@@ -1,6 +1,8 @@
 'use strict';
 
 const aiRouter = require('./ai-router');
+const { randomUUID } = require('node:crypto');
+const refineryErrors = require('./public/cultivation/refinery-errors.js');
 const soulboundRules = require('./public/cultivation/soulbound-pool.js');
 
 const ALLOWED_EFFECTS = new Set([
@@ -748,12 +750,17 @@ function registerArtifactGenerationApi(app) {
     res.json({ stage, ranges:defaultDepthEffectRanges(stage), realms:REALMS.slice(1) });
   });
   app.post('/api/generate-artifact', async (req, res) => {
+    const incomingId = String(req.get?.('x-refinery-request-id') || '');
+    const requestId = /^[A-Za-z0-9_-]{8,80}$/.test(incomingId) ? incomingId : randomUUID();
+    const started = Date.now();
+    let stage = 'request-validation';
+    res.set?.('X-Request-ID', requestId);
     try {
       const selected = Array.isArray(req.body?.selectedIngredients) ? req.body.selectedIngredients : [];
       const allMaterials = Array.isArray(req.body?.allMaterials) ? req.body.allMaterials : [];
       const totalIngredients = selected.reduce((sum, row) => sum + Math.max(0, Math.floor(Number(row?.quantity) || 1)), 0);
-      if (totalIngredients < 2 || totalIngredients > 8) return res.status(400).json({ error: '煉器素材必須為 2 到 8 個' });
-      if (!allMaterials.length) return res.status(400).json({ error: '缺少完整材料圖鑑' });
+      if (totalIngredients < 2 || totalIngredients > 8) throw Object.assign(Error('煉器素材必須為 2 到 8 個'), { code: 'refinery-input' });
+      if (!allMaterials.length) throw Object.assign(Error('缺少完整材料圖鑑'), { code: 'refinery-input' });
 
       // 境界永遠由伺服器依投入素材在完整圖鑑中的正式境界重算，忽略前端傳來的 targetRealm。
       const targetRealm = deriveTargetRealm(req.body || {});
@@ -763,7 +770,16 @@ function registerArtifactGenerationApi(app) {
       const refinementStage = deriveRefinementStage(safePayload);
       soulboundRules.refineEffects([], ingredientHierarchy(safePayload).primary);
       const prompt = buildPrompt(safePayload);
-      const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 35000 });
+      stage = 'generation';
+      const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 35000,
+        validate(candidate) {
+          if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate) ||
+            typeof candidate.name !== 'string' || !candidate.name.trim() || !Array.isArray(candidate.effects) || !candidate.effects.some(effect => ALLOWED_EFFECTS.has(effect?.type))) {
+            throw Object.assign(Error('生成結果缺少有效法寶名稱或效果'), { code: 'refinery-ai-artifact' });
+          }
+        }
+      });
+      stage = 'artifact-validation';
       const hierarchy = ingredientHierarchy(safePayload);
       const forgeOptions = { weaponForm: lockedWeaponForm(safePayload),
         forgeMethod: safePayload.forgeMethod,
@@ -774,11 +790,19 @@ function registerArtifactGenerationApi(app) {
       const finalArtifact = sanitizeGeneratedArtifact(reviewed.artifact, targetRealm, refinementStage,
         {}, effectBoundsV2, totalIngredients, forgeOptions);
       res.json({ artifact: finalArtifact, provider: routed.provider, model: routed.model,
-        guidanceReview: reviewed.guidanceReview });
+        guidanceReview: reviewed.guidanceReview, requestId, elapsedMs: Date.now() - started });
     } catch (error) {
-      console.error('[Artifact Generation API]', error);
-      res.status(/本命法寶|上下限|境界設定|階段設定|不允許設定|效果上下限|有限數值|不支援的法寶/.test(error?.message || '') ? 400 : 500)
-        .json({ error: error?.message || 'AI 法寶生成失敗' });
+      const report = refineryErrors.describe(error, { phase: stage, requestId });
+      report.elapsedMs = Date.now() - started;
+      // Upstream details stay server-side; redact configured credentials before logging.
+      for (const [key, value] of Object.entries(process.env)) {
+        if (/key|token|secret|password/i.test(key) && typeof value === 'string' && value.length >= 8) report.reason = report.reason.split(value).join('[REDACTED]');
+      }
+      console.error('[Artifact Generation API]', report);
+      res.status(report.suggestedStatus).json({ error: report.title, code: report.code,
+        stage: report.stage, retryable: report.retryable, requestId, elapsedMs: report.elapsedMs,
+        attempts: report.attempts,
+        reason: ['refinery-input', 'refinery-refinement'].includes(report.code) ? report.reason : '' });
     }
   });
 }

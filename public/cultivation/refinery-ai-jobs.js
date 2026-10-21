@@ -1,5 +1,6 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import './forge-fragments.js';
+import './refinery-errors.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from '../data-store.js';
 import {
@@ -391,42 +392,54 @@ import {
   }
 
   async function generateCandidate(job) {
-    let response;
+    const started = Date.now();
+    const requestId = globalThis.crypto?.randomUUID?.() || 'refinery-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
+    const metadata = () => ({ requestId, endpoint: '/api/generate-artifact', elapsedMs: Date.now() - started });
+    let body;
     try {
-      response = await fetch('/api/generate-artifact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          selectedIngredients: job.ingredients,
-          allMaterials: apiMaterials(),
-          existingArtifacts: apiArtifacts(),
-          targetRealm: job.targetRealm,
-          forgeMethod: job.forgeMethod || '自由發揮',
-          adminGenerationDirection: job.adminGenerationDirection || '',
-          adminGenerationPrompt: job.adminGenerationPrompt || '',
-          supportedEffects: SUPPORTED_ARTIFACT_EFFECTS,
-          effectBoundsV2: window.getArtifactEffectBounds?.() || {}
-        })
-      });
+      body = JSON.stringify({ selectedIngredients: job.ingredients, allMaterials: apiMaterials(), existingArtifacts: apiArtifacts(),
+        targetRealm: job.targetRealm, forgeMethod: job.forgeMethod || '自由發揮',
+        adminGenerationDirection: job.adminGenerationDirection || '', adminGenerationPrompt: job.adminGenerationPrompt || '',
+        supportedEffects: SUPPORTED_ARTIFACT_EFFECTS, effectBoundsV2: window.getArtifactEffectBounds?.() || {} });
     } catch (cause) {
-      // Safari 的「Load failed」通常只是網路層 TypeError，不能據此判定材料或任務損毀。
-      throw generationError('煉器推演服務無法連線', 'refinery-api-network', { cause });
+      throw generationError('無法準備煉器素材與設定', 'refinery-input', { ...metadata(), refineryStage: 'request-preparation', cause });
     }
+    const controller = new AbortController();
+    let timer;
+    let timedOut = false;
+    const timeout = new Promise((_, reject) => {
+      timer = setTimeout(() => { timedOut = true; controller.abort(); reject(generationError('煉器請求逾時', 'refinery-api-timeout', metadata())); }, 180000);
+    });
+    let response;
     let payload;
     try {
-      payload = await response.json();
+      response = await Promise.race([fetch('/api/generate-artifact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Refinery-Request-Id': requestId },
+        body, signal: controller.signal
+      }), timeout]);
+      payload = await Promise.race([response.json(), timeout]);
     } catch (cause) {
-      throw generationError('煉器推演服務回應格式不符', 'refinery-api-invalid-response', {
-        httpStatus: response.status, cause
+      if (timedOut) throw generationError('煉器請求逾時', 'refinery-api-timeout', { ...metadata(), httpStatus: response?.status });
+      if (cause?.code === 'refinery-api-timeout') throw cause;
+      // Safari 的「Load failed」通常只是網路層 TypeError，不能據此判定材料或任務損毀。
+      throw generationError(response ? '煉器推演服務回應格式不符' : '煉器推演服務無法連線', response ? 'refinery-api-invalid-response' : 'refinery-api-network', {
+        ...metadata(), httpStatus: response?.status, cause
       });
-    }
+    } finally { clearTimeout(timer); }
     if (!response.ok || !payload?.artifact) {
-      throw generationError('新法寶推演未完成', 'refinery-api-response', {
+      const code = globalThis.QARefineryErrors?.TYPES[payload?.code] ? payload.code : response.ok ? 'refinery-ai-artifact' :
+        [401, 403].includes(response.status) ? 'refinery-api-access' : response.status === 404 ? 'refinery-api-route' : response.status === 413 ? 'refinery-request-size' : 'refinery-api-response';
+      throw generationError(payload?.error || '新法寶推演未完成', code, {
+        ...metadata(), requestId: payload?.requestId || requestId, refineryStage: payload?.stage || 'generation',
         httpStatus: response.status,
-        serverReason: String(payload?.error || '').slice(0, 180)
+        serverReason: String(payload?.reason || payload?.error || '').slice(0, 500), attempts: payload?.attempts || []
       });
     }
-    return payload;
+    if (typeof payload.artifact !== 'object' || Array.isArray(payload.artifact) || !payload.artifact.name || !Array.isArray(payload.artifact.effects) || !payload.artifact.effects.length) {
+      throw generationError('生成結果缺少有效法寶名稱或效果', 'refinery-ai-artifact', { ...metadata(), httpStatus: response.status });
+    }
+    return { ...payload, requestId: payload.requestId || requestId };
   }
 
   function uniqueGeneratedId(items) {
@@ -470,11 +483,13 @@ import {
       artifactSystem.inventory[item.id] = (Number(artifactSystem.inventory[item.id]) || 0) + Math.max(1, Math.floor(Number(item.craft?.yield) || 1));
       tx.update(ref, { artifactSystem, [REFINERY_JOB_FIELD]: null });
     });
-    const local = data();
-    if (local) { local.artifactSystem = artifactSystem; local[REFINERY_JOB_FIELD] = null; }
-    window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: artifactSystem }));
-    window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: null }));
-    return getArtifactById(job.knownArtifactId);
+    try {
+      const local = data();
+      if (local) { local.artifactSystem = artifactSystem; local[REFINERY_JOB_FIELD] = null; }
+      window.dispatchEvent(new CustomEvent('artifact-system-updated', { detail: artifactSystem }));
+      window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail: null }));
+      return getArtifactById(job.knownArtifactId);
+    } catch (error) { error.refineryStage = 'client-sync'; error.refineryAwarded = true; throw error; }
   }
 
   async function claimDiscovery(job) {
@@ -491,8 +506,10 @@ import {
     let committedArtifacts = null;
     let committedCatalog = null;
     let committedRecipes = null;
+    let claimStage = 'catalog-read';
 
     await runTransaction(db(), async (tx) => {
+      claimStage = 'catalog-read';
       const userRef = doc(db(), 'users', user.uid);
       const artifactRef = doc(db(), ...ARTIFACT_CONFIG);
       const materialRef = doc(db(), ...MATERIAL_CONFIG);
@@ -509,6 +526,7 @@ import {
         ? clone(artifactSnap.data().items) : clone(ARTIFACT_CATALOG);
       const latestRecipes = materialSnap.exists() && materialSnap.data()?.recipes && typeof materialSnap.data().recipes === 'object'
         ? clone(materialSnap.data().recipes) : clone(ARTIFACT_RECIPES);
+      claimStage = 'catalog-validation';
       const recipeRepair = repairArtifactRecipes(latestRecipes, {
         artifactIds: latestItems.map((item) => item?.id),
         materialIds: MATERIAL_CATALOG.map((item) => item?.id)
@@ -520,6 +538,7 @@ import {
       // Firestore 會重試衝突交易，只有第一筆成功登錄新配方的人擁有權。
       firstDiscovery = !awardedId;
       if (!awardedId) {
+        claimStage = 'artifact-validation';
         const id = uniqueGeneratedId(latestItems);
         // Do not trust an AI-chosen slot at the final catalog commit.
         const realSoulboundSource = (fresh.recipe || []).some((row) =>
@@ -580,8 +599,14 @@ import {
       artifactSystem.inventory[awardedId] = (Number(artifactSystem.inventory[awardedId]) || 0) + 1;
       committedArtifacts = artifactSystem;
       tx.update(userRef, { artifactSystem, [REFINERY_JOB_FIELD]: null });
+      claimStage = 'catalog-commit';
+    }).catch(error => {
+      error.refineryStage = error.refineryStage || claimStage;
+      error.requestId = error.requestId || generated.requestId;
+      throw error;
     });
 
+    try {
     const local = data();
     if (local) { local.artifactSystem = committedArtifacts; local[REFINERY_JOB_FIELD] = null; }
     if (committedCatalog) replaceArtifactCatalog(committedCatalog, 'ai-generated');
@@ -593,7 +618,7 @@ import {
     // 管理員仍可在「物品補圖」面板重試。
     if (firstDiscovery && awardedId) {
       try { await ensureGeneratedArtifactImage(awardedId); }
-      catch (error) { console.warn('[Refinery artifact image]', awardedId, error); }
+      catch (error) { console.warn('[Refinery artifact image]', globalThis.QARefineryErrors?.describe(error, { phase: 'image', jobId: job.id, requestId: generated.requestId })); }
     }
 
     generatedCandidateCache.delete(job.id);
@@ -601,6 +626,7 @@ import {
     backgroundGenerationAttempted.delete(job.id);
     const awarded = getArtifactById(awardedId) || committedCatalog?.find((item) => item.id === awardedId) || { id: awardedId, name: '新生法寶' };
     return { ...awarded, recipeFirstDiscovery: firstDiscovery };
+    } catch (error) { error.refineryStage = 'client-sync'; error.refineryAwarded = true; error.requestId = generated.requestId; throw error; }
   }
 
   function requiresGeneratedCandidate(job) {
@@ -633,7 +659,7 @@ import {
       })
       .catch(error => {
         // Never alter an active forge job or claim outcome on a background error.
-        console.warn('[Refinery pre-generation] retry on opening furnace:', error?.message || error);
+        console.warn('[Refinery pre-generation] retry on opening furnace:', globalThis.QARefineryErrors?.describe(error, { phase: 'generation', jobId: job.id }));
         return null;
       })
       .finally(() => generatedCandidatePromises.delete(job.id));
@@ -644,7 +670,12 @@ import {
     const job = currentJob();
     if (!job) throw new Error('目前沒有煉器任務');
     if (Date.now() < Number(job.readyAtMs || 0)) throw new Error('尚需 ' + formatRefineryDuration(Number(job.readyAtMs) - Date.now()));
-    return requiresGeneratedCandidate(job) ? claimDiscovery(job) : claimKnown(job);
+    try { return await (requiresGeneratedCandidate(job) ? claimDiscovery(job) : claimKnown(job)); }
+    catch (error) {
+      error.refineryStage = error.refineryStage || 'inventory-commit';
+      error.endpoint = error.endpoint || (db()?.__d1 ? '/api/data' : 'firestore');
+      throw error;
+    }
   }
 
   async function skipJobWait() {

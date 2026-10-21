@@ -1,4 +1,5 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import './refinery-errors.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from '../data-store.js';
 import { ARTIFACT_CATALOG, getArtifactById, artifactRealmColor, realmOrderByName } from './artifact-catalog.js';
@@ -1058,24 +1059,35 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
   }
 
   function refineryFailureNotice(error, phase) {
-    const code = String(error?.code || '');
-    const message = String(error?.message || '');
-    const transient = /refinery-api-network|unavailable|deadline-exceeded|resource-exhausted/i.test(code) ||
-      /Load failed|Failed to fetch|NetworkError|network request failed|network connection/i.test(message);
-    if (code === 'refinery-api-network' || (phase === 'claim-discovery' && transient)) {
-      return '煉器推演服務暫時無法連線，煉製進度已保留。請確認網路後再按「開爐」。';
-    }
-    if (error?.refineryStage === 'generation' || (phase === 'claim-discovery' && code === 'permission-denied')) {
-      return '法寶推演暫時無法完成，煉製進度已保留。請稍後再按「開爐」。';
-    }
-    if (transient && phase === 'start') {
-      return '目前無法確認是否開始煉製。請重新整理確認素材、煉器碎片和煉製進度後再操作。';
-    }
-    if (transient && phase.startsWith('claim')) {
-      return '開爐暫時未完成，煉製工作已保留。請確認連線後再按「開爐」。';
-    }
-    return window.xiuxianSafeActionError?.('煉器操作', error, '本次操作未完成，請稍後再試。') ||
-      '本次操作未完成，請稍後再試。';
+    const api = globalThis.QARefineryErrors;
+    return api ? api.notice(api.describe(error, { phase })) : '煉器操作未完成，請保留任務並回報管理員。';
+  }
+
+  function showRefineryFailure(error, phase, jobId) {
+    const api = globalThis.QARefineryErrors;
+    if (!api) { toast(refineryFailureNotice(error, phase), false); return; }
+    const report = { ...api.describe(error, { phase: error?.refineryStage || phase, jobId, endpoint: db()?.__d1 ? '/api/data' : 'firestore' }), recordedAt: new Date().toISOString() };
+    console.error('[Cultivation refinery job]', report);
+    document.getElementById('refinery-error-report')?.remove();
+    const dialog = document.createElement('dialog');
+    dialog.id = 'refinery-error-report';
+    dialog.setAttribute('aria-labelledby', 'refinery-error-title');
+    dialog.style.cssText = 'width:min(460px,calc(100vw - 28px));max-height:85dvh;overflow:auto;padding:22px;border:1px solid #96714e;border-radius:16px;background:#171c25;color:#eee2ca;z-index:22000;box-shadow:0 20px 70px #0009';
+    dialog.innerHTML = '<h3 id="refinery-error-title" style="font-size:18px;margin:0 0 12px"></h3><p data-notice style="font-size:14px;line-height:1.8"></p><p data-copy-status role="status" style="font-size:12px;color:#bcdacf"></p><details style="margin:14px 0"><summary style="cursor:pointer;font-size:13px">檢視錯誤回報</summary><pre style="font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:35dvh;overflow:auto;margin-top:10px"></pre></details><div style="display:flex;gap:10px"><button type="button" data-copy style="flex:1;padding:10px;border:1px solid #ba9a62;border-radius:9px;background:#765b30;color:#fff1d4">複製錯誤回報</button><button type="button" data-close style="padding:10px 18px;border:1px solid #627282;border-radius:9px;background:#253342;color:#e2e8f0">關閉</button></div>';
+    dialog.querySelector('h3').textContent = report.title;
+    dialog.querySelector('[data-notice]').textContent = api.notice(report);
+    const text = JSON.stringify(report, null, 2);
+    dialog.querySelector('pre').textContent = text;
+    dialog.querySelector('[data-copy]').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(text); dialog.querySelector('[data-copy-status]').textContent = '已複製，可貼給管理員查詢。'; }
+      catch (_) { dialog.querySelector('details').open = true; dialog.querySelector('[data-copy-status]').textContent = '無法自動複製，請選取下方回報文字。'; }
+    });
+    const closeReport = () => dialog.remove();
+    dialog.querySelector('[data-close]').addEventListener('click', closeReport);
+    dialog.addEventListener('cancel', event => { event.preventDefault(); closeReport(); });
+    document.body.appendChild(dialog);
+    if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
+    dialog.querySelector('[data-close]').focus();
   }
 
   async function craft() {
@@ -1119,15 +1131,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         globalThis.QAGameAudio?.play('combat-impact', { rate:.8 });
       }
     } catch (error) {
-      console.error('[Cultivation refinery job]', {
-        phase: error?.refineryStage || phase,
-        jobId: attemptedJobId,
-        code: String(error?.code || ''),
-        httpStatus: error?.httpStatus || null,
-        serverReason: String(error?.serverReason || '').slice(0, 180),
-        cause: String(error?.cause?.message || '')
-      }, error);
-      toast(refineryFailureNotice(error, phase), false);
+      showRefineryFailure(error, phase, attemptedJobId);
       globalThis.QAGameAudio?.play('answer-wrong');
     } finally {
       busy = false;
