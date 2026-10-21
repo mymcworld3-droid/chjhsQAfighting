@@ -673,6 +673,7 @@ function createHandler({
             personalDamage,
             critical: combat.critical === true,
             comboHits: combat.comboHits || [],
+            innateSkill: combat.innateSkill || '',
             teamBurstDamage,
             teamContributors: teamCorrectUids.length,
             teamGuardReady,

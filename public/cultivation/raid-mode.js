@@ -1109,6 +1109,7 @@ import './combat-contribution.js';
         damage: Math.max(0, Number(resolution.damage) || 0),
         critical: resolution.critical === true,
         comboHits: resolution.comboHits || [],
+        innateSkill: String(resolution.innateSkill || ''),
         personalDamage: Math.max(0, Number(resolution.personalDamage) || 0),
         teamBurstDamage: Math.max(0, Number(resolution.teamBurstDamage) || 0),
         teamGuardReady: resolution.teamGuardReady === true,
@@ -1147,7 +1148,7 @@ import './combat-contribution.js';
 
       if (state.answerCorrect) {
         const dealt = Math.max(0, Number(state.lastPlayerAction.damage) || 0);
-        const hitText = (state.lastPlayerAction.critical ? '・爆擊' : '') + (state.lastPlayerAction.comboHits.length ? '・連擊 ×'+state.lastPlayerAction.comboHits.length : '');
+        const hitText = (state.lastPlayerAction.critical ? '・爆擊' : '') + (state.lastPlayerAction.comboHits.length ? '・連擊 ×'+state.lastPlayerAction.comboHits.length : '') + (state.lastPlayerAction.innateSkill ? '・本命神通：'+state.lastPlayerAction.innateSkill : '');
         const spiritText = Number(resolution.spiritGain) > 0
           ? (result.spiritReward?.status === 'pending' ? '・元嬰碎精待入帳' : '・元嬰碎精 +1') : '';
         const learningText = Number(resolution.cultivationGain) > 0
@@ -1160,7 +1161,7 @@ import './combat-contribution.js';
       if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
         await playBattleScene({
           attacker: 'player',
-          actionName: state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : state.lastPlayerAction.critical ? '爆擊' : state.lastPlayerAction.comboHits.length ? '連擊' : '破勢一擊',
+          actionName: state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : state.lastPlayerAction.innateSkill || (state.lastPlayerAction.critical ? '爆擊' : state.lastPlayerAction.comboHits.length ? '連擊' : '破勢一擊'),
           critical: state.lastPlayerAction.critical,
           comboHits: state.lastPlayerAction.comboHits,
           damage: state.lastPlayerAction.damage,

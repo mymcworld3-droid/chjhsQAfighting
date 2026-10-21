@@ -1,4 +1,6 @@
 import {} from './combat-combo.js';
+import {} from './nascent-growth.js';
+import {} from './innate-ability.js';
 // Battle v2 pure engine: deterministic, replay-safe PvP settlement.
 // No Firebase / DOM dependencies so round rules can be regression-tested independently.
 
@@ -121,6 +123,7 @@ export function shouldSuppressNascentSoul(player, opponent) {
 }
 
 export function applyNascentSoulDuelRuleToPlayer(player, opponent) {
+  player = globalThis.QAInnateAbility?.suppressForDuel(player, opponent) ?? player;
   if (!player || !shouldSuppressNascentSoul(player, opponent)) return player;
 
   const soul = player.nascentSoul || {};
@@ -272,6 +275,10 @@ export function settleBattleRound({
 }) {
   // 對手若仍在金丹或以下，元嬰戰鬥投影全部封印：包含攻擊／生命屬性、加傷、減傷與護元。
   ({ host, guest } = applyNascentSoulDuelRule(host, guest));
+  const innate = globalThis.QAInnateAbility;
+  // Never advance the caller's snapshot: transaction retries must replay the same answer once.
+  host = {...host, innateAbilityState: innate?.advance(host, answerCorrect(host)) || null};
+  guest = {...guest, innateAbilityState: innate?.advance(guest, answerCorrect(guest)) || null};
 
   // Firestore server-stamped response time determines initiative, never damage eligibility.
   // Missing/timeout answers move last; timestamps tied to the millisecond defer to firstAnswerUid.
@@ -289,6 +296,10 @@ export function settleBattleRound({
   const guestSoulHeal = answerCorrect(guest) ? Math.max(0, Math.min(1000, Math.round(Number(guest?.nascentSoul?.coreHeal) || 0))) : 0;
   hostSupport.heal += hostSoulHeal;
   guestSupport.heal += guestSoulHeal;
+  const hostInnateHeal = innate?.healingOnAnswer(host) || 0;
+  const guestInnateHeal = innate?.healingOnAnswer(guest) || 0;
+  hostSupport.heal += hostInnateHeal;
+  guestSupport.heal += guestInnateHeal;
   const startHostHp = Math.min(Math.max(1, Number(host?.maxHp) || 1000), currentHp(host) + hostSupport.heal);
   const startGuestHp = Math.min(Math.max(1, Number(guest?.maxHp) || 1000), currentHp(guest) + guestSupport.heal);
   let hostHp = startHostHp;
@@ -304,16 +315,20 @@ export function settleBattleRound({
   const applySoulLeech = (role, player, dealt) => {
     const hp = role === 'host' ? hostHp : guestHp;
     if (hp <= 0) return;
-    const heal = soulTalents?.healing(player,dealt) || 0;
+    const divineHeal = innate?.leech(player,dealt) || 0;
+    const heal = (soulTalents?.healing(player,dealt) || 0) + divineHeal;
     const amount = Math.max(0,Math.min(player.maxHp,hp+heal)-hp);
     if (!amount) return;
     if (role === 'host') hostHp += amount; else guestHp += amount;
-    logs.push({type:'heal',actorRole:role,actorUid:player.uid,amount,damage:0,skill:'元嬰・還神吸血'});
+    logs.push({type:'heal',actorRole:role,actorUid:player.uid,amount,damage:0,skill:divineHeal?'本命神通・歸元納氣':'元嬰・還神吸血'});
   };
   for (const activation of hostSupport.activations) activations.push({ ...activation, ownerUid: host.uid });
   for (const activation of guestSupport.activations) activations.push({ ...activation, ownerUid: guest.uid });
-  if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type: 'heal', actorRole: 'host', actorUid: host.uid, damage: 0, amount: startHostHp - currentHp(host), skill: hostSoulHeal ? '本命護元' : '太初回元丹・回元' });
-  if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type: 'heal', actorRole: 'guest', actorUid: guest.uid, damage: 0, amount: startGuestHp - currentHp(guest), skill: guestSoulHeal ? '本命護元' : '太初回元丹・回元' });
+  for (const [player, amount] of [[host,hostInnateHeal],[guest,guestInnateHeal]]) if(amount) activations.push({
+    type:'innate-ability',name:'本命神通',ownerUid:player.uid,skill:'本命神通・養神',message:'神通回復 '+amount+' 生命',kind:'化神神通'
+  });
+  if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type: 'heal', actorRole: 'host', actorUid: host.uid, damage: 0, amount: startHostHp - currentHp(host), skill: hostInnateHeal ? '本命神通・養神' : hostSoulHeal ? '本命護元' : '太初回元丹・回元' });
+  if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type: 'heal', actorRole: 'guest', actorUid: guest.uid, damage: 0, amount: startGuestHp - currentHp(guest), skill: guestInnateHeal ? '本命神通・養神' : guestSoulHeal ? '本命護元' : '太初回元丹・回元' });
 
   for (const role of turnOrder) {
     // An earlier lethal hit (including Thunder reflection) ends the round immediately.
@@ -333,6 +348,8 @@ export function settleBattleRound({
     defender.hp = role === 'host' ? guestHp : hostHp;
     const plan = hitPlan({ roomId, round, role, player, support });
     const talent = soulTalents?.attack(player, defender, {seed:roomId + ':' + round + ':' + player.uid, streak:support.streak}) || {normal:0,trueDamage:0,followup:0,leech:0};
+    const divine = innate?.attack(player,defender) || {normal:0,trueDamage:0};
+    talent.trueDamage += divine.trueDamage;
     // The equipment resolver must see the current sequential HP, not the pre-round snapshot.
     if (typeof resolveEquipmentHit === 'function') {
       player.hp = role === 'host' ? hostHp : guestHp;
@@ -365,7 +382,7 @@ export function settleBattleRound({
     const coreEffect = plan.activation || (support.bonusDamage > 0 ? support.activations[0] : null);
     const attack = { type: 'attack', actorRole: role, actorUid: player.uid, targetUid: defender.uid, damage, baseDamage: plan.baseDamage, extraDamage: plan.extraDamage + talent.normal + talent.trueDamage,
       critical: !guarded && equipment?.critical === true, coreEffect,
-      skill: [coreEffect?.skill, plan.soulDamage ? '元嬰神通' : '', talent.normal || talent.trueDamage ? '元嬰・' + talent.name + (talent.trueDamage ? '真傷' : '') : '', equipment?.skill].filter(Boolean).join('・') };
+      skill: [coreEffect?.skill, plan.soulDamage ? '元嬰神通' : '', talent.normal || talent.trueDamage - divine.trueDamage ? '元嬰・' + talent.name + (talent.trueDamage - divine.trueDamage ? '真傷' : '') : '', divine.trueDamage ? '本命神通・'+divine.name : '', equipment?.skill].filter(Boolean).join('・') };
     logs.push(attack);
     if (guarded) {
       steps.push({ ...attack, damage: 0, guarded: true, hostHp: beforeHostHp, guestHp: beforeGuestHp });
@@ -409,7 +426,7 @@ export function settleBattleRound({
         steps.push(step); logs.push(step);
         return dealt;
       }});
-    const pursuit = talent.followup + plan.followupDamage;
+    const pursuit = talent.followup + plan.followupDamage + divine.normal;
     // One isolated follow-up: defense still applies, attack procs never run again.
     if (pursuit > 0 && hostHp > 0 && guestHp > 0) {
       defender.hp = role === 'host' ? guestHp : hostHp;
@@ -422,8 +439,10 @@ export function settleBattleRound({
       if (role === 'host') guestHp = Math.max(0,guestHp-followDamage);
       else hostHp = Math.max(0,hostHp-followDamage);
       steps.push({type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
-        damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,pursuit:true,critical:false,skill:plan.followupDamage ? '九天劍氣丹・追擊' : '元嬰・' + talent.name + '追擊',hostHp,guestHp});
+        damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,pursuit:true,critical:false,skill:[plan.followupDamage ? '九天劍氣丹・追擊' : '',talent.followup ? '元嬰・'+talent.name+'追擊' : '',divine.normal ? '本命神通・'+divine.name : ''].filter(Boolean).join('・'),hostHp,guestHp});
     }
+    if(divine.normal || divine.trueDamage) activations.push({type:'innate-ability',name:'本命神通',ownerUid:player.uid,
+      skill:'本命神通・'+divine.name,message:divine.name+'發動',kind:'化神神通'});
     applySoulLeech(role,player,talentReceived);
     // Step HP records must include any instant post-hit recovery before animation playback.
     steps[steps.length - 1].hostHp = hostHp;
@@ -440,7 +459,12 @@ export function settleBattleRound({
       const combinedCoreWeapon = normalReceived > 0 && coreBonus > 0 && weaponReflect > 0
         ? Math.round(normalReceived*(coreBonus + weaponReflect/normalReceived))
         : counter.reflectDamage + weaponReflect;
-      counter.reflectDamage = combinedCoreWeapon + soulReflect;
+      const divineReflect = innate?.reflection(defender,normalReceived) || 0;
+      counter.reflectDamage = combinedCoreWeapon + soulReflect + divineReflect;
+      if(divineReflect>0) {
+        counter.activation=counter.activation || {type:'innate-ability',name:'本命神通',message:'劫雷返照',kind:'化神神通'};
+        counter.activation={...counter.activation,skill:[counter.activation.skill,'本命神通・劫雷返照'].filter(Boolean).join('・')};
+      }
       if(soulReflect > 0)counter.activation=counter.activation || {type:'nascent-soul',skill:'元嬰・雷返反傷',name:'雷霆元嬰',message:'雷返反傷',kind:'元嬰受擊效果'};
       if (equipment?.reflectDamage > 0) {
         counter.activation = counter.activation || { type: 'artifact', skill: equipment.reflectSkill || '法寶反傷', name: '法寶', message: '法寶反傷觸發', kind: '鬥法受擊效果' };
@@ -499,7 +523,7 @@ export function settleBattleRound({
     if (!actual || hostHp<=0 || guestHp<=0) continue;
     const counter = resolveDeterministicCounterCore(defender,actual,roomId+':'+round+':'+defender.uid+':star-counter');
     const reflect = counter.reflectDamage + Math.max(0,Math.round(Number(defended?.reflectDamage)||0)) +
-      Math.max(0,Math.round(Number(soulTalents?.reflection?.(defender,actual))||0));
+      Math.max(0,Math.round(Number(soulTalents?.reflection?.(defender,actual))||0)) + (innate?.reflection(defender,actual) || 0);
     if (reflect>0) {
       const counterTargetHp = role === 'host' ? hostHp : guestHp;
       const coreGuard = role==='host' ? hostCoreShield : guestCoreShield;
@@ -545,6 +569,8 @@ export function settleBattleRound({
     guestCoreStreak: guestSupport.streak,
     hostStarCorrectWindow: starReady ? 0 : hostStarCount,
     guestStarCorrectWindow: starReady ? 0 : guestStarCount,
+    hostInnateAbilityState: host.innateAbilityState,
+    guestInnateAbilityState: guest.innateAbilityState,
     hostArtifactState: { artifactShield: host.artifactShield || 0, artifactFirstHitUsed: !!host.artifactFirstHitUsed, artifactCheatDeathUsed: !!host.artifactCheatDeathUsed },
     guestArtifactState: { artifactShield: guest.artifactShield || 0, artifactFirstHitUsed: !!guest.artifactFirstHitUsed, artifactCheatDeathUsed: !!guest.artifactCheatDeathUsed },
     logs,

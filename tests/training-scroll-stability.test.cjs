@@ -59,6 +59,7 @@ function trainingRenderRuntime() {
   };
   const main = {scrollTop:200}, page = {scrollTop:80};
   const context = {
+    Innate:require('../public/cultivation/innate-ability.js'),window:{getCurrentUserData:()=>({})},
     activeTab:'nascent-soul', NASCENT_SOUL_THRESHOLD:68, currentScore:() => 68,
     document:{
       getElementById:id => id === 'training-tab-content' ? content : page,
