@@ -79,6 +79,7 @@
     const firstQi = fromIndex === 0 && toIndex === 1;
 
     activeFeedback?.dispose();
+    globalThis.QAGameAudio?.play(major ? 'grand-reveal' : 'spirit-pulse', { key:'realm:'+fromIndex+':'+toIndex });
     let resolveCompletion;
     const completion = new Promise(resolve => { resolveCompletion = resolve; });
 

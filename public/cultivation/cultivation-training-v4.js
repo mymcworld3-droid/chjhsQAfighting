@@ -485,6 +485,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       if (getAuth(getApp()).currentUser?.uid === user.uid) {
         const local = window.getCurrentUserData?.();
         if (local) Growth.apply(local,result);
+        globalThis.QAGameAudio?.play('spirit-pulse');
         toast(reset ? '元嬰已重修，返還 '+result.returned+' 碎精' : '升級成功，消耗 '+result.cost+' 碎精');
         const extra = reset ? [] : [{label:result.branch.name + '分支等級',before:{value:result.level,unit:'級'},after:{value:result.level + 1,unit:'級'}}];
         if (!reset && ['cultivation','core'].includes(branchId)) extra.push({label:result.branch.name + '加成',

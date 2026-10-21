@@ -147,6 +147,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
       });
       if(epoch!==generation||uid!==getMainUser()?.uid||!layer)return;
       trial=result.state;review=result.review;updateLocal(result);paintReview();
+      globalThis.QAGameAudio?.answer(review.correct === true, 'enlightenment:'+trial.runId+':'+q.id);
     }catch(err){
       if(epoch===generation&&layer){
         setBody(trialHeader()+'<p class="enlightenment-error">'+escape(err.message)+'</p>'+

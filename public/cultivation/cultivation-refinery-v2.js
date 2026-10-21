@@ -1093,6 +1093,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
           throw new Error('尚需 ' + (window.formatCultivationRefineryDuration?.(Number(job.readyAtMs) - Date.now()) || '一段時間'));
         }
         const item = await window.claimCultivationRefineryJob?.();
+        globalThis.QAGameAudio?.play('grand-reveal', { key:'forge:'+attemptedJobId });
         toast(item?.recipeFirstDiscovery
           ? `首發成功！${item?.name || '新生法寶'} 配方擁有權已歸你所有。`
           : `開爐成功：${item?.name || '新生法寶'}`);
@@ -1115,6 +1116,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         adminForgePrompt = '';
         forgeMethod = '自由發揮';
         toast(`開始煉製：消耗 ${started.fragmentCost} 煉器碎片，約 ${window.formatCultivationRefineryDuration?.(started.durationMs) || ''} 完成`);
+        globalThis.QAGameAudio?.play('combat-impact', { rate:.8 });
       }
     } catch (error) {
       console.error('[Cultivation refinery job]', {
@@ -1126,6 +1128,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         cause: String(error?.cause?.message || '')
       }, error);
       toast(refineryFailureNotice(error, phase), false);
+      globalThis.QAGameAudio?.play('answer-wrong');
     } finally {
       busy = false;
       render(true);

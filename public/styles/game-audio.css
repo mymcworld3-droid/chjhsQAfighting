@@ -1,0 +1,10 @@
+.game-audio-settings{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;align-items:center;padding:18px;margin:16px 0;border:1px solid var(--xq-line,#57462b);border-radius:12px}
+.game-audio-settings h3{margin:0;color:var(--xq-paper,#f5f1e8);font-size:16px}
+.game-audio-settings p{margin:4px 0 0;color:var(--xq-muted,#aaa08b);font-size:12px}
+.game-audio-settings button{min-height:40px;min-width:64px;padding:8px 14px;border:1px solid var(--xq-line,#57462b);border-radius:8px;background:#17130d;color:var(--xq-gold,#d8b15d);font:inherit;font-size:13px;cursor:pointer}
+.game-audio-settings [aria-checked="true"]{background:#352a17;border-color:#b19354}
+.game-audio-settings label{display:grid;grid-template-columns:1fr auto;gap:8px;color:var(--xq-paper,#f5f1e8);font-size:13px}
+.game-audio-settings input{grid-column:1/-1;width:100%;min-width:0;accent-color:#d8b15d;cursor:pointer}
+.game-audio-settings output{color:var(--xq-muted,#aaa08b)}
+.game-audio-settings button:disabled{opacity:.45;cursor:default}
+.game-audio-settings :is(button,input):focus-visible{outline:2px solid #ead7a6;outline-offset:3px}

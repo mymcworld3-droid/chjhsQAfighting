@@ -13,7 +13,7 @@ const index = read('index.html');
 const main = read('main.js');
 
 test('every local static resource has an up-to-date independent version', () => {
-  const extensions = new Set(['.html', '.js', '.css', '.json', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg']);
+  const extensions = new Set(['.html', '.js', '.css', '.json', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.mp3']);
   const found = {};
   const walk = dir => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {

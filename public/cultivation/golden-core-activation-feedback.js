@@ -130,6 +130,8 @@
     const previous = recent.get(key) || 0;
     if (now - previous < 1000) return;
     recent.set(key, now);
+    // Sound belongs to the trigger, never the delayed visual-banner queue.
+    globalThis.QAGameAudio?.play('spirit-pulse');
     if (recent.size > 30) {
       for (const [item, time] of recent) if (now - time > 10000) recent.delete(item);
     }

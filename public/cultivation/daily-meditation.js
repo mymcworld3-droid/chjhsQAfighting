@@ -240,19 +240,20 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     pauseClock();const body={questionId:session.question.id,choice,activeMs:Math.floor(clock?.total||0)};
     await task(async()=>{
       try{const result=await request('answer',body);session=result.session;renderQuestion();
+        globalThis.QAGameAudio?.answer(session.feedback?.isCorrect === true, 'meditation:'+session.date+':'+body.questionId);
         void window.trackPlayerAnalytics?.('answer_completed',{mode:'meditation',eventId:'meditation_'+session.date+'_'+session.answered});
       }catch(error){
         notify(error.message);const retry=document.createElement('button');retry.type='button';retry.className='dm-action';retry.textContent='重試保存本題答案';
-        retry.onclick=()=>void task(async()=>{const result=await request('answer',body);session=result.session;renderQuestion();});node('dm-content')?.appendChild(retry);
+        retry.onclick=()=>void task(async()=>{const result=await request('answer',body);session=result.session;renderQuestion();globalThis.QAGameAudio?.answer(session.feedback?.isCorrect === true,'meditation:'+session.date+':'+body.questionId);});node('dm-content')?.appendChild(retry);
       }
     });
   }
   function rewardReceipt(reward, {receiptId,title,subtitle,stars,note}={}) {
-    const owner=uid(),settings=userData()?.gameSettings;
+    const owner=uid();
     globalThis.QAMeditationRewardFeedback?.show({
       uid:owner,receiptId,reward,title,subtitle,note,
       kicker:stars?stars+' 星共修':'今日閉關',
-      sound:settings?.soundEnabled!==false&&settings?.musicEnabled!==false,
+      sound:true,
       isCurrent:()=>uid()===owner,
       focusTarget:()=>node('dm-close'),
       target:()=>stars?node('dm-content')?.querySelector('[data-dm-claim="'+stars+'"]'):node('dm-content')?.querySelector('.dm-summary')

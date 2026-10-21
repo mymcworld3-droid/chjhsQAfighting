@@ -1106,6 +1106,7 @@ function playStartupCloudCurtain(onClosed, { isCurrent = () => true, blockInput 
         await preloadStartupCloudImages();
         if (!isCurrent()) return false;
         const curtain = ensureStartupCloudCurtain();
+        globalThis.QAGameAudio?.transition();
         const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
         try {
             if (blockInput) {
@@ -3017,6 +3018,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
+    globalThis.QAGameAudio?.answer(isCorrect, 'solo:' + (window.quizStartTime || '') + ':' + (quiz?.id || questionText));
     quizHelperState.answered = true;
     quizHelperState.selectedIndex = Number.isInteger(userIdx) ? userIdx : null;
     quizHelperState.correctIndex = Number.isInteger(correctIdx) ? correctIdx : quizHelperState.correctIndex;

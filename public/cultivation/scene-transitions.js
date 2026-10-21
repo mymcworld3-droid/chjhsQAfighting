@@ -51,6 +51,7 @@ export function beginSceneTransition(from, to, theme = 'cloud', scope = 'page', 
   if (scope !== 'page' && (running.has('page') || [...running.keys()].some(key => key !== scope && key.endsWith('-open')))) return noop;
   if (scope === 'page' && [...running.keys()].some(key => key.endsWith('-close'))) return noop;
   if (scope === 'page') [...running.values()].forEach(cleanup => cleanup());
+  if (scope === 'page') globalThis.QAGameAudio?.transition();
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !Element.prototype.animate || document.hidden) return noop;
 
   const pageSlide = scope === 'page';
