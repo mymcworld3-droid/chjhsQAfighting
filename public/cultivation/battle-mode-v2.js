@@ -518,7 +518,7 @@ export const featureReady = (async () => {
 
   function baseCombatSnapshot() {
     const stats = userData()?.stats || {};
-    const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000)));
+    const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000) + (globalThis.QATrainingAccessRules?.hpBonus(userData()) || 0)));
     return {
       attack: Math.max(1, Math.round(finite(stats.attack, 200))),
       hp: maxHp,
