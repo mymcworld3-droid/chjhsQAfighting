@@ -46,6 +46,22 @@ test('choosing continue after failure closes once and waits for another full enc
   assert.equal(game.closed, 1); assert.equal(game.calls.length, 1);
   assert.equal(await game.start(), false); assert.equal(game.schedule.peek('u1').remaining, 19);
 });
+
+test('failed generation retains stage, question and request details for diagnosis',async()=>{
+  const game=scenario(),opening=game.start();
+  game.pending.shift().reject(Object.assign(Error('機緣題組未通過品質檢查'),{diagnostic:{code:'opportunity-evidence',stage:'validation',questionId:'Q2',reason:'引文不足',retryable:true}}));
+  await tick();
+  assert.match(game.el.innerHTML,/opportunity-evidence/);assert.match(game.el.innerHTML,/Q2/);
+  assert.match(game.el.innerHTML,/validation/);assert.match(game.el.innerHTML,new RegExp(game.calls[0].body.requestId));
+  game.elements.get('op-cancel-load').onclick();await opening;
+});
+
+test('a nonretryable failure keeps the return control and avoids an ineffective retry loop',async()=>{
+  const game=scenario(),opening=game.start();
+  game.pending.shift().reject(Object.assign(Error('修習範圍已變更'),{diagnostic:{code:'opportunity-scope',retryable:false}}));
+  await tick();assert.equal(game.elements.has('op-retry-load'),false);
+  game.elements.get('op-cancel-load').onclick();await opening;
+});
 test('cancelled or switched-account start responses cannot reopen an encounter', async () => {
   const cancelled = scenario(), opening = cancelled.start();
   cancelled.elements.get('op-cancel-load').onclick(); await opening;
@@ -62,4 +78,17 @@ test('a deliberate close marks the encounter restored so user-ready notification
     $: () => null, window: {}, document: { querySelector: () => null, body: { classList: { remove() {} } } }, escapeHandler: null, previousFocus: null });
   vm.runInContext(source.slice(start, end) + '\nclose(false);', context);
   assert.equal(context.restoredAccount, 'u1'); assert.equal(context.run, null);
+});
+
+test('a stalled authentication request cannot hold the opportunity loader forever',async()=>{
+  let expire,signal,cleared=false;
+  const context={AbortController,Promise,JSON,Error,
+    authenticatedMainFetch:async(_path,init)=>{signal=init.signal;return new Promise(()=>{});},
+    setTimeout(fn){expire=fn;return 1;},clearTimeout(){cleared=true;}};
+  const a=source.indexOf('  async function request('),b=source.indexOf('  function ensureStyle()',a);
+  vm.runInNewContext(source.slice(a,b)+'\nthis.request=request;',context);
+  const pending=context.request('start',{requestId:'test-request-001'},90000);
+  expire();
+  await assert.rejects(pending,error=>error.diagnostic.code==='opportunity-client-timeout');
+  assert.equal(signal.aborted,true);assert.equal(cleared,true);
 });

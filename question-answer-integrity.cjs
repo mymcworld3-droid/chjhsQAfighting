@@ -7,7 +7,9 @@ const clean = value => String(value ?? '').normalize('NFKC')
 const normalized = value => clean(value)
   .replace(/^\s*(?:\\\(|\\\[|\$\$?)/, '')
   .replace(/(?:\\\)|\\\]|\$\$?)\s*$/, '')
-  .replace(/[「」『』"'\s。，．；;！!]/g, '').replace(/\.+$/, '')
+  .replace(/^(['"])([\s\S]*)\1$/, '$2')
+  .replace(/[’‘]/g, "'")
+  .replace(/[「」『』"\s。，．；;！!]/g, '').replace(/\.+$/, '')
   .toLowerCase();
 
 function numericAnswer(value) {
@@ -104,4 +106,4 @@ function questionIntegrityIssue(input, { rejectRepairNotes = true } = {}) {
   return '';
 }
 
-module.exports = { questionIntegrityIssue, solutionCorrectionNote, explicitSolutionAnswer, arithmeticExpected, numericAnswer };
+module.exports = { questionIntegrityIssue, solutionCorrectionNote, explicitSolutionAnswer, arithmeticExpected, numericAnswer, answerKey };
