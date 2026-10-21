@@ -30,8 +30,8 @@
       {id:'rebound',name:'劫雷返照',describe:n=>`答對後反擊傷害額外增加 ${2*n} 個百分點，與金丹、元嬰、法寶相加；團本持續至下次首領攻擊。真傷不計入反擊基數。`},
       {id:'nourish',name:'雷息養神',describe:n=>`每累積答對 2 題，回復 ${6*n} 生命，不要求連答。`} ]},
     reverse: {name:'陰陽元神', branches:[
-      {id:'defy',name:'逆命回天',describe:n=>`答對且自身生命不高於 50% 時，追加攻擊力 ${10*n}% 的普通傷害；低血時受到的普通傷害降低 ${3*n}%。`},
-      {id:'balance',name:'陰陽相生',describe:n=>`每次答對回復已損失生命的 ${n}%；生命不高於 50% 時受到的普通傷害降低 ${3*n}%。`} ]},
+      {id:'defy',name:'逆命回天',describe:n=>`答對且自身生命不高於 50% 時，追加攻擊力 ${8*n}% 的普通傷害；低血時受到的普通傷害降低 ${2.5*n}%。`},
+      {id:'balance',name:'陰陽相生',describe:n=>`每次答對回復已損失生命的 ${n}%；生命不高於 50% 時受到的普通傷害降低 ${2.5*n}%。`} ]},
     sword: {name:'劍心元神', branches:[
       {id:'pursuit',name:'分神御劍',describe:n=>`每累積答對 2 題，追加攻擊力 ${4*n}% 的普通傷害，不要求連答。`},
       {id:'unity',name:'劍意歸一',describe:n=>`每次答對追加攻擊力 ${1.5*n}% 的普通傷害，並回復已損失生命的 ${n/2}%。`} ]}
@@ -135,7 +135,7 @@
     if(a.type==='ocean')factor=b==='tide'?(enemy>=.6?.02*n:0):(s.correctCount%3===0?.06*n:0);
     if(a.type==='ningxin'&&b==='focus'&&s.streak%2===0)factor=.04*n;
     if(a.type==='pojing'&&b==='momentum')factor=s.correctCount%3===0?.06*n:0;
-    if(a.type==='reverse'&&b==='defy'&&own<=.5)factor=.10*n;
+    if(a.type==='reverse'&&b==='defy'&&own<=.5)factor=.08*n;
     if(a.type==='sword')factor=b==='pursuit'?(s.correctCount%2===0?.04*n:0):.015*n;
     result.normal=Math.round(p*factor);
     result.name=branches(a.type).find(row=>row.id===b).name;
@@ -155,7 +155,7 @@
     const a=active(player);
     if(a?.type!=='reverse'||Number(player.hp)<=0)return 0;
     const maxHp=Math.max(1,Number(player.maxHp)||1);
-    return Number(player.hp)/maxHp<=.5 ? .03*a.level : 0;
+    return Number(player.hp)/maxHp<=.5 ? .025*a.level : 0;
   }
   function executeThreshold(player) {
     const a=active(player);
