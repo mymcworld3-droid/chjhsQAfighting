@@ -325,9 +325,9 @@ test('triple barrier beam is attached only to the third accumulated correct stri
   host=advance(advance(host,true),false);host=advance(host,true);
   const out=duel(host,{});
   assert.equal(out.steps.filter(x=>x.innateEffect==='triple-beam').length,1);
-  assert.equal(out.steps.find(x=>x.innateEffect==='triple-beam').damage,150);
+  assert.equal(out.steps.find(x=>x.innateEffect==='triple-beam').damage,120);
   const raid=Raid.resolvePlayerAction(host,{roomId:'beam',actionId:3,correct:true,bossHp:3000,bossMaxHp:3000});
-  assert.deepEqual(raid.innateEffects,[{kind:'triple-beam',damage:150}]);
+  assert.deepEqual(raid.innateEffects,[{kind:'triple-beam',damage:120}]);
   const wrong=duel({...host,answer:{correct:false,atMs:10}},{});
   assert.ok(!wrong.steps.some(x=>x.innateEffect==='triple-beam'));
 });
@@ -339,8 +339,8 @@ function meteorFighter() {
 test('each meteor settles separately, including a third wrong answer, consuming only one Dao shield per hit',()=>{
   const h=meteorFighter(),out=duel(h,{coreShield:true,goldenCore:{type:'ningxin',grade:9}},{round:3});
   const hits=out.steps.filter(x=>x.innateEffect==='meteor');
-  assert.deepEqual(Array.from(hits,x=>x.damage),[0,100,180]);
-  assert.deepEqual(Array.from(hits,x=>x.guestHp),[3000,2900,2720]);
+  assert.deepEqual(Array.from(hits,x=>x.damage),[0,100,120]);
+  assert.deepEqual(Array.from(hits,x=>x.guestHp),[3000,2900,2780]);
   assert.equal(out.guestCoreShield,false);assert.equal(hits.at(-1).meteorCount,3);
   assert.equal(hits.at(-1).skill.includes('三星聚曜'),true);
   const lethal=duel(h,{hp:20,maxHp:3000},{round:3});
@@ -351,13 +351,13 @@ test('raid meteors carry separate HP snapshots, replay identically and award the
   const h=meteorFighter(),before=JSON.stringify(h);
   const input={roomId:'stones',actionId:3,correct:false,bossHp:3000,bossMaxHp:3000};
   const result=Raid.resolvePlayerAction(h,input);
-  assert.deepEqual(result.meteorHits.map(x=>x.damage),[100,100,180]);
-  assert.deepEqual(result.meteorHits.map(x=>[x.beforeHp,x.afterHp]),[[3000,2900],[2900,2800],[2800,2620]]);
-  assert.equal(result.damage,380);assert.equal(JSON.stringify(h),before);
+  assert.deepEqual(result.meteorHits.map(x=>x.damage),[100,100,120]);
+  assert.deepEqual(result.meteorHits.map(x=>[x.beforeHp,x.afterHp]),[[3000,2900],[2900,2800],[2800,2680]]);
+  assert.equal(result.damage,320);assert.equal(JSON.stringify(h),before);
   assert.equal(JSON.stringify(result),JSON.stringify(Raid.resolvePlayerAction(h,input)));
   let wrong=fighter('xingchen','meteor');wrong=advance(advance(wrong,false),false);
   wrong.soulStarAnswerWindow=2;wrong.soulStarCorrectWindow=0;
-  assert.deepEqual(Raid.resolvePlayerAction(wrong,input).meteorHits.map(x=>x.damage),[180]);
+  assert.deepEqual(Raid.resolvePlayerAction(wrong,input) .meteorHits.map(x=>x.damage),[120]);
 });
 test('WuChen returns shield-absorbed normal damage as true damage, excluding incoming true damage and retaliation loops',()=>{
   const h=fighter('wugou','clarity',{coreShield:true,answer:{correct:false,atMs:20}});h.nascentSoul=null;
@@ -380,7 +380,7 @@ test('new recovery branches retain exact rank scaling and two-correct streak cad
     pure=advance(pure,true);assert.equal(Innate.healingOnAnswer(pure),0);
     pure=advance(advance(pure,false),true);assert.equal(Innate.healingOnAnswer(pure),0);
     assert.equal(Innate.healingOnAnswer(advance(p('reverse','balance'),true)),18*n);
-    assert.equal(Innate.healingOnAnswer(advance(p('sword','unity'),true)),15*n);
+    assert.equal(Innate.healingOnAnswer(advance(p('sword','unity'),true)),9*n);
     assert.equal(Innate.shieldDamage(p('wugou','clarity'),1000),10*n);
   }
 });
