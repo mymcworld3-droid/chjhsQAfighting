@@ -10,6 +10,7 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page {
   max-height: none !important;
   margin: 0 !important;
   padding: 0 !important;
+  border-radius: 0 !important;
   overflow: hidden !important;
   background: #889b9f;
   isolation: isolate;
@@ -27,7 +28,7 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   overflow: hidden;
   background: #889b9f;
   background-size: cover;
-  background-position: center;
+  background-position: center bottom;
   isolation: isolate;
   touch-action: pan-x pan-y;
 }

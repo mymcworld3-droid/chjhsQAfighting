@@ -39,7 +39,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css?v=20261019-portrait-tabs2';
+  link.href = 'styles/training-scene-map.css?v=20261021-stage-bottom';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
@@ -263,7 +263,8 @@ function renderScene(next) {
   const safeRendering = trainingRenderProfile() === 'safe';
   const plate = safeRendering ? `assets/training/cultivation-${next}-clean.webp` : layout.image;
   map.style.backgroundImage = `url("${plate}")`;
-  scenery.style.backgroundImage = `url("${plate}")`;
+  // The full-height map owns the bottom-aligned plate. Repeating it on the
+  // navigation-safe terrain plane makes the image visibly end above the rail.
   scenery.replaceChildren(...(safeRendering ? [] : makeSceneryLayers(layout)));
   background = document.createElement('img');
   background.className = 'training-map-background';
