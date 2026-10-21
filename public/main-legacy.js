@@ -1440,6 +1440,7 @@ onAuthStateChanged(auth, async (user) => {
         window.__xiuxianMigrationApproved = false;
         checkAdminRole(false);
         currentUserData = null;
+        window.QAFriendRequests?.reset();
         soloCacheIdentity = '';
         soloCacheRevision += 1;
         soloQuizOpenSerial += 1;
@@ -1524,9 +1525,10 @@ function injectSocialUI() {
             </div>
             <div class="flex gap-2 mb-4">
                 <input type="text" id="input-friend-code" placeholder="輸入代碼..." class="flex-1 bg-slate-900 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-cyan-500 uppercase">
-                <button onclick="addFriend()" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-4 rounded-lg font-bold shadow-lg">
+                <button onclick="addFriend()" aria-label="發送好友邀請" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-3 rounded-lg font-bold shadow-lg">
                     <i class="fa-solid fa-user-plus"></i>
                 </button>
+                <button type="button" data-friend-requests-open aria-label="好友邀請與設定" class="bg-slate-700 text-cyan-200 px-3 rounded-lg"><i class="fa-solid fa-envelope"></i><span id="friend-request-badge" hidden></span></button>
             </div>
             <div id="friend-list-container" class="space-y-3">
                 <div class="text-center text-gray-500 py-10">${t('loading')}</div>
@@ -1548,6 +1550,7 @@ function injectSocialUI() {
     `;
     main.appendChild(pageSocial);
     window.QAFriendChat?.start();
+    window.QAFriendRequests?.repaint();
 }
 
 // 切換分頁 (好友/聊天)
@@ -1806,34 +1809,8 @@ window.addFriend = async () => {
     btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
     try {
-        const q = query(collection(db, "users"), where("friendCode", "==", targetCode));
-        const snap = await getDocs(q);
-        if (snap.empty) {
-            alert("找不到這個好友代碼");
-            btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
-            return;
-        }
-        const targetUserDoc = snap.docs[0];
-        const targetUserId = targetUserDoc.id;
-        const targetUserData = targetUserDoc.data();
-
-        if (currentUserData.friends.includes(targetUserId)) {
-            alert("已經是好友了！");
-            btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>';
-            return;
-        }
-
-        await runTransaction(db, async (transaction) => {
-            const myRef = doc(db, "users", auth.currentUser.uid);
-            const friendRef = doc(db, "users", targetUserId);
-            transaction.update(myRef, { friends: arrayUnion(targetUserId) });
-            transaction.update(friendRef, { friends: arrayUnion(auth.currentUser.uid) });
-        });
-
-        currentUserData.friends.push(targetUserId);
-        alert(`Added ${targetUserData.displayName}!`);
-        input.value = "";
-        loadFriendList();
+        if (!window.QAFriendRequests) throw new Error('好友邀請功能載入中，請稍後再試');
+        if (await window.QAFriendRequests.sendCode(targetCode)) input.value = '';
     } catch (e) {
         console.error(e);
         alert("發生錯誤：" + e.message);
@@ -4353,6 +4330,10 @@ window.addEventListener('xiuxian:invite-blocked', dismissVisibleGameInvites);
 
 function receiveIncomingInvite(invite) {
     if (!invite?.id) return;
+    if (invite.type === 'friend-request') {
+        window.dispatchEvent(new CustomEvent('xiuxian:friend-request'));
+        return;
+    }
     const born = Number(invite.createdAtMs) || Date.now();
     if (Date.now() - born >= 2 * 60 * 1000) {
         pendingIncomingInvites.delete(invite.id);

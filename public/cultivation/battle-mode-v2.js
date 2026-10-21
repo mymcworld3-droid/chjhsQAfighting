@@ -294,6 +294,8 @@ export const featureReady = (async () => {
   function setPlayerAvatar(id, player) {
     const holder = document.getElementById(id);
     if (!holder) return;
+    if (player?.uid) { holder.dataset.xiuxianProfile = player.uid; holder.setAttribute('role', 'button'); holder.tabIndex = 0; }
+    else { delete holder.dataset.xiuxianProfile; holder.removeAttribute('role'); holder.removeAttribute('tabindex'); }
     const img = holder.querySelector('img');
     const fallback = holder.querySelector('.bv2-avatar-fallback');
     if (!img || !fallback) return;
@@ -359,6 +361,7 @@ export const featureReady = (async () => {
         <header class="bv2-head">
           <div><span class="bv2-eyebrow">青雲宗 · 演武臺</span><h2>論道鬥法</h2></div>
           <div class="bv2-head-actions">
+            <button id="bv2-friend-invite" type="button" class="bv2-icon-btn" aria-label="邀請對手成為好友" title="邀請對手成為好友" hidden><i class="fa-solid fa-user-plus"></i></button>
             <span id="bv2-room-badge" class="bv2-room-badge">尚未配對</span>
             <button id="bv2-leave-top" type="button" class="bv2-icon-btn" aria-label="離開鬥法"><i class="fa-solid fa-xmark"></i></button>
           </div>
@@ -455,6 +458,20 @@ export const featureReady = (async () => {
       </div>`;
 
     page.querySelector('#bv2-review-continue')?.addEventListener('click', confirmReview);
+    page.querySelector('#bv2-friend-invite')?.addEventListener('click', async event => {
+      const button = event.currentTarget;
+      const opponent = state.role === 'host' ? state.room?.guest : state.room?.host;
+      if (!opponent?.uid) return;
+      button.disabled = true;
+      try {
+        if (!window.QAFriendRequests) { toast('好友邀請功能載入中，請稍後再試'); return; }
+        await window.QAFriendRequests.send(opponent.uid);
+      } finally { button.disabled = false; }
+    });
+    page.addEventListener('keydown', event => {
+      const avatar = event.target.closest?.('[data-xiuxian-profile]');
+      if (avatar && ['Enter', ' '].includes(event.key)) { event.preventDefault(); avatar.click(); }
+    });
     page.querySelector('#bv2-cancel')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
     page.querySelector('#bv2-leave-top')?.addEventListener('click', () => exitBattle({ navigate: true, forfeit: true }));
     page.querySelector('#bv2-home')?.addEventListener('click', returnFromBattleResult);
@@ -1977,6 +1994,8 @@ export const featureReady = (async () => {
     const room = snap.data(); if (Number(room.modeVersion) !== BATTLE_V2.modeVersion) return;
     const uid = me()?.uid; if (room.host?.uid === uid) state.role = 'host'; else if (room.guest?.uid === uid) state.role = 'guest'; else return;
     state.room = room;
+    const friendInviteButton = document.getElementById('bv2-friend-invite');
+    if (friendInviteButton) friendInviteButton.hidden = !(state.role === 'host' ? room.guest?.uid : room.host?.uid);
     if (typeof persistSettledAnswer === 'function') persistSettledAnswer(room);
     if (room.status !== 'waiting') { state.waitingUnsub?.(); state.waitingUnsub = null; state.waitingSnapshot = null; }
     if (room.status === 'waiting') { renderLobby(room); if (state.role === 'host') { watchWaitingRooms(); scheduleReconcile(); inviteOnlineFriends(state.roomId); } }
@@ -2048,6 +2067,7 @@ export const featureReady = (async () => {
     const session = Number(state.matchSerial) || 0, uid = me().uid;
     window.dispatchEvent(new CustomEvent('xiuxian:invite-blocked'));
     ensurePage(); window.switchToPage?.('page-battle'); showSection('lobby'); renderLobby(null);
+    if (document.getElementById('bv2-friend-invite')) document.getElementById('bv2-friend-invite').hidden = true;
     try {
       await window.ensureCombatStats?.();
       if (!isMatchSessionActive(session, uid)) return;

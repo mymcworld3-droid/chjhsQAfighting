@@ -173,6 +173,21 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
       if (!snap.exists()) { body.innerHTML = '<p class="xpp-loading">查無此修士或帳號已刪除。</p>'; return; }
       const profile = projectProfile(uid, snap.data(), self);
       body.innerHTML = profileMarkup(profile);
+      if (!self) {
+        const add = document.createElement('button');
+        add.type = 'button'; add.className = 'friend-request-action';
+        const alreadyFriend = window.getCurrentUserData?.()?.friends?.includes(uid);
+        add.textContent = alreadyFriend ? '已是好友' : '邀請成為好友';
+        add.disabled = Boolean(alreadyFriend);
+        add.addEventListener('click', async () => {
+          add.disabled = true;
+          try {
+            if (!window.QAFriendRequests) { add.textContent = '功能載入中，請稍後重試'; return; }
+            if (await window.QAFriendRequests.send(uid)) add.textContent = '已發送好友邀請';
+          } finally { add.disabled = false; }
+        });
+        body.appendChild(add);
+      }
       const image = body.querySelector('[data-xpp-avatar]');
       if (image && profile.avatar) {
         image.onload = () => { image.hidden = false; image.nextElementSibling.hidden = true; };

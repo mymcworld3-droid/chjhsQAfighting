@@ -27,8 +27,9 @@ function loadAvatarController() {
         set src(value) { this._src=value; this.loads++; },
         get src() { return this._src; }
       };
-      holders.set(id, { querySelector(sel) { return sel === 'img' ? img : sel === '.bv2-avatar-fallback' ? fallback : null; } });
-      return {img,fallback};
+      const holder = { dataset: {}, attributes: {}, setAttribute(key,value) { this.attributes[key] = value; }, removeAttribute(key) { delete this.attributes[key]; }, querySelector(sel) { return sel === 'img' ? img : sel === '.bv2-avatar-fallback' ? fallback : null; } };
+      holders.set(id, holder);
+      return {img,fallback,holder};
     }
   };
 }
@@ -53,9 +54,11 @@ test('match lobby and versus intro retain independent player avatar slots', () =
 
 test('avatar renderer shows saved image, avoids duplicate loads and falls back on missing or broken images', () => {
   const {api,mount} = loadAvatarController();
-  const {img,fallback} = mount('match');
+  const {img,fallback,holder} = mount('match');
   assert.match(api.avatarMarkup('match'), /class="bv2-avatar"/);
-  api.setPlayerAvatar('match', {name:'測試修士',avatar:'assets/avatars/test.png'});
+  api.setPlayerAvatar('match', {uid:'opponent',name:'測試修士',avatar:'assets/avatars/test.png'});
+  assert.equal(holder.dataset.xiuxianProfile, 'opponent');
+  assert.equal(holder.attributes.role, 'button');
   assert.equal(img.src,'assets/avatars/test.png');
   assert.equal(img.alt,'測試修士的頭像');
   assert.equal(img.hidden,true);
@@ -70,6 +73,8 @@ test('avatar renderer shows saved image, avoids duplicate loads and falls back o
   assert.equal(fallback.hidden,false);
 
   api.setPlayerAvatar('match', null);
+  assert.equal(holder.dataset.xiuxianProfile, undefined);
+  assert.equal(holder.attributes.role, undefined);
   assert.equal(img.src,'');
   assert.equal(img.hidden,true);
   assert.equal(fallback.hidden,false);

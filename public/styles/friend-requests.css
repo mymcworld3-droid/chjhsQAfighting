@@ -1,0 +1,20 @@
+#friend-requests-dialog[hidden],#friend-request-notice[hidden],#friend-request-badge[hidden]{display:none!important}
+#friend-requests-dialog{position:fixed;inset:0;z-index:18000;background:#020617c9;display:grid;place-items:center;padding:16px;color:#e2e8f0}
+#friend-requests-dialog section{width:min(440px,100%);max-height:85dvh;overflow:auto;padding:20px;border:1px solid #467c88;border-radius:20px;background:linear-gradient(150deg,#142f3b,#0f172a);box-shadow:0 20px 70px #0009}
+#friend-requests-dialog header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+#friend-requests-dialog h2{font-size:21px;font-weight:700;color:#a5f3fc}
+#friend-requests-dialog button,.friend-request-action{border:1px solid #467c88;background:#164e63;color:#ecfeff;border-radius:9px;padding:8px 12px;cursor:pointer;font-size:14px}
+#friend-requests-dialog button:disabled,.friend-request-action:disabled{opacity:.5;cursor:wait}
+.friend-request-setting{display:flex;align-items:center;gap:8px;font-size:14px}
+.friend-request-setting input{width:18px;height:18px;accent-color:#22d3ee;flex-shrink:0}
+.friend-request-help{font-size:12px;line-height:1.7;color:#94a3b8;margin:10px 0}
+#friend-request-message{font-size:13px;color:#fde68a;margin:12px 0}
+.friend-request-row{display:flex;align-items:center;gap:8px;border-top:1px solid #334155;padding:12px 0}
+.friend-request-row strong{flex:1;min-width:0;overflow-wrap:anywhere;font-size:14px}
+.friend-request-row button{flex-shrink:0}
+.friend-request-row button:last-child{background:#334155!important}
+#friend-request-notice{position:fixed;z-index:20000;bottom:max(90px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:max-content;max-width:90vw;padding:12px 18px;border:1px solid #67e8f9;border-radius:12px;background:#0f273dee;color:#ecfeff;box-shadow:0 6px 24px #0008;font-size:14px;text-align:center}
+[data-friend-requests-open]{position:relative;flex-shrink:0}
+#friend-request-badge{position:absolute;top:-6px;right:-5px;min-width:17px;border-radius:12px;background:#f43f5e;color:#fff;font-size:11px;padding:1px 4px}
+#input-friend-code{min-width:0}
+#bv2-friend-invite[hidden]{display:none!important}

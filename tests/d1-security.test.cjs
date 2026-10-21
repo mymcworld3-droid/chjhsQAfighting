@@ -19,12 +19,14 @@ test('D1 browser transaction rejects stale versions and freezes all writes on co
   await assert.rejects(executeCommit(db,{reads:[{target:{role:'A',path:'users/alice',kind:'doc'},version:before.version}],writes:[write('users/alice',{'stats.gold':0})]},context),e=>e.code==='aborted');
   assert.equal((await db.doc('users/alice').get()).data().stats.gold,15);
 });
-test('D1 cross-user friend change requires matching reciprocal own update',async()=>{
+test('D1 browser cannot bypass friend consent or change invitation preferences',async()=>{
   const {db}=setup();for(const uid of ['alice','bob'])await db.doc('users/'+uid).set({uid,isAdmin:false,friends:[]});
   const union=uid=>({__d1op:'arrayUnion',args:[uid]});
   await assert.rejects(executeCommit(db,{writes:[write('users/bob',{friends:union('alice')})]},context),e=>e.status===403);
-  await executeCommit(db,{writes:[write('users/alice',{friends:union('bob')}),write('users/bob',{friends:union('alice')})]},context);
-  assert.deepEqual((await db.doc('users/bob').get()).data().friends,['alice']);
+  await assert.rejects(executeCommit(db,{writes:[write('users/alice',{friends:union('bob')}),write('users/bob',{friends:union('alice')})]},context),e=>e.status===403);
+  await assert.rejects(executeCommit(db,{writes:[write('users/alice',{friends:['bob']})]},context),e=>e.status===403);
+  await assert.rejects(executeCommit(db,{writes:[write('users/alice',{friendInvitesDisabled:true})]},context),e=>e.status===403);
+  assert.deepEqual((await db.doc('users/bob').get()).data().friends,[]);
 });
 test('D1 marketplace seller credit requires an atomic listing transition and buyer debit',async()=>{
   const {db}=setup();await db.doc('users/alice').set({uid:'alice',isAdmin:false,stats:{gold:100}});await db.doc('users/bob').set({uid:'bob',stats:{gold:10}});
@@ -36,6 +38,8 @@ test('D1 marketplace seller credit requires an atomic listing transition and buy
 test('D1 private documents and public player projection protect email and private learning fields',()=>{
   assert.equal(mayRead({role:'A',path:'exam_logs/x',data:{uid:'bob'},uid:'alice',admin:false}),false);
   assert.equal(mayRead({role:'BD',path:'friendChats/x/messages/y',data:{},uid:'alice',admin:false}),false);
+  assert.equal(mayRead({role:'A',path:'friendRequestInboxes/bob',data:{},uid:'alice',admin:false}),false);
+  assert.equal(mayRead({role:'A',path:'friendRequestOutboxes/alice',data:{},uid:'alice',admin:false}),false);
   const p=publicPlayer({displayName:'B',email:'secret',isAdmin:true,profile:{weakSubjects:'secret'},stats:{totalScore:20,knowledgePointMapV1:{secret:true}}});
   assert.equal(p.email,undefined);assert.equal(p.isAdmin,undefined);assert.equal(p.profile.weakSubjects,undefined);assert.equal(p.stats.knowledgePointMapV1,undefined);
 });

@@ -263,6 +263,7 @@ function registerInvitationApi(app, {
 }
 
 module.exports = registerInvitationApi;
+module.exports.verifyRequest = verifyRequest;
 module.exports.__test = {
   INVITE_TTL_MS, ONLINE_TTL_MS, LISTEN_TIMEOUT_MS, uniqueUids,
   createInvitationHub, validateRoom, verifyRequest

@@ -54,6 +54,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/artifact-battle-effects.js',
   './cultivation/combat-power.js',
   './cultivation/player-profile.js',
+  './cultivation/friend-requests.js',
   './cultivation/material-system.js',
   './cultivation/startup-resource-preloader.js',
   './cultivation/inventory-dismantle.js',
