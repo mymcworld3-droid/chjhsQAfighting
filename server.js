@@ -411,9 +411,19 @@ function isTooSimilarQuestion(candidate, history) {
     });
 }
 
+// Raise the question depth by one tier while keeping the public difficulty IDs.
 function qualityPolicy(subject, difficulty) {
     const languageSocial = ['國文', '英文', '歷史', '地理', '公民'].includes(subject);
     if (difficulty === 'hard') {
+        return {
+            cognitive: '5',
+            steps: '4-6',
+            instruction: languageSocial
+                ? '至少整合兩項文本或資料線索，透過多層推論、比較不同觀點或評估證據作答；不得只問單一名詞、翻譯或年代記憶。難度來自思考深度，不是冷僻知識或加長題幹，仍須在指定年級與單元範圍內。'
+                : '至少需要 4 個有意義的解題步驟，整合兩個以上子技能與多項條件，包含建模、逆向推理、方法比較或結果檢驗。不得用重複計算、冗長敘述或超綱知識湊難度。'
+        };
+    }
+    if (difficulty === 'medium') {
         return {
             cognitive: '4-5',
             steps: '3-5',
@@ -422,19 +432,12 @@ function qualityPolicy(subject, difficulty) {
                 : '至少需要 3 個有意義的解題步驟，優先結合兩個子技能、逆向推理、資料判讀或陌生情境。'
         };
     }
-    if (difficulty === 'medium') {
-        return {
-            cognitive: '3-4',
-            steps: '2-3',
-            instruction: languageSocial
-                ? '不能只靠看到關鍵字直接作答；至少需要理解上下文、因果、比較或資訊整合。'
-                : '至少包含一次轉換、建模、判斷方法或兩步計算；避免單純代公式。'
-        };
-    }
     return {
-        cognitive: '2-3',
-        steps: '1-2',
-        instruction: '基礎題仍要檢查真正理解；可以直接，但避免反覆只考定義、背誦或完全相同公式代入。'
+        cognitive: '3-4',
+        steps: '2-3',
+        instruction: languageSocial
+            ? '不能只靠看到關鍵字直接作答；至少需要理解上下文、因果、比較或資訊整合。'
+            : '至少包含一次轉換、建模、判斷方法或兩步計算；避免單純代公式。'
     };
 }
 
@@ -566,7 +569,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
         // 低正確率代表需要更清楚的鷹架，不代表永遠只做 easy。
-        // hard 最多降一級到 medium；medium 保持兩步以上的理解／推理要求。
+        // hard 最多降一級到 medium；medium 仍採原困難級的理解／推理要求。
         if (!raidQuickSimple) {
             if (stats.total > 3 && Number(accuracy) < 40 && difficulty === "hard") difficulty = "medium";
             if (stats.total > 5 && Number(accuracy) > 80) difficulty = "hard";
@@ -655,8 +658,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             "concept_id": "穩定且短小的考點ID",
             "template_id": "描述解題骨架的ID",
             "question_form": "${targetForm}",
-            "cognitive_level": 1,
-            "reasoning_steps": 1
+            "cognitive_level": ${Number.parseInt(quality.cognitive, 10)},
+            "reasoning_steps": ${Number.parseInt(quality.steps, 10)}
         }
         請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
     `;
@@ -758,10 +761,10 @@ app.post('/api/generate-quiz', async (req, res) => {
                 .trim().slice(0, 120);
             parsed.cognitive_level = raidQuickSimple
                 ? Math.max(1, Math.min(2, Number(parsed.cognitive_level) || 1))
-                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2)));
+                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 5 : difficulty === 'medium' ? 4 : 3)));
             parsed.reasoning_steps = raidQuickSimple
                 ? 1
-                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 3 : difficulty === 'medium' ? 2 : 1)));
+                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2)));
 
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');
