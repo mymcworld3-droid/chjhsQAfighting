@@ -1,5 +1,5 @@
-import { createStarfallImpact } from './battle-combat-feedback.js';
 import { RAID_MVP, shenPhaseForHp, shenIntentForRound, bossClockState } from './raid-engine.js';
+import { createStarfallImpact } from './battle-combat-feedback.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
 import { generateRaidQuestion } from './raid-question.js';
@@ -15,7 +15,7 @@ import { rewardRepository } from './data/reward-repository.js';
 import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
 import './raid-difficulty.js';
 import './combat-contribution.js';
-import { createInnateAbilityEffect } from './innate-ability-effects.js';
+import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-effects.js';
 
 (function () {
   'use strict';
@@ -853,8 +853,10 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
     healed = 0,
     critical = false,
     comboHits = [],
-    starfallCount = 0,
-    innateEffects = []
+    innateEffects = [],
+    meteorHits = [],
+    specialImpact = '',
+    starfallCount = 0
   } = {}) {
     // Boss and answer settlements may arrive together. Serialize their visual
     // feedback without changing the authoritative combat or answer state.
@@ -865,28 +867,29 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
     state.battleSceneTail = tail;
     await previous;
     if (token !== state.battleSceneToken) { release(); return; }
-    let notice, stage, starfall;
+    let notice, stage, legacyStarfall;
     const abilityVisuals=[];
+    const sceneStart=now(),baseDuration=meteorHits.length&&damage<=meteorHits.reduce((sum,hit)=>sum+hit.damage,0)?0:1150;
     try {
       state.battleScenePlaying = true;
+      state.meteorReplayHp=meteorHits.length?meteorHits[0].beforeHp:null;
       setRaidCombatFocus(true);
       renderArena({ transition: false });
 
       const arena = document.getElementById('raid-arena');
       stage = arena?.querySelector('.raid-stage');
-      globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
+      if(!meteorHits.length&&starfallCount>0)legacyStarfall=createStarfallImpact(stage,{count:starfallCount,x:'50%',y:'38%'});
+      if(baseDuration)globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
         rate: attacker === 'boss' ? .8 : critical ? .85 : 1.05,
         key: 'raid-hit:'+state.roomId+':'+attacker+':'+state.playerActionCount+':'+state.lastBossActionSeen
       });
       if (stage) stage.classList.add(attacker === 'player' ? 'raid-player-strike' : 'raid-boss-strike');
-      if (attacker === 'player' && starfallCount > 0) starfall = createStarfallImpact(stage, { count: starfallCount, x: '50%', y: '38%' });
       const actionCaption = arena?.querySelector('.raid-boss-portrait > span');
       if (actionCaption && actionName) actionCaption.textContent = '「' + actionName + '」';
 
       notice = document.createElement('div');
       notice.className = 'raid-combat-event ' + (critical ? 'is-critical ' : '') + (comboHits.length ? 'has-combo ' : '') + (attacker === 'player' ? 'player' : 'boss');
       const details = [];
-      if (starfallCount > 0) details.push('星隕 ×' + starfallCount);
       if (critical) details.push('爆擊');
       if (comboHits.length) details.push('連擊 ×'+comboHits.length+'：'+comboHits.map(n=>Math.round(n)).join('／'));
       if (guarded) details.push('道心護體・完全抵擋');
@@ -899,6 +902,8 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         '<b>' + (guarded ? '0' : Math.max(0, Math.round(Number(damage) || 0)).toLocaleString()) + ' 傷害</b>' +
         (details.length ? '<span>' + details.map(escapeHtml).join('・') + '</span>' : '');
       arena?.appendChild(notice);
+      const shakeKind=specialImpact || innateEffects.find(effect=>['vital-orb','triple-beam'].includes(effect.kind))?.kind;
+      if(shakeKind&&baseDuration)shakeBattleScreen(document.querySelector('main')||stage,{kind:shakeKind,delayMs:500});
       for(const effect of innateEffects) {
         const visual=createInnateAbilityEffect(stage,{kind:effect.kind,
           source:stage?.querySelector('.raid-stage-player.me .raid-stage-player-art'),
@@ -906,14 +911,32 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         if(visual)abilityVisuals.push(visual);
       }
 
-      await wait(1150);
+      await wait(Math.max(0,sceneStart+baseDuration-now()));
+      for(let index=0;index<meteorHits.length;index++) {
+        const hit=meteorHits[index],startAt=sceneStart+baseDuration+index*900;
+        if(token!==state.battleSceneToken)break;
+        const visual=createInnateAbilityEffect(stage,{kind:'meteor',
+          source:stage?.querySelector('.raid-stage-player.me .raid-stage-player-art'),
+          target:stage?.querySelector('.raid-boss-portrait'),durationMs:900,elapsedMs:Math.max(0,now()-startAt)});
+        if(visual)abilityVisuals.push(visual);
+        await wait(Math.max(0,startAt+400-now()));
+        if(token!==state.battleSceneToken)break;
+        state.meteorReplayHp=hit.afterHp;updateLiveLabels();
+        if(notice)notice.innerHTML='<small>'+escapeHtml(hit.skill||'星隕')+'</small><strong>隕石 '+(index+1)+' / '+meteorHits.length+'</strong><b>'+Math.round(hit.damage).toLocaleString()+' 傷害</b>';
+        if(now()<startAt+900) {
+          globalThis.QAGameAudio?.play('combat-impact',{rate:.75,key:'raid-meteor:'+state.roomId+':'+state.playerActionCount+':'+index});
+          shakeBattleScreen(document.querySelector('main')||stage,{kind:'meteor',elapsedMs:Math.max(0,now()-startAt-400)});
+        }
+        await wait(Math.max(0,startAt+900-now()));visual?.dispose?.();
+      }
     } catch (error) {
       console.warn('[Raid] combat feedback failed:', error);
     } finally {
-      try { starfall?.remove(); for(const visual of abilityVisuals)visual.dispose?.();notice?.remove(); stage?.classList.remove('raid-player-strike', 'raid-boss-strike'); }
+      try { legacyStarfall?.remove();for(const visual of abilityVisuals)visual.dispose?.();notice?.remove(); stage?.classList.remove('raid-player-strike', 'raid-boss-strike'); }
       finally {
         release();
         if (token === state.battleSceneToken && state.battleSceneTail === tail) {
+          state.meteorReplayHp=null;
           state.battleSceneTail = null;
           state.battleScenePlaying = false;
           setRaidCombatFocus(false);
@@ -1123,8 +1146,10 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         critical: resolution.critical === true,
         comboHits: resolution.comboHits || [],
         innateSkill: String(resolution.innateSkill || ''),
-        starfallCount: Math.min(3, Math.max(0, Number(resolution.starfallCount) || 0)),
         innateEffects: Array.isArray(resolution.innateEffects)?resolution.innateEffects:[],
+        meteorHits:Array.isArray(resolution.meteorHits)?resolution.meteorHits:[],
+        starfallCount:Math.min(4,Math.max(0,Number(resolution.starfallCount)||0)),
+        specialImpact:String(resolution.specialImpact||''),
         personalDamage: Math.max(0, Number(resolution.personalDamage) || 0),
         teamBurstDamage: Math.max(0, Number(resolution.teamBurstDamage) || 0),
         teamGuardReady: resolution.teamGuardReady === true,
@@ -1173,16 +1198,18 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + hitText + teamText + learningText + spiritText);
       }
 
-      if ((state.answerCorrect && state.lastPlayerAction.damage > 0) || state.lastPlayerAction.starfallCount > 0) {
+      if ((state.lastPlayerAction.damage > 0 && (state.answerCorrect || state.lastPlayerAction.meteorHits.length)) || state.lastPlayerAction.starfallCount > 0) {
         await playBattleScene({
           attacker: 'player',
-          actionName: state.lastPlayerAction.starfallCount > 0 ? '元嬰・星隕' : state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : state.lastPlayerAction.innateSkill || (state.lastPlayerAction.critical ? '爆擊' : state.lastPlayerAction.comboHits.length ? '連擊' : '破勢一擊'),
+          actionName: state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : state.lastPlayerAction.innateSkill || (state.lastPlayerAction.critical ? '爆擊' : state.lastPlayerAction.comboHits.length ? '連擊' : '破勢一擊'),
           critical: state.lastPlayerAction.critical,
           comboHits: state.lastPlayerAction.comboHits,
-          starfallCount: state.lastPlayerAction.starfallCount,
           damage: state.lastPlayerAction.damage,
           healed: state.lastPlayerAction.healed,
-          innateEffects:state.lastPlayerAction.innateEffects
+          innateEffects:state.lastPlayerAction.innateEffects,
+          meteorHits:state.lastPlayerAction.meteorHits,
+          starfallCount:state.lastPlayerAction.starfallCount,
+          specialImpact:state.lastPlayerAction.specialImpact
         });
       } else if (state.pendingFinishRoom && !state.battleSceneTail) {
         const terminal = state.pendingFinishRoom;
@@ -1260,7 +1287,8 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         resolution.teamGuarded ? '同心破陣・Boss 傷害降低 45%' : '',
         resolution.guarded ? '道心護體擋下攻擊' : ('受到 ' + Math.max(0, Number(resolution.damage) || 0).toLocaleString() + ' 傷害'),
         Number(resolution.reflectedDamage) > 0 ? ('反擊 ' + Number(resolution.reflectedDamage).toLocaleString()) : '',
-        Number(resolution.healingDamage)>0?'歸元納氣・真傷 '+Number(resolution.healingDamage).toLocaleString():''
+        Number(resolution.healingDamage)>0?'歸元納氣・真傷 '+Number(resolution.healingDamage).toLocaleString():'',
+        Number(resolution.shieldDamage)>0?'無塵神光・真傷 '+Number(resolution.shieldDamage).toLocaleString():''
       ].filter(Boolean).join('・');
       toast(bossHint);
 
@@ -1273,7 +1301,7 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         damage: Math.max(0, Number(resolution.damage) || 0),
         reflectedDamage: Math.max(0, Number(resolution.reflectedDamage) || 0),
         guarded: resolution.guarded === true,
-        defenseSkill: resolution.teamGuarded ? '同心破陣・傷害降低 45%' : '',
+        defenseSkill: [resolution.teamGuarded ? '同心破陣・傷害降低 45%' : '',Number(resolution.shieldDamage)>0?'無塵神光・真傷 '+resolution.shieldDamage:''].filter(Boolean).join('・'),
         healed:Number(resolution.healed)||0,
         innateEffects:Array.isArray(resolution.innateEffects)?resolution.innateEffects:[]
       });
@@ -1338,8 +1366,9 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
     const bossBar = document.getElementById('raid-boss-hp-bar');
     const playerHp = document.getElementById('raid-player-hp-text');
     const playerBar = document.getElementById('raid-player-hp-bar');
-    if (bossHp) bossHp.textContent = Math.round(state.boss.hp).toLocaleString() + ' / ' + Math.round(state.boss.maxHp).toLocaleString();
-    if (bossBar) bossBar.style.width = hpPct(state.boss.hp, state.boss.maxHp) + '%';
+    const displayedBossHp=Number.isFinite(state.meteorReplayHp)?state.meteorReplayHp:state.boss.hp;
+    if (bossHp) bossHp.textContent = Math.round(displayedBossHp).toLocaleString() + ' / ' + Math.round(state.boss.maxHp).toLocaleString();
+    if (bossBar) bossBar.style.width = hpPct(displayedBossHp, state.boss.maxHp) + '%';
     if (playerHp) playerHp.textContent = Math.round(state.player.hp).toLocaleString() + ' HP';
     if (playerBar) playerBar.style.width = hpPct(state.player.hp, state.player.maxHp) + '%';
     const arena = document.getElementById('raid-arena');
@@ -1730,7 +1759,7 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
       selectedChoice: null, answerCorrect: null, playerActionCount: 0, bossStartedAtMs: 0, bossActionCount: 0,
       lastBossAction: null, lastPlayerAction: null, questionLoading: false, pendingQuestionWork: null, openingQuestion: false, roomId: '', room: null,
       lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false,
-      battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, battleSceneTail: null, pendingFinishRoom: null, invitedRoomId: '',
+      battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, battleSceneTail: null, meteorReplayHp:null,pendingFinishRoom: null, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: '',
       learningOutcome: null, roomCommand: ''
     });

@@ -29,7 +29,7 @@ function duel(host,guest,extra={}) {
   return e.settle({roomId:'divine-test',round:1,host:{answer:{correct:true,atMs:10},...host},
     guest:{uid:'g',totalScore:68,hp:3000,maxHp:3000,atk:200,answer:{correct:false,atMs:20},...guest},
     resolveEquipmentHit:e.window.resolveArtifactBattleHit,resolveGuardedFollowup:e.window.resolveArtifactGuardedFollowup,
-    resolveTalentDefense:e.window.resolveArtifactBattleDefense,...extra});
+    resolveTalentDefense:e.window.resolveArtifactBattleDefense,resolveGuardAbsorption:e.window.resolveArtifactGuardAbsorption,...extra});
 }
 test('all nine cores have two exclusive ten-rank variations and awakening is free at Huashen',()=>{
   assert.equal(Object.keys(Innate.TYPES).length,9);
@@ -43,21 +43,21 @@ test('all nine cores have two exclusive ten-rank variations and awakening is fre
     assert.equal(Object.keys(chosen.growth.paths).length,1);
   }
 });
-test('ranks consume 4 through 20 fragments exactly, cap at ten, and switching retains rank',()=>{
+test('ranks consume 2 through 10 fragments exactly, cap at ten, and switching retains rank',()=>{
   const p=account('ocean','tide',1);
-  for(let n=2;n<=10;n++) {const next=Innate.upgrade(p);assert.equal(next.cost,2*n);Innate.apply(p,next);}
-  assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],892);
+  for(let n=2;n<=10;n++) {const next=Innate.upgrade(p);assert.equal(next.cost,n);Innate.apply(p,next);}
+  assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],946);
   assert.equal(Innate.upgrade(p).ok,false);
   Innate.apply(p,Innate.select(p,'surge'));
   assert.equal(Innate.snapshot(p).level,10);assert.equal(Innate.snapshot(p).branch,'surge');
-  assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],892);
+  assert.equal(p.materialSystem.inventory[Growth.ITEM_ID],946);
   p.cultivationTraining.equippedCore.type='sword';assert.equal(Innate.snapshot(p),null);
   Innate.apply(p,Innate.select(p,'unity'));assert.equal(Innate.snapshot(p).level,1);
   p.cultivationTraining.equippedCore.type='ocean';assert.equal(Innate.snapshot(p).level,10);
   assert.equal(Innate.snapshot(p).branch,'surge');
 });
 test('insufficient resources, disabled cores and forged/mismatched powers do not grant effects',()=>{
-  const p=account('ocean','tide',1);p.materialSystem.inventory[Growth.ITEM_ID]=3;
+  const p=account('ocean','tide',1);p.materialSystem.inventory[Growth.ITEM_ID]=1;
   assert.equal(Innate.upgrade(p).ok,false);assert.equal(p.innateAbilityGrowth.paths.ocean.level,1);
   p.cultivationTraining.coreEnabled=false;assert.equal(Innate.snapshot(p),null);
   const f=fighter('ocean','tide');
@@ -85,26 +85,26 @@ test('offensive variations respect HP boundaries, alternating answers, streaks a
   assert.equal(Innate.attack(advance(fighter('pojing','execute'),true),{hp:500,maxHp:1000}).normal,0);
   assert.equal(Innate.executeThreshold(fighter('pojing','execute')),.7);
   assert.equal(Innate.attack(advance(fighter('reverse','defy',{hp:1500}),true),target).normal,60);
-  for(const [type,branch,every,damage] of [['ocean','surge',3,120],['pojing','momentum',3,150],['xingchen','meteor',3,180],['sword','pursuit',2,80]]) {
+  for(const [type,branch,every,damage] of [['ocean','surge',3,120],['pojing','momentum',3,150],['sword','pursuit',2,80]]) {
     let p=fighter(type,branch);
     for(let i=1;i<=every;i++){p=advance(p,true);assert.equal(Innate.attack(p,target).normal,i===every?damage:0);if(i<every)p=advance(p,false);}
   }
   let focus=fighter('ningxin','focus');focus=advance(advance(focus,true),true);
   assert.equal(Innate.attack(focus,target).normal,80);
   focus=advance(advance(focus,false),true);assert.equal(Innate.attack(focus,target).normal,0);
-  assert.equal(Innate.attack(advance(fighter('wugou','clarity'),true),target).trueDamage,8);
+  assert.equal(Innate.attack(advance(fighter('wugou','clarity'),true),target).trueDamage,0);
   assert.equal(Innate.attack(advance(fighter('sword','unity'),true),target).normal,30);
 });
 test('healing variations clamp to missing HP and never heal a dead player',()=>{
   assert.equal(Innate.healingOnAnswer(advance(fighter('taichu','renew'),true)),150);
-  assert.equal(Innate.healingOnAnswer(advance(fighter('reverse','balance'),true)),90);
-  assert.equal(Innate.healingOnAnswer(advance(fighter('sword','unity'),true)),10);
+  assert.equal(Innate.healingOnAnswer(advance(fighter('reverse','balance'),true)),180);
+  assert.equal(Innate.healingOnAnswer(advance(fighter('sword','unity'),true)),150);
   let calm=fighter('ningxin','calm');assert.equal(Innate.healingOnAnswer(advance(calm,true)),0);
   calm=advance(advance(calm,false),true);assert.equal(Innate.healingOnAnswer(calm),180);
   let moon=fighter('xingchen','moon');for(const correct of [true,true,false])moon=advance(moon,correct);
   assert.equal(Innate.healingOnAnswer(moon),60);
-  let pure=fighter('wugou','purify');for(let i=0;i<3;i++)pure=advance(pure,true);
-  assert.equal(Innate.healingOnAnswer(pure),90);
+  let pure=fighter('wugou','purify');for(let i=0;i<2;i++)pure=advance(pure,true);
+  assert.equal(Innate.healingOnAnswer(pure),180);
   let thunder=fighter('thunder','nourish');for(const correct of [true,false,true])thunder=advance(thunder,correct);
   assert.equal(Innate.healingOnAnswer(thunder),60);
   assert.equal(Innate.healingOnAnswer(advance(fighter('taichu','renew',{hp:2999}),true)),1);
@@ -140,7 +140,7 @@ test('WuGou innate light passes Dao shield while normal divine pursuit uses arti
   const p=account('wugou','clarity');p.cultivationTraining.equippedCore.grade=1;p.nascentSoulGrowth.branches.core=10;
   const host=Raid.trustedRaidPlayerSnapshot(p,'h');
   const shielded=duel(host,{coreShield:true,goldenCore:{type:'ningxin',grade:9}});
-  assert.equal(shielded.guestHp,2920); // 72 nascent + 8 innate; no new >80 flat true-damage supply.
+  assert.equal(shielded.guestHp,2928); // Existing nascent true damage remains; no innate flat true damage.
   const h=fighter('ocean','tide');h.nascentSoul=null;
   const defended=duel(h,{artifactBattle:{effects:[{type:'equip_damage_reduction_percent',value:.5}]}});
   const base=duel({...h,innateAbility:null},{artifactBattle:{effects:[{type:'equip_damage_reduction_percent',value:.5}]}});
@@ -207,7 +207,7 @@ test('the actual training markup offers two choices, rank previews, disabled upg
   let markup=ctx.innateAbilityMarkup(p);
   assert.equal((markup.match(/data-ia-select=/g)||[]).length,2);
   assert.equal((markup.match(/is-selected/g)||[]).length,1);
-  assert.match(markup,/4 \/ 10 階/);assert.match(markup,/升至 5 階需 10 元嬰碎精/);
+  assert.match(markup,/4 \/ 10 階/);assert.match(markup,/升至 5 階需 5 元嬰碎精/);
   assert.match(markup,/下一階/);assert.match(markup,/對戰金丹期及以下修士時，神通全部封印/);
   p.materialSystem.inventory[Growth.ITEM_ID]=0;
   assert.match(ctx.innateAbilityMarkup(p),/data-ia-upgrade disabled>碎精不足/);
@@ -218,7 +218,7 @@ test('the actual training markup offers two choices, rank previews, disabled upg
 test('UI transactions serialize double taps, recompute costs after retry and do not spend on failure or changed core',async()=>{
   const r=uiRuntime({retry:true});await Promise.all([r.ctx.save(),r.ctx.save()]);
   assert.equal(r.writes.length,1);assert.equal(r.remote.innateAbilityGrowth.paths.ocean.level,3);
-  assert.equal(r.local.materialSystem.inventory[Growth.ITEM_ID],990);
+  assert.equal(r.local.materialSystem.inventory[Growth.ITEM_ID],995);
   for(const options of [{fail:true},{changedCore:true}]) {
     const bad=uiRuntime(options);await bad.ctx.save();
     assert.equal(bad.writes.length,0);assert.equal(bad.local.materialSystem.inventory[Growth.ITEM_ID],1000);
@@ -311,4 +311,57 @@ test('triple barrier beam is attached only to the third accumulated correct stri
   assert.deepEqual(raid.innateEffects,[{kind:'triple-beam',damage:150}]);
   const wrong=duel({...host,answer:{correct:false,atMs:10}},{});
   assert.ok(!wrong.steps.some(x=>x.innateEffect==='triple-beam'));
+});
+function meteorFighter() {
+  const p=account('xingchen','meteor');p.cultivationTraining.equippedCore.grade=1;p.nascentSoulGrowth.branches.core=10;
+  let h=Raid.trustedRaidPlayerSnapshot(p,'h');h=advance(advance(h,true),true);
+  return {...h,soulStarCorrectWindow:2,soulStarAnswerWindow:2,answer:{correct:false,atMs:10}};
+}
+test('each meteor settles separately, including a third wrong answer, consuming only one Dao shield per hit',()=>{
+  const h=meteorFighter(),out=duel(h,{coreShield:true,goldenCore:{type:'ningxin',grade:9}},{round:3});
+  const hits=out.steps.filter(x=>x.innateEffect==='meteor');
+  assert.deepEqual(Array.from(hits,x=>x.damage),[0,100,180]);
+  assert.deepEqual(Array.from(hits,x=>x.guestHp),[3000,2900,2720]);
+  assert.equal(out.guestCoreShield,false);assert.equal(hits.at(-1).meteorCount,3);
+  assert.equal(hits.at(-1).skill.includes('三星聚曜'),true);
+  const lethal=duel(h,{hp:20,maxHp:3000},{round:3});
+  assert.equal(lethal.steps.filter(x=>x.innateEffect==='meteor').length,1);
+  assert.equal(lethal.guestHp,0);
+});
+test('raid meteors carry separate HP snapshots, replay identically and award the additional stone even with zero correct',()=>{
+  const h=meteorFighter(),before=JSON.stringify(h);
+  const input={roomId:'stones',actionId:3,correct:false,bossHp:3000,bossMaxHp:3000};
+  const result=Raid.resolvePlayerAction(h,input);
+  assert.deepEqual(result.meteorHits.map(x=>x.damage),[100,100,180]);
+  assert.deepEqual(result.meteorHits.map(x=>[x.beforeHp,x.afterHp]),[[3000,2900],[2900,2800],[2800,2620]]);
+  assert.equal(result.damage,380);assert.equal(JSON.stringify(h),before);
+  assert.equal(JSON.stringify(result),JSON.stringify(Raid.resolvePlayerAction(h,input)));
+  let wrong=fighter('xingchen','meteor');wrong=advance(advance(wrong,false),false);
+  wrong.soulStarAnswerWindow=2;wrong.soulStarCorrectWindow=0;
+  assert.deepEqual(Raid.resolvePlayerAction(wrong,input).meteorHits.map(x=>x.damage),[180]);
+});
+test('WuChen returns shield-absorbed normal damage as true damage, excluding incoming true damage and retaliation loops',()=>{
+  const h=fighter('wugou','clarity',{coreShield:true,answer:{correct:false,atMs:20}});h.nascentSoul=null;
+  const opponent={uid:'g',answer:{correct:true,atMs:10},artifactBattle:{effects:[
+    {type:'equip_damage_percent',value:1},{type:'equip_true_damage_flat',value:80},{type:'equip_reflect_percent',value:1}]}};
+  const out=duel(h,opponent);
+  assert.equal(out.hostHp,1120);assert.equal(out.guestHp,2960);
+  const light=out.steps.filter(x=>x.skill==='本命神通・無塵神光');
+  assert.equal(light.length,1);assert.equal(light[0].damage,40);
+  const raid=Raid.resolveBossDefense(h,{bossAction:{damage:200},bossHp:3000});
+  assert.equal(raid.damage,0);assert.equal(raid.shieldDamage,20);assert.equal(raid.reflectedDamage,0);
+  const suppressed=duel(h,{...opponent,totalScore:67});
+  assert.ok(!suppressed.steps.some(x=>x.skill==='本命神通・無塵神光'));
+});
+test('new recovery branches retain exact rank scaling and two-correct streak cadence',()=>{
+  for(let n=1;n<=10;n++) {
+    const p=(type,branch)=>({...fighter(type,branch),innateAbility:{version:1,type,branch,level:n}});
+    let pure=advance(p('wugou','purify'),true);assert.equal(Innate.healingOnAnswer(pure),0);
+    pure=advance(pure,true);assert.equal(Innate.healingOnAnswer(pure),18*n);
+    pure=advance(pure,true);assert.equal(Innate.healingOnAnswer(pure),0);
+    pure=advance(advance(pure,false),true);assert.equal(Innate.healingOnAnswer(pure),0);
+    assert.equal(Innate.healingOnAnswer(advance(p('reverse','balance'),true)),18*n);
+    assert.equal(Innate.healingOnAnswer(advance(p('sword','unity'),true)),15*n);
+    assert.equal(Innate.shieldDamage(p('wugou','clarity'),1000),10*n);
+  }
 });

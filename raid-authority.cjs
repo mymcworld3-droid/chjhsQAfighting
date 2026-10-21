@@ -383,7 +383,6 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
   next.thunderCounterReady=correct===true&&next.goldenCore?.type==='thunder'&&deterministicPercent(seed+':thunder')<chanceByGrade(next.goldenCore.grade,30,5,70);
   const starAnswers=(Math.max(0,Math.floor(finite(member?.soulStarAnswerWindow)))%3)+1;
   const starCorrect=Math.min(3,Math.max(0,Math.floor(finite(member?.soulStarCorrectWindow)))+(correct===true?1:0));
-  const starDamage=starAnswers===3?soulTalents.starfall(next,starCorrect):0;
   next.soulStarAnswerWindow=starAnswers===3?0:starAnswers;
   next.soulStarCorrectWindow=starAnswers===3?0:starCorrect;
   const innateHeal=Innate.healingOnAnswer(next);
@@ -396,15 +395,18 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     convertedHealingDamage+=Innate.healingDamage(next,actual);
   };
   recover(support.heal+(correct?Math.max(0,Math.round(finite(next?.nascentSoul?.coreHeal))):0)+innateHeal);
-  let damage=0, critical=false, comboHits=[], comboDamage=0;
+  let damage=0, critical=false, comboHits=[], comboDamage=0,specialImpact='';
+  const meteorHits=[];
   if(correct){
     const coreDamage=coreAttack(next,seed+':core-attack');
+    if(coreDamage>0&&['ocean','sword'].includes(next.goldenCore?.type))specialImpact=next.goldenCore.type;
     const pursuit=next.goldenCore?.type==='sword'?coreDamage:0;
     const base=Math.max(1,Math.round(finite(next.atk,200)))+support.bonusDamage+
       (pursuit?0:coreDamage)+Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.bonusDamage))));
     const artifact=resolveArtifactAttack(next,base,seed+':artifact');
     const talent=soulTalents.attack(next,{hp:bossHp,maxHp:bossMaxHp},{seed,streak:support.streak,executeThreshold:Innate.executeThreshold(next)});
     const divine=Innate.attack(next,{hp:bossHp,maxHp:bossMaxHp});
+    if(divine.normal>0&&['ocean','sword'].includes(next.innateAbility?.type))specialImpact=next.innateAbility.type;
     innateTriggered ||= divine.normal>0 || divine.trueDamage>0;
     damage=artifact.damage+talent.normal+talent.trueDamage+divine.trueDamage;
     critical=artifact.critical;
@@ -417,8 +419,14 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     recover(lifesteal);
     next.artifactShield=Math.max(0,Math.round(finite(next.artifactShield)))+artifact.shieldGain;
   }
-  // 星隕獨立於答對攻擊：第三題答錯仍按近三題答對數結算。
-  damage+=starDamage;
+  const stones=starAnswers===3?soulTalents.meteorHits(next,starCorrect).map(raw=>({raw,skill:'元嬰・星隕'})):[];
+  const extraMeteor=Innate.meteorDamage(next);
+  if(extraMeteor>0){stones.push({raw:extraMeteor,skill:'本命神通・三星聚曜'});innateTriggered=true;}
+  for(const stone of stones) {
+    const beforeHp=Math.max(0,bossHp-damage);if(beforeHp<=0)break;
+    const dealt=Math.min(beforeHp,stone.raw);damage+=dealt;
+    meteorHits.push({kind:'meteor',damage:dealt,beforeHp,afterHp:beforeHp-dealt,skill:stone.skill});
+  }
   const actualDealt=Math.min(Math.max(0,bossHp),damage);
   recover(soulTalents.healing(next,actualDealt));
   const healingDamage=Math.min(Math.max(0,bossHp-damage),convertedHealingDamage);
@@ -428,7 +436,7 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     comboHits:comboHits.length,comboDamage,criticalHits:critical && damage > 0 && bossHp > 0 ? 1 : 0});
   if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
   const innateSkill=innateTriggered?Innate.branches(next.innateAbility.type).find(row=>row.id===next.innateAbility.branch)?.name || '':'';
-  return {member:next,damage,healed,critical,comboHits,innateSkill,innateEffects,healingDamage,starfallCount:starDamage>0?starCorrect:0,starDamage,correct:correct===true};
+  return {member:next,damage,healed,critical,comboHits,innateSkill,innateEffects,meteorHits,specialImpact,healingDamage,starfallCount:meteorHits.length,starDamage:meteorHits.reduce((sum,hit)=>sum+hit.damage,0),correct:correct===true};
 }
 function resolveArtifactDefense(member,incoming){
   const effects=runtimeEffects(member);let reduction=sumEffect(effects,'equip_damage_reduction_percent');
@@ -469,13 +477,14 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
   // 神通答對窗口與雷丹一致，只對下一次首領攻擊生效，格擋也消耗。
   if(next.innateAbilityState)next.innateAbilityState={...next.innateAbilityState,reflectReady:false};
   const actualReflected=Math.min(Math.max(0,bossHp),reflected);
+  const shieldDamage=guarded?Math.min(Math.max(0,bossHp),Innate.shieldDamage(next,Math.max(0,incoming-finite(bossAction?.trueDamage)))):0;
   const soulHeal=next.hp>0?Math.min(Math.max(0,next.maxHp-next.hp),soulTalents.healing(next,actualReflected)):0;
   next.hp+=soulHeal;
   const healingDamage=Math.min(Math.max(0,bossHp-reflected),Innate.healingDamage(next,soulHeal));
   const innateEffects=healingDamage>0?[{kind:'vital-orb',damage:healingDamage}]:[];
   next.combatContribution = Contribution.add(member.combatContribution,{reflectedDamage:Math.min(Math.max(0,Math.round(reflected)),Math.max(0,bossHp))});
   if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
-  return {member:next,damage,reflectedDamage:Math.max(0,Math.round(reflected)),healingDamage,healed:soulHeal,innateEffects,guarded};
+  return {member:next,damage,reflectedDamage:Math.max(0,Math.round(reflected)),shieldDamage,healingDamage,healed:soulHeal,innateEffects,guarded};
 }
 
 module.exports={

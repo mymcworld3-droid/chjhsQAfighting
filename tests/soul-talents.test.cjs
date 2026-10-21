@@ -76,7 +76,7 @@ test('starfall triggers on the third answered question even when that answer is 
   h.coreCorrectStreak=r.hostCoreStreak;g.coreCorrectStreak=r.guestCoreStreak;
   h.soulStarCorrectWindow=r.hostStarCorrectWindow;g.soulStarCorrectWindow=r.guestStarCorrectWindow;
   if(round===3){
-   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===200));
+   assert.deepEqual(Array.from(r.logs.filter(x=>/星隕/.test(x.skill)&&x.type==='attack'),x=>x.damage),[100,100]);
    assert.equal(r.hostStarCorrectWindow,0);
   }
  }
@@ -166,7 +166,7 @@ test('independent pursuits and reflected starfall also provide taichu lifesteal'
  assert.equal(pursuit.hostHp,250);
  const starHost=p('ocean'),starGuest=p('taichu');starHost.answer.correct=false;starGuest.answer.correct=false;starGuest.hp=400;
  const star=engine({roomId:'leech-star-counter',round:3,host:starHost,guest:starGuest,
-  soulTalents:{...talents,starfall:player=>player.uid==='ocean'?100:0},
+  soulTalents:{...talents,meteorHits:player=>player.uid==='ocean'?[100]:[]},
   resolveTalentDefense:()=>({hpDamage:100,reflectDamage:50})});
  assert.equal(star.guestHp,325);
 });
