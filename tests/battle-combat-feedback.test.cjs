@@ -171,13 +171,13 @@ function playback(step, role = 'host') {
   const room = { round: 1, status: 'settled', battleLogId: 'log', host: player('h', { goldenCore: { type: 'sword' } }), guest: player('g'), lastSettlement: { round: 1, startHostHp: 2000, startGuestHp: 2000, steps: [step] } };
   const state = { roomId: 'r', room, role, reviewedRound: 1, animationTimers: [], seenSettlementKey: null };
   let now = 0;
-  const context = { ...feedback, document, state,
+  const context = { ...feedback, document, state,specialImpactKind:()=>'',shakeBattleScreen(){},
     nowMs: () => now, clearTimeout() {}, settlementKey: () => 'r:log', updateArenaCombatState() {},
     setHp: (who, player) => hp.push({ who, hp: player.hp, at: now }), setText: (id, text) => texts.set(id, text),
     otherRole: role => role === 'host' ? 'guest' : 'host',
     scheduleBattleAt: (at, key, action) => queue.push({ at, key, action }),
     ATTACK_LEAD_MS: 280, ATTACK_IMPACT_MS: 650, ATTACK_VISIBLE_MS: 1450, ANIMATION_STEP_MS: 1850,
-    battleAnimationDuration: count => 280 + count * 1850 + 400,
+    battleAnimationDuration: steps => 280 + (Array.isArray(steps)?steps.length:steps) * 1850 + 400,
     playerForRole: (room, role) => room[role], bothReviewed: () => false, renderResult() {}
   };
   const start = battleSource.indexOf('  function animateSettlement(room) {');

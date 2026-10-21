@@ -257,6 +257,9 @@ import {} from './combat-combo.js';
   };
 
   // Shared PvP/story bridge: pass final HP damage back to the sequential combat engine,
+  window.resolveArtifactGuardAbsorption = function ({attacker,defender,baseDamage,bonusNormalDamage=0,seed}={}) {
+    return window.resolveArtifactBattleAttack({attacker,defender,baseDamage,seed}).normalDamage+Math.max(0,Number(bonusNormalDamage)||0);
+  };
   // while mutation of artifactShield / first-hit / cheat-death remains on the player snapshot.
   window.resolveArtifactBattleHit = function ({ attacker, defender, baseDamage, seed = null, bonusNormalDamage=0, bonusTrueDamage=0 } = {}) {
     const attack = window.resolveArtifactBattleAttack({ attacker, defender, baseDamage, seed });

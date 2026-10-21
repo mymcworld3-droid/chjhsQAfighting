@@ -44,11 +44,15 @@
   function starfallCoefficient(t) {
     return t?.type==='xingchen' ? Math.min(.5,strength(t)*3.125) : 0;
   }
-  function starfall(player, correctInWindow) {
+  function starfall(player,correctInWindow) {
+    return meteorHits(player,correctInWindow).reduce((sum,damage)=>sum+damage,0);
+  }
+  function meteorHits(player,correctInWindow) {
     const t=player?.nascentSoul?.talent;
-    if(t?.type!=='xingchen')return 0;
-    const correct=Math.min(3,Math.max(0,Math.floor(Number(correctInWindow)||0)));
-    return Math.round(correct*power(player)*starfallCoefficient(t));
+    if(t?.type!=='xingchen')return [];
+    const count=Math.min(3,Math.max(0,Math.floor(Number(correctInWindow)||0)));
+    const damage=Math.round(power(player)*starfallCoefficient(t));
+    return damage>0?Array(count).fill(damage):[];
   }
   function reflection(player,received) {
     const t=player?.nascentSoul?.talent;
@@ -67,7 +71,7 @@
     return (.25+.25*quality)*investment;
   }
   function healing(player,dealt) {return Math.round(Math.max(0,Number(dealt)||0)*leechRate(player?.nascentSoul?.talent));}
-  const api=Object.freeze({TYPES,snapshot,strength,attack,starfallCoefficient,starfall,reflection,healing,leechRate,power,trueDamage});
+  const api=Object.freeze({TYPES,snapshot,strength,attack,starfallCoefficient,starfall,meteorHits,reflection,healing,leechRate,power,trueDamage});
   if(typeof module==='object'&&module.exports)module.exports=api;
   else root.QASoulTalents=api;
 })(globalThis);

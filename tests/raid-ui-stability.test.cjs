@@ -85,13 +85,34 @@ function sceneHarness() {
   let arenaRenders=0;
   const stage={classList:{add(){},remove(){}}};
   const arena={querySelector:selector=>selector==='.raid-stage'?stage:null,appendChild:node=>notices.add(node)};
-  const context={state:{status:'submitting',roomId:'room',room:room(),player:{hp:100},question:{id:'q'},battleSceneToken:0,battleSceneTail:null},
+  const context={now:()=>Date.now(),state:{status:'submitting',roomId:'room',room:room(),player:{hp:100},question:{id:'q'},battleSceneToken:0,battleSceneTail:null},
     document:{getElementById:()=>arena,createElement:()=>({remove(){notices.delete(this);}})},
     setRaidCombatFocus:value=>focus.push(value),renderArena:options=>{assert.equal(options.transition,false);arenaRenders++;},
     wait:()=>new Promise(resolve=>waiting.push(resolve)),escapeHtml:x=>String(x),renderQuestion:value=>restores.push(value),updateLiveLabels(){},finishRaid(){}};
   vm.runInNewContext(section('  async function playBattleScene(', '  async function prefetchQuestion(')+'\nthis.play=playBattleScene;',context);
   return {context,notices,waiting,restores,focus,renders:()=>arenaRenders};
 }
+test('meteor playback has separate timed HP deductions and sounds without mutating authoritative boss HP',async()=>{
+  const h=sceneHarness(),ctx=h.context,hits=[
+    {damage:48,beforeHp:3000,afterHp:2952,skill:'元嬰・星隕'},
+    {damage:48,beforeHp:2952,afterHp:2904,skill:'元嬰・星隕'},
+    {damage:180,beforeHp:2904,afterHp:2724,skill:'三星聚曜'}];
+  let clock=0;const hp=[],sounds=[],visuals=[],shakes=[];
+  ctx.state.boss={hp:2724,maxHp:3000};ctx.state.status='review';ctx.state.playerActionCount=3;
+  ctx.now=()=>clock;ctx.wait=async ms=>{clock+=ms;};
+  ctx.updateLiveLabels=()=>hp.push([clock,ctx.state.meteorReplayHp]);
+  ctx.createInnateAbilityEffect=(_stage,args)=>{visuals.push([clock,args.kind]);return {dispose(){}};};
+  ctx.shakeBattleScreen=(_surface,args)=>shakes.push([clock,args.kind]);
+  ctx.QAGameAudio={play:(_sound,args)=>sounds.push([clock,args.key])};
+  ctx.document.querySelector=()=>({});
+  const arena=ctx.document.getElementById();arena.querySelector('.raid-stage').querySelector=()=>({});
+  await ctx.play({attacker:'player',damage:276,meteorHits:hits});
+  assert.deepEqual(hp,[[400,2952],[1300,2904],[2200,2724]]);
+  assert.equal(sounds.length,3);assert.equal(new Set(sounds.map(x=>x[1])).size,3);
+  assert.deepEqual(visuals,[[0,'meteor'],[900,'meteor'],[1800,'meteor']]);
+  assert.equal(shakes.length,3);assert.equal(clock,2700);
+  assert.equal(ctx.state.boss.hp,2724);assert.equal(ctx.state.meteorReplayHp,null);
+});
 
 test('simultaneous Boss and player settlements serialize feedback and restore the latest answer phase', async () => {
   const h=sceneHarness();

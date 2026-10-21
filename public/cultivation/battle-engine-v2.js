@@ -270,6 +270,7 @@ export function settleBattleRound({
   // Optional per-hit resolver for equipment effects. Pure engine remains unchanged without one.
   resolveEquipmentHit = null,
   resolveGuardedFollowup = null,
+  resolveGuardAbsorption = null,
   resolveTalentDefense = null,
   soulTalents = globalThis.QASoulTalents || null
 }) {
@@ -313,8 +314,7 @@ export function settleBattleRound({
   const steps = [];
   const activations = [];
   // Healing conversion is a separate true strike. It never feeds leech, counters or itself.
-  const convertHealing = (role, player, actualHealed) => {
-    const raw=innate?.healingDamage(player,actualHealed) || 0;
+  const trueStrike = (role, player, raw, skill, effect='',message='') => {
     const defender=role==='host'?guest:host;
     const ownHp=role==='host'?hostHp:guestHp,targetHp=role==='host'?guestHp:hostHp;
     if(!raw || ownHp<=0 || targetHp<=0)return;
@@ -324,11 +324,15 @@ export function settleBattleRound({
     if(role==='host')guestHp-=damage;else hostHp-=damage;
     const record={type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
       damage,baseDamage:0,extraDamage:raw,trueDamage:raw,critical:false,guarded:false,
-      innateEffect:'vital-orb',skill:'本命神通・歸元納氣'};
+      innateEffect:effect,skill};
     logs.push(record);steps.push({...record,hostHp,guestHp});
     activations.push({type:'innate-ability',name:'本命神通',ownerUid:player.uid,skill:record.skill,
-      message:'實際回復 '+actualHealed+' 生命，轉化 '+raw+' 真傷',kind:'化神神通'});
+      message:message || skill+'：'+raw+' 真傷',kind:'化神神通'});
   };
+  const convertHealing=(role,player,amount)=>trueStrike(role,player,innate?.healingDamage(player,amount)||0,
+    '本命神通・歸元納氣','vital-orb','實際回復 '+amount+' 生命');
+  const shieldBlast=(role,player,absorbed)=>trueStrike(role,player,innate?.shieldDamage(player,absorbed)||0,
+    '本命神通・無塵神光');
   // All actual outgoing HP damage can leech, including independent strikes and counters.
   const applySoulLeech = (role, player, dealt) => {
     const hp = role === 'host' ? hostHp : guestHp;
@@ -377,6 +381,9 @@ export function settleBattleRound({
     }
     attackers.push(role);
     const guarded = role === 'host' ? guestCoreShield : hostCoreShield;
+    const absorbedNormal=guarded?(typeof resolveGuardAbsorption==='function'
+      ?resolveGuardAbsorption({attacker:player,defender,baseDamage:plan.totalDamage,bonusNormalDamage:talent.normal,seed:`${roomId}:${round}:${player.uid}:artifact`})
+      :plan.totalDamage+talent.normal):0;
     if (guarded) {
       if (role === 'host') guestCoreShield = false;
       else hostCoreShield = false;
@@ -411,6 +418,8 @@ export function settleBattleRound({
       steps.push({ ...attack, guarded: false, hostHp, guestHp });
     }
     if (plan.activation) activations.push({ ...plan.activation, ownerUid: player.uid });
+    if(guarded)shieldBlast(targetRole,defender,absorbedNormal);
+    if((role==='host'?hostHp:guestHp)<=0)break;
     // Equipment heals / grants a shield to its attacker after an actual hit.
     if (equipment) {
       if (damage > 0) {
@@ -508,6 +517,7 @@ export function settleBattleRound({
           skill: counter.activation?.skill || '' };
         logs.push(reflected);
         steps.push({ ...reflected, hostHp, guestHp });
+        if(counterGuarded)shieldBlast(role,player,counter.reflectDamage);
         applySoulLeech(targetRole,defender,counterGuarded ? 0 : Math.min(counterTargetHp,counter.reflectDamage));
         steps[steps.length-1].hostHp=hostHp;steps[steps.length-1].guestHp=guestHp;
         if (counter.activation) activations.push({ ...counter.activation, ownerUid: defender.uid });
@@ -515,54 +525,52 @@ export function settleBattleRound({
     }
   }
   
-  // 星辰元嬰每三次作答觸發一次；即使第三題答錯，也按三題中答對數結算。
-  // 星隕是獨立普通傷害，不繼承法寶暴擊/連擊，也不攜帶真實傷害。
-  if (starReady) for (const role of turnOrder) {
-    if (hostHp <= 0 || guestHp <= 0) break;
-    const player = role === 'host' ? host : guest;
-    const defender = role === 'host' ? guest : host;
-    const targetRole = role === 'host' ? 'guest' : 'host';
-    const correctCount = role === 'host' ? hostStarCount : guestStarCount;
-    const raw = Math.max(0, Math.round(Number(soulTalents?.starfall?.(player,correctCount))||0));
-    if (!raw) continue;
-    const guarded = role === 'host' ? guestCoreShield : hostCoreShield;
-    if (guarded) {
-      if (role === 'host') guestCoreShield = false;
-      else hostCoreShield = false;
-    }
-    defender.hp = role === 'host' ? guestHp : hostHp;
-    const defended = guarded ? null : resolveTalentDefense?.({attacker:player,defender,normalDamage:raw,trueDamage:0});
-    const reduced = guarded ? 0 : defended ?
-      Math.max(0,Math.round(Number(defended.hpDamage)||0)) :
-      Math.max(0,raw - Math.max(0,Number(defender.nascentSoul?.reductionFlat)||0));
-    const actual = Math.min(role === 'host' ? guestHp : hostHp,reduced);
-    if (role === 'host') guestHp -= actual;
-    else hostHp -= actual;
-    const starAttack = {type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
-      damage:actual,baseDamage:0,extraDamage:raw,guarded,critical:false,starfallCount:correctCount,
-      skill:'元嬰・星隕（近三題答對 '+correctCount+'/3）'};
-    logs.push(starAttack);steps.push({...starAttack,hostHp,guestHp});
-    applySoulLeech(role,player,actual);
-    steps[steps.length-1].hostHp=hostHp;steps[steps.length-1].guestHp=guestHp;
-    activations.push({type:'xingchen',name:'星辰元嬰',ownerUid:player.uid,
-      skill:'元嬰・星隕',message:'三題蓄星：答對 '+correctCount+'/3，星隕傷害 '+actual,kind:'元嬰攻擊效果'});
-    if (!actual || hostHp<=0 || guestHp<=0) continue;
-    const counter = resolveDeterministicCounterCore(defender,actual,roomId+':'+round+':'+defender.uid+':star-counter');
-    const reflect = counter.reflectDamage + Math.max(0,Math.round(Number(defended?.reflectDamage)||0)) +
-      Math.max(0,Math.round(Number(soulTalents?.reflection?.(defender,actual))||0)) + (innate?.reflection(defender,actual) || 0);
-    if (reflect>0) {
-      const counterTargetHp = role === 'host' ? hostHp : guestHp;
-      const coreGuard = role==='host' ? hostCoreShield : guestCoreShield;
-      if (coreGuard) {
-        if (role==='host')hostCoreShield=false;else guestCoreShield=false;
-      } else if (role==='host') hostHp=Math.max(0,hostHp-reflect);
-      else guestHp=Math.max(0,guestHp-reflect);
-      const record = {type:'counter',actorRole:targetRole,actorUid:defender.uid,targetUid:player.uid,
-        damage:coreGuard?0:reflect,guarded:coreGuard,critical:false,skill:counter.activation?.skill||'星隕反擊'};
+  // 每顆隕石獨立承傷、消耗護體並反擊；致命後不再落下後續隕石。
+  for (const role of turnOrder) {
+    const player=role==='host'?host:guest,defender=role==='host'?guest:host;
+    const targetRole=role==='host'?'guest':'host';
+    const correctCount=role==='host'?hostStarCount:guestStarCount;
+    const ordinary=starReady?(soulTalents?.meteorHits?.(player,correctCount) || []):[];
+    const meteors=ordinary.map(raw=>({raw,skill:'元嬰・星隕'}));
+    const extra=innate?.meteorDamage(player) || 0;
+    if(extra>0)meteors.push({raw:extra,skill:'本命神通・三星聚曜'});
+    for(let index=0;index<meteors.length;index++) {
+      if(hostHp<=0 || guestHp<=0)break;
+      const {raw,skill}=meteors[index];
+      const guarded=role==='host'?guestCoreShield:hostCoreShield;
+      if(guarded){if(role==='host')guestCoreShield=false;else hostCoreShield=false;}
+      defender.hp=role==='host'?guestHp:hostHp;
+      const defended=guarded?null:resolveTalentDefense?.({attacker:player,defender,normalDamage:raw,trueDamage:0});
+      const reduced=guarded?0:defended?Math.max(0,Math.round(Number(defended.hpDamage)||0)):
+        Math.max(0,raw-Math.max(0,Number(defender.nascentSoul?.reductionFlat)||0));
+      const actual=Math.min(defender.hp,reduced);
+      if(role==='host')guestHp-=actual;else hostHp-=actual;
+      const record={type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
+        damage:actual,baseDamage:0,extraDamage:raw,guarded,critical:false,innateEffect:'meteor',starfallCount:1,
+        meteorIndex:index+1,meteorCount:meteors.length,skill:skill+'（'+(index+1)+'/'+meteors.length+'）'};
       logs.push(record);steps.push({...record,hostHp,guestHp});
-      applySoulLeech(targetRole,defender,coreGuard ? 0 : Math.min(counterTargetHp,reflect));
+      if(guarded)shieldBlast(targetRole,defender,raw);
+      applySoulLeech(role,player,actual);
       steps[steps.length-1].hostHp=hostHp;steps[steps.length-1].guestHp=guestHp;
-      if(counter.activation)activations.push({...counter.activation,ownerUid:defender.uid});
+      activations.push({type:'xingchen',name:'星隕',ownerUid:player.uid,skill,
+        message:'第 '+(index+1)+' 顆隕石：'+actual+' 傷害',kind:'隕石攻擊'});
+      if(!actual || hostHp<=0 || guestHp<=0)continue;
+      const counter=resolveDeterministicCounterCore(defender,actual,roomId+':'+round+':'+defender.uid+':star-counter');
+      const reflect=counter.reflectDamage+Math.max(0,Math.round(Number(defended?.reflectDamage)||0))+
+        Math.max(0,Math.round(Number(soulTalents?.reflection?.(defender,actual))||0))+(innate?.reflection(defender,actual)||0);
+      if(reflect>0) {
+        const targetHp=role==='host'?hostHp:guestHp;
+        const coreGuard=role==='host'?hostCoreShield:guestCoreShield;
+        if(coreGuard){if(role==='host')hostCoreShield=false;else guestCoreShield=false;}
+        else if(role==='host')hostHp=Math.max(0,hostHp-reflect);else guestHp=Math.max(0,guestHp-reflect);
+        const reply={type:'counter',actorRole:targetRole,actorUid:defender.uid,targetUid:player.uid,
+          damage:coreGuard?0:reflect,guarded:coreGuard,critical:false,skill:counter.activation?.skill||'星隕反擊'};
+        logs.push(reply);steps.push({...reply,hostHp,guestHp});
+        if(coreGuard)shieldBlast(role,player,reflect);
+        applySoulLeech(targetRole,defender,coreGuard?0:Math.min(targetHp,reflect));
+        steps[steps.length-1].hostHp=hostHp;steps[steps.length-1].guestHp=guestHp;
+        if(counter.activation)activations.push({...counter.activation,ownerUid:defender.uid});
+      }
     }
   }
 

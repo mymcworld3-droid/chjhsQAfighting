@@ -1,7 +1,32 @@
 // Purely visual: reads settled effect kinds and never changes battle state or damage.
 let serial=0;
 const NS='http://www.w3.org/2000/svg';
-const KINDS=new Set(['vital-orb','triple-beam']);
+const KINDS=new Set(['vital-orb','triple-beam','meteor']);
+const shakes=new WeakMap();
+export function specialImpactKind(step={}) {
+  if(step.guarded || !(Number(step.damage)>0))return '';
+  if(KINDS.has(step.innateEffect))return step.innateEffect;
+  if(['ocean','sword'].includes(step.coreEffect?.type))return step.coreEffect.type;
+  const skill=String(step.skill||'');
+  if(/星隕|隕石|三星聚曜/.test(skill))return 'meteor';
+  if(/滄潮|滄溟|百川|巨浪|大海/.test(skill))return 'ocean';
+  if(/劍心|劍氣|御劍|萬劍|劍意/.test(skill))return 'sword';
+  return '';
+}
+export function shakeBattleScreen(surface,{kind,elapsedMs=0,delayMs=0}={}) {
+  if(!surface?.animate || !['ocean','sword','vital-orb','triple-beam','meteor'].includes(kind) ||
+    globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches)return null;
+  const age=Math.max(0,Number(elapsedMs)||0);if(age>=340)return null;
+  shakes.get(surface)?.cancel();
+  const force=kind==='meteor'?9:kind==='triple-beam'||kind==='ocean'?7:5;
+  const animation=surface.animate([0,-1,1,-.75,.65,-.4,.25,0].map((v,i)=>({
+    transform:`translate(${v*force}px,${(i%2?-.45:.45)*Math.abs(v)*force}px)`
+  })),{duration:340,delay:Math.max(0,delayMs),easing:'linear',composite:'add'});
+  animation.currentTime=age;shakes.set(surface,animation);
+  const release=()=>{if(shakes.get(surface)===animation)shakes.delete(surface);};
+  animation.finished?.then(release,release);
+  return animation;
+}
 export function createInnateAbilityEffect(stage,{kind,source,target,elapsedMs=0,durationMs=1450}={}) {
   if(!stage || !source || !target || !KINDS.has(kind))return null;
   const duration=Math.max(300,Number(durationMs)||1450),elapsed=Math.max(0,Number(elapsedMs)||0);
@@ -37,7 +62,21 @@ export function createInnateAbilityEffect(stage,{kind,source,target,elapsedMs=0,
   const hit=node('circle',{cx:distance,cy:0,r:size*.9,fill:'none',stroke:color,'stroke-width':3},axis);
   motion(hit,[{opacity:0,offset:0},{opacity:0,offset:.44},{opacity:1,offset:.46},
     {opacity:0,transform:reduced?'none':'scale(1.5)',transformOrigin:`${distance}px 0px`,offset:.8},{opacity:0,offset:1}]);
-  if(kind==='vital-orb') {
+  if(kind==='meteor') {
+    const rock=node('g',{class:'ia-meteor'});
+    node('path',{d:`M${-size*2.8},${-size*.8} Q${-size},0 ${-size*2.8},${size*.8} L${size*.5},0 Z`,fill:'#ff6c32'},rock);
+    node('path',{d:`M${-size*2.1},${-size*.3} L${size*.4},0 L${-size*2.1},${size*.3} Z`,fill:'#ffdb7a'},rock);
+    node('circle',{cx:0,cy:0,r:size*.50,fill:'#a44329',stroke:'#ffd39c','stroke-width':3},rock);
+    node('path',{d:`M${-size*.3},0 L0,${-size*.3} L${size*.25},0 L0,${size*.25} Z`,fill:'#ffbd60'},rock);
+    rock.style.filter='drop-shadow(0 0 8px #ff8c40)';
+    const startX=Math.min(rect.width-size,tx+size*3),startY=Math.max(size,ty-size*5);
+    const rotation=Math.atan2(ty-startY,tx-startX)*180/Math.PI;
+    motion(rock,reduced?[{opacity:0,transform:`translate(${tx}px,${ty}px)`,offset:0},
+      {opacity:1,transform:`translate(${tx}px,${ty}px)`,offset:.45},{opacity:0,transform:`translate(${tx}px,${ty}px)`,offset:1}]:[{opacity:0,transform:`translate(${startX}px,${startY}px) rotate(${rotation}deg)`,offset:0},
+      {opacity:1,transform:`translate(${startX}px,${startY}px) rotate(${rotation}deg)`,offset:.06},
+      {opacity:1,transform:`translate(${tx}px,${ty}px) rotate(${rotation}deg)`,offset:.45},
+      {opacity:0,transform:`translate(${tx}px,${ty}px) rotate(${rotation}deg)`,offset:.58},{opacity:0,offset:1}]);
+  } else if(kind==='vital-orb') {
     const start=distance*.1,id='ia-vital-'+(++serial),defs=node('defs',{});
     const gradient=node('radialGradient',{id},defs);
     node('stop',{offset:'0%','stop-color':'#ffffff'},gradient);

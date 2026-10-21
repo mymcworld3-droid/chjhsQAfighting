@@ -678,6 +678,8 @@ function createHandler({
             starfallCount: combat.starfallCount || 0,
             starDamage: combat.starDamage || 0,
             innateEffects: combat.innateEffects || [],
+            meteorHits: combat.meteorHits || [],
+            specialImpact: combat.specialImpact || '',
             healingDamage: combat.healingDamage || 0,
             teamBurstDamage,
             teamContributors: teamCorrectUids.length,

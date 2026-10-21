@@ -72,8 +72,8 @@ test('long counterattack sequences reserve enough absolute time before next roun
 });
 
 test('formal and tutorial attacks both use a fixed timeline and a delayed impact', () => {
-  assert.match(battle,/startAtMs \+ ATTACK_LEAD_MS \+ index \* ANIMATION_STEP_MS/);
-  assert.match(battle,/const impactAtMs = strikeAtMs \+ ATTACK_IMPACT_MS/);
+  assert.match(battle,/startAtMs \+ ATTACK_LEAD_MS \+ stepOffsetMs/);
+  assert.match(battle,/const impactAtMs = strikeAtMs \+ \(meteor\?400:ATTACK_IMPACT_MS\)/);
   assert.match(battle,/scheduleBattleAt\(impactAtMs, key/);
   assert.match(battle,/atMs >= clearAtMs/);
   assert.doesNotMatch(battle.slice(battle.indexOf('  function animateSettlement(room) {'),battle.indexOf('  async function confirmReview() {')),/requestAnimationFrame/);

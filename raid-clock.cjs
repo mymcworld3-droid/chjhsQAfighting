@@ -61,13 +61,14 @@ function advanceRaidClock(room, roomId, at = Date.now()) {
         const combat = resolveBossDefense(member, { roomId, bossAction: action, bossHp:Math.max(0,finite(next.bossHp) - reflected) });
         const reflection = Math.max(0, Math.round(finite(combat.reflectedDamage)));
         const healingDamage=Math.max(0,Math.round(finite(combat.healingDamage)));
-        reflected += reflection+healingDamage;
+        const shieldDamage=Math.max(0,Math.round(finite(combat.shieldDamage)));
+        reflected += reflection+healingDamage+shieldDamage;
         next.members[uid] = { ...combat.member, alive: finite(combat.member.hp) > 0,
-          damage: Math.max(0, finite(member.damage)) + reflection+healingDamage,
+          damage: Math.max(0, finite(member.damage)) + reflection+healingDamage+shieldDamage,
           lastBossActionSeen: action.id,
           lastBossResolution: { bossActionSeen: action.id, damage: combat.damage,
             reflectedDamage: reflection, guarded: combat.guarded, teamGuarded: action.teamGuarded === true,
-            healingDamage,healed:combat.healed || 0,innateEffects:combat.innateEffects || [],
+            healingDamage,shieldDamage,healed:combat.healed || 0,innateEffects:combat.innateEffects || [],
             rawBossDamage: action.rawDamage, playerHp: combat.member.hp } };
       }
       next.bossHp = Math.max(0, finite(next.bossHp) - reflected);

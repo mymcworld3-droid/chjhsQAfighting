@@ -14,7 +14,7 @@ import { battleRepository } from './data/battle-repository.js';
 import { playerRepository } from './data/player-repository.js';
 import { rewardRepository } from './data/reward-repository.js';
 import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback.js';
-import { createInnateAbilityEffect } from './innate-ability-effects.js';
+import { createInnateAbilityEffect, specialImpactKind, shakeBattleScreen } from './innate-ability-effects.js';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：房間與戰鬥狀態只寫 Firebase C；玩家邀請與獎勵留在 A／後端。
@@ -52,11 +52,13 @@ export const featureReady = (async () => {
   const ATTACK_LEAD_MS = 280;
   const ROUND_ANIMATION_GRACE_MS = 5200;
   function battleAnimationDuration(stepCount) {
+    if(Array.isArray(stepCount))return ATTACK_LEAD_MS+Math.max(ANIMATION_STEP_MS,
+      stepCount.reduce((sum,step)=>sum+(step.innateEffect==='meteor'?900:ANIMATION_STEP_MS),0))+400;
     return ATTACK_LEAD_MS + Math.max(1, stepCount) * ANIMATION_STEP_MS + 400;
   }
   function roundAnimationGrace(room) {
     const count = Array.isArray(room?.lastSettlement?.steps) ? room.lastSettlement.steps.length : 0;
-    return Math.max(ROUND_ANIMATION_GRACE_MS, battleAnimationDuration(count) + 1500);
+    return Math.max(ROUND_ANIMATION_GRACE_MS, battleAnimationDuration(room?.lastSettlement?.steps || count) + 1500);
   }
   const ANSWER_WINDOW_MS = 25000;
 
@@ -1222,10 +1224,14 @@ export const featureReady = (async () => {
       guest: document.getElementById(myRole === 'guest' ? 'bv2-my-fighter' : 'bv2-enemy-fighter')
     };
     const valid = () => !!state.roomId && state.seenSettlementKey === key && Number(state.room?.round) === round;
+    let stepOffsetMs=0;
     steps.forEach((step, index) => {
-      const strikeAtMs = startAtMs + ATTACK_LEAD_MS + index * ANIMATION_STEP_MS;
-      const impactAtMs = strikeAtMs + ATTACK_IMPACT_MS;
-      const clearAtMs = strikeAtMs + ATTACK_VISIBLE_MS;
+      const meteor=step.innateEffect==='meteor';
+      const strikeAtMs = startAtMs + ATTACK_LEAD_MS + stepOffsetMs;
+      const impactAtMs = strikeAtMs + (meteor?400:ATTACK_IMPACT_MS);
+      const visibleMs=meteor?900:ATTACK_VISIBLE_MS;
+      const clearAtMs = strikeAtMs + visibleMs;
+      stepOffsetMs+=meteor?900:ANIMATION_STEP_MS;
       const actor = fighters[step.actorRole];
       const target = fighters[otherRole(step.actorRole)];
       const damage = Math.max(0, Number(step.damage) || 0);
@@ -1240,7 +1246,7 @@ export const featureReady = (async () => {
       scheduleBattleAt(strikeAtMs, key, (atMs) => {
         if (!valid() || atMs >= clearAtMs) return;
         if(step.innateEffect)innateEffect=createInnateAbilityEffect(stage,{kind:step.innateEffect,
-          source:actor,target,elapsedMs:atMs-strikeAtMs,durationMs:ATTACK_VISIBLE_MS});
+          source:actor,target,elapsedMs:atMs-strikeAtMs,durationMs:visibleMs});
         setText('bv2-cue-kicker', index === 0 ? '先手出招' : counter ? '雷光反擊' : '後手出招');
         setText('bv2-cue-count', step.starfallCount > 0 ? '星隕 ×' + step.starfallCount : missed ? '落空' : guarded ? '護體' : feedback.critical ? '爆擊' : counter ? '反擊' : feedback.enhanced ? '金丹神通' : '出招');
         setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') +
@@ -1257,10 +1263,12 @@ export const featureReady = (async () => {
         setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
         setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
         if (atMs >= clearAtMs) return;
+        const special=specialImpactKind(step);
+        if(special)shakeBattleScreen(document.querySelector('main')||stage,{kind:special,elapsedMs:atMs-impactAtMs});
         if (!missed) globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
           key: 'duel-hit:'+key+':'+index, rate: counter ? 1.2 : feedback.critical ? .8 : 1
         });
-        if (!missed && stage && (!guarded || step.starfallCount > 0) && (!step.innateEffect || step.starfallCount > 0)) {
+        if (!missed && stage && (!guarded || step.starfallCount > 0) && !step.innateEffect) {
           impact = createBattleImpact(stage, { step, player: original[step.actorRole],
             fromMe: step.actorRole === myRole, elapsedMs: atMs - impactAtMs });
         }
@@ -1289,7 +1297,7 @@ export const featureReady = (async () => {
         innateEffect?.dispose?.();
       });
     });
-    scheduleBattleAt(startAtMs + battleAnimationDuration(steps.length), key, () => {
+    scheduleBattleAt(startAtMs + battleAnimationDuration(steps), key, () => {
       if (!valid()) return;
       state.animationFinishedKey = key;
       updateArenaCombatState(state.room, false);
@@ -1671,6 +1679,7 @@ export const featureReady = (async () => {
           tieWindowMs: BATTLE_V2.tieWindowMs, maxRounds: fresh.maxRounds || BATTLE_V2.maxRounds,
           resolveEquipmentHit: window.resolveArtifactBattleHit,
           resolveGuardedFollowup: window.resolveArtifactGuardedFollowup,
+          resolveGuardAbsorption: window.resolveArtifactGuardAbsorption,
           resolveTalentDefense: window.resolveArtifactBattleDefense
         });
         const names = { host: fresh.host?.name || '我方', guest: fresh.guest?.name || '對手' };
