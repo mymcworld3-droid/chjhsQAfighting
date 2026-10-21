@@ -18,7 +18,7 @@ function activeRoom(prefix,round=1) {
  }
  throw Error('No active thunder seed');
 }
-test('correct answers roll a grade-scaled 30–70% chance once per round with a 50% additive bonus',()=>{
+test('correct answers roll a grade-scaled 30–70% chance once per round with a 75% additive bonus',()=>{
  let triggered=0,missed=0;
  for(let grade=1;grade<=9;grade++)for(let seed=0;seed<100;seed++){
   const key='answer-'+seed+':1:g:';
@@ -27,8 +27,8 @@ test('correct answers roll a grade-scaled 30–70% chance once per round with a 
   const star=engine.resolveDeterministicCounterCore(player('g',true,grade),200,key+'star-counter');
   assert.equal(result.reflectDamage,again.reflectDamage);assert.equal(result.reflectDamage,star.reflectDamage);
   let hash=2166136261;for(const ch of key+'counter:thunder'){hash^=ch.charCodeAt(0);hash=Math.imul(hash,16777619);}
-  assert.equal(result.reflectDamage,(hash>>>0)%100 < 30+(9-grade)*5 ? 100 : 0);
-  if(result.reflectDamage){assert.equal(result.reflectDamage,100);assert.equal(result.activation.type,'thunder');triggered++;}
+  assert.equal(result.reflectDamage,(hash>>>0)%100 < 30+(9-grade)*5 ? 150 : 0);
+  if(result.reflectDamage){assert.equal(result.reflectDamage,150);assert.equal(result.activation.type,'thunder');triggered++;}
   else missed++;
  }
  assert.ok(triggered>0&&missed>0);
@@ -38,11 +38,11 @@ test('correct answers roll a grade-scaled 30–70% chance once per round with a 
 test('the answer bonus is available before the slower correct player attacks, and expires when the next answer is wrong',()=>{
  const host=player('h',true),guest=player('g',true);
  const first=engine.settleBattleRound({roomId:activeRoom('answer-window'),round:1,host,guest});
- assert.equal(first.hostHp,1700);assert.equal(first.guestHp,1800);
+ assert.equal(first.hostHp,1650);assert.equal(first.guestHp,1800);
  assert.equal(first.steps.filter(s=>s.type==='counter').length,1,'counter damage never causes another counter');
  const second=engine.settleBattleRound({roomId:activeRoom('answer-window'),round:2,
   host:{...host,hp:first.hostHp},guest:{...guest,hp:first.guestHp,answer:{correct:false,atMs:1200}}});
- assert.equal(second.hostHp,1700);assert.equal(second.guestHp,1600);
+ assert.equal(second.hostHp,1650);assert.equal(second.guestHp,1600);
  assert.equal(second.steps.filter(s=>s.type==='counter').length,0);
  const noIncoming=engine.settleBattleRound({roomId:'no-incoming',round:1,host:player('h',false),guest});
  assert.equal(noIncoming.steps.filter(s=>s.type==='counter').length,0,'answering correctly does not itself fire a lightning attack');
@@ -58,8 +58,8 @@ test('the browser fallback uses the same seeded chance and supports both answer 
  const context={window:{},Math:math};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../public/cultivation/golden-core-battle-effects.js'),'utf8'),context);
  const seed=Array.from({length:1000},(_,i)=>'fallback-'+i+':1:g:counter').find(key=>engine.resolveDeterministicCounterCore(player('g',true,9),125,key).reflectDamage);
  const resolve=(answer,key=seed,grade=9)=>context.window.resolveGoldenCoreBattleCounter({defender:{goldenCore:{type:'thunder',grade},...answer},receivedDamage:125,seed:key});
- assert.equal(resolve({answer:{correct:true}}).reflectDamage,63);
- assert.equal(resolve({answerCorrect:true}).reflectDamage,63);
+ assert.equal(resolve({answer:{correct:true}}).reflectDamage,94);
+ assert.equal(resolve({answerCorrect:true}).reflectDamage,94);
  assert.equal(resolve({answer:{correct:false},answerCorrect:true}).reflectDamage,0);
  assert.equal(resolve({}).reflectDamage,0);
  for(let grade=1;grade<=9;grade++)for(let i=0;i<100;i++){
@@ -78,7 +78,7 @@ const hit=(member,extra={})=>authority.resolveBossDefense(member,{roomId:'raid',
 test('raid correct answers arm one boss action, add to weapon reflection and do not stack',()=>{
  assert.ok(activeIds.length>0&&inactiveIds.length>0);
  const armed=arm(arm(raidMember()),true,activeIds[1]);
- const first=hit(armed);assert.equal(first.reflectedDamage,132,'200 × (50% core + 16% weapon)');
+ const first=hit(armed);assert.equal(first.reflectedDamage,182,'200 × (75% core + 16% weapon)');
  assert.equal(first.member.thunderCounterReady,false);
  assert.equal(hit(first.member).reflectedDamage,32,'the next boss attack keeps only the weapon reflection');
  assert.equal(hit(arm(armed,false)).reflectedDamage,32,'a wrong answer clears the pending core bonus');
@@ -97,8 +97,8 @@ test('eligible PvP thunder reflects only the normal portion of a mixed normal an
  const result=engine.settleBattleRound({roomId:activeRoom('normal-only'),round:1,host:player('h',true),guest:player('g',true),
   resolveEquipmentHit:({attacker})=>attacker.uid==='h'?{damage:100,normalHpDamage:40,trueDamage:60}:{damage:0,normalHpDamage:0,trueDamage:0}});
  const counters=result.steps.filter(s=>s.type==='counter');
- assert.equal(counters.length,1);assert.equal(counters[0].damage,20);
- assert.equal(result.hostHp,1980);assert.equal(result.guestHp,1900);
+ assert.equal(counters.length,1);assert.equal(counters[0].damage,30);
+ assert.equal(result.hostHp,1970);assert.equal(result.guestHp,1900);
 });
 
 test('the 70% answer roll includes 69 and excludes 70, sharing the decision with starfall',()=>{
@@ -110,7 +110,7 @@ test('the 70% answer roll includes 69 and excludes 70, sharing the decision with
  const below=keyFor(69),boundary=keyFor(70);
  assert.ok(below&&boundary);
  for(const suffix of ['counter','star-counter']){
-  assert.equal(engine.resolveDeterministicCounterCore(eligible,200,below+suffix).reflectDamage,100);
+  assert.equal(engine.resolveDeterministicCounterCore(eligible,200,below+suffix).reflectDamage,150);
   assert.equal(engine.resolveDeterministicCounterCore(eligible,200,boundary+suffix).reflectDamage,0);
  }
 });
