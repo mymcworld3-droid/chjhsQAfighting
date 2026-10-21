@@ -39,7 +39,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css?v=20261021-stage-bottom';
+  link.href = 'styles/training-scene-map.css?v=20261021-full-scene-bottom';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
@@ -361,30 +361,35 @@ function fit() {
   const nav = document.querySelector('#bottom-nav .glass-capsule');
   const top = Math.max(0, header?.getBoundingClientRect().bottom || 0);
   const navTop = nav?.getBoundingClientRect().top;
-  const bottom = Number.isFinite(navTop) && navTop > top && navTop < innerHeight ? innerHeight - navTop + 4 : 0;
-  page.style.setProperty('--training-scene-top', `${top}px`);
   const next = innerWidth >= innerHeight ? 'landscape' : 'portrait';
   if (orientation !== next) renderScene(next);
   const layout = Layouts[next], rect = map.getBoundingClientRect();
   if (!rect.width || !rect.height) return;
-  // The plate continues beneath navigation; targets keep the same safe area.
-  const availableHeight = Math.max(1, rect.height - bottom);
-  // Keep the complete interactive plane (including names and locks) inside
-  // the header/navigation safe area. Only the decorative backdrop may crop.
-  const scale = Math.min(rect.width / layout.width, availableHeight / layout.height);
-  const left = (rect.width - layout.width * scale) / 2, offset = (availableHeight - layout.height * scale) / 2;
+  // Fit the actual terrain and buildings to the whole fixed-ratio stage. Header
+  // and navigation overlay the artwork instead of shortening the scene itself.
+  const scale = Math.min(rect.width / layout.width, rect.height / layout.height);
+  const left = (rect.width - layout.width * scale) / 2, offset = rect.height - layout.height * scale;
   plane.style.width = `${layout.width}px`;
   plane.style.height = `${layout.height}px`;
   plane.style.left = `${left}px`;
   plane.style.top = `${offset}px`;
   plane.style.transform = `scale(${scale})`;
-  // Keep terrain layers registered to the same logical canvas as the buttons.
-  // The map's cover backdrop fills the remaining space beneath navigation.
+  // Terrain, clouds and buildings share this bottom edge, not just the backdrop.
   scenery.style.width = `${layout.width}px`;
   scenery.style.height = `${layout.height}px`;
   scenery.style.left = `${left}px`;
   scenery.style.top = `${offset}px`;
   scenery.style.transform = `scale(${scale})`;
+  // A locked entrance has a taller name plaque. Lift only the plaque when it
+  // meets the rail; never shrink the whole island scene to accommodate its text.
+  const labelBottom = Number.isFinite(navTop) && navTop > top && navTop < innerHeight ? navTop - 4 : innerHeight - 4;
+  const labels = [...plane.querySelectorAll('.training-place-label')];
+  for (const label of labels) label.style.setProperty('--training-label-lift', '0px');
+  const shifts = labels.map(label => {
+    const bounds = label.getBoundingClientRect();
+    return Math.max(top + 4 - bounds.top, Math.min(0, labelBottom - bounds.bottom));
+  });
+  labels.forEach((label, index) => label.style.setProperty('--training-label-lift', `${shifts[index] / scale}px`));
 }
 function scheduleFit() {
   if (scheduled) return;

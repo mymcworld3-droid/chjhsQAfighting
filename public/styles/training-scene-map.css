@@ -1,7 +1,7 @@
 /* The outer game stage scales these logical coordinates as one fixed canvas. */
 body.xianxia-theme #page-training.training-scene-map-active.active-page {
   position: fixed !important;
-  inset: var(--training-scene-top, 72px) 0 0 !important;
+  inset: 0 !important;
   display: block !important;
   width: 100% !important;
   max-width: none !important;
@@ -235,7 +235,7 @@ body.xianxia-theme #page-training .training-place {
   align-items: center;
   width: max-content;
   max-width: none;
-  transform: translateX(-50%);
+  transform: translate(-50%, var(--training-label-lift, 0px));
   gap: .07em;
   padding: .15em .75em .18em;
   border: 1px solid #e6d09ca6;

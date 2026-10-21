@@ -152,16 +152,30 @@ test('both clean scene plates match their assets and contain six non-overlapping
   }
 });
 
-test('all six images, names and unlock plaques stay visible across phone and tablet aspect ratios', () => {
+test('the actual scene reaches the stage bottom while names and locks avoid header and navigation', () => {
   const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
   const fit = source.slice(source.indexOf('function fit() {'), source.indexOf('\nfunction scheduleFit()'));
   const cases = [[320,568,64,64],[360,640,64,72],[390,844,72,80],[430,932,72,80],
+    [360,640,0,96],[1280,720,72,96],[1888,1062,106,140],
     [768,1024,72,80],[844,390,56,64],[1024,768,72,80],[1366,768,72,80],[1920,1080,80,88]];
   for (const [width,height,header,nav] of cases) {
     const orientation = width >= height ? 'landscape' : 'portrait', layout = Layouts[orientation];
     const properties = {}, style = { setProperty() {} };
-    const context = { map: { hidden:false, getBoundingClientRect:()=>({width,height:height-header}) },
-      page: { style }, plane: { style:properties }, scenery: { style:{} },
+    const labels = Rules.PLACES.map(place => {
+      const region=layout.places[place.id],font=layout.font*1.08;
+      const w=Math.max(place.name.length*font*1.08,(place.realm+'解鎖').length*font*.6*1.02)+font*1.5+2;
+      const h=font*(1.25+.33+.6*1.25+.07)+2;
+      let lift=0;
+      return { place, style:{setProperty(_name,value){lift=parseFloat(value);}},
+        getBoundingClientRect(){
+          const scale=Number(properties.transform.match(/scale\(([^)]+)\)/)[1]);
+          const left=parseFloat(properties.left)+(region.label[0]-w/2)*scale;
+          const top=parseFloat(properties.top)+(region.label[1]-layout.font*.84+lift)*scale;
+          return {left,top,right:left+w*scale,bottom:top+h*scale};
+        }};
+    });
+    const context = { map: { hidden:false, getBoundingClientRect:()=>({width,height}) },
+      page: { style }, plane: { style:properties,querySelectorAll:()=>labels }, scenery: { style:{} },
       document: { querySelector: selector => ({ getBoundingClientRect: () => selector.includes('header') ? {bottom:header} : {top:height-nav} }) },
       visible:()=>true, innerWidth:width, innerHeight:height, orientation, Layouts,
       renderScene:()=>assert.fail('unchanged orientation must not rebuild the map') };
@@ -169,20 +183,20 @@ test('all six images, names and unlock plaques stay visible across phone and tab
     assert.equal(context.scenery.style.height, `${layout.height}px`, 'terrain must not stretch away from the buttons');
     assert.equal(context.scenery.style.transform, properties.transform);
     const scale = Number(properties.transform.match(/scale\(([^)]+)\)/)[1]);
-    const left = parseFloat(properties.left), top = parseFloat(properties.top), available = height-header-nav-4;
+    const left = parseFloat(properties.left), top = parseFloat(properties.top);
+    assert.ok(Math.abs(top+layout.height*scale-height)<.01,'the island/cloud canvas itself must end at the stage bottom, behind navigation');
+    assert.equal(scale,Math.min(width/layout.width,height/layout.height),'navigation cannot shrink the artwork');
     const check = (r,label) => {
       assert.ok(left+r[0]*scale >= -.01 && top+r[1]*scale >= -.01, `${width}×${height} ${label} clipped at top/left`);
-      assert.ok(left+(r[0]+r[2])*scale <= width+.01 && top+(r[1]+r[3])*scale <= available+.01, `${width}×${height} ${label} clipped at bottom/right`);
+      assert.ok(left+(r[0]+r[2])*scale <= width+.01 && top+(r[1]+r[3])*scale <= height+.01, `${width}×${height} ${label} clipped at bottom/right`);
     };
     const plaques = [];
     for (const place of Rules.PLACES) {
       const region = layout.places[place.id];check(region.bounds,place.name);
-      const font = layout.font*1.08;
-      // Conservative CJK glyph widths include letter spacing, plaque padding and borders.
-      const w = Math.max(place.name.length*font*1.08,(place.realm+'解鎖').length*font*.6*1.02)+font*1.5+2;
-      const h = font*(1.25+.33+.6*1.25+.07)+2;
-      const plaque = [region.label[0]-w/2,region.label[1]-layout.font*.84,w,h];
-      check(plaque,place.name+'名稱及解鎖提示');plaques.push(plaque);
+      const actual=labels.find(label=>label.place.id===place.id).getBoundingClientRect();
+      assert.ok(actual.top>=header+4-.01 && actual.bottom<=height-nav-4+.01,place.name+'名稱及解鎖提示必須避開導覽與頁首');
+      assert.ok(actual.left>=-.01 && actual.right<=width+.01);
+      plaques.push([actual.left,actual.top,actual.right-actual.left,actual.bottom-actual.top]);
     }
     for (let a=0;a<plaques.length;a++)for(let b=a+1;b<plaques.length;b++){
       const [x,y,w,h]=plaques[a],[xx,yy,ww,hh]=plaques[b];
