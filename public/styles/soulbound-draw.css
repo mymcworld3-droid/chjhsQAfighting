@@ -45,7 +45,7 @@ body.xianxia-theme #training-tab-content:has(> #soulbound-page) #soulbound-page.
 #soulbound-page .sb-pity{color:#b9ab8f}
 #soulbound-page .sb-empty{padding:18px 12px 6px}
 #soulbound-page .sb-showcase{
-  --sb-carousel-gap:12px;--sb-carousel-reduction:8px;--sb-carousel-step:4px;
+  --sb-carousel-gap:0px;--sb-carousel-card:38%;--sb-carousel-overlap:7%;--sb-carousel-step:31%;
   display:flex;flex-direction:column;justify-content:center;
   padding:16px 14px 12px;min-width:0;overflow:hidden;
 }
@@ -64,32 +64,31 @@ body.xianxia-theme #training-tab-content:has(> #soulbound-page) #soulbound-page.
   transition:transform .66s cubic-bezier(.2,.75,.2,1);
 }
 #soulbound-page .sb-carousel-track.is-shifting{
-  transform:translateX(calc(-33.333333% - var(--sb-carousel-step)));
+  transform:translateX(calc(-1 * var(--sb-carousel-step)));
 }
 #soulbound-page button.sb-carousel-card{
   --sb-color:#e7c58e;
-  flex:0 0 calc(33.333333% - var(--sb-carousel-reduction));min-width:0;
+  position:relative;z-index:1;
+  flex:0 0 var(--sb-carousel-card);min-width:0;margin-right:calc(-1 * var(--sb-carousel-overlap));
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   min-height:184px;gap:5px;padding:9px 5px 10px;
-  background:linear-gradient(165deg,rgba(217,174,96,.07),rgba(255,255,255,.008));
-  border:1px solid rgba(218,178,108,.11);border-radius:13px;
-  transform:scale(.83);opacity:.65;
-  transition:transform .66s cubic-bezier(.2,.75,.2,1),opacity .66s ease,
-    background .25s ease,border-color .25s ease;
+  background:transparent;border:0;border-radius:0;box-shadow:none;
+  transform:scale(.9);opacity:.78;
+  transition:transform .66s cubic-bezier(.2,.75,.2,1),opacity .66s ease;
   will-change:transform;
 }
 #soulbound-page button.sb-carousel-card.is-center,
 #soulbound-page .sb-carousel-track.is-shifting button.sb-carousel-card:nth-child(3){
-  transform:scale(1);opacity:1;
-  border-color:rgba(226,188,117,.43);
-  background:radial-gradient(ellipse at 50% 40%,rgba(216,172,96,.12),transparent 76%),rgba(27,23,16,.76);
+  transform:scale(1);opacity:1;z-index:2;
 }
 #soulbound-page .sb-carousel-track.is-shifting button.sb-carousel-card.is-center{
-  transform:scale(.83);opacity:.65;border-color:rgba(218,178,108,.11);
+  transform:scale(.9);opacity:.78;z-index:1;
 }
-#soulbound-page .sb-carousel-art{display:grid;place-items:center;width:100%;min-height:124px}
+/* The fourth item is an incoming slide, not a visible sliver at the right edge. */
+#soulbound-page .sb-carousel-track:not(.is-shifting) .sb-carousel-card[aria-hidden="true"]{visibility:hidden}
+#soulbound-page .sb-carousel-art{display:grid;place-items:center;width:110%;aspect-ratio:1;min-height:0}
 #soulbound-page .sb-carousel-art img{
-  display:block;width:100%;height:clamp(92px,10.5vw,144px);max-width:100%;
+  display:block;width:100%;height:100%;max-width:none;
   object-fit:contain;filter:drop-shadow(0 7px 13px rgba(0,0,0,.42));
 }
 #soulbound-page .sb-carousel-card.is-center img{
@@ -137,12 +136,9 @@ body.xianxia-theme #training-tab-content:has(> #soulbound-page) #soulbound-page.
 #soulbound-page .sb-preview-hint{display:block;font-size:10px;color:#a48c69;margin-top:13px}
 @media(max-width:650px){
   #soulbound-page .sb-showcase{
-    --sb-carousel-gap:8px;--sb-carousel-reduction:5.333333px;--sb-carousel-step:2.666667px;
     padding:13px 9px 10px;
   }
   #soulbound-page button.sb-carousel-card{min-height:142px;padding:6px 3px}
-  #soulbound-page .sb-carousel-art{min-height:94px}
-  #soulbound-page .sb-carousel-art img{height:clamp(70px,21vw,116px)}
   #soulbound-page .sb-carousel-card b{font-size:11px}
   #soulbound-page .sb-carousel-card small{font-size:9px}
   #soulbound-page .sb-preview-card{grid-template-columns:1fr;gap:4px;padding:22px 17px}
