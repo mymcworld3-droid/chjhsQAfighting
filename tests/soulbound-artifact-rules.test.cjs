@@ -263,7 +263,7 @@ test('an already-paid old known job upgrades on opening and a failed commit retr
   const docs = new Map([['users/tester',clone(user)],['gameConfig/artifactCatalogV1',{items:clone(catalog)}],['gameConfig/materialCatalogV1',{recipes:clone(recipes)}]]);
   docs.set('gameConfig/artifactCatalogV1',{items:clone(catalog.filter(item=>item.id !== 'soul-sword-golden-core'))});
   let failCommit = true, generations = 0;
-  const ctx = {console,QASoulboundPool:pool,
+  const ctx = {console,QASoulboundPool:pool,AbortController,setTimeout,clearTimeout,
     window:{getCurrentUserData:()=>user,dispatchEvent(){}},CustomEvent:class {},
     ARTIFACT_CATALOG:catalog,MATERIAL_CATALOG:payload.allMaterials,ARTIFACT_RECIPES:recipes,REFINERY_JOB_FIELD:field,
     SUPPORTED_ARTIFACT_EFFECTS:[...api.ALLOWED_EFFECTS],MAX_ARTIFACT_RECIPE_NESTING:2,

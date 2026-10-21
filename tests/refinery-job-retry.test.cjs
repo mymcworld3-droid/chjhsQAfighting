@@ -29,7 +29,7 @@ test('network and invalid-response errors carry generation-stage and endpoint me
   assert.match(jobs, /httpStatus: response\.status/);
   assert.match(jobs, /error\.refineryStage = 'generation'/);
   assert.match(ui, /error\?\.refineryStage \|\| phase/);
-  assert.match(ui, /error\?\.cause\?\.message/);
+  assert.match(fs.readFileSync(path.join(root, 'public/cultivation/refinery-errors.js'), 'utf8'), /error\.cause\?\.message/);
 });
 
 test('retrying discovery after a successful AI response reuses that response and preserves job until committed', () => {
@@ -39,8 +39,9 @@ test('retrying discovery after a successful AI response reuses that response and
   const claim = jobs.slice(jobs.indexOf('async function claimDiscovery(job)'), jobs.indexOf('async function claimJob()'));
   assert.match(claim, /tx\.update\(userRef, \{ artifactSystem, \[REFINERY_JOB_FIELD\]: null \}\)/);
   assert.ok(claim.indexOf('generatedCandidateCache.delete(job.id)') > claim.indexOf('await runTransaction'));
-  assert.match(ui, /煉製進度已保留/);
-  assert.match(ui, /目前無法確認是否開始煉製/);
+  const diagnostics = fs.readFileSync(path.join(root, 'public/cultivation/refinery-errors.js'), 'utf8');
+  assert.match(diagnostics, /煉製任務已保留/);
+  assert.match(diagnostics, /結果尚待同步/);
   assert.match(ui, /開爐/);
   assert.doesNotMatch(ui, /人工智慧/);
 });

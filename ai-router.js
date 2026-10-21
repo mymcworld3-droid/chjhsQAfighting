@@ -1,4 +1,5 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const refineryErrors = require('./public/cultivation/refinery-errors.js');
 
 const DEFAULT_TIMEOUT_MS = Math.max(3000, Number(process.env.AI_TIMEOUT_MS) || 25000);
 let roundRobinCursor = 0;
@@ -172,7 +173,7 @@ async function callOpenAICompatible(provider, prompt, signal) {
 
   if (!response.ok) {
     const detail = (await response.text().catch(() => '')).slice(0, 300);
-    throw new Error(`HTTP ${response.status}${detail ? `: ${detail}` : ''}`);
+    throw Object.assign(new Error(`HTTP ${response.status}${detail ? `: ${detail}` : ''}`), { httpStatus: response.status });
   }
 
   const payload = await response.json();
@@ -224,12 +225,14 @@ async function withDeadline(promise,timeoutMs) {
 async function generateJSON(prompt, options = {}) {
   const providers = buildProviders();
   if (!providers.length) {
-    throw new Error('No AI provider configured. Set GEMINI_API_KEY(S) or AI_PROVIDERS_JSON.');
+    throw Object.assign(new Error('No AI provider configured. Set GEMINI_API_KEY(S) or AI_PROVIDERS_JSON.'), { code: 'refinery-ai-config', attempts: [] });
   }
   const timeoutMs = Math.max(3000, Number(options.timeoutMs) || DEFAULT_TIMEOUT_MS);
   const ordered = orderedProviders(providers);
   const errors = [];
+  const attempts = [];
   const attempt = async (provider, index = 0) => {
+    const started = Date.now();
     try {
       const candidatePrompt = typeof options.promptForProvider === 'function' ? options.promptForProvider(prompt, index) : prompt;
       const raw = await callProvider(provider, candidatePrompt, timeoutMs);
@@ -241,7 +244,13 @@ async function generateJSON(prompt, options = {}) {
       return { data, text, provider: provider.name, model: provider.model };
     } catch (error) {
       recordAttempt(provider, 'failed', error);
-      const message = error?.name === 'AbortError' ? 'timeout' : safeProviderError(error,provider);
+      let message = error?.name === 'AbortError' ? 'timeout' : safeProviderError(error,provider);
+      // A proxy error may echo more than the active credential. Redact every
+      // configured provider key/header before aggregating diagnostics.
+      for (const configured of providers) message = safeProviderError({ message }, configured);
+      attempts.push({ provider: refineryErrors.clean(provider.name, 60), model: refineryErrors.clean(provider.model, 100),
+        code: refineryErrors.classify(error, 'generation'),
+        httpStatus: Number(error?.httpStatus || error?.status) || null, elapsedMs: Date.now() - started });
       errors.push(`${provider.name}: ${message}`);
       console.warn(`[AI Router] ${provider.name}/${provider.model} failed: ${message}`);
       throw error;
@@ -286,7 +295,10 @@ async function generateJSON(prompt, options = {}) {
     if (attempted.has(provider)) continue;
     try { return collect(await attempt(provider, index)); } catch (_) { /* continue fallback */ }
   }
-  throw new Error(`All AI providers failed: ${errors.join(' | ')}`);
+  const codes = new Set(attempts.map(item => item.code));
+  throw Object.assign(new Error(`All AI providers failed: ${errors.join(' | ')}`), {
+    code: codes.size === 1 ? attempts[0].code : 'refinery-ai-mixed', attempts
+  });
 }
 
 function getStatus() {
