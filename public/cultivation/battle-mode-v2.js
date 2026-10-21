@@ -510,7 +510,7 @@ export const featureReady = (async () => {
   }
 
   function playerNascentSealLabel(player) {
-    return player?.nascentSoulSuppressed ? ' · 元嬰封印' : '';
+    return [player?.nascentSoulSuppressed ? ' · 元嬰封印' : '',player?.innateAbilitySuppressed ? ' · 神通封印' : ''].join('');
   }
 
   function baseCombatSnapshot() {
@@ -545,6 +545,9 @@ export const featureReady = (async () => {
       gender: data.storyProgressV1?.gender === 'female' ? 'female' : 'male',
       rankLevel: Math.max(0, Number(data.stats?.rankLevel) || 0),
       totalScore: Math.max(0, Number(data.stats?.totalScore) || 0),
+      trainingAccessScore: globalThis.QATrainingAccessRules?.score(data) ?? Math.max(0, Number(data.stats?.totalScore) || 0),
+      innateAbility: globalThis.QAInnateAbility?.snapshot(data) || null,
+      innateAbilityState: null,
       cultivationBonus: window.QANascentGrowth.cultivation(data, 'battle'),
       combatPower: Math.max(0, Math.round(Number(window.getCombatPower?.().total) || 0)),
       baseAtk: baseCombat.attack,
@@ -1674,6 +1677,7 @@ export const featureReady = (async () => {
           'host.hp': outcome.hostHp, 'guest.hp': outcome.guestHp, 'host.isDead': outcome.hostHp <= 0, 'guest.isDead': outcome.guestHp <= 0,
           'host.coreShield': outcome.hostCoreShield, 'guest.coreShield': outcome.guestCoreShield,
           'host.coreCorrectStreak': outcome.hostCoreStreak, 'guest.coreCorrectStreak': outcome.guestCoreStreak,
+          'host.innateAbilityState': outcome.hostInnateAbilityState, 'guest.innateAbilityState': outcome.guestInnateAbilityState,
           'host.soulStarCorrectWindow': outcome.hostStarCorrectWindow, 'guest.soulStarCorrectWindow': outcome.guestStarCorrectWindow,
           'host.artifactShield': outcome.hostArtifactState.artifactShield,
           'guest.artifactShield': outcome.guestArtifactState.artifactShield,

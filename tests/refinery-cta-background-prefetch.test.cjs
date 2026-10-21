@@ -25,7 +25,7 @@ test('forge gives a clear, synchronized second claim CTA and glowing center',()=
 test('ready forge indicator reaches map, detail tab, and bottom navigation',()=>{
   assert.match(scene,/player\.refineryJobV1/);
   assert.match(scene,/Number\(forgeJob\.readyAtMs \|\| 0\) <= Date\.now\(\)/);
-  assert.match(scene,/button === nav \? ready \|\| canUpgrade \|\| forgeReady : ready/);
+  assert.match(scene,/button === nav \? ready \|\| canUpgrade \|\| innateReady \|\| forgeReady : ready/);
   assert.match(scene,/data-training-location="forge"/);
   assert.match(scene,/data-training-tab="refinery"/);
   assert.match(scene,/xiuxian:refinery-job-updated/);

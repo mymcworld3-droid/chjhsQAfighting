@@ -4,6 +4,7 @@ import {} from './soul-talents.js';
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {} from './nascent-growth.js';
+import {} from './innate-ability.js';
 import { NASCENT_SOUL_THRESHOLD, normalizeSpirit } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -43,6 +44,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   let busy = false;
   let soulBusy = false;
   const Growth = globalThis.QANascentGrowth;
+  const Innate = globalThis.QAInnateAbility;
+  let innateBusy = false;
   let migrationBusy = false;
   let lastUnlocked = false;
 
@@ -419,6 +422,58 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     return Growth.branchValue(core, id, level);
   }
 
+  function innateAbilityMarkup(player) {
+    const info=Innate.status(player);
+    if (!info.ok) return '';
+    const rank=info.path?.level || 1;
+    const disabled=innateBusy || soulBusy || busy;
+    const cards=Innate.branches(info.type).map(branch=>{
+      const selected=info.path?.branch===branch.id;
+      return `<article class="ia-branch ${selected?'is-selected':''}"><div class="ia-branch-heading"><h4>${branch.name}</h4><span>${selected?'已選擇 · '+rank+' / 10 階':'可選變化'}</span></div>
+        <p>${branch.describe(rank)}</p>
+        ${selected&&rank<Innate.CAP?`<p class="ia-preview">下一階：${branch.describe(rank+1)}</p>`:''}
+        <button type="button" class="core-equip-btn" data-ia-select="${branch.id}" ${disabled||selected?'disabled':''}>${selected?'此變化已啟用':info.path?'切換至此變化':'覺醒此變化 · 免費一階'}</button></article>`;
+    }).join('');
+    return `<section class="ia-panel" aria-label="化神本命神通"><header><div><span class="ia-eyebrow">元嬰化神</span><h3>${Innate.TYPES[info.type].name}・本命神通</h3></div><span class="ns-growth-resource">元嬰碎精 <strong>${info.fragments}</strong></span></header>
+      <p class="ia-intro">依已調御金丹覺醒，同時僅啟用一種變化。${player.cultivationTraining?.coreEnabled===false?'金丹已停用，神通效果暫停。':''}</p>
+      <div class="ia-branches">${cards}</div>
+      ${info.path?`<div class="ia-upgrade-row"><span>${rank>=Innate.CAP?'十階圓滿':`升至 ${rank+1} 階需 ${info.cost} 元嬰碎精`}</span><button type="button" class="core-wash-btn" data-ia-upgrade ${disabled||!info.canUpgrade?'disabled':''}>${innateBusy?'保存中…':rank>=Innate.CAP?'已圓滿':info.canUpgrade?'提升神通':'碎精不足'}</button></div>`:''}
+      <p class="ia-note">切換變化保留階數；更換丹性保留各丹性進度。普通神通追加傷害以最多 600 攻擊力計算，獨立追擊不觸發法寶爆擊或連擊。對戰金丹期及以下修士時，神通全部封印。</p>
+    </section>`;
+  }
+
+  async function saveInnateAbility(branchId=null) {
+    if (innateBusy || soulBusy || busy) return;
+    const user=getAuth(getApp()).currentUser;
+    if(!user)return toast('尚未登入，無法保存神通。');
+    const core={...state.equippedCore};
+    innateBusy=true;
+    renderTrainingPage();
+    try {
+      const result=await runTransaction(getFirestore(getApp()),async tx=>{
+        const ref=doc(getFirestore(getApp()),'users',user.uid),snap=await tx.get(ref);
+        if(!snap.exists())throw new Error('找不到玩家資料');
+        if(getAuth(getApp()).currentUser?.uid!==user.uid)throw new Error('登入帳號已變更');
+        const data=snap.data();
+        if(!sameGoldenCore(data.cultivationTraining?.equippedCore,core))throw new Error('裝配金丹已變更，請重開元神頁');
+        const next=branchId?Innate.select(data,branchId):Innate.upgrade(data);
+        if(!next.ok)throw new Error(next.reason);
+        tx.update(ref,Innate.patch(next));
+        return next;
+      });
+      if(getAuth(getApp()).currentUser?.uid===user.uid) {
+        const local=window.getCurrentUserData?.();
+        if(local)Innate.apply(local,result);
+        const chosen=result.growth.paths[result.type];
+        const name=Innate.branches(result.type).find(item=>item.id===chosen.branch).name;
+        globalThis.QAGameAudio?.play('spirit-pulse');
+        toast(branchId?`${name}已啟用 · ${chosen.level} 階`:`${name}升至 ${chosen.level} 階，消耗 ${result.cost} 元嬰碎精`);
+        window.dispatchEvent(new CustomEvent('xiuxian:stats-updated',{detail:{source:'innate-ability'}}));
+      }
+    } catch(error) {toast('神通保存未完成：'+(error?.message||'請重試'));}
+    finally {innateBusy=false;renderTrainingPage();}
+  }
+
   function nascentSoulTabMarkup() {
     if (!nascentUnlocked()) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
     const getFragmentsButton = '<button type="button" class="ns-get-fragments-btn" data-ns-get-fragments><i class="fa-solid fa-gem" aria-hidden="true"></i><span>去獲取元嬰碎精</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>';
@@ -449,7 +504,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       </button>`;
     }).join('');
     const lines = positions.map(([x, y], index) => `<line class="ns-growth-link ${prepared.growth.branches[branches[index].id] ? 'is-grown' : ''}" x1="50" y1="50" x2="${x}" y2="${y}"/>`).join('');
-    return `<section class="ns-panel ns-growth-panel">
+    return `${innateAbilityMarkup(player)}<section class="ns-panel ns-growth-panel">
       <div class="ns-growth-toolbar"><span class="ns-growth-resource">元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><div class="ns-growth-actions">${getFragmentsButton}<button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div></div>
       <div class="ns-growth-map" data-branch-count="${branches.length}" role="group" aria-label="元嬰分支">
         <svg class="ns-growth-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>
@@ -460,7 +515,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   }
 
   async function saveSoulBranch(branchId, reset = false) {
-    if (soulBusy || busy) return;
+    if (soulBusy || busy || innateBusy) return;
     const user = getAuth(getApp()).currentUser;
     if (!user) return toast('尚未登入，無法保存元嬰。');
     const core = {...state.equippedCore};
@@ -530,6 +585,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     });
     content?.querySelectorAll('[data-ns-upgrade]').forEach(button => button.addEventListener('click',()=>void saveSoulBranch(button.dataset.nsUpgrade)));
     content?.querySelector('[data-ns-reset]')?.addEventListener('click',()=>void saveSoulBranch(null,true));
+    content?.querySelectorAll('[data-ia-select]').forEach(button=>button.addEventListener('click',()=>void saveInnateAbility(button.dataset.iaSelect)));
+    content?.querySelector('[data-ia-upgrade]')?.addEventListener('click',()=>void saveInnateAbility());
     void migrateSoulResources();
   }
 
@@ -550,6 +607,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   function renderTrainingPage() {
     const content = document.getElementById('training-tab-content');
     if (!content) return;
+    const soulLabel=document.querySelector('#page-training [data-training-tab="nascent-soul"] span');
+    if(soulLabel)soulLabel.textContent=Innate.status(window.getCurrentUserData?.()||{}).ok?'元神':'元嬰';
     // 煉器／裝備可提前返回，先清理元嬰專屬的一屏模式，避免裁切其他分頁。
     if (activeTab !== 'nascent-soul') document.body.classList.remove('ns-map-active');
     if (activeTab === 'contract') {

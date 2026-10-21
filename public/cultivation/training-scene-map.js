@@ -1,5 +1,6 @@
 import './training-access-rules.js';
 import './nascent-growth.js';
+import './innate-ability.js';
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import { getMainUser } from './data/project-repository.js';
@@ -76,9 +77,14 @@ function updateDetailTabs() {
     button.classList.remove('hidden');
     button.disabled = locked;
     button.classList.toggle('is-locked', locked);
+    if(def.id==='nascent-soul') {
+      const label=button.querySelector('span');
+      if(label)label.textContent=score>=188?'元神':'元嬰';
+    }
     button.setAttribute('role', 'tab');
     button.setAttribute('aria-disabled', String(locked));
-    button.setAttribute('aria-label', locked ? `${def.name}，${def.unlock}` : def.name);
+    const displayName=def.id==='nascent-soul'&&score>=188?'元神':def.name;
+    button.setAttribute('aria-label', locked ? `${displayName}，${def.unlock}` : displayName);
     button.title = locked ? def.unlock : '';
     return button;
   });
@@ -304,6 +310,8 @@ function updateTicketIndicators() {
   const growth = globalThis.QANascentGrowth;
   const canUpgrade = !!(accountReady && growth?.branches(player.cultivationTraining?.equippedCore)
     .some(branch => growth.status(player, branch.id).ok));
+  const innate=accountReady?globalThis.QAInnateAbility?.status(player):null;
+  const innateReady=!!(innate?.ok&&(!innate.path||innate.canUpgrade));
   const building = plane?.querySelector('[data-training-location="secret"]');
   const nav = document.getElementById('nav-training');
   const home = document.getElementById('sect-raid-entry');
@@ -317,9 +325,9 @@ function updateTicketIndicators() {
       dot.setAttribute('aria-hidden', 'true');
       host.appendChild(dot);
     }
-    const pending = button === nav ? ready || canUpgrade || forgeReady : ready;
+    const pending = button === nav ? ready || canUpgrade || innateReady || forgeReady : ready;
     dot.hidden = !pending;
-    const description = [ready ? '尚有團本入場券，可挑戰秘境試煉' : '', button === nav && canUpgrade ? '元嬰有分支可升級' : '', button === nav && forgeReady ? '煉器已完成，可立即開爐' : ''].filter(Boolean).join('；');
+    const description = [ready ? '尚有團本入場券，可挑戰秘境試煉' : '', button === nav && canUpgrade ? '元嬰有分支可升級' : '',button === nav && innateReady ? '本命神通可覺醒或升階' : '', button === nav && forgeReady ? '煉器已完成，可立即開爐' : ''].filter(Boolean).join('；');
     if (pending) button.setAttribute('aria-description', description);
     else button.removeAttribute('aria-description');
   }
@@ -353,8 +361,8 @@ function updateTicketIndicators() {
         dot.setAttribute('aria-hidden', 'true');
         host.appendChild(dot);
       }
-      dot.hidden = !canUpgrade;
-      if (canUpgrade) button.setAttribute('aria-description', '元嬰有分支可升級');
+      dot.hidden = !(canUpgrade || innateReady);
+      if (canUpgrade || innateReady) button.setAttribute('aria-description', innateReady ? '本命神通可覺醒或升階' : '元嬰有分支可升級');
       else button.removeAttribute('aria-description');
     }
   }
