@@ -428,7 +428,7 @@ function resolvePlayerAction(member,{roomId,actionId,correct,bossHp=1,bossMaxHp=
     comboHits:comboHits.length,comboDamage,criticalHits:critical && damage > 0 && bossHp > 0 ? 1 : 0});
   if (!member.combatContribution && (finite(member.lastActionId) > 0 || finite(member.lastBossActionSeen) > 0)) next.combatContribution.partial = true;
   const innateSkill=innateTriggered?Innate.branches(next.innateAbility.type).find(row=>row.id===next.innateAbility.branch)?.name || '':'';
-  return {member:next,damage,healed,critical,comboHits,innateSkill,innateEffects,healingDamage,correct:correct===true};
+  return {member:next,damage,healed,critical,comboHits,innateSkill,innateEffects,healingDamage,starfallCount:starDamage>0?starCorrect:0,starDamage,correct:correct===true};
 }
 function resolveArtifactDefense(member,incoming){
   const effects=runtimeEffects(member);let reduction=sumEffect(effects,'equip_damage_reduction_percent');

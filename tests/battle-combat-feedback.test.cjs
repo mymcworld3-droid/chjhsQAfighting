@@ -11,7 +11,7 @@ const battleSource = read('cultivation/battle-mode-v2.js');
 
 function loadFeedback(document = {}) {
   const context = { document };
-  vm.runInNewContext(feedbackSource.replace(/export function /g, 'function ') + '\nthis.api={battleStepFeedback,createBattleImpact};', context);
+  vm.runInNewContext(feedbackSource.replace(/export function /g, 'function ') + '\nthis.api={battleStepFeedback,createBattleImpact,createStarfallImpact};', context);
   return context.api;
 }
 function loadCombat() {
@@ -251,4 +251,23 @@ test('leaving combat clears pending impact layers, damage text and portrait anim
   assert.equal(mine.style.animationDelay, '');
   assert.equal(state.animationTimers.length, 0);
   assert.equal(cleared.length, 5);
+});
+
+
+test('starfall creates exactly one meteor per settled correct answer, including guarded hits', () => {
+  const api = loadFeedback({ createElement: node });
+  for (let count = 0; count <= 3; count++) {
+    const stage = node();
+    const effect = api.createBattleImpact(stage, { step: { type: 'attack', guarded: true, starfallCount: count }, fromMe: false, elapsedMs: 100 });
+    if (!count) { assert.equal(effect, null); continue; }
+    const meteors = effect.children.filter(child => child.classList.contains('qa-starfall-meteor'));
+    assert.equal(meteors.length, count);
+    assert.equal(meteors[0].style.animationDelay, '-100ms');
+    assert.match(meteors[0].style.left, /28%/);
+    effect.remove(); assert.equal(stage.children.length, 0);
+  }
+  const replay = playback({ type: 'attack', actorRole: 'host', guarded: true, starfallCount: 2, damage: 0, hostHp: 2000, guestHp: 2000 });
+  replay.run(930);
+  assert.equal(replay.stage.children[0].children.filter(child => child.classList.contains('qa-starfall-meteor')).length, 2);
+  replay.run(1730); assert.equal(replay.stage.children.length, 0);
 });

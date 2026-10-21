@@ -6,7 +6,7 @@
     taichu:{name:'還神',trait:'吸血',desc:'所有攻擊造成實際傷害皆可吸血，含普通攻擊、真傷、爆擊、連擊、追擊及反擊；滿級九品 25%、一品 50%。無單次回血量或攻擊力限制，生命最多回滿。'},
     ningxin:{name:'凝鋒',trait:'會心',desc:'答對時有 25% 機率追加 3 倍能力倍率的普通傷害；不再觸發法寶暴擊。修習後道心改為每連答至少 3 題凝聚一次。'},
     pojing:{name:'破境',trait:'斬殺',desc:'敵方生命不高於 50% 時，額外普通傷害為能力倍率的 3.8 倍；其餘為 0.4 倍。'},
-    xingchen:{name:'星隕',trait:'三題蓄星',desc:'每作答 3 題結算一次星隕，不要求連續答對；傷害＝該 3 題答對數 × 攻擊力 × 星辰元嬰能力係數 × 1.5。第三題答錯也會結算，真傷與法寶連擊不放大星隕。'},
+    xingchen:{name:'星隕',trait:'三題蓄星',desc:'每作答 3 題結算一次星隕，不要求連續答對；傷害＝該 3 題答對數 × 攻擊力 × 顯示係數（一品十階最高 50%）；每答對一題落下一顆隕石。第三題答錯也會結算，真傷與法寶連擊不放大星隕。'},
     wugou:{name:'清光',trait:'真傷',desc:'答對追加固定真傷，穿過道心護體與普通減傷；法寶護盾與保命仍有效。金丹屬性分支升滿提供 60–72 真傷，依金丹品級提高。'},
     thunder:{name:'雷返',trait:'反傷',desc:'金丹答對時依品級有 30～70% 機率（九品 30%、一品 70%）使本回合反擊傷害 +75%，與元嬰及法寶加成相加（例如法寶 16% 觸發後為 91%）；答錯不獲得金丹加成，團本加成持續至下次首領攻擊且不疊加。真實傷害不計入反擊基數，反傷不可再觸發反傷。'},
     reverse:{name:'逆命',trait:'低血增傷',desc:'自身生命不高於 50% 時，額外普通傷害為能力倍率的 1.8 倍；其餘為 0.25 倍。'},
@@ -41,11 +41,14 @@
     for(const key of ['normal','trueDamage','followup'])out[key]=Math.round(out[key]);
     return out;
   }
+  function starfallCoefficient(t) {
+    return t?.type==='xingchen' ? Math.min(.5,strength(t)*3.125) : 0;
+  }
   function starfall(player, correctInWindow) {
     const t=player?.nascentSoul?.talent;
     if(t?.type!=='xingchen')return 0;
     const correct=Math.min(3,Math.max(0,Math.floor(Number(correctInWindow)||0)));
-    return Math.round(correct*power(player)*strength(t)*1.5);
+    return Math.round(correct*power(player)*starfallCoefficient(t));
   }
   function reflection(player,received) {
     const t=player?.nascentSoul?.talent;
@@ -64,7 +67,7 @@
     return (.25+.25*quality)*investment;
   }
   function healing(player,dealt) {return Math.round(Math.max(0,Number(dealt)||0)*leechRate(player?.nascentSoul?.talent));}
-  const api=Object.freeze({TYPES,snapshot,strength,attack,starfall,reflection,healing,leechRate,power,trueDamage});
+  const api=Object.freeze({TYPES,snapshot,strength,attack,starfallCoefficient,starfall,reflection,healing,leechRate,power,trueDamage});
   if(typeof module==='object'&&module.exports)module.exports=api;
   else root.QASoulTalents=api;
 })(globalThis);

@@ -31,6 +31,10 @@ export function battleStepFeedback(step = {}, player = {}) {
 }
 
 export function createBattleImpact(stage, { step, player, fromMe, elapsedMs = 0 } = {}) {
+  if (step?.starfallCount > 0) return createStarfallImpact(stage, {
+    count: step.starfallCount, x: fromMe ? '72%' : '28%',
+    y: fromMe ? '34%' : '65%', elapsedMs
+  });
   const feedback = battleStepFeedback(step, player);
   if (!stage || !feedback.landed) return null;
   const impact = document.createElement('i');
@@ -65,4 +69,48 @@ export function createBattleImpact(stage, { step, player, fromMe, elapsedMs = 0 
   }
   stage.appendChild(impact);
   return impact;
+}
+
+// One visual per settled correct answer. All delays use elapsed milliseconds;
+// removing the parent cancels the entire effect when combat ends.
+export function createStarfallImpact(stage, { count = 0, x = '50%', y = '40%', elapsedMs = 0 } = {}) {
+  const total = Math.min(3, Math.max(0, Math.floor(Number(count) || 0)));
+  if (!stage || !total) return null;
+  const layer = document.createElement('div');
+  layer.className = 'bv2-stage-impact qa-starfall-impact';
+  layer.setAttribute('aria-hidden', 'true');
+  layer.style.cssText = 'position:absolute;inset:0;z-index:12;pointer-events:none;overflow:hidden;';
+  const style = document.createElement('style');
+  style.textContent = `
+    .qa-starfall-meteor{position:absolute;width:100px;height:150px;margin:-130px 0 0 -65px;opacity:0;animation:qaStarfallDrop 400ms ease-in both}
+    .qa-starfall-meteor svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 9px #c1a1ff)}
+    .qa-starfall-ring{position:absolute;width:82px;height:36px;margin:-18px 0 0 -41px;border:3px solid #e1caff;border-radius:50%;opacity:0;box-shadow:0 0 18px #9a75ff;animation:qaStarfallRing 220ms ease-out both}
+    .qa-starfall-caption{position:absolute;left:50%;top:10%;transform:translateX(-50%);color:#eee1ff;font:bold 18px sans-serif;text-shadow:0 0 12px #9762ef;white-space:nowrap}
+    @keyframes qaStarfallDrop{0%{opacity:0;transform:translate(-110px,-190px) scale(.65)}20%{opacity:1}85%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(5px,8px) scale(1.15)}}
+    @keyframes qaStarfallRing{0%{opacity:1;transform:scale(.3)}100%{opacity:0;transform:scale(1.7)}}
+    @media(prefers-reduced-motion:reduce){.qa-starfall-meteor{animation-name:qaStarfallStill}.qa-starfall-ring{animation-name:qaStarfallStill}@keyframes qaStarfallStill{0%,80%{opacity:1}100%{opacity:0}}}
+  `;
+  layer.appendChild(style);
+  for (let index = 0; index < total; index++) {
+    const offset = (index - (total - 1) / 2) * 24;
+    const meteor = document.createElement('span');
+    meteor.className = 'qa-starfall-meteor';
+    meteor.style.left = `calc(${x} + ${offset}px)`;
+    meteor.style.top = y;
+    meteor.style.animationDelay = (index * 110 - Math.max(0, Number(elapsedMs) || 0)) + 'ms';
+    meteor.innerHTML = '<svg viewBox="0 0 100 150" focusable="false" aria-hidden="true"><path d="M5 0 L79 110 L60 123 Z" fill="#9870ed" opacity=".7"/><path d="M20 15 L88 118 L70 128 Z" fill="#e6caff"/><path d="M66 106 L85 109 L96 125 L84 142 L65 137 L57 121 Z" fill="#b997ff" stroke="#f3e5ff" stroke-width="3"/><path d="M71 113 L82 119 L77 132 L65 126 Z" fill="#fff4d9"/></svg>';
+    layer.appendChild(meteor);
+    const ring = document.createElement('span');
+    ring.className = 'qa-starfall-ring';
+    ring.style.left = meteor.style.left;
+    ring.style.top = y;
+    ring.style.animationDelay = (index * 110 + 320 - Math.max(0, Number(elapsedMs) || 0)) + 'ms';
+    layer.appendChild(ring);
+  }
+  const caption = document.createElement('b');
+  caption.className = 'qa-starfall-caption';
+  caption.textContent = '元嬰・星隕 ×' + total;
+  layer.appendChild(caption);
+  stage.appendChild(layer);
+  return layer;
 }

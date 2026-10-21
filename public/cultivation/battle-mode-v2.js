@@ -1242,7 +1242,7 @@ export const featureReady = (async () => {
         if(step.innateEffect)innateEffect=createInnateAbilityEffect(stage,{kind:step.innateEffect,
           source:actor,target,elapsedMs:atMs-strikeAtMs,durationMs:ATTACK_VISIBLE_MS});
         setText('bv2-cue-kicker', index === 0 ? '先手出招' : counter ? '雷光反擊' : '後手出招');
-        setText('bv2-cue-count', missed ? '落空' : guarded ? '護體' : feedback.critical ? '爆擊' : counter ? '反擊' : feedback.enhanced ? '金丹神通' : '出招');
+        setText('bv2-cue-count', step.starfallCount > 0 ? '星隕 ×' + step.starfallCount : missed ? '落空' : guarded ? '護體' : feedback.critical ? '爆擊' : counter ? '反擊' : feedback.enhanced ? '金丹神通' : '出招');
         setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') +
           (missed ? '作答未命中！' : guarded ? '出招被道心護體抵擋' : counter ? '發動反擊！' : (feedback.critical ? '爆擊！' : '') + '造成 ' + damage + ' 點傷害'));
         if (actor) {
@@ -1260,7 +1260,7 @@ export const featureReady = (async () => {
         if (!missed) globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
           key: 'duel-hit:'+key+':'+index, rate: counter ? 1.2 : feedback.critical ? .8 : 1
         });
-        if (!missed && !guarded && stage && !step.innateEffect) {
+        if (!missed && stage && (!guarded || step.starfallCount > 0) && (!step.innateEffect || step.starfallCount > 0)) {
           impact = createBattleImpact(stage, { step, player: original[step.actorRole],
             fromMe: step.actorRole === myRole, elapsedMs: atMs - impactAtMs });
         }

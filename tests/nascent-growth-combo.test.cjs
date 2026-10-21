@@ -19,7 +19,7 @@ test('four ordinary branches and five critical/combo branches replace prerequisi
 });
 test('branch metadata names the real trait and reports grade-dependent bonuses',()=>{
  const expected={ocean:['蓄潮爆發',32,'%'],taichu:['吸血',50,'%'],pojing:['斬殺',60.8,'%'],
-  xingchen:['三題蓄星',24,'%'],wugou:['真傷',72,''],thunder:['反傷',16,'%'],reverse:['低血增傷',28.8,'%']};
+  xingchen:['三題蓄星',50,'%'],wugou:['真傷',72,''],thunder:['反傷',16,'%'],reverse:['低血增傷',28.8,'%']};
  for(const [type,[name,value,unit]] of Object.entries(expected)){
   const core={type,grade:1},branch=Growth.branches(core).at(-1);
   assert.equal(branch.name,name);assert.equal(branch.unit,unit);assert.equal(Growth.branchValue(core,'core',10),value);
@@ -140,4 +140,25 @@ test('wugou full-power true damage reaches 72 in trusted snapshots and actual Pv
   const raid=resolvePlayerAction(trusted,{roomId:'wugou-72',actionId:1,correct:true,bossHp:10000,bossMaxHp:10000});
   assert.equal(raid.damage,200+expected);
  }
+});
+
+
+test('starfall caps at 50% per meteor and raid settles accumulated stars on a wrong third answer',()=>{
+ for (let count=0;count<=3;count++) {
+  const source=player('xingchen',{core:10});
+  const member=trustedRaidPlayerSnapshot(source,'h',{items:[]});
+  member.soulStarAnswerWindow=2;member.soulStarCorrectWindow=Math.min(2,count);
+  const correct=count===3;
+  const result=resolvePlayerAction(member,{roomId:'starfall-raid',actionId:3,correct,bossHp:10000,bossMaxHp:10000});
+  assert.equal(Growth.branchValue(source.cultivationTraining.equippedCore,'core',10),50);
+  assert.equal(result.starfallCount,count);
+  assert.equal(result.starDamage,count*100);
+  assert.equal(result.damage,count*100+(correct?200:0));
+  assert.equal(result.member.soulStarAnswerWindow,0);
+  assert.equal(result.member.soulStarCorrectWindow,0);
+ }
+ const api=read('raid-room-api.cjs');
+ assert.match(api,/personalDamage = Math.max\(0, Math.round\(finite\(combat.damage\)\)\)/);
+ const client=read('public/cultivation/raid-mode.js');
+ assert.match(client,/\|\| state.lastPlayerAction.starfallCount > 0/);
 });

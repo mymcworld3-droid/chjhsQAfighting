@@ -1,3 +1,4 @@
+import { createStarfallImpact } from './battle-combat-feedback.js';
 import { RAID_MVP, shenPhaseForHp, shenIntentForRound, bossClockState } from './raid-engine.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 import { snapshotBattleKnowledge, resolveBattleKnowledge } from './battle-question-scope.js';
@@ -852,6 +853,7 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
     healed = 0,
     critical = false,
     comboHits = [],
+    starfallCount = 0,
     innateEffects = []
   } = {}) {
     // Boss and answer settlements may arrive together. Serialize their visual
@@ -863,7 +865,7 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
     state.battleSceneTail = tail;
     await previous;
     if (token !== state.battleSceneToken) { release(); return; }
-    let notice, stage;
+    let notice, stage, starfall;
     const abilityVisuals=[];
     try {
       state.battleScenePlaying = true;
@@ -877,12 +879,14 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         key: 'raid-hit:'+state.roomId+':'+attacker+':'+state.playerActionCount+':'+state.lastBossActionSeen
       });
       if (stage) stage.classList.add(attacker === 'player' ? 'raid-player-strike' : 'raid-boss-strike');
+      if (attacker === 'player' && starfallCount > 0) starfall = createStarfallImpact(stage, { count: starfallCount, x: '50%', y: '38%' });
       const actionCaption = arena?.querySelector('.raid-boss-portrait > span');
       if (actionCaption && actionName) actionCaption.textContent = '「' + actionName + '」';
 
       notice = document.createElement('div');
       notice.className = 'raid-combat-event ' + (critical ? 'is-critical ' : '') + (comboHits.length ? 'has-combo ' : '') + (attacker === 'player' ? 'player' : 'boss');
       const details = [];
+      if (starfallCount > 0) details.push('星隕 ×' + starfallCount);
       if (critical) details.push('爆擊');
       if (comboHits.length) details.push('連擊 ×'+comboHits.length+'：'+comboHits.map(n=>Math.round(n)).join('／'));
       if (guarded) details.push('道心護體・完全抵擋');
@@ -906,7 +910,7 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
     } catch (error) {
       console.warn('[Raid] combat feedback failed:', error);
     } finally {
-      try { for(const visual of abilityVisuals)visual.dispose?.();notice?.remove(); stage?.classList.remove('raid-player-strike', 'raid-boss-strike'); }
+      try { starfall?.remove(); for(const visual of abilityVisuals)visual.dispose?.();notice?.remove(); stage?.classList.remove('raid-player-strike', 'raid-boss-strike'); }
       finally {
         release();
         if (token === state.battleSceneToken && state.battleSceneTail === tail) {
@@ -1119,6 +1123,7 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         critical: resolution.critical === true,
         comboHits: resolution.comboHits || [],
         innateSkill: String(resolution.innateSkill || ''),
+        starfallCount: Math.min(3, Math.max(0, Number(resolution.starfallCount) || 0)),
         innateEffects: Array.isArray(resolution.innateEffects)?resolution.innateEffects:[],
         personalDamage: Math.max(0, Number(resolution.personalDamage) || 0),
         teamBurstDamage: Math.max(0, Number(resolution.teamBurstDamage) || 0),
@@ -1168,12 +1173,13 @@ import { createInnateAbilityEffect } from './innate-ability-effects.js';
         showCorrectAnswerFeedback((dealt > 0 ? '攻勢命中・' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚') + hitText + teamText + learningText + spiritText);
       }
 
-      if (state.answerCorrect && state.lastPlayerAction.damage > 0) {
+      if ((state.answerCorrect && state.lastPlayerAction.damage > 0) || state.lastPlayerAction.starfallCount > 0) {
         await playBattleScene({
           attacker: 'player',
-          actionName: state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : state.lastPlayerAction.innateSkill || (state.lastPlayerAction.critical ? '爆擊' : state.lastPlayerAction.comboHits.length ? '連擊' : '破勢一擊'),
+          actionName: state.lastPlayerAction.starfallCount > 0 ? '元嬰・星隕' : state.lastPlayerAction.teamBurstDamage > 0 ? '三才合擊' : state.lastPlayerAction.innateSkill || (state.lastPlayerAction.critical ? '爆擊' : state.lastPlayerAction.comboHits.length ? '連擊' : '破勢一擊'),
           critical: state.lastPlayerAction.critical,
           comboHits: state.lastPlayerAction.comboHits,
+          starfallCount: state.lastPlayerAction.starfallCount,
           damage: state.lastPlayerAction.damage,
           healed: state.lastPlayerAction.healed,
           innateEffects:state.lastPlayerAction.innateEffects

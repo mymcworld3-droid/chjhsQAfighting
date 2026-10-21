@@ -539,7 +539,7 @@ export function settleBattleRound({
     if (role === 'host') guestHp -= actual;
     else hostHp -= actual;
     const starAttack = {type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
-      damage:actual,baseDamage:0,extraDamage:raw,guarded,critical:false,
+      damage:actual,baseDamage:0,extraDamage:raw,guarded,critical:false,starfallCount:correctCount,
       skill:'元嬰・星隕（近三題答對 '+correctCount+'/3）'};
     logs.push(starAttack);steps.push({...starAttack,hostHp,guestHp});
     applySoulLeech(role,player,actual);

@@ -16,7 +16,7 @@
   const SPECIAL_BRANCHES = [{id:'coreChance',name:'金丹機率',icon:'fa-dice',maxBonus:7.5,unit:'%',description:'逐級增加爆擊或連擊機率，依金丹品級升滿增加 5–7.5%。'},
     {id:'coreDamage',name:'金丹傷害',icon:'fa-burst',maxBonus:50,unit:'%',description:'逐級增加爆擊或連擊傷害。爆擊升滿增加 25 個百分點，連擊升滿增加 15 個百分點。'}].map(Object.freeze);
   // 一般百分比為攻擊力係數；太初獨立顯示實際傷害吸血率，真傷使用固定傷害。
-  const CORE_FACTORS = Object.freeze({ocean:2,pojing:3.8,xingchen:1.5,thunder:1,reverse:1.8});
+  const CORE_FACTORS = Object.freeze({ocean:2,pojing:3.8,thunder:1,reverse:1.8});
   const CORE_ICONS = Object.freeze({ocean:'fa-water',taichu:'fa-heart-circle-plus',pojing:'fa-skull',
     xingchen:'fa-star',wugou:'fa-shield-halved',thunder:'fa-bolt',reverse:'fa-fire'});
   const roundBonus = value => Math.round(value * 10) / 10;
@@ -25,6 +25,7 @@
     const rank = Math.min(CAP,count(level));
     const talent = rules?.snapshot(core?.type,core?.grade,{leftTop:rank,leftFarBottom:rank,leftFinal:rank});
     if(talent) talent.powerScale=core?.type==='wugou'?1:.5;
+    if(core?.type === 'xingchen') return roundBonus((rules?.starfallCoefficient(talent) || 0)*100);
     if(core?.type === 'taichu') return roundBonus((rules?.leechRate(talent) || 0)*100);
     if(core?.type === 'wugou') return rules?.trueDamage(talent) || 0;
     return roundBonus((rules?.strength(talent) || 0) * (CORE_FACTORS[core?.type] || 0) * 100);
