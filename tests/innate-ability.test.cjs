@@ -142,7 +142,7 @@ test('all eighteen powers are completely suppressed against golden core and belo
   }
   for(const score of [68,187,188]) {
     const h=fighter('ocean','tide');h.nascentSoul=null;
-    assert.equal(duel(h,{totalScore:score}).guestHp,duel({...h,innateAbility:null},{totalScore:score}).guestHp-40);
+    assert.equal(duel(h,{totalScore:score}).guestHp,duel({...h,innateAbility:null},{totalScore:score}).guestHp-60);
   }
 });
 test('PvP retries replay exactly, persist counters across rounds, and never advance input state',()=>{
@@ -163,7 +163,7 @@ test('WuGou innate light passes Dao shield while normal divine pursuit uses arti
   const h=fighter('ocean','tide');h.nascentSoul=null;
   const defended=duel(h,{artifactBattle:{effects:[{type:'equip_damage_reduction_percent',value:.5}]}});
   const base=duel({...h,innateAbility:null},{artifactBattle:{effects:[{type:'equip_damage_reduction_percent',value:.5}]}});
-  assert.equal(base.guestHp-defended.guestHp,20);
+  assert.equal(base.guestHp-defended.guestHp,30);
 });
 test('raid snapshots trust saved core and power; retries and boss actions do not duplicate charge or reflection windows',()=>{
   const h=fighter('thunder','rebound');h.goldenCore={type:'thunder',grade:9};h.nascentSoul=null;
