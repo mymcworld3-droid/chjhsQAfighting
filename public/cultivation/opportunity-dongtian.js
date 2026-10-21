@@ -69,6 +69,8 @@ import { playerRepository } from './data/player-repository.js';
   function focusTitle() { $('op-title')?.focus({ preventScroll: true }); }
   function close(resume = true) {
     const canResume = validOwner();
+    // A deliberate return must not be undone by a later user-ready notification.
+    if (canResume) restoredAccount = owner;
     serial++; run = null; busy = false;
     const el = $('opportunity-overlay');
     const finish = window.beginSceneTransition?.(el, document.querySelector('.active-page'), 'cloud', 'opportunity-close');
@@ -255,31 +257,48 @@ import { playerRepository } from './data/player-repository.js';
     // Choose one inclusive 20–30-question interval per cycle. Changing scope does not erase progress.
     const progress = schedule.step(account);
     if (!progress.due || inflight || restoring) return false;
+    // Consume the encounter cycle when it is offered, including failed generation.
+    // Otherwise a due countdown of zero opens the same loader on every next answer.
+    schedule.reset(account);
+    restoredAccount = account;
     owner = account; inflight = true; const operation = ++serial;
-    const requestId = crypto.randomUUID().replace(/-/g, '');
+    const requestId = globalThis.crypto?.randomUUID?.().replace(/-/g, '') || `op-${Date.now()}-${Math.random().toString(36).slice(2, 14)}`;
     const el = overlay();
-    el.innerHTML = `${header('靈光正在凝成')}<div class="op-offer"><span class="op-seal op-loading" aria-hidden="true">緣</span><h3>一卷新篇，正在展開</h3><p role="status">正在為你選定的修習範圍凝成長文與五題，並核對文本依據。</p><button class="op-secondary" id="op-cancel-load" type="button">先繼續問道</button></div>`;
-    focusTitle();
     return new Promise(resolve => {
-      let released = false;
+      let released = false, attemptBusy = false;
       const release = () => { if (!released) { released = true; resolve(true); } };
       const skip = () => {
         if (released) return;
-        if (validOwner()) schedule.reset(account);
         close(); release();
       };
-      $('op-cancel-load').onclick = skip; $('op-leave').onclick = skip;
-      void request('start', { requestId, scope }, 90000).then(result => {
-        if (operation !== serial || uid() !== account || rules.scopeKey(data() || {}) !== scope || result.run.scope !== scope) {
-          if (uid() === account) void request('abandon', { runId: result.run.id }).catch(() => {});
-          if (operation === serial) close();
-          release(); return;
-        }
-        schedule.reset(account); openRun(result.run, account); release();
-      }).catch(e => {
-        if (operation === serial && uid() === account) { toast(`${e.message}，先繼續問道。`); close(); }
-        release();
-      }).finally(() => { inflight = false; });
+      const load = async () => {
+        if (released || attemptBusy || operation !== serial || uid() !== account) return;
+        attemptBusy = true; inflight = true;
+        el.innerHTML = `${header('靈光正在凝成')}<div class="op-offer"><span class="op-seal op-loading" aria-hidden="true">緣</span><h3>一卷新篇，正在展開</h3><p role="status">正在為你選定的修習範圍凝成長文與五題，並核對文本依據。</p><button class="op-secondary" id="op-cancel-load" type="button">先繼續問道</button></div>`;
+        $('op-cancel-load').onclick = skip; $('op-leave').onclick = skip;
+        focusTitle();
+        try {
+          // Retrying after a lost response reuses the same server idempotency key.
+          const result = await request('start', { requestId, scope }, 90000);
+          if (operation !== serial || uid() !== account) {
+            if (uid() === account && result.run?.id) void request('abandon', { runId: result.run.id }).catch(() => {});
+            release(); return;
+          }
+          if (!result.run?.id) throw new Error('機緣回應不完整，請重試展卷。');
+          if (rules.scopeKey(data() || {}) !== scope || result.run?.scope !== scope) {
+            if (result.run?.id) void request('abandon', { runId: result.run.id }).catch(() => {});
+            throw new Error('修習範圍已變更，請返回問道確認範圍。');
+          }
+          openRun(result.run, account); release();
+        } catch (e) {
+          if (operation !== serial || uid() !== account) { release(); return; }
+          el.innerHTML = `${header('機緣尚未展開')}<div class="op-offer"><h3>暫時無法展開這卷機緣</h3><p role="alert">${esc(e.message)}</p><p>可在此重試，或繼續問道；下一次機緣會重新等待 20～30 題，不會每題反覆出現。</p><button id="op-retry-load" class="op-primary" type="button">重試展卷</button><button id="op-cancel-load" class="op-secondary" type="button">繼續問道</button></div>`;
+          $('op-retry-load').onclick = () => { void load(); };
+          $('op-cancel-load').onclick = skip; $('op-leave').onclick = skip;
+          focusTitle();
+        } finally { attemptBusy = false; inflight = false; }
+      };
+      void load();
     });
   };
   async function restore() {

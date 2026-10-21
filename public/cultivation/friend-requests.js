@@ -35,7 +35,7 @@ async function request(body) {
 }
 function badge(active, count) {
   const el = $('friend-request-badge');
-  if (el) { el.hidden = !active; el.textContent = count ? String(count) : '•'; }
+  if (el) { el.hidden = !active; el.textContent = count ? String(count) : '•'; el.setAttribute('aria-label', count ? `有 ${count} 則好友邀請` : '有新的好友邀請'); }
 }
 function sync(data) {
   const local = window.getCurrentUserData?.();

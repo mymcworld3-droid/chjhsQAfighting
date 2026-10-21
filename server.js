@@ -31,6 +31,7 @@ const registerQuestApi = require('./quest-api.cjs');
 const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
 const enlightenmentTrial = require('./enlightenment-trial-api.cjs').__test;
 const registerOpportunityApi = require('./opportunity-api.cjs');
+const registerGameIssueApi = require('./game-issue-api.cjs');
 const registerGameStage = require('./game-stage.cjs');
 const { raidRepository, playerRepository } = require('./server-repositories.cjs');
 const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
@@ -94,6 +95,7 @@ registerSoulboundDrawApi(app);
 registerMeditationApi(app);
 registerInventoryDismantleApi(app);
 registerOpportunityApi(app);
+registerGameIssueApi(app);
 
 // 僅回傳已配置 provider 的名稱與模型，不暴露 API key。
 app.get('/api/ai-status', (req, res) => {

@@ -1078,6 +1078,15 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     dialog.querySelector('[data-notice]').textContent = api.notice(report);
     const text = JSON.stringify(report, null, 2);
     dialog.querySelector('pre').textContent = text;
+    const send = document.createElement('button');
+    send.type = 'button'; send.textContent = '回報管理員';
+    send.style.cssText = 'padding:10px;border:1px solid #ba9a62;border-radius:9px;background:#36483d;color:#e1f2df';
+    send.onclick = () => {
+      if (window.openGameIssueReport) window.openGameIssueReport({ category: '功能異常', description: '煉器時出現：' + report.title, diagnostics: text });
+      else dialog.querySelector('[data-copy-status]').textContent = '回報功能尚未載入，請先複製回報，或至設定頁回報問題。';
+    };
+    const actions = dialog.querySelector('[data-close]').parentElement;
+    actions.style.flexWrap = 'wrap'; actions.appendChild(send);
     dialog.querySelector('[data-copy]').addEventListener('click', async () => {
       try { await navigator.clipboard.writeText(text); dialog.querySelector('[data-copy-status]').textContent = '已複製，可貼給管理員查詢。'; }
       catch (_) { dialog.querySelector('details').open = true; dialog.querySelector('[data-copy-status]').textContent = '無法自動複製，請選取下方回報文字。'; }

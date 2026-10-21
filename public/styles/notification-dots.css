@@ -1,0 +1,17 @@
+/* Notification visuals share the completed-refinery red glow. Position belongs to each host. */
+:is(.sect-action-dot,.quest-tab-dot,.raid-ticket-dot,.nascent-upgrade-dot,.raid-global-ticket-dot,.refinery-ready-dot,.refinery-ready-pip,.alliance-chat-badge,#friend-request-badge) {
+  box-sizing:border-box!important;
+  width:10px!important;height:10px!important;min-width:10px!important;min-height:10px!important;
+  max-width:10px!important;max-height:10px!important;padding:0!important;
+  border:0!important;border-radius:50%!important;background:#f13a34!important;
+  box-shadow:0 0 0 2px #24170b,0 0 12px rgba(255,66,50,.72);
+  animation:notification-dot-breath 1.6s ease-in-out infinite!important;
+  font-size:0!important;line-height:1!important;pointer-events:none;
+}
+:is(.sect-action-dot,.quest-tab-dot,.raid-ticket-dot,.nascent-upgrade-dot,.raid-global-ticket-dot,.refinery-ready-dot,.refinery-ready-pip,.alliance-chat-badge,#friend-request-badge)[hidden] { display:none!important; }
+@keyframes notification-dot-breath {
+  50% { box-shadow:0 0 0 3px #24170b,0 0 20px rgba(255,66,50,.9);transform:scale(1.13); }
+}
+@media(prefers-reduced-motion:reduce) {
+  :is(.sect-action-dot,.quest-tab-dot,.raid-ticket-dot,.nascent-upgrade-dot,.raid-global-ticket-dot,.refinery-ready-dot,.refinery-ready-pip,.alliance-chat-badge,#friend-request-badge) { animation:none!important; }
+}

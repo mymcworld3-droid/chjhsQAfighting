@@ -42,7 +42,8 @@ function compileQuery(query) {
     [ ['playerAnalyticsEvents'], "collection_path='playerAnalyticsEvents'" ],
     [ ['playerAnalyticsVisitors','playerAnalyticsPlayers'], "collection_path IN ('playerAnalyticsVisitors','playerAnalyticsPlayers')" ],
     [ ['exam_logs'], "collection_path='exam_logs'" ],
-    [ ['global_chat'], "collection_path='global_chat'" ]
+    [ ['global_chat'], "collection_path='global_chat'" ],
+    [ ['gameIssueReports'], "collection_path='gameIssueReports'" ]
   ];
   for(const [collections,predicate] of predicates)if(collections.includes(query.path))where.push(predicate);
 

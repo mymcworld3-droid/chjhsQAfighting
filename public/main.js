@@ -14,6 +14,7 @@ void import('./cultivation/training-render-guard.js').catch(error => {
 void import('./cultivation/player-analytics-client.js?v=20261016-events1').catch(error => {
   console.warn('[Player Analytics] optional tracking module unavailable', error);
 });
+void import('./cultivation/game-issue-report.js').catch(error => console.warn('[Game issue report]', error));
 // Repository 註冊屬於附加能力；即使載入失敗也不能阻斷 Google 登入核心。
 void import('./cultivation/data/index.js').catch((error) => {
   console.error('[Data repositories] failed to initialize repository registry', error);
