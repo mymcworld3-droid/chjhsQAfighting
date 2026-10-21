@@ -259,7 +259,7 @@ test('showcase motion and coloring remain responsive without exposing all eight 
   assert.match(css, /\.sb-carousel-track\.is-shifting/);
   assert.match(css, /nth-child\(3\)/);
   assert.match(css, /prefers-reduced-motion:reduce/);
-  assert.match(css, /--sb-carousel-gap:8px/);
+  assert.match(css, /--sb-carousel-gap:0px/);
   assert.match(css, /#training-tab-content:has\(> #soulbound-page\)/);
   assert.doesNotMatch(css, /#0b1018/);
   assert.doesNotMatch(css, /#090c16f5/);
