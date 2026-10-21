@@ -238,7 +238,7 @@ test('ordinary streaks never create Dao-heart shields or bonus cultivation', asy
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, undefined);
 });
 
-test('Golden Core realm gives +2 correct and never removes cultivation for wrong or skipped answers', async () => {
+test('Golden Core realm gives +2 correct, deducts one for mistakes and leaves skips unpenalized', async () => {
   const h = setup(27);
 
   await h.answer();
@@ -252,15 +252,15 @@ test('Golden Core realm gives +2 correct and never removes cultivation for wrong
 
   h.newQuiz();
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 30);
+  assert.equal(h.context.currentUserData.stats.totalScore, 29);
 
   h.newQuiz();
   await h.answer(-1, -2);
-  assert.equal(h.context.currentUserData.stats.totalScore, 30);
+  assert.equal(h.context.currentUserData.stats.totalScore, 29);
 
   h.newQuiz();
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 30);
+  assert.equal(h.context.currentUserData.stats.totalScore, 28);
 });
 
 test('Ningxin Dao-heart preserves one streak on a mistake and is consumed', async () => {
@@ -270,11 +270,11 @@ test('Ningxin Dao-heart preserves one streak on a mistake and is consumed', asyn
   h.context.window.resolveGoldenCoreCultivationReward = ({stats,isCorrect}) =>
     ({preserveStreak:!isCorrect && stats.goldenCoreShield && stats.currentStreak>0});
   await h.answer(1,0);
-  assert.equal(h.context.currentUserData.stats.totalScore,28);
+  assert.equal(h.context.currentUserData.stats.totalScore,27);
   assert.equal(h.context.currentUserData.stats.currentStreak,5);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield,false);
   h.newQuiz(); await h.answer(1,0);
-  assert.equal(h.context.currentUserData.stats.totalScore,28);
+  assert.equal(h.context.currentUserData.stats.totalScore,27);
   assert.equal(h.context.currentUserData.stats.currentStreak,0);
 });
 
@@ -297,11 +297,11 @@ test('legacy missing or string scores become numeric cultivation totals', async 
   }
 });
 
-test('wrong-answer Golden Core Dao-heart can form without reducing cultivation', async () => {
+test('wrong-answer Golden Core Dao-heart still forms while one cultivation is deducted', async () => {
   const h = setup(28);
   h.context.window.resolveGoldenCoreCultivationReward = () => ({ forceShield: true, message: '清心護體' });
   await h.answer(1, 0);
-  assert.equal(h.context.currentUserData.stats.totalScore, 28);
+  assert.equal(h.context.currentUserData.stats.totalScore, 27);
   assert.equal(h.context.currentUserData.stats.goldenCoreShield, true);
 });
 
@@ -350,11 +350,15 @@ test('ordinary answer transactions preserve server quest rewards arriving before
 test('real answer flow persists mistakes and awards correction variants exactly once',async()=>{
  const h=setup(28);h.context.window.QASoloLearningRules=require('../public/cultivation/solo-learning-rules.js');
  const origin=h.context.window.currentActiveQuiz.data.q;
- await h.answer(1,0);assert.equal(h.writes.length,1);assert.equal(h.context.currentUserData.stats.totalScore,28);
+ await h.answer(1,0);assert.equal(h.writes.length,1);assert.equal(h.context.currentUserData.stats.totalScore,27);
+ assert.equal(h.context.currentUserData.stats.lastQuizAnswer.penalty,1);
+ assert.equal(h.context.currentUserData.stats.lastQuizAnswer.scoreBefore,28);
+ assert.equal(h.context.currentUserData.stats.lastQuizAnswer.scoreAfter,27);
+ assert.match(h.nodes.get('feedback-title').innerHTML,/-1 修為/);
  h.newQuiz();h.context.window.currentActiveQuiz.data.q='A new variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
- await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,31);assert.equal(h.context.currentUserData.stats.gold,40);
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,29);assert.equal(h.context.currentUserData.stats.gold,35);
  h.newQuiz();h.context.window.currentActiveQuiz.data.q='Another variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
- await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,33);assert.equal(h.context.currentUserData.stats.gold,70);
+ await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,31);assert.equal(h.context.currentUserData.stats.gold,65);
 });
 test('a second tab cannot claim an already corrected origin again',async()=>{
  const h=setup(28),rules=require('../public/cultivation/solo-learning-rules.js');h.context.window.QASoloLearningRules=rules;

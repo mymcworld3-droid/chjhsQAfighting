@@ -16,14 +16,26 @@ test('difficulty comes from issued question and weakness from saved profile or o
  assert.equal(Learning.reward({},question('簡單',{learningDifficulty:'easy'}),true).gain,0);
  assert.equal(Learning.reward({knowledgeMap:{數學:{方程式:{total:5,correct:2}}}},question('弱項'),true).weakPractice,true);
 });
-test('learning and recovery bonuses are not multiplied by artifacts; mistakes retain cultivation',()=>{
+test('learning and recovery bonuses are not multiplied by artifacts; golden-core mistakes lose one cultivation',()=>{
  const source=fs.readFileSync(require.resolve('../public/cultivation/cultivation-rules.js'),'utf8').replace(/^export /gm,'');
  const window={isGoldenCoreEnabled:()=>true,applyArtifactCultivationGain:n=>({gain:n*2}),
   resolveGoldenCoreCultivationReward:({isRecovery})=>({recoveryBonusGain:isRecovery?1:0})};
  const apply=vm.runInNewContext(source+'\napplyCultivationReward',{window,console});
  const stats={totalScore:30};const r=apply(stats,true,{learningBonusGain:3,isRecovery:true});
  assert.equal(r.gain,8);assert.equal(r.artifactBonusGain,2);
- const miss=apply(stats,false);assert.equal(stats.totalScore,38);assert.equal(miss.penalty,0);
+ const miss=apply(stats,false);assert.equal(stats.totalScore,37);assert.equal(miss.penalty,1);
+});
+test('wrong-answer penalty begins at golden core and also applies when a shield preserves the streak',()=>{
+ const source=fs.readFileSync(require.resolve('../public/cultivation/cultivation-rules.js'),'utf8').replace(/^export /gm,'');
+ const window={isGoldenCoreEnabled:()=>true,resolveGoldenCoreCultivationReward:()=>({preserveStreak:true})};
+ const apply=vm.runInNewContext(source+'\napplyCultivationReward',{window,console});
+ for(const score of [0,10,27,28,68,1868]) {
+  const stats={totalScore:score,currentStreak:3,goldenCoreShield:true};
+  const reward=apply(stats,false);
+  assert.equal(reward.penalty,score>=28?1:0);
+  assert.equal(stats.totalScore,score-(score>=28?1:0));
+  assert.equal(reward.streakPreserved,true);
+ }
 });
 test('Ningxin retains one streak and Wugou rewards correction while combat descriptions remain present',()=>{
  const source=fs.readFileSync(require.resolve('../public/cultivation/cultivation-training-v4.js'),'utf8');

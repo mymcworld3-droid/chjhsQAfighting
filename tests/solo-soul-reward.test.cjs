@@ -41,5 +41,5 @@ test('disabled core, changed core and pre-nascent score do not activate old inve
 
 test('wrong answer gives no soul cultivation bonus',()=>{
   const p=player();const result=reward(p,false);
-  assert.equal(result.soulBonusGain,0);assert.equal(result.gain,0);assert.equal(p.stats.totalScore,68);
+  assert.equal(result.soulBonusGain,0);assert.equal(result.gain,0);assert.equal(p.stats.totalScore,67);
 });

@@ -1,10 +1,10 @@
 // 修為與答題統計由主流程一次儲存，避免另一次讀寫扣回獎勵。
-// 築基期以前答對 +1；金丹期起答對 +2。一般問道答錯不扣修為，只中斷連答。
+// 築基期以前答對 +1；金丹期起答對 +2、答錯 -1。
 const GOLDEN_CORE_SCORE = 28;
 const PRE_GOLDEN_CORE_GAIN = 1;
 const GOLDEN_CORE_GAIN = 2;
 
-export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppliedSoulBonusGain, learningBonusGain = 0, isRecovery = false } = {}) {
+export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppliedSoulBonusGain, learningBonusGain = 0, isRecovery = false, isSkipped = false } = {}) {
   stats.totalScore = Math.max(0, Number(stats.totalScore) || 0);
   const scoreBeforeAnswer = stats.totalScore;
   const isGoldenCoreOrAbove = scoreBeforeAnswer >= GOLDEN_CORE_SCORE;
@@ -60,7 +60,9 @@ export function applyCultivationReward(stats, isCorrect, { soulBonusGain: suppli
   const artifactBonusGain = isCorrect ? Math.max(0, gain - preArtifactGain - learningGain - recoveryBonusGain) : 0;
   const goldenCoreMindReady = !!goldenCoreEffect.forceShield;
 
-  const shieldBlockedPenalty = false, penalty = 0;
+  const shieldBlockedPenalty = false;
+  const penalty = !isCorrect && !isSkipped && isGoldenCoreOrAbove ? 1 : 0;
+  stats.totalScore = Math.max(0, stats.totalScore - penalty);
   const streakPreserved = !isCorrect && !!goldenCoreEffect.preserveStreak && Number(stats.currentStreak) > 0;
   if (isCorrect) {
     stats.totalScore += gain;
@@ -124,12 +126,13 @@ export function showCultivationFeedback(reward, isCorrect) {
     return;
   }
 
+  const scoreText = reward.penalty > 0 ? `修為 -${reward.penalty}` : '修為不減';
   if (reward.streakPreserved) {
-    showToast('本次失誤，修為不減；凝心道心保留本次連答，護體已消耗。');
+    showToast(`本次失誤，${scoreText}；凝心道心保留本次連答，護體已消耗。`);
     return;
   }
 
-  const lossText = '修為不減，連答已中斷';
+  const lossText = `${scoreText}，連答已中斷`;
 
   if (reward.goldenCoreMindReady) {
     showToast(`本次失誤，${lossText}；${reward.goldenCoreMessage || '金丹道心護體成形'}`);
