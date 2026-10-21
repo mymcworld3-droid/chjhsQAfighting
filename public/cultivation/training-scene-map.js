@@ -39,7 +39,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css?v=20261021-full-scene-bottom';
+  link.href = 'styles/training-scene-map.css?v=20261021-rank-ship';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
@@ -104,7 +104,11 @@ function showMap({ focus = false } = {}) {
 }
 function openPlace(place, selectedTab = place.tab) {
   if (place.page) {
-    window.openRaidHub?.();
+    if (place.page === 'page-raid') window.openRaidHub?.();
+    else {
+      window.switchToPage?.(place.page);
+      if (place.page === 'page-rank') void window.loadLeaderboard?.();
+    }
     return;
   }
   const tab = selectedTab === 'status' ? page.querySelector('#training-status-tab')

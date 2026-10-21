@@ -41,9 +41,9 @@ test('reduced-motion training navigation stays synchronous and inside the docume
 
 test('new accounts see Status; existing Foundation and Golden Core gates are at 6 and 28', () => {
   const player = { stats: { totalScore: 0 } };
-  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status']);
+  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status', 'rank']);
   player.stats.totalScore = 6;
-  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'vault', 'secret', 'status']);
+  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'vault', 'secret', 'status', 'rank']);
   player.stats.totalScore = 28;
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);
 });
@@ -108,7 +108,7 @@ test('previously unlocked soul upgrades and trusted combat core remain usable af
   assert.equal(Authority.trustedRaidPlayerSnapshot(player, 'u1').goldenCore, null);
 });
 
-test('both clean scene plates match their assets and contain six non-overlapping targets', () => {
+test('both clean scene plates match their assets and contain non-overlapping targets', () => {
   for (const [name, layout] of Object.entries(Layouts)) {
     const file = fs.readFileSync(path.join(__dirname, '../public', layout.image.replace(/\.webp$/, '.png')));
     assert.equal(file.readUInt32BE(16), layout.width, `${name} image width`);
