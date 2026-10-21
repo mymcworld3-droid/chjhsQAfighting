@@ -350,7 +350,7 @@ function coreSupport(member,correct,seed){
 }
 function coreAttack(member,seed){
   const core=member?.goldenCore;if(!core)return 0;const grade=clampGrade(core.grade);
-  if(core.type==='ocean'&&deterministicPercent(seed+':ocean')<chanceByGrade(grade,10,5,50))return 100;
+  if(core.type==='ocean'&&deterministicPercent(seed+':ocean')<chanceByGrade(grade,10,5,50))return 150;
   if(core.type==='sword'&&deterministicPercent(seed+':sword')<chanceByGrade(grade,10,5,50))return 200;
   return 0;
 }
