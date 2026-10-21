@@ -9,8 +9,8 @@
   const level = value => Math.min(CAP, count(value));
   const TYPES = Object.freeze({
     ocean: {name:'滄海元神', branches:[
-      {id:'tide',name:'滄溟潮生',describe:n=>`答對且目標生命至少 60% 時，追加攻擊力 ${2*n}% 的普通傷害。`},
-      {id:'surge',name:'百川歸海',describe:n=>`每累積答對 3 題，追加攻擊力 ${6*n}% 的普通傷害，不要求連答。`} ]},
+      {id:'tide',name:'滄溟潮生',describe:n=>`答對時，目標生命至少 60% 追加攻擊力 ${3*n}% 的普通傷害；低於 60% 時追加 ${n}% 的普通傷害。`},
+      {id:'surge',name:'百川歸海',describe:n=>`每累積答對 3 題，追加攻擊力 ${8.5*n}% 的普通傷害，不要求連答。`} ]},
     taichu: {name:'太初元神', branches:[
       {id:'renew',name:'太初生息',describe:n=>`每次答對回復生命上限的 ${n/2}%。`},
       {id:'devour',name:'歸元納氣',describe:n=>`每次實際回復生命時，對對手造成回復量 ${3*n}% 的真實傷害；滿血溢補不計入，轉化傷害不再觸發吸血或治療轉傷。`} ]},
@@ -132,7 +132,7 @@
     const enemy=Number(target?.hp)/Math.max(1,Number(target?.maxHp)||1);
     const own=Number(player.hp)/Math.max(1,Number(player.maxHp)||1);
     let factor=0;
-    if(a.type==='ocean')factor=b==='tide'?(enemy>=.6?.02*n:0):(s.correctCount%3===0?.06*n:0);
+    if(a.type==='ocean')factor=b==='tide'?(enemy>=.6?.03*n:.01*n):(s.correctCount%3===0?.085*n:0);
     if(a.type==='ningxin'&&b==='focus'&&s.streak%2===0)factor=.04*n;
     if(a.type==='pojing'&&b==='momentum')factor=s.correctCount%3===0?.06*n:0;
     if(a.type==='reverse'&&b==='defy'&&own<=.5)factor=.08*n;
