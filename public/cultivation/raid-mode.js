@@ -20,7 +20,7 @@ import './combat-contribution.js';
 
   const DIFFICULTY = globalThis.QARaidDifficulty;
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261019-enlightenment';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261021-study-layout';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -152,7 +152,7 @@ import './combat-contribution.js';
       .replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
   }
   function rich(value) { return (window.quizMathRichText || escapeHtml)(String(value ?? '')); }
-  function typeset(el) { window.quizMathTypeset?.(el); }
+  function typeset(el) { return window.quizMathTypeset?.(el); }
   function randomId() {
     if (globalThis.crypto?.randomUUID) return 'shen-raid-' + crypto.randomUUID();
     return 'shen-raid-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
@@ -972,14 +972,17 @@ import './combat-contribution.js';
     syncRaidBottomClearance();
     const view = document.getElementById('raid-question');
     if (sameQuestion) {
-      view.querySelectorAll('[data-choice]').forEach(button => { button.disabled = review || state.status === 'submitting' || state.player.hp <= 0; });
+      view.querySelectorAll('[data-choice]').forEach(button => {
+        button.disabled = review || state.status === 'submitting' || state.player.hp <= 0;
+        button.classList?.toggle('selected', Number(button.dataset?.choice) === state.selectedChoice);
+      });
       updateLiveLabels();
       return;
     }
     view.raidQuestion = q;
     view.dataset.review = String(!!review);
     const opts = q.opts.map(function (option, i) {
-      let cls = '';
+      let cls = i === state.selectedChoice ? ' selected' : '';
       if (review && i === q.ans) cls = ' correct';
       else if (review && i === state.selectedChoice && i !== q.ans) cls = ' wrong';
       return '<button class="' + cls + '" type="button" data-choice="' + i + '" ' + (review || state.status === 'submitting' || state.player.hp <= 0 ? 'disabled' : '') + '><span>' +
@@ -992,17 +995,33 @@ import './combat-contribution.js';
         ? ('答對・' + (dealt > 0 ? '造成 ' + dealt.toLocaleString() + ' 傷害' : '攻勢已凝聚'))
         : '答錯・本次失去攻擊';
       explain = '<div class="enlightenment-review raid-study-review"><strong class="' + (state.answerCorrect ? 'correct' : 'wrong') + '">' + label + '</strong>' +
-        '<div class="enlightenment-explanation">' + rich(q.exp) + '</div>' +
-        '<button class="enlightenment-primary" type="button" data-next>下一題</button><button class="raid-ghost" type="button" data-arena>先看戰場</button></div>';
+        '<div class="enlightenment-explanation"><strong>解析：</strong>' + rich(q.exp) + '</div>' +
+        '<div class="raid-study-actions"><button class="enlightenment-primary" type="button" data-next>下一題</button><button class="raid-ghost" type="button" data-arena>先看戰場</button></div></div>';
     }
-    view.innerHTML = '<div class="raid-question-shell"><article class="enlightenment-panel raid-study-panel"><header><div><small>宗門試煉 ／ 並肩共戰</small><h2>秘境試題</h2></div>' +
-      '<button class="raid-ghost" type="button" data-question-arena>戰場</button></header><div class="raid-study-body">' +
-      '<div class="enlightenment-overview"><span>本題科目</span><strong>' + escapeHtml(q.subject) + ' · ' + escapeHtml(q.level) + '</strong></div>' +
-      '<div class="raid-question-boss"><img src="' + RAID_MVP.bossImage + '" alt="沈清霜"><span id="raid-question-boss-clock">Boss 行動倒數</span></div>' +
-      teamworkMarkup(true) + '<div class="enlightenment-step"><span>個人題號 ' + (state.playerActionCount + (review ? 0 : 1)) +
-      '</span><span id="raid-question-timer">不限時</span></div>' +
-      '<h3 class="enlightenment-question">' + rich(q.q) + '</h3><div class="enlightenment-options raid-options">' + opts + '</div>' + explain + '</div></article></div>';
-    typeset(view);
+    window.quizMathClear?.(view);
+    view.innerHTML = '<div class="raid-question-shell"><article class="enlightenment-panel raid-study-panel"><header class="raid-quiz-timing" aria-label="團本作答與 Boss 行動計時">' +
+      '<div class="raid-study-heading"><div><small>' + escapeHtml(q.subject) + ' · ' + escapeHtml(q.level) + '</small><h2>團本答題</h2></div>' +
+      '<button class="raid-ghost" type="button" data-question-arena>返回戰場</button></div>' +
+      '<div class="enlightenment-step raid-question-meta"><span>個人題號 ' + (state.playerActionCount + (review ? 0 : 1)) +
+      ' · <span id="raid-question-timer">不限時</span></span><span id="raid-question-boss-clock">Boss 行動倒數</span></div>' +
+      '<div class="raid-boss-timer-track" aria-hidden="true"><i id="raid-question-boss-bar"></i></div></header>' +
+      '<div class="raid-study-body" tabindex="0" role="region" aria-label="團本題目與解析">' +
+      '<section class="raid-question-sheet"><span class="raid-question-kicker">題目</span><h3 class="enlightenment-question">' + rich(q.q) + '</h3></section>' +
+      '<div class="enlightenment-options raid-options">' + opts + '</div>' + teamworkMarkup(true) + explain +
+      '<p id="raid-answer-status" class="raid-answer-status" role="status"></p></div></article></div>';
+    const mathReady = typeset(view);
+    if (review) {
+      // Reveal the review controls after formulas have settled, without scrolling
+      // the fixed clock or restoring an old question after the player has left.
+      const revealReview = () => {
+        if (view.raidQuestion !== q || view.dataset.review !== 'true' ||
+            document.getElementById(PAGE_ID)?.dataset.raidView !== 'question') return;
+        const body = view.querySelector('.raid-study-body');
+        if (body) body.scrollTop = body.scrollHeight;
+      };
+      requestAnimationFrame(revealReview);
+      Promise.resolve(mathReady).catch(() => {}).then(() => requestAnimationFrame(revealReview));
+    }
     view.querySelector('[data-question-arena]')?.addEventListener('click', () => renderArena());
     if (!review) {
       view.querySelectorAll('[data-choice]').forEach(function (button) {
@@ -1233,9 +1252,19 @@ import './combat-contribution.js';
       questionBossClock.textContent = current.telegraphing ?
         '警告：Boss ' + (current.remainingMs / 1000).toFixed(1) + ' 秒後出招' :
         'Boss ' + (current.remainingMs / 1000).toFixed(1) + ' 秒後行動';
+      questionBossClock.closest('.raid-quiz-timing')?.classList.toggle('urgent', current.telegraphing || current.due);
     }
+    const questionBossBar = document.getElementById('raid-question-boss-bar');
+    if (questionBossBar && current) questionBossBar.style.width =
+      Math.max(0, Math.min(100, current.remainingMs / RAID_MVP.bossActionIntervalMs * 100)) + '%';
     const qTimer = document.getElementById('raid-question-timer');
-    if (qTimer) qTimer.textContent = state.status === 'review' ? '可續' : '不限時';
+    if (qTimer) qTimer.textContent = state.status === 'review' ? '本題解析' : state.status === 'submitting' ? '答案確認中' : '不限時';
+    const answerStatus = document.getElementById('raid-answer-status');
+    if (answerStatus) {
+      const message = state.status === 'submitting' ? '答案已送出，正在確認本次出手…' :
+        state.status === 'review' ? '本題已結算；看完解析後可繼續下一題。' : '不限讀題時間；答對即可出手，Boss 會持續行動。';
+      if (answerStatus.textContent !== message) answerStatus.textContent = message;
+    }
     const bossHp = document.getElementById('raid-boss-hp-text');
     const bossBar = document.getElementById('raid-boss-hp-bar');
     const playerHp = document.getElementById('raid-player-hp-text');
