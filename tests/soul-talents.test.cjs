@@ -49,8 +49,8 @@ test('starfall counts correct answers in every three attempts and low HP talents
  const target=p('ocean');
  assert.equal(talents.attack(p('xingchen'),target,{streak:3}).normal,0);
  assert.equal(talents.starfall(p('xingchen'),0),0);
- assert.equal(talents.starfall(p('xingchen'),2),192);
- assert.equal(talents.starfall(p('xingchen'),3),288);
+ assert.equal(talents.starfall(p('xingchen'),2),200);
+ assert.equal(talents.starfall(p('xingchen'),3),300);
  const a=p('reverse'),healthy=talents.attack(a,target).normal;a.hp=500;
  assert.ok(talents.attack(a,target).normal>healthy);
  const execute=p('pojing'),high=talents.attack(execute,target).normal;target.hp=500;
@@ -76,7 +76,7 @@ test('starfall triggers on the third answered question even when that answer is 
   h.coreCorrectStreak=r.hostCoreStreak;g.coreCorrectStreak=r.guestCoreStreak;
   h.soulStarCorrectWindow=r.hostStarCorrectWindow;g.soulStarCorrectWindow=r.guestStarCorrectWindow;
   if(round===3){
-   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===192));
+   assert.ok(r.logs.some(x=>/星隕/.test(x.skill)&&x.damage===200));
    assert.equal(r.hostStarCorrectWindow,0);
   }
  }

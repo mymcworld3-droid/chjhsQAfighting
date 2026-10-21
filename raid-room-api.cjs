@@ -650,7 +650,8 @@ function createHandler({
           }
 
           const combat = resolvePlayerAction({ ...me }, { roomId, actionId: id, correct, bossHp:current.bossHp, bossMaxHp:current.bossMaxHp });
-          const personalDamage = correct ? Math.max(0, Math.round(finite(combat.damage))) : 0;
+          // 第三題答錯仍可能由前兩題蓄星造成傷害。
+          const personalDamage = Math.max(0, Math.round(finite(combat.damage)));
           const previousContributors = Array.isArray(current.teamCorrectUids) ? current.teamCorrectUids : [];
           const teamCorrectUids = correct ? [...new Set([...previousContributors, uid])] : [...previousContributors];
           const teamGuardReady = current.teamGuardReady === true ||
@@ -674,6 +675,8 @@ function createHandler({
             critical: combat.critical === true,
             comboHits: combat.comboHits || [],
             innateSkill: combat.innateSkill || '',
+            starfallCount: combat.starfallCount || 0,
+            starDamage: combat.starDamage || 0,
             innateEffects: combat.innateEffects || [],
             healingDamage: combat.healingDamage || 0,
             teamBurstDamage,
