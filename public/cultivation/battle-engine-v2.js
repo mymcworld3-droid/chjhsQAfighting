@@ -304,6 +304,7 @@ export function settleBattleRound({
   const startGuestHp = Math.min(Math.max(1, Number(guest?.maxHp) || 1000), currentHp(guest) + guestSupport.heal);
   let hostHp = startHostHp;
   let guestHp = startGuestHp;
+  const hostRecovered=startHostHp-currentHp(host),guestRecovered=startGuestHp-currentHp(guest);
   // 每次凝聚的道心護體只擋一次傷害；使用後立刻消耗，下一回合不會自動恢復。
   // 金丹技能未來若再次凝聚，resolveDeterministicCoreSupport 才會重新設為 true。
   let hostCoreShield = hostSupport.shield;
@@ -311,16 +312,33 @@ export function settleBattleRound({
   const logs = [];
   const steps = [];
   const activations = [];
+  // Healing conversion is a separate true strike. It never feeds leech, counters or itself.
+  const convertHealing = (role, player, actualHealed) => {
+    const raw=innate?.healingDamage(player,actualHealed) || 0;
+    const defender=role==='host'?guest:host;
+    const ownHp=role==='host'?hostHp:guestHp,targetHp=role==='host'?guestHp:hostHp;
+    if(!raw || ownHp<=0 || targetHp<=0)return;
+    defender.hp=targetHp;
+    const defended=resolveTalentDefense?.({attacker:player,defender,normalDamage:0,trueDamage:raw});
+    const damage=Math.min(targetHp,defended?Math.max(0,Math.round(defended.hpDamage || 0)):raw);
+    if(role==='host')guestHp-=damage;else hostHp-=damage;
+    const record={type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
+      damage,baseDamage:0,extraDamage:raw,trueDamage:raw,critical:false,guarded:false,
+      innateEffect:'vital-orb',skill:'本命神通・歸元納氣'};
+    logs.push(record);steps.push({...record,hostHp,guestHp});
+    activations.push({type:'innate-ability',name:'本命神通',ownerUid:player.uid,skill:record.skill,
+      message:'實際回復 '+actualHealed+' 生命，轉化 '+raw+' 真傷',kind:'化神神通'});
+  };
   // All actual outgoing HP damage can leech, including independent strikes and counters.
   const applySoulLeech = (role, player, dealt) => {
     const hp = role === 'host' ? hostHp : guestHp;
     if (hp <= 0) return;
-    const divineHeal = innate?.leech(player,dealt) || 0;
-    const heal = (soulTalents?.healing(player,dealt) || 0) + divineHeal;
+    const heal = soulTalents?.healing(player,dealt) || 0;
     const amount = Math.max(0,Math.min(player.maxHp,hp+heal)-hp);
     if (!amount) return;
     if (role === 'host') hostHp += amount; else guestHp += amount;
-    logs.push({type:'heal',actorRole:role,actorUid:player.uid,amount,damage:0,skill:divineHeal?'本命神通・歸元納氣':'元嬰・還神吸血'});
+    logs.push({type:'heal',actorRole:role,actorUid:player.uid,amount,damage:0,skill:'元嬰・還神吸血'});
+    convertHealing(role,player,amount);
   };
   for (const activation of hostSupport.activations) activations.push({ ...activation, ownerUid: host.uid });
   for (const activation of guestSupport.activations) activations.push({ ...activation, ownerUid: guest.uid });
@@ -329,6 +347,8 @@ export function settleBattleRound({
   });
   if (hostSupport.heal && startHostHp > currentHp(host)) logs.push({ type: 'heal', actorRole: 'host', actorUid: host.uid, damage: 0, amount: startHostHp - currentHp(host), skill: hostInnateHeal ? '本命神通・養神' : hostSoulHeal ? '本命護元' : '太初回元丹・回元' });
   if (guestSupport.heal && startGuestHp > currentHp(guest)) logs.push({ type: 'heal', actorRole: 'guest', actorUid: guest.uid, damage: 0, amount: startGuestHp - currentHp(guest), skill: guestInnateHeal ? '本命神通・養神' : guestSoulHeal ? '本命護元' : '太初回元丹・回元' });
+  for(const role of turnOrder)convertHealing(role,role==='host'?host:guest,
+    role==='host'?hostRecovered:guestRecovered);
 
   for (const role of turnOrder) {
     // An earlier lethal hit (including Thunder reflection) ends the round immediately.
@@ -347,7 +367,7 @@ export function settleBattleRound({
     player.hp = role === 'host' ? hostHp : guestHp;
     defender.hp = role === 'host' ? guestHp : hostHp;
     const plan = hitPlan({ roomId, round, role, player, support });
-    const talent = soulTalents?.attack(player, defender, {seed:roomId + ':' + round + ':' + player.uid, streak:support.streak}) || {normal:0,trueDamage:0,followup:0,leech:0};
+    const talent = soulTalents?.attack(player, defender, {seed:roomId + ':' + round + ':' + player.uid, streak:support.streak,executeThreshold:innate?.executeThreshold(player) ?? .5}) || {normal:0,trueDamage:0,followup:0,leech:0};
     const divine = innate?.attack(player,defender) || {normal:0,trueDamage:0};
     talent.trueDamage += divine.trueDamage;
     // The equipment resolver must see the current sequential HP, not the pre-round snapshot.
@@ -394,10 +414,12 @@ export function settleBattleRound({
     // Equipment heals / grants a shield to its attacker after an actual hit.
     if (equipment) {
       if (damage > 0) {
+        const beforeHeal=role==='host'?hostHp:guestHp;
         const healed = Math.min(Math.max(1, Number(player.maxHp) || 1000),
           (role === 'host' ? hostHp : guestHp) + Math.max(0, Math.round(Number(equipment.heal) || 0)));
         if (role === 'host') hostHp = healed;
         else guestHp = healed;
+        convertHealing(role,player,healed-beforeHeal);
       }
       if (equipment.shieldGain > 0) {
         player.artifactShield = Math.max(0, Number(player.artifactShield) || 0) + Math.round(equipment.shieldGain);
@@ -439,7 +461,9 @@ export function settleBattleRound({
       if (role === 'host') guestHp = Math.max(0,guestHp-followDamage);
       else hostHp = Math.max(0,hostHp-followDamage);
       steps.push({type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
-        damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,pursuit:true,critical:false,skill:[plan.followupDamage ? '九天劍氣丹・追擊' : '',talent.followup ? '元嬰・'+talent.name+'追擊' : '',divine.normal ? '本命神通・'+divine.name : ''].filter(Boolean).join('・'),hostHp,guestHp});
+        damage:followDamage,baseDamage:0,extraDamage:followDamage,guarded:false,pursuit:true,critical:false,
+        innateEffect:divine.normal&&player.innateAbility?.branch==='momentum'?'triple-beam':'',
+        skill:[plan.followupDamage ? '九天劍氣丹・追擊' : '',talent.followup ? '元嬰・'+talent.name+'追擊' : '',divine.normal ? '本命神通・'+divine.name : ''].filter(Boolean).join('・'),hostHp,guestHp});
     }
     if(divine.normal || divine.trueDamage) activations.push({type:'innate-ability',name:'本命神通',ownerUid:player.uid,
       skill:'本命神通・'+divine.name,message:divine.name+'發動',kind:'化神神通'});
@@ -479,12 +503,13 @@ export function settleBattleRound({
           activations.push({ type: player.goldenCore?.type || 'shield', name: player.goldenCore?.name || '金丹', ownerUid: player.uid, skill: '金丹道心護體', message: '金丹道心護體發動並消耗，須重新凝聚', kind: '鬥法防護' });
         } else if (role === 'host') hostHp = Math.max(0, hostHp - counter.reflectDamage);
         else guestHp = Math.max(0, guestHp - counter.reflectDamage);
-        applySoulLeech(targetRole,defender,counterGuarded ? 0 : Math.min(counterTargetHp,counter.reflectDamage));
         const reflected = { type: 'counter', actorRole: targetRole, actorUid: defender.uid, targetUid: player.uid, damage: counterGuarded ? 0 : counter.reflectDamage, guarded: counterGuarded, critical: false,
           coreEffect: counter.activation?.type === defender.goldenCore?.type ? counter.activation : null,
           skill: counter.activation?.skill || '' };
         logs.push(reflected);
         steps.push({ ...reflected, hostHp, guestHp });
+        applySoulLeech(targetRole,defender,counterGuarded ? 0 : Math.min(counterTargetHp,counter.reflectDamage));
+        steps[steps.length-1].hostHp=hostHp;steps[steps.length-1].guestHp=guestHp;
         if (counter.activation) activations.push({ ...counter.activation, ownerUid: defender.uid });
       }
     }
@@ -513,11 +538,12 @@ export function settleBattleRound({
     const actual = Math.min(role === 'host' ? guestHp : hostHp,reduced);
     if (role === 'host') guestHp -= actual;
     else hostHp -= actual;
-    applySoulLeech(role,player,actual);
     const starAttack = {type:'attack',actorRole:role,actorUid:player.uid,targetUid:defender.uid,
       damage:actual,baseDamage:0,extraDamage:raw,guarded,critical:false,
       skill:'元嬰・星隕（近三題答對 '+correctCount+'/3）'};
     logs.push(starAttack);steps.push({...starAttack,hostHp,guestHp});
+    applySoulLeech(role,player,actual);
+    steps[steps.length-1].hostHp=hostHp;steps[steps.length-1].guestHp=guestHp;
     activations.push({type:'xingchen',name:'星辰元嬰',ownerUid:player.uid,
       skill:'元嬰・星隕',message:'三題蓄星：答對 '+correctCount+'/3，星隕傷害 '+actual,kind:'元嬰攻擊效果'});
     if (!actual || hostHp<=0 || guestHp<=0) continue;
@@ -531,10 +557,11 @@ export function settleBattleRound({
         if (role==='host')hostCoreShield=false;else guestCoreShield=false;
       } else if (role==='host') hostHp=Math.max(0,hostHp-reflect);
       else guestHp=Math.max(0,guestHp-reflect);
-      applySoulLeech(targetRole,defender,coreGuard ? 0 : Math.min(counterTargetHp,reflect));
       const record = {type:'counter',actorRole:targetRole,actorUid:defender.uid,targetUid:player.uid,
         damage:coreGuard?0:reflect,guarded:coreGuard,critical:false,skill:counter.activation?.skill||'星隕反擊'};
       logs.push(record);steps.push({...record,hostHp,guestHp});
+      applySoulLeech(targetRole,defender,coreGuard ? 0 : Math.min(counterTargetHp,reflect));
+      steps[steps.length-1].hostHp=hostHp;steps[steps.length-1].guestHp=guestHp;
       if(counter.activation)activations.push({...counter.activation,ownerUid:defender.uid});
     }
   }

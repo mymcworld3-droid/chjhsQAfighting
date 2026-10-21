@@ -674,6 +674,8 @@ function createHandler({
             critical: combat.critical === true,
             comboHits: combat.comboHits || [],
             innateSkill: combat.innateSkill || '',
+            innateEffects: combat.innateEffects || [],
+            healingDamage: combat.healingDamage || 0,
             teamBurstDamage,
             teamContributors: teamCorrectUids.length,
             teamGuardReady,

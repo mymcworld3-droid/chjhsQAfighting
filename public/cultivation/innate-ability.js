@@ -12,13 +12,13 @@
       {id:'tide',name:'滄溟潮生',describe:n=>`答對且目標生命至少 60% 時，追加攻擊力 ${2*n}% 的普通傷害。`},
       {id:'surge',name:'百川歸海',describe:n=>`每累積答對 3 題，追加攻擊力 ${6*n}% 的普通傷害，不要求連答。`} ]},
     taichu: {name:'太初元神', branches:[
-      {id:'renew',name:'太初生息',describe:n=>`每次答對回復 ${3*n} 生命。`},
-      {id:'devour',name:'歸元納氣',describe:n=>`造成實際傷害時額外吸血 ${n/2}%，含追擊與反擊。`} ]},
+      {id:'renew',name:'太初生息',describe:n=>`每次答對回復生命上限的 ${n/2}%。`},
+      {id:'devour',name:'歸元納氣',describe:n=>`每次實際回復生命時，對對手造成回復量 ${3*n}% 的真實傷害；滿血溢補不計入，轉化傷害不再觸發吸血或治療轉傷。`} ]},
     ningxin: {name:'凝心元神', branches:[
       {id:'focus',name:'一念凝鋒',describe:n=>`每連續答對 2 題，追加攻擊力 ${4*n}% 的普通傷害。答錯重新累積。`},
-      {id:'calm',name:'靜心返照',describe:n=>`答錯後的下一題答對，回復 ${6*n} 生命；開場首題不觸發。`} ]},
+      {id:'calm',name:'靜心返照',describe:n=>`答錯後的下一題答對，回復生命上限的 ${Math.round(.6*n*10)/10}%；開場首題不觸發。`} ]},
     pojing: {name:'破境元神', branches:[
-      {id:'execute',name:'破妄斬關',describe:n=>`答對且目標生命不高於 50% 時，追加攻擊力 ${2.5*n}% 的普通傷害。`},
+      {id:'execute',name:'破妄斬關',describe:n=>`元嬰斬殺生命門檻增加 ${2*n} 個百分點，由 50% 提高至 ${50+2*n}%（最高 70%），原斬殺傷害倍率不變。`},
       {id:'momentum',name:'三疊破障',describe:n=>`每累積答對 3 題，追加攻擊力 ${7.5*n}% 的普通傷害，不要求連答。`} ]},
     xingchen: {name:'星辰元神', branches:[
       {id:'meteor',name:'三星聚曜',describe:n=>`每累積答對 3 題，追加攻擊力 ${9*n}% 的普通傷害，不要求連答。`},
@@ -115,8 +115,8 @@
     let heal=0;
     if(a.type==='xingchen'&&b==='moon'&&s.windowReady)heal=s.windowCount*3*n;
     if(s.correct) {
-      if(a.type==='taichu'&&b==='renew')heal=3*n;
-      if(a.type==='ningxin'&&b==='calm'&&s.previousWrong)heal=6*n;
+      if(a.type==='taichu'&&b==='renew')heal=Number(player.maxHp)*.005*n;
+      if(a.type==='ningxin'&&b==='calm'&&s.previousWrong)heal=Number(player.maxHp)*.006*n;
       if(a.type==='wugou'&&b==='purify'&&s.streak%3===0)heal=9*n;
       if(a.type==='thunder'&&b==='nourish'&&s.correctCount%2===0)heal=6*n;
       if(a.type==='reverse'&&b==='balance')heal=Math.max(0,Number(player.maxHp)-Number(player.hp))*.005*n;
@@ -134,7 +134,7 @@
     let factor=0;
     if(a.type==='ocean')factor=b==='tide'?(enemy>=.6?.02*n:0):(s.correctCount%3===0?.06*n:0);
     if(a.type==='ningxin'&&b==='focus'&&s.streak%2===0)factor=.04*n;
-    if(a.type==='pojing')factor=b==='execute'?(enemy<=.5?.025*n:0):(s.correctCount%3===0?.075*n:0);
+    if(a.type==='pojing'&&b==='momentum')factor=s.correctCount%3===0?.075*n:0;
     if(a.type==='xingchen'&&b==='meteor'&&s.correctCount%3===0)factor=.09*n;
     if(a.type==='wugou'&&b==='clarity')result.trueDamage=Math.round(.8*n);
     if(a.type==='reverse'&&b==='defy'&&own<=.5)factor=.03*n;
@@ -148,11 +148,15 @@
     return a?.type==='thunder'&&a.branch==='rebound'&&player.innateAbilityState?.reflectReady===true
       ?Math.round(Math.max(0,normalReceived)*.02*a.level):0;
   }
-  function leech(player,dealt) {
+  function healingDamage(player,actualHealed) {
     const a=active(player);
-    return a?.type==='taichu'&&a.branch==='devour'?Math.round(Math.max(0,dealt)*.005*a.level):0;
+    return a?.type==='taichu'&&a.branch==='devour'?Math.round(count(actualHealed)*.03*a.level):0;
+  }
+  function executeThreshold(player) {
+    const a=active(player);
+    return a?.type==='pojing'&&a.branch==='execute'?Math.min(.7,(50+2*a.level)/100):.5;
   }
   const api=Object.freeze({THRESHOLD,DUEL_THRESHOLD,CAP,TYPES,branches,normalize,status,select,upgrade,patch,apply,snapshot,
-    active,suppressForDuel,advance,healingOnAnswer,attack,reflection,leech});
+    active,suppressForDuel,advance,healingOnAnswer,attack,reflection,healingDamage,executeThreshold});
   if(node)module.exports=api;else root.QAInnateAbility=api;
 })(globalThis);

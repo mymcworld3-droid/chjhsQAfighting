@@ -25,7 +25,7 @@
   }
   function hash(seed){let n=2166136261;for(const ch of String(seed)){n^=ch.charCodeAt(0);n=Math.imul(n,16777619);}return(n>>>0)/4294967296;}
   function power(p){return clamp(p?.atk,0,600);}
-  function attack(player,target,{seed='',streak=0}={}) {
+  function attack(player,target,{seed='',streak=0,executeThreshold=.5}={}) {
     const t=player?.nascentSoul?.talent,s=strength(t),p=power(player),budget=s*p;
     const out={normal:0,trueDamage:0,followup:0,leech:0,name:TYPES[t?.type]?.name||''};
     if(!budget)return out;
@@ -33,7 +33,7 @@
     if(t.type==='ocean')out.normal=budget*(enemy>=.6?2:.6);
     if(t.type==='taichu')out.leech=leechRate(t);
     if(t.type==='ningxin'&&!t.comboMode&&hash(seed+':soul-critical')<.25)out.normal=budget*3;
-    if(t.type==='pojing')out.normal=budget*(enemy<=.5?3.8:.4);
+    if(t.type==='pojing')out.normal=budget*(enemy<=clamp(executeThreshold,.5,.7)?3.8:.4);
     // 星隕按三題作答視窗獨立結算，不混入一般答對攻擊。
     if(t.type==='wugou')out.trueDamage=trueDamage(t);
     if(t.type==='reverse')out.normal=budget*(own<=.5?1.8:.25);
