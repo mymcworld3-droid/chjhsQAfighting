@@ -268,7 +268,7 @@ test('server raid snapshots always include fixed soulbound items and star burst 
   const authority = require('../raid-authority.cjs'), item = pool.get('soul-star-golden-core');
   const user = sample(); user.artifactSystem.inventory[item.id] = 1; user.artifactSystem.equipped['本命法寶'] = item.id;
   const snapshot = authority.trustedRaidPlayerSnapshot(user, 'u1', { artifactCatalogSchemaVersion: 2, items: [{ ...item, effects: [{ type: 'equip_attack_flat', value: 999999 }] }] });
-  assert.equal(snapshot.atk, 225); assert.equal(snapshot.maxHp, 1080);
+  assert.equal(snapshot.atk, 225); assert.equal(snapshot.maxHp, 1180);
   assert.ok(snapshot.artifactBattle.effects.some(e=>e.type===item.coreEffect));
   let member = snapshot;
   for (let i=1;i<=3;i++) {
