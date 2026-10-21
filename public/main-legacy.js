@@ -1971,7 +1971,7 @@ window.switchToPage = (pageId) => {
         btn.classList.remove('active-nav-btn');
         
         // 只有目標頁面的按鈕加上發光狀態
-        if (btn.dataset.target === pageId) {
+        if (btn.dataset.target === (pageId === 'page-rank' ? 'page-training' : pageId)) {
             btn.classList.add('active-nav-btn');
         }
     });

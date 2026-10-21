@@ -8,7 +8,8 @@
     { id: 'contract', name: '契器', threshold: 28, realm: '金丹境', tab: 'contract' },
     { id: 'vault', name: '寶庫', threshold: 6, realm: '築基初期', tab: 'bag' },
     { id: 'secret', name: '秘境', threshold: 6, realm: '築基期', page: 'page-raid' },
-    { id: 'status', name: '狀態', threshold: 0, realm: '', tab: 'status' }
+    { id: 'status', name: '狀態', threshold: 0, realm: '', tab: 'status' },
+    { id: 'rank', name: '仙榜', threshold: 0, realm: '', page: 'page-rank' }
   ].map(Object.freeze));
   const number = value => Number.isFinite(Number(value)) ? Math.max(0, Math.floor(Number(value))) : 0;
   function realmScore(value) {

@@ -1,8 +1,14 @@
 // Shared AI-extracted alpha sprites retain fine roof tips, railings and ornaments.
-// Both fixed-ratio maps share six sprites, including the compact contract altar beside the forge.
+// Both fixed-ratio maps share their sprites, including the flying leaderboard ship.
 (function (root) {
   'use strict';
   const sprites = {
+  "rank": {
+    "image": "assets/training/cutouts/rank-ship.webp",
+    "width": 1536,
+    "height": 1024,
+    "crop": [0, 0, 1536, 1024]
+  },
   "contract": {
     "image": "assets/training/cutouts/contract-ai.webp",
     "width": 768,
@@ -121,7 +127,8 @@
         forge: place('forge', [43,438,502,341], [305,739], [303,614]),
         contract: place('contract', [550,620,250,200], [675,794], [675,700]),
         secret: place('secret', [1208,137,310,293], [1360,390], [1367,271]),
-        status: place('status', [1183,465,378,345], [1368,770], [1376,637])
+        status: place('status', [1183,465,378,345], [1368,770], [1376,637]),
+        rank: place('rank', [823,620,325,232], [985,822], [985,735])
       }
     },
     portrait: {
@@ -132,7 +139,8 @@
         forge: place('forge', [18,945,340,361], [198,1246], [198,1131]),
         contract: place('contract', [365,1080,190,230], [460,1270], [460,1180]),
         secret: place('secret', [603,265,316,315], [763,521], [773,419]),
-        status: place('status', [561,952,362,435], [762,1302], [771,1151])
+        status: place('status', [561,952,362,435], [762,1302], [771,1151]),
+        rank: place('rank', [376,226,224,298], [488,484], [488,390])
       }
     }
   };

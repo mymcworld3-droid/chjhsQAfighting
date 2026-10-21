@@ -14,5 +14,5 @@ test('retired card drawing is absent from markup, boot logic, and visual audit',
   }
   assert.doesNotMatch(boot, /removeLegacyGachaUI|LEGACY_SELECTORS/);
   const nav = index.slice(index.indexOf('<nav id="bottom-nav"'), index.indexOf('<div id="toast-container"'));
-  assert.equal((nav.match(/data-target="page-/g) || []).length, 4);
+  assert.equal((nav.match(/data-target="page-/g) || []).length, 3);
 });

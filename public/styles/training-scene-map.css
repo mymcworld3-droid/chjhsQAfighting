@@ -213,6 +213,18 @@ body.xianxia-theme #page-training .training-place {
 .training-place svg { display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .training-place-art { position: absolute; inset: 0; pointer-events: none; }
 .training-place-art > svg { position: absolute; inset: 0; }
+/* Animate the artwork independently so the label and hit target remain still. */
+body.xianxia-theme #page-training .training-place[data-training-location="rank"] .training-place-art {
+  animation: training-ship-float 6s ease-in-out infinite !important;
+  animation-play-state: paused !important;
+}
+body.xianxia-theme #page-training.training-scene-map-active.active-page .training-place[data-training-location="rank"] .training-place-art {
+  animation-play-state: running !important;
+}
+@keyframes training-ship-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
 /* The broad bloom sits behind the sprite; the delicate rim follows its alpha. */
 .training-place-aura {
   display: none;
@@ -251,6 +263,8 @@ body.xianxia-theme #page-training .training-place {
   white-space: nowrap;
   text-shadow: 0 1px 3px #000;
   pointer-events: auto;
+  /* fit() measures these anchors synchronously, including reduced motion. */
+  transition: none !important;
 }
 .training-place-name { display: block; }
 .raid-ticket-dot, .nascent-upgrade-dot {
@@ -385,10 +399,10 @@ body.xianxia-theme #page-training .training-scene-back {
   body.xianxia-theme #page-training .training-map-cloud,
   body.xianxia-theme #page-training .training-map-atmosphere > span,
   body.xianxia-theme #page-training .training-map-mote { animation: none !important; }
+  body.xianxia-theme #page-training .training-place[data-training-location="rank"] .training-place-art { animation: none !important; }
 }
 
 /* Refinery completion notice: always distinct from challenge/raid indicators. */
-.training-place-label { position:relative; }
 .training-subtab-v3 { position:relative; }
 .refinery-ready-dot { position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:#f13a34;box-shadow:0 0 0 2px #24170b,0 0 12px rgba(255,66,50,.72);z-index:10;pointer-events:none;animation:refinery-dot-breath 1.6s ease-in-out infinite; }
 .refinery-ready-dot[hidden] { display:none!important; }
@@ -401,3 +415,4 @@ body.xianxia-theme #page-training .training-scene-back {
 .training-map[data-render-profile="safe"] .training-map-atmosphere,
 .training-map[data-render-profile="safe"] .training-map-motes{display:none}
 .training-map[data-render-profile="safe"] .training-place-cutout{filter:none}
+body.xianxia-theme #page-training .training-map[data-render-profile="safe"] .training-place[data-training-location="rank"] .training-place-art{animation:none!important}
