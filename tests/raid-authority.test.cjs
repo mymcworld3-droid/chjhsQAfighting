@@ -111,7 +111,7 @@ test('raid protocol ignores client combat claims and uses trusted A/C server res
 
   assert.doesNotMatch(mode,/resolveShenPlayerAction|resolveShenBossAction/);
   assert.match(mode,/state\.answerCorrect = resolution\.correct === true/);
-  assert.match(question,/authenticatedMainFetch\('\/api\/generate-quiz'/);
+  assert.match(question,/raidRequestJson\('\/api\/generate-quiz'/);
   assert.match(question,/ans: null, exp: ''/);
   assert.match(server,/issueRaidQuestionTicket/);
   assert.match(server,/raidActionId > expected \+ 1/);

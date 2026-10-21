@@ -1,5 +1,5 @@
 import { pickBattleKnowledge } from './battle-question-scope.js';
-import { authenticatedMainFetch } from './data/project-repository.js';
+import { raidRequestJson } from './data/raid-transport.js';
 
 function randomId(prefix = 'raidq') {
   if (globalThis.crypto?.randomUUID) return prefix + '-' + crypto.randomUUID();
@@ -71,12 +71,7 @@ export async function generateRaidQuestion({ scope, round, rank = 0, history = [
       reasoning_steps: Number(item?.reasoning_steps) || 1
     }))
   };
-  const response = await authenticatedMainFetch('/api/generate-quiz', {
-    method: 'POST',
-    body: JSON.stringify(request)
-  });
-  if (!response.ok) throw new Error('quiz api ' + response.status);
-  const body = await response.json();
+  const body = await raidRequestJson('/api/generate-quiz', request, 90000);
   if (body?.raidQuestion) {
     const question = body.raidQuestion;
     const opts = Array.isArray(question.opts) ? question.opts.map(value => String(value ?? '').trim()) : [];
@@ -85,7 +80,7 @@ export async function generateRaidQuestion({ scope, round, rank = 0, history = [
       throw new Error('伺服器未回傳有效的團本題目票證');
     }
     // The correct answer and explanation intentionally do not exist on the client until settlement.
-    return { ...question, opts, ans: null, exp: '' };
+    return { ...question, actionId:request.actionId, opts, ans: null, exp: '' };
   }
   let raw = body?.text ?? body;
   if (typeof raw === 'string') {
@@ -98,5 +93,5 @@ export async function generateRaidQuestion({ scope, round, rank = 0, history = [
     }
     raw = JSON.parse(raw);
   }
-  return normalizeRaidQuestion(raw, request);
+  return { ...normalizeRaidQuestion(raw, request), actionId:request.actionId };
 }

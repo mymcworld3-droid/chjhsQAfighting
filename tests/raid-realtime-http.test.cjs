@@ -52,6 +52,7 @@ function client(origin,uid,requests) {
     }};
   vm.createContext(context);
   vm.runInContext(clean(read('public/cultivation/data/room-event-stream.js'))+'\n'+
+    clean(read('public/cultivation/data/raid-transport.js'))+'\n'+
     clean(read('public/cultivation/data/raid-repository.js')),context);
   context.window={getCurrentUserData:()=>user};
   const user={uid,stats:{}};
