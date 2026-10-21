@@ -1621,7 +1621,7 @@ function renderChatMessage(msg, container) {
     const equipped = { frame: msg.frame || '', avatar: msg.avatar || '' };
     const avatarHtml = getAvatarHtml(equipped, "w-8 h-8");
     const rankName = getRankMarkup(msg.rankLevel || 0, msg.uid || null, msg.totalScore ?? 0);
-    const time = msg.timestamp ? new Date(msg.timestamp.toMillis()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
+    const time = readTimestampDate(msg.timestamp)?.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) || '...';
 
     const chatProfile = msg.uid ? ' data-xiuxian-profile="' + escapeHtml(msg.uid) + '"' : '';
     div.innerHTML = `
@@ -1874,7 +1874,7 @@ window.loadFriendList = async () => {
             if (!d.exists()) return;
             const fData = d.data();
             const now = new Date();
-            const lastActive = fData.lastActive ? fData.lastActive.toDate() : new Date(0);
+            const lastActive = readTimestampDate(fData.lastActive) || new Date(0);
             const diffMinutes = (now - lastActive) / 1000 / 60;
             const isOnline = diffMinutes < 5;
             const statusHtml = isOnline ? `<span class="text-green-400 text-xs flex items-center gap-1"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> 在線</span>` : `<span class="text-gray-500 text-xs">離線（${getTimeAgo(lastActive)}）</span>`;
@@ -5317,8 +5317,8 @@ function createFloatingText(parentEl, text, colorClass = "text-white", topOffset
 async function resolveRoundLogic(roomId, room) {
     const host = room.host;
     const guest = room.guest;
-    const tHost = host.answerTime ? host.answerTime.toMillis() : Date.now() + 999999;
-    const tGuest = guest.answerTime ? guest.answerTime.toMillis() : Date.now() + 999999;
+    const tHost = readTimestampDate(host.answerTime)?.getTime() ?? Date.now() + 999999;
+    const tGuest = readTimestampDate(guest.answerTime)?.getTime() ?? Date.now() + 999999;
     let turnOrder;
     if (host.answerCorrect && !guest.answerCorrect) turnOrder = ['host', 'guest'];
     else if (!host.answerCorrect && guest.answerCorrect) turnOrder = ['guest', 'host'];
@@ -5622,9 +5622,7 @@ window.loadUserHistory = async (isLoadMore = false) => {
 
         snap.forEach(doc => {
             const log = doc.data();
-            const time = log.timestamp?.toDate
-                ? log.timestamp.toDate().toLocaleString('zh-TW')
-                : '--';
+            const time = readTimestampDate(log.timestamp)?.toLocaleString('zh-TW') || '--';
             if (log.mode === 'dongtian' && typeof window.renderDongtianHistoryLog === 'function') {
                 const grouped = window.renderDongtianHistoryLog(log, time);
                 if (grouped) { ul.appendChild(grouped); return; }
@@ -5956,7 +5954,7 @@ window.loadAdminLogs = async () => {
         ul.innerHTML = '';
         snap.forEach(doc => {
             const log = doc.data();
-            const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString() : '--:--';
+            const time = readTimestampDate(log.timestamp)?.toLocaleTimeString() || '--:--';
             const li = document.createElement('li');
             li.className = `p-3 rounded-lg text-xs border-l-4 mb-2 bg-slate-700/50 ${log.isCorrect ? 'border-green-500' : 'border-red-500'}`;
             li.innerHTML = `
@@ -6204,10 +6202,41 @@ let adminChartData = {
     accuracy: { labels: [], data: [] }
 };
 
-// 輔助函式：將 Firebase Timestamp 轉為 YYYY-MM-DD 格式 (避免時區問題)
+// Firebase/D1 Timestamp, migrated plain objects, Date, ISO strings and millisecond
+// values can coexist in historical records. Never let one bad date abort a list.
+function readTimestampDate(value) {
+    if (value === null || value === undefined || typeof value === 'boolean') return null;
+    let date;
+    try {
+        if (value instanceof Date) date = new Date(value.getTime());
+        else if (typeof value?.toDate === 'function') {
+            const converted = value.toDate();
+            if (!converted || typeof converted.getTime !== 'function') return null;
+            date = new Date(converted.getTime());
+        } else if (typeof value?.toMillis === 'function') {
+            const millis = value.toMillis();
+            if (typeof millis !== 'number' || !Number.isFinite(millis)) return null;
+            date = new Date(millis);
+        }
+        else if (typeof value === 'object') {
+            const seconds = value.seconds ?? value._seconds;
+            const nanoseconds = value.nanoseconds ?? value._nanoseconds ?? 0;
+            if (typeof seconds === 'number' && Number.isFinite(seconds) &&
+                typeof nanoseconds === 'number' && Number.isFinite(nanoseconds)) {
+                date = new Date(seconds * 1000 + nanoseconds / 1e6);
+            } else if (value.__d1type === 'date' && typeof value.value === 'string') {
+                date = new Date(value.value);
+            }
+        } else if (typeof value === 'number' && Number.isFinite(value)) date = new Date(value);
+        else if (typeof value === 'string' && value.trim()) date = new Date(value);
+    } catch (_) { return null; }
+    return date && Number.isFinite(date.getTime()) ? date : null;
+}
+
+// Keep the existing browser-local calendar grouping after normalizing the value.
 function formatDateKey(timestamp) {
-    if (!timestamp) return null;
-    const d = timestamp.toDate();
+    const d = readTimestampDate(timestamp);
+    if (!d) return null;
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
@@ -6241,16 +6270,16 @@ window.loadAdminStatistics = async () => {
             const data = doc.data();
             
             // 處理活躍時間分群
-            if (data.lastActive) {
-                const activeDateObj = data.lastActive.toDate();
+            const activeDateObj = readTimestampDate(data.lastActive);
+            if (activeDateObj) {
                 if (activeDateObj > sevenDaysAgo) activeUsersCount++;
                 
-                const dateKey = formatDateKey(data.lastActive);
+                const dateKey = formatDateKey(activeDateObj);
                 activeMap[dateKey] = (activeMap[dateKey] || 0) + 1;
             }
 
-            // 處理註冊時間分群 (若無 createdAt 則以 lastActive 或今天代替)
-            const createTimestamp = data.createdAt || data.lastActive; 
+            // 無效或缺少 createdAt 時改用 lastActive；兩者皆無效則不加入每日分群。
+            const createTimestamp = readTimestampDate(data.createdAt) || activeDateObj;
             if (createTimestamp) {
                 const dateKey = formatDateKey(createTimestamp);
                 regMap[dateKey] = (regMap[dateKey] || 0) + 1;
@@ -6280,8 +6309,8 @@ window.loadAdminStatistics = async () => {
         
         qSnap.forEach(doc => {
             const data = doc.data();
-            if (data.timestamp) {
-                const dateKey = formatDateKey(data.timestamp);
+            const dateKey = formatDateKey(data.timestamp);
+            if (dateKey) {
                 qMap[dateKey] = (qMap[dateKey] || 0) + 1;
             }
         });
