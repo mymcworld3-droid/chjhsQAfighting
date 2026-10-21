@@ -8,6 +8,7 @@ const { questionQualityIssue, removeUnstableOptionLabels } = require('./question
 const { recordEvent } = require('./public/cultivation/quest-rules.js');
 const rules = require('./public/cultivation/opportunity-rules.js');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const { QUESTION_PRESENTATION_RULES } = require('./quiz-answer-prompt.cjs');
 const RUNS = 'opportunityRuns', STATES = 'opportunityStates', TTL = 24 * 60 * 60 * 1000;
 const fail = (message, status = 409) => Object.assign(new Error(message), { status });
 const hash = v => crypto.createHash('sha256').update(v).digest('hex');
@@ -48,6 +49,7 @@ function generationPrompt(target, history, repair = '') {
   return `你是台灣課綱素養題編寫者。生成「機緣洞天」：一篇原創、連貫、有充足資訊的長文，五題共用全文。\n` +
     `嚴格範圍=${JSON.stringify(target)}。學科、選定單元與細項是真正考點；不得只把章節名貼進一般閱讀題，不得超綱。國小400至750字、國中650至1200字、高中以上850至1600字；英文科使用該年級可讀的英文250至550 words。` +
     Knowledge.promptFor(target.subject) + '\n' +
+    QUESTION_PRESENTATION_RULES + '\n' +
     `文章4至10段，包含情境、觀察、資料、因果或不同觀點；不要依赖附圖。可以融入修仙世界，但概念與數據必須正確，不可讓故事妨礙理解。` +
     `五題依序技能=${JSON.stringify(rules.SKILLS)}，分別擷取、跨段整合、推論、應用、評估。每題都必須依本文才可作答，彼此獨立、不洩漏其他題答案。後兩題需結合單元知識，但本文仍是必要條件。` +
     `每題四個不重複選項，唯一正解，三個有合理迷思的錯誤選項。解析至少80中文字，提供推理步驟與錯誤選項原因；不能以選項字母或順序稱呼答案。` +

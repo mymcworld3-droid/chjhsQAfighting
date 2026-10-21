@@ -9,7 +9,7 @@
   // Preserve Chinese and other ordinary words as text. Only a standalone TeX command
   // without its delimiters can be inferred as an inline formula.
   function normalize(value) {
-    const text = String(value ?? '');
+    const text = window.QAMathGuard?.normalizeMathText?.(value) ?? String(value ?? '');
     const trimmed = text.trim();
     if (!trimmed || /(\$\$|\\\[|\\\(|(?<!\\)\$(?!\$))/.test(trimmed)) return text;
     if (/\\(?:frac|dfrac|tfrac|sqrt|sum|int|lim|pi|theta|alpha|beta|gamma|cdot|times|div|leq|geq|neq|infty|overline|vec|binom|left|right)\b/.test(trimmed)
@@ -53,7 +53,24 @@
     // question, option and explanation requests in document order.
     const job = async () => {
       const mj = math();
-      if (!mj?.typesetPromise) return;
+      if (!mj?.typesetPromise) {
+        // The CDN may be unavailable on mobile. Use readable symbols instead
+        // of leaving raw TeX commands visible until another question arrives.
+        if (typeof document !== 'undefined' && document.createTreeWalker && window.QAMathGuard) {
+          for (const node of roots.filter(root => root.isConnected)) {
+            const walker = document.createTreeWalker(node,4); // SHOW_TEXT
+            const texts = [];
+            while (walker.nextNode()) texts.push(walker.currentNode);
+            for (const text of texts) {
+              if (text.parentElement?.closest('mjx-container,script,style,.tex2jax_ignore')) continue;
+              if (/\\[a-zA-Z]+|\\[()[\]]|\$[^$]+\$/.test(text.nodeValue || '')) {
+                text.nodeValue = window.QAMathGuard.readableMath(text.nodeValue);
+              }
+            }
+          }
+        }
+        return;
+      }
       try {
         await readyMath();
         const live = roots.filter(node => node.isConnected);

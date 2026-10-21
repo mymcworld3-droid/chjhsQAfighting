@@ -20,6 +20,19 @@ function questionQualityIssue({ q, correct, wrong, exp } = {}) {
   }
   const stem = String(q || '');
   const explanation = String(exp || '');
+  if (/(?:正確答案|本題正解)\s*(?:[:：]|(?:是|為)(?!何|什麼|哪|多少|幾|否))/.test(stem)) return '題幹直接洩漏正解';
+  const errorIdentification = /(?:文法|語法|用字|用詞|語病).*(?:錯|誤)|(?:找出|何者|哪個).*(?:錯誤|不正確)|\b(?:error|incorrect|mistake)\b/i.test(stem);
+  if (errorIdentification) {
+    const labels = stem.match(/[（(][A-D][）)]/g) || [];
+    const marks = [...stem.matchAll(/<u\b[^>]*>([\s\S]*?)<\/u>|\\underline\{([^{}]*)\}|\*\*([^*]+)\*\*|__([^_]+)__/gi)]
+      .map(match => match.slice(1).find(value => value !== undefined) || '');
+    const clean = value => String(value || '').replace(/[（(][A-D][）)]/g, '').replace(/[^\p{L}\p{N}]/gu, '').toLowerCase();
+    const answer = clean(correct);
+    const markedAnswers = marks.filter(value => answer && clean(value) === answer);
+    if ((labels.length > 0 && labels.length < 4) || (markedAnswers.length > 0 && marks.length === markedAnswers.length)) {
+      return '題幹只標示錯誤位置或正解，洩漏答案；請取消標記並讓玩家自行判斷';
+    }
+  }
   if (/(?:附圖|下圖|右圖|左圖|如圖所示|圖中所示)/.test(stem)) return '題目引用未提供的圖片';
   if (/[（(][A-D][）)]/.test(stem) && (stem.match(/[（(][A-D][）)]/g) || []).length >= 3) {
     return '題幹重複列出會再被排序的選項';

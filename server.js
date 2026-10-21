@@ -411,33 +411,28 @@ function isTooSimilarQuestion(candidate, history) {
     });
 }
 
-// Raise the question depth by one tier while keeping the public difficulty IDs.
+// Lower standards relative to the original tiers; public IDs and rewards stay fixed.
 function qualityPolicy(subject, difficulty) {
     const languageSocial = ['國文', '英文', '歷史', '地理', '公民'].includes(subject);
     if (difficulty === 'hard') {
         return {
-            cognitive: '5',
-            steps: '4-6',
+            cognitive: '3-4', steps: '2-3',
             instruction: languageSocial
-                ? '至少整合兩項文本或資料線索，透過多層推論、比較不同觀點或評估證據作答；不得只問單一名詞、翻譯或年代記憶。難度來自思考深度，不是冷僻知識或加長題幹，仍須在指定年級與單元範圍內。'
-                : '至少需要 4 個有意義的解題步驟，整合兩個以上子技能與多項條件，包含建模、逆向推理、方法比較或結果檢驗。不得用重複計算、冗長敘述或超綱知識湊難度。'
+                ? '採原中等題標準：使用清楚上下文，最多兩到三步理解、因果或比較，不堆疊多層推論。'
+                : '採原中等題標準：最多兩到三個步驟，一次轉換或兩步計算，數字簡單、條件直接。'
         };
     }
     if (difficulty === 'medium') {
         return {
-            cognitive: '4-5',
-            steps: '3-5',
+            cognitive: '2-3', steps: '1-2',
             instruction: languageSocial
-                ? '至少包含推論、比較、資料或語境判讀之一，不得只問單一名詞、翻譯或年代記憶。'
-                : '至少需要 3 個有意義的解題步驟，優先結合兩個子技能、逆向推理、資料判讀或陌生情境。'
+                ? '採原簡單題標準：常用詞與明確語境，一到兩步即可回答，避免隱晦推論與冷僻細節。'
+                : '採原簡單題標準：一個核心觀念，一到兩步直接計算或公式應用，不結合多個子技能。'
         };
     }
     return {
-        cognitive: '3-4',
-        steps: '2-3',
-        instruction: languageSocial
-            ? '不能只靠看到關鍵字直接作答；至少需要理解上下文、因果、比較或資訊整合。'
-            : '至少包含一次轉換、建模、判斷方法或兩步計算；避免單純代公式。'
+        cognitive: '1-2', steps: '1',
+        instruction: '入門題：只考一個基礎觀念，給足條件或清楚語境，一步即可回答；不設陷阱、不洩漏答案、不超出指定年級與單元。'
     };
 }
 
@@ -569,7 +564,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
         // 低正確率代表需要更清楚的鷹架，不代表永遠只做 easy。
-        // hard 最多降一級到 medium；medium 仍採原困難級的理解／推理要求。
+        // 適性調整仍使用降低後的新標準，不恢復舊版高難度。
         if (!raidQuickSimple) {
             if (stats.total > 3 && Number(accuracy) < 40 && difficulty === "hard") difficulty = "medium";
             if (stats.total > 5 && Number(accuracy) > 80) difficulty = "hard";
@@ -761,10 +756,10 @@ app.post('/api/generate-quiz', async (req, res) => {
                 .trim().slice(0, 120);
             parsed.cognitive_level = raidQuickSimple
                 ? Math.max(1, Math.min(2, Number(parsed.cognitive_level) || 1))
-                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 5 : difficulty === 'medium' ? 4 : 3)));
+                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 3 : difficulty === 'medium' ? 2 : 1)));
             parsed.reasoning_steps = raidQuickSimple
                 ? 1
-                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2)));
+                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 2 : 1)));
 
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');

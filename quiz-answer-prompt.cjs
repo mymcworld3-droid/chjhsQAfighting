@@ -1,7 +1,15 @@
 'use strict';
 
 // One contract for regular practice, trials, and compact combat generation.
+const QUESTION_PRESENTATION_RULES = [
+  '[題幹不得洩題與符號格式]',
+  '題幹不得直接告知正解，也不得只對正解或錯誤所在處加底線、粗體、括號、顏色或其他提示。文法找錯題的待判斷字詞一律不標記，四個選項直接提供原句中的字詞，讓玩家自行判斷。',
+  '選項會隨機重排，q、correct、wrong 不得附上作答用 A/B/C/D 標記；解析只用選項內容。不要為一個單字加上 (A) 或用底線暴露錯誤位置。',
+  '一般文字直接使用真正的 Unicode 符號（例如 ×、÷、≤、≥、π），不要輸出 HTML entity、字面上的 Unicode 跳脫碼或 Markdown／HTML 底線。',
+  '每段 LaTeX 公式各自完整放在 $...$ 中，中文留在公式外；禁止裸露的反斜線指令。JSON 只跳脫一次，解析後不得殘留雙重反斜線；只用 MathJax 基本指令，不用自訂巨集或額外套件。'
+].join('\n');
 const ANSWER_AND_EXPLANATION_RULES = [
+  QUESTION_PRESENTATION_RULES,
   '[答案與解析核對]',
   '先只依 q 的條件獨立求解，再填 correct，最後設計三個 wrong；不得先決定選項再湊解析。',
   '輸出前重新核算：檢查正負號、常數項、括號、分母、單位及題目問的是什麼，再逐一代入或判斷四個選項。',
@@ -16,4 +24,4 @@ const ANSWER_AND_EXPLANATION_RULES = [
   '驗算在輸出前完成，不把驗算過程或長篇思考寫進 exp；不得為縮短文字而省略必要條件或截斷公式。'
 ].join('\n');
 
-module.exports = { ANSWER_AND_EXPLANATION_RULES };
+module.exports = { ANSWER_AND_EXPLANATION_RULES, QUESTION_PRESENTATION_RULES };
