@@ -14,6 +14,7 @@ import { rewardRepository } from './data/reward-repository.js';
 import { RAID_TRIALS, raidTrialById } from './raid-catalog.js';
 import './raid-difficulty.js';
 import './combat-contribution.js';
+import { createInnateAbilityEffect } from './innate-ability-effects.js';
 
 (function () {
   'use strict';
@@ -850,7 +851,8 @@ import './combat-contribution.js';
     defenseSkill = '',
     healed = 0,
     critical = false,
-    comboHits = []
+    comboHits = [],
+    innateEffects = []
   } = {}) {
     // Boss and answer settlements may arrive together. Serialize their visual
     // feedback without changing the authoritative combat or answer state.
@@ -862,6 +864,7 @@ import './combat-contribution.js';
     await previous;
     if (token !== state.battleSceneToken) { release(); return; }
     let notice, stage;
+    const abilityVisuals=[];
     try {
       state.battleScenePlaying = true;
       setRaidCombatFocus(true);
@@ -892,12 +895,18 @@ import './combat-contribution.js';
         '<b>' + (guarded ? '0' : Math.max(0, Math.round(Number(damage) || 0)).toLocaleString()) + ' 傷害</b>' +
         (details.length ? '<span>' + details.map(escapeHtml).join('・') + '</span>' : '');
       arena?.appendChild(notice);
+      for(const effect of innateEffects) {
+        const visual=createInnateAbilityEffect(stage,{kind:effect.kind,
+          source:stage?.querySelector('.raid-stage-player.me .raid-stage-player-art'),
+          target:stage?.querySelector('.raid-boss-portrait'),durationMs:1150});
+        if(visual)abilityVisuals.push(visual);
+      }
 
       await wait(1150);
     } catch (error) {
       console.warn('[Raid] combat feedback failed:', error);
     } finally {
-      try { notice?.remove(); stage?.classList.remove('raid-player-strike', 'raid-boss-strike'); }
+      try { for(const visual of abilityVisuals)visual.dispose?.();notice?.remove(); stage?.classList.remove('raid-player-strike', 'raid-boss-strike'); }
       finally {
         release();
         if (token === state.battleSceneToken && state.battleSceneTail === tail) {
@@ -1110,6 +1119,7 @@ import './combat-contribution.js';
         critical: resolution.critical === true,
         comboHits: resolution.comboHits || [],
         innateSkill: String(resolution.innateSkill || ''),
+        innateEffects: Array.isArray(resolution.innateEffects)?resolution.innateEffects:[],
         personalDamage: Math.max(0, Number(resolution.personalDamage) || 0),
         teamBurstDamage: Math.max(0, Number(resolution.teamBurstDamage) || 0),
         teamGuardReady: resolution.teamGuardReady === true,
@@ -1165,7 +1175,8 @@ import './combat-contribution.js';
           critical: state.lastPlayerAction.critical,
           comboHits: state.lastPlayerAction.comboHits,
           damage: state.lastPlayerAction.damage,
-          healed: state.lastPlayerAction.healed
+          healed: state.lastPlayerAction.healed,
+          innateEffects:state.lastPlayerAction.innateEffects
         });
       } else if (state.pendingFinishRoom && !state.battleSceneTail) {
         const terminal = state.pendingFinishRoom;
@@ -1242,7 +1253,8 @@ import './combat-contribution.js';
       const bossHint = [
         resolution.teamGuarded ? '同心破陣・Boss 傷害降低 45%' : '',
         resolution.guarded ? '道心護體擋下攻擊' : ('受到 ' + Math.max(0, Number(resolution.damage) || 0).toLocaleString() + ' 傷害'),
-        Number(resolution.reflectedDamage) > 0 ? ('反擊 ' + Number(resolution.reflectedDamage).toLocaleString()) : ''
+        Number(resolution.reflectedDamage) > 0 ? ('反擊 ' + Number(resolution.reflectedDamage).toLocaleString()) : '',
+        Number(resolution.healingDamage)>0?'歸元納氣・真傷 '+Number(resolution.healingDamage).toLocaleString():''
       ].filter(Boolean).join('・');
       toast(bossHint);
 
@@ -1255,7 +1267,9 @@ import './combat-contribution.js';
         damage: Math.max(0, Number(resolution.damage) || 0),
         reflectedDamage: Math.max(0, Number(resolution.reflectedDamage) || 0),
         guarded: resolution.guarded === true,
-        defenseSkill: resolution.teamGuarded ? '同心破陣・傷害降低 45%' : ''
+        defenseSkill: resolution.teamGuarded ? '同心破陣・傷害降低 45%' : '',
+        healed:Number(resolution.healed)||0,
+        innateEffects:Array.isArray(resolution.innateEffects)?resolution.innateEffects:[]
       });
     } catch (error) {
       console.error('[Raid] authoritative boss action failed:', error);
@@ -1698,6 +1712,7 @@ import './combat-contribution.js';
   }
 
   function resetRaid(clearRoom = true) {
+    document.querySelectorAll?.('#raid-arena .ia-ability-effect').forEach(node=>node.dispose?.());
     stopTick();
     stopHeartbeat();
     state.roomUnsub?.();

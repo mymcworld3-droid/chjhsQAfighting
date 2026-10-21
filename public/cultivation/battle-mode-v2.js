@@ -14,6 +14,7 @@ import { battleRepository } from './data/battle-repository.js';
 import { playerRepository } from './data/player-repository.js';
 import { rewardRepository } from './data/reward-repository.js';
 import { battleStepFeedback, createBattleImpact } from './battle-combat-feedback.js';
+import { createInnateAbilityEffect } from './innate-ability-effects.js';
 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：房間與戰鬥狀態只寫 Firebase C；玩家邀請與獎勵留在 A／後端。
@@ -1062,7 +1063,7 @@ export const featureReady = (async () => {
     if (state.quotaReconnect) clearTimeout(state.quotaReconnect);
     state.quotaReconnect = null;
     state.animationTimers.forEach(clearTimeout); state.animationTimers = [];
-    document.querySelectorAll('#bv2-arena .bv2-stage-impact, #bv2-arena .bv2-damage-pop').forEach(node => node.remove());
+    document.querySelectorAll('#bv2-arena .bv2-stage-impact, #bv2-arena .bv2-damage-pop, #bv2-arena .ia-ability-effect').forEach(node => node.dispose ? node.dispose() : node.remove());
     for (const id of ['bv2-my-fighter', 'bv2-enemy-fighter']) {
       const fighter = document.getElementById(id);
       fighter?.classList.remove('strike', 'hit', 'miss', 'guarded');
@@ -1215,6 +1216,7 @@ export const featureReady = (async () => {
     const steps = Array.isArray(settlement.steps) ? settlement.steps : [];
     const stage = document.querySelector('#bv2-arena .bv2-stage');
     stage?.querySelectorAll('.bv2-stage-impact').forEach((node) => node.remove());
+    stage?.querySelectorAll('.ia-ability-effect').forEach(node=>node.dispose?.());
     const fighters = {
       host: document.getElementById(myRole === 'host' ? 'bv2-my-fighter' : 'bv2-enemy-fighter'),
       guest: document.getElementById(myRole === 'guest' ? 'bv2-my-fighter' : 'bv2-enemy-fighter')
@@ -1234,8 +1236,11 @@ export const featureReady = (async () => {
       const label = feedback.label;
       let pop = null;
       let impact = null;
+      let innateEffect = null;
       scheduleBattleAt(strikeAtMs, key, (atMs) => {
         if (!valid() || atMs >= clearAtMs) return;
+        if(step.innateEffect)innateEffect=createInnateAbilityEffect(stage,{kind:step.innateEffect,
+          source:actor,target,elapsedMs:atMs-strikeAtMs,durationMs:ATTACK_VISIBLE_MS});
         setText('bv2-cue-kicker', index === 0 ? '先手出招' : counter ? '雷光反擊' : '後手出招');
         setText('bv2-cue-count', missed ? '落空' : guarded ? '護體' : feedback.critical ? '爆擊' : counter ? '反擊' : feedback.enhanced ? '金丹神通' : '出招');
         setText('bv2-cue-message', (step.actorRole === myRole ? '我方' : '對手') +
@@ -1255,7 +1260,7 @@ export const featureReady = (async () => {
         if (!missed) globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
           key: 'duel-hit:'+key+':'+index, rate: counter ? 1.2 : feedback.critical ? .8 : 1
         });
-        if (!missed && !guarded && stage) {
+        if (!missed && !guarded && stage && !step.innateEffect) {
           impact = createBattleImpact(stage, { step, player: original[step.actorRole],
             fromMe: step.actorRole === myRole, elapsedMs: atMs - impactAtMs });
         }
@@ -1281,6 +1286,7 @@ export const featureReady = (async () => {
         if (target) target.style.animationDelay = '';
         pop?.remove();
         impact?.remove();
+        innateEffect?.dispose?.();
       });
     });
     scheduleBattleAt(startAtMs + battleAnimationDuration(steps.length), key, () => {
