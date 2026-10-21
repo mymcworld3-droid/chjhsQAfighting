@@ -93,7 +93,7 @@
     const damage = Math.max(0, Math.round(Number(receivedDamage) || 0));
     if (!damage) return { reflectDamage: 0 };
 
-    const chance = chanceByGrade(core.grade, 10, 6.25, 60);
+    const chance = chanceByGrade(core.grade, 30, 5, 70);
     if (!thunderTriggered(seed, chance)) return { reflectDamage: 0 };
 
     const reflected = Math.round(damage * .5);
