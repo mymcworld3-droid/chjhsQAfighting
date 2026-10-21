@@ -91,7 +91,7 @@ test('zero-damage Dao shield blocks combo and normal extra segments apply defens
  const g=fighters({artifactBattle:{effects:[{type:'equip_combo_chance',value:.1}]}});g.guest.artifactBattle={effects:[{type:'equip_damage_reduction_percent',value:.5}]};const reduced=r.settle({roomId,round:1,...g,resolveEquipmentHit:r.window.resolveArtifactBattleHit,resolveTalentDefense:r.window.resolveArtifactBattleDefense});assert.deepEqual(Array.from(reduced.steps.filter(x=>x.combo),x=>x.damage),[15,15]);assert.equal(reduced.guestHp,2870);
 });
 test('raid uses new trusted bonuses and records critical/combo metadata without client claims',()=>{
- const p=player('sword',{attack:10,vitality:10,coreChance:10,coreDamage:10}),snapshot=trustedRaidPlayerSnapshot(p,'h');assert.equal(snapshot.atk,235);assert.equal(snapshot.maxHp,1250);assert.ok(Math.abs(snapshot.nascentSoul.comboChance-.075)<1e-9);
+ const p=player('sword',{attack:10,vitality:10,coreChance:10,coreDamage:10}),snapshot=trustedRaidPlayerSnapshot(p,'h');assert.equal(snapshot.atk,235);assert.equal(snapshot.maxHp,1450);assert.ok(Math.abs(snapshot.nascentSoul.comboChance-.075)<1e-9);
  snapshot.goldenCore=null;let result;for(let actionId=1;actionId<5000;actionId++){result=resolvePlayerAction(snapshot,{roomId:'raid-chain',actionId,correct:true,bossHp:10000,bossMaxHp:10000});if(result.comboHits.length>=2)break;}assert.ok(result.comboHits.length>=2);assert.ok(result.comboHits.every(n=>n===106));assert.equal(result.damage,235+106*result.comboHits.length);
 });
 

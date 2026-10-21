@@ -104,7 +104,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20260930-economy-raid1';
+const XIUXIAN_FEATURE_BUILD = '20261021-realm-hp100';
 const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
 const BATTLE_FEATURE_BUILD = '20261006-battle-join-fix1';
 

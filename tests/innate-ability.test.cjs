@@ -14,7 +14,7 @@ function account(type='ocean',branch=Innate.branches(type)[0].id,rank=10) {
     innateAbilityGrowth:{version:1,paths:{[type]:{branch,level:rank}}}};
 }
 function fighter(type,branch,extra={}) {
-  return {...Raid.trustedRaidPlayerSnapshot(account(type,branch),'h'),hp:1200,...extra};
+  return {...Raid.trustedRaidPlayerSnapshot(account(type,branch),'h'),maxHp:3000,hp:1200,...extra};
 }
 function advance(p,correct) {return {...p,innateAbilityState:Innate.advance(p,correct)};}
 function engine() {
@@ -260,7 +260,7 @@ test('updated healing percentages, conversion and execution threshold scale acro
 });
 function healingFighter(extra={}) {
   const p=account('taichu','devour');p.cultivationTraining.equippedCore.grade=1;p.nascentSoulGrowth.branches.core=10;
-  return {...Raid.trustedRaidPlayerSnapshot(p,'h'),hp:1200,...extra};
+  return {...Raid.trustedRaidPlayerSnapshot(p,'h'),maxHp:3000,hp:1200,...extra};
 }
 test('Guiyuan converts actual soul and artifact healing into a separate nonrecursive true strike',()=>{
   for(const [hp,life,expectedHeal,expectedTrue] of [[1200,0,100,30],[2990,0,10,3],[3000,0,0,0],[1200,.1,120,36]]) {

@@ -252,7 +252,7 @@ function battleSnapshot(effects){
 function trustedRaidPlayerSnapshot(player,uid,catalogDoc={}){
   if(!player||typeof player!=='object')throw new Error('玩家資料不存在');
   const baseAttack=Math.max(0,finite(player?.stats?.attack,200));
-  const baseMaxHp=Math.max(1,finite(player?.stats?.maxHp,1000));
+  const baseMaxHp=Math.max(1,finite(player?.stats?.maxHp,1000))+trainingAccess.hpBonus(player);
   const core=coreSnapshot(player), soul=soulSnapshot(player,core);
   const equipped=equippedArtifacts(player,artifactCatalog(catalogDoc));
   const effects=equippedEffects(equipped);

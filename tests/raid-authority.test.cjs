@@ -25,7 +25,7 @@ test('trusted raid snapshot derives combat stats from the A user document and eq
   const snap=authority.trustedRaidPlayerSnapshot(user,'u1',catalog);
   assert.equal(snap.uid,'u1');
   assert.equal(snap.atk,250); // 200 + 50 equipment + 24 nascent soul
-  assert.equal(snap.maxHp,1200); // 1000 + 200 equipment + 210 nascent soul
+  assert.equal(snap.maxHp,1400); // 1000 + 200 realm + 200 equipment (legacy nascent projection absent)
   assert.equal(snap.artifactShield,90);
   assert.equal(snap.goldenCore.type,'sword');
   assert.equal(snap.nascentSoul.bonusDamage,0);

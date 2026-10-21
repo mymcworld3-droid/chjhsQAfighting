@@ -1,3 +1,4 @@
+import './training-access-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from '../data-store.js';
@@ -44,12 +45,16 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
   window.getCombatStats = function () {
     const data = window.getCurrentUserData?.();
     const base = normalized(data?.stats || {});
-    // 元嬰點亮的是即時計算的戰鬥投影，不直接修改玩家永久 stats 欄位。
+    const realmHp = window.QATrainingAccessRules?.hpBonus(data) || 0;
+    // Realm/元嬰 bonuses are projections. Never add them to permanent stats.maxHp.
+    const projectedMaxHp = base.maxHp + realmHp;
+    const projected = { ...base, maxHp: projectedMaxHp,
+      hp: Math.round(projectedMaxHp * (base.hp / base.maxHp)) };
     const soul = window.getNascentSoulBattleSnapshot?.();
-    if (!soul) return base;
+    if (!soul) return projected;
     const attackFlat = Math.max(0, Math.min(2000, Math.round(Number(soul.attackFlat) || 0)));
     const hpFlat = Math.max(0, Math.min(10000, Math.round(Number(soul.maxHpFlat) || 0)));
-    const maxHp = base.maxHp + hpFlat;
+    const maxHp = projected.maxHp + hpFlat;
     return {
       attack: base.attack + attackFlat,
       maxHp,

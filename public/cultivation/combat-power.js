@@ -1,3 +1,4 @@
+import './training-access-rules.js';
 import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmOrderByName } from './artifact-catalog.js';
 
 // 戰力是獨立展示用的綜合評分，不參與傷害、配對或勝負判定。
@@ -111,6 +112,7 @@ export function getCurrentCombatPower() {
   const soul = window.getNascentSoulBattleSnapshot?.() || null;
   const system = data.artifactSystem || {};
   const stats = { ...(data.stats || {}) };
+  stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) + (globalThis.QATrainingAccessRules?.hpBonus(data) || 0);
   if (soul) {
     // 戰力展示反映元嬰屬性，但不把法寶加成重複計入基礎數值。
     stats.attack = positive(stats.attack ?? 200) + positive(soul.attackFlat);
