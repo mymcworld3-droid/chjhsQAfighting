@@ -184,7 +184,7 @@ import {} from './combat-combo.js';
       reductionPercent += sumValue(effects, 'equip_low_hp_reduction_percent');
     }
 
-    // Both Yin-Yang paths gain up to 30% extra mitigation when at or below half HP.
+    // Both Yin-Yang paths gain up to 25% extra mitigation when at or below half HP.
     // Added to normal reduction only; true damage still bypasses percentage mitigation.
     reductionPercent += Math.max(0,globalThis.QAInnateAbility?.damageReduction(defender) || 0);
     const incomingNormal = Math.max(0, num(normalDamage));
