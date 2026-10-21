@@ -80,12 +80,12 @@ test('browser and Node share identical ranks, previews and snapshots',()=>{
 });
 test('offensive variations respect HP boundaries, alternating answers, streaks and independent counters',()=>{
   const target={hp:600,maxHp:1000};
-  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),target).normal,40);
-  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),{hp:599,maxHp:1000}).normal,0);
+  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),target).normal,60);
+  assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),{hp:599,maxHp:1000}).normal,20);
   assert.equal(Innate.attack(advance(fighter('pojing','execute'),true),{hp:500,maxHp:1000}).normal,0);
   assert.equal(Innate.executeThreshold(fighter('pojing','execute')),.7);
   assert.equal(Innate.attack(advance(fighter('reverse','defy',{hp:1500}),true),target).normal,160);
-  for(const [type,branch,every,damage] of [['ocean','surge',3,120],['pojing','momentum',3,120],['sword','pursuit',2,80]]) {
+  for(const [type,branch,every,damage] of [['ocean','surge',3,170],['pojing','momentum',3,120],['sword','pursuit',2,80]]) {
     let p=fighter(type,branch);
     for(let i=1;i<=every;i++){p=advance(p,true);assert.equal(Innate.attack(p,target).normal,i===every?damage:0);if(i<every)p=advance(p,false);}
   }
