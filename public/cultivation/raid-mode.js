@@ -447,6 +447,34 @@ import './combat-contribution.js';
     }
   }
 
+  function selectHubDifficulty(id) {
+    const tier = DIFFICULTY.get(id);
+    const selected = raidTrialById(state.selectedRaidId);
+    const hub = document.getElementById('raid-hub');
+    if (!tier || !hub || state.roomId || selected.status !== 'open') return;
+    state.selectedDifficulty = tier.id;
+    const card = hub.querySelector('[data-raid-theme]');
+    if (!card) return;
+    const locked = score() < tier.minScore || Number(state.ticketState?.count) === 0;
+    card.dataset.raidTheme = tier.id;
+    card.classList.toggle('locked', locked);
+    const picker = card.querySelector('.raid-difficulty-picker');
+    picker.style.setProperty('--raid-selected-index', Object.keys(DIFFICULTY.TIERS).indexOf(tier.id));
+    picker.querySelectorAll('[data-raid-difficulty]').forEach(button => {
+      const active = button.dataset.raidDifficulty === tier.id;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    card.querySelector('.raid-boss-art > span').textContent = '清霜試煉・' + tier.name;
+    card.querySelector('.raid-unlock-status').textContent = tier.minRealm + '解鎖・' + tier.minScore + ' 修為';
+    card.querySelector('.raid-reward-preview b').textContent = '通關必得 元嬰碎精 ×' + tier.fragments;
+    card.querySelector('.raid-reward-preview span').textContent = tier.materialRealms.join('～') + '木鐵素材';
+    card.querySelectorAll('[data-quick],[data-create]').forEach(button => { button.disabled = locked; });
+    // Keep the picker, focus, invitation code and scroll position intact so its
+    // selection can slide; a difficulty preview never fetches public rooms.
+    scheduleRaidHubFit();
+  }
+
   function renderHub() {
     syncRaidTicketState();
     state.hubAccessSignature = hubAccessSignature();
@@ -480,7 +508,7 @@ import './combat-contribution.js';
         '<div class="raid-future-drop"><i class="fa-solid fa-gem"></i><span><b>預定獎勵方向</b><small>' +
         selected.rewards.map(escapeHtml).join('・') + '</small></span></div></div></article>';
     } else {
-      detail = '<article class="raid-boss-card ' + (selectedLocked ? 'locked' : '') + '">' +
+      detail = '<article class="raid-boss-card ' + (selectedLocked ? 'locked' : '') + '" data-raid-theme="' + tier.id + '">' +
         '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>清霜試煉・' + escapeHtml(tier.name) + '</span></div>' +
         '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
         escapeHtml(selected.recommended) + '</span><span>' + escapeHtml(selected.mechanic) + '</span></div>' +
@@ -490,7 +518,7 @@ import './combat-contribution.js';
         '<div class="raid-reward-preview"><b>通關必得 元嬰碎精 ×' + tier.fragments + '</b><span>' +
           escapeHtml(tier.materialRealms.join('～')) + '木鐵素材</span><span>淬靈玄印・玄天道印</span></div></div>' +
         '<div class="raid-entry-actions" role="group" aria-label="試煉組隊">' +
-        '<div class="raid-difficulty-picker" role="group" aria-label="清霜試煉難度">' +
+        '<div class="raid-difficulty-picker" role="group" aria-label="清霜試煉難度" style="--raid-selected-index:' + Object.keys(DIFFICULTY.TIERS).indexOf(tier.id) + '"><span class="raid-difficulty-selection" aria-hidden="true"></span>' +
         Object.values(DIFFICULTY.TIERS).map(function (option) {
           const locked = score() < option.minScore;
           return '<button type="button" data-raid-difficulty="' + option.id +
@@ -535,8 +563,7 @@ import './combat-contribution.js';
     if (selected.status === 'open') {
       hub.querySelectorAll('[data-raid-difficulty]').forEach(function (button) {
         button.addEventListener('click', function () {
-          state.selectedDifficulty = button.dataset.raidDifficulty || 'normal';
-          renderHub();
+          selectHubDifficulty(button.dataset.raidDifficulty || 'normal');
         });
       });
       hub.querySelector('[data-quick]')?.addEventListener('click', function () { void enterRoom('quick'); });

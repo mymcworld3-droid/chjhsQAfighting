@@ -314,7 +314,7 @@ body.raid-page-open #page-raid.active-page > #raid-hub:not(.hidden) {
 #raid-hub .raid-entry-actions button { min-width:0; min-height:48px; margin:0; padding:10px 12px; font-size:15px; line-height:1.4; white-space:normal; overflow-wrap:anywhere; cursor:pointer; }
 #raid-hub .raid-entry-actions .raid-primary { background:linear-gradient(135deg,#d0a95e,#a67b39); color:#21180c; border-color:#e7c779; }
 #raid-hub .raid-code-join input { min-width:0; width:100%; min-height:48px; padding:10px 12px; box-sizing:border-box; font-size:16px; }
-#raid-hub .raid-difficulty-picker { gap:8px; margin-bottom:14px; }
+#raid-hub .raid-difficulty-picker { gap:0; margin-bottom:14px; }
 #raid-hub .raid-difficulty-picker button { min-height:72px; padding:10px 6px; }
 #raid-hub .raid-difficulty-picker strong { font-size:16px; }
 #raid-hub .raid-difficulty-picker small { font-size:12px; line-height:1.5; }
@@ -343,20 +343,37 @@ body.raid-page-open #page-raid.active-page > #raid-hub:not(.hidden) {
 }
 .raid-global-ticket .raid-global-ticket-dot[hidden] { display: none; }
 
-/* 清霜三難度：固定在隊伍建立時，避免選項擠壓主視覺。 */
-.raid-difficulty-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;width:100%;margin:0 0 10px}
-.raid-difficulty-picker button{min-width:0;display:grid;gap:3px;padding:9px 6px;border:1px solid rgba(231,199,121,.2);border-radius:10px;background:rgba(12,13,16,.82);color:#d7c9a6;text-align:center;cursor:pointer}
-.raid-difficulty-picker button.active{border-color:#e5c977;background:rgba(145,104,36,.23);box-shadow:inset 0 0 0 1px rgba(231,199,121,.13)}
+/* One shared rail; the same selection element slides between all three tiers. */
+.raid-difficulty-picker{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:100%;box-sizing:border-box;margin:0 0 10px;padding:4px;border:1px solid var(--trial-line,#568e87);border-radius:18px;background:#02070c70}
+.raid-difficulty-selection{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);box-sizing:border-box;border:1px solid var(--trial-accent,#8ddaca);border-radius:13px;background:var(--trial-selection,#23584f);box-shadow:0 2px 12px #0004,inset 0 1px #ffffff18;transform:translateX(calc(var(--raid-selected-index,0)*100%));transition:transform .32s cubic-bezier(.22,.75,.25,1),background-color .32s,border-color .32s;pointer-events:none}
+.raid-difficulty-picker button{position:relative;z-index:1;min-width:0;display:grid;align-content:center;gap:3px;padding:9px 6px;border:0;border-radius:13px;background:transparent;color:#b9b8bc;text-align:center;cursor:pointer;transition:color .25s,opacity .25s}
+.raid-difficulty-picker button.active{color:var(--trial-text,#d7fff2);background:transparent;box-shadow:none}
 .raid-difficulty-picker button.locked:not(.active){opacity:.64}
 .raid-difficulty-picker strong{font-size:12px;letter-spacing:.08em}
-.raid-difficulty-picker small{font-size:9px;line-height:1.45;color:#aaa08c}
-.raid-difficulty-picker button:focus-visible{outline:2px solid #e5c977;outline-offset:2px}
+.raid-difficulty-picker small{font-size:9px;line-height:1.45;color:inherit;opacity:.8}
+.raid-difficulty-picker button:focus-visible{outline:2px solid var(--trial-accent,#8ddaca);outline-offset:-3px}
 @media(max-width:640px){
- .raid-difficulty-picker{gap:4px}
  .raid-difficulty-picker button{padding:7px 3px}
  .raid-difficulty-picker strong{font-size:11px}
  .raid-difficulty-picker small{font-size:8px}
 }
+
+/* Theme the whole trial, including the portrait panel and entry controls. */
+#raid-hub [data-raid-theme="normal"]{--trial-accent:#8ddaca;--trial-text:#d7fff2;--trial-line:#406d65;--trial-base:#102a29;--trial-art:#153735;--trial-selection:#23584f;--trial-button:#8bc9b4;--trial-ink:#102c25}
+#raid-hub [data-raid-theme="hard"]{--trial-accent:#efc078;--trial-text:#fff0d1;--trial-line:#876443;--trial-base:#35251d;--trial-art:#4a3023;--trial-selection:#78532c;--trial-button:#e2b36a;--trial-ink:#38240f}
+#raid-hub [data-raid-theme="extreme"]{--trial-accent:#dfabf2;--trial-text:#fbe4ff;--trial-line:#795180;--trial-base:#302036;--trial-art:#442541;--trial-selection:#70436e;--trial-button:#d6a0da;--trial-ink:#351a3a}
+#raid-hub .raid-boss-card[data-raid-theme]{border-color:var(--trial-line);background-color:var(--trial-base);background-image:linear-gradient(135deg,#ffffff04,#00000030);box-shadow:0 20px 55px #0005,inset 0 1px #ffffff07;transition:background-color .32s,border-color .32s}
+#raid-hub [data-raid-theme] .raid-boss-art{background-color:var(--trial-art);background-image:radial-gradient(ellipse at 50% 32%,#ffffff14,transparent 65%);transition:background-color .32s}
+#raid-hub [data-raid-theme] .raid-boss-art:after{background:linear-gradient(transparent,var(--trial-base))}
+#raid-hub [data-raid-theme] .raid-boss-art>span,#raid-hub [data-raid-theme] .raid-badges span{border-color:var(--trial-line);background:#070a1066;color:var(--trial-text);transition:color .32s,border-color .32s}
+#raid-hub [data-raid-theme] .raid-boss-info h3{color:var(--trial-text);transition:color .32s}
+#raid-hub [data-raid-theme] .raid-unlock-status,#raid-hub [data-raid-theme] .raid-reward-preview b{color:var(--trial-accent);transition:color .32s}
+#raid-hub [data-raid-theme] .raid-reward-preview{border-color:var(--trial-line);background:#02070c33;transition:border-color .32s}
+#raid-hub [data-raid-theme] .raid-reward-preview span{color:#cbc4c7}
+#raid-hub [data-raid-theme] .raid-entry-actions{border-color:var(--trial-line);background-color:var(--trial-base);background-image:linear-gradient(#00000028,#00000028);transition:background-color .32s,border-color .32s}
+#raid-hub [data-raid-theme] .raid-entry-actions .raid-primary{background:var(--trial-button);border-color:var(--trial-accent);color:var(--trial-ink);transition:background-color .32s,border-color .32s,color .32s}
+#raid-hub [data-raid-theme] .raid-entry-actions .raid-ghost{border-color:var(--trial-line);color:var(--trial-text);background:#02070c44}
+@media(prefers-reduced-motion:reduce){#raid-hub [data-raid-theme],#raid-hub [data-raid-theme] *,#raid-hub [data-raid-theme] *:after{transition:none!important}}
 
 /* 與悟道試煉共用題目、選項與解析樣式，團本只補戰鬥資訊與視窗配置。 */
 #page-raid .raid-question-shell:not(.raid-loading){

@@ -209,7 +209,7 @@ body.xianxia-theme :is(.uib-fragment-balance,.refinery-fragment-balance) {
 }
 
 /* Dialogs share the same material, including the two existing dismantle bags. */
-body.xianxia-theme :is(.uib-modal,.xpp-dialog,.dt-modal-card,.dm-card,
+body.xianxia-theme :is(.uib-modal,.xpp-dialog,.dt-modal-card,
   .ids-panel,.ids-confirmation,.quest-dialog .quest-panel) {
   background: #272118 !important;
   border-color: rgba(199,163,94,.32) !important;
@@ -241,6 +241,18 @@ body.xianxia-theme #scope-studio #dongfu-scope-save {
   text-shadow: none !important;
   font-weight: 600 !important;
   letter-spacing: .015em;
+}
+
+/* Trial difficulty owns these controls' colors; preserve the shared theme elsewhere. */
+body.xianxia-theme #raid-hub [data-raid-theme] .raid-primary {
+  background: var(--trial-button) !important;
+  border-color: var(--trial-accent) !important;
+  color: var(--trial-ink) !important;
+}
+body.xianxia-theme #raid-hub [data-raid-theme] .raid-ghost {
+  background: #02070c44 !important;
+  border-color: var(--trial-line) !important;
+  color: var(--trial-text) !important;
 }
 body.xianxia-theme :is(.btn-cyber-primary,.bv2-btn.primary,.raid-primary,.quest-claim,
   .refinery-recipe-craft,.uib-use-btn,.uib-equip-btn,.dt-play,.fi-primary,
