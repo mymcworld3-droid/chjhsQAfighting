@@ -84,8 +84,8 @@ test('offensive variations respect HP boundaries, alternating answers, streaks a
   assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),{hp:599,maxHp:1000}).normal,0);
   assert.equal(Innate.attack(advance(fighter('pojing','execute'),true),{hp:500,maxHp:1000}).normal,0);
   assert.equal(Innate.executeThreshold(fighter('pojing','execute')),.7);
-  assert.equal(Innate.attack(advance(fighter('reverse','defy',{hp:1500}),true),target).normal,60);
-  for(const [type,branch,every,damage] of [['ocean','surge',3,120],['pojing','momentum',3,150],['sword','pursuit',2,80]]) {
+  assert.equal(Innate.attack(advance(fighter('reverse','defy',{hp:1500}),true),target).normal,160);
+  for(const [type,branch,every,damage] of [['ocean','surge',3,120],['pojing','momentum',3,120],['sword','pursuit',2,80]]) {
     let p=fighter(type,branch);
     for(let i=1;i<=every;i++){p=advance(p,true);assert.equal(Innate.attack(p,target).normal,i===every?damage:0);if(i<every)p=advance(p,false);}
   }
@@ -98,7 +98,7 @@ test('offensive variations respect HP boundaries, alternating answers, streaks a
 test('healing variations clamp to missing HP and never heal a dead player',()=>{
   assert.equal(Innate.healingOnAnswer(advance(fighter('taichu','renew'),true)),150);
   assert.equal(Innate.healingOnAnswer(advance(fighter('reverse','balance'),true)),180);
-  assert.equal(Innate.healingOnAnswer(advance(fighter('sword','unity'),true)),150);
+  assert.equal(Innate.healingOnAnswer(advance(fighter('sword','unity'),true)),90);
   let calm=fighter('ningxin','calm');assert.equal(Innate.healingOnAnswer(advance(calm,true)),0);
   calm=advance(advance(calm,false),true);assert.equal(Innate.healingOnAnswer(calm),180);
   let moon=fighter('xingchen','moon');for(const correct of [true,true,false])moon=advance(moon,correct);
@@ -109,6 +109,25 @@ test('healing variations clamp to missing HP and never heal a dead player',()=>{
   assert.equal(Innate.healingOnAnswer(thunder),60);
   assert.equal(Innate.healingOnAnswer(advance(fighter('taichu','renew',{hp:2999}),true)),1);
   assert.equal(Innate.healingOnAnswer(advance(fighter('taichu','renew',{hp:0}),true)),0);
+});
+test('Yin-Yang low-HP damage reduction is shared across both paths, ranked and limited to normal hits',()=>{
+  for(const branch of ['defy','balance']) {
+    const h=fighter('reverse',branch,{hp:1200});h.nascentSoul=null;
+    assert.equal(Innate.damageReduction(h),.25);
+    assert.equal(Innate.damageReduction({...h,hp:1500}),.25);
+    assert.equal(Innate.damageReduction({...h,hp:1501}),0);
+    assert.equal(Innate.damageReduction({...h,innateAbility:{...h.innateAbility,level:5}}),.125);
+    assert.equal(Innate.damageReduction({...h,hp:0}),0);
+    const safe=duel({...h,answer:{correct:false,atMs:10}},{answer:{correct:true,atMs:20}});
+    const base=duel({...h,innateAbility:null,answer:{correct:false,atMs:10}},{answer:{correct:true,atMs:20}});
+    assert.equal(safe.hostHp-base.hostHp,50,'normal PvP damage mitigated 25%');
+    const boss=Raid.resolveBossDefense(h,{bossAction:{damage:200}});
+    const baseline=Raid.resolveBossDefense({...h,innateAbility:null},{bossAction:{damage:200}});
+    assert.equal(boss.member.hp-baseline.member.hp,50,'normal raid damage mitigated 25%');
+    const trueBoss=Raid.resolveBossDefense(h,{bossAction:{damage:200,trueDamage:200}});
+    assert.equal(trueBoss.member.hp,baseline.member.hp,'raid true damage bypasses new mitigation');
+  }
+  assert.equal(Innate.damageReduction(fighter('ocean','tide',{hp:1200})),0);
 });
 test('all eighteen powers are completely suppressed against golden core and below, including without a nascent snapshot',()=>{
   for(const type of Object.keys(Innate.TYPES))for(const branch of Innate.branches(type))for(const score of [0,27,28,67]) {
@@ -132,7 +151,7 @@ test('PvP retries replay exactly, persist counters across rounds, and never adva
   assert.equal(JSON.stringify(first),JSON.stringify(retry));assert.equal(JSON.stringify(h),before);
   const second=duel({...h,innateAbilityState:first.hostInnateAbilityState},{},{round:2});
   const third=duel({...h,innateAbilityState:second.hostInnateAbilityState},{},{round:3});
-  assert.equal(third.guestHp,second.guestHp-180);
+  assert.equal(third.guestHp,second.guestHp-120);
   assert.equal(third.hostInnateAbilityState.correctCount,3);
   assert.ok(third.steps.some(x=>x.skill?.includes('三星聚曜')));
 });
@@ -306,9 +325,9 @@ test('triple barrier beam is attached only to the third accumulated correct stri
   host=advance(advance(host,true),false);host=advance(host,true);
   const out=duel(host,{});
   assert.equal(out.steps.filter(x=>x.innateEffect==='triple-beam').length,1);
-  assert.equal(out.steps.find(x=>x.innateEffect==='triple-beam').damage,150);
+  assert.equal(out.steps.find(x=>x.innateEffect==='triple-beam').damage,120);
   const raid=Raid.resolvePlayerAction(host,{roomId:'beam',actionId:3,correct:true,bossHp:3000,bossMaxHp:3000});
-  assert.deepEqual(raid.innateEffects,[{kind:'triple-beam',damage:150}]);
+  assert.deepEqual(raid.innateEffects,[{kind:'triple-beam',damage:120}]);
   const wrong=duel({...host,answer:{correct:false,atMs:10}},{});
   assert.ok(!wrong.steps.some(x=>x.innateEffect==='triple-beam'));
 });
@@ -320,8 +339,8 @@ function meteorFighter() {
 test('each meteor settles separately, including a third wrong answer, consuming only one Dao shield per hit',()=>{
   const h=meteorFighter(),out=duel(h,{coreShield:true,goldenCore:{type:'ningxin',grade:9}},{round:3});
   const hits=out.steps.filter(x=>x.innateEffect==='meteor');
-  assert.deepEqual(Array.from(hits,x=>x.damage),[0,100,180]);
-  assert.deepEqual(Array.from(hits,x=>x.guestHp),[3000,2900,2720]);
+  assert.deepEqual(Array.from(hits,x=>x.damage),[0,100,120]);
+  assert.deepEqual(Array.from(hits,x=>x.guestHp),[3000,2900,2780]);
   assert.equal(out.guestCoreShield,false);assert.equal(hits.at(-1).meteorCount,3);
   assert.equal(hits.at(-1).skill.includes('三星聚曜'),true);
   const lethal=duel(h,{hp:20,maxHp:3000},{round:3});
@@ -332,13 +351,13 @@ test('raid meteors carry separate HP snapshots, replay identically and award the
   const h=meteorFighter(),before=JSON.stringify(h);
   const input={roomId:'stones',actionId:3,correct:false,bossHp:3000,bossMaxHp:3000};
   const result=Raid.resolvePlayerAction(h,input);
-  assert.deepEqual(result.meteorHits.map(x=>x.damage),[100,100,180]);
-  assert.deepEqual(result.meteorHits.map(x=>[x.beforeHp,x.afterHp]),[[3000,2900],[2900,2800],[2800,2620]]);
-  assert.equal(result.damage,380);assert.equal(JSON.stringify(h),before);
+  assert.deepEqual(result.meteorHits.map(x=>x.damage),[100,100,120]);
+  assert.deepEqual(result.meteorHits.map(x=>[x.beforeHp,x.afterHp]),[[3000,2900],[2900,2800],[2800,2680]]);
+  assert.equal(result.damage,320);assert.equal(JSON.stringify(h),before);
   assert.equal(JSON.stringify(result),JSON.stringify(Raid.resolvePlayerAction(h,input)));
   let wrong=fighter('xingchen','meteor');wrong=advance(advance(wrong,false),false);
   wrong.soulStarAnswerWindow=2;wrong.soulStarCorrectWindow=0;
-  assert.deepEqual(Raid.resolvePlayerAction(wrong,input).meteorHits.map(x=>x.damage),[180]);
+  assert.deepEqual(Raid.resolvePlayerAction(wrong,input).meteorHits.map(x=>x.damage),[120]);
 });
 test('WuChen returns shield-absorbed normal damage as true damage, excluding incoming true damage and retaliation loops',()=>{
   const h=fighter('wugou','clarity',{coreShield:true,answer:{correct:false,atMs:20}});h.nascentSoul=null;
@@ -361,7 +380,7 @@ test('new recovery branches retain exact rank scaling and two-correct streak cad
     pure=advance(pure,true);assert.equal(Innate.healingOnAnswer(pure),0);
     pure=advance(advance(pure,false),true);assert.equal(Innate.healingOnAnswer(pure),0);
     assert.equal(Innate.healingOnAnswer(advance(p('reverse','balance'),true)),18*n);
-    assert.equal(Innate.healingOnAnswer(advance(p('sword','unity'),true)),15*n);
+    assert.equal(Innate.healingOnAnswer(advance(p('sword','unity'),true)),9*n);
     assert.equal(Innate.shieldDamage(p('wugou','clarity'),1000),10*n);
   }
 });

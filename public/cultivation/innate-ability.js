@@ -19,9 +19,9 @@
       {id:'calm',name:'靜心返照',describe:n=>`答錯後的下一題答對，回復生命上限的 ${Math.round(.6*n*10)/10}%；開場首題不觸發。`} ]},
     pojing: {name:'破境元神', branches:[
       {id:'execute',name:'破妄斬關',describe:n=>`元嬰斬殺生命門檻增加 ${2*n} 個百分點，由 50% 提高至 ${50+2*n}%（最高 70%），原斬殺傷害倍率不變。`},
-      {id:'momentum',name:'三疊破障',describe:n=>`每累積答對 3 題，追加攻擊力 ${7.5*n}% 的普通傷害，不要求連答。`} ]},
+      {id:'momentum',name:'三疊破障',describe:n=>`每累積答對 3 題，追加攻擊力 ${6*n}% 的普通傷害，不要求連答。`} ]},
     xingchen: {name:'星辰元神', branches:[
-      {id:'meteor',name:'三星聚曜',describe:n=>`每作答 3 題，追加一顆攻擊力 ${9*n}% 的隕石；第三題答錯仍觸發，每顆隕石獨立命中。`},
+      {id:'meteor',name:'三星聚曜',describe:n=>`每作答 3 題，追加一顆攻擊力 ${6*n}% 的隕石；第三題答錯仍觸發，每顆隕石獨立命中。`},
       {id:'moon',name:'月華養神',describe:n=>`每作答 3 題，依該三題答對數，每答對一題回復 ${3*n} 生命；第三題答錯仍結算。`} ]},
     wugou: {name:'無垢元神', branches:[
       {id:'clarity',name:'無塵神光',describe:n=>`道心護體吸收普通傷害時，對攻擊者造成吸收量 ${n}% 的真實傷害；不再觸發吸血或反傷。`},
@@ -30,11 +30,11 @@
       {id:'rebound',name:'劫雷返照',describe:n=>`答對後反擊傷害額外增加 ${2*n} 個百分點，與金丹、元嬰、法寶相加；團本持續至下次首領攻擊。真傷不計入反擊基數。`},
       {id:'nourish',name:'雷息養神',describe:n=>`每累積答對 2 題，回復 ${6*n} 生命，不要求連答。`} ]},
     reverse: {name:'陰陽元神', branches:[
-      {id:'defy',name:'逆命回天',describe:n=>`答對且自身生命不高於 50% 時，追加攻擊力 ${3*n}% 的普通傷害。`},
-      {id:'balance',name:'陰陽相生',describe:n=>`每次答對回復已損失生命的 ${n}%。`} ]},
+      {id:'defy',name:'逆命回天',describe:n=>`答對且自身生命不高於 50% 時，追加攻擊力 ${8*n}% 的普通傷害；低血時受到的普通傷害降低 ${2.5*n}%。`},
+      {id:'balance',name:'陰陽相生',describe:n=>`每次答對回復已損失生命的 ${n}%；生命不高於 50% 時受到的普通傷害降低 ${2.5*n}%。`} ]},
     sword: {name:'劍心元神', branches:[
       {id:'pursuit',name:'分神御劍',describe:n=>`每累積答對 2 題，追加攻擊力 ${4*n}% 的普通傷害，不要求連答。`},
-      {id:'unity',name:'劍意歸一',describe:n=>`每次答對追加攻擊力 ${1.5*n}% 的普通傷害，並回復生命上限的 ${n/2}%。`} ]}
+      {id:'unity',name:'劍意歸一',describe:n=>`每次答對追加攻擊力 ${1.5*n}% 的普通傷害，並回復已損失生命的 ${n/2}%。`} ]}
   });
   for (const value of Object.values(TYPES)) {
     value.branches.forEach(Object.freeze); Object.freeze(value.branches); Object.freeze(value);
@@ -120,7 +120,7 @@
       if(a.type==='wugou'&&b==='purify'&&s.streak%2===0)heal=Number(player.maxHp)*.006*n;
       if(a.type==='thunder'&&b==='nourish'&&s.correctCount%2===0)heal=6*n;
       if(a.type==='reverse'&&b==='balance')heal=Math.max(0,Number(player.maxHp)-Number(player.hp))*.01*n;
-      if(a.type==='sword'&&b==='unity')heal=Number(player.maxHp)*.005*n;
+      if(a.type==='sword'&&b==='unity')heal=Math.max(0,Number(player.maxHp)-Number(player.hp))*.005*n;
     }
     return Math.min(Math.max(0,Number(player.maxHp)-Number(player.hp)),Math.max(0,Math.round(heal)));
   }
@@ -134,8 +134,8 @@
     let factor=0;
     if(a.type==='ocean')factor=b==='tide'?(enemy>=.6?.02*n:0):(s.correctCount%3===0?.06*n:0);
     if(a.type==='ningxin'&&b==='focus'&&s.streak%2===0)factor=.04*n;
-    if(a.type==='pojing'&&b==='momentum')factor=s.correctCount%3===0?.075*n:0;
-    if(a.type==='reverse'&&b==='defy'&&own<=.5)factor=.03*n;
+    if(a.type==='pojing'&&b==='momentum')factor=s.correctCount%3===0?.06*n:0;
+    if(a.type==='reverse'&&b==='defy'&&own<=.5)factor=.08*n;
     if(a.type==='sword')factor=b==='pursuit'?(s.correctCount%2===0?.04*n:0):.015*n;
     result.normal=Math.round(p*factor);
     result.name=branches(a.type).find(row=>row.id===b).name;
@@ -150,6 +150,13 @@
     const a=active(player);
     return a?.type==='taichu'&&a.branch==='devour'?Math.round(count(actualHealed)*.03*a.level):0;
   }
+  // Low-HP defensive passive shared by both Yin-Yang paths; real damage bypasses normal mitigation.
+  function damageReduction(player) {
+    const a=active(player);
+    if(a?.type!=='reverse'||Number(player.hp)<=0)return 0;
+    const maxHp=Math.max(1,Number(player.maxHp)||1);
+    return Number(player.hp)/maxHp<=.5 ? .025*a.level : 0;
+  }
   function executeThreshold(player) {
     const a=active(player);
     return a?.type==='pojing'&&a.branch==='execute'?Math.min(.7,(50+2*a.level)/100):.5;
@@ -157,13 +164,13 @@
   function meteorDamage(player) {
     const a=active(player);
     return a?.type==='xingchen'&&a.branch==='meteor'&&player.innateAbilityState?.windowReady
-      ?Math.round(Math.min(600,count(player.atk))*.09*a.level):0;
+      ?Math.round(Math.min(600,count(player.atk))*.06*a.level):0;
   }
   function shieldDamage(player,absorbed) {
     const a=active(player);
     return a?.type==='wugou'&&a.branch==='clarity'?Math.round(count(absorbed)*.01*a.level):0;
   }
   const api=Object.freeze({THRESHOLD,DUEL_THRESHOLD,CAP,TYPES,branches,normalize,status,select,upgrade,patch,apply,snapshot,
-    active,suppressForDuel,advance,healingOnAnswer,attack,reflection,healingDamage,executeThreshold,meteorDamage,shieldDamage});
+    active,suppressForDuel,advance,healingOnAnswer,attack,reflection,healingDamage,damageReduction,executeThreshold,meteorDamage,shieldDamage});
   if(node)module.exports=api;else root.QAInnateAbility=api;
 })(globalThis);

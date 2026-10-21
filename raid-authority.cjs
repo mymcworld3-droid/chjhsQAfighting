@@ -463,9 +463,11 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
   if(next.coreShield&&incoming>0){next.coreShield=false;guarded=true;}
   else if(incoming>0){
     const defense=resolveArtifactDefense(next,incoming);
-    damage=Math.max(0,defense.hpDamage-Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.reductionFlat)))));
-    const trueReceived=Math.max(0,Math.min(damage,Math.round(finite(bossAction?.trueDamage))));
-    const normalReceived=Math.max(0,damage-trueReceived);
+    const afterArtifact=Math.max(0,defense.hpDamage-Math.max(0,Math.min(1000,Math.round(finite(next?.nascentSoul?.reductionFlat)))));
+    const trueReceived=Math.max(0,Math.min(afterArtifact,Math.round(finite(bossAction?.trueDamage))));
+    // Apply the same Yin-Yang low-HP passive in authoritative raids without reducing true damage.
+    const normalReceived=Math.max(0,Math.round((afterArtifact-trueReceived)*(1-Innate.damageReduction(next))));
+    damage=normalReceived+trueReceived;
     const weaponPercent=clamp(sumEffect(runtimeEffects(next),'equip_reflect_percent'),0,1);
     const coreAdditional=damage<next.hp?coreCounter(next,normalReceived):0;
     const corePercent=coreAdditional>0?.75:0;
