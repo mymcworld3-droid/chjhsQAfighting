@@ -87,7 +87,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       id: 'ocean', name: '大海無垠丹', icon: '≈', tone: 'ocean',
       effect(grade) {
         const chance = chanceByGrade(grade, 10, 5, 50);
-        return `獲得修為時有 ${chance}% 機率使本次基礎修為翻倍；鬥法攻擊時有 ${chance}% 機率召喚千尺巨浪，額外造成 100 傷害。`;
+        return `獲得修為時有 ${chance}% 機率使本次基礎修為翻倍；鬥法攻擊時有 ${chance}% 機率召喚千尺巨浪，額外造成 150 傷害。`;
       },
       ability: '潮汐入丹，悟道與鬥法皆可借海勢增幅。',
       upkeep: '每日觀水片刻，平心定氣。',
