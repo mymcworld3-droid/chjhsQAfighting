@@ -197,6 +197,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { source: 'quest-reward', ...result.balances } }));
       }
       status(result.awarded ? `已獲得 ${rewardText(result.reward)}${kind === 'path' && !q.supplemental && snapshot.path ? '，下一個仙道任務已開啟。' : '。'}` : '此任務已領取過，進度已同步。');
+      if (result.awarded) globalThis.QAGameAudio?.play('reward-chime', { key:'quest:'+uid+':'+kind+':'+q.id+':'+snapshot.date+':'+snapshot.weeklyKey });
     } catch (e) {
       if (getMainUser()?.uid === uid) { status(`${e.message}，請重新同步後重試。`); dirty = true; }
     } finally {

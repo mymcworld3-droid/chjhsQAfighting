@@ -1,0 +1,56 @@
+{
+  "source": "Generated sound effects",
+  "provider": "Runway",
+  "format": "MP3, mono, 44100 Hz, 96 kbps",
+  "processing": "Shortened tails, 4 ms entrance fade, 40 ms exit fade, consistent peak level before encoding; no external asset requests at runtime.",
+  "sounds": [
+    {
+      "id": "ui-click",
+      "taskId": "4cbf1f22-bbb2-4f0a-834a-d5c20163be61",
+      "prompt": "A single tiny polished jade stone tap for a Chinese fantasy game interface. Crisp soft tick with a delicate ceramic resonance, immediate attack, very short clean decay within 0.15 seconds, remaining time silent. Gentle and unobtrusive, dry close sound, no voice, music, background noise or long reverb.",
+      "requestedDuration": 0.5
+    },
+    {
+      "id": "cloud-whoosh",
+      "taskId": "aca3deef-7a35-4c73-a3e7-10e8bb532c28",
+      "prompt": "Soft silk and airy cloud whoosh for a Chinese immortal fantasy game transition. One smooth swell, gentle wind passing left to right, no thunder or sharp hiss, quiet ethereal texture, short clean tail. Dry enough for repeated interface use. No music, voice, melody, ambience bed or background noise.",
+      "requestedDuration": 0.8
+    },
+    {
+      "id": "answer-correct",
+      "taskId": "bffbe6e4-af08-4de8-879a-21f01d4f090a",
+      "prompt": "Two clear delicate jade bell notes gently ascending, a restrained correct-answer confirmation in an elegant Chinese fantasy game. Warm bright pure chime, instantly reassuring, soft attack with clean quick decay. Pleasant when repeated many times. No voice, music accompaniment, dramatic fanfare, background sound or long reverb.",
+      "requestedDuration": 0.7
+    },
+    {
+      "id": "answer-wrong",
+      "taskId": "7e001126-c50d-4f33-8652-6e92e8680fa6",
+      "prompt": "One soft low wooden knock with a muted descending tonal touch, a gentle wrong-answer or unavailable-action signal for a Chinese fantasy learning game. Brief, restrained, kind rather than punishing, no buzz, alarm, distortion, harsh treble, voice, music or long reverberation. Fast fade to silence.",
+      "requestedDuration": 0.5
+    },
+    {
+      "id": "combat-impact",
+      "taskId": "19635ef0-2f7b-493a-8614-dc0cbb1f392a",
+      "prompt": "A single compact magical martial-arts impact: a short deep wooden thump combined with a soft air crack and very subtle metallic edge. Solid and satisfying, restrained bass, readable at low volume, quick dry decay. Suitable for attacks, counters and a forge hammer. No scream, voice, music, explosion or rumbling tail.",
+      "requestedDuration": 0.5
+    },
+    {
+      "id": "spirit-pulse",
+      "taskId": "0ca9fb63-31b9-474d-87a0-d107f569e3de",
+      "prompt": "A compact mystical energy pulse for Chinese xianxia: gentle breath-like rising shimmer gathers briefly then opens into a warm resonant jade bowl glow. One clear activation, elegant and calm, quick fade. For shields, cultivation upgrades and buffs. No music track, spoken voice, harsh sparkle, piercing high notes or long echo.",
+      "requestedDuration": 1
+    },
+    {
+      "id": "reward-chime",
+      "taskId": "d5783d3e-df96-4b73-a457-a6293112006f",
+      "prompt": "A small handful of jade and gold tokens gently settling into a pouch, followed by one warm clear bell overtone. A concise elegant reward pickup chime for a Chinese fantasy game, delicate physical clinks, satisfying but subtle, clean short fade. No voice, music bed, fanfare, repeating loop or long reverb.",
+      "requestedDuration": 0.9
+    },
+    {
+      "id": "grand-reveal",
+      "taskId": "e0d7ba18-4e1f-4886-80c5-ef33020a54b1",
+      "prompt": "A short Chinese immortal fantasy breakthrough reveal: a soft deep energy swell for 0.3 seconds opens into three warm luminous bell and singing-bowl tones, triumphant yet restrained, fading fully by 1.8 seconds. For realm breakthrough and rare treasure. No vocals, speech, music bed, drums, harsh blast or extended reverb.",
+      "requestedDuration": 1.8
+    }
+  ]
+}

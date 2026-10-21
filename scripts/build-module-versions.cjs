@@ -8,7 +8,7 @@ const { createHash } = require('node:crypto');
 
 const root = join(__dirname, '..', 'public');
 const output = join(root, 'module-versions.json');
-const extensions = new Set(['.html', '.js', '.css', '.json', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg']);
+const extensions = new Set(['.html', '.js', '.css', '.json', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.mp3']);
 const excluded = new Set(['sw.js', 'module-versions.json']);
 const files = {};
 function walk(dir) {

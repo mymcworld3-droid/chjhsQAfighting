@@ -1249,6 +1249,9 @@ export const featureReady = (async () => {
         setHp('my', { ...original[myRole], hp: Number(step[myRole + 'Hp']) });
         setHp('enemy', { ...original[otherRole(myRole)], hp: Number(step[otherRole(myRole) + 'Hp']) });
         if (atMs >= clearAtMs) return;
+        if (!missed) globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
+          key: 'duel-hit:'+key+':'+index, rate: counter ? 1.2 : feedback.critical ? .8 : 1
+        });
         if (!missed && !guarded && stage) {
           impact = createBattleImpact(stage, { step, player: original[step.actorRole],
             fromMe: step.actorRole === myRole, elapsedMs: atMs - impactAtMs });
@@ -1517,6 +1520,7 @@ export const featureReady = (async () => {
     // Repeat Firestore snapshots update rewards, not the once-per-result reveal.
     const finaleKey = String(state.roomId || '') + ':' + String(room.round) + ':' + String(room.winner || 'draw');
     if (resultScene && resultScene.dataset.finaleKey !== finaleKey) {
+      globalThis.QAGameAudio?.play(won ? 'grand-reveal' : isDraw ? 'reward-chime' : 'answer-wrong', { key:'duel-result:'+finaleKey });
       resultScene.dataset.finaleKey = finaleKey;
       resultScene.classList.remove('bv2-result-reveal');
       void resultScene.offsetWidth;
@@ -1609,6 +1613,8 @@ export const featureReady = (async () => {
         if (state.room) renderQuestion(state.room, playerForRole(state.room, state.role));
       } else {
         const eventId = 'duel_' + state.roomId + '_' + round;
+        if (state.room?.currentQuestion?.id === questionId && Number(state.room?.round) === round && me()?.uid === mine?.uid)
+          globalThis.QAGameAudio?.answer(Number(choice) === Number(state.room.currentQuestion.ans), 'duel-answer:'+eventId);
         void window.trackPlayerAnalytics?.('answer_completed', { mode: 'duel', eventId });
         void window.trackPlayerAnalytics?.('social_participated', { mode: 'duel', eventId: eventId + '_social' });
         if (Number(choice) === Number(state.room?.currentQuestion?.ans)) {

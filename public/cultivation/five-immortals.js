@@ -303,6 +303,7 @@ import { playerRepository } from './data/player-repository.js';
     challenge.busy = true;
     const q = challenge.question;
     challenge.questionNumber += 1;
+    globalThis.QAGameAudio?.answer(choice === q.answer, 'immortal:'+challenge.attemptId+':'+challenge.questionNumber);
     preserveChallengeAnswer(q, choice, serial);
     const body = document.getElementById('fi-body');
     const buttons = [...body.querySelectorAll('[data-answer]')];

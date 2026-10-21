@@ -36,7 +36,6 @@
     active = null;
     root.cancelAnimationFrame?.(receipt.frame); root.clearTimeout(receipt.timer);
     receipt.animations.forEach(animation => animation.cancel());
-    if (receipt.audio) void receipt.audio.close().catch(() => {});
     if (receipt.overlay.open && typeof receipt.overlay.close === 'function') receipt.overlay.close();
     receipt.overlay.remove(); document.body.classList.remove('meditation-reward-open');
     if (restoreFocus && receipt.isCurrent()) receipt.focusTarget?.()?.focus?.({ preventScroll: true });
@@ -67,15 +66,7 @@
   }
   function chime(receipt) {
     if (!receipt.sound) return;
-    try {
-      const Audio = root.AudioContext || root.webkitAudioContext;
-      if (!Audio) return;
-      const audio = receipt.audio = new Audio(), gain = audio.createGain(); gain.connect(audio.destination);
-      gain.gain.setValueAtTime(.025, audio.currentTime); gain.gain.exponentialRampToValueAtTime(.001, audio.currentTime+.7);
-      [660,880,1100].forEach((hz,i) => { const tone=audio.createOscillator();tone.type='sine';tone.frequency.value=hz;tone.connect(gain);tone.start(audio.currentTime+i*.09);tone.stop(audio.currentTime+.7); });
-      void audio.resume?.().catch(() => {});
-      root.setTimeout(() => { if (audio.state !== 'closed') void audio.close().catch(() => {}); }, 900);
-    } catch (_) { /* Sound never blocks a saved reward. */ }
+    root.QAGameAudio?.play('reward-chime', { key: receipt.soundKey });
   }
   function show(options = {}) {
     const items = entries(options.reward), key = options.uid + ':' + options.receiptId;
@@ -85,7 +76,7 @@
     overlay.setAttribute('aria-labelledby','mr-reward-title'); overlay.setAttribute('aria-describedby','mr-reward-subtitle');
     overlay.innerHTML = '<section class="mr-reward-panel"><header class="mr-reward-header"><div class="mr-reward-crest" aria-hidden="true">'+icon('m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z')+'</div><span class="mr-reward-kicker">'+esc(options.kicker||'閉關共修')+'</span><h2 id="mr-reward-title">'+esc(options.title||'獎勵入袋')+'</h2><p id="mr-reward-subtitle">'+esc(options.subtitle||'本次獲得')+'</p></header><ul class="mr-reward-list" aria-label="本次獲得的獎勵">'+items.map((item,i)=>'<li class="mr-reward-item'+(item.key==='drawTickets'?' is-special':'')+'" style="--mr-delay:'+i*90+'ms" aria-label="'+esc(item.label)+' +'+item.amount+'"><span class="mr-reward-icon">'+icon(item.path)+'</span><span class="mr-reward-label">'+esc(item.label)+'</span><strong class="mr-reward-amount" aria-hidden="true">+0</strong></li>').join('')+'</ul><footer class="mr-reward-footer">'+(options.note?'<p class="mr-reward-note">'+esc(options.note)+'</p>':'')+'<button type="button" data-mr-collect>收入囊中</button></footer></section>';
     document.body.appendChild(overlay); document.body.classList.add('meditation-reward-open');
-    const receipt = active = {overlay,items,elements:[...overlay.querySelectorAll('.mr-reward-amount')],reduced:root.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true,isCurrent:options.isCurrent||(()=>true),target:options.target,focusTarget:options.focusTarget,sound:options.sound!==false,animations:[],frame:0,timer:0,collecting:false};
+    const receipt = active = {overlay,items,elements:[...overlay.querySelectorAll('.mr-reward-amount')],reduced:root.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true,isCurrent:options.isCurrent||(()=>true),target:options.target,focusTarget:options.focusTarget,sound:options.sound!==false,soundKey:'meditation-reward:'+key,animations:[],frame:0,timer:0,collecting:false};
     overlay.querySelector('[data-mr-collect]').addEventListener('click',collect);
     overlay.addEventListener('cancel', event=>{event.preventDefault();clear(true);});
     overlay.addEventListener('click',event=>{if(event.target===overlay)collect();});

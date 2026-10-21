@@ -2,6 +2,8 @@
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
 import './main-legacy.js?v=20261013-arrival1';
 import './cultivation/dongtian-entry.js';
+// Sound is optional and cannot hold up authentication or gameplay readiness.
+void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
 // Auth-only: administrators can observe/resume migration even during maintenance.
 void import('./cultivation/admin-d1-migration.js').catch(error => console.warn('[Admin D1 migration]', error));
 // Rendering is assessed during the login/loading screen, before scenery loads.

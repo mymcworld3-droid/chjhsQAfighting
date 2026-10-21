@@ -866,6 +866,10 @@ import './combat-contribution.js';
 
     const arena = document.getElementById('raid-arena');
     const stage = arena?.querySelector('.raid-stage');
+    globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
+      rate: attacker === 'boss' ? .8 : critical ? .85 : 1.05,
+      key: 'raid-hit:'+state.roomId+':'+attacker+':'+state.playerActionCount+':'+state.lastBossActionSeen
+    });
     if (stage) stage.classList.add(attacker === 'player' ? 'raid-player-strike' : 'raid-boss-strike');
     const actionCaption = arena?.querySelector('.raid-boss-portrait > span');
     if (actionCaption && actionName) actionCaption.textContent = '「' + actionName + '」';
@@ -1063,6 +1067,7 @@ import './combat-contribution.js';
       if (result.room && (Number(result.room.revision) || 0) >= (Number(state.room?.revision) || 0)) state.room = result.room;
       state.playerActionCount = actionId;
       state.answerCorrect = resolution.correct === true;
+      globalThis.QAGameAudio?.answer(state.answerCorrect, 'raid-answer:'+roomId+':'+actionId);
       state.questionResolvedAtMs = now();
       state.nextQuestionAtMs = 0;
       question.ans = Number(resolution.correctIndex);
@@ -1589,6 +1594,7 @@ import './combat-contribution.js';
     if (state.status === 'finished') return;
     stopTick();
     state.status = 'finished';
+    globalThis.QAGameAudio?.play(won ? 'grand-reveal' : 'answer-wrong', { key:'raid-result:'+state.roomId });
     document.body.classList.remove('raid-session-active');
     setRaidCombatFocus(false);
     show('result');

@@ -422,19 +422,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function animate(batch) {
     openPresentation(batch);
     const higher = batch.results.some(r => r.itemId);
-    // Short generated chime: no external audio request and no persistent audio context.
-    try {
-      const Audio = window.AudioContext || window.webkitAudioContext;
-      if (Audio && data()?.gameSettings?.soundEnabled !== false && data()?.gameSettings?.musicEnabled !== false) {
-        const context = new Audio(), gain = context.createGain(); gain.connect(context.destination);
-        gain.gain.setValueAtTime(.035, context.currentTime); gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + .6);
-        [higher ? 660 : 440, higher ? 990 : 660].forEach((hz, i) => {
-          const oscillator = context.createOscillator(); oscillator.frequency.value = hz; oscillator.connect(gain);
-          oscillator.start(context.currentTime + i * .12); oscillator.stop(context.currentTime + .6);
-        });
-        setTimeout(() => { void context.close().catch(() => {}); }, 800);
-      }
-    } catch (_) { /* Sound is optional; results have already been committed. */ }
+    globalThis.QAGameAudio?.play(higher ? 'grand-reveal' : 'reward-chime', { key: 'draw:'+account+':'+batch.requestId });
   }
   async function runOperation(operation) {
     if (busy || !reconcile()) return;
