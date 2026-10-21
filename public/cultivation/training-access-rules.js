@@ -30,11 +30,18 @@
   function score(player) {
     return Math.max(number(player?.stats?.totalScore), savedScore(player), legacyScore(player));
   }
+  // Realm breakthroughs permanently add 100 max HP each after Foundation Establishment.
+  // Use attained-realm access (including saved highest realm) so correcting an answer
+  // cannot remove health already earned. This is a combat projection, not a DB write.
+  function hpBonus(player) {
+    const attained = score(player);
+    return 100 * REALMS.filter(threshold => threshold >= 28 && threshold <= attained).length;
+  }
   function record(player, previous = 0) {
     return { version: 1, highestRealmScore: realmScore(Math.max(score(player), number(previous))) };
   }
   function allows(player, threshold) { return score(player) >= number(threshold); }
-  const api = Object.freeze({ REALMS, PLACES, number, realmScore, savedScore, legacyScore, score, record, allows });
+  const api = Object.freeze({ REALMS, PLACES, number, realmScore, savedScore, legacyScore, score, hpBonus, record, allows });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QATrainingAccessRules = api;
 })(globalThis);
