@@ -2,6 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc } from '../data-store.js';
 import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact-catalog.js';
+import './training-access-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 
 // Shared public-facing player card for ranking, friends and global chat.
@@ -88,7 +89,8 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const score = number(stats.totalScore);
     const core = equippedCore(data, self);
     const power = window.calculateCombatPower?.({
-      stats: { attack: stats.attack ?? 200, maxHp: stats.maxHp ?? 1000 },
+      stats: { attack: stats.attack ?? 200,
+        maxHp: Math.max(1, Number(stats.maxHp) || 1000) + (window.QATrainingAccessRules?.hpBonus(data) || 0) } ,
       core, equipped: data?.artifactSystem?.equipped || {},
       inventory: data?.artifactSystem?.inventory || {}
     }) || { total: 0, base: 0, core: 0, equipment: 0, items: [] };
