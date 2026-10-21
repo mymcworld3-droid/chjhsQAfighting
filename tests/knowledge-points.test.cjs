@@ -90,7 +90,7 @@ function generationHarness(candidates) {
     SUBJECT_SCHEMA:{數學:['原範圍']},SUBJECT_DETAILS:{},QUESTION_FORMS:['multi-step'],
     cleanQuestionText:x=>String(x),normalizeQuestionMeta:x=>x,getRandomItem:x=>x[0],
     qualityPolicy:()=>({cognitive:2,steps:2,instruction:'理解推理'}),chooseQuestionForm:()=> 'multi-step',
-    ANSWER_AND_EXPLANATION_RULES:'獨立驗算',quickQuizPrompt,
+    ANSWER_AND_EXPLANATION_RULES:'獨立驗算',subjectReliabilityPrompt:require('../quiz-answer-prompt.cjs').subjectReliabilityPrompt,quickQuizPrompt,
     isTooSimilarQuestion:()=>false,questionQualityIssue:()=>'',removeUnstableOptionLabels:x=>x,
     quizSparePool:{key:()=>'',take:()=>null,markServed(){},offer(){}},
     aiRouter:{async generateJSON(prompt,options){prompts.push(prompt);const data=candidates[Math.min(calls++,candidates.length-1)];options.validate(data);return {data:{...data},provider:'test',model:'test'};}},

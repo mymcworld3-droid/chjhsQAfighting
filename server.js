@@ -448,7 +448,7 @@ function chooseQuestionForm(previousMeta, seed) {
 // API 2: 生成測驗題目 (優化版：單次請求 + 安全 JSON 解析)
 // ==========================================
 const { MODES: FAST_QUIZ_MODES, quickQuizPrompt } = require('./fast-quiz-prompt.cjs');
-const { ANSWER_AND_EXPLANATION_RULES } = require('./quiz-answer-prompt.cjs');
+const { ANSWER_AND_EXPLANATION_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const raidDifficultyRules = require('./public/cultivation/raid-difficulty.js');
 const { createSparePool } = require('./quiz-spare-pool.cjs');
 const quizSparePool = createSparePool({ similar: (a, b) => isTooSimilarQuestion(a, [b]) });
@@ -586,6 +586,8 @@ app.post('/api/generate-quiz', async (req, res) => {
     const generationPrompt = `
         [系統指令]
         你是一名 AI 教師，請生成一道「單選題」。
+        ${ANSWER_AND_EXPLANATION_RULES}
+        ${subjectReliabilityPrompt(subject)}
 
         [出題規格]
         主科目：${subject}
@@ -623,7 +625,6 @@ app.post('/api/generate-quiz', async (req, res) => {
         再將四個選項逐一代入，
         確認只有一個選項正確，解析與最後結論都指向 correct。
 
-        ${ANSWER_AND_EXPLANATION_RULES}
         ${Knowledge.promptFor(subject, targetKnowledgePointId)}
 
         發現錯誤一律完整重寫 JSON：
