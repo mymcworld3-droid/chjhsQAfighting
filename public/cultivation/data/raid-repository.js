@@ -1,5 +1,6 @@
 import { authenticatedMainFetch, getMainUser } from './project-repository.js';
 import { readRoomEvents } from './room-event-stream.js';
+import { raidRequestJson } from './raid-transport.js';
 
 const DEFAULT_ENDPOINT = '/api/raid/room';
 
@@ -16,14 +17,9 @@ export const raidRepository = Object.freeze({
   },
 
   async request(action, payload = {}, endpoint = DEFAULT_ENDPOINT) {
-    const response = await authenticatedMainFetch(endpoint, {
-      method: 'POST',
-      body: JSON.stringify({ action, ...payload })
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok || data.ok !== true) {
+    const data = await raidRequestJson(endpoint, { action, ...payload });
+    if (data.ok !== true) {
       const error = new Error(data.error || '團本房間連線失敗');
-      error.status = response.status;
       throw error;
     }
     return data;

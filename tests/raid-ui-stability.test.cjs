@@ -187,3 +187,129 @@ test('battle CSS has one set of attack keyframes and app header themes do not st
     assert.match(theme,/body\.xianxia-theme > header/);
   }
 });
+
+test('a thrown sound effect releases the animation queue and restores answer controls', async () => {
+  const h = sceneHarness();
+  h.context.console = {warn(){}};
+  h.context.QAGameAudio = {play(){throw Error('audio unavailable');}};
+  h.context.state.status = 'review';
+  await h.context.play({attacker:'player', damage:100});
+  assert.equal(h.context.state.battleSceneTail, null);
+  assert.equal(h.context.state.battleScenePlaying, false);
+  assert.deepEqual(h.restores, [true]);
+  h.context.QAGameAudio = null;
+  const next = h.context.play({attacker:'boss'});
+  await flush();
+  assert.equal(h.waiting.length, 1, 'the next animation is not blocked behind a rejected visual');
+  h.waiting.shift()(); await next;
+});
+
+function questionHarness() {
+  let resolve, renders = 0, requests = 0;
+  const context = {state:{room:room(), roomId:'r', player:{hp:100}, status:'review',
+    battleSceneToken:1, history:[], pendingQuestion:null}, now:()=>1,
+    prefetchQuestion(){requests++; return new Promise(done => {resolve = done;});},
+    renderArena(){},renderQuestion(){renders++;}};
+  vm.runInNewContext(section('  async function openNextQuestion()', '  function renderQuestion(')+'\nthis.open=openNextQuestion;', context);
+  return {context, requests:()=>requests, renders:()=>renders,
+    complete(q={id:'next'}){context.state.pendingQuestion=q;resolve();}};
+}
+
+test('repeated next taps while generation is pending consume exactly one question', async () => {
+  const h=questionHarness();
+  const first=h.context.open(), second=h.context.open(), third=h.context.open();
+  assert.equal(h.requests(),1);
+  h.complete(); await Promise.all([first,second,third]);
+  assert.equal(h.context.state.question.id,'next');
+  assert.equal(h.context.state.history.length,1);
+  assert.equal(h.renders(),1);
+  assert.equal(h.context.state.openingQuestion,false);
+});
+
+test('late next-question work cannot reopen a defeated, departed or replaced session', async () => {
+  for (const change of [{room:{status:'lost'}},{player:{hp:0}},{roomId:'new',battleSceneToken:2,openingQuestion:false}]) {
+    const h=questionHarness(), work=h.context.open();
+    Object.assign(h.context.state,change);
+    h.complete();await work;
+    assert.equal(h.renders(),0);
+    assert.equal(h.context.state.question,undefined);
+    assert.equal(h.context.state.openingQuestion,false);
+  }
+});
+
+function answerHarness() {
+  const context={state:{room:room(),roomId:'r',player:{uid:'me',hp:100},boss:{hp:900,maxHp:1000},
+    status:'question',question:{id:'q1',actionId:1,ticket:'t',opts:['a','b','c','d']},
+    playerActionCount:0,battleSceneToken:1,history:[],questionIssuedAtMs:1},
+    now:()=>2,renderQuestion(){},updateHomeEntry(){},prefetchQuestion(){},renderArena(){},
+    playerRepository:{saveExamAnswer:()=>Promise.resolve()},window:{},console:{warn(){},error(){}},
+    shenPhaseForHp:()=>1,toast(){},showCorrectAnswerFeedback(){},playBattleScene:async()=>{},finishRaid(){}};
+  vm.runInNewContext(section('  async function answer(', '  async function applyRemoteBossAction(')+'\nthis.answer=answer;',context);
+  return context;
+}
+
+test('lost replies retry the original question action and choice even when room count advanced', async () => {
+  const h=answerHarness(), sent=[];
+  h.commitRaidPlayerAction=async payload=>{sent.push(payload);throw Error('offline');};
+  await h.answer(2);
+  assert.equal(h.state.status,'question');
+  h.state.playerActionCount=1; // Room push beat the HTTP response.
+  h.commitRaidPlayerAction=async payload=>{sent.push(payload);return {resolution:{correct:false,correctIndex:0,explanation:'explanation'}};};
+  await h.answer(3);
+  assert.deepEqual(sent.map(row=>row.actionId),[1,1]);
+  assert.deepEqual(sent.map(row=>row.choice),[2,2]);
+  assert.equal(h.state.status,'review');
+  assert.equal(h.state.playerActionCount,1);
+});
+
+test('room receipt recovers an answer when HTTP fails and optional history services throw', async () => {
+  const h=answerHarness();
+  h.playerRepository.saveExamAnswer=()=>{throw Error('history unavailable');};
+  h.commitRaidPlayerAction=async()=>{
+    h.state.room.members.me.lastPlayerResolution={questionId:'q1',actionId:1,correct:false,correctIndex:0,explanation:'settled'};
+    throw Error('lost reply');
+  };
+  await h.answer(1);
+  assert.equal(h.state.status,'review');
+  assert.equal(h.state.question.exp,'settled');
+});
+
+test('expired tickets return to a usable battlefield instead of trapping retries on an invalid question', async () => {
+  const h=answerHarness();let arenas=0;
+  h.renderArena=()=>arenas++;
+  h.commitRaidPlayerAction=async()=>{throw Object.assign(Error('團本題目已過期，請取得下一題'),{status:409});};
+  await h.answer(1);
+  assert.equal(h.state.status,'active');
+  assert.equal(h.state.question,null);
+  assert.equal(arenas,1);
+});
+
+test('heartbeats do not accumulate requests on a slow connection', async () => {
+  let tick,resolve,calls=0;
+  const context={state:{roomId:'r'},HEARTBEAT_MS:8000,stopHeartbeat(){},
+    setInterval(fn){tick=fn;return 1;},heartbeatRaidRoom(){calls++;return new Promise(done=>{resolve=done;});}};
+  vm.runInNewContext(section('  function startHeartbeat()', '  function stopHeartbeat()')+'\nstartHeartbeat();',context);
+  tick();tick();tick();assert.equal(calls,1);
+  resolve();await flush();tick();assert.equal(calls,2);
+  context.state.roomId='new';tick();assert.equal(calls,2);
+  resolve();await flush();
+});
+
+test('forty consecutive answers retain stable ticket numbers across reordered room pushes and replies', async () => {
+  const h=answerHarness();
+  for(let id=1;id<=40;id++) {
+    Object.assign(h.state,{status:'question',question:{id:'q'+id,actionId:id,ticket:'t'+id,opts:['a','b','c','d']}});
+    h.commitRaidPlayerAction=async payload=>{
+      assert.equal(payload.actionId,id);
+      assert.equal(payload.questionId,'q'+id);
+      h.state.playerActionCount=id;
+      const resolution={questionId:'q'+id,actionId:id,correct:false,correctIndex:0,explanation:'settled'};
+      h.state.room.members.me.lastPlayerResolution=resolution;
+      if(id%3===0)throw Error('HTTP reply lost after commit');
+      return {resolution};
+    };
+    await h.answer(1);
+    assert.equal(h.state.status,'review','answer '+id+' reaches review');
+    assert.equal(h.state.playerActionCount,id);
+  }
+});

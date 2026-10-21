@@ -80,6 +80,31 @@ test('returning to a completed fight restores result for pending reward claim',a
   assert.equal(result.room.status,'won');
 });
 
+test('a committed answer can be retried after victory or death without another attack',async()=>{
+  const tickets=require('../raid-question-ticket.cjs');
+  const key='FIREBASE_A_SERVICE_ACCOUNT_JSON', previous=process.env[key];
+  process.env[key]=JSON.stringify({type:'service_account',project_id:'question-learning',private_key:'-----BEGIN PRIVATE KEY-----\ntest-key\n-----END PRIVATE KEY-----',client_email:'test@example.com'});
+  try {
+    for(const status of ['active','won','lost']) {
+      const f=fixture(status),room=f.read(),member=room.members.a;
+      const prior={actionId:1,questionId:'question-1',correct:true,damage:200,correctIndex:2,explanation:'settled'};
+      Object.assign(member,{lastActionId:1,lastPlayerResolution:prior,alive:status==='active',hp:status==='active'?1000:0});
+      const before=structuredClone(room);
+      const ticket=tickets.issueRaidQuestionTicket({uid:'a',roomId:'room12345',actionId:1,questionId:'question-1',answerIndex:2});
+      const result=await f.request('player-action',{actionId:1,questionId:'question-1',choice:2,ticket});
+      assert.deepEqual(result.resolution,prior);
+      assert.equal(f.read().bossHp,before.bossHp);
+      assert.equal(f.read().members.a.lastActionId,1);
+      assert.equal(f.read().members.a.attempts,0,'replaying the receipt never adds another answer');
+      const other=tickets.issueRaidQuestionTicket({uid:'a',roomId:'room12345',actionId:1,questionId:'different-question',answerIndex:2});
+      const mismatch=await f.request('player-action',{actionId:1,questionId:'different-question',choice:2,ticket:other});
+      assert.equal(mismatch.resolution,null,'same sequence with a different question cannot recover a receipt');
+    }
+  } finally {
+    if(previous===undefined)delete process.env[key];else process.env[key]=previous;
+  }
+});
+
 test('room start assigns the same Boss HP and attack for one through four players',async()=>{
   for(const size of [1,2,3,4]) {
     const f=fixture('waiting'),room=f.read(),base=room.members.a;

@@ -46,6 +46,7 @@ import './combat-contribution.js';
     lastPlayerAction: null,
     tickTimer: null,
     questionLoading: false,
+    openingQuestion: false,
     roomId: '',
     room: null,
     roomUnsub: null,
@@ -860,45 +861,53 @@ import './combat-contribution.js';
     state.battleSceneTail = tail;
     await previous;
     if (token !== state.battleSceneToken) { release(); return; }
-    state.battleScenePlaying = true;
-    setRaidCombatFocus(true);
-    renderArena({ transition: false });
+    let notice, stage;
+    try {
+      state.battleScenePlaying = true;
+      setRaidCombatFocus(true);
+      renderArena({ transition: false });
 
-    const arena = document.getElementById('raid-arena');
-    const stage = arena?.querySelector('.raid-stage');
-    globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
-      rate: attacker === 'boss' ? .8 : critical ? .85 : 1.05,
-      key: 'raid-hit:'+state.roomId+':'+attacker+':'+state.playerActionCount+':'+state.lastBossActionSeen
-    });
-    if (stage) stage.classList.add(attacker === 'player' ? 'raid-player-strike' : 'raid-boss-strike');
-    const actionCaption = arena?.querySelector('.raid-boss-portrait > span');
-    if (actionCaption && actionName) actionCaption.textContent = '「' + actionName + '」';
+      const arena = document.getElementById('raid-arena');
+      stage = arena?.querySelector('.raid-stage');
+      globalThis.QAGameAudio?.play(guarded ? 'spirit-pulse' : 'combat-impact', {
+        rate: attacker === 'boss' ? .8 : critical ? .85 : 1.05,
+        key: 'raid-hit:'+state.roomId+':'+attacker+':'+state.playerActionCount+':'+state.lastBossActionSeen
+      });
+      if (stage) stage.classList.add(attacker === 'player' ? 'raid-player-strike' : 'raid-boss-strike');
+      const actionCaption = arena?.querySelector('.raid-boss-portrait > span');
+      if (actionCaption && actionName) actionCaption.textContent = '「' + actionName + '」';
 
-    const notice = document.createElement('div');
-    notice.className = 'raid-combat-event ' + (critical ? 'is-critical ' : '') + (comboHits.length ? 'has-combo ' : '') + (attacker === 'player' ? 'player' : 'boss');
-    const details = [];
-    if (critical) details.push('爆擊');
-    if (comboHits.length) details.push('連擊 ×'+comboHits.length+'：'+comboHits.map(n=>Math.round(n)).join('／'));
-    if (guarded) details.push('道心護體・完全抵擋');
-    if (defenseSkill) details.push(defenseSkill);
-    if (reflectedDamage > 0) details.push('反擊 ' + Math.round(reflectedDamage).toLocaleString());
-    if (healed > 0) details.push('回復 ' + Math.round(healed).toLocaleString() + ' HP');
-    notice.innerHTML =
-      '<small>' + (attacker === 'player' ? '你的攻勢' : '大師姐出招') + '</small>' +
-      '<strong>' + escapeHtml(actionName || (attacker === 'player' ? '攻擊' : '劍招')) + '</strong>' +
-      '<b>' + (guarded ? '0' : Math.max(0, Math.round(Number(damage) || 0)).toLocaleString()) + ' 傷害</b>' +
-      (details.length ? '<span>' + details.map(escapeHtml).join('・') + '</span>' : '');
-    arena?.appendChild(notice);
+      notice = document.createElement('div');
+      notice.className = 'raid-combat-event ' + (critical ? 'is-critical ' : '') + (comboHits.length ? 'has-combo ' : '') + (attacker === 'player' ? 'player' : 'boss');
+      const details = [];
+      if (critical) details.push('爆擊');
+      if (comboHits.length) details.push('連擊 ×'+comboHits.length+'：'+comboHits.map(n=>Math.round(n)).join('／'));
+      if (guarded) details.push('道心護體・完全抵擋');
+      if (defenseSkill) details.push(defenseSkill);
+      if (reflectedDamage > 0) details.push('反擊 ' + Math.round(reflectedDamage).toLocaleString());
+      if (healed > 0) details.push('回復 ' + Math.round(healed).toLocaleString() + ' HP');
+      notice.innerHTML =
+        '<small>' + (attacker === 'player' ? '你的攻勢' : '大師姐出招') + '</small>' +
+        '<strong>' + escapeHtml(actionName || (attacker === 'player' ? '攻擊' : '劍招')) + '</strong>' +
+        '<b>' + (guarded ? '0' : Math.max(0, Math.round(Number(damage) || 0)).toLocaleString()) + ' 傷害</b>' +
+        (details.length ? '<span>' + details.map(escapeHtml).join('・') + '</span>' : '');
+      arena?.appendChild(notice);
 
-    await wait(1150);
-    notice.remove();
-    stage?.classList.remove('raid-player-strike', 'raid-boss-strike');
-    if (token !== state.battleSceneToken) { release(); return; }
-    if (state.battleSceneTail !== tail) { release(); return; }
-    state.battleSceneTail = null;
-    state.battleScenePlaying = false;
-    setRaidCombatFocus(false);
-    release();
+      await wait(1150);
+    } catch (error) {
+      console.warn('[Raid] combat feedback failed:', error);
+    } finally {
+      try { notice?.remove(); stage?.classList.remove('raid-player-strike', 'raid-boss-strike'); }
+      finally {
+        release();
+        if (token === state.battleSceneToken && state.battleSceneTail === tail) {
+          state.battleSceneTail = null;
+          state.battleScenePlaying = false;
+          setRaidCombatFocus(false);
+        }
+      }
+    }
+    if (token !== state.battleSceneToken || state.battleSceneTail) return;
 
     if (state.pendingFinishRoom) {
       const terminal = state.pendingFinishRoom;
@@ -926,7 +935,7 @@ import './combat-contribution.js';
     const token = state.battleSceneToken;
     const work = (async () => {
       try {
-        const targetAction = state.playerActionCount + (state.status === 'question' ? 2 : 1);
+        const targetAction = Math.max(state.playerActionCount + 1, (state.question?.actionId || 0) + 1);
         const generated = await generateRaidQuestion({
           scope: state.scope,
           round: targetAction,
@@ -934,7 +943,8 @@ import './combat-contribution.js';
           history: state.history,
           roomId: state.roomId
         });
-        if (state.room?.status === 'active' && state.roomId === roomId && token === state.battleSceneToken) state.pendingQuestion = generated;
+        if (state.room?.status === 'active' && state.roomId === roomId && token === state.battleSceneToken &&
+            targetAction > state.playerActionCount) state.pendingQuestion = generated;
       } catch (error) {
         if (token !== state.battleSceneToken || state.roomId !== roomId) return;
         console.warn('[Raid] question generation failed:', error);
@@ -949,21 +959,31 @@ import './combat-contribution.js';
   }
 
   async function openNextQuestion() {
-    if (state.room?.status !== 'active' || state.player?.hp <= 0 || state.status === 'submitting' || state.battleScenePlaying) return;
+    if (state.openingQuestion || state.room?.status !== 'active' || state.player?.hp <= 0 || state.status === 'submitting' || state.battleScenePlaying) return;
     if (state.status === 'question' && state.question) return renderQuestion(false);
-    if (!state.pendingQuestion) {
-      await prefetchQuestion();
+    const roomId = state.roomId, token = state.battleSceneToken;
+    state.openingQuestion = true;
+    try {
+      if (state.pendingQuestion?.actionId && state.pendingQuestion.actionId !== state.playerActionCount + 1) state.pendingQuestion = null;
+      if (!state.pendingQuestion) await prefetchQuestion();
+      // Generation can finish after defeat, departure or a new session.
+      if (state.roomId !== roomId || token !== state.battleSceneToken ||
+          state.room?.status !== 'active' || state.player?.hp <= 0) return;
       if (!state.pendingQuestion) return renderArena();
+      state.question = state.pendingQuestion;
+      state.pendingQuestion = null;
+      state.history.push(state.question);
+      state.history = state.history.slice(-30);
+      state.selectedChoice = null;
+      state.answerCorrect = null;
+      state.questionIssuedAtMs = now();
+      state.status = 'question';
+      // An animation restores the question when its queue drains.
+      if (!state.battleScenePlaying) renderQuestion(false);
+      void prefetchQuestion();
+    } finally {
+      if (token === state.battleSceneToken) state.openingQuestion = false;
     }
-    state.question = state.pendingQuestion;
-    state.pendingQuestion = null;
-    state.history.push(state.question);
-    state.selectedChoice = null;
-    state.answerCorrect = null;
-    state.questionIssuedAtMs = now();
-    state.status = 'question';
-    renderQuestion(false);
-    void prefetchQuestion();
   }
 
   function renderQuestion(review) {
@@ -977,7 +997,8 @@ import './combat-contribution.js';
     const view = document.getElementById('raid-question');
     if (sameQuestion) {
       view.querySelectorAll('[data-choice]').forEach(button => {
-        button.disabled = review || state.status === 'submitting' || state.player.hp <= 0;
+        button.disabled = review || state.status === 'submitting' || state.player.hp <= 0 ||
+          (q.submittedChoice != null && Number(button.dataset?.choice) !== q.submittedChoice);
         button.classList?.toggle('selected', Number(button.dataset?.choice) === state.selectedChoice);
       });
       updateLiveLabels();
@@ -989,7 +1010,7 @@ import './combat-contribution.js';
       let cls = i === state.selectedChoice ? ' selected' : '';
       if (review && i === q.ans) cls = ' correct';
       else if (review && i === state.selectedChoice && i !== q.ans) cls = ' wrong';
-      return '<button class="' + cls + '" type="button" data-choice="' + i + '" ' + (review || state.status === 'submitting' || state.player.hp <= 0 ? 'disabled' : '') + '><span>' +
+      return '<button class="' + cls + '" type="button" data-choice="' + i + '" ' + (review || state.status === 'submitting' || state.player.hp <= 0 || (q.submittedChoice != null && i !== q.submittedChoice) ? 'disabled' : '') + '><span>' +
         String.fromCharCode(65 + i) + '</span><b>' + rich(option) + '</b></button>';
     }).join('');
     let explain = '';
@@ -1040,10 +1061,12 @@ import './combat-contribution.js';
 
   async function answer(choice) {
     if (state.status !== 'question' || !state.question || state.room?.status !== 'active') return;
-    const selectedChoice = Number.isInteger(choice) ? choice : null;
+    const selectedChoice = state.question.submittedChoice ?? (Number.isInteger(choice) ? choice : null);
     if (selectedChoice === null || selectedChoice < 0 || selectedChoice > 3) return;
-    const actionId = state.playerActionCount + 1;
     const question = state.question;
+    const actionId = question.actionId || state.playerActionCount + 1;
+    question.actionId = actionId;
+    question.submittedChoice = selectedChoice;
     const roomId = state.roomId;
     const token = state.battleSceneToken;
 
@@ -1058,6 +1081,14 @@ import './combat-contribution.js';
         questionId: question.id,
         choice: selectedChoice,
         ticket: question.ticket
+      }).catch(error => {
+        // A room push can confirm a commit even if its HTTP reply was lost.
+        const prior = state.room?.members?.[state.player?.uid]?.lastPlayerResolution;
+        if (state.roomId === roomId && token === state.battleSceneToken &&
+            prior?.questionId === question.id && Number(prior.actionId) === actionId) {
+          return {room:state.room, resolution:prior};
+        }
+        throw error;
       });
       if (state.roomId !== roomId || token !== state.battleSceneToken) return;
       const resolution = result?.resolution;
@@ -1065,9 +1096,10 @@ import './combat-contribution.js';
       if (!resolution) throw new Error('伺服器尚未完成本次出手結算');
 
       if (result.room && (Number(result.room.revision) || 0) >= (Number(state.room?.revision) || 0)) state.room = result.room;
-      state.playerActionCount = actionId;
+      state.playerActionCount = Math.max(state.playerActionCount, actionId);
       state.answerCorrect = resolution.correct === true;
-      globalThis.QAGameAudio?.answer(state.answerCorrect, 'raid-answer:'+roomId+':'+actionId);
+      try { globalThis.QAGameAudio?.answer(state.answerCorrect, 'raid-answer:'+roomId+':'+actionId); }
+      catch (error) { console.warn('[Raid] answer audio failed:', error); }
       state.questionResolvedAtMs = now();
       state.nextQuestionAtMs = 0;
       question.ans = Number(resolution.correctIndex);
@@ -1091,20 +1123,22 @@ import './combat-contribution.js';
         state.boss.phase = shenPhaseForHp(state.boss.hp, state.boss.maxHp);
       }
       state.status = 'review';
-      // 對應團本伺服器簽名票證的完成結算；不信任未確認的前端選擇。
-      void playerRepository.saveExamAnswer('raid_'+roomId+'_'+state.player?.uid+'_'+actionId,{
-        mode:'raid',topic:'Raid',rankAtTime:'團本 · 清霜秘境',
-        ...globalThis.QAKnowledgePoints.metadata(question,question.subject),
-        question:question.q,options:question.opts,correctIdx:question.ans,userIdx:selectedChoice,
-        explanation:question.exp,subject:question.subject,subTopic:question.topic,
-        isCorrect:state.answerCorrect,timeTaken:Math.max(0,now()-state.questionIssuedAtMs)/1000
-      }).catch(error=>console.warn('[Raid answer history]',error?.message||error));
-      // Only a verified, settled raid action counts as learning/social participation.
-      const analyticsId = 'raid_' + roomId + '_' + actionId;
-      void window.trackPlayerAnalytics?.('answer_completed', { mode: 'raid', eventId: analyticsId });
-      if (Object.keys(state.room?.members || {}).length > 1) {
-        void window.trackPlayerAnalytics?.('social_participated', { mode: 'raid', eventId: analyticsId + '_social' });
-      }
+      try {
+        // 對應團本伺服器簽名票證的完成結算；不信任未確認的前端選擇。
+        void playerRepository.saveExamAnswer('raid_'+roomId+'_'+state.player?.uid+'_'+actionId,{
+          mode:'raid',topic:'Raid',rankAtTime:'團本 · 清霜秘境',
+          ...globalThis.QAKnowledgePoints?.metadata?.(question,question.subject),
+          question:question.q,options:question.opts,correctIdx:question.ans,userIdx:selectedChoice,
+          explanation:question.exp,subject:question.subject,subTopic:question.topic,
+          isCorrect:state.answerCorrect,timeTaken:Math.max(0,now()-state.questionIssuedAtMs)/1000
+        }).catch(error=>console.warn('[Raid answer history]',error?.message||error));
+        // Only a verified, settled raid action counts as learning/social participation.
+        const analyticsId = 'raid_' + roomId + '_' + actionId;
+        void Promise.resolve(window.trackPlayerAnalytics?.('answer_completed', { mode: 'raid', eventId: analyticsId })).catch(() => {});
+        if (Object.keys(state.room?.members || {}).length > 1) {
+          void Promise.resolve(window.trackPlayerAnalytics?.('social_participated', { mode: 'raid', eventId: analyticsId + '_social' })).catch(() => {});
+        }
+      } catch (error) { console.warn('[Raid] answer history deferred:', error); }
 
       if (state.room?.status === 'won' || state.room?.status === 'lost') {
         state.pendingFinishRoom = state.room;
@@ -1151,7 +1185,15 @@ import './combat-contribution.js';
         finishRaid(terminal.status === 'won', terminal.status === 'won' ? 'boss-defeated' : 'team-defeated');
         return;
       }
-      toast(error.message || '出手結算失敗，請再作答一次。');
+      if (error.status === 409 && /票證|過期|不同步|出手不符|已經結算/.test(error.message || '')) {
+        state.question = null;
+        state.pendingQuestion = null;
+        state.status = state.player?.hp > 0 ? 'active' : 'spectating';
+        toast('題目狀態已更新，請重新取得下一題。');
+        renderArena();
+        return;
+      }
+      toast(error.message || '出手確認暫時失敗，請按原答案重試。');
       renderQuestion(false);
     }
     updateHomeEntry();
@@ -1267,7 +1309,8 @@ import './combat-contribution.js';
     const answerStatus = document.getElementById('raid-answer-status');
     if (answerStatus) {
       const message = state.status === 'submitting' ? '答案已送出，正在確認本次出手…' :
-        state.status === 'review' ? '本題已結算；看完解析後可繼續下一題。' : '不限讀題時間；答對即可出手，Boss 會持續行動。';
+        state.status === 'review' ? '本題已結算；看完解析後可繼續下一題。' :
+        state.question?.submittedChoice != null ? '尚未收到結算確認，請按原答案重試；不會重複計算。' : '不限讀題時間；答對即可出手，Boss 會持續行動。';
       if (answerStatus.textContent !== message) answerStatus.textContent = message;
     }
     const bossHp = document.getElementById('raid-boss-hp-text');
@@ -1349,8 +1392,12 @@ import './combat-contribution.js';
   function startHeartbeat() {
     stopHeartbeat();
     if (!state.roomId) return;
+    const roomId = state.roomId;
+    let busy = false;
     state.heartbeatTimer = setInterval(function () {
-      void heartbeatRaidRoom(state.roomId).catch(() => {});
+      if (busy || state.roomId !== roomId) return;
+      busy = true;
+      void heartbeatRaidRoom(roomId).catch(() => {}).finally(() => { busy = false; });
     }, HEARTBEAT_MS);
   }
   function stopHeartbeat() {
@@ -1659,7 +1706,7 @@ import './combat-contribution.js';
       status: 'hub', runId: '', player: null, boss: null, scope: null, question: null, pendingQuestion: null,
       history: [], questionIssuedAtMs: 0, questionResolvedAtMs: 0, nextQuestionAtMs: 0,
       selectedChoice: null, answerCorrect: null, playerActionCount: 0, bossStartedAtMs: 0, bossActionCount: 0,
-      lastBossAction: null, lastPlayerAction: null, questionLoading: false, roomId: '', room: null,
+      lastBossAction: null, lastPlayerAction: null, questionLoading: false, pendingQuestionWork: null, openingQuestion: false, roomId: '', room: null,
       lastBossActionSeen: 0, applyingBossAction: false, advancingBossAction: false,
       battleSceneToken: state.battleSceneToken + 1, battleScenePlaying: false, battleSceneTail: null, pendingFinishRoom: null, invitedRoomId: '',
       rewardClaiming: false, rewardClaimedRoomId: '',

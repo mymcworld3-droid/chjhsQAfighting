@@ -629,18 +629,18 @@ function createHandler({
           const snap = await tx.get(ref);
           if (!snap.exists) throw Object.assign(new Error('團本房間不存在'), { status: 404 });
           const current = snap.data() || {};
-          if (current.status !== 'active') return { room: publicRoom(roomId, current), resolution: null };
           const members = { ...membersOf(current) };
           const me = requireMember(current, uid);
-          if (me.alive === false) return { room: publicRoom(roomId, current), resolution: null };
 
           if (id <= finite(me.lastActionId)) {
             const prior = me.lastPlayerResolution;
             return {
               room: publicRoom(roomId, current),
-              resolution: prior && finite(prior.actionId) === id ? prior : null
+              resolution: prior && finite(prior.actionId) === id && prior.questionId === questionId ? prior : null
             };
           }
+          // A committed answer remains recoverable after a final hit or death.
+          if (current.status !== 'active' || me.alive === false) return { room: publicRoom(roomId, current), resolution: null };
           if (id !== Math.floor(finite(me.lastActionId)) + 1) {
             throw Object.assign(new Error('團本出手序號不同步，請等待房間重新同步'), { status: 409 });
           }
