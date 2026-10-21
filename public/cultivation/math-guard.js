@@ -21,6 +21,89 @@
     ]) if (text.startsWith(mark, at)) return { mark, kind, open };
     return null;
   }
+  const symbols = Object.freeze({times:'×',cdot:'·',div:'÷',pm:'±',mp:'∓',le:'≤',leq:'≤',ge:'≥',geq:'≥',ne:'≠',neq:'≠',
+    approx:'≈',equiv:'≡',infty:'∞',pi:'π',theta:'θ',alpha:'α',beta:'β',gamma:'γ',delta:'δ',Delta:'Δ',lambda:'λ',mu:'μ',
+    sigma:'σ',Sigma:'Σ',omega:'ω',Omega:'Ω',phi:'φ',epsilon:'ε',rho:'ρ',tau:'τ',nu:'ν',eta:'η',degree:'°',
+    in:'∈',notin:'∉',subset:'⊂',subseteq:'⊆',cup:'∪',cap:'∩',emptyset:'∅',to:'→',rightarrow:'→',leftarrow:'←',leftrightarrow:'↔',
+    Rightarrow:'⇒',Leftrightarrow:'⇔',therefore:'∴',because:'∵',ldots:'…',cdots:'⋯',angle:'∠',perp:'⊥',parallel:'∥'});
+  const argumentsFor = Object.freeze({frac:2,dfrac:2,tfrac:2,sqrt:1,vec:1,overline:1,bar:1,hat:1,mathrm:1,mathbf:1,text:1,underline:1,binom:2});
+  function decodeEntities(value) {
+    const named = {lt:'<',gt:'>',amp:'&',quot:'"',apos:"'",nbsp:' ',times:'×',divide:'÷',plusmn:'±',radic:'√',infin:'∞',
+      le:'≤',leq:'≤',ge:'≥',geq:'≥',ne:'≠',neq:'≠',...symbols};
+    return String(value ?? '').replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (entity,key) => {
+      if (key[0] !== '#') return named[key] ?? entity;
+      const code = key[1].toLowerCase() === 'x' ? parseInt(key.slice(2),16) : Number(key.slice(1));
+      return code >= 32 && code <= 0x10ffff && !(code >= 0xd800 && code <= 0xdfff) ? String.fromCodePoint(code) : entity;
+    });
+  }
+  function argument(text, at) {
+    let start = at;
+    while (/\s/.test(text[start] || '') && start < text.length) start++;
+    if (text[start] !== '{') return null;
+    let depth = 1;
+    for (let i = start + 1; i < text.length; i++) {
+      if (!isEscaped(text,i)) {
+        if (text[i] === '{') depth++;
+        if (text[i] === '}' && --depth === 0) return {body:text.slice(start+1,i),end:i+1};
+      }
+    }
+    return null;
+  }
+  function bareMath(prose, plain = false) {
+    let output = '';
+    for (let i = 0; i < prose.length;) {
+      const command = prose[i] === '\\' && !isEscaped(prose,i) && /^\\([a-zA-Z]+)/.exec(prose.slice(i));
+      if (!command) { output += prose[i++]; continue; }
+      const name = command[1];
+      if (plain && ['left','right'].includes(name)) { i += command[0].length; continue; }
+      if (Object.hasOwn(symbols,name)) { output += symbols[name]; i += command[0].length; continue; }
+      let end = i + command[0].length;
+      const args = [];
+      for (let n = 0; n < (argumentsFor[name] || 0); n++) {
+        const arg = argument(prose,end);
+        if (!arg) break;
+        args.push(arg.body); end = arg.end;
+      }
+      if (argumentsFor[name] && args.length === argumentsFor[name]) {
+        if (!plain) output += '\\(' + prose.slice(i,end) + '\\)';
+        else {
+          const values = args.map(value => bareMath(value,true));
+          if (['frac','dfrac','tfrac'].includes(name)) output += '('+values[0]+')/('+values[1]+')';
+          else if (name === 'sqrt') output += '√('+values[0]+')';
+          else if (name === 'vec') output += '向量 '+values[0];
+          else if (name === 'binom') output += 'C('+values[0]+','+values[1]+')';
+          else if (['bar','overline'].includes(name)) output += '上劃線('+values[0]+')';
+          else if (name === 'hat') output += '帽號('+values[0]+')';
+          else if (name === 'underline') output += '底線('+values[0]+')';
+          else output += values[0];
+        }
+        i = end; continue;
+      }
+      output += command[0]; i += command[0].length;
+    }
+    return output;
+  }
+  // Infer only bounded known commands; ordinary Chinese/English and existing
+  // delimited equations remain text and complete equations respectively.
+  function normalizeMathText(value) {
+    const text = decodeEntities(expandTextEscapes(value));
+    const pattern = /(?<!\\)\$\$[\s\S]*?\$\$|(?<!\\)\\\[[\s\S]*?\\\]|(?<!\\)\\\([\s\S]*?\\\)|(?<!\\)\$(?!\$)(?:\\.|[^$\\])*?\$/g;
+    const prose = value => {
+      const repaired = value.replace(/\\\\(?=(?:frac|dfrac|tfrac|sqrt|vec|overline|bar|hat|mathrm|mathbf|text|underline|binom|times|div|cdot|leq|geq|neq|pi|theta|alpha|beta|gamma|infty)\b|[()[\]])/g, '\\');
+      return repaired === value ? bareMath(value) : normalizeMathText(repaired);
+    };
+    let output = '', start = 0;
+    for (const match of text.matchAll(pattern)) {
+      output += prose(text.slice(start,match.index)) + match[0];
+      start = match.index + match[0].length;
+    }
+    return output + prose(text.slice(start));
+  }
+  function readableMath(value) {
+    const text = decodeEntities(expandTextEscapes(value));
+    if (!inspect(text).valid) return text;
+    return bareMath(text.replace(/\$\$|(?<!\\)\$|\\[()[\]]/g,''),true);
+  }
   // Interpret serialized prose escapes outside math; never damage TeX commands.
   function expandTextEscapes(value) {
     const input = String(value ?? '');
@@ -47,6 +130,11 @@
           if (pair === '\\t') { output += '\u3000'; i += 2; continue; }
         }
         if (pair === '\\"' || pair === '\\/') { output += input[i + 1]; i += 2; continue; }
+        const surrogate = /^\\u([dD][89aAbB][0-9a-fA-F]{2})\\u([dD][c-fC-F][0-9a-fA-F]{2})/.exec(tail);
+        if (surrogate) {
+          output += String.fromCodePoint(0x10000 + ((parseInt(surrogate[1],16)-0xd800)<<10) + parseInt(surrogate[2],16)-0xdc00);
+          i += surrogate[0].length; continue;
+        }
         const unicode = /^\\u\{([0-9a-fA-F]{1,6})\}/.exec(tail) ||
           /^\\u([0-9a-fA-F]{4})(?![0-9a-fA-F])/.exec(tail) ||
           /^\\x([0-9a-fA-F]{2})(?![0-9a-fA-F])/.exec(tail);
@@ -122,7 +210,7 @@
   }
   function fallback(value) {
     return '<span class="tex2jax_ignore quiz-math-fallback" title="原始數學式未能安全排版">' +
-      escape(expandTextEscapes(value)).replace(/\n/g, '<br>') + '</span>';
+      escape(readableMath(value)).replace(/\n/g, '<br>') + '</span>';
   }
-  return Object.freeze({ inspect, fallback, escape, expandTextEscapes });
+  return Object.freeze({ inspect, fallback, escape, expandTextEscapes, normalizeMathText, readableMath });
 });

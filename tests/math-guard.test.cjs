@@ -155,3 +155,41 @@ test('live question and legacy rich text both apply serialized special escapes s
   vm.runInNewContext(math, context2);
   assert.equal(context2.window.quizMathRichText(source), output);
 });
+
+test('mixed Chinese prose repairs bare formulas, symbol commands and entities without altering delimited math', () => {
+  const source=String.raw`計算 \frac{1}{\sqrt{2}}，若 x \leq 3 且角度 &theta;，面積為 &#x03C0;。`;
+  const expected=String.raw`計算 \(\frac{1}{\sqrt{2}}\)，若 x ≤ 3 且角度 θ，面積為 π。`;
+  assert.equal(Guard.normalizeMathText(source),expected);
+  assert.equal(Guard.normalizeMathText(expected),expected,'normalization can safely run in both shared and legacy formatters');
+  const aligned=String.raw`公式 $\begin{aligned}x&=\frac{1}{2}\\y&=\theta\end{aligned}$`;
+  assert.equal(Guard.normalizeMathText(aligned),aligned);
+  const context={window:{QAMathGuard:Guard},console};vm.runInNewContext(math,context);
+  assert.equal(context.window.quizMathRichText(source),expected);
+  assert.equal(Guard.expandTextEscapes(String.raw`\uD83D\uDE00`),'😀');
+});
+
+test('double-escaped standalone TeX is repaired but matrix row breaks remain unchanged', () => {
+  assert.equal(Guard.normalizeMathText(String.raw`結果 \\frac{1}{2}`),String.raw`結果 \(\frac{1}{2}\)`);
+  assert.equal(Guard.normalizeMathText(String.raw`結果 \\(\\frac{1}{2}\\)`),String.raw`結果 \(\frac{1}{2}\)`);
+  assert.equal(Guard.readableMath(String.raw`答案 $\frac{1}{2}$，角度 $\theta$`),'答案 (1)/(2)，角度 θ');
+  assert.equal(Guard.readableMath(String.raw`$\overline{AB}$ 與 $\vec{v}$`),'上劃線(AB) 與 向量 v');
+  const html=Guard.fallback(String.raw`$\frac{<img src=x onerror=alert(1)>}{2}$`);
+  assert.doesNotMatch(html,/<img/);
+  assert.match(html,/&lt;img/);
+});
+
+test('missing MathJax uses readable text without deleting option buttons or event handlers', async () => {
+  const texts=[{nodeValue:String.raw`計算 $\frac{1}{2}$`,parentElement:{closest:()=>null}},
+    {nodeValue:String.raw`$\theta$`,parentElement:{closest:()=>null}}];
+  let clicked=0;
+  const button={onclick:()=>clicked++};
+  const root={isConnected:true,buttons:[button],set innerHTML(_value){throw Error('must not replace interactive DOM');}};
+  const context={window:{QAMathGuard:Guard},console,document:{createTreeWalker(){
+    let i=0;return {currentNode:null,nextNode(){this.currentNode=texts[i++];return !!this.currentNode;}};
+  }}};
+  vm.runInNewContext(math,context);
+  await context.window.quizMathTypeset(root);
+  assert.equal(texts[0].nodeValue,'計算 (1)/(2)');
+  assert.equal(texts[1].nodeValue,'θ');
+  root.buttons[0].onclick();assert.equal(clicked,1);
+});

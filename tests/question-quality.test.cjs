@@ -26,3 +26,27 @@ test('removes Chinese and numeric choice order without changing solution steps o
   const explanation = removeUnstableOptionLabels('第一步先算500公尺。選項二的路網分析不適合；第一項錯誤；錯誤選項三錯誤；答案4是正解。');
   assert.equal(explanation, '第一步先算500公尺。相關敘述的路網分析不適合；相關敘述錯誤；相關敘述錯誤；相關敘述是正解。');
 });
+
+test('grammar-error questions cannot identify their own answer through a single mark', () => {
+  const base={q:'下列英文句子中，有一個畫底線的文法或用字錯誤，請找出該錯誤選項：Although Kevin was (A) exhausting after a long day of work, he still helped his younger sister with her homework.',
+    correct:'exhausting',wrong:['Although','with','helped'],exp:'描述 Kevin 感到疲憊應用 exhausted。答案為 exhausting。'};
+  assert.match(questionQualityIssue(base),/洩漏答案/);
+  for(const mark of ['<u>exhausting</u>',String.raw`$\underline{exhausting}$`,'**exhausting**','__exhausting__']) {
+    assert.match(questionQualityIssue({...base,q:base.q.replace('(A) exhausting',mark)}),/洩漏答案/);
+  }
+  const unmarked={...base,q:'下列句子何者使用不當？Although Kevin was exhausting after a long day of work, he still helped his younger sister with her homework.'};
+  assert.equal(questionQualityIssue(unmarked),'','the error exists in the sentence without being singled out');
+  assert.equal(questionQualityIssue({q:'根據上述條件，正確答案為何？'}),'');
+});
+
+test('all shared generation prompts forbid answer-revealing emphasis and require display-safe symbols', () => {
+  const {ANSWER_AND_EXPLANATION_RULES,QUESTION_PRESENTATION_RULES}=require('../quiz-answer-prompt.cjs');
+  const {quickQuizPrompt}=require('../fast-quiz-prompt.cjs');
+  assert.ok(ANSWER_AND_EXPLANATION_RULES.includes(QUESTION_PRESENTATION_RULES));
+  for(const mode of ['battle-fast','immortal-fast','raid-standard','raid-quick-simple']) {
+    const prompt=quickQuizPrompt({mode,subject:'英文'});
+    assert.match(prompt,/不得只對正解或錯誤所在處加底線/);
+    assert.match(prompt,/JSON 只跳脫一次/);
+    assert.match(prompt,/禁止裸露的反斜線指令/);
+  }
+});

@@ -7,19 +7,19 @@ const source=fs.readFileSync('server.js','utf8');
 const a=source.indexOf('function qualityPolicy('),b=source.indexOf('function chooseQuestionForm(',a);
 const policy=vm.runInNewContext(source.slice(a,b)+'\nqualityPolicy');
 
-test('easy adopts the previous medium depth and medium adopts the previous hard depth',()=>{
+test('hard adopts original medium, medium adopts original easy and easy becomes introductory',()=>{
   for(const subject of ['數學','物理','國文','英文','歷史','地理','公民']) {
-    assert.equal(policy(subject,'easy').cognitive,'3-4');
-    assert.equal(policy(subject,'easy').steps,'2-3');
-    assert.equal(policy(subject,'medium').cognitive,'4-5');
-    assert.equal(policy(subject,'medium').steps,'3-5');
-    assert.equal(policy(subject,'hard').cognitive,'5');
-    assert.equal(policy(subject,'hard').steps,'4-6');
+    assert.equal(policy(subject,'easy').cognitive,'1-2');
+    assert.equal(policy(subject,'easy').steps,'1');
+    assert.equal(policy(subject,'medium').cognitive,'2-3');
+    assert.equal(policy(subject,'medium').steps,'1-2');
+    assert.equal(policy(subject,'hard').cognitive,'3-4');
+    assert.equal(policy(subject,'hard').steps,'2-3');
   }
-  assert.match(policy('數學','medium').instruction,/至少需要 3 個有意義的解題步驟/);
-  assert.match(policy('國文','medium').instruction,/推論、比較、資料或語境判讀/);
-  assert.match(policy('數學','hard').instruction,/不得.*超綱/);
-  assert.match(policy('國文','hard').instruction,/指定年級與單元範圍/);
+  assert.match(policy('數學','medium').instruction,/原簡單題標準/);
+  assert.match(policy('國文','medium').instruction,/原簡單題標準/);
+  assert.match(policy('數學','hard').instruction,/原中等題標準/);
+  assert.match(policy('國文','hard').instruction,/原中等題標準/);
 });
 
 test('compact combat prompts retain the same depth policy and emit numeric metadata examples',()=>{
