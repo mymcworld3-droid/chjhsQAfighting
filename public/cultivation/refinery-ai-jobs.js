@@ -575,17 +575,19 @@ import {
 
         tx.set(artifactRef, {
           version: 1,
-          items: committedCatalog,
+          // Discovery only appends its own entry. Keep stored definitions intact;
+          // normalizing other players' items is an administrator operation.
+          items: raw.isAdmin === true ? committedCatalog : [candidate, ...(artifactSnap.data()?.items || [])],
           aiGeneratedAtMs: Date.now(),
           aiGeneratedArtifactId: candidate.id
         }, { merge: true });
         tx.set(materialRef, {
-          recipes: committedRecipes,
+          recipes: raw.isAdmin === true ? committedRecipes : { ...(materialSnap.data()?.recipes || {}), [candidate.id]: fresh.recipe },
           aiGeneratedRecipeAtMs: Date.now(),
           aiGeneratedArtifactId: candidate.id,
-          orphanRecipeCleanupRemovedIds: recipeRepair.removedRecipeIds.slice(0, 100)
+          ...(raw.isAdmin === true ? { orphanRecipeCleanupRemovedIds: recipeRepair.removedRecipeIds.slice(0, 100) } : {})
         }, { merge: true });
-      } else if (recipeRepair.changed) {
+      } else if (recipeRepair.changed && raw.isAdmin === true) {
         committedRecipes = cleanLatestRecipes;
         tx.set(materialRef, {
           recipes: committedRecipes,

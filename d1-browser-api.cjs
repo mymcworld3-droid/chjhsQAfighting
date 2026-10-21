@@ -1,6 +1,7 @@
 'use strict';
 const {adminProject,PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {getD1Store,Transaction,Query,Codec,validPath}=require('./d1-store.cjs');
+const {mayCommitDiscovery}=require('./refinery-discovery-commit.cjs');
 const fail=(message='無權存取這筆資料',status=403,code='permission-denied')=>Object.assign(Error(message),{status,code});
 const same=(a,b)=>JSON.stringify(Codec.encode(a??null))===JSON.stringify(Codec.encode(b??null));
 const changed=(a,b)=>[...new Set([...Object.keys(a||{}),...Object.keys(b||{})])].filter(k=>!same(a?.[k],b?.[k]));
@@ -54,6 +55,10 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
   const [col,id,...nested]=path.split('/');
   if(nested.length)throw fail();
   if(admin)return; // role was read from the authoritative profile BEFORE the transaction.
+  if(role==='A'&&col==='gameConfig'&&['artifactCatalogV1','materialCatalogV1'].includes(id)) {
+    if(mayCommitDiscovery({tx,preview,uid}))return;
+    throw fail('煉器圖鑑登錄必須包含已完成的任務、原配方與單件發寶，且不可修改既有圖鑑或設定');
+  }
   const keys=changed(before,after);
   if(role==='A'&&col==='users') {
     if(id===uid) {
