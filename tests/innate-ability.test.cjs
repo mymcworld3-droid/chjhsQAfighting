@@ -84,7 +84,7 @@ test('offensive variations respect HP boundaries, alternating answers, streaks a
   assert.equal(Innate.attack(advance(fighter('ocean','tide'),true),{hp:599,maxHp:1000}).normal,0);
   assert.equal(Innate.attack(advance(fighter('pojing','execute'),true),{hp:500,maxHp:1000}).normal,0);
   assert.equal(Innate.executeThreshold(fighter('pojing','execute')),.7);
-  assert.equal(Innate.attack(advance(fighter('reverse','defy',{hp:1500}),true),target).normal,200);
+  assert.equal(Innate.attack(advance(fighter('reverse','defy',{hp:1500}),true),target).normal,160);
   for(const [type,branch,every,damage] of [['ocean','surge',3,120],['pojing','momentum',3,120],['sword','pursuit',2,80]]) {
     let p=fighter(type,branch);
     for(let i=1;i<=every;i++){p=advance(p,true);assert.equal(Innate.attack(p,target).normal,i===every?damage:0);if(i<every)p=advance(p,false);}
@@ -113,17 +113,17 @@ test('healing variations clamp to missing HP and never heal a dead player',()=>{
 test('Yin-Yang low-HP damage reduction is shared across both paths, ranked and limited to normal hits',()=>{
   for(const branch of ['defy','balance']) {
     const h=fighter('reverse',branch,{hp:1200});h.nascentSoul=null;
-    assert.equal(Innate.damageReduction(h),.30);
-    assert.equal(Innate.damageReduction({...h,hp:1500}),.30);
+    assert.equal(Innate.damageReduction(h),.25);
+    assert.equal(Innate.damageReduction({...h,hp:1500}),.25);
     assert.equal(Innate.damageReduction({...h,hp:1501}),0);
-    assert.equal(Innate.damageReduction({...h,innateAbility:{...h.innateAbility,level:5}}),.15);
+    assert.equal(Innate.damageReduction({...h,innateAbility:{...h.innateAbility,level:5}}),.125);
     assert.equal(Innate.damageReduction({...h,hp:0}),0);
     const safe=duel({...h,answer:{correct:false,atMs:10}},{answer:{correct:true,atMs:20}});
     const base=duel({...h,innateAbility:null,answer:{correct:false,atMs:10}},{answer:{correct:true,atMs:20}});
-    assert.equal(safe.hostHp-base.hostHp,60,'normal PvP damage mitigated 30%');
+    assert.equal(safe.hostHp-base.hostHp,50,'normal PvP damage mitigated 25%');
     const boss=Raid.resolveBossDefense(h,{bossAction:{damage:200}});
     const baseline=Raid.resolveBossDefense({...h,innateAbility:null},{bossAction:{damage:200}});
-    assert.equal(boss.member.hp-baseline.member.hp,60,'normal raid damage mitigated 30%');
+    assert.equal(boss.member.hp-baseline.member.hp,50,'normal raid damage mitigated 25%');
     const trueBoss=Raid.resolveBossDefense(h,{bossAction:{damage:200,trueDamage:200}});
     assert.equal(trueBoss.member.hp,baseline.member.hp,'raid true damage bypasses new mitigation');
   }
