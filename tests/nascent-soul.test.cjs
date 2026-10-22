@@ -228,11 +228,13 @@ test('radial branches retain page scrolling instead of the retired fixed skill m
 });
 
 
-test('each independent radial branch is an accessible upgrade button',()=>{
- const source=read('public/cultivation/cultivation-training-v4.js');assert.match(source,/data-ns-upgrade="\$\{branch.id\}"/);assert.match(source,/saveSoulBranch\(button.dataset.nsUpgrade\)/);assert.doesNotMatch(source,/selectedSoulNodeId|前置節點/);
+test('each independent radial branch opens details before a separate upgrade action',()=>{
+ const source=read('public/cultivation/cultivation-training-v4.js');
+ assert.match(source,/data-ns-node=/);assert.match(source,/inspect\(button.dataset.nsNode\)/);
+ assert.match(source,/saveSoulBranch\(button.dataset.nsUpgrade\)/);
 });
 
-function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false, grade = 1) {
+function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false, grade = 1, selected = null) {
   const source = read('public/cultivation/cultivation-training-v4.js');
   const start = source.indexOf('  function branchDisplayValue(');
   const end = source.indexOf('  async function saveSoulBranch', start);
@@ -240,11 +242,12 @@ function renderGrowthMap(type, branches = {}, fragments = 20, soulBusy = false, 
   const player = {stats:{totalScore:68}, cultivationTraining:{equippedCore:core},
     nascentSoulGrowth:{version:1, branches}, materialSystem:{inventory:{'nascent-soul-essence':fragments}}};
   return new Function('state', 'Growth', 'currentScore', 'NASCENT_SOUL_THRESHOLD', 'window',
-    'clampGrade', 'coreType', 'coreVisualMarkup', 'soulBusy', 'nascentUnlocked', 'Innate',
+    'clampGrade', 'coreType', 'coreVisualMarkup', 'soulBusy', 'nascentUnlocked', 'Innate', 'soulView', 'getAuth', 'getApp', 'innateBusy', 'busy',
     source.slice(start, end) + '\nreturn nascentSoulTabMarkup();')(
       {equippedCore:core, core:{type:'thunder', grade:9}}, globalThis.QANascentGrowth,
       () => 68, 68, {getCurrentUserData:() => player}, grade => grade,
-      type => ({name:type}), core => `<div data-test-core="${core.type}" data-test-grade="${core.grade}"></div>`, soulBusy, () => true,require('../public/cultivation/innate-ability.js'));
+      type => ({name:type}), core => `<div data-test-core="${core.type}" data-test-grade="${core.grade}"></div>`, soulBusy, () => true,require('../public/cultivation/innate-ability.js'),
+      {owner:`h:${type}:${grade}:0`,selected,choosing:false},()=>({currentUser:{uid:'h'}}),()=>({}),false,false);
 }
 
 test('equipped core sits at the radial center with one connector per four or five branches', () => {
@@ -253,7 +256,7 @@ test('equipped core sits at the radial center with one connector per four or fiv
     assert.match(markup, new RegExp(`data-branch-count="${count}"`));
     assert.match(markup, new RegExp(`class="ns-growth-core"><div data-test-core="${type}" data-test-grade="1"`));
     assert.doesNotMatch(markup, /data-test-core="thunder"/);
-    assert.equal((markup.match(/data-ns-upgrade=/g) || []).length, count);
+    assert.equal((markup.match(/data-ns-node=/g) || []).length, count);
     assert.equal((markup.match(/<line /g) || []).length, count);
     const positions = [...markup.matchAll(/--branch-x:(\d+)%;--branch-y:(\d+)%/g)];
     assert.equal(new Set(positions.map(match => match[1]+','+match[2])).size, count);
@@ -262,44 +265,46 @@ test('equipped core sits at the radial center with one connector per four or fiv
   }
   const css = read('public/cultivation-training-v3.css');
   assert.match(css, /\.ns-growth-core \{[^}]*left:50%; top:50%/);
-  assert.match(css, /@media\(max-width:640px\)[\s\S]*\.ns-growth-map \{ height:480px/);
+  assert.match(css, /@media\(max-width:640px\)[\s\S]*\.ns-growth-workspace \{ min-height:480px/);
   assert.match(css, /#training-tab-content:has\(\.ns-growth-panel\) \{ overflow-y:auto/);
   assert.match(css, /\.training-page-v3:has\(\.ns-growth-panel\) \{[^}]*padding-bottom:0/);
   assert.match(css, /\.ns-growth-core \.golden-core-stage-v3 \{ width:100% !important; height:100% !important; min-width:0; min-height:0/);
 });
 
-test('radial UI keeps current bonuses, ranks and costs without upper limits or explanations', () => {
+test('orb overview has only icons and rings; full or unaffordable nodes remain inspectable', () => {
   const markup = renderGrowthMap('sword', {attack:10, coreDamage:4}, 0);
   assert.match(markup, /ns-growth-resource">元嬰碎精 <strong aria-live="polite">0/);
-  assert.match(markup, /data-ns-upgrade="attack"[^>]*disabled/);
-  assert.match(markup, /data-ns-upgrade="coreDamage"[^>]*元嬰碎精不足[^>]*disabled/);
-  assert.match(markup, /ns-growth-value ">\+35</);
-  assert.match(markup, /ns-growth-value is-percent">\+6%</);
-  assert.doesNotMatch(markup, /上限|ns-growth-cap/);
-  assert.match(markup, /10 \/ 10/);
-  assert.match(markup, /已圓滿/);
-  assert.match(markup, /↑ 5 碎精/);
-  assert.doesNotMatch(markup, /<p>|ns-growth-note|個獨立分支|舊神識|團本答對|各分支共/);
-  const busy = renderGrowthMap('ocean', {}, 20, true);
-  assert.equal((busy.match(/data-ns-upgrade="[^"]+"[^>]*disabled/g) || []).length, 4);
-  assert.match(busy, /保存中/);
+  assert.equal((markup.match(/data-ns-node=/g) || []).length, 5);
+  assert.doesNotMatch(markup, /data-ns-upgrade|ns-orb-detail|ns-growth-name|ns-growth-value/);
+  assert.match(markup, /stroke-dasharray="100 100"/);
+  assert.match(markup, /stroke-dasharray="40 100"/);
+  const full = renderGrowthMap('sword', {attack:10}, 0, false, 1, 'attack');
+  assert.match(full, /data-ns-upgrade="attack" disabled/);
+  assert.match(full, /ns-detail-value">\+35</);
+  assert.match(full, /十階圓滿/);
+  const poor = renderGrowthMap('sword', {coreDamage:4}, 0, false, 1, 'coreDamage');
+  assert.match(poor, /data-ns-upgrade="coreDamage" disabled>元嬰碎精不足/);
+  assert.match(poor, /ns-detail-value">\+6%</);
+  assert.match(poor, /升至 5 階需 5 元嬰碎精/);
+  const busy = renderGrowthMap('ocean', {}, 20, true, 1, 'attack');
+  assert.match(busy, /data-ns-upgrade="attack" disabled>保存中/);
 });
 
 test('radial branch labels show the equipped core ability and its actual bonus', () => {
   const expected = {ocean:'蓄潮爆發',taichu:'吸血',pojing:'斬殺',xingchen:'三題蓄星',
     wugou:'真傷',thunder:'反傷',reverse:'低血增傷'};
   for (const [type, name] of Object.entries(expected)) {
-    const markup = renderGrowthMap(type,{core:4});
-    assert.match(markup,new RegExp('ns-growth-name">[^<]*<i[^>]*><\\/i>'+name+'<'));
+    const markup = renderGrowthMap(type,{core:4},20,false,1,'core');
+    assert.match(markup,new RegExp('id="ns-detail-title">'+name+'<'));
     assert.doesNotMatch(markup,/金丹屬性|金丹機率|金丹傷害|上限/);
   }
-  const trueDamage = renderGrowthMap('wugou',{core:10},20,false,2);
-  assert.match(trueDamage,/ns-growth-value ">\+71</);
+  const trueDamage = renderGrowthMap('wugou',{core:10},20,false,2,'core');
+  assert.match(trueDamage,/ns-detail-value">\+71</);
   assert.doesNotMatch(trueDamage,/\+100%|\+71%/);
   for (const [type, rate, damage] of [['ningxin','爆擊率','爆擊傷害'],['sword','連擊率','連擊傷害']]) {
     const markup = renderGrowthMap(type,{coreChance:4,coreDamage:4});
-    assert.match(markup,new RegExp('<\\/i>'+rate+'<'));
-    assert.match(markup,new RegExp('<\\/i>'+damage+'<'));
+    assert.match(markup,new RegExp('aria-label="'+rate+'，'));
+    assert.match(markup,new RegExp('aria-label="'+damage+'，'));
     assert.doesNotMatch(markup,/金丹屬性|金丹機率|金丹傷害|上限/);
   }
 });

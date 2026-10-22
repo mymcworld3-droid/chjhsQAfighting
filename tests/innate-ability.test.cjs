@@ -198,7 +198,7 @@ function uiRuntime({fail=false,retry=false,changedCore=false}={}) {
   const remote=account('ocean','tide',1),local=structuredClone(remote),writes=[],messages=[];
   const source=read('public/cultivation/cultivation-training-v4.js');
   const start=source.indexOf('  async function saveInnateAbility('),end=source.indexOf('  function nascentSoulTabMarkup',start);
-  const ctx={Innate,innateBusy:false,soulBusy:false,busy:false,state:structuredClone(remote.cultivationTraining),
+  const ctx={Innate,soulView:{selected:null,choosing:false},innateBusy:false,soulBusy:false,busy:false,state:structuredClone(remote.cultivationTraining),
     getApp:()=>({}),getAuth:()=>({currentUser:{uid:'h'}}),getFirestore:()=>({}),doc:()=>({}),
     sameGoldenCore:(a,b)=>a?.type===b?.type&&a?.grade===b?.grade&&a?.createdAt===b?.createdAt,
     renderTrainingPage(){},toast:m=>messages.push(m),CustomEvent:class{},
@@ -219,13 +219,17 @@ function uiRuntime({fail=false,retry=false,changedCore=false}={}) {
 }
 test('the actual training markup offers two choices, rank previews, disabled upgrades and the duel seal rule',()=>{
   const source=read('public/cultivation/cultivation-training-v4.js');
-  const start=source.indexOf('  function innateAbilityMarkup('),end=source.indexOf('  async function saveInnateAbility',start);
-  const ctx={Innate,innateBusy:false,soulBusy:false,busy:false};vm.createContext(ctx);
+  const start=source.indexOf('  function innateBranchIcon('),end=source.indexOf('  async function saveInnateAbility',start);
+  const ctx={Innate,soulView:{selected:'innate',choosing:true},innateBusy:false,soulBusy:false,busy:false};vm.createContext(ctx);
   vm.runInContext(source.slice(start,end),ctx);
   const p=account('sword','unity',4);
   let markup=ctx.innateAbilityMarkup(p);
   assert.equal((markup.match(/data-ia-select=/g)||[]).length,2);
   assert.equal((markup.match(/is-selected/g)||[]).length,1);
+  assert.match(markup,/選擇元神分支/);assert.doesNotMatch(markup,/data-ia-upgrade/);
+  ctx.soulView.choosing=false;
+  markup=ctx.innateAbilityMarkup(p);
+  assert.doesNotMatch(markup,/data-ia-select=/);assert.match(markup,/data-ia-reselect/);
   assert.match(markup,/4 \/ 10 階/);assert.match(markup,/升至 5 階需 5 元嬰碎精/);
   assert.match(markup,/下一階/);assert.match(markup,/對戰金丹期及以下修士時，神通全部封印/);
   p.materialSystem.inventory[Growth.ITEM_ID]=0;

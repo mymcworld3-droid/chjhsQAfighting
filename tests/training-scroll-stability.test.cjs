@@ -59,6 +59,7 @@ function trainingRenderRuntime() {
   };
   const main = {scrollTop:200}, page = {scrollTop:80};
   const context = {
+    soulView:{selected:'attack',choosing:false},
     Innate:require('../public/cultivation/innate-ability.js'),window:{getCurrentUserData:()=>({})},
     activeTab:'nascent-soul', NASCENT_SOUL_THRESHOLD:68, currentScore:() => 68,
     document:{
@@ -95,6 +96,7 @@ test('switching into nascent branches still starts at the top after another tab'
   runtime.render();
   runtime.context.activeTab = 'bag';
   runtime.render();
+  assert.equal(runtime.context.soulView.selected,null);
   runtime.main.scrollTop = 310;
   runtime.page.scrollTop = 120;
   runtime.context.activeTab = 'nascent-soul';
