@@ -46,6 +46,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   const Growth = globalThis.QANascentGrowth;
   const Innate = globalThis.QAInnateAbility;
   let innateBusy = false;
+  // 選取只屬於目前畫面；檢視節點不寫入或消耗碎精。
+  const soulView = { selected: null, choosing: false, owner: '' };
   let migrationBusy = false;
   let lastUnlocked = false;
 
@@ -422,24 +424,76 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     return Growth.branchValue(core, id, level);
   }
 
+  function innateBranchIcon(branchId) {
+    return ({tide:'fa-water',surge:'fa-water',renew:'fa-heart-circle-plus',devour:'fa-seedling',
+      focus:'fa-crosshairs',calm:'fa-spa',execute:'fa-skull',momentum:'fa-khanda',
+      meteor:'fa-meteor',moon:'fa-moon',clarity:'fa-shield-halved',purify:'fa-heart',
+      rebound:'fa-bolt',nourish:'fa-heart-circle-plus',defy:'fa-fire',balance:'fa-yin-yang',
+      pursuit:'fa-khanda',unity:'fa-khanda'})[branchId] || 'fa-circle-nodes';
+  }
+
+  function soulOrbMarkup({id, name, icon, level, x, y, innate = false, canUpgrade = false}) {
+    const selected = soulView.selected === id && !soulView.choosing;
+    return `<button type="button" class="ns-growth-node ${level ? 'is-grown' : ''} ${selected ? 'is-selected' : ''} ${innate ? 'is-innate' : ''}"
+      style="--branch-x:${x}%;--branch-y:${y}%" ${innate ? 'data-ia-node' : `data-ns-node="${id}"`}
+      data-upgradable="${canUpgrade}" aria-label="${name}，${level} / 10 階，點擊查看資料" aria-pressed="${selected}"
+      aria-haspopup="dialog" aria-controls="ns-node-dialog">
+      <svg class="ns-orb-ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="ns-orb-track" cx="50" cy="50" r="45"/>
+        <circle class="ns-orb-progress" cx="50" cy="50" r="45" pathLength="100" stroke-dasharray="${level * 10} 100"/></svg>
+      <span class="ns-orb-surface" aria-hidden="true"><i class="fa-solid ${icon}"></i></span>
+    </button>`;
+  }
+
   function innateAbilityMarkup(player) {
-    const info=Innate.status(player);
+    const info = Innate.status(player);
     if (!info.ok) return '';
-    const rank=info.path?.level || 1;
-    const disabled=innateBusy || soulBusy || busy;
-    const cards=Innate.branches(info.type).map(branch=>{
-      const selected=info.path?.branch===branch.id;
-      return `<article class="ia-branch ${selected?'is-selected':''}"><div class="ia-branch-heading"><h4>${branch.name}</h4><span>${selected?'已選擇 · '+rank+' / 10 階':'可選變化'}</span></div>
-        <p>${branch.describe(rank)}</p>
-        ${selected&&rank<Innate.CAP?`<p class="ia-preview">下一階：${branch.describe(rank+1)}</p>`:''}
-        <button type="button" class="core-equip-btn" data-ia-select="${branch.id}" ${disabled||selected?'disabled':''}>${selected?'此變化已啟用':info.path?'切換至此變化':'覺醒此變化 · 免費一階'}</button></article>`;
-    }).join('');
-    return `<section class="ia-panel" aria-label="化神本命神通"><header><div><span class="ia-eyebrow">元嬰化神</span><h3>${Innate.TYPES[info.type].name}・本命神通</h3></div><span class="ns-growth-resource">元嬰碎精 <strong>${info.fragments}</strong></span></header>
-      <p class="ia-intro">依已調御金丹覺醒，同時僅啟用一種變化。${player.cultivationTraining?.coreEnabled===false?'金丹已停用，神通效果暫停。':''}</p>
-      <div class="ia-branches">${cards}</div>
-      ${info.path?`<div class="ia-upgrade-row"><span>${rank>=Innate.CAP?'十階圓滿':`升至 ${rank+1} 階需 ${info.cost} 元嬰碎精`}</span><button type="button" class="core-wash-btn" data-ia-upgrade ${disabled||!info.canUpgrade?'disabled':''}>${innateBusy?'保存中…':rank>=Innate.CAP?'已圓滿':info.canUpgrade?'提升神通':'碎精不足'}</button></div>`:''}
-      <p class="ia-note">切換變化保留階數；更換丹性保留各丹性進度。普通神通追加傷害以最多 600 攻擊力計算，獨立追擊不觸發法寶爆擊或連擊。對戰金丹期及以下修士時，神通全部封印。</p>
-    </section>`;
+    const rank = info.path?.level || 1;
+    const disabled = innateBusy || soulBusy || busy;
+    const note = '切換變化保留階數；更換丹性保留各丹性進度。對戰金丹期及以下修士時，神通全部封印。';
+    if (soulView.choosing) {
+      const cards = Innate.branches(info.type).map(branch => {
+        const selected = info.path?.branch === branch.id;
+        return `<article class="ia-branch ${selected ? 'is-selected' : ''}">
+          <i class="fa-solid ${innateBranchIcon(branch.id)} ia-choice-icon" aria-hidden="true"></i>
+          <h4>${branch.name}</h4><span class="ia-choice-rank">${rank} / 10 階</span><p>${branch.describe(rank)}</p>
+          <button type="button" class="core-equip-btn" data-ia-select="${branch.id}" ${disabled ? 'disabled' : ''}>${selected ? '保留此變化' : info.path ? '選擇此變化' : '覺醒此變化 · 免費一階'}</button></article>`;
+      }).join('');
+      return `<section class="ia-panel ns-branch-choice" role="dialog" aria-modal="false" aria-labelledby="ns-choice-title">
+        <header><div><span class="ia-eyebrow">元嬰化神</span><h3 id="ns-choice-title" tabindex="-1">選擇元神分支</h3></div>
+          <button type="button" class="ns-detail-close" data-ns-close ${disabled ? 'disabled' : ''} aria-label="返回節點">×</button></header>
+        <p class="ia-intro">${Innate.TYPES[info.type].name} · 選擇一種本命神通變化</p>
+        <div class="ia-branches">${cards}</div><p class="ia-note">${note}</p></section>`;
+    }
+    if (!info.path) return '';
+    const branch = Innate.branches(info.type).find(item => item.id === info.path.branch);
+    return `<aside class="ns-orb-detail" id="ns-node-dialog" role="dialog" aria-modal="false" aria-labelledby="ns-detail-title">
+      <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉節點資料">×</button>
+      <i class="fa-solid ${innateBranchIcon(branch.id)} ns-detail-icon" aria-hidden="true"></i>
+      <span class="ia-eyebrow">化神 · 本命神通</span><h3 id="ns-detail-title">${branch.name}</h3>
+      <span class="ns-detail-rank">${rank} / 10 階</span><p>${branch.describe(rank)}</p>
+      ${rank < Innate.CAP ? `<p class="ns-detail-preview">下一階：${branch.describe(rank + 1)}</p>` : ''}
+      <div class="ns-detail-footer"><p>${rank >= Innate.CAP ? '十階圓滿' : `升至 ${rank + 1} 階需 ${info.cost} 元嬰碎精`}</p>
+        <button type="button" class="core-wash-btn" data-ia-upgrade ${disabled || !info.canUpgrade ? 'disabled' : ''}>${innateBusy ? '保存中…' : rank >= Innate.CAP ? '已圓滿' : info.canUpgrade ? '提升神通' : '碎精不足'}</button>
+        <button type="button" class="ns-reset-btn" data-ia-reselect ${disabled ? 'disabled' : ''}>重選元嬰</button></div>
+      ${player.cultivationTraining?.coreEnabled === false ? '<p class="ia-note">金丹已停用，神通效果暫停。</p>' : ''}
+      <p class="ia-note">${note}</p></aside>`;
+  }
+
+  function soulBranchDetailMarkup(player, core, branch) {
+    const status = Growth.status(player, branch.id), level = status.level;
+    const unit = branch.unit === '%' ? '%' : '';
+    const disabled = soulBusy || innateBusy || busy || !status.ok;
+    return `<aside class="ns-orb-detail" id="ns-node-dialog" role="dialog" aria-modal="false" aria-labelledby="ns-detail-title">
+      <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉節點資料">×</button>
+      <i class="fa-solid ${branch.icon} ns-detail-icon" aria-hidden="true"></i>
+      <span class="ia-eyebrow">元嬰分支</span><h3 id="ns-detail-title">${branch.name}</h3>
+      <span class="ns-detail-rank">${level} / 10 階</span>
+      <strong class="ns-detail-value">+${branchDisplayValue(core, branch.id, level)}${unit}</strong>
+      <p>${branch.description}</p>
+      ${level < Growth.CAP ? `<p class="ns-detail-preview">下一階：+${branchDisplayValue(core, branch.id, level + 1)}${unit}</p>` : ''}
+      <div class="ns-detail-footer"><p>${level >= Growth.CAP ? '十階圓滿' : `升至 ${level + 1} 階需 ${status.cost} 元嬰碎精`}</p>
+        <button type="button" class="core-wash-btn" data-ns-upgrade="${branch.id}" ${disabled ? 'disabled' : ''}>${soulBusy ? '保存中…' : status.reason || '提升節點'}</button></div>
+      ${player.cultivationTraining?.coreEnabled === false ? '<p class="ia-note">金丹已停用，元嬰效果暫停。</p>' : ''}</aside>`;
   }
 
   async function saveInnateAbility(branchId=null) {
@@ -464,6 +518,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       if(getAuth(getApp()).currentUser?.uid===user.uid) {
         const local=window.getCurrentUserData?.();
         if(local)Innate.apply(local,result);
+        soulView.choosing=false;
+        soulView.selected='innate';
         const chosen=result.growth.paths[result.type];
         const name=Innate.branches(result.type).find(item=>item.id===chosen.branch).name;
         globalThis.QAGameAudio?.play('spirit-pulse');
@@ -482,34 +538,40 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     const prepared = Growth.prepare(player);
     const core = state.equippedCore;
     const branches = Growth.branches(core);
-    const positions = branches.length === 5
-      ? [[50, 15], [82, 39], [70, 84], [30, 84], [18, 39]]
-      : [[24, 20], [76, 20], [76, 84], [24, 84]];
+    const info = Innate.status(player);
+    const owner = `${getAuth(getApp()).currentUser?.uid || ''}:${core.type}:${core.grade}:${core.createdAt || 0}`;
+    if (soulView.owner !== owner) Object.assign(soulView, {owner, selected:null, choosing:false});
+    if (!info.ok && soulView.selected === 'innate') Object.assign(soulView, {selected:null, choosing:false});
+    if (soulView.choosing) return `<section class="ns-panel ns-growth-panel is-choosing">${innateAbilityMarkup(player)}</section>`;
+    const count = branches.length + (info.ok ? 1 : 0);
+    const positions = count === 6
+      ? [[50,12],[82,30],[82,70],[50,88],[18,70],[18,30]]
+      : count === 5 ? [[50,14],[82,39],[70,84],[30,84],[18,39]]
+      : [[24,22],[76,22],[76,82],[24,82]];
     const nodes = branches.map((branch, index) => {
-      const status = Growth.status({...player,cultivationTraining:{...player.cultivationTraining,equippedCore:core}},branch.id);
-      const level = status.level;
-      const value = branchDisplayValue(core,branch.id,level);
-      const name = branch.name;
-      const [x, y] = positions[index];
-      const unit = branch.unit === '%' ? '%' : '';
-      const action = soulBusy ? '保存中…' : level === 10 ? '已圓滿' : '↑ '+status.cost+' 碎精';
-      const label = `${name}，${level} / 10 級，加成 ${value}${unit}，${soulBusy ? '保存中' : status.ok ? '升級消耗 '+status.cost+' 碎精' : status.reason}`;
-      return `<button type="button" class="ns-growth-node ${level ? 'is-grown' : ''}" style="--branch-x:${x}%;--branch-y:${y}%" data-ns-upgrade="${branch.id}" aria-label="${label}" title="${status.reason || '升級消耗 '+status.cost+' 碎精'}" ${!status.ok || soulBusy ? 'disabled' : ''}>
-        <span class="ns-growth-name"><i class="fa-solid ${branch.icon}" aria-hidden="true"></i>${name}</span>
-        <strong class="ns-growth-value ${unit ? 'is-percent' : ''}">+${value}${unit}</strong>
-        ${level < Growth.CAP ? `<small class="ns-growth-preview">下級 +${branchDisplayValue(core,branch.id,level + 1)}${unit}</small>` : ''}
-        <span class="ns-growth-level">${level} / 10</span>
-        <span class="ns-growth-track" aria-hidden="true"><span style="width:${level * 10}%"></span></span>
-        <span class="ns-growth-action">${action}</span>
-      </button>`;
-    }).join('');
-    const lines = positions.map(([x, y], index) => `<line class="ns-growth-link ${prepared.growth.branches[branches[index].id] ? 'is-grown' : ''}" x1="50" y1="50" x2="${x}" y2="${y}"/>`).join('');
-    return `${innateAbilityMarkup(player)}<section class="ns-panel ns-growth-panel">
-      <div class="ns-growth-toolbar"><span class="ns-growth-resource">元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><div class="ns-growth-actions">${getFragmentsButton}<button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div></div>
-      <div class="ns-growth-map" data-branch-count="${branches.length}" role="group" aria-label="元嬰分支">
-        <svg class="ns-growth-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>
-        <div class="ns-growth-core">${coreVisualMarkup(core, false)}<div class="ns-growth-core-caption"><strong>${coreType(core.type).name}</strong><span>${clampGrade(core.grade)} 品</span></div></div>
-        ${nodes}
+      const status = Growth.status(player, branch.id);
+      const [x, y] = positions[index + (info.ok ? 1 : 0)];
+      return soulOrbMarkup({id:branch.id, name:branch.name, icon:branch.icon, level:status.level,
+        x, y, canUpgrade:status.ok && !soulBusy && !innateBusy && !busy});
+    });
+    if (info.ok) {
+      const branch = Innate.branches(info.type).find(item => item.id === info.path?.branch);
+      nodes.unshift(soulOrbMarkup({id:'innate', name:branch ? `化神・${branch.name}` : '化神・選擇元神分支',
+        icon:branch ? innateBranchIcon(branch.id) : 'fa-atom', level:info.path?.level || 0,
+        x:positions[0][0], y:positions[0][1], innate:true, canUpgrade:info.canUpgrade}));
+    }
+    const lines = positions.map(([x, y]) => `<line class="ns-growth-link" x1="50" y1="50" x2="${x}" y2="${y}"/>`).join('');
+    const selectedBranch = branches.find(branch => branch.id === soulView.selected);
+    const detail = soulView.selected === 'innate' ? innateAbilityMarkup(player)
+      : selectedBranch ? soulBranchDetailMarkup(player, core, selectedBranch) : '';
+    return `<section class="ns-panel ns-growth-panel">
+      <div class="ns-growth-toolbar"><span class="ns-growth-resource">元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><div class="ns-growth-actions">${getFragmentsButton}<button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || innateBusy || busy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div></div>
+      <div class="ns-growth-workspace ${detail ? 'has-detail' : ''}">
+        <div class="ns-growth-map" data-branch-count="${branches.length}" role="group" aria-label="元嬰與化神節點">
+          <svg class="ns-growth-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>
+          <div class="ns-growth-core">${coreVisualMarkup(core, false)}<div class="ns-growth-core-caption"><strong>${coreType(core.type).name}</strong><span>${clampGrade(core.grade)} 品</span></div></div>
+          ${nodes.join('')}
+        </div>${detail}
       </div>
     </section>`;
   }
@@ -577,12 +639,37 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     finally { migrationBusy = false; }
   }
 
+  function closeSoulDetails() {
+    if (innateBusy) return;
+    const previous = soulView.selected;
+    // 重選取消後返回原神通詳情；初次取消則返回節點圖。
+    const backToDetail = soulView.choosing && !!Innate.status(window.getCurrentUserData?.() || {}).path;
+    soulView.choosing = false;
+    soulView.selected = backToDetail ? 'innate' : null;
+    renderTrainingPage();
+    const selector = backToDetail ? '[data-ia-reselect]' : previous === 'innate' ? '[data-ia-node]' : `[data-ns-node="${previous}"]`;
+    document.getElementById('training-tab-content')?.querySelector(selector)?.focus({preventScroll:true});
+  }
+
   function bindSoulActions() {
     const content = document.getElementById('training-tab-content');
     content?.querySelector('[data-ns-get-fragments]')?.addEventListener('click', () => {
       if (typeof window.openRaidHub === 'function') window.openRaidHub();
       else toast('秘境試煉尚未準備好，請稍後再試。');
     });
+    const inspect = (id, choosing = false) => {
+      soulView.selected = id;
+      soulView.choosing = choosing;
+      renderTrainingPage();
+      content?.querySelector(choosing ? '#ns-choice-title' : '[data-ns-close]')?.focus({preventScroll:true});
+    };
+    content?.querySelectorAll('[data-ns-node]').forEach(button => button.addEventListener('click', () => inspect(button.dataset.nsNode)));
+    content?.querySelector('[data-ia-node]')?.addEventListener('click', () => inspect('innate', !Innate.status(window.getCurrentUserData?.() || {}).path));
+    content?.querySelector('[data-ia-reselect]')?.addEventListener('click', () => inspect('innate', true));
+    content?.querySelector('[data-ns-close]')?.addEventListener('click', closeSoulDetails);
+    content.onkeydown = event => {
+      if (event.key === 'Escape' && soulView.selected) { event.preventDefault(); closeSoulDetails(); }
+    };
     content?.querySelectorAll('[data-ns-upgrade]').forEach(button => button.addEventListener('click',()=>void saveSoulBranch(button.dataset.nsUpgrade)));
     content?.querySelector('[data-ns-reset]')?.addEventListener('click',()=>void saveSoulBranch(null,true));
     content?.querySelectorAll('[data-ia-select]').forEach(button=>button.addEventListener('click',()=>void saveInnateAbility(button.dataset.iaSelect)));
@@ -610,7 +697,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     const soulLabel=document.querySelector('#page-training [data-training-tab="nascent-soul"] span');
     if(soulLabel)soulLabel.textContent=Innate.status(window.getCurrentUserData?.()||{}).ok?'元神':'元嬰';
     // 煉器／裝備可提前返回，先清理元嬰專屬的一屏模式，避免裁切其他分頁。
-    if (activeTab !== 'nascent-soul') document.body.classList.remove('ns-map-active');
+    if (activeTab !== 'nascent-soul') {
+      document.body.classList.remove('ns-map-active');
+      Object.assign(soulView, {selected:null, choosing:false});
+      content.onkeydown = null;
+    }
     if (activeTab === 'contract') {
       window.mountSoulboundTrainingPage?.(content);
       return;
