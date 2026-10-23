@@ -1946,6 +1946,10 @@ window.promptXiuxianEducationLevel = () => {
 
 // 修改原本的 switchToPage
 window.switchToPage = (pageId) => {
+    if (window.QAWorld?.active?.() && pageId !== 'page-world') {
+        window.showToast?.('請先完成戰鬥，或使用撤離按鈕。');
+        return false;
+    }
     if (pageId === 'page-social' && window.promptXiuxianEducationLevel()) return false;
     if (isBattleActive && pageId !== 'page-battle') {
         alert("鬥法進行中！");

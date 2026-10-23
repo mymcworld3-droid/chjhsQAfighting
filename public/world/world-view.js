@@ -8,15 +8,18 @@ const materialNames={'qi-spirit-wood':'靈木','qi-spirit-iron':'玄鐵'};
 export class WorldView {
   constructor(root,{api,subscribe,uid,openEntry=()=>{},applyUser=()=>{},confirm=message=>Promise.resolve(globalThis.confirm(message))}){
     Object.assign(this,{root,api,subscribe,uid,openEntry,applyUser,confirm});this.players=[];this.events={};this.seq=0;this.busy=false;this.visible=false;this.generation=0;
-    root.innerHTML=`<header class="ww-top"><div class="ww-brand"><span>青雲問道</span><h1>青雲界 <small data-zone>問道宗</small></h1></div><div class="ww-top-right"><span data-connection role="status">正在連線</span><button type="button" data-action="menu" aria-label="開啟功能選單">☰ <span>選單</span></button></div></header>
-      <section class="ww-stage"><canvas class="ww-canvas" tabindex="0" role="application" aria-label="大世界地圖。點格移動，拖曳查看。也可用方向鍵選格，Enter 前往。"></canvas>
-        <div class="ww-location"><span data-coordinates>9，36</span><small>點格前往・拖曳查看</small></div>
+    root.innerHTML=`<section class="ww-stage"><canvas class="ww-canvas" tabindex="0" role="application" aria-label="大世界地圖。點格移動，拖曳查看。也可用方向鍵選格，Enter 前往。"></canvas>
+        <div class="ww-location"><strong data-zone>問道宗</strong><span><span data-coordinates>9，36</span> · 點格前往・拖曳查看</span><small data-connection role="status">正在連線</small></div>
+        <div class="ww-explore-actions"><button type="button" class="btn-cyber-ghost" id="world-free-practice" data-entry="practice"><i class="fa-solid fa-scroll" aria-hidden="true"></i> 自由問道</button><div class="ww-top-right"><button type="button" class="btn-cyber-ghost" data-action="menu" aria-label="開啟功能選單"><i class="fa-solid fa-bars" aria-hidden="true"></i> 功能</button></div></div>
         <div class="ww-minimap"><canvas width="144" height="144" aria-label="已探索地圖，點擊可移動鏡頭"></canvas><span>全服共享 · 48 × 48</span></div>
         <div class="ww-camera"><button type="button" data-action="center" aria-label="回到角色">◎ <span>回到角色</span></button><button type="button" data-action="zoom-in" aria-label="放大地圖">＋</button><button type="button" data-action="zoom-out" aria-label="縮小地圖">−</button><button type="button" data-action="stop" aria-label="停止移動">停</button></div>
         <div class="ww-battle-status" hidden></div><div class="ww-combat-log" aria-live="polite" hidden></div><div class="ww-objective" hidden></div>
         <div class="ww-message" role="status" aria-live="polite" hidden></div>
         <section class="ww-panel" aria-label="地圖互動" hidden></section>
-      </section><footer class="ww-bottom"><button type="button" data-action="quest"><b>◇</b>仙途任務</button><button type="button" data-entry="training"><b>修</b>修煉養成</button><button type="button" data-entry="practice"><b>卷</b>自由問道</button><button type="button" data-entry="bag"><b>庫</b>寶庫</button><button type="button" data-action="menu"><b>☷</b>更多</button></footer>`;
+      </section><footer class="ww-battle-actions" aria-label="本回合戰鬥操作" hidden></footer>`;
+    // Use the app's existing header, navigation and logical game canvas.
+    this.layoutObserver=new ResizeObserver(()=>this.fitViewport());
+    for(const node of [document.documentElement,document.querySelector('body > header'),document.getElementById('bottom-nav')])if(node)this.layoutObserver.observe(node);
     this.renderer=new WorldRenderer(root.querySelector('.ww-canvas'),root.querySelector('.ww-minimap canvas'),p=>this.pick(p));
     this.onClick=e=>{
       const button=e.target.closest('button');if(!button||button.disabled)return;
@@ -26,7 +29,14 @@ export class WorldView {
     this.onKeyDown=e=>{if(e.key==='Escape'){this.pending=null;this.closePanel();this.renderer.set({preview:null,selected:null});}};
     root.addEventListener('click',this.onClick);root.addEventListener('keydown',this.onKeyDown);
   }
-  destroy(){this.destroyed=true;this.suspend();this.renderer.destroy();this.root.removeEventListener('click',this.onClick);this.root.removeEventListener('keydown',this.onKeyDown);}
+  destroy(){this.destroyed=true;this.suspend();this.layoutObserver.disconnect();this.renderer.destroy();this.root.removeEventListener('click',this.onClick);this.root.removeEventListener('keydown',this.onKeyDown);}
+  fitViewport(){
+    if(this.destroyed||!this.root.getClientRects().length)return;
+    const header=document.querySelector('body > header'),nav=document.getElementById('bottom-nav');
+    const top=header?.getClientRects().length?Math.max(0,header.getBoundingClientRect().bottom):0;
+    const bottom=nav?.getClientRects().length?Math.max(0,innerHeight-nav.getBoundingClientRect().top):0;
+    this.root.style.setProperty('--ww-top',top+'px');this.root.style.setProperty('--ww-bottom',bottom+'px');
+  }
   battle(){return this.state?.battle;}
   now(){return Date.now()+(this.clockOffset||0);}
   message(text){if(this.destroyed)return;const n=this.root.querySelector('.ww-message');n.textContent=text;n.hidden=!text;clearTimeout(this.messageTimer);if(text)this.messageTimer=setTimeout(()=>n.hidden=true,6000);}
@@ -51,7 +61,7 @@ export class WorldView {
   }
   async start(){
     if(this.visible)return;this.visible=true;const generation=++this.generation;
-    this.root.querySelector('.ww-panel').hidden=true;this.renderer.resize();this.renderer.start();
+    this.root.querySelector('.ww-panel').hidden=true;this.fitViewport();this.renderer.resize();this.renderer.start();
     try{
       const data=await this.api('join');if(!this.visible||generation!==this.generation)return;
       if(data.mapVersion!==W.VERSION)throw new Error('大世界地圖已更新，請重新整理遊戲後再進入');
@@ -99,11 +109,12 @@ export class WorldView {
     if(!status.hidden){status.innerHTML=`<div><small>局部戰場 · 第 ${b.turn} 回合</small><strong>${esc(b.name)}</strong></div><div class="ww-vitals"><span>生命 ${b.player.hp} / ${b.player.maxHp}</span><i><em style="width:${b.player.hp/b.player.maxHp*100}%"></em></i><span>靈力 ${b.player.mana} · 移動 ${b.moved?'已用':'2 格'} · 行動 ${b.acted?'已用':'可用'}</span></div>`;}
     const battleLog=this.root.querySelector('.ww-combat-log');battleLog.hidden=b?.status!=='active';
     if(!battleLog.hidden)battleLog.innerHTML=(b.log||[]).slice(-3).map(line=>`<p>${esc(line)}</p>`).join('');
-    this.root.querySelector('.ww-bottom').innerHTML=b?.status==='active'?(b.phase==='recharge'?`${this.button('繼續補能 '+b.answered+'/2','recharge')}${this.button('略過補能','skip')}${this.button('撤離','retreat')}`:`${this.button('普攻','select-attack')}${this.button('神通','select-skill')}${this.button('防守','guard')}${this.button('結束回合','end')}${this.button('撤離','retreat')}`):
-      `<button type="button" data-action="quest"><b>◇</b>仙途任務</button><button type="button" data-entry="training"><b>修</b>修煉養成</button><button type="button" id="world-free-practice" data-entry="practice"><b>卷</b>自由問道</button><button type="button" data-entry="bag"><b>庫</b>寶庫</button><button type="button" data-action="menu"><b>☷</b>更多</button>`;
+    const fighting=b?.status==='active',actions=this.root.querySelector('.ww-battle-actions');
+    this.root.classList.toggle('ww-in-battle',fighting);actions.hidden=!fighting;
+    actions.innerHTML=fighting?(b.phase==='recharge'?`${this.button('繼續補能 '+b.answered+'/2','recharge')}${this.button('略過補能','skip')}${this.button('撤離','retreat')}`:`${this.button('普攻','select-attack')}${this.button('神通','select-skill')}${this.button('防守','guard')}${this.button('結束回合','end')}${this.button('撤離','retreat')}`):'';
     this.root.querySelector('[data-action="stop"]').hidden=b?.status==='active';
   }
-  button(label,action,extra=''){return `<button type="button" data-action="${action}" ${extra}>${esc(label)}</button>`;}
+  button(label,action,extra=''){const style=['interact','confirm-move','recharge','end','dismiss','claim','contribute'].includes(action)?'primary':'ghost';return `<button type="button" class="btn-cyber-${style}" data-action="${action}" ${extra}>${esc(label)}</button>`;}
   panel(title,content,actions=''){
     if(this.destroyed)return;
     const n=this.root.querySelector('.ww-panel');window.quizMathClear?.(n);n.classList.toggle('ww-quiz-panel',this.battle()?.phase==='recharge');n.hidden=false;n.innerHTML=`<div class="ww-panel-head"><h2>${esc(title)}</h2>${this.button('×','close','aria-label="關閉互動面板"')}</div><div class="ww-panel-content">${content}</div>${actions?`<div class="ww-panel-actions">${actions}</div>`:''}`;
@@ -156,7 +167,7 @@ export class WorldView {
     this.move(p);
   }
   objectPanel(o){
-    const info={gather:'每日個人採集資格；其他玩家採集不會影響你。可獲得材料 ×2。',chest:'個人首次寶箱；開啟後獲得玄鐵、靈木與靈石。',monster:'在此處展開 8 × 8 局部戰場。每回合兩題補能；答錯仍可移動、普攻與防守。每日第一次勝利可取得獎勵，其後仍可練習戰術。',building:'走到建築旁開啟，也可使用下方快捷入口。',npc:'追蹤仙途任務，從青竹林帶回第一批修行材料。',event:o.id==='bridge'?'全服共同投入靈木，修復後開通青溪捷徑。每日每人可投入一次。':'全服共同投入玄鐵，穩定山口古陣。每日每人可投入一次。'}[o.kind];
+    const info={gather:'每日個人採集資格；其他玩家採集不會影響你。可獲得材料 ×2。',chest:'個人首次寶箱；開啟後獲得玄鐵、靈木與靈石。',monster:'在此處展開 8 × 8 局部戰場。每回合兩題補能；答錯仍可移動、普攻與防守。每日第一次勝利可取得獎勵，其後仍可練習戰術。',building:'走到建築旁開啟，也可使用原本的修煉導覽或地圖功能選單。',npc:'追蹤仙途任務，從青竹林帶回第一批修行材料。',event:o.id==='bridge'?'全服共同投入靈木，修復後開通青溪捷徑。每日每人可投入一次。':'全服共同投入玄鐵，穩定山口古陣。每日每人可投入一次。'}[o.kind];
     let extra='';if(o.kind==='event'){const goal=o.id==='bridge'?20:60,value=this.events[o.id]||0;extra=`<div class="ww-event-bar"><span style="width:${Math.min(100,value/goal*100)}%"></span></div><p>全服進度 ${value} / ${goal} · 需要${o.id==='bridge'?'靈木':'玄鐵'} ×2</p>${o.id==='array'?'<p>完成後解除北方封印，所有修士皆可進入古陣秘藏。</p>':''}`;}
     this.panel(o.name,`<p>${info}</p>${extra}<small>地點（${o.x}，${o.y}）· ${esc(W.zone(o))}</small>`,this.button(o.kind==='monster'?'前往挑戰':o.kind==='gather'?'前往採集':o.kind==='chest'?'前往開箱':o.kind==='event'?'前往貢獻':'前往互動','interact'));
   }

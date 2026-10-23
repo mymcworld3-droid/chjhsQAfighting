@@ -66,6 +66,8 @@
 
 ## 本地驗證
 
+大世界沿用既有墨金主題、正式頁首及「宗門／修煉／坊市／仙盟／設定」五鍵導覽，未另建探索用底部列。地圖與互動面板位於原頁首與導覽之間；戰棋的回合操作列出現在導覽上方。自由問道與功能選單在地圖上方，點擊原標題可返回大世界。外層繼續使用原本的 `stage.html`，橫式 1280 × 720、直式 360 × 640 等比縮放並保留黑邊。
+
 ```sh
 npm ci
 node --test tests/world-*.test.cjs tests/battle-matchmaking-race.test.cjs
@@ -75,7 +77,9 @@ npm run audit:code
 node scripts/capture-grid-world.cjs
 ```
 
-畫面驗證使用隔離的測試帳號、記憶體交易資料與真實 API／前端模組，不會登入真實帳號或寫入正式資料。截圖涵蓋 1440 × 900、390 × 844、1194 × 834，以及既有固定比例外框使用的 360 × 640／1280 × 720 內框。腳本檢查兩個瀏覽器看見彼此、點格移動、迷霧邊界、遭遇、補能作答與存檔、關閉後繼續補能、確認移動、移動後防守、回合結束、重載續戰與頁面溢出。需要本地 Playwright Chromium；可用 `WORLD_CHROMIUM_PATH` 指定已安裝執行檔，`WORLD_FONT_DIR` 提供本地 Noto Sans TC 的 Fontsource 目錄。
+畫面驗證使用隔離的測試帳號、記憶體交易資料與真實 API／前端入口，不會登入真實帳號或寫入正式資料。每張截圖均經過正式 `stage.html`／`index.html` 與原樣式，涵蓋 1440 × 900、390 × 844、1194 × 834、360 × 640、1280 × 720 瀏覽器視窗。腳本比對接入地圖前後的五鍵 HTML、配色與尺寸，檢查探索／補能／戰棋的導覽可見性、黑邊及固定比例、切頁與標題返回、戰鬥時阻擋切頁，並驗證兩個瀏覽器看見彼此、點格移動、迷霧邊界、遭遇、作答存檔、繼續補能、確認移動、移動後防守、回合結束、重載續戰與頁面溢出。
+
+需要本地 Playwright Chromium、Tailwind 3、Noto Serif TC／Noto Sans TC 與 Font Awesome 6.4。可用 `WORLD_CHROMIUM_PATH` 指定瀏覽器，`WORLD_UI_DEPS` 指定樣式／字型依賴目錄，`WORLD_TAILWIND` 指定由 `public/**/*.html`、`public/**/*.js` 產生的 Tailwind CSS。預設依賴在 `/tmp/grid-world-ui/node_modules`，CSS 在 `/tmp/grid-world-tailwind.css`；依賴僅用於隔離截圖，不寫入正式套件。
 
 截圖與結果放在 `docs/design/grid-world/`。分支只交付此可玩閉環，不自動合併到 `main`。
 

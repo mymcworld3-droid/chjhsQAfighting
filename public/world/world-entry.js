@@ -67,6 +67,7 @@ function ensureView(){
 function sync(){
   const active=root.classList.contains('active-page')&&!root.classList.contains('hidden')&&!!getMainUser();
   document.body.classList.toggle('world-page-open',active);
+  if(active)document.querySelector('#nav-grid [data-target="page-home"]')?.classList.add('active-nav-btn');
   if(active&&!document.hidden)ensureView()?.start();else view?.suspend();
 }
 new MutationObserver(sync).observe(root,{attributes:true,attributeFilter:['class']});
@@ -82,10 +83,6 @@ window.openWorldMap=async()=>{
 };
 window.QAWorld=Object.freeze({open:()=>window.openWorldMap(),active:()=>!!view?.battle()&&view.battle().status==='active'});
 document.getElementById('brand-home')?.setAttribute('aria-label','青雲問道，返回大世界');
-// A return entrance remains visible on every legacy cultivation/quiz/social page.
-const nav=document.getElementById('nav-grid');
-if(nav&&!nav.querySelector('[data-target="page-world"]')){
-  const button=document.createElement('button');button.type='button';button.className='nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all';button.dataset.target='page-world';
-  button.innerHTML='<i class="fa-solid fa-map text-xl mb-0.5" aria-hidden="true"></i><span class="text-[10px] font-bold">大世界</span>';
-  button.onclick=()=>window.openWorldMap();nav.prepend(button);
-}
+document.getElementById('brand-home')?.setAttribute('title','返回大世界');
+// Keep the original five navigation buttons, icons, order and styling.
+// The existing title button returns from cultivation and social pages to the world.
