@@ -3020,6 +3020,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const isCorrect = userIdx === correctIdx;
     globalThis.QAGameAudio?.answer(isCorrect, 'solo:' + (window.quizStartTime || '') + ':' + (quiz?.id || questionText));
     quizHelperState.answered = true;
+    if (quiz) delete quiz.helperReviewRedacted;
     quizHelperState.selectedIndex = Number.isInteger(userIdx) ? userIdx : null;
     quizHelperState.correctIndex = Number.isInteger(correctIdx) ? correctIdx : quizHelperState.correctIndex;
     quizHelperState.explanation = String(explanation || '');
@@ -3494,7 +3495,7 @@ function resetQuizHelper(data = {}, { topic = '' } = {}) {
     setQuizHelperOpen(hadPreviousQuestion ? wasOpen : defaultOpen, { remember: false });
 }
 
-async function sendQuizHelperMessage(rawMessage) {
+async function sendQuizHelperMessage(rawMessage, { intent = 'discussion' } = {}) {
     const message = String(rawMessage || '').trim().slice(0, 600);
     const { input, send, status } = quizHelperElements();
     if (!message || quizHelperState.busy || !quizHelperState.question) return;
@@ -3522,6 +3523,7 @@ async function sendQuizHelperMessage(rawMessage) {
                 options: quizHelperState.options,
                 subject: quizHelperState.subject,
                 message,
+                ...(intent === 'check-question' ? { intent } : {}),
                 history,
                 answered: quizHelperState.answered,
                 explanation: quizHelperState.explanation,
@@ -3542,7 +3544,8 @@ async function sendQuizHelperMessage(rawMessage) {
         quizHelperAppendMessage('assistant', answer, { knowledgePoint });
         if (status) status.textContent = '';
         if (payload.questionIssue?.confirmed === true) {
-            void window.reportQuizHelperIssue({ quiz: requestQuiz, uid: requestUid, reason: payload.questionIssue.reason });
+            void window.reportQuizHelperIssue({ quiz: requestQuiz, uid: requestUid, reason: payload.questionIssue.reason,
+                ...(payload.checkOnly === true ? { hideAnswer: true } : {}) });
         }
     } catch (error) {
         if (requestId !== quizHelperState.requestSerial || requestQuestion !== quizHelperState.question) return;
@@ -3565,9 +3568,9 @@ window.submitQuizHelper = (event) => {
     void sendQuizHelperMessage(input?.value || '');
 };
 
-window.askQuizHelperPreset = (message) => {
+window.askQuizHelperPreset = (message, intent = 'discussion') => {
     setQuizHelperOpen(true);
-    void sendQuizHelperMessage(message);
+    void sendQuizHelperMessage(message, { intent });
 };
 
 async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
@@ -4079,7 +4082,7 @@ window.closeReportModal = () => {
 };
 
 // Helpers submit the exact question snapshot; changing question/account invalidates a late reply.
-window.reportQuizHelperIssue = async ({ quiz, uid, reason } = {}) => {
+window.reportQuizHelperIssue = async ({ quiz, uid, reason, hideAnswer = false } = {}) => {
     const text = String(reason || '').trim().slice(0, 1200);
     if (!uid || uid !== auth.currentUser?.uid || quiz !== window.currentActiveQuiz || !quiz?.data?.q || text.length < 6) return;
     if (reportSubmitting || quiz.helperReportUid === uid) return;
@@ -4087,8 +4090,10 @@ window.reportQuizHelperIssue = async ({ quiz, uid, reason } = {}) => {
     try {
         window.openReportModal();
         if (reportQuizSnapshot !== quiz) { delete quiz.helperReportUid; return; }
-        document.getElementById('report-reason').value = text;
-        const result = await window.submitReport();
+        if (hideAnswer) quiz.helperReviewRedacted = true;
+        document.getElementById('report-reason').value = hideAnswer
+            ? '問道助手核對後發現題目、選項或解析可能不一致，請重新審核。' : text;
+        const result = await window.submitReport({ helperReason: hideAnswer ? text : '' });
         // No success marker on network, AI or persistence failures; a later check can retry.
         if (!['confirmed','duplicate','rejected','limit'].includes(result?.status)) delete quiz.helperReportUid;
     } catch (error) {
@@ -4097,9 +4102,9 @@ window.reportQuizHelperIssue = async ({ quiz, uid, reason } = {}) => {
     }
 };
 
-window.submitReport = async () => {
+window.submitReport = async ({ helperReason = '' } = {}) => {
     if (reportSubmitting) return;
-    const reason = document.getElementById('report-reason').value.trim();
+    const reason = String(helperReason || document.getElementById('report-reason').value).trim();
     if (reason.length < 6) {
         reportStatus('請具體指出題目錯誤，至少輸入 6 個字元。', true);
         return;
@@ -4157,6 +4162,13 @@ window.submitReport = async () => {
         reportStage = 'response';
         reportLoadingStatus('正在確認審核結果…');
         const result = await res.json().catch(() => ({}));
+        if (quiz.helperReviewRedacted === true) {
+            // 審核仍使用完整證據；作答前的結果視窗與重試表單不顯示可能含正解的理由。
+            result.reason = result.status === 'confirmed' || result.status === 'duplicate'
+                ? '獨立審核已確認這道題目有誤。'
+                : result.status === 'rejected' ? '獨立審核未確認這道題目有實質錯誤。'
+                    : '本次題目審核尚未完成，請稍後重試。';
+        }
         if (!res.ok || ['unavailable', 'invalid', 'unauthorized'].includes(result.status)) {
             const error = new Error(result.reason || `題目回報暫時無法處理（HTTP ${res.status}），請稍後重試。`);
             error.httpStatus = res.status;
