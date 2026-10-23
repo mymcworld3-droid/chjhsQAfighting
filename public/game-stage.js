@@ -7,12 +7,17 @@
     const root = document.documentElement;
     const layoutWidth = Math.max(1, Number(root.clientWidth) || Number(window.innerWidth) || 1);
     const layoutHeight = Math.max(1, Number(root.clientHeight) || Number(window.innerHeight) || 1);
+    // The dynamic CSS viewport follows Safari's browser bars without following
+    // keyboard/visual-viewport panning. Keep the iframe's logical canvas intact.
+    const bounds = safeArea.getBoundingClientRect();
+    const viewportWidth = Number(bounds.width) || layoutWidth;
+    const viewportHeight = Number(bounds.height) || layoutHeight;
     const inset = getComputedStyle(safeArea);
     const safe = key => Math.max(0,parseFloat(inset[key])||0);
-    const width = Math.max(1,layoutWidth-safe('paddingLeft')-safe('paddingRight'));
-    const height = Math.max(1,layoutHeight-safe('paddingTop')-safe('paddingBottom'));
+    const width = Math.max(1,viewportWidth-safe('paddingLeft')-safe('paddingRight'));
+    const height = Math.max(1,viewportHeight-safe('paddingTop')-safe('paddingBottom'));
     // Fit the page layout; a keyboard or visual-viewport pan does not resize the game.
-    const mode = layoutWidth >= layoutHeight ? 'landscape' : 'portrait';
+    const mode = viewportWidth >= viewportHeight ? 'landscape' : 'portrait';
     state = window.QAGameStageRules.fit({width,height,mode,
       left:safe('paddingLeft'),top:safe('paddingTop')});
     const values = {'--stage-left':state.left+'px','--stage-top':state.top+'px',
@@ -28,15 +33,27 @@
     if (queued) return;
     queued = requestAnimationFrame(() => { queued = 0; sync(); });
   }
+  function resetOuterScroll() {
+    // Only reset the shell; the app's main, questions and dialogs retain their scroll.
+    stage.scrollTop = 0; stage.scrollLeft = 0;
+    if (window.scrollX || window.scrollY) window.scrollTo(0,0);
+  }
   window.QAGameStage = Object.freeze({getState:() => ({...state}),sync});
   sync();
+  resetOuterScroll();
   const url = new URL('app.html',location.href);
   url.search = location.search; url.hash = location.hash;
   frame.src = url.href;
   window.addEventListener('resize',schedule,{passive:true});
   window.addEventListener('orientationchange',schedule,{passive:true});
-  window.addEventListener('pageshow',schedule);
-  if (window.ResizeObserver) new ResizeObserver(schedule).observe(document.documentElement);
+  window.addEventListener('pageshow',() => {resetOuterScroll();schedule();});
+  window.addEventListener('scroll',resetOuterScroll,{passive:true});
+  stage.addEventListener('scroll',resetOuterScroll,{passive:true});
+  if (window.ResizeObserver) {
+    const observer = new ResizeObserver(schedule);
+    observer.observe(document.documentElement);
+    observer.observe(safeArea);
+  }
   // 黑邊不接受頁面縮放；題面手勢由遊戲內的縮放政策處理。
   document.addEventListener('wheel',event => {if(event.ctrlKey||event.metaKey)event.preventDefault();},{passive:false});
   for (const type of ['touchstart','touchmove']) {
