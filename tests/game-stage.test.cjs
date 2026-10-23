@@ -29,30 +29,70 @@ test('doubling screen pixels doubles every displayed dimension while logical lay
   close(keyboard.width/keyboard.height,9/16);
 });
 
-test('outer stage fits document bounds and safe areas without reacting to keyboard or visual panning',()=>{
-  const props=new Map(),handlers={},frames=[],root={clientWidth:390,clientHeight:844};
-  let loads=0,observed;
+function stageRuntime() {
+  const props=new Map(),handlers={},stageHandlers={},frames=[];
+  const root={clientWidth:390,clientHeight:844};
+  const bounds={width:390,height:844},safeArea={getBoundingClientRect:()=>bounds};
+  let loads=0,observerCallback;
+  const observed=[];
   const frame={set src(value){loads++;this.url=value;}};
-  const stage={dataset:{},style:{getPropertyValue:key=>props.get(key),setProperty:(key,value)=>props.set(key,value)}};
-  class ResizeObserver {constructor(callback){this.callback=callback;}observe(node){observed=node;}}
+  const stage={scrollTop:0,scrollLeft:0,dataset:{},
+    style:{getPropertyValue:key=>props.get(key),setProperty:(key,value)=>props.set(key,value)},
+    addEventListener:(type,callback)=>stageHandlers[type]=callback};
+  class ResizeObserver {
+    constructor(callback){observerCallback=callback;}
+    observe(node){observed.push(node);}
+  }
   let visualListeners=0;
-  const window={innerWidth:1000,innerHeight:700,QAGameStageRules:rules,ResizeObserver,
+  const window={innerWidth:1000,innerHeight:700,QAGameStageRules:rules,ResizeObserver,scrollX:0,scrollY:0,
+    scrollTo(x,y){this.scrollX=x;this.scrollY=y;},
     visualViewport:{width:300,height:200,offsetLeft:40,offsetTop:80,addEventListener(){visualListeners++;}},
     addEventListener:(type,callback)=>handlers[type]=callback};
   vm.runInNewContext(read('public/game-stage.js'),{window,document:{documentElement:root,
-    getElementById:id=>id==='game-stage'?stage:id==='game-frame'?frame:{},addEventListener(){}},
+    getElementById:id=>id==='game-stage'?stage:id==='game-frame'?frame:safeArea,addEventListener(){}},
     getComputedStyle:()=>({paddingLeft:'4px',paddingRight:'6px',paddingTop:'20px',paddingBottom:'24px'}),
     ResizeObserver,requestAnimationFrame:callback=>{frames.push(callback);return frames.length;},URL,
     location:{href:'https://example.test/stage.html?qa=1',search:'?qa=1',hash:''}});
-  const first=window.QAGameStage.getState();
+  return {window,root,stage,safeArea,bounds,handlers,stageHandlers,observed,
+    loads:()=>loads,visualListeners:()=>visualListeners,
+    resizeProbe:()=>observerCallback(),flush:()=>{while(frames.length)frames.shift()();}};
+}
+
+test('outer stage fits the dynamic CSS viewport and safe areas without reacting to keyboard panning',()=>{
+  const h=stageRuntime(),first=h.window.QAGameStage.getState();
   const expected=rules.fit({width:380,height:800,left:4,top:20,mode:'portrait'});
   for(const key of ['width','height','left','top','scale'])close(first[key],expected[key]);
-  assert.equal(first.mode,'portrait');assert.equal(observed,root);assert.equal(visualListeners,0);
-  window.visualViewport.height=100;window.visualViewport.offsetTop=250;window.QAGameStage.sync();
-  assert.deepEqual(window.QAGameStage.getState(),first);
-  root.clientWidth=1280;root.clientHeight=720;handlers.resize();while(frames.length)frames.shift()();
-  assert.equal(window.QAGameStage.getState().mode,'landscape');
-  assert.equal(loads,1,'resizing never reloads the authenticated game document');
+  assert.equal(first.mode,'portrait');
+  assert.ok(h.observed.includes(h.root));assert.ok(h.observed.includes(h.safeArea));
+  assert.equal(h.visualListeners(),0);
+  h.window.visualViewport.height=100;h.window.visualViewport.offsetTop=250;h.window.QAGameStage.sync();
+  assert.deepEqual(h.window.QAGameStage.getState(),first);
+  Object.assign(h.bounds,{width:1280,height:720});
+  h.handlers.resize();h.flush();
+  assert.equal(h.window.QAGameStage.getState().mode,'landscape');
+  assert.equal(h.loads(),1,'resizing never reloads the authenticated game document');
+});
+
+test('Safari browser bar height changes refit the shell even when root clientHeight stays unchanged',()=>{
+  const h=stageRuntime();
+  Object.assign(h.root,{clientWidth:1024,clientHeight:768});
+  Object.assign(h.bounds,{width:1024,height:620});h.resizeProbe();h.flush();
+  const expected=rules.fit({width:1014,height:576,left:4,top:20,mode:'landscape'});
+  const result=h.window.QAGameStage.getState();
+  for(const key of ['width','height','left','top','scale'])close(result[key],expected[key]);
+  assert.ok(result.top+result.height<=620-24);
+  assert.equal(h.loads(),1);
+});
+
+test('shell focus scrolling and back navigation reset only the outer containers',()=>{
+  const h=stageRuntime();
+  h.stage.scrollTop=90;h.stage.scrollLeft=25;h.stageHandlers.scroll();
+  assert.equal(h.stage.scrollTop,0);assert.equal(h.stage.scrollLeft,0);
+  h.window.scrollY=72;h.window.scrollX=12;h.handlers.scroll();
+  assert.equal(h.window.scrollY,0);assert.equal(h.window.scrollX,0);
+  h.stage.scrollTop=80;h.window.scrollY=40;h.handlers.pageshow();h.flush();
+  assert.equal(h.stage.scrollTop,0);assert.equal(h.window.scrollY,0);
+  assert.equal(h.loads(),1);
 });
 
 test('server separates the outer page from its single authenticated app document',async t=>{
