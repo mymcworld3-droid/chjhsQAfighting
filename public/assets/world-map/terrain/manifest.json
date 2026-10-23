@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "tileSize": 40,
+  "tiles": {
+    "grass": {
+      "image": "grass.webp",
+      "fallback": "grass.png",
+      "width": 80,
+      "height": 80,
+      "displayWidth": 40,
+      "displayHeight": 40,
+      "walkable": true
+    }
+  }
+}

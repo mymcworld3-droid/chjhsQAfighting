@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>大地圖角色素材預覽</title>
+<style>body{margin:0;background:#14251f;color:#e8eee9;font:16px system-ui;padding:20px}main{max-width:700px;margin:auto}h1{font-size:23px}button,select{font:inherit;padding:8px;margin:4px;border-radius:8px}canvas{display:block;width:100%;height:auto;background:#38533e;border-radius:12px;margin-top:16px}p{line-height:1.6;color:#bfcec2}</style>
+<main><h1>地圖角色 · 待機與行走</h1><p>保留男女主角造型。每格 40 px，角色約高 48 px。下方另附兩倍放大檢視。</p>
+<button id="toggle">切換待機</button><label>地格大小 <select id="size"><option>32</option><option selected>40</option><option>48</option></select></label>
+<canvas id="view" width="640" height="420"></canvas><p id="status">載入素材中…</p></main>
+<script>
+(async()=>{
+ const canvas=document.querySelector('#view'),ctx=canvas.getContext('2d');
+ const manifest=await fetch('./manifest.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json()});
+ const images=await Promise.all(['male','female'].map(g=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=manifest.characters[g].image})));
+ let moving=true,epoch=performance.now();
+ document.querySelector('#toggle').onclick=e=>{moving=!moving;epoch=performance.now();e.target.textContent=moving?'切換待機':'播放行走'};
+ const names=['向下','向右','向左','向上'];
+ function render(now){
+  ctx.clearRect(0,0,640,420);ctx.fillStyle='#e5ede5';ctx.font='15px system-ui';
+  const tile=Number(document.querySelector('#size').value),box=tile*1.4;
+  for(let gender=0;gender<2;gender++)for(let row=0;row<4;row++){
+   const x=150+row*128,y=90+gender*100;
+   ctx.strokeStyle='#6d866a';ctx.strokeRect(x-tile/2,y-tile,tile,tile);
+   const col=moving?manifest.animations.walk.frames[Math.floor((now-epoch)/130)%4]:0;
+   ctx.drawImage(images[gender],col*112,row*112,112,112,x-box/2,y-box*104/112,box,box);
+   ctx.fillStyle='#e5ede5';ctx.fillText(names[row],x-16,y+28);
+  }
+  ctx.fillText('男主角',18,70);ctx.fillText('女主角',18,170);ctx.fillText('兩倍檢視',18,300);
+  const col=moving?manifest.animations.walk.frames[Math.floor((now-epoch)/130)%4]:0;
+  images.forEach((img,i)=>ctx.drawImage(img,col*112,0,112,112,170+i*180,270,112,112));
+  requestAnimationFrame(render);
+ }
+ document.querySelector('#status').textContent='四方向各四格 · 130 ms／格 · 腳底固定對齊';requestAnimationFrame(render);
+})().catch(e=>document.querySelector('#status').textContent='載入失敗：'+e.message+'；請透過 HTTP 靜態伺服器開啟。');
+</script></html>
