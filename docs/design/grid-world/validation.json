@@ -1,0 +1,157 @@
+[
+  {
+    "viewport": "desktop",
+    "width": 1440,
+    "documentWidth": 1440,
+    "documentHeight": 900,
+    "height": 900,
+    "root": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "top": 0,
+      "right": 1440,
+      "bottom": 900,
+      "left": 0
+    },
+    "overflowButtons": [],
+    "checks": [
+      "two-live-browsers",
+      "point-and-walk",
+      "fog-frontier",
+      "encounter",
+      "two-question-recharge",
+      "answer-and-save",
+      "close-and-resume-recharge",
+      "confirmed-two-tile-move",
+      "guard-after-move",
+      "next-turn",
+      "reload-recovery"
+    ]
+  },
+  {
+    "viewport": "phone",
+    "width": 390,
+    "documentWidth": 390,
+    "documentHeight": 844,
+    "height": 844,
+    "root": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844,
+      "top": 0,
+      "right": 390,
+      "bottom": 844,
+      "left": 0
+    },
+    "overflowButtons": [],
+    "checks": [
+      "two-live-browsers",
+      "point-and-walk",
+      "fog-frontier",
+      "encounter",
+      "two-question-recharge",
+      "answer-and-save",
+      "close-and-resume-recharge",
+      "confirmed-two-tile-move",
+      "guard-after-move",
+      "next-turn",
+      "reload-recovery"
+    ]
+  },
+  {
+    "viewport": "tablet",
+    "width": 1194,
+    "documentWidth": 1194,
+    "documentHeight": 834,
+    "height": 834,
+    "root": {
+      "x": 0,
+      "y": 0,
+      "width": 1194,
+      "height": 834,
+      "top": 0,
+      "right": 1194,
+      "bottom": 834,
+      "left": 0
+    },
+    "overflowButtons": [],
+    "checks": [
+      "two-live-browsers",
+      "point-and-walk",
+      "fog-frontier",
+      "encounter",
+      "two-question-recharge",
+      "answer-and-save",
+      "close-and-resume-recharge",
+      "confirmed-two-tile-move",
+      "guard-after-move",
+      "next-turn",
+      "reload-recovery"
+    ]
+  },
+  {
+    "viewport": "phone-frame",
+    "width": 360,
+    "documentWidth": 360,
+    "documentHeight": 640,
+    "height": 640,
+    "root": {
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 640,
+      "top": 0,
+      "right": 360,
+      "bottom": 640,
+      "left": 0
+    },
+    "overflowButtons": [],
+    "checks": [
+      "two-live-browsers",
+      "point-and-walk",
+      "fog-frontier",
+      "encounter",
+      "two-question-recharge",
+      "answer-and-save",
+      "close-and-resume-recharge",
+      "confirmed-two-tile-move",
+      "guard-after-move",
+      "next-turn",
+      "reload-recovery"
+    ]
+  },
+  {
+    "viewport": "landscape-frame",
+    "width": 1280,
+    "documentWidth": 1280,
+    "documentHeight": 720,
+    "height": 720,
+    "root": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720,
+      "top": 0,
+      "right": 1280,
+      "bottom": 720,
+      "left": 0
+    },
+    "overflowButtons": [],
+    "checks": [
+      "two-live-browsers",
+      "point-and-walk",
+      "fog-frontier",
+      "encounter",
+      "two-question-recharge",
+      "answer-and-save",
+      "close-and-resume-recharge",
+      "confirmed-two-tile-move",
+      "guard-after-move",
+      "next-turn",
+      "reload-recovery"
+    ]
+  }
+]

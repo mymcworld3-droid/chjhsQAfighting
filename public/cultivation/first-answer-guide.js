@@ -8,6 +8,7 @@
     { target: 'quiz-helper-launcher', title: '問道助手', text: '有問題隨時提問！', action: '開始作答' }
   ];
   const $ = id => document.getElementById(id);
+  const targetForStep = () => step === 0 && visible($('page-world')) ? $('world-free-practice') : $(steps[step].target);
   let account = '', step = 0, timer = null, layer = null, waiting = false, starting = false;
   const sessionDone = new Set();
   function stored(uid) {
@@ -51,7 +52,7 @@
       layer.innerHTML = '<div class="fag-mask"></div>'.repeat(4) + '<div class="fag-highlight"></div><div class="fag-card"><small></small><h2 id="first-answer-guide-title"></h2><p></p><div class="fag-actions"><button type="button" data-guide-skip>略過</button><button type="button" data-guide-next></button></div></div>';
       layer.querySelector('[data-guide-skip]').onclick = finish;
       layer.querySelector('[data-guide-next]').onclick = () => {
-        if (step === 0) { if (!starting) $(steps[0].target)?.click(); }
+        if (step === 0) { if (!starting) targetForStep()?.click(); }
         else if (step === 1) { step = 2; save('pending'); hide(); tick(); }
         else finish();
       };
@@ -74,8 +75,8 @@
       } else return;
     }
     if (step > 0 && !visible($('page-quiz'))) { hide(); return; }
-    if (step === 0 && !visible($('page-home'))) { hide(); return; }
-    const target = $(steps[step].target);
+    if (step === 0 && !visible($('page-home')) && !visible($('page-world'))) { hide(); return; }
+    const target = targetForStep();
     if (!visible(target)) { hide(); return; }
     if (!layer) target.scrollIntoView({ block:'center', inline:'nearest', behavior:'instant' });
     render(target);
@@ -94,7 +95,7 @@
   window.cancelFirstAnswerGuide = cancel;
   document.addEventListener('click', event => {
     if (!account || !layer) return;
-    if (step === 0 && event.target.closest?.('#btn-home-start')) {
+    if (step === 0 && (event.target.closest?.('#btn-home-start') || event.target.closest?.('#world-free-practice'))) {
       event.preventDefault(); event.stopImmediatePropagation();
       if (starting) return;
       starting = true; waiting = true; hide();

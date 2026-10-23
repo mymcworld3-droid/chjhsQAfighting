@@ -136,7 +136,7 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
       const member=[before.host?.uid,before.guest?.uid].includes(uid);
       if(member&&after.host?.uid===before.host?.uid&&after.guest?.uid===before.guest?.uid)return;
       const joinFields=['host','guest','knowledgeScope','status','matchedAt','matchedAtMs','introUntilMs','answerWindowStartedAt','answerWindowStartedAtMs','firstAnswerUid','updatedAt'];
-      if(before.status==='waiting'&&before.guest==null&&after.guest?.uid===uid&&after.host?.uid===before.host?.uid&&['intro','ready'].includes(after.status)&&only(keys,joinFields))return;
+      if(before.status==='waiting'&&before.guest==null&&(!before.worldTargetUid||before.worldTargetUid===uid)&&after.guest?.uid===uid&&after.host?.uid===before.host?.uid&&['intro','ready'].includes(after.status)&&only(keys,joinFields))return;
     }
     throw fail();
   }

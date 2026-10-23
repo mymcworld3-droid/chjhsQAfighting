@@ -914,6 +914,7 @@ export const featureReady = (async () => {
       if (!isMatchSessionActive(session, myData.uid) || !snap.exists()) return false;
       const room = snap.data();
       if (Number(room.modeVersion) !== BATTLE_V2.modeVersion || room.status !== 'waiting' || room.guest || room.host?.uid === myData.uid || isRoomStale(room)) return false;
+      if (room.worldTargetUid && room.worldTargetUid !== myData.uid) return false;
       tx.update(targetRef, guestJoinPatch(room, myData));
       return true;
     });
@@ -924,7 +925,7 @@ export const featureReady = (async () => {
     if (onlyRoomId) return await claimWaitingRoom(roomRef(onlyRoomId), myData, session) ? onlyRoomId : null;
     const snap = await readWaitingRooms(entry => {
       const room = entry.data();
-      return Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
+      return Number(room.modeVersion) === BATTLE_V2.modeVersion && !room.worldTargetUid && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
     });
     const candidates = snap.docs.sort((a, b) => {
       const aGap = Math.abs((Number(a.data().host?.totalScore) || 0) - myData.totalScore);
@@ -939,10 +940,11 @@ export const featureReady = (async () => {
     return null;
   }
 
-  async function createWaitingRoom(myData) {
+  async function createWaitingRoom(myData, worldTargetUid = '') {
     const ref = await addDoc(collection(db(), ROOM_COLLECTION), {
       battleCultivationVersion: cultivationRules.VERSION, battleCultivationLedger: {},
-      modeVersion: BATTLE_V2.modeVersion, mode: 'matchmaking', host: myData, guest: null, status: 'waiting',
+      modeVersion: BATTLE_V2.modeVersion, mode: worldTargetUid ? 'world-invite' : 'matchmaking',
+      ...(worldTargetUid ? { worldTargetUid } : {}), host: myData, guest: null, status: 'waiting',
       round: 1, maxRounds: BATTLE_V2.maxRounds, responseWindowMs: ANSWER_WINDOW_MS,
       currentQuestion: null, questionHistory: [], knowledgeScope: null, questionReadyAtMs: null,
       prefetchedQuestion: null, prefetchedRound: null, prefetchOwnerUid: null, prefetchClaimedAtMs: null,
@@ -957,6 +959,7 @@ export const featureReady = (async () => {
   // Invite only the host's friends who were recently active. The same waiting
   // room gets one invitation wave; listeners and reconnects cannot spam friends.
   async function inviteOnlineFriends(roomId) {
+    if (state.room?.worldTargetUid) return;
     if (!roomId || state.invitedRoomId === roomId || state.role !== 'host' || state.room?.status !== 'waiting') return;
     state.invitedRoomId = roomId;
     const owner = me();
@@ -983,6 +986,7 @@ export const featureReady = (async () => {
   }
 
   function scheduleReconcile(delay = MATCH_RECONCILE_MS) {
+    if (state.room?.worldTargetUid) return;
     if (state.syncPaused || roomQuota.blocked() || state.reconcile || state.role !== 'host' || !state.roomId) return;
     state.reconcile = setTimeout(async () => {
       state.reconcile = null;
@@ -993,6 +997,7 @@ export const featureReady = (async () => {
   }
 
   function watchWaitingRooms() {
+    if (state.room?.worldTargetUid) return;
     if (state.syncPaused || roomQuota.blocked() || state.waitingUnsub || state.role !== 'host' || state.room?.status !== 'waiting') return;
     const serial = state.subscriptionSerial, roomId = state.roomId;
     const current = () => state.subscriptionSerial === serial && state.roomId === roomId && !state.syncPaused;
@@ -1009,6 +1014,7 @@ export const featureReady = (async () => {
   }
 
   async function reconcileOwnWaitingRoom(waitingSnapshot = state.waitingCache) {
+    if (state.room?.worldTargetUid) return;
     const ownId = state.roomId, session = Number(state.matchSerial) || 0;
     if (state.syncPaused || roomQuota.blocked()) return;
     if (!ownId || state.role !== 'host' || state.room?.status !== 'waiting' || state.reconcileBusy || state.leaving) return;
@@ -1020,7 +1026,7 @@ export const featureReady = (async () => {
       if (attempt) { await finishRoomMerge(attempt); return; }
       const snap = await readWaitingRooms(entry => {
         const room = entry.data();
-        return entry.id < ownId && room.status === 'waiting' && Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
+        return entry.id < ownId && !room.worldTargetUid && room.status === 'waiting' && Number(room.modeVersion) === BATTLE_V2.modeVersion && room.host?.uid !== myData.uid && !room.guest && !isRoomStale(room);
       }, waitingSnapshot);
       if (!isMatchSessionActive(session, myData.uid) || state.roomId !== ownId) return;
       const target = snap.docs.sort((a,b) => a.id.localeCompare(b.id))[0];
@@ -2080,7 +2086,7 @@ export const featureReady = (async () => {
     return !!document.querySelector('#xiuxian-story-layer,#dongtian-overlay');
   }
 
-  async function startMatchmaking() {
+  async function startMatchmaking(options = {}) {
     if (state.starting) return; if (score() < FOUNDATION_SCORE) { toast(`需達築基初期（${FOUNDATION_SCORE} 修為）才可配對鬥法。`); return; } if (!me()) { alert('請先登入！'); return; }
     if (state.roomId && state.room && state.room.status !== 'finished') { window.switchToPage?.('page-battle'); return; }
     // 境界是唯一的遊玩進度門檻；正在顯示的劇情或洞天畫面仍不能與配對重疊。
@@ -2097,12 +2103,15 @@ export const featureReady = (async () => {
       await window.ensureCombatStats?.();
       if (!isMatchSessionActive(session, uid)) return;
       const myData = playerSnapshot(); setPlayerAvatar('bv2-match-me-avatar', myData); setText('bv2-match-me', myData.name); setText('bv2-match-me-core', `本命金丹：${playerCoreLabel(myData)}${playerPowerLabel(myData)}${playerNascentSealLabel(myData)}`);
-      const joined = await findAndClaimRoom(myData);
+      const worldTargetUid = typeof options.worldTargetUid === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(options.worldTargetUid) ? options.worldTargetUid : '';
+      const joined = worldTargetUid ? null : await findAndClaimRoom(myData);
       if (!isMatchSessionActive(session, uid)) { if (joined) await releaseMatchmakingRoom(joined, uid); return; }
       if (joined) { state.role = 'guest'; subscribeRoom(joined); return; }
-      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData);
+      setText('bv2-lobby-status', '目前沒有可加入的道友，正在開啟鬥法臺…'); const created = await createWaitingRoom(myData, worldTargetUid);
       if (!isMatchSessionActive(session, uid)) { await releaseMatchmakingRoom(created, uid); return; }
-      state.role = 'host'; subscribeRoom(created); scheduleReconcile(); inviteOnlineFriends(created);
+      state.role = 'host'; subscribeRoom(created);
+      if (!worldTargetUid) { scheduleReconcile(); inviteOnlineFriends(created); }
+      return created;
     } catch (error) {
       if (!isMatchSessionActive(session, uid)) return;
       logBattleFirestoreError('matchmaking failed', error);
@@ -2250,6 +2259,7 @@ export const featureReady = (async () => {
   };
 
   window.startBattleMatchmaking = startMatchmaking;
+  window.startWorldDuelWith = uid => startMatchmaking({ worldTargetUid: uid });
   window.leaveBattle = () => exitBattle({ navigate: true, forfeit: true });
   window.returnFromBattleResult = returnFromBattleResult;
   window.joinBattleRoomV2 = joinSpecificRoom;

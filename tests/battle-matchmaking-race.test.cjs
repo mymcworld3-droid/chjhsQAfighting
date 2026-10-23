@@ -135,3 +135,16 @@ test('an old merge completion cannot forfeit a target already adopted by the new
  await b.ctx.merge();assert.equal(b.state.roomId,'a');assert.equal(b.state.role,'guest');
  assert.equal(shared.rooms.get('a').status,'intro');assert.equal(shared.rooms.get('a').guest.uid,'B');
 });
+test('a world invitation creates a dedicated room that only its selected opponent can claim',async()=>{
+ const shared=bus({}),a=client(shared,'A');
+ const roomId=await vm.runInContext('startMatchmaking({worldTargetUid:"B"})',a.ctx);
+ assert.ok(roomId);assert.equal(shared.rooms.get(roomId).worldTargetUid,'B');
+ const c=client(shared,'C');assert.equal(await c.ctx.claim({id:roomId},{uid:'C'}),false);
+ const b=client(shared,'B');assert.equal(await b.ctx.claim({id:roomId},{uid:'B'}),true);
+ assert.equal(shared.rooms.get(roomId).guest.uid,'B');
+});
+test('public matchmaking does not absorb or merge a targeted world invitation',async()=>{
+ const shared=bus({a:{...waiting('A'),worldTargetUid:'B'},z:waiting('C')}),a=client(shared,'A','a'),c=client(shared,'C','z');
+ await Promise.all([a.ctx.merge(),c.ctx.merge()]);
+ assert.equal(shared.rooms.size,2);assert.equal(shared.rooms.get('a').guest,null);assert.equal(c.state.roomId,'z');
+});

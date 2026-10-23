@@ -40,6 +40,7 @@ service cloud.firestore {
       return signedIn()
         && resource.data.status == 'waiting'
         && resource.data.guest == null
+        && (!('worldTargetUid' in resource.data) || resource.data.worldTargetUid == request.auth.uid)
         && request.resource.data.status == 'intro'
         && request.resource.data.host.uid == resource.data.host.uid
         && request.resource.data.guest != null

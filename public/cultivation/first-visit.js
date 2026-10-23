@@ -98,7 +98,7 @@ import './first-answer-guide.js';
     await window.completeFirstVisitSetup?.(selected, name);
     store({ stage: 'done', completed: true, joining: false });
     removeLayer();
-    window.switchToPage?.('page-home');
+    window.switchToPage?.(window.openWorldMap ? 'page-world' : 'page-home');
     $('bottom-nav')?.classList.remove('hidden');
     window.dispatchEvent(new CustomEvent('xiuxian:arrival-completed'));
   }

@@ -1150,7 +1150,7 @@ window.playStartupCloudCurtain = playStartupCloudCurtain;
 async function enterHomeWithStartupCloudCurtain() {
     await playStartupCloudCurtain(() => {
         document.getElementById('bottom-nav')?.classList.remove('hidden');
-        switchToPage('page-home');
+        switchToPage(window.openWorldMap ? 'page-world' : 'page-home');
         hideGameStartupGate();
     });
     window.dispatchEvent(new CustomEvent('xiuxian:startup-cloud-transition-completed'));
@@ -1441,6 +1441,7 @@ onAuthStateChanged(auth, async (user) => {
         window.__xiuxianMigrationApproved = false;
         checkAdminRole(false);
         currentUserData = null;
+        window.dispatchEvent(new CustomEvent('xiuxian:signed-out'));
         window.QAFriendRequests?.reset();
         soloCacheIdentity = '';
         soloCacheRevision += 1;
@@ -2020,7 +2021,8 @@ window.returnToImmortalHome = async () => {
         !hasCompletedPlayerProfile() || brandHomeFlowBlocked()) return false;
 
     const page = document.querySelector('.page-section.active-page');
-    if (!page || page.id === 'page-home') return false;
+    const destination = window.openWorldMap ? 'page-world' : 'page-home';
+    if (!page || page.id === destination) return false;
     const account = auth.currentUser.uid;
     brandHomeNavigationPending = true;
     try {
@@ -2053,7 +2055,7 @@ window.returnToImmortalHome = async () => {
             if (auth.currentUser?.uid !== account || document.querySelector('.page-section.active-page') !== page ||
                 brandHomeFlowBlocked()) return false;
         }
-        window.switchToPage('page-home');
+        window.switchToPage(destination);
         return true;
     } catch (error) {
         console.warn('[Home navigation]', error);
@@ -4332,6 +4334,7 @@ function invitationBlockedByCombat() {
             : window.isXiuxianBattleBusy?.();
         if (battleBlocked) return true;
         if (window.isXiuxianRaidInviteBlocked?.()) return true;
+        if (window.QAWorld?.active?.()) return true;
     } catch (_) {}
     return false;
 }

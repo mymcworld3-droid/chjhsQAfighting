@@ -26,6 +26,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
+  let worldInvitationPending = false;
 
   const state = {
     status: 'hub',
@@ -592,6 +593,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
   }
 
   async function inviteOnlineFriends({ force = false } = {}) {
+    if (worldInvitationPending) return { sent: 0, skipped: true };
     if (!state.roomId || !state.room || !isHost() || state.room.status !== 'waiting') return { sent: 0, skipped: true };
     if (!force && state.invitedRoomId === state.roomId) return { sent: 0, skipped: true };
     if (force && now() < state.inviteCooldownUntil) {
@@ -1823,6 +1825,11 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
     return !!state.roomId;
   };
   window.startShenRaid = function () { return enterRoom('quick'); };
+  window.createWorldRaidRoom = async function () {
+    worldInvitationPending = true;
+    try { await enterRoom('create'); if (state.roomId) state.invitedRoomId = state.roomId; }
+    finally { worldInvitationPending = false; }
+  };
   window.getRaidMvpState = function () {
     return {
       modeVersion: 2,

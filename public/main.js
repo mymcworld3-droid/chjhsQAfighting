@@ -97,7 +97,8 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-item-image-manager.js',
   './cultivation/admin-panel-collapsible.js',
   './cultivation/admin-realm-sorting.js',
-  './cultivation/admin-single-row-layout.js'
+  './cultivation/admin-single-row-layout.js',
+  './world/world-entry.js'
 ];
 
 let xiuxianFeatureLoadStarted = false;
