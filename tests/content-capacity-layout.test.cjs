@@ -105,3 +105,18 @@ test('training height uses the page bottom when navigation is hidden, independen
   context.window.visualViewport.height=100;context.sync();assert.equal(props.get('--training-fill-height'),'612px');
   root.clientHeight=640;context.sync();assert.equal(props.get('--training-fill-height'),'532px');
 });
+
+test('training content height reserves the detail bar between tabs and the node workspace', () => {
+  const props=new Map();
+  const page={classList:{contains:()=>false},getBoundingClientRect:()=>({top:72,height:500}),
+    querySelector:selector=>({getBoundingClientRect:()=>selector==='#training-tab-content'?{top:214}:{bottom:132}}),
+    style:{setProperty:(key,value)=>props.set(key,value)}};
+  const context={PAGE_ID:'page-training',NAV_ID:'bottom-nav',window:{innerHeight:640},
+    document:{documentElement:{clientHeight:640},getElementById:id=>id==='page-training'?page:
+      {classList:{contains:()=>false},getBoundingClientRect:()=>({top:580})}}};
+  const start=layout.indexOf('  function updateTrainingFillHeight()'),end=layout.indexOf('  function scheduleMeasure()',start);
+  vm.runInNewContext(layout.slice(start,end)+'\nthis.sync=updateTrainingFillHeight;',context);
+  context.sync();
+  assert.equal(props.get('--training-content-height'),'358px');
+  assert.equal(props.get('--training-fill-height'),'500px');
+});

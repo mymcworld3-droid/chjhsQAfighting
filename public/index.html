@@ -615,64 +615,6 @@ body.xianxia-theme main:has(#page-training.active-page),
         }
       }
 
-      /* Narrow viewports: two equal-width launchers sit above the navigation.
-         On wide screens they flank the centered 560px navigation instead. */
-      #bottom-nav>.xiuxian-quick-actions{
-        display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;
-        /* Span the entire viewport; each launcher takes one equal half. */
-        width:100vw;max-width:none;box-sizing:border-box;
-        margin:0 0 10px 50%;transform:translateX(-50%);
-        padding-inline:max(8px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-right));
-        pointer-events:auto;
-      }
-      #bottom-nav>.xiuxian-quick-actions>button{
-        box-sizing:border-box;min-width:0;min-height:62px;padding:9px 12px;
-        display:flex;align-items:center;justify-content:center;gap:9px;
-        border:1px solid rgba(174,204,169,.48);border-radius:11px;
-        background:linear-gradient(135deg,rgba(24,58,45,.98),rgba(12,32,28,.98));
-        box-shadow:0 8px 24px rgba(0,0,0,.4),inset 0 1px rgba(244,230,189,.1);
-        color:#f3ead4;backdrop-filter:blur(16px);
-      }
-      #bottom-nav>.xiuxian-quick-actions>#btn-home-pvp{
-        border-color:rgba(218,177,113,.52);
-        background:linear-gradient(135deg,rgba(65,47,35,.98),rgba(29,28,23,.98));
-      }
-      #bottom-nav>.xiuxian-quick-actions>button>div:first-child{
-        flex:0 0 36px;width:36px;height:36px;border-radius:8px;
-        background:rgba(218,186,120,.1);border-color:rgba(218,186,120,.25);
-      }
-      #bottom-nav>.xiuxian-quick-actions>button>div:last-child{min-width:0;align-items:flex-start}
-      #bottom-nav>.xiuxian-quick-actions .font-sci{font-size:13px;line-height:1.4;white-space:nowrap}
-      #bottom-nav>.xiuxian-quick-actions .font-mono{font-size:9px;line-height:1.4;white-space:nowrap}
-      #bottom-nav>.xiuxian-quick-actions>button:hover{border-color:#d4b879;filter:brightness(1.08)}
-      @media(max-width:420px){
-        #bottom-nav>.xiuxian-quick-actions{gap:7px}
-        #bottom-nav>.xiuxian-quick-actions>button{gap:6px;min-height:54px;padding:7px 6px}
-        #bottom-nav>.xiuxian-quick-actions>button>div:first-child{flex-basis:30px;width:30px;height:30px}
-        #bottom-nav>.xiuxian-quick-actions .font-sci{font-size:12px;letter-spacing:.035em}
-        #bottom-nav>.xiuxian-quick-actions .font-mono{font-size:8px;letter-spacing:0}
-      }
-      @media(min-width:1100px){
-        /* A 560px center bar plus 12px clearance on either side. */
-        #bottom-nav>.xiuxian-quick-actions{
-          position:absolute;bottom:0;left:50%;
-          width:100vw;height:72px;margin:0;
-          transform:translateX(-50%);
-          grid-template-columns:repeat(2,minmax(0,1fr));
-          column-gap:calc(560px + 24px);
-          align-items:stretch;
-          pointer-events:none;
-        }
-        #bottom-nav>.xiuxian-quick-actions>button{width:100%;min-height:72px;pointer-events:auto}
-      }
-      /* Only the visible home screen exposes the quiz/duel shortcuts. */
-      body:has(#page-home.active-page) #bottom-nav>.xiuxian-quick-actions{display:grid}
-      body.xianxia-theme #page-home .xianxia-footnote{grid-column:1/-1}
-      body.xianxia-theme main{padding-bottom:116px}
-      body.xianxia-theme:has(#page-home.active-page) main{padding-bottom:208px}
-      @media(min-width:1100px){
-        body.xianxia-theme:has(#page-home.active-page) main{padding-bottom:116px}
-      }
     </style>
 
     <script>
@@ -696,6 +638,8 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/page-layout-unified.css?v=20261013-home-scroll1">
     <link rel="stylesheet" href="styles/content-format.css?v=20261005-xianxia-font1">
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
+    <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261023-review1">
+    <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261023-review1">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
       #btn-show-debug{
@@ -712,7 +656,7 @@ body.xianxia-theme main:has(#page-training.active-page),
       }
     </style>
 </head>
-<body class="xianxia-theme font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white bg-slate-950">
+<body class="xianxia-theme ui-cleanup font-sans h-[100dvh] flex flex-col overflow-hidden text-slate-100 selection:bg-cyan-500 selection:text-white bg-slate-950">
 
     <header class="fixed top-0 left-0 w-full z-40 px-4 py-3 flex justify-between items-center glass-strip border-b border-white/5">
         <h1 class="xianxia-brand">
@@ -749,11 +693,11 @@ body.xianxia-theme main:has(#page-training.active-page),
 
         <div id="page-home" class="page-section hidden px-4 relative">
             <div class="xianxia-page-heading">
-                <div><div class="xianxia-eyebrow">青雲山境 ／ 修行手札</div><h2>宗門</h2><p>山靜日長，今日亦是問道之時。</p></div>
-                <span class="xianxia-chapter" aria-hidden="true">壹 · 仙途</span>
+                <div><div class="xianxia-eyebrow">青雲問道</div><h2>宗門</h2><p>今日修行，由此開始。</p></div>
+
             </div>
     
-            <div class="pb-4"> <div class="glass-panel mt-4 rounded-3xl p-6 relative overflow-hidden group border-t border-cyan-500/30">
+            <div class="home-layout"> <div hidden class="glass-panel mt-4 rounded-3xl p-6 relative overflow-hidden group border-t border-cyan-500/30">
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/20 rounded-full blur-[60px] pointer-events-none"></div>
             
                     <div class="relative z-10 flex flex-col items-center text-center">
@@ -804,6 +748,40 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>
                 </section>
 
+                <section class="home-practice" aria-label="今日修行">
+                    <h3 class="home-section-label">今日修行</h3>
+        <div class="xiuxian-quick-actions" aria-label="修行快捷入口">
+<button id="btn-home-start" type="button" onclick="startQuizFlow()" class="xiuxian-quick-btn group">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/40 transition border border-blue-500/30">
+                        <i class="fa-solid fa-scroll text-blue-400 text-lg group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <div class="flex flex-col items-start">
+                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">問道試煉</span>
+                        <span class="text-[9px] text-blue-300 font-mono">答題悟道 · 積累修為</span>
+                    </div>
+                </button>
+
+                <button id="btn-home-pvp" type="button" onclick="startBattleMatchmaking()" class="xiuxian-quick-btn group">
+                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center group-hover:bg-red-500/40 transition border border-red-500/30">
+                        <i class="fa-solid fa-khanda text-red-400 text-lg group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <div class="flex flex-col items-start">
+                            <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_pvp">鬥法論道</span>
+                            <span class="text-[9px] text-red-300 font-mono">切磋學識 · 道友同修</span>
+                    </div>
+                </button>
+        </div>
+                </section>
+
+                <div id="quest-spotlight-slot" hidden>
+                    <button id="quest-spotlight" class="quest-spotlight" type="button" aria-label="查看當前任務">
+                        <span class="quest-spotlight-heading"><span id="quest-spotlight-kind">當前任務</span><span id="quest-spotlight-progress"></span></span>
+                        <span id="quest-spotlight-title" class="quest-spotlight-title">正在同步任務…</span>
+                        <span class="quest-spotlight-footer"><span id="quest-spotlight-reward"></span><span id="quest-spotlight-action">查看任務 →</span></span>
+                    </button>
+                    <p id="quest-spotlight-status" role="status" aria-live="polite"></p>
+                </div>
+
                 <aside class="sect-actions" aria-label="宗門事務">
                     <button id="quest-open" class="sect-action" type="button" aria-haspopup="dialog" aria-controls="quest-dialog" aria-expanded="false">
                         <span class="sect-action-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h14v22H9a3 3 0 0 1 0-6h17a3 3 0 0 1 0 6h-3M9 5a3 3 0 0 0-3 3v16M23 5h3a3 3 0 0 1 0 6h-3M12 12h7m-7 5h7"/></svg></span>
@@ -831,15 +809,8 @@ body.xianxia-theme main:has(#page-training.active-page),
                     </button>
                 </aside>
 
-                <div id="quest-spotlight-slot" hidden>
-                    <button id="quest-spotlight" class="quest-spotlight" type="button" aria-label="查看當前任務">
-                        <span class="quest-spotlight-heading"><span id="quest-spotlight-kind">當前任務</span><span id="quest-spotlight-progress"></span></span>
-                        <span id="quest-spotlight-title" class="quest-spotlight-title">正在同步任務…</span>
-                        <span class="quest-spotlight-footer"><span id="quest-spotlight-reward"></span><span id="quest-spotlight-action">查看任務 →</span></span>
-                    </button>
-                    <p id="quest-spotlight-status" role="status" aria-live="polite"></p>
-                </div>
-
+                <details class="home-records">
+                    <summary>修行紀錄<span>悟性與連勝</span></summary>
                 <div class="grid grid-cols-2 gap-3 mb-4 home-stats">
                     <div class="stat-card group">
                         <div class="stat-icon text-yellow-500"><i class="fa-solid fa-coins"></i></div>
@@ -864,9 +835,10 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </div>
 
 
+                </details>
             </div>
 
-            <p class="xianxia-footnote">千里仙途，始於一問</p>
+
         </div>
 
         <div id="page-training" class="page-section hidden px-4 training-page training-page-v3" data-static-layout="1">
@@ -1064,12 +1036,12 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
 
             <!-- 交易市集入口直接存在頁面內，不依賴非同步模組掛載才出現。 -->
-            <div id="player-market-switch" class="flex gap-2 my-3">
+            <div id="player-market-switch" class="flex gap-2 my-3" role="group" aria-label="坊市與玩家交易">
                 <button type="button" id="pm-view-shop" class="active flex-1 rounded-lg border border-yellow-900/40 px-3 py-3 text-xs font-bold" style="background:#4c3618;color:#fff0c6">坊市商品</button>
                 <button type="button" id="pm-view-market" onclick="window.openPlayerMarketplace?.('all')" class="flex-1 rounded-lg border border-yellow-900/40 px-3 py-3 text-xs font-bold" style="background:#15120c;color:#ead29b">玩家交易市集</button>
             </div>
 
-            <div class="flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-xl">
+            <div class="ui-store-categories flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-xl" role="group" aria-label="商品類型">
                 <button onclick="filterStore('all', this)" class="store-tab active flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_all">全部</button>
                 <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_frame">相框</button>
                 <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_avatar">頭像</button>
@@ -1115,7 +1087,7 @@ body.xianxia-theme main:has(#page-training.active-page),
             <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-green-400 mt-4">
                 <i class="fa-solid fa-sliders"></i> <span data-i18n="settings_title">設定</span>
             </h2>
-            <button id="btn-game-issue-report" type="button" class="btn-cyber-primary w-full py-3 rounded-xl mb-4"><i class="fa-solid fa-flag"></i> 回報問題</button>
+            <p class="ui-page-caption">個人資料、出題範圍與修行紀錄。</p>
             
             <div class="glass-panel p-6 rounded-2xl mb-6 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -1212,7 +1184,7 @@ body.xianxia-theme main:has(#page-training.active-page),
             <!-- 新版能力分析圖譜區塊 -->
             <div class="glass-panel p-5 rounded-2xl mb-6 relative border border-white/10 shadow-[0_0_20px_rgba(34,211,238,0.1)]">
                  <h3 class="font-bold text-white flex items-center gap-2 mb-2 font-sci">
-                    <i class="fa-solid fa-chart-radar text-cyan-400"></i> <span data-i18n="analysis_title">能力分析圖譜</span>
+                    <i class="fa-solid fa-chart-simple text-cyan-400"></i> <span data-i18n="analysis_title">能力分析圖譜</span>
                 </h3>
                 <p class="text-[10px] text-gray-400 mb-4 font-mono" data-i18n="analysis_desc">依答題紀錄估計各單元能力，並提供 AI 補強建議</p>
 
@@ -1231,10 +1203,14 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </div>
             </div>
 
+            <div class="ui-settings-links">
             <button onclick="switchToPage('page-history')" class="btn-cyber-ghost w-full py-3 rounded-xl border border-cyan-500/30 text-cyan-400 hover:bg-cyan-900/20 transition text-xs font-bold tracking-widest mb-4">
                 <i class="fa-solid fa-clock-rotate-left mr-2"></i> 檢視答題紀錄
             </button>
             
+            <button id="btn-game-issue-report" type="button" class="btn-cyber-ghost w-full py-3 rounded-xl mb-4"><i class="fa-solid fa-flag"></i> 回報問題</button>
+            </div>
+
             <button onclick="logout()" class="w-full py-3 rounded-xl border border-red-800/50 text-red-400 hover:bg-red-900/20 transition text-xs font-bold tracking-widest" data-i18n="btn_logout">登出帳號</button>
         </div>
 
@@ -1250,7 +1226,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </button>
             </div>
             
-            <div class="glass-panel p-4 rounded-2xl mb-24 border border-white/5 relative overflow-hidden">
+            <div class="ui-history-panel glass-panel p-4 rounded-2xl mb-24 border border-white/5 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 <h3 class="text-xs font-bold text-gray-400 mb-4 px-1 uppercase tracking-wider">近期答題紀錄</h3>
                 
@@ -1371,27 +1347,6 @@ body.xianxia-theme main:has(#page-training.active-page),
     </main>
 
     <nav id="bottom-nav" class="fixed bottom-0 z-50 hidden">
-        <div class="xiuxian-quick-actions" aria-label="修行快捷入口">
-<button id="btn-home-start" type="button" onclick="startQuizFlow()" class="xiuxian-quick-btn group">
-                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/40 transition border border-blue-500/30">
-                        <i class="fa-solid fa-scroll text-blue-400 text-lg group-hover:scale-110 transition-transform"></i>
-                    </div>
-                    <div class="flex flex-col items-start">
-                        <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_solo">單人挑戰</span>
-                        <span class="text-[9px] text-blue-300 font-mono">答題悟道 · 積累修為</span>
-                    </div>
-                </button>
-
-                <button id="btn-home-pvp" type="button" onclick="startBattleMatchmaking()" class="xiuxian-quick-btn group">
-                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center group-hover:bg-red-500/40 transition border border-red-500/30">
-                        <i class="fa-solid fa-khanda text-red-400 text-lg group-hover:scale-110 transition-transform"></i>
-                    </div>
-                    <div class="flex flex-col items-start">
-                            <span class="font-sci text-sm font-bold text-white tracking-widest" data-i18n="btn_pvp">雙人對戰</span>
-                            <span class="text-[9px] text-red-300 font-mono">切磋學識 · 道友同修</span>
-                    </div>
-                </button>
-        </div>
         <div class="glass-capsule h-18 px-2 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 backdrop-blur-xl bg-slate-900/90 mx-auto">
             
             <div class="grid w-full h-full items-center" id="nav-grid">

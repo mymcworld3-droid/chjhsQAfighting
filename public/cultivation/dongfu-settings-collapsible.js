@@ -154,7 +154,7 @@
     [...analysisPanel.children].forEach((child) => analysisBody.appendChild(child));
     analysisPanel.appendChild(analysisBody);
     registerCard('analysis', analysisPanel, analysisBody, {
-      icon: 'fa-chart-radar', title: '能力分析圖譜', summary: '近期答題正確率與科目能力', className: 'dongfu-analysis-card'
+      icon: 'fa-chart-simple', title: '能力分析圖譜', summary: '近期答題正確率與科目能力', className: 'dongfu-analysis-card'
     });
 
     resetSections();

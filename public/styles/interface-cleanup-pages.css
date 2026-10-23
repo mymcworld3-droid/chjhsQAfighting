@@ -1,0 +1,333 @@
+/* Secondary screens share the home review's restrained hierarchy. All rules
+   are scoped to ui-cleanup; combat state colors and native layout locks remain. */
+body.ui-cleanup {
+  --review-paper:#eee5d2;--review-muted:#ada591;--review-line:rgba(210,185,137,.18);
+  --review-surface:#201f19;--review-inset:#191a16;--review-gold:#d2b374;
+}
+/* Page titles, tabs and content panels have distinct visual roles. */
+html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) {
+  width:min(100%,1112px);max-width:1112px;padding-inline:24px;border-radius:0;
+}
+html body.ui-cleanup :is(#page-store,#page-history)>.sticky,
+html body.ui-cleanup #page-social>.ui-social-heading {
+  min-height:0;margin:0 0 18px;padding:0 0 16px;border:0;border-bottom:1px solid var(--review-line);
+  background:var(--xq-ink)!important;box-shadow:none!important;backdrop-filter:none;
+}
+html body.ui-cleanup :is(#page-settings,#page-admin)>h2,
+html body.ui-cleanup #page-rank>h2 {min-height:0;margin:0 0 12px;padding:0 0 12px;border:0;text-shadow:none!important}
+html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) h2 {
+  font:500 25px/1.4 var(--ui-serif)!important;color:var(--review-paper)!important;letter-spacing:.06em;
+}
+html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) h2>i {font-size:19px;color:#c3ab78!important}
+.ui-page-caption {margin:0 0 24px;color:var(--review-muted);font-size:12px;line-height:1.7}
+html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) .glass-panel {
+  border-color:var(--review-line)!important;background:var(--review-surface)!important;box-shadow:none!important;
+}
+html body.ui-cleanup :is(.input-cyber,#input-friend-code,#chat-input) {border-color:var(--review-line)!important;background:var(--review-inset)!important;color:var(--review-paper)!important;box-shadow:none;min-width:0}
+html body.ui-cleanup :is(.input-cyber,#input-friend-code,#chat-input):focus {outline:2px solid #c6aa7566;outline-offset:1px;border-color:#c6aa75!important}
+html body.ui-cleanup :is(#page-settings,#page-store,#page-social,#page-history) :is(.btn-cyber-primary,.btn-cyber-ghost) {box-shadow:none!important;border-radius:8px!important}
+html body.ui-cleanup :is(#page-store,#page-social,#page-settings) :is(.store-tab,.dongfu-collapse-head) {font-weight:500!important}
+/* Settings use readable disclosure rows, with support/history as secondary links. */
+html body.ui-cleanup #page-settings {max-width:860px}
+html body.ui-cleanup #page-settings .dongfu-collapse-card {border:0!important;border-bottom:1px solid var(--review-line)!important;border-radius:0!important;margin-bottom:0!important;background:transparent!important}
+html body.ui-cleanup #page-settings .dongfu-collapse-head {min-height:78px;padding:16px 0;grid-template-columns:32px minmax(0,1fr) 24px;gap:16px;background:transparent!important}
+html body.ui-cleanup #page-settings .dongfu-collapse-icon {border:0;background:transparent;border-radius:0;font-size:19px;color:#b8a16e}
+html body.ui-cleanup #page-settings .dongfu-collapse-copy {display:grid;gap:6px}
+html body.ui-cleanup #page-settings .dongfu-collapse-title {font-size:15px;font-weight:500;letter-spacing:.04em}
+html body.ui-cleanup #page-settings .dongfu-collapse-summary {font-size:12px;font-weight:400;color:#9b9585;white-space:normal;line-height:1.6}
+html body.ui-cleanup #page-settings .dongfu-collapse-body {padding:10px 0 22px}
+html body.ui-cleanup #page-settings .dongfu-collapse-body label {font-size:12px!important;font-weight:400!important;margin-bottom:7px}
+html body.ui-cleanup #page-settings .dongfu-profile-card .space-y-4 {display:grid;grid-template-columns:1fr 1fr;gap:18px 24px}
+html body.ui-cleanup #page-settings .dongfu-profile-card .space-y-4>* {margin:0}
+html body.ui-cleanup #page-settings .dongfu-profile-card .space-y-4>:is(p,button,.grid) {grid-column:1/-1}
+.ui-settings-links {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0 16px}
+html body.ui-cleanup #page-settings .ui-settings-links>button {margin:0;min-height:48px;background:transparent!important;border:1px solid var(--review-line)!important;color:#bbb19c!important;font-weight:400!important;letter-spacing:.02em!important}
+html body.ui-cleanup #page-settings>button[data-i18n="btn_logout"] {border:0;border-top:1px solid var(--review-line);border-radius:0;background:transparent;color:#bb9682;font-weight:400;letter-spacing:.04em}
+/* Shop tabs separate browsing from the player market; products keep rarity cues. */
+html body.ui-cleanup #page-store>#player-market-switch {width:min(100%,420px);margin:0 0 18px;gap:0;padding:3px;background:#ffffff04;border:1px solid var(--review-line);border-radius:9px}
+html body.ui-cleanup #page-store #player-market-switch>button {min-height:44px;border:0!important;border-radius:6px;padding:10px 12px;font-size:13px;font-weight:500;box-shadow:none;white-space:normal}
+html body.ui-cleanup #page-store #player-market-switch>button.active {background:#c5a66b22!important;color:#ead3a1!important}
+html body.ui-cleanup #page-store #player-market-switch>button:not(.active) {background:transparent!important;color:#aaa28f!important}
+html body.ui-cleanup #page-store .ui-store-categories {gap:24px;padding:0 0 10px;background:transparent!important;border-radius:0;border-bottom:1px solid var(--review-line)}
+html body.ui-cleanup #page-store .ui-store-categories>.store-tab {flex:0 0 auto;min-height:40px!important;padding:8px 2px;border:0!important;border-radius:0!important;background:transparent!important;font-size:13px!important;color:#969180!important}
+html body.ui-cleanup #page-store .ui-store-categories>.store-tab:is(.active,.active-tab) {color:#e1c58e!important;border-bottom:2px solid #c2a46a!important}
+html body.ui-cleanup #page-store #store-grid>.store-card.hidden {display:none!important}
+html body.ui-cleanup #page-store #store-grid {grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:16px;padding-bottom:12px!important}
+html body.ui-cleanup #page-store #store-grid>.store-card {border:1px solid var(--review-line)!important;border-radius:10px!important;box-shadow:none!important;background:#ffffff03!important;padding:14px!important;min-width:0}
+html body.ui-cleanup #page-store #store-grid>.store-card>button {min-height:40px!important;font-weight:500!important;background:#c9ac6d18;border-color:#c9ac6d44}
+html body.ui-cleanup #page-store #store-user-points {font-size:16px;font-variant-numeric:tabular-nums}
+html body.ui-cleanup #page-store #pm-market-load-state:empty {display:none}
+html body.ui-cleanup #player-market .pm-header {padding:16px 0;border:0;background:transparent;box-shadow:none}
+html body.ui-cleanup #player-market .pm-filters {gap:8px;padding-bottom:16px}
+html body.ui-cleanup #player-market .pm-filters>button {min-height:40px;border-radius:6px;background:transparent;border-color:var(--review-line);font-size:12px!important}
+html body.ui-cleanup #player-market .pm-card {border:1px solid var(--review-line)!important;border-radius:10px!important;background:#ffffff03!important;box-shadow:none!important;padding:16px}
+html body.ui-cleanup #player-market .pm-compose {border-color:var(--review-line)!important;background:#ffffff03!important;box-shadow:none!important}
+/* Friends and chat keep their independent scroll areas and notification rules. */
+html body.ui-cleanup #page-social {height:calc(100dvh - 168px);min-height:0;overflow:hidden;flex-shrink:0}
+html body.ui-cleanup:has(#page-social.active-page)>main {overflow:hidden!important;padding-bottom:0!important}
+html body.ui-cleanup #page-social>.ui-social-heading {flex:0 0 auto;margin-bottom:0;padding-bottom:12px}
+html body.ui-cleanup #page-social .ui-social-heading h2 {padding:0 0 16px}
+html body.ui-cleanup #page-social .ui-social-tabs {gap:24px;margin:0;padding:0}
+html body.ui-cleanup #page-social .ui-social-tabs>button {flex:0 0 auto;min-height:44px;padding:8px 2px;border-radius:0;box-shadow:none!important;background:transparent!important;font-weight:500;color:#9e9786}
+html body.ui-cleanup #page-social:has(#section-friends:not(.hidden)) #tab-btn-friends,
+html body.ui-cleanup #page-social:has(#section-chat:not(.hidden)) #tab-btn-chat {color:#e2c58a!important;border-bottom:2px solid #c2a46a}
+html body.ui-cleanup #page-social #section-friends {padding:22px 0 14px;min-height:0}
+html body.ui-cleanup #page-social .ui-friend-code {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--review-line);border-radius:9px;background:#ffffff03!important;margin:0 0 14px}
+html body.ui-cleanup #page-social .ui-friend-code>div:first-child {font-size:12px;color:#aaa18c;margin:0}
+html body.ui-cleanup #page-social .ui-friend-code>div:last-child {gap:22px}
+html body.ui-cleanup #page-social #my-friend-code {font-size:19px;letter-spacing:.12em;font-weight:500}
+html body.ui-cleanup #page-social .ui-friend-code button {background:transparent;color:#b9b19c;border:1px solid var(--review-line);min-height:40px;border-radius:6px}
+html body.ui-cleanup #page-social .ui-friend-add {gap:10px;margin:0 0 20px}
+html body.ui-cleanup #page-social .ui-friend-add input {min-width:0;min-height:44px;font-size:13px;padding:10px 12px}
+html body.ui-cleanup #page-social .ui-friend-add>button {flex:0 0 44px;min-height:44px;padding:8px;background:#c8ab6e18!important;border:1px solid var(--review-line);color:#d7be86!important;box-shadow:none;border-radius:7px}
+html body.ui-cleanup #page-social #friend-list-container {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+html body.ui-cleanup #page-social #friend-list-container>* {min-width:0;margin:0;padding:16px;border:1px solid var(--review-line);border-radius:9px;background:#ffffff03!important;box-shadow:none!important}
+html body.ui-cleanup #page-social #section-chat {min-height:0;padding-bottom:66px}
+html body.ui-cleanup #page-social #chat-messages {padding:20px 0;min-height:0}
+html body.ui-cleanup #page-social .ui-chat-compose {padding:10px 0;background:var(--xq-ink)!important;border-color:var(--review-line);gap:10px}
+html body.ui-cleanup #page-social #chat-input {min-height:44px;border-radius:7px;font-size:13px}
+html body.ui-cleanup #page-social .ui-chat-compose>button {flex:0 0 44px;width:44px;height:44px;border-radius:7px;background:#c9ad72;color:#28241a;box-shadow:none}
+/* History and ranking are lists, rather than grids of large decorative cards. */
+html body.ui-cleanup #page-history .ui-history-panel {padding:18px 20px;margin:0;border-radius:10px!important}
+html body.ui-cleanup #page-history #history-list {margin-top:18px}
+html body.ui-cleanup #page-history #history-list>li {padding:16px 0;border:0;border-bottom:1px solid var(--review-line);border-radius:0;background:transparent!important;box-shadow:none!important;margin:0}
+html body.ui-cleanup #page-history #history-list>li:last-child {border-bottom:0}
+html body.ui-cleanup #page-rank #leaderboard-back-training {min-height:40px!important;margin:0 0 18px;padding:5px 0;border:0!important;background:transparent!important;font-size:12px!important;font-weight:400!important;color:#a79c85}
+html body.ui-cleanup #page-rank #leaderboard-refresh {min-height:40px!important;padding:8px 12px;border-color:var(--review-line);background:transparent;color:#d1bd93;font-weight:400!important}
+html body.ui-cleanup #page-rank>p {font-size:12px;line-height:1.7;color:#a59a82;margin:0 0 20px}
+html body.ui-cleanup #page-rank table {table-layout:fixed;min-width:0!important}
+html body.ui-cleanup #page-rank :is(th,td) {padding:16px 20px;border-color:var(--review-line);font-size:13px}
+html body.ui-cleanup #page-rank th {font-weight:400;color:#948c78;background:#ffffff03}
+html body.ui-cleanup #page-rank th:first-child {width:60px}
+/* Cultivation detail pages have one toolbar and an uncluttered workspace. */
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-page-heading-v3 {border:0!important;background:transparent!important;box-shadow:none!important;margin-bottom:16px;padding:0}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-page-heading-v3 h2 {font-size:25px;font-weight:500}
+html body.ui-cleanup #page-training .training-scene-detailbar {padding:0 0 14px;border:0;border-bottom:1px solid var(--review-line);background:transparent;box-shadow:none}
+html body.ui-cleanup #page-training .training-scene-detailbar strong {font-size:19px;font-weight:500;letter-spacing:.06em}
+html body.ui-cleanup #page-training .training-scene-detailbar button {min-height:40px;border:0;background:transparent;color:#bfb298;font-size:12px}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtabs-v3 {gap:6px;padding:4px;border:1px solid var(--review-line)!important;border-radius:9px!important;background:#ffffff03!important;box-shadow:none!important;margin-bottom:18px}
+html body.ui-cleanup #page-training .training-subtabs-v3>.training-subtab-v3 {border:0!important;border-radius:6px!important;box-shadow:none!important;min-height:42px!important;font-weight:400!important}
+html body.ui-cleanup #page-training .training-subtab-v3.active {background:#c5a56a1a!important;color:#e5cea0!important}
+html body.ui-cleanup #page-training #training-tab-content {border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+html body.ui-cleanup #page-training #training-tab-content :is(.core-minimal-card,.ns-panel) {border:0!important;background:transparent!important;box-shadow:none!important}
+html body.ui-cleanup #page-training #training-tab-content .core-minimal-center {min-height:0!important;padding:16px 0;gap:0}
+html body.ui-cleanup #page-training #training-tab-content .core-minimal-center>.golden-core-stage-v3 {height:210px!important;min-height:0!important;max-height:210px!important;margin:0 auto 8px}
+html body.ui-cleanup #page-training .core-minimal-name {font-weight:500;font-size:24px;letter-spacing:.06em}
+html body.ui-cleanup #page-training .core-minimal-grade {font-size:12px;color:#b5a380}
+html body.ui-cleanup #page-training :is(.core-wash-btn,.core-equip-btn) {min-height:44px!important;border-radius:8px!important;box-shadow:none!important;font-weight:500!important}
+html body.ui-cleanup #page-training .core-gold-balance {font-size:13px;color:#aaa08a}
+html body.ui-cleanup #page-training .ns-growth-toolbar {padding:10px 0 16px;background:transparent;border:0;border-bottom:1px solid var(--review-line);box-shadow:none}
+html body.ui-cleanup #page-training .ns-growth-resource {font-size:13px;color:#bcb29d}
+html body.ui-cleanup #page-training .ns-growth-resource strong {font-size:20px;font-weight:500;color:#e6cf98}
+html body.ui-cleanup #page-training :is(.ns-get-fragments-btn,.ns-reset-btn) {min-height:40px!important;border:1px solid var(--review-line)!important;border-radius:7px!important;background:transparent!important;box-shadow:none!important;font-size:12px!important}
+html body.ui-cleanup #page-training .ns-orb-detail,
+html body.ui-cleanup .ns-orb-detail[data-ns-portrait-sheet] {display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:start;gap:8px;padding:32px 16px 16px;border-color:var(--review-line)!important;border-radius:12px;background:#222019!important;box-shadow:0 8px 24px #0003!important}
+html body.ui-cleanup .ns-orb-detail :is(.ns-detail-icon,.ia-eyebrow) {display:none}
+html body.ui-cleanup .ns-orb-detail h3 {grid-column:1;grid-row:1}
+html body.ui-cleanup .ns-orb-detail .ns-detail-rank {grid-column:2;grid-row:1;align-self:center}
+html body.ui-cleanup .ns-orb-detail :is(.ns-detail-value,p,.ns-detail-footer) {grid-column:1/-1}
+html body.ui-cleanup .ns-orb-detail :is(h3,strong) {font-weight:500}
+html body.ui-cleanup .ns-orb-detail .ns-detail-footer {gap:8px}
+html body.ui-cleanup #page-training :is(.uib-toolbar,.uib-equipment-panel,.refinery-panel) {border-color:var(--review-line)!important;background:#ffffff03!important;box-shadow:none!important;border-radius:10px!important}
+html body.ui-cleanup #page-training .uib-toolbar {gap:10px;padding:14px;margin-bottom:16px}
+html body.ui-cleanup #page-training .uib-grid {gap:12px}
+html body.ui-cleanup #page-training .uib-item {padding:12px 9px;border:1px solid color-mix(in srgb,var(--uib-quality,#c4aa73) 25%,transparent)!important;box-shadow:none!important;border-radius:9px!important}
+html body.ui-cleanup #page-training .uib-name {font-size:12px!important;font-weight:500!important;line-height:1.5;white-space:normal}
+html body.ui-cleanup #page-training :is(.uib-summary,.uib-toolbar label) {font-size:12px!important;color:#aaa08a}
+html body.ui-cleanup #page-training .uib-item :is(.uib-icon,.uib-quality) {box-shadow:none!important}
+html body.ui-cleanup #page-training .refinery-head {gap:12px;margin-bottom:16px}
+html body.ui-cleanup #page-training .refinery-head h3 {font-size:18px;font-weight:500}
+html body.ui-cleanup #page-training .refinery-head p {font-size:11px;color:#9f9580;line-height:1.7}
+html body.ui-cleanup #page-training .refinery-material {border-radius:8px!important;box-shadow:none!important}
+html body.ui-cleanup #page-training .refinery-mat-copy strong {font-size:12px;line-height:1.5}
+html body.ui-cleanup #page-training .refinery-mat-copy small {font-size:10px}
+html body.ui-cleanup #page-training :is(.refinery-group-title,.refinery-fragment-balance) {background:#ffffff04;border-color:var(--review-line);box-shadow:none}
+html body.ui-cleanup #page-training .refinery-action-banner {border:1px solid var(--review-line);background:#b69b6812;box-shadow:none;border-radius:8px}
+html body.ui-cleanup #page-training .refinery-banner-copy strong {font-size:14px;font-weight:500}
+html body.ui-cleanup #page-training .refinery-banner-copy small {font-size:11px;line-height:1.6}
+html body.ui-cleanup #page-training :is(.refinery-summary,.refinery-match) {padding:12px;font-size:12px;line-height:1.7;border-color:var(--review-line)!important;background:#ffffff03!important;box-shadow:none}
+html body.ui-cleanup #page-training .refinery-recipe-book {border-color:var(--review-line);box-shadow:none}
+/* Contract summary is a ledger above the existing weapon showcase. */
+html body.ui-cleanup #soulbound-page.sb-page {background:transparent!important}
+html body.ui-cleanup #soulbound-page .sb-header {padding:0 0 16px;margin:0 0 14px;border-color:var(--review-line)}
+html body.ui-cleanup #soulbound-page .sb-header h2 {font-size:22px;font-weight:500}
+html body.ui-cleanup #soulbound-page .sb-summary {gap:0;padding:14px 0;border-bottom:1px solid var(--review-line)}
+html body.ui-cleanup #soulbound-page .sb-summary>div {padding:0 18px;border:0;border-right:1px solid var(--review-line);border-radius:0;background:transparent;box-shadow:none}
+html body.ui-cleanup #soulbound-page .sb-summary>div:first-child {padding-left:0}
+html body.ui-cleanup #soulbound-page .sb-summary>div:last-child {border-right:0}
+html body.ui-cleanup #soulbound-page .sb-summary strong {font-size:24px;font-weight:500;color:#dcc18b}
+html body.ui-cleanup #soulbound-page :is(.sb-draw-controls,.sb-showcase,.sb-details) {border-color:var(--review-line);box-shadow:none!important;border-radius:10px;background:#ffffff03!important}
+html body.ui-cleanup #soulbound-page .sb-draw-controls h3 {font-size:22px;font-weight:500}
+html body.ui-cleanup #soulbound-page .sb-draw-controls p {font-size:12px;line-height:1.8;color:#b3a68b}
+html body.ui-cleanup #soulbound-page .sb-actions {gap:10px}
+html body.ui-cleanup #soulbound-page .sb-actions>button {min-height:44px;font-weight:500!important;box-shadow:none!important;border-radius:7px}
+html body.ui-cleanup #soulbound-page .sb-primary {background:#ceb075!important;color:#292419!important;border-color:#ceb075!important}
+html body.ui-cleanup #soulbound-page .sb-pity {margin:12px 0 18px;gap:12px;color:#9d947e}
+/* Raid browsing keeps its native theme and a single scrolling content area. */
+html body.ui-cleanup #page-raid #raid-hub .raid-heading {padding:16px!important;border:0;border-bottom:1px solid var(--review-line);border-radius:0;background:transparent;box-shadow:none}
+html body.ui-cleanup #page-raid #raid-hub .raid-heading h2 {font-size:25px!important;font-weight:500}
+html body.ui-cleanup #page-raid #raid-hub .raid-global-ticket {padding:6px 16px 6px 9px;margin-top:8px;background:#ffffff03;border:1px solid var(--review-line);border-radius:7px}
+html body.ui-cleanup #page-raid #raid-hub .raid-global-ticket b {font-size:12px;font-weight:500}
+html body.ui-cleanup #page-raid #raid-hub .raid-global-ticket small {font-size:10px}
+html body.ui-cleanup #page-raid #raid-hub .raid-trial-list {gap:10px}
+html body.ui-cleanup #page-raid #raid-hub .raid-trial-card {min-height:68px;border-radius:8px;box-shadow:none!important;background:#ffffff03}
+html body.ui-cleanup #page-raid #raid-hub .raid-trial-copy strong {font-size:14px;font-weight:500}
+html body.ui-cleanup #page-raid #raid-hub .raid-trial-copy :is(small,em) {font-size:11px}
+html body.ui-cleanup #page-raid #raid-hub .raid-boss-card {border-radius:12px;box-shadow:none!important}
+html body.ui-cleanup #page-raid #raid-hub .raid-boss-info {padding:22px}
+html body.ui-cleanup #page-raid #raid-hub .raid-badges span {font-size:11px;padding:4px 7px}
+html body.ui-cleanup #page-raid #raid-hub .raid-boss-info h3 {font-size:25px;font-weight:500}
+html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview {border:0;border-left:2px solid var(--trial-accent,#bda576);border-radius:0;background:#0002;padding:12px 14px}
+html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview b {font-size:14px;font-weight:500}
+html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview span {font-size:12px}
+html body.ui-cleanup #page-raid #raid-hub .raid-entry-actions {padding:18px 22px;border-color:#ffffff12}
+html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker {border-radius:9px;padding:3px;margin-bottom:16px;box-shadow:none}
+html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-selection {top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/3);border-radius:6px;box-shadow:none}
+html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker button {min-height:58px;font-size:13px;border-radius:6px}
+html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker strong {font-size:14px;font-weight:500}
+html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker small {font-size:11px}
+html body.ui-cleanup #page-raid :is(.raid-lobby-panel,.raid-member-card,.raid-result-card) {box-shadow:none;border-color:var(--review-line);border-radius:10px}
+/* Questions share spacing and readable hit areas; answer state colors are owned
+   by each game's existing correct/wrong/disabled rules. */
+html body.ui-cleanup #page-quiz {max-width:900px;padding-inline:24px}
+html body.ui-cleanup #page-quiz #quiz-container {margin-top:0}
+html body.ui-cleanup #page-quiz .quiz-main-column>.glass-panel:first-child {border:1px solid var(--review-line)!important;border-left:2px solid #c0a16a!important;border-radius:10px!important;background:#24231d!important;box-shadow:none!important;padding:58px 24px 24px}
+html body.ui-cleanup #page-quiz #question-text {font-size:20px;line-height:1.9;font-weight:500!important;letter-spacing:.02em;color:var(--review-paper)!important}
+html body.ui-cleanup #page-quiz .quiz-main-column>.glass-panel:first-child>.text-6xl {display:none}
+html body.ui-cleanup #page-quiz #options-container {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+html body.ui-cleanup #page-quiz #options-container>button {min-height:64px;padding:16px;border-radius:9px!important;box-shadow:none!important;margin:0;font-size:16px;line-height:1.65}
+html body.ui-cleanup #page-quiz #options-container>button:not(.bg-green-600):not(.bg-red-600) {border-color:var(--review-line)!important;background:#ffffff04!important}
+html body.ui-cleanup #page-quiz #options-container>button>span:first-child {width:30px;height:30px;background:#c2a16d10;border:1px solid #c2a16d40;border-radius:6px;font-size:13px}
+html body.ui-cleanup #page-quiz .quiz-footer-actions {margin-top:18px;gap:8px}
+html body.ui-cleanup #page-quiz .quiz-footer-actions>button {min-height:44px;font-size:12px;color:#b0a28a}
+html body.ui-cleanup #page-quiz .quiz-card-tools {top:14px;right:18px;gap:8px}
+html body.ui-cleanup #page-quiz #btn-extended-practice-stop.hidden {display:none!important}
+html body.ui-cleanup #page-quiz .quiz-helper-launcher {box-shadow:none;border:1px solid var(--review-line);border-radius:9px}
+html body.ui-cleanup #page-quiz .quiz-helper-panel {border-color:var(--review-line);border-radius:10px;box-shadow:0 8px 24px #0003}
+html body.ui-cleanup :is(.bv2-head,.raid-battle-head) {box-shadow:none}
+html body.ui-cleanup :is(.bv2-question-shell,.raid-study-panel) {border-color:var(--review-line);box-shadow:none}
+html body.ui-cleanup :is(.bv2-option,.raid-option) {border-radius:9px;box-shadow:none;font-weight:400}
+/* Admin and reusable modal contents follow the same card hierarchy. */
+html body.ui-cleanup #page-admin :is(.admin-collapse-card,.admin-stat-card) {border-color:var(--review-line)!important;box-shadow:none!important}
+html body.ui-cleanup :is(.quest-dialog,.xpp-dialog,.dm-card,.uib-modal) {border-color:var(--review-line)!important;box-shadow:0 12px 36px #0005!important}
+@media(max-width:700px) {
+  html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) {padding-inline:16px}
+  html body.ui-cleanup :is(#page-store,#page-rank,#page-social,#page-settings,#page-history,#page-admin) h2 {font-size:21px!important}
+  html body.ui-cleanup :is(#page-store,#page-history)>.sticky {gap:12px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px}
+  html body.ui-cleanup #page-settings .dongfu-collapse-head {min-height:78px;gap:10px}
+  html body.ui-cleanup #page-settings .dongfu-collapse-title {font-size:14px}
+  html body.ui-cleanup #page-settings .dongfu-collapse-summary {font-size:11px}
+  html body.ui-cleanup #page-settings .dongfu-profile-card .space-y-4 {grid-template-columns:minmax(0,1fr);gap:16px}
+  html body.ui-cleanup #page-settings .ui-settings-links {gap:8px;margin-top:22px}
+  html body.ui-cleanup #page-settings .ui-settings-links>button {font-size:12px!important}
+  html body.ui-cleanup #page-store #store-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
+  html body.ui-cleanup #page-store #store-grid>.store-card {padding:12px!important}
+  html body.ui-cleanup #page-store .ui-store-categories {gap:22px}
+  html body.ui-cleanup #page-store>#player-market-switch {width:100%;margin-bottom:14px}
+  html body.ui-cleanup #page-social {height:calc(100dvh - 84px)}
+  html body.ui-cleanup #page-social .ui-social-heading h2 {padding-bottom:10px}
+  html body.ui-cleanup #page-social #section-friends {padding-top:16px}
+  html body.ui-cleanup #page-social .ui-friend-code {padding:12px;gap:10px}
+  html body.ui-cleanup #page-social .ui-friend-code>div:last-child {gap:12px}
+  html body.ui-cleanup #page-social #my-friend-code {font-size:17px;letter-spacing:.06em}
+  html body.ui-cleanup #page-social #friend-list-container {grid-template-columns:minmax(0,1fr)}
+  html body.ui-cleanup #page-social #friend-list-container>* {padding:13px}
+  html body.ui-cleanup #page-rank :is(th,td) {padding:14px 10px;font-size:12px}
+  html body.ui-cleanup #page-rank th:first-child {width:36px}
+  html body.ui-cleanup #page-rank h2 {gap:8px;flex-wrap:wrap}
+  html body.ui-cleanup #page-rank #leaderboard-refresh {font-size:11px!important;padding-inline:10px}
+  html body.ui-cleanup #page-history .ui-history-panel {padding:14px}
+  html body.ui-cleanup #page-history #history-list>li {padding-block:14px}
+  html body.ui-cleanup #page-training .training-subtabs-v3 {gap:2px!important;padding:3px!important;margin-bottom:14px!important}
+  html body.ui-cleanup #page-training .training-subtabs-v3>.training-subtab-v3 {min-height:42px!important}
+  html body.ui-cleanup #page-training .training-subtab-v3 span {font-size:12px!important}
+  html body.ui-cleanup #page-training .training-scene-detailbar strong {font-size:17px}
+  html body.ui-cleanup #page-training .training-scene-detailbar button {font-size:11px}
+  html body.ui-cleanup #page-training #training-tab-content .core-minimal-center {padding-block:8px}
+  html body.ui-cleanup #page-training #training-tab-content .core-minimal-center>.golden-core-stage-v3 {height:156px!important;max-height:156px!important;margin-bottom:4px}
+  html body.ui-cleanup #page-training .uib-grid {grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px}
+  html body.ui-cleanup #page-training .uib-item {padding:9px 6px}
+  html body.ui-cleanup #page-training .uib-name {font-size:11px!important}
+  html body.ui-cleanup #page-training .refinery-head {gap:8px;flex-wrap:wrap}
+  html body.ui-cleanup #page-training .refinery-head h3 {font-size:17px}
+  html body.ui-cleanup #page-training .refinery-head-actions {gap:6px;flex-wrap:wrap}
+  html body.ui-cleanup #page-training #training-tab-content .cultivation-refinery {min-width:0;grid-template-columns:minmax(0,1fr)!important}
+  html body.ui-cleanup #page-training #training-tab-content .refinery-material-panel {height:250px!important;min-height:0!important;max-height:250px!important}
+  html body.ui-cleanup #page-training #training-tab-content .refinery-material-list {min-height:0!important;height:100%!important}
+  html body.ui-cleanup #page-training #training-tab-content .refinery-panel {min-width:0;max-width:100%}
+  html body.ui-cleanup #page-training #training-tab-content .refinery-forge-panel {overflow-x:clip!important}
+  html body.ui-cleanup #page-training #training-tab-content .refinery-slots {--array-size:min(76vw,320px);--slot-size:58px}
+  html body.ui-cleanup #soulbound-page .sb-summary {gap:14px 0}
+  html body.ui-cleanup #soulbound-page .sb-summary>div {padding-inline:12px}
+  html body.ui-cleanup #soulbound-page .sb-summary strong {font-size:21px}
+  html body.ui-cleanup #soulbound-page .sb-summary small {font-size:11px}
+  html body.ui-cleanup #soulbound-page .sb-summary span {font-size:10px}
+  html body.ui-cleanup #soulbound-page .sb-pity {gap:8px}
+  html body.ui-cleanup #soulbound-page .sb-pity span {font-size:11px;line-height:1.6}
+  html body.ui-cleanup #soulbound-page .sb-draw-controls {padding:16px}
+  html body.ui-cleanup #soulbound-page .sb-draw-controls h3 {font-size:20px}
+  html body.ui-cleanup #page-raid #raid-hub .raid-heading {padding:12px 4px!important}
+  html body.ui-cleanup #page-raid #raid-hub .raid-heading h2 {font-size:22px!important}
+  html body.ui-cleanup #page-raid #raid-hub .raid-boss-card {grid-template-columns:minmax(90px,.65fr) minmax(0,1.35fr)}
+  html body.ui-cleanup #page-raid #raid-hub .raid-boss-info {padding:16px 12px}
+  html body.ui-cleanup #page-raid #raid-hub .raid-boss-info h3 {font-size:20px}
+  html body.ui-cleanup #page-raid #raid-hub .raid-badges {gap:5px}
+  html body.ui-cleanup #page-raid #raid-hub .raid-badges span {font-size:10px;padding:3px 5px}
+  html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview {padding:10px}
+  html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview span {font-size:11px}
+  html body.ui-cleanup #page-raid #raid-hub .raid-entry-actions {padding:14px 12px}
+  html body.ui-cleanup #page-quiz {padding-inline:16px}
+  html body.ui-cleanup #page-quiz .quiz-main-column>.glass-panel:first-child {padding:58px 18px 20px}
+  html body.ui-cleanup #page-quiz #question-text {font-size:17px;line-height:1.8}
+  html body.ui-cleanup #page-quiz #options-container {grid-template-columns:minmax(0,1fr);gap:10px}
+  html body.ui-cleanup #page-quiz #options-container>button {min-height:56px;padding:12px 14px;font-size:15px}
+  html body.ui-cleanup #page-quiz .quiz-helper-shell.collapsed {inset:auto 16px 72px auto}
+  html body.ui-cleanup #page-quiz .quiz-helper-shell.collapsed .quiz-helper-launcher {min-width:44px;height:44px}
+}
+@media(orientation:portrait) {
+ html body.ui-cleanup>.ns-orb-detail[data-ns-portrait-sheet] {border-radius:16px 16px 0 0;padding-bottom:max(16px,env(safe-area-inset-bottom,0px))}
+ html body.ui-cleanup>.ns-orb-detail[data-ns-portrait-sheet] p {font-size:13px;line-height:1.6}
+}
+/* The commission form is secondary to the market listings. Keep it reachable
+   with a native disclosure; the renderer preserves the player's open state. */
+html body.ui-cleanup #player-market .pm-compose {padding:0 16px;margin:0 0 18px;border-radius:8px}
+html body.ui-cleanup #player-market .pm-compose>summary {display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;padding:14px 0;cursor:pointer;font-size:14px;color:#d8c39a;list-style:none}
+html body.ui-cleanup #player-market .pm-compose>summary::-webkit-details-marker {display:none}
+html body.ui-cleanup #player-market .pm-compose>summary:after {content:'＋';font-size:18px;color:#b4a17c}
+html body.ui-cleanup #player-market .pm-compose[open]>summary:after {content:'−'}
+html body.ui-cleanup #player-market .pm-compose>summary>span {font-size:11px;color:#948a75;margin-left:auto}
+html body.ui-cleanup #player-market .pm-compose[open] {padding-bottom:16px}
+html body.ui-cleanup #player-market .pm-header small {font-size:10px;font-weight:400}
+html body.ui-cleanup #player-market .pm-header h3 {font-size:22px;font-weight:500}
+html body.ui-cleanup #player-market .pm-header p {max-width:650px;font-size:12px;color:#a99e86}
+html body.ui-cleanup #player-market .pm-grid {gap:14px}
+html body.ui-cleanup #page-battle .bv2-shell>.bv2-head {border:0;border-bottom:1px solid var(--review-line);border-radius:0;background:transparent;box-shadow:none}
+html body.ui-cleanup #page-battle .bv2-head h2 {font-size:23px;font-weight:500}
+html body.ui-cleanup #page-battle .bv2-room-badge {background:#c3a36812;box-shadow:none;border-color:var(--review-line)}
+html body.ui-cleanup #page-battle button[hidden] {display:none!important}
+html body.ui-cleanup #page-battle .bv2-question-card {border:0;border-radius:0;box-shadow:none}
+html body.ui-cleanup #page-battle .bv2-question {font-weight:500;line-height:1.9}
+html body.ui-cleanup #page-battle .bv2-option {min-height:58px;border-radius:9px;padding:14px 18px;box-shadow:none}
+html body.ui-cleanup #page-battle .bv2-option b {font-size:16px;font-weight:400}
+html body.ui-cleanup #page-training .status-section {border:1px solid var(--review-line);border-radius:10px;background:#ffffff03;box-shadow:none}
+html body.ui-cleanup #page-training .status-section-title {font-size:13px;font-weight:500}
+html body.ui-cleanup #page-training .status-power-main strong {font-size:34px;font-weight:500}
+html body.ui-cleanup #page-training .status-stat {box-shadow:none;border-color:var(--review-line);background:#ffffff03}
+html body.ui-cleanup #scope-studio :is(.ss-panel,.cs-panel) {border-color:var(--review-line);box-shadow:none;border-radius:9px}
+html body.ui-cleanup #scope-studio :is(.ss-tabs,.cs-page-actions) {box-shadow:none;background:transparent}
+@media(max-width:700px) {
+ html body.ui-cleanup #player-market .pm-header {align-items:flex-start;gap:10px}
+ html body.ui-cleanup #player-market .pm-header h3 {font-size:20px}
+ html body.ui-cleanup #player-market .pm-compose>summary>span {display:none}
+ html body.ui-cleanup #player-market .pm-header>b {font-size:12px}
+ html body.ui-cleanup #page-battle .bv2-option {min-height:54px;padding:12px 14px}
+}
+/* The radial node view fills the measured space below its toolbar, keeping all
+   nodes in reach while preserving the existing 30% / half-height detail panels. */
+html body.ui-cleanup #page-training #training-tab-content .ns-growth-panel:not(.is-choosing) {display:grid!important;grid-template-rows:auto minmax(0,1fr);height:var(--training-content-height,calc(100dvh - 244px))!important;min-height:0!important;max-height:var(--training-content-height,calc(100dvh - 244px))!important;padding:0!important}
+html body.ui-cleanup #page-training #training-tab-content .ns-growth-workspace {min-height:0!important;height:100%!important}
+html body.ui-cleanup #page-training #training-tab-content .ns-growth-map {min-height:0;height:100%}
+html body.ui-cleanup #page-training #training-tab-content .core-equip-btn.equipped {min-height:24px!important;padding:2px 8px;margin-top:8px;border:0;background:transparent;font-size:12px!important}
+html body.ui-cleanup #soulbound-page .sb-header>div {display:none}
+html body.ui-cleanup #soulbound-page .sb-header {justify-content:flex-end;padding:0;margin:0;border:0;min-height:40px}
+html body.ui-cleanup #soulbound-page #soulbound-refresh {min-height:36px;padding:5px 12px;font-size:11px;background:transparent;border-color:var(--review-line)}
