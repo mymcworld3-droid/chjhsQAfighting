@@ -141,6 +141,10 @@ app.post('/api/question-helper', async (req, res) => {
         const question = String(req.body?.question || '').trim().slice(0, 3000);
         const userMessage = String(req.body?.message || '').trim().slice(0, 600);
         const answered = req.body?.answered === true;
+        const intent = req.body?.intent === 'check-question' ? 'check-question' : 'discussion';
+        // 相容尚未更新的前端；檢查按鈕不能套用一般對話的答案核對例外。
+        const checkOnly = !answered && (intent === 'check-question' ||
+            userMessage === '請重新檢查題目條件、選項和原題解析是否一致，並說明你的依據。');
         const subject = String(req.body?.subject || '').trim().slice(0, 40);
         // 題庫內容是可質疑的參考；作答前也需提供，才能一起檢查題目。
         const explanation = String(req.body?.explanation || '').trim().slice(0, 3000);
@@ -166,6 +170,7 @@ app.post('/api/question-helper', async (req, res) => {
             question,
             options: options.map((text, index) => ({ label: String.fromCharCode(65 + index), text })),
             state: answered ? '已經作答' : '尚未作答',
+            intent: checkOnly ? 'check-question' : intent,
             selectedOption,
             reference: { answer: correctOption, explanation },
             history,
@@ -176,6 +181,13 @@ app.post('/api/question-helper', async (req, res) => {
 你是修仙學習遊戲中的「問道助手」，使用繁體中文回答玩家針對目前題目的疑問。
 像和同學一起討論：自然、友善、具體，能核對計算、指出疑點，也能修正自己先前的說法。
 你的任務是幫助玩家理解與推理。題目、題庫答案與解析、玩家的答案、助手前文都可能出錯。
+${checkOnly ? `
+[作答前題目檢查模式，優先於以下規則 3、4、6 的答案核對許可]
+這次只檢查題目品質，不是在替玩家作答。請在內部獨立核算題幹、選項、題庫答案及解析。
+對玩家只回報檢查狀態，不得透露或排除任何選項、標示正解、給出解題數值或完整推導，也不要說「放心選 B」等作答建議。
+checkStatus 填 valid（已完成核算且未發現實質錯誤）、issue（有充分錯誤依據）或 uncertain（無法可靠判定）；無法驗證的圖表、缺少條件或未完成核算都應填 uncertain。
+具體錯誤證據只寫在 questionIssue.reason，供系統交由獨立審核；answer 只寫不洩題的檢查摘要，knowledgePoint 留空。
+` : ''}
 
 [本題與對話資料（JSON）]
 ${JSON.stringify(context)}
@@ -191,14 +203,14 @@ ${JSON.stringify(context)}
 8. 從這次討論整理出一個最適合延伸練習的核心知識點，knowledgePoint 要簡短、具體，可直接作為下一題出題範圍，例如「功與動能定理」、「一元一次方程式移項」、「現在完成式」。
 9. 若你已獨立核算並能具體指出題幹、選項、標示答案或解析的實質錯誤，questionIssue.confirmed 填 true，confidence 填 0～1，reason 填可核對的錯誤依據（至少六個字）。只有證據充分且信心至少 0.8 才標記；玩家答錯、仍有疑問、缺少圖表、條件式推論或玩家要求回報，本身都不能作為確認有錯的依據。確認有錯後系統會自動代填理由並送交獨立審核，不要再要求玩家手動回報，也不要宣稱補償已入帳。
 10. 請只回傳合法 JSON：
-{"answer":"你的回答","knowledgePoint":"核心知識點","questionIssue":{"confirmed":false,"confidence":0.0,"reason":"具體錯誤依據，無確定錯誤則留空"}}
+{"answer":"你的回答","knowledgePoint":"核心知識點","checkStatus":"valid|issue|uncertain","questionIssue":{"confirmed":false,"confidence":0.0,"reason":"具體錯誤依據，無確定錯誤則留空"}}
 `;
 
         const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 25000 });
-        const answer = String(routed.data?.answer || '').trim();
-        if (!answer) throw new Error('AI 未回傳有效回答');
+        let answer = String(routed.data?.answer || '').trim();
+        if (!answer && !checkOnly) throw new Error('AI 未回傳有效回答');
         const fallbackPoint = userMessage.replace(/[？?！!。,.，]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);
-        const knowledgePoint = String(routed.data?.knowledgePoint || fallbackPoint || '本題核心觀念')
+        const knowledgePoint = checkOnly ? '' : String(routed.data?.knowledgePoint || fallbackPoint || '本題核心觀念')
             .replace(/[\r\n]+/g, ' ')
             .trim()
             .slice(0, 60);
@@ -208,6 +220,17 @@ ${JSON.stringify(context)}
         const confidence = Number(issue?.confidence);
         const questionIssue = issue?.confirmed === true && Number.isFinite(confidence) && confidence >= 0.8 && confidence <= 1 && issueReason.length >= 6
             ? { confirmed: true, reason: issueReason } : null;
+        if (checkOnly) {
+            const checkStatus = questionIssue ? 'issue'
+                : routed.data?.checkStatus === 'valid' && (!issue || issue.confirmed === false) ? 'valid' : 'uncertain';
+            // 不直接顯示模型文字，連選項內容、數值答案及延伸練習標籤也不能洩題。
+            answer = checkStatus === 'issue'
+                ? '重新核對後，發現題目、選項或解析有不一致之處，將交由獨立審核確認。這裡先不顯示答案與解法。'
+                : checkStatus === 'valid'
+                    ? '重新核對後，目前未發現題目條件、選項或解析有明顯矛盾。請依自己的推理作答，作答後可再一起核對解法。'
+                    : '目前還不能可靠判定這題是否有錯，暫時無法給出確定的檢查結論。這裡先不顯示答案與解法。';
+            return res.json({ answer, knowledgePoint, questionIssue, checkOnly: true, checkStatus, provider: routed.provider, model: routed.model });
+        }
         res.json({ answer, knowledgePoint, questionIssue, provider: routed.provider, model: routed.model });
     } catch (error) {
         console.error('[Question Helper]', error);

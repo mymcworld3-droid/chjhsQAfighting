@@ -110,6 +110,78 @@ test('answer, correction and uncertain review responses keep their evidence and 
     }
 });
 
+test('pre-answer check blocks option advice, numeric solutions and answer-bearing practice labels', async () => {
+    for (const answer of ['你可以放心選B', '答案是 B：60 J。', '先排除 A、C，剩下的就是正解。', '總功 = 29 × 2 = 58 J。']) {
+        const route = createRoute(async () => ({data:{answer, knowledgePoint:'選 B，答案是 60 J', checkStatus:'valid'}}));
+        const result = await route.request({...problem, intent:'check-question', message:'檢查題目'});
+        assert.equal(result.body.checkOnly,true);
+        assert.equal(result.body.checkStatus,'valid');
+        assert.match(result.body.answer,/未發現.*明顯矛盾/);
+        assert.doesNotMatch(result.body.answer,/放心|[ABC]|58|60|29|排除|×/);
+        assert.equal(result.body.knowledgePoint,'');
+        assert.equal(result.body.questionIssue,null);
+        assert.equal(contextFrom(route.calls[0].prompt).intent,'check-question');
+        assert.match(route.calls[0].prompt,/作答前題目檢查模式/);
+    }
+});
+
+test('uncertain or contradictory checks cannot falsely reassure the player', async () => {
+    for (const data of [{}, {checkStatus:'uncertain'}, {checkStatus:'issue'},
+        {checkStatus:'valid',questionIssue:{confirmed:true,confidence:.4,reason:'答案應為 58 J，選 A 才對'}}]) {
+        const route = createRoute(async () => ({data:{answer:'你可以放心選B',...data}}));
+        const result = await route.request({...problem,intent:'check-question'});
+        assert.equal(result.status,200);
+        assert.equal(result.body.checkStatus,'uncertain');
+        assert.match(result.body.answer,/還不能可靠判定/);
+        assert.doesNotMatch(result.body.answer,/放心|[AB]|58|未發現/);
+        assert.equal(result.body.questionIssue,null);
+    }
+});
+
+test('a confirmed check keeps automatic report evidence outside the displayed summary', async () => {
+    const reason='合力乘位移為 58 J，所以選 A，題庫 B 的 60 J 有誤。';
+    const route=createRoute(async()=>({data:{answer:'你可以放心選 A',knowledgePoint:'58 J',checkStatus:'issue',
+        questionIssue:{confirmed:true,confidence:.95,reason}}}));
+    const result=await route.request({...problem,intent:'check-question'});
+    assert.equal(result.body.checkStatus,'issue');
+    assert.deepEqual(result.body.questionIssue,{confirmed:true,reason});
+    assert.match(result.body.answer,/交由獨立審核/);
+    assert.doesNotMatch(result.body.answer,/放心|[AB]|58|60/);
+    assert.equal(result.body.knowledgePoint,'');
+    const client=createClient(async()=>({ok:true,json:async()=>result.body}));
+    await client.send('檢查題目',{intent:'check-question'});
+    assert.equal(client.requests[0].intent,'check-question');
+    assert.equal(client.automaticReports[0].hideAnswer,true);
+    assert.equal(client.automaticReports[0].reason,reason);
+    assert.doesNotMatch(client.state.messages.at(-1).text,/放心|[AB]|58|60/);
+    assert.equal(client.state.answered,false);
+});
+
+test('the old check preset is protected while post-answer checking can explain the solution', async () => {
+    const message='請重新檢查題目條件、選項和原題解析是否一致，並說明你的依據。';
+    const route=createRoute(async()=>({data:{answer:'答案為 A：58 J。',checkStatus:'valid'}}));
+    assert.equal((await route.request({...problem,message})).body.checkOnly,true);
+    const answered=await route.request({...problem,message,intent:'check-question',answered:true});
+    assert.equal(answered.body.checkOnly,undefined);
+    assert.equal(answered.body.answer,'答案為 A：58 J。');
+});
+
+test('the actual check button forwards the dedicated intent through its preset handler', () => {
+    const html=readFileSync(join(root,'public/index.html'),'utf8');
+    const onclick=html.match(/onclick="([^"]+)"[^>]*>檢查題目<\/button>/)?.[1];
+    assert.ok(onclick);
+    const sent=[],opened=[];
+    const ctx={window:{},setQuizHelperOpen:value=>opened.push(value),sendQuizHelperMessage:(message,options)=>sent.push({message,options})};
+    vm.createContext(ctx);
+    const start=legacy.indexOf('window.askQuizHelperPreset =');
+    vm.runInContext(legacy.slice(start,legacy.indexOf('async function fetchExtendedPracticeQuestion',start)),ctx);
+    ctx.askQuizHelperPreset=ctx.window.askQuizHelperPreset;
+    vm.runInContext(onclick,ctx);
+    assert.deepEqual(opened,[true]);
+    assert.equal(sent[0].options.intent,'check-question');
+    assert.match(sent[0].message,/不要透露答案/);
+});
+
 test('only an explicit high-confidence finding with concrete evidence requests automatic reporting', async () => {
     const reason = '合力乘位移應為 58 J，標示答案 60 J 與題幹及解析矛盾。';
     for (const issue of [null, {confirmed:false,confidence:1,reason}, {confirmed:'true',confidence:1,reason},
@@ -135,16 +207,45 @@ test('a confirmed helper finding immediately reports the original quiz without g
 });
 
 function createAutoReporter(result = {status:'confirmed'}) {
-    const calls = [], quiz = {data:{q:problem.question}}, reason = {value:''};
+    const calls = [], submissions = [], quiz = {data:{q:problem.question}}, reason = {value:''};
     const context = {reportSubmitting:false,reportQuizSnapshot:null,auth:{currentUser:{uid:'u'}},
         document:{getElementById:()=>reason},console:{warn(){}},window:{currentActiveQuiz:quiz}};
     context.window.openReportModal = () => {calls.push('open');context.reportQuizSnapshot=context.window.currentActiveQuiz;};
-    context.window.submitReport = async () => {calls.push(reason.value);return typeof result === 'function' ? result() : result;};
+    context.window.submitReport = async options => {calls.push(reason.value);submissions.push(options);return typeof result === 'function' ? result() : result;};
     vm.createContext(context);
     vm.runInContext(legacy.slice(legacy.indexOf('window.reportQuizHelperIssue ='),legacy.indexOf('window.submitReport = async')) ,context);
     const input = {quiz,uid:'u',reason:'已核算出題目選項與解析矛盾。'};
-    return {context,input,calls,send:context.window.reportQuizHelperIssue};
+    return {context,input,calls,submissions,send:context.window.reportQuizHelperIssue};
 }
+
+test('automatic checking hides answer-bearing evidence in the report form but still submits it for review', async () => {
+    const h=createAutoReporter();
+    const reason='應選 B，因為正確的計算結果為 58 J。';
+    await h.send({...h.input,reason,hideAnswer:true});
+    assert.equal(h.input.quiz.helperReviewRedacted,true);
+    assert.doesNotMatch(h.calls[1],/B|58|應選/);
+    assert.equal(h.submissions[0].helperReason,reason);
+});
+
+test('pre-answer automatic review results cannot reveal the solution, including rejected reviews', async () => {
+    const source=legacy.slice(legacy.indexOf('window.submitReport = async'),legacy.indexOf('//  🚀 隨機邀請系統'));
+    for(const status of ['rejected','unavailable','confirmed']) {
+        const quiz={data:{q:problem.question},helperReviewRedacted:true},outcomes=[],requests=[];
+        const ctx={window:{currentActiveQuiz:quiz,closeReportModal(){}},reportSubmitting:false,reportQuizSnapshot:quiz,
+            document:{getElementById:()=>({value:'可能存在答案或解析不一致'})},auth:{currentUser:{uid:'u',getIdToken:async()=> 'test'}},
+            currentUserData:{uid:'u'},reportStatus(){},reportView(){},reportLoadingStatus(){},
+            renderReportOutcome:value=>outcomes.push(value),console:{warn(){}},
+            fetch:async(_,init)=>{requests.push(JSON.parse(init.body));return {ok:status!=='unavailable',status:503,
+                json:async()=>({status,reason:'你可以放心選 B，答案是 58 J。',
+                    ...(status==='confirmed'?{compensated:true,goldAdded:100,newGold:250,newTotalScore:70,cultivationBonus:1}:{})})};}};
+        vm.createContext(ctx);vm.runInContext(source,ctx);
+        await ctx.window.submitReport({helperReason:'實際核算為 58 J，正解為 A。'});
+        assert.equal(requests[0].userReason,'實際核算為 58 J，正解為 A。');
+        assert.equal(outcomes.length,1);
+        assert.doesNotMatch(outcomes[0].message,/放心|[AB]|58/);
+        assert.equal(ctx.reportSubmitting,false);
+    }
+});
 
 test('automatic report fills and submits once and rejects stale question/account snapshots', async () => {
     const h=createAutoReporter();
