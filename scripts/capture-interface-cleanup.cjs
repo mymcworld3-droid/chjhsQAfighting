@@ -61,5 +61,6 @@ if(!baseline){await frame.locator('#btn-home-start').click();assert.equal(await 
 await frame.locator('.home-records summary').click();await page.locator('#game-stage').screenshot({path:path.join(output,'home-portrait-records.jpg'),animations:'disabled',type:'jpeg',quality:90});
 }
 if(!baseline){await frame.locator('#xiuxian-path').click();assert.equal(await frame.locator('#xiuxian-realm-atlas').count(),1);await frame.locator('[data-realm-atlas-close]').click();assert.equal(await frame.locator('#xiuxian-realm-atlas').count(),0);}
+if(process.env.UI_CAPTURE_PAGES==='all') await require('./interface-preview-pages.cjs')({page,frame,origin,root,output,reports,assert});
 console.log(JSON.stringify({baseline,reports,errors},null,2));assert.equal(errors.length,0);
 }finally{await browser.close();server.close();}})().catch(e=>{console.error(e);server.close();process.exitCode=1;});

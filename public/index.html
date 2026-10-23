@@ -639,6 +639,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/content-format.css?v=20261005-xianxia-font1">
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
     <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261023-review1">
+    <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261023-review1">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
       #btn-show-debug{
@@ -1035,12 +1036,12 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
 
             <!-- 交易市集入口直接存在頁面內，不依賴非同步模組掛載才出現。 -->
-            <div id="player-market-switch" class="flex gap-2 my-3">
+            <div id="player-market-switch" class="flex gap-2 my-3" role="group" aria-label="坊市與玩家交易">
                 <button type="button" id="pm-view-shop" class="active flex-1 rounded-lg border border-yellow-900/40 px-3 py-3 text-xs font-bold" style="background:#4c3618;color:#fff0c6">坊市商品</button>
                 <button type="button" id="pm-view-market" onclick="window.openPlayerMarketplace?.('all')" class="flex-1 rounded-lg border border-yellow-900/40 px-3 py-3 text-xs font-bold" style="background:#15120c;color:#ead29b">玩家交易市集</button>
             </div>
 
-            <div class="flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-xl">
+            <div class="ui-store-categories flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-xl" role="group" aria-label="商品類型">
                 <button onclick="filterStore('all', this)" class="store-tab active flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_all">全部</button>
                 <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_frame">相框</button>
                 <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_avatar">頭像</button>
@@ -1086,7 +1087,7 @@ body.xianxia-theme main:has(#page-training.active-page),
             <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-green-400 mt-4">
                 <i class="fa-solid fa-sliders"></i> <span data-i18n="settings_title">設定</span>
             </h2>
-            <button id="btn-game-issue-report" type="button" class="btn-cyber-primary w-full py-3 rounded-xl mb-4"><i class="fa-solid fa-flag"></i> 回報問題</button>
+            <p class="ui-page-caption">個人資料、出題範圍與修行紀錄。</p>
             
             <div class="glass-panel p-6 rounded-2xl mb-6 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -1183,7 +1184,7 @@ body.xianxia-theme main:has(#page-training.active-page),
             <!-- 新版能力分析圖譜區塊 -->
             <div class="glass-panel p-5 rounded-2xl mb-6 relative border border-white/10 shadow-[0_0_20px_rgba(34,211,238,0.1)]">
                  <h3 class="font-bold text-white flex items-center gap-2 mb-2 font-sci">
-                    <i class="fa-solid fa-chart-radar text-cyan-400"></i> <span data-i18n="analysis_title">能力分析圖譜</span>
+                    <i class="fa-solid fa-chart-simple text-cyan-400"></i> <span data-i18n="analysis_title">能力分析圖譜</span>
                 </h3>
                 <p class="text-[10px] text-gray-400 mb-4 font-mono" data-i18n="analysis_desc">依答題紀錄估計各單元能力，並提供 AI 補強建議</p>
 
@@ -1202,10 +1203,14 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </div>
             </div>
 
+            <div class="ui-settings-links">
             <button onclick="switchToPage('page-history')" class="btn-cyber-ghost w-full py-3 rounded-xl border border-cyan-500/30 text-cyan-400 hover:bg-cyan-900/20 transition text-xs font-bold tracking-widest mb-4">
                 <i class="fa-solid fa-clock-rotate-left mr-2"></i> 檢視答題紀錄
             </button>
             
+            <button id="btn-game-issue-report" type="button" class="btn-cyber-ghost w-full py-3 rounded-xl mb-4"><i class="fa-solid fa-flag"></i> 回報問題</button>
+            </div>
+
             <button onclick="logout()" class="w-full py-3 rounded-xl border border-red-800/50 text-red-400 hover:bg-red-900/20 transition text-xs font-bold tracking-widest" data-i18n="btn_logout">登出帳號</button>
         </div>
 
@@ -1221,7 +1226,7 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </button>
             </div>
             
-            <div class="glass-panel p-4 rounded-2xl mb-24 border border-white/5 relative overflow-hidden">
+            <div class="ui-history-panel glass-panel p-4 rounded-2xl mb-24 border border-white/5 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 <h3 class="text-xs font-bold text-gray-400 mb-4 px-1 uppercase tracking-wider">近期答題紀錄</h3>
                 

@@ -1501,12 +1501,12 @@ function injectSocialUI() {
     pageSocial.className = "page-section hidden h-full flex flex-col"; 
     
     pageSocial.innerHTML = `
-        <div class="sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 border-b border-slate-800">
+        <div class="ui-social-heading sticky top-0 bg-slate-900/95 backdrop-blur-sm z-20 border-b border-slate-800">
             <h2 class="text-2xl font-bold text-cyan-400 flex items-center gap-2 p-4 pb-2">
-                <i class="fa-solid fa-comments"></i> 社交中心 <span id="alliance-chat-title-unread" class="alliance-chat-badge with-count" hidden aria-label="未讀好友訊息"></span>
+                <i class="fa-solid fa-comments"></i> 仙盟 <span id="alliance-chat-title-unread" class="alliance-chat-badge with-count" hidden aria-label="未讀好友訊息"></span>
             </h2>
             
-            <div class="flex px-4 gap-2 mb-2">
+            <div class="ui-social-tabs flex px-4 gap-2 mb-2">
                 <button onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
                     <i class="fa-solid fa-user-group"></i> 好友 <span id="alliance-friend-unread" class="alliance-chat-badge with-count" hidden aria-label="好友私訊未讀"></span>
                 </button>
@@ -1517,14 +1517,14 @@ function injectSocialUI() {
         </div>
 
         <div id="section-friends" class="flex-1 overflow-y-auto p-4 pb-20">
-            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 mb-4">
+            <div class="ui-friend-code bg-slate-800 p-4 rounded-xl border border-slate-700 mb-4">
                 <div class="text-xs text-gray-400 mb-1">我的好友代碼</div>
                 <div class="flex justify-between items-center">
                     <span class="text-2xl font-mono font-bold text-white tracking-widest" id="my-friend-code">...</span>
                     <button onclick="copyFriendCode()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded text-white transition">複製</button>
                 </div>
             </div>
-            <div class="flex gap-2 mb-4">
+            <div class="ui-friend-add flex gap-2 mb-4">
                 <input type="text" id="input-friend-code" placeholder="輸入代碼..." class="flex-1 bg-slate-900 border border-slate-600 text-white rounded-lg p-3 outline-none focus:border-cyan-500 uppercase">
                 <button onclick="addFriend()" aria-label="發送好友邀請" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-3 rounded-lg font-bold shadow-lg">
                     <i class="fa-solid fa-user-plus"></i>
@@ -1541,7 +1541,7 @@ function injectSocialUI() {
                 <div class="text-center text-gray-500 text-xs py-4">歡迎來到全服聊天室 👋<br>請保持友善發言</div>
             </div>
 
-            <div class="p-2 bg-slate-800 border-t border-slate-700 flex gap-2 items-center absolute bottom-0 w-full z-10">
+            <div class="ui-chat-compose p-2 bg-slate-800 border-t border-slate-700 flex gap-2 items-center absolute bottom-0 w-full z-10">
                 <input type="text" id="chat-input" maxlength="50" placeholder="說點什麼..." class="flex-1 bg-slate-900 border border-slate-600 text-white rounded-full px-4 py-2 text-sm outline-none focus:border-cyan-500" onkeypress="if(event.key==='Enter') sendChatMessage()">
                 <button onclick="sendChatMessage()" class="bg-cyan-600 hover:bg-cyan-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition transform active:scale-95">
                     <i class="fa-solid fa-paper-plane"></i>

@@ -240,7 +240,11 @@
 
     const tabs = page.querySelector('.training-subtabs-v3');
     const tabsRect = tabs?.getBoundingClientRect();
-    const contentTop = tabsRect ? Math.max(pageRect.top, tabsRect.bottom + 4) : pageRect.top;
+    const contentRect = page.querySelector('#training-tab-content')?.getBoundingClientRect();
+    // Scene detail bars sit between the tabs and content. Measure the actual
+    // workspace so that the node map also reserves their height.
+    const measuredTop = Number(contentRect?.top);
+    const contentTop = Math.max(pageRect.top, Number.isFinite(measuredTop) ? measuredTop : tabsRect ? tabsRect.bottom + 4 : pageRect.top);
     const contentHeight = Math.max(240, Math.floor(navTop - contentTop - safeGap));
 
     page.style.setProperty('--training-fill-height', `${fillHeight}px`);
