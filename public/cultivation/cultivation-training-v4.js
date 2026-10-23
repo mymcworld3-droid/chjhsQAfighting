@@ -648,7 +648,22 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     soulView.selected = backToDetail ? 'innate' : null;
     renderTrainingPage();
     const selector = backToDetail ? '[data-ia-reselect]' : previous === 'innate' ? '[data-ia-node]' : `[data-ns-node="${previous}"]`;
-    document.getElementById('training-tab-content')?.querySelector(selector)?.focus({preventScroll:true});
+    const target = backToDetail ? document.getElementById('ns-node-dialog')?.querySelector(selector)
+      : document.getElementById('training-tab-content')?.querySelector(selector);
+    target?.focus({preventScroll:true});
+  }
+
+  // 直式詳情移至 body，避開節點圖的 stacking context 與分頁裁切，才能蓋過導覽。
+  function syncSoulDetailLayout() {
+    const detail = document.getElementById('ns-node-dialog');
+    if (!detail) return;
+    if (window.matchMedia('(orientation: portrait)').matches) {
+      detail.dataset.nsPortraitSheet = '';
+      document.body.appendChild(detail);
+    } else {
+      delete detail.dataset.nsPortraitSheet;
+      document.querySelector('#training-tab-content .ns-growth-workspace')?.appendChild(detail);
+    }
   }
 
   function bindSoulActions() {
@@ -661,7 +676,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       soulView.selected = id;
       soulView.choosing = choosing;
       renderTrainingPage();
-      content?.querySelector(choosing ? '#ns-choice-title' : '[data-ns-close]')?.focus({preventScroll:true});
+      const target = choosing ? content?.querySelector('#ns-choice-title')
+        : document.getElementById('ns-node-dialog')?.querySelector('[data-ns-close]');
+      target?.focus({preventScroll:true});
     };
     content?.querySelectorAll('[data-ns-node]').forEach(button => button.addEventListener('click', () => inspect(button.dataset.nsNode)));
     content?.querySelector('[data-ia-node]')?.addEventListener('click', () => inspect('innate', !Innate.status(window.getCurrentUserData?.() || {}).path));
@@ -670,10 +687,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     content.onkeydown = event => {
       if (event.key === 'Escape' && soulView.selected) { event.preventDefault(); closeSoulDetails(); }
     };
+    const detail = content?.querySelector('.ns-orb-detail');
+    if (detail) detail.onkeydown = content.onkeydown;
     content?.querySelectorAll('[data-ns-upgrade]').forEach(button => button.addEventListener('click',()=>void saveSoulBranch(button.dataset.nsUpgrade)));
     content?.querySelector('[data-ns-reset]')?.addEventListener('click',()=>void saveSoulBranch(null,true));
     content?.querySelectorAll('[data-ia-select]').forEach(button=>button.addEventListener('click',()=>void saveInnateAbility(button.dataset.iaSelect)));
     content?.querySelector('[data-ia-upgrade]')?.addEventListener('click',()=>void saveInnateAbility());
+    syncSoulDetailLayout();
     void migrateSoulResources();
   }
 
@@ -694,6 +714,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   function renderTrainingPage() {
     const content = document.getElementById('training-tab-content');
     if (!content) return;
+    document.querySelector('[data-ns-portrait-sheet]')?.remove?.();
     const soulLabel=document.querySelector('#page-training [data-training-tab="nascent-soul"] span');
     if(soulLabel)soulLabel.textContent=Innate.status(window.getCurrentUserData?.()||{}).ok?'元神':'元嬰';
     // 煉器／裝備可提前返回，先清理元嬰專屬的一屏模式，避免裁切其他分頁。
@@ -1229,6 +1250,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   }
 
   function boot() {
+    window.matchMedia('(orientation: portrait)').addEventListener('change', syncSoulDetailLayout);
     window.addEventListener('xiuxian:contract-page-opened', () => { activeTab = 'contract'; });
     loadStyle();
     restoreRemoteTraining();
