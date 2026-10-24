@@ -80,9 +80,42 @@
     const nodes=[title,body,extra];if(o?.species){const n=document.createElement('small');n.textContent=(Core.LABELS[o.biome]||'野外')+'棲地 · '+o.species+'群聚';nodes.push(n);}if(Core.inSafeArea(p.x,p.y)){const n=document.createElement('small');n.textContent=world.zone(p)+' · 安全區，沒有野生妖獸';nodes.push(n);}if(o?.veinId){const n=document.createElement('small');n.textContent='連續礦脈 · '+o.veinLength+' 格 · '+o.realm+'資源';nodes.push(n);}if(o?.kind==='realm'){const n=document.createElement('small');n.textContent=o.subtype==='guardian'?'守衛挑戰秘境':'陣紋探索秘境';nodes.push(n);}$('tile-info').replaceChildren(...nodes);draw();
   }
   function changeTile(p,type){
-    if(!model||!Core.inside(p.x,p.y))return;const k=Core.chunkKey(p.x,p.y),i=(p.y%32)*32+p.x%32,tiles={...(patches[k]?.tiles||{})},base=Core.TYPES[model.tiles[p.y*1000+p.x]];
-    if(type==='restore'||type===base)delete tiles[i];else tiles[i]={terrain:type};revisions[k]=(revisions[k]||0)+1;const data={revision:revisions[k],tiles};world.installPatches({[k]:data});
-    if(Object.keys(tiles).length)patches[k]=data;else delete patches[k];updateStorage();inspect(p);status('此格變更保存在本機模擬中');draw();
+    if(!model||!Core.inside(p.x,p.y))return;
+    const previously=world.terrain(p.x,p.y),updates=new Map(),protectedTerrain=new Set(['water','ocean','bridge','broken-bridge','lava','sealed']);
+    // Stage every new road tile and its enclosed interior, then apply each
+    // affected chunk once so large enclosed courts do not redraw per cell.
+    function stageTile(cell,terrain){
+      const k=Core.chunkKey(cell.x,cell.y),i=(cell.y%32)*32+cell.x%32,base=Core.TYPES[model.tiles[cell.y*1000+cell.x]];
+      if(!updates.has(k))updates.set(k,{...(patches[k]?.tiles||{})});
+      const tiles=updates.get(k);
+      if(terrain==='restore'||terrain===base)delete tiles[i];else tiles[i]={terrain};
+    }
+    stageTile(p,type);
+    const stagedTerrain=(x,y)=>{
+      if(!Core.inside(x,y))return 'rock';
+      const k=Core.chunkKey(x,y),i=(y%32)*32+x%32,tiles=updates.get(k);
+      return tiles?tiles[i]?.terrain||Core.TYPES[model.tiles[y*1000+x]]:world.terrain(x,y);
+    };
+    let filled=0;
+    if(type==='road'&&previously!=='road'){
+      const interior=world.enclosedRoadCells(p,{terrainAt:stagedTerrain});
+      for(const cell of interior){
+        const k=Core.chunkKey(cell.x,cell.y),i=(cell.y%32)*32+cell.x%32;
+        // Keep waterways, bridge surfaces, existing structures, and manually
+        // painted non-road terrain instead of erasing garden landmarks.
+        if(Core.sectBlocked(cell.x,cell.y)||world.objectAt(cell.x,cell.y)||protectedTerrain.has(world.terrain(cell.x,cell.y))||
+          patches[k]?.tiles?.[i]&&patches[k].tiles[i].terrain!=='road')continue;
+        if(stagedTerrain(cell.x,cell.y)==='road')continue;
+        stageTile(cell,'road');filled++;
+      }
+    }
+    const changes={};
+    for(const[k,tiles]of updates){
+      const revision=(revisions[k]||0)+1,data={revision,tiles};revisions[k]=revision;changes[k]=data;
+      if(Object.keys(tiles).length)patches[k]=data;else delete patches[k];
+    }
+    world.installPatches(changes);updateStorage();inspect(p);
+    status(filled?'道路已封閉，自動填滿 '+filled+' 格（僅保存在本機模擬中）':'此格變更保存在本機模擬中');draw();
   }
   function zoom(factor,point={screenX:width/2,screenY:height/2}){if(!model)return;const x=(point.screenX-width/2)/view.scale+view.x,y=(point.screenY-height/2)/view.scale+view.y;view.scale=Math.max(Math.min(width/1000,height/1000)*.6,Math.min(40,view.scale*factor));view.x=x-(point.screenX-width/2)/view.scale;view.y=y-(point.screenY-height/2)/view.scale;view.fit=false;draw();}
   function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
