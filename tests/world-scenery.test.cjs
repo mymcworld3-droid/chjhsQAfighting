@@ -87,7 +87,10 @@ test('connection masks survive viewport/chunk seams and update when neighbouring
   assert.equal(find(scene.inBounds(bounds)).mask,10);
   const s=W.SPAWN,r=W.CITY_RADIUS,town=S.create({...plain(),terrain:()=> 'courtyard'}).inBounds({x:s.x-r,y:s.y-r,w:r*2+1,h:r*2+1});
   const corner=town.filter(p=>p.prop==='wall'&&Math.floor(p.x)===s.x-r&&Math.floor(p.y)===s.y-r);assert.equal(corner.length,1);assert.equal(corner[0].mask,6);
-  for(const gate of town.filter(p=>p.prop==='gate')){
+  const sectGates=town.filter(p=>p.prop==='sect-gate');
+  assert.equal(sectGates.length,4,'one dedicated gate at each cardinal road entrance');
+  assert.deepEqual(sectGates.map(g=>g.direction).sort(),['east','north','south','west']);
+  for(const gate of sectGates){
     const horizontal=['north','south'].includes(gate.direction);
     for(const sign of [-1,1])assert.ok(town.some(p=>p.prop==='wall'&&Math.floor(p.x)===Math.floor(gate.x)+(horizontal?sign:0)&&Math.floor(p.y)===Math.floor(gate.y)+(horizontal?0:sign)&&p.mask===(horizontal?10:5)),'town wall joins both sides of each gate');
   }

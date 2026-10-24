@@ -4,7 +4,7 @@
   const base='/assets/world-map/ai/';
   const buildings=['meditation','forge','contract','vault','rank','duel','raid','watchtower','shrine','ruins','camp','realm-spring','realm-array','realm-sword','realm-star'];
   const directions=Object.freeze(['north','east','south','west']);
-  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas'].map(id=>[id,base+id+'.webp'])));
+  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas','sect-gates'].map(id=>[id,base+id+'.webp'])));
   const sceneryProps=Object.freeze(['fence','gate','wall','broken-wall','pillar','rubble','bridge','supplies']);
   const props=['bamboo','tree','rock','volcano','flowers','shrub','reeds','herb','ore','chest','lantern','wall-h','wall-v','gate','garden','boat','meteor','shield','altar','sealed'];
   const creatures=['靈狼','玄甲山豬','竹林靈狼','青竹蛇','山魈','妖藤','沙蠍','荒漠蜥蜴','巖甲獸','石靈','赤焰獸','熔岩蜥蜴','霜羽鷹','雪狼','毒蟾','澤蛇','潮汐蟹','海岸靈龜','古陣守衛','靈獸'];
@@ -16,6 +16,12 @@
   const compass=d=>({N:'north',E:'east',S:'south',W:'west',up:'north',right:'east',down:'south',left:'west'}[d]||d||'south');
   function directional(name,direction='south',size=40){
     direction=compass(direction);
+    // Qingyun Sect uses its own four-view, two-column cutout atlas. The
+    // narrow east/west profiles are painted independently, never rotated.
+    if(name==='sect-gate'){
+      const index=({south:0,north:1,west:2,east:3})[direction]??0;
+      return {image:'sect-gates',sx:index%2*104,sy:Math.floor(index/2)*104,sw:104,sh:104,w:118,h:118,anchor:.8};
+    }
     if(name==='boat')return sheet('boats-atlas',Math.max(0,['south','north','east','west'].indexOf(direction)),4,size,size);
     if(name==='fence'||name==='wall')return sheet(name+'-connectors-atlas',1+Math.max(0,directions.indexOf(direction)),3,size,size);
     const sprite=sheet('scenery-'+(directions.includes(direction)?direction:'south')+'-atlas',Math.max(0,sceneryProps.indexOf(name)),4,size,size);

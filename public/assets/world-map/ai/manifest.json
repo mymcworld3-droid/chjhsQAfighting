@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 1556742,
+  "totalBytes": 1573150,
   "assets": [
     {
       "id": "meditation",
@@ -353,6 +353,17 @@
       "source": "AI-guided flat-palette lossless ground-atlas.webp",
       "sourceSha256": "1f3030a3e6a601cc92df05f9c75e8453cd9738d0a58d3be67193c65dac5a8f38",
       "lossless": true
+    },
+    {
+      "id": "sect-gates",
+      "file": "sect-gates.webp",
+      "width": 208,
+      "height": 208,
+      "bytes": 16408,
+      "alpha": true,
+      "quality": 60,
+      "source": "2026-10-24 Qingyun sect two-pillar gates, four-view cropped atlas",
+      "sourceSha256": "da3cbfc69f3ec5275abd868f94ddc61344489071cf7bd0e1fc9f697a7892e046"
     }
   ]
 }

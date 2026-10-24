@@ -47,3 +47,11 @@ test('all terrain and decorative illustration paths use AI bitmap cells with val
   for(const prop of ['fence','wall'])for(let mask=0;mask<16;mask++)r.drawScenery({prop,mask,x:0,y:0});
   assert.ok(draws.length>=W.TYPES.length);for(const[image,x,y,w,h]of draws){assert.ok(x>=0&&y>=0&&w>0&&h>0);const width=image.id.startsWith('creatures-')?640:image.id.endsWith('-atlas')?512:256;const height=image.id.startsWith('scenery-')?256:image.id.startsWith('creatures-')?512:image.id==='boats-atlas'?128:image.id.endsWith('-atlas')?640:256;assert.ok(x+w<=width&&y+h<=height);}
 });
+
+test('Qingyun Sect gates use an independent four-view gate cutout without changing camp entrances',()=>{
+  const gates=A.directions.map(d=>A.directional('sect-gate',d,100));
+  assert.ok(gates.every(s=>s.image==='sect-gates'&&s.sw===104&&s.sh===104&&s.w===118&&s.h===118));
+  assert.equal(new Set(gates.map(s=>s.sx+':'+s.sy)).size,4);
+  assert.deepEqual(gates.map(s=>[s.sx,s.sy]),[[104,0],[104,104],[0,0],[0,104]]);
+  assert.ok(A.directions.every(d=>A.directional('gate',d).image.startsWith('scenery-')),'camp gateways preserve their original sprites');
+});

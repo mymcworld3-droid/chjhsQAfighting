@@ -6,13 +6,13 @@
   const ROADS=new Set(['road','bridge','broken-bridge']),WATER=new Set(['water','ocean']);
   const DRY=new Set(['grass','courtyard','mountain','bamboo','forest','desert','snow','swamp','stone','volcano','beach']);
   const isSite=o=>['building','structure','realm'].includes(o.kind);
-  const isBarrier=p=>p.prop==='fence'||p.prop==='wall',cell=p=>Math.floor(p.x)+','+Math.floor(p.y);
+  const isBarrier=p=>p.prop==='fence'||p.prop==='wall',isGate=p=>p?.prop==='gate'||p?.prop==='sect-gate',cell=p=>Math.floor(p.x)+','+Math.floor(p.y);
   // A block owns one centre and only the half-arms leading to compatible neighbours.
   // Resolve after visibility/occupancy, but before viewport clipping (one-cell halo).
   function connect(items){
     const nodes=new Map(),unique=[];
     for(const p of items){
-      if(isBarrier(p)||p.prop==='gate'){const k=cell(p);if(nodes.has(k))continue;nodes.set(k,p);}
+      if(isBarrier(p)||isGate(p)){const k=cell(p);if(nodes.has(k))continue;nodes.set(k,p);}
       unique.push(p);
     }
     return unique.map(p=>{
@@ -20,7 +20,7 @@
       let mask=0;
       for(let i=0;i<4;i++){
         const [dx,dy]=STEPS[i],n=nodes.get((Math.floor(p.x)+dx)+','+(Math.floor(p.y)+dy));
-        if(n?.prop===p.prop||n?.prop==='gate'&&((['east','west'].includes(n.direction)?5:10)&(1<<i)))mask|=1<<i;
+        if(n?.prop===p.prop||isGate(n)&&((['east','west'].includes(n.direction)?5:10)&(1<<i)))mask|=1<<i;
       }
       return {...p,mask,post:p.prop==='fence'||mask!==5&&mask!==10};
     });
@@ -61,10 +61,11 @@
         else if(t==='sealed')add('sealed',44);
         for(const item of items){item.x+=((h>>>8)%101/100-.5)*.3;item.y+=((h>>>17)%101/100-.5)*.2;}
       }
-      // Sect walls and gates have actual north/east/south/west illustrations.
+      // Qingyun Sect's ceremonial gates are standalone four-view sprites.
+      // Camp fence gates keep their existing small wooden atlas images.
       if(Math.abs(dx)===r&&Math.abs(dy)<=r&&dy!==0&&t==='courtyard')add('wall',40);
       if(Math.abs(dy)===r&&Math.abs(dx)<=r&&dx!==0&&t==='courtyard')add('wall',40);
-      if((Math.abs(dx)===r&&dy===0)||(Math.abs(dy)===r&&dx===0))add('gate',100,dx===r?'east':dx===-r?'west':dy===r?'south':'north');
+      if((Math.abs(dx)===r&&dy===0)||(Math.abs(dy)===r&&dx===0))add('sect-gate',100,dx===r?'east':dx===-r?'west':dy===r?'south':'north');
       if(t==='courtyard'&&Math.abs(dx)>=6&&Math.abs(dx)<=8&&Math.abs(dy)>=6&&Math.abs(dy)<=8&&(dx+dy)%2===0)add('garden',38);
       if(t==='courtyard'&&((Math.abs(dx)===8&&dy%4===0)||(Math.abs(dy)===8&&dx%4===0)))add('lantern',32);
       // Ceremonial lantern avenues, paired gate stelae and hanging banners.
@@ -126,7 +127,7 @@
       for(let y=Math.max(0,bounds.y-1);y<Math.min(W.SIZE,bounds.y+bounds.h+1);y++)for(let x=Math.max(0,bounds.x-1);x<Math.min(W.SIZE,bounds.x+bounds.w+1);x++){
         if(!visible(x,y))continue;
         const plants=ambient(x,y,W.terrain(x,y,events),events);
-        items.push(...(reserved.has(W.key(x,y))?plants.filter(p=>p.prop==='wall'||p.prop==='gate'):plants));
+        items.push(...(reserved.has(W.key(x,y))?plants.filter(p=>p.prop==='wall'||isGate(p)):plants));
       }
       return connect(items).filter(p=>p.x>=bounds.x&&p.x<bounds.x+bounds.w&&p.y>=bounds.y&&p.y<bounds.y+bounds.h);
     }
