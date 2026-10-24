@@ -91,3 +91,32 @@ test('zoomed-out shoreline caches fit the complete sect while remaining bounded 
   for(let i=0;i<540;i++)ground.compose({...info,key:'detail-'+i},images);
   assert.equal(ground.cachedTiles,512);
 });
+
+test('fully connected road cells cover every corner with road texture, rather than courtyard squares',()=>{
+  for(const [u,v] of [[0,0],[1,0],[0,1],[1,1],[.05,.05],[.95,.95],[.5,.5]])
+    assert.equal(G.roadAlpha(15,u,v),1,'all four road connections require a filled tile');
+  assert.equal(G.roadAlpha(5,0,0),0,'straight roads still preserve their natural edges');
+  const operations=[],canvases=[];
+  const factory=()=>{
+    const canvas={width:0,height:0,operations:[]};
+    const context={
+      save(){},restore(){},translate(){},scale(){},
+      drawImage(...args){canvas.operations.push(args);operations.push(args);},
+      createImageData(w,h){return{data:new Uint8ClampedArray(w*h*4)};},
+      putImageData(){},
+    };
+    canvas.getContext=()=>context;canvases.push(canvas);return canvas;
+  };
+  const ground=G.create(A,factory),atlas={complete:true,naturalWidth:512},images={'ground-atlas':atlas};
+  const full={x:502,y:503,terrain:'road',underlay:'courtyard',mask:15,key:'road:15:courtyard'};
+  const paved=ground.compose(full,images);
+  const sources=operations.filter(args=>args[0]===atlas);
+  assert.equal(sources.length,1,'filled road reads one native atlas material');
+  assert.equal(sources[0][1],128,'the material is road, not courtyard');
+  assert.ok(paved.operations.length===1,'solid paving draws directly without underlay or masked overlays');
+  assert.strictEqual(ground.compose(full,images),paved,'filled paving uses the render cache');
+  // Ordinary pathways must continue drawing an underlay and clipped road,
+  // otherwise their side edges would become boxy on the open grassland.
+  const path=ground.compose({...full,mask:5,key:'road:5:courtyard'},images);
+  assert.ok(path.operations.length>1,'a two-ended road retains the masked composition');
+});
