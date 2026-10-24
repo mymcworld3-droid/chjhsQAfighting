@@ -1,6 +1,7 @@
 'use strict';
 const path=require('node:path'),fs=require('node:fs/promises'),assert=require('node:assert/strict'),express=require('express'),{once}=require('node:events'),{pathToFileURL}=require('node:url');
 let chromium;try{({chromium}=require('playwright'));}catch{({chromium}=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES||'/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules','playwright')));}
+const Core=require('../public/world/world-core.js'),Simulator=require('../public/world/world-simulator-worker.js');
 const root=path.resolve(__dirname,'../public'),output=path.resolve('docs/design/seed-world'),app=express();
 app.use('/fonts',express.static('/tmp/grid-world-ui/node_modules/@fontsource/noto-sans-tc'));app.use(express.static(root));
 (async()=>{
@@ -12,11 +13,11 @@ app.use('/fonts',express.static('/tmp/grid-world-ui/node_modules/@fontsource/not
   await page.goto(origin+'/world-simulator.html');await page.addStyleTag({url:origin+'/fonts/400.css'});await page.addStyleTag({content:':root{font-family:"Noto Sans TC",sans-serif}'});
   const ready=()=>page.waitForFunction(()=>!!WorldSeedSimulator.getState().world&&!WorldSeedSimulator.getState().busy);
   await ready();await page.evaluate(()=>document.fonts.ready);
-  const initial=await page.evaluate(()=>WorldSeedSimulator.getState());assert.equal(initial.world.size,1000);assert.equal(initial.stats.fingerprint,'d3b3c064');assert.ok(initial.stats.kinds.realm>300);
+  const initial=await page.evaluate(()=>WorldSeedSimulator.getState());assert.equal(initial.world.size,1000);assert.equal(initial.stats.fingerprint,Simulator.generate(Core.DEFAULT_SEED).stats.fingerprint);assert.ok(initial.stats.kinds.realm>300);
   await page.screenshot({path:path.join(output,'simulator-desktop.png')});
   await page.locator('#layer').selectOption('resources');await page.screenshot({path:path.join(output,'simulator-resources.png')});
   await page.locator('#spawn').click();await page.locator('#paint').selectOption('road');
-  const tile={x:10,y:35};const point=await page.evaluate(p=>{const c=document.getElementById('map'),r=c.getBoundingClientRect(),v=WorldSeedSimulator.getState().view;return{x:r.x+(c.clientWidth/2+(p.x+.5-v.x)*v.scale)*r.width/c.clientWidth,y:r.y+(c.clientHeight/2+(p.y+.5-v.y)*v.scale)*r.height/c.clientHeight};},tile);
+  const tile=Core.townPoint(10,35);const point=await page.evaluate(p=>{const c=document.getElementById('map'),r=c.getBoundingClientRect(),v=WorldSeedSimulator.getState().view;return{x:r.x+(c.clientWidth/2+(p.x+.5-v.x)*v.scale)*r.width/c.clientWidth,y:r.y+(c.clientHeight/2+(p.y+.5-v.y)*v.scale)*r.height/c.clientHeight};},tile);
   await page.mouse.click(point.x,point.y);assert.equal(await page.evaluate(()=>Object.values(WorldSeedSimulator.getState().patches).reduce((n,c)=>n+Object.keys(c.tiles).length,0)),1);
   await page.screenshot({path:path.join(output,'simulator-delta.png')});
   const jsonDownload=page.waitForEvent('download');await page.locator('#export-json').click();const download=await jsonDownload,data=JSON.parse(await fs.readFile(await download.path(),'utf8'));

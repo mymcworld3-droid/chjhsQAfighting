@@ -1,9 +1,10 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const W=require('../public/world/world-core.js'),B=require('../world-battle.cjs'),Q=require('../world-questions.cjs');
+const P=W.starterPoint;
 const {trustedRaidPlayerSnapshot}=require('../raid-authority.cjs');
 function battle(type=''){
   const user={displayName:'修士',stats:{attack:200,maxHp:1000,totalScore:type?68:0},cultivationTraining:{equippedCore:type?{type,grade:3}:null,coreEnabled:true}};
-  const b=B.createBattle({x:18,y:23},W.object('wolf'),trustedRaidPlayerSnapshot(user,'u1'),{},Date.now());
+  const b=B.createBattle(P(18,23),W.object('wolf'),trustedRaidPlayerSnapshot(user,'u1'),{},Date.now());
   b.questions=Q.fallback(b,{subject:'數學'});return b;
 }
 const action=(b,command,extra={})=>B.act(b,{command,turn:b.turn,revision:b.revision,...extra});
@@ -24,7 +25,7 @@ test('movement uses actual path cost, enforces occupancy and can occur before or
   let b=commandReady(battle());assert.throws(()=>action(b,'move',{target:{x:b.player.x,y:b.player.y+3}}));
   assert.throws(()=>action(b,'move',{target:b.enemies[0]}));
   b=action(b,'guard');const dest=B.view(b).reachable.find(p=>W.distance(p,b.player)>0);b=action(b,'move',{target:dest});assert.ok(b.acted&&b.moved);
-  assert.throws(()=>action(b,'move',{target:{x:18,y:23}}));assert.throws(()=>action(b,'guard'));
+  assert.throws(()=>action(b,'move',{target:P(18,23)}));assert.throws(()=>action(b,'guard'));
 });
 test('identical answers have different damage outcomes when the player dodges the announced strike',()=>{
   const b=commandReady(battle()),standing=action(b,'end');

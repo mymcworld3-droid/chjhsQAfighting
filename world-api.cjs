@@ -13,9 +13,9 @@ const day = now => new Date(now+8*3600000).toISOString().slice(0,10);
 const clone = value => structuredClone(value);
 const STATE = 'worldPlayers', EVENTS = 'worldEvents';
 function normalize(raw={},events={},W=BaseWorld) {
-  const travelMode=raw.travelMode==='sail'?'sail':'walk',position=W.safePosition(raw.position,{events,mode:travelMode});
+  const sameMap=raw.mapVersion===W.VERSION,travelMode=sameMap&&raw.travelMode==='sail'?'sail':'walk',position=W.safePosition(sameMap?raw.position:W.SPAWN,{events,mode:travelMode});
   const claims=Object.fromEntries(Object.entries(raw.claims||{}).filter(([key,at])=>key.startsWith('chest:')||key.startsWith('realm:')||key.startsWith('structure:')||Number(at)>Date.now()-3*86400000));
-  const explored=raw.mapVersion===W.VERSION?W.normalizeExplored(raw.explored):typeof raw.explored==='string'&&raw.explored.length===2304?W.normalizeExplored(raw.explored):W.initialExplored();
+  const explored=sameMap?W.normalizeExplored(raw.explored):W.initialExplored();
   return {version:2,mapVersion:W.VERSION,position,travelMode,explored:W.reveal(explored,position),
     claims,gathered:count(raw.gathered),victories:count(raw.victories),chests:count(raw.chests),
     questClaimed:raw.questClaimed===true,battle:raw.mapVersion===W.VERSION&&raw.battle?.version===1?raw.battle:null,
@@ -23,7 +23,7 @@ function normalize(raw={},events={},W=BaseWorld) {
     requests:Array.isArray(raw.requests)?raw.requests.slice(-32):[],updatedAtMs:count(raw.updatedAtMs)};
 }
 function quest(s,W=BaseWorld) {
-  const steps=[{name:'走進青竹林',done:W.known(s.explored,18,27),target:{x:18,y:27}},
+  const entrance=W.starterPoint(18,27),steps=[{name:'走進青竹林',done:W.known(s.explored,entrance.x,entrance.y),target:entrance},
     {name:'採集一處靈材',done:s.gathered>0,objectId:'herb-a'},
     {name:'戰勝一隻妖獸',done:s.victories>0,objectId:'wolf'},
     {name:'打開林間遺箱',done:s.chests>0,objectId:'chest-a'}];
@@ -80,6 +80,14 @@ function registerWorldApi(app,{
     if(force||now()-hub.eventsLoadedAt>60000){const ref=db.collection(EVENTS).doc('main'),snap=await ref.get();let data=snap.exists?snap.data():{};
       if(!data.worldId)data=await db.runTransaction(async tx=>{const current=await tx.get(ref),value=current.exists?current.data():{};
         if(value.worldId)return value;const pinned={...value,worldId:W.VERSION,world:W.descriptor};tx.set(ref,pinned);return pinned;});
+      const previousId='qingyun-seeded-v1-'+W.seedHash(W.descriptor.seed).toString(16).padStart(8,'0');
+      if(data.worldId===previousId&&data.world?.generatorVersion==='qingyun-seeded-v1'&&data.world.seed===W.descriptor.seed){
+        data=await db.runTransaction(async tx=>{const current=await tx.get(ref),value=current.data();if(value.worldId!==previousId)return value;
+          if(value.world?.seed!==W.descriptor.seed||value.world.generatorVersion!=='qingyun-seeded-v1')throw fail('世界種子與存檔不一致，請先由管理員確認世界設定',503);
+          // Keep the old descriptor/revisions and their chunk documents for recovery.
+          tx.set(db.collection(EVENTS).doc('archive:'+previousId),{...value,archivedAtMs:now()});
+          const migrated={...value,worldId:W.VERSION,world:W.descriptor,chunkRevisions:{},previousWorldId:previousId,migratedAtMs:now()};tx.set(ref,migrated);return migrated;});
+      }
       if(data.worldId&&data.worldId!==W.VERSION||data.world?.seed&&data.world.seed!==W.descriptor.seed)throw fail('世界種子與存檔不一致，請先由管理員確認世界設定',503);
       hub.events=data;}
   }
@@ -105,10 +113,10 @@ function registerWorldApi(app,{
       db.collection('gameConfig').doc('artifactCatalogV1').get()]);
     if(!u.exists)throw fail('找不到修士資料，請重新登入',404);
     const user=u.data(),raw=s.exists?s.data():{};
-    await loadPatches(db,nearbyChunks(W.inside(raw.position?.x,raw.position?.y)?raw.position:W.SPAWN));
+    await loadPatches(db,nearbyChunks(raw.mapVersion===W.VERSION&&W.inside(raw.position?.x,raw.position?.y)?raw.position:W.SPAWN));
     const state=normalizeState(raw);
     const actor={uid,db,state,name:String(user.displayName||'無名修士').slice(0,32),gender:user.storyProgressV1?.gender==='female'?'female':'male',
-      profile:trustedRaidPlayerSnapshot(user,uid,c.exists?c.data():{}),lastSeenAtMs:now(),lastSaveAtMs:now(),dirty:!s.exists,
+      profile:trustedRaidPlayerSnapshot(user,uid,c.exists?c.data():{}),lastSeenAtMs:now(),lastSaveAtMs:now(),dirty:!s.exists||raw.mapVersion!==W.VERSION,
       route:{path:[state.position],startedAtMs:now(),stepMs:W.STEP_MS},revealedIndex:0,battle:state.battle?.status==='active'?state.battle:null,
       commandSeq:0,sessionId:crypto.randomUUID(),lastCommandAtMs:-Infinity,connected:true};
     // The local battlefield is private; returning to it does not move the exploration anchor.
@@ -196,7 +204,7 @@ function registerWorldApi(app,{
         const materials=clone(user.materialSystem);materials.inventory[field]-=2;user.materialSystem=materials;
         const patches={};
         if(events[name]===goal){
-          const changed=name==='bridge'?[{x:26,y:27,terrain:'bridge'},{x:27,y:27,terrain:'bridge'}]:[{x:39,y:6,terrain:'road'}];
+          const changed=(name==='bridge'?[{x:26,y:27,terrain:'bridge'},{x:27,y:27,terrain:'bridge'}]:[{x:39,y:6,terrain:'road'}]).map(p=>({...p,...W.starterPoint(p.x,p.y)}));
           const k=W.chunkKey(changed[0].x,changed[0].y),patchRef=actor.db.collection('worldChunks').doc(W.VERSION+':'+k),previous=await tx.get(patchRef),data=previous.exists?previous.data():{tiles:{},revision:0};
           const tiles={...data.tiles};for(const p of changed)tiles[(p.y%32)*32+p.x%32]={terrain:p.terrain};
           const revision=count(data.revision)+1;patches[k]={revision,tiles};

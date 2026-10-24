@@ -1,0 +1,226 @@
+{
+  "generatorVersion": "qingyun-seeded-v2",
+  "spawn": {
+    "x": 500,
+    "y": 500
+  },
+  "cityRadius": 9,
+  "safeRadius": 36,
+  "tests": {
+    "world": 44,
+    "repository": 1835,
+    "failed": 0
+  },
+  "audit": {
+    "syntaxSources": 475,
+    "jsonFiles": 25,
+    "browserModuleLinks": 165
+  },
+  "checks": [
+    "central-sect-across-five-seeds",
+    "flat-safe-plain-without-hostiles",
+    "four-cardinal-exits",
+    "eleven-natural-terrain-types-across-three-seeds",
+    "same-species-compact-packs",
+    "species-shared-within-habitats",
+    "node-browser-vm-determinism",
+    "bounded-chunk-cache",
+    "sparse-chunk-persistence",
+    "v1-migration-and-rejoin",
+    "shared-bridge-and-array-relocation",
+    "standalone-simulator-build",
+    "static-resource-version-check"
+  ],
+  "browserScreenshot": {
+    "status": "not-run",
+    "reason": "Chromium download returned an invalid archive in this environment; v1 screenshots remain historical."
+  },
+  "samples": [
+    {
+      "world": {
+        "seed": "qingyun-2026",
+        "size": 1000,
+        "chunkSize": 32,
+        "generatorVersion": "qingyun-seeded-v2",
+        "worldId": "qingyun-seeded-v2-ba95dee1"
+      },
+      "stats": {
+        "counts": {
+          "grass": 123473,
+          "road": 381,
+          "courtyard": 324,
+          "mountain": 3960,
+          "water": 115427,
+          "bridge": 2,
+          "broken-bridge": 2,
+          "bamboo": 122852,
+          "rock": 1901,
+          "sealed": 1,
+          "ocean": 183055,
+          "beach": 87232,
+          "forest": 134501,
+          "desert": 75188,
+          "snow": 38555,
+          "swamp": 38230,
+          "stone": 27139,
+          "volcano": 45247,
+          "lava": 2530
+        },
+        "tiers": [
+          77,
+          282,
+          359,
+          430,
+          643,
+          645,
+          233,
+          61
+        ],
+        "kinds": {
+          "realm": 450,
+          "structure": 468,
+          "gather": 7748,
+          "chest": 657,
+          "monster": 2730,
+          "event": 2,
+          "building": 7,
+          "npc": 1
+        },
+        "veins": 1366,
+        "islands": 10,
+        "largestLand": 693611,
+        "spawnConnected": 693611,
+        "walkable": 697084,
+        "landRatio": 0.701518,
+        "fingerprint": "a66c5104",
+        "chunks": 1024
+      },
+      "packs": 668,
+      "multiMemberPackRatio": 0.9895209580838323
+    },
+    {
+      "world": {
+        "seed": "海上有仙山",
+        "size": 1000,
+        "chunkSize": 32,
+        "generatorVersion": "qingyun-seeded-v2",
+        "worldId": "qingyun-seeded-v2-77a57e11"
+      },
+      "stats": {
+        "counts": {
+          "grass": 82597,
+          "road": 381,
+          "courtyard": 324,
+          "mountain": 14800,
+          "water": 170302,
+          "bridge": 2,
+          "broken-bridge": 2,
+          "bamboo": 105111,
+          "rock": 10814,
+          "sealed": 1,
+          "ocean": 163077,
+          "beach": 98409,
+          "forest": 113851,
+          "desert": 33259,
+          "snow": 37849,
+          "swamp": 34112,
+          "stone": 82240,
+          "volcano": 45157,
+          "lava": 7712
+        },
+        "tiers": [
+          83,
+          262,
+          237,
+          365,
+          653,
+          661,
+          169,
+          51
+        ],
+        "kinds": {
+          "realm": 414,
+          "structure": 434,
+          "gather": 7223,
+          "chest": 615,
+          "monster": 2481,
+          "event": 2,
+          "building": 7,
+          "npc": 1
+        },
+        "veins": 1280,
+        "islands": 16,
+        "largestLand": 644582,
+        "spawnConnected": 644582,
+        "walkable": 648092,
+        "landRatio": 0.666621,
+        "fingerprint": "0bfb7f3b",
+        "chunks": 1024
+      },
+      "packs": 613,
+      "multiMemberPackRatio": 0.9836867862969005
+    },
+    {
+      "world": {
+        "seed": "竹影與星河",
+        "size": 1000,
+        "chunkSize": 32,
+        "generatorVersion": "qingyun-seeded-v2",
+        "worldId": "qingyun-seeded-v2-eac6ebf2"
+      },
+      "stats": {
+        "counts": {
+          "grass": 76243,
+          "road": 381,
+          "courtyard": 324,
+          "mountain": 11473,
+          "water": 136883,
+          "bridge": 2,
+          "broken-bridge": 2,
+          "bamboo": 80562,
+          "rock": 972,
+          "sealed": 1,
+          "ocean": 342347,
+          "beach": 85610,
+          "forest": 82961,
+          "desert": 50114,
+          "snow": 8311,
+          "swamp": 21624,
+          "stone": 23758,
+          "volcano": 65498,
+          "lava": 12934
+        },
+        "tiers": [
+          74,
+          275,
+          208,
+          280,
+          459,
+          502,
+          157,
+          4
+        ],
+        "kinds": {
+          "chest": 468,
+          "monster": 1959,
+          "gather": 5662,
+          "structure": 325,
+          "realm": 328,
+          "event": 2,
+          "building": 7,
+          "npc": 1
+        },
+        "veins": 1012,
+        "islands": 9,
+        "largestLand": 506043,
+        "spawnConnected": 506043,
+        "walkable": 506861,
+        "landRatio": 0.52077,
+        "fingerprint": "9ba463e4",
+        "chunks": 1024
+      },
+      "packs": 482,
+      "multiMemberPackRatio": 0.9854771784232366
+    }
+  ]
+}

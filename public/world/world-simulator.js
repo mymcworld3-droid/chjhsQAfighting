@@ -46,6 +46,7 @@
       if(view.scale>=12){context.font='10px sans-serif';context.textAlign='center';context.lineWidth=3;context.strokeStyle='#111c';const text=o.name+(o.level?' Lv.'+o.level:'');context.strokeText(text,p.x,p.y-9);context.fillStyle='#eee4d0';context.fillText(text,p.x,p.y-9);}
     }
     const spawn=visiblePoint(Core.SPAWN.x+.5,Core.SPAWN.y+.5);context.strokeStyle='#fff1bb';context.lineWidth=1.5;context.strokeRect(spawn.x-4,spawn.y-4,8,8);
+    context.font='12px sans-serif';context.textAlign='center';context.lineWidth=3;context.strokeStyle='#14211dcc';context.strokeText('問道宗',spawn.x,spawn.y-10);context.fillStyle='#fff1bb';context.fillText('問道宗',spawn.x,spawn.y-10);
     if(selected){const p=visiblePoint(selected.x,selected.y);context.strokeStyle='#fff0af';context.lineWidth=2;context.strokeRect(p.x,p.y,Math.max(3,view.scale),Math.max(3,view.scale));}
   }
   function draw(){if(!renderQueued){renderQueued=true;requestAnimationFrame(drawNow);}}
@@ -76,7 +77,7 @@
   function inspect(p){
     if(!model||!Core.inside(p.x,p.y))return;selected={x:p.x,y:p.y};const base=Core.TYPES[model.tiles[p.y*1000+p.x]],actual=$('show-changes').checked?world.terrain(p.x,p.y):base,o=world.objectAt(p.x,p.y),tier=Core.TIERS[world.tierAt(p.x,p.y)];
     $('tile-coordinate').textContent=p.x+'，'+p.y;const title=document.createElement('strong');title.textContent=Core.LABELS[actual]+' · '+tier.name+'域';const body=document.createElement('div');body.textContent=o?o.name+(o.level?' · Lv.'+o.level:''):'此格沒有固定互動物件';const extra=document.createElement('small');extra.textContent='區塊 '+Core.chunkKey(p.x,p.y)+(actual!==base?' · 已修改（原為'+Core.LABELS[base]+'）':' · 種子生成');
-    const nodes=[title,body,extra];if(o?.veinId){const n=document.createElement('small');n.textContent='連續礦脈 · '+o.veinLength+' 格 · '+o.realm+'資源';nodes.push(n);}if(o?.kind==='realm'){const n=document.createElement('small');n.textContent=o.subtype==='guardian'?'守衛挑戰秘境':'陣紋探索秘境';nodes.push(n);}$('tile-info').replaceChildren(...nodes);draw();
+    const nodes=[title,body,extra];if(o?.species){const n=document.createElement('small');n.textContent=(Core.LABELS[o.biome]||'野外')+'棲地 · '+o.species+'群聚';nodes.push(n);}if(Core.inSafeArea(p.x,p.y)){const n=document.createElement('small');n.textContent=world.zone(p)+' · 安全區，沒有野生妖獸';nodes.push(n);}if(o?.veinId){const n=document.createElement('small');n.textContent='連續礦脈 · '+o.veinLength+' 格 · '+o.realm+'資源';nodes.push(n);}if(o?.kind==='realm'){const n=document.createElement('small');n.textContent=o.subtype==='guardian'?'守衛挑戰秘境':'陣紋探索秘境';nodes.push(n);}$('tile-info').replaceChildren(...nodes);draw();
   }
   function changeTile(p,type){
     if(!model||!Core.inside(p.x,p.y))return;const k=Core.chunkKey(p.x,p.y),i=(p.y%32)*32+p.x%32,tiles={...(patches[k]?.tiles||{})},base=Core.TYPES[model.tiles[p.y*1000+p.x]];

@@ -13,7 +13,7 @@
       if(cy%4===0)progress(Math.round((cy+1)/world.CHUNK_COUNT*75));
     }
     const counts=Object.fromEntries(world.TYPES.map(t=>[t,0])),tiers=Array(8).fill(0),kinds={},veins=new Set();let fingerprint=2166136261;
-    const blocked=new Set(['water','ocean','rock','bamboo','broken-bridge','sealed'].map(t=>world.TYPES.indexOf(t))),visited=new Uint8Array(size*size),queue=new Uint32Array(size*size);
+    const blocked=new Set(['water','ocean','rock','lava','broken-bridge','sealed'].map(t=>world.TYPES.indexOf(t))),visited=new Uint8Array(size*size),queue=new Uint32Array(size*size);
     for(const code of tiles){counts[world.TYPES[code]]++;fingerprint=Math.imul(fingerprint^code,16777619);}
     for(const o of objects){kinds[o.kind]=(kinds[o.kind]||0)+1;if(o.kind==='monster')tiers[o.tier||0]++;if(o.veinId)veins.add(o.veinId);}
     let islands=0,largest=0,spawnConnected=0,walkable=0;

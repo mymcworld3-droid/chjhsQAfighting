@@ -69,6 +69,10 @@ export class WorldRenderer {
     if(t==='water'||t==='ocean'||t==='broken-bridge'){
       c.strokeStyle='#aed2c16a';c.beginPath();const wave=Math.sin(at/1700+x+y)*3;c.moveTo(px+8+wave,py+12);c.lineTo(px+25+wave,py+12);c.moveTo(px+19-wave,py+28);c.lineTo(px+33-wave,py+28);c.stroke();
     }
+    if(t==='desert'){c.strokeStyle='#e4ca9255';c.beginPath();c.ellipse(px+15+h%9,py+23,15,4,0,Math.PI,Math.PI*2);c.stroke();}
+    if(t==='stone'||t==='volcano'||t==='lava'){
+      c.strokeStyle=t==='lava'?'#ffd181':t==='volcano'?'#c06c4680':'#5f5c535e';c.lineWidth=t==='lava'?2:1;c.beginPath();c.moveTo(px+5,py+8+h%7);c.lineTo(px+19,py+20);c.lineTo(px+30,py+12);c.moveTo(px+19,py+20);c.lineTo(px+24,py+36);c.stroke();
+    }
     if(t==='bridge'||t==='broken-bridge'){
       c.fillStyle=t==='bridge'?'#b3986c':'#756e54';c.fillRect(px,py+7,t==='bridge'?40:14,27);
       if(t==='broken-bridge')c.fillRect(px+31,py+7,9,27);
@@ -76,6 +80,12 @@ export class WorldRenderer {
     }
     c.strokeStyle='#223d2718';c.strokeRect(px+.5,py+.5,39,39);
     if(t==='sealed'){c.strokeStyle='#c5d9b9';c.lineWidth=2;c.strokeRect(px+5,py+5,30,30);this.label('封',px+20,py+24,'#e4e9bf',15);}
+    const dx=x-W.SPAWN.x,dy=y-W.SPAWN.y,r=W.CITY_RADIUS;
+    if((Math.abs(dx)===r&&Math.abs(dy)<=r&&Math.abs(dy)>1)||(Math.abs(dy)===r&&Math.abs(dx)<=r&&Math.abs(dx)>1)){
+      c.strokeStyle='#777460';c.lineWidth=5;c.beginPath();
+      if(Math.abs(dx)===r){const edge=px+(dx>0?38:2);c.moveTo(edge,py);c.lineTo(edge,py+40);}
+      if(Math.abs(dy)===r){const edge=py+(dy>0?38:2);c.moveTo(px,edge);c.lineTo(px+40,edge);}c.stroke();
+    }
   }
   decoration(x,y,t){
     const c=this.ctx,px=(x+.5)*TILE,py=(y+.65)*TILE;
@@ -84,6 +94,11 @@ export class WorldRenderer {
       for(const d of [-8,5]){c.strokeStyle='#365b32';c.lineWidth=4;c.beginPath();c.moveTo(px+d,py);c.lineTo(px+d+2,py-36);c.stroke();
         c.strokeStyle='#a1bd6a';c.lineWidth=1;for(let k=0;k<3;k++){c.beginPath();c.moveTo(px+d-2,py-k*11);c.lineTo(px+d+4,py-k*11);c.stroke();}
         c.fillStyle='#2f633c';for(const [dx,dy]of [[-10,-15],[6,-25],[-7,-33]]){c.beginPath();c.ellipse(px+d+dx,py+dy,11,4,dx>0?-.6:.6,0,Math.PI*2);c.fill();}}
+    }else if(t==='forest'){
+      c.fillStyle='#27442c44';c.beginPath();c.ellipse(px,py+4,17,7,0,0,7);c.fill();c.fillStyle='#65513b';c.fillRect(px-3,py-24,6,27);
+      for(const[dx,dy,r]of [[-8,-24,11],[7,-26,12],[0,-36,12]]){c.fillStyle=dy<-30?'#5e8650':'#3c7046';c.beginPath();c.arc(px+dx,py+dy,r,0,7);c.fill();}
+    }else if(t==='volcano'){
+      c.fillStyle='#443d3c';c.beginPath();c.moveTo(px-16,py+3);c.lineTo(px-6,py-22);c.lineTo(px+6,py-22);c.lineTo(px+17,py+3);c.closePath();c.fill();c.fillStyle='#d87a43';c.beginPath();c.ellipse(px,py-22,6,3,0,0,7);c.fill();
     }else if(t==='rock'){
       c.fillStyle='#45564b55';c.beginPath();c.ellipse(px,py+3,17,8,0,0,7);c.fill();c.fillStyle='#a3ad99';c.beginPath();c.moveTo(px-16,py);c.lineTo(px-10,py-18);c.lineTo(px+3,py-23);c.lineTo(px+16,py-9);c.lineTo(px+11,py+4);c.closePath();c.fill();
       c.fillStyle='#73816d';c.beginPath();c.moveTo(px+3,py-23);c.lineTo(px+1,py-5);c.lineTo(px+11,py+4);c.lineTo(px+16,py-9);c.fill();
@@ -135,9 +150,10 @@ export class WorldRenderer {
     for(let y=top;y<=bottom;y++)for(let x=left;x<=right;x++){
       const discovered=W.known(d.state.explored,x,y)||b&&x>=b.bounds.x&&x<b.bounds.x+8&&y>=b.bounds.y&&y<b.bounds.y+8;
       if(!discovered){c.fillStyle=W.hash(x,y)%3===0?'#34483c':'#304438';c.fillRect(x*TILE,y*TILE,40,40);continue;}
-      const t=W.terrain(x,y,b?.events||d.events);this.tile(x,y,t,at);if(['bamboo','rock'].includes(t))decor.push({y:y+.65,draw:()=>this.decoration(x,y,t)});
+      const t=W.terrain(x,y,b?.events||d.events);this.tile(x,y,t,at);if(['bamboo','rock'].includes(t)||t==='forest'&&W.hash(x,y)%3===0||t==='volcano'&&W.hash(x,y)%11===0)decor.push({y:y+.65,draw:()=>this.decoration(x,y,t)});
       if(b&&(x<b.bounds.x||x>=b.bounds.x+8||y<b.bounds.y||y>=b.bounds.y+8)){c.fillStyle='#11221ac9';c.fillRect(x*40,y*40,40,40);}
     }
+    if(!b&&W.known(d.state.explored,W.SPAWN.x,W.SPAWN.y)&&Math.abs(this.camera.x-W.SPAWN.x)<30&&Math.abs(this.camera.y-W.SPAWN.y)<30)this.label('問 道 宗',(W.SPAWN.x+.5)*TILE,(W.SPAWN.y-2.6)*TILE,'#f3dfac',17);
     if(b){
       for(const p of b.reachable||[])this.overlayCell(p,'#c9e0d029');
       for(const e of b.enemies.filter(e=>e.hp>0)){
