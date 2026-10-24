@@ -133,28 +133,37 @@ export class WorldRenderer {
     this.hitRegions=[];
     const zoom=b?Math.max(.55,Math.min(1.4,(this.width-28)/320,(this.height-80)/320)):this.camera.zoom,s=TILE*zoom;
     c.setTransform(this.dpr,0,0,this.dpr,0,0);c.fillStyle='#253b31';c.fillRect(0,0,this.width,this.height);
-    c.translate(this.width/2,this.height/2);c.scale(zoom,zoom);c.translate(-this.camera.x*TILE,-this.camera.y*TILE);
+    // Quantize only the final display translation to physical pixels. This
+    // prevents subpixel filtering from making otherwise fixed ground look shaky
+    // when the follow camera moves at fractional tile coordinates.
+    const screenX=this.width/2-this.camera.x*TILE*zoom;
+    const screenY=this.height/2-this.camera.y*TILE*zoom;
+    c.setTransform(this.dpr*zoom,0,0,this.dpr*zoom,Math.round(screenX*this.dpr),Math.round(screenY*this.dpr));
     // Keep hit testing on the same battle zoom as rendering.
     if(b)this.camera.zoom=zoom;
     const left=Math.max(0,Math.floor(this.camera.x-this.width/s/2)-1),right=Math.min(this.world.SIZE-1,Math.ceil(this.camera.x+this.width/s/2)+1),
       top=Math.max(0,Math.floor(this.camera.y-this.height/s/2)-2),bottom=Math.min(this.world.SIZE-1,Math.ceil(this.camera.y+this.height/s/2)+2),decor=[];
     const visible=(x,y)=>W.known(d.state.explored,x,y)||!!(b&&x>=b.bounds.x&&x<b.bounds.x+8&&y>=b.bounds.y&&y<b.bounds.y+8),events=b?.events||d.events;
     const scenery=this.sceneryModel(),signature=[left,right,top,bottom,d.state.explored.revision,d.state.explored.all,W.patchRevision,events?.bridge,events?.array,b?.id,b?.revision].join(':');
-    // Reuse one near-view world object query for building effects and interactions.
-    const nearbyObjects=b?[]:W.objectsIn({x:left-5,y:top-5,w:right-left+11,h:bottom-top+11});
-    let sacredSites=[];
-    if(!b&&this.atmosphere){
-      const fullyKnown=(o,pad)=>{
-        if(!visible(o.x,o.y))return false;
-        return [[-pad,-pad],[pad,-pad],[-pad,pad],[pad,pad]].every(([dx,dy])=>W.inside(o.x+dx,o.y+dy)&&visible(o.x+dx,o.y+dy));
-      };
-      sacredSites=nearbyObjects.filter(o=>(o.kind==='building'||o.kind==='realm'||o.id==='shrine'||o.subtype==='shrine')&&fullyKnown(o,4))
-        .sort((a,b)=>Math.hypot(a.x-this.camera.x,a.y-this.camera.y)-Math.hypot(b.x-this.camera.x,b.y-this.camera.y)).slice(0,12);
-      if(Math.abs(this.camera.x-W.SPAWN.x)<17&&Math.abs(this.camera.y-W.SPAWN.y)<17&&fullyKnown(W.SPAWN,7))
-        sacredSites.unshift({kind:'sect',x:W.SPAWN.x,y:W.SPAWN.y,id:'qingyun-sect'});
-    }
     this.ground?.setScale(this.dpr*zoom);
-    if(signature!==this.scenerySignature){this.scenerySignature=signature;this.sceneryItems=scenery.inBounds({x:left,y:top,w:right-left+1,h:bottom-top+1},events,visible);}
+    // Scenery, objects and aura anchors depend on revealed cells and viewport
+    // tiles, not on fractional camera positions. Rebuild only when these change.
+    if(signature!==this.scenerySignature){
+      this.scenerySignature=signature;
+      this.sceneryItems=scenery.inBounds({x:left,y:top,w:right-left+1,h:bottom-top+1},events,visible);
+      this.nearbyObjects=b?[]:W.objectsIn({x:left-5,y:top-5,w:right-left+11,h:bottom-top+11});
+      let sites=[];
+      if(!b&&this.atmosphere){
+        const fullyKnown=(o,pad)=>visible(o.x,o.y)&&[[-pad,-pad],[pad,-pad],[-pad,pad],[pad,pad]]
+          .every(([dx,dy])=>W.inside(o.x+dx,o.y+dy)&&visible(o.x+dx,o.y+dy));
+        sites=this.nearbyObjects.filter(o=>(o.kind==='building'||o.kind==='realm'||o.id==='shrine'||o.subtype==='shrine')&&fullyKnown(o,4))
+          .sort((a,b)=>Math.hypot(a.x-this.camera.x,a.y-this.camera.y)-Math.hypot(b.x-this.camera.x,b.y-this.camera.y)).slice(0,12);
+        if(Math.abs(this.camera.x-W.SPAWN.x)<17&&Math.abs(this.camera.y-W.SPAWN.y)<17&&fullyKnown(W.SPAWN,7))
+          sites.unshift({kind:'sect',x:W.SPAWN.x,y:W.SPAWN.y,id:'qingyun-sect'});
+      }
+      this.sacredSites=sites;
+    }
+    const nearbyObjects=this.nearbyObjects||[],sacredSites=b?[]:this.sacredSites||[];
     for(let y=top;y<=bottom;y++)for(let x=left;x<=right;x++){
       const discovered=visible(x,y);
       if(!discovered){c.fillStyle=W.hash(x,y)%3===0?'#34483c':'#304438';c.fillRect(x*TILE,y*TILE,40,40);continue;}
@@ -187,7 +196,7 @@ export class WorldRenderer {
       this.route(d.preview?.path||mine?.route?.path?.slice(W.sample(mine?.route,at).index));
     }else{decor.push({y:b.player.y+.5,draw:()=>this.sprite({...mine,name:mine?.name||'我'},pos,at,true,false)});this.route(d.preview?.path);}
     decor.sort((a,q)=>a.y-q.y).forEach(n=>n.draw());
-    if(sacredSites.length)this.atmosphere.drawAir(c,sacredSites,at,!globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);
+    if(sacredSites.length)this.atmosphere.drawAir(c,sacredSites);
     const effectTime=Date.now();this.effects=this.effects.filter(e=>effectTime-e.at<1000);
     for(const e of this.effects){const elapsed=(effectTime-e.at)/1000,x=(e.x+.5)*40,y=(e.y+.5)*40;
       c.save();c.globalAlpha=Math.max(0,1-elapsed);
