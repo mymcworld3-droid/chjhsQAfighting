@@ -35,9 +35,13 @@
       const bridgeDirection=horizontal>=vertical?'east':'south';
       const counts=new Map();for(const v of neighbours)if(DRY.has(v))counts.set(v,(counts.get(v)||0)+1);
       const underlay=Math.max(Math.abs(x-W.SPAWN.x),Math.abs(y-W.SPAWN.y))<=W.CITY_RADIUS?'courtyard':[...counts].sort((a,b)=>b[1]-a[1])[0]?.[0]||'grass';
-      // Topology is coordinate-independent; Ground.compose adds the exact
-      // texture-flip variants instead of assuming an eight-cell repeat.
-      return {x,y,terrain:t,neighbours,mask,underlay,bridgeDirection,key:[t,...neighbours,mask,underlay,bridgeDirection].join(':')};
+      // Only include neighbours that actually contribute pixels. A road's
+      // eight surrounding terrain names used to create hundreds of duplicate
+      // rasters when zooming out across an entire landscaped sect.
+      const blended=neighbours.map(v=>v!==t&&!['road','bridge','broken-bridge','sealed'].includes(v)?v:'');
+      const raster=t==='road'?[t,mask,underlay]:['bridge','broken-bridge'].includes(t)?[t,bridgeDirection,neighbours.includes('ocean')?'ocean':'water']:[t,...blended];
+      // Ground.compose additionally keys every contributing texture's flips.
+      return {x,y,terrain:t,neighbours,mask,underlay,bridgeDirection,key:raster.join(':')};
     }
     function sparse(x,y,limit,layer,diagonal=false){
       const h=W.hash(x,y,layer);if(h%100>=limit)return false;
@@ -83,19 +87,41 @@
       }
       // Qingyun Sect's ceremonial gates are standalone four-view sprites.
       // Camp fence gates keep their existing small wooden atlas images.
-      if(Math.abs(dx)===r&&Math.abs(dy)<=r&&dy!==0&&t==='courtyard')add('wall',40);
-      if(Math.abs(dy)===r&&Math.abs(dx)<=r&&dx!==0&&t==='courtyard')add('wall',40);
+      if(Math.abs(dx)===r&&Math.abs(dy)<=r&&dy!==0&&['courtyard','road'].includes(t))add('wall',40);
+      if(Math.abs(dy)===r&&Math.abs(dx)<=r&&dx!==0&&['courtyard','road'].includes(t))add('wall',40);
       if((Math.abs(dx)===r&&dy===0)||(Math.abs(dy)===r&&dx===0))add('sect-gate',100,dx===r?'east':dx===-r?'west':dy===r?'south':'north');
       if(t==='courtyard'&&Math.abs(dx)>=6&&Math.abs(dx)<=8&&Math.abs(dy)>=6&&Math.abs(dy)<=8&&(dx+dy)%2===0)add('garden',38);
-      if(t==='courtyard'&&((Math.abs(dx)===8&&dy%4===0)||(Math.abs(dy)===8&&dx%4===0)))add('lantern',32);
+      if(t==='courtyard'&&((Math.abs(dx)===20&&dy%4===0)||(Math.abs(dy)===20&&dx%4===0)))add('lantern',42);
       // Ceremonial lantern avenues, paired gate stelae and hanging banners.
       // These are seeded visual props only; all existing roads stay passable.
-      if(t==='courtyard'&&Math.abs(dx)===2&&Math.abs(dy)<=7&&Math.abs(dy)%3===1)add('lantern',34);
-      if(t==='courtyard'&&Math.abs(dy)===2&&Math.abs(dx)<=7&&Math.abs(dx)%3===1)add('lantern',34);
+      if(t==='courtyard'&&Math.abs(dx)===2&&dy>=-11&&dy<=18&&Math.abs(dy)%4===2)add('lantern',42);
+      if(t==='courtyard'&&Math.abs(dy)===2&&Math.abs(dx)<=18&&Math.abs(dx)%4===2)add('lantern',42);
       if(t==='courtyard'&&((Math.abs(dy)===r-1&&Math.abs(dx)===2)||(Math.abs(dx)===r-1&&Math.abs(dy)===2)))add('obelisk',43);
       if(t==='courtyard'&&((Math.abs(dy)===r-2&&Math.abs(dx)===3)||(Math.abs(dx)===r-2&&Math.abs(dy)===3)))add('banner',38);
       return items;
     }
+    function sect(){
+      const items=[],add=(prop,dx,dy,w,h=w,anchor=.88,extra={})=>items.push({prop,x:W.SPAWN.x+dx+.5,y:W.SPAWN.y+dy+.5,w,h,size:w,anchor,owner:'wendao-gardens',occludes:true,...extra});
+      for(const p of W.SECT_LANDMARKS||[])add(p.prop,p.dx,p.dy,p.w,p.h,p.anchor,{footprint:p.footprint});
+      add('sect-medallion',0,0,232,232,.5,{layer:'ground',occludes:false});
+      add('sect-medallion',0,13,152,152,.5,{layer:'ground',occludes:false});
+      for(const side of [-1,1]){
+        for(const dy of [-7,0,6]){
+          const dx=side*(13+Math.round(Math.sin((dy+4)/7)*1.4));
+          add('sect-bridge-ew',dx,dy,190,105,.55,{layer:'ground',occludes:false,bridge:true});
+        }
+        for(const dy of [7,19])add(side<0?'sect-lion-right':'sect-lion-left',side*3,dy,74,86,.9);
+        for(const [dx,dy]of [[8,-13],[18,-12],[8,12],[18,4],[7,18]])add('sect-magnolia',side*dx,dy,128,142,.92);
+        for(const dy of [-9,11])add('sect-censer',side*5,dy,80,88,.9);
+        for(const [dx,dy]of [[9,12],[12,13],[10,15],[14,14]])add('sect-lotus',side*dx,dy,50,50,.5,{layer:'ground',occludes:false,water:true});
+        // Small matching garden furniture keeps the broad lawns intentional.
+        for(const [dx,dy]of [[18,-17],[9,-18],[19,16]])add('bonsai',side*dx,dy,72,72,.88);
+      }
+      return items;
+    }
+    const sectItems=sect();
+    const intersects=(p,b)=>p.x+p.w/80>b.x&&p.x-p.w/80<b.x+b.w&&
+      p.y+p.h*(1-p.anchor)/40>b.y&&p.y-p.h*p.anchor/40<b.y+b.h;
     function site(o,events={}){
       if(!isSite(o))return [];
       const subtype=o.kind==='building'?o.id:o.kind==='realm'?'realm':o.subtype,h=W.hash(o.x,o.y,110),items=[];
@@ -149,14 +175,24 @@
         const plants=ambient(x,y,W.terrain(x,y,events),events);
         items.push(...(reserved.has(W.key(x,y))?plants.filter(p=>p.prop==='wall'||isGate(p)):plants));
       }
+      // Architectural sprites are clipped by their actual multi-tile extents,
+      // not their anchor cell. Panning cannot pop a palace roof or bridge away.
+      for(const p of sectItems){
+        if(!visible(Math.floor(p.x),Math.floor(p.y))||!intersects(p,bounds))continue;
+        if(p.footprint){const f=p.footprint;let known=true;for(let dy=0;dy<f.h;dy++)for(let dx=0;dx<f.w;dx++)if(!visible(W.SPAWN.x+f.x+dx,W.SPAWN.y+f.y+dy))known=false;if(!known)continue;}
+        if(p.bridge&&W.terrain(Math.floor(p.x),Math.floor(p.y),events)!=='bridge')continue;
+        if(p.water&&!WATER.has(W.terrain(Math.floor(p.x),Math.floor(p.y),events)))continue;
+        items.push(p);
+      }
       // Include tall canopies rooted below or beside the viewport. The halo
       // covers the largest 184px sprite at 40px/tile, including seeded offsets.
       return connect(items).filter(p=>{
+        if(p.owner==='wendao-gardens')return intersects(p,bounds);
         const bamboo=p.prop.startsWith('bamboo-tall-'),side=bamboo?2:0;
         return p.x>=bounds.x-side&&p.x<bounds.x+bounds.w+side&&p.y>=bounds.y-(bamboo?1:0)&&p.y<bounds.y+bounds.h+(bamboo?5:0);
       });
     }
-    return Object.freeze({world,topology,ambient,site,inBounds});
+    return Object.freeze({world,topology,ambient,site,sect:()=>sectItems,inBounds});
   }
   const api=Object.freeze({DIRECTIONS,STEPS,isBarrier,connect,create});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorldScenery=api;

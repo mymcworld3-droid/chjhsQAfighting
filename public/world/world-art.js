@@ -4,7 +4,8 @@
   const base='/assets/world-map/ai/';
   const buildings=['meditation','forge','contract','vault','rank','duel','raid','watchtower','shrine','ruins','camp','realm-spring','realm-array','realm-sword','realm-star'];
   const directions=Object.freeze(['north','east','south','west']);
-  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas','sect-gates','bamboo-upright-atlas'].map(id=>[id,base+id+'.webp'])));
+  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas','sect-gates','bamboo-upright-atlas','sect-palace','sect-garden-atlas','sect-lotus'].map(id=>[id,base+id+'.webp'])));
+  const sectProps=Object.freeze(['sect-rockery','sect-pavilion','sect-bridge-ew','sect-bridge-ns','sect-lion-right','sect-lion-left','sect-censer','sect-magnolia','sect-medallion']);
   const sceneryProps=Object.freeze(['fence','gate','wall','broken-wall','pillar','rubble','bridge','supplies']);
   const props=['bamboo','tree','rock','volcano','flowers','shrub','reeds','herb','ore','chest','lantern','wall-h','wall-v','gate','garden','boat','meteor','shield','altar','sealed'];
   const creatures=['靈狼','玄甲山豬','竹林靈狼','青竹蛇','山魈','妖藤','沙蠍','荒漠蜥蜴','巖甲獸','石靈','赤焰獸','熔岩蜥蜴','霜羽鷹','雪狼','毒蟾','澤蛇','潮汐蟹','海岸靈龜','古陣守衛','靈獸'];
@@ -41,6 +42,12 @@
     return parts;
   }
   const scenery=p=>{
+    if(p.prop==='sect-lotus')return {image:'sect-lotus',sx:0,sy:0,sw:256,sh:256,w:p.w||50,h:p.h||50,anchor:.5};
+    if(p.prop==='sect-palace')return {image:'sect-palace',sx:0,sy:0,sw:1024,sh:768,w:p.w||360,h:p.h||270,anchor:p.anchor??.88};
+    if(sectProps.includes(p.prop)){
+      const i=sectProps.indexOf(p.prop),size=p.size||100;
+      return {image:'sect-garden-atlas',sx:i%3*512,sy:Math.floor(i/3)*512,sw:512,sh:512,w:p.w||size,h:p.h||size,anchor:p.anchor??.88};
+    }
     // Four generated upright bamboo cutouts. Preserve their 1:2 source aspect
     // ratio at every seeded size; each rises roughly four cells above its foot.
     if(/^bamboo-tall-[0-3]$/.test(p.prop)){
@@ -69,6 +76,6 @@
   function bounds(o,sprite=object(o)){
     return{x:(o.x+.5)*40-sprite.w/2,y:(o.y+.5)*40-sprite.h*sprite.anchor,w:sprite.w,h:sprite.h};
   }
-  const api=Object.freeze({sources,directions,sceneryProps,ambientProps,ambientProp,compass,buildings:Object.freeze(buildings),props:Object.freeze(props),creatures:Object.freeze(creatures),terrain:Object.freeze(terrain),sheet,prop,directional,barrierParts,scenery,monster,object,bounds});
+  const api=Object.freeze({sources,directions,sceneryProps,sectProps,ambientProps,ambientProp,compass,buildings:Object.freeze(buildings),props:Object.freeze(props),creatures:Object.freeze(creatures),terrain:Object.freeze(terrain),sheet,prop,directional,barrierParts,scenery,monster,object,bounds});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorldArt=api;
 })(globalThis);

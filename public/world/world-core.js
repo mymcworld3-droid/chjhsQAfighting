@@ -4,7 +4,38 @@
   const SIZE=1000,CHUNK_SIZE=32,CHUNK_COUNT=Math.ceil(SIZE/CHUNK_SIZE),STEP_MS=220,VISION_RADIUS=15;
   const GENERATOR_VERSION='qingyun-seeded-v2',DEFAULT_SEED='qingyun-2026';
   const SPAWN=Object.freeze({x:Math.floor(SIZE/2),y:Math.floor(SIZE/2)}),DIRS=Object.freeze([[0,1],[1,0],[0,-1],[-1,0]]);
-  const CITY_RADIUS=9,SAFE_RADIUS=36,OUTSKIRTS=Object.freeze({x:SPAWN.x+44,y:SPAWN.y-64,w:48,h:48});
+  const CITY_RADIUS=22,SAFE_RADIUS=36,OUTSKIRTS=Object.freeze({x:SPAWN.x+44,y:SPAWN.y-64,w:48,h:48});
+  // Shared architectural footprints use tile coordinates; painted roofs and
+  // canopies may overhang them. Existing functional buildings keep their IDs
+  // and positions, so saved interactions still lead to the same doors.
+  const SECT_LANDMARKS=Object.freeze([
+    {id:'main-hall',prop:'sect-palace',dx:0,dy:-15,w:360,h:270,anchor:.88,footprint:{x:-3,y:-17,w:7,h:3}},
+    ...[-1,1].flatMap(side=>[
+      {id:'rockery-'+side,prop:'sect-rockery',dx:side*13,dy:-10,w:200,h:190,anchor:.88,footprint:{x:side*13-1,y:-12,w:3,h:3}},
+      {id:'pavilion-'+side,prop:'sect-pavilion',dx:side*18,dy:11,w:152,h:152,anchor:.86,footprint:{x:side*18-1,y:10,w:3,h:2}}
+    ])
+  ].map(p=>Object.freeze({...p,footprint:Object.freeze(p.footprint)})));
+  function sectWater(dx,dy){
+    const ax=Math.abs(dx),centre=13+Math.round(Math.sin((dy+4)/7)*1.4);
+    return dy>=-12&&dy<=16&&Math.abs(ax-centre)<=1||((ax-11)/4)**2+((dy-13)/3.4)**2<=1;
+  }
+  function sectTerrain(dx,dy){
+    const ax=Math.abs(dx),ay=Math.abs(dy);
+    if(Math.max(ax,ay)>CITY_RADIUS)return null;
+    // The former 19 x 19 court is preserved. Water gardens occupy the new
+    // wings; their marble crossings are genuine walkable bridge terrain.
+    if(sectWater(dx,dy))return [0,-7,6].includes(dy)?'bridge':'water';
+    if(ax<=1||ay<=1||ax===18||ay===18||[-7,6].includes(dy)&&ax>=9&&ax<=18||
+      dy===-12&&ax<=6||ax===6&&dy>=-20&&dy<=-12||dy===-20&&ax<=6)return 'road';
+    if(ax>=10&&ax<=20&&dy>=-17&&dy<=16)return 'grass';
+    return 'courtyard';
+  }
+  function sectBlocked(x,y){
+    const dx=x-SPAWN.x,dy=y-SPAWN.y,ax=Math.abs(dx),ay=Math.abs(dy);
+    if(Math.max(ax,ay)>CITY_RADIUS)return false;
+    if(ax===CITY_RADIUS&&dy!==0||ay===CITY_RADIUS&&dx!==0)return true;
+    return SECT_LANDMARKS.some(({footprint:f})=>dx>=f.x&&dx<f.x+f.w&&dy>=f.y&&dy<f.y+f.h);
+  }
   const townPoint=(x,y)=>({x:SPAWN.x+x-9,y:SPAWN.y+y-36}),starterPoint=(x,y)=>({x:OUTSKIRTS.x+x,y:OUTSKIRTS.y+y});
   const inSafeArea=(x,y)=>Math.max(Math.abs(x-SPAWN.x),Math.abs(y-SPAWN.y))<=SAFE_RADIUS;
   const inOutskirts=(x,y)=>x>=OUTSKIRTS.x&&y>=OUTSKIRTS.y&&x<OUTSKIRTS.x+48&&y<OUTSKIRTS.y+48;
@@ -129,7 +160,7 @@ return TERRAIN;})();
     const chunks={...a.chunks};for(const[k,v]of Object.entries(b.chunks))chunks[k]=!chunks[k]?v:[...v].map((c,i)=>HEX[fogValue(c)|fogValue(chunks[k][i])]).join('');
     return {version:2,chunks,revision:Math.max(a.revision,b.revision)+1};
   }
-  function initialExplored(){let fog=normalizeExplored();for(let y=SPAWN.y-CITY_RADIUS-1;y<=SPAWN.y+CITY_RADIUS+1;y++)for(let x=SPAWN.x-CITY_RADIUS-1;x<=SPAWN.x+CITY_RADIUS+1;x++)fog=reveal(fog,{x,y},0);return reveal(fog,SPAWN);}
+  function initialExplored(){let fog=normalizeExplored();const r=10;for(let y=SPAWN.y-r;y<=SPAWN.y+r;y++)for(let x=SPAWN.x-r;x<=SPAWN.x+r;x++)fog=reveal(fog,{x,y},0);return reveal(fog,SPAWN);}
   const fullExplored=()=>({version:2,chunks:{},all:true,revision:1});
   function sample(route,at=Date.now()){
     const path=route?.path?.length?route.path:[SPAWN],stepMs=route?.stepMs||STEP_MS;
@@ -158,7 +189,7 @@ return TERRAIN;})();
       if(!inside(x,y))return 'rock';
       const dx=Math.abs(x-SPAWN.x),dy=Math.abs(y-SPAWN.y);
       // The sect and its surrounding plain are identical for every seed.
-      if(inSafeArea(x,y))return dx===0||dy===0?'road':Math.max(dx,dy)<=CITY_RADIUS?'courtyard':'grass';
+      if(inSafeArea(x,y))return sectTerrain(x-SPAWN.x,y-SPAWN.y)||(dx===0||dy===0?'road':'grass');
       if(inOutskirts(x,y))return STARTER_TERRAIN[(y-OUTSKIRTS.y)*48+x-OUTSKIRTS.x];
       if((dx===0&&dy<=60)||(dy===0&&dx<=60)||x===OUTSKIRTS.x&&y>=OUTSKIRTS.y+36&&y<=SPAWN.y)return 'road';
       const {elevation:e,humidity:h,temperature:t}=climate(x,y);
@@ -246,7 +277,7 @@ return TERRAIN;})();
       if(t==='sealed'&&events.array>=60)t='road';if(t==='broken-bridge'&&events.bridge>=20)t='bridge';return t;
     }
     function walkable(x,y,{events={},bounds=null,blocked=null,ignoreObjects=false,mode='walk'}={}){
-      if(!inside(x,y)||bounds&&(x<bounds.x||y<bounds.y||x>=bounds.x+bounds.w||y>=bounds.y+bounds.h)||blocked?.has(key(x,y)))return false;
+      if(!inside(x,y)||bounds&&(x<bounds.x||y<bounds.y||x>=bounds.x+bounds.w||y>=bounds.y+bounds.h)||blocked?.has(key(x,y))||sectBlocked(x,y))return false;
       const t=terrain(x,y,events),sea=['water','ocean'];
       if(mode==='sail'){
         if(!sea.includes(t)&&t!=='beach'&&!DIRS.some(([dx,dy])=>sea.includes(terrain(x+dx,y+dy,events))))return false;
@@ -298,7 +329,7 @@ return TERRAIN;})();
       return {...result,route:{path,stepMs:STEP_MS,startedAtMs:at-(p.moving?p.fraction*STEP_MS:0)}};
     }
     const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?'問道宗':inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
-    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
+    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
       key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
       patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
     return Object.freeze(api);

@@ -85,9 +85,12 @@
           if(t!==info.terrain&&!['road','bridge','broken-bridge','sealed'].includes(t))overlay(t,mask('edge:'+i,(u,v)=>transitionAlpha(i,u,v)));
         });
       }
-      tiles.set(key,target);if(tiles.size>512)tiles.delete(tiles.keys().next().value);return target;
+      // A zoomed-out garden exposes many shoreline/junction variants at once.
+      // Small rasters can retain more variants without exceeding the existing
+      // high-DPI memory budget (1024 x 52px RGBA is about 11 MB).
+      tiles.set(key,target);if(tiles.size>(SIZE<=52?1024:512))tiles.delete(tiles.keys().next().value);return target;
     }
-    return Object.freeze({compose,setScale,get tileSize(){return SIZE;},get cachedTiles(){return tiles.size;}});
+    return Object.freeze({compose,setScale,get tileSize(){return SIZE;},get maxCachedTiles(){return SIZE<=52?1024:512;},get cachedTiles(){return tiles.size;}});
   }
   const api=Object.freeze({create,roadAlpha,transitionAlpha,textureFrame});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorldGround=api;

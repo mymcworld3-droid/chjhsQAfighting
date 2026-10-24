@@ -1,0 +1,49 @@
+{
+  "renderer": "production WorldRenderer via native Canvas",
+  "seed": "qingyun-2026",
+  "sectSize": 45,
+  "assets": 36,
+  "repeatable": true,
+  "fixtures": [
+    {
+      "name": "overview",
+      "width": 1280,
+      "height": 1280,
+      "dpr": 1,
+      "zoom": 0.65,
+      "props": 45,
+      "tileCache": 602,
+      "medianDrawMs": 62.650277999999844
+    },
+    {
+      "name": "main-hall",
+      "width": 1100,
+      "height": 720,
+      "dpr": 1,
+      "zoom": 1.45,
+      "props": 10,
+      "tileCache": 145,
+      "medianDrawMs": 8.078342000000248
+    },
+    {
+      "name": "water-garden",
+      "width": 1100,
+      "height": 760,
+      "dpr": 1,
+      "zoom": 1.25,
+      "props": 13,
+      "tileCache": 221,
+      "medianDrawMs": 16.35672199999999
+    },
+    {
+      "name": "phone",
+      "width": 390,
+      "height": 740,
+      "dpr": 2,
+      "zoom": 1,
+      "props": 12,
+      "tileCache": 71,
+      "medianDrawMs": 32.029749999999694
+    }
+  ]
+}

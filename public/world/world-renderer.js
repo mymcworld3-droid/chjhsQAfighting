@@ -68,7 +68,7 @@ export class WorldRenderer {
     const c=this.ctx;c.save();c.globalAlpha*=opacity;
     // High-resolution ornamental gate roofs need quality downsampling at normal zoom.
     // Other scenery retains the default faster interpolation.
-    if(sprite.image==='sect-gates')c.imageSmoothingQuality='high';
+    if(sprite.image.startsWith('sect-'))c.imageSmoothingQuality='high';
     c.drawImage(img,sprite.sx,sprite.sy,sprite.sw,sprite.sh,x-sprite.w/2,y-sprite.h*sprite.anchor,sprite.w,sprite.h);c.restore();return true;
   }
   pickPoint(p){
@@ -107,10 +107,11 @@ export class WorldRenderer {
     const sprite=Art.scenery(p),player=this.playerSilhouette;
     // A dense canopy may rise several rows in front of the local player.
     // Fade only overlapping foreground clumps so the character stays readable.
-    const obscures=player&&p.prop.startsWith('bamboo-tall-')&&p.y>player.foot&&
+    const bamboo=p.prop.startsWith('bamboo-tall-');
+    const obscures=player&&(bamboo||p.occludes)&&p.y>player.foot&&
       p.x*TILE+sprite.w/2>player.x&&p.x*TILE-sprite.w/2<player.x+player.w&&
       p.y*TILE-sprite.h*sprite.anchor<player.y+player.h&&p.y*TILE>player.y;
-    this.imageSprite(sprite,p.x*TILE,p.y*TILE,obscures?.08:1);
+    this.imageSprite(sprite,p.x*TILE,p.y*TILE,obscures?(bamboo?.08:.22):1);
   }
   decoration(x,y,t){
     for(const p of this.sceneryModel().ambient(x,y,t,this.data?.events))this.drawScenery(p);
@@ -181,8 +182,9 @@ export class WorldRenderer {
       const t=W.terrain(x,y,events);this.tile(x,y,t,at,events,visible);
       if(b&&(x<b.bounds.x||x>=b.bounds.x+8||y<b.bounds.y||y>=b.bounds.y+8)){c.fillStyle='#11221ac9';c.fillRect(x*40,y*40,40,40);}
     }
+    for(const p of this.sceneryItems)if(p.layer==='ground')this.drawScenery(p);
     if(sacredSites.length)this.atmosphere.drawGround(c,sacredSites,at);
-    for(const p of this.sceneryItems)decor.push({y:p.y,draw:()=>this.drawScenery(p)});
+    for(const p of this.sceneryItems)if(p.layer!=='ground')decor.push({y:p.y,draw:()=>this.drawScenery(p)});
     if(!b&&W.known(d.state.explored,W.SPAWN.x,W.SPAWN.y)&&Math.abs(this.camera.x-W.SPAWN.x)<30&&Math.abs(this.camera.y-W.SPAWN.y)<30)this.label('問 道 宗',(W.SPAWN.x+.5)*TILE,(W.SPAWN.y-2.6)*TILE,'#f3dfac',17);
     if(b){
       for(const p of b.reachable||[])this.overlayCell(p,'#c9e0d029');

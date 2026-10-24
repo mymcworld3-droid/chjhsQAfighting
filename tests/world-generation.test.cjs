@@ -40,10 +40,10 @@ test('every seed starts in the central sect with a clear plain, no hostile spawn
   for(const seed of ['qingyun-2026','海上有仙山','竹影與星河','0','中央出生測試']){
     const world=W.createWorld(seed),s=world.SPAWN,r=world.SAFE_RADIUS;assert.equal(world.zone(s),'問道宗');assert.equal(world.tierAt(s.x,s.y),0);
     for(let y=s.y-r;y<=s.y+r;y++)for(let x=s.x-r;x<=s.x+r;x++){
-      assert.ok(['grass','road','courtyard'].includes(world.baseTerrain(x,y)),seed+' '+x+','+y);
+      assert.ok(['grass','road','courtyard','water','bridge'].includes(world.baseTerrain(x,y)),seed+' '+x+','+y);
       const object=world.objectAt(x,y);assert.ok(!object||['building','npc'].includes(object.kind));
     }
-    for(const[dx,dy]of world.DIRS){const target={x:s.x+dx*60,y:s.y+dy*60},route=world.plan(s,target);assert.equal(route.path.length,61);assert.deepEqual(route.path.at(-1),target);}
+    for(const[dx,dy]of world.DIRS){const target={x:s.x+dx*60,y:s.y+dy*60},route=world.plan(s,target);assert.ok(route.path.length>=61&&route.path.length<=75);assert.deepEqual(route.path.at(-1),target);assert.ok(route.path.every(p=>world.walkable(p.x,p.y)));}
     assert.ok(world.OBJECTS.filter(o=>o.kind==='monster').every(o=>!world.inSafeArea(o.x,o.y)));
     assert.equal(world.known(world.initialExplored(),s.x,s.y),true);assert.equal(world.known(world.initialExplored(),9,36),false);
   }

@@ -79,3 +79,15 @@ test('ground cache includes underlay and neighbour blend flips, not only the mai
     assert.equal(ground.cachedTiles,2);
   }
 });
+
+test('zoomed-out shoreline caches fit the complete sect while remaining bounded by raster size',()=>{
+  const factory=()=>({width:0,height:0,getContext(){return {save(){},restore(){},translate(){},scale(){},drawImage(){}};}});
+  const ground=G.create(A,factory),images={'ground-atlas':{complete:true,naturalWidth:512}};
+  const info={x:0,y:0,terrain:'grass',neighbours:Array(8).fill('grass'),mask:0,underlay:'grass'};
+  ground.setScale(.65);assert.equal(ground.maxCachedTiles,1024);
+  for(let i=0;i<1100;i++)ground.compose({...info,key:'shore-'+i},images);
+  assert.equal(ground.cachedTiles,1024);assert.ok(ground.cachedTiles*ground.tileSize**2*4<3000000);
+  ground.setScale(3.6);assert.equal(ground.cachedTiles,0);assert.equal(ground.maxCachedTiles,512);
+  for(let i=0;i<540;i++)ground.compose({...info,key:'detail-'+i},images);
+  assert.equal(ground.cachedTiles,512);
+});

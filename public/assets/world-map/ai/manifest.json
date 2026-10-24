@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 1984806,
+  "totalBytes": 3081864,
   "assets": [
     {
       "id": "meditation",
@@ -377,6 +377,51 @@
       "variants": 4,
       "source": "Built-in image generation: four long straight bamboo clumps on a transparent 2x2 atlas",
       "sourceSha256": "8f1dc205af52aed584cc0878d50b984e5a5bb6bf3ec6230cbcefefba0e27d1a7"
+    },
+    {
+      "id": "sect-palace",
+      "file": "sect-palace.webp",
+      "width": 1024,
+      "height": 768,
+      "bytes": 289076,
+      "alpha": true,
+      "quality": 90,
+      "source": "exec-0798b625-a357-4a34-ae31-89b40b3d7fcb.png",
+      "sourceSha256": "7f9b55ea2fcb06a69c5f45cbbad151eece2d3f6fcb50c45dd0c154fdd7dc7b1c"
+    },
+    {
+      "id": "sect-garden-atlas",
+      "file": "sect-garden-atlas.webp",
+      "width": 1536,
+      "height": 1536,
+      "bytes": 793422,
+      "alpha": true,
+      "quality": 88,
+      "sourceRows": [
+        0,
+        430,
+        808,
+        1254
+      ],
+      "sourceColumns": [
+        0,
+        418,
+        836,
+        1254
+      ],
+      "source": "exec-5a01de66-cc07-41be-81de-9194b88e1edd.png",
+      "sourceSha256": "35e06ac96465080b7dce4329e572e121e9f61e33e85a28bd4f467347923829ef"
+    },
+    {
+      "id": "sect-lotus",
+      "file": "sect-lotus.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 14560,
+      "alpha": true,
+      "quality": 86,
+      "source": "exec-3d3d038b-5df0-48d9-960e-f5d95907ff48.png",
+      "sourceSha256": "5cd26fc1cdc965b7b3f406ca49e1aa8142cb66543e66ac523e9b583e032ee037"
     }
   ]
 }

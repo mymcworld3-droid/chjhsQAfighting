@@ -20,6 +20,8 @@
 | 藏劍遺窟 | `realm-sword.webp` |
 | 星隕石窟 | `realm-star.webp` |
 
+問道宗園林新增三份內建 image_gen 生成的透明 WebP，保留既有建築美術。`sect-palace.webp` 為 1024 × 768 的金飾主殿，顯示 360 × 270 遊戲像素（約 9 × 6.75 格）。`sect-garden-atlas.webp` 為 1536 × 1536、3 × 3 格圖集，每格 512px，依序為假山瀑布、涼亭、東西玉橋、南北玉橋、朝右石獅、朝左石獅、香爐、玉蘭與地坪紋章；`sect-lotus.webp` 為 256px 荷葉花叢。大型假山、涼亭、橋梁、樹木和地坪各自跨越數格，依真實圖片範圍剔除離開畫面的物件，角色被前景建築或樹冠擋住時局部淡出。提示詞、裁切順序與產製規格見 `sect-prompts.md`。
+
 - 問道宗四面城門獨立使用 `sect-gates.webp`：1024 × 1024 透明 WebP（品質 90），四格各 512 × 512，依序為南、北、西、東。每個城門只有兩根柱子與屋頂，無文字、無兩側城牆；東西門為窄側面微俯視圖。營地的木門繼續沿用原有 `scenery-*-atlas.webp`，圍牆透過相鄰格自動銜接，但仍是獨立素材。從原始 1536 × 1024 圖重新裁切，無低解析素材反覆放大。遊戲顯示仍為 118px；城門專用高品質縮圖插值適應高解析螢幕與地圖縮放，不改通行或尋路。
 - 單棟建築檔案為 256 × 256 WebP，畫面顯示 72～80 邏輯像素，約 1.8～2 格；圖檔中的透明留白會讓實際輪廓略小。
 - 妖獸顯示 44 邏輯像素，採集物 34～38 像素，與角色大小相近。
@@ -34,4 +36,4 @@
 
 地圖插畫透過 `drawImage` 繪製；格線／選取、路線、傷害文字、血條及小地圖資訊標記仍是互動資訊。沒有另外生成逐格資料庫資料。
 
-重新壓縮原始圖：安裝開發工具 `sharp`，提供 `{"assets":[{"id":"meditation","path":"/path/original.png"}]}` 格式的 JSON 給 `node scripts/pack-world-ai-art.cjs /path/source-manifest.json`。可加 `--merge` 保留其他素材。圖集可提供 `gridColumns`、`gridRows`、`rows`、`columns`、`inset` 與 `quality`，支援裁切部分列與獨立壓縮品質。連接零件使用 `componentParts: true` 裁緊後填滿單格，端點不加透明留白，由繪製器指定零件的實際尺寸及位置。原始 PNG 保留於生成結果，正式網站只載入小型 WebP。
+重新壓縮原始圖：安裝開發工具 `sharp`，提供 `{"assets":[{"id":"meditation","path":"/path/original.png"}]}` 格式的 JSON 給 `node scripts/pack-world-ai-art.cjs /path/source-manifest.json`。可加 `--merge` 保留其他素材。圖集可提供 `gridColumns`、`gridRows`、`rows`、`columns`、`inset`、`cellSize`、`padding` 與 `quality`，支援裁切部分列、自訂原生格尺寸與獨立壓縮品質；獨立圖片可用 `width`／`height` 保留大型素材解析度。連接零件使用 `componentParts: true` 裁緊後填滿單格，端點不加透明留白，由繪製器指定零件的實際尺寸及位置。原始 PNG 保留於生成結果，正式網站只載入小型 WebP。
