@@ -8,7 +8,7 @@ const plain=(seed='scenery')=>{
 test('bamboo is dense, stone is sparse, and both are identical across browser/server and visit order',()=>{
   const context={};vm.runInNewContext(fs.readFileSync(require.resolve('../public/world/world-scenery.js'),'utf8'),context);
   const a=S.create(plain()),b=S.create(plain()),browser=context.QAGridWorldScenery.create(plain()),other=S.create(plain('another'));
-  for(const [terrain,prop,min,max]of [['bamboo','bamboo-tall-',.92,.99],['stone','stone-',.04,.18]]){
+  for(const [terrain,prop,min,max]of [['bamboo','bamboo-tall-',.87,.94],['stone','stone-',.04,.18]]){
     const cells=[];for(let y=20;y<84;y++)for(let x=20;x<84;x++)cells.push([x,y]);
     const generated=cells.map(([x,y])=>a.ambient(x,y,terrain)),fraction=generated.filter(items=>items.some(p=>p.prop.startsWith(prop))).length/cells.length;
     assert.equal(new Set(generated.flat().filter(p=>p.prop.startsWith(prop)).map(p=>p.prop)).size,terrain==='bamboo'?4:3,'all seeded visual variants appear');
@@ -34,8 +34,8 @@ test('new long straight bamboo sprites are multi-tile bitmaps and use stable den
       assert.ok(sprite.sx+sprite.sw<=768&&sprite.sy+sprite.sh<=1536);
     }
   }
-  assert.ok(stems>2100&&stems<2500,'clump density roughly doubles the previous 1.08 clumps per cell');
-  assert.ok(multiples>800&&triples>380,'dense patches hold two or three staggered clumps');
+  assert.ok(stems>1500&&stems<1800,'lighter forest averages about 1.6 clumps per cell');
+  assert.ok(multiples>500&&multiples<650&&triples>120&&triples<210,'mostly one or two clumps, with occasional dense patches');
   const bounds={x:70,y:70,w:6,h:6},draw=scene.inBounds(bounds);
   assert.ok(draw.some(p=>p.prop.startsWith('bamboo-tall-')&&p.y>=bounds.y+bounds.h+3&&p.y<bounds.y+bounds.h+5),
     'tall bamboo roots beyond the viewport remain drawable where their canopy enters it');
