@@ -64,9 +64,15 @@
       // Sect walls and gates have actual north/east/south/west illustrations.
       if(Math.abs(dx)===r&&Math.abs(dy)<=r&&dy!==0&&t==='courtyard')add('wall',40);
       if(Math.abs(dy)===r&&Math.abs(dx)<=r&&dx!==0&&t==='courtyard')add('wall',40);
-      if((Math.abs(dx)===r&&dy===0)||(Math.abs(dy)===r&&dx===0))add('gate',66,dx===r?'east':dx===-r?'west':dy===r?'south':'north');
+      if((Math.abs(dx)===r&&dy===0)||(Math.abs(dy)===r&&dx===0))add('gate',100,dx===r?'east':dx===-r?'west':dy===r?'south':'north');
       if(t==='courtyard'&&Math.abs(dx)>=6&&Math.abs(dx)<=8&&Math.abs(dy)>=6&&Math.abs(dy)<=8&&(dx+dy)%2===0)add('garden',38);
-      if(t==='courtyard'&&((Math.abs(dx)===8&&dy%4===0)||(Math.abs(dy)===8&&dx%4===0)))add('lantern',29);
+      if(t==='courtyard'&&((Math.abs(dx)===8&&dy%4===0)||(Math.abs(dy)===8&&dx%4===0)))add('lantern',32);
+      // Ceremonial lantern avenues, paired gate stelae and hanging banners.
+      // These are seeded visual props only; all existing roads stay passable.
+      if(t==='courtyard'&&Math.abs(dx)===2&&Math.abs(dy)<=7&&Math.abs(dy)%3===1)add('lantern',34);
+      if(t==='courtyard'&&Math.abs(dy)===2&&Math.abs(dx)<=7&&Math.abs(dx)%3===1)add('lantern',34);
+      if(t==='courtyard'&&((Math.abs(dy)===r-1&&Math.abs(dx)===2)||(Math.abs(dx)===r-1&&Math.abs(dy)===2)))add('obelisk',43);
+      if(t==='courtyard'&&((Math.abs(dy)===r-2&&Math.abs(dx)===3)||(Math.abs(dx)===r-2&&Math.abs(dy)===3)))add('banner',38);
       return items;
     }
     function site(o,events={}){
@@ -94,8 +100,8 @@
         add('fence',-2,0,46,'west');add('fence',2,0,46,'east');add('supplies',-1,1,30);add('lantern',1,1,29);
       }else if(subtype==='shrine'||subtype==='realm'){
         add('pillar',-2,-1,37,'west');add('pillar',2,-1,37,'east');
-        add('rubble',-2,1,27,'west');add('rubble',2,1,28,'east');
-        add(subtype==='realm'&&/靈泉/.test(o.name)?'reeds':'lantern',-1,2,29);add('shrub',1,2,27);
+        add('crystals',-2,1,30);add('obelisk',2,1,34);
+        add(subtype==='realm'&&/靈泉/.test(o.name)?'reeds':'lantern',-1,2,31);add('banner',1,2,34);
       }else if(subtype==='forge'){
         add('weapons',-1,1,30);add('ore',1,1,29);add('logs',2,0,25);
       }else if(subtype==='contract'){
@@ -106,6 +112,7 @@
         add(subtype==='vault'?'supplies':subtype==='rank'?'scrolls':'bonsai',-1,1,31);add('lantern',1,1,29);
         if(subtype==='meditation')add('bamboo',-2,-1,36);
         if(subtype==='duel')add('wall',2,-1,42,'east');
+        if(['meditation','rank','duel','raid'].includes(subtype)){add('banner',-2,1,34);add('banner',2,1,34);}
       }
       return items;
     }
