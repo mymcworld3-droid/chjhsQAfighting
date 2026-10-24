@@ -14,11 +14,18 @@ const world=W.createWorld(),scene=S.create(world),objects=world.objectsIn({x:0,y
 const site=type=>objects.find(o=>o.subtype===type&&o.x>80&&o.x<920&&o.y>80&&o.y<920&&world.baseTerrain(o.x,o.y)==='grass'&&scene.site(o).length>=(type==='camp'?12:7));
 const biome=type=>{for(let y=90;y<910;y+=12)for(let x=90;x<910;x+=12)if([-6,0,6].every(dy=>[-8,0,8].every(dx=>world.baseTerrain(x+dx,y+dy)===type)))return{x,y};throw Error(type);};
 const fixtures=[{...site('camp'),name:'CAMP / CONNECTED FENCES'},{...site('ruins'),name:'RUINS / STONE DEBRIS'},{name:'BAMBOO / SEEDED CLEARINGS',...biome('bamboo')},{name:'STONE FIELD / SPARSE ROCKS',...biome('stone')},{name:'WENDAO SECT / ORIGINAL BUILDINGS',...world.SPAWN},{name:'RIVER / BRIDGE CONNECTION',...world.starterPoint(26,17)}];
-const render=(p,width,height,zoom=1.15)=>{const canvas=createCanvas(width,height),r=Object.create(context.Renderer.prototype),position={x:p.x,y:p.y+1};Object.assign(r,{ctx:canvas.getContext('2d'),canvas,mini:createCanvas(96,96),width,height,dpr:1,world,camera:{x:p.x+.5,y:p.y+.5,zoom,follow:false},effects:[],hitRegions:[],hitMasks:new Map(),images,data:{uid:'qa',state:{position,explored:world.fullExplored(),claims:{},travelMode:'walk'},players:[{uid:'qa',name:'',gender:'male',route:{path:[position],startedAtMs:100000,stepMs:W.STEP_MS}}],events:{bridge:1,array:0}}});r.label=()=>{};r.draw();const a=canvas.toBuffer('image/png');r.draw();assert.ok(a.equals(canvas.toBuffer('image/png')));assert.ok(r.ground.cachedTiles<=512);return{canvas,r};};
+const render=(p,width,height,zoom=1.15,dpr=1)=>{const canvas=createCanvas(Math.round(width*dpr),Math.round(height*dpr)),r=Object.create(context.Renderer.prototype),position={x:p.x,y:p.y+1};Object.assign(r,{ctx:canvas.getContext('2d'),canvas,mini:createCanvas(96,96),width,height,dpr,world,camera:{x:p.x+.5,y:p.y+.5,zoom,follow:false},effects:[],hitRegions:[],hitMasks:new Map(),images,data:{uid:'qa',state:{position,explored:world.fullExplored(),claims:{},travelMode:'walk'},players:[{uid:'qa',name:'',gender:'male',route:{path:[position],startedAtMs:100000,stepMs:W.STEP_MS}}],events:{bridge:1,array:0}}});r.label=()=>{};r.draw();const a=canvas.toBuffer('image/png');r.draw();assert.ok(a.equals(canvas.toBuffer('image/png')));assert.ok(r.ground.cachedTiles<=512);assert.equal(r.ground.tileSize,Math.max(26,Math.min(144,Math.round(40*dpr*zoom))));return{canvas,r};};
 const contact=createCanvas(1200,1044),c=contact.getContext('2d');c.fillStyle='#17261d';c.fillRect(0,0,1200,1044);const report=[];
-for(let i=0;i<fixtures.length;i++){const p=fixtures[i],{canvas,r}=render(p,590,300),x=i%2*600+5,y=Math.floor(i/2)*348+40;c.drawImage(canvas,x,y);c.fillStyle='#e7ddc4';c.font='bold 14px sans-serif';c.fillText(p.name+'  ('+p.x+', '+p.y+')',x+10,y-14);report.push({name:p.name,x:p.x,y:p.y,props:r.sceneryItems.length,cache:r.ground.cachedTiles});}
+for(let i=0;i<fixtures.length;i++){const p=fixtures[i],{canvas,r}=render(p,590,300),x=i%2*600+5,y=Math.floor(i/2)*348+40;c.drawImage(canvas,x,y);c.fillStyle='#e7ddc4';c.font='bold 14px sans-serif';c.fillText(p.name+'  ('+p.x+', '+p.y+')',x+10,y-14);report.push({name:p.name,x:p.x,y:p.y,props:r.sceneryItems.length,cache:r.ground.cachedTiles,tilePixels:r.ground.tileSize});}
 fs.writeFileSync(path.join(output,'overview.webp'),contact.toBuffer('image/webp',90));
 fs.writeFileSync(path.join(output,'phone.webp'),render(fixtures[0],390,640,1).canvas.toBuffer('image/webp',90));
+const highDpi=render(fixtures[0],390,640,1,2);fs.writeFileSync(path.join(output,'phone-hidpi.webp'),highDpi.canvas.toBuffer('image/webp',90));
+const rasterScales=[];
+for(const zoom of [.65,1.8,1]){
+  highDpi.r.camera.zoom=zoom;highDpi.r.draw();
+  const expected=Math.round(40*2*zoom);assert.equal(highDpi.r.ground.tileSize,expected);
+  assert.ok(highDpi.r.ground.cachedTiles<=512);rasterScales.push({dpr:2,zoom,tilePixels:expected});
+}
 // Controlled neighbourhoods show every connector state using the production painter.
 const board=createCanvas(1120,672),bc=board.getContext('2d');bc.fillStyle='#17261d';bc.fillRect(0,0,board.width,board.height);
 const painter=Object.create(context.Renderer.prototype);painter.images=images;painter.ctx=bc;
@@ -45,6 +52,9 @@ for(const prop of ['fence','wall'])for(const vertical of [false,true]){
 }
 const base={terrain:'grass',neighbours:Array(8).fill('grass'),mask:0,underlay:'grass',bridgeDirection:'east'},ground=G.create(A,()=>createCanvas(80,80));let seam=0;
 const tile=(x,y)=>ground.compose({...base,x,y,key:x+','+y},images).getContext('2d');const compare=(a,b)=>{for(let i=0;i<a.length;i++)seam=Math.max(seam,Math.abs(a[i]-b[i]));};
-for(let n=0;n<8;n++){compare(tile(3,n).getImageData(79,0,1,80).data,tile(4,n).getImageData(0,0,1,80).data);compare(tile(n,3).getImageData(0,79,80,1).data,tile(n,4).getImageData(0,0,80,1).data);}assert.ok(seam<=1);
-const result={renderer:'production WorldRenderer via native Canvas',labels:'suppressed in fixture; no CJK font in native runtime',seed:world.descriptor.seed,images:Object.keys(images).length,repeatable:true,seamMaxDifference:seam,connectorStates:32,connectorCoverage,fixtures:report};fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
+for(const scale of [1,1.3,2,3.6]){
+  ground.setScale(scale);const size=ground.tileSize;
+  for(let n=0;n<8;n++){compare(tile(3,n).getImageData(size-1,0,1,size).data,tile(4,n).getImageData(0,0,1,size).data);compare(tile(n,3).getImageData(0,size-1,size,1).data,tile(n,4).getImageData(0,0,size,1).data);}
+}assert.ok(seam<=1);
+const result={renderer:'production WorldRenderer via native Canvas',labels:'suppressed in fixture; no CJK font in native runtime',seed:world.descriptor.seed,images:Object.keys(images).length,repeatable:true,seamMaxDifference:seam,rasterScales,connectorStates:32,connectorCoverage,fixtures:report};fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
 })().catch(e=>{console.error(e);process.exitCode=1;});

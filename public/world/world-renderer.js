@@ -139,6 +139,7 @@ export class WorldRenderer {
       top=Math.max(0,Math.floor(this.camera.y-this.height/s/2)-2),bottom=Math.min(this.world.SIZE-1,Math.ceil(this.camera.y+this.height/s/2)+2),decor=[];
     const visible=(x,y)=>W.known(d.state.explored,x,y)||!!(b&&x>=b.bounds.x&&x<b.bounds.x+8&&y>=b.bounds.y&&y<b.bounds.y+8),events=b?.events||d.events;
     const scenery=this.sceneryModel(),signature=[left,right,top,bottom,d.state.explored.revision,d.state.explored.all,W.patchRevision,events?.bridge,events?.array,b?.id,b?.revision].join(':');
+    this.ground?.setScale(this.dpr*zoom);
     if(signature!==this.scenerySignature){this.scenerySignature=signature;this.sceneryItems=scenery.inBounds({x:left,y:top,w:right-left+1,h:bottom-top+1},events,visible);}
     for(let y=top;y<=bottom;y++)for(let x=left;x<=right;x++){
       const discovered=visible(x,y);

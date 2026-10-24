@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 1592402,
+  "totalBytes": 1567648,
   "assets": [
     {
       "id": "meditation",
@@ -216,16 +216,6 @@
       "sourceSha256": "7996efe9a5e93588ef58f61691141e0ba8c47c1231841f61a9c26d9eb480eedf"
     },
     {
-      "id": "ground-atlas",
-      "file": "ground-atlas.webp",
-      "width": 512,
-      "height": 640,
-      "bytes": 38432,
-      "alpha": false,
-      "source": "exec-31fa077d-40a2-4564-946a-a69c94ea8975.png",
-      "sourceSha256": "947f5f121cc0c24661f5c95e5c1a9973ec8b34432992e2d574cb966ae77c3cb3"
-    },
-    {
       "id": "ambient-atlas",
       "file": "ambient-atlas.webp",
       "width": 512,
@@ -336,6 +326,32 @@
       "quality": 78,
       "source": "exec-5ec4c2c4-9771-4456-8f88-f7b37cf988dc.png",
       "sourceSha256": "5da8c87c4d51f687ce0e84d9f386553a320d989c674f587f76e57487831a7ad2"
+    },
+    {
+      "id": "ground-atlas",
+      "file": "ground-atlas.webp",
+      "width": 512,
+      "height": 640,
+      "bytes": 13678,
+      "alpha": false,
+      "quality": 84,
+      "sourceRows": [
+        0,
+        278,
+        554,
+        822,
+        1088,
+        1402
+      ],
+      "sourceColumns": [
+        0,
+        280,
+        561,
+        841,
+        1122
+      ],
+      "source": "exec-848dabaf-24e9-4033-8add-c1929411134d.png",
+      "sourceSha256": "bf98d9746afa7c9145e9335a9090aca0f9a07cda4d11895e8fd55272b4837ae3"
     }
   ]
 }

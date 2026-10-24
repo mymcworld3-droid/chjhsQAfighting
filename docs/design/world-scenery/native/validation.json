@@ -5,6 +5,23 @@
   "images": 31,
   "repeatable": true,
   "seamMaxDifference": 0,
+  "rasterScales": [
+    {
+      "dpr": 2,
+      "zoom": 0.65,
+      "tilePixels": 52
+    },
+    {
+      "dpr": 2,
+      "zoom": 1.8,
+      "tilePixels": 144
+    },
+    {
+      "dpr": 2,
+      "zoom": 1,
+      "tilePixels": 80
+    }
+  ],
   "connectorStates": 32,
   "connectorCoverage": [
     {
@@ -34,42 +51,48 @@
       "x": 583,
       "y": 83,
       "props": 29,
-      "cache": 70
+      "cache": 70,
+      "tilePixels": 46
     },
     {
       "name": "RUINS / STONE DEBRIS",
       "x": 251,
       "y": 88,
       "props": 21,
-      "cache": 93
+      "cache": 93,
+      "tilePixels": 46
     },
     {
       "name": "BAMBOO / SEEDED CLEARINGS",
       "x": 294,
       "y": 90,
       "props": 42,
-      "cache": 64
+      "cache": 64,
+      "tilePixels": 46
     },
     {
       "name": "STONE FIELD / SPARSE ROCKS",
       "x": 150,
       "y": 90,
       "props": 15,
-      "cache": 70
+      "cache": 70,
+      "tilePixels": 46
     },
     {
       "name": "WENDAO SECT / ORIGINAL BUILDINGS",
       "x": 500,
       "y": 500,
       "props": 14,
-      "cache": 88
+      "cache": 88,
+      "tilePixels": 46
     },
     {
       "name": "RIVER / BRIDGE CONNECTION",
       "x": 570,
       "y": 453,
       "props": 14,
-      "cache": 163
+      "cache": 163,
+      "tilePixels": 46
     }
   ]
 }

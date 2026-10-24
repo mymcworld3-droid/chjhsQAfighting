@@ -56,9 +56,10 @@ async function main(){
       const tile=(x,y)=>r.ground.compose({...base,x,y,key:'seam:'+x+':'+y},r.images).getContext('2d');
       let difference=0;
       const compare=(a,b)=>{for(let i=0;i<a.length;i++)difference=Math.max(difference,Math.abs(a[i]-b[i]));};
+      const size=r.ground.tileSize;
       for(let n=0;n<8;n++){
-        compare(tile(3,n).getImageData(79,0,1,80).data,tile(4,n).getImageData(0,0,1,80).data);
-        compare(tile(n,3).getImageData(0,79,80,1).data,tile(n,4).getImageData(0,0,80,1).data);
+        compare(tile(3,n).getImageData(size-1,0,1,size).data,tile(4,n).getImageData(0,0,1,size).data);
+        compare(tile(n,3).getImageData(0,size-1,size,1).data,tile(n,4).getImageData(0,0,size,1).data);
       }
       return difference;
     });assert.ok(seam<=1,'same terrain textures meet continuously');

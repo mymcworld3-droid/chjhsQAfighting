@@ -1,7 +1,7 @@
 /* Compose the AI textures through neighbour masks; cache the resulting small tiles. */
 (function(root){
   'use strict';
-  const SIZE=80,SPAN=4;
+  const SPAN=4;
   function textureFrame(Art,t,x=0,y=0){
     const cell=Math.max(0,Art.terrain.indexOf(t)),step=128/SPAN;
     const phase=n=>((n%(SPAN*2))+SPAN*2)%(SPAN*2),px=phase(x),py=phase(y);
@@ -18,10 +18,15 @@
   }
   function transitionAlpha(direction,u,v){
     const distances=[v,1-u,1-v,u,Math.hypot(u,v),Math.hypot(1-u,v),Math.hypot(1-u,1-v),Math.hypot(u,1-v)];
-    return Math.max(0,1-distances[direction]/.24)*.5;
+    return Math.max(0,1-distances[direction]/.12)*.5;
   }
   function create(Art,canvasFactory=()=>document.createElement('canvas')){
-    const tiles=new Map(),masks=new Map(),materials=new Map();
+    const tiles=new Map(),masks=new Map(),materials=new Map();let SIZE=80;
+    function setScale(scale){
+      if(!Number.isFinite(scale)||scale<=0)return;
+      const size=Math.max(26,Math.min(144,Math.round(40*scale)));
+      if(size===SIZE)return;SIZE=size;tiles.clear();masks.clear();
+    }
     const canvas=()=>{const c=canvasFactory();c.width=SIZE;c.height=SIZE;return c;};
     function mask(key,alpha){
       if(masks.has(key))return masks.get(key);
@@ -39,12 +44,15 @@
         const s=textureFrame(Art,t,info.x,info.y);context.save();
         // Isolate atlas cells before enlarging, so filtering cannot pick up another material.
         if(!materials.has(t)){
-          const cell=canvas();cell.width=cell.height=128;
+          const cell=canvas();cell.width=cell.height=124;
           // Ignore the two-pixel rim affected by WebP chroma subsampling at atlas joins.
-          cell.getContext('2d').drawImage(atlas,Math.floor(s.sx/128)*128+2,Math.floor(s.sy/128)*128+2,124,124,0,0,128,128);materials.set(t,cell);
+          cell.getContext('2d').drawImage(atlas,Math.floor(s.sx/128)*128+2,Math.floor(s.sy/128)*128+2,124,124,0,0,124,124);materials.set(t,cell);
         }
         context.translate(s.flipX?SIZE:0,s.flipY?SIZE:0);context.scale(s.flipX?-1:1,s.flipY?-1:1);
-        context.drawImage(materials.get(t),s.sx%128,s.sy%128,s.sw,s.sh,0,0,SIZE,SIZE);context.restore();
+        // Copy the material once at native resolution, then resample each crop
+        // directly to its device-pixel size. Avoid enlarging to 80px and shrinking again.
+        const ratio=124/128;
+        context.drawImage(materials.get(t),(s.sx%128)*ratio,(s.sy%128)*ratio,s.sw*ratio,s.sh*ratio,0,0,SIZE,SIZE);context.restore();
       };
       const overlay=(t,m)=>{
         const layer=canvas(),context=layer.getContext('2d');texture(context,t);context.globalCompositeOperation='destination-in';context.drawImage(m,0,0);c.drawImage(layer,0,0);
@@ -67,7 +75,7 @@
       }
       tiles.set(info.key,target);if(tiles.size>512)tiles.delete(tiles.keys().next().value);return target;
     }
-    return Object.freeze({compose,get cachedTiles(){return tiles.size;}});
+    return Object.freeze({compose,setScale,get tileSize(){return SIZE;},get cachedTiles(){return tiles.size;}});
   }
   const api=Object.freeze({create,roadAlpha,transitionAlpha,textureFrame});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorldGround=api;
