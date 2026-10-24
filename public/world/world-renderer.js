@@ -121,7 +121,7 @@ export class WorldRenderer {
     const direction=o.kind==='monster'?(o.nextMove?(o.nextMove.x>o.x?'east':o.nextMove.x<o.x?'west':o.nextMove.y<o.y?'north':o.nextMove.y>o.y?'south':o.direction||'south'):o.direction||Art.directions[this.world.hash(o.x,o.y,143)%4]):o.direction;
     const sprite=Art.object({...o,direction});
     if(this.imageSprite(sprite,x,y,claimed?.5:1))this.hitRegions.push({object:o,sprite,bounds:Art.bounds(o,sprite)});
-    if(showName&&(!o.veinId||o.veinAnchor))this.label(o.name+(o.level?' · '+o.level+'級':''),x,y+17,claimed?'#c9d3be':o.kind==='monster'?'#ffe2be':'#fff5d5',10);
+    if(showName&&(!o.housing||this.camera?.zoom>=1.3)&&(!o.veinId||o.veinAnchor))this.label(o.name+(o.level?' · '+o.level+'級':''),x,y+17,claimed?'#c9d3be':o.kind==='monster'?'#ffe2be':'#fff5d5',10);
   }
   sprite(actor,pos,at,self=false,showName=true){
     const c=this.ctx,x=(pos.x+.5)*TILE,y=(pos.y+.5)*TILE,img=this.images[actor.gender||'male'];

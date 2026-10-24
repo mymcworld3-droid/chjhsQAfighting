@@ -42,6 +42,7 @@
     return parts;
   }
   const scenery=p=>{
+    if(p.prop==='sect-spirit-beast')return sheet('creatures-atlas',19,5,p.size||34);
     if(p.prop==='sect-lotus')return {image:'sect-lotus',sx:0,sy:0,sw:256,sh:256,w:p.w||50,h:p.h||50,anchor:.5};
     if(p.prop==='sect-palace')return {image:'sect-palace',sx:0,sy:0,sw:1024,sh:768,w:p.w||360,h:p.h||270,anchor:p.anchor??.88};
     if(sectProps.includes(p.prop)){

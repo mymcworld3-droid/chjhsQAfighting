@@ -12,7 +12,7 @@ function entry(window={},nodes={}){
   return context;
 }
 test('all new facilities have a reachable entrance, a solid base and an atlas sprite at native phone resolution',()=>{
-  assert.equal(W.SECT_FACILITIES.length,14);const occupied=new Set();
+  assert.equal(W.SECT_FACILITIES.length,26);const occupied=new Set();
   for(const o of W.SECT_FACILITIES){
     assert.equal(W.object(o.id),o);assert.equal(W.objectAt(o.x,o.y),o);assert.ok(W.inSafeArea(o.x,o.y));
     const approach=W.approach(W.SPAWN,o);assert.ok(approach.path.length,o.id);assert.equal(approach.partial,false);
@@ -24,9 +24,41 @@ test('all new facilities have a reachable entrance, a solid base and an atlas sp
   }
   assert.equal(new Set(W.SECT_FACILITIES.map(o=>o.artCell)).size,9);
 });
+test('every facility is reachable from each gate and its full base avoids water and ceremonial landmarks',()=>{
+  for(const o of W.SECT_FACILITIES){
+    const f=o.footprint;
+    for(let dy=f.y;dy<f.y+f.h;dy++)for(let dx=f.x;dx<f.x+f.w;dx++){
+      assert.ok(!['water','bridge'].includes(W.terrain(500+dx,500+dy)),o.id+' dry base');
+      assert.ok(!W.SECT_LANDMARKS.some(({footprint:p})=>dx>=p.x&&dx<p.x+p.w&&dy>=p.y&&dy<p.y+p.h),o.id+' avoids garden architecture');
+    }
+    for(const [dx,dy]of W.DIRS){
+      const p={x:500+dx*(W.CITY_RADIUS+1),y:500+dy*(W.CITY_RADIUS+1)},route=W.approach(p,o);
+      assert.ok(route.path.length,o.id);assert.equal(route.partial,false);assert.ok(route.path.every(p=>W.walkable(p.x,p.y)));
+    }
+  }
+});
+test('compact residential courts have real non-overlapping bases and accessible doors from all four gates',()=>{
+  assert.equal(W.CITY_RADIUS*2+1,55);assert.equal(W.SECT_HOUSING.length,24);
+  const occupied=new Set();
+  for(const o of [...W.SECT_LANDMARKS,...W.SECT_FACILITIES,...W.SECT_HOUSING]){
+    const f=o.footprint;
+    for(let dy=f.y;dy<f.y+f.h;dy++)for(let dx=f.x;dx<f.x+f.w;dx++){
+      const key=W.key(dx,dy);assert.ok(!occupied.has(key),o.id+' base overlap');occupied.add(key);
+      if(o.housing){assert.ok(!['water','bridge'].includes(W.terrain(500+dx,500+dy)),o.id);assert.equal(W.walkable(500+dx,500+dy),false);}
+    }
+  }
+  for(const o of W.SECT_HOUSING){
+    assert.equal(W.objectAt(o.x,o.y),o);assert.equal(W.terrain(o.x,o.y+1),'road');assert.ok(W.walkable(o.x,o.y+1));
+    for(const [dx,dy]of W.DIRS){const route=W.approach({x:500+dx*28,y:500+dy*28},o);assert.ok(route.path.length,o.id);assert.equal(route.partial,false);}
+    const v=view();assert.equal(v.facilityPanel(o.entry),true);assert.equal(v.lastPanel.title,o.name);assert.match(v.lastPanel.html,/data-entry="bag"/);
+  }
+  assert.deepEqual(W.createWorld('homes-a').SECT_HOUSING,W.createWorld('homes-b').SECT_HOUSING);
+  // The ceremonial square remains a usable meeting space, with clear axes.
+  for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)assert.ok(W.walkable(500+dx,500+dy));
+});
 test('the commercial street has six shops with four architectural styles and the old garden remains intact',()=>{
-  const market=W.SECT_DISTRICTS.find(d=>d.id==='market');assert.equal(market.places.length,6);
-  const shops=market.places.map(id=>W.object(id));assert.equal(new Set(shops.map(o=>o.artCell)).size,4);
+  const market=W.SECT_DISTRICTS.find(d=>d.id==='market');assert.equal(market.places.length,7);
+  const shops=market.places.map(id=>W.object(id)).filter(o=>o.kind==='building');assert.equal(new Set(shops.map(o=>o.artCell)).size,4);
   assert.ok(shops.every(o=>o.y===524));assert.match(W.zone(shops[0]),/雲間商街/);
   for(const p of W.SECT_LANDMARKS)assert.ok(W.sectBlocked(500+p.footprint.x,500+p.footprint.y));
   for(const side of [-1,1])for(const dy of [-7,0,6]){
@@ -49,6 +81,14 @@ test('facility menus offer working service destinations without pretending to gr
     assert.equal(v.facilityPanel(id),true);for(const item of entries)assert.ok(v.lastPanel.html.includes('data-entry="'+item+'"'),id+':'+item);
   }
   assert.equal(v.facilityPanel('unknown'),false);
+});
+test('medical, merit, residential and production facilities open their declared service menus',async()=>{
+  const v=view(),extra=W.SECT_FACILITIES.filter(o=>o.services);assert.equal(extra.length,12);
+  for(const o of extra){
+    assert.equal(v.facilityPanel(o.entry),true);assert.equal(v.lastPanel.title,o.name);
+    for(const [destination]of o.services)assert.ok(v.lastPanel.html.includes('data-entry="'+destination+'"'),o.id);
+    const ctx=entry();await ctx.open(o.entry);assert.equal(ctx.room,o.entry);
+  }
 });
 test('shop destinations select the existing store or the correct player-market filter',async()=>{
   const calls=[],ctx=entry({switchToPage:async p=>calls.push(p),openPlayerMarketplace:filter=>calls.push(filter)}, {'pm-view-shop':{click:()=>calls.push('shop')}});

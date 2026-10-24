@@ -187,9 +187,9 @@ export class WorldView {
     this.panel('問道宗導覽',`<p class="ww-muted">沿街尋店，入院問道。選擇一處地點，便會沿可通行路線前往。</p><div class="ww-sect-guide">${W.SECT_DISTRICTS.map(d=>`<section><h3>${esc(d.name)}</h3><small>${esc(d.detail)}</small><div>${d.places.map(place=>W.object(place)).filter(Boolean).map(o=>`<button type="button" data-action="visit-place" data-place="${esc(o.id)}"><b>${esc(o.icon||'門')}</b><span>${esc(o.name)}<small>（${o.x}，${o.y}）</small></span><em>前往 →</em></button>`).join('')}</div></section>`).join('')}</div>`);
   }
   facilityPanel(entry){
-    const place=this.world.SECT_FACILITIES.find(o=>o.entry===entry);
+    const place=this.world.OBJECTS.find(o=>o.entry===entry&&o.kind==='building');
     if(!place)return false;
-    const choices={
+    const choices=place.services||{
       market:[['store','逛坊市商品'],['market-all','道友交易市集'],['market-mine','我的上架商品']],
       library:[['core','查閱金丹・元嬰・化神'],['history','回顧答題紀錄'],['practice','入座問道']],
       alchemy:[['bag','查看丹藥與行囊'],['core','前往金丹修行'],['refinery','前往煉器']],

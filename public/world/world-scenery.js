@@ -108,7 +108,7 @@
       if(t==='courtyard'&&Math.abs(dy)===2&&Math.abs(dx)<=18&&Math.abs(dx)%4===2)add('lantern',42);
       if(t==='courtyard'&&((Math.abs(dy)===r-1&&Math.abs(dx)===2)||(Math.abs(dx)===r-1&&Math.abs(dy)===2)))add('obelisk',43);
       if(t==='courtyard'&&((Math.abs(dy)===r-2&&Math.abs(dx)===3)||(Math.abs(dx)===r-2&&Math.abs(dy)===3)))add('banner',38);
-      if(t==='courtyard'&&dy===27&&Math.abs(dx)>=5&&Math.abs(dx)<=23&&Math.abs(dx)%6===5)add('lantern',34);
+      if(t==='courtyard'&&dy===W.CITY_RADIUS-1&&Math.abs(dx)>=5&&Math.abs(dx)<=23&&Math.abs(dx)%6===5)add('lantern',34);
       return items;
     }
     function sect(){
@@ -122,7 +122,7 @@
           add('sect-bridge-ew',dx,dy,190,105,.55,{layer:'ground',occludes:false,bridge:true});
         }
         for(const dy of [7,19])add(side<0?'sect-lion-right':'sect-lion-left',side*3,dy,74,86,.9);
-        for(const [dx,dy]of [[8,-13],[18,-12],[8,12],[18,4],[7,18]])add('sect-magnolia',side*dx,dy,128,142,.92);
+        for(const [dx,dy]of [[8,-13],[18,-12],[11,7],[16,3],[7,18]])add('sect-magnolia',side*dx,dy,128,142,.92);
         for(const dy of [-9,11])add('sect-censer',side*5,dy,80,88,.9);
         for(const [dx,dy]of [[9,12],[12,13],[10,15],[14,14]])add('sect-lotus',side*dx,dy,50,50,.5,{layer:'ground',occludes:false,water:true});
         // Small matching garden furniture keeps the broad lawns intentional.
@@ -147,7 +147,13 @@
       };
       if(o.town){
         add('lantern',-2,0,30);add('lantern',2,0,30);
-        if(o.artCell===1){add('logs',-2,1,30);add('ore',2,1,27);}
+        if(o.id==='spirit-fields'){
+          for(const x of [-2,2])for(const y of [0,2])add('herb',x,y,30);
+        }else if(o.id==='beast-court'){
+          add('sect-spirit-beast',-2,0,34);add('sect-spirit-beast',2,0,34);
+        }else if(['observatory','array-hall'].includes(o.id)){
+          add('crystals',-2,0,31);add('obelisk',2,0,35);
+        }else if(o.artCell===1){add('logs',-2,1,30);add('ore',2,1,27);}
         else if(o.artCell===2)add('weapons',2,1,30);
         else if([3,5].includes(o.artCell))add('scrolls',-2,1,28);
         else if(o.artCell===4){add('herb',-2,1,27);add('bonsai',2,1,29);}

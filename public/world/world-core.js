@@ -4,7 +4,7 @@
   const SIZE=1000,CHUNK_SIZE=32,CHUNK_COUNT=Math.ceil(SIZE/CHUNK_SIZE),STEP_MS=220,VISION_RADIUS=15;
   const GENERATOR_VERSION='qingyun-seeded-v2',DEFAULT_SEED='qingyun-2026';
   const SPAWN=Object.freeze({x:Math.floor(SIZE/2),y:Math.floor(SIZE/2)}),DIRS=Object.freeze([[0,1],[1,0],[0,-1],[-1,0]]);
-  const CITY_RADIUS=30,SAFE_RADIUS=36,OUTSKIRTS=Object.freeze({x:SPAWN.x+44,y:SPAWN.y-64,w:48,h:48});
+  const CITY_RADIUS=27,SAFE_RADIUS=36,OUTSKIRTS=Object.freeze({x:SPAWN.x+44,y:SPAWN.y-64,w:48,h:48});
   // Shared architectural footprints use tile coordinates; painted roofs and
   // canopies may overhang them. Existing functional buildings keep their IDs
   // and positions, so saved interactions still lead to the same doors.
@@ -29,17 +29,42 @@
     {id:'disciple-residence',name:'弟子居所',dx:-23,dy:9,artCell:7,entry:'residence',icon:'居',description:'整理行囊與儀容，設定這一趟修行想探索的學問。'},
     {id:'teahouse',name:'聽雨茶樓',dx:23,dy:9,artCell:6,entry:'friends',icon:'茶',description:'邀道友品茶、交流，約好下一次切磋與秘境之行。'},
     {id:'lecture-hall',name:'傳道堂',dx:-10,dy:-24,artCell:5,entry:'practice',icon:'道',description:'隨時入座問道，在一問一答之間積累自己的修為。'},
-    {id:'sect-storehouse',name:'宗門庫房',dx:10,dy:-24,artCell:1,entry:'bag',icon:'倉',description:'查看材料與法寶收藏，為煉器與遠行備齊行囊。'}
-  ].map(p=>Object.freeze({...p,x:SPAWN.x+p.dx,y:SPAWN.y+p.dy,kind:'building',town:true,footprint:Object.freeze({x:p.dx-1,y:p.dy-1,w:3,h:2})})));
+    {id:'sect-storehouse',name:'宗門庫房',dx:10,dy:-24,artCell:1,entry:'bag',icon:'倉',description:'查看材料與法寶收藏，為煉器與遠行備齊行囊。'},
+    {id:'infirmary',name:'回春醫館',dx:8,dy:-10,artCell:4,entry:'facility:infirmary',icon:'醫',description:'藥香與流水相伴，醫修照看靜養的弟子，叮囑出門前先整理修行。',services:[['core','整理修行'],['bag','查看隨身物品']]},
+    {id:'merit-hall',name:'功德堂',dx:8,dy:20,artCell:8,entry:'facility:merit-hall',icon:'功',description:'功德簿記下弟子歷練與師門委託，完成後可在原任務視窗領取嘉獎。',services:[['commissions','查看委託與嘉獎'],['rank','查看仙榜']]},
+    {id:'discipline-hall',name:'執法堂',dx:19,dy:-4,artCell:8,entry:'facility:discipline-hall',icon:'律',description:'宗規有言：切磋須經同意，鬥法在論道台進行；宗內不可私鬥。',services:[['duel','前往鬥法'],['sect','查看宗門事務']]},
+    {id:'guest-house',name:'迎客館',dx:19,dy:3,artCell:7,entry:'facility:guest-house',icon:'客',description:'往來道友先在此歇腳，交換見聞，相約下一趟歷練。',services:[['friends','拜訪道友']]},
+    {id:'inner-residence',name:'內門別院',dx:-19,dy:-4,artCell:7,entry:'facility:inner-residence',icon:'院',description:'竹影掩映的清修院落，內門弟子在此閉關、溫書與參悟。',services:[['core','參悟金丹與元嬰'],['meditation','今日閉關']]},
+    {id:'spirit-fields',name:'靈田莊',dx:-19,dy:20,artCell:1,entry:'facility:spirit-fields',icon:'田',description:'農事弟子照料靈穀與宗門日常供給，田莊也打聽各地靈材行情。',services:[['market-material','查看靈材交易']]},
+    {id:'herb-garden',name:'百草圃',dx:19,dy:20,artCell:4,entry:'facility:herb-garden',icon:'藥',description:'藥修依時令養護靈草，藥圃、丹藥堂與醫館相互供應。',services:[['market-material','查看靈材交易'],['bag','查看修行行囊']]},
+    {id:'beast-court',name:'靈獸苑',dx:19,dy:-17,artCell:7,entry:'facility:beast-court',icon:'獸',description:'馴養弟子照看靈禽與馱獸，道友們常在此集合，再一道出宗歷練。',services:[['friends','邀約道友'],['raid','相約秘境歷練']]},
+    {id:'ancestor-hall',name:'祖師祠',dx:-5,dy:-24,artCell:8,entry:'facility:ancestor-hall',icon:'祖',description:'香火供奉歷代祖師，石碑記下問道宗傳承：勤學、互助、不欺同門。',services:[['sect','查看宗門事務'],['practice','研讀問道']]},
+    {id:'observatory',name:'觀星臺',dx:5,dy:-24,artCell:5,entry:'facility:observatory',icon:'星',description:'夜觀星象、白日參道，星盤映照修士的參悟之路。',services:[['core','參悟修行']]},
+    {id:'array-hall',name:'護宗陣堂',dx:-4,dy:17,artCell:8,entry:'facility:array-hall',icon:'陣',description:'陣師巡查四門靈脈，維持護宗大陣，也指引弟子前往秘境。',services:[['raid','查看團本秘境']]},
+    {id:'watch-hall',name:'巡守堂',dx:4,dy:17,artCell:8,entry:'facility:watch-hall',icon:'衛',description:'巡守弟子交接四門路線，出宗前可先查看歷練委託。',services:[['commissions','查看宗門委託'],['quest','查看仙途指引']]}
+  ].map(p=>Object.freeze({...p,...(p.services?{services:Object.freeze(p.services.map(s=>Object.freeze(s)))}:{}),x:SPAWN.x+p.dx,y:SPAWN.y+p.dy,kind:'building',town:true,footprint:Object.freeze({x:p.dx-1,y:p.dy-1,w:3,h:2})})));
+  // Paired residential courts occupy the former empty paving. Share their
+  // solid bases and door approaches with the authority, just like shops.
+  const SECT_HOUSING=Object.freeze([
+    [16,-24],[22,-24],[10,-18],[16,-18],[19,-10],[23,-11],
+    [23,3],[23,16],[7,9],[13,20],[5,13],[5,-19]
+  ].flatMap(([x,dy])=>[-1,1].map(side=>({dx:side*x,dy}))).map(({dx,dy},i)=>{
+    const id='sect-home-'+(dx<0?'west':'east')+'-'+Math.abs(dx)+'-'+(dy<0?'n':'s')+Math.abs(dy);
+    return Object.freeze({id,name:(dx<0?'西':'東')+'院弟子舍・'+(Math.floor(i/2)+1),dx,dy,x:SPAWN.x+dx,y:SPAWN.y+dy,kind:'building',town:true,housing:true,artCell:i%6===1?6:7,icon:'舍',entry:'facility:'+id,
+      description:'弟子們在此起居、溫書與整理行囊。屋前石徑連著鄰院，出門便可前往宗門各堂。',
+      services:Object.freeze([Object.freeze(['bag','整理行囊']),Object.freeze(['meditation','今日閉關'])]),
+      footprint:Object.freeze({x:dx-1,y:dy-1,w:3,h:2})});
+  }));
+  const SECT_BUILDINGS=Object.freeze([...SECT_FACILITIES,...SECT_HOUSING]);
   const SECT_DISTRICTS=Object.freeze([
-    {id:'affairs',name:'宗門中樞',detail:'師門事務與仙途指引',places:['sect-steward','commission-hall','quest','rank']},
-    {id:'market',name:'雲間商街',detail:'坊市商品、衣冠飾物、靈材與法寶交易',places:['market-hall','material-shop','avatar-shop','frame-shop','artifact-shop','recipe-shop']},
-    {id:'study',name:'傳道學宮',detail:'問道、藏經與閉關修行',places:['lecture-hall','scripture-library','meditation']},
-    {id:'craft',name:'丹器百工',detail:'丹藥、煉器、契器與庫藏',places:['alchemy-hall','forge','contract','sect-storehouse']},
-    {id:'living',name:'弟子生活',detail:'膳堂、居所與道友茶聚',places:['dining-hall','disciple-residence','teahouse','vault']},
-    {id:'adventure',name:'演武與歷練',detail:'論道切磋與秘境同行',places:['duel','raid']}
+    {id:'affairs',name:'宗門中樞',detail:'師門事務、功德宗規與仙途指引',places:['sect-steward','commission-hall','quest','rank','merit-hall','discipline-hall']},
+    {id:'market',name:'雲間商街',detail:'坊市商品、衣冠飾物、靈材與法寶交易',places:['market-hall','material-shop','avatar-shop','frame-shop','artifact-shop','recipe-shop','market-keeper']},
+    {id:'study',name:'傳道學宮',detail:'問道、藏經、醫藥與閉關修行',places:['lecture-hall','scripture-library','meditation','infirmary']},
+    {id:'craft',name:'丹器百工',detail:'丹藥、煉器、契器、靈田藥圃與靈獸供給',places:['alchemy-hall','forge','contract','sect-storehouse','spirit-fields','herb-garden','beast-court']},
+    {id:'living',name:'弟子生活',detail:'膳堂、居所、弟子住宅群、迎賓與道友茶聚',places:['dining-hall','disciple-residence','teahouse','vault','tea-host','guest-house','inner-residence','sect-home-west-23-n11','sect-home-east-23-s16']},
+    {id:'adventure',name:'祖庭與歷練',detail:'祖師傳承、觀星、護宗巡守與秘境同行',places:['duel','raid','ancestor-hall','observatory','array-hall','watch-hall']}
   ].map(p=>Object.freeze({...p,places:Object.freeze(p.places)})));
-  const SECT_FOOTPRINTS=Object.freeze([...SECT_LANDMARKS,...SECT_FACILITIES].map(p=>p.footprint));
+  const SECT_FOOTPRINTS=Object.freeze([...SECT_LANDMARKS,...SECT_BUILDINGS].map(p=>p.footprint));
   function sectWater(dx,dy){
     const ax=Math.abs(dx),centre=13+Math.round(Math.sin((dy+4)/7)*1.4);
     return dy>=-12&&dy<=16&&Math.abs(ax-centre)<=1||((ax-11)/4)**2+((dy-13)/3.4)**2<=1;
@@ -51,8 +76,9 @@
     // wings; their marble crossings are genuine walkable bridge terrain.
     if(sectWater(dx,dy))return [0,-7,6].includes(dy)?'bridge':'water';
     if(ax<=1||ay<=1||ax===18||ay===18||ax===26||ay===26||[-23,25].includes(dy)&&ax<=26||
-      SECT_FACILITIES.some(p=>dy===p.dy+1&&Math.abs(dx-p.dx)<=3)||[-7,6].includes(dy)&&ax>=9&&ax<=18||
+      SECT_BUILDINGS.some(p=>dy===p.dy+1&&Math.abs(dx-p.dx)<=3)||[-7,6].includes(dy)&&ax>=9&&ax<=18||
       dy===-12&&ax<=6||ax===6&&dy>=-20&&dy<=-12||dy===-20&&ax<=6)return 'road';
+    if(ax>=21&&ax<=25&&ay>=3&&ay<=25||((dy>=-25&&dy<=-18)||(dy>=19&&dy<=24))&&ax>=3&&ax<=25)return 'grass';
     if(ax>=10&&ax<=20&&dy>=-17&&dy<=16)return 'grass';
     return 'courtyard';
   }
@@ -118,7 +144,7 @@
   ].map(Object.freeze));
   const STARTER_OBJECTS=Object.freeze([
     ...LOCAL_OBJECTS.map(o=>Object.freeze({...o,...(['building','npc'].includes(o.kind)?townPoint(o.x,o.y):starterPoint(o.x,o.y)),...(o.kind==='monster'?{species:o.name,biome:o.id.startsWith('wolf')?'bamboo':'mountain',habitatId:'starter:'+o.name}:{} )})),
-    ...SECT_FACILITIES,
+    ...SECT_BUILDINGS,
     Object.freeze({id:'sect-steward',x:SPAWN.x,y:SPAWN.y-11,kind:'npc',name:'內門執事',icon:'師',entry:'commissions',description:'師門日常、每週修行與宗門委託，都可向執事詢問。'}),
     Object.freeze({id:'market-keeper',x:SPAWN.x-9,y:SPAWN.y+25,kind:'npc',name:'坊市掌櫃',icon:'商',entry:'market',description:'想逛坊市、找道友交易，或管理自己的寄售商品，都可來問掌櫃。'}),
     Object.freeze({id:'tea-host',x:SPAWN.x+21,y:SPAWN.y+10,kind:'npc',name:'茶樓知客',icon:'茶',entry:'friends',description:'一盞清茶會道友，邀朋友來宗門裡走走。'})
@@ -363,7 +389,7 @@ return TERRAIN;})();
     const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?
       '問道宗'+(p.y>=SPAWN.y+20?'・雲間商街':p.y<=SPAWN.y-21?'・傳道學宮':p.x<=SPAWN.x-21?'・弟子西院':p.x>=SPAWN.x+21?'・百工東院':''):
       inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
-    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,SECT_FACILITIES,SECT_DISTRICTS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
+    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,SECT_FACILITIES,SECT_HOUSING,SECT_DISTRICTS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
       key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
       patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
     return Object.freeze(api);

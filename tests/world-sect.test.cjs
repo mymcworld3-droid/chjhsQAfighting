@@ -4,7 +4,7 @@ const W=require('../public/world/world-core.js'),S=require('../public/world/worl
 const at=(dx,dy)=>({x:W.SPAWN.x+dx,y:W.SPAWN.y+dy});
 
 test('expanded sect keeps every existing entrance and provides real streams, bridges and four exits',()=>{
-  assert.equal(W.CITY_RADIUS*2+1,61);
+  assert.equal(W.CITY_RADIUS*2+1,55);
   const oldDoors={meditation:[-4,-5],forge:[4,-4],contract:[5,3],vault:[-4,3],rank:[-5,-1],quest:[2,-2],duel:[7,-1],raid:[8,-5]};
   for(const [id,[dx,dy]]of Object.entries(oldDoors)){
     const door=W.object(id);assert.deepEqual({x:door.x,y:door.y},at(dx,dy));

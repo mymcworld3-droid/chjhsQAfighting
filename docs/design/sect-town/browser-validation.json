@@ -3,6 +3,9 @@
     "width": 1200,
     "guideFits": true,
     "routeAndInteraction": true,
+    "medicalArrival": true,
+    "meritCommissions": true,
+    "housingArrival": true,
     "service": "material market",
     "pageErrors": 0
   },
@@ -10,6 +13,9 @@
     "width": 390,
     "guideFits": true,
     "routeAndInteraction": true,
+    "medicalArrival": true,
+    "meritCommissions": true,
+    "housingArrival": true,
     "service": "avatar store",
     "pageErrors": 0
   },
@@ -17,6 +23,9 @@
     "width": 320,
     "guideFits": true,
     "routeAndInteraction": true,
+    "medicalArrival": true,
+    "meritCommissions": true,
+    "housingArrival": true,
     "service": "avatar store",
     "pageErrors": 0
   }

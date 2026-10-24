@@ -36,7 +36,7 @@ async function main(){
     r.playerSilhouette={x:500.5*40-18,y:484.5*40-48,w:36,h:48,foot:484.5};
     const palace=S.create(world).sect().find(p=>p.prop==='sect-palace');r.drawScenery(palace);assert.equal(draws[0].alpha,.22);
   }
-  const summary={renderer:'production WorldRenderer via native Canvas',seed:world.descriptor.seed,sectSize:world.CITY_RADIUS*2+1,facilities:world.SECT_FACILITIES.length,assets:Object.keys(images).length,repeatable:true,fixtures:report};
+  const summary={renderer:'production WorldRenderer via native Canvas',seed:world.descriptor.seed,sectSize:world.CITY_RADIUS*2+1,facilities:world.SECT_FACILITIES.length,houses:world.SECT_HOUSING.length,assets:Object.keys(images).length,repeatable:true,fixtures:report};
   fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(summary,null,2)+'\n');console.log(JSON.stringify(summary));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

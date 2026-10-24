@@ -12,6 +12,7 @@ const transport=createWorldTransport(authenticatedMainFetch);
 async function openEntry(entry,data={}){
   const toast=message=>window.showToast?.(message);
   if(entry==='sect-guide'){view?.sectGuide();return;}
+  if(entry.startsWith('facility:')){view?.facilityPanel(entry);return;}
   if(['market','library','alchemy','dining','residence'].includes(entry)){view?.facilityPanel(entry);return;}
   if(['store','store-avatar','store-frame'].includes(entry)){
     await window.switchToPage?.('page-store');document.getElementById('pm-view-shop')?.click();

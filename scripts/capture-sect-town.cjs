@@ -45,8 +45,21 @@ async function main(){
       if(width===1200)await page.waitForFunction(()=>window.fixtureMarketFilter==='material');else await page.waitForFunction(()=>window.fixtureCategory==='avatar');
       assert.equal(await page.evaluate(()=>window.fixturePage),'page-store');
       await page.evaluate(async()=>{await window.openWorldMap();const r=window.fixtureView.renderer;r.camera.follow=false;r.camera.x=482.5;r.camera.y=524.5;r.camera.zoom=1.25;});
-      await page.waitForFunction(()=>window.fixtureView.visible);await page.screenshot({path:path.join(output,'market-'+width+'.png')});
-      assert.deepEqual(errors,[]);report.push({width,guideFits:true,routeAndInteraction:true,service:width===1200?'material market':'avatar store',pageErrors:errors.length});await context.close();
+      await page.waitForFunction(()=>window.fixtureView.visible&&window.fixtureView.online&&!window.fixtureView.busy);await page.screenshot({path:path.join(output,'market-'+width+'.png')});
+      // The added medical and merit buildings use actual movement, server
+      // proximity checks, arrival dispatch and the existing commission dialog.
+      const home='sect-home-west-23-n11';
+      for(const [place,title]of [['infirmary','回春醫館'],['merit-hall','功德堂'],[home,W.object(home).name]]){
+        await page.locator('[data-action="sect-guide"]').click();await page.locator('[data-place="'+place+'"]').click();
+        await page.waitForFunction(()=>window.fixtureView.pending||window.fixtureView.navigation,{},{timeout:5000}).catch(async error=>{throw new Error(error.message+' '+JSON.stringify(await page.evaluate(()=>({pending:window.fixtureView.pending,online:window.fixtureView.online,position:window.fixtureView.state.position,message:document.querySelector('.ww-message')?.textContent,title:document.querySelector('.ww-panel h2')?.textContent}))));});
+        await page.evaluate(async()=>{const r=await(await fetch('/fixture-advance',{method:'POST'})).json();window.fixtureView.clockOffset=r.now-Date.now();window.fixtureView.checkArrival();});
+        await page.waitForFunction(title=>document.querySelector('.ww-panel h2')?.textContent===title&&!window.fixtureView.busy,title);
+        const current=await page.evaluate(()=>window.fixtureView.state.position);assert.equal(W.distance(current,W.object(place)),1);
+        await page.evaluate(()=>{const r=window.fixtureView.renderer;r.camera.follow=true;});
+        if(place!==home||width===390)await page.screenshot({path:path.join(output,place+'-'+width+'.png')});
+        if(place==='merit-hall'){await page.locator('.ww-panel [data-entry="commissions"]').click();assert.equal(await page.locator('#quest-panel').evaluate(n=>n.open),true);await page.locator('#quest-panel').evaluate(n=>n.close());}
+      }
+      assert.deepEqual(errors,[]);report.push({width,guideFits:true,routeAndInteraction:true,medicalArrival:true,meritCommissions:true,housingArrival:true,service:width===1200?'material market':'avatar store',pageErrors:errors.length});await context.close();
     }
     await fs.writeFile(path.join(output,'browser-validation.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
   }finally{await browser?.close();service.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
