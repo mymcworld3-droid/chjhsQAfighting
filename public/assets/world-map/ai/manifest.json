@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 1520816,
+  "totalBytes": 1592402,
   "assets": [
     {
       "id": "meditation",
@@ -312,6 +312,30 @@
       ],
       "source": "exec-a4cf9f39-e25c-418a-ab79-50525bd4fdc8.png",
       "sourceSha256": "70e60d8fd60b0318f80d81248b0fcc196c49274c25dd2d356226fd2135533025"
+    },
+    {
+      "id": "fence-connectors-atlas",
+      "file": "fence-connectors-atlas.webp",
+      "width": 384,
+      "height": 256,
+      "bytes": 33452,
+      "alpha": true,
+      "componentParts": true,
+      "quality": 78,
+      "source": "exec-c6359d2d-6893-46d5-bddd-432a7791aa61.png",
+      "sourceSha256": "5a5bba396b906a1b350c20faa1d5d74d540d75e3c62146ce311b5eff32444167"
+    },
+    {
+      "id": "wall-connectors-atlas",
+      "file": "wall-connectors-atlas.webp",
+      "width": 384,
+      "height": 256,
+      "bytes": 38134,
+      "alpha": true,
+      "componentParts": true,
+      "quality": 78,
+      "source": "exec-5ec4c2c4-9771-4456-8f88-f7b37cf988dc.png",
+      "sourceSha256": "5da8c87c4d51f687ce0e84d9f386553a320d989c674f587f76e57487831a7ad2"
     }
   ]
 }

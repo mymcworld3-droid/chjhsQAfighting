@@ -95,8 +95,11 @@ export class WorldRenderer {
     }
   }
   drawScenery(p){
+    if(Scenery.isBarrier(p)){
+      for(const part of Art.barrierParts(p))this.imageSprite(part.sprite,p.x*TILE+part.dx,p.y*TILE+part.dy);
+      return;
+    }
     this.imageSprite(Art.scenery(p),p.x*TILE,p.y*TILE);
-    if(p.joinDirection)this.imageSprite(Art.directional(p.prop,p.joinDirection,p.size),p.x*TILE,p.y*TILE);
   }
   decoration(x,y,t){
     for(const p of this.sceneryModel().ambient(x,y,t,this.data?.events))this.drawScenery(p);

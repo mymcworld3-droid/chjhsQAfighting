@@ -22,14 +22,15 @@
 
 - 單棟建築檔案為 256 × 256 WebP，畫面顯示 72～80 邏輯像素，約 1.8～2 格；圖檔中的透明留白會讓實際輪廓略小。
 - 妖獸顯示 44 邏輯像素，採集物 34～38 像素，與角色大小相近。
-- 圖集每格 128 × 128，最大邊 640 像素。正式地圖共 27 張小型 WebP（不含既有主角動畫），完整大小見 `manifest.json`。
+- 圖集每格 128 × 128，最大邊 640 像素。正式地圖共 29 張小型 WebP（不含既有主角動畫），完整大小見 `manifest.json`。
+- 柵欄、圍牆使用新生成的 `fence-connectors-atlas.webp`、`wall-connectors-atlas.webp`（各 384 × 256），拆成中心柱及北／東／南／西半段。依相鄰同材質地格自動決定 16 種連接狀態，沒有鄰格的方向不畫橫桿，轉角／T 字／十字不再疊整片柵欄。柵欄保留中心柱，直線石牆改用低接頭；入口只沿兩側連接，不連斜角或不同材質。素材與最終修訂提示詞見 `barrier-prompts.md`。
 - 竹林以種子散布三種竹叢，混入灌木並保留空地；石域以鄰格優先規則放置三種散石，八方向相鄰格不會同時放石頭，跨區塊也一致。
 - 營地配置相連柵欄、開放入口、物資、柴堆與營火；遺跡有斷牆、石柱與碎石。鍛造坊、契器閣與仙榜分別配置武器架、方尖碑及卷軸架。周邊避開道路和其他物件，與建築的原始正門方向一致。
 - 地面使用簡化後的低細節材質，以四乘四地格延伸一張紋理，避免每小格重複碎紋；規格與生成提示詞見 `ground-prompts.md`。
 - 透明背景、接地位置、前後遮擋與圖片超出地格後的點選共用 `public/world/world-art.js`。透明像素不截取旁邊地格的點擊。
-- `manifest.json` 列出尺寸、檔案大小、來源名稱與來源 SHA-256；生成提示詞在 `prompts.md`、`scenery-prompts.md` 和 `ground-prompts.md`。
+- `manifest.json` 列出尺寸、檔案大小、來源名稱與來源 SHA-256；生成提示詞在 `prompts.md`、`scenery-prompts.md`、`ground-prompts.md` 和 `barrier-prompts.md`。舊四向地景圖集的整段柵欄／圍牆格已不再用於遊戲中的連接結構，其他入口、斷牆、橋梁等格繼續使用。
 - 地形、建築座標、種子、通行與獎勵仍由原本的世界生成器和伺服器決定。
 
 地圖插畫透過 `drawImage` 繪製；格線／選取、路線、傷害文字、血條及小地圖資訊標記仍是互動資訊。沒有另外生成逐格資料庫資料。
 
-重新壓縮原始圖：安裝開發工具 `sharp`，提供 `{"assets":[{"id":"meditation","path":"/path/original.png"}]}` 格式的 JSON 給 `node scripts/pack-world-ai-art.cjs /path/source-manifest.json`。可加 `--merge` 保留其他素材。圖集可提供 `gridColumns`、`gridRows`、`rows`、`columns`、`inset` 與 `quality`，支援裁切部分列與獨立壓縮品質。原始 PNG 保留於生成結果，正式網站只載入小型 WebP。
+重新壓縮原始圖：安裝開發工具 `sharp`，提供 `{"assets":[{"id":"meditation","path":"/path/original.png"}]}` 格式的 JSON 給 `node scripts/pack-world-ai-art.cjs /path/source-manifest.json`。可加 `--merge` 保留其他素材。圖集可提供 `gridColumns`、`gridRows`、`rows`、`columns`、`inset` 與 `quality`，支援裁切部分列與獨立壓縮品質。連接零件使用 `componentParts: true` 裁緊後填滿單格，端點不加透明留白，由繪製器指定零件的實際尺寸及位置。原始 PNG 保留於生成結果，正式網站只載入小型 WebP。

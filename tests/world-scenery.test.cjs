@@ -23,7 +23,8 @@ test('site scenery has matching structures, avoids objects and roads, and respec
   const camp={id:'camp-test',kind:'structure',subtype:'camp',x:100,y:100},ruins={...camp,id:'ruins-test',subtype:'ruins',x:115};
   const original=plain(),world={...original,objectsIn:()=>[camp,ruins],objectAt:(x,y)=>[camp,ruins].find(o=>o.x===x&&o.y===y)},scenery=S.create(world);
   assert.ok(scenery.site(camp).filter(p=>p.prop==='fence').length>=8);assert.ok(scenery.site(camp).some(p=>p.prop==='gate'));
-  assert.deepEqual(scenery.site(camp).filter(p=>p.joinDirection).map(p=>p.joinDirection),['west','east'],'corner tiles paint both connecting directions');
+  const corners=S.connect(scenery.site(camp)).filter(p=>p.prop==='fence'&&Math.floor(p.y)===98&&[98,102].includes(Math.floor(p.x)));
+  assert.deepEqual(corners.map(p=>p.mask),[6,12],'corners derive two arms from their adjacent cells');
   assert.ok(scenery.site(ruins).some(p=>p.prop==='rubble'));assert.ok(scenery.site(ruins).some(p=>p.prop==='broken-wall'));
   const bounds={x:96,y:96,w:24,h:10},items=scenery.inBounds(bounds),occupied=items.map(p=>W.key(Math.floor(p.x),Math.floor(p.y)));
   assert.equal(new Set(occupied).size,occupied.length,'sites do not place competing decorations on a tile');
@@ -49,11 +50,47 @@ test('road masks connect every junction at seams and close absent arms; bridge o
   assert.ok(scene.topology(30,30,'grass',{},()=>false).neighbours.every(t=>t==='grass'),'unknown neighbour types stay hidden');
 });
 test('directional art has distinct generated sheets and every source cell stays inside the atlas',()=>{
-  assert.equal(new Set(A.directions.map(d=>A.directional('fence',d).image)).size,4);
+  for(const material of ['fence','wall'])assert.equal(new Set(A.directions.map(d=>{const s=A.directional(material,d);return s.image+':'+s.sx+':'+s.sy;})).size,4);
   for(const d of A.directions)for(const prop of A.sceneryProps){const sprite=A.directional(prop,d);assert.ok(sprite.sx+sprite.sw<=512&&sprite.sy+sprite.sh<=256);}
   assert.equal(new Set(A.directions.map(direction=>A.monster({species:'靈狼',direction}).image)).size,4);
   assert.equal(new Set(A.directions.map(d=>A.directional('boat',d).sx)).size,4);
   for(const id of A.buildings){const sprites=A.directions.map(direction=>A.object({id,kind:'building',direction}));assert.ok(sprites.every(s=>s.image===id&&s.sx===0&&s.sy===0&&s.sw===256&&s.sh===256),'buildings keep the original single view');}
+});
+test('all sixteen fence/wall states are derived from cardinal neighbours, including automatic removal',()=>{
+  const centre={x:31.5,y:31.6};
+  for(const prop of ['fence','wall'])for(let mask=0;mask<16;mask++){
+    const nodes=[{...centre,prop}];for(let i=0;i<4;i++)if(mask&(1<<i))nodes.push({x:centre.x+S.STEPS[i][0],y:centre.y+S.STEPS[i][1],prop});
+    const result=S.connect(nodes),p=result[0];assert.equal(p.mask,mask);
+    assert.equal(p.post,prop==='fence'||![5,10].includes(mask));
+    for(let i=0;i<4;i++)if(mask&(1<<i))assert.ok(result.find(n=>n.x===centre.x+S.STEPS[i][0]&&n.y===centre.y+S.STEPS[i][1]).mask&(1<<((i+2)%4)),'shared connection is reciprocal');
+    const parts=A.barrierParts(p);assert.equal(parts.length,1+mask.toString(2).replace(/0/g,'').length);
+    for(const part of parts){const s=part.sprite;assert.equal(s.image,prop+'-connectors-atlas');assert.ok(s.sx+s.sw<=384&&s.sy+s.sh<=256);}
+    assert.equal(parts.at(-1).sprite.sx,p.post?0:256);assert.equal(parts.at(-1).sprite.sy,p.post?0:128);
+    assert.equal(S.connect(nodes.slice(0,1))[0].mask,0,'removing neighbours retracts every arm');
+    assert.equal(nodes[0].mask,undefined,'connection calculation does not mutate the seeded layout');
+  }
+});
+test('barriers ignore diagonals and other materials and only attach to a gate along its fence axis',()=>{
+  const p={prop:'fence',x:50.5,y:50.6};
+  assert.equal(S.connect([p,{prop:'wall',x:51.5,y:50.6},{prop:'fence',x:51.5,y:51.6}])[0].mask,0);
+  for(let i=0;i<4;i++)for(const direction of A.directions){
+    const gate={prop:'gate',direction,x:p.x+S.STEPS[i][0],y:p.y+S.STEPS[i][1]},allowed=(['north','south'].includes(direction)?10:5)&(1<<i);
+    assert.equal(!!S.connect([p,gate])[0].mask,!!allowed);
+  }
+});
+test('connection masks survive viewport/chunk seams and update when neighbouring scenery is revealed',()=>{
+  const camp={id:'seam-camp',kind:'structure',subtype:'camp',x:31,y:31},world={...plain(),objectsIn:()=>[camp]},scene=S.create(world),bounds={x:31,y:29,w:1,h:1};
+  const find=items=>items.find(p=>p.prop==='fence'&&Math.floor(p.x)===31&&Math.floor(p.y)===29);
+  const all=scene.inBounds({x:26,y:26,w:12,h:12}),clipped=scene.inBounds(bounds);
+  assert.equal(find(clipped).mask,10);assert.deepEqual(find(clipped),find(all));
+  assert.equal(find(scene.inBounds(bounds,{},(x,y)=>x!==32||y!==29)).mask,8,'hidden neighbour does not leak a connecting arm');
+  assert.equal(find(scene.inBounds(bounds)).mask,10);
+  const s=W.SPAWN,r=W.CITY_RADIUS,town=S.create({...plain(),terrain:()=> 'courtyard'}).inBounds({x:s.x-r,y:s.y-r,w:r*2+1,h:r*2+1});
+  const corner=town.filter(p=>p.prop==='wall'&&Math.floor(p.x)===s.x-r&&Math.floor(p.y)===s.y-r);assert.equal(corner.length,1);assert.equal(corner[0].mask,6);
+  for(const gate of town.filter(p=>p.prop==='gate')){
+    const horizontal=['north','south'].includes(gate.direction);
+    for(const sign of [-1,1])assert.ok(town.some(p=>p.prop==='wall'&&Math.floor(p.x)===Math.floor(gate.x)+(horizontal?sign:0)&&Math.floor(p.y)===Math.floor(gate.y)+(horizontal?0:sign)&&p.mask===(horizontal?10:5)),'town wall joins both sides of each gate');
+  }
 });
 test('single-facing buildings keep their south entrance and matching surroundings even beside a northern road',()=>{
   const world={...plain(),terrain:(x,y)=>y===97?'road':'grass'},scene=S.create(world),camp={id:'camp-front',kind:'structure',subtype:'camp',x:100,y:100};

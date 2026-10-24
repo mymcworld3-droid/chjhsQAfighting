@@ -6,4 +6,8 @@
 
 `native/validation.json` 記錄載入圖片數、地景數量、快取上限與像素驗證。相同時間重繪的像素一致；鏡像材質的邊界最大像素差為 0。
 
+`native/connections.webp` 顯示柵欄、圍牆各 16 種四向連接狀態。畫面中的每個地格只繪製一個中心與必要的半段；在獨立透明畫布上檢查兩種材質的橫向、縱向共享邊界，確定沒有透明裂縫。測試也涵蓋移除鄰格、跨區塊／畫面邊界、迷霧及入口朝向。
+
+![四向連接狀態](native/connections.webp)
+
 可安裝選用的 `@napi-rs/canvas` 後執行 `node scripts/capture-world-scenery-native.cjs` 重現。具備 Playwright Chromium 的環境也可執行既有的 `scripts/capture-world-scenery.cjs` 取得瀏覽器預覽。

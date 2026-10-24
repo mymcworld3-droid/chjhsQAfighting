@@ -2,15 +2,38 @@
   "renderer": "production WorldRenderer via native Canvas",
   "labels": "suppressed in fixture; no CJK font in native runtime",
   "seed": "qingyun-2026",
-  "images": 29,
+  "images": 31,
   "repeatable": true,
   "seamMaxDifference": 0,
+  "connectorStates": 32,
+  "connectorCoverage": [
+    {
+      "prop": "fence",
+      "axis": "EW",
+      "minSeamAlpha": 253
+    },
+    {
+      "prop": "fence",
+      "axis": "NS",
+      "minSeamAlpha": 255
+    },
+    {
+      "prop": "wall",
+      "axis": "EW",
+      "minSeamAlpha": 253
+    },
+    {
+      "prop": "wall",
+      "axis": "NS",
+      "minSeamAlpha": 253
+    }
+  ],
   "fixtures": [
     {
       "name": "CAMP / CONNECTED FENCES",
       "x": 583,
       "y": 83,
-      "props": 25,
+      "props": 29,
       "cache": 70
     },
     {
@@ -24,7 +47,7 @@
       "name": "BAMBOO / SEEDED CLEARINGS",
       "x": 294,
       "y": 90,
-      "props": 41,
+      "props": 42,
       "cache": 64
     },
     {

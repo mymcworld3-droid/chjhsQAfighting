@@ -6,6 +6,25 @@
   const ROADS=new Set(['road','bridge','broken-bridge']),WATER=new Set(['water','ocean']);
   const DRY=new Set(['grass','courtyard','mountain','bamboo','forest','desert','snow','swamp','stone','volcano','beach']);
   const isSite=o=>['building','structure','realm'].includes(o.kind);
+  const isBarrier=p=>p.prop==='fence'||p.prop==='wall',cell=p=>Math.floor(p.x)+','+Math.floor(p.y);
+  // A block owns one centre and only the half-arms leading to compatible neighbours.
+  // Resolve after visibility/occupancy, but before viewport clipping (one-cell halo).
+  function connect(items){
+    const nodes=new Map(),unique=[];
+    for(const p of items){
+      if(isBarrier(p)||p.prop==='gate'){const k=cell(p);if(nodes.has(k))continue;nodes.set(k,p);}
+      unique.push(p);
+    }
+    return unique.map(p=>{
+      if(!isBarrier(p))return p;
+      let mask=0;
+      for(let i=0;i<4;i++){
+        const [dx,dy]=STEPS[i],n=nodes.get((Math.floor(p.x)+dx)+','+(Math.floor(p.y)+dy));
+        if(n?.prop===p.prop||n?.prop==='gate'&&((['east','west'].includes(n.direction)?5:10)&(1<<i)))mask|=1<<i;
+      }
+      return {...p,mask,post:p.prop==='fence'||mask!==5&&mask!==10};
+    });
+  }
   function create(world){
     const W=world;
     function topology(x,y,t,events={},visible=()=>true){
@@ -43,8 +62,8 @@
         for(const item of items){item.x+=((h>>>8)%101/100-.5)*.3;item.y+=((h>>>17)%101/100-.5)*.2;}
       }
       // Sect walls and gates have actual north/east/south/west illustrations.
-      if(Math.abs(dx)===r&&Math.abs(dy)<=r&&Math.abs(dy)>1&&t==='courtyard')add('wall',46,dx>0?'east':'west');
-      if(Math.abs(dy)===r&&Math.abs(dx)<=r&&Math.abs(dx)>1&&t==='courtyard')add('wall',46,dy>0?'south':'north');
+      if(Math.abs(dx)===r&&Math.abs(dy)<=r&&dy!==0&&t==='courtyard')add('wall',40);
+      if(Math.abs(dy)===r&&Math.abs(dx)<=r&&dx!==0&&t==='courtyard')add('wall',40);
       if((Math.abs(dx)===r&&dy===0)||(Math.abs(dy)===r&&dx===0))add('gate',66,dx===r?'east':dx===-r?'west':dy===r?'south':'north');
       if(t==='courtyard'&&Math.abs(dx)>=6&&Math.abs(dx)<=8&&Math.abs(dy)>=6&&Math.abs(dy)<=8&&(dx+dy)%2===0)add('garden',38);
       if(t==='courtyard'&&((Math.abs(dx)===8&&dy%4===0)||(Math.abs(dy)===8&&dx%4===0)))add('lantern',29);
@@ -56,15 +75,16 @@
       // Every existing building has one front-facing image. Its door and surrounding
       // layout stay south-facing; only fences, gates and other props have variants.
       const turn=0;
-      const add=(prop,dx,dy,size=34,facing='south',joinDirection=null)=>{
+      const add=(prop,dx,dy,size=34,facing='south')=>{
         for(let i=0;i<turn;i++){const a=dx;dx=-dy;dy=a;}
         const x=o.x+dx,y=o.y+dy,tx=Math.floor(x+.5),ty=Math.floor(y+.5);
         if(!W.inside(tx,ty)||!DRY.has(W.terrain(tx,ty,events))||W.terrain(tx,ty,events)==='road'||W.objectAt(tx,ty))return;
-        items.push({x:x+.5,y:y+.6,prop,size,direction:['fence','gate','wall','broken-wall','pillar','rubble','supplies'].includes(prop)?DIRECTIONS[(DIRECTIONS.indexOf(facing)+turn)%4]:null,...(joinDirection?{joinDirection}:{}),owner:o.id});
+        items.push({x:x+.5,y:y+.6,prop,size,direction:['gate','broken-wall','pillar','rubble','supplies'].includes(prop)?DIRECTIONS[(DIRECTIONS.indexOf(facing)+turn)%4]:null,owner:o.id});
       };
       if(subtype==='camp'){
-        for(const x of [-2,-1,0,1,2])add('fence',x,-2,46,'north',x===-2?'west':x===2?'east':null);
-        for(const y of [-1,0,1]){add('fence',-2,y,46,'west');add('fence',2,y,46,'east');}
+        for(const x of [-2,-1,0,1,2])add('fence',x,-2,40);
+        for(const y of [-1,0,1]){add('fence',-2,y,40);add('fence',2,y,40);}
+        for(const x of [-2,-1,1,2])add('fence',x,2,40);
         add('gate',0,2,54);add('supplies',-1,1,31);add('fire',1,1,24);add('logs',-1,-1,27);
       }else if(subtype==='ruins'){
         add('broken-wall',-2,-1,45,'west');add('broken-wall',2,-1,43,'east');
@@ -96,14 +116,15 @@
         const x=Math.floor(item.x),y=Math.floor(item.y),k=W.key(x,y);
         if(visible(x,y)&&!occupied.has(k)){occupied.add(k);items.push(item);}
       }
-      for(let y=Math.max(0,bounds.y);y<Math.min(W.SIZE,bounds.y+bounds.h);y++)for(let x=Math.max(0,bounds.x);x<Math.min(W.SIZE,bounds.x+bounds.w);x++){
-        if(!visible(x,y)||reserved.has(W.key(x,y)))continue;
-        items.push(...ambient(x,y,W.terrain(x,y,events),events));
+      for(let y=Math.max(0,bounds.y-1);y<Math.min(W.SIZE,bounds.y+bounds.h+1);y++)for(let x=Math.max(0,bounds.x-1);x<Math.min(W.SIZE,bounds.x+bounds.w+1);x++){
+        if(!visible(x,y))continue;
+        const plants=ambient(x,y,W.terrain(x,y,events),events);
+        items.push(...(reserved.has(W.key(x,y))?plants.filter(p=>p.prop==='wall'||p.prop==='gate'):plants));
       }
-      return items.filter(p=>p.x>=bounds.x&&p.x<bounds.x+bounds.w&&p.y>=bounds.y&&p.y<bounds.y+bounds.h);
+      return connect(items).filter(p=>p.x>=bounds.x&&p.x<bounds.x+bounds.w&&p.y>=bounds.y&&p.y<bounds.y+bounds.h);
     }
     return Object.freeze({world,topology,ambient,site,inBounds});
   }
-  const api=Object.freeze({DIRECTIONS,STEPS,create});
+  const api=Object.freeze({DIRECTIONS,STEPS,isBarrier,connect,create});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorldScenery=api;
 })(globalThis);

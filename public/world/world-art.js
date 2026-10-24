@@ -4,7 +4,7 @@
   const base='/assets/world-map/ai/';
   const buildings=['meditation','forge','contract','vault','rank','duel','raid','watchtower','shrine','ruins','camp','realm-spring','realm-array','realm-sword','realm-star'];
   const directions=Object.freeze(['north','east','south','west']);
-  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west'].map(id=>[id,base+id+'.webp'])));
+  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas'].map(id=>[id,base+id+'.webp'])));
   const sceneryProps=Object.freeze(['fence','gate','wall','broken-wall','pillar','rubble','bridge','supplies']);
   const props=['bamboo','tree','rock','volcano','flowers','shrub','reeds','herb','ore','chest','lantern','wall-h','wall-v','gate','garden','boat','meteor','shield','altar','sealed'];
   const creatures=['靈狼','玄甲山豬','竹林靈狼','青竹蛇','山魈','妖藤','沙蠍','荒漠蜥蜴','巖甲獸','石靈','赤焰獸','熔岩蜥蜴','霜羽鷹','雪狼','毒蟾','澤蛇','潮汐蟹','海岸靈龜','古陣守衛','靈獸'];
@@ -17,8 +17,22 @@
   function directional(name,direction='south',size=40){
     direction=compass(direction);
     if(name==='boat')return sheet('boats-atlas',Math.max(0,['south','north','east','west'].indexOf(direction)),4,size,size);
+    if(name==='fence'||name==='wall')return sheet(name+'-connectors-atlas',1+Math.max(0,directions.indexOf(direction)),3,size,size);
     const sprite=sheet('scenery-'+(directions.includes(direction)?direction:'south')+'-atlas',Math.max(0,sceneryProps.indexOf(name)),4,size,size);
     sprite.anchor=['fence','wall','broken-wall','bridge','rubble'].includes(name)?.55:name==='gate'?.8:.87;return sprite;
+  }
+  function barrierParts(p){
+    const wall=p.prop==='wall',image=p.prop+'-connectors-atlas',mask=(p.mask||0)&15,parts=[];
+    const add=(cell,dx,dy,w,h)=>{const sprite=sheet(image,cell,3,w,h);sprite.anchor=0;parts.push({sprite,dx,dy});};
+    // E/W tips overlap by one pixel at the shared cell edge; N/S also overlap
+    // the projected height of the wall/rails. No end-post is baked into an arm.
+    if(mask&1)add(1,0,wall?-34:-32,wall?10:7,wall?34:32);
+    if(mask&8)add(4,-10,wall?-15:-14,22,wall?15:10);
+    if(mask&2)add(2,10,wall?-15:-14,22,wall?15:10);
+    if(mask&4)add(3,0,wall?-14:-12,wall?10:7,wall?34:32);
+    const post=!wall||mask!==5&&mask!==10;
+    add(post?0:5,0,wall?(post?-24:-14):-24,wall?(post?12:10):9,wall?(post?25:15):25);
+    return parts;
   }
   const scenery=p=>ambientProps.includes(p.prop)&&!p.direction?ambientProp(p.prop,p.size):p.direction?directional(p.prop,p.direction,p.size):prop(p.prop,p.size);
   function monster(o){
@@ -40,6 +54,6 @@
   function bounds(o,sprite=object(o)){
     return{x:(o.x+.5)*40-sprite.w/2,y:(o.y+.5)*40-sprite.h*sprite.anchor,w:sprite.w,h:sprite.h};
   }
-  const api=Object.freeze({sources,directions,sceneryProps,ambientProps,ambientProp,compass,buildings:Object.freeze(buildings),props:Object.freeze(props),creatures:Object.freeze(creatures),terrain:Object.freeze(terrain),sheet,prop,directional,scenery,monster,object,bounds});
+  const api=Object.freeze({sources,directions,sceneryProps,ambientProps,ambientProp,compass,buildings:Object.freeze(buildings),props:Object.freeze(props),creatures:Object.freeze(creatures),terrain:Object.freeze(terrain),sheet,prop,directional,barrierParts,scenery,monster,object,bounds});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorldArt=api;
 })(globalThis);
