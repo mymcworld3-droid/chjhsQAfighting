@@ -19,7 +19,7 @@
     const ax=Math.abs(dx),centre=13+Math.round(Math.sin((dy+4)/7)*1.4);
     return dy>=-12&&dy<=16&&Math.abs(ax-centre)<=1||((ax-11)/4)**2+((dy-13)/3.4)**2<=1;
   }
-  function sectTerrainBase(dx,dy){
+  function sectTerrain(dx,dy){
     const ax=Math.abs(dx),ay=Math.abs(dy);
     if(Math.max(ax,ay)>CITY_RADIUS)return null;
     // The former 19 x 19 court is preserved. Water gardens occupy the new
@@ -29,33 +29,6 @@
       dy===-12&&ax<=6||ax===6&&dy>=-20&&dy<=-12||dy===-20&&ax<=6)return 'road';
     if(ax>=10&&ax<=20&&dy>=-17&&dy<=16)return 'grass';
     return 'courtyard';
-  }
-
-  // Pave the middle of every road-enclosed court. Only the courtyard floor
-  // changes: streams, bridges and intentionally landscaped grass stay intact.
-  const SECT_ENCLOSED_FLOORS=(()=>{
-    const filled=new Set(),visited=new Set(),limit=CITY_RADIUS;
-    const valid=(x,y)=>Math.abs(x)<=limit&&Math.abs(y)<=limit;
-    for(let y=-limit;y<=limit;y++)for(let x=-limit;x<=limit;x++){
-      const start=x+','+y;
-      if(visited.has(start)||['road','bridge'].includes(sectTerrainBase(x,y)))continue;
-      const queue=[[x,y]];visited.add(start);let enclosed=true;
-      for(let n=0;n<queue.length;n++){
-        const [px,py]=queue[n];
-        for(const [dx,dy] of DIRS){
-          const nx=px+dx,ny=py+dy,k=nx+','+ny;
-          if(!valid(nx,ny)){enclosed=false;continue;}
-          if(visited.has(k)||['road','bridge'].includes(sectTerrainBase(nx,ny)))continue;
-          visited.add(k);queue.push([nx,ny]);
-        }
-      }
-      if(enclosed)for(const [px,py] of queue)if(sectTerrainBase(px,py)==='courtyard')filled.add(px+','+py);
-    }
-    return filled;
-  })();
-  function sectTerrain(dx,dy){
-    const original=sectTerrainBase(dx,dy);
-    return original==='courtyard'&&SECT_ENCLOSED_FLOORS.has(dx+','+dy)?'road':original;
   }
   function sectBlocked(x,y){
     const dx=x-SPAWN.x,dy=y-SPAWN.y,ax=Math.abs(dx),ay=Math.abs(dy);
@@ -303,31 +276,6 @@ return TERRAIN;})();
       let t=patch?.terrain||TYPES[chunk(Math.floor(x/32),Math.floor(y/32)).tiles[(y%32)*32+x%32]];
       if(t==='sealed'&&events.array>=60)t='road';if(t==='broken-bridge'&&events.bridge>=20)t='bridge';return t;
     }
-    // Only the last road placement can close a loop. A bounded, four-neighbour
-    // flood fill avoids mistaking diagonal contacts for walls and avoids scanning
-    // a million-cell world when a path is still open.
-    function enclosedRoadCells(lastRoad,{terrainAt=terrain,maxCells=16384}={}){
-      if(!inside(lastRoad?.x,lastRoad?.y)||terrainAt(lastRoad.x,lastRoad.y)!=='road')return [];
-      if(DIRS.filter(([dx,dy])=>terrainAt(lastRoad.x+dx,lastRoad.y+dy)==='road').length<2)return [];
-      const limit=Math.max(1,Math.min(32768,Math.floor(maxCells)||16384)),visited=new Set(),enclosed=[];
-      for(const[dx,dy]of DIRS){
-        const first={x:lastRoad.x+dx,y:lastRoad.y+dy},firstKey=key(first.x,first.y);
-        if(!inside(first.x,first.y)||terrainAt(first.x,first.y)==='road'||visited.has(firstKey))continue;
-        const region=[first];visited.add(firstKey);let closed=true;
-        for(let index=0;index<region.length&&closed;index++){
-          const current=region[index];
-          for(const[stepX,stepY]of DIRS){
-            const x=current.x+stepX,y=current.y+stepY,k=key(x,y);
-            if(!inside(x,y)){closed=false;break;}
-            if(terrainAt(x,y)==='road'||visited.has(k))continue;
-            visited.add(k);region.push({x,y});
-            if(region.length>limit){closed=false;break;}
-          }
-        }
-        if(closed)enclosed.push(...region);
-      }
-      return enclosed;
-    }
     function walkable(x,y,{events={},bounds=null,blocked=null,ignoreObjects=false,mode='walk'}={}){
       if(!inside(x,y)||bounds&&(x<bounds.x||y<bounds.y||x>=bounds.x+bounds.w||y>=bounds.y+bounds.h)||blocked?.has(key(x,y))||sectBlocked(x,y))return false;
       const t=terrain(x,y,events),sea=['water','ocean'];
@@ -382,7 +330,7 @@ return TERRAIN;})();
     }
     const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?'問道宗':inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
     const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
-      key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,enclosedRoadCells,
+      key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
       patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
     return Object.freeze(api);
   }

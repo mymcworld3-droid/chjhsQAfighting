@@ -30,35 +30,18 @@
     function topology(x,y,t,events={},visible=()=>true){
       const neighbours=STEPS.map(([dx,dy])=>W.inside(x+dx,y+dy)&&visible(x+dx,y+dy)?W.terrain(x+dx,y+dy,events):t);
       let mask=0;neighbours.slice(0,4).forEach((v,i)=>{if(ROADS.has(v))mask|=1<<i;});
-      // A road is a broad paved surface only where the neighbouring tiles
-      // really form a 2x2 road square. The diagonal check keeps lone bends,
-      // narrow paths and bridges from receiving unwanted paved corners.
-      const road=i=>neighbours[i]==='road';
-      let cornerMask=0;
-      if(t==='road'){
-        if(road(0)&&road(3)&&road(4))cornerMask|=1; // northwest
-        if(road(0)&&road(1)&&road(5))cornerMask|=2; // northeast
-        if(road(1)&&road(2)&&road(6))cornerMask|=4; // southeast
-        if(road(2)&&road(3)&&road(7))cornerMask|=8; // southwest
-      }
       const horizontal=[1,3].reduce((s,i)=>s+Number(ROADS.has(neighbours[i]))*3+Number(DRY.has(neighbours[i])),0);
       const vertical=[0,2].reduce((s,i)=>s+Number(ROADS.has(neighbours[i]))*3+Number(DRY.has(neighbours[i])),0);
       const bridgeDirection=horizontal>=vertical?'east':'south';
       const counts=new Map();for(const v of neighbours)if(DRY.has(v))counts.set(v,(counts.get(v)||0)+1);
-      const inSect=Math.max(Math.abs(x-W.SPAWN.x),Math.abs(y-W.SPAWN.y))<=W.CITY_RADIUS;
-      const adjacent=neighbours.slice(0,4);
-      const underlay=inSect
-        ?t==='road'&&adjacent.includes('grass')?'grass'
-          :t==='road'&&adjacent.some(v=>WATER.has(v))?'water'
-          :'courtyard'
-        :[...counts].sort((a,b)=>b[1]-a[1])[0]?.[0]||'grass';
+      const underlay=Math.max(Math.abs(x-W.SPAWN.x),Math.abs(y-W.SPAWN.y))<=W.CITY_RADIUS?'courtyard':[...counts].sort((a,b)=>b[1]-a[1])[0]?.[0]||'grass';
       // Only include neighbours that actually contribute pixels. A road's
       // eight surrounding terrain names used to create hundreds of duplicate
       // rasters when zooming out across an entire landscaped sect.
       const blended=neighbours.map(v=>v!==t&&!['road','bridge','broken-bridge','sealed'].includes(v)?v:'');
-      const raster=t==='road'?[t,mask,cornerMask,underlay]:['bridge','broken-bridge'].includes(t)?[t,bridgeDirection,neighbours.includes('ocean')?'ocean':'water']:[t,...blended];
+      const raster=t==='road'?[t,mask,underlay]:['bridge','broken-bridge'].includes(t)?[t,bridgeDirection,neighbours.includes('ocean')?'ocean':'water']:[t,...blended];
       // Ground.compose additionally keys every contributing texture's flips.
-      return {x,y,terrain:t,neighbours,mask,cornerMask,underlay,bridgeDirection,key:raster.join(':')};
+      return {x,y,terrain:t,neighbours,mask,underlay,bridgeDirection,key:raster.join(':')};
     }
     function sparse(x,y,limit,layer,diagonal=false){
       const h=W.hash(x,y,layer);if(h%100>=limit)return false;

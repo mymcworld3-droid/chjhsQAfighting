@@ -5,7 +5,7 @@
 <header><div class="brand"><span class="seal" aria-hidden="true">道</span><div><h1>大世界種子模擬器</h1><p>青雲問道 · 1000 × 1000 格</p></div></div><span class="local-badge">本機模擬</span></header>
 <form id="seed-form" class="controls"><label>世界種子<input id="seed" maxlength="128" value="qingyun-2026" autocomplete="off" spellcheck="false"></label><button class="primary" type="submit" id="generate">生成世界</button><button type="button" id="random">隨機種子</button><button type="button" id="compare">比較四個種子</button><button type="button" id="export-json">匯出種子與變更</button><button type="button" id="import-json">匯入</button><input type="file" id="import-file" accept="application/json,.json" hidden></form>
 <main><section class="map-pane"><div class="map-toolbar"><label>地圖圖層<select id="layer"><option value="terrain">海陸地貌</option><option value="danger">怪物等級帶</option><option value="resources">礦脈與資源</option><option value="sites">秘境與結構</option></select></label><label>點格操作<select id="paint"><option value="inspect">查看地格</option><option value="road">鋪設道路</option><option value="bridge">架設橋樑</option><option value="grass">改為草地</option><option value="water">改為水域</option><option value="rock">放置岩壁</option><option value="restore">還原此格</option></select></label><label class="check"><input id="show-changes" type="checkbox" checked>顯示變更</label></div>
-<div class="map-stage"><canvas id="map" aria-label="世界總覽；拖曳平移、滾輪縮放，點擊查看地格" tabindex="0"></canvas><div id="map-hint">中央問道宗 · 道路圍成封閉圈會自動填滿 · 拖曳查看</div><div class="map-buttons"><button id="zoom-in" type="button" aria-label="放大">＋</button><button id="zoom-out" type="button" aria-label="縮小">−</button><button id="fit" type="button">全圖</button><button id="spawn" type="button">問道宗</button><button id="export-png" type="button">匯出圖</button></div><div id="loading" role="status"><span id="loading-label">正在生成世界</span><progress id="progress" max="100" value="0"></progress></div></div></section>
+<div class="map-stage"><canvas id="map" aria-label="世界總覽；拖曳平移、滾輪縮放，點擊查看地格" tabindex="0"></canvas><div id="map-hint">中央問道宗 · 拖曳查看 · 滾輪縮放</div><div class="map-buttons"><button id="zoom-in" type="button" aria-label="放大">＋</button><button id="zoom-out" type="button" aria-label="縮小">−</button><button id="fit" type="button">全圖</button><button id="spawn" type="button">問道宗</button><button id="export-png" type="button">匯出圖</button></div><div id="loading" role="status"><span id="loading-label">正在生成世界</span><progress id="progress" max="100" value="0"></progress></div></div></section>
 <aside><section class="inspection"><h2>地格資訊 <span id="tile-coordinate">點選地圖</span></h2><div id="tile-info">選擇地格查看地貌、妖獸等級、秘境、結構或礦脈。放大後可看清相鄰地格。</div></section><section><h2>生成基底統計 <span id="generation-time"></span></h2><div id="stats" class="stats"></div><div id="tier-stats"></div></section><section class="legend-section"><h2>圖例與標記</h2><div id="legend" class="legend"></div><div class="marker-toggles"><label><input type="checkbox" data-marker="realm" checked>秘境</label><label><input type="checkbox" data-marker="structure" checked>結構</label><label><input type="checkbox" data-marker="monster">妖獸</label><label><input type="checkbox" data-marker="vein">礦脈</label></div></section><p class="storage-note">地形由種子在本機重建；匯出僅含種子、生成版本與改動地格，不包含百萬格基底。此工具不會修改正式世界。</p></aside></main>
 <footer><span id="status" role="status">準備生成</span><span id="storage">地圖變更 0 格</span></footer>
 <dialog id="compare-dialog"><div class="dialog-heading"><div><h2>四種世界，同一套生成規則</h2><p>選擇一張地圖，載入該種子繼續查看。</p></div><button id="close-compare" type="button" aria-label="關閉比較">×</button></div><div id="compare-grid"></div></dialog>
@@ -30,7 +30,7 @@
     const ax=Math.abs(dx),centre=13+Math.round(Math.sin((dy+4)/7)*1.4);
     return dy>=-12&&dy<=16&&Math.abs(ax-centre)<=1||((ax-11)/4)**2+((dy-13)/3.4)**2<=1;
   }
-  function sectTerrainBase(dx,dy){
+  function sectTerrain(dx,dy){
     const ax=Math.abs(dx),ay=Math.abs(dy);
     if(Math.max(ax,ay)>CITY_RADIUS)return null;
     // The former 19 x 19 court is preserved. Water gardens occupy the new
@@ -40,33 +40,6 @@
       dy===-12&&ax<=6||ax===6&&dy>=-20&&dy<=-12||dy===-20&&ax<=6)return 'road';
     if(ax>=10&&ax<=20&&dy>=-17&&dy<=16)return 'grass';
     return 'courtyard';
-  }
-
-  // Pave the middle of every road-enclosed court. Only the courtyard floor
-  // changes: streams, bridges and intentionally landscaped grass stay intact.
-  const SECT_ENCLOSED_FLOORS=(()=>{
-    const filled=new Set(),visited=new Set(),limit=CITY_RADIUS;
-    const valid=(x,y)=>Math.abs(x)<=limit&&Math.abs(y)<=limit;
-    for(let y=-limit;y<=limit;y++)for(let x=-limit;x<=limit;x++){
-      const start=x+','+y;
-      if(visited.has(start)||['road','bridge'].includes(sectTerrainBase(x,y)))continue;
-      const queue=[[x,y]];visited.add(start);let enclosed=true;
-      for(let n=0;n<queue.length;n++){
-        const [px,py]=queue[n];
-        for(const [dx,dy] of DIRS){
-          const nx=px+dx,ny=py+dy,k=nx+','+ny;
-          if(!valid(nx,ny)){enclosed=false;continue;}
-          if(visited.has(k)||['road','bridge'].includes(sectTerrainBase(nx,ny)))continue;
-          visited.add(k);queue.push([nx,ny]);
-        }
-      }
-      if(enclosed)for(const [px,py] of queue)if(sectTerrainBase(px,py)==='courtyard')filled.add(px+','+py);
-    }
-    return filled;
-  })();
-  function sectTerrain(dx,dy){
-    const original=sectTerrainBase(dx,dy);
-    return original==='courtyard'&&SECT_ENCLOSED_FLOORS.has(dx+','+dy)?'road':original;
   }
   function sectBlocked(x,y){
     const dx=x-SPAWN.x,dy=y-SPAWN.y,ax=Math.abs(dx),ay=Math.abs(dy);
@@ -314,31 +287,6 @@ return TERRAIN;})();
       let t=patch?.terrain||TYPES[chunk(Math.floor(x/32),Math.floor(y/32)).tiles[(y%32)*32+x%32]];
       if(t==='sealed'&&events.array>=60)t='road';if(t==='broken-bridge'&&events.bridge>=20)t='bridge';return t;
     }
-    // Only the last road placement can close a loop. A bounded, four-neighbour
-    // flood fill avoids mistaking diagonal contacts for walls and avoids scanning
-    // a million-cell world when a path is still open.
-    function enclosedRoadCells(lastRoad,{terrainAt=terrain,maxCells=16384}={}){
-      if(!inside(lastRoad?.x,lastRoad?.y)||terrainAt(lastRoad.x,lastRoad.y)!=='road')return [];
-      if(DIRS.filter(([dx,dy])=>terrainAt(lastRoad.x+dx,lastRoad.y+dy)==='road').length<2)return [];
-      const limit=Math.max(1,Math.min(32768,Math.floor(maxCells)||16384)),visited=new Set(),enclosed=[];
-      for(const[dx,dy]of DIRS){
-        const first={x:lastRoad.x+dx,y:lastRoad.y+dy},firstKey=key(first.x,first.y);
-        if(!inside(first.x,first.y)||terrainAt(first.x,first.y)==='road'||visited.has(firstKey))continue;
-        const region=[first];visited.add(firstKey);let closed=true;
-        for(let index=0;index<region.length&&closed;index++){
-          const current=region[index];
-          for(const[stepX,stepY]of DIRS){
-            const x=current.x+stepX,y=current.y+stepY,k=key(x,y);
-            if(!inside(x,y)){closed=false;break;}
-            if(terrainAt(x,y)==='road'||visited.has(k))continue;
-            visited.add(k);region.push({x,y});
-            if(region.length>limit){closed=false;break;}
-          }
-        }
-        if(closed)enclosed.push(...region);
-      }
-      return enclosed;
-    }
     function walkable(x,y,{events={},bounds=null,blocked=null,ignoreObjects=false,mode='walk'}={}){
       if(!inside(x,y)||bounds&&(x<bounds.x||y<bounds.y||x>=bounds.x+bounds.w||y>=bounds.y+bounds.h)||blocked?.has(key(x,y))||sectBlocked(x,y))return false;
       const t=terrain(x,y,events),sea=['water','ocean'];
@@ -393,7 +341,7 @@ return TERRAIN;})();
     }
     const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?'問道宗':inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
     const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
-      key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,enclosedRoadCells,
+      key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
       patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
     return Object.freeze(api);
   }
@@ -532,42 +480,9 @@ return TERRAIN;})();
     const nodes=[title,body,extra];if(o?.species){const n=document.createElement('small');n.textContent=(Core.LABELS[o.biome]||'野外')+'棲地 · '+o.species+'群聚';nodes.push(n);}if(Core.inSafeArea(p.x,p.y)){const n=document.createElement('small');n.textContent=world.zone(p)+' · 安全區，沒有野生妖獸';nodes.push(n);}if(o?.veinId){const n=document.createElement('small');n.textContent='連續礦脈 · '+o.veinLength+' 格 · '+o.realm+'資源';nodes.push(n);}if(o?.kind==='realm'){const n=document.createElement('small');n.textContent=o.subtype==='guardian'?'守衛挑戰秘境':'陣紋探索秘境';nodes.push(n);}$('tile-info').replaceChildren(...nodes);draw();
   }
   function changeTile(p,type){
-    if(!model||!Core.inside(p.x,p.y))return;
-    const previously=world.terrain(p.x,p.y),updates=new Map(),protectedTerrain=new Set(['water','ocean','bridge','broken-bridge','lava','sealed']);
-    // Stage every new road tile and its enclosed interior, then apply each
-    // affected chunk once so large enclosed courts do not redraw per cell.
-    function stageTile(cell,terrain){
-      const k=Core.chunkKey(cell.x,cell.y),i=(cell.y%32)*32+cell.x%32,base=Core.TYPES[model.tiles[cell.y*1000+cell.x]];
-      if(!updates.has(k))updates.set(k,{...(patches[k]?.tiles||{})});
-      const tiles=updates.get(k);
-      if(terrain==='restore'||terrain===base)delete tiles[i];else tiles[i]={terrain};
-    }
-    stageTile(p,type);
-    const stagedTerrain=(x,y)=>{
-      if(!Core.inside(x,y))return 'rock';
-      const k=Core.chunkKey(x,y),i=(y%32)*32+x%32,tiles=updates.get(k);
-      return tiles?tiles[i]?.terrain||Core.TYPES[model.tiles[y*1000+x]]:world.terrain(x,y);
-    };
-    let filled=0;
-    if(type==='road'&&previously!=='road'){
-      const interior=world.enclosedRoadCells(p,{terrainAt:stagedTerrain});
-      for(const cell of interior){
-        const k=Core.chunkKey(cell.x,cell.y),i=(cell.y%32)*32+cell.x%32;
-        // Keep waterways, bridge surfaces, existing structures, and manually
-        // painted non-road terrain instead of erasing garden landmarks.
-        if(Core.sectBlocked(cell.x,cell.y)||world.objectAt(cell.x,cell.y)||protectedTerrain.has(world.terrain(cell.x,cell.y))||
-          patches[k]?.tiles?.[i]&&patches[k].tiles[i].terrain!=='road')continue;
-        if(stagedTerrain(cell.x,cell.y)==='road')continue;
-        stageTile(cell,'road');filled++;
-      }
-    }
-    const changes={};
-    for(const[k,tiles]of updates){
-      const revision=(revisions[k]||0)+1,data={revision,tiles};revisions[k]=revision;changes[k]=data;
-      if(Object.keys(tiles).length)patches[k]=data;else delete patches[k];
-    }
-    world.installPatches(changes);updateStorage();inspect(p);
-    status(filled?'道路已封閉，自動填滿 '+filled+' 格（僅保存在本機模擬中）':'此格變更保存在本機模擬中');draw();
+    if(!model||!Core.inside(p.x,p.y))return;const k=Core.chunkKey(p.x,p.y),i=(p.y%32)*32+p.x%32,tiles={...(patches[k]?.tiles||{})},base=Core.TYPES[model.tiles[p.y*1000+p.x]];
+    if(type==='restore'||type===base)delete tiles[i];else tiles[i]={terrain:type};revisions[k]=(revisions[k]||0)+1;const data={revision:revisions[k],tiles};world.installPatches({[k]:data});
+    if(Object.keys(tiles).length)patches[k]=data;else delete patches[k];updateStorage();inspect(p);status('此格變更保存在本機模擬中');draw();
   }
   function zoom(factor,point={screenX:width/2,screenY:height/2}){if(!model)return;const x=(point.screenX-width/2)/view.scale+view.x,y=(point.screenY-height/2)/view.scale+view.y;view.scale=Math.max(Math.min(width/1000,height/1000)*.6,Math.min(40,view.scale*factor));view.x=x-(point.screenX-width/2)/view.scale;view.y=y-(point.screenY-height/2)/view.scale;view.fit=false;draw();}
   function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}

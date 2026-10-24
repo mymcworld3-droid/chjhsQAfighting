@@ -19,15 +19,6 @@ test('expanded sect keeps every existing entrance and provides real streams, bri
   }
   for(const [dx,dy]of W.DIRS){const p=at(dx*23,dy*23);assert.ok(W.plan(W.SPAWN,p).path.length);}
   const wall=at(22,4);assert.equal(W.walkable(wall.x,wall.y),false,'solid perimeter cannot be crossed through a painted wall');
-  assert.equal(W.sectTerrain(5,5),'road','courtyard surrounded by paths becomes continuous paving');
-  const scene=S.create(W),p={x:W.SPAWN.x+5,y:W.SPAWN.y+5};
-  const topology=scene.topology(p.x,p.y,W.terrain(p.x,p.y));
-  assert.equal(topology.terrain,'road');
-  assert.equal(topology.mask,15,'filled city courtyard is surrounded by road on four sides');
-
-  assert.equal(W.sectTerrain(13,9),'water','ponds remain water inside the paved court');
-  assert.equal(W.sectTerrain(11,9),'grass','landscaped wings are not covered by auto-paving');
-
 });
 
 test('multi-cell palace, rockeries and pavilions block their bases while roofs remain visual overhangs',()=>{
