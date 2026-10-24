@@ -63,6 +63,7 @@ export class WorldRenderer {
     const W=this.world;
     const c=this.ctx,px=x*TILE,py=y*TILE,h=W.hash(x,y);c.fillStyle=colors[t]||colors.grass;c.fillRect(px,py,TILE,TILE);
     const grass=this.images.grass;if((t==='grass'||t==='bamboo')&&grass.complete&&grass.naturalWidth){c.save();c.globalAlpha=t==='bamboo'?.65:.83;c.drawImage(grass,px,py,TILE,TILE);c.restore();}
+    this.groundDetail(x,y,t,at);
     if(t==='road'||t==='courtyard'){c.strokeStyle='#6e6b5527';c.lineWidth=1;c.strokeRect(px+.5,py+.5,39,39);
       if(t==='courtyard'){c.beginPath();c.moveTo(px,py+20);c.lineTo(px+40,py+20);c.moveTo(px+20,py);c.lineTo(px+20,py+40);c.stroke();}
       else{c.fillStyle='#7c795a44';c.fillRect(px+7+h%13,py+7,3,2);c.fillRect(px+9,py+25+h%5,2,2);}}
@@ -87,8 +88,63 @@ export class WorldRenderer {
       if(Math.abs(dy)===r){const edge=py+(dy>0?38:2);c.moveTo(px,edge);c.lineTo(px+40,edge);}c.stroke();
     }
   }
+  groundDetail(x,y,t,at){
+    const c=this.ctx,W=this.world,px=x*TILE,py=y*TILE,h=W.hash(x,y,91),land=!['water','ocean','lava','broken-bridge'].includes(t);
+    c.save();
+    // Coordinate hashes keep every pebble and flower stable across visits.
+    c.fillStyle=(h&1)?'#fff3c009':'#14291c0b';c.fillRect(px,py,40,40);
+    for(let n=0;n<5;n++){
+      const q=W.hash(x*7+n,y,92),u=px+3+q%34,v=py+3+(q>>>8)%34;
+      if(['grass','bamboo','forest','swamp'].includes(t)){
+        c.strokeStyle=n%2?'#c3d99565':'#304e3860';c.lineWidth=1;c.beginPath();c.moveTo(u-2,v);c.lineTo(u-3,v-4);c.moveTo(u,v);c.lineTo(u+1,v-6);c.moveTo(u+2,v);c.lineTo(u+4,v-3);c.stroke();
+        if(t==='grass'&&q%19===0){c.fillStyle=['#eee2a4','#d4a6a1','#c9d8e5'][q%3];c.beginPath();c.arc(u,v-5,1.7,0,7);c.fill();}
+        if(t==='forest'&&q%3===0){c.fillStyle='#c0a26a66';c.beginPath();c.ellipse(u,v,3,1, q%6,0,7);c.fill();}
+      }else if(['desert','beach','stone','mountain','snow','volcano'].includes(t)){
+        c.fillStyle=t==='snow'?'#8ca5ad40':t==='volcano'?'#241f2866':'#4d493c38';c.beginPath();c.ellipse(u,v,1+q%3,1+(q>>>5)%2,0,0,7);c.fill();
+        if(t==='snow'){c.strokeStyle='#f4fbeb80';c.beginPath();c.moveTo(u-3,v-3);c.lineTo(u+4,v-4);c.stroke();}
+      }
+    }
+    if(['water','ocean','beach'].includes(t)){
+      for(const[dx,dy]of W.DIRS){const neighbour=W.terrain(x+dx,y+dy,this.data.events||{}),water=['water','ocean','broken-bridge'].includes(neighbour);
+        if(t==='beach'?water:!water&&neighbour!=='rock'){
+          c.strokeStyle=t==='beach'?'#f7e8bb9a':'#d5e9d4a0';c.lineWidth=t==='beach'?3:2;c.beginPath();
+          const inset=2+Math.sin(at/1800+x*.3+y*.4)*.8;
+          if(dx){const edge=px+(dx>0?40-inset:inset);c.moveTo(edge,py+1);c.quadraticCurveTo(edge-dx*2,py+20,edge,py+39);}
+          else{const edge=py+(dy>0?40-inset:inset);c.moveTo(px+1,edge);c.quadraticCurveTo(px+20,edge-dy*2,px+39,edge);}c.stroke();
+        }
+      }
+      if(t==='water'&&h%5===0){c.fillStyle='#dce9cf66';c.beginPath();c.ellipse(px+13,py+27,2,1,0,0,7);c.fill();}
+      if(t==='beach'&&h%7===0){c.fillStyle='#e9d9b8';c.beginPath();c.ellipse(px+25,py+16,3,2,-.4,0,7);c.fill();}
+    }
+    if(t==='swamp'&&h%3===0){c.fillStyle='#345e5755';c.beginPath();c.ellipse(px+20,py+26,11,4,0,0,7);c.fill();c.fillStyle='#82976b';c.beginPath();c.ellipse(px+24,py+25,3,2,0,0,7);c.fill();}
+    if(t==='lava'){c.globalAlpha=.35+Math.sin(at/1100+x+y)*.12;c.fillStyle='#ffbe62';c.beginPath();c.ellipse(px+12+h%18,py+16,5,2,0,0,7);c.fill();}
+    if(t==='courtyard'){
+      c.strokeStyle='#eee0b526';c.lineWidth=1;c.strokeRect(px+3,py+3,34,34);
+      if(h%13===0){c.fillStyle='#596c483a';c.fillRect(px+2,py+30,7,2);}
+    }
+    // A shallow stone drain and gold capped posts define the four open gates.
+    const dx=x-W.SPAWN.x,dy=y-W.SPAWN.y,r=W.CITY_RADIUS;
+    if(Math.abs(dx)<=2&&Math.abs(dy)<=2){
+      c.save();c.beginPath();c.rect(px,py,40,40);c.clip();const cx=(W.SPAWN.x+.5)*40,cy=(W.SPAWN.y+.5)*40;
+      c.strokeStyle='#eee1b56b';c.lineWidth=2;for(const radius of [44,51]){c.beginPath();c.arc(cx,cy,radius,0,7);c.stroke();}
+      c.strokeStyle='#827b5759';c.lineWidth=1;c.beginPath();c.moveTo(cx-68,cy);c.lineTo(cx+68,cy);c.moveTo(cx,cy-68);c.lineTo(cx,cy+68);c.stroke();c.restore();
+    }
+    if(t==='courtyard'&&Math.abs(dx)>=6&&Math.abs(dx)<=8&&Math.abs(dy)>=6&&Math.abs(dy)<=8){
+      c.fillStyle='#777f5655';c.fillRect(px+2,py+2,36,36);c.strokeStyle='#d9cd9b80';c.lineWidth=2;c.strokeRect(px+3,py+3,34,34);
+      for(let n=0;n<4;n++){const u=px+9+n%2*19,v=py+10+Math.floor(n/2)*18;c.fillStyle=n%2?'#526d46':'#70814c';c.beginPath();c.ellipse(u,v,7,5,0,0,7);c.fill();c.fillStyle=['#e2c3a5','#e8d992','#c8d2ac'][h%3];c.beginPath();c.arc(u+2,v-2,1.5,0,7);c.fill();}
+    }
+    if(t==='courtyard'&&((Math.abs(dx)===8&&dy%4===0)||(Math.abs(dy)===8&&dx%4===0))){
+      c.fillStyle='#444c3e44';c.beginPath();c.ellipse(px+22,py+29,8,3,0,0,7);c.fill();c.fillStyle='#69634b';c.fillRect(px+17,py+15,5,14);c.fillStyle='#ddc78c';c.fillRect(px+14,py+10,11,9);c.fillStyle='#707259';c.fillRect(px+12,py+8,15,3);
+    }
+    if((Math.abs(dx)===r&&Math.abs(dy)<=1)||(Math.abs(dy)===r&&Math.abs(dx)<=1)){
+      c.strokeStyle='#6d6c5666';c.lineWidth=2;c.beginPath();if(Math.abs(dx)===r){c.moveTo(px+20,py);c.lineTo(px+20,py+40);}else{c.moveTo(px,py+20);c.lineTo(px+40,py+20);}c.stroke();
+      if(Math.abs(dx)===1||Math.abs(dy)===1){c.fillStyle='#77725b';c.fillRect(px+14,py+9,12,22);c.fillStyle='#d2ba7d';c.fillRect(px+12,py+6,16,5);}
+    }
+    c.restore();
+  }
   decoration(x,y,t){
     const c=this.ctx,px=(x+.5)*TILE,py=(y+.65)*TILE;
+    if(['forest','bamboo','rock','volcano'].includes(t)){c.save();c.fillStyle='#1a30212b';c.beginPath();c.ellipse(px+8,py+8,21,7,.3,0,7);c.fill();c.restore();}
     if(t==='bamboo'){
       c.fillStyle='#1d3f2433';c.beginPath();c.ellipse(px,py+4,17,7,0,0,Math.PI*2);c.fill();
       for(const d of [-8,5]){c.strokeStyle='#365b32';c.lineWidth=4;c.beginPath();c.moveTo(px+d,py);c.lineTo(px+d+2,py-36);c.stroke();
@@ -110,8 +166,9 @@ export class WorldRenderer {
     c.fillStyle='#152c2633';c.beginPath();c.ellipse(x,y+6,o.kind==='building'?28:15,8,0,0,7);c.fill();
     if(['building','realm','structure'].includes(o.kind)){
       c.fillStyle='#e4d8b4';c.fillRect(x-19,y-21,38,25);c.fillStyle='#5e5845';c.fillRect(x-5,y-11,10,15);
+      c.fillStyle='#b9ac89';c.fillRect(x-22,y+4,44,4);c.fillStyle='#d7cbae';c.fillRect(x-25,y+8,50,3);c.strokeStyle='#93876b';c.lineWidth=1;for(const side of [-1,1]){c.strokeRect(x+side*12-4,y-15,8,9);c.beginPath();c.moveTo(x+side*12,y-15);c.lineTo(x+side*12,y-6);c.stroke();}
       c.fillStyle='#3c615a';c.beginPath();c.moveTo(x-29,y-22);c.lineTo(x-10,y-36);c.lineTo(x+11,y-36);c.lineTo(x+29,y-22);c.lineTo(x+21,y-19);c.lineTo(x-21,y-19);c.closePath();c.fill();
-      c.strokeStyle='#ceb879';c.lineWidth=2;c.stroke();this.label(o.icon,x,y-23,'#f9e6a8',12);
+      c.strokeStyle='#ceb879';c.lineWidth=2;c.stroke();c.strokeStyle='#8fa28c66';c.lineWidth=1;for(let k=-18;k<=18;k+=6){c.beginPath();c.moveTo(x+k*.5,y-33);c.lineTo(x+k,y-22);c.stroke();}this.label(o.icon,x,y-23,'#f9e6a8',12);
     }else{
       const fill=o.veinId?'#bca362':{gather:'#a9d281',chest:'#d4aa51',monster:'#8c6453',npc:'#83a9a0',event:'#7e98b5'}[o.kind];
       c.fillStyle=fill;c.strokeStyle='#ece0b1';c.lineWidth=1.5;c.beginPath();
