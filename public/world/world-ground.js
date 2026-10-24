@@ -40,7 +40,19 @@
       c.putImageData(data,0,0);masks.set(key,target);return target;
     }
     function compose(info,images){
-      if(tiles.has(info.key))return tiles.get(info.key);
+      // Many cells share a topology key, while their texture flips depend on
+      // complete coordinates. Include every visible material's actual flips.
+      const active=info.terrain==='road'
+        ?[info.underlay,'road']
+        :['bridge','broken-bridge'].includes(info.terrain)
+          ?[info.neighbours.includes('ocean')?'ocean':'water']
+          :[info.terrain,...info.neighbours.filter(t=>t!==info.terrain&&!['road','bridge','broken-bridge','sealed'].includes(t))];
+      const variants=[...new Set(active)].map(t=>{
+        const frame=textureFrame(Art,t,info.x,info.y);
+        return t+':'+Number(frame.flipX)+Number(frame.flipY);
+      }).join('|');
+      const key=info.key+'|'+variants;
+      if(tiles.has(key))return tiles.get(key);
       const atlas=images['ground-atlas'];if(!atlas?.complete||!atlas.naturalWidth)return null;
       const target=canvas(),c=target.getContext('2d');
       const texture=(context,t)=>{
@@ -73,7 +85,7 @@
           if(t!==info.terrain&&!['road','bridge','broken-bridge','sealed'].includes(t))overlay(t,mask('edge:'+i,(u,v)=>transitionAlpha(i,u,v)));
         });
       }
-      tiles.set(info.key,target);if(tiles.size>512)tiles.delete(tiles.keys().next().value);return target;
+      tiles.set(key,target);if(tiles.size>512)tiles.delete(tiles.keys().next().value);return target;
     }
     return Object.freeze({compose,setScale,get tileSize(){return SIZE;},get cachedTiles(){return tiles.size;}});
   }

@@ -35,8 +35,9 @@
       const bridgeDirection=horizontal>=vertical?'east':'south';
       const counts=new Map();for(const v of neighbours)if(DRY.has(v))counts.set(v,(counts.get(v)||0)+1);
       const underlay=Math.max(Math.abs(x-W.SPAWN.x),Math.abs(y-W.SPAWN.y))<=W.CITY_RADIUS?'courtyard':[...counts].sort((a,b)=>b[1]-a[1])[0]?.[0]||'grass';
-      // Ground art spans four cells; mirror whole blocks rather than every cell.
-      return {x,y,terrain:t,neighbours,mask,underlay,bridgeDirection,key:[t,...neighbours,mask,underlay,bridgeDirection,x&7,y&7].join(':')};
+      // Topology is coordinate-independent; Ground.compose adds the exact
+      // texture-flip variants instead of assuming an eight-cell repeat.
+      return {x,y,terrain:t,neighbours,mask,underlay,bridgeDirection,key:[t,...neighbours,mask,underlay,bridgeDirection].join(':')};
     }
     function sparse(x,y,limit,layer,diagonal=false){
       const h=W.hash(x,y,layer);if(h%100>=limit)return false;
