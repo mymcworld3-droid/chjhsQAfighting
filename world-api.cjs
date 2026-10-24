@@ -1,6 +1,6 @@
 'use strict';
 const crypto = require('node:crypto');
-const W = require('./public/world/world-core.js');
+const BaseWorld = require('./public/world/world-core.js');
 const Battle = require('./world-battle.cjs');
 const {playerRepository,battleRepository} = require('./server-repositories.cjs');
 const {verifyMainIdentity} = require('./raid-question-ticket.cjs');
@@ -12,28 +12,29 @@ const count = n => Number.isFinite(Number(n))?Math.max(0,Math.floor(Number(n))):
 const day = now => new Date(now+8*3600000).toISOString().slice(0,10);
 const clone = value => structuredClone(value);
 const STATE = 'worldPlayers', EVENTS = 'worldEvents';
-function normalize(raw={},events={}) {
-  const position=W.safePosition(raw.position,{events});
-  const claims=Object.fromEntries(Object.entries(raw.claims||{}).filter(([key,at])=>key.startsWith('chest:')||Number(at)>Date.now()-3*86400000));
-  const explored=raw.mapVersion===W.VERSION&&typeof raw.explored==='string'&&raw.explored.length===W.SIZE*W.SIZE?raw.explored:W.initialExplored();
-  return {version:1,mapVersion:W.VERSION,position,explored:W.reveal(explored,position),
+function normalize(raw={},events={},W=BaseWorld) {
+  const travelMode=raw.travelMode==='sail'?'sail':'walk',position=W.safePosition(raw.position,{events,mode:travelMode});
+  const claims=Object.fromEntries(Object.entries(raw.claims||{}).filter(([key,at])=>key.startsWith('chest:')||key.startsWith('realm:')||key.startsWith('structure:')||Number(at)>Date.now()-3*86400000));
+  const explored=raw.mapVersion===W.VERSION?W.normalizeExplored(raw.explored):typeof raw.explored==='string'&&raw.explored.length===2304?W.normalizeExplored(raw.explored):W.initialExplored();
+  return {version:2,mapVersion:W.VERSION,position,travelMode,explored:W.reveal(explored,position),
     claims,gathered:count(raw.gathered),victories:count(raw.victories),chests:count(raw.chests),
-    questClaimed:raw.questClaimed===true,battle:raw.battle?.version===1?raw.battle:null,
+    questClaimed:raw.questClaimed===true,battle:raw.mapVersion===W.VERSION&&raw.battle?.version===1?raw.battle:null,
+    expedition:raw.mapVersion===W.VERSION&&raw.expedition?.version===1?raw.expedition:null,
     requests:Array.isArray(raw.requests)?raw.requests.slice(-32):[],updatedAtMs:count(raw.updatedAtMs)};
 }
-function quest(s) {
-  const steps=[{name:'走進青竹林',done:[...s.explored].some((c,i)=>c==='1'&&i%48===18&&Math.floor(i/48)===27),target:{x:18,y:27}},
+function quest(s,W=BaseWorld) {
+  const steps=[{name:'走進青竹林',done:W.known(s.explored,18,27),target:{x:18,y:27}},
     {name:'採集一處靈材',done:s.gathered>0,objectId:'herb-a'},
     {name:'戰勝一隻妖獸',done:s.victories>0,objectId:'wolf'},
     {name:'打開林間遺箱',done:s.chests>0,objectId:'chest-a'}];
   return {name:'初入青竹林',steps,ready:steps.every(x=>x.done),claimed:s.questClaimed,reward:'6 修為・60 靈石・玄鐵 ×2・靈木 ×2'};
 }
-function publicState(s) {return {...s,battle:Battle.view(s.battle),requests:undefined,quest:quest(s)};}
-function createHub({now=Date.now}={}) {
+function publicState(s,W=BaseWorld) {return {...s,battle:Battle.view(s.battle),requests:undefined,quest:quest(s,W)};}
+function createHub({now=Date.now,world:W=BaseWorld}={}) {
   const actors=new Map(),listeners=new Map(),locks=new Map(),signatures=new Map();
   let events={bridge:0,array:0},eventsLoadedAt=-Infinity;
   function publicActor(a) {return {uid:a.uid,name:a.name,gender:a.gender,route:clone(a.route),direction:a.direction||'down',
-    status:a.battle?'battle':'explore',battleName:a.battle?.name||'',lastSeenAtMs:a.lastSeenAtMs};}
+    status:a.battle?'battle':'explore',travelMode:a.state.travelMode,battleName:a.battle?.name||'',lastSeenAtMs:a.lastSeenAtMs};}
   function nearby(a) {
     const p=W.sample(a.route,now());
     return [...actors.values()].filter(o=>o.uid===a.uid||o.connected!==false&&now()-o.lastSeenAtMs<45000&&W.distance(p,W.sample(o.route,now()))<=15).map(publicActor);
@@ -65,16 +66,36 @@ function createHub({now=Date.now}={}) {
     return ()=>{set.delete(sink);if(!set.size){listeners.delete(uid);signatures.delete(uid);}};
   }
   return {actors,listeners,send,broadcast,nearby,publicActor,update,serial,subscribe,
-    get events(){return events;},set events(value){events={bridge:count(value?.bridge),array:count(value?.array)};eventsLoadedAt=now();},
+    get events(){return events;},set events(value){events={bridge:count(value?.bridge),array:count(value?.array),worldId:W.VERSION,
+      chunkRevisions:Object.fromEntries(Object.entries(value?.chunkRevisions||{}).filter(([k,v])=>W.validChunk(k)&&Number.isSafeInteger(v)&&v>0))};eventsLoadedAt=now();},
     get eventsLoadedAt(){return eventsLoadedAt;}};
 }
 function registerWorldApi(app,{
-  resolveA=()=>playerRepository.resolve(),resolveC=()=>battleRepository.resolve(),now=Date.now,hub=createHub({now}),
+  resolveA=()=>playerRepository.resolve(),resolveC=()=>battleRepository.resolve(),now=Date.now,world:W=BaseWorld.createWorld({seed:process.env.WORLD_SEED||BaseWorld.DEFAULT_SEED}),hub=createHub({now,world:W}),
   verify=(req)=>verifyMainIdentity(req,{resolveA}),generateQuestions=Questions.generate,logger=console,schedule=true
 }={}) {
-  const questionJobs=new Map();let ticking=false;
+  const questionJobs=new Map(),patchCache=new Map();let ticking=false;
+  const normalizeState=raw=>normalize(raw,hub.events,W),expose=state=>publicState(state,W);
   async function loadEvents(db,force=false) {
-    if(force||now()-hub.eventsLoadedAt>60000){const snap=await db.collection(EVENTS).doc('main').get();hub.events=snap.exists?snap.data():{};}
+    if(force||now()-hub.eventsLoadedAt>60000){const ref=db.collection(EVENTS).doc('main'),snap=await ref.get();let data=snap.exists?snap.data():{};
+      if(!data.worldId)data=await db.runTransaction(async tx=>{const current=await tx.get(ref),value=current.exists?current.data():{};
+        if(value.worldId)return value;const pinned={...value,worldId:W.VERSION,world:W.descriptor};tx.set(ref,pinned);return pinned;});
+      if(data.worldId&&data.worldId!==W.VERSION||data.world?.seed&&data.world.seed!==W.descriptor.seed)throw fail('世界種子與存檔不一致，請先由管理員確認世界設定',503);
+      hub.events=data;}
+  }
+  function nearbyChunks(p,radius=1){const out=[],cx=Math.floor(p.x/32),cy=Math.floor(p.y/32);for(let y=Math.max(0,cy-radius);y<=Math.min(W.CHUNK_COUNT-1,cy+radius);y++)for(let x=Math.max(0,cx-radius);x<=Math.min(W.CHUNK_COUNT-1,cx+radius);x++)out.push(W.key(x,y));return out;}
+  async function loadPatches(db,keys,versions={}){
+    const out={};
+    for(const k of keys){
+      const revision=hub.events.chunkRevisions?.[k]||0;if(revision===(versions[k]||0))continue;
+      if(!revision){out[k]={revision:0,tiles:{}};continue;}
+      let data=patchCache.get(k);
+      if(data?.revision!==revision){const snap=await db.collection('worldChunks').doc(W.VERSION+':'+k).get();
+        if(!snap.exists||snap.data().worldId!==W.VERSION||snap.data().revision!==revision)throw fail('地圖變更尚未同步，請稍後再試',503);
+        data={revision,tiles:snap.data().tiles||{}};patchCache.set(k,data);if(patchCache.size>192)patchCache.delete(patchCache.keys().next().value);}
+      out[k]=data;
+    }
+    W.installPatches(out);return out;
   }
   async function join(uid,db) {
     if(hub.actors.has(uid)){const actor=hub.actors.get(uid);actor.lastSeenAtMs=now();return actor;}
@@ -83,7 +104,9 @@ function registerWorldApi(app,{
     const [s,u,c]=await Promise.all([db.collection(STATE).doc(uid).get(),db.collection('users').doc(uid).get(),
       db.collection('gameConfig').doc('artifactCatalogV1').get()]);
     if(!u.exists)throw fail('找不到修士資料，請重新登入',404);
-    const user=u.data(),state=normalize(s.exists?s.data():{},hub.events);
+    const user=u.data(),raw=s.exists?s.data():{};
+    await loadPatches(db,nearbyChunks(W.inside(raw.position?.x,raw.position?.y)?raw.position:W.SPAWN));
+    const state=normalizeState(raw);
     const actor={uid,db,state,name:String(user.displayName||'無名修士').slice(0,32),gender:user.storyProgressV1?.gender==='female'?'female':'male',
       profile:trustedRaidPlayerSnapshot(user,uid,c.exists?c.data():{}),lastSeenAtMs:now(),lastSaveAtMs:now(),dirty:!s.exists,
       route:{path:[state.position],startedAtMs:now(),stepMs:W.STEP_MS},revealedIndex:0,battle:state.battle?.status==='active'?state.battle:null,
@@ -95,9 +118,9 @@ function registerWorldApi(app,{
     const sampled=hub.update(actor);if(!actor.dirty)return;
     const ref=actor.db.collection(STATE).doc(actor.uid),position={...sampled.tile},explored=actor.state.explored;
     await actor.db.runTransaction(async tx=>{
-      const snap=await tx.get(ref),state=normalize(snap.exists?snap.data():actor.state,hub.events);
+      const snap=await tx.get(ref),state=normalizeState(snap.exists?snap.data():actor.state);
       // Merge exploration instead of clobbering a reward or battle committed by another request.
-      state.position=position;state.explored=[...state.explored].map((c,i)=>c==='1'||explored[i]==='1'?'1':'0').join('');state.updatedAtMs=now();
+      state.position=position;state.travelMode=actor.state.travelMode;state.explored=W.mergeExplored(state.explored,explored);state.updatedAtMs=now();
       tx.set(ref,state);
     });
     actor.lastSaveAtMs=now();actor.dirty=false;
@@ -109,8 +132,8 @@ function registerWorldApi(app,{
     const output=await actor.db.runTransaction(async tx=>{
       const [s,u]=await Promise.all([tx.get(ref),tx.get(userRef)]);
       if(!u.exists)throw fail('玩家資料不存在',404);
-      const state=normalize(s.exists?s.data():actor.state,hub.events),user=u.data();
-      state.position=sampled.tile;state.explored=[...state.explored].map((c,i)=>c==='1'||actor.state.explored[i]==='1'?'1':'0').join('');
+      const state=normalizeState(s.exists?s.data():actor.state),user=u.data();
+      state.position=sampled.tile;state.travelMode=actor.state.travelMode;state.explored=W.mergeExplored(state.explored,actor.state.explored);
       if(state.requests.includes(id))return {state,duplicate:true,inventory:user.materialSystem?.inventory||{},stats:user.stats};
       const outcome=await work({tx,state,user,userRef});
       state.requests=[...state.requests,id].slice(-32);state.updatedAtMs=now();tx.set(ref,state);
@@ -118,7 +141,7 @@ function registerWorldApi(app,{
     });
     actor.state=output.state;actor.battle=output.state.battle?.status==='active'?output.state.battle:null;
     actor.lastSaveAtMs=now();actor.dirty=false;
-    hub.broadcast();return {...output,state:publicState(output.state)};
+    hub.broadcast();return {...output,state:expose(output.state)};
   }
   function grant(tx,userRef,user,rewards) {
     const materialSystem=clone(user.materialSystem||{inventory:{}});materialSystem.inventory||={};
@@ -126,6 +149,8 @@ function registerWorldApi(app,{
     user.materialSystem=materialSystem;user.stats={...user.stats,gold:count(user.stats?.gold)+count(rewards.gold),totalScore:count(user.stats?.totalScore)+count(rewards.cultivation)};
     tx.update(userRef,{materialSystem,'stats.gold':user.stats.gold,'stats.totalScore':user.stats.totalScore});
   }
+  const claimKey=o=>o.kind==='realm'?'realm:'+o.id:'monster:'+o.id+':'+day(now());
+  const explorationRewards=o=>{const tier=W.TIERS[o.tier||0];return {materials:{[tier.iron]:o.kind==='realm'?4:2,[tier.wood]:2},gold:25+(o.tier||0)*10};};
   async function interact(actor,request) {
     if(W.sample(actor.route,now()).moving)throw fail('請先走到互動位置');
     const o=W.object(request.objectId);if(!o)throw fail('此地沒有可互動物件',400);
@@ -134,19 +159,30 @@ function registerWorldApi(app,{
       if(state.battle?.status==='active')throw fail('請先完成或撤離目前戰鬥');
       if(o.kind==='building'||o.kind==='npc')return {entry:o.entry||'quest'};
       if(!W.known(state.explored,o.x,o.y))throw fail('請先探索此處');
-      if(o.kind==='monster'){
-        const claimKey='monster:'+o.id+':'+day(now());
+      if(o.kind==='monster'||o.kind==='realm'&&o.subtype==='guardian'){
+        if(state.travelMode==='sail'&&['water','ocean'].includes(W.terrain(state.position.x,state.position.y,hub.events)))throw fail('請先靠岸再挑戰');
+        const claim=claimKey(o);
         // Refresh cultivation/equipment from the trusted player record for each encounter.
         const catalog=await tx.get(actor.db.collection('gameConfig').doc('artifactCatalogV1'));
-        state.battle=Battle.createBattle(state.position,o,trustedRaidPlayerSnapshot(user,actor.uid,catalog.exists?catalog.data():{}),hub.events,now());
-        state.battle.rewardEligible=!state.claims[claimKey];
+        state.battle=Battle.createBattle(state.position,o,trustedRaidPlayerSnapshot(user,actor.uid,catalog.exists?catalog.data():{}),hub.events,now(),W);
+        state.battle.rewardEligible=!state.claims[claim];state.expedition=null;
         return {message:state.battle.rewardEligible?'戰場展開，先完成兩題補能':'今日獎勵已領取，這場可練習戰術'};
+      }
+      if(o.kind==='realm'||o.kind==='structure'){
+        const key=o.kind+':'+o.id;if(state.claims[key])return {message:'此處已完成探索，可以繼續尋找其他秘境'};
+        if(o.kind==='structure'&&o.subtype==='camp')return {entry:'practice',message:'在行腳營地稍作休整，可隨時問道練習'};
+        if(o.kind==='structure'&&o.subtype==='watchtower'){
+          state.explored=W.reveal(state.explored,o,18);state.claims[key]=now();const rewards=explorationRewards(o);grant(tx,userRef,user,rewards);return {rewards,message:'登高遠望，已揭開附近地圖並收錄遺跡'};
+        }
+        if(state.expedition&&state.expedition.objectId===o.id)return {message:'繼續接通秘境陣紋'};
+        const h=W.hash(o.x,o.y,71);state.expedition={version:1,objectId:o.id,name:o.name,rotations:[1+h%3,1+(h>>>4)%3,1+(h>>>8)%3],target:[0,0,0]};
+        return {message:'旋轉三座符盤，讓陣紋全部朝向上方；探索不需答題'};
       }
       if(o.kind==='gather'||o.kind==='chest'){
         const key=o.kind==='chest'?'chest:'+o.id:'gather:'+o.id+':'+day(now());
         if(state.claims[key])throw fail(o.kind==='chest'?'這只寶箱已經開啟':'今日已採集此處，明日再來');
         state.claims[key]=now();
-        const rewards=o.kind==='gather'?{materials:{[o.material]:2}}:{materials:{'qi-spirit-iron':2,'qi-spirit-wood':2},gold:25};
+        const rewards=o.kind==='gather'?{materials:{[o.material]:2}}:explorationRewards(o);
         if(o.kind==='gather')state.gathered++;else state.chests++;
         grant(tx,userRef,user,rewards);return {rewards,message:o.kind==='gather'?'採集完成，材料已放入寶庫':'遺箱開啟，獎勵已入帳'};
       }
@@ -158,16 +194,25 @@ function registerWorldApi(app,{
         if(count(user.materialSystem?.inventory?.[field])<2)throw fail('需要 '+(name==='bridge'?'靈木':'玄鐵')+' ×2');
         state.claims[key]=now();events[name]=count(events[name])+1;
         const materials=clone(user.materialSystem);materials.inventory[field]-=2;user.materialSystem=materials;
+        const patches={};
+        if(events[name]===goal){
+          const changed=name==='bridge'?[{x:26,y:27,terrain:'bridge'},{x:27,y:27,terrain:'bridge'}]:[{x:39,y:6,terrain:'road'}];
+          const k=W.chunkKey(changed[0].x,changed[0].y),patchRef=actor.db.collection('worldChunks').doc(W.VERSION+':'+k),previous=await tx.get(patchRef),data=previous.exists?previous.data():{tiles:{},revision:0};
+          const tiles={...data.tiles};for(const p of changed)tiles[(p.y%32)*32+p.x%32]={terrain:p.terrain};
+          const revision=count(data.revision)+1;patches[k]={revision,tiles};
+          events.chunkRevisions={...events.chunkRevisions,[k]:revision};events.worldId=W.VERSION;events.world=W.descriptor;
+          tx.set(patchRef,{worldId:W.VERSION,revision,tiles,updatedAtMs:now()});
+        }
         tx.set(eventRef,events);tx.update(userRef,{materialSystem:materials});
-        return {events,message:'已貢獻材料，全服進度 '+events[name]+'／'+goal};
+        return {events,patches,message:'已貢獻材料，全服進度 '+events[name]+'／'+goal};
       }
       throw fail('此處暫時無法互動');
     });
   }
   async function battleAction(actor,request) {
     if(request.command==='questions'){
-      const b=actor.state.battle;if(!b||b.status!=='active'||b.phase!=='recharge')return {state:publicState(actor.state)};
-      if(b.questions.length===2)return {state:publicState(actor.state)};
+      const b=actor.state.battle;if(!b||b.status!=='active'||b.phase!=='recharge')return {state:expose(actor.state)};
+      if(b.questions.length===2)return {state:expose(actor.state)};
       const jobKey=actor.uid+':'+b.id+':'+b.turn;
       let job=questionJobs.get(jobKey);
       if(!job){job=generateQuestions(clone(b));questionJobs.set(jobKey,job);}
@@ -197,9 +242,9 @@ function registerWorldApi(app,{
             explanation:record.explanation,mode:'world',rankAtTime:'大世界・補能',email:'',timestamp:new Date(now())});
       }
       if(next.status==='won'&&previous.status==='active'){
-        const key='monster:'+next.objectId+':'+day(now());
+        const object=W.object(next.objectId),key=claimKey(object);
         if(!state.claims[key]){
-          const elite=W.object(next.objectId)?.elite;rewards={materials:{'qi-spirit-iron':elite?4:2,'qi-spirit-wood':elite?3:2},gold:elite?45:20,cultivation:elite?2:1};
+          const elite=object?.elite,tier=W.TIERS[object?.tier||0];rewards={materials:{[tier.iron]:elite?4:2,[tier.wood]:elite?3:2},gold:elite?45:20,cultivation:elite?2:1};
           state.claims[key]=now();state.victories++;grant(tx,userRef,user,rewards);next.rewards=rewards;
         }
       }
@@ -262,9 +307,35 @@ function registerWorldApi(app,{
       const result=await hub.serial(uid,async()=>{
         hub.update(actor);
         if(action==='join'){
-          await loadEvents(db);return {state:publicState(actor.state),self:hub.publicActor(actor),players:hub.nearby(actor),events:hub.events,
-            sessionId:actor.sessionId,commandSeq:actor.commandSeq,mapVersion:W.VERSION};
+          await loadEvents(db);return {state:expose(actor.state),self:hub.publicActor(actor),players:hub.nearby(actor),events:hub.events,
+            sessionId:actor.sessionId,commandSeq:actor.commandSeq,mapVersion:W.VERSION,world:W.descriptor,
+            patches:await loadPatches(db,nearbyChunks(actor.state.position))};
         }
+        if(action==='patches'){
+          if(!Array.isArray(request.keys)||request.keys.length>25||request.keys.some(k=>!W.validChunk(k)))throw fail('區塊請求無效',400);
+          const allowed=new Set(nearbyChunks(actor.state.position,2));if(request.keys.some(k=>!allowed.has(k)))throw fail('只能同步目前附近的地圖變更',400);
+          if(now()-(actor.lastPatchAtMs||0)<300)throw fail('地圖同步過於頻繁',429);actor.lastPatchAtMs=now();
+          return {worldId:W.VERSION,patches:await loadPatches(db,[...new Set(request.keys)],request.versions||{})};
+        }
+        if(action==='travel'){
+          if(actor.battle||W.sample(actor.route,now()).moving)throw fail('請先停止移動並結束戰鬥');
+          if(!['walk','sail'].includes(request.mode))throw fail('移動模式無效',400);
+          const p=actor.state.position,water=['water','ocean'].includes(W.terrain(p.x,p.y,hub.events));
+          if(request.mode==='walk'&&water)throw fail('請將靈舟駛到海岸地格再上岸');
+          if(request.mode==='sail'&&!W.DIRS.some(([dx,dy])=>['water','ocean'].includes(W.terrain(p.x+dx,p.y+dy,hub.events)))&&!water)throw fail('請先走到水域旁再乘舟');
+          return mutate(actor,request,({state})=>{state.travelMode=request.mode;return {message:request.mode==='sail'?'已乘靈舟，可沿水域前往其他陸地':'已上岸，可繼續探索陸地'};});
+        }
+        if(action==='explore')return mutate(actor,request,({tx,state,user,userRef})=>{
+          if(state.battle?.status==='active'||W.sample(actor.route,now()).moving)throw fail('請先停止移動並結束戰鬥');
+          const expedition=state.expedition,o=W.object(expedition?.objectId);if(!o||W.distance(state.position,o)>1)throw fail('請先回到秘境入口旁');
+          const i=Number(request.index);if(request.command!=='rotate'||!Number.isInteger(i)||i<0||i>2)throw fail('陣紋操作無效',400);
+          expedition.rotations[i]=(expedition.rotations[i]+1)%4;
+          if(expedition.rotations.every((n,j)=>n===expedition.target[j])){
+            const key=o.kind+':'+o.id;if(state.claims[key])throw fail('探索獎勵已領取');
+            state.claims[key]=now();state.expedition=null;const rewards=explorationRewards(o);grant(tx,userRef,user,rewards);return {rewards,message:'陣紋接通，秘藏已開啟，材料放入寶庫'};
+          }
+          return {message:'符盤已旋轉'};
+        });
         if(action==='move'||action==='stop'){
           if(actor.battle)throw fail('戰鬥中請使用戰棋移動');
           if(request.sessionId!==actor.sessionId||!Number.isSafeInteger(request.seq)||request.seq<=actor.commandSeq)throw fail('較舊的移動指令已忽略');
@@ -275,7 +346,14 @@ function registerWorldApi(app,{
             const p=W.sample(actor.route,now());next={path:p.moving?[p.tile,p.next]:[p.tile],startedAtMs:now()-(p.moving?p.fraction*W.STEP_MS:0),stepMs:W.STEP_MS};
           }else{
             if(request.objectId&&!W.object(request.objectId))throw fail('目標不存在',400);
-            const planned=W.redirect(actor.route,request.objectId?{objectId:request.objectId}:request.target,now(),{events:hub.events,explored:actor.state.explored});
+            let planned;
+            for(let attempt=0;attempt<4;attempt++){
+              planned=W.redirect(actor.route,request.objectId?{objectId:request.objectId}:request.target,now(),{events:hub.events,explored:actor.state.explored,mode:actor.state.travelMode});
+              const keys=[...new Set((planned.route?.path||[]).map(p=>W.chunkKey(p.x,p.y)))],versions=W.patchVersions();
+              if(keys.every(k=>(versions[k]||0)===(hub.events.chunkRevisions?.[k]||0)))break;
+              await loadPatches(db,keys,versions);planned=null;
+            }
+            if(!planned)throw fail('沿途地形已改變，請重新選擇目的地');
             if(!planned.route)throw fail(planned.reason||'無法前往此處');next=planned.route;actor.partial=planned.partial;
           }
           actor.route=next;actor.revealedIndex=0;actor.dirty=true;hub.broadcast();
@@ -286,7 +364,7 @@ function registerWorldApi(app,{
           return {saved:true};
         }
         if(action==='interact'){
-          const result=await interact(actor,request);if(result.events){hub.events=result.events;hub.broadcast();}return result;
+          const result=await interact(actor,request);if(result.events){hub.events=result.events;W.installPatches(result.patches||{});for(const[k,v]of Object.entries(result.patches||{}))patchCache.set(k,v);hub.broadcast();}return result;
         }
         if(action==='invite'){
           const target=hub.actors.get(String(request.targetUid||'')),kind=request.kind;
@@ -301,7 +379,7 @@ function registerWorldApi(app,{
           return {message:'已向 '+target.name+' 發出'+(kind==='raid'?'組隊':'切磋')+'邀請'};
         }
         if(action==='quest')return mutate(actor,request,({tx,state,user,userRef})=>{
-          if(!quest(state).ready)throw fail('請先完成青竹林的四項目標');if(state.questClaimed)throw fail('這項任務已領取');
+          if(!quest(state,W).ready)throw fail('請先完成青竹林的四項目標');if(state.questClaimed)throw fail('這項任務已領取');
           state.questClaimed=true;const rewards={gold:60,cultivation:6,materials:{'qi-spirit-iron':2,'qi-spirit-wood':2}};
           grant(tx,userRef,user,rewards);return {rewards,message:'宗門嘉獎已領取；可帶材料前往鍛造坊'};
         });

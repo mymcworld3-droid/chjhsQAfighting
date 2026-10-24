@@ -1,18 +1,18 @@
 import './world-core.js';
 import {WorldRenderer} from './world-renderer.js';
-const W=globalThis.QAGridWorld;
+const BaseWorld=globalThis.QAGridWorld;
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rich=value=>window.quizMathRichText?window.quizMathRichText(value):esc(value);
 const id=()=>globalThis.crypto?.randomUUID?.()||'world-'+Date.now()+'-'+Math.random().toString(36).slice(2);
-const materialNames={'qi-spirit-wood':'靈木','qi-spirit-iron':'玄鐵'};
+const materialNames={'qi-spirit-wood':'靈木','qi-spirit-iron':'玄鐵','foundation-refined-iron':'精煉玄鐵','foundation-century-wood':'百年靈木','golden-purple-iron':'紫金玄鐵','golden-lightning-wood':'雷擊木','nascent-star-iron':'玄冥星鐵','nascent-soul-wood':'千載魂木'};
 export class WorldView {
   constructor(root,{api,subscribe,uid,openEntry=()=>{},applyUser=()=>{},confirm=message=>Promise.resolve(globalThis.confirm(message))}){
-    Object.assign(this,{root,api,subscribe,uid,openEntry,applyUser,confirm});this.players=[];this.events={};this.seq=0;this.busy=false;this.visible=false;this.generation=0;
+    Object.assign(this,{root,api,subscribe,uid,openEntry,applyUser,confirm});this.world=BaseWorld.createWorld();this.players=[];this.events={};this.seq=0;this.busy=false;this.visible=false;this.generation=0;
     root.innerHTML=`<section class="ww-stage"><canvas class="ww-canvas" tabindex="0" role="application" aria-label="大世界地圖。點格移動，拖曳查看。也可用方向鍵選格，Enter 前往。"></canvas>
         <div class="ww-location"><strong data-zone>問道宗</strong><span><span data-coordinates>9，36</span> · 點格前往・拖曳查看</span><small data-connection role="status">正在連線</small></div>
         <div class="ww-explore-actions"><button type="button" class="btn-cyber-ghost" id="world-free-practice" data-entry="practice"><i class="fa-solid fa-scroll" aria-hidden="true"></i> 自由問道</button><div class="ww-top-right"><button type="button" class="btn-cyber-ghost" data-action="menu" aria-label="開啟功能選單"><i class="fa-solid fa-bars" aria-hidden="true"></i> 功能</button></div></div>
-        <div class="ww-minimap"><canvas width="144" height="144" aria-label="已探索地圖，點擊可移動鏡頭"></canvas><span>全服共享 · 48 × 48</span></div>
-        <div class="ww-camera"><button type="button" data-action="center" aria-label="回到角色">◎ <span>回到角色</span></button><button type="button" data-action="zoom-in" aria-label="放大地圖">＋</button><button type="button" data-action="zoom-out" aria-label="縮小地圖">−</button><button type="button" data-action="stop" aria-label="停止移動">停</button></div>
+        <div class="ww-minimap"><canvas width="144" height="144" aria-label="已探索地圖，點擊可移動鏡頭"></canvas><span>全服共享 · 1000 × 1000</span></div>
+        <div class="ww-camera"><button type="button" data-action="travel" aria-label="乘舟或上岸" hidden>乘舟</button><button type="button" data-action="center" aria-label="回到角色">◎ <span>回到角色</span></button><button type="button" data-action="zoom-in" aria-label="放大地圖">＋</button><button type="button" data-action="zoom-out" aria-label="縮小地圖">−</button><button type="button" data-action="stop" aria-label="停止移動">停</button></div>
         <div class="ww-battle-status" hidden></div><div class="ww-combat-log" aria-live="polite" hidden></div><div class="ww-objective" hidden></div>
         <div class="ww-message" role="status" aria-live="polite" hidden></div>
         <section class="ww-panel" aria-label="地圖互動" hidden></section>
@@ -43,6 +43,8 @@ export class WorldView {
   connected(value){this.online=value;const n=this.root.querySelector('[data-connection]');n.dataset.online=String(value);n.textContent=value?`附近 ${Math.max(1,this.players.length)} 位修士`:'連線中斷・正在重連';}
   set(data){
     if(this.destroyed)return;
+    if(data.world){const descriptor=BaseWorld.validateDescriptor(data.world);if(data.mapVersion!==descriptor.worldId)throw new Error('地圖版本不一致，請重新整理');if(this.world.VERSION!==descriptor.worldId)this.world=BaseWorld.createWorld(descriptor);this.renderer.world=this.world;}
+    if(data.patches){this.world.installPatches(data.patches);this.renderer.miniSignature='';}
     if(data.serverTime)this.clockOffset=data.serverTime-Date.now();
     const previousBattle=this.state?.battle,wasFighting=previousBattle?.status==='active';
     if(data.state)this.state=data.state;if(data.self)this.self=data.self;if(data.players)this.players=data.players;
@@ -64,13 +66,13 @@ export class WorldView {
     this.root.querySelector('.ww-panel').hidden=true;this.fitViewport();this.renderer.resize();this.renderer.start();
     try{
       const data=await this.api('join');if(!this.visible||generation!==this.generation)return;
-      if(data.mapVersion!==W.VERSION)throw new Error('大世界地圖已更新，請重新整理遊戲後再進入');
+      if(!data.world)throw new Error('世界種子尚未就緒，請重新整理遊戲');
       this.set(data);this.connected(true);this.renderer.center();
       this.unsubscribe=this.subscribe(packet=>{
         if(!this.visible||generation!==this.generation)return;
         this.connected(true);
         if(packet.type==='left'){this.unsubscribe?.();return;}
-        if(packet.explored&&this.state){this.state.explored=packet.explored;this.state.position=packet.position;}
+        if(packet.explored&&this.state){this.state.explored=this.world.mergeExplored(this.state.explored,packet.explored);this.state.position=packet.position;}
         this.set(packet);
         if(packet.type==='invite'){
           this.invite=packet.invite;this.message(packet.invite.fromName+' 邀請你'+(packet.invite.kind==='raid'?'組隊挑戰秘境':'切磋'));
@@ -83,7 +85,7 @@ export class WorldView {
         if(!this.visible||generation!==this.generation)return;
         const fresh=await this.api('join');if(this.visible&&generation===this.generation){this.pending=null;this.set(fresh);this.renderBattle();}
       });
-      this.locationTick=setInterval(()=>{if(this.state){this.updateLocalExploration();this.checkArrival();this.renderLocation();}},200);
+      this.locationTick=setInterval(()=>{if(this.state){this.updateLocalExploration();this.checkArrival();this.renderLocation();void this.refreshPatches();}},200);
       this.renderBattle();
     }catch(error){if(generation!==this.generation)return;this.connected(false);this.panel('暫時無法進入青雲界',`<p>${esc(error.message)}</p>`,this.button('重新連線','reconnect'));}
   }
@@ -92,13 +94,16 @@ export class WorldView {
     try{await this.api('leave',{}, {keepalive:true});}catch{/* The server checkpoints the final reached tile when the stream closes. */}
   }
   updateLocalExploration(){
+    const W=this.world;
     if(this.battle()?.status==='active')return;const mine=this.players.find(p=>p.uid===this.uid)||this.self;if(!mine?.route)return;
     const sample=W.sample(mine.route,this.now());
     // Match the server's reveal radius. Movement still stops at the originally accepted frontier.
-    for(const p of mine.route.path.slice(0,sample.index+1))this.state.explored=W.reveal(this.state.explored,p);
+    const stamp=mine.route.startedAtMs+':'+mine.route.path.length;if(this.localRevealStamp!==stamp){this.localRevealStamp=stamp;this.localRevealIndex=-1;}
+    for(let i=(this.localRevealIndex??-1)+1;i<=sample.index;i++)this.state.explored=W.reveal(this.state.explored,mine.route.path[i]);this.localRevealIndex=sample.index;
     this.state.position=sample.tile;
   }
-  renderLocation(){const mine=this.players.find(p=>p.uid===this.uid)||this.self,p=W.sample(mine?.route,this.now()).tile;
+  renderLocation(){
+    const W=this.world;const mine=this.players.find(p=>p.uid===this.uid)||this.self,p=W.sample(mine?.route,this.now()).tile;
     this.root.querySelector('[data-zone]').textContent=W.zone(p);this.root.querySelector('[data-coordinates]').textContent=`${p.x}，${p.y}`;}
   renderHud(){
     if(this.destroyed||!this.state)return;this.renderLocation();if(this.online)this.connected(true);
@@ -113,6 +118,7 @@ export class WorldView {
     this.root.classList.toggle('ww-in-battle',fighting);actions.hidden=!fighting;
     actions.innerHTML=fighting?(b.phase==='recharge'?`${this.button('繼續補能 '+b.answered+'/2','recharge')}${this.button('略過補能','skip')}${this.button('撤離','retreat')}`:`${this.button('普攻','select-attack')}${this.button('神通','select-skill')}${this.button('防守','guard')}${this.button('結束回合','end')}${this.button('撤離','retreat')}`):'';
     this.root.querySelector('[data-action="stop"]').hidden=b?.status==='active';
+    const travel=this.root.querySelector('[data-action="travel"]'),p=this.state.position,W=this.world;travel.hidden=fighting||!W.DIRS.some(([dx,dy])=>['water','ocean'].includes(W.terrain(p.x+dx,p.y+dy,this.events)))&&this.state.travelMode!=='sail';travel.textContent=this.state.travelMode==='sail'?'上岸':'乘舟';
   }
   button(label,action,extra=''){const style=['interact','confirm-move','recharge','end','dismiss','claim','contribute'].includes(action)?'primary':'ghost';return `<button type="button" class="btn-cyber-${style}" data-action="${action}" ${extra}>${esc(label)}</button>`;}
   panel(title,content,actions=''){
@@ -137,14 +143,16 @@ export class WorldView {
     }catch(error){if(seq===this.seq){this.pending=null;this.message(error.message);}}
   }
   checkArrival(){
+    const W=this.world;
     if(!this.pending||this.busy)return;const mine=this.players.find(p=>p.uid===this.uid)||this.self;if(W.sample(mine?.route,this.now()).moving)return;
     const pending=this.pending;this.pending=null;
     this.run(async()=>{
       const response=await this.api('interact',{objectId:pending.objectId,requestId:pending.requestId});this.set(response);
-      if(response.message)this.message(response.message);if(response.entry)this.openEntry(response.entry);this.renderBattle();
+      if(response.message)this.message(response.message);if(response.entry)this.openEntry(response.entry);this.renderBattle();if(response.state?.expedition)this.renderExpedition();else if(response.rewards)this.panel('探索收穫',this.rewards(response.rewards),this.button('繼續探索','close'));
     });
   }
   pick(p){
+    const W=this.world;
     if(!this.state||!W.inside(p.x,p.y)||this.busy)return;
     const b=this.battle();this.renderer.set({selected:p,cursor:p});
     if(b?.status==='active'){
@@ -154,7 +162,7 @@ export class WorldView {
       const enemy=b.enemies.find(e=>e.hp>0&&W.same(e,p));if(enemy){this.selectedEnemy=enemy.id;this.enemyPanel(enemy);return;}
       if(b.mechanism?.active&&W.same(b.mechanism,p)){this.panel('陣眼',`<p>所有金丹都可操作。站在陣眼旁，可消除護盾並使敵人攻擊降低 35%。</p>`,this.button('解除陣眼','mechanism',W.distance(b.player,p)>1||b.acted?'disabled':''));return;}
       if(b.moved){this.message('本回合已移動，仍可執行尚未使用的主要行動');return;}
-      const blocked=new Set(b.enemies.filter(e=>e.hp>0).map(e=>W.key(e.x,e.y))),path=W.plan(b.player,p,{bounds:b.bounds,events:this.events,blocked,maxSteps:2}).path;
+      const blocked=new Set(b.enemies.filter(e=>e.hp>0).map(e=>W.key(e.x,e.y))),path=W.plan(b.player,p,{bounds:b.bounds,events:b.events,blocked,maxSteps:2}).path;
       if(path.length<2){this.message('此格無法到達，或超過本回合兩格移動範圍');return;}
       this.preview={path,target:p};this.renderer.set({preview:this.preview});const danger=b.enemies.filter(e=>e.hp>0&&e.intent.cells.some(c=>W.same(c,p)));
       this.panel('移動預覽',`<p>沿路移動 ${path.length-1} 格，抵達（${p.x}，${p.y}）。</p><p class="${danger.length?'ww-danger':'ww-safe'}">${danger.length?'危險：此格位於 '+danger.map(e=>esc(e.intent.name)).join('、')+' 的預告範圍':'此格不在目前的攻擊預告範圍內'}</p>`,this.button('確認移動','confirm-move'));return;
@@ -163,18 +171,20 @@ export class WorldView {
     if(peers.length){this.playerPanel(peers);return;}
     const object=W.objectAt(p.x,p.y);
     if(object&&W.known(this.state.explored,p.x,p.y)){this.selectedObject=object;this.objectPanel(object);return;}
-    if(W.known(this.state.explored,p.x,p.y)&&!W.walkable(p.x,p.y,{events:this.events})){this.message('此處無法通行，請選擇道路或空地');return;}
+    if(W.known(this.state.explored,p.x,p.y)&&!W.walkable(p.x,p.y,{events:this.events,mode:this.state.travelMode})){this.message('此處無法通行，請選擇道路或空地');return;}
     this.move(p);
   }
   objectPanel(o){
+    const W=this.world;
     const info={gather:'每日個人採集資格；其他玩家採集不會影響你。可獲得材料 ×2。',chest:'個人首次寶箱；開啟後獲得玄鐵、靈木與靈石。',monster:'在此處展開 8 × 8 局部戰場。每回合兩題補能；答錯仍可移動、普攻與防守。每日第一次勝利可取得獎勵，其後仍可練習戰術。',building:'走到建築旁開啟，也可使用原本的修煉導覽或地圖功能選單。',npc:'追蹤仙途任務，從青竹林帶回第一批修行材料。',event:o.id==='bridge'?'全服共同投入靈木，修復後開通青溪捷徑。每日每人可投入一次。':'全服共同投入玄鐵，穩定山口古陣。每日每人可投入一次。'}[o.kind];
-    let extra='';if(o.kind==='event'){const goal=o.id==='bridge'?20:60,value=this.events[o.id]||0;extra=`<div class="ww-event-bar"><span style="width:${Math.min(100,value/goal*100)}%"></span></div><p>全服進度 ${value} / ${goal} · 需要${o.id==='bridge'?'靈木':'玄鐵'} ×2</p>${o.id==='array'?'<p>完成後解除北方封印，所有修士皆可進入古陣秘藏。</p>':''}`;}
-    this.panel(o.name,`<p>${info}</p>${extra}<small>地點（${o.x}，${o.y}）· ${esc(W.zone(o))}</small>`,this.button(o.kind==='monster'?'前往挑戰':o.kind==='gather'?'前往採集':o.kind==='chest'?'前往開箱':o.kind==='event'?'前往貢獻':'前往互動','interact'));
+    let extra=o.level?`<p>建議等級 ${o.level} · ${esc(o.realm)}域${o.veinId?' · 連續礦脈':''}</p>`:'';if(['realm','structure'].includes(o.kind))extra+='<p>'+esc(o.kind==='realm'?(o.subtype==='guardian'?'古老守衛看守秘藏，可展開局部戰棋挑戰。':'旋轉陣紋機關，開啟秘境寶藏；探索不需答題。'):o.subtype==='watchtower'?'登上望樓可揭開附近迷霧。':o.subtype==='camp'?'可在此休整與問道練習。':'調查遺跡並破解陣紋，取得探索獎勵。')+'</p>';if(o.kind==='event'){const goal=o.id==='bridge'?20:60,value=this.events[o.id]||0;extra=`<div class="ww-event-bar"><span style="width:${Math.min(100,value/goal*100)}%"></span></div><p>全服進度 ${value} / ${goal} · 需要${o.id==='bridge'?'靈木':'玄鐵'} ×2</p>${o.id==='array'?'<p>完成後解除北方封印，所有修士皆可進入古陣秘藏。</p>':''}`;}
+    this.panel(o.name,`<p>${info||'前往調查這處古老遺跡。'}</p>${extra}<small>地點（${o.x}，${o.y}）· ${esc(W.zone(o))}</small>`,this.button(o.kind==='monster'?'前往挑戰':o.kind==='gather'?'前往採集':o.kind==='chest'?'前往開箱':o.kind==='event'?'前往貢獻':'前往互動','interact'));
   }
   playerPanel(peers){
     this.panel(peers.length>1?`此格有 ${peers.length} 位道友`:peers[0].name,peers.map(p=>`<article class="ww-peer"><strong>${esc(p.name)}</strong><small>${p.status==='battle'?'交戰中・'+esc(p.battleName):'正在探索青雲界'}</small><div><button type="button" data-action="profile" data-uid="${esc(p.uid)}">角色資料</button><button type="button" data-action="chat" data-uid="${esc(p.uid)}" data-name="${esc(p.name)}">交流</button><button type="button" data-action="invite-raid" data-uid="${esc(p.uid)}">邀請組隊</button><button type="button" data-action="invite-duel" data-uid="${esc(p.uid)}">切磋</button></div></article>`).join(''));
   }
   enemyPanel(e){
+    const W=this.world;
     const b=this.battle();this.panel(e.name,`<p>生命 ${e.hp} / ${e.maxHp}${e.shield?' · 護盾 '+e.shield:''}</p><p>下一式：${esc(e.intent.name)} · 傷害 ${e.intent.damage}${e.stunned?' · 已受干擾':''}</p><p>與你相距 ${W.distance(b.player,e)} 格。虛線表示敵人本回合預計移動方向。</p><small>${esc(b.skill.name)}：${esc(b.skill.detail)}</small>`,this.button('普攻','attack',b.acted||W.distance(b.player,e)>1?'disabled':'')+this.button(b.skill.name+' · '+b.skill.cost+' 靈力','select-skill',b.acted||b.player.mana<b.skill.cost?'disabled':''));
   }
   renderBattle(){
@@ -204,15 +214,28 @@ export class WorldView {
   questPanel(){
     const q=this.state.quest;if(!q)return;this.panel(q.name,`<p>帶回第一批靈材，讓宗門見證你的成長。</p><div class="ww-quest-list">${q.steps.map((s,i)=>`<button type="button" data-action="navigate" data-step="${i}"><b>${s.done?'✓':i+1}</b><span>${esc(s.name)}</span><small>${s.done?'已完成':'尋路 →'}</small></button>`).join('')}</div><p class="ww-muted">${esc(q.reward)}</p>`,q.claimed?'<p>嘉獎已領取。可前往鍛造坊使用材料。</p>':q.ready?this.button('領取宗門嘉獎','claim-quest'):'');
   }
+  async refreshPatches(){
+    if(!this.visible||!this.state||this.patchLoading||Date.now()<(this.patchRetryAtMs||0))return;const W=this.world,p=this.state.position,cx=Math.floor(p.x/32),cy=Math.floor(p.y/32),keys=[];
+    for(let y=Math.max(0,cy-1);y<=Math.min(W.CHUNK_COUNT-1,cy+1);y++)for(let x=Math.max(0,cx-1);x<=Math.min(W.CHUNK_COUNT-1,cx+1);x++)keys.push(W.key(x,y));
+    const versions=W.patchVersions(),stamp=keys.map(k=>k+':'+(this.events.chunkRevisions?.[k]||0)).join('|');if(stamp===this.patchStamp)return;
+    const changed=keys.filter(k=>(versions[k]||0)!==(this.events.chunkRevisions?.[k]||0));if(!changed.length){this.patchStamp=stamp;return;}
+    this.patchLoading=true;try{const data=await this.api('patches',{keys:changed,versions});if(this.visible&&data.worldId===W.VERSION){this.set(data);this.patchStamp=stamp;this.patchFailures=0;this.patchRetryAtMs=0;}}catch{this.patchFailures=(this.patchFailures||0)+1;this.patchRetryAtMs=Date.now()+Math.min(60000,5000*2**Math.min(4,this.patchFailures-1));}finally{this.patchLoading=false;}
+  }
+  renderExpedition(){
+    const e=this.state?.expedition;if(!e)return;const arrows=['↑','→','↓','←'];this.panel(e.name,`<p>旋轉三座符盤，讓陣紋全部朝向上方。每次點擊轉動四分之一圈。</p><div class="ww-runes">${e.rotations.map((r,i)=>`<button type="button" class="btn-cyber-ghost" data-action="rotate-rune" data-index="${i}" aria-label="旋轉第 ${i+1} 座符盤">${arrows[r]}</button>`).join('')}</div><small>陣紋解開後取得秘藏；途中可關閉面板，進度會保存。</small>`);
+  }
   async command(command,extra={}){
     const b=this.battle();if(!b||b.status!=='active')return;
     await this.run(async()=>{const result=await this.api('battle',{command,battleId:b.id,turn:b.turn,revision:b.revision,requestId:id(),...extra});this.set(result);this.renderer.set({preview:null});this.renderBattle();});
   }
   async action(action,data={}){
+    const W=this.world;
     switch(action){
       case 'close':this.closePanel();this.renderer.set({preview:null,selected:null});break;
       case 'dismiss':await this.run(async()=>{const b=this.battle();const r=await this.api('battle',{command:'dismiss',battleId:b.id,requestId:id()});this.set(r);this.closePanel();});break;
       case 'reconnect':await this.suspend();await this.start();break;
+      case 'travel':await this.run(async()=>{const data=await this.api('travel',{mode:this.state.travelMode==='sail'?'walk':'sail',requestId:id()});this.set(data);this.message(data.message);});break;
+      case 'rotate-rune':await this.run(async()=>{const response=await this.api('explore',{command:'rotate',index:Number(data.index),requestId:id()});this.set(response);if(this.state.expedition)this.renderExpedition();else this.panel('秘藏開啟',this.rewards(response.rewards),this.button('繼續探索','close'));});break;
       case 'center':this.renderer.center();break;
       case 'zoom-in':this.renderer.zoom(1.15);break;
       case 'zoom-out':this.renderer.zoom(1/1.15);break;

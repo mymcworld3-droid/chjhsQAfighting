@@ -151,6 +151,41 @@ async function main(){
       results.push({viewport:size.name,shell,...layout,checks:['original-five-button-navigation','title-return-to-world','original-header','fixed-aspect-ratio','black-bar-containment','two-live-browsers','point-and-walk','fog-frontier','encounter','two-question-recharge','battle-navigation-guard','answer-and-save','close-and-resume-recharge','confirmed-two-tile-move','guard-after-move','next-turn','reload-recovery']});
       await frame.evaluate(()=>window.fixtureView.suspend());await page.close();service.hub.actors.delete('fixture');db.docs.delete('worldPlayers/fixture');
     }
+    // Generated content uses the same entry, pointer controls, API and original chrome.
+    const secret=W.objectsIn({x:64,y:64,w:160,h:160}).find(o=>o.kind==='realm'&&o.subtype==='puzzle');
+    const entrance=W.DIRS.map(([dx,dy])=>({x:secret.x+dx,y:secret.y+dy})).find(p=>W.walkable(p.x,p.y));
+    db.docs.set('worldPlayers/fixture',{...register.__test.normalize(),position:entrance,mapVersion:W.VERSION,explored:W.fullExplored()});
+    const generated=await browser.newPage({viewport:{width:1440,height:900}}),generatedErrors=[];generated.on('pageerror',e=>generatedErrors.push(e.message));
+    let generatedFrame=await load(generated);
+    const pickGenerated=async target=>{
+      await generatedFrame.waitForFunction(()=>window.fixtureView.renderer.camera.follow);
+      const p=await generatedFrame.evaluate(target=>{const r=window.fixtureView.renderer,rect=r.canvas.getBoundingClientRect(),s=40*r.camera.zoom;return{x:rect.left+r.width/2+(target.x+.5-r.camera.x)*s,y:rect.top+r.height/2+(target.y+.5-r.camera.y)*s};},target);
+      const stage=await generated.evaluate(()=>QAGameStage.getState());await generated.mouse.click(stage.left+p.x*stage.scale,stage.top+p.y*stage.scale);
+    };
+    await generatedFrame.waitForFunction(p=>Math.abs(window.fixtureView.renderer.camera.x-p.x-.5)<.01,entrance);
+    await pickGenerated(secret);await generatedFrame.locator('[data-action="interact"]').click();await generatedFrame.waitForFunction(()=>!!window.fixtureView.state.expedition);
+    await generatedFrame.evaluate(()=>document.fonts.ready);await generated.screenshot({path:path.join(output,'generated-secret-realm.png'),animations:'disabled'});
+    await generatedFrame.locator('[data-action="rotate-rune"][data-index="0"]').click();await generatedFrame.waitForFunction(()=>!window.fixtureView.busy);
+    const savedRotations=await generatedFrame.evaluate(()=>window.fixtureView.state.expedition.rotations);
+    await generated.reload();await generated.waitForFunction(()=>document.getElementById('game-frame')?.contentWindow?.fixtureView?.online);generatedFrame=generated.frames().find(f=>f.url().includes('/app.html'));
+    assert.deepEqual(await generatedFrame.evaluate(()=>window.fixtureView.state.expedition.rotations),savedRotations);
+    await generatedFrame.waitForFunction(p=>Math.abs(window.fixtureView.renderer.camera.x-p.x-.5)<.01,entrance);
+    await pickGenerated(secret);await generatedFrame.locator('[data-action="interact"]').click();await generatedFrame.waitForFunction(()=>!!document.querySelector('.ww-runes'));
+    for(let i=0;i<3;i++)while(await generatedFrame.evaluate(i=>window.fixtureView.state.expedition?.rotations[i]>0,i)){
+      const before=await generatedFrame.evaluate(i=>window.fixtureView.state.expedition.rotations[i],i);
+      await generatedFrame.locator('[data-action="rotate-rune"][data-index="'+i+'"]').click();await generatedFrame.waitForFunction(({i,before})=>!window.fixtureView.busy&&window.fixtureView.state.expedition?.rotations[i]!==before,{i,before});
+    }
+    await generatedFrame.waitForFunction(()=>!window.fixtureView.state.expedition);await generated.screenshot({path:path.join(output,'generated-secret-cleared.png'),animations:'disabled'});
+    let coast,water;
+    for(let y=100;y<400&&!coast;y++)for(let x=100;x<400&&!coast;x++)if(W.walkable(x,y))for(const[dx,dy]of W.DIRS)if(['water','ocean'].includes(W.terrain(x+dx,y+dy))){coast={x,y};water={x:x+dx,y:y+dy};break;}
+    await generatedFrame.evaluate(()=>window.fixtureView.suspend());service.hub.actors.delete('fixture');
+    db.docs.set('worldPlayers/fixture',{...db.docs.get('worldPlayers/fixture'),position:coast,travelMode:'walk',explored:W.fullExplored()});
+    await generatedFrame.evaluate(()=>window.fixtureView.start());await generatedFrame.waitForFunction(p=>Math.abs(window.fixtureView.renderer.camera.x-p.x-.5)<.01,coast);
+    await generatedFrame.locator('[data-action="travel"]').click();await generatedFrame.waitForFunction(()=>window.fixtureView.state.travelMode==='sail');
+    await pickGenerated(water);await generatedFrame.waitForFunction(p=>QAGridWorld.same(window.fixtureView.state.position,p),water);
+    await generated.screenshot({path:path.join(output,'generated-sailing.png'),animations:'disabled'});assert.deepEqual(generatedErrors,[]);
+    results.push({scenario:'generated-content',secret,coast,checks:['generated-realm-visible','pointer-interaction','non-combat-mechanism','reload-resumes-mechanism','exploration-reward','coast-boarding','sailing-along-real-route','original-navigation-preserved']});
+    await generatedFrame.evaluate(()=>window.fixtureView.suspend());await generated.close();
     await fs.writeFile(path.join(output,'validation.json'),JSON.stringify(results,null,2)+'\n');console.log(JSON.stringify(results));
   }finally{await browser.close();service.close();server.closeAllConnections();server.close();}
 }

@@ -1,7 +1,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const W=require('../public/world/world-core.js');
-test('48 by 48 world has one deterministic connected route to every interaction',()=>{
-  assert.equal(W.TERRAIN.length,48*48);assert.equal(W.VERSION,'qingyun-48-v1');
+test('1000 by 1000 seeded world retains connected onboarding interactions',()=>{
+  assert.equal(W.SIZE,1000);assert.equal(W.CHUNK_SIZE,32);assert.equal(W.GENERATOR_VERSION,'qingyun-seeded-v1');
   for(const o of W.OBJECTS){const r=W.approach(W.SPAWN,o,{events:{array:60}});assert.ok(r.path.length,o.id);assert.ok(W.distance(r.path.at(-1),o)<=1,o.id);
     for(let i=1;i<r.path.length;i++){assert.equal(W.distance(r.path[i-1],r.path[i]),1);assert.ok(W.walkable(r.path[i].x,r.path[i].y,{events:{array:60}}));}}
 });

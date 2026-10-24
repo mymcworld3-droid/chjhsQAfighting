@@ -1,6 +1,7 @@
 'use strict';
 const crypto = require('node:crypto');
-const W = require('./public/world/world-core.js');
+const BaseWorld = require('./public/world/world-core.js');
+const worldFor=b=>BaseWorld.forDescriptor(b?.world||BaseWorld.descriptor);
 const Authority = require('./raid-authority.cjs');
 const fail = message => {throw Object.assign(new Error(message),{status:409});};
 const SKILLS = Object.freeze({
@@ -15,14 +16,16 @@ const SKILLS = Object.freeze({
 });
 const skill = b => SKILLS[b.player.goldenCore?.type]||SKILLS.basic;
 const living = b => b.enemies.filter(e=>e.hp>0);
-function blocked(b,exclude='') {return new Set(living(b).filter(e=>e.id!==exclude).map(e=>W.key(e.x,e.y)));}
+function blocked(b,exclude='') {return new Set(living(b).filter(e=>e.id!==exclude).map(e=>BaseWorld.key(e.x,e.y)));}
 function options(b,exclude='') {return {bounds:b.bounds,events:b.events,blocked:blocked(b,exclude)};}
 function log(b,text) {b.log=[...(b.log||[]),text].slice(-8);}
 function cellsIn(b,p,radius) {
+  const W=worldFor(b);
   const out=[];for(let y=b.bounds.y;y<b.bounds.y+8;y++)for(let x=b.bounds.x;x<b.bounds.x+8;x++)
     if(W.distance(p,{x,y})<=radius)out.push({x,y});return out;
 }
 function planEnemies(b) {
+  const W=worldFor(b);
   const occupied=blocked(b);occupied.add(W.key(b.player.x,b.player.y));
   for(const e of living(b)){
     const line=e.elite&&b.turn%2===1;
@@ -36,12 +39,14 @@ function planEnemies(b) {
     occupied.add(W.key(e.nextMove.x,e.nextMove.y));
   }
 }
-function createBattle(position,object,player,events={},now=Date.now()) {
-  const bounds={x:Math.max(1,Math.min(39,object.x-3)),y:Math.max(1,Math.min(39,object.y-3)),w:8,h:8};
+function createBattle(position,object,player,events={},now=Date.now(),W=BaseWorld) {
+  const bounds={x:Math.max(1,Math.min(W.SIZE-8,object.x-3)),y:Math.max(1,Math.min(W.SIZE-8,object.y-3)),w:8,h:8};
+  const tiles={};for(let y=bounds.y;y<bounds.y+8;y++)for(let x=bounds.x;x<bounds.x+8;x++)tiles[W.key(x,y)]=W.terrain(x,y,events);
+  events={bridge:events.bridge||0,array:events.array||0,tiles};
   const p={...structuredClone(player),...W.safePosition(position,{bounds,events}),mana:1,guard:false,ward:false};
   const first={id:'enemy-1',name:object.name,...W.safePosition(object,{bounds,events}),hp:object.hp,maxHp:object.hp,atk:object.atk,elite:!!object.elite,shield:object.id==='sentinel'?250:0};
   if(W.same(first,p)){const candidate=W.DIRS.map(([dx,dy])=>({x:first.x+dx,y:first.y+dy})).find(c=>W.walkable(c.x,c.y,{bounds,events}));if(candidate)Object.assign(first,candidate);}
-  const b={id:crypto.randomUUID(),version:1,revision:0,objectId:object.id,name:object.name,bounds,events:{...events},
+  const b={id:crypto.randomUUID(),version:1,world:W.descriptor,revision:0,objectId:object.id,name:object.name,bounds,events:{...events},
     player:p,enemies:[first],turn:1,phase:'recharge',status:'active',moved:false,acted:false,questions:[],answered:0,correctThisTurn:0,
     meteors:[],tides:[],records:[],log:['留意紅色攻擊預告；移出範圍，或架盾反擊。'],startedAtMs:now};
   const area=W.reachable(p,{bounds,events,blocked:new Set([W.key(first.x,first.y)])}).cells;
@@ -61,6 +66,7 @@ function damage(b,e,amount) {
 }
 function targetEnemy(b,id) {const e=living(b).find(e=>e.id===id);if(!e)fail('請選擇仍在場上的敵人');return e;}
 function endTurn(b,now) {
+  const W=worldFor(b);
   checkAct(b);
   for(const e of living(b)){
     if(e.stunned){e.stunned=false;log(b,e.name+' 受到干擾，停止一回合');continue;}
@@ -90,6 +96,7 @@ function endTurn(b,now) {
   }
 }
 function act(original,request,now=Date.now()) {
+  const W=worldFor(original);
   const b=structuredClone(original);checkActive(b);
   if(Number(request.turn)!==b.turn||Number(request.revision)!==b.revision)fail('戰況已更新，請依目前畫面操作');
   const p=b.player;
@@ -158,6 +165,7 @@ function act(original,request,now=Date.now()) {
   finish(b,now);b.revision++;return b;
 }
 function view(b) {
+  const W=worldFor(b);
   if(!b)return null;
   const out=structuredClone(b);out.questions=(out.questions||[]).map((q,i)=>({q:q.q,options:q.options,subject:q.subject,topic:q.topic,index:i}));
   out.records=undefined;out.skill=skill(b);out.reachable=b.status==='active'&&b.phase==='command'&&!b.moved?W.reachable(b.player,{...options(b),maxSteps:2}).cells:[];

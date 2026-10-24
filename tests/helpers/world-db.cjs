@@ -1,9 +1,9 @@
 'use strict';
 const assert=require('node:assert/strict');
 function worldDb(seed={}){
-  const docs=new Map(Object.entries(seed).map(([k,v])=>[k,structuredClone(v)]));let queue=Promise.resolve(),writes=0,failNext=false;
-  const snap=ref=>({exists:docs.has(ref.key),data:()=>structuredClone(docs.get(ref.key)),id:ref.key.split('/').at(-1)});
-  const db={docs,get writes(){return writes;},failNext(){failNext=true;},collection(name){return{doc(id){const ref={key:name+'/'+id,get:async()=>snap(ref)};return ref;}};},
+  const docs=new Map(Object.entries(seed).map(([k,v])=>[k,structuredClone(v)]));let queue=Promise.resolve(),writes=0,failNext=false;const reads=[];
+  const snap=ref=>{reads.push(ref.key);return {exists:docs.has(ref.key),data:()=>structuredClone(docs.get(ref.key)),id:ref.key.split('/').at(-1)};};
+  const db={docs,reads,get writes(){return writes;},failNext(){failNext=true;},collection(name){return{doc(id){const ref={key:name+'/'+id,get:async()=>snap(ref)};return ref;}};},
     runTransaction(work){const task=queue.catch(()=>{}).then(async()=>{
       let writing=false;const pending=new Map();
       const tx={get:async ref=>{assert.equal(writing,false,'all reads precede writes');return snap(ref);},

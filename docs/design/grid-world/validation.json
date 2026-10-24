@@ -383,5 +383,37 @@
       "next-turn",
       "reload-recovery"
     ]
+  },
+  {
+    "scenario": "generated-content",
+    "secret": {
+      "id": "g:ba95dee1:4:2:0",
+      "x": 138,
+      "y": 86,
+      "kind": "realm",
+      "tier": 0,
+      "level": 4,
+      "realm": "煉氣",
+      "name": "星隕石窟",
+      "icon": "境",
+      "subtype": "puzzle",
+      "hp": 1300,
+      "atk": 168,
+      "elite": true
+    },
+    "coast": {
+      "x": 341,
+      "y": 100
+    },
+    "checks": [
+      "generated-realm-visible",
+      "pointer-interaction",
+      "non-combat-mechanism",
+      "reload-resumes-mechanism",
+      "exploration-reward",
+      "coast-boarding",
+      "sailing-along-real-route",
+      "original-navigation-preserved"
+    ]
   }
 ]

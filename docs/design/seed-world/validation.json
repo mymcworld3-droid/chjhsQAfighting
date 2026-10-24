@@ -1,0 +1,118 @@
+{
+  "checks": [
+    "million-tile-generation",
+    "browser-server-fingerprint",
+    "four-seed-comparison",
+    "layer-switch",
+    "zoom-to-sect",
+    "paint-real-tile",
+    "delta-only-json-under-1KB",
+    "restore-tile",
+    "new-seed-different-world",
+    "import-restores-seed-and-delta",
+    "reject-generator-version-mismatch",
+    "export-1000-square-png",
+    "16:9-and-9:16-fit",
+    "offline-standalone-file"
+  ],
+  "reports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "documentWidth": 1440,
+      "documentHeight": 900,
+      "stage": {
+        "x": 0,
+        "y": 45,
+        "width": 1440,
+        "height": 810,
+        "top": 45,
+        "right": 1440,
+        "bottom": 855,
+        "left": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "documentWidth": 390,
+      "documentHeight": 844,
+      "stage": {
+        "x": 0,
+        "y": 75.328125,
+        "width": 390,
+        "height": 693.328125,
+        "top": 75.328125,
+        "right": 390,
+        "bottom": 768.65625,
+        "left": 0
+      }
+    },
+    {
+      "width": 1194,
+      "height": 834,
+      "documentWidth": 1194,
+      "documentHeight": 834,
+      "stage": {
+        "x": 0,
+        "y": 81.1875,
+        "width": 1194,
+        "height": 671.625,
+        "top": 81.1875,
+        "right": 1194,
+        "bottom": 752.8125,
+        "left": 0
+      }
+    }
+  ],
+  "defaultStats": {
+    "counts": {
+      "grass": 186066,
+      "road": 119,
+      "courtyard": 219,
+      "mountain": 66375,
+      "water": 115682,
+      "bridge": 2,
+      "broken-bridge": 2,
+      "bamboo": 85,
+      "rock": 11240,
+      "sealed": 1,
+      "ocean": 206069,
+      "beach": 86598,
+      "forest": 189369,
+      "desert": 57791,
+      "snow": 38314,
+      "swamp": 42068
+    },
+    "tiers": [
+      97,
+      213,
+      229,
+      440,
+      462,
+      361,
+      476,
+      268
+    ],
+    "kinds": {
+      "building": 7,
+      "gather": 7455,
+      "chest": 621,
+      "monster": 2546,
+      "event": 2,
+      "realm": 429,
+      "structure": 454,
+      "npc": 1
+    },
+    "veins": 1312,
+    "islands": 11,
+    "largestLand": 662944,
+    "spawnConnected": 662944,
+    "walkable": 666921,
+    "landRatio": 0.678249,
+    "fingerprint": "d3b3c064",
+    "milliseconds": 826,
+    "chunks": 1024
+  },
+  "errors": []
+}

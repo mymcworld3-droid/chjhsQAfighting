@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>青雲問道 · 大世界種子模擬器</title><style>:root{--sim-serif:"Noto Serif TC","Songti TC","PMingLiU","Noto Sans TC",serif;color-scheme:dark;font-family:"PingFang TC","Microsoft JhengHei",sans-serif;color:#eee4d0;background:#000}*{box-sizing:border-box}body{margin:0;overflow:hidden}#sim-stage{position:fixed;overflow:hidden;background:#17140f}#sim-app{position:absolute;transform-origin:0 0;display:grid;grid-template-rows:64px auto minmax(0,1fr) 30px;background:#17140f;color:#eee4d0}header{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid #d2b98929;background:#1c1812}.brand{display:flex;gap:12px;align-items:center}.seal{display:grid;place-items:center;width:32px;height:36px;border:1px solid #a78b53;border-radius:3px;font-family:var(--sim-serif);font-size:23px;color:#d0b579}h1,h2,p{margin:0}h1{font:500 21px/1.3 var(--sim-serif);letter-spacing:.07em}.brand p{font-size:10px;color:#9f998b;margin-top:4px;letter-spacing:.1em}.local-badge{font-size:10px;color:#c8ad79;border:1px solid #d2b98929;border-radius:5px;padding:6px 9px}button,input,select{font:inherit}button,select{color:#e3d2ac;background:#30271b;border:1px solid #877044;border-radius:7px;min-height:34px;padding:7px 10px;cursor:pointer;font-size:11px}button:hover{background:#40331f}button:focus-visible,select:focus-visible,input:focus-visible,canvas:focus-visible{outline:2px solid #dfbd79;outline-offset:2px}button:disabled{opacity:.4;cursor:wait}button.primary{color:#241b10;background:#c6a15c;border-color:#e0c486;font-weight:600}.controls{display:flex;gap:8px;align-items:end;margin:0;padding:12px 24px;background:#211d16;border-bottom:1px solid #d2b98929}.controls label{display:grid;gap:5px;flex:1;max-width:380px;font-size:10px;color:#bcae94}.controls input{min-width:0;width:100%;height:34px;background:#1b1711;border:1px solid #89754f;border-radius:7px;color:#eee4d0;padding:6px 10px}main{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 275px;gap:0}.map-pane{display:grid;grid-template-rows:auto minmax(0,1fr);min-width:0;min-height:0}.map-toolbar{display:flex;gap:14px;align-items:center;padding:10px 18px;border-bottom:1px solid #d2b98920;background:#1e1c16}.map-toolbar label{display:flex;gap:7px;align-items:center;font-size:10px;color:#bcae94}.map-toolbar select{min-height:28px;font-size:10px;padding:4px 7px}.check{margin-left:auto}.check input,.marker-toggles input{accent-color:#c6a15c}.map-stage{position:relative;min-height:0;overflow:hidden;background:#10181b}#map{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}#map-hint{position:absolute;left:14px;top:12px;padding:6px 9px;border:1px solid #d2b98920;border-radius:5px;color:#bcae94;background:#1b1812db;font-size:10px;pointer-events:none}.map-buttons{position:absolute;right:12px;bottom:12px;display:flex;gap:5px}.map-buttons button{background:#211d16e8;font-size:10px;min-width:30px;min-height:30px;padding:5px 9px}#loading{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;background:#151813d9;backdrop-filter:blur(2px);font-size:13px;color:#e0c486}#loading[hidden]{display:none}progress{width:230px;height:6px;accent-color:#c6a15c}aside{overflow:auto;padding:16px 17px;background:#211e17;border-left:1px solid #d2b98929;scrollbar-width:thin}aside section+section{border-top:1px solid #d2b98920;margin-top:16px;padding-top:14px}aside h2{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:500;letter-spacing:.04em;color:#d7bf91}aside h2 span{font-size:9px;color:#9f998b;font-weight:400}.inspection #tile-info{font-size:11px;line-height:1.85;color:#bcae94;margin-top:9px;min-height:62px}#tile-info strong{color:#eee4d0;font-size:13px;font-weight:500}#tile-info small{display:block;font-size:10px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px 12px;margin:14px 0}.stat{padding:0 0 7px;border-bottom:1px solid #d2b98912}.stat small{display:block;font-size:9px;color:#a59a86}.stat b{display:block;font-size:20px;line-height:1.6;font-weight:500;color:#eee0bf}.stat span{font-size:10px;font-weight:400;color:#bcae94}.tier-row{display:grid;grid-template-columns:35px minmax(0,1fr) 29px;gap:8px;align-items:center;font-size:9px;color:#a99e89;margin:7px 0}.tier-row i{height:4px;background:#4a3c27;border-radius:4px;overflow:hidden}.tier-row em{display:block;height:100%;background:#c6a15c}.legend{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.legend span{display:flex;gap:7px;align-items:center;font-size:9px;color:#bcae94}.legend i{width:10px;height:10px;display:inline-block;border-radius:2px}.marker-toggles{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:12px}.marker-toggles label{display:flex;gap:4px;align-items:center;font-size:10px;color:#c5b699}.storage-note{font-size:10px;line-height:1.85;color:#8f8777;border-top:1px solid #d2b98920;padding-top:13px;margin-top:15px}footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 18px;background:#1c1812;border-top:1px solid #d2b98920;font-size:9px;color:#a89a81}dialog{width:min(1120px,94%);max-height:90%;padding:20px;border:1px solid #877044;border-radius:12px;background:#211e17;color:#eee4d0}dialog::backdrop{background:#000b}.dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}.dialog-heading h2{font:500 20px var(--sim-serif)}.dialog-heading p{font-size:11px;color:#bcae94;margin-top:7px}.dialog-heading button{font-size:22px;width:36px;padding:0}#compare-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.compare-card{padding:10px;text-align:left;background:#171a16;border-color:#d2b98929;overflow:hidden}.compare-card canvas{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated;border-radius:4px}.compare-card strong{display:block;font-size:12px;margin:12px 0 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e0c486}.compare-card small{font-size:10px;line-height:1.9;color:#bcae94;display:block}.portrait #sim-app{grid-template-rows:52px auto minmax(0,1fr) 28px}.portrait header{padding:8px 12px}.portrait h1{font-size:16px}.portrait .brand p{font-size:8px}.portrait .brand{gap:8px}.portrait .seal{width:26px;height:30px;font-size:20px}.portrait .local-badge{font-size:8px;padding:4px 6px}.portrait .controls{padding:8px 10px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.portrait .controls label{grid-column:span 3;max-width:none;gap:4px;font-size:9px}.portrait .controls button{min-height:29px;font-size:9px;padding:5px 3px}.portrait #generate{align-self:end;height:32px}.portrait .controls input{height:32px;font-size:11px}.portrait main{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 139px}.portrait aside{border-left:0;border-top:1px solid #d2b98929;display:grid;grid-template-columns:1fr 1.1fr;gap:12px;padding:9px 11px}.portrait aside h2{font-size:10px}.portrait aside h2 span{font-size:8px}.portrait aside section+section{border:0;padding:0;margin:0}.portrait .inspection #tile-info{font-size:9px;line-height:1.65;margin-top:6px}.portrait #tile-info strong{font-size:11px}.portrait .stats{gap:3px 9px;margin:6px 0}.portrait .stat{padding:0;border:0}.portrait .stat small{font-size:8px}.portrait .stat b{font-size:13px;line-height:1.6}.portrait .stat span{font-size:8px}.portrait #tier-stats,.portrait .legend-section,.portrait .storage-note{display:none}.portrait .map-toolbar{padding:6px 9px;gap:8px}.portrait .map-toolbar label{font-size:8px;gap:4px}.portrait .map-toolbar select{font-size:9px;max-width:98px;min-height:25px;padding:3px}.portrait .map-toolbar .check{font-size:0;margin:0}.portrait .map-toolbar .check input{margin:0}.portrait #map-hint{font-size:8px;left:8px;top:8px;padding:4px 6px}.portrait .map-buttons{right:7px;bottom:7px;gap:3px}.portrait .map-buttons button{font-size:9px;min-height:27px;min-width:26px;padding:4px 6px}.portrait footer{font-size:8px;padding:5px 9px}.portrait dialog{padding:12px;max-height:94%;width:96%}.portrait .dialog-heading h2{font-size:15px}.portrait .dialog-heading p{font-size:9px}.portrait #compare-grid{grid-template-columns:1fr 1fr;gap:8px}.portrait .compare-card{padding:7px}.portrait .compare-card strong{font-size:10px;margin:7px 0 4px}.portrait .compare-card small{font-size:8px}.portrait progress{width:180px}
+</style></head>
+<body><div id="sim-stage"><div id="sim-app">
+<header><div class="brand"><span class="seal" aria-hidden="true">道</span><div><h1>大世界種子模擬器</h1><p>青雲問道 · 1000 × 1000 格</p></div></div><span class="local-badge">本機模擬</span></header>
+<form id="seed-form" class="controls"><label>世界種子<input id="seed" maxlength="128" value="qingyun-2026" autocomplete="off" spellcheck="false"></label><button class="primary" type="submit" id="generate">生成世界</button><button type="button" id="random">隨機種子</button><button type="button" id="compare">比較四個種子</button><button type="button" id="export-json">匯出種子與變更</button><button type="button" id="import-json">匯入</button><input type="file" id="import-file" accept="application/json,.json" hidden></form>
+<main><section class="map-pane"><div class="map-toolbar"><label>地圖圖層<select id="layer"><option value="terrain">海陸地貌</option><option value="danger">怪物等級帶</option><option value="resources">礦脈與資源</option><option value="sites">秘境與結構</option></select></label><label>點格操作<select id="paint"><option value="inspect">查看地格</option><option value="road">鋪設道路</option><option value="bridge">架設橋樑</option><option value="grass">改為草地</option><option value="water">改為水域</option><option value="rock">放置岩壁</option><option value="restore">還原此格</option></select></label><label class="check"><input id="show-changes" type="checkbox" checked>顯示變更</label></div>
+<div class="map-stage"><canvas id="map" aria-label="世界總覽；拖曳平移、滾輪縮放，點擊查看地格" tabindex="0"></canvas><div id="map-hint">拖曳查看 · 滾輪縮放 · 點格查看</div><div class="map-buttons"><button id="zoom-in" type="button" aria-label="放大">＋</button><button id="zoom-out" type="button" aria-label="縮小">−</button><button id="fit" type="button">全圖</button><button id="spawn" type="button">宗門</button><button id="export-png" type="button">匯出圖</button></div><div id="loading" role="status"><span id="loading-label">正在生成世界</span><progress id="progress" max="100" value="0"></progress></div></div></section>
+<aside><section class="inspection"><h2>地格資訊 <span id="tile-coordinate">點選地圖</span></h2><div id="tile-info">選擇地格查看地貌、妖獸等級、秘境、結構或礦脈。放大後可看清相鄰地格。</div></section><section><h2>生成基底統計 <span id="generation-time"></span></h2><div id="stats" class="stats"></div><div id="tier-stats"></div></section><section class="legend-section"><h2>圖例與標記</h2><div id="legend" class="legend"></div><div class="marker-toggles"><label><input type="checkbox" data-marker="realm" checked>秘境</label><label><input type="checkbox" data-marker="structure" checked>結構</label><label><input type="checkbox" data-marker="monster">妖獸</label><label><input type="checkbox" data-marker="vein">礦脈</label></div></section><p class="storage-note">地形由種子在本機重建；匯出僅含種子、生成版本與改動地格，不包含百萬格基底。此工具不會修改正式世界。</p></aside></main>
+<footer><span id="status" role="status">準備生成</span><span id="storage">地圖變更 0 格</span></footer>
+<dialog id="compare-dialog"><div class="dialog-heading"><div><h2>四種世界，同一套生成規則</h2><p>選擇一張地圖，載入該種子繼續查看。</p></div><button id="close-compare" type="button" aria-label="關閉比較">×</button></div><div id="compare-grid"></div></dialog>
+</div></div><script id="world-core-source">/* The browser, simulator and authority share this versioned deterministic world. */
+(function(root){
+  'use strict';
+  const SIZE=1000,CHUNK_SIZE=32,CHUNK_COUNT=Math.ceil(SIZE/CHUNK_SIZE),STEP_MS=220;
+  const GENERATOR_VERSION='qingyun-seeded-v1',DEFAULT_SEED='qingyun-2026';
+  const SPAWN=Object.freeze({x:9,y:36}),DIRS=Object.freeze([[0,1],[1,0],[0,-1],[-1,0]]);
+  const TYPES=Object.freeze(['grass','road','courtyard','mountain','water','bridge','broken-bridge','bamboo','rock','sealed','ocean','beach','forest','desert','snow','swamp']);
+  const COLORS=Object.freeze({grass:'#719955',road:'#c4b485',courtyard:'#b2ac8e',mountain:'#829074',water:'#518f9c',bridge:'#b59464','broken-bridge':'#577e83',bamboo:'#638347',rock:'#7e887b',sealed:'#627e78',ocean:'#254c70',beach:'#d1c18b',forest:'#426c46',desert:'#b99a65',snow:'#c5d4d6',swamp:'#637963'});
+  const LABELS=Object.freeze({grass:'草原',road:'道路',courtyard:'宗門',mountain:'山地',water:'淺海／湖泊',bridge:'橋樑','broken-bridge':'斷橋',bamboo:'竹林',rock:'岩壁',sealed:'封印',ocean:'深海',beach:'海岸',forest:'森林',desert:'荒漠',snow:'雪原',swamp:'濕地'});
+  const TIERS=Object.freeze([
+    {name:'煉氣',level:1,iron:'qi-spirit-iron',wood:'qi-spirit-wood'},
+    {name:'築基',level:10,iron:'foundation-refined-iron',wood:'foundation-century-wood'},
+    {name:'金丹',level:20,iron:'golden-purple-iron',wood:'golden-lightning-wood'},
+    {name:'元嬰',level:30,iron:'nascent-star-iron',wood:'nascent-soul-wood'},
+    {name:'化神',level:40,iron:'nascent-star-iron',wood:'nascent-soul-wood'},
+    {name:'煉虛',level:50,iron:'nascent-star-iron',wood:'nascent-soul-wood'},
+    {name:'合體',level:60,iron:'nascent-star-iron',wood:'nascent-soul-wood'},
+    {name:'大乘',level:70,iron:'nascent-star-iron',wood:'nascent-soul-wood'}
+  ].map(Object.freeze));
+  const key=(x,y)=>x+','+y,index=(x,y)=>y*SIZE+x;
+  const inside=(x,y)=>Number.isInteger(x)&&Number.isInteger(y)&&x>=0&&y>=0&&x<SIZE&&y<SIZE;
+  const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),same=(a,b)=>!!a&&!!b&&a.x===b.x&&a.y===b.y;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  function seedHash(value){let h=2166136261;for(const c of String(value)){h^=c.codePointAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+  function mix(x,y,salt){let h=(Math.imul(x|0,0x1f123bb5)^Math.imul(y|0,0x5f356495)^salt)>>>0;h=Math.imul(h^(h>>>16),0x7feb352d);h=Math.imul(h^(h>>>15),0x846ca68b);return(h^(h>>>16))>>>0;}
+  function descriptor(input={}){
+    if(typeof input==='string'||typeof input==='number')input={seed:String(input)};
+    if(input.generatorVersion&&input.generatorVersion!==GENERATOR_VERSION)throw Error('地圖生成器版本不相容');
+    if(input.size&&input.size!==SIZE||input.chunkSize&&input.chunkSize!==CHUNK_SIZE)throw Error('地圖尺寸不相容');
+    const seed=String(input.seed??DEFAULT_SEED).trim().slice(0,128)||DEFAULT_SEED;
+    return Object.freeze({seed,size:SIZE,chunkSize:CHUNK_SIZE,generatorVersion:GENERATOR_VERSION,worldId:GENERATOR_VERSION+'-'+seedHash(seed).toString(16).padStart(8,'0')});
+  }
+  const STARTER_OBJECTS = Object.freeze([
+    {id:'meditation',x:5,y:31,kind:'building',name:'修煉室',icon:'修',entry:'core'},
+    {id:'forge',x:13,y:32,kind:'building',name:'鍛造坊',icon:'煉',entry:'refinery'},
+    {id:'contract',x:14,y:39,kind:'building',name:'契器閣',icon:'契',entry:'contract'},
+    {id:'vault',x:5,y:39,kind:'building',name:'寶庫',icon:'庫',entry:'bag'},
+    {id:'rank',x:4,y:35,kind:'building',name:'仙榜',icon:'榜',entry:'rank'},
+    {id:'quest',x:11,y:34,kind:'npc',name:'宗門執事',icon:'任'},
+    {id:'duel',x:16,y:35,kind:'building',name:'論道台',icon:'鬥',entry:'duel'},
+    {id:'raid',x:17,y:31,kind:'building',name:'秘境之門',icon:'境',entry:'raid'},
+    {id:'herb-a',x:12,y:26,kind:'gather',name:'青靈木',material:'qi-spirit-wood',icon:'木'},
+    {id:'ore-a',x:21,y:23,kind:'gather',name:'玄鐵礦',material:'qi-spirit-iron',icon:'鐵'},
+    {id:'herb-b',x:23,y:13,kind:'gather',name:'青靈木',material:'qi-spirit-wood',icon:'木'},
+    {id:'ore-b',x:34,y:14,kind:'gather',name:'玄鐵礦',material:'qi-spirit-iron',icon:'鐵'},
+    {id:'chest-a',x:19,y:26,kind:'chest',name:'林間遺箱',icon:'寶'},
+    {id:'chest-b',x:33,y:27,kind:'chest',name:'溪畔遺箱',icon:'寶'},
+    {id:'chest-array',x:39,y:4,kind:'chest',name:'古陣秘藏',icon:'寶'},
+    {id:'wolf',x:18,y:22,kind:'monster',name:'竹林靈狼',icon:'狼',hp:700,atk:150},
+    {id:'boar',x:22,y:18,kind:'monster',name:'玄甲山豬',icon:'獸',hp:850,atk:170},
+    {id:'sister',x:20,y:29,kind:'monster',name:'大師姐・試劍',icon:'劍',hp:1600,atk:210,elite:true},
+    {id:'sentinel',x:37,y:12,kind:'monster',name:'古陣守衛',icon:'衛',hp:1400,atk:200,elite:true},
+    {id:'bridge',x:25,y:27,kind:'event',name:'修復青溪橋',icon:'橋'},
+    {id:'array',x:39,y:8,kind:'event',name:'共破古陣',icon:'陣'}
+  ].map(Object.freeze));
+  const legacyHash=(x,y)=>((Math.imul(x+91,73856093)^Math.imul(y+17,19349663))>>>0);
+  const STARTER_TERRAIN=(()=>{const SIZE=48,OBJECTS=STARTER_OBJECTS,hash=legacyHash,index=(x,y)=>y*48+x,inside=(x,y)=>x>=0&&y>=0&&x<48&&y<48;
+  function makeTerrain() {
+    const cells = Array.from({length:SIZE*SIZE},(_,i)=>{
+      const x=i%SIZE,y=Math.floor(i/SIZE),h=hash(x,y);
+      if(!x||!y||x===47||y===47)return 'rock';
+      if(x>=26&&x<=27&&y<=33)return 'water';
+      if(x>30&&y<19)return h%9===0?'rock':'mountain';
+      if(y<30&&x<26)return h%7===0?'bamboo':'grass';
+      return h%43===0?'rock':'grass';
+    });
+    const set=(x,y,t)=>{if(inside(x,y))cells[index(x,y)]=t;};
+    const rect=(x,y,w,h,t)=>{for(let j=y;j<y+h;j++)for(let i=x;i<x+w;i++)set(i,j,t);};
+    rect(2,30,16,15,'courtyard');
+    function road(a,b){let x=a.x,y=a.y;set(x,y,'road');while(x!==b.x||y!==b.y){if(x!==b.x)x+=Math.sign(b.x-x);else y+=Math.sign(b.y-y);set(x,y,'road');}}
+    const waypoints=[SPAWN,{x:9,y:28},{x:18,y:28},{x:18,y:17},{x:32,y:17},{x:32,y:9},{x:42,y:9}];
+    waypoints.slice(1).forEach((p,i)=>road(waypoints[i],p));
+    road({x:9,y:36},{x:16,y:36});road({x:9,y:36},{x:9,y:42});
+    road({x:18,y:27},{x:35,y:27});
+    // The north crossing is always open; repairing the south bridge adds a shortcut.
+    rect(26,17,2,1,'bridge');rect(26,27,2,1,'broken-bridge');
+    for(const o of OBJECTS){
+      // Interactions always have a clear approach. This is shared terrain, not random per login.
+      for(let y=o.y-1;y<=o.y+1;y++)for(let x=o.x-1;x<=o.x+1;x++){
+        if(['bamboo','rock'].includes(cells[index(x,y)]))set(x,y,o.y<19&&x>30?'mountain':'grass');
+      }
+      set(o.x,o.y,o.kind==='building'?'courtyard':o.y<19&&o.x>30?'mountain':'grass');
+    }
+    // Completing the shared array opens the only entrance to its optional treasure court.
+    rect(36,2,7,5,'mountain');rect(36,2,7,1,'rock');rect(36,6,7,1,'rock');
+    rect(36,2,1,5,'rock');rect(42,2,1,5,'rock');set(39,6,'sealed');
+    return Object.freeze(cells);
+  }
+  const TERRAIN = makeTerrain();
+return TERRAIN;})();
+  const HEX='0123456789abcdef',fogValue=c=>HEX.indexOf(c);
+  const validChunk=k=>typeof k==='string'&&/^\d{1,2},\d{1,2}$/.test(k)&&k.split(',').every(n=>Number(n)<CHUNK_COUNT)&&k.split(',').map(Number).join(',')===k;
+  const chunkKey=(x,y)=>key(Math.floor(x/CHUNK_SIZE),Math.floor(y/CHUNK_SIZE));
+  function normalizeExplored(raw){
+    if(raw?.version===2&&raw.chunks&&typeof raw.chunks==='object'){
+      const chunks={};for(const[k,v]of Object.entries(raw.chunks).slice(0,CHUNK_COUNT**2))if(validChunk(k)&&typeof v==='string'&&/^[0-9a-f]{256}$/.test(v))chunks[k]=v;
+      return {version:2,chunks,revision:Number(raw.revision)||0,...(raw.all===true?{all:true}:{})};
+    }
+    let fog={version:2,chunks:{},revision:0};
+    // Preserve the original onboarding fog without expanding it into a million-character string.
+    if(typeof raw==='string'&&raw.length===2304){for(let y=0;y<48;y++)for(let x=0;x<48;x++)if(raw[y*48+x]==='1')fog=reveal(fog,{x,y},0);}
+    return fog;
+  }
+  function known(fog,x,y){
+    if(!inside(x,y))return false;if(fog?.all)return true;
+    const s=fog?.chunks?.[chunkKey(x,y)],i=(y%32)*32+x%32;
+    return !!s&&(fogValue(s[i>>2])&(1<<(i&3)))!==0;
+  }
+  function reveal(raw,p,radius=5){
+    const fog=raw?.version===2?raw:normalizeExplored(raw);if(fog.all)return fog;
+    const chunks={...fog.chunks},changed=new Map();let dirty=false;
+    for(let y=Math.max(0,p.y-radius);y<=Math.min(SIZE-1,p.y+radius);y++)for(let x=Math.max(0,p.x-radius);x<=Math.min(SIZE-1,p.x+radius);x++){
+      if(Math.hypot(x-p.x,y-p.y)>radius+.3)continue;
+      const k=chunkKey(x,y),cells=changed.get(k)||chunks[k]?.split('')||Array(256).fill('0');changed.set(k,cells);
+      const i=(y%32)*32+x%32,n=i>>2,bits=fogValue(cells[n]),next=bits|(1<<(i&3));if(bits!==next){cells[n]=HEX[next];dirty=true;}
+    }
+    if(!dirty)return fog;for(const[k,v]of changed)chunks[k]=v.join('');return {version:2,chunks,revision:(fog.revision||0)+1};
+  }
+  function mergeExplored(a,b){
+    a=normalizeExplored(a);b=normalizeExplored(b);if(a.all||b.all)return {version:2,chunks:{},all:true,revision:Math.max(a.revision,b.revision)+1};
+    const chunks={...a.chunks};for(const[k,v]of Object.entries(b.chunks))chunks[k]=!chunks[k]?v:[...v].map((c,i)=>HEX[fogValue(c)|fogValue(chunks[k][i])]).join('');
+    return {version:2,chunks,revision:Math.max(a.revision,b.revision)+1};
+  }
+  function initialExplored(){let fog=normalizeExplored();for(let y=29;y<=46;y++)for(let x=1;x<=18;x++)fog=reveal(fog,{x,y},0);return reveal(fog,SPAWN);}
+  const fullExplored=()=>({version:2,chunks:{},all:true,revision:1});
+  function sample(route,at=Date.now()){
+    const path=route?.path?.length?route.path:[SPAWN],stepMs=route?.stepMs||STEP_MS;
+    const progress=Math.max(0,(at-(route?.startedAtMs||0))/stepMs),i=Math.min(path.length-1,Math.floor(progress)),a=path[i],b=path[Math.min(i+1,path.length-1)],f=Math.min(1,progress-i);
+    const from=i<path.length-1?a:path[Math.max(0,i-1)],to=i<path.length-1?b:a;
+    return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f,tile:{...a},next:{...b},fraction:f,index:i,moving:i<path.length-1,direction:to.x>from.x?'right':to.x<from.x?'left':to.y<from.y?'up':'down'};
+  }
+  class Heap{
+    constructor(){this.a=[];}
+    push(v){const a=this.a;let i=a.length;a.push(v);while(i){const p=(i-1)>>1;if(a[p].f<=v.f)break;a[i]=a[p];i=p;}a[i]=v;}
+    pop(){const a=this.a,first=a[0],v=a.pop();if(a.length){let i=0;while(i*2+1<a.length){let j=i*2+1;if(j+1<a.length&&a[j+1].f<a[j].f)j++;if(a[j].f>=v.f)break;a[i]=a[j];i=j;}a[i]=v;}return first;}
+  }
+  function pathTo(target,parents){if(!parents.has(key(target.x,target.y)))return [];const path=[];for(let p=target;p;p=parents.get(key(p.x,p.y)))path.push({x:p.x,y:p.y});return path.reverse();}
+  function createWorld(input={}){
+    const config=descriptor(input),salt=seedHash(config.seed),seedHex=salt.toString(16).padStart(8,'0'),cache=new Map(),patches=new Map();let patchRevision=0;
+    const hash=(x,y,layer=0)=>mix(x,y,salt^Math.imul(layer,0x9e3779b9));
+    function noise(x,y,scale,layer){const X=x/scale,Y=y/scale,ix=Math.floor(X),iy=Math.floor(Y);let u=X-ix,v=Y-iy;u=u*u*(3-2*u);v=v*v*(3-2*v);
+      const h=(a,b)=>hash(a,b,layer)/4294967295,a=h(ix,iy),b=h(ix+1,iy),c=h(ix,iy+1),d=h(ix+1,iy+1);return(a+(b-a)*u)*(1-v)+(c+(d-c)*u)*v;}
+    function climate(x,y){
+      let elevation=.57*noise(x,y,190,1)+.27*noise(x,y,77,2)+.11*noise(x,y,29,3)+.05*noise(x,y,11,4);
+      const start=Math.hypot(x-30,y-35);elevation=Math.max(elevation,.68-start*.0018);
+      const edge=Math.min(x,y,SIZE-1-x,SIZE-1-y);if(edge<12&&x>100&&y>100)elevation-=.15*(1-edge/12);
+      return {elevation,humidity:noise(x,y,105,5),temperature:noise(x,y,210,6)*.65+(y/SIZE)*.35};
+    }
+    function baseTerrain(x,y){
+      if(!inside(x,y))return 'rock';
+      if(x<48&&y<48){if(x>=45&&y===36)return 'road';return STARTER_TERRAIN[y*48+x];}
+      if(x>=48&&x<80&&Math.abs(y-36)<=1)return y===36?'road':'grass';
+      const {elevation:e,humidity:h,temperature:t}=climate(x,y);
+      if(e<.405)return 'ocean';if(e<.46)return 'water';if(e<.49)return 'beach';
+      if(e>.76)return 'rock';if(e>.65)return t<.35?'snow':'mountain';
+      if(t<.22)return 'snow';if(h<.29&&t>.45)return 'desert';if(h>.72&&e<.56)return 'swamp';if(h>.53)return 'forest';return 'grass';
+    }
+    const tierAt=(x,y)=>clamp(Math.floor(Math.hypot(x-SPAWN.x,y-SPAWN.y)/155),0,TIERS.length-1);
+    function chunk(cx,cy){
+      if(!Number.isInteger(cx)||!Number.isInteger(cy)||cx<0||cy<0||cx>=CHUNK_COUNT||cy>=CHUNK_COUNT)throw Error('區塊座標無效');
+      const k=key(cx,cy);if(cache.has(k)){const found=cache.get(k);cache.delete(k);cache.set(k,found);return found;}
+      const x0=cx*32,y0=cy*32,tiles=new Uint8Array(1024),objects=[],occupied=new Set();
+      for(let y=0;y<32;y++)for(let x=0;x<32;x++)tiles[y*32+x]=TYPES.indexOf(baseTerrain(x0+x,y0+y));
+      const place=o=>{if(!inside(o.x,o.y)||occupied.has(key(o.x,o.y)))return false;occupied.add(key(o.x,o.y));objects.push(Object.freeze(o));return true;};
+      for(const o of STARTER_OBJECTS)if(o.x>=x0&&o.x<x0+32&&o.y>=y0&&o.y<y0+32)place(o);
+      const dry=(x,y)=>inside(x,y)&&!['water','ocean','rock'].includes(baseTerrain(x,y));
+      const make=(slot,kind,x,y,extra={})=>{
+        const tier=tierAt(x,y),level=TIERS[tier].level+hash(x,y,12)%9;
+        return {id:'g:'+seedHex+':'+cx+':'+cy+':'+slot,x,y,kind,tier,level,realm:TIERS[tier].name,...extra};
+      };
+      for(let slot=0;slot<12;slot++){
+        const h=hash(cx*13+slot,cy,20),x=x0+2+h%28,y=y0+2+(h>>>9)%28;if(x<50&&y<50||!dry(x,y))continue;
+        if(!DIRS.every(([dx,dy])=>dry(x+dx,y+dy)))continue;
+        const tier=tierAt(x,y),t=TIERS[tier],hp=Math.round(650*(1+tier*.65)**2),atk=Math.round(140*(1+tier*.48));
+        if(slot===0&&h%10<7){const variants=['靈泉洞天','古陣秘境','藏劍遺窟','星隕石窟'],variant=(h>>>19)%4;
+          place(make(slot,'realm',x,y,{name:variants[variant],icon:'境',subtype:variant===2?'guardian':'puzzle',hp:hp*2,atk:Math.round(atk*1.2),elite:true}));
+        }else if(slot===1&&h%10<7){const variants=[['watchtower','古代望樓','望'],['shrine','山神祭壇','壇'],['ruins','殘破仙府','遺'],['camp','行腳營地','營']],v=variants[(h>>>18)%4];
+          place(make(slot,'structure',x,y,{subtype:v[0],name:v[1],icon:v[2]}));
+        }else if(slot>=2&&slot<=5){const v=['山魈','靈狼','巖甲獸','妖藤','霜羽鷹'][(h>>>20)%5];place(make(slot,'monster',x,y,{name:t.name+'・'+v,icon:'獸',hp,atk,elite:h%13===0}));
+        }else if(slot===6||slot===7){place(make(slot,'gather',x,y,{name:t.name+'靈木',material:t.wood,icon:'木'}));
+        }else if(slot===8){place(make(slot,'chest',x,y,{name:'散修遺藏',icon:'寶'}));}
+      }
+      // Contiguous ore veins are generated from one anchor and direction per vein.
+      for(let vein=0;vein<2;vein++){
+        const h=hash(cx,cy,40+vein),sx=2+h%23,sy=2+(h>>>8)%23,length=3+(h>>>19)%5,vertical=!!(h&256);
+        const nodes=[];
+        for(let n=0;n<length;n++){
+          const lx=sx+(vertical?0:n),ly=sy+(vertical?n:0),x=x0+lx,y=y0+ly;
+          if(lx>=31||ly>=31||x<50&&y<50||!dry(x,y)||occupied.has(key(x,y))||!DIRS.some(([dx,dy])=>dry(x+dx,y+dy))){if(nodes.length)break;continue;}
+          const t=TIERS[tierAt(x,y)];nodes.push(make(80+vein*8+n,'gather',x,y,{name:t.name+'礦脈',icon:'礦',material:t.iron,veinId:'vein:'+seedHex+':'+cx+':'+cy+':'+vein}));
+        }
+        nodes.forEach((o,i)=>place({...o,veinLength:nodes.length,veinAnchor:i===0}));
+      }
+      const value=Object.freeze({cx,cy,key:k,tiles,objects:Object.freeze(objects)});cache.set(k,value);if(cache.size>192)cache.delete(cache.keys().next().value);return value;
+    }
+    function objectsIn(bounds){
+      const out=[],x0=clamp(Math.floor(bounds.x/32),0,CHUNK_COUNT-1),y0=clamp(Math.floor(bounds.y/32),0,CHUNK_COUNT-1),x1=clamp(Math.floor((bounds.x+bounds.w-1)/32),0,CHUNK_COUNT-1),y1=clamp(Math.floor((bounds.y+bounds.h-1)/32),0,CHUNK_COUNT-1);
+      for(let cy=y0;cy<=y1;cy++)for(let cx=x0;cx<=x1;cx++)for(const o of chunk(cx,cy).objects)if(o.x>=bounds.x&&o.x<bounds.x+bounds.w&&o.y>=bounds.y&&o.y<bounds.y+bounds.h)out.push(o);
+      return out;
+    }
+    function objectAt(x,y){return inside(x,y)?chunk(Math.floor(x/32),Math.floor(y/32)).objects.find(o=>o.x===x&&o.y===y):undefined;}
+    function object(id){
+      const starter=STARTER_OBJECTS.find(o=>o.id===id);if(starter)return starter;
+      const m=/^g:([0-9a-f]{8}):(\d{1,2}):(\d{1,2}):(\d{1,3})$/.exec(String(id));if(!m||m[1]!==seedHex||Number(m[2])>=CHUNK_COUNT||Number(m[3])>=CHUNK_COUNT)return undefined;
+      return chunk(Number(m[2]),Number(m[3])).objects.find(o=>o.id===id);
+    }
+    function installPatches(changes={}){
+      for(const[k,data]of Object.entries(changes)){
+        if(!validChunk(k)||!Number.isSafeInteger(data?.revision)||data.revision<0)throw Error('區塊變更版本無效');
+        const clean={},[cx,cy]=k.split(',').map(Number);for(const[i,v]of Object.entries(data.tiles||{})){
+          if(!/^\d{1,4}$/.test(i)||String(Number(i))!==i||Number(i)>=1024||!inside(cx*32+Number(i)%32,cy*32+Math.floor(Number(i)/32))||!TYPES.includes(v?.terrain))throw Error('地格變更無效');clean[i]={terrain:v.terrain};
+        }
+        if((patches.get(k)?.revision??-1)>data.revision)continue;
+        patches.set(k,{revision:data.revision,tiles:clean});patchRevision++;
+      }
+    }
+    function terrain(x,y,events={}){
+      if(!inside(x,y))return 'rock';if(events.tiles?.[key(x,y)])return events.tiles[key(x,y)];
+      const patch=patches.get(chunkKey(x,y))?.tiles[(y%32)*32+x%32];
+      let t=patch?.terrain||TYPES[chunk(Math.floor(x/32),Math.floor(y/32)).tiles[(y%32)*32+x%32]];
+      if(t==='sealed'&&events.array>=60)t='road';if(t==='broken-bridge'&&events.bridge>=20)t='bridge';return t;
+    }
+    function walkable(x,y,{events={},bounds=null,blocked=null,ignoreObjects=false,mode='walk'}={}){
+      if(!inside(x,y)||bounds&&(x<bounds.x||y<bounds.y||x>=bounds.x+bounds.w||y>=bounds.y+bounds.h)||blocked?.has(key(x,y)))return false;
+      const t=terrain(x,y,events),sea=['water','ocean'];
+      if(mode==='sail'){
+        if(!sea.includes(t)&&t!=='beach'&&!DIRS.some(([dx,dy])=>sea.includes(terrain(x+dx,y+dy,events))))return false;
+        if(['rock','bamboo','sealed','broken-bridge'].includes(t))return false;
+      }else if([...sea,'rock','bamboo','broken-bridge','sealed'].includes(t))return false;
+      const o=objectAt(x,y);return !(!ignoreObjects&&o?.kind==='building');
+    }
+    function reachable(start,options={}){
+      const queue=[{x:start.x,y:start.y}],parents=new Map([[key(start.x,start.y),null]]),cost=new Map([[key(start.x,start.y),0]]),max=options.maxNodes||20000;
+      for(let n=0;n<queue.length&&n<max;n++){
+        const p=queue[n],depth=cost.get(key(p.x,p.y));if(depth>=(options.maxSteps??512))continue;
+        for(const[dx,dy]of DIRS){const x=p.x+dx,y=p.y+dy,k=key(x,y);if(parents.has(k)||!walkable(x,y,options)||options.explored&&!known(options.explored,x,y)||queue.length>=max)continue;
+          const next={x,y};parents.set(k,p);cost.set(k,depth+1);queue.push(next);}
+      }
+      return {cells:queue,parents,cost};
+    }
+    function plan(start,target,options={}){
+      if(!inside(target?.x,target?.y))return {path:[],reason:'目的地不在地圖內'};
+      const open=new Heap(),parents=new Map([[key(start.x,start.y),null]]),cost=new Map([[key(start.x,start.y),0]]),unknown=options.explored&&!known(options.explored,target.x,target.y);
+      if(!unknown&&!same(start,target)&&!walkable(target.x,target.y,options))return {path:[],reason:'目的地無法通行'};
+      let best=start,frontier=null,visited=0;const maxNodes=options.maxNodes||12000,maxSteps=options.maxSteps??512;open.push({...start,f:distance(start,target),g:0});
+      while(open.a.length&&visited<maxNodes){
+        const p=open.pop(),k=key(p.x,p.y);if(cost.get(k)!==p.g)continue;visited++;
+        if(distance(p,target)<distance(best,target))best=p;
+        if(same(p,target))return {path:pathTo(p,parents),partial:false,visited};
+        if(unknown&&DIRS.some(([dx,dy])=>inside(p.x+dx,p.y+dy)&&!known(options.explored,p.x+dx,p.y+dy))&&(!frontier||distance(p,target)<distance(frontier,target)||distance(p,target)===distance(frontier,target)&&p.g<frontier.g))frontier=p;
+        if(p.g>=maxSteps)continue;
+        for(const[dx,dy]of DIRS){const x=p.x+dx,y=p.y+dy,n=key(x,y),g=p.g+1;
+          if(!walkable(x,y,options)||options.explored&&!known(options.explored,x,y)||(cost.get(n)??Infinity)<=g)continue;
+          cost.set(n,g);parents.set(n,{x:p.x,y:p.y});open.push({x,y,g,f:g+distance({x,y},target)});
+        }
+      }
+      if(frontier)return {path:pathTo(frontier,parents),partial:true,visited};
+      if(options.explored&&options.maxSteps===undefined&&(visited>=maxNodes||cost.get(key(best.x,best.y))>=maxSteps)&&!same(best,start))return {path:pathTo(best,parents),partial:true,limited:true,visited};
+      return {path:[],visited,reason:'此處無法通行，請選擇道路、空地或合適的航行路線'};
+    }
+    function approach(start,target,options={}){
+      if(!target)return {path:[],reason:'目標不存在'};if(distance(start,target)<=1)return {path:[{x:start.x,y:start.y}],partial:false};
+      const choices=DIRS.map(([dx,dy])=>({x:target.x+dx,y:target.y+dy})).filter(p=>walkable(p.x,p.y,options)).map(p=>plan(start,p,options)).filter(p=>p.path.length);
+      choices.sort((a,b)=>Number(a.partial)-Number(b.partial)||a.path.length-b.path.length);return choices[0]||{path:[],reason:'找不到可接近的道路'};
+    }
+    function safePosition(p,options={}){
+      if(inside(p?.x,p?.y)&&walkable(p.x,p.y,options))return {x:p.x,y:p.y};const origin=inside(p?.x,p?.y)?p:SPAWN,b=options.bounds;
+      for(let d=0;d<=64;d++)for(let dy=-d;dy<=d;dy++){const dx=d-Math.abs(dy);for(const sign of dx?[1,-1]:[1]){const x=origin.x+dx*sign,y=origin.y+dy;if(walkable(x,y,options))return {x,y};}}
+      if(b){for(let y=b.y;y<b.y+b.h;y++)for(let x=b.x;x<b.x+b.w;x++)if(walkable(x,y,options))return {x,y};throw Error('此區域沒有安全地格');}
+      return {...SPAWN};
+    }
+    function redirect(route,target,at,options={}){
+      const p=sample(route,at),start=p.moving?p.next:p.tile,result=target?.objectId?approach(start,object(target.objectId),options):plan(start,target,options);
+      if(!result.path.length)return result;const path=p.moving?[p.tile,...result.path]:result.path;
+      return {...result,route:{path,stepMs:STEP_MS,startedAtMs:at-(p.moving?p.fraction*STEP_MS:0)}};
+    }
+    const zone=p=>p.x<48&&p.y<48?(p.y>=30&&p.x<19?'問道宗':p.x>29&&p.y<20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
+    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,SPAWN,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
+      key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
+      patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
+    return Object.freeze(api);
+  }
+  const worlds=new Map();
+  function forDescriptor(input){const d=descriptor(input);if(!worlds.has(d.worldId)){worlds.set(d.worldId,createWorld(d));if(worlds.size>8)worlds.delete(worlds.keys().next().value);}return worlds.get(d.worldId);}
+  const defaultWorld=createWorld();
+  const api=Object.freeze({...defaultWorld,createWorld,forDescriptor,validateDescriptor:descriptor,get patchRevision(){return defaultWorld.patchRevision;},get cachedChunks(){return defaultWorld.cachedChunks;}});
+  if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorld=api;
+})(globalThis);
+</script><script id="world-worker-source" type="text/plain">/* Pure generation/analysis: no network, account, game save or database. */
+(function(){
+  'use strict';
+  const Core=typeof module==='object'&&module.exports?require('./world-core.js'):self.QAGridWorld;
+  function generate(seed,progress=()=>{}){
+    const started=performance.now(),world=Core.createWorld(seed),size=world.SIZE,tiles=new Uint8Array(size*size),objects=[];
+    for(let cy=0;cy<world.CHUNK_COUNT;cy++){
+      for(let cx=0;cx<world.CHUNK_COUNT;cx++){
+        const chunk=world.chunk(cx,cy),w=Math.min(32,size-cx*32),h=Math.min(32,size-cy*32);
+        for(let y=0;y<h;y++)tiles.set(chunk.tiles.subarray(y*32,y*32+w),(cy*32+y)*size+cx*32);
+        objects.push(...chunk.objects);
+      }
+      if(cy%4===0)progress(Math.round((cy+1)/world.CHUNK_COUNT*75));
+    }
+    const counts=Object.fromEntries(world.TYPES.map(t=>[t,0])),tiers=Array(8).fill(0),kinds={},veins=new Set();let fingerprint=2166136261;
+    const blocked=new Set(['water','ocean','rock','bamboo','broken-bridge','sealed'].map(t=>world.TYPES.indexOf(t))),visited=new Uint8Array(size*size),queue=new Uint32Array(size*size);
+    for(const code of tiles){counts[world.TYPES[code]]++;fingerprint=Math.imul(fingerprint^code,16777619);}
+    for(const o of objects){kinds[o.kind]=(kinds[o.kind]||0)+1;if(o.kind==='monster')tiers[o.tier||0]++;if(o.veinId)veins.add(o.veinId);}
+    let islands=0,largest=0,spawnConnected=0,walkable=0;
+    for(let i=0;i<tiles.length;i++){
+      if(visited[i]||blocked.has(tiles[i]))continue;let head=0,tail=1,spawn=false;queue[0]=i;visited[i]=1;
+      while(head<tail){const n=queue[head++],x=n%size,y=(n/size)|0;if(x===world.SPAWN.x&&y===world.SPAWN.y)spawn=true;
+        for(const next of [x? n-1:-1,x<size-1?n+1:-1,y?n-size:-1,y<size-1?n+size:-1])if(next>=0&&!visited[next]&&!blocked.has(tiles[next])){visited[next]=1;queue[tail++]=next;}
+      }
+      if(tail>=16)islands++;if(tail>largest)largest=tail;if(spawn)spawnConnected=tail;walkable+=tail;
+    }
+    progress(95);
+    return {world:world.descriptor,tiles,objects,stats:{counts,tiers,kinds,veins:veins.size,islands,largestLand:largest,spawnConnected,walkable,
+      landRatio:1-(counts.water+counts.ocean)/(size*size),fingerprint:(fingerprint>>>0).toString(16).padStart(8,'0'),milliseconds:Math.round(performance.now()-started),chunks:world.CHUNK_COUNT**2}};
+  }
+  if(typeof module==='object'&&module.exports){module.exports={generate};return;}
+  self.onmessage=event=>{
+    const {id,kind,seeds,seed}=event.data||{};
+    try{
+      if(kind==='compare'){
+        const results=[];for(let i=0;i<seeds.length;i++){
+          const result=generate(seeds[i],pct=>self.postMessage({type:'progress',id,pct:Math.round((i+pct/100)/seeds.length*100)}));
+          const mini=new Uint8Array(200*200);for(let y=0;y<200;y++)for(let x=0;x<200;x++)mini[y*200+x]=result.tiles[y*5*1000+x*5];
+          results.push({world:result.world,stats:result.stats,mini});
+        }
+        self.postMessage({type:'comparison',id,results},results.map(r=>r.mini.buffer));
+      }else{
+        const result=generate(seed,pct=>self.postMessage({type:'progress',id,pct}));self.postMessage({type:'world',id,...result},[result.tiles.buffer]);
+      }
+    }catch(error){self.postMessage({type:'error',id,message:error.message});}
+  };
+})();
+</script><script>(function(){
+  'use strict';
+  const Core=globalThis.QAGridWorld,$=id=>document.getElementById(id),canvas=$('map'),context=canvas.getContext('2d');
+  const app=$('sim-app'),stage=$('sim-stage'),tierColors=['#a0b57c','#b4bd7c','#d2b877','#cd9467','#b5829e','#927fb6','#647eaa','#b66367'];
+  const markerColors={realm:'#e1b2ed',structure:'#f2d393',monster:'#d67a69',vein:'#d3b75a'};
+  let model=null,world=null,worker=null,task=0,view={x:500,y:500,scale:1},width=1,height=1,drag=null,selected=null,overview=null,overviewLayer='',patches={},revisions={},renderQueued=false;
+  const workerURL=URL.createObjectURL(new Blob([$('world-core-source').textContent,'\n',$('world-worker-source').textContent],{type:'text/javascript'}));
+  const format=n=>Number(n||0).toLocaleString('zh-TW');
+  const status=text=>{$('status').textContent=text;};
+  function fitApp(){
+    const portrait=innerWidth<innerHeight,w=portrait?360:1280,h=portrait?640:720,scale=Math.min(innerWidth/w,innerHeight/h);
+    stage.classList.toggle('portrait',portrait);Object.assign(stage.style,{left:(innerWidth-w*scale)/2+'px',top:(innerHeight-h*scale)/2+'px',width:w*scale+'px',height:h*scale+'px'});
+    Object.assign(app.style,{width:w+'px',height:h+'px',transform:'scale('+scale+')'});resize();
+  }
+  function resize(){width=canvas.clientWidth;height=canvas.clientHeight;const dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);context.setTransform(dpr,0,0,dpr,0,0);if(model&&view.fit)fitMap();draw();}
+  function fitMap(){view={x:500,y:500,scale:Math.min(width/1000,height/1000)*.96,fit:true};draw();}
+  const colorParts=hex=>[parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];
+  const palette=Core.TYPES.map(t=>colorParts(Core.COLORS[t])),dangerPalette=tierColors.map(colorParts);
+  function pixelColor(type,x,y,layer){
+    const code=Core.TYPES.indexOf(type),sea=type==='ocean'||type==='water';
+    if(layer==='danger'&&!sea)return dangerPalette[world.tierAt(x,y)];
+    const rgb=palette[code]||[0,0,0];return layer==='resources'||layer==='sites'?rgb.map(v=>Math.round(v*.48)):rgb;
+  }
+  function makeOverview(){
+    if(!model)return;const layer=$('layer').value;if(overview&&overviewLayer===layer)return;overviewLayer=layer;
+    overview=document.createElement('canvas');overview.width=1000;overview.height=1000;const c=overview.getContext('2d'),data=c.createImageData(1000,1000);
+    for(let i=0;i<model.tiles.length;i++){const rgb=pixelColor(Core.TYPES[model.tiles[i]],i%1000,(i/1000)|0,layer),j=i*4;data.data[j]=rgb[0];data.data[j+1]=rgb[1];data.data[j+2]=rgb[2];data.data[j+3]=255;}
+    c.putImageData(data,0,0);
+  }
+  function visiblePoint(x,y){return {x:width/2+(x-view.x)*view.scale,y:height/2+(y-view.y)*view.scale};}
+  function worldPoint(event){const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)*width/r.width,y=(event.clientY-r.top)*height/r.height;return{x:(x-width/2)/view.scale+view.x,y:(y-height/2)/view.scale+view.y,screenX:x,screenY:y};}
+  function paintDeltas(c,scale=1,origin={x:0,y:0}){
+    if(!$('show-changes').checked)return;
+    for(const[k,chunk]of Object.entries(patches)){const[cx,cy]=k.split(',').map(Number);for(const[i,v]of Object.entries(chunk.tiles)){const n=Number(i),x=cx*32+n%32,y=cy*32+Math.floor(n/32),rgb=pixelColor(v.terrain,x,y,$('layer').value);c.fillStyle='rgb('+rgb.join(',')+')';c.fillRect(origin.x+x*scale,origin.y+y*scale,Math.max(1,scale+.1),Math.max(1,scale+.1));}}
+  }
+  function drawNow(){
+    renderQueued=false;context.clearRect(0,0,width,height);context.fillStyle='#10181b';context.fillRect(0,0,width,height);if(!model)return;makeOverview();
+    const origin=visiblePoint(0,0);context.imageSmoothingEnabled=false;context.drawImage(overview,origin.x,origin.y,1000*view.scale,1000*view.scale);paintDeltas(context,view.scale,origin);
+    if(view.scale>=7){context.strokeStyle='#eee4d01c';context.lineWidth=1;const left=Math.max(0,Math.floor(view.x-width/view.scale/2)),right=Math.min(1000,Math.ceil(view.x+width/view.scale/2)),top=Math.max(0,Math.floor(view.y-height/view.scale/2)),bottom=Math.min(1000,Math.ceil(view.y+height/view.scale/2));
+      context.beginPath();for(let x=left;x<=right;x++){const p=visiblePoint(x,top),q=visiblePoint(x,bottom);context.moveTo(p.x,p.y);context.lineTo(q.x,q.y);}for(let y=top;y<=bottom;y++){const p=visiblePoint(left,y),q=visiblePoint(right,y);context.moveTo(p.x,p.y);context.lineTo(q.x,q.y);}context.stroke();}
+    const enabled=new Set([...document.querySelectorAll('[data-marker]:checked')].map(n=>n.dataset.marker)),layer=$('layer').value;
+    for(const o of model.objects){const kind=o.veinId?'vein':o.kind;if(!enabled.has(kind)&&!(layer==='resources'&&(kind==='vein'||kind==='gather'))&&!(layer==='sites'&&(kind==='realm'||kind==='structure')))continue;
+      if(kind==='vein'&&view.scale<4&&!o.veinAnchor)continue;
+      const p=visiblePoint(o.x+.5,o.y+.5);if(p.x<0||p.y<0||p.x>width||p.y>height)continue;context.fillStyle=markerColors[kind]||'#a9d281';const radius=view.scale<1?(kind==='realm'?1.6:kind==='structure'?1.2:.8):(kind==='realm'?3:kind==='structure'?2.5:1.5);
+      context.beginPath();if(kind==='vein')context.rect(p.x-1.3,p.y-1.3,2.6,2.6);else context.arc(p.x,p.y,Math.max(radius,Math.min(5,view.scale*.24)),0,Math.PI*2);context.fill();
+      if(view.scale>=12){context.font='10px sans-serif';context.textAlign='center';context.lineWidth=3;context.strokeStyle='#111c';const text=o.name+(o.level?' Lv.'+o.level:'');context.strokeText(text,p.x,p.y-9);context.fillStyle='#eee4d0';context.fillText(text,p.x,p.y-9);}
+    }
+    const spawn=visiblePoint(Core.SPAWN.x+.5,Core.SPAWN.y+.5);context.strokeStyle='#fff1bb';context.lineWidth=1.5;context.strokeRect(spawn.x-4,spawn.y-4,8,8);
+    if(selected){const p=visiblePoint(selected.x,selected.y);context.strokeStyle='#fff0af';context.lineWidth=2;context.strokeRect(p.x,p.y,Math.max(3,view.scale),Math.max(3,view.scale));}
+  }
+  function draw(){if(!renderQueued){renderQueued=true;requestAnimationFrame(drawNow);}}
+  function setBusy(value,label='正在生成世界'){ $('loading').hidden=!value;$('loading-label').textContent=label;$('progress').value=0;}
+  function launch(kind,payload){
+    worker?.terminate();worker=new Worker(workerURL);const id=++task;setBusy(true,kind==='compare'?'正在比較四個種子':'正在生成一百萬格世界');
+    worker.onmessage=event=>{
+      const data=event.data;if(data.id!==task)return;
+      if(data.type==='progress'){$('progress').value=data.pct;status('生成中 '+data.pct+'%');if(kind==='compare')$('compare-dialog').querySelector('p').textContent='正在生成與分析 '+data.pct+'%';return;}
+      setBusy(false);worker.terminate();worker=null;
+      if(data.type==='error'){status(data.message);return;}
+      if(data.type==='comparison'){showComparison(data.results);status('四個種子比較完成');return;}
+      model=data;world=Core.createWorld(data.world);patches={};revisions={};overview=null;selected=null;
+      if(payload.patches){try{world.installPatches(payload.patches);patches=structuredClone(payload.patches);revisions=world.patchVersions();}catch(error){patches={};status('變更檔無效：'+error.message);}}
+      $('seed').value=data.world.seed;updateStats();updateStorage();fitMap();inspect(Core.SPAWN);status('種子 '+data.world.seed+' · 指紋 '+data.stats.fingerprint);
+    };
+    worker.onerror=event=>{if(id===task){setBusy(false);status('生成未完成：'+event.message);}};
+    worker.postMessage({id,kind,...payload});
+  }
+  function generate(seed=$('seed').value,changes=null){const d=Core.validateDescriptor({seed});launch('generate',{seed:d.seed,...(changes?{patches:changes}:{})});}
+  function updateStats(){
+    const s=model.stats,entries=[['陸地比例',(s.landRatio*100).toFixed(1),'%'],['海洋比例',((1-s.landRatio)*100).toFixed(1),'%'],['秘境',s.kinds.realm||0,'處'],['結構',s.kinds.structure||0,'處'],['妖獸',s.kinds.monster||0,'隻'],['連續礦脈',s.veins,'條'],['主要陸塊',s.islands,'片'],['宗門可步行',format(s.spawnConnected),'格']];
+    $('stats').replaceChildren(...entries.map(([name,value,unit])=>{const n=document.createElement('div');n.className='stat';const small=document.createElement('small');small.textContent=name;const b=document.createElement('b');b.textContent=typeof value==='number'?format(value):value;const span=document.createElement('span');span.textContent=' '+unit;b.append(span);n.append(small,b);return n;}));
+    $('generation-time').textContent=(s.milliseconds/1000).toFixed(2)+' 秒';const max=Math.max(...s.tiers,1);
+    $('tier-stats').replaceChildren(...s.tiers.map((count,i)=>{const row=document.createElement('div');row.className='tier-row';const name=document.createElement('span');name.textContent=Core.TIERS[i].name;const bar=document.createElement('i'),fill=document.createElement('em');fill.style.width=count/max*100+'%';fill.style.background=tierColors[i];bar.append(fill);const value=document.createElement('span');value.textContent=count;row.append(name,bar,value);return row;}));
+  }
+  function updateStorage(){const count=Object.values(patches).reduce((n,c)=>n+Object.keys(c.tiles).length,0),bytes=new Blob([JSON.stringify({world:world?.descriptor,patches})]).size;$('storage').textContent='變更 '+count+' 格 · '+format(bytes)+' bytes';}
+  function inspect(p){
+    if(!model||!Core.inside(p.x,p.y))return;selected={x:p.x,y:p.y};const base=Core.TYPES[model.tiles[p.y*1000+p.x]],actual=$('show-changes').checked?world.terrain(p.x,p.y):base,o=world.objectAt(p.x,p.y),tier=Core.TIERS[world.tierAt(p.x,p.y)];
+    $('tile-coordinate').textContent=p.x+'，'+p.y;const title=document.createElement('strong');title.textContent=Core.LABELS[actual]+' · '+tier.name+'域';const body=document.createElement('div');body.textContent=o?o.name+(o.level?' · Lv.'+o.level:''):'此格沒有固定互動物件';const extra=document.createElement('small');extra.textContent='區塊 '+Core.chunkKey(p.x,p.y)+(actual!==base?' · 已修改（原為'+Core.LABELS[base]+'）':' · 種子生成');
+    const nodes=[title,body,extra];if(o?.veinId){const n=document.createElement('small');n.textContent='連續礦脈 · '+o.veinLength+' 格 · '+o.realm+'資源';nodes.push(n);}if(o?.kind==='realm'){const n=document.createElement('small');n.textContent=o.subtype==='guardian'?'守衛挑戰秘境':'陣紋探索秘境';nodes.push(n);}$('tile-info').replaceChildren(...nodes);draw();
+  }
+  function changeTile(p,type){
+    if(!model||!Core.inside(p.x,p.y))return;const k=Core.chunkKey(p.x,p.y),i=(p.y%32)*32+p.x%32,tiles={...(patches[k]?.tiles||{})},base=Core.TYPES[model.tiles[p.y*1000+p.x]];
+    if(type==='restore'||type===base)delete tiles[i];else tiles[i]={terrain:type};revisions[k]=(revisions[k]||0)+1;const data={revision:revisions[k],tiles};world.installPatches({[k]:data});
+    if(Object.keys(tiles).length)patches[k]=data;else delete patches[k];updateStorage();inspect(p);status('此格變更保存在本機模擬中');draw();
+  }
+  function zoom(factor,point={screenX:width/2,screenY:height/2}){if(!model)return;const x=(point.screenX-width/2)/view.scale+view.x,y=(point.screenY-height/2)/view.scale+view.y;view.scale=Math.max(Math.min(width/1000,height/1000)*.6,Math.min(40,view.scale*factor));view.x=x-(point.screenX-width/2)/view.scale;view.y=y-(point.screenY-height/2)/view.scale;view.fit=false;draw();}
+  function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function showComparison(results){
+    $('compare-dialog').querySelector('p').textContent='選擇一張地圖，載入該種子繼續查看。';
+    $('compare-grid').replaceChildren(...results.map(result=>{const button=document.createElement('button');button.className='compare-card';button.type='button';const preview=document.createElement('canvas');preview.width=200;preview.height=200;const c=preview.getContext('2d'),data=c.createImageData(200,200);for(let i=0;i<result.mini.length;i++){const rgb=palette[result.mini[i]],j=i*4;data.data[j]=rgb[0];data.data[j+1]=rgb[1];data.data[j+2]=rgb[2];data.data[j+3]=255;}c.putImageData(data,0,0);const name=document.createElement('strong');name.textContent=result.world.seed;const stats=document.createElement('small'),s=result.stats;stats.textContent='陸地 '+(s.landRatio*100).toFixed(1)+'% · 秘境 '+(s.kinds.realm||0)+'\n結構 '+(s.kinds.structure||0)+' · 妖獸 '+(s.kinds.monster||0)+'\n礦脈 '+s.veins+' · 主要陸塊 '+s.islands;stats.style.whiteSpace='pre-line';button.append(preview,name,stats);button.onclick=()=>{$('compare-dialog').close();generate(result.world.seed);};return button;}));
+  }
+  $('seed-form').onsubmit=event=>{event.preventDefault();generate();};
+  $('random').onclick=()=>{const seed='青雲-'+crypto.getRandomValues(new Uint32Array(1))[0].toString(36);$('seed').value=seed;generate(seed);};
+  $('compare').onclick=()=>{const seeds=[...new Set([$('seed').value,'海上有仙山','竹影與星河','314159','qingyun-2026'])].slice(0,4);$('compare-grid').textContent='正在生成四個世界…';$('compare-dialog').showModal();launch('compare',{seeds});};
+  $('close-compare').onclick=()=>{$('compare-dialog').close();if(worker){worker.terminate();worker=null;task++;setBusy(false);status('已停止比較');}};
+  $('layer').onchange=()=>{overview=null;draw();};$('show-changes').onchange=()=>{if(selected)inspect(selected);draw();};document.querySelectorAll('[data-marker]').forEach(n=>n.onchange=draw);
+  $('zoom-in').onclick=()=>zoom(1.8);$('zoom-out').onclick=()=>zoom(1/1.8);$('fit').onclick=fitMap;$('spawn').onclick=()=>{if(!model)return;view={x:Core.SPAWN.x,y:Core.SPAWN.y,scale:8,fit:false};inspect(Core.SPAWN);draw();};
+  $('export-json').onclick=()=>{if(!world)return;download(new Blob([JSON.stringify({format:'qingyun-world-delta-v1',world:world.descriptor,patches},null,2)],{type:'application/json'}),'qingyun-world-'+world.descriptor.worldId+'.json');};
+  $('import-json').onclick=()=>$('import-file').click();$('import-file').onchange=async event=>{const file=event.target.files[0];if(!file)return;try{if(file.size>16*1024*1024)throw Error('檔案超過 16 MB');const data=JSON.parse(await file.text());if(data.format!=='qingyun-world-delta-v1')throw Error('變更檔格式不相容');const d=Core.validateDescriptor(data.world),check=Core.createWorld(d);check.installPatches(data.patches||{});generate(d.seed,data.patches||{});}catch(error){status('匯入失敗：'+error.message);}event.target.value='';};
+  $('export-png').onclick=()=>{if(!model)return;makeOverview();const out=document.createElement('canvas');out.width=1000;out.height=1000;const c=out.getContext('2d');c.drawImage(overview,0,0);paintDeltas(c);out.toBlob(blob=>download(blob,'qingyun-world-'+world.descriptor.worldId+'.png'));};
+  canvas.onpointerdown=event=>{canvas.setPointerCapture(event.pointerId);const p=worldPoint(event);drag={x:p.screenX,y:p.screenY,lastX:p.screenX,lastY:p.screenY,moved:false};};
+  canvas.onpointermove=event=>{if(!drag)return;const p=worldPoint(event);if(Math.hypot(p.screenX-drag.x,p.screenY-drag.y)>4)drag.moved=true;if(drag.moved){view.x-=(p.screenX-drag.lastX)/view.scale;view.y-=(p.screenY-drag.lastY)/view.scale;view.x=Math.max(-100,Math.min(1100,view.x));view.y=Math.max(-100,Math.min(1100,view.y));view.fit=false;draw();}drag.lastX=p.screenX;drag.lastY=p.screenY;};
+  canvas.onpointerup=event=>{if(drag&&!drag.moved){const p=worldPoint(event),tile={x:Math.floor(p.x),y:Math.floor(p.y)};if($('paint').value==='inspect')inspect(tile);else changeTile(tile,$('paint').value);}drag=null;};canvas.onpointercancel=()=>{drag=null;};
+  canvas.addEventListener('wheel',event=>{event.preventDefault();zoom(event.deltaY<0?1.25:.8,worldPoint(event));},{passive:false});
+  canvas.onkeydown=event=>{if(!model)return;const dirs={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};if(dirs[event.key]){event.preventDefault();const[dx,dy]=dirs[event.key];view.x+=dx*32;view.y+=dy*32;view.fit=false;draw();}if(event.key==='+'||event.key==='=')zoom(1.8);if(event.key==='-')zoom(1/1.8);};
+  for(const t of ['ocean','water','beach','grass','forest','mountain','desert','snow','swamp','rock']){const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.background=Core.COLORS[t];item.append(swatch,document.createTextNode(Core.LABELS[t]));$('legend').append(item);}
+  window.WorldSeedSimulator=Object.freeze({generate,getState:()=>({world:world?.descriptor,stats:model?.stats,patches:structuredClone(patches),selected,view:{...view},busy:!!worker}),inspect,changeTile});
+  new ResizeObserver(resize).observe(canvas);window.addEventListener('resize',fitApp);fitApp();
+  const requested=new URLSearchParams(location.search).get('seed');generate(requested||Core.DEFAULT_SEED);
+})();
+</script></body></html>

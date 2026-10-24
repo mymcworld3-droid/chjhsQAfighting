@@ -1,4 +1,4 @@
-# 青雲界：共享格狀世界第一版
+# 青雲界：種子生成的共享格狀世界
 
 工作分支：`grid-world`。登入完成、雲幕打開後進入大世界；原有養成、自由問道、鬥法與團本繼續使用原功能。
 
@@ -11,7 +11,7 @@
 5. 在原地展開 8 × 8 局部戰場。完成兩題補能，或略過剩餘補能，再移動、普攻、神通、防守或操作陣眼。
 6. 勝利材料直接進入現有 `materialSystem.inventory`，修為與靈石直接進入現有玩家資料。完成四項初始目標可領 6 修為，達到築基後可帶材料使用既有鍛造坊。
 
-地圖為固定 48 × 48 方格，三區連通：問道宗、青竹林、古陣山口。玩家不占探索碰撞格；同格玩家折疊顯示人數，點擊可查看名單與角色資料。附近道友可直接邀請既有團本或指定對手的鬥法；陌生道友交流先經現有好友邀請流程。
+地圖為 1000 × 1000 方格，依世界種子按需生成 32 × 32 區塊。問道宗、青竹林、古陣山口採用固定新手模板，東側道路接往外圍生成世界；外圍包含海洋、海岸、森林、山地、雪原、荒漠、濕地、分級妖獸、秘境、結構與連續礦脈。玩家不占探索碰撞格；同格玩家折疊顯示人數，點擊可查看名單與角色資料。附近道友可直接邀請既有團本或指定對手的鬥法；陌生道友交流先經現有好友邀請流程。
 
 ## 戰棋規則與養成投影
 
@@ -47,7 +47,7 @@
 
 ## 同步與存檔
 
-`POST /api/world` 使用既有 A 專案身分驗證，憑證放 Authorization header。地形與尋路共用 `public/world/world-core.js`，隨靜態資源版本快取。
+`POST /api/world` 使用既有 A 專案身分驗證，憑證放 Authorization header。地形與尋路共用 `public/world/world-core.js`，隨靜態資源版本快取。完整生成規則、變更存檔與模擬器見 [seeded-world.md](seeded-world.md)。客戶端取得種子與生成版本後自行重建附近地形；伺服器只讀取、傳送有修改且版本不同的附近區塊。
 
 目前即時層選用 **Render 單一 Node 程序的記憶體房間 + SSE**，沒有增加 Workers 或逐格 D1 寫入。附近半徑 15 格顯示玩家；新路線帶開始時間與每格時長，各瀏覽器以絕對時間播放。重複相同路線不會每個畫面／地格重送。背景巡檢只檢查記憶體，不查詢 D1。
 
@@ -56,11 +56,12 @@
 | 持久資料 | 位置 |
 | --- | --- |
 | 個人位置、迷霧、資格、任務、局部戰鬥 | A / `worldPlayers/{uid}` |
-| 全服修橋與破陣 | A / `worldEvents/main` |
+| 世界種子與版本、全服修橋／破陣、變更區塊版本索引 | A / `worldEvents/main` |
+| 僅有修改地格的區塊 | A / `worldChunks/{worldId}:{cx},{cy}` |
 | 材料、修為、靈石、答題統計 | 原本 `users/{uid}` |
 | 題目、選項、答案與解析 | 原本 `exam_logs` |
 
-使用目前 `GAME_DATA_BACKEND=d1` 設定時，以上持久資料走既有 D1 文件儲存層，不需新增 SQL migration、Firestore listener 或另一套身分服務。維護模式會由全域 API 閘門阻擋。`worldPlayers` 與 `worldEvents` 不開放一般瀏覽器資料 API 直接讀寫。
+使用目前 `GAME_DATA_BACKEND=d1` 設定時，以上持久資料走既有 D1 文件儲存層，不需新增 SQL migration、Firestore listener 或另一套身分服務。維護模式會由全域 API 閘門阻擋。`worldPlayers`、`worldEvents`、`worldChunks` 不開放一般瀏覽器資料 API 直接讀寫。
 
 **部署須維持單一 Render 執行個體／Node 程序。** 目前未使用跨機即時訊息代理；在多個副本部署會拆開在線玩家名單。擴容前須將即時房間抽到共享 broker／Durable Object，並將位置控制權加上跨節點租約。此次沒有宣稱完成多人負載或正式線上部署測試。
 
@@ -81,7 +82,7 @@ node scripts/capture-grid-world.cjs
 
 需要本地 Playwright Chromium、Tailwind 3、Noto Serif TC／Noto Sans TC 與 Font Awesome 6.4。可用 `WORLD_CHROMIUM_PATH` 指定瀏覽器，`WORLD_UI_DEPS` 指定樣式／字型依賴目錄，`WORLD_TAILWIND` 指定由 `public/**/*.html`、`public/**/*.js` 產生的 Tailwind CSS。預設依賴在 `/tmp/grid-world-ui/node_modules`，CSS 在 `/tmp/grid-world-tailwind.css`；依賴僅用於隔離截圖，不寫入正式套件。
 
-截圖與結果放在 `docs/design/grid-world/`。分支只交付此可玩閉環，不自動合併到 `main`。
+截圖與結果放在 `docs/design/grid-world/`，另驗證生成區域的秘境機關、重載後續解、探索獎勵，以及靠岸乘舟和實際水路移動。模擬器截圖與匯出範例在 `docs/design/seed-world/`。分支只交付此可玩閉環，不自動合併到 `main`。
 
 ## 後續階段
 

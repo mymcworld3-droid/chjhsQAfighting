@@ -1,0 +1,20 @@
+{
+  "format": "qingyun-world-delta-v1",
+  "world": {
+    "seed": "qingyun-2026",
+    "size": 1000,
+    "chunkSize": 32,
+    "generatorVersion": "qingyun-seeded-v1",
+    "worldId": "qingyun-seeded-v1-ba95dee1"
+  },
+  "patches": {
+    "0,1": {
+      "revision": 1,
+      "tiles": {
+        "106": {
+          "terrain": "road"
+        }
+      }
+    }
+  }
+}
