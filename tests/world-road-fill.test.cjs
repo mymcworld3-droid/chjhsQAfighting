@@ -1,18 +1,11 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
 const W=require('../public/world/world-core.js'),S=require('../public/world/world-scenery.js'),G=require('../public/world/world-ground.js'),A=require('../public/world/world-art.js');
-
-function outline(points){
-  const cells=new Map();
-  for(let i=1;i<points.length;i++){
-    let[x,y]=points[i-1];const[tx,ty]=points[i];
-    assert.ok(x===tx||y===ty,'fixtures use real cardinal roads');
-    cells.set(W.key(x,y),{x,y});
-    while(x!==tx||y!==ty){x+=Math.sign(tx-x);y+=Math.sign(ty-y);cells.set(W.key(x,y),{x,y});}
-  }
-  return [...cells.values()];
+const block=(x,y,w=2,h=2)=>Array.from({length:w*h},(_,i)=>({x:x+i%w,y:y+Math.floor(i/w)}));
+function fixture(cells){
+  const roads=new Set(cells.map(p=>W.key(p.x,p.y))),world={...W.createWorld(),terrain:(x,y,events={})=>events.tiles?.[W.key(x,y)]||(roads.has(W.key(x,y))?'road':'grass')},scene=S.create(world);
+  return {world,scene,at:(x,y,events={},visible)=>scene.topology(x,y,world.terrain(x,y,events),events,visible)};
 }
-const rectangle=(x,y,w,h)=>outline([[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]]);
 function install(world,cells,revision=1,overrides={}){
   const chunks={};
   for(const p of cells){
@@ -22,94 +15,88 @@ function install(world,cells,revision=1,overrides={}){
   world.installPatches(chunks);
 }
 
-test('closed road faces fill their interiors and inner edge halves, leaving exterior paths narrow',()=>{
-  const paving=S.roadEnclosures(rectangle(10,10,6,5));
-  assert.equal(paving(13,12),15);assert.equal(paving(10,10),4);assert.equal(paving(13,10),12);assert.equal(paving(10,12),6);
-  for(const p of [[9,12],[17,12],[13,9],[13,16]])assert.equal(paving(...p),0,'outside stays unfilled');
-  assert.equal(G.roadAlpha(6,.9,.9,paving(10,10)),1,'inside corner is fully paved');
-  assert.equal(G.roadAlpha(6,.1,.1,paving(10,10)),0,'outside corner keeps its underlay');
-  assert.equal(G.roadAlpha(5,.1,.5,0),0,'an open straight road keeps its original width');
-});
-
-test('even the sub-tile hole between four adjacent roads is filled without checkerboard gaps',()=>{
-  const paving=S.roadEnclosures(rectangle(0,0,1,1));
-  const tiles=[[0,0,6,4],[1,0,12,8],[1,1,9,1],[0,1,3,2]];
-  for(const[x,y,mask,fill]of tiles){
-    assert.equal(paving(x,y),fill);
-    for(let row=0;row<40;row++)for(let col=0;col<40;col++){
-      const u=(col+.5)/40,v=(row+.5)/40,worldX=x+u,worldY=y+v;
-      if(worldX>=.5&&worldX<=1.5&&worldY>=.5&&worldY<=1.5)assert.equal(G.roadAlpha(mask,u,v,fill),1);
+test('only all four roads in a 2 x 2 block fill their shared corner',()=>{
+  const cells=block(10,10),corners=[4,8,2,1];
+  for(let pattern=0;pattern<16;pattern++){
+    const {at}=fixture(cells.filter((_,i)=>pattern&(1<<i)));
+    for(const [i,p]of cells.entries()){
+      const info=at(p.x,p.y);assert.equal(info.paving,pattern===15?corners[i]:0,'pattern '+pattern+' tile '+i);
+      assert.equal(info.terrain,pattern&(1<<i)?'road':'grass','non-road terrain is never converted');
     }
   }
 });
 
-test('a missing segment, an open U and diagonal contacts never close a region',()=>{
-  for(const roads of [rectangle(10,10,6,6).filter(p=>p.x!==13||p.y!==10),outline([[10,10],[10,16],[16,16],[16,10]]),[{x:10,y:10},{x:11,y:11}]]){
-    const paving=S.roadEnclosures(roads);
-    for(let y=9;y<=17;y++)for(let x=9;x<=17;x++)assert.equal(paving(x,y),0);
+test('the entire small centre hole is opaque while the four outside corners retain the narrow road shape',()=>{
+  const {at}=fixture(block(10,10));
+  for(const p of block(10,10)){
+    const info=at(p.x,p.y);
+    for(let row=0;row<40;row++)for(let col=0;col<40;col++){
+      const u=(col+.5)/40,v=(row+.5)/40,x=p.x+u,y=p.y+v;
+      if(x>=10.5&&x<=11.5&&y>=10.5&&y<=11.5)assert.equal(G.roadAlpha(info.mask,u,v,info.paving),1);
+    }
   }
-  assert.equal(S.roadEnclosures([])(0,0),0);
+  for(const[x,y,u,v]of [[10,10,.1,.1],[11,10,.9,.1],[11,11,.9,.9],[10,11,.1,.9]]){
+    const info=at(x,y);assert.equal(G.roadAlpha(info.mask,u,v,info.paving),0,'outside corner retains its underlay');
+  }
 });
 
-test('concave, nested and touching loops use their actual shape and are independent of visit order',()=>{
-  const lShape=outline([[0,0],[6,0],[6,2],[2,2],[2,6],[0,6],[0,0]]),paving=S.roadEnclosures(lShape);
-  for(const p of [[1,1],[5,1],[1,5]])assert.equal(paving(...p),15);
-  assert.equal(paving(4,4),0);assert.equal(paving(2,2),11,'concave corner fills the three inner quadrants');
-  const roads=[...rectangle(10,10,8,8),...rectangle(12,12,4,4),...rectangle(18,18,4,4)];
-  const forward=S.roadEnclosures(roads),reverse=S.roadEnclosures(roads.toReversed());
-  for(let y=9;y<=23;y++)for(let x=9;x<=23;x++)assert.equal(forward(x,y),reverse(x,y));
-  assert.equal(forward(14,14),15);assert.equal(forward(20,20),15);assert.equal(forward(20,14),0);
+test('larger rings leave their centre and inner edge halves unfilled',()=>{
+  for(const size of [3,7,9]){
+    const roads=block(10,10,size,size).filter(p=>p.x===10||p.y===10||p.x===9+size||p.y===9+size),{at}=fixture(roads);
+    for(const p of block(9,9,size+2,size+2))assert.equal(at(p.x,p.y).paving,0,'large perimeter never fills terrain or road halves');
+    const centre=at(11,11);assert.equal(centre.terrain,'grass');
+  }
 });
 
-test('world road index matches generated layouts and honours repairs, patches and event precedence',()=>{
-  const world=W.createWorld('road-index'),initial=new Set(world.roadCells().map(p=>W.key(p.x,p.y)));
-  for(let y=430;y<=565;y++)for(let x=435;x<=595;x++)assert.equal(initial.has(W.key(x,y)),['road','bridge'].includes(world.terrain(x,y)),W.key(x,y));
-  const broken=world.starterPoint(26,27),sealed=world.starterPoint(39,6);
-  assert.ok(!initial.has(W.key(broken.x,broken.y)));assert.ok(!initial.has(W.key(sealed.x,sealed.y)));
-  const repaired=new Set(world.roadCells({bridge:20,array:60}).map(p=>W.key(p.x,p.y)));
-  assert.ok(repaired.has(W.key(broken.x,broken.y)));assert.ok(repaired.has(W.key(sealed.x,sealed.y)));
-  const tiles={[W.key(broken.x,broken.y)]:'broken-bridge'};
-  assert.ok(!world.roadCells({bridge:20,array:60,tiles}).some(p=>W.same(p,broken)),'explicit battle terrain precedes shared repairs');
-  install(world,[{x:999,y:999},{x:500,y:500}],1,{'500,500':'grass'});
-  const patched=new Set(world.roadCells().map(p=>W.key(p.x,p.y)));
-  assert.ok(patched.has('999,999'));assert.ok(!patched.has('500,500'));
+test('adjacent solid blocks join continuously without extending beyond their actual tiles',()=>{
+  const {at}=fixture(block(10,10,3,3));assert.equal(at(11,11).paving,15);
+  assert.equal(at(11,10).paving,12);assert.equal(at(10,11).paving,6);assert.equal(at(10,10).paving,4);
+  for(const p of [{x:9,y:11},{x:13,y:11},{x:11,y:9},{x:11,y:13}])assert.equal(at(p.x,p.y).paving,0);
 });
 
-test('a loop crossing chunk seams fills immediately and reopens after a patch removes its closing segment',()=>{
-  const world=W.createWorld('patched-loop'),scene=S.create(world),roads=rectangle(30,30,6,6),gap={x:33,y:30};
-  install(world,roads,1,{'33,30':'grass'});
+test('small holes across chunk seams update immediately after patches and event overrides',()=>{
+  const world=W.createWorld('patched-2x2'),scene=S.create(world),roads=block(31,31);
   const at=(x,y,events={})=>scene.topology(x,y,world.terrain(x,y,events),events);
-  assert.equal(at(33,33).paving,0);
-  install(world,roads,2);const closed=at(33,33);
-  assert.equal(closed.terrain,'road');assert.equal(closed.paving,15);assert.equal(at(30,30).paving,4);
-  assert.equal(at(33,29).paving,0);
-  const events={tiles:{[W.key(gap.x,gap.y)]:'grass'}};
-  assert.equal(at(33,33,events).paving,0,'event overrides reopen a loop');
-  events.tiles[W.key(gap.x,gap.y)]='road';scene.prepare(events);
-  assert.equal(at(33,33,events).paving,15,'frame preparation also handles in-place event changes');
-  install(world,roads,3,{'33,30':'grass'});
-  assert.equal(at(33,33).paving,0);assert.notEqual(at(33,33).key,closed.key);
+  install(world,roads,1,{'32,32':'grass'});assert.equal(at(31,31).paving,0);
+  install(world,roads,2);const filled=at(31,31);assert.equal(filled.paving,4);
+  const events={tiles:{'32,32':'grass'}};assert.equal(at(31,31,events).paving,0);
+  events.tiles['32,32']='road';assert.equal(at(31,31,events).paving,4,'in-place event changes need no global preparation');
+  install(world,roads,3,{'32,32':'grass'});assert.equal(at(31,31).paving,0);assert.notEqual(at(31,31).key,filled.key);
 });
 
-test('sect paving preserves water, bridges, outside stone ground, gameplay terrain and sparse saves',()=>{
-  const world=W.createWorld(),scene=S.create(world),before=JSON.stringify(world.patchVersions());
-  const snapshots=[];
-  for(let dy=-24;dy<=24;dy++)for(let dx=-24;dx<=24;dx++){
-    const x=500+dx,y=500+dy,t=world.terrain(x,y),walkable=world.walkable(x,y);snapshots.push({x,y,t,walkable});
-    const info=scene.topology(x,y,t);
-    if(['water','bridge'].includes(t)){assert.equal(info.terrain,t);assert.equal(info.paving,0);}
+test('water, bridges, missing diagonals, hidden neighbours and map edges do not complete a solid road block',()=>{
+  const {at,scene}=fixture(block(10,10));
+  for(const type of ['water','bridge','broken-bridge','courtyard','rock']){
+    const events={tiles:{'11,11':type}};
+    for(const p of block(10,10))assert.equal(at(p.x,p.y,events).paving,0,type+' is not a road');
   }
-  const inside=scene.topology(497,486,world.terrain(497,486)),outside=scene.topology(480,480,world.terrain(480,480));
-  assert.equal(inside.terrain,'road');assert.equal(inside.paving,15);
-  assert.equal(outside.terrain,'courtyard');assert.equal(outside.paving,0);
-  assert.equal(scene.topology(500,470,'road').paving,0,'approach outside the enclosing avenue remains narrow');
-  for(const {x,y,t,walkable}of snapshots){assert.equal(world.terrain(x,y),t);assert.equal(world.walkable(x,y),walkable);}
-  assert.equal(JSON.stringify(world.patchVersions()),before);
-  const other=S.create(W.createWorld('another-seed'));
-  assert.equal(other.topology(497,486,'courtyard').key,inside.key,'fixed sect architecture fills identically for every seed');
+  assert.equal(scene.topology(10,10,'plaza').paving,0,'central medallion texture is preserved');
+  assert.equal(at(10,10,{},(x,y)=>x!==11||y!==11).paving,0,'hidden diagonals do not infer a closed corner');
+  const edges=fixture(block(0,0));assert.equal(edges.at(0,0).paving,4,'out-of-world fallback road neighbours cannot fill outside quadrants');
 });
 
-test('paving has its own cached mask and an interior tile draws the full road texture',()=>{
+test('sect ground and gardens retain their identities while dense road junctions lose their small holes',()=>{
+  const world=W.createWorld(),scene=S.create(world),before=JSON.stringify(world.patchVersions()),snapshots=[];
+  for(let y=476;y<=524;y++)for(let x=476;x<=524;x++){
+    const terrain=world.terrain(x,y),walkable=world.walkable(x,y),info=scene.topology(x,y,terrain);snapshots.push({x,y,terrain,walkable});
+    assert.equal(info.terrain,terrain);if(terrain!=='road')assert.equal(info.paving,0);
+  }
+  const court=scene.topology(497,486,world.terrain(497,486));assert.equal(court.terrain,'courtyard');assert.equal(court.paving,0);
+  assert.equal(scene.topology(500,497,world.terrain(500,497)).paving,15,'3-wide road centre has four solid 2 x 2 neighbours');
+  assert.equal(scene.topology(500,470,'road').paving,0,'single-width approach remains narrow');
+  for(const {x,y,terrain,walkable}of snapshots){assert.equal(world.terrain(x,y),terrain);assert.equal(world.walkable(x,y),walkable);}
+  assert.equal(JSON.stringify(world.patchVersions()),before);
+});
+
+test('corner detection samples only the eight immediate neighbours and is independent of visit order',()=>{
+  let reads=0;const cells=new Set(block(31,31).map(p=>W.key(p.x,p.y))),world={...W.createWorld(),terrain:(x,y)=>{reads++;return cells.has(W.key(x,y))?'road':'grass';}},scene=S.create(world);
+  assert.equal(scene.topology(31,31,'road').paving,4);assert.equal(reads,8,'no world scan or flood fill');
+  const expected=block(31,31).map(p=>scene.topology(p.x,p.y,'road').key);
+  for(const p of block(31,31).toReversed())scene.topology(p.x,p.y,'road');
+  assert.deepEqual(block(31,31).map(p=>scene.topology(p.x,p.y,'road').key),expected);
+});
+
+test('small-corner masks are cached separately and fully surrounded road pixels remain opaque',()=>{
   const masks=[],copies=[],factory=()=>({width:0,height:0,getContext(){return {
     save(){},restore(){},translate(){},scale(){},drawImage(...args){copies.push(args);},
     createImageData(w,h){return {data:new Uint8ClampedArray(w*h*4)};},putImageData(data){masks.push(data);}
@@ -118,9 +105,9 @@ test('paving has its own cached mask and an interior tile draws the full road te
   const info={x:10,y:10,terrain:'road',mask:6,underlay:'courtyard',neighbours:Array(8).fill('courtyard'),key:'shared-topology'};
   const open=ground.compose(info,images),closed=ground.compose({...info,paving:4},images);
   assert.notStrictEqual(open,closed);assert.equal(masks[0].data[(36*40+36)*4+3],0);
-  assert.equal(masks[1].data[(36*40+36)*4+3],255,'closed corner receives fully opaque road pixels');
+  assert.equal(masks[1].data[(36*40+36)*4+3],255,'shared corner receives fully opaque road pixels');
   assert.equal(masks[1].data[(3*40+3)*4+3],0,'outside corner keeps its stone underlay');
   assert.strictEqual(ground.compose({...info,paving:4},images),closed);
-  const count=masks.length;ground.compose({...info,paving:15},images);assert.equal(masks.length,count,'full interiors never receive a narrow cross mask');
-  assert.equal(copies.filter(args=>args[0]===atlas).length,2,'only the unchanged road and courtyard materials are read');
+  const count=masks.length;ground.compose({...info,paving:15},images);assert.equal(masks.length,count,'all four filled quarters cover the entire road tile');
+  assert.equal(copies.filter(args=>args[0]===atlas).length,2,'unchanged native road and courtyard materials are used');
 });

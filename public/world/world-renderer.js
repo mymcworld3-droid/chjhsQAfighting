@@ -157,7 +157,6 @@ export class WorldRenderer {
       top=Math.max(0,Math.floor(this.camera.y-this.height/s/2)-2),bottom=Math.min(this.world.SIZE-1,Math.ceil(this.camera.y+this.height/s/2)+2),decor=[];
     const visible=(x,y)=>W.known(d.state.explored,x,y)||!!(b&&x>=b.bounds.x&&x<b.bounds.x+8&&y>=b.bounds.y&&y<b.bounds.y+8),events=b?.events||d.events;
     const scenery=this.sceneryModel(),signature=[left,right,top,bottom,d.state.explored.revision,d.state.explored.all,W.patchRevision,events?.bridge,events?.array,b?.id,b?.revision].join(':');
-    scenery.prepare(events);
     this.ground?.setScale(this.dpr*zoom);
     // Scenery, objects and aura anchors depend on revealed cells and viewport
     // tiles, not on fractional camera positions. Rebuild only when these change.

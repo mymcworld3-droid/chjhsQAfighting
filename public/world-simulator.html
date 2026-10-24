@@ -186,7 +186,7 @@ return TERRAIN;})();
   }
   function pathTo(target,parents){if(!parents.has(key(target.x,target.y)))return [];const path=[];for(let p=target;p;p=parents.get(key(p.x,p.y)))path.push({x:p.x,y:p.y});return path.reverse();}
   function createWorld(input={}){
-    const config=descriptor(input),salt=seedHash(config.seed),seedHex=seedHash(config.worldId).toString(16).padStart(8,'0'),cache=new Map(),patches=new Map();let patchRevision=0,generatedRoads;
+    const config=descriptor(input),salt=seedHash(config.seed),seedHex=seedHash(config.worldId).toString(16).padStart(8,'0'),cache=new Map(),patches=new Map();let patchRevision=0;
     const hash=(x,y,layer=0)=>mix(x,y,salt^Math.imul(layer,0x9e3779b9));
     function noise(x,y,scale,layer){const X=x/scale,Y=y/scale,ix=Math.floor(X),iy=Math.floor(Y);let u=X-ix,v=Y-iy;u=u*u*(3-2*u);v=v*v*(3-2*v);
       const h=(a,b)=>hash(a,b,layer)/4294967295,a=h(ix,iy),b=h(ix+1,iy),c=h(ix,iy+1),d=h(ix+1,iy+1);return(a+(b-a)*u)*(1-v)+(c+(d-c)*u)*v;}
@@ -287,30 +287,6 @@ return TERRAIN;})();
       let t=patch?.terrain||TYPES[chunk(Math.floor(x/32),Math.floor(y/32)).tiles[(y%32)*32+x%32]];
       if(t==='sealed'&&events.array>=60)t='road';if(t==='broken-bridge'&&events.bridge>=20)t='bridge';return t;
     }
-    function roadCells(events={}){
-      // All procedural roads live in these authored layouts and connecting
-      // axes. Index their real terrain once, without scanning the million-cell
-      // wilderness or depending on which chunks the camera has visited.
-      const candidates=new Set(['road','bridge','broken-bridge','sealed']);
-      if(!generatedRoads){
-        generatedRoads=new Map();
-        const add=(x,y)=>{if(candidates.has(baseTerrain(x,y)))generatedRoads.set(key(x,y),{x,y});};
-        for(let dy=-CITY_RADIUS;dy<=CITY_RADIUS;dy++)for(let dx=-CITY_RADIUS;dx<=CITY_RADIUS;dx++)add(SPAWN.x+dx,SPAWN.y+dy);
-        for(let dy=0;dy<OUTSKIRTS.h;dy++)for(let dx=0;dx<OUTSKIRTS.w;dx++)add(OUTSKIRTS.x+dx,OUTSKIRTS.y+dy);
-        for(let d=-60;d<=60;d++){add(SPAWN.x+d,SPAWN.y);add(SPAWN.x,SPAWN.y+d);}
-        for(let y=OUTSKIRTS.y+36;y<=SPAWN.y;y++)add(OUTSKIRTS.x,y);
-      }
-      const cells=new Map(generatedRoads),update=(x,y,t)=>{
-        if(candidates.has(t))cells.set(key(x,y),{x,y});else cells.delete(key(x,y));
-      };
-      for(const[k,chunk]of patches){const[cx,cy]=k.split(',').map(Number);for(const[i,v]of Object.entries(chunk.tiles)){
-        const n=Number(i);update(cx*32+n%32,cy*32+Math.floor(n/32),v.terrain);
-      }}
-      for(const[k,t]of Object.entries(events.tiles||{})){const[x,y]=k.split(',').map(Number);if(inside(x,y))update(x,y,t);}
-      // Broken crossings remain open until repaired. Use terrain() so event
-      // overrides and sparse patches have exactly the same precedence here.
-      return [...cells.values()].filter(p=>['road','bridge'].includes(terrain(p.x,p.y,events)));
-    }
     function walkable(x,y,{events={},bounds=null,blocked=null,ignoreObjects=false,mode='walk'}={}){
       if(!inside(x,y)||bounds&&(x<bounds.x||y<bounds.y||x>=bounds.x+bounds.w||y>=bounds.y+bounds.h)||blocked?.has(key(x,y))||sectBlocked(x,y))return false;
       const t=terrain(x,y,events),sea=['water','ocean'];
@@ -365,7 +341,7 @@ return TERRAIN;})();
     }
     const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?'問道宗':inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
     const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
-      key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,roadCells,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
+      key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
       patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
     return Object.freeze(api);
   }
