@@ -5,10 +5,10 @@ const plain=(seed='scenery')=>{
   const world=W.createWorld(seed);
   return {...world,terrain:()=> 'grass',objectAt:()=>undefined,objectsIn:()=>[]};
 };
-test('bamboo and stone props are sparse, seeded, and identical across browser/server and visit order',()=>{
+test('bamboo is dense, stone is sparse, and both are identical across browser/server and visit order',()=>{
   const context={};vm.runInNewContext(fs.readFileSync(require.resolve('../public/world/world-scenery.js'),'utf8'),context);
   const a=S.create(plain()),b=S.create(plain()),browser=context.QAGridWorldScenery.create(plain()),other=S.create(plain('another'));
-  for(const [terrain,prop,min,max]of [['bamboo','bamboo-tall-',.70,.87],['stone','stone-',.04,.18]]){
+  for(const [terrain,prop,min,max]of [['bamboo','bamboo-tall-',.92,.99],['stone','stone-',.04,.18]]){
     const cells=[];for(let y=20;y<84;y++)for(let x=20;x<84;x++)cells.push([x,y]);
     const generated=cells.map(([x,y])=>a.ambient(x,y,terrain)),fraction=generated.filter(items=>items.some(p=>p.prop.startsWith(prop))).length/cells.length;
     assert.equal(new Set(generated.flat().filter(p=>p.prop.startsWith(prop)).map(p=>p.prop)).size,terrain==='bamboo'?4:3,'all seeded visual variants appear');
@@ -22,24 +22,38 @@ test('bamboo and stone props are sparse, seeded, and identical across browser/se
 
 test('new long straight bamboo sprites are multi-tile bitmaps and use stable density',()=>{
   const world={...plain('upright-bamboo'),terrain:()=> 'bamboo'},scene=S.create(world);
-  let stems=0,doubles=0;
+  let stems=0,multiples=0,triples=0;
   for(let y=60;y<92;y++)for(let x=60;x<92;x++){
     const p=scene.ambient(x,y,'bamboo').filter(p=>p.prop.startsWith('bamboo-tall-'));
-    stems+=p.length;if(p.length===2)doubles++;
+    stems+=p.length;if(p.length>=2)multiples++;if(p.length===3)triples++;
     for(const item of p){
       const sprite=A.scenery(item);
-      assert.equal(sprite.image,'bamboo-tall-atlas');assert.ok(sprite.h>80&&sprite.h<120);
-      assert.ok(sprite.w<64,'bamboo may be taller than one tile but remains slender');
-      assert.ok(sprite.sx+sprite.sw<=128&&sprite.sy+sprite.sh<=256);
+      assert.equal(sprite.image,'bamboo-upright-atlas');assert.ok(sprite.h>=144&&sprite.h<=184);
+      assert.equal(sprite.h/sprite.w,2,'long source proportions are preserved');
+      assert.ok(sprite.sw>=sprite.w*3.6&&sprite.sh>=sprite.h*3.6,'native pixels cover maximum zoom at DPR 2');
+      assert.ok(sprite.sx+sprite.sw<=768&&sprite.sy+sprite.sh<=1536);
     }
   }
-  assert.ok(stems>850&&stems<1250,'forest is much denser than isolated saplings');
-  assert.ok(doubles>200,'dense patches hold a second staggered bamboo culm');
+  assert.ok(stems>2100&&stems<2500,'clump density roughly doubles the previous 1.08 clumps per cell');
+  assert.ok(multiples>800&&triples>380,'dense patches hold two or three staggered clumps');
   const bounds={x:70,y:70,w:6,h:6},draw=scene.inBounds(bounds);
-  assert.ok(draw.some(p=>p.prop.startsWith('bamboo-tall-')&&p.y>=bounds.y+bounds.h&&p.y<bounds.y+bounds.h+3),
+  assert.ok(draw.some(p=>p.prop.startsWith('bamboo-tall-')&&p.y>=bounds.y+bounds.h+3&&p.y<bounds.y+bounds.h+5),
     'tall bamboo roots beyond the viewport remain drawable where their canopy enters it');
   assert.equal(JSON.stringify(draw),JSON.stringify(scene.inBounds(bounds)),'viewport density is repeatable');
   assert.notEqual(JSON.stringify(draw),JSON.stringify(S.create({...plain('other-bamboo'),terrain:()=> 'bamboo'}).inBounds(bounds)));
+});
+test('long bamboo does not disappear at viewport seams or leak from hidden cells',()=>{
+  const scene=S.create({...plain('bamboo-seams'),terrain:()=> 'bamboo'}),large={x:20,y:20,w:32,h:32};
+  const all=scene.inBounds(large).filter(p=>p.prop.startsWith('bamboo-tall-'));
+  for(const bounds of [{x:30,y:30,w:1,h:1},{x:31,y:31,w:4,h:3},{x:30.4,y:30.6,w:3,h:2}]){
+    const draw=scene.inBounds(bounds),keys=new Set(draw.map(p=>JSON.stringify(p)));
+    const intersects=p=>{const s=A.scenery(p);return p.x+s.w/80>bounds.x&&p.x-s.w/80<bounds.x+bounds.w&&p.y+s.h*(1-s.anchor)/40>bounds.y&&p.y-s.h*s.anchor/40<bounds.y+bounds.h;};
+    for(const p of all.filter(intersects))assert.ok(keys.has(JSON.stringify(p)),'every canopy intersecting the viewport is drawn');
+    assert.ok(draw.some(p=>p.x<bounds.x||p.x>=bounds.x+bounds.w),'side overhang is retained');
+  }
+  assert.deepEqual(scene.inBounds({x:30,y:30,w:4,h:4},{},()=>false),[]);
+  const hidden=scene.inBounds({x:30,y:30,w:4,h:4},{},(x,y)=>y<34);
+  assert.ok(hidden.every(p=>Math.floor(p.y)<34),'unrevealed roots cannot expose a canopy');
 });
 test('site scenery has matching structures, avoids objects and roads, and respects both anchor and tile fog',()=>{
   const camp={id:'camp-test',kind:'structure',subtype:'camp',x:100,y:100},ruins={...camp,id:'ruins-test',subtype:'ruins',x:115};

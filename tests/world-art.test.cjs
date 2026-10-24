@@ -24,7 +24,7 @@ test('all shipped AI images exist, match the size manifest, preserve cutout alph
     if(path.extname(url)==='.png')assert.equal(bytes.toString('hex',0,8),'89504e470d0a1a0a');
     else {assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
     assert.equal(bytes.length,asset.bytes);
-    assert.ok(asset.width<=(id==='sect-gates'?1024:640)&&asset.height<=(id==='sect-gates'?1024:640));
+    assert.ok(asset.width<=(id==='bamboo-upright-atlas'?768:id==='sect-gates'?1024:640)&&asset.height<=(id==='bamboo-upright-atlas'?1536:id==='sect-gates'?1024:640));
     assert.ok(asset.bytes<=(id==='sect-gates'?250000:220000));
     if(asset.sourceSha256)assert.match(asset.sourceSha256,/^[a-f0-9]{64}$/);
     if(id!=='ground-atlas')assert.equal(asset.alpha,true,id);
@@ -49,7 +49,7 @@ test('all terrain and decorative illustration paths use AI bitmap cells with val
   for(const direction of A.directions)for(const prop of [...A.sceneryProps,'boat'])r.imageSprite(A.directional(prop,direction),0,0);
   for(const prop of A.ambientProps)r.imageSprite(A.ambientProp(prop),0,0);
   for(const prop of ['fence','wall'])for(let mask=0;mask<16;mask++)r.drawScenery({prop,mask,x:0,y:0});
-  assert.ok(draws.length>=W.TYPES.length);for(const[image,x,y,w,h]of draws){assert.ok(x>=0&&y>=0&&w>0&&h>0);const width=image.id.startsWith('creatures-')?640:image.id.endsWith('-atlas')?512:256;const height=image.id.startsWith('scenery-')?256:image.id.startsWith('creatures-')?512:image.id==='boats-atlas'?128:image.id.endsWith('-atlas')?640:256;assert.ok(x+w<=width&&y+h<=height);}
+  assert.ok(draws.length>=W.TYPES.length);for(const[image,x,y,w,h]of draws){assert.ok(x>=0&&y>=0&&w>0&&h>0);const width=image.id==='bamboo-upright-atlas'?768:image.id.startsWith('creatures-')?640:image.id.endsWith('-atlas')?512:256;const height=image.id==='bamboo-upright-atlas'?1536:image.id.startsWith('scenery-')?256:image.id.startsWith('creatures-')?512:image.id==='boats-atlas'?128:image.id.endsWith('-atlas')?640:256;assert.ok(x+w<=width&&y+h<=height);}
 });
 
 test('Qingyun Sect gates use an independent four-view gate cutout without changing camp entrances',()=>{
@@ -63,4 +63,13 @@ test('Qingyun Sect gates use an independent four-view gate cutout without changi
 test('high resolution gate texture handles the maximum zoom at 2x DPR',()=>{
   const s=A.directional('sect-gate','south');
   assert.ok(s.sw>=s.w*1.8*2&&s.sh>=s.h*1.8*2);
+});
+
+test('dense foreground bamboo keeps the local player visible without fading the rest of the forest',()=>{
+  const r=renderer(),draws=[];
+  r.playerSilhouette={x:102.5*40-18,y:102.5*40-48,w:36,h:48,foot:102.5};
+  r.imageSprite=(sprite,x,y,alpha)=>draws.push({sprite,x,y,alpha});
+  for(const p of [{prop:'bamboo-tall-0',x:102.5,y:105.6,size:84},{prop:'bamboo-tall-1',x:106.5,y:105.6,size:84},{prop:'bamboo-tall-2',x:102.5,y:101.6,size:84},{prop:'rock',x:102.5,y:103.6,size:44}])r.drawScenery(p);
+  assert.deepEqual(draws.map(p=>p.alpha),[.08,1,1,1]);
+  r.playerSilhouette=null;r.drawScenery({prop:'bamboo-tall-0',x:102.5,y:105.6,size:84});assert.equal(draws.at(-1).alpha,1);
 });

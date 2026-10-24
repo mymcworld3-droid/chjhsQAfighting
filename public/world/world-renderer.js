@@ -104,7 +104,13 @@ export class WorldRenderer {
       for(const part of Art.barrierParts(p))this.imageSprite(part.sprite,p.x*TILE+part.dx,p.y*TILE+part.dy);
       return;
     }
-    this.imageSprite(Art.scenery(p),p.x*TILE,p.y*TILE);
+    const sprite=Art.scenery(p),player=this.playerSilhouette;
+    // A dense canopy may rise several rows in front of the local player.
+    // Fade only overlapping foreground clumps so the character stays readable.
+    const obscures=player&&p.prop.startsWith('bamboo-tall-')&&p.y>player.foot&&
+      p.x*TILE+sprite.w/2>player.x&&p.x*TILE-sprite.w/2<player.x+player.w&&
+      p.y*TILE-sprite.h*sprite.anchor<player.y+player.h&&p.y*TILE>player.y;
+    this.imageSprite(sprite,p.x*TILE,p.y*TILE,obscures?.08:1);
   }
   decoration(x,y,t){
     for(const p of this.sceneryModel().ambient(x,y,t,this.data?.events))this.drawScenery(p);
@@ -133,6 +139,7 @@ export class WorldRenderer {
     const W=this.world;
     if(!this.width||!this.data.state)return;const d=this.data,b=d.state.battle?.status==='active'?d.state.battle:null,at=Date.now()+(d.clockOffset||0),c=this.ctx;
     const mine=d.players?.find(p=>p.uid===d.uid)||d.self,pos=b?{...b.player,moving:false}:W.sample(mine?.route,at);
+    this.playerSilhouette=mine||b?{x:(pos.x+.5)*TILE-18,y:(pos.y+.5)*TILE-48,w:36,h:48,foot:pos.y+.5}:null;
     if(this.camera.follow){this.camera.x=b?b.bounds.x+4:pos.x+.5;this.camera.y=b?b.bounds.y+4:pos.y+.5;}
     this.hitRegions=[];
     const zoom=b?Math.max(.55,Math.min(1.4,(this.width-28)/320,(this.height-80)/320)):this.camera.zoom,s=TILE*zoom;

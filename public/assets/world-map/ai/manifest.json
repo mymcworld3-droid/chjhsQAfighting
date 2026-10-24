@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 1902914,
+  "totalBytes": 1984806,
   "assets": [
     {
       "id": "meditation",
@@ -367,14 +367,16 @@
       "note": "512px native directional sprite rendered at 118px"
     },
     {
-      "id": "bamboo-tall-atlas",
-      "file": "bamboo-tall-atlas.png",
-      "width": 128,
-      "height": 256,
-      "bytes": 131406,
+      "id": "bamboo-upright-atlas",
+      "file": "bamboo-upright-atlas.webp",
+      "width": 768,
+      "height": 1536,
+      "bytes": 213298,
       "alpha": true,
+      "quality": 84,
       "variants": 4,
-      "source": "seeded hand-drawn upright multi-tile bamboo PNG"
+      "source": "Built-in image generation: four long straight bamboo clumps on a transparent 2x2 atlas",
+      "sourceSha256": "8f1dc205af52aed584cc0878d50b984e5a5bb6bf3ec6230cbcefefba0e27d1a7"
     }
   ]
 }
