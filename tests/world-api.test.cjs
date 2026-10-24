@@ -19,6 +19,17 @@ async function setup(t,{saved={},db:provided=null,world=null}={}){
   }
   return {db,service,request,url,advance(ms){at+=ms;},get now(){return at;}};
 }
+test('sect services use authoritative proximity checks and open existing entries without changing player balances',async t=>{
+  const h=await setup(t,{saved:{position:W.SPAWN,explored:W.fullExplored()}});await h.request('join');
+  const actor=h.service.hub.actors.get('u1');
+  for(const o of [...W.SECT_FACILITIES,W.object('sect-steward')]){
+    const p=W.approach(W.SPAWN,o).path.at(-1);actor.state.position=p;actor.route={path:[p],startedAtMs:h.now,stepMs:W.STEP_MS};
+    const result=await h.request('interact',{objectId:o.id});assert.equal(result.ok,true,o.id);assert.equal(result.entry,o.entry);
+  }
+  assert.equal(h.db.docs.get('users/u1').stats.gold,0);assert.equal(h.db.docs.get('users/u1').materialSystem.inventory['qi-spirit-iron'],10);
+  actor.state.position=W.SPAWN;actor.route={path:[W.SPAWN],startedAtMs:h.now,stepMs:W.STEP_MS};
+  assert.equal((await h.request('interact',{objectId:'market-hall'})).status,409,'distant clients must still walk to the building');
+});
 test('world API requires identity and never accepts a client-supplied position or combat snapshot',async t=>{
   const h=await setup(t);assert.equal((await h.request('join',{},'')).status,401);
   const joined=await h.request('join',{position:P(37,12),attack:999999});assert.deepEqual(joined.state.position,W.SPAWN);

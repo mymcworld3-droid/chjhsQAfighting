@@ -15,7 +15,7 @@
   const SIZE=1000,CHUNK_SIZE=32,CHUNK_COUNT=Math.ceil(SIZE/CHUNK_SIZE),STEP_MS=220,VISION_RADIUS=15;
   const GENERATOR_VERSION='qingyun-seeded-v2',DEFAULT_SEED='qingyun-2026';
   const SPAWN=Object.freeze({x:Math.floor(SIZE/2),y:Math.floor(SIZE/2)}),DIRS=Object.freeze([[0,1],[1,0],[0,-1],[-1,0]]);
-  const CITY_RADIUS=22,SAFE_RADIUS=36,OUTSKIRTS=Object.freeze({x:SPAWN.x+44,y:SPAWN.y-64,w:48,h:48});
+  const CITY_RADIUS=30,SAFE_RADIUS=36,OUTSKIRTS=Object.freeze({x:SPAWN.x+44,y:SPAWN.y-64,w:48,h:48});
   // Shared architectural footprints use tile coordinates; painted roofs and
   // canopies may overhang them. Existing functional buildings keep their IDs
   // and positions, so saved interactions still lead to the same doors.
@@ -26,6 +26,31 @@
       {id:'pavilion-'+side,prop:'sect-pavilion',dx:side*18,dy:11,w:152,h:152,anchor:.86,footprint:{x:side*18-1,y:10,w:3,h:2}}
     ])
   ].map(p=>Object.freeze({...p,footprint:Object.freeze(p.footprint)})));
+  const SECT_FACILITIES=Object.freeze([
+    {id:'market-hall',name:'雲間商會',dx:-18,dy:24,artCell:0,entry:'market',icon:'市',description:'逛坊市、與道友交易，或整理自己上架的商品。'},
+    {id:'material-shop',name:'靈材鋪',dx:-12,dy:24,artCell:1,entry:'market-material',icon:'材',description:'交易道友採集與團本所得的靈木、靈鐵等材料。'},
+    {id:'avatar-shop',name:'衣冠閣',dx:-6,dy:24,artCell:0,entry:'store-avatar',icon:'衣',description:'挑選坊市中的人物頭像，換一副行走江湖的樣貌。'},
+    {id:'frame-shop',name:'流光飾坊',dx:6,dy:24,artCell:3,entry:'store-frame',icon:'飾',description:'挑選坊市中的頭像框，為自己的修行名帖添一分風采。'},
+    {id:'artifact-shop',name:'法寶鋪',dx:12,dy:24,artCell:2,entry:'market-artifact',icon:'器',description:'尋找道友出售的法寶，為下一次歷練整理裝備。'},
+    {id:'recipe-shop',name:'百卷書肆',dx:18,dy:24,artCell:3,entry:'market-recipe',icon:'方',description:'翻閱交易市集的煉器配方，尋找下一件本命法器的方向。'},
+    {id:'scripture-library',name:'藏經閣',dx:-23,dy:-18,artCell:5,entry:'library',icon:'經',description:'查閱修行法門、回顧答題紀錄，帶著新的領悟再去問道。'},
+    {id:'alchemy-hall',name:'丹藥堂',dx:23,dy:-18,artCell:4,entry:'alchemy',icon:'丹',description:'整理丹藥與修行行囊，查看金丹、元嬰與化神的修行。'},
+    {id:'commission-hall',name:'庶務堂',dx:-23,dy:-5,artCell:8,entry:'commissions',icon:'務',description:'查看日常、每週與宗門委託，領取已完成的師門嘉獎。'},
+    {id:'dining-hall',name:'百味膳堂',dx:23,dy:-5,artCell:6,entry:'dining',icon:'膳',description:'在熱茶與飯香中歇腳，安排今日的問道與閉關。'},
+    {id:'disciple-residence',name:'弟子居所',dx:-23,dy:9,artCell:7,entry:'residence',icon:'居',description:'整理行囊與儀容，設定這一趟修行想探索的學問。'},
+    {id:'teahouse',name:'聽雨茶樓',dx:23,dy:9,artCell:6,entry:'friends',icon:'茶',description:'邀道友品茶、交流，約好下一次切磋與秘境之行。'},
+    {id:'lecture-hall',name:'傳道堂',dx:-10,dy:-24,artCell:5,entry:'practice',icon:'道',description:'隨時入座問道，在一問一答之間積累自己的修為。'},
+    {id:'sect-storehouse',name:'宗門庫房',dx:10,dy:-24,artCell:1,entry:'bag',icon:'倉',description:'查看材料與法寶收藏，為煉器與遠行備齊行囊。'}
+  ].map(p=>Object.freeze({...p,x:SPAWN.x+p.dx,y:SPAWN.y+p.dy,kind:'building',town:true,footprint:Object.freeze({x:p.dx-1,y:p.dy-1,w:3,h:2})})));
+  const SECT_DISTRICTS=Object.freeze([
+    {id:'affairs',name:'宗門中樞',detail:'師門事務與仙途指引',places:['sect-steward','commission-hall','quest','rank']},
+    {id:'market',name:'雲間商街',detail:'坊市商品、衣冠飾物、靈材與法寶交易',places:['market-hall','material-shop','avatar-shop','frame-shop','artifact-shop','recipe-shop']},
+    {id:'study',name:'傳道學宮',detail:'問道、藏經與閉關修行',places:['lecture-hall','scripture-library','meditation']},
+    {id:'craft',name:'丹器百工',detail:'丹藥、煉器、契器與庫藏',places:['alchemy-hall','forge','contract','sect-storehouse']},
+    {id:'living',name:'弟子生活',detail:'膳堂、居所與道友茶聚',places:['dining-hall','disciple-residence','teahouse','vault']},
+    {id:'adventure',name:'演武與歷練',detail:'論道切磋與秘境同行',places:['duel','raid']}
+  ].map(p=>Object.freeze({...p,places:Object.freeze(p.places)})));
+  const SECT_FOOTPRINTS=Object.freeze([...SECT_LANDMARKS,...SECT_FACILITIES].map(p=>p.footprint));
   function sectWater(dx,dy){
     const ax=Math.abs(dx),centre=13+Math.round(Math.sin((dy+4)/7)*1.4);
     return dy>=-12&&dy<=16&&Math.abs(ax-centre)<=1||((ax-11)/4)**2+((dy-13)/3.4)**2<=1;
@@ -36,7 +61,8 @@
     // The former 19 x 19 court is preserved. Water gardens occupy the new
     // wings; their marble crossings are genuine walkable bridge terrain.
     if(sectWater(dx,dy))return [0,-7,6].includes(dy)?'bridge':'water';
-    if(ax<=1||ay<=1||ax===18||ay===18||[-7,6].includes(dy)&&ax>=9&&ax<=18||
+    if(ax<=1||ay<=1||ax===18||ay===18||ax===26||ay===26||[-23,25].includes(dy)&&ax<=26||
+      SECT_FACILITIES.some(p=>dy===p.dy+1&&Math.abs(dx-p.dx)<=3)||[-7,6].includes(dy)&&ax>=9&&ax<=18||
       dy===-12&&ax<=6||ax===6&&dy>=-20&&dy<=-12||dy===-20&&ax<=6)return 'road';
     if(ax>=10&&ax<=20&&dy>=-17&&dy<=16)return 'grass';
     return 'courtyard';
@@ -45,7 +71,7 @@
     const dx=x-SPAWN.x,dy=y-SPAWN.y,ax=Math.abs(dx),ay=Math.abs(dy);
     if(Math.max(ax,ay)>CITY_RADIUS)return false;
     if(ax===CITY_RADIUS&&dy!==0||ay===CITY_RADIUS&&dx!==0)return true;
-    return SECT_LANDMARKS.some(({footprint:f})=>dx>=f.x&&dx<f.x+f.w&&dy>=f.y&&dy<f.y+f.h);
+    return SECT_FOOTPRINTS.some(f=>dx>=f.x&&dx<f.x+f.w&&dy>=f.y&&dy<f.y+f.h);
   }
   const townPoint=(x,y)=>({x:SPAWN.x+x-9,y:SPAWN.y+y-36}),starterPoint=(x,y)=>({x:OUTSKIRTS.x+x,y:OUTSKIRTS.y+y});
   const inSafeArea=(x,y)=>Math.max(Math.abs(x-SPAWN.x),Math.abs(y-SPAWN.y))<=SAFE_RADIUS;
@@ -101,7 +127,13 @@
     {id:'bridge',x:25,y:27,kind:'event',name:'修復青溪橋',icon:'橋'},
     {id:'array',x:39,y:8,kind:'event',name:'共破古陣',icon:'陣'}
   ].map(Object.freeze));
-  const STARTER_OBJECTS=Object.freeze(LOCAL_OBJECTS.map(o=>Object.freeze({...o,...(['building','npc'].includes(o.kind)?townPoint(o.x,o.y):starterPoint(o.x,o.y)),...(o.kind==='monster'?{species:o.name,biome:o.id.startsWith('wolf')?'bamboo':'mountain',habitatId:'starter:'+o.name}:{} )})));
+  const STARTER_OBJECTS=Object.freeze([
+    ...LOCAL_OBJECTS.map(o=>Object.freeze({...o,...(['building','npc'].includes(o.kind)?townPoint(o.x,o.y):starterPoint(o.x,o.y)),...(o.kind==='monster'?{species:o.name,biome:o.id.startsWith('wolf')?'bamboo':'mountain',habitatId:'starter:'+o.name}:{} )})),
+    ...SECT_FACILITIES,
+    Object.freeze({id:'sect-steward',x:SPAWN.x,y:SPAWN.y-11,kind:'npc',name:'內門執事',icon:'師',entry:'commissions',description:'師門日常、每週修行與宗門委託，都可向執事詢問。'}),
+    Object.freeze({id:'market-keeper',x:SPAWN.x-9,y:SPAWN.y+25,kind:'npc',name:'坊市掌櫃',icon:'商',entry:'market',description:'想逛坊市、找道友交易，或管理自己的寄售商品，都可來問掌櫃。'}),
+    Object.freeze({id:'tea-host',x:SPAWN.x+21,y:SPAWN.y+10,kind:'npc',name:'茶樓知客',icon:'茶',entry:'friends',description:'一盞清茶會道友，邀朋友來宗門裡走走。'})
+  ]);
   const legacyHash=(x,y)=>((Math.imul(x+91,73856093)^Math.imul(y+17,19349663))>>>0);
   const STARTER_TERRAIN=(()=>{const SIZE=48,OBJECTS=LOCAL_OBJECTS.filter(o=>!['building','npc'].includes(o.kind)),hash=legacyHash,index=(x,y)=>y*48+x,inside=(x,y)=>x>=0&&y>=0&&x<48&&y<48;
   function makeTerrain() {
@@ -339,8 +371,10 @@ return TERRAIN;})();
       if(!result.path.length)return result;const path=p.moving?[p.tile,...result.path]:result.path;
       return {...result,route:{path,stepMs:STEP_MS,startedAtMs:at-(p.moving?p.fraction*STEP_MS:0)}};
     }
-    const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?'問道宗':inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
-    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
+    const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?
+      '問道宗'+(p.y>=SPAWN.y+20?'・雲間商街':p.y<=SPAWN.y-21?'・傳道學宮':p.x<=SPAWN.x-21?'・弟子西院':p.x>=SPAWN.x+21?'・百工東院':''):
+      inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
+    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,SECT_LANDMARKS,SECT_FACILITIES,SECT_DISTRICTS,sectWater,sectTerrain,sectBlocked,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
       key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
       patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
     return Object.freeze(api);

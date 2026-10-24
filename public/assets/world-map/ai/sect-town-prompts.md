@@ -1,0 +1,13 @@
+# 問道宗生活街區素材
+
+使用內建 `image_gen` 製作一張透明九格建築圖集，遊戲素材為 `public/assets/world-map/ai/sect-town-atlas.webp`。不替換既有大殿、城門、庭園或地面材質。
+
+## 最終生成提示詞
+
+Use case: stylized-concept. Asset type: a SINGLE production-ready 3-by-3 sprite ATLAS for the Chinese xianxia browser RPG's prosperous WENDAO SECT. Create one square 1536x1536 transparent PNG atlas, exactly 9 equal square cells, no visible grid lines. Each cell contains ONE different entire standalone south-facing Chinese fantasy building sprite centred in its own cell, generous fully transparent margins, no cell overlaps. Art: crisp high-detail hand-painted miniature videogame architecture, elevated frontal overhead 3/4 view with roof visible and front doorway facing straight south, approximately orthographic, symmetrical front edges, teal/jade glazed curved roof tiles with gold ridges, warm carved timber, pale stone steps, subdued natural palette matching a grand jade-and-gold Chinese cultivation monastery. Not pixel art and not photorealistic. Consistent camera and scale, rich readable silhouettes at small game size. Exact row-major subjects: TOP LEFT welcoming two-storey market shop with cream awning, merchandise and hanging lanterns; TOP MIDDLE material merchant with neat ore crates, logs, sacks and open display; TOP RIGHT enchanted weapon merchant with sword racks, jade blades and copper fittings; MIDDLE LEFT recipe and scroll shop with scroll displays, books and hanging scrolls; MIDDLE MIDDLE elegant alchemy infirmary with herb planters, medicine drawers and a jade cauldron; MIDDLE RIGHT tall three-roof scripture library with windows, carved railings and open books; BOTTOM LEFT lively communal dining hall with steam baskets, round wooden tables and small tea counter; BOTTOM MIDDLE peaceful two-part disciple residence with veranda, small courtyard and bamboo planters; BOTTOM RIGHT dignified sect administration/commission hall with an outdoor notice board and scrolls. All nine buildings must stay complete inside their own cell with a transparent outer margin, no connecting floors between cells. No people, no landscape, no opaque backgrounds, no clouds, no glow haze, no particles, no labels, no lettering, no text or watermarks. These are functional game sprites, not a collage of scenes.
+
+## 分格與畫質
+
+生成原圖實際為 1254 × 1254；依透明分隔帶切割，避免裁掉藏經閣的屋頂。來源 X 邊界為 `0,420,838,1254`，Y 邊界為 `0,373,812,1254`。每格整理為 416 × 416、透明邊距 8px，以 WebP quality 90、alphaQuality 100 封裝；成品 1248 × 1248，655,308 bytes。完整 SHA-256 與來源邊界記錄於 `manifest.json`。
+
+九格依序供商會、靈材鋪、法寶鋪、書肆、丹藥堂、藏經閣、膳堂、居所與庶務堂使用。衣冠閣、流光飾坊、傳道堂、茶樓與庫房共享相應建築風格。遊戲顯示 110 × 110，最高縮放 1.8 倍、DPR 2 仍由 416px 原生格供應。

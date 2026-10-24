@@ -17,14 +17,15 @@ test('every building has its own small bitmap and all live world objects have ma
 test('all shipped AI images exist, match the size manifest, preserve cutout alpha and fit a small download budget',()=>{
   const root=path.join(__dirname,'../public/assets/world-map/ai'),manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
   // Includes the three additional monster directions, boat directions and ambient props.
-  assert.equal(manifest.assets.length,Object.keys(A.sources).length);assert.ok(manifest.totalBytes<3200000);
+  assert.equal(manifest.assets.length,Object.keys(A.sources).length);assert.ok(manifest.totalBytes<3900000);
+  assert.ok(manifest.totalBytes-manifest.assets.find(a=>a.id==='sect-town-atlas').bytes<3200000,'existing assets retain their download budget');
   assert.equal(new Set(manifest.assets.filter(a=>A.buildings.includes(a.id)).map(a=>a.sourceSha256)).size,15,'each building comes from its own generated image');
   for(const[id,url]of Object.entries(A.sources)){
     const asset=manifest.assets.find(a=>a.id===id);assert.ok(asset,id);const bytes=fs.readFileSync(path.join(root,path.basename(url)));
     if(path.extname(url)==='.png')assert.equal(bytes.toString('hex',0,8),'89504e470d0a1a0a');
     else {assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
     assert.equal(bytes.length,asset.bytes);
-    const limits=({'sect-garden-atlas':[1536,1536,850000],'sect-palace':[1024,768,300000],'bamboo-upright-atlas':[768,1536,220000],'sect-gates':[1024,1024,250000]})[id]||[640,640,220000];
+    const limits=({'sect-town-atlas':[1248,1248,700000],'sect-garden-atlas':[1536,1536,850000],'sect-palace':[1024,768,300000],'bamboo-upright-atlas':[768,1536,220000],'sect-gates':[1024,1024,250000]})[id]||[640,640,220000];
     assert.ok(asset.width<=limits[0]&&asset.height<=limits[1]);
     assert.ok(asset.bytes<=limits[2]);
     if(asset.sourceSha256)assert.match(asset.sourceSha256,/^[a-f0-9]{64}$/);

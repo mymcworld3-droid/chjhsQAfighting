@@ -4,7 +4,7 @@
   const base='/assets/world-map/ai/';
   const buildings=['meditation','forge','contract','vault','rank','duel','raid','watchtower','shrine','ruins','camp','realm-spring','realm-array','realm-sword','realm-star'];
   const directions=Object.freeze(['north','east','south','west']);
-  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas','sect-gates','bamboo-upright-atlas','sect-palace','sect-garden-atlas','sect-lotus'].map(id=>[id,base+id+'.webp'])));
+  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas','sect-gates','bamboo-upright-atlas','sect-palace','sect-garden-atlas','sect-lotus','sect-town-atlas'].map(id=>[id,base+id+'.webp'])));
   const sectProps=Object.freeze(['sect-rockery','sect-pavilion','sect-bridge-ew','sect-bridge-ns','sect-lion-right','sect-lion-left','sect-censer','sect-magnolia','sect-medallion']);
   const sceneryProps=Object.freeze(['fence','gate','wall','broken-wall','pillar','rubble','bridge','supplies']);
   const props=['bamboo','tree','rock','volcano','flowers','shrub','reeds','herb','ore','chest','lantern','wall-h','wall-v','gate','garden','boat','meteor','shield','altar','sealed'];
@@ -64,6 +64,7 @@
     return sheet(direction==='south'?'creatures-atlas':'creatures-'+direction,index<0?19:index,5,44,44);
   }
   function object(o){
+    if(o.town&&Number.isInteger(o.artCell))return {image:'sect-town-atlas',sx:o.artCell%3*416,sy:Math.floor(o.artCell/3)*416,sw:416,sh:416,w:110,h:110,anchor:.89};
     if(o.kind==='monster')return monster(o);
     let id=o.kind==='building'?o.id:o.kind==='structure'?o.subtype:null;
     if(o.kind==='realm')id=['靈泉洞天','古陣秘境','藏劍遺窟','星隕石窟'].includes(o.name)?['realm-spring','realm-array','realm-sword','realm-star'][['靈泉洞天','古陣秘境','藏劍遺窟','星隕石窟'].indexOf(o.name)]:'realm-array';

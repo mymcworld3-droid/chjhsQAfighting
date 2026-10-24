@@ -1,0 +1,23 @@
+[
+  {
+    "width": 1200,
+    "guideFits": true,
+    "routeAndInteraction": true,
+    "service": "material market",
+    "pageErrors": 0
+  },
+  {
+    "width": 390,
+    "guideFits": true,
+    "routeAndInteraction": true,
+    "service": "avatar store",
+    "pageErrors": 0
+  },
+  {
+    "width": 320,
+    "guideFits": true,
+    "routeAndInteraction": true,
+    "service": "avatar store",
+    "pageErrors": 0
+  }
+]

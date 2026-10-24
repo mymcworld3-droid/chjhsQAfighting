@@ -78,6 +78,16 @@ html.app-zoom-locked body #page-world .ww-canvas,html.app-answer-zoom-allowed bo
 #page-world .ww-menu button{display:flex;align-items:center;justify-content:space-between;font-size:12px;text-align:left;gap:4px;padding:10px}
 #page-world .ww-menu+p{font-size:11px;margin-top:12px}
 #page-world .ww-menu button span{color:var(--ww-gold)}
+#page-world .ww-sect-guide{display:grid;gap:18px}
+#page-world .ww-sect-guide h3{font:500 16px/1.5 var(--ui-serif,serif);margin:0;color:var(--ww-gold)}
+#page-world .ww-sect-guide section>small{margin:2px 0 8px}
+#page-world .ww-sect-guide section>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+#page-world .ww-sect-guide button{display:flex;align-items:center;gap:8px;text-align:left;min-width:0;padding:9px}
+#page-world .ww-sect-guide b{flex:none;color:var(--ww-gold);font:500 18px var(--ui-serif,serif)}
+#page-world .ww-sect-guide button>span{flex:1;font-size:12px;min-width:0}
+#page-world .ww-sect-guide button small{font-size:10px}
+#page-world .ww-sect-guide em{font-size:10px;font-style:normal;color:var(--ww-muted);flex:none}
+@media(max-width:420px){#page-world .ww-sect-guide section>div{grid-template-columns:1fr}}
 #page-world .ww-peer{border-bottom:1px solid var(--ww-line);padding:8px 0 14px;margin-bottom:8px}
 #page-world .ww-peer strong{font-size:14px}
 #page-world .ww-peer>div{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}

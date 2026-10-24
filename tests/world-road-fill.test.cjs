@@ -83,7 +83,9 @@ test('sect ground and gardens retain their identities while dense road junctions
   }
   const court=scene.topology(497,486,world.terrain(497,486));assert.equal(court.terrain,'courtyard');assert.equal(court.paving,0);
   assert.equal(scene.topology(500,497,world.terrain(500,497)).paving,15,'3-wide road centre has four solid 2 x 2 neighbours');
-  assert.equal(scene.topology(500,470,'road').paving,0,'single-width approach remains narrow');
+  const approachY=W.SPAWN.y-W.CITY_RADIUS-1;
+  assert.equal(world.terrain(500,approachY),'road');
+  assert.equal(scene.topology(500,approachY,'road').paving,0,'single-width approach outside the sect remains narrow');
   for(const {x,y,terrain,walkable}of snapshots){assert.equal(world.terrain(x,y),terrain);assert.equal(world.walkable(x,y),walkable);}
   assert.equal(JSON.stringify(world.patchVersions()),before);
 });

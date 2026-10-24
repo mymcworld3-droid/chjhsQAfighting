@@ -12,10 +12,13 @@ vm.runInNewContext(fs.readFileSync(root+'/public/world/world-renderer.js','utf8'
 async function main(){
   const images={};for(const[id,url]of Object.entries({...A.sources,male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'}))images[id]=await loadImage(root+'/public'+url);
   const world=W.createWorld(),fixtures=[
-    {name:'overview',x:500,y:500,width:1280,height:1280,zoom:.65,player:{x:500,y:502}},
+    {name:'overview',x:500,y:500,width:1720,height:1720,zoom:.65,player:{x:500,y:502}},
     {name:'main-hall',x:500,y:485,width:1100,height:720,zoom:1.45,player:{x:500,y:489}},
     {name:'water-garden',x:514,y:502,width:1100,height:760,zoom:1.25,player:{x:514,y:506}},
-    {name:'phone',x:500,y:497,width:390,height:740,zoom:1,dpr:2,player:{x:500,y:497}}
+    {name:'phone',x:500,y:497,width:390,height:740,zoom:1,dpr:2,player:{x:500,y:497}},
+    {name:'shopping-street',x:500,y:524,width:1440,height:720,zoom:.85,player:{x:500,y:525}},
+    {name:'phone-market',x:482,y:524,width:390,height:740,zoom:1.25,dpr:2,player:{x:482,y:525}},
+    {name:'library-quarter',x:477,y:481,width:1000,height:720,zoom:1.4,player:{x:477,y:483}}
   ],report=[];
   for(const f of fixtures){
     const dpr=f.dpr||1,canvas=createCanvas(f.width*dpr,f.height*dpr),r=Object.create(context.Renderer.prototype);
@@ -33,7 +36,7 @@ async function main(){
     r.playerSilhouette={x:500.5*40-18,y:484.5*40-48,w:36,h:48,foot:484.5};
     const palace=S.create(world).sect().find(p=>p.prop==='sect-palace');r.drawScenery(palace);assert.equal(draws[0].alpha,.22);
   }
-  const summary={renderer:'production WorldRenderer via native Canvas',seed:world.descriptor.seed,sectSize:45,assets:Object.keys(images).length,repeatable:true,fixtures:report};
+  const summary={renderer:'production WorldRenderer via native Canvas',seed:world.descriptor.seed,sectSize:world.CITY_RADIUS*2+1,facilities:world.SECT_FACILITIES.length,assets:Object.keys(images).length,repeatable:true,fixtures:report};
   fs.writeFileSync(path.join(output,'validation.json'),JSON.stringify(summary,null,2)+'\n');console.log(JSON.stringify(summary));
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

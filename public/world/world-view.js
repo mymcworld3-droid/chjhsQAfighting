@@ -10,7 +10,7 @@ export class WorldView {
     Object.assign(this,{root,api,subscribe,uid,openEntry,applyUser,confirm});this.world=BaseWorld.createWorld();this.players=[];this.events={};this.seq=0;this.busy=false;this.visible=false;this.generation=0;
     root.innerHTML=`<section class="ww-stage"><canvas class="ww-canvas" tabindex="0" role="application" aria-label="大世界地圖。點格移動，拖曳查看。也可用方向鍵選格，Enter 前往。"></canvas>
         <div class="ww-location"><strong data-zone>問道宗</strong><span><span data-coordinates>500，500</span> · 點格前往・拖曳查看</span><small data-connection role="status">正在連線</small></div>
-        <div class="ww-explore-actions"><button type="button" class="btn-cyber-ghost" id="world-free-practice" data-entry="practice"><i class="fa-solid fa-scroll" aria-hidden="true"></i> 自由問道</button><div class="ww-top-right"><button type="button" class="btn-cyber-ghost" data-action="menu" aria-label="開啟功能選單"><i class="fa-solid fa-bars" aria-hidden="true"></i> 功能</button></div></div>
+        <div class="ww-explore-actions"><button type="button" class="btn-cyber-ghost" id="world-free-practice" data-entry="practice"><i class="fa-solid fa-scroll" aria-hidden="true"></i> 自由問道</button><button type="button" class="btn-cyber-ghost" data-action="sect-guide"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> 宗門導覽</button><div class="ww-top-right"><button type="button" class="btn-cyber-ghost" data-action="menu" aria-label="開啟功能選單"><i class="fa-solid fa-bars" aria-hidden="true"></i> 功能</button></div></div>
         <div class="ww-minimap"><canvas width="144" height="144" aria-label="已探索地圖，點擊可移動鏡頭"></canvas><span>全服共享 · 1000 × 1000</span></div>
         <div class="ww-camera"><button type="button" data-action="travel" aria-label="乘舟或上岸" hidden>乘舟</button><button type="button" data-action="center" aria-label="回到角色">◎ <span>回到角色</span></button><button type="button" data-action="zoom-in" aria-label="放大地圖">＋</button><button type="button" data-action="zoom-out" aria-label="縮小地圖">−</button><button type="button" data-action="stop" aria-label="停止移動">停</button></div>
         <div class="ww-battle-status" hidden></div><div class="ww-combat-log" aria-live="polite" hidden></div><div class="ww-objective" hidden></div>
@@ -180,7 +180,25 @@ export class WorldView {
     const W=this.world;
     const info={gather:'每日個人採集資格；其他玩家採集不會影響你。可獲得材料 ×2。',chest:'個人首次寶箱；開啟後獲得玄鐵、靈木與靈石。',monster:'在此處展開 8 × 8 局部戰場。每回合兩題補能；答錯仍可移動、普攻與防守。每日第一次勝利可取得獎勵，其後仍可練習戰術。',building:'走到建築旁開啟，也可使用原本的修煉導覽或地圖功能選單。',npc:'追蹤仙途任務，從青竹林帶回第一批修行材料。',event:o.id==='bridge'?'全服共同投入靈木，修復後開通青溪捷徑。每日每人可投入一次。':'全服共同投入玄鐵，穩定山口古陣。每日每人可投入一次。'}[o.kind];
     let extra=o.level?`<p>建議等級 ${o.level} · ${esc(o.realm)}域${o.veinId?' · 連續礦脈':''}</p>`:'';if(['realm','structure'].includes(o.kind))extra+='<p>'+esc(o.kind==='realm'?(o.subtype==='guardian'?'古老守衛看守秘藏，可展開局部戰棋挑戰。':'旋轉陣紋機關，開啟秘境寶藏；探索不需答題。'):o.subtype==='watchtower'?'登上望樓可揭開附近迷霧。':o.subtype==='camp'?'可在此休整與問道練習。':'調查遺跡並破解陣紋，取得探索獎勵。')+'</p>';if(o.kind==='event'){const goal=o.id==='bridge'?20:60,value=this.events[o.id]||0;extra=`<div class="ww-event-bar"><span style="width:${Math.min(100,value/goal*100)}%"></span></div><p>全服進度 ${value} / ${goal} · 需要${o.id==='bridge'?'靈木':'玄鐵'} ×2</p>${o.id==='array'?'<p>完成後解除北方封印，所有修士皆可進入古陣秘藏。</p>':''}`;}
-    this.panel(o.name,`<p>${info||'前往調查這處古老遺跡。'}</p>${extra}<small>地點（${o.x}，${o.y}）· ${esc(W.zone(o))}</small>`,this.button(o.kind==='monster'?'前往挑戰':o.kind==='gather'?'前往採集':o.kind==='chest'?'前往開箱':o.kind==='event'?'前往貢獻':'前往互動','interact'));
+    this.panel(o.name,`<p>${esc(o.description)||info||'前往調查這處古老遺跡。'}</p>${extra}<small>地點（${o.x}，${o.y}）· ${esc(W.zone(o))}</small>`,this.button(o.kind==='monster'?'前往挑戰':o.kind==='gather'?'前往採集':o.kind==='chest'?'前往開箱':o.kind==='event'?'前往貢獻':o.town?'前往'+o.name:'前往互動','interact'));
+  }
+  sectGuide(){
+    const W=this.world;
+    this.panel('問道宗導覽',`<p class="ww-muted">沿街尋店，入院問道。選擇一處地點，便會沿可通行路線前往。</p><div class="ww-sect-guide">${W.SECT_DISTRICTS.map(d=>`<section><h3>${esc(d.name)}</h3><small>${esc(d.detail)}</small><div>${d.places.map(place=>W.object(place)).filter(Boolean).map(o=>`<button type="button" data-action="visit-place" data-place="${esc(o.id)}"><b>${esc(o.icon||'門')}</b><span>${esc(o.name)}<small>（${o.x}，${o.y}）</small></span><em>前往 →</em></button>`).join('')}</div></section>`).join('')}</div>`);
+  }
+  facilityPanel(entry){
+    const place=this.world.SECT_FACILITIES.find(o=>o.entry===entry);
+    if(!place)return false;
+    const choices={
+      market:[['store','逛坊市商品'],['market-all','道友交易市集'],['market-mine','我的上架商品']],
+      library:[['core','查閱金丹・元嬰・化神'],['history','回顧答題紀錄'],['practice','入座問道']],
+      alchemy:[['bag','查看丹藥與行囊'],['core','前往金丹修行'],['refinery','前往煉器']],
+      dining:[['meditation','今日閉關'],['practice','茶後問道'],['commissions','今日宗門委託']],
+      residence:[['bag','整理修行行囊'],['settings','整理儀容與答題範圍'],['friends','探訪道友']]
+    }[entry];
+    if(!choices)return false;
+    this.panel(place.name,`<p>${esc(place.description)}</p><div class="ww-menu">${choices.map(([key,label])=>`<button type="button" data-entry="${key}">${esc(label)}<span>→</span></button>`).join('')}</div>`);
+    return true;
   }
   playerPanel(peers){
     this.panel(peers.length>1?`此格有 ${peers.length} 位道友`:peers[0].name,peers.map(p=>`<article class="ww-peer"><strong>${esc(p.name)}</strong><small>${p.status==='battle'?'交戰中・'+esc(p.battleName):'正在探索青雲界'}</small><div><button type="button" data-action="profile" data-uid="${esc(p.uid)}">角色資料</button><button type="button" data-action="chat" data-uid="${esc(p.uid)}" data-name="${esc(p.name)}">交流</button><button type="button" data-action="invite-raid" data-uid="${esc(p.uid)}">邀請組隊</button><button type="button" data-action="invite-duel" data-uid="${esc(p.uid)}">切磋</button></div></article>`).join(''));
@@ -243,10 +261,12 @@ export class WorldView {
       case 'zoom-out':this.renderer.zoom(1/1.15);break;
       case 'stop':this.pending=null;this.navigation=null;try{const response=await this.api('stop',{sessionId:this.sessionId,seq:++this.seq});this.players=this.players.filter(p=>p.uid!==this.uid).concat(response.self);this.set(response);}catch(e){this.message(e.message);}break;
       case 'quest':this.questPanel();break;
+      case 'sect-guide':if(this.battle()?.status==='active'){this.message('請先完成戰鬥，或使用撤離按鈕');break;}this.sectGuide();break;
+      case 'visit-place':{if(this.battle()?.status==='active'){this.message('請先完成戰鬥，或使用撤離按鈕');break;}const o=W.object(data.place);if(o&&['building','npc'].includes(o.kind)){this.selectedObject=o;await this.move(o,o.id,true);}break;}
       case 'navigate':{const step=this.state.quest.steps[Number(data.step)],object=step.objectId?W.object(step.objectId):null;this.move(step.target||object,object?.id);break;}
       case 'claim-quest':await this.run(async()=>{const r=await this.api('quest',{requestId:id()});this.set(r);this.panel('宗門嘉獎',this.rewards(r.rewards)+`<p>修為與材料已入帳；帶著材料前往鍛造坊吧。</p>`,`<button type="button" data-entry="refinery">開啟鍛造坊</button>`+this.button('繼續探索','close'));});break;
       case 'interact':{const o=this.selectedObject;this.move(o,o.id,true);break;}
-      case 'menu':this.panel('仙途行囊',`<div class="ww-menu">${[['training','修煉與突破'],['core','金丹・元嬰・化神'],['refinery','煉器'],['contract','契器'],['bag','寶庫'],['practice','自由問道'],['duel','鬥法'],['raid','團本秘境'],['rank','仙榜'],['friends','好友交流'],['settings','設定'],['sect','宗門事務']].map(([key,name])=>`<button type="button" data-entry="${key}">${name}<span>→</span></button>`).join('')}</div><p class="ww-muted">金色路線為前往方向。紅格為敵人攻擊預告；藍綠格可移動。一般探索不消耗靈力。</p>`);break;
+      case 'menu':this.panel('仙途行囊',`<div class="ww-menu">${[['sect-guide','宗門導覽'],['store','雲間坊市'],['market-all','道友交易'],['commissions','宗門委託'],['training','修煉與突破'],['core','金丹・元嬰・化神'],['refinery','煉器'],['contract','契器'],['bag','寶庫'],['practice','自由問道'],['duel','鬥法'],['raid','團本秘境'],['rank','仙榜'],['friends','好友交流'],['settings','設定'],['sect','宗門事務']].map(([key,name])=>`<button type="button" data-entry="${key}">${name}<span>→</span></button>`).join('')}</div><p class="ww-muted">金色路線為前往方向。紅格為敵人攻擊預告；藍綠格可移動。一般探索不消耗靈力。</p>`);break;
       case 'questions':this.questionJob=null;this.loadQuestions();break;
       case 'recharge':this.renderBattle();break;
       case 'answer':await this.command('answer',{choice:Number(data.choice),index:this.battle().answered});break;

@@ -11,6 +11,24 @@ let view,owner='',opening=false;
 const transport=createWorldTransport(authenticatedMainFetch);
 async function openEntry(entry,data={}){
   const toast=message=>window.showToast?.(message);
+  if(entry==='sect-guide'){view?.sectGuide();return;}
+  if(['market','library','alchemy','dining','residence'].includes(entry)){view?.facilityPanel(entry);return;}
+  if(['store','store-avatar','store-frame'].includes(entry)){
+    await window.switchToPage?.('page-store');document.getElementById('pm-view-shop')?.click();
+    const tab={'store-avatar':'tab_avatar','store-frame':'tab_frame'}[entry];
+    if(tab)document.querySelector(`[data-i18n="${tab}"]`)?.click();return;
+  }
+  const marketViews={'market-all':'all','market-material':'material','market-artifact':'artifact','market-recipe':'recipe','market-mine':'mine'};
+  if(marketViews[entry]){
+    if(!window.openPlayerMarketplace){toast('坊市正在準備，請稍後再試');return;}
+    window.openPlayerMarketplace(marketViews[entry]);return;
+  }
+  if(entry==='commissions'){
+    const button=document.getElementById('quest-open');
+    if(!document.getElementById('quest-panel')||!button){toast('宗門委託正在準備，請稍後再試');return;}
+    button.click();document.getElementById('quest-tab-daily')?.click();return;
+  }
+  if(entry==='meditation'){window.openDailyMeditation?.();return;}
   if(entry==='profile'){window.openPlayerProfileByUid?.(data.uid);return;}
   if(entry==='chat'){
     if(!(window.getCurrentUserData?.()?.friends||[]).includes(data.uid)){window.openPlayerProfileByUid?.(data.uid);toast('先加入好友，就能開啟道友私訊');return;}
@@ -38,7 +56,7 @@ async function openEntry(entry,data={}){
   if(entry==='duel'){window.startBattleMatchmaking?.();return;}
   if(entry==='raid'){window.openRaidHub?.();return;}
   if(entry==='rank'){await window.switchToPage?.('page-rank');void window.loadLeaderboard?.();return;}
-  const pages={settings:'page-settings',friends:'page-social',sect:'page-home'};
+  const pages={settings:'page-settings',friends:'page-social',sect:'page-home',history:'page-history'};
   if(pages[entry]){await window.switchToPage?.(pages[entry]);return;}
   const place={refinery:'forge',contract:'contract',core:'meditation',bag:'vault'}[entry];
   await window.switchToPage?.('page-training');

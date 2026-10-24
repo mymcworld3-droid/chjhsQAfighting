@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 3081864,
+  "totalBytes": 3737172,
   "assets": [
     {
       "id": "meditation",
@@ -422,6 +422,29 @@
       "quality": 86,
       "source": "exec-3d3d038b-5df0-48d9-960e-f5d95907ff48.png",
       "sourceSha256": "5cd26fc1cdc965b7b3f406ca49e1aa8142cb66543e66ac523e9b583e032ee037"
+    },
+    {
+      "id": "sect-town-atlas",
+      "file": "sect-town-atlas.webp",
+      "width": 1248,
+      "height": 1248,
+      "bytes": 655308,
+      "alpha": true,
+      "quality": 90,
+      "sourceRows": [
+        0,
+        373,
+        812,
+        1254
+      ],
+      "sourceColumns": [
+        0,
+        420,
+        838,
+        1254
+      ],
+      "source": "exec-2e8a52d9-0a16-4467-afb3-c9c997a53535.png",
+      "sourceSha256": "fda8e1c1dd0ee60af65d0f22c461616938dd3dd4695ac5d5a5b63e9b3a4f49a7"
     }
   ]
 }

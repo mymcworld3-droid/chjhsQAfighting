@@ -4,7 +4,7 @@ const W=require('../public/world/world-core.js'),S=require('../public/world/worl
 const at=(dx,dy)=>({x:W.SPAWN.x+dx,y:W.SPAWN.y+dy});
 
 test('expanded sect keeps every existing entrance and provides real streams, bridges and four exits',()=>{
-  assert.equal(W.CITY_RADIUS*2+1,45);
+  assert.equal(W.CITY_RADIUS*2+1,61);
   const oldDoors={meditation:[-4,-5],forge:[4,-4],contract:[5,3],vault:[-4,3],rank:[-5,-1],quest:[2,-2],duel:[7,-1],raid:[8,-5]};
   for(const [id,[dx,dy]]of Object.entries(oldDoors)){
     const door=W.object(id);assert.deepEqual({x:door.x,y:door.y},at(dx,dy));
@@ -18,7 +18,7 @@ test('expanded sect keeps every existing entrance and provides real streams, bri
     const water=at(x,dy+1);assert.equal(W.terrain(water.x,water.y),'water');assert.equal(W.walkable(water.x,water.y),false);
   }
   for(const [dx,dy]of W.DIRS){const p=at(dx*23,dy*23);assert.ok(W.plan(W.SPAWN,p).path.length);}
-  const wall=at(22,4);assert.equal(W.walkable(wall.x,wall.y),false,'solid perimeter cannot be crossed through a painted wall');
+  const wall=at(W.CITY_RADIUS,4);assert.equal(W.walkable(wall.x,wall.y),false,'solid perimeter cannot be crossed through a painted wall');
 });
 
 test('multi-cell palace, rockeries and pavilions block their bases while roofs remain visual overhangs',()=>{
@@ -47,7 +47,7 @@ test('large ornaments remain stable when only their overhang is inside the viewp
 test('sect architecture is the same for every seed without altering the surrounding world or patch saves',()=>{
   const a=W.createWorld('garden-a'),b=W.createWorld('garden-b');
   const patches=JSON.stringify(a.patchVersions());
-  for(let dy=-22;dy<=22;dy++)for(let dx=-22;dx<=22;dx++){
+  for(let dy=-W.CITY_RADIUS;dy<=W.CITY_RADIUS;dy++)for(let dx=-W.CITY_RADIUS;dx<=W.CITY_RADIUS;dx++){
     const p=at(dx,dy);assert.equal(a.baseTerrain(p.x,p.y),b.baseTerrain(p.x,p.y));assert.equal(a.walkable(p.x,p.y),b.walkable(p.x,p.y));
   }
   assert.deepEqual(S.create(a).sect(),S.create(b).sect());assert.equal(JSON.stringify(a.patchVersions()),patches);

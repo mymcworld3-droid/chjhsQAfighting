@@ -108,6 +108,7 @@
       if(t==='courtyard'&&Math.abs(dy)===2&&Math.abs(dx)<=18&&Math.abs(dx)%4===2)add('lantern',42);
       if(t==='courtyard'&&((Math.abs(dy)===r-1&&Math.abs(dx)===2)||(Math.abs(dx)===r-1&&Math.abs(dy)===2)))add('obelisk',43);
       if(t==='courtyard'&&((Math.abs(dy)===r-2&&Math.abs(dx)===3)||(Math.abs(dx)===r-2&&Math.abs(dy)===3)))add('banner',38);
+      if(t==='courtyard'&&dy===27&&Math.abs(dx)>=5&&Math.abs(dx)<=23&&Math.abs(dx)%6===5)add('lantern',34);
       return items;
     }
     function sect(){
@@ -144,7 +145,15 @@
         if(!W.inside(tx,ty)||!DRY.has(W.terrain(tx,ty,events))||W.terrain(tx,ty,events)==='road'||W.objectAt(tx,ty))return;
         items.push({x:x+.5,y:y+.6,prop,size,direction:['gate','broken-wall','pillar','rubble','supplies'].includes(prop)?DIRECTIONS[(DIRECTIONS.indexOf(facing)+turn)%4]:null,owner:o.id});
       };
-      if(subtype==='camp'){
+      if(o.town){
+        add('lantern',-2,0,30);add('lantern',2,0,30);
+        if(o.artCell===1){add('logs',-2,1,30);add('ore',2,1,27);}
+        else if(o.artCell===2)add('weapons',2,1,30);
+        else if([3,5].includes(o.artCell))add('scrolls',-2,1,28);
+        else if(o.artCell===4){add('herb',-2,1,27);add('bonsai',2,1,29);}
+        else if(o.artCell===8)add('banner',-2,1,34);
+        else add('bonsai',-2,1,30);
+      }else if(subtype==='camp'){
         for(const x of [-2,-1,0,1,2])add('fence',x,-2,40);
         for(const y of [-1,0,1]){add('fence',-2,y,40);add('fence',2,y,40);}
         for(const x of [-2,-1,1,2])add('fence',x,2,40);
