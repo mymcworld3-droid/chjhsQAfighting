@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "tool": "built-in image_gen",
+  "cellSize": 128,
+  "buildingSize": 256,
+  "totalBytes": 870118,
+  "assets": [
+    {
+      "id": "meditation",
+      "file": "meditation.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 28204,
+      "alpha": true,
+      "source": "exec-543857e1-28b7-403f-b399-f795f1d9f32a.png",
+      "sourceSha256": "b295a281c4966ea6cf3b25ff9a71a2dc0de189507d8d6d74583ce0212082da70"
+    },
+    {
+      "id": "ground-atlas",
+      "file": "ground-atlas.webp",
+      "width": 512,
+      "height": 640,
+      "bytes": 118356,
+      "alpha": false,
+      "source": "exec-08d8e9aa-2de9-42d4-ac18-f0f3edd8505a.png",
+      "sourceSha256": "8a054538050eb79ca72dbfdf18824b7ec3f50f4c62cd1b0ab6112d54835e6d02"
+    },
+    {
+      "id": "props-atlas",
+      "file": "props-atlas.webp",
+      "width": 512,
+      "height": 640,
+      "bytes": 159834,
+      "alpha": true,
+      "source": "exec-62e6e853-985e-40c7-be2c-177a1edef66b.png",
+      "sourceSha256": "b997795fb90d0b4e212f2b71ae61588f5f7e8fd473b9e19c2f768fcf48b800d7"
+    },
+    {
+      "id": "creatures-atlas",
+      "file": "creatures-atlas.webp",
+      "width": 640,
+      "height": 512,
+      "bytes": 178866,
+      "alpha": true,
+      "source": "exec-280e0938-8a04-4872-bf9a-8c7403abe846.png",
+      "sourceSha256": "e025bc3ba633405659b5b5af3c4a7cb560fd21b949564258670a4320b056fbe9"
+    },
+    {
+      "id": "forge",
+      "file": "forge.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 26938,
+      "alpha": true,
+      "source": "exec-894d9343-75a4-4a60-ba76-e0778278e529.png",
+      "sourceSha256": "1c61e2ddc68962209040633612a68afa002ed76d9fd90dc6bf05289a1853aff0"
+    },
+    {
+      "id": "contract",
+      "file": "contract.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 32166,
+      "alpha": true,
+      "source": "exec-47f36a94-5f30-417b-b8ba-1a3d054af78e.png",
+      "sourceSha256": "33cfb1f691fc96628bb8f6f72a587bfef4f1ec481e1982d51622172fd5f3c5fe"
+    },
+    {
+      "id": "vault",
+      "file": "vault.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 26200,
+      "alpha": true,
+      "source": "exec-6daeef00-5358-4f21-b115-3fe0af0956a4.png",
+      "sourceSha256": "84412ce3ef8d5375a61462204cfbe25a6e2855a5b46d3a332fb2b34a6492c69c"
+    },
+    {
+      "id": "rank",
+      "file": "rank.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 28900,
+      "alpha": true,
+      "source": "exec-38343eae-cc0f-4988-bb49-c715031b4406.png",
+      "sourceSha256": "becfbcb9c22cf077112ab03216f04ccd51e01dd38705d480170b4d9242f4c4d1"
+    },
+    {
+      "id": "duel",
+      "file": "duel.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 28792,
+      "alpha": true,
+      "source": "exec-d92af04a-2785-4c33-ba6d-dae34bcddacb.png",
+      "sourceSha256": "09c1714029ec8de22a45c8e381ea33519d7a139e45f798ea32258e60d1e13756"
+    },
+    {
+      "id": "raid",
+      "file": "raid.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 28718,
+      "alpha": true,
+      "source": "exec-b56b1701-9def-48e9-8b68-34fc4ad816b5.png",
+      "sourceSha256": "80f73476c4b796eafeb303ea5f15d5d9482a3ed87efcc922c417b346526a72f1"
+    },
+    {
+      "id": "watchtower",
+      "file": "watchtower.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 23160,
+      "alpha": true,
+      "source": "exec-d20b3a20-b352-4b05-b4df-6de0c5649dde.png",
+      "sourceSha256": "7dbe052d96deb2f7fc7f62c2ae0ac137f1aeacb5de7fa8a846e958362f9435dc"
+    },
+    {
+      "id": "shrine",
+      "file": "shrine.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 30304,
+      "alpha": true,
+      "source": "exec-4959e15a-92c0-40bc-addd-6d8a19514bc5.png",
+      "sourceSha256": "4ac93fdc73a9267eb9481b9aa43d076b02d842617c421c96f082bcc20c5c404a"
+    },
+    {
+      "id": "ruins",
+      "file": "ruins.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 30370,
+      "alpha": true,
+      "source": "exec-918c65e4-6867-40fe-9f4e-71da5f8df0f5.png",
+      "sourceSha256": "cac4a218e5ec227845372cefa6ad270ed4e3a20fc84e4e8c56683dc9cf141e12"
+    },
+    {
+      "id": "camp",
+      "file": "camp.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 24774,
+      "alpha": true,
+      "source": "exec-568905b9-9729-45db-96cf-688e275faf0a.png",
+      "sourceSha256": "1c8b51ada1abe96ea04fd48e84e1417ab6421087d9aa1d122a31089d68204c62"
+    },
+    {
+      "id": "realm-spring",
+      "file": "realm-spring.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 29506,
+      "alpha": true,
+      "source": "exec-b4ea9ee0-346a-4f1b-8480-ae2bc17adf6d.png",
+      "sourceSha256": "e09890a61dfd89f2dd8dc953e8fbf04f2a00274369f389267c5e76a21c88bdae"
+    },
+    {
+      "id": "realm-array",
+      "file": "realm-array.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 28212,
+      "alpha": true,
+      "source": "exec-aad7e747-e1fe-46e1-83f3-9ac5a99ab610.png",
+      "sourceSha256": "95fb52f82955ae74835430dae2d10f0c30d4babc35fa79040a40a8a6b2836e61"
+    },
+    {
+      "id": "realm-sword",
+      "file": "realm-sword.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 24278,
+      "alpha": true,
+      "source": "exec-1c78c239-c485-4421-9903-f1d55460a382.png",
+      "sourceSha256": "8a0f3a9f630345e83c24351ef9618e5d8a2e62f3ab19fb91224d974c72653de8"
+    },
+    {
+      "id": "realm-star",
+      "file": "realm-star.webp",
+      "width": 256,
+      "height": 256,
+      "bytes": 22540,
+      "alpha": true,
+      "source": "exec-c9f90ee5-02ae-4857-9a1b-89929b7fbe09.png",
+      "sourceSha256": "62417fab9f6f5124d9472fc3fc7e2b0fcbc8b4c279c36ba95befdf94d8b27038"
+    }
+  ]
+}

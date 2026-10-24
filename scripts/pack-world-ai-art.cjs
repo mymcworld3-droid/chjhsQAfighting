@@ -1,0 +1,31 @@
+'use strict';
+// Downsample generated originals into small, transparent, versioned game sprites.
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+let sharp;try{sharp=require('sharp');}catch{sharp=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES||'/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules','sharp'));}
+const output=path.resolve(__dirname,'../public/assets/world-map/ai');
+async function pack(source){
+  const meta=await sharp(source.path).metadata(),id=source.id;let pipeline;
+  if(id.endsWith('-atlas')){
+    const columns=id==='creatures-atlas'?5:4,rows=id==='creatures-atlas'?4:5;
+    const edges=source.rows||Array.from({length:rows+1},(_,i)=>Math.round(i*meta.height/rows));
+    const xs=source.columns||Array.from({length:columns+1},(_,i)=>Math.round(i*meta.width/columns)),tiles=[];
+    for(let row=0;row<rows;row++)for(let col=0;col<columns;col++){
+      const crop={left:xs[col],top:edges[row],width:xs[col+1]-xs[col],height:edges[row+1]-edges[row]};
+      let image=sharp(await sharp(source.path).extract(crop).png().toBuffer());
+      if(id==='ground-atlas')image=image.removeAlpha().resize(128,128,{fit:'fill'});
+      else image=image.trim({threshold:12}).resize(112,112,{fit:'contain',background:'#00000000'}).extend({top:8,bottom:8,left:8,right:8,background:'#00000000'});
+      tiles.push({input:await image.png().toBuffer(),left:col*128,top:row*128});
+    }
+    pipeline=sharp({create:{width:columns*128,height:rows*128,channels:4,background:'#00000000'}}).composite(tiles);
+  }else pipeline=sharp(source.path).trim({threshold:12}).resize(240,240,{fit:'contain',background:'#00000000'}).extend({top:8,bottom:8,left:8,right:8,background:'#00000000'});
+  const file=id+'.webp',target=path.join(output,file);await pipeline.webp({quality:id==='ground-atlas'?84:88,alphaQuality:100,effort:6}).toFile(target);
+  const final=await sharp(target).metadata();return{id,file,width:final.width,height:final.height,bytes:fs.statSync(target).size,alpha:!!final.hasAlpha,source: path.basename(source.path),sourceSha256:crypto.createHash('sha256').update(fs.readFileSync(source.path)).digest('hex')};
+}
+async function main(){
+  const input=process.argv[2];if(!input)throw Error('Usage: node scripts/pack-world-ai-art.cjs /path/to/source-manifest.json');
+  const sources=JSON.parse(fs.readFileSync(input,'utf8')).assets;fs.mkdirSync(output,{recursive:true});const assets=[];
+  for(const source of sources)assets.push(await pack(source));
+  const manifest={version:1,tool:'built-in image_gen',cellSize:128,buildingSize:256,totalBytes:assets.reduce((n,a)=>n+a.bytes,0),assets};
+  fs.writeFileSync(path.join(output,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');console.log(JSON.stringify(manifest));
+}
+main().catch(error=>{console.error(error);process.exitCode=1;});
