@@ -11,7 +11,7 @@ test('bamboo and stone props are sparse, seeded, and identical across browser/se
   for(const [terrain,prop,min,max]of [['bamboo','bamboo-tall-',.70,.87],['stone','stone-',.04,.18]]){
     const cells=[];for(let y=20;y<84;y++)for(let x=20;x<84;x++)cells.push([x,y]);
     const generated=cells.map(([x,y])=>a.ambient(x,y,terrain)),fraction=generated.filter(items=>items.some(p=>p.prop.startsWith(prop))).length/cells.length;
-    assert.equal(new Set(generated.flat().filter(p=>p.prop.startsWith(prop)).map(p=>p.prop)).size,3,'all three visual variants appear');
+    assert.equal(new Set(generated.flat().filter(p=>p.prop.startsWith(prop)).map(p=>p.prop)).size,terrain==='bamboo'?4:3,'all seeded visual variants appear');
     assert.ok(fraction>min&&fraction<max,terrain+' density '+fraction);
     for(const [x,y]of cells.toReversed())assert.equal(JSON.stringify(b.ambient(x,y,terrain)),JSON.stringify(a.ambient(x,y,terrain)));
     assert.equal(JSON.stringify(cells.map(([x,y])=>browser.ambient(x,y,terrain))),JSON.stringify(generated));
