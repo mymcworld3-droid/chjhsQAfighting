@@ -120,3 +120,20 @@ test('fully connected road cells cover every corner with road texture, rather th
   const path=ground.compose({...full,mask:5,key:'road:5:courtyard'},images);
   assert.ok(path.operations.length>1,'a two-ended road retains the masked composition');
 });
+
+test('filled paving includes inner half-edges and inner quarter-corners, but not outside shoulders',()=>{
+  // North, east and south form the western rim of a paved courtyard.
+  for(const p of [[.9,.15],[.9,.85],[.65,.3],[.65,.7]])
+    assert.equal(G.roadAlpha(7,p[0],p[1],6),1,'inner eastern half must be filled');
+  assert.ok(G.roadAlpha(7,.04,.04,6)<1,'outer northwest shoulder stays natural');
+  assert.ok(G.roadAlpha(7,.04,.96,6)<1,'outer southwest shoulder stays natural');
+  // East and south meet around a square's southeast corner.
+  assert.equal(G.roadAlpha(6,.99,.99,4),1,'inner quarter must reach the corner');
+  assert.ok(G.roadAlpha(6,.01,.01,4)<1,'the opposite outer corner remains open');
+  // North, east, south, west and all four diagonal variants are symmetric.
+  for(const [mask,corners,u,v] of [
+    [9,1,.05,.05],[3,2,.95,.05],[6,4,.95,.95],[12,8,.05,.95]
+  ])assert.equal(G.roadAlpha(mask,u,v,corners),1,'four symmetric inner corners');
+  assert.ok(G.roadAlpha(5,.05,.05,0)<1,'standalone roads keep their edge');
+  assert.equal(G.roadAlpha(15,0,0,0),1,'fully paved interiors stay solid');
+});
