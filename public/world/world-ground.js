@@ -11,11 +11,16 @@
     variant^=variant>>>16;
     return {sx:cell%4*128,sy:Math.floor(cell/4)*128,sw:128,sh:128,flipX:!!(variant&1),flipY:!!(variant&2)};
   }
-  function roadAlpha(mask,u,v){
-    // A fully surrounded road cell is solid paving, not a narrow crossroads.
-    // Without this the courtyard underlay shows through as a square checkerboard
-    // even after the enclosed cells have correctly become road terrain.
-    if((mask&15)===15)return 1;
+  function roadAlpha(mask,u,v,cornerMask=0){
+    // The cardinal mask alone misses the INNER HALF of a paved edge and the
+    // INNER QUARTER of a paved corner. A 2x2 block of road tiles owns its
+    // shared corner: fill that quadrant without squaring off the outside edge.
+    // Bit order: northwest, northeast, southeast, southwest.
+    if((mask&15)===15||
+       u<=.5&&v<=.5&&(cornerMask&1)||
+       u>=.5&&v<=.5&&(cornerMask&2)||
+       u>=.5&&v>=.5&&(cornerMask&4)||
+       u<=.5&&v>=.5&&(cornerMask&8))return 1;
     let distance=Math.hypot(u-.5,v-.5);
     if(mask&1)distance=Math.min(distance,Math.hypot(u-.5,v-Math.min(.5,v)));
     if(mask&2)distance=Math.min(distance,Math.hypot(u-Math.max(.5,u),v-.5));
@@ -80,7 +85,7 @@
           texture(c,'road');
         }else{
           texture(c,info.underlay);
-          overlay('road',mask('road:'+info.mask,(u,v)=>roadAlpha(info.mask,u,v)));
+          overlay('road',mask('road:'+info.mask+':'+(info.cornerMask||0),(u,v)=>roadAlpha(info.mask,u,v,info.cornerMask||0)));
         }
       }else if(['bridge','broken-bridge'].includes(info.terrain)){
         texture(c,info.neighbours.includes('ocean')?'ocean':'water');
