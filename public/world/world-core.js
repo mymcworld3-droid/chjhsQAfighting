@@ -19,7 +19,7 @@
     const ax=Math.abs(dx),centre=13+Math.round(Math.sin((dy+4)/7)*1.4);
     return dy>=-12&&dy<=16&&Math.abs(ax-centre)<=1||((ax-11)/4)**2+((dy-13)/3.4)**2<=1;
   }
-  function sectTerrain(dx,dy){
+  function sectTerrainBase(dx,dy){
     const ax=Math.abs(dx),ay=Math.abs(dy);
     if(Math.max(ax,ay)>CITY_RADIUS)return null;
     // The former 19 x 19 court is preserved. Water gardens occupy the new
@@ -29,6 +29,33 @@
       dy===-12&&ax<=6||ax===6&&dy>=-20&&dy<=-12||dy===-20&&ax<=6)return 'road';
     if(ax>=10&&ax<=20&&dy>=-17&&dy<=16)return 'grass';
     return 'courtyard';
+  }
+
+  // Pave the middle of every road-enclosed court. Only the courtyard floor
+  // changes: streams, bridges and intentionally landscaped grass stay intact.
+  const SECT_ENCLOSED_FLOORS=(()=>{
+    const filled=new Set(),visited=new Set(),limit=CITY_RADIUS;
+    const valid=(x,y)=>Math.abs(x)<=limit&&Math.abs(y)<=limit;
+    for(let y=-limit;y<=limit;y++)for(let x=-limit;x<=limit;x++){
+      const start=x+','+y;
+      if(visited.has(start)||['road','bridge'].includes(sectTerrainBase(x,y)))continue;
+      const queue=[[x,y]];visited.add(start);let enclosed=true;
+      for(let n=0;n<queue.length;n++){
+        const [px,py]=queue[n];
+        for(const [dx,dy] of DIRS){
+          const nx=px+dx,ny=py+dy,k=nx+','+ny;
+          if(!valid(nx,ny)){enclosed=false;continue;}
+          if(visited.has(k)||['road','bridge'].includes(sectTerrainBase(nx,ny)))continue;
+          visited.add(k);queue.push([nx,ny]);
+        }
+      }
+      if(enclosed)for(const [px,py] of queue)if(sectTerrainBase(px,py)==='courtyard')filled.add(px+','+py);
+    }
+    return filled;
+  })();
+  function sectTerrain(dx,dy){
+    const original=sectTerrainBase(dx,dy);
+    return original==='courtyard'&&SECT_ENCLOSED_FLOORS.has(dx+','+dy)?'road':original;
   }
   function sectBlocked(x,y){
     const dx=x-SPAWN.x,dy=y-SPAWN.y,ax=Math.abs(dx),ay=Math.abs(dy);
