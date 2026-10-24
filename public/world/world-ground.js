@@ -1,12 +1,15 @@
 /* Compose the AI textures through neighbour masks; cache the resulting small tiles. */
 (function(root){
   'use strict';
-  const SPAN=4;
+  // Each 128px material is an edge-matched lossless texture. Read all of its
+  // pixels at every zoom level: a 32px crop stretched on a HiDPI screen looked hazy.
   function textureFrame(Art,t,x=0,y=0){
-    const cell=Math.max(0,Art.terrain.indexOf(t)),step=128/SPAN;
-    const phase=n=>((n%(SPAN*2))+SPAN*2)%(SPAN*2),px=phase(x),py=phase(y);
-    const flipX=px>=SPAN,flipY=py>=SPAN;
-    return {sx:cell%4*128+(flipX?SPAN*2-1-px:px)*step,sy:Math.floor(cell/4)*128+(flipY?SPAN*2-1-py:py)*step,sw:step,sh:step,flipX,flipY};
+    const cell=Math.max(0,Art.terrain.indexOf(t));
+    let variant=Math.imul(x|0,73856093)^Math.imul(y|0,19349663)^Math.imul(cell+1,83492791);
+    variant=Math.imul(variant^(variant>>>16),0x7feb352d);
+    variant=Math.imul(variant^(variant>>>15),0x846ca68b);
+    variant^=variant>>>16;
+    return {sx:cell%4*128,sy:Math.floor(cell/4)*128,sw:128,sh:128,flipX:!!(variant&1),flipY:!!(variant&2)};
   }
   function roadAlpha(mask,u,v){
     let distance=Math.hypot(u-.5,v-.5);
@@ -42,17 +45,14 @@
       const target=canvas(),c=target.getContext('2d');
       const texture=(context,t)=>{
         const s=textureFrame(Art,t,info.x,info.y);context.save();
-        // Isolate atlas cells before enlarging, so filtering cannot pick up another material.
+        // Lossless atlas + edge-locked cells: copy the entire 128px source
+        // without cropping its border or sampling into the neighbouring cell.
         if(!materials.has(t)){
-          const cell=canvas();cell.width=cell.height=124;
-          // Ignore the two-pixel rim affected by WebP chroma subsampling at atlas joins.
-          cell.getContext('2d').drawImage(atlas,Math.floor(s.sx/128)*128+2,Math.floor(s.sy/128)*128+2,124,124,0,0,124,124);materials.set(t,cell);
+          const cell=canvas();cell.width=cell.height=128;
+          cell.getContext('2d').drawImage(atlas,s.sx,s.sy,128,128,0,0,128,128);materials.set(t,cell);
         }
         context.translate(s.flipX?SIZE:0,s.flipY?SIZE:0);context.scale(s.flipX?-1:1,s.flipY?-1:1);
-        // Copy the material once at native resolution, then resample each crop
-        // directly to its device-pixel size. Avoid enlarging to 80px and shrinking again.
-        const ratio=124/128;
-        context.drawImage(materials.get(t),(s.sx%128)*ratio,(s.sy%128)*ratio,s.sw*ratio,s.sh*ratio,0,0,SIZE,SIZE);context.restore();
+        context.drawImage(materials.get(t),0,0,128,128,0,0,SIZE,SIZE);context.restore();
       };
       const overlay=(t,m)=>{
         const layer=canvas(),context=layer.getContext('2d');texture(context,t);context.globalCompositeOperation='destination-in';context.drawImage(m,0,0);c.drawImage(layer,0,0);

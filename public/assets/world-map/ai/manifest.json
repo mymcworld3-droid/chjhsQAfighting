@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 1567648,
+  "totalBytes": 1556742,
   "assets": [
     {
       "id": "meditation",
@@ -332,9 +332,9 @@
       "file": "ground-atlas.webp",
       "width": 512,
       "height": 640,
-      "bytes": 13678,
+      "bytes": 2772,
       "alpha": false,
-      "quality": 84,
+      "quality": 100,
       "sourceRows": [
         0,
         278,
@@ -350,8 +350,9 @@
         841,
         1122
       ],
-      "source": "exec-848dabaf-24e9-4033-8add-c1929411134d.png",
-      "sourceSha256": "bf98d9746afa7c9145e9335a9090aca0f9a07cda4d11895e8fd55272b4837ae3"
+      "source": "AI-guided flat-palette lossless ground-atlas.webp",
+      "sourceSha256": "1f3030a3e6a601cc92df05f9c75e8453cd9738d0a58d3be67193c65dac5a8f38",
+      "lossless": true
     }
   ]
 }
