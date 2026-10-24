@@ -12,6 +12,10 @@
     return {sx:cell%4*128,sy:Math.floor(cell/4)*128,sw:128,sh:128,flipX:!!(variant&1),flipY:!!(variant&2)};
   }
   function roadAlpha(mask,u,v){
+    // A fully surrounded road cell is solid paving, not a narrow crossroads.
+    // Without this the courtyard underlay shows through as a square checkerboard
+    // even after the enclosed cells have correctly become road terrain.
+    if((mask&15)===15)return 1;
     let distance=Math.hypot(u-.5,v-.5);
     if(mask&1)distance=Math.min(distance,Math.hypot(u-.5,v-Math.min(.5,v)));
     if(mask&2)distance=Math.min(distance,Math.hypot(u-Math.max(.5,u),v-.5));
@@ -43,7 +47,7 @@
       // Many cells share a topology key, while their texture flips depend on
       // complete coordinates. Include every visible material's actual flips.
       const active=info.terrain==='road'
-        ?[info.underlay,'road']
+        ?[(info.mask&15)===15?'road':info.underlay,'road']
         :['bridge','broken-bridge'].includes(info.terrain)
           ?[info.neighbours.includes('ocean')?'ocean':'water']
           :[info.terrain,...info.neighbours.filter(t=>t!==info.terrain&&!['road','bridge','broken-bridge','sealed'].includes(t))];
@@ -70,7 +74,14 @@
         const layer=canvas(),context=layer.getContext('2d');texture(context,t);context.globalCompositeOperation='destination-in';context.drawImage(m,0,0);c.drawImage(layer,0,0);
       };
       if(info.terrain==='road'){
-        texture(c,info.underlay);overlay('road',mask('road:'+info.mask,(u,v)=>roadAlpha(info.mask,u,v)));
+        if((info.mask&15)===15){
+          // Adjacent road tiles own all four edges, so paint the complete
+          // tile. This makes a newly enclosed court genuinely seamless.
+          texture(c,'road');
+        }else{
+          texture(c,info.underlay);
+          overlay('road',mask('road:'+info.mask,(u,v)=>roadAlpha(info.mask,u,v)));
+        }
       }else if(['bridge','broken-bridge'].includes(info.terrain)){
         texture(c,info.neighbours.includes('ocean')?'ocean':'water');
         const s=Art.directional('bridge',info.bridgeDirection),img=images[s.image];
