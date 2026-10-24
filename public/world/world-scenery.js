@@ -7,6 +7,32 @@
   const DRY=new Set(['grass','courtyard','mountain','bamboo','forest','desert','snow','swamp','stone','volcano','beach']);
   const isSite=o=>['building','structure','realm'].includes(o.kind);
   const isBarrier=p=>p.prop==='fence'||p.prop==='wall',isGate=p=>p?.prop==='gate'||p?.prop==='sect-gate',cell=p=>Math.floor(p.x)+','+Math.floor(p.y);
+  function roadEnclosures(roads){
+    if(!roads.length)return ()=>0;
+    const nodes=new Set(roads.map(p=>p.x+','+p.y));
+    let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+    for(const p of roads){left=Math.min(left,p.x-1);top=Math.min(top,p.y-1);right=Math.max(right,p.x);bottom=Math.max(bottom,p.y);}
+    const width=right-left+1,height=bottom-top+1,state=new Uint8Array(width*height),queue=new Uint32Array(state.length);
+    const index=(x,y)=>(y-top)*width+x-left;
+    // Flood the faces BETWEEN road centres. Each real cardinal road edge
+    // blocks the two adjacent faces. This also detects the small hole between
+    // four road tiles, while preserving the narrow outer half of a loop.
+    for(const {x,y}of roads){
+      if(nodes.has((x+1)+','+y)){state[index(x,y-1)]|=4;state[index(x,y)]|=1;}
+      if(nodes.has(x+','+(y+1))){state[index(x-1,y)]|=2;state[index(x,y)]|=8;}
+    }
+    let end=1;state[0]|=16;
+    for(let head=0;head<end;head++){
+      const i=queue[head],x=i%width,y=Math.floor(i/width),walls=state[i];
+      const visit=n=>{if(!(state[n]&16)){state[n]|=16;queue[end++]=n;}};
+      if(y&&!(walls&1))visit(i-width);
+      if(x<width-1&&!(walls&2))visit(i+1);
+      if(y<height-1&&!(walls&4))visit(i+width);
+      if(x&&!(walls&8))visit(i-1);
+    }
+    const enclosed=(x,y)=>x>=left&&x<=right&&y>=top&&y<=bottom&&!(state[index(x,y)]&16);
+    return (x,y)=>Number(enclosed(x-1,y-1))|Number(enclosed(x,y-1))<<1|Number(enclosed(x,y))<<2|Number(enclosed(x-1,y))<<3;
+  }
   // A block owns one centre and only the half-arms leading to compatible neighbours.
   // Resolve after visibility/occupancy, but before viewport clipping (one-cell halo).
   function connect(items){
@@ -27,7 +53,18 @@
   }
   function create(world){
     const W=world;
+    let paving=()=>0,pavingSignature,pavingRevision,pavingBridge,pavingArray,pavingTiles;
+    function prepare(events={}){
+      const bridge=events.bridge>=20,array=events.array>=60,signature=[W.patchRevision,bridge,array,JSON.stringify(events.tiles||{})].join(':');
+      if(signature!==pavingSignature){paving=roadEnclosures(W.roadCells(events));pavingSignature=signature;}
+      pavingRevision=W.patchRevision;pavingBridge=bridge;pavingArray=array;pavingTiles=events.tiles;
+    }
     function topology(x,y,t,events={},visible=()=>true){
+      if(pavingRevision!==W.patchRevision||pavingBridge!==(events.bridge>=20)||pavingArray!==(events.array>=60)||pavingTiles!==events.tiles)prepare(events);
+      const fill=t==='road'||DRY.has(t)?paving(x,y):0;
+      // Paving is visual only: water, bridge art, props, collision terrain and
+      // sparse saves retain their original identities.
+      if(fill===15&&DRY.has(t))t='road';
       const neighbours=STEPS.map(([dx,dy])=>W.inside(x+dx,y+dy)&&visible(x+dx,y+dy)?W.terrain(x+dx,y+dy,events):t);
       let mask=0;neighbours.slice(0,4).forEach((v,i)=>{if(ROADS.has(v))mask|=1<<i;});
       const horizontal=[1,3].reduce((s,i)=>s+Number(ROADS.has(neighbours[i]))*3+Number(DRY.has(neighbours[i])),0);
@@ -39,9 +76,9 @@
       // eight surrounding terrain names used to create hundreds of duplicate
       // rasters when zooming out across an entire landscaped sect.
       const blended=neighbours.map(v=>v!==t&&!['road','bridge','broken-bridge','sealed'].includes(v)?v:'');
-      const raster=t==='road'?[t,mask,underlay]:['bridge','broken-bridge'].includes(t)?[t,bridgeDirection,neighbours.includes('ocean')?'ocean':'water']:[t,...blended];
+      const raster=t==='road'?[t,mask,underlay,fill]:['bridge','broken-bridge'].includes(t)?[t,bridgeDirection,neighbours.includes('ocean')?'ocean':'water']:[t,...blended];
       // Ground.compose additionally keys every contributing texture's flips.
-      return {x,y,terrain:t,neighbours,mask,underlay,bridgeDirection,key:raster.join(':')};
+      return {x,y,terrain:t,neighbours,mask,paving:fill,underlay,bridgeDirection,key:raster.join(':')};
     }
     function sparse(x,y,limit,layer,diagonal=false){
       const h=W.hash(x,y,layer);if(h%100>=limit)return false;
@@ -192,8 +229,8 @@
         return p.x>=bounds.x-side&&p.x<bounds.x+bounds.w+side&&p.y>=bounds.y-(bamboo?1:0)&&p.y<bounds.y+bounds.h+(bamboo?5:0);
       });
     }
-    return Object.freeze({world,topology,ambient,site,sect:()=>sectItems,inBounds});
+    return Object.freeze({world,prepare,topology,ambient,site,sect:()=>sectItems,inBounds});
   }
-  const api=Object.freeze({DIRECTIONS,STEPS,isBarrier,connect,create});
+  const api=Object.freeze({DIRECTIONS,STEPS,isBarrier,connect,roadEnclosures,create});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QAGridWorldScenery=api;
 })(globalThis);

@@ -11,7 +11,9 @@
     variant^=variant>>>16;
     return {sx:cell%4*128,sy:Math.floor(cell/4)*128,sw:128,sh:128,flipX:!!(variant&1),flipY:!!(variant&2)};
   }
-  function roadAlpha(mask,u,v){
+  function roadAlpha(mask,u,v,paving=0){
+    const corner=v<.5?(u<.5?0:1):(u<.5?3:2);
+    if(paving&(1<<corner))return 1;
     let distance=Math.hypot(u-.5,v-.5);
     if(mask&1)distance=Math.min(distance,Math.hypot(u-.5,v-Math.min(.5,v)));
     if(mask&2)distance=Math.min(distance,Math.hypot(u-Math.max(.5,u),v-.5));
@@ -43,7 +45,7 @@
       // Many cells share a topology key, while their texture flips depend on
       // complete coordinates. Include every visible material's actual flips.
       const active=info.terrain==='road'
-        ?[info.underlay,'road']
+        ?info.paving===15?['road']:[info.underlay,'road']
         :['bridge','broken-bridge'].includes(info.terrain)
           ?[info.neighbours.includes('ocean')?'ocean':'water']
           :[info.terrain,...info.neighbours.filter(t=>t!==info.terrain&&!['road','bridge','broken-bridge','sealed'].includes(t))];
@@ -51,7 +53,7 @@
         const frame=textureFrame(Art,t,info.x,info.y);
         return t+':'+Number(frame.flipX)+Number(frame.flipY);
       }).join('|');
-      const key=info.key+'|'+variants;
+      const key=info.key+'|'+(info.paving||0)+'|'+variants;
       if(tiles.has(key))return tiles.get(key);
       const atlas=images['ground-atlas'];if(!atlas?.complete||!atlas.naturalWidth)return null;
       const target=canvas(),c=target.getContext('2d');
@@ -70,7 +72,11 @@
         const layer=canvas(),context=layer.getContext('2d');texture(context,t);context.globalCompositeOperation='destination-in';context.drawImage(m,0,0);c.drawImage(layer,0,0);
       };
       if(info.terrain==='road'){
-        texture(c,info.underlay);overlay('road',mask('road:'+info.mask,(u,v)=>roadAlpha(info.mask,u,v)));
+        if(info.paving===15)texture(c,'road');
+        else{
+          texture(c,info.underlay);
+          overlay('road',mask('road:'+info.mask+':'+(info.paving||0),(u,v)=>roadAlpha(info.mask,u,v,info.paving)));
+        }
       }else if(['bridge','broken-bridge'].includes(info.terrain)){
         texture(c,info.neighbours.includes('ocean')?'ocean':'water');
         const s=Art.directional('bridge',info.bridgeDirection),img=images[s.image];
