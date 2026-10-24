@@ -58,9 +58,14 @@ test('fog uses sparse packed chunks and merges independent discoveries including
   assert.ok(JSON.stringify(initial).length<2048);assert.ok(JSON.stringify(merged).length<5000);assert.ok(W.known(merged,999,999));assert.ok(W.known(merged,510,511));assert.ok(!W.known(initial,999,999));
   const old=Array(2304).fill('0');old[27*48+18]='1';assert.ok(W.known(W.normalizeExplored(old.join('')),P(18,27).x,P(18,27).y));assert.equal(W.known(merged,-1,0),false);
 });
-test('a far destination stops at the known frontier and explicit battle movement never turns into a partial route',()=>{
-  const fog=W.initialExplored(),result=W.plan(W.SPAWN,{x:999,y:999},{explored:fog});assert.ok(result.partial);assert.ok(result.visited<=12000);assert.ok(result.path.every(p=>W.known(fog,p.x,p.y)));
-  assert.equal(W.plan(W.SPAWN,C(9,39),{maxSteps:2}).path.length,0);assert.deepEqual(W.plan(W.SPAWN,{x:1000,y:0}).path,[]);
+test('long routes cross fog in bounded segments while explicit battle movement remains strict',()=>{
+  const world=W.createWorld('long-fog-route'),tiles={};
+  // Controlled clear corridor across the million-tile map, including chunk seams.
+  for(let x=500;x<1000;x++){const k=W.chunkKey(x,500);tiles[k]||={revision:1,tiles:{}};tiles[k].tiles[(500%32)*32+x%32]={terrain:'road'};}
+  world.installPatches(tiles);const fog=world.initialExplored(),target={x:999,y:500},result=world.plan(world.SPAWN,target,{explored:fog,maxNodes:100});
+  assert.ok(result.partial);assert.ok(result.visited<=100);assert.ok(result.path.some(p=>!world.known(fog,p.x,p.y)));
+  const rest=world.plan(result.path.at(-1),target,{explored:fog});assert.equal(rest.partial,false);assert.deepEqual(rest.path.at(-1),target);
+  assert.equal(world.plan(world.SPAWN,{x:503,y:500},{maxSteps:2}).path.length,0);assert.deepEqual(world.plan(world.SPAWN,{x:1000,y:0}).path,[]);
 });
 test('sparse terrain patches do not mutate the procedural base and reject incompatible cells or stale versions',()=>{
   const world=W.createWorld('delta'),p={x:520,y:520},k=world.chunkKey(p.x,p.y),i=(p.y%32)*32+p.x%32,base=world.baseTerrain(p.x,p.y);

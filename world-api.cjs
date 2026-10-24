@@ -351,6 +351,7 @@ function registerWorldApi(app,{
           actor.commandSeq=request.seq;actor.lastCommandAtMs=now();
           let next;
           if(action==='stop'){
+            actor.partial=false;
             const p=W.sample(actor.route,now());next={path:p.moving?[p.tile,p.next]:[p.tile],startedAtMs:now()-(p.moving?p.fraction*W.STEP_MS:0),stepMs:W.STEP_MS};
           }else{
             if(request.objectId&&!W.object(request.objectId))throw fail('目標不存在',400);

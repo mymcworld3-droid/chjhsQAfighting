@@ -12,7 +12,7 @@
 </div></div><script id="world-core-source">/* The browser, simulator and authority share this versioned deterministic world. */
 (function(root){
   'use strict';
-  const SIZE=1000,CHUNK_SIZE=32,CHUNK_COUNT=Math.ceil(SIZE/CHUNK_SIZE),STEP_MS=220;
+  const SIZE=1000,CHUNK_SIZE=32,CHUNK_COUNT=Math.ceil(SIZE/CHUNK_SIZE),STEP_MS=220,VISION_RADIUS=15;
   const GENERATOR_VERSION='qingyun-seeded-v2',DEFAULT_SEED='qingyun-2026';
   const SPAWN=Object.freeze({x:Math.floor(SIZE/2),y:Math.floor(SIZE/2)}),DIRS=Object.freeze([[0,1],[1,0],[0,-1],[-1,0]]);
   const CITY_RADIUS=9,SAFE_RADIUS=36,OUTSKIRTS=Object.freeze({x:SPAWN.x+44,y:SPAWN.y-64,w:48,h:48});
@@ -125,7 +125,7 @@ return TERRAIN;})();
     const s=fog?.chunks?.[chunkKey(x,y)],i=(y%32)*32+x%32;
     return !!s&&(fogValue(s[i>>2])&(1<<(i&3)))!==0;
   }
-  function reveal(raw,p,radius=5){
+  function reveal(raw,p,radius=VISION_RADIUS){
     const fog=raw?.version===2?raw:normalizeExplored(raw);if(fog.all)return fog;
     const chunks={...fog.chunks},changed=new Map();let dirty=false;
     for(let y=Math.max(0,p.y-radius);y<=Math.min(SIZE-1,p.y+radius);y++)for(let x=Math.max(0,p.x-radius);x<=Math.min(SIZE-1,p.x+radius);x++){
@@ -140,7 +140,7 @@ return TERRAIN;})();
     const chunks={...a.chunks};for(const[k,v]of Object.entries(b.chunks))chunks[k]=!chunks[k]?v:[...v].map((c,i)=>HEX[fogValue(c)|fogValue(chunks[k][i])]).join('');
     return {version:2,chunks,revision:Math.max(a.revision,b.revision)+1};
   }
-  function initialExplored(){let fog=normalizeExplored();for(let y=SPAWN.y-CITY_RADIUS-1;y<=SPAWN.y+CITY_RADIUS+1;y++)for(let x=SPAWN.x-CITY_RADIUS-1;x<=SPAWN.x+CITY_RADIUS+1;x++)fog=reveal(fog,{x,y},0);return fog;}
+  function initialExplored(){let fog=normalizeExplored();for(let y=SPAWN.y-CITY_RADIUS-1;y<=SPAWN.y+CITY_RADIUS+1;y++)for(let x=SPAWN.x-CITY_RADIUS-1;x<=SPAWN.x+CITY_RADIUS+1;x++)fog=reveal(fog,{x,y},0);return reveal(fog,SPAWN);}
   const fullExplored=()=>({version:2,chunks:{},all:true,revision:1});
   function sample(route,at=Date.now()){
     const path=route?.path?.length?route.path:[SPAWN],stepMs=route?.stepMs||STEP_MS;
@@ -269,29 +269,27 @@ return TERRAIN;})();
       const queue=[{x:start.x,y:start.y}],parents=new Map([[key(start.x,start.y),null]]),cost=new Map([[key(start.x,start.y),0]]),max=options.maxNodes||20000;
       for(let n=0;n<queue.length&&n<max;n++){
         const p=queue[n],depth=cost.get(key(p.x,p.y));if(depth>=(options.maxSteps??512))continue;
-        for(const[dx,dy]of DIRS){const x=p.x+dx,y=p.y+dy,k=key(x,y);if(parents.has(k)||!walkable(x,y,options)||options.explored&&!known(options.explored,x,y)||queue.length>=max)continue;
+        for(const[dx,dy]of DIRS){const x=p.x+dx,y=p.y+dy,k=key(x,y);if(parents.has(k)||!walkable(x,y,options)||queue.length>=max)continue;
           const next={x,y};parents.set(k,p);cost.set(k,depth+1);queue.push(next);}
       }
       return {cells:queue,parents,cost};
     }
     function plan(start,target,options={}){
       if(!inside(target?.x,target?.y))return {path:[],reason:'目的地不在地圖內'};
-      const open=new Heap(),parents=new Map([[key(start.x,start.y),null]]),cost=new Map([[key(start.x,start.y),0]]),unknown=options.explored&&!known(options.explored,target.x,target.y);
-      if(!unknown&&!same(start,target)&&!walkable(target.x,target.y,options))return {path:[],reason:'目的地無法通行'};
-      let best=start,frontier=null,visited=0;const maxNodes=options.maxNodes||12000,maxSteps=options.maxSteps??512;open.push({...start,f:distance(start,target),g:0});
+      const open=new Heap(),parents=new Map([[key(start.x,start.y),null]]),cost=new Map([[key(start.x,start.y),0]]);
+      if(!same(start,target)&&!walkable(target.x,target.y,options))return {path:[],reason:'目的地無法通行'};
+      let best=start,visited=0;const maxNodes=options.maxNodes||12000,maxSteps=options.maxSteps??512;open.push({...start,f:distance(start,target),g:0});
       while(open.a.length&&visited<maxNodes){
         const p=open.pop(),k=key(p.x,p.y);if(cost.get(k)!==p.g)continue;visited++;
         if(distance(p,target)<distance(best,target))best=p;
         if(same(p,target))return {path:pathTo(p,parents),partial:false,visited};
-        if(unknown&&DIRS.some(([dx,dy])=>inside(p.x+dx,p.y+dy)&&!known(options.explored,p.x+dx,p.y+dy))&&(!frontier||distance(p,target)<distance(frontier,target)||distance(p,target)===distance(frontier,target)&&p.g<frontier.g))frontier=p;
         if(p.g>=maxSteps)continue;
         for(const[dx,dy]of DIRS){const x=p.x+dx,y=p.y+dy,n=key(x,y),g=p.g+1;
-          if(!walkable(x,y,options)||options.explored&&!known(options.explored,x,y)||(cost.get(n)??Infinity)<=g)continue;
+          if(!walkable(x,y,options)||(cost.get(n)??Infinity)<=g)continue;
           cost.set(n,g);parents.set(n,{x:p.x,y:p.y});open.push({x,y,g,f:g+distance({x,y},target)});
         }
       }
-      if(frontier)return {path:pathTo(frontier,parents),partial:true,visited};
-      if(options.explored&&options.maxSteps===undefined&&(visited>=maxNodes||cost.get(key(best.x,best.y))>=maxSteps)&&!same(best,start))return {path:pathTo(best,parents),partial:true,limited:true,visited};
+      if((options.allowPartial||options.explored)&&options.maxSteps===undefined&&(visited>=maxNodes||cost.get(key(best.x,best.y))>=maxSteps)&&!same(best,start))return {path:pathTo(best,parents),partial:true,limited:true,visited};
       return {path:[],visited,reason:'此處無法通行，請選擇道路、空地或合適的航行路線'};
     }
     function approach(start,target,options={}){
@@ -311,7 +309,7 @@ return TERRAIN;})();
       return {...result,route:{path,stepMs:STEP_MS,startedAtMs:at-(p.moving?p.fraction*STEP_MS:0)}};
     }
     const zone=p=>Math.max(Math.abs(p.x-SPAWN.x),Math.abs(p.y-SPAWN.y))<=CITY_RADIUS?'問道宗':inSafeArea(p.x,p.y)?'問道宗外・平原':inOutskirts(p.x,p.y)?(p.x>OUTSKIRTS.x+29&&p.y<OUTSKIRTS.y+20?'古陣山口':'青竹林'):LABELS[terrain(Math.floor(p.x),Math.floor(p.y))]+' · '+TIERS[tierAt(p.x,p.y)].name+'域';
-    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,SPAWN,CITY_RADIUS,SAFE_RADIUS,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
+    const api={SIZE,CHUNK_SIZE,CHUNK_COUNT,GENERATOR_VERSION,DEFAULT_SEED,VERSION:config.worldId,descriptor:config,STEP_MS,VISION_RADIUS,SPAWN,CITY_RADIUS,SAFE_RADIUS,OUTSKIRTS,starterPoint,townPoint,inSafeArea,DIRS,TYPES,COLORS,LABELS,TIERS,OBJECTS:STARTER_OBJECTS,
       key,index,inside,distance,same,hash,seedHash,chunkKey,validChunk,normalizeExplored,mergeExplored,fullExplored,known,reveal,initialExplored,sample,pathTo,climate,baseTerrain,tierAt,chunk,objectsIn,objectAt,object,terrain,walkable,reachable,plan,approach,safePosition,redirect,zone,installPatches,
       patchVersions:()=>Object.fromEntries([...patches].map(([k,v])=>[k,v.revision])),get patchRevision(){return patchRevision;},get cachedChunks(){return cache.size;}};
     return Object.freeze(api);

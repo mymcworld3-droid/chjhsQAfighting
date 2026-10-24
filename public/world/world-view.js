@@ -26,7 +26,7 @@ export class WorldView {
       if(button.dataset.entry){if(this.battle()?.status==='active'){this.message('請先完成戰鬥，或使用撤離按鈕');return;}this.openEntry(button.dataset.entry);}
       else if(button.dataset.action)this.action(button.dataset.action,button.dataset);
     };
-    this.onKeyDown=e=>{if(e.key==='Escape'){this.pending=null;this.closePanel();this.renderer.set({preview:null,selected:null});}};
+    this.onKeyDown=e=>{if(e.key==='Escape'){this.pending=null;this.navigation=null;this.closePanel();this.renderer.set({preview:null,selected:null});}};
     root.addEventListener('click',this.onClick);root.addEventListener('keydown',this.onKeyDown);
   }
   destroy(){this.destroyed=true;this.suspend();this.layoutObserver.disconnect();this.renderer.destroy();this.root.removeEventListener('click',this.onClick);this.root.removeEventListener('keydown',this.onKeyDown);}
@@ -83,21 +83,21 @@ export class WorldView {
         this.checkArrival();
       },()=>this.connected(false),async()=>{
         if(!this.visible||generation!==this.generation)return;
-        const fresh=await this.api('join');if(this.visible&&generation===this.generation){this.pending=null;this.set(fresh);this.renderBattle();}
+        const fresh=await this.api('join');if(this.visible&&generation===this.generation){this.pending=null;this.navigation=null;this.set(fresh);this.renderBattle();}
       });
       this.locationTick=setInterval(()=>{if(this.state){this.updateLocalExploration();this.checkArrival();this.renderLocation();void this.refreshPatches();}},200);
       this.renderBattle();
     }catch(error){if(generation!==this.generation)return;this.connected(false);this.panel('暫時無法進入青雲界',`<p>${esc(error.message)}</p>`,this.button('重新連線','reconnect'));}
   }
   async suspend(){
-    if(!this.visible)return;this.visible=false;this.generation++;this.unsubscribe?.();this.unsubscribe=null;clearInterval(this.locationTick);clearTimeout(this.messageTimer);this.pending=null;this.renderer.stop();
+    if(!this.visible)return;this.visible=false;this.generation++;this.unsubscribe?.();this.unsubscribe=null;clearInterval(this.locationTick);clearTimeout(this.messageTimer);this.pending=null;this.navigation=null;this.renderer.stop();
     try{await this.api('leave',{}, {keepalive:true});}catch{/* The server checkpoints the final reached tile when the stream closes. */}
   }
   updateLocalExploration(){
     const W=this.world;
     if(this.battle()?.status==='active')return;const mine=this.players.find(p=>p.uid===this.uid)||this.self;if(!mine?.route)return;
     const sample=W.sample(mine.route,this.now());
-    // Match the server's reveal radius. Movement still stops at the originally accepted frontier.
+    // Match the server: reveal the 15-cell radius only as each route tile is reached.
     const stamp=mine.route.startedAtMs+':'+mine.route.path.length;if(this.localRevealStamp!==stamp){this.localRevealStamp=stamp;this.localRevealIndex=-1;}
     for(let i=(this.localRevealIndex??-1)+1;i<=sample.index;i++)this.state.explored=W.reveal(this.state.explored,mine.route.path[i]);this.localRevealIndex=sample.index;
     this.state.position=sample.tile;
@@ -136,15 +136,17 @@ export class WorldView {
   }
   async move(target,objectId=null,after=null){
     if(!this.online){this.message('連線恢復後才能移動');return;}
-    const seq=++this.seq;this.pending=after?{objectId,requestId:id(),seq}:null;this.closePanel();this.renderer.set({preview:null,selected:target});
+    const seq=++this.seq;this.navigation=null;this.pending=after?{objectId,requestId:id(),seq}:null;this.closePanel();this.renderer.set({preview:null,selected:target});
     try{const data=await this.api('move',{target,objectId,seq,sessionId:this.sessionId});if(seq!==this.seq||!this.visible)return;
       this.set(data);this.players=this.players.filter(p=>p.uid!==this.uid).concat(data.self);this.renderer.set({players:this.players});
-      if(data.partial){this.pending=null;this.message('前方尚未探索，先走到已知邊界；抵達後可繼續選路');}this.checkArrival();
+      if(data.partial){this.pending=null;this.navigation={target:{x:target.x,y:target.y},objectId,after};}this.checkArrival();
     }catch(error){if(seq===this.seq){this.pending=null;this.message(error.message);}}
   }
   checkArrival(){
     const W=this.world;
-    if(!this.pending||this.busy)return;const mine=this.players.find(p=>p.uid===this.uid)||this.self;if(W.sample(mine?.route,this.now()).moving)return;
+    if(!this.visible||this.busy||this.continuing)return;const mine=this.players.find(p=>p.uid===this.uid)||this.self;if(W.sample(mine?.route,this.now()).moving)return;
+    if(this.navigation){const goal=this.navigation;this.navigation=null;this.continuing=true;void this.move(goal.target,goal.objectId,goal.after).finally(()=>{this.continuing=false;});return;}
+    if(!this.pending)return;
     const pending=this.pending;this.pending=null;
     this.run(async()=>{
       const response=await this.api('interact',{objectId:pending.objectId,requestId:pending.requestId});this.set(response);
@@ -239,7 +241,7 @@ export class WorldView {
       case 'center':this.renderer.center();break;
       case 'zoom-in':this.renderer.zoom(1.15);break;
       case 'zoom-out':this.renderer.zoom(1/1.15);break;
-      case 'stop':this.pending=null;try{const response=await this.api('stop',{sessionId:this.sessionId,seq:++this.seq});this.players=this.players.filter(p=>p.uid!==this.uid).concat(response.self);this.set(response);}catch(e){this.message(e.message);}break;
+      case 'stop':this.pending=null;this.navigation=null;try{const response=await this.api('stop',{sessionId:this.sessionId,seq:++this.seq});this.players=this.players.filter(p=>p.uid!==this.uid).concat(response.self);this.set(response);}catch(e){this.message(e.message);}break;
       case 'quest':this.questPanel();break;
       case 'navigate':{const step=this.state.quest.steps[Number(data.step)],object=step.objectId?W.object(step.objectId):null;this.move(step.target||object,object?.id);break;}
       case 'claim-quest':await this.run(async()=>{const r=await this.api('quest',{requestId:id()});this.set(r);this.panel('宗門嘉獎',this.rewards(r.rewards)+`<p>修為與材料已入帳；帶著材料前往鍛造坊吧。</p>`,`<button type="button" data-entry="refinery">開啟鍛造坊</button>`+this.button('繼續探索','close'));});break;

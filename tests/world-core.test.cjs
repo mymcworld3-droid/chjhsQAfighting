@@ -16,10 +16,16 @@ test('water, rock and buildings cannot be crossed; bridge contribution opens a r
   const a=W.plan(P(25,27),P(29,27)).path,b=W.plan(P(25,27),P(29,27),{events:{bridge:20}}).path;
   assert.ok(a.length>b.length+10);
 });
-test('unknown destinations stop at a reachable known frontier without revealing hidden terrain',()=>{
-  const explored=W.reveal('',W.SPAWN),r=W.plan(W.SPAWN,P(18,22),{explored});assert.equal(r.partial,true);
-  assert.ok(r.path.length>1);assert.ok(r.path.every(p=>W.known(explored,p.x,p.y)));assert.ok(!W.same(r.path.at(-1),P(18,22)));
-  assert.ok(W.DIRS.some(([dx,dy])=>!W.known(explored,r.path.at(-1).x+dx,r.path.at(-1).y+dy)));
+test('unexplored destinations can be reached without revealing the route in advance',()=>{
+  const explored=W.reveal('',W.SPAWN),target=P(18,22),before=JSON.stringify(explored),r=W.plan(W.SPAWN,target,{explored});
+  assert.equal(r.partial,false);assert.deepEqual(r.path.at(-1),target);assert.ok(r.path.some(p=>!W.known(explored,p.x,p.y)));
+  assert.equal(JSON.stringify(explored),before);assert.equal(W.known(explored,target.x,target.y),false);
+  assert.ok(r.path.every(p=>W.walkable(p.x,p.y)));
+});
+test('exploration reveals a radius of fifteen cells at spawn and after each reached tile',()=>{
+  assert.equal(W.VISION_RADIUS,15);const fog=W.initialExplored();
+  for(const[dx,dy]of W.DIRS){assert.ok(W.known(fog,W.SPAWN.x+dx*15,W.SPAWN.y+dy*15));assert.equal(W.known(fog,W.SPAWN.x+dx*16,W.SPAWN.y+dy*16),false);}
+  const p={x:600,y:500},next=W.reveal(fog,p);assert.ok(W.known(next,615,500));assert.equal(W.known(next,616,500),false);
 });
 test('retargeting preserves fractional movement on the current edge and remains four-directional',()=>{
   const initial={path:[C(9,36),C(9,35),C(9,34)],startedAtMs:1000,stepMs:W.STEP_MS},at=1100;

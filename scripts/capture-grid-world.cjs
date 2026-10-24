@@ -112,7 +112,7 @@ async function main(){
       await frame.locator('.ww-objective [data-action="quest"]').click();await frame.locator('[data-action="navigate"][data-step="1"]').click();
       await frame.waitForFunction(()=>window.fixtureView.players.find(p=>p.uid==='fixture').route.path.length>1);
       await frame.waitForFunction(()=>!QAGridWorld.sample(window.fixtureView.players.find(p=>p.uid==='fixture').route,window.fixtureView.now()).moving);
-      const fogStop=await frame.evaluate(()=>({position:window.fixtureView.state.position,explored:window.fixtureView.state.explored}));assert.notDeepEqual(fogStop.position,W.starterPoint(12,26));
+      const arrived=await frame.evaluate(()=>window.fixtureView.state.position);assert.ok(W.distance(arrived,W.object('herb-a'))<=1,'walks through fog to the selected object');
       await frame.evaluate(()=>window.fixtureView.suspend());service.hub.actors.delete('fixture');
       db.docs.set('worldPlayers/fixture',{...register.__test.normalize(),position:W.starterPoint(18,23),mapVersion:W.VERSION,explored:W.reveal(W.initialExplored(),W.starterPoint(18,23),9)});
       await frame.evaluate(()=>window.fixtureView.start());await frame.waitForFunction(p=>window.fixtureView.state.position.x===p.x&&window.fixtureView.state.position.y===p.y,W.starterPoint(18,23));
@@ -148,7 +148,7 @@ async function main(){
       assert.equal(layout.width,size.width>=size.height?1280:360);assert.equal(layout.height,size.width>=size.height?720:640);
       assert.ok(Math.abs(shell.stage.width/shell.stage.height-(size.width>=size.height?16/9:9/16))<.0001);
       assert.deepEqual(layout.overflowButtons,[]);assert.deepEqual(errors,[]);
-      results.push({viewport:size.name,shell,...layout,checks:['original-five-button-navigation','title-return-to-world','original-header','fixed-aspect-ratio','black-bar-containment','two-live-browsers','point-and-walk','fog-frontier','encounter','two-question-recharge','battle-navigation-guard','answer-and-save','close-and-resume-recharge','confirmed-two-tile-move','guard-after-move','next-turn','reload-recovery']});
+      results.push({viewport:size.name,shell,...layout,checks:['original-five-button-navigation','title-return-to-world','original-header','fixed-aspect-ratio','black-bar-containment','two-live-browsers','point-and-walk','walk-through-fog','encounter','two-question-recharge','battle-navigation-guard','answer-and-save','close-and-resume-recharge','confirmed-two-tile-move','guard-after-move','next-turn','reload-recovery']});
       await frame.evaluate(()=>window.fixtureView.suspend());await page.close();service.hub.actors.delete('fixture');db.docs.delete('worldPlayers/fixture');
     }
     // Generated content uses the same entry, pointer controls, API and original chrome.
