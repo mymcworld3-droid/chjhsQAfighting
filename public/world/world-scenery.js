@@ -49,12 +49,24 @@
       const h=W.hash(x,y,91),items=[],dx=x-W.SPAWN.x,dy=y-W.SPAWN.y,r=W.CITY_RADIUS;
       const add=(prop,size,direction=null)=>items.push({x:x+.5,y:y+.65,prop,size,direction});
       if(!W.objectAt(x,y)){
-        if(t==='bamboo'&&sparse(x,y,42,92))add('bamboo-'+((h>>>12)%3),40+h%9);
-        else if(t==='rock')add('rock',44);
+        if(t==='bamboo'){
+          // Seeded bamboo canopies are deliberately allowed to overlap neighbouring
+          // tiles. Their foot is still in this tile; no terrain or collision changes.
+          const density=W.hash(x,y,92)%100;
+          if(density<79){
+            add('bamboo-tall-'+((h>>>12)%4),42+h%10);
+            // Dense patches carry a second, staggered culm; deterministic at seams.
+            if(density<29){
+              add('bamboo-tall-'+((h>>>20)%4),34+((h>>>5)%9));
+              const extra=items[items.length-1];
+              extra.x+=((h>>>25)&1)?.30:-.30;
+              extra.y-=.12;
+            }
+          }else if(h%3===0)add('shrub',21);
+        }else if(t==='rock')add('rock',44);
         else if(t==='forest'&&sparse(x,y,48,93))add('tree',48+h%9);
         else if(t==='volcano'&&sparse(x,y,13,94,true))add('volcano',39);
         else if(t==='grass'&&h%17===0)add('flowers',22);
-        else if(t==='bamboo'&&h%29===0)add('shrub',21);
         else if(t==='swamp'&&h%6===0)add('reeds',30);
         else if(t==='stone'&&sparse(x,y,23,95,true))add('stone-'+((h>>>12)%3),24+h%9);
         else if(t==='mountain'&&sparse(x,y,12,96,true))add('rock',27);
@@ -124,12 +136,14 @@
         const x=Math.floor(item.x),y=Math.floor(item.y),k=W.key(x,y);
         if(visible(x,y)&&!occupied.has(k)){occupied.add(k);items.push(item);}
       }
-      for(let y=Math.max(0,bounds.y-1);y<Math.min(W.SIZE,bounds.y+bounds.h+1);y++)for(let x=Math.max(0,bounds.x-1);x<Math.min(W.SIZE,bounds.x+bounds.w+1);x++){
+      for(let y=Math.max(0,bounds.y-1);y<Math.min(W.SIZE,bounds.y+bounds.h+4);y++)for(let x=Math.max(0,bounds.x-1);x<Math.min(W.SIZE,bounds.x+bounds.w+1);x++){
         if(!visible(x,y))continue;
         const plants=ambient(x,y,W.terrain(x,y,events),events);
         items.push(...(reserved.has(W.key(x,y))?plants.filter(p=>p.prop==='wall'||isGate(p)):plants));
       }
-      return connect(items).filter(p=>p.x>=bounds.x&&p.x<bounds.x+bounds.w&&p.y>=bounds.y&&p.y<bounds.y+bounds.h);
+      // Tall sprites from up to three rows below still enter the viewport above.
+      // Do not allow their origins to pop into view when a chunk scrolls.
+      return connect(items).filter(p=>p.x>=bounds.x&&p.x<bounds.x+bounds.w&&p.y>=bounds.y&&p.y<bounds.y+bounds.h+(p.prop.startsWith('bamboo-tall-')?3:0));
     }
     return Object.freeze({world,topology,ambient,site,inBounds});
   }

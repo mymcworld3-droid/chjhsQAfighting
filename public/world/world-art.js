@@ -4,7 +4,7 @@
   const base='/assets/world-map/ai/';
   const buildings=['meditation','forge','contract','vault','rank','duel','raid','watchtower','shrine','ruins','camp','realm-spring','realm-array','realm-sword','realm-star'];
   const directions=Object.freeze(['north','east','south','west']);
-  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas','sect-gates'].map(id=>[id,base+id+'.webp'])));
+  const sources=Object.freeze(Object.fromEntries([...buildings,'ground-atlas','props-atlas','creatures-atlas',...directions.map(d=>'scenery-'+d+'-atlas'),'ambient-atlas','boats-atlas','creatures-north','creatures-east','creatures-west','fence-connectors-atlas','wall-connectors-atlas','sect-gates','bamboo-tall-atlas'].map(id=>[id,base+id+(id==='bamboo-tall-atlas'?'.png':'.webp')])));
   const sceneryProps=Object.freeze(['fence','gate','wall','broken-wall','pillar','rubble','bridge','supplies']);
   const props=['bamboo','tree','rock','volcano','flowers','shrub','reeds','herb','ore','chest','lantern','wall-h','wall-v','gate','garden','boat','meteor','shield','altar','sealed'];
   const creatures=['靈狼','玄甲山豬','竹林靈狼','青竹蛇','山魈','妖藤','沙蠍','荒漠蜥蜴','巖甲獸','石靈','赤焰獸','熔岩蜥蜴','霜羽鷹','雪狼','毒蟾','澤蛇','潮汐蟹','海岸靈龜','古陣守衛','靈獸'];
@@ -40,7 +40,15 @@
     add(post?0:5,0,wall?(post?-24:-14):-24,wall?(post?12:10):9,wall?(post?25:15):25);
     return parts;
   }
-  const scenery=p=>ambientProps.includes(p.prop)&&!p.direction?ambientProp(p.prop,p.size):p.direction?directional(p.prop,p.direction,p.size):prop(p.prop,p.size);
+  const scenery=p=>{
+    // Four individually drawn, upright transparent bamboo variants: each rises
+    // 2–3 grid cells above its planted foot and retains native bitmap resolution.
+    if(/^bamboo-tall-[0-3]$/.test(p.prop)){
+      const index=Number(p.prop.slice(-1));
+      return {image:'bamboo-tall-atlas',sx:index%2*64,sy:Math.floor(index/2)*128,sw:64,sh:128,w:p.size||44,h:94+(index%3)*10,anchor:.98};
+    }
+    return ambientProps.includes(p.prop)&&!p.direction?ambientProp(p.prop,p.size):p.direction?directional(p.prop,p.direction,p.size):prop(p.prop,p.size);
+  };
   function monster(o){
     const direction=compass(o.direction);
     if((o.name||'').includes('大師姐'))return {image:'female',sx:0,sy:['south','east','west','north'].indexOf(direction)*112,sw:112,sh:112,w:48,h:48,anchor:.93};

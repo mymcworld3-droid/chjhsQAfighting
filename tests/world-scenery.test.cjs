@@ -8,7 +8,7 @@ const plain=(seed='scenery')=>{
 test('bamboo and stone props are sparse, seeded, and identical across browser/server and visit order',()=>{
   const context={};vm.runInNewContext(fs.readFileSync(require.resolve('../public/world/world-scenery.js'),'utf8'),context);
   const a=S.create(plain()),b=S.create(plain()),browser=context.QAGridWorldScenery.create(plain()),other=S.create(plain('another'));
-  for(const [terrain,prop,min,max]of [['bamboo','bamboo-',.1,.34],['stone','stone-',.04,.18]]){
+  for(const [terrain,prop,min,max]of [['bamboo','bamboo-tall-',.70,.87],['stone','stone-',.04,.18]]){
     const cells=[];for(let y=20;y<84;y++)for(let x=20;x<84;x++)cells.push([x,y]);
     const generated=cells.map(([x,y])=>a.ambient(x,y,terrain)),fraction=generated.filter(items=>items.some(p=>p.prop.startsWith(prop))).length/cells.length;
     assert.equal(new Set(generated.flat().filter(p=>p.prop.startsWith(prop)).map(p=>p.prop)).size,3,'all three visual variants appear');
@@ -18,6 +18,28 @@ test('bamboo and stone props are sparse, seeded, and identical across browser/se
     assert.notEqual(JSON.stringify(cells.map(([x,y])=>other.ambient(x,y,terrain))),JSON.stringify(generated));
     if(terrain==='stone')for(const [x,y]of cells)if(a.ambient(x,y,terrain).length)for(const [dx,dy]of S.STEPS)assert.equal(a.ambient(x+dx,y+dy,terrain).length,0,'stone piles keep an adjacent clear tile');
   }
+});
+
+test('new long straight bamboo sprites are multi-tile bitmaps and use stable density',()=>{
+  const world={...plain('upright-bamboo'),terrain:()=> 'bamboo'},scene=S.create(world);
+  let stems=0,doubles=0;
+  for(let y=60;y<92;y++)for(let x=60;x<92;x++){
+    const p=scene.ambient(x,y,'bamboo').filter(p=>p.prop.startsWith('bamboo-tall-'));
+    stems+=p.length;if(p.length===2)doubles++;
+    for(const item of p){
+      const sprite=A.scenery(item);
+      assert.equal(sprite.image,'bamboo-tall-atlas');assert.ok(sprite.h>80&&sprite.h<120);
+      assert.ok(sprite.w<64,'bamboo may be taller than one tile but remains slender');
+      assert.ok(sprite.sx+sprite.sw<=128&&sprite.sy+sprite.sh<=256);
+    }
+  }
+  assert.ok(stems>850&&stems<1250,'forest is much denser than isolated saplings');
+  assert.ok(doubles>200,'dense patches hold a second staggered bamboo culm');
+  const bounds={x:70,y:70,w:6,h:6},draw=scene.inBounds(bounds);
+  assert.ok(draw.some(p=>p.prop.startsWith('bamboo-tall-')&&p.y>=bounds.y+bounds.h&&p.y<bounds.y+bounds.h+3),
+    'tall bamboo roots beyond the viewport remain drawable where their canopy enters it');
+  assert.equal(JSON.stringify(draw),JSON.stringify(scene.inBounds(bounds)),'viewport density is repeatable');
+  assert.notEqual(JSON.stringify(draw),JSON.stringify(S.create({...plain('other-bamboo'),terrain:()=> 'bamboo'}).inBounds(bounds)));
 });
 test('site scenery has matching structures, avoids objects and roads, and respects both anchor and tile fog',()=>{
   const camp={id:'camp-test',kind:'structure',subtype:'camp',x:100,y:100},ruins={...camp,id:'ruins-test',subtype:'ruins',x:115};
