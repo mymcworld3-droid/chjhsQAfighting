@@ -54,17 +54,17 @@
           // Seeded bamboo canopies are deliberately allowed to overlap neighbouring
           // tiles. Their foot is still in this tile; no terrain or collision changes.
           const density=W.hash(x,y,92)%100;
-          if(density<90){
+          if(density<80){
             add('bamboo-tall-'+((h>>>12)%4),82+h%11);
             // Mostly one or two staggered clumps, with occasional denser patches
             // and seeded clearings. Roots never change terrain or collisions.
-            if(density<55){
+            if(density<35){
               add('bamboo-tall-'+((h>>>20)%4),76+((h>>>5)%9));
               const extra=items[items.length-1];
               extra.x+=((h>>>25)&1)?.30:-.30;
               extra.y-=.12;
             }
-            if(density<15){
+            if(density<5){
               add('bamboo-tall-'+((h>>>23)%4),72+((h>>>3)%9));
               const extra=items[items.length-1];
               extra.x+=((h>>>25)&1)?-.29:.29;
