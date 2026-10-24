@@ -2,8 +2,9 @@ import './world-core.js';
 import './world-art.js';
 import './world-scenery.js';
 import './world-ground.js';
+import './world-aura.js';
 const BaseWorld=globalThis.QAGridWorld, TILE=40;
-const colors=BaseWorld.COLORS,Art=globalThis.QAGridWorldArt,Scenery=globalThis.QAGridWorldScenery,Ground=globalThis.QAGridWorldGround;
+const colors=BaseWorld.COLORS,Art=globalThis.QAGridWorldArt,Scenery=globalThis.QAGridWorldScenery,Ground=globalThis.QAGridWorldGround,Aura=globalThis.QAGridWorldAura;
 export class WorldRenderer {
   constructor(canvas,mini,onPick){
     this.world=BaseWorld.createWorld();const W=this.world;
@@ -79,7 +80,7 @@ export class WorldRenderer {
     return{x:Math.floor(p.x),y:Math.floor(p.y)};
   }
   sceneryModel(){
-    if(this.scenery?.world!==this.world){this.scenery=Scenery.create(this.world);this.ground=typeof document==='undefined'?null:Ground.create(Art);this.scenerySignature='';}
+    if(this.scenery?.world!==this.world){this.scenery=Scenery.create(this.world);this.ground=typeof document==='undefined'?null:Ground.create(Art);this.atmosphere=Aura?.create(this.world);this.scenerySignature='';}
     return this.scenery;
   }
   tile(x,y,t,at,events=this.data?.events||{},visible=()=>true){
@@ -139,6 +140,19 @@ export class WorldRenderer {
       top=Math.max(0,Math.floor(this.camera.y-this.height/s/2)-2),bottom=Math.min(this.world.SIZE-1,Math.ceil(this.camera.y+this.height/s/2)+2),decor=[];
     const visible=(x,y)=>W.known(d.state.explored,x,y)||!!(b&&x>=b.bounds.x&&x<b.bounds.x+8&&y>=b.bounds.y&&y<b.bounds.y+8),events=b?.events||d.events;
     const scenery=this.sceneryModel(),signature=[left,right,top,bottom,d.state.explored.revision,d.state.explored.all,W.patchRevision,events?.bridge,events?.array,b?.id,b?.revision].join(':');
+    // Reuse one near-view world object query for building effects and interactions.
+    const nearbyObjects=b?[]:W.objectsIn({x:left-5,y:top-5,w:right-left+11,h:bottom-top+11});
+    let sacredSites=[];
+    if(!b&&this.atmosphere){
+      const fullyKnown=(o,pad)=>{
+        if(!visible(o.x,o.y))return false;
+        return [[-pad,-pad],[pad,-pad],[-pad,pad],[pad,pad]].every(([dx,dy])=>W.inside(o.x+dx,o.y+dy)&&visible(o.x+dx,o.y+dy));
+      };
+      sacredSites=nearbyObjects.filter(o=>(o.kind==='building'||o.kind==='realm'||o.id==='shrine'||o.subtype==='shrine')&&fullyKnown(o,4))
+        .sort((a,b)=>Math.hypot(a.x-this.camera.x,a.y-this.camera.y)-Math.hypot(b.x-this.camera.x,b.y-this.camera.y)).slice(0,12);
+      if(Math.abs(this.camera.x-W.SPAWN.x)<17&&Math.abs(this.camera.y-W.SPAWN.y)<17&&fullyKnown(W.SPAWN,7))
+        sacredSites.unshift({kind:'sect',x:W.SPAWN.x,y:W.SPAWN.y,id:'qingyun-sect'});
+    }
     this.ground?.setScale(this.dpr*zoom);
     if(signature!==this.scenerySignature){this.scenerySignature=signature;this.sceneryItems=scenery.inBounds({x:left,y:top,w:right-left+1,h:bottom-top+1},events,visible);}
     for(let y=top;y<=bottom;y++)for(let x=left;x<=right;x++){
@@ -147,6 +161,7 @@ export class WorldRenderer {
       const t=W.terrain(x,y,events);this.tile(x,y,t,at,events,visible);
       if(b&&(x<b.bounds.x||x>=b.bounds.x+8||y<b.bounds.y||y>=b.bounds.y+8)){c.fillStyle='#11221ac9';c.fillRect(x*40,y*40,40,40);}
     }
+    if(sacredSites.length)this.atmosphere.drawGround(c,sacredSites,at);
     for(const p of this.sceneryItems)decor.push({y:p.y,draw:()=>this.drawScenery(p)});
     if(!b&&W.known(d.state.explored,W.SPAWN.x,W.SPAWN.y)&&Math.abs(this.camera.x-W.SPAWN.x)<30&&Math.abs(this.camera.y-W.SPAWN.y)<30)this.label('問 道 宗',(W.SPAWN.x+.5)*TILE,(W.SPAWN.y-2.6)*TILE,'#f3dfac',17);
     if(b){
@@ -162,7 +177,7 @@ export class WorldRenderer {
         const x=(e.x+.5)*40,y=(e.y+.5)*40;this.object({...e,kind:'monster'},false,false);
         c.fillStyle='#241d1c';c.fillRect(x-19,y-33,38,4);c.fillStyle='#e39a77';c.fillRect(x-19,y-33,38*e.hp/e.maxHp,4);
       }});
-    }else for(const o of W.objectsIn({x:left,y:top,w:right-left+1,h:bottom-top+1}))if(W.known(d.state.explored,o.x,o.y)&&o.x>=left&&o.x<=right&&o.y>=top&&o.y<=bottom){
+    }else for(const o of nearbyObjects)if(W.known(d.state.explored,o.x,o.y)&&o.x>=left&&o.x<=right&&o.y>=top&&o.y<=bottom){
       const today=new Date(at+8*3600000).toISOString().slice(0,10),claimed=d.state.claims?.[(o.kind==='chest'?'chest:':o.kind==='monster'?'monster:':'gather:')+o.id+(o.kind==='chest'?'':':'+today)];
       decor.push({y:o.y+.5,draw:()=>this.object(o,claimed)});
     }
@@ -172,6 +187,7 @@ export class WorldRenderer {
       this.route(d.preview?.path||mine?.route?.path?.slice(W.sample(mine?.route,at).index));
     }else{decor.push({y:b.player.y+.5,draw:()=>this.sprite({...mine,name:mine?.name||'我'},pos,at,true,false)});this.route(d.preview?.path);}
     decor.sort((a,q)=>a.y-q.y).forEach(n=>n.draw());
+    if(sacredSites.length)this.atmosphere.drawAir(c,sacredSites,at,!globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);
     const effectTime=Date.now();this.effects=this.effects.filter(e=>effectTime-e.at<1000);
     for(const e of this.effects){const elapsed=(effectTime-e.at)/1000,x=(e.x+.5)*40,y=(e.y+.5)*40;
       c.save();c.globalAlpha=Math.max(0,1-elapsed);
