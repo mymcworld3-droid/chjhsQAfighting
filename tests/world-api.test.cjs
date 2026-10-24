@@ -223,6 +223,6 @@ test('an unseen destination is reached through fog and fifteen-cell exploration 
   const moved=await h.request('move',{sessionId:joined.sessionId,seq:1,target});assert.equal(moved.ok,true);assert.equal(moved.partial,false);assert.deepEqual(moved.self.route.path.at(-1),target);
   assert.equal(W.known(moved.explored,target.x,target.y),false,'planning does not reveal future terrain');
   const writes=h.db.writes;h.advance(W.STEP_MS*20+1);await h.service.tick();const actor=h.service.hub.actors.get('u1');
-  assert.deepEqual(actor.state.position,{x:520,y:500});assert.ok(W.known(actor.state.explored,535,500));assert.equal(W.known(actor.state.explored,536,500),false);assert.equal(h.db.writes,writes,'no per-tile database writes');
+  assert.deepEqual(actor.state.position,{x:520,y:500});assert.ok(W.known(actor.state.explored,535,500));assert.equal(W.known(actor.state.explored,537,500),false);assert.equal(h.db.writes,writes,'no per-tile database writes');
   h.advance(W.STEP_MS*20);await h.service.tick();assert.deepEqual(actor.state.position,target);assert.ok(W.known(actor.state.explored,555,500));
 });

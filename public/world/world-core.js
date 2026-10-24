@@ -199,7 +199,10 @@ return TERRAIN;})();
     return fog;
   }
   function known(fog,x,y){
-    if(!inside(x,y))return false;if(fog?.all)return true;
+    if(!inside(x,y))return false;
+    // Sect grounds and the surrounding safe plain are public knowledge for
+    // both new and existing saves; no exploration writes or migration needed.
+    if(inSafeArea(x,y)||fog?.all)return true;
     const s=fog?.chunks?.[chunkKey(x,y)],i=(y%32)*32+x%32;
     return !!s&&(fogValue(s[i>>2])&(1<<(i&3)))!==0;
   }

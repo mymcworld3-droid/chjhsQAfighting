@@ -22,9 +22,12 @@ test('unexplored destinations can be reached without revealing the route in adva
   assert.equal(JSON.stringify(explored),before);assert.equal(W.known(explored,target.x,target.y),false);
   assert.ok(r.path.every(p=>W.walkable(p.x,p.y)));
 });
-test('exploration reveals a radius of fifteen cells at spawn and after each reached tile',()=>{
+test('safe sect grounds are always visible and wilderness exploration retains a fifteen-cell radius',()=>{
   assert.equal(W.VISION_RADIUS,15);const fog=W.initialExplored();
-  for(const[dx,dy]of W.DIRS){assert.ok(W.known(fog,W.SPAWN.x+dx*15,W.SPAWN.y+dy*15));assert.equal(W.known(fog,W.SPAWN.x+dx*16,W.SPAWN.y+dy*16),false);}
+  const empty=W.normalizeExplored(),before=JSON.stringify(empty);
+  for(let dy=-W.SAFE_RADIUS;dy<=W.SAFE_RADIUS;dy++)for(let dx=-W.SAFE_RADIUS;dx<=W.SAFE_RADIUS;dx++)assert.ok(W.known(empty,W.SPAWN.x+dx,W.SPAWN.y+dy));
+  for(const[dx,dy]of W.DIRS){assert.ok(W.known(fog,W.SPAWN.x+dx*W.SAFE_RADIUS,W.SPAWN.y+dy*W.SAFE_RADIUS));assert.equal(W.known(empty,W.SPAWN.x+dx*(W.SAFE_RADIUS+1),W.SPAWN.y+dy*(W.SAFE_RADIUS+1)),false);}
+  assert.equal(JSON.stringify(empty),before,'visibility does not expand or modify saved fog');
   const p={x:600,y:500},next=W.reveal(fog,p);assert.ok(W.known(next,615,500));assert.equal(W.known(next,616,500),false);
 });
 test('retargeting preserves fractional movement on the current edge and remains four-directional',()=>{
