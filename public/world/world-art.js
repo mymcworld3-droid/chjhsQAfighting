@@ -45,7 +45,7 @@
     if(o.kind==='monster')return monster(o);
     let id=o.kind==='building'?o.id:o.kind==='structure'?o.subtype:null;
     if(o.kind==='realm')id=['靈泉洞天','古陣秘境','藏劍遺窟','星隕石窟'].includes(o.name)?['realm-spring','realm-array','realm-sword','realm-star'][['靈泉洞天','古陣秘境','藏劍遺窟','星隕石窟'].indexOf(o.name)]:'realm-array';
-    if(buildings.includes(id)){const size=id==='watchtower'?80:id==='duel'?76:72;return{image:id,sx:0,sy:0,sw:256,sh:256,w:size,h:size,anchor:.89};}
+    if(buildings.includes(id)){const size=({meditation:104,forge:102,contract:100,vault:100,rank:110,duel:108,raid:116,watchtower:96,shrine:112,ruins:98,camp:92,'realm-spring':110,'realm-array':114,'realm-sword':108,'realm-star':110})[id]||100;return{image:id,sx:0,sy:0,sw:256,sh:256,w:size,h:size,anchor:.89};}
     if(o.kind==='npc')return {image:'female',sx:0,sy:['south','east','west','north'].indexOf(compass(o.direction))*112,sw:112,sh:112,w:44,h:44,anchor:.93};
     if(o.kind==='chest')return prop('chest',38);
     if(o.kind==='gather')return prop(o.veinId||/iron/.test(o.material||'')?'ore':'herb',o.veinId?38:34);
