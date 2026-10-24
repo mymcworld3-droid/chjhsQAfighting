@@ -1,0 +1,52 @@
+{
+  "renderer": "production WorldRenderer via native Canvas",
+  "labels": "suppressed in fixture; no CJK font in native runtime",
+  "seed": "qingyun-2026",
+  "images": 29,
+  "repeatable": true,
+  "seamMaxDifference": 0,
+  "fixtures": [
+    {
+      "name": "CAMP / CONNECTED FENCES",
+      "x": 583,
+      "y": 83,
+      "props": 25,
+      "cache": 70
+    },
+    {
+      "name": "RUINS / STONE DEBRIS",
+      "x": 251,
+      "y": 88,
+      "props": 21,
+      "cache": 93
+    },
+    {
+      "name": "BAMBOO / SEEDED CLEARINGS",
+      "x": 294,
+      "y": 90,
+      "props": 41,
+      "cache": 64
+    },
+    {
+      "name": "STONE FIELD / SPARSE ROCKS",
+      "x": 150,
+      "y": 90,
+      "props": 15,
+      "cache": 70
+    },
+    {
+      "name": "WENDAO SECT / ORIGINAL BUILDINGS",
+      "x": 500,
+      "y": 500,
+      "props": 14,
+      "cache": 88
+    },
+    {
+      "name": "RIVER / BRIDGE CONNECTION",
+      "x": 570,
+      "y": 453,
+      "props": 14,
+      "cache": 163
+    }
+  ]
+}

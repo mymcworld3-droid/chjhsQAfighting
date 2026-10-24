@@ -30,14 +30,14 @@
       const h=W.hash(x,y,91),items=[],dx=x-W.SPAWN.x,dy=y-W.SPAWN.y,r=W.CITY_RADIUS;
       const add=(prop,size,direction=null)=>items.push({x:x+.5,y:y+.65,prop,size,direction});
       if(!W.objectAt(x,y)){
-        if(t==='bamboo'&&sparse(x,y,42,92))add('bamboo',40+h%9);
+        if(t==='bamboo'&&sparse(x,y,42,92))add('bamboo-'+((h>>>12)%3),40+h%9);
         else if(t==='rock')add('rock',44);
         else if(t==='forest'&&sparse(x,y,48,93))add('tree',48+h%9);
         else if(t==='volcano'&&sparse(x,y,13,94,true))add('volcano',39);
         else if(t==='grass'&&h%17===0)add('flowers',22);
         else if(t==='bamboo'&&h%29===0)add('shrub',21);
         else if(t==='swamp'&&h%6===0)add('reeds',30);
-        else if(t==='stone'&&sparse(x,y,23,95,true))add(h&8?'rock':'rubble',24+h%9,h&8?null:DIRECTIONS[(h>>>12)%4]);
+        else if(t==='stone'&&sparse(x,y,23,95,true))add('stone-'+((h>>>12)%3),24+h%9);
         else if(t==='mountain'&&sparse(x,y,12,96,true))add('rock',27);
         else if(t==='sealed')add('sealed',44);
         for(const item of items){item.x+=((h>>>8)%101/100-.5)*.3;item.y+=((h>>>17)%101/100-.5)*.2;}
@@ -53,23 +53,19 @@
     function site(o,events={}){
       if(!isSite(o))return [];
       const subtype=o.kind==='building'?o.id:o.kind==='realm'?'realm':o.subtype,h=W.hash(o.x,o.y,110),items=[];
-      let direction=o.kind==='building'?'south':DIRECTIONS[h%4],best=Infinity;
-      // Face a nearby road when there is one; ties have a fixed compass order.
-      for(let i=0;i<4;i++)for(let d=1;d<=4;d++){
-        const [dx,dy]=STEPS[i],x=o.x+dx*d,y=o.y+dy*d;
-        if(W.inside(x,y)&&W.terrain(x,y,events)==='road'&&d<best){best=d;direction=DIRECTIONS[i];}
-      }
-      const turn=(DIRECTIONS.indexOf(direction)+2)%4;
-      const add=(prop,dx,dy,size=34,facing='south')=>{
+      // Every existing building has one front-facing image. Its door and surrounding
+      // layout stay south-facing; only fences, gates and other props have variants.
+      const turn=0;
+      const add=(prop,dx,dy,size=34,facing='south',joinDirection=null)=>{
         for(let i=0;i<turn;i++){const a=dx;dx=-dy;dy=a;}
         const x=o.x+dx,y=o.y+dy,tx=Math.floor(x+.5),ty=Math.floor(y+.5);
         if(!W.inside(tx,ty)||!DRY.has(W.terrain(tx,ty,events))||W.terrain(tx,ty,events)==='road'||W.objectAt(tx,ty))return;
-        items.push({x:x+.5,y:y+.6,prop,size,direction:['fence','gate','wall','broken-wall','pillar','rubble','supplies'].includes(prop)?DIRECTIONS[(DIRECTIONS.indexOf(facing)+turn)%4]:null,owner:o.id});
+        items.push({x:x+.5,y:y+.6,prop,size,direction:['fence','gate','wall','broken-wall','pillar','rubble','supplies'].includes(prop)?DIRECTIONS[(DIRECTIONS.indexOf(facing)+turn)%4]:null,...(joinDirection?{joinDirection}:{}),owner:o.id});
       };
       if(subtype==='camp'){
-        for(const x of [-2,-1,0,1,2])add('fence',x,-2,46,'north');
+        for(const x of [-2,-1,0,1,2])add('fence',x,-2,46,'north',x===-2?'west':x===2?'east':null);
         for(const y of [-1,0,1]){add('fence',-2,y,46,'west');add('fence',2,y,46,'east');}
-        add('gate',0,2,54);add('supplies',-1,1,31);add('lantern',1,1,27);
+        add('gate',0,2,54);add('supplies',-1,1,31);add('fire',1,1,24);add('logs',-1,-1,27);
       }else if(subtype==='ruins'){
         add('broken-wall',-2,-1,45,'west');add('broken-wall',2,-1,43,'east');
         add('pillar',-1,-2,36,'north');add('pillar',2,1,34);
@@ -81,11 +77,13 @@
         add('rubble',-2,1,27,'west');add('rubble',2,1,28,'east');
         add(subtype==='realm'&&/靈泉/.test(o.name)?'reeds':'lantern',-1,2,29);add('shrub',1,2,27);
       }else if(subtype==='forge'){
-        add('supplies',-1,1,30);add('ore',1,1,29);add('rubble',2,0,25,'east');
+        add('weapons',-1,1,30);add('ore',1,1,29);add('logs',2,0,25);
+      }else if(subtype==='contract'){
+        add('weapons',-1,1,30);add('obelisk',1,1,28);
       }else if(subtype==='raid'){
         add('pillar',-2,0,35,'west');add('pillar',2,0,35,'east');add('rubble',1,1,27);
       }else{
-        add(subtype==='vault'?'supplies':'garden',-1,1,31);add('lantern',1,1,29);
+        add(subtype==='vault'?'supplies':subtype==='rank'?'scrolls':'bonsai',-1,1,31);add('lantern',1,1,29);
         if(subtype==='meditation')add('bamboo',-2,-1,36);
         if(subtype==='duel')add('wall',2,-1,42,'east');
       }

@@ -8,9 +8,10 @@ const plain=(seed='scenery')=>{
 test('bamboo and stone props are sparse, seeded, and identical across browser/server and visit order',()=>{
   const context={};vm.runInNewContext(fs.readFileSync(require.resolve('../public/world/world-scenery.js'),'utf8'),context);
   const a=S.create(plain()),b=S.create(plain()),browser=context.QAGridWorldScenery.create(plain()),other=S.create(plain('another'));
-  for(const [terrain,prop,min,max]of [['bamboo','bamboo',.1,.34],['stone',null,.04,.18]]){
+  for(const [terrain,prop,min,max]of [['bamboo','bamboo-',.1,.34],['stone','stone-',.04,.18]]){
     const cells=[];for(let y=20;y<84;y++)for(let x=20;x<84;x++)cells.push([x,y]);
-    const generated=cells.map(([x,y])=>a.ambient(x,y,terrain)),fraction=generated.filter(items=>items.some(p=>prop?p.prop===prop:['rock','rubble'].includes(p.prop))).length/cells.length;
+    const generated=cells.map(([x,y])=>a.ambient(x,y,terrain)),fraction=generated.filter(items=>items.some(p=>p.prop.startsWith(prop))).length/cells.length;
+    assert.equal(new Set(generated.flat().filter(p=>p.prop.startsWith(prop)).map(p=>p.prop)).size,3,'all three visual variants appear');
     assert.ok(fraction>min&&fraction<max,terrain+' density '+fraction);
     for(const [x,y]of cells.toReversed())assert.equal(JSON.stringify(b.ambient(x,y,terrain)),JSON.stringify(a.ambient(x,y,terrain)));
     assert.equal(JSON.stringify(cells.map(([x,y])=>browser.ambient(x,y,terrain))),JSON.stringify(generated));
@@ -22,6 +23,7 @@ test('site scenery has matching structures, avoids objects and roads, and respec
   const camp={id:'camp-test',kind:'structure',subtype:'camp',x:100,y:100},ruins={...camp,id:'ruins-test',subtype:'ruins',x:115};
   const original=plain(),world={...original,objectsIn:()=>[camp,ruins],objectAt:(x,y)=>[camp,ruins].find(o=>o.x===x&&o.y===y)},scenery=S.create(world);
   assert.ok(scenery.site(camp).filter(p=>p.prop==='fence').length>=8);assert.ok(scenery.site(camp).some(p=>p.prop==='gate'));
+  assert.deepEqual(scenery.site(camp).filter(p=>p.joinDirection).map(p=>p.joinDirection),['west','east'],'corner tiles paint both connecting directions');
   assert.ok(scenery.site(ruins).some(p=>p.prop==='rubble'));assert.ok(scenery.site(ruins).some(p=>p.prop==='broken-wall'));
   const bounds={x:96,y:96,w:24,h:10},items=scenery.inBounds(bounds),occupied=items.map(p=>W.key(Math.floor(p.x),Math.floor(p.y)));
   assert.equal(new Set(occupied).size,occupied.length,'sites do not place competing decorations on a tile');
@@ -49,6 +51,15 @@ test('road masks connect every junction at seams and close absent arms; bridge o
 test('directional art has distinct generated sheets and every source cell stays inside the atlas',()=>{
   assert.equal(new Set(A.directions.map(d=>A.directional('fence',d).image)).size,4);
   for(const d of A.directions)for(const prop of A.sceneryProps){const sprite=A.directional(prop,d);assert.ok(sprite.sx+sprite.sw<=512&&sprite.sy+sprite.sh<=256);}
+  assert.equal(new Set(A.directions.map(direction=>A.monster({species:'靈狼',direction}).image)).size,4);
+  assert.equal(new Set(A.directions.map(d=>A.directional('boat',d).sx)).size,4);
+  for(const id of A.buildings){const sprites=A.directions.map(direction=>A.object({id,kind:'building',direction}));assert.ok(sprites.every(s=>s.image===id&&s.sx===0&&s.sy===0&&s.sw===256&&s.sh===256),'buildings keep the original single view');}
+});
+test('single-facing buildings keep their south entrance and matching surroundings even beside a northern road',()=>{
+  const world={...plain(),terrain:(x,y)=>y===97?'road':'grass'},scene=S.create(world),camp={id:'camp-front',kind:'structure',subtype:'camp',x:100,y:100};
+  const items=scene.site(camp),gate=items.find(p=>p.prop==='gate');assert.ok(gate);assert.equal(gate.direction,'south');assert.equal(gate.y,102.6);assert.equal(gate.x,100.5);
+  assert.ok(!items.some(p=>Math.floor(p.x)===100&&Math.floor(p.y)===101),'door approach stays clear');
+  assert.ok(items.some(p=>p.prop==='fire'));assert.ok(items.some(p=>p.prop==='logs'));
 });
 test('visual scenery does not change world terrain, persisted patch state, or legal movement',()=>{
   const world=W.createWorld('visual-only'),scene=S.create(world),bounds={x:490,y:490,w:24,h:24};

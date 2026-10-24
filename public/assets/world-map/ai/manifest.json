@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 994362,
+  "totalBytes": 1520816,
   "assets": [
     {
       "id": "meditation",
@@ -224,6 +224,94 @@
       "alpha": false,
       "source": "exec-31fa077d-40a2-4564-946a-a69c94ea8975.png",
       "sourceSha256": "947f5f121cc0c24661f5c95e5c1a9973ec8b34432992e2d574cb966ae77c3cb3"
+    },
+    {
+      "id": "ambient-atlas",
+      "file": "ambient-atlas.webp",
+      "width": 512,
+      "height": 640,
+      "bytes": 116356,
+      "alpha": true,
+      "quality": 78,
+      "sourceRows": [
+        0,
+        300,
+        540,
+        830,
+        1070,
+        1402
+      ],
+      "source": "exec-ebcbb6b5-10df-4421-9bc9-7e5e40d3abd9.png",
+      "sourceSha256": "6b2c6aae2dae40e4ada310b3e30d67a9966a8670f00821817ff7ac363aa6e996"
+    },
+    {
+      "id": "creatures-north",
+      "file": "creatures-north.webp",
+      "width": 640,
+      "height": 512,
+      "bytes": 124074,
+      "alpha": true,
+      "quality": 64,
+      "sourceRows": [
+        0,
+        295,
+        551,
+        822,
+        1122
+      ],
+      "source": "exec-5587466f-5a28-444d-8509-127ee87e7379.png",
+      "sourceSha256": "8aefd543ae816b277a51ad83763fc598d62aac694292cf8a9a79d1d980c726b3"
+    },
+    {
+      "id": "creatures-east",
+      "file": "creatures-east.webp",
+      "width": 640,
+      "height": 512,
+      "bytes": 133162,
+      "alpha": true,
+      "quality": 64,
+      "sourceRows": [
+        0,
+        300,
+        563,
+        821,
+        1122
+      ],
+      "source": "exec-311c801b-7c83-4065-bc71-ce696471e650.png",
+      "sourceSha256": "d6a67afb255bce342c454aefcb91cd55b9e487fcc71611bf8278adbb1a8a5099"
+    },
+    {
+      "id": "creatures-west",
+      "file": "creatures-west.webp",
+      "width": 640,
+      "height": 512,
+      "bytes": 134146,
+      "alpha": true,
+      "quality": 64,
+      "sourceRows": [
+        0,
+        292,
+        555,
+        816,
+        1122
+      ],
+      "source": "exec-6fa221e0-02e5-49ce-9bc7-c38fcf390412.png",
+      "sourceSha256": "b21e9168b250e1bb48204d7f7bcc905fde4b22422a29dbbd4774805c2bd83515"
+    },
+    {
+      "id": "boats-atlas",
+      "file": "boats-atlas.webp",
+      "width": 512,
+      "height": 128,
+      "bytes": 18716,
+      "alpha": true,
+      "quality": 82,
+      "sourceRows": [
+        0,
+        320
+      ],
+      "source": "exec-a4cf9f39-e25c-418a-ab79-50525bd4fdc8.png",
+      "sourceSha256": "70e60d8fd60b0318f80d81248b0fcc196c49274c25dd2d356226fd2135533025"
     }
   ]
 }

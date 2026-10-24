@@ -16,7 +16,8 @@ test('every building has its own small bitmap and all live world objects have ma
 });
 test('all shipped AI images exist, match the size manifest, preserve cutout alpha and fit a small download budget',()=>{
   const root=path.join(__dirname,'../public/assets/world-map/ai'),manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
-  assert.equal(manifest.assets.length,Object.keys(A.sources).length);assert.ok(manifest.totalBytes<1500000);
+  // Includes the three additional monster directions, boat directions and ambient props.
+  assert.equal(manifest.assets.length,Object.keys(A.sources).length);assert.ok(manifest.totalBytes<1600000);
   assert.equal(new Set(manifest.assets.filter(a=>A.buildings.includes(a.id)).map(a=>a.sourceSha256)).size,15,'each building comes from its own generated image');
   for(const[id,url]of Object.entries(A.sources)){
     const asset=manifest.assets.find(a=>a.id===id);assert.ok(asset,id);const bytes=fs.readFileSync(path.join(root,path.basename(url)));
@@ -41,6 +42,7 @@ test('all terrain and decorative illustration paths use AI bitmap cells with val
   const r=renderer(),draws=[];r.world=W;r.data={events:{}};r.images=Object.fromEntries(Object.keys(A.sources).map(id=>[id,{id,complete:true,naturalWidth:640}]));
   r.ctx={globalAlpha:1,save(){},restore(){},drawImage(...args){draws.push(args);}};
   for(let i=0;i<W.TYPES.length;i++){r.tile(50+i,50,W.TYPES[i],1234);r.decoration(50+i,50,W.TYPES[i]);}
-  for(const direction of A.directions)for(const prop of A.sceneryProps)r.imageSprite(A.directional(prop,direction),0,0);
-  assert.ok(draws.length>=W.TYPES.length);for(const[image,x,y,w,h]of draws){assert.ok(x>=0&&y>=0&&w>0&&h>0);const width=image.id==='creatures-atlas'?640:image.id.endsWith('-atlas')?512:256;const height=image.id.startsWith('scenery-')?256:image.id==='creatures-atlas'?512:image.id.endsWith('-atlas')?640:256;assert.ok(x+w<=width&&y+h<=height);}
+  for(const direction of A.directions)for(const prop of [...A.sceneryProps,'boat'])r.imageSprite(A.directional(prop,direction),0,0);
+  for(const prop of A.ambientProps)r.imageSprite(A.ambientProp(prop),0,0);
+  assert.ok(draws.length>=W.TYPES.length);for(const[image,x,y,w,h]of draws){assert.ok(x>=0&&y>=0&&w>0&&h>0);const width=image.id.startsWith('creatures-')?640:image.id.endsWith('-atlas')?512:256;const height=image.id.startsWith('scenery-')?256:image.id.startsWith('creatures-')?512:image.id==='boats-atlas'?128:image.id.endsWith('-atlas')?640:256;assert.ok(x+w<=width&&y+h<=height);}
 });

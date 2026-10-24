@@ -94,17 +94,23 @@ export class WorldRenderer {
       c.save();c.globalAlpha=.025+.015*Math.sin(at/1800+x*.2+y*.3);c.fillStyle=t==='lava'?'#ffc287':'#d4efea';c.fillRect(px,py,40,40);c.restore();
     }
   }
+  drawScenery(p){
+    this.imageSprite(Art.scenery(p),p.x*TILE,p.y*TILE);
+    if(p.joinDirection)this.imageSprite(Art.directional(p.prop,p.joinDirection,p.size),p.x*TILE,p.y*TILE);
+  }
   decoration(x,y,t){
-    for(const p of this.sceneryModel().ambient(x,y,t,this.data?.events))this.imageSprite(Art.scenery(p),p.x*TILE,p.y*TILE);
+    for(const p of this.sceneryModel().ambient(x,y,t,this.data?.events))this.drawScenery(p);
   }
   object(o,claimed,showName=true){
-    const c=this.ctx,x=(o.x+.5)*TILE,y=(o.y+.5)*TILE,sprite=Art.object(o);
+    const c=this.ctx,x=(o.x+.5)*TILE,y=(o.y+.5)*TILE;
+    const direction=o.kind==='monster'?(o.nextMove?(o.nextMove.x>o.x?'east':o.nextMove.x<o.x?'west':o.nextMove.y<o.y?'north':o.nextMove.y>o.y?'south':o.direction||'south'):o.direction||Art.directions[this.world.hash(o.x,o.y,143)%4]):o.direction;
+    const sprite=Art.object({...o,direction});
     if(this.imageSprite(sprite,x,y,claimed?.5:1))this.hitRegions.push({object:o,sprite,bounds:Art.bounds(o,sprite)});
     if(showName&&(!o.veinId||o.veinAnchor))this.label(o.name+(o.level?' · '+o.level+'級':''),x,y+17,claimed?'#c9d3be':o.kind==='monster'?'#ffe2be':'#fff5d5',10);
   }
   sprite(actor,pos,at,self=false,showName=true){
     const c=this.ctx,x=(pos.x+.5)*TILE,y=(pos.y+.5)*TILE,img=this.images[actor.gender||'male'];
-    if(actor.travelMode==='sail')this.imageSprite(Art.prop('boat',60),x,y+8);
+    if(actor.travelMode==='sail')this.imageSprite(Art.directional('boat',pos.direction||actor.direction||'down',60),x,y+8);
     if(self)this.overlayCell({x:Math.floor(pos.x),y:Math.floor(pos.y)},'#ffe6a508','#ffe6a54a');
     const direction=pos.moving||actor.route?.path?.length>1?pos.direction:actor.direction||'down',row=['down','right','left','up'].indexOf(direction);
     const frame=pos.moving?[1,2,3,0][Math.floor((at-(actor.route?.startedAtMs||0))/130)%4]:0;
@@ -137,7 +143,7 @@ export class WorldRenderer {
       const t=W.terrain(x,y,events);this.tile(x,y,t,at,events,visible);
       if(b&&(x<b.bounds.x||x>=b.bounds.x+8||y<b.bounds.y||y>=b.bounds.y+8)){c.fillStyle='#11221ac9';c.fillRect(x*40,y*40,40,40);}
     }
-    for(const p of this.sceneryItems)decor.push({y:p.y,draw:()=>this.imageSprite(Art.scenery(p),p.x*TILE,p.y*TILE)});
+    for(const p of this.sceneryItems)decor.push({y:p.y,draw:()=>this.drawScenery(p)});
     if(!b&&W.known(d.state.explored,W.SPAWN.x,W.SPAWN.y)&&Math.abs(this.camera.x-W.SPAWN.x)<30&&Math.abs(this.camera.y-W.SPAWN.y)<30)this.label('問 道 宗',(W.SPAWN.x+.5)*TILE,(W.SPAWN.y-2.6)*TILE,'#f3dfac',17);
     if(b){
       for(const p of b.reachable||[])this.overlayCell(p,'#c9e0d029');
