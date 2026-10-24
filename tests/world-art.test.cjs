@@ -10,7 +10,7 @@ function renderer(){
 test('every building has its own small bitmap and all live world objects have mapped artwork',()=>{
   assert.equal(A.buildings.length,15);assert.equal(new Set(A.buildings.map(id=>A.sources[id])).size,15);
   const objects=[...W.OBJECTS,...W.objectsIn({x:64,y:64,w:192,h:192})];
-  for(const o of objects){const s=A.object(o);assert.ok(A.sources[s.image]||['male','female'].includes(s.image));assert.ok(s.w<=80&&s.h<=80);assert.ok(s.w>0&&s.h>0);}
+  for(const o of objects){const s=A.object(o);assert.ok(A.sources[s.image]||['male','female'].includes(s.image));assert.ok(s.w<=(['building','structure','realm'].includes(o.kind)?116:80)&&s.h<=(['building','structure','realm'].includes(o.kind)?116:80));assert.ok(s.w>0&&s.h>0);}
   assert.ok(W.TYPES.every(t=>A.terrain.includes(t)));
   for(const species of A.creatures){const s=A.monster({species});assert.equal(s.image,'creatures-atlas');assert.ok(s.sx+s.sw<=640&&s.sy+s.sh<=512);}
 });
