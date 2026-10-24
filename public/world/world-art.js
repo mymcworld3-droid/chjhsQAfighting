@@ -20,7 +20,7 @@
     // narrow east/west profiles are painted independently, never rotated.
     if(name==='sect-gate'){
       const index=({south:0,north:1,west:2,east:3})[direction]??0;
-      return {image:'sect-gates',sx:index%2*104,sy:Math.floor(index/2)*104,sw:104,sh:104,w:118,h:118,anchor:.8};
+      return {image:'sect-gates',sx:index%2*512,sy:Math.floor(index/2)*512,sw:512,sh:512,w:118,h:118,anchor:.8};
     }
     if(name==='boat')return sheet('boats-atlas',Math.max(0,['south','north','east','west'].indexOf(direction)),4,size,size);
     if(name==='fence'||name==='wall')return sheet(name+'-connectors-atlas',1+Math.max(0,directions.indexOf(direction)),3,size,size);

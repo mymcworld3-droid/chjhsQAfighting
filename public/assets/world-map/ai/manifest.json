@@ -3,7 +3,7 @@
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 1704556,
+  "totalBytes": 1902914,
   "assets": [
     {
       "id": "meditation",
@@ -357,13 +357,14 @@
     {
       "id": "sect-gates",
       "file": "sect-gates.webp",
-      "width": 208,
-      "height": 208,
-      "bytes": 16408,
+      "width": 1024,
+      "height": 1024,
+      "bytes": 214766,
       "alpha": true,
-      "quality": 60,
-      "source": "2026-10-24 Qingyun sect two-pillar gates, four-view cropped atlas",
-      "sourceSha256": "da3cbfc69f3ec5275abd868f94ddc61344489071cf7bd0e1fc9f697a7892e046"
+      "quality": 90,
+      "source": "2026-10-24 high-resolution recrop of original two-pillar four-view artwork, 512px quadrants",
+      "sourceSha256": "da3cbfc69f3ec5275abd868f94ddc61344489071cf7bd0e1fc9f697a7892e046",
+      "note": "512px native directional sprite rendered at 118px"
     },
     {
       "id": "bamboo-tall-atlas",

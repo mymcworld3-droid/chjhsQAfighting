@@ -65,7 +65,11 @@ export class WorldRenderer {
   label(text,x,y,color='#fff3d6',size=11){const c=this.ctx;c.font=`600 ${size}px "Noto Sans TC",sans-serif`;c.textAlign='center';c.lineWidth=3;c.strokeStyle='#1b2a23cc';c.strokeText(text,x,y);c.fillStyle=color;c.fillText(text,x,y);}
   imageSprite(sprite,x,y,opacity=1){
     const img=this.images[sprite.image];if(!img?.complete||!img.naturalWidth)return false;
-    const c=this.ctx;c.save();c.globalAlpha*=opacity;c.drawImage(img,sprite.sx,sprite.sy,sprite.sw,sprite.sh,x-sprite.w/2,y-sprite.h*sprite.anchor,sprite.w,sprite.h);c.restore();return true;
+    const c=this.ctx;c.save();c.globalAlpha*=opacity;
+    // High-resolution ornamental gate roofs need quality downsampling at normal zoom.
+    // Other scenery retains the default faster interpolation.
+    if(sprite.image==='sect-gates')c.imageSmoothingQuality='high';
+    c.drawImage(img,sprite.sx,sprite.sy,sprite.sw,sprite.sh,x-sprite.w/2,y-sprite.h*sprite.anchor,sprite.w,sprite.h);c.restore();return true;
   }
   pickPoint(p){
     const x=p.x*40,y=p.y*40;

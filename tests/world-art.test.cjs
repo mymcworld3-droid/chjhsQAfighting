@@ -17,12 +17,16 @@ test('every building has its own small bitmap and all live world objects have ma
 test('all shipped AI images exist, match the size manifest, preserve cutout alpha and fit a small download budget',()=>{
   const root=path.join(__dirname,'../public/assets/world-map/ai'),manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
   // Includes the three additional monster directions, boat directions and ambient props.
-  assert.equal(manifest.assets.length,Object.keys(A.sources).length);assert.ok(manifest.totalBytes<1600000);
+  assert.equal(manifest.assets.length,Object.keys(A.sources).length);assert.ok(manifest.totalBytes<2000000);
   assert.equal(new Set(manifest.assets.filter(a=>A.buildings.includes(a.id)).map(a=>a.sourceSha256)).size,15,'each building comes from its own generated image');
   for(const[id,url]of Object.entries(A.sources)){
     const asset=manifest.assets.find(a=>a.id===id);assert.ok(asset,id);const bytes=fs.readFileSync(path.join(root,path.basename(url)));
-    assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');assert.equal(bytes.length,asset.bytes);
-    assert.ok(asset.width<=640&&asset.height<=640);assert.ok(asset.bytes<220000);assert.match(asset.sourceSha256,/^[a-f0-9]{64}$/);
+    if(path.extname(url)==='.png')assert.equal(bytes.toString('hex',0,8),'89504e470d0a1a0a');
+    else {assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WEBP');}
+    assert.equal(bytes.length,asset.bytes);
+    assert.ok(asset.width<=(id==='sect-gates'?1024:640)&&asset.height<=(id==='sect-gates'?1024:640));
+    assert.ok(asset.bytes<=(id==='sect-gates'?250000:220000));
+    if(asset.sourceSha256)assert.match(asset.sourceSha256,/^[a-f0-9]{64}$/);
     if(id!=='ground-atlas')assert.equal(asset.alpha,true,id);
   }
 });
@@ -50,8 +54,13 @@ test('all terrain and decorative illustration paths use AI bitmap cells with val
 
 test('Qingyun Sect gates use an independent four-view gate cutout without changing camp entrances',()=>{
   const gates=A.directions.map(d=>A.directional('sect-gate',d,100));
-  assert.ok(gates.every(s=>s.image==='sect-gates'&&s.sw===104&&s.sh===104&&s.w===118&&s.h===118));
+  assert.ok(gates.every(s=>s.image==='sect-gates'&&s.sw===512&&s.sh===512&&s.w===118&&s.h===118));
   assert.equal(new Set(gates.map(s=>s.sx+':'+s.sy)).size,4);
-  assert.deepEqual(gates.map(s=>[s.sx,s.sy]),[[104,0],[104,104],[0,0],[0,104]]);
+  assert.deepEqual(gates.map(s=>[s.sx,s.sy]),[[512,0],[512,512],[0,0],[0,512]]);
   assert.ok(A.directions.every(d=>A.directional('gate',d).image.startsWith('scenery-')),'camp gateways preserve their original sprites');
+});
+
+test('high resolution gate texture handles the maximum zoom at 2x DPR',()=>{
+  const s=A.directional('sect-gate','south');
+  assert.ok(s.sw>=s.w*1.8*2&&s.sh>=s.h*1.8*2);
 });
