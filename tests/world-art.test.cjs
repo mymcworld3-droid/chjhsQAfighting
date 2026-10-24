@@ -1,8 +1,9 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const W=require('../public/world/world-core.js'),A=require('../public/world/world-art.js');
+const Scenery=require('../public/world/world-scenery.js'),Ground=require('../public/world/world-ground.js');
 function renderer(){
-  const context={QAGridWorld:W,QAGridWorldArt:A};
+  const context={QAGridWorld:W,QAGridWorldArt:A,QAGridWorldScenery:Scenery,QAGridWorldGround:Ground};
   const source=fs.readFileSync(path.join(__dirname,'../public/world/world-renderer.js'),'utf8').replace(/^import .*;\n/gm,'').replace('export class WorldRenderer','this.Renderer=class WorldRenderer');
   vm.runInNewContext(source,context);return Object.create(context.Renderer.prototype);
 }
@@ -40,5 +41,6 @@ test('all terrain and decorative illustration paths use AI bitmap cells with val
   const r=renderer(),draws=[];r.world=W;r.data={events:{}};r.images=Object.fromEntries(Object.keys(A.sources).map(id=>[id,{id,complete:true,naturalWidth:640}]));
   r.ctx={globalAlpha:1,save(){},restore(){},drawImage(...args){draws.push(args);}};
   for(let i=0;i<W.TYPES.length;i++){r.tile(50+i,50,W.TYPES[i],1234);r.decoration(50+i,50,W.TYPES[i]);}
-  assert.ok(draws.length>=W.TYPES.length);for(const[image,x,y,w,h]of draws){assert.ok(x>=0&&y>=0&&w>0&&h>0);const width=image.id==='creatures-atlas'?640:image.id.endsWith('-atlas')?512:256;const height=image.id==='creatures-atlas'?512:image.id.endsWith('-atlas')?640:256;assert.ok(x+w<=width&&y+h<=height);}
+  for(const direction of A.directions)for(const prop of A.sceneryProps)r.imageSprite(A.directional(prop,direction),0,0);
+  assert.ok(draws.length>=W.TYPES.length);for(const[image,x,y,w,h]of draws){assert.ok(x>=0&&y>=0&&w>0&&h>0);const width=image.id==='creatures-atlas'?640:image.id.endsWith('-atlas')?512:256;const height=image.id.startsWith('scenery-')?256:image.id==='creatures-atlas'?512:image.id.endsWith('-atlas')?640:256;assert.ok(x+w<=width&&y+h<=height);}
 });

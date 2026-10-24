@@ -1,0 +1,74 @@
+{
+  "seed": "qingyun-2026",
+  "fixtures": [
+    {
+      "camera": {
+        "x": 583.5,
+        "y": 83.5,
+        "zoom": 1.15,
+        "follow": false
+      },
+      "props": 29,
+      "cache": 80,
+      "assetErrors": []
+    },
+    {
+      "camera": {
+        "x": 251.5,
+        "y": 88.5,
+        "zoom": 1.15,
+        "follow": false
+      },
+      "props": 28,
+      "cache": 113,
+      "assetErrors": []
+    },
+    {
+      "camera": {
+        "x": 294.5,
+        "y": 90.5,
+        "zoom": 1.15,
+        "follow": false
+      },
+      "props": 56,
+      "cache": 64,
+      "assetErrors": []
+    },
+    {
+      "camera": {
+        "x": 150.5,
+        "y": 90.5,
+        "zoom": 1.15,
+        "follow": false
+      },
+      "props": 21,
+      "cache": 81,
+      "assetErrors": []
+    },
+    {
+      "camera": {
+        "x": 500.5,
+        "y": 500.5,
+        "zoom": 1.15,
+        "follow": false
+      },
+      "props": 29,
+      "cache": 108,
+      "assetErrors": []
+    },
+    {
+      "camera": {
+        "x": 570.5,
+        "y": 453.5,
+        "zoom": 1.15,
+        "follow": false
+      },
+      "props": 18,
+      "cache": 221,
+      "assetErrors": []
+    }
+  ],
+  "errors": [],
+  "seamMaxDifference": 0,
+  "medianDrawMs": 1.466666666790843
+}

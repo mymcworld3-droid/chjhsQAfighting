@@ -1,7 +1,9 @@
 import './world-core.js';
 import './world-art.js';
+import './world-scenery.js';
+import './world-ground.js';
 const BaseWorld=globalThis.QAGridWorld, TILE=40;
-const colors=BaseWorld.COLORS,Art=globalThis.QAGridWorldArt;
+const colors=BaseWorld.COLORS,Art=globalThis.QAGridWorldArt,Scenery=globalThis.QAGridWorldScenery,Ground=globalThis.QAGridWorldGround;
 export class WorldRenderer {
   constructor(canvas,mini,onPick){
     this.world=BaseWorld.createWorld();const W=this.world;
@@ -76,32 +78,24 @@ export class WorldRenderer {
     }
     return{x:Math.floor(p.x),y:Math.floor(p.y)};
   }
-  tile(x,y,t,at){
+  sceneryModel(){
+    if(this.scenery?.world!==this.world){this.scenery=Scenery.create(this.world);this.ground=typeof document==='undefined'?null:Ground.create(Art);this.scenerySignature='';}
+    return this.scenery;
+  }
+  tile(x,y,t,at,events=this.data?.events||{},visible=()=>true){
     const c=this.ctx,W=this.world,px=x*TILE,py=y*TILE,img=this.images['ground-atlas'];
-    if(img?.complete&&img.naturalWidth){const name=x===W.SPAWN.x&&y===W.SPAWN.y?'plaza':t,cell=Math.max(0,Art.terrain.indexOf(name));c.drawImage(img,cell%4*128,Math.floor(cell/4)*128,128,128,px,py,40,40);}
+    const model=this.sceneryModel(),name=x===W.SPAWN.x&&y===W.SPAWN.y?'plaza':t;
+    const composed=this.ground?.compose(model.topology(x,y,name,events,visible),this.images);
+    if(composed)c.drawImage(composed,px,py,40,40);
+    else if(img?.complete&&img.naturalWidth){const cell=Math.max(0,Art.terrain.indexOf(name));c.drawImage(img,cell%4*128,Math.floor(cell/4)*128,128,128,px,py,40,40);}
     else{c.fillStyle=colors[t]||colors.grass;c.fillRect(px,py,40,40);}
-    // Light breathing is an alpha overlay of the same AI water/lava texture.
-    if(img?.complete&&img.naturalWidth&&['water','ocean','lava'].includes(t)){
-      const cell=Art.terrain.indexOf(t);c.save();c.globalAlpha=.04+.025*Math.sin(at/1800+x*.2+y*.3);c.drawImage(img,cell%4*128,Math.floor(cell/4)*128,128,128,px,py,40,40);c.restore();
+    // Broad light breathing preserves the calm material instead of repeating fine ripples.
+    if(composed&&['water','ocean','lava'].includes(t)){
+      c.save();c.globalAlpha=.025+.015*Math.sin(at/1800+x*.2+y*.3);c.fillStyle=t==='lava'?'#ffc287':'#d4efea';c.fillRect(px,py,40,40);c.restore();
     }
   }
   decoration(x,y,t){
-    const W=this.world,h=W.hash(x,y,91),px=(x+.5)*TILE,py=(y+.65)*TILE,dx=x-W.SPAWN.x,dy=y-W.SPAWN.y,r=W.CITY_RADIUS;
-    const props=[];
-    if(t==='bamboo')props.push(['bamboo',48]);
-    else if(t==='rock')props.push(['rock',46]);
-    else if(t==='forest'&&h%3===0)props.push(['tree',56]);
-    else if(t==='volcano'&&h%11===0)props.push(['volcano',46]);
-    else if(t==='grass'&&h%9===0)props.push(['flowers',25]);
-    else if(t==='swamp'&&h%5===0)props.push(['reeds',36]);
-    else if(t==='stone'&&h%11===0)props.push(['rock',28]);
-    else if(t==='sealed')props.push(['sealed',44]);
-    if((Math.abs(dx)===r&&Math.abs(dy)<=r&&Math.abs(dy)>1))props.push(['wall-v',54]);
-    if((Math.abs(dy)===r&&Math.abs(dx)<=r&&Math.abs(dx)>1))props.push(['wall-h',54]);
-    if((Math.abs(dx)===r&&dy===0)||(Math.abs(dy)===r&&dx===0))props.push(['gate',76]);
-    if(t==='courtyard'&&Math.abs(dx)>=6&&Math.abs(dx)<=8&&Math.abs(dy)>=6&&Math.abs(dy)<=8&&(dx+dy)%2===0)props.push(['garden',42]);
-    if(t==='courtyard'&&((Math.abs(dx)===8&&dy%4===0)||(Math.abs(dy)===8&&dx%4===0)))props.push(['lantern',32]);
-    for(const[name,size]of props)this.imageSprite(Art.prop(name,size),px,py);
+    for(const p of this.sceneryModel().ambient(x,y,t,this.data?.events))this.imageSprite(Art.scenery(p),p.x*TILE,p.y*TILE);
   }
   object(o,claimed,showName=true){
     const c=this.ctx,x=(o.x+.5)*TILE,y=(o.y+.5)*TILE,sprite=Art.object(o);
@@ -134,12 +128,16 @@ export class WorldRenderer {
     if(b)this.camera.zoom=zoom;
     const left=Math.max(0,Math.floor(this.camera.x-this.width/s/2)-1),right=Math.min(this.world.SIZE-1,Math.ceil(this.camera.x+this.width/s/2)+1),
       top=Math.max(0,Math.floor(this.camera.y-this.height/s/2)-2),bottom=Math.min(this.world.SIZE-1,Math.ceil(this.camera.y+this.height/s/2)+2),decor=[];
+    const visible=(x,y)=>W.known(d.state.explored,x,y)||!!(b&&x>=b.bounds.x&&x<b.bounds.x+8&&y>=b.bounds.y&&y<b.bounds.y+8),events=b?.events||d.events;
+    const scenery=this.sceneryModel(),signature=[left,right,top,bottom,d.state.explored.revision,d.state.explored.all,W.patchRevision,events?.bridge,events?.array,b?.id,b?.revision].join(':');
+    if(signature!==this.scenerySignature){this.scenerySignature=signature;this.sceneryItems=scenery.inBounds({x:left,y:top,w:right-left+1,h:bottom-top+1},events,visible);}
     for(let y=top;y<=bottom;y++)for(let x=left;x<=right;x++){
-      const discovered=W.known(d.state.explored,x,y)||b&&x>=b.bounds.x&&x<b.bounds.x+8&&y>=b.bounds.y&&y<b.bounds.y+8;
+      const discovered=visible(x,y);
       if(!discovered){c.fillStyle=W.hash(x,y)%3===0?'#34483c':'#304438';c.fillRect(x*TILE,y*TILE,40,40);continue;}
-      const t=W.terrain(x,y,b?.events||d.events);this.tile(x,y,t,at);decor.push({y:y+.65,draw:()=>this.decoration(x,y,t)});
+      const t=W.terrain(x,y,events);this.tile(x,y,t,at,events,visible);
       if(b&&(x<b.bounds.x||x>=b.bounds.x+8||y<b.bounds.y||y>=b.bounds.y+8)){c.fillStyle='#11221ac9';c.fillRect(x*40,y*40,40,40);}
     }
+    for(const p of this.sceneryItems)decor.push({y:p.y,draw:()=>this.imageSprite(Art.scenery(p),p.x*TILE,p.y*TILE)});
     if(!b&&W.known(d.state.explored,W.SPAWN.x,W.SPAWN.y)&&Math.abs(this.camera.x-W.SPAWN.x)<30&&Math.abs(this.camera.y-W.SPAWN.y)<30)this.label('問 道 宗',(W.SPAWN.x+.5)*TILE,(W.SPAWN.y-2.6)*TILE,'#f3dfac',17);
     if(b){
       for(const p of b.reachable||[])this.overlayCell(p,'#c9e0d029');

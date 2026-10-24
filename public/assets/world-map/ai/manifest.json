@@ -1,9 +1,9 @@
 {
-  "version": 1,
+  "version": 2,
   "tool": "built-in image_gen",
   "cellSize": 128,
   "buildingSize": 256,
-  "totalBytes": 870118,
+  "totalBytes": 994362,
   "assets": [
     {
       "id": "meditation",
@@ -14,16 +14,6 @@
       "alpha": true,
       "source": "exec-543857e1-28b7-403f-b399-f795f1d9f32a.png",
       "sourceSha256": "b295a281c4966ea6cf3b25ff9a71a2dc0de189507d8d6d74583ce0212082da70"
-    },
-    {
-      "id": "ground-atlas",
-      "file": "ground-atlas.webp",
-      "width": 512,
-      "height": 640,
-      "bytes": 118356,
-      "alpha": false,
-      "source": "exec-08d8e9aa-2de9-42d4-ac18-f0f3edd8505a.png",
-      "sourceSha256": "8a054538050eb79ca72dbfdf18824b7ec3f50f4c62cd1b0ab6112d54835e6d02"
     },
     {
       "id": "props-atlas",
@@ -184,6 +174,56 @@
       "alpha": true,
       "source": "exec-c9f90ee5-02ae-4857-9a1b-89929b7fbe09.png",
       "sourceSha256": "62417fab9f6f5124d9472fc3fc7e2b0fcbc8b4c279c36ba95befdf94d8b27038"
+    },
+    {
+      "id": "scenery-north-atlas",
+      "file": "scenery-north-atlas.webp",
+      "width": 512,
+      "height": 256,
+      "bytes": 53196,
+      "alpha": true,
+      "source": "exec-2d735da6-d59c-47ac-a20c-dc425ec54bea.png",
+      "sourceSha256": "100aa374fe6ad17f3125a00af52ed0f2d7a3ec70abc0501c19d42d28cbabe8f3"
+    },
+    {
+      "id": "scenery-east-atlas",
+      "file": "scenery-east-atlas.webp",
+      "width": 512,
+      "height": 256,
+      "bytes": 49536,
+      "alpha": true,
+      "source": "exec-ee7b6849-26b8-4f03-a76a-41bb74695233.png",
+      "sourceSha256": "4304ea966bdf6b605048a4596315e09ba1b0b6a05e785d2c8b8c9c00542f6bc2"
+    },
+    {
+      "id": "scenery-south-atlas",
+      "file": "scenery-south-atlas.webp",
+      "width": 512,
+      "height": 256,
+      "bytes": 51826,
+      "alpha": true,
+      "source": "exec-ab0290d5-668a-4d0e-8262-88aad6d993fb.png",
+      "sourceSha256": "be9a340be941530c89e90394a015e150934835457aa8141ee0ab439faf7a7c09"
+    },
+    {
+      "id": "scenery-west-atlas",
+      "file": "scenery-west-atlas.webp",
+      "width": 512,
+      "height": 256,
+      "bytes": 49610,
+      "alpha": true,
+      "source": "exec-78f407c7-6a34-40f7-98de-150472913696.png",
+      "sourceSha256": "7996efe9a5e93588ef58f61691141e0ba8c47c1231841f61a9c26d9eb480eedf"
+    },
+    {
+      "id": "ground-atlas",
+      "file": "ground-atlas.webp",
+      "width": 512,
+      "height": 640,
+      "bytes": 38432,
+      "alpha": false,
+      "source": "exec-31fa077d-40a2-4564-946a-a69c94ea8975.png",
+      "sourceSha256": "947f5f121cc0c24661f5c95e5c1a9973ec8b34432992e2d574cb966ae77c3cb3"
     }
   ]
 }
