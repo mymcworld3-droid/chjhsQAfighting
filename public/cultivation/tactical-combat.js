@@ -39,6 +39,7 @@ function ensure(){
     else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open('pve');
     else if(b.hasAttribute('data-exit'))close();
     else if(b.hasAttribute('data-sync'))void sync();
+    else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
     else if(b.dataset.action){action=b.dataset.action;selection=null;
       const me=state?.actors.find(a=>a.uid===uid);if(action==='skill'&&me&&R.branchFor(me).skill.range===0)selection={x:me.x,y:me.y};
       updateControls();renderer?.update(state,uid,action,selection);}
@@ -54,7 +55,7 @@ function ensure(){
     else if(b.hasAttribute('data-copy'))void navigator.clipboard?.writeText(state.id.replace('arena-','')).then(()=>notice('戰場代碼已複製')).catch(()=>notice('請長按上方代碼複製'));
   });
   root.addEventListener('keydown',event=>{
-    if(event.key==='Escape'){event.preventDefault();modalOpen?hideModal():close();}
+    if(event.key==='Escape'){event.preventDefault();$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
     if(event.key==='Tab'){
       const scope=modalOpen?$('[data-modal]'):root,focusable=[...scope.querySelectorAll('button:not(:disabled),input,canvas[tabindex],summary')].filter(el=>el.getClientRects().length);
       if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);
@@ -103,6 +104,7 @@ function paint(){
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   updateControls();renderer.update(state,uid,action,selection);updateClock();
   if(state.status==='finished')resultDialog();
+  else if(state.mode==='pve'&&state.newEnemies?.length)showEnemyIntro();
 }
 function updateControls(){
   if(!$('[data-selection]')||!state)return;
@@ -134,12 +136,23 @@ function updateClock(){
     `${state.trial?'第 '+state.trial.stage+' 關 · ':''}第 ${state.turn} 回合 · ${mine?'你的行動':'對手行動'}${state.deadlineMs?' · '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`;
   if(state.status==='active'&&state.deadlineMs&&now>=state.deadlineMs&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
 }
-function showModal(html,{quiz=false}={}){
-  modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
+function showModal(html,{quiz=false,encounter=false}={}){
+  modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
   $('[data-modal] .tc-dialog').focus();window.quizMathTypeset?.($('[data-modal]'));
 }
 function hideModal(){if(!root)return;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
+function showEnemyIntro(error=''){
+  const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length;
+  showModal(`<small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><h2>${esc(p.name)}</h2><p>第 ${p.unlockStage} 關起登場</p></div></div><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl><p class="tc-enemy-note">紅色虛線框是下次攻擊預告；先移開，再結束回合。</p><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（尚有 '+(remaining-1)+' 種）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉，稍後繼續</button>`,{encounter:true});
+}
+async function acknowledgeIntro(){
+  if(busy||!state?.newEnemies?.length)return;
+  const e=epoch,account=uid,serial=++op,species=state.newEnemies[0];let error='';busy=true;$('[data-intro-ack]').disabled=true;
+  try{const result=await api('/api/tactical/acknowledge-enemy',{roomId:state.id,species});if(valid(e,account))accept(result.state,serial);}
+  catch(err){error=err.message;}
+  finally{if(valid(e,account)){busy=false;if(error&&state.newEnemies?.length)showEnemyIntro(error);else paint();schedule();}}
+}
 function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   if(state.mode==='pve'){
@@ -172,7 +185,7 @@ async function task(work,{render=true}={}){
   try{const next=await work();if(!valid(e,account))return;
     retryMs=4000;if(render)accept(next,serial);return next;
   }catch(err){if(valid(e,account)){notice(err.message);retryMs=Math.min(30000,retryMs*2);}}
-  finally{if(valid(e,account)){busy=false;if(state&&$('canvas')&&!modalOpen)paint();else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);schedule();}}
+  finally{if(valid(e,account)){busy=false;if(state&&$('canvas')&&(!modalOpen||$('[data-intro-ack]')))paint();else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);schedule();}}
 }
 async function start(code=''){
   await task(async()=>{const result=await api('/api/tactical/start',{mode,map,...(code?{code}:{})});return result.state;});

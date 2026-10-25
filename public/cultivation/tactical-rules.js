@@ -75,27 +75,56 @@
     let h=2166136261;for(const c of String(seed)){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}
     return ()=>{h+=0x6D2B79F5;let t=Math.imul(h^h>>>15,1|h);t^=t+Math.imul(t^t>>>7,61|t);return ((t^t>>>14)>>>0)/4294967296;};
   }
-  const TRIAL_TERRAINS=Object.freeze([
+  const monster=(name,unlockStage,attackName,attack,moveName,move,attackText,moveText,tip)=>({name,unlockStage,attackName,attack:Object.freeze(attack),moveName,move:Object.freeze(move),attackText,moveText,tip});
+  const MONSTERS=Object.freeze([
+    monster('靈狼',1,'撲咬',{shape:'point',range:1},'追獵',{kind:'chase',steps:2},'鎖定相鄰的一格，下回合撲咬該紅框。','沿通路追近，每回合最多走兩格。','在結束回合前離開紅框，可避開撲咬。'),
+    monster('玄甲山豬',4,'直線衝撞',{shape:'charge',range:3,power:1.15},'對準衝線',{kind:'align',steps:1},'沿上下左右一個方向衝撞三格；紅框整條路徑都危險，遇障礙或角色停止。','每回合走一格，尋找能對準你的直線。','側移離開整條紅框，不要只沿衝撞方向後退。'),
+    monster('竹林靈狼',3,'側身爪掃',{shape:'arc',range:1},'繞側疾走',{kind:'flank',steps:3},'掃擊正前與兩側斜前，共三格。','優先繞向側面，每回合最多走三格。','退到爪掃背面，或離開整排紅框。'),
+    monster('青竹蛇',5,'穿竹毒牙',{shape:'line',range:2,slow:true},'交錯蛇行',{kind:'weave',steps:2},'直線刺穿兩格；命中後，下次移動每格消耗兩點體力。','交替優先橫向與縱向繞行，每回合最多兩格。','往側面移開毒牙直線，命中後先留足移動體力。'),
+    monster('山魈',9,'躍擊',{shape:'pounce',range:3,power:1.1},'越障跳躍',{kind:'leap',steps:2},'鎖定三格內的一個落點；下回合躍到附近，砸擊原先標記的一格。','可跳過中間障礙，落在兩格內的空地。','離開原本的紅框即可，躍擊不會追蹤你移動後的位置。'),
+    monster('妖藤',7,'纏根爆發',{shape:'blast',range:3,radius:1,slow:true},'盤根',{kind:'rooted',steps:0},'鎖定落點與四個相鄰格，形成五格十字；命中會使下次移動耗體力加倍。','固定原地，不會追趕。','一次移出整個十字，或利用射程外的位置整備。'),
+    monster('沙蠍',6,'尾針射擊',{shape:'shot',range:3},'保持距離',{kind:'kite',steps:1,minDistance:2,ideal:3},'鎖定視線內三格的一格射出尾針。','每回合走一格；過近時會後退，優先維持遠射距離。','貼近可迫使牠重新拉開距離；射擊前先離開標記格。'),
+    monster('荒漠蜥蜴',8,'扇形吐息',{shape:'cone',range:2},'游移',{kind:'strafe',steps:2,ideal:2},'朝前方吐息兩層：第一層一格、第二層三格。','每回合最多兩格，尋找能用吐息罩住你的角度。','向左右離開扇形，比沿吐息方向後退更安全。'),
+    monster('巖甲獸',2,'震地',{shape:'cross',range:1,power:1.1},'重步',{kind:'heavy',steps:1},'同時震擊周身上下左右四格。','緩慢接近，每回合只走一格。','退到兩格外，別站在任一相鄰紅框。'),
+    monster('石靈',17,'斜向石刺',{shape:'diagonal',range:2},'斜移',{kind:'diagonal',steps:1},'朝四條斜線各伸出兩格石刺，遇障礙停止。','優先斜向滑行一格，受阻時改走直格。','站在牠的同行或同列，可避開斜線石刺。'),
+    monster('赤焰獸',18,'烈焰吐息',{shape:'cone',range:3,power:1.1},'疾進',{kind:'rush',steps:3},'向前方噴出三層扇形烈焰，最遠一層寬五格。','沿一個方向快速接近，最多三格；轉彎時停下。','靠近扇形側緣脫離，不要一路往最寬的外圈退。'),
+    monster('熔岩蜥蜴',19,'熔岩光束',{shape:'line',range:4,power:1.1},'側步瞄準',{kind:'sidestep',steps:1,ideal:4},'朝一條直線貫穿四格，遇障礙停止。','每回合側移一格，優先尋找長距離直線。','移到相鄰的另一行或列，或利用石障截斷光束。'),
+    monster('霜羽鷹',12,'俯衝翼斬',{shape:'dive',range:4,sight:false},'振翅越障',{kind:'fly',steps:3,minDistance:2,ideal:3},'鎖定落點及其左右兩格，俯衝斬擊整排三格；障礙無法遮住俯衝。','飛越中間障礙，最多移到三格內的空地。','往紅框排的前方或後方移開，別只沿紅框橫移。'),
+    monster('雪狼',11,'霜牙',{shape:'point',range:1,slow:true},'踏雪奔行',{kind:'chase',steps:3},'咬擊相鄰一格；命中後，下次移動每格消耗兩點體力。','每回合最多追近三格。','看到霜牙紅框就先閃開，避免緩速後逃不出下一招。'),
+    monster('毒蟾',13,'落毒環',{shape:'ring',range:4,sight:false,slow:true},'蛙躍',{kind:'hop',steps:2},'落毒形成八格方環；紅框有毒，環中央沒有紅框的一格安全。','可越過中間障礙，跳到兩格內的空地。','離開毒環，或移入中央安全格；障礙擋不住落毒。'),
+    monster('澤蛇',14,'三岔毒刺',{shape:'fork',range:2,slow:true},'疾速蛇行',{kind:'weave',steps:3},'朝正前、左斜前與右斜前各刺出兩格；命中使下次移動耗體力加倍。','交替優先橫向與縱向，每回合最多走三格。','利用三條紅線之間的空格，或退到牠的身後。'),
+    monster('潮汐蟹',15,'雙鉗橫掃',{shape:'sides',range:2,push:1},'橫行',{kind:'sideways',steps:2},'同時橫掃左右各兩格，命中會將你推開一格。','橫向最多走兩格；縱向調位每回合只走一格。','從上方或下方接近，避開牠所在的橫排。'),
+    monster('海岸靈龜',16,'外圈震波',{shape:'shell',range:2,power:1.1},'退守',{kind:'kite',steps:1,minDistance:2,ideal:2},'攻擊周身第二圈方環；貼身第一圈和更遠處都不在紅框內。','每回合走一格，過近時退後，維持外圈距離。','可以貼身進內圈，也可以退出最外圈。'),
+    monster('古陣守衛',10,'十字鎮壓／落石',{shape:'guardian',range:3,power:1.15},'鎮守調位',{kind:'sentinel',steps:1},'交替使用四向三格十字，以及鎖定落點的五格落石；每次以當前紅框為準。','每回合調位一格，尋找鎮壓軸線。','先確認這回合是十字還是落石，再移出全部紅框。'),
+    monster('靈獸',20,'靈能爆發',{shape:'nova',range:4,radius:2,sight:false,power:1.2},'靈躍',{kind:'teleport',steps:2,ideal:3},'鎖定落點，下一回合引爆十三格菱形；不會追蹤你移動後的位置。','可越過中間障礙，靈躍到兩格內的空地。','先答題蓄足體力，一次移出整片菱形紅框。')
+  ].map((p,species)=>Object.freeze({...p,species})));
+  const monsterProfile=species=>MONSTERS[Number(species)]||MONSTERS[0];
+  // Keep the original generator for retries of battles created before layout v2.
+  const LEGACY_TRIAL_TERRAINS=Object.freeze([
     {name:'竹影溪谷',terrain:0,props:'tree',enemies:[2,3,4,5]},
     {name:'荒漠殘垣',terrain:13,props:'rock',enemies:[6,7,8,9]},
     {name:'雪嶺險徑',terrain:14,props:'rock',enemies:[12,13,8]},
     {name:'碧水庭苑',terrain:2,props:'rock',enemies:[0,1,16,17]},
     {name:'古陣遺墟',terrain:16,props:'rock',enemies:[8,9,18]}
   ]);
-  const TRIAL_ENEMIES=Object.freeze(['靈狼','玄甲山豬','竹林靈狼','青竹蛇','山魈','妖藤','沙蠍','荒漠蜥蜴','巖甲獸','石靈','赤焰獸','熔岩蜥蜴','霜羽鷹','雪狼','毒蟾','澤蛇','潮汐蟹','海岸靈龜','古陣守衛','靈獸']);
-  function stageLayout(seed,stage=1){
+  const TRIAL_TERRAINS=Object.freeze(LEGACY_TRIAL_TERRAINS.map((t,i)=>Object.freeze({...t,enemies:Object.freeze([[0,2,3,4,5],[0,1,6,7,10,11],[0,8,9,12,13],[0,1,14,15,16,17],[0,8,9,10,18,19]][i])})));
+  const TRIAL_ENEMIES=Object.freeze(MONSTERS.map(p=>p.name));
+  function stageLayout(seed,stage=1,layoutVersion=2){
     stage=Math.max(1,Math.min(1000000,num(stage)));const random=seeded(seed+':stage:'+stage);
-    const m=MAPS[Math.floor(random()*MAPS.length)],theme=TRIAL_TERRAINS[Math.floor(random()*TRIAL_TERRAINS.length)];
+    const m=MAPS[Math.floor(random()*MAPS.length)],introduced=layoutVersion>=2?MONSTERS.find(p=>p.unlockStage===stage):null;
+    const themes=layoutVersion<2?LEGACY_TRIAL_TERRAINS:introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
+    const theme=themes[Math.floor(random()*themes.length)],pool=layoutVersion<2?theme.enemies:theme.enemies.filter(id=>MONSTERS[id].unlockStage<=stage);
     const width=m.width,height=m.height,spawn={x:1,y:1+Math.floor(random()*(height-2))},enemies=[],blocks=[];
     const count=Math.min(4,1+Math.floor((stage-1)/3)+(stage>1&&random()<.35?1:0));
     const spaces=[];for(let y=1;y<height-1;y++)for(let x=Math.floor(width/2)+1;x<width-1;x++)spaces.push({x,y});
     for(let i=spaces.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[spaces[i],spaces[j]]=[spaces[j],spaces[i]];}
     for(let i=0;i<count;i++){
-      const species=stage%5===0&&i===count-1?18:theme.enemies[Math.floor(random()*theme.enemies.length)];
+      const species=layoutVersion<2?(stage%5===0&&i===count-1?18:pool[Math.floor(random()*pool.length)]):
+        i===0&&introduced?introduced.species:stage>=10&&stage%5===0&&i===count-1&&introduced?.species!==18?18:pool[Math.floor(random()*pool.length)];
       enemies.push({...spaces[i],species,name:(stage%5===0&&species===18?'鎮關・':'')+TRIAL_ENEMIES[species],
         hpFactor:(species===8||species===18?3.8:2.8+random()*.6)*(1+Math.min(stage-1,30)*.035),
         attackFactor:(species===18?.7:.48+random()*.15)*(1+Math.min(stage-1,30)*.025),
-        intentRange:[3,6,12,18].includes(species)?3:2,intentRadius:species===18?1:0,moveSteps:species===8||species===18?1:2});
+        intentRange:[3,6,12,18].includes(species)?3:2,intentRadius:species===18?1:0,moveSteps:species===8||species===18?1:2,level:stage});
     }
     const protectedCells=[spawn,...enemies];
     const reachable=()=>{
@@ -110,7 +139,7 @@
     const desired=Math.floor(width*height*(.1+random()*.07));
     for(const p of candidates){if(blocks.length>=desired)break;blocks.push({...p,kind:theme.terrain===13?'rock':random()<.2?'water':theme.props});if(!reachable())blocks.pop();}
     const ground=Array(width*height).fill(theme.terrain);for(const b of blocks)if(b.kind==='water')ground[b.y*width+b.x]=4;
-    return {seed,stage,map:m.id,width,height,title:theme.name,terrain:theme.terrain,ground,blocks,spawn,enemies};
+    return {seed,stage,layoutVersion,map:m.id,width,height,title:theme.name,terrain:theme.terrain,ground,blocks,spawn,enemies};
   }
   function branchFor(a){const c=CORES[a.core]||CORES.none;return c.branches.find(b=>b.id===a.branch)||c.branches[0];}
   function inside(s,p){return Number.isInteger(p?.x)&&Number.isInteger(p?.y)&&p.x>=0&&p.y>=0&&p.x<s.width&&p.y<s.height;}
@@ -161,19 +190,21 @@
     const maxHp=Math.max(1,num(raw.maxHp)||1000);
     return {uid:String(raw.uid),name:String(raw.name||'修士').slice(0,40),team:raw.team||'player',bot:!!raw.bot,
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
+      ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
   function create({id,mode='pve',map='courtyard',players,trial=null,now=Date.now()}){
-    const layout=mode==='pve'&&trial?stageLayout(trial.seed,trial.stage):null;
+    const layout=mode==='pve'&&trial&&trial.layoutVersion!==0?stageLayout(trial.seed,trial.stage,trial.layoutVersion??2):null;
     const m=layout||mapFor(map),mid=Math.floor(m.height/2);
     const s={version:1,id,mode,map:m.id,width:m.width,height:m.height,terrain:m.terrain,
       blocks:[],actors:[],status:mode==='pvp'&&players.length<2?'waiting':'active',revision:0,
       turn:1,turnUid:players[0].uid,turnStartedAtMs:now,deadlineMs:mode==='pvp'?now+LIMITS.turnMs:0,
       createdAtMs:now,updatedAtMs:now,winner:null,finishReason:'',effects:[],events:[],receipts:[],rewarded:[],turnTimeouts:{}};
-    if(layout){s.map=layout.map;s.trial={version:1,seed:layout.seed,stage:layout.stage,title:layout.title};s.ground=layout.ground;s.blocks=layout.blocks;}
+    if(layout){s.map=layout.map;s.trial={version:1,seed:layout.seed,stage:layout.stage,layoutVersion:layout.layoutVersion,title:layout.title};s.ground=layout.ground;s.blocks=layout.blocks;}
+    else if(mode==='pve'&&trial)s.trial={version:1,seed:trial.seed,stage:trial.stage,layoutVersion:0,title:m.name};
     else if(m.id!=='courtyard'){
       for(let y=1;y<m.height-1;y++)if(y!==mid)s.blocks.push({x:Math.floor(m.width/2),y});
       s.blocks.push({x:2,y:1},{x:m.width-3,y:m.height-2});
@@ -222,8 +253,10 @@
     return dealt;
   }
   function push(s,a,target,steps){
+    const before=key(target);
     const dx=Math.abs(target.x-a.x)>=Math.abs(target.y-a.y)?Math.sign(target.x-a.x):0,dy=dx?0:Math.sign(target.y-a.y);
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(blocked(s,p)||at(s,p))break;target.x=p.x;target.y=p.y;}
+    if(target.bot&&key(target)!==before)interruptMonster(target);
   }
   // Geometric aiming range stays visible even while stamina/cooldown prevents a
   // cast. The server still validates the selected enemy, resources and turn.
@@ -278,7 +311,7 @@
       const routes=neighbours(s,target).map(n=>path(s,a,n,a.uid)).filter(r=>r&&r.length-1<=sk.range).sort((a,b)=>a.length-b.length);
       const end=routes[0].at(-1);a.x=end.x;a.y=end.y;
     }
-    if(sk.kind==='swap'){const pos={x:a.x,y:a.y};a.x=target.x;a.y=target.y;target.x=pos.x;target.y=pos.y;}
+    if(sk.kind==='swap'){const pos={x:a.x,y:a.y};a.x=target.x;a.y=target.y;target.x=pos.x;target.y=pos.y;if(target.bot)interruptMonster(target);}
     const targets=sk.kind==='swap'?[target]:s.actors.filter(t=>alive(t)&&t.team!==a.team&&skillCells(s,a,sk,p).some(c=>key(c)===key(t)));
     for(const t of targets){
       if(!alive(a))break;
@@ -287,13 +320,117 @@
       if(sk.slow&&alive(t)){t.slow=1;t.slowUntil=t.turns+1;}if(sk.push&&alive(t))push(s,a,t,sk.push);
     }
   }
+  function interruptMonster(m){m.intent={version:2,kind:'stagger',cells:[],text:'位移打斷：下回合重新蓄勢'};}
+  function monsterCells(s,m,target,profile=monsterProfile(m.species)){
+    const attack=profile.attack,range=attack.range;
+    const dx=Math.abs(target.x-m.x)>=Math.abs(target.y-m.y)?Math.sign(target.x-m.x)||1:0,dy=dx?0:Math.sign(target.y-m.y)||1;
+    const side={x:-dy,y:dx},point={x:target.x,y:target.y};let shape=attack.shape,cells=[];
+    if(shape==='guardian')shape=s.turn%2===0?'guardian-cross':'guardian-blast';
+    if(['point','shot','blast','pounce','dive','ring','nova','guardian-blast'].includes(shape)){
+      if(dist(m,target)>range||attack.sight!==false&&!sight(s,m,target))return [];
+    }
+    if(['point','shot','pounce'].includes(shape))cells=[point];
+    else if(['line','charge'].includes(shape))cells=line(s,m,target,range);
+    else if(['cross','guardian-cross','sides'].includes(shape)){
+      const dirs=shape==='sides'?[[1,0],[-1,0]]:[[1,0],[-1,0],[0,1],[0,-1]];
+      cells=dirs.flatMap(([x,y])=>line(s,m,{x:m.x+x,y:m.y+y},range));
+    }else if(shape==='diagonal'){
+      for(const [x,y]of [[1,1],[1,-1],[-1,1],[-1,-1]])for(let n=1;n<=range;n++){
+        const p={x:m.x+x*n,y:m.y+y*n};
+        if(blocked(s,p)||blocked(s,{x:p.x-x,y:p.y})||blocked(s,{x:p.x,y:p.y-y}))break;cells.push(p);
+      }
+    }else if(['cone','fork','arc'].includes(shape)){
+      for(let depth=1;depth<=range;depth++){
+        const offsets=shape==='arc'?[-1,0,1]:shape==='fork'?[-depth,0,depth]:Array.from({length:depth*2-1},(_,i)=>i-depth+1);
+        for(const offset of offsets)cells.push({x:m.x+dx*depth+side.x*offset,y:m.y+dy*depth+side.y*offset});
+      }
+    }else if(shape==='dive')cells=[-1,0,1].map(n=>({x:point.x+side.x*n,y:point.y+side.y*n}));
+    else if(shape==='ring'){
+      const center={x:point.x-dx,y:point.y-dy};
+      for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)if(x||y)cells.push({x:center.x+x,y:center.y+y});
+    }else if(shape==='shell'){
+      for(let x=-range;x<=range;x++)for(let y=-range;y<=range;y++)if(Math.max(Math.abs(x),Math.abs(y))===range)cells.push({x:m.x+x,y:m.y+y});
+    }else cells=area(s,point,attack.radius||1);
+    cells=cells.filter(p=>!blocked(s,p)&&(attack.sight===false||sight(s,m,p)));
+    if(shape==='charge'){
+      const first=cells.findIndex(p=>at(s,p)&&at(s,p).uid!==m.uid);if(first>=0)cells=cells.slice(0,first+1);
+    }
+    return [...new Map(cells.map(p=>[key(p),p])).values()];
+  }
+  function monsterRoute(s,m,hero){
+    const profile=monsterProfile(m.species),move=profile.move,budget=Math.floor(move.steps/(1+(m.slow||0))),origin={x:m.x,y:m.y};
+    if(!budget||move.kind==='rooted')return [origin];
+    const jumping=['leap','hop','fly','teleport'].includes(move.kind),parents=new Map([[key(origin),null]]),queue=[origin];
+    const open=p=>!blocked(s,p)&&(!at(s,p)||at(s,p).uid===m.uid);
+    function next(p){
+      if(jumping){const result=[];
+        for(let y=Math.max(0,p.y-budget);y<=Math.min(s.height-1,p.y+budget);y++)for(let x=Math.max(0,p.x-budget);x<=Math.min(s.width-1,p.x+budget);x++){
+          const n={x,y},distance=move.kind==='fly'?Math.max(Math.abs(x-p.x),Math.abs(y-p.y)):dist(p,n);
+          if(distance>0&&distance<=budget&&open(n))result.push(n);
+        }return result;
+      }
+      let result=neighbours(s,p).filter(open);
+      if(move.kind==='weave'&&(s.turn+m.species)%2)result.sort((a,b)=>Math.abs(b.y-p.y)-Math.abs(a.y-p.y));
+      if(move.kind==='diagonal')result=[...[[1,1],[1,-1],[-1,1],[-1,-1]].map(([x,y])=>({x:p.x+x,y:p.y+y})).filter(n=>open(n)&&!blocked(s,{x:n.x,y:p.y})&&!blocked(s,{x:p.x,y:n.y})),...result];
+      return result;
+    }
+    for(let i=0;i<queue.length;i++)for(const n of next(queue[i]))if(!parents.has(key(n))){parents.set(key(n),queue[i]);queue.push(n);}
+    const routeTo=p=>{const route=[];while(p){route.unshift(p);p=parents.get(key(p));}return route;};
+    const ranked=queue.map(p=>{
+      const route=routeTo(p),distance=dist(p,hero),ready=distance>=(move.minDistance||0)&&monsterCells(s,{...m,...p},hero,profile).some(c=>key(c)===key(hero));
+      const flank=move.kind==='flank'?(Math.abs(m.x-hero.x)>=Math.abs(m.y-hero.y)?Number(p.y===hero.y):Number(p.x===hero.x)):0;
+      return {route,score:[ready?0:1,flank,move.ideal?Math.abs(distance-move.ideal):route.length,move.ideal?route.length:distance]};
+    }).sort((a,b)=>{for(let i=0;i<a.score.length;i++)if(a.score[i]!==b.score[i])return a.score[i]-b.score[i];return 0;});
+    let route=ranked[0]?.route||[origin];
+    if(jumping)return route.slice(0,2);
+    route=route.slice(0,budget+1);
+    if(['rush','sideways'].includes(move.kind)&&route.length>1){
+      const horizontal=route[1].x!==origin.x,limit=move.kind==='sideways'&&!horizontal?1:budget;
+      const turn=route.findIndex((p,i)=>i>0&&(horizontal?p.y!==origin.y:p.x!==origin.x));
+      route=route.slice(0,Math.min(turn<0?route.length:turn,limit+1));
+    }
+    return route;
+  }
   function prepareIntents(s){
     if(s.mode!=='pve')return;const hero=s.actors[0];
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
-      const close=dist(m,hero)<=m.intentRange&&sight(s,m,hero);
-      m.intent={kind:close?'strike':'advance',cells:close?area(s,hero,m.intentRadius):[],
-        text:close?(m.intentRadius?'下次：轟擊標記區域':'下次：撲擊標記地格'):'下次：向你接近'};
+      const profile=monsterProfile(m.species),cells=monsterCells(s,m,hero,profile),ready=dist(m,hero)>=(profile.move.minDistance||0)&&cells.some(p=>key(p)===key(hero));
+      const name=profile.attack.shape==='guardian'?(s.turn%2===0?'天樞十字':'落石鎮壓'):profile.attackName;
+      m.intent={version:2,kind:ready?'attack':profile.move.steps?'advance':'wait',cells:ready?cells:[],
+        origin:{x:m.x,y:m.y},target:{x:hero.x,y:hero.y},shape:profile.attack.shape,
+        power:profile.attack.power||1,slow:!!profile.attack.slow,push:profile.attack.push||0,
+        text:ready?'下次：'+name:'下次：'+profile.moveName+(profile.move.steps?' '+profile.move.steps+' 格':'')};
     }
+  }
+  function monsterTurn(s,m,hero){
+    const intent=m.intent;
+    if(intent?.kind==='strike'){
+      // Honor an already visible warning from a pre-v2 battle for this turn.
+      if(intent.cells.some(p=>key(p)===key(hero)))damage(s,m,hero,m.atk,{skill:'monster'});
+      else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge');return;
+    }
+    if(intent?.kind==='attack'){
+      if(intent.origin&&key(intent.origin)!==key(m))return;
+      let hit=intent.cells.some(p=>key(p)===key(hero));
+      if(intent.shape==='charge'){
+        hit=false;for(const p of intent.cells){if(blocked(s,p))break;const occupant=at(s,p);
+          if(occupant){hit=occupant.uid===hero.uid;break;}m.x=p.x;m.y=p.y;
+        }
+      }
+      if(hit){
+        damage(s,m,hero,m.atk*(intent.power||1),{skill:'monster-'+m.species});
+        if(alive(hero)&&intent.slow){hero.slow=1;hero.slowUntil=hero.turns+1;}
+        if(alive(hero)&&intent.push)push(s,m,hero,intent.push);
+      }else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge');
+      if(alive(m)&&['pounce','dive'].includes(intent.shape)){
+        const spots=area(s,intent.target,1).filter(p=>!at(s,p)).sort((a,b)=>dist(a,intent.target)-dist(b,intent.target)||dist(m,a)-dist(m,b));
+        if(spots[0]){m.x=spots[0].x;m.y=spots[0].y;}
+      }
+      return;
+    }
+    if(intent?.kind==='stagger'||intent?.kind==='wait')return;
+    const route=monsterRoute(s,m,hero),end=route.at(-1);m.slow=0;
+    if(route.length>1){m.x=end.x;m.y=end.y;log(s,m.name+'以'+monsterProfile(m.species).moveName+'移動','monster-move',{actor:m.uid,path:route});}
   }
   function begin(s,a,now){
     s.turnUid=a.uid;a.turns++;a.questions=0;a.attacks=0;a.actions=0;a.guard=0;a.counter=0;
@@ -308,13 +445,7 @@
     if(s.mode==='pve'){
       const hero=s.actors[0];
       for(const m of s.actors.filter(a=>a.bot&&alive(a))){
-        if(m.intent?.kind==='strike'){
-          if(m.intent.cells.some(p=>key(p)===key(hero)))damage(s,m,hero,m.atk,{skill:'monster'});
-          else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge');
-        }else{
-          const routes=neighbours(s,hero).map(n=>path(s,m,n,m.uid)).filter(Boolean).sort((a,b)=>a.length-b.length);
-          if(routes[0]){const p=routes[0][Math.min(m.moveSteps,routes[0].length-1)];m.x=p.x;m.y=p.y;}
-        }
+        monsterTurn(s,m,hero);
         if(!alive(hero))break;
       }
       s.turn++;checkFinished(s);if(s.status==='active'){begin(s,hero,now);prepareIntents(s);}
@@ -363,5 +494,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit');return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,apply,answer,expire,forfeit});
 });

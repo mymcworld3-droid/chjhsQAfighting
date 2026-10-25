@@ -19,9 +19,17 @@ const copy=v=>JSON.parse(JSON.stringify(v));
 const exists=s=>s?.exists?s.data():null;
 function member(s,uid){const a=s?.actors?.find(a=>a.uid===uid&&!a.bot);if(!a)throw error('你不是此戰場的參戰玩家',403);return a;}
 function publicQuestion(q){return q?{id:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,...Knowledge.metadata(q,q.subject)}:null;}
+const seenSpecies=pointer=>[...new Set((Array.isArray(pointer?.bestiary?.seen)?pointer.bestiary.seen:[]).filter(id=>Number.isInteger(id)&&!!Rules.MONSTERS[id]))];
+function ensureIntroductions(s,uid,pointer){
+  if(s.mode!=='pve'||Array.isArray(s.pendingIntroductions?.[uid]))return false;
+  const seen=new Set(seenSpecies(pointer));s.pendingIntroductions||={};
+  s.pendingIntroductions[uid]=[...new Set(s.actors.filter(a=>a.bot&&Rules.MONSTERS[a.species]&&!seen.has(a.species)).map(a=>a.species))];
+  return true;
+}
 function snapshot(s,uid){
   if(!s)return null;member(s,uid);
   const out=copy(s);delete out.pending;delete out.reviews;delete out.receipts;
+  out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
   out.question=s.turnUid===uid?publicQuestion(s.pending?.[uid]):null;
   out.serverNowMs=Date.now();
   out.review=s.reviews?.[uid]||null;
@@ -110,10 +118,13 @@ async function start(db,uid,selection={},now=Date.now()){
     const campaign=trialProgress(pointer.trial,seed);
     if(prior?.status==='active'){
       // Resume old unfinished trials without moving actors or discarding a question.
+      let changed=false;
       if(prior.mode==='pve'&&!prior.trial){
-        prior.trial={version:1,seed:campaign.seed,stage:campaign.stage,title:Rules.mapFor(prior.map).name};
-        tx.set(db.collection(ROOMS).doc(prior.id),prior);tx.set(pointerRef,{...pointer,trial:campaign});
+        prior.trial={version:1,seed:campaign.seed,stage:campaign.stage,layoutVersion:0,title:Rules.mapFor(prior.map).name};
+        changed=true;tx.set(pointerRef,{...pointer,trial:campaign});
       }
+      changed=ensureIntroductions(prior,uid,pointer)||changed;
+      if(changed)tx.set(db.collection(ROOMS).doc(prior.id),prior);
       return snapshot(prior,uid);
     }
     if(prior?.status==='waiting'&&mode!=='pvp')throw error('請先取消正在等待的鬥法');
@@ -131,11 +142,14 @@ async function start(db,uid,selection={},now=Date.now()){
       }}
     }else if(prior?.status==='waiting')return snapshot(prior,uid);
     else{
-      s=attachScopes(Rules.create({id:newId,mode,map,players:[a],trial:mode==='pve'?campaign:null,now}),[a]);
+      const retry=mode==='pve'&&prior?.trial?.seed===campaign.seed&&prior.trial.stage===campaign.stage&&prior.winner!=='player';
+      const trial={...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):2};
+      s=attachScopes(Rules.create({id:newId,mode,map:retry&&trial.layoutVersion===0?prior.map:map,players:[a],trial:mode==='pve'?trial:null,now}),[a]);
       // Actor construction deliberately limits public combat fields.
       s.actors[0].baseAtk=a.baseAtk;s.actors[0].baseMaxHp=a.baseMaxHp;s.actors[0].trainingAccessScore=a.trainingAccessScore;
     }
     if(s.mode==='pvp'&&s.actors.length===2){const p=s.actors.find(p=>p.uid===uid);p.baseAtk=a.baseAtk;p.baseMaxHp=a.baseMaxHp;p.trainingAccessScore=a.trainingAccessScore;}
+    ensureIntroductions(s,uid,pointer);
     if(prior?.status==='waiting'&&prior.id!==s.id)tx.set(db.collection(ROOMS).doc(prior.id),Rules.forfeit(prior,uid,now));
     tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{...pointer,roomId:s.id,...(mode==='pve'?{trial:campaign}:{})});
     const preferences={['tacticalPreferences.'+a.core]:a.branch,...(mode==='pve'?{tacticalTrialV1:campaign}:{})};
@@ -147,12 +161,29 @@ async function state(db,uid,now=Date.now()){
   // No write for ordinary reads. Only an expired PvP turn requires a transaction.
   const stored=exists(await db.collection(ROOMS).doc(pointer.roomId).get());if(!stored)return null;
   member(stored,uid);
+  if(stored.status==='active')ensureIntroductions(stored,uid,pointer);
   if(stored.status==='waiting'&&stored.createdAtMs<now-15*60000)return command(db,uid,{roomId:stored.id,type:'leave',requestId:crypto.randomUUID()},now);
   if(stored.status==='finished')return withProgress(stored,uid,exists(await db.collection('users').doc(uid).get()));
   if(stored.status!=='active'||stored.mode!=='pvp'||now<stored.deadlineMs)return snapshot(stored,uid);
   return db.runTransaction(async tx=>{
     const raw=await readRoom(tx,db,stored.id,uid),s=Rules.expire(raw,now);
     let updates={};if(s!==raw){delete s.pending?.[raw.turnUid];updates=await settle(tx,db,s);tx.set(db.collection(ROOMS).doc(s.id),s);}return withProgress(s,uid,updates[uid]);
+  });
+}
+async function acknowledgeEnemy(db,uid,input){
+  const species=Number(input.species);if(!Number.isInteger(species)||!Rules.MONSTERS[species])throw error('妖獸種類無效',400);
+  return db.runTransaction(async tx=>{
+    const s=await readRoom(tx,db,input.roomId,uid),pointerRef=db.collection(PLAYERS).doc(uid),pointer=exists(await tx.get(pointerRef));
+    if(s.mode!=='pve'||pointer?.roomId!==s.id||!s.actors.some(a=>a.bot&&a.species===species))throw error('這不是目前試煉出現的妖獸');
+    ensureIntroductions(s,uid,pointer);const seen=seenSpecies(pointer),pending=s.pendingIntroductions[uid];
+    if(!pending.includes(species)){
+      if(seen.includes(species))return snapshot(s,uid);
+      throw error('這種妖獸沒有待閱讀的介紹');
+    }
+    s.pendingIntroductions[uid]=pending.filter(id=>id!==species);
+    tx.set(db.collection(ROOMS).doc(s.id),s);
+    tx.set(pointerRef,{...pointer,bestiary:{version:1,seen:[...new Set([...seen,species])].sort((a,b)=>a-b)}});
+    return snapshot(s,uid);
   });
 }
 async function command(db,uid,input,now=Date.now()){
@@ -234,6 +265,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/start',route((db,uid,req)=>start(db,uid,req.body)));
   app.post('/api/tactical/action',route((db,uid,req)=>command(db,uid,req.body)));
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
+  app.post('/api/tactical/acknowledge-enemy',route((db,uid,req)=>acknowledgeEnemy(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,prepareQuestion,commitQuestion,answer};
+module.exports.__test={ROOMS,PLAYERS,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer};

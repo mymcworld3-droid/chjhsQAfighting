@@ -15,6 +15,9 @@ async function main(){
   const db=database(),app=express();app.use(express.json());
   const legacy=fs.readFileSync(path.join(__dirname,'../public/main-legacy.js'),'utf8');
   const index=fs.readFileSync(path.join(__dirname,'../public/index.html'),'utf8');
+  const mathDir=process.env.TACTICAL_MATHJAX_DIR,mathStart=index.indexOf('window.MathJax = {');
+  const mathHead=mathDir?'<script>'+index.slice(mathStart,index.indexOf('</script>',mathStart))+'</script><script src="/test-mathjax/es5/tex-mml-chtml.js"></script>':'';
+  if(mathDir)app.use('/test-mathjax',express.static(mathDir));
   const sheets=[...index.matchAll(/<link\b[^>]*>/g)].map(m=>m[0]).filter(tag=>/rel="stylesheet"/.test(tag))
     .map(tag=>tag.match(/href="([^"]+)"/)?.[1]).filter(href=>href&&!/^https?:/.test(href));
   const theme=[...new Set([...sheets,'xianxia-bright-accents.css','styles/xianxia-quiet.css','styles/page-layout-unified.css','styles/interface-cleanup.css','styles/interface-cleanup-pages.css'])]
@@ -23,7 +26,10 @@ async function main(){
     legacy.slice(legacy.indexOf('const STARTUP_CLOUD_ASSETS ='),legacy.indexOf('\nasync function enterHomeWithStartupCloudCurtain()'));
   app.get('/test-cloud.js',(_,res)=>res.type('text/javascript').send(cloud));
   db.records.get('users/u1').displayName='青雲修士';db.records.get('users/u2').displayName='雲岫道友';
-  let loseMoveResponse=true;
+  let loseMoveResponse=true,loseIntroResponse=false;
+  app.use('/api/tactical/acknowledge-enemy',(req,res,next)=>{
+    if(loseIntroResponse){loseIntroResponse=false;const json=res.json.bind(res);res.json=()=>{res.status(503);return json({error:'介紹已保存，但回應遺失，請重試'});};}next();
+  });
   app.use('/api/tactical/action',(req,res,next)=>{
     if(req.body.type==='move'&&loseMoveResponse){loseMoveResponse=false;const json=res.json.bind(res);res.json=()=>{res.status(503);return json({error:'模擬已提交但回應遺失'});};}next();
   });
@@ -32,14 +38,14 @@ async function main(){
   }});
   app.post('/api/generate-quiz',async(req,res)=>{
     try{const uid=req.get('x-test-user'),expected=await service.prepareQuestion(db,uid,req.body.roomId);
-      const q=expected.pending||await service.commitQuestion(db,uid,expected,{q:'若 x + 2 = 5，則 x 的值為何？',correct:'3',wrong:['1','2','4'],exp:'等號兩邊同減 2，得到 x = 3。'});
+      const q=expected.pending||await service.commitQuestion(db,uid,expected,{q:mathDir?'若 \\(x+2=5\\)，則 \\(x\\) 的值為何？':'若 x + 2 = 5，則 x 的值為何？',correct:'3',wrong:['1','2',mathDir?'\\(4\\)':'4'],exp:mathDir?'等號兩邊同減 \\(2\\)，得到 \\(x=3\\)。':'等號兩邊同減 2，得到 x = 3。'});
       res.json({tacticalQuestion:q});
     }catch(e){res.status(e.status||500).json({error:e.message});}
   });
   app.get('/cultivation/data/project-repository.js',(req,res)=>res.type('text/javascript').send(`export const getMainUser=()=>({uid:sessionStorage.testUid||'u1'});export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'Content-Type':'application/json','X-Test-User':getMainUser().uid}});`));
   if(process.env.TACTICAL_FONT_DIR)app.use('/test-font',express.static(process.env.TACTICAL_FONT_DIR));
   app.get(['/','/index.html','/stage.html'],(_,res)=>res.sendFile(path.join(__dirname,'../public/stage.html')));
-  app.get('/app.html',(req,res)=>res.type('html').send(`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>青雲問道 · 戰場測試</title><meta name="viewport" content="width=device-width,initial-scale=1"><script src="/app-stage-bridge.js"></script>${theme}${process.env.TACTICAL_FONT_DIR?'<link rel="stylesheet" href="/test-font/400.css">':''}<style>body{margin:0;font-family:'Noto Sans TC',system-ui;background:#101a17}button{font:inherit}#tactical-combat :is(h1,h2,h3){font-family:'Noto Sans TC',serif!important}</style></head><body class="xianxia-theme ui-cleanup"><button id="entry" onclick="startQuizFlow()">問道試煉</button><script src="/test-cloud.js"></script><script>window.__testPlayer={displayName:'青雲修士',stats:{totalScore:30},cultivationTraining:{equippedCore:{type:'thunder',grade:9}}};window.getCurrentUserData=()=>window.__testPlayer;</script><script type="module" src="/cultivation/tactical-combat.js"></script></body></html>`));
+  app.get('/app.html',(req,res)=>res.type('html').send(`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>青雲問道 · 戰場測試</title><meta name="viewport" content="width=device-width,initial-scale=1"><script src="/app-stage-bridge.js"></script>${theme}${mathHead}${process.env.TACTICAL_FONT_DIR?'<link rel="stylesheet" href="/test-font/400.css">':''}<style>body{margin:0;font-family:'Noto Sans TC',system-ui;background:#101a17}button{font:inherit}#tactical-combat :is(h1,h2,h3){font-family:'Noto Sans TC',serif!important}</style></head><body class="xianxia-theme ui-cleanup"><button id="entry" onclick="startQuizFlow()">問道試煉</button><script src="/test-cloud.js"></script><script>window.__testPlayer={displayName:'青雲修士',stats:{totalScore:30},cultivationTraining:{equippedCore:{type:'thunder',grade:9}}};window.getCurrentUserData=()=>window.__testPlayer;</script><script src="/cultivation/quiz-math.js"></script><script type="module" src="/cultivation/tactical-combat.js"></script></body></html>`));
   app.use(express.static(path.join(__dirname,'../public')));
   const server=await new Promise(resolve=>{const server=app.listen(0,'127.0.0.1',()=>resolve(server));});
   const base='http://127.0.0.1:'+server.address().port;
@@ -105,17 +111,37 @@ async function main(){
     });
     for(const pair of pairs)assert.deepEqual(pair.current,pair.original,pair.name+' must keep the original question-page appearance');
   }
+  async function mathIsWhite(view,review=false){
+    if(!mathDir)return;
+    await view.locator((review?'.tc-feedback-text':'.tc-question')+' mjx-container').first().waitFor();
+    const colors=await view.evaluate(()=>[...document.querySelectorAll('.tc-quiz mjx-container,.tc-quiz mjx-container *')].map(el=>({color:getComputedStyle(el).color,fill:getComputedStyle(el).webkitTextFillColor})));
+    assert.ok(colors.length>10,'use real MathJax output in the question and explanation');
+    assert.ok(colors.every(c=>c.color==='rgb(255, 255, 255)'&&c.fill==='rgb(255, 255, 255)'),'all rendered formula descendants remain white');
+  }
+  async function acknowledgeIntros(view){
+    for(let i=0;i<20&&await view.locator('[data-intro-ack]').count();i++){
+      await view.waitForFunction(()=>!document.querySelector('[data-intro-ack]').disabled);await ratio(view,{dialog:true});
+      const name=await view.locator('.tc-encounter h2').textContent(),profile=Rules.MONSTERS.find(p=>p.name===name);
+      assert.ok(profile);assert.ok((await view.locator('.tc-enemy-attack').textContent()).includes(profile.attackText));
+      const button=await view.evaluate(()=>{const r=document.querySelector('[data-intro-ack]').getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:innerHeight};});
+      assert.ok(button.top>=0&&button.bottom<=button.height,'introduction confirmation remains inside the stage');
+      await view.locator('[data-intro-ack]').click();
+      await view.waitForFunction(name=>!document.querySelector('[data-intro-ack]')||document.querySelector('.tc-encounter h2').textContent!==name,name);
+    }
+    assert.equal(await view.locator('[data-intro-ack]').count(),0);
+  }
   async function correct(page){
-    await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);
+    await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);await mathIsWhite(page);
     const orientation=await page.evaluate(()=>innerWidth<innerHeight?'portrait':'landscape');
     await page.screenshot({path:path.join(output,'question-'+orientation+'.png')});
-    await page.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await page.locator('[data-continue]').waitFor();await originalQuizStyle(page);
+    await page.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await page.locator('[data-continue]').waitFor();await originalQuizStyle(page);await mathIsWhite(page,true);
     await page.locator('[data-continue]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,'question-review-'+orientation+'.png')});
     await page.locator('[data-continue]').click();await page.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
   }
   async function rangePreviewChecks(view){
     const current=await read(view),key=service.ROOMS+'/'+current.id,saved=db.records.get(key);
     const room=Rules.create({id:current.id,mode:'pve',players:[{...saved.actors[0],core:'thunder',branch:'lightning'}]});
+    room.pendingIntroductions={u1:[]};
     Object.assign(room.actors[0],{x:3,y:3,stamina:8,knowledgeScope:saved.actors[0].knowledgeScope});
     room.blocks=[{x:3,y:2}];room.actors=[room.actors[0],...[[4,3],[5,3],[4,4]].map(([x,y],i)=>Rules.actor({uid:'monster-'+i,name:'演武妖獸',bot:true,team:'monster',atk:100,maxHp:1000,species:i},{x,y,intent:{kind:'advance',cells:[],text:'下次：向你接近'}}))];
     room.revision=saved.revision+1;db.records.set(key,room);
@@ -164,6 +190,12 @@ async function main(){
     await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor();
     await mobile.locator('canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     await ratio(mobile);
+    assert.deepEqual((await read(mobile)).newEnemies,[0]);await mobile.locator('.tc-encounter').waitFor();await ratio(mobile,{dialog:true});
+    await mobile.screenshot({path:path.join(output,'enemy-intro-wolf-mobile.png')});
+    await mobile.reload();await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});await mobile.locator('[data-intro-ack]').waitFor();
+    assert.deepEqual((await read(mobile)).newEnemies,[0],'unread encounter survives refresh');await acknowledgeIntros(mobile);
+    await mobile.reload();await mobile.locator('#entry').click();await mobile.locator('canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+    assert.equal(await mobile.locator('[data-intro-ack]').count(),0,'acknowledged species does not repeat after refresh');
     assert.equal(await mobile.locator('[data-start],[data-map],[data-branch]').count(),0,'trial entry skips both pickers');
     assert.equal((await read(mobile)).trial.stage,1);await correct(mobile);
     assert.equal((await read(mobile)).actors[0].stamina,6);
@@ -187,6 +219,7 @@ async function main(){
     const room=await read(mobile),key=service.ROOMS+'/'+room.id,saved=db.records.get(key);
     let denseStage=10;while(true){const layout=Rules.stageLayout('layout-fit',denseStage);if(layout.width===11&&layout.enemies.length===4)break;denseStage++;}
     const dense=Rules.create({id:room.id,mode:'pve',players:[{...saved.actors[0],name:'《九州》陳長青',maxHp:2400}],trial:{seed:'layout-fit',stage:denseStage}});
+    dense.pendingIntroductions={u1:[]};
     Object.assign(dense.actors[0],{stamina:0,questions:2,attacks:1});dense.revision=saved.revision+1;db.records.set(key,dense);
     await mobile.locator('[data-sync]').click();await mobile.waitForFunction(()=>document.querySelector('[data-stamina] strong').textContent==='0');
     for(const size of [{width:393,height:852},{width:1280,height:720}]){
@@ -205,10 +238,24 @@ async function main(){
     await mobile.locator('[data-next-stage]').waitFor();await mobile.locator('[data-next-stage]').click();
     await mobile.locator('#startup-cloud-curtain.is-closed').waitFor();await ratio(mobile,{cloud:true});await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     const next=await read(mobile);assert.equal(next.trial.stage,2);assert.equal(next.trial.seed,prior.trial.seed);assert.notEqual(next.id,prior.id);
+    assert.deepEqual(next.newEnemies,[8],'stage two introduces the new rock beast');
+    await mobile.setViewportSize({width:393,height:852});await mobile.screenshot({path:path.join(output,'enemy-intro-rock-mobile.png')});await acknowledgeIntros(mobile);
     assert.equal(await mobile.evaluate(()=>window.__pickersSeen),0);await mobile.evaluate(()=>window.__pickerObserver.disconnect());
     await mobile.setViewportSize({width:393,height:852});await ratio(mobile);await mobile.screenshot({path:path.join(output,'trial-stage-2-mobile.png')});
     await mobile.reload();await mobile.waitForFunction(()=>typeof window.openTacticalCombat==='function');await mobile.locator('#entry').click();await mobile.locator('canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     assert.equal((await read(mobile)).id,next.id,'refresh resumes the current randomized stage');
+    assert.equal(await mobile.locator('[data-intro-ack]').count(),0);
+    // Two unseen species in one stage are introduced in order; a lost
+    // acknowledgement response can be retried without duplicate progress.
+    const introKey=service.ROOMS+'/'+next.id,introSaved=structuredClone(db.records.get(introKey)),introRoom=db.records.get(introKey);
+    introRoom.actors.push(...[1,2].map((species,i)=>Rules.actor({uid:'intro-'+i,name:Rules.monsterProfile(species).name,bot:true,team:'monster',species},{x:i,y:0})));
+    introRoom.pendingIntroductions={u1:[1,2]};introRoom.revision++;await mobile.locator('[data-sync]').click();await mobile.locator('[data-intro-ack]').waitFor();
+    assert.equal(await mobile.locator('.tc-encounter h2').textContent(),'玄甲山豬');await mobile.screenshot({path:path.join(output,'enemy-intro-boar-mobile.png')});
+    loseIntroResponse=true;await mobile.locator('[data-intro-ack]').click();
+    await mobile.locator('.tc-enemy-error:not([hidden])').waitFor();assert.ok(db.records.get(service.PLAYERS+'/u1').bestiary.seen.includes(1));
+    await acknowledgeIntros(mobile);
+    assert.ok(db.records.get(service.PLAYERS+'/u1').bestiary.seen.includes(2));
+    introSaved.revision=introRoom.revision+1;db.records.set(introKey,introSaved);await mobile.locator('[data-sync]').click();await mobile.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
     await mobile.locator('[data-leave]').click();await mobile.locator('[data-forfeit]').click();await mobile.locator('[data-exit]').click();
     await mobile.evaluate(()=>window.startBattleMatchmaking());await mobile.locator('[data-start]').click();await mobile.locator('.tc-waiting').waitFor();
     const waiting=await read(mobile),p2=await make('u2',{width:1280,height:720});await p2.evaluate(()=>window.openTacticalCombat('pvp'));
@@ -219,7 +266,7 @@ async function main(){
     await correct(mobile);await mobile.locator('[data-end]').click();await p2.waitForFunction(()=>!document.querySelector('[data-quiz]').disabled,{timeout:15000});
     await correct(p2);assert.equal((await read(p2)).actors.find(a=>a.uid==='u2').stamina,6);
     await p2.screenshot({path:path.join(output,'duel-landscape.png')});
-    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question-page styles in both orientations and answer review, production theme isolation, visible controls with four enemies and zero stamina, gray range pulses and reduced motion, two-cell directional hits, core aiming, paused/resumed rendering, scaled canvas input, bounded cloud/dialogs, trial progression and two-player synchronization.');
+    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question-page styles in both orientations and answer review, production theme isolation, visible controls with four enemies and zero stamina, gray range pulses and reduced motion, two-cell directional hits, core aiming, paused/resumed rendering, white MathJax formulas, persistent queued enemy introductions and lost-response retry, scaled canvas input, bounded cloud/dialogs, trial progression and two-player synchronization.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

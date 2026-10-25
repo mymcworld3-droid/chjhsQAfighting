@@ -343,3 +343,13 @@ html body.ui-cleanup #page-training #training-tab-content .core-equip-btn.equipp
 html body.ui-cleanup #soulbound-page .sb-header>div {display:none}
 html body.ui-cleanup #soulbound-page .sb-header {justify-content:flex-end;padding:0;margin:0;border:0;min-height:40px}
 html body.ui-cleanup #soulbound-page #soulbound-refresh {min-height:36px;padding:5px 12px;font-size:11px;background:transparent;border-color:var(--review-line)}
+
+/* Keep rendered LaTeX white on the original dark question cards, including
+   MathJax SVG/CHTML descendants that inherited the old parchment ink color. */
+html body.xianxia-theme :is(mjx-container,.MathJax),
+html body.xianxia-theme :is(mjx-container,.MathJax) *,
+html body.xianxia-theme :is(#question-text,#feedback-text,#options-container,#bv2-question,#page-raid) :is(mjx-container,.MathJax,mjx-container *,.MathJax *),
+html body.xianxia-theme #tactical-combat .tc-quiz :is(mjx-container,.MathJax,mjx-container *,.MathJax *) {
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
