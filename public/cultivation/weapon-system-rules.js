@@ -2,6 +2,8 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.QAWeapons=api;})(globalThis,()=>{
   'use strict';
   const VERSION=2,ATTACK_PER_REALM=.025,FRAGMENTS_PER_CHEST=600;
+  const DRAW_VERSION='weapons-random-v1',DRAW_GOLD=500;
+  const PAYMENTS=Object.freeze({free:{label:'首次免費',unit:0},chest:{label:'兵器匣',unit:1},ticket:{label:'尋器券',unit:1},gold:{label:'靈石',unit:DRAW_GOLD},fragments:{label:'煉器碎片',unit:FRAGMENTS_PER_CHEST}});
   const REALMS=Object.freeze([
     ['煉氣',1],['築基',6],['金丹',28],['元嬰',68],['化神',188],['煉虛',428],['合體',788],['渡劫',1268],['半仙',1868],['真仙',1868]
   ].map(([name,need],index)=>Object.freeze({index,name,need,requiresImmortal:index===9})));
@@ -16,10 +18,14 @@
   const get=id=>TYPES.find(t=>t.id===id)||null;
   function realmIndex(row){return Math.min(REALMS.length-1,Math.max(0,Number.isInteger(row?.realm)?row.realm:num(row?.level||1)-1));}
   const realmFor=row=>REALMS[realmIndex(row)];
-  function initial(){return {version:VERSION,revision:0,equipped:'',starterClaimed:false,chests:0,trialRewardedStage:0,weapons:{},legacyConverted:false};}
+  function drawCost(payment,count){return Object.hasOwn(PAYMENTS,payment)&&[1,5].includes(count)&&(payment!=='free'||count===1)?PAYMENTS[payment].unit*count:null;}
+  function roll(random){const value=random();if(!Number.isFinite(value)||value<0||value>=1)throw Error('無效抽取亂數');return {type:TYPES[Math.floor(value*TYPES.length)].id,realm:0};}
+  function savedDraw(raw){if(raw?.action!=='draw'||!raw.requestId||!Object.hasOwn(PAYMENTS,raw.payment)||![1,5].includes(raw.count)||!Array.isArray(raw.results)||raw.results.length!==raw.count||!raw.results.every(row=>get(row?.type)))return null;
+    return {action:'draw',requestId:String(raw.requestId),payment:raw.payment,count:raw.count,spent:num(raw.spent),poolVersion:String(raw.poolVersion||''),results:raw.results.map(row=>({type:row.type,realm:0}))};}
+  function initial(){return {version:VERSION,revision:0,equipped:'',starterClaimed:false,chests:0,trialRewardedStage:0,weapons:{},legacyConverted:false,lastDraw:null};}
   function normalize(raw){
     const s={...initial(),revision:num(raw?.revision),equipped:String(raw?.equipped||''),starterClaimed:raw?.starterClaimed===true,
-      chests:num(raw?.chests),trialRewardedStage:num(raw?.trialRewardedStage),legacyConverted:raw?.legacyConverted===true};
+      chests:num(raw?.chests),trialRewardedStage:num(raw?.trialRewardedStage),legacyConverted:raw?.legacyConverted===true,lastDraw:savedDraw(raw?.lastDraw)};
     for(const t of TYPES){const row=raw?.weapons?.[t.id],copies=num(row?.copies);if(copies)s.weapons[t.id]={copies,realm:realmIndex(row)};}
     if(!get(s.equipped)||!Object.hasOwn(s.weapons,s.equipped))s.equipped='';return s;
   }
@@ -32,5 +38,5 @@
   function add(s,type,count=1){if(!get(type))throw Object.assign(Error('兵器類型無效'),{status:400});s.weapons[type]||={realm:0,copies:0};s.weapons[type].copies=num(s.weapons[type].copies+count);if(!s.equipped)s.equipped=type;return s;}
   function grantTrial(raw,best){const s=normalize(raw),stage=num(best),from=s.trialRewardedStage;if(stage<=from)return {state:s,earned:0};
     const earned=stage-from+Math.floor(stage/5)-Math.floor(from/5);s.chests=num(s.chests+earned);s.trialRewardedStage=stage;s.revision++;return {state:s,earned};}
-  return Object.freeze({VERSION,REALMS,ATTACK_PER_REALM,FRAGMENTS_PER_CHEST,TYPES,num,get,initial,normalize,realmIndex,realmFor,promotion,mergeCost,goldCost,snapshot,attackMultiplier,attackSkill,add,grantTrial});
+  return Object.freeze({VERSION,REALMS,ATTACK_PER_REALM,FRAGMENTS_PER_CHEST,DRAW_VERSION,DRAW_GOLD,PAYMENTS,drawCost,roll,TYPES,num,get,initial,normalize,realmIndex,realmFor,promotion,mergeCost,goldCost,snapshot,attackMultiplier,attackSkill,add,grantTrial});
 });

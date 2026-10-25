@@ -6,6 +6,7 @@ const {fakeDb}=require('./helpers/inventory-db.cjs');
 const user=()=>({uid:'u1',stats:{totalScore:30,gold:100000,attack:200,maxHp:1000},soulboundDrawTickets:3,forgeFragments:1200});
 const request=(id,extra={})=>({requestId:'weapon-operation-'+id,...extra});
 const op=(db,action,id,extra={})=>api.transact(db,'u1',action,request(id,extra));
+const draw=(db,id,{payment='free',types=['bow'],...body}={})=>{let i=0;return api.transact(db,'u1','draw',request(id,{payment,count:types.length,poolVersion:W.DRAW_VERSION,expectedCost:W.drawCost(payment,types.length),...body}),now,()=>{const type=types[i++%types.length];return W.TYPES.findIndex(t=>t.id===type)/5;});};
 const armory=db=>db.docs.get('weaponArmories/u1');
 const now=2000000000000;
 function battlefield(type){const s=R.create({id:'weapons',players:[{uid:'u1',atk:200,maxHp:1000,weapon:{type,realm:0}}],now});s.width=s.height=9;s.blocks=[];s.actors=[s.actors[0]];Object.assign(s.actors[0],{x:4,y:4,stamina:10});return s;}
@@ -82,28 +83,28 @@ test('upgrading a weapon increases trial damage without inflating the same stage
   const create=realm=>R.create({id:'same-stage',players:[{uid:'u1',atk:Math.round(200*W.attackMultiplier({type:'sword',realm})),maxHp:1000,enemyScaleAttack:200,weapon:{type:'sword',realm}}],trial:{seed:'1234567890abcdef1234567890abcdef',stage:12},now});
   const first=create(0),upgraded=create(9);assert.equal(upgraded.actors[0].atk,245);assert.deepEqual(upgraded.actors.slice(1),first.actors.slice(1));
 });
-test('starter, selected chests and equipment use server inventory, with exactly one equipped weapon',async()=>{
+test('free random draw, chest draws and equipment use server inventory, with exactly one equipped weapon',async()=>{
   const db=fakeDb(user());const before=await api.transact(db,'u1');assert.equal(before.state.starterClaimed,false);assert.equal(db.docs.size,1,'ordinary views do not initialize or mutate assets');
-  await op(db,'starter','starter',{type:'bow'});assert.equal(armory(db).equipped,'bow');
-  await assert.rejects(op(db,'starter','starter-2',{type:'sword'}),/已領取/);
+  await draw(db,'starter',{payment:'free',types:['bow']});assert.equal(armory(db).equipped,'bow');
+  await assert.rejects(draw(db,'starter-2',{payment:'free',types:['sword']}),/已使用/);
   await assert.rejects(op(db,'equip','unowned',{type:'hammer'}),/尚未持有/);
-  await op(db,'exchange-ticket','ticket');await op(db,'open-chest','open',{type:'hammer'});await op(db,'equip','equip',{type:'hammer'});
+  await op(db,'exchange-ticket','ticket');await draw(db,'open',{payment:'chest',types:['hammer']});await op(db,'equip','equip',{type:'hammer'});
   assert.equal(armory(db).equipped,'hammer');assert.deepEqual(Object.keys(armory(db).weapons).sort(),['bow','hammer']);assert.equal(db.docs.get('users/u1').soulboundDrawTickets,2);
 });
 test('promotion consumes both copies and gold; retries and concurrent requests cannot spend or promote twice',async()=>{
-  const db=fakeDb(user());await op(db,'starter','starter',{type:'sword'});
-  await op(db,'exchange-ticket','ticket-1');await op(db,'open-chest','open-1',{type:'sword'});
+  const db=fakeDb(user());await draw(db,'starter',{payment:'free',types:['sword']});
+  await op(db,'exchange-ticket','ticket-1');await draw(db,'open-1',{payment:'chest',types:['sword']});
   const req=request('promote',{type:'sword',expectedRealm:0,cost:1,realm:99,playerRealmScore:99999,copiesSpent:0});
   const first=await api.transact(db,'u1','upgrade',req),retry=await api.transact(db,'u1','upgrade',req);
   assert.equal(first.state.weapons.sword.realm,1);assert.equal(retry.state.weapons.sword.realm,1);assert.equal(retry.replayed,true);assert.equal(db.docs.get('users/u1').stats.gold,99700);assert.equal(armory(db).weapons.sword.copies,1);
   assert.deepEqual(first.result,{action:'upgrade',realm:1,type:'sword',copiesSpent:1,goldSpent:300});
   await assert.rejects(api.transact(db,'u1','upgrade',{...req,payment:'merge'}),/識別碼/);
-  await op(db,'exchange-ticket','ticket');await op(db,'open-chest','open',{type:'sword'});
+  await op(db,'exchange-ticket','ticket');await draw(db,'open',{payment:'chest',types:['sword']});
   const attempts=await Promise.allSettled([op(db,'upgrade','promote-a',{type:'sword',expectedRealm:1}),op(db,'upgrade','promote-b',{type:'sword',expectedRealm:1})]);
   assert.equal(attempts.filter(r=>r.status==='fulfilled').length,1);assert.equal(armory(db).weapons.sword.realm,2);assert.equal(armory(db).weapons.sword.copies,1);assert.equal(db.docs.get('users/u1').stats.gold,98500);
 });
 test('insufficient copies, insufficient gold and old alternative payments leave every asset and receipt untouched',async()=>{
-  const db=fakeDb(user());await op(db,'starter','starter',{type:'sword'});
+  const db=fakeDb(user());await draw(db,'starter',{payment:'free',types:['sword']});
   const unchanged=async(input,pattern)=>{const before=structuredClone([...db.docs]);await assert.rejects(op(db,'upgrade','rejected',input),pattern);assert.deepEqual([...db.docs],before);};
   await unchanged({type:'sword',expectedRealm:0},/副本|保留/);
   armory(db).weapons.sword.copies=2;db.docs.get('users/u1').stats.gold=299;
@@ -151,7 +152,7 @@ test('already committed legacy upgrade receipts replay after migration without c
   const before=structuredClone([...db.docs]),result=await api.transact(db,'u1','upgrade',req);assert.equal(result.replayed,true);assert.deepEqual(result.state.weapons.sword,{realm:1,copies:1});assert.deepEqual([...db.docs],before);
 });
 test('database failure and transaction retries leave no partial payment, receipt or upgrade',async()=>{
-  const db=fakeDb(user());await op(db,'starter','starter',{type:'sword'});armory(db).weapons.sword.copies=2;const run=db.runTransaction,before=structuredClone([...db.docs]);
+  const db=fakeDb(user());await draw(db,'starter',{payment:'free',types:['sword']});armory(db).weapons.sword.copies=2;const run=db.runTransaction,before=structuredClone([...db.docs]);
   db.runTransaction=fn=>run(async tx=>{const set=tx.set;tx.set=(ref,value)=>{if(ref.key.startsWith('weaponArmoryReceipts/'))throw Error('lost database');set(ref,value);};return fn(tx);});
   await assert.rejects(op(db,'upgrade','retry',{type:'sword',expectedRealm:0}),/lost database/);assert.deepEqual([...db.docs],before);
   db.runTransaction=run;db.retryNextTransaction();await op(db,'upgrade','retry',{type:'sword',expectedRealm:0});assert.equal(armory(db).weapons.sword.realm,1);assert.equal(armory(db).weapons.sword.copies,1);assert.equal(db.docs.get('users/u1').stats.gold,99700);
@@ -176,7 +177,7 @@ test('legacy transfer archives equipment and a pending job, preserves other item
 test('live tactical loadouts ignore forged client weapons and old equipment bonuses; upgrades apply only to new rooms',async()=>{
   const {database}=require('./helpers/tactical-db.cjs'),db=database();db.records.get('users/u1').stats.gold=100000;
   db.records.get('users/u1').artifactSystem={inventory:{'soul-sword-golden-core':1},equipped:{'本命法寶':'soul-sword-golden-core'}};
-  await api.transact(db,'u1','starter',request('start',{type:'hammer'}));db.records.get('weaponArmories/u1').weapons.hammer.copies=3;
+  await draw(db,'start',{types:['hammer']});db.records.get('weaponArmories/u1').weapons.hammer.copies=3;
   await api.transact(db,'u1','upgrade',request('upgrade',{type:'hammer',expectedRealm:0}));
   const s=await tactical.start(db,'u1',{mode:'pve',weapon:{type:'bow',realm:99},atk:99999},now);
   assert.equal(s.actors[0].weapon.type,'hammer');assert.equal(s.actors[0].weapon.realm,1);assert.equal(s.actors[0].atk,205);assert.equal(s.actors[0].shield,0);
@@ -199,5 +200,59 @@ test('ordinary browser access cannot read or mutate authoritative weapons, recei
   for(const col of ['weaponArmories','weaponArmoryReceipts','weaponLegacyArchives']){
     assert.equal(mayRead({role:'A',path:col+'/u1',data:{uid:'u1'},uid:'u1',admin:false}),false);
     assert.throws(()=>authorizeWrite({role:'A',path:col+'/u1',before:null,after:{uid:'u1'},operation:'set',context:{uid:'u1',admin:false}}),/無權/);
+  }
+});
+
+test('draw pool maps five equal intervals to the five weapon types and rejects invalid random values',()=>{
+  for(let i=0;i<5;i++){assert.equal(W.roll(()=>i/5).type,W.TYPES[i].id);assert.equal(W.roll(()=>(i+1)/5-1e-8).type,W.TYPES[i].id);}
+  for(const value of [-1,1,NaN,Infinity])assert.throws(()=>W.roll(()=>value),/亂數/);
+  assert.equal(W.drawCost('gold',5),2500);assert.equal(W.drawCost('fragments',1),600);assert.equal(W.drawCost('free',5),null);assert.equal(W.drawCost('__proto__',1),null);
+  assert.equal(W.normalize({lastDraw:{action:'draw',requestId:'x',payment:'gold',count:1,results:'x'}}).lastDraw,null);
+});
+test('free draw is random, cannot be selected by the client, and is granted once per player',async()=>{
+  const db=fakeDb(user());const payload=await draw(db,'free',{types:['spear'],type:'hammer',results:[{type:'hammer'}],seed:999});
+  assert.deepEqual(payload.result.results,[{type:'spear',realm:0}]);assert.equal(payload.state.equipped,'spear');assert.equal(payload.balance,100000);assert.equal(payload.state.starterClaimed,true);
+  const before=structuredClone([...db.docs]);await assert.rejects(draw(db,'free-again'),/免費抽取已使用/);assert.deepEqual([...db.docs],before);
+  const legacy=fakeDb(user());legacy.docs.set('weaponArmories/u1',{starterClaimed:true,equipped:'bow',weapons:{bow:{level:2,copies:1}}});await assert.rejects(draw(legacy,'old-player-free'),/已使用/);
+});
+test('each draw payment atomically grants five server-rolled weapons and spends only the selected resource',async()=>{
+  for(const payment of ['chest','ticket','gold','fragments']){
+    const u=user();u.soulboundDrawTickets=10;u.forgeFragments=6000;const db=fakeDb(u);db.docs.set('weaponArmories/u1',{chests:10,equipped:'sword',weapons:{sword:{realm:3,copies:1}}});
+    const payload=await draw(db,'five-'+payment,{payment,types:W.TYPES.map(t=>t.id)});
+    assert.equal(payload.state.equipped,'sword');assert.deepEqual(payload.state.weapons.sword,{realm:3,copies:2});assert.equal(Object.keys(payload.state.weapons).length,5);
+    assert.equal(payload.balance,payment==='gold'?97500:100000);assert.equal(payload.tickets,payment==='ticket'?5:10);assert.equal(payload.fragments,payment==='fragments'?3000:6000);assert.equal(payload.state.chests,payment==='chest'?5:10);
+    assert.equal(payload.result.spent,W.drawCost(payment,5));assert.deepEqual(payload.state.lastDraw,payload.result);
+    const view=await api.transact(db,'u1');assert.deepEqual(view.state.lastDraw,payload.result);
+    await op(db,'equip','equip-after-draw',{type:'hammer'});assert.deepEqual(armory(db).lastDraw,payload.result,'last results survive other inventory operations');
+  }
+});
+test('lost draw responses replay the same results without another random roll, resource payment or inventory grant',async()=>{
+  const db=fakeDb(user()),body=request('retry-draw',{payment:'gold',count:5,poolVersion:W.DRAW_VERSION,expectedCost:2500});let rolls=0;
+  const first=await api.transact(db,'u1','draw',body,now,()=>{rolls++;return .41;});const before=structuredClone([...db.docs]);
+  const again=await api.transact(db,'u1','draw',body,now,()=>{throw Error('must not reroll');});assert.equal(again.replayed,true);assert.equal(rolls,5);assert.deepEqual(again.result,first.result);assert.deepEqual([...db.docs],before);assert.equal(armory(db).weapons.sword.copies,5);
+  for(const patch of [{payment:'ticket'},{count:1},{expectedCost:1},{poolVersion:'old'}])await assert.rejects(api.transact(db,'u1','draw',{...body,...patch}),/識別碼/);
+});
+test('invalid draw requests, exhausted resources and retired selection routes cannot mutate assets',async()=>{
+  const db=fakeDb({...user(),soulboundDrawTickets:0,forgeFragments:0});db.docs.get('users/u1').stats.gold=499;
+  const denied=async(action,body,pattern)=>{const before=structuredClone([...db.docs]);await assert.rejects(op(db,action,'rejected-draw',body),pattern);assert.deepEqual([...db.docs],before);};
+  for(const payment of ['ticket','gold','fragments','chest'])await denied('draw',{payment,count:1,poolVersion:W.DRAW_VERSION,expectedCost:W.drawCost(payment,1)},/不足/);
+  for(const count of [0,2,10,'5',-5])await denied('draw',{payment:'gold',count,poolVersion:W.DRAW_VERSION,expectedCost:1},/單抽或五連抽/);
+  await denied('draw',{payment:'free',count:5,poolVersion:W.DRAW_VERSION,expectedCost:0},/單抽或五連抽/);
+  await denied('draw',{payment:'gold',count:1,poolVersion:'old',expectedCost:500},/已更新/);
+  await denied('draw',{payment:'gold',count:1,poolVersion:W.DRAW_VERSION,expectedCost:0},/已更新/);
+  for(const action of ['starter','open-chest'])await denied(action,{type:'sword'},/改為隨機抽取/);
+});
+test('concurrent draws cannot overspend and transaction failure leaves neither payment nor reward',async()=>{
+  const db=fakeDb(user());db.docs.get('users/u1').stats.gold=500;
+  const attempts=await Promise.allSettled([draw(db,'concurrent-a',{payment:'gold'}),draw(db,'concurrent-b',{payment:'gold'})]);assert.equal(attempts.filter(r=>r.status==='fulfilled').length,1);assert.equal(db.docs.get('users/u1').stats.gold,0);assert.equal(armory(db).weapons.bow.copies,1);
+  const other=fakeDb(user()),run=other.runTransaction,before=structuredClone([...other.docs]);other.runTransaction=fn=>run(async tx=>{const set=tx.set;tx.set=(ref,value)=>{if(ref.key.startsWith('weaponArmoryReceipts/'))throw Error('database failed');set(ref,value);};return fn(tx);});
+  await assert.rejects(draw(other,'failed',{payment:'gold'}),/database failed/);assert.deepEqual([...other.docs],before);
+  other.runTransaction=run;other.retryNextTransaction();await draw(other,'failed',{payment:'gold'});assert.equal(other.docs.get('users/u1').stats.gold,99500);assert.equal(armory(other).weapons.bow.copies,1);
+});
+test('committed legacy selection receipts replay safely while uncommitted selections require random draws',async()=>{
+  const crypto=require('node:crypto');for(const action of ['starter','open-chest']){
+    const db=fakeDb(user()),body=request('old-selection',{type:'sword'});db.docs.set('weaponArmories/u1',{equipped:'sword',starterClaimed:true,weapons:{sword:{level:1,copies:1}}});
+    const result={action,name:'青鋒劍'};db.docs.set('weaponArmoryReceipts/'+api.key('u1',body.requestId),{uid:'u1',signature:crypto.createHash('sha256').update(JSON.stringify([action,'sword','',null])).digest('hex'),result});
+    const before=structuredClone([...db.docs]),replayed=await api.transact(db,'u1',action,body);assert.equal(replayed.replayed,true);assert.deepEqual(replayed.result,result);assert.deepEqual([...db.docs],before);
   }
 });

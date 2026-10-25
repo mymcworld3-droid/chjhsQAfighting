@@ -805,6 +805,6 @@ test('more ingredients improve inverse damage caps', () => {
 });
 test('raid material icons remain visually distinct in refinery, backpack and marketplace', () => {
   assert.match(refinery,/refinery-mat-icon\.is-material[^\n]*border-radius:50%/);
-  assert.match(read('public/cultivation/unified-inventory-grid.js'),/uib-item\[data-uib-item\^="material:"\][^\n]*border-radius:50%/);
+  assert.match(read('public/cultivation/inventory-grid-style.js'),/uib-item\[data-uib-item\^="material:"\][^\n]*border-radius:50%/);
   assert.match(read('public/cultivation/player-marketplace.js'),/\.pm-material \.pm-icon\{border-radius:50%/);
 });

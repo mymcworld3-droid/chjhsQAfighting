@@ -255,7 +255,7 @@ test('server and clients wire secure backfill and automatic generated-artifact i
 });
 
 test('active inventory and refinery surfaces render generated images with icon fallback', () => {
-  const bag = read('public/cultivation/unified-inventory-grid.js');
+  const bag = read('public/cultivation/unified-inventory-grid.js') + read('public/cultivation/inventory-grid-style.js');
   const refinery = read('public/cultivation/cultivation-refinery-v2.js');
   const materials = read('public/cultivation/material-system.js');
   assert.match(bag, /function imageMarkup\(/);

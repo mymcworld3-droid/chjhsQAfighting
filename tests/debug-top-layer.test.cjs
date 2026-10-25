@@ -10,7 +10,7 @@ function read(rel) {
 const index = read('public/index.html');
 const legacy = read('public/main-legacy.js');
 const battle = read('public/cultivation/battle-v3-stability-ui.js');
-const inventory = read('public/cultivation/unified-inventory-grid.js');
+const inventory = read('public/cultivation/inventory-grid-style.js');
 
 test('debug button is permanently reserved as the top-most app layer', () => {
   assert.match(index, /id="debug-top-layer-style"/);

@@ -11,7 +11,7 @@ const api = require('../artifact-generation-api.js');
 const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 const jobs = read('public/cultivation/refinery-ai-jobs.js');
 const catalog = read('public/cultivation/artifact-catalog.js');
-const bag = read('public/cultivation/unified-inventory-grid.js');
+const bag = read('public/cultivation/unified-inventory-grid.js') + read('public/cultivation/inventory-grid-style.js');
 const market = read('public/cultivation/player-marketplace.js');
 
 test('forge methods create distinct discovery signatures and are sent to artifact generation', () => {

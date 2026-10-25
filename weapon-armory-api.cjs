@@ -9,7 +9,7 @@ const {artifactCatalog}=require('./raid-authority.cjs');
 const ARMORIES='weaponArmories',RECEIPTS='weaponArmoryReceipts';
 const fail=(message,status=409)=>Object.assign(Error(message),{status});
 const exists=s=>s?.exists?s.data():null;
-const actions=new Set(['starter','equip','upgrade','open-chest','claim-trial','exchange-ticket','exchange-fragments','convert-legacy']);
+const actions=new Set(['draw','starter','equip','upgrade','open-chest','claim-trial','exchange-ticket','exchange-fragments','convert-legacy']);
 const LEGACY_MATERIALS=new Set(['qi-spirit-iron','foundation-refined-iron','golden-purple-iron','qi-spirit-wood','foundation-century-wood','golden-lightning-wood','nascent-star-iron','nascent-soul-wood','raid-refine-key-ii','raid-refine-key-iii']);
 function key(uid,requestId){if(!/^[A-Za-z0-9_-]{8,100}$/.test(String(requestId||'')))throw fail('操作識別碼無效',400);return crypto.createHash('sha256').update(uid+'\n'+requestId).digest('hex');}
 function legacyPreview(user,catalog){
@@ -32,9 +32,9 @@ function response(user,raw,pointer,catalog,extra={}){
     playerRealmScore:access.score(user),canAscendToImmortal:false,
     pendingTrialChests:trial.earned,trialBest:best,legacy:{equipmentCopies:legacy.equipmentCopies,materialCount:legacy.materialCount,chests:legacy.chests,gold:legacy.gold,pendingJob:!!legacy.job,refundFragments:legacy.refundFragments},...extra};
 }
-async function transact(db,uid,action='view',body={},now=Date.now()){
+async function transact(db,uid,action='view',body={},now=Date.now(),random=()=>crypto.randomInt(0,0x100000000)/0x100000000){
   if(action!=='view'&&!actions.has(action))throw fail('未知兵器操作',400);
-  const request=action==='view'?null:key(uid,body.requestId),signature=crypto.createHash('sha256').update(JSON.stringify([action,body.type||'',body.payment||'',body.expectedRealm??body.expectedLevel??null])).digest('hex');
+  const request=action==='view'?null:key(uid,body.requestId),signature=crypto.createHash('sha256').update(JSON.stringify(action==='draw'?[action,body.count,body.payment,body.poolVersion,body.expectedCost]:[action,body.type||'',body.payment||'',body.expectedRealm??body.expectedLevel??null])).digest('hex');
   return db.runTransaction(async tx=>{
     const userRef=db.collection('users').doc(uid),armoryRef=db.collection(ARMORIES).doc(uid),receiptRef=request?db.collection(RECEIPTS).doc(request):null;
     const [u,a,r,p,c]=await Promise.all([tx.get(userRef),tx.get(armoryRef),receiptRef?tx.get(receiptRef):null,
@@ -48,11 +48,24 @@ async function transact(db,uid,action='view',body={},now=Date.now()){
     const reply=(profile,state,extra={})=>response(profile,state,pointer,catalog,{canAscendToImmortal:immortal,...extra});
     if(receipt){if(receipt.signature!==signature)throw fail('相同操作識別碼不能用於不同請求');return reply(user,s,{result:receipt.result,replayed:true});}
     if(action==='view')return reply(user,s);
+    if(['starter','open-chest'].includes(action))throw fail('尋器已改為隨機抽取，請重新同步後抽取',400);
     const patch={};let result={action};
     const type=String(body.type||'');
-    if(['starter','equip','upgrade','open-chest'].includes(action)&&!W.get(type))throw fail('兵器類型無效',400);
-    if(action==='starter'){
-      if(s.starterClaimed)throw fail('初始兵器已領取');W.add(s,type);s.starterClaimed=true;s.equipped=type;result.name=W.get(type).name;
+    if(['equip','upgrade'].includes(action)&&!W.get(type))throw fail('兵器類型無效',400);
+    if(action==='draw'){
+      const {count,payment}=body,cost=W.drawCost(payment,count);
+      if(cost===null||payment==='free'&&count!==1)throw fail('請選擇單抽或五連抽及有效支付方式',400);
+      if(body.poolVersion!==W.DRAW_VERSION||body.expectedCost!==cost)throw fail('尋器費用或獎池已更新，請重新同步');
+      if(payment==='free'){
+        if(s.starterClaimed)throw fail('首次免費抽取已使用');s.starterClaimed=true;
+      }else if(payment==='chest'){
+        if(s.chests<cost)throw fail('兵器匣不足');s.chests-=cost;
+      }else{
+        const field={ticket:'soulboundDrawTickets',gold:'stats.gold',fragments:'forgeFragments'}[payment];
+        const balance=W.num(payment==='gold'?user.stats?.gold:user[field]);if(balance<cost)throw fail(W.PAYMENTS[payment].label+'不足');patch[field]=balance-cost;
+      }
+      const results=Array.from({length:count},()=>W.roll(random));for(const row of results)W.add(s,row.type);
+      result={action,requestId:body.requestId,payment,count,spent:cost,poolVersion:W.DRAW_VERSION,results};s.lastDraw=result;
     }else if(action==='equip'){
       if(!s.weapons[type]?.copies)throw fail('尚未持有這把兵器');s.equipped=type;
     }else if(action==='upgrade'){
@@ -66,8 +79,6 @@ async function transact(db,uid,action='view',body={},now=Date.now()){
       if(balance<fee.gold)throw fail('靈石不足，需要 '+fee.gold+' 靈石');
       row.copies-=fee.copies;patch['stats.gold']=balance-fee.gold;row.realm=fee.next.index;
       Object.assign(result,{realm:row.realm,type,copiesSpent:fee.copies,goldSpent:fee.gold});
-    }else if(action==='open-chest'){
-      if(s.chests<1)throw fail('沒有可開啟的兵器匣');s.chests--;W.add(s,type);result.name=W.get(type).name;
     }else if(action==='claim-trial'){
       const reward=W.grantTrial(s,W.num(pointer?.trial?.best));if(!reward.earned)throw fail('目前沒有待領的試煉兵器匣');Object.assign(s,reward.state);result.chests=reward.earned;
     }else if(action==='exchange-ticket'){
@@ -96,8 +107,8 @@ async function transact(db,uid,action='view',body={},now=Date.now()){
     return reply(updated,s,{result});
   });
 }
-function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,logger=console}={}){
-  const handler=action=>async(req,res)=>{res.set?.('Cache-Control','no-store');try{const uid=await verify(req);res.json(await transact(resolve().db,uid,action,req.body||{}));}
+function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,random,logger=console}={}){
+  const handler=action=>async(req,res)=>{res.set?.('Cache-Control','no-store');try{const uid=await verify(req);res.json(await transact(resolve().db,uid,action,req.body||{},Date.now(),random));}
     catch(e){if(!e.status)logger.error('[Weapon armory]',e.message);res.status(e.status||503).json({ok:false,error:e.status?e.message:'兵器同步失敗，可安全重試同一操作'});}};
   app.get('/api/weapons',handler('view'));
   for(const action of actions)app.post('/api/weapons/'+action,handler(action));

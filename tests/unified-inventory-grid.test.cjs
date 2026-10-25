@@ -7,7 +7,7 @@ function read(rel) {
   return fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
 }
 
-const bag = read('public/cultivation/unified-inventory-grid.js');
+const bag = read('public/cultivation/unified-inventory-grid.js') + read('public/cultivation/inventory-grid-style.js');
 const adminSort = read('public/cultivation/admin-realm-sorting.js');
 const main = read('public/main.js');
 
