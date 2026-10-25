@@ -199,22 +199,27 @@ body.xianxia-theme .quiz-main-column > .glass-panel:first-child {
   border-left-color: #d0a34a;
   box-shadow: 0 14px 35px rgba(0,0,0,.46), inset 0 0 35px rgba(216,177,93,.035);
 }
+body.xianxia-theme #tactical-combat .tc-question,
 body.xianxia-theme #question-text { color: #f2ecdf; }
+body.xianxia-theme #tactical-combat .tc-question-badge,
 body.xianxia-theme #quiz-badge {
   color: #d6b66f;
   background: rgba(216,177,93,.08);
   border-color: rgba(216,177,93,.25);
 }
+body.xianxia-theme #tactical-combat .tc-options > button,
 body.xianxia-theme #options-container > button {
   background: linear-gradient(145deg, #161616, #090909);
   border-color: rgba(216,177,93,.24);
   color: #eee8dc;
   box-shadow: 0 6px 18px rgba(0,0,0,.30);
 }
+body.xianxia-theme #tactical-combat .tc-options > button:not(.cursor-not-allowed):hover,
 body.xianxia-theme #options-container > button:not(.cursor-not-allowed):hover {
   border-color: #c99a3d;
   background: linear-gradient(145deg, #211b10, #0f0d09);
 }
+body.xianxia-theme #tactical-combat .tc-options > button > span:first-child,
 body.xianxia-theme #options-container > button > span:first-child {
   background: rgba(216,177,93,.08);
   color: #d7b45f;

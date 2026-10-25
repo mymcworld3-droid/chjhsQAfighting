@@ -208,6 +208,7 @@ body.xianxia-theme :is(.modal-content, .shop-card, .item-card, .rank-card, .hist
 
 body.xianxia-theme :is(.btn-cyber-primary, .btn-cyber-accent, .btn-cyber-ghost, .xiuxian-btn),
 body.xianxia-theme .home-actions > button,
+body.xianxia-theme #tactical-combat .tc-options > button,
 body.xianxia-theme #options-container > button,
 body.xianxia-theme #nav-grid button {
   border-radius: 16px !important;

@@ -293,6 +293,7 @@ body.xianxia-theme .quiz-main-column > .glass-panel:first-child {
   color: #211a10 !important;
 }
 body.xianxia-theme #page-battle .bv2-question-sheet { box-shadow: none !important; }
+body.xianxia-theme #tactical-combat .tc-options > button:not(.bg-green-600):not(.bg-red-600),
 body.xianxia-theme #options-container > button:not(.bg-green-600):not(.bg-red-600) {
   background: #322c20 !important;
   border-color: #927c4e !important;
@@ -329,6 +330,7 @@ body.xianxia-theme #scope-studio :is(.ss-picker,.ss-cart) {
     border-color: #d9b66d !important;
     box-shadow: none !important;
   }
+  body.xianxia-theme #tactical-combat .tc-options > button:not(.cursor-not-allowed):not(.bg-green-600):not(.bg-red-600):hover,
   body.xianxia-theme #options-container > button:not(.cursor-not-allowed):not(.bg-green-600):not(.bg-red-600):hover {
     background: #4a3a23 !important;
     border-color: #d9b66d !important;

@@ -36,7 +36,7 @@ export class TacticalRenderer{
     const {canvas,ctx:c,state:s}=this,rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
     const dpr=Math.min(3,window.devicePixelRatio||1),w=rect.width,h=rect.height;
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
-    c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);c.fillStyle='#171e19';c.fillRect(0,0,w,h);
+    c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
     const cell=this.cell=Math.min((w-20)/s.width,(h-24)/s.height),ox=this.ox=Math.round((w-cell*s.width)/2),oy=this.oy=Math.round((h-cell*s.height)/2);
     const mine=s.actors.find(a=>a.uid===this.uid),myTurn=s.status==='active'&&s.turnUid===this.uid;
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};

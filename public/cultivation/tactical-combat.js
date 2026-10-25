@@ -130,8 +130,8 @@ function updateClock(){
     `${state.trial?'第 '+state.trial.stage+' 關 · ':''}第 ${state.turn} 回合 · ${mine?'你的行動':'對手行動'}${state.deadlineMs?' · '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`;
   if(state.status==='active'&&state.deadlineMs&&now>=state.deadlineMs&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
 }
-function showModal(html){
-  modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
+function showModal(html,{quiz=false}={}){
+  modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
   $('[data-main]').inert=true;$('[data-close]').disabled=true;
   $('[data-modal] .tc-dialog').focus();window.quizMathTypeset?.($('[data-modal]'));
 }
@@ -196,8 +196,11 @@ async function question(){
   }catch(err){if(valid(e,account))showModal('<h2>題目尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-dismiss>返回戰場後重試</button>');}
   finally{if(valid(e,account)){busy=false;updateControls();const button=$('[data-quiz]');if(button)button.disabled=state.turnUid!==uid||state.actors.find(a=>a.uid===uid).questions>=2;schedule();}}
 }
+function questionSheet(q,review=null){
+  return `<div class="glass-panel tc-question-sheet"><div class="quiz-card-tools"><span class="tc-question-badge">${esc([q.subject,q.topic].filter(Boolean).join(' · ')||'問道試煉')}</span></div><h3 class="tc-question">${rich(q.q)}</h3></div><div class="tc-options">${q.opts.map((v,i)=>`<button type="button" ${review?`disabled class="cursor-not-allowed ${i===review.answerIndex?'bg-green-600':i===review.choice?'bg-red-600':''}"`:`data-choice="${i}"`}><span>${String.fromCharCode(65+i)}</span><span class="quiz-rich-option">${rich(v)}${review&&i===review.answerIndex?' ✓':''}</span></button>`).join('')}</div>`;
+}
 function paintQuestion(q){
-  showModal(`<div class="tc-dialog-heading"><small>${esc(q.subject)} · 答對 +4 / 答錯 +1 體力</small><button type="button" data-dismiss aria-label="返回戰場">×</button></div><h2 class="tc-question">${rich(q.q)}</h2><div class="tc-options">${q.opts.map((v,i)=>`<button type="button" data-choice="${i}"><span>${String.fromCharCode(65+i)}</span><div>${rich(v)}</div></button>`).join('')}</div><p class="tc-muted">每回合最多答兩題；體力上限 10。</p>`);
+  showModal(`<div class="tc-dialog-heading"><small>答對 +4 / 答錯 +1 體力</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場 ×</button></div><div class="quiz-main-column">${questionSheet(q)}</div><p class="tc-muted">每回合最多答兩題；體力上限 10。</p>`,{quiz:true});
 }
 async function answer(choice){
   if(busy||!state?.question)return;busy=true;const e=epoch,account=uid,q=state.question,serial=++op;
@@ -207,7 +210,7 @@ async function answer(choice){
     if(!valid(e,account))return;
     state=result.state;applyProgress(state);clockOffset=state.serverNowMs-Date.now();appliedOp=serial;const review=state.review;
     window.QAGameAudio?.answer(review.correct,'tactical:'+state.id+':'+q.id);
-    showModal(`<small>體力 +${review.gain}</small><h2 class="${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'靈思通明':'訂正後再出發'}</h2><div class="tc-review-question">${rich(review.q)}</div><div class="tc-review-options">${review.opts.map((v,i)=>`<p class="${i===review.answerIndex?'is-correct':i===review.choice?'is-wrong':''}">${String.fromCharCode(65+i)}. ${rich(v)}${i===review.answerIndex?' ✓':''}</p>`).join('')}</div><div class="tc-explanation">${rich(review.explanation)}</div><button type="button" class="tc-primary" data-continue>返回戰場 · 使用體力</button>`);
+    showModal(`<div class="tc-dialog-heading"><small>體力 +${review.gain}</small></div><div class="quiz-main-column">${questionSheet({...q,q:review.q,opts:review.opts},review)}<section class="glass-panel tc-feedback"><h3 class="tc-feedback-title ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'靈思通明':'訂正後再出發'}</h3><div class="tc-explanation"><span class="tc-explanation-label">題解參悟</span><div class="tc-feedback-text">${rich(review.explanation)}</div></div><button type="button" class="tc-primary" data-continue>返回戰場 · 使用體力</button></section></div>`,{quiz:true});
     renderer?.update(state,uid,action,null);
   }catch(err){if(valid(e,account)){
     const message=document.createElement('p');message.className='tc-wrong';message.setAttribute('role','alert');message.textContent=err.message+'；可再按一次答案重試，體力不會重複計算。';

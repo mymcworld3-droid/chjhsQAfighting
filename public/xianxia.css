@@ -404,20 +404,31 @@ body.xianxia-theme .quiz-main-column > .glass-panel:first-child {
   border-left: 5px solid #8c7750; padding: 56px 32px 30px; border-radius: 4px;
   box-shadow: 0 14px 35px #04151140, inset 0 0 35px #947b4620;
 }
+body.xianxia-theme #tactical-combat .tc-question,
 body.xianxia-theme #question-text { color: #25392e; font-size: 19px; line-height: 1.95; font-weight: 500; }
+body.xianxia-theme #tactical-combat .tc-question-badge,
 body.xianxia-theme #quiz-badge { color: #64573a; background: #c9b98e33; border-color: #96855760; font-size: 11px; max-width: calc(100% - 34px); overflow-wrap: anywhere; }
+body.xianxia-theme #tactical-combat .tc-options > button,
 body.xianxia-theme #options-container > button {
   background: #173128; border: 1px solid #b4ae8650; color: #eee8d5;
   border-radius: 5px; min-height: 68px; padding: 16px 20px; font-size: 15px;
 }
+body.xianxia-theme #tactical-combat .tc-options > button:not(.cursor-not-allowed):hover,
 body.xianxia-theme #options-container > button:not(.cursor-not-allowed):hover { border-color: #d1bd7d; background: #254534; }
+body.xianxia-theme #tactical-combat .tc-options > button:hover,
 body.xianxia-theme #options-container > button:hover { box-shadow: 0 4px 16px #030f0a40; transform: translateY(-1px); }
+body.xianxia-theme #tactical-combat .tc-options > button::after,
 body.xianxia-theme #options-container > button::after { display: none; }
+body.xianxia-theme #tactical-combat .tc-options > button > span:first-child,
 body.xianxia-theme #options-container > button > span:first-child { background: #a5b58a12; color: #decb98; border: 1px solid #a7ac7750; border-radius: 3px; flex-shrink: 0; }
+body.xianxia-theme #tactical-combat .tc-options > .bg-green-600,
 body.xianxia-theme #options-container > .bg-green-600 { background: #285a40; border-color: #a8d1a4; opacity: 1; }
+body.xianxia-theme #tactical-combat .tc-options > .bg-red-600,
 body.xianxia-theme #options-container > .bg-red-600 { background: #6b3830; border-color: #d9a492; opacity: 1; }
 body.xianxia-theme #feedback-section { border-color: #a6b78d70; }
+body.xianxia-theme #tactical-combat .tc-feedback-title,
 body.xianxia-theme #feedback-title { font-family: var(--xq-serif); }
+body.xianxia-theme #tactical-combat .tc-feedback-text,
 body.xianxia-theme #feedback-text { font-size: 15px; line-height: 1.9; }
 body.xianxia-theme #solo-progress-panel { position: static; margin-top: 8px; }
 /* 山門登入 */
@@ -479,6 +490,7 @@ body.xianxia-theme #nav-grid button:hover i { color: #e1cc98; transform: transla
   body.xianxia-theme .home-actions > button > div:first-child { width: 30px; height: 34px; flex-shrink: 0; }
   body.xianxia-theme .home-actions .font-sci { font-size: 16px; letter-spacing: .04em; }
   body.xianxia-theme .home-actions .font-mono { font-size: 9px; letter-spacing: 0; }
+  body.xianxia-theme #tactical-combat .tc-question,
   body.xianxia-theme #question-text { font-size: 17px; }
   body.xianxia-theme .quiz-main-column > .glass-panel:first-child { padding-inline: 22px; }
   body.xianxia-theme #bottom-nav > .glass-capsule { min-height: 68px; padding-inline: 4px; }

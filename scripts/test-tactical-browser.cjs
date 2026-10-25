@@ -57,8 +57,8 @@ async function main(){
       waitForFunction:(...args)=>frame().waitForFunction(...args),screenshot:(...args)=>page.screenshot(...args),
       reload:async()=>{await page.reload();await ready();},setViewportSize:async size=>{
         await page.setViewportSize(size);
-        await page.waitForFunction(()=>{const s=window.QAGameStage.getState(),f=document.getElementById('game-frame');
-          const landscape=innerWidth>=innerHeight;return s.designWidth===(landscape?1280:360)&&f.contentDocument.documentElement.clientWidth===s.designWidth;});
+        await page.waitForFunction(target=>{const s=window.QAGameStage.getState(),f=document.getElementById('game-frame');
+          const landscape=innerWidth>=innerHeight;return s.designWidth===(landscape?1280:360)&&f.contentDocument.documentElement.clientWidth===s.designWidth&&Math.abs(s.width-target.width)<.15&&Math.abs(s.height-target.height)<.15;},Stage.fit(size));
       }};}
   const read=page=>page.evaluate(async()=>{const r=await fetch('/api/tactical/state',{headers:{'X-Test-User':sessionStorage.testUid||'u1'}});return (await r.json()).state;});
   async function cell(view,x,y){const s=await read(view),point=await view.evaluate(({x,y,width,height})=>{
@@ -87,7 +87,31 @@ async function main(){
     for(const r of actual.rects){if(r.selector==='.tc-dialog'){assert.ok(r.x>=0&&r.y>=0&&r.x+r.width<=actual.width+.1&&r.y+r.height<=actual.height+.1);}
       else{near(r.x,0);near(r.y,0);near(r.width,actual.width);near(r.height,actual.height);}}
   }
-  async function correct(page){await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await page.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await page.locator('[data-continue]').click();await page.waitForFunction(()=>!document.querySelector('[data-end]').disabled);}
+  async function originalQuizStyle(view){
+    const pairs=await view.evaluate(()=>{
+      const old=document.createElement('div');old.id='page-quiz';old.inert=true;old.setAttribute('aria-hidden','true');
+      old.style.cssText='position:fixed;left:-10000px;top:0;width:900px;pointer-events:none';
+      old.innerHTML='<div class="quiz-main-column"><div class="glass-panel"><h3 id="question-text">原問道題卡</h3></div><div id="options-container"></div></div>';
+      const options=[...document.querySelectorAll('.tc-quiz .tc-options>button')];
+      for(const button of options)old.querySelector('#options-container').append(button.cloneNode(true));
+      document.body.append(old);
+      const style=(el,keys)=>Object.fromEntries(keys.map(k=>[k,getComputedStyle(el)[k]]));
+      try{return [
+        ['question card',old.querySelector('.glass-panel'),document.querySelector('.tc-question-sheet'),['backgroundColor','borderLeftColor','borderRadius','borderLeftWidth']],
+        ['question text',old.querySelector('#question-text'),document.querySelector('.tc-question'),['color','fontSize','fontWeight','lineHeight','letterSpacing']],
+        ...options.map((el,i)=>['option '+i,old.querySelectorAll('#options-container>button')[i],el,['backgroundColor','backgroundImage','borderColor','borderRadius','color','fontSize']])
+      ].map(([name,a,b,keys])=>({name,original:style(a,keys),current:style(b,keys)}));}finally{old.remove();}
+    });
+    for(const pair of pairs)assert.deepEqual(pair.current,pair.original,pair.name+' must keep the original question-page appearance');
+  }
+  async function correct(page){
+    await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);
+    const orientation=await page.evaluate(()=>innerWidth<innerHeight?'portrait':'landscape');
+    await page.screenshot({path:path.join(output,'question-'+orientation+'.png')});
+    await page.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await page.locator('[data-continue]').waitFor();await originalQuizStyle(page);
+    await page.locator('[data-continue]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,'question-review-'+orientation+'.png')});
+    await page.locator('[data-continue]').click();await page.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+  }
   try{
     const mobile=await make('u1',{width:393,height:852});
     await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor();
@@ -147,7 +171,7 @@ async function main(){
     await correct(mobile);await mobile.locator('[data-end]').click();await p2.waitForFunction(()=>!document.querySelector('[data-quiz]').disabled,{timeout:15000});
     await correct(p2);assert.equal((await read(p2)).actors.find(a=>a.uid==='u2').stamina,6);
     await p2.screenshot({path:path.join(output,'duel-landscape.png')});
-    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, production theme isolation, visible controls with four enemies and zero stamina, scaled canvas input, bounded cloud/dialogs, trial progression and two-player synchronization.');
+    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question-page styles in both orientations and answer review, production theme isolation, visible controls with four enemies and zero stamina, scaled canvas input, bounded cloud/dialogs, trial progression and two-player synchronization.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

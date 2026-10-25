@@ -241,6 +241,7 @@ body.xianxia-theme #store-grid > .store-card:active { transform: none; }
 
 /* Question, option and explanation content use the same reading scale across
    solo practice, daily meditation, caves, duels and raids. MathJax keeps its font. */
+body.xianxia-theme #tactical-combat .tc-question,
 body.xianxia-theme #question-text,
 body.xianxia-theme #bv2-question,
 body.xianxia-theme #page-raid .raid-question-shell > h2,
@@ -250,6 +251,7 @@ body.xianxia-theme .dm-question {
   line-height: 1.8 !important;
   overflow-wrap: anywhere;
 }
+body.xianxia-theme #tactical-combat .tc-options > button,
 body.xianxia-theme #options-container > button,
 body.xianxia-theme .bv2-option b,
 body.xianxia-theme #page-raid .raid-option > b,
@@ -260,9 +262,11 @@ body.xianxia-theme .dm-option span {
   overflow-wrap: anywhere;
 }
 body.xianxia-theme :is(.bv2-option,.raid-option,.dt-option,.dm-option),
+body.xianxia-theme #tactical-combat .tc-options > button,
 body.xianxia-theme #options-container > button {
   border-radius: var(--ui-control-radius) !important;
 }
+body.xianxia-theme #tactical-combat .tc-feedback-text,
 body.xianxia-theme #feedback-text,
 body.xianxia-theme .bv2-explanation,
 body.xianxia-theme #page-raid .raid-explain,

@@ -333,33 +333,41 @@ body.xianxia-theme .quiz-main-column>.glass-panel:first-child{
     0 14px 35px rgba(4,21,17,.24),
     inset 0 0 32px rgba(82,60,30,.10)!important;
 }
+body.xianxia-theme #tactical-combat .tc-question,
+body.xianxia-theme #tactical-combat .tc-question *,
 body.xianxia-theme #question-text,
 body.xianxia-theme #question-text *{
   color:#211a10!important;
   text-shadow:none!important;
 }
+body.xianxia-theme #tactical-combat .tc-question :is(mjx-container,mjx-container *),
 body.xianxia-theme #question-text :is(mjx-container,mjx-container *){
   color:#211a10!important;
 }
+body.xianxia-theme #tactical-combat .tc-question-badge,
 body.xianxia-theme #quiz-badge{
   background:rgba(38,31,21,.82)!important;
   color:#f4dfaa!important;
   border-color:rgba(112,88,48,.55)!important;
 }
+body.xianxia-theme #tactical-combat .tc-options>button:not(.bg-green-600):not(.bg-red-600),
 body.xianxia-theme #options-container>button:not(.bg-green-600):not(.bg-red-600){
   background:
     linear-gradient(145deg,rgba(46,54,39,.96),rgba(26,36,29,.97))!important;
   border-color:rgba(218,202,139,.42)!important;
   box-shadow:inset 0 1px rgba(255,255,255,.045),0 7px 18px rgba(0,0,0,.14)!important;
 }
+body.xianxia-theme #tactical-combat .tc-options>button:not(.cursor-not-allowed):not(.bg-green-600):not(.bg-red-600):hover,
 body.xianxia-theme #options-container>button:not(.cursor-not-allowed):not(.bg-green-600):not(.bg-red-600):hover{
   background:linear-gradient(145deg,rgba(63,79,54,.98),rgba(35,49,38,.98))!important;
   border-color:#e1c77d!important;
 }
+body.xianxia-theme #tactical-combat .tc-options>.bg-green-600,
 body.xianxia-theme #options-container>.bg-green-600{
   background:linear-gradient(145deg,#3f7654,#285a40)!important;
   border-color:#b7dcae!important;
 }
+body.xianxia-theme #tactical-combat .tc-options>.bg-red-600,
 body.xianxia-theme #options-container>.bg-red-600{
   background:linear-gradient(145deg,#835047,#69372f)!important;
   border-color:#e2ad9a!important;
