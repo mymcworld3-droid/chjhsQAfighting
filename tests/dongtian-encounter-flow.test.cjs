@@ -79,3 +79,17 @@ test('failed chance or already-encountered cave does not re-offer it', async () 
   assert.equal(await seen.roll(), false);
   assert.deepEqual(seen.attempts, []);
 });
+
+test('tactical trial entry is not intercepted by the legacy cave encounter hook',async()=>{
+  const hook=source.slice(source.indexOf('  function installQuizEncounterHook()'),source.indexOf('  // 法寶通用引擎只取得當前題目的安全索引'));
+  for(const enabled of [true,false]){
+    let entries=0,encounters=0;
+    const original=async()=>{entries++;};
+    const ctx=vm.createContext({state:{},window:{QA_TACTICAL_BATTLE_ENABLED:enabled,startQuizFlow:original},
+      maybeEncounterBeforeQuiz:async()=>{encounters++;return false;}});
+    vm.runInContext(hook+'\ninstallQuizEncounterHook();',ctx);
+    await ctx.window.startQuizFlow();
+    assert.equal(entries,1);assert.equal(encounters,enabled?0:1);
+    if(enabled)assert.equal(ctx.window.startQuizFlow,original);
+  }
+});

@@ -29,7 +29,7 @@ function snapshot(s,uid){
   return out;
 }
 function withProgress(s,uid,user){
-  const out=snapshot(s,uid);if(user)out.progress={stats:user.stats||{},questProgress:user.questProgress||null};return out;
+  const out=snapshot(s,uid);if(user)out.progress={stats:user.stats||{},questProgress:user.questProgress||null,tacticalTrialV1:user.tacticalTrialV1||null};return out;
 }
 function patchedUser(user,patch){
   const next={...user,stats:{...(user.stats||{})}};
@@ -38,9 +38,12 @@ function patchedUser(user,patch){
 }
 function playerActor(user,uid,selection,catalog){
   const trusted=trustedRaidPlayerSnapshot(user,uid,catalog),type=trusted.goldenCore?.type||'none';
-  const options=Rules.CORES[type]||Rules.CORES.none;
-  const branch=options.branches.find(b=>b.id===selection.branch)?.id||user.tacticalPreferences?.[type]||options.branches[0].id;
+  const branch=Rules.savedBranch(user,type).id;
   return {...trusted,core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:trusted.artifactShield||0};
+}
+function trialProgress(raw,seed){
+  return {version:1,seed:/^[a-f0-9]{32}$/.test(raw?.seed)?raw.seed:seed,
+    stage:Math.max(1,Math.min(1000000,Rules.num(raw?.stage)||1)),best:Rules.num(raw?.best)};
 }
 function attachScopes(s,actors){
   for(const a of s.actors){const trusted=actors.find(p=>p.uid===a.uid);if(trusted)a.knowledgeScope=trusted.knowledgeScope;}
@@ -49,27 +52,35 @@ function attachScopes(s,actors){
 function rewardFor(s,a,user){
   if(s.status!=='finished'||s.finishReason==='forfeit'&&s.actors.reduce((n,p)=>n+(p.answered||0),0)<2)return null;
   const win=s.winner===a.team,draw=s.winner==='draw';
-  if(s.mode==='pve')return win&&a.correct>0?{gold:35+Rules.MAPS.findIndex(m=>m.id===s.map)*25,cultivation:2+Growth.cultivation(user,'solo'),win}:null;
+  if(s.mode==='pve')return win&&a.correct>0?{gold:s.trial?35+Math.min(100,Rules.num(s.trial.stage-1)*5):35+Rules.MAPS.findIndex(m=>m.id===s.map)*25,cultivation:2+Growth.cultivation(user,'solo'),win}:null;
   if(s.actors.filter(p=>!p.bot).reduce((n,p)=>n+p.answered,0)<2)return null;
   return {gold:win?500:draw?250:200,cultivation:win?5+Growth.cultivation(user,'battle'):draw?2:0,win,draw};
 }
 async function settle(tx,db,s){
   const updates={};if(s.status!=='finished')return updates;
   const people=s.actors.filter(a=>!a.bot&&!s.rewarded.includes(a.uid));
-  const users=await Promise.all(people.map(a=>tx.get(db.collection('users').doc(a.uid))));
+  const [users,pointers]=await Promise.all([
+    Promise.all(people.map(a=>tx.get(db.collection('users').doc(a.uid)))),
+    Promise.all(people.map(a=>tx.get(db.collection(PLAYERS).doc(a.uid))))
+  ]);
   people.forEach((a,i)=>{
     const u=exists(users[i]);if(!u)return;const reward=rewardFor(s,a,u);
     s.rewarded.push(a.uid);s.rewards||={};s.rewards[a.uid]=reward||{gold:0,cultivation:0,win:s.winner===a.team};
-    if(!reward)return;
-    const patch={'stats.gold':Rules.num(u.stats?.gold)+reward.gold,
-      'stats.totalScore':Rules.num(u.stats?.totalScore)+reward.cultivation};
-    if(s.mode==='pvp'){
+    const patch={};
+    const pointer=exists(pointers[i]),campaign=pointer?.trial;
+    if(s.mode==='pve'&&s.trial&&s.winner===a.team&&s.finishReason==='hp'&&pointer?.roomId===s.id&&
+       campaign?.seed===s.trial.seed&&campaign.stage===s.trial.stage){
+      const next={...campaign,stage:Math.min(1000000,campaign.stage+1),best:Math.max(campaign.best||0,campaign.stage)};
+      patch.tacticalTrialV1=next;s.nextStage=next.stage;
+      tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,trial:next});
+    }
+    if(reward){patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;patch['stats.totalScore']=Rules.num(u.stats?.totalScore)+reward.cultivation;}
+    if(reward&&s.mode==='pvp'){
       patch.questProgress=recordEvent(u.questProgress,'battle');
       patch['stats.battleMatches']=Rules.num(u.stats?.battleMatches)+1;
       const field=reward.win?'battleWins':reward.draw?'battleDraws':'battleLosses';patch['stats.'+field]=Rules.num(u.stats?.[field])+1;
     }
-    tx.update(db.collection('users').doc(a.uid),patch);
-    updates[a.uid]=patchedUser(u,patch);
+    if(Object.keys(patch).length){tx.update(db.collection('users').doc(a.uid),patch);updates[a.uid]=patchedUser(u,patch);}
   });
   return updates;
 }
@@ -89,14 +100,22 @@ async function start(db,uid,selection={},now=Date.now()){
     const found=await db.collection(ROOMS).where('createdAtMs','>',now-15*60000).orderBy('createdAtMs','desc').limit(80).get();
     candidates=found.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='waiting'&&s.mode==='pvp'&&s.map===map).sort((a,b)=>a.id.localeCompare(b.id));
   }
-  const newId='arena-'+crypto.randomBytes(8).toString('hex');
+  const newId='arena-'+crypto.randomBytes(8).toString('hex'),seed=crypto.randomBytes(16).toString('hex');
   return db.runTransaction(async tx=>{
     const pointerRef=db.collection(PLAYERS).doc(uid),userRef=db.collection('users').doc(uid);
     const [pointerSnap,userSnap,catalogSnap]=await Promise.all([tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
-    const priorId=exists(pointerSnap)?.roomId;
+    const pointer=exists(pointerSnap)||{},priorId=pointer.roomId;
     const prior=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
-    if(prior?.status==='active')return snapshot(prior,uid);
+    const campaign=trialProgress(pointer.trial,seed);
+    if(prior?.status==='active'){
+      // Resume old unfinished trials without moving actors or discarding a question.
+      if(prior.mode==='pve'&&!prior.trial){
+        prior.trial={version:1,seed:campaign.seed,stage:campaign.stage,title:Rules.mapFor(prior.map).name};
+        tx.set(db.collection(ROOMS).doc(prior.id),prior);tx.set(pointerRef,{...pointer,trial:campaign});
+      }
+      return snapshot(prior,uid);
+    }
     if(prior?.status==='waiting'&&mode!=='pvp')throw error('請先取消正在等待的鬥法');
     const candidate=wanted||candidates.find(s=>!s.actors.some(a=>a.uid===uid)&&(!prior||s.id<prior.id))?.id;
     const target=candidate?exists(await tx.get(db.collection(ROOMS).doc(candidate))):null;
@@ -112,14 +131,15 @@ async function start(db,uid,selection={},now=Date.now()){
       }}
     }else if(prior?.status==='waiting')return snapshot(prior,uid);
     else{
-      s=attachScopes(Rules.create({id:newId,mode,map,players:[a],now}),[a]);
+      s=attachScopes(Rules.create({id:newId,mode,map,players:[a],trial:mode==='pve'?campaign:null,now}),[a]);
       // Actor construction deliberately limits public combat fields.
       s.actors[0].baseAtk=a.baseAtk;s.actors[0].baseMaxHp=a.baseMaxHp;s.actors[0].trainingAccessScore=a.trainingAccessScore;
     }
     if(s.mode==='pvp'&&s.actors.length===2){const p=s.actors.find(p=>p.uid===uid);p.baseAtk=a.baseAtk;p.baseMaxHp=a.baseMaxHp;p.trainingAccessScore=a.trainingAccessScore;}
     if(prior?.status==='waiting'&&prior.id!==s.id)tx.set(db.collection(ROOMS).doc(prior.id),Rules.forfeit(prior,uid,now));
-    tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{roomId:s.id});
-    tx.update(userRef,{['tacticalPreferences.'+a.core]:a.branch});return snapshot(s,uid);
+    tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{...pointer,roomId:s.id,...(mode==='pve'?{trial:campaign}:{})});
+    const preferences={['tacticalPreferences.'+a.core]:a.branch,...(mode==='pve'?{tacticalTrialV1:campaign}:{})};
+    tx.update(userRef,preferences);return snapshot(s,uid);
   });
 }
 async function state(db,uid,now=Date.now()){
@@ -216,4 +236,4 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,roomId,member,snapshot,playerActor,rewardFor,start,state,command,prepareQuestion,commitQuestion,answer};
+module.exports.__test={ROOMS,PLAYERS,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,prepareQuestion,commitQuestion,answer};

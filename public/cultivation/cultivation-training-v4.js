@@ -5,6 +5,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {} from './nascent-growth.js';
 import {} from './innate-ability.js';
+import './tactical-rules.js';
 import { NASCENT_SOUL_THRESHOLD, normalizeSpirit } from './nascent-soul-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -453,9 +454,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     if (soulView.choosing) {
       const cards = Innate.branches(info.type).map(branch => {
         const selected = info.path?.branch === branch.id;
+        const tactical=globalThis.QATactical.spiritBranch(info.type,branch.id)?.skill;
         return `<article class="ia-branch ${selected ? 'is-selected' : ''}">
           <i class="fa-solid ${innateBranchIcon(branch.id)} ia-choice-icon" aria-hidden="true"></i>
           <h4>${branch.name}</h4><span class="ia-choice-rank">${rank} / 10 階</span><p>${branch.describe(rank)}</p>
+          ${tactical?`<p class="ia-tactical-skill"><strong>戰場技能：${tactical.name} · ${tactical.cost} 體力</strong><span>${tactical.description}</span></p>`:''}
           <button type="button" class="core-equip-btn" data-ia-select="${branch.id}" ${disabled ? 'disabled' : ''}>${selected ? '保留此變化' : info.path ? '選擇此變化' : '覺醒此變化 · 免費一階'}</button></article>`;
       }).join('');
       return `<section class="ia-panel ns-branch-choice" role="dialog" aria-modal="false" aria-labelledby="ns-choice-title">
@@ -466,11 +469,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     }
     if (!info.path) return '';
     const branch = Innate.branches(info.type).find(item => item.id === info.path.branch);
+    const tactical=globalThis.QATactical.spiritBranch(info.type,branch.id)?.skill;
     return `<aside class="ns-orb-detail" id="ns-node-dialog" role="dialog" aria-modal="false" aria-labelledby="ns-detail-title">
       <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉節點資料">×</button>
       <i class="fa-solid ${innateBranchIcon(branch.id)} ns-detail-icon" aria-hidden="true"></i>
       <span class="ia-eyebrow">化神 · 本命神通</span><h3 id="ns-detail-title">${branch.name}</h3>
       <span class="ns-detail-rank">${rank} / 10 階</span><p>${branch.describe(rank)}</p>
+      ${tactical?`<p class="ia-tactical-skill"><strong>戰場技能：${tactical.name} · ${tactical.cost} 體力</strong><span>${tactical.description}</span></p>`:''}
       ${rank < Innate.CAP ? `<p class="ns-detail-preview">下一階：${branch.describe(rank + 1)}</p>` : ''}
       <div class="ns-detail-footer"><p>${rank >= Innate.CAP ? '十階圓滿' : `升至 ${rank + 1} 階需 ${info.cost} 元嬰碎精`}</p>
         <button type="button" class="core-wash-btn" data-ia-upgrade ${disabled || !info.canUpgrade ? 'disabled' : ''}>${innateBusy ? '保存中…' : rank >= Innate.CAP ? '已圓滿' : info.canUpgrade ? '提升神通' : '碎精不足'}</button>
@@ -512,12 +517,14 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
         if(!sameGoldenCore(data.cultivationTraining?.equippedCore,core))throw new Error('裝配金丹已變更，請重開元神頁');
         const next=branchId?Innate.select(data,branchId):Innate.upgrade(data);
         if(!next.ok)throw new Error(next.reason);
-        tx.update(ref,Innate.patch(next));
+        const tactical=globalThis.QATactical.spiritBranch(core.type,next.growth.paths[core.type].branch);
+        tx.update(ref,{...Innate.patch(next),...(tactical?{['tacticalPreferences.'+core.type]:tactical.id}:{})});
         return next;
       });
       if(getAuth(getApp()).currentUser?.uid===user.uid) {
         const local=window.getCurrentUserData?.();
         if(local)Innate.apply(local,result);
+        if(local){const tactical=globalThis.QATactical.spiritBranch(core.type,result.growth.paths[core.type].branch);if(tactical)(local.tacticalPreferences||={})[core.type]=tactical.id;}
         soulView.choosing=false;
         soulView.selected='innate';
         const chosen=result.growth.paths[result.type];

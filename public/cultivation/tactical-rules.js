@@ -54,6 +54,15 @@
     ])
   });
   const BASIC=skill('attack','普通攻擊',2,1,'hit',1,'攻擊相鄰敵人。',{cooldown:0});
+  // The existing spirit page remains the single branch-selection surface.
+  const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
+    ningxin:{focus:'focus',calm:'barrier'},pojing:{execute:'execute',momentum:'breach'},xingchen:{meteor:'meteor',moon:'orbit'},
+    wugou:{clarity:'cleanse',purify:'purify'},thunder:{rebound:'counter',nourish:'lightning'},reverse:{defy:'reversal',balance:'exchange'},sword:{pursuit:'lunge',unity:'blades'}});
+  function spiritBranch(type,id){return CORES[type]?.branches.find(b=>b.id===SPIRIT_BRANCHES[type]?.[id])||null;}
+  function savedBranch(player,type){
+    const c=CORES[type]||CORES.none,path=player?.innateAbilityGrowth?.version===1?player.innateAbilityGrowth.paths?.[type]:null;
+    return (Number(path?.level)>0&&spiritBranch(type,path.branch))||c.branches.find(b=>b.id===player?.tacticalPreferences?.[type])||c.branches[0];
+  }
   const num=v=>Number.isFinite(Number(v))?Math.max(0,Math.floor(Number(v))):0;
   const fail=message=>{throw Object.assign(new Error(message),{status:409});};
   const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
@@ -62,6 +71,47 @@
   const alive=a=>a&&a.hp>0;
   const current=s=>s.actors.find(a=>a.uid===s.turnUid);
   const mapFor=id=>MAPS.find(m=>m.id===id)||MAPS[0];
+  function seeded(seed){
+    let h=2166136261;for(const c of String(seed)){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}
+    return ()=>{h+=0x6D2B79F5;let t=Math.imul(h^h>>>15,1|h);t^=t+Math.imul(t^t>>>7,61|t);return ((t^t>>>14)>>>0)/4294967296;};
+  }
+  const TRIAL_TERRAINS=Object.freeze([
+    {name:'竹影溪谷',terrain:0,props:'tree',enemies:[2,3,4,5]},
+    {name:'荒漠殘垣',terrain:13,props:'rock',enemies:[6,7,8,9]},
+    {name:'雪嶺險徑',terrain:14,props:'rock',enemies:[12,13,8]},
+    {name:'碧水庭苑',terrain:2,props:'rock',enemies:[0,1,16,17]},
+    {name:'古陣遺墟',terrain:16,props:'rock',enemies:[8,9,18]}
+  ]);
+  const TRIAL_ENEMIES=Object.freeze(['靈狼','玄甲山豬','竹林靈狼','青竹蛇','山魈','妖藤','沙蠍','荒漠蜥蜴','巖甲獸','石靈','赤焰獸','熔岩蜥蜴','霜羽鷹','雪狼','毒蟾','澤蛇','潮汐蟹','海岸靈龜','古陣守衛','靈獸']);
+  function stageLayout(seed,stage=1){
+    stage=Math.max(1,Math.min(1000000,num(stage)));const random=seeded(seed+':stage:'+stage);
+    const m=MAPS[Math.floor(random()*MAPS.length)],theme=TRIAL_TERRAINS[Math.floor(random()*TRIAL_TERRAINS.length)];
+    const width=m.width,height=m.height,spawn={x:1,y:1+Math.floor(random()*(height-2))},enemies=[],blocks=[];
+    const count=Math.min(4,1+Math.floor((stage-1)/3)+(stage>1&&random()<.35?1:0));
+    const spaces=[];for(let y=1;y<height-1;y++)for(let x=Math.floor(width/2)+1;x<width-1;x++)spaces.push({x,y});
+    for(let i=spaces.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[spaces[i],spaces[j]]=[spaces[j],spaces[i]];}
+    for(let i=0;i<count;i++){
+      const species=stage%5===0&&i===count-1?18:theme.enemies[Math.floor(random()*theme.enemies.length)];
+      enemies.push({...spaces[i],species,name:(stage%5===0&&species===18?'鎮關・':'')+TRIAL_ENEMIES[species],
+        hpFactor:(species===8||species===18?3.8:2.8+random()*.6)*(1+Math.min(stage-1,30)*.035),
+        attackFactor:(species===18?.7:.48+random()*.15)*(1+Math.min(stage-1,30)*.025),
+        intentRange:[3,6,12,18].includes(species)?3:2,intentRadius:species===18?1:0,moveSteps:species===8||species===18?1:2});
+    }
+    const protectedCells=[spawn,...enemies];
+    const reachable=()=>{
+      const occupied=new Set(blocks.map(key)),seen=new Set([key(spawn)]),q=[spawn];
+      for(let i=0;i<q.length;i++)for(const p of [{x:q[i].x+1,y:q[i].y},{x:q[i].x-1,y:q[i].y},{x:q[i].x,y:q[i].y+1},{x:q[i].x,y:q[i].y-1}]){
+        const k=key(p);if(p.x<0||p.y<0||p.x>=width||p.y>=height||occupied.has(k)||seen.has(k))continue;seen.add(k);q.push(p);
+      }
+      return seen.size===width*height-blocks.length;
+    };
+    const candidates=[];for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(protectedCells.every(p=>dist(p,{x,y})>1))candidates.push({x,y});
+    for(let i=candidates.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}
+    const desired=Math.floor(width*height*(.1+random()*.07));
+    for(const p of candidates){if(blocks.length>=desired)break;blocks.push({...p,kind:theme.terrain===13?'rock':random()<.2?'water':theme.props});if(!reachable())blocks.pop();}
+    const ground=Array(width*height).fill(theme.terrain);for(const b of blocks)if(b.kind==='water')ground[b.y*width+b.x]=4;
+    return {seed,stage,map:m.id,width,height,title:theme.name,terrain:theme.terrain,ground,blocks,spawn,enemies};
+  }
   function branchFor(a){const c=CORES[a.core]||CORES.none;return c.branches.find(b=>b.id===a.branch)||c.branches[0];}
   function inside(s,p){return Number.isInteger(p?.x)&&Number.isInteger(p?.y)&&p.x>=0&&p.y>=0&&p.x<s.width&&p.y<s.height;}
   function blocked(s,p){return !inside(s,p)||s.blocks.some(b=>b.x===p.x&&b.y===p.y);}
@@ -102,20 +152,26 @@
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
+      intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
-  function create({id,mode='pve',map='courtyard',players,now=Date.now()}){
-    const m=mapFor(map),mid=Math.floor(m.height/2);
+  function create({id,mode='pve',map='courtyard',players,trial=null,now=Date.now()}){
+    const layout=mode==='pve'&&trial?stageLayout(trial.seed,trial.stage):null;
+    const m=layout||mapFor(map),mid=Math.floor(m.height/2);
     const s={version:1,id,mode,map:m.id,width:m.width,height:m.height,terrain:m.terrain,
       blocks:[],actors:[],status:mode==='pvp'&&players.length<2?'waiting':'active',revision:0,
       turn:1,turnUid:players[0].uid,turnStartedAtMs:now,deadlineMs:mode==='pvp'?now+LIMITS.turnMs:0,
       createdAtMs:now,updatedAtMs:now,winner:null,finishReason:'',effects:[],events:[],receipts:[],rewarded:[],turnTimeouts:{}};
-    if(m.id!=='courtyard'){
+    if(layout){s.map=layout.map;s.trial={version:1,seed:layout.seed,stage:layout.stage,title:layout.title};s.ground=layout.ground;s.blocks=layout.blocks;}
+    else if(m.id!=='courtyard'){
       for(let y=1;y<m.height-1;y++)if(y!==mid)s.blocks.push({x:Math.floor(m.width/2),y});
       s.blocks.push({x:2,y:1},{x:m.width-3,y:m.height-2});
     }else s.blocks.push({x:3,y:1},{x:3,y:5});
-    s.actors=players.map((p,i)=>actor({...p,team:mode==='pvp'?p.uid:'player'},{x:i?m.width-2:1,y:mid}));
-    if(mode==='pve'){
+    s.actors=players.map((p,i)=>actor({...p,team:mode==='pvp'?p.uid:'player'},layout?layout.spawn:{x:i?m.width-2:1,y:mid}));
+    if(layout){
+      for(const [i,m]of layout.enemies.entries())s.actors.push(actor({...m,uid:'monster-'+i,bot:true,team:'monster',
+        atk:Math.round(s.actors[0].atk*m.attackFactor),maxHp:Math.round(s.actors[0].atk*m.hpFactor)},{x:m.x,y:m.y}));
+    }else if(mode==='pve'){
       const count=m.id==='courtyard'?1:m.id==='bamboo'?2:3;
       for(let i=0;i<count;i++)s.actors.push(actor({uid:'monster-'+i,bot:true,team:'monster',
         name:['靈狼','巖甲獸','古陣守衛'][i],species:[0,8,18][i],
@@ -209,9 +265,9 @@
   function prepareIntents(s){
     if(s.mode!=='pve')return;const hero=s.actors[0];
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
-      const close=dist(m,hero)<=2;
-      m.intent={kind:close?'strike':'advance',cells:close?area(s,hero,m.species===18?1:0):[],
-        text:close?(m.species===18?'下次：轟擊標記區域':'下次：撲擊標記地格'):'下次：向你接近'};
+      const close=dist(m,hero)<=m.intentRange&&sight(s,m,hero);
+      m.intent={kind:close?'strike':'advance',cells:close?area(s,hero,m.intentRadius):[],
+        text:close?(m.intentRadius?'下次：轟擊標記區域':'下次：撲擊標記地格'):'下次：向你接近'};
     }
   }
   function begin(s,a,now){
@@ -232,7 +288,7 @@
           else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge');
         }else{
           const routes=neighbours(s,hero).map(n=>path(s,m,n,m.uid)).filter(Boolean).sort((a,b)=>a.length-b.length);
-          if(routes[0]){const p=routes[0][Math.min(2,routes[0].length-1)];m.x=p.x;m.y=p.y;}
+          if(routes[0]){const p=routes[0][Math.min(m.moveSteps,routes[0].length-1)];m.x=p.x;m.y=p.y;}
         }
         if(!alive(hero))break;
       }
@@ -282,5 +338,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit');return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,sight,area,line,actor,create,join,skillCells,validateSkill,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,sight,area,line,actor,create,join,skillCells,validateSkill,apply,answer,expire,forfeit});
 });

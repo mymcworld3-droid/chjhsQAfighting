@@ -89,7 +89,8 @@ test('server hides pending answers, rejects out-of-turn generation and credits r
 });
 test('server commands reject stale revisions, ignore client damage, and replay movement without charging twice',async()=>{
   const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed);
-  const request={roomId:s.id,revision:s.revision,requestId:'move-0123456789',type:'move',x:1,y:2,damage:999999,stamina:100};
+  const pos=R.neighbours(s,s.actors[0]).find(p=>!R.at(s,p));
+  const request={roomId:s.id,revision:s.revision,requestId:'move-0123456789',type:'move',...pos,damage:999999,stamina:100};
   const first=await api.command(db,'u1',request,fixed),again=await api.command(db,'u1',request,fixed);
   assert.equal(first.actors[0].stamina,1);assert.equal(again.actors[0].stamina,1);
   await assert.rejects(api.command(db,'u1',{...request,requestId:'move-abcdefgh',x:1,y:1},fixed),/戰場已更新/);
@@ -102,12 +103,14 @@ test('simultaneous matchmaking converges and a room never accepts a third player
 });
 test('finished battle rewards and quest counters are atomic and idempotent',async()=>{
   const db=database();let s=await api.start(db,'u1',{mode:'pve'},fixed);let raw=db.records.get(api.ROOMS+'/'+s.id);
-  raw.actors[0].stamina=4;raw.actors[0].correct=1;raw.actors[0].answered=1;raw.actors[1].x=2;raw.actors[1].hp=1;
+  raw.blocks=[];raw.actors[0].x=1;raw.actors[0].y=3;raw.actors[0].stamina=4;raw.actors[0].correct=1;raw.actors[0].answered=1;raw.actors[1].x=2;raw.actors[1].y=3;raw.actors[1].hp=1;
   const request={roomId:s.id,revision:0,requestId:'kill-0123456789',type:'attack',x:2,y:3};
   const first=await api.command(db,'u1',request,fixed),retry=await api.command(db,'u1',request,fixed);
   assert.equal(first.status,'finished');assert.equal(first.rewards.u1.gold,35);assert.equal(retry.rewards.u1.gold,35);
   assert.equal(db.records.get('users/u1').stats.gold,35);assert.equal(db.records.get('users/u1').stats.totalScore,32);
   assert.equal(first.progress.stats.gold,35);assert.equal(retry.progress.stats.gold,35);
+  assert.equal(first.nextStage,2);assert.equal(db.records.get(api.PLAYERS+'/u1').trial.stage,2);
+  assert.equal(db.records.get('users/u1').tacticalTrialV1.best,1);
 });
 test('a generation finishing after turn change is discarded; the new turn cannot reuse the question',async()=>{
   const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed),expected=await api.prepareQuestion(db,'u1',s.id,fixed);
@@ -146,4 +149,48 @@ test('all three PvE maps can be completed through the public action rules',()=>{
     }
     assert.equal(s.winner,'player',map.id);
   }
+});
+
+test('seeded stages vary terrain, enemies and obstacles while keeping every passable cell connected',()=>{
+  const shapes=new Set(),terrains=new Set(),enemies=new Set();
+  for(let stage=1;stage<=80;stage++){
+    const layout=R.stageLayout('0123456789abcdef0123456789abcdef',stage);
+    assert.deepEqual(layout,R.stageLayout('0123456789abcdef0123456789abcdef',stage));
+    shapes.add(JSON.stringify(layout.blocks));terrains.add(layout.terrain);layout.enemies.forEach(m=>enemies.add(m.species));
+    const room=R.create({id:'arena-test',players:[hero()],trial:{seed:layout.seed,stage},now:fixed});
+    const occupied=new Set(room.blocks.map(R.key)),seen=new Set([R.key(layout.spawn)]),queue=[layout.spawn];
+    for(let i=0;i<queue.length;i++)for(const n of R.neighbours(room,queue[i]))if(!seen.has(R.key(n))){seen.add(R.key(n));queue.push(n);}
+    assert.equal(seen.size,room.width*room.height-occupied.size);
+    for(const m of room.actors)assert.ok(seen.has(R.key(m)),'all spawns must be reachable');
+    assert.equal(new Set(room.actors.map(R.key)).size,room.actors.length);
+    assert.equal(layout.enemies.length<=4,true);
+  }
+  assert.equal(terrains.size,5);assert.ok(enemies.size>10);assert.equal(shapes.size,80);
+});
+test('trial victories advance exactly one stage, concurrent entry resumes it, and defeat cannot reroll',async()=>{
+  const db=database(),first=await api.start(db,'u1',{mode:'pve',map:'ruins',stage:999,seed:'forged'},fixed);
+  assert.equal(first.trial.stage,1);
+  const raw=db.records.get(api.ROOMS+'/'+first.id),a=raw.actors[0],target=raw.actors[1];
+  a.x=1;a.y=3;a.stamina=4;a.correct=1;a.answered=1;target.x=2;target.y=3;target.hp=1;raw.blocks=[];
+  const input={roomId:first.id,revision:0,requestId:'campaign-kill-001',type:'attack',x:2,y:3};
+  const result=await api.command(db,'u1',input,fixed);assert.equal(result.nextStage,2);
+  await api.command(db,'u1',input,fixed);assert.equal(db.records.get(api.PLAYERS+'/u1').trial.stage,2);
+  db.records.get('users/u1').tacticalTrialV1.stage=999; // Display mirror is never authoritative.
+  const [next,duplicate]=await Promise.all([api.start(db,'u1',{mode:'pve'},fixed),api.start(db,'u1',{mode:'pve'},fixed)]);
+  assert.equal(next.id,duplicate.id);assert.equal(next.trial.stage,2);assert.equal(next.trial.seed,first.trial.seed);
+  await api.command(db,'u1',{roomId:next.id,type:'leave',requestId:'campaign-leave-001'},fixed);
+  const retry=await api.start(db,'u1',{mode:'pve',map:'courtyard'},fixed);
+  assert.equal(retry.trial.stage,2);assert.deepEqual(retry.blocks,next.blocks);
+  assert.deepEqual(retry.actors.filter(a=>a.bot),next.actors.filter(a=>a.bot));
+});
+test('each existing spirit branch selects the matching tactical skill and request bodies cannot override it',async()=>{
+  const Innate=require('../public/cultivation/innate-ability.js');
+  for(const type of Object.keys(Innate.TYPES))for(const b of Innate.branches(type)){
+    const user={cultivationTraining:{equippedCore:{type,grade:9}},stats:{totalScore:188},innateAbilityGrowth:{version:1,paths:{[type]:{branch:b.id,level:4}}}};
+    assert.equal(R.savedBranch(user,type).id,R.spiritBranch(type,b.id).id);
+    const fighter=api.playerActor(user,'u1',{branch:'forged'},{});assert.equal(fighter.branch,R.spiritBranch(type,b.id).id);
+  }
+  const db=database();db.records.get('users/u1').innateAbilityGrowth={version:1,paths:{thunder:{branch:'rebound',level:1}}};
+  const state=await api.start(db,'u1',{mode:'pve',branch:'lightning'},fixed);
+  assert.equal(state.actors[0].branch,'counter');
 });

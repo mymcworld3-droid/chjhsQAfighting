@@ -1,6 +1,7 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
 const Innate=require('../public/cultivation/innate-ability.js');
+const Tactical=require('../public/cultivation/tactical-rules.js');
 const Growth=require('../public/cultivation/nascent-growth.js');
 const Access=require('../public/cultivation/training-access-rules.js');
 const Combo=require('../public/cultivation/combat-combo.js');
@@ -198,7 +199,7 @@ function uiRuntime({fail=false,retry=false,changedCore=false}={}) {
   const remote=account('ocean','tide',1),local=structuredClone(remote),writes=[],messages=[];
   const source=read('public/cultivation/cultivation-training-v4.js');
   const start=source.indexOf('  async function saveInnateAbility('),end=source.indexOf('  function nascentSoulTabMarkup',start);
-  const ctx={Innate,soulView:{selected:null,choosing:false},innateBusy:false,soulBusy:false,busy:false,state:structuredClone(remote.cultivationTraining),
+  const ctx={Innate,QATactical:Tactical,soulView:{selected:null,choosing:false},innateBusy:false,soulBusy:false,busy:false,state:structuredClone(remote.cultivationTraining),
     getApp:()=>({}),getAuth:()=>({currentUser:{uid:'h'}}),getFirestore:()=>({}),doc:()=>({}),
     sameGoldenCore:(a,b)=>a?.type===b?.type&&a?.grade===b?.grade&&a?.createdAt===b?.createdAt,
     renderTrainingPage(){},toast:m=>messages.push(m),CustomEvent:class{},
@@ -220,13 +221,14 @@ function uiRuntime({fail=false,retry=false,changedCore=false}={}) {
 test('the actual training markup offers two choices, rank previews, disabled upgrades and the duel seal rule',()=>{
   const source=read('public/cultivation/cultivation-training-v4.js');
   const start=source.indexOf('  function innateBranchIcon('),end=source.indexOf('  async function saveInnateAbility',start);
-  const ctx={Innate,soulView:{selected:'innate',choosing:true},innateBusy:false,soulBusy:false,busy:false};vm.createContext(ctx);
+  const ctx={Innate,QATactical:Tactical,soulView:{selected:'innate',choosing:true},innateBusy:false,soulBusy:false,busy:false};vm.createContext(ctx);
   vm.runInContext(source.slice(start,end),ctx);
   const p=account('sword','unity',4);
   let markup=ctx.innateAbilityMarkup(p);
   assert.equal((markup.match(/data-ia-select=/g)||[]).length,2);
   assert.equal((markup.match(/is-selected/g)||[]).length,1);
   assert.match(markup,/選擇元神分支/);assert.doesNotMatch(markup,/data-ia-upgrade/);
+  assert.match(markup,/戰場技能：劍意突進/);assert.match(markup,/戰場技能：萬劍歸一/);
   ctx.soulView.choosing=false;
   markup=ctx.innateAbilityMarkup(p);
   assert.doesNotMatch(markup,/data-ia-select=/);assert.match(markup,/data-ia-reselect/);
@@ -249,6 +251,7 @@ test('UI transactions serialize double taps, recompute costs after retry and do 
   }
   const select=uiRuntime();await select.ctx.save('surge');
   assert.equal(select.remote.innateAbilityGrowth.paths.ocean.branch,'surge');
+  assert.equal(select.remote.tacticalPreferences.ocean,'surge');assert.equal(select.local.tacticalPreferences.ocean,'surge');
   assert.equal(select.local.materialSystem.inventory[Growth.ITEM_ID],1000);
 });
 

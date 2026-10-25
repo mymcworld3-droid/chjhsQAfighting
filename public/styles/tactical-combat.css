@@ -30,6 +30,7 @@
 #tactical-combat .tc-primary{background:#c5ab70;color:#18251c;border-color:#e4ce99;font-weight:700;padding:13px 16px;min-height:46px}
 #tactical-combat .tc-primary:hover:not(:disabled){background:#dec48a}.tc-hub-intro .tc-primary{margin-top:25px}
 .tc-muted{color:#a0af98;font-size:12px;line-height:1.65}
+.tc-equipped-skill{padding:14px;border:1px solid #bba46b47;background:#26342b;border-radius:7px;line-height:1.7}.tc-equipped-skill b{color:#ead3a0;font-weight:500}.tc-equipped-skill p{color:#c0c9b4;font-size:12px;margin-top:5px!important}.tc-equipped-skill small{display:block;color:#9daf92;margin-top:8px;font-size:11px}
 .tc-join{display:flex;gap:8px}.tc-join input{min-width:0;width:100%;background:#0e1813;border:1px solid #bba46b47;color:#f3e1b4;border-radius:7px;padding:10px;font-family:monospace!important}
 .tc-codex{border-top:1px solid #bba46b30;padding:16px 0;font-size:12px}.tc-codex summary{cursor:pointer;color:#cfc49f}.tc-codex section{margin:18px 0}.tc-codex h3{font-size:15px;margin-bottom:6px!important}.tc-codex p{color:#a8b7a1;margin-top:6px!important}.tc-codex b{color:#d7d1b6;font-weight:500}
 .tc-game{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0;overflow:hidden;background:#131f18}

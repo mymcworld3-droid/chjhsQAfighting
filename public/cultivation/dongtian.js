@@ -1316,6 +1316,7 @@ export const featureReady = (async () => {
   }
 
   function installQuizEncounterHook() {
+    if (window.QA_TACTICAL_BATTLE_ENABLED) return;
     if (state.originalStartQuizFlow || typeof window.startQuizFlow !== 'function') return;
     state.originalStartQuizFlow = window.startQuizFlow;
     window.startQuizFlow = async function (...args) {

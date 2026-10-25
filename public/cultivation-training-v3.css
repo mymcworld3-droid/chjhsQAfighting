@@ -720,6 +720,7 @@ body.xianxia-theme .ns-growth-core .golden-core-sphere-v3 { width:50% !important
 .ia-choice-icon { display:grid; place-items:center; width:60px; aspect-ratio:1; margin:4px auto; border:2px solid #ba9f6f; border-radius:50%; background:radial-gradient(circle at 35% 25%,#685c45,#1c1d1d); color:#f0d69e; font-size:26px; box-shadow:inset -5px -6px 12px #0008; }
 .ia-branch h4 { font-size:18px; color:#f0d69e; margin:0; }
 .ia-choice-rank { color:#b9a887; font-size:12px; }
+.ia-tactical-skill{padding-top:10px;border-top:1px solid #c5af7733;line-height:1.7}.ia-tactical-skill strong{display:block;color:#dec98d;font-size:12px;font-weight:500}.ia-tactical-skill span{display:block;margin-top:5px;font-size:11px;color:#b8b49e}
 .ia-branch p { flex:1; margin:0; font-size:14px; line-height:1.7; overflow-wrap:anywhere; }
 .ia-branch .core-equip-btn { align-self:stretch; min-height:44px; margin-top:8px; }
 .core-gold-balance { color:#dbc08a; margin:12px 0; }
