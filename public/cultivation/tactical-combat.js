@@ -55,9 +55,11 @@ function ensure(){
     else if(b.hasAttribute('data-quiz'))void question();
     else if(b.hasAttribute('data-dismiss')){hideModal();if(state&&$('canvas'))paint();}
     else if(b.hasAttribute('data-continue')){if(state.quizRound&&canQuestion())void question();else{hideModal();paint();}}
-    else if(b.hasAttribute('data-helper-toggle')){const panel=$('[data-helper-panel]');panel.hidden=!panel.hidden;b.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)$('[data-helper-input]')?.focus();}
+    else if(b.hasAttribute('data-helper-toggle'))openQuestionTool('helper');
+    else if(b.hasAttribute('data-tool-close'))closeQuestionTool();
+    else if(b.dataset.helperPreset){$('[data-helper-input]').value=b.dataset.helperPreset;void askHelper();}
     else if(b.hasAttribute('data-helper-send'))void askHelper();
-    else if(b.hasAttribute('data-report-toggle')){const panel=$('[data-report-panel]');panel.hidden=!panel.hidden;b.setAttribute('aria-expanded',String(!panel.hidden));}
+    else if(b.hasAttribute('data-report-toggle'))openQuestionTool('report');
     else if(b.hasAttribute('data-report-send'))void reportQuestion();
     else if(b.hasAttribute('data-leave'))leaveDialog();
     else if(b.hasAttribute('data-forfeit')){hideModal();void send({type:'leave'});}
@@ -65,9 +67,9 @@ function ensure(){
     else if(b.hasAttribute('data-copy'))void navigator.clipboard?.writeText(state.id.replace('arena-','')).then(()=>notice('戰場代碼已複製')).catch(()=>notice('請長按上方代碼複製'));
   });
   root.addEventListener('keydown',event=>{
-    if(event.key==='Escape'){event.preventDefault();$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
+    if(event.key==='Escape'){event.preventDefault();if($('[data-question-tool]:not([hidden])')){closeQuestionTool();return;}$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
     if(event.key==='Tab'){
-      const scope=modalOpen?$('[data-modal]'):root,focusable=[...scope.querySelectorAll('button:not(:disabled),input,canvas[tabindex],summary')].filter(el=>el.getClientRects().length);
+      const scope=$('[data-question-tool]:not([hidden])')||(modalOpen?$('[data-modal]'):root),focusable=[...scope.querySelectorAll('button:not(:disabled),input,textarea,canvas[tabindex],summary')].filter(el=>el.getClientRects().length);
       if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);
       if(event.shiftKey&&(document.activeElement===first||!scope.contains(document.activeElement))){event.preventDefault();last.focus();}
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
@@ -256,14 +258,30 @@ function setQuizContext(q,review=null){
 }
 function quizTools(){
   if(state.mode!=='pve')return '';
-  return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" data-report-toggle aria-expanded="false">錯題回報</button><button type="button" data-helper-toggle aria-expanded="false">問道助手</button></div><div data-report-panel hidden><label for="tc-report-reason">請具體描述題目的錯誤（至少六個字）</label><textarea id="tc-report-reason" data-report-reason maxlength="1200" rows="3"></textarea><button type="button" data-report-send>送出審核</button><p data-report-status role="status"></p></div><div data-helper-panel hidden><div class="tc-helper-messages" data-helper-messages role="log" aria-label="問道助手對話">${quizContext.messages.map(m=>`<p><b>${m.role==='user'?'你':'問道助手'}</b><span>${m.role==='user'?esc(m.text):rich(m.text)}</span></p>`).join('')}</div><label for="tc-helper-input">針對本題提問</label><textarea id="tc-helper-input" data-helper-input maxlength="600" rows="2" placeholder="可以詢問觀念、解題步驟或題目的疑點"></textarea><button type="button" data-helper-send>送出提問</button><p data-helper-status role="status"></p></div></section>`;
+  const message=(m)=>`<p class="quiz-helper-message ${m.role==='user'?'user':'assistant'}"><span class="quiz-helper-message-stack"><span class="quiz-helper-message-body">${m.role==='user'?esc(m.text):rich(m.text)}</span></span></p>`;
+  return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" class="btn-cyber-ghost" data-report-toggle aria-haspopup="dialog" aria-expanded="false"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button type="button" class="btn-cyber-ghost" data-helper-toggle aria-haspopup="dialog" aria-expanded="false"><i class="fa-solid fa-comments"></i> 問道助手</button></div>
+    <div class="tc-tool-overlay tc-report-overlay" data-question-tool="report" data-report-panel hidden><section class="tc-report-box glass-panel" role="dialog" aria-modal="true" aria-labelledby="tc-report-title"><h3 id="tc-report-title"><i class="fa-solid fa-triangle-exclamation"></i> 回報題目錯誤</h3><p>請簡述題目問題 (例如: 答案錯誤、選項重複、錯字)，AI 將進行嚴格審查。</p><label class="sr-only" for="tc-report-reason">問題描述（至少六個字）</label><textarea id="tc-report-reason" data-report-reason maxlength="1200" rows="4" placeholder="請輸入問題描述..."></textarea><p data-report-status role="status" aria-live="polite"></p><div class="tc-report-actions"><button type="button" class="btn-cyber-ghost" data-tool-close>取消</button><button type="button" class="btn-cyber-primary" data-report-send>送出審查</button></div></section></div>
+    <div class="tc-tool-overlay tc-helper-overlay" data-question-tool="helper" data-helper-panel hidden><section class="quiz-helper-panel" role="dialog" aria-modal="true" aria-labelledby="tc-helper-title"><header class="quiz-helper-header"><div class="quiz-helper-heading"><span class="quiz-helper-avatar"><i class="fa-solid fa-user-graduate"></i></span><div><strong id="tc-helper-title">問道助手</strong><small>一起核對、討論題目</small></div></div><button type="button" class="quiz-helper-collapse" data-tool-close aria-label="關閉問道助手">×</button></header><div class="quiz-helper-messages" data-helper-messages role="log" aria-label="問道助手對話">${quizContext.messages.map(message).join('')}</div><div class="quiz-helper-prompts" aria-label="快速提問"><button type="button" data-helper-preset="給我一個提示，但不要直接告訴我答案。">給我提示</button><button type="button" data-helper-preset="這題應該先從哪個觀念開始？">從哪開始</button><button type="button" data-helper-preset="可以把這題拆成幾個步驟嗎？">拆解步驟</button><button type="button" data-helper-preset="請檢查題目條件和選項是否一致，作答前不要透露答案。">檢查題目</button></div><div class="quiz-helper-compose"><textarea id="tc-helper-input" data-helper-input maxlength="600" rows="1" placeholder="輸入你對這題的疑問…" aria-label="輸入對題目的疑問"></textarea><button type="button" data-helper-send aria-label="送出問題"><i class="fa-solid fa-paper-plane"></i></button></div><div class="quiz-helper-status" data-helper-status role="status" aria-live="polite"></div></section></div></section>`;
+}
+function openQuestionTool(kind){
+  closeQuestionTool(false);
+  const panel=$(`[data-${kind}-panel]`);if(!panel)return;
+  panel.hidden=false;$(`[data-${kind}-toggle]`)?.setAttribute('aria-expanded','true');
+  const column=$('.quiz-main-column');if(column)for(const child of column.children)if(!child.classList.contains('tc-question-tools'))child.inert=true;
+  const heading=$('.tc-dialog-heading');if(heading)heading.inert=true;
+  $(`[data-${kind==='helper'?'helper-input':'report-reason'}]`)?.focus();
+}
+function closeQuestionTool(restore=true){
+  for(const kind of ['helper','report']){const panel=$(`[data-${kind}-panel]`);if(panel&&!panel.hidden){panel.hidden=true;const trigger=$(`[data-${kind}-toggle]`);trigger?.setAttribute('aria-expanded','false');if(restore)trigger?.focus();}}
+  const column=$('.quiz-main-column');if(column)for(const child of column.children)child.inert=false;
+  const heading=$('.tc-dialog-heading');if(heading)heading.inert=false;
 }
 function sameQuiz(ctx){return quizContext===ctx&&valid(ctx.epoch,ctx.owner);}
 async function askHelper(){
   const ctx=quizContext,input=$('[data-helper-input]'),message=input?.value.trim().slice(0,600);
   if(!ctx||!message||ctx.helperBusy||state.mode!=='pve')return;
   const history=ctx.messages.slice(-6);ctx.messages.push({role:'user',text:message});ctx.helperBusy=true;
-  const append=(role,text)=>{const row=document.createElement('p'),label=document.createElement('b'),body=document.createElement('span');label.textContent=role==='user'?'你':'問道助手';if(role==='user')body.textContent=text;else body.innerHTML=rich(text);row.append(label,body);$('[data-helper-messages]')?.append(row);window.quizMathTypeset?.(body);};
+  const append=(role,text)=>{const row=document.createElement('p'),label=document.createElement('span'),body=document.createElement('span');row.className='quiz-helper-message '+(role==='user'?'user':'assistant');label.className='quiz-helper-message-stack';body.className='quiz-helper-message-body';if(role==='user')body.textContent=text;else body.innerHTML=rich(text);label.append(body);row.append(label);$('[data-helper-messages]')?.append(row);window.quizMathTypeset?.(body);};
   append('user',message);input.value='';$('[data-helper-send]').disabled=true;$('[data-helper-status]').textContent='問道助手正在思考…';
   try{
     const review=ctx.review,q=ctx.q;
@@ -279,7 +297,7 @@ async function askHelper(){
 async function reportQuestion(helperReason=''){
   const ctx=quizContext,reason=String(helperReason||$('[data-report-reason]')?.value||'').trim().slice(0,1200);
   if(!ctx||ctx.reportBusy||state.mode!=='pve')return;
-  $('[data-report-panel]').hidden=false;$('[data-report-toggle]').setAttribute('aria-expanded','true');
+  openQuestionTool('report');
   const status=$('[data-report-status]');if(reason.length<6){status.textContent='請至少用六個字具體指出題目錯誤。';return;}
   ctx.reportBusy=true;$('[data-report-send]').disabled=true;status.textContent='正在獨立審核題目…';
   try{

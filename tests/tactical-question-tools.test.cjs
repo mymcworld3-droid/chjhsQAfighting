@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),vm=require(
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
 const toolsSource=source.slice(source.indexOf('function setQuizContext('),source.indexOf('function paintQuestion('));
 const q={id:'question-one',q:'計算二加三的結果？',opts:['1','2','3','5'],subject:'數學'};
-const node=()=>({value:'',textContent:'',hidden:false,disabled:false,children:[],append(...v){this.children.push(...v);},setAttribute(){}});
+const node=()=>({value:'',textContent:'',hidden:false,disabled:false,children:[],focus(){},append(...v){this.children.push(...v);},setAttribute(){}});
 function client(reply=async()=>({answer:'先把兩個數相加。'})){
   const nodes=new Map(),requests=[];const $=key=>{if(!nodes.has(key))nodes.set(key,node());return nodes.get(key);};
   const user={stats:{gold:0,totalScore:30}},legacyQuiz={data:{q:'另一頁的題目'}};
@@ -15,7 +15,7 @@ function client(reply=async()=>({answer:'先把兩個數相加。'})){
   return {ctx,$,requests,user,legacyQuiz};
 }
 test('trial tools appear below the answer options and keep the original solo quiz state isolated',async()=>{
-  const c=client();assert.match(c.ctx.quizTools(),/錯題回報/);assert.match(c.ctx.quizTools(),/問道助手/);
+  const c=client();assert.match(c.ctx.quizTools(),/問題回報/);assert.match(c.ctx.quizTools(),/問道助手/);
   c.$('[data-helper-input]').value='第一步怎麼算？';await c.ctx.askHelper();
   assert.equal(c.requests[0].url,'/api/question-helper');assert.equal(c.requests[0].body.question,q.q);
   assert.equal(c.requests[0].body.answered,false);assert.equal(c.requests[0].body.correctOption,'');

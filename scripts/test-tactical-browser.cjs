@@ -193,11 +193,11 @@ async function main(){
   async function correct(page){
     await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);await mathIsWhite(page);
     if(!checkedQuestionTools){
-      await page.locator('[data-helper-toggle]').click();await page.locator('[data-helper-input]').fill('可以解釋第一步嗎？');await page.locator('[data-helper-send]').click();
+      await page.locator('[data-helper-toggle]').click();assert.equal(await page.locator('[data-helper-panel] [role=dialog]').isVisible(),true);await page.screenshot({path:path.join(output,'question-helper-popup.png')});await page.locator('[data-helper-input]').fill('可以解釋第一步嗎？');await page.locator('[data-helper-send]').click();
       await page.waitForFunction(()=>document.querySelectorAll('[data-helper-messages] p').length===2);
-      await page.locator('[data-report-toggle]').click();await page.locator('[data-report-reason]').fill('請檢查本題條件是否充分');await page.locator('[data-report-send]').click();
+      await page.locator('[data-helper-panel] [data-tool-close]').click();await page.locator('[data-report-toggle]').click();assert.equal(await page.locator('[data-report-panel] [role=dialog]').isVisible(),true);await page.screenshot({path:path.join(output,'question-report-popup.png')});await page.locator('[data-report-reason]').fill('請檢查本題條件是否充分');await page.locator('[data-report-send]').click();
       await page.waitForFunction(()=>document.querySelector('[data-report-status]').textContent.includes('未確認'));
-      await page.locator('[data-report-toggle]').click();await page.locator('[data-helper-toggle]').click();checkedQuestionTools=true;
+      await page.locator('[data-report-panel] [data-tool-close]').click();checkedQuestionTools=true;
     }
     const orientation=await page.evaluate(()=>innerWidth<innerHeight?'portrait':'landscape');
     await page.screenshot({path:path.join(output,'question-'+orientation+'.png')});
