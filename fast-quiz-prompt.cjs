@@ -1,6 +1,6 @@
 'use strict';
 // Compact generation instruction. Existing server validation is always retained.
-const MODES = new Set(['raid-quick-simple', 'raid-standard', 'battle-fast', 'immortal-fast']);
+const MODES = new Set(['raid-quick-simple', 'raid-standard', 'battle-fast', 'immortal-fast', 'tactical']);
 const { ANSWER_AND_EXPLANATION_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previousQuestions = [],

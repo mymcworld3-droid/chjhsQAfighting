@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "frameWidth": 112,
+  "frameHeight": 112,
+  "columns": 4,
+  "rows": 4,
+  "directions": [
+    "down",
+    "right",
+    "left",
+    "up"
+  ],
+  "anchor": {
+    "x": 56,
+    "y": 104
+  },
+  "display": {
+    "width": 56,
+    "height": 56,
+    "tileSize": 40,
+    "visibleHeightApprox": 48
+  },
+  "animations": {
+    "idle": {
+      "frames": [
+        0
+      ],
+      "frameDurationMs": 1000
+    },
+    "walk": {
+      "frames": [
+        1,
+        2,
+        3,
+        0
+      ],
+      "frameDurationMs": 130
+    }
+  },
+  "characters": {
+    "male": {
+      "image": "player-male.webp",
+      "fallback": "player-male.png"
+    },
+    "female": {
+      "image": "player-female.webp",
+      "fallback": "player-female.png"
+    }
+  }
+}

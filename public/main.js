@@ -25,6 +25,7 @@ void import('./account-delete.js').catch((error) => {
   console.error('[Account Delete] failed to load account deletion controls', error);
 });
 
+window.QA_TACTICAL_BATTLE_ENABLED = true;
 const XIUXIAN_FEATURE_MODULES = [
   './cultivation/realm-icons.js',
   './cultivation/realm-icon-motion.js',
@@ -71,6 +72,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/material-drop-system.js',
   './cultivation/battle-v3-stability-ui.js',
   './cultivation/battle-mode-v2.js',
+  './cultivation/tactical-combat.js',
   './cultivation/raid-mode.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/training-scene-map.js',

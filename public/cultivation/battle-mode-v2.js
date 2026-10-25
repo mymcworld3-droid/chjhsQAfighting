@@ -19,6 +19,7 @@ import { createInnateAbilityEffect, specialImpactKind, shakeBattleScreen } from 
 // Battle v2 — 修仙配對鬥法。
 // 核心原則：房間與戰鬥狀態只寫 Firebase C；玩家邀請與獎勵留在 A／後端。
 export const featureReady = (async () => {
+  if (window.QA_TACTICAL_BATTLE_ENABLED) return;
   const { db: battleDb } = await battleRepository.connect();
   (function () {
   'use strict';

@@ -2441,6 +2441,8 @@ function getSmartDifficulty() {
 }
 
 async function fillBuffer() {
+    // Tactical questions are issued on demand by the authenticated battlefield API.
+    if (window.QA_TACTICAL_BATTLE_ENABLED) return;
     const scope = syncSoloQuestionCache();
     const uid = auth.currentUser?.uid || '';
     // When the player opens the quiz during prefetch, share that existing request.

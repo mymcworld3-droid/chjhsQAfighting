@@ -29,6 +29,8 @@ const registerMeditationApi = require('./daily-meditation-api.cjs');
 const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
+const registerTacticalCombatApi = require('./tactical-combat-api.cjs');
+const tacticalCombat = registerTacticalCombatApi.__test;
 const enlightenmentTrial = require('./enlightenment-trial-api.cjs').__test;
 const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameIssueApi = require('./game-issue-api.cjs');
@@ -91,6 +93,7 @@ const invitationHub = registerInvitationApi(app);
 registerFriendRequestsApi(app, { hub: invitationHub });
 registerQuestApi(app);
 registerEnlightenmentTrialApi(app);
+registerTacticalCombatApi(app);
 registerSoulboundDrawApi(app);
 registerMeditationApi(app);
 registerInventoryDismantleApi(app);
@@ -484,6 +487,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
+    const tacticalMode = String(quizMode || '') === 'tactical';
     const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
@@ -491,6 +495,19 @@ app.post('/api/generate-quiz', async (req, res) => {
     let raidTrustedTopic = '';
     let raidTrustedDifficulty = 'medium';
     let enlightenmentContext = null;
+    let tacticalContext = null;
+    if (tacticalMode) {
+        try {
+            const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
+            tacticalContext = {uid,db,...await tacticalCombat.prepareQuestion(db,uid,String(req.body?.roomId||''))};
+            if (tacticalContext.pending) return res.json({tacticalQuestion:tacticalContext.pending});
+            subject=tacticalContext.subject;level=tacticalContext.level;rank=0;knowledgeMap=null;
+            difficulty=tacticalContext.difficulty;specificTopic=tacticalContext.topic;topic=tacticalContext.topic;
+            avoidQuestions=tacticalContext.history;avoidQuestionMeta=[];
+        } catch(error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'戰場題目準備失敗，請重試'});
+        }
+    }
     if (raidTicketMode) {
         try {
             raidIdentity = await verifyMainIdentity(req);
@@ -688,6 +705,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     // never share saved candidates. Do not store question tickets or credentials.
     const requestedSession = String(quizSessionId || '');
     const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
+        : tacticalMode ? `tactical:${tacticalContext.uid}:${tacticalContext.roomId}`
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
     const spareKey = quizSparePool.key({
@@ -789,6 +807,10 @@ app.post('/api/generate-quiz', async (req, res) => {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
 
+            if (tacticalMode) {
+                const question=await tacticalCombat.commitQuestion(tacticalContext.db,tacticalContext.uid,tacticalContext,parsed);
+                return res.json({tacticalQuestion:question});
+            }
             if (enlightenmentMode) {
                 const question = await enlightenmentTrial.commitQuestion(
                     enlightenmentContext.db,enlightenmentContext.uid,enlightenmentContext,parsed

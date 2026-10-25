@@ -3,6 +3,7 @@
 // quiz API schema compatibility and presenting battle as a true fullscreen mode.
 (function () {
   'use strict';
+  if (window.QA_TACTICAL_BATTLE_ENABLED) return;
 
   const STYLE_ID = 'battle-v3-fullscreen-style';
   const ACTIVE_CLASS = 'battle-v3-fullscreen-active';
