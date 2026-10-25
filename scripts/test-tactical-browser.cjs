@@ -26,7 +26,12 @@ async function main(){
     legacy.slice(legacy.indexOf('const STARTUP_CLOUD_ASSETS ='),legacy.indexOf('\nasync function enterHomeWithStartupCloudCurtain()'));
   app.get('/test-cloud.js',(_,res)=>res.type('text/javascript').send(cloud));
   db.records.get('users/u1').displayName='青雲修士';db.records.get('users/u2').displayName='雲岫道友';
-  let loseMoveResponse=true,loseIntroResponse=false;
+  let loseMoveResponse=true,loseIntroResponse=false,checkedQuestionTools=false;
+  app.post('/api/question-helper',(req,res)=>res.json({answer:'把等式兩邊做相同的運算，便能保持相等。',questionIssue:null}));
+  app.post('/api/tactical/report-question',async(req,res)=>{
+    try{const state=await service.reportQuestion(db,req.get('x-test-user'),req.body,{review:async()=>({status:'rejected',reason:'測試審核已完成，未確認實質錯誤。'})});res.json({ok:true,state});}
+    catch(e){res.status(e.status||500).json({error:e.message});}
+  });
   app.use('/api/tactical/acknowledge-enemy',(req,res,next)=>{
     if(loseIntroResponse){loseIntroResponse=false;const json=res.json.bind(res);res.json=()=>{res.status(503);return json({error:'介紹已保存，但回應遺失，請重試'});};}next();
   });
@@ -187,11 +192,26 @@ async function main(){
   }
   async function correct(page){
     await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);await mathIsWhite(page);
+    if(!checkedQuestionTools){
+      await page.locator('[data-helper-toggle]').click();await page.locator('[data-helper-input]').fill('可以解釋第一步嗎？');await page.locator('[data-helper-send]').click();
+      await page.waitForFunction(()=>document.querySelectorAll('[data-helper-messages] p').length===2);
+      await page.locator('[data-report-toggle]').click();await page.locator('[data-report-reason]').fill('請檢查本題條件是否充分');await page.locator('[data-report-send]').click();
+      await page.waitForFunction(()=>document.querySelector('[data-report-status]').textContent.includes('未確認'));
+      await page.locator('[data-report-toggle]').click();await page.locator('[data-helper-toggle]').click();checkedQuestionTools=true;
+    }
     const orientation=await page.evaluate(()=>innerWidth<innerHeight?'portrait':'landscape');
     await page.screenshot({path:path.join(output,'question-'+orientation+'.png')});
     await page.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await page.locator('[data-continue]').waitFor();await originalQuizStyle(page);await mathIsWhite(page,true);
     await page.locator('[data-continue]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,'question-review-'+orientation+'.png')});
     await page.locator('[data-continue]').click();await page.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+  }
+  async function completeRound(view){
+    for(let i=0;i<2;i++){
+      await view.locator('[data-choice]').first().waitFor();
+      await view.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await view.locator('[data-continue]').waitFor();
+      await view.locator('[data-continue]').click();
+    }
+    await view.locator('[data-modal]').waitFor({state:'hidden'});
   }
   async function rangePreviewChecks(view){
     const current=await read(view),key=service.ROOMS+'/'+current.id,saved=db.records.get(key);
@@ -413,9 +433,17 @@ async function main(){
     await p2.locator('[data-code]').fill(waiting.id.replace('arena-',''));await p2.locator('[data-join]').click();await p2.locator('.tc-arena canvas').waitFor();
     await mobile.locator('.tc-arena canvas').waitFor({timeout:15000});assert.equal((await read(p2)).id,waiting.id);
     await ratio(mobile);await ratio(p2);
-    assert.equal(await p2.locator('[data-quiz]').isDisabled(),true);
-    await correct(mobile);await mobile.locator('[data-end]').click();await p2.waitForFunction(()=>!document.querySelector('[data-quiz]').disabled,{timeout:15000});
-    await correct(p2);assert.equal((await read(p2)).actors.find(a=>a.uid==='u2').stamina,6);
+    await mobile.locator('[data-choice]').first().waitFor();await p2.locator('[data-choice]').first().waitFor();
+    await completeRound(mobile);await mobile.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    const firstReady=await read(mobile);assert.equal(firstReady.turnUid,'u1');assert.equal(firstReady.deadlineMs-firstReady.turnStartedAtMs,30000);
+    assert.equal(firstReady.answerDeadlineMs-firstReady.turnStartedAtMs,50000);
+    await p2.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));
+    await p2.waitForFunction(()=>document.querySelector('[data-quiz-clock]').textContent.includes('秒'));
+    assert.equal(await p2.locator('[data-choice]').count(),4,'opponent sync preserves the unanswered sheet');
+    await mobile.locator('[data-end]').click();assert.equal((await read(mobile)).phase,'waiting-answer');
+    await completeRound(p2);await p2.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    assert.equal((await read(p2)).actors.find(a=>a.uid==='u2').stamina,10);
+    assert.equal((await read(p2)).turnUid,'u2');
     await p2.screenshot({path:path.join(output,'duel-landscape.png')});
     assert.deepEqual(errors,[]);console.log('Browser checks passed: 20 live enemy introductions with movement/hit/dodge simulations, compact cameras retaining full attack shapes, pause/replay/manual steps and zero API calls or account mutations; shared 16:9 / 9:16 stage, six screen sizes, original question styles, visible controls with four enemies and zero stamina, gray/red ranges, white MathJax, persistent introductions, ordered combat effects/input lock, every core/monster canvas effect, paused action resume, reduced motion/no duplicate replay, defeat before results, lost-response retry, trial progression and two-player synchronization.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}

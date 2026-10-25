@@ -4,7 +4,7 @@
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QATactical=api;
 })(globalThis,()=>{
   'use strict';
-  const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,turns:60,turnMs:120000});
+  const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
     {id:'courtyard',name:'演武庭',width:7,height:7,terrain:2,description:'開闊石庭，練習近身與迂迴。'},
     {id:'bamboo',name:'青竹幽徑',width:9,height:7,terrain:0,description:'石障分隔通道，利用掩護接近。'},
@@ -196,7 +196,7 @@
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
-  function create({id,mode='pve',map='courtyard',players,trial=null,now=Date.now()}){
+  function create({id,mode='pve',map='courtyard',players,trial=null,simultaneous=mode==='pvp',now=Date.now()}){
     const layout=mode==='pve'&&trial&&trial.layoutVersion!==0?stageLayout(trial.seed,trial.stage,trial.layoutVersion??2):null;
     const m=layout||mapFor(map),mid=Math.floor(m.height/2);
     const s={version:1,id,mode,map:m.id,width:m.width,height:m.height,terrain:m.terrain,
@@ -220,12 +220,16 @@
         atk:Math.round(s.actors[0].atk*(.55+i*.1)),maxHp:Math.round(s.actors[0].atk*(3+i*1.3))},
       {x:m.width-2,y:mid+(i===1?-2:i===2?2:0)}));
     }
-    current(s).turns=1;prepareIntents(s);return s;
+    current(s).turns=1;
+    if(mode==='pvp'&&simultaneous){s.quizRound=0;questionRound(s,now);s.actors.forEach(a=>a.turns=0);}
+    prepareIntents(s);return s;
   }
   function join(state,player,now=Date.now()){
     const s=clone(state);if(s.status!=='waiting'||s.mode!=='pvp'||s.actors.some(a=>a.uid===player.uid))fail('此房間無法加入');
     s.actors.push(actor({...player,team:player.uid},{x:s.width-2,y:Math.floor(s.height/2)}));
-    s.status='active';s.turnStartedAtMs=now;s.deadlineMs=now+LIMITS.turnMs;s.revision++;return s;
+    s.status='active';s.turnStartedAtMs=now;s.deadlineMs=now+LIMITS.turnMs;
+    if(s.quizRound){s.quizRound=0;questionRound(s,now);}
+    s.revision++;return s;
   }
   function log(s,text,type='info',extra={}){
     // A bounded log still needs unique IDs when one turn produces many effects.
@@ -243,7 +247,14 @@
     log(s,a.name+(hp?'回復 '+hp+' 生命':'')+(shield?' · 護盾 +'+shield:''),'restore',
       {actor:a.uid,animation:{kind:'restore',changes:[appearance(a)],numbers:[{uid:a.uid,heal:hp,shield}]}});
   }
-  function canAct(s,uid){if(s.status!=='active'||s.turnUid!==uid||!alive(current(s)))fail('目前不是你的行動回合');}
+  function canAct(s,uid){if(s.status!=='active'||s.turnUid!==uid||s.quizRound&&s.phase!=='action'||!alive(current(s)))fail('目前不是你的行動回合');}
+  function canAnswer(s,uid,now=Date.now()){
+    const a=s.actors.find(a=>a.uid===uid&&!a.bot);
+    if(!s.quizRound){canAct(s,uid);if(s.mode==='pvp'&&now>=s.deadlineMs)fail('行動時間已結束');}
+    else if(s.status!=='active'||!a||!alive(a)||a.quizExpired||s.actedUids.includes(uid)||s.answerDeadlineMs&&now>=s.answerDeadlineMs)fail('本輪答題時間已結束');
+    if(a.questions>=LIMITS.questions)fail('本回合已完成兩題，請行動或結束回合');
+    return a;
+  }
   function checkFinished(s){
     const human=s.actors.filter(a=>!a.bot),teams=[...new Set(s.actors.filter(alive).map(a=>a.team))];
     if(teams.length<2){s.status='finished';s.winner=teams[0]||'draw';s.finishReason='hp';}
@@ -464,7 +475,8 @@
     else log(s,m.name+'觀察戰局','wait',{actor:m.uid,animation:{kind:'guard'}});
   }
   function begin(s,a,now){
-    s.turnUid=a.uid;a.turns++;a.questions=0;a.attacks=0;a.actions=0;a.guard=0;a.counter=0;
+    s.turnUid=a.uid;a.turns++;if(!s.quizRound)a.questions=0;a.attacks=0;a.actions=0;a.guard=0;a.counter=0;
+    if(s.quizRound){s.phase='action';s.actionRevision=s.revision+1;}
     if((a.slowUntil||0)<a.turns)a.slow=0;
     s.turnStartedAtMs=now;s.deadlineMs=s.mode==='pvp'?now+LIMITS.turnMs:0;
     const due=s.effects.filter(e=>e.owner===a.uid&&e.due<=a.turns);
@@ -476,6 +488,20 @@
     checkFinished(s);
     if(s.status==='active')log(s,a.name+'的行動回合','turn',{actor:a.uid,animation:{kind:'turn',changes:[appearance(a)]}});
   }
+  function questionRound(s,now){
+    s.quizRound++;s.phase='answer';s.initiativeUid='';s.actedUids=[];s.answerDeadlineMs=0;s.deadlineMs=0;
+    s.turnStartedAtMs=now;
+    for(const a of s.actors){a.questions=0;a.quizExpired=false;}
+    // Never carry an in-flight generation or an unanswered question into a new round.
+    s.pending={};
+  }
+  function readyForAction(s,a){return a.questions>=LIMITS.questions||a.quizExpired;}
+  function nextAction(s,now){
+    const next=s.actors.find(a=>!s.actedUids.includes(a.uid));
+    if(!next){questionRound(s,now);return;}
+    if(readyForAction(s,next))begin(s,next,now);
+    else{s.phase='waiting-answer';s.deadlineMs=0;}
+  }
   function end(s,now){
     if(s.mode==='pve'){
       const hero=s.actors[0];
@@ -484,6 +510,8 @@
         if(!alive(hero))break;
       }
       s.turn++;checkFinished(s);if(s.status==='active'){begin(s,hero,now);prepareIntents(s);}
+    }else if(s.quizRound){
+      s.actedUids.push(s.turnUid);s.turn++;checkFinished(s);if(s.status==='active')nextAction(s,now);
     }else{
       const next=s.actors.find(a=>a.uid!==s.turnUid);s.turn++;checkFinished(s);if(s.status==='active')begin(s,next,now);
     }
@@ -506,19 +534,50 @@
       log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});end(s,now);
     }
     else fail('未知的戰場行動');
-    a.actions++;s.turnTimeouts[uid]=0;s.revision++;s.updatedAtMs=now;checkFinished(s);return s;
+    a.actions++;s.turnTimeouts[uid]=0;s.revision++;if(s.quizRound)s.actionRevision=s.revision;s.updatedAtMs=now;checkFinished(s);return s;
   }
   function answer(state,uid,correct,now=Date.now()){
-    const s=clone(state);canAct(s,uid);const a=current(s);
-    if(s.mode==='pvp'&&now>=s.deadlineMs)fail('行動時間已結束');
-    if(a.questions>=LIMITS.questions)fail('本回合已完成兩題，請行動或結束回合');
+    // A late response may arrive after the opponent's action clock. Resolve it
+    // before accepting this answer so the second player still gets 30 seconds.
+    const timed=state.quizRound?expire(state,now):state;
+    if(state.quizRound&&timed.quizRound!==state.quizRound)fail('本輪答題時間已結束');
+    const s=clone(timed),a=canAnswer(s,uid,now);
     const before=a.stamina;a.stamina=Math.min(LIMITS.stamina,a.stamina+(correct?LIMITS.correct:LIMITS.wrong));
     a.questions++;a.answered++;if(correct)a.correct++;
     log(s,a.name+(correct?'答對':'訂正')+'，體力 +'+(a.stamina-before),'answer',{actor:uid,correct,gain:a.stamina-before,
       animation:{kind:'answer',changes:[appearance(a)],numbers:[{uid,gain:a.stamina-before}]}});
-    s.turnTimeouts[uid]=0;s.revision++;s.updatedAtMs=now;return s;
+    if(!s.quizRound)s.turnTimeouts[uid]=0;
+    if(s.quizRound&&a.questions===LIMITS.questions){
+      if(!s.initiativeUid){s.initiativeUid=uid;s.answerDeadlineMs=now+LIMITS.answerMs;begin(s,a,now);}
+      else if(s.phase==='waiting-answer')begin(s,a,now);
+    }
+    s.revision++;s.updatedAtMs=now;return s;
   }
   function expire(state,now=Date.now()){
+    if(state.status==='active'&&state.quizRound){
+      let s=state;
+      // Resolve both clocks in chronological order, even after reconnecting late.
+      for(let i=0;i<4&&s.status==='active';i++){
+        const quizDue=s.answerDeadlineMs&&s.actors.some(a=>!readyForAction(s,a))?s.answerDeadlineMs:Infinity;
+        const actionDue=s.phase==='action'&&s.deadlineMs?s.deadlineMs:Infinity;
+        const due=Math.min(quizDue,actionDue);if(now<due||!Number.isFinite(due))break;
+        if(s===state)s=clone(state);
+        if(quizDue<=actionDue){
+          for(const a of s.actors.filter(a=>!readyForAction(s,a))){
+            a.quizExpired=true;delete s.pending?.[a.uid];
+            log(s,a.name+'答題倒數結束，未作答題目不獲得體力','quiz-timeout',{actor:a.uid});
+          }
+          if(s.phase==='waiting-answer')nextAction(s,due);
+        }else{
+          const uid=s.turnUid;s.turnTimeouts[uid]=(s.turnTimeouts[uid]||0)+1;
+          log(s,current(s).name+'行動逾時','timeout',{actor:uid,animation:{kind:'turn'}});
+          if(s.turnTimeouts[uid]>=2){s.status='finished';s.winner=s.actors.find(a=>a.uid!==uid).team;s.finishReason='timeout';s.deadlineMs=0;}
+          else end(s,due);
+        }
+        s.revision++;s.updatedAtMs=now;
+      }
+      return s;
+    }
     if(state.status!=='active'||state.mode!=='pvp'||now<state.deadlineMs)return state;
     const s=clone(state),uid=s.turnUid;s.turnTimeouts[uid]=(s.turnTimeouts[uid]||0)+1;
     log(s,current(s).name+'行動逾時','timeout',{actor:uid,animation:{kind:'turn'}});
@@ -532,5 +591,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

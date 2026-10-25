@@ -11,10 +11,14 @@ const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
+let autoQuizKey='',quizContext=null;
 const $=selector=>root?.querySelector(selector);
+const myActor=()=>state?.actors.find(a=>a.uid===uid);
+const myAction=()=>state?.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
+function canQuestion(){try{R.canAnswer(state,uid,Date.now()+clockOffset);return !!state.quizRound||myActor().stamina<10;}catch(_){return false;}}
 
-async function api(path,body){
-  const response=await authenticatedMainFetch(path,{...(body?{method:'POST',body:JSON.stringify(body)}:{method:'GET'}),signal:AbortSignal.timeout(65000)});
+async function api(path,body,signal){
+  const response=await authenticatedMainFetch(path,{...(body?{method:'POST',body:JSON.stringify(body)}:{method:'GET'}),signal:signal?AbortSignal.any([signal,AbortSignal.timeout(65000)]):AbortSignal.timeout(65000)});
   const data=await response.json().catch(()=>({}));
   if(!response.ok||data.error)throw Object.assign(Error(data.error||'戰場連線暫時中斷'),{status:response.status});
   return data;
@@ -49,7 +53,11 @@ function ensure(){
     else if(b.hasAttribute('data-end'))void send({type:'end'});
     else if(b.hasAttribute('data-quiz'))void question();
     else if(b.hasAttribute('data-dismiss')){hideModal();if(state&&$('canvas'))paint();}
-    else if(b.hasAttribute('data-continue')){hideModal();paint();}
+    else if(b.hasAttribute('data-continue')){if(state.quizRound&&canQuestion())void question();else{hideModal();paint();}}
+    else if(b.hasAttribute('data-helper-toggle')){const panel=$('[data-helper-panel]');panel.hidden=!panel.hidden;b.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)$('[data-helper-input]')?.focus();}
+    else if(b.hasAttribute('data-helper-send'))void askHelper();
+    else if(b.hasAttribute('data-report-toggle')){const panel=$('[data-report-panel]');panel.hidden=!panel.hidden;b.setAttribute('aria-expanded',String(!panel.hidden));}
+    else if(b.hasAttribute('data-report-send'))void reportQuestion();
     else if(b.hasAttribute('data-leave'))leaveDialog();
     else if(b.hasAttribute('data-forfeit')){hideModal();void send({type:'leave'});}
     else if(b.dataset.choice!==undefined)void answer(Number(b.dataset.choice));
@@ -77,7 +85,7 @@ function renderHub(){
     <label class="tc-label">選擇戰場</label><div class="tc-maps">${R.MAPS.map(m=>`<button type="button" data-map="${m.id}" aria-pressed="${map===m.id}"><b>${m.name}</b><span>${m.width} × ${m.height} · ${mode==='pvp'?'雙人演武':m.id==='courtyard'?'1 隻妖獸':m.id==='bamboo'?'2 隻妖獸':'3 隻妖獸'}</span></button>`).join('')}</div>
     <label class="tc-label">${esc(core.name)} · 已裝配神通</label><div class="tc-equipped-skill"><b>${esc(chosen.skill.name)} · ${chosen.skill.cost} 體力</b><p>${esc(chosen.skill.description)}</p><small>分支於元神頁面調整，進場自動沿用。</small></div>
     <button type="button" class="tc-primary" data-start ${busy?'disabled':''}>${mode==='pve'?'進入戰場 · 問道獵妖':'尋找道友 · 開始鬥法'}</button>
-    ${mode==='pvp'?'<div class="tc-join"><input data-code aria-label="戰場代碼" maxlength="22" placeholder="輸入道友的 16 碼戰場代碼"><button type="button" data-join>加入</button></div><p class="tc-muted">配對同一戰場的道友，或將戰場代碼分享給朋友。每人行動時間兩分鐘。</p>':'<p class="tc-muted">怪物會預告下一次攻擊的位置。紅格是危險區域，可以先移開再出招。</p>'}
+    ${mode==='pvp'?'<div class="tc-join"><input data-code aria-label="戰場代碼" maxlength="22" placeholder="輸入道友的 16 碼戰場代碼"><button type="button" data-join>加入</button></div><p class="tc-muted">雙方同時答兩題；先答完者先行動，另一方開始 50 秒答題倒數。每人行動 30 秒，雙方行動後開始下一輪。</p>':'<p class="tc-muted">怪物會預告下一次攻擊的位置。紅格是危險區域，可以先移開再出招。</p>'}
     <details class="tc-codex"><summary>查看九丹十八條技能分支</summary>${Object.entries(R.CORES).filter(([key])=>key!=='none').map(([,c])=>`<section><h3>${esc(c.name)}</h3>${c.branches.map(b=>`<p><b>${esc(b.name)} · ${esc(b.skill.name)}</b> ${esc(b.skill.description)}</p>`).join('')}</section>`).join('')}</details></div>`;
 }
 function buildGame(){
@@ -88,33 +96,34 @@ function buildGame(){
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);}},()=>{
     if(!opened||!state||!renderer)return;updateControls();
     if(!renderer.isAnimating&&state.status==='finished'&&!modalOpen)resultDialog();
+    else if(!renderer.isAnimating&&!modalOpen&&state.quizRound)schedule();
   });
 }
-function paint(){
-  if(!state)return renderHub();hideModal();
+function paint({preserveModal=false}={}){
+  if(!state)return renderHub();if(!preserveModal)hideModal();
   $('[data-title]').textContent=state.mode==='pve'?'問道試煉':'鬥法論道';
   if(state.status==='waiting'){
     destroyRenderer();$('[data-main]').className='tc-main tc-waiting';
     $('[data-main]').innerHTML=`<div><small>演武庭已備妥</small><h2>靜候道友入場</h2><p>正在尋找同一戰場的道友，也可以分享代碼邀請朋友。</p><code>${esc(state.id.replace('arena-',''))}</code><button type="button" data-copy>複製戰場代碼</button><p class="tc-muted">${esc(R.mapFor(state.map).name)} · ${state.width} × ${state.height}</p><button type="button" data-leave>取消配對</button></div>`;return;
   }
   if(!renderer||!$('canvas'))buildGame();
-  const me=state.actors.find(a=>a.uid===uid),myTurn=state.turnUid===uid&&state.status==='active';
+  const me=myActor(),myTurn=myAction();
   $('[data-map-name]').textContent=(state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name)+' · '+state.width+' × '+state.height;
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}"><div><b>${esc(a.name)}</b><span>${a.uid===uid?'我方':a.bot?'妖獸':'對手'}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div><small>${a.hp} / ${a.maxHp}${a.shield?' · 護盾 '+a.shield:''}${a.slow?' · 緩速':''}</small>${a.intent&&a.hp>0?'<p>'+esc(a.intent.text)+'</p>':''}</div>`).join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>本回合答題 ${me.questions}/2 · 攻擊／技能 ${me.attacks}/2</small>`;
-  $('[data-quiz]').textContent=myTurn?`答題補充體力 · ${me.questions}/2`:'等待對手行動';
+  $('[data-quiz]').textContent=canQuestion()?`${state.quizRound?'本輪答題':'答題補充體力'} · ${me.questions}/2`:state.quizRound&&me.questions>=2?'兩題完成 · 等待行動':myTurn?'本回合答題完成':'等待對手行動';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   renderer.update(state,uid,action,selection);updateControls();updateClock();
-  if(state.status==='finished'&&!renderer.isAnimating)resultDialog();
+  if(state.status==='finished'&&!renderer.isAnimating&&!modalOpen)resultDialog();
   else if(state.mode==='pve'&&state.newEnemies?.length)showEnemyIntro();
 }
 function updateControls(){
   if(!$('[data-selection]')||!state)return;
-  const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid,sk=R.branchFor(me).skill,animating=renderer?.isAnimating,locked=busy||animating;
-  $('[data-quiz]').disabled=!mine||locked||me.questions>=2||me.stamina>=10;
+  const me=myActor(),mine=myAction(),sk=R.branchFor(me).skill,animating=renderer?.isAnimating,locked=busy||animating;
+  $('[data-quiz]').disabled=!canQuestion()||locked;
   $('[data-guard]').disabled=!mine||locked||me.attacks>=2;$('[data-end]').disabled=!mine||locked;
   $('[data-sync]').disabled=locked;root.classList.toggle('tc-animating',!!animating);
-  $('[data-stamina]').classList.toggle('tc-gaining',renderer?.currentKind==='answer');
+  $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
   let label=action==='attack'?'選擇攻擊方向':action==='move'?'選擇移動位置':'選擇施放位置',error='';
   const direction=selection?(selection.x===me.x&&selection.y!==me.y?selection.y>me.y?'下':'上':selection.y===me.y&&selection.x!==me.x?selection.x>me.x?'右':'左':''):'';
@@ -139,9 +148,15 @@ function updateClock(){
   if(!opened||!state)return;
   if(getMainUser()?.uid!==uid){state=null;close();return;}
   const mine=state.turnUid===uid,now=Date.now()+clockOffset;
-  $('[data-turn]').textContent=state.status==='waiting'?'等待配對':state.status==='finished'?'戰鬥結束':
+  const answerLeft=state.answerDeadlineMs?Math.max(0,Math.ceil((state.answerDeadlineMs-now)/1000)):null;
+  const quizPending=state.quizRound&&myActor().questions<2&&!myActor().quizExpired;
+  const quizLabel=quizPending?`答題 ${myActor().questions}/2${answerLeft!==null?' · 剩 '+answerLeft+' 秒':' · 雙方同時作答'}`:'';
+  $('[data-turn]').textContent=state.status==='waiting'?'等待配對':state.status==='finished'?'戰鬥結束':state.quizRound?
+    `第 ${state.quizRound} 輪 · ${quizLabel||state.phase==='answer'&&'雙方答題'||state.phase==='waiting-answer'&&'等待對手完成答題'||(mine?'你的行動':'對手行動')}${state.phase==='action'?' · 行動 '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`:
     `${state.trial?'第 '+state.trial.stage+' 關 · ':''}第 ${state.turn} 回合 · ${mine?'你的行動':'對手行動'}${state.deadlineMs?' · '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`;
-  if(state.status==='active'&&state.deadlineMs&&now>=state.deadlineMs&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
+  $('[data-quiz-clock]')?.replaceChildren(document.createTextNode(quizLabel||'兩題已完成'));
+  const answerExpired=state.answerDeadlineMs&&now>=state.answerDeadlineMs&&state.actors.some(a=>a.questions<2&&!a.quizExpired);
+  if(state.status==='active'&&(state.deadlineMs&&now>=state.deadlineMs||answerExpired)&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
 }
 function showModal(html,{quiz=false,encounter=false}={}){
   introDemo?.destroy();introDemo=null;
@@ -179,7 +194,11 @@ function accept(next,serial){
   if(next&&state?.id===next.id&&next.revision<state.revision)return;
   if(next?.serverNowMs)clockOffset=next.serverNowMs-Date.now();
   applyProgress(next);
-  state=next;selection=null;paint();
+  const oldQuestion=state?.question?.id;
+  const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
+  state=next;if(!keepSelection)selection=null;
+  if(modalOpen&&$('[data-choice]')&&oldQuestion&&!next?.question){hideModal();notice('本輪答題已結束，請查看戰場。');}
+  paint({preserveModal:modalOpen});
 }
 function applyProgress(next){
   if(!next?.progress||getMainUser()?.uid!==uid)return;const local=localUser();local.stats||={};
@@ -190,11 +209,11 @@ function applyProgress(next){
 }
 async function task(work,{render=true}={}){
   if(busy)return;busy=true;const e=epoch,account=uid,serial=++op;notice('');
-  if(state&&$('canvas'))paint();
+  if(state&&$('canvas'))updateControls();
   try{const next=await work();if(!valid(e,account))return;
     retryMs=4000;if(render)accept(next,serial);return next;
   }catch(err){if(valid(e,account)){notice(err.message);retryMs=Math.min(30000,retryMs*2);}}
-  finally{if(valid(e,account)){busy=false;if(state&&$('canvas')&&(!modalOpen||$('[data-intro-ack]')))paint();else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);schedule();}}
+  finally{if(valid(e,account)){busy=false;if(state&&$('canvas'))updateControls();else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);schedule();}}
 }
 async function start(code=''){
   await task(async()=>{const result=await api('/api/tactical/start',{mode,map,...(code?{code}:{})});return result.state;});
@@ -203,16 +222,16 @@ async function sync(){await task(async()=>{const result=await api('/api/tactical
 async function send(command){
   if(!state||renderer?.isAnimating&&command.type!=='leave')return;
   // Retrying the same command uses the same idempotency key after a lost response.
-  const request={...command,roomId:state.id,revision:state.revision,requestId:id()};
+  const request={...command,roomId:state.id,revision:state.revision,actionRevision:state.actionRevision,requestId:id()};
   await task(async()=>{
     try{return (await api('/api/tactical/action',request)).state;}
     catch(err){if(!err.status||err.status>=500){try{return (await api('/api/tactical/action',request)).state;}catch(_){}}
-      if(err.status===409){const latest=await api('/api/tactical/state');if(latest.state)state=latest.state;}throw err;}
+      if(err.status===409){const latest=await api('/api/tactical/state');if(latest.state)accept(latest.state,++op);}throw err;}
   });
 }
 async function execute(){if(selection)await send({type:action,x:selection.x,y:selection.y});}
 async function question(){
-  if(!state||busy||renderer?.isAnimating)return;
+  if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
   const e=epoch,account=uid;
   busy=true;notice('');showModal('<small>以學御法</small><h2>凝神問道</h2><p>正在準備題目…</p><button type="button" data-dismiss>先返回戰場</button>');
   try{
@@ -220,13 +239,57 @@ async function question(){
     if(!valid(e,account))return;if(!q)throw Error('題目尚未準備完成，請重試');state.question=q;
     if(modalOpen)paintQuestion(q);
   }catch(err){if(valid(e,account))showModal('<h2>題目尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-dismiss>返回戰場後重試</button>');}
-  finally{if(valid(e,account)){busy=false;updateControls();const button=$('[data-quiz]');if(button)button.disabled=state.turnUid!==uid||state.actors.find(a=>a.uid===uid).questions>=2;schedule();}}
+  finally{if(valid(e,account)){busy=false;updateControls();schedule();}}
 }
 function questionSheet(q,review=null){
   return `<div class="glass-panel tc-question-sheet"><div class="quiz-card-tools"><span class="tc-question-badge">${esc([q.subject,q.topic].filter(Boolean).join(' · ')||'問道試煉')}</span></div><h3 class="tc-question">${rich(q.q)}</h3></div><div class="tc-options">${q.opts.map((v,i)=>`<button type="button" ${review?`disabled class="cursor-not-allowed ${i===review.answerIndex?'bg-green-600':i===review.choice?'bg-red-600':''}"`:`data-choice="${i}"`}><span>${String.fromCharCode(65+i)}</span><span class="quiz-rich-option">${rich(v)}${review&&i===review.answerIndex?' ✓':''}</span></button>`).join('')}</div>`;
 }
+function setQuizContext(q,review=null){
+  if(quizContext?.id!==q.id||quizContext.roomId!==state.id){
+    quizContext?.abort.abort();
+    quizContext={id:q.id,roomId:state.id,q,review,owner:uid,epoch,abort:new AbortController(),messages:[],helperBusy:false,reportBusy:false};
+  }else quizContext.review=review;
+}
+function quizTools(){
+  if(state.mode!=='pve')return '';
+  return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" data-report-toggle aria-expanded="false">錯題回報</button><button type="button" data-helper-toggle aria-expanded="false">問道助手</button></div><div data-report-panel hidden><label for="tc-report-reason">請具體描述題目的錯誤（至少六個字）</label><textarea id="tc-report-reason" data-report-reason maxlength="1200" rows="3"></textarea><button type="button" data-report-send>送出審核</button><p data-report-status role="status"></p></div><div data-helper-panel hidden><div class="tc-helper-messages" data-helper-messages role="log" aria-label="問道助手對話">${quizContext.messages.map(m=>`<p><b>${m.role==='user'?'你':'問道助手'}</b><span>${m.role==='user'?esc(m.text):rich(m.text)}</span></p>`).join('')}</div><label for="tc-helper-input">針對本題提問</label><textarea id="tc-helper-input" data-helper-input maxlength="600" rows="2" placeholder="可以詢問觀念、解題步驟或題目的疑點"></textarea><button type="button" data-helper-send>送出提問</button><p data-helper-status role="status"></p></div></section>`;
+}
+function sameQuiz(ctx){return quizContext===ctx&&valid(ctx.epoch,ctx.owner);}
+async function askHelper(){
+  const ctx=quizContext,input=$('[data-helper-input]'),message=input?.value.trim().slice(0,600);
+  if(!ctx||!message||ctx.helperBusy||state.mode!=='pve')return;
+  const history=ctx.messages.slice(-6);ctx.messages.push({role:'user',text:message});ctx.helperBusy=true;
+  const append=(role,text)=>{const row=document.createElement('p'),label=document.createElement('b'),body=document.createElement('span');label.textContent=role==='user'?'你':'問道助手';if(role==='user')body.textContent=text;else body.innerHTML=rich(text);row.append(label,body);$('[data-helper-messages]')?.append(row);window.quizMathTypeset?.(body);};
+  append('user',message);input.value='';$('[data-helper-send]').disabled=true;$('[data-helper-status]').textContent='問道助手正在思考…';
+  try{
+    const review=ctx.review,q=ctx.q;
+    const result=await api('/api/question-helper',{question:q.q,options:q.opts,subject:q.subject,message,history,answered:!!review,
+      explanation:review?.explanation||'',selectedOption:review?q.opts[review.choice]:'',correctOption:review?q.opts[review.answerIndex]:''},ctx.abort.signal);
+    if(!sameQuiz(ctx))return;
+    if(!result.answer)throw Error('問道助手暫時沒有回覆，請重試。');
+    ctx.messages.push({role:'assistant',text:result.answer});append('assistant',result.answer);$('[data-helper-status]').textContent='';
+    if(result.questionIssue?.confirmed)void reportQuestion(result.questionIssue.reason);
+  }catch(err){if(sameQuiz(ctx)&&$('[data-helper-status]'))$('[data-helper-status]').textContent=err.message;}
+  finally{ctx.helperBusy=false;if(sameQuiz(ctx)&&$('[data-helper-send]'))$('[data-helper-send]').disabled=false;}
+}
+async function reportQuestion(helperReason=''){
+  const ctx=quizContext,reason=String(helperReason||$('[data-report-reason]')?.value||'').trim().slice(0,1200);
+  if(!ctx||ctx.reportBusy||state.mode!=='pve')return;
+  $('[data-report-panel]').hidden=false;$('[data-report-toggle]').setAttribute('aria-expanded','true');
+  const status=$('[data-report-status]');if(reason.length<6){status.textContent='請至少用六個字具體指出題目錯誤。';return;}
+  ctx.reportBusy=true;$('[data-report-send]').disabled=true;status.textContent='正在獨立審核題目…';
+  try{
+    const result=(await api('/api/tactical/report-question',{roomId:ctx.roomId,questionId:ctx.id,reason},ctx.abort.signal)).state;
+    if(!sameQuiz(ctx))return;
+    status.textContent=result.reason+(result.compensated?` 已補償 ${result.goldAdded} 靈石、${result.cultivationAdded} 修為。`:'');
+    if(result.compensated){const user=localUser();user.stats||={};user.stats.gold=result.newGold;user.stats.totalScore=result.newTotalScore;window.updateUIStats?.();window.refreshXiuxianLiveSync?.(result.newTotalScore);}
+  }catch(err){if(sameQuiz(ctx))status.textContent=err.message+'，可再次送出重試。';}
+  finally{ctx.reportBusy=false;if(sameQuiz(ctx)&&$('[data-report-send]'))$('[data-report-send]').disabled=false;}
+}
 function paintQuestion(q){
-  showModal(`<div class="tc-dialog-heading"><small>答對 +4 / 答錯 +1 體力</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場 ×</button></div><div class="quiz-main-column">${questionSheet(q)}</div><p class="tc-muted">每回合最多答兩題；體力上限 10。</p>`,{quiz:true});
+  setQuizContext(q);
+  showModal(`<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'答對 +4 / 答錯 +1 體力'}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場 ×</button></div><div class="quiz-main-column">${questionSheet(q)}${quizTools()}</div><p class="tc-muted">${state.quizRound?'雙方同時答兩題，先完成者先行動。':'每回合最多答兩題；體力上限 10。'}</p>`,{quiz:true});
+  updateClock();
 }
 async function answer(choice){
   if(busy||!state?.question)return;busy=true;const e=epoch,account=uid,q=state.question,serial=++op;
@@ -236,7 +299,8 @@ async function answer(choice){
     if(!valid(e,account))return;
     state=result.state;applyProgress(state);clockOffset=state.serverNowMs-Date.now();appliedOp=serial;const review=state.review;
     window.QAGameAudio?.answer(review.correct,'tactical:'+state.id+':'+q.id);
-    showModal(`<div class="tc-dialog-heading"><small>體力 +${review.gain}</small></div><div class="quiz-main-column">${questionSheet({...q,q:review.q,opts:review.opts},review)}<section class="glass-panel tc-feedback"><h3 class="tc-feedback-title ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'靈思通明':'訂正後再出發'}</h3><div class="tc-explanation"><span class="tc-explanation-label">題解參悟</span><div class="tc-feedback-text">${rich(review.explanation)}</div></div><button type="button" class="tc-primary" data-continue>返回戰場 · 使用體力</button></section></div>`,{quiz:true});
+    setQuizContext(q,review);
+    showModal(`<div class="tc-dialog-heading"><small>體力 +${review.gain}${state.quizRound?' · 已完成 '+myActor().questions+'/2':''}</small></div><div class="quiz-main-column">${questionSheet({...q,q:review.q,opts:review.opts},review)}<section class="glass-panel tc-feedback"><h3 class="tc-feedback-title ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'靈思通明':'訂正後再出發'}</h3><div class="tc-explanation"><span class="tc-explanation-label">題解參悟</span><div class="tc-feedback-text">${rich(review.explanation)}</div></div><button type="button" class="tc-primary" data-continue>${state.quizRound&&canQuestion()?'繼續第二題 →':'返回戰場 · 使用體力'}</button></section>${quizTools()}</div>`,{quiz:true});
     renderer?.update(state,uid,action,null);
   }catch(err){if(valid(e,account)){
     const message=document.createElement('p');message.className='tc-wrong';message.setAttribute('role','alert');message.textContent=err.message+'；可再按一次答案重試，體力不會重複計算。';
@@ -246,8 +310,10 @@ async function answer(choice){
 }
 function schedule(){
   clearTimeout(poll);if(!opened||document.hidden||!state||state.status==='finished')return;
+  const key=state.id+':'+state.quizRound;
+  if(state.quizRound&&!busy&&!modalOpen&&!renderer?.isAnimating&&canQuestion()&&autoQuizKey!==key){autoQuizKey=key;void question();return;}
   if(state.status==='waiting')poll=setTimeout(()=>{if(!busy)void start();else schedule();},Math.max(6000,retryMs));
-  else if(state.mode==='pvp'&&state.turnUid!==uid)poll=setTimeout(()=>{if(!busy)void sync();else schedule();},retryMs);
+  else if(state.mode==='pvp')poll=setTimeout(()=>{if(!busy)void sync();else schedule();},retryMs);
 }
 async function enterTrial(e,account){
   // Start preparation immediately while the existing full-screen clouds close.
@@ -291,7 +357,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;quizContext?.abort.abort();quizContext=null;autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;

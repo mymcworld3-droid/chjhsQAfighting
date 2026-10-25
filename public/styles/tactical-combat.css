@@ -63,6 +63,13 @@
 .tc-question-badge{display:block;padding:4px 8px;border:1px solid;border-radius:4px;font-size:11px;line-height:1.5}
 .tc-question{margin:0;overflow-wrap:anywhere}
 .tc-options{display:grid;gap:12px}
+.tc-question-tools{display:grid;gap:10px;border-top:1px solid var(--quiet-line,#d2b9892e);padding-top:12px}
+.tc-tools-buttons{display:flex;gap:8px;flex-wrap:wrap}.tc-tools-buttons button{flex:1}
+.tc-question-tools label{display:block;font-size:12px;margin:8px 0;color:var(--review-muted,#ada591)}
+.tc-question-tools textarea{display:block;width:100%;resize:vertical;min-height:64px;background:#16140f;color:var(--review-paper,#eee4d0);border:1px solid var(--quiet-line,#d2b9892e);border-radius:8px;padding:10px;font:inherit;margin-bottom:8px}
+.tc-question-tools [role=status]{font-size:12px;white-space:pre-wrap;margin-top:8px!important}
+.tc-helper-messages{display:grid;gap:10px;max-height:220px;overflow:auto;overscroll-behavior:contain}
+.tc-helper-messages p{padding:10px;background:#ffffff05;border-radius:7px;overflow-wrap:anywhere}.tc-helper-messages b{display:block;font-size:11px;color:var(--xq-gold,#c7a35e)}.tc-helper-messages span{white-space:pre-wrap}
 .tc-options button{display:flex;align-items:center;gap:12px;text-align:left;line-height:1.65}
 .tc-options button>span:first-child{display:grid;place-items:center;flex:0 0 30px}
 .tc-options .quiz-rich-option{min-width:0;overflow-wrap:anywhere}

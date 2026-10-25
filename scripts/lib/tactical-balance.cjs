@@ -167,7 +167,7 @@ function playTurn(state,uid,{accuracy=.7,seed='0',audit=null,metrics=null}={}){
 }
 function fighter(v,uid,{atk=200,maxHp=1000}={}){return {uid,name:v.id,core:v.core,branch:v.branch,atk,maxHp};}
 function duel(a,b,{map='courtyard',accuracy=.7,seed='0',stats={},audit=null}={}){
-  let s=R.create({id:'offline-duel',mode:'pvp',map,players:[fighter(a,'seat0',stats),fighter(b,'seat1',stats)],now:NOW});
+  let s=R.create({id:'offline-duel',mode:'pvp',simultaneous:false,map,players:[fighter(a,'seat0',stats),fighter(b,'seat1',stats)],now:NOW});
   const metrics=Object.fromEntries(['seat0','seat1'].map(uid=>[uid,{skill:0,attack:0,guard:0,move:0,end:0}]));
   while(s.status==='active')s=playTurn(s,s.turnUid,{accuracy,seed,audit,metrics});
   return {winner:s.winner,reason:s.finishReason,turns:s.turn,hp:s.actors.map(a=>a.hp),answers:s.actors.map(a=>a.answered),metrics};

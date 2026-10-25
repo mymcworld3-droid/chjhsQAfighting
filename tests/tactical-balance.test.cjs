@@ -22,7 +22,7 @@ test('balance simulations are deterministic, bounded and execute only real legal
 
 test('every equipped tactical branch is available to the policy without inventing resources or multipliers',()=>{
   for(const v of S.variants){
-    const s=S.R.create({id:'options',mode:'pvp',players:[S.fighter(v,'a'),S.fighter(S.variants[0],'b')],now:S.NOW});
+    const s=S.R.create({id:'options',mode:'pvp',simultaneous:false,players:[S.fighter(v,'a'),S.fighter(S.variants[0],'b')],now:S.NOW});
     s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10,hp:400});Object.assign(s.actors[1],{x:2,y:3});
     const choices=S.options(s,s.actors[0]);assert.ok(choices.some(o=>o.command.type==='skill'),v.id);
     for(const option of choices)assert.doesNotThrow(()=>S.R.apply(s,'a',option.command,S.NOW),v.id);

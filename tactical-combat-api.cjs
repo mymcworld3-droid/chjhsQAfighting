@@ -30,7 +30,7 @@ function snapshot(s,uid){
   if(!s)return null;member(s,uid);
   const out=copy(s);delete out.pending;delete out.reviews;delete out.receipts;
   out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
-  out.question=s.turnUid===uid?publicQuestion(s.pending?.[uid]):null;
+  out.question=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pending?.[uid]):null;
   out.serverNowMs=Date.now();
   out.review=s.reviews?.[uid]||null;
   out.actors=out.actors.map(a=>{delete a.knowledgeScope;return a;});
@@ -164,10 +164,10 @@ async function state(db,uid,now=Date.now()){
   if(stored.status==='active')ensureIntroductions(stored,uid,pointer);
   if(stored.status==='waiting'&&stored.createdAtMs<now-15*60000)return command(db,uid,{roomId:stored.id,type:'leave',requestId:crypto.randomUUID()},now);
   if(stored.status==='finished')return withProgress(stored,uid,exists(await db.collection('users').doc(uid).get()));
-  if(stored.status!=='active'||stored.mode!=='pvp'||now<stored.deadlineMs)return snapshot(stored,uid);
+  if(stored.status!=='active'||stored.mode!=='pvp'||!((stored.deadlineMs&&now>=stored.deadlineMs)||(stored.answerDeadlineMs&&now>=stored.answerDeadlineMs&&stored.actors.some(a=>a.questions<2&&!a.quizExpired))))return snapshot(stored,uid);
   return db.runTransaction(async tx=>{
     const raw=await readRoom(tx,db,stored.id,uid),s=Rules.expire(raw,now);
-    let updates={};if(s!==raw){delete s.pending?.[raw.turnUid];updates=await settle(tx,db,s);tx.set(db.collection(ROOMS).doc(s.id),s);}return withProgress(s,uid,updates[uid]);
+    let updates={};if(s!==raw){if(!s.quizRound)delete s.pending?.[raw.turnUid];updates=await settle(tx,db,s);tx.set(db.collection(ROOMS).doc(s.id),s);}return withProgress(s,uid,updates[uid]);
   });
 }
 async function acknowledgeEnemy(db,uid,input){
@@ -191,7 +191,9 @@ async function command(db,uid,input,now=Date.now()){
   return db.runTransaction(async tx=>{
     const raw=await readRoom(tx,db,input.roomId,uid);
     if(raw.receipts?.some(r=>r.uid===uid&&r.id===id))return raw.status==='finished'?withProgress(raw,uid,exists(await tx.get(db.collection('users').doc(uid)))):snapshot(raw,uid);
-    if(input.type!=='leave'&&Number(input.revision)!==raw.revision)throw error('戰場已更新，請重新選擇行動');
+    const expired=input.type==='leave'?raw:Rules.expire(raw,now);
+    if(expired!==raw){const updates=await settle(tx,db,expired);tx.set(db.collection(ROOMS).doc(expired.id),expired);return withProgress(expired,uid,updates[uid]);}
+    if(input.type!=='leave'&&Number(input.revision)!==raw.revision&&!(raw.quizRound&&Number.isInteger(input.actionRevision)&&input.actionRevision===raw.actionRevision))throw error('戰場已更新，請重新選擇行動');
     let s=input.type==='leave'?Rules.forfeit(raw,uid,now):Rules.apply(raw,uid,input,now);
     if(input.type==='end'||input.type==='leave')delete s.pending?.[uid];
     s.receipts=[...(s.receipts||[]),{uid,id}].slice(-48);
@@ -201,11 +203,10 @@ async function command(db,uid,input,now=Date.now()){
 async function prepareQuestion(db,uid,id,now=Date.now()){
   if(!roomId(id))throw error('戰場代碼無效',400);
   const s=exists(await db.collection(ROOMS).doc(id).get()),a=member(s,uid);
-  if(s.status!=='active'||s.turnUid!==uid)throw error('請在自己的回合答題');
-  if(s.mode==='pvp'&&now>=s.deadlineMs)throw error('行動時間已結束');
-  if(a.questions>=Rules.LIMITS.questions||a.stamina>=Rules.LIMITS.stamina)throw error('請先使用體力，或結束回合');
+  Rules.canAnswer(s,uid,now);
+  if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina)throw error('請先使用體力，或結束回合');
   const scope=pickTrustedRaidKnowledge(a.knowledgeScope,a.answered+1);
-  return {roomId:id,turn:s.turn,index:a.answered,subject:scope.subject,topic:scope.specificTopic,
+  return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,subject:scope.subject,topic:scope.specificTopic,
     difficulty:scope.difficulty,level:scope.level,history:(s.questionHistory||[]).slice(-24),pending:publicQuestion(s.pending?.[uid])};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
@@ -216,7 +217,8 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
     subject:expected.subject,topic:expected.topic||String(parsed.sub_topic||'').slice(0,100),...Knowledge.metadata(parsed,expected.subject),createdAtMs:now};
   return db.runTransaction(async tx=>{
     const s=await readRoom(tx,db,expected.roomId,uid),a=member(s,uid);
-    if(s.status!=='active'||s.turnUid!==uid||s.turn!==expected.turn||a.answered!==expected.index||s.mode==='pvp'&&now>=s.deadlineMs)throw error('回合已更新，請重新取得題目');
+    if((s.quizRound?s.quizRound!==expected.quizRound:s.turnUid!==uid||s.turn!==expected.turn)||a.answered!==expected.index)throw error('回合已更新，請重新取得題目');
+    try{Rules.canAnswer(s,uid,now);}catch(_){throw error('回合已更新，請重新取得題目');}
     if(s.pending?.[uid])return publicQuestion(s.pending[uid]);
     s.pending||={};s.pending[uid]=q;
     tx.set(db.collection(ROOMS).doc(s.id),s);return publicQuestion(q);
@@ -230,7 +232,7 @@ async function answer(db,uid,input,now=Date.now()){
     if(raw.reviews?.[uid]?.questionId===input.questionId)return withProgress(raw,uid,user);
     const q=raw.pending?.[uid];if(!q||q.id!==input.questionId)throw error('此題已結算或已失效');
     const correct=input.choice===q.answerIndex,s=Rules.answer(raw,uid,correct,now),before=member(raw,uid),after=member(s,uid);
-    s.reviews||={};s.reviews[uid]={questionId:q.id,q:q.q,opts:q.opts,correct,choice:input.choice,answerIndex:q.answerIndex,explanation:q.explanation,gain:after.stamina-before.stamina};
+    s.reviews||={};s.reviews[uid]={questionId:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,correct,choice:input.choice,answerIndex:q.answerIndex,explanation:q.explanation,gain:after.stamina-before.stamina};
     delete s.pending[uid];s.questionHistory=[...(s.questionHistory||[]),q.q].slice(-24);
     const stats=user.stats||{},patch={'stats.totalAnswered':Rules.num(stats.totalAnswered)+1,
       'stats.totalCorrect':Rules.num(stats.totalCorrect)+(correct?1:0),
@@ -242,6 +244,8 @@ async function answer(db,uid,input,now=Date.now()){
     if(s.mode==='pve'){
       const gain=correct?1+Growth.cultivation(user,'solo'):Rules.num(stats.totalScore)>=28?-1:0;
       patch['stats.totalScore']=Math.max(0,Rules.num(stats.totalScore)+gain);
+      patch['stats.lastQuizAnswer']={question:q.q,isCorrect:correct,scoreBefore:Rules.num(stats.totalScore),scoreAfter:patch['stats.totalScore'],
+        penalty:Math.max(0,Rules.num(stats.totalScore)-patch['stats.totalScore']),answeredAtMs:now};
       patch['stats.currentStreak']=correct?Rules.num(stats.currentStreak)+1:0;
       patch['stats.bestStreak']=Math.max(Rules.num(stats.bestStreak),patch['stats.currentStreak']);
       if(correct){patch['stats.gold']=Rules.num(stats.gold)+Gold.perCorrect(stats.totalScore);patch.questProgress=recordEvent(user.questProgress,'solo');}
@@ -255,6 +259,23 @@ async function answer(db,uid,input,now=Date.now()){
     tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,patchedUser(user,patch));
   });
 }
+async function reportQuestion(db,uid,input,{review,award}={}){
+  const reports=require('./question-report-api.cjs').__test;
+  if(!roomId(input.roomId))throw error('戰場代碼無效',400);
+  const s=exists(await db.collection(ROOMS).doc(input.roomId).get());member(s,uid);
+  if(s.mode!=='pve')throw error('問道試煉才能使用此回報入口',400);
+  const q=s.pending?.[uid]?.id===input.questionId?s.pending[uid]:s.reviews?.[uid]?.questionId===input.questionId?s.reviews[uid]:null;
+  if(!q)throw error('題目已變更，請回到目前題目重新回報');
+  const trusted=reports.validateReport({question:q.q,options:q.opts,correctIndex:q.answerIndex,explanation:q.explanation,userReason:input.reason});
+  if(trusted.error)throw error(trusted.error,400);
+  const claimed=await db.collection('questionErrorCompensations').doc(reports.reportKey(uid,trusted.question)).get();
+  if(claimed.exists)return {status:'duplicate',reason:'這道題目已領取過錯題補償。'};
+  const result=await (review||reports.reviewQuestion)(trusted);
+  if(result.status==='unavailable')throw error(result.reason,503);
+  const outcome=result.status==='confirmed'?await (award||reports.awardOnce)(db,uid,trusted,result):result;
+  // Before answering, never reveal the answer through an AI review reason.
+  return s.pending?.[uid]?.id===input.questionId?{...outcome,reason:outcome.status==='confirmed'?'獨立審核已確認本題有誤。':outcome.status==='rejected'?'獨立審核未確認本題有實質錯誤。':outcome.reason}:outcome;
+}
 function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,logger=console}={}){
   const route=fn=>async(req,res)=>{
     res.set?.('Cache-Control','no-store');
@@ -266,6 +287,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/action',route((db,uid,req)=>command(db,uid,req.body)));
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
   app.post('/api/tactical/acknowledge-enemy',route((db,uid,req)=>acknowledgeEnemy(db,uid,req.body)));
+  app.post('/api/tactical/report-question',route((db,uid,req)=>reportQuestion(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer};
+module.exports.__test={ROOMS,PLAYERS,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};

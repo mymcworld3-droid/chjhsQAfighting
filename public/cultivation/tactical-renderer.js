@@ -29,7 +29,7 @@ export class TacticalRenderer{
     if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){this.queue=[];this.scene=null;}
     if(!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
-      const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid;
+      const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,mode==='attack'?R.BASIC:R.branchFor(me).skill)):[];
     }
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();

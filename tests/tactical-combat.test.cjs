@@ -5,7 +5,7 @@ const R=require('../public/cultivation/tactical-rules.js');
 const api=require('../tactical-combat-api.cjs').__test;
 const fixed=2000000000000;
 const hero=(uid='u1',extra={})=>({uid,name:uid,atk:200,maxHp:1000,...extra});
-const battle=(mode='pve',extra={})=>R.create({id:'arena-0123456789abcdef',mode,players:mode==='pvp'?[hero(),hero('u2')]:[hero()],now:fixed,...extra});
+const battle=(mode='pve',extra={})=>R.create({simultaneous:false,id:'arena-0123456789abcdef',mode,players:mode==='pvp'?[hero(),hero('u2')]:[hero()],now:fixed,...extra});
 test('answer stamina is capped, persists between turns, and limits two questions',()=>{
   const initial=battle();let s=R.answer(initial,'u1',true,fixed);s=R.answer(s,'u1',true,fixed);
   assert.equal(s.actors[0].stamina,10);assert.equal(initial.actors[0].stamina,2);
@@ -168,7 +168,7 @@ test('simultaneous matchmaking converges and a room never accepts a third player
   const db=database();const first=await api.start(db,'u1',{mode:'pvp',map:'bamboo'},fixed);
   const [second,third]=await Promise.all([api.start(db,'u2',{mode:'pvp',code:first.id},fixed),api.start(db,'u3',{mode:'pvp',code:first.id},fixed)] .map(p=>p.then(value=>({value}),error=>({error}))));
   assert.equal(second.value.status,'active');assert.ok(third.error);assert.equal(db.records.get(api.ROOMS+'/'+first.id).actors.length,2);
-  await assert.rejects(api.prepareQuestion(db,'u2',first.id,fixed),/自己的回合/);
+  assert.equal((await api.prepareQuestion(db,'u2',first.id,fixed)).quizRound,1);
 });
 test('finished battle rewards and quest counters are atomic and idempotent',async()=>{
   const db=database();let s=await api.start(db,'u1',{mode:'pve'},fixed);let raw=db.records.get(api.ROOMS+'/'+s.id);
