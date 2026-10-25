@@ -4,6 +4,7 @@ const W=require('./public/cultivation/weapon-system-rules.js');
 const {playerRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity}=require('./raid-question-ticket.cjs');
 const access=require('./public/cultivation/training-access-rules.js');
+const {educationCohort,ROLE_IDS}=require('./world-immortals-cleanup-api.cjs').__test;
 const {artifactCatalog}=require('./raid-authority.cjs');
 const ARMORIES='weaponArmories',RECEIPTS='weaponArmoryReceipts';
 const fail=(message,status=409)=>Object.assign(Error(message),{status});
@@ -28,20 +29,25 @@ function legacyPreview(user,catalog){
 function response(user,raw,pointer,catalog,extra={}){
   const state=W.normalize(raw),best=W.num(pointer?.trial?.best),trial=W.grantTrial(state,best),legacy=legacyPreview(user,catalog);
   return {ok:true,state,balance:W.num(user.stats?.gold),fragments:W.num(user.forgeFragments),tickets:W.num(user.soulboundDrawTickets),
+    playerRealmScore:access.score(user),canAscendToImmortal:false,
     pendingTrialChests:trial.earned,trialBest:best,legacy:{equipmentCopies:legacy.equipmentCopies,materialCount:legacy.materialCount,chests:legacy.chests,gold:legacy.gold,pendingJob:!!legacy.job,refundFragments:legacy.refundFragments},...extra};
 }
 async function transact(db,uid,action='view',body={},now=Date.now()){
   if(action!=='view'&&!actions.has(action))throw fail('未知兵器操作',400);
-  const request=action==='view'?null:key(uid,body.requestId),signature=crypto.createHash('sha256').update(JSON.stringify([action,body.type||'',body.payment||'',body.expectedLevel??null])).digest('hex');
+  const request=action==='view'?null:key(uid,body.requestId),signature=crypto.createHash('sha256').update(JSON.stringify([action,body.type||'',body.payment||'',body.expectedRealm??body.expectedLevel??null])).digest('hex');
   return db.runTransaction(async tx=>{
     const userRef=db.collection('users').doc(uid),armoryRef=db.collection(ARMORIES).doc(uid),receiptRef=request?db.collection(RECEIPTS).doc(request):null;
     const [u,a,r,p,c]=await Promise.all([tx.get(userRef),tx.get(armoryRef),receiptRef?tx.get(receiptRef):null,
       tx.get(db.collection('tacticalBattlePlayers').doc(uid)),tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
     const user=exists(u);if(!user||user.uid&&user.uid!==uid)throw fail('玩家資料不存在',404);
     if(access.score(user)<6)throw fail('築基後開放兵器，請先修煉至 6 修為',403);
+    const group=educationCohort(user.profile?.educationLevel);
+    const seats=group&&access.score(user)>=1868?await Promise.all([...ROLE_IDS].map(role=>tx.get(db.collection('worldImmortals').doc(group+'__'+role)))):[];
+    const immortal=seats.some(s=>s.exists&&s.data()?.uid===uid&&s.data()?.cohort===group);
     const original=exists(a),s=W.normalize(original),receipt=exists(r),pointer=exists(p),catalog=exists(c)||{};
-    if(receipt){if(receipt.signature!==signature)throw fail('相同操作識別碼不能用於不同請求');return response(user,s,pointer,catalog,{result:receipt.result,replayed:true});}
-    if(action==='view')return response(user,s,pointer,catalog);
+    const reply=(profile,state,extra={})=>response(profile,state,pointer,catalog,{canAscendToImmortal:immortal,...extra});
+    if(receipt){if(receipt.signature!==signature)throw fail('相同操作識別碼不能用於不同請求');return reply(user,s,{result:receipt.result,replayed:true});}
+    if(action==='view')return reply(user,s);
     const patch={};let result={action};
     const type=String(body.type||'');
     if(['starter','equip','upgrade','open-chest'].includes(action)&&!W.get(type))throw fail('兵器類型無效',400);
@@ -51,14 +57,15 @@ async function transact(db,uid,action='view',body={},now=Date.now()){
       if(!s.weapons[type]?.copies)throw fail('尚未持有這把兵器');s.equipped=type;
     }else if(action==='upgrade'){
       const row=s.weapons[type];if(!row?.copies)throw fail('尚未持有這把兵器');
-      if(row.level>=W.MAX_LEVEL)throw fail('兵器已達最高等級');
-      if(body.expectedLevel!==row.level)throw fail('兵器等級已更新，請重新確認升級費用');
-      if(body.payment==='merge'){
-        const need=W.mergeCost(row.level);if(row.copies-1<need)throw fail('同款兵器數量不足，需保留一把主武器');row.copies-=need;result.copiesSpent=need;
-      }else if(body.payment==='gold'){
-        const cost=W.goldCost(row.level),balance=W.num(user.stats?.gold);if(balance<cost)throw fail('靈石不足');patch['stats.gold']=balance-cost;result.goldSpent=cost;
-      }else throw fail('請選擇同款合併或靈石升級',400);
-      row.level++;result.level=row.level;result.type=type;
+      if(!Number.isInteger(body.expectedRealm)||body.payment)throw fail('兵器已改為境界進階，請重新同步後確認',400);
+      if(body.expectedRealm!==row.realm)throw fail('兵器境界已更新，請重新確認進階費用');
+      const fee=W.promotion(row,access.score(user),immortal),balance=W.num(user.stats?.gold);
+      if(!fee.next)throw fail('兵器已達最高境界');
+      if(!fee.eligible)throw fail(fee.next.requiresImmortal?'玩家需達半仙並持有相應學段的真仙席位':'玩家需先達到'+fee.next.name+'境（'+fee.next.need+' 修為）');
+      if(row.copies-1<fee.copies)throw fail('同款兵器數量不足，需要 '+fee.copies+' 把副本並保留主武器');
+      if(balance<fee.gold)throw fail('靈石不足，需要 '+fee.gold+' 靈石');
+      row.copies-=fee.copies;patch['stats.gold']=balance-fee.gold;row.realm=fee.next.index;
+      Object.assign(result,{realm:row.realm,type,copiesSpent:fee.copies,goldSpent:fee.gold});
     }else if(action==='open-chest'){
       if(s.chests<1)throw fail('沒有可開啟的兵器匣');s.chests--;W.add(s,type);result.name=W.get(type).name;
     }else if(action==='claim-trial'){
@@ -86,7 +93,7 @@ async function transact(db,uid,action='view',body={},now=Date.now()){
     tx.set(armoryRef,s);tx.update(userRef,patch);tx.set(receiptRef,{uid,signature,result,createdAtMs:now});
     const updated=JSON.parse(JSON.stringify(user));
     for(const [field,value]of Object.entries(patch)){const parts=field.split('.');let at=updated;for(const part of parts.slice(0,-1))at=at[part]||={};at[parts.at(-1)]=value;}
-    return response(updated,s,pointer,catalog,{result});
+    return reply(updated,s,{result});
   });
 }
 function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,logger=console}={}){

@@ -47,7 +47,7 @@ function ensure(){
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
     else if(b.dataset.action){action=b.dataset.action;selection=null;
-      const me=state?.actors.find(a=>a.uid===uid);if(action==='skill'&&me&&R.branchFor(me).skill.range===0)selection={x:me.x,y:me.y};
+      const me=state?.actors.find(a=>a.uid===uid);if(me&&(action==='skill'&&R.branchFor(me).skill.range===0||action==='attack'&&R.basicFor(me).kind==='ring'))selection={x:me.x,y:me.y};
       updateControls();renderer?.update(state,uid,action,selection);}
     else if(b.hasAttribute('data-execute'))void execute();
     else if(b.hasAttribute('data-guard'))void send({type:'guard'});
@@ -110,7 +110,7 @@ function paint({preserveModal=false}={}){
   if(!renderer||!$('canvas'))buildGame();
   const me=myActor(),myTurn=myAction();
   $('[data-map-name]').textContent=(state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name)+' · '+state.width+' × '+state.height;
-  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}"><div><b>${esc(a.name)}</b><span>${a.uid===uid?'我方':a.bot?'妖獸':'對手'}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div><small>${a.hp} / ${a.maxHp}${a.shield?' · 護盾 '+a.shield:''}${a.slow?' · 緩速':''}${a.weapon?' · '+esc(globalThis.QAWeapons.get(a.weapon.type).label)+' Lv.'+a.weapon.level:''}</small>${a.intent&&a.hp>0?'<p>'+esc(a.intent.text)+'</p>':''}</div>`).join('');
+  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}"><div><b>${esc(a.name)}</b><span>${a.uid===uid?'我方':a.bot?'妖獸':'對手'}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div><small>${a.hp} / ${a.maxHp}${a.shield?' · 護盾 '+a.shield:''}${a.slow?' · 緩速':''}${a.weapon?' · '+esc(globalThis.QAWeapons.get(a.weapon.type).label)+' · '+globalThis.QAWeapons.realmFor(a.weapon).name+'境':''}</small>${a.intent&&a.hp>0?'<p>'+esc(a.intent.text)+'</p>':''}</div>`).join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>本回合答題 ${me.questions}/2 · 攻擊／技能 ${me.attacks}/2</small>`;
   $('[data-quiz]').textContent=canQuestion()?`${state.quizRound?'本輪答題':'答題補充體力'} · ${me.questions}/2`:state.quizRound&&me.questions>=2?'兩題完成 · 等待行動':myTurn?'本回合答題完成':'等待對手行動';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
@@ -128,8 +128,9 @@ function updateControls(){
   const t=selection?R.at(state,selection):null;
   const basic=R.basicFor(me),directional=['line','cleave'].includes(basic.kind);
   $('[data-action="attack"]').textContent=`${me.weapon?globalThis.QAWeapons.get(me.weapon.type).label:'攻擊'} · ${basic.cost}`;
-  let label=action==='attack'?(directional?'選擇攻擊方向':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='';
-  const direction=selection?(selection.x===me.x&&selection.y!==me.y?selection.y>me.y?'下':'上':selection.y===me.y&&selection.x!==me.x?selection.x>me.x?'右':'左':''):'';
+  let label=action==='attack'?(directional?'選擇攻擊方向':basic.kind==='ring'?'震擊周圍':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='';
+  const d=selection&&(basic.kind==='cleave'||selection.x===me.x||selection.y===me.y)?R.attackDirection(me,selection):null;
+  const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
   if(action==='move'&&selection){const path=R.path(state,me,selection,uid),cost=(path?.length-1)*(1+(me.slow||0));
     label=path&&path.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
     if(!path||path.length<2)error='此地格無法到達';else if(cost>me.stamina)error='體力不足';
@@ -144,7 +145,7 @@ function updateControls(){
   root.querySelectorAll('[data-action]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.action===action));b.disabled=!mine||locked;});
   $('[data-range-legend]').textContent=(action==='move'?'灰閃：可走':'紅格：射程')+' · 紅框：預告';
   const hint=action==='move'?'灰色閃動格可移動，點選預覽路線與體力消耗':action==='attack'?basic.description:sk.range===0?'紅格標示自身，確認即可施放金丹技能':'紅格標示技能射程，點選後預覽命中區域';
-  $('[data-selection]').textContent=selection?`${action==='attack'&&directional&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,basic,selection).length+' 格':`地格 ${selection.x+1}, ${selection.y+1}${t?' · '+t.name+' · 生命 '+t.hp+'/'+t.maxHp:''}`}${error?' · '+error:''}`:mine?hint:'對手正在思考。你可以查看戰場與攻擊預告。';
+  $('[data-selection]').textContent=selection?`${action==='attack'&&basic.kind==='ring'?'震擊周圍一圈 · '+R.skillCells(state,me,basic,selection).length+' 格':action==='attack'&&directional&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,basic,selection).length+' 格':`地格 ${selection.x+1}, ${selection.y+1}${t?' · '+t.name+' · 生命 '+t.hp+'/'+t.maxHp:''}`}${error?' · '+error:''}`:mine?hint:'對手正在思考。你可以查看戰場與攻擊預告。';
   if(animating)$('[data-selection]').textContent=renderer.currentAction;
 }
 function updateClock(){

@@ -22,7 +22,7 @@ async function refresh(){const uid=identity(),epoch=serial;if(!uid||loading)retu
   catch(e){if(valid(uid,epoch))message=e.message;}finally{if(valid(uid,epoch)){loading=false;render();}}}
 function remember(operation){pending=operation;try{if(operation)localStorage.setItem(pendingKey(owner),JSON.stringify(operation));else localStorage.removeItem(pendingKey(owner));}catch(_){}}
 function resultMessage(payload){const r=payload.result||{};if(payload.replayed)return '操作已完成，已同步最新兵器。';
-  if(r.action==='upgrade')return `${W.get(r.type).name}提升至 Lv.${r.level}。`;
+  if(r.action==='upgrade')return `${W.get(r.type).name}進階至${W.realmFor(r).name}境。`;
   if(r.name)return `獲得${r.name}，可在煉器頁裝配。`;
   if(r.action==='equip')return '主武器已更換，下一場戰鬥生效。';
   if(r.action==='convert-legacy')return `傳承完成：自選兵器匣 ×${r.chests}、靈石 +${r.gold}。`;
@@ -37,11 +37,12 @@ async function mutate(action,body={},retry=false){
   }catch(e){if(valid(uid,epoch)){message=e.message+(e.definitive?'':'，請按「重試原操作」。');if(e.definitive)remember(null);}}
   finally{if(valid(uid,epoch)){busy=false;render();}}
 }
-function cards(state){return W.TYPES.map(t=>{const row=state.weapons[t.id];return `<button type="button" class="wf-weapon ${selected===t.id?'is-selected':''}" data-weapon-select="${t.id}" aria-pressed="${selected===t.id}" style="--weapon-ink:${t.color}"><span class="wf-art">${icon(t.id)}</span><b>${t.name}</b><span>${t.label} · ${t.tag}</span><small>${row?'Lv.'+row.level+' · 持有 '+row.copies+' 把':'尚未獲得'}</small>${state.equipped===t.id?'<em>主武器</em>':''}</button>`;}).join('');}
-function weaponsMarkup(s,locked){const t=W.get(selected),row=s.weapons[selected],level=row?.level||1,max=row?.level>=W.MAX_LEVEL,need=W.mergeCost(level),gold=W.goldCost(level),spares=Math.max(0,(row?.copies||0)-1),owned=!!row;
-  return `<div class="wf-workbench"><div class="wf-detail-art" style="--weapon-ink:${t.color}">${icon(t.id)}</div><div class="wf-detail"><small>${t.label} · ${t.tag}</small><h3>${t.name} <span>${owned?'Lv.'+level:'未持有'}</span></h3><p>${t.description}</p><div class="wf-stats"><span>消耗 ${t.cost} 體力</span><span>射程 ${t.minRange?t.minRange+'～':''}${t.range} 格</span><span>攻擊加成 +${Number(((level-1)*W.ATTACK_PER_LEVEL*100).toFixed(1))}%</span></div>
+function cards(state){return W.TYPES.map(t=>{const row=state.weapons[t.id];return `<button type="button" class="wf-weapon ${selected===t.id?'is-selected':''}" data-weapon-select="${t.id}" aria-pressed="${selected===t.id}" style="--weapon-ink:${t.color}"><span class="wf-art">${icon(t.id)}</span><b>${t.name}</b><span>${t.label} · ${t.tag}</span><small>${row?W.realmFor(row).name+' · 持有 '+row.copies+' 把':'尚未獲得'}</small>${state.equipped===t.id?'<em>主武器</em>':''}</button>`;}).join('');}
+function weaponsMarkup(s,locked){const t=W.get(selected),row=s.weapons[selected],owned=!!row,fee=W.promotion(row,snapshot.playerRealmScore,snapshot.canAscendToImmortal),{current,next,copies,gold,eligible}=fee,max=owned&&!next,spares=Math.max(0,(row?.copies||0)-1);
+  const ready=owned&&eligible&&spares>=copies&&snapshot.balance>=gold;
+  return `<div class="wf-workbench"><div class="wf-detail-art" style="--weapon-ink:${t.color}">${icon(t.id)}</div><div class="wf-detail"><small>${t.label} · ${t.tag}</small><h3>${t.name} <span>${owned?current.name+'境':'未持有'}</span></h3><p>${t.description}</p><div class="wf-stats"><span>消耗 ${t.cost} 體力</span><span>${t.rangeText}</span><span>攻擊加成 +${Number((current.index*W.ATTACK_PER_REALM*100).toFixed(1))}%</span></div>
     <button type="button" data-weapon-equip="${t.id}" ${locked||!owned||s.equipped===t.id?'disabled':''}>${s.equipped===t.id?'正在使用':'裝配為主武器'}</button></div></div>
-    <section class="wf-upgrade"><div><h3>淬鍊升級 <small>${owned?'Lv.'+level+(max?' · 已滿級':' → Lv.'+(level+1)):'先獲得這把武器'}</small></h3><p>最高 Lv.${W.MAX_LEVEL}；每級增加 2.5% 攻擊。同款合併與靈石升級擇一支付。</p></div><div class="wf-upgrade-options"><button type="button" data-weapon-upgrade="merge" ${locked||!owned||max||spares<need?'disabled':''}><b>合併同款 ×${need}</b><span>可用副本 ${spares} 把 · 保留主武器</span></button><button type="button" data-weapon-upgrade="gold" ${locked||!owned||max||snapshot.balance<gold?'disabled':''}><b>${gold.toLocaleString('zh-TW')} 靈石升級</b><span>不消耗同款武器</span></button></div></section>`;
+    <section class="wf-upgrade"><div><h3>境界進階 <small>${owned?current.name+(max?' · 已達最高境界':' → '+next.name):'先獲得這把武器'}</small></h3><p>每提升一境增加 2.5% 攻擊。修士須達目標境界，並同時消耗同款兵器與靈石。</p></div>${!max&&next?`<p class="wf-realm-gate ${eligible?'is-ready':''}">修士門檻：${next.requiresImmortal?'半仙（1868 修為）及相應學段真仙席位':next.name+'境（'+next.need+' 修為）'} · ${eligible?'已達到':'尚未達到'}</p><div class="wf-upgrade-options"><div class="wf-requirement ${spares>=copies?'is-ready':''}"><b>同款副本 ×${copies}</b><span>可用 ${spares} 把 · 另保留一把主武器</span></div><div class="wf-requirement ${snapshot.balance>=gold?'is-ready':''}"><b>${gold.toLocaleString('zh-TW')} 靈石</b><span>持有 ${snapshot.balance.toLocaleString('zh-TW')} 靈石</span></div></div>`:''}<button type="button" class="wf-promote" data-weapon-promote ${locked||!ready?'disabled':''}>${!owned?'先前往尋器獲得兵器':max?'已達真仙境':'進階至'+next.name+'境 · 同時消耗以上資源'}</button></section>`;
 }
 function acquireMarkup(s,locked){const t=W.get(selected),legacy=snapshot.legacy,hasLegacy=legacy.equipmentCopies||legacy.materialCount||legacy.pendingJob;
   return `<section class="wf-acquire"><div class="wf-choice"><small>正在選擇</small><h3>${t.name}</h3><p>點選上方兵器後領取；兵器匣可以選新類型，也能選同款用於合併。</p><div class="wf-choice-actions">${!s.starterClaimed?`<button type="button" class="wf-primary" data-weapon-starter ${locked?'disabled':''}>免費領取第一把 · ${t.label}</button>`:''}<button type="button" data-weapon-open ${locked||s.chests<1?'disabled':''}>開啟自選兵器匣 · 剩 ${s.chests} 匣</button></div></div>
@@ -55,11 +56,11 @@ function render(){if(!host?.isConnected)return;
   if(active&&!['refinery','contract','equipment'].includes(active))return;
   if(!snapshot){host.innerHTML=`<section class="wf-page"><h2>煉器 · 兵器庫</h2><p role="status">${esc(message||'正在整理兵器…')}</p><button type="button" data-weapon-refresh ${loading?'disabled':''}>重新同步</button></section>`;return;}
   const s=snapshot.state,equipped=W.get(s.equipped),row=s.weapons[s.equipped],locked=busy||loading||!!pending;
-  host.innerHTML=`<section class="wf-page" aria-label="單一主武器裝配與升級"><header class="wf-heading"><h2>${view==='acquire'?'尋器':'煉器'} · 兵器庫</h2><span>${snapshot.balance.toLocaleString('zh-TW')} 靈石</span></header>
-    <div class="wf-equipped"><span class="wf-equipped-art">${equipped?icon(equipped.id):'未持武器'}</span><div><small>主武器 · 單一欄位</small><b>${equipped?equipped.name+' · Lv.'+row.level:'尚未裝配主武器'}</b><span>${equipped?equipped.tag+' · '+equipped.cost+' 體力 · 射程 '+(equipped.minRange?equipped.minRange+'～':'')+equipped.range+' 格':'前往尋器，自選領取第一把武器。'}</span></div></div>
-    <nav class="wf-tabs" aria-label="兵器操作"><button type="button" data-weapon-view="weapons" aria-pressed="${view==='weapons'}">裝配與升級</button><button type="button" data-weapon-view="acquire" aria-pressed="${view==='acquire'}">獲取兵器 <span>${s.chests?'· '+s.chests+' 匣':''}</span></button></nav>
+  host.innerHTML=`<section class="wf-page" aria-label="單一主武器裝配與進階"><header class="wf-heading"><h2>${view==='acquire'?'尋器':'煉器'} · 兵器庫</h2><span>${snapshot.balance.toLocaleString('zh-TW')} 靈石</span></header>
+    <div class="wf-equipped"><span class="wf-equipped-art">${equipped?icon(equipped.id):'未持武器'}</span><div><small>主武器 · 單一欄位</small><b>${equipped?equipped.name+' · '+W.realmFor(row).name+'境':'尚未裝配主武器'}</b><span>${equipped?equipped.tag+' · '+equipped.cost+' 體力 · '+equipped.rangeText:'前往尋器，自選領取第一把武器。'}</span></div></div>
+    <nav class="wf-tabs" aria-label="兵器操作"><button type="button" data-weapon-view="weapons" aria-pressed="${view==='weapons'}">裝配與進階</button><button type="button" data-weapon-view="acquire" aria-pressed="${view==='acquire'}">獲取兵器 <span>${s.chests?'· '+s.chests+' 匣':''}</span></button></nav>
     <p class="wf-message" role="status" ${message?'':'hidden'}>${esc(message)}</p>${pending&&!busy?'<button type="button" class="wf-retry" data-weapon-retry>重試原操作</button>':''}
-    <div class="wf-weapons" aria-label="五種武器">${cards(s)}</div>${view==='acquire'?acquireMarkup(s,locked):weaponsMarkup(s,locked)}<footer class="wf-footer"><span>裝配、升級在下一場戰鬥生效。</span><button type="button" data-weapon-refresh ${busy||loading?'disabled':''}>重新同步</button></footer></section>`;
+    <div class="wf-weapons" aria-label="五種武器">${cards(s)}</div>${view==='acquire'?acquireMarkup(s,locked):weaponsMarkup(s,locked)}<footer class="wf-footer"><span>裝配、進階在下一場戰鬥生效。</span><button type="button" data-weapon-refresh ${busy||loading?'disabled':''}>重新同步</button></footer></section>`;
 }
 function click(event){const b=event.target.closest('button');if(!b||b.disabled)return;
   if(b.dataset.weaponSelect){selected=b.dataset.weaponSelect;render();}
@@ -69,7 +70,7 @@ function click(event){const b=event.target.closest('button');if(!b||b.disabled)r
   else if(b.hasAttribute('data-weapon-starter'))void mutate('starter',{type:selected});
   else if(b.hasAttribute('data-weapon-open'))void mutate('open-chest',{type:selected});
   else if(b.dataset.weaponEquip)void mutate('equip',{type:b.dataset.weaponEquip});
-  else if(b.dataset.weaponUpgrade)void mutate('upgrade',{type:selected,payment:b.dataset.weaponUpgrade,expectedLevel:snapshot.state.weapons[selected]?.level});
+  else if(b.hasAttribute('data-weapon-promote'))void mutate('upgrade',{type:selected,expectedRealm:snapshot.state.weapons[selected]?.realm});
   else if(b.hasAttribute('data-weapon-claim'))void mutate('claim-trial');
   else if(b.hasAttribute('data-weapon-ticket'))void mutate('exchange-ticket');
   else if(b.hasAttribute('data-weapon-fragments'))void mutate('exchange-fragments');

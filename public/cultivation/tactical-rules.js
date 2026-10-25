@@ -191,7 +191,7 @@
     const maxHp=Math.max(1,num(raw.maxHp)||1000);
     return {uid:String(raw.uid),name:String(raw.name||'修士').slice(0,40),team:raw.team||'player',bot:!!raw.bot,
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
-      ...(W?.get(raw.weapon?.type)?{weapon:{version:1,type:raw.weapon.type,level:Math.min(W.MAX_LEVEL,Math.max(1,num(raw.weapon.level)))}}:{}),
+      ...(W?.get(raw.weapon?.type)?{weapon:{version:W.VERSION,type:raw.weapon.type,realm:W.realmIndex(raw.weapon)}}:{}),
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
@@ -292,13 +292,27 @@
   }
   // Geometric aiming range stays visible even while stamina/cooldown prevents a
   // cast. The server still validates the selected enemy, resources and turn.
+  function attackDirection(a,p){const dx=p.x-a.x,dy=p.y-a.y;if(!dx&&!dy)return null;
+    return Math.abs(dy)>=Math.abs(dx)?{x:0,y:Math.sign(dy)}:{x:Math.sign(dx),y:0};}
+  function skillDistance(a,p,sk){return sk.metric==='square'?Math.max(Math.abs(p.x-a.x),Math.abs(p.y-a.y)):dist(a,p);}
+  function rectangle(s,a,sk,p){const d=attackDirection(a,p);if(!d)return [];
+    const depth=sk.depth||1,half=Math.floor((sk.width||3)/2),dx=p.x-a.x,dy=p.y-a.y,forward=dx*d.x+dy*d.y,side=-dx*d.y+dy*d.x;
+    if(forward<1||forward>depth||Math.abs(side)>half)return [];
+    const cells=[];for(let step=1;step<=depth;step++)for(let i=-half;i<=half;i++){
+      const c={x:a.x+d.x*step-d.y*i,y:a.y+d.y*step+d.x*i};if(inside(s,c)&&!blocked(s,c)&&sight(s,a,c))cells.push(c);
+    }return cells;
+  }
+  function ring(s,a){const cells=[];for(let y=a.y-1;y<=a.y+1;y++)for(let x=a.x-1;x<=a.x+1;x++){
+    const p={x,y};if(key(p)!==key(a)&&inside(s,p)&&!blocked(s,p)&&sight(s,a,p))cells.push(p);
+  }return cells;}
   function aimCells(s,a,sk){
     if(!a||!alive(a))return [];
-    if(sk.kind==='cleave')return neighbours(s,a).filter(p=>!blocked(s,p));
+    if(sk.kind==='ring')return ring(s,a);
+    if(sk.kind==='cleave'){const cells=new Map();for(const d of [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}])for(const p of rectangle(s,a,sk,{x:a.x+d.x,y:a.y+d.y}))cells.set(key(p),p);return [...cells.values()];}
     if(sk.kind==='line')return [{x:a.x+1,y:a.y},{x:a.x-1,y:a.y},{x:a.x,y:a.y+1},{x:a.x,y:a.y-1}].flatMap(p=>line(s,a,p,sk.range));
     const cells=[];
     for(let y=Math.max(0,a.y-sk.range);y<=Math.min(s.height-1,a.y+sk.range);y++)for(let x=Math.max(0,a.x-sk.range);x<=Math.min(s.width-1,a.x+sk.range);x++){
-      const p={x,y};if(dist(a,p)>sk.range||dist(a,p)<(sk.minRange||0)||blocked(s,p)||!sight(s,a,p))continue;
+      const p={x,y};if(skillDistance(a,p,sk)>sk.range||skillDistance(a,p,sk)<(sk.minRange||0)||blocked(s,p)||!sight(s,a,p))continue;
       if(sk.kind==='blink'&&at(s,p))continue;
       if(['hit','lunge','swap'].includes(sk.kind)&&key(p)===key(a))continue;
       cells.push(p);
@@ -306,17 +320,16 @@
     return cells;
   }
   function skillCells(s,a,sk,p){
-    if(sk.kind==='cleave'){const dx=Math.sign(p.x-a.x),dy=Math.sign(p.y-a.y);if(dist(a,p)!==1)return [];
-      return [-1,0,1].map(i=>({x:a.x+dx-dy*i,y:a.y+dy+dx*i})).filter(c=>inside(s,c)&&!blocked(s,c)&&sight(s,a,c));}
+    if(sk.kind==='cleave')return rectangle(s,a,sk,p);
+    if(sk.kind==='ring')return ring(s,a);
     return sk.kind==='line'?line(s,a,p,sk.range):['area','meteor'].includes(sk.kind)||sk.kind==='blink'&&sk.burst?area(s,p,sk.radius||1):[p];
   }
   function validateSkill(s,a,sk,p){
     if(a.stamina<sk.cost)fail('體力不足，先答題補充');
     if(a.attacks>=LIMITS.attacks)fail('本回合已使用兩次攻擊／技能');
     if((a.cooldowns[sk.id]||0)>a.turns)fail('技能仍在冷卻');
-    if(!inside(s,p)||blocked(s,p)||dist(a,p)>sk.range)fail('目標超出技能範圍');
-    if(dist(a,p)<(sk.minRange||0))fail('距離太近，弓需要至少兩格距離');
-    if(sk.kind==='cleave'&&dist(a,p)!==1)fail('請選擇上下左右的攻擊方向');
+    if(!inside(s,p)||blocked(s,p)||(sk.kind==='cleave'?!rectangle(s,a,sk,p).some(c=>key(c)===key(p)):skillDistance(a,p,sk)>sk.range))fail('目標超出技能範圍');
+    if(skillDistance(a,p,sk)<(sk.minRange||0))fail('距離太近，弓需要至少兩格距離');
     if(sk.range===0&&dist(a,p)!==0)fail('請選擇自己');
     if(sk.range>0&&!sight(s,a,p))fail('石障擋住了視線');
     if(sk.kind==='line'&&!line(s,a,p,sk.range).length)fail('請選擇同一行或同一列');
@@ -602,5 +615,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

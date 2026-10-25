@@ -202,7 +202,7 @@ export class TacticalRenderer{
     if(myTurn&&['attack','skill'].includes(this.mode)){
       const sk=this.mode==='attack'?R.basicFor(mine):R.branchFor(mine).skill;
       for(const p of this.range)fill(p,'#e445454d','#ed6a6a99');
-      if(this.selection&&this.range.some(p=>R.key(p)===R.key(this.selection)))for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
+      if(this.selection&&(this.range.some(p=>R.key(p)===R.key(this.selection))||sk.kind==='ring'&&R.key(this.selection)===R.key(mine)))for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
     }
     if(!animating){
       for(const e of s.effects)for(const p of e.cells)fill(p,'#9b7aec55','#d5b8ff');

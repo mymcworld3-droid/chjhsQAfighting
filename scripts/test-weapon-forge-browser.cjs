@@ -13,10 +13,10 @@ async function main(){
   Object.assign(db.records.get('users/u1'),{displayName:'青雲修士',soulboundDrawTickets:3,forgeFragments:600});
   Object.assign(db.records.get('users/u1').stats,{totalScore:6,gold:5000});
   Object.assign(db.records.get('users/u2'),{displayName:'雲岫道友',soulboundDrawTickets:0,forgeFragments:0});
-  let dropGoldResponse=true;const upgrades=[];
+  let dropPromotionResponse=true;const upgrades=[];
   app.use('/api/weapons/upgrade',(req,res,next)=>{
     upgrades.push({...req.body,uid:req.get('x-test-user')});
-    if(req.body.payment==='gold'&&dropGoldResponse){dropGoldResponse=false;const json=res.json.bind(res);res.json=()=>{res.status(503);return json({ok:false,error:'已提交，但回應遺失'});};}next();
+    if(req.body.expectedRealm===1&&dropPromotionResponse){dropPromotionResponse=false;const json=res.json.bind(res);res.json=()=>{res.status(503);return json({ok:false,error:'已提交，但回應遺失'});};}next();
   });
   register(app,{resolve:()=>({db}),verify:async req=>{const uid=req.get('x-test-user');if(!['u1','u2'].includes(uid))throw Object.assign(Error('test identity required'),{status:401});return uid;}});
   app.get('/cultivation/data/project-repository.js',(_,res)=>res.type('text/javascript').send("export const getMainUser=()=>({uid:sessionStorage.testUid||'u1'});export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'Content-Type':'application/json','X-Test-User':getMainUser().uid}});"));
@@ -34,24 +34,35 @@ async function main(){
     assert.equal(await ui('[data-training-tab="equipment"]').isVisible(),false);assert.equal(await ui('.wf-weapon').count(),5);assert.equal(await ui('.refinery-slot,.uib-equip-slot').count(),0);
     await ui('[data-weapon-view="acquire"]').click();await ui('[data-weapon-select="bow"]').click();await ui('[data-weapon-starter]').click();
     await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.equipped==='bow');
+    await ui('[data-weapon-view="weapons"]').click();assert.equal(await ui('[data-weapon-promote]').isDisabled(),true,'cannot promote without a spare copy');
+    assert.match(await ui('.wf-detail').textContent(),/方形五格/);assert.doesNotMatch(await ui('.wf-page').textContent(),/Lv\./);
+    await ui('[data-weapon-view="acquire"]').click();
     await ui('[data-weapon-ticket]').click();await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.chests===1);
     await ui('[data-weapon-open]').click();await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.weapons.bow?.copies===2);
-    await ui('[data-weapon-view="weapons"]').click();await ui('[data-weapon-upgrade="merge"]').click();
-    await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.weapons.bow?.level===2);assert.equal(db.records.get('users/u1').stats.gold,5000);
-    await ui('[data-weapon-upgrade="gold"]').click();await ui('[data-weapon-retry]').waitFor();assert.equal(db.records.get('weaponArmories/u1').weapons.bow.level,3);assert.equal(db.records.get('users/u1').stats.gold,3800);
-    await ui('[data-weapon-retry]').click();await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.weapons.bow?.level===3);
-    assert.equal(db.records.get('users/u1').stats.gold,3800);assert.equal(upgrades.at(-1).requestId,upgrades.at(-2).requestId);
+    await ui('[data-weapon-view="weapons"]').click();await ui('[data-weapon-promote]').click();
+    await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.weapons.bow?.realm===1);assert.equal(db.records.get('users/u1').stats.gold,4700);assert.equal(db.records.get('weaponArmories/u1').weapons.bow.copies,1);
+    await ui('[data-weapon-view="acquire"]').click();await ui('[data-weapon-ticket]').click();await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.chests===1);
+    await ui('[data-weapon-open]').click();await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.weapons.bow?.copies===2);
+    await ui('[data-weapon-view="weapons"]').click();assert.equal(await ui('[data-weapon-promote]').isDisabled(),true,'player must reach the target realm even with sufficient copies and gold');
+    assert.match(await ui('.wf-realm-gate').textContent(),/金丹.*28.*尚未達到/);
+    await ui('.wf-upgrade').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'weapon-realm-gate-mobile.png')});
+    db.records.get('users/u1').stats.totalScore=28;await frame().evaluate(()=>{window.__users.u1.stats.totalScore=28;});
+    await ui('[data-weapon-refresh]').click();await frame().waitForFunction(()=>document.querySelector('[data-weapon-promote]')?.disabled===false);
+    await ui('[data-weapon-promote]').click();await ui('[data-weapon-retry]').waitFor();assert.equal(db.records.get('weaponArmories/u1').weapons.bow.realm,2);assert.equal(db.records.get('users/u1').stats.gold,3500);assert.equal(db.records.get('weaponArmories/u1').weapons.bow.copies,1);
+    await ui('[data-weapon-retry]').click();await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.weapons.bow?.realm===2);
+    assert.equal(db.records.get('users/u1').stats.gold,3500);assert.equal(db.records.get('weaponArmories/u1').weapons.bow.copies,1);assert.equal(upgrades.at(-1).requestId,upgrades.at(-2).requestId);
     async function bounds(){return frame().evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth,slots:document.querySelectorAll('.wf-equipped').length,
-      cards:[...document.querySelectorAll('.wf-weapon,.wf-upgrade-options button')].map(b=>{const r=b.getBoundingClientRect();return {x:r.x,right:r.right};})}));}
+      cards:[...document.querySelectorAll('.wf-weapon,.wf-requirement,.wf-promote')].map(b=>{const r=b.getBoundingClientRect();return {x:r.x,right:r.right};})}));}
     for(const [name,size]of [['mobile',{width:393,height:852}],['landscape',{width:1280,height:720}],['tablet',{width:1024,height:1366}]]){
       await page.setViewportSize(size);await page.waitForFunction(expected=>Math.abs(window.QAGameStage.getState().width-expected.width)<.2,Stage.fit(size));
       const measured=await bounds();assert.equal(measured.slots,1);assert.ok(measured.scroll<=measured.width+1);assert.ok(measured.cards.every(r=>r.x>=0&&r.right<=measured.width+1));
       await frame().evaluate(()=>{document.querySelector('#page-training').scrollTop=0;document.querySelector('#training-tab-content').scrollTop=0;});await frame().evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,'weapon-forge-'+name+'.png')});
+      if(name==='mobile'){await ui('.wf-upgrade').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'weapon-promotion-mobile.png')});}
     }
     await page.setViewportSize({width:393,height:852});await ui('[data-weapon-view="acquire"]').click();await page.screenshot({path:path.join(out,'weapon-acquisition-mobile.png')});
     await frame().evaluate(()=>{sessionStorage.testUid='u2';window.__users.u2.stats.totalScore=6;window.dispatchEvent(new CustomEvent('xiuxian:user-data-ready'));window.openWeaponForge();});
     await frame().waitForFunction(()=>window.getCurrentUserData().weaponSystemV1?.starterClaimed===false);assert.equal(await ui('[data-weapon-retry]').count(),0);assert.equal(db.records.has('weaponArmories/u2'),false);
-    assert.deepEqual(errors,[]);console.log('Weapon browser checks passed: Foundation navigation, one slot, five weapons, starter/chest choice, duplicate and gold upgrades, lost-response idempotency, three stage sizes, no horizontal clipping and account isolation.');
+    assert.deepEqual(errors,[]);console.log('Weapon browser checks passed: Foundation navigation, one slot, five weapons, starter/chest choice, named realms, player-realm gate, combined copy/gold payment, lost-response idempotency, three stage sizes, no horizontal clipping and account isolation.');
   }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
