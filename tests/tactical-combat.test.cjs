@@ -30,6 +30,66 @@ test('attacks require range, sight, stamina and own turn; guard spends an action
   assert.equal(s.actors[1].hp,800);assert.throws(()=>R.apply(s,'u1',{type:'attack',x:2,y:3},fixed),/兩次/);
   assert.equal(s.actors[0].stamina,8);
 });
+test('normal attacks choose exactly one cardinal direction and hit both cells for one cost',()=>{
+  for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){
+    const s=battle();s.blocks=[];Object.assign(s.actors[0],{x:3,y:3,stamina:8});
+    s.actors=[s.actors[0],...[1,2,3].map(n=>R.actor(hero('m'+n,{bot:true,team:'monster'}),{x:3+dx*n,y:3+dy*n}))];
+    const next=R.apply(s,'u1',{type:'attack',x:3+dx,y:3+dy},fixed);
+    assert.deepEqual(next.actors.slice(1).map(a=>a.hp),[800,800,1000]);
+    assert.equal(next.actors[0].stamina,6);assert.equal(next.actors[0].attacks,1);assert.equal(next.actors[0].actions,1);
+    assert.equal(next.turn,1);assert.equal(s.actors[1].hp,1000);
+    const far=R.apply(s,'u1',{type:'attack',x:3+dx*2,y:3+dy*2},fixed);
+    assert.deepEqual(far.actors,next.actors,'either red cell selects the same two-cell ray');
+  }
+});
+test('directional attacks stop at walls and edges, exclude diagonals, and permit an empty ray',()=>{
+  const s=battle();s.blocks=[{x:3,y:2}];Object.assign(s.actors[0],{x:3,y:3,stamina:8});
+  Object.assign(s.actors[1],{x:3,y:1});
+  assert.deepEqual(R.skillCells(s,s.actors[0],R.BASIC,{x:3,y:2}),[]);
+  assert.throws(()=>R.apply(s,'u1',{type:'attack',x:3,y:1},fixed),/視線/);
+  assert.throws(()=>R.apply(s,'u1',{type:'attack',x:4,y:4},fixed),/同一行|同一列/);
+  assert.throws(()=>R.apply(s,'u1',{type:'attack',x:3,y:3},fixed),/同一行|同一列/);
+  const miss=R.apply(s,'u1',{type:'attack',x:2,y:3},fixed);
+  assert.equal(miss.actors[1].hp,s.actors[1].hp);assert.equal(miss.actors[0].stamina,6);
+  s.actors[0].x=5;
+  assert.deepEqual(R.skillCells(s,s.actors[0],R.BASIC,{x:6,y:3}),[{x:6,y:3}]);
+  assert.ok(R.aimCells(s,s.actors[0],R.BASIC).every(p=>R.inside(s,p)));
+});
+test('move highlights match every legal server move, including detours, occupancy, stamina and slow',()=>{
+  for(const slow of [0,1])for(const stamina of [0,1,3,6]){
+    const s=battle();Object.assign(s.actors[0],{x:1,y:3,stamina,slow});s.blocks=[{x:2,y:3},{x:2,y:2}];
+    const a=s.actors[0],cells=R.moveCells(s,a),byKey=new Map(cells.map(p=>[R.key(p),p]));
+    assert.equal(cells.length,byKey.size);
+    for(let y=0;y<s.height;y++)for(let x=0;x<s.width;x++){
+      if(x===a.x&&y===a.y)continue;
+      let next;try{next=R.apply(s,'u1',{type:'move',x,y},fixed);}catch(_){}
+      assert.equal(byKey.has(x+','+y),!!next,`slow=${slow}, stamina=${stamina}, cell=${x},${y}`);
+      if(next)assert.equal(byKey.get(x+','+y).cost,stamina-next.actors[0].stamina);
+    }
+  }
+  const s=battle();s.actors[0].stamina=10;s.actors[0].actions=R.LIMITS.actions;
+  assert.deepEqual(R.moveCells(s,s.actors[0]),[]);
+});
+test('core aim ranges follow their own line, area, teleport and self-cast shapes',()=>{
+  const s=battle();s.blocks=[{x:3,y:2}];Object.assign(s.actors[0],{x:3,y:3,stamina:10});
+  const a=s.actors[0],line=R.CORES.ocean.branches[0].skill,area=R.CORES.thunder.branches[0].skill;
+  const rays=R.aimCells(s,a,line),diamond=R.aimCells(s,a,area);
+  assert.ok(rays.every(p=>p.x===a.x||p.y===a.y));assert.ok(!rays.some(p=>p.x===3&&p.y<3));
+  assert.ok(diamond.some(p=>p.x===4&&p.y===4));assert.ok(diamond.some(p=>R.key(p)===R.key(a)),'area skills may target the caster cell');
+  for(const [type,c]of Object.entries(R.CORES))for(const branch of c.branches){
+    const sk=branch.skill,range=R.aimCells(s,a,sk);
+    assert.ok(range.every(p=>R.inside(s,p)&&!R.blocked(s,p)&&R.dist(a,p)<=sk.range),type+':'+branch.id);
+    if(sk.range===0)assert.deepEqual(range,[{x:a.x,y:a.y}]);
+    if(sk.kind==='blink')assert.ok(range.every(p=>!R.at(s,p)));
+  }
+});
+test('blink burst preview covers the same adjacent enemies as the actual cast',()=>{
+  const s=battle('pve',{players:[hero('u1',{core:'pojing',branch:'breach'})]});s.blocks=[];s.actors[0].stamina=10;
+  const p={x:3,y:3};s.actors=[s.actors[0],R.actor(hero('m1',{bot:true,team:'monster'}),{x:4,y:3}),R.actor(hero('m2',{bot:true,team:'monster'}),{x:4,y:4})];
+  const cells=R.skillCells(s,s.actors[0],R.branchFor(s.actors[0]).skill,p),next=R.apply(s,'u1',{type:'skill',...p},fixed);
+  assert.ok(cells.some(c=>c.x===4&&c.y===3));assert.ok(!cells.some(c=>c.x===4&&c.y===4));
+  assert.equal(next.actors[1].hp,760);assert.equal(next.actors[2].hp,1000);
+});
 test('all nine cores have two distinct executable branches and immutable cooldowns',()=>{
   let count=0;
   for(const [type,c]of Object.entries(R.CORES)){
@@ -71,6 +131,15 @@ test('PvP timeout advances the turn and two consecutive missed own turns forfeit
   assert.equal(s.finishReason,'timeout');
 });
 const {database}=require('./helpers/tactical-db.cjs');
+test('server directional hits and stamina are idempotent and ignore forged range and damage',async()=>{
+  const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed),raw=db.records.get(api.ROOMS+'/'+s.id);
+  raw.blocks=[];Object.assign(raw.actors[0],{x:1,y:3,stamina:8});
+  raw.actors=[raw.actors[0],...[2,3,4].map((x,i)=>R.actor(hero('m'+i,{bot:true,team:'monster'}),{x,y:3}))];
+  const input={roomId:s.id,revision:s.revision,requestId:'direction-attack-01',type:'attack',x:2,y:3,range:99,damage:999999};
+  const first=await api.command(db,'u1',input,fixed),retry=await api.command(db,'u1',input,fixed);
+  assert.deepEqual(first.actors.slice(1).map(a=>a.hp),[800,800,1000]);
+  assert.deepEqual(retry.actors,first.actors);assert.equal(retry.actors[0].stamina,6);assert.equal(retry.actors[0].attacks,1);
+});
 test('server hides pending answers, rejects out-of-turn generation and credits retried answers only once',async()=>{
   const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed);
   const expected=await api.prepareQuestion(db,'u1',s.id,fixed);

@@ -80,7 +80,7 @@ function renderHub(){
 }
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span>紅格：妖獸預告 · 紫格：隕星</span></div><canvas tabindex="0" aria-label="方格戰場；點選地格或使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection>點選地格，預覽路線與體力消耗</div></section>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection>點選地格，預覽路線與體力消耗</div></section>
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" class="tc-primary" data-quiz>答題補充體力</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">攻擊 · 2</button><button type="button" data-action="skill">金丹技能</button></div><div class="tc-skill-info" data-skill></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><div class="tc-turn-buttons"><button type="button" data-guard>護身 · 免費</button><button type="button" data-end>結束回合 →</button></div></section>
     <div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div><div class="tc-game-footer"><button type="button" data-sync>重新同步</button><button type="button" data-leave>離開戰場</button></div></aside>`;
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);}});
@@ -92,7 +92,7 @@ function paint(){
     destroyRenderer();$('[data-main]').className='tc-main tc-waiting';
     $('[data-main]').innerHTML=`<div><small>演武庭已備妥</small><h2>靜候道友入場</h2><p>正在尋找同一戰場的道友，也可以分享代碼邀請朋友。</p><code>${esc(state.id.replace('arena-',''))}</code><button type="button" data-copy>複製戰場代碼</button><p class="tc-muted">${esc(R.mapFor(state.map).name)} · ${state.width} × ${state.height}</p><button type="button" data-leave>取消配對</button></div>`;return;
   }
-  if(!$('canvas'))buildGame();
+  if(!renderer||!$('canvas'))buildGame();
   const me=state.actors.find(a=>a.uid===uid),myTurn=state.turnUid===uid&&state.status==='active';
   $('[data-map-name]').textContent=(state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name)+' · '+state.width+' × '+state.height;
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}"><div><b>${esc(a.name)}</b><span>${a.uid===uid?'我方':a.bot?'妖獸':'對手'}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div><small>${a.hp} / ${a.maxHp}${a.shield?' · 護盾 '+a.shield:''}${a.slow?' · 緩速':''}</small>${a.intent&&a.hp>0?'<p>'+esc(a.intent.text)+'</p>':''}</div>`).join('');
@@ -108,19 +108,23 @@ function updateControls(){
   if(!$('[data-selection]')||!state)return;
   const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid,sk=R.branchFor(me).skill;
   const t=selection?R.at(state,selection):null;
-  let label='選擇目標',error='';
+  let label=action==='attack'?'選擇攻擊方向':action==='move'?'選擇移動位置':'選擇施放位置',error='';
+  const direction=selection?(selection.x===me.x&&selection.y!==me.y?selection.y>me.y?'下':'上':selection.y===me.y&&selection.x!==me.x?selection.x>me.x?'右':'左':''):'';
   if(action==='move'&&selection){const path=R.path(state,me,selection,uid),cost=(path?.length-1)*(1+(me.slow||0));
     label=path&&path.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
     if(!path||path.length<2)error='此地格無法到達';else if(cost>me.stamina)error='體力不足';
   }else if(selection){
-    const chosen=action==='attack'?R.BASIC:sk;label=chosen.name+' · '+chosen.cost+' 體力';
+    const chosen=action==='attack'?R.BASIC:sk;label=(action==='attack'&&direction?'向'+direction+'攻擊':chosen.name)+' · '+chosen.cost+' 體力';
     try{R.validateSkill(state,me,chosen,selection);}catch(e){error=e.message;}
   }
   const cooling=Math.max(0,(me.cooldowns[sk.id]||0)-me.turns);
-  $('[data-skill]').innerHTML=`<b>${esc(R.branchFor(me).name)} · ${esc(sk.name)} <span>${sk.cost} 體力${cooling?' · 冷卻 '+cooling+' 回合':''}</span></b><p>${esc(sk.description)}</p>`;
+  const shown=action==='attack'?R.BASIC:sk;
+  $('[data-skill]').innerHTML=`<b>${action==='attack'?'四向攻擊':esc(R.branchFor(me).name)} · ${esc(shown.name)} <span>${shown.cost} 體力${action!=='attack'&&cooling?' · 冷卻 '+cooling+' 回合':''}</span></b><p>${esc(shown.description)}</p>`;
   $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||busy||!selection||!!error||me.actions>=R.LIMITS.actions;
   root.querySelectorAll('[data-action]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.action===action));b.disabled=!mine||busy;});
-  $('[data-selection]').textContent=selection?`地格 ${selection.x+1}, ${selection.y+1}${t?' · '+t.name+' · 生命 '+t.hp+'/'+t.maxHp:''}${error?' · '+error:''}`:mine?'點選地格，預覽路線與體力消耗':'對手正在思考。你可以查看戰場與攻擊預告。';
+  $('[data-range-legend]').textContent=(action==='move'?'灰閃：可走':'紅格：射程')+' · 紅框：預告';
+  const hint=action==='move'?'灰色閃動格可移動，點選預覽路線與體力消耗':action==='attack'?'點選上下左右的紅格，攻擊該方向兩格':sk.range===0?'紅格標示自身，確認即可施放金丹技能':'紅格標示技能射程，點選後預覽命中區域';
+  $('[data-selection]').textContent=selection?`${action==='attack'&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,R.BASIC,selection).length+' 格':`地格 ${selection.x+1}, ${selection.y+1}${t?' · '+t.name+' · 生命 '+t.hp+'/'+t.maxHp:''}`}${error?' · '+error:''}`:mine?hint:'對手正在思考。你可以查看戰場與攻擊預告。';
 }
 function updateClock(){
   if(!opened||!state)return;
@@ -132,10 +136,10 @@ function updateClock(){
 }
 function showModal(html,{quiz=false}={}){
   modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
-  $('[data-main]').inert=true;$('[data-close]').disabled=true;
+  $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
   $('[data-modal] .tc-dialog').focus();window.quizMathTypeset?.($('[data-modal]'));
 }
-function hideModal(){if(!root)return;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;}
+function hideModal(){if(!root)return;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
 function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   if(state.mode==='pve'){

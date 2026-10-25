@@ -5,7 +5,9 @@ const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/wo
 
 export class TacticalRenderer{
   constructor(canvas,onSelect){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.images={};this.frame=0;this.destroyed=false;this.motion=null;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.images={};this.frame=0;this.destroyed=false;this.motion=null;this.paused=false;this.range=[];
+    this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
+    this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
       const img=new Image();img.onload=()=>this.draw();img.onerror=()=>this.draw();img.src=url;this.images[id]=img;
     }
@@ -24,21 +26,27 @@ export class TacticalRenderer{
     if(this.state&&state.id===this.state.id&&state.revision>this.state.revision){
       const event=state.events.at(-1);if(event?.type==='move'&&event.path?.length>1)this.motion={uid:event.actor,path:event.path,started:performance.now()};
     }
+    if(this.state!==state||this.uid!==uid||this.mode!==mode){
+      const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid;
+      this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,mode==='attack'?R.BASIC:R.branchFor(me).skill)):[];
+    }
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.draw();
   }
-  destroy(){this.destroyed=true;this.resize.disconnect();cancelAnimationFrame(this.frame);}
+  setPaused(value){if(this.paused===value)return;this.paused=value;this.draw();}
+  destroy(){this.destroyed=true;this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
   }
   draw(){
-    if(this.destroyed||!this.state)return;cancelAnimationFrame(this.frame);
+    cancelAnimationFrame(this.frame);this.frame=0;
+    if(this.destroyed||this.paused||document.hidden||!this.state)return;
     const {canvas,ctx:c,state:s}=this,rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
     const dpr=Math.min(3,window.devicePixelRatio||1),w=rect.width,h=rect.height;
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
     c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
     const cell=this.cell=Math.min((w-20)/s.width,(h-24)/s.height),ox=this.ox=Math.round((w-cell*s.width)/2),oy=this.oy=Math.round((h-cell*s.height)/2);
-    const mine=s.actors.find(a=>a.uid===this.uid),myTurn=s.status==='active'&&s.turnUid===this.uid;
+    const mine=s.actors.find(a=>a.uid===this.uid),myTurn=s.status==='active'&&s.turnUid===this.uid,reduced=this.reducedMotion.matches,now=performance.now();
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
     c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
     for(let y=0;y<s.height;y++)for(let x=0;x<s.width;x++){
@@ -46,21 +54,19 @@ export class TacticalRenderer{
       if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=(x+y)%2?'#5b6650':'#5f6b53';c.fillRect(px,py,edgeX-px,edgeY-py);}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
     }
-    for(const a of s.actors.filter(a=>a.bot&&R.alive(a)))for(const p of a.intent?.cells||[])fill(p,'#e2564547','#f0896da0');
-    for(const e of s.effects)for(const p of e.cells)fill(p,'#9b7aec55','#d5b8ff');
     if(myTurn&&this.mode==='move'){
-      // One bounded BFS rather than a path search for every cell on larger maps.
-      const queue=[{x:mine.x,y:mine.y,d:0}],seen=new Set([R.key(mine)]),step=1+(mine.slow||0);
-      for(let i=0;i<queue.length;i++){
-        const p=queue[i];if(p.d>0)fill(p,'#e5d08815');if((p.d+1)*step>mine.stamina)continue;
-        for(const n of R.neighbours(s,p))if(!seen.has(R.key(n))&&!R.at(s,n)){seen.add(R.key(n));queue.push({...n,d:p.d+1});}
-      }
+      // Absolute time keeps the same soft pulse at any refresh rate. The BFS is
+      // cached by update(), rather than repeated on every animation frame.
+      const alpha=reduced ? .4 : .18+.34*(.5+.5*Math.sin(now*2*Math.PI/1400));
+      for(const p of this.range)fill(p,`rgba(128,128,128,${alpha})`,'#dadde18c');
     }
     if(myTurn&&['attack','skill'].includes(this.mode)){
       const sk=this.mode==='attack'?R.BASIC:R.branchFor(mine).skill;
-      for(let y=0;y<s.height;y++)for(let x=0;x<s.width;x++)if(R.dist(mine,{x,y})<=sk.range&&!R.blocked(s,{x,y})&&R.sight(s,mine,{x,y}))fill({x,y},'#e4b66e17');
-      if(this.selection)for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#eabb664a','#ffdf9e');
+      for(const p of this.range)fill(p,'#e445454d','#ed6a6a99');
+      if(this.selection&&this.range.some(p=>R.key(p)===R.key(this.selection)))for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
     }
+    for(const e of s.effects)for(const p of e.cells)fill(p,'#9b7aec55','#d5b8ff');
+    c.setLineDash([3,3]);for(const a of s.actors.filter(a=>a.bot&&R.alive(a)))for(const p of a.intent?.cells||[])fill(p,'#e2564518','#ff8871');c.setLineDash([]);
     if(myTurn&&this.mode==='move'&&this.selection){
       const route=R.path(s,mine,this.selection,mine.uid);if(route&&route.length>1){
         c.beginPath();route.forEach((p,i)=>c[i?'lineTo':'moveTo'](ox+(p.x+.5)*cell,oy+(p.y+.5)*cell));
@@ -77,8 +83,8 @@ export class TacticalRenderer{
     let moving=false;
     const positions=s.actors.filter(R.alive).map(a=>{
       let x=a.x,y=a.y,frame=0,row=a.gender==='female'?2:0;
-      if(this.motion?.uid===a.uid&&!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
-        const t=(performance.now()-this.motion.started)/130,path=this.motion.path,i=Math.floor(t);
+      if(this.motion?.uid===a.uid&&!reduced){
+        const t=(now-this.motion.started)/130,path=this.motion.path,i=Math.floor(t);
         if(i<path.length-1){const f=t-i,p=path[i],n=path[i+1];x=p.x+(n.x-p.x)*f;y=p.y+(n.y-p.y)*f;
           row=n.x>p.x?1:n.x<p.x?2:n.y<p.y?3:0;frame=[1,2,3,0][Math.floor(t)%4];moving=true;
         }
@@ -99,6 +105,7 @@ export class TacticalRenderer{
     }
     if(this.selection)fill(this.selection,'#fff0','#fff1ba');
     c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox,oy,cell*s.width,cell*s.height);
-    if(moving)this.frame=requestAnimationFrame(()=>this.draw());else this.motion=null;
+    if(!moving)this.motion=null;
+    if(moving||myTurn&&this.mode==='move'&&this.range.length&&!reduced)this.frame=requestAnimationFrame(()=>this.draw());
   }
 }

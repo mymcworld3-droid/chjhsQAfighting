@@ -53,7 +53,7 @@
       {id:'blades',name:'萬劍',skill:skill('blades','萬劍歸一',4,4,'line',1.6,'劍氣沿直線穿過敵人，遇石障停止。')}
     ])
   });
-  const BASIC=skill('attack','普通攻擊',2,1,'hit',1,'攻擊相鄰敵人。',{cooldown:0});
+  const BASIC=skill('attack','普通攻擊',2,2,'line',1,'選擇上下左右一個方向，攻擊該方向兩格；遇障礙停止。',{cooldown:0});
   // The existing spirit page remains the single branch-selection surface.
   const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
     ningxin:{focus:'focus',calm:'barrier'},pojing:{execute:'execute',momentum:'breach'},xingchen:{meteor:'meteor',moon:'orbit'},
@@ -129,6 +129,17 @@
       }
     }
     return null;
+  }
+  function moveCells(s,a){
+    if(!a||!alive(a)||a.actions>=LIMITS.actions)return [];
+    const step=1+(a.slow||0),queue=[{x:a.x,y:a.y,cost:0}],seen=new Set([key(a)]),cells=[];
+    for(let i=0;i<queue.length;i++){
+      const p=queue[i],cost=p.cost+step;if(cost>a.stamina)continue;
+      for(const n of neighbours(s,p))if(!seen.has(key(n))&&!at(s,n)){
+        const cell={...n,cost};seen.add(key(n));cells.push(cell);queue.push(cell);
+      }
+    }
+    return cells;
   }
   function sight(s,a,b){
     let x=a.x,y=a.y;const dx=Math.abs(b.x-x),dy=Math.abs(b.y-y),sx=x<b.x?1:-1,sy=y<b.y?1:-1;let err=dx-dy;
@@ -214,7 +225,21 @@
     const dx=Math.abs(target.x-a.x)>=Math.abs(target.y-a.y)?Math.sign(target.x-a.x):0,dy=dx?0:Math.sign(target.y-a.y);
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(blocked(s,p)||at(s,p))break;target.x=p.x;target.y=p.y;}
   }
-  function skillCells(s,a,sk,p){return sk.kind==='line'?line(s,a,p,sk.range):['area','meteor'].includes(sk.kind)?area(s,p,sk.radius||1):[p];}
+  // Geometric aiming range stays visible even while stamina/cooldown prevents a
+  // cast. The server still validates the selected enemy, resources and turn.
+  function aimCells(s,a,sk){
+    if(!a||!alive(a))return [];
+    if(sk.kind==='line')return [{x:a.x+1,y:a.y},{x:a.x-1,y:a.y},{x:a.x,y:a.y+1},{x:a.x,y:a.y-1}].flatMap(p=>line(s,a,p,sk.range));
+    const cells=[];
+    for(let y=Math.max(0,a.y-sk.range);y<=Math.min(s.height-1,a.y+sk.range);y++)for(let x=Math.max(0,a.x-sk.range);x<=Math.min(s.width-1,a.x+sk.range);x++){
+      const p={x,y};if(dist(a,p)>sk.range||blocked(s,p)||!sight(s,a,p))continue;
+      if(sk.kind==='blink'&&at(s,p))continue;
+      if(['hit','lunge','swap'].includes(sk.kind)&&key(p)===key(a))continue;
+      cells.push(p);
+    }
+    return cells;
+  }
+  function skillCells(s,a,sk,p){return sk.kind==='line'?line(s,a,p,sk.range):['area','meteor'].includes(sk.kind)||sk.kind==='blink'&&sk.burst?area(s,p,sk.radius||1):[p];}
   function validateSkill(s,a,sk,p){
     if(a.stamina<sk.cost)fail('體力不足，先答題補充');
     if(a.attacks>=LIMITS.attacks)fail('本回合已使用兩次攻擊／技能');
@@ -338,5 +363,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit');return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,sight,area,line,actor,create,join,skillCells,validateSkill,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,apply,answer,expire,forfeit});
 });

@@ -48,6 +48,7 @@ async function main(){
   catch(e){server.close();throw e;}
   const errors=[];
   async function make(uid,viewport){const context=await browser.newContext({viewport,deviceScaleFactor:2});await context.addInitScript(uid=>sessionStorage.testUid=uid,uid);
+    await context.addInitScript(()=>{const clear=CanvasRenderingContext2D.prototype.clearRect;CanvasRenderingContext2D.prototype.clearRect=function(...args){if(this.canvas.closest('#tactical-combat'))window.__battleDraws=(window.__battleDraws||0)+1;return Reflect.apply(clear,this,args);};});
     await context.addInitScript(()=>{window.__pickersSeen=0;window.__pickerObserver=new MutationObserver(()=>{if(document.querySelector('#tactical-combat [data-map],#tactical-combat [data-branch]'))window.__pickersSeen++;});window.__pickerObserver.observe(document,{childList:true,subtree:true});});
     const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
     const frame=()=>page.frames().find(f=>f!==page.mainFrame()&&/\/app\.html(?:[?#]|$)/.test(f.url()));
@@ -112,6 +113,52 @@ async function main(){
     await page.locator('[data-continue]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,'question-review-'+orientation+'.png')});
     await page.locator('[data-continue]').click();await page.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
   }
+  async function rangePreviewChecks(view){
+    const current=await read(view),key=service.ROOMS+'/'+current.id,saved=db.records.get(key);
+    const room=Rules.create({id:current.id,mode:'pve',players:[{...saved.actors[0],core:'thunder',branch:'lightning'}]});
+    Object.assign(room.actors[0],{x:3,y:3,stamina:8,knowledgeScope:saved.actors[0].knowledgeScope});
+    room.blocks=[{x:3,y:2}];room.actors=[room.actors[0],...[[4,3],[5,3],[4,4]].map(([x,y],i)=>Rules.actor({uid:'monster-'+i,name:'演武妖獸',bot:true,team:'monster',atk:100,maxHp:1000,species:i},{x,y,intent:{kind:'advance',cells:[],text:'下次：向你接近'}}))];
+    room.revision=saved.revision+1;db.records.set(key,room);
+    await view.setViewportSize({width:393,height:852});await view.locator('[data-sync]').click();
+    await view.waitForFunction(()=>document.querySelector('[data-stamina] strong').textContent==='8'&&!document.querySelector('[data-end]').disabled);
+    await view.locator('[data-action="move"]').click();
+    const sample=(positions,duration)=>view.evaluate(({positions,duration})=>new Promise(resolve=>{
+      const started=performance.now(),samples=[];
+      function frame(now){const canvas=document.querySelector('#tactical-combat canvas'),r=canvas.getBoundingClientRect(),size=Math.min((r.width-20)/7,(r.height-24)/7),ox=Math.round((r.width-size*7)/2),oy=Math.round((r.height-size*7)/2),scale=canvas.width/r.width;
+        samples.push(positions.map(p=>Array.from(canvas.getContext('2d').getImageData(Math.floor((ox+(p.x+.8)*size)*scale),Math.floor((oy+(p.y+.8)*size)*scale),1,1).data)));
+        if(now-started>=duration)resolve(samples);else requestAnimationFrame(frame);
+      }requestAnimationFrame(frame);
+    }),{positions,duration});
+    const pulse=await sample([{x:2,y:3}],1500),values=pulse.map(p=>p[0][0]);
+    assert.ok(Math.max(...values)-Math.min(...values)>8,'reachable gray cells must visibly pulse');
+    await view.page.emulateMedia({reducedMotion:'reduce'});
+    const still=await sample([{x:2,y:3}],180);assert.deepEqual(still[0],still.at(-1),'reduced motion keeps a steady gray range');
+    await view.screenshot({path:path.join(output,'range-move-mobile.png')});await ratio(view);
+    await view.page.emulateMedia({reducedMotion:'no-preference'});
+    const quiet=()=>view.evaluate(()=>new Promise(resolve=>{const before=window.__battleDraws;let frames=0;function frame(){if(++frames===8)resolve(window.__battleDraws-before);else requestAnimationFrame(frame);}requestAnimationFrame(frame);}));
+    await view.locator('[data-quiz]').click();await view.locator('[data-choice]').first().waitFor();
+    assert.equal(await quiet(),0,'question dialog pauses the battle animation');await view.locator('[data-dismiss]').click();
+    assert.ok(await quiet()>0,'closing the question resumes the move preview');
+    await view.locator('[data-close]').click();assert.equal(await quiet(),0,'closing the battle stops drawing');
+    await view.locator('#entry').click();await view.locator('canvas').waitFor();await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+    assert.ok(await quiet()>0,'resuming a closed battle rebuilds its interactive renderer');
+    await view.locator('[data-action="attack"]').click();
+    const colors=(await sample([{x:2,y:3},{x:1,y:3},{x:2,y:2},{x:0,y:3}],0))[0];
+    assert.ok(colors[0][0]-colors[0][1]>25&&colors[1][0]-colors[1][1]>25,'both cells of a cardinal ray are red');
+    assert.ok(colors[2][0]-colors[2][1]<25&&colors[3][0]-colors[3][1]<25,'diagonals and third cells are outside the normal attack range');
+    assert.equal(await quiet(),0,'static attack ranges do not keep repainting');
+    await cell(view,4,3);assert.match(await view.locator('[data-execute]').textContent(),/向右攻擊/);
+    await view.screenshot({path:path.join(output,'range-attack-mobile.png')});await ratio(view);
+    await view.locator('[data-execute]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    const hit=await read(view);assert.deepEqual(hit.actors.slice(1).map(a=>a.hp),[800,800,1000]);assert.equal(hit.actors[0].stamina,6);
+    await view.locator('[data-action="skill"]').click();
+    const diagonal=(await sample([{x:2,y:2}],0))[0][0];assert.ok(diagonal[0]-diagonal[1]>25,'area core uses its own diamond aiming range');
+    await cell(view,4,3);await view.screenshot({path:path.join(output,'range-core-mobile.png')});await ratio(view);
+    await view.locator('[data-execute]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    const cast=await read(view);assert.deepEqual(cast.actors.slice(1).map(a=>a.hp),[520,520,720]);assert.equal(cast.actors[0].stamina,2);
+    saved.revision=cast.revision+1;db.records.set(key,saved);await view.locator('[data-sync]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    await view.locator('[data-action="move"]').click();await ratio(view);
+  }
   try{
     const mobile=await make('u1',{width:393,height:852});
     await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor();
@@ -135,6 +182,7 @@ async function main(){
       await mobile.setViewportSize({width,height});await ratio(mobile);await mobile.screenshot({path:path.join(output,name+'.png')});
     }
     assert.ok(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    await rangePreviewChecks(mobile);
     // Reproduce the reported exhausted-stamina view with the densest later-stage HUD.
     const room=await read(mobile),key=service.ROOMS+'/'+room.id,saved=db.records.get(key);
     let denseStage=10;while(true){const layout=Rules.stageLayout('layout-fit',denseStage);if(layout.width===11&&layout.enemies.length===4)break;denseStage++;}
@@ -171,7 +219,7 @@ async function main(){
     await correct(mobile);await mobile.locator('[data-end]').click();await p2.waitForFunction(()=>!document.querySelector('[data-quiz]').disabled,{timeout:15000});
     await correct(p2);assert.equal((await read(p2)).actors.find(a=>a.uid==='u2').stamina,6);
     await p2.screenshot({path:path.join(output,'duel-landscape.png')});
-    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question-page styles in both orientations and answer review, production theme isolation, visible controls with four enemies and zero stamina, scaled canvas input, bounded cloud/dialogs, trial progression and two-player synchronization.');
+    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question-page styles in both orientations and answer review, production theme isolation, visible controls with four enemies and zero stamina, gray range pulses and reduced motion, two-cell directional hits, core aiming, paused/resumed rendering, scaled canvas input, bounded cloud/dialogs, trial progression and two-player synchronization.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
