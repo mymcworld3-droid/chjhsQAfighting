@@ -50,7 +50,7 @@ test('new accounts see Status; existing Foundation and Golden Core gates are at 
 
 test('compact contract entrance sits beside the forge and opens its existing tab', () => {
   const contract = Rules.PLACES.find(place => place.id === 'contract');
-  assert.equal(contract.name, '契器');
+  assert.equal(contract.name, '尋器');
   assert.equal(contract.threshold, 28);
   for (const layout of Object.values(Layouts)) {
     const forge = layout.places.forge.bounds, altar = layout.places.contract.bounds;

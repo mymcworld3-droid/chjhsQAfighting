@@ -7,6 +7,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
 
 (function () {
   'use strict';
+  if(window.QA_WEAPON_SYSTEM_ENABLED)return;
 
   const SLOT_COUNT = 8;
   const TAB = 'refinery';

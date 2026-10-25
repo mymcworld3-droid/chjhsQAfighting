@@ -1,3 +1,4 @@
+import './weapon-system-rules.js';
 import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js';
 import {EnemyDemo} from './tactical-enemy-demo.js';
@@ -109,7 +110,7 @@ function paint({preserveModal=false}={}){
   if(!renderer||!$('canvas'))buildGame();
   const me=myActor(),myTurn=myAction();
   $('[data-map-name]').textContent=(state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name)+' · '+state.width+' × '+state.height;
-  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}"><div><b>${esc(a.name)}</b><span>${a.uid===uid?'我方':a.bot?'妖獸':'對手'}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div><small>${a.hp} / ${a.maxHp}${a.shield?' · 護盾 '+a.shield:''}${a.slow?' · 緩速':''}</small>${a.intent&&a.hp>0?'<p>'+esc(a.intent.text)+'</p>':''}</div>`).join('');
+  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}"><div><b>${esc(a.name)}</b><span>${a.uid===uid?'我方':a.bot?'妖獸':'對手'}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div><small>${a.hp} / ${a.maxHp}${a.shield?' · 護盾 '+a.shield:''}${a.slow?' · 緩速':''}${a.weapon?' · '+esc(globalThis.QAWeapons.get(a.weapon.type).label)+' Lv.'+a.weapon.level:''}</small>${a.intent&&a.hp>0?'<p>'+esc(a.intent.text)+'</p>':''}</div>`).join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>本回合答題 ${me.questions}/2 · 攻擊／技能 ${me.attacks}/2</small>`;
   $('[data-quiz]').textContent=canQuestion()?`${state.quizRound?'本輪答題':'答題補充體力'} · ${me.questions}/2`:state.quizRound&&me.questions>=2?'兩題完成 · 等待行動':myTurn?'本回合答題完成':'等待對手行動';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
@@ -125,23 +126,25 @@ function updateControls(){
   $('[data-sync]').disabled=locked;root.classList.toggle('tc-animating',!!animating);
   $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
-  let label=action==='attack'?'選擇攻擊方向':action==='move'?'選擇移動位置':'選擇施放位置',error='';
+  const basic=R.basicFor(me),directional=['line','cleave'].includes(basic.kind);
+  $('[data-action="attack"]').textContent=`${me.weapon?globalThis.QAWeapons.get(me.weapon.type).label:'攻擊'} · ${basic.cost}`;
+  let label=action==='attack'?(directional?'選擇攻擊方向':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='';
   const direction=selection?(selection.x===me.x&&selection.y!==me.y?selection.y>me.y?'下':'上':selection.y===me.y&&selection.x!==me.x?selection.x>me.x?'右':'左':''):'';
   if(action==='move'&&selection){const path=R.path(state,me,selection,uid),cost=(path?.length-1)*(1+(me.slow||0));
     label=path&&path.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
     if(!path||path.length<2)error='此地格無法到達';else if(cost>me.stamina)error='體力不足';
   }else if(selection){
-    const chosen=action==='attack'?R.BASIC:sk;label=(action==='attack'&&direction?'向'+direction+'攻擊':chosen.name)+' · '+chosen.cost+' 體力';
+    const chosen=action==='attack'?basic:sk;label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':chosen.name)+' · '+chosen.cost+' 體力';
     try{R.validateSkill(state,me,chosen,selection);}catch(e){error=e.message;}
   }
   const cooling=Math.max(0,(me.cooldowns[sk.id]||0)-me.turns);
-  const shown=action==='attack'?R.BASIC:sk;
-  $('[data-skill]').innerHTML=`<b>${action==='attack'?'四向攻擊':esc(R.branchFor(me).name)} · ${esc(shown.name)} <span>${shown.cost} 體力${action!=='attack'&&cooling?' · 冷卻 '+cooling+' 回合':''}</span></b><p>${esc(shown.description)}</p>`;
+  const shown=action==='attack'?basic:sk;
+  $('[data-skill]').innerHTML=`<b>${action==='attack'?'兵器招式':esc(R.branchFor(me).name)} · ${esc(shown.name)} <span>${shown.cost} 體力${action!=='attack'&&cooling?' · 冷卻 '+cooling+' 回合':''}</span></b><p>${esc(shown.description)}</p>`;
   $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
   root.querySelectorAll('[data-action]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.action===action));b.disabled=!mine||locked;});
   $('[data-range-legend]').textContent=(action==='move'?'灰閃：可走':'紅格：射程')+' · 紅框：預告';
-  const hint=action==='move'?'灰色閃動格可移動，點選預覽路線與體力消耗':action==='attack'?'點選上下左右的紅格，攻擊該方向兩格':sk.range===0?'紅格標示自身，確認即可施放金丹技能':'紅格標示技能射程，點選後預覽命中區域';
-  $('[data-selection]').textContent=selection?`${action==='attack'&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,R.BASIC,selection).length+' 格':`地格 ${selection.x+1}, ${selection.y+1}${t?' · '+t.name+' · 生命 '+t.hp+'/'+t.maxHp:''}`}${error?' · '+error:''}`:mine?hint:'對手正在思考。你可以查看戰場與攻擊預告。';
+  const hint=action==='move'?'灰色閃動格可移動，點選預覽路線與體力消耗':action==='attack'?basic.description:sk.range===0?'紅格標示自身，確認即可施放金丹技能':'紅格標示技能射程，點選後預覽命中區域';
+  $('[data-selection]').textContent=selection?`${action==='attack'&&directional&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,basic,selection).length+' 格':`地格 ${selection.x+1}, ${selection.y+1}${t?' · '+t.name+' · 生命 '+t.hp+'/'+t.maxHp:''}`}${error?' · '+error:''}`:mine?hint:'對手正在思考。你可以查看戰場與攻擊預告。';
   if(animating)$('[data-selection]').textContent=renderer.currentAction;
 }
 function updateClock(){
@@ -181,7 +184,7 @@ function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'本關妖獸已盡，前方還有新的地勢與敵人。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-exit>返回宗門</button>`);return;
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'本關妖獸已盡，前方還有新的地勢與敵人。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}${state.weaponRewards?.[uid]?.chests?' · 自選兵器匣 ×'+state.weaponRewards[uid].chests+'（尋器頁開啟）':''}</p><button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-exit>返回宗門</button>`);return;
   }
   showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
 }
@@ -213,7 +216,7 @@ async function task(work,{render=true}={}){
   try{const next=await work();if(!valid(e,account))return;
     retryMs=4000;if(render)accept(next,serial);return next;
   }catch(err){if(valid(e,account)){notice(err.message);retryMs=Math.min(30000,retryMs*2);}}
-  finally{if(valid(e,account)){busy=false;if(state&&$('canvas'))updateControls();else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);schedule();}}
+  finally{if(valid(e,account)){busy=false;if(state&&$('canvas')){updateControls();const acknowledge=$('[data-intro-ack]');if(acknowledge)acknowledge.disabled=false;}else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);schedule();}}
 }
 async function start(code=''){
   await task(async()=>{const result=await api('/api/tactical/start',{mode,map,...(code?{code}:{})});return result.state;});

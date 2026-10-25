@@ -118,6 +118,7 @@ export function getCurrentCombatPower() {
     stats.attack = positive(stats.attack ?? 200) + positive(soul.attackFlat);
     stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) + positive(soul.maxHpFlat);
   }
+  if(window.QA_WEAPON_SYSTEM_ENABLED){stats.attack=Math.round(positive(stats.attack??200)*globalThis.QAWeapons.attackMultiplier(globalThis.QAWeapons.snapshot(data.weaponSystemV1)));return calculateCombatPower({stats,core,equipped:{},inventory:{}});}
   return calculateCombatPower({
     stats, core, equipped: system.equipped || {}, inventory: system.inventory || {}
   });

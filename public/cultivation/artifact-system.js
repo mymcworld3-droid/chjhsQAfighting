@@ -120,6 +120,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     return Object.values(state().buffs).filter((buff) => Number(buff.expiresAt) > now);
   }
   function equipmentEffects() {
+    if(window.QA_WEAPON_SYSTEM_ENABLED)return [];
     const s = state();
     const result = [];
     Object.entries(s.equipped).forEach(([slot, id]) => {
@@ -376,7 +377,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
       const maxHp = Math.max(1, Math.round((baseMaxHp + mod.hpFlat) * mod.hpMultiplier));
       return {
         ...stats,
-        attack: Math.max(0, Math.round(((Number(stats.attack) || 0) + mod.attackFlat) * mod.attackMultiplier)),
+        attack: Math.max(0, Math.round(((Number(stats.attack) || 0) + mod.attackFlat) * mod.attackMultiplier * (window.QA_WEAPON_SYSTEM_ENABLED?globalThis.QAWeapons.attackMultiplier(globalThis.QAWeapons.snapshot(userData()?.weaponSystemV1)):1))),
         maxHp,
         hp: Math.max(0, Math.min(maxHp, Math.round(maxHp * hpRatio)))
       };
@@ -618,6 +619,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     } finally { expiredBuffBusy = false; }
   }
   async function enforceEquipmentEligibility() {
+    if(window.QA_WEAPON_SYSTEM_ENABLED)return;
     if (eligibilityBusy) return;
     const ownerUid = authUser()?.uid;
     if (!ownerUid || !window.__artifactCatalogReadyForEquipment) return;

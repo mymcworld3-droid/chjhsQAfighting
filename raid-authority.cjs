@@ -288,12 +288,16 @@ function trustedRaidPlayerSnapshot(player,uid,catalogDoc={}){
   };
 }
 async function loadTrustedRaidPlayer(db,uid){
-  const [userSnap,catalogSnap]=await Promise.all([
+  const [userSnap,catalogSnap,armorySnap]=await Promise.all([
     db.collection('users').doc(String(uid)).get(),
-    db.collection('gameConfig').doc('artifactCatalogV1').get().catch(()=>null)
+    db.collection('gameConfig').doc('artifactCatalogV1').get().catch(()=>null),
+    db.collection('weaponArmories').doc(String(uid)).get()
   ]);
   if(!userSnap.exists)throw Object.assign(new Error('玩家資料不存在'),{status:404});
-  return trustedRaidPlayerSnapshot(userSnap.data()||{},uid,catalogSnap?.exists?(catalogSnap.data()||{}):{});
+  const user=userSnap.data()||{},W=require('./public/cultivation/weapon-system-rules.js');
+  const player=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalogSnap?.exists?(catalogSnap.data()||{}):{});
+  const weapon=W.snapshot(armorySnap?.exists?armorySnap.data():null),multiplier=W.attackMultiplier(weapon),before=player.atk;
+  player.atk=Math.round(player.atk*multiplier);player.baseAtk=Math.round(player.baseAtk*multiplier);player.combatPower+=2*(player.atk-before);player.weapon=weapon;return player;
 }
 function memberSnapshotFromTrusted(player,host=false){
   return {...player,ready:false,alive:true,online:true,host,damage:0,correct:0,attempts:0,
@@ -490,7 +494,7 @@ function resolveBossDefense(member,{roomId,bossAction,bossHp=Infinity}={}){
 }
 
 module.exports={
-  EQUIP_SLOTS,RUNTIME_EFFECTS,stableHash,artifactPower,combatPower,trustedKnowledgeScope,pickTrustedRaidKnowledge,
+  EQUIP_SLOTS,RUNTIME_EFFECTS,stableHash,artifactPower,artifactCatalog,combatPower,trustedKnowledgeScope,pickTrustedRaidKnowledge,
   trustedRaidPlayerSnapshot,loadTrustedRaidPlayer,memberSnapshotFromTrusted,createRaidBoss,RAID_BOSS_DIFFICULTY,RAID_TEAMWORK,bossPhase,bossIntent,
   resolvePlayerAction,resolveBossDefense
 };

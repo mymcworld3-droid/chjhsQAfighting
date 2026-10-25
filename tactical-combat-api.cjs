@@ -1,6 +1,7 @@
 'use strict';
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
+const Weapons=require('./public/cultivation/weapon-system-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
 const Gold=require('./public/cultivation/answer-gold-rules.js');
@@ -44,10 +45,12 @@ function patchedUser(user,patch){
   for(const [key,value]of Object.entries(patch))if(key.startsWith('stats.'))next.stats[key.slice(6)]=value;else next[key]=value;
   return next;
 }
-function playerActor(user,uid,selection,catalog){
-  const trusted=trustedRaidPlayerSnapshot(user,uid,catalog),type=trusted.goldenCore?.type||'none';
+function playerActor(user,uid,selection,catalog,armory){
+  const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
   const branch=Rules.savedBranch(user,type).id;
-  return {...trusted,core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:trusted.artifactShield||0};
+  const weapon=Weapons.snapshot(armory),multiplier=Weapons.attackMultiplier(weapon);
+  return {...trusted,atk:Math.round(trusted.atk*multiplier),baseAtk:Math.round(trusted.baseAtk*multiplier),enemyScaleAttack:trusted.atk,weapon,
+    core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0};
 }
 function trialProgress(raw,seed){
   return {version:1,seed:/^[a-f0-9]{32}$/.test(raw?.seed)?raw.seed:seed,
@@ -67,9 +70,10 @@ function rewardFor(s,a,user){
 async function settle(tx,db,s){
   const updates={};if(s.status!=='finished')return updates;
   const people=s.actors.filter(a=>!a.bot&&!s.rewarded.includes(a.uid));
-  const [users,pointers]=await Promise.all([
+  const [users,pointers,armories]=await Promise.all([
     Promise.all(people.map(a=>tx.get(db.collection('users').doc(a.uid)))),
-    Promise.all(people.map(a=>tx.get(db.collection(PLAYERS).doc(a.uid))))
+    Promise.all(people.map(a=>tx.get(db.collection(PLAYERS).doc(a.uid)))),
+    Promise.all(people.map(a=>tx.get(db.collection('weaponArmories').doc(a.uid))))
   ]);
   people.forEach((a,i)=>{
     const u=exists(users[i]);if(!u)return;const reward=rewardFor(s,a,u);
@@ -81,6 +85,8 @@ async function settle(tx,db,s){
       const next={...campaign,stage:Math.min(1000000,campaign.stage+1),best:Math.max(campaign.best||0,campaign.stage)};
       patch.tacticalTrialV1=next;s.nextStage=next.stage;
       tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,trial:next});
+      if(a.correct>0){const earned=Weapons.grantTrial(exists(armories[i]),campaign.stage);
+        if(earned.earned){patch.weaponSystemV1=earned.state;s.weaponRewards||={};s.weaponRewards[a.uid]={chests:earned.earned};tx.set(db.collection('weaponArmories').doc(a.uid),earned.state);}}
     }
     if(reward){patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;patch['stats.totalScore']=Rules.num(u.stats?.totalScore)+reward.cultivation;}
     if(reward&&s.mode==='pvp'){
@@ -111,7 +117,7 @@ async function start(db,uid,selection={},now=Date.now()){
   const newId='arena-'+crypto.randomBytes(8).toString('hex'),seed=crypto.randomBytes(16).toString('hex');
   return db.runTransaction(async tx=>{
     const pointerRef=db.collection(PLAYERS).doc(uid),userRef=db.collection('users').doc(uid);
-    const [pointerSnap,userSnap,catalogSnap]=await Promise.all([tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
+    const [pointerSnap,userSnap,catalogSnap,armorySnap]=await Promise.all([tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1')),tx.get(db.collection('weaponArmories').doc(uid))]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
     const pointer=exists(pointerSnap)||{},priorId=pointer.roomId;
     const prior=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
@@ -131,7 +137,7 @@ async function start(db,uid,selection={},now=Date.now()){
     const candidate=wanted||candidates.find(s=>!s.actors.some(a=>a.uid===uid)&&(!prior||s.id<prior.id))?.id;
     const target=candidate?exists(await tx.get(db.collection(ROOMS).doc(candidate))):null;
     if(wanted&&(!target||target.status!=='waiting'||target.createdAtMs<now-15*60000))throw error('此戰場已開始或已失效');
-    const a=playerActor(user,uid,selection,exists(catalogSnap)||{});
+    const a=playerActor(user,uid,selection,exists(catalogSnap)||{},exists(armorySnap));
     if(mode==='pvp'&&a.trainingAccessScore<6)throw error('築基期解鎖鬥法論道');
     let s;
     if(target&&target.status==='waiting'&&!target.actors.some(p=>p.uid===uid)&&target.createdAtMs>now-15*60000){

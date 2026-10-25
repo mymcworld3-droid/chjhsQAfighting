@@ -5,6 +5,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
 
 (function () {
   'use strict';
+  if(window.QA_WEAPON_SYSTEM_ENABLED)return;
   const pool = globalThis.QASoulboundPool;
   let snapshot = null, account = '', busy = false, message = '', animationTimer = null, flipTimer = null, autoTimer = null, presentation = null, externalDirty = false;
   const CAROUSEL_DELAY_MS = 4800, CAROUSEL_MOVE_MS = 660;

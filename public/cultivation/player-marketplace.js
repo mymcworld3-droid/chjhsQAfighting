@@ -144,6 +144,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
     if (busy || !user()) return;
     const seller = user();
     const type = sellType;
+    if(window.QA_WEAPON_SYSTEM_ENABLED&&type==='recipe'){message('配方已停用，兵器在煉器頁直接裝配及升級。',false);return;}
     const id = String(sellId || '');
     const item = itemFor(type, id);
     if (!item) { message('請先選擇可出售的物品或配方。', false); return; }
@@ -222,6 +223,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
         const buyerSnap = await tx.get(buyerRef);
         if (!listingSnap.exists() || !buyerSnap.exists()) throw new Error('委託或玩家資料不存在');
         const listing = listingSnap.data();
+        if(window.QA_WEAPON_SYSTEM_ENABLED&&listing.type==='recipe')throw new Error('配方交易已停用；原委託可由賣家取消。');
         if (listing.status !== 'active') throw new Error('這件商品已售出或下架');
         if (listing.sellerUid === buyer.uid) throw new Error('不可購買自己的委託');
         const sellerRef = doc(db, 'users', listing.sellerUid);
@@ -350,6 +352,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
   function card(listing, own = false) {
     const mine = listing.sellerUid === currentUid;
     const canBuy = !isSoulboundListing(listing.type, listing.itemId) && !own && !mine && !busy && gold(data()) >= qty(listing.price)
+      && !(window.QA_WEAPON_SYSTEM_ENABLED&&listing.type==='recipe')
       && !(listing.type === 'recipe' && data()?.recipeLicenses?.[listing.itemId] === true);
     const price = qty(listing.price);
     return `<article class="pm-card pm-${esc(listing.type)}"><div class="pm-card-head"><span class="pm-icon">${esc(listing.itemIcon)}</span><div><b>${esc(listing.itemName)}</b><small>${esc(TYPE_LABEL[listing.type] || '商品')} · ${esc(listing.itemRealm)} · ×${qty(listing.quantity)}</small></div></div>
@@ -367,10 +370,11 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
     const options = listable();
     if (!options.some((row) => row.id === sellId)) sellId = options[0]?.id || '';
     const selected = options.find((row) => row.id === sellId);
-    const list = filter === 'mine' ? mine : active.filter((listing) => filter === 'all' || listing.type === filter);
-    root.innerHTML = `<div class="pm-header"><div><small>道友互通有無</small><h3><i class="fa-solid fa-scale-balanced"></i> 交易市集</h3><p>材料、法寶與配方指南的玩家寄售市集。價格由賣家設定。</p></div><b>金幣 ${gold(data()).toLocaleString()}</b></div>
-      <details class="pm-compose" ${composing ? 'open' : ''}><summary>發布委託<span>出售材料、法寶與配方指南</span></summary><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p id="pm-material-price-hint" class="pm-price-reference" role="status"></p><p class="pm-hint">八種木／鐵團本素材可自由交易；淬靈玄印、玄天道印綁定玩家不可交易；本命法寶及其配方不可交易，僅契器台靈石抽取可取得本命法寶。法寶上架時扣除可用庫存，取消即退還。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。</p></details>
-      <div class="pm-filters">${[['all','全部'],['material','素材'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
+    if(window.QA_WEAPON_SYSTEM_ENABLED&&sellType==='recipe')sellType='material';
+    const list = filter === 'mine' ? mine : active.filter((listing) => (!window.QA_WEAPON_SYSTEM_ENABLED||listing.type!=='recipe')&&(filter === 'all' || listing.type === filter));
+    root.innerHTML = `<div class="pm-header"><div><small>道友互通有無</small><h3><i class="fa-solid fa-scale-balanced"></i> 交易市集</h3><p>${window.QA_WEAPON_SYSTEM_ENABLED?'舊材料與藏品的玩家寄售市集。兵器在煉器頁裝配與升級。':'材料、法寶與配方指南的玩家寄售市集。價格由賣家設定。'}</p></div><b>金幣 ${gold(data()).toLocaleString()}</b></div>
+      <details class="pm-compose" ${composing ? 'open' : ''}><summary>發布委託<span>${window.QA_WEAPON_SYSTEM_ENABLED?'出售材料與藏品':'出售材料、法寶與配方指南'}</span></summary><div class="pm-form"><label>類別<select id="pm-sell-type">${Object.entries(TYPE_LABEL).filter(([type])=>!window.QA_WEAPON_SYSTEM_ENABLED||type!=='recipe').map(([type,label]) => `<option value="${type}" ${type === sellType ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label>商品<select id="pm-sell-item">${options.map((row) => `<option value="${esc(row.id)}" ${row.id === sellId ? 'selected' : ''}>${esc(row.name)}${sellType === 'recipe' ? ' · 首發配方' : ' · 可售 '+ row.count}</option>`).join('')}</select></label><label>數量<input id="pm-sell-qty" type="number" min="1" max="${selected?.count || 1}" value="${sellType === 'recipe' ? 1 : Math.min(Math.max(1,sellQuantity), selected?.count || 1)}" ${sellType === 'recipe' ? 'disabled' : ''}></label><label>總價（金幣）<input id="pm-sell-price" type="number" min="1" max="${MAX_PRICE}" value="${sellPrice}"></label><button id="pm-publish" ${!options.length || busy ? 'disabled' : ''}>上架寄售</button></div><p id="pm-material-price-hint" class="pm-price-reference" role="status"></p><p class="pm-hint">${window.QA_WEAPON_SYSTEM_ENABLED?'兵器由尋器頁取得，不在此交易。舊材料與裝備可於尋器頁傳承；寄售物品取消委託後才可轉換。舊配方委託可由賣家取消。':'八種木／鐵團本素材可自由交易；淬靈玄印、玄天道印綁定玩家不可交易；本命法寶及其配方不可交易，僅契器台靈石抽取可取得本命法寶。法寶上架時扣除可用庫存，取消即退還。配方交易只傳授製作方法，首發者身分不轉移；沒有配方也能嘗試煉器。'}</p></details>
+      <div class="pm-filters">${[['all','全部'],['material','素材'],['artifact','法寶'],['recipe','配方'],['mine','我的委託']].filter(([value])=>!window.QA_WEAPON_SYSTEM_ENABLED||value!=='recipe').map(([value,label]) => `<button data-pm-filter="${value}" class="${filter === value ? 'active' : ''}">${label}</button>`).join('')}</div>
       ${failed ? '<div class="pm-connection"><span>市集連線暫時中斷，以下若有商品為上次取得的資料；交易會在送出時重新驗證。</span><button type="button" data-pm-refresh>重新載入商品</button></div>' : ''}
       <div class="pm-list">${list.length ? list.map((row) => card(row,filter==='mine')).join('') : '<p class="pm-empty">目前沒有符合條件的委託。</p>'}</div>
       <p id="player-market-notice" class="${noticeError ? 'market-notice-error' : ''}" aria-live="polite">${esc(noticeText)}</p>`;
@@ -593,6 +597,7 @@ import { MATERIAL_CATALOG, RAID_CRAFT_MATERIAL_IDS, RAID_REFINEMENT_KEYS, getMat
   }
   // 先註冊入口，避免 DOMContentLoaded 前從煉器頁點擊時遺失請求。
   window.openPlayerMarketplace = (view = 'all') => {
+    if(window.QA_WEAPON_SYSTEM_ENABLED&&view==='recipe')view='all';
     if (['all','material','artifact','recipe','mine'].includes(view)) filter = view;
     if (!marketInitialized) { requestedView = filter; return; }
     if (!mount()) return;

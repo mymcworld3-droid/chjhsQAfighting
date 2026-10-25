@@ -33,6 +33,7 @@ import {
 
 (function () {
   'use strict';
+  if(window.QA_WEAPON_SYSTEM_ENABLED)return;
 
   const ARTIFACT_CONFIG = ['gameConfig', 'artifactCatalogV1'];
   const MATERIAL_CONFIG = ['gameConfig', 'materialCatalogV1'];

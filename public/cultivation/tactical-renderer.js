@@ -1,3 +1,4 @@
+import './weapon-system-rules.js';
 import './tactical-rules.js';
 import './tactical-animation.js';
 const R=globalThis.QATactical;
@@ -30,7 +31,7 @@ export class TacticalRenderer{
     if(!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
-      this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,mode==='attack'?R.BASIC:R.branchFor(me).skill)):[];
+      this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,mode==='attack'?R.basicFor(me):R.branchFor(me).skill)):[];
     }
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
@@ -184,7 +185,7 @@ export class TacticalRenderer{
     c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
     const view=this.preview?.view||{x:0,y:0,width:s.width,height:s.height};
     const cell=this.cell=Math.min((w-20)/view.width,(h-24)/view.height),ox=this.ox=Math.round((w-cell*view.width)/2)-view.x*cell,oy=this.oy=Math.round((h-cell*view.height)/2)-view.y*cell;
-    const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid,reduced=this.reducedMotion.matches;
+    const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid&&(!s.quizRound||s.phase==='action'),reduced=this.reducedMotion.matches;
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
     c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
     for(let y=view.y;y<view.y+view.height;y++)for(let x=view.x;x<view.x+view.width;x++){
@@ -199,7 +200,7 @@ export class TacticalRenderer{
       for(const p of this.range)fill(p,`rgba(128,128,128,${alpha})`,'#dadde18c');
     }
     if(myTurn&&['attack','skill'].includes(this.mode)){
-      const sk=this.mode==='attack'?R.BASIC:R.branchFor(mine).skill;
+      const sk=this.mode==='attack'?R.basicFor(mine):R.branchFor(mine).skill;
       for(const p of this.range)fill(p,'#e445454d','#ed6a6a99');
       if(this.selection&&this.range.some(p=>R.key(p)===R.key(this.selection)))for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
     }

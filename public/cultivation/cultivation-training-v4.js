@@ -730,6 +730,9 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       Object.assign(soulView, {selected:null, choosing:false});
       content.onkeydown = null;
     }
+    if(window.QA_WEAPON_SYSTEM_ENABLED&&['refinery','equipment','contract'].includes(activeTab)){
+      window.mountWeaponForge?.(content,activeTab==='contract'?'acquire':'weapons');return;
+    }
     if (activeTab === 'contract') {
       window.mountSoulboundTrainingPage?.(content);
       return;
@@ -806,7 +809,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" disabled><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>尋器</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
         </div>
@@ -854,7 +857,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     }
 
     if (!tabs.querySelector('[data-training-tab="contract"]')) {
-      tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>');
+      tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>尋器</span></button>');
     }
 
     if (page.dataset.trainingV4Bound !== '1') {
