@@ -26,7 +26,7 @@ function ensure(){
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><div><small>青雲宗 · 演武司</small><h1 data-title>問道獵妖</h1></div><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起 ×</button></div></header>
-    <div class="tc-notice" data-notice role="status" hidden></div><main class="tc-main" data-main></main><div class="tc-modal" data-modal hidden></div>`;
+    <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
   document.body.append(root);$('[data-close]').onclick=close;
   root.addEventListener('click',event=>{
     const b=event.target.closest('button');if(!b||b.disabled)return;
