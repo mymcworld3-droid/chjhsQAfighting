@@ -1,5 +1,6 @@
 import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js';
+import {EnemyDemo} from './tactical-enemy-demo.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const R=globalThis.QATactical;
@@ -9,7 +10,7 @@ const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
-let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0;
+let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 const $=selector=>root?.querySelector(selector);
 
 async function api(path,body){
@@ -143,14 +144,16 @@ function updateClock(){
   if(state.status==='active'&&state.deadlineMs&&now>=state.deadlineMs&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}
 }
 function showModal(html,{quiz=false,encounter=false}={}){
+  introDemo?.destroy();introDemo=null;
   modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
   $('[data-modal] .tc-dialog').focus();window.quizMathTypeset?.($('[data-modal]'));
 }
-function hideModal(){if(!root)return;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
+function hideModal(){if(!root)return;introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
 function showEnemyIntro(error=''){
   const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length;
-  showModal(`<small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><h2>${esc(p.name)}</h2><p>第 ${p.unlockStage} 關起登場</p></div></div><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl><p class="tc-enemy-note">紅色虛線框是下次攻擊預告；先移開，再結束回合。</p><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（尚有 '+(remaining-1)+' 種）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉，稍後繼續</button>`,{encounter:true});
+  showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>第 ${p.unlockStage} 關起登場</p></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
+  introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
 }
 async function acknowledgeIntro(){
   if(busy||!state?.newEnemies?.length)return;

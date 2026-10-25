@@ -130,6 +130,61 @@ async function main(){
     }
     assert.equal(await view.locator('[data-intro-ack]').count(),0);
   }
+  async function enemyDemoChecks(view){
+    const checkpoint=structuredClone([...db.records]),traffic=[];
+    const track=request=>{if(request.url().includes('/api/'))traffic.push(request.url());};view.page.on('request',track);
+    const canvas=view.locator('[data-enemy-demo] canvas');await canvas.waitFor();
+    const phase=name=>view.waitForFunction(name=>document.querySelector('[data-enemy-demo] canvas')?.dataset.demoPhase===name,name,{timeout:18000});
+    const pixels=()=>view.evaluate(()=>{const c=document.querySelector('[data-enemy-demo] canvas'),p=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let h=0;for(let i=0;i<p.length;i+=4)h=Math.imul(h^p[i]^p[i+1]<<8^p[i+2]<<16,16777619);return h;});
+    const moment=()=>view.evaluate(()=>new Promise(resolve=>{let count=0;function next(){if(++count===12)resolve();else requestAnimationFrame(next);}requestAnimationFrame(next);}));
+    try{
+      await phase('warning');await ratio(view,{dialog:true});await view.screenshot({path:path.join(output,'enemy-demo-wolf-mobile.png')});
+      await phase('hit');const before=await pixels();await moment();assert.notEqual(await pixels(),before,'the actual attack changes canvas pixels over time');
+      await view.locator('[data-demo-toggle]').click();assert.equal(await view.locator('[data-demo-toggle]').getAttribute('aria-pressed'),'true');
+      const still=await pixels();await moment();assert.equal(await pixels(),still,'pause freezes the current simulation frame');
+      await view.locator('[data-demo-replay]').click();assert.equal(await view.locator('[data-demo-toggle]').getAttribute('aria-pressed'),'false','replay restarts a paused demonstration');
+      await phase('escape');await phase('success');
+      assert.match(await view.locator('[data-demo-caption]').textContent(),/生命不減/);
+      await view.locator('[data-demo-replay]').click();await phase('movement');
+      await view.page.emulateMedia({reducedMotion:'reduce'});await view.locator('[data-demo-next]').waitFor();
+      const reduced=await pixels();await moment();assert.equal(await pixels(),reduced,'reduced motion uses a steady manual preview');
+      const step=await canvas.getAttribute('data-demo-step');await view.locator('[data-demo-next]').click();assert.notEqual(await canvas.getAttribute('data-demo-step'),step);
+      await view.page.emulateMedia({reducedMotion:'no-preference'});
+      await view.locator('[data-demo-toggle]').click();
+      const coverage=await view.evaluate(async()=>{
+        const {EnemyDemo}=await import('/cultivation/tactical-enemy-demo.js'),template=document.querySelector('.tc-encounter'),results=[];template.hidden=true;
+        try{
+        for(let species=0;species<20;species++){
+          const card=template.cloneNode(true),profile=window.QATactical.monsterProfile(species);card.hidden=false;card.style.animation='none';card.setAttribute('aria-hidden','true');
+          card.querySelector('h2').textContent=profile.name;card.querySelector('.tc-enemy-attack h3').textContent=profile.attackName;card.querySelector('.tc-enemy-attack p').textContent=profile.attackText;
+          const details=card.querySelectorAll('.tc-enemy-details dd');details[0].textContent=profile.moveText;details[1].textContent=profile.tip;
+          template.parentElement.append(card);const host=card.querySelector('[data-enemy-demo]');
+          const demo=new EnemyDemo(host,species);demo.paused=true;
+          try{
+            await Promise.all(Object.values(demo.renderer.images).map(img=>img.complete?null:new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true});})));
+            for(const beat of demo.demo.beats){
+              const hashes=[];for(const p of [.2,.6]){
+                demo.elapsed=beat.start+beat.duration*p;demo.refresh();const c=host.querySelector('canvas'),bytes=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+                let hash=0;for(let i=0;i<bytes.length;i+=4)hash=Math.imul(hash^bytes[i]^bytes[i+1]<<8^bytes[i+2]<<16,16777619);hashes.push(hash);
+              }
+              results.push({species,phase:beat.phase,animated:!!beat.scene,changed:hashes[0]!==hashes[1]});
+            }
+            const rect=card.getBoundingClientRect(),buttons=[...card.querySelectorAll('.tc-enemy-footer button,.tc-demo-tools button:not([hidden])')].map(b=>b.getBoundingClientRect());
+            results.push({species,phase:'layout',animated:false,cell:demo.renderer.cell,layout:rect.top>=0&&rect.bottom<=innerHeight&&buttons.every(b=>b.top>=rect.top&&b.bottom<=rect.bottom)});
+          }finally{demo.destroy();card.remove();}
+        }}finally{template.hidden=false;}return results;
+      });
+      assert.equal(new Set(coverage.map(r=>r.species)).size,20);assert.ok(coverage.filter(r=>r.animated).every(r=>r.changed),'every monster simulation really animates its moves and attacks');
+      assert.ok(coverage.filter(r=>r.phase==='layout').every(r=>r.layout),'every monster introduction keeps its simulation and confirmation buttons visible');
+      assert.ok(coverage.find(r=>r.species===0&&r.phase==='layout').cell>25,'the compact camera makes adjacent attacks legible on a phone');
+      for(const size of [{width:1280,height:720},{width:393,height:852}]){
+        await view.setViewportSize(size);await ratio(view,{dialog:true});
+        const footer=await view.evaluate(()=>[...document.querySelectorAll('.tc-enemy-footer button,.tc-demo-tools button:not([hidden])')].map(b=>{const r=b.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:innerHeight};}));
+        assert.ok(footer.every(b=>b.top>=0&&b.bottom<=b.height),'simulation and acknowledgement controls remain inside the stage');
+      }
+      assert.deepEqual([...db.records],checkpoint,'all demonstrations preserve the real room, stamina, rewards and seen-species records');assert.deepEqual(traffic,[],'watching and controlling demos never calls the API');
+    }finally{view.page.off('request',track);}
+  }
   async function correct(page){
     await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);await mathIsWhite(page);
     const orientation=await page.evaluate(()=>innerWidth<innerHeight?'portrait':'landscape');
@@ -166,7 +221,7 @@ async function main(){
     assert.equal(await quiet(),0,'question dialog pauses the battle animation');await view.locator('[data-dismiss]').click();
     assert.ok(await quiet()>0,'closing the question resumes the move preview');
     await view.locator('[data-close]').click();assert.equal(await quiet(),0,'closing the battle stops drawing');
-    await view.locator('#entry').click();await view.locator('canvas').waitFor();await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+    await view.locator('#entry').click();await view.locator('.tc-arena canvas').waitFor();await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     assert.ok(await quiet()>0,'resuming a closed battle rebuilds its interactive renderer');
     await view.locator('[data-action="attack"]').click();
     const colors=(await sample([{x:2,y:3},{x:1,y:3},{x:2,y:2},{x:0,y:3}],0))[0];
@@ -232,7 +287,7 @@ async function main(){
     await view.locator('[data-action="attack"]').click();await cell(view,lethal.actors[1].x,lethal.actors[1].y);await view.locator('[data-execute]').click();
     await view.locator('canvas[data-animation="damage"]').waitFor();assert.equal(await view.locator('[data-next-stage]').count(),0);
     await view.locator('canvas[data-animation="finish"]').waitFor();await beat();await view.screenshot({path:path.join(output,'animation-victory-mobile.png')});
-    await view.locator('[data-next-stage]').waitFor();assert.equal(await view.locator('canvas').getAttribute('aria-busy'),'false');
+    await view.locator('[data-next-stage]').waitFor();assert.equal(await view.locator('.tc-arena canvas').getAttribute('aria-busy'),'false');
     await view.evaluate(()=>window.__animationObserver.disconnect());
     saved.revision=(await read(view)).revision+1;db.records.clear();for(const [k,v]of checkpoint)db.records.set(k,v);db.records.set(key,saved);
     await view.locator('[data-exit]').click();await view.locator('#entry').click();await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});await idle();
@@ -281,13 +336,14 @@ async function main(){
   try{
     const mobile=await make('u1',{width:393,height:852});
     await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor();
-    await mobile.locator('canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+    await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     await ratio(mobile);
     assert.deepEqual((await read(mobile)).newEnemies,[0]);await mobile.locator('.tc-encounter').waitFor();await ratio(mobile,{dialog:true});
+    await enemyDemoChecks(mobile);
     await mobile.screenshot({path:path.join(output,'enemy-intro-wolf-mobile.png')});
     await mobile.reload();await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});await mobile.locator('[data-intro-ack]').waitFor();
     assert.deepEqual((await read(mobile)).newEnemies,[0],'unread encounter survives refresh');await acknowledgeIntros(mobile);
-    await mobile.reload();await mobile.locator('#entry').click();await mobile.locator('canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+    await mobile.reload();await mobile.locator('#entry').click();await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     assert.equal(await mobile.locator('[data-intro-ack]').count(),0,'acknowledged species does not repeat after refresh');
     assert.equal(await mobile.locator('[data-start],[data-map],[data-branch]').count(),0,'trial entry skips both pickers');
     assert.equal((await read(mobile)).trial.stage,1);await correct(mobile);
@@ -300,8 +356,8 @@ async function main(){
     await mobile.locator('[data-end]').click();await mobile.waitForFunction(()=>document.querySelector('[data-turn]').textContent.includes('第 3')&&!document.querySelector('[data-end]').disabled);
     await mobile.screenshot({path:path.join(output,'battle-mobile.png')});
     assert.ok(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-    const rect=await mobile.locator('canvas').boundingBox();assert.ok(rect.height>200,'mobile board must remain playable');
-    await mobile.reload();await mobile.waitForFunction(()=>typeof window.openTacticalCombat==='function');await mobile.locator('#entry').click();await mobile.locator('canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+    const rect=await mobile.locator('.tc-arena canvas').boundingBox();assert.ok(rect.height>200,'mobile board must remain playable');
+    await mobile.reload();await mobile.waitForFunction(()=>typeof window.openTacticalCombat==='function');await mobile.locator('#entry').click();await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     assert.equal((await read(mobile)).turn,3,'refresh resumes the same room');
     for(const [width,height,name]of [[1280,720,'battle-landscape'],[1024,768,'battle-tablet-landscape'],[768,1024,'battle-tablet-portrait'],[1920,800,'battle-ultrawide'],[844,390,'battle-phone-landscape']]){
       await mobile.setViewportSize({width,height});await ratio(mobile);await mobile.screenshot({path:path.join(output,name+'.png')});
@@ -337,7 +393,7 @@ async function main(){
     await mobile.setViewportSize({width:393,height:852});await mobile.screenshot({path:path.join(output,'enemy-intro-rock-mobile.png')});await acknowledgeIntros(mobile);
     assert.equal(await mobile.evaluate(()=>window.__pickersSeen),0);await mobile.evaluate(()=>window.__pickerObserver.disconnect());
     await mobile.setViewportSize({width:393,height:852});await ratio(mobile);await mobile.screenshot({path:path.join(output,'trial-stage-2-mobile.png')});
-    await mobile.reload();await mobile.waitForFunction(()=>typeof window.openTacticalCombat==='function');await mobile.locator('#entry').click();await mobile.locator('canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+    await mobile.reload();await mobile.waitForFunction(()=>typeof window.openTacticalCombat==='function');await mobile.locator('#entry').click();await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     assert.equal((await read(mobile)).id,next.id,'refresh resumes the current randomized stage');
     assert.equal(await mobile.locator('[data-intro-ack]').count(),0);
     // Two unseen species in one stage are introduced in order; a lost
@@ -354,14 +410,14 @@ async function main(){
     await mobile.locator('[data-leave]').click();await mobile.locator('[data-forfeit]').click();await mobile.locator('[data-exit]').click();
     await mobile.evaluate(()=>window.startBattleMatchmaking());await mobile.locator('[data-start]').click();await mobile.locator('.tc-waiting').waitFor();
     const waiting=await read(mobile),p2=await make('u2',{width:1280,height:720});await p2.evaluate(()=>window.openTacticalCombat('pvp'));
-    await p2.locator('[data-code]').fill(waiting.id.replace('arena-',''));await p2.locator('[data-join]').click();await p2.locator('canvas').waitFor();
-    await mobile.locator('canvas').waitFor({timeout:15000});assert.equal((await read(p2)).id,waiting.id);
+    await p2.locator('[data-code]').fill(waiting.id.replace('arena-',''));await p2.locator('[data-join]').click();await p2.locator('.tc-arena canvas').waitFor();
+    await mobile.locator('.tc-arena canvas').waitFor({timeout:15000});assert.equal((await read(p2)).id,waiting.id);
     await ratio(mobile);await ratio(p2);
     assert.equal(await p2.locator('[data-quiz]').isDisabled(),true);
     await correct(mobile);await mobile.locator('[data-end]').click();await p2.waitForFunction(()=>!document.querySelector('[data-quiz]').disabled,{timeout:15000});
     await correct(p2);assert.equal((await read(p2)).actors.find(a=>a.uid==='u2').stamina,6);
     await p2.screenshot({path:path.join(output,'duel-landscape.png')});
-    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question styles, visible controls with four enemies and zero stamina, gray/red ranges, white MathJax, persistent enemy introductions, ordered action animations and input lock, every core/monster canvas effect at different phases, hit/knockback/recovery/guard, paused action resume, reduced motion and no duplicate replay, defeat before results, lost-response retry, trial progression and two-player synchronization.');
+    assert.deepEqual(errors,[]);console.log('Browser checks passed: 20 live enemy introductions with movement/hit/dodge simulations, compact cameras retaining full attack shapes, pause/replay/manual steps and zero API calls or account mutations; shared 16:9 / 9:16 stage, six screen sizes, original question styles, visible controls with four enemies and zero stamina, gray/red ranges, white MathJax, persistent introductions, ordered combat effects/input lock, every core/monster canvas effect, paused action resume, reduced motion/no duplicate replay, defeat before results, lost-response retry, trial progression and two-player synchronization.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

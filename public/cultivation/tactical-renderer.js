@@ -15,16 +15,17 @@ export class TacticalRenderer{
     }
     this.resize=new ResizeObserver(()=>this.draw());this.resize.observe(canvas);
     canvas.addEventListener('click',event=>{
-      if(!this.state||this.isAnimating||this.paused)return;const rect=canvas.getBoundingClientRect(),x=Math.floor((event.clientX-rect.left-this.ox)/this.cell),y=Math.floor((event.clientY-rect.top-this.oy)/this.cell);
+      if(!this.state||this.preview||this.isAnimating||this.paused)return;const rect=canvas.getBoundingClientRect(),x=Math.floor((event.clientX-rect.left-this.ox)/this.cell),y=Math.floor((event.clientY-rect.top-this.oy)/this.cell);
       if(R.inside(this.state,{x,y}))this.onSelect({x,y});
     });
     canvas.addEventListener('keydown',event=>{
-      if(!this.state||this.isAnimating||this.paused)return;const delta={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[event.key];
+      if(!this.state||this.preview||this.isAnimating||this.paused)return;const delta={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[event.key];
       if(!delta)return;event.preventDefault();const p=this.selection||this.state.actors.find(a=>a.uid===this.uid)||{x:0,y:0};
       const next={x:p.x+delta[0],y:p.y+delta[1]};if(R.inside(this.state,next))this.onSelect(next);
     });
   }
   update(state,uid,mode,selection){
+    this.preview=null;
     if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){this.queue=[];this.scene=null;}
     if(!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
@@ -32,6 +33,9 @@ export class TacticalRenderer{
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,mode==='attack'?R.BASIC:R.branchFor(me).skill)):[];
     }
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
+  }
+  present(state,uid,scene=null,progress=0,view=null){
+    this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -173,16 +177,17 @@ export class TacticalRenderer{
     if(this.paused||document.hidden){this.heldAt??=now;return;}
     if(this.heldAt!==null){if(this.scene)this.scene.started+=now-this.heldAt;this.heldAt=null;}
     if(this.reducedMotion.matches&&this.isAnimating){this.queue=[];this.scene=null;this.activity();}
-    const progress=this.advance(now),scene=this.scene,animating=this.isAnimating;
+    const progress=this.preview?this.preview.progress:this.advance(now),scene=this.preview?this.preview.scene:this.scene,animating=!!scene||this.isAnimating;
     const {canvas,ctx:c,state:s}=this,rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return;
     const dpr=Math.min(3,window.devicePixelRatio||1),w=rect.width,h=rect.height;
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
     c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
-    const cell=this.cell=Math.min((w-20)/s.width,(h-24)/s.height),ox=this.ox=Math.round((w-cell*s.width)/2),oy=this.oy=Math.round((h-cell*s.height)/2);
+    const view=this.preview?.view||{x:0,y:0,width:s.width,height:s.height};
+    const cell=this.cell=Math.min((w-20)/view.width,(h-24)/view.height),ox=this.ox=Math.round((w-cell*view.width)/2)-view.x*cell,oy=this.oy=Math.round((h-cell*view.height)/2)-view.y*cell;
     const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid,reduced=this.reducedMotion.matches;
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
     c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
-    for(let y=0;y<s.height;y++)for(let x=0;x<s.width;x++){
+    for(let y=view.y;y<view.y+view.height;y++)for(let x=view.x;x<view.x+view.width;x++){
       const px=Math.round(ox+x*cell),py=Math.round(oy+y*cell),edgeX=Math.round(ox+(x+1)*cell),edgeY=Math.round(oy+(y+1)*cell),t=s.ground?.[y*s.width+x]??s.terrain;
       if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=(x+y)%2?'#5b6650':'#5f6b53';c.fillRect(px,py,edgeX-px,edgeY-py);}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
@@ -237,7 +242,7 @@ export class TacticalRenderer{
     }
     if(scene)this.drawEffect(scene,progress,true);
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
-    c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox,oy,cell*s.width,cell*s.height);
-    if(animating||myTurn&&this.mode==='move'&&this.range.length&&!reduced)this.frame=requestAnimationFrame(()=>this.draw());
+    c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);
+    if(!this.preview&&(animating||myTurn&&this.mode==='move'&&this.range.length&&!reduced))this.frame=requestAnimationFrame(()=>this.draw());
   }
 }
