@@ -185,6 +185,99 @@ async function main(){
     saved.revision=cast.revision+1;db.records.set(key,saved);await view.locator('[data-sync]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
     await view.locator('[data-action="move"]').click();await ratio(view);
   }
+  async function animationChecks(view){
+    const checkpoint=new Map([...db.records].map(([k,v])=>[k,structuredClone(v)]));
+    const current=await read(view),key=service.ROOMS+'/'+current.id,saved=structuredClone(db.records.get(key));
+    const room=Rules.create({id:current.id,mode:'pve',players:[{...saved.actors[0],core:'ocean',branch:'surge',maxHp:10000}]});
+    room.pendingIntroductions={u1:[]};room.blocks=[];Object.assign(room.actors[0],{x:2,y:3,stamina:10,knowledgeScope:saved.actors[0].knowledgeScope});
+    room.actors=[room.actors[0],...[[0,3,2],[8,4,2],[12,6,6],[3,6,0]].map(([species,x,y],i)=>Rules.actor({uid:'monster-'+i,name:Rules.monsterProfile(species).name,bot:true,team:'monster',species,atk:100,maxHp:2000},{x,y}))];
+    Rules.prepareIntents(room);room.revision=saved.revision+1;db.records.set(key,room);
+    await view.setViewportSize({width:393,height:852});await view.locator('[data-sync]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    await view.evaluate(()=>{
+      window.__animationHistory=[];const canvas=document.querySelector('#tactical-combat canvas');
+      window.__animationObserver=new MutationObserver(()=>{const kind=canvas.dataset.animation;if(kind)window.__animationHistory.push({kind,locked:document.querySelector('[data-end]').disabled,result:!!document.querySelector('[data-next-stage]')});});
+      window.__animationObserver.observe(canvas,{attributes:true,attributeFilter:['data-animation']});
+    });
+    const reset=()=>view.evaluate(()=>{window.__animationHistory=[];});
+    const idle=()=>view.waitForFunction(()=>document.querySelector('#tactical-combat canvas').getAttribute('aria-busy')==='false'&&!document.querySelector('[data-end]').disabled);
+    const beat=()=>view.evaluate(()=>new Promise(resolve=>{let frames=0;function next(){if(++frames===8)resolve();else requestAnimationFrame(next);}requestAnimationFrame(next);}));
+    await view.locator('[data-action="move"]').click();await cell(view,2,2);await view.locator('[data-execute]').click();
+    await view.locator('canvas[data-animation="move"]').waitFor();assert.equal(await view.locator('[data-end]').isDisabled(),true);
+    await beat();await view.screenshot({path:path.join(output,'animation-move-mobile.png')});await idle();
+    assert.equal((await read(view)).actors[0].stamina,9);await reset();
+    await view.locator('[data-action="attack"]').click();await cell(view,3,2);await view.locator('[data-execute]').click();
+    await view.locator('canvas[data-animation="cast"]').waitFor();await beat();await view.screenshot({path:path.join(output,'animation-attack-mobile.png')});
+    await view.locator('canvas[data-animation="damage"]').waitFor();await beat();await view.screenshot({path:path.join(output,'animation-damage-mobile.png')});await idle();
+    const attackHistory=await view.evaluate(()=>window.__animationHistory);assert.ok(attackHistory.some(e=>e.kind==='cast'));assert.ok(attackHistory.some(e=>e.kind==='damage'));assert.ok(attackHistory.every(e=>e.locked&&!e.result));
+    await reset();await view.locator('[data-action="skill"]').click();await cell(view,3,2);await view.locator('[data-execute]').click();
+    await view.locator('canvas[data-animation="cast"]').waitFor();await beat();await view.screenshot({path:path.join(output,'animation-core-mobile.png')});await idle();
+    const coreHistory=await view.evaluate(()=>window.__animationHistory);assert.ok(coreHistory.some(e=>e.kind==='move'),'ocean push is visible after its hit');
+    await reset();await view.locator('[data-end]').click();await idle();
+    const monsters=await view.evaluate(()=>window.__animationHistory);assert.ok(monsters.filter(e=>e.kind==='move').length>=2,'a multi-monster turn shows individual movement');assert.ok(monsters.filter(e=>e.kind==='turn').length>=2);
+    // Guard, answer recovery and focus/visibility changes use the same real UI.
+    await view.locator('[data-guard]').click();await view.locator('canvas[data-animation="guard"]').waitFor();
+    await view.locator('[data-leave]').click();await view.locator('[data-dismiss]').waitFor();
+    const pausedDraws=await view.evaluate(()=>new Promise(resolve=>{const before=window.__battleDraws;let frames=0;function next(){if(++frames===8)resolve(window.__battleDraws-before);else requestAnimationFrame(next);}requestAnimationFrame(next);}));
+    assert.equal(pausedDraws,0,'opening the leave dialog freezes the active action without skipping it');
+    await view.locator('[data-dismiss]').click();await view.locator('canvas[data-animation="guard"]').waitFor();await beat();await view.screenshot({path:path.join(output,'animation-guard-mobile.png')});await idle();
+    await correct(view);assert.equal((await read(view)).actors[0].stamina,7);
+    await reset();await view.locator('[data-sync]').click();await idle();assert.deepEqual(await view.evaluate(()=>window.__animationHistory),[],'same snapshot cannot replay an action');
+    await view.page.emulateMedia({reducedMotion:'reduce'});await reset();
+    await view.locator('[data-guard]').click();await idle();assert.deepEqual(await view.evaluate(()=>window.__animationHistory),[],'reduced motion applies the final state immediately');
+    await view.page.emulateMedia({reducedMotion:'no-preference'});
+    // A lethal strike must finish its impact/fade before opening the result.
+    const lethal=db.records.get(key);lethal.actors[0].attacks=0;lethal.actors[0].stamina=10;
+    lethal.actors=lethal.actors.slice(0,2);Object.assign(lethal.actors[1],{x:lethal.actors[0].x+1,y:lethal.actors[0].y,hp:1});lethal.revision++;
+    await view.locator('[data-sync]').click();await idle();await reset();
+    await view.locator('[data-action="attack"]').click();await cell(view,lethal.actors[1].x,lethal.actors[1].y);await view.locator('[data-execute]').click();
+    await view.locator('canvas[data-animation="damage"]').waitFor();assert.equal(await view.locator('[data-next-stage]').count(),0);
+    await view.locator('canvas[data-animation="finish"]').waitFor();await beat();await view.screenshot({path:path.join(output,'animation-victory-mobile.png')});
+    await view.locator('[data-next-stage]').waitFor();assert.equal(await view.locator('canvas').getAttribute('aria-busy'),'false');
+    await view.evaluate(()=>window.__animationObserver.disconnect());
+    saved.revision=(await read(view)).revision+1;db.records.clear();for(const [k,v]of checkpoint)db.records.set(k,v);db.records.set(key,saved);
+    await view.locator('[data-exit]').click();await view.locator('#entry').click();await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});await idle();
+  }
+  async function animationRenderingCoverage(view){
+    const result=await view.evaluate(async()=>{
+      const {TacticalRenderer}=await import('/cultivation/tactical-renderer.js'),R=window.QATactical,A=window.QATacticalAnimation;
+      const canvas=document.createElement('canvas');canvas.style.cssText='position:fixed;left:0;top:0;width:300px;height:300px;z-index:30000';document.body.append(canvas);
+      const renderer=new TacticalRenderer(canvas,()=>{}),checks=[];
+      const fixture=(core='thunder',branch='lightning')=>{
+        const s=R.create({id:'render-coverage',players:[{uid:'u1',name:'修士',core,branch,maxHp:10000}],now:2000000000000});
+        s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,hp:5000,stamina:10});Object.assign(s.actors[1],{x:3,y:3,hp:2000,maxHp:2000});return s;
+      };
+      const render=(before,next)=>{
+        renderer.update(before,'u1','attack',null);renderer.state=next;
+        for(const scene of A.plan(before,next,'u1')){
+          const hashes=[];renderer.queue=[];
+          for(const progress of [.2,.6]){
+            renderer.scene={...scene,started:performance.now()-scene.duration*progress};renderer.draw();
+            const pixels=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+            let hash=2166136261;for(let i=0;i<pixels.length;i+=4)hash=Math.imul(hash^pixels[i]^pixels[i+1]<<8^pixels[i+2]<<16,16777619);
+            hashes.push(hash);
+          }checks.push({kind:scene.kind,style:scene.style,changed:hashes[0]!==hashes[1]});
+        }
+      };
+      try{
+        for(const [core,c]of Object.entries(R.CORES))for(const branch of c.branches){
+          const s=fixture(core,branch.id),sk=branch.skill,p=sk.range===0?s.actors[0]:sk.kind==='blink'?{x:2,y:3}:{x:3,y:3};
+          const next=R.apply(s,'u1',{type:'skill',x:p.x,y:p.y},2000000000000);render(s,next);
+          if(sk.kind==='meteor'){next.actors[1].intent={kind:'wait',cells:[]};render(next,R.apply(next,'u1',{type:'end'},2000000000000));}
+        }
+        for(const profile of R.MONSTERS){
+          const s=fixture();s.width=11;s.height=11;Object.assign(s.actors[0],{x:5,y:5});const m=s.actors[1];m.species=profile.species;
+          const spots=Array.from({length:121},(_,i)=>({x:i%11,y:Math.floor(i/11)}));
+          const origin=spots.find(p=>R.key(p)!==R.key(s.actors[0])&&R.dist(p,s.actors[0])>=(profile.move.minDistance||0)&&R.monsterCells(s,{...m,...p},s.actors[0]).some(c=>R.key(c)===R.key(s.actors[0])));
+          Object.assign(m,origin);R.prepareIntents(s);render(s,R.apply(s,'u1',{type:'end'},2000000000000));
+          Object.assign(m,{x:0,y:0,intent:{kind:'advance',cells:[]}});Object.assign(s.actors[0],{x:9,y:9});render(s,R.apply(s,'u1',{type:'end'},2000000000000));
+        }
+        const s=fixture();render(s,R.answer(s,'u1',true));render(s,R.apply(s,'u1',{type:'guard'}));
+        return checks;
+      }finally{renderer.destroy();canvas.remove();}
+    });
+    assert.ok(result.length>150,'render every core, monster attack and monster movement through the real canvas');
+    assert.ok(result.every(r=>r.changed),'different action phases must produce visibly different pixels');
+  }
   try{
     const mobile=await make('u1',{width:393,height:852});
     await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor();
@@ -203,8 +296,8 @@ async function main(){
     const beforeMove=await read(mobile),pos=Rules.neighbours(beforeMove,beforeMove.actors[0]).find(p=>!Rules.at(beforeMove,p));
     await cell(mobile,pos.x,pos.y);await mobile.locator('[data-execute]').click();await mobile.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
     const moved=await read(mobile);assert.equal(moved.actors[0].stamina,5,'lost move response retry must not charge twice');assert.equal(Rules.key(moved.actors[0]),Rules.key(pos));
-    await mobile.locator('[data-end]').click();await mobile.waitForFunction(()=>document.querySelector('[data-turn]').textContent.includes('第 2'));
-    await mobile.locator('[data-end]').click();await mobile.waitForFunction(()=>document.querySelector('[data-turn]').textContent.includes('第 3'));
+    await mobile.locator('[data-end]').click();await mobile.waitForFunction(()=>document.querySelector('[data-turn]').textContent.includes('第 2')&&!document.querySelector('[data-end]').disabled);
+    await mobile.locator('[data-end]').click();await mobile.waitForFunction(()=>document.querySelector('[data-turn]').textContent.includes('第 3')&&!document.querySelector('[data-end]').disabled);
     await mobile.screenshot({path:path.join(output,'battle-mobile.png')});
     assert.ok(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     const rect=await mobile.locator('canvas').boundingBox();assert.ok(rect.height>200,'mobile board must remain playable');
@@ -215,6 +308,8 @@ async function main(){
     }
     assert.ok(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     await rangePreviewChecks(mobile);
+    await animationChecks(mobile);
+    await animationRenderingCoverage(mobile);
     // Reproduce the reported exhausted-stamina view with the densest later-stage HUD.
     const room=await read(mobile),key=service.ROOMS+'/'+room.id,saved=db.records.get(key);
     let denseStage=10;while(true){const layout=Rules.stageLayout('layout-fit',denseStage);if(layout.width===11&&layout.enemies.length===4)break;denseStage++;}
@@ -266,7 +361,7 @@ async function main(){
     await correct(mobile);await mobile.locator('[data-end]').click();await p2.waitForFunction(()=>!document.querySelector('[data-quiz]').disabled,{timeout:15000});
     await correct(p2);assert.equal((await read(p2)).actors.find(a=>a.uid==='u2').stamina,6);
     await p2.screenshot({path:path.join(output,'duel-landscape.png')});
-    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question-page styles in both orientations and answer review, production theme isolation, visible controls with four enemies and zero stamina, gray range pulses and reduced motion, two-cell directional hits, core aiming, paused/resumed rendering, white MathJax formulas, persistent queued enemy introductions and lost-response retry, scaled canvas input, bounded cloud/dialogs, trial progression and two-player synchronization.');
+    assert.deepEqual(errors,[]);console.log('Browser checks passed: shared 16:9 / 9:16 stage, six screen sizes, original question styles, visible controls with four enemies and zero stamina, gray/red ranges, white MathJax, persistent enemy introductions, ordered action animations and input lock, every core/monster canvas effect at different phases, hit/knockback/recovery/guard, paused action resume, reduced motion and no duplicate replay, defeat before results, lost-response retry, trial progression and two-player synchronization.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});

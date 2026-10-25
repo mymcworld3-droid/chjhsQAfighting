@@ -81,10 +81,13 @@ function renderHub(){
 }
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection>點選地格，預覽路線與體力消耗</div></section>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div></section>
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" class="tc-primary" data-quiz>答題補充體力</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">攻擊 · 2</button><button type="button" data-action="skill">金丹技能</button></div><div class="tc-skill-info" data-skill></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><div class="tc-turn-buttons"><button type="button" data-guard>護身 · 免費</button><button type="button" data-end>結束回合 →</button></div></section>
     <div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div><div class="tc-game-footer"><button type="button" data-sync>重新同步</button><button type="button" data-leave>離開戰場</button></div></aside>`;
-  renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);}});
+  renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);}},()=>{
+    if(!opened||!state||!renderer)return;updateControls();
+    if(!renderer.isAnimating&&state.status==='finished'&&!modalOpen)resultDialog();
+  });
 }
 function paint(){
   if(!state)return renderHub();hideModal();
@@ -99,16 +102,18 @@ function paint(){
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}"><div><b>${esc(a.name)}</b><span>${a.uid===uid?'我方':a.bot?'妖獸':'對手'}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div><small>${a.hp} / ${a.maxHp}${a.shield?' · 護盾 '+a.shield:''}${a.slow?' · 緩速':''}</small>${a.intent&&a.hp>0?'<p>'+esc(a.intent.text)+'</p>':''}</div>`).join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>本回合答題 ${me.questions}/2 · 攻擊／技能 ${me.attacks}/2</small>`;
   $('[data-quiz]').textContent=myTurn?`答題補充體力 · ${me.questions}/2`:'等待對手行動';
-  $('[data-quiz]').disabled=!myTurn||busy||me.questions>=2||me.stamina>=10;
-  $('[data-guard]').disabled=!myTurn||busy||me.attacks>=2;$('[data-end]').disabled=!myTurn||busy;
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
-  updateControls();renderer.update(state,uid,action,selection);updateClock();
-  if(state.status==='finished')resultDialog();
+  renderer.update(state,uid,action,selection);updateControls();updateClock();
+  if(state.status==='finished'&&!renderer.isAnimating)resultDialog();
   else if(state.mode==='pve'&&state.newEnemies?.length)showEnemyIntro();
 }
 function updateControls(){
   if(!$('[data-selection]')||!state)return;
-  const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid,sk=R.branchFor(me).skill;
+  const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid,sk=R.branchFor(me).skill,animating=renderer?.isAnimating,locked=busy||animating;
+  $('[data-quiz]').disabled=!mine||locked||me.questions>=2||me.stamina>=10;
+  $('[data-guard]').disabled=!mine||locked||me.attacks>=2;$('[data-end]').disabled=!mine||locked;
+  $('[data-sync]').disabled=locked;root.classList.toggle('tc-animating',!!animating);
+  $('[data-stamina]').classList.toggle('tc-gaining',renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
   let label=action==='attack'?'選擇攻擊方向':action==='move'?'選擇移動位置':'選擇施放位置',error='';
   const direction=selection?(selection.x===me.x&&selection.y!==me.y?selection.y>me.y?'下':'上':selection.y===me.y&&selection.x!==me.x?selection.x>me.x?'右':'左':''):'';
@@ -122,11 +127,12 @@ function updateControls(){
   const cooling=Math.max(0,(me.cooldowns[sk.id]||0)-me.turns);
   const shown=action==='attack'?R.BASIC:sk;
   $('[data-skill]').innerHTML=`<b>${action==='attack'?'四向攻擊':esc(R.branchFor(me).name)} · ${esc(shown.name)} <span>${shown.cost} 體力${action!=='attack'&&cooling?' · 冷卻 '+cooling+' 回合':''}</span></b><p>${esc(shown.description)}</p>`;
-  $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||busy||!selection||!!error||me.actions>=R.LIMITS.actions;
-  root.querySelectorAll('[data-action]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.action===action));b.disabled=!mine||busy;});
+  $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
+  root.querySelectorAll('[data-action]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.action===action));b.disabled=!mine||locked;});
   $('[data-range-legend]').textContent=(action==='move'?'灰閃：可走':'紅格：射程')+' · 紅框：預告';
   const hint=action==='move'?'灰色閃動格可移動，點選預覽路線與體力消耗':action==='attack'?'點選上下左右的紅格，攻擊該方向兩格':sk.range===0?'紅格標示自身，確認即可施放金丹技能':'紅格標示技能射程，點選後預覽命中區域';
   $('[data-selection]').textContent=selection?`${action==='attack'&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,R.BASIC,selection).length+' 格':`地格 ${selection.x+1}, ${selection.y+1}${t?' · '+t.name+' · 生命 '+t.hp+'/'+t.maxHp:''}`}${error?' · '+error:''}`:mine?hint:'對手正在思考。你可以查看戰場與攻擊預告。';
+  if(animating)$('[data-selection]').textContent=renderer.currentAction;
 }
 function updateClock(){
   if(!opened||!state)return;
@@ -192,7 +198,7 @@ async function start(code=''){
 }
 async function sync(){await task(async()=>{const result=await api('/api/tactical/state');return result.state;});}
 async function send(command){
-  if(!state)return;
+  if(!state||renderer?.isAnimating&&command.type!=='leave')return;
   // Retrying the same command uses the same idempotency key after a lost response.
   const request={...command,roomId:state.id,revision:state.revision,requestId:id()};
   await task(async()=>{
@@ -203,7 +209,7 @@ async function send(command){
 }
 async function execute(){if(selection)await send({type:action,x:selection.x,y:selection.y});}
 async function question(){
-  if(!state||busy)return;
+  if(!state||busy||renderer?.isAnimating)return;
   const e=epoch,account=uid;
   busy=true;notice('');showModal('<small>以學御法</small><h2>凝神問道</h2><p>正在準備題目…</p><button type="button" data-dismiss>先返回戰場</button>');
   try{

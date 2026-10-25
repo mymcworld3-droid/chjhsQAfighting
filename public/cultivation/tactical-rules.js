@@ -227,7 +227,22 @@
     s.actors.push(actor({...player,team:player.uid},{x:s.width-2,y:Math.floor(s.height/2)}));
     s.status='active';s.turnStartedAtMs=now;s.deadlineMs=now+LIMITS.turnMs;s.revision++;return s;
   }
-  function log(s,text,type='info',extra={}){s.events.push({id:s.revision+':'+s.events.length,type,text,...extra});s.events=s.events.slice(-28);}
+  function log(s,text,type='info',extra={}){
+    // A bounded log still needs unique IDs when one turn produces many effects.
+    s.eventSequence=(s.eventSequence||0)+1;
+    const event={id:s.revision+':'+s.eventSequence,type,text,...extra};s.events.push(event);s.events=s.events.slice(-28);return event;
+  }
+  const point=a=>({x:a.x,y:a.y});
+  const appearance=a=>({uid:a.uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow});
+  function motion(s,a,route,style='walk',text=a.name+'調整位置'){
+    if(route.length<2||key(route[0])===key(route.at(-1)))return;
+    log(s,text,'displace',{actor:a.uid,path:route,animation:{kind:'move',style}});
+  }
+  function recovery(s,a,hp,shield=0){
+    if(!hp&&!shield)return;
+    log(s,a.name+(hp?'回復 '+hp+' 生命':'')+(shield?' · 護盾 +'+shield:''),'restore',
+      {actor:a.uid,animation:{kind:'restore',changes:[appearance(a)],numbers:[{uid:a.uid,heal:hp,shield}]}});
+  }
   function canAct(s,uid){if(s.status!=='active'||s.turnUid!==uid||!alive(current(s)))fail('目前不是你的行動回合');}
   function checkFinished(s){
     const human=s.actors.filter(a=>!a.bot),teams=[...new Set(s.actors.filter(alive).map(a=>a.team))];
@@ -245,17 +260,19 @@
     let amount=Math.max(0,Math.round(raw));if(!opts.pierce)amount=Math.round(amount*(1-(target.guard||0)));
     const absorbed=opts.pierce?0:Math.min(target.shield,amount);target.shield-=absorbed;amount-=absorbed;
     const dealt=Math.min(target.hp,amount);target.hp-=dealt;
-    log(s,source.name+' → '+target.name+' −'+dealt+(absorbed?'（護盾 '+absorbed+'）':''),'damage',{actor:source.uid,target:target.uid,damage:dealt,skill:opts.skill||'attack',x:target.x,y:target.y});
-    if(opts.leech&&dealt){const heal=Math.min(source.maxHp-source.hp,Math.round(dealt*opts.leech));source.hp+=heal;}
+    log(s,source.name+' → '+target.name+' −'+dealt+(absorbed?'（護盾 '+absorbed+'）':''),'damage',{actor:source.uid,target:target.uid,damage:dealt,skill:opts.skill||'attack',x:target.x,y:target.y,
+      animation:{kind:'damage',style:opts.skill||'attack',origin:point(source),target:point(target),changes:[appearance(target)],numbers:[{uid:target.uid,damage:dealt,absorbed}]}});
+    if(opts.leech&&dealt){const heal=Math.min(source.maxHp-source.hp,Math.round(dealt*opts.leech));source.hp+=heal;recovery(s,source,heal);}
     if(target.counter&&alive(target)&&!opts.reflected){
       const reflect=target.counter;target.counter=0;damage(s,target,source,target.atk*reflect,{reflected:true,skill:'counter'});
     }
     return dealt;
   }
   function push(s,a,target,steps){
-    const before=key(target);
+    const before=key(target),route=[point(target)];
     const dx=Math.abs(target.x-a.x)>=Math.abs(target.y-a.y)?Math.sign(target.x-a.x):0,dy=dx?0:Math.sign(target.y-a.y);
-    for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(blocked(s,p)||at(s,p))break;target.x=p.x;target.y=p.y;}
+    for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(blocked(s,p)||at(s,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
+    motion(s,target,route,'push',target.name+'被擊退');
     if(target.bot&&key(target)!==before)interruptMonster(target);
   }
   // Geometric aiming range stays visible even while stamina/cooldown prevents a
@@ -292,15 +309,19 @@
   function cast(s,a,sk,p){
     validateSkill(s,a,sk,p);a.stamina-=sk.cost;a.attacks++;
     if(sk.cooldown)a.cooldowns[sk.id]=a.turns+sk.cooldown;
-    log(s,a.name+'施展「'+sk.name+'」','cast',{actor:a.uid,skill:sk.id,x:p.x,y:p.y});
+    const castEvent=log(s,a.name+'施展「'+sk.name+'」','cast',{actor:a.uid,skill:sk.id,x:p.x,y:p.y,
+      animation:{kind:'cast',style:sk.kind,origin:point(a),target:point(p),cells:skillCells(s,a,sk,p),color:(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
     if(sk.kind==='restore'){
+      const hp=a.hp,shield=a.shield;
       a.hp=Math.min(a.maxHp,a.hp+Math.round(a.maxHp*sk.power));
       a.shield=Math.min(a.maxHp,Math.max(a.shield,Math.round(a.maxHp*(sk.shield||0))));
-      if(sk.cleanse)a.slow=0;return;
+      if(sk.cleanse)a.slow=0;recovery(s,a,a.hp-hp,a.shield-shield);return;
     }
-    if(sk.kind==='counter'){a.guard=.4;a.counter=sk.power;return;}
+    if(sk.kind==='counter'){a.guard=.4;a.counter=sk.power;castEvent.animation.changes=[appearance(a)];return;}
     if(sk.kind==='blink'){
+      const origin=point(a),shield=a.shield;
       a.x=p.x;a.y=p.y;if(sk.shield)a.shield=Math.max(a.shield,Math.round(a.maxHp*sk.shield));
+      motion(s,a,[origin,point(a)],'teleport');recovery(s,a,0,a.shield-shield);
       if(sk.burst)for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&dist(a,t)<=1))damage(s,a,t,a.atk*sk.burst,{skill:sk.id});return;
     }
     if(sk.kind==='meteor'){
@@ -309,9 +330,12 @@
     const target=at(s,p);
     if(sk.kind==='lunge'){
       const routes=neighbours(s,target).map(n=>path(s,a,n,a.uid)).filter(r=>r&&r.length-1<=sk.range).sort((a,b)=>a.length-b.length);
-      const end=routes[0].at(-1);a.x=end.x;a.y=end.y;
+      const route=routes[0],end=route.at(-1);a.x=end.x;a.y=end.y;motion(s,a,route,'dash',a.name+'劍意突進');
     }
-    if(sk.kind==='swap'){const pos={x:a.x,y:a.y};a.x=target.x;a.y=target.y;target.x=pos.x;target.y=pos.y;if(target.bot)interruptMonster(target);}
+    if(sk.kind==='swap'){
+      const pos=point(a),other=point(target);a.x=target.x;a.y=target.y;target.x=pos.x;target.y=pos.y;if(target.bot)interruptMonster(target);
+      log(s,a.name+'與'+target.name+'交換位置','displace',{actor:a.uid,animation:{kind:'move',style:'teleport',moves:[{uid:a.uid,path:[pos,other]},{uid:target.uid,path:[other,pos]}]}});
+    }
     const targets=sk.kind==='swap'?[target]:s.actors.filter(t=>alive(t)&&t.team!==a.team&&skillCells(s,a,sk,p).some(c=>key(c)===key(t)));
     for(const t of targets){
       if(!alive(a))break;
@@ -405,32 +429,39 @@
   function monsterTurn(s,m,hero){
     const intent=m.intent;
     if(intent?.kind==='strike'){
+      log(s,m.name+'發起攻擊','monster-attack',{actor:m.uid,animation:{kind:'cast',style:'point',origin:point(m),target:point(hero),cells:intent.cells,color:'#dda080'}});
       // Honor an already visible warning from a pre-v2 battle for this turn.
       if(intent.cells.some(p=>key(p)===key(hero)))damage(s,m,hero,m.atk,{skill:'monster'});
-      else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge');return;
+      else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});return;
     }
     if(intent?.kind==='attack'){
       if(intent.origin&&key(intent.origin)!==key(m))return;
+      const profile=monsterProfile(m.species),shape=intent.shape==='guardian'?(s.turn%2===0?'cross':'blast'):intent.shape;
+      log(s,m.name+'施展「'+profile.attackName+'」','monster-attack',{actor:m.uid,animation:{kind:'cast',style:shape,origin:point(m),target:intent.target,cells:intent.cells,color:profile.attack.slow?'#b8ca82':['cone','line'].includes(shape)?'#e4a06d':'#d9a080'}});
       let hit=intent.cells.some(p=>key(p)===key(hero));
       if(intent.shape==='charge'){
-        hit=false;for(const p of intent.cells){if(blocked(s,p))break;const occupant=at(s,p);
-          if(occupant){hit=occupant.uid===hero.uid;break;}m.x=p.x;m.y=p.y;
+        const route=[point(m)];hit=false;for(const p of intent.cells){if(blocked(s,p))break;const occupant=at(s,p);
+          if(occupant){hit=occupant.uid===hero.uid;break;}m.x=p.x;m.y=p.y;route.push(point(m));
         }
+        motion(s,m,route,'dash',m.name+'衝撞');
       }
       if(hit){
         damage(s,m,hero,m.atk*(intent.power||1),{skill:'monster-'+m.species});
         if(alive(hero)&&intent.slow){hero.slow=1;hero.slowUntil=hero.turns+1;}
         if(alive(hero)&&intent.push)push(s,m,hero,intent.push);
-      }else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge');
+      }else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
       if(alive(m)&&['pounce','dive'].includes(intent.shape)){
         const spots=area(s,intent.target,1).filter(p=>!at(s,p)).sort((a,b)=>dist(a,intent.target)-dist(b,intent.target)||dist(m,a)-dist(m,b));
-        if(spots[0]){m.x=spots[0].x;m.y=spots[0].y;}
+        if(spots[0]){const origin=point(m);m.x=spots[0].x;m.y=spots[0].y;motion(s,m,[origin,point(m)],intent.shape==='dive'?'fly':'leap');}
       }
       return;
     }
-    if(intent?.kind==='stagger'||intent?.kind==='wait')return;
+    if(intent?.kind==='stagger'||intent?.kind==='wait'){
+      log(s,m.name+(intent.kind==='stagger'?'重新蓄勢':'等待時機'),'wait',{actor:m.uid,animation:{kind:'guard'}});return;
+    }
     const route=monsterRoute(s,m,hero),end=route.at(-1);m.slow=0;
-    if(route.length>1){m.x=end.x;m.y=end.y;log(s,m.name+'以'+monsterProfile(m.species).moveName+'移動','monster-move',{actor:m.uid,path:route});}
+    if(route.length>1){m.x=end.x;m.y=end.y;log(s,m.name+'以'+monsterProfile(m.species).moveName+'移動','monster-move',{actor:m.uid,path:route,animation:{kind:'move',style:monsterProfile(m.species).move.kind}});}
+    else log(s,m.name+'觀察戰局','wait',{actor:m.uid,animation:{kind:'guard'}});
   }
   function begin(s,a,now){
     s.turnUid=a.uid;a.turns++;a.questions=0;a.attacks=0;a.actions=0;a.guard=0;a.counter=0;
@@ -438,8 +469,12 @@
     s.turnStartedAtMs=now;s.deadlineMs=s.mode==='pvp'?now+LIMITS.turnMs:0;
     const due=s.effects.filter(e=>e.owner===a.uid&&e.due<=a.turns);
     s.effects=s.effects.filter(e=>!due.includes(e));
-    for(const e of due)for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&e.cells.some(c=>key(c)===key(t))))damage(s,a,t,e.power,{skill:e.skill});
+    for(const e of due){
+      log(s,'隕星落下','impact',{actor:a.uid,skill:e.skill,animation:{kind:'impact',style:'meteor',cells:e.cells,color:'#b5a1e7'}});
+      for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&e.cells.some(c=>key(c)===key(t))))damage(s,a,t,e.power,{skill:e.skill});
+    }
     checkFinished(s);
+    if(s.status==='active')log(s,a.name+'的行動回合','turn',{actor:a.uid,animation:{kind:'turn',changes:[appearance(a)]}});
   }
   function end(s,now){
     if(s.mode==='pve'){
@@ -462,12 +497,14 @@
       const route=path(s,a,p,a.uid),cost=(route?.length-1)*(1+(a.slow||0));
       if(!route||route.length<2)fail('此地格無法到達');if(cost>a.stamina)fail('體力不足以走到這裡');
       a.stamina-=cost;a.x=p.x;a.y=p.y;a.slow=0;
-      log(s,a.name+'移動 '+(route.length-1)+' 格，消耗 '+cost+' 體力','move',{actor:a.uid,path:route});
+      log(s,a.name+'移動 '+(route.length-1)+' 格，消耗 '+cost+' 體力','move',{actor:a.uid,path:route,animation:{kind:'move',style:'walk',changes:[appearance(a)]}});
     }else if(command.type==='attack'||command.type==='skill'){
       cast(s,a,command.type==='attack'?BASIC:branchFor(a).skill,p);
     }else if(command.type==='guard'){
-      if(a.attacks>=LIMITS.attacks)fail('本回合已使用兩次攻擊／技能');a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard');
-    }else if(command.type==='end'){end(s,now);}
+      if(a.attacks>=LIMITS.attacks)fail('本回合已使用兩次攻擊／技能');a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
+    }else if(command.type==='end'){
+      log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});end(s,now);
+    }
     else fail('未知的戰場行動');
     a.actions++;s.turnTimeouts[uid]=0;s.revision++;s.updatedAtMs=now;checkFinished(s);return s;
   }
@@ -477,13 +514,14 @@
     if(a.questions>=LIMITS.questions)fail('本回合已完成兩題，請行動或結束回合');
     const before=a.stamina;a.stamina=Math.min(LIMITS.stamina,a.stamina+(correct?LIMITS.correct:LIMITS.wrong));
     a.questions++;a.answered++;if(correct)a.correct++;
-    log(s,a.name+(correct?'答對':'訂正')+'，體力 +'+(a.stamina-before),'answer',{actor:uid,correct,gain:a.stamina-before});
+    log(s,a.name+(correct?'答對':'訂正')+'，體力 +'+(a.stamina-before),'answer',{actor:uid,correct,gain:a.stamina-before,
+      animation:{kind:'answer',changes:[appearance(a)],numbers:[{uid,gain:a.stamina-before}]}});
     s.turnTimeouts[uid]=0;s.revision++;s.updatedAtMs=now;return s;
   }
   function expire(state,now=Date.now()){
     if(state.status!=='active'||state.mode!=='pvp'||now<state.deadlineMs)return state;
     const s=clone(state),uid=s.turnUid;s.turnTimeouts[uid]=(s.turnTimeouts[uid]||0)+1;
-    log(s,current(s).name+'行動逾時','timeout');
+    log(s,current(s).name+'行動逾時','timeout',{actor:uid,animation:{kind:'turn'}});
     if(s.turnTimeouts[uid]>=2){s.status='finished';s.winner=s.actors.find(a=>a.uid!==uid).team;s.finishReason='timeout';s.deadlineMs=0;}
     else end(s,now);
     s.revision++;s.updatedAtMs=now;return s;
@@ -492,7 +530,7 @@
     const s=clone(state);if(!s.actors.some(a=>a.uid===uid))fail('你不在此戰場');
     if(s.status==='finished')return s;
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
-    log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit');return s;
+    log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
   return Object.freeze({LIMITS,MAPS,CORES,BASIC,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,apply,answer,expire,forfeit});
 });

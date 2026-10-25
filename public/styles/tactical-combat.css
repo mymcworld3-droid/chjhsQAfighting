@@ -49,8 +49,8 @@
 .tc-skill-info{font-size:11px;line-height:1.6;min-height:50px}.tc-skill-info b{display:block;font-weight:500;color:#e0c991}.tc-skill-info span{color:var(--review-muted,var(--xq-muted,#ada591));font-size:10px}.tc-skill-info p{color:var(--review-muted,var(--xq-muted,#ada591));margin-top:3px!important}
 #tactical-combat .tc-confirm{background:#44351f;border-color:var(--quiet-accent-line,#d2af6970);color:var(--review-paper,var(--xq-paper,#eee4d0))}
 .tc-turn-buttons{display:flex;gap:7px}.tc-turn-buttons button{font-size:12px!important;flex:1;padding:8px 4px!important}
-.tc-log{border-top:1px solid #c4ad7830;padding-top:10px;max-height:120px;overflow:auto;font-size:10px;color:var(--review-muted,var(--xq-muted,#ada591));flex:1;min-height:45px}.tc-log p{margin-bottom:5px!important}.tc-log .is-damage{color:#dba384}.tc-log .is-answer{color:#d6d8ae}.tc-log .is-cast{color:#d7c3e8}
-.tc-game-footer{display:flex;justify-content:space-between;gap:6px;margin-top:auto}.tc-game-footer button{font-size:11px!important;min-height:32px!important;background:transparent!important;padding:5px!important;border-color:transparent!important;color:var(--review-muted,var(--xq-muted,#ada591))!important}
+.tc-log{border-top:1px solid #c4ad7830;padding-top:10px;max-height:120px;overflow:auto;font-size:10px;color:var(--review-muted,var(--xq-muted,#ada591));flex:1;min-height:0}.tc-log p{margin-bottom:5px!important}.tc-log .is-damage{color:#dba384}.tc-log .is-answer{color:#d6d8ae}.tc-log .is-cast{color:#d7c3e8}
+.tc-game-footer{display:flex;justify-content:space-between;gap:6px;margin-top:auto;flex:0 0 auto}.tc-game-footer button{font-size:11px!important;min-height:32px!important;background:transparent!important;padding:5px!important;border-color:transparent!important;color:var(--review-muted,var(--xq-muted,#ada591))!important}
 .tc-waiting{display:grid;place-items:center;text-align:center;padding:20px}.tc-waiting>div{max-width:460px;display:grid;gap:22px}.tc-waiting h2{font-size:30px}.tc-waiting p{color:#b1bea6}.tc-waiting code{font-size:24px;letter-spacing:.12em;color:#edce8a;border:1px solid #bba46b47;padding:20px;background:#203225;user-select:all;overflow-wrap:anywhere}
 .tc-modal{position:absolute;inset:0;background:#100f0bd9;display:grid;place-items:center;z-index:5;padding:20px;overflow:auto}
 .tc-dialog{width:min(660px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain;background:var(--review-panel,var(--quiet-surface,#242018));border:1px solid var(--quiet-line,#d2b9892e);border-radius:var(--ui-panel-radius,12px);padding:28px;box-shadow:0 18px 70px #0009;display:flex;flex-direction:column;gap:18px;outline:none}
@@ -78,6 +78,16 @@
 .tc-enemy-attack{padding:12px;border:1px solid var(--quiet-line,#d2b9892e);border-left:2px solid var(--xq-gold,#c7a35e);border-radius:8px;background:#c7a35e0a}.tc-enemy-attack small{font-size:11px;color:var(--xq-gold,#c7a35e)}.tc-enemy-attack h3{font-size:17px;font-weight:500;margin:4px 0 7px!important}.tc-enemy-attack p{font-size:13px;color:var(--xq-paper,#eee4d0)!important;line-height:1.7}
 .tc-enemy-details{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px 12px;margin:0;font-size:12px;line-height:1.65}.tc-enemy-details dt{color:var(--xq-gold,#c7a35e)}.tc-enemy-details dd{margin:0;color:var(--review-paper,#eee5d2)}
 .tc-enemy-note{font-size:11px}.tc-enemy-error{font-size:12px;color:#ffb6a3!important}
+/* Small ink/gold transitions stay inside the existing stage and take no space. */
+@keyframes tc-reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tc-stage-reveal{from{opacity:0}to{opacity:1}}
+@keyframes tc-breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.45)}}
+#tactical-combat .tc-game{animation:tc-stage-reveal .22s ease-out both}
+#tactical-combat .tc-dialog{animation:tc-reveal .22s ease-out both}
+#tactical-combat button:active:not(:disabled){transform:translateY(1px) scale(.98)}
+#tactical-combat .tc-gaining{animation:tc-breathe .6s ease-out}
+#tactical-combat.tc-animating .tc-selection{color:var(--xq-gold,#c7a35e);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tactical-combat.tc-animating canvas{cursor:progress}
 @media(orientation:portrait){
   .tc-top{padding:7px 10px}.tc-top h1{font-size:20px}.tc-top-right{gap:6px;flex-direction:row;align-items:center}.tc-top-right>span{font-size:10px;max-width:146px;line-height:1.4}.tc-top-right button{min-height:30px!important;padding:5px 7px!important;font-size:11px!important;white-space:nowrap}
   .tc-hub{grid-template-columns:1fr;gap:20px;padding:18px}.tc-hub-intro{position:static;padding:0}.tc-hub-intro h2{font-size:26px;max-width:none;margin:8px 0 12px!important}.tc-hub-intro p{font-size:12px;max-width:none}.tc-hub-intro .tc-primary{margin-top:12px;width:100%}.tc-hub-config{gap:10px}.tc-branches button{min-height:125px!important;padding:12px!important}.tc-branches{grid-template-columns:1fr 1fr}
