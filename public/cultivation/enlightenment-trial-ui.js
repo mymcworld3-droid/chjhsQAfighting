@@ -25,7 +25,7 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
     layer.className='enlightenment-overlay';
     layer.setAttribute('role','dialog');layer.setAttribute('aria-modal','true');
     layer.setAttribute('aria-label','悟道試煉');
-    layer.innerHTML='<div class="enlightenment-panel"><header><div><small>INNER CULTIVATION ／ 悟道修行</small><h2>悟道試煉</h2></div><button type="button" data-close aria-label="關閉試煉">×</button></header><div id="enlightenment-body" aria-live="polite"></div></div>';
+    layer.innerHTML='<div class="enlightenment-panel"><header><h2>悟道試煉</h2><button type="button" data-close aria-label="關閉試煉">×</button></header><div id="enlightenment-body" aria-live="polite"></div></div>';
     layer.querySelector('[data-close]').addEventListener('click',close);
     layer.addEventListener('click',event=>{if(event.target===layer)close();});
     document.body.appendChild(layer);
@@ -46,29 +46,28 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
     setBody('<div class="enlightenment-status"><i class="fa-solid fa-circle-notch fa-spin"></i> '+escape(message)+'</div>');
   }
   function trialHeader(){
-    return '<div class="enlightenment-overview"><span>指定單元</span><strong>'+escape(trial?.subject||selected?.subject||'待診斷')+
-      ' · '+escape(trial?.topic||selected?.topic||'學習弱項')+'</strong><small>固定 5 題，答對至少 4 題即通過。完成後更新知識掌握紀錄。</small></div>';
+    return '<div class="enlightenment-overview"><strong>'+escape(trial?.subject||selected?.subject||'待診斷')+
+      ' · '+escape(trial?.topic||selected?.topic||'學習弱項')+'</strong></div>';
   }
   function finished(){
     const win=trial.success===true;
     setBody(trialHeader()+'<div class="enlightenment-finish '+(win?'passed':'')+'"><b>'+
-      (win?'悟道試煉完成':'試煉尚未通過')+'</b><strong>'+escape(trial.correct)+' / 5 題</strong><p>'+
+      (win?'試煉通過':'試煉未通過')+'</b><strong>'+escape(trial.correct)+' / 5 題</strong><p>'+
       (win?(trial.rewarded?'首次掌握此單元，取得 '+(trial.reward?.gold||0)+' 靈石與 '+(trial.reward?.cultivation||0)+' 修為。':'此單元已曾通過，本次不重複領獎。'):
-        '已記錄此次練習表現；可複習解析，明日再次挑戰。')+'</p>'+
-      '<div class="enlightenment-mastery"><i class="fa-solid fa-award"></i> 掌握單元 '+
+        '答對 4 題即可通過，明日可再挑戰。')+'</p>'+
+      '<div class="enlightenment-mastery">已掌握 '+
       escape(trial.masteryCount||0)+' · '+escape(trial.title||'尚未取得稱號')+'</div>'+
-      (win?'<p class="enlightenment-concept-growth">已通過「'+escape(trial.subject)+' · '+escape(trial.topic)+'」本次五題檢驗，完成一輪概念補強。</p>':'')+
       '<button type="button" class="enlightenment-primary" data-close-result>完成</button></div>');
     $('enlightenment-body')?.querySelector('[data-close-result]')?.addEventListener('click',close);
   }
   function resting(){
     const weakness=trial?.weakness;
-    setBody('<div class="enlightenment-intro"><p>宗門會依已記錄的答題表現，挑選證據足夠且需要加強的單元。</p>'+
+    setBody('<div class="enlightenment-intro"><p>每天一場，共 5 題，答對 4 題即可通過。</p>'+
       (weakness?'<div class="enlightenment-overview"><span>推薦補強</span><strong>'+escape(weakness.subject)+' · '+escape(weakness.topic)+
-        '</strong><small>已練習 '+escape(weakness.total)+' 題；保守估計 '+escape(weakness.estimate)+'%。</small></div>'+
+        '</strong></div>'+
         '<button type="button" class="enlightenment-primary" data-start>開始五題試煉</button>':
-        '<p class="enlightenment-empty">目前沒有足夠的弱項證據。先在問道同一單元練習至少 5 題，系統才能安排試煉。</p>')+
-      '<small>每天限一場；通過同一單元的首次獎勵只會發放一次，答題與獎勵皆以伺服器紀錄為準。</small></div>');
+        '<p class="enlightenment-empty">先在問道同一單元練習至少 5 題，即可安排補強試煉。</p>')+
+      '<small>每個單元首次通過可獲得獎勵。</small></div>');
     $('enlightenment-body')?.querySelector('[data-start]')?.addEventListener('click',()=>void start());
   }
   function paintQuestion(){
@@ -84,16 +83,15 @@ import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
     setBody(trialHeader()+'<div class="enlightenment-step"><span>第 '+(trial.index+1)+' / 5 題</span>'+
       '<span>目前答對 '+trial.correct+' 題</span></div><h3 class="enlightenment-question">'+rich(q.q)+'</h3>'+
       '<div class="enlightenment-options">'+q.opts.map((opt,i)=>
-      '<button type="button" data-answer="'+i+'" '+(busy?'disabled':'')+'><span>'+
-        'ABCD'[i]+'</span><b>'+rich(opt)+'</b></button>').join('')+'</div>'+
-      '<small class="enlightenment-footnote">此題由 AI 生成並經伺服器驗證；答案在提交前不傳送至瀏覽器。</small>');
+      '<button type="button" data-answer="'+i+'"><span>'+
+        'ABCD'[i]+'</span><b>'+rich(opt)+'</b></button>').join('')+'</div>');
     $('enlightenment-body')?.querySelectorAll('[data-answer]').forEach(button=>
       button.addEventListener('click',()=>void answer(Number(button.dataset.answer))));
   }
   function paintReview(){
     if(!review)return paintQuestion();
     setBody(trialHeader()+'<div class="enlightenment-review"><strong class="'+(review.correct?'correct':'wrong')+'">'+
-      (review.correct?'答對了！':'本題未答對')+'</strong><p>第 '+review.index+' / 5 題 · '+(review.correct?'正確作答':'已記錄錯題')+
+      (review.correct?'答對':'答錯')+'</strong><p>第 '+review.index+' / 5 題'+
       '</p><div class="enlightenment-explanation">'+rich(review.explanation||'此題解析未提供')+'</div>'+
       '<button type="button" class="enlightenment-primary" data-continue>'+
       (trial.status==='completed'?'查看試煉成果':'繼續下一題')+'</button></div>');
