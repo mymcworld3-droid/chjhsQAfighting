@@ -5,7 +5,7 @@
   const PLACES = Object.freeze([
     { id: 'meditation', name: '修煉室', threshold: 28, realm: '金丹境', tab: 'core' },
     { id: 'forge', name: '鍛造坊', threshold: 6, realm: '築基初期', tab: 'refinery' },
-    { id: 'contract', name: '尋器', threshold: 28, realm: '金丹境', tab: 'contract' },
+    { id: 'contract', name: '尋器', threshold: 6, realm: '築基期', tab: 'contract' },
     { id: 'vault', name: '寶庫', threshold: 6, realm: '築基初期', tab: 'bag' },
     { id: 'secret', name: '秘境', threshold: 6, realm: '築基期', page: 'page-raid' },
     { id: 'status', name: '狀態', threshold: 0, realm: '', tab: 'status' },

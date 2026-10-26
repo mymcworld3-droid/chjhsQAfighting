@@ -15,7 +15,7 @@ const DETAIL_TABS = [
   { id: 'core', name: '金丹', icon: 'fa-circle-dot', threshold: 28, unlock: '金丹境解鎖' },
   { id: 'nascent-soul', name: '元嬰', icon: 'fa-child-reaching', threshold: 68, unlock: '元嬰境解鎖' },
   { id: 'refinery', name: '煉器', icon: 'fa-hammer', threshold: 6, unlock: '築基期解鎖' },
-  { id: 'contract', name: '契器', icon: 'fa-dharmachakra', threshold: 28, unlock: '金丹境解鎖' },
+  { id: 'contract', name: '尋器', icon: 'fa-dharmachakra', threshold: 6, unlock: '築基期解鎖' },
   { id: 'equipment', name: '裝備', icon: 'fa-shield-halved', threshold: 6, unlock: '築基期解鎖' },
   { id: 'bag', name: '背包', icon: 'fa-box-open', threshold: 6, unlock: '築基期解鎖' }
 ];
@@ -45,7 +45,7 @@ function loadStyle() {
 }
 function setDetail(placeId) {
   if (!page) return;
-  const place = placeId === 'contract' ? { id: 'contract', name: '契器台' } : Rules.PLACES.find(place => place.id === placeId);
+  const place = Rules.PLACES.find(place => place.id === placeId);
   if (!place) return;
   if (pageNavigation?.isCurrent()) pageNavigation.place = place.id;
   page.classList.remove('training-scene-map-active');

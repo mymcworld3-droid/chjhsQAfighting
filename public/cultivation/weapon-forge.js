@@ -1,6 +1,7 @@
 import './weapon-system-rules.js';
 import {ensureInventoryGridStyle} from './inventory-grid-style.js';
 import {showWeaponDraw} from './weapon-draw-reveal.js';
+import {createWeaponShowcase} from './weapon-showcase.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const W=globalThis.QAWeapons;
@@ -10,8 +11,9 @@ const current=()=>window.getCurrentUserData?.()||{};
 const pendingKey=uid=>'weapon-forge-pending:'+uid;
 const valid=(uid,epoch)=>owner===uid&&getMainUser()?.uid===uid&&serial===epoch;
 const activeTab=()=>document.querySelector('#page-training [data-training-tab].active')?.dataset.trainingTab;
+const showcase=createWeaponShowcase({icon,find:()=>host?.querySelector('.wf-showcase'),visible:()=>view==='acquire'&&!!host?.querySelector('.wf-showcase')?.isConnected&&['refinery','contract'].includes(activeTab())&&!!document.querySelector('#page-training.active-page:not(.hidden):not(.training-scene-map-active)')});
 function closeDetail(restore=true){detail?.close();detail?.remove();detail=null;const previous=selected;selected='';if(restore)host?.querySelector(`[data-weapon-select="${previous}"]`)?.focus();}
-function identity(){const uid=getMainUser()?.uid||'';if(owner!==uid){closeDetail(false);destroyDraw?.();destroyDraw=null;owner=uid;serial++;snapshot=null;busy=false;loading=false;message='';payment='ticket';try{pending=JSON.parse(localStorage.getItem(pendingKey(uid))||'null');}catch(_){pending=null;}}return uid;}
+function identity(){const uid=getMainUser()?.uid||'';if(owner!==uid){showcase.reset();closeDetail(false);destroyDraw?.();destroyDraw=null;owner=uid;serial++;snapshot=null;busy=false;loading=false;message='';payment='ticket';try{pending=JSON.parse(localStorage.getItem(pendingKey(uid))||'null');}catch(_){pending=null;}}return uid;}
 function icon(type){
   const paths={bow:'M25 10 Q82 50 25 90 M25 10 L49 50 25 90 M18 50 H85 M73 41 L85 50 73 59',spear:'M22 86 L72 24 M64 27 L82 9 78 35 72 24 M18 78 L30 88',
     sword:'M22 82 L67 27 M57 31 L81 10 72 42 M37 56 L54 70 M18 88 L27 84',saber:'M19 85 L40 60 Q70 48 82 12 Q89 50 51 75 M31 57 L51 78',
@@ -32,7 +34,7 @@ function resultMessage(payload){const r=payload.result||{};if(r.action==='draw')
   if(r.action==='convert-legacy')return `傳承完成：兵器匣 ×${r.chests}、靈石 +${r.gold}。`;
   return `獲得兵器匣 ×${r.chests||1}。`;
 }
-function present(draw,opening=true){const uid=identity(),epoch=serial;if(!draw||!host?.isConnected)return;closeDetail(false);destroyDraw?.();
+function present(draw,opening=true){const uid=identity(),epoch=serial;if(!draw||!host?.isConnected)return;showcase.pause();closeDetail(false);destroyDraw?.();
   destroyDraw=showWeaponDraw({draw,icon,opening,isCurrent:()=>valid(uid,epoch),onClose:toForge=>{destroyDraw=null;message='';if(toForge)view='weapons';render();host?.querySelector(toForge?'[data-weapon-select]':'[data-weapon-last-draw]')?.focus();}});}
 async function mutate(action,body={},retry=false){
   const uid=identity(),epoch=serial;if(!uid||busy||loading||pending&&!retry)return;
@@ -55,16 +57,17 @@ function renderDetail(){if(!detail)return;const row=snapshot?.state.weapons[sele
 function openDetail(type){if(!snapshot?.state.weapons[type])return;closeDetail(false);selected=type;detail=document.createElement('dialog');detail.className='uib-modal-backdrop wf-detail-overlay';detail.setAttribute('aria-labelledby','wf-detail-title');detail.addEventListener('click',event=>{if(event.target===detail)closeDetail();else click(event);});detail.addEventListener('cancel',event=>{event.preventDefault();closeDetail();});document.body.append(detail);renderDetail();detail.showModal();}
 function balanceFor(method){return method==='chest'?snapshot.state.chests:method==='ticket'?snapshot.tickets:method==='gold'?snapshot.balance:snapshot.fragments;}
 function acquireMarkup(s,locked){const legacy=snapshot.legacy,hasLegacy=legacy.equipmentCopies||legacy.materialCount||legacy.pendingJob;
-  return `<section class="wf-acquire"><div class="wf-pool" aria-label="隨機兵器獎池">${W.TYPES.map(t=>`<div style="--weapon-ink:${t.color}"><span>${icon(t.id)}</span><b>${t.label}</b><small>20%</small></div>`).join('')}</div><p>每抽必得一把煉氣兵器；同款可用於境界進階。</p>${!s.starterClaimed?`<button type="button" class="wf-primary" data-weapon-free ${locked?'disabled':''}>首次免費抽取</button>`:''}<label class="wf-payment">使用<select data-weapon-payment ${locked?'disabled':''}>${['chest','ticket','gold','fragments'].map(method=>`<option value="${method}" ${payment===method?'selected':''}>${W.PAYMENTS[method].label} · 持有 ${balanceFor(method).toLocaleString('zh-TW')}</option>`).join('')}</select></label><div class="wf-draw-actions">${[1,5].map(count=>`<button type="button" data-weapon-draw="${count}" ${locked||balanceFor(payment)<W.drawCost(payment,count)?'disabled':''}>${count===1?'單抽':'五連抽'}<small>${W.drawCost(payment,count).toLocaleString('zh-TW')} ${W.PAYMENTS[payment].label}</small></button>`).join('')}</div>${s.lastDraw?'<button type="button" data-weapon-last-draw>重看上次結果</button>':''}${snapshot.pendingTrialChests?`<button type="button" data-weapon-claim ${locked?'disabled':''}>領取試煉兵器匣 ×${snapshot.pendingTrialChests}</button>`:''}<details class="wf-extra"><summary>抽取來源與舊資產</summary><p>問道試煉每關首通獲得 1 匣，每五關額外 1 匣。原契器券可直接使用，由任務與閉關取得；亦可使用靈石或煉器碎片抽取。</p><button type="button" data-weapon-trial ${locked?'disabled':''}>前往問道試煉</button>${hasLegacy?`<div class="wf-legacy"><p>舊裝備 ${legacy.equipmentCopies} 件、舊材料 ${legacy.materialCount} 個，可轉換為 ${legacy.chests} 個兵器匣與 ${legacy.gold} 靈石。${legacy.pendingJob?'未完成的煉製會退回投入，另返還 '+legacy.refundFragments+' 碎片。':''}</p><button type="button" data-weapon-convert ${locked?'disabled':''}>確認轉換上述舊資產</button></div>`:''}</details></section>`;
+  return `<section class="wf-acquire">${showcase.markup()}<p>每抽必得一把煉氣兵器；同款可用於境界進階。</p>${!s.starterClaimed?`<button type="button" class="wf-primary" data-weapon-free ${locked?'disabled':''}>首次免費抽取</button>`:''}<label class="wf-payment">使用<select data-weapon-payment ${locked?'disabled':''}>${['chest','ticket','gold','fragments'].map(method=>`<option value="${method}" ${payment===method?'selected':''}>${W.PAYMENTS[method].label} · 持有 ${balanceFor(method).toLocaleString('zh-TW')}</option>`).join('')}</select></label><div class="wf-draw-actions">${[1,5].map(count=>`<button type="button" data-weapon-draw="${count}" ${locked||balanceFor(payment)<W.drawCost(payment,count)?'disabled':''}>${count===1?'單抽':'五連抽'}<small>${W.drawCost(payment,count).toLocaleString('zh-TW')} ${W.PAYMENTS[payment].label}</small></button>`).join('')}</div>${s.lastDraw?'<button type="button" data-weapon-last-draw>重看上次結果</button>':''}${snapshot.pendingTrialChests?`<button type="button" data-weapon-claim ${locked?'disabled':''}>領取試煉兵器匣 ×${snapshot.pendingTrialChests}</button>`:''}<details class="wf-extra"><summary>抽取來源與舊資產</summary><p>問道試煉每關首通獲得 1 匣，每五關額外 1 匣。原契器券可直接使用，由任務與閉關取得；亦可使用靈石或煉器碎片抽取。</p><button type="button" data-weapon-trial ${locked?'disabled':''}>前往問道試煉</button>${hasLegacy?`<div class="wf-legacy"><p>舊裝備 ${legacy.equipmentCopies} 件、舊材料 ${legacy.materialCount} 個，可轉換為 ${legacy.chests} 個兵器匣與 ${legacy.gold} 靈石。${legacy.pendingJob?'未完成的煉製會退回投入，另返還 '+legacy.refundFragments+' 碎片。':''}</p><button type="button" data-weapon-convert ${locked?'disabled':''}>確認轉換上述舊資產</button></div>`:''}</details></section>`;
 }
-function render(){if(!host?.isConnected)return;const active=activeTab();if(active&&!['refinery','contract','equipment'].includes(active)){closeDetail(false);return;}
+function render(){showcase.stop();if(!host?.isConnected)return;const active=activeTab();if(active&&!['refinery','contract','equipment'].includes(active)){closeDetail(false);return;}
   if(!snapshot){host.innerHTML=`<section class="wf-page"><b>鍛造坊</b><p role="status">${esc(message||'正在整理兵器…')}</p><button type="button" data-weapon-refresh ${loading?'disabled':''}>重新同步</button></section>`;return;}
   const s=snapshot.state,equipped=W.get(s.equipped),row=s.weapons[s.equipped],locked=busy||loading||!!pending,owned=Object.keys(s.weapons).length;
   host.innerHTML=`<section class="wf-page uib-root" aria-label="${view==='acquire'?'尋器抽取':'鍛造坊兵器庫'}"><div class="uib-toolbar"><div class="uib-summary"><b>${view==='acquire'?'尋器':'鍛造坊'}</b><span>${view==='acquire'?'隨機獲得兵器':owned+' 種兵器'}</span></div><span class="wf-balance">${snapshot.balance.toLocaleString('zh-TW')} 靈石</span><button type="button" data-weapon-view="${view==='acquire'?'weapons':'acquire'}">${view==='acquire'?'兵器庫':'尋器 →'}</button><button type="button" data-weapon-refresh aria-label="重新同步兵器" ${busy||loading?'disabled':''}>同步</button></div><p class="wf-message" role="status" ${message?'':'hidden'}>${esc(message)}</p>${pending&&!busy?'<button type="button" data-weapon-retry>重試原操作</button>':''}${view==='acquire'?acquireMarkup(s,locked):`${equipped?`<button type="button" class="wf-equipped" data-weapon-select="${equipped.id}"><span>${icon(equipped.id)}</span><b>主武器 · ${equipped.name}</b><small>${W.realmFor(row).name}境</small></button>`:'<p class="wf-equipped">尚未裝配主武器</p>'}<div class="uib-grid wf-weapons" aria-label="已持有武器">${cards(s)}</div>${owned?'<p class="wf-hint">點選武器以裝配或進階。</p>':'<div class="uib-empty"><b>尚無兵器</b><button type="button" data-weapon-view="acquire">前往尋器</button></div>'}`}</section>`;
-  renderDetail();
+  renderDetail();showcase.schedule();
 }
 function draw(count,method=payment){void mutate('draw',{count,payment:method,poolVersion:W.DRAW_VERSION,expectedCost:W.drawCost(method,count)});}
 function click(event){const b=event.target.closest('button');if(!b||b.disabled)return;
+  if(showcase.handle(b))return;
   if(b.hasAttribute('data-weapon-close'))closeDetail();
   else if(b.dataset.weaponSelect)openDetail(b.dataset.weaponSelect);
   else if(b.dataset.weaponView){closeDetail(false);view=b.dataset.weaponView;message='';render();}
@@ -85,6 +88,6 @@ window.mountWeaponForge=(container,nextView='weapons')=>{identity();ensureInvent
 window.openWeaponForge=(nextView='weapons')=>{window.switchToPage?.('page-training');patchTabs();const tab=document.querySelector(`[data-training-tab="${nextView==='acquire'?'contract':'refinery'}"]`)||document.querySelector('[data-training-tab="refinery"]');tab?.click();const container=document.getElementById('training-tab-content');if(container)window.mountWeaponForge(container,nextView);};
 window.openCultivationRefinery=()=>window.openWeaponForge('weapons');window.openSoulboundDraw=()=>window.openWeaponForge('acquire');window.mountSoulboundTrainingPage=container=>window.mountWeaponForge(container,'acquire');
 window.addEventListener('xiuxian:user-data-ready',()=>{identity();patchTabs();});window.addEventListener('xiuxian:weapon-updated',patchTabs);
-document.addEventListener('click',event=>{if(event.target.closest('[data-training-tab],#nav-grid button'))closeDetail(false);},true);
+document.addEventListener('click',event=>{if(event.target.closest('[data-training-tab],#nav-grid button,.training-scene-back')){showcase.pause();closeDetail(false);}},true);
 patchTabs();
 export {icon,render,refresh};

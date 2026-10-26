@@ -83,6 +83,18 @@ test('upgrading a weapon increases trial damage without inflating the same stage
   const create=realm=>R.create({id:'same-stage',players:[{uid:'u1',atk:Math.round(200*W.attackMultiplier({type:'sword',realm})),maxHp:1000,enemyScaleAttack:200,weapon:{type:'sword',realm}}],trial:{seed:'1234567890abcdef1234567890abcdef',stage:12},now});
   const first=create(0),upgraded=create(9);assert.equal(upgraded.actors[0].atk,245);assert.deepEqual(upgraded.actors.slice(1),first.actors.slice(1));
 });
+test('weapon view and random draws open at Foundation, including saved access after a deduction',async()=>{
+  const player=user();player.stats.totalScore=5;
+  const db=fakeDb(player),before=structuredClone([...db.docs]);
+  await assert.rejects(api.transact(db,'u1'),error=>error.status===403);
+  await assert.rejects(draw(db,'locked'),error=>error.status===403);
+  assert.deepEqual([...db.docs],before);
+  db.docs.get('users/u1').stats.totalScore=6;
+  assert.equal((await api.transact(db,'u1')).playerRealmScore,6);
+  assert.equal((await draw(db,'foundation')).state.weapons.bow.copies,1);
+  Object.assign(db.docs.get('users/u1'),{stats:{...player.stats,totalScore:0},trainingAccess:{version:1,highestRealmScore:6}});
+  assert.equal((await draw(db,'saved-foundation',{payment:'ticket'})).state.weapons.bow.copies,2);
+});
 test('free random draw, chest draws and equipment use server inventory, with exactly one equipped weapon',async()=>{
   const db=fakeDb(user());const before=await api.transact(db,'u1');assert.equal(before.state.starterClaimed,false);assert.equal(db.docs.size,1,'ordinary views do not initialize or mutate assets');
   await draw(db,'starter',{payment:'free',types:['bow']});assert.equal(armory(db).equipped,'bow');

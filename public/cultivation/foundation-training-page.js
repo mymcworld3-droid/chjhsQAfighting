@@ -1,5 +1,5 @@
 import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
-// 築基期修煉頁：6～27 修為開放背包與煉器；踏入金丹後交棒給完整修煉模組。
+// 築基期修煉頁：6～27 修為開放背包與煉器，並開放尋器；踏入金丹後交棒給完整修煉模組。
 (function () {
   'use strict';
 
@@ -104,6 +104,9 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       const bag = page.querySelector('[data-training-tab="bag"]');
       bag?.insertAdjacentHTML('beforebegin', '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
     }
+    if (window.QA_WEAPON_SYSTEM_ENABLED && tabs && !tabs.querySelector('[data-training-tab="contract"]')) {
+      tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>尋器</span></button>');
+    }
 
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
       const selected = !preserveStatus && tab.dataset.trainingTab === 'bag';
@@ -126,6 +129,18 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       return window.beginSceneTransition?.(content, content, 'alchemy', 'training-tab', true,
         next > (current < 0 ? tabs.length - 1 : current) ? 1 : -1);
     }
+
+    page.querySelector('[data-training-tab="contract"]')?.addEventListener('click', () => {
+      if (!foundationStage() || !window.QA_WEAPON_SYSTEM_ENABLED) return;
+      const finishTransition = beginTabSlide('contract');
+      page.querySelectorAll('[data-training-tab]').forEach(tab => {
+        const selected = tab.dataset.trainingTab === 'contract';
+        tab.classList.toggle('active', selected);
+        tab.setAttribute('aria-selected', String(selected));
+      });
+      window.mountWeaponForge?.(page.querySelector('#training-tab-content'), 'acquire');
+      finishTransition?.();
+    });
 
     page.querySelector('[data-training-tab="refinery"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;

@@ -43,7 +43,7 @@ test('new accounts see Status; existing Foundation and Golden Core gates are at 
   const player = { stats: { totalScore: 0 } };
   assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status', 'rank']);
   player.stats.totalScore = 6;
-  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'vault', 'secret', 'status', 'rank']);
+  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'contract', 'vault', 'secret', 'status', 'rank']);
   player.stats.totalScore = 28;
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);
 });
@@ -51,7 +51,7 @@ test('new accounts see Status; existing Foundation and Golden Core gates are at 
 test('compact contract entrance sits beside the forge and opens its existing tab', () => {
   const contract = Rules.PLACES.find(place => place.id === 'contract');
   assert.equal(contract.name, '尋器');
-  assert.equal(contract.threshold, 28);
+  assert.equal(contract.threshold, 6);
   for (const layout of Object.values(Layouts)) {
     const forge = layout.places.forge.bounds, altar = layout.places.contract.bounds;
     assert.ok(altar[2] < forge[2]);
