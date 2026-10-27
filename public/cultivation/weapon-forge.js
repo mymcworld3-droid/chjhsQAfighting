@@ -15,10 +15,8 @@ const showcase=createWeaponShowcase({icon,find:()=>host?.querySelector('.wf-show
 function closeDetail(restore=true){detail?.close();detail?.remove();detail=null;const previous=selected;selected='';if(restore)host?.querySelector(`[data-weapon-select="${previous}"]`)?.focus();}
 function identity(){const uid=getMainUser()?.uid||'';if(owner!==uid){showcase.reset();closeDetail(false);destroyDraw?.();destroyDraw=null;owner=uid;serial++;snapshot=null;busy=false;loading=false;message='';payment='ticket';try{pending=JSON.parse(localStorage.getItem(pendingKey(uid))||'null');}catch(_){pending=null;}}return uid;}
 function icon(type){
-  const paths={bow:'M25 10 Q82 50 25 90 M25 10 L49 50 25 90 M18 50 H85 M73 41 L85 50 73 59',spear:'M22 86 L72 24 M64 27 L82 9 78 35 72 24 M18 78 L30 88',
-    sword:'M22 82 L67 27 M57 31 L81 10 72 42 M37 56 L54 70 M18 88 L27 84',saber:'M19 85 L40 60 Q70 48 82 12 Q89 50 51 75 M31 57 L51 78',
-    hammer:'M23 87 L61 45 M43 36 L62 15 87 37 68 58 Z M48 33 L73 54'};
-  return `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path d="${paths[type]}" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const weapon=W.get(type);if(!weapon)return '';
+  return `<img class="wf-art" src="/assets/weapons/${weapon.id}.webp" width="768" height="768" alt="" aria-hidden="true" decoding="async" draggable="false">`;
 }
 function apply(payload){if(!snapshot)payment=payload.state.chests?'chest':payload.tickets?'ticket':'gold';snapshot=payload;const user=current();user.weaponSystemV1=payload.state;user.stats||={};user.stats.gold=payload.balance;user.forgeFragments=payload.fragments;user.soulboundDrawTickets=payload.tickets;
   window.updateUIStats?.();window.dispatchEvent(new CustomEvent('xiuxian:weapon-updated',{detail:{state:payload.state}}));}
