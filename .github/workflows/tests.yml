@@ -2,7 +2,7 @@ name: Cultivation regression tests
 
 on:
   push:
-    branches: [main, Improvement, Improve]
+    branches: [main, original, grid-world, stamina-battle]
   pull_request:
     branches: [main]
 
