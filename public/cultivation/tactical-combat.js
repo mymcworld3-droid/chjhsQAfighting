@@ -226,7 +226,7 @@ async function task(work,{render=true}={}){
 async function start(code=''){
   await task(async()=>{const result=await api('/api/tactical/start',{mode,map,...(code?{code}:{})});return result.state;});
 }
-async function sync(){await task(async()=>{const result=await api('/api/tactical/state');return result.state;});}
+async function sync(){await task(async()=>{const result=await api('/api/tactical/state?mode='+mode);return result.state;});}
 async function send(command){
   if(!state||renderer?.isAnimating&&command.type!=='leave')return;
   // Retrying the same command uses the same idempotency key after a lost response.
@@ -234,7 +234,7 @@ async function send(command){
   await task(async()=>{
     try{return (await api('/api/tactical/action',request)).state;}
     catch(err){if(!err.status||err.status>=500){try{return (await api('/api/tactical/action',request)).state;}catch(_){}}
-      if(err.status===409){const latest=await api('/api/tactical/state');if(latest.state)accept(latest.state,++op);}throw err;}
+      if(err.status===409){const latest=await api('/api/tactical/state?mode='+mode);if(latest.state)accept(latest.state,++op);}throw err;}
   });
 }
 async function execute(){if(selection)await send({type:action,x:selection.x,y:selection.y});}
@@ -366,9 +366,10 @@ async function enterTrial(e,account){
 }
 async function open(nextMode='pve'){
   ensure();
-  if(nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
-  lastTrigger=document.activeElement;mode=nextMode;
-  const accountUid=getMainUser()?.uid||'';if(uid!==accountUid)state=null;uid=accountUid;
+  if(opened&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
+  if(opened)close();
+  lastTrigger=document.activeElement;mode=nextMode;root.dataset.mode=mode;
+  const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;
   if(!uid){window.showToast?.('請先登入後進入戰場');return;}
   epoch++;opened=true;busy=true;op=0;appliedOp=0;document.body.classList.add('tactical-open');
   clearInterval(clock);clock=setInterval(updateClock,1000);
@@ -379,8 +380,8 @@ async function open(nextMode='pve'){
     return;
   }
   root.hidden=false;renderHub();$('[data-close]').focus();
-  try{const result=await api('/api/tactical/state');if(!valid(e,account))return;state=result.state;applyProgress(state);if(state?.serverNowMs)clockOffset=state.serverNowMs-Date.now();
-    if(state&&['active','waiting'].includes(state.status)){mode=state.mode;map=state.map;paint();}else renderHub();schedule();
+  try{const result=await api('/api/tactical/state?mode='+nextMode);if(!valid(e,account))return;state=result.state?.mode===nextMode?result.state:null;applyProgress(state);if(state?.serverNowMs)clockOffset=state.serverNowMs-Date.now();
+    if(state&&['active','waiting'].includes(state.status)){map=state.map;paint();}else renderHub();schedule();
   }catch(err){if(valid(e,account))notice(err.message);}
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }

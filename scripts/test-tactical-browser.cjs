@@ -50,7 +50,7 @@ async function main(){
   app.get('/cultivation/data/project-repository.js',(req,res)=>res.type('text/javascript').send(`export const getMainUser=()=>({uid:sessionStorage.testUid||'u1'});export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'Content-Type':'application/json','X-Test-User':getMainUser().uid}});`));
   if(process.env.TACTICAL_FONT_DIR)app.use('/test-font',express.static(process.env.TACTICAL_FONT_DIR));
   app.get(['/','/index.html','/stage.html'],(_,res)=>res.sendFile(path.join(__dirname,'../public/stage.html')));
-  app.get('/app.html',(req,res)=>res.type('html').send(`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>青雲問道 · 戰場測試</title><meta name="viewport" content="width=device-width,initial-scale=1"><script src="/app-stage-bridge.js"></script>${theme}${mathHead}${process.env.TACTICAL_FONT_DIR?'<link rel="stylesheet" href="/test-font/400.css">':''}<style>body{margin:0;font-family:'Noto Sans TC',system-ui;background:#101a17}button{font:inherit}#tactical-combat :is(h1,h2,h3){font-family:'Noto Sans TC',serif!important}</style></head><body class="xianxia-theme ui-cleanup"><button id="entry" onclick="startQuizFlow()">問道試煉</button><script src="/test-cloud.js"></script><script>window.__testPlayer={displayName:'青雲修士',stats:{totalScore:30},cultivationTraining:{equippedCore:{type:'thunder',grade:9}}};window.getCurrentUserData=()=>window.__testPlayer;</script><script src="/cultivation/quiz-math.js"></script><script type="module" src="/cultivation/tactical-combat.js"></script></body></html>`));
+  app.get('/app.html',(req,res)=>res.type('html').send(`<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>青雲問道 · 戰場測試</title><meta name="viewport" content="width=device-width,initial-scale=1"><script src="/app-stage-bridge.js"></script>${theme}${mathHead}${process.env.TACTICAL_FONT_DIR?'<link rel="stylesheet" href="/test-font/400.css">':''}<style>body{margin:0;font-family:'Noto Sans TC',system-ui;background:#101a17}button{font:inherit}#tactical-combat :is(h1,h2,h3){font-family:'Noto Sans TC',serif!important}</style></head><body class="xianxia-theme ui-cleanup"><button id="entry" onclick="startQuizFlow()">問道試煉</button><button id="duel-entry" onclick="startBattleMatchmaking()">鬥法論道</button><script src="/test-cloud.js"></script><script>window.__testPlayer={displayName:'青雲修士',stats:{totalScore:30},cultivationTraining:{equippedCore:{type:'thunder',grade:9}}};window.getCurrentUserData=()=>window.__testPlayer;</script><script src="/cultivation/quiz-math.js"></script><script type="module" src="/cultivation/tactical-combat.js"></script></body></html>`));
   app.use(express.static(path.join(__dirname,'../public')));
   const server=await new Promise(resolve=>{const server=app.listen(0,'127.0.0.1',()=>resolve(server));});
   const base='http://127.0.0.1:'+server.address().port;
@@ -72,7 +72,7 @@ async function main(){
         await page.waitForFunction(target=>{const s=window.QAGameStage.getState(),f=document.getElementById('game-frame');
           const landscape=innerWidth>=innerHeight;return s.designWidth===(landscape?1280:360)&&f.contentDocument.documentElement.clientWidth===s.designWidth&&Math.abs(s.width-target.width)<.15&&Math.abs(s.height-target.height)<.15;},Stage.fit(size));
       }};}
-  const read=page=>page.evaluate(async()=>{const r=await fetch('/api/tactical/state',{headers:{'X-Test-User':sessionStorage.testUid||'u1'}});return (await r.json()).state;});
+  const read=page=>page.evaluate(async()=>{const mode=document.querySelector('#tactical-combat')?.dataset.mode||'pve';const r=await fetch('/api/tactical/state?mode='+mode,{headers:{'X-Test-User':sessionStorage.testUid||'u1'}});return (await r.json()).state;});
   async function cell(view,x,y){const s=await read(view),point=await view.evaluate(({x,y,width,height})=>{
     const r=document.querySelector('canvas').getBoundingClientRect(),size=Math.min((r.width-20)/width,(r.height-24)/height);
     return {x:r.left+Math.round((r.width-size*width)/2)+(x+.5)*size,y:r.top+Math.round((r.height-size*height)/2)+(y+.5)*size};
@@ -385,7 +385,59 @@ async function main(){
     saved.revision=(await read(view)).revision+1;db.records.set(key,saved);await view.locator('[data-sync]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
     await view.locator('[data-action="move"]').click();
   }
+  async function modeEntryChecks(){
+    const checkpoint=structuredClone([...db.records]),views=[];
+    try{
+      for(const viewport of [{width:393,height:852},{width:1280,height:720},{width:768,height:1024}]){
+        db.records.clear();for(const [k,v]of structuredClone(checkpoint))db.records.set(k,v);
+        const trial=await service.start(db,'u3',{mode:'pve'});
+        delete db.records.get(service.PLAYERS+'/u3').roomIds;
+        const original=structuredClone(db.records.get(service.ROOMS+'/'+trial.id));
+        const view=await make('u3',viewport);views.push(view);
+        await view.locator('#duel-entry').click();await view.locator('[data-start]:enabled').waitFor();
+        assert.equal(await view.locator('[data-title]').textContent(),'鬥法論道');
+        assert.equal(await view.locator('.tc-arena canvas,.tc-encounter,[data-resume]').count(),0);
+        assert.equal(await read(view),null,'duel entry never restores a legacy trial');
+        await view.locator('[data-start]').click();await view.locator('.tc-waiting').waitFor();
+        const waiting=await read(view);assert.equal(waiting.mode,'pvp');assert.equal(waiting.status,'waiting');
+        assert.deepEqual(db.records.get(service.ROOMS+'/'+trial.id),original);
+        await view.screenshot({path:path.join(output,'duel-entry-'+viewport.width+'.png')});
+        await view.locator('[data-close]').click();await view.locator('#entry').click();
+        await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});await view.locator('.tc-encounter').waitFor();
+        assert.equal((await read(view)).id,trial.id);await acknowledgeIntros(view);await ratio(view);
+        await view.locator('[data-quiz]').click();await view.locator('[data-choice]').first().waitFor();
+        const question=(await read(view)).question.id;
+        // Switching while a sheet is open must clear the previous mode's modal.
+        await view.evaluate(()=>window.startBattleMatchmaking());await view.locator('.tc-waiting').waitFor();
+        assert.equal(await view.locator('[data-modal]').isHidden(),true);
+        assert.equal((await read(view)).id,waiting.id);
+        const guestTrial=await service.start(db,'u2',{mode:'pve'}),guest=await make('u2',viewport);views.push(guest);
+        await guest.locator('#duel-entry').click();await guest.locator('[data-code]').fill(waiting.id.replace('arena-',''));
+        await guest.locator('[data-join]').click();await guest.locator('.tc-arena canvas').waitFor();
+        await view.locator('.tc-arena canvas').waitFor({timeout:15000});
+        for(const player of [view,guest]){
+          const duel=await read(player);assert.equal(duel.id,waiting.id);assert.equal(duel.mode,'pvp');
+          assert.equal(duel.actors.length,2);assert.ok(duel.actors.every(a=>!a.bot));
+          assert.equal(await player.locator('[data-title]').textContent(),'鬥法論道');await ratio(player);
+        }
+        await view.reload();await view.locator('#duel-entry').click();await view.locator('.tc-arena canvas').waitFor();
+        assert.equal((await read(view)).id,waiting.id,'reload restores the duel, even with a saved trial');
+        await view.evaluate(()=>window.startQuizFlow());await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+        assert.equal((await read(view)).id,trial.id);assert.equal((await read(view)).question.id,question);
+        assert.equal(await view.locator('[data-title]').textContent(),'問道試煉');await ratio(view);
+        await guest.evaluate(()=>window.startQuizFlow());await guest.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+        assert.equal((await read(guest)).id,guestTrial.id);
+        await view.page.context().close();await guest.page.context().close();
+      }
+      console.log('Mode navigation browser checks passed: mobile, desktop and tablet; legacy trial to duel hub, matchmaking, room-code join with both trials unfinished, modal cleanup, refresh/resume and preserved trial questions.');
+    }finally{
+      for(const view of views)await view.page.context().close();
+      db.records.clear();for(const [k,v]of checkpoint)db.records.set(k,v);
+    }
+  }
   try{
+    await modeEntryChecks();
+    if(process.env.TACTICAL_NAV_ONLY){assert.deepEqual(errors,[]);return;}
     const mobile=await make('u1',{width:393,height:852});
     await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor();
     await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});

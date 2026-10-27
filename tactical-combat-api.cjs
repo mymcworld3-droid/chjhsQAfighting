@@ -18,6 +18,8 @@ const roomId=value=>/^arena-[a-f0-9]{16}$/.test(String(value))?String(value):'';
 const requestId=value=>/^[A-Za-z0-9_-]{8,100}$/.test(String(value))?String(value):'';
 const copy=v=>JSON.parse(JSON.stringify(v));
 const exists=s=>s?.exists?s.data():null;
+// Keep the legacy pointer for older clients, but resume each mode independently.
+const currentRoomId=(pointer,mode)=>pointer?.roomIds?.[mode]||pointer?.roomId;
 function member(s,uid){const a=s?.actors?.find(a=>a.uid===uid&&!a.bot);if(!a)throw error('你不是此戰場的參戰玩家',403);return a;}
 function publicQuestion(q){return q?{id:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,...Knowledge.metadata(q,q.subject)}:null;}
 const seenSpecies=pointer=>[...new Set((Array.isArray(pointer?.bestiary?.seen)?pointer.bestiary.seen:[]).filter(id=>Number.isInteger(id)&&!!Rules.MONSTERS[id]))];
@@ -80,7 +82,7 @@ async function settle(tx,db,s){
     s.rewarded.push(a.uid);s.rewards||={};s.rewards[a.uid]=reward||{gold:0,cultivation:0,win:s.winner===a.team};
     const patch={};
     const pointer=exists(pointers[i]),campaign=pointer?.trial;
-    if(s.mode==='pve'&&s.trial&&s.winner===a.team&&s.finishReason==='hp'&&pointer?.roomId===s.id&&
+    if(s.mode==='pve'&&s.trial&&s.winner===a.team&&s.finishReason==='hp'&&currentRoomId(pointer,'pve')===s.id&&
        campaign?.seed===s.trial.seed&&campaign.stage===s.trial.stage){
       const next={...campaign,stage:Math.min(1000000,campaign.stage+1),best:Math.max(campaign.best||0,campaign.stage)};
       patch.tacticalTrialV1=next;s.nextStage=next.stage;
@@ -119,8 +121,11 @@ async function start(db,uid,selection={},now=Date.now()){
     const pointerRef=db.collection(PLAYERS).doc(uid),userRef=db.collection('users').doc(uid);
     const [pointerSnap,userSnap,catalogSnap,armorySnap]=await Promise.all([tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1')),tx.get(db.collection('weaponArmories').doc(uid))]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
-    const pointer=exists(pointerSnap)||{},priorId=pointer.roomId;
-    const prior=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
+    const pointer=exists(pointerSnap)||{},priorId=currentRoomId(pointer,mode);
+    const stored=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
+    const prior=stored?.mode===mode?stored:null;
+    // Preserve an unfinished legacy trial when first entering PvP (and vice versa).
+    const roomIds={...pointer.roomIds,...(stored?{[stored.mode]:stored.id}:{})};
     const campaign=trialProgress(pointer.trial,seed);
     if(prior?.status==='active'){
       // Resume old unfinished trials without moving actors or discarding a question.
@@ -133,10 +138,9 @@ async function start(db,uid,selection={},now=Date.now()){
       if(changed)tx.set(db.collection(ROOMS).doc(prior.id),prior);
       return snapshot(prior,uid);
     }
-    if(prior?.status==='waiting'&&mode!=='pvp')throw error('請先取消正在等待的鬥法');
     const candidate=wanted||candidates.find(s=>!s.actors.some(a=>a.uid===uid)&&(!prior||s.id<prior.id))?.id;
     const target=candidate?exists(await tx.get(db.collection(ROOMS).doc(candidate))):null;
-    if(wanted&&(!target||target.status!=='waiting'||target.createdAtMs<now-15*60000))throw error('此戰場已開始或已失效');
+    if(wanted&&(!target||target.mode!=='pvp'||target.status!=='waiting'||target.createdAtMs<now-15*60000))throw error('此戰場已開始或已失效');
     const a=playerActor(user,uid,selection,exists(catalogSnap)||{},exists(armorySnap));
     if(mode==='pvp'&&a.trainingAccessScore<6)throw error('築基期解鎖鬥法論道');
     let s;
@@ -157,15 +161,16 @@ async function start(db,uid,selection={},now=Date.now()){
     if(s.mode==='pvp'&&s.actors.length===2){const p=s.actors.find(p=>p.uid===uid);p.baseAtk=a.baseAtk;p.baseMaxHp=a.baseMaxHp;p.trainingAccessScore=a.trainingAccessScore;}
     ensureIntroductions(s,uid,pointer);
     if(prior?.status==='waiting'&&prior.id!==s.id)tx.set(db.collection(ROOMS).doc(prior.id),Rules.forfeit(prior,uid,now));
-    tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{...pointer,roomId:s.id,...(mode==='pve'?{trial:campaign}:{})});
+    tx.set(db.collection(ROOMS).doc(s.id),s);tx.set(pointerRef,{...pointer,roomId:s.id,roomIds:{...roomIds,[mode]:s.id},...(mode==='pve'?{trial:campaign}:{})});
     const preferences={['tacticalPreferences.'+a.core]:a.branch,...(mode==='pve'?{tacticalTrialV1:campaign}:{})};
     tx.update(userRef,preferences);return snapshot(s,uid);
   });
 }
-async function state(db,uid,now=Date.now()){
-  const pointer=exists(await db.collection(PLAYERS).doc(uid).get());if(!pointer?.roomId)return null;
+async function state(db,uid,now=Date.now(),mode=''){
+  if(mode&&mode!=='pve'&&mode!=='pvp')throw error('戰場模式無效',400);
+  const pointer=exists(await db.collection(PLAYERS).doc(uid).get()),id=mode?currentRoomId(pointer,mode):pointer?.roomId;if(!id)return null;
   // No write for ordinary reads. Only an expired PvP turn requires a transaction.
-  const stored=exists(await db.collection(ROOMS).doc(pointer.roomId).get());if(!stored)return null;
+  const stored=exists(await db.collection(ROOMS).doc(id).get());if(!stored||mode&&stored.mode!==mode)return null;
   member(stored,uid);
   if(stored.status==='active')ensureIntroductions(stored,uid,pointer);
   if(stored.status==='waiting'&&stored.createdAtMs<now-15*60000)return command(db,uid,{roomId:stored.id,type:'leave',requestId:crypto.randomUUID()},now);
@@ -180,7 +185,7 @@ async function acknowledgeEnemy(db,uid,input){
   const species=Number(input.species);if(!Number.isInteger(species)||!Rules.MONSTERS[species])throw error('妖獸種類無效',400);
   return db.runTransaction(async tx=>{
     const s=await readRoom(tx,db,input.roomId,uid),pointerRef=db.collection(PLAYERS).doc(uid),pointer=exists(await tx.get(pointerRef));
-    if(s.mode!=='pve'||pointer?.roomId!==s.id||!s.actors.some(a=>a.bot&&a.species===species))throw error('這不是目前試煉出現的妖獸');
+    if(s.mode!=='pve'||currentRoomId(pointer,'pve')!==s.id||!s.actors.some(a=>a.bot&&a.species===species))throw error('這不是目前試煉出現的妖獸');
     ensureIntroductions(s,uid,pointer);const seen=seenSpecies(pointer),pending=s.pendingIntroductions[uid];
     if(!pending.includes(species)){
       if(seen.includes(species))return snapshot(s,uid);
@@ -331,7 +336,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
     try{const uid=await verify(req),result=await fn(resolve().db,uid,req);return res.json({ok:true,state:result});}
     catch(e){if(!e.status)logger.error('[Tactical combat]',e?.message||e);return res.status(e.status||503).json({ok:false,error:e.status?e.message:'戰場同步失敗，請稍後重試'});}
   };
-  app.get('/api/tactical/state',route((db,uid)=>state(db,uid)));
+  app.get('/api/tactical/state',route((db,uid,req)=>state(db,uid,Date.now(),req.query?.mode||'')));
   app.post('/api/tactical/start',route((db,uid,req)=>start(db,uid,req.body)));
   app.post('/api/tactical/action',route((db,uid,req)=>command(db,uid,req.body)));
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
