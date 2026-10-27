@@ -7,6 +7,7 @@
 .cc-shell button{min-height:40px;padding:7px 13px;border:1px solid #78664b;border-radius:7px;background:#30281d;color:#f0e1bd;cursor:pointer;font:inherit;font-size:13px;line-height:1.4}
 .cc-shell button:hover{background:#463824;border-color:#bfa16b}
 .cc-shell button.cc-primary{background:#76603b;border-color:#aa8e58;color:#fff6df}
+.cc-actions button[aria-pressed=true]{background:#57472d;border-color:#d4b46e}
 .cc-shell button.cc-danger{border-color:#9e6660;color:#efb9ae;background:#34221f}
 .cc-shell button:disabled{opacity:.45;cursor:default}
 .cc-shell button:focus-visible,.cc-shell input:focus-visible,.cc-shell textarea:focus-visible,.cc-shell select:focus-visible{outline:2px solid #ddc084;outline-offset:2px}

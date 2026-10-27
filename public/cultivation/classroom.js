@@ -64,16 +64,25 @@ function field(name, label, value = '', attrs = '') {
   return `<label>${label}<input name="${name}" value="${escape(value)}" ${attrs}></label>`;
 }
 function homeView() {
+  const admin = state.access?.isAdmin, account = state.access?.account;
   const rooms = state.classes.map(room => `<article class="cc-card"><h4>${escape(room.name)}</h4><p class="cc-muted">${room.role === 'teacher' ? '教師' : '學生'} · ${room.studentCount} 位學生${room.status === 'archived' ? ' · 已封存' : ''}</p><p>${escape(room.teacherName)}</p>${button('class', '進入班級', `data-id="${room.id}"`)}</article>`).join('');
-  return `<div class="cc-toolbar"><h3>我的班級</h3>${button('refresh', '重新整理')}</div>
-    ${rooms ? `<div class="cc-grid">${rooms}</div>` : '<p class="cc-muted">輸入老師提供的加入碼，或建立你要管理的班級。</p>'}
+  const application = admin ? `<section class="cc-card"><h4>管理員建班</h4><form class="cc-form" data-form="create">
+      ${field('name', '班級名稱', '', 'required maxlength="60"')}${field('teacherName', '教師稱呼', '', 'required maxlength="40"')}
+      ${button('create', '建立班級', 'class="cc-primary"')}</form><p class="cc-muted">建立後可在班級設定指派已核准的教師。</p></section>`
+    : `<section class="cc-card"><h4>教師帳號申請</h4>${account ? `<p class="cc-status">${({ pending: '等待管理員審核', approved: '教師資格已核准，請等候管理員指派班級', rejected: '申請已退回，可修改後重新申請', revoked: '教師資格已撤銷' })[account.status]}</p>${account.reviewNote ? `<p>${escape(account.reviewNote)}</p>` : ''}` : '<p class="cc-muted">教師功能須先向管理員申請，由管理員審核並分配班級。</p>'}
+      ${!account || ['rejected', 'revoked'].includes(account.status) ? `<form data-form="apply" class="cc-form">${field('name', '教師稱呼', account?.name || '', 'required maxlength="40"')}${field('school', '學校／任教單位', account?.school || '', 'required maxlength="80"')}<label>申請說明<textarea name="reason" required maxlength="600">${escape(account?.reason || '')}</textarea></label>${button('apply-teacher', '送出教師申請', 'class="cc-primary"')}</form>` : ''}</section>`;
+  return `<div class="cc-toolbar"><h3>${admin ? '班級管理' : '我的班級'}</h3><div class="cc-actions">${admin ? button('teacher-accounts', '教師帳號審核') : ''}${button('refresh', '重新整理')}</div></div>
+    ${rooms ? `<div class="cc-grid">${rooms}</div>` : '<p class="cc-muted">目前沒有可管理或已加入的班級。</p>'}${state.nextCursor ? button('more-classes', '載入更多班級') : ''}
     <div class="cc-grid"><section class="cc-card"><h4>加入班級</h4><form class="cc-form" data-form="join">
       ${field('joinCode', '八碼加入碼', '', 'required maxlength="8" autocomplete="off" style="text-transform:uppercase"')}
       ${field('name', '老師辨識用的姓名', '', 'required maxlength="40" autocomplete="name"')}
       ${field('seat', '座號（選填）', '', 'maxlength="12"')}${button('join', '加入班級', 'class="cc-primary"')}</form></section>
-    <section class="cc-card"><h4>教師建班</h4><p class="cc-muted">建立班級後，即可為自己的學生派題、查看成績。</p><form class="cc-form" data-form="create">
-      ${field('name', '班級名稱', '', 'required maxlength="60"')}${field('teacherName', '教師稱呼', '', 'required maxlength="40"')}
-      ${button('create', '建立班級', 'class="cc-primary"')}</form></section></div>`;
+    ${application}</div>`;
+}
+function accountsView() {
+  const review = state.accountReview;
+  return `<div class="cc-toolbar"><h3>教師帳號審核</h3><div class="cc-actions">${button('home', '返回班級')}${button('refresh', '重新整理')}</div></div><div class="cc-actions" style="margin-bottom:14px">${[['pending', '待審核'], ['approved', '已核准'], ['rejected', '已退回'], ['revoked', '已撤銷']].map(([value, title]) => button('account-filter', title, `data-status="${value}" aria-pressed="${review.status === value}"`)).join('')}</div>
+    ${review.accounts.map(a => `<article class="cc-card"><h4>${escape(a.name)}</h4><p>${escape(a.school)}</p><p class="cc-muted">帳號：${escape(a.uid)} · 申請：${date(a.requestedAtMs)}</p><p style="white-space:pre-wrap;overflow-wrap:anywhere">${escape(a.reason)}</p>${a.reviewNote ? `<p class="cc-muted">審核備註：${escape(a.reviewNote)}</p>` : ''}${['pending', 'approved'].includes(a.status) ? `<label>審核備註（選填）<input name="reviewNote" maxlength="300"></label><div class="cc-actions" style="margin-top:10px">${(a.status === 'pending' ? [['approve', '核准教師'], ['reject', '退回申請']] : [['revoke', '撤銷教師資格']]).map(([decision, title]) => button('review-teacher', title, `data-uid="${escape(a.uid)}" data-version="${a.version}" data-decision="${decision}"`)).join('')}</div>` : ''}</article>`).join('') || '<p class="cc-muted">目前沒有符合此狀態的教師帳號。</p>'}${review.nextCursor ? button('more-accounts', '載入更多帳號') : ''}`;
 }
 function classView() {
   const room = state.classroom, teacher = room.role === 'teacher';
@@ -83,6 +92,7 @@ function classView() {
   const members = teacher ? `<details class="cc-card"><summary>學生名單（${room.members.length} 人）</summary><div class="cc-table-wrap"><table><thead><tr><th>座號</th><th>姓名</th><th>管理</th></tr></thead><tbody>${room.members.map(m => `<tr><td>${escape(m.seat || '—')}</td><td>${escape(m.name)}</td><td>${button('remove-student', '移出班級', `data-id="${escape(m.uid)}" data-name="${escape(m.name)}"`)}</td></tr>`).join('') || '<tr><td colspan="3">尚無學生加入</td></tr>'}</tbody></table></div></details>` : '';
   return `<div class="cc-toolbar"><div><h3>${escape(room.name)}</h3><span class="cc-muted">${escape(room.teacherName)}${room.status === 'archived' ? ' · 已封存' : ''}</span></div><div class="cc-actions">${button('home', '所有班級')}${button('refresh', '重新整理')}</div></div>
     ${teacher ? `<section class="cc-card"><div class="cc-toolbar"><div><span class="cc-muted">班級加入碼</span><div class="cc-code">${escape(room.joinCode)}</div></div><div class="cc-actions">${button('copy-code', '複製加入碼')}${button('new-assignment', '新增作業', `class="cc-primary" ${room.status !== 'active' ? 'disabled' : ''}`)}</div></div><details><summary>班級設定</summary><form data-form="rename" class="cc-form">${field('name', '班級名稱', room.name, 'required maxlength="60"')}<div class="cc-actions">${button('rename', '儲存名稱')}${button('rotate-code', '更新加入碼')}${button('archive', room.status === 'active' ? '封存班級' : '恢復班級')}</div></form></details></section>` : `<div class="cc-actions" style="margin-bottom:14px">${button('leave', '退出班級')}</div>`}
+    ${state.access?.isAdmin ? `<details class="cc-card"><summary>指派班級教師</summary><form data-form="assign" class="cc-form"><label>已核准的教師<select name="teacherUid"><option value="${escape(getMainUser()?.uid)}">由我（管理員）管理</option>${(state.approvedTeachers || []).map(a => `<option value="${escape(a.uid)}" ${a.uid === room.ownerUid ? 'selected' : ''}>${escape(a.name)} · ${escape(a.school)}（${escape(a.uid)}）</option>`).join('')}</select></label><div class="cc-actions">${button('assign-teacher', '指派教師')}${state.nextApprovedCursor ? button('more-approved', '載入更多教師') : ''}</div></form></details>` : ''}
     ${members}<div class="cc-toolbar"><h3>班級作業</h3></div>${list || '<p class="cc-muted">目前沒有作業。</p>'}`;
 }
 const blankQuestion = () => ({ question: '', options: ['', '', '', ''], answerIndex: 0, explanation: '', knowledge_points: [] });
@@ -139,13 +149,21 @@ function reportView() {
 }
 function render() {
   const panel = $('section-classes'); if (!panel) return;
-  const views = { home: homeView, class: classView, editor: editorView, preview: previewView, work: workView, report: reportView };
+  const views = { home: homeView, accounts: accountsView, class: classView, editor: editorView, preview: previewView, work: workView, report: reportView };
   window.quizMathClear?.(panel);
   panel.innerHTML = `<div class="cc-shell"><div data-message role="status" aria-live="polite"></div>${views[state.view]()}</div>`;
   void window.quizMathTypeset?.([panel]);
 }
-async function loadHome() { const data = await request({ action: 'list' }); state = { view: 'home', classes: data.classes }; render(); }
-async function loadClass(classId = state.classroom?.id) { const data = await request({ action: 'classDetail', classId }); state = { ...state, ...data, view: 'class' }; render(); }
+async function loadHome(more = false) { const data = await request({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) }); state = { ...data, view: 'home', classes: more ? [...state.classes, ...data.classes] : data.classes }; render(); }
+async function loadAccounts(status = state.accountReview?.status || 'pending', more = false) {
+  const data = await request({ action: 'teacherAccounts', status, ...(more ? { cursor: state.accountReview.nextCursor } : {}) });
+  state.accountReview = { ...data, status, accounts: more ? [...state.accountReview.accounts, ...data.accounts] : data.accounts }; state.view = 'accounts'; render();
+}
+async function loadClass(classId = state.classroom?.id) {
+  const data = await request({ action: 'classDetail', classId });
+  const approved = data.access?.isAdmin ? await request({ action: 'teacherAccounts', status: 'approved' }) : null;
+  state = { ...state, ...data, approvedTeachers: approved?.accounts || [], nextApprovedCursor: approved?.nextCursor, view: 'class' }; render();
+}
 async function loadAssignment(assignmentId, view) {
   const data = await request({ action: 'getAssignment', classId: state.classroom.id, assignmentId });
   state = { ...state, ...data, view, questionIndex: 0 }; render();
@@ -179,8 +197,27 @@ function validForm(name) {
 async function act(target) {
   const action = target.dataset.action, classId = state.classroom?.id;
   if (action === 'home') return loadHome();
+  if (action === 'more-classes') return loadHome(true);
+  if (action === 'teacher-accounts' || action === 'account-filter') return loadAccounts(target.dataset.status || 'pending');
+  if (action === 'more-accounts') return loadAccounts(state.accountReview.status, true);
+  if (action === 'apply-teacher') {
+    const values = validForm('apply'); if (!values) return;
+    await request({ action: 'applyTeacher', ...values }); await loadHome(); message('教師申請已送出，請等候管理員審核。'); return;
+  }
+  if (action === 'review-teacher') {
+    if (!window.confirm('確定' + ({ approve: '核准此教師帳號', reject: '退回此申請', revoke: '撤銷此教師資格' })[target.dataset.decision] + '？')) return;
+    await request({ action: 'reviewTeacher', teacherUid: target.dataset.uid, version: Number(target.dataset.version), decision: target.dataset.decision, reviewNote: target.closest('article').querySelector('[name=reviewNote]').value }); return loadAccounts();
+  }
+  if (action === 'more-approved') {
+    const data = await request({ action: 'teacherAccounts', status: 'approved', cursor: state.nextApprovedCursor }); state.approvedTeachers.push(...data.accounts); state.nextApprovedCursor = data.nextCursor; return render();
+  }
+  if (action === 'assign-teacher') {
+    const values = validForm('assign'); if (!values) return;
+    if (!window.confirm('確定變更班級教師？原教師將失去此班級的管理權限。')) return;
+    await request({ action: 'assignTeacher', classId, expectedOwnerUid: state.classroom.ownerUid, ...values }); return loadClass();
+  }
   if (action === 'class') return loadClass(target.dataset.id);
-  if (action === 'refresh') return state.view === 'home' ? loadHome() : state.view === 'report' ? loadReport() : loadClass();
+  if (action === 'refresh') return state.view === 'home' ? loadHome() : state.view === 'accounts' ? loadAccounts() : state.view === 'report' ? loadReport() : loadClass();
   if (action === 'create' || action === 'join') {
     const values = validForm(action); if (!values) return;
     const data = await request({ action: action === 'create' ? 'createClass' : 'joinClass', ...values }); return loadClass(data.classroom.id);
@@ -264,7 +301,7 @@ function mount() {
   panel.addEventListener('click', event => {
     const target = event.target.closest('button[data-action]');
     if (!target || target.disabled) return;
-    if (['create', 'join', 'rename', 'save-draft', 'save-preview'].includes(target.dataset.action) && !target.closest('form')?.reportValidity()) return;
+    if (['create', 'join', 'rename', 'apply-teacher', 'assign-teacher', 'save-draft', 'save-preview'].includes(target.dataset.action) && !target.closest('form')?.reportValidity()) return;
     void run(() => act(target));
   });
   render();

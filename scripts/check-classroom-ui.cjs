@@ -46,6 +46,8 @@ async function click(page, action, index = 0) { await page.locator(`[data-action
 async function as(page, uid) { await page.evaluate(uid => { window.__uid = uid; window.__authCallbacks.forEach(cb => cb()); }, uid); await page.evaluate(() => window.QAClassrooms.open()); await ready(page); }
 async function measure(page) { assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no document overflow'); }
 (async () => {
+  await db.doc('users/teacher').set({ isAdmin: true, displayName: '管理員' });
+  await db.doc('users/applicant').set({ isAdmin: false, displayName: '陳老師' });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = 'http://127.0.0.1:' + server.address().port;
   const browser = await chromium.launch({ headless: true });
@@ -59,10 +61,21 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     await page.locator('#btn-social-nav').click(); assert.equal(await page.evaluate(() => window.__allianceEntered), true);
     assert.equal(await page.locator('#btn-social-nav.progression-locked').count(), 0);
     await page.evaluate(() => window.switchSocialTab('classes')); await ready(page);
+    await as(page, 'applicant');
+    assert.equal(await page.locator('[data-form=create]').count(), 0);
+    await page.locator('[data-form=apply] [name=name]').fill('陳老師');
+    await page.locator('[data-form=apply] [name=school]').fill('青雲中學');
+    await page.locator('[data-form=apply] [name=reason]').fill('數學教學與班級派題');
+    await click(page, 'apply-teacher');
+    assert.match(await page.locator('#section-classes').innerText(), /等待管理員審核/);
+    await as(page, 'teacher'); await click(page, 'teacher-accounts'); await click(page, 'review-teacher'); await click(page, 'home');
     await page.locator('[data-form=create] [name=name]').fill('七年一班');
     await page.locator('[data-form=create] [name=teacherName]').fill('陳老師');
     await click(page, 'create');
     const code = await page.locator('.cc-code').innerText();
+    await page.locator('summary').filter({ hasText: '指派班級教師' }).click();
+    await page.locator('[data-form=assign] [name=teacherUid]').selectOption('applicant'); await click(page, 'assign-teacher');
+    await as(page, 'applicant'); assert.equal(await page.locator('[data-form=create]').count(), 0); await click(page, 'class');
     await click(page, 'new-assignment');
     await page.locator('[name=title]').fill('加法練習');
     await page.locator('[name=question-0]').fill('1 + 1 = ? <img src=x onerror=alert(1)>');
@@ -100,6 +113,11 @@ async function measure(page) { assert.ok(await page.evaluate(() => document.docu
     delayReport = true; await page.locator('[data-action=refresh]').click(); await page.waitForTimeout(40);
     await as(page, 'outsider'); await page.waitForTimeout(600);
     assert.doesNotMatch(await page.locator('#section-classes').innerText(), /王同學|加法練習|50 分/);
+    await as(page, 'teacher'); await click(page, 'teacher-accounts');
+    await page.locator('[data-action=account-filter][data-status=approved]').click(); await ready(page); await click(page, 'review-teacher');
+    await as(page, 'applicant');
+    assert.match(await page.locator('#section-classes').innerText(), /教師資格已撤銷/);
+    assert.equal(await page.locator('[data-action=class]').count(), 0);
     await page.evaluate(() => window.switchSocialTab('friends'));
     assert.equal(await page.locator('#section-classes').isVisible(), false);
     await page.evaluate(() => window.switchSocialTab('chat'));
