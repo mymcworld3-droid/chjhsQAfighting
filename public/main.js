@@ -15,6 +15,11 @@ void import('./cultivation/player-analytics-client.js?v=20261016-events1').catch
   console.warn('[Player Analytics] optional tracking module unavailable', error);
 });
 void import('./cultivation/game-issue-report.js').catch(error => console.warn('[Game issue report]', error));
+void import('./cultivation/classroom.js').catch(error => {
+  console.warn('[Classrooms]', error);
+  const panel = document.getElementById('section-classes');
+  if (panel) panel.textContent = '班級功能載入失敗，請重新整理後再試。';
+});
 // Repository 註冊屬於附加能力；即使載入失敗也不能阻斷 Google 登入核心。
 void import('./cultivation/data/index.js').catch((error) => {
   console.error('[Data repositories] failed to initialize repository registry', error);

@@ -32,7 +32,8 @@ test('Alliance entry with missing education level still offers a clickable setti
   assert.match(legacy, /pageId === 'page-social' && window\.promptXiuxianEducationLevel\(\)/);
   assert.match(legacy, /id="xep-go"/);
   assert.match(legacy, /window\.switchToPage\('page-settings'\)/);
-  assert.match(progress, /window\.promptXiuxianEducationLevel\?\.\(\)/);
+  assert.match(progress, /markLock\(document\.getElementById\('btn-social-nav'\), false\)/);
+  assert.doesNotMatch(progress, /closest\?\.\('#btn-social-nav/);
 });
 
 test('two scoped Five Immortals sets, with score and grade verified before writing', () => {

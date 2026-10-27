@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from '../data-store.js';
 
-// 進度規則 v2：築基開多人、金丹 28 開內丹；舊版高境界玩家一次性補償。
+// 築基開鬥法、金丹 28 開內丹；仙盟與班級不受境界限制。
 (function () {
   'use strict';
 
@@ -111,7 +111,7 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
     modal({
       icon: '<i class="fa-solid fa-lock"></i>',
       title: `${kind}尚未開啟`,
-      body: `修士需先達到 <strong>築基初期（${FOUNDATION_SCORE} 修為）</strong> 才能使用配對、鬥法與仙盟等多人功能。<br>目前尚差 <strong>${left} 修為</strong>。`,
+      body: `修士需先達到 <strong>築基初期（${FOUNDATION_SCORE} 修為）</strong> 才能使用鬥法配對與邀請。<br>目前尚差 <strong>${left} 修為</strong>。`,
       button: '繼續修煉'
     });
   }
@@ -297,23 +297,17 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
   function syncMultiplayerLocks() {
     const locked = score() < FOUNDATION_SCORE;
     document.querySelectorAll('button[onclick*="startBattleMatchmaking"]').forEach((button) => markLock(button, locked));
-    markLock(document.getElementById('btn-social-nav'), locked);
+    markLock(document.getElementById('btn-social-nav'), false);
   }
 
   function interceptLockedClicks(event) {
     if (score() >= FOUNDATION_SCORE) return;
-    const target = event.target?.closest?.('#btn-social-nav,[data-target="page-social"],[id^="btn-acc-"]');
+    const target = event.target?.closest?.('[id^="btn-acc-"]');
     if (!target) return;
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
-    if (target.id?.startsWith('btn-acc-')) {
-      showLocked('接受鬥法邀請');
-    } else if (!window.getCurrentUserData?.()?.profile?.educationLevel && window.promptXiuxianEducationLevel?.()) {
-      return;
-    } else {
-      showLocked('仙盟');
-    }
+    showLocked('接受鬥法邀請');
   }
 
   function exposeRules() {
