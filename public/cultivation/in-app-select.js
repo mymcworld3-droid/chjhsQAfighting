@@ -3,7 +3,49 @@
 (() => {
   'use strict';
   let current = null, sequence = 0;
+  const controls = new WeakMap(), sources = new WeakMap();
   const enabled = select => select.isConnected && !select.matches(':disabled') && select.getClientRects().length;
+  const dropdown = select => !select.multiple && select.size <= 1;
+  function syncControl(select) {
+    let state = controls.get(select);
+    if (state && select.parentElement !== state.wrapper) {
+      state.wrapper.remove(); select.inert = state.inert;
+      controls.delete(select); sources.delete(state.trigger); state = null;
+    }
+    if (!select.isConnected) return;
+    if (!dropdown(select)) {
+      if (current?.select === select) close(false);
+      if (state) {
+        state.wrapper.replaceWith(select); select.inert = state.inert;
+        controls.delete(select); sources.delete(state.trigger);
+      }
+      return;
+    }
+    if (!state) {
+      if (!select.isConnected || select.inert) return;
+      const wrapper = document.createElement('span'), trigger = document.createElement('button');
+      wrapper.className = 'app-select-control'; trigger.className = 'app-select-trigger'; trigger.type = 'button';
+      state = {wrapper, trigger, inert:select.inert};
+      controls.set(select, state); sources.set(trigger, select);
+      // The original control still renders its value and participates in forms.
+      // An inert select cannot activate a second, platform-owned picker.
+      select.before(wrapper); wrapper.append(select, trigger); select.inert = true;
+      trigger.setAttribute('aria-haspopup', 'dialog'); trigger.setAttribute('aria-expanded', 'false');
+      trigger.addEventListener('focus', () => syncControl(select));
+    }
+    const {wrapper, trigger} = state;
+    const hidden = select.hidden || select.classList.contains('hidden') || getComputedStyle(select).display === 'none';
+    if (wrapper.hidden !== hidden) wrapper.hidden = hidden;
+    const disabled = select.matches(':disabled');
+    if (trigger.disabled !== disabled) trigger.disabled = disabled;
+    const name = nameOf(select), value = select.selectedOptions[0]?.label || '';
+    const label = value ? name + '：' + value : name;
+    if (trigger.getAttribute('aria-label') !== label) trigger.setAttribute('aria-label', label);
+  }
+  function scan(root) {
+    if (root.matches?.('select')) syncControl(root);
+    root.querySelectorAll?.('select').forEach(syncControl);
+  }
   function nameOf(select) {
     const explicit = select.getAttribute('aria-label');
     if (explicit) return explicit;
@@ -23,11 +65,12 @@
     window.visualViewport?.removeEventListener('resize', position);
     window.visualViewport?.removeEventListener('scroll', position);
     for (const [name, value] of state.attributes) {
-      if (value === null) state.select.removeAttribute(name); else state.select.setAttribute(name, value);
+      const control = state.control || state.select;
+      if (value === null) control.removeAttribute(name); else control.setAttribute(name, value);
     }
     if (state.dialog.open) state.dialog.close();
     state.dialog.remove();
-    if (restoreFocus && enabled(state.select)) state.select.focus({ preventScroll:true });
+    if (restoreFocus && enabled(state.select)) (state.control || state.select).focus({ preventScroll:true });
   }
   function position() {
     if (!current) return;
@@ -53,6 +96,7 @@
     if (!option || option.hidden || option.disabled || option.parentElement?.disabled || option.parentElement?.hidden) return;
     const changed = state.select.selectedIndex !== index;
     state.select.selectedIndex = index;
+    if (controls.has(state.select)) syncControl(state.select);
     close();
     if (changed) {
       state.select.dispatchEvent(new Event('input', { bubbles:true }));
@@ -132,11 +176,12 @@
     const list = document.createElement('div'); list.className = 'app-select-list'; list.setAttribute('role','listbox');
     list.setAttribute('aria-label', nameOf(select));
     dialog.append(header, search, list);
-    const attributes = ['aria-haspopup','aria-expanded','aria-controls'].map(name => [name, select.getAttribute(name)]);
+    const control = controls.get(select)?.trigger || select;
+    const attributes = ['aria-haspopup','aria-expanded','aria-controls'].map(name => [name, control.getAttribute(name)]);
     const optionsObserver = new MutationObserver(renderOptions);
     const pageObserver = new MutationObserver(() => { if (current && !enabled(select)) close(false); });
-    current = { select, dialog, search, list, attributes, optionsObserver, pageObserver };
-    select.setAttribute('aria-haspopup','dialog'); select.setAttribute('aria-expanded','true'); select.setAttribute('aria-controls',dialog.id);
+    current = { select, control, dialog, search, list, attributes, optionsObserver, pageObserver };
+    control.setAttribute('aria-haspopup','dialog'); control.setAttribute('aria-expanded','true'); control.setAttribute('aria-controls',dialog.id);
     document.body.append(dialog);
     dialog.showModal();
     renderOptions();
@@ -156,14 +201,22 @@
     window.visualViewport?.addEventListener('resize', position); window.visualViewport?.addEventListener('scroll', position);
   }
   const targetSelect = event => {
-    const select = event.target.closest?.('select');
-    return select && !select.multiple && select.size <= 1 ? select : null;
+    const target = event.target;
+    const trigger = target.closest?.('.app-select-trigger');
+    const select = sources.get(trigger) || target.closest?.('select');
+    if (select) return dropdown(select) ? select : null;
+    // A label's default activation must not focus the original native control.
+    if (target.closest?.('button,input,textarea,a')) return null;
+    const labelled = target.closest?.('label')?.control;
+    return labelled?.tagName === 'SELECT' && dropdown(labelled) ? labelled : null;
   };
-  // Blocking the native activation keeps iOS/Android pickers from opening.
+  // Cover controls inserted in the same task, before the observer has run.
   for (const type of ['pointerdown','mousedown','touchstart']) document.addEventListener(type, event => {
-    if (targetSelect(event)) event.preventDefault();
+    const select = event.target.closest?.('select');
+    if (select && dropdown(select)) { event.preventDefault(); syncControl(select); }
   }, { capture:true, passive:false });
-  for (const type of ['click','touchend']) document.addEventListener(type, event => {
+  // A tap produces one button click. Opening on touchend as well can reopen it.
+  document.addEventListener('click', event => {
     const select = targetSelect(event); if (!select) return;
     event.preventDefault(); open(select);
   }, { capture:true, passive:false });
@@ -171,4 +224,18 @@
     const select = targetSelect(event); if (!select || event.key === 'Tab' || event.ctrlKey || event.metaKey) return;
     if (['ArrowDown','ArrowUp','Enter',' ','F4','Home','End'].includes(event.key)) { event.preventDefault(); open(select); }
   }, true);
+  for (const type of ['input','change']) document.addEventListener(type, event => {
+    if (event.target.tagName === 'SELECT') syncControl(event.target);
+  }, true);
+  document.addEventListener('reset', event => setTimeout(() => scan(event.target), 0), true);
+  new MutationObserver(records => {
+    for (const record of records) {
+      if (record.type === 'childList') { record.addedNodes.forEach(scan); record.removedNodes.forEach(scan); }
+      const select = record.target.closest?.('select') || record.target.parentElement?.closest('select');
+      if (select) syncControl(select);
+      else if (record.type === 'attributes' && record.target.tagName === 'FIELDSET') scan(record.target);
+    }
+  }).observe(document.documentElement, {childList:true, subtree:true, characterData:true, attributes:true,
+    attributeFilter:['disabled','hidden','class','style','multiple','size','label','selected','aria-label','aria-labelledby','title']});
+  scan(document);
 })();

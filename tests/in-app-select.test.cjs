@@ -7,10 +7,11 @@ const source=fs.readFileSync(require.resolve('../public/cultivation/in-app-selec
 
 function runtime() {
   const handlers=new Map();
-  const document={addEventListener:(type,fn)=>{if(!handlers.has(type))handlers.set(type,[]);handlers.get(type).push(fn);}};
-  const context=vm.createContext({document,window:{},Event:class{constructor(type,options){this.type=type;Object.assign(this,options);}}});
+  const document={querySelectorAll:()=>[],addEventListener:(type,fn)=>{if(!handlers.has(type))handlers.set(type,[]);handlers.get(type).push(fn);}};
+  const context=vm.createContext({document,window:{},MutationObserver:class{observe(){}},Event:class{constructor(type,options){this.type=type;Object.assign(this,options);}}});
   const hooks=`globalThis.api = {choose, close, targetSelect, setCurrent: value => {current=value;},
-    replaceOpen: fn => {open=fn;}, replaceClose: fn => {close=fn;}};`;
+    replaceOpen: fn => {open=fn;}, replaceClose: fn => {close=fn;}, replaceSync: fn => {syncControl=fn;},
+    linkTrigger: (trigger,select) => sources.set(trigger,select)};`;
   vm.runInContext(source.replace(/\}\)\(\);\s*$/,hooks+'})();'),context);
   return {api:context.api,handlers,context};
 }
@@ -40,18 +41,29 @@ test('hidden or disabled options and disabled groups cannot be selected, includi
   select.matches=()=>false;select.isConnected=false;api.choose(0);assert.equal(closed,2);
 });
 
-test('delegated activation suppresses native mouse/touch pickers and supports controls created after boot',()=>{
+test('native activation is blocked before enhancement and one tap opens the internal picker once',()=>{
   const {api,handlers}=runtime();const opened=[];api.replaceOpen(select=>opened.push(select));
-  const {select}=selectMock();
-  for(const type of ['pointerdown','mousedown','touchstart','touchend','click']) {
+  const {select}=selectMock();let enhanced=0;api.replaceSync(value=>{assert.equal(value,select);enhanced++;});
+  for(const type of ['pointerdown','mousedown','touchstart','click']) {
     let prevented=false;handlers.get(type).forEach(fn=>fn({target:select,preventDefault(){prevented=true;}}));
     assert.equal(prevented,true,type);
   }
-  assert.equal(opened.length,2);assert.ok(opened.every(value=>value===select));
+  assert.equal(enhanced,3);assert.equal(opened.length,1);assert.equal(opened[0],select);
+  assert.equal(handlers.has('touchend'),false,'the compatibility click is the only tap activation');
   let prevented=false;handlers.get('click').forEach(fn=>fn({target:{closest:()=>null},preventDefault(){prevented=true;}}));
   assert.equal(prevented,false,'other buttons keep their default behavior');
   select.multiple=true;assert.equal(api.targetSelect({target:select}),null);
   select.multiple=false;select.size=5;assert.equal(api.targetSelect({target:select}),null,'list boxes are not dropdowns');
+});
+
+test('proxy buttons and external labels resolve to their source without activating other label controls',()=>{
+  const {api,handlers}=runtime(),{select}=selectMock();select.tagName='SELECT';
+  const trigger={};api.linkTrigger(trigger,select);let opened=0;api.replaceOpen(value=>{assert.equal(value,select);opened++;});
+  const button={closest:selector=>selector==='.app-select-trigger'?trigger:null};
+  const label={closest:selector=>selector==='label'?{control:select}:null};
+  for(const target of [button,label]) handlers.get('click')[0]({target,preventDefault(){}});
+  assert.equal(opened,2);
+  assert.equal(api.targetSelect({target:{closest:selector=>selector==='button,input,textarea,a'?{}:{control:select}}}),null);
 });
 
 test('keyboard activation opens the internal menu while Tab and browser shortcuts keep their meaning',()=>{
@@ -77,4 +89,13 @@ test('cancelling restores source accessibility attributes and focus without chan
   api.close();assert.equal(select.selectedIndex,0);assert.deepEqual(events,[]);assert.equal(focus,1);
   assert.equal(attrs.get('aria-controls'),'original');assert.equal(disconnected,2);assert.equal(removed,1);
   api.close();assert.equal(removed,1,'closing twice cannot affect another control');
+});
+
+test('closing the menu restores focus to the proxy instead of the native select',()=>{
+  const {api,context}=runtime(),{select}=selectMock();let focused=0;
+  select.focus=()=>assert.fail('native select must never regain focus');context.window.removeEventListener=()=>{};
+  const control={removeAttribute(){},setAttribute(){},focus(){focused++;}};
+  api.setCurrent({select,control,dialog:{open:true,close(){},remove(){}},attributes:[['aria-expanded','false']],
+    optionsObserver:{disconnect(){}},pageObserver:{disconnect(){}}});
+  api.close();assert.equal(focused,1);
 });

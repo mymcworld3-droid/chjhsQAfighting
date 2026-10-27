@@ -1,3 +1,10 @@
+.app-select-control{position:relative;display:inline-grid;vertical-align:middle;width:100%;min-width:0;max-width:100%;flex:1}
+.app-select-control[hidden]{display:none!important}
+.app-select-control>select{grid-area:1/1;width:100%;min-width:0;max-width:100%;pointer-events:none}
+/* The select supplies the appearance; only this ordinary button is interactive. */
+html body .app-select-control>.app-select-trigger{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:6px!important;background:transparent!important;box-shadow:none!important;transform:none!important;cursor:pointer;touch-action:manipulation}
+html body .app-select-control>.app-select-trigger:focus-visible{outline:2px solid #e7c47c!important;outline-offset:2px}
+html body .app-select-control>.app-select-trigger:disabled{cursor:default}
 .app-select-menu{box-sizing:border-box;position:fixed;inset:auto;margin:0;padding:0;max-width:calc(100vw - 24px);border:1px solid #c7a45d88;border-radius:12px;background:#181a14;color:#eee2c8;box-shadow:0 10px 32px #0006;font:inherit;overflow:hidden;display:none;flex-direction:column}
 .app-select-menu[open]{display:flex}.app-select-menu::backdrop{background:#0003}
 .app-select-menu header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 4px;flex-shrink:0}.app-select-menu header strong{font-weight:600;font-size:13px;line-height:1.4;color:#d9c38d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
