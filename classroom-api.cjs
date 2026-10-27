@@ -20,14 +20,16 @@ function newCode() {
   return [...randomBytes(8)].map(n => alphabet[n % alphabet.length]).join('');
 }
 const member = (room, uid) => room.members.find(row => row.uid === uid);
-function requireAccess(room, uid, teacher = false) {
+function canManage(room, uid, roles) { return roles.admin || roles.teacher && room?.ownerUid === uid; }
+function requireAccess(room, uid, teacher = false, roles = {}) {
   if (!room) throw fail('找不到班級', 404);
-  if (room.ownerUid !== uid && (teacher || !member(room, uid))) throw fail('沒有此班級的權限', 403);
+  if (!canManage(room, uid, roles) && (teacher || !member(room, uid))) throw fail('沒有此班級的權限；教師須由管理員核准', 403);
 }
-function summary(room, uid) {
-  return { id: room.id, name: room.name, teacherName: room.teacherName, role: room.ownerUid === uid ? 'teacher' : 'student',
+function summary(room, uid, roles) {
+  const manager = canManage(room, uid, roles);
+  return { id: room.id, name: room.name, teacherName: room.teacherName, role: manager ? 'teacher' : 'student',
     status: room.status, studentCount: room.members.length, createdAtMs: room.createdAtMs,
-    ...(room.ownerUid === uid ? { joinCode: room.joinCode } : {}) };
+    ...(manager ? { joinCode: room.joinCode } : {}), ...(roles.admin ? { ownerUid: room.ownerUid } : {}) };
 }
 function questionsOf(values, subject) {
   if (!Array.isArray(values) || !values.length || values.length > LIMITS.questions) throw fail('題組需有 1–30 題');
@@ -71,23 +73,77 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
   if (!uid || typeof uid !== 'string' || uid.includes('/')) throw fail('請先登入', 401);
   const clock = now();
   const profileRef = ref(db, 'classroomProfiles', uid);
+  const userRef = ref(db, 'users', uid), accountRef = ref(db, 'classroomTeacherAccounts', uid);
+  async function authority(tx) {
+    const [user, account] = await Promise.all([tx ? tx.get(userRef) : userRef.get(), tx ? tx.get(accountRef) : accountRef.get()]);
+    return { admin: user.data()?.isAdmin === true, teacher: account.data()?.status === 'approved', account: account.data() || null };
+  }
+  let roles = await authority();
+  const requireAdmin = access => { if (!access.admin) throw fail('只有管理員可以執行此操作', 403); };
+  const accountView = value => value ? { uid: value.uid, name: value.name, school: value.school, reason: value.reason,
+    status: value.status, version: value.version, requestedAtMs: value.requestedAtMs, reviewedAtMs: value.reviewedAtMs || null, reviewNote: value.reviewNote || '' } : null;
+  if (body.action === 'applyTeacher') {
+    const name = text(body.name, 40, '教師稱呼'), school = text(body.school, 80, '學校／任教單位'), reason = text(body.reason, 600, '申請說明');
+    return db.runTransaction(async tx => {
+      const current = await authority(tx);
+      if (current.admin) throw fail('管理員無需申請教師帳號');
+      if (['pending', 'approved'].includes(current.account?.status)) return { account: accountView(current.account) };
+      const account = { uid, name, school, reason, status: 'pending', version: (current.account?.version || 0) + 1, requestedAtMs: clock };
+      tx.set(accountRef, account); return { account: accountView(account) };
+    });
+  }
+  if (body.action === 'teacherAccounts') {
+    requireAdmin(roles);
+    const status = body.status || 'pending';
+    if (!['pending', 'approved', 'rejected', 'revoked'].includes(status)) throw fail('教師帳號狀態格式錯誤');
+    let query = db.collection('classroomTeacherAccounts').where('status', '==', status).orderBy('__name__').limit(51);
+    if (body.cursor) query = query.startAfter(id(body.cursor));
+    const data = await query.get(); requireAdmin(await authority());
+    return { accounts: data.docs.slice(0, 50).map(s => accountView(s.data())), nextCursor: data.docs.length > 50 ? data.docs[49].id : null };
+  }
+  if (body.action === 'reviewTeacher') {
+    const teacherUid = text(body.teacherUid, 128, '教師代碼');
+    if (teacherUid.includes('/') || !['approve', 'reject', 'revoke'].includes(body.decision)) throw fail('審核格式錯誤');
+    const targetRef = ref(db, 'classroomTeacherAccounts', teacherUid);
+    return db.runTransaction(async tx => {
+      const current = await authority(tx); requireAdmin(current);
+      const target = await tx.get(targetRef), previous = target.data();
+      if (!previous) throw fail('找不到教師申請', 404);
+      if (body.version !== previous.version) throw fail('申請已更新，請重新載入後審核', 409);
+      if (body.decision === 'revoke' ? previous.status !== 'approved' : previous.status !== 'pending') throw fail('此申請目前無法執行這項審核', 409);
+      const account = { ...previous, status: { approve: 'approved', reject: 'rejected', revoke: 'revoked' }[body.decision],
+        version: previous.version + 1, reviewedAtMs: clock, reviewedByUid: uid, reviewNote: text(body.reviewNote || '', 300, '審核備註', false) };
+      tx.set(targetRef, account); return { account: accountView(account) };
+    });
+  }
   if (body.action === 'list') {
-    const profile = await profileRef.get();
-    const rooms = await Promise.all((profile.data()?.classIds || []).slice(0, LIMITS.classes).map(key => ref(db, 'classrooms', key).get()));
-    return { classes: rooms.filter(s => s.exists).map(s => s.data()).filter(r => r.ownerUid === uid || member(r, uid)).map(r => summary(r, uid)) };
+    let rooms, nextCursor = null;
+    if (roles.admin) {
+      let query = db.collection('classrooms').orderBy('__name__').limit(51);
+      if (body.cursor) query = query.startAfter(id(body.cursor));
+      const values = await query.get(); rooms = values.docs.slice(0, 50); nextCursor = values.docs.length > 50 ? values.docs[49].id : null;
+    } else {
+      const profile = await profileRef.get();
+      rooms = await Promise.all((profile.data()?.classIds || []).slice(0, LIMITS.classes).map(key => ref(db, 'classrooms', key).get()));
+    }
+    roles = await authority();
+    return { classes: rooms.filter(s => s.exists).map(s => s.data()).filter(r => canManage(r, uid, roles) || member(r, uid)).map(r => summary(r, uid, roles)),
+      access: { isAdmin: roles.admin, isTeacher: roles.admin || roles.teacher, account: accountView(roles.account) }, nextCursor: roles.admin ? nextCursor : null };
   }
   if (body.action === 'createClass') {
+    requireAdmin(roles);
     const name = text(body.name, 60, '班級名稱'), teacherName = text(body.teacherName, 40, '教師名稱');
     const classId = id(makeId()), joinCode = makeCode();
     const roomRef = ref(db, 'classrooms', classId), codeRef = ref(db, 'classroomCodes', joinCode);
     return db.runTransaction(async tx => {
+      requireAdmin(await authority(tx));
       const [profile, existing, code] = await Promise.all([tx.get(profileRef), tx.get(roomRef), tx.get(codeRef)]);
       const classIds = profile.data()?.classIds || [];
       if (classIds.length >= LIMITS.classes) throw fail('最多可加入或管理 20 個班級', 409);
       if (existing.exists || code.exists) throw fail('代碼正在使用，請重新建立班級', 409);
-      const room = { id: classId, name, teacherName, ownerUid: uid, joinCode, status: 'active', members: [], assignmentIds: [], createdAtMs: clock };
+      const room = { id: classId, name, teacherName, ownerUid: uid, createdByUid: uid, joinCode, status: 'active', members: [], assignmentIds: [], createdAtMs: clock };
       tx.create(roomRef, room); tx.create(codeRef, { classId }); tx.set(profileRef, { classIds: [...classIds, classId] });
-      return { classroom: summary(room, uid) };
+      return { classroom: summary(room, uid, roles) };
     });
   }
   if (body.action === 'joinClass') {
@@ -99,32 +155,59 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
       if (!code.exists) throw fail('加入碼無效', 404);
       const roomRef = ref(db, 'classrooms', code.data().classId), snap = await tx.get(roomRef), room = snap.data();
       if (!room || room.joinCode !== joinCode || room.status !== 'active') throw fail('班級目前不開放加入', 409);
-      if (room.ownerUid === uid) return { classroom: summary(room, uid) };
+      if (canManage(room, uid, roles)) return { classroom: summary(room, uid, roles) };
+      if (room.ownerUid === uid) throw fail('教師資格尚未核准，請先向管理員申請', 403);
       const classIds = profile.data()?.classIds || [], enrolled = member(room, uid);
       if (!enrolled && room.members.length >= LIMITS.students) throw fail('班級已達 100 人上限', 409);
       if (!classIds.includes(room.id) && classIds.length >= LIMITS.classes) throw fail('最多可加入或管理 20 個班級', 409);
       const student = { uid, name, seat, joinedAtMs: enrolled?.joinedAtMs || clock };
       room.members = [...room.members.filter(m => m.uid !== uid), student];
       tx.set(roomRef, room); tx.set(profileRef, { classIds: [...new Set([...classIds, room.id])] });
-      return { classroom: summary(room, uid) };
+      return { classroom: summary(room, uid, roles) };
     });
   }
   const classId = id(body.classId), roomRef = ref(db, 'classrooms', classId);
+  if (body.action === 'assignTeacher') {
+    requireAdmin(roles);
+    const teacherUid = text(body.teacherUid, 128, '教師代碼');
+    if (teacherUid.includes('/')) throw fail('教師代碼格式錯誤');
+    return db.runTransaction(async tx => {
+      requireAdmin(await authority(tx));
+      const roomSnap = await tx.get(roomRef), room = roomSnap.data();
+      if (!room) throw fail('找不到班級', 404);
+      if (body.expectedOwnerUid !== room.ownerUid) throw fail('班級教師已更新，請重新載入', 409);
+      const nextRef = ref(db, 'classroomProfiles', teacherUid), oldRef = ref(db, 'classroomProfiles', room.ownerUid);
+      const [account, user, nextProfile, oldProfile] = await Promise.all([
+        tx.get(ref(db, 'classroomTeacherAccounts', teacherUid)), tx.get(ref(db, 'users', teacherUid)), tx.get(nextRef), tx.get(oldRef)
+      ]);
+      if (!user.exists || !(user.data().isAdmin === true || account.data()?.status === 'approved')) throw fail('只能指派管理員或已核准的教師帳號', 403);
+      const classIds = nextProfile.data()?.classIds || [];
+      if (!classIds.includes(classId) && classIds.length >= LIMITS.classes) throw fail('該教師管理的班級已達上限', 409);
+      if (room.ownerUid !== teacherUid && oldProfile.exists) tx.set(oldRef, { classIds: (oldProfile.data().classIds || []).filter(key => key !== classId) });
+      tx.set(nextRef, { classIds: [...new Set([...classIds, classId])] });
+      room.ownerUid = teacherUid; room.teacherName = account.data()?.name || user.data().displayName || '教師';
+      room.members = room.members.filter(m => m.uid !== teacherUid);
+      room.teacherAssignedAtMs = clock; room.teacherAssignedByUid = uid;
+      tx.set(roomRef, room); return { classroom: summary(room, uid, roles) };
+    });
+  }
   if (body.action === 'classDetail') {
-    const snap = await roomRef.get(), room = snap.data(); requireAccess(room, uid);
-    const teacher = room.ownerUid === uid;
+    const snap = await roomRef.get(), room = snap.data(); requireAccess(room, uid, false, roles);
+    const teacher = canManage(room, uid, roles);
     const values = await Promise.all(room.assignmentIds.map(key => ref(db, 'classroomAssignments', key).get()));
     const assignments = values.filter(s => s.exists).map(s => s.data()).filter(a => a.classId === classId && (teacher || a.status !== 'draft'));
     const submissions = teacher ? [] : await Promise.all(assignments.map(a => ref(db, 'classroomSubmissions', a.id + '_' + uid).get()));
     // Recheck membership after dependent reads; a removed student cannot retain access.
-    requireAccess((await roomRef.get()).data(), uid);
-    return { classroom: { ...summary(room, uid), ...(teacher ? { members: room.members } : { student: member(room, uid) }) },
+    const latestRoom = (await roomRef.get()).data(); roles = await authority();
+    requireAccess(latestRoom, uid, teacher, roles);
+    return { access: { isAdmin: roles.admin, isTeacher: roles.admin || roles.teacher, account: accountView(roles.account) },
+      classroom: { ...summary(room, uid, roles), ...(teacher ? { members: room.members } : { student: member(room, uid) }) },
       assignments: assignments.map((a, i) => ({ ...assignmentSummary(a), ...(!teacher ? { submission: progressView(submissions[i]?.data()) } : {}) })) };
   }
   if (['renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass'].includes(body.action)) {
     const nextCode = body.action === 'rotateCode' ? makeCode() : null;
     return db.runTransaction(async tx => {
-      const snap = await tx.get(roomRef), room = snap.data(); requireAccess(room, uid, body.action !== 'leaveClass');
+      const snap = await tx.get(roomRef), room = snap.data(); requireAccess(room, uid, body.action !== 'leaveClass', await authority(tx));
       if (body.action === 'renameClass') room.name = text(body.name, 60, '班級名稱');
       if (body.action === 'archiveClass') {
         if (typeof body.archived !== 'boolean') throw fail('班級狀態格式錯誤');
@@ -142,7 +225,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
         room.members = room.members.filter(m => m.uid !== target);
         if (profile.exists) tx.set(targetRef, { classIds: (profile.data().classIds || []).filter(key => key !== classId) });
       }
-      tx.set(roomRef, room); return { classroom: summary(room, uid) };
+      tx.set(roomRef, room); return { classroom: summary(room, uid, roles) };
     });
   }
   const assignmentId = body.action === 'saveAssignment' && !body.assignmentId ? id(makeId()) : id(body.assignmentId);
@@ -155,7 +238,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
     if (dueAtMs !== null && (!Number.isSafeInteger(dueAtMs) || dueAtMs <= clock || dueAtMs > clock + 366 * 86400000)) throw fail('截止時間需在未來一年內');
     return db.runTransaction(async tx => {
       const [r, a] = await Promise.all([tx.get(roomRef), tx.get(assignmentRef)]), room = r.data(), previous = a.data();
-      requireAccess(room, uid, true);
+      requireAccess(room, uid, true, await authority(tx));
       if (room.status !== 'active') throw fail('請先恢復班級再編輯作業', 409);
       if (previous && previous.classId !== classId) throw fail('作業不屬於此班級', 403);
       if (previous && (previous.status !== 'draft' || body.version !== previous.version)) throw fail('作業已發布或已被更新，請重新載入', 409);
@@ -170,7 +253,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
   if (body.action === 'deleteDraft') {
     return db.runTransaction(async tx => {
       const [r, a] = await Promise.all([tx.get(roomRef), tx.get(assignmentRef)]), room = r.data(), assignment = a.data();
-      requireAccess(room, uid, true);
+      requireAccess(room, uid, true, await authority(tx));
       if (!assignment || assignment.classId !== classId) throw fail('找不到作業', 404);
       if (assignment.status !== 'draft') throw fail('已發布的作業不能刪除', 409);
       tx.delete(assignmentRef); tx.update(roomRef, { assignmentIds: room.assignmentIds.filter(key => key !== assignmentId) });
@@ -180,7 +263,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
   if (['publishAssignment', 'closeAssignment'].includes(body.action)) {
     return db.runTransaction(async tx => {
       const [r, a] = await Promise.all([tx.get(roomRef), tx.get(assignmentRef)]), room = r.data(), assignment = a.data();
-      requireAccess(room, uid, true);
+      requireAccess(room, uid, true, await authority(tx));
       if (!assignment || assignment.classId !== classId) throw fail('找不到作業', 404);
       if (body.version !== assignment.version) throw fail('作業已更新，請重新載入', 409);
       if (body.action === 'publishAssignment') {
@@ -198,10 +281,11 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
   }
   if (['report', 'exportReport'].includes(body.action)) {
     const [r, a] = await Promise.all([roomRef.get(), assignmentRef.get()]), room = r.data(), assignment = a.data();
-    requireAccess(room, uid, true);
+    requireAccess(room, uid, true, roles);
     if (!assignment || assignment.classId !== classId) throw fail('找不到作業', 404);
     const roster = [...new Map([...(assignment.roster || []), ...room.members].map(m => [m.uid, m])).values()];
     const records = await Promise.all(roster.map(m => ref(db, 'classroomSubmissions', assignmentId + '_' + m.uid).get()));
+    requireAccess((await roomRef.get()).data(), uid, true, await authority());
     const students = roster.map((m, i) => {
       const s = records[i].data(), submitted = s?.status === 'submitted';
       const wrongCount = submitted ? s.total - s.correctCount : null;
@@ -222,18 +306,18 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
     return body.action === 'exportReport' ? { csv: reportCsv(report) } : { report };
   }
   if (body.action === 'getAssignment') {
-    const [r, a] = await Promise.all([roomRef.get(), assignmentRef.get()]), room = r.data(), assignment = a.data(); requireAccess(room, uid);
-    const teacher = room.ownerUid === uid;
+    const [r, a] = await Promise.all([roomRef.get(), assignmentRef.get()]), room = r.data(), assignment = a.data(); requireAccess(room, uid, false, roles);
+    const teacher = canManage(room, uid, roles);
     if (!assignment || assignment.classId !== classId || (!teacher && assignment.status === 'draft')) throw fail('找不到作業', 404);
     const progress = teacher ? null : (await ref(db, 'classroomSubmissions', assignmentId + '_' + uid).get()).data();
-    requireAccess((await roomRef.get()).data(), uid);
+    requireAccess((await roomRef.get()).data(), uid, teacher, await authority());
     return { assignment: { ...assignmentSummary(assignment), questions: teacher ? assignment.questions : studentQuestions(assignment, progress?.status === 'submitted') }, submission: progressView(progress) };
   }
   if (['saveProgress', 'submit', 'correct'].includes(body.action)) {
     const submissionRef = ref(db, 'classroomSubmissions', assignmentId + '_' + uid);
     return db.runTransaction(async tx => {
       const [r, a, s] = await Promise.all([tx.get(roomRef), tx.get(assignmentRef), tx.get(submissionRef)]);
-      const room = r.data(), assignment = a.data(), previous = s.data(); requireAccess(room, uid);
+      const room = r.data(), assignment = a.data(), previous = s.data(); requireAccess(room, uid, false, roles);
       if (!member(room, uid)) throw fail('只有班級學生可以繳交作業', 403);
       if (!assignment || assignment.classId !== classId || assignment.status === 'draft') throw fail('找不到作業', 404);
       // A retry after the deadline returns the committed first score unchanged.
@@ -269,7 +353,7 @@ async function perform(db, uid, body, { now = Date.now, makeId = randomUUID, mak
 }
 
 function registerClassroomApi(app, { resolveA = () => playerRepository.resolve(), logger = console } = {}) {
-  const allowed = new Set(['list', 'createClass', 'joinClass', 'classDetail', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
+  const allowed = new Set(['applyTeacher', 'teacherAccounts', 'reviewTeacher', 'assignTeacher', 'list', 'createClass', 'joinClass', 'classDetail', 'renameClass', 'rotateCode', 'archiveClass', 'removeStudent', 'leaveClass', 'saveAssignment', 'deleteDraft', 'publishAssignment', 'closeAssignment', 'report', 'exportReport', 'getAssignment', 'saveProgress', 'submit', 'correct']);
   app.post('/api/classrooms', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     try {

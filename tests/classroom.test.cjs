@@ -13,6 +13,7 @@ async function fixture() {
   const { db } = setup(); let counter = 0, code = 0;
   const options = { now: () => CLOCK, makeId: () => 'id-' + ++counter, makeCode: () => ['ABCDEFGH', 'BCDEFGHJ', 'CDEFGHJK'][code++] };
   const call = (uid, action, body = {}, overrides = {}) => perform(db, uid, { action, ...body }, { ...options, ...overrides });
+  await db.doc('users/teacher').set({isAdmin:true,displayName:'陳老師'});
   const created = await call('teacher', 'createClass', { name: '七年一班', teacherName: '陳老師' });
   const classId = created.classroom.id;
   const act = (uid, action, body = {}, overrides = {}) => call(uid, action, { classId, ...body }, overrides);
@@ -27,7 +28,7 @@ async function fixture() {
 const progress = (f, a, answers = [1, null], version = 0, uid = 'student') => f.act(uid, 'saveProgress', { assignmentId: a.id, answers, version });
 const submit = (f, a, answers = [1, 0], version = 0, uid = 'student', overrides) => f.act(uid, 'submit', { assignmentId: a.id, answers, version, score: 100, correctCount: 2, uid: 'teacher' }, overrides);
 
-test('teachers create classes and zero-cultivation students join without game progression requirements', async () => {
+test('administrators create classes and zero-cultivation students join without game progression requirements', async () => {
   const f = await fixture(); await f.join();
   const teacher = await f.act('teacher', 'classDetail'), student = await f.act('student', 'classDetail');
   assert.equal(teacher.classroom.role, 'teacher'); assert.equal(teacher.classroom.members[0].name, '王同學');
@@ -178,8 +179,97 @@ test('API verifies main-project tokens, ignores spoofed actors, and uses no-stor
 });
 test('generic browser data endpoints cannot read or forge classroom records', () => {
   const { mayRead, authorizeWrite } = require('../d1-browser-api.cjs');
-  for (const collection of ['classroomProfiles', 'classrooms', 'classroomCodes', 'classroomAssignments', 'classroomSubmissions']) {
+  for (const collection of ['classroomTeacherAccounts', 'classroomProfiles', 'classrooms', 'classroomCodes', 'classroomAssignments', 'classroomSubmissions']) {
     assert.equal(mayRead({ role: 'A', path: collection + '/student', uid: 'student', data: { uid: 'student', ownerUid: 'student' }, admin: false }), false);
     assert.throws(() => authorizeWrite({ role: 'A', path: collection + '/student', before: null, after: { uid: 'student' }, operation: { type: 'set' }, context: { uid: 'student', admin: false }, preview: new Map() }), e => e.status === 403);
   }
+});
+const application = { name: '林老師', school: '青雲中學', reason: '數學課派題與成績管理' };
+async function approve(f, uid = 'applicant') {
+  await f.db.doc('users/' + uid).set({ uid, isAdmin: false, isTeacher: true, displayName: application.name });
+  const account = (await f.call(uid, 'applyTeacher', application)).account;
+  return (await f.call('teacher', 'reviewTeacher', { teacherUid: uid, decision: 'approve', version: account.version })).account;
+}
+test('only administrators create classes; applications never self-grant teacher or administrator access', async () => {
+  const f = await fixture();
+  const create = () => f.call('applicant', 'createClass', { name: '禁止建班', teacherName: '偽教師', isAdmin: true, role: 'admin', uid: 'teacher' });
+  await assert.rejects(create(), e => e.status === 403);
+  const pending = (await f.call('applicant', 'applyTeacher', { ...application, status: 'approved', reviewedByUid: 'teacher' })).account;
+  assert.equal(pending.status, 'pending');
+  await assert.rejects(create(), e => e.status === 403);
+  assert.equal((await f.call('applicant', 'list')).access.isTeacher, false);
+  await assert.rejects(f.call('applicant', 'teacherAccounts'), e => e.status === 403);
+  await assert.rejects(f.call('applicant', 'reviewTeacher', { teacherUid: 'applicant', version: pending.version, decision: 'approve' }), e => e.status === 403);
+  await approve(f); assert.equal((await f.call('applicant', 'list')).access.isTeacher, true);
+  await assert.rejects(create(), e => e.status === 403);
+});
+test('application review has explicit approval, rejection, resubmission, revocation and revision protection', async () => {
+  const f = await fixture();
+  const pending = (await f.call('applicant', 'applyTeacher', application)).account;
+  const duplicate = (await f.call('applicant', 'applyTeacher', { ...application, name: '另一名字' })).account;
+  assert.deepEqual(duplicate, pending);
+  const rejected = (await f.call('teacher', 'reviewTeacher', { teacherUid: 'applicant', version: pending.version, decision: 'reject', reviewNote: '請補充任教資料' })).account;
+  assert.equal(rejected.status, 'rejected');
+  assert.equal((await f.call('applicant', 'list')).access.account.reviewNote, '請補充任教資料');
+  const renewed = (await f.call('applicant', 'applyTeacher', { ...application, reason: '已補充' })).account;
+  await assert.rejects(f.call('teacher', 'reviewTeacher', { teacherUid: 'applicant', version: pending.version, decision: 'approve' }), e => e.status === 409);
+  const approved = (await f.call('teacher', 'reviewTeacher', { teacherUid: 'applicant', version: renewed.version, decision: 'approve' })).account;
+  assert.equal(approved.status, 'approved');
+  const revoked = (await f.call('teacher', 'reviewTeacher', { teacherUid: 'applicant', version: approved.version, decision: 'revoke' })).account;
+  assert.equal(revoked.status, 'revoked');
+  await assert.rejects(f.call('teacher', 'reviewTeacher', { teacherUid: 'applicant', version: renewed.version, decision: 'approve' }), e => e.status === 409);
+  assert.equal((await f.call('applicant', 'list')).access.isTeacher, false);
+});
+test('administrators assign approved teachers, revoke access immediately, and preserve student work', async () => {
+  const f = await fixture(); await f.join(); const a = await f.publish(); const account = await approve(f);
+  await assert.rejects(f.act('applicant', 'classDetail'), e => e.status === 403);
+  await assert.rejects(f.act('student', 'assignTeacher', { teacherUid: 'student', expectedOwnerUid: 'teacher' }), e => e.status === 403);
+  await assert.rejects(f.act('teacher', 'assignTeacher', { teacherUid: 'student', expectedOwnerUid: 'teacher' }), e => e.status === 403);
+  await f.act('teacher', 'assignTeacher', { teacherUid: 'applicant', expectedOwnerUid: 'teacher' });
+  assert.equal((await f.act('applicant', 'classDetail')).classroom.role, 'teacher');
+  assert.equal((await f.call('applicant', 'list')).classes.length, 1);
+  await f.act('applicant', 'saveAssignment', { title: '教師草稿', subject: '數學', questions: questions() });
+  await submit(f, a);
+  assert.equal((await f.act('applicant', 'report', { assignmentId: a.id })).report.totals.submitted, 1);
+  await f.call('teacher', 'reviewTeacher', { teacherUid: 'applicant', decision: 'revoke', version: account.version });
+  for (const action of ['classDetail', 'report', 'exportReport', 'getAssignment', 'saveAssignment']) await assert.rejects(f.act('applicant', action, { assignmentId: a.id, title: 'fake', subject: '數學', questions: questions() }), e => e.status === 403);
+  assert.equal((await f.call('applicant', 'list')).classes.length, 0);
+  assert.equal((await f.act('student', 'getAssignment', { assignmentId: a.id })).submission.score, 50);
+  await f.act('teacher', 'assignTeacher', { teacherUid: 'teacher', expectedOwnerUid: 'applicant' });
+  assert.deepEqual((await f.db.doc('classroomProfiles/applicant').get()).data().classIds, []);
+});
+test('legacy class ownership and editable isTeacher flags do not substitute for administrator approval', async () => {
+  const f = await fixture(); await f.db.doc('users/teacher').set({ isAdmin: false, isTeacher: true, role: 'teacher' });
+  assert.equal((await f.call('teacher', 'list')).classes.length, 0);
+  await assert.rejects(f.act('teacher', 'classDetail'), e => e.status === 403);
+  await assert.rejects(f.join('teacher'), e => e.status === 403);
+  await assert.rejects(f.call('teacher', 'createClass', { name: '偽班級', teacherName: '偽教師' }), e => e.status === 403);
+});
+test('teacher-account and global-class lists paginate only for administrators', async () => {
+  const f = await fixture();
+  for (let i = 0; i < 53; i++) await f.db.doc('classroomTeacherAccounts/t' + String(i).padStart(2, '0')).set({ ...application, uid: 't' + i, status: 'pending', version: 1, requestedAtMs: CLOCK });
+  const first = await f.call('teacher', 'teacherAccounts');
+  const second = await f.call('teacher', 'teacherAccounts', { cursor: first.nextCursor });
+  assert.equal(first.accounts.length, 50); assert.equal(second.accounts.length, 3); assert.equal(second.nextCursor, null);
+  assert.equal((await f.call('teacher', 'teacherAccounts', { status: 'approved' })).accounts.length, 0);
+  await assert.rejects(f.call('student', 'teacherAccounts', { cursor: first.nextCursor }), e => e.status === 403);
+});
+test('administrator removal between initial authorization and a write is checked inside the transaction', async () => {
+  const f = await fixture(), original = f.db.runTransaction.bind(f.db); let change = true;
+  f.db.runTransaction = async worker => {
+    if (change) { change = false; await original(async tx => { const target = f.db.doc('users/teacher'); await tx.get(target); tx.update(target, { isAdmin: false }); }); }
+    return original(worker);
+  };
+  await assert.rejects(f.call('teacher', 'createClass', { name: '撤權後禁止', teacherName: '教師' }), e => e.status === 403);
+});
+test('teacher revocation racing with a draft save is checked in the same transaction', async () => {
+  const f = await fixture(); await approve(f);
+  await f.act('teacher', 'assignTeacher', { teacherUid: 'applicant', expectedOwnerUid: 'teacher' });
+  const original = f.db.runTransaction.bind(f.db); let change = true;
+  f.db.runTransaction = async worker => {
+    if (change) { change = false; await original(async tx => { const target = f.db.doc('classroomTeacherAccounts/applicant'); await tx.get(target); tx.update(target, { status: 'revoked' }); }); }
+    return original(worker);
+  };
+  await assert.rejects(f.act('applicant', 'saveAssignment', { title: '撤權後禁止', subject: '數學', questions: questions() }), e => e.status === 403);
+  assert.equal((await f.act('teacher', 'classDetail')).assignments.length, 0);
 });
