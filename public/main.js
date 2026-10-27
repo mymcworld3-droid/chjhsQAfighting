@@ -20,6 +20,7 @@ void import('./cultivation/classroom.js').catch(error => {
   const panel = document.getElementById('section-classes');
   if (panel) panel.textContent = '班級功能載入失敗，請重新整理後再試。';
 });
+void import('./cultivation/teacher-dongtian.js').catch(error => console.warn('[Teacher Dongtian]', error));
 // Repository 註冊屬於附加能力；即使載入失敗也不能阻斷 Google 登入核心。
 void import('./cultivation/data/index.js').catch((error) => {
   console.error('[Data repositories] failed to initialize repository registry', error);

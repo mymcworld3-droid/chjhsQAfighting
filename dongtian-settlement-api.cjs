@@ -13,6 +13,7 @@ const FIRST_COMPLETION_BASE_SPIRIT_STONES=30, FIRST_COMPLETION_SPIRIT_STONE_PER_
   OWNER_CULTIVATION_REWARD=1, OWNER_GOLD_REWARD=5, NASCENT_SOUL_THRESHOLD=68;
 const count = n => Number.isFinite(Number(n)) ? Math.max(0,Math.floor(Number(n))) : 0;
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const {assertEntry}=require('./dongtian-access.cjs');
 const clean = v => String(v ?? '').trim();
 function safeId(v,max=240) { const id=clean(v); return id && id.length<=max && !id.includes('/') ? id : ''; }
 function receiptId(uid,cave,run) { return crypto.createHash('sha256').update(uid+'\n'+cave+'\n'+run).digest('hex'); }
@@ -21,7 +22,13 @@ function questionKey(q) {
     (q.wrong || []).map(clean).sort()])).digest('hex');
 }
 function verifyAnswers(cave,submitted) {
-  const qs=Array.isArray(cave?.questions)?cave.questions:[], as=Array.isArray(submitted)?submitted:[];
+  const qs=Array.isArray(cave?.questions)?cave.questions:[]; let as=Array.isArray(submitted)?submitted:[];
+  if(cave.teacherManaged&&cave.settings?.shuffleQuestions) {
+    if(as.length!==qs.length)throw Object.assign(Error('洞天答題紀錄不完整'),{status:409});
+    const byId=new Map(as.map(answer=>[answer?.id,answer]));
+    if(byId.size!==as.length)throw Object.assign(Error('洞天答題代碼重複'),{status:409});
+    as=qs.map(q=>byId.get(q.id));
+  }
   if(!qs.length || as.length!==qs.length) throw Object.assign(new Error('洞天答題紀錄不完整'),{status:409});
   const masteredKeys=[];
   for(let i=0;i<qs.length;i++) {
@@ -38,7 +45,8 @@ function verifyAnswers(cave,submitted) {
     Array.isArray(q.wrong) && q.wrong.length===3 && new Set([q.correct,...q.wrong].map(clean)).size===4);
   const knowledgeAnswers = qs.map((q,i) => ({ ...Knowledge.metadata(q,q.subject || cave.subject),isCorrect:clean(as[i].selected)===clean(q.correct) }))
     .filter(q => Knowledge.label(q));
-  return {correct,total,accuracy,tier,masteredKeys,qualityEligible,knowledgeAnswers};
+  return {correct,total,accuracy,tier,masteredKeys,qualityEligible,knowledgeAnswers,
+    ...(cave.teacherManaged?{passPercent:cave.settings?.passPercent??60,passed:accuracy*100>=(cave.settings?.passPercent??60)}:{})};
 }
 function firstCompletionGold(correct) { return FIRST_COMPLETION_BASE_SPIRIT_STONES+count(correct)*FIRST_COMPLETION_SPIRIT_STONE_PER_QUESTION; }
 function caveSoulBonus(player) { return Growth.cultivation(player,'cave'); }
@@ -76,7 +84,7 @@ async function verifyRequest(req,resolveA) {
     throw Object.assign(new Error('登入身分驗證失敗'),{status:401});
   return {uid:v.uid,a};
 }
-async function claimEligibility(db,uid,dongtianId,runId,answers) {
+async function claimEligibility(db,uid,dongtianId,runId,answers,accessDb) {
   const id=receiptId(uid,dongtianId,runId),claimRef=db.collection(ELIGIBILITY_COLLECTION).doc(id),
     indexRef=db.collection(INDEX_COLLECTION).doc(dongtianId),caveRef=db.collection(DATA_COLLECTION).doc(dongtianId);
   return db.runTransaction(async tx => {
@@ -84,6 +92,7 @@ async function claimEligibility(db,uid,dongtianId,runId,answers) {
     const [is,cs]=await Promise.all([tx.get(indexRef),tx.get(caveRef)]);
     if(!is.exists || !cs.exists) throw Object.assign(new Error('洞天資料不存在'),{status:404});
     const index=is.data() || {},cave=cs.data() || {};
+    await assertEntry(cave,uid,accessDb);
     if(index.status!=='active' || cave.status!=='active') throw Object.assign(new Error('洞天已封印，本次不進行通關結算'),{status:409});
     if(String(index.ownerUid || cave.ownerUid || '')!==String(cave.ownerUid || '')) throw new Error('洞天索引與內容擁有人不一致');
     const claim={uid,dongtianId,runId,ownerUid:String(cave.ownerUid || ''),...verifyAnswers(cave,answers),
@@ -109,6 +118,7 @@ async function awardProgress(db,uid,e) {
       const reward=learningReward(previous,e,player,legacyReceipt),{ledger,...paid}=reward;
       if(!ownerRef) paid.ownerRewarded=false;
       tx.set(playRef,{uid,dongtianId:e.dongtianId,ownerUid,encountered:true,completed:true,
+        ...(typeof e.passed==='boolean'?{passed:e.passed,passPercent:e.passPercent}:{}),
         correct:e.correct,total:e.total,accuracy:e.accuracy,rewardTier:e.tier,lastSpiritRunId:e.runId,
         bestCorrect:Math.max(count(previous.bestCorrect),count(previous.correct),e.correct),learningRewardV2:ledger,
         completedAt:FieldValue.serverTimestamp(),completedAtMs:Date.now()},{merge:true});
@@ -119,10 +129,11 @@ async function awardProgress(db,uid,e) {
       if(paid.cultivationAdded) p['stats.totalScore']=FieldValue.increment(paid.cultivationAdded);
       tx.update(userRef,p);
       if(paid.ownerRewarded) tx.update(ownerRef,{'stats.totalScore':FieldValue.increment(OWNER_CULTIVATION_REWARD),'stats.gold':FieldValue.increment(OWNER_GOLD_REWARD)});
-      return {...paid,correct:e.correct,total:e.total,tier:e.tier};
+      return {...paid,correct:e.correct,total:e.total,tier:e.tier,...(typeof e.passed==='boolean'?{passed:e.passed,passPercent:e.passPercent}:{})};
     },createReceipt:r=>({uid,dongtianId:e.dongtianId,runId:e.runId,ownerUid,...r})});
   const d=receipt.duplicate ? receipt.receipt : receipt.result;
   return {applied:!receipt.duplicate,firstCompletion:d?.firstCompletion===true,
+    ...(typeof d?.passed==='boolean'?{passed:d.passed,passPercent:d.passPercent}:{}),
     goldAdded:count(d?.goldAdded),realmGoldAdded:count(d?.realmGoldAdded),cultivationAdded:count(d?.cultivationAdded),soulCultivationAdded:count(d?.soulCultivationAdded),
     spiritAdded:count(d?.spiritAdded),correct:count(d?.correct),total:count(d?.total),tier:String(d?.tier || e.tier || ''),
     newCorrect:count(d?.newCorrect),masteredCount:count(d?.masteredCount),ownerRewarded:d?.ownerRewarded===true};
@@ -146,7 +157,7 @@ function createHandler({resolveA=()=>playerRepository.resolve(),resolveBD=()=>do
     try {identity=await verifyRequest(req,resolveA);bd=resolveBD();}
     catch(error) {const status=error?.status || 503;if(status>=500)logger.error('[Dongtian settlement] Firebase unavailable:',error?.message);return res.status(status).json({ok:false,error:error?.message || '洞天結算服務尚未完成設定'});}
     try {
-      const e=await claimEligibility(bd.db,identity.uid,dongtianId,runId,req.body.answers),reward=await awardProgress(identity.a.db,identity.uid,e);
+      const e=await claimEligibility(bd.db,identity.uid,dongtianId,runId,req.body.answers,identity.a.db),reward=await awardProgress(identity.a.db,identity.uid,e);
       await finalizeEligibility(bd.db,e,reward.firstCompletion);
       return res.json({ok:true,dongtianId,runId,...reward});
     } catch(error) {const status=error?.status || 503;if(status>=500)logger.error('[Dongtian settlement] failed:',error?.message);return res.status(status).json({ok:false,error:error?.message || '洞天結算尚未完成，請稍後重試'});}

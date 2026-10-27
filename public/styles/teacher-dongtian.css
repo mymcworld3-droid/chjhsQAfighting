@@ -1,0 +1,11 @@
+#page-teacher-dongtian{box-sizing:border-box;width:100%;min-height:0;height:100%;overflow:auto;overscroll-behavior:contain;padding:18px 18px 84px;color:#e9dfcb}
+#page-teacher-dongtian [hidden]{display:none!important}
+#page-teacher-dongtian .cc-card h4{overflow-wrap:anywhere}
+#page-teacher-dongtian .cc-shell textarea{min-height:85px}
+#page-teacher-dongtian .cc-shell input[type=file]{white-space:normal;height:auto}
+#page-teacher-dongtian .cc-shell form{margin:0}
+#page-teacher-dongtian .cc-question,#page-teacher-dongtian .cc-explanation{color:#fff}
+#page-teacher-dongtian .cc-actions{margin-top:8px}
+#nav-grid:has(>#nav-teacher-dongtian){grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+#nav-grid #nav-teacher-dongtian{min-width:0}
+@media(max-width:540px){#page-teacher-dongtian{padding:12px 12px 84px}}
