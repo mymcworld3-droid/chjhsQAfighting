@@ -1,6 +1,7 @@
 'use strict';
 const {playerRepository,dongtianRepository}=require('./server-repositories.cjs');
 const {FieldValue}=require('./storage-values.cjs');
+const {assertEntry}=require('./dongtian-access.cjs');
 
 function createEntryHandler({verifyPlayer,content=()=>dongtianRepository.resolve().db,
   progress=()=>playerRepository.resolve().db,fields=FieldValue,logger=console}={}) {
@@ -22,6 +23,8 @@ function createEntryHandler({verifyPlayer,content=()=>dongtianRepository.resolve
         return res.status(403).json({ok:false,error:'只有洞天主人可以開啟此洞天',code:'permission-denied',phase:'ownership'});
       if(cave.tutorialOnly||cave.status!=='active')
         return res.status(409).json({ok:false,error:'此洞天尚未開放或已封印',code:'failed-precondition',phase:'status'});
+      phase='access';
+      await assertEntry(cave,uid,cave.teacherManaged||cave.visibility?progress():undefined);
       if(!Array.isArray(cave.questions)||!cave.questions.length)
         return res.status(409).json({ok:false,error:'洞天題目尚未準備完成',code:'failed-precondition',phase:'questions'});
       if(action==='encounter') {
@@ -45,7 +48,7 @@ function createEntryHandler({verifyPlayer,content=()=>dongtianRepository.resolve
       logger.warn('[Dongtian entry API]',{phase,code:error?.code,message:error?.message});
       const status=Number(error?.status)||503;
       return res.status(status).json({ok:false,code:String(error?.code||'unavailable'),phase,
-        error:status===401?'登入狀態已失效，請重新登入':'洞天讀取服務暫時無法連線，請稍後再試。'});
+        error:status===401?'登入狀態已失效，請重新登入':status===403||status===409?error.message:'洞天讀取服務暫時無法連線，請稍後再試。'});
     }
   };
 }

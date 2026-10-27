@@ -4,6 +4,7 @@ const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
+const { listed: publicDongtian, teacherAccess } = require('./dongtian-access.cjs');
 
 const LEVELS = [
   '國小中年級',
@@ -998,6 +999,10 @@ module.exports = function registerDongtianApi(app) {
       const cave = dataSnap.exists ? (dataSnap.data() || {}) : {};
       const index = indexSnap.exists ? (indexSnap.data() || {}) : {};
       const ownerUid = String(cave.ownerUid || index.ownerUid || '');
+      if (cave.teacherManaged) {
+        const access = await teacherAccess(playerRepository.resolve().db, uid);
+        if (!access.admin && !access.teacher) return res.status(403).json({ ok: false, error: '教師資格已失效，請聯絡管理員' });
+      }
       if (!ownerUid || ownerUid !== uid) {
         return res.status(403).json({ ok: false, error: '只有洞天主人可以刪除' });
       }
@@ -1051,6 +1056,7 @@ module.exports = function registerDongtianApi(app) {
       }
       const snap = await queryRef.get();
       const items = snap.docs.map((entry) => ({ id: entry.id, ...(entry.data() || {}) }))
+        .filter(item => mode !== 'public' || publicDongtian(item))
         .sort((a, b) => Number(b.createdAtMs || 0) - Number(a.createdAtMs || 0));
       return res.json({ ok: true, items });
     } catch (error) {

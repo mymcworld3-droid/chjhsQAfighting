@@ -2,6 +2,7 @@
 const {adminProject,PROJECT_IDS}=require('./firebase-admin-projects.cjs');
 const {getD1Store,Transaction,Query,Codec,validPath}=require('./d1-store.cjs');
 const {mayCommitDiscovery}=require('./refinery-discovery-commit.cjs');
+const {listed:publicDongtian}=require('./dongtian-access.cjs');
 const fail=(message='無權存取這筆資料',status=403,code='permission-denied')=>Object.assign(Error(message),{status,code});
 const same=(a,b)=>JSON.stringify(Codec.encode(a??null))===JSON.stringify(Codec.encode(b??null));
 const changed=(a,b)=>[...new Set([...Object.keys(a||{}),...Object.keys(b||{})])].filter(k=>!same(a?.[k],b?.[k]));
@@ -22,8 +23,10 @@ function mayRead({role,path,data,uid,admin}) {
   const [col,id,...nested]=path.split('/');
   if(nested.length)return false; // Private chat is served by its authenticated domain API.
   if(col==='playerProfiles')return id===uid;
-  if(col==='dongtians')return data?.ownerUid===uid || data?.status==='active';
-  if(col==='dongtianReports')return data?.ownerUid===uid || data?.reporterUid===uid;
+  if(role!=='BD'&&['dongtians','dongtianIndex'].includes(col))return false;
+  if(col==='dongtians')return !data?.teacherManaged && (data?.ownerUid===uid || publicDongtian(data));
+  if(col==='dongtianIndex'&&(data?.teacherManaged||data?.visibility))return data?.ownerUid===uid || publicDongtian(data);
+  if(col==='dongtianReports')return data?.reporterUid===uid || !data?.teacherManaged && data?.ownerUid===uid;
   if(['exam_logs','dongtianPlays'].includes(col))return data?.uid===uid;
   return PUBLIC.has(col) && (role==='A' || (role==='BD'&&col==='dongtianIndex') || (role==='C'&&['rooms','raidRooms'].includes(col)));
 }
@@ -102,6 +105,9 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
     throw fail();
   }
   if(['A','BD'].includes(role)&&['dongtians','dongtianIndex'].includes(col)) {
+    if(before?.teacherManaged||after?.teacherManaged) {
+      throw fail('教師洞天內容與開放設定必須經教師管理介面儲存');
+    }
     if(before===null&&after?.ownerUid===uid)return;
     if(before?.ownerUid===uid&&(after===null||after.ownerUid===uid))return;
     const moderation=['status','moderationStatus','activeReportId','flaggedQuestionId','flaggedQuestionIndex','flaggedReason','aiReviewSummary','suspendedAt','suspendedAtMs'];
@@ -112,6 +118,7 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
     throw fail();
   }
   if(['A','BD'].includes(role)&&col==='dongtianReports') {
+    if(before?.teacherManaged||after?.teacherManaged)throw fail('教師洞天回報須經驗證後的回報介面處理');
     if(before===null&&after?.reporterUid===uid)return;
     if(before?.ownerUid===uid&&after?.ownerUid===uid&&only(keys,['status','resolvedAt','resolvedAtMs','resolution']))return;
     if((before?.reporterUid===uid||before?.ownerUid===uid)&&after===null)return;
