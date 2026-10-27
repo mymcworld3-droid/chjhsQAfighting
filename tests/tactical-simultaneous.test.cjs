@@ -115,10 +115,11 @@ test('question reports use the exact server question and hide pre-answer review 
   const result=await api.reportQuestion(db,'u1',{roomId:s.id,questionId:q.id,question:'偽造題目',correctIndex:99,reason:'題目條件寫得不完整'},deps);
   assert.equal(evidence.question,parsed.q);assert.equal(evidence.options[evidence.correctIndex],'5');assert.equal(awards,1);
   assert.equal(result.reason,'獨立審核已確認本題有誤。');assert.equal('correctIndex'in result,false);
+  assert.equal(result.staminaAdded,4);assert.equal(result.questionSkipped,true);assert.equal(result.battle.question,null);
   await assert.rejects(api.reportQuestion(db,'u2',{roomId:s.id,questionId:q.id,reason:'請確認題目錯誤'},deps),/參戰/);
   await assert.rejects(api.reportQuestion(db,'u1',{roomId:s.id,questionId:'stale',reason:'請確認題目錯誤'},deps),/題目已變更/);
   await assert.rejects(api.reportQuestion(db,'u1',{roomId:s.id,questionId:q.id,reason:'錯誤'},deps),/六|6/);
-  const raw=db.records.get(api.ROOMS+'/'+s.id);await api.answer(db,'u1',{roomId:s.id,questionId:q.id,choice:raw.pending.u1.answerIndex},now+1);
+  await assert.rejects(api.answer(db,'u1',{roomId:s.id,questionId:q.id,choice:0},now+1),/失效/);
   const after=await api.reportQuestion(db,'u1',{roomId:s.id,questionId:q.id,reason:'原本解析寫得不完整'},deps);
-  assert.equal(after.reason,undefined);assert.equal(evidence.explanation,parsed.exp);
+  assert.equal(after.status,'duplicate');assert.equal(after.staminaAdded,0);assert.equal(awards,1);assert.equal(evidence.explanation,parsed.exp);
 });

@@ -29,7 +29,7 @@ function ensureIntroductions(s,uid,pointer){
 }
 function snapshot(s,uid){
   if(!s)return null;member(s,uid);
-  const out=copy(s);delete out.pending;delete out.reviews;delete out.receipts;
+  const out=copy(s);delete out.pending;delete out.reviews;delete out.receipts;delete out.answerStamina;delete out.questionRefunds;
   out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
   out.question=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pending?.[uid]):null;
   out.serverNowMs=Date.now();
@@ -239,6 +239,9 @@ async function answer(db,uid,input,now=Date.now()){
     const q=raw.pending?.[uid];if(!q||q.id!==input.questionId)throw error('此題已結算或已失效');
     const correct=input.choice===q.answerIndex,s=Rules.answer(raw,uid,correct,now),before=member(raw,uid),after=member(s,uid);
     s.reviews||={};s.reviews[uid]={questionId:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,correct,choice:input.choice,answerIndex:q.answerIndex,explanation:q.explanation,gain:after.stamina-before.stamina};
+    // Keep only the authoritative shortfall, including the cap at answer time.
+    // A review may finish after another answer has replaced the visible review.
+    s.answerStamina||={};s.answerStamina[q.id]={uid,shortfall:correct?0:Math.max(0,Math.min(Rules.LIMITS.correct,Rules.LIMITS.stamina-before.stamina)-(after.stamina-before.stamina))};
     delete s.pending[uid];s.questionHistory=[...(s.questionHistory||[]),q.q].slice(-24);
     const stats=user.stats||{},patch={'stats.totalAnswered':Rules.num(stats.totalAnswered)+1,
       'stats.totalCorrect':Rules.num(stats.totalCorrect)+(correct?1:0),
@@ -265,22 +268,62 @@ async function answer(db,uid,input,now=Date.now()){
     tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,patchedUser(user,patch));
   });
 }
+async function refundQuestionStamina(db,uid,id,questionId){
+  return db.runTransaction(async tx=>{
+    const s=await readRoom(tx,db,id,uid),a=member(s,uid);
+    const user=exists(await tx.get(db.collection('users').doc(uid)));if(!user)throw error('玩家資料不存在',404);
+    const previous=s.questionRefunds?.[questionId];
+    if(previous?.uid===uid)return {staminaAdded:0,staminaRefunded:previous.amount,staminaReplayed:true,questionSkipped:previous.skipped,battle:withProgress(s,uid,user)};
+    let amount=0,skipped=false;
+    if(s.status==='active'){
+      const pending=s.pending?.[uid],record=s.answerStamina?.[questionId],answered=s.reviews?.[uid];
+      let shortfall=0;
+      if(pending?.id===questionId){
+        Rules.canAnswer(s,uid);skipped=true;shortfall=Rules.LIMITS.correct;
+        a.questions++;delete s.pending[uid];
+        s.questionHistory=[...(s.questionHistory||[]),pending.q].slice(-24);
+      }else if(record?.uid===uid)shortfall=record.shortfall;
+      // Backward compatibility for an answer made before the shortfall ledger existed.
+      else if(answered?.questionId===questionId&&!answered.correct)shortfall=Math.max(0,Rules.LIMITS.correct-Rules.num(answered.gain));
+      amount=Math.min(Rules.num(shortfall),Math.max(0,Rules.LIMITS.stamina-a.stamina));
+      a.stamina+=amount;
+    }
+    s.questionRefunds||={};s.questionRefunds[questionId]={uid,amount,skipped};
+    delete s.answerStamina?.[questionId];
+    s.revision++;s.updatedAtMs=Date.now();
+    if(amount){
+      s.eventSequence=(s.eventSequence||0)+1;
+      s.events=[...s.events,{id:s.revision+':'+s.eventSequence,type:'answer',actor:uid,gain:amount,text:a.name+'錯題確認，返還 '+amount+' 體力',
+        animation:{kind:'answer',changes:[{uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow}],numbers:[{uid,gain:amount}]}}].slice(-28);
+    }
+    tx.set(db.collection(ROOMS).doc(s.id),s);
+    return {staminaAdded:amount,staminaRefunded:amount,staminaReplayed:false,questionSkipped:skipped,battle:withProgress(s,uid,user)};
+  });
+}
 async function reportQuestion(db,uid,input,{review,award}={}){
   const reports=require('./question-report-api.cjs').__test;
   if(!roomId(input.roomId))throw error('戰場代碼無效',400);
   const s=exists(await db.collection(ROOMS).doc(input.roomId).get());member(s,uid);
   if(s.mode!=='pve')throw error('問道試煉才能使用此回報入口',400);
+  if(String(input.reason||'').normalize('NFC').replace(/\s+/g,' ').trim().length<6)throw error('請具體描述題目的錯誤，至少輸入 6 個字元。',400);
+  if(s.questionRefunds?.[input.questionId]?.uid===uid)return {status:'duplicate',compensated:false,reason:'本題已完成錯題補償。',...await refundQuestionStamina(db,uid,s.id,input.questionId)};
   const q=s.pending?.[uid]?.id===input.questionId?s.pending[uid]:s.reviews?.[uid]?.questionId===input.questionId?s.reviews[uid]:null;
   if(!q)throw error('題目已變更，請回到目前題目重新回報');
   const trusted=reports.validateReport({question:q.q,options:q.opts,correctIndex:q.answerIndex,explanation:q.explanation,userReason:input.reason});
   if(trusted.error)throw error(trusted.error,400);
-  const claimed=await db.collection('questionErrorCompensations').doc(reports.reportKey(uid,trusted.question)).get();
-  if(claimed.exists)return {status:'duplicate',reason:'這道題目已領取過錯題補償。'};
-  const result=await (review||reports.reviewQuestion)(trusted);
+  const claim=exists(await db.collection('questionErrorCompensations').doc(reports.reportKey(uid,trusted.question)).get());
+  const approved=claim?.uid===uid&&claim.question===trusted.question&&claim.correctIndex===trusted.correctIndex&&
+    claim.explanation===trusted.explanation&&JSON.stringify(claim.options)===JSON.stringify(trusted.options);
+  const result=approved?{status:'confirmed',reason:claim.reviewReason,issueType:claim.issueType}:await (review||reports.reviewQuestion)(trusted);
   if(result.status==='unavailable')throw error(result.reason,503);
-  const outcome=result.status==='confirmed'?await (award||reports.awardOnce)(db,uid,trusted,result):result;
+  if(result.status==='confirmed'){
+    // Currency and combat stamina have separate idempotent receipts. A lost
+    // response or a failed stamina transaction can safely retry a currency award.
+    const outcome=await (award||reports.awardOnce)(db,uid,trusted,result);
+    return {...outcome,status:'confirmed',reason:'獨立審核已確認本題有誤。'+(outcome.status==='limit'?outcome.reason:''),...await refundQuestionStamina(db,uid,s.id,input.questionId)};
+  }
   // Before answering, never reveal the answer through an AI review reason.
-  return s.pending?.[uid]?.id===input.questionId?{...outcome,reason:outcome.status==='confirmed'?'獨立審核已確認本題有誤。':outcome.status==='rejected'?'獨立審核未確認本題有實質錯誤。':outcome.reason}:outcome;
+  return s.pending?.[uid]?.id===input.questionId?{...result,reason:result.status==='rejected'?'獨立審核未確認本題有實質錯誤。':result.reason}:result;
 }
 function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,logger=console}={}){
   const route=fn=>async(req,res)=>{

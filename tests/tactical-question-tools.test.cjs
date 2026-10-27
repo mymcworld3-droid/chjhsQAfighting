@@ -7,12 +7,14 @@ const node=()=>({value:'',textContent:'',hidden:false,disabled:false,children:[]
 function client(reply=async()=>({answer:'先把兩個數相加。'})){
   const nodes=new Map(),requests=[];const $=key=>{if(!nodes.has(key))nodes.set(key,node());return nodes.get(key);};
   const user={stats:{gold:0,totalScore:30}},legacyQuiz={data:{q:'另一頁的題目'}};
-  const ctx={quizContext:null,state:{id:'arena-one',mode:'pve'},uid:'u1',epoch:1,AbortController,
+  const accepted=[],notices=[];
+  const ctx={quizContext:null,state:{id:'arena-one',mode:'pve'},uid:'u1',epoch:1,op:0,AbortController,
     valid:(e,uid)=>ctx.epoch===e&&uid===ctx.uid,localUser:()=>user,$,esc:String,rich:String,
     document:{createElement:node},window:{currentActiveQuiz:legacyQuiz,quizMathTypeset(){},updateUIStats(){},refreshXiuxianLiveSync(){}},
+    accept(next){accepted.push(next);ctx.state=next;if(next.progress)Object.assign(user.stats,next.progress.stats);},notice:message=>notices.push(message),
     api:async(url,body,signal)=>{requests.push({url,body,signal});return reply(url,body);}};
   vm.createContext(ctx);vm.runInContext(toolsSource,ctx);ctx.setQuizContext(q);
-  return {ctx,$,requests,user,legacyQuiz};
+  return {ctx,$,requests,user,legacyQuiz,accepted,notices};
 }
 test('trial tools appear below the answer options and keep the original solo quiz state isolated',async()=>{
   const c=client();assert.match(c.ctx.quizTools(),/問題回報/);assert.match(c.ctx.quizTools(),/問道助手/);
@@ -52,6 +54,28 @@ test('a helper-confirmed issue automatically submits the current question for in
   c.$('[data-helper-input]').value='題目有沒有錯？';await c.ctx.askHelper();await new Promise(resolve=>setImmediate(resolve));
   assert.equal(c.requests[1].url,'/api/tactical/report-question');assert.equal(c.requests[1].body.questionId,q.id);
   assert.match(c.$('[data-report-status]').textContent,/未確認/);
+});
+test('confirmed reports apply authoritative stamina and fresh balances rather than stale award totals',async()=>{
+  const battle={id:'arena-one',mode:'pve',actors:[{uid:'u1',stamina:6}],progress:{stats:{gold:250,totalScore:35}}};
+  const c=client(async()=>({state:{status:'confirmed',reason:'本題有誤。',compensated:true,goldAdded:100,cultivationAdded:1,newGold:100,newTotalScore:31,staminaRefunded:3,battle}}));
+  c.$('[data-report-reason]').value='題目的條件互相矛盾';await c.ctx.reportQuestion();
+  assert.equal(c.accepted.length,1);assert.equal(c.ctx.state.actors[0].stamina,6);
+  assert.equal(c.user.stats.gold,250);assert.equal(c.user.stats.totalScore,35);assert.match(c.$('[data-report-status]').textContent,/返還 3 體力/);
+});
+test('skipping a confirmed unanswered question announces the refund on the battlefield',async()=>{
+  const c=client(async()=>({state:{reason:'本題有誤。',staminaRefunded:4,questionSkipped:true,battle:{id:'arena-one',mode:'pve',question:null,actors:[{uid:'u1',stamina:6}]}}}));
+  c.$('[data-report-reason]').value='題目的條件互相矛盾';await c.ctx.reportQuestion();
+  assert.equal(c.ctx.state.question,null);assert.match(c.notices[0],/返還 4 體力/);
+});
+test('a delayed refund updates the same room without overwriting the next question, and ignores an account switch',async()=>{
+  let resolve;const c=client(()=>new Promise(r=>resolve=r));c.$('[data-report-reason]').value='題目的條件互相矛盾';
+  const waiting=c.ctx.reportQuestion();c.ctx.setQuizContext({...q,id:'next-question'});
+  const battle={id:'arena-one',mode:'pve',question:{id:'next-question'},actors:[{uid:'u1',stamina:6}]};
+  resolve({state:{reason:'已確認',staminaRefunded:3,battle}});await waiting;
+  assert.equal(c.accepted.length,1);assert.equal(c.ctx.quizContext.id,'next-question');assert.equal(c.ctx.state.question.id,'next-question');
+  assert.doesNotMatch(c.$('[data-report-status]').textContent,/返還/);
+  const again=c.ctx.reportQuestion();c.ctx.uid='u2';resolve({state:{reason:'已確認',staminaRefunded:3,battle}});await again;
+  assert.equal(c.accepted.length,1);
 });
 test('background state synchronization preserves the current question; expiry closes an invalid question',()=>{
   const acceptSource=source.slice(source.indexOf('function accept('),source.indexOf('function applyProgress('));

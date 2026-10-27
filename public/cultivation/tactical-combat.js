@@ -304,9 +304,13 @@ async function reportQuestion(helperReason=''){
   ctx.reportBusy=true;$('[data-report-send]').disabled=true;status.textContent='正在獨立審核題目…';
   try{
     const result=(await api('/api/tactical/report-question',{roomId:ctx.roomId,questionId:ctx.id,reason},ctx.abort.signal)).state;
+    if(!valid(ctx.epoch,ctx.owner))return;
+    if(result.battle&&state?.id===ctx.roomId)accept(result.battle,++op);
     if(!sameQuiz(ctx))return;
-    status.textContent=result.reason+(result.compensated?` 已補償 ${result.goldAdded} 靈石、${result.cultivationAdded} 修為。`:'');
-    if(result.compensated){const user=localUser();user.stats||={};user.stats.gold=result.newGold;user.stats.totalScore=result.newTotalScore;window.updateUIStats?.();window.refreshXiuxianLiveSync?.(result.newTotalScore);}
+    const message=result.reason+(result.compensated?` 已補償 ${result.goldAdded} 靈石、${result.cultivationAdded} 修為。`:'')+
+      (result.staminaRefunded>0?` 已返還 ${result.staminaRefunded} 體力。`:'');
+    status.textContent=message;if(result.questionSkipped)notice(message);
+    if(result.compensated&&!result.battle){const user=localUser();user.stats||={};user.stats.gold=result.newGold;user.stats.totalScore=result.newTotalScore;window.updateUIStats?.();window.refreshXiuxianLiveSync?.(result.newTotalScore);}
   }catch(err){if(sameQuiz(ctx))status.textContent=err.message+'，可再次送出重試。';}
   finally{ctx.reportBusy=false;if(sameQuiz(ctx)&&$('[data-report-send]'))$('[data-report-send]').disabled=false;}
 }

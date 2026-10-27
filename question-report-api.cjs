@@ -138,7 +138,7 @@ async function awardOnce(db, uid, input, result, { today = dateInTaiwan, fieldVa
     const cultivationRefund = actualCultivationRefund(user.stats, input.question);
     const cultivationAdded = cultivationRefund + BONUS_CULTIVATION;
     tx.create(claimRef, {
-      uid, question: input.question, options: input.options, correctIndex: input.correctIndex,
+      uid, question: input.question, options: input.options, correctIndex: input.correctIndex, explanation: input.explanation,
       userReason: input.reason, reviewReason: result.reason, issueType: result.issueType || '',
       gold: REWARD_GOLD, cultivationRefund, cultivationBonus: BONUS_CULTIVATION,
       cultivationAdded, date: day, createdAt: fieldValue.serverTimestamp()
