@@ -1513,6 +1513,9 @@ function injectSocialUI() {
                 <button onclick="switchSocialTab('chat')" id="tab-btn-chat" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
                     <i class="fa-solid fa-earth-asia"></i> 全服聊天 <span id="alliance-global-unread" class="alliance-chat-badge" hidden aria-label="全服有新訊息"></span>
                 </button>
+                <button onclick="switchSocialTab('classes')" id="tab-btn-classes" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-chalkboard-user"></i> 班級
+                </button>
             </div>
         </div>
 
@@ -1536,6 +1539,7 @@ function injectSocialUI() {
             </div>
         </div>
 
+        <div id="section-classes" class="hidden flex-1 overflow-y-auto p-4 pb-20" aria-label="教師與班級"><p role="status">正在準備班級功能…</p></div>
         <div id="section-chat" class="hidden flex-1 flex flex-col overflow-hidden relative pb-16">
             <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
                 <div class="text-center text-gray-500 text-xs py-4">歡迎來到全服聊天室 👋<br>請保持友善發言</div>
@@ -1552,19 +1556,30 @@ function injectSocialUI() {
     main.appendChild(pageSocial);
     window.QAFriendChat?.start();
     window.QAFriendRequests?.repaint();
+    window.QAClassrooms?.mount();
 }
 
-// 切換分頁 (好友/聊天)
+// 切換分頁 (好友/聊天/班級)
 window.switchSocialTab = (tab) => {
+    if (!['friends', 'chat', 'classes'].includes(tab)) return;
     const btnFriends = document.getElementById('tab-btn-friends');
     const btnChat = document.getElementById('tab-btn-chat');
     const secFriends = document.getElementById('section-friends');
     const secChat = document.getElementById('section-chat');
-    const next = tab === 'friends' ? secFriends : secChat;
-    const previous = [secFriends, secChat].find(el => !el.classList.contains('hidden'));
+    const secClasses = document.getElementById('section-classes');
+    const btnClasses = document.getElementById('tab-btn-classes');
+    const next = { friends: secFriends, chat: secChat, classes: secClasses }[tab];
+    const previous = [secFriends, secChat, secClasses].find(el => el && !el.classList.contains('hidden'));
     const finishTransition = beginSceneTransition(previous, next, 'cloud', 'social');
+    secClasses.classList.toggle('hidden', tab !== 'classes');
+    btnClasses.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all ' + (tab === 'classes' ? 'bg-cyan-600 text-white shadow-lg' : 'bg-slate-800 text-gray-400 hover:bg-slate-700');
 
-    if (tab === 'friends') {
+    if (tab === 'classes') {
+        secFriends.classList.add('hidden'); secChat.classList.add('hidden');
+        for (const button of [btnFriends, btnChat]) button.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700';
+        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
+        void window.QAClassrooms?.open();
+    } else if (tab === 'friends') {
         btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
         btnChat.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700";
         secFriends.classList.remove('hidden');
