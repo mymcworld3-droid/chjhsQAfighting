@@ -154,7 +154,7 @@ function render() {
   panel.innerHTML = `<div class="cc-shell"><div data-message role="status" aria-live="polite"></div>${views[state.view]()}</div>`;
   void window.quizMathTypeset?.([panel]);
 }
-async function loadHome(more = false) { const data = await request({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) }); state = { ...data, view: 'home', classes: more ? [...state.classes, ...data.classes] : data.classes }; render(); }
+async function loadHome(more = false) { const data = await request({ action: 'list', ...(more ? { cursor: state.nextCursor } : {}) }); state = { ...data, view: 'home', classes: more ? [...state.classes, ...data.classes] : data.classes }; render(); window.dispatchEvent(new CustomEvent('xiuxian:teacher-access')); }
 async function loadAccounts(status = state.accountReview?.status || 'pending', more = false) {
   const data = await request({ action: 'teacherAccounts', status, ...(more ? { cursor: state.accountReview.nextCursor } : {}) });
   state.accountReview = { ...data, status, accounts: more ? [...state.accountReview.accounts, ...data.accounts] : data.accounts }; state.view = 'accounts'; render();

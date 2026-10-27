@@ -7,6 +7,7 @@ import {
 import { dongtianRepository } from './data/dongtian-repository.js';
 import { playerRepository } from './data/player-repository.js';
 import { rewardRepository } from './data/reward-repository.js';
+import { authenticatedMainFetch } from './data/project-repository.js';
 
 export const featureReady = (async () => {
   const { content, progress } = await dongtianRepository.connect();
@@ -157,6 +158,7 @@ export const featureReady = (async () => {
         <span class="dongfu-collapse-chevron"><i class="fa-solid fa-chevron-down"></i></span>
       </button>
       <div id="dongtian-body" class="dongfu-collapse-body dt-body" hidden>
+        <section class="dt-enter-code"><h4>以洞天代碼進入</h4><div class="dt-upload-row"><input id="dt-shared-code" class="dt-input" maxlength="160" placeholder="輸入老師提供的洞天代碼" aria-label="洞天代碼"><button id="dt-open-code" type="button" class="dt-repair">進入洞天</button></div></section>
         <section class="dt-create">
           <h4>開闢新洞天</h4>
           <textarea id="dt-source-text" class="dt-input" maxlength="16000" placeholder="貼上課文、筆記、公式說明、重點整理……（圖片與文字至少提供一種）"></textarea>
@@ -194,6 +196,7 @@ export const featureReady = (async () => {
       if (!body.hidden && !state.listLoaded) loadOwnDongtians();
     };
     card.querySelector('#dt-images').addEventListener('change', handleFiles);
+    card.querySelector('#dt-open-code').onclick = () => void window.openSharedDongtian?.(card.querySelector('#dt-shared-code').value.trim());
     card.querySelector('#dt-generate').onclick = generateDongtian;
     card.querySelector('#dt-refresh').onclick = async (event) => {
       const button = event.currentTarget;
@@ -678,6 +681,7 @@ export const featureReady = (async () => {
     if (!dongtian?.questions?.length || state.session) return;
     if (dongtian.tutorialOnly || options.tutorialOnly) return;
     if (dongtian.status && dongtian.status !== 'active') { toast('此洞天已封印，等待主人修復。'); return; }
+    if (dongtian.teacherManaged && dongtian.settings?.shuffleQuestions) dongtian = { ...dongtian, questions: shuffle([...dongtian.questions]) };
     {
       if (options.encountered) await markEncountered(dongtian);
       else if (!options.alreadyEncountered) void dongtianRepository.recordVisit(dongtian.id)
@@ -725,12 +729,19 @@ export const featureReady = (async () => {
     const finishTransition = window.beginSceneTransition?.(overlay, overlay, 'raid', 'dongtian-question', true);
     queueMicrotask(() => finishTransition?.());
     s.answered = false;
-    const optionObjects = shuffle([{ text: q.correct, correct: true }, ...(q.wrong || []).map((text) => ({ text, correct: false }))]);
+    const fixedOptions = (q.optionOrder || [q.correct, ...(q.wrong || [])]).map(text => ({ text, correct: text === q.correct }));
+    const optionObjects = s.dongtian.teacherManaged && s.dongtian.settings?.shuffleOptions === false ? fixedOptions : shuffle(fixedOptions);
     s.currentOptions = optionObjects;
     const rich = window.quizMathRichText || escapeHtml;
     window.quizMathClear?.(overlay);
     overlay.innerHTML = `<div class="dt-runner"><header class="dt-run-head"><div><small>洞天試煉 · FIXED SEQUENCE</small><strong>${escapeHtml(s.dongtian.name)}</strong></div><button id="dt-exit" class="dt-exit" type="button" aria-label="退出洞天"><i class="fa-solid fa-door-open"></i></button></header><div class="dt-run-meta"><div><span>題序</span><b>${s.index + 1} / ${s.dongtian.questions.length}</b></div><div><span>科目</span><b>${escapeHtml(q.subject || s.dongtian.subject)}</b></div><div><span>難度</span><b>${difficultyLabel(q.difficulty)}</b></div></div><div class="dt-progress"><i style="width:${((s.index) / s.dongtian.questions.length) * 100}%"></i></div><section class="dt-question"><div class="dt-question-title-row"><h3>${rich(q.q)}</h3></div><div id="dt-options" class="dt-options">${optionObjects.map((option, index) => `<button class="dt-option" type="button" data-dt-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b class="dt-option-math">${rich(option.text)}</b></button>`).join('')}</div><div id="dt-explain-slot"></div></section></div>`;
     overlay.querySelector('#dt-exit').onclick = exitDongtian;
+    if (s.dongtian.teacherManaged && s.dongtian.instructions) {
+      const instructions = document.createElement('details'); instructions.style.cssText = 'margin-bottom:12px;color:#d9c7e1';
+      const title = document.createElement('summary'); title.textContent = '作答說明';
+      const copy = document.createElement('p'); copy.textContent = s.dongtian.instructions; copy.style.whiteSpace = 'pre-wrap';
+      instructions.append(title, copy); overlay.querySelector('.dt-question').prepend(instructions);
+    }
     overlay.querySelectorAll('[data-dt-answer]').forEach((button) => button.onclick = () => answerDongtian(Number(button.dataset.dtAnswer)));
     void window.quizMathTypeset?.(overlay);
   }
@@ -743,11 +754,12 @@ export const featureReady = (async () => {
     const selected = s.currentOptions[optionIndex];
     const correctIdx = s.currentOptions.findIndex((item) => item.correct);
     const isCorrect = !!selected?.correct;
+    const deferred = s.dongtian.teacherManaged && s.dongtian.settings?.feedback === 'completion';
     const buttons = [...document.querySelectorAll('#dongtian-overlay [data-dt-answer]')];
     buttons.forEach((button, index) => {
       button.disabled = true;
-      if (index === correctIdx) button.classList.add('correct');
-      else if (index === optionIndex && !isCorrect) button.classList.add('wrong');
+      if (!deferred && index === correctIdx) button.classList.add('correct');
+      else if (!deferred && index === optionIndex && !isCorrect) button.classList.add('wrong');
     });
     s.answers.push({
       id: q.id,
@@ -763,6 +775,7 @@ export const featureReady = (async () => {
     });
     const slot = document.getElementById('dt-explain-slot');
     slot.innerHTML = `<div class="dt-explain"><strong style="color:${isCorrect ? '#86efac' : '#fca5a5'}">${isCorrect ? '答對 · 靈機相合' : '答錯 · 參悟解析'}</strong><br>${(window.quizMathRichText || escapeHtml)(q.exp || '此題暫無解析。')}</div><div class="dt-answer-actions"><button id="dt-report-question" class="dt-report-question" type="button"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button id="dt-next" type="button" class="dt-next">${s.index + 1 >= s.dongtian.questions.length ? '完成洞天' : '前往下一境'}</button></div>`;
+    if (deferred) slot.querySelector('.dt-explain').textContent = '作答已記錄，完成整份洞天後顯示答案與解析。';
     document.getElementById('dt-report-question').onclick = openQuestionReport;
     document.getElementById('dt-next').onclick = async () => {
       // A slow Firestore lookup must not allow two clicks to skip questions.
@@ -821,6 +834,17 @@ export const featureReady = (async () => {
   async function ensureSessionDongtianActive() {
     const s = state.session;
     if (!s) return false;
+    if (s.dongtian.teacherManaged) {
+      try {
+        const live = await dongtianRepository.getData(s.dongtian.id);
+        if (state.session !== s) return false;
+        if (live.version !== s.dongtian.version) { sealCurrentSession('教師已更新洞天，請重新進入以使用最新題組。'); return false; }
+        return true;
+      } catch (error) {
+        if (/permission-denied|http-403|http-409|failed-precondition/.test(error.code || '')) { sealCurrentSession(error.message); return false; }
+        throw error;
+      }
+    }
     const result = await readSessionDongtianStatus(s.dongtian.id);
     if (state.session !== s) return false;
     if (result.snapshot?.exists() && result.snapshot.data()?.status !== 'active') {
@@ -868,6 +892,11 @@ export const featureReady = (async () => {
     document.body.appendChild(modal);
     modal.querySelector('.dt-modal-cancel').onclick = removeModerationModal;
     modal.querySelector('#dt-report-submit').onclick = () => submitQuestionReport(modal, q, s.index);
+    if (s.dongtian.teacherManaged) {
+      modal.querySelector('.dt-modal-note').textContent = '請具體描述題目問題，回報將交由洞天教師查看並直接修正。';
+      modal.querySelector('#dt-report-submit').textContent = '送交教師';
+      if (s.dongtian.settings?.feedback === 'completion') modal.querySelector('.dt-modal-question span')?.remove();
+    }
   }
 
   async function submitQuestionReport(modal, question, questionIndex) {
@@ -882,6 +911,14 @@ export const featureReady = (async () => {
     status.textContent = '第一階段檢查題目本身；若疑似有誤，會再交由第二階段獨立複核。';
     const s = state.session;
     try {
+      if (s.dongtian.teacherManaged) {
+        const reporter = uid(); submit.textContent = '正在送交教師…';
+        const response = await authenticatedMainFetch('/api/dongtian/teacher-report', { method: 'POST', body: JSON.stringify({ id: s.dongtian.id, questionId: question.id, reason }) });
+        const result = await response.json();
+        if (uid() !== reporter || state.session !== s) throw new Error('登入帳號或洞天已變更');
+        if (!response.ok || !result.ok) throw new Error(result.error || '回報未完成');
+        status.textContent = result.duplicate ? '這題的回報已送交教師，請等候處理。' : '回報已送交教師，可繼續作答。'; submit.textContent = '已送交教師'; return;
+      }
       const response = await fetch('/api/review-dongtian-question', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -971,6 +1008,7 @@ export const featureReady = (async () => {
 
   async function openOwnerQuestionManager(dongtianId) {
     if (!uid() || state.moderationBusy) return;
+    if (globalThis.QATeacherDongtian?.allowed) { await globalThis.QATeacherDongtian.open(dongtianId); return; }
     const snap = await getDoc(doc(db, DATA_COLLECTION, dongtianId));
     if (!snap.exists()) throw new Error('洞天資料不存在');
     const dongtian = { id: snap.id, ...snap.data() };
@@ -1225,6 +1263,18 @@ export const featureReady = (async () => {
     const totalCultivation = Number(reward.cultivationAdded) || 0;
     const rewardLabel = firstCompletion ? '首次完成獎勵' : reward.newCorrect > 0 ? '訂正補領獎勵' : '本次重遊';
     overlay.innerHTML = `<div class="dt-result"><div class="dt-result-seal">天</div><h2>${escapeHtml(s.dongtian.name)} · 通關</h2><p>首次完成與首次答對分開計算；重遊訂正只補領尚未取得的獎勵。</p><div class="dt-result-grid"><div><span>答對</span><b>${correct} / ${total}</b></div><div><span>正確率</span><b>${Math.round(accuracy * 100)}%</b></div><div><span>新增掌握</span><b>${Number(reward.newCorrect) || 0} 題</b></div></div><div class="dt-reward"><strong>${rewardLabel}</strong><br>+${Number(reward.goldAdded) || 0} 靈石${Number(reward.realmGoldAdded) > 0 ? `（含境界加成 +${Number(reward.realmGoldAdded)}）` : ''} · +${totalCultivation} 修為${soulCultivationAdded ? `（含元嬰 +${soulCultivationAdded}）` : ''}<br>已領取的題目不重複發獎。${reward.ownerRewarded ? `<br>洞天主人已獲得 +${OWNER_CULTIVATION_REWARD} 修為、+${OWNER_GOLD_REWARD} 靈石。` : ''}</div><button id="dt-back" class="dt-back" type="button">返回</button></div>`;
+    if (s.dongtian.teacherManaged) {
+      const verdict = document.createElement('p');
+      verdict.textContent = `及格標準 ${s.dongtian.settings?.passPercent ?? 60}% · ${accuracy * 100 >= (s.dongtian.settings?.passPercent ?? 60) ? '已達標' : '尚未達標'}`;
+      overlay.querySelector('.dt-result h2').after(verdict);
+      if (s.dongtian.settings?.feedback === 'completion') {
+        const review = document.createElement('details');
+        review.style.cssText = 'max-height:40vh;overflow:auto;text-align:left;padding:12px';
+        review.innerHTML = '<summary>查看本次答案與解析</summary>' + s.answers.map((a, i) => `<article style="padding:10px;border-bottom:1px solid #8d76954d"><strong>第 ${i + 1} 題 · ${a.isCorrect ? '答對' : '答錯'}</strong><p>${escapeHtml(a.q)}</p><p>你的答案：${escapeHtml(a.options[a.userIdx])}<br>正確答案：${escapeHtml(a.options[a.correctIdx])}</p><div style="white-space:pre-wrap">${escapeHtml(a.exp || '此題未提供解析')}</div></article>`).join('');
+        overlay.querySelector('.dt-result').appendChild(review);
+        void window.quizMathTypeset?.(review);
+      }
+    }
     document.getElementById('dt-back').onclick = closeAfterSession;
   }
 
@@ -1425,6 +1475,7 @@ export const featureReady = (async () => {
     installQuizEncounterHook();
     setTimeout(installQuizEncounterHook, 600);
     window.addEventListener('xiuxian:user-ready', () => { mount(); installQuizEncounterHook(); });
+    window.addEventListener('teacher-dongtian:changed', event => { invalidateOwnCave(event.detail?.id); state.listLoaded = false; });
     // Browser focus does not refresh the Firestore list. Only the refresh button does.
     new MutationObserver(() => { if (!state.mounted) mount(); }).observe(document.body, { childList: true, subtree: true });
   }
