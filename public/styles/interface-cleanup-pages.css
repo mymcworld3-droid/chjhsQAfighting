@@ -187,20 +187,8 @@ html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker button {min-he
 html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker strong {font-size:14px;font-weight:500}
 html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker small {font-size:11px}
 html body.ui-cleanup #page-raid :is(.raid-lobby-panel,.raid-member-card,.raid-result-card) {box-shadow:none;border-color:var(--review-line);border-radius:10px}
-/* Questions share spacing and readable hit areas; answer state colors are owned
-   by each game's existing correct/wrong/disabled rules. */
-html body.ui-cleanup #page-quiz {max-width:900px;padding-inline:24px}
-html body.ui-cleanup #page-quiz #quiz-container {margin-top:0}
-html body.ui-cleanup #page-quiz .quiz-main-column>.glass-panel:first-child {border:1px solid var(--review-line)!important;border-left:2px solid #c0a16a!important;border-radius:10px!important;background:#24231d!important;box-shadow:none!important;padding:58px 24px 24px}
-html body.ui-cleanup #page-quiz #question-text {font-size:20px;line-height:1.9;font-weight:500!important;letter-spacing:.02em;color:var(--review-paper)!important}
-html body.ui-cleanup #page-quiz .quiz-main-column>.glass-panel:first-child>.text-6xl {display:none}
-html body.ui-cleanup #page-quiz #options-container {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-html body.ui-cleanup #page-quiz #options-container>button {min-height:64px;padding:16px;border-radius:9px!important;box-shadow:none!important;margin:0;font-size:16px;line-height:1.65}
-html body.ui-cleanup #page-quiz #options-container>button:not(.bg-green-600):not(.bg-red-600) {border-color:var(--review-line)!important;background:#ffffff04!important}
-html body.ui-cleanup #page-quiz #options-container>button>span:first-child {width:30px;height:30px;background:#c2a16d10;border:1px solid #c2a16d40;border-radius:6px;font-size:13px}
-html body.ui-cleanup #page-quiz .quiz-footer-actions {margin-top:18px;gap:8px}
-html body.ui-cleanup #page-quiz .quiz-footer-actions>button {min-height:44px;font-size:12px;color:#b0a28a}
-html body.ui-cleanup #page-quiz .quiz-card-tools {top:14px;right:18px;gap:8px}
+/* Solo practice owns its jade-and-paper appearance in quiz-scroll.css. Keep
+   helper placement here; duel and raid answer states retain their own rules. */
 html body.ui-cleanup #page-quiz #btn-extended-practice-stop.hidden {display:none!important}
 html body.ui-cleanup #page-quiz .quiz-helper-launcher {box-shadow:none;border:1px solid var(--review-line);border-radius:9px}
 html body.ui-cleanup #page-quiz .quiz-helper-panel {border-color:var(--review-line);border-radius:10px;box-shadow:0 8px 24px #0003}
@@ -276,11 +264,6 @@ html body.ui-cleanup :is(.quest-dialog,.xpp-dialog,.dm-card,.uib-modal) {border-
   html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview {padding:10px}
   html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview span {font-size:11px}
   html body.ui-cleanup #page-raid #raid-hub .raid-entry-actions {padding:14px 12px}
-  html body.ui-cleanup #page-quiz {padding-inline:16px}
-  html body.ui-cleanup #page-quiz .quiz-main-column>.glass-panel:first-child {padding:58px 18px 20px}
-  html body.ui-cleanup #page-quiz #question-text {font-size:17px;line-height:1.8}
-  html body.ui-cleanup #page-quiz #options-container {grid-template-columns:minmax(0,1fr);gap:10px}
-  html body.ui-cleanup #page-quiz #options-container>button {min-height:56px;padding:12px 14px;font-size:15px}
   html body.ui-cleanup #page-quiz .quiz-helper-shell.collapsed {inset:auto 16px 72px auto}
   html body.ui-cleanup #page-quiz .quiz-helper-shell.collapsed .quiz-helper-launcher {min-width:44px;height:44px}
 }
