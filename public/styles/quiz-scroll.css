@@ -50,21 +50,12 @@ html body.xianxia-theme #page-quiz #question-text {
   font-weight: 500 !important;
   letter-spacing: .02em;
 }
-/* White formulas remain legible on the light paper with a jade backing.
-   The descendant rule also covers MathJax/KaTeX's generated internal nodes. */
-html body.xianxia-theme #page-quiz #question-text :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) {
-  background: #214032;
-  border-radius: 4px;
-  padding: .08em .25em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-html body.xianxia-theme #page-quiz #question-text mjx-container:not([display="true"]) {
-  display: inline-block;
-}
-html body.xianxia-theme #page-quiz #question-text :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
-html body.xianxia-theme #page-quiz #question-text :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) * {
-  color: #fff !important;
+/* Formulas follow their surrounding text: ink on the paper question and light
+   text on jade options, explanations and tools. Include generated glyphs so
+   the shared white-math theme cannot recolor part of an expression. */
+html body.xianxia-theme #page-quiz :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
+html body.xianxia-theme #page-quiz :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) * {
+  color: inherit !important;
 }
 html body.xianxia-theme #page-quiz .quiz-main-column > .glass-panel:first-child > .text-6xl {
   display: block;
