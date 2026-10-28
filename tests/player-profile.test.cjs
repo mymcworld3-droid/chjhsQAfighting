@@ -15,7 +15,7 @@ function profileModule() {
   const from = source.indexOf('  function esc(value) {');
   const to = source.indexOf('  async function openPlayerProfileByUid(uid) {', from);
   assert.ok(from > 0 && to > from);
-  const slots = ['本命法寶','護身法寶','佩飾法寶','輔助法寶'];
+  const slots = ['本命法寶'];
   const items = {
     sword: {id:'sword',name:'測試仙劍',realm:'元嬰',equipSlot:'本命法寶',effects:[{type:'equip_attack_flat',value:100}]}
   };
@@ -50,7 +50,7 @@ test('ranking, friends and chat avatars and names open the same UID-backed read-
   assert.match(main,/cultivation\/combat-power\.js'[\s\S]*cultivation\/player-profile\.js'/);
 });
 
-test('remote equipped Golden Core, quality, four equipped artifacts and total accuracy appear in public projection', () => {
+test('remote equipped Golden Core, quality, the equipped soulbound artifact and total accuracy appear in public projection', () => {
   const {projectProfile, profileMarkup} = profileModule();
   const raw = {
     displayName:'道友',
@@ -66,15 +66,14 @@ test('remote equipped Golden Core, quality, four equipped artifacts and total ac
   assert.equal(p.power.core,16000);
   assert.equal(p.power.equipment,900);
   assert.equal(p.power.total,17500);
-  assert.equal(p.slots.length,4);
+  assert.equal(p.slots.length,1);
   assert.equal(p.slots[0].item.name,'測試仙劍');
-  assert.equal(p.slots[1].item,null);
   const html=profileMarkup(p);
   assert.match(html,/太初回元丹/);
   assert.match(html,/70\.0%/);
   assert.match(html,/17,500/);
   assert.match(html,/測試仙劍/);
-  assert.match(html,/尚未裝備/);
+  assert.doesNotMatch(html,/護身法寶|佩飾法寶|輔助法寶/);
   assert.doesNotMatch(html,/sword.*grade:1/);
 });
 

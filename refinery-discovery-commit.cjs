@@ -68,6 +68,7 @@ function mayCommitDiscovery({ tx, preview, uid, now = Date.now() }) {
     if (source.equipSlot === '本命法寶') sources.push(source);
   }
   const bound = sources.length > 0;
+  if (!bound || item.equipSlot !== '本命法寶') return false;
   if (oldItems.some(existing => Array.isArray(oldRecipes[existing.id]) &&
       signature(oldRecipes[existing.id], existing.forgeMethod) === job.signature &&
       pool.refinementCompatible(existing, bound, sources))) return false;

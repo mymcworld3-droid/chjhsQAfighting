@@ -60,7 +60,7 @@ function trainingRenderRuntime() {
   const main = {scrollTop:200}, page = {scrollTop:80};
   const context = {
     soulView:{selected:'attack',choosing:false},
-    Innate:require('../public/cultivation/innate-ability.js'),window:{getCurrentUserData:()=>({})},
+    Innate:require('../public/cultivation/innate-ability.js'),window:{getCurrentUserData:()=>({}),dispatchEvent(){}},CustomEvent:class {},
     activeTab:'nascent-soul', NASCENT_SOUL_THRESHOLD:68, currentScore:() => 68,
     document:{
       getElementById:id => id === 'training-tab-content' ? content : page,

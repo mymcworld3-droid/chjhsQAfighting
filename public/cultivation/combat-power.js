@@ -1,5 +1,5 @@
 import './training-access-rules.js';
-import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmOrderByName } from './artifact-catalog.js';
+import { ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIFACT_EQUIP_SLOTS, getArtifactById, realmOrderByName } from './artifact-catalog.js';
 
 // 戰力是獨立展示用的綜合評分，不參與傷害、配對或勝負判定。
 // 金丹只按目前調御的品級給分；法寶按境界品質與裝備特性給分。
@@ -97,7 +97,7 @@ export function calculateCombatPower({ stats = {}, core = null, equipped = {}, i
     if (!itemId || positive(inventory?.[itemId]) < 1) return null;
     const item = getArtifact(itemId);
     // The official equipment system requires an item to belong to this exact slot.
-    const itemSlot = ARTIFACT_EQUIP_SLOTS.includes(item?.equipSlot) ? item.equipSlot : '輔助法寶';
+    const itemSlot = ARTIFACT_EQUIP_SLOTS.includes(item?.equipSlot) ? item.equipSlot : '';
     if (itemSlot !== slot) return null;
     const power = calculateArtifactPower(item);
     return power > 0 ? { slot, id: itemId, name: String(item.name || '未命名法寶'), realm: String(item.realm || '凡人'), power } : null;

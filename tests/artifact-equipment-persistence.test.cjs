@@ -9,7 +9,7 @@ const system = read('public/cultivation/artifact-system.js');
 const sync = read('public/cultivation/artifact-catalog-sync.js');
 const main = read('public/main-legacy.js');
 const bag = read('public/cultivation/unified-inventory-grid.js');
-const slots = ['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶'];
+const slots = ['本命法寶'];
 
 function normalizer(catalog, ready) {
   const window = { __artifactCatalogReadyForEquipment: ready };
@@ -45,13 +45,13 @@ test('equipped slots survive reload while remote catalog is loading', () => {
   };
   const known = { 'known-guard': { id: 'known-guard', equipSlot: '護身法寶' } };
   const duringLoad = normalizer(known, false);
-  assert.deepEqual(duringLoad(saved).equipped, saved.equipped);
+  assert.deepEqual(duringLoad(saved).equipped, { 本命法寶: 'remote-sword' });
   const afterLoad = normalizer({
     ...known, 'remote-sword': { id: 'remote-sword', equipSlot: '本命法寶' }
   }, true);
-  assert.deepEqual(afterLoad(saved).equipped, saved.equipped);
+  assert.deepEqual(afterLoad(saved).equipped, { 本命法寶: 'remote-sword' });
   const invalidAfterLoad = normalizer(known, true);
-  assert.deepEqual(invalidAfterLoad(saved).equipped, { '護身法寶': 'known-guard' },
+  assert.deepEqual(invalidAfterLoad(saved).equipped, {},
     'once authoritative catalog is loaded, an unknown artifact may be rejected');
 });
 

@@ -417,7 +417,7 @@ test('refinery button flow is 煉製 -> 煉製中 -> 開爐 and claim only after
   assert.match(refinery, /job\.fragmentCost : job\.goldCost/);
   assert.match(refinery, /法寶境界/);
   assert.match(refinery, /Date\.now\(\) >= Number\(job\.readyAtMs/);
-  assert.match(refinery, /const craftLabel = job \? \(jobReady \? '開爐取寶' : '煉製中'\) : '開始煉製'/);
+  assert.match(refinery, /const craftLabel = legacyJob \? '退還舊煉製' : job \? \(jobReady \? '開爐取寶' : '煉製中'\) : '開始煉製'/);
   assert.match(refinery, /ready \? '開爐取寶' : '煉製中'/);
   assert.match(refinery, /可開爐/);
   assert.match(refinery, /setInterval\(updateJobClock, 1000\)/);

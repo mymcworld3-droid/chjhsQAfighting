@@ -48,6 +48,8 @@ export const ARTIFACT_REALMS = Object.freeze([
 ]);
 
 export const ARTIFACT_EQUIP_SLOTS = Object.freeze(['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']);
+// Historical definitions stay readable; only soulbound equipment is active.
+export const ACTIVE_ARTIFACT_EQUIP_SLOTS = Object.freeze(['本命法寶']);
 export const ARTIFACT_WEAPON_FORMS = Object.freeze(['劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','符籙','陣盤','寶珠','玉佩','法鏡','鈴','幡','印','鼎','鐘','器胚','其他']);
 export const ARTIFACT_FORGE_METHODS = Object.freeze(['自由發揮','劍道鍛造','護體鑄造','符籙煉製','陣法刻印']);
 export const ARTIFACT_CATALOG_SCHEMA_VERSION = 2;

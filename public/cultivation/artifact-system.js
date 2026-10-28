@@ -2,7 +2,7 @@ import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.j
 import './forge-fragments.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, runTransaction } from '../data-store.js';
-import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName, artifactRealmColor } from './artifact-catalog.js';
+import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName, artifactRealmColor } from './artifact-catalog.js';
 
 // 資料驅動法寶系統：法寶內容只在 artifact-catalog.js 定義。
 // 本檔負責通用打造、持有、裝備、限時效果與題目中使用，不寫任何單一法寶的專屬 if/else。
@@ -71,7 +71,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
   function canonicalEquipSlot(item) {
     if (!itemHasEquipEffects(item)) return '';
     const configured = String(item?.equipSlot || '').trim();
-    return ARTIFACT_EQUIP_SLOTS.includes(configured) ? configured : '輔助法寶';
+    return ARTIFACT_EQUIP_SLOTS.includes(configured) ? configured : '';
   }
   function normalizeSystem(raw = {}) {
     const inventory = {};
@@ -113,7 +113,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     return realmForScore(Math.max(0, Number(userData()?.stats?.totalScore) || 0));
   }
   // Item realm is a quality/power tier, never an equipment requirement.
-  function realmAllowedToEquip(item) { return !!item && itemHasEquipEffects(item); }
+  function realmAllowedToEquip(item) { return !!canonicalEquipSlot(item); }
   function quantity(itemId) { return Math.max(0, Number(state().inventory[itemId]) || 0); }
   function activeBuffs() {
     const now = Date.now();
@@ -220,39 +220,8 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     return committed;
   }
 
-  async function craftArtifact(itemId) {
-    const item = getArtifactById(itemId);
-    const user = authUser();
-    if (!item || !user) return;
-    if (item.equipSlot === '本命法寶') throw new Error('本命法寶僅能透過契器台靈石抽取取得。');
-    const cost = Math.max(globalThis.QAForgeFragments.baseCost(item.realm), Math.ceil((Number(item.craft?.gold) || 0) / 10));
-    const gain = Math.max(1, Math.floor(Number(item.craft?.yield) || 1));
-    busyAction = `craft:${itemId}`; scheduleRender();
-    try {
-      let newFragments = 0;
-      let committed = null;
-      await runTransaction(database(), async (tx) => {
-        const ref = doc(database(), 'users', user.uid);
-        const snap = await tx.get(ref);
-        if (!snap.exists()) throw new Error('玩家資料不存在');
-        const raw = snap.data();
-        const fragments = globalThis.QAForgeFragments.balance(raw);
-        if (fragments < cost) throw new Error(`煉器碎片不足，打造需要 ${cost}`);
-        const next = normalizeSystem(raw[FIELD] || {});
-        next.inventory[itemId] = (Number(next.inventory[itemId]) || 0) + gain;
-        newFragments = fragments - cost;
-        committed = next;
-        tx.update(ref, { [FIELD]: next, 'forgeFragments': newFragments });
-      });
-      const data = userData();
-      if (authUser()?.uid !== user.uid) return;
-      if (data) data.forgeFragments = newFragments;
-      setLocalState(committed);
-      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', { detail: { forgeFragments: newFragments, artifactCrafted: itemId } }));
-      toast(`煉器成功：${item.name} × ${gain}`);
-    } finally {
-      busyAction = ''; scheduleRender();
-    }
+  async function craftArtifact() {
+    throw new Error('鍛造僅開放本命法器精煉，請將本命法器投入八方煉器陣。');
   }
 
   function equipmentStatus(itemId) {
@@ -267,6 +236,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
     let reason = '';
     if (!item) reason = '法寶不存在';
     else if (!isEquipment) reason = '此法寶不是裝備型';
+    else if (!slot) reason = '目前僅能裝備本命法器';
     else if (owned <= 0) reason = '尚未持有';
     return {
       itemId: String(itemId || ''),
@@ -534,7 +504,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ARTIFACT_EQUIP_SLOTS, getArtifactByI
         <div class="artifact-meta">持有 <b>×${qty}</b>${eqSlot ? ` · 已裝備於 <b>${escapeHtml(eqSlot)}</b>` : ''}${buff ? ` · 效果剩餘 <b data-artifact-expire="${buff.expiresAt}">${formatRemaining(buff.expiresAt - Date.now())}</b>` : ''}</div>
       </div>
       <div class="artifact-actions">
-        ${soulboundOnly ? '<span class="artifact-soulbound-only">本命法寶 · 契器台常駐抽取</span>' : `<button type="button" data-artifact-craft="${escapeHtml(item.id)}" ${busyAction ? 'disabled' : ''}>${busyAction === `craft:${item.id}` ? '煉製中…' : `煉製 ×${yieldCount}`}<small>${cost} 碎片</small></button>`}
+        <span class="artifact-soulbound-only">${soulboundOnly ? '本命法器 · 可投入八方煉器陣精煉' : '既有物品 · 已停止鍛造'}</span>
         ${hasEquip ? `<button type="button" data-artifact-equip="${escapeHtml(item.id)}" ${qty <= 0 || !canEquip || busyAction ? 'disabled' : ''}>${eqSlot ? '卸下' : '裝備'}<small>${escapeHtml(item.equipSlot || '法寶')}</small></button>` : ''}
         ${hasTimed ? `<button type="button" data-artifact-use="${escapeHtml(item.id)}" ${qty <= 0 || busyAction ? 'disabled' : ''}>${buff ? '重新催動' : '催動'}<small>消耗 1 件</small></button>` : ''}
         ${(item.effects || []).some((effect) => effect.type === 'remove_wrong_option') ? `<span class="artifact-question-only">於題目作答前使用</span>` : ''}

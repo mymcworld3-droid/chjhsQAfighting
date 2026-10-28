@@ -141,8 +141,8 @@ import {
     let known = knownArtifactId ? getArtifactById(knownArtifactId) : null;
     const hasSoulboundBase = recipe.some((row) =>
       row.artifactId && isSoulboundSourceItem(row.artifactId));
-    if (known?.equipSlot === '本命法寶' && !hasSoulboundBase) {
-      return { valid:false, reason:'本命法寶原器需經抽取或碎片兌換取得，已有本命法寶可作素材精煉。', total };
+    if (!hasSoulboundBase) {
+      return { valid:false, reason:'鍛造僅開放本命法器精煉，請至少投入一件本命法器及其他素材。', total };
     }
     const boundSources = soulboundSources(recipe);
     try { globalThis.QASoulboundPool.refineEffects([], boundSources); }
@@ -200,7 +200,7 @@ import {
     artifactSystem.equipped = artifactSystem.equipped && typeof artifactSystem.equipped === 'object' ? artifactSystem.equipped : {};
 
     const equippedCounts = {};
-    Object.values(artifactSystem.equipped).forEach((id) => {
+    [artifactSystem.equipped['本命法寶']].forEach((id) => {
       const key = String(id || '');
       if (key) equippedCounts[key] = (equippedCounts[key] || 0) + 1;
     });
@@ -454,7 +454,7 @@ import {
       const item = catalog.find((candidate) => candidate.id === artifactId);
       const hasSoulboundBase = (recipe || []).some(row => row.artifactId &&
         isSoulboundSourceItem(row.artifactId, catalog));
-      if (!globalThis.QASoulboundPool.refinementCompatible(item, hasSoulboundBase, soulboundSources(recipe, catalog))) continue;
+      if (!hasSoulboundBase || item?.equipSlot !== '本命法寶' || !globalThis.QASoulboundPool.refinementCompatible(item, true, soulboundSources(recipe, catalog))) continue;
       // Use current recipe + saved method so edited recipes remain reproducible.
       const currentSignature = recipeSignature(recipe, item?.forgeMethod || '自由發揮');
       if (currentSignature === signature) return artifactId;
@@ -477,7 +477,8 @@ import {
       const item = getArtifactById(fresh.knownArtifactId);
       if (!item) throw new Error('此法寶已不存在，請聯絡管理員');
       const sources = soulboundSources(fresh.recipe);
-      if (sources.length) globalThis.QASoulboundPool.assertRefinementImproves(item, sources);
+      if (!sources.length || item.equipSlot !== '本命法寶') throw new Error('鍛造僅能產生本命法器');
+      globalThis.QASoulboundPool.assertRefinementImproves(item, sources);
       artifactSystem = raw.artifactSystem && typeof raw.artifactSystem === 'object' ? clone(raw.artifactSystem) : { inventory: {}, equipped: {}, buffs: [] };
       artifactSystem.inventory = normalizeInventory(artifactSystem.inventory);
       artifactSystem.inventory[item.id] = (Number(artifactSystem.inventory[item.id]) || 0) + Math.max(1, Math.floor(Number(item.craft?.yield) || 1));
@@ -493,6 +494,7 @@ import {
   }
 
   async function claimDiscovery(job) {
+    if (isLegacyJob(job)) throw new Error('此舊煉器工作須先取消並退還素材');
     // Reuse the background request, if still pending, instead of calling twice.
     const pending = generatedCandidatePromises.get(job.id);
     if (pending) await pending.catch(() => null);
@@ -549,7 +551,7 @@ import {
           generatedArtifact.effects = globalThis.QASoulboundPool.refineEffects(generatedArtifact.effects, soulboundSources(fresh.recipe, latestItems));
           generatedArtifact.soulboundRefinementVersion = globalThis.QASoulboundPool.REFINEMENT_VERSION;
         }
-        if (generatedArtifact.equipSlot === '本命法寶' && !realSoulboundSource) generatedArtifact.equipSlot = '輔助法寶';
+        if (!realSoulboundSource) throw new Error('鍛造僅開放本命法器精煉');
         const candidate = normalizeArtifactDefinition({
           id,
           ...generatedArtifact,
@@ -632,7 +634,7 @@ import {
   }
 
   function requiresGeneratedCandidate(job) {
-    if (!job) return false;
+    if (!job || isLegacyJob(job)) return false;
     const hasSoulboundBase = (job.recipe || []).some(row => row.artifactId && getArtifactById(row.artifactId)?.equipSlot === '本命法寶');
     const outdated = hasSoulboundBase && !globalThis.QASoulboundPool.refinementCompatible(getArtifactById(job.knownArtifactId), true, soulboundSources(job.recipe));
     return job.kind === 'discovery' || outdated;
@@ -668,9 +670,69 @@ import {
     generatedCandidatePromises.set(job.id, pending);
   }
 
+  // Unknown catalog entries may still be syncing; never refund a valid bound
+  // job merely because its catalog record has not arrived yet.
+  function isLegacyJob(job) {
+    const recipe = Array.isArray(job?.recipe) ? job.recipe : [];
+    if (!recipe.length || recipe.some(row => row.artifactId &&
+        !globalThis.QASoulboundPool.get(row.artifactId) && !getArtifactById(row.artifactId))) return false;
+    return !soulboundSources(recipe).length;
+  }
+
+  async function cancelLegacyJob(job) {
+    const user = authUser();
+    if (!user) throw new Error('尚未登入');
+    let committed;
+    await runTransaction(db(), async tx => {
+      const ref = doc(db(), 'users', user.uid);
+      const snap = await tx.get(ref);
+      if (!snap.exists()) throw new Error('玩家資料不存在');
+      const raw = snap.data(), fresh = raw[REFINERY_JOB_FIELD];
+      if (fresh?.id !== job.id || !isLegacyJob(fresh)) throw new Error('煉器任務已變更，請重新整理');
+      const materialSystem = clone(raw.materialSystem || {});
+      const artifactSystem = clone(raw.artifactSystem || {});
+      materialSystem.inventory = normalizeInventory(materialSystem.inventory);
+      artifactSystem.inventory = normalizeInventory(artifactSystem.inventory);
+      for (const row of fresh.recipe) {
+        if (row.materialId && raw.isAdmin === true) continue; // virtual admin stock was never deducted
+        const inventory = row.artifactId ? artifactSystem.inventory : materialSystem.inventory;
+        const id = row.artifactId || row.materialId;
+        inventory[id] = (inventory[id] || 0) + Math.max(0, Math.floor(Number(row.quantity) || 0));
+      }
+      if (raw.isAdmin !== true && fresh.keyRequirement?.materialId) {
+        const key = fresh.keyRequirement;
+        materialSystem.inventory[key.materialId] = (materialSystem.inventory[key.materialId] || 0) + Math.max(0, Math.floor(Number(key.quantity) || 0));
+      }
+      committed = { materialSystem, artifactSystem, [REFINERY_JOB_FIELD]: null };
+      if (fresh.currency === 'forgeFragments') {
+        committed.forgeFragments = globalThis.QAForgeFragments.balance(raw) + Math.max(0, Math.floor(Number(fresh.fragmentCost) || 0));
+      } else {
+        committed['stats.gold'] = Math.max(0, Number(raw.stats?.gold) || 0) + Math.max(0, Math.floor(Number(fresh.goldCost) || 0));
+      }
+      tx.update(ref, committed);
+    });
+    if (authUser()?.uid === user.uid) {
+      const local = data();
+      if (local) {
+        local.materialSystem = committed.materialSystem;
+        local.artifactSystem = committed.artifactSystem;
+        local[REFINERY_JOB_FIELD] = null;
+        if ('forgeFragments' in committed) local.forgeFragments = committed.forgeFragments;
+        if ('stats.gold' in committed) { local.stats ||= {}; local.stats.gold = committed['stats.gold']; }
+      }
+      generatedCandidateCache.delete(job.id);
+      window.dispatchEvent(new CustomEvent('material-system-updated'));
+      window.dispatchEvent(new CustomEvent('artifact-system-updated'));
+      window.dispatchEvent(new CustomEvent('xiuxian:stats-updated'));
+      window.dispatchEvent(new CustomEvent('xiuxian:refinery-job-updated', { detail:null }));
+    }
+    return { cancelled:true, name:'舊煉器工作已取消，素材與費用已退還' };
+  }
+
   async function claimJob() {
     const job = currentJob();
     if (!job) throw new Error('目前沒有煉器任務');
+    if (isLegacyJob(job)) return cancelLegacyJob(job);
     if (Date.now() < Number(job.readyAtMs || 0)) throw new Error('尚需 ' + formatRefineryDuration(Number(job.readyAtMs) - Date.now()));
     try { return await (requiresGeneratedCandidate(job) ? claimDiscovery(job) : claimKnown(job)); }
     catch (error) {
@@ -720,6 +782,7 @@ import {
     else preGenerateOnlineCandidate();
   }
 
+  window.isLegacyCultivationRefineryJob = isLegacyJob;
   window.getCultivationRefineryJob = currentJob;
   window.getCultivationRefineryPlan = buildPlan;
   window.startCultivationRefineryJob = startJob;

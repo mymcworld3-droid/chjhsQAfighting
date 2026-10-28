@@ -1,14 +1,11 @@
 // 築基與金丹共用的裝備和煉器預載骨架；正式畫面由裝備及煉器模組接管。
 export function equipmentShellMarkup() {
     const slots = [
-      ['本命法寶', 'fa-khanda'],
-      ['護身法寶', 'fa-shield-halved'],
-      ['佩飾法寶', 'fa-gem'],
-      ['輔助法寶', 'fa-wand-magic-sparkles']
+      ['本命法寶', 'fa-khanda']
     ];
     return `
       <section class="uib-equipment-panel uib-equipment-shell" aria-label="法寶裝配欄" aria-busy="true">
-        <div class="uib-equipment-head"><b><i class="fa-solid fa-shield-halved"></i> 法寶裝配</b><em>0 / 4</em></div>
+        <div class="uib-equipment-head"><b><i class="fa-solid fa-shield-halved"></i> 本命法器</b><em>0 / 1</em></div>
         <div class="uib-equipment-grid">
           ${slots.map(([slot, icon]) => `<button type="button" class="uib-equip-slot is-empty" disabled>
             <span class="uib-equip-slot-label"><i class="fa-solid ${icon}"></i> ${slot}</span>

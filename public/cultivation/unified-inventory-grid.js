@@ -1,6 +1,6 @@
 import {} from './nascent-growth.js';
 import { soulboundItemFrameMarkup } from './soulbound-item-frame.js';
-import { ARTIFACT_CATALOG, ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName } from './artifact-catalog.js';
+import { ARTIFACT_CATALOG, ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore, realmOrderByName } from './artifact-catalog.js';
 import {
   MATERIAL_CATALOG,
   getMaterialById,
@@ -57,7 +57,7 @@ import {
   function qualityColor(realm) { return REALM_COLORS[realm] || materialRealmColor(realm) || '#d4d4d8'; }
   function artifactEquipped(id) {
     const equipped = userData()?.artifactSystem?.equipped || {};
-    return Object.values(equipped).includes(id);
+    return ARTIFACT_EQUIP_SLOTS.some(slot => equipped[slot] === id && artifactSlot(getArtifactById(id)) === slot);
   }
   function artifactHasEquipEffects(item) {
     return (item?.effects || []).some((effect) => String(effect?.type || '').startsWith('equip_'));
@@ -65,17 +65,16 @@ import {
   function artifactSlot(item) {
     if (!artifactHasEquipEffects(item)) return '';
     const configured = String(item?.equipSlot || '').trim();
-    return ARTIFACT_EQUIP_SLOTS.includes(configured) ? configured : '輔助法寶';
+    return ARTIFACT_EQUIP_SLOTS.includes(configured) ? configured : '';
   }
   function artifactCanEquip(item) {
-    if (!item || !artifactHasEquipEffects(item)) return false;
-    return true;
+    return !!artifactSlot(item);
   }
   function equippedIdForSlot(slot) {
     return String(userData()?.artifactSystem?.equipped?.[slot] || '');
   }
   const EQUIPMENT_ICONS = Object.freeze({
-    本命法寶:'fa-khanda', 護身法寶:'fa-shield-halved', 佩飾法寶:'fa-gem', 輔助法寶:'fa-wand-magic-sparkles'
+    本命法寶:'fa-khanda'
   });
   function equipmentSlotMarkup(slot) {
     const id = equippedIdForSlot(slot), item = getArtifactById(id);
@@ -108,7 +107,7 @@ import {
       return !!item && qty(userData()?.artifactSystem?.inventory?.[id]) > 0 && artifactSlot(item) === slot;
     }).length;
     return `<section class="uib-equipment-panel" aria-label="法寶裝配欄">
-      <div class="uib-equipment-head"><b><i class="fa-solid fa-shield-halved"></i> 法寶裝配</b><em>${equippedCount} / ${ARTIFACT_EQUIP_SLOTS.length}</em></div>
+      <div class="uib-equipment-head"><b><i class="fa-solid fa-shield-halved"></i> 本命法器</b><em>${equippedCount} / ${ARTIFACT_EQUIP_SLOTS.length}</em></div>
       <div class="uib-equipment-grid">${ARTIFACT_EQUIP_SLOTS.map(equipmentSlotMarkup).join('')}</div></section>`;
   }
 
@@ -258,29 +257,6 @@ import {
   }
 
   function rootMarkup(allItems, view = 'bag') {
-    if (view === 'equipment') {
-      const ownedArtifacts = allItems.filter((item) => item.type === 'artifact');
-      const equippedCandidates = ownedArtifacts.filter((item) => !!artifactSlot(item.raw));
-      const equipmentItems = equippedCandidates
-        .filter((item) => !equipmentPickSlot || artifactSlot(item.raw) === equipmentPickSlot)
-        .sort((a, b) => (b.qualityRank || 0) - (a.qualityRank || 0) || String(a.name).localeCompare(String(b.name), 'zh-Hant'));
-      const noEquipmentHint = equipmentPickSlot === '本命法寶'
-        ? '取得本命法器後，即可在此選擇裝配。'
-        : ownedArtifacts.length && !equippedCandidates.length
-        ? '目前持有的法寶都是消耗型或答題型，不能放入裝配格。請先煉製具有裝備效果的法寶。'
-        : equipmentPickSlot && equippedCandidates.length
-          ? '目前持有的裝備型法寶屬於其他欄位。請取消選擇後查看可用欄位。'
-          : '請先在煉器頁取得具有裝備效果的法寶。';
-      return `<section id="${ROOT_ID}" class="uib-root uib-equipment-view">
-        ${equipmentMarkup()}
-        ${equipmentPickSlot
-          ? `<div class="uib-equip-picker"><span>點選下方法寶，即可裝配到「${escapeHtml(equipmentPickSlot)}」</span><button type="button" data-uib-cancel-equip>取消</button></div>`
-          : '<div class="uib-equip-picker"><span>先點擊空裝配格，再選擇下方對應法寶；已裝備法寶可點擊卸下。</span></div>'}
-        ${equipmentItems.length
-          ? `<div class="uib-equipment-available"><span>持有裝備型法寶</span><small>${equipmentPickSlot ? '點一下直接裝配' : '點擊查看詳情及裝備'}</small></div><div class="uib-grid">${equipmentItems.map(itemMarkup).join('')}</div>`
-          : `<div class="uib-empty"><i class="fa-solid fa-shield-halved"></i><b>${equipmentPickSlot ? '此欄沒有可裝配的法寶' : '尚無可裝配的法寶'}</b><span>${noEquipmentHint}</span></div>`}
-      </section>`;
-    }
     const visible = sortedVisibleItems(allItems);
     const counts = {
       artifact: allItems.filter((item) => item.type === 'artifact').length,
@@ -288,8 +264,10 @@ import {
       consumable: allItems.filter((item) => item.type === 'consumable' || item.type === 'training').length
     };
     return `<section id="${ROOT_ID}" class="uib-root uib-bag-view">
+      ${equipmentMarkup()}
+      ${equipmentPickSlot ? `<div class="uib-equip-picker"><span>選擇下方本命法器即可裝配</span><button type="button" data-uib-cancel-equip>返回全部物品</button></div>` : ''}
       <div class="uib-toolbar">
-        <div class="uib-summary"><b>背包</b><span>${allItems.length} 種物品</span></div>
+        <div class="uib-summary"><b>背包與裝備</b><span>${allItems.length} 種物品</span></div>
         <div class="uib-fragment-balance" aria-label="持有煉器碎片"><span>煉器碎片</span><b data-uib-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div>
         <button type="button" class="uib-dismantle-btn" data-inventory-dismantle>物品分解</button>
         <label>種類
@@ -363,7 +341,7 @@ import {
       const equippedId = equipSlot ? equippedIdForSlot(equipSlot) : '';
       const equippedHere = equippedId === item.id;
       const replacing = equippedId && !equippedHere ? getArtifactById(equippedId) : null;
-      const hasEquip = artifactHasEquipEffects(rawArtifact);
+      const hasEquip = !!equipSlot;
       const canEquip = artifactCanEquip(rawArtifact);
       const itemPower = Math.max(0, Number(window.calculateArtifactPower?.(rawArtifact)) || 0);
       const equipAction = hasEquip && equipSlot
@@ -531,12 +509,13 @@ import {
       @media(max-width:700px){.uib-soulbound-caption{letter-spacing:.05em}.uib-equip-slot.is-soulbound{min-height:151px}}
       @media(prefers-reduced-motion:reduce){.uib-equip-slot.is-soulbound{transition:none}}
       #${ROOT_ID}{width:100%;height:100%;min-height:0;display:flex;flex-direction:column;gap:10px;box-sizing:border-box}
+      .uib-bag-view{overflow:auto;overscroll-behavior:contain}.uib-bag-view>.uib-toolbar{flex-shrink:0}.uib-bag-view>.uib-grid{flex:1 0 200px;overflow:visible}
       .uib-equipment-view{overflow:auto;min-height:0;overscroll-behavior:contain}
       .uib-equipment-available{display:flex;justify-content:space-between;align-items:center;color:#ddbf79;font-size:12px;font-weight:900}
       .uib-equipment-available small{font-size:10px;color:#978465;font-weight:400}
       .uib-equipment-panel{flex:0 0 auto;width:100%;min-width:0;padding:clamp(12px,1.4vw,20px);border:1px solid rgba(216,177,93,.3);border-radius:18px;background:radial-gradient(ellipse at 50% -40%,rgba(186,137,55,.15),transparent 65%),linear-gradient(145deg,#17130d,#080807)}
       .uib-equipment-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.uib-equipment-head b{color:#ecd9ae;font-size:clamp(12px,1.15vw,17px)}.uib-equipment-head b i{margin-right:7px;color:#c8a15b}.uib-equipment-head em{padding:4px 10px;border:1px solid rgba(216,177,93,.28);border-radius:999px;color:#ebca80;font-size:12px;font-style:normal}
-      .uib-equipment-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(7px,1vw,14px)}
+      .uib-equipment-grid{display:grid;grid-template-columns:minmax(0,240px);justify-content:center;gap:clamp(7px,1vw,14px)}
       .uib-equip-slot{position:relative;min-width:0;min-height:clamp(137px,17dvh,185px);padding:12px 7px;display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid rgba(216,177,93,.2);border-radius:16px;background:linear-gradient(145deg,#211a10,#080807);text-align:center;color:#ab9879;transition:border-color .15s,transform .15s;overflow:hidden}
       .uib-equip-slot:before{content:"";position:absolute;inset:5px;border:1px solid rgba(216,177,93,.08);border-radius:11px;pointer-events:none}.uib-equip-slot:hover,.uib-equip-slot:focus-visible{border-color:#dfbd78;transform:translateY(-2px);outline:none}.uib-equip-slot.is-picking{border-color:#f6d58b;box-shadow:0 0 24px rgba(221,178,91,.17)}.uib-equip-slot.is-filled{border-color:color-mix(in srgb,var(--uib-quality) 60%,#47361a);background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--uib-quality) 14%,transparent),transparent 65%),#100e0a}
       .uib-equip-slot-label{color:#dfc186;font-size:clamp(10px,1vw,14px);font-weight:900;white-space:nowrap}.uib-equip-slot-label i{margin-right:5px;color:#bc9959}
@@ -558,7 +537,7 @@ import {
       .uib-empty{flex:1;min-height:180px;display:grid;place-items:center;align-content:center;gap:7px;color:#706653;text-align:center}.uib-empty i{font-size:25px}.uib-empty b{color:#a99b80;font-size:10px}.uib-empty span{font-size:7px}
       .uib-raid-key-detail{border-color:rgba(231,199,121,.26);background:rgba(231,199,121,.035)}.uib-raid-key-detail>span{color:#e7c779}.uib-raid-key-detail b{color:#f1d791}
       .uib-modal-backdrop{position:fixed;inset:0;z-index:16050;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.82);backdrop-filter:blur(8px)}.uib-modal{width:min(100%,540px);max-height:88dvh;overflow:auto;padding:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 48%,rgba(255,255,255,.08));border-radius:20px;background:linear-gradient(150deg,#18140e,#080808);box-shadow:0 30px 100px rgba(0,0,0,.72)}.uib-modal-head{display:grid;grid-template-columns:58px minmax(0,1fr) 34px;gap:11px;align-items:center}.uib-modal-icon{width:56px;height:56px;display:grid;place-items:center;border-radius:16px;border:1px solid color-mix(in srgb,var(--uib-quality) 55%,transparent);background:color-mix(in srgb,var(--uib-quality) 11%,#090807);color:var(--uib-quality);font-size:18px;font-weight:900}.uib-modal-head small{display:block;color:#857965;font-size:7px}.uib-modal-head h3{margin:3px 0;color:#f1e4c9;font-size:15px}.uib-modal-head span{color:var(--uib-quality);font-size:8px}.uib-close{width:32px;height:32px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.025);color:#a99d87}.uib-description{margin-top:14px;padding:11px;border-radius:12px;background:rgba(255,255,255,.025);color:#a99b83;font-size:9px;line-height:1.7}.uib-detail-section{margin-top:10px;padding:11px;border:1px solid rgba(216,177,93,.12);border-radius:12px}.uib-detail-section>span{display:block;margin-bottom:7px;color:#d3b86f;font-size:8px;font-weight:900}.uib-detail-section p,.uib-detail-section li{margin:4px 0;color:#9b8e77;font-size:8px;line-height:1.55}.uib-detail-section ul{margin:0;padding-left:17px}.uib-equipped-note{color:#e3c36e!important}.uib-use-btn,.uib-equip-btn{width:100%;min-height:38px;margin-top:9px;border:1px solid rgba(216,177,93,.38);border-radius:11px;background:rgba(216,177,93,.09);color:#f0d99a;font-size:9px;font-weight:900}.uib-use-btn:disabled,.uib-equip-btn:disabled{opacity:.45}.uib-equip-btn:not(:disabled):hover{border-color:#e2c069;background:rgba(216,177,93,.14)}
-      @media(max-width:700px){.uib-equipment-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.uib-equip-slot{min-height:136px}.uib-equip-slot-frame{width:58px;min-height:58px}.uib-toolbar{align-items:stretch;flex-wrap:wrap}.uib-summary{width:100%;margin-right:0}.uib-toolbar label{flex:1;min-width:120px}.uib-toolbar select{width:100%;min-width:0}.uib-grid{grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:8px}.uib-item{max-width:140px;justify-self:start}}
+      @media(max-width:700px){.uib-equipment-grid{grid-template-columns:minmax(0,200px)}.uib-equip-slot{min-height:136px}.uib-equip-slot-frame{width:58px;min-height:58px}.uib-toolbar{align-items:stretch;flex-wrap:wrap}.uib-summary{width:100%;margin-right:0}.uib-toolbar label{flex:1;min-width:120px}.uib-toolbar select{width:100%;min-width:0}.uib-grid{grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:8px}.uib-item{max-width:140px;justify-self:start}}
       @media(max-width:420px){.uib-grid{grid-template-columns:repeat(3,minmax(0,1fr));}.uib-item{max-width:none;padding:9px 6px}.uib-icon{width:40px;height:40px}.uib-name{font-size:7px}.uib-bottom small,.uib-bottom em{font-size:5.5px}}
     `;
     document.head.appendChild(style);

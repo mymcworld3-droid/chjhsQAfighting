@@ -327,7 +327,7 @@ test('legacy and known-recipe paths block minting while equipment slot stays ope
   const jobs = read('public/cultivation/refinery-ai-jobs.js');
   const equip = read('public/cultivation/unified-inventory-grid.js');
   const market = read('public/cultivation/player-marketplace.js');
-  assert.match(legacy, /item\.equipSlot === '本命法寶'.*throw new Error/);
+  assert.match(legacy, /async function craftArtifact\(\) \{\s*throw new Error\('鍛造僅開放本命法器精煉/);
   assert.match(jobs, /hasSoulboundBase/);
   assert.match(jobs, /realSoulboundSource/);
   assert.match(equip, /點擊選擇本命法器/);

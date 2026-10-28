@@ -52,7 +52,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 
   function bagMarkup() {
     // 真正背包由 unified-inventory-grid 接手；不要先畫舊式純文字卡。
-    return '<section class="uib-bag-loading" aria-hidden="true"></section>';
+    return equipmentShellMarkup() + '<section class="uib-bag-loading" aria-hidden="true"></section>';
   }
 
   function createPage() {
@@ -68,8 +68,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
         <div class="training-page-heading-v3"></div>
         <div class="training-subtabs-v3" role="tablist">
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
-          <button type="button" class="training-subtab-v3 active" data-training-tab="bag" aria-selected="true"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
+          <button type="button" class="training-subtab-v3 active" data-training-tab="bag" aria-selected="true"><i class="fa-solid fa-box-open"></i><span>背包與裝備</span></button>
         </div>
         <div id="training-tab-content">${bagMarkup()}</div>
       `;
@@ -95,15 +94,10 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
     if (tabs && !tabs.querySelector('[data-training-tab="bag"]')) {
       tabs.insertAdjacentHTML('afterbegin', `
         <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-        <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
-        <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
+        <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包與裝備</span></button>
       `);
     }
-    // 舊靜態殼層也補齊裝備入口，四個裝配欄由統一裝備視圖渲染。
-    if (!page.querySelector('[data-training-tab="equipment"]')) {
-      const bag = page.querySelector('[data-training-tab="bag"]');
-      bag?.insertAdjacentHTML('beforebegin', '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
-    }
+    page.querySelector('[data-training-tab="equipment"]')?.remove();
 
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
       const selected = !preserveStatus && tab.dataset.trainingTab === 'bag';
@@ -147,21 +141,6 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       finishTransition?.();
     });
 
-    page.querySelector('[data-training-tab="equipment"]')?.addEventListener('click', () => {
-      if (!foundationStage()) return;
-      const finishTransition = beginTabSlide('equipment');
-      page.querySelectorAll('[data-training-tab]').forEach((tab) => {
-        const selected = tab.dataset.trainingTab === 'equipment';
-        tab.classList.toggle('active', selected);
-        tab.setAttribute('aria-selected', selected ? 'true' : 'false');
-      });
-      const content = page.querySelector('#training-tab-content');
-      if (content) content.innerHTML = equipmentShellMarkup();
-      window.openCultivationEquipment?.();
-      window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
-      finishTransition?.();
-    });
-
     page.querySelector('[data-training-tab="bag"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;
       const finishTransition = beginTabSlide('bag');
@@ -172,6 +151,8 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       });
       const content = page.querySelector('#training-tab-content');
       if (content) content.innerHTML = bagMarkup();
+      window.openCultivationEquipment?.();
+      window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       finishTransition?.();
     });
   }

@@ -708,7 +708,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
   function bagTabMarkup() {
     // 背包物品改由統一背包模組渲染，避免舊的純文字卡先出現在畫面。
-    return '<section class="uib-bag-loading" aria-hidden="true"></section>';
+    return equipmentShellMarkup() + '<section class="uib-bag-loading" aria-hidden="true"></section>';
   }
 
   function renderTrainingPage() {
@@ -732,13 +732,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
       return;
     }
-    if (activeTab === 'equipment') {
-      // 四個裝配格先立即出現，再由共用裝備模組填入實際法寶。
-      content.innerHTML = equipmentShellMarkup();
-      window.openCultivationEquipment?.();
-      window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
-      return;
-    }
     // 舊畫面仍是元嬰分支時，只更新數值，不視為再次切入分頁。
     const previouslySoulMap = !!content.querySelector('.ns-growth-panel');
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
@@ -751,6 +744,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       if (main) main.scrollTop = 0;
       const page = document.getElementById('page-training');
       if (page) page.scrollTop = 0;
+    }
+    if (activeTab === 'bag') {
+      window.openCultivationEquipment?.();
+      window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
     }
     if (activeTab === 'core') bindCoreActions();
     if (activeTab === 'nascent-soul') bindSoulActions();
@@ -800,8 +797,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" disabled><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包與裝備</span></button>
         </div>
         <div id="training-tab-content"></div>
       `;
@@ -841,10 +837,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
     }
     if (soulTab) { soulTab.hidden = false; soulTab.disabled = !nascentUnlocked(); }
-    if (!tabs.querySelector('[data-training-tab="equipment"]')) {
-      tabs.querySelector('[data-training-tab="bag"]')?.insertAdjacentHTML('beforebegin',
-        '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
-    }
+    tabs.querySelector('[data-training-tab="equipment"]')?.remove();
 
     if (!tabs.querySelector('[data-training-tab="contract"]')) {
       tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>');
@@ -862,7 +855,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           const fromStatus = !page.querySelector('[data-training-tab].active');
           const direction = fromStatus || tabOrder.indexOf(requested) < tabOrder.indexOf(activeTab) ? -1 : 1;
           const finishTransition = requested !== activeTab || fromStatus ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
-          activeTab = ['bag', 'refinery', 'equipment', 'contract'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
+          activeTab = ['bag', 'refinery', 'contract'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
             tab.classList.toggle('active', selected);

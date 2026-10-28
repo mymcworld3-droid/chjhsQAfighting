@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc } from '../data-store.js';
-import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact-catalog.js';
+import { ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact-catalog.js';
 import './training-access-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 
@@ -68,7 +68,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     if (!id || number(data?.artifactSystem?.inventory?.[id]) < 1) return null;
     const item = getArtifactById(id);
     if (!item || !Array.isArray(item.effects) || !item.effects.some((effect) => String(effect?.type || '').startsWith('equip_'))) return null;
-    const assigned = ARTIFACT_EQUIP_SLOTS.includes(item.equipSlot) ? item.equipSlot : '輔助法寶';
+    const assigned = ARTIFACT_EQUIP_SLOTS.includes(item.equipSlot) ? item.equipSlot : '';
     if (assigned !== slot) return null;
     return item;
   }

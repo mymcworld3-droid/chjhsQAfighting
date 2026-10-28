@@ -11,7 +11,7 @@ const status = read('cultivation/cultivation-status-panel.js');
 const battle = read('cultivation/battle-mode-v2.js');
 const bag = read('cultivation/unified-inventory-grid.js');
 
-const slots = ['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶'];
+const slots = ['本命法寶'];
 const realm = { 凡人:0, 煉氣:1, 築基:2, 金丹:3, 元嬰:4, 化神:5, 煉虛:6, 合體:7, 大乘:8, 渡劫:9, 真仙:10 };
 const fixtures = {
   sword: {id:'sword',name:'青鋒',realm:'金丹',equipSlot:'本命法寶',effects:[{type:'equip_attack_flat',value:100}]},
@@ -44,7 +44,7 @@ test('artifact power includes realm quality and combat effects, never consumable
   assert.equal(power.calculateArtifactPower(fixtures.robe),45 * 5 ** 2 + 90 + 130);
   assert.ok(power.calculateArtifactPower(fixtures.robe)>power.calculateArtifactPower(fixtures.sword));
 });
-test('only possessed artifacts in the correct four equipment slots contribute power', () => {
+test('only possessed soulbound artifacts in the active equipment slot contribute power', () => {
   const {power}=loadPower();
   const snapshot=power.calculateCombatPower({
     stats:{attack:200,maxHp:1000}, core:{type:'ocean',grade:3},
@@ -53,9 +53,9 @@ test('only possessed artifacts in the correct four equipment slots contribute po
   });
   assert.equal(snapshot.base,600);
   assert.equal(snapshot.core,16000);
-  assert.equal(snapshot.equipment, power.calculateArtifactPower(fixtures.sword)+power.calculateArtifactPower(fixtures.robe));
+  assert.equal(snapshot.equipment, power.calculateArtifactPower(fixtures.sword));
   assert.equal(snapshot.total, snapshot.base+snapshot.core+snapshot.equipment);
-  assert.deepEqual(Array.from(snapshot.items, item=>item.name),['青鋒','天衣']);
+  assert.deepEqual(Array.from(snapshot.items, item=>item.name),['青鋒']);
   const noCore=power.calculateCombatPower({stats:{attack:200,maxHp:1000},equipped:{'本命法寶':'sword'},inventory:{sword:0}});
   assert.equal(noCore.total,600);
 });

@@ -93,7 +93,8 @@ test('artifact ownership, equipment and timed buffs persist in the user document
 
 test('equipment system uses four canonical slots, replaces same-slot gear, and cleans invalid equipment', () => {
   assert.match(catalog, /ARTIFACT_EQUIP_SLOTS = Object\.freeze\(\['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶'\]\)/);
-  assert.match(system, /ARTIFACT_EQUIP_SLOTS/);
+  assert.match(catalog, /ACTIVE_ARTIFACT_EQUIP_SLOTS = Object\.freeze\(\['本命法寶'\]\)/);
+  assert.match(system, /ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIFACT_EQUIP_SLOTS/);
   assert.match(system, /function canonicalEquipSlot\(item\)/);
   assert.match(system, /ARTIFACT_EQUIP_SLOTS\.includes\(slot\)/);
   assert.match(system, /ARTIFACT_EQUIP_SLOTS\.includes\(slot\) && inventory\[id\] > 0/);

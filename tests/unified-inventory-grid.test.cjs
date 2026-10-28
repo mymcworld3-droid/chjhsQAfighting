@@ -80,7 +80,7 @@ test('new backpack modules load after material and artifact systems and admin so
 });
 
 
-test('backpack renders four real equipment cards with inspect, equip and unequip actions', () => {
+test('backpack renders only the active soulbound equipment card with inspect, equip and unequip actions', () => {
   assert.match(bag, /ARTIFACT_EQUIP_SLOTS/);
   assert.match(bag, /function equipmentMarkup\(\)/);
   assert.match(bag, /function equipmentSlotMarkup\(slot\)/);
@@ -89,15 +89,15 @@ test('backpack renders four real equipment cards with inspect, equip and unequip
   assert.match(bag, /data-uib-empty-slot/);
   assert.match(bag, /data-uib-equip=/);
   assert.match(bag, /window\.toggleEquipArtifact/);
-  for (const slot of ['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶']) {
+  for (const slot of ['本命法寶']) {
     assert.match(bag, new RegExp(slot));
   }
   assert.match(bag, /裝備後會替換/);
 });
 
 test('equipment cards are responsive and show artifact icons instead of effect text', () => {
-  assert.match(bag, /\.uib-equipment-grid\{display:grid;grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
-  assert.match(bag, /@media\(max-width:700px\)\{\.uib-equipment-grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(bag, /\.uib-equipment-grid\{display:grid;grid-template-columns:minmax\(0,240px\)/);
+  assert.match(bag, /@media\(max-width:700px\)\{\.uib-equipment-grid\{grid-template-columns:minmax\(0,200px\)/);
   assert.match(bag, /uib-equip-slot-frame is-artifact/);
   assert.match(bag, /uib-equip-slot-name/);
   assert.doesNotMatch(bag.slice(bag.indexOf('function equipmentSlotMarkup'),bag.indexOf('function readTrainingLocalItems')), /effects\.map\(effectLabel\)/);
@@ -116,57 +116,54 @@ test('only selected backpack tab renders; empty slots choose compatible artifact
 });
 
 
-test('real equipment tab is present in the static and both stage-specific layouts', () => {
+test('static and both stage layouts expose one combined Backpack and Equipment tab', () => {
   const index = read('public/index.html');
   const foundation = read('public/cultivation/foundation-training-page.js');
   const golden = read('public/cultivation/cultivation-training-v4.js');
   for (const [name, source] of Object.entries({index, foundation, golden})) {
-    assert.match(source, /data-training-tab="equipment"/,name);
-    assert.match(source, /fa-shield-halved/,name);
+    assert.doesNotMatch(source, /<button[^>]*data-training-tab="equipment"/, name);
+    assert.match(source, /data-training-tab="bag"/, name);
+    assert.match(source, /背包與裝備/, name);
   }
   assert.match(foundation, /xiuxian:equipment-open-request/);
-  assert.match(golden, /activeTab === 'equipment'/);
+  assert.match(golden, /activeTab === 'bag'/);
   assert.match(golden, /xiuxian:equipment-open-request/);
   assert.match(bag, /'xiuxian:equipment-open-request'/);
-  assert.match(bag, /unified-inventory-grid-runtime-style/);
   assert.match(index, /id="unified-inventory-grid-style"/);
-  assert.doesNotMatch(index, /id="unified-inventory-grid-runtime-style"/);
 });
 
-test('real markup puts exactly four equipment slots on Equipment tab, none in Backpack', () => {
+test('combined inventory markup contains the soulbound slot and all inventory controls', () => {
   const vm = require('node:vm');
   const rootSource = bag.slice(bag.indexOf('  function rootMarkup('),bag.indexOf('  function effectLabel('));
-  const slots = ['本命法寶','護身法寶','佩飾法寶','輔助法寶'];
   const ctx = vm.createContext({
-    fragmentBalance:()=>0, ROOT_ID: 'unified-cultivation-bag', equipmentPickSlot:'', filterType:'all',sortMode:'type-quality',
-    escapeHtml:String, equipmentMarkup:() => '<section class="uib-equipment-panel"><div class="uib-equipment-grid">'+slots.map(name=>'<button class="uib-equip-slot">'+name+'</button>').join('')+'</div></section>',
-    sortedVisibleItems:()=>[], itemMarkup:()=>'', artifactSlot:()=>'', String
+    fragmentBalance:()=>0, ROOT_ID:'unified-cultivation-bag', equipmentPickSlot:'', filterType:'all', sortMode:'type-quality',
+    escapeHtml:String, equipmentMarkup:()=>'<section class="uib-equipment-panel"><button class="uib-equip-slot">本命法寶</button></section>',
+    sortedVisibleItems:items=>items, itemMarkup:item=>'<button data-uib-item="'+item.key+'">'+item.name+'</button>'
   });
   vm.runInContext(rootSource,ctx);
-  const equipment = vm.runInContext("rootMarkup([], 'equipment')",ctx);
-  assert.match(equipment,/uib-equipment-panel/);
-  assert.equal((equipment.match(/class="uib-equip-slot"/g)||[]).length,4);
-  assert.match(equipment,/尚無可裝配的法寶/);
-  const backpack = vm.runInContext("rootMarkup([], 'bag')",ctx);
-  assert.doesNotMatch(backpack,/uib-equipment-panel|uib-equip-slot/);
-  assert.match(backpack,/uib-toolbar/);
+  ctx.items=[{type:'material',key:'material:ore',name:'鐵'}, {type:'artifact',key:'artifact:sword',name:'劍'}];
+  const markup=vm.runInContext("rootMarkup(items, 'bag')",ctx);
+  assert.equal((markup.match(/class="uib-equip-slot"/g)||[]).length,1);
+  assert.match(markup,/uib-toolbar/);
+  assert.match(markup,/material:ore/);
+  assert.match(markup,/artifact:sword/);
+  ctx.equipmentPickSlot='本命法寶';
+  assert.match(vm.runInContext("rootMarkup(items, 'bag')",ctx),/data-uib-cancel-equip/);
 });
 
-
-test('both stages import exactly one shared four-slot preload shell', () => {
-  const foundation = read('public/cultivation/foundation-training-page.js');
-  const golden = read('public/cultivation/cultivation-training-v4.js');
-  const shared = read('public/cultivation/training-shared-shells.js');
-  for (const [name, source] of Object.entries({foundation, golden})) {
-    assert.match(source,/import \{ equipmentShellMarkup, refineryShellMarkup \} from '\.\/training-shared-shells\.js'/,name);
-    assert.match(source,/content\.innerHTML = equipmentShellMarkup\(\)/,name);
-    assert.doesNotMatch(source,/function equipmentShellMarkup\(\)/,name);
+test('both stages preload the shared single soulbound slot in the combined bag', () => {
+  const vm = require('node:vm');
+  for (const name of ['foundation-training-page.js','cultivation-training-v4.js']) {
+    const source=read('public/cultivation/'+name);
+    assert.match(source,/equipmentShellMarkup, refineryShellMarkup/);
+    assert.match(source,/return equipmentShellMarkup\(\) \+ '<section class="uib-bag-loading"/);
   }
-  assert.match(shared,/export function equipmentShellMarkup\(\)/);
-  const block = shared.slice(shared.indexOf('function equipmentShellMarkup()'),shared.indexOf('function refineryShellMarkup()'));
-  for (const slot of ['本命法寶','護身法寶','佩飾法寶','輔助法寶']) assert.match(block,new RegExp(slot));
-  assert.match(block,/uib-equipment-grid/);
-  assert.match(block,/uib-equip-slot is-empty/);
+  const shared=read('public/cultivation/training-shared-shells.js').replace(/export function /g,'function ');
+  const markup=vm.runInNewContext(shared+'\nequipmentShellMarkup()');
+  assert.equal((markup.match(/class="uib-equip-slot is-empty"/g)||[]).length,1);
+  assert.match(markup,/本命法寶/);
+  assert.match(markup,/0 \/ 1/);
+  assert.doesNotMatch(markup,/護身法寶|佩飾法寶|輔助法寶/);
 });
 
 test('old plain-text training backpack cards are removed from both stage shells', () => {
@@ -188,15 +185,11 @@ test('all runtime feature modules share one build query without changing depende
   assert.match(main,/'\.\/cultivation\/unified-inventory-grid\.js'/);
 });
 
-test('selected equipment slot equips compatible owned artifacts directly and explains unsupported items', () => {
-  assert.match(bag, /const equippedCandidates = ownedArtifacts\.filter/);
-  assert.match(bag, /目前持有的法寶都是消耗型或答題型/);
-  assert.match(bag, /目前持有的裝備型法寶屬於其他欄位/);
-  assert.match(bag, /點選下方法寶，即可裝配到/);
+test('selected soulbound slot filters compatible items and equips directly', () => {
+  assert.match(bag, /選擇下方本命法器即可裝配/);
   assert.match(bag, /if \(!equipmentPickSlot \|\| !item/);
   assert.match(bag, /artifactSlot\(item\.raw\) !== equipmentPickSlot/);
   assert.match(bag, /await window\.toggleEquipArtifact\(item\.id\)/);
-  assert.match(bag, /if \(!artifactCanEquip\(item\.raw\)\) \{/);
-  assert.match(bag, /openDetails\(key\); \/\/ 其他原因/);
+  assert.match(bag, /return !!artifactSlot\(item\)/);
   assert.match(bag, /console\.error\('\[Equipment slot\] equip failed:'/);
 });

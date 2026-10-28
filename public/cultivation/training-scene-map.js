@@ -16,8 +16,7 @@ const DETAIL_TABS = [
   { id: 'nascent-soul', name: '元嬰', icon: 'fa-child-reaching', threshold: 68, unlock: '元嬰境解鎖' },
   { id: 'refinery', name: '煉器', icon: 'fa-hammer', threshold: 6, unlock: '築基期解鎖' },
   { id: 'contract', name: '契器', icon: 'fa-dharmachakra', threshold: 28, unlock: '金丹境解鎖' },
-  { id: 'equipment', name: '裝備', icon: 'fa-shield-halved', threshold: 6, unlock: '築基期解鎖' },
-  { id: 'bag', name: '背包', icon: 'fa-box-open', threshold: 6, unlock: '築基期解鎖' }
+  { id: 'bag', name: '背包與裝備', icon: 'fa-box-open', threshold: 6, unlock: '築基期解鎖' }
 ];
 let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
@@ -60,6 +59,7 @@ function updateDetailTabs() {
   const list = page.querySelector('.training-subtabs-v3');
   if (!list) return;
   const score = window.getTrainingAccessScore?.() ?? Rules.score(window.getCurrentUserData?.());
+  list.querySelector('[data-training-tab="equipment"]')?.remove();
   const buttons = DETAIL_TABS.map(def => {
     let button = list.querySelector(`[data-training-tab="${def.id}"]`);
     if (!button) {
@@ -109,6 +109,7 @@ function showMap({ focus = false } = {}) {
   if (focus) map.querySelector('.training-place:not(:disabled)')?.focus({ preventScroll: true });
 }
 function openPlace(place, selectedTab = place.tab) {
+  if (selectedTab === 'equipment') selectedTab = 'bag';
   if (place.page) {
     if (place.page === 'page-raid') window.openRaidHub?.();
     else {

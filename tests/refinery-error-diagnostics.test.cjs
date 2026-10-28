@@ -83,7 +83,8 @@ test('artifact API returns safe structured failures with request IDs for input, 
     const response = { code: 200, set() {}, status(code) { this.code = code; return this; }, json(data) { this.data = data; } };
     await handler({ body, get: () => 'trace-client-123' }, response); return response;
   };
-  const body = { selectedIngredients: [{ id: 'iron', type: 'material', quantity: 2 }], allMaterials: [{ id: 'iron', name: '鐵', realm: '築基' }] };
+  const bound = require('../public/cultivation/soulbound-pool.js').ITEMS[0];
+  const body = { selectedIngredients: [{ id:bound.id, type:'artifact', quantity:1 }, { id:'iron', type:'material', quantity:1 }], existingArtifacts:[bound], allMaterials:[{ id:'iron', name:'鐵', realm:'築基' }] };
   try {
     let result = await call({}); assert.equal(result.code, 400); assert.equal(result.data.code, 'refinery-input');
     assert.equal(result.data.requestId, 'trace-client-123'); assert.equal(result.data.stage, 'request-validation');

@@ -24,7 +24,7 @@ function loadConsumption() {
 
 function rawUser(isAdmin, iron = 0) {
   return { isAdmin, materialSystem:{inventory:{iron,seal:2}}, artifactSystem:{
-    inventory:{sword:2},equipped:{'護身法寶':'sword'}
+    inventory:{sword:2},equipped:{'本命法寶':'sword'}
   }};
 }
 

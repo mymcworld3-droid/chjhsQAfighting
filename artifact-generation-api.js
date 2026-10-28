@@ -628,6 +628,7 @@ function buildPrompt(payload) {
     '若 story 有內容，將它視為已設定的世界觀事實，名稱與描述要合理承接其來源、傳說、遭遇或歷史；若 story 為空，僅可根據 description 創作，不要偽稱另有正式背景故事。不要把素材原文直接整段複製到玩家描述。',
     '',
     '硬性規則：',
+    '目前鍛造僅開放本命法器精煉：成品必須是本命法寶，保留原器器型與既有屬性；不得產出其他裝備或消耗法器。',
     '1. 法寶境界已由遊戲鎖定為「' + targetRealm + '」，不得改境界。',
     '2. 只輸出 JSON，不要 Markdown。',
     '3. 效果只能使用下方允許的 type；依本次內部煉器階段與境界，最多 ' + (soulbound ? soulboundRules.MAX_REFINEMENT_EFFECTS : maxEffectsForGeneration(order, refinementStage)) + ' 個效果。',
@@ -767,6 +768,9 @@ function registerArtifactGenerationApi(app) {
       const effectBoundsV2 = normalizeDepthEffectBounds(req.body?.effectBoundsV2);
       const safePayload = { ...(req.body || {}), targetRealm, effectBoundsV2,
         forgeMethod: normalizeForgeMethod(req.body?.forgeMethod) };
+      if (!ingredientHierarchy(safePayload).primary.some(item => item.type === 'artifact' && item.equipSlot === '本命法寶')) {
+        throw Object.assign(Error('鍛造僅開放本命法器精煉，請投入既有本命法器'), { code:'refinery-input' });
+      }
       const refinementStage = deriveRefinementStage(safePayload);
       soulboundRules.refineEffects([], ingredientHierarchy(safePayload).primary);
       const prompt = buildPrompt(safePayload);
@@ -789,6 +793,8 @@ function registerArtifactGenerationApi(app) {
       // A secondary AI review cannot undo the locked form or inherited signature effect.
       const finalArtifact = sanitizeGeneratedArtifact(reviewed.artifact, targetRealm, refinementStage,
         {}, effectBoundsV2, totalIngredients, forgeOptions);
+      if (finalArtifact.equipSlot !== '本命法寶') throw Object.assign(Error('鍛造僅能產生本命法器'), {code:'refinery-input'});
+      soulboundRules.assertRefinementImproves(finalArtifact, hierarchy.primary.filter(item => item.equipSlot === '本命法寶'));
       res.json({ artifact: finalArtifact, provider: routed.provider, model: routed.model,
         guidanceReview: reviewed.guidanceReview, requestId, elapsedMs: Date.now() - started });
     } catch (error) {

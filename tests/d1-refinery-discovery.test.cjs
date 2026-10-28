@@ -20,7 +20,7 @@ const signature = (recipe,method='自由發揮') => recipe.map(row => ({key:row.
   .sort((a,b)=>a.key.localeCompare(b.key)).map(row=>row.key+':'+row.quantity).join('|')+(method==='自由發揮'?'':'|method:'+method);
 const write = (path,data,type='set') => ({target:{role:'A',path,kind:'doc'},type,data:Codec.encode(data),options:type==='set'?{merge:true}:undefined});
 
-async function fixture({empty=false,realm='煉氣',stage=1,recipe=[{materialId:'qi-spirit-iron',quantity:1},{materialId:'qi-spirit-wood',quantity:1}],primaryArtifacts=[],effects=[{type:'equip_attack_flat',value:2}],bounds={}}={}) {
+async function fixture({empty=false,realm='煉氣',stage=2,recipe=[{artifactId:pool.ITEMS[0].id,quantity:1},{materialId:'qi-spirit-iron',quantity:1}],primaryArtifacts=[pool.ITEMS[0]],effects=[{type:'equip_attack_flat',value:2}],bounds={}}={}) {
   const {db} = setup(), now=Date.now();
   const job={id:'forge-preserved-job',kind:'discovery',status:'refining',readyAtMs:now-1000,targetRealm:realm,
     refinementStage:stage,recipe,forgeMethod:'自由發揮',signature:signature(recipe)};
@@ -71,7 +71,7 @@ const mutations={
   'claims approved status':f=>{f.input.writes[0].data.items[0].reviewStatus='approved';},
   'wrong recipe':f=>{f.input.writes[1].data.recipes[f.artifact.id][0].quantity=8;},
   'oversized effect':f=>{f.input.writes[0].data.items[0].effects[0].value=1e20;},
-  'mints soulbound without source':f=>{f.input.writes[0].data.items[0].equipSlot='本命法寶';},
+  'mints ordinary output':f=>{f.input.writes[0].data.items[0].equipSlot='護身法寶';},
   'double award':f=>{f.input.writes[2].data.artifactSystem.inventory[f.artifact.id]=2;},
   'changes currency with award':f=>{f.input.writes[2].data.forgeFragments=999;},
   'keeps job after award':f=>{f.input.writes[2].data.refineryJobV1=f.job;},
@@ -99,7 +99,7 @@ test('stale concurrent discovery conflicts; retry awards existing recipe without
 
 test('server configured bounds and all generated effect forms remain accepted',async()=>{
   for(const stage of [1,2,3])for(const type of generation.ALLOWED_EFFECTS){
-    if(!generation.effectRange(type,4,stage))continue;
+    if(!type.startsWith('equip_') || !generation.effectRange(type,4,stage))continue;
     const f=await fixture({realm:'元嬰',stage,effects:[{type,value:1000,multiplier:2}]});
     await assert.doesNotReject(executeCommit(f.db,f.input,context),type+' stage '+stage);
   }
@@ -113,4 +113,11 @@ test('soulbound refinement retains and improves the authoritative source effects
   const f=await fixture({realm:original.realm,stage:2,recipe:[{artifactId:original.id,quantity:1},{materialId:'qi-spirit-iron',quantity:1}],primaryArtifacts:[original]});
   await executeCommit(f.db,f.input,context);
   pool.assertRefinementImproves((await f.db.doc(artifactPath).get()).data().items[0],[original]);
+});
+
+test('ordinary material-only discovery cannot publish or award any new artifact', async()=>{
+  const f=await fixture({primaryArtifacts:[],recipe:[{materialId:'qi-spirit-iron',quantity:1},{materialId:'qi-spirit-wood',quantity:1}]});
+  const before=await Promise.all(['users/alice',artifactPath,materialPath].map(async path=>(await f.db.doc(path).get()).data()));
+  await assert.rejects(executeCommit(f.db,f.input,context),error=>error.status===403);
+  assert.deepEqual(await Promise.all(['users/alice',artifactPath,materialPath].map(async path=>(await f.db.doc(path).get()).data())),before);
 });
