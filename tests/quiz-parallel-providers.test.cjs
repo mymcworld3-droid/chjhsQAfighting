@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const router=require('../ai-router');
 const server=fs.readFileSync('server.js','utf8');
-const {createQuizTaskPlan}=require('../quiz-generation-tasks.cjs');
+const {QUESTION_FORMS,createQuizTaskPlan}=require('../quiz-generation-tasks.cjs');
 const {createSparePool}=require('../quiz-spare-pool.cjs');
 function taskFrom(prompt){return JSON.parse(prompt.split('\n').find(line=>line.startsWith('任務規格 JSON：')).slice('任務規格 JSON：'.length));}
 
@@ -85,7 +85,7 @@ test('one configured API retains the ordinary sequential path and quiz endpoint 
   assert.match(server,/aiRouter\.generateJSON\(prompt, \{/);
   assert.match(server,/parallel: true/);
   assert.match(server,/onSpare: spare => quizSparePool\.offer\(spareKey, spare\)/);
-  assert.match(server,/const saved = attempts === 0 \? quizSparePool\.take\(spareKey, validateCandidate\)/);
+  assert.match(server,/const saved = attempts === 0 \? .*quizSparePool\.take\(spareKey, validateCandidate\)/);
   assert.match(server,/const combatFastMode = FAST_QUIZ_MODES\.has/);
   assert.match(server,/app\.post\('\/api\/generate-quiz'/);
   assert.match(fs.readFileSync('fast-quiz-prompt.cjs','utf8'),/raid-quick-simple.*battle-fast.*immortal-fast/);
@@ -209,5 +209,45 @@ test('real quiz handler delivers the fastest assigned form, strips internal IDs 
       assert.notEqual(JSON.parse(next.body.text).q,question.q);
       assert(!Object.hasOwn(JSON.parse(next.body.text),'generation_task_id'));
     }
+  });
+});
+
+test('adaptive solo handler assigns different fine methods to simultaneous APIs, strips binding fields and preserves spare eligibility',async()=>{
+  await withMockProviders(async()=>{
+    const Adaptive=require('../adaptive-learning-api.cjs').__test;
+    const Rules=require('../public/cultivation/adaptive-learning-rules.js');
+    const unit={path:'物理/高中二年級/下學期/物理',detail:'鉛直圓周運動'};
+    let stats={};const db={collection:name=>({doc:()=>({get:async()=>({exists:name==='users',data:()=>({stats,gameSettings:{sourceMode:'focused',focusedUnits:[unit],difficulty:'auto'}})}),set:async()=>{}})})};
+    const adaptiveLearning=Adaptive.createAdaptiveLearning({verify:async()=> 'u1',resolve:()=>({db}),generate:async(_prompt,options)=>{
+      const data={concepts:Adaptive.seedConcepts(Adaptive.scopeFor(unit))};options.validate(data);return {data};
+    }});
+    let handler,calls=0;const pending=[],assignments=[];
+    const context={QUESTION_FORMS,createQuizTaskPlan,adaptiveLearning,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,crypto:require('node:crypto'),
+      FAST_QUIZ_MODES:new Set(),quickQuizPrompt:require('../fast-quiz-prompt.cjs').quickQuizPrompt,Knowledge:require('../public/cultivation/knowledge-points.js'),
+      ANSWER_AND_EXPLANATION_RULES:'完整單選題',subjectReliabilityPrompt:()=>'',questionQualityIssue:()=>'',removeUnstableOptionLabels:text=>text,
+      SUBJECT_SCHEMA:{物理:['圓周運動']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},quizSparePool:createSparePool({similar:(a,b)=>a===b})};
+    const helperStart=server.indexOf('function cleanQuestionText('),helperEnd=server.indexOf('const { MODES: FAST_QUIZ_MODES',helperStart);
+    const start=server.indexOf("app.post('/api/generate-quiz',"),end=server.indexOf('// API 5:',start);
+    vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end),context);
+    global.fetch=(_url,init)=>new Promise(resolve=>{
+      const prompt=JSON.parse(init.body).messages[1].content,task=taskFrom(prompt),binding=JSON.parse(prompt.split('[範圍細觀念與考法]\n')[1].split('\n')[0]),index=calls++;
+      assignments.push(binding);pending.push(()=>resolve(response({q:'獨立練習情境：'+binding.method+'，請選出正確關係。',correct:'關係甲',wrong:['關係乙','關係丙','關係丁'],exp:'依照題目條件，完整推導可得關係甲。',
+        subject:'物理',knowledge_points:[{subject:'物理',id:'physics-1',name:'力與運動'}],question_form:task.question_form,generation_task_id:task.generation_task_id,
+        adaptive_scope_id:binding.adaptive_scope_id,adaptive_facet_id:binding.adaptive_facet_id,adaptive_difficulty:binding.adaptive_difficulty,template_id:'adaptive-template-'+index,reasoning_steps:1,cognitive_level:1})));
+    });
+    const invoke=async(extra={})=>{
+      const out={};await handler({body:{subject:'數學',level:'國中一年級',difficulty:'hard',specificTopic:'不可信範圍',quizMode:'solo',adaptiveScope:unit,...extra}},
+        {status(n){out.status=n;return this;},json(value){out.body=value;return this;}});return out;
+    };
+    const first=invoke();await new Promise(resolve=>setImmediate(resolve));assert.equal(calls,3);assert.equal(new Set(assignments.map(x=>x.adaptive_facet_id)).size,3);
+    assert(assignments.every(x=>x.adaptive_difficulty==='easy'&&x.scope.subject==='物理'&&x.scope.level==='高中二年級'));
+    pending[1]();const delivered=await first;assert.equal(delivered.status,undefined);const question=JSON.parse(delivered.body.text);
+    assert.equal(question.adaptive.facetId,assignments[1].adaptive_facet_id);assert.equal(question.adaptive.outline.length,6);assert.equal(question.subject,'物理');
+    for(const key of ['generation_task_id','adaptive_scope_id','adaptive_facet_id','adaptive_difficulty'])assert(!Object.hasOwn(question,key));
+    pending[0]();pending[2]();await new Promise(resolve=>setImmediate(resolve));
+    stats={adaptiveLearningV1:Rules.record(undefined,question.adaptive,{correct:true,at:1000})};
+    const next=await invoke();assert.equal(calls,3,'an eligible spare for another unpracticed concept is reused');
+    const nextQuestion=JSON.parse(next.body.text);assert.notEqual(nextQuestion.adaptive.conceptId,question.adaptive.conceptId);
+    const denied=await invoke({quizMode:'battle-fast'});assert.equal(denied.status,400);
   });
 });

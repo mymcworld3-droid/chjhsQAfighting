@@ -56,7 +56,7 @@ test('responses from the wrong task or form fail before becoming winners or spar
 });
 test('endpoint builds the full specification for each task and validates task binding before collecting results',()=>{
   const server=fs.readFileSync(require.resolve('../server.js'),'utf8');
-  assert.match(server,/generationPrompt\(task\.form, task\.id\)/);
+  assert.match(server,/generationPrompt\(task\.form, task\.id,\{difficulty:taskDifficulty,quality:taskQuality,adaptiveFields\}\)/);
   assert.match(server,/targetForm:task\.form/);
   assert.match(server,/validateCandidate\(parsed\);\s*taskPlan\.validate\(parsed, context\.index\)/);
   assert.match(server,/delete parsed\.generation_task_id/);

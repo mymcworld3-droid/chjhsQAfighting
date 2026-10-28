@@ -31,11 +31,11 @@ test('solo transaction rechecks realm before the answer and displays the amount 
   const end = source.indexOf('    try {\n        const p1 = shouldSaveAnswer',start);
   assert.ok(start>=0&&end>start);
   for(const correct of [true,false]) {
-    const stats = {gold:100,totalScore:67},remote = {stats:{gold:100,totalScore:68}};
+    const stats = {gold:100,totalScore:67,adaptiveLearningV1:{version:1,scopes:{stale:{answered:1}}}},remote = {stats:{gold:100,totalScore:68,adaptiveLearningV1:{version:1,scopes:{latest:{answered:2}}}}};
     const q = {data:{q:'test'},answerSelectedIndex:0,learningSubject:'數學',learningDifficulty:'hard'};
     const learningReward = Learning.reward(stats,q,correct);
     const title = {innerHTML:''};let patch;
-    const context = {db:{},doc:()=>({}),auth:{currentUser:{uid:'u'}},answerUser:{uid:'u'},currentUserData:{stats},
+    const context = {adaptiveRows:[],db:{},doc:()=>({}),auth:{currentUser:{uid:'u'}},answerUser:{uid:'u'},currentUserData:{stats},
       stats,isCorrect:correct,trialAnswerId:'',learningRules:Learning,learningReward,quiz:q,
       cultivationDelta:correct?2:0,recoveryCoreGain:0,originalGoldenMessage:'',cultivationReward:{},scoreGain:30,
       calculateRankFromScore:()=>0,updateUIStats(){},showCultivationFeedback(){},cultivationFeedback:null,fbTitle:title,t:()=> '答對',CustomEvent:class{},
@@ -47,5 +47,6 @@ test('solo transaction rechecks realm before the answer and displays the amount 
     assert.equal(patch.stats.totalScore,correct?70:68);
     if(correct)assert.match(title.innerHTML,/\+50💰/);
     assert.equal(stats.gold,patch.stats.gold);
+    assert.equal(patch.stats.adaptiveLearningV1,remote.stats.adaptiveLearningV1,'ordinary answers preserve the latest background observations');
   }
 });

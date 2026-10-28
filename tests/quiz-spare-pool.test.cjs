@@ -96,7 +96,7 @@ test('all quiz callers supply a private session; team tickets are issued at actu
   assert.match(server,/sessionOwner = raidTicketMode \? `raid:\$\{raidIdentity\}:\$\{raidRoomId\}`/);
   assert.match(server,/quizSparePool\.take\(spareKey, validateCandidate\)/);
   assert.match(server,/onSpare: spare => quizSparePool\.offer\(spareKey, spare\)/);
-  const cache=server.indexOf('const saved = attempts === 0 ? quizSparePool.take(');
+  const cache=server.indexOf('const saved = attempts === 0 ? (adaptiveContext?quizSparePool.takeMatching(');
   const ticket=server.indexOf('const ticket = issueRaidQuestionTicket(',cache);
   assert.ok(cache>0&&ticket>cache,'cached quiz content must not store pre-issued tickets');
 });

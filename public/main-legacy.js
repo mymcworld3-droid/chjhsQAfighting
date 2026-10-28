@@ -1,5 +1,6 @@
 import {} from './cultivation/solo-learning-rules.js';
 import './cultivation/knowledge-points.js';
+import './cultivation/adaptive-learning.js';
 import './cultivation/ability-insights-core.js';
 import './cultivation/answer-gold-rules.js';
 import './cultivation/quest-rules.js';
@@ -115,6 +116,12 @@ const soloQuestionCache = createSoloQuestionCache(window.localStorage);
 let soloCacheIdentity = '';
 let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
+window.persistAdaptiveActiveQuiz = quiz => {
+    if (soloQuestionCache.isCurrent(auth.currentUser?.uid, soloQuestionScope())) soloQuestionCache.persistActive(quiz);
+};
+function adaptiveQuestionContext(unit) {
+    return window.QAAdaptiveLearning?.request(unit, [soloQuestionCache.getActive(), ...soloQuestionCache.getQueue()]) || {};
+}
 
 function soloQuestionScope() {
     const settings = currentUserData?.gameSettings || {};
@@ -2826,7 +2833,7 @@ async function fetchOneQuestion() {
         console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
         try {
-            const response = await fetch("/api/generate-quiz", {
+            const response = await (window.QAAdaptiveLearning?.fetchQuiz || fetch)("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -2838,7 +2845,8 @@ async function fetchOneQuestion() {
                     language: 'zh-TW',
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
                     quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
-                    ...recentSoloQuestionContext()
+                    ...recentSoloQuestionContext(),
+                    ...adaptiveQuestionContext(randomUnit)
                 })
             });
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
@@ -2852,9 +2860,10 @@ async function fetchOneQuestion() {
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
                 meta: quizMetaFromRaw(rawData),
+                adaptive: rawData.adaptive,
                 rank: rankName,
                 badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`,
-                learningSubject:subject, learningTopic:rawData.sub_topic || '精選', learningDifficulty:finalDifficulty
+                learningSubject:subject, learningTopic:rawData.sub_topic || '精選', learningDifficulty:rawData.adaptive?.difficulty || finalDifficulty
             };
         } catch (e) {
             console.error("[AI-出題失敗]", e);
@@ -3023,6 +3032,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
+    const adaptiveRows = window.QAAdaptiveLearning?.answer(quiz, isCorrect, userIdx < 0) || [];
     globalThis.QAGameAudio?.answer(isCorrect, 'solo:' + (window.quizStartTime || '') + ':' + (quiz?.id || questionText));
     quizHelperState.answered = true;
     if (quiz) delete quiz.helperReviewRedacted;
@@ -3183,7 +3193,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     // stay local until the next reward. A report explicitly saves its last answer
     // before the API can calculate a trusted refund.
     const shouldSaveAnswer = isCorrect || (learningRules && userIdx >= 0) || stats.totalScore !== scoreBeforeAnswer ||
-        !!stats.goldenCoreShield !== shieldBeforeAnswer;
+        !!stats.goldenCoreShield !== shieldBeforeAnswer || !!quiz?.adaptive;
     const cultivationDelta = stats.totalScore - scoreBeforeAnswer;
     const recoveryCoreGain = cultivationReward.recoveryBonusGain;
     const originalGoldenMessage = cultivationReward.goldenCoreMessage;
@@ -3201,11 +3211,14 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 const learningDelta = verifiedLearning.gain - learningReward.gain +
                     (verifiedLearning.recovery ? 0 : -recoveryCoreGain);
                 const savedStats = { ...stats,
+                    ...(remote.stats?.adaptiveLearningV1 ? {adaptiveLearningV1:remote.stats.adaptiveLearningV1} : {}),
+                    ...(adaptiveRows.length ? {adaptiveLearningV1:window.QAAdaptiveLearning.merge(remote.stats?.adaptiveLearningV1, adaptiveRows)} : {}),
                     ...(verifiedLearning.progress ? {soloLearningV1:verifiedLearning.progress} : {}),
                     gold: Math.max(0, Number(remote.stats?.gold) || 0) + verifiedGold,
                     totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta + learningDelta),
                     knowledgePointMapV1: window.QAKnowledgePoints.record(remote.stats?.knowledgePointMapV1 || {}, quiz, isCorrect)
                 };
+                if (!remote.stats?.adaptiveLearningV1 && !adaptiveRows.length) delete savedStats.adaptiveLearningV1;
                 cultivationReward.gain = Math.max(0,cultivationDelta + learningDelta);
                 scoreGain = verifiedGold;
                 cultivationReward.learningGain = verifiedLearning.gain;
@@ -3222,6 +3235,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             }).then(savedStats => {
                 if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) throw new Error('帳號已更換，請重新整理。');
                 Object.assign(stats, savedStats);
+                window.QAAdaptiveLearning?.acknowledge(answerUser.uid, adaptiveRows);
+                void window.QAAdaptiveLearning?.afterSaved(quiz);
                 updateUIStats();
                 if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
@@ -3251,6 +3266,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             knowledgePoint: window.QAKnowledgePoints.label(quiz)?.name || '',
             knowledgePoints: window.QAKnowledgePoints.labels(quiz),
             // AI-generated question metadata, not an AI inference from correctness.
+            ...(quiz?.adaptive ? {adaptiveScopeId:quiz.adaptive.scopeId, adaptiveConceptId:quiz.adaptive.conceptId,
+                adaptiveFacetId:quiz.adaptive.facetId, assistanceLevel:quiz.adaptiveHelp || 0, adaptiveSkipped:userIdx < 0} : {}),
             questionForm: String(quiz?.meta?.question_form || '').slice(0, 40),
             cognitiveLevel: Number(quiz?.meta?.cognitive_level) || null,
             reasoningSteps: Number(quiz?.meta?.reasoning_steps) || null,
@@ -3274,7 +3291,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         }
         if (p1) await p1;
         answerSaved = true;
-    } catch (e) { console.error("Firebase Error", e); }
+    } catch (e) { console.error("Firebase Error", e); void window.QAAdaptiveLearning?.flush(answerUser.uid); }
     finally { cultivationFeedback?.cancel(); }
 
     if (answerSaved && userIdx >= 0) {
@@ -3548,6 +3565,8 @@ async function sendQuizHelperMessage(rawMessage, { intent = 'discussion' } = {})
         const answer = String(payload.answer || '').trim();
         if (!answer) throw new Error('問道助手沒有回傳內容');
         const knowledgePoint = String(payload.knowledgePoint || '').trim().slice(0, 60);
+        if (!quizHelperState.answered && intent !== 'check-question' && window.currentActiveQuiz === requestQuiz && auth.currentUser?.uid === requestUid)
+            window.QAAdaptiveLearning?.hint(requestQuiz);
         quizHelperState.messages.push({ role: 'assistant', text: answer, knowledgePoint });
         quizHelperAppendMessage('assistant', answer, { knowledgePoint });
         if (status) status.textContent = '';
@@ -3592,7 +3611,8 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
 
     let specificTopic = knowledgePoint;
     if (recoveryOrigin) specificTopic = `${knowledgePoint}。針對原題「${practice.originQuestion}」的同一概念出一道新情境變式，勿重複原題。`.slice(0,1800);
-    const response = await fetch('/api/generate-quiz', {
+    const adaptive = recoveryOrigin ? practice.quiz?.adaptive : null;
+    const response = await (adaptive ? (window.QAAdaptiveLearning?.fetchQuiz || fetch) : fetch)('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -3604,7 +3624,8 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
             language: 'zh-TW',
             knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
             quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
-                    ...recentSoloQuestionContext()
+                    ...recentSoloQuestionContext(),
+            ...(adaptive ? {...adaptiveQuestionContext(adaptive.scope), adaptiveConceptId:adaptive.conceptId} : {})
         })
     });
     if (!response.ok) throw new Error(`Server Error: ${response.status}`);
@@ -3623,12 +3644,13 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
             exp: rawData.exp
         },
         meta: quizMetaFromRaw(rawData),
+        adaptive: rawData.adaptive,
         rank: rankName,
         badge: `${recoveryOrigin ? '📝 訂正練習' : '📚 延伸練習'} | ${subject} · ${knowledgePoint}`,
         extendedPractice: !recoveryOrigin,
         extendedPracticeSubject: subject,
         extendedPracticeKnowledgePoint: knowledgePoint,
-        learningSubject:subject, learningTopic:knowledgePoint, learningDifficulty:difficulty,
+        learningSubject:subject, learningTopic:knowledgePoint, learningDifficulty:rawData.adaptive?.difficulty || difficulty,
         recoveryOrigin
     };
 }
@@ -3923,6 +3945,7 @@ function renderQuiz(data, rank, topic) {
     // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
     resetQuizHelper(data, { topic });
+    window.QAAdaptiveLearning?.render(window.currentActiveQuiz);
     syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');

@@ -5,6 +5,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const aiRouter = require('./ai-router');
 const { QUESTION_FORMS, createQuizTaskPlan } = require('./quiz-generation-tasks.cjs');
+const registerAdaptiveLearningApi = require('./adaptive-learning-api.cjs');
 const registerAbilityCoachApi = require('./ability-coach-api.cjs');
 const registerFriendChatApi = require('./alliance-friend-chat-api.cjs');
 const registerDongtianApi = require('./dongtian-api');
@@ -101,6 +102,7 @@ registerInventoryDismantleApi(app);
 registerOpportunityApi(app);
 registerGameIssueApi(app);
 registerClassroomApi(app);
+const adaptiveLearning = registerAdaptiveLearningApi(app);
 
 // 僅回傳已配置 provider 的名稱與模型，不暴露 API key。
 app.get('/api/ai-status', (req, res) => {
@@ -491,6 +493,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     let raidTrustedTopic = '';
     let raidTrustedDifficulty = 'medium';
     let enlightenmentContext = null;
+    let adaptiveContext = null;
     if (raidTicketMode) {
         try {
             raidIdentity = await verifyMainIdentity(req);
@@ -547,6 +550,14 @@ app.post('/api/generate-quiz', async (req, res) => {
         } catch (error) {
             return res.status(error.status||503).json({error:error.status?error.message:'悟道試煉題目準備失敗'});
         }
+    }
+    if(req.body?.adaptiveScope){
+        if(quizMode&&quizMode!=='solo')return res.status(400).json({error:'背景適性學習僅用於一般問道試煉'});
+        try{
+            adaptiveContext=await adaptiveLearning.prepare(req);
+            subject=adaptiveContext.scope.subject;level=adaptiveContext.scope.level;specificTopic=adaptiveContext.scope.topic;
+            difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
+        }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
     }
     difficulty = enlightenmentMode ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
         : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
@@ -606,7 +617,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         .map(item => ({ concept_id: item.concept_id, question_form: item.question_form }));
     const targetKnowledgePointId = enlightenmentContext?.knowledgePointId || '';
 
-    const generationPrompt = (form, taskId) => `
+    const generationPrompt = (form, taskId, spec = {difficulty,quality}) => `
         [系統指令]
         你是一名 AI 教師，請生成一道「單選題」。
         ${ANSWER_AND_EXPLANATION_RULES}
@@ -617,7 +628,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         指定題型：${targetTopic}
         題型要求：${topicDescription}
         適用程度：${level}，段位：${rank}
-        難度設定：${difficulty}
+        難度設定：${spec.difficulty}
         隨機因子：${randomSeed}
 
         只能考查指定程度內的指定科目與單元，不得超綱或擅自替換單元。
@@ -626,9 +637,9 @@ app.post('/api/generate-quiz', async (req, res) => {
         重出相同解法骨架。
 
         本題指定表現形式：${form}
-        認知層級約：${quality.cognitive}
-        合理推理步數約：${quality.steps}
-        深度要求：${quality.instruction}
+        認知層級約：${spec.quality.cognitive}
+        合理推理步數約：${spec.quality.steps}
+        深度要求：${spec.quality.instruction}
 
         近期禁止骨架：${recentTemplates.length ? JSON.stringify(recentTemplates) : '無'}
         近期概念／題型組合：${recentConceptForms.length ? JSON.stringify(recentConceptForms) : '無'}
@@ -678,8 +689,9 @@ app.post('/api/generate-quiz', async (req, res) => {
             "template_id": "描述解題骨架的ID",
             "question_form": "${form}",
             "generation_task_id": ${JSON.stringify(taskId)},
-            "cognitive_level": ${Number.parseInt(quality.cognitive, 10)},
-            "reasoning_steps": ${Number.parseInt(quality.steps, 10)}
+            ${spec.adaptiveFields?Object.entries(spec.adaptiveFields).map(([k,v])=>JSON.stringify(k)+':'+JSON.stringify(v)+',').join('\n'):''}
+            "cognitive_level": ${Number.parseInt(spec.quality.cognitive, 10)},
+            "reasoning_steps": ${Number.parseInt(spec.quality.steps, 10)}
         }
         請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
     `;
@@ -692,9 +704,9 @@ app.post('/api/generate-quiz', async (req, res) => {
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
     const spareKey = quizSparePool.key({
-        owner: sessionOwner, mode: String(quizMode || 'solo'), subject, level,
-        topic: targetTopic, difficulty, rank,
-        knowledge: diagnosticInfo // never share between different diagnostic modes
+        owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
+        topic: targetTopic, difficulty:adaptiveContext?'adaptive':difficulty, rank:adaptiveContext?'adaptive':rank,
+        knowledge: adaptiveContext ? adaptiveContext.scope.scopeId+':'+adaptiveContext.plan.version : diagnosticInfo
     });
     const validateCandidate = (parsed, extraQuestions = [], extraTemplates = []) => {
         Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
@@ -719,6 +731,8 @@ app.post('/api/generate-quiz', async (req, res) => {
         if (template && [...recentTemplates, ...extraTemplates].includes(template)) {
             throw new Error('AI 題目與近期解題骨架重複');
         }
+        if(adaptiveContext&&(!adaptiveContext.decision.targets.some(f=>f.id===parsed.adaptive_facet_id&&f.difficulty===parsed.adaptive_difficulty&&f.forms.includes(parsed.question_form))||
+            parsed.adaptive_scope_id!==adaptiveContext.scope.scopeId))throw new Error('備用題不符合目前範圍的學習安排');
         return true;
     };
 
@@ -734,28 +748,32 @@ app.post('/api/generate-quiz', async (req, res) => {
                 '\n[前一版未通過驗證]\n' + lastGenerationIssue.slice(0, 600) +
                 '\n這一版必須從頭重寫整個題目 JSON 的 q、correct、wrong、exp，不能只在解析加註更正。' : '';
             const taskPlan = createQuizTaskPlan({targetForm, forms:QUESTION_FORMS, previousMeta,
-                difficulty, mode:String(quizMode || 'solo')});
+                difficulty, mode:String(quizMode || 'solo'),assignmentForTask:adaptiveContext?index=>adaptiveContext.target(index):undefined});
             const promptForTask = index => {
                 const task = taskPlan.get(index);
+                const facet=adaptiveContext?.target(index),taskDifficulty=facet?.difficulty||difficulty;
+                const taskQuality=adaptiveContext?qualityPolicy(subject,taskDifficulty):quality;
+                const adaptiveFields=adaptiveContext?{adaptive_scope_id:adaptiveContext.scope.scopeId,adaptive_facet_id:facet.id,adaptive_difficulty:taskDifficulty}:null;
                 const base = combatFastMode ? quickQuizPrompt({
-                    mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty,
-                    previousQuestions, previousMeta, targetForm:task.form, quality,
+                    mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty:taskDifficulty,
+                    previousQuestions, previousMeta, targetForm:task.form, quality:taskQuality,adaptiveFields,
                     knowledgePointId: targetKnowledgePointId, generationTaskId:task.id,
                     retryIssue: lastGenerationIssue, randomSeed
-                }) : generationPrompt(task.form, task.id) + retryCorrection;
-                return taskPlan.prompt(base, index);
+                }) : generationPrompt(task.form, task.id,{difficulty:taskDifficulty,quality:taskQuality,adaptiveFields}) + retryCorrection;
+                return taskPlan.prompt(base, index)+(adaptiveContext?adaptiveLearning.prompt(adaptiveContext,index):'');
             };
             const prompt = promptForTask(0);
             // Shorter instructions and bounded provider latency only for combat.
             // Every generated candidate still undergoes the SAME server-side
             // TeX, quality, answer consistency, and duplicate validation below.
-            const saved = attempts === 0 ? quizSparePool.take(spareKey, validateCandidate) : null;
+            const saved = attempts === 0 ? (adaptiveContext?quizSparePool.takeMatching(spareKey,validateCandidate,data=>adaptiveContext.decision.targets.findIndex(f=>f.id===data.adaptive_facet_id&&f.difficulty===data.adaptive_difficulty)):quizSparePool.take(spareKey, validateCandidate)) : null;
             const routed = saved || await aiRouter.generateJSON(prompt, {
                 ...(combatFastMode ? { timeoutMs: 16000 } : {}),
                 parallel: true,
                 validate: (parsed, context = {index:0}) => {
                     validateCandidate(parsed);
                     taskPlan.validate(parsed, context.index);
+                    if(adaptiveContext)adaptiveLearning.validate(adaptiveContext,parsed,context.index);
                 },
                 promptForProvider: (_base, index) => promptForTask(index),
                 onWinner: winner => quizSparePool.markServed(spareKey, winner.data),
@@ -783,7 +801,10 @@ app.post('/api/generate-quiz', async (req, res) => {
             parsed.sub_topic = targetTopic;
             Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
             Object.assign(parsed, Knowledge.metadata(parsed, subject));
+            if(adaptiveContext)parsed.adaptive=adaptiveLearning.metadata(adaptiveContext,parsed);
+            const deliveredDifficulty=parsed.adaptive?.difficulty||difficulty;
             delete parsed.generation_task_id;
+            delete parsed.adaptive_scope_id;delete parsed.adaptive_facet_id;delete parsed.adaptive_difficulty;
             parsed.question_form = QUESTION_FORMS.includes(String(parsed.question_form || ''))
                 ? String(parsed.question_form) : targetForm;
             parsed.concept_id = String(parsed.concept_id || (subject + ':' + targetTopic)).trim().slice(0, 100);
@@ -791,10 +812,10 @@ app.post('/api/generate-quiz', async (req, res) => {
                 .trim().slice(0, 120);
             parsed.cognitive_level = raidQuickSimple
                 ? Math.max(1, Math.min(2, Number(parsed.cognitive_level) || 1))
-                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 3 : difficulty === 'medium' ? 2 : 1)));
+                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (deliveredDifficulty === 'hard' ? 3 : deliveredDifficulty === 'medium' ? 2 : 1)));
             parsed.reasoning_steps = raidQuickSimple
                 ? 1
-                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 2 : 1)));
+                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (deliveredDifficulty === 'hard' ? 2 : 1)));
 
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');

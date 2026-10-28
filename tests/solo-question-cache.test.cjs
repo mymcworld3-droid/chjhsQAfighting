@@ -247,3 +247,13 @@ test('core import and page query change together to refresh browser cached code'
   assert.match(index, /main\.js\?v=20261013-arrival1/);
   assert.match(index, /xianxia\.css\?v=20261013-ai-scenes1/);
 });
+
+test('assistance on the exact active question survives reload and cannot replace an unanswered question',()=>{
+  const {createSoloQuestionCache}=cacheAPI(),storage=createMemoryStorage(),cache=createSoloQuestionCache(storage);
+  cache.activate('uid-help',scope());const quiz=makeQuiz('待答且已使用提示的題目');quiz.adaptive={questionId:'help-question'};
+  cache.setActive(quiz);quiz.adaptiveHelp=2;quiz.adaptiveLessonHelp=true;
+  assert.equal(cache.persistActive(quiz),true);assert.equal(cache.persistActive({...quiz,data:{...quiz.data,q:'另一題'}}),false);
+  const reloaded=createSoloQuestionCache(storage);reloaded.activate('uid-help',scope());
+  assert.equal(reloaded.getActive().adaptiveHelp,2);assert.equal(reloaded.getActive().adaptiveLessonHelp,true);assert.equal(reloaded.getActive().data.q,quiz.data.q);
+  cache.consumeActive();assert.equal(cache.persistActive(quiz),false);
+});

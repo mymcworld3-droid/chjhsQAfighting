@@ -15,9 +15,8 @@ const QUESTION_FORMS = Object.freeze(Object.keys(GOALS));
 const SIMPLE_FORMS = new Set(['direct-application', 'comparison', 'error-analysis']);
 const ANGLES = ['概念成立的條件', '關鍵資訊的取捨', '規則的適用情形', '結果與依據的對應'];
 
-function createQuizTaskPlan({targetForm, forms = QUESTION_FORMS, previousMeta = [], difficulty, mode, batchId = randomUUID()} = {}) {
-  const simple = difficulty === 'easy' || mode === 'raid-quick-simple';
-  const available = [...new Set(forms)].filter(form => Object.hasOwn(GOALS, form) && (!simple || SIMPLE_FORMS.has(form)));
+function createQuizTaskPlan({targetForm, forms = QUESTION_FORMS, previousMeta = [], difficulty, mode, batchId = randomUUID(), assignmentForTask} = {}) {
+  const available = [...new Set(forms)].filter(form => Object.hasOwn(GOALS, form));
   if (!available.length) throw Error('沒有符合出題限制的任務題型');
   const recent = new Set(previousMeta.slice(-5).map(item => item.question_form));
   const fresh = available.filter(form => !recent.has(form));
@@ -27,12 +26,19 @@ function createQuizTaskPlan({targetForm, forms = QUESTION_FORMS, previousMeta = 
   const tasks = new Map();
   function get(index) {
     if (!Number.isSafeInteger(index) || index < 0) throw Error('出題任務序號無效');
-    if (!tasks.has(index)) tasks.set(index, Object.freeze({
+    if (!tasks.has(index)) {
+      const assignment=assignmentForTask?.(index)||{},simple=(assignment.difficulty||difficulty)==='easy'||mode==='raid-quick-simple';
+      const compatible=order.filter(form=>(!simple||SIMPLE_FORMS.has(form))&&(!assignment.forms?.length||assignment.forms.includes(form)));
+      const choices=compatible.length?compatible:order.filter(form=>!simple||SIMPLE_FORMS.has(form));
+      if(!choices.length)throw Error('沒有符合此考法難度的任務題型');
+      const form=choices[index%choices.length];
+      tasks.set(index, Object.freeze({
       id: `quiz-task-${batchId}-${index + 1}`, index,
-      form: order[index % order.length],
-      goal: GOALS[order[index % order.length]],
+      form,
+      goal: GOALS[form],
       angle: ANGLES[Math.floor(index / order.length) % ANGLES.length], simple
-    }));
+      }));
+    }
     return tasks.get(index);
   }
   function prompt(base, index) {
@@ -41,14 +47,14 @@ function createQuizTaskPlan({targetForm, forms = QUESTION_FORMS, previousMeta = 
       generation_task_id: task.id, question_form: task.form, goal: task.goal, angle: task.angle
     }) + '\n本 API 只完成這一個任務，輸出一道完整且可獨立作答的單選題。不同任務必須使用不同的作答目標及解題骨架，不能只更換數字、人名或地點。' +
       '\n保持上文指定的科目、年級、單元、知識點與難度；任務分工不得擴張範圍或增加推理步數。' +
-      (simple ? '\n本任務只需一步直接判斷或應用；錯誤辨析也只能檢查一個明確步驟，不設陷阱。' : '') +
+      (task.simple ? '\n本任務只需一步直接判斷或應用；錯誤辨析也只能檢查一個明確步驟，不設陷阱。' : '') +
       '\n回傳 JSON 必須包含與任務規格完全相同的 generation_task_id、question_form；任務編號與分工說明不得出現在題幹、選項或解析。';
   }
   function validate(data, index) {
     const task = get(index);
     if (data?.generation_task_id !== task.id || data?.question_form !== task.form)
       throw Error('AI 回應與分派的出題任務或題型不符');
-    if (simple && Number(data.reasoning_steps) > 1) throw Error('入門出題任務不得超過一步推理');
+    if (task.simple && Number(data.reasoning_steps) > 1) throw Error('入門出題任務不得超過一步推理');
     return true;
   }
   return Object.freeze({get, prompt, validate});

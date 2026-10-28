@@ -165,3 +165,24 @@ html body.xianxia-theme #page-quiz .quiz-helper-launcher {
   html body.xianxia-theme #page-quiz .quiz-correction-actions { grid-template-columns: minmax(0,1fr); }
   html body.xianxia-theme #page-quiz .quiz-footer-actions { gap: 6px; }
 }
+/* Background learning stays inside the green parchment question surface. */
+#page-quiz .adaptive-scope-progress {
+  margin: .5rem 0 1rem; padding: .65rem .8rem;
+  border: 1px solid #75957b; border-radius: .35rem;
+  color: #294c37; background: #e5dfbe; font-size: .8rem;
+  overflow-wrap: anywhere;
+}
+#page-quiz .adaptive-scope-progress summary { cursor: pointer; font-weight: 700; }
+#page-quiz .adaptive-scope-progress p { margin: .6rem 0; }
+#page-quiz .adaptive-concept-row { padding: .55rem 0; border-top: 1px solid #a5b18c; }
+#page-quiz .adaptive-concept-row ul { padding-left: 1.1rem; margin-top: .3rem; list-style: disc; }
+#page-quiz .adaptive-concept-row li { margin: .25rem 0; line-height: 1.6; }
+#page-quiz .adaptive-concept-lesson {
+  margin: 1rem 0; padding: 1rem; color: #173e2c;
+  background: #ede4c6; border: 1px solid #648b70; border-left: 4px solid #527c58;
+  border-radius: .35rem; line-height: 1.9; overflow-wrap: anywhere;
+}
+#page-quiz .adaptive-concept-lesson h3 { font-weight: 700; font-size: 1rem; }
+#page-quiz .adaptive-concept-lesson h4 { font-weight: 700; margin-top: .65rem; }
+#page-quiz .adaptive-concept-lesson mjx-container,
+#page-quiz .adaptive-concept-lesson .katex { color: #173e2c !important; background: transparent !important; }

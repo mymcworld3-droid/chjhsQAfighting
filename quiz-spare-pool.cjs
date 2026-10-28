@@ -64,6 +64,15 @@ function createSparePool({ttlMs=8*60*1000,maxScopes=350,maxPerScope=4,similar=()
     return null;
   }
   function count(id){const b=scopes.get(id);return b&&b.expiry>now()?b.items.length:0;}
-  return {key,offer,markServed,take,count};
+  function takeMatching(id,validate,priority){
+    const b=scopes.get(id);if(!b||b.expiry<=now()){scopes.delete(id);return null;}
+    const choices=b.items.map(item=>({item,rank:priority(item.data)})).filter(x=>Number.isFinite(x.rank)&&x.rank>=0).sort((a,b)=>a.rank-b.rank);
+    for(const {item}of choices){
+      b.items=b.items.filter(candidate=>candidate!==item);
+      try{if(!validate(item.data,b.seen.map(x=>x.q),b.seen.map(x=>x.template)))continue;markServed(id,item.data);return item;}catch(_){}
+    }
+    return null;
+  }
+  return {key,offer,markServed,take,takeMatching,count};
 }
 module.exports={createSparePool};

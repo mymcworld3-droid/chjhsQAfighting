@@ -175,6 +175,14 @@ export function createSoloQuestionCache(storage) {
     return true;
   }
 
+  function persistActive(question) {
+    // Assistance belongs to this exact unanswered object; never replace it with
+    // another question or pass through the duplicate-question insertion path.
+    if (!uid || !scope || active !== question || !validQuestion(question)) return false;
+    save();
+    return true;
+  }
+
   function remember(question) {
     const item = compactMeta(question);
     if (!item.q) return false;
@@ -197,6 +205,6 @@ export function createSoloQuestionCache(storage) {
 
   return {
     activate, getActive, getQueue, getHistory, pendingCount, isPersistent,
-    isCurrent, isDuplicate, append, takeNext, setActive, remember, consumeActive
+    isCurrent, isDuplicate, append, takeNext, setActive, persistActive, remember, consumeActive
   };
 }

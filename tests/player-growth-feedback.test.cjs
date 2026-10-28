@@ -213,7 +213,7 @@ test('correction celebration fires only after a successful saved reward and neve
     const quiz=question('訂正變式',{recoveryOrigin:'原題'}), events=[];
     const remote={stats:{gold:10,totalScore:68,soloLearningV1:{version:1,mistakes:{[Learning.key('原題')]:{recovered:scenario==='replay'}}}}};
     const stats=structuredClone(remote.stats), auth={currentUser:{uid:'u'}}, learningReward=Learning.reward(stats,quiz,true);
-    const context={db:{},doc:()=>({}),auth,answerUser:{uid:'u'},currentUserData:{stats},stats,
+    const context={adaptiveRows:[],db:{},doc:()=>({}),auth,answerUser:{uid:'u'},currentUserData:{stats},stats,
       isCorrect:true,trialAnswerId:'',learningRules:Learning,learningReward,quiz,correctionFeedback:null,
       cultivationDelta:2,recoveryCoreGain:0,originalGoldenMessage:'',cultivationReward:{},scoreGain:0,
       calculateRankFromScore:()=>0,updateUIStats(){},showCultivationFeedback(){},cultivationFeedback:null,fbTitle:{},t:()=> '答對',
