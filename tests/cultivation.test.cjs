@@ -360,6 +360,53 @@ test('real answer flow persists mistakes and awards correction variants exactly 
  h.newQuiz();h.context.window.currentActiveQuiz.data.q='Another variation';h.context.window.currentActiveQuiz.recoveryOrigin=origin;
  await h.answer();assert.equal(h.context.currentUserData.stats.totalScore,31);assert.equal(h.context.currentUserData.stats.gold,65);
 });
+
+function mountCorrectionActions(h) {
+  const buttons = new Map();
+  h.nodes.set('solo-correction-actions', {
+    appendChild(button) {
+      buttons.set(button.id, button);
+      h.nodes.set(button.id, button);
+      button.remove = () => { buttons.delete(button.id); h.nodes.delete(button.id); };
+    }
+  });
+  return buttons;
+}
+
+test('wrong-answer correction is actionable while saving and an old save cannot restore it on the next question', async () => {
+  const h = setup(28), buttons = mountCorrectionActions(h), requests = [], hints = [];
+  h.context.window.currentActiveQuiz.learningTopic = '方程式';
+  h.context.window.startQuizExtendedPractice = (point, options) => { requests.push({point, correction:options.correction}); };
+  h.context.window.askQuizHelperPreset = prompt => hints.push(prompt);
+  const save = h.context.runTransaction;
+  let release, saves = 0;
+  h.context.runTransaction = async (...args) => {
+    if (++saves === 1) await new Promise(resolve => { release = resolve; });
+    return save(...args);
+  };
+  const pending = h.answer(1, 0);
+  assert.equal(h.writes.length, 0, 'answer save is still pending');
+  assert.equal(buttons.size, 2, 'both correction actions appear immediately');
+  buttons.get('solo-correction-practice').onclick();
+  buttons.get('solo-correction-hint').onclick();
+  assert.deepEqual(requests, [{point:'方程式', correction:true}]);
+  assert.match(hints[0], /概念提示/);
+  h.newQuiz();
+  await h.answer();
+  assert.equal(buttons.size, 0, 'a correct next answer has no correction controls');
+  release();
+  await pending;
+  assert.equal(buttons.size, 0, 'finishing the old save does not reinsert stale controls');
+});
+
+test('correct and skipped answers do not offer correction practice', async () => {
+  for (const choice of [0, -1]) {
+    const h = setup(28), buttons = mountCorrectionActions(h);
+    await h.answer(choice, 0);
+    assert.equal(buttons.size, 0);
+  }
+});
+
 test('a second tab cannot claim an already corrected origin again',async()=>{
  const h=setup(28),rules=require('../public/cultivation/solo-learning-rules.js');h.context.window.QASoloLearningRules=rules;
  const origin='Old mistake',key=rules.key(origin);

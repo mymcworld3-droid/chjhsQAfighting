@@ -3077,6 +3077,26 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         void window.MathJax?.typesetPromise?.([fbText]).catch(err => console.warn('[Quiz explanation MathJax]', err));
     }
 
+    // 訂正操作隨答錯解析立即出現，不等待儲存；置於下一題上方。
+    document.getElementById('solo-correction-practice')?.remove();
+    document.getElementById('solo-correction-hint')?.remove();
+    const correctionActions = document.getElementById('solo-correction-actions') || fbSection;
+    if (!isCorrect && userIdx >= 0 && quiz && correctionActions) {
+        const correction = document.createElement('button');
+        correction.id = 'solo-correction-practice'; correction.type = 'button';
+        correction.className = 'btn-cyber-primary mt-3 px-4 py-2 rounded-lg text-xs';
+        correction.textContent = '加入訂正練習 · 訂正修為 +1';
+        correction.onclick = () => {
+            void window.startQuizExtendedPractice(quiz.learningTopic || quiz.meta?.concept_id || '本題核心觀念', { correction: true });
+        };
+        correctionActions.appendChild(correction);
+        const hint = document.createElement('button'); hint.id = 'solo-correction-hint'; hint.type = 'button';
+        hint.className = 'btn-cyber-ghost mt-3 mr-2 px-4 py-2 rounded-lg text-xs';
+        hint.textContent = '先看概念提示';
+        hint.onclick = () => window.askQuizHelperPreset?.('請針對我這題的錯誤給一個簡短的概念提示，協助我理解關鍵步驟，再嘗試同概念訂正題。');
+        correctionActions.appendChild(hint);
+    }
+
     if (soloSession.active) {
         if (isCorrect) soloSession.correctCount++;
         else soloSession.wrongCount++;
@@ -3272,23 +3292,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
     }
 
-    document.getElementById('solo-correction-practice')?.remove();
-    document.getElementById('solo-correction-hint')?.remove();
-    if (!isCorrect && userIdx >= 0 && quiz && fbSection) {
-        const hint = document.createElement('button'); hint.id = 'solo-correction-hint'; hint.type = 'button';
-        hint.className = 'btn-cyber-ghost mt-3 mr-2 px-4 py-2 rounded-lg text-xs';
-        hint.textContent = '先看概念提示';
-        hint.onclick = () => window.askQuizHelperPreset?.('請針對我這題的錯誤給一個簡短的概念提示，協助我理解關鍵步驟，再嘗試同概念訂正題。');
-        fbSection.appendChild(hint);
-        const correction = document.createElement('button');
-        correction.id = 'solo-correction-practice'; correction.type = 'button';
-        correction.className = 'btn-cyber-primary mt-3 px-4 py-2 rounded-lg text-xs';
-        correction.textContent = '加入訂正練習 · 訂正修為 +1';
-        correction.onclick = () => {
-            void window.startQuizExtendedPractice(quiz.learningTopic || quiz.meta?.concept_id || '本題核心觀念', { correction: true });
-        };
-        fbSection.appendChild(correction);
-    }
     if (!extendedPracticeState.active) fillBuffer();
 }
 
@@ -3921,6 +3924,8 @@ window.toggleQuizWhiteboard = (forceOpen) => {
 };
 
 function renderQuiz(data, rank, topic) {
+    document.getElementById('solo-correction-practice')?.remove();
+    document.getElementById('solo-correction-hint')?.remove();
     const quizPage = document.getElementById('page-quiz');
     const finishQuestionTransition = beginSceneTransition(quizPage, quizPage, 'scroll', 'solo-question', true);
     // Rendering stays synchronous; the old question dissolves over the new one.
