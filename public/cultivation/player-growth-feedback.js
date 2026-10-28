@@ -5,9 +5,15 @@ import { getMainUser } from './data/project-repository.js';
 const Rules = globalThis.QAPlayerGrowth;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number = value => new Intl.NumberFormat('zh-TW', { maximumFractionDigits:2 }).format(value);
-let owner = '', queued = false, popupTimer = null;
+const COMPARISON_HOLD_MS = 4000, COMPARISON_FADE_MS = 600;
+let owner = '', queued = false, popupTimer = null, popupRemovalTimer = null;
 let observedUid = '', observedStats = null;
 const player = () => window.getCurrentUserData?.() || {};
+function clearComparison() {
+  clearTimeout(popupTimer); clearTimeout(popupRemovalTimer);
+  popupTimer = popupRemovalTimer = null;
+  document.getElementById('growth-comparison')?.remove();
+}
 function learningMarkup() {
   const concepts = Object.values(player().stats?.soloLearningV1?.concepts || {}).filter(item => item?.corrected > 0).slice(-5).reverse();
   if (!concepts.length) return '';
@@ -20,7 +26,7 @@ function render() {
   const uid = getMainUser()?.uid || '';
   if (owner !== uid) {
     owner = uid;
-    document.getElementById('growth-comparison')?.remove();
+    clearComparison();
     document.getElementById('correction-growth-feedback')?.remove();
     document.getElementById('player-learning-progress')?.remove();
   }
@@ -79,18 +85,23 @@ window.showGrowthComparison = ({uid,before,after,extra=[]}) => {
   const changes = [...Rules.statChanges(before,after), ...extra.filter(row => row.before?.value !== row.after?.value)];
   changes.sort((a,b) => Number(b.key === 'combatPower') - Number(a.key === 'combatPower'));
   if (!changes.length) return;
-  document.getElementById('growth-comparison')?.remove(); clearTimeout(popupTimer);
+  clearComparison();
   const popup = document.createElement('aside'); popup.id = 'growth-comparison'; popup.className = 'growth-comparison';
   popup.setAttribute('role','status'); popup.setAttribute('aria-live','polite');
   const value = stat => stat ? number(stat.value) + (stat.unit || '') : '未生效';
-  popup.innerHTML = `<button class="growth-comparison-close" type="button" aria-label="關閉能力比較">×</button><div class="growth-change-list">${changes.map((row,index) => {
+  popup.innerHTML = `<div class="growth-change-list">${changes.map((row,index) => {
     const delta = Number.isFinite(row.before?.value) && Number.isFinite(row.after?.value) ? Math.round((row.after.value - row.before.value)*100)/100 : null;
     const deltaText = delta === null ? '' : (delta > 0 ? '+' : '') + number(delta) + (row.after?.unit || row.before?.unit || '');
     return `<div class="growth-change${row.key === 'combatPower' ? ' growth-power-change' : ''}"><span>${esc(row.label)}</span><b aria-label="${esc(value(row.before) + ' → ' + value(row.after) + (deltaText ? '（' + deltaText + '）' : ''))}"><span aria-hidden="true">${esc(value(row.before))} <i class="growth-change-arrow">→</i> <span class="growth-animated-value"${delta !== null ? ` data-growth-value="${index}"` : ''}>${esc(value(row.after))}</span>${delta !== null ? `<small class="growth-delta ${delta < 0 ? 'growth-decrease' : 'growth-increase'}">${esc(deltaText)}</small>` : ''}</span></b></div>`;
   }).join('')}</div>`;
-  popup.querySelector('button').onclick = () => popup.remove(); document.body.appendChild(popup);
+  document.body.appendChild(popup);
   animateComparison(popup,changes);
-  popupTimer = setTimeout(() => { if (!popup.contains(document.activeElement) && !popup.matches(':hover')) popup.remove(); }, 15000);
+  popupTimer = setTimeout(() => {
+    popupTimer = null;
+    if (!popup.isConnected) return;
+    popup.classList.add('is-fading');
+    popupRemovalTimer = setTimeout(() => { popupRemovalTimer = null; popup.remove(); }, COMPARISON_FADE_MS);
+  }, COMPARISON_HOLD_MS);
 };
 function showCorrection(event) {
   const detail = event.detail;
