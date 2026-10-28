@@ -1,11 +1,12 @@
-import { collection, query, orderBy, limit, onSnapshot } from '../data-store.js';
+import { subscribeSocialFeed } from './social-feed.js';
 import { getProjectServices, getMainUser, authenticatedMainFetch } from './data/project-repository.js';
 
 const state = {
   uid: '', conversations: new Map(), peer: '', messages: [], lastMessageId: '',
   timer: null, polling: false, loading: false, sending: false,
   friendCount: null, friendSignature: '', failures: 0, retryAt: 0,
-  globalUnsub: null, globalListenGeneration: 0, globalLatest: '', globalUnread: false
+  globalUnsub: null, scopeUnsub: null, globalListenGeneration: 0,
+  globalLatest: '', globalUnread: false, scopeLatest: '', scopeUnread: false
 };
 const $ = id => document.getElementById(id);
 const currentUid = () => getMainUser()?.uid || '';
@@ -22,6 +23,7 @@ function updateBadges() {
   showBadge('alliance-chat-title-unread', total > 0, total);
   showBadge('alliance-friend-unread', total > 0, total);
   showBadge('alliance-global-unread', state.globalUnread); // NEVER light navigation for global chat.
+  showBadge('alliance-scope-unread', state.scopeUnread);
   document.querySelectorAll('[data-friend-chat-unread]').forEach(el => {
     const count = state.conversations.get(el.dataset.friendChatUnread)?.unread || 0;
     el.hidden = !count; el.textContent = count > 99 ? '99+' : String(count || '');
@@ -141,12 +143,14 @@ async function send(event) {
 function stopGlobalListener() {
   state.globalListenGeneration++;
   if (state.globalUnsub) { state.globalUnsub(); state.globalUnsub = null; }
+  if (state.scopeUnsub) { state.scopeUnsub(); state.scopeUnsub = null; }
 }
 function reset(uid) {
   close(); state.uid = uid; state.conversations.clear();
   state.friendCount = null; state.friendSignature = ''; state.failures = 0; state.retryAt = 0;
   stopGlobalListener();
-  state.globalLatest = ''; state.globalUnread = false; updateBadges();
+  state.globalLatest = ''; state.globalUnread = false;
+  state.scopeLatest = ''; state.scopeUnread = false; updateBadges();
 }
 async function poll({ force = false } = {}) {
   const uid = currentUid();
@@ -180,11 +184,21 @@ async function poll({ force = false } = {}) {
   } finally { state.polling = false; }
 }
 const globalChatVisible = () => $('page-social')?.classList.contains('active-page') &&
-  !$('section-chat')?.classList.contains('hidden');
+  Boolean($('section-chat') && !$('section-chat').classList.contains('hidden'));
+const scopeSharesVisible = () => $('page-social')?.classList.contains('active-page') &&
+  Boolean($('section-shares') && !$('section-shares').classList.contains('hidden'));
 function ackGlobalChat() {
   state.globalUnread = false;
   if (state.uid && state.globalLatest) {
     try { localStorage.setItem('xiuxian-global-chat-seen:' + state.uid, state.globalLatest); }
+    catch (_) {}
+  }
+  updateBadges();
+}
+function ackScopeShares() {
+  state.scopeUnread = false;
+  if (state.uid && state.scopeLatest) {
+    try { localStorage.setItem('xiuxian-scope-shares-seen:' + state.uid, state.scopeLatest); }
     catch (_) {}
   }
   updateBadges();
@@ -195,28 +209,35 @@ async function listenGlobal() {
   const generation = ++state.globalListenGeneration;
   try {
     const { db } = await getProjectServices('A', { authenticateSecondary: false });
-    if (state.uid !== uid || generation !== state.globalListenGeneration || document.visibilityState === 'hidden') return;
-    state.globalUnsub = onSnapshot(query(collection(db, 'global_chat'),
-      orderBy('timestamp', 'desc'), limit(1)), snap => {
-      if (uid !== state.uid || generation !== state.globalListenGeneration || document.visibilityState === 'hidden') return;
-      const latest = snap.docs[0]?.id || '';
-      const key = 'xiuxian-global-chat-seen:' + uid;
-      let lastSeen = '';
-      try { lastSeen = localStorage.getItem(key) || ''; } catch (_) {}
-      if (latest && !lastSeen) {
-        try { localStorage.setItem(key, latest); } catch (_) {}
-        lastSeen = latest; // No false alert for messages predating first login.
-      }
-      state.globalLatest = latest;
-      const mine = snap.docs[0]?.data()?.uid === uid;
-      state.globalUnread = Boolean(latest && latest !== lastSeen && !mine && !globalChatVisible());
-      if (globalChatVisible() || (mine && latest)) ackGlobalChat();
-      updateBadges();
-    }, err => {
+    if (state.uid !== uid || currentUid() !== uid || generation !== state.globalListenGeneration || document.visibilityState === 'hidden') return;
+    const failed = err => {
       if (generation !== state.globalListenGeneration) return;
       stopGlobalListener();
       console.warn('[Friend chat] public badge unavailable', err.message);
-    });
+    };
+    for (const kind of ['chat', 'shares']) {
+      if (generation !== state.globalListenGeneration) break;
+      const unsubscribe = subscribeSocialFeed(db, kind, 1, docs => {
+        if (uid !== state.uid || currentUid() !== uid || generation !== state.globalListenGeneration || document.visibilityState === 'hidden') return;
+        const shares = kind === 'shares', latest = docs[0]?.id || '';
+        const key = (shares ? 'xiuxian-scope-shares-seen:' : 'xiuxian-global-chat-seen:') + uid;
+        let lastSeen = '';
+        try { lastSeen = localStorage.getItem(key) || ''; } catch (_) {}
+        if (latest && !lastSeen) {
+          try { localStorage.setItem(key, latest); } catch (_) {}
+          lastSeen = latest; // No false alert for records predating first login.
+        }
+        const mine = docs[0]?.data()?.uid === uid;
+        const visible = shares ? scopeSharesVisible() : globalChatVisible();
+        const unread = Boolean(latest && latest !== lastSeen && !mine && !visible);
+        if (shares) { state.scopeLatest = latest; state.scopeUnread = unread; }
+        else { state.globalLatest = latest; state.globalUnread = unread; }
+        if (visible || (mine && latest)) (shares ? ackScopeShares : ackGlobalChat)();
+        updateBadges();
+      }, failed);
+      if (kind === 'chat') state.globalUnsub = unsubscribe;
+      else state.scopeUnsub = unsubscribe;
+    }
   } catch (err) { console.warn('[Friend chat] public listener unavailable', err.message); }
 }
 function start() {
@@ -241,6 +262,6 @@ document.addEventListener('keydown', event => {
 });
 window.addEventListener('xiuxian:user-ready', start);
 window.addEventListener('xiuxian:features-ready', start);
-window.QAFriendChat = Object.freeze({ start, poll, open, close, updateBadges, ackGlobalChat,
+window.QAFriendChat = Object.freeze({ start, poll, open, close, updateBadges, ackGlobalChat, ackScopeShares,
   unreadFor: peer => state.conversations.get(peer)?.unread || 0 });
 if (currentUid() && $('page-social')) start();

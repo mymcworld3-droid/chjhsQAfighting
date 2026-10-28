@@ -39,7 +39,7 @@
   pointer-events:none}
 .alliance-chat-badge.with-count{min-width:17px;height:17px;top:-7px;right:-8px;
   display:grid;place-items:center;color:#fff;font-size:10px;padding:0 3px;line-height:1}
-#btn-social-nav,#tab-btn-friends,#tab-btn-chat,.alliance-chat-friend-btn,
+#btn-social-nav,#tab-btn-friends,#tab-btn-chat,#tab-btn-shares,.alliance-chat-friend-btn,
 #page-social h2{position:relative}
 #alliance-chat-nav-unread{right:calc(50% - 19px);top:3px}
 #alliance-chat-title-unread{position:static;display:inline-grid;vertical-align:middle;margin-left:7px}

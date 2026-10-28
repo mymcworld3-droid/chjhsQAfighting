@@ -48,7 +48,7 @@ import { playerRepository } from './data/player-repository.js';
     const sent = chatShare.ok && JSON.stringify(chatShare.message) === lastShared;
     if ($('ss-transfer-chat')) {
       $('ss-transfer-chat').disabled = saving || sharing || !chatShare.ok || sent;
-      $('ss-transfer-chat').textContent = sharing ? '分享中…' : sent ? '已分享到聊天室' : '分享到聊天室';
+      $('ss-transfer-chat').textContent = sharing ? '分享中…' : sent ? '已發布至範圍分享' : '發布至範圍分享';
     }
     for (const id of ['ss-transfer-close', 'ss-transfer-dismiss']) if ($(id)) $(id).disabled = sharing;
     if ($('ss-transfer-panel')?.dataset.mode === 'share') {
@@ -90,7 +90,7 @@ import { playerRepository } from './data/player-repository.js';
     panel.dataset.mode = mode;
     input.readOnly = mode === 'share';
     $('ss-transfer-title').textContent = mode === 'share' ? '分享已選清單' : '匯入修習清單';
-    $('ss-transfer-help').textContent = mode === 'share' ? '填寫標題後可分享到全服聊天室，其他修士可查看並加入；也可複製分享內容。' : '貼上收到的完整分享內容或分享碼，會加入目前清單並略過重複項目。完成後記得儲存。';
+    $('ss-transfer-help').textContent = mode === 'share' ? '填寫標題後可發布至仙盟的「範圍分享」，其他修士可查看並加入；也可複製分享內容。' : '貼上收到的完整分享內容或分享碼，會加入目前清單並略過重複項目。完成後記得儲存。';
     $('ss-share-title-field').hidden = mode !== 'share';
     $('ss-transfer-chat').hidden = mode !== 'share';
     $('ss-transfer-copy').hidden = mode !== 'share';
@@ -112,11 +112,11 @@ import { playerRepository } from './data/player-repository.js';
     if (!shared.ok) { feedback(shared.message); return; }
     const key = JSON.stringify(shared.message);
     if (key === lastShared) return;
-    sharing = true; updateSummary(); feedback('正在分享到全服聊天室…');
+    sharing = true; updateSummary(); feedback('正在發布至範圍分享…');
     try {
       await playerRepository.shareCurriculum({ code:shared.message.scopeCode, title:shared.message.scopeTitle });
       lastShared = key;
-      feedback('已分享到全服聊天室，其他修士可查看並加入清單。');
+      feedback('已發布至仙盟的「範圍分享」，其他修士可查看並加入清單。');
     } catch (error) {
       feedback(error?.message || '分享失敗，請檢查連線後再試。');
     } finally { sharing = false; updateSummary(); }
@@ -363,7 +363,7 @@ import { playerRepository } from './data/player-repository.js';
         <div class="ss-transfer-body">
           <p id="ss-transfer-help"></p>
           <div id="ss-share-title-field" class="ss-share-title-field">
-            <label for="ss-share-title">聊天室標題（選填，最多 20 字）</label>
+            <label for="ss-share-title">分享標題（選填，最多 20 字）</label>
             <input id="ss-share-title" type="text" placeholder="例如：物理段考複習" aria-describedby="ss-share-title-count" autocomplete="off">
             <small id="ss-share-title-count" aria-live="polite">0 / 20 字</small>
           </div>
@@ -372,7 +372,7 @@ import { playerRepository } from './data/player-repository.js';
         </div>
         <p id="ss-transfer-feedback" role="status" aria-live="polite"></p>
         <div class="ss-transfer-actions">
-          <button id="ss-transfer-chat" type="button">分享到聊天室</button>
+          <button id="ss-transfer-chat" type="button">發布至範圍分享</button>
           <button id="ss-transfer-copy" type="button">複製清單</button>
           <button id="ss-transfer-native" type="button">系統分享</button>
           <button id="ss-transfer-apply" type="button">加入修習卷</button>

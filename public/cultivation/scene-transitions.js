@@ -25,7 +25,7 @@ export function sceneDirection(from, to, scope = 'page') {
   const groups = [
     ['page-home', 'page-training', 'page-store', 'page-rank', 'page-social', 'page-settings'],
     ['cs-stage-0', 'cs-stage-1', 'cs-stage-2'],
-    ['section-friends', 'section-chat'],
+    ['section-friends', 'section-chat', 'section-shares', 'section-classes'],
     ['ss-picker', 'ss-cart'],
     ['bv2-lobby', 'bv2-intro', 'bv2-arena', 'bv2-quiz', 'bv2-result'],
     ['raid-hub', 'raid-lobby', 'raid-arena', 'raid-question', 'raid-result']

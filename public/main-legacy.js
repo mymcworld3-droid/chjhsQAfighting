@@ -6,6 +6,7 @@ import './cultivation/quest-rules.js';
 import './cultivation/first-visit.js';
 import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
 import './cultivation/curriculum-range-rules.js';
+import { subscribeSocialFeed } from './cultivation/social-feed.js';
 import { beginSceneTransition, sceneTheme } from './cultivation/scene-transitions.js';
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
@@ -1506,20 +1507,23 @@ function injectSocialUI() {
                 <i class="fa-solid fa-comments"></i> 仙盟 <span id="alliance-chat-title-unread" class="alliance-chat-badge with-count" hidden aria-label="未讀好友訊息"></span>
             </h2>
             
-            <div class="ui-social-tabs flex px-4 gap-2 mb-2">
-                <button onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
+            <div class="ui-social-tabs flex px-4 gap-2 mb-2" role="tablist" aria-label="仙盟功能">
+                <button type="button" role="tab" aria-controls="section-friends" aria-selected="true" onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
                     <i class="fa-solid fa-user-group"></i> 好友 <span id="alliance-friend-unread" class="alliance-chat-badge with-count" hidden aria-label="好友私訊未讀"></span>
                 </button>
-                <button onclick="switchSocialTab('chat')" id="tab-btn-chat" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
-                    <i class="fa-solid fa-earth-asia"></i> 全服聊天 <span id="alliance-global-unread" class="alliance-chat-badge" hidden aria-label="全服有新訊息"></span>
+                <button type="button" role="tab" aria-controls="section-chat" aria-selected="false" onclick="switchSocialTab('chat')" id="tab-btn-chat" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-comments"></i> 聊天室 <span id="alliance-global-unread" class="alliance-chat-badge" hidden aria-label="聊天室有新訊息"></span>
                 </button>
-                <button onclick="switchSocialTab('classes')" id="tab-btn-classes" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                <button type="button" role="tab" aria-controls="section-shares" aria-selected="false" onclick="switchSocialTab('shares')" id="tab-btn-shares" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-scroll"></i> 範圍分享 <span id="alliance-scope-unread" class="alliance-chat-badge" hidden aria-label="有新的範圍分享"></span>
+                </button>
+                <button type="button" role="tab" aria-controls="section-classes" aria-selected="false" onclick="switchSocialTab('classes')" id="tab-btn-classes" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
                     <i class="fa-solid fa-chalkboard-user"></i> 班級
                 </button>
             </div>
         </div>
 
-        <div id="section-friends" class="flex-1 overflow-y-auto p-4 pb-20">
+        <div id="section-friends" role="tabpanel" aria-labelledby="tab-btn-friends" class="flex-1 overflow-y-auto p-4 pb-20">
             <div class="ui-friend-code bg-slate-800 p-4 rounded-xl border border-slate-700 mb-4">
                 <div class="text-xs text-gray-400 mb-1">我的好友代碼</div>
                 <div class="flex justify-between items-center">
@@ -1539,8 +1543,12 @@ function injectSocialUI() {
             </div>
         </div>
 
-        <div id="section-classes" class="hidden flex-1 overflow-y-auto p-4 pb-20" aria-label="教師與班級"><p role="status">正在準備班級功能…</p></div>
-        <div id="section-chat" class="hidden flex-1 flex flex-col overflow-hidden relative pb-16">
+        <div id="section-classes" role="tabpanel" aria-labelledby="tab-btn-classes" class="hidden flex-1 overflow-y-auto p-4 pb-20" aria-label="教師與班級"><p role="status">正在準備班級功能…</p></div>
+        <div id="section-shares" role="tabpanel" aria-labelledby="tab-btn-shares" class="hidden flex-1 flex flex-col overflow-hidden">
+            <div class="ui-scope-share-heading"><p>查看道友分享的修習範圍，加入自己的清單。</p><button type="button" class="btn-cyber-ghost" onclick="window.openCurriculumStudio?.()">分享我的範圍</button></div>
+            <div id="scope-share-messages" class="flex-1 overflow-y-auto p-4" aria-label="範圍分享清單"><p role="status">正在讀取範圍分享…</p></div>
+        </div>
+        <div id="section-chat" role="tabpanel" aria-labelledby="tab-btn-chat" class="hidden flex-1 flex flex-col overflow-hidden relative pb-16">
             <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
                 <div class="text-center text-gray-500 text-xs py-4">歡迎來到全服聊天室 👋<br>請保持友善發言</div>
             </div>
@@ -1559,72 +1567,54 @@ function injectSocialUI() {
     window.QAClassrooms?.mount();
 }
 
-// 切換分頁 (好友/聊天/班級)
+// 好友、聊天室、範圍分享與班級各自顯示；只監聽目前開啟的公開清單。
 window.switchSocialTab = (tab) => {
-    if (!['friends', 'chat', 'classes'].includes(tab)) return;
-    const btnFriends = document.getElementById('tab-btn-friends');
-    const btnChat = document.getElementById('tab-btn-chat');
-    const secFriends = document.getElementById('section-friends');
-    const secChat = document.getElementById('section-chat');
-    const secClasses = document.getElementById('section-classes');
-    const btnClasses = document.getElementById('tab-btn-classes');
-    const next = { friends: secFriends, chat: secChat, classes: secClasses }[tab];
-    const previous = [secFriends, secChat, secClasses].find(el => el && !el.classList.contains('hidden'));
+    const tabs = ['friends', 'chat', 'shares', 'classes'];
+    if (!tabs.includes(tab)) return;
+    const next = document.getElementById('section-' + tab);
+    const previous = tabs.map(name => document.getElementById('section-' + name))
+        .find(element => element && !element.classList.contains('hidden'));
     const finishTransition = beginSceneTransition(previous, next, 'cloud', 'social');
-    secClasses.classList.toggle('hidden', tab !== 'classes');
-    btnClasses.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all ' + (tab === 'classes' ? 'bg-cyan-600 text-white shadow-lg' : 'bg-slate-800 text-gray-400 hover:bg-slate-700');
-
-    if (tab === 'classes') {
-        secFriends.classList.add('hidden'); secChat.classList.add('hidden');
-        for (const button of [btnFriends, btnChat]) button.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700';
-        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-        void window.QAClassrooms?.open();
-    } else if (tab === 'friends') {
-        btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
-        btnChat.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700";
-        secFriends.classList.remove('hidden');
-        secChat.classList.add('hidden');
-        
-        // 切回好友時，取消聊天室監聽以省流量
-        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-        loadFriendList();
-    } else {
-        btnChat.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
-        btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700";
-        secChat.classList.remove('hidden');
-        secFriends.classList.add('hidden');
-        
-        // 啟用聊天室監聽：清除全服分頁內的紅點，但不影響好友私訊紅點。
-        listenToGlobalChat();
-        window.QAFriendChat?.ackGlobalChat();
+    for (const name of tabs) {
+        const active = name === tab, button = document.getElementById('tab-btn-' + name);
+        document.getElementById('section-' + name).classList.toggle('hidden', !active);
+        button.setAttribute('aria-selected', String(active));
+        button.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all ' +
+            (active ? 'bg-cyan-600 text-white shadow-lg' : 'bg-slate-800 text-gray-400 hover:bg-slate-700');
+    }
+    if (chatUnsub) { chatUnsub(); chatUnsub = null; }
+    if (tab === 'friends') loadFriendList();
+    else if (tab === 'classes') void window.QAClassrooms?.open();
+    else {
+        listenToGlobalChat(tab);
+        if (tab === 'shares') window.QAFriendChat?.ackScopeShares();
+        else window.QAFriendChat?.ackGlobalChat();
     }
     window.QAFriendChat?.updateBadges();
     finishTransition();
 };
 
-// 監聽聊天訊息
-function listenToGlobalChat() {
-    if (chatUnsub) return; // 避免重複監聽
-
-    const chatContainer = document.getElementById('chat-messages');
-    const q = query(collection(db, "global_chat"), orderBy("timestamp", "desc"), limit(25));
-
-    chatUnsub = onSnapshot(q, (snapshot) => {
-        if(snapshot.size > 0 && chatContainer.innerHTML.includes('歡迎來到全服聊天室')) {
-            chatContainer.innerHTML = '';
+function listenToGlobalChat(kind = 'chat') {
+    if (chatUnsub || !auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+    const container = document.getElementById(kind === 'shares' ? 'scope-share-messages' : 'chat-messages');
+    container.innerHTML = '<p class="ui-social-status" role="status">正在讀取' + (kind === 'shares' ? '範圍分享' : '聊天訊息') + '…</p>';
+    chatUnsub = subscribeSocialFeed(db, kind, 25, docs => {
+        if (auth.currentUser?.uid !== uid) return;
+        container.replaceChildren();
+        if (!docs.length) {
+            const empty = document.createElement('p');
+            empty.className = 'ui-social-status';
+            empty.textContent = kind === 'shares' ? '還沒有範圍分享，先分享你的修習清單吧。' : '歡迎來到全服聊天室，請保持友善發言。';
+            container.appendChild(empty);
         }
-
-        const messages = [];
-        snapshot.forEach(doc => messages.push({id: doc.id, ...doc.data()}));
-        messages.reverse(); // 轉成 舊 -> 新
-
-        chatContainer.innerHTML = '';
-        messages.forEach(msg => {
-            renderChatMessage(msg, chatContainer);
-        });
-
-        // 自動捲動到底部
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        const ordered = kind === 'shares' ? docs : docs.slice().reverse();
+        ordered.forEach(doc => renderChatMessage({id: doc.id, ...doc.data()}, container));
+        if (kind === 'chat') container.scrollTop = container.scrollHeight;
+    }, error => {
+        if (auth.currentUser?.uid !== uid) return;
+        container.textContent = '讀取失敗，請重新開啟此分頁。';
+        console.warn('[Social feed]', error);
     });
 }
 

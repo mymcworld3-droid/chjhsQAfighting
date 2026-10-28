@@ -64,13 +64,16 @@ html body.ui-cleanup #player-market .pm-card {border:1px solid var(--review-line
 html body.ui-cleanup #player-market .pm-compose {border-color:var(--review-line)!important;background:#ffffff03!important;box-shadow:none!important}
 /* Friends and chat keep their independent scroll areas and notification rules. */
 html body.ui-cleanup #page-social {height:calc(100dvh - 168px);min-height:0;overflow:hidden;flex-shrink:0}
+html body.ui-cleanup #page-social.active-page {display:flex;flex-direction:column}
 html body.ui-cleanup:has(#page-social.active-page)>main {overflow:hidden!important;padding-bottom:0!important}
 html body.ui-cleanup #page-social>.ui-social-heading {flex:0 0 auto;margin-bottom:0;padding-bottom:12px}
 html body.ui-cleanup #page-social .ui-social-heading h2 {padding:0 0 16px}
-html body.ui-cleanup #page-social .ui-social-tabs {gap:24px;margin:0;padding:0}
-html body.ui-cleanup #page-social .ui-social-tabs>button {flex:0 0 auto;min-height:44px;padding:8px 2px;border-radius:0;box-shadow:none!important;background:transparent!important;font-weight:500;color:#9e9786}
+html body.ui-cleanup #page-social .ui-social-tabs {gap:clamp(12px,3vw,24px);margin:0;padding:0;min-width:0;overflow-x:auto}
+html body.ui-cleanup #page-social .ui-social-tabs>button {flex:0 0 auto;min-height:44px;padding:8px 2px;border-radius:0;box-shadow:none!important;background:transparent!important;font-weight:500;color:#9e9786;white-space:nowrap}
 html body.ui-cleanup #page-social:has(#section-friends:not(.hidden)) #tab-btn-friends,
-html body.ui-cleanup #page-social:has(#section-chat:not(.hidden)) #tab-btn-chat {color:#e2c58a!important;border-bottom:2px solid #c2a46a}
+html body.ui-cleanup #page-social:has(#section-chat:not(.hidden)) #tab-btn-chat,
+html body.ui-cleanup #page-social:has(#section-shares:not(.hidden)) #tab-btn-shares,
+html body.ui-cleanup #page-social:has(#section-classes:not(.hidden)) #tab-btn-classes {color:#e2c58a!important;border-bottom:2px solid #c2a46a}
 html body.ui-cleanup #page-social #section-friends {padding:22px 0 14px;min-height:0}
 html body.ui-cleanup #page-social .ui-friend-code {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--review-line);border-radius:9px;background:#ffffff03!important;margin:0 0 14px}
 html body.ui-cleanup #page-social .ui-friend-code>div:first-child {font-size:12px;color:#aaa18c;margin:0}
@@ -84,6 +87,13 @@ html body.ui-cleanup #page-social #friend-list-container {display:grid;grid-temp
 html body.ui-cleanup #page-social #friend-list-container>* {min-width:0;margin:0;padding:16px;border:1px solid var(--review-line);border-radius:9px;background:#ffffff03!important;box-shadow:none!important}
 html body.ui-cleanup #page-social #section-chat {min-height:0;padding-bottom:66px}
 html body.ui-cleanup #page-social #chat-messages {padding:20px 0;min-height:0}
+html body.ui-cleanup #page-social #section-shares {min-height:0}
+html body.ui-cleanup #page-social .ui-scope-share-heading {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--review-line);flex:0 0 auto}
+html body.ui-cleanup #page-social .ui-scope-share-heading p {margin:0;color:#aaa18c;font-size:12px;line-height:1.7}
+html body.ui-cleanup #page-social .ui-scope-share-heading button {flex-shrink:0;min-height:44px;padding:8px 12px;font-size:12px}
+html body.ui-cleanup #page-social #scope-share-messages {min-height:0;padding:20px 0;overscroll-behavior:contain}
+html body.ui-cleanup #page-social #scope-share-messages>div>div:last-child {max-width:calc(100% - 48px);min-width:0}
+html body.ui-cleanup #page-social .ui-social-status {padding:24px 12px;text-align:center;font-size:13px;line-height:1.7;color:#aaa18c}
 html body.ui-cleanup #page-social .ui-chat-compose {padding:10px 0;background:var(--xq-ink)!important;border-color:var(--review-line);gap:10px}
 html body.ui-cleanup #page-social #chat-input {min-height:44px;border-radius:7px;font-size:13px}
 html body.ui-cleanup #page-social .ui-chat-compose>button {flex:0 0 44px;width:44px;height:44px;border-radius:7px;background:#c9ad72;color:#28241a;box-shadow:none}

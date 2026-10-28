@@ -73,7 +73,7 @@ test('friends, leaderboard and chat reuse recent reads without changing their or
   assert.match(legacy, /friendListPending/);
   assert.match(legacy, /leaderboardCachedSnapshot/);
   assert.match(legacy, /Date\.now\(\) - leaderboardCacheTime < 120000/);
-  assert.match(legacy, /limit\(25\)/);
+  assert.match(legacy, /subscribeSocialFeed\(db, kind, 25,/);
   assert.match(legacy, /if \(pageId !== 'page-social' && chatUnsub\)/);
 });
 
