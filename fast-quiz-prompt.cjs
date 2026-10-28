@@ -4,7 +4,7 @@ const MODES = new Set(['raid-quick-simple', 'raid-standard', 'battle-fast', 'imm
 const { ANSWER_AND_EXPLANATION_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previousQuestions = [],
-  previousMeta = [], targetForm = '', quality = {}, retryIssue = '', randomSeed = '', knowledgePointId = '' } = {}) {
+  previousMeta = [], targetForm = '', quality = {}, retryIssue = '', randomSeed = '', knowledgePointId = '', generationTaskId = '' } = {}) {
   if (!MODES.has(mode)) throw new Error('Unsupported fast quiz mode');
   const safe = (value, n=140) => String(value ?? '').slice(0,n);
   const previous = previousQuestions.slice(-10).map(value => safe(value,140));
@@ -16,6 +16,7 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     exp: '精簡且答案一致的解析', subject: safe(subject,40), sub_topic: safe(topic,180),
     knowledge_points:[{subject:Knowledge.subject(subject),id:'清單中的 ID',name:'清單中的名稱'}],
     concept_id: '考點短ID', template_id: '解題骨架短ID', question_form: safe(targetForm,40),
+    ...(generationTaskId ? {generation_task_id:safe(generationTaskId,100)} : {}),
     cognitive_level: quick ? 1 : Number.parseInt(quality.cognitive,10) || 2,
     reasoning_steps: quick ? 1 : Number.parseInt(quality.steps,10) || 2
   };

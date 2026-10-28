@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const aiRouter = require('./ai-router');
+const { QUESTION_FORMS, createQuizTaskPlan } = require('./quiz-generation-tasks.cjs');
 const registerAbilityCoachApi = require('./ability-coach-api.cjs');
 const registerFriendChatApi = require('./alliance-friend-chat-api.cjs');
 const registerDongtianApi = require('./dongtian-api');
@@ -372,11 +373,6 @@ function getRandomItem(arr) {
 }
 
 
-const QUESTION_FORMS = Object.freeze([
-    'direct-application', 'inverse-reasoning', 'error-analysis', 'scenario-modeling',
-    'data-interpretation', 'comparison', 'multi-step', 'concept-transfer'
-]);
-
 function cleanQuestionText(value) {
     return String(value || '').trim().slice(0, 500);
 }
@@ -610,7 +606,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         .map(item => ({ concept_id: item.concept_id, question_form: item.question_form }));
     const targetKnowledgePointId = enlightenmentContext?.knowledgePointId || '';
 
-    const generationPrompt = `
+    const generationPrompt = (form, taskId) => `
         [系統指令]
         你是一名 AI 教師，請生成一道「單選題」。
         ${ANSWER_AND_EXPLANATION_RULES}
@@ -629,7 +625,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         不得只換數字、人名、物品、地點或敘述，
         重出相同解法骨架。
 
-        本題指定表現形式：${targetForm}
+        本題指定表現形式：${form}
         認知層級約：${quality.cognitive}
         合理推理步數約：${quality.steps}
         深度要求：${quality.instruction}
@@ -680,7 +676,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             "knowledge_points": [{"subject":"${Knowledge.subject(subject)}","id":"固定清單中的 ID","name":"對應的固定知識點名稱"}],
             "concept_id": "穩定且短小的考點ID",
             "template_id": "描述解題骨架的ID",
-            "question_form": "${targetForm}",
+            "question_form": "${form}",
+            "generation_task_id": ${JSON.stringify(taskId)},
             "cognitive_level": ${Number.parseInt(quality.cognitive, 10)},
             "reasoning_steps": ${Number.parseInt(quality.steps, 10)}
         }
@@ -736,12 +733,19 @@ app.post('/api/generate-quiz', async (req, res) => {
             const retryCorrection = lastGenerationIssue ?
                 '\n[前一版未通過驗證]\n' + lastGenerationIssue.slice(0, 600) +
                 '\n這一版必須從頭重寫整個題目 JSON 的 q、correct、wrong、exp，不能只在解析加註更正。' : '';
-            const prompt = combatFastMode ? quickQuizPrompt({
-                mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty,
-                previousQuestions, previousMeta, targetForm, quality,
-                knowledgePointId: targetKnowledgePointId,
-                retryIssue: lastGenerationIssue, randomSeed
-            }) : generationPrompt + retryCorrection;
+            const taskPlan = createQuizTaskPlan({targetForm, forms:QUESTION_FORMS, previousMeta,
+                difficulty, mode:String(quizMode || 'solo')});
+            const promptForTask = index => {
+                const task = taskPlan.get(index);
+                const base = combatFastMode ? quickQuizPrompt({
+                    mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty,
+                    previousQuestions, previousMeta, targetForm:task.form, quality,
+                    knowledgePointId: targetKnowledgePointId, generationTaskId:task.id,
+                    retryIssue: lastGenerationIssue, randomSeed
+                }) : generationPrompt(task.form, task.id) + retryCorrection;
+                return taskPlan.prompt(base, index);
+            };
+            const prompt = promptForTask(0);
             // Shorter instructions and bounded provider latency only for combat.
             // Every generated candidate still undergoes the SAME server-side
             // TeX, quality, answer consistency, and duplicate validation below.
@@ -749,9 +753,11 @@ app.post('/api/generate-quiz', async (req, res) => {
             const routed = saved || await aiRouter.generateJSON(prompt, {
                 ...(combatFastMode ? { timeoutMs: 16000 } : {}),
                 parallel: true,
-                validate: validateCandidate,
-                promptForProvider: (base, index) => index === 0 ? base
-                    : base + `\n[候選題目差異化] 本次候選編號 ${index + 1}，請以不同情境、數字與考點切入，但維持指定學制、範圍及難度，產生獨立完整單選題。`,
+                validate: (parsed, context = {index:0}) => {
+                    validateCandidate(parsed);
+                    taskPlan.validate(parsed, context.index);
+                },
+                promptForProvider: (_base, index) => promptForTask(index),
                 onWinner: winner => quizSparePool.markServed(spareKey, winner.data),
                 onSpare: spare => quizSparePool.offer(spareKey, spare)
             });
@@ -777,6 +783,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             parsed.sub_topic = targetTopic;
             Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
             Object.assign(parsed, Knowledge.metadata(parsed, subject));
+            delete parsed.generation_task_id;
             parsed.question_form = QUESTION_FORMS.includes(String(parsed.question_form || ''))
                 ? String(parsed.question_form) : targetForm;
             parsed.concept_id = String(parsed.concept_id || (subject + ':' + targetTopic)).trim().slice(0, 100);

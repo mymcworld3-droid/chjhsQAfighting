@@ -219,9 +219,8 @@ async function withDeadline(promise,timeoutMs) {
   finally{clearTimeout(timer);}
 }
 
-// Concurrent quiz providers race to return the first syntactically valid JSON.
-// If the first wave fails, preserve the existing sequential provider fallback.
-// Requests use the same prompt; server-side quiz integrity checks still run.
+// Concurrent providers return the first fully validated result. Callers may
+// assign a different task to every attempt, including sequential fallbacks.
 async function generateJSON(prompt, options = {}) {
   const providers = buildProviders();
   if (!providers.length) {
@@ -231,14 +230,16 @@ async function generateJSON(prompt, options = {}) {
   const ordered = orderedProviders(providers);
   const errors = [];
   const attempts = [];
-  const attempt = async (provider, index = 0) => {
+  let nextAttemptIndex = 0;
+  const attempt = async (provider) => {
+    const index = nextAttemptIndex++;
     const started = Date.now();
     try {
       const candidatePrompt = typeof options.promptForProvider === 'function' ? options.promptForProvider(prompt, index) : prompt;
       const raw = await callProvider(provider, candidatePrompt, timeoutMs);
       const text = extractJsonText(raw);
       const data = JSON.parse(text);
-      if (typeof options.validate === 'function') options.validate(data);
+      if (typeof options.validate === 'function') options.validate(data, {index, provider:provider.name, model:provider.model});
       recordAttempt(provider, 'success');
       console.log(`[AI Router] ${provider.name}/${provider.model} success`);
       return { data, text, provider: provider.name, model: provider.model };
@@ -283,17 +284,17 @@ async function generateJSON(prompt, options = {}) {
   };
   if (wave.length > 1) {
     try {
-      return await Promise.any(wave.map((provider, index) => attempt(provider, index).then(collect)));
+      return await Promise.any(wave.map(provider => attempt(provider).then(collect)));
     } catch (_) {
       // All parallel attempts failed; remaining providers still get a chance.
     }
   } else if (wave.length === 1) {
-    try { return collect(await attempt(wave[0], 0)); } catch (_) { /* retry other providers */ }
+    try { return collect(await attempt(wave[0])); } catch (_) { /* retry other providers */ }
   }
   const attempted = new Set(wave);
-  for (const [index, provider] of ordered.entries()) {
+  for (const provider of ordered) {
     if (attempted.has(provider)) continue;
-    try { return collect(await attempt(provider, index)); } catch (_) { /* continue fallback */ }
+    try { return collect(await attempt(provider)); } catch (_) { /* continue fallback */ }
   }
   const codes = new Set(attempts.map(item => item.code));
   throw Object.assign(new Error(`All AI providers failed: ${errors.join(' | ')}`), {

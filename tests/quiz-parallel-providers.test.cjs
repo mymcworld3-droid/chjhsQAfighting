@@ -2,8 +2,12 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
+const vm=require('node:vm');
 const router=require('../ai-router');
 const server=fs.readFileSync('server.js','utf8');
+const {createQuizTaskPlan}=require('../quiz-generation-tasks.cjs');
+const {createSparePool}=require('../quiz-spare-pool.cjs');
+function taskFrom(prompt){return JSON.parse(prompt.split('\n').find(line=>line.startsWith('任務規格 JSON：')).slice('任務規格 JSON：'.length));}
 
 async function withMockProviders(fn) {
   const keys=['GEMINI_API_KEYS','GEMINI_API_KEY','OPENAI_API_KEY','OPENAI_MODEL','AI_PROVIDERS_JSON','AI_PROVIDER_STRATEGY'];
@@ -85,4 +89,125 @@ test('one configured API retains the ordinary sequential path and quiz endpoint 
   assert.match(server,/const combatFastMode = FAST_QUIZ_MODES\.has/);
   assert.match(server,/app\.post\('\/api\/generate-quiz'/);
   assert.match(fs.readFileSync('fast-quiz-prompt.cjs','utf8'),/raid-quick-simple.*battle-fast.*immortal-fast/);
+});
+
+test('all APIs start with different tasks together; late valid tasks become reusable spares',async()=>{
+  await withMockProviders(async()=>{
+    const plan=createQuizTaskPlan({difficulty:'medium'}),pool=createSparePool({similar:(a,b)=>a===b});
+    const key=pool.key({owner:'session:abcdefghijklmnopqrst',subject:'數學',topic:'方程式'});
+    const assigned=[],pending=[];
+    global.fetch=(url,init)=>new Promise(resolve=>{
+      const task=taskFrom(JSON.parse(init.body).messages[1].content);assigned.push(task);
+      pending.push(()=>resolve(response({q:'獨立題目 '+task.question_form,correct:'正解',wrong:['錯一','錯二','錯三'],exp:'完整解析',
+        template_id:'template-'+task.question_form,question_form:task.question_form,generation_task_id:task.generation_task_id})));
+    });
+    const work=router.generateJSON('同一指定範圍',{
+      parallel:true,promptForProvider:(base,index)=>plan.prompt(base,index),validate:(data,context)=>plan.validate(data,context.index),
+      onWinner:result=>pool.markServed(key,result.data),onSpare:result=>pool.offer(key,result)
+    });
+    assert.equal(assigned.length,3,'every API is started before waiting for a result');
+    assert.equal(new Set(assigned.map(x=>x.generation_task_id)).size,3);
+    assert.equal(new Set(assigned.map(x=>x.question_form)).size,3);
+    assert.equal(new Set(assigned.map(x=>x.goal)).size,3);
+    pending[1]();const winner=await work;assert.equal(winner.data.generation_task_id,assigned[1].generation_task_id);
+    pending[0]();pending[2]();await new Promise(resolve=>setImmediate(resolve));
+    assert.equal(pool.count(key),2);
+    assert(pool.take(key,()=>true));assert(pool.take(key,()=>true));assert.equal(assigned.length,3,'spares need no new API requests');
+  });
+});
+
+test('a fast response with another task ID cannot win or become a spare',async()=>{
+  await withMockProviders(async()=>{
+    const plan=createQuizTaskPlan({difficulty:'medium'}),spares=[];
+    global.fetch=async(url,init)=>{
+      const task=taskFrom(JSON.parse(init.body).messages[1].content),name=new URL(url).hostname.split('.')[0];
+      if(name!=='fast')await new Promise(resolve=>setTimeout(resolve,5));
+      return response({generation_task_id:name==='fast'?'another-task':task.generation_task_id,question_form:task.question_form});
+    };
+    const result=await router.generateJSON('scope',{parallel:true,promptForProvider:(base,index)=>plan.prompt(base,index),
+      validate:(data,context)=>plan.validate(data,context.index),onSpare:result=>spares.push(result)});
+    assert.notEqual(result.provider,'fast');await new Promise(resolve=>setTimeout(resolve,20));
+    assert(spares.every(result=>result.provider!=='fast'));
+  });
+});
+
+test('fallback models sharing a credential receive new task numbers after the parallel wave',async()=>{
+  await withMockProviders(async()=>{
+    process.env.AI_PROVIDERS_JSON=JSON.stringify(['a','b','c'].flatMap(key=>[1,2].map(model=>({
+      name:key+model,type:'openai-compatible',baseUrl:'https://'+key+'.test/v1',apiKey:'key-'+key,model:String(model)
+    }))));
+    const plan=createQuizTaskPlan({difficulty:'medium'}),assigned=[],indices=[];
+    global.fetch=async(_url,init)=>{
+      const body=JSON.parse(init.body),task=taskFrom(body.messages[1].content);assigned.push(task);
+      if(assigned.length<=3)return {ok:true,json:async()=>({choices:[{message:{content:'invalid'}}]})};
+      return response({generation_task_id:task.generation_task_id,question_form:task.question_form});
+    };
+    const result=await router.generateJSON('scope',{parallel:true,promptForProvider:(base,index)=>{indices.push(index);return plan.prompt(base,index);},
+      validate:(data,context)=>plan.validate(data,context.index)});
+    assert(result.data.generation_task_id);
+    assert.equal(new Set(assigned.map(x=>x.generation_task_id)).size,assigned.length);
+    assert.deepEqual(indices,Array.from({length:assigned.length},(_,i)=>i));
+    assert.equal(assigned.length,4);
+  });
+});
+
+test('a single configured API receives one complete task without additional generation calls',async()=>{
+  await withMockProviders(async()=>{
+    const configured=JSON.parse(process.env.AI_PROVIDERS_JSON);process.env.AI_PROVIDERS_JSON=JSON.stringify(configured.slice(0,1));
+    const plan=createQuizTaskPlan({difficulty:'easy'});let calls=0;
+    global.fetch=async(_url,init)=>{
+      calls++;const task=taskFrom(JSON.parse(init.body).messages[1].content);
+      return response({generation_task_id:task.generation_task_id,question_form:task.question_form});
+    };
+    const result=await router.generateJSON('scope',{parallel:true,promptForProvider:(base,index)=>plan.prompt(base,index),
+      validate:(data,context)=>plan.validate(data,context.index)});
+    assert.equal(calls,1);assert.equal(result.data.generation_task_id,plan.get(0).id);
+  });
+});
+
+test('real quiz handler delivers the fastest assigned form, strips internal IDs and reuses other tasks in solo and combat',async()=>{
+  await withMockProviders(async()=>{
+    for(const mode of ['solo','battle-fast']) {
+      let handler;const pending=[],assigned=[];let calls=0;
+      const context={QUESTION_FORMS:require('../quiz-generation-tasks.cjs').QUESTION_FORMS,createQuizTaskPlan,
+        app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,crypto:require('node:crypto'),
+        FAST_QUIZ_MODES:require('../fast-quiz-prompt.cjs').MODES,quickQuizPrompt:require('../fast-quiz-prompt.cjs').quickQuizPrompt,
+        Knowledge:require('../public/cultivation/knowledge-points.js'),
+        ANSWER_AND_EXPLANATION_RULES:require('../quiz-answer-prompt.cjs').ANSWER_AND_EXPLANATION_RULES,
+        subjectReliabilityPrompt:require('../quiz-answer-prompt.cjs').subjectReliabilityPrompt,
+        questionQualityIssue:require('../question-quality.cjs').questionQualityIssue,removeUnstableOptionLabels:require('../question-quality.cjs').removeUnstableOptionLabels,
+        SUBJECT_SCHEMA:{數學:['一次方程式']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},
+        quizSparePool:createSparePool({similar:(a,b)=>a===b})};
+      const helperStart=server.indexOf('function cleanQuestionText('),helperEnd=server.indexOf('const { MODES: FAST_QUIZ_MODES',helperStart);
+      const start=server.indexOf("app.post('/api/generate-quiz',"),end=server.indexOf('// API 5:',start);
+      vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end),context);
+      const questions=[
+        {q:'方程式 x+2=6 中，x 的值為何？',correct:'4',wrong:['2','3','5'],exp:'移項得 x=6-2=4，所以答案為 4。'},
+        {q:'某數乘以 3 等於 15，這個數是多少？',correct:'5',wrong:['2','3','4'],exp:'設此數為 x，3x=15，兩邊除以 3 得 x=5。'},
+        {q:'解方程式 x+3=7 時，將 x 寫成 7+3。正確的移項結果為何？',correct:'x=4',wrong:['x=10','x=7','x=3'],exp:'原式兩邊同減 3，應得 x=7-3=4。'}
+      ];
+      global.fetch=(_url,init)=>new Promise(resolve=>{
+        const task=taskFrom(JSON.parse(init.body).messages[1].content),index=calls++;assigned.push(task);
+        pending.push(()=>resolve(response({...questions[index],subject:'數學',
+          knowledge_points:[{subject:'數學',id:'math-3',name:'方程與不等式'}],
+          question_form:task.question_form,generation_task_id:task.generation_task_id,
+          concept_id:'linear-equation',template_id:'independent-'+index,reasoning_steps:1,cognitive_level:2})));
+      });
+      const invoke=async()=>{
+        const output={};
+        await handler({body:{subject:'數學',specificTopic:'一次方程式',level:'國中一年級',difficulty:'medium',quizMode:mode,quizSessionId:'abcdefghijklmnopqrst-session'}},
+          {status(n){output.status=n;return this;},json(value){output.body=value;return this;}});
+        return output;
+      };
+      const first=invoke();assert.equal(calls,3);
+      pending[1]();const delivered=await first;
+      assert.equal(delivered.status,undefined);const question=JSON.parse(delivered.body.text);
+      assert.equal(question.q,questions[1].q);assert(!Object.hasOwn(question,'generation_task_id'));
+      assert.equal(question.question_form,assigned[1].question_form);assert.notEqual(question.question_form,assigned[0].question_form);
+      pending[0]();pending[2]();await new Promise(resolve=>setImmediate(resolve));
+      const next=await invoke();assert.equal(calls,3,'compatible late tasks are reused without a new batch');
+      assert.notEqual(JSON.parse(next.body.text).q,question.q);
+      assert(!Object.hasOwn(JSON.parse(next.body.text),'generation_task_id'));
+    }
+  });
 });
