@@ -48,7 +48,7 @@ import {
     equip_crit_chance: { title: '暴擊率', summary: '攻擊時有機率造成暴擊', hint: '例如：0.15 = 15%', icon: 'fa-crosshairs' },
     equip_crit_damage_percent: { title: '暴擊增傷', summary: '暴擊時提高額外倍率', hint: '例如：0.5 = 暴擊額外 +50%', icon: 'fa-bolt' },
     equip_combo_damage_percent: { title:'連擊傷害',summary:'增加連擊傷害（基礎 30%），每段可再次連擊',hint:'0.30 = 額外 30 個百分點',icon:'fa-burst' },
-    equip_combo_chance: { title: '連擊率', summary: '普通法器最多 10%、本命法寶最多 12%，每段可再次連擊，基礎傷害 30%', hint: '普通上限：0.10 = 10%；本命上限：0.12 = 12%', icon: 'fa-forward-fast' },
+    equip_combo_chance: { title: '連擊率', summary: '普通法器最多 10%、本命法寶最多 30%，每段可再次連擊，基礎傷害 30%', hint: '普通上限：0.10 = 10%；本命上限：0.30 = 30%', icon: 'fa-forward-fast' },
     equip_lifesteal_percent: { title: '吸血', summary: '依實際造成的生命傷害回復生命', hint: '例如：0.1 = 10%', icon: 'fa-droplet' },
     equip_reflect_percent: { title: '反傷', summary: '反射實際受到的生命傷害', hint: '例如：0.15 = 15%', icon: 'fa-reply' },
     equip_shield_flat: { title: '開場護盾', summary: '每場鬥法開始時獲得固定護盾', hint: '例如：300 護盾', icon: 'fa-shield-heart' },
@@ -140,7 +140,7 @@ import {
       equip_crit_chance: `暴擊率 ${pct(effect.value)}`,
       equip_crit_damage_percent: `暴擊增傷 ${pct(effect.value)}`,
       equip_combo_damage_percent: `連擊傷害 +${pct(effect.value)}（基礎 30%）`,
-      equip_combo_chance: `連擊率 ${pct(Math.min(0.10, Number(effect.value) || 0))}`,
+      equip_combo_chance: `連擊率 ${pct(effect.value)}`,
       equip_lifesteal_percent: `吸血 ${pct(effect.value)}`,
       equip_reflect_percent: `反傷 ${pct(effect.value)}`,
       equip_shield_flat: `開場護盾 +${Number(effect.value) || 0}`,
@@ -450,18 +450,19 @@ import {
       display.textContent = prefix + (base.note || '固定規則，不需輸入數值');
       return;
     }
-    const setting = window.getArtifactEffectBounds?.()?.[String(stage)]?.[type];
-    const bounds = setting || base;
+    const bounds = base;
     const integer = base.unit === '點';
     const inverse = type === 'equip_damage_cap_percent';
     const [realmMin, realmMax] = depthHintForRealm(bounds, index, inverse, integer);
     const quantity = currentEditorIngredientCount(modal);
     const factor = ingredientHintMultiplier(quantity);
     const scaled = scaleIngredientHint(realmMin, realmMax, base, factor);
-    const { min, max } = globalThis.QASoulboundPool.refinementRange({ ...base, min:scaled[0], max:scaled[1] }, modal.querySelector('#aam-slot')?.value === '本命法寶');
+    const soulbound = modal.querySelector('#aam-slot')?.value === '本命法寶';
+    const fixedRange = soulbound ? globalThis.QASoulboundPool.effectRange(type,index,stage,quantity) : null;
+    const { min, max } = fixedRange || {min:scaled[0],max:scaled[1]};
     const number = (value) => Number(value).toLocaleString('zh-TW', { maximumFractionDigits:4 });
     let text = prefix + number(min) + '～' + number(max) + ' ' + base.unit +
-      '（素材 ' + quantity + ' 個 ×' + factor + '）' + (modal.querySelector('#aam-slot')?.value === '本命法寶' ? '；本命特殊屬性 ×4，攻擊／生命不變' : '');
+      '（素材 ' + quantity + ' 個 ×' + factor + '）' + (soulbound ? '；本命法器採系統固定上下限' : '');
     if (base.field === 'multiplier') {
       const [durationMin, durationMax] = depthHintForRealm({
         min:bounds.durationMinutesMin, max:bounds.durationMinutesMax
@@ -469,10 +470,12 @@ import {
       text += '；持續 ' + number(durationMin) + '～' + number(durationMax) + ' 分鐘';
     }
     const input = row.querySelector(base.field === 'value' ? '[data-aam-effect-value]' : '[data-aam-effect-multiplier]');
+    const hardBounds = soulbound ? globalThis.QASoulboundPool.EFFECT_BOUNDS[type] : null;
+    if (input && hardBounds) { input.min = String(hardBounds.min); input.max = String(hardBounds.max); input.step = type.endsWith('_flat') ? '1' : '0.0001'; }
     const current = Number(input?.value);
     const outside = input?.value?.trim() && Number.isFinite(current) && (current < min - 1e-8 || current > max + 1e-8);
     if (outside) text += '；目前填值超出參考範圍';
-    display.textContent = text + '（僅供參考，不限制手動填寫）';
+    display.textContent = text + (soulbound ? '（儲存時套用系統硬上限）' : '（僅供參考，不限制手動填寫）');
     display.classList.toggle('is-outside', !!outside);
   }
 
@@ -504,11 +507,11 @@ import {
         valueInput.removeAttribute('max');
         valueInput.removeAttribute('min');
         if (current === 'equip_combo_chance') {
-          valueInput.max = document.getElementById(MODAL_ID)?.querySelector('#aam-slot')?.value === '本命法寶' ? '0.12' : '0.10';
+          valueInput.max = document.getElementById(MODAL_ID)?.querySelector('#aam-slot')?.value === '本命法寶' ? String(globalThis.QASoulboundPool.EFFECT_BOUNDS.equip_combo_chance.max) : '0.10';
           valueInput.min = '0';
           if (Number(valueInput.value) > Number(valueInput.max)) valueInput.value = valueInput.max;
         } else if (current === 'equip_damage_cap_percent') {
-          valueInput.min = document.getElementById(MODAL_ID)?.querySelector('#aam-slot')?.value === '本命法寶' ? String(Number((0.05 / 1.2).toFixed(6))) : '0.05';
+          valueInput.min = document.getElementById(MODAL_ID)?.querySelector('#aam-slot')?.value === '本命法寶' ? String(globalThis.QASoulboundPool.EFFECT_BOUNDS.equip_damage_cap_percent.min) : '0.05';
           valueInput.max = '1';
         }
       }
@@ -565,7 +568,8 @@ import {
       const type = row.querySelector('[data-aam-effect-type]').value;
       if (effectUsesValue(type)) {
         let value = Number(row.querySelector('[data-aam-effect-value]').value) || 0;
-        if (type === 'equip_combo_chance') value = Math.min(modal.querySelector('#aam-slot')?.value === '本命法寶' ? 0.12 : 0.10, Math.max(0, value));
+        if (modal.querySelector('#aam-slot')?.value === '本命法寶') value = globalThis.QASoulboundPool.normalizeValue(type,value);
+        else if (type === 'equip_combo_chance') value = Math.min(0.10, Math.max(0, value));
         return { type, value };
       }
       if (type.startsWith('timed_')) {
@@ -729,6 +733,7 @@ import {
       forgeMethod: modal.querySelector('#aam-forge-method').value,
       coreEffect: original?.coreEffect || '',
       soulboundRefinementVersion: original?.soulboundRefinementVersion || 0,
+      soulboundBalanceVersion: globalThis.QASoulboundPool.BALANCE_VERSION,
       equipSlot: modal.querySelector('#aam-slot').value,
       description: modal.querySelector('#aam-description').value,
       craft: { gold: modal.querySelector('#aam-gold').value, yield: modal.querySelector('#aam-yield').value },

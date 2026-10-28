@@ -97,7 +97,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-account-manager.js',
   './cultivation/admin-player-analytics.js',
   './cultivation/admin-artifact-manager.js',
-  './cultivation/admin-artifact-effect-bounds.js',
   './cultivation/admin-artifact-delete.js',
   './cultivation/admin-material-manager.js',
   './cultivation/admin-item-image-manager.js',

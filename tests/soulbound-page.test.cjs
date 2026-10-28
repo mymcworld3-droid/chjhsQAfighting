@@ -246,8 +246,8 @@ test('clicking a showcase weapon opens details without changing draw target or m
   assert.match(modal.innerHTML, /role="dialog" aria-modal="true"/);
   assert.ok(modal.innerHTML.includes(item.name));
   assert.ok(modal.innerHTML.includes(item.description));
-  assert.match(modal.innerHTML, /攻擊 \+100/);
-  assert.match(modal.innerHTML, /生命 \+305/);
+  assert.match(modal.innerHTML, /攻擊 \+400/);
+  assert.match(modal.innerHTML, /生命 \+1220/);
   assert.equal(runtime.requests.length, 1, 'preview must not issue a draw');
   runtime.closePreview();
   assert.equal(runtime.nodes.has('soulbound-preview'), false);

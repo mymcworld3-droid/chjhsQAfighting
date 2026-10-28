@@ -53,14 +53,14 @@ function mayCommitDiscovery({ tx, preview, uid, now = Date.now() }) {
       typeof item.name !== 'string' || !item.name.trim() || item.name.length > 18 ||
       item.craft?.yield !== 1 || item.craft?.gold !== fragments.baseCost(item.realm) * 10 ||
       !only(item, ['id','name','icon','realm','category','description','weaponForm','forgeMethod','coreEffect','craft','effects',
-        'equipSlot','soulboundRefinementVersion','reviewStatus','generatedByAI','generatedAtMs','recipeOwnerUid',
+        'equipSlot','soulboundRefinementVersion','soulboundBalanceVersion','reviewStatus','generatedByAI','generatedAtMs','recipeOwnerUid',
         'recipeOwnerName','recipeDiscoveredAtMs','generationSignature','generationMaterials','aiProvider','aiModel'])) return false;
   if (catalog.aiGeneratedArtifactId !== item.id || materials.aiGeneratedArtifactId !== item.id ||
       !Number.isSafeInteger(catalog.aiGeneratedAtMs) || !Number.isSafeInteger(materials.aiGeneratedRecipeAtMs)) return false;
   const oldRecipes = oldMaterials.recipes || {};
   if (Object.hasOwn(oldRecipes, item.id) || !equal(materials.recipes, {...oldRecipes, [item.id]:job.recipe})) return false;
 
-  const artifacts = new Map([...fragments.DEFAULT_ARTIFACTS, ...oldItems, ...pool.ITEMS].map(row => [row.id,row]));
+  const artifacts = new Map([...fragments.DEFAULT_ARTIFACTS, ...oldItems, ...pool.ITEMS].map(row => [row.id,pool.balanceArtifact(row)]));
   const sources = [];
   for (const row of job.recipe) {
     const source = row.artifactId ? artifacts.get(row.artifactId) : fragments.MATERIALS.find(item => item.id === row.materialId);
@@ -68,7 +68,8 @@ function mayCommitDiscovery({ tx, preview, uid, now = Date.now() }) {
     if (source.equipSlot === '本命法寶') sources.push(source);
   }
   const bound = sources.length > 0;
-  if (!bound || item.equipSlot !== '本命法寶') return false;
+  if (!bound || item.equipSlot !== '本命法寶' || item.soulboundRefinementVersion !== pool.REFINEMENT_VERSION ||
+      item.soulboundBalanceVersion !== pool.BALANCE_VERSION) return false;
   if (oldItems.some(existing => Array.isArray(oldRecipes[existing.id]) &&
       signature(oldRecipes[existing.id], existing.forgeMethod) === job.signature &&
       pool.refinementCompatible(existing, bound, sources))) return false;
@@ -87,7 +88,7 @@ function mayCommitDiscovery({ tx, preview, uid, now = Date.now() }) {
   }
   for (const effect of item.effects) {
     if (!generation.ALLOWED_EFFECTS.has(effect.type) || !only(effect, ['type','value','multiplier','durationMs','contexts','perQuestion'])) return false;
-    const range = pool.refinementRange(generation.effectRange(effect.type, order, job.refinementStage, {}, false, oldCatalog.effectBoundsV2 || {}, total), bound);
+    const range = pool.effectRange(effect.type, order, job.refinementStage, total);
     const inherited = bound && sources.some(source => source.effects?.some(row => row.type === effect.type));
     if (!range && !inherited) return false;
     if (range?.field === 'none' || inherited && !Object.hasOwn(effect, 'value')) {
@@ -97,7 +98,7 @@ function mayCommitDiscovery({ tx, preview, uid, now = Date.now() }) {
       const inheritedFloor = required.find(row => row.type === effect.type)?.value || 0;
       const max = bound ? Math.min(pool.refinementCap(effect.type, pool.PERCENT_EFFECT_CAPS[effect.type] ?? Infinity, true),
         Math.max(range?.max || 0, inheritedFloor)) : range.max;
-      if (effect.value > max || (effect.type === 'equip_damage_cap_percent' && effect.value < (bound ? .05 / pool.REFINEMENT_MULTIPLIER : .05))) return false;
+      if ((!inherited && range && effect.value < range.min) || effect.value > max || (effect.type === 'equip_damage_cap_percent' && effect.value < pool.EFFECT_BOUNDS.equip_damage_cap_percent.min)) return false;
     } else if (effect.type.startsWith('timed_')) {
       if (!Number.isFinite(effect.multiplier) || effect.multiplier < range.min || effect.multiplier > range.max ||
           !Number.isSafeInteger(effect.durationMs) || effect.durationMs < Math.round(range.durationMinutesMin * 60000) || effect.durationMs > Math.round(range.durationMinutesMax * 60000)) return false;

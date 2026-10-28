@@ -16,11 +16,11 @@ test('trusted raid snapshot derives combat stats from the A user document and eq
     nascentSoulTree:{version:4,paths:{sword:{nodes:{leftMain:2,rightMain:3,leftTop:1},baselineNodes:{},legacySpent:0}}},
     artifactSystem:{
       inventory:{armor:1},
-      equipped:{'護身法寶':'armor'},
+      equipped:{'本命法寶':'armor'},
       buffs:{}
     }
   };
-  const catalog={items:[{id:'armor',name:'Server Armor',realm:'金丹',equipSlot:'護身法寶',
+  const catalog={items:[{id:'armor',name:'Server Armor',realm:'金丹',equipSlot:'本命法寶',soulboundBalanceVersion:1,
     effects:[{type:'equip_attack_flat',value:50},{type:'equip_hp_flat',value:200},{type:'equip_shield_flat',value:90}]}]};
   const snap=authority.trustedRaidPlayerSnapshot(user,'u1',catalog);
   assert.equal(snap.uid,'u1');

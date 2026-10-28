@@ -7,7 +7,7 @@ const trainingAccess = require('./public/cultivation/training-access-rules.js');
 const soulboundPool = require('./public/cultivation/soulbound-pool.js');
 const soulTalents = require('./public/cultivation/soul-talents.js');
 
-const EQUIP_SLOTS = Object.freeze(['本命法寶','護身法寶','佩飾法寶','輔助法寶']);
+const EQUIP_SLOTS = Object.freeze(['本命法寶']);
 const REALM_ORDER = Object.freeze({凡人:0,煉氣:1,築基:2,金丹:3,元嬰:4,化神:5,煉虛:6,合體:7,大乘:8,渡劫:8,半仙:9,真仙:10});
 const CORE_LOWEST_POWER = 4000;
 const CORE_GRADE_STEP = 2000;
@@ -174,7 +174,7 @@ function soulNodeLevels(tree,type){
 }
 function soulSnapshot(data,core){return Growth.bonuses(data,core);}
 function withPermanentPool(items){
-  return [...items.filter(item=>!soulboundPool.get(item.id)),...soulboundPool.ITEMS];
+  return [...items.filter(item=>!soulboundPool.get(item.id)).map(soulboundPool.balanceArtifact),...soulboundPool.ITEMS];
 }
 function artifactCatalog(data){
   const items=Array.isArray(data?.items)?data.items.filter(x=>x&&typeof x==='object'&&x.id):[];
@@ -229,7 +229,7 @@ function artifactPower(item){
   const realmPower=45*(realm+1)**2;
   const effectsPower=effects.reduce((sum,e)=>{
     const type=e.type;
-    if(type==='equip_damage_cap_percent')return sum+Math.round((1-clamp(e.value,item.equipSlot==='本命法寶' ? .05/1.2 : .05,1))*500);
+    if(type==='equip_damage_cap_percent')return sum+Math.round((1-clamp(e.value,item.equipSlot==='本命法寶' ? soulboundPool.EFFECT_BOUNDS.equip_damage_cap_percent.min : .05,1))*500);
     if(type==='equip_cheat_death'||type==='equip_copy_enemy_artifact')return sum+EFFECT_WEIGHTS[type];
     return sum+Math.round(Math.min(positive(e.value),soulboundPool.refinementCap(type,EFFECT_LIMITS[type]??100000,item.equipSlot==='本命法寶'))*EFFECT_WEIGHTS[type]);
   },0);
@@ -446,7 +446,7 @@ function resolveArtifactDefense(member,incoming){
   }
   reduction=clamp(reduction,0,.9);
   let damage=Math.max(0,incoming*(1-reduction)-sumEffect(effects,'equip_damage_reduction_flat'));
-  const caps=effects.filter(e=>e.type==='equip_damage_cap_percent').map(e=>clamp(e.value,e.soulbound ? .05/1.2 : .05,1));
+  const caps=effects.filter(e=>e.type==='equip_damage_cap_percent').map(e=>clamp(e.value,e.soulbound ? soulboundPool.EFFECT_BOUNDS.equip_damage_cap_percent.min : .05,1));
   if(caps.length)damage=Math.min(damage,Math.max(1,Math.round(member.maxHp*Math.min(...caps))));
   const absorbed=Math.min(Math.max(0,finite(member.artifactShield)),damage);
   member.artifactShield=Math.max(0,Math.round(finite(member.artifactShield)-absorbed));damage-=absorbed;

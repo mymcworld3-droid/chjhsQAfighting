@@ -341,7 +341,7 @@ import {
   function soulboundSources(recipe = [], catalog = ARTIFACT_CATALOG) {
     return recipe.filter(row => row.artifactId).map(row =>
       globalThis.QASoulboundPool.get(row.artifactId) || catalog.find(item => item.id === row.artifactId)
-    ).filter(item => item?.equipSlot === '本命法寶');
+    ).filter(item => item?.equipSlot === '本命法寶').map(globalThis.QASoulboundPool.balanceArtifact);
   }
 
   function isSoulboundSourceItem(id, catalog = ARTIFACT_CATALOG) {
@@ -400,7 +400,7 @@ import {
       body = JSON.stringify({ selectedIngredients: job.ingredients, allMaterials: apiMaterials(), existingArtifacts: apiArtifacts(),
         targetRealm: job.targetRealm, forgeMethod: job.forgeMethod || '自由發揮',
         adminGenerationDirection: job.adminGenerationDirection || '', adminGenerationPrompt: job.adminGenerationPrompt || '',
-        supportedEffects: SUPPORTED_ARTIFACT_EFFECTS, effectBoundsV2: window.getArtifactEffectBounds?.() || {} });
+        supportedEffects: SUPPORTED_ARTIFACT_EFFECTS });
     } catch (cause) {
       throw generationError('無法準備煉器素材與設定', 'refinery-input', { ...metadata(), refineryStage: 'request-preparation', cause });
     }
@@ -550,6 +550,7 @@ import {
           generatedArtifact.equipSlot = '本命法寶';
           generatedArtifact.effects = globalThis.QASoulboundPool.refineEffects(generatedArtifact.effects, soulboundSources(fresh.recipe, latestItems));
           generatedArtifact.soulboundRefinementVersion = globalThis.QASoulboundPool.REFINEMENT_VERSION;
+          generatedArtifact.soulboundBalanceVersion = globalThis.QASoulboundPool.BALANCE_VERSION;
         }
         if (!realSoulboundSource) throw new Error('鍛造僅開放本命法器精煉');
         const candidate = normalizeArtifactDefinition({

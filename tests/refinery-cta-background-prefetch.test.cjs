@@ -19,7 +19,7 @@ test('forge gives a clear, synchronized second claim CTA and glowing center',()=
   assert.match(ui,/querySelector\('\[data-refinery-action-banner\]'\)\?\.addEventListener\('click', craft\)/);
   assert.match(ui,/banner\.disabled = !ready/);
   assert.match(ui,/prefers-reduced-motion/);
-  assert.match(ui,/特殊屬性範圍為普通法器的 1\.2 倍/);
+  assert.match(ui,/屬性由系統固定上下限管理/);
 });
 
 test('ready forge indicator reaches map, detail tab, and bottom navigation',()=>{

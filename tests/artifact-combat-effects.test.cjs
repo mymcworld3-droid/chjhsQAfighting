@@ -81,10 +81,10 @@ test('catalog exposes useful flat and percentage combat effects but no battle-st
   assert.doesNotMatch(catalog, /battle_start_heal|post_battle_heal|battle_end_heal/);
 });
 
-test('ordinary combo stays at ten percent while soulbound refinements allow twelve percent', () => {
+test('ordinary combo stays at ten percent while soulbound refinements allow thirty percent', () => {
   assert.equal(require('../public/cultivation/soulbound-pool.js').PERCENT_EFFECT_CAPS.equip_combo_chance, 0.10);
-  assert.match(manager, /valueInput\.max = .*本命法寶.*'0\.12' : '0\.10'/);
-  assert.match(manager, /本命法寶.*0\.12 : 0\.10, Math\.max\(0, value\)/);
+  assert.match(manager, /valueInput\.max = .*本命法寶.*EFFECT_BOUNDS\.equip_combo_chance\.max/);
+  assert.match(manager, /本命法寶.*QASoulboundPool\.normalizeValue\(type,value\)/);
   assert.match(resolverSource, /COMBO_CHANCE_CAP = 0\.10/);
 
   const runtime = loadResolver(0);
@@ -233,7 +233,7 @@ test('admin guide includes copy-enemy effect and both flat/percentage defensive 
   assert.match(manager, /鏡映敵方法寶/);
   assert.match(manager, /固定減傷/);
   assert.match(manager, /百分比減傷/);
-  assert.match(manager, /普通上限：0\.10 = 10%；本命上限：0\.12 = 12%/);
+  assert.match(manager, /普通上限：0\.10 = 10%；本命上限：0\.30 = 30%/);
   assert.match(manager, /不會複製「複製」本身/);
 });
 

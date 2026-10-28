@@ -12,7 +12,7 @@ const proposed = (slot = '本命法寶') => ({
   effects:[{ type:'equip_attack_flat', value:50 }]
 });
 const boundBase = {
-  id:'already-owned', equipSlot:'本命法寶', weaponForm:'劍',
+  id:'already-owned', equipSlot:'本命法寶', weaponForm:'劍', soulboundBalanceVersion:pool.BALANCE_VERSION,
   effects:[{ type:'equip_attack_flat', value:60 }]
 };
 
@@ -32,12 +32,12 @@ test('all permanent weapons strictly improve every original stat even with weake
 });
 
 test('a fourth affix survives further refinement and a fifth cannot replace any existing affix', () => {
-  const source = {...pool.ITEMS[0],effects:[...pool.ITEMS[0].effects,{type:'equip_true_damage_flat',value:9999}]};
+  const source = {...pool.ITEMS[0],id:'refined-four-affixes',effects:[...pool.ITEMS[0].effects,{type:'equip_true_damage_flat',value:1000}]};
   const result = api.sanitizeGeneratedArtifact({...proposed(),effects:[{type:'equip_shield_flat',value:99999}]},
     '金丹',3,{}, {},2,{primaryArtifacts:[source]});
   assert.deepEqual(result.effects.map(row => row.type),source.effects.map(row => row.type));
   assert.equal(result.effects.length,4);
-  assert.equal(result.effects[3].value,10000);
+  assert.equal(result.effects[3].value,1150);
   pool.assertRefinementImproves(result,[source]);
 });
 
@@ -51,7 +51,7 @@ test('inverse damage caps improve downwards and fixed abilities survive without 
 });
 
 test('capped stats and recipes requiring over four inherited affixes fail instead of silently weakening weapons', () => {
-  assert.throws(() => pool.refineEffects([], [{...boundBase,effects:[{type:'equip_combo_chance',value:.12}]}]),/已達上限/);
+  assert.throws(() => pool.refineEffects([], [{...boundBase,effects:[{type:'equip_combo_chance',value:.3}]}]),/已達上限/);
   const tooMany = {...boundBase,effects:[...pool.ITEMS[0].effects,
     {type:'equip_true_damage_flat',value:1},{type:'equip_shield_flat',value:1}]};
   assert.throws(() => pool.refineEffects([], [tooMany]),/超過四個/);
@@ -143,25 +143,18 @@ test('multiple soulbound inputs select the same core and form regardless of inpu
   assert.equal(api.lockedWeaponForm(payload), first[0].weaponForm);
 });
 
-test('soulbound ranges multiply special attributes by 1.2 but preserve all attack and HP bounds', () => {
-  for (const stage of [2, 3]) for (const count of [2, 3, 8]) {
-    const normal = api.effectRangesForRealm('元嬰',stage,{}, {},count);
-    const bound = api.effectRangesForRealm('元嬰',stage,{}, {},count,true);
-    for (const type of ['equip_damage_percent','equip_streak_damage_percent','equip_reflect_percent','equip_true_damage_flat','equip_shield_flat','equip_on_correct_shield_flat']) {
-      const ordinary = normal.find(row => row.type === type);
-      const soulbound = bound.find(row => row.type === type);
-      assert.equal(soulbound.min, Number((ordinary.min * 1.2).toFixed(4)), type);
-      assert.equal(soulbound.max, Number((ordinary.max * 1.2).toFixed(4)), type);
+test('soulbound generation uses fixed ranges and clamps model output independently of administrator settings', () => {
+  for(const stage of [2,3])for(const count of [2,3,8]) {
+    const ranges=api.effectRangesForRealm('元嬰',stage,{}, {},count,true);
+    const overrides={'2':{equip_attack_flat:{min:1,max:1000000}}};
+    assert.deepEqual(api.effectRangesForRealm('元嬰',stage,{},overrides,count,true),ranges);
+    for(const range of ranges) {
+      const expected=pool.effectRange(range.type,4,stage,count);
+      assert.equal(range.min,expected.min);assert.equal(range.max,expected.max);
+      const effect=api.sanitizeEffect({type:range.type,value:1e9},4,stage,{},overrides,count,true);
+      if(range.field==='value') assert.equal(effect.value,range.max);
     }
-    for (const type of ['equip_attack_flat','equip_attack_percent','equip_hp_flat','equip_hp_percent','timed_attack_multiplier']) {
-      assert.deepEqual(bound.find(row => row.type === type),normal.find(row => row.type === type));
-    }
-    const inverse = bound.find(row => row.type === 'equip_damage_cap_percent');
-    assert.equal(inverse.min,Number((normal.find(row => row.type === inverse.type).min / 1.2).toFixed(4)));
-    for (const range of bound) {
-      const effect = api.sanitizeEffect({type:range.type,value:1e9,multiplier:1e9}, 4,stage,{}, {},count,true);
-      if (range.field === 'value' || range.field === 'multiplier') assert.equal(effect[range.field],range.type.endsWith('_flat') ? Math.floor(range.max) : range.max);
-    }
+    assert.equal(ranges.some(row=>row.type.startsWith('timed_')),false);
   }
 });
 
@@ -176,12 +169,12 @@ test('catalog saving and reading preserves soulbound special bounds and attack/H
       effects:[{type:'equip_combo_chance',value:.4},{type:'equip_streak_damage_percent',value:9},
         {type:'equip_attack_percent',value:20},{type:'equip_hp_percent',value:20}]
     }])[0];
-    assert.equal(item.effects[0].value,soulbound ? .12 : .1);
-    assert.equal(item.effects[1].value,soulbound ? 3.6 : 3);
-    assert.equal(item.effects[2].value,5);
-    assert.equal(item.effects[3].value,5);
+    assert.equal(item.effects[0].value,soulbound ? .3 : .1);
+    assert.equal(item.effects[1].value,soulbound ? 2 : 3);
+    assert.equal(item.effects[2].value,soulbound ? 2 : 5);
+    assert.equal(item.effects[3].value,soulbound ? 2 : 5);
     const inverse = context.validate([{...item,effects:[{type:'equip_damage_cap_percent',value:.0125}]}])[0];
-    assert.equal(inverse.effects[0].value,soulbound ? .05 / 1.2 : .05);
+    assert.equal(inverse.effects[0].value,soulbound ? .1 : .05);
     assert.equal(item.soulboundRefinementVersion,soulbound ? pool.REFINEMENT_VERSION : undefined);
   }
 });
@@ -201,14 +194,14 @@ test('soulbound combo and inverse damage cap work in actual PvP resolution', () 
   const attacker = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_combo_chance',value:.35,soulbound:true}]}};
   const defender = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_damage_cap_percent',value:.025,soulbound:true}]}};
   const attack = ctx.window.resolveArtifactBattleAttack({attacker,defender,baseDamage:500});
-  assert.equal(attack.comboChance,.12);
+  assert.equal(attack.comboChance,.3);
   const defense = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
-  assert.equal(defense.hpDamage,42);
+  assert.equal(defense.hpDamage,100);
   defender.artifactBattle.effects[0].soulbound=false;
   const ordinary = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
   assert.equal(ordinary.hpDamage,50);
   assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999}]).chance,.1);
-  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.12);
+  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.3);
 });
 
 test('trusted raid snapshots and boss defense honor refined soulbound values', () => {
@@ -218,9 +211,9 @@ test('trusted raid snapshots and boss defense honor refined soulbound values', (
   const user = {stats:{attack:200,maxHp:1000,totalScore:10},artifactSystem:{inventory:{'refined-sword':1},equipped:{'本命法寶':'refined-sword'}}};
   const member = authority.trustedRaidPlayerSnapshot(user,'tester',catalog);
   assert.ok(member.artifactBattle.effects.every(effect=>effect.soulbound===true));
-  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.12);
+  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.3);
   const result = authority.resolveBossDefense(member,{roomId:'room-test',bossAction:{id:1,damage:500}});
-  assert.equal(result.damage,42);
+  assert.equal(result.damage,100);
 });
 
 test('generation and guidance review both use soulbound priority and expanded ranges', async () => {
@@ -313,7 +306,7 @@ test('an already-paid old known job upgrades on opening and a failed commit retr
   await assert.rejects(ctx.window.claimCultivationRefineryJob(),/目前沒有/);
   assert.equal(docs.get('users/tester').artifactSystem.inventory[awarded.id],1);
   pool.assertRefinementImproves(awarded,[pool.ITEMS[0]]);
-  catalog.push({...pool.ITEMS[0],id:'capped-source',effects:[{type:'equip_combo_chance',value:.12}]});
+  catalog.push({...pool.ITEMS[0],id:'capped-source',effects:[{type:'equip_combo_chance',value:.3}]});
   const before = clone(docs.get('users/tester'));
   const blocked = ctx.window.getCultivationRefineryPlan(['artifact:capped-source','material:ore']);
   assert.equal(blocked.valid,false);

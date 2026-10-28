@@ -121,3 +121,17 @@ test('ordinary material-only discovery cannot publish or award any new artifact'
   await assert.rejects(executeCommit(f.db,f.input,context),error=>error.status===403);
   assert.deepEqual(await Promise.all(['users/alice',artifactPath,materialPath].map(async path=>(await f.db.doc(path).get()).data())),before);
 });
+
+test('stale administrator bounds cannot change valid system-governed discovery commits',async()=>{
+  const f=await fixture({bounds:{'2':{equip_attack_flat:{min:9999999,max:9999999}}}});
+  await executeCommit(f.db,f.input,context);
+  const saved=(await f.db.doc(artifactPath).get()).data().items[0];
+  assert.equal(saved.soulboundBalanceVersion,pool.BALANCE_VERSION);
+  for(const effect of saved.effects){const bounds=pool.EFFECT_BOUNDS[effect.type];if(bounds)assert.ok(effect.value>=bounds.min&&effect.value<=bounds.max);}
+});
+
+for(const field of ['soulboundRefinementVersion','soulboundBalanceVersion'])test('discovery rejects stale '+field+' without awarding or publishing',async()=>{
+  const f=await fixture();f.input.writes[0].data.items[0][field]=0;
+  await assert.rejects(executeCommit(f.db,f.input,context),error=>error.status===403);
+  assert.equal((await f.db.doc('users/alice').get()).data().artifactSystem.inventory[f.artifact.id],undefined);
+});

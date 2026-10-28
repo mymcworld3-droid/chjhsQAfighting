@@ -46,11 +46,9 @@ function markArtifactCatalogReady(source) {
     return prompt;
   }
 
-  function applyEffectBounds(value, source = 'sync') {
-    const bounds = value && typeof value === 'object' && !Array.isArray(value)
-      ? JSON.parse(JSON.stringify(value)) : {};
-    window.__artifactEffectBoundsV2 = bounds;
-    window.dispatchEvent(new CustomEvent('artifact-effect-bounds-updated', { detail: { source } }));
+  function applyEffectBounds() {
+    // Retained getter for old cached callers; remote administrator limits are retired.
+    window.__artifactEffectBoundsV2 = {};
   }
 
   function applyDefault(reason = 'fallback') {
@@ -118,7 +116,7 @@ function markArtifactCatalogReady(source) {
       }
       const data = snap.data() || {};
       applyGenerationPrompt(data.generationPrompt || '', 'firestore');
-      applyEffectBounds(data.effectBoundsV2 || {}, 'firestore');
+      applyEffectBounds();
       try {
         if (!Array.isArray(data.items) || !data.items.length) throw new Error('遠端法寶清單為空');
         const schemaVersion = Math.max(0, Number(data.artifactCatalogSchemaVersion) || 0);
@@ -150,7 +148,6 @@ function markArtifactCatalogReady(source) {
   window.addEventListener('xiuxian:features-ready', retryPendingMigration);
 
   window.getArtifactEffectBounds = () => JSON.parse(JSON.stringify(window.__artifactEffectBoundsV2 || {}));
-  window.setArtifactEffectBoundsLocal = (value, source = 'admin-save') => applyEffectBounds(value, source);
   window.getArtifactCatalogConfigPath = () => `${CONFIG_COLLECTION}/${CONFIG_DOC}`;
   window.getArtifactGenerationPrompt = () => normalizeGenerationPrompt(window.__artifactGenerationPrompt || '');
   window.setArtifactGenerationPromptLocal = (value, source = 'local') => applyGenerationPrompt(value, source);

@@ -115,7 +115,8 @@ test('recipe ownership and market listing follow artifact effects and use indepe
 
 test('manual effect editor displays live, advisory depth-and-realm bounds', () => {
   assert.match(artifactManager, /\/api\/artifact-depth-effect-ranges\?stage=/);
-  assert.match(artifactManager, /window\.getArtifactEffectBounds\?\.\(\)/);
+  assert.doesNotMatch(artifactManager, /window\.getArtifactEffectBounds/);
+  assert.match(artifactManager, /QASoulboundPool\.effectRange\(type,index,stage,quantity\)/);
   assert.match(artifactManager, /function depthHintForRealm\(/);
   assert.match(artifactManager, /const step = \(Number\(bounds\.max\) - Number\(bounds\.min\)\) \/ 12/);
   assert.match(artifactManager, /index, inverse, integer/);

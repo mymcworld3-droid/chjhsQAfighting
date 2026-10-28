@@ -167,7 +167,7 @@
       const value = finitePositive(effect.value);
       if (meta.minValue) {
         // 同時佩戴數個傷害上限效果時，鬥法採最小值。
-        if (value > 0) totals.set(key, Math.min(totals.get(key) ?? 1, Math.max(effect.soulbound ? 0.05 / 1.2 : 0.05, Math.min(1, value))));
+        if (value > 0) totals.set(key, Math.min(totals.get(key) ?? 1, Math.max(effect.soulbound ? (globalThis.QASoulboundPool?.EFFECT_BOUNDS.equip_damage_cap_percent.min ?? .1) : 0.05, Math.min(1, value))));
       } else {
         totals.set(key, (totals.get(key) || 0) + value);
       }
@@ -175,8 +175,9 @@
     const soul = player?.nascentSoul || {};
     const combo = effects.filter(effect => effect.type === 'equip_combo_chance');
     const comboSum = bound => combo.filter(effect => !!effect.soulbound === bound).reduce((sum,effect) => sum + finitePositive(effect.value),0);
-    const boundCombo = Math.min(.12,comboSum(true));
-    totals.set('equip_combo_chance',Math.min(boundCombo > 0 ? .12 : .10, Math.min(.10,comboSum(false)) + boundCombo) + finitePositive(soul.comboChance));
+    const boundCap = globalThis.QASoulboundPool?.EFFECT_BOUNDS.equip_combo_chance.max ?? .3;
+    const boundCombo = Math.min(boundCap,comboSum(true));
+    totals.set('equip_combo_chance',Math.min(boundCombo > 0 ? boundCap : .10, Math.min(.10,comboSum(false)) + boundCombo) + finitePositive(soul.comboChance));
     totals.set('equip_combo_damage_percent',Math.min(4,.30 + (totals.get('equip_combo_damage_percent') || 0) + finitePositive(soul.comboDamageBonus)));
     totals.set('equip_crit_chance',(totals.get('equip_crit_chance') || 0) + finitePositive(soul.critChance));
     totals.set('equip_crit_damage_percent',(totals.get('equip_crit_damage_percent') || 0) + finitePositive(soul.critDamageBonus));
