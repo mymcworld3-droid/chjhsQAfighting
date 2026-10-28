@@ -7,11 +7,11 @@ const strip=source=>source.replace(/^import .*;\n/gm,'').replace(/^export /gm,''
 function catalogRuntime(){return vm.runInNewContext(strip(fs.readFileSync('public/cultivation/artifact-catalog.js','utf8'))+'\n({normalizeArtifactDefinition,validateArtifactCatalog,getArtifactById});',{QASoulboundPool:pool});}
 const current=item=>({...item,soulboundBalanceVersion:pool.BALANCE_VERSION,soulboundRefinementVersion:pool.REFINEMENT_VERSION});
 
-test('every permanent weapon gains fourfold flat stats and double percent effects without changing ownership IDs',()=>{
+test('permanent weapons use lower attack/HP bases and retain strengthened special effects under the hard caps',()=>{
   for(let rank=0;rank<8;rank++)for(const type of pool.TYPES){
     const item=pool.get('soul-'+type.id+'-'+pool.REALMS[rank].id);
     const values=Object.fromEntries(item.effects.map(e=>[e.type,e.value]));
-    assert.equal(values.equip_attack_flat,4*(25+rank*15));assert.equal(values.equip_hp_flat,4*(80+rank*45));
+    assert.equal(values.equip_attack_flat,60+rank*12);assert.equal(values.equip_hp_flat,240+rank*48);
     assert.equal(values[type.effect],Number(((type.base+type.step*rank)*(type.effect.endsWith('_flat')?4:2)).toFixed(4)));
     for(const effect of item.effects){const bounds=pool.EFFECT_BOUNDS[effect.type];assert.ok(effect.value>=bounds.min&&effect.value<=bounds.max);}
   }
@@ -61,12 +61,14 @@ test('legacy refined items migrate exactly once and browser and server derive th
   assert.deepEqual(user.artifactSystem.inventory,{[old.id]:1});
 });
 
-test('every original tier retains all affixes with at least 15 percent gains through both refinements',()=>{
-  for(const source of pool.ITEMS) {
+test('every original tier can complete both refinements even with maximum attack/HP rolls',()=>{
+  for(const source of pool.ITEMS)for(const count of [2,8])for(const roll of [0,1e20]) {
     let previous=source;
     for(const stage of [2,3]) {
-      const result=api.sanitizeGeneratedArtifact({name:'測試成品',effects:[{type:'equip_attack_flat',value:0}]},source.realm,stage,{}, {},2,{primaryArtifacts:[previous]});
+      const result=api.sanitizeGeneratedArtifact({name:'測試成品',effects:[{type:'equip_attack_flat',value:roll},{type:'equip_hp_flat',value:roll}]},source.realm,stage,{}, {},count,{primaryArtifacts:[previous]});
       for(const base of previous.effects)assert.ok(result.effects.find(e=>e.type===base.type).value>=Number((base.value*1.15).toFixed(4)),source.id+':'+base.type);
+      assert.ok(result.effects.find(e=>e.type==='equip_attack_flat').value<=200);
+      assert.ok(result.effects.find(e=>e.type==='equip_hp_flat').value<=800);
       pool.assertRefinementImproves(result,[previous]);previous={...result,id:'refined-'+source.id};
     }
   }
@@ -108,5 +110,15 @@ test('editing an item cannot restore the obsolete 12 percent combo cap or exceed
   const effects=[['equip_combo_chance',.25],['equip_attack_flat',99999],['equip_hp_percent',99999]];
   const rows=effects.map(([type,value])=>({querySelector:selector=>({value:selector==='[data-aam-effect-type]'?type:String(value)})}));
   const result=context.read({querySelector:()=>({value:'本命法寶'}),querySelectorAll:()=>rows});
-  assert.deepEqual(Array.from(result,e=>e.value),[.25,3000,2]);
+  assert.deepEqual(Array.from(result,e=>e.value),[.25,200,2]);
+});
+
+test('previously boosted version-three artifacts are clamped without applying the old multiplier again',()=>{
+  const item={id:'version-three-item',equipSlot:'本命法寶',soulboundRefinementVersion:3,
+    effects:[{type:'equip_attack_flat',value:100},{type:'equip_hp_flat',value:400}]};
+  assert.deepEqual(pool.balanceArtifact(item).effects.map(e=>e.value),[100,400]);
+  const over={...item,effects:[{type:'equip_attack_flat',value:3000},{type:'equip_hp_flat',value:12000}]};
+  const clamped=pool.balanceArtifact(over);
+  assert.deepEqual(clamped.effects.map(e=>e.value),[200,800]);
+  assert.deepEqual(pool.balanceArtifact(clamped),clamped);
 });

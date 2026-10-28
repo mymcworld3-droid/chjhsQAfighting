@@ -144,3 +144,18 @@ test('actual merged inventory renders one soulbound slot and keeps materials vis
   assert.doesNotMatch(html,/data-uib-item="material:ore"|data-uib-item="artifact:mountain-armor"/);
   assert.match(html,/data-uib-cancel-equip/);
 });
+
+test('paid soulbound jobs made impossible by the new caps refund their original resources once',async()=>{
+  const capped={id:'old-over-cap',name:'舊精煉器',realm:'金丹',equipSlot:'本命法寶',soulboundBalanceVersion:1,soulboundRefinementVersion:3,
+    effects:[{type:'equip_attack_flat',value:3000},{type:'equip_hp_flat',value:12000}]};
+  const job={id:'paid-before-cap-change',kind:'discovery',readyAtMs:Date.now()+60000,currency:'forgeFragments',fragmentCost:20,
+    recipe:[{artifactId:capped.id,quantity:1},{materialId:'ore',quantity:1}],keyRequirement:{materialId:'seal',quantity:1}};
+  const app=jobsRuntime({forgeFragments:5,materialSystem:{inventory:{ore:2}},artifactSystem:{inventory:{},equipped:{}},refineryJobV1:job},[capped]);
+  assert.equal(app.window.isLegacyCultivationRefineryJob(job),true);
+  const result=await app.window.claimCultivationRefineryJob();assert.equal(result.cancelled,true);
+  const saved=app.db.docs.get('users/u1');
+  assert.equal(saved.forgeFragments,25);assert.equal(saved.materialSystem.inventory.ore,3);
+  assert.equal(saved.materialSystem.inventory.seal,1);assert.equal(saved.artifactSystem.inventory[capped.id],1);
+  assert.equal(saved.refineryJobV1,null);
+  await assert.rejects(app.window.claimCultivationRefineryJob(),/沒有煉器任務/);
+});

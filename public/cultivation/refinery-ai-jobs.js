@@ -677,7 +677,12 @@ import {
     const recipe = Array.isArray(job?.recipe) ? job.recipe : [];
     if (!recipe.length || recipe.some(row => row.artifactId &&
         !globalThis.QASoulboundPool.get(row.artifactId) && !getArtifactById(row.artifactId))) return false;
-    return !soulboundSources(recipe).length;
+    const sources = soulboundSources(recipe);
+    if (!sources.length) return true;
+    // A paid job may predate tighter hard caps. Offer the existing atomic refund
+    // when its source can no longer meet the required improvement.
+    try { globalThis.QASoulboundPool.refineEffects([], sources); return false; }
+    catch (_) { return true; }
   }
 
   async function cancelLegacyJob(job) {

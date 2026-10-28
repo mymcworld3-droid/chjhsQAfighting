@@ -1,12 +1,12 @@
 // Versioned, permanent pool shared by browser and server. Never generated at draw time.
 (function (root) {
   'use strict';
-  const VERSION = 'soulbound-v4-fixed-balance';
-  const BALANCE_VERSION = 1, REFINEMENT_VERSION = 3, REFINEMENT_GROWTH = .15;
+  const VERSION = 'soulbound-v5-attack200-hp800';
+  const BALANCE_VERSION = 1, REFINEMENT_VERSION = 4, REFINEMENT_GROWTH = .15;
   const PITY = 20, WEAPON_RATE = .02, FRAGMENT_MIN = 20, FRAGMENT_MAX = 40;
   // One authority for generation, persistence and combat. Bounds are code-owned.
   const EFFECT_BOUNDS = Object.freeze(Object.fromEntries(Object.entries({
-    equip_attack_flat:[1,3000], equip_hp_flat:[1,12000],
+    equip_attack_flat:[1,200], equip_hp_flat:[1,800],
     equip_damage_reduction_flat:[1,800], equip_shield_flat:[1,6000],
     equip_true_damage_flat:[1,1500], equip_on_correct_shield_flat:[1,1800],
     equip_attack_percent:[.05,2], equip_hp_percent:[.05,2],
@@ -44,7 +44,10 @@
     const high = inverse ? bounds.max - (bounds.max - bounds.min) * strength * .55 : bounds.max * strength;
     const min = integer ? Math.max(bounds.min,Math.ceil(low - 1e-9)) : Math.max(bounds.min,round(low));
     const max = integer ? Math.max(min,Math.floor(high + 1e-9)) : Math.max(min,round(high));
-    return {type,field:'value',min,max:Math.min(bounds.max,max),unit:integer?'點':'比例',
+    // The first refinement leaves room for the final 15% attack/HP upgrade.
+    const reserveFinalGrowth = stage < 3 && ['equip_attack_flat','equip_hp_flat'].includes(type);
+    const ceiling = reserveFinalGrowth ? Math.floor(bounds.max / (1 + REFINEMENT_GROWTH)) : bounds.max;
+    return {type,field:'value',min:Math.min(min,ceiling),max:Math.min(ceiling,max),unit:integer?'點':'比例',
       note:inverse?'數值越小越強；系統固定上下限':'系統固定上下限'};
   }
   // Runtime migration is idempotent; ownership and item IDs do not change.
@@ -52,7 +55,7 @@
     if (!item || item.equipSlot !== '本命法寶') return item;
     const permanent = get(item.id);
     if (permanent) return permanent;
-    const legacy = Number(item.soulboundBalanceVersion || 0) < BALANCE_VERSION && item.soulboundRefinementVersion !== REFINEMENT_VERSION;
+    const legacy = Number(item.soulboundBalanceVersion || 0) < BALANCE_VERSION && Number(item.soulboundRefinementVersion || 0) < 3;
     return {...item,soulboundBalanceVersion:BALANCE_VERSION,effects:(item.effects || []).map(effect=>{
       if (!Object.hasOwn(effect,'value') || !EFFECT_BOUNDS[effect.type]) return {...effect};
       const multiplier = effect.type.endsWith('_flat') || ['equip_attack_percent','equip_hp_percent'].includes(effect.type) ? 4 : 2;
@@ -92,8 +95,8 @@
     // Defining effect first so legacy refinement paths also inherit it.
     effects: Object.freeze([
       Object.freeze({ type: type.effect, value: amount(type, rank) }),
-      Object.freeze({ type: 'equip_attack_flat', value: 100 + rank * 60 }),
-      Object.freeze({ type: 'equip_hp_flat', value: 320 + rank * 180 })
+      Object.freeze({ type: 'equip_attack_flat', value: 60 + rank * 12 }),
+      Object.freeze({ type: 'equip_hp_flat', value: 240 + rank * 48 })
     ])
   }))));
   const get = id => ITEMS.find(item => item.id === id) || null;

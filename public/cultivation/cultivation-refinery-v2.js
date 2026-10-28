@@ -748,7 +748,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     if (job) {
       matchClass = jobReady ? 'ready' : '';
       matchPrefix = legacyJob ? '舊煉器工作：' : jobReady ? '煉製完成：' : '爐火運轉：';
-      matchPlain = legacyJob ? '一般法器鍛造已停止，請點擊退還本爐素材與費用。' : job.kind === 'discovery'
+      matchPlain = legacyJob ? '此工作不符合目前精煉規則，請點擊退還本爐素材與費用。' : job.kind === 'discovery'
         ? (jobReady ? '煉製已完成，點中央「開爐」取出新法寶。' : '未知配方正在孕化；完成後即可開爐。')
         : (jobReady ? '法寶已完成，點中央「開爐」。' : `正在煉製 ${getArtifactById(job.knownArtifactId)?.name || '法寶'}。`);
     } else if (used && matching.length === 1 && plan?.valid) {
@@ -776,8 +776,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     const craftLabel = legacyJob ? '退還舊煉製' : job ? (jobReady ? '開爐取寶' : '煉製中') : '開始煉製';
     const bannerPhase = job ? (jobReady ? 'is-claimable' : 'is-working') : craftReady ? 'is-claimable' : 'is-idle';
     const bannerTitle = legacyJob ? '舊煉器工作 · 退還素材與費用' : job ? (jobReady ? '法寶已成 · 立即開爐！' : '爐火運轉中 · 靜候成器') : craftReady ? '材料齊備 · 點此開始煉製' : '選擇材料 · 啟動八方煉器陣';
-    const bannerDetail = legacyJob ? '一般法器已停止鍛造，點擊退還本爐投入' : job ? (jobReady ? '煉製完成，點擊領取法寶' : '完成後將在此提示開爐') : craftReady ? craftCostText(plan) : '投入本命法器及其他素材，共 2 至 8 件';
-    const jobBox = job ? `<div class="refinery-job-box ${jobReady ? 'is-claimable' : ''}" data-refinery-job-box><strong>${legacyJob ? '待退還的舊煉器工作' : job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付${job.currency === 'forgeFragments' ? '煉器碎片' : '靈石（舊工作）'}<b>${Math.max(0, Number(job.currency === 'forgeFragments' ? job.fragmentCost : job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${legacyJob ? '此工作不再產生一般法器，點擊退還素材與費用後即可重新投入本命法器精煉。' : job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與煉器碎片已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
+    const bannerDetail = legacyJob ? '此工作不符合目前精煉規則，點擊退還本爐投入' : job ? (jobReady ? '煉製完成，點擊領取法寶' : '完成後將在此提示開爐') : craftReady ? craftCostText(plan) : '投入本命法器及其他素材，共 2 至 8 件';
+    const jobBox = job ? `<div class="refinery-job-box ${jobReady ? 'is-claimable' : ''}" data-refinery-job-box><strong>${legacyJob ? '待退還的舊煉器工作' : job.kind === 'discovery' ? '未知配方煉製' : '法寶煉製中'}</strong><div class="refinery-job-grid"><div class="refinery-job-stat">法寶境界<b>${esc(job.targetRealm || '凡人')}</b></div><div class="refinery-job-stat">已付${job.currency === 'forgeFragments' ? '煉器碎片' : '靈石（舊工作）'}<b>${Math.max(0, Number(job.currency === 'forgeFragments' ? job.fragmentCost : job.goldCost) || 0)}</b></div><div class="refinery-job-stat">剩餘時間<b data-refinery-job-clock>--</b></div></div><div class="refinery-job-progress"><i data-refinery-job-progress></i></div><div class="refinery-note ${job.kind === 'discovery' ? 'refinery-discovery-note' : ''}">${legacyJob ? '此工作不符合目前精煉規則，點擊退還素材與費用後即可重新選擇本命法器精煉。' : job.kind === 'discovery' ? '此組合沒有既有配方；煉製完成後按「開爐」即可取得新法寶。' : '素材與煉器碎片已在按「煉製」時扣除，完成後按「開爐」取出。'}</div>${canAdminSkip ? `<div class="refinery-actions"><button type="button" class="refinery-clear" data-refinery-admin-skip ${busy ? 'disabled' : ''}><i class="fa-solid fa-forward-fast"></i> 管理員：跳過等待</button></div>` : ''}</div>` : '';
 
     const adminGuidance = adminGuidanceMarkup(job, matching.length);
 
@@ -1178,7 +1178,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
         banner.classList.toggle('is-working', !ready);
         banner.classList.toggle('is-claimable', ready);
         setText(banner.querySelector('[data-refinery-banner-title]'), legacyJob ? '舊煉器工作 · 退還素材與費用' : ready ? '法寶已成 · 立即開爐！' : '爐火運轉中 · 靜候成器');
-        setText(banner.querySelector('[data-refinery-banner-detail]'), legacyJob ? '一般法器已停止鍛造，點擊退還本爐投入' : ready ? '煉製完成，點擊領取法寶' : '剩餘 ' + (window.formatCultivationRefineryDuration?.(remaining) || '一段時間'));
+        setText(banner.querySelector('[data-refinery-banner-detail]'), legacyJob ? '此工作不符合目前精煉規則，點擊退還本爐投入' : ready ? '煉製完成，點擊領取法寶' : '剩餘 ' + (window.formatCultivationRefineryDuration?.(remaining) || '一段時間'));
         const pip = banner.querySelector('[data-refinery-ready-pip]');
         if (pip) pip.hidden = !ready;
         content.querySelector('.refinery-slots')?.classList.toggle('is-finished', ready);
