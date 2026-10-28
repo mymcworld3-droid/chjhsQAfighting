@@ -338,8 +338,10 @@ body.xianxia-theme #question-text *{
   color:#211a10!important;
   text-shadow:none!important;
 }
-body.xianxia-theme #question-text :is(mjx-container,mjx-container *){
-  color:#211a10!important;
+body.xianxia-theme #question-text :is(mjx-container,mjx-container *),
+body.xianxia-theme #question-text :is(.MathJax,.katex,math,.quiz-math-fallback),
+body.xianxia-theme #question-text :is(.MathJax,.katex,math,.quiz-math-fallback) *{
+  color:#fff!important;
 }
 body.xianxia-theme #quiz-badge{
   background:rgba(38,31,21,.82)!important;

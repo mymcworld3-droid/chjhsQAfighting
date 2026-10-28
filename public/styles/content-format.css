@@ -27,6 +27,13 @@ body.xianxia-theme :not(:where(
   font-family: var(--ui-font) !important;
 }
 
+/* LaTeX stays white across questions, choices, explanations and history.
+   Include descendants so generated glyphs and fraction rules share the color. */
+body.xianxia-theme :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
+body.xianxia-theme :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) * {
+  color: #fff !important;
+}
+
 /* Avatars fill the same circular viewport in previews and player identities. */
 body.xianxia-theme .avatar-preview {
   flex: none;
