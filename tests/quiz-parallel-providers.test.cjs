@@ -81,6 +81,74 @@ test('a fast answer/explanation mismatch cannot win the quiz race or enter the s
   });
 });
 
+test('wrong arithmetic in both fast and late responses cannot win or enter the spare pool',async()=>{
+  const {questionQualityIssue}=require('../question-quality.cjs');
+  await withMockProviders(async()=>{
+    const plan=createQuizTaskPlan({difficulty:'medium'}),pool=createSparePool();
+    const key=pool.key({owner:'session:abcdefghijklmnopqrst',subject:'數學',topic:'向量'});
+    const pending=[],called=[];
+    global.fetch=(_url,init)=>new Promise(resolve=>{
+      const task=taskFrom(JSON.parse(init.body).messages[1].content);called.push(task);
+      const bad=task.question_form!==plan.get(1).form;
+      pending.push(()=>resolve(response({
+        q:'已知兩向量長度為 3、5，內積為 12，求向量和的長度。',
+        correct:bad?String.raw`$\sqrt{38}$`:String.raw`$\sqrt{58}$`,wrong:['8','38','6'],
+        exp:bad?String.raw`平方為 $3^2+2(12)+5^2=9+24+25=38$。答案為 $\sqrt{38}$。`
+          :String.raw`平方為 $3^2+2(12)+5^2=9+24+25=58$。答案為 $\sqrt{58}$。`,
+        generation_task_id:task.generation_task_id,question_form:task.question_form
+      })));
+    });
+    const work=router.generateJSON('向量單選題',{parallel:true,
+      promptForProvider:(base,index)=>plan.prompt(base,index),
+      validate:(data,context)=>{const issue=questionQualityIssue(data);if(issue)throw Error(issue);plan.validate(data,context.index);},
+      onWinner:item=>pool.markServed(key,item.data),onSpare:item=>pool.offer(key,item)});
+    assert.equal(called.length,3);
+    pending[0]();await new Promise(resolve=>setImmediate(resolve));
+    pending[1]();const delivered=await work;
+    assert.equal(delivered.data.correct,String.raw`$\sqrt{58}$`);
+    pending[2]();await new Promise(resolve=>setImmediate(resolve));
+    assert.equal(pool.count(key),0,'the late invalid calculation must not be cached');
+    assert.equal(called.length,3,'deterministic checks do not buy another AI review');
+  });
+});
+
+test('real quiz handler rewrites the entire question when every API repeats the same arithmetic error',async()=>{
+  await withMockProviders(async()=>{
+    for(const mode of ['solo','battle-fast']) {
+      let handler,calls=0;const prompts=[];
+      const context={QUESTION_FORMS,createQuizTaskPlan,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,
+        FAST_QUIZ_MODES:require('../fast-quiz-prompt.cjs').MODES,quickQuizPrompt:require('../fast-quiz-prompt.cjs').quickQuizPrompt,
+        Knowledge:require('../public/cultivation/knowledge-points.js'),
+        ANSWER_AND_EXPLANATION_RULES:require('../quiz-answer-prompt.cjs').ANSWER_AND_EXPLANATION_RULES,
+        subjectReliabilityPrompt:require('../quiz-answer-prompt.cjs').subjectReliabilityPrompt,
+        questionQualityIssue:require('../question-quality.cjs').questionQualityIssue,removeUnstableOptionLabels:require('../question-quality.cjs').removeUnstableOptionLabels,
+        SUBJECT_SCHEMA:{數學:['向量']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},
+        quizSparePool:createSparePool({similar:(a,b)=>a===b})};
+      const helperStart=server.indexOf('function cleanQuestionText('),helperEnd=server.indexOf('const { MODES: FAST_QUIZ_MODES',helperStart);
+      const start=server.indexOf("app.post('/api/generate-quiz',"),end=server.indexOf('// API 5:',start);
+      vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end),context);
+      global.fetch=async(_url,init)=>{
+        const prompt=JSON.parse(init.body).messages[1].content,task=taskFrom(prompt),bad=calls++<3;
+        prompts.push(prompt);
+        return response({q:'已知向量長度為 3、5，內積為 12，求向量和的長度。',
+          correct:bad?String.raw`$\sqrt{38}$`:String.raw`$\sqrt{58}$`,wrong:['8','38','6'],
+          exp:bad?String.raw`平方為 $9+24+25=38$。答案為 $\sqrt{38}$。`:String.raw`平方為 $9+24+25=58$。答案為 $\sqrt{58}$。`,
+          subject:'數學',knowledge_points:[{subject:'數學',id:'math-5',name:'幾何與向量'}],
+          generation_task_id:task.generation_task_id,question_form:task.question_form});
+      };
+      const output={};
+      await handler({body:{subject:'數學',specificTopic:'向量',quizMode:mode}},
+        {status(n){output.status=n;return this;},json(value){output.body=value;return this;}});
+      assert.equal(output.status,undefined,JSON.stringify(output.body));
+      const question=JSON.parse(output.body.text);
+      assert.equal(question.correct,String.raw`$\sqrt{58}$`);assert(!question.exp.includes('38'));
+      assert.equal(calls,6,'one bad parallel wave is followed by one complete replacement wave');
+      assert.ok(prompts.slice(3).every(prompt=>prompt.includes('數值等式')&&/重寫|重新生成/.test(prompt)));
+      await new Promise(resolve=>setImmediate(resolve));
+    }
+  });
+});
+
 test('one configured API retains the ordinary sequential path and quiz endpoint opts in for all modes',()=>{
   assert.match(server,/aiRouter\.generateJSON\(prompt, \{/);
   assert.match(server,/parallel: true/);
