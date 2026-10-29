@@ -19,7 +19,7 @@ function timeText(ms){if(ms<=0)return '可採收';const minutes=Math.ceil(ms/600
 function readyPlots(){return snapshot?.plots?.filter(p=>!p.locked&&!p.empty&&p.readyAt<=current())||[];}
 function updateEntrance(){const button=$('spirit-farm-entrance');if(!button)return;const ready=account===getMainUser()?.uid&&readyPlots().length>0;button.querySelector('.refinery-ready-dot').hidden=!ready;button.setAttribute('aria-label',ready?'靈田，有靈草可採收':'進入靈田');}
 function plotHTML(p){
-  const active=p.index===selected,base=`type="button" class="farm-plot ${active?'is-selected':''} ${p.locked?'is-locked':''}" data-farm-plot="${p.index}" aria-pressed="${active}"`;
+  const active=p.index===selected,base=`type="button" class="farm-plot ${active?'is-selected':''} ${p.locked?'is-locked':''}" data-farm-plot="${p.index}" style="--farm-depth:${Math.floor(p.index/3)+1}" aria-pressed="${active}"`;
   if(p.locked)return `<button ${base} aria-label="第 ${p.index+1} 畦，尚未開墾"><span class="farm-plot-number">${p.index+1}</span><span class="farm-soil-mark" aria-hidden="true">鎖</span><span class="farm-plot-label">待開墾</span></button>`;
   if(p.empty)return `<button ${base} aria-label="第 ${p.index+1} 畦，空田，可種植"><span class="farm-plot-number">${p.index+1}</span><span class="farm-soil-mark" aria-hidden="true">＋</span><span class="farm-plot-label">種植</span></button>`;
   const ready=p.readyAt<=current(),progress=Math.max(0,Math.min(1,(current()-p.plantedAt)/Math.max(1,p.readyAt-p.plantedAt)));
