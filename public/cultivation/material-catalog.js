@@ -1,5 +1,5 @@
 // 煉器素材與法寶配方的資料來源。
-// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本是木／鐵素材與煉製印記的唯一產生來源。
+// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本產出鐵材、木材與煉製印記，靈田也可兌換三種基礎木材。
 
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 
@@ -47,7 +47,7 @@ export const MATERIAL_REALMS = Object.freeze(ARTIFACT_REALMS.map((realm) => Obje
 })));
 
 // 現行材料系統只保留本團本的六種木／鐵煉器素材，以及二煉、三煉印記。
-// 素材只涵蓋煉氣、築基、金丹三個境界；問道、洞天與商店不會自然產生。
+// 木材也可由靈田收成兌換；團本印記仍只由團本取得。
 const DEFAULT_MATERIAL_CATALOG = [
   { id: 'qi-spirit-iron', name: '玄鐵', icon: '鐵', category: '鐵材', realm: '煉氣',
     description: '煉氣境常用鐵材，質地沉穩，適合基礎兵器與法器器胚。只能由對應團本產生。', buyGold: 0 },
@@ -56,11 +56,11 @@ const DEFAULT_MATERIAL_CATALOG = [
   { id: 'golden-purple-iron', name: '紫金玄鐵', icon: '紫鐵', category: '鐵材', realm: '金丹',
     description: '帶有紫金靈輝的金丹境高階鐵材，可承受更強的法力灌注。只能由對應團本產生。', buyGold: 0 },
   { id: 'qi-spirit-wood', name: '靈木', icon: '木', category: '木材', realm: '煉氣',
-    description: '帶有淡薄靈氣的煉氣境木材，可用於符器、弓杖與輔助法寶。只能由對應團本產生。', buyGold: 0 },
+    description: '帶有淡薄靈氣的煉氣境木材，可用於符器、弓杖與本命法器。可由對應團本取得，或以青露草在靈田兌換。', buyGold: 0 },
   { id: 'foundation-century-wood', name: '百年靈木', icon: '古木', category: '木材', realm: '築基',
-    description: '生長百年的築基境靈木，木質穩定而能長時間蓄靈。只能由對應團本產生。', buyGold: 0 },
+    description: '生長百年的築基境靈木，木質穩定而能長時間蓄靈。可由對應團本取得，或以赤穗花在靈田兌換。', buyGold: 0 },
   { id: 'golden-lightning-wood', name: '雷擊木', icon: '雷木', category: '木材', realm: '金丹',
-    description: '經天雷洗鍊仍存生機的金丹境木材，兼具堅韌與導靈性。只能由對應團本產生。', buyGold: 0 },
+    description: '經天雷洗鍊仍存生機的金丹境木材，兼具堅韌與導靈性。可由對應團本取得，或以月華蘭在靈田兌換。', buyGold: 0 },
   { id: 'nascent-star-iron', name: '玄冥星鐵', icon: '星鐵', category: '鐵材', realm: '元嬰',
     description: '元嬰境星辰淬鍊的稀有鐵材，僅從極境清霜試煉取得。', buyGold: 0 },
   { id: 'nascent-soul-wood', name: '千載魂木', icon: '魂木', category: '木材', realm: '元嬰',
