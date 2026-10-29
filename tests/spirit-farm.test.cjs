@@ -46,6 +46,66 @@ test('watering and fertilizer each apply once, reduce original growth time, and 
   const b=await care(f,'fertilize');assert.equal(b.farm.energy,4);assert.equal(b.farm.plots[0].readyAt,t+7.5*60000);await assert.rejects(care(f,'fertilize'),/已施肥/);
   f.time=b.farm.plots[0].readyAt;const harvest=await care(f,'harvest');assert.equal(harvest.result.items[0].quality,'良品');assert.equal(harvest.result.items[0].quantity,3);
 });
+test('bulk planting fills only open empty plots, caps at available seeds, and keeps each plant and channel bonus independent',async()=>{
+  const f=await fixture();await plant(f,1,'amber');
+  await f.db.doc('spiritFarms/u1').update({openPlots:6,channel:true,seeds:{jade:3,amber:2,moon:1}});
+  const first=await f.act('plant-all',{cropId:'jade',quantity:999,index:8,readyAt:0});
+  assert.deepEqual(first.result.indices,[0,2,3]);assert.equal(first.farm.seeds.jade,0);
+  assert.equal(first.farm.plots[1].cropId,'amber');assert(first.farm.plots[4].empty);assert(first.farm.plots[6].locked);
+  assert.equal(new Set(first.farm.plots.filter(p=>p.id).map(p=>p.id)).size,4);
+  assert.equal(first.farm.plots[0].readyAt,f.time+450000);assert.equal(first.farm.plots[2].readyAt,f.time+600000);
+  assert.equal(first.farm.plots[3].watered,true);assert.equal(first.farm.plots[2].watered,false);
+  await assert.rejects(f.act('plant-all',{cropId:'jade'}),/種子不足/);
+  const second=await f.act('plant-all',{cropId:'amber'});assert.deepEqual(second.result.indices,[4,5]);
+  await assert.rejects(f.act('plant-all',{cropId:'moon'}),/空田/);
+});
+test('bulk planting replay and concurrent commands spend seeds only once',async()=>{
+  const f=await fixture(),op=request(0,'plant-all',{cropId:'jade'});
+  const [a,b]=await Promise.all([f.service.act('u1',op),f.service.act('u1',op)]);
+  assert.deepEqual(a.farm.plots,b.farm.plots);assert.equal(b.replayed,true);assert.equal(b.farm.seeds.jade,3);
+  await assert.rejects(f.service.act('u1',{...op,cropId:'moon'}),/其他田務/);
+  const g=await fixture(),out=await Promise.allSettled([g.service.act('u1',request(0,'plant-all',{cropId:'jade'})),g.service.act('u1',request(0,'plant-all',{cropId:'amber'}))]);
+  assert.equal(out.filter(x=>x.status==='fulfilled').length,1);
+  assert.equal((await g.view()).plots.filter(p=>p.id).length,3);
+});
+test('batch care matches individual care and never recharges completed, mature, empty or locked plots',async()=>{
+  const f=await fixture({random:()=>.05});await f.act('plant-all',{cropId:'jade'});
+  await care(f,'water',0);await care(f,'fertilize',0);await care(f,'purify',0);
+  await f.db.doc('spiritFarms/u1').update({energy:10});
+  const water=await f.act('water-all');assert.deepEqual(water.result.indices,[1,2]);assert.equal(water.farm.energy,10);
+  const farm=await f.view(),op=request(farm.revision,'fertilize-all'),fert=await f.service.act('u1',op);
+  assert.deepEqual(fert.result.indices,[1,2]);assert.equal(fert.result.energySpent,4);assert.equal(fert.farm.energy,6);
+  const retry=await f.service.act('u1',op);assert.equal(retry.farm.energy,6);assert.equal(retry.replayed,true);
+  const pure=await f.act('purify-all');assert.deepEqual(pure.result.indices,[1,2]);assert.equal(pure.farm.energy,4);
+  assert(pure.farm.plots.slice(0,3).every(p=>p.watered&&p.fertilized&&p.cleared&&!p.pest));
+  assert(pure.farm.plots.slice(0,3).every(p=>p.readyAt===f.time+450000));
+  await assert.rejects(f.act('water-all'),/沒有需要灌溉/);await assert.rejects(f.act('fertilize-all'),/沒有需要施肥/);
+  await assert.rejects(f.act('purify-all'),/沒有需要驅蟲/);
+  f.time+=450000;await assert.rejects(f.act('fertilize-all'),/沒有需要/);
+});
+test('insufficient energy leaves the entire care batch unchanged while free watering is still available',async()=>{
+  const f=await fixture({random:()=>.05});await f.act('plant-all',{cropId:'jade'});
+  await f.db.doc('spiritFarms/u1').update({energy:2});const before=await f.raw();
+  await assert.rejects(f.act('fertilize-all'),/靈氣不足/);assert.deepEqual(await f.raw(),before);
+  await assert.rejects(f.act('purify-all'),/靈氣不足/);assert.deepEqual(await f.raw(),before);
+  assert.equal((await f.act('water-all')).farm.energy,2);
+});
+test('care batch skips crops that matured since its preview and charges only the remaining eligible plants',async()=>{
+  const f=await fixture();await f.act('plant-all',{cropId:'jade'});
+  await f.db.doc('spiritFarms/u1').update({'plots':(await f.raw()).plots.map((p,i)=>p&&({...p,readyAt:f.time+(i===0?10:600000)}))});
+  const before=await f.view(),preview=Rules.workPlan(before,f.time);assert.equal(preview.fertilizeCost,6);
+  f.time+=11;const result=await f.service.act('u1',request(before.revision,'fertilize-all'));
+  assert.deepEqual(result.result.indices,[1,2]);assert.equal(result.result.energySpent,4);
+  assert.equal(result.farm.plots[0].fertilized,false);assert.equal(result.farm.energy,2);
+});
+test('public and stored work plans agree, and failed batch writes roll back the whole batch',async()=>{
+  const f=await fixture();await f.act('plant-all',{cropId:'jade'});
+  assert.deepEqual(Rules.workPlan(await f.raw(),f.time,'jade'),Rules.workPlan(await f.view(),f.time,'jade'));
+  const before=await f.raw(),original=f.db.runTransaction.bind(f.db);
+  f.db.runTransaction=worker=>original(async tx=>{const save=tx.set.bind(tx);tx.set=(ref,value)=>{if(ref.path.startsWith('spiritFarms/'))throw Error('unavailable');return save(ref,value);};return worker(tx);});
+  await assert.rejects(f.service.act('u1',request(before.revision,'fertilize-all')),/unavailable/);
+  assert.deepEqual(await f.raw(),before);
+});
 test('pests are optional care and do not reduce an unattended plant below its base harvest',async()=>{
   const f=await fixture({random:()=>.05});await plant(f);assert.equal((await f.view()).plots[0].pest,true);
   f.time+=600000;const result=await care(f,'harvest');assert.equal(result.result.items[0].quantity,2);

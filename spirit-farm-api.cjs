@@ -11,13 +11,13 @@ const dateKey=ms=>Quests.dateKey(new Date(ms));
 const timestamp=value=>typeof value?.toMillis==='function'?value.toMillis():typeof value?.toDate==='function'?value.toDate().getTime():value instanceof Date?value.getTime():typeof value==='number'?value:typeof value==='string'?Date.parse(value):NaN;
 function operation(body={}) {
   if(!/^[A-Za-z0-9_-]{16,80}$/.test(String(body.requestId||''))||!Number.isSafeInteger(body.expectedRevision)||body.expectedRevision<0)throw fail('操作資料已更新，請重新同步靈田',400);
-  const actions=['plant','water','fertilize','purify','harvest','harvest-all','seed','expand','channel','exchange','study'];
+  const actions=['plant','plant-all','water','water-all','fertilize','fertilize-all','purify','purify-all','harvest','harvest-all','seed','expand','channel','exchange','study'];
   if(!actions.includes(body.action))throw fail('未知的田務操作',400);
   const op={action:body.action,requestId:body.requestId,expectedRevision:body.expectedRevision};
   if(['plant','water','fertilize','purify','harvest'].includes(op.action)){
     if(!Number.isInteger(body.index)||body.index<0||body.index>8)throw fail('請選擇有效田地',400);op.index=body.index;
   }
-  if(['plant','seed','exchange'].includes(op.action)){
+  if(['plant','plant-all','seed','exchange'].includes(op.action)){
     if(!Rules.crop(body.cropId))throw fail('請選擇有效靈草',400);op.cropId=body.cropId;
   }
   if(op.action!=='plant'&&['water','fertilize','purify','harvest'].includes(op.action)){
@@ -29,7 +29,8 @@ function createService({db,now=Date.now,random=Math.random,uuid=crypto.randomUUI
   async function transact(uid,body) {
     const op=body?operation(body):null,signature=op?hash(JSON.stringify(op)):'';
     // Retried database callbacks reuse the same entropy; refresh cannot reroll a harvest.
-    const entropy=op?.action==='plant'?{id:uuid(),pest:random()<.12,mutationRoll:random()}:null;
+    const freshPlant=()=>({id:uuid(),pest:random()<.12,mutationRoll:random()});
+    const entropy=op?.action==='plant'?{[op.index]:freshPlant()}:op?.action==='plant-all'?Object.fromEntries(Array.from({length:9},(_,i)=>[i,freshPlant()])):null;
     return db.runTransaction(async tx=>{
       const userRef=db.collection('users').doc(uid),farmRef=db.collection('spiritFarms').doc(uid);
       const [u,s]=await Promise.all([tx.get(userRef),tx.get(farmRef)]);
@@ -50,12 +51,34 @@ function createService({db,now=Date.now,random=Math.random,uuid=crypto.randomUUI
       const spend=cost=>{for(const [key,n]of Object.entries(cost))if(farm.harvest[key]<n)throw fail('收成不足，請先採收所需靈草');for(const [key,n]of Object.entries(cost))farm.harvest[key]-=n;};
       const energy=n=>{if(farm.energy<n)throw fail('靈氣不足，可從今日作答紀錄納取靈氣');farm.energy-=n;};
       const boost=(plant,fraction)=>{plant.readyAt=Math.max(time,plant.readyAt-plant.originalMs*fraction);};
+      const plantAt=index=>{
+        farm.seeds[c.id]--;
+        const channel=farm.channel&&index%3===0;
+        farm.plots[index]={...entropy[index],cropId:c.id,plantedAt:time,readyAt:time+c.minutes*Rules.MINUTE*(channel?.75:1),originalMs:c.minutes*Rules.MINUTE,
+          watered:channel,channelBonus:channel,fertilized:false,cleared:false};
+      };
       if(op.action==='plant'){
         if(p)throw fail('這畦已有靈草');if(!farm.seeds[c.id])throw fail('種子不足，可到種子袋換取');
-        farm.seeds[c.id]--;const irrigated=farm.channel&&op.index%3===0;
-        farm.plots[op.index]={...entropy,cropId:c.id,plantedAt:time,readyAt:time+c.minutes*Rules.MINUTE*(irrigated?.75:1),originalMs:c.minutes*Rules.MINUTE,
-          watered:irrigated,channelBonus:irrigated,fertilized:false,cleared:false};
+        plantAt(op.index);const irrigated=farm.channel&&op.index%3===0;
         result.message='已種下'+c.name+(irrigated?'，水渠已自動灌溉':'');
+      }else if(op.action==='plant-all'){
+        const plan=Rules.workPlan(farm,time,c.id);
+        if(!plan.empty.length)throw fail('目前沒有可播種的空田');
+        if(!plan.plant.length)throw fail('種子不足，可到種子袋換取');
+        for(const index of plan.plant)plantAt(index);
+        result.indices=plan.plant;result.count=plan.plant.length;
+        result.message='已種下 '+result.count+' 畦'+c.name+'，使用種子 '+result.count+' 顆';
+      }else if(['water-all','fertilize-all','purify-all'].includes(op.action)){
+        const kind=op.action.replace('-all',''),indices=Rules.workPlan(farm,time)[kind];
+        if(!indices.length)throw fail('目前沒有需要'+({water:'灌溉',fertilize:'施肥',purify:'驅蟲'}[kind])+'的靈植');
+        const cost=indices.length*({water:0,fertilize:2,purify:1}[kind]);energy(cost);
+        for(const index of indices){const plant=farm.plots[index];
+          if(kind==='water'){plant.watered=true;boost(plant,.1);}
+          if(kind==='fertilize'){plant.fertilized=true;boost(plant,.15);}
+          if(kind==='purify'){plant.pest=false;plant.cleared=true;}
+        }
+        result.indices=indices;result.count=indices.length;result.energySpent=cost;
+        result.message='已為 '+indices.length+' 畦'+({water:'灌溉',fertilize:'施肥',purify:'驅散靈蟲'}[kind])+(cost?'，使用靈氣 '+cost+' 點':'，免費滋養');
       }else if(['water','fertilize','purify'].includes(op.action)){
         if(time>=p.readyAt)throw fail('靈草已成熟，現在可以採收');
         if(op.action==='water'){if(p.watered)throw fail('這株已灌溉');p.watered=true;boost(p,.1);result.message='清泉潤田，生長時間縮短，品質提升';}

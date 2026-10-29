@@ -64,6 +64,22 @@
       stage:ready?'mature':progress>=.5?'growing':'sprout',watered:p.watered,fertilized:p.fertilized,pest:p.pest,cleared:p.cleared,
       channelBonus:p.channelBonus,...quality(farm,index)};
   }
+  // Accept both stored plots and their public view, so previews and settlement
+  // use identical eligibility. Time can only reduce a care batch before commit.
+  function workPlan(farm,now,cropId='jade') {
+    const plan={empty:[],plant:[],water:[],fertilize:[],purify:[],harvest:[]};
+    for(let i=0;i<farm.openPlots;i++){
+      const p=farm.plots[i];
+      if(!p||p.empty){plan.empty.push(i);continue;}
+      if(p.readyAt<=now){plan.harvest.push(i);continue;}
+      if(!p.watered)plan.water.push(i);
+      if(!p.fertilized)plan.fertilize.push(i);
+      if(p.pest&&!p.cleared)plan.purify.push(i);
+    }
+    plan.plant=plan.empty.slice(0,crop(cropId)?integer(farm.seeds[cropId]):0);
+    plan.fertilizeCost=plan.fertilize.length*2;plan.purifyCost=plan.purify.length;
+    return plan;
+  }
   function view(farm,now,date,score=0) {
     return {schema:1,revision:farm.revision,serverNow:now,openPlots:farm.openPlots,channel:farm.channel,
       plots:farm.plots.map((_,i)=>plotView(farm,i,now)),seeds:farm.seeds,harvest:farm.harvest,energy:farm.energy,energyCap:ENERGY_CAP,
@@ -71,5 +87,5 @@
       expansionCost:EXPANSION_COSTS[farm.openPlots/3-1]||null,channelCost:CHANNEL_COST,
       crops:CROPS.map(c=>({...c,exchangeUnlocked:score>=c.minScore}))};
   }
-  return Object.freeze({MINUTE,CROPS,STUDY_CAP,ENERGY_CAP,CHANNEL_COST,EXPANSION_COSTS,integer,crop,inventory,initial,normalize,neighbors,companion,quality,harvestResult,plotView,view});
+  return Object.freeze({MINUTE,CROPS,STUDY_CAP,ENERGY_CAP,CHANNEL_COST,EXPANSION_COSTS,integer,crop,inventory,initial,normalize,neighbors,companion,quality,harvestResult,plotView,workPlan,view});
 });
