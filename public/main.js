@@ -32,6 +32,7 @@ void import('./account-delete.js').catch((error) => {
 });
 
 const XIUXIAN_FEATURE_MODULES = [
+  './cultivation/item-icons.js',
   './cultivation/realm-icons.js',
   './cultivation/realm-icon-motion.js',
   './cultivation/cultivation-theme.js',

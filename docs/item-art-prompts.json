@@ -1,0 +1,146 @@
+{
+  "date": "2026-11-01",
+  "generator": "Built-in imagegen",
+  "transparent_background": true,
+  "base_prompt": "Use case: stylized-concept. Asset type: individual inventory icon for a Chinese xianxia cultivation RPG. One single isolated item, centered, fills 72% of a square canvas, genuine transparent background. Hand-painted semi-realistic fantasy game item art, warm ivory highlights, antique-gold details, softly outlined clean readable silhouette at 32px. Three-quarter view, soft upper-left light, subtle contained magical light ONLY immediately around object. No border, no tile, no scene, no ground plane, no text, no numerals, no letters, no watermark. ",
+  "items": [
+    {
+      "id": "gold",
+      "file": "public/assets/items/gold.webp",
+      "subject": "One compact cluster of three faceted emerald-jade spirit crystals, one large upright crystal and two small crystals, translucent pale mint luminous core. Currency called spirit stones, NOT coins.",
+      "source_filename": "exec-7a9b2d3c-2cc7-4ec4-a501-79c3b315f86a.png"
+    },
+    {
+      "id": "raid-ticket",
+      "file": "public/assets/items/raid-ticket.webp",
+      "subject": "One folded ivory paper dungeon admission ticket with dark teal silk edge bindings and a small antique gold sword emblem stamped at its center, two short ribbon ends. Distinct simple rectangular silhouette, elegant magical pass.",
+      "source_filename": "exec-7d6173bb-4535-45ca-8af0-c2d1e0fbf0d3.png"
+    },
+    {
+      "id": "draw-ticket",
+      "file": "public/assets/items/draw-ticket.webp",
+      "subject": "One imperial gold and warm red paper summoning voucher, rolled slightly at two opposing corners, dark crimson silk ribbon and a single jade star medallion at center. Clearly different from a teal dungeon admission pass.",
+      "source_filename": "exec-c1b25f55-66c2-4e49-9aef-e9b6df029c91.png"
+    },
+    {
+      "id": "qi-spirit-iron",
+      "file": "public/assets/items/qi-spirit-iron.webp",
+      "subject": "A squat rough black iron ingot with a few iron-grey fractured ore facets and faint cool jade fissures, simple heavy raw metal, basic grade.",
+      "source_filename": "exec-be46af56-403c-4da0-a92c-2c63b2c2bcec.png"
+    },
+    {
+      "id": "foundation-refined-iron",
+      "file": "public/assets/items/foundation-refined-iron.webp",
+      "subject": "Two carefully forged brushed silver-blue iron bars stacked into one compact pile, crisp bevelled edges, a restrained blue spiritual gleam, mid grade metal.",
+      "source_filename": "exec-0ade7f3b-1e81-4aff-8ef7-16121b199c45.png"
+    },
+    {
+      "id": "golden-purple-iron",
+      "file": "public/assets/items/golden-purple-iron.webp",
+      "subject": "One purple-black metal ingot with rich purple crystalline facets, molten antique-gold veins and gold bevel edges, high grade magical metal. Compact block shape.",
+      "source_filename": "exec-a8d6fc9b-0af2-46cf-b07e-26ad4e953b72.png"
+    },
+    {
+      "id": "qi-spirit-wood",
+      "file": "public/assets/items/qi-spirit-wood.webp",
+      "subject": "A compact bundle of two short warm brown spiritwood logs with clean visible growth rings, a single fresh jade-green leaf and faint soft green sap glow, basic grade wood.",
+      "source_filename": "exec-5197a97f-f078-4a60-b744-4ee25a5b7518.png"
+    },
+    {
+      "id": "foundation-century-wood",
+      "file": "public/assets/items/foundation-century-wood.webp",
+      "subject": "One thick short gnarled dark amber ancient log with richly visible concentric growth rings, an elegant turquoise moss strip and small gold sap veins, mid grade aged wood.",
+      "source_filename": "exec-cd885194-e86f-40d9-bf77-6fe39dabae3b.png"
+    },
+    {
+      "id": "golden-lightning-wood",
+      "file": "public/assets/items/golden-lightning-wood.webp",
+      "subject": "A short forked charcoal-black lightning-struck branch, bold zigzag silhouette, split amber-gold core with one tiny blue-white electrical arc close to the wood, high grade wood.",
+      "source_filename": "exec-366e8fff-9f11-453e-b59b-c9af2075a601.png"
+    },
+    {
+      "id": "nascent-star-iron",
+      "file": "public/assets/items/nascent-star-iron.webp",
+      "subject": "A compact irregular meteorite iron chunk, midnight blue-black crystalline metal with a few silver celestial flecks and one prominent icy blue star-like glint within its facets. Rare highest grade iron, bold angular outline.",
+      "source_filename": "exec-2fae6873-7d69-4fe0-a781-77ac2c7dcf6c.png"
+    },
+    {
+      "id": "nascent-soul-wood",
+      "file": "public/assets/items/nascent-soul-wood.webp",
+      "subject": "A short beautifully twisted ancient silver-violet spiritwood root with a teal luminous knot and a tiny translucent violet leaf. Rare highest grade soulwood, smooth pale exposed grain, compact diagonal silhouette.",
+      "source_filename": "exec-ae25a2cb-69bb-43cf-951f-c56d56657937.png"
+    },
+    {
+      "id": "raid-refine-key-ii",
+      "file": "public/assets/items/raid-refine-key-ii.webp",
+      "subject": "One blue sapphire upgrade stone, large oval faceted gem in a simple antique gold claw setting, exactly two small gold accent dots on its lower bezel. Bright icy blue core, restrained blue glow, easily recognized as a gem stone, NOT a seal stamp.",
+      "source_filename": "exec-9485d031-5a3f-41f8-9d8e-9c819263eadb.png"
+    },
+    {
+      "id": "raid-refine-key-iii",
+      "file": "public/assets/items/raid-refine-key-iii.webp",
+      "subject": "One royal purple and luminous amber-gold upgrade stone, large pointed diamond-shaped amethyst in an elaborate three-pronged gold mount, exactly three small gold accent dots on its lower bezel. High grade, clearly distinct in color and angular silhouette from an oval blue stone, NOT a seal stamp.",
+      "source_filename": "exec-5c9f4bf7-bd79-4468-99aa-48a06b48196b.png"
+    },
+    {
+      "id": "forge-fragment",
+      "file": "public/assets/items/forge-fragment.webp",
+      "subject": "A compact pile of three broken dark gold magical metal shards with glowing warm orange inner edges and carved curved grooves, largest shard in the center. Crafting fragments, NOT coins, NOT a full weapon.",
+      "source_filename": "exec-20d57ed3-360c-4d8e-a2be-5557179258ad.png"
+    },
+    {
+      "id": "nascent-soul-essence",
+      "file": "public/assets/items/nascent-soul-essence.webp",
+      "subject": "One glowing violet-blue crystalline teardrop containing a very simple white-blue spiritual wisp, with two tiny floating purple fragments immediately beside it. Soul essence fragments, gentle violet magical glow, no character or face.",
+      "source_filename": "exec-414413a3-abaa-4fe5-b1f5-25db4748e64d.png"
+    },
+    {
+      "id": "revival-pill",
+      "file": "public/assets/items/revival-pill.webp",
+      "subject": "One open miniature celadon ceramic medicine jar with a gold rim and three round glossy amber-red medicinal pills beside its base, one pill glows softly with jade qi. One compact grouping, large readable shapes.",
+      "source_filename": "exec-de399e28-f7be-48e0-8c13-6caff6b99990.png"
+    },
+    {
+      "id": "cultivation",
+      "file": "public/assets/items/cultivation.webp",
+      "subject": "One small rolled ivory cultivation scroll with green jade end caps, slightly open to show a simple abstract golden spiral, no writing, no text. A subtle gold spiritual wisp above the scroll. Cultivation experience resource.",
+      "source_filename": "exec-1b2283c0-40d5-4ba9-9f30-7c7ccc919ce6.png"
+    },
+    {
+      "id": "seven-treasure-ruler",
+      "file": "public/assets/items/seven-treasure-ruler.webp",
+      "subject": "One elegant short pale jade ceremonial ruler, gold cloud-shaped ends and seven tiny distinct colored gemstone inlays along its length. Diagonal compact silhouette, a magical measuring rod, no measurement marks or writing.",
+      "source_filename": "exec-47b0eabe-24a8-4684-a488-2766d1450ac3.png"
+    },
+    {
+      "id": "war-drum",
+      "file": "public/assets/items/war-drum.webp",
+      "subject": "One round Chinese war drum with deep red lacquer wood shell, cream hide face, antique bronze studs and two short crossed drumsticks behind it, compact centered grouping. Martial magical relic.",
+      "source_filename": "exec-3981a9d6-b66e-443e-aa59-3712292ff1fe.png"
+    },
+    {
+      "id": "enlightenment-lamp",
+      "file": "public/assets/items/enlightenment-lamp.webp",
+      "subject": "One elegant antique bronze Chinese oil lamp with a green jade lotus bowl and a single gentle turquoise-gold flame, simple broad round base, no hanging chains. Wisdom relic.",
+      "source_filename": "exec-81204dfb-ee1b-40ff-8fb9-0c2b80a798e4.png"
+    },
+    {
+      "id": "mountain-armor",
+      "file": "public/assets/items/mountain-armor.webp",
+      "subject": "One compact breastplate of Chinese mountain-guardian armor, dark slate-blue overlapping metal plates, gold shoulder trim and a small jade crest at the chest. Empty armor only, no body, no person, no helmet.",
+      "source_filename": "exec-3fdf7167-6507-4225-aafb-7f622cf9d3f8.png"
+    },
+    {
+      "id": "longevity-jade",
+      "file": "public/assets/items/longevity-jade.webp",
+      "subject": "One pale celadon circular jade pendant carved as a simple coiled cloud, one rich red silk cord loop and a short red tassel, with subtle gold fittings. Compact clean ring silhouette, a vitality talisman.",
+      "source_filename": "exec-e6dfc911-19d5-4e72-a2d1-67b5ac49a6dc.png"
+    },
+    {
+      "id": "treasure-pouch",
+      "file": "public/assets/items/treasure-pouch.webp",
+      "subject": "One small dark jade green silk drawstring pouch with an antique gold clasp and two short gold cords, three small glowing pale jade stones barely peeking from the top. Generic cultivation treasure item icon, compact rounded outline.",
+      "source_filename": "exec-4366fbaa-b169-474f-9da4-a68e866f1719.png"
+    }
+  ]
+}

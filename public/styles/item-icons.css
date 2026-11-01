@@ -1,0 +1,8 @@
+/* Item art uses explicit dimensions; loading never shifts amounts or buttons. */
+img.game-item-icon{display:inline-block;flex:none;object-fit:contain;vertical-align:middle;max-width:100%;pointer-events:none}
+.game-item-reward{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;white-space:nowrap}
+.quest-reward .game-item-reward{margin:2px 5px 2px 0}
+.raid-loot-icon img,.mr-reward-icon img{width:100%;height:100%;object-fit:contain}
+.uib-modal-icon img.ui-content-image{display:block;width:100%;height:100%;object-fit:contain}
+.raid-ticket-status>.game-item-icon{width:30px;height:30px}
+.uib-fragment-balance>span,.refinery-fragment-balance>span{display:inline-flex;align-items:center;gap:4px}

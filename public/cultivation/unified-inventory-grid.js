@@ -184,6 +184,7 @@ import {
         type: 'consumable',
         name: item.name || '修煉道具',
         icon: item.icon || (item.id === 'revival-pill' ? '丹' : '物'),
+        imageUrl: globalThis.QAItemIcons?.url(item) || '',
         quantity,
         category: '消耗道具',
         realm: item.realm || '凡人',
@@ -208,6 +209,7 @@ import {
         type: 'training',
         name: item?.name || '修煉物品',
         icon: item?.icon || '◆',
+        imageUrl: globalThis.QAItemIcons?.url(item) || '',
         quantity,
         category: item?.category || '修煉物品',
         realm: item?.realm || '凡人',
@@ -252,7 +254,7 @@ import {
       ${item.raidKey || item.raidMaterial ? '<span class="uib-raid-key-badge"><i class="fa-solid fa-stamp"></i> 團本</span>' : ''}
       <span class="uib-icon">${soulbound ? soulboundItemFrameMarkup() : ''}${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span>
       <span class="uib-name">${escapeHtml(item.name)}</span>
-      <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '團本印記' : item.raidMaterial ? '團本煉器素材' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
+      <span class="uib-bottom"><small>${escapeHtml(item.raidKey ? '升級石' : item.raidMaterial ? '團本煉器素材' : typeLabel(item.type))}</small><em>${escapeHtml(item.realm || '凡人')}</em></span>
     </button>`;
   }
 
@@ -268,7 +270,7 @@ import {
       ${equipmentPickSlot ? `<div class="uib-equip-picker"><span>選擇下方本命法器即可裝配</span><button type="button" data-uib-cancel-equip>返回全部物品</button></div>` : ''}
       <div class="uib-toolbar">
         <div class="uib-summary"><b>背包與裝備</b><span>${allItems.length} 種物品</span></div>
-        <div class="uib-fragment-balance" aria-label="持有煉器碎片"><span>煉器碎片</span><b data-uib-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div>
+        <div class="uib-fragment-balance" aria-label="持有煉器碎片"><span>${globalThis.QAItemIcons?.markup('forge-fragment',{size:18})||''}煉器碎片</span><b data-uib-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div>
         <button type="button" class="uib-dismantle-btn" data-inventory-dismantle>物品分解</button>
         <label>種類
           <select id="uib-filter-type">
@@ -352,14 +354,14 @@ import {
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
       extra = item.nascentMaterial ? `<div class="uib-detail-section"><span>元嬰養成</span><p>用途：升級修為、攻擊、生命及金丹屬性分支；化神後亦可提升本命神通。</p><p>不可交易或煉器。可於修煉 → 元嬰／元神使用。</p><p>持有數量：<b>×${item.quantity}</b></p></div>` : item.raidKey || item.raidMaterial
-        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> ${item.raidKey ? '團本印記' : '團本煉器素材'}</span><p>分類：${item.raidKey ? '煉製階段印記' : '八方煉器陣素材'}</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要印記，不佔素材格。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要印記，不佔素材格。' : escapeHtml(item.name) + '，可直接放入八方煉器陣。'}</p><p>取得方式：素材只能由對應團本產生，但木／鐵素材可在玩家市集轉手；問道、洞天與系統商店不會產出。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
+        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> ${item.raidKey ? '升級石' : '團本煉器素材'}</span><p>分類：${item.raidKey ? '煉製升級石' : '八方煉器陣素材'}</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要升級石，不佔素材格。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要升級石，不佔素材格。' : escapeHtml(item.name) + '，可直接放入八方煉器陣。'}</p><p>取得方式：素材只能由對應團本產生，但木／鐵素材可在玩家市集轉手；問道、洞天與系統商店不會產出。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
         : `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p></div>`;
     } else if (item.id === 'revival-pill') {
       extra = `<div class="uib-detail-section"><span>使用效果</span><p>服用後立即增加 ${item.cultivationGain || 100} 修為。</p><button type="button" class="uib-use-btn" data-uib-use="revival-pill">服用一顆</button></div>`;
     }
 
     modal.innerHTML = `<section class="uib-modal uib-modal-${escapeHtml(item.type)}${soulbound ? ' uib-modal-soulbound' : ''}" role="dialog" aria-modal="true" aria-label="${escapeHtml(item.name)}" style="--uib-quality:${escapeHtml(color)}">
-      <div class="uib-modal-head"><div class="uib-modal-icon">${soulbound ? soulboundItemFrameMarkup() + imageMarkup(item.imageUrl, item.icon || '◆', item.name) : escapeHtml(item.icon || '◆')}</div><div><small>${escapeHtml(typeLabel(item.type))} · ${escapeHtml(item.category || '')}</small><h3>${escapeHtml(item.name)}</h3><span>${escapeHtml(item.realm || '凡人')} · 持有 ×${item.quantity}</span></div><button type="button" class="uib-close" aria-label="關閉"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="uib-modal-head"><div class="uib-modal-icon">${soulbound ? soulboundItemFrameMarkup() : ''}${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</div><div><small>${escapeHtml(typeLabel(item.type))} · ${escapeHtml(item.category || '')}</small><h3>${escapeHtml(item.name)}</h3><span>${escapeHtml(item.realm || '凡人')} · 持有 ×${item.quantity}</span></div><button type="button" class="uib-close" aria-label="關閉"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="uib-description">${escapeHtml(item.description || '沒有說明。')}</div>
       ${extra}
       ${item.raw?.equipSlot === '本命法寶' ? '<button type="button" class="uib-use-btn" data-uib-contract>前往契器台</button>' : ''}

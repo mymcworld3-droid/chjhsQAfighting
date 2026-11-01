@@ -519,7 +519,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
         '<h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
         '<small class="raid-unlock-status">' + escapeHtml(tier.minRealm) + '解鎖・' + tier.minScore + ' 修為</small>' +
         '<div class="raid-reward-preview"><b>通關必得 元嬰碎精 ×' + tier.fragments + '</b><span>' +
-          escapeHtml(tier.materialRealms.join('～')) + '木鐵素材</span><span>淬靈玄印・玄天道印</span></div></div>' +
+          escapeHtml(tier.materialRealms.join('～')) + '木鐵素材</span><span>二階升級石・三階升級石</span></div></div>' +
         '<div class="raid-entry-actions" role="group" aria-label="試煉組隊">' +
         '<div class="raid-difficulty-picker" role="group" aria-label="清霜試煉難度" style="--raid-selected-index:' + Object.keys(DIFFICULTY.TIERS).indexOf(tier.id) + '"><span class="raid-difficulty-selection" aria-hidden="true"></span>' +
         Object.values(DIFFICULTY.TIERS).map(function (option) {
@@ -538,7 +538,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
 
     hub.innerHTML = '<header class="raid-heading raid-hub-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
       '<div class="raid-heading-copy"><h2>秘境試煉</h2>' +
-      '<div class="raid-ticket-status raid-global-ticket"><i class="fa-solid fa-ticket"></i><span><b>團本入場券 ' +
+      '<div class="raid-ticket-status raid-global-ticket">'+(globalThis.QAItemIcons?.markup('raid-ticket',{size:30})||'')+'<span><b>團本入場券 ' +
         (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
         '</b><small>全團本共用・每日 +2・最多 5 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
         (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div></header>' +

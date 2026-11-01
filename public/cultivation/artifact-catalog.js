@@ -1,4 +1,5 @@
 import {} from './soulbound-pool.js';
+import './item-icons.js';
 // 法寶清單：內建清單是預設值與遠端設定失敗時的備援。
 // 正式遊戲執行時可由 artifact-catalog-sync.js 用 Firestore 全站設定替換同一個陣列。
 // 因為 artifact-system.js 始終持有這個陣列的同一個 reference，所以管理員新增／編輯後，
@@ -260,8 +261,10 @@ export function normalizeArtifactDefinition(raw = {}) {
   if (raw.generationSignature) item.generationSignature = String(raw.generationSignature).trim().slice(0, 512);
   if (raw.aiProvider) item.aiProvider = String(raw.aiProvider).trim().slice(0, 80);
   if (raw.aiModel) item.aiModel = String(raw.aiModel).trim().slice(0, 120);
-  // Only soulbound artifacts use artwork; ordinary artifacts render their icon.
-  if (item.equipSlot === '本命法寶' && raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
+  // Built-in and older held artifacts share the same local painted item icons.
+  const artwork=globalThis.QAItemIcons?.url(raw);
+  if (artwork) item.imageUrl=artwork;
+  else if (raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
   if (['generating','ready','error'].includes(raw.imageStatus)) item.imageStatus = raw.imageStatus;
   if (raw.imageModel) item.imageModel = String(raw.imageModel).trim().slice(0, 120);
   if (raw.imagePromptVersion) item.imagePromptVersion = String(raw.imagePromptVersion).trim().slice(0, 80);

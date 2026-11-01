@@ -471,7 +471,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIF
     // 否則會形成 observer -> syncQuestionTools -> innerHTML -> observer 的無限循環，改法寶名稱時尤其容易觸發。
     if (bar.dataset.artifactRenderKey === renderKey) return;
     bar.dataset.artifactRenderKey = renderKey;
-    bar.innerHTML = `<span class="artifact-question-label"><i class="fa-solid fa-wand-sparkles"></i> 法寶</span>${available.map((item) => `<button type="button" data-artifact-question-use="${escapeHtml(item.id)}" ${used || busyAction ? 'disabled' : ''}><b>${escapeHtml(item.icon || '◆')}</b>${escapeHtml(item.name)} ×${quantity(item.id)}<small>排除錯項</small></button>`).join('')}`;
+    bar.innerHTML = `<span class="artifact-question-label"><i class="fa-solid fa-wand-sparkles"></i> 法寶</span>${available.map((item) => `<button type="button" data-artifact-question-use="${escapeHtml(item.id)}" ${used || busyAction ? 'disabled' : ''}><b>${globalThis.QAItemIcons?.markup(item,{size:26})||escapeHtml(item.icon || '◆')}</b>${escapeHtml(item.name)} ×${quantity(item.id)}<small>排除錯項</small></button>`).join('')}`;
     bar.querySelectorAll('[data-artifact-question-use]').forEach((button) => {
       button.onclick = () => useRemoveOptionArtifact(button.dataset.artifactQuestionUse, currentQuestionContext() || context).catch((error) => toast(window.xiuxianSafeActionError?.('法寶答題使用', error, '法寶使用未完成。') || '法寶使用未完成。'));
     });
@@ -496,7 +496,7 @@ import { ARTIFACT_CATALOG, ARTIFACT_REALMS, ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIF
     const invalidEffects = (item.effects || []).filter((effect) => !SUPPORTED_EFFECTS.has(effect.type));
     const realmColor = artifactRealmColor(item.realm);
     return `<article class="artifact-item ${eqSlot ? 'is-equipped' : ''}" style="--artifact-realm-color:${escapeHtml(realmColor)}">
-      <div class="artifact-icon" aria-hidden="true">${escapeHtml(item.icon || '◆')}</div>
+      <div class="artifact-icon" aria-hidden="true">${globalThis.QAItemIcons?.markup(item,{size:44})||escapeHtml(item.icon || '◆')}</div>
       <div class="artifact-copy">
         <div class="artifact-name-row"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.realm)}</span><em>${escapeHtml(item.category || '法寶')}</em></div>
         <p>${escapeHtml(item.description || '')}</p>

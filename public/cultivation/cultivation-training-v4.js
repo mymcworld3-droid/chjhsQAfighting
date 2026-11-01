@@ -392,7 +392,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           <h3 class="core-minimal-name">${type.name}</h3>
           <div class="core-minimal-grade">${clampGrade(core.grade)} 品</div>
 
-          <p class="core-gold-balance" aria-live="polite">現有靈石：<strong>${Growth.count(window.getCurrentUserData?.()?.stats?.gold).toLocaleString("zh-TW")}</strong></p>
+          <p class="core-gold-balance" aria-live="polite">${globalThis.QAItemIcons?.markup('gold',{size:22})||''}現有靈石：<strong>${Growth.count(window.getCurrentUserData?.()?.stats?.gold).toLocaleString("zh-TW")}</strong></p>
           <p class="ns-progress-caption" aria-live="polite">再洗髓 ${Pity.remaining(window.getCurrentUserData?.()?.[WASH_FIELD]?.count)} 次，必得三品以上金丹</p>
           <div class="core-wash-row">
             <button id="wash-golden-core" type="button" class="core-wash-btn" ${busy ? 'disabled' : ''}>
@@ -565,7 +565,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     const detail = soulView.selected === 'innate' ? innateAbilityMarkup(player)
       : selectedBranch ? soulBranchDetailMarkup(player, core, selectedBranch) : '';
     return `<section class="ns-panel ns-growth-panel">
-      <div class="ns-growth-toolbar"><span class="ns-growth-resource">元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><div class="ns-growth-actions">${getFragmentsButton}<button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || innateBusy || busy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div></div>
+      <div class="ns-growth-toolbar"><span class="ns-growth-resource">${globalThis.QAItemIcons?.markup('nascent-soul-essence',{size:24})||''}元嬰碎精 <strong aria-live="polite">${prepared.fragments}</strong></span><div class="ns-growth-actions">${getFragmentsButton}<button type="button" class="ns-reset-btn" data-ns-reset ${soulBusy || innateBusy || busy || !Growth.spent(prepared.growth) ? 'disabled' : ''}>重修</button></div></div>
       <div class="ns-growth-workspace ${detail ? 'has-detail' : ''}">
         <div class="ns-growth-map" data-branch-count="${branches.length}" role="group" aria-label="元嬰與化神節點">
           <svg class="ns-growth-links" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>

@@ -7,7 +7,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const visible = () => $('page-home')?.classList.contains('active-page');
-  const materialNames = { 'raid-refine-key-ii': '淬靈玄印', 'raid-refine-key-iii': '玄天道印' };
+  const materialNames = { 'raid-refine-key-ii': '二階升級石', 'raid-refine-key-iii': '三階升級石' };
   function rewardText(reward) {
     const parts = [];
     if (reward.gold) parts.push(`${reward.gold} 靈石`);
@@ -15,6 +15,12 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if (reward.drawTickets) parts.push(`本命法器抽獎券 ×${reward.drawTickets}`);
     Object.entries(reward.materials || {}).forEach(([id, count]) => parts.push(`${materialNames[id] || id} ×${count}`));
     return parts.join(' · ');
+  }
+  function rewardMarkup(reward){
+    const rows=[['gold',reward.gold,'靈石'],['cultivation',reward.cultivation,'修為'],['draw-ticket',reward.drawTickets,'本命法器抽獎券'],
+      ...Object.entries(reward.materials||{}).map(([id,n])=>[id,n,materialNames[id]||id])];
+    return rows.filter(([,n])=>Number(n)>0).map(([id,n,label])=>'<span class="game-item-reward">'+
+      (globalThis.QAItemIcons?.markup(id,{size:20})||'')+esc(label)+' ×'+esc(n)+'</span>').join(' ');
   }
   function status(message) {
     for (const id of ['quest-status', 'quest-spotlight-status']) if ($(id)) $(id).textContent = message;
@@ -55,7 +61,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-spotlight-kind').textContent = ready ? '獎勵可領' : ({ path: '仙道任務', daily: '日常任務', commission: '宗門委託', weekly: '每週任務' }[item?.kind] || '修行任務');
     $('quest-spotlight-title').textContent = title;
     $('quest-spotlight-progress').textContent = q ? (ready ? '✓ 已完成' : `${progressLabel} ${q.current}／${q.target}`) : '';
-    $('quest-spotlight-reward').textContent = reward;
+    $('quest-spotlight-reward').innerHTML = q ? rewardMarkup(q.reward) : esc(reward);
     $('quest-spotlight-reward').title = reward;
     $('quest-spotlight-action').textContent = busy ? '同步中…' : `${action} →`;
     button.disabled = busy;
@@ -87,7 +93,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <p>${esc(q.description)}</p>
       <div class="quest-progress-label"><span>${q.locked ? `需 ${q.minScore} 修為 · 先繼續問道修行` : '任務進度'}</span><b>${q.current} / ${q.target}</b></div>
       <div class="quest-progress" role="progressbar" aria-label="${esc(q.title)}" aria-valuemin="0" aria-valuemax="${q.target}" aria-valuenow="${q.current}"><i style="width:${Math.round(q.current / q.target * 100)}%"></i></div>
-      <div class="quest-reward"><i class="fa-solid fa-gift" aria-hidden="true"></i> ${esc(rewardText(q.reward))}</div>
+      <div class="quest-reward">${rewardMarkup(q.reward)}</div>
       <button type="button" data-quest-id="${esc(q.id)}" data-quest-kind="${kind}" ${busy || q.claimed || q.locked ? 'disabled' : ''} class="quest-action ${q.claimable ? 'quest-claim' : ''}">${busy ? '正在同步…' : label}</button>
     </article>`;
   }

@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),vm=require(
 const Rules=require('../public/cultivation/spirit-farm-rules.js');
 function fixture(storage=new Map()){
   let uid='u1',fetcher=async()=>({ok:true,json:async()=>({ok:true,farm:Rules.view(Rules.initial(1000),1000,'2026-10-29'),materialInventory:{}})}),failStorage=false;
-  const nodes={ 'farm-body':{innerHTML:'',querySelectorAll:()=>[],setAttribute(){},classList:{remove(){},add(){}}},'farm-refresh':{disabled:false},'farm-header-values':{innerHTML:''}},events={},calls=[],player={uid:'u1',stats:{gold:10},materialSystem:{inventory:{}}};
+  const nodes={ 'farm-body':{innerHTML:'',querySelectorAll:()=>[],setAttribute(){},classList:{remove(){},add(){}}},'farm-refresh':{disabled:false},'farm-header-values':{innerHTML:''}},events={},calls=[],player={uid:'u1',isAdmin:true,stats:{gold:10},materialSystem:{inventory:{}}};
   const window={getCurrentUserData:()=>player,dispatchEvent(){},addEventListener:(name,fn)=>events[name]=fn};
   const document={readyState:'loading',getElementById:id=>nodes[id],querySelector:()=>null,addEventListener(){}};
   const context={window,document,QASpiritFarmRules:Rules,getMainUser:()=>uid?{uid}:null,authenticatedMainFetch:async(url,init)=>{calls.push({url,init});return fetcher(url,init);},
@@ -74,4 +74,11 @@ test('uncertain batch requests block direct plot taps and preserve the same comm
 test('all farm controls are native buttons, the entrance targets the actual training map, and timers stop off-page',()=>{
   const source=fs.readFileSync('public/cultivation/spirit-farm.js','utf8');assert.match(source,/querySelector\('#page-training \.training-map'\)/);assert.match(source,/clearInterval\(timer\)/);assert.match(source,/if\(!visible\(\)\|\|document\.hidden/);assert.match(source,/aria-live="polite"/);assert.match(source,/getMainUser\(\)\?\.uid!==uid\|\|account!==uid\|\|request!==serial/);
   assert(!source.includes('innerHTML=payload.result.message'));assert.match(fs.readFileSync('public/styles/spirit-farm.css','utf8'),/prefers-reduced-motion/);
+});
+
+test('non-admins do not load, plant or replay a pending command through the public farm functions',async()=>{
+  const f=fixture();f.player.isAdmin=false;f.api.storePending('u1',body);
+  await f.api.refresh();await f.api.send(body);await f.api.tapPlot(0);assert.equal(f.calls.length,0);
+  assert.match(f.nodes['farm-body'].innerHTML,/暫未開放/);
+  assert.equal(f.api.pending().requestId,body.requestId);
 });

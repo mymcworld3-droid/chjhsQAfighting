@@ -45,7 +45,7 @@ test('solo transaction rechecks realm before the answer and displays the amount 
     await context.persist();
     assert.equal(patch.stats.gold,correct?150:100,'元嬰 40 plus hard-question 10; wrong answers earn zero');
     assert.equal(patch.stats.totalScore,correct?70:68);
-    if(correct)assert.match(title.innerHTML,/\+50💰/);
+    if(correct)assert.match(title.innerHTML,/\+50 靈石/);
     assert.equal(stats.gold,patch.stats.gold);
     assert.equal(patch.stats.adaptiveLearningV1,remote.stats.adaptiveLearningV1,'ordinary answers preserve the latest background observations');
   }

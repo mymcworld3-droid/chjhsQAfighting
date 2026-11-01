@@ -36,6 +36,7 @@ function createService({db,now=Date.now,random=Math.random,uuid=crypto.randomUUI
       const [u,s]=await Promise.all([tx.get(userRef),tx.get(farmRef)]);
       if(!u.exists)throw fail('玩家資料不存在',404);
       const user=u.data()||{};if(user.uid&&user.uid!==uid)throw fail('玩家身分不符',403);
+      if(user.isAdmin!==true)throw fail('靈田目前僅開放管理員',403);
       const time=now(),date=dateKey(time),farm=Rules.normalize(s.exists?s.data():null,time);
       const publicView=(result=null,replayed=false)=>({ok:true,farm:Rules.view(farm,time,date,Access.score(user)),result,replayed,materialInventory:user.materialSystem?.inventory||{}});
       if(!op){if(!s.exists)tx.set(farmRef,farm);return publicView();}

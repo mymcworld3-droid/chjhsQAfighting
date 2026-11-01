@@ -72,7 +72,8 @@ test('home rendering reuses data, shows tickets first and disables claims while 
   ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-title').textContent, '<任務>');
   assert.equal(elements.get('quest-spotlight-progress').textContent, '答對 8／10');
-  assert.equal(elements.get('quest-spotlight-reward').textContent, '抽獎券 ×1 · 120 靈石');
+  assert.match(elements.get('quest-spotlight-reward').innerHTML,/靈石 ×120/);
+  assert.match(elements.get('quest-spotlight-reward').innerHTML,/本命法器抽獎券 ×1/);
   assert.equal(elements.get('quest-spotlight-action').textContent, '繼續問道 →');
   data.path.claimable = true; data.path.current = 10;
   ctx.renderSpotlight();

@@ -10,10 +10,10 @@ export function renderRaidLoot(payload) {
   const tier = raidDifficulty.get(payload?.difficulty) || raidDifficulty.TIERS.normal;
   return '<b>' + tier.name + '清霜試煉・' + (payload.awarded ? '戰利品已入帳' : '本場戰利品已領取') + '</b>' +
     '<div class="raid-loot-grid">' + items.map(([id,qty]) => {
-      const item = id === 'nascent-soul-essence' ? {name:'元嬰碎精',icon:'嬰'} : getMaterialById(id);
+      const item = id === 'nascent-soul-essence' ? {name:'元嬰碎精',icon:'嬰',imageUrl:'/assets/items/nascent-soul-essence.webp'} : getMaterialById(id);
       const keyLabels = {
-        'raid-refine-key-ii':'第二煉印記・團本限定',
-        'raid-refine-key-iii':'第三煉印記・團本限定'
+        'raid-refine-key-ii':'二階升級石・團本限定',
+        'raid-refine-key-iii':'三階升級石・團本限定'
       };
       const key = keyLabels[id] || '';
       const image = String(item?.imageUrl || '');
@@ -24,7 +24,7 @@ export function renderRaidLoot(payload) {
         escape(item?.name || id) + ' ×' + Math.floor(Number(qty)) + '</strong><small>' +
         (id === 'nascent-soul-essence' ? '通關必得・元嬰養成' : key ? key : '團本素材') + '</small></div></div>';
     }).join('') + '</div>' +
-    (payload.dailyFirstVictory ? '<small class="raid-loot-bonus">每日首勝：淬靈玄印、玄天道印各額外 ×1</small>' : '') +
+    (payload.dailyFirstVictory ? '<small class="raid-loot-bonus">每日首勝：二階升級石、三階升級石各額外 ×1</small>' : '') +
     (payload.firstVictory ? '<div class="raid-memento"><b>首次通關・' + escape(payload.memento?.name || '清霜劍印') +
       '</b><small>永久紀念已收入本帳號的團本紀錄</small></div>' : '');
 }
@@ -34,6 +34,6 @@ export function renderRaidLearning(member, outcome) {
   const pending = learning > (Number(outcome?.settledLearningCorrect) || 0) || spirit > (Number(outcome?.settledCorrect) || 0);
   return '<b>本場答題收益・勝敗皆保留</b><div class="raid-learning-grid">' +
     [['修為',Math.max(learning,Number(outcome?.roomCultivation) || learning)],['靈石',learning * 20],['元嬰碎精',spirit]].map(([label,qty]) =>
-      '<div><small>' + label + '</small><strong>+' + qty + '</strong></div>').join('') + '</div><small>' +
+      '<div><small>' + (globalThis.QAItemIcons?.markup({'修為':'cultivation','靈石':'gold','元嬰碎精':'nascent-soul-essence'}[label])||'') + label + '</small><strong>+' + qty + '</strong></div>').join('') + '</div><small>' +
     (pending ? '部分收益待入帳，請保持此頁開啟；系統會自動重試。' : '答題收益已入帳。') + '</small>';
 }

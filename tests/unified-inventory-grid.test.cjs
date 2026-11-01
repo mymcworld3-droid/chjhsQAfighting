@@ -45,10 +45,10 @@ test('raid wood/iron materials and bound refinement seals have distinct backpack
   assert.match(bag, /RAID_CRAFT_MATERIAL_IDS/);
   assert.match(bag, /RAID_KEY_IDS = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
   assert.match(bag, /RAID_CRAFT_IDS = new Set\(RAID_CRAFT_MATERIAL_IDS\)/);
-  assert.match(bag, /團本印記/);
+  assert.match(bag, /升級石/);
   assert.match(bag, /團本煉器素材/);
-  assert.match(bag, /第二次煉製的必要印記/);
-  assert.match(bag, /第三次煉製的必要印記/);
+  assert.match(bag, /第二次煉製的必要升級石/);
+  assert.match(bag, /第三次煉製的必要升級石/);
   assert.match(bag, /可直接放入八方煉器陣/);
   assert.match(bag, /木／鐵素材可在玩家市集轉手/);
 });

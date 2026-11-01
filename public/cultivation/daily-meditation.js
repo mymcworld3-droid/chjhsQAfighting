@@ -174,11 +174,11 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     node('dm-close').focus({preventScroll:true});
   }
   function rewardText(reward,compact=false) {
-    const parts=[reward.gold+' 靈石'];
-    if(reward.fragments)parts.push((compact?'碎精':'元嬰碎精')+' ×'+reward.fragments);
-    if(reward.raidTickets)parts.push((compact?'團本券':'團本入場券')+' ×'+reward.raidTickets);
-    if(reward.drawTickets)parts.push((compact?'抽獎券':'本命法器抽獎券')+' ×'+reward.drawTickets);
-    return parts.map(esc).join('<br>');
+    const parts=[['gold',reward.gold+' 靈石']];
+    if(reward.fragments)parts.push(['nascent-soul-essence',(compact?'碎精':'元嬰碎精')+' ×'+reward.fragments]);
+    if(reward.raidTickets)parts.push(['raid-ticket',(compact?'團本券':'團本入場券')+' ×'+reward.raidTickets]);
+    if(reward.drawTickets)parts.push(['draw-ticket',(compact?'抽獎券':'本命法器抽獎券')+' ×'+reward.drawTickets]);
+    return parts.map(([id,label])=>(globalThis.QAItemIcons?.markup(id,{size:18})||'')+esc(label)).join('<br>');
   }
   function renderDashboard(clearStatus=true) {
     if(!state||!node('dm-content'))return;

@@ -43,7 +43,7 @@ function loadRecipeApi() {
   context.getArtifactById = (id) => context.ARTIFACT_CATALOG.find((item) => item.id === id) || null;
 
   let source = materialCatalog
-    .replace(/^import[^;]+;\s*/m, '')
+    .replace(/^import[^;]+;\s*/gm, '')
     .replace(/\bexport\s+/g, '');
   source += '\n;globalThis.__recipeApi={validateArtifactRecipes,repairArtifactRecipes,artifactRecipeDepth,MAX_ARTIFACT_RECIPE_NESTING,MIN_ARTIFACT_RECIPE_MATERIALS};';
   vm.runInContext(source, context);

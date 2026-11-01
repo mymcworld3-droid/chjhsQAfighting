@@ -10,7 +10,7 @@ let serial=0;
 const request=(revision,action,extra={})=>({requestId:'farm-request-'+String(++serial).padStart(8,'0'),expectedRevision:revision,action,...extra});
 async function fixture({score=28,random=()=>.99}={}){
   const {db}=setup();let time=Date.parse('2026-10-29T06:00:00Z');
-  const user={uid:'u1',stats:{gold:123,totalScore:score},materialSystem:{inventory:{'qi-spirit-iron':4}}};await db.doc('users/u1').set(user);
+  const user={uid:'u1',isAdmin:true,stats:{gold:123,totalScore:score},materialSystem:{inventory:{'qi-spirit-iron':4}}};await db.doc('users/u1').set(user);
   const service=Farm.createService({db,now:()=>time,random,uuid:()=> 'plant-'+String(++serial).padStart(8,'0')});
   const raw=async()=> (await db.doc('spiritFarms/u1').get()).data();
   const f={db,service,user,raw,get time(){return time;},set time(x){time=x;},async view(){return (await service.view('u1')).farm;},async act(action,extra={}){const farm=await f.view();return service.act('u1',request(farm.revision,action,extra));}};
@@ -174,10 +174,11 @@ test('study cap, energy storage cap and Taiwan midnight keep unclaimed evidence 
 });
 test('farm persists independently of unrelated player stats writes and is isolated per account',async()=>{
   const f=await fixture();await plant(f);await f.db.doc('users/u1').update({stats:{gold:5,totalScore:2}});assert.equal((await f.view()).plots[0].cropId,'jade');
-  await f.db.doc('users/u2').set({uid:'u2',stats:{totalScore:0}});const other=await f.service.view('u2');assert(other.farm.plots.every(x=>x.locked||x.empty));assert.equal(other.farm.seeds.jade,6);
+  await f.db.doc('users/u2').set({uid:'u2',isAdmin:true,stats:{totalScore:0}});const other=await f.service.view('u2');assert(other.farm.plots.every(x=>x.locked||x.empty));assert.equal(other.farm.seeds.jade,6);
 });
 test('browser cannot directly read or forge the server-owned farm document',async()=>{
   const f=await fixture(),context={uid:'u1',admin:false,decoded:{}};assert.equal(mayRead({role:'A',path:'spiritFarms/u1',uid:'u1',data:await f.raw(),admin:false}),false);
+  await f.db.doc('users/u1').update({isAdmin:false});
   await assert.rejects(executeCommit(f.db,{writes:[{type:'update',target:{role:'A',path:'spiritFarms/u1',kind:'doc'},data:Codec.encode({energy:999999})}]},context),e=>e.status===403);
 });
 test('HTTP routes authenticate before resolving a database, sanitize public state and return no-store',async()=>{
@@ -187,4 +188,15 @@ test('HTTP routes authenticate before resolving a database, sanitize public stat
   await handlers.GET({get:()=>''},out);assert.equal(out.statusCode,401);assert.equal(resolves,0);assert.equal(out.cache,'no-store');
   const f=await fixture();register(app,{verify:async()=> 'u1',resolve:()=>({db:f.db}),now:()=>f.time});
   await handlers.GET({},out);assert.equal(out.body.ok,true);assert(!JSON.stringify(out.body).includes('operations'));assert(!JSON.stringify(out.body).includes('mutationRoll'));
+});
+
+test('farm read and write deny non-admin accounts without creating or changing a garden',async()=>{
+  const f=await fixture();await f.db.doc('users/ordinary').set({uid:'ordinary',isAdmin:false});
+  await assert.rejects(f.service.view('ordinary'),e=>e.status===403);
+  await assert.rejects(f.service.act('ordinary',request(0,'plant-all',{cropId:'jade',isAdmin:true})),e=>e.status===403);
+  assert.equal((await f.db.doc('spiritFarms/ordinary').get()).exists,false);
+  await plant(f);const before=await f.raw();await f.db.doc('users/u1').update({isAdmin:false});
+  await assert.rejects(f.service.view('u1'),e=>e.status===403);
+  await assert.rejects(f.service.act('u1',request(before.revision,'harvest-all')),e=>e.status===403);
+  assert.deepEqual(await f.raw(),before);
 });

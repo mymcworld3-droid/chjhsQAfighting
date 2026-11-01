@@ -43,7 +43,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const id=key(row), selected=s.selected.has(id), soulbound=row.equipSlot==='本命法寶';
     const item=row.type==='artifact'?getArtifactById(row.id):getMaterialById(row.id);
     const color=(row.type==='artifact'?artifactRealmColor:materialRealmColor)(row.realm);
-    const imageUrl=(soulbound||row.type==='material')?String(item?.imageUrl||''):'';
+    const imageUrl=String(item?.imageUrl||globalThis.QAItemIcons?.url(item)||'');
     const fallback=esc(item?.icon||(row.type==='material'?'材':'◆'));
     const icon=imageUrl?`<img src="${esc(imageUrl)}" alt="" loading="lazy" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>${fallback}</span>`:fallback;
     const left=area==='selected', quantity=left?s.selected.get(id):row.owned;
@@ -71,7 +71,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       <div class="ids-workspace" ${s.confirm?'inert aria-hidden="true"':''}>
         <section class="ids-bag-pane ids-selected-pane" aria-label="待分解背包"><div class="ids-tools ids-selected-tools"><button type="button" data-ids-clear ${disabled||!selected.length?'disabled':''}>清空</button></div>
           <div class="ids-pane-scroll" data-ids-pane-scroll="selected">${!selected.length?'<p class="ids-empty-message">點右側物品，放入此處</p>':''}<div class="ids-backpack-grid">${selected.map(row=>itemMarkup(row,'selected',s,disabled)).join('')}${emptySlots(8-selected.length)}</div></div>
-          <footer class="ids-selected-footer"><small>分解後將獲得</small><div class="ids-reward" aria-live="polite"><span aria-hidden="true">✦</span><strong data-ids-reward-total>${total.toLocaleString('zh-TW')}</strong><span>煉器碎片</span></div><span class="ids-selection-count">已選 ${quantity} 件</span><button type="button" class="ids-primary" data-ids-review ${disabled||!selected.length?'disabled':''}>確定分解</button></footer>
+          <footer class="ids-selected-footer"><small>分解後將獲得</small><div class="ids-reward" aria-live="polite">${globalThis.QAItemIcons?.markup('forge-fragment',{size:24})||''}<strong data-ids-reward-total>${total.toLocaleString('zh-TW')}</strong><span>煉器碎片</span></div><span class="ids-selection-count">已選 ${quantity} 件</span><button type="button" class="ids-primary" data-ids-review ${disabled||!selected.length?'disabled':''}>確定分解</button></footer>
         </section>
         <section class="ids-bag-pane ids-owned-pane" aria-label="玩家背包"><div class="ids-tools"><label>種類 <select data-ids-filter ${disabled?'disabled':''}><option value="all" ${s.filter==='all'?'selected':''}>全部</option><option value="material" ${s.filter==='material'?'selected':''}>材料</option><option value="artifact" ${s.filter==='artifact'?'selected':''}>法寶</option></select></label><button type="button" data-ids-all ${disabled||!filtered.some(row=>row.available)?'disabled':''}>全選</button></div>
           <div class="ids-pane-scroll" data-ids-pane-scroll="owned">${!filtered.length?`<p class="ids-empty-message">${s.snapshot?'沒有此類物品':s.busy?'正在同步物品…':'請重新同步'}</p>`:''}<div class="ids-backpack-grid">${filtered.map(row=>itemMarkup(row,'owned',s,disabled)).join('')}${emptySlots(8-filtered.length)}</div></div><p class="ids-note">裝備中的份數會保留</p>

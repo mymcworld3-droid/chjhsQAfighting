@@ -1,7 +1,8 @@
 // 煉器素材與法寶配方的資料來源。
-// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本產出鐵材、木材與煉製印記，靈田也可兌換三種基礎木材。
+// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本產出鐵材、木材與升級石，靈田也可兌換三種基礎木材。
 
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
+import './item-icons.js';
 
 export const MATERIAL_CATEGORIES = Object.freeze(['鐵材', '木材', '礦石', '兵器材料', '靈木', '晶石', '妖獸材料', '特殊材料', '符材', '其他']);
 export const MATERIAL_WEAPON_FORMS = Object.freeze(['','劍','刀','槍','弓','斧','錘','戟','棍','鞭','匕首','飛劍','法盾','法杖','符籙','陣盤','寶珠','玉佩','法鏡','鈴','幡','印','鼎','鐘','器胚']);
@@ -46,8 +47,8 @@ export const MATERIAL_REALMS = Object.freeze(ARTIFACT_REALMS.map((realm) => Obje
   dongtianRate: MATERIAL_REALM_DROP_BASE[realm.name]?.dongtianRate || 0.08
 })));
 
-// 現行材料系統只保留本團本的六種木／鐵煉器素材，以及二煉、三煉印記。
-// 木材也可由靈田收成兌換；團本印記仍只由團本取得。
+// 現行材料系統只保留本團本的六種木／鐵煉器素材，以及二煉、三煉升級石。
+// 木材也可由靈田收成兌換；升級石仍只由團本取得。
 const DEFAULT_MATERIAL_CATALOG = [
   { id: 'qi-spirit-iron', name: '玄鐵', icon: '鐵', category: '鐵材', realm: '煉氣',
     description: '煉氣境常用鐵材，質地沉穩，適合基礎兵器與法器器胚。只能由對應團本產生。', buyGold: 0 },
@@ -56,19 +57,19 @@ const DEFAULT_MATERIAL_CATALOG = [
   { id: 'golden-purple-iron', name: '紫金玄鐵', icon: '紫鐵', category: '鐵材', realm: '金丹',
     description: '帶有紫金靈輝的金丹境高階鐵材，可承受更強的法力灌注。只能由對應團本產生。', buyGold: 0 },
   { id: 'qi-spirit-wood', name: '靈木', icon: '木', category: '木材', realm: '煉氣',
-    description: '帶有淡薄靈氣的煉氣境木材，可用於符器、弓杖與本命法器。可由對應團本取得，或以青露草在靈田兌換。', buyGold: 0 },
+    description: '帶有淡薄靈氣的煉氣境木材，可用於符器、弓杖與本命法器。可由對應團本取得。', buyGold: 0 },
   { id: 'foundation-century-wood', name: '百年靈木', icon: '古木', category: '木材', realm: '築基',
-    description: '生長百年的築基境靈木，木質穩定而能長時間蓄靈。可由對應團本取得，或以赤穗花在靈田兌換。', buyGold: 0 },
+    description: '生長百年的築基境靈木，木質穩定而能長時間蓄靈。可由對應團本取得。', buyGold: 0 },
   { id: 'golden-lightning-wood', name: '雷擊木', icon: '雷木', category: '木材', realm: '金丹',
-    description: '經天雷洗鍊仍存生機的金丹境木材，兼具堅韌與導靈性。可由對應團本取得，或以月華蘭在靈田兌換。', buyGold: 0 },
+    description: '經天雷洗鍊仍存生機的金丹境木材，兼具堅韌與導靈性。可由對應團本取得。', buyGold: 0 },
   { id: 'nascent-star-iron', name: '玄冥星鐵', icon: '星鐵', category: '鐵材', realm: '元嬰',
     description: '元嬰境星辰淬鍊的稀有鐵材，僅從極境清霜試煉取得。', buyGold: 0 },
   { id: 'nascent-soul-wood', name: '千載魂木', icon: '魂木', category: '木材', realm: '元嬰',
     description: '經千年溫養的元嬰境靈木，僅從極境清霜試煉取得。', buyGold: 0 },
-  { id: 'raid-refine-key-ii', name: '淬靈玄印', icon: '玄印', category: '團本印記', realm: '築基',
-    description: '第二煉的必要印記。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 },
-  { id: 'raid-refine-key-iii', name: '玄天道印', icon: '道印', category: '團本印記', realm: '金丹',
-    description: '第三煉的必要印記。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 }
+  { id: 'raid-refine-key-ii', name: '二階升級石', icon: '二階', category: '升級石', realm: '築基',
+    description: '第二煉的必要升級石。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 },
+  { id: 'raid-refine-key-iii', name: '三階升級石', icon: '三階', category: '升級石', realm: '金丹',
+    description: '第三煉的必要升級石。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 }
 ]
 
 const DEFAULT_MATERIAL_REALM_BY_ID = Object.freeze(Object.fromEntries(
@@ -202,7 +203,9 @@ export function normalizeMaterialDefinition(raw = {}) {
     weaponName: String(raw.weaponName || '').trim().slice(0, 18),
     buyGold: Math.max(0, Math.floor(finite(raw.buyGold, 0)))
   };
-  if (raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
+  const artwork=globalThis.QAItemIcons?.url(raw);
+  if (artwork) item.imageUrl=artwork;
+  else if (raw.imageUrl) item.imageUrl = String(raw.imageUrl).trim().slice(0, 2048);
   if (['generating','ready','error'].includes(raw.imageStatus)) item.imageStatus = raw.imageStatus;
   if (raw.imageModel) item.imageModel = String(raw.imageModel).trim().slice(0, 120);
   if (raw.imagePromptVersion) item.imagePromptVersion = String(raw.imagePromptVersion).trim().slice(0, 80);
@@ -220,7 +223,7 @@ export function validateMaterialCatalog(items) {
   if (items.length !== allowed.size) throw new Error('現行材料系統固定為 10 種團本道具，不可新增或刪除');
   const normalized = items.map((raw) => {
     const item = normalizeMaterialDefinition(raw);
-    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許本團本八種木鐵素材與兩種印記`);
+    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許本團本八種木鐵素材與兩種升級石`);
     if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(item.id)) throw new Error(`材料 ID 不合法：${item.id || '空白'}`);
     if (seen.has(item.id)) throw new Error(`材料 ID 重複：${item.id}`);
     seen.add(item.id);
@@ -238,7 +241,7 @@ export function getDefaultMaterialCatalog() {
   return clone(DEFAULT_MATERIAL_CATALOG.map(normalizeMaterialDefinition));
 }
 
-// Schema v5：固定六種煉氣～金丹木／鐵素材＋二煉／三煉印記。
+// Schema v5：固定六種煉氣～金丹木／鐵素材＋二煉／三煉升級石。
 export function mergeMaterialCatalogWithDefaults(items = []) {
   const merged = new Map(getDefaultMaterialCatalog().map((item) => [item.id, item]));
   (Array.isArray(items) ? items : []).forEach((raw) => {

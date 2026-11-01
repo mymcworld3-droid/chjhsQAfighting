@@ -5,7 +5,7 @@
   const access = typeof module === 'object' && module.exports ? require('./training-access-rules.js') : null;
   const accessScore = player => (access || root.QATrainingAccessRules)?.score(player) ?? count(player?.stats?.totalScore);
   const THRESHOLD = 68, CAP = 10, ITEM_ID = 'nascent-soul-essence';
-  const ITEM = Object.freeze({id:ITEM_ID,name:'元嬰碎精',icon:'嬰',realm:'元嬰',category:'元嬰養成',
+  const ITEM = Object.freeze({id:ITEM_ID,name:'元嬰碎精',icon:'嬰',imageUrl:'/assets/items/nascent-soul-essence.webp',realm:'元嬰',category:'元嬰養成',
     description:'溫養元嬰各分支及化神本命神通的碎精。元嬰境界團本答對每題 +1、每日閉關全對 +3。不可交易或用於煉器。',nascentMaterial:true,buyGold:0,sellGold:0});
   const BRANCHES = Object.freeze([
     {id:'cultivation',name:'修為',icon:'fa-book-open',maxBonus:5,unit:'修為',description:'升滿後問道、鬥法及團本答對、閉關全對與洞天通關的元嬰修為加成為 +5。'},

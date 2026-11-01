@@ -47,7 +47,7 @@ test('all six wood/iron raid materials can trade while refinement seals stay bou
   assert.match(market,/tradableMaterialIds\.has\(String\(id \|\| ''\)\) \? getMaterialById\(id\) : null/);
   assert.match(market,/tradableMaterialIds\.has\(item\.id\) && !boundSealIds\.has\(item\.id\)/);
   assert.match(market,/八種木／鐵團本素材可自由交易/);
-  assert.match(market,/淬靈玄印、玄天道印綁定玩家不可交易/);
+  assert.match(market,/二階升級石、三階升級石綁定玩家不可交易/);
 });
 
 test('recipe marketplace sells crafting knowledge while preserving the first discoverer', () => {

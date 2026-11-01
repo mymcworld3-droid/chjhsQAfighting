@@ -4,13 +4,14 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
 const Rules=globalThis.QASpiritFarmRules, KEY='xiuxian:spirit-farm-pending:v1:';
 const $=id=>document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let account='',snapshot=null,selected=0,seed='jade',busy=false,serial=0,clockOffset=0,timer=null,notice='',failed=false,inspectOpen=false,focusAfter='';
+let account='',allowed=false,snapshot=null,selected=0,seed='jade',busy=false,serial=0,clockOffset=0,timer=null,notice='',failed=false,inspectOpen=false,focusAfter='';
 const pendingMemory=new Map();
 const visible=()=>$('page-spirit-farm')?.classList.contains('active-page')&&!$('page-spirit-farm')?.classList.contains('hidden');
 const current=()=>Date.now()+clockOffset;
+function canAccess(){const uid=getMainUser()?.uid,data=window.getCurrentUserData?.();return !!uid&&data?.isAdmin===true&&(!data.uid||data.uid===uid);}
 function pending(uid=account){if(pendingMemory.has(uid))return pendingMemory.get(uid);try{const value=JSON.parse(localStorage.getItem(KEY+uid)||'null');pendingMemory.set(uid,value);return value;}catch(_){return null;}}
 function storePending(uid,op){pendingMemory.set(uid,op||null);try{if(op)localStorage.setItem(KEY+uid,JSON.stringify(op));else localStorage.removeItem(KEY+uid);}catch(_){}}
-function align(){const uid=getMainUser()?.uid||'';if(uid===account)return;account=uid;snapshot=null;busy=false;selected=0;seed='jade';notice='';failed=false;inspectOpen=false;focusAfter='';serial++;render();updateEntrance();}
+function align(){const uid=getMainUser()?.uid||'',access=canAccess();if(uid===account&&access===allowed)return;account=uid;allowed=access;snapshot=null;busy=false;selected=0;seed='jade';notice='';failed=false;inspectOpen=false;focusAfter='';serial++;render();updateEntrance();}
 function status(text,error=false){notice=text;failed=error;const node=$('farm-status');if(node){node.textContent=text;node.classList.toggle('is-error',error);}}
 function art(id,classes=''){return `<span class="farm-herb farm-herb-${esc(id)} ${classes}" aria-hidden="true"></span>`;}
 function names(cost){return Object.entries(cost||{}).map(([id,n])=>`${Rules.crop(id)?.name||id} ×${n}`).join('、');}
@@ -47,6 +48,7 @@ function render(){
   const host=$('farm-body');if(!host)return;
   const hud=$('farm-header-values');if(!snapshot&&hud)hud.innerHTML='';
   $('farm-refresh').disabled=busy;
+  if(!canAccess()){host.innerHTML='<p class="farm-empty">靈田暫未開放。</p>';return;}
   if(!account){host.innerHTML='<p class="farm-empty">登入後即可照料自己的靈田。</p>';return;}
   if(!snapshot){host.innerHTML='<p class="farm-empty" role="status">'+esc(notice||'正在開啟靈田…')+'</p>'+(pending()?'<button type="button" data-farm-retry>重試上次田務</button>':'');$('farm-refresh').disabled=busy;return;}
   const opened=[...host.querySelectorAll('.farm-drawer')].map(node=>node.open);
@@ -66,13 +68,13 @@ function apply(payload){
   if(selected>=snapshot.openPlots)selected=Math.min(selected,8);
 }
 async function send(op=null){
-  align();const uid=account;if(!uid||busy)return;busy=true;const request=++serial;
+  align();const uid=account;if(!uid||!canAccess()||busy)return;busy=true;const request=++serial;
   if(op)storePending(uid,op);status(op?({plant:'正在播種','plant-all':'正在整批播種',water:'正在灌溉','water-all':'正在整批灌溉',fertilize:'正在施肥','fertilize-all':'正在整批施肥',purify:'正在驅蟲','purify-all':'正在整批驅蟲',harvest:'正在採收','harvest-all':'正在整批採收'}[op.action]||'正在處理田務')+'…':'正在同步靈田…');render();
   const controller=new AbortController(),deadline=setTimeout(()=>controller.abort(),15000);
   try{
     const response=await authenticatedMainFetch('/api/spirit-farm',{method:op?'POST':'GET',...(op?{body:JSON.stringify(op)}:{}),signal:controller.signal});
     const payload=await response.json().catch(()=>({}));
-    if(getMainUser()?.uid!==uid||account!==uid||request!==serial)return;
+    if(getMainUser()?.uid!==uid||account!==uid||request!==serial||!canAccess())return;
     if(!response.ok||!payload.ok){
       if(op&&response.status>=400&&response.status<500)storePending(uid,null);
       const error=Error(payload.error||'田務尚未確認，請重試');error.conflict=response.status===409;throw error;
@@ -125,6 +127,7 @@ function tick(){
 }
 function timers(){if(visible()&&!document.hidden){if(!timer)timer=setInterval(tick,1000);tick();}else{clearInterval(timer);timer=null;}}
 function entrance(){
+  if(!canAccess()){$('spirit-farm-entrance')?.remove();if(visible())void window.switchToPage?.('page-training');return;}
   const map=document.querySelector('#page-training .training-map');if(!map||$('spirit-farm-entrance'))return;
   const button=document.createElement('button');button.id='spirit-farm-entrance';button.className='training-garden-entrance';button.type='button';
   button.innerHTML='<span class="farm-entrance-art" aria-hidden="true"></span><span><strong>靈田</strong><small>耕植 · 收成 · 經營</small></span><span class="refinery-ready-dot" hidden></span>';
@@ -146,11 +149,11 @@ function boot(){
       else if(button.hasAttribute('data-farm-retry'))void refresh();
     });
     page.addEventListener('toggle',event=>{if(event.target.id==='farm-inspector')inspectOpen=event.target.open;},true);
-    new MutationObserver(timers).observe(page,{attributes:true,attributeFilter:['class']});
+    new MutationObserver(()=>{if(visible()&&!canAccess()){void window.switchToPage?.('page-training');return;}timers();}).observe(page,{attributes:true,attributeFilter:['class']});
   }
   entrance();
   const training=$('page-training');if(training){new MutationObserver(entrance).observe(training,{childList:true,subtree:true});new MutationObserver(updateEntrance).observe(training,{attributes:true,attributeFilter:['class']});}
-  window.openSpiritFarm=async()=>{align();if(!account){window.showToast?.('請先登入');return;}await window.switchToPage?.('page-spirit-farm');if(!visible())return;$('nav-training')?.classList.add('active-nav-btn');render();timers();await refresh();};
+  window.openSpiritFarm=async()=>{align();if(!canAccess())return;await window.switchToPage?.('page-spirit-farm');if(!visible())return;$('nav-training')?.classList.add('active-nav-btn');render();timers();await refresh();};
 }
 window.addEventListener('xiuxian:user-data-ready',()=>{align();entrance();});
 window.addEventListener('xiuxian:user-ready',()=>{align();entrance();});

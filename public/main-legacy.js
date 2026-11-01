@@ -3157,7 +3157,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = window.QAAnswerGoldRules.perCorrect(scoreBeforeAnswer) + learningReward.gold;
-        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
+        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${cultivationReward.gain} 修為</span>`;
     } else {
         if (!cultivationReward.streakPreserved) stats.currentStreak = 0;
         if (cultivationReward.penalty > 0) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">-${cultivationReward.penalty} 修為</span>`;
@@ -3238,7 +3238,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 window.QAAdaptiveLearning?.acknowledge(answerUser.uid, adaptiveRows);
                 void window.QAAdaptiveLearning?.afterSaved(quiz);
                 updateUIStats();
-                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
+                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${cultivationReward.gain} 修為</span>`;
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
             }).then(async () => {
                 await cultivationFeedback?.play({ gain: cultivationReward.gain, totalScore: stats.totalScore });
@@ -6819,7 +6819,7 @@ window.loadStoreItems = async () => {
             } else if (isOwned) {
                 btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-auto bg-slate-600 hover:bg-slate-500 text-white text-xs py-2 rounded font-bold tracking-wider">${t('btn_equip')}</button>`;
             } else {
-                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded flex items-center justify-center gap-1 font-bold"><i class="fa-solid fa-coins text-yellow-300"></i> ${item.price}</button>`;
+                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded flex items-center justify-center gap-1 font-bold">${globalThis.QAItemIcons?.markup('gold',{size:18})||''} ${item.price}</button>`;
             }
 
             const card = document.createElement('div');
