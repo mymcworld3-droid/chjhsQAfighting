@@ -23,7 +23,7 @@ test('refinery uses eight directional slots around an octagonal array', () => {
   assert.match(refinery, /refinery-array-ring/);
 });
 
-test('craft action lives in the center of the array and lights when recipe matches', () => {
+test('craft action keeps its dedicated controls and lights when recipe matches', () => {
   const center = refinery.indexOf('class="refinery-array-center"');
   const craft = refinery.indexOf('data-refinery-craft', center);
   const slotsEnd = refinery.indexOf('refinery-array-caption', center);
