@@ -51,6 +51,9 @@ export function refineryShellMarkup() {
               <span class="refinery-array-lines"></span>
               <span class="refinery-array-ring"></span>
               ${slots}
+              <span class="refinery-base-placeholder" aria-hidden="true"><i class="fa-solid fa-khanda"></i><span>本命法器</span></span>
+            </div>
+          </div>
               <div class="refinery-array-center">
                 <button type="button" class="refinery-craft" disabled>
                   <i class="fa-solid fa-fire-flame-curved"></i>
@@ -59,8 +62,6 @@ export function refineryShellMarkup() {
                 </button>
               </div>
               <span class="refinery-array-caption">八方聚靈 · 一器成形</span>
-            </div>
-          </div>
           <div class="refinery-match refinery-shell-match">先選本命法器，再加入材料。</div>
           <details class="refinery-advanced"><summary>更多設定與配方</summary><div class="refinery-advanced-body refinery-shell-summary">載入中</div></details>
         </article>

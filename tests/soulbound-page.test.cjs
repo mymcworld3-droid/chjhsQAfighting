@@ -21,18 +21,32 @@ function pageRuntime(options = {}) {
   };
   function node(id = '') {
     const callbacks = new Map();
-    const element = { id, innerHTML: '', textContent: '', disabled: false, classList: classes(),
+    const element = { id, textContent: '', disabled: false, classList: classes(), dataset: {},
+      style: { setProperty() {} }, htmlWrites: 0,
       setAttribute() {}, focus() {}, scrollTo() {}, remove() { nodes.delete(this.id); },
       addEventListener(name, callback) { callbacks.set(name, callback); },
       appendChild(child) { nodes.set(child.id, child); return child; },
       fire(name, event = {}) { callbacks.get(name)?.(event); },
-      querySelector(selector) { return selector.startsWith('#') ? nodes.get(selector.slice(1)) : null; },
-      querySelectorAll() { return [tab]; },
+      querySelector(selector) { return this.parts?.get(selector) || (selector.startsWith('#') ? nodes.get(selector.slice(1)) : null); },
+      querySelectorAll(selector) { return options.stableDom && selector === '[data-sb-card-index]' ? this.cards || [] : [tab]; },
       replaceChildren(child) {
         nodes.set(child.id, child);
         for (const [, childId] of child.innerHTML.matchAll(/id="([^"]+)"/g)) nodes.set(childId, node(childId));
       }
     };
+    let html = '';
+    Object.defineProperty(element, 'innerHTML', { get: () => html, set(value) {
+      html = value; element.htmlWrites++;
+      if (!options.stableDom || element.id !== 'soulbound-animation') return;
+      element.parts = new Map(); element.cards = [];
+      if (!value.includes('sb-reveal-batch')) return;
+      for (const selector of ['.sb-reveal-batch', '#sb-reveal-title', '[data-sb-reveal-progress]', '.sb-reveal-selection', '.sb-reveal-actions', '.sb-reveal-message', '.sb-reveal-payment']) element.parts.set(selector, node());
+      for (let index = 0; index < 5; index++) {
+        const card = node(), front = node();
+        card.dataset.sbCardIndex = String(index); front.dataset.sbResultRendered = 'false';
+        card.parts = new Map([['.sb-reveal-front', front]]); element.cards.push(card);
+      }
+    } });
     return element;
   }
   const tab = node(); tab.dataset = { trainingTab: 'contract' };
@@ -62,7 +76,7 @@ function pageRuntime(options = {}) {
     setTimeout: options.fakeTime ? (callback, delay) => { const id = ++nextTimer; timers.set(id, {callback, at: now + delay}); return id; } : setTimeout,
     clearTimeout: options.fakeTime ? id => timers.delete(id) : clearTimeout,
     crypto: { randomUUID: () => 'ui-draw-request-000001' },
-    matchMedia: () => ({ matches: true }),
+    matchMedia: () => ({ matches: options.reducedMotion !== false }),
     CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options?.detail; } }
   };
   vm.runInNewContext(source, context);
@@ -96,6 +110,7 @@ function pageRuntime(options = {}) {
       const button = { disabled: false, dataset, hasAttribute: name => name === attribute };
       nodes.get('soulbound-animation')?.fire('click', { target: { closest: () => button } });
     },
+    tapPresentation() { nodes.get('soulbound-animation')?.fire('click', { target: { closest: () => null } }); },
     revealHtml: () => nodes.get('soulbound-animation')?.innerHTML || '',
     html: () => nodes.get('soulbound-content').innerHTML
   };
@@ -147,7 +162,7 @@ test('three common-pool weapons remain visible during slow or failed sync, with 
 
 test('contract styling is loaded by the initial document before feature modules can open the page', () => {
   const html=fs.readFileSync(path.join(__dirname,'../public/index.html'),'utf8');
-  assert.match(html, /<link id="soulbound-page-style" rel="stylesheet" href="styles\/soulbound-draw\.css">/);
+  assert.match(html, /<link id="soulbound-page-style" rel="stylesheet" href="styles\/soulbound-draw\.css(?:\?v=[^"]+)?">/);
   const headEnd=html.indexOf('</head>');
   assert.ok(html.indexOf('id="soulbound-page-style"')<headEnd);
 });
@@ -377,4 +392,44 @@ test('dismissed pentagon timers cannot reveal or acknowledge a different present
   assert.equal(runtime.nodes.has('soulbound-animation'),false);
   assert.equal(runtime.pendingTimers(),0);
   assert.equal(runtime.requests.length,1);
+});
+
+test('screen taps accelerate opening and every batch card without another purchase or early acknowledgement', async () => {
+  const runtime = pageRuntime({ fakeTime: true, reducedMotion: false }); runtime.open();
+  runtime.requests[0].reply(snapshot()); await settle(); runtime.draw(5);
+  const body = JSON.parse(runtime.requests[1].init.body);
+  const batch = { requestId: body.requestId, cost: body.expectedCost, results: Array.from({ length: 5 }, (_, i) => ({ kind: 'fragments', fragments: 20 + i })) };
+  runtime.requests[1].reply({ ...snapshot(), pending: batch, result: batch }); await settle();
+  assert.match(runtime.revealHtml(), /契印開啟/);
+  runtime.tapPresentation();
+  assert.equal((runtime.revealHtml().match(/data-sb-card-index=/g) || []).length, 5);
+  for (let i = 0; i < 5; i++) {
+    runtime.tapPresentation();
+    assert.match(runtime.revealHtml(), new RegExp('煉器碎片 ×' + (20 + i)));
+    assert.doesNotMatch(runtime.revealHtml(), /data-sb-keep/);
+  }
+  runtime.tapPresentation(); assert.match(runtime.revealHtml(), /data-sb-keep/);
+  runtime.tapPresentation(); runtime.advance(10000);
+  assert.equal(runtime.requests.length, 2, 'tapping only advances the saved presentation');
+  assert.equal(runtime.player.forgeFragments, 0, 'animation never changes authoritative balances');
+  runtime.revealAction('data-sb-keep');
+  assert.equal(runtime.requests.length, 3); assert.equal(runtime.requests[2].url, '/api/soulbound/ack');
+  runtime.requests[2].reply(snapshot()); await settle();
+});
+
+test('revealed batch cards and image markup stay mounted through later flips and inspection', async () => {
+  const runtime = pageRuntime({ fakeTime: true, reducedMotion: false, stableDom: true }); runtime.open();
+  const batch = { requestId: 'stable-cards-000001', cost: 2500, results: Array.from({ length: 5 }, (_, i) => ({ kind: 'fragments', fragments: 20 + i })) };
+  runtime.requests[0].reply({ ...snapshot(), pending: batch }); await settle();
+  const overlay = runtime.nodes.get('soulbound-animation'), cards = overlay.cards.slice();
+  runtime.advance(450);
+  const front = cards[0].querySelector('.sb-reveal-front');
+  assert.equal(front.htmlWrites, 1);
+  runtime.advance(5000);
+  runtime.revealAction('data-sb-inspect', { sbInspect: '4' });
+  assert.equal(overlay.htmlWrites, 1, 'the five-card board is never replaced after mounting');
+  assert.ok(cards.every((card, i) => card === overlay.cards[i]));
+  assert.equal(front.htmlWrites, 1, 'revealing other cards cannot recreate the first reward image');
+  assert.ok(cards.every(card => card.querySelector('.sb-reveal-front').htmlWrites === 1));
+  assert.equal(runtime.requests.length, 1);
 });

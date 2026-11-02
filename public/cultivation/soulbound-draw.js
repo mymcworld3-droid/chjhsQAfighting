@@ -275,7 +275,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   function resultMarkup(row, compact = false) {
     const item = row.itemId && (getArtifactById(row.itemId) || pool.get(row.itemId));
     return `<span class="sb-reveal-rarity">${item ? esc(item.realm) + (compact ? ' · 法器' : ' · 本命法器') : compact ? '碎片' : '煉器資源'}${row.pity ? ' · 保底' : row.higher ? ' · 高階' : ''}</span>
-      <div class="sb-reveal-art">${item ? image(item) : (globalThis.QAItemIcons?.markup('forge-fragment',{size:128})||'<span class="sb-fragment-art" aria-hidden="true">✦</span>')}</div>
+      <div class="sb-reveal-art">${item ? image(item) : (globalThis.QAItemIcons?.markup('forge-fragment',{size:128})?.replace('loading="lazy"', 'loading="eager"')||'<span class="sb-fragment-art" aria-hidden="true">✦</span>')}</div>
       <h3>${item ? esc(item.name) : row.itemId ? esc(row.itemId) : '煉器碎片 ×' + Number(row.fragments || 0)}</h3>
       <p>${item ? esc(effectText(item)) : row.itemId ? '法器已存入寶庫。' : '已存入碎片餘額，可用於煉器或兌換法器。'}</p>
       ${item ? `<div class="sb-reveal-stats"><span>攻擊 +${base(item, 'equip_attack_flat')}</span><span>生命 +${base(item, 'equip_hp_flat')}</span></div>` : ''}`;
@@ -320,12 +320,14 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       return `<div class="sb-reveal-card ${flipping ? 'is-flipping' : flipped ? 'is-revealed' : ''}${ready && state.index === index ? ' is-selected' : ''}" data-sb-card-index="${index}"
         style="--sb-x:${x.toFixed(6)}%;--sb-y:${y.toFixed(6)}%;--sb-flip-delay:${flipping ? -state.flipElapsed : 0}ms;--sb-color:${flipped && item ? esc(artifactRealmColor(item.realm)) : '#f5cf83'}">
         <div class="sb-reveal-card-inner"><div class="sb-reveal-back" aria-hidden="true"><span class="sb-card-ornament">✧</span><span class="sb-card-seal">契</span><span>${index + 1}</span></div>
-          <button type="button" class="sb-reveal-front" data-sb-inspect="${index}" aria-label="查看第 ${index + 1} 張：${esc(label)}" aria-hidden="${!flipped}" aria-pressed="${ready && state.index === index}" ${!ready ? 'disabled tabindex="-1"' : ''}>${flipped ? resultMarkup(row, true) : ''}</button>
+          <button type="button" class="sb-reveal-front" data-sb-inspect="${index}" data-sb-result-rendered="${flipped}" aria-label="${ready ? `查看第 ${index + 1} 張：${esc(label)}` : `點擊加快第 ${index + 1} 張契牌揭曉`}" aria-hidden="${!flipped}" aria-pressed="${ready && state.index === index}" ${!ready ? 'tabindex="-1"' : ''}>${flipped ? resultMarkup(row, true) : ''}</button>
         </div></div>`;
     }).join('');
-    overlay.innerHTML = `<button type="button" class="sb-reveal-close" data-sb-dismiss aria-label="稍後繼續翻牌">×</button>
-      <div class="sb-reveal-stage sb-reveal-batch"><header class="sb-reveal-heading"><span>締結本命</span><h2 id="sb-reveal-title">${ready ? '五契已啟' : '五契連啟'}</h2><p role="status">${state.revealed.size} / 5</p>
-        ${ready ? `<p class="sb-reveal-selection">${esc(selectedItem?.name || (selectedRow.itemId ? selectedRow.itemId : '煉器碎片 ×' + Number(selectedRow.fragments || 0)))}${selectedItem ? '<br>' + esc(effectText(selectedItem)) : ''}</p>` : ''}</header>
+    // Mount the board once. Replacing it at every flip restarts image decoding
+    // and 3D compositing on all five cards, making already revealed art flash.
+    if (!overlay.querySelector('.sb-reveal-batch')) overlay.innerHTML = `<button type="button" class="sb-reveal-close" data-sb-dismiss aria-label="稍後繼續翻牌">×</button>
+      <div class="sb-reveal-stage sb-reveal-batch"><header class="sb-reveal-heading"><span>締結本命</span><h2 id="sb-reveal-title">${ready ? '五契已啟' : '五契連啟'}</h2><p role="status" data-sb-reveal-progress>${state.revealed.size} / 5</p>
+        <p class="sb-reveal-selection" ${ready ? '' : 'hidden'}>${ready ? esc(selectedItem?.name || (selectedRow.itemId ? selectedRow.itemId : '煉器碎片 ×' + Number(selectedRow.fragments || 0))) + (selectedItem ? '<br>' + esc(effectText(selectedItem)) : '') : ''}</p></header>
       <div class="sb-pentagon" aria-label="五張契牌排列於正五邊形頂點">
         <svg class="sb-pentagon-lines" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,18 80.433809,40.111456 68.809128,75.888544 31.190872,75.888544 19.566191,40.111456"/></svg>
         <span class="sb-pentagon-mark" aria-hidden="true">契</span>${cards}</div>
@@ -333,8 +335,66 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
         ${ready && selectedItem ? `<button type="button" data-sb-reveal-equip="${esc(selectedItem.id)}" ${blocked || !Number(snapshot?.inventory?.[selectedItem.id]) || equipped()?.id === selectedItem.id ? 'disabled' : ''}>${equipped()?.id === selectedItem.id ? '已調御' : '調御此器'}</button>` : ''}
         ${ready ? `<button type="button" class="sb-primary" data-sb-keep ${blocked ? 'disabled' : ''}>確認收入</button>` : ''}
       </div><p class="sb-reveal-message" role="status">${esc(message)}</p>
-      <small class="sb-reveal-payment">${ready ? '點選契牌查看獎勵 · ' : '依序揭曉中 · '}本批 ${state.batch.payment === 'ticket' ? Number(state.batch.ticketsSpent || 0) + ' 張抽獎券' : Number(state.batch.cost || 0).toLocaleString('zh-TW') + ' 靈石'}</small></footer></div>`;
-    if (ready) overlay.querySelector('[data-sb-keep]')?.focus({ preventScroll: true });
+      <small class="sb-reveal-payment">${ready ? '點選契牌查看獎勵 · ' : '點擊畫面加快揭曉 · '}本批 ${state.batch.payment === 'ticket' ? Number(state.batch.ticketsSpent || 0) + ' 張抽獎券' : Number(state.batch.cost || 0).toLocaleString('zh-TW') + ' 靈石'}</small></footer></div>`;
+    overlay.querySelectorAll('[data-sb-card-index]').forEach(card => {
+      const index = Number(card.dataset.sbCardIndex), row = state.batch.results[index];
+      if (!row) return;
+      syncPentagonCard(card, row, index, state);
+    });
+    const setText = (selector, value) => { const node = overlay.querySelector(selector); if (node && node.textContent !== value) node.textContent = value; };
+    setText('#sb-reveal-title', ready ? '五契已啟' : '五契連啟');
+    setText('[data-sb-reveal-progress]', `${state.revealed.size} / 5`);
+    const selection = overlay.querySelector('.sb-reveal-selection');
+    if (selection) {
+      selection.hidden = !ready;
+      if (ready) setText('.sb-reveal-selection', (selectedItem?.name || selectedRow.itemId || '煉器碎片 ×' + Number(selectedRow.fragments || 0)) + (selectedItem ? '\n' + effectText(selectedItem) : ''));
+    }
+    const actions = overlay.querySelector('.sb-reveal-actions');
+    if (actions) {
+      const html = `${ready && selectedItem ? `<button type="button" data-sb-reveal-equip="${esc(selectedItem.id)}" ${blocked || !Number(snapshot?.inventory?.[selectedItem.id]) || equipped()?.id === selectedItem.id ? 'disabled' : ''}>${equipped()?.id === selectedItem.id ? '已調御' : '調御此器'}</button>` : ''}
+        ${ready ? `<button type="button" class="sb-primary" data-sb-keep ${blocked ? 'disabled' : ''}>確認收入</button>` : ''}`;
+      if (actions.innerHTML !== html) actions.innerHTML = html;
+    }
+    setText('.sb-reveal-message', message);
+    setText('.sb-reveal-payment', `${ready ? '點選契牌查看獎勵 · ' : '點擊畫面加快揭曉 · '}本批 ${state.batch.payment === 'ticket' ? Number(state.batch.ticketsSpent || 0) + ' 張抽獎券' : Number(state.batch.cost || 0).toLocaleString('zh-TW') + ' 靈石'}`);
+    const stage = overlay.querySelector('.sb-reveal-batch');
+    if (stage && ready && stage.dataset.sbRevealReady !== 'true') overlay.querySelector('[data-sb-keep]')?.focus({ preventScroll: true });
+    if (stage) stage.dataset.sbRevealReady = String(ready);
+  }
+  function syncPentagonCard(card, row, index, state) {
+    const ready = state.phase === 'revealed', flipped = state.revealed.has(index), flipping = state.flippingIndex === index;
+    const front = card.querySelector('.sb-reveal-front');
+    const item = row.itemId && (getArtifactById(row.itemId) || pool.get(row.itemId));
+    if (flipping && !card.classList.contains('is-flipping')) card.style.setProperty('--sb-flip-delay', `${-state.flipElapsed}ms`);
+    card.classList.toggle('is-flipping', flipping);
+    card.classList.toggle('is-revealed', flipped && !flipping);
+    card.classList.toggle('is-selected', ready && state.index === index);
+    if (!front) return;
+    if (flipped && front.dataset.sbResultRendered !== 'true') {
+      front.innerHTML = resultMarkup(row, true);
+      front.dataset.sbResultRendered = 'true';
+      card.style.setProperty('--sb-color', item ? artifactRealmColor(item.realm) : '#f5cf83');
+    }
+    front.setAttribute('aria-hidden', String(!flipped));
+    front.setAttribute('aria-pressed', String(ready && state.index === index));
+    front.tabIndex = ready ? 0 : -1;
+    front.setAttribute('aria-label', ready ? `查看第 ${index + 1} 張：${item?.name || row.itemId || '煉器碎片 ×' + Number(row.fragments || 0)}` : `點擊加快第 ${index + 1} 張契牌揭曉`);
+  }
+  function acceleratePresentation() {
+    const state = presentation;
+    if (!state) return;
+    if (state.phase === 'seal') startCards();
+    else if (state.phase === 'auto') {
+      // Move the wall-clock timeline forward; purchases and acknowledgement
+      // remain separate. Repeated taps can finish the batch without re-rolling.
+      const target = state.autoInitial + Math.min(state.revealed.size, 4) * state.autoInterval + (state.revealed.size === 5 ? state.autoFlip : 0);
+      state.autoStartedAt = Math.min(state.autoStartedAt, Date.now() - target);
+      advancePentagon();
+    } else if (state.phase === 'card') flipCard();
+    else if (state.phase === 'flipping') {
+      clearTimeout(flipTimer); flipTimer = null;
+      state.phase = 'revealed'; renderPresentation();
+    }
   }
   function advancePentagon() {
     const state = presentation;
@@ -392,6 +452,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const trigger = document.activeElement;
     closePresentation(false); hidePreview(); stopCarousel();
     presentation = { batch, uid: account, index: 0, revealed: new Set(), phase: opening ? 'seal' : 'card', trigger };
+    if (typeof Image === 'function') {
+      const urls = new Set(batch.results.map(row => row.itemId ? (getArtifactById(row.itemId) || pool.get(row.itemId))?.imageUrl : globalThis.QAItemIcons?.url('forge-fragment')).filter(Boolean));
+      for (const url of urls) { const art = new Image(); art.src = url; art.decode?.().catch(() => {}); }
+    }
     const overlay = document.createElement('dialog');
     overlay.id = 'soulbound-animation'; overlay.className = 'sb-reveal-overlay' + (batch.results.some(row => row.itemId) ? ' is-higher' : '');
     overlay.setAttribute('aria-labelledby', 'sb-reveal-title');
@@ -399,7 +463,10 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     overlay.addEventListener('cancel', event => { event.preventDefault(); if (!busy) closePresentation(); });
     overlay.addEventListener('click', event => {
       const button = event.target.closest?.('button');
-      if (!button || button.disabled || !presentation || getMainUser()?.uid !== presentation.uid) return;
+      if (!presentation || getMainUser()?.uid !== presentation.uid) return;
+      if (button?.hasAttribute('data-sb-dismiss')) { if (!busy) closePresentation(); return; }
+      if (['seal', 'auto', 'flipping'].includes(presentation.phase) || (!button && presentation.phase === 'card')) { acceleratePresentation(); return; }
+      if (!button || button.disabled) return;
       if (button.hasAttribute('data-sb-skip')) startCards();
       else if (button.hasAttribute('data-sb-flip')) flipCard();
       else if (button.hasAttribute('data-sb-dismiss') && !busy) closePresentation();
@@ -474,7 +541,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     if (!content) return false;
     if (content.querySelector('#soulbound-page')) return false;
     if (!$('soulbound-page-style')) {
-      const style = document.createElement('link'); style.id = 'soulbound-page-style'; style.rel = 'stylesheet'; style.href = '/styles/soulbound-draw.css'; document.head.append(style);
+      const style = document.createElement('link'); style.id = 'soulbound-page-style'; style.rel = 'stylesheet'; style.href = '/styles/soulbound-draw.css?v=20261102-stable-reveal1'; document.head.append(style);
     }
     const section = document.createElement('section'); section.id = 'soulbound-page'; section.className = 'sb-page';
     section.setAttribute('aria-labelledby', 'soulbound-title');

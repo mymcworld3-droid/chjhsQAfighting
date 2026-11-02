@@ -720,6 +720,9 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       : content?.querySelector('[data-refinery-craft]:enabled') || content?.querySelector('[data-refinery-picker="materials"] > summary');
     target?.focus({ preventScroll: true });
   }
+  function refineryBaseIndex(tokens) {
+    return tokens.findIndex(token => token && ingredientMeta(token).item?.equipSlot === '本命法寶');
+  }
 
   function markup() {
     const matInv = materialInventory();
@@ -786,11 +789,12 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       </div>
     </details>`;
     const displaySlots = job ? recipeTokens(job.recipe) : selected;
+    const baseIndex = refineryBaseIndex(displaySlots);
 
     const slotHtml = Array.from({ length: SLOT_COUNT }, (_, index) => {
       const token = displaySlots[index];
       const meta = token ? ingredientMeta(token) : null;
-      return `<button type="button" class="refinery-slot ${meta?.item ? 'filled' : ''} ${meta?.type === 'material' ? 'is-material' : meta?.type === 'artifact' ? 'is-artifact' : ''}" data-refinery-slot="${index}" ${meta?.item ? `data-refinery-token="${esc(token)}" style="--material-realm-color:${esc(meta.color)}"` : ''} ${!meta?.item || job || busy ? 'disabled' : ''} aria-label="${esc(meta?.name ? `${meta.name}${job ? '' : '，點擊取回'}` : `空煉器格 ${index + 1}`)}" title="${meta?.item ? '點擊取回' : `陣位 ${directions[index]}`}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${directions[index]}</span><span><span class="icon">${meta?.item ? itemImageMarkup(meta, meta.icon || '◆') : '＋'}</span><span class="name">${esc(meta?.name || '')}</span></span></button>`;
+      return `<button type="button" class="refinery-slot ${meta?.item ? 'filled' : ''} ${index === baseIndex ? 'is-base' : ''} ${meta?.type === 'material' ? 'is-material' : meta?.type === 'artifact' ? 'is-artifact' : ''}" data-refinery-slot="${index}" ${meta?.item ? `data-refinery-token="${esc(token)}" style="--material-realm-color:${esc(meta.color)}"` : ''} ${!meta?.item || job || busy ? 'disabled' : ''} aria-label="${esc(meta?.name ? `${meta.name}${job ? '' : '，點擊取回'}` : `空煉器格 ${index + 1}`)}" title="${meta?.item ? '點擊取回' : `陣位 ${directions[index]}`}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${directions[index]}</span><span><span class="refinery-slot-role">本命法器</span><span class="icon">${meta?.item ? itemImageMarkup(meta, meta.icon || '◆') : '＋'}</span><span class="name">${esc(meta?.name || '')}</span></span></button>`;
     }).join('');
 
     const summary = Object.entries(selectedCounts(displaySlots)).map(([token, q]) => `${ingredientMeta(token).name} ×${q}`).join(' · ') || '尚未投入素材';
@@ -818,12 +822,13 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
           <div class="refinery-fragment-balance" aria-label="持有煉器碎片"><span>${globalThis.QAItemIcons?.markup('forge-fragment',{size:18})||''}煉器碎片</span><b data-refinery-fragment-balance>${fragmentBalance().toLocaleString('zh-TW')}</b></div>
         </div>
         <div class="refinery-selection-tools"><span class="refinery-badge" data-refinery-used-badge>${job ? displaySlots.length : used}/${SLOT_COUNT} 件</span><button type="button" class="refinery-clear" data-refinery-clear ${!used || busy || job ? 'disabled' : ''}>重新選擇</button></div>
-        <div class="refinery-array-wrap"><div class="refinery-slots ${jobReady ? 'is-finished' : ''}" aria-label="八方煉器陣">
+        <div class="refinery-array-wrap"><div class="refinery-slots ${baseIndex >= 0 ? 'has-base' : ''} ${jobReady ? 'is-finished' : ''}" aria-label="八方煉器陣，本命法器居中，素材環繞">
           <span class="refinery-array-lines"></span><span class="refinery-array-ring"></span>${slotHtml}
-          <div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}>
+          <span class="refinery-base-placeholder" aria-hidden="true"><i class="fa-solid fa-khanda"></i><span>本命法器</span></span>
+        </div></div>
+        <div class="refinery-array-center"><button type="button" class="refinery-craft ${craftReady ? 'ready' : ''} ${jobReady ? 'job-ready' : ''}" data-refinery-craft ${craftReady ? '' : 'disabled'}>
             <i class="fa-solid fa-fire-flame-curved" aria-hidden="true"></i><span class="craft-main" data-refinery-craft-label>${busy ? '處理中' : craftLabel}</span><span class="craft-sub" data-refinery-craft-cost aria-live="polite">${esc(craftCostText(plan, job))}</span>
           </button></div><span class="refinery-array-caption">八方聚靈 · 一器成形</span>
-        </div></div>
         ${keyRequirementHtml}${jobBox}
         <div class="refinery-match ${feedback.tone}" data-refinery-match role="status" aria-live="polite"><b data-refinery-match-prefix>${esc(feedback.prefix)}</b><span data-refinery-match-text>${esc(feedback.message)}</span></div>
         <details class="refinery-advanced" data-refinery-advanced ${advancedOpen ? 'open' : ''}><summary>更多設定與配方<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary><div class="refinery-advanced-body">
@@ -885,12 +890,15 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       setText(button.querySelector('.refinery-mat-qty'), Number.isFinite(remaining) ? `×${remaining}` : '∞');
     });
 
+    const baseIndex = refineryBaseIndex(selected);
+    content.querySelector('.refinery-slots')?.classList.toggle('has-base', baseIndex >= 0);
     content.querySelectorAll('[data-refinery-slot]').forEach((button) => {
       const index = Number(button.dataset.refinerySlot);
       const token = selected[index] || '';
       const meta = token ? ingredientMeta(token) : null;
       const previousToken = button.dataset.refineryToken || '';
       button.classList.toggle('filled', !!meta?.item);
+      button.classList.toggle('is-base', index === baseIndex);
       button.classList.toggle('is-material', meta?.type === 'material');
       button.classList.toggle('is-artifact', meta?.type === 'artifact');
       button.disabled = !meta?.item || busy;
