@@ -146,60 +146,66 @@ html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscro
 @media(prefers-reduced-motion:reduce){#scope-studio *,#scope-studio *:before,#scope-studio *:after{transition-duration:0s!important;animation:none!important}}
 
 
-/* 五段式課程導覽：只顯示當前決策，不再把四個 select 同時擠在畫面中。 */
-#scope-studio #cs-pages{display:grid;gap:16px;min-width:0}
+/* 同頁選範圍：保留原有表單與儲存流程，縮短主要操作。 */
+#scope-studio #cs-pages{display:grid;gap:14px;min-width:0}
 #scope-studio #cs-scope>.cs-note{display:none}
-#scope-studio #cs-pages .cs-native-fields{display:none!important}
-#scope-studio .cs-stage[hidden]{display:none!important}
-#scope-studio .cs-page-navigation{display:flex;align-items:center;justify-content:flex-start}
-#scope-studio .cs-scope .cs-back{display:inline-flex;align-items:center;justify-content:center;min-width:118px;min-height:38px!important;padding:8px 13px!important;border:1px solid rgba(143,212,200,.35)!important;border-radius:10px!important;background:rgba(109,181,160,.09)!important;color:#d8ede1!important;font-size:12px!important;font-weight:800!important}
-#scope-studio .cs-scope .cs-back:hover{border-color:rgba(143,212,200,.7)!important;background:rgba(109,181,160,.19)!important}
-#scope-studio .cs-stage{min-width:0;display:grid;gap:15px;align-content:start}
-#scope-studio .cs-stage-title{display:grid;gap:4px}
-#scope-studio .cs-stage-title>small{color:#85c5b5;font-size:10px;letter-spacing:.18em;font-weight:900}
-#scope-studio .cs-stage-title>h4{margin:0;color:#f1e4cb;font:700 20px/1.4 "Noto Serif TC",serif}
-#scope-studio .cs-stage-title>p{margin:0;color:#aaa99f;font-size:12px;line-height:1.7}
-/* Regular scope selection stays concise; first-visit and interactive newbie tutorials keep their teaching copy. */
-body:not(:has(#newbie-tutorial-layer)) #scope-studio:not(.fv-scope) .cs-stage-title > :is(small,p){display:none}
-#scope-studio .cs-range-panel{display:grid;gap:10px;min-width:0;padding:16px;border:1px solid rgba(143,212,200,.24);border-radius:13px;background:rgba(93,163,144,.075)}
-#scope-studio .cs-range-panel h5{margin:0;color:#d8ede1;font-size:15px;line-height:1.5}
-#scope-studio .cs-range-panel p{margin:0;color:#adbdb4;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
-#scope-studio .cs-range-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-#scope-studio .cs-range-fields label,#scope-studio .cs-range-label{display:grid;gap:6px;min-width:0;color:#d8dfcf;font-size:12px}
-#scope-studio .cs-range-panel #cs-range-add{justify-self:start;min-height:44px!important;border-color:rgba(143,212,200,.4)!important;color:#d8ede1!important}
+#scope-studio .cs-simple-heading{display:grid;gap:5px}
+#scope-studio .cs-simple-heading h4{margin:0;color:#f1e4cb;font:700 19px/1.5 "Noto Serif TC",serif}
+#scope-studio .cs-simple-heading p{margin:0;color:#b0bdb4;font-size:12px;line-height:1.7}
+#scope-studio .cs-fields.cs-simple-fields{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+#scope-studio .cs-stage{display:grid;gap:12px;min-width:0}
+#scope-studio .cs-course-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}
+#scope-studio .cs-course-heading span{flex-shrink:0;color:#9cb8aa;font-size:11px}
+#scope-studio .cs-term-filter{display:flex;gap:6px;flex-wrap:wrap}
+#scope-studio .cs-scope .cs-term-filter button{min-height:40px!important;flex:1;padding:7px 6px!important}
+#scope-studio .cs-scope .cs-term-filter button[aria-pressed=true]{border-color:rgba(129,205,182,.7)!important;background:rgba(93,163,144,.18)!important;color:#d7eee0!important}
+#scope-studio .cs-scope .cs-chapter-pick{display:flex!important;align-items:center;gap:10px!important;min-height:60px;margin:0!important;padding:12px!important;border:0;cursor:pointer}
+#scope-studio .cs-chapter-pick b{flex:1;min-width:0;font-size:13px;line-height:1.6;color:#f1e6ce;overflow-wrap:anywhere}
+#scope-studio .cs-chapter-pick .cs-card-term{font-size:9px;white-space:nowrap}
+#scope-studio .cs-unit:has(.cs-chapter:indeterminate){border-color:rgba(124,206,185,.5)!important}
+#scope-studio .cs-topic-picker{border-top:1px solid rgba(231,215,183,.08)}
+#scope-studio .cs-topic-picker summary{min-height:44px!important;padding:10px 13px!important;font-size:11px;color:#a1b7ab}
+#scope-studio .cs-topic-picker summary::after{font-size:16px}
+#scope-studio .cs-topic-picker[open] summary::after{transform:rotate(180deg)}
+#scope-studio .cs-topic-picker label{min-height:44px}
+#scope-studio .cs-range-panel{display:block;min-width:0;border:1px solid rgba(143,212,200,.22);border-radius:12px;background:rgba(93,163,144,.05)}
+#scope-studio .cs-range-panel>summary{padding:13px;min-height:46px;cursor:pointer;color:#bed3c6;font-size:12px}
+#scope-studio .cs-range-body{display:grid;gap:10px;padding:0 13px 13px;min-width:0}
+#scope-studio .cs-range-body p{margin:0;color:#adbdb4;font-size:11px;line-height:1.7;overflow-wrap:anywhere}
+#scope-studio .cs-range-label{display:grid;gap:6px;color:#d8dfcf;font-size:12px;min-width:0}
+#scope-studio #cs-range-add{justify-self:start;min-height:44px!important}
 #scope-studio #cs-range-message:empty{display:none}
-#scope-studio .cs-choice-grid{min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
-#scope-studio .cs-choice{display:grid;grid-template-columns:34px minmax(0,1fr) 15px;align-items:center;gap:12px;min-height:65px;padding:12px 13px;border:1px solid rgba(227,199,148,.18);border-radius:13px;background:linear-gradient(130deg,rgba(32,39,38,.95),rgba(18,27,27,.95));color:#e8deca;text-align:left;transition:background .16s,border-color .16s,transform .16s;cursor:pointer}
-#scope-studio .cs-choice:not(:disabled):hover{transform:translateY(-2px);border-color:rgba(236,204,132,.5);background:rgba(236,204,132,.09)}
-#scope-studio .cs-choice.is-selected{border-color:rgba(129,205,182,.66);background:linear-gradient(130deg,rgba(93,163,144,.2),rgba(43,99,89,.12))}
-#scope-studio .cs-choice-num{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;border:1px solid rgba(237,203,134,.22);background:rgba(218,183,108,.08);color:#d5bb83;font-size:11px;font-weight:900}
-#scope-studio .cs-choice.is-selected .cs-choice-num{color:#c8e9da;border-color:rgba(139,208,185,.35);background:rgba(129,205,182,.12)}
-#scope-studio .cs-choice-main{font-size:14px;font-weight:800;line-height:1.5;overflow-wrap:anywhere}
-#scope-studio .cs-choice>i{font-size:10px;color:#8c866e}
-#scope-studio .cs-choice.is-selected>i{color:#9bdbca}
-#scope-studio .cs-step-empty{grid-column:1/-1;padding:24px 13px;border:1px dashed rgba(236,204,132,.18);border-radius:13px;color:#a9aa9e;text-align:center}
-#scope-studio .cs-page-actions{display:flex;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid rgba(238,205,141,.1)}
-#scope-studio .cs-page-actions button{min-width:110px;min-height:42px;padding:10px 18px;border:1px solid rgba(233,199,135,.24);border-radius:11px;background:rgba(228,193,121,.075);color:#e7d4ae;font-size:13px;font-weight:800}
-#scope-studio #cs-next{margin-left:auto;border-color:rgba(131,205,180,.4);background:rgba(112,182,161,.17);color:#dcf0e5}
-#scope-studio .cs-page-actions button:disabled{opacity:.35;cursor:not-allowed}
-#scope-studio .cs-stage .cs-tools-caption{font-size:12px}
-#scope-studio .cs-stage #cs-add{margin-top:0}
-@media(max-width:700px){
-#scope-studio #cs-pages{gap:11px}
-#scope-studio .cs-stage-title>h4{font-size:18px}
-#scope-studio .cs-choice-grid{grid-template-columns:1fr}
-#scope-studio .cs-choice{min-height:57px}
-#scope-studio .cs-page-actions button{min-width:94px;padding:9px 10px}
-}
-@media(max-width:360px){#scope-studio .cs-choice-main{font-size:13px}#scope-studio .cs-range-fields{grid-template-columns:1fr}}
-
-/* Paginated controls take priority over the legacy generic .cs-scope button rules. */
-#scope-studio .cs-scope .cs-choice{min-height:65px!important;padding:12px 13px!important;border:1px solid rgba(227,199,148,.18)!important;border-radius:13px!important;background:linear-gradient(130deg,rgba(32,39,38,.95),rgba(18,27,27,.95))!important;color:#e8deca!important;text-align:left!important}
-#scope-studio .cs-scope .cs-choice.is-selected{border-color:rgba(129,205,182,.66)!important;background:linear-gradient(130deg,rgba(93,163,144,.2),rgba(43,99,89,.12))!important}
-#scope-studio .cs-scope .cs-choice:not(:disabled):hover{border-color:rgba(236,204,132,.5)!important;background:rgba(236,204,132,.09)!important}
-#scope-studio .cs-scope .cs-page-actions button{min-width:110px;min-height:42px!important;padding:10px 18px!important;border-radius:11px!important;font-size:13px!important}
-#scope-studio .cs-scope #cs-next{border-color:rgba(131,205,180,.4)!important;background:rgba(112,182,161,.17)!important;color:#dcf0e5!important}
-@media(max-width:700px){#scope-studio .cs-scope .cs-choice{min-height:57px!important}}
-
+#scope-studio .cs-search-empty{grid-column:1/-1;padding:16px;border:1px dashed rgba(143,212,200,.2);border-radius:12px;text-align:center;color:#b6c8bf;font-size:12px}
+#scope-studio .cs-search-empty p{margin:0 0 12px}
+#scope-studio .cs-bulk-tools{margin-left:auto;min-width:0}
+#scope-studio .cs-bulk-tools>summary{min-height:44px;padding:11px 6px;cursor:pointer;color:#b6c8bf;font-size:12px}
+#scope-studio .cs-bulk-tools .cs-tools-actions{padding:6px 0;flex-wrap:wrap}
+#scope-studio .ss-mode-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:16px}
+#scope-studio .ss-mode-choices button{min-width:0;min-height:44px;padding:8px 4px;border:1px solid rgba(235,202,131,.2);border-radius:10px;background:rgba(255,255,255,.025);color:#c6c6b4;font:inherit;font-size:12px;cursor:pointer}
+#scope-studio .ss-mode-choices button[aria-pressed=true]{border-color:rgba(138,209,188,.6);background:rgba(118,188,169,.17);color:#d5f0e6;font-weight:800}
+#scope-studio .ss-mode-choices button:disabled{opacity:.5}
+#scope-studio :is(#set-source-mode,.ss-mode-native-label)[hidden],#scope-studio .ss-mode-native-label{display:none!important}
 #scope-studio #comprehensive-source-container.hidden{display:none!important}
 #scope-studio #comprehensive-source-container{display:grid;gap:12px}
+#scope-studio #solo-unit-hint{display:none}
+#scope-studio #ss-save-hint{margin-right:auto;min-width:0;color:#bed3c6;font-size:12px;line-height:1.5}
+#scope-studio .ss-foot:has(#ss-feedback:not(:empty)) #ss-save-hint{display:none}
+@media(max-width:700px){
+#scope-studio .ss-picker>.ss-panel-head{display:none}
+#scope-studio .ss-topbar .ss-overline{display:none}
+#scope-studio h2{font-size:18px}
+#scope-studio .ss-workspace{padding:8px}
+#scope-studio .ss-picker-body{padding:12px}
+#scope-studio .cs-simple-heading h4{font-size:17px}
+#scope-studio .cs-simple-heading p{font-size:11px}
+#scope-studio .cs-simple-heading h4,#scope-studio .cs-course-heading{display:none}
+#scope-studio #cs-pages{gap:10px}
+#scope-studio .cs-stage{gap:9px}
+#scope-studio .ss-mode-choices{margin-bottom:12px}
+#scope-studio .cs-tools-caption{font-size:11px}
+#scope-studio .cs-tools-actions{width:100%}
+#scope-studio .cs-tools-actions button{flex:1;min-height:42px!important;padding:7px 5px!important;font-size:11px!important}
+#scope-studio #ss-save-hint{font-size:11px}
+#scope-studio .ss-foot{padding-inline:12px}
+#scope-studio #dongfu-scope-save{min-width:140px}
+}

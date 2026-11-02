@@ -1,141 +1,100 @@
-// 研修所三步選課：年級 → 科目 → 全學年章節；學期與版本由資料層自動整合。
+// 同頁選範圍：年級、科目、章節；細考點與自訂輸入按需展開。
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
-  const fields = ['cs-grade','cs-subject'];
-  const names = ['選年級','選科目','選章節'];
-  const customRangeMarkup = `<section class="cs-range-panel" aria-labelledby="cs-range-title">
-    <h5 id="cs-range-title">自訂範圍</h5>
-    <p id="cs-range-help">可一次輸入多個章節或考點，用頓號、逗號、分號或換行分開；每項最多 90 字，會沿用下方的年級與科目。加入後記得儲存。</p>
-    <div class="cs-range-fields">
-      <label for="cs-range-grade">年級<select id="cs-range-grade"></select></label>
-      <label for="cs-range-subject">科目<select id="cs-range-subject"></select></label>
-    </div>
-    <label for="cs-range-input" class="cs-range-label">想練習的範圍
-      <textarea id="cs-range-input" rows="3" maxlength="2400" placeholder="例如：功與動能、角動量" aria-describedby="cs-range-help cs-range-message"></textarea>
-    </label>
-    <button type="button" id="cs-range-add">加入自訂範圍</button>
-    <p id="cs-range-message" role="status" aria-live="polite"></p>
-  </section>`;
-  let root, active = 0, ready = false;
-  function options(id) {
-    return [...($(id)?.options || [])].filter(o => o.value).map(o => ({value:o.value,label:o.textContent}));
+  let ready = false;
+
+  function openCustom(value) {
+    const custom = $('cs-custom-range');
+    if (!custom) return;
+    custom.open = true;
+    if (typeof value === 'string') $('cs-range-input').value = value;
+    $('cs-range-input').focus();
   }
-  function current(id) { return $(id)?.value || ''; }
-  function clean(value) { return String(value || '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-  function setPage(page) {
-    if (!root) return;
-    const nextStep = Math.max(0,Math.min(2,page));
-    const finishTransition = window.beginSceneTransition?.($('cs-stage-'+active), $('cs-stage-'+nextStep), 'scroll', 'curriculum-step');
-    active = nextStep;
-    root.dataset.step = String(active);
-    for (let i=0;i<3;i++) {
-      const item = $('cs-stage-'+i);
-      if (item) item.hidden = i!==active;
-    }
-    const back = $('cs-prev'), next = $('cs-next');
-    if (back) back.textContent = active===0 ? '← 返回設定' : '← 返回上一步';
-    if (next) {
-      next.textContent = active===2?'查看已選範圍':'下一步　→';
-      next.disabled = active<2 && !current(fields[active]);
-    }
-    const scroller=$('ss-picker-body');if(scroller)scroller.scrollTop=0;
-    finishTransition?.();
-  }
-  function visibleOptions(stage) {
-    const native=$(fields[stage]);
-    const holder=$('cs-cards-'+stage);
-    if (!holder || !native) return;
-    holder.replaceChildren();
-    const list=options(fields[stage]);
-    if (!list.length) {
-      const empty=document.createElement('p');empty.className='cs-step-empty';
-      empty.textContent='此範圍目前沒有可選資料，請返回調整上一項。';holder.append(empty);
-      return;
-    }
-    const selected=current(fields[stage]);
-    list.forEach((opt,index)=>{
-      const btn=document.createElement('button');btn.type='button';btn.className='cs-choice';
-      btn.classList.toggle('is-selected',opt.value===selected);
-      btn.setAttribute('aria-pressed',String(opt.value===selected));
-      btn.innerHTML='<span class="cs-choice-num">'+String(index+1).padStart(2,'0')+'</span><span class="cs-choice-main">'+clean(opt.label)+'</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i>';
-      btn.addEventListener('click',()=>{
-        if(native.value!==opt.value){native.value=opt.value;native.dispatchEvent(new Event('change',{bubbles:true}));}
-        // 科目選完直接進章節；資料在 curriculum:options-ready 回報後刷新。
-        setPage(Math.min(2,stage+1));
-        refresh();
-      });
-      holder.append(btn);
+
+  function refresh() {
+    if (!ready) return;
+    const grade = $('cs-grade')?.value || '', subject = $('cs-subject')?.value || '';
+    $('cs-current-course').textContent = [grade, subject].filter(Boolean).join(' · ');
+    $('cs-range-context').textContent = '加入 ' + grade + '・' + subject + ' 的範圍';
+    document.querySelectorAll('[data-cs-term]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.csTerm === (window.getCurriculumTermFilter?.() || 'all')));
     });
   }
-  function refresh() {
-    if (!root) return;
-    for(let i=0;i<2;i++)visibleOptions(i);
-    for (const [id, source] of [['cs-range-grade','cs-grade'],['cs-range-subject','cs-subject']]) {
-      const select=$(id);if(!select)continue;
-      select.replaceChildren();
-      for (const item of options(source)) {
-        const option=document.createElement('option');option.value=item.value;option.textContent=item.label;select.append(option);
-      }
-      select.value=current(source);select.disabled=!select.options.length;
-    }
-    const next=$('cs-next');
-    if (next && active<2)next.disabled=!current(fields[active]);
-  }
-  function onOptions() { if (!root) return;refresh(); }
+
   function mount() {
     if (ready) return true;
-    const base=$('cs-scope');
-    if (!base || !$('cs-units') || !$('cs-grade')) return false;
-    const note=base.querySelector(':scope > .cs-note');
-    const native=base.querySelector('.cs-fields');
-    const search=base.querySelector('.cs-search-field');
-    const tools=base.querySelector('.cs-tools');
-    const chapter=$('cs-units'), message=$('cs-message');
-    if(!native||!search||!tools||!chapter||!message)return false;
-    root=document.createElement('section');root.id='cs-pages';root.className='cs-pages';root.dataset.step='0';
-    root.innerHTML='<div class="cs-page-navigation"><button type="button" id="cs-prev" class="cs-back">← 返回設定</button></div>'+
-      names.map((name,i)=>'<section class="cs-stage" id="cs-stage-'+i+'" '+(i?'hidden':'')+' aria-label="'+name+'"><div class="cs-stage-title"><small>STEP 0'+(i+1)+'</small><h4>'+(['選擇你的年級','想練習哪一科？','勾選全學年章節與考點'][i])+'</h4><p>'+(['每個年級都可獨立安排，不必受個人資料的預設學制限制。','選完科目就直接進入章節；上下學期已合併，不再另外選版本。','上、下學期章節會一起顯示並標示原學期；可勾選整章或個別考點。'][i])+'</p></div><div id="cs-cards-'+i+'" class="cs-choice-grid"></div>'+(i===0?customRangeMarkup:'')+'</section>').join('')+
-      '<div class="cs-page-actions"><button type="button" id="cs-next">下一步　→</button></div>';
-    base.insertBefore(root,note||base.firstChild);
-    // 保留原始 select 與事件處理器，僅從可見區域隱藏。
-    native.classList.add('cs-native-fields');root.append(native);
-    const last=$('cs-stage-2');
-    last.append(search,tools,chapter,message);
-    const smallNote=base.lastElementChild;
-    if(smallNote?.classList.contains('cs-note'))last.append(smallNote);
-    $('cs-prev').addEventListener('click',()=>{
-      if(active===0) window.closeCurriculumStudio?.();
-      else setPage(active-1);
-    });
-    $('cs-next').addEventListener('click',()=>{
-      if(active===2){$('ss-tab-cart')?.click();return;}
-      if(!current(fields[active]))return;
-      setPage(active+1);
-    });
-    fields.forEach(id=>$(id)?.addEventListener('change',()=>{refresh();}));
-    for (const [id, source] of [['cs-range-grade','cs-grade'],['cs-range-subject','cs-subject']]) {
-      $(id).addEventListener('change',()=>{
-        $(source).value=$(id).value;$(source).dispatchEvent(new Event('change',{bubbles:true}));
-        $('cs-range-message').textContent='';refresh();
-      });
-    }
-    const addRange=()=>{
-      const input=$('cs-range-input'),result=window.addCustomCurriculumRange?.(input.value);
-      $('cs-range-message').textContent=result?.message||'範圍選擇器尚未準備好，請稍後再試。';
-      if(result?.ok)input.value='';
-      input.focus({preventScroll:true});
+    const base = $('cs-scope'), native = base?.querySelector('.cs-fields');
+    const search = base?.querySelector('.cs-search-field'), tools = base?.querySelector('.cs-tools');
+    const chapter = $('cs-units'), message = $('cs-message');
+    if (!base || !native || !search || !tools || !chapter || !message) return false;
+    const root = document.createElement('section');
+    root.id = 'cs-pages'; root.className = 'cs-simple-picker';
+    root.innerHTML = `
+      <div class="cs-simple-heading"><h4>想練習什麼？</h4><p>選好年級、科目，點選章節，再按下方儲存。</p></div>
+      <section id="cs-stage-2" class="cs-stage" aria-label="選擇章節">
+        <div class="cs-course-heading"><strong id="cs-current-course"></strong><span>可選多章</span></div>
+        <div class="cs-term-filter" role="group" aria-label="顯示的學期">
+          <button type="button" data-cs-term="all" aria-pressed="true">全學年</button>
+          <button type="button" data-cs-term="第一學期" aria-pressed="false">上學期</button>
+          <button type="button" data-cs-term="第二學期" aria-pressed="false">下學期</button>
+        </div>
+      </section>
+      <details id="cs-custom-range" class="cs-range-panel">
+        <summary>找不到章節？自行輸入範圍</summary>
+        <div class="cs-range-body">
+          <p id="cs-range-context"></p>
+          <label for="cs-range-input" class="cs-range-label">想練習的章節或考點
+            <textarea id="cs-range-input" rows="2" maxlength="2400" placeholder="例如：鉛直圓周運動、功與動能" aria-describedby="cs-range-help cs-range-message"></textarea>
+          </label>
+          <p id="cs-range-help">多個範圍可用頓號或換行分開，每項最多 90 字。</p>
+          <button type="button" id="cs-range-add">加入範圍</button>
+          <p id="cs-range-message" role="status" aria-live="polite"></p>
+        </div>
+      </details>`;
+    base.prepend(root);
+    root.insertBefore(native, $('cs-stage-2'));
+    native.classList.add('cs-simple-fields');
+    const stage = $('cs-stage-2');
+    search.firstChild.textContent = '';
+    $('cs-search').setAttribute('aria-label', '搜尋章名或考點');
+    stage.insertBefore(search, stage.querySelector('.cs-term-filter'));
+    const actions = tools.querySelector('.cs-tools-actions');
+    const bulk = document.createElement('details'); bulk.className = 'cs-bulk-tools';
+    const bulkTitle = document.createElement('summary'); bulkTitle.textContent = '批次選取';
+    bulk.append(bulkTitle, actions); tools.append(bulk);
+    const count = $('cs-draft-count'); tools.querySelector('.cs-tools-caption').replaceChildren('已勾選 ', count, ' 項');
+    stage.append(tools, chapter, message);
+    document.querySelectorAll('[data-cs-term]').forEach(button => button.addEventListener('click', () => {
+      window.filterCurriculumTerm?.(button.dataset.csTerm); refresh();
+    }));
+    ['cs-grade', 'cs-subject'].forEach(id => $(id).addEventListener('change', refresh));
+    const addRange = () => {
+      const input = $('cs-range-input'), result = window.addCustomCurriculumRange?.(input.value);
+      $('cs-range-message').textContent = result?.message || '範圍選擇器尚未準備好，請稍後再試。';
+      if (result?.ok) input.value = '';
+      input.focus({ preventScroll:true });
     };
-    $('cs-range-add').addEventListener('click',addRange);
-    $('cs-range-input').addEventListener('keydown',e=>{
-      if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)&&!e.isComposing){e.preventDefault();addRange();}
+    $('cs-range-add').addEventListener('click', addRange);
+    $('cs-range-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !e.isComposing) { e.preventDefault(); addRange(); }
     });
-    window.addEventListener('curriculum:options-ready',onOptions);
-    ready=true;refresh();setPage(0);
-    return true;
+    ready = true; refresh(); return true;
   }
-  window.resetCurriculumPages=()=>{if(mount())setPage(0);};
-  window.openCurriculumPage=page=>{if(mount())setPage(page);};
-  function boot(){mount();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+
+  window.openCustomCurriculumRange = value => { if (mount()) openCustom(value); };
+  window.resetCurriculumPages = () => {
+    if (!mount()) return;
+    $('cs-custom-range').open = false;
+    document.querySelector('.cs-bulk-tools').open = false;
+    $('cs-range-message').textContent = '';
+    $('cs-range-input').value = '';
+    window.restoreCurriculumContext?.();
+    refresh();
+  };
+  // 舊版教學仍可指定焦點，所有欄位維持在同一頁。
+  window.openCurriculumPage = page => { if (mount()) $(page === 0 ? 'cs-grade' : page === 1 ? 'cs-subject' : 'cs-search')?.focus(); };
+  window.addEventListener('curriculum:options-ready', () => { mount(); refresh(); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once:true });
+  else mount();
 })();

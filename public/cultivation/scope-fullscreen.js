@@ -29,6 +29,19 @@ import { playerRepository } from './data/player-repository.js';
     if (!studio) return;
     const selected = units();
     const comprehensive = $('set-source-mode')?.value === 'random';
+    const sourceMode = $('set-source-mode')?.value;
+    studio.querySelector('.ss-workspace').inert = saving;
+    studio.querySelector('.ss-tabs').inert = saving;
+    $('ss-close').disabled = saving || sharing;
+    studio.querySelectorAll('[data-ss-mode]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.ssMode === sourceMode));
+      button.disabled = saving;
+    });
+    if (saveButton && opened) {
+      saveButton.disabled = saving || (sourceMode === 'focused' && !selected.length);
+      saveButton.textContent = saving ? '儲存中…' : comprehensive ? '使用綜合練習' : sourceMode === 'bank' ? '儲存題庫' : '儲存範圍（' + selected.length + '）';
+    }
+    if ($('ss-save-hint')) $('ss-save-hint').textContent = comprehensive ? '不選章節，也能先開始練習。' : sourceMode === 'bank' ? '選好題庫後即可儲存。' : selected.length ? '已選 ' + selected.length + ' 個範圍，可直接儲存。' : '先點選至少一個章節。';
     const c = $('ss-selection-count'),
       sum = $('ss-footer-main'), foot = $('ss-footer-sub'), tab = $('ss-tab-count');
     if (c) c.textContent = String(selected.length);
@@ -37,7 +50,7 @@ import { playerRepository } from './data/player-repository.js';
     if (sum) sum.textContent = comprehensive ? '綜合練習 · 跨科隨機出題' : selected.length ? '已選 ' + selected.length + ' 個複習範圍' : '建立你的專屬修習計畫';
     if (foot) foot.textContent = changed() ? '變更尚未儲存，離開前記得儲存。' : comprehensive ? '無須挑選章節，可以直接儲存開始。' : '可跨科選擇，最多 24 個範圍。';
     const cardSummary = $('dongfu-scope-card')?.querySelector('.dongfu-collapse-summary');
-    if (cardSummary) cardSummary.textContent = selected.length ? '已選 ' + selected.length + ' 個範圍 · 點擊全螢幕編輯' : '全螢幕選課 · 選章節、定考點';
+    if (cardSummary) cardSummary.textContent = selected.length ? '已選 ' + selected.length + ' 個範圍 · 點擊修改' : comprehensive ? '綜合練習 · 點擊選擇章節' : '選年級、科目，點章節即可';
     for (const id of ['ss-organize', 'ss-share']) if ($(id)) $(id).disabled = saving || !selected.length;
     if ($('ss-import')) $('ss-import').disabled = saving;
     const title = window.CurriculumRangeRules.validateShareTitle($('ss-share-title')?.value);
@@ -302,7 +315,7 @@ import { playerRepository } from './data/player-repository.js';
     const link = document.createElement('link');
     link.id = 'ss-studio-style';
     link.rel = 'stylesheet';
-    link.href = './styles/curriculum-studio.css?v=20261014-scope-concise1';
+    link.href = './styles/curriculum-studio.css?v=20261102-scope-simple1';
     if (!$('ss-studio-style')) document.head.append(link);
 
     studio = document.createElement('section');
@@ -315,7 +328,7 @@ import { playerRepository } from './data/player-repository.js';
     studio.innerHTML = `
       <header class="ss-topbar">
         <span class="ss-emblem" aria-hidden="true"><i class="fa-solid fa-book-open-reader"></i></span>
-        <div class="ss-brand"><span class="ss-overline">青雲問道 · 修習策劃</span><h2 id="ss-title">課程研修所</h2></div>
+        <div class="ss-brand"><span class="ss-overline">青雲問道</span><h2 id="ss-title">選擇練習範圍</h2></div>
         <button type="button" class="ss-close" id="ss-close" aria-label="返回設定"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回設定</span></button>
       </header>
       <nav class="ss-tabs" aria-label="選課分頁" role="tablist">
@@ -324,7 +337,7 @@ import { playerRepository } from './data/player-repository.js';
       </nav>
       <div class="ss-workspace">
         <section class="ss-picker" id="ss-picker" role="tabpanel" aria-labelledby="ss-tab-course">
-          <div class="ss-panel-head"><span class="ss-panel-mark"><i class="fa-solid fa-compass" aria-hidden="true"></i></span><div><strong>探索課程</strong><small>先選出題模式，再從課程目錄挑選章節或細項。</small></div></div>
+          <div class="ss-panel-head"><span class="ss-panel-mark"><i class="fa-solid fa-compass" aria-hidden="true"></i></span><div><strong>選擇範圍</strong><small>選年級與科目，點選想練習的章節。</small></div></div>
           <div class="ss-picker-body" id="ss-picker-body"></div>
         </section>
         <aside class="ss-cart" id="ss-cart" role="tabpanel" aria-labelledby="ss-tab-cart">
@@ -352,6 +365,7 @@ import { playerRepository } from './data/player-repository.js';
         </aside>
       </div>
       <footer class="ss-foot">
+        <span id="ss-save-hint" aria-live="polite"></span>
         <small id="ss-feedback" role="status" aria-live="polite"></small>
         <div id="ss-foot-actions"></div>
       </footer>
@@ -380,6 +394,22 @@ import { playerRepository } from './data/player-repository.js';
         </div>
       </dialog>`;
     document.body.append(studio);
+
+    const modes = document.createElement('div');
+    modes.className = 'ss-mode-choices'; modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', '練習方式');
+    for (const [value, label] of [['focused', '選課本章節'], ['random', '先綜合練習'], ['bank', '使用題庫']]) {
+      const button = document.createElement('button'); button.type = 'button'; button.dataset.ssMode = value;
+      button.textContent = label;
+      button.addEventListener('click', () => {
+        if (saving || $('set-source-mode').value === value) return;
+        $('set-source-mode').value = value;
+        $('set-source-mode').dispatchEvent(new Event('change', { bubbles:true }));
+      });
+      modes.append(button);
+    }
+    block.prepend(modes);
+    $('set-source-mode').hidden = true;
+    $('set-source-mode').previousElementSibling?.classList.add('ss-mode-native-label');
 
     // 已選清單與原有 selector 為同一份 DOM；這樣移除/儲存仍走既有流程。
     $('ss-cart-body').append(cartSource);
