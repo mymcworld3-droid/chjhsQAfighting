@@ -67,14 +67,13 @@ test('stable shell is created early while hydrated modules keep safe dependency 
   assert.ok(layoutPos > refineryPos && battlePos > layoutPos);
 });
 
-test('preloaded refinery shell uses the same divider shifted 96px downward', () => {
-  for (const source of [read('public/cultivation/training-shared-shells.js')]) {
-    assert.match(source, /refinery-panel refinery-material-panel/);
-    assert.match(source, /持有煉器素材 · 一般素材/);
-    assert.match(source, /二次煉製/);
-  }
-  assert.match(trainingCss, /refinery-panel\.refinery-material-panel\{[^}]*padding:0/);
-  assert.match(trainingCss, /refinery-material-list\{[^}]*grid-template-rows:minmax\(0,calc\(50% \+ 96px - 32px\)\) minmax\(0,calc\(50% - 96px \+ 32px\)\)[^}]*gap:0/);
+test('preloaded refinery follows the same three steps with optional settings closed', () => {
+  const shell=read('public/cultivation/training-shared-shells.js');
+  assert.match(shell, /cultivation-refinery refinery-simple refinery-shell/);
+  assert.ok(shell.indexOf('選本命法器') < shell.indexOf('加入材料'));
+  assert.ok(shell.indexOf('加入材料') < shell.indexOf('本命法器精煉'));
+  assert.match(shell, /<details class="refinery-advanced">/);
+  assert.match(read('public/index.html'), /styles\/refinery-simple\.css/);
 });
 
 

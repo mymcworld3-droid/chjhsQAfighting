@@ -38,8 +38,8 @@ test('material system is read-only on the client and has no purchase or Firebase
 test('eight wood/iron materials enter the furnace while refinement seals stay external', () => {
   assert.match(refinery,/new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
   assert.match(refinery,/filter\(\(m\) => !raidKeyIds\.has\(m\.id\)/);
-  assert.match(refinery,/二階升級石/);
-  assert.match(refinery,/三階升級石/);
+  assert.match(read('public/cultivation/material-catalog.js'),/二階升級石/);
+  assert.match(read('public/cultivation/material-catalog.js'),/三階升級石/);
 });
 
 test('admin material catalog is fixed to ten entries while artifact recipe editor remains available', () => {

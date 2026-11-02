@@ -20,7 +20,7 @@ test('forge methods create distinct discovery signatures and are sent to artifac
   assert.match(jobs, /\|method:' \+ forgeMethod/);
   assert.match(jobs, /forgeMethod: job\.forgeMethod \|\| '自由發揮'/);
   assert.match(refinery, /data-refinery-forge-method/);
-  assert.match(refinery, /同樣的材料可以用不同手法探索新配方/);
+  assert.match(refinery, /預設使用「自由發揮」，需要時再調整/);
 });
 
 test('deep artifact form wins over a newly selected forge method', () => {

@@ -133,8 +133,8 @@ test('orphan artifact recipes are repaired as a cascade without weakening strict
 test('player refinery accepts artifact tokens and never consumes equipped copies', () => {
   assert.match(refinery, /artifact:\$\{a\.id\}/);
   assert.match(refinery, /data-refinery-ingredient/);
-  assert.match(refinery, /持有煉器素材 · 一般素材/);
-  assert.match(refinery, /> 二次煉製<\/span>/);
+  assert.match(refinery, /加入材料/);
+  assert.match(refinery, /選本命法器/);
   assert.match(refinery, /equippedArtifactCounts/);
   const aiJobs = read('public/cultivation/refinery-ai-jobs.js');
   assert.match(aiJobs, /have - reserved < need/);
@@ -178,8 +178,8 @@ test('refinery separates general materials and second-refinement artifacts into 
   assert.match(refinery, /data-refinery-material-roll-body="materials"/);
   assert.match(refinery, /data-refinery-material-roll-body="artifacts"/);
   assert.match(refinery, /\.refinery-material-roll-body\{[^}]*overflow:auto/);
-  assert.match(refinery, /持有煉器素材 · 一般素材/);
-  assert.match(refinery, /> 二次煉製<\/span>/);
+  assert.match(refinery, /加入材料/);
+  assert.match(refinery, /選本命法器/);
 });
 
 test('held-material divider equally divides normal and secondary forging shelves', () => {

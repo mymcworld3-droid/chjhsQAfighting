@@ -29,21 +29,22 @@ export function refineryShellMarkup() {
       `<button type="button" class="refinery-slot" data-refinery-slot="${index}" disabled aria-label="空陣位 ${direction}"><span class="idx">${index + 1}</span><span class="remove">×</span><span class="direction">${direction}</span><span><span class="icon">＋</span><span class="name"></span></span></button>`
     ).join('');
     return `
-      <section class="cultivation-refinery refinery-shell" aria-busy="true">
+      <section class="cultivation-refinery refinery-simple refinery-shell" aria-busy="true">
         <article class="refinery-panel refinery-material-panel">
           <div class="refinery-material-list">
-            <section class="refinery-material-roll">
-              <div class="refinery-group-title"><span><i class="fa-solid fa-gem"></i> 持有煉器素材 · 一般素材</span><span>載入中</span></div>
-              <div class="refinery-shell-material-grid refinery-material-roll-body">${materials}</div>
-            </section>
-            <section class="refinery-material-roll">
-              <div class="refinery-group-title"><span><i class="fa-solid fa-recycle"></i> 二次煉製</span><span>載入中</span></div>
+            <section class="refinery-material-roll" data-refinery-material-roll="artifacts">
+              <div class="refinery-group-title"><span><b class="refinery-step">1</b> 選本命法器</span><span>載入中</span></div>
               <div class="refinery-shell-material-grid refinery-material-roll-body">${artifacts}</div>
+            </section>
+            <section class="refinery-material-roll" data-refinery-material-roll="materials">
+              <div class="refinery-group-title"><span><b class="refinery-step">2</b> 加入材料</span><span>合計 2～8 件</span></div>
+              <div class="refinery-shell-material-grid refinery-material-roll-body">${materials}</div>
             </section>
           </div>
         </article>
         <article class="refinery-panel refinery-forge-panel">
-          <div class="refinery-head"><div><h3><i class="fa-solid fa-fire-burner"></i> 八方煉器陣</h3><p>八方歸位，陣心煉器；法陣已預先建立。</p></div><span class="refinery-badge">0/8</span></div>
+          <div class="refinery-head"><div><h3><b class="refinery-step">3</b> 本命法器精煉</h3><p>點選材料放入，點陣位取回。</p></div></div>
+          <div class="refinery-selection-tools refinery-shell-actions"><span class="refinery-badge">0/8 件</span><button type="button" class="refinery-clear" disabled>重新選擇</button></div>
           <div class="refinery-array-wrap">
             <div class="refinery-slots refinery-shell-array" aria-label="八方煉器陣">
               <span class="refinery-array-lines"></span>
@@ -52,16 +53,15 @@ export function refineryShellMarkup() {
               <div class="refinery-array-center">
                 <button type="button" class="refinery-craft" disabled>
                   <i class="fa-solid fa-fire-flame-curved"></i>
-                  <span class="craft-main">煉製</span>
-                  <span class="craft-sub">需 — 碎片</span>
+                  <span class="craft-main">開始精煉</span>
+                  <span class="craft-sub">待選材料</span>
                 </button>
               </div>
               <span class="refinery-array-caption">八方聚靈 · 一器成形</span>
             </div>
           </div>
-          <div class="refinery-shell-summary">投入：尚未投入材料</div>
-          <div class="refinery-shell-match">放入材料後，依材料數量自動辨識法寶配方。</div>
-          <div class="refinery-shell-actions"><button type="button" disabled><i class="fa-solid fa-rotate-left"></i> 清空陣位</button></div>
+          <div class="refinery-match refinery-shell-match">先選本命法器，再加入材料。</div>
+          <details class="refinery-advanced"><summary>更多設定與配方</summary><div class="refinery-advanced-body refinery-shell-summary">載入中</div></details>
         </article>
       </section>
     `;

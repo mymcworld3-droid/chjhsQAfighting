@@ -73,7 +73,7 @@ test('preload shell styling no longer describes the old four-column forge', () =
   assert.match(trainingCss, /\.refinery-shell-array \.refinery-slot/);
 });
 
-test('normal and secondary refinery shelves are equally tall on mobile and independently scrollable', () => {
+test('legacy refinery keeps bounded shelves; simplified view overrides the old fixed height', () => {
   // Both preload and runtime CSS need matching geometry, or mobile users see
   // a short lower panel before hydration or after an app rerender.
   for (const css of [index, refinery]) {
@@ -93,4 +93,7 @@ test('normal and secondary refinery shelves are equally tall on mobile and indep
   assert.doesNotMatch(content, /refinery-panel\.refinery-material-panel\{height:(?:424|294)px!important/);
   assert.doesNotMatch(content, /refinery-material-list\{max-height:294px!important/);
   assert.doesNotMatch(content, /refinery-material-list\{[^}]*max-height:min\(42dvh,360px\)!important/);
+  const simple=read('public/styles/refinery-simple.css');
+  assert.match(simple, /refinery-material-panel\s*\{[^}]*min-height: 0 !important;[^}]*height: auto !important;/);
+  assert.match(simple, /grid-template-rows: auto auto !important/);
 });

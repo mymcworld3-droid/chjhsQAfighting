@@ -412,16 +412,16 @@ test('same discovered recipe is reused instead of generating duplicate permanent
   assert.match(aiJobs, /if \(!awardedId\) \{/);
 });
 
-test('refinery button flow is 煉製 -> 煉製中 -> 開爐 and claim only after ready time', () => {
+test('refinery button flow is 開始精煉 -> 精煉中 -> 開爐 and claim only after ready time', () => {
   assert.match(refinery, /data-refinery-job-clock/);
   assert.match(refinery, /job\.fragmentCost : job\.goldCost/);
-  assert.match(refinery, /法寶境界/);
+  assert.match(refinery, /job\.targetRealm/);
   assert.match(refinery, /Date\.now\(\) >= Number\(job\.readyAtMs/);
-  assert.match(refinery, /const craftLabel = legacyJob \? '退還舊煉製' : job \? \(jobReady \? '開爐取寶' : '煉製中'\) : '開始煉製'/);
-  assert.match(refinery, /ready \? '開爐取寶' : '煉製中'/);
+  assert.match(refinery, /const craftLabel = legacyJob \? '退還舊煉製' : job \? \(jobReady \? '開爐取寶' : '精煉中'\) : '開始精煉'/);
+  assert.match(refinery, /ready \? '開爐取寶' : '精煉中'/);
   assert.match(refinery, /可開爐/);
   assert.match(refinery, /setInterval\(updateJobClock, 1000\)/);
-  assert.match(refinery, /煉製完成後按「開爐」取出法寶/);
+  assert.match(refinery, /精煉完成，請開爐領取/);
 });
 
 test('player-facing refinery never reveals that unknown recipes are AI-generated', () => {
@@ -430,8 +430,8 @@ test('player-facing refinery never reveals that unknown recipes are AI-generated
   assert.doesNotMatch(refinery, /AI[・ ]?(?:生成|法寶|煉器|推演)/);
   assert.doesNotMatch(refinery, /人工智慧/);
   assert.doesNotMatch(aiJobs, /AI 法寶生成失敗/);
-  assert.match(refinery, /未知配方煉製/);
-  assert.match(refinery, /煉製完成後按「開爐」即可取得新法寶/);
+  assert.match(refinery, /本命法器精煉/);
+  assert.match(refinery, /精煉完成，請開爐領取/);
 });
 
 test('admin keeps newest pending AI artifacts above approved realm-sorted artifacts and supports approval', () => {

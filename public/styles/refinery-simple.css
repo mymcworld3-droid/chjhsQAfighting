@@ -1,0 +1,165 @@
+/* Shared by the loading shell and the interactive refinery. */
+body.xianxia-theme #page-training .cultivation-refinery.refinery-simple {
+  width: 100% !important;
+  max-width: 1080px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  grid-template-columns: minmax(220px, .95fr) minmax(300px, 1.05fr) !important;
+  align-items: start !important;
+  gap: 12px;
+}
+body.xianxia-theme #page-training .refinery-simple .refinery-panel {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 14px;
+  overflow: clip !important;
+}
+body.xianxia-theme #page-training .refinery-simple .refinery-panel.refinery-material-panel {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0;
+}
+body.xianxia-theme #page-training .refinery-simple .refinery-material-panel .refinery-material-list {
+  height: auto !important;
+  grid-template-rows: auto auto !important;
+}
+body.xianxia-theme #page-training .refinery-simple .refinery-material-roll {
+  height: auto !important;
+  grid-template-rows: auto minmax(0, auto);
+  padding: 12px;
+  gap: 9px;
+}
+.refinery-simple .refinery-group-title {
+  padding: 0;
+  background: none;
+  font-size: 13px;
+  color: #eddbb3;
+}
+.refinery-simple .refinery-group-title > span:first-child { display: flex; align-items: center; gap: 7px; }
+.refinery-simple .refinery-group-title > span:last-child { font-size: 10px; color: #aa9775; }
+.refinery-step {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 23px;
+  width: 23px;
+  height: 23px;
+  border: 1px solid #c39a4c66;
+  border-radius: 50%;
+  background: #d8b15d12;
+  color: #f0d597;
+  font-size: 11px;
+  font-weight: 700;
+}
+.refinery-simple .refinery-material-roll-body {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-height: 218px;
+  padding: 1px 2px 3px;
+  gap: 7px;
+  scrollbar-gutter: auto;
+}
+.refinery-simple [data-refinery-material-roll="artifacts"] .refinery-material-roll-body {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 166px;
+}
+.refinery-simple .refinery-material {
+  min-height: 105px;
+  aspect-ratio: auto;
+  padding: 17px 5px 7px;
+  gap: 5px;
+  border-radius: 11px;
+}
+.refinery-simple .refinery-material.refinery-artifact-ingredient {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  min-height: 68px;
+  padding: 10px 7px;
+  gap: 6px;
+}
+.refinery-simple .refinery-artifact-ingredient .refinery-mat-copy { align-items: flex-start; }
+.refinery-simple .refinery-artifact-ingredient .refinery-mat-icon { width: 36px; height: 36px; }
+.refinery-simple .refinery-artifact-ingredient .refinery-mat-qty { font-size: 9px; }
+.refinery-simple .refinery-material.is-selected { border-color: #dcbe73; background-color: #9d773426; }
+.refinery-simple .refinery-material.is-selected .refinery-mat-copy small { color: #dfc484; }
+.refinery-simple .refinery-material:disabled { opacity: .55; }
+.refinery-simple .refinery-mat-icon { width: 38px; height: 38px; flex-basis: 38px; }
+.refinery-simple .refinery-mat-icon img,
+.refinery-simple .refinery-slot .icon img { object-fit: contain; }
+.refinery-simple .refinery-mat-copy strong { font-size: 11px; }
+.refinery-simple .refinery-mat-copy small { font-size: 10px; }
+.refinery-simple .refinery-mat-copy strong,
+.refinery-simple .refinery-mat-copy small { line-height: 1.4; }
+.refinery-simple .refinery-mat-copy .material-realm-badge { display: none !important; }
+.refinery-simple .refinery-mat-qty { font-size: 10px; top: 4px; right: 5px; padding: 1px 4px; }
+.refinery-simple .refinery-empty { padding: 18px 10px; font-size: 12px; }
+.refinery-simple .refinery-material-roll-body.is-empty { justify-content: flex-start; }
+.refinery-simple .refinery-shelf-hint { margin: 0; color: #aa9775; font-size: 11px; line-height: 1.6; }
+.refinery-shelf-hint button { color: #efd08a; text-decoration: underline; padding: 5px; }
+.refinery-simple .refinery-head { align-items: center; gap: 8px; margin-bottom: 4px; }
+.refinery-simple .refinery-head h3 { display: flex; align-items: center; gap: 7px; font-size: 14px; }
+.refinery-simple .refinery-head p { color: #aa9775; font-size: 11px; }
+.refinery-simple .refinery-fragment-balance { min-height: 32px; padding: 4px 7px; gap: 5px; }
+.refinery-simple .refinery-fragment-balance span { font-size: 10px; }
+.refinery-simple .refinery-fragment-balance b { font-size: 12px; }
+.refinery-selection-tools { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.refinery-simple .refinery-badge { font-size: 11px; }
+.refinery-simple .refinery-clear { font-size: 11px; min-height: 36px; }
+.refinery-simple .refinery-array-wrap { padding: 4px 0 9px; }
+body.xianxia-theme #page-training .refinery-simple .refinery-slots {
+  --array-size: 320px;
+  --slot-size: clamp(46px, 17%, 57px);
+  width: min(100%, var(--array-size));
+  flex: 0 1 320px;
+}
+.refinery-simple .refinery-slot { padding: 4px; border-radius: 13px; }
+.refinery-simple .refinery-slot > span:last-child { display: flex; flex-direction: column; align-items: center; }
+.refinery-simple .refinery-slot .idx,
+.refinery-simple .refinery-slot .direction { display: none; }
+.refinery-simple .refinery-slot .icon { width: 30px; height: 30px; display: grid; place-items: center; }
+.refinery-simple .refinery-slot .name { max-width: 48px; margin-top: 2px; font-size: 8px; }
+.refinery-simple .refinery-slot .remove { font-size: 11px; top: 0; right: 4px; }
+.refinery-simple .refinery-array-center { width: 38%; }
+.refinery-simple .refinery-craft { width: 90%; gap: 4px; }
+.refinery-simple .refinery-craft .craft-main { font-size: 14px; letter-spacing: 0; }
+.refinery-simple .refinery-craft .craft-sub { font-size: 10px; }
+.refinery-simple .refinery-craft i { font-size: 19px; }
+.refinery-simple .refinery-array-caption { font-size: 8px; letter-spacing: .1em; }
+.refinery-simple .refinery-match { padding: 9px 11px; margin-top: 0; font-size: 12px; line-height: 1.6; }
+.refinery-simple .refinery-key-copy small { font-size: 10px; letter-spacing: 0; }
+.refinery-simple .refinery-key-copy strong { font-size: 12px; }
+.refinery-simple .refinery-key-copy em { font-size: 11px; }
+.refinery-simple .refinery-job-box { margin-bottom: 8px; padding: 10px; }
+.refinery-simple .refinery-job-grid { grid-template-columns: 1fr 1fr; margin: 0; }
+.refinery-simple .refinery-job-stat { font-size: 11px; }
+.refinery-simple .refinery-job-stat:last-child { grid-column: auto; }
+.refinery-simple .refinery-job-stat b { font-size: 12px; }
+.refinery-advanced { position: relative; z-index: 2; margin-top: 12px; border-top: 1px solid #d8b15d26; }
+.refinery-advanced > summary { display: flex; align-items: center; justify-content: space-between; min-height: 42px; color: #b7a384; font-size: 12px; cursor: pointer; list-style: none; }
+.refinery-advanced > summary::-webkit-details-marker { display: none; }
+.refinery-advanced > summary i { font-size: 10px; transition: transform .2s; }
+.refinery-advanced[open] > summary i { transform: rotate(180deg); }
+.refinery-advanced:not([open]) > .refinery-advanced-body { display: none !important; }
+.refinery-advanced-body { display: grid; gap: 10px; }
+.refinery-simple .refinery-summary,
+.refinery-simple .refinery-forge-method,
+.refinery-simple .refinery-forge-method small,
+.refinery-simple .refinery-note { font-size: 11px; line-height: 1.7; }
+.refinery-simple .refinery-note { margin: 0; color: #aa9775; }
+.refinery-simple .refinery-forge-method { margin: 0; }
+.refinery-simple .refinery-recipe-book { margin-top: 0; }
+.refinery-simple .refinery-dismantle { min-height: 38px; font-size: 12px; }
+body.xianxia-theme #page-training .cultivation-refinery.refinery-simple.is-job-active { grid-template-columns: minmax(0, 1fr) !important; max-width: 620px !important; }
+body.xianxia-theme #page-training .refinery-simple.is-job-active .refinery-material-panel { display: none !important; }
+@media (max-width: 760px) {
+  body.xianxia-theme #page-training .cultivation-refinery.refinery-simple { grid-template-columns: minmax(0, 1fr) !important; }
+}
+@media (max-width: 430px) {
+  body.xianxia-theme #page-training .refinery-simple .refinery-panel { padding: 11px; }
+  .refinery-simple .refinery-material-roll { padding: 10px; }
+  .refinery-simple .refinery-material-list { gap: 0; }
+  .refinery-simple .refinery-material { min-height: 98px; }
+  .refinery-simple .refinery-mat-copy strong { font-size: 10px; }
+  .refinery-simple .refinery-head h3 { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .refinery-simple .refinery-array-center:after { animation: none; }
+}

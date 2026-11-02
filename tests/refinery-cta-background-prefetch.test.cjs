@@ -9,15 +9,13 @@ const jobs=fs.readFileSync('public/cultivation/refinery-ai-jobs.js','utf8');
 const scene=fs.readFileSync('public/cultivation/training-scene-map.js','utf8');
 const css=fs.readFileSync('public/styles/training-scene-map.css','utf8');
 
-test('forge gives a clear, synchronized second claim CTA and glowing center',()=>{
-  assert.match(ui,/data-refinery-action-banner/);
-  assert.match(ui,/data-refinery-banner-title/);
-  assert.match(ui,/法寶已成 · 立即開爐！/);
-  assert.match(ui,/data-refinery-ready-pip/);
-  assert.match(ui,/\.refinery-action-banner\.is-claimable/);
+test('forge keeps one primary action and synchronizes its ready state',()=>{
+  assert.doesNotMatch(ui,/data-refinery-action-banner/);
+  assert.match(ui,/data-refinery-craft/);
+  assert.match(ui,/精煉完成，請開爐領取/);
   assert.match(ui,/\.refinery-craft\.job-ready:not\(:disabled\)/);
-  assert.match(ui,/querySelector\('\[data-refinery-action-banner\]'\)\?\.addEventListener\('click', craft\)/);
-  assert.match(ui,/banner\.disabled = !ready/);
+  assert.match(ui,/querySelector\('\[data-refinery-craft\]'\)\?\.addEventListener\('click', craft\)/);
+  assert.match(ui,/button\.disabled = !ready/);
   assert.match(ui,/prefers-reduced-motion/);
   assert.match(ui,/屬性由系統固定上下限管理/);
 });
