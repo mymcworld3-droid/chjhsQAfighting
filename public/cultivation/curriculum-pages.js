@@ -93,7 +93,12 @@
     refresh();
   };
   // 舊版教學仍可指定焦點，所有欄位維持在同一頁。
-  window.openCurriculumPage = page => { if (mount()) $(page === 0 ? 'cs-grade' : page === 1 ? 'cs-subject' : 'cs-search')?.focus(); };
+  window.openCurriculumPage = page => {
+    if (!mount()) return;
+    const field = $(page === 0 ? 'cs-grade' : page === 1 ? 'cs-subject' : 'cs-search');
+    const trigger = field?.nextElementSibling;
+    (trigger?.classList.contains('app-select-trigger') ? trigger : field)?.focus();
+  };
   window.addEventListener('curriculum:options-ready', () => { mount(); refresh(); });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once:true });
   else mount();
