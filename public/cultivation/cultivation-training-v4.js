@@ -388,25 +388,28 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     return `
       <section class="core-minimal-card">
         <div class="core-minimal-center">
-          ${coreVisualMarkup(core, true)}
-          <h3 class="core-minimal-name">${type.name}</h3>
-          <div class="core-minimal-grade">${clampGrade(core.grade)} 品</div>
-
-          <p class="core-gold-balance" aria-live="polite">${globalThis.QAItemIcons?.markup('gold',{size:22})||''}現有靈石：<strong>${Growth.count(window.getCurrentUserData?.()?.stats?.gold).toLocaleString("zh-TW")}</strong></p>
-          <p class="ns-progress-caption" aria-live="polite">再洗髓 ${Pity.remaining(window.getCurrentUserData?.()?.[WASH_FIELD]?.count)} 次，必得三品以上金丹</p>
-          <div class="core-wash-row">
-            <button id="wash-golden-core" type="button" class="core-wash-btn" ${busy ? 'disabled' : ''}>
-              <i class="fa-solid fa-rotate"></i>
-              <span>${busy ? '洗髓中…' : '洗髓（100 靈石）'}</span>
-            </button>
-            <button id="core-odds-info" type="button" class="core-info-btn" aria-label="查看品質機率">
-              <i class="fa-solid fa-exclamation"></i>
+          <div class="core-art-chamber">
+            ${coreVisualMarkup(core, true)}
+            <span class="core-art-hint">輕觸金丹，查看完整丹性</span>
+          </div>
+          <div class="core-cultivation-panel">
+            <span class="training-panel-eyebrow">${state.equipped ? '目前丹相' : '待調御丹相'}</span>
+            <div class="core-identity"><h3 class="core-minimal-name">${type.name}</h3><span class="core-minimal-grade">${clampGrade(core.grade)} 品</span></div>
+            <p class="core-trait-summary">${type.ability}</p>
+            <div class="core-resource-ledger">
+              <p class="core-gold-balance" aria-live="polite"><span>${globalThis.QAItemIcons?.markup('gold',{size:22})||''}持有靈石</span><strong>${Growth.count(window.getCurrentUserData?.()?.stats?.gold).toLocaleString("zh-TW")}</strong></p>
+              <p class="ns-progress-caption" aria-live="polite">再洗髓 ${Pity.remaining(window.getCurrentUserData?.()?.[WASH_FIELD]?.count)} 次，必得三品以上金丹</p>
+            </div>
+            <div class="core-wash-row">
+              <button id="wash-golden-core" type="button" class="core-wash-btn" ${busy ? 'disabled' : ''}>
+                <i class="fa-solid fa-rotate"></i><span>${busy ? '洗髓中…' : '洗髓（100 靈石）'}</span>
+              </button>
+              <button id="core-odds-info" type="button" class="core-info-btn" aria-label="查看品質機率"><i class="fa-solid fa-info"></i></button>
+            </div>
+            <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
+              ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
             </button>
           </div>
-
-          <button id="equip-current-core" type="button" class="core-equip-btn ${state.equipped ? 'equipped' : ''}" ${state.equipped || busy ? 'disabled' : ''}>
-            ${state.equipped ? '<i class="fa-solid fa-circle-check"></i> 已調御此丹相' : '<i class="fa-solid fa-circle-dot"></i> 調御此丹相'}
-          </button>
         </div>
       </section>
     `;
@@ -441,6 +444,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       <svg class="ns-orb-ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="ns-orb-track" cx="50" cy="50" r="45"/>
         <circle class="ns-orb-progress" cx="50" cy="50" r="45" pathLength="100" stroke-dasharray="${level * 10} 100"/></svg>
       <span class="ns-orb-surface" aria-hidden="true"><i class="fa-solid ${icon}"></i></span>
+      <span class="ns-node-caption" aria-hidden="true"><strong>${innate ? name.replace('化神・','').replace('選擇元神分支','元神分支') : name}</strong><small>${level} 階${canUpgrade ? ' · 可升級' : ''}</small></span>
     </button>`;
   }
 
@@ -532,7 +536,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
   function nascentSoulTabMarkup() {
     if (!nascentUnlocked()) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
-    const getFragmentsButton = '<button type="button" class="ns-get-fragments-btn" data-ns-get-fragments><i class="fa-solid fa-gem" aria-hidden="true"></i><span>去獲取元嬰碎精</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>';
+    const getFragmentsButton = '<button type="button" class="ns-get-fragments-btn" data-ns-get-fragments aria-label="前往秘境獲取元嬰碎精"><i class="fa-solid fa-gem" aria-hidden="true"></i><span>獲取碎精</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>';
     if (!state.equippedCore) return `<section class="ns-panel"><h3>尚未調御金丹</h3><p>請先在金丹頁調御丹相，再溫養元嬰。</p>${getFragmentsButton}</section>`;
     const player = window.getCurrentUserData?.() || {};
     const prepared = Growth.prepare(player);

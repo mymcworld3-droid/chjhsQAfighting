@@ -1,0 +1,325 @@
+/* Cultivation detail pages share one visual language. The illustrated map is excluded. */
+html body.ui-cleanup #page-training:not(.training-scene-map-active) {
+  --training-paper:#eee6d4;
+  --training-muted:#afa68f;
+  --training-line:#bca77a38;
+  --training-gold:#ddc58c;
+  --training-jade:#97b5a3;
+  --training-surface:#1a211b;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  padding:0 clamp(12px,2vw,28px) 24px!important;
+  overflow:visible!important;align-content:start!important;
+  grid-template-rows:auto auto auto!important;
+}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-page-heading-v3 {display:none!important}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtabs-v3 {
+  display:flex!important;flex-wrap:nowrap!important;gap:4px!important;align-items:center;
+  padding:5px!important;margin:0 0 8px!important;min-width:0;
+  border:1px solid var(--training-line)!important;border-radius:13px!important;
+  background:#141a15!important;box-shadow:none!important;
+}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtab-v3 {
+  flex:1 1 0!important;width:auto!important;min-width:0!important;height:44px!important;min-height:44px!important;
+  padding:0 12px!important;gap:7px;border:0!important;border-radius:8px!important;
+  background:transparent!important;color:#a9a58f!important;box-shadow:none!important;font-size:12px;font-weight:500!important;
+}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtab-v3.active {color:#f1e2ba!important;background:#304032!important}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtab-v3:disabled {opacity:.4}
+html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-scene-detailbar {
+  display:flex;align-items:center;min-height:47px;padding:0 2px 11px;margin:0 0 13px;
+  border:0;border-bottom:1px solid var(--training-line);background:transparent;box-shadow:none;
+}
+html body.ui-cleanup #page-training .training-scene-detailbar strong {color:var(--training-paper);font-size:20px;letter-spacing:.1em;font-weight:500}
+html body.ui-cleanup #page-training .training-scene-back {display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:6px 11px;border:1px solid var(--training-line);border-radius:9px;background:#ffffff03;color:var(--training-muted);font-size:12px}
+html body.ui-cleanup #page-training #training-tab-content {min-width:0;min-height:0!important;height:auto!important;max-height:none!important;padding:0!important;overflow:visible!important;border:0!important;background:transparent!important;box-shadow:none!important}
+html body.ui-cleanup #page-training #training-tab-content :is(.core-minimal-card,.ns-panel,.refinery-panel,.uib-equipment-panel,.uib-toolbar,.status-section) {
+  border:1px solid var(--training-line)!important;border-radius:17px!important;
+  background:linear-gradient(145deg,#20281f,#171d18)!important;box-shadow:inset 0 1px #f5e5be05!important;
+}
+html body.ui-cleanup #page-training .training-panel-eyebrow {color:var(--training-jade);font-size:11px;letter-spacing:.14em}
+/* Golden core: the painted core and its controls form a single compact dossier. */
+html body.ui-cleanup #page-training #training-tab-content .core-minimal-card {height:auto!important;min-height:0!important;max-height:none!important;padding:clamp(18px,3vw,32px)!important;background:radial-gradient(ellipse at 22% 40%,#c5ad6510,transparent 56%),linear-gradient(135deg,#20281f,#171d18)!important}
+html body.ui-cleanup #page-training #training-tab-content .core-minimal-center {display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto!important;height:auto!important;max-height:none!important;align-content:center!important;align-items:center;justify-items:stretch!important;gap:clamp(18px,5vw,68px)!important;width:100%!important;max-width:1000px!important;min-height:320px!important;margin:auto;padding:0!important;text-align:left}
+html body.ui-cleanup #page-training .core-art-chamber {display:grid;justify-items:center;align-content:center;gap:10px;min-width:0;padding:10px 0}
+html body.ui-cleanup #page-training .core-art-chamber .golden-core-stage-v3 {width:270px!important;height:270px!important;max-width:100%!important;max-height:270px!important;min-width:0!important;min-height:0!important;margin:0!important}
+html body.ui-cleanup #page-training .core-art-chamber .golden-core-sphere-v3 {width:74%!important;height:74%!important}
+html body.ui-cleanup #page-training .core-art-hint {color:#a6a68d;font-size:11px;letter-spacing:.03em}
+html body.ui-cleanup #page-training .core-cultivation-panel {display:grid;align-content:center;gap:15px;min-width:0;width:100%}
+html body.ui-cleanup #page-training .core-identity {display:flex;align-items:center;gap:12px;min-width:0}
+html body.ui-cleanup #page-training .core-minimal-name {margin:0;color:var(--training-paper);font-size:28px;line-height:1.5;font-weight:500;letter-spacing:.06em}
+html body.ui-cleanup #page-training .core-minimal-grade {flex-shrink:0;margin:0;padding:3px 9px;border:1px solid #c8b17155;border-radius:6px;background:#c6a65a0b;color:var(--training-gold);font-size:12px;font-weight:500}
+html body.ui-cleanup #page-training .core-trait-summary {margin:0;color:#bdc0ad;font-size:13px;line-height:1.85}
+html body.ui-cleanup #page-training .core-resource-ledger {display:grid;gap:8px;padding:15px 0;border-block:1px solid var(--training-line)}
+html body.ui-cleanup #page-training .core-gold-balance {display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0;color:var(--training-muted);font-size:12px}
+html body.ui-cleanup #page-training .core-gold-balance>span {display:inline-flex;align-items:center;gap:6px}
+html body.ui-cleanup #page-training .core-gold-balance strong {font-size:25px;font-weight:500;color:var(--training-gold);font-variant-numeric:tabular-nums}
+html body.ui-cleanup #page-training .core-resource-ledger .ns-progress-caption {margin:0;color:#b1ae97;font-size:11px;line-height:1.7;text-align:left}
+html body.ui-cleanup #page-training .core-wash-row {display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:9px;width:100%;margin:0}
+html body.ui-cleanup #page-training :is(.core-wash-btn,.core-info-btn,.core-equip-btn) {min-height:44px!important;height:auto!important;margin:0;border-radius:9px!important;font-size:13px!important;font-weight:500!important;box-shadow:none!important}
+html body.ui-cleanup #page-training .core-wash-btn {border:1px solid #d7be81!important;background:#d4bd83!important;color:#28291c!important}
+html body.ui-cleanup #page-training .core-info-btn {width:44px;border:1px solid var(--training-line);background:#ffffff03;color:var(--training-muted)}
+html body.ui-cleanup #page-training .core-equip-btn {width:100%;border:1px solid #9cb49b55;background:#94b09412;color:#cadbc7}
+html body.ui-cleanup #page-training #training-tab-content .core-equip-btn.equipped {min-height:26px!important;padding:2px 6px;border:0;background:transparent;color:#a6baa3;font-size:11px!important;opacity:1}
+/* Soul branches: readable labels, a quiet jade canvas and one resource toolbar. */
+html body.ui-cleanup #page-training #training-tab-content .ns-growth-panel {display:grid!important;gap:14px;height:auto!important;min-height:0!important;max-height:none!important;padding:18px!important}
+html body.ui-cleanup #page-training .ns-growth-toolbar {display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 0 13px;border-bottom:1px solid var(--training-line);background:none}
+html body.ui-cleanup #page-training .ns-growth-resource {display:inline-flex;align-items:center;gap:6px;color:var(--training-muted);font-size:12px;white-space:nowrap}
+html body.ui-cleanup #page-training .ns-growth-resource strong {margin:0 0 0 4px;color:var(--training-gold);font-size:24px;font-weight:500}
+html body.ui-cleanup #page-training .ns-growth-actions {gap:7px}
+html body.ui-cleanup #page-training :is(.ns-get-fragments-btn,.ns-reset-btn) {min-height:40px!important;padding:8px 10px;border:1px solid var(--training-line)!important;border-radius:8px!important;background:#ffffff03!important;color:#c7c9b5!important;box-shadow:none!important;font-size:12px!important}
+html body.ui-cleanup #page-training #training-tab-content .ns-growth-workspace {height:clamp(320px,46vh,420px)!important;min-height:0!important}
+html body.ui-cleanup #page-training #training-tab-content .ns-growth-map {height:calc(100% - 34px);min-height:0;border-radius:12px;background:radial-gradient(circle at 50% 50%,#aaa15e0a 0,transparent 50%)}
+html body.ui-cleanup #page-training .ns-growth-map::before {content:'';position:absolute;inset:13% 20%;border:1px solid #bfae7220;border-radius:50%;pointer-events:none}
+html body.ui-cleanup #page-training .ns-growth-link {stroke:#b7ac72;opacity:.3}
+html body.ui-cleanup #page-training .ns-growth-node {width:62px;min-height:0;overflow:visible}
+html body.ui-cleanup #page-training .ns-orb-surface {background:radial-gradient(circle at 35% 25%,#4a5940,#202d23 80%);border-color:#b5b78950;box-shadow:inset 0 2px 8px #d8dfbc0b,0 4px 13px #0003}
+html body.ui-cleanup #page-training .ns-growth-node.is-innate .ns-orb-surface {background:radial-gradient(circle at 35% 25%,#5e5950,#292b28 80%)}
+html body.ui-cleanup #page-training .ns-node-caption {position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);display:grid;gap:3px;width:110px;pointer-events:none;text-align:center;line-height:1.4}
+html body.ui-cleanup #page-training .ns-node-caption strong {color:#e4dfc9;font-size:12px;font-weight:500}
+html body.ui-cleanup #page-training .ns-node-caption small {color:#a4b49a;font-size:10px}
+html body.ui-cleanup #page-training .ns-growth-node.is-innate .ns-node-caption small {color:#c5b69d}
+html body.ui-cleanup #page-training .ns-growth-core-caption strong {font-size:13px;font-weight:500}
+html body.ui-cleanup #page-training .ns-growth-core-caption span {font-size:10px}
+html body.ui-cleanup :is(#page-training .ns-orb-detail,.ns-orb-detail[data-ns-portrait-sheet]) {padding:30px 18px 18px;border:1px solid #a59d7066;border-radius:15px;background:#20281f;box-shadow:0 16px 50px #0005;color:#eee5d0}
+html body.ui-cleanup .ns-orb-detail :is(.ns-detail-icon,.ia-eyebrow) {display:none}
+html body.ui-cleanup .ns-orb-detail h3 {font-weight:500}
+html body.ui-cleanup #page-training .ia-branch {padding:18px;border:1px solid #b5ac7640;border-radius:13px;background:#162019;box-shadow:none}
+html body.ui-cleanup #page-training .ia-branch h4 {font-size:18px;font-weight:500;color:var(--training-paper)}
+html body.ui-cleanup #page-training .ia-branch p {font-size:12px;line-height:1.8;color:#c4c5b0}
+html body.ui-cleanup #page-training .ia-branch button {min-height:44px;border-radius:9px;font-size:12px;box-shadow:none}
+/* Backpack: equipped weapon as a compact row; items use the same square tiles. */
+html body.ui-cleanup #page-training .uib-root {display:grid;gap:14px}
+html body.ui-cleanup #page-training .uib-equipment-panel {padding:14px}
+html body.ui-cleanup #page-training .uib-equipment-head {margin:0 0 10px;color:var(--training-muted);font-size:12px}
+html body.ui-cleanup #page-training .uib-equipment-head em {font-size:10px}
+html body.ui-cleanup #page-training .uib-equipment-grid {grid-template-columns:minmax(0,1fr)!important}
+html body.ui-cleanup #page-training .uib-equip-slot {display:grid!important;grid-template-columns:64px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;gap:3px 14px;min-height:78px!important;padding:9px 12px!important;text-align:left;box-shadow:none!important;background:#0f171333!important;border:1px solid #b3aa7550!important;border-radius:11px!important}
+html body.ui-cleanup #page-training .uib-equip-slot :is(.uib-soulbound-crest,.uib-soulbound-caption,.uib-equip-slot-label),
+html body.ui-cleanup #page-training .uib-equip-slot::before,html body.ui-cleanup #page-training .uib-equip-slot::after {display:none!important}
+html body.ui-cleanup #page-training .uib-equip-slot-frame {grid-column:1;grid-row:1/3;width:56px!important;min-height:56px!important;height:56px!important;margin:0;justify-self:center}
+html body.ui-cleanup #page-training .uib-equip-slot-name {grid-column:2;align-self:end;margin:0;font-size:15px;font-weight:500;color:var(--training-paper)}
+html body.ui-cleanup #page-training .uib-equip-slot-hint {grid-column:2;align-self:start;font-size:11px;color:var(--training-muted)}
+html body.ui-cleanup #page-training .uib-toolbar {display:flex!important;align-items:center;flex-wrap:wrap;gap:10px;margin:0;padding:13px!important}
+html body.ui-cleanup #page-training .uib-summary {flex:1 1 110px;width:auto!important;margin:0;gap:3px}
+html body.ui-cleanup #page-training .uib-summary b {font-size:13px;font-weight:500;color:var(--training-paper)}
+html body.ui-cleanup #page-training .uib-summary span {font-size:10px;color:var(--training-muted)}
+html body.ui-cleanup #page-training .uib-fragment-balance {padding:7px;border:0;background:none;box-shadow:none;color:var(--training-gold);font-size:11px}
+html body.ui-cleanup #page-training .uib-fragment-balance span {font-size:10px}
+html body.ui-cleanup #page-training .uib-dismantle-btn {min-height:40px;padding:7px 10px;border:1px solid var(--training-line);border-radius:8px;font-size:11px;background:transparent}
+html body.ui-cleanup #page-training .uib-toolbar label {display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:6px;min-width:0;color:var(--training-muted);font-size:11px}
+html body.ui-cleanup #page-training .uib-toolbar :is(select,.app-select-trigger) {width:100%;min-width:0;min-height:40px!important;font-size:11px!important;border-radius:8px}
+html body.ui-cleanup #page-training .uib-grid {grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important;gap:11px!important;align-content:start}
+html body.ui-cleanup #page-training .uib-item {max-width:none!important;width:100%;min-height:146px;padding:12px 9px!important;border:1px solid color-mix(in srgb,var(--uib-quality,#c4aa73) 24%,#66715b18)!important;border-radius:12px!important;background:#1c251d!important;box-shadow:none!important}
+html body.ui-cleanup #page-training .uib-item.is-soulbound {background:#282d1d!important;border-color:#c4ae6a70!important}
+html body.ui-cleanup #page-training .uib-item::before,html body.ui-cleanup #page-training .uib-item::after {display:none!important}
+html body.ui-cleanup #page-training .uib-icon {width:56px!important;height:56px!important;min-height:56px;font-size:24px;box-shadow:none!important}
+html body.ui-cleanup #page-training .uib-name {min-height:34px;font-size:12px!important;font-weight:500!important;line-height:1.45;color:#e9e2cd;white-space:normal}
+html body.ui-cleanup #page-training .uib-bottom :is(small,em) {font-size:9px}
+html body.ui-cleanup #page-training .uib-qty {top:6px;right:7px;padding:2px 5px;border-radius:5px;background:#101911d9;color:#d9d6bb;font-size:10px}
+/* Refinery: keep the three-step flow, foldouts and the existing eight-place array. */
+html body.ui-cleanup #page-training #training-tab-content .cultivation-refinery.refinery-simple {width:100%!important;max-width:none!important;min-height:0!important;padding-bottom:0!important;gap:16px!important}
+html body.ui-cleanup #page-training #training-tab-content .refinery-simple .refinery-panel {padding:18px!important;min-height:0!important;height:auto!important}
+html body.ui-cleanup #page-training #training-tab-content .refinery-simple .refinery-material-panel {padding:0!important;overflow:clip!important}
+html body.ui-cleanup #page-training .refinery-picker {border-color:var(--training-line);background:transparent}
+html body.ui-cleanup #page-training .refinery-picker>summary {min-height:54px;padding:13px 15px;color:#dedbc4}
+html body.ui-cleanup #page-training .refinery-step {width:22px;height:22px;border-radius:6px;border-color:#a8ac7e66;background:#a6b08b10;color:#cdd4b9}
+html body.ui-cleanup #page-training .refinery-head h3 {font-size:16px;font-weight:500;color:var(--training-paper)}
+html body.ui-cleanup #page-training .refinery-head p {font-size:11px;color:var(--training-muted)}
+html body.ui-cleanup #page-training .refinery-fragment-balance {padding:6px 8px;border:1px solid var(--training-line);border-radius:8px;background:none;box-shadow:none;color:var(--training-gold);font-size:12px}
+html body.ui-cleanup #page-training .refinery-material {border-radius:10px!important;border-color:#bca77a30!important;background:#152018!important;box-shadow:none!important}
+html body.ui-cleanup #page-training .refinery-mat-copy strong {font-size:12px;font-weight:500}
+html body.ui-cleanup #page-training .refinery-mat-copy small {font-size:10px}
+html body.ui-cleanup #page-training .refinery-slot {border-radius:10px!important;background:#172219!important;border-color:#a3b18b55!important;box-shadow:none!important}
+html body.ui-cleanup #page-training .refinery-summary {background:none!important;border:0!important;padding:4px 0!important;font-size:11px}
+html body.ui-cleanup #page-training .refinery-match {padding:11px 12px;border:1px solid var(--training-line)!important;border-radius:10px;background:#111a1433!important;color:#c1c6ae;font-size:12px;line-height:1.65;box-shadow:none!important}
+html body.ui-cleanup #page-training .refinery-simple [data-refinery-craft] {min-height:48px!important;border-radius:10px!important;box-shadow:none!important;background:#cfb77e!important;border-color:#cfb77e!important;color:#29291b!important}
+html body.ui-cleanup #page-training .refinery-simple [data-refinery-craft]:disabled {background:#b7ae8233!important;border-color:#b7ae8240!important;color:#aaa88e!important;opacity:1}
+html body.ui-cleanup #page-training .refinery-advanced {margin-top:8px;border:0;border-top:1px solid var(--training-line);border-radius:0;background:none}
+html body.ui-cleanup #page-training .refinery-advanced>summary {padding:12px 2px;color:var(--training-muted);font-size:11px}
+/* Contract: a short ledger, a visible weapon gallery and two clear draw rows. */
+html body.ui-cleanup #page-training #soulbound-page {display:flex;flex-direction:column;height:auto!important;min-height:0;overflow:visible;background:transparent!important}
+html body.ui-cleanup #soulbound-page .sb-header {order:1;justify-content:flex-end;padding:0 0 6px;margin:8px 0 0;border:0;min-height:32px}
+html body.ui-cleanup #soulbound-page .sb-header>div {display:none}
+html body.ui-cleanup #soulbound-page #soulbound-refresh {min-height:32px;padding:5px 9px;border:1px solid var(--training-line);border-radius:7px;background:transparent;font-size:10px;color:var(--training-muted)}
+html body.ui-cleanup #soulbound-page .sb-scroll {overflow:visible;padding:0!important}
+html body.ui-cleanup #soulbound-page .sb-summary {grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0;margin:0;padding:12px 0;border-block:1px solid var(--training-line)}
+html body.ui-cleanup #soulbound-page .sb-summary>div {gap:4px;padding:0 15px;border:0;border-right:1px solid var(--training-line);border-radius:0;background:transparent;min-width:0;box-shadow:none}
+html body.ui-cleanup #soulbound-page .sb-summary>div:first-child {padding-left:0}
+html body.ui-cleanup #soulbound-page .sb-summary>div:last-child {border:0}
+html body.ui-cleanup #soulbound-page .sb-summary small {display:flex;align-items:center;gap:4px;color:var(--training-muted);font-size:11px}
+html body.ui-cleanup #soulbound-page .sb-summary strong {font-size:25px;font-weight:500;color:var(--training-gold)}
+html body.ui-cleanup #soulbound-page .sb-summary b {font-size:15px;font-weight:500;color:var(--training-paper);line-height:1.6}
+html body.ui-cleanup #soulbound-page .sb-summary span {font-size:10px;color:var(--training-muted)}
+html body.ui-cleanup #soulbound-page .sb-pity {display:grid;grid-template-columns:minmax(70px,.4fr) 1fr;align-items:center;gap:12px;margin:12px 0 17px}
+html body.ui-cleanup #soulbound-page .sb-pity span {font-size:11px;line-height:1.6;color:#beb99c}
+html body.ui-cleanup #soulbound-page progress {appearance:none;width:100%;height:5px;border:0;border-radius:4px;background:#c4c59e20;accent-color:#b9b27b}
+html body.ui-cleanup #soulbound-page progress::-webkit-progress-bar {background:#c4c59e20;border-radius:4px}
+html body.ui-cleanup #soulbound-page progress::-webkit-progress-value {background:#b9b27b;border-radius:4px}
+html body.ui-cleanup #soulbound-page progress::-moz-progress-bar {background:#b9b27b;border-radius:4px}
+html body.ui-cleanup #soulbound-page .sb-lobby {grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px;margin-bottom:16px}
+html body.ui-cleanup #soulbound-page :is(.sb-showcase,.sb-draw-controls,.sb-details) {border:1px solid var(--training-line);border-radius:16px;background:linear-gradient(145deg,#222b21,#171e18)!important;box-shadow:none!important}
+html body.ui-cleanup #soulbound-page .sb-showcase {padding:17px 14px}
+html body.ui-cleanup #soulbound-page .sb-showcase h3 {font-size:15px;font-weight:500;color:var(--training-paper)}
+html body.ui-cleanup #soulbound-page .sb-showcase-heading {padding:0 4px;gap:7px}
+html body.ui-cleanup #soulbound-page .sb-carousel-viewport {height:194px;min-height:0;padding:4px 0}
+html body.ui-cleanup #soulbound-page .sb-carousel-art {width:100%!important;height:140px!important;max-height:140px!important;aspect-ratio:auto}
+html body.ui-cleanup #soulbound-page .sb-carousel-art img {width:100%!important;height:140px!important;max-height:140px!important;object-fit:contain!important}
+html body.ui-cleanup #soulbound-page button.sb-carousel-card {min-height:0;padding:10px 3px}
+html body.ui-cleanup #soulbound-page .sb-carousel-card b {font-size:13px;font-weight:500;color:#ece3ca}
+html body.ui-cleanup #soulbound-page .sb-carousel-hint {font-size:10px;color:var(--training-muted)}
+html body.ui-cleanup #soulbound-page .sb-draw-controls {padding:22px;text-align:left}
+html body.ui-cleanup #soulbound-page .sb-draw-controls h3 {margin:0 0 8px;font-size:23px;font-weight:500;color:var(--training-paper)}
+html body.ui-cleanup #soulbound-page .sb-draw-controls p {margin:6px 0;font-size:12px;line-height:1.8;color:#bcb9a0}
+html body.ui-cleanup #soulbound-page .sb-actions {gap:8px;margin:10px 0}
+html body.ui-cleanup #soulbound-page .sb-actions button {min-height:44px;padding:8px;border:1px solid #d4bc7955;border-radius:9px;font-size:12px;font-weight:500;box-shadow:none!important}
+html body.ui-cleanup #soulbound-page .sb-primary {background:#d4bd83!important;color:#28291c!important;border-color:#d4bd83!important}
+html body.ui-cleanup #soulbound-page .sb-details {margin-top:10px;padding:12px 15px;background:#1c231b!important;font-size:12px}
+/* Status: power and the active core lead; combat values share readable tiles. */
+html body.ui-cleanup #page-training .training-status-panel {width:100%!important;max-width:none;height:auto!important;overflow:visible;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);grid-template-rows:auto auto;align-items:start;gap:15px}
+html body.ui-cleanup #page-training .status-section {padding:16px;min-width:0}
+html body.ui-cleanup #page-training .status-player-section {grid-column:1/-1}
+html body.ui-cleanup #page-training .status-section-title {padding:0;align-items:center;color:var(--training-paper)}
+html body.ui-cleanup #page-training .status-section-title span {font-size:13px;font-weight:500;color:var(--training-paper)}
+html body.ui-cleanup #page-training .status-section-title small {color:var(--training-muted);font-size:10px;letter-spacing:.04em}
+html body.ui-cleanup #page-training .status-power-main {padding:12px 0;gap:10px}
+html body.ui-cleanup #page-training .status-power-main strong {font-size:42px;font-weight:500;color:var(--training-gold)}
+html body.ui-cleanup #page-training .status-power-main i {color:var(--training-jade);font-size:23px;filter:none}
+html body.ui-cleanup #page-training .status-power-sources {gap:0;margin:0;padding:10px 0;border-block:1px solid var(--training-line)}
+html body.ui-cleanup #page-training .status-power-sources>div {padding:0 10px;border:0;border-right:1px solid var(--training-line);border-radius:0;background:transparent}
+html body.ui-cleanup #page-training .status-power-sources>div:last-child {border:0}
+html body.ui-cleanup #page-training .status-power-sources span {font-size:10px;color:var(--training-muted)}
+html body.ui-cleanup #page-training .status-power-sources b {font-size:16px;font-weight:500;color:#e0dec3}
+html body.ui-cleanup #page-training .status-power-note {margin:10px 0 0;color:#a7ab93;font-size:10px;line-height:1.8}
+html body.ui-cleanup #page-training .status-core-row {padding:18px 0 4px;gap:10px}
+html body.ui-cleanup #page-training .status-core-detail {grid-template-columns:68px minmax(0,1fr);gap:12px}
+html body.ui-cleanup #page-training .status-core-toggle {min-width:44px;min-height:44px;padding:9px 12px;border-radius:9px;background:#a8b19510;box-shadow:none}
+html body.ui-cleanup #page-training .status-stat-hint {margin:10px 0;color:#a7ab93;font-size:11px}
+html body.ui-cleanup #page-training .status-stat-grid {grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important;gap:10px;padding:0;overflow:visible}
+html body.ui-cleanup #page-training .status-stat-card {padding:14px 12px;border:1px solid #adad7d2b;border-radius:11px;background:#0f18122e;box-shadow:none}
+html body.ui-cleanup #page-training .status-stat-copy>span {font-size:11px;color:var(--training-muted)}
+html body.ui-cleanup #page-training .status-stat-copy strong {font-size:23px;font-weight:500;color:#e5dfc3}
+html body.ui-cleanup #page-training .status-stat-copy small {font-size:10px;color:#9da58e;line-height:1.5}
+/* Item and branch details retain their original actions in the same quiet palette. */
+html body.ui-cleanup :is(#training-v3-detail-modal,#training-v3-odds-modal) .training-v3-modal,
+html body.ui-cleanup #unified-bag-detail-modal .uib-modal {width:min(620px,100%);max-height:calc(100dvh - 36px);padding:20px;border:1px solid #b5ac7655;border-radius:18px;background:linear-gradient(145deg,#293025,#171e18);box-shadow:0 20px 70px #0007}
+html body.ui-cleanup .training-v3-modal-head h3 {font-size:20px;font-weight:500;color:#eee4cc}
+html body.ui-cleanup .training-v3-modal-body {font-size:13px;line-height:1.85;color:#c7c6b2}
+html body.ui-cleanup .training-v3-detail-top .golden-core-stage-v3 {width:180px!important;height:180px!important;min-height:0!important;min-width:0!important;max-height:180px!important}
+html body.ui-cleanup .training-core-detail-two {gap:14px}
+html body.ui-cleanup .training-v3-lore :is(p,li) {font-size:12px;line-height:1.85}
+html body.ui-cleanup :is(.training-v3-modal-close,#unified-bag-detail-modal .uib-close) {width:36px;height:36px;min-height:36px;border:1px solid #b5ac7644;border-radius:8px;background:#ffffff05;color:#d6d4bd}
+html body.ui-cleanup #unified-bag-detail-modal :is(.uib-description,.uib-detail-section p,.uib-detail-section li) {font-size:12px;line-height:1.8;color:#c9c8b3}
+html body.ui-cleanup #unified-bag-detail-modal .uib-detail-section>span {font-size:11px;color:#ddca94}
+html body.ui-cleanup #unified-bag-detail-modal :is(.uib-use-btn,.uib-equip-btn) {min-height:44px;font-size:12px;border-radius:9px}
+html body.ui-cleanup #soulbound-preview {position:fixed;inset:0;z-index:1200;padding:18px}
+html body.ui-cleanup #soulbound-preview .sb-preview-card {max-height:calc(100dvh - 36px);background:#20281f;border-color:#b5ac7666;border-radius:18px;box-shadow:0 20px 70px #0007}
+html body.ui-cleanup #soulbound-preview .sb-preview-close {z-index:2;min-height:36px;width:36px;height:36px;border-radius:8px;background:#273126;color:#e5dfc3}
+html body.ui-cleanup #soulbound-preview .sb-preview-art img {height:200px!important;width:100%!important;max-height:200px;object-fit:contain!important}
+@media(max-width:760px) {
+  html body.ui-cleanup #page-training:not(.training-scene-map-active) {padding-inline:12px!important}
+  html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtabs-v3 {padding:4px!important;gap:2px!important;margin-bottom:7px!important}
+  html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtab-v3 {flex:1 1 0!important;width:auto!important;height:40px!important;min-height:40px!important;padding:0 4px!important;font-size:12px!important}
+  html body.ui-cleanup #page-training:not(.training-scene-map-active) .training-subtab-v3.active {flex:0 0 auto!important;min-width:68px!important;padding-inline:10px!important}
+  html body.ui-cleanup #page-training .training-scene-detailbar {min-height:43px!important;padding-bottom:9px!important;margin-bottom:11px!important}
+  html body.ui-cleanup #page-training .training-scene-detailbar strong {font-size:18px}
+  html body.ui-cleanup #page-training .training-scene-back {min-height:34px;font-size:11px}
+  html body.ui-cleanup #page-training #training-tab-content .core-minimal-card {padding:15px!important}
+  html body.ui-cleanup #page-training #training-tab-content .core-minimal-center {grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto auto auto auto auto!important;gap:10px!important;min-height:0!important}
+  html body.ui-cleanup #page-training .core-art-chamber {grid-column:1;grid-row:1/4;padding:0;gap:2px;align-self:center}
+  html body.ui-cleanup #page-training .core-art-chamber .golden-core-stage-v3 {width:112px!important;height:112px!important;max-height:112px!important}
+  html body.ui-cleanup #page-training .core-art-hint {font-size:9px}
+  html body.ui-cleanup #page-training .core-cultivation-panel {display:contents}
+  html body.ui-cleanup #page-training .training-panel-eyebrow {grid-column:2;grid-row:1;align-self:end;font-size:10px}
+  html body.ui-cleanup #page-training .core-identity {grid-column:2;grid-row:2;justify-content:space-between;gap:8px}
+  html body.ui-cleanup #page-training .core-minimal-name {font-size:19px}
+  html body.ui-cleanup #page-training .core-minimal-grade {font-size:11px}
+  html body.ui-cleanup #page-training .core-trait-summary {grid-column:2;grid-row:3;align-self:start;font-size:11px;line-height:1.75}
+  html body.ui-cleanup #page-training .core-resource-ledger {grid-column:1/-1;grid-row:4;padding-block:10px;gap:6px}
+  html body.ui-cleanup #page-training .core-wash-row {grid-column:1/-1;grid-row:5}
+  html body.ui-cleanup #page-training .core-cultivation-panel>.core-equip-btn {grid-column:1/-1;grid-row:6}
+  html body.ui-cleanup #page-training .core-gold-balance strong {font-size:23px}
+  html body.ui-cleanup #page-training .core-resource-ledger .ns-progress-caption {font-size:10px}
+  html body.ui-cleanup #page-training #training-tab-content .ns-growth-panel {padding:12px!important;gap:11px}
+  html body.ui-cleanup #page-training .ns-growth-toolbar {gap:7px;padding-bottom:10px;flex-wrap:nowrap}
+  html body.ui-cleanup #page-training .ns-growth-resource {font-size:11px;gap:3px}
+  html body.ui-cleanup #page-training .ns-growth-resource strong {font-size:21px}
+  html body.ui-cleanup #page-training :is(.ns-get-fragments-btn,.ns-reset-btn) {padding:7px;font-size:11px!important;min-height:36px!important;gap:4px}
+  html body.ui-cleanup #page-training .ns-get-fragments-btn i:last-child {display:none}
+  html body.ui-cleanup #page-training #training-tab-content .ns-growth-workspace {height:330px!important}
+  html body.ui-cleanup #page-training .ns-growth-node {width:48px}
+  html body.ui-cleanup #page-training .ns-node-caption {width:86px;gap:2px}
+  html body.ui-cleanup #page-training .ns-node-caption strong {font-size:11px}
+  html body.ui-cleanup #page-training .ns-node-caption small {font-size:9px}
+  html body.ui-cleanup #page-training .ns-growth-core-caption strong {font-size:11px}
+  html body.ui-cleanup #page-training .ns-growth-core {width:94px;height:94px}
+  html body.ui-cleanup #page-training .uib-root {gap:10px}
+  html body.ui-cleanup #page-training .uib-equipment-panel {padding:11px}
+  html body.ui-cleanup #page-training .uib-equipment-head {margin-bottom:7px}
+  html body.ui-cleanup #page-training .uib-equip-slot {min-height:68px!important;grid-template-columns:52px minmax(0,1fr);gap:3px 10px;padding:8px 10px!important}
+  html body.ui-cleanup #page-training .uib-equip-slot-frame {width:46px!important;height:46px!important;min-height:46px!important}
+  html body.ui-cleanup #page-training .uib-equip-slot-name {font-size:13px}
+  html body.ui-cleanup #page-training .uib-toolbar {gap:8px;padding:10px!important}
+  html body.ui-cleanup #page-training .uib-summary {flex-basis:84px}
+  html body.ui-cleanup #page-training .uib-summary b {font-size:12px}
+  html body.ui-cleanup #page-training .uib-fragment-balance {padding:3px;font-size:11px}
+  html body.ui-cleanup #page-training .uib-dismantle-btn {min-height:36px;padding:6px;font-size:10px}
+  html body.ui-cleanup #page-training .uib-toolbar label {flex:1 1 calc(50% - 8px);font-size:10px;gap:4px}
+  html body.ui-cleanup #page-training .uib-grid {grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+  html body.ui-cleanup #page-training .uib-item {min-height:128px;padding:9px 6px!important}
+  html body.ui-cleanup #page-training .uib-icon {width:43px!important;height:43px!important;min-height:43px}
+  html body.ui-cleanup #page-training .uib-name {min-height:31px;font-size:11px!important}
+  html body.ui-cleanup #page-training .uib-bottom :is(small,em) {font-size:8px}
+  html body.ui-cleanup #page-training #training-tab-content .cultivation-refinery.refinery-simple {grid-template-columns:minmax(0,1fr)!important;gap:11px!important}
+  html body.ui-cleanup #page-training #training-tab-content .refinery-simple .refinery-panel {padding:12px!important}
+  html body.ui-cleanup #page-training #training-tab-content .refinery-simple .refinery-material-panel {padding:0!important}
+  html body.ui-cleanup #page-training .refinery-picker>summary {min-height:48px;padding:11px 12px}
+  html body.ui-cleanup #page-training .refinery-head {gap:8px;align-items:center}
+  html body.ui-cleanup #page-training .refinery-head h3 {font-size:14px}
+  html body.ui-cleanup #page-training .refinery-fragment-balance {padding:5px;font-size:11px}
+  html body.ui-cleanup #soulbound-page .sb-header {order:1;min-height:28px;padding-bottom:5px;margin-top:8px}
+  html body.ui-cleanup #soulbound-page #soulbound-refresh {min-height:28px;padding:4px 7px;font-size:9px}
+  html body.ui-cleanup #soulbound-page .sb-summary {padding:10px 0}
+  html body.ui-cleanup #soulbound-page .sb-summary>div {padding:0 8px;gap:3px}
+  html body.ui-cleanup #soulbound-page .sb-summary small {font-size:10px;gap:2px;line-height:1.6}
+  html body.ui-cleanup #soulbound-page .sb-summary small .item-image {width:14px;height:14px}
+  html body.ui-cleanup #soulbound-page .sb-summary strong {font-size:20px;line-height:1.4}
+  html body.ui-cleanup #soulbound-page .sb-summary b {font-size:12px;line-height:1.7}
+  html body.ui-cleanup #soulbound-page .sb-summary span {display:none}
+  html body.ui-cleanup #soulbound-page .sb-pity {margin:8px 0 10px;gap:9px;grid-template-columns:65px minmax(0,1fr)}
+  html body.ui-cleanup #soulbound-page .sb-pity span {font-size:9px}
+  html body.ui-cleanup #soulbound-page .sb-lobby {grid-template-columns:minmax(0,1fr);gap:10px;margin-bottom:10px}
+  html body.ui-cleanup #soulbound-page .sb-lobby .sb-showcase {display:flex!important;grid-row:1;order:0!important;padding:9px 10px}
+  html body.ui-cleanup #soulbound-page .sb-showcase-heading {min-height:26px}
+  html body.ui-cleanup #soulbound-page .sb-showcase-heading h3 {font-size:12px}
+  html body.ui-cleanup #soulbound-page .sb-carousel-nav {gap:4px}
+  html body.ui-cleanup #soulbound-page .sb-carousel-nav button {width:26px;min-width:26px;min-height:26px;height:26px;padding:0}
+  html body.ui-cleanup #soulbound-page .sb-carousel-count {font-size:9px}
+  html body.ui-cleanup #soulbound-page .sb-carousel-viewport {height:106px;max-height:106px;min-height:0;padding:4px 0}
+  html body.ui-cleanup #soulbound-page .sb-carousel-art {height:60px!important;max-height:60px!important;width:100%!important;aspect-ratio:auto}
+  html body.ui-cleanup #soulbound-page .sb-carousel-art img {height:60px!important;max-height:60px!important;max-width:100%!important;width:100%!important;object-fit:contain!important}
+  html body.ui-cleanup #soulbound-page button.sb-carousel-card {min-height:0;gap:2px;padding:3px 2px}
+  html body.ui-cleanup #soulbound-page .sb-carousel-card b {font-size:10px;line-height:1.4}
+  html body.ui-cleanup #soulbound-page .sb-carousel-card small {font-size:8px}
+  html body.ui-cleanup #soulbound-page .sb-carousel-hint {display:none}
+  html body.ui-cleanup #soulbound-page .sb-lobby .sb-draw-controls {grid-row:2;order:1!important;padding:13px}
+  html body.ui-cleanup #soulbound-page .sb-draw-controls h3 {font-size:18px;margin-bottom:5px}
+  html body.ui-cleanup #soulbound-page .sb-draw-controls p {font-size:10px;line-height:1.65;margin:5px 0}
+  html body.ui-cleanup #soulbound-page .sb-actions {margin:7px 0;gap:7px}
+  html body.ui-cleanup #soulbound-page .sb-actions button {min-height:42px;padding:7px 4px;font-size:11px}
+  html body.ui-cleanup #soulbound-preview .sb-preview-art img {height:130px!important;max-height:130px}
+  html body.ui-cleanup #page-training .training-status-panel {grid-template-columns:minmax(0,1fr);gap:11px}
+  html body.ui-cleanup #page-training .status-section {padding:13px}
+  html body.ui-cleanup #page-training .status-player-section {grid-column:1}
+  html body.ui-cleanup #page-training .status-power-main {padding:9px 0}
+  html body.ui-cleanup #page-training .status-power-main strong {font-size:35px}
+  html body.ui-cleanup #page-training .status-power-sources {padding:8px 0}
+  html body.ui-cleanup #page-training .status-power-sources span {font-size:9px}
+  html body.ui-cleanup #page-training .status-power-sources b {font-size:14px}
+  html body.ui-cleanup #page-training .status-power-note {font-size:9px;line-height:1.65}
+  html body.ui-cleanup #page-training .status-core-row {padding-top:12px}
+  html body.ui-cleanup #page-training .status-core-detail {grid-template-columns:54px minmax(0,1fr);gap:9px}
+  html body.ui-cleanup #page-training .status-core-orb {width:50px;height:50px}
+  html body.ui-cleanup #page-training .status-stat-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+  html body.ui-cleanup #page-training .status-stat-card {padding:11px 9px}
+}
+@media(prefers-reduced-motion:reduce) {html body.ui-cleanup #page-training .ns-growth-map {transition:none}}
