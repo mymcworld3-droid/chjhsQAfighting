@@ -1,3 +1,9 @@
+select.app-select-native{position:fixed!important;left:-10000px!important;top:0!important;clip-path:inset(50%)!important;opacity:0!important;pointer-events:none!important}
+.app-select-trigger{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-width:0;min-height:44px;text-align:left;cursor:pointer;vertical-align:middle}
+.app-select-trigger[hidden]{display:none!important}
+.app-select-trigger:disabled{opacity:.5;cursor:default}
+.app-select-trigger::after{content:'';display:block;flex:0 0 7px;width:7px;height:7px;margin:-3px 3px 0 6px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);opacity:.7}
+.app-select-trigger .app-select-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .app-select-menu{box-sizing:border-box;position:fixed;inset:auto;margin:0;padding:0;max-width:calc(100vw - 24px);border:1px solid #c7a45d88;border-radius:12px;background:#181a14;color:#eee2c8;box-shadow:0 10px 32px #0006;font:inherit;overflow:hidden;display:none;flex-direction:column}
 .app-select-menu[open]{display:flex}.app-select-menu::backdrop{background:#0003}
 .app-select-menu header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 4px;flex-shrink:0}.app-select-menu header strong{font-weight:600;font-size:13px;line-height:1.4;color:#d9c38d;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
