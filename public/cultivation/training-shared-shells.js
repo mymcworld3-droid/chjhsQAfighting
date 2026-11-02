@@ -19,6 +19,7 @@ export function equipmentShellMarkup() {
   }
 
 export function refineryShellMarkup() {
+    const pickerOpen = globalThis.matchMedia?.('(max-width: 760px)')?.matches ? '' : 'open';
     const materialCells = Array.from({ length: 8 }, (_, index) =>
       `<div class="refinery-shell-material" aria-hidden="true"><span class="refinery-shell-icon"></span><span class="refinery-shell-line"></span><small>材料 ${index + 1}</small></div>`
     );
@@ -32,14 +33,14 @@ export function refineryShellMarkup() {
       <section class="cultivation-refinery refinery-simple refinery-shell" aria-busy="true">
         <article class="refinery-panel refinery-material-panel">
           <div class="refinery-material-list">
-            <section class="refinery-material-roll" data-refinery-material-roll="artifacts">
-              <div class="refinery-group-title"><span><b class="refinery-step">1</b> 選本命法器</span><span>載入中</span></div>
-              <div class="refinery-shell-material-grid refinery-material-roll-body">${artifacts}</div>
-            </section>
-            <section class="refinery-material-roll" data-refinery-material-roll="materials">
-              <div class="refinery-group-title"><span><b class="refinery-step">2</b> 加入材料</span><span>合計 2～8 件</span></div>
-              <div class="refinery-shell-material-grid refinery-material-roll-body">${materials}</div>
-            </section>
+            <details class="refinery-material-roll refinery-picker" data-refinery-material-roll="artifacts" ${pickerOpen}>
+              <summary class="refinery-group-title"><span><b class="refinery-step">1</b> 選本命法器</span><span class="refinery-picker-current">載入中</span></summary>
+              <div class="refinery-picker-content"><div class="refinery-shell-material-grid refinery-material-roll-body">${artifacts}</div></div>
+            </details>
+            <details class="refinery-material-roll refinery-picker" data-refinery-material-roll="materials" ${pickerOpen}>
+              <summary class="refinery-group-title"><span><b class="refinery-step">2</b> 加入材料</span><span class="refinery-picker-current">載入中</span></summary>
+              <div class="refinery-picker-content"><div class="refinery-shell-material-grid refinery-material-roll-body">${materials}</div></div>
+            </details>
           </div>
         </article>
         <article class="refinery-panel refinery-forge-panel">

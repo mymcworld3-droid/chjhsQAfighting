@@ -250,8 +250,8 @@ html body.ui-cleanup :is(.quest-dialog,.xpp-dialog,.dm-card,.uib-modal) {border-
   html body.ui-cleanup #page-training .refinery-head h3 {font-size:17px}
   html body.ui-cleanup #page-training .refinery-head-actions {gap:6px;flex-wrap:wrap}
   html body.ui-cleanup #page-training #training-tab-content .cultivation-refinery {min-width:0;grid-template-columns:minmax(0,1fr)!important}
-  html body.ui-cleanup #page-training #training-tab-content .refinery-material-panel {height:250px!important;min-height:0!important;max-height:250px!important}
-  html body.ui-cleanup #page-training #training-tab-content .refinery-material-list {min-height:0!important;height:100%!important}
+  html body.ui-cleanup #page-training #training-tab-content .cultivation-refinery:not(.refinery-simple) .refinery-material-panel {height:250px!important;min-height:0!important;max-height:250px!important}
+  html body.ui-cleanup #page-training #training-tab-content .cultivation-refinery:not(.refinery-simple) .refinery-material-list {min-height:0!important;height:100%!important}
   html body.ui-cleanup #page-training #training-tab-content .refinery-panel {min-width:0;max-width:100%}
   html body.ui-cleanup #page-training #training-tab-content .refinery-forge-panel {overflow-x:clip!important}
   html body.ui-cleanup #page-training #training-tab-content .refinery-slots {--array-size:min(76vw,320px);--slot-size:58px}

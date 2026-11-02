@@ -16,6 +16,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
   let queued = false;
   let recipeBookOpen = false;
   let advancedOpen = false;
+  let pickerOpen = '';
+  let pickerCompact = null;
   let expandedRecipeId = '';
   let adminForgeDirection = '自由發揮';
   let forgeMethod = '自由發揮';
@@ -691,6 +693,34 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     };
   }
 
+  function compactRefinery() {
+    return window.matchMedia?.('(max-width: 760px)')?.matches === true;
+  }
+  function pickerSummary(type, tokens = selected) {
+    const items = tokens.filter(token => token && parseToken(token).type === type);
+    if (!items.length) return type === 'artifact' ? '點選法器' : '點選材料';
+    if (type === 'material') return `已選 ${items.length} 件`;
+    return ingredientMeta(items[0]).name + (items.length > 1 ? ` 等 ${items.length} 件` : '');
+  }
+  function syncPickers(force = false) {
+    const compact = compactRefinery();
+    if (!force && pickerCompact === compact) return;
+    pickerCompact = compact;
+    document.querySelectorAll('#training-tab-content [data-refinery-picker]').forEach(node => {
+      node.open = !compact || node.dataset.refineryPicker === pickerOpen;
+      const summary = node.querySelector('summary');
+      if (summary) summary.tabIndex = compact ? 0 : -1;
+    });
+  }
+  function showPicker(kind) {
+    pickerOpen = kind;
+    syncPickers(true);
+    const content = document.getElementById('training-tab-content');
+    const target = kind ? content?.querySelector(`[data-refinery-picker="${kind}"] > summary`)
+      : content?.querySelector('[data-refinery-craft]:enabled') || content?.querySelector('[data-refinery-picker="materials"] > summary');
+    target?.focus({ preventScroll: true });
+  }
+
   function markup() {
     const matInv = materialInventory();
     const artInv = artifactInventory();
@@ -742,15 +772,19 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       return `<button type="button" class="refinery-material refinery-artifact-ingredient ${placed ? 'is-selected' : ''}" aria-pressed="${placed > 0}" data-refinery-ingredient="${esc(token)}" style="--material-realm-color:${esc(color)}" ${remaining <= 0 || used >= SLOT_COUNT || busy || job ? 'disabled' : ''}><span class="refinery-mat-icon is-artifact">${itemImageMarkup(a, a.icon || '◆')}</span><span class="refinery-mat-copy"><strong>${esc(a.name)}</strong><small>${reserved && !usableOwned ? '裝備中，請先卸下' : placed ? `已選 ×${placed}` : esc(a.realm || '凡人')}</small><span class="material-realm-badge">${esc(a.realm || '凡人')}</span></span><span class="refinery-mat-qty">×${remaining}</span></button>`;
     }).join('');
 
-    const ingredientHtml = `<section class="refinery-material-roll" data-refinery-material-roll="artifacts">
-      <div class="refinery-group-title"><span><b class="refinery-step">1</b> 選本命法器</span><span>${ownedArtifacts.length} 種</span></div>
+    const ingredientHtml = `<details class="refinery-material-roll refinery-picker" data-refinery-picker="artifacts" data-refinery-material-roll="artifacts" ${!compactRefinery() || pickerOpen === 'artifacts' ? 'open' : ''}>
+      <summary class="refinery-group-title"><span><b class="refinery-step">1</b> 選本命法器</span><span class="refinery-picker-count">${ownedArtifacts.length} 種</span><span class="refinery-picker-current" data-refinery-picker-summary="artifact">${esc(pickerSummary('artifact'))}</span><i class="fa-solid fa-chevron-down refinery-picker-chevron" aria-hidden="true"></i></summary>
+      <div class="refinery-picker-content">
       <div class="refinery-material-roll-body ${artifactHtml ? '' : 'is-empty'}" data-refinery-material-roll-body="artifacts">${artifactHtml || '<div class="refinery-empty">尚無本命法器，可前往契器台取得。</div>'}</div>
       ${ownedArtifacts.some(a => equippedCounts[a.id]) ? '<p class="refinery-shelf-hint">裝備中的法器需先卸下。<button type="button" data-refinery-open-equipment>前往裝備</button></p>' : !ownedArtifacts.length ? '<button type="button" class="refinery-clear" data-refinery-open-contract>前往契器台</button>' : ''}
-    </section><section class="refinery-material-roll" data-refinery-material-roll="materials">
-      <div class="refinery-group-title"><span><b class="refinery-step">2</b> 加入材料</span><span>合計 2～8 件</span></div>
+      </div>
+    </details><details class="refinery-material-roll refinery-picker" data-refinery-picker="materials" data-refinery-material-roll="materials" ${!compactRefinery() || pickerOpen === 'materials' ? 'open' : ''}>
+      <summary class="refinery-group-title"><span><b class="refinery-step">2</b> 加入材料</span><span class="refinery-picker-count">合計 2～8 件</span><span class="refinery-picker-current" data-refinery-picker-summary="material">${esc(pickerSummary('material'))}</span><i class="fa-solid fa-chevron-down refinery-picker-chevron" aria-hidden="true"></i></summary>
+      <div class="refinery-picker-content">
       <div class="refinery-material-roll-body" data-refinery-material-roll-body="materials">${materialHtml || '<div class="refinery-empty">目前沒有材料，可從副本取得。</div>'}</div>
       ${adminUnlimitedMaterials() ? '<p class="refinery-shelf-hint">管理員無限素材</p>' : ''}
-    </section>`;
+      </div>
+    </details>`;
     const displaySlots = job ? recipeTokens(job.recipe) : selected;
 
     const slotHtml = Array.from({ length: SLOT_COUNT }, (_, index) => {
@@ -877,6 +911,8 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     setText(content.querySelector('[data-refinery-used-badge]'), `${used}/${SLOT_COUNT} 件`);
     const summary = Object.entries(counts).map(([token, q]) => `${ingredientMeta(token).name} ×${q}`).join(' · ') || '尚未投入素材';
     setText(content.querySelector('[data-refinery-summary-text]'), summary);
+    setText(content.querySelector('[data-refinery-picker-summary="artifact"]'), pickerSummary('artifact'));
+    setText(content.querySelector('[data-refinery-picker-summary="material"]'), pickerSummary('material'));
 
     const matchNode = content.querySelector('[data-refinery-match]');
     matchNode?.classList.remove('ready', 'error');
@@ -903,6 +939,21 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
   }
 
   function bindContent(content) {
+    content.querySelectorAll('[data-refinery-picker]').forEach(node => node.addEventListener('toggle', () => {
+      if (!compactRefinery()) {
+        if (!node.open) node.open = true;
+        return;
+      }
+      if (node.open) {
+        pickerOpen = node.dataset.refineryPicker;
+        content.querySelectorAll('[data-refinery-picker]').forEach(other => {
+          if (other !== node) other.open = false;
+        });
+      } else if (pickerOpen === node.dataset.refineryPicker) {
+        pickerOpen = '';
+      }
+    }));
+    syncPickers(true);
     content.querySelector('[data-refinery-advanced]')?.addEventListener('toggle', event => {
       advancedOpen = event.currentTarget.open;
     });
@@ -1018,6 +1069,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
     }
     selected[empty] = token;
     syncSelectionView();
+    if (compactRefinery()) showPicker(parseToken(token).type === 'artifact' ? 'materials' : '');
   }
   function remove(index) {
     if (busy || window.getCultivationRefineryJob?.() || index < 0 || index >= SLOT_COUNT) return;
@@ -1223,6 +1275,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
 
   function boot() {
     ensureStyle();
+    window.addEventListener('resize', () => syncPickers(), { passive: true });
     schedule();
     ['foundation-training-stage-changed','golden-core-access-changed','material-system-updated','artifact-system-updated','material-catalog-updated','artifact-catalog-updated','artifact-recipes-updated','xiuxian:recipe-license-updated','xiuxian:user-ready','xiuxian:refinery-job-updated','xiuxian:stats-updated'].forEach((name) => window.addEventListener(name, schedule));
     window.addEventListener('xiuxian:refinery-open-request', () => activate());
