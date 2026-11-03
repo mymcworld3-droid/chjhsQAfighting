@@ -126,8 +126,7 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
   }
   if(role==='A'&&col==='worldImmortals') {
     if(before?.uid===uid && (after===null||only(keys,['displayName'])))return;
-    const player=tx.reads.get('users/'+uid)?.data();
-    if(after?.uid===uid&&Number(player?.stats?.totalScore)>=1268&&Number.isSafeInteger(after.challengeScore)&&after.challengeScore>Math.max(0,Number(before?.challengeScore)||0))return;
+    // Seat ownership and defender builds are awarded only by the verified combat API.
     throw fail();
   }
   if(role==='A'&&col==='marketListings') {

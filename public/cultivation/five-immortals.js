@@ -1,14 +1,12 @@
-// 九州五大仙：渡劫以上修士，以國中程度連答問鼎。答錯即止，連答紀錄嚴格超過在榜者才可奪位。
+// 九州五大仙：以真實配裝挑戰離線守擂化身，擊破後由伺服器授予仙位。
 import { resolvePlayerAvatar } from './profile-avatar.js';
 import { playerRepository } from './data/player-repository.js';
+import { authenticatedMainFetch } from './data/project-repository.js';
+import './five-immortals-style.js';
 (function () {
   'use strict';
 
   const TRIBULATION_SCORE = 1268;
-  const QUIZ_LEVEL = '國中三年級';
-  const ELEMENTARY_QUIZ_LEVEL = '國小高年級';
-  const QUIZ_DIFFICULTY = 'medium';
-  const IMMORTAL_QUIZ_SESSION = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36));
   const ROLES = [
     { id: 'ru-xian', name: '儒仙', subject: '國文', desc: '以文載道' },
     { id: 'fa-xian', name: '法仙', subject: '社會', desc: '洞察世事' },
@@ -33,10 +31,9 @@ import { playerRepository } from './data/player-repository.js';
   function userData() { return window.getCurrentUserData?.() || null; }
   function currentScore() { return Math.max(0, Number(userData()?.stats?.totalScore) || 0); }
   function currentGroup() { return window.getLeaderboardEducationGroup?.(userData()?.profile?.educationLevel) || null; }
-  function seatId(group, role) { return group + '__' + role; }
   function eligible() { return !!currentGroup() && currentScore() >= TRIBULATION_SCORE; }
   function roleById(id) { return ROLES.find((r) => r.id === id) || null; }
-  function ownerRecord(id) { return Math.max(0, Number(owners[id]?.challengeScore) || 0); }
+  function ownerRecord(id) { return Math.max(0, Number(owners[id]?.avatarPower || owners[id]?.avatar?.power) || 0); }
   function escapeHtml(value) { return String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
 
   function toast(message) {
@@ -136,7 +133,6 @@ import { playerRepository } from './data/player-repository.js';
         owner.displayName = profile.displayName || owner.displayName || '無名仙客';
         owner.equipped = profile.equipped || owner.equipped || null;
         owner.totalScore = profile.totalScore || 0;
-        owner.challengeScore = Math.max(0, Number(owner.challengeScore) || 0);
       });
     } catch (error) {
       console.warn('五仙榜讀取失敗', error);
@@ -144,233 +140,219 @@ import { playerRepository } from './data/player-repository.js';
     render();
   }
 
-  function normalizeQuestion(raw) {
-    const source = Array.isArray(raw) ? raw[0] : (raw?.questions?.[0] || raw || {});
-    const question = String(source.q ?? source.question ?? '').trim();
-    // The shared /api/generate-quiz returns { correct, wrong[3] }, whereas
-    // older cached questions can still use { opts, ans }. Support both.
-    let options = Array.isArray(source.opts) ? [...source.opts] :
-      (Array.isArray(source.options) ? [...source.options] : null);
-    let answer = source.ans ?? source.answer ?? source.correctIndex;
-    let needsShuffle = false;
-    if (!options && typeof source.correct === 'string' && Array.isArray(source.wrong) && source.wrong.length === 3) {
-      options = [source.correct, ...source.wrong];
-      answer = 0;
-      needsShuffle = true;
-    }
-    if (!options) throw new Error('INVALID_QUESTION_OPTIONS');
-    if (typeof answer === 'string' && /^[A-Da-d]$/.test(answer.trim())) answer = answer.trim().toUpperCase().charCodeAt(0) - 65;
-    if (!Number.isInteger(Number(answer)) && typeof answer === 'string') answer = options.findIndex(item => String(item) === answer);
-    answer = Number(answer);
-    const choices = options.map(value => String(value ?? '').trim());
-    const explanation = String(source.exp ?? source.explanation ?? '').trim();
-    if (question.length < 5 || choices.length !== 4 || choices.some(value => !value) ||
-        new Set(choices.map(value => value.replace(/\s+/g, '').toLowerCase())).size !== 4 ||
-        !Number.isInteger(answer) || answer < 0 || answer > 3 || explanation.length < 5)
-      throw new Error('INVALID_QUESTION');
-    if (needsShuffle) {
-      for (let i = choices.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [choices[i], choices[j]] = [choices[j], choices[i]];
-        if (answer === i) answer = j; else if (answer === j) answer = i;
-      }
-    }
-    return { question, options: choices, answer, explanation,
-      knowledge_subject:String(source.knowledge_subject || ''),
-      knowledge_point_id:String(source.knowledge_point_id || ''),
-      knowledge_point:String(source.knowledge_point || ''),
-      ...(Array.isArray(source.knowledge_points) ? {knowledge_points:source.knowledge_points} : {}) };
-  }
-
-  async function fetchChallengeQuestion(role, avoidQuestions = []) {
-    const level = currentGroup() === 'elementary' ? ELEMENTARY_QUIZ_LEVEL : QUIZ_LEVEL;
-    const response = await fetch('/api/generate-quiz', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subject: role.subject, level, difficulty: QUIZ_DIFFICULTY, rank: userData()?.stats?.rankLevel || 0, quizMode: 'immortal-fast', quizSessionId: IMMORTAL_QUIZ_SESSION + '-' + (auth?.currentUser?.uid || 'guest'), avoidQuestions: avoidQuestions.slice(-12), specificTopic: `${role.subject}${currentGroup() === 'elementary' ? '國小' : '國中'}程度綜合題。題目需有唯一明確答案。` })
+  async function request(path, body) {
+    const response = await authenticatedMainFetch(path, body === undefined ? {} : {
+      method:'POST',body:JSON.stringify(body)
     });
-    if (!response.ok) throw new Error(`QUIZ_API_${response.status}`);
-    const body = await response.json();
-    let raw = body?.text ?? body;
-    if (typeof raw === 'string') {
-      raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim();
-      raw = JSON.parse(raw);
-    }
-    const normalized = normalizeQuestion(raw);
-    if (avoidQuestions.some(previous => String(previous).replace(/\s+/g, '') === normalized.question.replace(/\s+/g, ''))) throw new Error('DUPLICATE_IMMORTAL_QUESTION');
-    return normalized;
+    const data = await response.json();
+    if (!response.ok || data.ok === false) throw new Error(data.error || '戰場同步失敗，請重試');
+    return data;
   }
-
-  // Generate exactly one question ahead while the player reads the current one.
-  // The prefetch promise belongs to a single challenge; closing/restarting
-  // cannot reuse an old session's questions or spend extra requests forever.
-  function prefetchNextChallengeQuestion(serial) {
-    const current = challenge;
-    if (!current?.active || current.serial !== serial || current.nextPromise) return;
-    const seen = (current.seenQuestions || []).slice(-12);
-    const job = fetchChallengeQuestion(current.role, seen).catch(error => {
-      console.warn('[Five Immortals] background next question failed', error.message);
-      return null;
-    });
-    current.nextPromise = job;
-  }
-
-  function ensureModal() {
-    document.getElementById('five-immortal-challenge')?.remove();
-    const backdrop = document.createElement('div');
-    backdrop.id = 'five-immortal-challenge';
-    backdrop.className = 'fi-backdrop';
-    backdrop.innerHTML = `<section class="fi-modal" role="dialog" aria-modal="true"><div class="fi-head"><div><span class="fi-kicker">渡劫問鼎 · ENDLESS TRIAL</span><h3 id="fi-title">五仙問鼎</h3></div><button class="fi-close" type="button">×</button></div><div class="fi-scoreboard"><div><span>本次連答</span><b id="fi-streak">0</b></div><div><span>在榜紀錄</span><b id="fi-target">0</b></div><div><span>資格</span><b>渡劫+</b></div></div><div class="fi-note">${currentGroup() === 'elementary' ? '國小高年級' : '國中三年級'}程度。沒有總題數，也沒有挑戰次數限制；一路答到第一次錯誤為止。要奪位，必須<strong>嚴格超過</strong>目前仙主紀錄，同分不換榜。</div><div id="fi-body"></div></section>`;
-    backdrop.querySelector('.fi-close').onclick = () => closeChallenge();
-    backdrop.addEventListener('click', (event) => { if (event.target === backdrop) closeChallenge(); });
-    document.body.appendChild(backdrop);
-  }
-
+  function alive(serial) { return challenge?.serial === serial && !!document.getElementById('five-immortal-challenge'); }
   function closeChallenge() {
-    if (challenge?.active && challenge.streak > 0 && !confirm('問鼎尚未答錯，現在離開會放棄本次連答紀錄。確定離開？')) return;
-    sessionSerial += 1;
-    challenge = null;
+    const focus = challenge?.returnFocus;
+    sessionSerial += 1; challenge = null;
     document.getElementById('five-immortal-challenge')?.remove();
+    focus?.focus?.();
   }
-
+  function ensureModal(role) {
+    document.getElementById('five-immortal-challenge')?.remove();
+    const overlay = document.createElement('div');
+    overlay.id = 'five-immortal-challenge'; overlay.className = 'fi-backdrop';
+    overlay.innerHTML = `<section class="fi-modal fi-avatar-modal" role="dialog" aria-modal="true" aria-labelledby="fi-title" tabindex="-1"><header class="fi-head"><div><span class="fi-kicker">IMMORTAL AVATAR · 化身試煉</span><h3 id="fi-title">${escapeHtml(role.name)}問鼎</h3></div><button class="fi-close" aria-label="暫離戰場">×</button></header><p class="fi-error" id="fi-error" role="alert"></p><div id="fi-body" aria-live="polite"><div class="fi-loading">正在連接化身戰場…</div></div></section>`;
+    document.body.appendChild(overlay);
+    overlay.querySelector('.fi-close').onclick = closeChallenge;
+    overlay.addEventListener('keydown',event=>{
+      if (event.key === 'Escape') { event.preventDefault(); closeChallenge(); return; }
+      if (event.key !== 'Tab') return;
+      const focusable = [...overlay.querySelectorAll('button:not(:disabled),input:not(:disabled)')].filter(el=>el.offsetParent);
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === overlay.querySelector('section'))) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    });
+    overlay.querySelector('section').focus();
+  }
+  function showError(error, serial) {
+    if (alive(serial)) {
+      document.getElementById('fi-error').textContent = error.message || String(error);
+      document.querySelector('.fi-avatar-modal').scrollTop = 0;
+    }
+  }
+  function clearError() { const el = document.getElementById('fi-error'); if (el) el.textContent = ''; }
+  const format = value => Math.max(0,Number(value)||0).toLocaleString('zh-TW');
+  function fighterHtml(player, enemy = false) {
+    const percent = Math.min(100,Math.max(0,player.hp / Math.max(1,player.maxHp) * 100));
+    return `<article class="fi-fighter ${enemy ? 'fi-enemy' : ''}"><div class="fi-fighter-top"><span>${enemy ? '守擂化身' : '挑戰者'}</span><b>戰力 ${format(player.power)}</b></div><h4>${escapeHtml(player.name)}</h4><div class="fi-hp-label"><b>${format(player.hp)} <small>/ ${format(player.maxHp)}</small></b><span>攻擊 ${format(player.atk)}</span></div><div class="fi-hp" role="progressbar" aria-label="${enemy ? '化身' : '挑戰者'}生命" aria-valuemin="0" aria-valuemax="${player.maxHp}" aria-valuenow="${player.hp}"><i style="width:${percent}%"></i></div><div class="fi-build"><span>${escapeHtml(player.goldenCore?.name || '未調御金丹')}</span><span>${player.nascentSoul ? '元嬰已啟用' : '未啟用元嬰'}</span>${player.innateAbility ? `<span>神通已啟用</span>` : ''}${player.shield ? `<span>護盾 ${format(player.shield)}</span>` : ''}</div><div class="fi-equipment">${escapeHtml((player.equipment || []).join(' · ') || '未裝備法器')}</div></article>`;
+  }
+  function styleChoices(current = 'assault') {
+    return `<fieldset class="fi-styles"><legend>我的守擂風格</legend>${[['assault','強攻','積極進攻，每三回合重擊'],['sustain','續戰','輪流防守、回復、出手'],['counter','反擊','先守後攻，伺機重擊']].map(([id,name,desc])=>`<label><input type="radio" name="fi-style" value="${id}" ${id === current ? 'checked' : ''}><span><b>${name}</b><small>${desc}</small></span></label>`).join('')}</fieldset>`;
+  }
+  function showLobby(serial) {
+    if (!alive(serial)) return;
+    const run = challenge, owner = owners[run.role.id], mine = owner?.uid === auth?.currentUser?.uid;
+    const title = mine ? '留下你的守擂化身' : owner ? '擊敗仙主，登臨仙位' : '擊破鎮殿化身，問鼎空席';
+    document.getElementById('fi-body').innerHTML = `<div class="fi-lobby"><div class="fi-lobby-seal">${mine ? '鎮' : '戰'}</div><h4>${title}</h4><p>把養成帶上戰場。金丹、元嬰、神通與法器會實際出手，<br>答題決定出手機會，戰術決定攻守節奏。</p></div>${owner?.avatar ? `<div class="fi-preview">${fighterHtml(owner.avatar, true)}</div>` : `<div class="fi-note">${owner ? '首次挑戰會依仙主目前配裝建立化身。' : '此席由 NPC 鎮守，擊敗後即可入榜。'}</div>`}<div class="fi-battle-rules"><span>最多 24 回合</span><span>${currentGroup() === 'elementary' ? '國小' : '國中'} · ${run.role.subject}</span><span>答錯可繼續</span></div>${styleChoices(owner?.avatarStyle)}<p class="fi-caption">${mine ? '更新時保存目前配裝，仙主離線也會自動守擂。更新後，進行中的舊化身挑戰無法奪位。' : '奪位後以本次出戰配裝與選定風格自動守擂。24 回合內須擊倒化身且自己存活；同歸於盡由仙主守位。'}</p><div class="fi-actions">${mine ? '<button id="fi-configure" class="fi-ghost">更新守擂化身</button>' : ''}<button id="fi-start" class="fi-primary">${mine ? '以自身化身試陣' : '開始挑戰'}</button></div>${mine && owner.recentDefenses?.length ? `<div class="fi-defense"><h4>最近守擂</h4>${owner.recentDefenses.map(r=>`<p><span>${escapeHtml(r.challenger)}</span><b>${r.won ? '化身被擊破' : '成功守住'} · ${r.round} 回合</b></p>`).join('')}</div>` : ''}`;
+    document.querySelector('.fi-avatar-modal').scrollTop = 0;
+    const selectedStyle = () => document.querySelector('[name="fi-style"]:checked')?.value || 'assault';
+    document.getElementById('fi-start').onclick = async () => {
+      if (run.busy) return; run.busy = true; clearError();
+      const button = document.getElementById('fi-start'); button.disabled = true;
+      try {
+        const data = await request('/api/immortals/challenge/start',{role:run.role.id,style:selectedStyle()});
+        if (!alive(serial)) return;
+        run.state = data.state; run.busy = false; run.tactic = 'assault';
+        await nextQuestion(serial);
+      } catch (error) { showError(error,serial); }
+      finally { if (alive(serial)) { run.busy = false; button.disabled = false; } }
+    };
+    const configure = document.getElementById('fi-configure');
+    if (configure) configure.onclick = async () => {
+      if (run.busy) return; run.busy = true; configure.disabled = true; clearError();
+      try {
+        await request('/api/immortals/challenge/configure',{role:run.role.id,style:selectedStyle()});
+        await loadOwners(); if (!alive(serial)) return;
+        run.busy = false; showLobby(serial); toast('守擂化身已保存目前配裝');
+      } catch (error) { showError(error,serial); }
+      finally { if (alive(serial)) { run.busy = false; configure.disabled = false; } }
+    };
+  }
   async function startChallenge(roleId) {
     const role = roleById(roleId);
-    const user = auth?.currentUser;
-    if (!role || !user) { toast('請先登入，才能問鼎五仙。'); return; }
-    if (!currentGroup()) { toast('請先到設定頁設定年級，才能查看及問鼎五仙。'); return; }
-    if (!eligible()) { toast(`只有渡劫以上修士（${TRIBULATION_SCORE} 修為）能問鼎五仙。`); return; }
-    const serial = ++sessionSerial;
-    challenge = { active: true, serial, cohort: currentGroup(), attemptId: Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9), role, streak: 0, questionNumber: 0, target: ownerRecord(roleId), busy: false, question: null, seenQuestions: [], nextPromise: null };
-    ensureModal();
-    document.getElementById('fi-title').textContent = `問鼎${role.name} · ${role.subject}`;
-    document.getElementById('fi-target').textContent = String(challenge.target);
-    await nextQuestion(serial);
-  }
-
-  async function nextQuestion(serial) {
-    if (!challenge?.active || challenge.serial !== serial) return;
-    const body = document.getElementById('fi-body');
-    if (!body) return;
-    challenge.busy = true;
-    body.innerHTML = `<div class="fi-loading"><i class="fa-solid fa-circle-notch fa-spin"></i><br><br>天機凝題中…</div>`;
+    if (!role || !auth?.currentUser || !eligible()) { toast('請先登入並達到渡劫境，再問鼎仙位'); return; }
+    if (challenge) return;
+    const returnFocus = document.activeElement, serial = ++sessionSerial;
+    challenge = {serial,role,returnFocus,busy:false,state:null,tactic:'assault',nextPromise:null};
+    ensureModal(role);
     try {
-      const current = challenge;
-      const waiting = current.nextPromise;
-      current.nextPromise = null;
-      let question = waiting ? await waiting : null;
-      if (!question) question = await fetchChallengeQuestion(current.role, current.seenQuestions);
-      if (!challenge?.active || challenge.serial !== serial) return;
-      challenge.question = question;
-      challenge.seenQuestions.push(question.question);
-      if (challenge.seenQuestions.length > 20) challenge.seenQuestions.shift();
-      challenge.busy = false;
-      renderQuestion(serial);
-      prefetchNextChallengeQuestion(serial);
+      const {state} = await request('/api/immortals/challenge');
+      if (!alive(serial)) return;
+      if (state.status === 'active') {
+        challenge.state = state; challenge.role = roleById(state.role);
+        document.getElementById('fi-title').textContent = state.roleName + '問鼎';
+        document.getElementById('fi-body').innerHTML = `<div class="fi-lobby"><div class="fi-lobby-seal">續</div><h4>你的戰場還在</h4><p>${escapeHtml(state.roleName)} · 已完成 ${state.round} 回合<br>暫離不會丟失進度，一小時內可續戰。</p></div><div class="fi-arena">${fighterHtml(state.challenger)}${fighterHtml(state.defender,true)}</div><div class="fi-actions"><button id="fi-abandon" class="fi-ghost">結束這場挑戰</button><button id="fi-resume" class="fi-primary">繼續戰鬥</button></div>`;
+        document.getElementById('fi-resume').onclick = () => nextQuestion(serial);
+        document.getElementById('fi-abandon').onclick = () => abandonChallenge(serial);
+      } else showLobby(serial);
     } catch (error) {
-      console.warn('五仙問鼎出題失敗', error);
-      if (!challenge?.active || challenge.serial !== serial) return;
-      challenge.busy = false;
-      body.innerHTML = `<div class="fi-result"><div class="fi-result-seal">候</div><h4>天機暫時紊亂</h4><p>這次不算答錯，也不會中止連答。可以直接重新取題。</p><div class="fi-actions"><button id="fi-retry-question" class="fi-primary">重新取題</button></div></div>`;
-      document.getElementById('fi-retry-question').onclick = () => nextQuestion(serial);
+      showError(error,serial);
+      if (alive(serial)) {
+        document.getElementById('fi-body').innerHTML = '<div class="fi-actions"><button id="fi-reconnect" class="fi-primary">重新同步</button></div>';
+        document.getElementById('fi-reconnect').onclick = () => { closeChallenge(); void startChallenge(roleId); };
+      }
     }
   }
-
-  function renderQuestion(serial) {
-    if (!challenge?.active || challenge.serial !== serial || !challenge.question) return;
-    const body = document.getElementById('fi-body');
-    const q = challenge.question;
-    document.getElementById('fi-streak').textContent = String(challenge.streak);
-    body.innerHTML = `<div class="fi-question"><h4>${escapeHtml(q.question)}</h4><div class="fi-options">${q.options.map((option, index) => `<button type="button" class="fi-option" data-answer="${index}"><span>${String.fromCharCode(65 + index)}</span><b>${escapeHtml(option)}</b></button>`).join('')}</div></div>`;
-    body.querySelectorAll('[data-answer]').forEach((button) => { button.onclick = () => answerChallenge(Number(button.dataset.answer), serial); });
-    try { window.MathJax?.typesetPromise?.([body]); } catch (_) {}
+  async function abandonChallenge(serial) {
+    if (!alive(serial) || challenge.busy) return;
+    const run = challenge; run.busy = true; clearError();
+    try {
+      await request('/api/immortals/challenge/abandon',{runId:run.state.runId});
+      if (!alive(serial)) return;
+      run.state = null; run.busy = false; run.nextPromise = null; showLobby(serial);
+    } catch (error) { showError(error,serial); }
+    finally { if (alive(serial)) run.busy = false; }
   }
-
+  async function fetchChallengeQuestion(run) {
+    const data = await request('/api/generate-quiz',{quizMode: 'immortal-avatar',quizSessionId:run.state.runId});
+    const q = data.avatarQuestion;
+    if (!q?.id || !q.ticket || !q.q || !Array.isArray(q.opts) || q.opts.length !== 4) throw new Error('題目尚未準備完成，請重試');
+    return q;
+  }
+  function prefetchNextChallengeQuestion(serial) {
+    if (!alive(serial) || challenge.state?.status !== 'active') return;
+    const run = challenge;
+    if (!run.nextPromise) run.nextPromise = fetchChallengeQuestion(run).then(q=>({q}),error=>({error}));
+  }
+  async function nextQuestion(serial) {
+    if (!alive(serial) || challenge.busy) return;
+    const run = challenge;
+    if (run.state?.status !== 'active') return showBattle(serial);
+    run.busy = true; clearError();
+    document.getElementById('fi-body').innerHTML = `<div class="fi-arena">${fighterHtml(run.state.challenger)}${fighterHtml(run.state.defender,true)}</div><div class="fi-loading">正在準備第 ${run.state.round + 1} 回合…</div>`;
+    try {
+      const waiting = run.nextPromise;
+      const result = run.state.question ? {q:run.state.question} : waiting ? await waiting : {q:await fetchChallengeQuestion(run)};
+      if (!alive(serial)) return;
+      run.nextPromise = null;
+      if (result.error) throw result.error;
+      run.state.question = result.q; run.reviewing = false; run.busy = false;
+      showBattle(serial);
+    } catch (error) {
+      if (!alive(serial)) return;
+      run.nextPromise = null; showError(error,serial);
+      document.getElementById('fi-body').insertAdjacentHTML('beforeend','<div class="fi-actions"><button id="fi-retry-question" class="fi-primary">重試準備題目</button></div>');
+      document.getElementById('fi-retry-question').onclick = () => nextQuestion(serial);
+    } finally { if (alive(serial)) run.busy = false; }
+  }
+  function showBattle(serial) {
+    if (!alive(serial)) return;
+    const run = challenge, s = run.state, review = run.reviewing ? s.lastReview : null, q = s.question;
+    const finished = s.status !== 'active';
+    const messages = {claimed:['問鼎成功','你的化身已登臨仙位，將依所選風格自動守擂。'],
+      practice:[s.result?.won ? '試陣成功' : '試陣結束','這場為自身化身試陣，仙位保留。可調整配裝再試。'],
+      changed:['化身已更替','本場戰鬥已完成；對手仙位或配裝於戰鬥中更新，請挑戰新的化身。'],
+      'already-other':['你已位列五仙','每名修士同時只能據有一席仙位。'],
+      fallen:['問鼎未成','你的生命耗盡。調整配裝與攻守節奏，再次挑戰。'],
+      limit:['仙主守位','已達 24 回合。限時內擊破化身且自己存活，才可奪位。']};
+    const result = messages[s.result?.code] || ['挑戰已結束','可以返回榜單重新挑戰。'];
+    document.getElementById('fi-body').innerHTML = `<div class="fi-round"><span>${s.practice ? '自身試陣' : s.npc ? '鎮殿試煉' : '仙位爭奪'} · ${escapeHtml(s.styleName)}化身</span><b>回合 ${s.round}${finished ? '' : ' → ' + (s.round + 1)} / ${s.maxRounds}</b></div><div class="fi-arena ${review ? 'fi-resolved' : ''}">${fighterHtml(s.challenger)}${fighterHtml(s.defender,true)}</div>${finished ? `<div class="fi-outcome ${s.result?.claimed ? 'fi-victory' : ''}"><span>${s.result?.claimed ? '仙' : '試'}</span><div><h4>${result[0]}</h4><p>${result[1]}</p></div></div>` : `<div class="fi-intent"><span>化身下一步</span><strong>${escapeHtml(s.intent.name)}</strong><p>${escapeHtml(s.intent.hint)}</p></div>`}${review ? reviewHtml(review, run.lastQuestion) : ''}${!finished && !review && q ? `<div class="fi-tactics" role="group" aria-label="作戰方式">${[['assault','強攻','120% 攻擊，釋放蓄力'],['guard','守勢','70% 攻擊，化身攻擊降為 45%'],['charge','蓄力','35% 攻擊，下次強攻每層 +65%']].map(([id,name,desc])=>`<button data-tactic="${id}" aria-pressed="${run.tactic === id}"><b>${name}</b><small>${desc}</small></button>`).join('')}</div><div class="fi-charge">靈力 ${'●'.repeat(s.charge)}${'○'.repeat(2 - s.charge)} <span>先選戰術，再作答出手</span></div><div class="fi-question"><div class="fi-question-meta">${escapeHtml(s.subject)} · ${escapeHtml(s.level)} · 第 ${s.round + 1} 題</div><h4>${escapeHtml(q.q)}</h4><div class="fi-options">${q.opts.map((opt,i)=>`<button class="fi-option" data-answer="${i}"><span>${'ABCD'[i]}</span><b>${escapeHtml(opt)}</b></button>`).join('')}</div></div>` : ''}<div class="fi-actions">${finished ? '<button id="fi-finish" class="fi-ghost">返回榜單</button><button id="fi-again" class="fi-primary">再次問鼎</button>' : review ? '<button id="fi-next" class="fi-primary">下一回合</button>' : ''}</div>${!finished ? '<p class="fi-caption">可隨時暫離，一小時內續戰。答錯僅失去該回合出手，生命耗盡才落敗。</p>' : ''}`;
+    document.querySelector('.fi-avatar-modal').scrollTop = 0;
+    document.querySelectorAll('[data-tactic]').forEach(button=>button.onclick=()=>{
+      if (run.busy) return; run.tactic = button.dataset.tactic;
+      document.querySelectorAll('[data-tactic]').forEach(b=>b.setAttribute('aria-pressed',String(b === button)));
+    });
+    document.querySelectorAll('[data-answer]').forEach(button=>button.onclick=()=>answerChallenge(Number(button.dataset.answer),serial));
+    const next = document.getElementById('fi-next'); if (next) next.onclick = () => nextQuestion(serial);
+    const finish = document.getElementById('fi-finish'); if (finish) finish.onclick = closeChallenge;
+    const again = document.getElementById('fi-again'); if (again) again.onclick = () => {
+      run.state = null; run.nextPromise = null; run.reviewing = false; clearError(); showLobby(serial);
+    };
+    window.renderMathInElement?.(document.getElementById('fi-body'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  }
+  function reviewHtml(review, q) {
+    const title = review.correct ? '回答正確 · 已出手' : '回答錯誤 · 化身趁隙出手';
+    return `<section class="fi-review ${review.correct ? 'is-correct' : 'is-wrong'}"><h4>${title}</h4>${q ? `<p>正解：${escapeHtml(q.opts[review.correctIndex])}</p>` : ''}<p>${escapeHtml(review.explanation)}</p><div class="fi-combat-log">${review.notes.map(note=>`<p>${escapeHtml(note)}</p>`).join('')}${review.logs.map(log=>`<p><b>${log.actorRole === 'host' ? '你' : '化身'}</b> · ${escapeHtml(log.skill || (log.type === 'heal' ? '回復' : '出手'))} <strong>${format(log.damage || log.heal || 0)}</strong></p>`).join('')}${(review.activations || []).map(a=>`<p class="fi-activation">${escapeHtml(a.skill || a.name)} · ${escapeHtml(a.message)}</p>`).join('')}</div></section>`;
+  }
   function preserveChallengeAnswer(q, choice, serial) {
-    const run=challenge,user=auth?.currentUser;
-    if (!run || run.serial!==serial || !user?.uid) return;
-    const key='immortal_'+user.uid+'_'+run.attemptId+'_'+run.questionNumber;
+    const run = challenge, user = auth?.currentUser, review = run?.state?.lastReview;
+    if (!run || run.serial !== serial || !user?.uid || !review) return;
+    const key = 'immortal_' + user.uid + '_' + run.state.runId + '_' + review.round;
     void playerRepository.saveExamAnswer(key,{
-      mode:'immortal',topic:'Immortal',rankAtTime:'問鼎 · '+run.role.name,
-      question:q.question,options:q.options,correctIdx:q.answer,userIdx:choice,
-      explanation:q.explanation,subject:run.role.subject,
+      mode:'immortal',topic:'Immortal',rankAtTime:'化身問鼎 · ' + run.role.name,
+      question:q.q,options:q.opts,correctIdx:review.correctIndex,userIdx:choice,
+      explanation:review.explanation,subject:run.role.subject,
       ...globalThis.QAKnowledgePoints.metadata(q,run.role.subject),
-      subTopic:run.role.name,isCorrect:choice===q.answer,timeTaken:0
+      subTopic:run.role.name,isCorrect:review.correct,timeTaken:0
     }).catch(error=>console.warn('[Immortal answer history]',error?.message||error));
   }
-
   async function answerChallenge(choice, serial) {
-    if (!challenge?.active || challenge.serial !== serial || challenge.busy || !challenge.question) return;
-    challenge.busy = true;
-    const q = challenge.question;
-    challenge.questionNumber += 1;
-    globalThis.QAGameAudio?.answer(choice === q.answer, 'immortal:'+challenge.attemptId+':'+challenge.questionNumber);
-    preserveChallengeAnswer(q, choice, serial);
-    const body = document.getElementById('fi-body');
-    const buttons = [...body.querySelectorAll('[data-answer]')];
-    buttons.forEach((button) => {
-      button.disabled = true;
-      const index = Number(button.dataset.answer);
-      if (index === q.answer) button.classList.add('correct');
-      else if (index === choice) button.classList.add('wrong');
-    });
-    if (choice === q.answer) {
-      challenge.streak += 1;
-      document.getElementById('fi-streak').textContent = String(challenge.streak);
-      setTimeout(() => nextQuestion(serial), 550);
-      return;
-    }
-    challenge.active = false;
-    await finishChallenge(serial);
-  }
-
-  async function finishChallenge(serial) {
-    if (!challenge || challenge.serial !== serial) return;
-    const role = challenge.role;
-    const streak = challenge.streak;
-    const user = auth?.currentUser;
-    let result = 'miss';
-    let liveTarget = challenge.target;
+    if (!alive(serial) || challenge.busy || !challenge.state?.question) return;
+    const run = challenge, q = run.state.question;
+    run.busy = true; clearError();
+    document.querySelectorAll('[data-answer],[data-tactic]').forEach(b=>b.disabled=true);
     try {
-      const cohort = challenge.cohort;
-      const roleRef = fs.doc(db, 'worldImmortals', seatId(cohort, role.id));
-      const userRef = fs.doc(db, 'users', user.uid);
-      await fs.runTransaction(db, async (tx) => {
-        const refs = ROLES.map((item) => fs.doc(db, 'worldImmortals', seatId(cohort, item.id)));
-        const [userSnap, ...roleSnaps] = await Promise.all([tx.get(userRef), ...refs.map((ref) => tx.get(ref))]);
-        if (!userSnap.exists()) throw new Error('NO_USER');
-        const latestUser = userSnap.data();
-        if ((Number(latestUser.stats?.totalScore) || 0) < TRIBULATION_SCORE) throw new Error('NOT_TRIBULATION');
-        if (window.getLeaderboardEducationGroup?.(latestUser.profile?.educationLevel) !== cohort)
-          throw new Error('WRONG_COHORT');
-        const targetIndex = ROLES.findIndex((item) => item.id === role.id);
-        const targetSnap = roleSnaps[targetIndex];
-        const targetData = targetSnap.exists() ? targetSnap.data() : null;
-        liveTarget = Math.max(0, Number(targetData?.challengeScore) || 0);
-        const alreadyOwnsOther = roleSnaps.some((snap, index) => snap.exists() && snap.data().uid === user.uid && index !== targetIndex);
-        if (alreadyOwnsOther) throw new Error('ALREADY_IMMORTAL');
-        if (streak <= liveTarget) return;
-        tx.set(roleRef, { uid: user.uid, cohort, displayName: latestUser.displayName || user.displayName || '無名仙客', role: role.id, subject: role.subject, challengeScore: streak, previousRecord: liveTarget, claimedAt: fs.serverTimestamp(), challengeLevel: cohort === 'elementary' ? ELEMENTARY_QUIZ_LEVEL : QUIZ_LEVEL, challengeDifficulty: QUIZ_DIFFICULTY });
-        result = targetData?.uid === user.uid ? 'improved' : 'claimed';
-      });
+      const {state} = await request('/api/immortals/challenge/answer',{runId:run.state.runId,round:run.state.round,
+        questionId:q.id,ticket:q.ticket,choice,tactic:run.tactic});
+      if (!alive(serial)) return;
+      run.state = state; run.lastQuestion = q; run.reviewing = true; run.busy = false;
+      globalThis.QAGameAudio?.answer(state.lastReview.correct,'immortal:' + state.runId + ':' + state.round);
+      preserveChallengeAnswer(q, choice, serial);
+      showBattle(serial);
+      if (state.status === 'active') prefetchNextChallengeQuestion(serial);
+      else { void loadOwners(); window.dispatchEvent(new CustomEvent('xiuxian:immortals-updated')); }
     } catch (error) {
-      if (error.message === 'NOT_TRIBULATION') result = 'not-eligible';
-      else if (error.message === 'WRONG_COHORT') result = 'wrong-cohort';
-      else if (error.message === 'ALREADY_IMMORTAL') result = 'already-other';
-      else { console.error('五仙問鼎結算失敗', error); result = 'error'; }
-    }
-    await loadOwners();
-    showChallengeResult(result, streak, liveTarget, role, serial);
-  }
-
-  function showChallengeResult(result, streak, target, role, serial) {
-    const body = document.getElementById('fi-body');
-    if (!body || !challenge || challenge.serial !== serial) return;
-    const success = result === 'claimed' || result === 'improved';
-    const title = result === 'claimed' ? `問鼎成功 · 登臨${role.name}` : result === 'improved' ? `仙位鞏固 · 新紀錄 ${streak}` : result === 'already-other' ? '你已位列五仙' : result === 'not-eligible' ? '境界已不足' : result === 'wrong-cohort' ? '年級已變更' : result === 'error' ? '天道結算失敗' : streak === target ? '只差一步 · 同分不換榜' : '問鼎未成';
-    const message = success ? `本次連答 ${streak} 題，超過原紀錄 ${target} 題。` : result === 'already-other' ? '一名修士同時只能據有一席仙位；可回到自己的仙位刷新紀錄。' : result === 'not-eligible' ? '真正寫榜前再次驗證修為，只有渡劫以上修士可以成為五仙。' : result === 'wrong-cohort' ? '你的年級已變更，本次紀錄不會寫入另一組仙榜。' : result === 'error' ? '這次沒有改動榜單，可以立即重新挑戰。' : `本次連答 ${streak} 題；目前${role.name}紀錄為 ${target} 題。必須嚴格超過才能奪位。`;
-    body.innerHTML = `<div class="fi-result"><div class="fi-result-seal">${success ? '仙' : '問'}</div><h4>${title}</h4><p>${message}</p><div class="fi-actions"><button id="fi-close-result" class="fi-ghost">返回榜單</button><button id="fi-again" class="fi-primary">再次問鼎</button></div></div>`;
-    document.getElementById('fi-close-result').onclick = () => closeChallenge();
-    document.getElementById('fi-again').onclick = () => startChallenge(role.id);
+      if (!alive(serial)) return;
+      showError(error,serial);
+      document.getElementById('fi-error').insertAdjacentHTML('beforeend',' <button id="fi-sync" class="fi-ghost">同步進度</button>');
+      document.getElementById('fi-sync').onclick = async () => {
+        try {
+          const {state} = await request('/api/immortals/challenge'); if (!alive(serial)) return;
+          run.state = state; run.reviewing = state.lastReview?.questionId === q.id; run.lastQuestion = q; clearError();
+          if (run.reviewing) { preserveChallengeAnswer(q,state.lastReview.selectedChoice,serial); showBattle(serial); }
+          else await nextQuestion(serial);
+        } catch (syncError) { showError(syncError,serial); }
+      };
+      document.querySelectorAll('[data-answer],[data-tactic]').forEach(b=>b.disabled=false);
+    } finally { if (alive(serial)) run.busy = false; }
   }
 
   function render() {
@@ -391,7 +373,7 @@ import { playerRepository } from './data/player-repository.js';
       const owner = role.owner;
       const mine = owner?.uid === uid;
       const canTry = !!uid && !!cohort && eligible();
-      return `<div class="podium-slot rank-${role.rank}"><div class="avatar-wrapper">${avatarHtml(owner?.equipped, role.rank === 1)}</div><div class="immortal-name">${role.name}</div><div class="immortal-subject">${role.subject} · ${role.desc}</div><div class="immortal-owner-box">${owner ? `<div class="immortal-owner">${escapeHtml(owner.displayName || '無名仙客')}</div><div class="immortal-record">連答 ${ownerRecord(role.id)} 題</div><div class="immortal-status">${mine ? '你的仙位' : '在榜仙主'}</div>` : `<div class="immortal-owner" style="color:#625949">仙位懸空</div><div class="immortal-record">紀錄 0 題</div>`}<button class="immortal-btn" data-immortal="${role.id}" ${canTry ? '' : 'disabled'}>${mine ? '刷新紀錄' : owner ? '挑戰仙主' : '問鼎仙位'}</button></div></div>`;
+      return `<div class="podium-slot rank-${role.rank}"><div class="avatar-wrapper">${avatarHtml(owner?.equipped, role.rank === 1)}</div><div class="immortal-name">${role.name}</div><div class="immortal-subject">${role.subject} · ${role.desc}</div><div class="immortal-owner-box">${owner ? `<div class="immortal-owner">${escapeHtml(owner.displayName || '無名仙客')}</div><div class="immortal-record">${ownerRecord(role.id) ? '戰力 ' + format(ownerRecord(role.id)) : '化身待同步'}</div><div class="immortal-status">${mine ? '你的仙位' : '在榜仙主'}</div>` : `<div class="immortal-owner" style="color:#625949">仙位懸空</div><div class="immortal-record">鎮殿化身守位</div>`}<button class="immortal-btn" data-immortal="${role.id}" ${canTry ? '' : 'disabled'}>${mine ? '管理化身' : owner ? '挑戰化身' : '問鼎仙位'}</button></div></div>`;
     }).join('');
     container.querySelectorAll('[data-immortal]').forEach((button) => { button.onclick = () => startChallenge(button.dataset.immortal); });
     const lock = document.getElementById('five-immortal-lock');
@@ -412,7 +394,7 @@ import { playerRepository } from './data/player-repository.js';
       box = document.createElement('section');
       box.id = 'five-immortals';
       box.className = 'five-immortals';
-      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 依學制出題 · 一錯即止 · 1868 修為先入半仙 · 榜上五席方為真仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 1268 修為</b></div><div><span>問鼎方式</span><b>連續答對直到答錯</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目；挑戰沒有總題數，也沒有次數限制。一路答到第一次答錯為止，只有嚴格超過目前紀錄才能奪位，同分不換榜；每名修士同時只能據有一席仙位。真仙境界須同時達到 1868 修為並在榜；掉榜後恢復半仙，修為保留。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
+      box.innerHTML = `<div class="five-immortals-head"><h3>九州五大仙</h3><button id="five-immortals-help" class="five-immortals-help" type="button" aria-label="查看五大仙遊戲方式" aria-expanded="false" title="遊戲方式">!</button></div><div id="five-immortals-guide" class="five-immortal-guide" hidden><p>渡劫以上方可問鼎 · 戰力實戰 · 離線化身守擂 · 榜上五席方為真仙</p><div class="five-immortal-rule"><div><span>境界門檻</span><b>渡劫 · 1268 修為</b></div><div><span>問鼎方式</span><b>擊破仙主化身</b></div><div><span>挑戰限制</span><b>無限次嘗試</b></div></div><p class="five-immortal-extra">每一仙位對應固定科目，依學制出題；金丹、元嬰、神通與法器皆會參戰。選擇強攻、守勢或蓄力，答錯僅失去當回合出手機會。24 回合內擊破化身且自己存活即可奪位；沒有挑戰次數限制，每名修士同時只能據有一席仙位。仙主可保存配裝與守擂風格，離線也會自動應戰。真仙境界須同時達到 1868 修為並在榜；掉榜後恢復半仙，修為保留。</p></div><div id="five-immortal-list" class="podium-container"></div><div id="five-immortal-lock" class="five-locked"></div>`;
       const anchor = rank.querySelector('.glass-panel') || rank.firstElementChild;
       if (anchor) anchor.before(box); else rank.prepend(box);
     }
