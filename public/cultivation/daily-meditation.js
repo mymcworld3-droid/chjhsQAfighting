@@ -173,12 +173,15 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     });
     node('dm-close').focus({preventScroll:true});
   }
-  function rewardText(reward,compact=false) {
+  function rewardParts(reward,compact=false) {
     const parts=[['gold',reward.gold+' 靈石']];
     if(reward.fragments)parts.push(['nascent-soul-essence',(compact?'碎精':'元嬰碎精')+' ×'+reward.fragments]);
     if(reward.raidTickets)parts.push(['raid-ticket',(compact?'團本券':'團本入場券')+' ×'+reward.raidTickets]);
     if(reward.drawTickets)parts.push(['draw-ticket',(compact?'抽獎券':'本命法器抽獎券')+' ×'+reward.drawTickets]);
-    return parts.map(([id,label])=>(globalThis.QAItemIcons?.markup(id,{size:18})||'')+esc(label)).join('<br>');
+    return parts;
+  }
+  function rewardMarkup(reward,compact=false) {
+    return rewardParts(reward,compact).map(([id,label])=>(globalThis.QAItemIcons?.markup(id,{size:18})||'')+esc(label)).join('<br>');
   }
   function renderDashboard(clearStatus=true) {
     if(!state||!node('dm-content'))return;
@@ -194,8 +197,9 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     html+='<div class="dm-milestones">'+state.milestones.map(step=>{
       const reached=state.stars>=step.stars;
       const status=step.claimed?'已領取':step.claimable?'點擊領取':reached?'待出關':'差 '+(step.stars-state.stars)+' 星';
-      const label=step.stars+' 星，'+status+'，'+rewardText(step.reward).replace(/<br>/g,'、');
-      return '<section class="dm-milestone'+(reached?' is-reached':'')+(step.claimed?' is-claimed':'')+(step.claimable?' is-claimable':'')+'"><button type="button" class="dm-checkpoint" data-dm-claim="'+step.stars+'" aria-label="'+label+'" title="'+label+'" '+(!step.claimable||busy?'disabled':'')+'><span aria-hidden="true">'+(step.claimed?'✓':'★')+'</span></button><strong>'+step.stars+' 星</strong><p>'+rewardText(step.reward,true)+'</p><small>'+status+'</small></section>';
+      // Attribute descriptions must not contain the quoted markup used by item icons.
+      const label=esc(step.stars+' 星，'+status+'，'+rewardParts(step.reward).map(([,text])=>text).join('、'));
+      return '<section class="dm-milestone'+(reached?' is-reached':'')+(step.claimed?' is-claimed':'')+(step.claimable?' is-claimable':'')+'"><button type="button" class="dm-checkpoint" data-dm-claim="'+step.stars+'" aria-label="'+label+'" title="'+label+'" '+(!step.claimable||busy?'disabled':'')+'><span aria-hidden="true">'+(step.claimed?'✓':'★')+'</span></button><strong>'+step.stars+' 星</strong><p>'+rewardMarkup(step.reward,true)+'</p><small>'+status+'</small></section>';
     }).join('')+'</div></div>';
     html+='<p class="dm-note">自己與互為好友的同門，答對一題各得一星；達到節點即可領獎，每日最多十五星。好友稍後出關仍會增加進度。元嬰碎精與本命法器抽獎券可提前累積，金丹境開放抽取。團本券已滿時，該券折為額外靈石。</p>';
     if(state.completed){
