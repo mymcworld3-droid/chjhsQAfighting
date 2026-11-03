@@ -40,12 +40,13 @@ test('two scoped Five Immortals sets, with score and grade verified before writi
   assert.equal(cleanup.TRIBULATION_SCORE,1268);
   assert.equal(cleanup.seatId('elementary','ru-xian'),'elementary__ru-xian');
   assert.equal(cleanup.seatId('junior','ru-xian'),'junior__ru-xian');
-  assert.match(five,/seatId\(cohort, item\.id\)/);
-  assert.match(five,/seatId\(cohort, role\.id\)/);
-  assert.match(five,/latestUser\.stats\?\.totalScore[\s\S]*TRIBULATION_SCORE/);
-  assert.match(five,/latestUser\.profile\?\.educationLevel\) !== cohort/);
+  const api=read('immortal-challenge-api.cjs');
+  assert.match(api,/seatId\(cohort,id\)/);
+  assert.match(api,/checkPlayer\(user,state.cohort\)/);
+  assert.match(api,/count\(user.stats\?\.totalScore\)>=TRIBULATION_SCORE/);
+  assert.match(api,/educationCohort\(user.profile\?\.educationLevel\)===cohort/);
   assert.match(five,/fs\.where\('cohort', '==', cohort\)/);
-  assert.match(five,/const ELEMENTARY_QUIZ_LEVEL = '國小高年級'/);
+  assert.match(api,/cohort==='elementary'\?'國小高年級':'國中三年級'/);
   assert.match(read('server.js'), /registerImmortalsCleanupApi\(app\)/);
 });
 

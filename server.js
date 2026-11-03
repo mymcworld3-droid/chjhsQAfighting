@@ -34,6 +34,8 @@ const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
 const enlightenmentTrial = require('./enlightenment-trial-api.cjs').__test;
+const registerImmortalChallengeApi = require('./immortal-challenge-api.cjs');
+const immortalChallenge = require('./immortal-challenge-api.cjs').__test;
 const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameIssueApi = require('./game-issue-api.cjs');
 const registerClassroomApi = require('./classroom-api.cjs');
@@ -97,6 +99,7 @@ const invitationHub = registerInvitationApi(app);
 registerFriendRequestsApi(app, { hub: invitationHub });
 registerQuestApi(app);
 registerEnlightenmentTrialApi(app);
+registerImmortalChallengeApi(app);
 registerSoulboundDrawApi(app);
 registerMeditationApi(app);
 registerSpiritFarmApi(app);
@@ -488,6 +491,8 @@ app.post('/api/generate-quiz', async (req, res) => {
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
+    const avatarMode = String(quizMode || '') === 'immortal-avatar';
+    let avatarContext = null;
     const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
@@ -553,6 +558,18 @@ app.post('/api/generate-quiz', async (req, res) => {
             return res.status(error.status||503).json({error:error.status?error.message:'悟道試煉題目準備失敗'});
         }
     }
+    if (avatarMode) {
+        try {
+            const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
+            avatarContext = {uid,db,...await immortalChallenge.prepareQuestion(db,uid)};
+            if (avatarContext.pending) return res.json({avatarQuestion:avatarContext.pending});
+            subject = avatarContext.subject; level = avatarContext.level; rank = 0;
+            knowledgeMap = null; avoidQuestions = avatarContext.history; avoidQuestionMeta = [];
+            specificTopic = ''; topic = '';
+        } catch (error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'化身挑戰題目準備失敗'});
+        }
+    }
     if(req.body?.adaptiveScope){
         if(quizMode&&quizMode!=='solo')return res.status(400).json({error:'背景適性學習僅用於一般問道試煉'});
         try{
@@ -561,7 +578,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
         }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
     }
-    difficulty = enlightenmentMode ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
+    difficulty = (enlightenmentMode || avatarMode) ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
         : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
@@ -704,6 +721,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     const requestedSession = String(quizSessionId || '');
     const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
+        : avatarMode ? `avatar:${avatarContext.uid}:${avatarContext.runId}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
     const spareKey = quizSparePool.key({
         owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
@@ -823,6 +841,10 @@ app.post('/api/generate-quiz', async (req, res) => {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
 
+            if (avatarMode) {
+                const question = await immortalChallenge.commitQuestion(avatarContext.db,avatarContext.uid,avatarContext,parsed);
+                return res.json({avatarQuestion:question,provider:routed.provider,model:routed.model});
+            }
             if (enlightenmentMode) {
                 const question = await enlightenmentTrial.commitQuestion(
                     enlightenmentContext.db,enlightenmentContext.uid,enlightenmentContext,parsed

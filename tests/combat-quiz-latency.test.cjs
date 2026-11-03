@@ -32,7 +32,7 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
   }
   assert.match(battle, /quizMode: 'battle-fast'/);
   assert.match(raid, /quizMode: 'raid-quick-simple'/);
-  assert.match(five, /quizMode: 'immortal-fast'/);
+  assert.match(five, /quizMode: 'immortal-avatar'/);
   assert.match(server, /FAST_QUIZ_MODES\.has/);
   assert.match(server, /combatFastMode \? quickQuizPrompt/);
   assert.match(server, /timeoutMs: 16000/);
@@ -42,44 +42,17 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
   assert.match(server, /issueRaidQuestionTicket/);
 });
 
-test('Five Immortals accepts real API correct/wrong output with the correct answer preserved', () => {
-  const source = read('public/cultivation/five-immortals.js');
-  const start = source.indexOf('  function normalizeQuestion(raw) {');
-  const end = source.indexOf('  async function fetchChallengeQuestion(', start);
-  assert.ok(start > 0 && end > start);
-  const normalize = vm.runInNewContext(source.slice(start, end) + '\nnormalizeQuestion;', { Math });
-  const question = {
-    q: '請計算二加二是多少？', correct: '4', wrong: ['1','3','5'],
-    exp: '兩個二相加等於四，所以答案是四。'
-  };
-  for (let n=0; n<20; n++) {
-    const normalized = normalize(question);
-    assert.equal(normalized.options.length, 4);
-    assert.equal(normalized.options[normalized.answer], '4');
-    assert.equal(normalized.explanation, question.exp);
-    assert.equal(new Set(normalized.options).size, 4);
-  }
-  assert.throws(() => normalize({ ...question, wrong: ['4', '3', '5'] }), /INVALID_QUESTION/);
-  assert.throws(() => normalize({ ...question, wrong: ['1', '3'] }), /INVALID_QUESTION/);
-  // Old stored/cached opts/ans format remains supported.
-  const legacy = normalize({
-    q:'請選出正確的結果',opts:['1','2','3','4'],ans:3,
-    exp:'由題意可知正確結果是 4。'
-  });
-  assert.equal(legacy.options[legacy.answer], '4');
-});
-
-test('Five Immortals prefetches only one next question per live challenge and never repeats answered question', () => {
-  const source = read('public/cultivation/five-immortals.js');
-  assert.match(source, /function prefetchNextChallengeQuestion\(serial\)/);
-  assert.match(source, /current\.nextPromise/);
-  assert.match(source, /const waiting = current\.nextPromise/);
-  assert.match(source, /question = waiting \? await waiting : null/);
-  assert.match(source, /prefetchNextChallengeQuestion\(serial\)/);
-  assert.match(source, /current\.seenQuestions/);
-  assert.match(source, /avoidQuestions: avoidQuestions\.slice\(-12\)/);
-  assert.match(source, /DUPLICATE_IMMORTAL_QUESTION/);
-  assert.match(source, /challenge\.active = false/);
+test('avatar quizzes use a signed server question and prefetch only after the current turn settles',()=>{
+  const source=read('public/cultivation/five-immortals.js');
+  assert.match(source,/data.avatarQuestion/);
+  assert.match(source,/q.ticket/);
+  assert.match(source,/function prefetchNextChallengeQuestion\(serial\)/);
+  assert.match(source,/if \(!run.nextPromise\) run.nextPromise/);
+  assert.match(source,/const waiting = run.nextPromise/);
+  assert.match(source,/waiting \? await waiting/);
+  const answer=source.slice(source.indexOf('  async function answerChallenge'));
+  assert.ok(answer.indexOf('await request') < answer.indexOf('prefetchNextChallengeQuestion(serial)'));
+  assert.match(source,/alive\(serial\)/);
 });
 
 test('raid awaits its in-flight prefetch rather than losing the next question during an ongoing request', () => {

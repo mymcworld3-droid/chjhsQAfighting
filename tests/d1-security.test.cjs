@@ -49,3 +49,18 @@ test('D1 browser authenticates before touching data and refuses revoked/wrong-au
   await routes['/api/data']({get:()=>'',body:{}},response);assert.equal(response.statusCode,401);
   await routes['/api/data']({get:()=>'Bearer token',body:{}},response);assert.equal(response.statusCode,401);
 });
+
+test('D1 browsers cannot fabricate immortal seats, edit defender builds or read combat sessions',async()=>{
+  const {db}=setup();await db.doc('users/alice').set({uid:'alice',stats:{totalScore:9999}});
+  const playerSnap=await db.doc('users/alice').get();
+  const reads=[{target:{role:'A',path:'users/alice',kind:'doc'},version:playerSnap.version}];
+  await assert.rejects(executeCommit(db,{reads,writes:[write('worldImmortals/junior__ru-xian',{
+    uid:'alice',cohort:'junior',challengeScore:10000},'set')]},context),e=>e.status===403);
+  await db.doc('worldImmortals/junior__ru-xian').set({uid:'alice',cohort:'junior',avatarRevision:'valid'});
+  for(const patch of [{avatar:{atk:999999}},{avatarPower:999999},{avatarRevision:'fake'},{uid:'bob'}])
+    await assert.rejects(executeCommit(db,{writes:[write('worldImmortals/junior__ru-xian',patch)]},context),e=>e.status===403);
+  assert.equal(mayRead({role:'A',path:'immortalAvatarSessions/alice',data:{uid:'alice'},uid:'alice',admin:false}),false);
+  await assert.rejects(executeCommit(db,{writes:[write('immortalAvatarSessions/alice',{status:'completed'},'set')]},context),e=>e.status===403);
+  await executeCommit(db,{writes:[write('worldImmortals/junior__ru-xian',{displayName:'新名號'})]},context);
+  assert.equal((await db.doc('worldImmortals/junior__ru-xian').get()).data().displayName,'新名號');
+});
