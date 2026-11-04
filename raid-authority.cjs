@@ -209,7 +209,7 @@ function equippedEffects(equipped){
     .map((effect,effectIndex)=>({...effect,slot,item,effectIndex})));
 }
 function sumEffect(effects,type){
-  return effects.filter(e=>String(e.type||'')===type).reduce((sum,e)=>sum+positive(e.value),0);
+  return soulboundPool.effectTotal(effects,type);
 }
 function equipmentMultiplier(effects,type,cap=5){
   return effects.filter(e=>String(e.type||'')===type)

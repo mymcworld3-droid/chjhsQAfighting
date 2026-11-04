@@ -273,7 +273,7 @@ test('server raid snapshots always include fixed soulbound items and star burst 
   let member = snapshot;
   for (let i=1;i<=3;i++) {
     const r=authority.resolvePlayerAction(member,{roomId:'soul-raid',actionId:i,correct:true,bossHp:100000,bossMaxHp:100000});
-    assert.equal(r.damage,i===3?338:260);member=r.member;
+    assert.equal(r.damage,i===3?319:260);member=r.member;
   }
   const miss=authority.resolvePlayerAction(member,{roomId:'soul-raid',actionId:4,correct:false});
   assert.equal(miss.member.coreCorrectStreak,0);

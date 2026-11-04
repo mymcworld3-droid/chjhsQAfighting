@@ -48,7 +48,7 @@ import {
     equip_crit_chance: { title: '暴擊率', summary: '攻擊時有機率造成暴擊', hint: '例如：0.15 = 15%', icon: 'fa-crosshairs' },
     equip_crit_damage_percent: { title: '暴擊增傷', summary: '暴擊時提高額外倍率', hint: '例如：0.5 = 暴擊額外 +50%', icon: 'fa-bolt' },
     equip_combo_damage_percent: { title:'連擊傷害',summary:'增加連擊傷害（基礎 30%），每段可再次連擊',hint:'0.30 = 額外 30 個百分點',icon:'fa-burst' },
-    equip_combo_chance: { title: '連擊率', summary: '普通法器最多 10%、本命法寶最多 30%，每段可再次連擊，基礎傷害 30%', hint: '普通上限：0.10 = 10%；本命上限：0.30 = 30%', icon: 'fa-forward-fast' },
+    equip_combo_chance: { title: '連擊率', summary: '普通法器最多 10%、本命法寶最多 20%，每段可再次連擊，基礎傷害 30%', hint: '普通上限：0.10 = 10%；本命上限：0.20 = 20%', icon: 'fa-forward-fast' },
     equip_lifesteal_percent: { title: '吸血', summary: '依實際造成的生命傷害回復生命', hint: '例如：0.1 = 10%', icon: 'fa-droplet' },
     equip_reflect_percent: { title: '反傷', summary: '反射實際受到的生命傷害', hint: '例如：0.15 = 15%', icon: 'fa-reply' },
     equip_shield_flat: { title: '開場護盾', summary: '每場鬥法開始時獲得固定護盾', hint: '例如：300 護盾', icon: 'fa-shield-heart' },

@@ -233,7 +233,7 @@ test('admin guide includes copy-enemy effect and both flat/percentage defensive 
   assert.match(manager, /鏡映敵方法寶/);
   assert.match(manager, /固定減傷/);
   assert.match(manager, /百分比減傷/);
-  assert.match(manager, /普通上限：0\.10 = 10%；本命上限：0\.30 = 30%/);
+  assert.match(manager, /普通上限：0\.10 = 10%；本命上限：0\.20 = 20%/);
   assert.match(manager, /不會複製「複製」本身/);
 });
 

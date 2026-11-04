@@ -1,22 +1,22 @@
 // Versioned, permanent pool shared by browser and server. Never generated at draw time.
 (function (root) {
   'use strict';
-  const VERSION = 'soulbound-v5-attack200-hp800';
-  const BALANCE_VERSION = 1, REFINEMENT_VERSION = 4, REFINEMENT_GROWTH = .15;
+  const VERSION = 'soulbound-v6-controlled-effects';
+  const BALANCE_VERSION = 2, REFINEMENT_VERSION = 5, REFINEMENT_GROWTH = .15;
   const PITY = 20, WEAPON_RATE = .02, FRAGMENT_MIN = 20, FRAGMENT_MAX = 40;
   // One authority for generation, persistence and combat. Bounds are code-owned.
   const EFFECT_BOUNDS = Object.freeze(Object.fromEntries(Object.entries({
     equip_attack_flat:[1,200], equip_hp_flat:[1,800],
-    equip_damage_reduction_flat:[1,800], equip_shield_flat:[1,6000],
-    equip_true_damage_flat:[1,1500], equip_on_correct_shield_flat:[1,1800],
-    equip_attack_percent:[.05,2], equip_hp_percent:[.05,2],
-    equip_damage_percent:[.03,1.5], equip_streak_damage_percent:[.05,2],
-    equip_damage_reduction_percent:[.02,.75], equip_crit_chance:[.02,.6],
-    equip_crit_damage_percent:[.1,2.5], equip_combo_chance:[.02,.3],
-    equip_combo_damage_percent:[.05,1.5], equip_lifesteal_percent:[.02,.5],
-    equip_reflect_percent:[.05,1], equip_low_hp_damage_percent:[.05,2],
-    equip_low_hp_reduction_percent:[.03,.75], equip_first_hit_reduction_percent:[.05,.85],
-    equip_damage_cap_percent:[.1,.65]
+    equip_damage_reduction_flat:[1,80], equip_shield_flat:[1,400],
+    equip_true_damage_flat:[1,100], equip_on_correct_shield_flat:[1,160],
+    equip_attack_percent:[.05,.25], equip_hp_percent:[.05,.25],
+    equip_damage_percent:[.03,.3], equip_streak_damage_percent:[.05,.75],
+    equip_damage_reduction_percent:[.02,.25], equip_crit_chance:[.02,.2],
+    equip_crit_damage_percent:[.1,.75], equip_combo_chance:[.02,.2],
+    equip_combo_damage_percent:[.05,.5], equip_lifesteal_percent:[.02,.25],
+    equip_reflect_percent:[.05,.35], equip_low_hp_damage_percent:[.05,.75],
+    equip_low_hp_reduction_percent:[.03,.3], equip_first_hit_reduction_percent:[.05,.5],
+    equip_damage_cap_percent:[.35,.65]
   }).map(([type,[min,max]])=>[type,Object.freeze({min,max})])));
   const round = value => Number(value.toFixed(4));
   function normalizeValue(type, value) {
@@ -25,6 +25,16 @@
     const n = Number(value), finite = Number.isFinite(n) ? n : bounds.min;
     const clamped = Math.min(bounds.max, Math.max(bounds.min, finite));
     return type.endsWith('_flat') ? Math.round(clamped) : round(clamped);
+  }
+  // A copied or duplicated soulbound affix cannot bypass its equipment allowance.
+  function effectTotal(effects, type) {
+    let ordinary=0,bound=0;
+    for(const effect of effects || []){
+      if(effect?.type!==type)continue;
+      const value=Number(effect.value),amount=Number.isFinite(value)?Math.max(0,value):0;
+      if(effect.soulbound===true || effect.item?.equipSlot==='本命法寶')bound+=amount;else ordinary+=amount;
+    }
+    return ordinary+(EFFECT_BOUNDS[type]?Math.min(EFFECT_BOUNDS[type].max,bound):bound);
   }
   function effectRange(type, order = 3, stage = 2, count = 3) {
     const minRealm = {equip_cheat_death:5,equip_copy_enemy_artifact:6,equip_damage_cap_percent:4}[type] || 1;
@@ -44,10 +54,13 @@
     const high = inverse ? bounds.max - (bounds.max - bounds.min) * strength * .55 : bounds.max * strength;
     const min = integer ? Math.max(bounds.min,Math.ceil(low - 1e-9)) : Math.max(bounds.min,round(low));
     const max = integer ? Math.max(min,Math.floor(high + 1e-9)) : Math.max(min,round(high));
-    // The first refinement leaves room for the final 15% attack/HP upgrade.
-    const reserveFinalGrowth = stage < 3 && ['equip_attack_flat','equip_hp_flat'].includes(type);
-    const ceiling = reserveFinalGrowth ? Math.floor(bounds.max / (1 + REFINEMENT_GROWTH)) : bounds.max;
-    return {type,field:'value',min:Math.min(min,ceiling),max:Math.min(ceiling,max),unit:integer?'點':'比例',
+    // Every numeric affix must leave room for the final 15% improvement.
+    const reserveFinalGrowth = stage < 3;
+    const precision=integer?1:10000;
+    const ceiling = reserveFinalGrowth && !inverse
+      ? Math.floor(bounds.max / (1 + REFINEMENT_GROWTH)*precision)/precision : bounds.max;
+    const floor = reserveFinalGrowth && inverse ? Math.ceil(bounds.min / (1 - REFINEMENT_GROWTH)*10000)/10000 : bounds.min;
+    return {type,field:'value',min:Math.max(floor,Math.min(min,ceiling)),max:Math.max(floor,Math.min(ceiling,max)),unit:integer?'點':'比例',
       note:inverse?'數值越小越強；系統固定上下限':'系統固定上下限'};
   }
   // Runtime migration is idempotent; ownership and item IDs do not change.
@@ -55,13 +68,14 @@
     if (!item || item.equipSlot !== '本命法寶') return item;
     const permanent = get(item.id);
     if (permanent) return permanent;
-    const legacy = Number(item.soulboundBalanceVersion || 0) < BALANCE_VERSION && Number(item.soulboundRefinementVersion || 0) < 3;
-    return {...item,soulboundBalanceVersion:BALANCE_VERSION,effects:(item.effects || []).map(effect=>{
-      if (!Object.hasOwn(effect,'value') || !EFFECT_BOUNDS[effect.type]) return {...effect};
-      const multiplier = effect.type.endsWith('_flat') || ['equip_attack_percent','equip_hp_percent'].includes(effect.type) ? 4 : 2;
-      const value = legacy ? Number(effect.value) * (effect.type === 'equip_damage_cap_percent' ? .5 : multiplier) : effect.value;
-      return {...effect,value:normalizeValue(effect.type,value)};
-    })};
+    const effects=new Map();
+    for(const effect of item.effects || []){
+      const next=Object.hasOwn(effect,'value') && EFFECT_BOUNDS[effect.type]
+        ? {...effect,value:normalizeValue(effect.type,effect.value)} : {...effect};
+      const previous=effects.get(next.type),inverse=next.type==='equip_damage_cap_percent';
+      if(!previous || ('value' in next && (inverse?next.value<previous.value:next.value>previous.value)))effects.set(next.type,next);
+    }
+    return {...item,soulboundBalanceVersion:BALANCE_VERSION,effects:[...effects.values()]};
   }
   // A deliberate choice of archetype costs roughly twenty average fragment drops.
   const redemptionCost = rank => 600 + Math.max(0, rank) * 120;
@@ -81,7 +95,7 @@
     ['axe', '破障玄斧', '斧', '斧', 'equip_true_damage_flat', 15, 6, '命中追加真實傷害', '攻堅', '#fda4af']
   ].map(([id, name, form, icon, effect, base, step, label, synergy, color]) =>
     Object.freeze({ id, name, form, icon, effect, base, step, label, synergy, color })));
-  const amount = (type, rank) => Number(((type.base + type.step * rank) * (type.effect.endsWith('_flat') ? 4 : 2)).toFixed(4));
+  const amount = (type, rank) => normalizeValue(type.effect,(type.base + type.step * rank) * (type.effect.endsWith('_flat') ? 1.2 : 1.5));
   const valueText = (effect, value) => effect.endsWith('_percent') || effect.endsWith('_chance')
     ? `${Number((value * 100).toFixed(1))}%` : `${value} 點`;
   const ITEMS = Object.freeze(REALMS.flatMap((realm, rank) => TYPES.map(type => Object.freeze({
@@ -210,7 +224,7 @@
       }
     }
   }
-  const api = Object.freeze({ VERSION, BALANCE_VERSION, EFFECT_BOUNDS, REFINEMENT_GROWTH, normalizeValue, effectRange, balanceArtifact, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText, REFINEMENT_VERSION, MAX_REFINEMENT_EFFECTS, PERCENT_EFFECT_CAPS, redemptionCost, refinementCap, refinementRange, refinementCompatible, refineEffects, assertRefinementImproves });
+  const api = Object.freeze({ VERSION, BALANCE_VERSION, EFFECT_BOUNDS, REFINEMENT_GROWTH, normalizeValue, effectTotal, effectRange, balanceArtifact, PITY, WEAPON_RATE, FRAGMENT_MIN, FRAGMENT_MAX, REALMS, TYPES, ITEMS, get, rankFor, price, cost, candidates, roll, valueText, REFINEMENT_VERSION, MAX_REFINEMENT_EFFECTS, PERCENT_EFFECT_CAPS, redemptionCost, refinementCap, refinementRange, refinementCompatible, refineEffects, assertRefinementImproves });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QASoulboundPool = api;
 })(globalThis);

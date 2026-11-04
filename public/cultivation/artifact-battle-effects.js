@@ -1,4 +1,5 @@
 import {} from './combat-combo.js';
+import {} from './soulbound-pool.js';
 // 法寶鬥法效果結算：只依房間內的 artifactBattle 快照運算，不讀取本地玩家資料。
 // 由房主在 Firestore transaction 內統一結算，確保雙方看到相同結果。
 (function () {
@@ -106,6 +107,7 @@ import {} from './combat-combo.js';
   }
 
   function sumValue(effects, type) {
+    if(globalThis.QASoulboundPool)return globalThis.QASoulboundPool.effectTotal(effects,type);
     return effects
       .filter((effect) => effect.type === type)
       .reduce((sum, effect) => sum + Math.max(0, num(effect.value)), 0);
