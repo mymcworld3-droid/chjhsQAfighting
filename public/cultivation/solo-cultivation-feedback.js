@@ -19,7 +19,11 @@ export function cultivationProgress(score, realms, fixedIndex) {
   let index = 0;
   realms.forEach((realm, i) => { if (value >= realm.need) index = i; });
   if (typeof window.limitImmortalRank === 'function') index = window.limitImmortalRank(index, value, realms);
-  if (fixedIndex !== undefined) index = fixedIndex;
+  if (fixedIndex !== undefined) index = typeof fixedIndex === 'object' ? fixedIndex.index : fixedIndex;
+  if(window.QAVoidRetraining){
+    const result=window.QAVoidRetraining.progress(value,realms,index,typeof fixedIndex==='object'?fixedIndex:undefined);
+    return {...result,next:result.next?.need>result.realm.need?result.next:undefined};
+  }
   const realm = realms[index] || { name: '修行', sub: '', need: 0 };
   // 半仙／真仙同門檻，不能把仙榜資格當成下一段數值進度。
   const next = realms.slice(index + 1).find(item => item.need > realm.need);
@@ -215,13 +219,13 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
       const fromScore = Math.max(0, finalScore - amount);
       const initial = render(fromScore);
       gainLabel.textContent = `+${numberText(amount)} 修為`;
-      const flightEnd = await fly(amount, fromScore, initial.index);
+      const flightEnd = await fly(amount, fromScore, initial.cursor || initial.index);
       if (done) return;
       // 先完整呈現滿條，再顯示突破後帶入下一境的剩餘修為。
       await waitUntil(flightEnd + 260);
       if (done) return;
       const final = cultivationProgress(finalScore, realmList);
-      const carryMs = final.index !== initial.index ? 280 : 0;
+      const carryMs = (final.step ?? final.index) !== (initial.step ?? initial.index) ? 280 : 0;
       if (carryMs) { render(finalScore); await waitUntil(flightEnd + 260 + carryMs); }
       root.classList.add('leaving');
       await waitUntil(flightEnd + 260 + carryMs + 180);

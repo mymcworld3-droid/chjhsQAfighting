@@ -17,7 +17,7 @@
     { name: '元嬰', sub: '元嬰出竅', need: 68 },
     { name: '化神', sub: '神念通天', need: 188 },
     { name: '煉虛', sub: '虛空悟道', need: 428 },
-    { name: '合體', sub: '天地合一', need: 788 },
+    { name: '合體', sub: '天地合一', need: 642 },
     { name: '渡劫', sub: '雷劫問道', need: 1268 },
     { name: '半仙', sub: '仙門在望', need: 1868 },
     { name: '真仙', sub: '榜上仙位', need: 1868 }
@@ -25,6 +25,8 @@
 
   let initialized = false;
   let lastRealmIndex = 0;
+  let lastRealmStep = 0;
+  let lastRealmView = null;
   let activeFeedback = null;
   const CONTINUE_AFTER_MS = 1000;
   const EXIT_MS = 240;
@@ -72,9 +74,11 @@
     }).join('');
   }
 
-  function showBreakthrough(fromIndex, toIndex) {
-    const from = REALMS[Math.max(0, fromIndex)] || REALMS[0];
-    const to = REALMS[Math.max(0, toIndex)] || REALMS[0];
+  function showBreakthrough(fromIndex, toIndex, fromView, toView) {
+    const from = fromView || REALMS[Math.max(0, fromIndex)] || REALMS[0];
+    const to = toView || REALMS[Math.max(0, toIndex)] || REALMS[0];
+    const enteringRetraining = !from.retraining && to.retraining;
+    const completedRetraining = from.retraining && to.name==='合體';
     const major = from.name !== to.name;
     const firstQi = fromIndex === 0 && toIndex === 1;
 
@@ -100,13 +104,13 @@
       <div class="realm-breakthrough-particles">${particleMarkup(firstQi ? 52 : major ? 36 : 20)}</div>
       <section class="realm-breakthrough-card">
         <div class="realm-breakthrough-kicker">${major ? '大道突破' : '修為精進'}</div>
-        <div class="realm-breakthrough-title">${major ? '境界突破' : '境界提升'}</div>
-        <div class="realm-breakthrough-icon">${window.getRealmIconMarkup?.(to.name) || ''}</div>
+        <div class="realm-breakthrough-title">${enteringRetraining ? '返璞重修' : completedRetraining ? '重修圓滿' : major ? '境界突破' : '境界提升'}</div>
+        <div class="realm-breakthrough-icon">${window.getRealmIconMarkup?.(to.baseName || to.name) || ''}</div>
         <div class="realm-breakthrough-realm">${escapeHtml(to.name)}</div>
         <div class="realm-breakthrough-sub">${escapeHtml(to.sub)}</div>
         <div class="realm-breakthrough-divider"><span></span><b>◆</b><span></span></div>
         <div class="realm-breakthrough-route">${escapeHtml(from.name)} ${escapeHtml(from.sub)} <i class="fa-solid fa-arrow-right-long"></i> ${escapeHtml(to.name)} ${escapeHtml(to.sub)}</div>
-        <p>${firstQi ? '一念明悟，靈氣入體。你的第一步，已刻入仙途。' : major ? '天地共鳴，道途再開。' : '靈台清明，修為更進一境。'}</p>
+        <p>${enteringRetraining ? '煉虛初成，返璞歸真。從煉氣重修，所需修為減半；再修 214 修為即可晉入合體。' : completedRetraining ? '半程重修已圓滿，天地合一，晉入合體。' : firstQi ? '一念明悟，靈氣入體。你的第一步，已刻入仙途。' : major ? '天地共鳴，道途再開。' : '靈台清明，修為更進一境。'}</p>
       </section>
       <p id="realm-breakthrough-continue" class="realm-breakthrough-continue" aria-live="polite" aria-hidden="true">按任何地方以繼續</p>
     `;
@@ -188,21 +192,16 @@
     const value = currentScore();
     if (value == null) return;
     const currentIndex = realmIndexFor(value);
-
+    const projected=window.QAVoidRetraining?.progress(value,REALMS,currentIndex);
+    const currentStep=projected?.step ?? currentIndex*10;
+    const currentView=projected?.realm || REALMS[currentIndex];
     if (!initialized) {
-      initialized = true;
-      lastRealmIndex = currentIndex;
+      initialized = true;lastRealmIndex = currentIndex;lastRealmStep=currentStep;lastRealmView=currentView;
       return;
     }
-
-    if (currentIndex > lastRealmIndex) {
-      const previousIndex = lastRealmIndex;
-      lastRealmIndex = currentIndex;
-      showBreakthrough(previousIndex, currentIndex);
-      return;
-    }
-
-    if (currentIndex < lastRealmIndex) lastRealmIndex = currentIndex;
+    const previousIndex=lastRealmIndex,previousView=lastRealmView,previousStep=lastRealmStep;
+    lastRealmIndex=currentIndex;lastRealmStep=currentStep;lastRealmView=currentView;
+    if(currentStep>previousStep)showBreakthrough(previousIndex,currentIndex,previousView,currentView);
   }
 
   window.showFirstQiBreakthrough = async () => {
@@ -210,6 +209,7 @@
     loadStyle();
     initialized = true;
     lastRealmIndex = realmIndexFor(currentScore() || 1);
+    lastRealmStep=lastRealmIndex*10;lastRealmView=REALMS[lastRealmIndex];
     return showBreakthrough(0, 1);
   };
 

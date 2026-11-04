@@ -16,7 +16,7 @@
     { name: '元嬰', sub: '元嬰出竅', need: 68 },
     { name: '化神', sub: '神念通天', need: 188 },
     { name: '煉虛', sub: '虛空悟道', need: 428 },
-    { name: '合體', sub: '天地合一', need: 788 },
+    { name: '合體', sub: '天地合一', need: 642 },
     { name: '渡劫', sub: '雷劫問道', need: 1268 },
     { name: '半仙', sub: '仙門在望', need: 1868 },
     { name: '真仙', sub: '榜上仙位', need: 1868 }
@@ -33,13 +33,16 @@
   }
 
   function nextRealm(value) {
+    const projected=window.QAVoidRetraining?.progress(value,REALMS,REALMS.indexOf(realmFor(value)));
+    if(projected?.retraining)return projected.next;
     const current = realmFor(value);
     return REALMS[REALMS.indexOf(current) + 1] || null;
   }
 
   function refresh(score) {
     const value = Math.max(0, Number(score) || 0);
-    const realm = realmFor(value);
+    const projected=window.QAVoidRetraining?.progress(value,REALMS,REALMS.indexOf(realmFor(value)));
+    const realm = projected?.realm || realmFor(value);
     const next = nextRealm(value);
 
     const scoreEl = document.getElementById('xiuxian-score');

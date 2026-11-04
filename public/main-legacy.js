@@ -1,3 +1,4 @@
+import './cultivation/void-retraining-rules.js';
 import {} from './cultivation/solo-learning-rules.js';
 import './cultivation/knowledge-points.js';
 import './cultivation/adaptive-learning.js';
@@ -539,7 +540,7 @@ const REALMS = [
     { name: '元嬰', sub: '元嬰出竅', need: 68 },
     { name: '化神', sub: '神念通天', need: 188 },
     { name: '煉虛', sub: '虛空悟道', need: 428 },
-    { name: '合體', sub: '天地合一', need: 788 },
+    { name: '合體', sub: '天地合一', need: 642 },
     { name: '渡劫', sub: '雷劫問道', need: 1268 },
     { name: '半仙', sub: '仙門在望', need: 1868 },
     { name: '真仙', sub: '榜上仙位', need: 1868 }
@@ -548,7 +549,7 @@ const REALMS = [
 function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
     const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
         : window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
-    const r = REALMS[idx];
+    const r = window.QAVoidRetraining?.display(score,REALMS[idx]) || REALMS[idx];
     return `${r.name} ${r.sub}`;
 }
 
@@ -556,8 +557,8 @@ function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData
 function getRankMarkup(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
     const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
         : window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
-    const realm = REALMS[idx] || REALMS[0];
-    return `${window.getRealmIconMarkup?.(realm.name, '', uid) || ''} ${realm.name} ${realm.sub}`;
+    const realm = window.QAVoidRetraining?.display(score,REALMS[idx] || REALMS[0]) || REALMS[idx] || REALMS[0];
+    return `${window.getRealmIconMarkup?.(realm.baseName || realm.name, '', uid) || ''} ${realm.name} ${realm.sub}`;
 }
 
 function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
@@ -2113,6 +2114,13 @@ function updateUIStats() {
         currentStarsDisplay = currentScore - currentRealm.need;
         maxStarsDisplay = "∞";
         progressPercent = 100;
+    }
+
+    if (window.QAVoidRetraining?.phase(currentScore) >= 0) {
+        const progress = window.QAVoidRetraining.progress(currentScore,REALMS,rankIndex);
+        progressPercent = progress.ratio * 100;
+        currentStarsDisplay = progress.earned;
+        maxStarsDisplay = progress.required;
     }
 
     const starValEl = document.getElementById('display-stars');

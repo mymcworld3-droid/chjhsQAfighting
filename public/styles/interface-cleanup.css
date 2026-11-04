@@ -178,3 +178,8 @@ body.ui-cleanup #page-training .training-subtabs-v3 {box-shadow:none!important}
   body.ui-cleanup #page-home .home-records>summary {padding-block:12px}
   body.ui-cleanup:has(#page-home.active-page)>main {padding-bottom:68px}
 }
+
+/* 煉虛重修保留完整境界名稱，窄畫面也能顯示後綴。 */
+#xiuxian-realm.is-retraining,#display-rank.is-retraining{font-size:clamp(18px,3.4vw,30px)!important;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
+.xiuxian-retraining-note{margin:9px 0 0;padding:9px 12px;border:1px solid #79b5b03b;border-radius:10px;color:#a7d2c5;background:#568e8110;font-size:11px;line-height:1.7}
+.xiuxian-retraining-note[hidden]{display:none}

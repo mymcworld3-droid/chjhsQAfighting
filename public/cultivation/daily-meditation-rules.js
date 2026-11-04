@@ -6,7 +6,7 @@ const DAILY_MEDITATION_REALMS = Object.freeze([
   { min: 68, name: '元嬰', cultivation: 4, gold: 45 },
   { min: 188, name: '化神', cultivation: 5, gold: 60 },
   { min: 428, name: '煉虛', cultivation: 6, gold: 80 },
-  { min: 788, name: '合體', cultivation: 7, gold: 100 },
+  { min: 642, name: '合體', cultivation: 7, gold: 100 },
   { min: 1268, name: '渡劫', cultivation: 8, gold: 130 },
   { min: 1868, name: '半仙', cultivation: 9, gold: 160 },
   { min: 2588, name: '仙道精進', cultivation: 10, gold: 200 }

@@ -56,7 +56,7 @@ const CORE_NAMES = Object.freeze({
   ocean:'大海無垠丹',taichu:'太初回元丹',ningxin:'凝心靜音丹',pojing:'破境衝仙丹',
   xingchen:'星辰吞月丹',wugou:'無垢清心丹',thunder:'萬劫雷霆丹',reverse:'陰陽反轉丹',sword:'破鋒劍心丹'
 });
-const NEXT_REALM_THRESHOLDS = Object.freeze([28,68,188,428,788,1268,1868]);
+const NEXT_REALM_THRESHOLDS = Object.freeze([28,68,188,428,431,442,462,522,642,1268,1868]);
 const BATTLE_SUBJECTS = Object.freeze(['國文','英文','數學','公民','歷史','地理','物理','化學','生物']);
 
 function finite(value,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback;}

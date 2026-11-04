@@ -26,7 +26,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   ];
   const CSS_HREF = 'cultivation-training-v3.css';
   const REMOTE_FIELD = 'cultivationTraining';
-  const REALM_THRESHOLDS = [68, 188, 428, 788, 1268, 1868];
+  const REALM_THRESHOLDS = [68, 188, 428, 431, 442, 462, 522, 642, 1268, 1868];
 
   const GRADE_WEIGHTS = [
     { grade: 9, chance: 25 },

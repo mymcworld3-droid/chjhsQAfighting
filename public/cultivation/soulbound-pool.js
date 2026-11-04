@@ -67,7 +67,7 @@
   const redemptionCost = rank => 600 + Math.max(0, rank) * 120;
   const REALMS = Object.freeze([
     ['golden-core', '金丹', 28], ['nascent-soul', '元嬰', 68], ['spirit', '化神', 188],
-    ['void', '煉虛', 428], ['fusion', '合體', 788], ['mahayana', '渡劫', 1268],
+    ['void', '煉虛', 428], ['fusion', '合體', 642], ['mahayana', '渡劫', 1268],
     ['tribulation', '半仙', 1868], ['immortal', '真仙', 1868]
   ].map(([id, name, need]) => Object.freeze({ id, name, need })));
   const TYPES = Object.freeze([
