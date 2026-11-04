@@ -81,6 +81,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/raid-mode.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/martial-trial.js',
+  './cultivation/wendao-modes.js',
   './cultivation/training-scene-map.js',
   './cultivation/spirit-farm.js',
   './cultivation/realm-breakthrough-feedback.js',

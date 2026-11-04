@@ -240,7 +240,6 @@
             <div><span>裝備 · 境界與屬性</span><b>${formatStatNumber(power.equipment)}</b></div>
           </div>
           ${power.items?.length ? `<div class="status-power-items">${power.items.map(item => `<span>${escapeHtml(item.name)}（${escapeHtml(item.realm)}） +${formatStatNumber(item.power)}</span>`).join("")}</div>` : ""}
-          <button type="button" class="martial-trial-entry" data-martial-trial-open><span>演武試煉<small>以目前配裝挑戰百層守衛，不需答題</small></span><span aria-hidden="true">→</span></button>
           <p class="status-power-note">僅計入目前啟用金丹及已裝備法寶；停用金丹不計戰力。戰力不直接增加鬥法傷害。</p>
         </div>
         <div class="status-section status-core-section">
