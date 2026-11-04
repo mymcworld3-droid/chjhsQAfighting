@@ -8,7 +8,7 @@
     { min: 68, name: '元嬰', bonus: 20 },
     { min: 188, name: '化神', bonus: 30 },
     { min: 428, name: '煉虛', bonus: 40 },
-    { min: 788, name: '合體', bonus: 50 },
+    { min: 642, name: '合體', bonus: 50 },
     { min: 1268, name: '渡劫', bonus: 60 },
     { min: 1868, name: '半仙以上', bonus: 80 }
   ].map(Object.freeze));

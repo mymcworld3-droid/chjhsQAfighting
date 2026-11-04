@@ -111,14 +111,14 @@ test('multiplayer unlock remains Foundation Establishment at 6 cultivation', () 
 test('post-Golden-Core realm curve is consistent across active realm renderers', () => {
   const expected = [
     ['金丹', 28], ['元嬰', 68], ['化神', 188], ['煉虛', 428],
-    ['合體', 788], ['渡劫', 1268], ['半仙', 1868], ['真仙', 1868]
+    ['合體', 642], ['渡劫', 1268], ['半仙', 1868], ['真仙', 1868]
   ];
   for (const source of [theme, liveSync, breakthrough]) {
     for (const [name, need] of expected) {
       assert.match(source, new RegExp(`name: '${name}'.*need: ${need}`), `${name} threshold ${need} is synchronized`);
     }
   }
-  assert.match(training, /const REALM_THRESHOLDS = \[68, 188, 428, 788, 1268, 1868\];/);
+  assert.match(training, /const REALM_THRESHOLDS = \[68, 188, 428, 431, 442, 462, 522, 642, 1268, 1868\];/);
 });
 
 test('legacy compensation formula and item are preserved', () => {

@@ -44,6 +44,7 @@ function harness() {
   });
   const parentDocument = target();
   const window = Object.assign(target(), {
+    QAVoidRetraining:require('../public/cultivation/void-retraining-rules.js'),
     parent: { document: parentDocument }, getCurrentUserData: () => ({stats:{totalScore:score}}),
     limitImmortalRank: i => i, dispatchEvent() {}
   });
@@ -136,4 +137,12 @@ test('mobile styles preserve authored animation durations for cards and breakthr
   assert.doesNotMatch(css, /\*\s*\{\s*animation-duration:\s*0?\.5s\s*!important/);
   assert.match(read('public/realm-breakthrough-feedback.css'), /realmBreakthroughRays 14s linear infinite/);
   assert.match(read('public/realm-icons.css'), /var\(--realm-entry-time\)/);
+});
+
+test('entering Void, each retraining phase and completed Fusion have distinct breakthrough feedback',()=>{
+  const h=harness();h.trigger(427);h.trigger(428);
+  assert.match(h.overlay().innerHTML,/返璞重修/);assert.match(h.overlay().innerHTML,/煉氣期（煉虛）/);
+  h.trigger(431);assert.match(h.overlay().innerHTML,/築基期（煉虛）/);
+  const same=h.overlay();h.trigger(432);assert.equal(h.overlay(),same,'ordinary score changes do not replay a phase');
+  h.trigger(642);assert.match(h.overlay().innerHTML,/重修圓滿/);assert.match(h.overlay().innerHTML,/合體/);
 });

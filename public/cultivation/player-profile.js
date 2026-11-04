@@ -96,7 +96,8 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     }) || { total: 0, base: 0, core: 0, equipment: 0, items: [] };
     const answered = number(stats.totalAnswered);
     const correct = Math.min(answered, number(stats.totalCorrect));
-    const realm = realmForScore(score)?.name || '凡人';
+    const baseRealm = realmForScore(score);
+    const realm = (window.QAVoidRetraining?.display(score,baseRealm) || baseRealm)?.name || '凡人';
     const slots = ARTIFACT_EQUIP_SLOTS.map(slot => ({ slot, item: equippedArtifact(data, slot) }));
     return {
       uid, name: String(data?.displayName || '無名修士'), avatar: safeImage(resolvePlayerAvatar(data)),

@@ -54,17 +54,15 @@ test('legacy saved realm indices cannot mislabel players after removing Qi layer
 });
 
 test('post-nascent-soul curve grows with investable cultivation bonuses', () => {
-  const expected = [['元嬰',68],['化神',188],['煉虛',428],['合體',788],['渡劫',1268],['半仙',1868],['真仙',1868]];
+  const expected = [['元嬰',68],['化神',188],['煉虛',428],['合體',642],['渡劫',1268],['半仙',1868],['真仙',1868]];
   for (const [name, need] of expected) assert.match(theme, new RegExp("name: '" + name + "'.*need: " + need));
   assert.match(artifacts, /id: 'golden-core'.*need: 28/);
   assert.match(artifacts, /id: 'mahayana'.*need: 1268/);
 });
 
-test('base +2 answer gaps increase after Nascent Soul while spirit bonuses shorten the grind', () => {
-  const thresholds = [28, 68, 188, 428, 788, 1268, 1868];
-  const answerGaps = thresholds.slice(1).map((need, index) => (need - thresholds[index]) / 2);
-  assert.deepEqual(answerGaps, [20, 60, 120, 180, 240, 300]);
-  for (let i = 1; i < answerGaps.length; i += 1) assert.ok(answerGaps[i] >= answerGaps[i - 1]);
-  const fullyTrainedGaps = thresholds.slice(2).map((need, index) => (need - thresholds[index + 1]) / 12);
-  assert.deepEqual(fullyTrainedGaps, [10, 20, 30, 40, 50]);
+test('Void retraining is half the first journey, while higher realm thresholds retain their original gates', () => {
+  const thresholds = [28,68,188,428,642,1268,1868];
+  assert.equal(thresholds[4]-thresholds[3],428/2);
+  assert.equal((thresholds[4]-thresholds[3])/2,107);
+  assert.equal(thresholds.at(-2),1268);assert.equal(thresholds.at(-1),1868);
 });

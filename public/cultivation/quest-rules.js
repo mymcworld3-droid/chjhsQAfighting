@@ -39,8 +39,8 @@
     quest('path-raid-ten', '護宗十戰', '累計成功通關團本 10 次。', 'raid', 10, 350, 3, 'raid', 6, { 'raid-refine-key-iii': 2 }),
     quest('path-spirit', '神念通天', '修為達 188，晉至化神。', 'score', 188, 500, 0, 'solo'),
     quest('path-solo-hundred', '百問悟道', '累計問道答對 100 題。', 'solo', 100, 400, 3, 'solo'),
-    quest('path-void', '虛空悟道', '修為達 428，晉至煉虛。', 'score', 428, 700, 0, 'solo'),
-    quest('path-union', '天地合一', '修為達 788，晉至合體。', 'score', 788, 900, 0, 'solo'),
+    quest('path-void', '虛空悟道', '修為達 428，進入煉虛返璞重修。', 'score', 428, 700, 0, 'solo'),
+    quest('path-union', '天地合一', '重修累積 214 修為、總修為達 642，晉至合體。', 'score', 642, 900, 0, 'solo'),
     quest('path-mahayana', '雷劫問道', '修為達 1268，晉至渡劫。', 'score', 1268, 1200, 0, 'solo'),
     quest('path-tribulation', '仙門在望', '修為達 1868，晉至半仙。', 'score', 1868, 1500, 0, 'solo'),
     quest('path-immortal', '仙道精進', '修為達 2588，繼續精進仙道。', 'score', 2588, 2000, 0, 'solo')

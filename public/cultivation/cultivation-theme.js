@@ -17,7 +17,7 @@
     { name: '元嬰', sub: '元嬰出竅', need: 68 },
     { name: '化神', sub: '神念通天', need: 188 },
     { name: '煉虛', sub: '虛空悟道', need: 428 },
-    { name: '合體', sub: '天地合一', need: 788 },
+    { name: '合體', sub: '天地合一', need: 642 },
     { name: '渡劫', sub: '雷劫問道', need: 1268 },
     { name: '半仙', sub: '仙門在望', need: 1868 },
     { name: '真仙', sub: '榜上仙位', need: 1868 }
@@ -41,11 +41,17 @@
     return REALMS[window.limitImmortalRank(REALMS.indexOf(current), value, REALMS)];
   }
 
+  function progressFor(value) {
+    const current=realmFor(value);
+    return window.QAVoidRetraining?.progress(value,REALMS,REALMS.indexOf(current));
+  }
   function nextRealm(value) {
-    return REALMS[REALMS.indexOf(realmFor(value)) + 1] || null;
+    return progressFor(value)?.next || REALMS[REALMS.indexOf(realmFor(value)) + 1] || null;
   }
 
   function pct(value) {
+    const progress=progressFor(value);
+    if(progress?.retraining)return progress.ratio*100;
     const current = realmFor(value);
     const next = nextRealm(value);
     if (!next) return 100;
@@ -65,7 +71,7 @@
     const label = `${realm.name} ${realm.sub}`;
     if (rank.dataset.realm === realm.name && rank.textContent === label && rank.querySelector('.realm-icon')) return;
     rank.dataset.realm = realm.name;
-    rank.innerHTML = `${window.getRealmIconMarkup?.(realm.name) || ''}<span>${label}</span>`;
+    rank.innerHTML = `${window.getRealmIconMarkup?.(realm.baseName || realm.name) || ''}<span>${label}</span>`;
   }
 
   function openRealmAtlas() {
@@ -84,14 +90,14 @@
           <h2>修行境界圖錄</h2>
           <button type="button" class="xiuxian-realm-atlas-close" data-realm-atlas-close aria-label="關閉境界圖錄"><i class="fa-solid fa-xmark"></i></button>
         </header>
-        <p class="xiuxian-realm-atlas-intro">境界各有獨立紋章；煉氣共五層，築基分初、中、後期。真仙須登上九州五大仙榜。</p>
+        <p class="xiuxian-realm-atlas-intro">煉氣共五層，築基分初、中、後期。428 修為進入煉虛返璞重修，再修 214 修為、總計 642 時晉入合體。真仙須登上九州五大仙榜。</p>
         <ul class="xiuxian-realm-atlas-list">
           ${grouped.map(realm => {
             const subtitle = realm.name === '煉氣' ? '一至五層' :
-              realm.name === '築基' ? '初期 · 中期 · 後期' : realm.sub;
+              realm.name === '築基' ? '初期 · 中期 · 後期' : realm.name === '煉虛' ? '煉氣 → 築基 → 金丹 → 元嬰 → 化神（重修）' : realm.sub;
             const requirement = realm.name === '真仙' ? '1868 修為＋榜上仙位' : `${realm.need} 修為起`;
             return `<li class="xiuxian-realm-atlas-item" data-current="${current.name === realm.name}">
-              ${window.getRealmIconMarkup?.(realm.name) || ''}
+              ${window.getRealmIconMarkup?.(realm.baseName || realm.name) || ''}
               <span class="xiuxian-realm-atlas-name"><strong>${realm.name}</strong><small>${subtitle}</small></span>
               <span class="xiuxian-realm-atlas-need">${requirement}</span>
             </li>`;
@@ -136,6 +142,7 @@
         <div class="xiuxian-row"><span class="xiuxian-label">當前修為</span><span id="xiuxian-score" class="xiuxian-value" aria-live="polite" aria-atomic="true">0 修為</span></div>
         <div class="xiuxian-bar"><div id="xiuxian-progress" style="width:0%"></div></div>
         <div class="xiuxian-row"><span id="xiuxian-progress-label" class="xiuxian-label">距離下一境界</span><span id="xiuxian-next" class="xiuxian-value">5 修為</span></div>
+        <p id="xiuxian-retraining" class="xiuxian-retraining-note" hidden></p>
         <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>
       `;
       anchor.parentNode.insertBefore(panel, anchor);
@@ -176,7 +183,7 @@
     rewriteLabels();
 
     const value = score();
-    const realm = realmFor(value);
+    const realm = progressFor(value)?.realm || realmFor(value);
     const next = nextRealm(value);
 
     const avatarContainer = document.getElementById('home-avatar-container');
@@ -193,7 +200,7 @@
     if (realmEl && typeof window.getRealmIconMarkup !== 'function') realmEl.textContent = realm.name;
     else if (realmEl && (realmEl.dataset.realm !== realm.name || !realmEl.querySelector('.realm-icon'))) {
       realmEl.dataset.realm = realm.name;
-      realmEl.innerHTML = `${window.getRealmIconMarkup?.(realm.name) || ''}<span>${realm.name}</span>`;
+      realmEl.innerHTML = `${window.getRealmIconMarkup?.(realm.baseName || realm.name) || ''}<span>${realm.name}</span>`;
     }
 
     const scoreEl = document.getElementById('xiuxian-score');
@@ -213,6 +220,11 @@
     const label = document.getElementById('xiuxian-progress-label');
     if (label) label.textContent = next?.name === '真仙' && value >= next.need ? '半仙已成 · 爭奪真仙席位' : next ? `下一境界：${next.name} ${next.sub}` : '榜上有名，位列真仙';
 
+    const retraining=window.QAVoidRetraining?.phase(value)>=0;
+    realmEl?.classList?.toggle?.('is-retraining',retraining);
+    rank?.classList?.toggle?.('is-retraining',retraining);
+    const note=document.getElementById('xiuxian-retraining');
+    if(note){note.hidden=!retraining;note.textContent=retraining?'煉虛重修 '+Math.max(0,value-428).toLocaleString()+' / 214 · 重修圓滿後晉入合體':'';}
     window.refreshDailyMeditationPanel?.();
   }
 
@@ -226,7 +238,7 @@
     if (rankEl) {
       new MutationObserver(() => {
         const value = score();
-        const realm = realmFor(value);
+        const realm = progressFor(value)?.realm || realmFor(value);
         updateRankNode(rankEl, realm);
       }).observe(rankEl, { childList: true, characterData: true, subtree: true });
     }
