@@ -472,15 +472,15 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     const branch = Innate.branches(info.type).find(item => item.id === info.path.branch);
     return `<aside class="ns-orb-detail" id="ns-node-dialog" role="dialog" aria-modal="false" aria-labelledby="ns-detail-title">
       <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉節點資料">×</button>
-      <i class="fa-solid ${innateBranchIcon(branch.id)} ns-detail-icon" aria-hidden="true"></i>
-      <span class="ia-eyebrow">化神 · 本命神通</span><h3 id="ns-detail-title">${branch.name}</h3>
-      <span class="ns-detail-rank">${rank} / 10 階</span><p>${branch.describe(rank)}</p>
-      ${rank < Innate.CAP ? `<p class="ns-detail-preview">下一階：${branch.describe(rank + 1)}</p>` : ''}
+      <header class="ns-orb-detail-header"><h3 id="ns-detail-title">${branch.name}</h3>
+        <span class="ns-detail-rank">${rank} / 10 階</span></header>
+      <div class="ns-detail-body"><p>${branch.describe(rank)}</p>
+        ${rank < Innate.CAP ? `<p class="ns-detail-preview">下一階：${branch.describe(rank + 1)}</p>` : ''}
+        ${player.cultivationTraining?.coreEnabled === false ? '<p class="ia-note">金丹已停用，神通效果暫停。</p>' : ''}
+        <p class="ia-note">${note}</p></div>
       <div class="ns-detail-footer"><p>${rank >= Innate.CAP ? '十階圓滿' : `升至 ${rank + 1} 階需 ${info.cost} 元嬰碎精`}</p>
         <button type="button" class="core-wash-btn" data-ia-upgrade ${disabled || !info.canUpgrade ? 'disabled' : ''}>${innateBusy ? '保存中…' : rank >= Innate.CAP ? '已圓滿' : info.canUpgrade ? '提升神通' : '碎精不足'}</button>
-        <button type="button" class="ns-reset-btn" data-ia-reselect ${disabled ? 'disabled' : ''}>重選元嬰</button></div>
-      ${player.cultivationTraining?.coreEnabled === false ? '<p class="ia-note">金丹已停用，神通效果暫停。</p>' : ''}
-      <p class="ia-note">${note}</p></aside>`;
+        <button type="button" class="ns-reset-btn" data-ia-reselect ${disabled ? 'disabled' : ''}>重選元嬰</button></div></aside>`;
   }
 
   function soulBranchDetailMarkup(player, core, branch) {
@@ -489,15 +489,14 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     const disabled = soulBusy || innateBusy || busy || !status.ok;
     return `<aside class="ns-orb-detail" id="ns-node-dialog" role="dialog" aria-modal="false" aria-labelledby="ns-detail-title">
       <button type="button" class="ns-detail-close" data-ns-close aria-label="關閉節點資料">×</button>
-      <i class="fa-solid ${branch.icon} ns-detail-icon" aria-hidden="true"></i>
-      <span class="ia-eyebrow">元嬰分支</span><h3 id="ns-detail-title">${branch.name}</h3>
-      <span class="ns-detail-rank">${level} / 10 階</span>
-      <strong class="ns-detail-value">+${branchDisplayValue(core, branch.id, level)}${unit}</strong>
-      <p>${branch.description}</p>
-      ${level < Growth.CAP ? `<p class="ns-detail-preview">下一階：+${branchDisplayValue(core, branch.id, level + 1)}${unit}</p>` : ''}
-      <div class="ns-detail-footer"><p>${level >= Growth.CAP ? '十階圓滿' : `升至 ${level + 1} 階需 ${status.cost} 元嬰碎精`}</p>
-        <button type="button" class="core-wash-btn" data-ns-upgrade="${branch.id}" ${disabled ? 'disabled' : ''}>${soulBusy ? '保存中…' : status.reason || '提升節點'}</button></div>
-      ${player.cultivationTraining?.coreEnabled === false ? '<p class="ia-note">金丹已停用，元嬰效果暫停。</p>' : ''}</aside>`;
+      <header class="ns-orb-detail-header"><h3 id="ns-detail-title">${branch.name}</h3>
+        <span class="ns-detail-rank">${level} / 10 階</span>
+        <strong class="ns-detail-value">+${branchDisplayValue(core, branch.id, level)}${unit}</strong></header>
+      <div class="ns-detail-body"><p>${branch.description}</p>
+        ${level < Growth.CAP ? `<p class="ns-detail-preview">下一階：+${branchDisplayValue(core, branch.id, level + 1)}${unit}</p>` : ''}
+        ${player.cultivationTraining?.coreEnabled === false ? '<p class="ia-note">金丹已停用，元嬰效果暫停。</p>' : ''}</div>
+      <div class="ns-detail-footer"><p>${level >= Growth.CAP ? '十階圓滿' : `升至 ${level + 1} 階需 ${status.cost} 元嬰碎精`}<small class="ns-detail-owned">持有 ${status.fragments} 元嬰碎精</small></p>
+        <button type="button" class="core-wash-btn" data-ns-upgrade="${branch.id}" ${disabled ? 'disabled' : ''}>${soulBusy ? '保存中…' : status.reason || `升級至 ${level + 1} 階`}</button></div></aside>`;
   }
 
   async function saveInnateAbility(branchId=null) {
@@ -657,11 +656,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     target?.focus({preventScroll:true});
   }
 
-  // 直式詳情移至 body，避開節點圖的 stacking context 與分頁裁切，才能蓋過導覽。
+  // 直式與低矮橫式詳情移至 body，避開節點圖的層級與分頁裁切，才能蓋過導覽。
   function syncSoulDetailLayout() {
     const detail = document.getElementById('ns-node-dialog');
     if (!detail) return;
-    if (window.matchMedia('(orientation: portrait)').matches) {
+    if (window.matchMedia('(orientation: portrait)').matches || window.matchMedia('(max-height: 600px)').matches) {
       detail.dataset.nsPortraitSheet = '';
       document.body.appendChild(detail);
     } else {
@@ -1248,6 +1247,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
   function boot() {
     window.matchMedia('(orientation: portrait)').addEventListener('change', syncSoulDetailLayout);
+    window.matchMedia('(max-height: 600px)').addEventListener('change', syncSoulDetailLayout);
     window.addEventListener('xiuxian:contract-page-opened', () => { activeTab = 'contract'; });
     loadStyle();
     restoreRemoteTraining();
