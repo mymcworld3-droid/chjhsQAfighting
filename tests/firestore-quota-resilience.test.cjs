@@ -34,7 +34,7 @@ test('wallet read is single-flight and throttles Firestore resource exhaustion',
 
 test('meditation reuses existing server sessions and keeps settlement atomic without client Firestore reads', () => {
   const api=readFileSync(join(__dirname,'../daily-meditation-api.cjs'),'utf8');
-  assert.match(api,/if\(existing.session\)return/);
+  assert.match(api,/if\(c.session\)return/);
   assert.match(api,/db.runTransaction/);
   assert.match(api,/if\(c.result\)return \{completed:true/);
   assert.doesNotMatch(meditation,/getDoc\(|getDocs\(|runTransaction\(/);
