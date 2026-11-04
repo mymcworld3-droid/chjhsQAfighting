@@ -34,7 +34,7 @@ const flush = ()=>new Promise(resolve=>setImmediate(resolve));
 test('only a newly created or unfinished account gets the three short pointers', () => {
   const h=guideHarness(); h.window.scheduleFirstAnswerGuide('new',false);h.tick();assert.equal(h.layer(),null);
   h.window.scheduleFirstAnswerGuide('new',true);h.block(true);h.tick();assert.equal(h.layer(),null,'wait for character setup and startup curtain');
-  h.block(false);h.tick();assert.equal(h.layer().querySelector('p').textContent,'從這裡開始答題。');
+  h.block(false);h.tick();assert.equal(h.layer().querySelector('p').textContent,'點開後選擇「自由問道」，開始答題。');
   assert.equal(h.starts(),0,'logging in never submits or generates a sample answer');
 });
 test('the real answer entry starts once, then report and helper pointers finish and never repeat', async () => {
@@ -57,7 +57,7 @@ test('an interrupted guide resumes on its own account; logout and account change
 test('failed question entry restores the first pointer and permits a retry', async () => {
   const h=guideHarness();h.window.startQuizFlow=async()=>{throw Error('offline');};
   h.window.scheduleFirstAnswerGuide('new',true);h.tick();h.layer().querySelector('[data-guide-next]').onclick();await flush();
-  assert.equal(h.layer().querySelector('p').textContent,'從這裡開始答題。');
+  assert.equal(h.layer().querySelector('p').textContent,'點開後選擇「自由問道」，開始答題。');
   h.window.startQuizFlow=async()=>h.page('quiz');h.layer().querySelector('[data-guide-next]').onclick();await flush();h.tick();
   assert.equal(h.layer().querySelector('h2').textContent,'題目有錯');
 });

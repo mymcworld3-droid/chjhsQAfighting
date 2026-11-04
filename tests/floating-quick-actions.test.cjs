@@ -8,7 +8,7 @@ const nav = index.slice(index.indexOf('<nav id="bottom-nav"'), index.indexOf('<d
 
 test('the home practice area owns the original solo and duel entry actions exactly once', () => {
   assert.match(home, /<section class="home-practice" aria-label="今日修行">/);
-  assert.match(home, /id="btn-home-start"[^>]*onclick="startQuizFlow\(\)"/);
+  assert.match(home, /id="btn-home-start"[^>]*onclick="openWendaoModes\(\)"/);
   assert.match(home, /id="btn-home-pvp"[^>]*onclick="startBattleMatchmaking\(\)"/);
   assert.doesNotMatch(nav, /xiuxian-quick-actions|btn-home-start|btn-home-pvp/);
   for (const id of ['btn-home-start','btn-home-pvp']) assert.equal((index.match(new RegExp(`id="${id}"`,'g'))||[]).length,1);

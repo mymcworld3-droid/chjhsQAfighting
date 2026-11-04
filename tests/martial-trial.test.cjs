@@ -8,7 +8,7 @@ function database(player=user()){
  const records=new Map([['users/u',structuredClone(player)]]);let queue=Promise.resolve();
  const snap=key=>({exists:records.has(key),data:()=>structuredClone(records.get(key))});
  return {records,collection:name=>({doc:id=>({key:name+'/'+id,get:async()=>snap(name+'/'+id)})}),runTransaction(worker){
-  const work=queue.then(async()=>{const writes=new Map();const result=await worker({get:async ref=>{assert.equal(writes.size,0);return snap(ref.key);},set:(ref,value)=>writes.set(ref.key,structuredClone(value))});for(const [key,value]of writes)records.set(key,value);return result;});queue=work.catch(()=>{});return work;
+  const work=queue.then(async()=>{const writes=new Map();const result=await worker({get:async ref=>{assert.equal(writes.size,0);return snap(ref.key);},set:(ref,value)=>writes.set(ref.key,structuredClone(value)),update:(ref,patch)=>{const value=structuredClone(writes.get(ref.key)||records.get(ref.key));for(const [key,next]of Object.entries(patch)){const parts=key.split('.');let cursor=value;for(const part of parts.slice(0,-1)){cursor[part]||={};cursor=cursor[part];}cursor[parts.at(-1)]=structuredClone(next);}writes.set(ref.key,value);}});for(const [key,value]of writes)records.set(key,value);return result;});queue=work.catch(()=>{});return work;
  }};
 }
 const saved=db=>db.records.get(Rules.COLLECTION+'/u');
@@ -84,11 +84,12 @@ test('last floor completion is bounded and no further floor can be started',asyn
  const record=saved(db);record.bestFloor=99;record.run.floor=100;record.run.defender=Rules.enemy(100);
  state=Rules.view(record,NOW);state=await fight(db,state);
  assert.equal(state.status,'complete');assert.equal(state.bestFloor,100);assert.equal(state.title,'萬象破陣者');
+ assert.equal(state.economy.gold,610);assert.equal(state.economy.drawTickets,4);assert.equal(state.economy.materials['raid-refine-key-iii'],1);assert.deepEqual(state.claimedFloors,[100]);
  await assert.rejects(Rules.act(db,'u','next',body(state),NOW+30000),e=>e.status===409);
 });
 test('routes require verified main-project identity and register only domain endpoints',async()=>{
  const routes=[];require('../martial-trial-api.cjs')({get:(p,h)=>routes.push([p,h]),post:(p,h)=>routes.push([p,h])});
- assert.equal(routes.length,5);assert.ok(routes.some(([p])=>p==='/api/martial-trial/turn'));
+ assert.equal(routes.length,6);assert.ok(routes.some(([p])=>p==='/api/martial-trial/turn'));
  const res={set(){},status(s){this.code=s;return this;},json(v){this.value=v;}};
  await Rules.handler('status',{resolveA:()=>{throw Error('should not resolve without bearer');},logger:{error(){}}})({get:()=>''},res);
  assert.equal(res.code,401);
@@ -114,4 +115,43 @@ test('ignored client fields never enter saved receipts or inflate the session do
  assert.equal(state.floor,1);assert.ok(JSON.stringify(saved(db)).length<20000);
  await Rules.act(db,'u','abandon',body(state,{tactic:ignored}),NOW+1000);
  assert.ok(JSON.stringify(saved(db)).length<20000);
+});
+
+test('first clear deposits the exact floor reward atomically and retries or re-clears never pay twice',async()=>{
+ const db=database(user({stats:{totalScore:1868,attack:900,maxHp:1000,gold:7},forgeFragments:11,soulboundDrawTickets:2,
+  materialSystem:{inventory:{'unrelated-item':123}}}));
+ let state=await Rules.start(db,'u',{requestId:'first-reward-start'},NOW),request=body(state,{tactic:'assault'});
+ state=await Rules.act(db,'u','turn',request,NOW);
+ assert.equal(state.status,'cleared');assert.deepEqual(state.claimedFloors,[1]);
+ assert.equal(state.economy.gold,27);assert.equal(state.economy.forgeFragments,13);assert.equal(state.economy.drawTickets,2);
+ assert.equal(db.records.get('users/u').materialSystem.inventory['unrelated-item'],123);
+ await Rules.act(db,'u','turn',request,NOW+1000);
+ assert.equal(db.records.get('users/u').stats.gold,27);
+ state=await Rules.act(db,'u','abandon',body(state),NOW+2000);
+ state=await Rules.start(db,'u',{requestId:'re-clear-first-floor',floor:1},NOW+3000);state=await fight(db,state,NOW+4000);
+ assert.equal(state.awarded,undefined);assert.equal(state.economy.gold,27);assert.deepEqual(saved(db).rewardClaims,[1]);
+});
+test('old best progress can backfill once, in parallel or after expiration, without touching cultivation or unrelated materials',async()=>{
+ const db=database(user({stats:{totalScore:1868,attack:200,maxHp:1000,gold:9},materialSystem:{inventory:{'nascent-soul-essence':2,wood:77}}}));
+ await Rules.start(db,'u',{requestId:'old-progress-start'},NOW);saved(db).bestFloor=20;
+ const before=structuredClone(db.records.get('users/u'));
+ const [a,b]=await Promise.all([Rules.act(db,'u','claim',{requestId:'backfill-first-request',gold:999999,floor:100},NOW+Rules.TTL+1),Rules.act(db,'u','claim',{requestId:'backfill-second-request'},NOW+Rules.TTL+1)]);
+ const expected=require('../public/cultivation/trial-tower-rewards.js').total(Array.from({length:20},(_,i)=>i+1));
+ assert.equal(a.claimedFloors.length,20);assert.equal(b.claimedFloors.length,20);
+ const player=db.records.get('users/u');assert.equal(player.stats.gold,9+expected.gold);assert.equal(player.forgeFragments,expected.forgeFragments);
+ assert.equal(player.soulboundDrawTickets,expected.drawTickets);assert.equal(player.materialSystem.inventory['nascent-soul-essence'],2+expected.materials['nascent-soul-essence']);
+ assert.equal(player.materialSystem.inventory['raid-refine-key-ii'],1);assert.equal(player.materialSystem.inventory.wood,77);
+ assert.equal(player.stats.totalScore,before.stats.totalScore);assert.equal(player.stats.maxHp,before.stats.maxHp);
+ const retry=await Rules.act(db,'u','claim',{requestId:'backfill-first-request'},NOW+Rules.TTL+2);
+ assert.equal(retry.awarded,undefined);assert.equal(retry.economy.gold,player.stats.gold);
+});
+test('locked floors cannot be claimed, rejected writes roll back both resources and claim receipts',async()=>{
+ const db=database(user({stats:{totalScore:1868,attack:900,maxHp:1000,gold:5}}));
+ let state=await Rules.start(db,'u',{requestId:'atomic-reward-start'},NOW);
+ const empty=await Rules.act(db,'u','claim',{requestId:'cannot-claim-future',floors:[100],amount:999999},NOW);
+ assert.equal(empty.awarded,undefined);assert.equal(empty.economy.gold,5);
+ const original=db.runTransaction.bind(db);db.runTransaction=worker=>original(tx=>worker({...tx,set(ref,value){if(ref.key.startsWith(Rules.COLLECTION+'/'))throw Error('simulated persistence failure');return tx.set(ref,value);}}));
+ const request=body(state,{tactic:'assault'});await assert.rejects(Rules.act(db,'u','turn',request,NOW+1000),/persistence failure/);
+ assert.equal(db.records.get('users/u').stats.gold,5);assert.equal(saved(db).bestFloor,0);assert.equal(saved(db).rewardClaims,undefined);
+ db.runTransaction=original;state=await Rules.act(db,'u','turn',request,NOW+2000);assert.equal(state.bestFloor,1);assert.equal(state.economy.gold,25);
 });

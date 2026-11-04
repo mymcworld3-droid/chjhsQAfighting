@@ -44,6 +44,7 @@ await frame.evaluate(()=>{
  document.querySelector('#quest-spotlight-title').textContent='今日問道，答對 5 題';document.querySelector('#quest-spotlight-reward').textContent='靈石 ×100 · 契器券 ×1';document.querySelector('#quest-spotlight-action').textContent='前往修行 →';
  for(const id of ['quest-ready-dot','meditation-pending-dot','sect-raid-ticket-dot'])document.getElementById(id).hidden=false;
 });
+await frame.addScriptTag({url:origin+'/cultivation/wendao-modes.js'});
 await frame.addScriptTag({url:origin+'/cultivation/realm-icons.js'});
 await frame.addScriptTag({url:origin+'/cultivation/cultivation-theme.js'});
 await frame.evaluate(()=>document.fonts.ready);await page.waitForTimeout(300);
@@ -57,7 +58,7 @@ for(const view of [{name:'landscape',width:1440,height:810},{name:'portrait',wid
   await frame.locator('.home-records summary').click();await page.locator('#game-stage').screenshot({path:path.join(output,'home-landscape-records.jpg'),animations:'disabled',type:'jpeg',quality:90});assert.equal(await frame.locator('.home-records').getAttribute('open'),'');
  }
 }
-if(!baseline){await frame.locator('#btn-home-start').click();assert.equal(await frame.evaluate(()=>window.__uiClicked),'solo');await frame.locator('#btn-home-pvp').click();assert.equal(await frame.evaluate(()=>window.__uiClicked),'duel');
+if(!baseline){await frame.locator('#btn-home-start').click();await frame.locator('[data-wm-free]').click();assert.equal(await frame.evaluate(()=>window.__uiClicked),'solo');await frame.locator('#btn-home-pvp').click();assert.equal(await frame.evaluate(()=>window.__uiClicked),'duel');
 await frame.locator('.home-records summary').click();await page.locator('#game-stage').screenshot({path:path.join(output,'home-portrait-records.jpg'),animations:'disabled',type:'jpeg',quality:90});
 }
 if(!baseline){await frame.locator('#xiuxian-path').click();assert.equal(await frame.locator('#xiuxian-realm-atlas').count(),1);await frame.locator('[data-realm-atlas-close]').click();assert.equal(await frame.locator('#xiuxian-realm-atlas').count(),0);}
