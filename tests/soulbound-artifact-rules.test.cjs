@@ -32,20 +32,20 @@ test('all permanent weapons strictly improve every original stat even with weake
 });
 
 test('a fourth affix survives further refinement and a fifth cannot replace any existing affix', () => {
-  const source = {...pool.ITEMS[0],id:'refined-four-affixes',effects:[...pool.ITEMS[0].effects,{type:'equip_true_damage_flat',value:1000}]};
+  const source = {...pool.ITEMS[0],id:'refined-four-affixes',effects:[...pool.ITEMS[0].effects,{type:'equip_true_damage_flat',value:50}]};
   const result = api.sanitizeGeneratedArtifact({...proposed(),effects:[{type:'equip_shield_flat',value:99999}]},
     '金丹',3,{}, {},2,{primaryArtifacts:[source]});
   assert.deepEqual(result.effects.map(row => row.type),source.effects.map(row => row.type));
   assert.equal(result.effects.length,4);
-  assert.equal(result.effects[3].value,1150);
+  assert.equal(result.effects[3].value,58);
   pool.assertRefinementImproves(result,[source]);
 });
 
 test('inverse damage caps improve downwards and fixed abilities survive without invented numeric values', () => {
-  const source = {...boundBase,effects:[{type:'equip_damage_cap_percent',value:.2},{type:'equip_cheat_death'}]};
+  const source = {...boundBase,effects:[{type:'equip_damage_cap_percent',value:.5},{type:'equip_cheat_death'}]};
   const result = api.sanitizeGeneratedArtifact({...proposed(),effects:[{type:'equip_damage_cap_percent',value:1}]},
     '金丹',3,{}, {},2,{primaryArtifacts:[source]});
-  assert.ok(result.effects.find(row => row.type === 'equip_damage_cap_percent').value < .2);
+  assert.ok(result.effects.find(row => row.type === 'equip_damage_cap_percent').value < .5);
   assert.deepEqual(result.effects.find(row => row.type === 'equip_cheat_death'),{type:'equip_cheat_death'});
   pool.assertRefinementImproves(result,[source]);
 });
@@ -169,12 +169,12 @@ test('catalog saving and reading preserves soulbound special bounds and attack/H
       effects:[{type:'equip_combo_chance',value:.4},{type:'equip_streak_damage_percent',value:9},
         {type:'equip_attack_percent',value:20},{type:'equip_hp_percent',value:20}]
     }])[0];
-    assert.equal(item.effects[0].value,soulbound ? .3 : .1);
-    assert.equal(item.effects[1].value,soulbound ? 2 : 3);
-    assert.equal(item.effects[2].value,soulbound ? 2 : 5);
-    assert.equal(item.effects[3].value,soulbound ? 2 : 5);
+    assert.equal(item.effects[0].value,soulbound ? .2 : .1);
+    assert.equal(item.effects[1].value,soulbound ? .75 : 3);
+    assert.equal(item.effects[2].value,soulbound ? .25 : 5);
+    assert.equal(item.effects[3].value,soulbound ? .25 : 5);
     const inverse = context.validate([{...item,effects:[{type:'equip_damage_cap_percent',value:.0125}]}])[0];
-    assert.equal(inverse.effects[0].value,soulbound ? .1 : .05);
+    assert.equal(inverse.effects[0].value,soulbound ? .35 : .05);
     assert.equal(item.soulboundRefinementVersion,soulbound ? pool.REFINEMENT_VERSION : undefined);
   }
 });
@@ -189,19 +189,19 @@ test('existing ordinary results from soulbound recipes must be rediscovered usin
 
 test('soulbound combo and inverse damage cap work in actual PvP resolution', () => {
   const combo = require('../public/cultivation/combat-combo.js');
-  const ctx = {window:{},QACombatCombo:combo};
+  const ctx = {window:{},QACombatCombo:combo,QASoulboundPool:pool};
   vm.runInNewContext(read('public/cultivation/artifact-battle-effects.js').replace(/^import .*;\n/gm,''),ctx);
   const attacker = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_combo_chance',value:.35,soulbound:true}]}};
   const defender = {hp:1000,maxHp:1000,artifactBattle:{effects:[{type:'equip_damage_cap_percent',value:.025,soulbound:true}]}};
   const attack = ctx.window.resolveArtifactBattleAttack({attacker,defender,baseDamage:500});
-  assert.equal(attack.comboChance,.3);
+  assert.equal(attack.comboChance,.2);
   const defense = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
-  assert.equal(defense.hpDamage,100);
+  assert.equal(defense.hpDamage,350);
   defender.artifactBattle.effects[0].soulbound=false;
   const ordinary = ctx.window.resolveArtifactBattleDefense({attacker,defender,normalDamage:500,trueDamage:0});
   assert.equal(ordinary.hpDamage,50);
   assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999}]).chance,.1);
-  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.3);
+  assert.equal(combo.stats({},[{type:'equip_combo_chance',value:999,soulbound:true}]).chance,.2);
 });
 
 test('trusted raid snapshots and boss defense honor refined soulbound values', () => {
@@ -211,9 +211,9 @@ test('trusted raid snapshots and boss defense honor refined soulbound values', (
   const user = {stats:{attack:200,maxHp:1000,totalScore:10},artifactSystem:{inventory:{'refined-sword':1},equipped:{'本命法寶':'refined-sword'}}};
   const member = authority.trustedRaidPlayerSnapshot(user,'tester',catalog);
   assert.ok(member.artifactBattle.effects.every(effect=>effect.soulbound===true));
-  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.3);
+  assert.equal(require('../public/cultivation/combat-combo.js').stats(member,member.artifactBattle.effects).chance,.2);
   const result = authority.resolveBossDefense(member,{roomId:'room-test',bossAction:{id:1,damage:500}});
-  assert.equal(result.damage,100);
+  assert.equal(result.damage,350);
 });
 
 test('generation and guidance review both use soulbound priority and expanded ranges', async () => {

@@ -17,7 +17,7 @@ import './item-icons.js';
 // - equip_damage_reduction_percent     每次受傷百分比減傷
 // - equip_crit_chance                  暴擊率
 // - equip_crit_damage_percent          暴擊額外倍率
-// - equip_combo_chance                 連擊率；普通法器 10%，本命法寶最多 30%
+// - equip_combo_chance                 連擊率；普通法器 10%，本命法寶最多 20%
 // - equip_lifesteal_percent            戰鬥吸血
 // - equip_reflect_percent              反射實際受到的生命傷害
 // - equip_shield_flat                  每場鬥法初始護盾
