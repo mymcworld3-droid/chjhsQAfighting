@@ -55,8 +55,8 @@ html body.ui-cleanup #page-training .core-gold-balance>span {display:inline-flex
 html body.ui-cleanup #page-training .core-gold-balance strong {font-size:25px;font-weight:500;color:var(--training-gold);font-variant-numeric:tabular-nums}
 html body.ui-cleanup #page-training .core-resource-ledger .ns-progress-caption {margin:0;color:#b1ae97;font-size:11px;line-height:1.7;text-align:left}
 html body.ui-cleanup #page-training .core-wash-row {display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:9px;width:100%;margin:0}
-html body.ui-cleanup #page-training :is(.core-wash-btn,.core-info-btn,.core-equip-btn) {min-height:44px!important;height:auto!important;margin:0;border-radius:9px!important;font-size:13px!important;font-weight:500!important;box-shadow:none!important}
-html body.ui-cleanup #page-training .core-wash-btn {border:1px solid #d7be81!important;background:#d4bd83!important;color:#28291c!important}
+html body.ui-cleanup :is(#page-training,.ns-orb-detail[data-ns-portrait-sheet]) :is(.core-wash-btn,.core-info-btn,.core-equip-btn) {min-height:44px!important;height:auto!important;margin:0;border-radius:9px!important;font-size:13px!important;font-weight:500!important;box-shadow:none!important}
+html body.ui-cleanup :is(#page-training,.ns-orb-detail[data-ns-portrait-sheet]) .core-wash-btn {border:1px solid #d7be81!important;background:#d4bd83!important;color:#28291c!important}
 html body.ui-cleanup #page-training .core-info-btn {width:44px;border:1px solid var(--training-line);background:#ffffff03;color:var(--training-muted)}
 html body.ui-cleanup #page-training .core-equip-btn {width:100%;border:1px solid #9cb49b55;background:#94b09412;color:#cadbc7}
 html body.ui-cleanup #page-training #training-tab-content .core-equip-btn.equipped {min-height:26px!important;padding:2px 6px;border:0;background:transparent;color:#a6baa3;font-size:11px!important;opacity:1}
