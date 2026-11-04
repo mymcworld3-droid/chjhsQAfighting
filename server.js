@@ -29,6 +29,8 @@ const registerInvitationApi = require('./invitation-api.cjs');
 const registerFriendRequestsApi = require('./friend-requests-api.cjs');
 const registerSoulboundDrawApi = require('./soulbound-draw-api.cjs');
 const registerMeditationApi = require('./daily-meditation-api.cjs');
+const meditationQuiz = require('./daily-meditation-api.cjs').__test;
+const MeditationLiteracy = require('./daily-meditation-literacy.cjs');
 const registerSpiritFarmApi = require('./spirit-farm-api.cjs');
 const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
@@ -493,6 +495,8 @@ app.post('/api/generate-quiz', async (req, res) => {
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
     const avatarMode = String(quizMode || '') === 'immortal-avatar';
     let avatarContext = null;
+    const meditationMode = String(quizMode || '') === 'meditation-literacy';
+    let meditationContext = null;
     const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
@@ -570,6 +574,19 @@ app.post('/api/generate-quiz', async (req, res) => {
             return res.status(error.status||503).json({error:error.status?error.message:'化身挑戰題目準備失敗'});
         }
     }
+    if (meditationMode) {
+        try {
+            const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
+            const service = meditationQuiz.createService({db});
+            meditationContext = {uid,db,...await service.prepareQuestion(uid)};
+            if (meditationContext.pending) return res.json({meditationSession:meditationContext.pending});
+            subject = meditationContext.subject; level = meditationContext.level; rank = 0;
+            knowledgeMap = null; avoidQuestions = meditationContext.history; avoidQuestionMeta = [];
+            specificTopic = meditationContext.topic; topic = '';
+        } catch (error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'閉關素養題準備失敗'});
+        }
+    }
     if(req.body?.adaptiveScope){
         if(quizMode&&quizMode!=='solo')return res.status(400).json({error:'背景適性學習僅用於一般問道試煉'});
         try{
@@ -578,7 +595,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
         }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
     }
-    difficulty = (enlightenmentMode || avatarMode) ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
+    difficulty = (enlightenmentMode || avatarMode || meditationMode) ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
         : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
@@ -626,10 +643,12 @@ app.post('/api/generate-quiz', async (req, res) => {
 
     if (raidQuickSimple) difficulty = 'easy';
     const randomSeed = Math.random().toString(36).substring(7);
-    const quality = raidQuickSimple
+    const quality = meditationMode
+        ? { cognitive: 2, steps: 2, instruction: '依指定年級，以完整情境與資料進行兩步理解、判讀或推論，不增加超綱前置知識。' }
+        : raidQuickSimple
         ? { cognitive: 1, steps: 1, instruction: '團本快答題：只考一個核心觀念，題幹短、條件直接，通常一步即可作答。避免陷阱、冗長情境、多階段推理與冷僻細節。' }
         : qualityPolicy(subject, difficulty);
-    const targetForm = chooseQuestionForm(previousMeta, randomSeed);
+    const targetForm = meditationMode ? meditationContext.form : chooseQuestionForm(previousMeta, randomSeed);
     const recentTemplates = [...new Set(previousMeta.slice(-18).map(item => item.template_id).filter(Boolean))];
     const recentConceptForms = previousMeta.slice(-6)
         .filter(item => item.concept_id || item.question_form)
@@ -722,6 +741,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
         : avatarMode ? `avatar:${avatarContext.uid}:${avatarContext.runId}`
+        : meditationMode ? `meditation:${meditationContext.uid}:${meditationContext.runId}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
     const spareKey = quizSparePool.key({
         owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
@@ -741,6 +761,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             isTooSimilarQuestion(parsed.q, [...previousQuestions, ...extraQuestions])) {
             throw new Error('AI 題目未通過範圍、格式或結構去重檢查');
         }
+        if (meditationMode) MeditationLiteracy.assertQuestion(parsed,meditationContext);
         const qualityIssue = questionQualityIssue(parsed);
         if (qualityIssue) throw new Error('AI 題目品質檢查失敗：' + qualityIssue);
         const cleanedExplanation = removeUnstableOptionLabels(parsed.exp);
@@ -767,7 +788,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             const retryCorrection = lastGenerationIssue ?
                 '\n[前一版未通過驗證]\n' + lastGenerationIssue.slice(0, 600) +
                 '\n這一版必須從頭重寫整個題目 JSON 的 q、correct、wrong、exp，不能只在解析加註更正。' : '';
-            const taskPlan = createQuizTaskPlan({targetForm, forms:QUESTION_FORMS, previousMeta,
+            const taskPlan = createQuizTaskPlan({targetForm, forms:meditationMode?MeditationLiteracy.FORMS:QUESTION_FORMS, previousMeta,
                 difficulty, mode:String(quizMode || 'solo'),assignmentForTask:adaptiveContext?index=>adaptiveContext.target(index):undefined});
             const promptForTask = index => {
                 const task = taskPlan.get(index);
@@ -780,7 +801,8 @@ app.post('/api/generate-quiz', async (req, res) => {
                     knowledgePointId: targetKnowledgePointId, generationTaskId:task.id,
                     retryIssue: lastGenerationIssue, randomSeed
                 }) : generationPrompt(task.form, task.id,{difficulty:taskDifficulty,quality:taskQuality,adaptiveFields}) + retryCorrection;
-                return taskPlan.prompt(base, index)+(adaptiveContext?adaptiveLearning.prompt(adaptiveContext,index):'');
+                return taskPlan.prompt(base, index)+(adaptiveContext?adaptiveLearning.prompt(adaptiveContext,index):'')+
+                    (meditationMode?'\n'+MeditationLiteracy.prompt(meditationContext):'');
             };
             const prompt = promptForTask(0);
             // Shorter instructions and bounded provider latency only for combat.
@@ -841,6 +863,11 @@ app.post('/api/generate-quiz', async (req, res) => {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
 
+            if (meditationMode) {
+                const session = await meditationQuiz.createService({db:meditationContext.db}).commitQuestion(
+                    meditationContext.uid,meditationContext,parsed);
+                return res.json({meditationSession:session,provider:routed.provider,model:routed.model});
+            }
             if (avatarMode) {
                 const question = await immortalChallenge.commitQuestion(avatarContext.db,avatarContext.uid,avatarContext,parsed);
                 return res.json({avatarQuestion:question,provider:routed.provider,model:routed.model});
