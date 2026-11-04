@@ -3,6 +3,7 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
 import { getFirestore, collection, doc, runTransaction, serverTimestamp } from '../data-store.js';
 import {
   ARTIFACT_CATALOG,
+  getDefaultArtifactCatalog,
   ARTIFACT_REALMS,
   ARTIFACT_EQUIP_SLOTS,
   ARTIFACT_WEAPON_FORMS,
@@ -318,7 +319,15 @@ import {
       @media(max-width:880px){.aam-editor-layout{grid-template-columns:1fr}.aam-guide{position:static;order:-1;max-height:58dvh}.aam-guide-scroll{max-height:42dvh}}
       @media(max-width:620px){.aam-item{grid-template-columns:38px minmax(0,1fr)}.aam-item-actions{grid-column:1/-1;width:100%;grid-template-columns:1fr 1fr}.aam-edit,.aam-approve{width:100%}.aam-grid{grid-template-columns:1fr}.aam-field.full{grid-column:auto}.aam-effect-main{grid-template-columns:1fr 1fr}.aam-effect-main>label:first-child{grid-column:1/-1}.aam-remove-effect{align-self:end}.aam-head{align-items:flex-start;flex-direction:column}.aam-add{width:100%}.aam-guide{max-height:54dvh}.aam-guide-scroll{max-height:38dvh}}
     `;
+    style.textContent+='\n.aam-custom{display:inline-block;margin:0 8px 4px 0;color:#a9c9ad;font-size:11px}.aam-stat-warning,.aam-hard-limit-warning{padding:10px;border:1px solid #cc8c49;border-radius:9px;background:#ac642715;color:#f0c390;font-size:12px;line-height:1.65;overflow-wrap:anywhere}.aam-stat-warning strong{display:block!important;color:#ffd89c!important;font-size:12px!important}.aam-stat-warning ul{margin:5px 0;padding-left:18px}.aam-stat-warning small{font-size:11px}.aam-hard-limit-warning[hidden]{display:none}';
     document.head.appendChild(style);
+  }
+
+  function artifactWarningsMarkup(item) {
+    const warnings=globalThis.QAArtifactAdminRules.warnings(item);
+    if(!warnings.length)return '';
+    const value=(type,n)=>Number.isFinite(Number(n))&&(type.endsWith('_percent')||type.endsWith('_chance'))?`${Number((Number(n)*100).toFixed(2))}%`:String(n);
+    return `<div class="aam-stat-warning" role="status"><strong>⚠ 原始數值超出限制，生效值已校正</strong><ul>${warnings.map(w=>`<li>${escapeHtml(EFFECT_GUIDE[w.type]?.title||w.type)}：${escapeHtml(value(w.type,w.value))}；限制 ${escapeHtml(value(w.type,w.min))}～${escapeHtml(value(w.type,w.max))}</li>`).join('')}</ul><small>開啟編輯、確認數值並儲存後，可清除此警告。</small></div>`;
   }
 
   function render() {
@@ -326,20 +335,17 @@ import {
     if (!panel || !isAdmin()) return;
     const list = panel.querySelector('#admin-artifact-list');
     if (!list) return;
-    const ordered = [...ARTIFACT_CATALOG].sort((a, b) => {
-      const pa = a.reviewStatus === 'pending' ? 0 : 1;
-      const pb = b.reviewStatus === 'pending' ? 0 : 1;
-      if (pa !== pb) return pa - pb;
-      if (pa === 0) return (Number(b.generatedAtMs) || 0) - (Number(a.generatedAtMs) || 0);
-      return 0;
-    });
+    const defaultIds=getDefaultArtifactCatalog().map(item=>item.id);
+    const ordered=globalThis.QAArtifactAdminRules.ordered(ARTIFACT_CATALOG,defaultIds);
     list.innerHTML = ordered.map((item) => {
       const color = artifactRealmColor(item.realm);
       const pending = item.reviewStatus === 'pending';
+      const custom=globalThis.QAArtifactAdminRules.custom(item,defaultIds);
+      const warnings=artifactWarningsMarkup(item);
       const aiMeta = item.generatedByAI
         ? `<div class="aam-ai-meta">AI 生成${item.aiProvider ? ` · ${escapeHtml(item.aiProvider)}` : ''}${item.generationMaterials?.length ? ` · 素材：${item.generationMaterials.map((row) => `${escapeHtml(row.name || row.id)}×${Number(row.quantity) || 1}`).join('、')}` : ''}</div>`
         : '';
-      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '◆')}</div><div class="aam-copy"><strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 基準點（10 點＝1 碎片） · 配方：${escapeHtml(recipeSummaryText(item.id))} · 擁有人：${escapeHtml(item.recipeOwnerName || '公共配方')}（${escapeHtml(item.recipeOwnerUid || '無 UID')}）${item.recipeSaleLocked ? ' · 付費配方' : ''}</div>${aiMeta}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" ${globalThis.QASoulboundPool?.get(item.id) ? 'disabled title="常駐池由版本化固定資料管理"' : ''} data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
+      return `<article class="aam-item ${pending ? 'is-pending' : ''}" data-admin-pending="${pending ? '1' : '0'}" style="--artifact-realm-color:${escapeHtml(color)};border-color:color-mix(in srgb,${escapeHtml(color)} 28%,rgba(255,255,255,.07))"><div class="aam-icon" style="border-color:color-mix(in srgb,${escapeHtml(color)} 55%,transparent);color:${escapeHtml(color)};background:color-mix(in srgb,${escapeHtml(color)} 10%,#171005)">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async">` : escapeHtml(item.icon || '◆')}</div><div class="aam-copy">${custom ? '<span class="aam-custom">自定法寶</span>' : ''}<strong style="color:${escapeHtml(color)}">${escapeHtml(item.name)}</strong>${pending ? '<span class="aam-pending"><i class="fa-solid fa-wand-magic-sparkles"></i> AI・待處理</span>' : ''}<div class="aam-meta">${escapeHtml(item.id)} · ${escapeHtml(item.realm)} · ${escapeHtml(item.category || '法寶')} · 打造 ${Number(item.craft?.gold) || 0} 基準點（10 點＝1 碎片） · 配方：${escapeHtml(recipeSummaryText(item.id))} · 擁有人：${escapeHtml(item.recipeOwnerName || '公共配方')}（${escapeHtml(item.recipeOwnerUid || '無 UID')}）${item.recipeSaleLocked ? ' · 付費配方' : ''}</div>${aiMeta}${warnings}<div class="aam-effects">${(item.effects || []).map((effect) => `<span>${escapeHtml(effectLabel(effect))}</span>`).join('')}</div></div><div class="aam-item-actions">${pending ? `<button type="button" class="aam-approve" data-admin-artifact-approve="${escapeHtml(item.id)}"><i class="fa-solid fa-check"></i> 確認已檢查</button>` : ''}<button type="button" class="aam-edit" ${globalThis.QASoulboundPool?.get(item.id) ? 'disabled title="常駐池由版本化固定資料管理"' : ''} data-admin-artifact-edit="${escapeHtml(item.id)}"><i class="fa-solid fa-pen"></i> 編輯</button></div></article>`;
     }).join('') || '<div class="text-gray-500 text-xs">目前沒有法寶。</div>';
   }
 
@@ -481,6 +487,14 @@ import {
 
   function refreshEffectHints(modal) {
     if (!modal?.isConnected) return;
+    modal.querySelectorAll('.aam-effect-row').forEach(row=>{
+      let alert=row.querySelector('.aam-hard-limit-warning');
+      if(!alert){alert=document.createElement('p');alert.className='aam-hard-limit-warning';alert.setAttribute('role','status');row.appendChild(alert);}
+      const type=row.querySelector('[data-aam-effect-type]')?.value,value=row.querySelector('[data-aam-effect-value]')?.value;
+      const limit=globalThis.QAArtifactAdminRules.bounds({equipSlot:modal.querySelector('#aam-slot')?.value},type);
+      const outside=value?.trim()&&limit&&(!Number.isFinite(Number(value))||Number(value)<limit.min||Number(value)>limit.max);
+      alert.hidden=!outside;alert.textContent=outside?'⚠ 數值超出系統限制 '+limit.min+'～'+limit.max+'，儲存時會校正。':'';
+    });
     const stage = currentEditorStage(modal);
     const apply = (ranges) => {
       if (!modal.isConnected || currentEditorStage(modal) !== stage) return;
@@ -738,7 +752,14 @@ import {
       description: modal.querySelector('#aam-description').value,
       craft: { gold: modal.querySelector('#aam-gold').value, yield: modal.querySelector('#aam-yield').value },
       effects: readEffects(modal),
+      statLimitWarnings: globalThis.QAArtifactAdminRules?.warnings({
+        equipSlot:modal.querySelector('#aam-slot').value,
+        effects:[...modal.querySelectorAll('.aam-effect-row')].map(row=>({
+          type:row.querySelector('[data-aam-effect-type]')?.value,value:row.querySelector('[data-aam-effect-value]')?.value
+        }))
+      }) || [],
       reviewStatus: original?.reviewStatus || 'approved',
+      customArtifact: true,customUpdatedAtMs: Date.now(),
       generatedByAI: original?.generatedByAI === true,
       generatedAtMs: original?.generatedAtMs || 0,
       reviewedAtMs: original?.reviewedAtMs || 0,
@@ -845,7 +866,7 @@ import {
     if (panel.dataset.artifactManagerHydrated !== '1') {
       panel.dataset.artifactManagerHydrated = '1';
       panel.classList.remove('admin-preload-shell');
-      panel.innerHTML = `<div class="aam-head"><div><h3><i class="fa-solid fa-hammer" style="color:#d8b15d"></i> 法寶管理</h3><p>查看並維護全站法寶。AI 新法寶會置頂標示「待處理」，但在確認前玩家已可正常使用；檢查後可編輯或按「確認已檢查」。</p></div><button type="button" class="aam-add" id="admin-artifact-add"><i class="fa-solid fa-plus"></i> 新增法寶</button></div><div id="admin-artifact-list" class="aam-list"></div>`;
+      panel.innerHTML = `<div class="aam-head"><div><h3><i class="fa-solid fa-hammer" style="color:#d8b15d"></i> 法寶管理</h3><p>自定法寶優先顯示。超出限制的原始數值會標示警告，生效值仍依系統上限；AI 新法寶另標示「待處理」。</p></div><button type="button" class="aam-add" id="admin-artifact-add"><i class="fa-solid fa-plus"></i> 新增法寶</button></div><div id="admin-artifact-list" class="aam-list"></div>`;
       panel.querySelector('#admin-artifact-add').onclick = () => openEditor();
       panel.addEventListener('click', (event) => {
         const approve = event.target.closest('[data-admin-artifact-approve]');
