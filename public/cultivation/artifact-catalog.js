@@ -1,4 +1,5 @@
 import {} from './soulbound-pool.js';
+import './artifact-admin-rules.js';
 import './item-icons.js';
 // 法寶清單：內建清單是預設值與遠端設定失敗時的備援。
 // 正式遊戲執行時可由 artifact-catalog-sync.js 用 Firestore 全站設定替換同一個陣列。
@@ -212,6 +213,7 @@ function normalizeEffectValue(type, value, soulbound = false) {
 }
 
 export function normalizeArtifactDefinition(raw = {}) {
+  const statLimitWarnings=globalThis.QAArtifactAdminRules?.warnings(raw)||[];
   raw = globalThis.QASoulboundPool.balanceArtifact(raw);
   const item = {
     id: String(raw.id || '').trim(),
@@ -256,6 +258,9 @@ export function normalizeArtifactDefinition(raw = {}) {
   }
   item.reviewStatus = raw.reviewStatus === 'pending' ? 'pending' : 'approved';
   item.generatedByAI = raw.generatedByAI === true;
+  if(raw.customArtifact===true)item.customArtifact=true;
+  if(raw.customUpdatedAtMs)item.customUpdatedAtMs=Math.max(0,Math.floor(finite(raw.customUpdatedAtMs,0)));
+  if(statLimitWarnings.length)item.statLimitWarnings=statLimitWarnings;
   if (raw.generatedAtMs) item.generatedAtMs = Math.max(0, Math.floor(finite(raw.generatedAtMs, 0)));
   if (raw.reviewedAtMs) item.reviewedAtMs = Math.max(0, Math.floor(finite(raw.reviewedAtMs, 0)));
   if (raw.generationSignature) item.generationSignature = String(raw.generationSignature).trim().slice(0, 512);

@@ -64,3 +64,15 @@ test('D1 browsers cannot fabricate immortal seats, edit defender builds or read 
   await executeCommit(db,{writes:[write('worldImmortals/junior__ru-xian',{displayName:'新名號'})]},context);
   assert.equal((await db.doc('worldImmortals/junior__ru-xian').get()).data().displayName,'新名號');
 });
+
+
+test('D1 browser cannot forge or inspect private martial trial progress',async()=>{
+  const {db}=setup();
+  await db.doc('users/alice').set({uid:'alice'});
+  await db.doc('martialTrialStates/alice').set({uid:'alice',bestFloor:10});
+  for(const path of ['martialTrialStates/alice','martialTrialStates/bob']){
+    assert.equal(mayRead({role:'A',path,data:{uid:'alice'},uid:'alice',admin:false}),false);
+    await assert.rejects(executeCommit(db,{writes:[write(path,{bestFloor:100},'set')]},context),e=>e.status===403);
+  }
+  assert.equal((await db.doc('martialTrialStates/alice').get()).data().bestFloor,10);
+});
