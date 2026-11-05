@@ -13,21 +13,26 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
  const count=n=>Math.max(0,Math.round(Number(n)||0));
  const alive=id=>id===serial&&owner===getMainUser()?.uid&&!!document.getElementById('martial-trial-modal');
  const unlocked=()=>Math.max(Number(window.getCurrentUserData?.()?.stats?.totalScore)||0,Number(window.getTrainingAccessScore?.())||0)>=28;
- function loadStyle(){if(!document.getElementById('tower-duel-style')){const link=document.createElement('link');link.id='tower-duel-style';link.rel='stylesheet';link.href='styles/battle-mode-v2.css?v=20261105-shared-stage1';document.head.appendChild(link);}if(document.getElementById('martial-trial-style'))return;const link=document.createElement('link');link.id='martial-trial-style';link.rel='stylesheet';link.href='styles/martial-trial.css?v=20261105-native-study1';document.head.appendChild(link);}
+ function loadStyle(){if(!document.getElementById('tower-duel-style')){const link=document.createElement('link');link.id='tower-duel-style';link.rel='stylesheet';link.href='styles/battle-mode-v2.css?v=20261105-shared-stage1';document.head.appendChild(link);}if(document.getElementById('martial-trial-style'))return;const link=document.createElement('link');link.id='martial-trial-style';link.rel='stylesheet';link.href='styles/martial-trial.css?v=20261105-fullscreen-rewards3';document.head.appendChild(link);}
  async function request(action,body){
   const response=await authenticatedMainFetch('/api/martial-trial'+(action?'/'+action:''),body?{method:'POST',body:JSON.stringify(body)}:{});
   const result=await response.json();if(!response.ok||!result.ok)throw Object.assign(new Error(result.error||'試煉同步失敗'),{status:response.status});return result.state;
  }
  function rewardMarkup(reward){return `<div class="tt-rewards">${Rewards.rows(reward).map(row=>`<span>${globalThis.QAItemIcons?.markup(row.icon,{size:20})||''}<b>${escape(row.name)} ×${row.quantity}</b></span>`).join('')}</div>`;}
  function rewardPreview(floor){
-  const claimed=state.claimedFloors?.includes(floor),available=floor<=state.bestFloor,ticketPending=state.unclaimedTicketFloors?.includes(floor);
-  return `<section class="tt-reward-preview ${claimed&&!ticketPending?'is-claimed':''}"><div><strong>第 ${floor} 層首通獎勵</strong><small>${ticketPending?'通關抽獎券待補領':claimed?'已領取 · 重打不重複發放':available?'已通關 · 可補領':'首次通關後自動入帳'}</small></div>${rewardMarkup(Rewards.forFloor(floor))}</section>`;
+  const claimed=state.claimedFloors?.includes(floor),available=floor<=state.bestFloor,ticketPending=state.unclaimedTicketFloors?.includes(floor),bonusPending=state.unclaimedBonusFloors?.includes(floor);
+  return `<section class="tt-reward-preview ${claimed&&!ticketPending&&!bonusPending?'is-claimed':''}"><div><strong>第 ${floor} 層首通獎勵</strong><small>${bonusPending?'通關獎勵加碼待補領':ticketPending?'通關抽獎券待補領':claimed?'已領取 · 重打不重複發放':available?'已通關 · 可補領':'首次通關後自動入帳'}</small></div>${rewardMarkup(Rewards.forFloor(floor))}</section>`;
  }
  function rewardBook(open=false){
-  const done=new Set(state.claimedFloors||[]),tickets=new Set(state.unclaimedTicketFloors||[]),first=(rewardPage-1)*10+1;
-  return `<details class="tt-reward-book" ${open?'open':''}><summary>查看百層獎勵 <span>已領取 ${done.size} / 100 層</span></summary><nav aria-label="獎勵層數">${Array.from({length:10},(_,i)=>`<button type="button" data-tt-page="${i+1}" aria-current="${rewardPage===i+1?'page':'false'}">${i*10+1}–${i*10+10}</button>`).join('')}</nav><ol start="${first}">${Array.from({length:10},(_,i)=>{const floor=first+i,status=tickets.has(floor)?'抽獎券待補領':done.has(floor)?'已領取':floor<=state.bestFloor?'可補領':'未通關';return `<li class="${done.has(floor)&&!tickets.has(floor)?'is-claimed':floor<=state.bestFloor?'is-ready':''}"><div><strong>第 ${floor} 層</strong><small>${status}</small></div>${rewardMarkup(Rewards.forFloor(floor))}</li>`;}).join('')}</ol></details>`;
+  const done=new Set(state.claimedFloors||[]),tickets=new Set(state.unclaimedTicketFloors||[]),bonuses=new Set(state.unclaimedBonusFloors||[]),first=(rewardPage-1)*10+1;
+  return `<details class="tt-reward-book" ${open?'open':''}><summary>查看百層獎勵 <span>已領取 ${done.size} / 100 層</span></summary><nav aria-label="獎勵層數">${Array.from({length:10},(_,i)=>`<button type="button" data-tt-page="${i+1}" aria-current="${rewardPage===i+1?'page':'false'}">${i*10+1}–${i*10+10}</button>`).join('')}</nav><ol start="${first}">${Array.from({length:10},(_,i)=>{const floor=first+i,status=bonuses.has(floor)?'獎勵加碼待補領':tickets.has(floor)?'抽獎券待補領':done.has(floor)?'已領取':floor<=state.bestFloor?'可補領':'未通關';return `<li class="${done.has(floor)&&!tickets.has(floor)&&!bonuses.has(floor)?'is-claimed':floor<=state.bestFloor?'is-ready':''}"><div><strong>第 ${floor} 層</strong><small>${status}</small></div>${rewardMarkup(Rewards.forFloor(floor))}</li>`;}).join('')}</ol></details>`;
  }
- function backfill(){const floors=state?.unclaimedFloors||[],tickets=state?.unclaimedTicketFloors||[],reward=Rewards.total(floors);reward.drawTickets+=tickets.length;return floors.length||tickets.length?`<section class="tt-backfill"><strong>${[floors.length?`可補領 ${floors.length} 層首通獎勵`:'',tickets.length?`補發 ${tickets.length} 張通關抽獎券`:''].filter(Boolean).join(' · ')}</strong>${rewardMarkup(reward)}<button type="button" class="mt-primary" data-tt-claim ${busy||pending?'disabled':''}>一鍵補領</button></section>`:'';}
+ function backfill(){
+  const floors=state?.unclaimedFloors||[],tickets=state?.unclaimedTicketFloors||[],bonuses=state?.unclaimedBonusFloors||[];
+  if(!floors.length&&!tickets.length&&!bonuses.length)return '';
+  const reward=Rewards.payout(floors,tickets,bonuses);
+  return `<section class="tt-backfill"><strong>${[floors.length?`可補領 ${floors.length} 層首通獎勵`:'',tickets.length?`補發 ${tickets.length} 張通關抽獎券`:'',bonuses.length?`可補領 ${bonuses.length} 層獎勵加碼`:''].filter(Boolean).join(' · ')}</strong>${rewardMarkup(reward)}<button type="button" class="mt-primary" data-tt-claim ${busy||pending?'disabled':''}>一鍵補領</button></section>`;
+ }
  function applyEconomy(value){
   const player=window.getCurrentUserData?.();if(!value||!player||owner!==getMainUser()?.uid)return;
   const before=JSON.stringify([count(player.stats?.gold),count(player.forgeFragments),count(player.soulboundDrawTickets),...Object.keys(Rewards.ITEMS).map(id=>count(player.materialSystem?.inventory?.[id]))]);
@@ -64,7 +69,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
     ${backfill()}<div class="mt-lobby"><span class="mt-lobby-seal" aria-hidden="true">塔</span><h3>答題出招，逐層登塔</h3><p>與鬥法相同的戰場，答對才能先手攻擊。<br>守衛固定後手，存活時每回合都會出招；題目與解析皆不計時。</p></div>
     <div class="mt-progress"><span>最高通過 <strong>${best}</strong> / 100 層</span><b>${escape(state.title)}</b><i style="--mt-progress:${best}%"></i></div>
     ${state.rulesUpdated?'<p class="tt-notice">試煉已改為答題戰鬥，既有最高層數與獎勵紀錄皆保留。請重新開陣。</p>':''}
-    ${rewardPreview(start)}<ul class="mt-rules"><li>每十層提升守衛境界：煉氣、築基、金丹、元嬰、化神、煉虛、合體、大乘、半仙、真仙。</li><li>通過一層即解鎖下一層；每層回滿生命，最多 24 回合。</li><li>題目依你的年級與設定範圍出題；可使用白板、問道助手與題目回報。</li><li>每層首次通關給 1 張本命法器抽獎券，第 50、100 層另有加碼。</li><li>每層首通獎勵限領一次，重打不重領；開陣時鎖定配裝。</li></ul>${rewardBook(bookOpen)}`;
+    ${rewardPreview(start)}<ul class="mt-rules"><li>每十層提升守衛境界：煉氣、築基、金丹、元嬰、化神、煉虛、合體、大乘、半仙、真仙。</li><li>通過一層即解鎖下一層；每層回滿生命，最多 24 回合。</li><li>題目依你的年級與設定範圍出題；可使用白板、問道助手與題目回報。</li><li>每層首次通關至少 1 張本命法器抽獎券，每 10 層及第 50、100 層另有加碼。</li><li>每層首通獎勵限領一次，重打不重領；開陣時鎖定配裝。</li></ul>${rewardBook(bookOpen)}`;
    if(battle)paintArena();
   }
   footer.innerHTML=`${pending&&!busy?'<button type="button" class="mt-primary" data-mt-retry>重試原操作</button><button type="button" class="mt-secondary" data-mt-sync>同步戰場</button>':studying?`<p class="mt-footer-note">第 ${state.floor} 層 · ${phase==='review'?'讀完解析後，按「繼續」觀看攻擊。':busy?'答案結算中…':'不計時 · 答對才能攻擊'}</p>`:phase==='animation'?'<p class="mt-footer-note" role="status">本回合戰鬥進行中…</p>':state?`<div class="mt-actions">${active?`<button type="button" class="mt-primary" data-mt-question ${busy?'disabled':''}>${busy?'正在準備題目…':'進入題目 · 答題出招'}</button><button type="button" class="mt-secondary" data-mt-abandon ${busy?'disabled':''}>結束本次闖塔</button>`:state.status==='cleared'?'<button type="button" class="mt-primary" data-mt-next>挑戰下一層</button><button type="button" class="mt-secondary" data-mt-abandon>回到塔前</button>':`<button type="button" class="mt-primary" data-mt-start="${start}" ${busy||!unlocked()?'disabled':''}>${unlocked()?`由第 ${start} 層開陣`:'金丹境開放'}</button>${start>1?'<button type="button" class="mt-secondary" data-mt-start="1">從第一層試陣</button>':''}`}</div>`:''}${error&&!pending&&!busy?'<button type="button" class="mt-secondary" data-mt-sync>重新同步</button>':''}`;
@@ -184,7 +189,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
    if(['turn','replace'].includes(operation.action)){
     question=next.lastTurn?.question;phase='review';
    }else if(!['practice','cancel-practice'].includes(operation.action)){question=null;phase='battle';}
-   if(next.awarded){notice=operation.action==='claim'?[next.awarded.floors.length?'已補領 '+next.awarded.floors.length+' 層首通獎勵':'',next.awarded.ticketFloors?.length?'已補發 '+next.awarded.ticketFloors.length+' 張通關抽獎券':''].filter(Boolean).join(' · '):'首通獎勵已入帳';globalThis.QAGameAudio?.play('reward-chime',{key:'tower:'+owner+':'+next.claimedFloors.length+':'+(next.unclaimedTicketFloors||[]).length});}
+   if(next.awarded){notice=operation.action==='claim'?[next.awarded.floors.length?'已補領 '+next.awarded.floors.length+' 層首通獎勵':'',next.awarded.ticketFloors?.length?'已補發 '+next.awarded.ticketFloors.length+' 張通關抽獎券':'',next.awarded.bonusFloors?.length?'已補領 '+next.awarded.bonusFloors.length+' 層獎勵加碼':''].filter(Boolean).join(' · '):'首通獎勵已入帳';globalThis.QAGameAudio?.play('reward-chime',{key:'tower:'+owner+':'+next.claimedFloors.length+':'+(next.unclaimedTicketFloors||[]).length+':'+(next.unclaimedBonusFloors||[]).length});}
   }catch(e){if(!alive(id))return;error=e.status?e.message:'連線暫時未完成，可重新同步或重試原操作。';}
   finally{if(alive(id)){busy=false;render();if(['turn','practice'].includes(operation.action))void prefetchPractice(question?.id);}}
  }

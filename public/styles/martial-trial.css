@@ -1,13 +1,14 @@
 body.martial-trial-open{overflow:hidden!important}
-#martial-trial-modal{position:fixed;inset:0;z-index:22000;display:grid;place-items:center;padding:16px;background:#050806d9;backdrop-filter:blur(7px);color:#e9e2d1;font-family:var(--ui-font,serif)}
+#martial-trial-modal{position:fixed;inset:0;z-index:22000;display:grid;place-items:stretch;padding:0;background:#161d18;color:#e9e2d1;font-family:var(--ui-font,serif)}
 #martial-trial-modal *{box-sizing:border-box}
-.mt-dialog{display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;width:min(960px,100%);height:min(760px,calc(100dvh - 32px));border:1px solid #bfa5735c;border-radius:18px;background:radial-gradient(ellipse at 20% 0,#b5a06b0b,transparent 50%),#161d18;box-shadow:0 25px 100px #0008}
-.mt-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 24px;border-bottom:1px solid #bfa57329}
+.mt-dialog{display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;width:100%;height:100%;min-height:0;border:0;border-radius:0;background:radial-gradient(ellipse at 20% 0,#b5a06b0b,transparent 50%),#161d18}
+.mt-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(16px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) 16px max(24px,env(safe-area-inset-left));border-bottom:1px solid #bfa57329}
 .mt-dialog h2{font-size:24px;font-weight:500;letter-spacing:.14em;color:#edd9a3;margin:3px 0}
 .mt-dialog header small{font-size:10px;color:#9fae98;letter-spacing:.2em}
 .mt-close{width:44px;height:44px;border:1px solid #bfa5733b;border-radius:10px;background:none;color:#d7cbaa;font:inherit;font-size:26px;cursor:pointer}
-.mt-body{min-height:0;overflow:auto;overscroll-behavior:contain;padding:20px 24px;scrollbar-width:thin}
-.mt-dialog>footer{padding:16px 24px max(16px,env(safe-area-inset-bottom));border-top:1px solid #bfa57329;background:#161d18}
+.mt-body{min-height:0;overflow:auto;overscroll-behavior:contain;padding:20px max(24px,env(safe-area-inset-right)) 20px max(24px,env(safe-area-inset-left));scrollbar-width:thin}
+.mt-content,.mt-messages{width:100%;max-width:1200px;margin-inline:auto}
+.mt-dialog>footer{padding:16px max(24px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));border-top:1px solid #bfa57329;background:#161d18}
 .mt-primary:disabled,.mt-secondary:disabled{opacity:.5;cursor:wait}
 .mt-footer-note{margin:10px 0 0;font-size:11px;line-height:1.6;color:#abae99}
 .mt-actions{display:flex;gap:10px;flex-wrap:wrap}.mt-primary,.mt-secondary{min-height:46px;padding:10px 18px;border-radius:9px;font:inherit;font-size:14px;cursor:pointer}
@@ -18,8 +19,8 @@ body.martial-trial-open{overflow:hidden!important}
 .mt-rules{padding-left:20px;font-size:12px;color:#aeb79f;line-height:2.1}.mt-outcome{border:1px solid #ac80684d;border-radius:12px;padding:14px 18px;background:#ac806809}.mt-outcome h3{font-weight:500;color:#dec296;margin:0 0 6px}.mt-outcome p{font-size:12px;line-height:1.7;color:#acb398;margin:0}.mt-outcome.is-won{border-color:#8bab795e;background:#8bab7909}
 .mt-error{padding:10px 12px;border:1px solid #b47f6459;border-radius:9px;color:#e7b195;font-size:12px;line-height:1.8;margin-bottom:12px}.mt-loading{text-align:center;padding:80px 10px;color:#b5b897;font-size:14px}
 .mt-dialog button:focus-visible,.tt-reward-book summary:focus-visible{outline:2px solid #e9d59b;outline-offset:3px}
-@media(max-width:600px){#martial-trial-modal{padding:8px}.mt-dialog{height:calc(100dvh - 16px);border-radius:12px}.mt-dialog>header,.mt-body,.mt-dialog>footer{padding:12px 14px}.mt-dialog h2{font-size:21px}.mt-footer-note{font-size:10px}.mt-lobby{padding:14px 4px 20px}.mt-lobby h3{font-size:21px}.mt-lobby p{font-size:12px}.mt-rules{font-size:11px}.mt-actions>*{flex:1}}
-@media(max-height:500px) and (orientation:landscape){.mt-dialog>header{padding:6px 16px}.mt-dialog>footer{padding:8px 16px}.mt-body{padding:10px 16px}.mt-footer-note{margin-top:3px}.mt-lobby{padding:5px}.mt-lobby-seal{display:none}}
+@media(max-width:600px){.mt-dialog>header,.mt-body,.mt-dialog>footer{padding:12px max(14px,env(safe-area-inset-right)) 12px max(14px,env(safe-area-inset-left))}.mt-dialog>header{padding-top:max(12px,env(safe-area-inset-top))}.mt-dialog>footer{padding-bottom:max(12px,env(safe-area-inset-bottom))}.mt-dialog h2{font-size:21px}.mt-footer-note{font-size:10px}.mt-lobby{padding:14px 4px 20px}.mt-lobby h3{font-size:21px}.mt-lobby p{font-size:12px}.mt-rules{font-size:11px}.mt-actions>*{flex:1}}
+@media(max-height:500px) and (orientation:landscape){.mt-dialog>header{padding:max(6px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 6px max(16px,env(safe-area-inset-left))}.mt-dialog>footer{padding:8px max(16px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}.mt-body{padding:10px max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left))}.mt-footer-note{margin-top:3px}.mt-lobby{padding:5px}.mt-lobby-seal{display:none}}
 .mt-head-actions{display:flex;align-items:center;gap:8px}.mt-head-actions .mt-secondary{min-height:44px;padding:7px 12px;font-size:12px}
 .tt-notice{margin:0 0 12px;padding:10px 14px;border-left:2px solid #a5c59c;background:#a5c59c0d;color:#d2e2bd;font-size:13px;line-height:1.7}
 .tt-reward-preview,.tt-backfill{padding:14px 16px;margin-top:16px;border:1px solid #bfa57340;border-radius:11px;background:#c1a56e08}.tt-reward-preview>div:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.tt-reward-preview strong,.tt-backfill>strong{font-size:13px;font-weight:500;color:#dec994}.tt-reward-preview small{font-size:11px;color:#b8bda3}.tt-reward-preview.is-claimed{border-color:#94ad783b}.tt-reward-preview.is-claimed small{color:#a9c396}
@@ -29,8 +30,8 @@ body.martial-trial-open{overflow:hidden!important}
 @media(max-width:600px){.mt-head-actions{gap:5px}.mt-head-actions .mt-secondary{padding:6px 8px}.tt-reward-preview,.tt-backfill{padding:12px}.tt-rewards{gap:6px 10px}.tt-rewards>span{font-size:11px}.tt-reward-book nav{gap:4px}.tt-reward-book nav button{font-size:10px}.tt-reward-book li{padding:10px}}
 /* The battlefield uses the duel's stage, portraits, health bars and effects. */
 #martial-trial-modal.mt-fighting{padding:0;background:#060605}
-.mt-fighting .mt-dialog{width:100%;height:100dvh;border:0;border-radius:0;background:#080806}
-.mt-fighting .mt-body{padding:0 12px}.mt-fighting .mt-dialog>header,.mt-fighting .mt-dialog>footer{padding:10px max(16px,calc((100vw - 1440px)/2));background:#080806}
+.mt-fighting .mt-dialog{width:100%;height:100%;border:0;border-radius:0;background:#080806}
+.mt-fighting .mt-body{padding:0 max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left))}.mt-fighting .mt-dialog>header,.mt-fighting .mt-dialog>footer{padding:10px max(16px,env(safe-area-inset-right),calc((100vw - 1440px)/2)) 10px max(16px,env(safe-area-inset-left),calc((100vw - 1440px)/2));background:#080806}.mt-fighting .mt-dialog>header{padding-top:max(10px,env(safe-area-inset-top))}.mt-fighting .mt-dialog>footer{padding-bottom:max(10px,env(safe-area-inset-bottom))}
 .mt-fighting .mt-content{max-width:1440px;margin:auto}.mt-fighting .trial-tower-battle{min-height:0;padding:0 0 12px;overflow:visible;background:none}
 .mt-fighting .mt-messages{max-width:1440px;margin:auto}.mt-fighting .tt-reward-preview{margin-top:12px}
 body.martial-trial-open #report-modal{z-index:24000!important}

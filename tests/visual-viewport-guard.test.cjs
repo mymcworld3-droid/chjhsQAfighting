@@ -45,6 +45,7 @@ test('fullscreen gameplay roots use the document bounds', () => {
   for (const selector of [
     '#dongtian-overlay.dt-overlay',
     '#page-battle.battle-v2-page',
+    '#martial-trial-modal',
     '#scope-studio',
     '.dm-overlay',
     '#admin-product-editor.admin-product-editor-fullscreen',

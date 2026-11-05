@@ -3,21 +3,31 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const Rewards=require('../public/cultivation/trial-tower-rewards.js');
 test('each floor pays a bounded first-clear reward with specified milestone extras',()=>{
  for(const [floor,gold,forgeFragments,drawTickets,materials]of [
-  [1,20,2,1,{}],[5,20,2,1,{'nascent-soul-essence':1}],
-  [10,20,2,1,{'nascent-soul-essence':1}],
-  [20,30,2,1,{'nascent-soul-essence':1,'raid-refine-key-ii':1}],
-  [25,40,3,1,{'nascent-soul-essence':2}],
-  [50,310,4,2,{'nascent-soul-essence':3,'raid-refine-key-iii':1}],
-  [75,90,5,1,{'nascent-soul-essence':4}],
-  [100,610,6,4,{'nascent-soul-essence':5,'raid-refine-key-ii':1,'raid-refine-key-iii':1}]]){
+  [1,50,5,1,{}],[5,50,5,1,{'nascent-soul-essence':2}],
+  [10,50,5,2,{'nascent-soul-essence':2}],
+  [20,70,5,2,{'nascent-soul-essence':2,'raid-refine-key-ii':2}],
+  [25,90,7,1,{'nascent-soul-essence':4}],
+  [50,880,9,7,{'nascent-soul-essence':6,'raid-refine-key-iii':2}],
+  [75,190,11,1,{'nascent-soul-essence':8}],
+  [100,1730,13,12,{'nascent-soul-essence':10,'raid-refine-key-ii':2,'raid-refine-key-iii':2}]]){
   assert.deepEqual(Rewards.forFloor(floor),{floor,gold,forgeFragments,drawTickets,materials});
  }
 });
 test('the hundred-floor budget is finite and duplicate or invalid requested floors cannot multiply it',()=>{
  const floors=Array.from({length:100},(_,i)=>i+1),total=Rewards.total(floors);
- assert.deepEqual(total,{gold:7250,forgeFragments:400,drawTickets:104,materials:{'nascent-soul-essence':54,'raid-refine-key-ii':5,'raid-refine-key-iii':2}});
+ assert.deepEqual(total,{gold:16250,forgeFragments:900,drawTickets:125,materials:{'nascent-soul-essence':108,'raid-refine-key-ii':10,'raid-refine-key-iii':4}});
  assert.deepEqual(Rewards.total([...floors,...floors,-1,101,Infinity,1.5,'1']),total);
  for(const floor of [0,-1,101,NaN,Infinity,1.5,'1',null])assert.equal(Rewards.forFloor(floor),null);
+});
+test('version 1 and version 2 upgrades pay only their exact missing amounts, with no duplicate full-floor or bonus payment',()=>{
+ const floors=Array.from({length:100},(_,i)=>i+1),bonus=Rewards.bonusTotal(floors);
+ assert.deepEqual(bonus,{gold:9000,forgeFragments:500,drawTickets:21,materials:{'nascent-soul-essence':54,'raid-refine-key-ii':5,'raid-refine-key-iii':2}});
+ assert.deepEqual(Rewards.bonusTotal([...floors,...floors,0,101,'1']),bonus);
+ assert.equal(Rewards.payout([],Rewards.ticketBackfill({rewardClaims:floors}),floors).drawTickets,111);
+ assert.equal(Rewards.payout([],[],floors).drawTickets+104,125);
+ assert.deepEqual(Rewards.payout([1,10],[1,2,2],[1,5,5,10]),{gold:130,forgeFragments:13,drawTickets:4,materials:{'nascent-soul-essence':3}});
+ const record={bestFloor:3,rewardVersion:999,rewardClaims:[1,2,3],floorRewardVersions:{1:3,3:4}};
+ assert.deepEqual(Rewards.bonusPending(record),[2]);assert.deepEqual(Rewards.bonusPending({bestFloor:100}),[]);
 });
 test('legacy ticket supplements exclude milestone tickets, uncleared floors, duplicate claims and already issued supplements',()=>{
  const old={bestFloor:20,rewardVersion:1,rewardClaims:[1,2,2,5,10,20,0,101,'3']};
