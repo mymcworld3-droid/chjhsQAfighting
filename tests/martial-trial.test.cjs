@@ -136,13 +136,13 @@ test('first clear deposits the exact floor reward atomically and retries or re-c
  let state=await Rules.start(db,'u',{requestId:'first-reward-start'},NOW),request=await answerBody(db,state);
  state=await Rules.act(db,'u','turn',request,NOW);
  assert.equal(state.status,'cleared');assert.deepEqual(state.claimedFloors,[1]);
- assert.equal(state.economy.gold,27);assert.equal(state.economy.forgeFragments,13);assert.equal(state.economy.drawTickets,2);
+ assert.equal(state.economy.gold,27);assert.equal(state.economy.forgeFragments,13);assert.equal(state.economy.drawTickets,3);
  assert.equal(db.records.get('users/u').materialSystem.inventory['unrelated-item'],123);
  await Rules.act(db,'u','turn',request,NOW+1000);
  assert.equal(db.records.get('users/u').stats.gold,27);
  state=await Rules.act(db,'u','abandon',body(state),NOW+2000);
  state=await Rules.start(db,'u',{requestId:'re-clear-first-floor',floor:1},NOW+3000);state=await fight(db,state,NOW+4000);
- assert.equal(state.awarded,undefined);assert.equal(state.economy.gold,27);assert.deepEqual(saved(db).rewardClaims,[1]);
+ assert.equal(state.awarded,undefined);assert.equal(state.economy.gold,27);assert.equal(state.economy.drawTickets,3);assert.deepEqual(saved(db).rewardClaims,[1]);assert.deepEqual(state.unclaimedTicketFloors,[]);
 });
 test('old best progress can backfill once, in parallel or after expiration, without touching cultivation or unrelated materials',async()=>{
  const db=database(user({stats:{totalScore:1868,attack:200,maxHp:1000,gold:9},materialSystem:{inventory:{'nascent-soul-essence':2,wood:77}}}));
@@ -167,7 +167,36 @@ test('locked floors cannot be claimed, rejected writes roll back both resources 
  const original=db.runTransaction.bind(db);db.runTransaction=worker=>original(tx=>worker({...tx,set(ref,value){if(ref.key.startsWith(Rules.COLLECTION+'/'))throw Error('simulated persistence failure');return tx.set(ref,value);}}));
  await assert.rejects(Rules.act(db,'u','turn',request,NOW+1000),/persistence failure/);
  assert.equal(db.records.get('users/u').stats.gold,5);assert.equal(saved(db).bestFloor,0);assert.equal(saved(db).rewardClaims,undefined);
- db.runTransaction=original;state=await Rules.act(db,'u','turn',request,NOW+2000);assert.equal(state.bestFloor,1);assert.equal(state.economy.gold,25);
+ assert.equal(db.records.get('users/u').soulboundDrawTickets,undefined);assert.equal(saved(db).floorTicketClaims,undefined);
+ db.runTransaction=original;state=await Rules.act(db,'u','turn',request,NOW+2000);assert.equal(state.bestFloor,1);assert.equal(state.economy.gold,25);assert.equal(state.economy.drawTickets,1);assert.deepEqual(saved(db).floorTicketClaims,[1]);
+});
+
+test('legacy claimed floors receive only missing tickets once, even if a new floor clears before a parallel backfill',async()=>{
+ const player=user({stats:{totalScore:1868,attack:900,maxHp:1000,gold:777},forgeFragments:33,soulboundDrawTickets:5,materialSystem:{inventory:{wood:9}}});
+ const db=database(player);let state=await Rules.start(db,'u',{requestId:'legacy-tickets-start'},NOW);
+ Object.assign(saved(db),{bestFloor:10,rewardVersion:1,rewardClaims:Array.from({length:10},(_,i)=>i+1)});
+ // A new normal reward must not mark older missing tickets as already issued.
+ saved(db).run.floor=11;saved(db).run.defender=Rules.enemy(11);state=Rules.view(saved(db),NOW);
+ state=await fight(db,state,NOW+1000);assert.equal(state.status,'cleared');assert.equal(state.economy.drawTickets,6);
+ assert.deepEqual(state.unclaimedTicketFloors,[1,2,3,4,5,6,7,8,9]);assert.equal(state.unclaimedFloors.length,0);
+ const before=structuredClone(db.records.get('users/u'));
+ const [a,b]=await Promise.all(['old-ticket-claim-a','old-ticket-claim-b'].map(requestId=>Rules.act(db,'u','claim',{requestId,ticketFloors:[100],drawTickets:999999},NOW+Rules.TTL+1000)));
+ assert.deepEqual(a.awarded.floors,[]);assert.equal(a.awarded.ticketFloors.length,9);assert.equal(a.awarded.reward.drawTickets,9);
+ assert.equal(a.economy.drawTickets,15);assert.equal(b.awarded,undefined);assert.equal(b.economy.drawTickets,15);
+ assert.deepEqual(a.unclaimedTicketFloors,[]);assert.deepEqual(a.claimedFloors,Array.from({length:11},(_,i)=>i+1));
+ const after=db.records.get('users/u');assert.deepEqual({...after,soulboundDrawTickets:before.soulboundDrawTickets},before);
+ assert.equal(saved(db).rewardVersion,2);assert.equal(saved(db).floorTicketClaims.length,10);
+ const retry=await Rules.act(db,'u','claim',{requestId:'old-ticket-claim-a'},NOW+Rules.TTL+2000);assert.equal(retry.awarded,undefined);assert.equal(retry.economy.drawTickets,15);
+});
+test('mixed legacy rewards and tickets backfill together, without duplicating milestones or any other reward',async()=>{
+ const db=database();await Rules.start(db,'u',{requestId:'mixed-tickets-start'},NOW);
+ Object.assign(saved(db),{bestFloor:20,rewardVersion:1,rewardClaims:[1,5,10]});
+ const result=await Rules.act(db,'u','claim',{requestId:'mixed-tickets-claim'},NOW);
+ const Rewards=require('../public/cultivation/trial-tower-rewards.js'),expected=Rewards.total(Array.from({length:20},(_,i)=>i+1).filter(f=>![1,5,10].includes(f)));
+ assert.deepEqual(result.awarded.ticketFloors,[1,5]);assert.equal(result.economy.drawTickets,expected.drawTickets+2);
+ assert.equal(result.economy.gold,expected.gold);assert.equal(result.economy.forgeFragments,expected.forgeFragments);
+ assert.deepEqual(result.economy.materials,{...Object.fromEntries(Object.keys(Rewards.ITEMS).map(id=>[id,0])),...expected.materials});
+ assert.deepEqual(result.unclaimedTicketFloors,[]);assert.deepEqual(result.unclaimedFloors,[]);
 });
 
 test('questions bind to saved grade/scope, keep answers private and serialize simultaneous generation',async()=>{
