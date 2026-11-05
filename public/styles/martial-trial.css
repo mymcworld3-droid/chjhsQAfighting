@@ -7,29 +7,9 @@ body.martial-trial-open{overflow:hidden!important}
 .mt-dialog header small{font-size:10px;color:#9fae98;letter-spacing:.2em}
 .mt-close{width:44px;height:44px;border:1px solid #bfa5733b;border-radius:10px;background:none;color:#d7cbaa;font:inherit;font-size:26px;cursor:pointer}
 .mt-body{min-height:0;overflow:auto;overscroll-behavior:contain;padding:20px 24px;scrollbar-width:thin}
-.mt-round,.mt-footer-note{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;color:#abae99}
-.mt-round b{font-weight:400;color:#deceaa}
-.mt-arena{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px;padding:14px 0 18px}
-.mt-fighter{position:relative;min-width:0;display:grid;grid-template-columns:64px 1fr;align-items:center;gap:10px;padding:16px;border:1px solid #adba8a30;border-radius:14px;background:#c7c69305}
-.mt-fighter-face{grid-row:span 2;display:grid;place-items:center;overflow:hidden;width:64px;height:64px;border-radius:50%;border:1px solid #bfa57366;color:#dac68e;font-size:28px;background:#202b22}
-.mt-fighter-face img{width:100%;height:100%;object-fit:cover;object-position:center 15%}
-.mt-fighter-name{min-width:0}.mt-fighter-name small{display:block;color:#9ca791;font-size:10px}.mt-fighter-name strong{font-size:17px;font-weight:500;overflow-wrap:anywhere}
-.mt-health{grid-column:2;height:5px;background:#dce8ce13;overflow:hidden;border-radius:4px}
-.mt-health i{display:block;height:100%;background:#91b69d;transition:width .4s}
-.mt-enemy .mt-health i{background:#c99b78}.mt-enemy .mt-fighter-face{border-color:#bf9971;background:#31291e}
-.mt-fighter-stats{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;margin:0;font-size:11px;color:#b9bea7;font-variant-numeric:tabular-nums}.mt-fighter-stats b{font-weight:400;color:#deceaa}
-.mt-shield,.mt-core{font-size:11px;color:#a4b7c5}
-.mt-intent{padding:12px 16px;border-left:2px solid #c5a971;background:#c5a97109}
-.mt-intent small{color:#a6aa93;font-size:11px;margin-right:14px}.mt-intent strong{color:#e0cb99;font-weight:500}.mt-intent p{font-size:12px;line-height:1.7;color:#b8bca5;margin:6px 0 0}
-.mt-record{margin-top:16px;font-size:12px;color:#afb69d;line-height:1.8}.mt-record summary{cursor:pointer;padding:8px 0;color:#d9c89e}.mt-record p{margin:4px 0}.mt-record ol{padding-left:20px}
 .mt-dialog>footer{padding:16px 24px max(16px,env(safe-area-inset-bottom));border-top:1px solid #bfa57329;background:#161d18}
-.mt-tactics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.mt-tactics button{min-width:0;min-height:64px;padding:10px;border:1px solid #bda56c5c;border-radius:10px;background:#bda56c0b;color:#e8dbb8;cursor:pointer;font:inherit}
-.mt-tactics strong{display:block;font-size:17px;font-weight:500}.mt-tactics small{display:block;color:#aeb59b;font-size:11px;line-height:1.6;margin-top:4px}
-.mt-tactics button:hover:not(:disabled){background:#bda56c20;border-color:#ddc790}
-.mt-tactics button:disabled,.mt-primary:disabled,.mt-secondary:disabled{opacity:.5;cursor:wait}
-.mt-footer-note{margin:10px 0 0;font-size:11px;line-height:1.6}
-.mt-link{background:none;border:0;color:#c1ac82;font:inherit;min-height:36px;cursor:pointer;text-decoration:underline}
+.mt-primary:disabled,.mt-secondary:disabled{opacity:.5;cursor:wait}
+.mt-footer-note{margin:10px 0 0;font-size:11px;line-height:1.6;color:#abae99}
 .mt-actions{display:flex;gap:10px;flex-wrap:wrap}.mt-primary,.mt-secondary{min-height:46px;padding:10px 18px;border-radius:9px;font:inherit;font-size:14px;cursor:pointer}
 .mt-primary{border:1px solid #dcc284;background:#d4bd83;color:#20271e}.mt-secondary{border:1px solid #bda56c52;background:none;color:#cbbd99}
 .mt-lobby{text-align:center;padding:20px 10px 26px}.mt-lobby h3{font-size:25px;font-weight:500;color:#ebd9a8;margin:16px 0}.mt-lobby p{font-size:14px;line-height:1.9;color:#b1bca5;margin:0}
@@ -37,11 +17,9 @@ body.martial-trial-open{overflow:hidden!important}
 .mt-progress{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:16px;border:1px solid #bfa57329;border-radius:10px;color:#b7bda6;font-size:13px}.mt-progress strong{font-size:24px;font-weight:500;color:#e6d2a3}.mt-progress b{font-weight:500;color:#adbfa7}.mt-progress i{flex-basis:100%;height:4px;border-radius:3px;background:linear-gradient(to right,#c4ad75 var(--mt-progress),#ccd6bc14 var(--mt-progress))}
 .mt-rules{padding-left:20px;font-size:12px;color:#aeb79f;line-height:2.1}.mt-outcome{border:1px solid #ac80684d;border-radius:12px;padding:14px 18px;background:#ac806809}.mt-outcome h3{font-weight:500;color:#dec296;margin:0 0 6px}.mt-outcome p{font-size:12px;line-height:1.7;color:#acb398;margin:0}.mt-outcome.is-won{border-color:#8bab795e;background:#8bab7909}
 .mt-error{padding:10px 12px;border:1px solid #b47f6459;border-radius:9px;color:#e7b195;font-size:12px;line-height:1.8;margin-bottom:12px}.mt-loading{text-align:center;padding:80px 10px;color:#b5b897;font-size:14px}
-.mt-resolved .mt-fighter-face{animation:mt-contact .4s ease-out}.mt-dialog button:focus-visible,.mt-record summary:focus-visible{outline:2px solid #e9d59b;outline-offset:3px}
-@keyframes mt-contact{0%{filter:brightness(1.8);transform:translateX(-4px)}40%{transform:translateX(4px)}100%{filter:none;transform:none}}
-@media(max-width:600px){#martial-trial-modal{padding:8px}.mt-dialog{height:calc(100dvh - 16px);border-radius:12px}.mt-dialog>header,.mt-body,.mt-dialog>footer{padding:12px 14px}.mt-dialog h2{font-size:21px}.mt-arena{gap:10px;padding-bottom:6px;margin-top:10px}.mt-fighter{padding:10px;grid-template-columns:1fr;gap:7px}.mt-fighter-face{grid-row:auto;width:46px;height:46px;font-size:22px}.mt-health{grid-column:1}.mt-fighter-name strong{font-size:15px}.mt-fighter-stats{font-size:10px}.mt-tactics{gap:6px}.mt-tactics button{padding:8px 5px;min-height:66px}.mt-tactics strong{font-size:16px}.mt-tactics small{font-size:10px}.mt-footer-note{font-size:10px}.mt-lobby{padding:14px 4px 20px}.mt-lobby h3{font-size:21px}.mt-lobby p{font-size:12px}.mt-rules{font-size:11px}.mt-actions>*{flex:1}}
-@media(max-height:500px) and (orientation:landscape){.mt-dialog>header{padding:6px 16px}.mt-dialog>footer{padding:8px 16px}.mt-body{padding:10px 16px}.mt-tactics button{min-height:48px;padding:5px}.mt-footer-note{margin-top:3px}.mt-lobby{padding:5px}.mt-lobby-seal{display:none}.mt-arena{padding:0;margin-top:8px}.mt-fighter-face{width:42px;height:42px}.mt-fighter{grid-template-columns:42px 1fr;padding:8px}.mt-record{margin-top:4px}}
-@media(prefers-reduced-motion:reduce){.mt-resolved .mt-fighter-face{animation:none}.mt-health i{transition:none}}
+.mt-dialog button:focus-visible,.tt-reward-book summary:focus-visible{outline:2px solid #e9d59b;outline-offset:3px}
+@media(max-width:600px){#martial-trial-modal{padding:8px}.mt-dialog{height:calc(100dvh - 16px);border-radius:12px}.mt-dialog>header,.mt-body,.mt-dialog>footer{padding:12px 14px}.mt-dialog h2{font-size:21px}.mt-footer-note{font-size:10px}.mt-lobby{padding:14px 4px 20px}.mt-lobby h3{font-size:21px}.mt-lobby p{font-size:12px}.mt-rules{font-size:11px}.mt-actions>*{flex:1}}
+@media(max-height:500px) and (orientation:landscape){.mt-dialog>header{padding:6px 16px}.mt-dialog>footer{padding:8px 16px}.mt-body{padding:10px 16px}.mt-footer-note{margin-top:3px}.mt-lobby{padding:5px}.mt-lobby-seal{display:none}}
 .mt-head-actions{display:flex;align-items:center;gap:8px}.mt-head-actions .mt-secondary{min-height:44px;padding:7px 12px;font-size:12px}
 .tt-notice{margin:0 0 12px;padding:10px 14px;border-left:2px solid #a5c59c;background:#a5c59c0d;color:#d2e2bd;font-size:13px;line-height:1.7}
 .tt-reward-preview,.tt-backfill{padding:14px 16px;margin-top:16px;border:1px solid #bfa57340;border-radius:11px;background:#c1a56e08}.tt-reward-preview>div:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.tt-reward-preview strong,.tt-backfill>strong{font-size:13px;font-weight:500;color:#dec994}.tt-reward-preview small{font-size:11px;color:#b8bda3}.tt-reward-preview.is-claimed{border-color:#94ad783b}.tt-reward-preview.is-claimed small{color:#a9c396}
@@ -49,3 +27,24 @@ body.martial-trial-open{overflow:hidden!important}
 .tt-backfill{border-color:#bca2568c;background:#bca25610;margin:0 0 16px}.tt-backfill .mt-primary{margin-top:12px;min-height:44px}.tt-backfill>strong{font-size:15px}
 .tt-reward-book{margin-top:20px;border-top:1px solid #bfa57329;padding-top:10px}.tt-reward-book>summary{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;cursor:pointer;color:#dbc68e;font-size:13px;line-height:1.8;padding:8px 0}.tt-reward-book>summary span{font-size:11px;color:#a8b29a}.tt-reward-book nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:12px 0}.tt-reward-book nav button{min-height:44px;min-width:0;padding:6px;border:1px solid #bfa57335;border-radius:6px;color:#afba9e;background:none;font:inherit;font-size:11px;cursor:pointer}.tt-reward-book nav button[aria-current="page"]{color:#f0ddaa;border-color:#c4ae73;background:#c4ae7314}.tt-reward-book ol{list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}.tt-reward-book li{padding:12px;border:1px solid #bfa57324;border-radius:8px;background:#ffffff02}.tt-reward-book li>div:first-child{display:flex;justify-content:space-between;gap:8px;color:#c8cbb2;font-size:12px}.tt-reward-book li strong{font-weight:500}.tt-reward-book li small{color:#919b87}.tt-reward-book li.is-ready{border-color:#c3a65e75;background:#c3a65e08}.tt-reward-book li.is-ready small{color:#e7c77e}.tt-reward-book li.is-claimed small{color:#9db889}.tt-reward-book li.is-claimed{opacity:.8}
 @media(max-width:600px){.mt-head-actions{gap:5px}.mt-head-actions .mt-secondary{padding:6px 8px}.tt-reward-preview,.tt-backfill{padding:12px}.tt-rewards{gap:6px 10px}.tt-rewards>span{font-size:11px}.tt-reward-book nav{gap:4px}.tt-reward-book nav button{font-size:10px}.tt-reward-book li{padding:10px}}
+/* The battlefield uses the duel's stage, portraits, health bars and effects. */
+#martial-trial-modal.mt-fighting{padding:0;background:#060605}
+.mt-fighting .mt-dialog{width:100%;height:100dvh;border:0;border-radius:0;background:#080806}
+.mt-fighting .mt-body{padding:0 12px}.mt-fighting .mt-dialog>header,.mt-fighting .mt-dialog>footer{padding:10px max(16px,calc((100vw - 1440px)/2));background:#080806}
+.mt-fighting .mt-content{max-width:1440px;margin:auto}.mt-fighting .trial-tower-battle{min-height:0;padding:0 0 12px;overflow:visible;background:none}
+.mt-fighting .mt-messages{max-width:1440px;margin:auto}.mt-fighting .tt-reward-preview{margin-top:12px}
+.mt-study-host[hidden],.mt-content[hidden]{display:none!important}
+.mt-studying .mt-dialog{width:min(1400px,100%);background:#0d211f}
+.mt-studying .mt-body{padding:0 8px 24px;background:#0d211f}.mt-study-host #page-quiz{margin:0 auto;min-height:0!important;width:100%}
+.mt-study-host #solo-progress-panel,.mt-study-host #btn-extended-practice-stop,.mt-study-host .adaptive-scope-progress{display:none!important}
+body.martial-trial-open #report-modal{z-index:24000!important}
+.mt-study-host #quiz-whiteboard-panel{z-index:23500}
+.mt-studying .mt-dialog>footer{padding:6px 18px}.mt-studying .mt-footer-note{margin:0}
+@media(max-width:600px){.mt-studying{padding:0!important}.mt-studying .mt-dialog{height:100dvh;border-radius:0}.mt-studying .mt-body{padding-inline:0}.mt-fighting .mt-body{padding-inline:9px}.mt-fighting .mt-dialog>header,.mt-fighting .mt-dialog>footer{padding-inline:12px}}
+/* Fit the shared duel layout between the tower's persistent header/actions. */
+.mt-in-combat .mt-body{overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.mt-in-combat .mt-content{width:100%;height:100%;min-height:0;flex:1}
+#martial-trial-modal #trial-tower-stage{position:relative!important;inset:auto!important;z-index:auto!important;width:100%!important;height:100%!important;max-height:none!important;margin:0!important}
+.mt-in-combat .mt-messages:empty{display:none}
+#trial-tower-stage #tt-cultivation-pool{font-size:10px}#trial-tower-stage #tt-cultivation-pool::after{content:none}
+#martial-trial-modal.mt-fighting:not(.mt-in-combat) #trial-tower-stage{height:clamp(260px,60dvh,600px)!important;min-height:260px!important}

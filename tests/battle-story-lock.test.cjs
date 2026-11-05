@@ -12,7 +12,8 @@ test('battle lock spans matchmaking, joined room, result screen, recovery and de
   const code = battle.slice(battle.indexOf('  window.isXiuxianBattleBusy ='), battle.indexOf('\n', battle.indexOf('  window.isXiuxianBattleBusy =')));
   assert.match(code, /state\.starting \|\| state\.leaving \|\| state\.recovering \|\| state\.roomId/);
   const state = { starting: false, leaving: false, recovering: false, roomId: null };
-  const context = { window: {}, state };
+  let towerOpen=false;
+  const context = { window: {}, state, document:{getElementById:()=>towerOpen?{}:null} };
   vm.runInNewContext(code, context);
   assert.equal(context.window.isXiuxianBattleBusy(), false);
   for (const property of ['starting', 'leaving', 'recovering']) {
@@ -24,6 +25,7 @@ test('battle lock spans matchmaking, joined room, result screen, recovery and de
   assert.equal(context.window.isXiuxianBattleBusy(), true, 'finished match remains locked until exit');
   state.roomId = null;
   assert.equal(context.window.isXiuxianBattleBusy(), false);
+  towerOpen=true;assert.equal(context.window.isXiuxianBattleBusy(),true,'tower also blocks delayed story launches');
 });
 
 test('automatic story and replay cannot start during a PvP session', () => {

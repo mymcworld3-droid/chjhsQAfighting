@@ -540,6 +540,12 @@
       }
     `;
     document.head.appendChild(style);
+    // Tower and ranked duels share the final viewport/animation rules too.
+    // Only their DOM IDs differ; question sheets keep the free-study layout.
+    const towerStyle=document.createElement('style');
+    towerStyle.id='tower-duel-fullscreen-style';
+    towerStyle.textContent=style.textContent.replaceAll('#page-battle','#trial-tower-stage').replaceAll('#bv2-','#tt-');
+    document.head.appendChild(towerStyle);
   }
 
   let battleViewportFrame = 0;

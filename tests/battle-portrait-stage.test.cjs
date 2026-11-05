@@ -6,10 +6,11 @@ const vm = require('node:vm');
 
 const read = name => fs.readFileSync(path.join(__dirname, '../public', name), 'utf8');
 const source = read('cultivation/battle-mode-v2.js');
+const shared = read('cultivation/duel-arena-view.js');
 const styles = read('styles/battle-mode-v2.css');
 
 function stageController() {
-  const from = source.indexOf('  function portraitMarkup(id) {');
+  const from = source.indexOf('  function setPlayerPortrait(id, player, own = false) {');
   const to = source.indexOf('  function ensurePage() {', from);
   assert.ok(from >= 0 && to > from);
   const nodes = new Map();
@@ -18,7 +19,7 @@ function stageController() {
     document: { getElementById: id => nodes.get(id) || null },
     userData: () => ({ storyProgressV1: { gender: 'female' } })
   };
-  vm.runInNewContext(source.slice(from, to) + '\nthis.stage={portraitMarkup,setPlayerPortrait}', context);
+  vm.runInNewContext(shared.slice(0,shared.indexOf('export function duelArenaMarkup')).replace('export function','function')+'\n'+source.slice(from, to) + '\nthis.stage={portraitMarkup,setPlayerPortrait}', context);
   function mount(id) {
     const img = { dataset: {}, hidden: true, loads: 0, _src: '',
       set src(s) { this._src = s; this.loads++; },
@@ -41,7 +42,7 @@ function stageController() {
 }
 
 test('formal arena shows enemy HP above center portraits and own HP below; no visible attack log', () => {
-  const scene = source.slice(source.indexOf('<section id="bv2-arena"'), source.indexOf('<section id="bv2-quiz"'));
+  const scene = shared.slice(shared.indexOf('<section id="bv2-arena"'));
   const upper = scene.indexOf('id="bv2-enemy-hp"');
   const stage = scene.indexOf('class="bv2-stage"');
   const mine = scene.indexOf('id="bv2-my-hp"');

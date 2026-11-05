@@ -7,7 +7,7 @@ const vm = require('node:vm');
 
 const read = (file) => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 const full = read('public/cultivation/battle-v3-stability-ui.js');
-const formal = read('public/cultivation/battle-mode-v2.js');
+const formal = read('public/cultivation/duel-arena-view.js');
 const main = read('public/main.js');
 const index = read('public/index.html');
 const viewport = full.slice(full.indexOf('/* Viewport-fit battle:'));

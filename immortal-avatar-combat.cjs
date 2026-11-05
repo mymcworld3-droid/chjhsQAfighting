@@ -104,4 +104,26 @@ function settle(state,correct,tactic){
     reason:won?'defeated':challenger.hp<=0?'fallen':round>=24?'limit':'',
     notes,logs:result.logs,activations:result.activations});
 }
-module.exports={snapshot,catalog,intent,settle,STYLES};
+// Tower initiative is fixed: the player's answer gates the first strike;
+// a surviving guard always takes the second turn, without tactical modifiers.
+function trialPair(build,defender){
+  return json(context.applyNascentSoulDuelRule(json(build),json(defender)));
+}
+function settleTrial(state,correct){
+  const round=state.round+1,host=json(state.challenger),guest=json(state.defender);
+  host.answer={correct,atMs:1};guest.answer={correct:true,atMs:1000};
+  const result=context.settleBattleRound({roomId:state.runId,round,host,guest,maxRounds:24,
+    resolveEquipmentHit:context.resolveArtifactBattleHit,resolveGuardedFollowup:context.resolveArtifactGuardedFollowup,
+    resolveGuardAbsorption:context.resolveArtifactGuardAbsorption,resolveTalentDefense:context.resolveArtifactBattleDefense});
+  const apply=(player,prefix)=>({...player,hp:result[prefix+'Hp'],coreShield:result[prefix+'CoreShield'],
+    coreCorrectStreak:result[prefix+'CoreStreak'],soulStarCorrectWindow:result[prefix+'StarCorrectWindow'],
+    innateAbilityState:result[prefix+'InnateAbilityState'],...result[prefix+'ArtifactState']});
+  const challenger=apply(host,'host'),defender=apply(guest,'guest');
+  delete challenger.answer;delete defender.answer;
+  const won=defender.hp<=0&&challenger.hp>0;
+  return json({round,challenger,defender,won,finished:won||challenger.hp<=0||round>=24,
+    notes:[correct?'答對，率先出手；守衛存活時固定後手攻擊。':'答錯，本回合無法出手；守衛仍會攻擊。'],
+    logs:result.logs,steps:result.steps,activations:result.activations,
+    startHostHp:result.startHostHp,startGuestHp:result.startGuestHp});
+}
+module.exports={snapshot,catalog,intent,settle,trialPair,settleTrial,STYLES};

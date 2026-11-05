@@ -39,6 +39,7 @@ const enlightenmentTrial = require('./enlightenment-trial-api.cjs').__test;
 const registerImmortalChallengeApi = require('./immortal-challenge-api.cjs');
 const registerMartialTrialApi = require('./martial-trial-api.cjs');
 const immortalChallenge = require('./immortal-challenge-api.cjs').__test;
+const trialTower = require('./martial-trial-api.cjs').__test;
 const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameIssueApi = require('./game-issue-api.cjs');
 const registerClassroomApi = require('./classroom-api.cjs');
@@ -495,6 +496,8 @@ app.post('/api/generate-quiz', async (req, res) => {
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
+    const towerMode = String(quizMode || '') === 'trial-tower';
+    let towerContext = null;
     const avatarMode = String(quizMode || '') === 'immortal-avatar';
     let avatarContext = null;
     const meditationMode = String(quizMode || '') === 'meditation-literacy';
@@ -562,6 +565,18 @@ app.post('/api/generate-quiz', async (req, res) => {
             avoidQuestionMeta = [];
         } catch (error) {
             return res.status(error.status||503).json({error:error.status?error.message:'悟道試煉題目準備失敗'});
+        }
+    }
+    if (towerMode) {
+        try {
+            const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
+            towerContext = {uid,db,...await trialTower.prepareQuestion(db,uid)};
+            if (towerContext.pending) return res.json({towerQuestion:towerContext.pending});
+            subject=towerContext.subject;level=towerContext.level;rank=0;difficulty=towerContext.difficulty;
+            specificTopic=towerContext.specificTopic;topic='';knowledgeMap=null;
+            avoidQuestions=towerContext.history;avoidQuestionMeta=[];
+        } catch(error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'試煉之塔題目準備失敗'});
         }
     }
     if (avatarMode) {
@@ -742,6 +757,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     const requestedSession = String(quizSessionId || '');
     const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
+        : towerMode ? `tower:${towerContext.uid}:${towerContext.runId}`
         : avatarMode ? `avatar:${avatarContext.uid}:${avatarContext.runId}`
         : meditationMode ? `meditation:${meditationContext.uid}:${meditationContext.runId}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
@@ -869,6 +885,10 @@ app.post('/api/generate-quiz', async (req, res) => {
                 const session = await meditationQuiz.createService({db:meditationContext.db}).commitQuestion(
                     meditationContext.uid,meditationContext,parsed);
                 return res.json({meditationSession:session,provider:routed.provider,model:routed.model});
+            }
+            if (towerMode) {
+                const question=await trialTower.commitQuestion(towerContext.db,towerContext.uid,towerContext,parsed);
+                return res.json({towerQuestion:question,provider:routed.provider,model:routed.model});
             }
             if (avatarMode) {
                 const question = await immortalChallenge.commitQuestion(avatarContext.db,avatarContext.uid,avatarContext,parsed);

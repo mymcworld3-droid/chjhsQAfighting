@@ -1,3 +1,4 @@
+import { createStudyQuestionBridge } from './cultivation/study-question-bridge.js';
 import './cultivation/void-retraining-rules.js';
 import {} from './cultivation/solo-learning-rules.js';
 import './cultivation/knowledge-points.js';
@@ -1958,6 +1959,7 @@ window.promptXiuxianEducationLevel = () => {
 
 // 修改原本的 switchToPage
 window.switchToPage = (pageId) => {
+    if(document.getElementById('martial-trial-modal'))window.closeTrialTower?.();
     if (pageId === 'page-social' && window.promptXiuxianEducationLevel()) return false;
     if (isBattleActive && pageId !== 'page-battle') {
         alert("鬥法進行中！");
@@ -3418,7 +3420,7 @@ function quizHelperAppendMessage(role, text, { knowledgePoint = '' } = {}) {
     else body.textContent = text;
 
     const point = String(knowledgePoint || '').trim().slice(0, 60);
-    if (role === 'assistant' && point) {
+    if (role === 'assistant' && point && window.currentActiveQuiz?.mode !== 'trial-tower') {
         const practice = document.createElement('button');
         practice.type = 'button';
         practice.className = 'quiz-helper-practice-btn';
@@ -3497,7 +3499,7 @@ function initQuizHelper() {
 
 function resetQuizHelper(data = {}, { topic = '' } = {}) {
     const pending = extendedPracticeState.pending;
-    if (pending && (pending.quiz !== window.currentActiveQuiz || pending.uid !== auth.currentUser?.uid || pending.scope !== soloQuestionScope())) {
+    if (window.currentActiveQuiz?.mode!=='trial-tower' && pending && (pending.quiz !== window.currentActiveQuiz || pending.uid !== auth.currentUser?.uid || pending.scope !== soloQuestionScope())) {
         extendedPracticeState.pending = null;
     }
     initQuizHelper();
@@ -3896,6 +3898,7 @@ function initQuizWhiteboard() {
     document.addEventListener('keydown', (event) => {
         const { panel } = quizWhiteboardElements();
         if (event.key !== 'Escape' || !panel || panel.classList.contains('hidden')) return;
+        event.preventDefault();event.stopImmediatePropagation();
         window.toggleQuizWhiteboard(false);
     });
 }
@@ -3943,7 +3946,7 @@ window.toggleQuizWhiteboard = (forceOpen) => {
     }
 };
 
-function renderQuiz(data, rank, topic) {
+function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     document.getElementById('solo-correction-practice')?.remove();
     document.getElementById('solo-correction-hint')?.remove();
     const quizPage = document.getElementById('page-quiz');
@@ -3953,7 +3956,7 @@ function renderQuiz(data, rank, topic) {
     // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
     resetQuizHelper(data, { topic });
-    window.QAAdaptiveLearning?.render(window.currentActiveQuiz);
+    if (!study) window.QAAdaptiveLearning?.render(window.currentActiveQuiz);
     syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
@@ -3979,20 +3982,30 @@ function renderQuiz(data, rank, topic) {
         // 🔥 這裡修復了斷裂的字串與 class 名稱
         btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
         btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${(window.quizMathRichText || formatQuizRichText)(optText)}</span>`;
-        btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
+        btn.onclick = () => onAnswer ? onAnswer(idx) : handleAnswer(idx, data.ans, data.q, data.exp);
         container.appendChild(btn);
     });
 
     // The same unanswered question can be revisited; reuse its event ID.
     const analyticsQuiz = window.currentActiveQuiz;
     if (analyticsQuiz) analyticsQuiz.analyticsStartEventId ||= window.newPlayerAnalyticsEventId?.();
-    void window.trackPlayerAnalytics?.('question_started', { mode: 'solo', eventId: analyticsQuiz?.analyticsStartEventId });
+    if (!study) void window.trackPlayerAnalytics?.('question_started', { mode: 'solo', eventId: analyticsQuiz?.analyticsStartEventId });
 
     // 等 MathJax 初始化後依序排版，避免快速換題時併發渲染。
     const mathTargets = [questionTextEl, container, whiteboardQuestionEl].filter(Boolean);
     if (window.quizMathTypeset) void window.quizMathTypeset(mathTargets);
     else void window.MathJax?.typesetPromise?.(mathTargets).catch(err => console.warn('[Quiz Math]', err));
 }
+
+window.QAStudyQuestion = createStudyQuestionBridge({
+    userId: () => auth.currentUser?.uid,
+    render: renderQuiz, resetWhiteboard: resetQuizWhiteboard, resetHelper: resetQuizHelper,
+    reviewHelper(review) {
+        quizHelperState.answered=true;quizHelperState.selectedIndex=review.selectedChoice;
+        quizHelperState.correctIndex=review.correctIndex;quizHelperState.explanation=review.explanation;
+        renderQuizHelperConversation();
+    }
+});
 
 // Open the normal scope editor without recording an answer or changing the streak.
 window.openQuizScopeSettings = () => {
@@ -4193,6 +4206,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
             body: JSON.stringify({
+                ...(quiz.mode==='trial-tower'?{towerRunId:quiz.towerRunId,towerQuestionId:quiz.towerQuestionId}:{}),
                 question: quiz.data.q,
                 options: quiz.data.opts,
                 correctIndex: quiz.data.ans,
@@ -4221,6 +4235,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
             closeReportModal();
             // A late review must not skip the player's newer question.
             if (window.currentActiveQuiz !== quiz) return;
+            if(quiz.mode==='trial-tower'){void quiz.onVerifiedSkip?.();return;}
             syncSoloQuestionCache();
             if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
                 soloQuestionCache.consumeActive({ remember: true });
