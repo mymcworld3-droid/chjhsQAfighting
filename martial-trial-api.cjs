@@ -38,7 +38,7 @@ function fighter(p){return {uid:p.uid,realm:p.realm||'',gender:p.gender||'',name
 function view(record,now=Date.now()){
  const bestFloor=Math.min(MAX_FLOOR,count(record?.bestFloor)),run=record?.run;
  const state={bestFloor,title:title(bestFloor),checkpoint:checkpoint(bestFloor),maxFloor:MAX_FLOOR,totalWins:count(record?.totalWins),status:'idle',
-  activeExtension:record?.activeExtension?{id:record.activeExtension.id,point:record.activeExtension.point}:null,queuedPractice:(record?.practiceQueue||[]).map(p=>({id:p.id,questionId:p.questionId,point:p.point,correction:p.correction})),rewardVersion:Rewards.VERSION,claimedFloors:Rewards.claimed(record||{}),unclaimedFloors:Rewards.pending(record||{}),unclaimedTicketFloors:Rewards.ticketBackfill(record||{})};
+  activeExtension:record?.activeExtension?{id:record.activeExtension.id,point:record.activeExtension.point}:null,queuedPractice:(record?.practiceQueue||[]).map(p=>({id:p.id,questionId:p.questionId,point:p.point,correction:p.correction})),rewardVersion:Rewards.VERSION,claimedFloors:Rewards.claimed(record||{}),unclaimedFloors:Rewards.pending(record||{}),unclaimedTicketFloors:Rewards.ticketBackfill(record||{}),unclaimedBonusFloors:Rewards.bonusPending(record||{})};
  if(!run||run.version!==2)return {...state,rulesUpdated:!!run};
  const expired=run.expiresAtMs<=now&&['active','cleared'].includes(run.status);
  return {...state,runId:run.runId,status:expired?'expired':run.status,floor:run.floor,round:run.round,maxRounds:24,
@@ -54,11 +54,12 @@ function refreshStudyScope(record,user){
 }
 function economy(user){return {gold:count(user.stats?.gold),forgeFragments:count(user.forgeFragments),drawTickets:count(user.soulboundDrawTickets),
  materials:Object.fromEntries(Object.keys(Rewards.ITEMS).map(id=>[id,count(user.materialSystem?.inventory?.[id])]))};}
-function award(record,user,floors,ticketFloors=[]){
+function award(record,user,floors,ticketFloors=[],bonusFloors=[]){
  const allowed=new Set(Rewards.pending(record)),earned=[...new Set(floors)].filter(f=>allowed.has(f));
  const ticketAllowed=new Set(Rewards.ticketBackfill(record)),tickets=[...new Set(ticketFloors)].filter(f=>ticketAllowed.has(f));
- if(!earned.length&&!tickets.length)return null;
- const reward=Rewards.total(earned);reward.drawTickets+=tickets.length;
+ const bonusAllowed=new Set(Rewards.bonusPending(record)),bonuses=[...new Set(bonusFloors)].filter(f=>bonusAllowed.has(f));
+ if(!earned.length&&!tickets.length&&!bonuses.length)return null;
+ const reward=Rewards.payout(earned,tickets,bonuses);
  const patch={
   'stats.gold':count(user.stats?.gold)+reward.gold,forgeFragments:count(user.forgeFragments)+reward.forgeFragments,
   soulboundDrawTickets:count(user.soulboundDrawTickets)+reward.drawTickets
@@ -71,9 +72,11 @@ function award(record,user,floors,ticketFloors=[]){
  record.rewardClaims=[...new Set([...Rewards.claimed(record),...earned])].sort((a,b)=>a-b);record.rewardVersion=Rewards.VERSION;
  // Preserve the unclaimed legacy ticket supplements when a newer floor clears.
  record.floorTicketClaims=[...new Set([...(Array.isArray(record.floorTicketClaims)?record.floorTicketClaims:[]),...earned,...tickets])].filter(f=>Number.isInteger(f)&&f>=1&&f<=MAX_FLOOR).sort((a,b)=>a-b);
- return {floors:earned,ticketFloors:tickets,reward,patch};
+ record.floorRewardVersions=Object.fromEntries(Rewards.claimed(record).filter(f=>Number(record.floorRewardVersions?.[f])>=Rewards.VERSION).map(f=>[f,record.floorRewardVersions[f]]));
+ for(const floor of [...earned,...bonuses])record.floorRewardVersions[floor]=Rewards.VERSION;
+ return {floors:earned,ticketFloors:tickets,bonusFloors:bonuses,reward,patch};
 }
-function result(record,user,now,granted){return {...view(record,now),economy:economy(user),...(granted?{awarded:{floors:granted.floors,ticketFloors:granted.ticketFloors,reward:granted.reward}}:{})};}
+function result(record,user,now,granted){return {...view(record,now),economy:economy(user),...(granted?{awarded:{floors:granted.floors,ticketFloors:granted.ticketFloors,bonusFloors:granted.bonusFloors,reward:granted.reward}}:{})};}
 function settleQuestion(record,user,q,choice,now,start=record.run,verifiedError=false){
  const run=record.run,revising=start.round<run.round,correct=Number.isInteger(choice)?choice===q.correctIndex:null;
  // Keep the entire private pre-round combat state: HP alone cannot restore shields,
@@ -160,7 +163,7 @@ async function act(db,uid,action,body={},now=Date.now()){
   const repeated=replay(record,action,body,now);if(repeated)return {...repeated,economy:economy(user)};
   if(action==='claim'){
    if(!record)throw fail('尚無可領取的通關獎勵');
-   const granted=award(record,user,Rewards.pending(record),Rewards.ticketBackfill(record));
+   const granted=award(record,user,Rewards.pending(record),Rewards.ticketBackfill(record),Rewards.bonusPending(record));
    if(granted)tx.update(db.collection('users').doc(uid),granted.patch);
    remember(record,action,body);tx.set(ref(db,uid),record);return result(record,user,now,granted);
   }
