@@ -161,8 +161,9 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
     res.set?.('Cache-Control', 'no-store');
     const bearer = /^Bearer ([A-Za-z0-9_.-]+)$/.exec(String(req.get?.('authorization') || ''));
     if (!bearer) return res.status(401).json({ status: 'unauthorized', valid: null, reason: '請先登入後再回報。' });
-    const input = validateReport(req.body);
-    if (input.error) return res.status(400).json({ status: 'invalid', valid: null, reason: input.error });
+    let input = validateReport(req.body);
+    const towerReport = !!req.body?.towerQuestionId;
+    if (input.error && !towerReport) return res.status(400).json({ status: 'invalid', valid: null, reason: input.error });
     let project, verified;
     try {
       project = resolve();
@@ -198,6 +199,12 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
       });
     }
     const uid = verified.uid;
+    if (towerReport) {
+      try { input=validateReport(await require('./martial-trial-api.cjs').__test.reportInput(project.db,uid,req.body)); }
+      catch(error){return res.status(error.status||503).json({status:'invalid',valid:null,reason:error.status?error.message:'題目資料同步失敗'});}
+      if(input.error)return res.status(400).json({status:'invalid',valid:null,reason:input.error});
+    }
+
     const claimRef = project.db.collection('questionErrorCompensations').doc(reportKey(uid, input.question));
     let phase = 'duplicate-check';
     try {

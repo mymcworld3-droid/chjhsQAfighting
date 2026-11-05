@@ -8,6 +8,7 @@ const vm = require('node:vm');
 
 const readPublic = (path) => readFileSync(join(__dirname, '../public', path), 'utf8');
 const engineSource = readPublic('cultivation/battle-engine-v2.js');
+const arenaSource = readPublic('cultivation/duel-arena-view.js');
 const battleSource = readPublic('cultivation/battle-mode-v2.js');
 const mainSource = readPublic('main.js');
 const cssSource = readPublic('styles/battle-mode-v2.css');
@@ -37,8 +38,8 @@ test('Battle v2 uses the unified cultivation combat scale', () => {
 });
 
 test('battle health display is a current in-match number, not a permanent fraction', () => {
-  assert.match(battleSource, /bv2-enemy-hp-text">1000</);
-  assert.match(battleSource, /bv2-my-hp-text">1000</);
+  assert.match(arenaSource, /bv2-enemy-hp-text">1000</);
+  assert.match(arenaSource, /bv2-my-hp-text">1000</);
   assert.match(battleSource, /setText\(`bv2-\$\{prefix\}-hp-text`, Math\.round\(hp\)\)/);
 });
 
@@ -525,7 +526,7 @@ test('early incorrect answer has a MISS before the opponent attacks', () => {
 });
 
 test('separate full-screen quiz requires countdown, explanation confirmation and shared review gate', () => {
-  const arena = battleSource.slice(battleSource.indexOf('<section id="bv2-arena"'), battleSource.indexOf('<section id="bv2-quiz"'));
+  const arena = arenaSource;
   const quiz = battleSource.slice(battleSource.indexOf('<section id="bv2-quiz"'), battleSource.indexOf('<section id="bv2-result"'));
   assert.ok(arena.includes('id="bv2-duel-cue"'));
   assert.ok(!arena.includes('id="bv2-question"'), 'question must never be shown inside arena');
