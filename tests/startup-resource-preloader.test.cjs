@@ -76,15 +76,19 @@ function imagePlan(player, profile = 'balanced') {
 test('low rendering preloads only composite scenery for both orientations, including background queues', () => {
   const plan = imagePlan({ stats: { totalScore: 28 } }, 'safe');
   const urls = [...plan.startup, ...plan.remaining];
-  assert.ok(plan.startup.includes('assets/training/cultivation-landscape-clean.webp'));
-  assert.ok(plan.remaining.includes('assets/training/cultivation-portrait-clean.webp'));
+  assert.ok(plan.startup.includes(Layouts.landscape.image));
+  assert.ok(plan.remaining.includes(Layouts.portrait.image));
   assert.equal(urls.some(url => url.startsWith('assets/training/layers/')), false);
   for (const id of ['meditation', 'vault', 'forge', 'secret', 'status']) {
-    assert.ok(plan.startup.includes(`assets/training/cutouts/${id}-ai.webp`));
+    assert.equal(urls.includes(`assets/training/cutouts/${id}-ai.webp`), false,
+      'painted buildings must not decode a second building or acquire a different stair alignment');
   }
+  for (const id of ['contract', 'rank']) assert.ok(plan.startup.includes(Layouts.landscape.places[id].sprite.image));
   const high = imagePlan({ stats: { totalScore: 28 } }, 'balanced');
   assert.ok(high.startup.includes(Layouts.landscape.layers[0].image));
   assert.ok(high.remaining.includes(Layouts.portrait.layers[0].image));
+  assert.equal([...high.startup, ...high.remaining].some(url => /island-|mountains-middle/.test(url)), false,
+    'balanced rendering also uses the integrated bridges, stairs and platforms');
 });
 
 test('startup image collection waits for the rendering decision before any images are warmed', async () => {

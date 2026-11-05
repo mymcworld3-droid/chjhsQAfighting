@@ -12,7 +12,7 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page {
   padding: 0 !important;
   border-radius: 0 !important;
   overflow: hidden !important;
-  background: #889b9f;
+  background: #111e2b;
   isolation: isolate;
 }
 body.xianxia-theme main:has(#page-training.training-scene-map-active.active-page) {
@@ -26,9 +26,10 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #889b9f;
-  background-size: cover;
+  background: #111e2b;
+  background-size: contain;
   background-position: center bottom;
+  background-repeat: no-repeat;
   isolation: isolate;
   touch-action: pan-x pan-y;
 }
@@ -38,19 +39,11 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
 .training-map-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; user-select: none; }
 .training-map-cloud-band { position: absolute; inset: 0; pointer-events: none; }
 .training-map-band-upper { --cloud-band-mask: linear-gradient(180deg, transparent 14%, #000 23%, #000 43%, transparent 57%); }
-.training-map-band-middle { --cloud-band-mask: linear-gradient(180deg, transparent 31%, #000 43%, #000 68%, transparent 83%); }
-.training-map-band-lower { --cloud-band-mask: linear-gradient(180deg, transparent 54%, #000 68%, #000); }
 .training-map-band-near { --cloud-band-mask: linear-gradient(180deg, transparent 55%, #000 72%, #000); }
 .training-map[data-orientation="portrait"] .training-map-band-upper { --cloud-band-mask: linear-gradient(180deg, transparent 12%, #000 21%, #000 36%, transparent 47%); }
 .training-map-cloud-band:not(.training-map-band-full) {
   -webkit-mask-image: var(--cloud-band-mask);
   mask-image: var(--cloud-band-mask);
-}
-/* Source-frame edges of the nearest islands dissolve into the moving cloud
-   bank. Resizing an extracted island must never leave a straight cliff cut. */
-.training-map-island-forge, .training-map-island-status, .training-map-island-meditation {
-  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent);
-  mask-image: linear-gradient(180deg, #000 78%, transparent);
 }
 .training-map-cloud {
   position: absolute;
@@ -71,34 +64,7 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   --cloud-to-x: 3%;
   --cloud-from-y: .2%;
   --cloud-to-y: -.4%;
-  opacity: .85;
-}
-.training-map-cloud-middle {
-  --cloud-duration: 56s;
-  --cloud-delay: -28s;
-  --cloud-from-x: 4%;
-  --cloud-to-x: -4%;
-  --cloud-from-y: -.5%;
-  --cloud-to-y: .5%;
-  opacity: .6;
-}
-.training-map-cloud-upper {
-  --cloud-duration: 68s;
-  --cloud-delay: -26s;
-  --cloud-from-x: -3.5%;
-  --cloud-to-x: 3.5%;
-  --cloud-from-y: .3%;
-  --cloud-to-y: -.3%;
-  opacity: .7;
-}
-.training-map-cloud-lower {
-  --cloud-duration: 48s;
-  --cloud-delay: -17s;
-  --cloud-from-x: 5%;
-  --cloud-to-x: -5%;
-  --cloud-from-y: -.6%;
-  --cloud-to-y: .6%;
-  opacity: .5;
+  opacity: .22;
 }
 .training-map-cloud-near {
   --cloud-duration: 42s;
@@ -107,7 +73,7 @@ body.xianxia-theme #page-training.training-scene-map-active > :not(.training-map
   --cloud-to-x: 6%;
   --cloud-from-y: .7%;
   --cloud-to-y: -.7%;
-  opacity: .45;
+  opacity: .18;
 }
 /* The mobile theme caps general animations at .5s. Scenic drift keeps its own
    long timing and pauses instead of racing through that cap. */
@@ -140,8 +106,7 @@ body.xianxia-theme #page-training .training-map-mote { animation-duration: var(-
 .training-map-atmosphere > span { position: absolute; pointer-events: none; }
 .training-map-light {
   inset: 0;
-  background: radial-gradient(ellipse at 50% 40%, #ffe4a12e, transparent 42%),
-    radial-gradient(ellipse at 82% 24%, #beceff20, transparent 26%);
+  background: radial-gradient(ellipse at 50% 40%, #ffe4a10c, transparent 42%);
   animation: training-light-breathe 14s ease-in-out infinite;
 }
 .training-map-mist-far {
@@ -186,8 +151,8 @@ body.xianxia-theme #page-training .training-map-mote { animation-duration: var(-
 }
 @keyframes training-mote-rise {
   0% { transform: translate3d(0, 10px, 0); opacity: 0; }
-  18% { opacity: .75; }
-  70% { opacity: .45; }
+  18% { opacity: .3; }
+  70% { opacity: .15; }
   100% { transform: translate3d(var(--mote-drift), -55px, 0); opacity: 0; }
 }
 body.xianxia-theme #page-training .training-place {
@@ -225,19 +190,8 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page .trainin
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
-/* The broad bloom sits behind the sprite; the delicate rim follows its alpha. */
-.training-place-aura {
-  display: none;
-  opacity: .36;
-  filter: brightness(0) invert(1) blur(12px);
-  transition: opacity .2s ease;
-}
 .training-place-cutout {
-  filter: drop-shadow(0 0 3px #fcfffcdd);
-  transition: filter .2s ease;
-}
-.training-place[data-training-location="contract"]:not(.is-locked) .training-place-cutout {
-  filter: drop-shadow(0 0 3px #fff6d5) drop-shadow(0 0 9px #e8c47799);
+  filter: drop-shadow(0 4px 6px #05121866);
 }
 .training-place-label {
   position: absolute;
@@ -248,20 +202,21 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page .trainin
   width: max-content;
   max-width: none;
   transform: translate(-50%, var(--training-label-lift, 0px));
-  gap: .07em;
-  padding: .15em .75em .18em;
-  border: 1px solid #e6d09ca6;
-  border-radius: .24em;
-  background: linear-gradient(180deg, #142126f5, #081215f5);
-  box-shadow: 0 .14em .55em #000a, inset 0 1px #fff0c938;
-  color: #fff8e8;
+  gap: .16em;
+  padding: .26em .55em .3em;
+  border: 0;
+  border-bottom: 1px solid #d1bd8b66;
+  border-radius: 0;
+  background: #0a171caa;
+  box-shadow: none;
+  color: #efe8d7;
   font-family: var(--xq-serif, serif);
-  font-size: calc(var(--training-map-font) * 1.08);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: .08em;
+  font-size: var(--training-map-font);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: .12em;
   white-space: nowrap;
-  text-shadow: 0 1px 3px #000;
+  text-shadow: 0 1px 2px #0009;
   pointer-events: auto;
   /* fit() measures these anchors synchronously, including reduced motion. */
   transition: none !important;
@@ -285,35 +240,31 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page .trainin
 #nav-training .raid-ticket-dot { width:8px; height:8px; right:0; top:0; }
 #page-training [data-training-tab="nascent-soul"] { position:relative; }
 #page-training [data-training-tab="nascent-soul"] > .nascent-upgrade-dot { width:8px; height:8px; right:6px; top:6px; }
-.training-place-realm { font-size: .6em; font-weight: 500; letter-spacing: .02em; color: #d9d5ca; }
+.training-place-realm { font-size: .7em; font-weight: 400; letter-spacing: .02em; color: #c3c9c5; }
 .training-place-realm[hidden], .training-place-lock[hidden] { display: none; }
 .training-place-lock {
   position: absolute;
   transform: translate(-50%, -50%);
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.2em;
+  height: 1.2em;
   display: grid;
   place-items: center;
-  border: 1px solid #e8e3d47a;
-  border-radius: 50%;
-  background: #0a101de0;
-  color: #efebe1;
-  font-size: calc(var(--training-map-font) * 1.1);
-  box-shadow: 0 .1em .5em #000a;
+  border: 1px solid #b6c0bb66;
+  border-radius: 3px;
+  background: #101c26c9;
+  color: #d3d9d4;
+  font-size: var(--training-map-font);
+  box-shadow: none;
   pointer-events: none;
 }
 .training-place.is-locked { cursor: default !important; }
 .training-place-lock svg { width: .82em; height: .95em; fill: none; stroke: currentColor; stroke-width: 2; }
-.training-place.is-locked .training-place-aura { opacity: 0; }
 .training-place.is-locked .training-place-cutout { filter: brightness(.32) saturate(.2); }
-.training-place.is-locked .training-place-label { border-color: #92958d80; }
+.training-place.is-locked .training-place-label { color: #b8c0ba; border-color: #92958d66; background: #0a171cc9; }
 .training-place:not(:disabled):focus-visible .training-place-label { outline: 3px solid white; outline-offset: 4px; }
-.training-place:not(:disabled):focus-visible .training-place-aura { opacity: .6; }
-.training-place:not(:disabled):focus-visible .training-place-cutout { filter: drop-shadow(0 0 5px #fff); }
+.training-place:not(:disabled):focus-visible .training-place-label { background: #18302de6; }
 @media (hover: hover) {
-  .training-place:not(:disabled):hover .training-place-aura { opacity: .54; }
-  .training-place:not(:disabled):hover .training-place-cutout { filter: drop-shadow(0 0 5px #fff); }
-  .training-place:not(:disabled):hover .training-place-label { border-color: #fff8dc; }
+  .training-place:not(:disabled):hover .training-place-label { border-color: #e8d6ad; background: #18302de6; }
 }
 body.xianxia-theme #page-training .training-scene-detailbar {
   display: flex;
@@ -392,7 +343,6 @@ body.xianxia-theme #page-training .training-scene-back {
 }
 .training-scene-back:focus-visible { outline: 2px solid white; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
-  .training-place-cutout, .training-place-aura { transition: none; }
   .training-map-atmosphere > span, .training-map-mote, .training-map-cloud { animation: none; }
   .training-map-mist-far, .training-map-mist-near { opacity: .3; }
   .training-map-light { opacity: .7; }
@@ -410,8 +360,7 @@ body.xianxia-theme #page-training .training-scene-back {
 @keyframes refinery-dot-breath { 50% { box-shadow:0 0 0 3px #24170b,0 0 20px rgba(255,66,50,.9);transform:scale(1.13); } }
 @media(prefers-reduced-motion:reduce) { .refinery-ready-dot { animation:none; } }
 
-/* Recovery after an interrupted renderer entry reuses the complete painted
-   background and the same building targets, without the extra cloud surfaces. */
+/* Recovery uses the same painting and targets, with no extra cloud surfaces. */
 .training-map[data-render-profile="safe"] .training-map-atmosphere,
 .training-map[data-render-profile="safe"] .training-map-motes{display:none}
 .training-map[data-render-profile="safe"] .training-place-cutout{filter:none}
