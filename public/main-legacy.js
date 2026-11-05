@@ -3566,37 +3566,45 @@ async function sendQuizHelperMessage(rawMessage, { intent = 'discussion' } = {})
     const thinkingBubble = quizHelperAppendThinking();
 
     try {
+        const interfaceState=window.getQuizInterfaceState?.();
+        const helperText=value=>window.QAMathGuard?.normalizeMathText?.(value)??value;
         const response = await fetch('/api/question-helper', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                question: quizHelperState.question,
-                options: quizHelperState.options,
+                question: helperText(quizHelperState.question),
+                options: quizHelperState.options.map(helperText),
                 subject: quizHelperState.subject,
                 message,
                 ...(intent === 'check-question' ? { intent } : {}),
                 history,
                 answered: quizHelperState.answered,
-                explanation: quizHelperState.explanation,
+                ...(interfaceState?{interfaceState}:{}),
+                explanation: helperText(quizHelperState.explanation),
                 selectedOption: quizHelperState.answered && Number.isInteger(quizHelperState.selectedIndex)
-                    ? quizHelperState.options[quizHelperState.selectedIndex] || '' : '',
+                    ? helperText(quizHelperState.options[quizHelperState.selectedIndex] || '') : '',
                 correctOption: Number.isInteger(quizHelperState.correctIndex)
-                    ? quizHelperState.options[quizHelperState.correctIndex] || '' : ''
+                    ? helperText(quizHelperState.options[quizHelperState.correctIndex] || '') : ''
             })
         });
         const payload = await response.json().catch(() => ({}));
         if (requestId !== quizHelperState.requestSerial || requestQuestion !== quizHelperState.question) return;
         thinkingBubble?.remove();
         if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
-        const answer = String(payload.answer || '').trim();
+        let answer = String(payload.answer || '').trim();
         if (!answer) throw new Error('問道助手沒有回傳內容');
+        if(payload.interfaceIssue && window.repairQuizOptions?.()){
+            const restored=window.getQuizInterfaceState?.();
+            if(restored?.expectedOptions>0&&restored.renderedOptions===restored.expectedOptions&&restored.clickableOptions===restored.expectedOptions)
+                answer+='\n本題的選項按鈕已恢復，請再試著點選。';
+        }
         const knowledgePoint = String(payload.knowledgePoint || '').trim().slice(0, 60);
-        if (!quizHelperState.answered && intent !== 'check-question' && window.currentActiveQuiz === requestQuiz && auth.currentUser?.uid === requestUid)
+        if (!payload.interfaceIssue && !quizHelperState.answered && intent !== 'check-question' && window.currentActiveQuiz === requestQuiz && auth.currentUser?.uid === requestUid)
             window.QAAdaptiveLearning?.hint(requestQuiz);
         quizHelperState.messages.push({ role: 'assistant', text: answer, knowledgePoint });
         quizHelperAppendMessage('assistant', answer, { knowledgePoint });
         if (status) status.textContent = '';
-        if (payload.questionIssue?.confirmed === true) {
+        if (!payload.interfaceIssue && payload.questionIssue?.confirmed === true) {
             void window.reportQuizHelperIssue({ quiz: requestQuiz, uid: requestUid, reason: payload.questionIssue.reason,
                 ...(payload.checkOnly === true ? { hideAnswer: true } : {}) });
         }
@@ -3993,16 +4001,24 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     if (whiteboardQuestionEl) whiteboardQuestionEl.innerHTML = renderedQuestion;
 
     // 所有選項均採與題幹／解析完全相同的安全 LaTeX 格式化器。
-    container.replaceChildren(); 
-    data.opts.forEach((optText, idx) => {
-        const btn = document.createElement('button');
-        btn.id = `option-btn-${idx}`;
-        // 🔥 這裡修復了斷裂的字串與 class 名稱
-        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
-        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${(window.quizMathRichText || formatQuizRichText)(optText)}</span>`;
-        btn.onclick = () => onAnswer ? onAnswer(idx) : handleAnswer(idx, data.ans, data.q, data.exp);
-        container.appendChild(btn);
-    });
+    const optionsQuiz=window.currentActiveQuiz,optionsUid=auth.currentUser?.uid||'';
+    const buildOptions=()=>{
+        container.replaceChildren();
+        data.opts.forEach((optText, idx) => {
+            const btn = document.createElement('button');
+            btn.id = `option-btn-${idx}`;
+            btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
+            btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${(window.quizMathRichText || formatQuizRichText)(optText)}</span>`;
+            btn.onclick = () => onAnswer ? onAnswer(idx) : handleAnswer(idx, data.ans, data.q, data.exp);
+            container.appendChild(btn);
+        });
+    };
+    buildOptions();
+    window.repairQuizOptions=()=>{
+        if(window.currentActiveQuiz!==optionsQuiz||(auth.currentUser?.uid||'')!==optionsUid||quizHelperState.answered||isAnswering)return false;
+        if(optionsQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.())return false;
+        window.quizMathClear?.(container);buildOptions();void window.quizMathTypeset?.(container);return true;
+    };
 
     // The same unanswered question can be revisited; reuse its event ID.
     const analyticsQuiz = window.currentActiveQuiz;
@@ -4014,6 +4030,16 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     if (window.quizMathTypeset) void window.quizMathTypeset(mathTargets);
     else void window.MathJax?.typesetPromise?.(mathTargets).catch(err => console.warn('[Quiz Math]', err));
 }
+
+window.getQuizInterfaceState=()=>{
+    const container=document.getElementById('options-container'),stem=document.getElementById('question-text');
+    const buttons=Array.from(container?.querySelectorAll('button[id^="option-btn-"]')||[]);
+    const answered=quizHelperState.answered,pending=!answered&&(isAnswering||(window.currentActiveQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.()));
+    return {expectedOptions:Math.min(6,window.currentActiveQuiz?.data?.opts?.length||0),renderedOptions:buttons.length,
+        clickableOptions:buttons.filter(button=>!button.disabled&&typeof button.onclick==='function'&&button.getClientRects().length).length,
+        answerPending:!!pending,mathFallback:!![stem,container].some(node=>node?.querySelector('.quiz-math-fallback')),
+        mathError:!![stem,container].some(node=>node?.querySelector('mjx-merror,.mjx-merror,[data-mjx-error]'))};
+};
 
 window.QAStudyQuestion = createStudyQuestionBridge({
     userId: () => auth.currentUser?.uid, rankName: () => getRankName(currentUserData?.stats?.rankLevel || 0),

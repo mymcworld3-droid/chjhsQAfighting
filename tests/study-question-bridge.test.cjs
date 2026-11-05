@@ -14,10 +14,12 @@ test('tower questions stay on the native page and share learning rendering/answe
  const q={id:'tower-question',q:'塔題',opts:['A','B','C','D'],subject:'物理',level:'高中二年級',topic:'圓周運動',adaptive:{scopeId:'selected-scope',outline:[]},recoveryOrigin:'先前錯題',help:2};
  const callbacks={runId:'run',onAnswer(){},onContinue(){},onSkip(){}};
  bridge.open(q,callbacks);assert.equal(navigation[0][0],'page-quiz');assert.equal(navigation[0][1].preserveTrialTower,true);
+ assert.equal(bridge.canAnswer(),true);bridge.disable(true);assert.equal(bridge.canAnswer(),false);bridge.disable(false);assert.equal(bridge.canAnswer(),true);
  assert.equal(window.currentActiveQuiz.adaptive.scopeId,'selected-scope');assert.equal(window.currentActiveQuiz.recoveryOrigin,'先前錯題');assert.equal(window.currentActiveQuiz.adaptiveHelp,2);assert.equal(renders.length,1);
  bridge.open(q,callbacks);assert.equal(renders.length,1);assert.equal(navigation.length,1);
  const review={questionId:q.id,selectedChoice:1,correctIndex:0,explanation:'解析'};
  bridge.review(review,callbacks.onContinue);bridge.review(review,callbacks.onContinue);assert.equal(answers.length,1);assert.equal(nodes.get('btn-next-step').onclick,callbacks.onContinue);
+ assert.equal(bridge.canAnswer(),false);
  finishAnswer();await bridge.waitForAnswer();bridge.end();assert.equal(window.currentActiveQuiz,previous);assert.equal(finished,true);assert.equal(navigation.at(-1)[0],'page-home');
  assert.equal(nodes.get('btn-next-step').innerHTML,'原按鈕');
 });

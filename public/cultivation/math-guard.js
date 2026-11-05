@@ -106,7 +106,12 @@
   }
   // Interpret serialized prose escapes outside math; never damage TeX commands.
   function expandTextEscapes(value) {
-    const input = String(value ?? '');
+    // Under-escaped JSON turns \frac / \beta / \begin into form-feed or
+    // backspace characters. Repair only these non-printing, known commands;
+    // ordinary tabs and line breaks keep their original meaning.
+    const input = String(value ?? '')
+      .replace(/\u000c(?=(?:rac|orall|box)(?=[^a-zA-Z]|$))/g, '\\f')
+      .replace(/\u0008(?=(?:egin|eta|ar|inom|oxed|oldsymbol|ig(?:g|l|r)?)(?=[^a-zA-Z]|$))/g, '\\b');
     let output = '', mode = null;
     for (let i = 0; i < input.length;) {
       const token = tokenAt(input, i);

@@ -368,3 +368,57 @@ test('a failed discussion releases controls and permits retry without submitting
     assert.equal(client.state.messages.at(-1).text, '已核對');
     assert.equal(client.state.answered, false);
 });
+
+test('missing or unclickable controls are recognized before AI reasoning and never expose answers or issue compensation reports',async()=>{
+    for(const body of [
+        {...problem,message:'我答不了題啊 沒有選項按鈕'},
+        {...problem,interfaceState:{expectedOptions:3,renderedOptions:0,clickableOptions:0}},
+        {...problem,interfaceState:{expectedOptions:3,renderedOptions:3,clickableOptions:0}},
+        {...problem,message:'公式顯示亂碼怎麼辦？'},
+        {...problem,interfaceState:{expectedOptions:3,renderedOptions:3,clickableOptions:3,mathError:true}}
+    ]){
+        const route=createRoute(async()=>{throw Error('interface failures must not ask AI for an answer');});
+        const result=await route.request(body);
+        assert.equal(result.status,200);assert.ok(result.body.interfaceIssue);assert.equal(route.calls.length,0);
+        assert.equal(result.body.knowledgePoint,'');assert.equal(result.body.questionIssue,null);
+        assert.doesNotMatch(result.body.answer,/58|60|[ABC]|正解|應選/);
+    }
+});
+
+test('content disputes remain question checks, while submitted and pending answers explain why their controls are locked',async()=>{
+    const route=createRoute();
+    const ui={expectedOptions:3,renderedOptions:3,clickableOptions:3,mathFallback:true};
+    const ordinary=await route.request({...problem,message:'沒有正確選項，這題是不是錯了？',interfaceState:ui});
+    assert.equal(ordinary.body.interfaceIssue,undefined);assert.equal(route.calls.length,1);
+    assert.equal(contextFrom(route.calls[0].prompt).interfaceState.mathFallback,true);
+    const answered=await route.request({...problem,answered:true,message:'按鈕不能點'});
+    assert.match(answered.body.answer,/已經作答/);assert.equal(route.calls.length,1);
+    const pending=await route.request({...problem,message:'按鈕不能點',interfaceState:{...ui,clickableOptions:0,answerPending:true}});
+    assert.match(pending.body.answer,/正在結算/);assert.equal(route.calls.length,1);
+    await route.request({...problem,interfaceState:{...ui,clickableOptions:0,answerPending:true}});
+    assert.equal(route.calls.length,2,'a pending answer is not automatically a broken interface');
+});
+
+test('client sends bounded interface facts and repairs the same question without consuming hints, grading or sending a question-error report',async()=>{
+    const client=createClient(async()=>({ok:true,json:async()=>({answer:'先恢復選項。',knowledgePoint:'',interfaceIssue:{kind:'answer-controls'},questionIssue:{confirmed:true,reason:'這不是內容錯誤'}})}));
+    let repaired=0,hints=0;
+    const broken={expectedOptions:3,renderedOptions:0,clickableOptions:0,answerPending:false,mathError:false,mathFallback:true};
+    client.context.window.getQuizInterfaceState=()=>repaired?{...broken,renderedOptions:3,clickableOptions:3}:broken;
+    client.context.window.repairQuizOptions=()=>{repaired++;return true;};
+    client.context.window.QAAdaptiveLearning={hint:()=>hints++};
+    await client.send('我答不了題啊 沒有選項按鈕');
+    assert.deepEqual(client.requests[0].interfaceState,broken);assert.equal(repaired,1);assert.equal(hints,0);
+    assert.match(client.state.messages.at(-1).text,/選項按鈕已恢復/);assert.equal(client.automaticReports.length,0);
+    assert.equal(client.state.answered,false);assert.equal(client.state.selectedIndex,null);assert.equal(client.context.window.currentActiveQuiz,client.quiz);
+});
+
+test('helper receives the same repaired formulas as the visible question without mutating the saved question',async()=>{
+    const client=createClient(),Guard=require('../public/cultivation/math-guard.js');
+    const damaged=JSON.parse(String.raw`{"q":"週期公式 \\(\frac{T^2}{R^3}=k\\)"}`).q;
+    client.context.window.QAMathGuard=Guard;client.state.question=damaged;
+    client.state.options=[damaged,'普通文字'];client.state.correctIndex=0;client.state.explanation=damaged;
+    await client.send('這個公式是什麼意思？');
+    const sent=client.requests[0];assert.equal(sent.question,Guard.normalizeMathText(damaged));assert.equal(sent.options[0],sent.question);
+    assert.equal(sent.correctOption,sent.question);assert.equal(sent.explanation,sent.question);assert.equal(client.state.question,damaged);
+    assert.doesNotMatch(sent.question,/[\x00-\x08\x0b\x0c]/);assert.equal(client.state.answered,false);
+});

@@ -65,7 +65,8 @@ export function createStudyQuestionBridge({render,answer,resetWhiteboard,resetHe
    for(const [label,callback]of [['重試原操作',retry],['同步戰場',sync]])if(callback){const button=document.createElement('button');button.type='button';button.className='btn-cyber-primary px-4 py-3 rounded-lg mr-2 mt-3';button.textContent=label;button.disabled=busy;button.onclick=callback;panel.append(button);}
    $('quiz-container').prepend(panel);
   },
-  disable(value=true){if(session)for(const node of $('options-container').children)node.disabled=value;},
+  canAnswer(){return !!session&&!session.disabled&&!session.reviewJob&&window.currentActiveQuiz===session.quiz;},
+  disable(value=true){if(session){session.disabled=value;for(const node of $('options-container').children)node.disabled=value;}},
   end
  };
 }
