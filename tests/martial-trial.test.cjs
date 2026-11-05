@@ -88,7 +88,7 @@ test('failed fights and voluntary exits preserve best scores; expired fights res
 });
 test('enemy progression increases through 100 floors and realms advance every ten floors',()=>{
  let previous={atk:0,maxHp:0};for(let floor=1;floor<=100;floor++){const e=Rules.enemy(floor);assert.ok(e.atk>previous.atk&&e.maxHp>previous.maxHp);assert.equal(!!e.goldenCore,floor>=21);if(floor>1)assert.ok(e.totalScore>=previous.totalScore);previous=e;}
- assert.equal(Rules.enemy(1).realm,'煉氣期');assert.equal(Rules.enemy(11).realm,'築基期');assert.equal(Rules.enemy(91).realm,'真仙');
+ assert.equal(Rules.enemy(1).realm,'煉氣期');assert.equal(Rules.enemy(11).realm,'築基期');assert.equal(Rules.enemy(81).realm,'真仙');assert.equal(Rules.enemy(91).realm,'超脫');assert.equal(Rules.enemy(51).realm,'合體期');
  assert.equal(Rules.checkpoint(0),1);assert.equal(Rules.checkpoint(5),6);assert.equal(Rules.checkpoint(16),17);assert.equal(Rules.checkpoint(99),100);assert.equal(Rules.checkpoint(100),100);
 });
 test('clearing floor 16 permanently unlocks floor 17, including after leaving, losing or expiring, without replaying old floors',async()=>{

@@ -8,24 +8,15 @@ const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Combat=require('./immortal-avatar-combat.cjs');
 const Access=require('./public/cultivation/training-access-rules.js');
 const Rewards=require('./public/cultivation/trial-tower-rewards.js');
+const Guards=require('./public/cultivation/trial-tower-guards.js');
 const COLLECTION='martialTrialStates',MAX_FLOOR=100,TTL=2*60*60*1000,TURN_DELAY=300;
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const count=n=>Number.isFinite(Number(n))?Math.max(0,Math.floor(Number(n))):0;
 const clone=x=>JSON.parse(JSON.stringify(x));
 const ref=(db,uid)=>db.collection(COLLECTION).doc(uid);
-const checkpoint=best=>Math.min(MAX_FLOOR,count(best)+1);
+const checkpoint=Guards.nextFloor;
 function title(best){return best>=100?'萬象破陣者':best>=50?'試煉宗師':best>=20?'破陣行者':best>=5?'登塔修士':'初入試煉';}
-const REALMS=[['煉氣期',0],['築基期',6],['金丹期',28],['元嬰期',68],['化神期',188],['煉虛期',428],['合體期',642],['大乘期',1000],['半仙',1268],['真仙',1868]];
-function enemy(floor){
- const [realm,totalScore]=REALMS[Math.min(9,Math.floor((floor-1)/10))];
- const names=['逐風劍衛','鎮岳守衛','霆霄靈衛','赤焰戰傀','星陣守將'];
- const atk=Math.round(90+floor*4+.25*floor**1.1),maxHp=Math.round(700+floor*50+2*floor**1.2);
- const type=['sword','ocean','thunder','reverse','xingchen'][(Math.ceil(floor/5)-1)%5];
- return {uid:'trial-guard-'+floor,realm,name:names[(floor-1)%5],atk,baseAtk:atk,hp:maxHp,maxHp,baseMaxHp:maxHp,
-  totalScore,trainingAccessScore:totalScore,goldenCore:floor>=21?{type,name:{sword:'破鋒劍心丹',ocean:'大海無垠丹',thunder:'萬劫雷霆丹',reverse:'陰陽反轉丹',xingchen:'星辰吞月丹'}[type],grade:Math.max(3,9-Math.floor(floor/15))}:null,
-  nascentSoul:null,innateAbility:null,innateAbilityState:null,coreShield:false,coreCorrectStreak:0,soulStarCorrectWindow:0,
-  artifactBattle:{version:1,effects:[],openingShield:0},artifactShield:0,artifactFirstHitUsed:false,artifactCheatDeathUsed:false};
-}
+const enemy=Guards.enemy;
 function encounter(build,runId,floor,now){
  const pair=Combat.trialPair(build,enemy(floor));
  return {version:2,runId,floor,status:'active',round:0,formation:clone(build),challenger:pair.host,defender:pair.guest,
@@ -35,6 +26,12 @@ function publicQuestion(q){return q?{id:q.id,q:q.q,opts:q.opts,subject:q.subject
 function fighter(p){return {uid:p.uid,realm:p.realm||'',gender:p.gender||'',name:p.name,atk:p.atk,hp:p.hp,maxHp:p.maxHp,shield:count(p.artifactShield),
  power:count(p.combatPower||p.power),portrait:p.portrait||'',core:p.goldenCore?.name||'',goldenCore:p.goldenCore||null,
  equipment:[...new Set((p.artifactBattle?.effects||[]).map(e=>e.artifactName).filter(Boolean))]};}
+function guardianView(run){
+ const {name,realm,portrait}=Guards.enemy(run.floor);
+ // Existing fights retain their HP, abilities, round and build; only the
+ // displayed guardian identity follows the new roster until the next floor.
+ return {...fighter(run.defender),name,realm,portrait};
+}
 function view(record,now=Date.now()){
  const bestFloor=Math.min(MAX_FLOOR,count(record?.bestFloor)),run=record?.run;
  const state={bestFloor,title:title(bestFloor),checkpoint:checkpoint(bestFloor),maxFloor:MAX_FLOOR,totalWins:count(record?.totalWins),status:'idle',
@@ -42,7 +39,7 @@ function view(record,now=Date.now()){
  if(!run||run.version!==2)return {...state,rulesUpdated:!!run};
  const expired=run.expiresAtMs<=now&&['active','cleared'].includes(run.status);
  return {...state,runId:run.runId,status:expired?'expired':run.status,floor:run.floor,round:run.round,maxRounds:24,
-  question:publicQuestion(run.pendingQuestion),challenger:fighter(run.challenger),defender:fighter(run.defender),
+  question:publicQuestion(run.pendingQuestion),challenger:fighter(run.challenger),defender:guardianView(run),
   lastTurn:run.lastTurn,lastReward:run.lastReward||null,expiresAtMs:run.expiresAtMs};
 }
 function plannedPractice(record){return record.practiceQueue?.[0]||record.activeExtension||null;}
