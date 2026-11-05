@@ -15,7 +15,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
  const count=n=>Math.max(0,Math.round(Number(n)||0));
  const alive=id=>id===serial&&owner===getMainUser()?.uid&&!!document.getElementById('martial-trial-modal');
  const unlocked=()=>Math.max(Number(window.getCurrentUserData?.()?.stats?.totalScore)||0,Number(window.getTrainingAccessScore?.())||0)>=28;
- function loadStyle(){if(!document.getElementById('tower-duel-style')){const link=document.createElement('link');link.id='tower-duel-style';link.rel='stylesheet';link.href='styles/battle-mode-v2.css?v=20261105-shared-stage1';document.head.appendChild(link);}if(document.getElementById('martial-trial-style'))return;const link=document.createElement('link');link.id='martial-trial-style';link.rel='stylesheet';link.href='styles/martial-trial.css?v=20261105-floor-lobby1';document.head.appendChild(link);}
+ function loadStyle(){if(!document.getElementById('tower-duel-style')){const link=document.createElement('link');link.id='tower-duel-style';link.rel='stylesheet';link.href='styles/battle-mode-v2.css?v=20261105-shared-stage1';document.head.appendChild(link);}if(document.getElementById('martial-trial-style'))return;const link=document.createElement('link');link.id='martial-trial-style';link.rel='stylesheet';link.href='styles/martial-trial.css?v=20261105-swipe-floors1';document.head.appendChild(link);}
  async function request(action,body){
   const response=await authenticatedMainFetch('/api/martial-trial'+(action?'/'+action:''),body?{method:'POST',body:JSON.stringify(body)}:{});
   const result=await response.json();if(!response.ok||!result.ok)throw Object.assign(new Error(result.error||'試煉同步失敗'),{status:response.status});return result.state;
@@ -40,11 +40,9 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   const label=locked?'尚未解鎖':floor<=best?'已通關 · 可再挑戰':'未通關 · 下一層';
   return `<div class="tt-lobby-layout">
    <section class="tt-tower-scene" aria-label="試煉樓層與守衛">
-    <div class="tt-tower-heading"><span>百層試煉</span><button type="button" class="tt-resume" data-tt-select="${next}" ${busy||pending?'disabled':''}>${best===100?'百層已通關':'回到第 '+next+' 層'}</button></div>
-    <nav class="tt-floor-nav" aria-label="選擇樓層"><button type="button" data-tt-select="${Math.min(100,floor+5)}" ${floor===100||busy||pending?'disabled':''} aria-label="查看較高樓層">⌃</button>
-     <div class="tt-floor-stack">${Guards.nearby(floor).map(f=>{const e=Guards.enemy(f),status=f>next?'未解鎖':f<=best?'已通關':'待挑戰';return `<button type="button" class="tt-floor ${f===floor?'is-selected':''} ${f>next?'is-locked':f<=best?'is-cleared':'is-next'}" data-tt-select="${f}" aria-current="${f===floor?'step':'false'}" aria-label="第 ${f} 層，${escape(e.name)}，${status}" ${busy||pending?'disabled':''}><img src="${escape(e.thumbnail)}" alt="" loading="lazy"><span><b>${f}</b><small class="tt-floor-name">${escape(e.name)}</small><small>${status}</small></span></button>`;}).join('')}</div>
-     <button type="button" data-tt-select="${Math.max(1,floor-5)}" ${floor===1||busy||pending?'disabled':''} aria-label="查看較低樓層">⌄</button>
-     <label class="tt-floor-jump">樓層<select data-tt-jump aria-label="跳至指定樓層" ${busy||pending?'disabled':''}>${Array.from({length:100},(_,i)=>`<option value="${i+1}" ${floor===i+1?'selected':''}>${i+1}${i+1>next?' · 未解鎖':''}</option>`).join('')}</select></label>
+    <div class="tt-tower-heading"><span>百層試煉</span></div>
+    <nav class="tt-floor-nav" aria-label="選擇樓層，上下滑動查看">
+     <div class="tt-floor-stack">${Array.from({length:100},(_,i)=>100-i).map(f=>{const e=Guards.enemy(f),status=f>next?'未解鎖':f<=best?'已通關':'待挑戰';return `<button type="button" class="tt-floor ${f===floor?'is-selected':''} ${f>next?'is-locked':f<=best?'is-cleared':'is-next'}" data-tt-select="${f}" aria-current="${f===floor?'step':'false'}" aria-label="第 ${f} 層，${escape(e.name)}，${status}" ${busy||pending?'disabled':''}><img src="${escape(e.thumbnail)}" alt="" loading="lazy"><span><b>${f}</b><small class="tt-floor-name">${escape(e.name)}</small><small>${status}</small></span></button>`;}).join('')}</div>
     </nav>
     <div class="tt-guard-stage"><div class="tt-guard-banner"><span>第 <b>${floor}</b> 層</span><small>${escape(guard.realm)} · 投影</small></div><div class="tt-guard-halo" aria-hidden="true"></div><div class="tt-guard-platform" aria-hidden="true"></div><img class="tt-guard-portrait" src="${escape(guard.portrait)}" alt="第 ${floor} 層守衛：${escape(guard.name)}"><div class="tt-guard-caption"><small>本層守衛</small><h3>${escape(guard.name)}</h3><span>${escape(guard.epithet)}</span></div></div>
     <div class="tt-ascent"><span>最高通關 <b>${best}</b> / 100 層</span><small>${escape(state.title)}</small><i style="--mt-progress:${best}%"></i></div>
@@ -52,10 +50,18 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
    <section class="tt-floor-panel" aria-label="第 ${floor} 層關卡資料"><div class="tt-floor-data">
     <div class="tt-floor-title"><small>${label}</small><h3>第 ${floor} 層 <span>· ${escape(guard.realm)}</span></h3><p>${escape(guard.name)} · ${escape(guard.epithet)}</p></div><p class="tt-guard-lore">${escape(guard.description)}</p>
     <dl class="tt-guard-stats"><div><dt>守衛攻擊</dt><dd>${guard.atk}</dd></div><div><dt>守衛生命</dt><dd>${guard.maxHp}</dd></div></dl>
-    <section class="tt-floor-rules"><h4>本關規則</h4><p>答對先手攻擊，守衛存活時固定後手出招。</p><div><span>題目不計時</span><span>最多 24 回合</span><span>每層回滿生命</span></div><details><summary>答題與闖塔說明</summary><p>角色以試煉投影登場，境界依塔層配置。</p><p>沿用已選範圍，白板、問道助手、題目回報、範圍足跡與訂正題皆可使用。</p><p>通過本層即解鎖下一層；首通獎勵限領一次，重打不重領。進入時鎖定目前配裝。</p></details></section>
     ${rewardPreview(floor)}${backfill()}${state.rulesUpdated?'<p class="tt-notice">既有通關與獎勵紀錄皆已保留。</p>':''}${rewardBook(bookOpen)}
+    <section class="tt-floor-rules"><h4>本關規則</h4><p>答對先手攻擊，守衛存活時固定後手出招。</p><div><span>題目不計時</span><span>最多 24 回合</span><span>每層回滿生命</span></div><details><summary>答題與闖塔說明</summary><p>角色以試煉投影登場，境界依塔層配置。</p><p>沿用已選範圍，白板、問道助手、題目回報、範圍足跡與訂正題皆可使用。</p><p>通過本層即解鎖下一層；首通獎勵限領一次，重打不重領。進入時鎖定目前配裝。</p></details></section>
    </div><div class="tt-entry"><p>${locked?`通過第 ${floor-1} 層後解鎖`:floor<=best?'再次挑戰不重複發放首通獎勵':'首次通關自動領取獎勵'}</p><button type="button" class="mt-primary tt-enter" data-mt-start="${floor}" ${busy||pending||!unlocked()||locked?'disabled':''}>${busy?'正在準備…':!unlocked()?'金丹境開放':locked?'尚未解鎖':floor<=best?'再次挑戰':'進入挑戰'}<span aria-hidden="true"> →</span></button></div></section>
   </div>`;
+ }
+ function restoreFloorScroll(rail,scroll){
+  if(!rail)return;
+  const center=()=>{const selected=rail.querySelector('.is-selected');return selected?selected.offsetTop-(rail.clientHeight-selected.offsetHeight)/2:0;};
+  rail.scrollTop=scroll??center();
+  const style=document.getElementById('martial-trial-style');
+  // First opening may receive the saved state before its stylesheet arrives.
+  if(style&&!style.sheet)style.addEventListener('load',()=>{if(rail.isConnected)rail.scrollTop=center();},{once:true});
  }
  function applyEconomy(value){
   const player=window.getCurrentUserData?.();if(!value||!player||owner!==getMainUser()?.uid)return;
@@ -72,7 +78,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
    root.querySelector('[data-mt-modes]').onclick=()=>{close();window.openWendaoModes?.();};root.querySelector('[data-mt-close]').onclick=close;
   }
   const content=root.querySelector('.mt-content'),footer=root.querySelector('footer');
-  const bookOpen=!!content.querySelector('.tt-reward-book')?.open,scroll=root.querySelector('.mt-body').scrollTop,dataScroll=content.querySelector('.tt-floor-data')?.scrollTop||0;
+  const bookOpen=!!content.querySelector('.tt-reward-book')?.open,scroll=root.querySelector('.mt-body').scrollTop,railScroll=content.querySelector('.tt-floor-stack')?.scrollTop,dataScroll=content.querySelector('.tt-floor-data')?.scrollTop||0;
   const active=state?.status==='active',won=['cleared','complete'].includes(state?.status),battle=!!state?.challenger&&['active','cleared','complete','defeated'].includes(state.status);
   const studying=['question','review'].includes(phase)&&!!question;
   root.hidden=studying;document.body.classList.toggle('martial-trial-open',!studying);root.classList.toggle('mt-fighting',battle&&!studying);root.classList.toggle('mt-in-combat',(active||phase==='animation')&&!studying);root.classList.toggle('mt-browsing',!!state&&!battle&&!studying);
@@ -96,9 +102,9 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   footer.hidden=!footer.innerHTML;
   root.querySelector('.mt-body').scrollTop=scroll;
   if(content.querySelector('.tt-floor-data'))content.querySelector('.tt-floor-data').scrollTop=dataScroll;
+  restoreFloorScroll(content.querySelector('.tt-floor-stack'),railScroll);
   const selectFloor=value=>{if(busy||pending)return;selectedFloor=Math.min(100,Math.max(1,count(value)));rewardPage=Math.ceil(selectedFloor/10);if(content.querySelector('.tt-floor-data'))content.querySelector('.tt-floor-data').scrollTop=0;render();root.querySelector('.tt-floor.is-selected')?.focus({preventScroll:true});};
   root.querySelectorAll('[data-tt-select]').forEach(b=>b.onclick=()=>selectFloor(b.dataset.ttSelect));
-  root.querySelector('[data-tt-jump]')?.addEventListener('change',event=>selectFloor(event.target.value));
   root.querySelector('[data-tt-claim]')?.addEventListener('click',()=>perform('claim'));
   root.querySelectorAll('[data-tt-page]').forEach(b=>b.onclick=()=>{rewardPage=Number(b.dataset.ttPage);render();});
   root.querySelectorAll('[data-mt-start]').forEach(b=>{b.disabled=busy||!!pending||!unlocked()||Number(b.dataset.mtStart)>start;b.onclick=()=>perform('start',{floor:Number(b.dataset.mtStart)});});
