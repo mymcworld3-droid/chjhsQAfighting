@@ -96,3 +96,27 @@ test('neutral answers avoid unnecessary stats writes while report persists their
   assert.match(legacy, /'stats\.lastQuizAnswer': currentUserData\.stats\.lastQuizAnswer/);
   assert.ok(legacy.indexOf('quiz.answerPersistence = updateDoc(') < legacy.indexOf("fetch('/api/verify-report'"));
 });
+
+test('tower report confirmation redeems the combat turn before showing the action, preserving compensation and ordinary free-study reports',async()=>{
+ const start=legacy.indexOf('window.submitReport = async'),end=legacy.indexOf('\n\n\n// ==========================================',start);
+ assert.ok(start>=0&&end>start);
+ for(const mode of ['trial-tower','solo'])for(const status of ['confirmed','duplicate','rejected','unavailable']){
+  const events=[],quiz={mode,data:{q:'條件不完整的題目',opts:['A','B','C','D']},towerRunId:'run',towerQuestionId:'question',
+   onVerifiedError:async()=>events.push('redeemed'),onVerifiedSkip:()=>events.push('combat')};
+  const user={uid:'u',getIdToken:async()=> 'token'},player={uid:'u',stats:{gold:0,totalScore:30}},window={currentActiveQuiz:quiz};
+  const result={status,compensated:status==='confirmed',goldAdded:100,newGold:100,newTotalScore:32,cultivationRefund:1,cultivationBonus:1};let outcome;
+  const ctx={window,auth:{currentUser:user},currentUserData:player,reportQuizSnapshot:quiz,reportSubmitting:false,console:{warn(){}},
+   document:{getElementById:()=>({value:'題目給定條件不完整'})},reportStatus(){},reportView(){},reportLoadingStatus(){},
+   fetch:async()=>({ok:status!=='unavailable',json:async()=>result}),updateUIStats(){events.push('compensated');},
+   renderReportOutcome(value){outcome=value;events.push('outcome');},closeReportModal(){events.push('closed');},Error,Number,String,Promise};
+  // Only tower quizzes carry the bridge callback in production.
+  if(mode!=='trial-tower')delete quiz.onVerifiedError;
+  vm.runInNewContext(legacy.slice(start,end),ctx);await window.submitReport();
+  if(['confirmed','duplicate'].includes(status)){
+   assert.equal(events.includes('redeemed'),mode==='trial-tower');
+   assert.equal(outcome.actionText,mode==='trial-tower'?'返回戰場出招':'跳過錯題');
+   if(status==='confirmed'){assert.equal(player.stats.gold,100);assert.equal(player.stats.totalScore,32);assert.equal(events[0],'compensated');}
+   if(mode==='trial-tower'){assert.ok(events.indexOf('redeemed')<events.indexOf('outcome'));outcome.onAction();assert.equal(events.at(-1),'combat');}
+  }else assert.equal(events.includes('redeemed'),false);
+ }
+});

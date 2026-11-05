@@ -4287,21 +4287,23 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
                 currentUserData.stats.totalScore = Number(result.newTotalScore);
                 updateUIStats();
             }
+            if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
             renderReportOutcome({
                 kind: 'approved',
                 title: '審查通過 ✅',
                 message: (result.reason || '題目確認有誤。') +
                     '\n返還修為 ' + refunded + '，額外獎勵 +' + extra +
                     ' 修為；共 +' + (refunded + extra) + ' 修為、100 靈石已入帳。',
-                actionText: '跳過錯題',
+                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
                 onAction: skipVerifiedQuestion
             });
         } else if (result.status === 'duplicate') {
+            if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
             renderReportOutcome({
                 kind: 'approved',
                 title: '此題已通過審查 ✅',
-                message: '先前已領取這道題目的補償，不會重複發放；可以直接跳過錯題。',
-                actionText: '跳過錯題',
+                message: '先前已領取這道題目的補償，不會重複發放；'+(quiz.mode==='trial-tower'?'本回合可返回戰場出招。':'可以直接跳過錯題。'),
+                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
                 onAction: skipVerifiedQuestion
             });
         } else if (result.status === 'rejected') {

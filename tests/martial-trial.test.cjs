@@ -203,7 +203,7 @@ test('expired, abandoned and legacy tactical sessions cannot generate or answer;
  assert.equal(state.floor,21);assert.equal(state.defender.realm,'金丹期');assert.deepEqual(state.claimedFloors,[1,2,3]);assert.equal(state.bestFloor,20);
  await assert.rejects(Rules.prepareQuestion(db,'u',NOW+Rules.TTL+3000),e=>e.status===409);
 });
-test('reports use the private server question and only independently approved errors can be replaced without a combat turn',async()=>{
+test('reports use the private question and only independently approved errors grant an unanswered combat turn once',async()=>{
  const db=database();const state=await Rules.start(db,'u',{requestId:'report-tower-start'},NOW);
  const request=await answerBody(db,state),privateQuestion=saved(db).run.pendingQuestion;
  const reportBody={towerRunId:state.runId,towerQuestionId:request.questionId,userReason:'題目給定條件可能不完整',question:'偽造題目',options:['甲','乙'],correctIndex:0};
@@ -215,10 +215,61 @@ test('reports use the private server question and only independently approved er
  const key=require('../question-report-api.cjs').__test.reportKey('u',privateQuestion.q);
  db.records.set('questionErrorCompensations/'+key,{uid:'u',question:privateQuestion.q});
  const after=await Rules.act(db,'u','replace',replace,NOW);
- assert.equal(after.round,0);assert.equal(after.question,null);assert.equal(after.challenger.hp,state.challenger.hp);assert.equal(after.bestFloor,0);assert.equal(after.economy.gold,0);
+ assert.equal(after.round,1);assert.equal(after.question,null);assert.ok(after.challenger.hp<state.challenger.hp);assert.ok(after.defender.hp<state.defender.hp);assert.equal(after.bestFloor,0);assert.equal(after.economy.gold,0);
+ assert.equal(after.lastTurn.verifiedError,true);assert.equal(after.lastTurn.correct,null);assert.equal(after.lastTurn.selectedChoice,null);
+ assert.deepEqual(after.lastTurn.steps.filter(s=>s.type==='attack').map(s=>s.actorRole),['host','guest']);
  assert.deepEqual(await Rules.act(db,'u','replace',replace,NOW),after);
+ assert.deepEqual(await Rules.act(db,'u','replace',body(after,{questionId:request.questionId}),NOW+1000),after);
+ const logs=[...db.records.entries()].filter(([k])=>k.startsWith('exam_logs/'));assert.equal(logs.length,1);assert.equal(logs[0][1].questionInvalid,true);assert.equal(logs[0][1].isCorrect,null);
  assert.ok(saved(db).run.history.includes(privateQuestion.q));
  await assert.rejects(Rules.act(db,'u','turn',request,NOW),e=>e.status===409);
+});
+test('approved wrong answers replay the original round including equipment counters and retain a prefetched correction',async()=>{
+ const player=user({artifactSystem:{inventory:{'soul-sword-immortal':1},equipped:{本命法寶:'soul-sword-immortal'}}});
+ const db=database(player);const state=await Rules.start(db,'u',{requestId:'report-replay-start'},NOW);
+ const request=await answerBody(db,state,false),q=structuredClone(saved(db).run.pendingQuestion),before=structuredClone(saved(db).run);
+ let after=await Rules.act(db,'u','turn',request,NOW);
+ const expected=require('../immortal-avatar-combat.cjs').settleTrial(before,true);
+ const nextQuestion=await answerBody(db,after,true,NOW+1000),queued=structuredClone(saved(db).run.pendingQuestion);
+ const key=require('../question-report-api.cjs').__test.reportKey('u',q.q);db.records.set('questionErrorCompensations/'+key,{uid:'u',question:q.q});
+ const repair=body(after,{questionId:q.id});after=await Rules.act(db,'u','replace',repair,NOW+1000);
+ assert.equal(after.round,1);assert.equal(after.lastTurn.correct,false);assert.equal(after.lastTurn.verifiedError,true);
+ assert.deepEqual(saved(db).run.challenger,expected.challenger);assert.deepEqual(saved(db).run.defender,expected.defender);
+ assert.deepEqual(saved(db).run.pendingQuestion,queued);assert.equal(after.question.id,nextQuestion.questionId);
+ assert.deepEqual(after.lastTurn.steps,expected.steps);assert.equal([...db.records.keys()].filter(k=>k.startsWith('exam_logs/')).length,1);
+ assert.deepEqual(await Rules.act(db,'u','replace',repair,NOW+2000),after);
+ const beforeRepeat=structuredClone(saved(db));await Rules.act(db,'u','replace',body(after,{questionId:q.id}),NOW+2000);
+ assert.deepEqual(saved(db).run,beforeRepeat.run);assert.equal(saved(db).totalWins,0);
+});
+test('an approved wrong answer can undo a fatal enemy hit and clear the same round, with first-clear rewards exactly once',async()=>{
+ const db=database(user({stats:{totalScore:1868,attack:900,maxHp:1}}));
+ let state=await Rules.start(db,'u',{requestId:'report-fatal-start'},NOW);saved(db).run.challenger.hp=1;state=Rules.view(saved(db),NOW);
+ const request=await answerBody(db,state,false);
+ const q=structuredClone(saved(db).run.pendingQuestion);let after=await Rules.act(db,'u','turn',request,NOW);
+ assert.equal(after.status,'defeated');assert.equal(after.challenger.hp,0);
+ const key=require('../question-report-api.cjs').__test.reportKey('u',q.q);db.records.set('questionErrorCompensations/'+key,{uid:'u',question:q.q});
+ const repair=body(after,{questionId:q.id});after=await Rules.act(db,'u','replace',repair,NOW+1000);
+ assert.equal(after.round,1);assert.equal(after.status,'cleared');assert.ok(after.challenger.hp>0);assert.equal(after.defender.hp,0);
+ assert.equal(after.bestFloor,1);assert.equal(after.totalWins,1);assert.equal(after.economy.gold,20);assert.deepEqual(after.claimedFloors,[1]);
+ assert.equal(after.lastTurn.steps.filter(s=>s.type==='attack'&&s.actorRole==='guest').length,0);
+ const repeated=await Rules.act(db,'u','replace',repair,NOW+2000);assert.equal(repeated.economy.gold,20);assert.equal(repeated.totalWins,1);assert.equal(repeated.awarded,undefined);
+ const again=await Rules.act(db,'u','replace',body(after,{questionId:q.id}),NOW+2000);assert.equal(again.economy.gold,20);assert.equal(again.totalWins,1);
+ const next=await Rules.act(db,'u','next',body(after),NOW+3000);
+ await assert.rejects(Rules.act(db,'u','replace',body(next,{questionId:q.id}),NOW+4000),e=>e.status===409);
+});
+test('approved reports never add another attack to a correct turn or allow rejected, stale, or abandoned rounds to attack',async()=>{
+ const db=database(),state=await Rules.start(db,'u',{requestId:'report-correct-start'},NOW),request=await answerBody(db,state);
+ const q=structuredClone(saved(db).run.pendingQuestion);let after=await Rules.act(db,'u','turn',request,NOW);
+ const before=structuredClone(saved(db).run),key=require('../question-report-api.cjs').__test.reportKey('u',q.q);
+ await assert.rejects(Rules.act(db,'u','replace',body(after,{questionId:q.id}),NOW+1000),e=>e.status===403);
+ db.records.set('questionErrorCompensations/'+key,{uid:'someone-else'});
+ await assert.rejects(Rules.act(db,'u','replace',body(after,{questionId:q.id}),NOW+1000),e=>e.status===403);
+ db.records.set('questionErrorCompensations/'+key,{uid:'u',question:q.q});
+ after=await Rules.act(db,'u','replace',body(after,{questionId:q.id}),NOW+1000);
+ assert.equal(after.round,1);assert.deepEqual(saved(db).run.challenger,before.challenger);assert.deepEqual(saved(db).run.defender,before.defender);assert.equal(after.lastTurn.verifiedError,true);
+ await assert.rejects(Rules.act(db,'u','replace',body(state,{questionId:q.id}),NOW+1000),e=>e.status===409);
+ after=await Rules.act(db,'u','abandon',body(after),NOW+2000);
+ await assert.rejects(Rules.act(db,'u','replace',body(after,{questionId:q.id}),NOW+3000),e=>e.status===409);
 });
 test('report endpoint authenticates before resolving tower evidence and ignores a forged client answer',async()=>{
  const db=database();const state=await Rules.start(db,'u',{requestId:'report-handler-start'},NOW);const answer=await answerBody(db,state);
