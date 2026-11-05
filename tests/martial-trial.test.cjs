@@ -73,23 +73,39 @@ test('clearing saves best progress once, next stage resets combat without refres
  assert.deepEqual(await Rules.act(db,'u','next',nextBody,NOW+30000),next);
  assert.equal(db.records.get('users/u').stats.maxHp,before.stats.maxHp);assert.equal(saved(db).totalWins,1);
 });
-test('failed fights and voluntary exits preserve best scores; expired fights can restart from earned checkpoints',async()=>{
+test('failed fights and voluntary exits preserve best scores; expired fights restart at the next uncleared floor',async()=>{
  const db=database(user({stats:{totalScore:28,attack:1,maxHp:1}}));
  let state=await Rules.start(db,'u',{requestId:'losing-start'},NOW);state=await fight(db,state);
  assert.equal(state.status,'defeated');assert.equal(state.bestFloor,0);
  saved(db).bestFloor=12;
- state=await Rules.start(db,'u',{requestId:'checkpoint-start'},NOW+30000);assert.equal(state.floor,11);
+ state=await Rules.start(db,'u',{requestId:'checkpoint-start'},NOW+30000);assert.equal(state.floor,13);
  const abandoned=await Rules.act(db,'u','abandon',body(state),NOW+31000);assert.equal(abandoned.bestFloor,12);assert.equal(abandoned.status,'abandoned');
  state=await Rules.start(db,'u',{requestId:'expiry-start'},NOW+32000);
  assert.equal(Rules.view(saved(db),NOW+Rules.TTL+40000).status,'expired');
  const expiredRequest=await answerBody(db,state,true,NOW+32000);
  await assert.rejects(Rules.act(db,'u','turn',expiredRequest,NOW+Rules.TTL+40000),e=>e.status===410);
- const restarted=await Rules.start(db,'u',{requestId:'restarted-after-expiry'},NOW+Rules.TTL+40000);assert.equal(restarted.floor,11);assert.notEqual(restarted.runId,state.runId);
+ const restarted=await Rules.start(db,'u',{requestId:'restarted-after-expiry'},NOW+Rules.TTL+40000);assert.equal(restarted.floor,13);assert.notEqual(restarted.runId,state.runId);
 });
 test('enemy progression increases through 100 floors and realms advance every ten floors',()=>{
  let previous={atk:0,maxHp:0};for(let floor=1;floor<=100;floor++){const e=Rules.enemy(floor);assert.ok(e.atk>previous.atk&&e.maxHp>previous.maxHp);assert.equal(!!e.goldenCore,floor>=21);if(floor>1)assert.ok(e.totalScore>=previous.totalScore);previous=e;}
  assert.equal(Rules.enemy(1).realm,'煉氣期');assert.equal(Rules.enemy(11).realm,'築基期');assert.equal(Rules.enemy(91).realm,'真仙');
- assert.equal(Rules.checkpoint(0),1);assert.equal(Rules.checkpoint(5),6);assert.equal(Rules.checkpoint(100),96);
+ assert.equal(Rules.checkpoint(0),1);assert.equal(Rules.checkpoint(5),6);assert.equal(Rules.checkpoint(16),17);assert.equal(Rules.checkpoint(99),100);assert.equal(Rules.checkpoint(100),100);
+});
+test('clearing floor 16 permanently unlocks floor 17, including after leaving, losing or expiring, without replaying old floors',async()=>{
+ const db=database(user({stats:{totalScore:1868,attack:9000,maxHp:1000}}));
+ const floors=Array.from({length:15},(_,i)=>i+1);
+ db.records.set(Rules.COLLECTION+'/u',{version:1,uid:'u',bestFloor:15,totalWins:15,rewardClaims:floors,floorTicketClaims:floors});
+ let state=await Rules.start(db,'u',{requestId:'floor-16-start'},NOW);assert.equal(state.floor,16);
+ state=await fight(db,state);assert.equal(state.status,'cleared');assert.equal(state.bestFloor,16);assert.equal(state.checkpoint,17);assert.equal(state.economy.drawTickets,1);
+ state=await Rules.act(db,'u','abandon',body(state),NOW+1000);
+ assert.equal((await Rules.status(db,'u',NOW+2000)).checkpoint,17);
+ await assert.rejects(Rules.start(db,'u',{requestId:'no-skipping-floor-17',floor:18},NOW+2000),e=>e.status===400);
+ state=await Rules.start(db,'u',{requestId:'continue-floor-17',floor:17},NOW+2000);assert.equal(state.floor,17);assert.equal(state.round,0);
+ assert.equal(state.economy.drawTickets,1);saved(db).run.challenger.hp=1;
+ state=await Rules.act(db,'u','turn',await answerBody(db,state,false,NOW+3000),NOW+3000);assert.equal(state.status,'defeated');assert.equal(state.bestFloor,16);
+ state=await Rules.start(db,'u',{requestId:'retry-floor-17'},NOW+4000);assert.equal(state.floor,17);
+ state=await Rules.start(db,'u',{requestId:'expired-floor-17'},NOW+Rules.TTL+5000);assert.equal(state.floor,17);
+ state=await fight(db,state,NOW+Rules.TTL+6000);assert.equal(state.status,'cleared');assert.equal(state.bestFloor,17);assert.equal(state.checkpoint,18);assert.equal(state.economy.drawTickets,2);
 });
 test('last floor completion is bounded and no further floor can be started',async()=>{
  const db=database(user({stats:{totalScore:1868,attack:99999,maxHp:99999}}));
@@ -99,6 +115,8 @@ test('last floor completion is bounded and no further floor can be started',asyn
  assert.equal(state.status,'complete');assert.equal(state.bestFloor,100);assert.equal(state.title,'萬象破陣者');
  assert.equal(state.economy.gold,610);assert.equal(state.economy.drawTickets,4);assert.equal(state.economy.materials['raid-refine-key-iii'],1);assert.deepEqual(state.claimedFloors,[100]);
  await assert.rejects(Rules.act(db,'u','next',body(state),NOW+30000),e=>e.status===409);
+ await assert.rejects(Rules.start(db,'u',{requestId:'no-floor-101',floor:101},NOW+30000),e=>e.status===400);
+ const replay=await Rules.start(db,'u',{requestId:'restart-last-floor'},NOW+31000);assert.equal(replay.floor,100);assert.equal(replay.economy.drawTickets,4);
 });
 test('routes require verified main-project identity and register only domain endpoints',async()=>{
  const routes=[];require('../martial-trial-api.cjs')({get:(p,h)=>routes.push([p,h]),post:(p,h)=>routes.push([p,h])});

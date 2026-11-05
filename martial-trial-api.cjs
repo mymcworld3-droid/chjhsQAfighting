@@ -13,7 +13,7 @@ const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const count=n=>Number.isFinite(Number(n))?Math.max(0,Math.floor(Number(n))):0;
 const clone=x=>JSON.parse(JSON.stringify(x));
 const ref=(db,uid)=>db.collection(COLLECTION).doc(uid);
-const checkpoint=best=>Math.min(96,Math.floor(count(best)/5)*5+1);
+const checkpoint=best=>Math.min(MAX_FLOOR,count(best)+1);
 function title(best){return best>=100?'萬象破陣者':best>=50?'試煉宗師':best>=20?'破陣行者':best>=5?'登塔修士':'初入試煉';}
 const REALMS=[['煉氣期',0],['築基期',6],['金丹期',28],['元嬰期',68],['化神期',188],['煉虛期',428],['合體期',642],['大乘期',1000],['半仙',1268],['真仙',1868]];
 function enemy(floor){
@@ -140,7 +140,7 @@ async function start(db,uid,body={},now=Date.now()){
   const repeated=replay(record,'start',body,now);if(repeated)return {...repeated,economy:economy(user)};
   if(record.run?.version===2&&record.run?.expiresAtMs>now&&['active','cleared'].includes(record.run.status))return result(record,user,now);
   const floor=body.floor===undefined?checkpoint(record.bestFloor):Number(body.floor);
-  if(!Number.isInteger(floor)||floor<1||floor>checkpoint(record.bestFloor)||(floor!==1&&(floor-1)%5!==0))throw fail('請由已解鎖的試煉起點開始',400);
+  if(!Number.isInteger(floor)||floor<1||floor>checkpoint(record.bestFloor))throw fail('請由已解鎖的試煉起點開始',400);
   const build=trustedRaidPlayerSnapshot(user,uid,c.exists?c.data():{});
   // Combat HP stays temporary; only verified first clears award resources.
   build.hp=build.maxHp;build.coreShield=false;build.gender=user.storyProgressV1?.gender==='female'?'female':'male';
