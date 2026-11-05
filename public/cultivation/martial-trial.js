@@ -7,7 +7,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
 // Single-player combat, using the server's saved build and the existing duel engine.
 (function(){
  'use strict';
- let serial=0,owner='',state=null,busy=false,error='',pending=null,returnFocus=null,notice='',rewardPage=1,phase='battle',question=null,timers=[],questionJob=null;
+ let serial=0,owner='',state=null,busy=false,error='',pending=null,returnFocus=null,notice='',rewardPage=1,phase='battle',question=null,timers=[],questionJob=null,verifiedQuestionId='';
  const Rewards=globalThis.QATrialTowerRewards;
  const escape=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
  const count=n=>Math.max(0,Math.round(Number(n)||0));
@@ -52,9 +52,9 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   content.hidden=studying;
   const start=count(state?.checkpoint)||1,best=count(state?.bestFloor);
   if(studying){
-   window.QAStudyQuestion.open(question,{runId:state.runId,onAnswer:choice=>perform('turn',{questionId:question.id,choice,help:Math.min(3,Number(window.currentActiveQuiz?.adaptiveHelp)||0)}),onContinue:watchCombat,onLeave:close,onSkip:skipQuestion});
+   window.QAStudyQuestion.open(question,{runId:state.runId,onAnswer:choice=>perform('turn',{questionId:question.id,choice,help:Math.min(3,Number(window.currentActiveQuiz?.adaptiveHelp)||0)}),onContinue:continueQuestion,onLeave:close,onVerifiedError:redeemQuestion,onSkip:skipQuestion});
    window.QAStudyQuestion.disable(busy||!!pending||phase==='review');
-   if(phase==='review')window.QAStudyQuestion.review(state.lastTurn,watchCombat);
+   if(phase==='review')window.QAStudyQuestion.review(state.lastTurn,continueQuestion);
    window.QAStudyQuestion.status({busy,error,retry:pending&&!busy?sendPending:null,sync:!busy?sync:null});
   }else{
    content.innerHTML=!state?'<p class="mt-loading" role="status">正在同步試煉紀錄…</p>':battle?`
@@ -161,16 +161,27 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
    window.QAStudyQuestion.practiceStatus(questionId,{ready:true});
   }catch(e){if(alive(id))window.QAStudyQuestion.practiceStatus(questionId,{failed:true});}
  }
- async function skipQuestion(){
-  if(phase==='review'){watchCombat();return;}
-  perform('replace',{questionId:question.id});
+ async function redeemQuestion(){
+  const id=serial,qid=question?.id;if(!qid)return;verifiedQuestionId=qid;await window.QAStudyQuestion.waitForAnswer();
+  if(!alive(id)||question?.id!==qid)return;
+  if(state.lastTurn?.questionId===qid&&state.lastTurn.verifiedError)return;
+  if(pending?.action==='replace')return sendPending();
+  return perform('replace',{questionId:qid});
  }
+ async function continueQuestion(){
+  if(phase!=='review'||!question)return;
+  if(verifiedQuestionId===question?.id&&!(state.lastTurn?.questionId===question.id&&state.lastTurn.verifiedError)){
+   await redeemQuestion();if(pending||busy||!state.lastTurn?.verifiedError)return;
+  }
+  return watchCombat();
+ }
+ async function skipQuestion(){await redeemQuestion();if(state?.lastTurn?.verifiedError)return continueQuestion();}
  async function sendPending(){
   if(busy||!pending)return;const id=serial,operation=pending;busy=true;error='';render();
   try{
    const next=await request(operation.action,operation.body);if(!alive(id))return;
    state=next;if(!['practice','cancel-practice'].includes(operation.action))applyEconomy(next.economy);pending=null;
-   if(operation.action==='turn'){
+   if(['turn','replace'].includes(operation.action)){
     question=next.lastTurn?.question;phase='review';
    }else if(!['practice','cancel-practice'].includes(operation.action)){question=null;phase='battle';}
    if(next.awarded){notice=operation.action==='claim'?'已補領 '+next.awarded.floors.length+' 層首通獎勵':'首通獎勵已入帳';globalThis.QAGameAudio?.play('reward-chime',{key:'tower:'+owner+':'+next.claimedFloors.length});}
@@ -181,7 +192,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   if(busy||pending||phase==='animation')return;
   notice='';if(['start','next'].includes(action))rewardPage=Math.ceil((action==='next'?state.floor+1:extra.floor||1)/10);
   pending={action,body:{requestId:crypto.randomUUID(),...(['start','claim'].includes(action)?{}:{runId:state.runId,floor:state.floor,round:state.round}),...extra}};
-  void sendPending();
+  return sendPending();
  }
  async function sync(){
   const id=serial;if(busy)return;busy=true;error='';render();

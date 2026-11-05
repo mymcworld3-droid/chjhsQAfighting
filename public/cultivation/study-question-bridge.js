@@ -29,7 +29,7 @@ export function createStudyQuestionBridge({render,answer,resetWhiteboard,resetHe
     rank:rankName(),badge:`${question.recoveryOrigin?'📝 訂正練習':question.extendedPractice?'📚 延伸練習':'🎯 '+question.subject} | ${question.topic||'綜合'}`,
     learningSubject:question.subject,learningTopic:question.practicePoint||question.topic||'本題核心觀念',learningDifficulty:question.adaptive?.difficulty||question.difficulty,
     extendedPractice:!!question.extendedPractice,extendedPracticeSubject:question.subject,extendedPracticeKnowledgePoint:question.practicePoint||'',recoveryOrigin:question.recoveryOrigin||'',
-    towerRunId:callbacks.runId,towerQuestionId:question.id,helperReviewRedacted:true,onVerifiedSkip:callbacks.onSkip};
+    towerRunId:callbacks.runId,towerQuestionId:question.id,helperReviewRedacted:true,onVerifiedError:callbacks.onVerifiedError,onVerifiedSkip:callbacks.onSkip};
    session.quiz=quiz;window.currentActiveQuiz=quiz;window.quizStartTime=Date.now();
    $('feedback-section').classList.add('hidden');$('solo-progress-panel')?.classList.remove('hidden');
    render(quiz.data,quiz.rank,quiz.badge,{study:true,onAnswer:callbacks.onAnswer});
@@ -37,7 +37,18 @@ export function createStudyQuestionBridge({render,answer,resetWhiteboard,resetHe
   },
   review(review,onContinue){
    if(!session||session.quiz?.id!==review.questionId)return;
-   if(!session.reviewJob){
+   if(review.verifiedError){
+    // An invalid question grants combat only; never grade it or pay study rewards
+    // again. Wait for any original answer write before replacing its feedback.
+    const current=session;
+    session.reviewJob=Promise.resolve(session.reviewJob).then(()=>{
+     if(session!==current)return;
+     $('feedback-section').classList.remove('hidden');
+     $('feedback-icon').textContent='✓';$('feedback-title').className='text-xl font-bold text-cyan-300';$('feedback-title').textContent='審查確認題目有誤';
+     $('feedback-text').textContent='本回合已取得攻擊機會。返回戰場後，我方先手出招；守衛存活時仍會後手攻擊。';
+     $('solo-correction-actions').innerHTML='';
+    });
+   }else if(!session.reviewJob){
     const quiz=session.quiz;Object.assign(quiz.data,{ans:review.correctIndex,exp:review.explanation});
     session.reviewJob=Promise.resolve(answer(review.selectedChoice,review.correctIndex,quiz.data.q,review.explanation));
    }

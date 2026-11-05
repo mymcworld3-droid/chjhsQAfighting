@@ -21,3 +21,23 @@ test('tower questions stay on the native page and share learning rendering/answe
  finishAnswer();await bridge.waitForAnswer();bridge.end();assert.equal(window.currentActiveQuiz,previous);assert.equal(finished,true);assert.equal(navigation.at(-1)[0],'page-home');
  assert.equal(nodes.get('btn-next-step').innerHTML,'原按鈕');
 });
+
+test('approved erroneous questions show combat entitlement without grading, and a settled wrong answer is never paid twice',async()=>{
+ for(const answered of [false,true]){
+  const nodes=new Map(['page-quiz','feedback-section','feedback-icon','feedback-title','feedback-text','solo-correction-actions','solo-progress-panel','btn-next-step','options-container'].map(id=>[id,node()]));
+  const window={switchToPage(){}};let answers=0,resolveAnswer;
+  const document={getElementById:id=>nodes.get(id)||null,querySelector:()=>({id:'page-home'})};
+  const create=vm.runInNewContext(source+'\ncreateStudyQuestionBridge;',{window,document,Date,Promise});
+  const bridge=create({render(){},resetWhiteboard(){},resetHelper(){},answer(){answers++;return new Promise(resolve=>resolveAnswer=resolve);}});
+  const q={id:'reported-question',q:'有誤的塔題',opts:['A','B','C','D'],subject:'數學'},onVerifiedError=()=>{},onContinue=()=>{};
+  bridge.open(q,{runId:'run',onVerifiedError,onContinue});assert.equal(window.currentActiveQuiz.onVerifiedError,onVerifiedError);
+  const review={questionId:q.id,selectedChoice:answered?1:null,correctIndex:0,explanation:'原解析'};
+  if(answered)bridge.review(review,onContinue);
+  bridge.review({...review,verifiedError:true},onContinue);
+  if(answered)resolveAnswer();
+  await bridge.waitForAnswer();
+  assert.equal(answers,answered?1:0);assert.match(nodes.get('feedback-title').textContent,/題目有誤/);assert.match(nodes.get('feedback-text').textContent,/先手出招/);
+  assert.equal(nodes.get('btn-next-step').onclick,onContinue);assert.equal(nodes.get('solo-correction-actions').innerHTML,'');
+  bridge.review({...review,verifiedError:true},onContinue);await bridge.waitForAnswer();assert.equal(answers,answered?1:0);
+ }
+});

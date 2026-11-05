@@ -70,6 +70,35 @@ function award(record,user,floors){
  return {floors:earned,reward,patch};
 }
 function result(record,user,now,granted){return {...view(record,now),economy:economy(user),...(granted?{awarded:{floors:granted.floors,reward:granted.reward}}:{})};}
+function settleQuestion(record,user,q,choice,now,start=record.run,verifiedError=false){
+ const run=record.run,revising=start.round<run.round,correct=Number.isInteger(choice)?choice===q.correctIndex:null;
+ // Keep the entire private pre-round combat state: HP alone cannot restore shields,
+ // one-use equipment or innate counters when an approved report corrects a round.
+ run.lastTurnStart={questionId:q.id,runId:run.runId,round:start.round,challenger:clone(start.challenger),defender:clone(start.defender)};
+ const outcome=Combat.settleTrial(run.lastTurnStart,verifiedError||correct===true),pending=run.pendingQuestion;
+ run.lastQuestion=q;if(!revising)run.history=[...(run.history||[]),q.q].slice(-80);
+ Object.assign(run,{status:'active',round:outcome.round,challenger:outcome.challenger,defender:outcome.defender,lastTurnAtMs:now,
+  lastTurn:{question:publicQuestion(q),questionId:q.id,correct,correctIndex:q.correctIndex,selectedChoice:choice,explanation:q.exp,
+   ...(verifiedError?{verifiedError:true}:{}),startHostHp:outcome.startHostHp,startGuestHp:outcome.startGuestHp,steps:outcome.steps,
+   notes:verifiedError?['審查確認題目有誤，本回合取得先手攻擊；守衛存活時仍會後手攻擊。']:outcome.notes.map(n=>n.replaceAll('化身','守衛')),logs:outcome.logs.slice(-24),activations:outcome.activations.slice(-12)}});
+ let granted=null;
+ if(outcome.finished){
+  run.status=outcome.won?(run.floor===MAX_FLOOR?'complete':'cleared'):'defeated';
+  if(outcome.won){
+   record.bestFloor=Math.max(count(record.bestFloor),run.floor);record.totalWins=count(record.totalWins)+1;
+   granted=award(record,user,[run.floor]);if(granted)run.lastReward={floors:granted.floors,reward:granted.reward};
+  }
+ }
+ // A correction/extension may already have prefetched the following question.
+ run.pendingQuestion=revising&&run.status==='active'?pending:null;
+ const logKey=('tower_'+record.uid+'_'+run.runId+'_'+outcome.round).replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,480);
+ const log={uid:record.uid,timestamp:new Date(now),mode:'trial-tower',topic:q.subject,
+  rankAtTime:'試煉之塔 · 第 '+run.floor+' 層',question:q.q,options:q.opts,correctIdx:q.correctIndex,userIdx:choice,
+  isCorrect:correct,explanation:q.exp,subject:q.subject,subTopic:q.topic||'',...Knowledge.metadata(q,q.subject),
+  ...(verifiedError?{questionInvalid:true,combatAttackGranted:true}:{}),
+  ...(q.adaptive?{adaptiveScopeId:q.adaptive.scopeId,adaptiveConceptId:q.adaptive.conceptId,adaptiveFacetId:q.adaptive.facetId,assistanceLevel:count(q.help),adaptiveSkipped:verifiedError}:{}),timeTaken:0};
+ return {granted,logKey,log};
+}
 async function status(db,uid,now=Date.now()){
  return db.runTransaction(async tx=>{
   const [s,p]=await Promise.all([tx.get(ref(db,uid)),tx.get(db.collection('users').doc(uid))]);
@@ -154,12 +183,26 @@ async function act(db,uid,action,body={},now=Date.now()){
   }else if(action==='cancel-practice'){
    record.practiceQueue=(record.practiceQueue||[]).filter(p=>p.correction);record.activeExtension=null;
   }else if(action==='replace'){
-   const q=run.pendingQuestion;
-   if(run.status!=='active'||!q||q.id!==body.questionId)throw fail('題目已更新，請重新同步');
+   const q=[run.pendingQuestion,run.lastQuestion].find(q=>q?.id===body.questionId);
+   if(!['active','cleared','complete','defeated'].includes(run.status)||!q)throw fail('題目已更新，請重新同步');
    const key=require('./question-report-api.cjs').__test.reportKey(uid,q.q);
    const claim=await tx.get(db.collection('questionErrorCompensations').doc(key));
-   if(!claim.exists)throw fail('題目尚未通過錯誤審核',403);
-   run.history=[...(run.history||[]),q.q].slice(-80);run.pendingQuestion=null;
+   if(!claim.exists||claim.data().uid!==uid)throw fail('題目尚未通過錯誤審核',403);
+   if(run.lastTurn?.questionId===q.id){
+    // Already granted, or the original correct answer already attacked/cleared.
+    if(run.lastTurn.verifiedError||run.lastTurn.correct||['cleared','complete'].includes(run.status))run.lastTurn.verifiedError=true;
+    else{
+     const start=run.lastTurnStart;
+     if(start?.questionId!==q.id||start.runId!==run.runId||start.round!==run.round-1)throw fail('此舊回合缺少完整戰鬥紀錄，無法補算；請由下一回合繼續');
+     const settled=settleQuestion(record,user,q,run.lastTurn.selectedChoice,now,start,true);granted=settled.granted;
+     tx.set(db.collection('exam_logs').doc(settled.logKey),settled.log);
+    }
+   }else{
+    if(run.status!=='active'||run.pendingQuestion?.id!==q.id)throw fail('本回合已結束，請重新同步');
+    const settled=settleQuestion(record,user,q,null,now,run,true);granted=settled.granted;
+    tx.set(db.collection('exam_logs').doc(settled.logKey),settled.log);
+   }
+   if(granted)tx.update(db.collection('users').doc(uid),granted.patch);
   }else if(action==='abandon'){run.status='abandoned';run.pendingQuestion=null;}
   else if(action==='next'){
    if(run.status!=='cleared'||run.floor>=MAX_FLOOR)throw fail('擊破當層守衛後才能繼續');
@@ -171,24 +214,9 @@ async function act(db,uid,action,body={},now=Date.now()){
    if(!q||q.id!==body.questionId)throw fail('請先取得本回合題目並作答',409);
    if(q.scopeKey!==StudyScope.key(StudyScope.snapshot(user)))throw fail('出題範圍已變更，請同步戰場後重新取得題目');
    q.help=Math.max(count(q.help),Math.min(3,count(body.help)));
-   const correct=body.choice===q.correctIndex,outcome=Combat.settleTrial(run,correct);
-   run.pendingQuestion=null;run.lastQuestion=q;run.history=[...(run.history||[]),q.q].slice(-80);
-   Object.assign(run,{round:outcome.round,challenger:outcome.challenger,defender:outcome.defender,lastTurnAtMs:now,
-    lastTurn:{question:publicQuestion(q),questionId:q.id,correct,correctIndex:q.correctIndex,selectedChoice:body.choice,explanation:q.exp,
-     startHostHp:outcome.startHostHp,startGuestHp:outcome.startGuestHp,steps:outcome.steps,notes:outcome.notes.map(n=>n.replaceAll('化身','守衛')),logs:outcome.logs.slice(-24),activations:outcome.activations.slice(-12)}});
-   const logKey=('tower_'+uid+'_'+run.runId+'_'+outcome.round).replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,480);
-   tx.set(db.collection('exam_logs').doc(logKey),{uid,timestamp:new Date(now),mode:'trial-tower',topic:q.subject,
-    rankAtTime:'試煉之塔 · 第 '+run.floor+' 層',question:q.q,options:q.opts,correctIdx:q.correctIndex,userIdx:body.choice,
-    isCorrect:correct,explanation:q.exp,subject:q.subject,subTopic:q.topic||'',...Knowledge.metadata(q,q.subject),
-    ...(q.adaptive?{adaptiveScopeId:q.adaptive.scopeId,adaptiveConceptId:q.adaptive.conceptId,adaptiveFacetId:q.adaptive.facetId,assistanceLevel:q.help,adaptiveSkipped:false}:{}),timeTaken:0});
-   if(outcome.finished){
-    run.status=outcome.won?(run.floor===MAX_FLOOR?'complete':'cleared'):'defeated';
-    if(outcome.won){
-     record.bestFloor=Math.max(count(record.bestFloor),run.floor);record.totalWins=count(record.totalWins)+1;
-     granted=award(record,user,[run.floor]);
-     if(granted){run.lastReward={floors:granted.floors,reward:granted.reward};tx.update(db.collection('users').doc(uid),granted.patch);}
-    }
-   }
+   const settled=settleQuestion(record,user,q,body.choice,now);granted=settled.granted;
+   tx.set(db.collection('exam_logs').doc(settled.logKey),settled.log);
+   if(granted)tx.update(db.collection('users').doc(uid),granted.patch);
   }
   remember(record,action,body);tx.set(ref(db,uid),record);return result(record,user,now,granted);
  });
