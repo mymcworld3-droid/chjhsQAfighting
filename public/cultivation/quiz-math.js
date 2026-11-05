@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   let queue = Promise.resolve();
+  const pending = new Set();
   const math = () => window.MathJax;
   const escape = value => String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;')
     .replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
@@ -34,6 +35,7 @@
   function clear(nodes) {
     const roots = (Array.isArray(nodes) ? nodes : [nodes]).filter(Boolean);
     if (!roots.length) return;
+    for (const request of pending) if (roots.some(root => root === request.node || root.contains?.(request.node) || request.node.contains?.(root))) request.cancelled = true;
     try { math()?.typesetClear?.(roots); } catch (error) {
       console.warn('[Quiz Math] unable to clear previous typesetting', error);
     }
@@ -46,69 +48,82 @@
     return mj?.startup?.promise || Promise.resolve();
   }
 
+  function snapshotTree(node) {
+    return { node, value: node.nodeValue, children: Array.from(node.childNodes || [], snapshotTree) };
+  }
+
+  function restoreTree(saved) {
+    const {node,children,value} = saved;
+    if (node.nodeType === 3) { node.nodeValue = value; return; }
+    const current = Array.from(node.childNodes || []);
+    if (current.length !== children.length || children.some((child,i) => child.node !== current[i])) node.replaceChildren(...children.map(child => child.node));
+    children.forEach(restoreTree);
+  }
+
+  // Only replace formula text nodes. A root may contain answer buttons, images,
+  // whiteboard/helper controls and their listeners; never flatten its innerHTML.
+  function readableFallback(node) {
+    const doc = node.ownerDocument || (typeof document === 'undefined' ? null : document);
+    if (!doc?.createTreeWalker) return;
+    const walker = doc.createTreeWalker(node,4), texts = [];
+    while (walker.nextNode()) texts.push(walker.currentNode);
+    for (const text of texts) {
+      if (text.parentElement?.closest('mjx-container,script,style,textarea,pre,code,.tex2jax_ignore')) continue;
+      const value = text.nodeValue || '';
+      if (!/\\[a-zA-Z]+|\\[()[\]]|\$[^$]+\$/.test(value)) continue;
+      const fallback = doc.createElement('span');
+      fallback.className = 'tex2jax_ignore quiz-math-fallback';
+      fallback.title = '公式暫以文字顯示';fallback.style.whiteSpace = 'pre-wrap';
+      fallback.textContent = window.QAMathGuard?.readableMath(value) ?? value;
+      text.replaceWith(fallback);
+    }
+  }
+
   function typeset(nodes) {
     const roots = (Array.isArray(nodes) ? nodes : [nodes]).filter(Boolean);
     if (!roots.length) return Promise.resolve();
+    const requests = roots.map(node => ({node,cancelled:false}));
+    requests.forEach(request => pending.add(request));
+    const current = request => request.node.isConnected && !request.cancelled;
     // MathJax cannot safely process concurrent DOM updates. Keep independent
     // question, option and explanation requests in document order.
     const job = async () => {
-      const mj = math();
-      if (!mj?.typesetPromise) {
-        // The CDN may be unavailable on mobile. Use readable symbols instead
-        // of leaving raw TeX commands visible until another question arrives.
-        if (typeof document !== 'undefined' && document.createTreeWalker && window.QAMathGuard) {
-          for (const node of roots.filter(root => root.isConnected)) {
-            const walker = document.createTreeWalker(node,4); // SHOW_TEXT
-            const texts = [];
-            while (walker.nextNode()) texts.push(walker.currentNode);
-            for (const text of texts) {
-              if (text.parentElement?.closest('mjx-container,script,style,.tex2jax_ignore')) continue;
-              if (/\\[a-zA-Z]+|\\[()[\]]|\$[^$]+\$/.test(text.nodeValue || '')) {
-                text.nodeValue = window.QAMathGuard.readableMath(text.nodeValue);
-              }
-            }
-          }
-        }
-        return;
-      }
       try {
+        const mj = math();
+        if (!mj?.typesetPromise) {
+          requests.filter(current).forEach(({node}) => readableFallback(node));
+          return;
+        }
         await readyMath();
-        const live = roots.filter(node => node.isConnected);
+        const live = requests.filter(current);
         if (!live.length) return;
-        const backups = live.map(node => ({
-          node,
-          html: node.innerHTML,
-          literal: node.textContent || ''
-        }));
+        const backups = live.map(request => ({request,tree:snapshotTree(request.node)}));
         try {
-          await mj.typesetPromise(live);
-          for (const entry of backups) {
-            const broken = entry.node.querySelector?.('mjx-merror, .mjx-merror, [data-mjx-error]') ||
-              (/(?:Math input error|TeX parse error|MathJax internal error)/i.test(entry.node.textContent || '') &&
-                entry.node.querySelector?.('mjx-container'));
-            if (!entry.node.isConnected || !broken) continue;
-            // Mark as ignored so a future MathJax pass cannot re-trigger
-            // the same parse failure. Never insert unescaped source text.
-            const escaped = window.QAMathGuard?.fallback(entry.literal) ||
-              '<span class="tex2jax_ignore">' + escape(entry.literal) + '</span>';
-            try { mj.typesetClear?.([entry.node]); } catch (_) {}
-            entry.node.innerHTML = escaped;
+          await mj.typesetPromise(live.map(({node}) => node));
+          for (const {request,tree} of backups) {
+            if (!current(request)) continue;
+            const node = request.node;
+            const broken = node.querySelector?.('mjx-merror, .mjx-merror, [data-mjx-error]') ||
+              (/(?:Math input error|TeX parse error|MathJax internal error)/i.test(node.textContent || '') &&
+                node.querySelector?.('mjx-container'));
+            if (!broken) continue;
+            try { mj.typesetClear?.([node]); } catch (_) {}
+            restoreTree(tree);readableFallback(node);
             console.warn('[Quiz Math] invalid TeX displayed as literal text');
           }
         } catch (renderError) {
-          for (const { node, html, literal } of backups) {
-            if (node.isConnected) {
-              try { mj.typesetClear?.([node]); } catch (_) {}
-              // Never retry the same failed MathJax input unchanged.
-              const original = literal || html.replace(/<[^>]*>/g, ' ');
-              node.innerHTML = window.QAMathGuard?.fallback(original) ||
-                '<span class="tex2jax_ignore">' + escape(original) + '</span>';
-            }
+          for (const {request,tree} of backups) {
+            if (!current(request)) continue;
+            try { mj.typesetClear?.([request.node]); } catch (_) {}
+            restoreTree(tree);readableFallback(request.node);
           }
           throw renderError;
         }
       } catch (error) {
+        requests.filter(current).forEach(({node}) => readableFallback(node));
         console.warn('[Quiz Math] typesetting failed; original text remains readable', error);
+      } finally {
+        requests.forEach(request => pending.delete(request));
       }
     };
     queue = queue.then(job,job);
