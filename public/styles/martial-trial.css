@@ -33,14 +33,7 @@ body.martial-trial-open{overflow:hidden!important}
 .mt-fighting .mt-body{padding:0 12px}.mt-fighting .mt-dialog>header,.mt-fighting .mt-dialog>footer{padding:10px max(16px,calc((100vw - 1440px)/2));background:#080806}
 .mt-fighting .mt-content{max-width:1440px;margin:auto}.mt-fighting .trial-tower-battle{min-height:0;padding:0 0 12px;overflow:visible;background:none}
 .mt-fighting .mt-messages{max-width:1440px;margin:auto}.mt-fighting .tt-reward-preview{margin-top:12px}
-.mt-study-host[hidden],.mt-content[hidden]{display:none!important}
-.mt-studying .mt-dialog{width:min(1400px,100%);background:#0d211f}
-.mt-studying .mt-body{padding:0 8px 24px;background:#0d211f}.mt-study-host #page-quiz{margin:0 auto;min-height:0!important;width:100%}
-.mt-study-host #solo-progress-panel,.mt-study-host #btn-extended-practice-stop,.mt-study-host .adaptive-scope-progress{display:none!important}
 body.martial-trial-open #report-modal{z-index:24000!important}
-.mt-study-host #quiz-whiteboard-panel{z-index:23500}
-.mt-studying .mt-dialog>footer{padding:6px 18px}.mt-studying .mt-footer-note{margin:0}
-@media(max-width:600px){.mt-studying{padding:0!important}.mt-studying .mt-dialog{height:100dvh;border-radius:0}.mt-studying .mt-body{padding-inline:0}.mt-fighting .mt-body{padding-inline:9px}.mt-fighting .mt-dialog>header,.mt-fighting .mt-dialog>footer{padding-inline:12px}}
 /* Fit the shared duel layout between the tower's persistent header/actions. */
 .mt-in-combat .mt-body{overflow:hidden;display:flex;flex-direction:column;min-height:0}
 .mt-in-combat .mt-content{width:100%;height:100%;min-height:0;flex:1}
@@ -48,3 +41,4 @@ body.martial-trial-open #report-modal{z-index:24000!important}
 .mt-in-combat .mt-messages:empty{display:none}
 #trial-tower-stage #tt-cultivation-pool{font-size:10px}#trial-tower-stage #tt-cultivation-pool::after{content:none}
 #martial-trial-modal.mt-fighting:not(.mt-in-combat) #trial-tower-stage{height:clamp(260px,60dvh,600px)!important;min-height:260px!important}
+#martial-trial-modal[hidden]{display:none!important}

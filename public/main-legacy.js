@@ -119,6 +119,7 @@ let soloCacheIdentity = '';
 let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
 window.persistAdaptiveActiveQuiz = quiz => {
+    if(quiz?.mode==='trial-tower'){window.persistTrialTowerStudyHint?.(quiz);return;}
     if (soloQuestionCache.isCurrent(auth.currentUser?.uid, soloQuestionScope())) soloQuestionCache.persistActive(quiz);
 };
 function adaptiveQuestionContext(unit) {
@@ -1958,8 +1959,8 @@ window.promptXiuxianEducationLevel = () => {
 };
 
 // 修改原本的 switchToPage
-window.switchToPage = (pageId) => {
-    if(document.getElementById('martial-trial-modal'))window.closeTrialTower?.();
+window.switchToPage = (pageId, {preserveTrialTower = false} = {}) => {
+    if(!preserveTrialTower && document.getElementById('martial-trial-modal'))window.closeTrialTower?.();
     if (pageId === 'page-social' && window.promptXiuxianEducationLevel()) return false;
     if (isBattleActive && pageId !== 'page-battle') {
         alert("鬥法進行中！");
@@ -3032,11 +3033,13 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     if (quiz) {
         if (answeredSoloQuizzes.has(quiz)) return;
         answeredSoloQuizzes.add(quiz);
-        syncSoloQuestionCache();
-        if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
-            soloQuestionCache.consumeActive({ remember: true });
-        } else {
-            soloQuestionCache.remember?.(quiz);
+        if(quiz.mode!=='trial-tower'){
+            syncSoloQuestionCache();
+            if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
+                soloQuestionCache.consumeActive({ remember: true });
+            } else {
+                soloQuestionCache.remember?.(quiz);
+            }
         }
     }
 
@@ -3215,12 +3218,18 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 const snap = await tx.get(ref);
                 if (!snap.exists()) throw new Error('玩家資料不存在');
                 const remote = snap.data();
+                const towerReceipts=Array.isArray(remote.stats?.trialTowerStudyAnswersV1)?remote.stats.trialTowerStudyAnswersV1:[];
+                if(quiz?.mode==='trial-tower'&&towerReceipts.includes(quiz.id)){
+                    cultivationReward.gain=0;scoreGain=0;return remote.stats;
+                }
                 const verifiedLearning = learningRules?.reward(remote.stats || {}, quiz, isCorrect, remote.profile) || learningReward;
                 correctionFeedback = verifiedLearning.recoveryFeedback || null;
                 const verifiedGold = isCorrect ? window.QAAnswerGoldRules.perCorrect(remote.stats?.totalScore) + verifiedLearning.gold : 0;
                 const learningDelta = verifiedLearning.gain - learningReward.gain +
                     (verifiedLearning.recovery ? 0 : -recoveryCoreGain);
                 const savedStats = { ...stats,
+                    ...(remote.stats?.trialTowerStudyAnswersV1?{trialTowerStudyAnswersV1:towerReceipts}:{}),
+                    ...(quiz?.mode==='trial-tower'?{trialTowerStudyAnswersV1:[...towerReceipts,quiz.id].slice(-64)}:{}),
                     ...(remote.stats?.adaptiveLearningV1 ? {adaptiveLearningV1:remote.stats.adaptiveLearningV1} : {}),
                     ...(adaptiveRows.length ? {adaptiveLearningV1:window.QAAdaptiveLearning.merge(remote.stats?.adaptiveLearningV1, adaptiveRows)} : {}),
                     ...(verifiedLearning.progress ? {soloLearningV1:verifiedLearning.progress} : {}),
@@ -3261,7 +3270,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             ? persistAnswer()
             : null;
         if (!shouldSaveAnswer) showCultivationFeedback(cultivationReward, isCorrect);
-        void addDoc(collection(db, "exam_logs"), { 
+        if(quiz?.mode!=='trial-tower') void addDoc(collection(db, "exam_logs"), {
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email || '',
             question: questionText, 
@@ -3309,7 +3318,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
     }
 
-    if (!extendedPracticeState.active) fillBuffer();
+    if (quiz?.mode!=='trial-tower' && !extendedPracticeState.active) fillBuffer();
 }
 
 async function generateVisualAid(imagePrompt) {
@@ -3331,6 +3340,13 @@ const extendedPracticeState = {
 window.isExtendedPracticeActive = () => extendedPracticeState.active;
 
 function syncQuizExtendedPracticeControls() {
+    if(window.currentActiveQuiz?.mode==='trial-tower'){
+        const state=window.getTrialTowerPracticeState?.()||{},stop=document.getElementById('btn-extended-practice-stop');
+        stop?.classList.toggle('hidden',!state.extension);
+        if(stop){stop.title='結束延伸練習';const label=stop.querySelector('span');if(label)label.textContent='延伸中';}
+        for(const button of document.querySelectorAll('.quiz-helper-practice-btn'))button.disabled=!!state.queued?.some(p=>p.point===button.dataset.knowledgePoint);
+        return;
+    }
     const pending = extendedPracticeState.pending;
     const stop = document.getElementById('btn-extended-practice-stop');
     stop?.classList.toggle('hidden', !extendedPracticeState.active && !pending);
@@ -3420,7 +3436,7 @@ function quizHelperAppendMessage(role, text, { knowledgePoint = '' } = {}) {
     else body.textContent = text;
 
     const point = String(knowledgePoint || '').trim().slice(0, 60);
-    if (role === 'assistant' && point && window.currentActiveQuiz?.mode !== 'trial-tower') {
+    if (role === 'assistant' && point) {
         const practice = document.createElement('button');
         practice.type = 'button';
         practice.className = 'quiz-helper-practice-btn';
@@ -3721,6 +3737,7 @@ window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
     if (!point || !currentUserData) return;
 
     const currentQuiz = window.currentActiveQuiz;
+    if(currentQuiz?.mode==='trial-tower')return window.queueTrialTowerPractice?.({questionId:currentQuiz.id,point,correction:!!options.correction});
     const uid = auth.currentUser?.uid;
     if (!currentQuiz?.data || !uid || soloNextBusy || window.isOpportunityActive?.()) return;
 
@@ -3744,6 +3761,7 @@ window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
 };
 
 window.endQuizExtendedPractice = () => {
+    if(window.currentActiveQuiz?.mode==='trial-tower'){window.cancelTrialTowerPractice?.();return;}
     if (!extendedPracticeState.active && !extendedPracticeState.pending) return;
     const wasActive = extendedPracticeState.active;
     extendedPracticeState.active = false;
@@ -3956,7 +3974,7 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
     resetQuizHelper(data, { topic });
-    if (!study) window.QAAdaptiveLearning?.render(window.currentActiveQuiz);
+    window.QAAdaptiveLearning?.render(window.currentActiveQuiz);
     syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
@@ -3998,12 +4016,19 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
 }
 
 window.QAStudyQuestion = createStudyQuestionBridge({
-    userId: () => auth.currentUser?.uid,
-    render: renderQuiz, resetWhiteboard: resetQuizWhiteboard, resetHelper: resetQuizHelper,
-    reviewHelper(review) {
-        quizHelperState.answered=true;quizHelperState.selectedIndex=review.selectedChoice;
-        quizHelperState.correctIndex=review.correctIndex;quizHelperState.explanation=review.explanation;
-        renderQuizHelperConversation();
+    userId: () => auth.currentUser?.uid, rankName: () => getRankName(currentUserData?.stats?.rankLevel || 0),
+    render: renderQuiz, answer: handleAnswer, resetWhiteboard: resetQuizWhiteboard, resetHelper: resetQuizHelper,
+    syncTools: syncQuizExtendedPracticeControls, practiceStatus: syncCorrectionPracticeButton,
+    beginSession() {
+        const previous={soloSession,extended:{...extendedPracticeState}};
+        soloSession={active:true,mode:'trial-tower',correctCount:0,wrongCount:0,history:[],currentStep:0};
+        for(const id of ['solo-correct-count','solo-wrong-count']){const el=document.getElementById(id);if(el)el.textContent='0';}
+        Object.assign(extendedPracticeState,{active:false,pending:null,correctionRequests:new Map()});
+        return previous;
+    },
+    endSession(previous,sameOwner) {
+        if(previous&&sameOwner){soloSession=previous.soloSession;Object.assign(extendedPracticeState,previous.extended);}
+        else{soloSession={active:false};Object.assign(extendedPracticeState,{active:false,pending:null,correctionRequests:new Map()});}
     }
 });
 
