@@ -112,9 +112,10 @@ function definitionImageUrls(defs) {
 }
 
 function trainingSceneImages(orientation) {
-  if (trainingRenderProfile() === 'safe') return [`assets/training/cultivation-${orientation}-clean.webp`];
   const layout = globalThis.QATrainingSceneLayouts[orientation];
-  return [layout.image, ...layout.layers.map(layer => layer.image)];
+  return [layout.image,
+    ...(trainingRenderProfile() === 'safe' ? [] : layout.layers.map(layer => layer.image)),
+    ...Object.values(layout.places).filter(place => !place.painted).map(place => place.sprite.image)];
 }
 
 function collectStartupImageUrls() {
@@ -135,12 +136,6 @@ function collectStartupImageUrls() {
     ...coreImages,
     ...SCENE_ART[sceneOrientation],
     ...trainingSceneImages(sceneOrientation),
-    'assets/training/cutouts/meditation-ai.webp',
-    'assets/training/cutouts/vault-ai.webp',
-    'assets/training/cutouts/forge-ai.webp',
-    'assets/training/cutouts/contract-ai.webp',
-    'assets/training/cutouts/secret-ai.webp',
-    'assets/training/cutouts/status-ai.webp',
     ...definitionImageUrls(ownedMaterials),
     ...definitionImageUrls(recipeMaterials),
     ...definitionImageUrls(nearbyMaterials)

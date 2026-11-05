@@ -108,7 +108,7 @@ test('previously unlocked soul upgrades and trusted combat core remain usable af
   assert.equal(Authority.trustedRaidPlayerSnapshot(player, 'u1').goldenCore, null);
 });
 
-test('both clean scene plates match their assets and contain non-overlapping targets', () => {
+test('both integrated scene plates match their assets and contain non-overlapping targets', () => {
   for (const [name, layout] of Object.entries(Layouts)) {
     const file = fs.readFileSync(path.join(__dirname, '../public', layout.image.replace(/\.webp$/, '.png')));
     assert.equal(file.readUInt32BE(16), layout.width, `${name} image width`);
@@ -162,9 +162,9 @@ test('the actual scene reaches the stage bottom while names and locks avoid head
     const orientation = width >= height ? 'landscape' : 'portrait', layout = Layouts[orientation];
     const properties = {}, style = { setProperty() {} };
     const labels = Rules.PLACES.map(place => {
-      const region=layout.places[place.id],font=layout.font*1.08;
-      const w=Math.max(place.name.length*font*1.08,(place.realm+'解鎖').length*font*.6*1.02)+font*1.5+2;
-      const h=font*(1.25+.33+.6*1.25+.07)+2;
+      const region=layout.places[place.id],font=layout.font;
+      const w=Math.max(place.name.length*font*1.12,(place.realm+'解鎖').length*font*.7*1.02)+font*1.1;
+      const h=font*(1.35+.56+.7*1.35+.16)+1;
       let lift=0;
       return { place, style:{setProperty(_name,value){lift=parseFloat(value);}},
         getBoundingClientRect(){
@@ -174,7 +174,7 @@ test('the actual scene reaches the stage bottom while names and locks avoid head
           return {left,top,right:left+w*scale,bottom:top+h*scale};
         }};
     });
-    const context = { map: { hidden:false, getBoundingClientRect:()=>({width,height}) },
+    const context = { map: { hidden:false, style:{}, getBoundingClientRect:()=>({width,height}) },
       page: { style }, plane: { style:properties,querySelectorAll:()=>labels }, scenery: { style:{} },
       document: { querySelector: selector => ({ getBoundingClientRect: () => selector.includes('header') ? {bottom:header} : {top:height-nav} }) },
       visible:()=>true, innerWidth:width, innerHeight:height, orientation, Layouts,
@@ -186,6 +186,8 @@ test('the actual scene reaches the stage bottom while names and locks avoid head
     const left = parseFloat(properties.left), top = parseFloat(properties.top);
     assert.ok(Math.abs(top+layout.height*scale-height)<.01,'the island/cloud canvas itself must end at the stage bottom, behind navigation');
     assert.equal(scale,Math.min(width/layout.width,height/layout.height),'navigation cannot shrink the artwork');
+    assert.equal(context.map.style.backgroundSize, `${layout.width*scale}px ${layout.height*scale}px`,
+      'painting and hit targets must have identical scale, including letterboxed phone and tablet layouts');
     const check = (r,label) => {
       assert.ok(left+r[0]*scale >= -.01 && top+r[1]*scale >= -.01, `${width}×${height} ${label} clipped at top/left`);
       assert.ok(left+(r[0]+r[2])*scale <= width+.01 && top+(r[1]+r[3])*scale <= height+.01, `${width}×${height} ${label} clipped at bottom/right`);

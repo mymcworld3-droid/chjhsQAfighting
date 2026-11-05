@@ -39,7 +39,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css?v=20261021-rank-ship';
+  link.href = 'styles/training-scene-map.css?v=20261105-coherent-scene';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
@@ -142,8 +142,8 @@ async function enter(place, button) {
   map.setAttribute('aria-busy', 'true');
   try {
     if (!reducedMotion()) {
-      await animate(button, [{ transform: 'scale(1)' }, { transform: 'scale(1.065)', offset: .42 },
-        { transform: 'scale(.985)', offset: .82 }, { transform: 'scale(1)' }], 230);
+      const feedback = button.querySelector('.training-place-label');
+      await animate(feedback, [{ opacity: 1 }, { opacity: .65, offset: .42 }, { opacity: 1 }], 180);
       if (!stillCurrent()) return;
       await window.playStartupCloudCurtain(() => openPlace(place), { isCurrent: stillCurrent, blockInput: true });
     } else if (stillCurrent()) openPlace(place);
@@ -160,18 +160,19 @@ function makeButton(place, layout) {
   button.className = 'training-place';
   button.dataset.trainingLocation = place.id;
   button.style.cssText = `left:${x / layout.width * 100}%;top:${y / layout.height * 100}%;width:${width / layout.width * 100}%;height:${height / layout.height * 100}%`;
-  // AI-derived alpha retains roof curls, railings and fine details. The same
-  // sprite is shared by both maps, with no hand-drawn polygon or stroke.
-  const art = document.createElement('span');
-  art.className = 'training-place-art';
-  art.style.height = `${(region.label[1] - y - layout.font * 1.06) / height * 100}%`;
-  const sprite = region.sprite;
-  for (const layer of ['aura', 'cutout']) {
+  // The five buildings already belong to the painting, including their stairs.
+  // Their buttons add hit targets and labels without a second building on top.
+  if (!region.painted) {
+    const art = document.createElement('span');
+    art.className = 'training-place-art';
+    art.style.height = `${(region.label[1] - y - layout.font * 1.06) / height * 100}%`;
+    const sprite = region.sprite;
     const svg = svgNode('svg', { viewBox: sprite.crop.join(' '), 'aria-hidden': 'true',
-      focusable: 'false', preserveAspectRatio: 'xMidYMax meet', class: `training-place-${layer}` });
+      focusable: 'false', preserveAspectRatio: 'xMidYMax meet', class: 'training-place-cutout' });
     svg.appendChild(svgNode('image', { href: sprite.image, x: 0, y: 0,
       width: sprite.width, height: sprite.height }));
     art.appendChild(svg);
+    button.appendChild(art);
   }
   const label = document.createElement('span');
   label.className = 'training-place-label';
@@ -190,7 +191,7 @@ function makeButton(place, layout) {
   lock.setAttribute('aria-hidden', 'true');
   lock.style.cssText = `left:${(region.lock[0] - x) / width * 100}%;top:${(region.lock[1] - y) / height * 100}%`;
   lock.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="10" width="16" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3M12 15v3"/></svg>';
-  button.append(art, label, lock);
+  button.append(label, lock);
   button.addEventListener('click', () => void enter(place, button));
   return button;
 }
@@ -238,9 +239,9 @@ function preloadTrainingSceneAssets(next) {
   const layout = Layouts[next];
   const safeRendering = trainingRenderProfile() === 'safe';
   const sources = new Set([
-    safeRendering ? `assets/training/cultivation-${next}-clean.webp` : layout.image,
+    layout.image,
     ...(safeRendering ? [] : layout.layers.map(layer => layer.image)),
-    ...Object.values(layout.places).map(place => place.sprite.image)
+    ...Object.values(layout.places).filter(place => !place.painted).map(place => place.sprite.image)
   ]);
   return Promise.all([...sources].map(src => {
     if (!sceneImageLoads.has(src)) {
@@ -272,7 +273,7 @@ function renderScene(next) {
   map.dataset.orientation = next;
   plane.style.setProperty('--training-map-font', `${layout.font}px`);
   const safeRendering = trainingRenderProfile() === 'safe';
-  const plate = safeRendering ? `assets/training/cultivation-${next}-clean.webp` : layout.image;
+  const plate = layout.image;
   map.style.backgroundImage = `url("${plate}")`;
   // The full-height map owns the bottom-aligned plate. Repeating it on the
   // navigation-safe terrain plane makes the image visibly end above the rail.
@@ -382,6 +383,9 @@ function fit() {
   // and navigation overlay the artwork instead of shortening the scene itself.
   const scale = Math.min(rect.width / layout.width, rect.height / layout.height);
   const left = (rect.width - layout.width * scale) / 2, offset = rect.height - layout.height * scale;
+  // Match the visible painting to the exact hit-target rectangle, including
+  // letterboxed tablet and wide-phone layouts. A cover crop would offset stairs.
+  map.style.backgroundSize = `${layout.width * scale}px ${layout.height * scale}px`;
   plane.style.width = `${layout.width}px`;
   plane.style.height = `${layout.height}px`;
   plane.style.left = `${left}px`;

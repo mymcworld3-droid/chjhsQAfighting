@@ -1,5 +1,5 @@
-// Shared AI-extracted alpha sprites retain fine roof tips, railings and ornaments.
-// Both fixed-ratio maps share their sprites, including the flying leaderboard ship.
+// Buildings, stairs and bridges stay in one painting and share one coordinate system.
+// Only the contract altar and leaderboard ship are separate scene objects.
 (function (root) {
   'use strict';
   const sprites = {
@@ -71,56 +71,19 @@
     ]
   }
 };
-  const place = (id, bounds, label, lock) => ({ bounds, label, lock, sprite: sprites[id] });
-  // The order is the depth order: each mountain silhouette occludes the cloud
-  // bank behind it. All plates share the original map's camera and coordinates.
+  const place = (id, bounds, label, lock) => ({ bounds, label, lock,
+    painted: id !== 'contract' && id !== 'rank', sprite: sprites[id] });
   const layerArt = typeof module === 'object' && module.exports
     ? require('./training-scene-layer-art.js') : root.QATrainingSceneLayerArt;
-  // Register each extracted platform to the existing building footprint. AI
-  // extraction can enlarge a silhouette even when retaining the full canvas.
-  const islandRegistration = {
-    landscape: {
-      'island-vault': [.74, [466, 340], [310, 322]],
-      'island-secret': [.9, [1338, 405], [1367, 348]],
-      'island-meditation': [.8, [860, 450], [848, 455]],
-      'island-forge': [.65, [443, 580], [310, 655]],
-      'island-status': [1.05, [1385, 709], [1375, 718]]
-    },
-    portrait: {
-      'island-vault': [.76, [338, 570], [182, 439]],
-      'island-secret': [.72, [714, 564], [775, 486]],
-      'island-meditation': [1.08, [477, 800], [487, 860]],
-      'island-forge': [.75, [276, 1126], [252, 1198]],
-      'island-status': [.76, [670, 1159], [758, 1270]]
-    }
-  };
+  // Clouds may drift over the painting; solid terrain must never move or scale
+  // independently of the buildings it supports.
   const sceneLayers = orientation => [
-    { id: 'cloud-far', kind: 'cloud', motion: 'far' },
-    { id: 'mountains-middle', kind: 'mountain' },
-    { id: 'cloud-upper', kind: 'cloud', asset: 'cloud-middle', band: 'upper', motion: 'upper' },
-    { id: 'island-vault', kind: 'island' },
-    { id: 'island-secret', kind: 'island' },
-    { id: 'cloud-middle', kind: 'cloud', band: 'middle', motion: 'middle' },
-    { id: 'island-meditation', kind: 'island' },
-    { id: 'cloud-lower', kind: 'cloud', asset: 'cloud-middle', band: 'lower', motion: 'lower' },
-    { id: 'island-forge', kind: 'island' },
-    { id: 'island-status', kind: 'island' },
+    { id: 'cloud-far', kind: 'cloud', band: 'upper', motion: 'far' },
     { id: 'cloud-near', kind: 'cloud', band: 'near', motion: 'near' }
-  ].map(layer => {
-    const art = layerArt[orientation][layer.asset || layer.id];
-    if (layer.id === 'cloud-near') {
-      const [x, y, width, height] = art.bounds;
-      return { ...layer, ...art, bounds: [x, y, width, height * 1.32] };
-    }
-    const registration = islandRegistration[orientation][layer.id];
-    if (!registration) return { ...layer, ...art };
-    const [scale, source, target] = registration, [x, y, width, height] = art.bounds;
-    return { ...layer, ...art, bounds: [target[0] + (x - source[0]) * scale,
-      target[1] + (y - source[1]) * scale, width * scale, height * scale] };
-  });
+  ].map(layer => ({ ...layer, ...layerArt[orientation][layer.id] }));
   const layouts = {
     landscape: {
-      image: 'assets/training/layers/landscape-far.webp', layers: sceneLayers('landscape'), width: 1672, height: 941, font: 28,
+      image: 'assets/training/cultivation-landscape.webp', layers: sceneLayers('landscape'), width: 1672, height: 941, font: 26,
       places: {
         meditation: place('meditation', [602,130,505,480], [845,594], [845,406]),
         vault: place('vault', [150,140,340,288], [310,389], [311,286]),
@@ -132,7 +95,7 @@
       }
     },
     portrait: {
-      image: 'assets/training/layers/portrait-far.webp', layers: sceneLayers('portrait'), width: 941, height: 1672, font: 40,
+      image: 'assets/training/cultivation-portrait.webp', layers: sceneLayers('portrait'), width: 941, height: 1672, font: 36,
       places: {
         meditation: place('meditation', [237,574,482,378], [486,936], [481,766]),
         vault: place('vault', [17,228,354,311], [198,479], [198,374]),
