@@ -40,6 +40,7 @@ const registerImmortalChallengeApi = require('./immortal-challenge-api.cjs');
 const registerMartialTrialApi = require('./martial-trial-api.cjs');
 const immortalChallenge = require('./immortal-challenge-api.cjs').__test;
 const trialTower = require('./martial-trial-api.cjs').__test;
+const trialTowerScope = require('./trial-tower-scope.cjs');
 const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameIssueApi = require('./game-issue-api.cjs');
 const registerClassroomApi = require('./classroom-api.cjs');
@@ -572,6 +573,11 @@ app.post('/api/generate-quiz', async (req, res) => {
             const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
             towerContext = {uid,db,...await trialTower.prepareQuestion(db,uid)};
             if (towerContext.pending) return res.json({towerQuestion:towerContext.pending});
+            if (towerContext.bankSource) {
+                const parsed=await trialTowerScope.bankQuestion(towerContext);
+                const question=await trialTower.commitQuestion(db,uid,towerContext,parsed);
+                return res.json({towerQuestion:question});
+            }
             subject=towerContext.subject;level=towerContext.level;rank=0;difficulty=towerContext.difficulty;
             specificTopic=towerContext.specificTopic;topic='';knowledgeMap=null;
             avoidQuestions=towerContext.history;avoidQuestionMeta=[];
@@ -604,7 +610,12 @@ app.post('/api/generate-quiz', async (req, res) => {
             return res.status(error.status||503).json({error:error.status?error.message:'閉關素養題準備失敗'});
         }
     }
-    if(req.body?.adaptiveScope){
+    if(towerMode&&towerContext.adaptiveScope){
+        try{
+            adaptiveContext=await adaptiveLearning.prepare(req,{adaptiveScope:towerContext.adaptiveScope,adaptiveConceptId:towerContext.adaptiveConceptId||''});
+            difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
+        }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
+    }else if(req.body?.adaptiveScope){
         if(quizMode&&quizMode!=='solo')return res.status(400).json({error:'背景適性學習僅用於一般問道試煉'});
         try{
             adaptiveContext=await adaptiveLearning.prepare(req);
@@ -687,6 +698,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         隨機因子：${randomSeed}
 
         只能考查指定程度內的指定科目與單元，不得超綱或擅自替換單元。
+        ${towerMode?towerContext.practiceInstruction||'':''}
 
         不得只換數字、人名、物品、地點或敘述，
         重出相同解法骨架。

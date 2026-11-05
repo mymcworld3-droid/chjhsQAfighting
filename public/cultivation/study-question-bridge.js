@@ -1,63 +1,58 @@
-// Mount the actual free-study question page in another mode. IDs, whiteboard,
-// helper and reports stay shared; mode callbacks own answer/reward settlement.
-export function createStudyQuestionBridge({render,resetWhiteboard,resetHelper,reviewHelper,userId=()=>null}) {
+// Tower questions use the actual main study page and the normal learning flow.
+// Combat answer validation stays on the server; the shared answer handler owns
+// learning footprints, explanations, corrections and ordinary study rewards.
+export function createStudyQuestionBridge({render,answer,resetWhiteboard,resetHelper,userId=()=>null,rankName=()=>'',beginSession=()=>null,endSession=()=>{},syncTools=()=>{},practiceStatus=()=>{}}) {
  let session=null;
  const $=id=>document.getElementById(id);
  function end(){
   if(!session)return;
-  resetWhiteboard({close:true});window.toggleQuizHelper?.(false);
-  const old=session;session=null;
-  old.marker.replaceWith(old.page);old.page.className=old.className;
-  for(const [node,handler,hidden,html] of old.controls){node.innerHTML=html;node.onclick=handler;node.classList.toggle('hidden',hidden);}
+  const old=session;session=null;resetWhiteboard({close:true});window.toggleQuizHelper?.(false);
+  $('study-mode-status')?.remove();
+  for(const [node,handler,html]of old.controls){node.innerHTML=html;node.onclick=handler;}
   const sameOwner=userId()===old.uid;
-  window.currentActiveQuiz=sameOwner?old.previous:null;
-  if(sameOwner&&old.previous?.data){render(old.previous.data,old.previous.rank||'',old.previous.topic||'',{study:true});}
+  endSession(old.learning,sameOwner);window.currentActiveQuiz=sameOwner?old.previous:null;
+  if(sameOwner&&old.previous?.data)render(old.previous.data,old.previous.rank||'',old.previous.badge||old.previous.topic||'',{study:true});
   else resetHelper({});
+  window.switchToPage?.(old.previousPage||'page-home',{preserveTrialTower:true});
  }
  return {
-  mount(host,question,callbacks){
+  open(question,callbacks){
    if(!session){
-    const page=$('page-quiz'),marker=document.createComment('study-question-home');
-    if(!page)throw Error('題目頁面尚未準備完成');
-    page.before(marker);
-    const ids=['btn-giveup','btn-quiz-home','btn-next-step'];
-    const back=$('feedback-section')?.querySelector('button');
-    const controls=[...ids.map($),back].filter(Boolean).map(node=>[node,node.onclick,node.classList.contains('hidden'),node.innerHTML]);
-    session={uid:userId(),page,marker,className:page.className,previous:window.currentActiveQuiz,controls,questionId:null};
+    const controls=[$('btn-next-step')].filter(Boolean).map(node=>[node,node.onclick,node.innerHTML]);
+    session={uid:userId(),previous:window.currentActiveQuiz,previousPage:document.querySelector('.page-section.active-page')?.id||'page-home',
+     controls,learning:beginSession(),questionId:null,quiz:null,reviewJob:null};
    }
-   const current=session;
-   host.append(current.page);current.page.classList.remove('hidden');current.page.classList.add('tower-study-question','active-page');
-   if(current.questionId===question.id)return;
-   current.questionId=question.id;
-   const quiz={id:question.id,mode:'trial-tower',data:{...question},topic:question.subject,
+   if(!$('page-quiz')?.classList.contains('active-page'))window.switchToPage?.('page-quiz',{preserveTrialTower:true});
+   if(session.questionId===question.id){syncTools();return;}
+   session.questionId=question.id;session.reviewJob=null;
+   const quiz={id:question.id,mode:'trial-tower',data:{...question},meta:question.meta||{},adaptive:question.adaptive||null,adaptiveHelp:question.help||0,
+    rank:rankName(),badge:`${question.recoveryOrigin?'📝 訂正練習':question.extendedPractice?'📚 延伸練習':'🎯 '+question.subject} | ${question.topic||'綜合'}`,
+    learningSubject:question.subject,learningTopic:question.practicePoint||question.topic||'本題核心觀念',learningDifficulty:question.adaptive?.difficulty||question.difficulty,
+    extendedPractice:!!question.extendedPractice,extendedPracticeSubject:question.subject,extendedPracticeKnowledgePoint:question.practicePoint||'',recoveryOrigin:question.recoveryOrigin||'',
     towerRunId:callbacks.runId,towerQuestionId:question.id,helperReviewRedacted:true,onVerifiedSkip:callbacks.onSkip};
-   window.currentActiveQuiz=quiz;
-   $('feedback-section').classList.add('hidden');
-   render(quiz.data,'試煉之塔',question.subject,{study:true,onAnswer:callbacks.onAnswer});
-   $('btn-giveup').classList.add('hidden');
-   $('btn-quiz-home').onclick=callbacks.onLeave;
-   $('btn-next-step').onclick=callbacks.onContinue;
-   const back=$('feedback-section')?.querySelector('button');if(back)back.onclick=callbacks.onLeave;
+   session.quiz=quiz;window.currentActiveQuiz=quiz;window.quizStartTime=Date.now();
+   $('feedback-section').classList.add('hidden');$('solo-progress-panel')?.classList.remove('hidden');
+   render(quiz.data,quiz.rank,quiz.badge,{study:true,onAnswer:callbacks.onAnswer});
+   $('btn-next-step').onclick=callbacks.onContinue;syncTools();
   },
-  review(review){
-   if(!session||window.currentActiveQuiz?.id!==review.questionId)return;
-   const quiz=window.currentActiveQuiz;
-   Object.assign(quiz.data,{ans:review.correctIndex,exp:review.explanation});delete quiz.helperReviewRedacted;
-   reviewHelper(review);
-   for(const [idx,button]of [...$('options-container').children].entries()){
-    button.disabled=true;button.classList.toggle('bg-green-600',idx===review.correctIndex);
-    button.classList.toggle('bg-red-600',idx===review.selectedChoice&&!review.correct);
+  review(review,onContinue){
+   if(!session||session.quiz?.id!==review.questionId)return;
+   if(!session.reviewJob){
+    const quiz=session.quiz;Object.assign(quiz.data,{ans:review.correctIndex,exp:review.explanation});
+    session.reviewJob=Promise.resolve(answer(review.selectedChoice,review.correctIndex,quiz.data.q,review.explanation));
    }
-   $('feedback-section').classList.remove('hidden');
-   $('feedback-title').textContent=review.correct?'答對，準備出手':'答錯，本回合無法出手';
-   $('feedback-icon').textContent=review.correct?'✓':'×';
-   const explanation=$('feedback-text');if(window.quizMathRichText)explanation.innerHTML=window.quizMathRichText(review.explanation||'此題暫無解析');
-   else explanation.textContent=review.explanation||'此題暫無解析';
-   void window.quizMathTypeset?.(explanation);
-   $('solo-correction-actions').replaceChildren();
-   $('btn-next-step').textContent='繼續 · 返回戰場';
-   globalThis.QAGameAudio?.answer(review.correct,'tower:'+quiz.towerRunId+':'+review.questionId);
-   $('feedback-section').scrollIntoView({block:'nearest',behavior:'smooth'});
+   // The shared answer handler binds its normal next button synchronously.
+   $('btn-next-step').onclick=onContinue;$('btn-next-step').textContent='繼續 · 返回戰場';
+  },
+  async waitForAnswer(){await session?.reviewJob;},
+  practiceStatus(questionId,status){if(session?.quiz?.id===questionId)practiceStatus(session.quiz,status);syncTools();},
+  status({busy=false,error='',retry=null,sync=null}={}){
+   if(!session)return;
+   $('study-mode-status')?.remove();if(!error)return;
+   const panel=document.createElement('section');panel.id='study-mode-status';panel.className='glass-panel p-4 rounded-xl mb-4';panel.setAttribute('role','alert');
+   const message=document.createElement('p');message.textContent=error;panel.append(message);
+   for(const [label,callback]of [['重試原操作',retry],['同步戰場',sync]])if(callback){const button=document.createElement('button');button.type='button';button.className='btn-cyber-primary px-4 py-3 rounded-lg mr-2 mt-3';button.textContent=label;button.disabled=busy;button.onclick=callback;panel.append(button);}
+   $('quiz-container').prepend(panel);
   },
   disable(value=true){if(session)for(const node of $('options-container').children)node.disabled=value;},
   end

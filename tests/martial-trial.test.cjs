@@ -102,7 +102,7 @@ test('last floor completion is bounded and no further floor can be started',asyn
 });
 test('routes require verified main-project identity and register only domain endpoints',async()=>{
  const routes=[];require('../martial-trial-api.cjs')({get:(p,h)=>routes.push([p,h]),post:(p,h)=>routes.push([p,h])});
- assert.equal(routes.length,7);assert.ok(routes.some(([p])=>p==='/api/martial-trial/turn'));
+ assert.equal(routes.length,10);assert.ok(routes.some(([p])=>p==='/api/martial-trial/turn'));
  const res={set(){},status(s){this.code=s;return this;},json(v){this.value=v;}};
  await Rules.handler('status',{resolveA:()=>{throw Error('should not resolve without bearer');},logger:{error(){}}})({get:()=>''},res);
  assert.equal(res.code,401);
@@ -228,4 +228,72 @@ test('report endpoint authenticates before resolving tower evidence and ignores 
  await handler({get:()=> 'Bearer test',body:{towerRunId:state.runId,towerQuestionId:answer.questionId,userReason:'請確認題目是否缺少條件',correctIndex:999}},res);
  assert.equal(res.data.status,'rejected');assert.equal(reviewed.correctIndex,saved(db).run.pendingQuestion.correctIndex);
  assert.equal(reviewed.question,saved(db).run.pendingQuestion.q);
+});
+
+test('changing saved scope during an active floor invalidates old questions and late generation without changing combat, build or rewards',async()=>{
+ const player=user({profile:{educationLevel:'國中一年級'},gameSettings:{sourceMode:'focused',difficulty:'hard',focusedUnits:[{path:'數學/八上',detail:'一次函數',sub_topics:['斜率']}]}});
+ const db=database(player);let state=await Rules.start(db,'u',{requestId:'scope-change-start'},NOW);
+ const oldContext=await Rules.prepareQuestion(db,'u',NOW),oldRequest=await answerBody(db,state);
+ const before=structuredClone(saved(db));
+ db.records.get('users/u').gameSettings.focusedUnits=[{path:'物理/高中二年級/自訂/物理',detail:'鉛直圓周運動',sub_topics:['最高點張力']}];
+ await assert.rejects(Rules.act(db,'u','turn',oldRequest,NOW+1000),/出題範圍已變更/);
+ await assert.rejects(Rules.commitQuestion(db,'u',oldContext,{q:'這是舊範圍的題目',correct:'A',wrong:['B','C','D'],exp:'舊解析'},NOW+1000),/出題範圍已變更/);
+ state=await Rules.status(db,'u',NOW+1000);assert.equal(state.question,null);assert.equal(state.round,0);assert.equal(state.bestFloor,0);assert.equal(state.economy.gold,0);
+ const context=await Rules.prepareQuestion(db,'u',NOW+1000);
+ assert.equal(context.subject,'物理');assert.equal(context.level,'高中二年級');assert.match(context.specificTopic,/鉛直圓周運動/);assert.match(context.specificTopic,/最高點張力/);
+ assert.deepEqual(saved(db).run.challenger,before.run.challenger);assert.deepEqual(saved(db).run.defender,before.run.defender);assert.deepEqual(saved(db).run.formation,before.run.formation);
+ const q=await Rules.commitQuestion(db,'u',context,{q:'新範圍題目條件完整嗎？',correct:'A',wrong:['B','C','D'],exp:'新範圍解析'},NOW+1000);
+ assert.equal(q.correctIndex,undefined);assert.match(q.topic,/鉛直圓周運動/);
+ assert.equal((await Rules.prepareQuestion(db,'u',NOW+2000)).pending.id,q.id);
+});
+test('old mutual-grade scope snapshots refresh automatically and bank questions stay private while allowing a finite bank to cycle',async()=>{
+ const db=database(user({profile:{educationLevel:'國小一年級'},gameSettings:{sourceMode:'focused',difficulty:'medium',focusedUnits:[{path:'地球科學/高中三年級/第二學期/地球科學',detail:'大氣與海洋'}]}}));
+ let state=await Rules.start(db,'u',{requestId:'legacy-scope-start'},NOW);delete saved(db).scopeKey;
+ saved(db).knowledgeScope={grade:1,subjects:['數學'],units:[]};saved(db).run.pendingQuestion={id:'legacy-wrong-scope',q:'不在範圍內的舊題'};
+ const expected=await Rules.prepareQuestion(db,'u',NOW);assert.equal(expected.pending,null);assert.equal(expected.subject,'地球科學');assert.equal(expected.level,'高中三年級');
+ db.records.get('users/u').gameSettings={sourceMode:'bank',source:'高中/學測/國文',difficulty:'easy'};
+ const Scope=require('../trial-tower-scope.cjs'),context=await Rules.prepareQuestion(db,'u',NOW);
+ assert.equal(context.bankSource,'高中/學測/國文');assert.equal(context.subject,'國文');
+ const parsed=await Scope.bankQuestion(context,{random:()=>0}),q=await Rules.commitQuestion(db,'u',context,parsed,NOW);
+ assert.equal(q.q,parsed.q);assert.equal(q.correctIndex,undefined);assert.equal(q.exp,undefined);
+ const request=body(state,{questionId:q.id,choice:saved(db).run.pendingQuestion.correctIndex});
+ state=await Rules.act(db,'u','turn',request,NOW+1000);assert.equal(state.lastTurn.correct,true);
+ const next=await Rules.prepareQuestion(db,'u',NOW+2000);const repeated=await Rules.commitQuestion(db,'u',next,parsed,NOW+2000);assert.equal(repeated.q,parsed.q);assert.notEqual(repeated.id,q.id);
+});
+
+test('tower study keeps adaptive metadata and hints, and queues a same-concept correction without advancing combat',async()=>{
+ const unit={path:'物理/高中二年級/自訂/物理',detail:'鉛直圓周運動',sub_topics:['最高點速率']};
+ const db=database(user({profile:{educationLevel:'國中一年級'},gameSettings:{sourceMode:'focused',difficulty:'medium',focusedUnits:[unit,{path:'數學/八上',detail:'一次函數'}]}}));
+ let state=await Rules.start(db,'u',{requestId:'adaptive-practice-start'},NOW),expected=await Rules.prepareQuestion(db,'u',NOW);
+ const adaptive={questionId:'adaptive-question-one',scopeId:'scope-one',conceptId:'concept-one',facetId:'facet-one',scope:unit,concept:'最高點速率',outline:[{id:'concept-one',name:'最高點速率',methods:[]}]};
+ const q=await Rules.commitQuestion(db,'u',expected,{q:'圓周最高點的速率如何求出？',correct:'A',wrong:['B','C','D'],exp:'依最高點的受力條件計算。',adaptive},NOW);
+ assert.deepEqual(q.adaptive,adaptive);assert.equal(q.recoveryOrigin,'');assert.equal(q.correctIndex,undefined);
+ await assert.rejects(Rules.act(db,'u','practice',body(state,{questionId:q.id,point:'最高點速率',correction:true}),NOW),/答錯後/);
+ const hint=body(state,{questionId:q.id,help:2});state=await Rules.act(db,'u','hint',hint,NOW);
+ assert.equal(state.question.help,2);assert.equal(state.round,0);assert.deepEqual(await Rules.act(db,'u','hint',hint,NOW),state);
+ state=await Rules.act(db,'u','turn',body(state,{questionId:q.id,choice:(saved(db).run.pendingQuestion.correctIndex+1)%4,help:3}),NOW+1000);
+ const before=structuredClone(saved(db).run),practice=body(state,{questionId:q.id,point:'最高點速率',correction:true});
+ state=await Rules.act(db,'u','practice',practice,NOW+2000);assert.equal(state.queuedPractice.length,1);
+ await Rules.act(db,'u','practice',practice,NOW+2000);assert.equal(saved(db).practiceQueue.length,1);
+ assert.equal(state.round,before.round);assert.deepEqual(saved(db).run.challenger,before.challenger);assert.equal(state.economy.gold,0);
+ const log=[...db.records.entries()].find(([key])=>key.startsWith('exam_logs/'))[1];assert.equal(log.assistanceLevel,3);assert.equal(log.adaptiveConceptId,'concept-one');
+ expected=await Rules.prepareQuestion(db,'u',NOW+3000);assert.equal(expected.adaptiveConceptId,'concept-one');assert.deepEqual(expected.adaptiveScope,unit);assert.equal(expected.recoveryOrigin,q.q);
+ const correction=await Rules.commitQuestion(db,'u',expected,{q:'在新情境中，最高點速率的條件為何？',correct:'A',wrong:['B','C','D'],exp:'新情境同樣使用最高點受力條件。',adaptive:{...adaptive,questionId:'adaptive-correction'}},NOW+3000);
+ assert.equal(correction.recoveryOrigin,q.q);assert.equal(correction.practicePoint,'最高點速率');assert.equal(correction.correctIndex,undefined);assert.equal(saved(db).practiceQueue.length,0);
+ assert.equal((await Rules.prepareQuestion(db,'u',NOW+4000)).pending.id,correction.id);
+});
+test('extensions continue until cancelled, corrections take priority, and cancelled generation cannot replace the current flow',async()=>{
+ const db=database();let state=await Rules.start(db,'u',{requestId:'continuous-extension-start'},NOW),request=await answerBody(db,state);
+ state=await Rules.act(db,'u','turn',{...request,choice:(request.choice+1)%4},NOW+1000);
+ const source=state.lastTurn.question,extension=body(state,{questionId:source.id,point:'同一觀念的應用',correction:false});
+ state=await Rules.act(db,'u','practice',extension,NOW+2000);
+ let expected=await Rules.prepareQuestion(db,'u',NOW+3000);
+ const issued=await Rules.commitQuestion(db,'u',expected,{q:'延伸練習第一題，何者正確？',correct:'A',wrong:['B','C','D'],exp:'說明同一觀念的應用。'},NOW+3000);
+ assert.equal(issued.extendedPractice,true);assert.ok(saved(db).activeExtension);
+ state=await Rules.act(db,'u','turn',body(state,{questionId:issued.id,choice:(saved(db).run.pendingQuestion.correctIndex+1)%4}),NOW+4000);
+ expected=await Rules.prepareQuestion(db,'u',NOW+5000);assert.equal(expected.practicePoint,'同一觀念的應用');assert.equal(expected.extendedPractice,true);
+ state=await Rules.act(db,'u','practice',body(state,{questionId:issued.id,point:'先補強原觀念',correction:true}),NOW+6000);
+ await assert.rejects(Rules.commitQuestion(db,'u',expected,{q:'較慢完成的延伸舊工作',correct:'A',wrong:['B','C','D'],exp:'舊工作'},NOW+7000),/練習順序已更新/);
+ const next=await Rules.prepareQuestion(db,'u',NOW+7000);assert.equal(next.recoveryOrigin,issued.q);assert.equal(next.practicePoint,'先補強原觀念');
+ state=await Rules.act(db,'u','cancel-practice',body(state),NOW+8000);assert.equal(state.activeExtension,null);assert.equal(state.queuedPractice.length,1);assert.equal(state.queuedPractice[0].correction,true);
 });

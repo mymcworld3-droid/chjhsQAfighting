@@ -7,13 +7,13 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
 // Single-player combat, using the server's saved build and the existing duel engine.
 (function(){
  'use strict';
- let serial=0,owner='',state=null,busy=false,error='',pending=null,returnFocus=null,notice='',rewardPage=1,phase='battle',question=null,timers=[];
+ let serial=0,owner='',state=null,busy=false,error='',pending=null,returnFocus=null,notice='',rewardPage=1,phase='battle',question=null,timers=[],questionJob=null;
  const Rewards=globalThis.QATrialTowerRewards;
  const escape=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
  const count=n=>Math.max(0,Math.round(Number(n)||0));
  const alive=id=>id===serial&&owner===getMainUser()?.uid&&!!document.getElementById('martial-trial-modal');
  const unlocked=()=>Math.max(Number(window.getCurrentUserData?.()?.stats?.totalScore)||0,Number(window.getTrainingAccessScore?.())||0)>=28;
- function loadStyle(){if(!document.getElementById('tower-duel-style')){const link=document.createElement('link');link.id='tower-duel-style';link.rel='stylesheet';link.href='styles/battle-mode-v2.css?v=20261105-shared-stage1';document.head.appendChild(link);}if(document.getElementById('martial-trial-style'))return;const link=document.createElement('link');link.id='martial-trial-style';link.rel='stylesheet';link.href='styles/martial-trial.css?v=20261105-answer-combat1';document.head.appendChild(link);}
+ function loadStyle(){if(!document.getElementById('tower-duel-style')){const link=document.createElement('link');link.id='tower-duel-style';link.rel='stylesheet';link.href='styles/battle-mode-v2.css?v=20261105-shared-stage1';document.head.appendChild(link);}if(document.getElementById('martial-trial-style'))return;const link=document.createElement('link');link.id='martial-trial-style';link.rel='stylesheet';link.href='styles/martial-trial.css?v=20261105-native-study1';document.head.appendChild(link);}
  async function request(action,body){
   const response=await authenticatedMainFetch('/api/martial-trial'+(action?'/'+action:''),body?{method:'POST',body:JSON.stringify(body)}:{});
   const result=await response.json();if(!response.ok||!result.ok)throw Object.assign(new Error(result.error||'試煉同步失敗'),{status:response.status});return result.state;
@@ -39,22 +39,23 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
  function render(){
   const root=document.getElementById('martial-trial-modal');if(!root)return;
   if(!root.querySelector('.mt-dialog')){
-   root.innerHTML=`<section class="mt-dialog" role="dialog" aria-modal="true" aria-labelledby="mt-title"><header><div><small>以學論道 · 逐層破陣</small><h2 id="mt-title" tabindex="-1">試煉之塔</h2></div><div class="mt-head-actions"><button type="button" class="mt-secondary" data-mt-modes>模式</button><button type="button" class="mt-close" data-mt-close aria-label="暫離試煉之塔">×</button></div></header><div class="mt-body"><div class="mt-messages" aria-live="polite"></div><div class="mt-content"></div><div class="mt-study-host" hidden></div></div><footer></footer></section>`;
+   root.innerHTML=`<section class="mt-dialog" role="dialog" aria-modal="true" aria-labelledby="mt-title"><header><div><small>以學論道 · 逐層破陣</small><h2 id="mt-title" tabindex="-1">試煉之塔</h2></div><div class="mt-head-actions"><button type="button" class="mt-secondary" data-mt-modes>模式</button><button type="button" class="mt-close" data-mt-close aria-label="暫離試煉之塔">×</button></div></header><div class="mt-body"><div class="mt-messages" aria-live="polite"></div><div class="mt-content"></div></div><footer></footer></section>`;
    root.querySelector('[data-mt-modes]').onclick=()=>{close();window.openWendaoModes?.();};root.querySelector('[data-mt-close]').onclick=close;
   }
-  const content=root.querySelector('.mt-content'),host=root.querySelector('.mt-study-host'),footer=root.querySelector('footer');
+  const content=root.querySelector('.mt-content'),footer=root.querySelector('footer');
   const bookOpen=!!content.querySelector('.tt-reward-book')?.open,scroll=root.querySelector('.mt-body').scrollTop;
   const active=state?.status==='active',won=['cleared','complete'].includes(state?.status),battle=!!state?.challenger&&['active','cleared','complete','defeated'].includes(state.status);
   const studying=['question','review'].includes(phase)&&!!question;
-  root.classList.toggle('mt-studying',studying);root.classList.toggle('mt-fighting',battle&&!studying);root.classList.toggle('mt-in-combat',(active||phase==='animation')&&!studying);
+  root.hidden=studying;document.body.classList.toggle('martial-trial-open',!studying);root.classList.toggle('mt-fighting',battle&&!studying);root.classList.toggle('mt-in-combat',(active||phase==='animation')&&!studying);
   root.querySelector('.mt-dialog').setAttribute('aria-busy',String(busy));
   root.querySelector('.mt-messages').innerHTML=(error?`<div class="mt-error" role="alert">${escape(error)}</div>`:'')+(notice?`<p class="tt-notice" role="status">${escape(notice)}</p>`:'');
-  content.hidden=studying;host.hidden=!studying;
+  content.hidden=studying;
   const start=count(state?.checkpoint)||1,best=count(state?.bestFloor);
   if(studying){
-   window.QAStudyQuestion.mount(host,question,{runId:state.runId,onAnswer:choice=>perform('turn',{questionId:question.id,choice}),onContinue:watchCombat,onLeave:close,onSkip:skipQuestion});
+   window.QAStudyQuestion.open(question,{runId:state.runId,onAnswer:choice=>perform('turn',{questionId:question.id,choice,help:Math.min(3,Number(window.currentActiveQuiz?.adaptiveHelp)||0)}),onContinue:watchCombat,onLeave:close,onSkip:skipQuestion});
    window.QAStudyQuestion.disable(busy||!!pending||phase==='review');
-   if(phase==='review')window.QAStudyQuestion.review(state.lastTurn);
+   if(phase==='review')window.QAStudyQuestion.review(state.lastTurn,watchCombat);
+   window.QAStudyQuestion.status({busy,error,retry:pending&&!busy?sendPending:null,sync:!busy?sync:null});
   }else{
    content.innerHTML=!state?'<p class="mt-loading" role="status">正在同步試煉紀錄…</p>':battle?`
     <div id="trial-tower-stage" class="trial-tower-battle battle-v2-page"><div class="bv2-shell">${duelArenaMarkup({prefix:'tt',maxRounds:state.maxRounds})}</div></div>
@@ -100,9 +101,10 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   if(bar)bar.style.width=Math.min(100,100*value/Math.max(1,p.maxHp))+'%';if(label)label.textContent=String(value);
  }
  function clearAnimation(){timers.forEach(clearTimeout);timers=[];document.querySelectorAll('.trial-tower-battle .ia-ability-effect').forEach(n=>n.dispose?.());}
- function watchCombat(){
+ async function watchCombat(){
   if(phase!=='review'||busy||pending)return;
-  window.QAStudyQuestion.end();phase='animation';question=null;render();paintArena(true);clearAnimation();
+  const current=serial;await window.QAStudyQuestion.waitForAnswer();if(!alive(current)||phase!=='review'||busy||pending)return;
+  phase='animation';question=null;render();paintArena(true);clearAnimation();
   const id=serial,root=document.querySelector('.trial-tower-battle'),stage=root.querySelector('.bv2-stage'),review=state.lastTurn;
   const steps=review.steps||[],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let offset=150;
@@ -130,16 +132,34 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   }
   timers.push(setTimeout(()=>{if(!alive(id))return;phase='battle';render();},offset+200));
  }
+ async function fetchQuestion(){
+  if(questionJob)return questionJob;
+  const fetcher=window.QAAdaptiveLearning?.fetchQuiz||authenticatedMainFetch;
+  const job=(async()=>{
+   const response=await fetcher('/api/generate-quiz',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({quizMode:'trial-tower'})});
+   const payload=await response.json();if(!response.ok||!payload.towerQuestion)throw Error(payload.error||'題目準備失敗');
+   return payload.towerQuestion;
+  })();questionJob=job;
+  try{return await job;}finally{if(questionJob===job)questionJob=null;}
+ }
  async function loadQuestion(){
   if(busy||pending||state?.status!=='active')return;
   if(!window.QAStudyQuestion){error='題目工具正在載入，請稍後重試。';render();return;}
   const id=serial;busy=true;error='';render();
+  try{const next=await fetchQuestion();if(!alive(id))return;question=next;phase='question';state.question=question;}
+  catch(e){if(alive(id))error=e.message||'題目準備失敗，請重試。';}
+  finally{if(alive(id)){busy=false;render();}}
+ }
+ async function prefetchPractice(questionId){
+  if(state?.status!=='active'||phase!=='review')return;
+  if(state.question?.recoveryOrigin&&state.question.recoveryOrigin===window.currentActiveQuiz?.data?.q){window.QAStudyQuestion.practiceStatus(questionId,{ready:true});return;}
+  if(!state.queuedPractice?.length&&!state.activeExtension)return;
+  const id=serial;window.QAStudyQuestion.practiceStatus(questionId,{busy:true});
   try{
-   const response=await authenticatedMainFetch('/api/generate-quiz',{method:'POST',body:JSON.stringify({quizMode:'trial-tower'})});
-   const payload=await response.json();if(!response.ok||!payload.towerQuestion)throw Error(payload.error||'題目準備失敗');
-   if(!alive(id))return;question=payload.towerQuestion;phase='question';state.question=question;
-  }catch(e){if(alive(id))error=e.message||'題目準備失敗，請重試。';}
-  finally{if(alive(id)){busy=false;render();document.querySelector('#martial-trial-modal .mt-body')?.scrollTo(0,0);}}
+   await window.QAStudyQuestion.waitForAnswer();if(!alive(id))return;
+   const next=await fetchQuestion();if(!alive(id))return;state.question=next;
+   window.QAStudyQuestion.practiceStatus(questionId,{ready:true});
+  }catch(e){if(alive(id))window.QAStudyQuestion.practiceStatus(questionId,{failed:true});}
  }
  async function skipQuestion(){
   if(phase==='review'){watchCombat();return;}
@@ -149,13 +169,13 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   if(busy||!pending)return;const id=serial,operation=pending;busy=true;error='';render();
   try{
    const next=await request(operation.action,operation.body);if(!alive(id))return;
-   state=next;applyEconomy(next.economy);pending=null;
+   state=next;if(!['practice','cancel-practice'].includes(operation.action))applyEconomy(next.economy);pending=null;
    if(operation.action==='turn'){
     question=next.lastTurn?.question;phase='review';
-   }else{window.QAStudyQuestion?.end();question=null;phase='battle';}
+   }else if(!['practice','cancel-practice'].includes(operation.action)){question=null;phase='battle';}
    if(next.awarded){notice=operation.action==='claim'?'已補領 '+next.awarded.floors.length+' 層首通獎勵':'首通獎勵已入帳';globalThis.QAGameAudio?.play('reward-chime',{key:'tower:'+owner+':'+next.claimedFloors.length});}
   }catch(e){if(!alive(id))return;error=e.status?e.message:'連線暫時未完成，可重新同步或重試原操作。';}
-  finally{if(alive(id)){busy=false;render();}}
+  finally{if(alive(id)){busy=false;render();if(['turn','practice'].includes(operation.action))void prefetchPractice(question?.id);}}
  }
  function perform(action,extra={}){
   if(busy||pending||phase==='animation')return;
@@ -166,7 +186,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
  async function sync(){
   const id=serial;if(busy)return;busy=true;error='';render();
   try{const next=await request('');if(alive(id)){
-   window.QAStudyQuestion?.end();state=next;applyEconomy(next.economy);pending=null;
+   state=next;applyEconomy(next.economy);pending=null;
    const resumable=['active','cleared','complete','defeated'].includes(next.status);
    question=resumable?(next.question||next.lastTurn?.question):null;
    phase=resumable&&next.question?'question':resumable&&next.lastTurn?.question?'review':'battle';
@@ -175,7 +195,7 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
  }
  function close(){const wasOpen=!!document.getElementById('martial-trial-modal');clearAnimation();window.QAStudyQuestion?.end();serial++;document.getElementById('martial-trial-modal')?.remove();document.body.classList.remove('martial-trial-open');pending=null;busy=false;returnFocus?.isConnected&&returnFocus.focus({preventScroll:true});if(wasOpen)window.dispatchEvent(new CustomEvent('xiuxian:battle-session-ended'));}
  function keydown(event){
-  const root=document.getElementById('martial-trial-modal');if(!root)return;
+  const root=document.getElementById('martial-trial-modal');if(!root||root.hidden)return;
   if(document.getElementById('report-modal')&&!document.getElementById('report-modal').classList.contains('hidden'))return;
   if(document.getElementById('quiz-whiteboard-panel')&&!document.getElementById('quiz-whiteboard-panel').classList.contains('hidden'))return;
   if(event.key==='Escape'){event.preventDefault();close();return;}
@@ -187,10 +207,20 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
   }
  }
  async function open(){
-  if(!getMainUser()?.uid)return;if(document.getElementById('martial-trial-modal'))close();loadStyle();returnFocus=document.activeElement;serial++;owner=getMainUser().uid;state=null;pending=null;busy=false;error='';notice='';rewardPage=1;phase='battle';question=null;
+  if(!getMainUser()?.uid)return;if(document.getElementById('martial-trial-modal'))close();loadStyle();returnFocus=document.activeElement;serial++;owner=getMainUser().uid;state=null;pending=null;busy=false;error='';notice='';rewardPage=1;phase='battle';question=null;questionJob=null;
   const root=document.createElement('div');root.id='martial-trial-modal';document.body.appendChild(root);document.body.classList.add('martial-trial-open');render();root.querySelector('#mt-title')?.focus();await sync();
  }
  function boot(){loadStyle();document.addEventListener('keydown',keydown);window.addEventListener('xiuxian:user-ready',()=>{if(owner!==getMainUser()?.uid)close();});}
+ window.persistTrialTowerStudyHint=async quiz=>{
+  if(!state||quiz.id!==question?.id||quiz.mode!=='trial-tower')return;
+  const id=serial;
+  try{const next=await request('hint',{requestId:crypto.randomUUID(),runId:state.runId,floor:state.floor,round:state.round,questionId:quiz.id,help:Math.min(3,Number(quiz.adaptiveHelp)||0)});
+   if(alive(id)&&question?.id===quiz.id&&state.round===next.round)state=next;
+  }catch(_){/* The answer request also carries the latest help count. */}
+ };
+ window.queueTrialTowerPractice=extra=>perform('practice',extra);
+ window.cancelTrialTowerPractice=()=>perform('cancel-practice');
+ window.getTrialTowerPracticeState=()=>({queued:state?.queuedPractice||[],extension:!!state?.activeExtension||!!state?.queuedPractice?.some(p=>!p.correction)});
  window.openMartialTrial=open;window.openTrialTower=open;window.closeTrialTower=close;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
