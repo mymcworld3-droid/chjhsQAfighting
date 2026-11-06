@@ -9,6 +9,34 @@ const DRIVE = 'https://www.googleapis.com/drive/v3/files';
 const UPLOAD = 'https://www.googleapis.com/upload/drive/v3/files';
 const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 
+// If set, this single bundle takes precedence over all three individual OAuth fields.
+// Base64 is transport encoding, NOT encryption. Treat the environment value as a secret.
+const OAUTH_BUNDLE_ENV = 'AI_QUESTION_BANK_GOOGLE_OAUTH_B64';
+
+function resolveOAuthCredentials(env) {
+  const bundle = String(env[OAUTH_BUNDLE_ENV] || '').trim();
+  if (!bundle) return {source:'individual',credentials:{
+    client_id: env.AI_QUESTION_BANK_GOOGLE_CLIENT_ID,
+    client_secret: env.AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET,
+    refresh_token: env.AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN
+  }};
+  try {
+    const parsed = JSON.parse(Buffer.from(bundle,'base64').toString('utf8'));
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) ||
+        !['client_id','client_secret','refresh_token'].every(
+          name => typeof parsed[name] === 'string' && parsed[name].length > 0))
+      throw Error('missing or invalid required credential fields');
+    return {source:'bundle',credentials:{
+      client_id:parsed.client_id,
+      client_secret:parsed.client_secret,
+      refresh_token:parsed.refresh_token
+    }};
+  } catch (_) {
+    return {source:'invalid-bundle',credentials:{},error:
+      'AI_QUESTION_BANK_GOOGLE_OAUTH_B64 must be Base64-encoded JSON with client_id, client_secret, refresh_token'};
+  }
+}
+
 const OAUTH_FIELDS = Object.freeze([
   'AI_QUESTION_BANK_GOOGLE_CLIENT_ID',
   'AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET',
@@ -96,17 +124,28 @@ const compatible = (entry, target) => {
 
 function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.now, logger = console} = {}) {
   const folderId = trim(env.AI_QUESTION_BANK_DRIVE_FOLDER_ID || DEFAULT_FOLDER, 160);
-  const oauth = !!(env.AI_QUESTION_BANK_GOOGLE_CLIENT_ID &&
-    env.AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET && env.AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN);
+  const resolved = resolveOAuthCredentials(env);
+  const oauthCredentials = resolved.credentials;
+  const oauth = !!(oauthCredentials.client_id &&
+    oauthCredentials.client_secret && oauthCredentials.refresh_token);
   const serviceJson = env.AI_QUESTION_BANK_SERVICE_ACCOUNT_JSON || env.FIREBASE_A_SERVICE_ACCOUNT_JSON || '';
-  const enabled = env.AI_QUESTION_BANK_ENABLED === '1' && (oauth || !!serviceJson);
+  // A malformed explicit OAuth bundle must not silently fall back to an unrelated Firebase identity.
+  const enabled = env.AI_QUESTION_BANK_ENABLED === '1' &&
+    (oauth || (resolved.source === 'individual' && !!serviceJson));
   if (env.AI_QUESTION_BANK_ENABLED === '1') {
-    const checks = oauthConfigurationChecks(env);
+    if (resolved.source === 'bundle') logger.info?.('[AI bank] OAuth source: AI_QUESTION_BANK_GOOGLE_OAUTH_B64 (three individual OAuth fields ignored)');
+    if (resolved.error) logger.warn('[AI bank] OAuth configuration: ' + resolved.error);
+    const checks = oauthConfigurationChecks({
+      AI_QUESTION_BANK_GOOGLE_CLIENT_ID:oauthCredentials.client_id,
+      AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:oauthCredentials.client_secret,
+      AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:oauthCredentials.refresh_token
+    });
     if (checks.missing.length) logger.warn('[AI bank] OAuth configuration: missing ' + checks.missing.join(', ') +
       (serviceJson ? ' (service account fallback available)' : ''));
     if (checks.issues.length) logger.warn('[AI bank] OAuth configuration: ' + checks.issues.join('; '));
-    logger.info?.('[AI bank] OAuth fields: ' + OAUTH_FIELDS.map(name =>
-      name + '=' + (String(env[name] ?? '').trim() ? 'present' : 'MISSING')).join(', '));
+    logger.info?.('[AI bank] Effective OAuth fields: ' + OAUTH_FIELDS.map((name,i) =>
+      name + '=' + (String([oauthCredentials.client_id,oauthCredentials.client_secret,
+        oauthCredentials.refresh_token][i] ?? '').trim() ? 'present' : 'MISSING')).join(', '));
     if (oauth) logger.info?.('[AI bank] Google OAuth refresh token configured (secret values hidden)');
     else if (serviceJson) logger.info?.('[AI bank] Google service-account mode configured (secret values hidden)');
     else logger.warn('[AI bank] disabled: no complete Google OAuth or service-account credentials');
@@ -125,9 +164,9 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     let form;
     if (oauth) {
       form = new URLSearchParams({
-        client_id: env.AI_QUESTION_BANK_GOOGLE_CLIENT_ID,
-        client_secret: env.AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET,
-        refresh_token: env.AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN,
+        client_id: oauthCredentials.client_id,
+        client_secret: oauthCredentials.client_secret,
+        refresh_token: oauthCredentials.refresh_token,
         grant_type: 'refresh_token'
       });
     } else {
@@ -292,4 +331,4 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
 
   return {enabled, LOW_WATER, find, publish, schedule, scopeCode, compatible};
 }
-module.exports = {createAIQuestionBank, scopeCode, fingerprint, compatible, oauthConfigurationChecks, oauthFailureHint};
+module.exports = {createAIQuestionBank, scopeCode, fingerprint, compatible, oauthConfigurationChecks, oauthFailureHint, resolveOAuthCredentials};

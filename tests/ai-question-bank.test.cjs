@@ -124,3 +124,61 @@ test('OAuth invalid_grant points to refresh token while service-account errors p
   assert.match(oauthFailureHint('invalid_client',401,'oauth'),/AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET/);
   assert.match(oauthFailureHint('invalid_grant',401,'service-account'),/SERVICE_ACCOUNT_JSON/);
 });
+
+test('single Google OAuth bundle overrides all three stale individual environment variables',async()=>{
+  const {resolveOAuthCredentials} = require('../ai-question-bank.cjs');
+  const credentials={
+    client_id:'123456-real.apps.googleusercontent.com',
+    client_secret:'new-secret-with-%+-&',
+    refresh_token:'1//fresh-secret-refresh'
+  };
+  const bundle=Buffer.from(JSON.stringify(credentials),'utf8').toString('base64');
+  const env={
+    AI_QUESTION_BANK_ENABLED:'1',
+    AI_QUESTION_BANK_GOOGLE_OAUTH_B64:bundle,
+    AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'123456-old.apps.googleusercontent.com',
+    AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:'wrong-old-client-secret',
+    AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:'wrong-old-refresh'
+  };
+  assert.equal(resolveOAuthCredentials(env).source,'bundle');
+  const infos=[],warnings=[];
+  const bank=createAIQuestionBank({
+    env,logger:{info:s=>infos.push(s),warn:s=>warnings.push(s)},
+    fetcher:async(url,opt)=>{
+      if (url.includes('oauth2.googleapis.com/token')) {
+        const form=new URLSearchParams(opt.body);
+        assert.equal(form.get('client_id'),credentials.client_id);
+        assert.equal(form.get('client_secret'),credentials.client_secret);
+        assert.equal(form.get('refresh_token'),credentials.refresh_token);
+        return {ok:true,json:async()=>({access_token:'mock-access-token',expires_in:3600})};
+      }
+      if (url.includes('www.googleapis.com/drive/v3/files?'))
+        return {ok:true,json:async()=>({files:[]})};
+      throw Error('Unexpected API request');
+    }
+  });
+  assert.equal(bank.enabled,true);
+  const x=await bank.find(target);
+  assert.equal(x.ready,true);
+  assert(infos.some(s=>s.includes('OAuth source: AI_QUESTION_BANK_GOOGLE_OAUTH_B64')));
+  assert(!JSON.stringify(infos).includes(credentials.client_secret));
+  assert(!JSON.stringify(warnings).includes(credentials.refresh_token));
+});
+
+test('invalid Google OAuth bundle safely disables bank rather than using stale fallback credentials',()=>{
+  const {resolveOAuthCredentials}=require('../ai-question-bank.cjs');
+  const env={
+    AI_QUESTION_BANK_ENABLED:'1',
+    AI_QUESTION_BANK_GOOGLE_OAUTH_B64:'not-valid-base64-json',
+    AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'123456-old.apps.googleusercontent.com',
+    AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:'old-secret',
+    AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:'old-token',
+    FIREBASE_A_SERVICE_ACCOUNT_JSON:'{}'
+  };
+  assert.equal(resolveOAuthCredentials(env).source,'invalid-bundle');
+  const warnings=[];
+  const bank=createAIQuestionBank({env,logger:{warn:s=>warnings.push(s),info:()=>{}}});
+  assert.equal(bank.enabled,false);
+  assert(warnings.some(s=>s.includes('AI_QUESTION_BANK_GOOGLE_OAUTH_B64 must be Base64-encoded JSON')));
+  assert(!JSON.stringify(warnings).includes('old-secret'));
+});
