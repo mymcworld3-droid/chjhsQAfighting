@@ -1,4 +1,3 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const aiRouter = require('./ai-router');
 const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const { QUESTION_RELIABILITY_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
@@ -348,22 +347,13 @@ function buildPrompt(text, creatorLevel, imageCount, questionAmount = 'medium') 
 }
 
 async function callGemini(provider, prompt, images) {
-  const genAI = new GoogleGenerativeAI(provider.key);
-  const model = genAI.getGenerativeModel({
-    model: provider.model,
-    generationConfig: {
-      responseMimeType: 'application/json',
-      maxOutputTokens: 16384
-    }
-  });
-  const parts = [{ text: prompt }, ...images.map((image) => ({ inlineData: { mimeType: image.mimeType, data: image.data } }))];
-  const result = await model.generateContent(parts);
-  return result.response.text();
+  // All Gemini calls, including image-to-question creation, share HIGH thinking.
+  return aiRouter.requestGeminiHigh(provider, prompt, images, { maxOutputTokens: 32768 });
 }
 
 async function callOpenAICompatible(provider, prompt, images) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 70000);
+  const timer = setTimeout(() => controller.abort(), 120000);
   try {
     const content = [
       { type: 'text', text: prompt },
@@ -397,7 +387,7 @@ async function callOpenAICompatible(provider, prompt, images) {
 }
 
 async function generateMultimodalJSON(prompt, images) {
-  if (!images.length) return aiRouter.generateJSON(prompt, { timeoutMs: 70000 });
+  if (!images.length) return aiRouter.generateJSON(prompt, { timeoutMs: 120000 });
   // Match the shared router's round-robin/random strategy instead of always using model 1.
   const providers = aiRouter.orderedProviders(aiRouter.buildProviders());
   if (!providers.length) throw new Error('No AI provider configured');
@@ -405,7 +395,7 @@ async function generateMultimodalJSON(prompt, images) {
   for (const provider of providers) {
     try {
       const raw = provider.type === 'gemini'
-        ? await aiRouter.withDeadline(callGemini(provider, prompt, images), 70000)
+        ? await aiRouter.withDeadline(callGemini(provider, prompt, images), 120000)
         : await callOpenAICompatible(provider, prompt, images);
       const text = aiRouter.extractJsonText(raw);
       const data = JSON.parse(text);
@@ -577,7 +567,7 @@ function inferIssuesFromReviewSummary(dongtian, review) {
 async function expandDongtianReviewIssues(dongtian, review) {
   if (Array.isArray(review?.issues) && review.issues.length) return review.issues;
   try {
-    const run = await aiRouter.generateJSON(buildDongtianIssueExpansionPrompt(dongtian, review), { timeoutMs: 60000 });
+    const run = await aiRouter.generateJSON(buildDongtianIssueExpansionPrompt(dongtian, review), { timeoutMs: 90000 });
     const issues = normalizeExpandedDongtianIssues(run.data, dongtian);
     if (issues.length) return issues;
   } catch (error) {
@@ -587,7 +577,7 @@ async function expandDongtianReviewIssues(dongtian, review) {
 }
 
 async function verifyGeneratedDongtian(dongtian) {
-  const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { timeoutMs: 60000 });
+  const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { timeoutMs: 90000 });
   const review = normalizeDongtianDoubleCheck(run.data);
   // Deterministic checks override optimistic AI approvals. The reviewer may
   // miss an explicit conflict or return approved=true with issues=[].
@@ -834,12 +824,12 @@ async function rewriteAndValidateQuestion(original, hint, issue, dongtian, maxAt
       const prompt = buildRevisionPrompt(original, hint, issue, dongtian) +
         (failure ? '\n[前次重寫未通過]\n' + cleanText(failure, 800) +
           '\n請重新求解並完整產生 q、correct、wrong[3]、exp；不要註記原題有錯。' : '');
-      rewrite = await aiRouter.generateJSON(prompt, { timeoutMs: 60000 });
+      rewrite = await aiRouter.generateJSON(prompt, { timeoutMs: 90000 });
       revised = normalizeStandaloneQuestion(rewrite.data, original);
       Knowledge.assertLabel(revised,original?.subject,Knowledge.labels(original,original?.subject).map(point=>point.id));
       validationRun = await aiRouter.generateJSON(
         buildRevisionValidationPrompt(original, revised, issue, hint, dongtian),
-        { timeoutMs: 60000 }
+        { timeoutMs: 90000 }
       );
       const validation = normalizeRevisionValidation(validationRun.data);
       lastValidation = validation;
@@ -1089,13 +1079,13 @@ module.exports = function registerDongtianApi(app) {
         return res.status(400).json({ error: '回報資料不完整' });
       }
 
-      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(question, reason, dongtian), { timeoutMs: 50000 });
+      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(question, reason, dongtian), { timeoutMs: 90000 });
       const review = normalizeQuestionReview(first.data);
       let verification = { confirmError: false, confidence: 0, summary: '第一階段未達複核門檻' };
       let secondProvider = null;
       let secondModel = null;
       if (review.hasError && review.confidence >= 0.65) {
-        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(question, reason, review, dongtian), { timeoutMs: 50000 });
+        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(question, reason, review, dongtian), { timeoutMs: 90000 });
         verification = normalizeReviewVerification(second.data);
         secondProvider = second.provider;
         secondModel = second.model;
@@ -1127,11 +1117,11 @@ module.exports = function registerDongtianApi(app) {
         return res.status(400).json({ error: '修改提示詞必須具體指出原題哪裡錯誤、不精確或有歧義' });
       }
 
-      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(original, hint, dongtian), { timeoutMs: 50000 });
+      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(original, hint, dongtian), { timeoutMs: 90000 });
       const review = normalizeQuestionReview(first.data);
       let verification = { confirmError: false, confidence: 0, summary: '' };
       if (review.hasError && review.confidence >= 0.65) {
-        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(original, hint, review, dongtian), { timeoutMs: 50000 });
+        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(original, hint, review, dongtian), { timeoutMs: 90000 });
         verification = normalizeReviewVerification(second.data);
       }
       const issueConfirmed = review.hasError && review.confidence >= 0.75 && verification.confirmError && verification.confidence >= 0.75;
