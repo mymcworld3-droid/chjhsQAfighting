@@ -373,7 +373,7 @@ async function generateJSON(prompt, options = {}) {
     throw Object.assign(new Error('No AI provider configured. Set GEMINI_API_KEY(S) or AI_PROVIDERS_JSON.'), { code: 'refinery-ai-config', attempts: [] });
   }
   const timeoutMs = Math.max(3000, Number(options.timeoutMs) || DEFAULT_TIMEOUT_MS);
-  const ordered = orderedProviders(providers);
+  const ordered = options.task ? providers : orderedProviders(providers);
   const errors = [];
   const attempts = [];
   let nextAttemptIndex = 0;
