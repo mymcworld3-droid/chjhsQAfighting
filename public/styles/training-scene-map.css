@@ -281,6 +281,12 @@ body.xianxia-theme #page-training.training-page-v3.active-page[data-training-pla
 body.xianxia-theme #page-training[data-training-place] > .training-subtabs-v3 { grid-row: 1; }
 body.xianxia-theme #page-training[data-training-place] > .training-scene-detailbar { grid-row: 2; }
 body.xianxia-theme #page-training[data-training-place] > #training-tab-content { grid-row: 3; }
+body.xianxia-theme #page-training[data-training-place="contract"] > .training-subtabs-v3 { display: none !important; }
+body.xianxia-theme #page-training.training-page-v3.active-page[data-training-place="contract"] {
+  grid-template-rows: auto minmax(0, 1fr) !important;
+}
+body.xianxia-theme #page-training[data-training-place="contract"] > .training-scene-detailbar { grid-row: 1; }
+body.xianxia-theme #page-training[data-training-place="contract"] > #training-tab-content { grid-row: 2; }
 body.xianxia-theme #page-training .training-subtab-v3:disabled { opacity: .45; cursor: not-allowed; }
 body.xianxia-theme #page-training .training-subtab-v3.is-locked::after { content: '🔒'; font-size: .8em; }
 /* Portrait: keep all seven destinations on one line; name the selected tab. */
