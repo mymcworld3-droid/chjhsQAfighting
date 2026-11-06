@@ -86,7 +86,7 @@ test('report prompt checks question polarity, option set and never treats the ke
   assert.equal(result.issueType,'ambiguity');
   assert.equal(prompts.length,2);
   for(const prompt of prompts){
-    assert.match(prompt,/問句/);
+    assert.match(prompt,/問法/);
     assert.match(prompt,/validIndices/);
     assert.match(prompt,/題庫標示答案索引/);
     assert.match(prompt,/玩家回報.*待查證/);
