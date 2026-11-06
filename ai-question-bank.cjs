@@ -141,7 +141,7 @@ function questionFolderSegments(target) {
     (stage === level ? '未分類年級' : level.replace(/年級/g,'').replace(/高中|高職/g,'高').replace(/國中/g,'國').replace(/國小|小學/g,'小') || '未分類年級');
   // Topics can be full syllabus paths. The final portion is the readable concept.
   const concept = topic.split(/[－—–]/).map(s=>s.trim()).filter(Boolean).at(-1) || '未分類觀念';
-  const clean = s => trim(s.replace(/[\\/\\\\\\x00-\\x1f]/g,' ').replace(/\\s+/g,' ').trim(),80) || '未分類';
+  const clean = s => trim(s.replaceAll('/', ' ').replaceAll('\\', ' ').replace(/\s+/g,' ').trim(),80) || '未分類';
   return [stage,subject || '未分類科目',grade,concept].map(clean);
 }
 
