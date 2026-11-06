@@ -2412,15 +2412,6 @@ window.saveProfile = async (triggerButton = null) => {
     return true;
 };
 
-async function switchToAI() {
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { "gameSettings.sourceMode": 'random' });
-    currentUserData.gameSettings.sourceMode = 'random';
-    const sm = document.getElementById('set-source-mode');
-    if(sm) { sm.value = 'random'; toggleSourceMode(); }
-    syncSoloQuestionCache();
-    return fetchOneQuestion(); 
-}
-
 // ==========================================
 //  出題核心 (AI / 題庫 - 支援資料夾混合)
 // ==========================================
