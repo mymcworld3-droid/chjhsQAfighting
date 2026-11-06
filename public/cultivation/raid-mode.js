@@ -473,7 +473,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
     unlockStatus.textContent = tier.minRealm + '解鎖・' + tier.minScore + ' 修為';
     unlockStatus.hidden = score() >= tier.minScore;
     card.querySelector('.raid-reward-preview b').textContent = '通關必得 元嬰碎精 ×' + tier.fragments;
-    card.querySelector('.raid-reward-preview span').textContent = tier.materialRealms.join('～') + '木鐵素材';
+    card.querySelector('.raid-reward-preview span').textContent = '二階升級石・三階升級石';
     card.querySelectorAll('[data-quick],[data-create]').forEach(button => { button.disabled = locked; });
     // Keep the picker, focus, invitation code and scroll position intact so its
     // selection can slide; a difficulty preview never fetches public rooms.
@@ -521,7 +521,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
         '<p class="raid-party-mechanic">' + escapeHtml(selected.mechanic) + '</p>' +
         '<small class="raid-unlock-status"' + (score() >= tier.minScore ? ' hidden' : '') + '>' + escapeHtml(tier.minRealm) + '解鎖・' + tier.minScore + ' 修為</small>' +
         '<div class="raid-reward-preview"><b>通關必得 元嬰碎精 ×' + tier.fragments + '</b><span>' +
-          escapeHtml(tier.materialRealms.join('～')) + '木鐵素材</span><span>二階升級石・三階升級石</span></div></div>' +
+          '二階升級石・三階升級石</span></div></div>' +
         '<div class="raid-entry-actions" role="group" aria-label="試煉組隊">' +
         '<div class="raid-difficulty-picker" role="group" aria-label="清霜試煉難度" style="--raid-selected-index:' + Object.keys(DIFFICULTY.TIERS).indexOf(tier.id) + '"><span class="raid-difficulty-selection" aria-hidden="true"></span>' +
         Object.values(DIFFICULTY.TIERS).map(function (option) {
