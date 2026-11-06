@@ -60,7 +60,7 @@ test('publishes one reviewed AI question and can reuse it without reviewing',asy
   };
   const bank=createAIQuestionBank({env:{
     AI_QUESTION_BANK_ENABLED:'1',AI_QUESTION_BANK_DRIVE_FOLDER_ID:'folder-test',
-    AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'client-test',
+    AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'123456-abcdef.apps.googleusercontent.com',
     AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:'secret-test',
     AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:'refresh-test'
   },fetcher});
@@ -74,4 +74,53 @@ test('publishes one reviewed AI question and can reuse it without reviewing',asy
   assert.equal(read.count,1);
   assert.equal(lists,1);
   assert.ok(fingerprint(question));
+});
+
+test('OAuth environment diagnostics reveal only missing or malformed names, not values',()=>{
+  const {oauthConfigurationChecks} = require('../ai-question-bank.cjs');
+  const env={
+    AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'https://console.cloud.google.com/',
+    AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:'private-client-secret ',
+    AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:''
+  };
+  const d=oauthConfigurationChecks(env);
+  assert(d.missing.includes('AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN'));
+  assert(d.issues.some(x=>x.includes('AI_QUESTION_BANK_GOOGLE_CLIENT_ID')));
+  assert(d.issues.some(x=>x.includes('AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET')));
+  assert(!JSON.stringify(d).includes('private-client-secret'));
+});
+test('OAuth HTTP 401 explains client ID/secret ambiguity but never prints Google error description',async()=>{
+  const warnings=[],infos=[];
+  const secret='DO_NOT_LEAK_CLIENT_SECRET';
+  const refresh='DO_NOT_LEAK_REFRESH_TOKEN';
+  const bank=createAIQuestionBank({
+    env:{
+      AI_QUESTION_BANK_ENABLED:'1',
+      AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'123456-abcdef.apps.googleusercontent.com',
+      AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:secret,
+      AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:refresh
+    },
+    logger:{warn:(...args)=>warnings.push(args.join(' ')),info:(...args)=>infos.push(args.join(' '))},
+    fetcher:async url=>{
+      assert(url.includes('oauth2.googleapis.com/token'));
+      return {ok:false,status:401,json:async()=>({error:'invalid_client',error_description:'secret='+secret})};
+    }
+  });
+  await assert.rejects(bank.publish(target,question,{approved:true,reason:'ok'}),err=>{
+    assert.match(err.message,/HTTP 401 \(invalid_client\)/);
+    assert.match(err.message,/AI_QUESTION_BANK_GOOGLE_CLIENT_ID/);
+    assert.match(err.message,/AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET/);
+    assert(!err.message.includes(secret));
+    assert(!err.message.includes(refresh));
+    return true;
+  });
+  assert(infos.some(s=>s.includes('GOOGLE_CLIENT_ID=present')));
+  assert(infos.every(s=>!s.includes(secret) && !s.includes(refresh)));
+  assert(warnings.every(s=>!s.includes(secret) && !s.includes(refresh)));
+});
+test('OAuth invalid_grant points to refresh token while service-account errors point to service credentials',()=>{
+  const {oauthFailureHint} = require('../ai-question-bank.cjs');
+  assert.match(oauthFailureHint('invalid_grant',400,'oauth'),/AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN/);
+  assert.match(oauthFailureHint('invalid_client',401,'oauth'),/AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET/);
+  assert.match(oauthFailureHint('invalid_grant',401,'service-account'),/SERVICE_ACCOUNT_JSON/);
 });
