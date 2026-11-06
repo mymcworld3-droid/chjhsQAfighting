@@ -39,7 +39,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css?v=20261106-no-white-outlines';
+  link.href = 'styles/training-scene-map.css?v=20261106-contract-no-tabs';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
