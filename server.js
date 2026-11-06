@@ -662,8 +662,8 @@ app.post('/api/generate-quiz', async (req, res) => {
     // Only authenticated random/focused solo practice may consume or expand the AI bank.
     // Custom JSON banks never call this path, and other game modes keep their rules.
     let aiBankAllowed = false;
-    if (aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
-        if (adaptiveContext) aiBankAllowed = true; // already authenticated/verified against focused scope
+    if (typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
+        if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
         else {
             try {
                 const bankUid = await verifyMainIdentity(req);
