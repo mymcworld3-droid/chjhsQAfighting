@@ -322,4 +322,21 @@ html body.ui-cleanup #soulbound-preview .sb-preview-art img {height:200px!import
   html body.ui-cleanup #page-training .status-stat-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
   html body.ui-cleanup #page-training .status-stat-card {padding:11px 9px}
 }
+/* The contract is a bottom-navigation destination, without the training shell.
+   Match its mounted content so every entry route uses the same full-width layout. */
+html body.ui-cleanup #page-training:not(.training-scene-map-active):has(#soulbound-page) {
+  display:block!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:none!important;
+}
+html body.ui-cleanup #page-training:has(#soulbound-page) > .training-subtabs-v3,
+html body.ui-cleanup #page-training:has(#soulbound-page) > .training-scene-detailbar {
+  display:none!important;
+}
+html body.ui-cleanup #page-training:has(#soulbound-page) > #training-tab-content {
+  grid-column:1 / -1!important;
+  grid-row:auto!important;
+  width:100%!important;
+  max-width:none!important;
+}
 @media(prefers-reduced-motion:reduce) {html body.ui-cleanup #page-training .ns-growth-map {transition:none}}
