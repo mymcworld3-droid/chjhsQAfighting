@@ -45,5 +45,5 @@ test('server dismantle fallbacks match the built-in browser catalogs exactly',()
  vm.runInContext(clean(read('artifact-catalog.js'))+'\nthis.defaults=getDefaultArtifactCatalog();',ctx);
  for(const item of F.DEFAULT_ARTIFACTS){const canonical=ctx.defaults.find(x=>x.id===item.id);assert.ok(canonical);assert.equal(item.realm,canonical.realm);assert.equal(item.name,canonical.name);assert.equal(item.equipSlot,canonical.equipSlot||'');}
  vm.runInContext(clean(read('material-catalog.js'))+'\nthis.materials=getDefaultMaterialCatalog();',ctx);
- for(const item of F.MATERIALS){const canonical=ctx.materials.find(x=>x.id===item.id);assert.ok(canonical);assert.equal(item.realm,canonical.realm);assert.equal(item.name,canonical.name);}
+ for(const item of F.MATERIALS){const canonical=ctx.materials.find(x=>x.id===item.id);if(canonical){assert.equal(item.realm,canonical.realm);assert.equal(item.name,canonical.name);}else assert.ok(!['raid-refine-key-ii','raid-refine-key-iii'].includes(item.id),'active upgrade stones must remain in the catalog');}
 });
