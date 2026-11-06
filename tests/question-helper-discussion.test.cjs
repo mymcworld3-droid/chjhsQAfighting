@@ -89,7 +89,7 @@ test('pre-answer discussion includes fallible reference, labeled options and pla
     assert.equal(data.selectedOption, '', 'a candidate claim is not a submitted option');
     assert.deepEqual(data.reference, { answer: '60 J', explanation: problem.explanation });
     assert.deepEqual(data.options, [{ label: 'A', text: '58 J' }, { label: 'B', text: '60 J' }, { label: 'C', text: '29 J' }]);
-    assert.equal(settings.timeoutMs, 25000);
+    assert.equal(settings.timeoutMs, 90000);
     assert.match(prompt, /無論是否已作答.*獨立核算/);
     assert.match(prompt, /也可以確認或更正/);
     assert.match(prompt, /不是正確性的保證/);
