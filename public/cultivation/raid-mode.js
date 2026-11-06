@@ -469,7 +469,9 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
       button.setAttribute('aria-pressed', String(active));
     });
     card.querySelector('.raid-boss-art > span').textContent = '清霜試煉・' + tier.name;
-    card.querySelector('.raid-unlock-status').textContent = tier.minRealm + '解鎖・' + tier.minScore + ' 修為';
+    const unlockStatus = card.querySelector('.raid-unlock-status');
+    unlockStatus.textContent = tier.minRealm + '解鎖・' + tier.minScore + ' 修為';
+    unlockStatus.hidden = score() >= tier.minScore;
     card.querySelector('.raid-reward-preview b').textContent = '通關必得 元嬰碎精 ×' + tier.fragments;
     card.querySelector('.raid-reward-preview span').textContent = tier.materialRealms.join('～') + '木鐵素材';
     card.querySelectorAll('[data-quick],[data-create]').forEach(button => { button.disabled = locked; });
@@ -516,9 +518,8 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
         '<div class="raid-boss-info">' +
         (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
         '<h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
-        '<p class="raid-party-summary">' + escapeHtml(selected.party) + '・' + escapeHtml(selected.recommended) + '</p>' +
         '<p class="raid-party-mechanic">' + escapeHtml(selected.mechanic) + '</p>' +
-        '<small class="raid-unlock-status">' + escapeHtml(tier.minRealm) + '解鎖・' + tier.minScore + ' 修為</small>' +
+        '<small class="raid-unlock-status"' + (score() >= tier.minScore ? ' hidden' : '') + '>' + escapeHtml(tier.minRealm) + '解鎖・' + tier.minScore + ' 修為</small>' +
         '<div class="raid-reward-preview"><b>通關必得 元嬰碎精 ×' + tier.fragments + '</b><span>' +
           escapeHtml(tier.materialRealms.join('～')) + '木鐵素材</span><span>二階升級石・三階升級石</span></div></div>' +
         '<div class="raid-entry-actions" role="group" aria-label="試煉組隊">' +
