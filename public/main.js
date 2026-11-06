@@ -101,7 +101,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-player-analytics.js',
   './cultivation/admin-artifact-manager.js',
   './cultivation/admin-artifact-delete.js',
-  './cultivation/admin-material-manager.js',
   './cultivation/admin-item-image-manager.js',
   './cultivation/admin-panel-collapsible.js',
   './cultivation/admin-realm-sorting.js',
@@ -112,7 +111,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261022-ocean-balance1';
+const XIUXIAN_FEATURE_BUILD = '20261106-forge-stones-only1';
 const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
