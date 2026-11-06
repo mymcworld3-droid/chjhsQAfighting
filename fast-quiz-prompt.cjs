@@ -26,13 +26,13 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     subjectReliabilityPrompt(subject),
     '科目='+safe(subject,40)+'；程度='+safe(level,32)+'；指定範圍='+safe(topic,180)+'；難度='+
       safe(difficulty,16)+'；段位='+Number(rank||0)+'；隨機種子='+safe(randomSeed,24),
-    '保持指定學制與難度，題目清楚而有實質理解、推理深度；勿冗長敘事。',
+    '保持指定學制與難度，禁止超綱或跨科；題目要清楚且有推理深度，勿冗長。',
     '題型='+safe(targetForm,40)+'；認知層級='+(quality.cognitive||2)+
       '；推理步數='+(quality.steps||2),
     quality.instruction ? '深度要求：'+safe(quality.instruction,300) : '',
     '獨立解題、逐項核對四個選項。只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
     Knowledge.promptFor(subject, knowledgePointId),
-    '發現錯題直接重寫 q、correct、wrong、exp，解析禁止「本題有錯」「原答案錯誤」「更正」等修訂註記。',
+    '發現錯題直接重寫 q、correct、wrong、exp；數學式用 $...$。解析不留「本題有錯」「更正」等修訂註記。',
     '最近題目：'+JSON.stringify(previous),
     '近期考點／骨架／形式：'+JSON.stringify(previousForms),
     retryIssue ? '上次失敗：'+safe(retryIssue,280)+'。完整重新生成 JSON，禁止僅在解析註記錯誤。' : '',
