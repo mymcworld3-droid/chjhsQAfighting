@@ -120,7 +120,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     $('quest-weekly-count').textContent = weeklyReadyCount ? `${weeklyReadyCount} 項待領`
       : `${weekly.filter(q=>q.claimed).length} / ${weekly.length}`;
     $('quest-note').textContent = tab === 'path'
-      ? '仙道任務依序開啟，領獎後接續下一項。觀看劇情請親自點擊，完整看完並儲存後即可領獎；已有紀錄也計入。'
+      ? '仙道任務依序開啟，領獎後接續下一項。'
       : tab === 'weekly'
         ? `本週 ${snapshot.weeklyKey} 起（台灣時間週一 00:00 重置）· 7 天累積，不需要天天登入。請於週末前領取已完成獎勵。`
         : `今日 ${snapshot.date} · 原有日常任務與隨機宗門委託；台灣時間每日 00:00 重置。`;

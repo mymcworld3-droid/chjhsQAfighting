@@ -56,11 +56,12 @@
   const PATH_DRAW_TICKETS = Object.freeze({
     'path-golden': 1, 'path-raid-one': 2, 'path-nascent': 3, 'path-raid-ten': 5, 'path-solo-hundred': 5
   });
-  const PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
+  const ALL_PATH = [{ ...storyQuest('prologue-enter-sect', '第一章 · 問道靈根', 0),
     title: '完成第一章 · 問道靈根',
     description: '準備好後，點「前往」認識青雲宗並完整觀看第一章；登入與選擇性別不會自動播放。' },
     ...LEGACY_PATH.flatMap(q => [q, ...(STORY_AFTER[q.id] || [])])]
     .map(q => ({ ...q, reward: { ...q.reward, drawTickets: PATH_DRAW_TICKETS[q.id] || 1 } }));
+  const PATH = ALL_PATH.filter(q => q.metric !== 'story');
   const DAILY = [
     quest('daily-solo-three', '溫故知新', '今日問道答對 3 題。', 'solo', 3, 40, 1, 'solo'),
     quest('daily-solo-ten', '勤學不輟', '今日問道答對 10 題。', 'solo', 10, 80, 1, 'solo'),
@@ -129,17 +130,17 @@
   function normalizeState(raw = {}, date = dateKey()) {
     const claimed = Array.isArray(raw?.pathClaimed) ? raw.pathClaimed
       : LEGACY_PATH.slice(0, number(raw?.pathIndex)).map(q => q.id);
-    const pathClaimed = PATH.filter(q => claimed.includes(q.id)).map(q => q.id);
+    const pathClaimed = ALL_PATH.filter(q => claimed.includes(q.id)).map(q => q.id);
     // The first ticket rollout stored IDs only and paid exactly one per quest.
     // Preserve that amount even when the tickets have already been spent.
     const pathTicketAmounts = {};
-    for (const q of PATH.filter(q => q.reward.drawTickets && pathClaimed.includes(q.id))) {
+    for (const q of ALL_PATH.filter(q => q.reward.drawTickets && pathClaimed.includes(q.id))) {
       const legacy = Array.isArray(raw?.pathTicketsClaimed) && raw.pathTicketsClaimed.includes(q.id) ? 1 : 0;
       const paid = Number(raw?.pathTicketAmounts?.[q.id]);
       const amount = Math.max(legacy, Number.isFinite(paid) ? number(paid) : 0);
       if (amount) pathTicketAmounts[q.id] = amount;
     }
-    const pathTicketsClaimed = PATH.filter(q => q.reward.drawTickets &&
+    const pathTicketsClaimed = ALL_PATH.filter(q => q.reward.drawTickets &&
       (pathTicketAmounts[q.id] || 0) >= q.reward.drawTickets).map(q => q.id);
     const next = PATH.findIndex(q => !pathClaimed.includes(q.id));
     return { version: 2, pathClaimed, pathTicketsClaimed, pathTicketAmounts, pathIndex: next < 0 ? PATH.length : next, dailyDate: date,
@@ -180,7 +181,7 @@
       const locked = number(user?.stats?.totalScore) < q.minScore;
       return { ...q, current, claimed, locked, complete: current >= q.target, claimable: !claimed && !locked && current >= q.target };
     }
-    return { date, pathIndex: state.pathIndex, pathCompleted: state.pathClaimed.length, pathTotal: PATH.length,
+    return { date, pathIndex: state.pathIndex, pathCompleted: PATH.filter(q => state.pathClaimed.includes(q.id)).length, pathTotal: PATH.length,
       path: state.pathIndex < PATH.length ? row(PATH[state.pathIndex], 'path') : null,
       pathTicketRewards: PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
         (state.pathTicketAmounts[q.id] || 0) < q.reward.drawTickets).map(q => ({ ...q, supplemental: true,
