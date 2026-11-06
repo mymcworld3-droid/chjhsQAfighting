@@ -44,7 +44,7 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
   const buckets = new Map();
   const inflight = new Map();
   const activity = [];
-  let bearer = '', expiresAt = 0, active = 0;
+  let bearer = '', expiresAt = 0, active = 0, unavailableUntil = 0;
   const LOW_WATER = 4;
   const CACHE_MS = 2 * 60 * 1000;
   const MAX_PER_HOUR = 24;
@@ -134,13 +134,22 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
   }
 
   async function find(target, excluded = [], isSimilar = () => false) {
-    if (!enabled) return {ready:false,question:null,count:0};
+    if (!enabled || now() < unavailableUntil) return {ready:false,question:null,count:0};
     try {
-      const items = (await readBucket(target)).filter(entry => compatible(entry, target));
+      // A cold Drive read must never make the player wait for a long Drive API
+      // timeout. Let the original live generation path proceed quickly.
+      let timeout;
+      const items = (await Promise.race([
+        readBucket(target),
+        new Promise((_, reject) => {
+          timeout = setTimeout(() => reject(Error('AI bank read deadline')), 2500);
+        })
+      ]).finally(() => clearTimeout(timeout))).filter(entry => compatible(entry, target));
       const eligible = items.filter(entry => !excluded.some(q => isSimilar(entry.question.q, q)));
       const chosen = eligible.length ? eligible[crypto.randomInt(eligible.length)] : null;
       return {ready:true,question:chosen?.question || null,count:eligible.length,total:items.length};
     } catch (error) {
+      unavailableUntil = now() + 60000;
       logger.warn('[AI bank] read unavailable:', String(error.message).slice(0,120));
       return {ready:false,question:null,count:0};
     }
