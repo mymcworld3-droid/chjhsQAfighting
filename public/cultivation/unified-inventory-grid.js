@@ -141,7 +141,7 @@ import {
         qualityRank: realmOrderByName(item?.realm || '凡人'),
         description: item?.description || '此法寶已不在目前法寶清單中。',
         effects: Array.isArray(item?.effects) ? item.effects : [],
-        refinementDepth: item ? artifactRecipeDepth(id) : 0,
+        refinementDepth: item?.simpleRefinementStage ? item.simpleRefinementStage - 1 : item ? artifactRecipeDepth(id) : 0,
         equipped: artifactEquipped(id),
         raw: item || null
       });
@@ -152,6 +152,8 @@ import {
       if (!quantity) return;
       const item = id === globalThis.QANascentGrowth.ITEM_ID ? globalThis.QANascentGrowth.ITEM : getMaterialById(id);
       if (!item) return;
+      // Existing wood and iron remain available in the dismantling dialog.
+      if (RAID_CRAFT_IDS.has(id)) return;
       out.push({
         key: `material:${id}`,
         id,
@@ -349,12 +351,12 @@ import {
       const equipAction = hasEquip && equipSlot
         ? `<button type="button" class="uib-equip-btn" data-uib-equip="${escapeHtml(item.id)}" ${!equippedHere && !canEquip ? 'disabled' : ''}>${equippedHere ? '<i class="fa-solid fa-box-archive"></i> 卸下' : '<i class="fa-solid fa-shield-halved"></i> 裝備'} · ${escapeHtml(equipSlot)}</button>`
         : '';
-      extra = `<div class="uib-detail-section"><span>法寶資訊</span>${item.raw?.weaponForm ? `<p>器型：${escapeHtml(item.raw.weaponForm)}</p>` : ''}${item.raw?.forgeMethod && item.raw.forgeMethod !== '自由發揮' ? `<p>煉器手法：${escapeHtml(item.raw.forgeMethod)}</p>` : ''}<p>二次煉製深度：${item.refinementDepth || 0}/${MAX_ARTIFACT_RECIPE_NESTING}</p>${hasEquip ? `<p>法寶戰力：<b>${itemPower.toLocaleString("zh-TW")}</b>（境界品質及裝備效果）</p>` : ""}${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>${equipSlot === '本命法寶' ? '<p>取得方式：契器台常駐靈石抽取。已持有本命法寶可投入八方煉器陣進行後續精煉。</p>' : ''}` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
+      extra = `<div class="uib-detail-section"><span>法寶資訊</span>${item.raw?.weaponForm ? `<p>器型：${escapeHtml(item.raw.weaponForm)}</p>` : ''}<p>煉製次數：${Math.min(3,(item.refinementDepth || 0)+1)} / 3</p>${hasEquip ? `<p>法寶戰力：<b>${itemPower.toLocaleString("zh-TW")}</b>（境界品質及裝備效果）</p>` : ""}${hasEquip ? `<p>裝備欄位：<b>${escapeHtml(equipSlot)}</b></p>${equipSlot === '本命法寶' ? '<p>可使用相同法器、碎片與升級石進行煉製。</p>' : ''}` : ''}${replacing ? `<p>裝備後會替換：<b>${escapeHtml(replacing.name)}</b></p>` : ''}</div><div class="uib-detail-section"><span>法寶效果</span>${item.effects.length
         ? `<ul>${item.effects.map((effect) => `<li>${escapeHtml(effectLabel(effect))}</li>`).join('')}</ul>`
         : '<p>目前沒有額外效果資料。</p>'}${equippedHere ? '<p class="uib-equipped-note"><i class="fa-solid fa-circle-check"></i> 目前已裝備，效果正在生效</p>' : ''}${equipAction}</div>`;
     } else if (item.type === 'material') {
       extra = item.nascentMaterial ? `<div class="uib-detail-section"><span>元嬰養成</span><p>用途：升級修為、攻擊、生命及金丹屬性分支；化神後亦可提升本命神通。</p><p>不可交易或煉器。可於修煉 → 元嬰／元神使用。</p><p>持有數量：<b>×${item.quantity}</b></p></div>` : item.raidKey || item.raidMaterial
-        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> ${item.raidKey ? '升級石' : '團本煉器素材'}</span><p>分類：${item.raidKey ? '煉製升級石' : '八方煉器陣素材'}</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要升級石，不佔素材格。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要升級石，不佔素材格。' : escapeHtml(item.name) + '，可直接放入八方煉器陣。'}</p><p>取得方式：素材只能由對應團本產生，但木／鐵素材可在玩家市集轉手；問道、洞天與系統商店不會產出。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
+        ? `<div class="uib-detail-section uib-raid-key-detail"><span><i class="fa-solid fa-stamp"></i> ${item.raidKey ? '升級石' : '團本煉器素材'}</span><p>分類：${item.raidKey ? '煉製升級石' : '八方煉器陣素材'}</p><p>用途：${item.id === RAID_REFINEMENT_KEYS[2] ? '第二次煉製的必要升級石。' : item.id === RAID_REFINEMENT_KEYS[3] ? '第三次煉製的必要升級石。' : escapeHtml(item.name) + '，可直接放入八方煉器陣。'}</p><p>取得方式：參與秘境試煉與挑戰試煉之塔。</p><p>持有數量：<b>×${item.quantity}</b></p></div>`
         : `<div class="uib-detail-section"><span>材料資訊</span><p>分類：${escapeHtml(item.category)}</p></div>`;
     } else if (item.id === 'revival-pill') {
       extra = `<div class="uib-detail-section"><span>使用效果</span><p>服用後立即增加 ${item.cultivationGain || 100} 修為。</p><button type="button" class="uib-use-btn" data-uib-use="revival-pill">服用一顆</button></div>`;

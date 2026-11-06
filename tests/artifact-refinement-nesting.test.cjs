@@ -151,15 +151,9 @@ test('retired material store no longer performs legacy forge transactions', () =
   assert.match(aiJobs, /delete artifactSystem\.inventory\[row\.artifactId\]/);
 });
 
-test('backpack exposes refinement depth and index preloads the new refinery styling', () => {
-  assert.match(bag, /refinementDepth: item \? artifactRecipeDepth\(id\) : 0/);
-  assert.match(bag, /二次煉製深度/);
-  const start = index.indexOf('<style id="cultivation-refinery-v2-preload-style" data-refinery-preload="true">');
-  const end = index.indexOf('</style>', start);
-  const css = index.slice(start, end);
-  assert.match(css, /refinery-artifact-ingredient/);
-  assert.match(css, /refinery-group-title/);
-  assert.match(index, /main\.js\?v=20261013-arrival1/);
+test('backpack exposes the actual refinement stage', () => {
+  assert.match(bag, /item\?\.simpleRefinementStage/);
+  assert.match(bag, /煉製次數/);
 });
 
 test('owned refinery ingredients use deterministic realm then name ordering', () => {

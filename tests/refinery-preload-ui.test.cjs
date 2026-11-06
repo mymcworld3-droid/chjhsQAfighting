@@ -21,23 +21,17 @@ test('held refinery materials use adaptive square grids inside independent scrol
   assert.match(refinery, /@media\(max-width:430px\)\{\.refinery-material-list\{gap:7px\}\.refinery-material-roll\{padding:5px\}\.refinery-material-roll-body\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
 });
 
-test('training page creates refinery tab and a complete stable shell up front', () => {
+test('training page creates refinery tab and a loading shell up front', () => {
   assert.match(training, /data-training-tab="refinery"/);
   assert.match(training, /training-shared-shells\.js/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /function refineryShellMarkup\(\)/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-material-grid/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-slots refinery-shell-array/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-array-center/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-summary/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-match/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-actions/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /正在載入法器、碎片與升級石/);
   assert.match(training, /xiuxian:refinery-open-request/);
 });
 
 test('foundation training also preloads the refinery tab and shell', () => {
   assert.match(foundation, /data-training-tab="refinery"/);
   assert.match(foundation, /training-shared-shells\.js/);
-  assert.match(read('public/cultivation/training-shared-shells.js'), /refinery-shell-material-grid/);
+  assert.match(read('public/cultivation/training-shared-shells.js'), /法器煉製/);
   assert.match(foundation, /xiuxian:refinery-open-request/);
 });
 
@@ -55,25 +49,19 @@ test('refinery hydrates an already-active preloaded tab', () => {
   assert.match(refinery, /if \(tabActive\(page\)\) \{\s*active = true;\s*render\(\);/);
 });
 
-test('stable shell is created early while hydrated modules keep safe dependency order', () => {
+test('simple forge loads after inventory and before layout', () => {
   const trainingPos = main.indexOf("'./cultivation/cultivation-training-v4.js'");
-  const materialPos = main.indexOf("'./cultivation/material-system.js'");
   const bagPos = main.indexOf("'./cultivation/unified-inventory-grid.js'");
-  const refineryPos = main.indexOf("'./cultivation/cultivation-refinery-v2.js'");
+  const forgePos = main.indexOf("'./cultivation/simple-forge.js'");
   const layoutPos = main.indexOf("'./cultivation/training-fluid-layout.js'");
-  const battlePos = main.indexOf("'./cultivation/battle-v3-stability-ui.js'");
-  assert.ok(trainingPos >= 0 && materialPos > trainingPos);
-  assert.ok(bagPos > materialPos && refineryPos > bagPos);
-  assert.ok(layoutPos > refineryPos && battlePos > layoutPos);
+  assert.ok(trainingPos >= 0 && bagPos > trainingPos && forgePos > bagPos && layoutPos > forgePos);
 });
 
-test('preloaded refinery follows the same three steps with optional settings closed', () => {
+test('preloaded refinery does not promise obsolete material crafting', () => {
   const shell=read('public/cultivation/training-shared-shells.js');
-  assert.match(shell, /cultivation-refinery refinery-simple refinery-shell/);
-  assert.ok(shell.indexOf('選本命法器') < shell.indexOf('加入材料'));
-  assert.ok(shell.indexOf('加入材料') < shell.indexOf('本命法器精煉'));
-  assert.match(shell, /<details class="refinery-advanced">/);
-  assert.match(read('public/index.html'), /styles\/refinery-simple\.css/);
+  assert.match(shell, /法器煉製/);
+  assert.match(shell, /升級石/);
+  assert.doesNotMatch(shell, /加入材料|配方/);
 });
 
 

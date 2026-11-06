@@ -447,10 +447,10 @@ test('admin keeps newest pending AI artifacts above approved realm-sorted artifa
   assert.match(adminSort, /generatedAtMs/);
 });
 
-test('AI refinery job module loads before refinery UI', () => {
-  const jobs = main.indexOf("'./cultivation/refinery-ai-jobs.js'");
-  const ui = main.indexOf("'./cultivation/cultivation-refinery-v2.js'");
-  assert.ok(jobs >= 0 && ui > jobs);
+test('new forge replaces AI refinery modules', () => {
+  assert.match(main, /cultivation\/simple-forge\.js/);
+  assert.doesNotMatch(main, /cultivation\/refinery-ai-jobs\.js/);
+  assert.doesNotMatch(main, /cultivation\/cultivation-refinery-v2\.js/);
 });
 
 

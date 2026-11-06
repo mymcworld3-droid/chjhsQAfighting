@@ -46,9 +46,7 @@ test('retrying discovery after a successful AI response reuses that response and
   assert.doesNotMatch(ui, /人工智慧/);
 });
 
-test('new build query forces updated refinery code without altering module order', () => {
-  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20261022-ocean-balance1'/);
-  assert.match(index, /main\.js\?v=20261013-arrival1/);
-  assert.ok(main.indexOf("'./cultivation/refinery-ai-jobs.js'") <
-    main.indexOf("'./cultivation/cultivation-refinery-v2.js'"));
+test('simple forge replaces the old generation modules', () => {
+  assert.match(main, /cultivation\/simple-forge\.js/);
+  assert.doesNotMatch(main, /cultivation\/refinery-ai-jobs\.js/);
 });

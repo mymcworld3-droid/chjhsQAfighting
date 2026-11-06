@@ -43,17 +43,13 @@ test('octagonal forge keeps existing functional hooks', () => {
   assert.match(refinery, /querySelector\('\[data-refinery-craft\]'\)\?\.addEventListener\('click', craft\)/);
 });
 
-test('Golden Core and Foundation preload the same octagonal forge shell', () => {
+test('both training stages preload the simplified forge shell', () => {
   assert.match(training,/training-shared-shells\.js/);
   assert.match(foundation,/training-shared-shells\.js/);
-  for (const source of [read('public/cultivation/training-shared-shells.js')]) {
-    assert.match(source, /refinery-array-wrap/);
-    assert.match(source, /refinery-slots refinery-shell-array/);
-    assert.match(source, /refinery-array-center/);
-    assert.match(source, /fa-fire-flame-curved/);
-    assert.match(source, /八方聚靈 · 一器成形/);
-    assert.doesNotMatch(source, /refinery-shell-slots/);
-  }
+  const source=read('public/cultivation/training-shared-shells.js');
+  assert.match(source,/法器煉製/);
+  assert.match(source,/正在載入法器、碎片與升級石/);
+  assert.doesNotMatch(source,/加入材料/);
 });
 
 test('preloaded index contains octagonal refinery CSS before hydration', () => {
