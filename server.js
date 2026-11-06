@@ -252,7 +252,7 @@ ${JSON.stringify(context)}
 {"answer":"你的回答","knowledgePoint":"核心知識點","checkStatus":"valid|issue|uncertain","questionIssue":{"confirmed":false,"confidence":0.0,"reason":"具體錯誤依據，無確定錯誤則留空"}}
 `;
 
-        const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 25000 });
+        const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 90000 });
         let answer = String(routed.data?.answer || '').trim();
         if (!answer && !checkOnly) throw new Error('AI 未回傳有效回答');
         const fallbackPoint = userMessage.replace(/[？?！!。,.，]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);
@@ -872,7 +872,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                     '只回傳 JSON {"approved":false,"validIndices":[0],"reason":"繁體中文簡短、具體且可驗證的理由"}；不可把示例的值當成答案。'
                 ].join('\n');
                 const checked = await aiRouter.generateJSON(reviewPrompt, {
-                    parallel:false,timeoutMs:15000,
+                    parallel:false,timeoutMs:90000,
                     validate:data=>{
                         if (typeof data?.approved !== 'boolean' || typeof data?.reason !== 'string' ||
                             !Array.isArray(data?.validIndices) || !data.validIndices.every(x=>Number.isInteger(x)&&x>=0&&x<4) ||
@@ -900,7 +900,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                     if (bankResult.count < aiQuestionBank.LOW_WATER) {
                         aiQuestionBank.schedule(bankTarget, async ()=>{
                             const more = await aiRouter.generateJSON(promptForTask(0), {
-                                parallel:false,timeoutMs:20000,
+                                parallel:false,timeoutMs:90000,
                                 validate:(data)=>{
                                     validateCandidate(data);
                                     taskPlan.validate(data,0);
@@ -926,7 +926,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             // TeX, quality, answer consistency, and duplicate validation below.
             const saved = attempts === 0 ? (adaptiveContext?quizSparePool.takeMatching(spareKey,validateCandidate,data=>adaptiveContext.decision.targets.findIndex(f=>f.id===data.adaptive_facet_id&&f.difficulty===data.adaptive_difficulty)):quizSparePool.take(spareKey, validateCandidate)) : null;
             const routed = saved || await aiRouter.generateJSON(prompt, {
-                ...(combatFastMode ? { timeoutMs: 16000 } : {}),
+                ...(combatFastMode ? { timeoutMs: 90000 } : {}),
                 parallel: true,
                 validate: (parsed, context = {index:0}) => {
                     validateCandidate(parsed);
