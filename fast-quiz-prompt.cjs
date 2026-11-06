@@ -32,7 +32,7 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     quality.instruction ? '深度要求：'+safe(quality.instruction,300) : '',
     '獨立解題、逐項核對四個選項。只能一個正解，三個錯誤選項不可與正解等價或互相同義。',
     Knowledge.promptFor(subject, knowledgePointId),
-    '發現錯題直接重寫 q、correct、wrong、exp；數學式用 $...$。解析不留「本題有錯」「更正」等修訂註記。',
+    '發現錯題直接重寫 q、correct、wrong、exp；數學式用 $...$。解析不留「本題有錯」「答案錯誤」「更正」等修訂註記。',
     '最近題目：'+JSON.stringify(previous),
     '近期考點／骨架／形式：'+JSON.stringify(previousForms),
     retryIssue ? '上次失敗：'+safe(retryIssue,280)+'。完整重新生成 JSON，禁止僅在解析註記錯誤。' : '',
