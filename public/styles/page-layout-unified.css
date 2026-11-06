@@ -1,5 +1,11 @@
 /* Shared spacing for the main app screens. Scoped to the visible app theme so
    battle overlays and the sign-in screen retain their own viewport geometry. */
+/* Navigation owns page visibility. Layered !important declarations outrank
+   unlayered theme/layout overrides, even when their selectors include IDs. */
+@layer page-visibility {
+  .page-section.hidden { display: none !important; }
+}
+
 body.xianxia-theme main { min-width: 0; }
 body.xianxia-theme:has(#login-screen:not(.hidden)) main { padding-bottom: 0; }
 body.xianxia-theme #login-screen:not(.hidden) { min-height: calc(100dvh - 92px); }

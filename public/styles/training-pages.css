@@ -322,9 +322,9 @@ html body.ui-cleanup #soulbound-preview .sb-preview-art img {height:200px!import
   html body.ui-cleanup #page-training .status-stat-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
   html body.ui-cleanup #page-training .status-stat-card {padding:11px 9px}
 }
-/* The contract is a bottom-navigation destination, without the training shell.
-   Match its mounted content so every entry route uses the same full-width layout. */
-html body.ui-cleanup #page-training:not(.training-scene-map-active):has(#soulbound-page) {
+/* The contract keeps its DOM when leaving the page. Only the active contract
+   may override the training shell with this full-width layout. */
+html body.ui-cleanup #page-training.active-page:not(.hidden):not(.training-scene-map-active):has(#soulbound-page) {
   display:block!important;
   grid-template-columns:minmax(0,1fr)!important;
   grid-template-rows:none!important;
