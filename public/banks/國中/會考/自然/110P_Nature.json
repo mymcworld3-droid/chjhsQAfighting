@@ -1,0 +1,1717 @@
+[
+  {
+    "id": "cap-110-science-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-110-science/Q1-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第1題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 1,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q1-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-110-science/Q2-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第2題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 2,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q2-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q3",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-110-science/Q3-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第3題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 3,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q3-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q4",
+    "difficulty": "easy",
+    "q": "阿華分別進入甲和乙兩種環境，在甲環境中肌肉出現顫抖的現象，而在乙環境\n  中皮膚表面的血管擴張、血液量增加。若僅以調節體溫恆定的正常反應判\n  斷，則下列有關甲、乙環境溫度及阿華體溫的比較，何者可能成立？",
+    "correct": "乙環境溫度＞體溫＞甲環境溫度",
+    "wrong": [
+      "甲環境溫度＞乙環境溫度＞體溫",
+      "甲環境溫度＞體溫＞乙環境溫度",
+      "乙環境溫度＞甲環境溫度＞體溫"
+    ],
+    "exp": "正確答案：乙環境溫度＞體溫＞甲環境溫度。來源：110年國中教育會考自然第4題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 4,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q5",
+    "difficulty": "medium",
+    "q": "死海是位於以色列和約旦邊界的湖泊，因湖水的蒸發量大於由河水和降雨的補充\n  量，所以死海的鹽分濃度逐漸升高。目前每公升湖水含有340公克的鹽，約為一\n  般海水的10倍，且每公升湖水重達1.24公斤，因此人可以浮在死海的水面上。為\n  解決湖水日益乾涸的問題，周邊國家正積極研擬搶救……。依據上述資訊，可以\n  計算得知目前死海的下列何項資訊？",
+    "correct": "鹽分的重量百分濃度\n\n                                  1",
+    "wrong": [
+      "湖水的總質量",
+      "每年的水分蒸發量",
+      "含有鹽分的總質量"
+    ],
+    "exp": "正確答案：鹽分的重量百分濃度\n\n                                  1。來源：110年國中教育會考自然第5題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 5,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q6",
+    "difficulty": "medium",
+    "q": "小雨想替盛開的百合花進行人工授粉，則他需將百合花的花粉沾至下列哪一構造？",
+    "correct": "柱頭",
+    "wrong": [
+      "花藥",
+      "花絲",
+      "子房"
+    ],
+    "exp": "正確答案：柱頭。來源：110年國中教育會考自然第6題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 6,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q7",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-110-science/Q7-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第7題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 7,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q7-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q8",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-110-science/Q8-question-1.png)\n\n![第8題原卷資料](/assets/banks/cap-110-science/Q8-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第8題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 8,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q8-question-1.png",
+      "/assets/banks/cap-110-science/Q8-question-2.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q9",
+    "difficulty": "medium",
+    "q": "以白光照射一張單色圖卡，圖卡反射紅光，吸收其他顏色的光。若改以藍光照射\n  此圖卡，則關於此時圖卡上的色光吸收或反射情形，下列何者最有可能發生？",
+    "correct": "吸收藍光",
+    "wrong": [
+      "吸收紅光",
+      "反射綠光",
+      "反射藍光"
+    ],
+    "exp": "正確答案：吸收藍光。來源：110年國中教育會考自然第9題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 9,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q10",
+    "difficulty": "medium",
+    "q": "下列為四本書的書名，每本書的書名分別顯示出所要介紹的內容，書中會列舉一\n  些植物詳細說明其特徵，則哪一本書最不可能以蘇鐵作為這些植物的主要例子？",
+    "correct": "《花朵圖鑑》",
+    "wrong": [
+      "《種子的傳播》",
+      "《毬果構造解析》",
+      "《維管束植物簡介》"
+    ],
+    "exp": "正確答案：《花朵圖鑑》。來源：110年國中教育會考自然第10題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 10,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q11",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-110-science/Q11-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第11題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 11,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q11-question.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-110-science/Q12-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第12題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 12,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q12-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q13",
+    "difficulty": "medium",
+    "q": "小新專題研究的題目是「日常生活的食物  油條」，他在報告中提到：\n  「部分業者使用碳酸氫銨(NH4HCO3)做為食品膨鬆劑，在高溫油炸的過程\n  中，碳酸氫銨會分解產生三種氣體，使緊實的麵糰迅速膨脹成膨鬆的油\n  條。」上述產生的三種氣體中，不可能含有下列何者？",
+    "correct": "氯化氫",
+    "wrong": [
+      "氨氣",
+      "水蒸氣",
+      "二氧化碳\n\n                                  3"
+    ],
+    "exp": "正確答案：氯化氫。來源：110年國中教育會考自然第13題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 13,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q14",
+    "difficulty": "medium",
+    "q": "美美到日月潭附近露營，看見甲、乙兩星正好在頭頂上方的位置；4小時後，\n  美美再度觀察，發現甲、乙兩星已經不在原先的位置。若美美想再次找到\n  甲、乙兩星，尋找的方式與其主要理由應為下列何者？",
+    "correct": "應朝西方天空尋找，因為地球自轉的關係",
+    "wrong": [
+      "應朝東方天空尋找，因為地球自轉的關係",
+      "應朝西方天空尋找，因為地球繞太陽公轉的關係",
+      "應朝東方天空尋找，因為地球繞太陽公轉的關係"
+    ],
+    "exp": "正確答案：應朝西方天空尋找，因為地球自轉的關係。來源：110年國中教育會考自然第14題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 14,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-110-science/Q15-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第15題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 15,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q15-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-110-science/Q16-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第16題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 16,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q16-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-110-science/Q17-question-1.png)\n\n![第17題原卷資料](/assets/banks/cap-110-science/Q17-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第17題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 17,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q17-question-1.png",
+      "/assets/banks/cap-110-science/Q17-question-2.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-110-science/Q18-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第18題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 18,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q18-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-110-science/Q19-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第19題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 19,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q19-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-110-science/Q20-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第20題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 20,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q20-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q21",
+    "difficulty": "medium",
+    "q": "下列分別為阿牧和小菲兩人將鋰、氦、氬、鉀、鈉和氖共六種元素分類的說明：\n  阿牧：依照常溫常壓下元素是否為固態進行分類。\n  小菲：依照是否會和水反應並冒泡進行分類。\n  兩人最終都是將鋰、鉀和鈉分成一類，氦、氬和氖分成另一類。關於兩人分類\n  的說明，下列何者正確？",
+    "correct": "只有小菲是依化學性質分類\n\n                                  5",
+    "wrong": [
+      "兩人都是依物理性質分類",
+      "兩人都是依化學性質分類",
+      "只有阿牧是依化學性質分類"
+    ],
+    "exp": "正確答案：只有小菲是依化學性質分類\n\n                                  5。來源：110年國中教育會考自然第21題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 21,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-110-science/Q22-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第22題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 22,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q22-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q23",
+    "difficulty": "medium",
+    "q": "柴油引擎排放的廢氣含有較多的氮氧化物(NOX)，若能加入氨氣與柴油引擎產生\n  的氮氧化物反應，則可減少排放廢氣造成的空氣汙染。氨氣與氮氧化物的反應\n  中，速率最快的反應為：\n   NO + NO2 + 2 NH3              2 N2 + 3 H2O\n  已知柴油引擎排放的廢氣中，NO所占比例約為NO2的9倍。若欲藉由上述反應\n  消耗大部分的氮氧化物，需使用觸媒轉化器調整反應前氮氧化物的比例，下列\n  何種觸媒轉化器的設計最合理？",
+    "correct": "將NO氧化成NO2，以提高NO2的比例",
+    "wrong": [
+      "將NO2氧化成NO，以提高NO的比例",
+      "將NO2還原成NO，以提高NO的比例",
+      "將NO還原成NO2，以提高NO2的比例"
+    ],
+    "exp": "正確答案：將NO氧化成NO2，以提高NO2的比例。來源：110年國中教育會考自然第23題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 23,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-110-science/Q24-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第24題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 24,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q24-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-110-science/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-110-science/Q25-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第25題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 25,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q25-question-1.png",
+      "/assets/banks/cap-110-science/Q25-question-2.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-110-science/Q26-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第26題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 26,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q26-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-110-science/Q27-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第27題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 27,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q27-question.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-110-science/Q28-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第28題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 28,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q28-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-110-science/Q29-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第29題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 29,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q29-question.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q30",
+    "difficulty": "medium",
+    "q": "鐵原子(Fe)、鐵離子(Fe3+)和亞鐵離子(Fe2+)三種粒子中，下列數值的比較何者正確？",
+    "correct": "Fe2+的電子數＞Fe3+的電子數\n\n                                  7",
+    "wrong": [
+      "Fe3+的質子數＞Fe的電子數",
+      "Fe3+的電子數＞Fe的質子數",
+      "Fe2+的電子數＞Fe的電子數"
+    ],
+    "exp": "正確答案：Fe2+的電子數＞Fe3+的電子數\n\n                                  7。來源：110年國中教育會考自然第30題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 30,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-110-science/Q31-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第31題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 31,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q31-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-110-science/Q32-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第32題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 32,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q32-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-110-science/Q33-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第33題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 33,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q33-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-110-science/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-110-science/Q34-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第34題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 34,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q34-question-1.png",
+      "/assets/banks/cap-110-science/Q34-question-2.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-110-science/Q35-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第35題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 35,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q35-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-110-science/Q36-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第36題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 36,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q36-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q37",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-110-science/Q37-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第37題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 37,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q37-question.png"
+    ],
+    "passRate": 0.31,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-110-science/Q38-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第38題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 38,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q38-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-110-science/Q39-question-1.png)\n\n![第39題原卷資料](/assets/banks/cap-110-science/Q39-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第39題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 39,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q39-question-1.png",
+      "/assets/banks/cap-110-science/Q39-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-science-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-110-science/Q40-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第40題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 40,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q40-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q41",
+    "difficulty": "hard",
+    "q": "乙酸異丁酯是存在於哈密瓜等水果中，具果香味的化合物。乙酸異丁酯可由\n  乙酸和異丁醇經濃硫酸脫水的反應而產生，為一種酯化反應，已知此反應的\n  化學反應式中，各反應物和生成物的係數均為1，且乙酸、異丁醇、硫酸和水\n  的分子量依序為60、74、98和18，則乙酸異丁酯的分子量應為下列何者？",
+    "correct": "116",
+    "wrong": [
+      "134",
+      "214",
+      "232"
+    ],
+    "exp": "正確答案：116。來源：110年國中教育會考自然第41題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 41,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.3,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q42",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-110-science/Q42-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第42題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 42,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q42-question.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q43",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-110-science/Q43-question-1.png)\n\n![第43題原卷資料](/assets/banks/cap-110-science/Q43-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第43題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 43,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q43-question-1.png",
+      "/assets/banks/cap-110-science/Q43-question-2.png"
+    ],
+    "passRate": 0.29,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q44",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-110-science/Q44-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第44題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 44,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q44-question.png"
+    ],
+    "passRate": 0.36,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q45",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-110-science/Q45-question-1.png)\n\n![第45題原卷資料](/assets/banks/cap-110-science/Q45-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第45題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 45,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/Q45-question-1.png",
+      "/assets/banks/cap-110-science/Q45-question-2.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q46",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-110-science/G46-47-context.png)\n\n![第46題原卷資料](/assets/banks/cap-110-science/Q46-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第46題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 46,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        47
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G46-47-context.png",
+      "/assets/banks/cap-110-science/Q46-question.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q47",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-110-science/G46-47-context.png)\n\n![第47題原卷資料](/assets/banks/cap-110-science/Q47-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考自然第47題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 47,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        47
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G46-47-context.png",
+      "/assets/banks/cap-110-science/Q47-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-110-science/G48-49-context.png)\n\n![第48題原卷資料](/assets/banks/cap-110-science/Q48-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第48題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 48,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        48,
+        49
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G48-49-context.png",
+      "/assets/banks/cap-110-science/Q48-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q49",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-110-science/G48-49-context.png)\n\n![第49題原卷資料](/assets/banks/cap-110-science/Q49-question-1.png)\n\n![第49題原卷資料](/assets/banks/cap-110-science/Q49-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第49題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 49,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        48,
+        49
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G48-49-context.png",
+      "/assets/banks/cap-110-science/Q49-question-1.png",
+      "/assets/banks/cap-110-science/Q49-question-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-110-science/G50-51-context.png)\n\n![第50題原卷資料](/assets/banks/cap-110-science/Q50-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考自然第50題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 50,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        50,
+        51
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G50-51-context.png",
+      "/assets/banks/cap-110-science/Q50-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q51",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 51 題。\n\n![第51題原卷資料](/assets/banks/cap-110-science/G50-51-context.png)\n\n![第51題原卷資料](/assets/banks/cap-110-science/Q51-question-1.png)\n\n![第51題原卷資料](/assets/banks/cap-110-science/Q51-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第51題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 51,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        50,
+        51
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G50-51-context.png",
+      "/assets/banks/cap-110-science/Q51-question-1.png",
+      "/assets/banks/cap-110-science/Q51-question-2.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q52",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/cap-110-science/G52-54-context.png)\n\n![第52題原卷資料](/assets/banks/cap-110-science/Q52-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第52題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 52,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        52,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G52-54-context.png",
+      "/assets/banks/cap-110-science/Q52-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q53",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/cap-110-science/G52-54-context.png)\n\n![第53題原卷資料](/assets/banks/cap-110-science/Q53-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考自然第53題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 53,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        52,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G52-54-context.png",
+      "/assets/banks/cap-110-science/Q53-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-science-q54",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/cap-110-science/G52-54-context.png)\n\n![第54題原卷資料](/assets/banks/cap-110-science/Q54-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考自然第54題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-110-science",
+      "question": 54,
+      "file": "國中/會考/自然/110P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        52,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-science/G52-54-context.png",
+      "/assets/banks/cap-110-science/Q54-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  }
+]

@@ -1,0 +1,1107 @@
+[
+  {
+    "id": "gsat-110-chinese-q1",
+    "difficulty": "easy",
+    "q": "下列「」內的字，讀音前後相同的是：",
+    "correct": "「阡」陌交通／惹禍招「愆」",
+    "wrong": [
+      "「賚」賞諸徒／「齎」志以歿",
+      "「餔」糟歠釃／「仆」地哭號",
+      "「矜」寡孤獨／罪無可「逭」"
+    ],
+    "exp": "正確答案：「阡」陌交通／惹禍招「愆」。來源：110年學科能力測驗國文第1題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 1,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q2",
+    "difficulty": "easy",
+    "q": "下列文句，完全沒有錯別字的是：",
+    "correct": "集中營裡的迫害手段聳人聽聞，諸多相關照片更是令人不忍卒睹",
+    "wrong": [
+      "這齣動畫電影劇情緊湊，妙趣恆生，締造本年度最高的票房紀錄",
+      "李老師為學校架設的圖書網站正式起用，校方特頒獎狀以致謝忱",
+      "大家對聚餐地點莫衷一是，經投票後，決定到牛排餐廳大塊朵頤"
+    ],
+    "exp": "正確答案：集中營裡的迫害手段聳人聽聞，諸多相關照片更是令人不忍卒睹。來源：110年學科能力測驗國文第2題。",
+    "subject": "國文",
+    "sub_topic": "字形辨正",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 2,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q3",
+    "difficulty": "easy",
+    "q": "依據文意，甲、乙、丙、丁、戊排列順序最適當的是：\n 牠哭起來固然一片悽慄，\n 甲、這時貓頭鷹「嘿嘿──嘿嘿──嘿嘿──嘿嘿」一波又一波的笑聲\n 乙、特別入秋以後，夜涼如水丙、一輪明月把人幾乎拋入冰河之中\n 丁、尖冷到直直地透進人的骨髓戊、笑起來更帶給人無限尖冷\n 就老吏斷獄那樣地凌遲著整個世間，讓每一個人的再多麼神祕的隱私都沒有地方\n 隱遁起來。（尉天驄〈眾鳥之什〉）",
+    "correct": "戊丁乙丙甲",
+    "wrong": [
+      "乙甲丁戊丙",
+      "乙丙甲戊丁",
+      "戊乙丁甲丙"
+    ],
+    "exp": "正確答案：戊丁乙丙甲。來源：110年學科能力測驗國文第3題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 3,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q4",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-110-chinese/Q4-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗國文第4題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 4,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/Q4-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q5",
+    "difficulty": "easy",
+    "q": "關於下文意象，說明最適當的是：\n    在每一個烈陽如漿的白日裡，祖母在田畝中佝僂耕種。在每一節翻土、播種、\n 除草、施肥的動作間，揮汗如雨。強大的日光，攫取祖母髮中的黑色素與汗水蘸\n 成墨汁下嚥，經過時間的消化後排泄出來，叫做黑夜。\n   濃稠的黑夜在暗中默默的成長，流淌於小溪庭院、穀倉柴坊、豬舍雞寮，並\n 不斷的擴張向田畝間的菜圃和水塘。夜色如墨，團團緊緊的包圍村莊，但它卻鎭\n 不住祖母的雙腳，她背負著浩大的夜色，如同白日頂著烈陽，仍不斷的在田畝間\n 穿梭，在豬舍雞寮間忙碌著。（葉國居〈髻鬃花〉）",
+    "correct": "髮中的黑色素與汗水蘸成墨汁：暗喻祖母勞動且漸老的身影",
+    "wrong": [
+      "烈陽如漿：形容祖母對子孫們的深厚關愛，彷如陽光般溫暖",
+      "濃稠的黑夜：凸顯祖母農務負擔沉重，不敢寄望光明的未來",
+      "背負著浩大的夜色：對比祖母日夜忙碌，卻收成有限的辛酸"
+    ],
+    "exp": "正確答案：髮中的黑色素與汗水蘸成墨汁：暗喻祖母勞動且漸老的身影。來源：110年學科能力測驗國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 5,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q6",
+    "difficulty": "easy",
+    "q": "依據下文，最符合作者對「心結」看法的是：\n   人都說，心結宜解不宜結。又說，解開心結就是海闊天空。可是，人生怎麼\n 少得了心結？一旦海闊天空，人心又將空懸何處？\n   許多人心裡都有心結的場所，例如：故鄉的母校──初戀、體罰、模擬考，\n 都在那裡發生。有些人每次回到故鄉，就一定要去母校走走；有些人卻一定要避\n 開母校。心結可能是甜美的，也可能是痛苦的。不管心結的場所被珍愛，還是被\n 憎惡，此等強烈的愛憎情緒，都證明了心結有多要緊。心結的場所，是數學X軸\n Y軸交叉的原點，有了原點，我們才知自己置身哪一個座標格子裡，才覺得踏實。\n   心結是一支大頭針，可以把一張地圖釘在牆上。如果大頭針掉失了，牆上的\n 地圖也就垮下來。（改寫自紀大偉〈心結〉）",
+    "correct": "人生因心結而有支點、能定著，不致虛空",
+    "wrong": [
+      "心結或甜美或痛苦，美者宜留，苦者宜解",
+      "產生心結的場所總令人卻步，不願再接近",
+      "生命不斷前行，無須回首心結，自招煩惱"
+    ],
+    "exp": "正確答案：人生因心結而有支點、能定著，不致虛空。來源：110年學科能力測驗國文第6題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 6,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q7",
+    "difficulty": "medium",
+    "q": "關於下列新詩，解讀最不適當的是：\n   孤獨的小舟都是歪斜地擱著／全世界的沙灘都是如此的／而如同歪斜的頭\n ／裡面充盈著悲哀（方旗〈小舟〉）",
+    "correct": "用「沙灘」的單調，暗喻生活千篇一律",
+    "wrong": [
+      "以「舟」喻人，凸顯生命被擱淺的悲哀",
+      "「都是如此的」強調人舟孤獨的普遍性",
+      "兩次「歪斜」描寫人舟頹然無力的姿態"
+    ],
+    "exp": "正確答案：用「沙灘」的單調，暗喻生活千篇一律。來源：110年學科能力測驗國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 7,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q8",
+    "difficulty": "easy",
+    "q": "下文內最適合填入的詞語依序是：\n  甲、上書陳事，起自戰國，逮於兩漢，風流彌廣。原其體度：攻人主之長短，  之\n   徒也；訐群臣之得失，訟訴之類也；陳國家之利害，  之伍也；帶私情之\n   與奪，  之儔也。總此四塗，賈誠以求位，鬻言以干祿，或無絲毫之益，\n   而有不省之困。（顏之推《顏氏家訓》）\n 乙、大凡為文，須要有溫和敦厚之氣，  告君文字，蓋尤不可無也。（吳訥《文\n   章辨體序》）",
+    "correct": "諫諍／對策／遊說／章疏",
+    "wrong": [
+      "諫諍／章疏／遊說／對策",
+      "遊說／對策／諫諍／章疏",
+      "遊說／諫諍／章疏／對策"
+    ],
+    "exp": "正確答案：諫諍／對策／遊說／章疏。來源：110年學科能力測驗國文第8題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 8,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q9",
+    "difficulty": "easy",
+    "q": "「……者，……也」是古文判斷句的典型結構，例如「南冥者，天池也」，即「所\n 謂南冥就是天池」。下列文句，不是表達判斷語意的是：",
+    "correct": "以為凡是州之山水有異態者，皆我有也",
+    "wrong": [
+      "望之蔚然而深秀者，琅邪也",
+      "夫史者，民族之精神，而人群之龜鑑也",
+      "鄭、衛、桑間、韶虞、武象者，異國之樂也"
+    ],
+    "exp": "正確答案：以為凡是州之山水有異態者，皆我有也。來源：110年學科能力測驗國文第9題。",
+    "subject": "國文",
+    "sub_topic": "文言文閱讀",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 9,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q10",
+    "difficulty": "medium",
+    "q": "關於下文〈烏鵲歌〉的解釋，最適當的是：\n   韓憑，戰國時為宋康王舍人。妻何氏美，王欲之，捕舍人，築青陵台。何氏\n 作〈烏鵲歌〉以見志，遂自縊死：「南山有烏，北山張羅。烏自高飛，羅當奈何。\n 烏鵲雙飛，不樂鳳凰。妾是庶民，不樂宋王。」（《九國志》）",
+    "correct": "以「高飛」凸顯何氏的自主意志",
+    "wrong": [
+      "以「烏」暗指宋康王的邪惡",
+      "以「羅」比喻利誘韓憑的圈套",
+      "以「鳳凰」形容韓憑夫婦情意堅貞"
+    ],
+    "exp": "正確答案：以「高飛」凸顯何氏的自主意志。來源：110年學科能力測驗國文第10題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 10,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q11",
+    "difficulty": "medium",
+    "q": "依據下文，最符合主旨的敘述是：\n   天下有可為其半而不可為其全者，偏枯之藥可以治偏枯，倍其偏枯之藥不可\n 以起死人也。天下有可為其全而不可為其半者，樵夫擔薪兩鈞，捷步以趨，去其\n 半而不能行，非力不足，勢不便也。（章學誠《文史通義》）",
+    "correct": "應世處事不能拘執一方，必須衡量狀況，審時度勢以制其宜",
+    "wrong": [
+      "再珍貴的藥材亦無法起死回生，面對死生窮達，當樂天知命",
+      "行百里者半九十，不能成事者多因半途而廢，並非力不能及",
+      "完滿或缺殘非由表象判斷，而是取決於主體如何處理和定義"
+    ],
+    "exp": "正確答案：應世處事不能拘執一方，必須衡量狀況，審時度勢以制其宜。來源：110年學科能力測驗國文第11題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 11,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q12",
+    "difficulty": "medium",
+    "q": "關於下文王若虛的論述方式，說明最適當的是：\n   「郊寒白俗」，詩人類鄙薄之。然鄭厚評詩，荊公、蘇、黃輩曾不比數，而\n 云：「樂天如柳陰春鶯，東野（郊）如草根秋蟲，皆造化中一妙」，何哉？哀樂\n 之真，發乎情性，此詩之正理也。(王若虛《滹南詩話》）",
+    "correct": "先述習見論評，再引前人說法表達觀點",
+    "wrong": [
+      "運用對比映襯以凸顯詩人品格上的差異",
+      "藉物象之喻強調詩人長於自然草蟲之詠",
+      "先分述各家短長，再總論詩歌創作之道"
+    ],
+    "exp": "正確答案：先述習見論評，再引前人說法表達觀點。來源：110年學科能力測驗國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 12,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q13",
+    "difficulty": "medium",
+    "q": "施先生參加朋友舉辦的宴會，贈詩一首：「桂已飄香菊作花，門前遙駐七香車。\n 競傳丰度誠端好，定卜咸宜到室家。」依據詩意，最適合這場宴會的題辭是：",
+    "correct": "珠聯璧合",
+    "wrong": [
+      "椿萱並茂",
+      "君子攸居",
+      "望重桑梓"
+    ],
+    "exp": "正確答案：珠聯璧合。來源：110年學科能力測驗國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 13,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q14",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-110-chinese/Q14-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 14,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/Q14-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q15",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n15-17為題組。閱讀下列詞選資料，回答15-17題。\n\n                選女入選率高的       【備註】\n                錄詞宋代女詞人及作品數  * 該書選錄詞作總數／該時\n                女人代詞選名李朱孫魏書選錄非佚名詞人總數\n                詞作\n                     清淑夫夫   # 該書所錄李清照、朱淑真人品\n                     照真人人詞作歸屬存疑篇數數數\n    《梅苑》                 1   18   18                     * 421 首／82 人\n  南 《樂府雅詞》            2   33   23             10      * 923 首／95 人\n  宋 《草堂詩餘》            3   13   10         2\n    《唐宋諸賢絕妙詞選》   10   29    8         5    7 選錄「閨秀」1 卷\n    《類編草堂詩餘》        3   15    9         5       # 李2 首\n  明 《詞的》                 6   18    8    2    5       # 李2 首\n  代 《花草粹編》           52  147   43   23    8   11  # 李9 首；朱5 首\n    《古今詞統》           30   62   15    5    5    3  # 李6 首；朱2 首\n\n關於上表內容的探究，最適當的是：",
+    "correct": "參考備註「*」推算《梅苑》、《樂府雅詞》中每位詞人的獲選作品平均量，\n   可對照出李清照詞頗受二書青睞",
+    "wrong": [
+      "從四本明代詞選的備註「#」可知，部分繫名為李清照的詞作，真正作者是朱\n   淑真",
+      "南宋詞選偏好孫夫人、魏夫人詞作的情況，到明代有所轉變，二位詞人的地\n   位改由朱淑真取代",
+      "《唐宋諸賢絕妙詞選》肯定女詞人，「閨秀」卷共收錄十位女詞人詞作，每位\n   至少選錄二首作品"
+    ],
+    "exp": "正確答案：參考備註「*」推算《梅苑》、《樂府雅詞》中每位詞人的獲選作品平均量，\n   可對照出李清照詞頗受二書青睞。來源：110年學科能力測驗國文第15題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 15,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n15-17為題組。閱讀下列詞選資料，回答15-17題。\n\n                選女入選率高的       【備註】\n                錄詞宋代女詞人及作品數  * 該書選錄詞作總數／該時\n                女人代詞選名李朱孫魏書選錄非佚名詞人總數\n                詞作\n                     清淑夫夫   # 該書所錄李清照、朱淑真人品\n                     照真人人詞作歸屬存疑篇數數數\n    《梅苑》                 1   18   18                     * 421 首／82 人\n  南 《樂府雅詞》            2   33   23             10      * 923 首／95 人\n  宋 《草堂詩餘》            3   13   10         2\n    《唐宋諸賢絕妙詞選》   10   29    8         5    7 選錄「閨秀」1 卷\n    《類編草堂詩餘》        3   15    9         5       # 李2 首\n  明 《詞的》                 6   18    8    2    5       # 李2 首\n  代 《花草粹編》           52  147   43   23    8   11  # 李9 首；朱5 首\n    《古今詞統》           30   62   15    5    5    3  # 李6 首；朱2 首\n\n若以上表為研判依據，關於甲、乙兩項推論，最適當的是：\n 甲、《花草粹編》選錄的詞人總數、詞作總數，均比《樂府雅詞》超出許多。\n 乙、《類編草堂詩餘》僅調整《草堂詩餘》的分類方式，未更動收錄的詞作。",
+    "correct": "甲無法判斷，乙錯誤",
+    "wrong": [
+      "甲正確，乙錯誤",
+      "甲錯誤，乙正確",
+      "甲正確，乙無法判斷"
+    ],
+    "exp": "正確答案：甲無法判斷，乙錯誤。來源：110年學科能力測驗國文第16題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 16,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/gsat-110-chinese/G15-17-context.png)\n\n![第17題原卷資料](/assets/banks/gsat-110-chinese/Q17-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 17,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G15-17-context.png",
+      "/assets/banks/gsat-110-chinese/Q17-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-110-chinese/G18-19-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-110-chinese/Q18-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 18,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G18-19-context.png",
+      "/assets/banks/gsat-110-chinese/Q18-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/gsat-110-chinese/G18-19-context.png)\n\n![第19題原卷資料](/assets/banks/gsat-110-chinese/Q19-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 19,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G18-19-context.png",
+      "/assets/banks/gsat-110-chinese/Q19-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q20",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-110-chinese/G20-21-context.png)\n\n![第20題原卷資料](/assets/banks/gsat-110-chinese/Q20-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第20題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 20,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G20-21-context.png",
+      "/assets/banks/gsat-110-chinese/Q20-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-110-chinese/G20-21-context.png)\n\n![第21題原卷資料](/assets/banks/gsat-110-chinese/Q21-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗國文第21題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 21,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G20-21-context.png",
+      "/assets/banks/gsat-110-chinese/Q21-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q22",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n22-23為題組。閱讀下文，回答22-23題。\n   臺北是我出生、成長，居住了三十年的地方，卻不是我的家。因為，比起臺\n 北人，他們更喜歡叫我原住民。\n    「107-2-8號。」監考人員盯著我的族語准考證，「請坐到那邊第三臺電腦。」\n 捏著准考證，我逐步邁向祖靈的召喚。這是一間新穎的電腦教室，日光燈照亮了\n 每一個本該陰暗的角落。側身越過喃喃背誦族語的考生，他們大部分是孩子，稚\n 嫩的臉龐，埋藏著對繁華都市的無限想像。其中少數幾位，是看起來不大適應電\n 腦設備的長輩，眼神中透露出一絲溫柔的倔強。雖然只是在七樓，         ，\n 在這之前，我不曾在臺北遇過這麼多族人齊聚一堂，更從未在他們臉上看見如此\n 戒慎恐懼的模樣。按監考人員指示，我坐入指定位置，左右張望，這所歷史悠久\n 的女校，此刻被賦予傳承臺灣千年傳統文化的神聖使命，而呆坐在試場中心，戶\n 籍設在臺北市的我，卻是整個歷史洪流中的盲點。\n\n  「請檢查桌上貼紙，確認是你的位置。」我是否在正確的位置？成長過程中，\n常有人問我「妳從哪裡來？」若誠實回答臺北，總不免換來「我指的是妳──真\n正──從哪裡來？」配上自認與我心有靈犀的挑眉。無奈的是，這類拒絕接受真\n相的提問總以千變萬化的形式反覆出現──「妳什麼時候過年？我指的是──真\n正──的豐年祭。」或是「妳叫什麼名字？我指的是妳──真正──的名字。」\n  「請戴上耳機測試麥克風，確認音量。」監考人員喚回我紛亂的思緒。\n    「Ciwas lalu mu.」我小心翼翼托著麥克風，謹慎地咬字。Ciwas是我「真正」\n的名字──真正沒人稱呼的名字。（改寫自游以德〈族語認證〉）\n\n依據文意脈絡，文中內最適合填入的文句是：",
+    "correct": "考場中隱約瀰漫著一股高海拔的芬多精",
+    "wrong": [
+      "教室裡彷彿散發著遼闊原野的綠草香味",
+      "試場中似乎吹拂著來自海洋的湛藍氣息",
+      "闈場內依稀湧動著一縷篝火的熾焰氣味"
+    ],
+    "exp": "正確答案：考場中隱約瀰漫著一股高海拔的芬多精。來源：110年學科能力測驗國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 22,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        22,
+        23
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n22-23為題組。閱讀下文，回答22-23題。\n   臺北是我出生、成長，居住了三十年的地方，卻不是我的家。因為，比起臺\n 北人，他們更喜歡叫我原住民。\n    「107-2-8號。」監考人員盯著我的族語准考證，「請坐到那邊第三臺電腦。」\n 捏著准考證，我逐步邁向祖靈的召喚。這是一間新穎的電腦教室，日光燈照亮了\n 每一個本該陰暗的角落。側身越過喃喃背誦族語的考生，他們大部分是孩子，稚\n 嫩的臉龐，埋藏著對繁華都市的無限想像。其中少數幾位，是看起來不大適應電\n 腦設備的長輩，眼神中透露出一絲溫柔的倔強。雖然只是在七樓，         ，\n 在這之前，我不曾在臺北遇過這麼多族人齊聚一堂，更從未在他們臉上看見如此\n 戒慎恐懼的模樣。按監考人員指示，我坐入指定位置，左右張望，這所歷史悠久\n 的女校，此刻被賦予傳承臺灣千年傳統文化的神聖使命，而呆坐在試場中心，戶\n 籍設在臺北市的我，卻是整個歷史洪流中的盲點。\n\n  「請檢查桌上貼紙，確認是你的位置。」我是否在正確的位置？成長過程中，\n常有人問我「妳從哪裡來？」若誠實回答臺北，總不免換來「我指的是妳──真\n正──從哪裡來？」配上自認與我心有靈犀的挑眉。無奈的是，這類拒絕接受真\n相的提問總以千變萬化的形式反覆出現──「妳什麼時候過年？我指的是──真\n正──的豐年祭。」或是「妳叫什麼名字？我指的是妳──真正──的名字。」\n  「請戴上耳機測試麥克風，確認音量。」監考人員喚回我紛亂的思緒。\n    「Ciwas lalu mu.」我小心翼翼托著麥克風，謹慎地咬字。Ciwas是我「真正」\n的名字──真正沒人稱呼的名字。（改寫自游以德〈族語認證〉）\n\n上文反覆提及「真正」一詞，關於此詞所表達的境況或心情，最不適當的敘述是：",
+    "correct": "呼應首段「不是我的家」，表達雖生於臺北，仍心繫祖靈，無法接受繁華都城",
+    "wrong": [
+      "茫然於自己在歷史洪流中的存在位置，並展開對身分歸屬的叩問與追尋",
+      "成長過程中，常因他人的刻板印象而被貼上制式標籤，區劃為不同族群",
+      "「是我『真正』的名字」語帶無奈和自嘲，因自己真實的名字竟須由旁人認定"
+    ],
+    "exp": "正確答案：呼應首段「不是我的家」，表達雖生於臺北，仍心繫祖靈，無法接受繁華都城。來源：110年學科能力測驗國文第23題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 23,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        22,
+        23
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/gsat-110-chinese/G24-25-context.png)\n\n![第24題原卷資料](/assets/banks/gsat-110-chinese/Q24-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 24,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G24-25-context.png",
+      "/assets/banks/gsat-110-chinese/Q24-question.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/gsat-110-chinese/G24-25-context.png)\n\n![第25題原卷資料](/assets/banks/gsat-110-chinese/Q25-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗國文第25題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 25,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G24-25-context.png",
+      "/assets/banks/gsat-110-chinese/Q25-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/gsat-110-chinese/G26-28-context.png)\n\n![第26題原卷資料](/assets/banks/gsat-110-chinese/Q26-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第26題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 26,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        26,
+        28
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G26-28-context.png",
+      "/assets/banks/gsat-110-chinese/Q26-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/gsat-110-chinese/G26-28-context.png)\n\n![第27題原卷資料](/assets/banks/gsat-110-chinese/Q27-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗國文第27題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 27,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        26,
+        28
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G26-28-context.png",
+      "/assets/banks/gsat-110-chinese/Q27-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/gsat-110-chinese/G26-28-context.png)\n\n![第28題原卷資料](/assets/banks/gsat-110-chinese/Q28-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗國文第28題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 28,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        26,
+        28
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-chinese/G26-28-context.png",
+      "/assets/banks/gsat-110-chinese/Q28-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q29",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n29-30為題組。閱讀下文，回答29-30題。\n\n   人能藉手語溝通，可知語音並非語言的必要因素。小鳥啁啾、海豚吱吱，都\n 近似人類語言的溝通系統，可見動物的溝通系統和人類語言的不同，絕非在於缺\n 少語音。\n   動物能在聲音上模仿人類的話語，並不表示牠們擁有語言。會說話的鳥並不\n 會把牠們模仿的聲音切成獨立的單位，而人類語言的特質之一，則是語音或手勢\n 單位的獨立性，單位之間有次序，可重新排序，可合併也可分開。總之，鸚鵡只\n 會說人家教牠或牠所聽到的，再無其他。\n   很多種鳥的叫聲的確具有溝通功能，且同一種鳥可能也有「方言」之別。鳥\n  語（bird calls）是包括一聲或一聲以上的短叫聲，傳達和環境相關的訊息，例如\n 危險、餵食、築巢、群聚等等；鳥鳴（bird songs）則是較為複雜的鳴叫形態，用\n 來宣示勢力範圍，並可吸引配偶。這些鳥叫聲看不出任何內在的結構，也不能像\n 人類語言能分出獨立具有意義的單位。一篇有關知更鳥勢力圈鳴聲的研究中發\n 現：敵對的知更鳥只注意高頻和低頻聲的轉換，何者在前何者在後，其實無關緊\n 要。訊息內容的差異，也只限於這些知更鳥對牠的東西擁有慾多強或牠的抵抗決\n 心多高，以及在勢力圈內築巢的意志多強等等。因此，高、低頻的轉換，只是表\n 達不同感受程度而已。知更鳥的創造力，在於能用不同方式做相同訊息的鳴叫，\n 但牠不能利用各種單位作不同組合，表達不同訊息。（改寫自V. Fromkin等著，\n 黃宣範譯《語言學新引》）\n\n依據上文，下列對於鳥叫聲的敘述，最適當的是：",
+    "correct": "知更鳥能以不同頻率的鳴叫轉換，傳達相同的訊息",
+    "wrong": [
+      "可藉其內在的結構，表達不同程度的感受",
+      "以短叫聲來表達欲望、意志和決心的強弱",
+      "能夠多樣組合各種意義單位，藉以表達不同的訊息"
+    ],
+    "exp": "正確答案：知更鳥能以不同頻率的鳴叫轉換，傳達相同的訊息。來源：110年學科能力測驗國文第29題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 29,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        29,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q30",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n29-30為題組。閱讀下文，回答29-30題。\n\n   人能藉手語溝通，可知語音並非語言的必要因素。小鳥啁啾、海豚吱吱，都\n 近似人類語言的溝通系統，可見動物的溝通系統和人類語言的不同，絕非在於缺\n 少語音。\n   動物能在聲音上模仿人類的話語，並不表示牠們擁有語言。會說話的鳥並不\n 會把牠們模仿的聲音切成獨立的單位，而人類語言的特質之一，則是語音或手勢\n 單位的獨立性，單位之間有次序，可重新排序，可合併也可分開。總之，鸚鵡只\n 會說人家教牠或牠所聽到的，再無其他。\n   很多種鳥的叫聲的確具有溝通功能，且同一種鳥可能也有「方言」之別。鳥\n  語（bird calls）是包括一聲或一聲以上的短叫聲，傳達和環境相關的訊息，例如\n 危險、餵食、築巢、群聚等等；鳥鳴（bird songs）則是較為複雜的鳴叫形態，用\n 來宣示勢力範圍，並可吸引配偶。這些鳥叫聲看不出任何內在的結構，也不能像\n 人類語言能分出獨立具有意義的單位。一篇有關知更鳥勢力圈鳴聲的研究中發\n 現：敵對的知更鳥只注意高頻和低頻聲的轉換，何者在前何者在後，其實無關緊\n 要。訊息內容的差異，也只限於這些知更鳥對牠的東西擁有慾多強或牠的抵抗決\n 心多高，以及在勢力圈內築巢的意志多強等等。因此，高、低頻的轉換，只是表\n 達不同感受程度而已。知更鳥的創造力，在於能用不同方式做相同訊息的鳴叫，\n 但牠不能利用各種單位作不同組合，表達不同訊息。（改寫自V. Fromkin等著，\n 黃宣範譯《語言學新引》）\n\n依據上文，關於動物與人類的語言，推論最適當的是：",
+    "correct": "人類語言與其他動物溝通系統的相異，在於複雜的語法結構",
+    "wrong": [
+      "鸚鵡經由良好的訓練，可以理解沒聽過的人類話語",
+      "動物沒有語言能力，關鍵在於缺少人類的發音器官",
+      "學習新語言多從發音開始，可知語音是人類語言的必要元素"
+    ],
+    "exp": "正確答案：人類語言與其他動物溝通系統的相異，在於複雜的語法結構。來源：110年學科能力測驗國文第30題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 30,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        29,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q31",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n31-32為題組。閱讀下文，回答31-32題。\n\n   夫足下之書，始所云者欲至乎道也，而所質者則辭也，無乃務其淺，忘其深，\n 當急者反徐之歟！夫道之大歸非他，欲其得諸心，充諸身，擴而被之國家天下而\n 已，非汲汲乎辭也。其所以不已乎辭者，非得已也。孟子曰：「        」\n 此其所以為孟子也。今足下其自謂已得諸心、充諸身歟？擴而被之國家天下而有\n 不得已歟？不然，何遽急於辭也？（曾鞏〈答李沿書〉）\n\n上文內最適合填入的文句是：",
+    "correct": "予豈好辯哉？予不得已也",
+    "wrong": [
+      "無辭讓之心，非人也",
+      "不以文害辭，不以辭害志",
+      "盡信書，則不如無書"
+    ],
+    "exp": "正確答案：予豈好辯哉？予不得已也。來源：110年學科能力測驗國文第31題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 31,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        31,
+        32
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q32",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n31-32為題組。閱讀下文，回答31-32題。\n\n   夫足下之書，始所云者欲至乎道也，而所質者則辭也，無乃務其淺，忘其深，\n 當急者反徐之歟！夫道之大歸非他，欲其得諸心，充諸身，擴而被之國家天下而\n 已，非汲汲乎辭也。其所以不已乎辭者，非得已也。孟子曰：「        」\n 此其所以為孟子也。今足下其自謂已得諸心、充諸身歟？擴而被之國家天下而有\n 不得已歟？不然，何遽急於辭也？（曾鞏〈答李沿書〉）\n\n依據上文，曾鞏主要是想提醒李沿：",
+    "correct": "為學不宜捨本逐末",
+    "wrong": [
+      "治天下應恤民重諾",
+      "寫文章應深入淺出",
+      "讀書不宜欲速躁進"
+    ],
+    "exp": "正確答案：為學不宜捨本逐末。來源：110年學科能力測驗國文第32題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 32,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        31,
+        32
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q33",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n33-34為題組。閱讀下文，回答33-34題。\n\n   魏王欲攻邯鄲，季梁聞之，中道而反。衣焦不申，頭塵不去，往見王曰：「今\n 者臣來，見人於大行，方北面而持其駕，告臣曰：『我欲之楚。』臣曰：『君之\n 楚，將奚為北面？』曰：『吾馬良。』臣曰：『馬雖良，此非楚之路也。』曰：\n 『吾用多。』臣曰：『用雖多，此非楚之路也。』曰：『吾御者善。』此數者愈\n 善，而離楚愈遠耳。今王動欲成霸王，舉欲信於天下；恃王國之大、兵之精銳，\n 而攻邯鄲，以廣地尊名。王之動愈數，而離王愈遠耳，猶至楚而北行也。」（《戰\n 國策》）\n\n上文特意描繪季梁往見魏王時「衣焦不申，頭塵不去」的形象，主要在凸顯：",
+    "correct": "事態緊急，不暇梳洗更衣",
+    "wrong": [
+      "個性率真，不重外貌衣著",
+      "君臣親密，不拘繁文縟節",
+      "旅途艱辛，不辭跋山涉水"
+    ],
+    "exp": "正確答案：事態緊急，不暇梳洗更衣。來源：110年學科能力測驗國文第33題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 33,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        33,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-chinese-q34",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n33-34為題組。閱讀下文，回答33-34題。\n\n   魏王欲攻邯鄲，季梁聞之，中道而反。衣焦不申，頭塵不去，往見王曰：「今\n 者臣來，見人於大行，方北面而持其駕，告臣曰：『我欲之楚。』臣曰：『君之\n 楚，將奚為北面？』曰：『吾馬良。』臣曰：『馬雖良，此非楚之路也。』曰：\n 『吾用多。』臣曰：『用雖多，此非楚之路也。』曰：『吾御者善。』此數者愈\n 善，而離楚愈遠耳。今王動欲成霸王，舉欲信於天下；恃王國之大、兵之精銳，\n 而攻邯鄲，以廣地尊名。王之動愈數，而離王愈遠耳，猶至楚而北行也。」（《戰\n 國策》）\n\n下列敘述，最符合上文所欲表達觀點的是：",
+    "correct": "緣木求魚，徒勞無功",
+    "wrong": [
+      "前車之鑑，可以為師",
+      "欲速不達，弄巧成拙",
+      "駑馬十駕，功在不舍"
+    ],
+    "exp": "正確答案：緣木求魚，徒勞無功。來源：110年學科能力測驗國文第34題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-110-chinese",
+      "question": 34,
+      "file": "高中/學測/國文/110學測國文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        33,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  }
+]

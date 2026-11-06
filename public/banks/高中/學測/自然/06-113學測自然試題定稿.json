@@ -1,0 +1,736 @@
+[
+  {
+    "id": "gsat-113-science-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-113-science/Q1-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年學科能力測驗自然第1題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 1,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q1-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q6",
+    "difficulty": "easy",
+    "q": "已知一段雙股去氧核糖核酸，其中一股的含氮鹼基序列為ATTGCCTTA，A 為腺\n  嘌呤、T 為胸腺嘧啶、C 為胞嘧啶、G 為鳥糞嘌呤，下列有關此段雙股去氧核糖\n\n 核酸的敘述，何者正確？",
+    "correct": "鳥糞嘌呤與胞嘧啶個數相加等於腺嘌呤個數",
+    "wrong": [
+      "腺嘌呤個數與胞嘧啶相同",
+      "腺嘌呤個數為胸腺嘧啶的兩倍",
+      "嘧啶總個數多於嘌呤總個數",
+      "嘌呤總個數多於嘧啶總個數"
+    ],
+    "exp": "正確答案：鳥糞嘌呤與胞嘧啶個數相加等於腺嘌呤個數。來源：113年學科能力測驗自然第6題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 6,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q8",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/gsat-113-science/Q8-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年學科能力測驗自然第8題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 8,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q8-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q9",
+    "difficulty": "medium",
+    "q": "有關現行的生物分類系統，下列敘述何者正確？",
+    "correct": "屬是將（物）種加以歸類後的第一個層級",
+    "wrong": [
+      "階層愈高，其內的（物）種間相似的特徵愈多，成員也較多",
+      "階層愈低，其內（物）種較少，親緣關係也較疏遠",
+      "任取兩個同目的（物）種必較同科的兩（物）種在親緣關係上疏遠",
+      "（物）種是分類的基本單位，只能以形態相區別"
+    ],
+    "exp": "正確答案：屬是將（物）種加以歸類後的第一個層級。來源：113年學科能力測驗自然第9題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 9,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q10",
+    "difficulty": "medium",
+    "q": "五種化合物的分子式分別是甲（ C19 H19 N7 O6 ）、乙（ C20 H30 O ）、丙（ C28 H 44 O ）、丁\n  （ C6 H8 O6 ）與戊（ C29 H50 O2 ）。某化合物經完全燃燒後，所得二氧化碳與水重量比\n  為11：3，則此化合物為下列哪一種？（原子量C＝12.0、H＝1.00、O＝16.0）",
+    "correct": "丁",
+    "wrong": [
+      "甲",
+      "乙",
+      "丙",
+      "戊"
+    ],
+    "exp": "正確答案：丁。來源：113年學科能力測驗自然第10題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 10,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/gsat-113-science/G12-13-context.png)\n\n![第12題原卷資料](/assets/banks/gsat-113-science/Q12-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年學科能力測驗自然第12題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 12,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        12,
+        13
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G12-13-context.png",
+      "/assets/banks/gsat-113-science/Q12-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q14",
+    "difficulty": "medium",
+    "q": "硼烷氨（ H3 NBH3 ）是一種固態能源，可與鹽酸反應產生氫氣。假設在25℃、1 atm\n  下，取1.54 克硼烷氨與足量的鹽酸反應，可完全轉變成硼酸（ H3 BO3 ）、氯化銨\n  （ NH 4 Cl ）與氫氣，反應式如下：\n           H3 NBH3 + HCl + H2 O → H3 BO3 + NH4 Cl + H2    （未平衡）\n\n  試問所產生氫氣的體積是多少升？（25℃、1 atm，1 莫耳氫氣的體積為24.5 升；\n  原子量C＝12.0、H＝1.00、O＝16.0、N＝14.0、B＝10.8）",
+    "correct": "3.68",
+    "wrong": [
+      "1.23",
+      "3.36",
+      "4.90",
+      "6.00"
+    ],
+    "exp": "正確答案：3.68。來源：113年學科能力測驗自然第14題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 14,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q15",
+    "difficulty": "medium",
+    "q": "李小仁買了一條流行的飛天小丑魚，是一種質量很輕類似氣球的飛行玩具，但是\n\n 買回來後發現，廠商沒有將飛天小丑魚灌入氣體。於是，李小仁前往附近店家尋\n\n 找，並填充一定量體積的氦氣，但是找了幾家，發現氦氣的純度有所差異，皆含\n 有體積1%氣體雜質。試問含有下列何種雜質會使飛天小丑魚最容易浮起？\n  （原子量C＝12.0、N＝14.0、O＝16.0、Ne＝20.2、Ar＝40.0）",
+    "correct": "氖氣",
+    "wrong": [
+      "二氧化碳",
+      "氮氣",
+      "氬氣",
+      "氧氣"
+    ],
+    "exp": "正確答案：氖氣。來源：113年學科能力測驗自然第15題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 15,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/gsat-113-science/G16-17-context.png)\n\n![第16題原卷資料](/assets/banks/gsat-113-science/Q16-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年學科能力測驗自然第16題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 16,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        16,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G16-17-context.png",
+      "/assets/banks/gsat-113-science/Q16-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q21",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-113-science/Q21-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年學科能力測驗自然第21題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 21,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q21-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/gsat-113-science/G24-25-context.png)\n\n![第25題原卷資料](/assets/banks/gsat-113-science/Q25-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年學科能力測驗自然第25題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 25,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G24-25-context.png",
+      "/assets/banks/gsat-113-science/Q25-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q26",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/gsat-113-science/G26-27-context.png)\n\n![第26題原卷資料](/assets/banks/gsat-113-science/Q26-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年學科能力測驗自然第26題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 26,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        26,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G26-27-context.png",
+      "/assets/banks/gsat-113-science/Q26-question.png"
+    ],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/gsat-113-science/G26-27-context.png)\n\n![第27題原卷資料](/assets/banks/gsat-113-science/Q27-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年學科能力測驗自然第27題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 27,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        26,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G26-27-context.png",
+      "/assets/banks/gsat-113-science/Q27-question.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q29",
+    "difficulty": "medium",
+    "q": "海洋裡有各種不同時間尺度的運動和現象，例如：（甲）潮汐、（乙）聖嬰現象、\n\n （丙）湧浪、（丁）風浪、（戊）溫鹽環流。這些運動和現象的大致週期，從長至\n\n 短的順序為何？",
+    "correct": "戊乙甲丙丁",
+    "wrong": [
+      "甲乙丙戊丁",
+      "戊甲丙丁乙",
+      "甲丙乙戊丁",
+      "乙戊甲丙丁"
+    ],
+    "exp": "正確答案：戊乙甲丙丁。來源：113年學科能力測驗自然第29題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 29,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q31",
+    "difficulty": "hard",
+    "q": "地震預警是利用地震資訊的快速發布，讓地震波尚未到達的地區能即時因應。假\n 設從地震發生到市民收到中央氣象署預警通知所需時間為10 秒，P 波的速率為\n  每秒5 公里，S 波的速率為每秒3 公里。假設震波速率不變，某地震發生後，若\n 臺北測站測得的P 波比S 波早到20 秒，則臺北市民在這地震的S 波到達前，有\n\n 多少秒可做緊急應變？",
+    "correct": "40",
+    "wrong": [
+      "30",
+      "35",
+      "45",
+      "50"
+    ],
+    "exp": "正確答案：40。來源：113年學科能力測驗自然第31題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 31,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.31,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q32",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/gsat-113-science/Q32-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年學科能力測驗自然第32題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 32,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q32-question.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q36",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/gsat-113-science/Q36-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年學科能力測驗自然第36題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 36,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q36-question.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q37",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-113-science/G37-39-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-113-science/Q37-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年學科能力測驗自然第37題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 37,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G37-39-context.png",
+      "/assets/banks/gsat-113-science/Q37-question.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/gsat-113-science/G37-39-context.png)\n\n![第39題原卷資料](/assets/banks/gsat-113-science/Q39-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年學科能力測驗自然第39題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 39,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G37-39-context.png",
+      "/assets/banks/gsat-113-science/Q39-question.png"
+    ]
+  },
+  {
+    "id": "gsat-113-science-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/gsat-113-science/G40-43-context.png)\n\n![第40題原卷資料](/assets/banks/gsat-113-science/Q40-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年學科能力測驗自然第40題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 40,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G40-43-context.png",
+      "/assets/banks/gsat-113-science/Q40-question.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/gsat-113-science/G44-46-context.png)\n\n![第44題原卷資料](/assets/banks/gsat-113-science/Q44-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：113年學科能力測驗自然第44題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 44,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        44,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G44-46-context.png",
+      "/assets/banks/gsat-113-science/Q44-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-113-science-q55",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n54-56題為題組\n\n   做為實證科學之一，天文學的發展仰賴大量的觀測結果。近百年以來，天文\n\n 觀測的手段也早就由可見光延伸到電磁波的其他波段，甚至是電磁波以外的觀測\n\n 手段。這些突破性的觀測成果，更讓科學家們發現宇宙當中前人所未知的領域。\n\n科學家們建造各式各樣的望遠鏡來收集電磁波訊號。新一代地面望遠鏡的口徑都\n\n 愈來愈大，原因為何？",
+    "correct": "口徑愈大，可以收集到的訊號愈多，可以看到星等數值更大的天體",
+    "wrong": [
+      "電磁波所行走的路徑會隨著宇宙膨脹而增加，所以需要大口徑望遠鏡",
+      "口徑愈大，受到大氣擾動的影響愈小，可以看得愈清晰",
+      "隨著經濟發展，建造大口徑望遠鏡有助於提升國防產業的技術",
+      "遙遠的天體會隨著宇宙膨脹而變大，所以需要大口徑望遠鏡"
+    ],
+    "exp": "正確答案：口徑愈大，可以收集到的訊號愈多，可以看到星等數值更大的天體。來源：113年學科能力測驗自然第55題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 55,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        54,
+        56
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  }
+]

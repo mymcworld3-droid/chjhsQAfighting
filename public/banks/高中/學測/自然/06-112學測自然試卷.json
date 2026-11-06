@@ -1,0 +1,1032 @@
+[
+  {
+    "id": "gsat-112-science-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/gsat-112-science/Q2-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗自然第2題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 2,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/Q2-question.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q3",
+    "difficulty": "easy",
+    "q": "新聞曾報導在地球南極大陸發現來自火星的隕石，科學家何以推測該隕石來自火星？",
+    "correct": "經過化學分析，隕石中的元素同位素比例符合火星的元素同位素比例",
+    "wrong": [
+      "已經有載人太空船登陸火星，並曾攜回火星岩石",
+      "太陽系早期火星與地球曾發生碰撞，可判斷當時有大量火星岩石掉落到地球",
+      "該隕石含有大量氧化鐵，呈現暗紅色",
+      "該隕石外觀焦黑，有火燒的痕跡"
+    ],
+    "exp": "正確答案：經過化學分析，隕石中的元素同位素比例符合火星的元素同位素比例。來源：112年學科能力測驗自然第3題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 3,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q4",
+    "difficulty": "easy",
+    "q": "海岸邊突然來個大浪將岸上的釣客或遊客捲入海中，這種大浪俗稱「瘋狗浪」。報載2013\n  年11 月9 日強烈颱風海燕穿過菲律賓，在南海西部向越南挺進。當日臺灣北部天氣良\n\n  好，無風無雨。某社區大學學員前往新北市貢寮區鼻頭角地質公園海濱從事戶外教學，\n  地質公園海濱突然出現5 公尺高的「瘋狗浪」，參觀海岸地形的遊客，遭大浪捲入海中。\n\n 此次「瘋狗浪」最有可能是由哪種因素所造成的？",
+    "correct": "因颱風外圍環流挾帶東北季風產生的湧浪",
+    "wrong": [
+      "因颱風瞬間強風直接產生的風浪",
+      "因颱風造成的風浪破碎後產生的碎浪",
+      "因颱風低壓引起水位高漲的暴潮",
+      "因颱風造成土石崩落產生的海嘯"
+    ],
+    "exp": "正確答案：因颱風外圍環流挾帶東北季風產生的湧浪。來源：112年學科能力測驗自然第4題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 4,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q7",
+    "difficulty": "easy",
+    "q": "表1 為臺北氣象站2010 年各月份的總降雨量、降雨日數（含雨跡日數）及雨跡日數統\n  計表，雨跡代表當天降水量小於0.1 mm。下列敘述何者正確？\n\n                      表1\n\n   月份（月）  一二三四五六七八九十十一十二總計\n\n  總降雨量（mm） 105.3 232.6 66.5 112.5 183.9 419.6 89.1 388.5 144.2 345.4 127.3 63.4 2278.3\n\n  降雨日數（天）  16   18   11   21   17   23   13   13   18   24   19   7    200\n  雨跡日數（天）  1    5    5    3    3    0    1    0    3    5    5    1    32",
+    "correct": "臺北測站8月發生降雨日的平均日降雨量大於6月",
+    "wrong": [
+      "臺北測站2010年的平均「月降雨量」超過200 mm",
+      "臺北測站冬季的總降雨量高於夏季",
+      "臺北測站12月發生降雨日的平均日降雨量為全年最大",
+      "若排除僅發生雨跡的日數，臺北測站2010年降雨日數仍超過半年以上"
+    ],
+    "exp": "正確答案：臺北測站8月發生降雨日的平均日降雨量大於6月。來源：112年學科能力測驗自然第7題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 7,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q9",
+    "difficulty": "medium",
+    "q": "全球主要有三大地震帶，臺灣位於其中的「環太平洋地震帶」上。下列有關此地震帶的\n\n  敘述何者正確？",
+    "correct": "此地震帶與環太平洋火山帶（火環）位置幾乎一致，有許多活火山",
+    "wrong": [
+      "此地震帶的形成主要與張裂性板塊邊界有關",
+      "地震主要發生在地殼中，所以此地震帶特徵多淺源地震",
+      "地震與斷層活動息息相關，此地震帶的地震多半是由平移斷層活動造成",
+      "臺灣位在此地震帶上，表示臺灣島與太平洋板塊相接"
+    ],
+    "exp": "正確答案：此地震帶與環太平洋火山帶（火環）位置幾乎一致，有許多活火山。來源：112年學科能力測驗自然第9題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 9,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q10",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/gsat-112-science/G10-11-context.png)\n\n![第10題原卷資料](/assets/banks/gsat-112-science/Q10-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗自然第10題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 10,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        10,
+        11
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G10-11-context.png",
+      "/assets/banks/gsat-112-science/Q10-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q13",
+    "difficulty": "medium",
+    "q": "取石蓮為材料欲觀察葉片保衛細胞之形態，下列玻片製作法何者最佳？",
+    "correct": "將材料以手指折撕",
+    "wrong": [
+      "將材料以小刀徒手切下薄片",
+      "將材料以蓋玻片壓散",
+      "將材料以牙籤或解剖針塗抹於載玻片",
+      "將材料直接放置於載玻片上"
+    ],
+    "exp": "正確答案：將材料以手指折撕。來源：112年學科能力測驗自然第13題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 13,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q14",
+    "difficulty": "medium",
+    "q": "比較大腸桿菌和酵母菌的細胞，下列何者是它們共同擁有的結構？",
+    "correct": "核糖體",
+    "wrong": [
+      "細胞核",
+      "粒線體",
+      "高基氏體",
+      "內質網"
+    ],
+    "exp": "正確答案：核糖體。來源：112年學科能力測驗自然第14題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 14,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q15",
+    "difficulty": "medium",
+    "q": "某物種生殖母細胞雙套染色體數為12，下列何者正確？",
+    "correct": "該物種卵細胞中的染色體數是6",
+    "wrong": [
+      "開始減數分裂之稍前，染色體發生聯會成為四分體數是48",
+      "減數分裂一開始，每個生殖母細胞中的同源染色體數是24對",
+      "減數分裂第一階段（減數分裂I）之後，每個子細胞中的二分體數是12",
+      "該物種精子中的染色體數是3"
+    ],
+    "exp": "正確答案：該物種卵細胞中的染色體數是6。來源：112年學科能力測驗自然第15題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 15,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q18",
+    "difficulty": "medium",
+    "q": "科學家篩到了兩個突變株（甲和乙），其果實皆較野生型小。下列有關證實甲和乙突變\n\n 為同一基因的敘述，何者正確？",
+    "correct": "若甲和乙皆為隱性同型合子，進行互交，得子代為同樣小果，則可證實",
+    "wrong": [
+      "若甲和乙皆為顯性異型合子，進行互交，得子代為同樣小果，則可證實",
+      "若甲和乙皆為顯性同型合子，進行互交，得子代為同樣小果，則可證實",
+      "若甲和乙皆為隱性同型合子，進行互交，得子代果實較甲乙小，則可證實",
+      "若甲和乙皆為顯性同型合子，進行互交，得子代果實較甲乙小，則可證實"
+    ],
+    "exp": "正確答案：若甲和乙皆為隱性同型合子，進行互交，得子代為同樣小果，則可證實。來源：112年學科能力測驗自然第18題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 18,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q19",
+    "difficulty": "medium",
+    "q": "酸鹼指示劑會在特定pH 值範圍發生顏色轉變，常用酸鹼指示劑的變色範圍和其顏色如\n  表2 所示。\n\n                      表2\n\n    常用指示劑酸型顏色變色範圍（pH）   鹼型顏色\n\n     甲基紅紅             4.2～6.3       黃\n\n      酚紅黃             6.4～8.2       紅\n\n      酚酞無            8.3～10.0       紅\n\n 下列有關酸鹼指示劑的敘述，何者正確？",
+    "correct": "酸鹼指示劑會因pH值變化而改變顏色，顯示它們本身可以跟酸或鹼反應",
+    "wrong": [
+      "將食鹽水溶液，加入少量甲基紅，會呈現紅與黃混合的橙色",
+      "相同體積莫耳濃度、相同體積之鹽酸與氫氧化鈉水溶液反應後，加入少量酚酞，會\n\n   呈現紅色",
+      "甲基紅、酚紅、酚酞的變色範圍約為2倍氫離子濃度的差異範圍",
+      "用甲基紅和酚紅的混合物當指示劑可更有效辨識強酸和強鹼"
+    ],
+    "exp": "正確答案：酸鹼指示劑會因pH值變化而改變顏色，顯示它們本身可以跟酸或鹼反應。來源：112年學科能力測驗自然第19題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 19,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-112-science/Q20-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗自然第20題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 20,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/Q20-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/gsat-112-science/Q22-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：112年學科能力測驗自然第22題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 22,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/Q22-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/gsat-112-science/G25-26-context-1.png)\n\n![第26題原卷資料](/assets/banks/gsat-112-science/G25-26-context-2.png)\n\n![第26題原卷資料](/assets/banks/gsat-112-science/Q26-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗自然第26題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 26,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        25,
+        26
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G25-26-context-1.png",
+      "/assets/banks/gsat-112-science/G25-26-context-2.png",
+      "/assets/banks/gsat-112-science/Q26-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q28",
+    "difficulty": "medium",
+    "q": "一群學生討論物理學發展史，初步整理出下列甲～己等6 項資料的敘述。\n\n  甲：湯姆森經由實驗發現電子的存在。\n\n  乙：拉塞福提出原子的正電荷集中在核心、電子分布在核外圍的原子模型。\n\n  丙：首先發現載有電流的導線會在其周圍產生磁場的是厄斯特。\n\n  丁：首先推論光是電磁波的是赫茲。\n\n  戊：首先由實驗發現電磁感應現象的是法拉第。\n\n  己：首先提出能量具有量子化特性的是愛因斯坦。\n\n  在上述各項敘述中，正確的為下列何者？",
+    "correct": "甲乙丙戊",
+    "wrong": [
+      "甲丁戊",
+      "乙丙己",
+      "丙丁戊己",
+      "甲乙丁己"
+    ],
+    "exp": "正確答案：甲乙丙戊。來源：112年學科能力測驗自然第28題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 28,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/gsat-112-science/G30-31-context.png)\n\n![第30題原卷資料](/assets/banks/gsat-112-science/Q30-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年學科能力測驗自然第30題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 30,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        30,
+        31
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G30-31-context.png",
+      "/assets/banks/gsat-112-science/Q30-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/gsat-112-science/Q32-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗自然第32題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 32,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/Q32-question.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/gsat-112-science/Q33-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：112年學科能力測驗自然第33題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 33,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/Q33-question.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q34",
+    "difficulty": "medium",
+    "q": "下列甲～戊為5 個與能源有關的敘述：\n\n  甲：核能發電廠利用核分裂發電後，反應爐內的原子總質量會比發電前少\n\n  乙：發電廠利用核分裂發電時，鈾235燃料的全部質量都可轉換為熱能而用以發電\n\n  丙：以變壓器供電的電器，即使關機，只要變壓器接在插座上而通有電流就會耗電\n\n  丁：在相同車型與行駛條件下，兩車各載一人與一車載兩人的燃油消耗相同\n\n  戊：相同耗電功率的LED燈與白熾燈泡，其發光與照明的效能一定相同\n  在上述5項敘述中，正確的為下列何者？",
+    "correct": "甲丙",
+    "wrong": [
+      "甲乙丙",
+      "甲丁戊",
+      "乙丙戊",
+      "乙丁"
+    ],
+    "exp": "正確答案：甲丙。來源：112年學科能力測驗自然第34題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 34,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q36",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/gsat-112-science/Q36-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗自然第36題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 36,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/Q36-question.png"
+    ],
+    "passRate": 0.34,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q37",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-112-science/G37-40-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-112-science/Q37-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗自然第37題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 37,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        40
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G37-40-context.png",
+      "/assets/banks/gsat-112-science/Q37-question.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/gsat-112-science/G37-40-context.png)\n\n![第38題原卷資料](/assets/banks/gsat-112-science/Q38-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗自然第38題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 38,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        40
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G37-40-context.png",
+      "/assets/banks/gsat-112-science/Q38-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/gsat-112-science/G37-40-context.png)\n\n![第39題原卷資料](/assets/banks/gsat-112-science/Q39-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗自然第39題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 39,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        40
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G37-40-context.png",
+      "/assets/banks/gsat-112-science/Q39-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-science-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/gsat-112-science/G41-44-context.png)\n\n![第41題原卷資料](/assets/banks/gsat-112-science/Q41-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：112年學科能力測驗自然第41題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 41,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        41,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G41-44-context.png",
+      "/assets/banks/gsat-112-science/Q41-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q42",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/gsat-112-science/G41-44-context.png)\n\n![第42題原卷資料](/assets/banks/gsat-112-science/Q42-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗自然第42題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 42,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        41,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G41-44-context.png",
+      "/assets/banks/gsat-112-science/Q42-question.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/gsat-112-science/G41-44-context.png)\n\n![第43題原卷資料](/assets/banks/gsat-112-science/Q43-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗自然第43題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 43,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        41,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G41-44-context.png",
+      "/assets/banks/gsat-112-science/Q43-question.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q45",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n45-47題為題組\n\n  乳糖與酪蛋白是牛乳中製作乳酪所需的重要成分。加入特定的微生物於牛乳中，靜置一\n\n  段時間發酵，待微生物將乳糖轉化形成乳酸。在這個過程中，溫度、熟成時間和其他微\n\n  量添加物（例如食鹽）都會影響乳酪的口感和味道。隨著發酵過程乳酸濃度的上升，酪\n\n  蛋白會逐漸凝聚析出形成固體，是乳酪的主要成分，殘留在溶液中的蛋白質則統稱為乳\n\n  清蛋白，經過加工以高蛋白營養品出售。\n\n市售牛乳的pH 為6.6，而乳酪的凝聚過程始於pH5.3。試問市售牛乳的氫離子濃度改變\n  多少後，乳酪會開始凝聚？（log2＝0.30）",
+    "correct": "增加約20倍",
+    "wrong": [
+      "增加約1.3倍",
+      "增加約13 %",
+      "減少約10倍",
+      "減少約10 %"
+    ],
+    "exp": "正確答案：增加約20倍。來源：112年學科能力測驗自然第45題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 45,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        45,
+        47
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-science-q53",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/gsat-112-science/G51-54-context.png)\n\n![第53題原卷資料](/assets/banks/gsat-112-science/Q53-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗自然第53題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 53,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        17,
+        18
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        51,
+        54
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G51-54-context.png",
+      "/assets/banks/gsat-112-science/Q53-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-science-q55",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 55 題。\n\n![第55題原卷資料](/assets/banks/gsat-112-science/G55-60-context.png)\n\n![第55題原卷資料](/assets/banks/gsat-112-science/Q55-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗自然第55題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 55,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        55,
+        60
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G55-60-context.png",
+      "/assets/banks/gsat-112-science/Q55-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-science-q56",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 56 題。\n\n![第56題原卷資料](/assets/banks/gsat-112-science/G55-60-context.png)\n\n![第56題原卷資料](/assets/banks/gsat-112-science/Q56-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗自然第56題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 56,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        18,
+        19
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        55,
+        60
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G55-60-context.png",
+      "/assets/banks/gsat-112-science/Q56-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-science-q58",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/gsat-112-science/G55-60-context.png)\n\n![第58題原卷資料](/assets/banks/gsat-112-science/Q58-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年學科能力測驗自然第58題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-112-science",
+      "question": 58,
+      "file": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "pages": [
+        18,
+        19
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        55,
+        60
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-science/G55-60-context.png",
+      "/assets/banks/gsat-112-science/Q58-question.png"
+    ]
+  }
+]

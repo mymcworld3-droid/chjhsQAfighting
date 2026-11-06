@@ -1,0 +1,1986 @@
+[
+  {
+    "id": "cap-110-social-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-110-social/Q1-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第1題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 1,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q1-question.png"
+    ],
+    "passRate": 0.92,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-110-social/Q2-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第2題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 2,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q2-question.png"
+    ],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q3",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-110-social/Q3-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第3題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 3,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q3-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q4",
+    "difficulty": "medium",
+    "q": "中國某一跨海大橋於2018年完工，其連結了中國兩個特別行政區及一個經濟\n  特區，可縮短往來三地的距離，及強化三地經濟社會的交流。上述跨海大橋\n  應位於下列哪條河川的出海口？",
+    "correct": "珠江",
+    "wrong": [
+      "長江",
+      "海河",
+      "黃河"
+    ],
+    "exp": "正確答案：珠江。來源：110年國中教育會考社會第4題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 4,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q5",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-110-social/Q5-question-1.png)\n\n![第5題原卷資料](/assets/banks/cap-110-social/Q5-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第5題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 5,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q5-question-1.png",
+      "/assets/banks/cap-110-social/Q5-question-2.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q6",
+    "difficulty": "easy",
+    "q": "考古學者在臺灣東部發現距今約三萬年前的史前人類生活遺跡，推估當時的人\n  們已經懂得打製粗糙的石器，但還沒有磨製石器的技巧，也不懂如何蓋房子，\n  而是住在天然的洞穴裡。這些史前人類最可能以下列何種方式維持生活？",
+    "correct": "採集漁獵",
+    "wrong": [
+      "牧養牛羊",
+      "種植稻米",
+      "圈養家畜㽸勪┶憺今ヮ⫆巭"
+    ],
+    "exp": "正確答案：採集漁獵。來源：110年國中教育會考社會第6題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 6,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q7",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-110-social/Q7-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第7題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 7,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q7-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q8",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-110-social/Q8-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第8題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 8,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q8-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-110-social/Q9-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第9題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 9,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q9-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q10",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-110-social/Q10-question-1.png)\n\n![第10題原卷資料](/assets/banks/cap-110-social/Q10-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第10題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 10,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q10-question-1.png",
+      "/assets/banks/cap-110-social/Q10-question-2.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q11",
+    "difficulty": "easy",
+    "q": "在咖啡廳打工的大牛，自從年齡不受《勞動基準法》童工規定的保護後，老\n  闆開始要求他每週五加班到凌晨。某日，大牛與客人發生衝突，因而被移送\n  少年法庭審理。根據上述內容判斷，下列關於大牛的敘述何者最適當？",
+    "correct": "可能受到保護管束處分",
+    "wrong": [
+      "屬於無責任能力人",
+      "屬於完全行為能力人",
+      "可能被處以十五萬元罰鍰"
+    ],
+    "exp": "正確答案：可能受到保護管束處分。來源：110年國中教育會考社會第11題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 11,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-110-social/Q12-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第12題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 12,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q12-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q13",
+    "difficulty": "medium",
+    "q": "我國中央政府基於五權分立、相互制衡的理念而運作，某些職務雖具有其法\n  定職權，但行使職權時經常需要取得其他機關的同意才能完成，例如緊急命\n  令的發布就包含了許多法定程序。下列何者與上述事例的運作流程無關？",
+    "correct": "司法院",
+    "wrong": [
+      "總統",
+      "行政院",
+      "立法院"
+    ],
+    "exp": "正確答案：司法院。來源：110年國中教育會考社會第13題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 13,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q14",
+    "difficulty": "easy",
+    "q": "近來許多地方政府重新整頓閒置空間，每逢週末舉辦藝文活動，並對外進行\n  攤位招商，有時還搭配煙火秀吸引遊客。由於此舉易造成周邊交通壅塞，加\n  上地方財政困窘，因而輿論對此作法有諸多批評，但不少地方政府仍持續舉\n  辦相關活動。下列何者最可能是上述地方政府作為的目的？",
+    "correct": "籌措地方自治財源",
+    "wrong": [
+      "提供人民社會福利",
+      "維護自然環境資源",
+      "保障民眾言論自由"
+    ],
+    "exp": "正確答案：籌措地方自治財源。來源：110年國中教育會考社會第14題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 14,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-110-social/Q15-question-1.png)\n\n![第15題原卷資料](/assets/banks/cap-110-social/Q15-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第15題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 15,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q15-question-1.png",
+      "/assets/banks/cap-110-social/Q15-question-2.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-110-social/Q16-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第16題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 16,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q16-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-110-social/Q17-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第17題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 17,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q17-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-110-social/Q18-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第18題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 18,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q18-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q19",
+    "difficulty": "medium",
+    "q": "臺灣目前有四個國家風景區在其範圍內設置有表(二)\n  北回歸線標誌，包括花東縱谷、東部海岸、澎設置地點經緯度\n  湖以及雲嘉南濱海國家風景區。表(二)為上述甲     23.45°N,121.50°E\n  四個北回歸線標誌設置地點的經緯度，何者位乙     23.45°N,120.14°E\n  在雲嘉南濱海國家風景區範圍內？\n                         丙     23.47°N,121.36°E",
+    "correct": "乙\n                         丁     23.48°N,119.51°E",
+    "wrong": [
+      "甲",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：乙\n                         丁     23.48°N,119.51°E。來源：110年國中教育會考社會第19題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 19,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-110-social/Q20-question-1.png)\n\n![第20題原卷資料](/assets/banks/cap-110-social/Q20-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第20題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 20,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q20-question-1.png",
+      "/assets/banks/cap-110-social/Q20-question-2.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-110-social/Q21-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第21題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 21,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q21-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-110-social/Q22-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第22題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 22,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q22-question.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q23",
+    "difficulty": "medium",
+    "q": "下列為兩本不同時代史書對中國長江中下游某地景觀的描述：\n  史書一：「地廣人稀，以稻米為飯，以魚類為菜，採行火耕等原始的耕種方\n       式。人們沒有積蓄，……既無挨餓受凍之人，也無千金富戶。」\n  史書二：「水澤廣闊，良田廣茂，桑樹遍野，田地與溝渠綿延相望，村舍錯\n       落，田間小路交織，好像美麗的刺繡。」\n  上述轉變與下列何者的關係最為密切？",
+    "correct": "「六朝」的開發",
+    "wrong": [
+      "張騫通西域",
+      "坊市制度的廢除",
+      "「萬里長城」的修築"
+    ],
+    "exp": "正確答案：「六朝」的開發。來源：110年國中教育會考社會第23題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 23,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q24",
+    "difficulty": "medium",
+    "q": "以下是一位西方記者對時事的報導：「過去美歐人士在中國許多城市高高在\n  上，不僅享有領事裁判權保護，更有本國軍隊在中國駐紮。但『戰爭』改變\n  了一切，領事裁判權被取消，美歐人士必須接受中國司法管轄，他們逍遙於\n  中國司法之外的好日子和地位，一去不復返了。」上述「戰爭」最可能是指\n  下列何者？",
+    "correct": "第二次世界大戰\n                                  5",
+    "wrong": [
+      "鴉片戰爭",
+      "國民革命軍北伐",
+      "第一次世界大戰"
+    ],
+    "exp": "正確答案：第二次世界大戰\n                                  5。來源：110年國中教育會考社會第24題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 24,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q25",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-110-social/Q25-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第25題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 25,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q25-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-110-social/Q26-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第26題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 26,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q26-question.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q27",
+    "difficulty": "medium",
+    "q": "小蔡多次趁消費時詐騙某一店家財物，老闆不甘受騙報警處理。雖然小蔡遭\n  逮後深表懊悔，並賠償店家損失達成和解，老闆也決定不提出告訴，但警方\n  仍依法將他移送法辦，最後小蔡遭法院判處罰金。上述小蔡與老闆達成和\n  解，以及被法院判罰的部分，依序屬於下列何種類型？",
+    "correct": "民事事件、非告訴乃論的刑事案件",
+    "wrong": [
+      "行政案件、告訴乃論的刑事案件",
+      "民事事件、告訴乃論的刑事案件",
+      "行政案件、非告訴乃論的刑事案件"
+    ],
+    "exp": "正確答案：民事事件、非告訴乃論的刑事案件。來源：110年國中教育會考社會第27題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 27,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-110-social/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/cap-110-social/Q28-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第28題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 28,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q28-question-1.png",
+      "/assets/banks/cap-110-social/Q28-question-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-110-social/Q29-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第29題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 29,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q29-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-110-social/Q30-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第30題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 30,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q30-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q31",
+    "difficulty": "medium",
+    "q": "「飛行釀酒師」是一個特別的行業，他們搭乘飛機穿梭在全球各地的葡萄園\n  提供技術指導，尤其是在秋季葡萄採收時最為忙碌。某一釀酒師在澳洲葡萄\n  採收的季節前往該國協助，則他在澳洲停留的月分最可能為下列何者？",
+    "correct": "3、4月",
+    "wrong": [
+      "1、2月",
+      "6、7月",
+      "9、10月"
+    ],
+    "exp": "正確答案：3、4月。來源：110年國中教育會考社會第31題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 31,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-110-social/Q32-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第32題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 32,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q32-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q33",
+    "difficulty": "medium",
+    "q": "法國            5,552\n33. 「早期，臺灣中部山區的原住民開墾坡地時， 斯洛伐克         4,094\n  會先砍伐樹木，待其充分乾燥後點火焚燒，坡羅馬尼亞          854\n  地因此留下不少灰燼，可作為肥料。首年的收\n                       總計         273,710\n  穫相當可觀，但通常僅能耕作3至5年，便須遷\n                      註：船舶貨運量為各國以船舶\n  移到其他坡地，再以相同方式開墾。」上述農\n                      運抵甲港口及從甲港口運至各\n  墾方式最可能也出現在下列哪一地區？\n                      國的貨運量總和。",
+    "correct": "印尼蘇門答臘島",
+    "wrong": [
+      "埃及尼羅河三角洲",
+      "加拿大拉布拉多高原",
+      "俄羅斯西伯利亞山地\n                                  7"
+    ],
+    "exp": "正確答案：印尼蘇門答臘島。來源：110年國中教育會考社會第33題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 33,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q34",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-110-social/Q34-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第34題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 34,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q34-question.png"
+    ],
+    "passRate": 0.23,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-110-social/Q35-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第35題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 35,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q35-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-110-social/Q36-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第36題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 36,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q36-question.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-110-social/Q37-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第37題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 37,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q37-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-110-social/Q38-question-1.png)\n\n![第38題原卷資料](/assets/banks/cap-110-social/Q38-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第38題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 38,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q38-question-1.png",
+      "/assets/banks/cap-110-social/Q38-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-social-q39",
+    "difficulty": "medium",
+    "q": "「吳生是徽州人，參加科舉考試屢屢失利，但他沒有放棄金榜題名的希望。\n  為了糊口謀生，在這個徽州商人活躍於全國，形成商幫組織的時代，他未從\n  商而選擇行醫。有一年，吳生遠赴省城參加鄉試，卻遇上了身體不適的老友\n  上門求診，結果老友得以痊癒，自己卻又再度名落孫山。終其一生，他雖未\n  能如願中舉，但卻成為一位良醫。」上文中的吳生，最可能是下列何時的讀\n  書人？",
+    "correct": "明清時期                                        (࿤Γ)\n                                                               500            ‴ᶔ",
+    "wrong": [
+      "西漢時期",
+      "隋唐時期",
+      "北宋時期"
+    ],
+    "exp": "正確答案：明清時期                                        (࿤Γ)\n                                                               500            ‴ᶔ。來源：110年國中教育會考社會第39題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 39,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "cap-110-social-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-110-social/Q40-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第40題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 40,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q40-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q41",
+    "difficulty": "hard",
+    "q": "有一本1926年出版的書籍，對於臺北名勝介紹如下：「圓山公園位在距離臺\n  北車站1.8哩之處，隔基隆河與臺灣神社相望，樹木繁盛，滿山翠綠。園內有\n  市立動物園，動物園飼養了來自世界各地的珍禽異獸，遊覽者眾，此動物園\n  被公認是國內的五大動物園之一。」上述內容中「國內的五大動物園」最可\n  能還包括下列何地的動物園？",
+    "correct": "京城(首爾)",
+    "wrong": [
+      "上海",
+      "馬尼拉",
+      "巴達維亞(雅加達)"
+    ],
+    "exp": "正確答案：京城(首爾)。來源：110年國中教育會考社會第41題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 41,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.34,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q42",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-110-social/Q42-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第42題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 42,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q42-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q43",
+    "difficulty": "hard",
+    "q": "阿治在網路上分享自己潛水過程中觸碰綠蠵龜的影片，引發了爭議。由於他\n  隨意觸碰保育類動物的行為，涉嫌違反《野生動物保育法》，一旦確定行為\n  違法，最重將可能面臨有期徒刑的處罰。根據上述內容判斷，若阿治遭罰但\n  不服，他採行下列哪一方式進行權利救濟最適當？",
+    "correct": "向高等法院提起上訴",
+    "wrong": [
+      "向相關單位提出請願",
+      "向訴願管轄機關提出訴願",
+      "向高等行政法院提起上訴\n                                  9"
+    ],
+    "exp": "正確答案：向高等法院提起上訴。來源：110年國中教育會考社會第43題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 43,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q44",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-110-social/Q44-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第44題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 44,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q44-question.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-110-social/Q45-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第45題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 45,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q45-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-110-social/Q46-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第46題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 46,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q46-question.png"
+    ],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q47",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-110-social/Q47-question-1.png)\n\n![第47題原卷資料](/assets/banks/cap-110-social/Q47-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第47題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 47,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q47-question-1.png",
+      "/assets/banks/cap-110-social/Q47-question-2.png"
+    ],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q48",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-110-social/Q48-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第48題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 48,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q48-question.png"
+    ],
+    "passRate": 0.28,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q49",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-110-social/Q49-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第49題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 49,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q49-question.png"
+    ],
+    "passRate": 0.92,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-110-social/Q50-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第50題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 50,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q50-question.png"
+    ],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q51",
+    "difficulty": "medium",
+    "q": "2018年的「世界音樂節@臺灣」邀請了世界各地的音樂團體來臺演出，其中\n  來自厄瓜多的樂團帶來安地斯山風情的音樂，讓我們可以藉此欣賞該國的文\n  化特色。上述文化特色最可能為下列何者？",
+    "correct": "印加傳統音樂",
+    "wrong": [
+      "中東新樂曲",
+      "寶萊塢歌舞劇",
+      "愛爾蘭踢踏舞樂"
+    ],
+    "exp": "正確答案：印加傳統音樂。來源：110年國中教育會考社會第51題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 51,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q52",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/cap-110-social/Q52-question-1.png)\n\n![第52題原卷資料](/assets/banks/cap-110-social/Q52-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第52題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 52,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q52-question-1.png",
+      "/assets/banks/cap-110-social/Q52-question-2.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q53",
+    "difficulty": "medium",
+    "q": "以下是一位學者對於歷史上某次政治改革所做的評論：「憲法由資政院起草議\n  決，皇帝頒布；修正權屬於國會；皇帝權力以憲法規定者為限。上述這些規定\n  雖限制了部分皇權，卻仍然強調皇帝神聖不可侵犯，對於人民的民主權利隻字\n  未提。」根據內容判斷，推行上述政治改革的最可能是下列何者？",
+    "correct": "1911年的清朝政府",
+    "wrong": [
+      "1860年的太平天國",
+      "1947年的國民政府",
+      "1949年的中華人民共和國"
+    ],
+    "exp": "正確答案：1911年的清朝政府。來源：110年國中教育會考社會第53題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 53,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q54",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/cap-110-social/Q54-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第54題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 54,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q54-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q55",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 55 題。\n\n![第55題原卷資料](/assets/banks/cap-110-social/Q55-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第55題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 55,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/Q55-question.png"
+    ],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q56",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 56 題。\n\n![第56題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第56題原卷資料](/assets/banks/cap-110-social/Q56-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第56題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 56,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q56-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q57",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 57 題。\n\n![第57題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第57題原卷資料](/assets/banks/cap-110-social/Q57-question-1.png)\n\n![第57題原卷資料](/assets/banks/cap-110-social/Q57-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第57題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 57,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q57-question-1.png",
+      "/assets/banks/cap-110-social/Q57-question-2.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q58",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第58題原卷資料](/assets/banks/cap-110-social/Q58-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第58題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 58,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q58-question.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q59",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 59 題。\n\n![第59題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第59題原卷資料](/assets/banks/cap-110-social/Q59-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考社會第59題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 59,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q59-question.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q60",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 60 題。\n\n![第60題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第60題原卷資料](/assets/banks/cap-110-social/Q60-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考社會第60題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 60,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q60-question.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q61",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 61 題。\n\n![第61題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第61題原卷資料](/assets/banks/cap-110-social/Q61-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第61題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 61,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q61-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q62",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 62 題。\n\n![第62題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第62題原卷資料](/assets/banks/cap-110-social/Q62-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考社會第62題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 62,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q62-question.png"
+    ],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-social-q63",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 63 題。\n\n![第63題原卷資料](/assets/banks/cap-110-social/G56-63-context.png)\n\n![第63題原卷資料](/assets/banks/cap-110-social/Q63-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考社會第63題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-110-social",
+      "question": 63,
+      "file": "國中/會考/社會/110P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "pages": [
+        13,
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        56,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-social/G56-63-context.png",
+      "/assets/banks/cap-110-social/Q63-question.png"
+    ],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  }
+]

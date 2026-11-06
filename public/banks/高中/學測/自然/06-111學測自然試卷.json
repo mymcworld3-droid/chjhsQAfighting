@@ -1,0 +1,783 @@
+[
+  {
+    "id": "gsat-111-science-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-111-science/G1-2-context.png)\n\n![第1題原卷資料](/assets/banks/gsat-111-science/Q1-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗自然第1題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 1,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        1,
+        2
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G1-2-context.png",
+      "/assets/banks/gsat-111-science/Q1-question.png"
+    ],
+    "passRate": 0.92,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q3",
+    "difficulty": "easy",
+    "q": "rE               mE3. 已知地球（E）與火星（M）的平均半徑比值約為1.86，質量比值約為9.3，試問\n                                                          rM              mM\n\n 同一物體在火星表面所受重力約為在地球表面所受重力的多少倍？",
+    "correct": "0.37",
+    "wrong": [
+      "0.10",
+      "0.72",
+      "0.93",
+      "1.86"
+    ],
+    "exp": "正確答案：0.37。來源：111年學科能力測驗自然第3題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 3,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q5",
+    "difficulty": "medium",
+    "q": "若質量為720 公斤的球體，具有3600 千焦耳的動能，則此球體的速率約為多少公尺秒？/",
+    "correct": "10 2",
+    "wrong": [
+      "103",
+      "10 4",
+      "105",
+      "106"
+    ],
+    "exp": "正確答案：10 2。來源：111年學科能力測驗自然第5題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 5,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q7",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-111-science/G7-8-context.png)\n\n![第7題原卷資料](/assets/banks/gsat-111-science/Q7-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第7題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 7,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        7,
+        8
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G7-8-context.png",
+      "/assets/banks/gsat-111-science/Q7-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q9",
+    "difficulty": "medium",
+    "q": "下列關於科學史實敘述，何者正確？",
+    "correct": "愛因斯坦以光子模型解釋光電效應",
+    "wrong": [
+      "馬克士威以馬克士威方程式解釋光電效應",
+      "拉塞福利用電子撞擊氫原子探究原子結構",
+      "波耳首先觀測到氫原子光譜",
+      "波耳氫原子模型的建構比拉塞福的原子模型來得早"
+    ],
+    "exp": "正確答案：愛因斯坦以光子模型解釋光電效應。來源：111年學科能力測驗自然第9題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 9,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q10",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/gsat-111-science/Q10-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗自然第10題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 10,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/Q10-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q11",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/gsat-111-science/Q11-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗自然第11題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 11,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/Q11-question.png"
+    ],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-111-science/Q13-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：111年學科能力測驗自然第13題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 13,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/Q13-question.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q14",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-111-science/Q14-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗自然第14題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 14,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/Q14-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-111-science/Q15-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第15題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 15,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/Q15-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/gsat-111-science/Q16-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗自然第16題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 16,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/Q16-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q19",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n19-20題為題組\n\n  分析細胞的DNA含量可瞭解組織中細胞的染色體套數或細胞所處之時期。研究者對某\n  一具雙套染色體之生物，將其DNA以螢光物質染色，利用DNA含量與螢光強度成正比\n\n  的原理，統計組織中不同螢光強度的細胞個數。\n\n依據上文，下列對於細胞有絲分裂的敘述，何者正確？",
+    "correct": "細胞分裂完成時，細胞具雙套染色體，螢光強度較間期時弱",
+    "wrong": [
+      "細胞分裂過程中，細胞因具單套染色體，螢光強度最弱",
+      "細胞完成DNA複製時，細胞具三套染色體，螢光強度最強",
+      "細胞DNA複製時，是處於細胞分裂期",
+      "細胞完成DNA複製後進入間期，此時螢光強度最強"
+    ],
+    "exp": "正確答案：細胞分裂完成時，細胞具雙套染色體，螢光強度較間期時弱。來源：111年學科能力測驗自然第19題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 19,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        19,
+        20
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/gsat-111-science/G28-29-context.png)\n\n![第29題原卷資料](/assets/banks/gsat-111-science/Q29-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第29題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 29,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        28,
+        29
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G28-29-context.png",
+      "/assets/banks/gsat-111-science/Q29-question.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q31",
+    "difficulty": "medium",
+    "q": "天體的顏色提供豐富訊息。例如：織女星發出藍白光芒，心宿二顏色偏紅，天王星外觀\n\n 為藍綠色，火星呈暗紅色。依據以上描述，下列何者正確？",
+    "correct": "織女星的表面溫度比心宿二高",
+    "wrong": [
+      "天王星的表面溫度比火星高",
+      "天王星的表面溫度比心宿二高",
+      "織女星的發光能力比心宿二強",
+      "火星的發光能力比心宿二強"
+    ],
+    "exp": "正確答案：織女星的表面溫度比心宿二高。來源：111年學科能力測驗自然第31題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 31,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q33",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/gsat-111-science/Q33-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第33題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 33,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/Q33-question.png"
+    ],
+    "passRate": 0.32,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q35",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n35-36題為題組\n\n  日本鰻在河川中成長，將成熟時，洄游數千公里到馬里亞納群島海域產卵。孵化後，幼\n\n  魚隨北赤道洋流與黑潮漂游到近岸，再游進河川。每年冬季都可見日本、韓國、臺灣、\n\n  大陸等地漁民於沿岸捕撈鰻苗供養殖所需。\n\n根據短文，以下推論何者有顯著錯誤？",
+    "correct": "已知黑潮平均流速約1 m/s，相對於日本九州海岸，臺灣鰻苗漁汛多半提早一至兩天",
+    "wrong": [
+      "若鰻的幼魚被動地隨著黑潮漂送，則鰻苗於東亞的分布情形可以反應黑潮的流況分布",
+      "福建海岸及臺灣西岸冬季都可能捕撈到鰻苗，表示黑潮水於冬季時會進入臺灣海峽",
+      "鰻的幼魚利用黑潮移動，所以在日本、韓國、臺灣、大陸等地都可以捕撈鰻苗",
+      "近岸海水及河流的污染，及生態環境破壞，可能是鰻魚產量變少的原因之一"
+    ],
+    "exp": "正確答案：已知黑潮平均流速約1 m/s，相對於日本九州海岸，臺灣鰻苗漁汛多半提早一至兩天。來源：111年學科能力測驗自然第35題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 35,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q36",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n35-36題為題組\n\n  日本鰻在河川中成長，將成熟時，洄游數千公里到馬里亞納群島海域產卵。孵化後，幼\n\n  魚隨北赤道洋流與黑潮漂游到近岸，再游進河川。每年冬季都可見日本、韓國、臺灣、\n\n  大陸等地漁民於沿岸捕撈鰻苗供養殖所需。\n\n鰻魚可感知鹽度以找尋適當河川。已知表層之黑潮水鹽度為33 ‰，河水鹽度為1 ‰，\n  假設水體充分混合，當鰻魚所在水域之鹽度為25 ‰時，黑潮水與河水混合的重量比例\n\n  為何？",
+    "correct": "3:1",
+    "wrong": [
+      "2:3",
+      "1:1",
+      "3: 2",
+      "1: 2"
+    ],
+    "exp": "正確答案：3:1。來源：111年學科能力測驗自然第36題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 36,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.23,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q41",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/gsat-111-science/G37-42-context.png)\n\n![第41題原卷資料](/assets/banks/gsat-111-science/Q41-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第41題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 41,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        37,
+        42
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G37-42-context.png",
+      "/assets/banks/gsat-111-science/Q41-question.png"
+    ],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/gsat-111-science/G43-45-context-1.png)\n\n![第43題原卷資料](/assets/banks/gsat-111-science/G43-45-context-2.png)\n\n![第43題原卷資料](/assets/banks/gsat-111-science/Q43-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗自然第43題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 43,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        43,
+        45
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G43-45-context-1.png",
+      "/assets/banks/gsat-111-science/G43-45-context-2.png",
+      "/assets/banks/gsat-111-science/Q43-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/gsat-111-science/G49-54-context.png)\n\n![第50題原卷資料](/assets/banks/gsat-111-science/Q50-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第50題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 50,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        16,
+        17
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        49,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G49-54-context.png",
+      "/assets/banks/gsat-111-science/Q50-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-111-science-q52",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/gsat-111-science/G49-54-context.png)\n\n![第52題原卷資料](/assets/banks/gsat-111-science/Q52-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗自然第52題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 52,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        16,
+        17
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        49,
+        54
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G49-54-context.png",
+      "/assets/banks/gsat-111-science/Q52-question.png"
+    ]
+  },
+  {
+    "id": "gsat-111-science-q53",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/gsat-111-science/G49-54-context.png)\n\n![第53題原卷資料](/assets/banks/gsat-111-science/Q53-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗自然第53題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 53,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        16,
+        17
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        49,
+        54
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G49-54-context.png",
+      "/assets/banks/gsat-111-science/Q53-question.png"
+    ]
+  },
+  {
+    "id": "gsat-111-science-q58",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/gsat-111-science/G58-60-context.png)\n\n![第58題原卷資料](/assets/banks/gsat-111-science/Q58-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗自然第58題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-111-science",
+      "question": 58,
+      "file": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        58,
+        60
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-science/G58-60-context.png",
+      "/assets/banks/gsat-111-science/Q58-question.png"
+    ]
+  }
+]

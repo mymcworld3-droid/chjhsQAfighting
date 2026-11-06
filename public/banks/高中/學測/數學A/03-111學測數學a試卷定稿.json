@@ -1,0 +1,187 @@
+[
+  {
+    "id": "gsat-111-math-a-q1",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-111-math-a/Q1-question.png)",
+    "correct": "原卷選項 5",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 4"
+    ],
+    "exp": "正確答案：原卷選項 5。來源：111年學科能力測驗數學A第1題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 1,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "5",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-math-a/Q1-question.png"
+    ]
+  },
+  {
+    "id": "gsat-111-math-a-q3",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-111-math-a/Q3-question.png)",
+    "correct": "原卷選項 5",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 4"
+    ],
+    "exp": "正確答案：原卷選項 5。來源：111年學科能力測驗數學A第3題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 3,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "5",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-math-a/Q3-question.png"
+    ]
+  },
+  {
+    "id": "gsat-111-math-a-q4",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-111-math-a/Q4-question.png)",
+    "correct": "原卷選項 3",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 4",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 3。來源：111年學科能力測驗數學A第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 4,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-math-a/Q4-question.png"
+    ]
+  },
+  {
+    "id": "gsat-111-math-a-q6",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/gsat-111-math-a/Q6-question.png)",
+    "correct": "原卷選項 5",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 4"
+    ],
+    "exp": "正確答案：原卷選項 5。來源：111年學科能力測驗數學A第6題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 6,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "5",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-math-a/Q6-question.png"
+    ]
+  },
+  {
+    "id": "gsat-111-math-a-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-111-math-a/Q13-question.png)",
+    "correct": "原卷選項 2",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 3",
+      "原卷選項 4",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 2。來源：111年學科能力測驗數學A第13題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 13,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "2",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-math-a/Q13-question.png"
+    ]
+  },
+  {
+    "id": "gsat-111-math-a-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-111-math-a/G18-20-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-111-math-a/Q18-question.png)",
+    "correct": "原卷選項 4",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 4。來源：111年學科能力測驗數學A第18題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 18,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        20
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-math-a/G18-20-context.png",
+      "/assets/banks/gsat-111-math-a/Q18-question.png"
+    ]
+  }
+]

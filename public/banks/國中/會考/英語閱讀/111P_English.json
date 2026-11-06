@@ -1,0 +1,1406 @@
+[
+  {
+    "id": "cap-111-english-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-111-english/Q1-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考英語閱讀第1題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 1,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/Q1-question.png"
+    ],
+    "passRate": 0.94,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q2",
+    "difficulty": "easy",
+    "q": "The movie starts at two o’clock, ______ let’s meet at the theater at one forty-five.",
+    "correct": "so",
+    "wrong": [
+      "or",
+      "if",
+      "because"
+    ],
+    "exp": "正確答案：so。來源：111年國中教育會考英語閱讀第2題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 2,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q3",
+    "difficulty": "easy",
+    "q": "Peter is afraid of the dark. He even leaves the ______ on when sleeping.",
+    "correct": "lights",
+    "wrong": [
+      "computer",
+      "fans",
+      "music"
+    ],
+    "exp": "正確答案：lights。來源：111年國中教育會考英語閱讀第3題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 3,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q4",
+    "difficulty": "easy",
+    "q": "Pam is a ______ baseball player; she has more fans than any other player on her team.",
+    "correct": "popular",
+    "wrong": [
+      "boring",
+      "heavy",
+      "rich"
+    ],
+    "exp": "正確答案：popular。來源：111年國中教育會考英語閱讀第4題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 4,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q5",
+    "difficulty": "easy",
+    "q": "I did not do my homework, so my teacher said I ______ stay after school to finish it.",
+    "correct": "had to",
+    "wrong": [
+      "failed to",
+      "hoped to",
+      "used to"
+    ],
+    "exp": "正確答案：had to。來源：111年國中教育會考英語閱讀第5題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 5,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q6",
+    "difficulty": "easy",
+    "q": "Kevin has only enough money for the bag or the shoes. That is a hard ______ to\n    make because he likes them both.",
+    "correct": "choice",
+    "wrong": [
+      "gift",
+      "rule",
+      "trick"
+    ],
+    "exp": "正確答案：choice。來源：111年國中教育會考英語閱讀第6題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 6,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q7",
+    "difficulty": "easy",
+    "q": "It was ______ for us to answer the math question because we’ve done the same kind\n     of questions many times.",
+    "correct": "easy",
+    "wrong": [
+      "common",
+      "safe",
+      "special"
+    ],
+    "exp": "正確答案：easy。來源：111年國中教育會考英語閱讀第7題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 7,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q8",
+    "difficulty": "medium",
+    "q": "Although it took me lots of time ______ a big meal for ten people, I was happy that\n    everyone enjoyed it.",
+    "correct": "to prepare",
+    "wrong": [
+      "prepare",
+      "preparing",
+      "prepared"
+    ],
+    "exp": "正確答案：to prepare。來源：111年國中教育會考英語閱讀第8題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 8,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q9",
+    "difficulty": "medium",
+    "q": "Don’t let the children swim in the river. We don’t know how ______ it is.  It could be\n    dangerous.",
+    "correct": "deep",
+    "wrong": [
+      "far",
+      "long",
+      "thick"
+    ],
+    "exp": "正確答案：deep。來源：111年國中教育會考英語閱讀第9題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 9,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q10",
+    "difficulty": "medium",
+    "q": "Bob is ______ of the boys in the family. He never does any housework. His brothers\n     at least take out the garbage sometimes.",
+    "correct": "the laziest",
+    "wrong": [
+      "lazier",
+      "the lazy",
+      "the lazier"
+    ],
+    "exp": "正確答案：the laziest。來源：111年國中教育會考英語閱讀第10題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 10,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q11",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-111-english/Q11-question-1.png)\n\n![第11題原卷資料](/assets/banks/cap-111-english/Q11-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考英語閱讀第11題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 11,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/Q11-question-1.png",
+      "/assets/banks/cap-111-english/Q11-question-2.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q12",
+    "difficulty": "easy",
+    "q": "We won’t see the sun even after the typhoon leaves, because the news said that\n     heavier rain will soon ______  .",
+    "correct": "follow",
+    "wrong": [
+      "catch",
+      "move",
+      "stop"
+    ],
+    "exp": "正確答案：follow。來源：111年國中教育會考英語閱讀第12題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 12,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q13",
+    "difficulty": "easy",
+    "q": "Yesterday when I got home from work, my brother ______ for dinner, so he invited me\n     to join him.",
+    "correct": "was going out",
+    "wrong": [
+      "goes out",
+      "went out",
+      "has gone out"
+    ],
+    "exp": "正確答案：was going out。來源：111年國中教育會考英語閱讀第13題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 13,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q14",
+    "difficulty": "medium",
+    "q": "You were ______ not to lend Amy money. She never gives back what she borrows.",
+    "correct": "wise",
+    "wrong": [
+      "crazy",
+      "helpful",
+      "wrong"
+    ],
+    "exp": "正確答案：wise。來源：111年國中教育會考英語閱讀第14題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 14,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q15",
+    "difficulty": "medium",
+    "q": "Have you found a summer job yet? Mr. Firth ______ someone to take care of his kids\n     during the vacation. Maybe you can talk to him.",
+    "correct": "is looking for",
+    "wrong": [
+      "has looked for",
+      "looks for",
+      "was looking for"
+    ],
+    "exp": "正確答案：is looking for。來源：111年國中教育會考英語閱讀第15題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 15,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q16",
+    "difficulty": "medium",
+    "q": "David looked out of the balcony window and saw a woman get in his car ______ away.",
+    "correct": "and drive",
+    "wrong": [
+      "drive",
+      "drove",
+      "and drove"
+    ],
+    "exp": "正確答案：and drive。來源：111年國中教育會考英語閱讀第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 16,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q17",
+    "difficulty": "medium",
+    "q": "The police haven’t found the little girl who ______ at a supermarket.  They’ll keep\n    doing all they can to find her.",
+    "correct": "was taken away",
+    "wrong": [
+      "took away",
+      "taken away",
+      "has taken away"
+    ],
+    "exp": "正確答案：was taken away。來源：111年國中教育會考英語閱讀第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 17,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q18",
+    "difficulty": "medium",
+    "q": "Buses to the airport only come once every hour, and we just missed ______  . Why don’t\n   we take a taxi?",
+    "correct": "one",
+    "wrong": [
+      "another",
+      "it",
+      "them"
+    ],
+    "exp": "正確答案：one。來源：111年國中教育會考英語閱讀第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 18,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q19",
+    "difficulty": "medium",
+    "q": "Ariel ______ every night for a week before her Chinese test and got a very good grade.",
+    "correct": "studied",
+    "wrong": [
+      "studies",
+      "has studied",
+      "was going to study"
+    ],
+    "exp": "正確答案：studied。來源：111年國中教育會考英語閱讀第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 19,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-111-english/Q20-question-1.png)\n\n![第20題原卷資料](/assets/banks/cap-111-english/Q20-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 20,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/Q20-question-1.png",
+      "/assets/banks/cap-111-english/Q20-question-2.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-111-english/G21-22-context.png)\n\n![第21題原卷資料](/assets/banks/cap-111-english/Q21-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考英語閱讀第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 21,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        21,
+        22
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G21-22-context.png",
+      "/assets/banks/cap-111-english/Q21-question.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-english-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-111-english/G21-22-context.png)\n\n![第22題原卷資料](/assets/banks/cap-111-english/Q22-question-1.png)\n\n![第22題原卷資料](/assets/banks/cap-111-english/Q22-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考英語閱讀第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 22,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        21,
+        22
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G21-22-context.png",
+      "/assets/banks/cap-111-english/Q22-question-1.png",
+      "/assets/banks/cap-111-english/Q22-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-111-english/G23-24-context-1.png)\n\n![第23題原卷資料](/assets/banks/cap-111-english/G23-24-context-2.png)\n\n![第23題原卷資料](/assets/banks/cap-111-english/Q23-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 23,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        23,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G23-24-context-1.png",
+      "/assets/banks/cap-111-english/G23-24-context-2.png",
+      "/assets/banks/cap-111-english/Q23-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-111-english/G23-24-context-1.png)\n\n![第24題原卷資料](/assets/banks/cap-111-english/G23-24-context-2.png)\n\n![第24題原卷資料](/assets/banks/cap-111-english/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/cap-111-english/Q24-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考英語閱讀第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 24,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        5,
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        23,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G23-24-context-1.png",
+      "/assets/banks/cap-111-english/G23-24-context-2.png",
+      "/assets/banks/cap-111-english/Q24-question-1.png",
+      "/assets/banks/cap-111-english/Q24-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-111-english/G25-26-context.png)\n\n![第25題原卷資料](/assets/banks/cap-111-english/Q25-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考英語閱讀第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 25,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        25,
+        26
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G25-26-context.png",
+      "/assets/banks/cap-111-english/Q25-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-111-english/G25-26-context.png)\n\n![第26題原卷資料](/assets/banks/cap-111-english/Q26-question-1.png)\n\n![第26題原卷資料](/assets/banks/cap-111-english/Q26-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考英語閱讀第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 26,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        25,
+        26
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G25-26-context.png",
+      "/assets/banks/cap-111-english/Q26-question-1.png",
+      "/assets/banks/cap-111-english/Q26-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-111-english/G27-29-context.png)\n\n![第27題原卷資料](/assets/banks/cap-111-english/Q27-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考英語閱讀第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 27,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        27,
+        29
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G27-29-context.png",
+      "/assets/banks/cap-111-english/Q27-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-111-english/G27-29-context.png)\n\n![第28題原卷資料](/assets/banks/cap-111-english/Q28-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 28,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        27,
+        29
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G27-29-context.png",
+      "/assets/banks/cap-111-english/Q28-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-111-english/G27-29-context.png)\n\n![第29題原卷資料](/assets/banks/cap-111-english/Q29-question-1.png)\n\n![第29題原卷資料](/assets/banks/cap-111-english/Q29-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考英語閱讀第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 29,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        27,
+        29
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G27-29-context.png",
+      "/assets/banks/cap-111-english/Q29-question-1.png",
+      "/assets/banks/cap-111-english/Q29-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-111-english/G30-32-context-1.png)\n\n![第30題原卷資料](/assets/banks/cap-111-english/G30-32-context-2.png)\n\n![第30題原卷資料](/assets/banks/cap-111-english/Q30-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 30,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        30,
+        32
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G30-32-context-1.png",
+      "/assets/banks/cap-111-english/G30-32-context-2.png",
+      "/assets/banks/cap-111-english/Q30-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-111-english/G30-32-context-1.png)\n\n![第31題原卷資料](/assets/banks/cap-111-english/G30-32-context-2.png)\n\n![第31題原卷資料](/assets/banks/cap-111-english/Q31-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考英語閱讀第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 31,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        30,
+        32
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G30-32-context-1.png",
+      "/assets/banks/cap-111-english/G30-32-context-2.png",
+      "/assets/banks/cap-111-english/Q31-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-111-english/G30-32-context-1.png)\n\n![第32題原卷資料](/assets/banks/cap-111-english/G30-32-context-2.png)\n\n![第32題原卷資料](/assets/banks/cap-111-english/Q32-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 32,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        30,
+        32
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G30-32-context-1.png",
+      "/assets/banks/cap-111-english/G30-32-context-2.png",
+      "/assets/banks/cap-111-english/Q32-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-111-english/G33-36-context-1.png)\n\n![第33題原卷資料](/assets/banks/cap-111-english/G33-36-context-2.png)\n\n![第33題原卷資料](/assets/banks/cap-111-english/Q33-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 33,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G33-36-context-1.png",
+      "/assets/banks/cap-111-english/G33-36-context-2.png",
+      "/assets/banks/cap-111-english/Q33-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-111-english/G33-36-context-1.png)\n\n![第34題原卷資料](/assets/banks/cap-111-english/G33-36-context-2.png)\n\n![第34題原卷資料](/assets/banks/cap-111-english/Q34-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考英語閱讀第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 34,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G33-36-context-1.png",
+      "/assets/banks/cap-111-english/G33-36-context-2.png",
+      "/assets/banks/cap-111-english/Q34-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-111-english/G33-36-context-1.png)\n\n![第35題原卷資料](/assets/banks/cap-111-english/G33-36-context-2.png)\n\n![第35題原卷資料](/assets/banks/cap-111-english/Q35-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 35,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G33-36-context-1.png",
+      "/assets/banks/cap-111-english/G33-36-context-2.png",
+      "/assets/banks/cap-111-english/Q35-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-111-english/G33-36-context-1.png)\n\n![第36題原卷資料](/assets/banks/cap-111-english/G33-36-context-2.png)\n\n![第36題原卷資料](/assets/banks/cap-111-english/Q36-question-1.png)\n\n![第36題原卷資料](/assets/banks/cap-111-english/Q36-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考英語閱讀第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 36,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G33-36-context-1.png",
+      "/assets/banks/cap-111-english/G33-36-context-2.png",
+      "/assets/banks/cap-111-english/Q36-question-1.png",
+      "/assets/banks/cap-111-english/Q36-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-111-english/G37-39-context.png)\n\n![第37題原卷資料](/assets/banks/cap-111-english/Q37-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考英語閱讀第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 37,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G37-39-context.png",
+      "/assets/banks/cap-111-english/Q37-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-111-english/G37-39-context.png)\n\n![第38題原卷資料](/assets/banks/cap-111-english/Q38-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考英語閱讀第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 38,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G37-39-context.png",
+      "/assets/banks/cap-111-english/Q38-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-111-english/G37-39-context.png)\n\n![第39題原卷資料](/assets/banks/cap-111-english/Q39-question-1.png)\n\n![第39題原卷資料](/assets/banks/cap-111-english/Q39-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考英語閱讀第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 39,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G37-39-context.png",
+      "/assets/banks/cap-111-english/Q39-question-1.png",
+      "/assets/banks/cap-111-english/Q39-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-111-english/G40-43-context.png)\n\n![第40題原卷資料](/assets/banks/cap-111-english/Q40-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考英語閱讀第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 40,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-context.png",
+      "/assets/banks/cap-111-english/Q40-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-111-english/G40-43-context.png)\n\n![第41題原卷資料](/assets/banks/cap-111-english/Q41-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考英語閱讀第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 41,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-context.png",
+      "/assets/banks/cap-111-english/Q41-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q42",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-111-english/G40-43-context.png)\n\n![第42題原卷資料](/assets/banks/cap-111-english/Q42-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考英語閱讀第42題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 42,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-context.png",
+      "/assets/banks/cap-111-english/Q42-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-english-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-111-english/G40-43-context.png)\n\n![第43題原卷資料](/assets/banks/cap-111-english/Q43-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考英語閱讀第43題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 43,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-context.png",
+      "/assets/banks/cap-111-english/Q43-question.png"
+    ]
+  }
+]

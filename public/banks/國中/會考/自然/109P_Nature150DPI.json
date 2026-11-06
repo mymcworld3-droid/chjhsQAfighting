@@ -1,0 +1,1722 @@
+[
+  {
+    "id": "cap-109-science-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-109-science/Q1-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第1題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 1,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q1-question.png"
+    ],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-109-science/Q2-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第2題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 2,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q2-question.png"
+    ],
+    "passRate": 0.94,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q3",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-109-science/Q3-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第3題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 3,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q3-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q4",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-109-science/Q4-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第4題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 4,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q4-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q5",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-109-science/Q5-question-1.png)\n\n![第5題原卷資料](/assets/banks/cap-109-science/Q5-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第5題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 5,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q5-question-1.png",
+      "/assets/banks/cap-109-science/Q5-question-2.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q6",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-109-science/Q6-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第6題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 6,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q6-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q7",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-109-science/Q7-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第7題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 7,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q7-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q8",
+    "difficulty": "easy",
+    "q": "當岩石受到壓力、溫度、海水等因素影響，會逐漸破裂，而海浪長期在破裂的\n  裂隙中反覆作用，使裂隙加大，會形成一塊塊形狀像豆腐的岩石，稱為「豆腐\n  岩」。根據上述資訊，「豆腐岩」的形成原因應以哪兩種地質作用為主？",
+    "correct": "風化作用與侵蝕作用",
+    "wrong": [
+      "風化作用與沉積作用",
+      "侵蝕作用與沉積作用",
+      "搬運作用與沉積作用"
+    ],
+    "exp": "正確答案：風化作用與侵蝕作用。來源：109年國中教育會考自然第8題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 8,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-109-science/Q9-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第9題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 9,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q9-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q10",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-109-science/Q10-question-1.png)\n\n![第10題原卷資料](/assets/banks/cap-109-science/Q10-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第10題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 10,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q10-question-1.png",
+      "/assets/banks/cap-109-science/Q10-question-2.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q11",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-109-science/Q11-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第11題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 11,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q11-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-109-science/Q12-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第12題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 12,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q12-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-109-science/Q13-question-1.png)\n\n![第13題原卷資料](/assets/banks/cap-109-science/Q13-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第13題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 13,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q13-question-1.png",
+      "/assets/banks/cap-109-science/Q13-question-2.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q14",
+    "difficulty": "medium",
+    "q": "市面上販售的萘丸，其主要成分為「萘」，可用來驅蟲。已知萘是一種有機烴類\n  化合物，下列何者所含有的原子種類與萘完全相同？",
+    "correct": "C6H6",
+    "wrong": [
+      "CO2",
+      "CH2Cl2",
+      "CH3COOC2H5"
+    ],
+    "exp": "正確答案：C6H6。來源：109年國中教育會考自然第14題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 14,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-109-science/Q15-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第15題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 15,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q15-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q16",
+    "difficulty": "medium",
+    "q": "某抗菌肥皂添加物質 X，其目的是要破壞細菌的構造以達到殺菌效果，但專家擔心\n  此產品會加速細菌的演化。若以天擇說解釋專家所擔心的內容，則有關此抗菌\n  肥皂中的物質 X 對人體或細菌的影響，下列何者最合理？",
+    "correct": "篩選出不被物質 X 破壞的細菌",
+    "wrong": [
+      "使人體產生對細菌的抵抗力",
+      "使細菌分泌物質 X 以增加存活機會",
+      "會刺激人體細胞分泌物質 X 以破壞細菌"
+    ],
+    "exp": "正確答案：篩選出不被物質 X 破壞的細菌。來源：109年國中教育會考自然第16題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 16,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q17",
+    "difficulty": "medium",
+    "q": "自花授粉是指植物的花粉黏附在同一朵花的雌蕊柱頭上。關於植物以自花授粉\n  的方式生殖，下列何者最合理？",
+    "correct": "屬於有性生殖",
+    "wrong": [
+      "不會產生果實",
+      "子代不具有繁殖能力",
+      "子代與親代的性狀皆完全相同"
+    ],
+    "exp": "正確答案：屬於有性生殖。來源：109年國中教育會考自然第17題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 17,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-109-science/Q18-question-1.png)\n\n![第18題原卷資料](/assets/banks/cap-109-science/Q18-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第18題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 18,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q18-question-1.png",
+      "/assets/banks/cap-109-science/Q18-question-2.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-109-science/Q19-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第19題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 19,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q19-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-109-science/Q20-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第20題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 20,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q20-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-109-science/Q21-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第21題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 21,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q21-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q22",
+    "difficulty": "medium",
+    "q": "有關目前對太陽系的認識，下列敘述何者正確？",
+    "correct": "八大行星中類地行星與類木行星數量相同",
+    "wrong": [
+      "銀河系與太陽系擁有的恆星數量大致相同",
+      "類地行星主要是由氣體、冰等物質所組成",
+      "類木行星的密度以及體積皆小於類地行星\n\n                                  5"
+    ],
+    "exp": "正確答案：八大行星中類地行星與類木行星數量相同。來源：109年國中教育會考自然第22題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 22,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-109-science/Q23-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第23題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 23,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q23-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-109-science/Q24-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第24題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 24,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q24-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-109-science/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-109-science/Q25-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第25題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 25,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q25-question-1.png",
+      "/assets/banks/cap-109-science/Q25-question-2.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-109-science/Q26-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第26題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 26,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q26-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q27",
+    "difficulty": "medium",
+    "q": "取一質量 10 kg 材質均勻的合金，將其分成兩塊，其中一塊製成一個邊長為\n    10 cm 的實心正立方體，另一塊製成一個質量為 2 kg 的實心球，則此實心球的\n  體積應為多少？",
+    "correct": "250 cm3",
+    "wrong": [
+      "200 cm3",
+      "4000 cm3",
+      "5000 cm3"
+    ],
+    "exp": "正確答案：250 cm3。來源：109年國中教育會考自然第27題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 27,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-109-science/Q28-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第28題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 28,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q28-question.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-109-science/Q29-question-1.png)\n\n![第29題原卷資料](/assets/banks/cap-109-science/Q29-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第29題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 29,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q29-question-1.png",
+      "/assets/banks/cap-109-science/Q29-question-2.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-109-science/Q30-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第30題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 30,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q30-question.png"
+    ],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q31",
+    "difficulty": "medium",
+    "q": "部分的肉類加工食品含有硝酸鹽(為含有 NO3 的化合物)，硝酸鹽會「反應」產生\n   亞硝酸鹽(為含有NO2 的化合物)，皆可抑制肉毒桿菌生長，但應避免過量食用這\n  類食品。在上述「反應」中，硝酸鹽扮演何種角色，以及進行何種反應？",
+    "correct": "氧化劑，還原反應",
+    "wrong": [
+      "還原劑，還原反應",
+      "還原劑，氧化反應",
+      "氧化劑，氧化反應"
+    ],
+    "exp": "正確答案：氧化劑，還原反應。來源：109年國中教育會考自然第31題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 31,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-109-science/Q32-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第32題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 32,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q32-question.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-109-science/Q33-question-1.png)\n\n![第33題原卷資料](/assets/banks/cap-109-science/Q33-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第33題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 33,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q33-question-1.png",
+      "/assets/banks/cap-109-science/Q33-question-2.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q34",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-109-science/Q34-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第34題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 34,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q34-question.png"
+    ],
+    "passRate": 0.34,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q35",
+    "difficulty": "medium",
+    "q": "本月小麗在家中感受到兩次明顯的地震，她查詢這兩次地震發生時，離她家最近\n  測站的震度，得到第一次地震的震度為 3 級，第二次地震的震度為 2 級。根據上\n  述，這兩次地震造成該測站搖晃程度與地震釋放能量大小之比較，下列何者正確？",
+    "correct": "第一次地震的搖晃程度較大，但無法比較釋放能量的差異",
+    "wrong": [
+      "第一次地震的搖晃程度較大，其釋放的能量也較大",
+      "第一次地震釋放的能量較大，但其造成搖晃程度反而較小",
+      "第一次地震釋放的能量較大，但無法比較兩次搖晃程度的差異"
+    ],
+    "exp": "正確答案：第一次地震的搖晃程度較大，但無法比較釋放能量的差異。來源：109年國中教育會考自然第35題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 35,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-109-science/Q36-question-1.png)\n\n![第36題原卷資料](/assets/banks/cap-109-science/Q36-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第36題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 36,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q36-question-1.png",
+      "/assets/banks/cap-109-science/Q36-question-2.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-109-science/Q37-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第37題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 37,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q37-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-109-science/Q38-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第38題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 38,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q38-question.png"
+    ]
+  },
+  {
+    "id": "cap-109-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-109-science/Q39-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第39題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 39,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-109-science-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-109-science/Q40-question-1.png)\n\n![第40題原卷資料](/assets/banks/cap-109-science/Q40-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第40題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 40,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q40-question-1.png",
+      "/assets/banks/cap-109-science/Q40-question-2.png"
+    ],
+    "passRate": 0.44,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-109-science/Q41-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第41題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 41,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q41-question.png"
+    ],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q42",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-109-science/Q42-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第42題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 42,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q42-question.png"
+    ],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q43",
+    "difficulty": "hard",
+    "q": "已知人體代謝甲物質後所產生的含氮廢物，會運送至乙器官中轉換成尿素。根\n  據上述，關於甲和乙的配對，下列何者正確？",
+    "correct": "甲：蛋白質，乙：肝臟",
+    "wrong": [
+      "甲：脂質，乙：腎臟",
+      "甲：脂質，乙：肝臟",
+      "甲：蛋白質，乙：腎臟"
+    ],
+    "exp": "正確答案：甲：蛋白質，乙：肝臟。來源：109年國中教育會考自然第43題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 43,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q44",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-109-science/Q44-question-1.png)\n\n![第44題原卷資料](/assets/banks/cap-109-science/Q44-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第44題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 44,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/Q44-question-1.png",
+      "/assets/banks/cap-109-science/Q44-question-2.png"
+    ],
+    "passRate": 0.29,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q45",
+    "difficulty": "hard",
+    "q": "俊傑與美玲對於萬有引力定律分別提出以下看法：\n  俊傑：舉例來說，我桌上的橡皮擦，它以相同大小的力吸引著宇宙中的每一個\n     物體，這種力就是萬有引力。\n  美玲：舉例來說，我腳底下的地球，它的質量非常大，所以它作用於我的萬有\n     引力會遠大於我作用於它的萬有引力。\n  關於兩人的看法是否符合萬有引力定律，下列何者正確？",
+    "correct": "兩人的看法均不符合",
+    "wrong": [
+      "兩人的看法均符合",
+      "只有俊傑的看法符合",
+      "只有美玲的看法符合"
+    ],
+    "exp": "正確答案：兩人的看法均不符合。來源：109年國中教育會考自然第45題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 45,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.31,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-109-science/G46-47-context.png)\n\n![第46題原卷資料](/assets/banks/cap-109-science/Q46-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第46題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 46,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        46,
+        47
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G46-47-context.png",
+      "/assets/banks/cap-109-science/Q46-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q47",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-109-science/G46-47-context.png)\n\n![第47題原卷資料](/assets/banks/cap-109-science/Q47-question-1.png)\n\n![第47題原卷資料](/assets/banks/cap-109-science/Q47-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第47題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 47,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        46,
+        47
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G46-47-context.png",
+      "/assets/banks/cap-109-science/Q47-question-1.png",
+      "/assets/banks/cap-109-science/Q47-question-2.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-109-science/G48-49-context.png)\n\n![第48題原卷資料](/assets/banks/cap-109-science/Q48-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第48題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 48,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        48,
+        49
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G48-49-context.png",
+      "/assets/banks/cap-109-science/Q48-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q49",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-109-science/G48-49-context.png)\n\n![第49題原卷資料](/assets/banks/cap-109-science/Q49-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第49題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 49,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        48,
+        49
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G48-49-context.png",
+      "/assets/banks/cap-109-science/Q49-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-109-science/G50-51-context.png)\n\n![第50題原卷資料](/assets/banks/cap-109-science/Q50-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第50題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 50,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        50,
+        51
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G50-51-context.png",
+      "/assets/banks/cap-109-science/Q50-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q51",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 51 題。\n\n![第51題原卷資料](/assets/banks/cap-109-science/G50-51-context.png)\n\n![第51題原卷資料](/assets/banks/cap-109-science/Q51-question-1.png)\n\n![第51題原卷資料](/assets/banks/cap-109-science/Q51-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考自然第51題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 51,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        50,
+        51
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G50-51-context.png",
+      "/assets/banks/cap-109-science/Q51-question-1.png",
+      "/assets/banks/cap-109-science/Q51-question-2.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q52",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/cap-109-science/G52-54-context.png)\n\n![第52題原卷資料](/assets/banks/cap-109-science/Q52-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考自然第52題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 52,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        52,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G52-54-context.png",
+      "/assets/banks/cap-109-science/Q52-question.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q53",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/cap-109-science/G52-54-context.png)\n\n![第53題原卷資料](/assets/banks/cap-109-science/Q53-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考自然第53題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 53,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        52,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G52-54-context.png",
+      "/assets/banks/cap-109-science/Q53-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-science-q54",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/cap-109-science/G52-54-context.png)\n\n![第54題原卷資料](/assets/banks/cap-109-science/Q54-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考自然第54題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-109-science",
+      "question": 54,
+      "file": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        52,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-science/G52-54-context.png",
+      "/assets/banks/cap-109-science/Q54-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  }
+]

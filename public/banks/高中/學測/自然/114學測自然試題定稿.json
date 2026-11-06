@@ -1,0 +1,695 @@
+[
+  {
+    "id": "gsat-114-science-q1",
+    "difficulty": "easy",
+    "q": "有關有絲分裂和減數分裂的敘述，下列何者正確？",
+    "correct": "減數分裂使生物體親代與子代的體細胞染色體數目相同",
+    "wrong": [
+      "有絲分裂會出現紡錘絲，但減數分裂則無",
+      "在分裂過程中，兩者都會發生同源染色體配對的現象",
+      "單細胞生物體不會發生減數分裂，多細胞生物體則有行減數分裂的潛能",
+      "這兩種分裂的方式是原核生物體及真核生物體共同具有的生命現象"
+    ],
+    "exp": "正確答案：減數分裂使生物體親代與子代的體細胞染色體數目相同。來源：114年學科能力測驗自然第1題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 1,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q3",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-114-science/Q3-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年學科能力測驗自然第3題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 3,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/Q3-question.png"
+    ],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q7",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-114-science/G7-8-context.png)\n\n![第7題原卷資料](/assets/banks/gsat-114-science/Q7-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年學科能力測驗自然第7題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 7,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        7,
+        8
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/G7-8-context.png",
+      "/assets/banks/gsat-114-science/Q7-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q12",
+    "difficulty": "medium",
+    "q": "當月球運行到地球與太陽之間且恰好排列成一直線，才會發生日食現象。有關\n\n  日食，下列敘述何者正確？",
+    "correct": "地表任一處發生日偏食的機會，大於發生日全食",
+    "wrong": [
+      "每個月會發生一次日食",
+      "發生日食當天，月相為滿月",
+      "地表任一處在12 年當中至少發生一次日全食",
+      "發生日全食的時候，月面會呈現暗紅色"
+    ],
+    "exp": "正確答案：地表任一處發生日偏食的機會，大於發生日全食。來源：114年學科能力測驗自然第12題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 12,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-114-science/Q13-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年學科能力測驗自然第13題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 13,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/Q13-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-114-science/Q15-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年學科能力測驗自然第15題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 15,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/Q15-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q17",
+    "difficulty": "medium",
+    "q": "對於海水鹽度的描述，以下的敘述何者不正確？",
+    "correct": "赤道附近由於雨量少且蒸發旺盛，海水鹽度因而增高",
+    "wrong": [
+      "開放大洋的海水，每公斤含鹽量大約35 公克",
+      "因為淡水匯入稀釋的原因，河口處的海水鹽度較低",
+      "黑潮表層水的鹽度較周邊的海水為高",
+      "北極海（北冰洋）上層海水的鹽度比印度洋上層海水鹽度較低"
+    ],
+    "exp": "正確答案：赤道附近由於雨量少且蒸發旺盛，海水鹽度因而增高。來源：114年學科能力測驗自然第17題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 17,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q18",
+    "difficulty": "medium",
+    "q": "一般以等級描述星球亮度，視星等數字小代表亮度強。根據長期記錄，發現木星\n  的亮度在 −（負3）星等及3       −（負2）星等之間變化。已知木星半徑約是地球112\n  倍，距離太陽約為日地距離的5 倍，而土星半徑約為地球9 倍，距離太陽約為\n  日地距離的10 倍，反照率則與木星類似。在地面觀測土星時，其最大亮度之\n  星等X，下列何者正確？",
+    "correct": "X > − 2",
+    "wrong": [
+      "X < − 3",
+      "−3 < X < − 2",
+      "X > 6",
+      "X 依照地球與太陽的距離而不一定"
+    ],
+    "exp": "正確答案：X > − 2。來源：114年學科能力測驗自然第18題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 18,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-114-science/G20-21-context.png)\n\n![第20題原卷資料](/assets/banks/gsat-114-science/Q20-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年學科能力測驗自然第20題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 20,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/G20-21-context.png",
+      "/assets/banks/gsat-114-science/Q20-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-114-science/G20-21-context.png)\n\n![第21題原卷資料](/assets/banks/gsat-114-science/Q21-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年學科能力測驗自然第21題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 21,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/G20-21-context.png",
+      "/assets/banks/gsat-114-science/Q21-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/gsat-114-science/G22-23-context.png)\n\n![第22題原卷資料](/assets/banks/gsat-114-science/Q22-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年學科能力測驗自然第22題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 22,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        22,
+        23
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/G22-23-context.png",
+      "/assets/banks/gsat-114-science/Q22-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q24",
+    "difficulty": "medium",
+    "q": "下列關於原子能階的敘述，何者錯誤？",
+    "correct": "為了使處於穩定狀態之原子的電子維持在特定的能階上，外界必須持續提供\n\n   特定能量的光子",
+    "wrong": [
+      "原子中的電子可能處在不同的能階",
+      "一個氫原子雖然只有一個電子，但能階躍遷時可能發射不同波長的光子",
+      "原子中的電子吸收能量後，可能從較低的能階躍遷到較高的能階",
+      "原子中的電子從一個能階躍遷到另一個能量較低的能階時，會放出光子"
+    ],
+    "exp": "正確答案：為了使處於穩定狀態之原子的電子維持在特定的能階上，外界必須持續提供\n\n   特定能量的光子。來源：114年學科能力測驗自然第24題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 24,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/gsat-114-science/Q25-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年學科能力測驗自然第25題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 25,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/Q25-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q26",
+    "difficulty": "medium",
+    "q": "有關物質間的基本交互作用的敘述，下列何者正確？",
+    "correct": "地板支撐體重的接觸力，其來源是電磁力的作用",
+    "wrong": [
+      "強力作用範圍涵蓋於整個原子",
+      "兩物體接觸時極為靠近，故萬有引力為摩擦力的主要來源",
+      "原子中電子繞行原子核類似於行星繞行地球，是靠萬有引力的束縛",
+      "強力仍不足以克服質子間的相斥靜電力，須加上弱力才能使質子束縛於原子核中"
+    ],
+    "exp": "正確答案：地板支撐體重的接觸力，其來源是電磁力的作用。來源：114年學科能力測驗自然第26題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 26,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/gsat-114-science/Q27-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年學科能力測驗自然第27題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 27,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/Q27-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q32",
+    "difficulty": "medium",
+    "q": "萊克多巴胺俗稱「瘦肉精」，可作為動物飼料添加物，用以幫助肌肉生長，減少\n  體脂肪。將「瘦肉精」樣品進行元素分析，發現含有重量百分比71.75%的碳、\n  7.65%的氫、4.65%的氮與15.95%的氧，試問其分子式為何？（原子量：H＝1.0，\n  C＝12.0，N＝14.0，O＝16.0）",
+    "correct": "C18 H23 NO3",
+    "wrong": [
+      "C18 H24 N2 O2",
+      "C17 H22 N2 O2",
+      "C17 H21 NO4",
+      "C17 H 21 N 2 O3"
+    ],
+    "exp": "正確答案：C18 H23 NO3。來源：114年學科能力測驗自然第32題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 32,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/gsat-114-science/Q34-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：114年學科能力測驗自然第34題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 34,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/Q34-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n35-36 題為題組\n\n    氧化亞銅為一種半導體材料，其奈米粒子會懸浮在水中，表面可以吸收光能，\n  將二氧化碳轉化成甲醇（ CH3OH ）與氧氣，但氧化亞銅奈米粒子並不會被消耗。\n\n  持續通入二氧化碳於含氧化亞銅的水溶液中使反應進行，發現光照期間，可觀察\n\n  到氧氣生成；若將光源關閉，則沒有氧氣生成。\n\n經過更仔細的實驗觀察，發現另有少量為氫氣的副產物生成，可能是在光照下，\n  水亦可被分解為氫氣與氧氣，反應式為： 2 H2 O → 2 H2 + O2 。若某次實驗結果的氣體\n  產物為氧氣1.40 莫耳與氫氣0.40 莫耳。試問該次實驗生成多少莫耳的甲醇？",
+    "correct": "0.8",
+    "wrong": [
+      "0.4",
+      "0.6",
+      "1.0",
+      "1.2"
+    ],
+    "exp": "正確答案：0.8。來源：114年學科能力測驗自然第36題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 36,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/gsat-114-science/G44-46-context.png)\n\n![第45題原卷資料](/assets/banks/gsat-114-science/Q45-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年學科能力測驗自然第45題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 45,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        15,
+        16
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        44,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/G44-46-context.png",
+      "/assets/banks/gsat-114-science/Q45-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/gsat-114-science/G47-49-context-1.png)\n\n![第48題原卷資料](/assets/banks/gsat-114-science/G47-49-context-2.png)\n\n![第48題原卷資料](/assets/banks/gsat-114-science/Q48-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年學科能力測驗自然第48題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 48,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        16,
+        17
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        47,
+        49
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-science/G47-49-context-1.png",
+      "/assets/banks/gsat-114-science/G47-49-context-2.png",
+      "/assets/banks/gsat-114-science/Q48-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-114-science-q55",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n55-57 題為題組\n\n    烷類在充足的氧氣下，可進行燃燒反應，產生二氧化碳，並釋出熱量，可作為\n\n  燃料使用。市售的液化天然氣是以甲烷為成分，液化石油氣則是丙烷與丁烷的\n  混合物。表3 為幾種烷類的分子式、分子量及莫耳燃燒熱。1 莫耳碳氫化合物\n\n  完全燃燒生成二氧化碳和水時，所釋出的熱量稱為莫耳燃燒熱。\n\n                        表3\n\n   化合物分子式分子量莫耳燃燒熱（千焦耳/莫耳）\n    甲烷        CH 4             16                       890\n    乙烷        C 2 H 6            30                      1560\n    丁烷        C4 H10            58                      2874\n    戊烷        C5 H12            72                      3509\n    辛烷        C8 H18           114                      5460\n\n根據表3 資料，下列敘述何者正確？",
+    "correct": "每克烷類燃燒釋出熱量的大小順序為：甲烷＞丁烷＞戊烷",
+    "wrong": [
+      "因辛烷分子量較甲烷大，故1 莫耳辛烷比1 莫耳甲烷含有較多的分子數",
+      "每克烷類燃燒釋出熱量皆大於50 千焦耳",
+      "燃燒2 莫耳甲烷比燃燒1 莫耳乙烷，所釋出的熱量要少",
+      "由表3 資料，可以推測己烷的莫耳燃燒熱約為6200（千焦耳/莫耳）"
+    ],
+    "exp": "正確答案：每克烷類燃燒釋出熱量的大小順序為：甲烷＞丁烷＞戊烷。來源：114年學科能力測驗自然第55題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-114-science",
+      "question": 55,
+      "file": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "pages": [
+        20
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        55,
+        57
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  }
+]

@@ -1,0 +1,1369 @@
+[
+  {
+    "id": "cap-110-english-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-110-english/Q1-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考英語閱讀第1題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 1,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/Q1-question.png"
+    ],
+    "passRate": 0.94,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q2",
+    "difficulty": "easy",
+    "q": "Listen! The baby        in the bedroom. Why don’t you go in and take a look?",
+    "correct": "is crying",
+    "wrong": [
+      "cried",
+      "cries",
+      "will cry"
+    ],
+    "exp": "正確答案：is crying。來源：110年國中教育會考英語閱讀第2題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 2,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q3",
+    "difficulty": "easy",
+    "q": "Jill is        that the city park is closed for the music festival because now she can’t\n     jog there.",
+    "correct": "unhappy",
+    "wrong": [
+      "excited",
+      "proud",
+      "scared"
+    ],
+    "exp": "正確答案：unhappy。來源：110年國中教育會考英語閱讀第3題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 3,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q4",
+    "difficulty": "easy",
+    "q": "Steven wants to be a          , because he loves to watch people enjoy the food he prepares.",
+    "correct": "cook",
+    "wrong": [
+      "doctor",
+      "driver",
+      "farmer"
+    ],
+    "exp": "正確答案：cook。來源：110年國中教育會考英語閱讀第4題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 4,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q5",
+    "difficulty": "easy",
+    "q": "Paul misses his parents a lot. He      them since he came to work in Taiwan a\n     year ago.",
+    "correct": "hasn’t seen",
+    "wrong": [
+      "didn’t see",
+      "doesn’t see",
+      "won’t see"
+    ],
+    "exp": "正確答案：hasn’t seen。來源：110年國中教育會考英語閱讀第5題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 5,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q6",
+    "difficulty": "easy",
+    "q": "Our teacher Ms. Wu seldom laughs, but when she           , everyone in the same\n     building can hear her.",
+    "correct": "does",
+    "wrong": [
+      "can",
+      "has",
+      "will"
+    ],
+    "exp": "正確答案：does。來源：110年國中教育會考英語閱讀第6題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 6,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q7",
+    "difficulty": "medium",
+    "q": "My sister is coming to my home today. She       with me for a week.",
+    "correct": "will stay",
+    "wrong": [
+      "stays",
+      "stayed",
+      "has stayed"
+    ],
+    "exp": "正確答案：will stay。來源：110年國中教育會考英語閱讀第7題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 7,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q8",
+    "difficulty": "medium",
+    "q": "Edward had worked as a computer engineer for ten years. This       helped him a\n      lot when he started his own computer shop.",
+    "correct": "experience",
+    "wrong": [
+      "chance",
+      "hobby",
+      "knowledge"
+    ],
+    "exp": "正確答案：experience。來源：110年國中教育會考英語閱讀第8題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 8,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-110-english/Q9-question-1.png)\n\n![第9題原卷資料](/assets/banks/cap-110-english/Q9-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考英語閱讀第9題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 9,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/Q9-question-1.png",
+      "/assets/banks/cap-110-english/Q9-question-2.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q10",
+    "difficulty": "medium",
+    "q": "Jimmy would not get up for breakfast,        his dad had already tried to pull him\n    from his bed several times.",
+    "correct": "although",
+    "wrong": [
+      "because",
+      "if",
+      "until"
+    ],
+    "exp": "正確答案：although。來源：110年國中教育會考英語閱讀第10題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 10,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q11",
+    "difficulty": "easy",
+    "q": "Duncan spent all his money trying to       the bookstore his mom left him. Sadly,\n     the business never got better, and he had to close it in the end.",
+    "correct": "save",
+    "wrong": [
+      "build",
+      "buy",
+      "start"
+    ],
+    "exp": "正確答案：save。來源：110年國中教育會考英語閱讀第11題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 11,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q12",
+    "difficulty": "easy",
+    "q": "Fiona loves listening to her children sing songs        at school.",
+    "correct": "they learned",
+    "wrong": [
+      "are learned",
+      "that learned",
+      "that they are learned"
+    ],
+    "exp": "正確答案：they learned。來源：110年國中教育會考英語閱讀第12題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 12,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q13",
+    "difficulty": "easy",
+    "q": "Beverly eats lots of snacks       meals. That’s why she is often too full to eat\n    anything at mealtimes.",
+    "correct": "between",
+    "wrong": [
+      "after",
+      "during",
+      "from"
+    ],
+    "exp": "正確答案：between。來源：110年國中教育會考英語閱讀第13題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 13,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q14",
+    "difficulty": "easy",
+    "q": "Nora: Can I check your drawer for some tools we can use?\n     Matt: Sure. Take a look. See if you can find       in there.",
+    "correct": "any",
+    "wrong": [
+      "it",
+      "others",
+      "those\n\n                                  2"
+    ],
+    "exp": "正確答案：any。來源：110年國中教育會考英語閱讀第14題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 14,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q15",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-110-english/G15-16-context.png)\n\n![第15題原卷資料](/assets/banks/cap-110-english/Q15-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考英語閱讀第15題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 15,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        15,
+        16
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G15-16-context.png",
+      "/assets/banks/cap-110-english/Q15-question.png"
+    ],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-110-english/G15-16-context.png)\n\n![第16題原卷資料](/assets/banks/cap-110-english/Q16-question-1.png)\n\n![第16題原卷資料](/assets/banks/cap-110-english/Q16-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考英語閱讀第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 16,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        15,
+        16
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G15-16-context.png",
+      "/assets/banks/cap-110-english/Q16-question-1.png",
+      "/assets/banks/cap-110-english/Q16-question-2.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-110-english/G17-18-context.png)\n\n![第17題原卷資料](/assets/banks/cap-110-english/Q17-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考英語閱讀第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 17,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        17,
+        18
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G17-18-context.png",
+      "/assets/banks/cap-110-english/Q17-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-110-english/G17-18-context.png)\n\n![第18題原卷資料](/assets/banks/cap-110-english/Q18-question-1.png)\n\n![第18題原卷資料](/assets/banks/cap-110-english/Q18-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考英語閱讀第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 18,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        17,
+        18
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G17-18-context.png",
+      "/assets/banks/cap-110-english/Q18-question-1.png",
+      "/assets/banks/cap-110-english/Q18-question-2.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-110-english/G19-21-context.png)\n\n![第19題原卷資料](/assets/banks/cap-110-english/Q19-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 19,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        19,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G19-21-context.png",
+      "/assets/banks/cap-110-english/Q19-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-110-english/G19-21-context.png)\n\n![第20題原卷資料](/assets/banks/cap-110-english/Q20-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考英語閱讀第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 20,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        19,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G19-21-context.png",
+      "/assets/banks/cap-110-english/Q20-question.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-110-english/G19-21-context.png)\n\n![第21題原卷資料](/assets/banks/cap-110-english/Q21-question-1.png)\n\n![第21題原卷資料](/assets/banks/cap-110-english/Q21-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考英語閱讀第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 21,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        19,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G19-21-context.png",
+      "/assets/banks/cap-110-english/Q21-question-1.png",
+      "/assets/banks/cap-110-english/Q21-question-2.png"
+    ],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-english-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-110-english/G22-24-context.png)\n\n![第22題原卷資料](/assets/banks/cap-110-english/Q22-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 22,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G22-24-context.png",
+      "/assets/banks/cap-110-english/Q22-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-110-english/G22-24-context.png)\n\n![第23題原卷資料](/assets/banks/cap-110-english/Q23-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考英語閱讀第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 23,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G22-24-context.png",
+      "/assets/banks/cap-110-english/Q23-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-110-english/G22-24-context.png)\n\n![第24題原卷資料](/assets/banks/cap-110-english/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/cap-110-english/Q24-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考英語閱讀第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 24,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G22-24-context.png",
+      "/assets/banks/cap-110-english/Q24-question-1.png",
+      "/assets/banks/cap-110-english/Q24-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-110-english/G25-28-context.png)\n\n![第25題原卷資料](/assets/banks/cap-110-english/Q25-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考英語閱讀第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 25,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G25-28-context.png",
+      "/assets/banks/cap-110-english/Q25-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-110-english/G25-28-context.png)\n\n![第26題原卷資料](/assets/banks/cap-110-english/Q26-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 26,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G25-28-context.png",
+      "/assets/banks/cap-110-english/Q26-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-110-english/G25-28-context.png)\n\n![第27題原卷資料](/assets/banks/cap-110-english/Q27-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考英語閱讀第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 27,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G25-28-context.png",
+      "/assets/banks/cap-110-english/Q27-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-110-english/G25-28-context.png)\n\n![第28題原卷資料](/assets/banks/cap-110-english/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/cap-110-english/Q28-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考英語閱讀第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 28,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G25-28-context.png",
+      "/assets/banks/cap-110-english/Q28-question-1.png",
+      "/assets/banks/cap-110-english/Q28-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-110-english/G29-31-context-1.png)\n\n![第29題原卷資料](/assets/banks/cap-110-english/G29-31-context-2.png)\n\n![第29題原卷資料](/assets/banks/cap-110-english/Q29-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考英語閱讀第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 29,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G29-31-context-1.png",
+      "/assets/banks/cap-110-english/G29-31-context-2.png",
+      "/assets/banks/cap-110-english/Q29-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-110-english/G29-31-context-1.png)\n\n![第30題原卷資料](/assets/banks/cap-110-english/G29-31-context-2.png)\n\n![第30題原卷資料](/assets/banks/cap-110-english/Q30-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考英語閱讀第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 30,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G29-31-context-1.png",
+      "/assets/banks/cap-110-english/G29-31-context-2.png",
+      "/assets/banks/cap-110-english/Q30-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-110-english/G29-31-context-1.png)\n\n![第31題原卷資料](/assets/banks/cap-110-english/G29-31-context-2.png)\n\n![第31題原卷資料](/assets/banks/cap-110-english/Q31-question-1.png)\n\n![第31題原卷資料](/assets/banks/cap-110-english/Q31-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 31,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        9,
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G29-31-context-1.png",
+      "/assets/banks/cap-110-english/G29-31-context-2.png",
+      "/assets/banks/cap-110-english/Q31-question-1.png",
+      "/assets/banks/cap-110-english/Q31-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-110-english/G32-34-context.png)\n\n![第32題原卷資料](/assets/banks/cap-110-english/Q32-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考英語閱讀第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 32,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G32-34-context.png",
+      "/assets/banks/cap-110-english/Q32-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-110-english/G32-34-context.png)\n\n![第33題原卷資料](/assets/banks/cap-110-english/Q33-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考英語閱讀第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 33,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G32-34-context.png",
+      "/assets/banks/cap-110-english/Q33-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-110-english/G32-34-context.png)\n\n![第34題原卷資料](/assets/banks/cap-110-english/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-110-english/Q34-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 34,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G32-34-context.png",
+      "/assets/banks/cap-110-english/Q34-question-1.png",
+      "/assets/banks/cap-110-english/Q34-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-110-english/G35-37-context.png)\n\n![第35題原卷資料](/assets/banks/cap-110-english/Q35-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考英語閱讀第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 35,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G35-37-context.png",
+      "/assets/banks/cap-110-english/Q35-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-110-english/G35-37-context.png)\n\n![第36題原卷資料](/assets/banks/cap-110-english/Q36-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 36,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G35-37-context.png",
+      "/assets/banks/cap-110-english/Q36-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-110-english/G35-37-context.png)\n\n![第37題原卷資料](/assets/banks/cap-110-english/Q37-question-1.png)\n\n![第37題原卷資料](/assets/banks/cap-110-english/Q37-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考英語閱讀第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 37,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G35-37-context.png",
+      "/assets/banks/cap-110-english/Q37-question-1.png",
+      "/assets/banks/cap-110-english/Q37-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-110-english/G38-41-context.png)\n\n![第38題原卷資料](/assets/banks/cap-110-english/Q38-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考英語閱讀第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 38,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-context.png",
+      "/assets/banks/cap-110-english/Q38-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-110-english/G38-41-context.png)\n\n![第39題原卷資料](/assets/banks/cap-110-english/Q39-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 39,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-context.png",
+      "/assets/banks/cap-110-english/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-110-english/G38-41-context.png)\n\n![第40題原卷資料](/assets/banks/cap-110-english/Q40-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考英語閱讀第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 40,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-context.png",
+      "/assets/banks/cap-110-english/Q40-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-english-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-110-english/G38-41-context.png)\n\n![第41題原卷資料](/assets/banks/cap-110-english/Q41-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考英語閱讀第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 41,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-context.png",
+      "/assets/banks/cap-110-english/Q41-question.png"
+    ]
+  }
+]

@@ -1,0 +1,2962 @@
+{
+  "version": 1,
+  "sourceFolder": "https://drive.google.com/drive/folders/11GkUb53AseHdo6qqWLLTUjb_Lf_0Xm28",
+  "banks": [
+    {
+      "id": "cap-109-chinese",
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.json",
+      "title": "109年會考 國文",
+      "sourceFile": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "questionCount": 48,
+      "imageQuestionCount": 32,
+      "excluded": []
+    },
+    {
+      "id": "cap-110-chinese",
+      "file": "國中/會考/國文/110P_Chinese.json",
+      "title": "110年會考 國文",
+      "sourceFile": "國中/會考/國文/110P_Chinese.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "questionCount": 48,
+      "imageQuestionCount": 29,
+      "excluded": []
+    },
+    {
+      "id": "cap-111-chinese",
+      "file": "國中/會考/國文/111P_Chinese.json",
+      "title": "111年會考 國文",
+      "sourceFile": "國中/會考/國文/111P_Chinese.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1RQVtYqDzrrxwfIFihJSwv0XI_FuWEtNb/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "questionCount": 42,
+      "imageQuestionCount": 31,
+      "excluded": []
+    },
+    {
+      "id": "cap-112-chinese",
+      "file": "國中/會考/國文/112P_Chinese.json",
+      "title": "112年會考 國文",
+      "sourceFile": "國中/會考/國文/112P_Chinese.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/14GhZZSold7EcGb8o7DKQByhYK5N_Lug1/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "questionCount": 42,
+      "imageQuestionCount": 29,
+      "excluded": []
+    },
+    {
+      "id": "cap-113-chinese",
+      "file": "國中/會考/國文/113P_Chinese.json",
+      "title": "113年會考 國文",
+      "sourceFile": "國中/會考/國文/113P_Chinese.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "questionCount": 42,
+      "imageQuestionCount": 30,
+      "excluded": []
+    },
+    {
+      "id": "cap-114-chinese",
+      "file": "國中/會考/國文/114P_Chinese.json",
+      "title": "114年會考 國文",
+      "sourceFile": "國中/會考/國文/114P_Chinese.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/19U7EKlFXWUliHHGWcHtQoRkTcpqptg7t/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "questionCount": 42,
+      "imageQuestionCount": 35,
+      "excluded": []
+    },
+    {
+      "id": "cap-109-math",
+      "file": "國中/會考/數學/109P_Math150DPI.json",
+      "title": "109年會考 數學",
+      "sourceFile": "國中/會考/數學/109P_Math150DPI.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "questionCount": 26,
+      "imageQuestionCount": 26,
+      "excluded": []
+    },
+    {
+      "id": "cap-110-math",
+      "file": "國中/會考/數學/110P_Math.json",
+      "title": "110年會考 數學",
+      "sourceFile": "國中/會考/數學/110P_Math.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1RrJ33_h5grHeAb53oe34UwrJ1zsKI7GG/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "questionCount": 26,
+      "imageQuestionCount": 26,
+      "excluded": []
+    },
+    {
+      "id": "cap-111-math",
+      "file": "國中/會考/數學/111P_Math.json",
+      "title": "111年會考 數學",
+      "sourceFile": "國中/會考/數學/111P_Math.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1hjt3LHPnDJdkLD1fE_ij6hsiKC-vv2gF/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "questionCount": 25,
+      "imageQuestionCount": 25,
+      "excluded": []
+    },
+    {
+      "id": "cap-112-math",
+      "file": "國中/會考/數學/112P_Math.json",
+      "title": "112年會考 數學",
+      "sourceFile": "國中/會考/數學/112P_Math.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "questionCount": 25,
+      "imageQuestionCount": 25,
+      "excluded": []
+    },
+    {
+      "id": "cap-113-math",
+      "file": "國中/會考/數學/113P_Math.json",
+      "title": "113年會考 數學",
+      "sourceFile": "國中/會考/數學/113P_Math.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "questionCount": 25,
+      "imageQuestionCount": 25,
+      "excluded": []
+    },
+    {
+      "id": "cap-114-math",
+      "file": "國中/會考/數學/114P_Math.json",
+      "title": "114年會考 數學",
+      "sourceFile": "國中/會考/數學/114P_Math.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1mCy5eLYo4O-TivCnl_jUgNrJjlclGSAf/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "questionCount": 25,
+      "imageQuestionCount": 25,
+      "excluded": []
+    },
+    {
+      "id": "cap-109-social",
+      "file": "國中/會考/社會/109P_Society150DPI.json",
+      "title": "109年會考 社會",
+      "sourceFile": "國中/會考/社會/109P_Society150DPI.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "questionCount": 63,
+      "imageQuestionCount": 53,
+      "excluded": []
+    },
+    {
+      "id": "cap-110-social",
+      "file": "國中/會考/社會/110P_Society.json",
+      "title": "110年會考 社會",
+      "sourceFile": "國中/會考/社會/110P_Society.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1A3R6YIzcLHU56q92pO1IHhJ4G4tcRTo2/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "questionCount": 63,
+      "imageQuestionCount": 47,
+      "excluded": []
+    },
+    {
+      "id": "cap-111-social",
+      "file": "國中/會考/社會/111P_Society.json",
+      "title": "111年會考 社會",
+      "sourceFile": "國中/會考/社會/111P_Society.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "questionCount": 54,
+      "imageQuestionCount": 43,
+      "excluded": []
+    },
+    {
+      "id": "cap-112-social",
+      "file": "國中/會考/社會/112P_Society.json",
+      "title": "112年會考 社會",
+      "sourceFile": "國中/會考/社會/112P_Society.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1XWECJCp035XILnUKT8ry2ayq5f3mUTwe/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "questionCount": 54,
+      "imageQuestionCount": 39,
+      "excluded": []
+    },
+    {
+      "id": "cap-113-social",
+      "file": "國中/會考/社會/113P_Society.json",
+      "title": "113年會考 社會",
+      "sourceFile": "國中/會考/社會/113P_Society.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1JtLEZtaDyCX0uJ8CgSo7WheIuWcpTReF/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "questionCount": 54,
+      "imageQuestionCount": 46,
+      "excluded": []
+    },
+    {
+      "id": "cap-114-social",
+      "file": "國中/會考/社會/114P_Society.json",
+      "title": "114年會考 社會",
+      "sourceFile": "國中/會考/社會/114P_Society.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1YGGDYyhEwZBRzF-KYiBNvKV9e3OBB8Km/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "questionCount": 54,
+      "imageQuestionCount": 42,
+      "excluded": []
+    },
+    {
+      "id": "cap-109-science",
+      "file": "國中/會考/自然/109P_Nature150DPI.json",
+      "title": "109年會考 自然",
+      "sourceFile": "國中/會考/自然/109P_Nature150DPI.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1i3kLOVJwh9Bk5m_4WlFj3cKU8623-WQc/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "questionCount": 54,
+      "imageQuestionCount": 44,
+      "excluded": []
+    },
+    {
+      "id": "cap-110-science",
+      "file": "國中/會考/自然/110P_Nature.json",
+      "title": "110年會考 自然",
+      "sourceFile": "國中/會考/自然/110P_Nature.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1xqou4TawZRzUv3Wygf8ZH2vHjN8yYp5m/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "questionCount": 54,
+      "imageQuestionCount": 43,
+      "excluded": []
+    },
+    {
+      "id": "cap-111-science",
+      "file": "國中/會考/自然/111P_Nature.json",
+      "title": "111年會考 自然",
+      "sourceFile": "國中/會考/自然/111P_Nature.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1klsgJtBPYkTHOJV8V92qL__D_35WmhIp/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "questionCount": 50,
+      "imageQuestionCount": 37,
+      "excluded": []
+    },
+    {
+      "id": "cap-112-science",
+      "file": "國中/會考/自然/112P_Nature.json",
+      "title": "112年會考 自然",
+      "sourceFile": "國中/會考/自然/112P_Nature.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "questionCount": 50,
+      "imageQuestionCount": 44,
+      "excluded": []
+    },
+    {
+      "id": "cap-113-science",
+      "file": "國中/會考/自然/113P_Nature.json",
+      "title": "113年會考 自然",
+      "sourceFile": "國中/會考/自然/113P_Nature.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/13VyybpMRaXnDkCCLQSmsBRU7ruTNiz5r/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "questionCount": 50,
+      "imageQuestionCount": 43,
+      "excluded": []
+    },
+    {
+      "id": "cap-114-science",
+      "file": "國中/會考/自然/114P_Nature.json",
+      "title": "114年會考 自然",
+      "sourceFile": "國中/會考/自然/114P_Nature.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "questionCount": 50,
+      "imageQuestionCount": 45,
+      "excluded": []
+    },
+    {
+      "id": "cap-109-english",
+      "file": "國中/會考/英語閱讀/109P_English150DPI.json",
+      "title": "109年會考 英語閱讀",
+      "sourceFile": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "questionCount": 41,
+      "imageQuestionCount": 28,
+      "excluded": []
+    },
+    {
+      "id": "cap-110-english",
+      "file": "國中/會考/英語閱讀/110P_English.json",
+      "title": "110年會考 英語閱讀",
+      "sourceFile": "國中/會考/英語閱讀/110P_English.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "questionCount": 41,
+      "imageQuestionCount": 29,
+      "excluded": []
+    },
+    {
+      "id": "cap-111-english",
+      "file": "國中/會考/英語閱讀/111P_English.json",
+      "title": "111年會考 英語閱讀",
+      "sourceFile": "國中/會考/英語閱讀/111P_English.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "questionCount": 43,
+      "imageQuestionCount": 26,
+      "excluded": []
+    },
+    {
+      "id": "cap-112-english",
+      "file": "國中/會考/英語閱讀/112P_English.json",
+      "title": "112年會考 英語閱讀",
+      "sourceFile": "國中/會考/英語閱讀/112P_English.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1wpM36aWEgOnWQfGAc71JGacTq3lHWbOB/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "questionCount": 43,
+      "imageQuestionCount": 23,
+      "excluded": []
+    },
+    {
+      "id": "cap-113-english",
+      "file": "國中/會考/英語閱讀/113P_English.json",
+      "title": "113年會考 英語閱讀",
+      "sourceFile": "國中/會考/英語閱讀/113P_English.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1wkv_DJK9QeIxm8i5Y8NhFAhs3B-neIz8/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "questionCount": 43,
+      "imageQuestionCount": 24,
+      "excluded": []
+    },
+    {
+      "id": "cap-114-english",
+      "file": "國中/會考/英語閱讀/114P_English.json",
+      "title": "114年會考 英語閱讀",
+      "sourceFile": "國中/會考/英語閱讀/114P_English.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "questionCount": 43,
+      "imageQuestionCount": 27,
+      "excluded": []
+    },
+    {
+      "id": "gsat-111-chinese",
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.json",
+      "title": "111年學測 國文",
+      "sourceFile": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 27,
+      "imageQuestionCount": 15,
+      "excluded": [
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "ABC"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "ABD"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 32,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 34,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 35,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 36,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-112-chinese",
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.json",
+      "title": "112年學測 國文",
+      "sourceFile": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 27,
+      "imageQuestionCount": 11,
+      "excluded": [
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "ABC"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 32,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 33,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 35,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 37,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-108-chinese",
+      "file": "高中/學測/國文/01-108學測國文(選擇題)試卷定稿.json",
+      "title": "108年學測 國文",
+      "sourceFile": "高中/學測/國文/01-108學測國文(選擇題)試卷定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1ZwMT6C5lFXpztkOxQ_rXWQIrH9UoshDd/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j193641495349792009/01-108%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 34,
+      "imageQuestionCount": 9,
+      "excluded": [
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 36,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 37,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 38,
+          "reason": "multiple-response",
+          "answer": "ABCE"
+        },
+        {
+          "question": 39,
+          "reason": "multiple-response",
+          "answer": "ABD"
+        },
+        {
+          "question": 40,
+          "reason": "multiple-response",
+          "answer": "CDE"
+        },
+        {
+          "question": 41,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "AD"
+        }
+      ]
+    },
+    {
+      "id": "gsat-109-chinese",
+      "file": "高中/學測/國文/01-109學測國文(選擇題)試卷定稿.json",
+      "title": "109年學測 國文",
+      "sourceFile": "高中/學測/國文/01-109學測國文(選擇題)試卷定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1ItpdG4zqYyj94d79xg2lpwJPrN8z1PX_/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050365523476238449/01-109%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 34,
+      "imageQuestionCount": 11,
+      "excluded": [
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "DE"
+        },
+        {
+          "question": 36,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 37,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 38,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 39,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 40,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 41,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "ABDE"
+        }
+      ]
+    },
+    {
+      "id": "gsat-113-chinese",
+      "file": "高中/學測/國文/01-113學測國綜試題定稿.json",
+      "title": "113年學測 國文",
+      "sourceFile": "高中/學測/國文/01-113學測國綜試題定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1NgJkjQanoWDEXeLrae8ohJpeoiCKID2g/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051429991629874988/01-113%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 26,
+      "imageQuestionCount": 13,
+      "excluded": [
+        {
+          "question": 25,
+          "reason": "multiple-response",
+          "answer": "ABC"
+        },
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 32,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 33,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 36,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-114-chinese",
+      "file": "高中/學測/國文/01-114學測國綜試題.json",
+      "title": "114年學測 國文",
+      "sourceFile": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 26,
+      "imageQuestionCount": 24,
+      "excluded": [
+        {
+          "question": 25,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "ABD"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 34,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 35,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 36,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-110-chinese",
+      "file": "高中/學測/國文/110學測國文試卷.json",
+      "title": "110年學測 國文",
+      "sourceFile": "高中/學測/國文/110學測國文試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1YAOHVZyqQzuNztq1x6gPQPSCR9zfyIIu/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 34,
+      "imageQuestionCount": 12,
+      "excluded": [
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 36,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 37,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 38,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 39,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 40,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 41,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        }
+      ]
+    },
+    {
+      "id": "gsat-111-math-a",
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.json",
+      "title": "111年學測 數學A",
+      "sourceFile": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 6,
+      "imageQuestionCount": 6,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 5,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 7,
+          "reason": "multiple-response",
+          "answer": "2,4"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "1,4"
+        },
+        {
+          "question": 9,
+          "reason": "multiple-response",
+          "answer": "3,4"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "1,2"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "2,3,4"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "1,2"
+        },
+        {
+          "question": 14,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-112-math-a",
+      "file": "高中/學測/數學A/03-112學測數學a試卷.json",
+      "title": "112年學測 數學A",
+      "sourceFile": "高中/學測/數學A/03-112學測數學a試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1JUPI9xpxqVuKdwNvhYGVEPRoxq5RnR0T/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045358876595832120/03-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 7,
+      "imageQuestionCount": 7,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 7,
+          "reason": "multiple-response",
+          "answer": "3,5"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "1,4"
+        },
+        {
+          "question": 9,
+          "reason": "multiple-response",
+          "answer": "3,5"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "1,3,5"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "2,5"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "1,5"
+        },
+        {
+          "question": 14,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-113-math-a",
+      "file": "高中/學測/數學A/03-113學測數a試題定稿.json",
+      "title": "113年學測 數學A",
+      "sourceFile": "高中/學測/數學A/03-113學測數a試題定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/19DgEJmSBIzT7U3AsrdlJOcYLqGW_3Ksz/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051426632950938748/03-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 8,
+      "imageQuestionCount": 8,
+      "excluded": [
+        {
+          "question": 7,
+          "reason": "multiple-response",
+          "answer": "3,4"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "2,3"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "3,5"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "2,3"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "2,4,5"
+        },
+        {
+          "question": 13,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 14,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-114-math-a",
+      "file": "高中/學測/數學A/03-114學測數學a試題.json",
+      "title": "114年學測 數學A",
+      "sourceFile": "高中/學測/數學A/03-114學測數學a試題.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1XRVE5fF1Dv_lzgvdmAh9jqHZRJgkWViu/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051544393000727284/03-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 7,
+      "imageQuestionCount": 7,
+      "excluded": [
+        {
+          "question": 7,
+          "reason": "multiple-response",
+          "answer": "2,4"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "3,5"
+        },
+        {
+          "question": 9,
+          "reason": "multiple-response",
+          "answer": "2,4,5"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "1,4,5"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "3,4,5"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "1,3,4,5"
+        },
+        {
+          "question": 13,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 14,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-111-math-b",
+      "file": "高中/學測/數學B/04-111學測數學b試卷.json",
+      "title": "111年學測 數學B",
+      "sourceFile": "高中/學測/數學B/04-111學測數學b試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1H0uGlpdlowejhNwttEdtIcmiKUmwE5r3/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 8,
+      "imageQuestionCount": 8,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 4,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 5,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "1,2,5"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "1,2,4"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "2,3"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "3,5"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-112-math-b",
+      "file": "高中/學測/數學B/04-112學測數學b試卷.json",
+      "title": "112年學測 數學B",
+      "sourceFile": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 6,
+      "imageQuestionCount": 6,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 4,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 5,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "2,4"
+        },
+        {
+          "question": 9,
+          "reason": "multiple-response",
+          "answer": "3,4,5"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "1,5"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "1,4"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "1,3"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 18,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-113-math-b",
+      "file": "高中/學測/數學B/04-113學測數學b試題定稿.json",
+      "title": "113年學測 數學B",
+      "sourceFile": "高中/學測/數學B/04-113學測數學b試題定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1IG2Oca_6DfKsgXhleai_3rFJ9eh3MERW/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 7,
+      "imageQuestionCount": 7,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 4,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 5,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "1,2,5"
+        },
+        {
+          "question": 9,
+          "reason": "multiple-response",
+          "answer": "2,5"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "1,3,4"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "1,4,5"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "1,4"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-114-math-b",
+      "file": "高中/學測/數學B/04-114學測數學b試題.json",
+      "title": "114年學測 數學B",
+      "sourceFile": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 7,
+      "imageQuestionCount": 7,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 4,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 5,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "1,5"
+        },
+        {
+          "question": 9,
+          "reason": "multiple-response",
+          "answer": "2,3,4"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "1,2,5"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "1,3,4"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "1,2"
+        },
+        {
+          "question": 15,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 16,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 17,
+          "reason": "numeric-fill-or-written-response"
+        },
+        {
+          "question": 19,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 20,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-108-social",
+      "file": "高中/學測/社會/01-108學測社會試卷定稿.json",
+      "title": "108年學測 社會",
+      "sourceFile": "高中/學測/社會/01-108學測社會試卷定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1gFy2vOej1BNv4XHi6ZTiFMmFey6PCweM/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196566783577158838/04-108%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 72,
+      "imageQuestionCount": 18,
+      "excluded": []
+    },
+    {
+      "id": "gsat-109-social",
+      "file": "高中/學測/社會/04-109學測社會科-定稿.json",
+      "title": "109年學測 社會",
+      "sourceFile": "高中/學測/社會/04-109學測社會科-定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1A9dYYqbItFCm-ux5I8N2X4XCZE2lPcr4/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050350220448111382/04-109%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 69,
+      "imageQuestionCount": 32,
+      "excluded": [
+        {
+          "question": 4,
+          "reason": "official-cancelled",
+          "answer": "無答案"
+        },
+        {
+          "question": 17,
+          "reason": "official-cancelled",
+          "answer": "無答案"
+        },
+        {
+          "question": 24,
+          "reason": "official-cancelled",
+          "answer": "無答案"
+        }
+      ]
+    },
+    {
+      "id": "gsat-111-social",
+      "file": "高中/學測/社會/05-111學測社會試卷.json",
+      "title": "111年學測 社會",
+      "sourceFile": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "questionCount": 57,
+      "imageQuestionCount": 23,
+      "excluded": [
+        {
+          "question": 48,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 50,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 52,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 54,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 56,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 58,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 60,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 63,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 64,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 67,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-112-social",
+      "file": "高中/學測/社會/05-112學測社會試卷.json",
+      "title": "112年學測 社會",
+      "sourceFile": "高中/學測/社會/05-112學測社會試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1K-8pj_AlXN6bxzju_pdPMYj1WFDx6WSP/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045356351993479581/05-112%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 56,
+      "imageQuestionCount": 21,
+      "excluded": [
+        {
+          "question": 47,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 51,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 54,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 56,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 59,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 61,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 62,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 65,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 66,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-113-social",
+      "file": "高中/學測/社會/05-113學測社會科試題定稿.json",
+      "title": "113年學測 社會",
+      "sourceFile": "高中/學測/社會/05-113學測社會科試題定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1RAWgrKWXqUbv8GSLEpwpt6t66dk8ox7v/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051422000729495697/05-113%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 54,
+      "imageQuestionCount": 16,
+      "excluded": [
+        {
+          "question": 38,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 40,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 43,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 46,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 50,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 53,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 57,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 60,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 64,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-114-social",
+      "file": "高中/學測/社會/05-114學測社會試題.json",
+      "title": "114年學測 社會",
+      "sourceFile": "高中/學測/社會/05-114學測社會試題.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1_bi1EnyUTyR-lFOsFQICX5xhOCjn4ZBW/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051540219978700116/05-114%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 54,
+      "imageQuestionCount": 14,
+      "excluded": [
+        {
+          "question": 46,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 51,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 53,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 55,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 56,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 58,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 61,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 63,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 64,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-110-social",
+      "file": "高中/學測/社會/110學測社會試卷.json",
+      "title": "110年學測 社會",
+      "sourceFile": "高中/學測/社會/110學測社會試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1JUCGips7Wt-4p1LHrNhz0U5qeZn_g5Ys/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069611557604829770/110%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 72,
+      "imageQuestionCount": 15,
+      "excluded": []
+    },
+    {
+      "id": "gsat-108-science",
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.json",
+      "title": "108年學測 自然",
+      "sourceFile": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 40,
+      "imageQuestionCount": 25,
+      "excluded": [
+        {
+          "question": 17,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 18,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 19,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 20,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 21,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 22,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 23,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 24,
+          "reason": "multiple-response",
+          "answer": "AC"
+        },
+        {
+          "question": 25,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 32,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 33,
+          "reason": "multiple-response",
+          "answer": "ABD"
+        },
+        {
+          "question": 34,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 40,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 41,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 43,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 47,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 52,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 61,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 62,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 67,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 68,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        }
+      ]
+    },
+    {
+      "id": "gsat-109-science",
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.json",
+      "title": "109年學測 自然",
+      "sourceFile": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 42,
+      "imageQuestionCount": 24,
+      "excluded": [
+        {
+          "question": 24,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 25,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "CDE"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "DE"
+        },
+        {
+          "question": 32,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 33,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 34,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 36,
+          "reason": "multiple-response",
+          "answer": "ABC"
+        },
+        {
+          "question": 40,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 45,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 50,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 52,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 54,
+          "reason": "multiple-response",
+          "answer": "ABC"
+        },
+        {
+          "question": 55,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 56,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 59,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 60,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 65,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 66,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 67,
+          "reason": "multiple-response",
+          "answer": "ABE"
+        }
+      ]
+    },
+    {
+      "id": "gsat-111-science",
+      "file": "高中/學測/自然/06-111學測自然試卷.json",
+      "title": "111年學測 自然",
+      "sourceFile": "高中/學測/自然/06-111學測自然試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1SnszqcnzzDzpkHTOFDNqlcbw5KblHjHs/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "questionCount": 23,
+      "imageQuestionCount": 16,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 4,
+          "reason": "multiple-response",
+          "answer": "DE"
+        },
+        {
+          "question": 6,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 17,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 18,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 20,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 21,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 22,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 23,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 24,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 25,
+          "reason": "multiple-response",
+          "answer": "CDE"
+        },
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 32,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 34,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 37,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 38,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 39,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 40,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "ABE"
+        },
+        {
+          "question": 44,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 45,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 46,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 47,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 48,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 51,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 54,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 55,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 56,
+          "reason": "multiple-response",
+          "answer": "ABE"
+        },
+        {
+          "question": 57,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 59,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 60,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-112-science",
+      "file": "高中/學測/自然/06-112學測自然試卷.json",
+      "title": "112年學測 自然",
+      "sourceFile": "高中/學測/自然/06-112學測自然試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1F8uGUEzCrcnW1AjR_6p6LLFwmceOnPFP/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045354876377703465/06-112%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 31,
+      "imageQuestionCount": 19,
+      "excluded": [
+        {
+          "question": 1,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 5,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 6,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "ADF"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 12,
+          "reason": "multiple-response",
+          "answer": "ABC"
+        },
+        {
+          "question": 16,
+          "reason": "multiple-response",
+          "answer": "BC"
+        },
+        {
+          "question": 17,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 21,
+          "reason": "multiple-response",
+          "answer": "ABE"
+        },
+        {
+          "question": 23,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 24,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 25,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 40,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 44,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 46,
+          "reason": "multiple-response",
+          "answer": "DE"
+        },
+        {
+          "question": 47,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 48,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 49,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 50,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 51,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 52,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 54,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 57,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 59,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 60,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-113-science",
+      "file": "高中/學測/自然/06-113學測自然試題定稿.json",
+      "title": "113年學測 自然",
+      "sourceFile": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 22,
+      "imageQuestionCount": 14,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 3,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 4,
+          "reason": "multiple-response",
+          "answer": "ABC"
+        },
+        {
+          "question": 5,
+          "reason": "multiple-response",
+          "answer": "CDE"
+        },
+        {
+          "question": 7,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 13,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 17,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 18,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 19,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 20,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 22,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 23,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 24,
+          "reason": "multiple-response",
+          "answer": "AC"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "DE"
+        },
+        {
+          "question": 33,
+          "reason": "multiple-response",
+          "answer": "ABE"
+        },
+        {
+          "question": 34,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 38,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 41,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 43,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 45,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 46,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 47,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 48,
+          "reason": "multiple-response",
+          "answer": "ABE"
+        },
+        {
+          "question": 49,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 50,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 51,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 52,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 53,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 54,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 56,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-110-science",
+      "file": "高中/學測/自然/110學測自然試卷.json",
+      "title": "110年學測 自然",
+      "sourceFile": "高中/學測/自然/110學測自然試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 37,
+      "imageQuestionCount": 22,
+      "excluded": [
+        {
+          "question": 23,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 24,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 25,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 26,
+          "reason": "multiple-response",
+          "answer": "AC"
+        },
+        {
+          "question": 27,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 32,
+          "reason": "multiple-response",
+          "answer": "BD"
+        },
+        {
+          "question": 33,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 34,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 36,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 38,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 41,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 44,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 46,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 48,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 49,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 50,
+          "reason": "multiple-response",
+          "answer": "ABD"
+        },
+        {
+          "question": 51,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 52,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 53,
+          "reason": "multiple-response",
+          "answer": "AB"
+        },
+        {
+          "question": 54,
+          "reason": "multiple-response",
+          "answer": "ADE"
+        },
+        {
+          "question": 57,
+          "reason": "multiple-response",
+          "answer": "ABE"
+        },
+        {
+          "question": 59,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 60,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 61,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 68,
+          "reason": "multiple-response",
+          "answer": "AD"
+        }
+      ]
+    },
+    {
+      "id": "gsat-114-science",
+      "file": "高中/學測/自然/114學測自然試題定稿.json",
+      "title": "114年學測 自然",
+      "sourceFile": "高中/學測/自然/114學測自然試題定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1z4EDtjZrK1HVLK0fBEYhHmFd63D-ssSM/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 21,
+      "imageQuestionCount": 12,
+      "excluded": [
+        {
+          "question": 2,
+          "reason": "multiple-response",
+          "answer": "CD"
+        },
+        {
+          "question": 4,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 5,
+          "reason": "multiple-response",
+          "answer": "ABD"
+        },
+        {
+          "question": 6,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 8,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 9,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 10,
+          "reason": "multiple-response",
+          "answer": "BCE"
+        },
+        {
+          "question": 11,
+          "reason": "multiple-response",
+          "answer": "BCD"
+        },
+        {
+          "question": 14,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 16,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 19,
+          "reason": "multiple-response",
+          "answer": "DE"
+        },
+        {
+          "question": 23,
+          "reason": "multiple-response",
+          "answer": "AD"
+        },
+        {
+          "question": 28,
+          "reason": "multiple-response",
+          "answer": "AC"
+        },
+        {
+          "question": 29,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 30,
+          "reason": "multiple-response",
+          "answer": "AC"
+        },
+        {
+          "question": 31,
+          "reason": "multiple-response",
+          "answer": "BDE"
+        },
+        {
+          "question": 33,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 35,
+          "reason": "multiple-response",
+          "answer": "ACE"
+        },
+        {
+          "question": 37,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 38,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 39,
+          "reason": "multiple-response",
+          "answer": "CDE"
+        },
+        {
+          "question": 40,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 41,
+          "reason": "multiple-response",
+          "answer": "ACD"
+        },
+        {
+          "question": 42,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 43,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 44,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 46,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 47,
+          "reason": "multiple-response",
+          "answer": "AE"
+        },
+        {
+          "question": 49,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 50,
+          "reason": "multiple-response",
+          "answer": "BE"
+        },
+        {
+          "question": 51,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 52,
+          "reason": "multiple-response",
+          "answer": "CE"
+        },
+        {
+          "question": 53,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 54,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 56,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 57,
+          "reason": "multiple-response",
+          "answer": "AE"
+        }
+      ]
+    },
+    {
+      "id": "gsat-108-english",
+      "file": "高中/學測/英文/01-108學測英文試卷定稿.json",
+      "title": "108年學測 英文",
+      "sourceFile": "高中/學測/英文/01-108學測英文試卷定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1MyOBUKOMMIHmNbQPP1Awt7i1Q5U1UA-E/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196548660460294627/02-108%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 56,
+      "imageQuestionCount": 5,
+      "excluded": []
+    },
+    {
+      "id": "gsat-109-english",
+      "file": "高中/學測/英文/02-109學測英文試卷-定稿.json",
+      "title": "109年學測 英文",
+      "sourceFile": "高中/學測/英文/02-109學測英文試卷-定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1LaiJs2aXLvL1cE1TheIW7FsODnKlU_AG/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 56,
+      "imageQuestionCount": 6,
+      "excluded": []
+    },
+    {
+      "id": "gsat-111-english",
+      "file": "高中/學測/英文/02-111學測英文試卷.json",
+      "title": "111年學測 英文",
+      "sourceFile": "高中/學測/英文/02-111學測英文試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1mTWYOS1M6-K8Kl1iWYtR5Tu7X1ikELgq/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "questionCount": 46,
+      "imageQuestionCount": 19,
+      "excluded": [
+        {
+          "question": 47,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 48,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "multiple-response",
+          "answer": "CD"
+        }
+      ]
+    },
+    {
+      "id": "gsat-112-english",
+      "file": "高中/學測/英文/02-112學測英文試卷.json",
+      "title": "112年學測 英文",
+      "sourceFile": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 46,
+      "imageQuestionCount": 5,
+      "excluded": [
+        {
+          "question": 47,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 48,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "multiple-response",
+          "answer": "DF"
+        },
+        {
+          "question": 50,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-113-english",
+      "file": "高中/學測/英文/02-113學測英文科定稿.json",
+      "title": "113年學測 英文",
+      "sourceFile": "高中/學測/英文/02-113學測英文科定稿.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1efI1DySNxN3Rr2xQGcEFkcHbe3ZxJPUQ/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051427843482078305/02-113%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 46,
+      "imageQuestionCount": 7,
+      "excluded": [
+        {
+          "question": 47,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 48,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "multiple-response",
+          "answer": "CF"
+        },
+        {
+          "question": 50,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-114-english",
+      "file": "高中/學測/英文/02-114學測英文試題.json",
+      "title": "114年學測 英文",
+      "sourceFile": "高中/學測/英文/02-114學測英文試題.pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1PY6p4_qH8R2FhtQMVYYAMmETnJGJShd9/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051545433631383724/02-114%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 46,
+      "imageQuestionCount": 8,
+      "excluded": [
+        {
+          "question": 47,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 48,
+          "reason": "written-response",
+          "answer": "／"
+        },
+        {
+          "question": 49,
+          "reason": "multiple-response",
+          "answer": "CDGI"
+        },
+        {
+          "question": 50,
+          "reason": "written-response",
+          "answer": "／"
+        }
+      ]
+    },
+    {
+      "id": "gsat-110-english",
+      "file": "高中/學測/英文/110學測英文試卷.json",
+      "title": "110年學測 英文",
+      "sourceFile": "高中/學測/英文/110學測英文試卷 .pdf",
+      "sourceUrl": "https://drive.google.com/file/d/1DOms-bWDzkPkwmU4HR5A7hj-wc-5sHCt/view?usp=drivesdk",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069608703462801602/110%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf",
+      "questionCount": 56,
+      "imageQuestionCount": 7,
+      "excluded": []
+    }
+  ],
+  "nonQuestionFiles": [
+    {
+      "file": "考試.pdf",
+      "reason": "application-screenshots-not-exam-questions"
+    },
+    {
+      "file": "題目格式",
+      "reason": "formatting-guidance-not-exam-questions"
+    }
+  ]
+}

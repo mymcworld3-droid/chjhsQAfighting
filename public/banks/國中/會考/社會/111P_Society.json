@@ -1,0 +1,1737 @@
+[
+  {
+    "id": "cap-111-social-q1",
+    "difficulty": "easy",
+    "q": "某宗教的全球年度大型集會表(一)\n  活動在2017年約有235萬人參國家人數國家人數\n  與。表(一)為該年參與者的來源沙烏地阿拉伯600,108  伊朗      86,500\n  國及其人數，此一宗教活動最印尼      221,000  土耳其     79,000\n  可能為下列何者？                 巴基斯坦   179,210 奈及利亞    79,000",
+    "correct": "伊斯蘭教朝覲埃及      108,000  其他     635,106",
+    "wrong": [
+      "佛教浴佛節印度      170,000 阿爾及利亞  36,000",
+      "印度教大壺節孟加拉    127,198  摩洛哥     31,000",
+      "天主教聖誕彌撒"
+    ],
+    "exp": "正確答案：伊斯蘭教朝覲埃及      108,000  其他     635,106。來源：111年國中教育會考社會第1題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 1,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-111-social/Q2-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第2題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 2,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q2-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q3",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-111-social/Q3-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第3題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 3,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q3-question.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q4",
+    "difficulty": "medium",
+    "q": "根據經濟部水利署的統計，截至2019年底，臺灣40座主要水庫中，淤積率超\n  過30%的共有15座，例如霧社水庫淤積率達74.8%、烏山頭水庫達49.2%，顯\n  示臺灣水庫淤積程度嚴重，影響水庫蓄水功能。下列何項策略最能有效改善\n  上述現象？",
+    "correct": "強化集水區崩塌裸露地的植被復育",
+    "wrong": [
+      "擴大在河川下游種植防風林的面積",
+      "減少都市不透水鋪面，增加雨水入滲",
+      "增加地面水源供應，以取代地下水源\n\n                                  1"
+    ],
+    "exp": "正確答案：強化集水區崩塌裸露地的植被復育。來源：111年國中教育會考社會第4題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 4,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q5",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-111-social/Q5-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第5題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 5,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q5-question.png"
+    ],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q6",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-111-social/Q6-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第6題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 6,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q6-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q7",
+    "difficulty": "medium",
+    "q": "「柯因奈語」(Koine)，又稱「通用希臘語」，是大約發源於西元前四世紀\n  的國際性語言。此一語言因某帝國在政治上統一了愛琴海地區各希臘城邦，\n  融合了該地區多種方言發展而成；其後又伴隨帝國對外武力征服，向埃及、\n  西亞等地區擴散傳播，對於往後數百年間科學、文學和宗教的發展影響深\n  遠。上述的「某帝國」，最可能為下列何者？",
+    "correct": "亞歷山大帝國",
+    "wrong": [
+      "波斯帝國",
+      "蒙兀兒帝國",
+      "阿茲提克帝國"
+    ],
+    "exp": "正確答案：亞歷山大帝國。來源：111年國中教育會考社會第7題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 7,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q8",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-111-social/Q8-question-1.png)\n\n![第8題原卷資料](/assets/banks/cap-111-social/Q8-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第8題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 8,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q8-question-1.png",
+      "/assets/banks/cap-111-social/Q8-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q9",
+    "difficulty": "easy",
+    "q": "某宮廟因違法擴建道路及廟宇建築，涉嫌竊占國土及濫墾山坡地，相關單位\n  多次介入協調，要求廟方自行拆除，但該廟負責人認為廟地選址及擴建的決\n  定皆為神明指示，堅決不願退讓，於是相關單位除了開罰六萬元外，並將\n  負責人移送法辦。上述內容最可能是關於下列哪二者之間的衝突？",
+    "correct": "法律規範與宗教信仰",
+    "wrong": [
+      "環境保育與經濟發展",
+      "傳統習俗與倫理道德觀念",
+      "信仰宗教自由與人民財產權"
+    ],
+    "exp": "正確答案：法律規範與宗教信仰。來源：111年國中教育會考社會第9題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 9,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q10",
+    "difficulty": "easy",
+    "q": "國中生小安寄了一封陳情信給某位公職人員，信中敘述父親因沉迷賭博，導致家\n  中債臺高築，害他的父母離異、家庭破碎，希望有人能幫幫他，讓父親不再沉溺\n  賭海。該名公職人員收到信後立刻啟動偵辦，循線破獲非法賭場，並依法對賭場\n  業者與賭徒提起公訴。根據上述內容判斷，小安寄信的對象應是下列何者？",
+    "correct": "檢察官",
+    "wrong": [
+      "法官",
+      "律師",
+      "警察局局長"
+    ],
+    "exp": "正確答案：檢察官。來源：111年國中教育會考社會第10題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 10,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q11",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-111-social/Q11-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第11題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 11,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q11-question.png"
+    ],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q12",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-111-social/Q12-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第12題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 12,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q12-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-111-social/Q13-question-1.png)\n\n![第13題原卷資料](/assets/banks/cap-111-social/Q13-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第13題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 13,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q13-question-1.png",
+      "/assets/banks/cap-111-social/Q13-question-2.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q14",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/cap-111-social/Q14-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第14題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 14,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q14-question.png"
+    ],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-111-social/Q15-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第15題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 15,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q15-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-111-social/Q16-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第16題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 16,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q16-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q17",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-111-social/Q17-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第17題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 17,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q17-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-111-social/Q18-question-1.png)\n\n![第18題原卷資料](/assets/banks/cap-111-social/Q18-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第18題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 18,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q18-question-1.png",
+      "/assets/banks/cap-111-social/Q18-question-2.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q19",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-111-social/Q19-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第19題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 19,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q19-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-111-social/Q20-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第20題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 20,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q20-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q21",
+    "difficulty": "medium",
+    "q": "日本料理「天婦羅」，是將食材裹上澱粉漿之後下鍋油炸，這種料理源自於\n  天主教徒在齋戒期間，將食材油炸後食用。在沒有冷凍技術的時代，因為油\n  炸食物容易保存，所以水手於遠洋航行時也會準備油炸魚類作為糧食。葡萄\n  牙的天主教徒最初到日本傳教與貿易時，同時傳入這種料理。「天婦羅」傳入\n  日本的時代背景，最可能是下列何者？",
+    "correct": "西方各國展開海外探險，建立到達東方的新航線",
+    "wrong": [
+      "外國艦隊脅迫幕府開港，促使日本推動明治維新",
+      "日本受大唐文化的薰染，效法唐朝推動制度改革",
+      "民主陣營為防堵共產勢力，派遣艦隊駐防太平洋"
+    ],
+    "exp": "正確答案：西方各國展開海外探險，建立到達東方的新航線。來源：111年國中教育會考社會第21題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 21,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q22",
+    "difficulty": "medium",
+    "q": "一列火車在德國官方祕密安排下，從蘇黎世出發前往俄國，車上乘客包括\n  列寧及其布爾什維克黨同志，這些人曾因為反對俄國政府而流亡海外。列寧\n  等人沿途經過德國、瑞典、芬蘭，最後抵達俄國的首都彼得格勒(今聖彼得\n  堡)。半年後，他們領導革命，推翻臨時政府，組織新的政權，對俄國產生重\n  大影響。當時德國官方安排這班列車的目的，最可能為下列何者？",
+    "correct": "為使俄國退出第一次世界大戰\n\n                                  5",
+    "wrong": [
+      "與俄國結盟對抗拿破崙",
+      "欲緩和冷戰東西對立局勢",
+      "遵守《德蘇互不侵犯條約》"
+    ],
+    "exp": "正確答案：為使俄國退出第一次世界大戰\n\n                                  5。來源：111年國中教育會考社會第22題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 22,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-111-social/Q23-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第23題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 23,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q23-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-111-social/Q24-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第24題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 24,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q24-question.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-111-social/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-111-social/Q25-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第25題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 25,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q25-question-1.png",
+      "/assets/banks/cap-111-social/Q25-question-2.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-111-social/Q26-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第26題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 26,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q26-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-111-social/Q27-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第27題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 27,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q27-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q28",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-111-social/Q28-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第28題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 28,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q28-question.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q29",
+    "difficulty": "hard",
+    "q": "世界氣象組織(WMO)定義熱浪標準為連續 5日的每日最高氣溫，皆高於歷年\n  最暖月的最高氣溫平均值5℃以上。表(五)為臺北測站1981至2010年氣溫相關\n  資料，根據上述定義，臺北在下列何種情形即達到此一熱浪標準？\n                         表(五)\n  月分      1   2   3   4   5   6   7   8   9   10  11  12 年平均\n  氣溫(℃)   16.1 16.5 18.5 21.9 25.2 27.7 29.6 29.2 27.4 24.5 21.5 17.9   23.0\n最高氣溫(℃) 19.1 19.6 22.1 25.7 29.2 32.0 34.3 33.8 31.1 27.5 24.2 20.7   26.6\n最低氣溫(℃) 13.9 14.2 15.8 19.0 22.3 24.6 26.3 26.1 24.8 22.3 19.3 15.6   20.4",
+    "correct": "連續5天出現39.3℃以上高溫\n\n                                  7",
+    "wrong": [
+      "連續5天出現31.6℃以上高溫",
+      "連續5天出現34.3℃以上高溫",
+      "連續5天出現34.6℃以上高溫"
+    ],
+    "exp": "正確答案：連續5天出現39.3℃以上高溫\n\n                                  7。來源：111年國中教育會考社會第29題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 29,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q30",
+    "difficulty": "medium",
+    "q": "以下是中國天津某年慶祝元旦的相關報導：「政府要求各機關及各民眾團\n  體，在元旦上午參加慶祝中華民國成立的紀念大會。當晚民眾提燈遍遊街\n  市，高呼『勿忘國恥』、『抵制日貨』、『打倒貪官汙吏』、『打倒燒香化\n  紙、磕頭拜年的惡習』等口號。各街市商號張貼標語、懸燈結綵，國民黨黨\n  旗和國旗飄揚天際，蔚為盛況。」上述內容最可能是描繪下列何時的景象？",
+    "correct": "1928-1937年十年建設期間",
+    "wrong": [
+      "1861-1895年自強運動期間",
+      "1958-1961年農工大躍進期間",
+      "1966-1976年文化大革命期間"
+    ],
+    "exp": "正確答案：1928-1937年十年建設期間。來源：111年國中教育會考社會第30題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 30,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q31",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-111-social/Q31-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第31題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 31,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q31-question.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q32",
+    "difficulty": "medium",
+    "q": "謝先生是王小姐的前夫，但謝先生屢次侵擾王小姐的住處，甚至還到她上班\n  的地方騷擾，最後謝先生因違反保護令的相關規定，被判處拘役四十天。根\n  據上述內容判斷，下列敘述何者正確？",
+    "correct": "謝先生必須為自己的違法行為負起刑事責任",
+    "wrong": [
+      "王小姐因警察局所核發的保護令而獲得保障",
+      "謝先生若不服判決可向地方法院提出民事訴訟",
+      "王小姐可依《性別平等教育法》向謝先生求償"
+    ],
+    "exp": "正確答案：謝先生必須為自己的違法行為負起刑事責任。來源：111年國中教育會考社會第32題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 32,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-111-social/Q33-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第33題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 33,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q33-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-111-social/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-111-social/Q34-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第34題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 34,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q34-question-1.png",
+      "/assets/banks/cap-111-social/Q34-question-2.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-111-social/Q35-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第35題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 35,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q35-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-111-social/Q36-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第36題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 36,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q36-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q37",
+    "difficulty": "medium",
+    "q": "中國近代某一文章提到：「政府假借預備立憲的美名卻實行中央集權，假借\n  推行新政卻搜刮民間錢財，對外則割讓土地，並出賣採礦權與鐵路經營權。\n  人民反對政策，可能會被處死；如果人民自己出錢出力興修鐵路，又會被官方\n  沒收。政府應該要保護人民，結果人民反而受到政府的傷害，如此不顧人民\n  生命、財產的政府，誰還能忍受呢！」上文的主要訴求最可能是下列何者？",
+    "correct": "對改革結果感到失望，體認到革命也是救國的途徑之一",
+    "wrong": [
+      "因對外戰爭受到挫敗，提倡學習西方的軍事及工業技術",
+      "推動制度層面的改革，以解決自強運動改革不彰的問題",
+      "主張全面改革思想文化，提倡西方科學精神與白話文學"
+    ],
+    "exp": "正確答案：對改革結果感到失望，體認到革命也是救國的途徑之一。來源：111年國中教育會考社會第37題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 37,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-111-social/Q38-question-1.png)\n\n![第38題原卷資料](/assets/banks/cap-111-social/Q38-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第38題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 38,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q38-question-1.png",
+      "/assets/banks/cap-111-social/Q38-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-111-social-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-111-social/Q39-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第39題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 39,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-111-social-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-111-social/Q40-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第40題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 40,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q40-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q41",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-111-social/Q41-question-1.png)\n\n![第41題原卷資料](/assets/banks/cap-111-social/Q41-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第41題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 41,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q41-question-1.png",
+      "/assets/banks/cap-111-social/Q41-question-2.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q42",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-111-social/Q42-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第42題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 42,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q42-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-111-social/Q43-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第43題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 43,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/Q43-question.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第44題原卷資料](/assets/banks/cap-111-social/Q44-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第44題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 44,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q44-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第45題原卷資料](/assets/banks/cap-111-social/Q45-question-1.png)\n\n![第45題原卷資料](/assets/banks/cap-111-social/Q45-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第45題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 45,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q45-question-1.png",
+      "/assets/banks/cap-111-social/Q45-question-2.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第46題原卷資料](/assets/banks/cap-111-social/Q46-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第46題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 46,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q46-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q47",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第47題原卷資料](/assets/banks/cap-111-social/Q47-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第47題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 47,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q47-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第48題原卷資料](/assets/banks/cap-111-social/Q48-question-1.png)\n\n![第48題原卷資料](/assets/banks/cap-111-social/Q48-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第48題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 48,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q48-question-1.png",
+      "/assets/banks/cap-111-social/Q48-question-2.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q49",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第49題原卷資料](/assets/banks/cap-111-social/Q49-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第49題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 49,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q49-question.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q50",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第50題原卷資料](/assets/banks/cap-111-social/Q50-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：111年國中教育會考社會第50題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 50,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q50-question.png"
+    ],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q51",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 51 題。\n\n![第51題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第51題原卷資料](/assets/banks/cap-111-social/Q51-question-1.png)\n\n![第51題原卷資料](/assets/banks/cap-111-social/Q51-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：111年國中教育會考社會第51題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 51,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        14,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q51-question-1.png",
+      "/assets/banks/cap-111-social/Q51-question-2.png"
+    ],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q52",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第52題原卷資料](/assets/banks/cap-111-social/Q52-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第52題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 52,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q52-question.png"
+    ],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q53",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第53題原卷資料](/assets/banks/cap-111-social/Q53-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：111年國中教育會考社會第53題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 53,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q53-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  },
+  {
+    "id": "cap-111-social-q54",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/cap-111-social/G44-54-context.png)\n\n![第54題原卷資料](/assets/banks/cap-111-social/Q54-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：111年國中教育會考社會第54題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-111-social",
+      "question": 54,
+      "file": "國中/會考/社會/111P_Society.pdf",
+      "url": "https://drive.google.com/file/d/1kuURcrew0Adqz-ukJkww0UCRFyjafMtP/view?usp=drivesdk",
+      "pages": [
+        12,
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        44,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-social/G44-54-context.png",
+      "/assets/banks/cap-111-social/Q54-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+  }
+]

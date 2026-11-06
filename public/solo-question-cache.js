@@ -48,6 +48,7 @@ function compactMeta(item) {
   const q = item?.data?.q || item?.q || item?.question || '';
   return {
     q: String(q).slice(0, 500),
+    bankQuestionId: String(item?.bankQuestionId || '').slice(0, 160),
     concept_id: String(item?.meta?.concept_id || item?.concept_id || '').slice(0, 100),
     template_id: String(item?.meta?.template_id || item?.template_id || '').slice(0, 120),
     question_form: String(item?.meta?.question_form || item?.question_form || '').slice(0, 60),
@@ -142,6 +143,11 @@ export function createSoloQuestionCache(storage) {
 
   function isDuplicate(question) {
     if (!validQuestion(question)) return true;
+    // A reading passage can contain several distinct blanks or subquestions.
+    // Their official source IDs distinguish them even when most text is shared.
+    if (question.bankQuestionId) {
+      return [active, ...queue].some(old => old?.bankQuestionId === question.bankQuestionId);
+    }
     const text = question.data.q;
     const candidates = [
       active?.data?.q,
@@ -188,7 +194,8 @@ export function createSoloQuestionCache(storage) {
     if (!item.q) return false;
 
     // 同一道或只換數字的題目只保留最近一次，避免歷史被同型題灌滿。
-    history = history.filter(old => !structuralDuplicate(old.q, item.q));
+    history = history.filter(old => item.bankQuestionId
+      ? old.bankQuestionId !== item.bankQuestionId : !structuralDuplicate(old.q, item.q));
     history.push(item);
     history = history.slice(-HISTORY_LIMIT);
     save();
