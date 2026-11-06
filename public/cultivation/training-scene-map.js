@@ -39,7 +39,7 @@ function loadStyle() {
   const link = document.createElement('link');
   link.id = 'training-scene-map-style';
   link.rel = 'stylesheet';
-  link.href = 'styles/training-scene-map.css?v=20261105-coherent-scene';
+  link.href = 'styles/training-scene-map.css?v=20261106-white-outlines';
   document.head.appendChild(link);
 }
 function setDetail(placeId) {
@@ -161,8 +161,13 @@ function makeButton(place, layout) {
   button.dataset.trainingLocation = place.id;
   button.style.cssText = `left:${x / layout.width * 100}%;top:${y / layout.height * 100}%;width:${width / layout.width * 100}%;height:${height / layout.height * 100}%`;
   // The five buildings already belong to the painting, including their stairs.
-  // Their buttons add hit targets and labels without a second building on top.
-  if (!region.painted) {
+  // Their outline follows the same scene coordinates without a second building.
+  if (region.painted) {
+    const outline = svgNode('svg', { viewBox: region.bounds.join(' '), 'aria-hidden': 'true',
+      focusable: 'false', class: 'training-place-outline' });
+    outline.appendChild(svgNode('path', { d: region.outline }));
+    button.appendChild(outline);
+  } else {
     const art = document.createElement('span');
     art.className = 'training-place-art';
     art.style.height = `${(region.label[1] - y - layout.font * 1.06) / height * 100}%`;
