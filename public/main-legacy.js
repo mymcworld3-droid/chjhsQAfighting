@@ -14,6 +14,7 @@ import { beginSceneTransition, sceneTheme } from './cultivation/scene-transition
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
+import { authenticatedMainFetch } from './cultivation/data/project-repository.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, signInAnonymously, linkWithPopup, signInWithCredential, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -2411,15 +2412,6 @@ window.saveProfile = async (triggerButton = null) => {
     return true;
 };
 
-async function switchToAI() {
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { "gameSettings.sourceMode": 'random' });
-    currentUserData.gameSettings.sourceMode = 'random';
-    const sm = document.getElementById('set-source-mode');
-    if(sm) { sm.value = 'random'; toggleSourceMode(); }
-    syncSoloQuestionCache();
-    return fetchOneQuestion(); 
-}
-
 // ==========================================
 //  出題核心 (AI / 題庫 - 支援資料夾混合)
 // ==========================================
@@ -2866,9 +2858,9 @@ async function fetchOneQuestion() {
                     } catch (e) { console.error(e); }
                 }
                 filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                if (filesToFetch.length === 0) return await switchToAI();
+                if (filesToFetch.length === 0) throw new Error('自訂題庫找不到題目，不會自動改為 AI 出題');
             } else {
-                return await switchToAI();
+                throw new Error('自訂題庫來源不存在，不會自動改為 AI 出題');
             }
 
             try {
@@ -2883,7 +2875,7 @@ async function fetchOneQuestion() {
                 currentBankData = { sourcePath: targetSource, questions: mergedQuestions, drawBags: {} };
             } catch (e) { 
                 console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
-                return await switchToAI(); 
+                throw new Error("自訂題庫讀取失敗，不會自動改為 AI 出題"); 
             }
         }
 
@@ -2920,7 +2912,7 @@ async function fetchOneQuestion() {
         finalDifficulty = getSmartDifficulty(targetSubject);
         
         try {
-            const response = await fetch("/api/generate-quiz", {
+            const response = await (typeof authenticatedMainFetch === "function" ? authenticatedMainFetch : fetch)("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

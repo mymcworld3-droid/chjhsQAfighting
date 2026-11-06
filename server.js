@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const aiRouter = require('./ai-router');
+const { createAIQuestionBank } = require('./ai-question-bank.cjs');
 const { QUESTION_FORMS, createQuizTaskPlan } = require('./quiz-generation-tasks.cjs');
 const registerAdaptiveLearningApi = require('./adaptive-learning-api.cjs');
 const registerAbilityCoachApi = require('./ability-coach-api.cjs');
@@ -53,6 +54,7 @@ const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question
 const { questionQualityIssue, removeUnstableOptionLabels } = require('./question-quality.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 require('dotenv').config();
+const aiQuestionBank = createAIQuestionBank();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -657,6 +659,19 @@ app.post('/api/generate-quiz', async (req, res) => {
             difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
         }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
     }
+    // Only authenticated random/focused solo practice may consume or expand the AI bank.
+    // Custom JSON banks never call this path, and other game modes keep their rules.
+    let aiBankAllowed = false;
+    if (typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
+        if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
+        else {
+            try {
+                const bankUid = await verifyMainIdentity(req);
+                const bankUser = await playerRepository.resolve().db.collection('users').doc(bankUid).get();
+                aiBankAllowed = !!bankUser.exists && bankUser.data()?.gameSettings?.sourceMode === 'random';
+            } catch (_) { /* unauthenticated legacy calls still use the original generator */ }
+        }
+    }
     difficulty = raidTicketMode ? raidTrustedDifficulty
         : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'easy');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
@@ -859,6 +874,76 @@ app.post('/api/generate-quiz', async (req, res) => {
                     (meditationMode?'\n'+MeditationLiteracy.prompt(meditationContext):'');
             };
             const prompt = promptForTask(0);
+
+            // Read only already-published AI questions; never re-run an AI review when serving one.
+            // Fine-grained focused requests must match the same facet, role, plan and difficulty.
+            const bankFacet = adaptiveContext?.target(0);
+            const bankTarget = aiBankAllowed ? {
+                subject, level, topic:targetTopic, difficulty:bankFacet?.difficulty || difficulty,
+                facetId:bankFacet?.id || '',role:adaptiveContext?.decision.role || '',
+                planVersion:adaptiveContext?.plan.version || '',
+                forms:bankFacet?.forms || null
+            } : null;
+            const verifyAndArchive = async (raw, target) => {
+                if (!target || questionQualityIssue(raw)) return;
+                // Exactly one independent AI review; the existing deterministic rules
+                // (JSON, TeX, answer consistency) have already been applied at generation.
+                const reviewPrompt = [
+                    '你是獨立題目審核員。請先不依賴標示答案自行解題，再檢查題意是否完整、是否只有一個正解、四個選項及解析是否正確、是否符合指定觀念與難度。',
+                    '只回傳 JSON {"approved":true或false,"reason":"簡短具體理由"}；無法確定時必須回答 false。',
+                    '指定範圍：' + JSON.stringify(target),
+                    '待審題目：' + JSON.stringify({
+                        q:raw.q,correct:raw.correct,wrong:raw.wrong,exp:raw.exp,
+                        subject:raw.subject,sub_topic:raw.sub_topic,question_form:raw.question_form
+                    })
+                ].join('\n');
+                const checked = await aiRouter.generateJSON(reviewPrompt, {
+                    parallel:false,timeoutMs:15000,
+                    validate:data=>{
+                        if (typeof data?.approved !== 'boolean' || typeof data?.reason !== 'string')
+                            throw Error('AI bank review format invalid');
+                    }
+                });
+                if (checked.data.approved === true) await aiQuestionBank.publish(target, raw, checked.data);
+            };
+            if (bankTarget && attempts === 0) {
+                const bankResult = await aiQuestionBank.find(
+                    bankTarget, previousQuestions, (q, old) => isTooSimilarQuestion(q, [old]));
+                if (bankResult.question) {
+                    const bankQuestion = {...bankResult.question};
+                    if (adaptiveContext) {
+                        const f = adaptiveContext.target(0);
+                        bankQuestion.adaptive = adaptiveLearning.metadata(adaptiveContext, {
+                            adaptive_scope_id:adaptiveContext.scope.scopeId,
+                            adaptive_facet_id:f.id,adaptive_difficulty:f.difficulty
+                        });
+                    }
+                    // Expand on low stock. This runs after the cached question is returned
+                    // and must not delay a player or replace the unanswered question.
+                    if (bankResult.count < aiQuestionBank.LOW_WATER) {
+                        aiQuestionBank.schedule(bankTarget, async ()=>{
+                            const more = await aiRouter.generateJSON(promptForTask(0), {
+                                parallel:false,timeoutMs:20000,
+                                validate:(data)=>{
+                                    validateCandidate(data);
+                                    taskPlan.validate(data,0);
+                                    if (adaptiveContext) adaptiveLearning.validate(adaptiveContext,data,0);
+                                }
+                            });
+                            const candidate = {...more.data};
+                            candidate.subject = subject;
+                            candidate.sub_topic = targetTopic;
+                            Object.assign(candidate,Knowledge.metadata(candidate,subject));
+                            delete candidate.generation_task_id;
+                            delete candidate.adaptive_scope_id;
+                            delete candidate.adaptive_facet_id;
+                            delete candidate.adaptive_difficulty;
+                            await verifyAndArchive(candidate,bankTarget);
+                        });
+                    }
+                    return res.json({text:JSON.stringify(bankQuestion),provider:'ai-bank',model:'approved',fromAiBank:true});
+                }
+            }
             // Shorter instructions and bounded provider latency only for combat.
             // Every generated candidate still undergoes the SAME server-side
             // TeX, quality, answer consistency, and duplicate validation below.
@@ -984,6 +1069,21 @@ app.post('/api/generate-quiz', async (req, res) => {
             }
 
             await trackDelivered();
+            // A live-generated fallback still answers immediately. Only its archived
+            // copy is independently reviewed once and uploaded to Google Drive.
+            if (bankTarget) {
+                // Parallel provider tasks can target different facets. Archive under
+                // the ACTUAL returned facet, not the first provider's planned facet.
+                const servedFacet = adaptiveContext?.plan.facets.find(f=>f.id===parsed.adaptive?.facetId);
+                const archiveTarget = servedFacet ? {
+                    ...bankTarget,facetId:servedFacet.id,
+                    difficulty:parsed.adaptive.difficulty,
+                    role:parsed.adaptive.role,forms:servedFacet.forms
+                } : bankTarget;
+                const archive = {...parsed};
+                delete archive.adaptive;
+                aiQuestionBank.schedule(archiveTarget, () => verifyAndArchive(archive,archiveTarget));
+            }
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
         } catch (error) {
