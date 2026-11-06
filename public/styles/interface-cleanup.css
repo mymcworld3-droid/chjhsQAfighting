@@ -95,10 +95,12 @@ body.ui-cleanup #page-home #quest-spotlight-reward {flex:1 1 auto;font-size:10px
 body.ui-cleanup #page-home #quest-spotlight-action {flex-shrink:0;font-size:11px;font-weight:500;color:#dbc18a}
 body.ui-cleanup #page-home .quest-spotlight-ready {border-left-color:#e7c17d;background:#b99a4726!important}
 body.ui-cleanup #page-home .sect-actions {
-  grid-area:affairs;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:none;
+  grid-area:affairs;display:flex;flex-wrap:nowrap;
   gap:0;align-self:start;min-width:0;width:100%;margin:0;padding:16px 0 0;
   border:0;border-top:1px solid var(--quiet-line);border-radius:0;background:transparent;box-shadow:none;
 }
+/* Share all available horizontal space among visible affairs, without reserved columns. */
+body.ui-cleanup #page-home .sect-actions > .sect-action {flex:1 1 0;min-width:0;width:auto}
 body.ui-cleanup #page-home .sect-action {flex-direction:column;justify-content:center;gap:8px;min-height:66px;padding:6px 2px;border-radius:5px;font-size:11px;text-align:center;color:#bdb39d}
 body.ui-cleanup #page-home .sect-action::after {display:none}
 body.ui-cleanup #page-home .sect-action-icon {width:26px;height:26px;background:transparent;border:0;border-radius:0;color:#bca575}
