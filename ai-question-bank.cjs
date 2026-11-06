@@ -105,6 +105,8 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     if (checks.missing.length) logger.warn('[AI bank] OAuth configuration: missing ' + checks.missing.join(', ') +
       (serviceJson ? ' (service account fallback available)' : ''));
     if (checks.issues.length) logger.warn('[AI bank] OAuth configuration: ' + checks.issues.join('; '));
+    logger.info?.('[AI bank] OAuth fields: ' + OAUTH_FIELDS.map(name =>
+      name + '=' + (String(env[name] ?? '').trim() ? 'present' : 'MISSING')).join(', '));
     if (oauth) logger.info?.('[AI bank] Google OAuth refresh token configured (secret values hidden)');
     else if (serviceJson) logger.info?.('[AI bank] Google service-account mode configured (secret values hidden)');
     else logger.warn('[AI bank] disabled: no complete Google OAuth or service-account credentials');
@@ -218,7 +220,9 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
       return {ready:true,question:chosen?.question || null,count:eligible.length,total:items.length};
     } catch (error) {
       unavailableUntil = now() + 60000;
-      logger.warn('[AI bank] read unavailable:', String(error.message).slice(0,120));
+      const message = String(error.message || '');
+      logger.warn('[AI bank] read unavailable:', message.slice(0,
+        message.startsWith('Google Drive OAuth token unavailable:') ? 280 : 120));
       return {ready:false,question:null,count:0};
     }
   }
@@ -276,7 +280,11 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     active++;
     activity.push(now());
     const work = Promise.resolve().then(run)
-      .catch(err => logger.warn('[AI bank] background task failed:',String(err?.message || err).slice(0,120)))
+      .catch(err => {
+        const message = String(err?.message || err);
+        logger.warn('[AI bank] background task failed:',message.slice(0,
+          message.startsWith('Google Drive OAuth token unavailable:') ? 280 : 120));
+      })
       .finally(()=>{inflight.delete(job);active--;});
     inflight.set(job,work);
     return true;
