@@ -126,6 +126,25 @@ const fingerprint = input => digest(JSON.stringify([
   normalize(input?.q), normalize(input?.correct),
   (Array.isArray(input?.wrong) ? input.wrong : []).map(normalize).sort()
 ]));
+
+function questionFolderSegments(target) {
+  const level = trim(target?.level,100);
+  const subject = trim(target?.subject,100);
+  const topic = trim(target?.topic,160);
+  const stage = level.includes('高中') || level.includes('高職') ? '高中' :
+    level.includes('國中') ? '國中' :
+    level.includes('國小') || level.includes('小學') ? '國小' :
+    (level ? level : '未分類學制');
+  const gradeMatch = level.match(/(?:高中|高職|國中|國小|小學)([一二三四五六123456])年級/);
+  const gradePrefix = stage === '高中' ? '高' : stage === '國中' ? '國' : stage === '國小' ? '小' : '';
+  const grade = gradeMatch ? gradePrefix + gradeMatch[1] :
+    (stage === level ? '未分類年級' : level.replace(/年級/g,'').replace(/高中|高職/g,'高').replace(/國中/g,'國').replace(/國小|小學/g,'小') || '未分類年級');
+  // Topics can be full syllabus paths. The final portion is the readable concept.
+  const concept = topic.split(/[－—–]/).map(s=>s.trim()).filter(Boolean).at(-1) || '未分類觀念';
+  const clean = s => trim(s.replace(/[\\/\\\\\\x00-\\x1f]/g,' ').replace(/\\s+/g,' ').trim(),80) || '未分類';
+  return [stage,subject || '未分類科目',grade,concept].map(clean);
+}
+
 const compatible = (entry, target) => {
   if (!entry || entry.status !== 'approved' || entry.reviewCount !== 1 ||
       !entry.question || !entry.catalog) return false;
@@ -172,6 +191,8 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     else logger.warn('[AI bank] disabled: no usable Google OAuth or service-account credentials');
   }
   const buckets = new Map();
+  const folders = new Map();
+  const folderFlights = new Map();
   const inflight = new Map();
   const activity = [];
   let bearer = '', expiresAt = 0, active = 0, unavailableUntil = 0;
@@ -228,25 +249,89 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     return response;
   }
 
+  const escapeDriveQuery = value => String(value).replace(/'/g,"\\'");
+  async function listFolder(parentId, name) {
+    const q = "'" + escapeDriveQuery(parentId) + "' in parents and trashed = false" +
+      " and mimeType = 'application/vnd.google-apps.folder'" +
+      " and name = '" + escapeDriveQuery(name) + "'";
+    const params = new URLSearchParams({q,pageSize:'100',fields:'nextPageToken,files(id,name,mimeType)'});
+    const response = await driveRequest(DRIVE + '?' + params.toString());
+    const data = await response.json();
+    return (data.files || []).find(file=>file.name === name &&
+      file.mimeType === 'application/vnd.google-apps.folder')?.id || null;
+  }
+
+  // Folder writes are single-flight within one server instance. Reads never create folders.
+  async function childFolder(parentId, name, create) {
+    const key = parentId + '\0' + name;
+    if (folders.has(key)) return folders.get(key);
+    const waiting = folderFlights.get(key);
+    if (waiting) return waiting;
+    const work = (async()=>{
+      let found = await listFolder(parentId,name);
+      if (!found && create) {
+        const response = await driveRequest(DRIVE + '?fields=id,name', {
+          method:'POST',
+          headers:{'Content-Type':'application/json; charset=UTF-8'},
+          body:JSON.stringify({name,mimeType:'application/vnd.google-apps.folder',parents:[parentId]})
+        });
+        const created = await response.json();
+        found = created.id;
+        if (!found) throw Error('Google Drive did not return created folder ID');
+        logger.info?.('[AI bank] organized folder created: ' + name);
+      }
+      if (found) folders.set(key,found);
+      return found;
+    })();
+    folderFlights.set(key,work);
+    try { return await work; }
+    finally { if (folderFlights.get(key) === work) folderFlights.delete(key); }
+  }
+
+  async function targetFolder(target, create) {
+    let current = folderId;
+    for (const name of questionFolderSegments(target)) {
+      current = await childFolder(current,name,create);
+      if (!current) return null;
+    }
+    return current;
+  }
+
+  async function listQuestionFiles(parentId, prefix) {
+    const q = "'" + escapeDriveQuery(parentId) + "' in parents and trashed = false" +
+      " and mimeType = 'application/json' and name contains '" + prefix + "'";
+    const files = [];
+    let page = '';
+    for (let i = 0; i < 3; i++) {
+      const params = new URLSearchParams({
+        q,pageSize:'1000',fields:'nextPageToken,files(id,name,mimeType)',
+        ...(page ? {pageToken:page} : {})
+      });
+      const response = await driveRequest(DRIVE + '?' + params.toString());
+      const data = await response.json();
+      files.push(...(data.files || []).filter(file=>file.name?.startsWith(prefix) &&
+        file.mimeType === 'application/json'));
+      page = data.nextPageToken || '';
+      if (!page) break;
+    }
+    return files;
+  }
+
   async function readBucket(target) {
     const id = scopeCode(target);
     const cached = buckets.get(id);
     if (cached && cached.until > now()) return cached.items;
     const prefix = 'aiq_' + id + '_';
-    const query = "'" + folderId.replace(/'/g, "\\'") + "' in parents and trashed = false and name contains '" + prefix + "'";
-    let page = '', files = [];
-    for (let i = 0; i < 3; i++) {
-      const args = new URLSearchParams({
-        q:query,pageSize:'1000',fields:'nextPageToken,files(id,name,mimeType)',
-        ...(page ? {pageToken:page} : {})
-      });
-      const response = await driveRequest(DRIVE + '?' + args.toString());
-      const data = await response.json();
-      files.push(...(Array.isArray(data.files) ? data.files.filter(f =>
-        f.name?.startsWith(prefix) && f.mimeType === 'application/json') : []));
-      page = data.nextPageToken || '';
-      if (!page) break;
-    }
+    // Read both the organized directory and the old root so migrations do not
+    // temporarily hide questions or cause duplicate uploads.
+    const organized = await targetFolder(target,false);
+    const fileGroups = await Promise.all([
+      listQuestionFiles(folderId,prefix),
+      organized && organized !== folderId ? listQuestionFiles(organized,prefix) : Promise.resolve([])
+    ]);
+    const unique = new Map();
+    for (const file of fileGroups.flat()) unique.set(file.id,file);
+    const files = [...unique.values()];
     const items = [];
     for (let i = 0; i < files.length; i += 6) {
       const rows = await Promise.all(files.slice(i, i + 6).map(async file => {
@@ -315,8 +400,10 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
       }
     };
     const boundary = 'aiquestionbank' + crypto.randomBytes(12).toString('hex');
+    const destination = await targetFolder(target,true);
+    if (!destination) throw Error('AI bank cannot resolve concept folder');
     const metadata = {name:'aiq_' + id + '_' + key.slice(0,24) + '.json',
-      mimeType:'application/json',parents:[folderId],description:'AI question bank: one independent review'};
+      mimeType:'application/json',parents:[destination],description:'AI question bank: one independent review'};
     const body = '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' +
       JSON.stringify(metadata) + '\r\n--' + boundary +
       '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' +
@@ -352,4 +439,4 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
 
   return {enabled, LOW_WATER, find, publish, schedule, scopeCode, compatible};
 }
-module.exports = {createAIQuestionBank, scopeCode, fingerprint, compatible, oauthConfigurationChecks, oauthFailureHint, resolveOAuthCredentials};
+module.exports = {createAIQuestionBank, scopeCode, fingerprint, compatible, oauthConfigurationChecks, oauthFailureHint, resolveOAuthCredentials, questionFolderSegments};
