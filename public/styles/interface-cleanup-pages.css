@@ -110,29 +110,7 @@ html body.ui-cleanup #page-rank :is(th,td) {padding:16px 20px;border-color:var(-
 html body.ui-cleanup #page-rank th {font-weight:400;color:#948c78;background:#ffffff03}
 html body.ui-cleanup #page-rank th:first-child {width:60px}
 /* Cultivation details are styled together in training-pages.css. */
-/* Raid browsing keeps its native theme and a single scrolling content area. */
-html body.ui-cleanup #page-raid #raid-hub .raid-heading {padding:16px!important;border:0;border-bottom:1px solid var(--review-line);border-radius:0;background:transparent;box-shadow:none}
-html body.ui-cleanup #page-raid #raid-hub .raid-heading h2 {font-size:25px!important;font-weight:500}
-html body.ui-cleanup #page-raid #raid-hub .raid-global-ticket {padding:6px 16px 6px 9px;margin-top:8px;background:#ffffff03;border:1px solid var(--review-line);border-radius:7px}
-html body.ui-cleanup #page-raid #raid-hub .raid-global-ticket b {font-size:12px;font-weight:500}
-html body.ui-cleanup #page-raid #raid-hub .raid-global-ticket small {font-size:10px}
-html body.ui-cleanup #page-raid #raid-hub .raid-trial-list {gap:10px}
-html body.ui-cleanup #page-raid #raid-hub .raid-trial-card {min-height:68px;border-radius:8px;box-shadow:none!important;background:#ffffff03}
-html body.ui-cleanup #page-raid #raid-hub .raid-trial-copy strong {font-size:14px;font-weight:500}
-html body.ui-cleanup #page-raid #raid-hub .raid-trial-copy :is(small,em) {font-size:11px}
-html body.ui-cleanup #page-raid #raid-hub .raid-boss-card {border-radius:12px;box-shadow:none!important}
-html body.ui-cleanup #page-raid #raid-hub .raid-boss-info {padding:22px}
-html body.ui-cleanup #page-raid #raid-hub .raid-badges span {font-size:11px;padding:4px 7px}
-html body.ui-cleanup #page-raid #raid-hub .raid-boss-info h3 {font-size:25px;font-weight:500}
-html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview {border:0;border-left:2px solid var(--trial-accent,#bda576);border-radius:0;background:#0002;padding:12px 14px}
-html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview b {font-size:14px;font-weight:500}
-html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview span {font-size:12px}
-html body.ui-cleanup #page-raid #raid-hub .raid-entry-actions {padding:18px 22px;border-color:#ffffff12}
-html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker {border-radius:9px;padding:3px;margin-bottom:16px;box-shadow:none}
-html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-selection {top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/3);border-radius:6px;box-shadow:none}
-html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker button {min-height:58px;font-size:13px;border-radius:6px}
-html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker strong {font-size:14px;font-weight:500}
-html body.ui-cleanup #page-raid #raid-hub .raid-difficulty-picker small {font-size:11px}
+/* Raid browsing owns its layout in raid-mode.css. */
 html body.ui-cleanup #page-raid :is(.raid-lobby-panel,.raid-member-card,.raid-result-card) {box-shadow:none;border-color:var(--review-line);border-radius:10px}
 /* Solo practice owns its jade-and-paper appearance in quiz-scroll.css. Keep
    helper placement here; duel and raid answer states retain their own rules. */
@@ -173,16 +151,6 @@ html body.ui-cleanup :is(.quest-dialog,.xpp-dialog,.dm-card,.uib-modal) {border-
   html body.ui-cleanup #page-rank #leaderboard-refresh {font-size:11px!important;padding-inline:10px}
   html body.ui-cleanup #page-history .ui-history-panel {padding:14px}
   html body.ui-cleanup #page-history #history-list>li {padding-block:14px}
-  html body.ui-cleanup #page-raid #raid-hub .raid-heading {padding:12px 4px!important}
-  html body.ui-cleanup #page-raid #raid-hub .raid-heading h2 {font-size:22px!important}
-  html body.ui-cleanup #page-raid #raid-hub .raid-boss-card {grid-template-columns:minmax(90px,.65fr) minmax(0,1.35fr)}
-  html body.ui-cleanup #page-raid #raid-hub .raid-boss-info {padding:16px 12px}
-  html body.ui-cleanup #page-raid #raid-hub .raid-boss-info h3 {font-size:20px}
-  html body.ui-cleanup #page-raid #raid-hub .raid-badges {gap:5px}
-  html body.ui-cleanup #page-raid #raid-hub .raid-badges span {font-size:10px;padding:3px 5px}
-  html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview {padding:10px}
-  html body.ui-cleanup #page-raid #raid-hub .raid-reward-preview span {font-size:11px}
-  html body.ui-cleanup #page-raid #raid-hub .raid-entry-actions {padding:14px 12px}
   html body.ui-cleanup #page-quiz .quiz-helper-shell.collapsed {inset:auto 16px 72px auto}
   html body.ui-cleanup #page-quiz .quiz-helper-shell.collapsed .quiz-helper-launcher {min-width:44px;height:44px}
 }

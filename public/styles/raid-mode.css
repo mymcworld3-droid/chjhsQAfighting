@@ -232,6 +232,8 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
   margin:0 auto 12px!important;
   overflow:visible!important;
   box-sizing:border-box!important;
+  padding:24px 0;
+  border:0;border-radius:0;background:none;box-shadow:none;
 }
 #raid-result .raid-result-actions{
   position:relative;
@@ -240,15 +242,15 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 }
 
 /* Compact, personal rewards; the existing result scroller handles small screens. */
-#raid-result .raid-learning-summary { margin:12px 0; padding:12px; border:1px solid #bfa46b55; border-radius:12px; background:#102b2b; text-align:left; }
+#raid-result .raid-learning-summary { margin:16px 0; padding:16px 0; border:0; border-block:1px solid #bca77a38; border-radius:0; background:none; text-align:left; }
 #raid-result .raid-learning-summary>small { display:block; color:#c6cabe; margin-top:8px; font-size:12px; }
 #raid-result .raid-learning-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:8px; }
-#raid-result .raid-learning-grid>div { display:flex; align-items:center; justify-content:space-between; gap:5px; padding:8px; background:#ffffff08; border-radius:8px; }
+#raid-result .raid-learning-grid>div { display:flex; align-items:center; justify-content:space-between; gap:5px; padding:8px 0; background:none; border-radius:0; }
 #raid-result .raid-learning-grid strong { color:#e7cb8d; font-size:18px; }
 #raid-result .raid-loot-summary { align-items:flex-start; text-align:left; }
 #raid-result #raid-reward-status { flex:1; min-width:0; }
 #raid-result .raid-loot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:10px 0; }
-#raid-result .raid-loot-item { display:flex; align-items:center; gap:8px; padding:8px; background:#ffffff08; border-radius:8px; min-width:0; }
+#raid-result .raid-loot-item { display:flex; align-items:center; gap:8px; padding:10px 0; border-bottom:1px solid #bca77a38; background:none; border-radius:0; min-width:0; }
 #raid-result .raid-loot-item>div:last-child { min-width:0; overflow-wrap:anywhere; }
 #raid-result .raid-loot-item strong { font-size:13px; }
 #raid-result .raid-loot-item small { display:block; font-size:11px; color:#b8c5bb; margin-top:3px; }
@@ -262,6 +264,7 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 #raid-result .raid-result-grid span { font-size:10px; }
 #raid-result .raid-result-grid b { font-size:12px; }
 #raid-result .raid-result-team span, #raid-result .raid-result-team b { font-size:12px; }
+#raid-result .raid-result-team>div { padding:10px 0; border:0; border-bottom:1px solid #bca77a38; border-radius:0; background:none; }
 #raid-result .raid-result-team small { font-size:10px; }
 #raid-result #raid-reward-status>b { font-size:14px; }
 #raid-result #raid-reward-status>small, #raid-result .raid-loot-bonus { font-size:12px; line-height:1.5; }
@@ -273,65 +276,85 @@ body.raid-page-open #page-raid.active-page>#raid-result:not(.hidden){
 
 .raid-combat-event.is-critical{border-color:#ffc163;box-shadow:0 0 34px #ffb13f66}.raid-combat-event.is-critical b{color:#ffbe62;font-size:1.6em}.raid-combat-event.has-combo{border-color:#cdb0ff}
 
-/* The hub has one vertical scroll area. Its cards use their natural height so
-   recruitment and actions cannot overlap on short or fixed-ratio viewports. */
+/* One scrolling entrance: portrait, details, then recruitment. */
 body.raid-page-open #page-raid.active-page > #raid-hub:not(.hidden) {
-  display:flex; flex-direction:column; gap:14px;
+  display:flex; flex-direction:column; gap:20px;
   overflow-y:auto!important; overflow-x:hidden!important;
-  padding:8px 2px max(24px,env(safe-area-inset-bottom,0px));
+  padding:12px 4px max(28px,env(safe-area-inset-bottom,0px));
   box-sizing:border-box; overscroll-behavior-y:contain;
   scrollbar-width:thin; scrollbar-color:#b6975266 transparent;
   scroll-padding:16px;
 }
 #raid-hub > * { flex:0 0 auto; min-width:0; }
-#raid-hub .raid-heading { grid-template-columns:44px minmax(0,1fr); margin:0; padding:14px; }
-#raid-hub .raid-back { width:44px; height:44px; font-size:18px; cursor:pointer; }
-#raid-hub .raid-heading h2 { font-size:26px; line-height:1.3; }
-#raid-hub .raid-global-ticket { padding:8px 22px 8px 10px; margin-top:8px; }
-#raid-hub .raid-global-ticket b { font-size:14px; line-height:1.5; }
-#raid-hub .raid-global-ticket small { font-size:12px; line-height:1.5; }
-#raid-hub .raid-trial-list { padding-bottom:6px; }
-#raid-hub .raid-trial-card { min-height:80px; }
-#raid-hub .raid-trial-copy small { font-size:12px; }
-#raid-hub .raid-trial-copy strong { font-size:16px; }
-#raid-hub .raid-trial-copy em { font-size:13px; }
-#raid-hub .raid-boss-card { box-sizing:border-box; grid-template-columns:minmax(180px,.7fr) minmax(0,1.3fr); grid-template-rows:auto auto; height:auto; max-height:none; border-radius:18px; }
-#raid-hub .raid-boss-art { grid-column:1; grid-row:1 / -1; }
-#raid-hub .raid-boss-art > span { font-size:12px; }
-#raid-hub .raid-boss-info { grid-column:2; grid-row:1; min-height:0; overflow:visible; padding:20px; }
+#raid-hub { --raid-paper:#eee6d4; --raid-muted:#afa68f; --raid-line:#bca77a38; }
+#raid-hub .raid-heading { grid-template-columns:44px minmax(0,1fr); gap:14px; margin:0; padding:0 0 16px; border:0; border-bottom:1px solid var(--raid-line); border-radius:0; background:none; box-shadow:none; }
+#raid-hub .raid-heading-copy { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 20px; min-width:0; }
+#raid-hub .raid-back { width:44px; height:44px; border-radius:6px; font-size:18px; cursor:pointer; }
+#raid-hub .raid-heading h2 { margin:0; color:var(--raid-paper); font-size:26px; line-height:1.4; font-weight:500; letter-spacing:.08em; }
+#raid-hub .raid-global-ticket { gap:8px; padding:0 16px 0 0; margin:0; border:0; border-radius:0; background:none; box-shadow:none; }
+#raid-hub .raid-global-ticket b { color:#d9c58f; font-size:14px; line-height:1.6; font-weight:500; }
+#raid-hub .raid-global-ticket small { color:var(--raid-muted); font-size:12px; line-height:1.6; }
+#raid-hub .raid-trial-list { gap:20px; padding:0; border-bottom:1px solid var(--raid-line); }
+#raid-hub .raid-trial-card { flex:0 0 auto; grid-template-columns:36px minmax(0,1fr); gap:9px; min-height:66px; padding:8px 8px 12px; border:0; border-bottom:2px solid transparent; border-radius:0; background:none; box-shadow:none; transform:none; }
+#raid-hub .raid-trial-card.active { border-bottom-color:#d9c58f; }
+#raid-hub .raid-trial-card:hover { background:#ffffff04; }
+#raid-hub .raid-trial-card.sealed { opacity:.55; }
+#raid-hub .raid-trial-icon { width:36px; height:42px; border:0; border-radius:0; background:none; }
+#raid-hub .raid-trial-copy small { color:var(--raid-muted); font-size:11px; letter-spacing:0; }
+#raid-hub .raid-trial-copy strong { color:var(--raid-paper); font-size:16px; font-weight:500; }
+#raid-hub .raid-boss-card { box-sizing:border-box; grid-template-columns:minmax(180px,.9fr) minmax(0,1.1fr); grid-template-rows:auto auto; column-gap:28px; height:auto; max-height:none; border:0; border-radius:0; background:none; box-shadow:none; }
+#raid-hub .raid-boss-card.locked { filter:none; }
+#raid-hub .raid-boss-art { grid-column:1; grid-row:1 / -1; display:flex; flex-direction:column; justify-content:flex-end; min-height:390px; padding:0 8px 12px; background:none; }
+#raid-hub .raid-boss-art:after { content:none; }
+#raid-hub .raid-boss-art img { position:static; width:100%; height:360px; object-fit:contain; object-position:center bottom; filter:none; }
+#raid-hub .raid-boss-art > span { position:static; display:block; padding:12px 0 0; border:0; border-radius:0; background:none; color:var(--raid-muted); text-align:center; font-size:13px; line-height:1.5; font-weight:400; }
+#raid-hub .raid-boss-info { grid-column:2; grid-row:1; min-height:0; overflow:visible; padding:8px 0 20px; }
 #raid-hub .raid-boss-info > * { flex-shrink:0; }
-#raid-hub .raid-badges { margin-bottom:10px; }
-#raid-hub .raid-badges span { font-size:12px; line-height:1.5; }
-#raid-hub .raid-boss-info h3 { font-size:24px; line-height:1.5; margin:0 0 8px; }
-#raid-hub .raid-boss-info > small,#raid-hub .raid-boss-info > p { font-size:14px; line-height:1.7; }
-#raid-hub .raid-unlock-status { color:var(--raid-cyan); margin:0; }
-#raid-hub .raid-reward-preview { gap:5px; margin-top:14px; padding:12px; }
-#raid-hub .raid-reward-preview b { font-size:15px; line-height:1.6; }
-#raid-hub .raid-reward-preview span { font-size:13px; line-height:1.6; }
-#raid-hub .raid-entry-actions { grid-column:2; grid-row:2; min-width:0; padding:16px 20px 20px; border-top:1px solid rgba(231,199,121,.14); background:rgba(11,10,9,.96); }
+#raid-hub .raid-boss-info h3 { color:var(--raid-paper); font-size:28px; line-height:1.5; margin:0 0 12px; font-weight:500; letter-spacing:.04em; }
+#raid-hub .raid-boss-info > small,#raid-hub .raid-boss-info > p { color:var(--raid-muted); font-size:13px; line-height:1.8; }
+#raid-hub .raid-boss-info .raid-party-summary { margin:0 0 4px; color:#d0ccb9; }
+#raid-hub .raid-boss-info .raid-party-mechanic { margin:0 0 12px; }
+#raid-hub .raid-unlock-status { margin:0; }
+#raid-hub .raid-reward-preview { gap:4px; margin-top:18px; padding:16px 0 0; border:0; border-top:1px solid var(--raid-line); border-radius:0; background:none; }
+#raid-hub .raid-reward-preview b { color:#d9c58f; font-size:15px; line-height:1.7; font-weight:500; }
+#raid-hub .raid-reward-preview span { color:var(--raid-muted); font-size:13px; line-height:1.6; }
+#raid-hub .raid-entry-actions { grid-column:2; grid-row:2; min-width:0; padding:0 0 12px; border:0; background:none; }
 #raid-hub .raid-entry-actions .raid-join-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:0; }
 #raid-hub .raid-entry-actions .raid-code-join { grid-template-columns:minmax(0,1fr) auto; gap:10px; margin-top:12px; }
-#raid-hub .raid-entry-actions button { min-width:0; min-height:48px; margin:0; padding:10px 12px; font-size:15px; line-height:1.4; white-space:normal; overflow-wrap:anywhere; cursor:pointer; }
-#raid-hub .raid-entry-actions .raid-primary { background:linear-gradient(135deg,#d0a95e,#a67b39); color:#21180c; border-color:#e7c779; }
-#raid-hub .raid-code-join input { min-width:0; width:100%; min-height:48px; padding:10px 12px; box-sizing:border-box; font-size:16px; }
-#raid-hub .raid-difficulty-picker { gap:0; margin-bottom:14px; }
-#raid-hub .raid-difficulty-picker button { min-height:72px; padding:10px 6px; }
-#raid-hub .raid-difficulty-picker strong { font-size:16px; }
+#raid-hub .raid-entry-actions button { min-width:0; min-height:48px; margin:0; padding:10px 12px; font-size:14px; line-height:1.5; font-weight:500; letter-spacing:0; white-space:normal; overflow-wrap:anywhere; cursor:pointer; box-shadow:none; border-radius:6px; }
+#raid-hub .raid-entry-actions .raid-primary { background:#d4bd83; color:#28291c; border-color:#d4bd83; }
+#raid-hub .raid-entry-actions .raid-ghost { background:transparent; color:#d0ccb9; border-color:var(--raid-line); }
+#raid-hub .raid-code-join input { min-width:0; width:100%; min-height:48px; padding:10px 12px; box-sizing:border-box; border-radius:6px; background:#ffffff03; font-size:16px; font-weight:400; }
+#raid-hub .raid-difficulty-picker { margin-bottom:20px; }
+#raid-hub .raid-difficulty-picker button { min-height:62px; padding:8px 6px; background:none; }
+#raid-hub .raid-difficulty-picker strong { font-size:15px; font-weight:500; letter-spacing:0; }
 #raid-hub .raid-difficulty-picker small { font-size:12px; line-height:1.5; }
-#raid-hub .raid-future-drop { margin-top:16px; }
-#raid-hub .raid-future-drop b { font-size:14px; }
-#raid-hub .raid-future-drop small { font-size:13px; }
-#raid-hub button:focus-visible,#raid-hub input:focus-visible { outline:2px solid #e7c779; outline-offset:3px; }
-#raid-hub .raid-entry-actions .raid-ghost:disabled { opacity:.45; cursor:not-allowed; }
+#raid-hub .raid-future-art { justify-content:center; align-items:center; }
+#raid-hub .raid-future-seal { width:64px; height:64px; border:0; background:none; color:var(--raid-muted); font-size:24px; }
+#raid-hub .raid-future-drop { margin-top:20px; padding:16px 0; border:0; border-top:1px solid var(--raid-line); border-radius:0; background:none; color:#b2a17b; }
+#raid-hub .raid-future-drop b { color:#d9c58f; font-size:14px; font-weight:500; }
+#raid-hub .raid-future-drop small { color:var(--raid-muted); font-size:13px; }
+#raid-hub button:focus-visible,#raid-hub input:focus-visible { outline:2px solid #d9c58f; outline-offset:3px; }
+#raid-hub .raid-entry-actions button:disabled { opacity:.45; cursor:not-allowed; }
 @media (max-width:700px) {
-  #raid-hub .raid-boss-card { grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr); }
-  #raid-hub .raid-boss-art { grid-row:1; }
-  #raid-hub .raid-boss-art > span { left:6px; top:8px; padding:4px 6px; font-size:11px; }
-  #raid-hub .raid-boss-info { padding:14px 12px; }
-  #raid-hub .raid-badges { gap:4px; margin-bottom:6px; }
+  #raid-hub .raid-boss-card { grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr); column-gap:16px; }
+  #raid-hub .raid-boss-art { grid-row:1; min-height:0; padding:0 0 12px; }
+  #raid-hub .raid-boss-art img { height:280px; }
+  #raid-hub .raid-boss-art > span { font-size:11px; }
+  #raid-hub .raid-boss-info { padding:4px 0 16px; }
+  #raid-hub .raid-boss-info h3 { font-size:22px; }
+  #raid-hub .raid-reward-preview { margin-top:12px; padding-top:12px; }
+  #raid-hub .raid-entry-actions { grid-column:1 / -1; padding:8px 0 12px; }
+}
+@media (max-width:420px) {
+  #raid-hub .raid-heading-copy { display:block; }
+  #raid-hub .raid-global-ticket { margin-top:8px; }
+  #raid-hub .raid-trial-list { gap:10px; }
+  #raid-hub .raid-trial-card { gap:6px; padding-inline:3px; }
+  #raid-hub .raid-trial-icon { width:28px; }
+  #raid-hub .raid-boss-card { column-gap:12px; }
+  #raid-hub .raid-boss-art img { height:240px; }
   #raid-hub .raid-boss-info h3 { font-size:20px; }
-  #raid-hub .raid-reward-preview { margin-top:10px; padding:10px; }
-  #raid-hub .raid-entry-actions { grid-column:1 / -1; padding:14px 12px; }
 }
 
 /* Shared ticket reminder stays inside the balance card without shifting its text. */
@@ -343,37 +366,19 @@ body.raid-page-open #page-raid.active-page > #raid-hub:not(.hidden) {
 }
 .raid-global-ticket .raid-global-ticket-dot[hidden] { display: none; }
 
-/* One shared rail; the same selection element slides between all three tiers. */
-.raid-difficulty-picker{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:100%;box-sizing:border-box;margin:0 0 10px;padding:4px;border:1px solid var(--trial-line,#568e87);border-radius:18px;background:#02070c70}
-.raid-difficulty-selection{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);box-sizing:border-box;border:1px solid var(--trial-accent,#8ddaca);border-radius:13px;background:var(--trial-selection,#23584f);box-shadow:0 2px 12px #0004,inset 0 1px #ffffff18;transform:translateX(calc(var(--raid-selected-index,0)*100%));transition:transform .32s cubic-bezier(.22,.75,.25,1),background-color .32s,border-color .32s;pointer-events:none}
-.raid-difficulty-picker button{position:relative;z-index:1;min-width:0;display:grid;align-content:center;gap:3px;padding:9px 6px;border:0;border-radius:13px;background:transparent;color:#b9b8bc;text-align:center;cursor:pointer;transition:color .25s,opacity .25s}
-.raid-difficulty-picker button.active{color:var(--trial-text,#d7fff2);background:transparent;box-shadow:none}
+/* Difficulty keeps a small moving selection; the scene stays neutral. */
+.raid-difficulty-picker{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:100%;box-sizing:border-box;margin:0 0 10px;padding:4px;border:0;border-bottom:1px solid #bca77a38;border-radius:0;background:none}
+.raid-difficulty-selection{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);box-sizing:border-box;border:0;border-bottom:2px solid var(--trial-accent,#b7c8ac);border-radius:4px 4px 0 0;background:#ffffff06;box-shadow:none;transform:translateX(calc(var(--raid-selected-index,0)*100%));transition:transform .25s ease,border-color .25s;pointer-events:none}
+.raid-difficulty-picker button{position:relative;z-index:1;min-width:0;display:grid;align-content:center;gap:3px;padding:9px 6px;border:0;border-radius:4px;background:transparent;color:#afa68f;text-align:center;cursor:pointer;transition:color .2s,opacity .2s}
+.raid-difficulty-picker button.active{color:var(--trial-accent,#d9c58f);background:transparent;box-shadow:none}
 .raid-difficulty-picker button.locked:not(.active){opacity:.64}
-.raid-difficulty-picker strong{font-size:12px;letter-spacing:.08em}
-.raid-difficulty-picker small{font-size:9px;line-height:1.45;color:inherit;opacity:.8}
-.raid-difficulty-picker button:focus-visible{outline:2px solid var(--trial-accent,#8ddaca);outline-offset:-3px}
-@media(max-width:640px){
- .raid-difficulty-picker button{padding:7px 3px}
- .raid-difficulty-picker strong{font-size:11px}
- .raid-difficulty-picker small{font-size:8px}
-}
-
-/* Theme the whole trial, including the portrait panel and entry controls. */
-#raid-hub [data-raid-theme="normal"]{--trial-accent:#8ddaca;--trial-text:#d7fff2;--trial-line:#406d65;--trial-base:#102a29;--trial-art:#153735;--trial-selection:#23584f;--trial-button:#8bc9b4;--trial-ink:#102c25}
-#raid-hub [data-raid-theme="hard"]{--trial-accent:#efc078;--trial-text:#fff0d1;--trial-line:#876443;--trial-base:#35251d;--trial-art:#4a3023;--trial-selection:#78532c;--trial-button:#e2b36a;--trial-ink:#38240f}
-#raid-hub [data-raid-theme="extreme"]{--trial-accent:#dfabf2;--trial-text:#fbe4ff;--trial-line:#795180;--trial-base:#302036;--trial-art:#442541;--trial-selection:#70436e;--trial-button:#d6a0da;--trial-ink:#351a3a}
-#raid-hub .raid-boss-card[data-raid-theme]{border-color:var(--trial-line);background-color:var(--trial-base);background-image:linear-gradient(135deg,#ffffff04,#00000030);box-shadow:0 20px 55px #0005,inset 0 1px #ffffff07;transition:background-color .32s,border-color .32s}
-#raid-hub [data-raid-theme] .raid-boss-art{background-color:var(--trial-art);background-image:radial-gradient(ellipse at 50% 32%,#ffffff14,transparent 65%);transition:background-color .32s}
-#raid-hub [data-raid-theme] .raid-boss-art:after{background:linear-gradient(transparent,var(--trial-base))}
-#raid-hub [data-raid-theme] .raid-boss-art>span,#raid-hub [data-raid-theme] .raid-badges span{border-color:var(--trial-line);background:#070a1066;color:var(--trial-text);transition:color .32s,border-color .32s}
-#raid-hub [data-raid-theme] .raid-boss-info h3{color:var(--trial-text);transition:color .32s}
-#raid-hub [data-raid-theme] .raid-unlock-status,#raid-hub [data-raid-theme] .raid-reward-preview b{color:var(--trial-accent);transition:color .32s}
-#raid-hub [data-raid-theme] .raid-reward-preview{border-color:var(--trial-line);background:#02070c33;transition:border-color .32s}
-#raid-hub [data-raid-theme] .raid-reward-preview span{color:#cbc4c7}
-#raid-hub [data-raid-theme] .raid-entry-actions{border-color:var(--trial-line);background-color:var(--trial-base);background-image:linear-gradient(#00000028,#00000028);transition:background-color .32s,border-color .32s}
-#raid-hub [data-raid-theme] .raid-entry-actions .raid-primary{background:var(--trial-button);border-color:var(--trial-accent);color:var(--trial-ink);transition:background-color .32s,border-color .32s,color .32s}
-#raid-hub [data-raid-theme] .raid-entry-actions .raid-ghost{border-color:var(--trial-line);color:var(--trial-text);background:#02070c44}
-@media(prefers-reduced-motion:reduce){#raid-hub [data-raid-theme],#raid-hub [data-raid-theme] *,#raid-hub [data-raid-theme] *:after{transition:none!important}}
+.raid-difficulty-picker strong{font-size:12px;letter-spacing:.04em}
+.raid-difficulty-picker small{font-size:11px;line-height:1.5;color:inherit}
+.raid-difficulty-picker button:focus-visible{outline:2px solid #d9c58f;outline-offset:-3px}
+#raid-hub [data-raid-theme="normal"]{--trial-accent:#b7c8ac}
+#raid-hub [data-raid-theme="hard"]{--trial-accent:#d9bd87}
+#raid-hub [data-raid-theme="extreme"]{--trial-accent:#c4afce}
+@media(prefers-reduced-motion:reduce){.raid-difficulty-selection,.raid-difficulty-picker button{transition:none!important}}
 
 /* 沿用悟道、鬥法的全頁閱讀版面；只有題目區捲動，Boss 計時始終可見。 */
 #page-raid .raid-question-shell:not(.raid-loading){
@@ -449,52 +454,60 @@ body.raid-page-open #page-raid.active-page > #raid-hub:not(.hidden) {
 }
 
 /* 伺服器公開招募名單：保留秘境原有墨金配色，不顯示私人邀請碼。 */
-#raid-hub .raid-public-recruitment{margin-top:12px;padding:12px 13px;border:1px solid rgba(220,183,108,.26);border-radius:13px;background:rgba(12,17,16,.79)}
+#raid-hub .raid-public-recruitment{margin-top:4px;padding:20px 0 0;border:0;border-top:1px solid var(--raid-line);border-radius:0;background:none}
 #raid-hub .raid-public-recruitment>header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
 #raid-hub .raid-public-recruitment>header>div{min-width:0}
 #raid-hub .raid-public-recruitment>header small{color:#a98a57;font-size:9px;letter-spacing:.15em}
-#raid-hub .raid-public-recruitment>header h3{margin:3px 0;color:#f0d6a5;font-size:20px}
+#raid-hub .raid-public-recruitment>header h3{margin:0;color:var(--raid-paper);font-size:18px;font-weight:500}
 #raid-hub .raid-public-recruitment>header p{margin:3px 0 0;color:#a49b88;font-size:11px;line-height:1.5}
-#raid-hub .raid-public-recruitment [data-public-refresh]{min-height:44px;padding:0 16px;flex:none;font-size:14px;cursor:pointer}
-#raid-hub .raid-public-rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-#raid-hub .raid-public-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;padding:12px;border:1px solid rgba(226,198,135,.2);border-radius:10px;background:rgba(255,255,255,.025)}
+#raid-hub .raid-public-recruitment [data-public-refresh]{min-height:44px;padding:0 8px;flex:none;border:0;background:none;font-size:13px;font-weight:400;color:var(--raid-muted);cursor:pointer}
+#raid-hub .raid-public-rooms{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+#raid-hub .raid-public-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border:0;border-bottom:1px solid var(--raid-line);border-radius:0;background:none}
 #raid-hub .raid-public-entry-main{min-width:0;display:grid;gap:5px}
-#raid-hub .raid-public-entry-main strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ecdec2;font-size:15px}
+#raid-hub .raid-public-entry-main strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--raid-paper);font-size:15px;font-weight:500}
 #raid-hub .raid-public-entry-main strong small{font-size:10px;color:#afa58c}
 #raid-hub .raid-public-entry-main>span{color:#a6b7ae;font-size:13px;line-height:1.6}
 #raid-hub .raid-public-entry-main i{font-style:normal;color:#827a69}
-#raid-hub .raid-public-join{min-width:64px;min-height:44px;padding:8px 12px;border:1px solid rgba(232,194,117,.55);border-radius:9px;background:rgba(190,133,49,.19);color:#f2d797;font-size:14px;cursor:pointer}
+#raid-hub .raid-public-join{min-width:64px;min-height:44px;padding:8px 14px;border:1px solid var(--raid-line);border-radius:6px;background:none;color:#d9c58f;font-size:14px;cursor:pointer}
 #raid-hub .raid-public-join:disabled{opacity:.48;cursor:not-allowed}
-#raid-hub .raid-public-join:not(:disabled):hover{background:rgba(190,133,49,.33)}
-#raid-hub .raid-public-empty{grid-column:1/-1;margin:0;padding:18px 10px;border:1px dashed rgba(214,184,116,.18);border-radius:10px;text-align:center;color:#bdb097;font-size:14px;line-height:1.7;overflow-wrap:anywhere}
+#raid-hub .raid-public-join:not(:disabled):hover{background:#ffffff08}
+#raid-hub .raid-public-empty{grid-column:1/-1;margin:0;padding:16px 0;border:0;border-radius:0;text-align:left;color:var(--raid-muted);font-size:14px;line-height:1.7;overflow-wrap:anywhere}
 .raid-lobby-visibility{display:inline-flex;align-items:center;min-height:34px;padding:5px 10px;border-radius:9px;background:rgba(119,178,151,.12);color:#afddba;font-size:11px;letter-spacing:.05em}
 @media(max-width:670px){
  #raid-hub .raid-public-rooms{grid-template-columns:1fr}
- #raid-hub .raid-public-recruitment{padding:10px}
- #raid-hub .raid-public-entry{padding:9px}
+ #raid-hub .raid-public-recruitment{padding:16px 0 0}
+ #raid-hub .raid-public-entry{padding:12px 0}
 }
 
 /* 等候小隊固定單欄；矮螢幕只捲動名單，保留準備與開戰按鈕。 */
 #raid-lobby>.raid-heading,#raid-lobby>.raid-lobby-actions{flex-shrink:0}
-#raid-lobby .raid-party-list{flex:1 1 auto;display:grid;grid-template-columns:minmax(0,1fr);grid-auto-rows:max-content;align-content:start;gap:9px;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;padding:2px}
-#raid-lobby .raid-party-member{grid-template-columns:48px minmax(0,1fr) auto;gap:12px;min-height:90px;max-height:none;padding:10px 12px;border-width:1px 1px 1px 4px;border-radius:12px}
-#raid-lobby .raid-party-member.is-ready{border-color:#46bc87;background:linear-gradient(100deg,rgba(25,104,69,.36),rgba(17,35,29,.94))}
-#raid-lobby .raid-party-member.is-waiting{border-color:#ee916c;background:linear-gradient(100deg,rgba(122,52,28,.29),rgba(39,26,22,.94))}
+#raid-lobby .raid-heading{padding:14px 0;border:0;border-bottom:1px solid #bca77a38;border-radius:0;background:none;box-shadow:none}
+#raid-lobby .raid-heading h2{font-size:23px;font-weight:500;line-height:1.5}
+#raid-lobby .raid-heading small,#raid-lobby .raid-heading p{font-size:12px;line-height:1.6;letter-spacing:0;color:#afa68f}
+#raid-lobby .raid-back{width:44px;height:44px;border-radius:6px}
+#raid-lobby .raid-seal{width:auto;height:auto;border:0;border-radius:0;color:#afa68f;font-size:16px;font-weight:400}
+#raid-lobby .raid-lobby-actions{gap:10px;padding:16px 0 8px;border:0;border-top:1px solid #bca77a38;border-radius:0;background:none;box-shadow:none;backdrop-filter:none}
+#raid-lobby .raid-lobby-actions button{min-height:44px;border-radius:6px;font-size:13px;font-weight:500;letter-spacing:0}
+#raid-lobby .raid-lobby-visibility,#raid-lobby .raid-wait-host{padding:5px 0;border:0;border-radius:0;background:none;color:#afa68f;font-size:13px}
+#raid-lobby .raid-party-list{flex:1 1 auto;display:grid;grid-template-columns:minmax(0,1fr);grid-auto-rows:max-content;align-content:start;gap:0;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-gutter:stable;padding:2px}
+#raid-lobby .raid-party-member{grid-template-columns:48px minmax(0,1fr) auto;gap:12px;min-height:90px;max-height:none;padding:12px 4px;border:0;border-bottom:1px solid #bca77a38;border-radius:0;background:none}
+#raid-lobby .raid-party-member.is-ready,#raid-lobby .raid-party-member.is-waiting{border-color:#bca77a38;background:none}
+
 #raid-lobby .raid-party-member img{width:48px;height:62px}
 #raid-lobby .raid-party-member>div{min-width:0}
 #raid-lobby .raid-party-member small{font-size:11px;color:#c7c4b4}
 #raid-lobby .raid-party-member strong{font-size:16px;line-height:1.5;overflow-wrap:anywhere}
 #raid-lobby .raid-party-member span{font-size:11px;line-height:1.6;color:#bcb9ac;white-space:normal;overflow-wrap:anywhere}
 #raid-lobby .raid-member-actions{display:grid;justify-items:stretch;gap:5px}
-#raid-lobby .raid-member-readiness{display:flex;align-items:center;justify-content:center;gap:6px;min-width:90px;min-height:34px;box-sizing:border-box;padding:6px 9px;border:1px solid;border-radius:8px;font-size:13px;line-height:1.4;font-weight:850;white-space:nowrap}
-#raid-lobby .raid-member-readiness.ready{color:#062d1b;background:#79f0ad;border-color:#b8ffd3;box-shadow:0 0 14px rgba(76,213,137,.16)}
-#raid-lobby .raid-member-readiness.waiting{color:#fff0e7;background:#9b3e25;border-color:#f0a27d}
+#raid-lobby .raid-member-readiness{display:flex;align-items:center;justify-content:center;gap:6px;min-width:90px;min-height:34px;box-sizing:border-box;padding:6px 0;border:0;border-radius:0;font-size:13px;line-height:1.4;font-weight:500;white-space:nowrap}
+#raid-lobby .raid-member-readiness.ready{color:#a2c6a6;background:none;box-shadow:none}
+#raid-lobby .raid-member-readiness.waiting{color:#b9ad91;background:none}
 #raid-lobby .raid-member-kick{min-height:36px;padding:5px 10px;border:1px solid #a86255;border-radius:8px;background:#341e1b;color:#ffbaab;font-size:12px;font-weight:750;cursor:pointer}
 #raid-lobby .raid-member-kick:hover:not(:disabled){background:#73362d;border-color:#ffc0b0;color:#fff}
 #raid-lobby .raid-member-kick:focus-visible{outline:2px solid #ffcabd;outline-offset:2px}
 #raid-lobby .raid-member-kick:disabled{opacity:.5;cursor:wait}
-#raid-lobby [data-ready]{font-size:14px;font-weight:850;border-color:#a9ffca;background:#65dc9a;color:#082f1d;box-shadow:0 0 15px rgba(77,207,131,.17)}
-#raid-lobby [data-ready][data-ready-state="ready"]{border-color:#4eaf80;background:#194c37;color:#c0fbd7;box-shadow:none}
+#raid-lobby [data-ready]{font-size:14px;font-weight:500;border-color:#bca77a55;background:#ffffff06;color:#d1d4bc;box-shadow:none}
+#raid-lobby [data-ready][data-ready-state="ready"]{border-color:#a2c6a655;background:#a2c6a60a;color:#a2c6a6;box-shadow:none}
 @media(max-width:380px){
  #raid-lobby .raid-party-member{grid-template-columns:36px minmax(0,1fr) auto;gap:7px;padding:8px}
  #raid-lobby .raid-party-member img{width:36px;height:50px}
