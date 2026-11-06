@@ -1,6 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const aiRouter = require('./ai-router');
 const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
+const { QUESTION_RELIABILITY_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const { playerRepository, dongtianRepository } = require('./server-repositories.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
@@ -254,6 +255,8 @@ ${JSON.stringify({
 [本批題目藍圖]
 ${JSON.stringify(blueprints)}
 ${Knowledge.promptFor(plan.subject)}
+${QUESTION_RELIABILITY_RULES}
+${subjectReliabilityPrompt(plan.subject,{examples:false})}
 
 [先前已生成的全部題目]
 ${generatedQuestions.length ? JSON.stringify(generatedQuestions) : '[]'}
@@ -480,6 +483,7 @@ function buildDongtianDoubleCheckPrompt(dongtian) {
 ${JSON.stringify(dongtian)}
 
 [必查項目]
+0. 必須先逐題讀懂「哪項正確／錯誤／不符合／錯誤推論／最適當」的問法，在未採信 correct 前判定每個選項是否符合所問；正反向題的判定極性不可顛倒。若有兩個以上符合、零個符合或多種合理解讀，應標記 questionId、approved=false。
 1. 每一題題幹事實、數學與邏輯是否成立。
 2. correct 是否唯一正確，三個 wrong 是否確實錯誤且不重複。
 3. exp 是否和 correct 真正一致：你必須不依賴原 correct，自行解出每題並與標示正解逐字／數值／數學等價比對；同時檢查 wrong 是否也含正解。
@@ -620,6 +624,12 @@ function buildQuestionReviewPrompt(question, reason, dongtian = {}) {
 [任務]
 你是洞天題目品質審核員。玩家回報一題可能有錯，請保守、嚴格判定，不要因為玩家質疑就迎合。
 
+[先做獨立逐項審查]
+- 先只依 q 與四個選項判定題目究竟問的是正確、錯誤、不符合、推論中何處錯誤或最適當。
+- 逐項判定「是否符合題目所問」，而不是僅看敘述真假；列出所有符合的選項，再回頭比較 correct。
+- 針對否定題與含錯誤推論的題目，檢查所有選項是否採相同回答方式；多個可能的錯誤敘述與一個正確定律混用時，不能強行認定唯一正解。
+- 解析與標示 correct 都是待審資料，不是權威。審核結果須以可驗證的題幹、定義、算式或原文為依據；玩家回報只是線索。
+
 [只有下列情況才算確實有誤]
 - 題幹有事實、數學、語意或邏輯錯誤，導致題目不成立。
 - 標示的 correct 並非唯一正確答案，或 wrong 中也存在合理正解。
@@ -666,6 +676,8 @@ function buildQuestionReviewVerificationPrompt(question, reason, firstReview, do
   return `
 [任務]
 你是第二位獨立審核員。請重新檢查洞天題目，不得因第一位審核員說有錯就直接同意。只有你也能指出可驗證的實質錯誤，才能 confirmError=true。
+先讀懂問句極性，重新評估四個選項各自是否「符合題目所問」，不把選項內容為真等同於選項符合逆向問句；先推導符合選項集合再比對標示 correct、解析與玩家理由。
+若題目以錯誤推論為背景，特別檢查「哪個觀念錯誤」和「哪個敘述正確」是否被混為一談；存在多解、無解或不明判準且能指出具體依據時應 confirmError=true。
 
 [洞天資訊]
 ${JSON.stringify({ name: cleanText(dongtian.name, 60), level: cleanText(dongtian.level, 30), difficulty: cleanText(dongtian.difficulty, 20), subject: cleanText(dongtian.subject, 30) })}
