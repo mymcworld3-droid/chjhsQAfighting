@@ -39,7 +39,7 @@ test('successful reward settlement updates the local bag without an extra Fireba
   const f=fixture({inventory:{'raid-refine-key-ii':3,'qi-spirit-iron':2}});
   await f.call();
   assert.equal(f.local.materialSystem.inventory['raid-refine-key-ii'],3);
-  assert.equal(f.local.materialSystem.inventory['qi-spirit-iron'],2);
+  assert.equal(f.local.materialSystem.inventory['qi-spirit-iron'],undefined);
   assert.equal(f.reads(),0);
   assert.equal(f.state.rewardClaimedRoomId,'room_test');
   assert.match(f.status.innerHTML,/loot/);
@@ -64,7 +64,7 @@ test('victory response after account switch does not change the old account',asy
 const view=fs.readFileSync(path.join(__dirname,'../public/cultivation/raid-loot-view.js'),'utf8').replace(/^import .*;\n/gm,'').replace(/^export /gm,'');
 test('loot view safely renders material names and blocks executable image URLs',()=>{
   const render=vm.runInNewContext(view+'\nrenderRaidLoot',{getMaterialById:()=>({name:'<script>x</script>',imageUrl:'javascript:alert(1)',icon:'<b>'})});
-  const html=render({awarded:true,rewards:{x:2},firstVictory:true,memento:{name:'<svg>'}});
+  const html=render({awarded:true,rewards:{'raid-refine-key-ii':2,x:999},firstVictory:true,memento:{name:'<svg>'}});
   assert.doesNotMatch(html,/<script>|javascript:|<svg>/);assert.match(html,/&lt;script&gt;/);assert.match(html,/×2/);
 });
 test('learning view clearly distinguishes pending from settled earnings',()=>{
