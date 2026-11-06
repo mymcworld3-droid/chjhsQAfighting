@@ -98,3 +98,51 @@ test('reading subquestions share passages without being mistaken for the same pe
   assert.equal(cache.getHistory()[0].bankQuestionId, 'reading-q21');
   assert.equal(cache.append(quiz('reading-q21')), true);
 });
+
+test('bank stems and choices are text JSON with only figure references', () => {
+  const catalog = JSON.parse(fs.readFileSync(path.join(root, 'data/bank-import/catalog.json')));
+  const all = catalog.banks.flatMap(bank => JSON.parse(fs.readFileSync(path.join(root, 'public/banks', bank.file))));
+  assert.equal(all.length, 2591);
+  for (const q of all) {
+    assert.equal(q.contentFormat, 'text-and-figures-v2', q.id);
+    assert.ok(!q.reviewRequired, q.id);
+    const text = [q.q, q.correct, ...q.wrong].join('\n');
+    assert.doesNotMatch(text, /原卷選項|請依下列原卷資料|@@FIG_|-(?:question|context)\.png/, q.id);
+    const refs = [...text.matchAll(/!\[[^\]]*\]\((\/assets\/banks\/[^)]+)\)/g)].map(m => m[1]);
+    assert.deepEqual([...new Set(refs)].sort(), [...q.requiredImages].sort(), q.id);
+    assert.ok(q.q.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 4, q.id);
+  }
+  const get = id => all.find(q => q.id === id);
+  assert.match(get('cap-109-math-q2').q, /2<sup>3<\/sup>/);
+  assert.equal(get('cap-109-math-q3').correct, String.raw`$\frac{2}{5}$`);
+  assert.match(get('cap-109-math-q4').q, /\\sqrt\{48\}/);
+  assert.match(get('gsat-114-math-a-q2').q, /-\\frac\{4\}\{3\}/);
+  assert.equal(get('gsat-111-math-a-q2').source.answer, '1');
+  assert.equal(get('gsat-111-math-a-q5').source.answer, '2');
+  assert.ok(!get('gsat-111-math-a-q13'));
+  assert.ok(!get('gsat-112-math-b-q18'));
+  assert.match(get('cap-112-english-q25').q, /Family trip to the South/);
+  assert.ok(!get('gsat-112-social-q58').wrong.join('').includes('Q58-option-D'));
+  assert.ok(!get('gsat-108-chinese-q4').requiredImages.length);
+});
+
+test('PDF columns, custom Chinese glyphs and circled option numbers retain their source meaning', () => {
+  const { banks } = JSON.parse(fs.readFileSync(path.join(root, 'data/bank-import/catalog.json')));
+  const questions = banks.flatMap(bank => JSON.parse(fs.readFileSync(path.join(root, 'public/banks', bank.file))));
+  const get = id => questions.find(q => q.id === id);
+  for (const q of questions.filter(q => q.id.startsWith('cap'))) {
+    const choices = [q.correct, ...q.wrong].join('\n').replace(/!\[[^\]]*\]\([^)]*\)/g, '');
+    assert.doesNotMatch(choices, /[（(][A-D][）)]/, q.id);
+    assert.doesNotMatch([q.q, choices].join('\n'), /[\u0400-\u1fff]/, q.id);
+  }
+  assert.equal(get('cap-114-math-q3').correct, '②和③');
+  assert.equal(get('cap-111-chinese-q26').requiredImages.length, 1);
+  assert.equal(get('cap-114-math-q11').requiredImages.length, 1);
+  assert.equal(get('cap-113-math-q25').requiredImages.length, 0);
+  assert.match(get('cap-113-math-q24').q, /100h-158/);
+  assert.deepEqual(get('cap-110-science-q28').wrong, ['需有感覺神經元參與', '需有運動神經元參與', '經練習可縮短反應時間']);
+  assert.match(get('cap-110-science-q28').q, /\| 時間\(秒\) \| 59 \| 48 \| 30 \| 35 \| 25 \|/);
+  assert.doesNotMatch(get('cap-110-social-q33').q, /斯洛伐克|羅馬尼亞|273,710/);
+  assert.equal(get('cap-112-social-q15').correct, '臺灣的紡織品出口至越南');
+  assert.ok(get('cap-112-social-q15').requiredImages.length > 0);
+});

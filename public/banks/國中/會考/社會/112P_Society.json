@@ -2,14 +2,14 @@
   {
     "id": "cap-112-social-q1",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-112-social/Q1-question.png)",
-    "correct": "原卷選項 C",
+    "q": "近年來，在政府與民間的努力下，開發出米麵包、米蛋糕、米布丁、米鳳梨\n酥、米冰淇淋等新米食。上述作法最可能達成下列何項效益？",
+    "correct": "減輕稻米過剩壓力\n![圖表](/assets/banks/cap-112-social/Q1-option-C-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "降低稻米生產成本",
+      "減少水稻耕作人力",
+      "確保米食安全管理\n![圖表](/assets/banks/cap-112-social/Q1-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第1題。",
+    "exp": "正確答案：減輕稻米過剩壓力\n![圖表](/assets/banks/cap-112-social/Q1-option-C-figure-1.png)。來源：112年國中教育會考社會第1題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -25,22 +25,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q1-question.png"
+      "/assets/banks/cap-112-social/Q1-option-C-figure-1.png",
+      "/assets/banks/cap-112-social/Q1-option-D-figure-1.png"
     ],
     "passRate": 0.92,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q2",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-112-social/Q2-question.png)",
-    "correct": "原卷選項 D",
+    "q": "交通部公路總局為了滿足部分地區民眾就學、就醫及\n洽公的需求，以及達成某項目的，推動「幸福巴士」\n政策。圖(一)為2019年8月時設有營運路線的行政區分\n布。根據上述及右圖資訊推論，該目的最可能為下列\n何者？",
+    "correct": "彌補公共運輸網的不足\n![圖表](/assets/banks/cap-112-social/Q2-option-D-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "串連北中南的工業園區\n![圖表](/assets/banks/cap-112-social/Q2-option-A-figure-1.png)",
+      "降低高速公路的車流量\n![圖表](/assets/banks/cap-112-social/Q2-option-B-figure-1.png)",
+      "增加高鐵接駁的便利性\n![圖表](/assets/banks/cap-112-social/Q2-option-C-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第2題。",
+    "exp": "正確答案：彌補公共運輸網的不足\n![圖表](/assets/banks/cap-112-social/Q2-option-D-figure-1.png)。來源：112年國中教育會考社會第2題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -56,15 +58,19 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q2-question.png"
+      "/assets/banks/cap-112-social/Q2-option-D-figure-1.png",
+      "/assets/banks/cap-112-social/Q2-option-A-figure-1.png",
+      "/assets/banks/cap-112-social/Q2-option-B-figure-1.png",
+      "/assets/banks/cap-112-social/Q2-option-C-figure-1.png"
     ],
     "passRate": 0.87,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q3",
     "difficulty": "easy",
-    "q": "格陵蘭島位處北極圈附近，某研究針對島上居民進行「氣候變遷對人類心理\n  影響」的抽樣調查，結果顯示大部分受訪者曾親身經歷全球暖化對生活帶來\n  的影響，氣候變遷正為北極地區居民帶來前所未有的壓力和焦慮。下列何者\n  最可能為當地居民擔憂的事情？",
+    "q": "格陵蘭島位處北極圈附近，某研究針對島上居民進行「氣候變遷對人類心理\n影響」的抽樣調查，結果顯示大部分受訪者曾親身經歷全球暖化對生活帶來\n的影響，氣候變遷正為北極地區居民帶來前所未有的壓力和焦慮。下列何者\n最可能為當地居民擔憂的事情？",
     "correct": "日益變薄的冰層讓雪橇通行變得危險",
     "wrong": [
       "冰河侵蝕日漸增強導致耕地面積減少",
@@ -88,19 +94,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q4",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-112-social/Q4-question-1.png)\n\n![第4題原卷資料](/assets/banks/cap-112-social/Q4-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "表(一)為中國不同年分的人口普查部分資料。觀察表中幼年人口比例的變動，\n下列何者最可能是造成2010到2020年微幅變化的原因之一？\n表(一) 單位：%\n| 年分 / 年齡組成 | 1953 | 1964 | 1982 | 1990 | 2000 | 2010 | 2020 |\n| 0-14 歲 | 36.28 | 40.69 | 33.59 | 27.69 | 22.89 | 16.60 | 17.95 |\n| 15-64 歲 | 59.31 | 55.75 | 61.50 | 66.74 | 70.15 | 74.53 | 68.55 |\n| 65 歲以上 | 4.41 | 3.56 | 4.91 | 5.57 | 6.96 | 8.87 | 13.50 |",
+    "correct": "開放生育第二胎",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "實施一胎化政策",
+      "重男輕女觀念式微",
+      "嚴格限制人口移入"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第4題。",
+    "exp": "正確答案：開放生育第二胎。來源：112年國中教育會考社會第4題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -116,24 +123,22 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q4-question-1.png",
-      "/assets/banks/cap-112-social/Q4-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q5",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-112-social/Q5-question.png)",
-    "correct": "原卷選項 A",
+    "q": "清末一位知識分子提到：「今日多數的中國婦女終身只待在家中，不曾見過\n什麼人、沒去過其他城市、身邊沒有學習的夥伴而孤陋寡聞，只能學一些無\n關緊要的東西，而這些東西遠比不上有用的知識。這是因為現在還有毀壞人\n體的風俗，這樣的風俗沒有廢除，新式的女子學校就無法設立。這項風俗延\n續了數百年直到今日，是外國人眼中的笑柄。」上述「風俗」最可能是下列\n何者？\n度出家：是指剃髮並接受佛教戒律，成為僧侶。\n& <sup>剃</sup>\n薙髮留辮：剃除大部分頭髮，僅在腦後編成髮辮的滿族髪式。",
+    "correct": "自幼纏足",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "吸食鴉片",
+      "剃度出家",
+      "薙髮留辮"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第5題。",
+    "exp": "正確答案：自幼纏足。來源：112年國中教育會考社會第5題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -148,23 +153,22 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q5-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.91,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q6",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-112-social/Q6-question.png)",
-    "correct": "原卷選項 C",
+    "q": "表(二)為兩個雜誌社的成員，他們在某時期曾表(二)\n遭法院判刑入獄。隨著時局更迭，2019年政\n府公告撤銷原本的有罪判決，讓他們獲得平\n反。表中人員當時被判刑，最可能與下列何\n| 雜誌社 | 成員 |\n| 自由中國 | 雷震等人 |\n| 美麗島 | 黃信介等人 |\n者有關？",
+    "correct": "挑戰戒嚴時期對人民權利的限制",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "受威爾遜的影響，主張民族自決",
+      "反對皇民化時期推動的統治措施",
+      "聲援六四天安門事件，發動遊行\n![圖表](/assets/banks/cap-112-social/Q6-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第6題。",
+    "exp": "正確答案：挑戰戒嚴時期對人民權利的限制。來源：112年國中教育會考社會第6題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -180,22 +184,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q6-question.png"
+      "/assets/banks/cap-112-social/Q6-option-D-figure-1.png"
     ],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q7",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-112-social/Q7-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(二)是法國1750至2000年人民平均壽命\n曲線圖。下列何者最能合理解釋圖中甲、\n乙、丙、丁四個箭頭處，平均壽命變動的\n主要原因？",
+    "correct": "參與對外戰爭，造成青壯年人口減損\n![圖表](/assets/banks/cap-112-social/Q7-option-C-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "宗教改革後，教派間對立引發流血衝突\n![圖表](/assets/banks/cap-112-social/Q7-option-A-figure-1.png)",
+      "派遣移民前往殖民地，使國內人口減少\n![圖表](/assets/banks/cap-112-social/Q7-option-B-figure-1.png)",
+      "「經濟大恐慌」蔓延，社會嚴重失序\n![圖表](/assets/banks/cap-112-social/Q7-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第7題。",
+    "exp": "正確答案：參與對外戰爭，造成青壯年人口減損\n![圖表](/assets/banks/cap-112-social/Q7-option-C-figure-1.png)。來源：112年國中教育會考社會第7題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -211,22 +216,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q7-question.png"
+      "/assets/banks/cap-112-social/Q7-option-C-figure-1.png",
+      "/assets/banks/cap-112-social/Q7-option-A-figure-1.png",
+      "/assets/banks/cap-112-social/Q7-option-B-figure-1.png",
+      "/assets/banks/cap-112-social/Q7-option-D-figure-1.png"
     ],
     "passRate": 0.79,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q8",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-112-social/Q8-question-1.png)\n\n![第8題原卷資料](/assets/banks/cap-112-social/Q8-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "李科羅是一位天主教傳教士，1655年前往廈門傳教，並得到當地統治者「國\n姓爺」的關照；他也為國姓爺父子擔任使者，出使菲律賓。但1663年李科羅\n結束使者任務返回廈門時，卻遭當地的新統治者逮捕；他擔心被送往北京，\n因此在洪水氾濫期間，趁亂逃亡，最後輾轉逃到臺灣。李科羅逃亡的原因，\n最可能與下列何者有關？",
+    "correct": "清帝國與鄭氏政權互相敵對",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "日本與荷蘭互相合作",
+      "荷蘭與西班牙互相敵對",
+      "鄭氏政權與英國互相合作"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第8題。",
+    "exp": "正確答案：清帝國與鄭氏政權互相敵對。來源：112年國中教育會考社會第8題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -242,17 +251,15 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q8-question-1.png",
-      "/assets/banks/cap-112-social/Q8-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.76,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q9",
     "difficulty": "easy",
-    "q": "我國國民在面對新冠肺炎疫情時，可透過接種疫苗來降低染疫風險，但逾期\n  停留或逾期居留的外國人卻無法接種疫苗，一旦染疫後，可能也無法得到適\n  當的醫療服務，甚至危及他們的生命安全，因此有民間團體呼籲政府應將這\n  些人納入公費疫苗施打對象。後來，政府基於防疫需求與風險控管，在國內\n  疫苗供應充足的情況下，以專案方式為這些人施打疫苗。上述民間團體的呼\n  籲隱含下列哪一觀點？",
+    "q": "我國國民在面對新冠肺炎疫情時，可透過接種疫苗來降低染疫風險，但逾期\n停留或逾期居留的外國人卻無法接種疫苗，一旦染疫後，可能也無法得到適\n當的醫療服務，甚至危及他們的生命安全，因此有民間團體呼籲政府應將這\n些人納入公費疫苗施打對象。後來，政府基於防疫需求與風險控管，在國內\n疫苗供應充足的情況下，以專案方式為這些人施打疫苗。上述民間團體的呼\n籲隱含下列哪一觀點？",
     "correct": "基本人權應受到普遍性保障",
     "wrong": [
       "公民參政權應受到重視",
@@ -276,19 +283,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.92,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q10",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-112-social/Q10-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(三)為某島國周邊範圍的示意圖，甲\n\n區塊為該國的土地，乙、丙區塊為環繞\n在甲周圍的海域，而丁、戊、己區塊則\n分別為甲、乙、丙所對應大氣層內的空\n中領域。根據圖中內容判斷，該國完整\n的領土範圍應為下列何者？\n\n![圖表](/assets/banks/cap-112-social/Q10-figure-1.png)\n\n\n\n![圖表](/assets/banks/cap-112-social/Q10-figure-3.png)",
+    "correct": "甲、乙、丁、戊",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "甲、丁",
+      "甲、乙、丁",
+      "甲、乙、丙、丁、戊\n![圖表](/assets/banks/cap-112-social/Q10-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第10題。",
+    "exp": "正確答案：甲、乙、丁、戊。來源：112年國中教育會考社會第10題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -304,22 +312,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q10-question.png"
+      "/assets/banks/cap-112-social/Q10-figure-1.png",
+      "/assets/banks/cap-112-social/Q10-figure-3.png",
+      "/assets/banks/cap-112-social/Q10-option-D-figure-1.png"
     ],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q11",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-112-social/Q11-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(四)是小強在網路上張貼的問題\n及四位網友的回答，根據圖中內\n容判斷，下列何者的回答可以給\n小強適當的協助？",
+    "correct": "小康\n![圖表](/assets/banks/cap-112-social/Q11-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "小臻\n![圖表](/assets/banks/cap-112-social/Q11-option-A-figure-1.png)",
+      "小芬\n![圖表](/assets/banks/cap-112-social/Q11-option-C-figure-1.png)",
+      "小俊\n![圖表](/assets/banks/cap-112-social/Q11-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第11題。",
+    "exp": "正確答案：小康\n![圖表](/assets/banks/cap-112-social/Q11-option-B-figure-1.png)。來源：112年國中教育會考社會第11題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -335,22 +346,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q11-question.png"
+      "/assets/banks/cap-112-social/Q11-option-B-figure-1.png",
+      "/assets/banks/cap-112-social/Q11-option-A-figure-1.png",
+      "/assets/banks/cap-112-social/Q11-option-C-figure-1.png",
+      "/assets/banks/cap-112-social/Q11-option-D-figure-1.png"
     ],
     "passRate": 0.88,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q12",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-112-social/Q12-question-1.png)\n\n![第12題原卷資料](/assets/banks/cap-112-social/Q12-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "某日，小晴沒來上課，班上同學們問\n《紀念日及節日實施辦法》第4條：\n了老師才知道，因為小晴是太魯閣族\n下列民俗節日，除春節放假三日\n的原住民，所以他今天放假和家人一\n外，其餘均放假一日：\n起返回部落參與感恩祭。老師也藉機\n一、春節。\n以圖(五)中的法律規範，向同學們說\n明小晴可以放假的依據。根據上述內\n六、原住民族歲時祭儀：各該原住\n容判斷，主管機關將原住民族的傳統\n民族放假日期，由行政院原住\n祭儀納入法律規範的原因，其主要考\n民族委員會參酌各該原住民族\n量最可能是下列何者？\n習俗公告，並刊登政府公報。\n圖(五)",
+    "correct": "尊重多元文化，促進部落文化傳承",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "落實部落自治，提升地方行政效率",
+      "推動觀光發展，增加青年工作機會",
+      "凝聚居民認同，改善社區生活環境"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第12題。",
+    "exp": "正確答案：尊重多元文化，促進部落文化傳承。來源：112年國中教育會考社會第12題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -366,17 +381,15 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q12-question-1.png",
-      "/assets/banks/cap-112-social/Q12-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.93,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q13",
     "difficulty": "medium",
-    "q": "棗椰樹屬於棕櫚科植物，主要分布在熱帶乾燥地區，其果實稱為椰棗，既可\n  作糧食，又是製糖的原料。全球有上億棵棗椰樹，其中前兩大分布區為西亞\n  和甲地區，椰棗也成為這些地區重要的出口農產品。上述甲地區最可能為下\n  列何者？",
+    "q": "棗椰樹屬於棕櫚科植物，主要分布在熱帶乾燥地區，其果實稱為椰棗，既可\n作糧食，又是製糖的原料。全球有上億棵棗椰樹，其中前兩大分布區為西亞\n和甲地區，椰棗也成為這些地區重要的出口農產品。上述甲地區最可能為下\n列何者？",
     "correct": "北非",
     "wrong": [
       "南歐",
@@ -400,19 +413,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/cap-112-social/Q14-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(六)的詩為唐代詩人登上今湖北襄陽的一座山\n頭，見石碑碑文有感而發之作。詩中「水落魚梁\n淺」指山腳下的魚梁沙洲因水位變化而露出水面，\n作者藉以說明環境與世事的變化。關於形成「水落\n魚梁淺」現象的原因，下列推論何者最為適切？\n\n![圖表](/assets/banks/cap-112-social/Q14-figure-1.png)",
+    "correct": "季節性降水差異產生的水位變化",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "沙洲上游融冰增加造成水位升降",
+      "海平面上升海水入侵內陸造成水位改變",
+      "在沙洲下游河段興築大型堤壩導致水位的變化"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第14題。",
+    "exp": "正確答案：季節性降水差異產生的水位變化。來源：112年國中教育會考社會第14題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -428,22 +442,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q14-question.png"
+      "/assets/banks/cap-112-social/Q14-figure-1.png"
     ],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-112-social/Q15-question.png)",
-    "correct": "原卷選項 A",
+    "q": "圖（七）為跨太平洋夥伴全面進步協定（CPTPP）的11個成員國。該協定於2018年12月30日生效，各成員國之間將階段性的廢除關稅，以促進貿易往來。此協定生效後，下列何者最可能因關稅劣勢而受到衝擊？\n\n![圖表](/assets/banks/cap-112-social/Q15-figure-1.png)",
+    "correct": "臺灣的紡織品出口至越南",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "加拿大的小麥出口至日本",
+      "墨西哥的汽車出口至智利",
+      "馬來西亞的石油出口至印度"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第15題。",
+    "exp": "正確答案：臺灣的紡織品出口至越南。來源：112年國中教育會考社會第15題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -459,22 +474,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q15-question.png"
+      "/assets/banks/cap-112-social/Q15-figure-1.png"
     ],
     "passRate": 0.48,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q16",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-112-social/Q16-question-1.png)\n\n![第16題原卷資料](/assets/banks/cap-112-social/Q16-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "某地區於2017年入選為世界遺產，該地區涵蓋了森林、谷地、潟湖及珊瑚礁\n等景觀，遺產的中心是玻里尼西亞普遍可見的毛利集會中心，此遺產是毛利\n文化極具代表性的見證。根據上文描述判斷，該遺產最可能位於下列何處？",
+    "correct": "(16.84°S，151.37°W)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "(11.88°N，2.49°E)",
+      "(49.93°N，115.43°E)",
+      "(42.85°S，71.87°W)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第16題。",
+    "exp": "正確答案：(16.84°S，151.37°W)。來源：112年國中教育會考社會第16題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -490,17 +506,15 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q16-question-1.png",
-      "/assets/banks/cap-112-social/Q16-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.54,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q17",
     "difficulty": "medium",
-    "q": "《周成過臺灣》是著名的民間傳說，其時代背景符合史實。故事描述周成拋\n  下故鄉泉州的妻兒，獨自來臺經商。適逢淡水、雞籠開港通商，周成在大稻\n  埕從事新興商品出口而致富。後來周成移情別戀，謀殺了來臺灣探視的妻\n  子，最終受到報應而死。根據上述內容，周成最有可能從事下列何種商品的\n  貿易？",
+    "q": "《周成過臺灣》是著名的民間傳說，其時代背景符合史實。故事描述周成拋\n下故鄉泉州的妻兒，獨自來臺經商。適逢淡水、雞籠開港通商，周成在大稻\n埕從事新興商品出口而致富。後來周成移情別戀，謀殺了來臺灣探視的妻\n子，最終受到報應而死。根據上述內容，周成最有可能從事下列何種商品的\n貿易？",
     "correct": "茶葉",
     "wrong": [
       "鹿皮",
@@ -524,12 +538,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q18",
     "difficulty": "medium",
-    "q": "以下是某歷史人物在其著作中的相關內容：「我們可以假設人類在社會形成\n  以前，所有人都是平等的。然而人們為了解決集體生活所產生的問題，透過\n  公眾的協商形成公意，且將全部的權力，託付由公意組成的政府，因為能夠\n  代表公意的政府，是不受私念限制、必然公正的。政府依循公意制定法律、\n  建立秩序，人們只要守法、服從公意，就能得到真正的自由。」上述內容最\n  可能與下列何者有關？",
+    "q": "以下是某歷史人物在其著作中的相關內容：「我們可以假設人類在社會形成\n以前，所有人都是平等的。然而人們為了解決集體生活所產生的問題，透過\n公眾的協商形成公意，且將全部的權力，託付由公意組成的政府，因為能夠\n代表公意的政府，是不受私念限制、必然公正的。政府依循公意制定法律、\n建立秩序，人們只要守法、服從公意，就能得到真正的自由。」上述內容最\n可能與下列何者有關？",
     "correct": "盧梭關於主權在民的主張",
     "wrong": [
       "希特勒針對種族主義的論述",
@@ -553,19 +568,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q19",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-112-social/Q19-question.png)",
-    "correct": "原卷選項 D",
+    "q": "圖(八)是霞喀羅國家步道的介紹圖，其舊名為「霞喀羅、薩克亞金警備道路」。\n此道路的開闢，是因為過去臺灣統治者為達到某一目的而下令修築。根據圖中\n內容判斷，統治者最初開闢這條道路的目的，最可能與下列何者有關？\n\ną 䔺䊼㽬傸Ʊ悋㤝㢋攡◮弸岟\ną ㄼ⃮䳻䘡ⵚ⫆审⫾䏝䏠䕂怐䎴\n㨣弑悊䣉\n\u0013NP \u0015\u0015NP\n\u0014\u000f\u001a\u0015\u001c\f \u000b\u0015\u000f\u0013\u0017\u0016\f \u000b\u0014\u000f\u0019\u0017\u0018\f \u000b\u0014\u000f\u0018\u0013\u0013\n烋ㆪ唝‥㐶⨕㽸㰵㆒榖ⵤ濕單位\n圖(八)\n\n![圖表](/assets/banks/cap-112-social/Q19-figure-1.png)",
+    "correct": "理蕃政策的實施",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "劃界封山的施行",
+      "新式製糖的推動",
+      "海運港口的整建"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第19題。",
+    "exp": "正確答案：理蕃政策的實施。來源：112年國中教育會考社會第19題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -581,22 +597,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q19-question.png"
+      "/assets/banks/cap-112-social/Q19-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q20",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-112-social/Q20-question-1.png)\n\n![第20題原卷資料](/assets/banks/cap-112-social/Q20-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "「關於我的『政治主張』，因為和蔣委員長在意見上的衝突，已經沒有和解的\n跡象。我考慮了三種方法來解決此事，第一是辭職、第二是勸諫、第三是兵\n諫。第一個方法因為我的國難家仇，和東北軍部下們的反對而不可行。最近我\n試了第二個方法，但導致蔣委員長極端憤怒。因此我決定採取第三個方法，以\n武力拘禁蔣委員長。」上述「政治主張」最可能為下列何者？\n\n![圖表](/assets/banks/cap-112-social/Q20-figure-1.png)",
+    "correct": "立即停止內戰，聯合各黨派抗日",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "反對洪憲帝制，起兵討伐袁世凱",
+      "終結軍閥混戰，完成中國的統一",
+      "攘外必先安內，全力剿滅共產黨"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第20題。",
+    "exp": "正確答案：立即停止內戰，聯合各黨派抗日。來源：112年國中教育會考社會第20題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -613,16 +630,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q20-question-1.png",
-      "/assets/banks/cap-112-social/Q20-question-2.png"
+      "/assets/banks/cap-112-social/Q20-figure-1.png"
     ],
     "passRate": 0.58,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q21",
     "difficulty": "easy",
-    "q": "雅加達自十七世紀以來一直是印尼的政治、經濟中心，不過由於人口過於集\n  中加上大量開發，對環境已產生過多負荷。近年來，雅加達的民眾飽受交通\n  壅塞、空氣汙染、地層下陷及水患之苦，因此印尼政府計畫將首都遷至婆羅\n  洲。但有生態專家提出警告，該處是紅毛猩猩的棲息地，遷都計畫所需的開\n  發過程必須謹慎評估，否則反而可能破壞環境，造成生態浩劫。上述討論內\n  容與下列何項議題最相符？",
+    "q": "雅加達自十七世紀以來一直是印尼的政治、經濟中心，不過由於人口過於集\n中加上大量開發，對環境已產生過多負荷。近年來，雅加達的民眾飽受交通\n壅塞、空氣汙染、地層下陷及水患之苦，因此印尼政府計畫將首都遷至婆羅\n洲。但有生態專家提出警告，該處是紅毛猩猩的棲息地，遷都計畫所需的開\n發過程必須謹慎評估，否則反而可能破壞環境，造成生態浩劫。上述討論內\n容與下列何項議題最相符？",
     "correct": "遷移首都的機會成本",
     "wrong": [
       "歷史古都的文化保存",
@@ -646,12 +663,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q22",
     "difficulty": "medium",
-    "q": "國際刑警組織共有195個成員國，總部建有一個存放上百萬名國際刑事罪犯檔\n  案的資料庫供成員國使用。我國目前受限於一個中國原則，無法加入此國際\n  組織，因此未能分享或接收該組織的情報資訊，所以難以確認入境我國的旅\n  客在境外是否有犯罪紀錄，而從我國潛逃出境的犯罪者也較難被繩之以法。\n  上述內容顯示一個中國原則對我國產生下列哪一影響？",
+    "q": "國際刑警組織共有195個成員國，總部建有一個存放上百萬名國際刑事罪犯檔\n案的資料庫供成員國使用。我國目前受限於一個中國原則，無法加入此國際\n組織，因此未能分享或接收該組織的情報資訊，所以難以確認入境我國的旅\n客在境外是否有犯罪紀錄，而從我國潛逃出境的犯罪者也較難被繩之以法。\n上述內容顯示一個中國原則對我國產生下列哪一影響？",
     "correct": "資訊傳達受限使得國內治安風險升高",
     "wrong": [
       "兩岸互信不足造成軍事衝突現象頻傳",
@@ -675,19 +693,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q23",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-112-social/Q23-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(九)呈現我國1998至2018年間，\n\u0015\u0018\n\u0015\u0013\n收入最高20%家庭與收入最低20%\n\u0014\u0018\n家庭的可支配所得成長率變化，其\n\u0014\u0013\nノ\n中灰階區塊是曾發生經濟成長率大 \u0018\n搵\n\u0013\n䉅\b\n幅衰退的兩段時間。根據圖中內容\n\u0010\u0018\n判斷，上述兩個灰階區塊的數據， \u0010\u0014\u0013\n\u0010\u0014\u0018\n呈現出下列哪一現象？\n\u0014\u001c\u001c\u001b \u0015\u0013\u0013\u0015 \u0015\u0013\u0013\u0019 \u0015\u0013\u0014\u0013 \u0015\u0013\u0014\u0017 \u0015\u0013\u0014\u001b ⴲ\n\n㏴‣㖾榖\u0015\u0013\b⩴⵫\n最低\n圖(九)\n\n![圖表](/assets/banks/cap-112-social/Q23-figure-1.png)\n\n![圖表](/assets/banks/cap-112-social/Q23-figure-2.png)",
+    "correct": "收入較低者的生活面臨較嚴重衝擊",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "收入較高者的財富減損情況較嚴重",
+      "經濟大幅衰退造成區域間發展不均",
+      "經濟大幅衰退反而縮小了貧富差距"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第23題。",
+    "exp": "正確答案：收入較低者的生活面臨較嚴重衝擊。來源：112年國中教育會考社會第23題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -703,22 +722,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q23-question.png"
+      "/assets/banks/cap-112-social/Q23-figure-1.png",
+      "/assets/banks/cap-112-social/Q23-figure-2.png"
     ],
     "passRate": 0.8,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-112-social/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/cap-112-social/Q24-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "甲在質詢行政院衛生福利部部長時，指出某飲料製造商早已知道自家產品出\n現變質問題，嚴重影響消費者權益，但該公司卻不主動回收處理，反而繼續\n販售變質的產品，對於這種明知故犯的行為，政府應予以重罰。關於甲所擔\n任的公職，下列敘述何者正確？",
+    "correct": "負責審查中央政府預算",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "負責審查法律是否違憲",
+      "經由地方層級的選舉所產生",
+      "由行政院院長提請總統任命"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第24題。",
+    "exp": "正確答案：負責審查中央政府預算。來源：112年國中教育會考社會第24題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -734,24 +755,22 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q24-question-1.png",
-      "/assets/banks/cap-112-social/Q24-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.5,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-112-social/Q25-question.png)",
-    "correct": "原卷選項 A",
+    "q": "圖(十)為世界銀行繪製用來展現世界各\n60,000\n人\n國經濟實力的示意圖，圖中矩形面積\n50,000\n✮\n*\n的大小可呈現2011年該國經濟規模的大 40,000\n'\n\n3\n小。圖中甲國最可能是下列何者？ 30,000\n併\n\n20,000\nK\n13,460\n10,000\n0\n0\n\n![圖表](/assets/banks/cap-112-social/Q25-figure-1.png)",
+    "correct": "印度",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "美國",
+      "德國",
+      "奈及利亞"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第25題。",
+    "exp": "正確答案：印度。來源：112年國中教育會考社會第25題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -767,22 +786,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q25-question.png"
+      "/assets/banks/cap-112-social/Q25-figure-1.png"
     ],
     "passRate": 0.56,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q26",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-112-social/Q26-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(十一)為貫穿美洲的泛美\n公路示意圖，主幹線北起美\n國阿拉斯加，南至智利。美\n洲多國可透過這個公路系統\n\u001b1\n相互連結，但巴拿馬到哥倫\n比亞之間的路段至今尚未修\n建。根據圖中資訊判斷，該\n路段未修建的原因之一最可\n能為下列何者？\n| ⴷ䲘 | ⷛ㋦ / Ⲳ 榓\u0003 / Ⓦ / ㆽ / ‒ / 桪 / 㮻 / 弉 / 㭱亞 / ◉䐊 ⴷ䲘㗨 ⶸ岭㩳 |\n| ⴷ䲘 |  |\n圖(十一)\n\u0014\u001a\u0011\u001b\u001c:\n\u0015\u001b\u0011\u0019\u00161",
+    "correct": "保護熱帶雨林生態",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "年溫差大施工困難",
+      "運河阻隔難以跨越",
+      "維護因紐特人文化\n![圖表](/assets/banks/cap-112-social/Q26-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第26題。",
+    "exp": "正確答案：保護熱帶雨林生態。來源：112年國中教育會考社會第26題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -798,22 +818,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q26-question.png"
+      "/assets/banks/cap-112-social/Q26-option-D-figure-1.png"
     ],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-112-social/Q27-question.png)",
-    "correct": "原卷選項 D",
+    "q": "西班牙海外島嶼的某座火\n山於2021年9月噴發，圖\n(十二)為其噴發後熔岩流\n及火山灰落塵分布的狀\n況。根據圖中資訊判斷，\n下列推論何者較為合理？\n\u0015\u001b\u0011\u0018\u001b1",
+    "correct": "火山噴發地點距海約6公里",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "當時的主要風向為西風\n![圖表](/assets/banks/cap-112-social/Q27-option-A-figure-1.png)",
+      "該區域的地勢西高東低\n![圖表](/assets/banks/cap-112-social/Q27-option-B-figure-1.png)",
+      "火山熔岩流向西流往太平\n![圖表](/assets/banks/cap-112-social/Q27-option-C-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第27題。",
+    "exp": "正確答案：火山噴發地點距海約6公里。來源：112年國中教育會考社會第27題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -829,22 +850,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q27-question.png"
+      "/assets/banks/cap-112-social/Q27-option-A-figure-1.png",
+      "/assets/banks/cap-112-social/Q27-option-B-figure-1.png",
+      "/assets/banks/cap-112-social/Q27-option-C-figure-1.png"
     ],
     "passRate": 0.46,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q28",
     "difficulty": "medium",
-    "q": "臺灣本島的經緯度約介於22°N～25°N，          表(三)\n   120°E～122°E 之間，降水的空間分布受到測站緯度經度高度(m)\n  地形及季風的影響而有顯著差異。表(三)為甲  23.98°N  121.61°E   16.0\n  本島四個氣象測站的資料，根據各測站位置乙  25.13°N  121.74°E   26.7\n  及地形判斷，何者的年降水量可能最多？   丙  22.99°N  120.20°E   40.8",
-    "correct": "乙丁  23.95°N  120.59°E   34.0",
+    "q": "臺灣本島的經緯度約介於22°N～25°N， 表(三)\n120°E～122°E 之間，降水的空間分布受到\n地形及季風的影響而有顯著差異。表(三)為\n本島四個氣象測站的資料，根據各測站位置\n及地形判斷，何者的年降水量可能最多？\n| 測站 | 緯度 | 經度 | 高度(m) |\n| 甲 | 23.98°N | 121.61°E | 16.0 |\n| 乙 | 25.13°N | 121.74°E | 26.7 |\n| 丙 | 22.99°N | 120.20°E | 40.8 |\n| 丁 | 23.95°N | 120.59°E | 34.0 |",
+    "correct": "乙",
     "wrong": [
       "甲",
       "丙",
-      "丁\n                                  7"
+      "丁"
     ],
-    "exp": "正確答案：乙丁  23.95°N  120.59°E   34.0。來源：112年國中教育會考社會第28題。",
+    "exp": "正確答案：乙。來源：112年國中教育會考社會第28題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -862,12 +886,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.56,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q29",
     "difficulty": "medium",
-    "q": "「距今六千多年前，此地區的人們觀察到，大約每隔365天，天狼星在拂曉的\n  時候，和太陽同時位於東方的地平線上。因此他們定365天為一年，每年分為\n  12個月，每月30天，年末加上5天。這種遵循太陽週期的曆法，依自然現象將\n  一年分為『阿赫特』、『佩雷特』、『夏矛』三個季節，有別於同時期兩河流\n  域的月亮週期曆法。」根據上文，「此地區」的發明最可能與下列何者有關？",
+    "q": "「距今六千多年前，此地區的人們觀察到，大約每隔365天，天狼星在拂曉的\n時候，和太陽同時位於東方的地平線上。因此他們定365天為一年，每年分為\n12個月，每月30天，年末加上5天。這種遵循太陽週期的曆法，依自然現象將\n一年分為『阿赫特』、『佩雷特』、『夏矛』三個季節，有別於同時期兩河流\n域的月亮週期曆法。」根據上文，「此地區」的發明最可能與下列何者有關？",
     "correct": "推算河川氾濫情形，掌握農業生產",
     "wrong": [
       "公民參與城邦事務，展現民主精神",
@@ -891,12 +916,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q30",
     "difficulty": "medium",
-    "q": "某中共領導人接見日本國會議員時提到：「戰後日本很快就發達起來，這經\n  驗很值得中國學習。當然，別人的經驗照搬也不行，中國有中國的條件，日\n  本有日本的條件。我們不但要引進發達國家的資金和技術，充分利用各國的\n  好經驗，並且要把這種經驗與中國的實際情況結合起來。」上述談話最可能\n  與下列何者有關？",
+    "q": "某中共領導人接見日本國會議員時提到：「戰後日本很快就發達起來，這經\n驗很值得中國學習。當然，別人的經驗照搬也不行，中國有中國的條件，日\n本有日本的條件。我們不但要引進發達國家的資金和技術，充分利用各國的\n好經驗，並且要把這種經驗與中國的實際情況結合起來。」上述談話最可能\n與下列何者有關？",
     "correct": "實施改革開放，設經濟特區",
     "wrong": [
       "發起文化大革命，破除四舊",
@@ -920,19 +946,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q31",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-112-social/Q31-question.png)",
-    "correct": "原卷選項 C",
+    "q": "表(四)呈現甲國於兩次世界大戰中， 表(四)\n在歐洲戰場開始參戰與結束參戰的\n原因。表中的「？」最適合填入下\n列何者？\n| 甲國在歐洲 / 戰場的情形 | 第一次 / 世界大戰 | 第二次 / 世界大戰 |\n| 開始 / 參戰的原因 | 支援「斯拉 / 夫兄弟」 | 德國毀約攻 / 打國土 |\n| 結束 / 參戰的原因 | ？ | 德國投降 |",
+    "correct": "國內共產政權成立，向同盟國議和",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "美國投下原子彈，敵國投降",
+      "簽署《凡爾賽條約》，戰敗投降",
+      "美國反對無限制潛艇政策，援助協約國"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第31題。",
+    "exp": "正確答案：國內共產政權成立，向同盟國議和。來源：112年國中教育會考社會第31題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -947,16 +974,15 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q31-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.39,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q32",
     "difficulty": "medium",
-    "q": "西元前十ㄧ世紀周人滅商後，其勢力持續向東方擴展，由於周管轄的土地與人\n  口在短時間內急速增加，為了天下的長治久安，因此周朝的統治者，設計出一\n  套有效的政治制度管理各地。上述政治制度的內容，最可能是下列何者？",
+    "q": "西元前十ㄧ世紀周人滅商後，其勢力持續向東方擴展，由於周管轄的土地與人\n口在短時間內急速增加，為了天下的長治久安，因此周朝的統治者，設計出一\n套有效的政治制度管理各地。上述政治制度的內容，最可能是下列何者？",
     "correct": "依據貴族的身分等級，授予土地與冊封爵位",
     "wrong": [
       "在領土內設置郡、縣，官員由國君直接任免",
@@ -980,19 +1006,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.51,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q33",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-112-social/Q33-question-1.png)\n\n![第33題原卷資料](/assets/banks/cap-112-social/Q33-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "「某位君主為了統治上的考量，需要招募許多能夠書寫的人才。一開始在他的\n國度中，竟然找不到太多有文化的人，這是因為西羅馬帝國滅亡後，城市生活\n逐漸消失，文化知識也幾乎被遺忘殆盡。因此這位君主特地聘請知名學者，來\n主持文化復興工作，諸如設立新學校、抄寫古羅馬的重要拉丁文著作，使拉丁\n文成為各地共通的文字系統。」上述學者的身分，最可能是下列何者？",
+    "correct": "西元八世紀的基督教教士",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "西元前五世紀的希臘哲學家",
+      "西元十七世紀的歐洲天文學者",
+      "西元十八世紀的啟蒙運動思想家"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第33題。",
+    "exp": "正確答案：西元八世紀的基督教教士。來源：112年國中教育會考社會第33題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1008,24 +1035,22 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q33-question-1.png",
-      "/assets/banks/cap-112-social/Q33-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.44,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q34",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-112-social/Q34-question.png)",
-    "correct": "原卷選項 D",
+    "q": "在探討一國國內不同地區醫療資源差異時，通常會先觀察醫師人數和病床\n數，由相關數據與人口數的相對關係，可大致推論一個地區的醫療資源是否\n不足。表(五)是某國2018年四個地區關於人口與醫療資源的資料：\n表(五)\n| 地 / 區 | 人口總數 / (人) | 老年人口 / 比例(%) | 醫師人數 / (人) | 平均每位醫師 / 負擔人數(人) | 病床數 / (張) | 平均每張病床 / 負擔人數(人) |\n| 甲 | 2,562,738 | 19.50 | 9,719 | 263.7 | 19,951 | 128.5 |\n| 乙 | 2,272,459 | 13.26 | 3,824 | 594.3 | 11,988 | 189.6 |\n| 丙 | 673,309 | 19.42 | 881 | 764.3 | 3,204 | 210.1 |\n| 丁 | 322,836 | 17.95 | 820 | 393.7 | 4,073 | 79.3 |\n根據表中資料判斷，關於甲、乙、丙、丁四個地區的醫療資源，下列何項推\n論最適當？",
+    "correct": "相對於其他地區，丙地區的醫療資源最為不足",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "老年人口最多的地區醫療資源最為不足",
+      "人口總數最少的地區醫療資源最為不足",
+      "相對於其他地區，乙地區的醫療資源最為不足"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第34題。",
+    "exp": "正確答案：相對於其他地區，丙地區的醫療資源最為不足。來源：112年國中教育會考社會第34題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -1040,16 +1065,15 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q34-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q35",
     "difficulty": "medium",
-    "q": "「飢餓行銷」是一種常見的行銷手法，指的是業者在短時間內利用各種管道\n  宣傳大批民眾排隊購買的熱潮，營造該項商品都會很快被搶購一空的情況，\n  透過媒體將商品炒作成為時下流行的話題，進而引起民眾的消費欲望。關於\n  上述行銷手法對於消費市場的影響，下列敘述何者最適當？",
+    "q": "「飢餓行銷」是一種常見的行銷手法，指的是業者在短時間內利用各種管道\n宣傳大批民眾排隊購買的熱潮，營造該項商品都會很快被搶購一空的情況，\n透過媒體將商品炒作成為時下流行的話題，進而引起民眾的消費欲望。關於\n上述行銷手法對於消費市場的影響，下列敘述何者最適當？",
     "correct": "民眾的購物意願受非金錢誘因影響而提高",
     "wrong": [
       "廠商間的競爭使消費者的選擇增加",
@@ -1073,12 +1097,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q36",
     "difficulty": "medium",
-    "q": "若有人為了在選舉時讓支持的候選人當選，配合動員把戶籍遷移到非實際居\n  住的行政區，企圖影響選舉結果，此種行為可能觸犯《刑法》，檢察官將代\n  表國家主動起訴違法者。根據上述內容判斷，關於某位違法遷移戶籍者在接\n  受偵查、審判的過程中，下列何種情況最可能出現？",
+    "q": "若有人為了在選舉時讓支持的候選人當選，配合動員把戶籍遷移到非實際居\n住的行政區，企圖影響選舉結果，此種行為可能觸犯《刑法》，檢察官將代\n表國家主動起訴違法者。根據上述內容判斷，關於某位違法遷移戶籍者在接\n受偵查、審判的過程中，下列何種情況最可能出現？",
     "correct": "被查出是在投票日的六個月前遷移戶籍",
     "wrong": [
       "遭到落選者提起民事訴訟要求損害賠償",
@@ -1102,17 +1127,18 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.54,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q37",
     "difficulty": "medium",
-    "q": "臺灣少子女化危機惡化的速度超乎想像，面對人口負成長的人口懸崖，有學\n  者認為政府過往提出的相關政策已是緩不濟急，或許可以透過社會增加的方\n  向，思考提高國民人數的對策。根據上述內容判斷，下列何項對策與該學者\n  的意見最相符？",
+    "q": "臺灣少子女化危機惡化的速度超乎想像，面對人口負成長的人口懸崖，有學\n者認為政府過往提出的相關政策已是緩不濟急，或許可以透過社會增加的方\n向，思考提高國民人數的對策。根據上述內容判斷，下列何項對策與該學者\n的意見最相符？",
     "correct": "鼓勵各國人才歸化入籍",
     "wrong": [
       "提高外籍移工僱用人數",
       "推動老人長期照護政策",
-      "增加公立幼兒托育中心\n                                  9"
+      "增加公立幼兒托育中心"
     ],
     "exp": "正確答案：鼓勵各國人才歸化入籍。來源：112年國中教育會考社會第37題。",
     "subject": "地理",
@@ -1132,19 +1158,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.48,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q38",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-112-social/Q38-question.png)",
-    "correct": "原卷選項 D",
+    "q": "表(六)為某作家的三部長篇表(六)\n小說內容簡介，該作家藉此\n構築十九至二十世紀臺灣歷\n史的發展過程。根據表中內\n容判斷，這三部小說呈現的\n時代先後順序，最可能是下\n列何者？\n| 著作 | 內容簡介 |\n| 甲 | 刻畫多位臺灣青年在南洋戰場上被戰爭折 / 磨至精神崩潰，甚至喪生的悲慘命運。 |\n| 乙 | 敘述客家族群在臺灣中部山區生產樟腦， / 為保衛家園參與武裝抗日的故事。 |\n| 丙 | 描繪臺灣人藉由參加文化協會、組織農民 / 運動，抵抗殖民統治的事蹟。 |",
+    "correct": "乙→丙→甲",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "乙→甲→丙",
+      "丙→乙→甲",
+      "丙→甲→乙"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第38題。",
+    "exp": "正確答案：乙→丙→甲。來源：112年國中教育會考社會第38題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1159,21 +1186,20 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q38-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q39",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-112-social/Q39-question.png)",
-    "correct": "原卷選項 A",
+    "q": "明清時期，蠶絲業是中國江南地區的重要產業。當時產出的生絲，主要供應國\n內需求，部分對外出口。下列何者最可能反映1830年代生絲出口的情況？",
+    "correct": "![圖表](/assets/banks/cap-112-social/Q39-option-A-figure-1.png)",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/cap-112-social/Q39-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-112-social/Q39-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-112-social/Q39-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第39題。",
+    "exp": "正確答案：![圖表](/assets/banks/cap-112-social/Q39-option-A-figure-1.png)。來源：112年國中教育會考社會第39題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1189,20 +1215,24 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q39-question.png"
-    ]
+      "/assets/banks/cap-112-social/Q39-option-A-figure-1.png",
+      "/assets/banks/cap-112-social/Q39-option-B-figure-1.png",
+      "/assets/banks/cap-112-social/Q39-option-C-figure-1.png",
+      "/assets/banks/cap-112-social/Q39-option-D-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q40",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-112-social/Q40-question.png)",
-    "correct": "原卷選項 A",
+    "q": "表(七)是甲、乙兩國匯率變動的情形。根據表中表(七)\n內容判斷，若其他條件不變，且所有成本完全\n反應在商品售價上，相較於去年，在今年甲、\n乙兩國的市場中，最可能出現下列何種情形？\n| 時間 | 1甲幣可兌換的乙幣 |\n| 去年 | 10 |\n| 今年 | 20 |",
+    "correct": "甲國商品在乙國的銷售量下滑",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "乙國商品在甲國的銷售量下滑",
+      "甲國進口的乙國商品數量下降\n![圖表](/assets/banks/cap-112-social/Q40-option-C-figure-1.png)",
+      "乙國進口的甲國商品價格下降\n![圖表](/assets/banks/cap-112-social/Q40-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第40題。",
+    "exp": "正確答案：甲國商品在乙國的銷售量下滑。來源：112年國中教育會考社會第40題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1218,22 +1248,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q40-question.png"
+      "/assets/banks/cap-112-social/Q40-option-C-figure-1.png",
+      "/assets/banks/cap-112-social/Q40-option-D-figure-1.png"
     ],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q41",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-112-social/Q41-question-1.png)\n\n![第41題原卷資料](/assets/banks/cap-112-social/Q41-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(十三)是一座歷史建築，根據圖中內\n容判斷，該建築最可能興建於下列何時\n何地？",
+    "correct": "西元十六世紀的印度半島\n![圖表](/assets/banks/cap-112-social/Q41-option-C-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "西元前六世紀的波斯地區\n![圖表](/assets/banks/cap-112-social/Q41-option-A-figure-1.png)",
+      "西元六世紀的阿拉伯半島\n![圖表](/assets/banks/cap-112-social/Q41-option-B-figure-1.png)",
+      "西元十九世紀的南美地區\n![圖表](/assets/banks/cap-112-social/Q41-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第41題。",
+    "exp": "正確答案：西元十六世紀的印度半島\n![圖表](/assets/banks/cap-112-social/Q41-option-C-figure-1.png)。來源：112年國中教育會考社會第41題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1250,16 +1282,19 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-social/Q41-question-1.png",
-      "/assets/banks/cap-112-social/Q41-question-2.png"
+      "/assets/banks/cap-112-social/Q41-option-C-figure-1.png",
+      "/assets/banks/cap-112-social/Q41-option-A-figure-1.png",
+      "/assets/banks/cap-112-social/Q41-option-B-figure-1.png",
+      "/assets/banks/cap-112-social/Q41-option-D-figure-1.png"
     ],
     "passRate": 0.26,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q42",
     "difficulty": "medium",
-    "q": "為維護消費者權益，政府制定法律對市場上供應不實有機農產品的業者處以\n  罰鍰，同時也能保障生產真正有機農產品農民的權益。上述主管機關對不實\n  業者的處罰，與下列何者受到的處罰類型相同？",
+    "q": "為維護消費者權益，政府制定法律對市場上供應不實有機農產品的業者處以\n罰鍰，同時也能保障生產真正有機農產品農民的權益。上述主管機關對不實\n業者的處罰，與下列何者受到的處罰類型相同？",
     "correct": "父母縱容少年抽菸而遭行政處分",
     "wrong": [
       "小華拒絕歸還向同事借的相機",
@@ -1283,19 +1318,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q43",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-112-social/Q43-question.png)",
-    "correct": "原卷選項 C",
+    "q": "甲國女性的就業率，長期以來皆大幅低於全國平均值，因此該國政府調查女\n性勞動人口中未就業者的原因，表(八)是調查結果中的部分統計資料。關於此\n資料的解讀，下列何者最適當？\n表(八) 單位：%\n| 原因 / 年齡(歲) | 需照顧未滿 / 12 歲子女 | 需照顧 65 歲 / 以上家屬 | 負責打理 / 家務 | 健康狀況 / 不佳 | 其他 |\n| 30-34 | 65.37 | 0.89 | 11.43 | 2.98 | 19.33 |\n| 35-39 | 55.35 | 2.60 | 21.39 | 4.26 | 16.40 |\n| 40-44 | 35.36 | 5.16 | 39.70 | 7.15 | 12.63 |\n| 45-49 | 7.05 | 8.10 | 58.04 | 5.50 | 21.31 |\n| 50-54 | 0.53 | 7.58 | 56.69 | 4.69 | 30.51 |",
+    "correct": "家庭平權的觀念仍有待加強",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "老年人口比例呈現上升趨勢",
+      "家庭職能因社會變遷而弱化",
+      "勞雇間的權力與資源不對等"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第43題。",
+    "exp": "正確答案：家庭平權的觀念仍有待加強。來源：112年國中教育會考社會第43題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -1310,23 +1346,22 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/Q43-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q44",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第44題原卷資料](/assets/banks/cap-112-social/Q44-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n上文中「唐手佐久川」與王國的使節團得以前往中國，最可能與當時中國何\n項外交政策有關？",
+    "correct": "與受冊封國家建立朝貢關係",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "聯合西域部族對抗外患",
+      "簽訂條約，開放五口通商",
+      "訂定澶淵之盟，以兄弟相稱"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第44題。",
+    "exp": "正確答案：與受冊封國家建立朝貢關係。來源：112年國中教育會考社會第44題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1345,24 +1380,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q44-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.57,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q45",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第45題原卷資料](/assets/banks/cap-112-social/Q45-question-1.png)\n\n![第45題原卷資料](/assets/banks/cap-112-social/Q45-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n上文提及「政治局勢發生變化」，造成「唐手」向外傳播，此一變化最可能\n是指下列何者？",
+    "correct": "日本藉由牡丹社事件擴張勢力",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "中國因甲午戰爭失敗割讓領土",
+      "天皇積極效法唐朝推展新制度",
+      "珍珠港事變導致美國對日宣戰"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第45題。",
+    "exp": "正確答案：日本藉由牡丹社事件擴張勢力。來源：112年國中教育會考社會第45題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1382,25 +1415,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q45-question-1.png",
-      "/assets/banks/cap-112-social/Q45-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.49,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q46",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第46題原卷資料](/assets/banks/cap-112-social/Q46-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n上文中登山步道開放的起始時間，主要是因為此時已具備下列何項條件？\n\u0013 / \u0013 / \u0019 \u0013 / \u0016 \u0013 / \u0013 / \u0013\u0013 / \u0017 \u0013 / \u0015\u0013 / \u0016 \u0013\u0013 / \u0016\u0013 \u0013 / \u001b\u0013 / \u0016 \u0013 / \u0015\u0019 \u0013；\u0013 / \u0013 / \u0019 \u0013 / \u0016 \u0013 / \u0013 / \u0013\u0013 / \u0017 \u0013 / \u0015\u0013 / \u0016 \u0013\u0013 / \u0016\u0013 \u0013 / \u001b\u0013 / \u0016 \u0013 / \u0015\u0019 \u0013",
+    "correct": "山上的積雪大多已融化",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "地質穩定且地震較少",
+      "乾季雨少，步道不溼滑",
+      "西北季風盛行，天氣涼爽"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第46題。",
+    "exp": "正確答案：山上的積雪大多已融化。來源：112年國中教育會考社會第46題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1420,24 +1450,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q46-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q47",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第47題原卷資料](/assets/banks/cap-112-social/Q47-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n圖(十四)為其中一條登山路\n線，依據圖中資訊判斷，最\n可能為表(九)中的何者？\n圖(十四)",
+    "correct": "丙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "甲",
+      "乙",
+      "丁"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第47題。",
+    "exp": "正確答案：丙。來源：112年國中教育會考社會第47題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1457,24 +1485,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q47-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.83,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q48",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第48題原卷資料](/assets/banks/cap-112-social/Q48-question-1.png)\n\n![第48題原卷資料](/assets/banks/cap-112-social/Q48-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n根據表(九)中資訊，小婷與體力、經驗較為不足的民眾，選擇的路線分別為下\n列何者？",
+    "correct": "小婷選丁；體力、經驗較為不足的民眾選甲",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "小婷選甲；體力、經驗較為不足的民眾選丁",
+      "小婷選乙；體力、經驗較為不足的民眾選丙",
+      "小婷選丙；體力、經驗較為不足的民眾選乙"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第48題。",
+    "exp": "正確答案：小婷選丁；體力、經驗較為不足的民眾選甲。來源：112年國中教育會考社會第48題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1495,25 +1521,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q48-question-1.png",
-      "/assets/banks/cap-112-social/Q48-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q49",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第49題原卷資料](/assets/banks/cap-112-social/Q49-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n根據上文及圖(十五)的資訊判斷，上述都市的氣候特色應為下列何者？",
+    "correct": "一月溫暖且雨量較少",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "一月寒冷且年溫差大",
+      "全年低溫且雨量稀少",
+      "終年有雨且夏雨較多"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第49題。",
+    "exp": "正確答案：一月溫暖且雨量較少。來源：112年國中教育會考社會第49題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1533,24 +1556,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q49-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.58,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q50",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第50題原卷資料](/assets/banks/cap-112-social/Q50-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n文中提及奴隸的輸出地最可能包含下列何者？",
+    "correct": "南洋群島",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "朝鮮半島",
+      "伊比利半島",
+      "夏威夷群島"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第50題。",
+    "exp": "正確答案：南洋群島。來源：112年國中教育會考社會第50題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1570,24 +1591,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q50-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q51",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 51 題。\n\n![第51題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第51題原卷資料](/assets/banks/cap-112-social/Q51-question-1.png)\n\n![第51題原卷資料](/assets/banks/cap-112-social/Q51-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n文中提到船隻改走新的通航路線，是因此航路具備下列哪一優勢？",
+    "correct": "大幅縮短至印度洋周邊的航行路程",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "可避免通過滿布浮冰的大西洋海域",
+      "可藉由北大西洋暖流加快航行速度",
+      "有助於疏解前往南美洲擁擠的航路"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考社會第51題。",
+    "exp": "正確答案：大幅縮短至印度洋周邊的航行路程。來源：112年國中教育會考社會第51題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1608,25 +1627,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q51-question-1.png",
-      "/assets/banks/cap-112-social/Q51-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.67,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q52",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第52題原卷資料](/assets/banks/cap-112-social/Q52-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n關於文中活動理念對臺灣帶來影響的過程，最適合以下列何者說明？",
+    "correct": "全球化下的文化交流",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "法律修改程序的變化",
+      "科技發展帶來的衝擊",
+      "風俗習慣的文化傳承"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考社會第52題。",
+    "exp": "正確答案：全球化下的文化交流。來源：112年國中教育會考社會第52題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1646,24 +1662,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q52-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q53",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第53題原卷資料](/assets/banks/cap-112-social/Q53-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n根據圖(十六)判斷，關於這則宣傳標語所呈現的意義，下列敘述何者最適當？",
+    "correct": "藉由改變家長價值觀來帶動社會變遷",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "主張對實施體罰者提起訴訟加以處罰",
+      "上街請願要求國家立法保障兒童福利",
+      "推廣法治教育教導兒童保護自身權益"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考社會第53題。",
+    "exp": "正確答案：藉由改變家長價值觀來帶動社會變遷。來源：112年國中教育會考社會第53題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1683,24 +1697,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q53-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-social-q54",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/cap-112-social/G44-54-context.png)\n\n![第54題原卷資料](/assets/banks/cap-112-social/Q54-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n二、題組：(44～54題)\n閱讀下列選文，回答第 44 至 45 題：\n歷史上的琉球王國與中國關係密切，在雙方數百年的交流之下，琉球文化\n在飲食、語言、風俗，甚至武術都受到中國影響。例如十九世紀前期琉球武術\n家佐久川寬賀，數度跟隨使節團前往中國，得以拜訪大師精進武藝，並將中\n國拳法融入傳統武術之中，形成「唐手」，他也被琉球人尊稱為「唐手佐久\n川」。之後，「唐手」得到琉球士族的重視，成為士族間秘傳的武術。\n十九世紀末，由於政治局勢發生變化，琉球王國遭到他國併吞，國王與士\n族被迫前往新統治者的都城居住，「唐手」也隨之傳入該國。經過一段時間的\n發展，「唐手」名稱改為同音異字的「空手」，即為今日的「空手道」。空手\n道在世界各地逐漸普及，並曾經被納入奧運比賽項目。\n\n關於文末前、後所提及我國的二項法規，下列敘述何者最適當？",
+    "correct": "以修法程序而言，皆須經總統公布後才生效",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "以法律位階而言，前者具有最高性",
+      "以法律位階而言，後者具有固定性",
+      "以修法程序而言，皆可由行政機關自行修訂"
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考社會第54題。",
+    "exp": "正確答案：以修法程序而言，皆須經總統公布後才生效。來源：112年國中教育會考社會第54題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1720,11 +1732,9 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-social/G44-54-context.png",
-      "/assets/banks/cap-112-social/Q54-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   }
 ]

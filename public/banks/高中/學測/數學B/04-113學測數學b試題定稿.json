@@ -2,15 +2,15 @@
   {
     "id": "gsat-113-math-b-q1",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-113-math-b/Q1-question.png)",
-    "correct": "原卷選項 4",
+    "q": "某遊戲共有210位玩家，每位玩家均持有寶石，其中持有1顆的有1位，持有2顆的有2位，依此類推，持有20顆寶石的有20位。試問這些玩家每人持有寶石數量的第90百分位數為下列哪一個選項？",
+    "correct": "19",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "16",
+      "17",
+      "18",
+      "20"
     ],
-    "exp": "正確答案：原卷選項 4。來源：113年學科能力測驗數學B第1題。",
+    "exp": "正確答案：19。來源：113年學科能力測驗數學B第1題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -25,22 +25,50 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-b/Q1-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-math-b-q2",
+    "difficulty": "medium",
+    "q": "已知$a,b,c$為實數，且滿足$1<a<10$、$b=loga$、$c=logb$，試選出正確的選項。",
+    "correct": "$c<0<b<1$",
+    "wrong": [
+      "$0<c<1<b$",
+      "$0<c<b<1$",
+      "$1<c<b$",
+      "$c<b<0$"
+    ],
+    "exp": "正確答案：$c<0<b<1$。來源：113年學科能力測驗數學B第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-113-math-b",
+      "question": 2,
+      "file": "高中/學測/數學B/04-113學測數學b試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1IG2Oca_6DfKsgXhleai_3rFJ9eh3MERW/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "1",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-b-q3",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-113-math-b/Q3-question.png)",
-    "correct": "原卷選項 2",
+    "q": "某射擊遊戲的玩家要避開障礙物射擊目標。今在遊戲畫面中設立一直角坐標系，以長方形螢幕左下角點$O$為原點，螢幕下方的邊緣為$x$軸、螢幕左方的邊緣為$y$軸，目標物放在點$P(12,10)$。畫面中有兩面牆（牆厚度可忽略不計），一面牆由點$A(10,5)$水平延伸到點$B(15,5)$，另一面牆由點$C(0,6)$水平延伸到點$D(9,6)$，如右圖之示意圖。若玩家在點$Q$可直線射擊點$P$的目標物，不會被兩面牆阻擋。下列哪一個選項有可能是點$Q$的坐標？\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n![圖表](/assets/banks/gsat-113-math-b/Q3-figure-1.png)",
+    "correct": "$(7,3)$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$(6,3)$",
+      "$(8,5\\,\\,)$",
+      "$(9,\\,\\,1\\,\\,)$",
+      "$(9,2)$"
     ],
-    "exp": "正確答案：原卷選項 2。來源：113年學科能力測驗數學B第3題。",
+    "exp": "正確答案：$(7,3)$。來源：113年學科能力測驗數學B第3題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -56,21 +84,80 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-113-math-b/Q3-question.png"
-    ]
+      "/assets/banks/gsat-113-math-b/Q3-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-math-b-q4",
+    "difficulty": "medium",
+    "q": "已知坐標平面上有一向量$\\lim _{⃑} v=(-2,3)$及兩點$A$、$B$，且點$A$的$x$坐標和$y$坐標、點$B$的$x$坐標和$y$坐標都落在區間$\\left[0,1\\right]$內，試問$\\left|\\lim _{⃑} v+\\lim _{⃑} AB\\right|$的最大值為下列哪一個選項？",
+    "correct": "$5$",
+    "wrong": [
+      "$\\sqrt{13}$",
+      "$\\sqrt{17}$",
+      "$3\\sqrt{2}$",
+      "$\\sqrt{2}+\\sqrt{13}$"
+    ],
+    "exp": "正確答案：$5$。來源：113年學科能力測驗數學B第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-113-math-b",
+      "question": 4,
+      "file": "高中/學測/數學B/04-113學測數學b試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1IG2Oca_6DfKsgXhleai_3rFJ9eh3MERW/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-math-b-q5",
+    "difficulty": "medium",
+    "q": "設二次函數$f(x)=x^2+bx+c$，其中$b,c$為實數。已知$f(x-2)=f(-x-2)$對任意實數$x$均成立，且當$-3\\leq x\\leq 1$時，$f(x)$的最大值會是最小值的4倍，則$f(x)$的最小值是下列哪一個選項？",
+    "correct": "$3$",
+    "wrong": [
+      "$0$",
+      "$\\frac{5}{3}$",
+      "$4$",
+      "$6$"
+    ],
+    "exp": "正確答案：$3$。來源：113年學科能力測驗數學B第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-113-math-b",
+      "question": 5,
+      "file": "高中/學測/數學B/04-113學測數學b試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/1IG2Oca_6DfKsgXhleai_3rFJ9eh3MERW/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-b-q6",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/gsat-113-math-b/Q6-question.png)",
-    "correct": "原卷選項 1",
+    "q": "某大樓居民在大樓外牆展示聖誕樹造型燈飾，如圖所示，從五樓外牆某處P向四樓地板的兩端A,B拉小燈泡形成等腰三角形PAB，其中$\\overline{PA}=\\overline{PB}$；向三樓地板的兩端C,D拉小燈泡形成等腰三角形PCD；向二樓地板的兩端E,F拉小燈泡形成等腰三角形PEF。假設每層樓等高且樓地板等長。若五樓地板在三角形PAB內部所截出的線段長度為樓地板長度的$\\frac{1}{3}$，則五樓地板在三角形PEF內部所截出的線段長度是樓地板長度的幾分之幾？（燈飾粗細可忽略不計）\n\n五樓\n\n四樓\n\n三樓\n\n二樓\n\n一樓\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n![圖表](/assets/banks/gsat-113-math-b/Q6-figure-1.png)\n",
+    "correct": "$\\frac{1}{7}$",
     "wrong": [
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$\\frac{1}{6}$",
+      "$\\frac{1}{5}$",
+      "$\\frac{2}{9}$",
+      "$\\frac{1}{4}$"
     ],
-    "exp": "正確答案：原卷選項 1。來源：113年學科能力測驗數學B第6題。",
+    "exp": "正確答案：$\\frac{1}{7}$。來源：113年學科能力測驗數學B第6題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -86,21 +173,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-113-math-b/Q6-question.png"
-    ]
+      "/assets/banks/gsat-113-math-b/Q6-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-b-q7",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-113-math-b/Q7-question.png)",
-    "correct": "原卷選項 3",
+    "q": "有一城市分為東、西兩區。兩區各有一個氣溫偵測站，該城市當天的最高溫（單位：攝氏度）是取這兩區當天氣溫的最大值來記錄。下表顯示東、西兩區某月（共30天）每日最高溫分布的情形。\n\n| 溫度t | $18\\leq t<24$ | $24\\leq t<30$ | $30\\leq t<36$ | $36\\leq t$ |\n| 東區（天數） | 0 | 11 | 14 | 5 |\n| 西區（天數） | 3 | 12 | 15 | 0 |\n\n根據上表，該城市當月每日最高溫分布的情形如下表。\n\n| 溫度t | $18\\leq t<24$ | $24\\leq t<30$ | $30\\leq t<36$ | $36\\leq t$ |\n| 天數 | $A$ | $B$ | $C$ | $D$ |\n\n試選出有可能為數組$(A,B,C,D)$的選項。",
+    "correct": "$(0,9,16,5)$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$(0,15,15,0)$",
+      "$(3,12,15,5)$",
+      "$(3,7,15,5)$",
+      "$(0,12,13,5)$"
     ],
-    "exp": "正確答案：原卷選項 3。來源：113年學科能力測驗數學B第7題。",
+    "exp": "正確答案：$(0,9,16,5)$。來源：113年學科能力測驗數學B第7題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -115,82 +203,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-b/Q7-question.png"
-    ]
-  },
-  {
-    "id": "gsat-113-math-b-q13",
-    "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-113-math-b/Q13-question.png)",
-    "correct": "原卷選項 2",
-    "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
-    ],
-    "exp": "正確答案：原卷選項 2。來源：113年學科能力測驗數學B第13題。",
-    "subject": "數學",
-    "sub_topic": "數學綜合",
-    "source": {
-      "exam": "gsat-113-math-b",
-      "question": 13,
-      "file": "高中/學測/數學B/04-113學測數學b試題定稿.pdf",
-      "url": "https://drive.google.com/file/d/1IG2Oca_6DfKsgXhleai_3rFJ9eh3MERW/view?usp=drivesdk",
-      "pages": [
-        6
-      ],
-      "answer": "2",
-      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
-    },
-    "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-b/Q13-question.png"
-    ]
-  },
-  {
-    "id": "gsat-113-math-b-q14",
-    "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-113-math-b/Q14-question.png)",
-    "correct": "原卷選項 4",
-    "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
-    ],
-    "exp": "正確答案：原卷選項 4。來源：113年學科能力測驗數學B第14題。",
-    "subject": "數學",
-    "sub_topic": "數學綜合",
-    "source": {
-      "exam": "gsat-113-math-b",
-      "question": 14,
-      "file": "高中/學測/數學B/04-113學測數學b試題定稿.pdf",
-      "url": "https://drive.google.com/file/d/1IG2Oca_6DfKsgXhleai_3rFJ9eh3MERW/view?usp=drivesdk",
-      "pages": [
-        6
-      ],
-      "answer": "4",
-      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051424006334262722/04-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
-    },
-    "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-b/Q14-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-b-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-113-math-b/G18-20-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-113-math-b/Q18-question.png)",
-    "correct": "原卷選項 4",
+    "q": "【共用閱讀資料】\n<u>18-20題為題組</u>\n\n![圖表](/assets/banks/gsat-113-math-b/G18-20-figure-1.png)\n如圖所示，考慮長方體的石塊上某一頂點$A$及包含點$A$的一個面，令這個面的各邊中點分別為$B,E,F,D$。此長方體上包含點$B$的另一個面，令其各邊中點分別為$B,C,H,G$。已知$\\overline{BC}=8,\\,\\overline{BD}=\\overline{DC}=9$。現將此石塊截去八個角，使得每個截角的截面恰通過該截角之三鄰邊的中點。根據上述，試回答下列問題。\n\n截角後的石塊為幾面體？（單選題，3分）",
+    "correct": "十四面體",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "八面體",
+      "十面體",
+      "十二面體",
+      "十六面體"
     ],
-    "exp": "正確答案：原卷選項 4。來源：113年學科能力測驗數學B第18題。",
+    "exp": "正確答案：十四面體。來源：113年學科能力測驗數學B第18題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -210,8 +237,8 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-113-math-b/G18-20-context.png",
-      "/assets/banks/gsat-113-math-b/Q18-question.png"
-    ]
+      "/assets/banks/gsat-113-math-b/G18-20-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

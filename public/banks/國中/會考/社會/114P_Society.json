@@ -2,7 +2,7 @@
   {
     "id": "cap-114-social-q1",
     "difficulty": "easy",
-    "q": "一國若發生重大自然災害，可能會直接衝擊該國的經濟活動，而成為較脆弱\n  的投資環境。臺灣因位於地震帶常發生地震，且易受颱風侵襲，於2015年被\n  某金融機構列為最脆弱的十個國家之一。下列哪一國家最可能也因為常發生\n  上述二種自然災害而列名其中？",
+    "q": "一國若發生重大自然災害，可能會直接衝擊該國的經濟活動，而成為較脆弱\n的投資環境。臺灣因位於地震帶常發生地震，且易受颱風侵襲，於2015年被\n某金融機構列為最脆弱的十個國家之一。下列哪一國家最可能也因為常發生\n上述二種自然災害而列名其中？",
     "correct": "日本",
     "wrong": [
       "伊朗",
@@ -26,12 +26,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.91,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q2",
     "difficulty": "easy",
-    "q": "2019年底，臺灣的農場與牧場，正式迎來首批合法的農業移工，其中2名是酪農移\n  工，其餘 5名則是外展農業移工。外展農業移工意指由農會、漁會、農林漁牧有\n  關之合作社，或非營利組織等「外展機構」所聘僱的外國人，並由外展機構指派\n  其至服務的場所從事農務工作。上述政策的推行主要是為了因應下列何項問題？",
+    "q": "2019年底，臺灣的農場與牧場，正式迎來首批合法的農業移工，其中2名是酪農移\n工，其餘 5名則是外展農業移工。外展農業移工意指由農會、漁會、農林漁牧有\n關之合作社，或非營利組織等「外展機構」所聘僱的外國人，並由外展機構指派\n其至服務的場所從事農務工作。上述政策的推行主要是為了因應下列何項問題？",
     "correct": "農業勞動力老化",
     "wrong": [
       "農產品的安全性",
@@ -55,19 +56,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.86,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q3",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-114-social/Q3-question.png)",
-    "correct": "原卷選項 B",
+    "q": "某部電影描述主角與母親及只會說華語的祖母，同住在美國舊金山華人聚集\n的街區，並出現拿筷子吃飯、與家人共度春節及清明節等原鄉文化情節，而\n主角雖然從小在美國長大，但在生活中仍經常使用華語。上述電影情節的文\n化意涵及傳播方式，與下列何者呈現的概念最相近？",
+    "correct": "來自泰、緬的新住民與移工齊聚慶祝潑水節\n![圖表](/assets/banks/cap-114-social/Q3-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "利用國際婦女節倡導家務分工性別平權理念",
+      "推行國語運動貶低母語所產生的不平等現象\n![圖表](/assets/banks/cap-114-social/Q3-option-C-figure-1.png)",
+      "華人認為烏鴉象徵厄運，在日本則象徵吉祥\n![圖表](/assets/banks/cap-114-social/Q3-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第3題。",
+    "exp": "正確答案：來自泰、緬的新住民與移工齊聚慶祝潑水節\n![圖表](/assets/banks/cap-114-social/Q3-option-B-figure-1.png)。來源：114年國中教育會考社會第3題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -83,22 +85,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q3-question.png"
+      "/assets/banks/cap-114-social/Q3-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q3-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q3-option-D-figure-1.png"
     ],
     "passRate": 0.83,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q4",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-114-social/Q4-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(一)是某行政區內名為挖仔的聚落地圖。根\n據該聚落所處環境特色判斷，其地名代表的意\n義最可能為下列何者？",
+    "correct": "鄰近溪流河道的轉彎處\n![圖表](/assets/banks/cap-114-social/Q4-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "位於岬灣海岸的灣澳\n![圖表](/assets/banks/cap-114-social/Q4-option-A-figure-1.png)",
+      "位處高山之間的小谷地\n![圖表](/assets/banks/cap-114-social/Q4-option-C-figure-1.png)",
+      "台地上的低窪地蓄水成湖\n![圖表](/assets/banks/cap-114-social/Q4-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第4題。",
+    "exp": "正確答案：鄰近溪流河道的轉彎處\n![圖表](/assets/banks/cap-114-social/Q4-option-B-figure-1.png)。來源：114年國中教育會考社會第4題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -114,20 +119,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q4-question.png"
+      "/assets/banks/cap-114-social/Q4-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q4-option-A-figure-1.png",
+      "/assets/banks/cap-114-social/Q4-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q4-option-D-figure-1.png"
     ],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q5",
     "difficulty": "easy",
-    "q": "某研究於2018年調查發現，臺灣不同地區民眾對於各種社會議題的關注傾向與\n  程度有所差異，其中部分地區的民眾對於自身周遭環境的議題更加關切，例如\n  離島地區。下列何者最可能為離島地區民眾較為關注的議題？",
+    "q": "某研究於2018年調查發現，臺灣不同地區民眾對於各種社會議題的關注傾向與\n程度有所差異，其中部分地區的民眾對於自身周遭環境的議題更加關切，例如\n離島地區。下列何者最可能為離島地區民眾較為關注的議題？",
     "correct": "落實區域間資源分配，讓民眾獲得同等醫療品質",
     "wrong": [
       "適當管制房價，降低民眾租屋或購屋的負擔",
       "管制重工業廢水的排放，避免造成土壤重金屬汙染",
-      "大規模土石流或崩塌，可能導致建築物毀損及人員傷亡\n\n                                  1"
+      "大規模土石流或崩塌，可能導致建築物毀損及人員傷亡"
     ],
     "exp": "正確答案：落實區域間資源分配，讓民眾獲得同等醫療品質。來源：114年國中教育會考社會第5題。",
     "subject": "社會",
@@ -147,19 +156,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q6",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-114-social/Q6-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(二)是臺灣歷史上某地區的地圖。根據內容\n判斷，此圖最有可能出自下列何者？",
+    "correct": "日本統治時期的〈臺北州大觀〉\n![圖表](/assets/banks/cap-114-social/Q6-option-C-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "大航海時代的〈熱蘭遮城鎮鳥瞰圖〉\n![圖表](/assets/banks/cap-114-social/Q6-option-A-figure-1.png)",
+      "清帝國統治時期的《淡水廳志》\n![圖表](/assets/banks/cap-114-social/Q6-option-B-figure-1.png)",
+      "戰後臺灣的《最新版臺灣街道圖》\n![圖表](/assets/banks/cap-114-social/Q6-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第6題。",
+    "exp": "正確答案：日本統治時期的〈臺北州大觀〉\n![圖表](/assets/banks/cap-114-social/Q6-option-C-figure-1.png)。來源：114年國中教育會考社會第6題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -175,22 +185,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q6-question.png"
+      "/assets/banks/cap-114-social/Q6-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q6-option-A-figure-1.png",
+      "/assets/banks/cap-114-social/Q6-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q6-option-D-figure-1.png"
     ],
     "passRate": 0.85,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q7",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-114-social/Q7-question.png)",
-    "correct": "原卷選項 D",
+    "q": "中國史上某作家發表了一部著作，他在書中提倡表(ㄧ)\n\n六項女性應當恢復的自然權利，如表(一)所示。該\n著作所提倡的主張，最可能與下列何者有關？\n\n![圖表](/assets/banks/cap-114-social/Q7-figure-1.png)",
+    "correct": "晚清時期，近代歐洲思潮傳入中國",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "隋唐時期，西域民族風俗傳入中國",
+      "宋元時期，朱熹學術成就受到推崇",
+      "明末清初，中國引入西方科學知識"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第7題。",
+    "exp": "正確答案：晚清時期，近代歐洲思潮傳入中國。來源：114年國中教育會考社會第7題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -206,15 +220,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q7-question.png"
+      "/assets/banks/cap-114-social/Q7-figure-1.png"
     ],
     "passRate": 0.79,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q8",
     "difficulty": "medium",
-    "q": "「十一世紀時，旅居中國的穆斯林商人，在生活方面可以依照自身的習俗行\n  事，例如他們在廣州的清真寺高塔上，懸掛旗幟、燈火來指引船隻出入港\n  口。但在貿易方面，仍須受到官方機構的管轄，此機構負責收取關稅、接\n  運貢品，並執行香料、珊瑚及象牙等進口商品的專賣，監督商家船隻的活\n  動。」上述的「機構」最可能是下列何者？",
+    "q": "「十一世紀時，旅居中國的穆斯林商人，在生活方面可以依照自身的習俗行\n事，例如他們在廣州的清真寺高塔上，懸掛旗幟、燈火來指引船隻出入港\n口。但在貿易方面，仍須受到官方機構的管轄，此機構負責收取關稅、接\n運貢品，並執行香料、珊瑚及象牙等進口商品的專賣，監督商家船隻的活\n動。」上述的「機構」最可能是下列何者？",
     "correct": "市舶司",
     "wrong": [
       "洋行",
@@ -238,19 +253,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q9",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-114-social/Q9-question.png)",
-    "correct": "原卷選項 C",
+    "q": "「巴黎和會引起中國強烈的民族情緒，在部分知識分子的心中，西方角色從啟\n蒙者轉變為壓迫者，因此他們逐漸對維護帝國主義、資本主義的西方國家感到\n失望。在五四運動後，有些知識分子開始轉向世界革命理論，試圖從俄國革命\n家對於受壓迫民族的呼籲，以及俄國新政權宣布放棄沙皇時代在中國特權的聲\n明中，找到改變中國的出路。」上述內容最可能與下列何者有關？",
+    "correct": "中國共產黨的成立\n![圖表](/assets/banks/cap-114-social/Q9-option-C-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "中華民國的建立",
+      "西安事變的發生\n![圖表](/assets/banks/cap-114-social/Q9-option-B-figure-1.png)",
+      "文化大革命的發動\n![圖表](/assets/banks/cap-114-social/Q9-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第9題。",
+    "exp": "正確答案：中國共產黨的成立\n![圖表](/assets/banks/cap-114-social/Q9-option-C-figure-1.png)。來源：114年國中教育會考社會第9題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -266,22 +282,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q9-question.png"
+      "/assets/banks/cap-114-social/Q9-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q9-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q9-option-D-figure-1.png"
     ],
     "passRate": 0.52,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q10",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-114-social/Q10-question-1.png)\n\n![第10題原卷資料](/assets/banks/cap-114-social/Q10-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(三)是一幅歷史上的木刻版畫。根據畫中\n內容判斷，作者的立場最可能是下列何者？",
+    "correct": "支持路德教派所提出因信得救的信仰主張\n![圖表](/assets/banks/cap-114-social/Q10-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "強調君士坦丁堡教會擁有基督教的領導權\n![圖表](/assets/banks/cap-114-social/Q10-option-A-figure-1.png)",
+      "主張只有希伯來民族能作為耶和華的選民\n![圖表](/assets/banks/cap-114-social/Q10-option-C-figure-1.png)",
+      "認同羅耀拉等人所提倡天主教改革的理念\n![圖表](/assets/banks/cap-114-social/Q10-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第10題。",
+    "exp": "正確答案：支持路德教派所提出因信得救的信仰主張\n![圖表](/assets/banks/cap-114-social/Q10-option-B-figure-1.png)。來源：114年國中教育會考社會第10題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -298,16 +317,19 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q10-question-1.png",
-      "/assets/banks/cap-114-social/Q10-question-2.png"
+      "/assets/banks/cap-114-social/Q10-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q10-option-A-figure-1.png",
+      "/assets/banks/cap-114-social/Q10-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q10-option-D-figure-1.png"
     ],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q11",
     "difficulty": "easy",
-    "q": "一間跨國咖啡公司打算在某國的傳統文化觀光區設立分店，但卻因為品牌形\n  象與當地建築、傳統飲食習慣不同而引發居民抗議。該公司為此改變店面沿\n  用的品牌風格，除了採用相容於該區環境的色系，還將原本的英文招牌改用\n  當地文字呈現，並增加販售具當地料理特色的創意餐點，希望透過這些舉動\n  降低當地的反彈聲浪。上述跨國公司的舉動，與下列何者最相符？",
+    "q": "一間跨國咖啡公司打算在某國的傳統文化觀光區設立分店，但卻因為品牌形\n象與當地建築、傳統飲食習慣不同而引發居民抗議。該公司為此改變店面沿\n用的品牌風格，除了採用相容於該區環境的色系，還將原本的英文招牌改用\n當地文字呈現，並增加販售具當地料理特色的創意餐點，希望透過這些舉動\n降低當地的反彈聲浪。上述跨國公司的舉動，與下列何者最相符？",
     "correct": "尊重多元文化，促進文化融合",
     "wrong": [
       "成立跨國企業，強化國際分工",
@@ -331,12 +353,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.9,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q12",
     "difficulty": "easy",
-    "q": "美國於2022年6月21日起，禁止進口來自中國新疆的商品，因為美國政府認為\n  這些商品是強迫維吾爾人勞動的產物。如果企業想要繼續將在新疆生產的商\n  品出口至美國，則必須提出充足的證據，證明商品的生產過程沒有涉及強迫\n  勞動問題。美國執行上述管制措施的主要理由，最可能是下列何者？",
+    "q": "美國於2022年6月21日起，禁止進口來自中國新疆的商品，因為美國政府認為\n這些商品是強迫維吾爾人勞動的產物。如果企業想要繼續將在新疆生產的商\n品出口至美國，則必須提出充足的證據，證明商品的生產過程沒有涉及強迫\n勞動問題。美國執行上述管制措施的主要理由，最可能是下列何者？",
     "correct": "避免侵害人權的商業行為",
     "wrong": [
       "擴大對外貿易的出超金額",
@@ -360,19 +383,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.88,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q13",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-114-social/Q13-question.png)",
-    "correct": "原卷選項 D",
+    "q": "某大學於學期末時，在校內美食街設立意見回饋箱，消費者有任何建議都可以\n寫在意見單上投入回饋箱中，學校會參考這些回饋的意見，藉以改善未來美食\n街的營運方式。根據上述內容判斷，下列何項回饋意見最能提升市場的競爭程\n度？",
+    "correct": "學校應招募更多廠商進駐美食街提供多元餐點\n![圖表](/assets/banks/cap-114-social/Q13-option-D-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "廠商應提供校內師生購買餐點九折優惠",
+      "應要求廠商提供餐點食材的生產履歷證明",
+      "希望廠商販售份量較少且價格較便宜的餐點"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第13題。",
+    "exp": "正確答案：學校應招募更多廠商進駐美食街提供多元餐點\n![圖表](/assets/banks/cap-114-social/Q13-option-D-figure-1.png)。來源：114年國中教育會考社會第13題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -388,22 +412,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q13-question.png"
+      "/assets/banks/cap-114-social/Q13-option-D-figure-1.png"
     ],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/cap-114-social/Q14-question.png)",
-    "correct": "原卷選項 C",
+    "q": "一對姊妹先後結婚了，圖(四)是他們之間關係的示意\n圖。根據圖中內容判斷，甲、乙、丙、丁四人之間最\n不可能存在下列何種親屬關係？",
+    "correct": "直系血親",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "配偶",
+      "姻親\n![圖表](/assets/banks/cap-114-social/Q14-option-B-figure-1.png)",
+      "旁系血親\n![圖表](/assets/banks/cap-114-social/Q14-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第14題。",
+    "exp": "正確答案：直系血親。來源：114年國中教育會考社會第14題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -419,22 +444,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q14-question.png"
+      "/assets/banks/cap-114-social/Q14-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q14-option-D-figure-1.png"
     ],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q15",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-114-social/Q15-question-1.png)\n\n![第15題原卷資料](/assets/banks/cap-114-social/Q15-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "表(二)是恬恬為了製作課堂報告所蒐\n集的資料，統計針對某候選人的新聞\n在各電視臺報導時間中所占比例。根\n據表中資料判斷，下列何者最可能是\n恬恬探究這份資料後，建議閱聽人應\n注意的事項？\n| 電視臺 | 占播報時間比例 (%) |  |  |\n|  | 總比例 | 正面報導 | 負面報導 |\n| 水果臺 | 36 | 28 | 4 |\n| F News | 12 | 4 | 6 |\n| 西水新聞 | 7 | 3 | 2 |\n| W 電視 | 28 | 4 | 21 |\n| 統計時間： / 5 / 1 - 5 / 7 每日19 : 00 ~ 20 : 00的新聞 |  |  |  |",
+    "correct": "留意媒體業者是否持有特定的立場",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "覺察媒體的報導內容與事實不符",
+      "解讀媒體報導中的性別刻板印象",
+      "關注媒體是否善盡監督政府的責任"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第15題。",
+    "exp": "正確答案：留意媒體業者是否持有特定的立場。來源：114年國中教育會考社會第15題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -450,24 +477,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-social/Q15-question-1.png",
-      "/assets/banks/cap-114-social/Q15-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q16",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-114-social/Q16-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(五)為中國於2019至2025年間規劃推\n動的「西部陸海新通道」，該通道利用\n鐵路、公路及海運等多種運輸方式以促\n進物流效率與經濟發展。根據圖中資訊\n判斷，上述通道的推動最可能具有下列\n何項效益？\n\n![圖表](/assets/banks/cap-114-social/Q16-figure-1.png)",
+    "correct": "增進與東南亞國協成員的貿易往來",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "連結經北極海通往歐洲的航線",
+      "節省與美墨加協定成員的海運時間",
+      "避免來自西亞的石油運輸受制於他國"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第16題。",
+    "exp": "正確答案：增進與東南亞國協成員的貿易往來。來源：114年國中教育會考社會第16題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -483,22 +508,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q16-question.png"
+      "/assets/banks/cap-114-social/Q16-figure-1.png"
     ],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q17",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-114-social/Q17-question.png)",
-    "correct": "原卷選項 A",
+    "q": "小荃想造訪一處風景優美的祕境，但在抵達祕境\n的入口處，見有一告示牌寫著「上游水壩不定時\n洩洪，請勿進入溪谷以確保生命安全」，於是決\n定避開危險另覓他處。圖(六)為上述祕境附近的等\n高線地形圖，圖中甲、乙、丙、丁何者最可能為\n該祕境所在地點？\n\n![圖表](/assets/banks/cap-114-social/Q17-figure-1.png)",
+    "correct": "甲",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "乙",
+      "丙",
+      "丁"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第17題。",
+    "exp": "正確答案：甲。來源：114年國中教育會考社會第17題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -514,15 +540,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q17-question.png"
+      "/assets/banks/cap-114-social/Q17-figure-1.png"
     ],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q18",
     "difficulty": "medium",
-    "q": "近年來由於新冠肺炎疫情造成嚴重的通貨膨脹，使得甲地的房價及物價高\n  漲，影響其生活品質。此外，因為在鄰國的乙地1天的薪水，在甲地約1小時\n  就賺得到，於是有一部分的甲地人搬至乙地居住，再利用遠距工作或每天通\n  勤至甲地上班，藉以降低房租及生活消費。上述甲地與乙地依序最可能位於\n  何國？",
+    "q": "近年來由於新冠肺炎疫情造成嚴重的通貨膨脹，使得甲地的房價及物價高\n漲，影響其生活品質。此外，因為在鄰國的乙地1天的薪水，在甲地約1小時\n就賺得到，於是有一部分的甲地人搬至乙地居住，再利用遠距工作或每天通\n勤至甲地上班，藉以降低房租及生活消費。上述甲地與乙地依序最可能位於\n何國？",
     "correct": "美國、墨西哥",
     "wrong": [
       "法國、英國",
@@ -546,19 +573,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q19",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-114-social/Q19-question-1.png)\n\n![第19題原卷資料](/assets/banks/cap-114-social/Q19-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "圖(七)為2022年世界及甲區域的人口年齡及性別資料，根據人口組成判斷，\n甲區域最可能為下列何者？\n\n![圖表](/assets/banks/cap-114-social/Q19-figure-1.png)",
+    "correct": "漠南非洲",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "歐洲",
+      "北美洲",
+      "東北亞"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第19題。",
+    "exp": "正確答案：漠南非洲。來源：114年國中教育會考社會第19題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -575,23 +603,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q19-question-1.png",
-      "/assets/banks/cap-114-social/Q19-question-2.png"
+      "/assets/banks/cap-114-social/Q19-figure-1.png"
     ],
     "passRate": 0.67,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q20",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-114-social/Q20-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(八)是博物館展覽對臺灣歷史上某陶\n製漏斗狀工具使用方式的介紹。此種工\n具在十八至十九世紀之間，最多被用於\n圖(九)中何處？\n\n![圖表](/assets/banks/cap-114-social/Q20-figure-1.png)\n\n",
+    "correct": "丙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "甲",
+      "乙",
+      "丁"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第20題。",
+    "exp": "正確答案：丙。來源：114年國中教育會考社會第20題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -607,22 +635,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q20-question.png"
+      "/assets/banks/cap-114-social/Q20-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-114-social/Q21-question.png)",
-    "correct": "原卷選項 A",
+    "q": "以下是學者對於中國史上某制度的論述：「此制度的基本涵義是指統治者透\n過任用非世襲的官員，建立中央集權的政府。這個制度初步發展於東周，\n在秦王朝統一天下後全面施行，隋唐等朝代都繼續沿用，也影響了周遭的\n日本、朝鮮，是中國重要的制度。」根據上述內容判斷，該制度最可能是下\n列何者？",
+    "correct": "郡縣制度",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "封建制度\n![圖表](/assets/banks/cap-114-social/Q21-option-B-figure-1.png)",
+      "科舉制度\n![圖表](/assets/banks/cap-114-social/Q21-option-C-figure-1.png)",
+      "九品官人法\n![圖表](/assets/banks/cap-114-social/Q21-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第21題。",
+    "exp": "正確答案：郡縣制度。來源：114年國中教育會考社會第21題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -638,22 +667,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q21-question.png"
+      "/assets/banks/cap-114-social/Q21-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q21-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q21-option-D-figure-1.png"
     ],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q22",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-114-social/Q22-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(十)是某報紙報導的部分內容，標題中\n的「？」最適合填入下列何者？\n\n圖(十)\n\n![圖表](/assets/banks/cap-114-social/Q22-figure-1.png)",
+    "correct": "八年抗戰\n![圖表](/assets/banks/cap-114-social/Q22-option-C-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "辛亥革命\n![圖表](/assets/banks/cap-114-social/Q22-option-A-figure-1.png)",
+      "北伐統一\n![圖表](/assets/banks/cap-114-social/Q22-option-B-figure-1.png)",
+      "抗美援朝"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第22題。",
+    "exp": "正確答案：八年抗戰\n![圖表](/assets/banks/cap-114-social/Q22-option-C-figure-1.png)。來源：114年國中教育會考社會第22題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -669,22 +701,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q22-question.png"
+      "/assets/banks/cap-114-social/Q22-figure-1.png",
+      "/assets/banks/cap-114-social/Q22-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q22-option-A-figure-1.png",
+      "/assets/banks/cap-114-social/Q22-option-B-figure-1.png"
     ],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q23",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-114-social/Q23-question-1.png)\n\n![第23題原卷資料](/assets/banks/cap-114-social/Q23-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "「1989年8月19日，奧地利及匈牙利曾在邊界上相鄰的兩個小鎮間，舉辦一場野餐交流活動。活動中，兩鎮之間的木製國界圍籬會被打開三小時，象徵支持沒有隔閡的歐洲。然而，這場野餐會卻成為政治性的脫逃活動。當圍籬一打開，從其他國家特別前來此地的數百男女就迅速衝過邊界，逃離受共產集團控制、實施計畫經濟的家鄉，抵達了『自由的歐洲』。」上述利用野餐脫逃的民眾，最可能來自圖（十一）中甲、乙、丙、丁何地區？\n\n![圖表](/assets/banks/cap-114-social/Q23-figure-2.png)",
+    "correct": "甲",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "乙",
+      "丙",
+      "丁"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第23題。",
+    "exp": "正確答案：甲。來源：114年國中教育會考社會第23題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -701,23 +737,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q23-question-1.png",
-      "/assets/banks/cap-114-social/Q23-question-2.png"
+      "/assets/banks/cap-114-social/Q23-figure-2.png"
     ],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q24",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-114-social/Q24-question.png)",
-    "correct": "原卷選項 D",
+    "q": "某國中學生自治組織選舉前，針對二種投票\n表(三)\n方式進行調查，其中願意投票的人數比例如\n表(三)所示。根據上述內容判斷，關於此一\n調查結果，下列敘述何者最適當？\n| 投票方式 / 年級 | 實體 / 投票 | 網路 / 投票 |\n| 七 | 48% | 93% |\n| 八 | 49% | 95% |\n| 九 | 42% | 90% |\n\n![圖表](/assets/banks/cap-114-social/Q24-figure-1.png)",
+    "correct": "使用科技能提升學生參與公共事務的程度",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "實體投票比網路投票更能形成民意",
+      "使用科技可能有洩漏個人資料的風險",
+      "實體投票比網路投票更符合無記名原則"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第24題。",
+    "exp": "正確答案：使用科技能提升學生參與公共事務的程度。來源：114年國中教育會考社會第24題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -733,15 +769,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q24-question.png"
+      "/assets/banks/cap-114-social/Q24-figure-1.png"
     ],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q25",
     "difficulty": "medium",
-    "q": "下列是某地方政府勞工局處理一件勞資糾紛的部分過程：\n  勞工局：「根據貴公司的員工出勤紀錄，員工確實常加班工作，依法雇主應\n       給付加班費。」\n  雇主：「可是我又沒強迫員工留下來加班，有時候他們留在公司也不一定是\n      為了工作，只是下班後不想那麼早離開而已。」\n  勞工局：「依照《勞動事件法》規定，出勤紀錄內記載的勞工出勤時間，都\n       預設勞工是經雇主同意而加班工作。若雇主認為員工並非因加班\n       工作而留在公司，則須由雇主提出證明。」\n  根據上述《勞動事件法》的規定判斷，下列何者最可能是當初立法時考量的\n  理由？",
+    "q": "下列是某地方政府勞工局處理一件勞資糾紛的部分過程：\n勞工局：「 根據貴公司的員工出勤紀錄，員工確實常加班工作，依法雇主應\n給付加班費。」\n雇主：「 可是我又沒強迫員工留下來加班，有時候他們留在公司也不一定是\n為了工作，只是下班後不想那麼早離開而已。」\n勞工局：「 依照《勞動事件法》規定，出勤紀錄內記載的勞工出勤時間，都\n預設勞工是經雇主同意而加班工作。若雇主認為員工並非因加班\n工作而留在公司，則須由雇主提出證明。」\n根據上述《勞動事件法》的規定判斷，下列何者最可能是當初立法時考量的\n理由？",
     "correct": "平衡勞資雙方之間權力不對等的關係",
     "wrong": [
       "消除職場上出現的性別歧視行為",
@@ -765,19 +802,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.73,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q26",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-114-social/Q26-question-1.png)\n\n![第26題原卷資料](/assets/banks/cap-114-social/Q26-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "圖(十二)是甲國在近三十年間，\n\n三種已婚女性的勞動力參與率。\n\n根據圖中資訊，可推論出該國社\n會存在下列何種現象？\n\n圖(十二)\n\n![圖表](/assets/banks/cap-114-social/Q26-figure-1.png)\n\n\n\n![圖表](/assets/banks/cap-114-social/Q26-figure-3.png)",
+    "correct": "家務勞動影響了女性參與市場勞動的機會",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "外籍配偶增多影響了該國女性的工作機會",
+      "家庭型態變遷使女性承擔較多的家務勞動",
+      "女性投入家務勞動的總時數比市場勞動多"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第26題。",
+    "exp": "正確答案：家務勞動影響了女性參與市場勞動的機會。來源：114年國中教育會考社會第26題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -794,23 +832,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q26-question-1.png",
-      "/assets/banks/cap-114-social/Q26-question-2.png"
+      "/assets/banks/cap-114-social/Q26-figure-1.png",
+      "/assets/banks/cap-114-social/Q26-figure-3.png"
     ],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-114-social/Q27-question.png)",
-    "correct": "原卷選項 D",
+    "q": "土耳其扼黑海出入馬摩拉海的咽喉，因為原有\n天然航道的航運交通量日益增加，政府計畫興\n建圖(十三)中的新運河，該計畫除了引發國內\n正反意見的討論外，也引起黑海周邊國家的高\n度關注。上述運河完工後所帶來的影響最可能\n為下列何者？\n\n![圖表](/assets/banks/cap-114-social/Q27-figure-1.png)",
+    "correct": "船隻等候通過博斯普魯斯海峽的時間減少",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "土耳其將會喪失原有的「歐亞陸橋」稱號",
+      "土耳其的經濟海域範圍將因此而大幅增加",
+      "黑海的海洋生物進入馬摩拉海的機率下降"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第27題。",
+    "exp": "正確答案：船隻等候通過博斯普魯斯海峽的時間減少。來源：114年國中教育會考社會第27題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -826,22 +865,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q27-question.png"
+      "/assets/banks/cap-114-social/Q27-figure-1.png"
     ],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q28",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-114-social/Q28-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(十四)中的國家積極發展某一種綠色能源。\n根據圖中資訊判斷，下列何者最可能為該國所\n發展的綠色能源及選擇的理由？\n海洋能：利用波浪、潮汐、洋流等海水運動過\n& \u0007\n程產生的能源。\n\n![圖表](/assets/banks/cap-114-social/Q28-figure-1.png)",
+    "correct": "太陽能；因位處太陽直射範圍，輻射強度大",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "水力；因雨量豐沛且山高水深，水力動能大",
+      "風力；因位於盛行西風帶，風力強勁且穩定",
+      "海洋能；因北大西洋暖流流經，洋流動能大"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第28題。",
+    "exp": "正確答案：太陽能；因位處太陽直射範圍，輻射強度大。來源：114年國中教育會考社會第28題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -857,22 +897,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q28-question.png"
+      "/assets/banks/cap-114-social/Q28-figure-1.png"
     ],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q29",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-114-social/Q29-question.png)",
-    "correct": "原卷選項 B",
+    "q": "小綸從網站上取得2021年中國各省級行政區年降水量資料，他以當年全國平\n均降水量691.6毫米作為標準，若省級行政區的年降水量低於此一數值，則在\n該區塗上深灰色。根據上述原則，小綸繪製出的地圖最可能為下列何者？",
+    "correct": "![圖表](/assets/banks/cap-114-social/Q29-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/cap-114-social/Q29-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-social/Q29-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-social/Q29-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第29題。",
+    "exp": "正確答案：![圖表](/assets/banks/cap-114-social/Q29-option-B-figure-1.png)。來源：114年國中教育會考社會第29題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -888,20 +929,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q29-question.png"
+      "/assets/banks/cap-114-social/Q29-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q29-option-A-figure-1.png",
+      "/assets/banks/cap-114-social/Q29-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q29-option-D-figure-1.png"
     ],
     "passRate": 0.57,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q30",
     "difficulty": "medium",
-    "q": "碳匯是指能夠吸收及儲存含碳化合物的天然或人工「倉庫」，如森林、草\n  原、濕地、土壤、海洋等。為了達成2050年「碳中和」目標，各國除了減少\n  二氧化碳的排放之外，也積極擴大國家的碳匯。根據上文所述，若要增加一\n  國的碳匯，則下列何種方法最為適切？",
+    "q": "碳匯是指能夠吸收及儲存含碳化合物的天然或人工「倉庫」，如森林、草\n原、濕地、土壤、海洋等。為了達成2050年「碳中和」目標，各國除了減少\n二氧化碳的排放之外，也積極擴大國家的碳匯。根據上文所述，若要增加一\n國的碳匯，則下列何種方法最為適切？",
     "correct": "恢復曾經消失的農地，採友善環境的耕作方式",
     "wrong": [
       "以焚林的方式，快速取得種植經濟作物的土地",
       "於屋頂上方設置太陽能發電板，增加電力供給",
-      "選用當地食材以減少運輸距離，降低食物里程\n\n                                  7"
+      "選用當地食材以減少運輸距離，降低食物里程"
     ],
     "exp": "正確答案：恢復曾經消失的農地，採友善環境的耕作方式。來源：114年國中教育會考社會第30題。",
     "subject": "公民",
@@ -921,19 +966,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q31",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-114-social/Q31-question.png)",
-    "correct": "原卷選項 A",
+    "q": "莎綺去北大武山登山的時候，\n看到山路上有一些歷史建築如\n圖(十五)所示。根據圖中碑文\n摘譯的內容判斷，若莎綺上網\n檢索這些歷史建築興建的時\n局背景，最可能會出現下列\n\n何者？\n\n![圖表](/assets/banks/cap-114-social/Q31-figure-1.png)\n\n\n\n",
+    "correct": "強化皇民化運動的推展",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "宣傳日俄戰爭即將勝利",
+      "實施開山撫番推動漢化",
+      "發起原住民族正名運動"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第31題。",
+    "exp": "正確答案：強化皇民化運動的推展。來源：114年國中教育會考社會第31題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -949,22 +995,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q31-question.png"
+      "/assets/banks/cap-114-social/Q31-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q32",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-114-social/Q32-question.png)",
-    "correct": "原卷選項 B",
+    "q": "理加頭目所屬部落與鄰近部落衝突頻繁，而荷蘭人未能妥善協助調停，心生不滿\n的他在日本人勸說下，帶族人前往日本尋求援助。理加返鄉後，立即遭到荷蘭人\n的監禁，進而引發日人挾持臺灣長官的衝突事件，更導致江戶幕府一度關閉荷蘭\n在日本的商館以作為制裁。上述事件最可能發生於下列何時何地？\n\n表(四)\n\n![圖表](/assets/banks/cap-114-social/Q32-figure-1.png)",
+    "correct": "十七世紀的大員",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "十六世紀的澎湖",
+      "十八世紀的淡水",
+      "十九世紀的卑南"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第32題。",
+    "exp": "正確答案：十七世紀的大員。來源：114年國中教育會考社會第32題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -980,22 +1027,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q32-question.png"
+      "/assets/banks/cap-114-social/Q32-figure-1.png"
     ],
     "passRate": 0.7,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q33",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-114-social/Q33-question.png)",
-    "correct": "原卷選項 D",
+    "q": "表(四)是某一時期臺灣鳳梨罐\n頭銷售至美國、日本、中國大\n陸及西德的官方統計數據。根\n據表中內容判斷，甲、乙、\n丙、丁何者最可能是中國大\n陸？\n| 貿易 / 對象 / 年分 | 甲 | 乙 | 丙 | 丁 |\n| 1946 | 0 | 0 | 0 | 60,696 |\n| 1950 | 38,134 | 203 | 0 | 0 |\n| 1955 | 182,000 | 33,836 | 153,963 | 0 |\n| 1960 | 269,338 | 676,098 | 737,723 | 0 |\n單位：箱",
+    "correct": "丁",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "甲",
+      "乙",
+      "丙"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第33題。",
+    "exp": "正確答案：丁。來源：114年國中教育會考社會第33題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1010,23 +1058,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-social/Q33-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.38,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q34",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-114-social/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-114-social/Q34-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(十六)是某大學公布欄所張貼的海報，根據圖中\n所列的演講者經歷判斷，下列何者最可能是他曾經\n行使過的職權？\n\n![圖表](/assets/banks/cap-114-social/Q34-figure-1.png)",
+    "correct": "對司法院院長被提名人行使同意權",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "為審核各機關送交的決算挑燈夜戰",
+      "提請總統任命行政院所屬部會首長",
+      "在掌握事證後彈劾違法失職的法官"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第34題。",
+    "exp": "正確答案：對司法院院長被提名人行使同意權。來源：114年國中教育會考社會第34題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -1043,16 +1090,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q34-question-1.png",
-      "/assets/banks/cap-114-social/Q34-question-2.png"
+      "/assets/banks/cap-114-social/Q34-figure-1.png"
     ],
     "passRate": 0.53,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q35",
     "difficulty": "easy",
-    "q": "甲、乙二則資料呈現不同時代官方興建公共建設的相關情況：\n  甲資料：統治者為了加強對國內各地的控制，便於運送物資及兵力，下令修\n      鑿運河，強行徵召數百萬人民從事勞役。\n  乙資料：某地方政府研擬興建社會住宅，當地議會要求依法召開公聽會聽取\n      附近居民的意見，作為後續制定政策的參考。\n  根據甲、乙二項資料判斷，關於不同時代官方興建公共建設作法的敘述，\n  下列何者最適當？",
+    "q": "甲、乙二則資料呈現不同時代官方興建公共建設的相關情況：\n甲資料： 統治者為了加強對國內各地的控制，便於運送物資及兵力，下令修\n鑿運河，強行徵召數百萬人民從事勞役。\n乙資料： 某地方政府研擬興建社會住宅，當地議會要求依法召開公聽會聽取\n附近居民的意見，作為後續制定政策的參考。\n根據甲、乙二項資料判斷，關於不同時代官方興建公共建設作法的敘述，\n下列何者最適當？",
     "correct": "乙資料顯示當時的政府權力受到約束與制衡",
     "wrong": [
       "甲資料顯示當時的市場勞動權利受法律保障",
@@ -1076,19 +1123,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.77,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q36",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-114-social/Q36-question.png)",
-    "correct": "原卷選項 A",
+    "q": "老師安排同學至地方法院參觀，並讓甲、\n乙、丙、丁四位同學在模擬法庭中扮演不同\n的角色，如圖(十七)所示。根據我國法律規\n定及圖中情境判斷，下列關於他們四人的臺\n詞，何者最適當？\n\n![圖表](/assets/banks/cap-114-social/Q36-figure-1.png)",
+    "correct": "甲：我依據相關犯罪事證依法起訴乙",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "乙：我承認錯誤，我會儘早償還借款",
+      "丙：我希望甲審酌證據後判決乙無罪",
+      "丁：我判決原告勝訴，撤銷行政處分"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第36題。",
+    "exp": "正確答案：甲：我依據相關犯罪事證依法起訴乙。來源：114年國中教育會考社會第36題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -1104,15 +1152,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q36-question.png"
+      "/assets/banks/cap-114-social/Q36-figure-1.png"
     ],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q37",
     "difficulty": "medium",
-    "q": "「社會企業」是近年頗受關注的概念，其中公司型的社會企業透過商業活動營\n  利，以改善社會或環境問題為目標，並非以讓出資者獲利為唯一考量，而企業\n  獲得的利潤，也將繼續投入改善社會或環境問題的商業活動，希望讓社會企業\n  得以永續經營。下列何種作法與上述提及的企業經營模式最相符？",
+    "q": "「社會企業」是近年頗受關注的概念，其中公司型的社會企業透過商業活動營\n利，以改善社會或環境問題為目標，並非以讓出資者獲利為唯一考量，而企業\n獲得的利潤，也將繼續投入改善社會或環境問題的商業活動，希望讓社會企業\n得以永續經營。下列何種作法與上述提及的企業經營模式最相符？",
     "correct": "提倡公平貿易幫助小農發展",
     "wrong": [
       "運用低價策略創造企業優勢",
@@ -1136,17 +1185,18 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.43,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q38",
     "difficulty": "medium",
-    "q": "某日新聞報導有位失智症患者將土地、房屋贈送給陌生人的糾紛，由於小明\n  的爺爺是中度失智症患者，家人擔心爺爺也會做出類似行為而導致權益受\n  損，便向律師諮詢。律師建議家屬可向法院提出聲請，對爺爺作出監護宣\n  告。上述律師的建議內容應是希望達成下列何項法律效果？",
+    "q": "某日新聞報導有位失智症患者將土地、房屋贈送給陌生人的糾紛，由於小明\n的爺爺是中度失智症患者，家人擔心爺爺也會做出類似行為而導致權益受\n損，便向律師諮詢。律師建議家屬可向法院提出聲請，對爺爺作出監護宣\n告。上述律師的建議內容應是希望達成下列何項法律效果？",
     "correct": "讓爺爺成為無行為能力人，以保障其財產",
     "wrong": [
       "讓爺爺成為限制行為能力人，以保障其財產",
       "讓爺爺成為無行為能力人，以保障其契約自由",
-      "讓爺爺成為限制行為能力人，以保障其契約自由\n\n                                  9"
+      "讓爺爺成為限制行為能力人，以保障其契約自由"
     ],
     "exp": "正確答案：讓爺爺成為無行為能力人，以保障其財產。來源：114年國中教育會考社會第38題。",
     "subject": "公民",
@@ -1164,19 +1214,20 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q39",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-114-social/Q39-question.png)",
-    "correct": "原卷選項 A",
+    "q": "2020年之前，臺灣與日本都面臨勞力短缺的問題，但日本提供比臺灣更高的\n薪資吸引國際移工，因此許多菲律賓籍移工較願意前往日本工作。不過2022\n年底時，許多在日本工作的菲律賓籍移工發現，雖然每個月都拿出相同金額\n的日幣兌換成菲律賓披索匯回家鄉，但年底換到的菲律賓披索卻比年初減少\n了約10%，因此他們打算改往澳洲工作。上述國際移工變更工作地的考量，\n其原因之一最可能為下列何者？\n\n![圖表](/assets/banks/cap-114-social/Q39-figure-1.png)",
+    "correct": "菲律賓披索相對日幣升值",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "菲律賓披索相對新臺幣貶值",
+      "去臺灣工作的機會成本比去日本低",
+      "去澳洲工作的機會成本比去日本高"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第39題。",
+    "exp": "正確答案：菲律賓披索相對日幣升值。來源：114年國中教育會考社會第39題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1192,20 +1243,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q39-question.png"
-    ]
+      "/assets/banks/cap-114-social/Q39-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q40",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-114-social/Q40-question.png)",
-    "correct": "原卷選項 D",
+    "q": "「俄烏戰爭以來，歐盟對\n俄羅斯採取大規模的制裁措\n施，其中立陶宛於2022年6月\n18日，對經其領土進出俄羅\n斯加里寧格勒的貨運火車實\n施限制，因而引發俄羅斯強\n烈不滿。此一事件也凸顯出\n加里寧格勒的重要性。」圖\n(十八)顯示加里寧格勒的位\n置，根據上文及圖中資訊判\n斷，其重要性可用下列何者\n來說明？\n\n![圖表](/assets/banks/cap-114-social/Q40-figure-1.png)",
+    "correct": "是俄羅斯對抗北大西洋公約組織的軍事基地",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "作為俄羅斯與東北亞國家間的貿易前哨站",
+      "為俄羅斯貨物經波羅的海出太平洋的港口",
+      "位處俄羅斯天然氣輸送至芬蘭的最短路徑上"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第40題。",
+    "exp": "正確答案：是俄羅斯對抗北大西洋公約組織的軍事基地。來源：114年國中教育會考社會第40題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1221,22 +1273,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/Q40-question.png"
+      "/assets/banks/cap-114-social/Q40-figure-1.png"
     ],
     "passRate": 0.46,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q41",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-114-social/Q41-question-1.png)\n\n![第41題原卷資料](/assets/banks/cap-114-social/Q41-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "表(五)為三個不同日期臺灣部分水表(五)\n庫的蓄水量百分比，這些水庫在\n2021年5月31日的蓄水量狀況，可\n能與下列何者關係最為密切？\n| 水庫名稱 | 所在 / 行政區 | 蓄水量百分比 (%) |  |  |\n|  |  | 2020年 / 5月31日 | 2020年 / 11月30日 | 2021年 / 5月31日 |\n| 翡翠水庫 | 新北市 | 80.9 | 94.6 | 62.1 |\n| 石門水庫 | 桃園市 | 67.4 | 49.7 | 12.5 |\n| 鯉魚潭水庫 | 苗栗縣 | 53.7 | 39.4 | 5.8 |\n| 德基水庫 | 臺中市 | 42.7 | 38.2 | 2.7 |\n| 曾文水庫 | 嘉義縣 / 臺南市 | 27.7 | 23.1 | 4.1 |",
+    "correct": "2020年缺乏颱風帶來的豐沛雨量",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "2021年梅雨鋒面提早報到",
+      "2021年夏末對流雨較不旺盛",
+      "2020年冬季迎風面的地形雨偏少"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第41題。",
+    "exp": "正確答案：2020年缺乏颱風帶來的豐沛雨量。來源：114年國中教育會考社會第41題。",
     "subject": "地理",
     "sub_topic": "地理綜合",
     "source": {
@@ -1252,24 +1305,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-social/Q41-question-1.png",
-      "/assets/banks/cap-114-social/Q41-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.32,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q42",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-114-social/Q42-question.png)",
-    "correct": "原卷選項 C",
+    "q": "某民意代表在服務處設立法律諮詢服務站，表(六)\n表(六)\n是2020年及2021年法律諮詢服務件數的統計資料，\n在2020年的刑事案件中，超過半數屬於告訴乃論，\n而2021年則有過半數的刑事案件屬於非告訴乃論。\n根據上述內容判斷，在2020年及2021年的諮詢服務\n中，可採調解方式處理的件數可能為下列何者？\n| 時間 / 類型 | 2020 / 年 | 2021 / 年 |\n| 民事事件 | 200 | 230 |\n| 刑事案件 | 180 | 150 |\n| 法律諮詢 / 服務總數 | 380 | 380 |\n單位：件",
+    "correct": "2020年300件，2021年300件",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "2020年70件，2021年100件",
+      "2020年100件，2021年70件",
+      "2020年330件，2021年330件"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第42題。",
+    "exp": "正確答案：2020年300件，2021年300件。來源：114年國中教育會考社會第42題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -1284,23 +1335,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-social/Q42-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q43",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第43題原卷資料](/assets/banks/cap-114-social/Q43-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n下列何項展品，最可能屬於該博物館的主要館藏？",
+    "correct": "![圖表](/assets/banks/cap-114-social/Q43-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/cap-114-social/Q43-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-social/Q43-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-social/Q43-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第43題。",
+    "exp": "正確答案：![圖表](/assets/banks/cap-114-social/Q43-option-B-figure-1.png)。來源：114年國中教育會考社會第43題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1320,23 +1370,27 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q43-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png",
+      "/assets/banks/cap-114-social/Q43-option-B-figure-1.png",
+      "/assets/banks/cap-114-social/Q43-option-A-figure-1.png",
+      "/assets/banks/cap-114-social/Q43-option-C-figure-1.png",
+      "/assets/banks/cap-114-social/Q43-option-D-figure-1.png"
     ],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q44",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第44題原卷資料](/assets/banks/cap-114-social/Q44-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n圖(十九)神官雕像手中所持的物品，最可能是下列何者？",
+    "correct": "玉米",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "橄欖",
+      "小麥",
+      "稻米"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第44題。",
+    "exp": "正確答案：玉米。來源：114年國中教育會考社會第44題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1356,23 +1410,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q44-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q45",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第45題原卷資料](/assets/banks/cap-114-social/Q45-question-1.png)\n\n![第45題原卷資料](/assets/banks/cap-114-social/Q45-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n文中博物館的展品說明，最可能以何種語文為主？",
+    "correct": "西班牙文",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "英文",
+      "法文",
+      "葡萄牙文"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第45題。",
+    "exp": "正確答案：西班牙文。來源：114年國中教育會考社會第45題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1393,24 +1447,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q45-question-1.png",
-      "/assets/banks/cap-114-social/Q45-question-2.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.67,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q46",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第46題原卷資料](/assets/banks/cap-114-social/Q46-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n多數國家使用0～9這十個數字作為車牌編碼的組合，但我國僅使用其中九個\n數字。根據文中內容判斷，其原因最可能為下列何者？",
+    "correct": "政府施政受社會規範影響",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "倫理價值具有約束力",
+      "民間習俗具有強制力",
+      "法律規定受宗教信仰影響"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第46題。",
+    "exp": "正確答案：政府施政受社會規範影響。來源：114年國中教育會考社會第46題。",
     "subject": "公民",
     "sub_topic": "公民綜合",
     "source": {
@@ -1431,23 +1484,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q46-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.57,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q47",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第47題原卷資料](/assets/banks/cap-114-social/Q47-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n文中關於民眾選擇車牌號碼的敘述，最適合用來說明下列哪一觀點？",
+    "correct": "不同人對同一誘因的感受有所不同",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "廠商之間的價格競爭將使消費者受惠",
+      "市場的競爭程度越高對消費者越有利",
+      "負向誘因促使民眾的行為發生改變"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第47題。",
+    "exp": "正確答案：不同人對同一誘因的感受有所不同。來源：114年國中教育會考社會第47題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1468,23 +1521,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q47-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q48",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第48題原卷資料](/assets/banks/cap-114-social/Q48-question-1.png)\n\n![第48題原卷資料](/assets/banks/cap-114-social/Q48-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n某民眾的車牌被別人惡意拔走，導致他違反文末所述的規定而受罰。若該民\n眾對此處罰不服，依法採行下列何種處理方式最適當？",
+    "correct": "透過行政救濟途徑維護權益",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "向中央立法機關提出訴願",
+      "向地方行政機關提出請願",
+      "透過刑事訴訟途徑維護權益"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第48題。",
+    "exp": "正確答案：透過行政救濟途徑維護權益。來源：114年國中教育會考社會第48題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1506,24 +1559,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q48-question-1.png",
-      "/assets/banks/cap-114-social/Q48-question-2.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.5,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q49",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第49題原卷資料](/assets/banks/cap-114-social/Q49-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n巴斯人的宗教信仰，最可能是下列何者？",
+    "correct": "祆教",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "佛教",
+      "猶太教",
+      "基督教"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考社會第49題。",
+    "exp": "正確答案：祆教。來源：114年國中教育會考社會第49題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1544,23 +1596,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q49-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.55,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q50",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第50題原卷資料](/assets/banks/cap-114-social/Q50-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n十九世紀上半葉，巴斯人與中國商人的主要貿易模式，最可能是下列何者？",
+    "correct": "巴斯人賣鴉片到中國以取得白銀",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "巴斯人賣瓷器到中國以換取茶葉",
+      "巴斯人賣鹿皮到中國以獲得棉花",
+      "巴斯人賣茶葉到中國以交換工業品"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第50題。",
+    "exp": "正確答案：巴斯人賣鴉片到中國以取得白銀。來源：114年國中教育會考社會第50題。",
     "subject": "歷史",
     "sub_topic": "歷史綜合",
     "source": {
@@ -1581,23 +1633,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q50-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.59,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q51",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 51 題。\n\n![第51題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第51題原卷資料](/assets/banks/cap-114-social/Q51-question-1.png)\n\n![第51題原卷資料](/assets/banks/cap-114-social/Q51-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n關於圖(二十)墓碑文字的解讀，下列何者最適當？",
+    "correct": "碑刻的紀年方式，反映巴斯人珍視薩珊王朝的歷史",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "當時類似的巴斯墓葬，多集中於今日山東青島一帶",
+      "根據時間可確認，此人於《南京條約》簽訂前來華",
+      "此人為孟買出身，顯示其生前主要與日本商行合作"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第51題。",
+    "exp": "正確答案：碑刻的紀年方式，反映巴斯人珍視薩珊王朝的歷史。來源：114年國中教育會考社會第51題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1619,24 +1671,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q51-question-1.png",
-      "/assets/banks/cap-114-social/Q51-question-2.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q52",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第52題原卷資料](/assets/banks/cap-114-social/Q52-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n根據圖(二十一)中的資訊判斷，與英國產生領土紛爭的國家應為下列何者？",
+    "correct": "阿根廷",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "南非",
+      "澳洲",
+      "紐西蘭"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考社會第52題。",
+    "exp": "正確答案：阿根廷。來源：114年國中教育會考社會第52題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1657,23 +1708,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q52-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.49,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q53",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第53題原卷資料](/assets/banks/cap-114-social/Q53-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n依據上文及圖(二十一)中的資訊判斷，該冰山漂流的方向應為下列何者？",
+    "correct": "西南向東北",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "東北向西南",
+      "東南向西北",
+      "西北向東南"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考社會第53題。",
+    "exp": "正確答案：西南向東北。來源：114年國中教育會考社會第53題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1694,23 +1745,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q53-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.45,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-social-q54",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/cap-114-social/G43-54-context.png)\n\n![第54題原卷資料](/assets/banks/cap-114-social/Q54-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n二、題組：(43～54題)\n閱讀下列選文，回答第 43 至 45 題：\n位於墨西哥首都的國立人類學博物館，館藏以當地古文明的文物為主，大約\n有六十萬件。博物館的建築設計，呼應該地古文明信仰中的四種自然力量：風、\n![圖表](/assets/banks/cap-114-social/G43-54-figure-1.png)\n火、水、土元素，充滿與大自然的共融感。\n一樓的展示廳為常設展，其中一塊區域專門展示當\n地古文明的農業。由於農業發展與宗教神話有密不可分\n的關係，因此展覽廳特別展示了保佑農業生產的神官雕\n像，如圖(十九)所示。神官雕像手中握著的物品，是原\n產於美洲的作物，也是當地古文明所倚重的主食。\n雖然博物館的收藏相當豐富，但在展品的說明上，\n受過去殖民歷史影響，大多僅採用今日當地的官方語\n文。若改善上述不足之處，勢必能造福更多到館參觀的\n外國旅客，增進對當地文化的了解。\n\n上述冰山若撞上南喬治亞島，其產生的影響最可能為下列何者？",
+    "correct": "島嶼海岸遭受破壞，危及動物棲地",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "巨浪侵襲島嶼陸地，阻礙工業發展",
+      "附近海水鹽度上升，改變海洋生態",
+      "威脅北美洲與非洲之間的船隻安全"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考社會第54題。",
+    "exp": "正確答案：島嶼海岸遭受破壞，危及動物棲地。來源：114年國中教育會考社會第54題。",
     "subject": "社會",
     "sub_topic": "社會綜合",
     "source": {
@@ -1731,10 +1782,10 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-social/G43-54-context.png",
-      "/assets/banks/cap-114-social/Q54-question.png"
+      "/assets/banks/cap-114-social/G43-54-figure-1.png"
     ],
     "passRate": 0.73,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   }
 ]

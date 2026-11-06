@@ -2,14 +2,14 @@
   {
     "id": "cap-110-math-q1",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-110-math/Q1-question.png)",
-    "correct": "原卷選項 A",
+    "q": "A\n1. 圖( 一 ) 的坐標平面上有A、B、C、D 四點。根據\n圖( 一 ) 中各點位置判斷，哪一個點在第二象限？\nx\nO\nB\nD\nC\n圖 ( 一 )",
+    "correct": "A",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "B",
+      "C",
+      "D"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考數學第1題。",
+    "exp": "正確答案：A。來源：110年國中教育會考數學第1題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -24,23 +24,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q1-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.88,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q2",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-110-math/Q2-question.png)",
-    "correct": "原卷選項 B",
+    "q": "算式 (−8) + (−2) × (−3) 之值為何？",
+    "correct": "−2",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "−14",
+      "18",
+      "30"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考數學第2題。",
+    "exp": "正確答案：−2。來源：110年國中教育會考數學第2題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -55,23 +54,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q2-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.83,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q3",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-110-math/Q3-question.png)",
-    "correct": "原卷選項 D",
+    "q": "x = 4y\n3.\t 若二元一次聯立方程式  ______ 的解為 x = a， y = b，則 a + b 之值為何？\n{ 6y − x = 10",
+    "correct": "25",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "−15",
+      "−3",
+      "5"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考數學第3題。",
+    "exp": "正確答案：25。來源：110年國中教育會考數學第3題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -86,23 +84,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q3-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.79,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q4",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-110-math/Q4-question-1.png)\n\n![第4題原卷資料](/assets/banks/cap-110-math/Q4-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "如圖( 二) ， 矩形 ABCD、  ∆BDE 中 ， A 點在 BE 上 。 若矩形 ABCD 的面積\n為 20 ， ∆BDE 的面積為 24 ， 則 ∆ADE 的面積為何？\nE\n\nA D\nB C\n圖 ( 二 )\n\n![圖表](/assets/banks/cap-110-math/Q4-figure-1.png)\n\n![圖表](/assets/banks/cap-110-math/Q4-figure-2.png)",
+    "correct": "14",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "10",
+      "12",
+      "16"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考數學第4題。",
+    "exp": "正確答案：14。來源：110年國中教育會考數學第4題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -119,23 +116,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q4-question-1.png",
-      "/assets/banks/cap-110-math/Q4-question-2.png"
+      "/assets/banks/cap-110-math/Q4-figure-1.png",
+      "/assets/banks/cap-110-math/Q4-figure-2.png"
     ],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q5",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-110-math/Q5-question.png)",
-    "correct": "原卷選項 D",
+    "q": "5<sup>6</sup> 是 5<sup>3</sup>的多少倍？",
+    "correct": "125",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "2",
+      "3",
+      "25"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考數學第5題。",
+    "exp": "正確答案：125。來源：110年國中教育會考數學第5題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -150,23 +148,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q5-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.8,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q6",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-110-math/Q6-question.png)",
-    "correct": "原卷選項 C",
+    "q": "下列等式何者不成立？",
+    "correct": "4$\\sqrt{3}$ × 2$\\sqrt{3}$ = 8$\\sqrt{3}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "4$\\sqrt{3}$ + 2$\\sqrt{3}$ = 6$\\sqrt{3}$",
+      "4$\\sqrt{3}$ − 2$\\sqrt{3}$ = 2$\\sqrt{3}$",
+      "4$\\sqrt{3}$ ÷ 2$\\sqrt{3}$ = 2"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考數學第6題。",
+    "exp": "正確答案：4$\\sqrt{3}$ × 2$\\sqrt{3}$ = 8$\\sqrt{3}$。來源：110年國中教育會考數學第6題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -181,23 +178,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q6-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q7",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-110-math/Q7-question-1.png)\n\n![第7題原卷資料](/assets/banks/cap-110-math/Q7-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "已知纜車從起點行駛到終點需花費 8 分鐘 ， 圖 ( 三 ) 表示行駛過程中纜車的\n海拔高度與行駛時間的關係。\n\n350\n海 300\n250\n拔\n200\n高\n(\n150\n度\n\n100\n\n公\n) 50\n\n尺\n0\n0 1 2 3 4 5 6 7 8\n行駛時間(分    )\n圖 ( 三 )\n根據圖 ( 三 ) 判斷 ， 下列敘述何者正確？\n\n![圖表](/assets/banks/cap-110-math/Q7-figure-1.png)",
+    "correct": "終點的海拔高度比起點高 300 公尺，行駛時間的末 4 分鐘都在上升",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "終點的海拔高度比起點高 300 公尺，行駛時間的前 4 分鐘都在上升",
+      "終點的海拔高度比起點高 350 公尺，行駛時間的前 4 分鐘都在上升",
+      "終點的海拔高度比起點高 350 公尺，行駛時間的末 4 分鐘都在上升"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考數學第7題。",
+    "exp": "正確答案：終點的海拔高度比起點高 300 公尺，行駛時間的末 4 分鐘都在上升。來源：110年國中教育會考數學第7題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -214,23 +210,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q7-question-1.png",
-      "/assets/banks/cap-110-math/Q7-question-2.png"
+      "/assets/banks/cap-110-math/Q7-figure-1.png"
     ],
     "passRate": 0.86,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q8",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-110-math/Q8-question.png)",
-    "correct": "原卷選項 C",
+    "q": "利用乘法公式判斷 ， 下列等式何者成立？",
+    "correct": "248<sup>2</sup> + 2 × 248 × 52 + 52<sup>2</sup> = 300<sup>2</sup>",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "248<sup>2</sup> + 248 × 52 + 52<sup>2</sup> = 300<sup>2</sup>",
+      "248<sup>2</sup> − 248 × 48 − 48<sup>2</sup> = 200<sup>2</sup>",
+      "248<sup>2</sup> − 2 × 248 × 48 − 48<sup>2</sup> = 200<sup>2</sup>"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考數學第8題。",
+    "exp": "正確答案：248<sup>2</sup> + 2 × 248 × 52 + 52<sup>2</sup> = 300<sup>2</sup>。來源：110年國中教育會考數學第8題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -245,23 +241,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q8-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.76,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q9",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-110-math/Q9-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖 ( 四 ) 為甲城市 6 月到 9 月外國旅客人數的折線圖 。 根據圖 ( 四 ) 判斷 ，\n哪一個月到甲城市的外國旅客中 ， 旅客人數最少的國家是美國？\n日本美國英國\n\n3\n人\n(\n\n數\n\n2\n\n千\n\n)\n人\n1\n6 7 8 9 月分(月)\n圖 ( 四 )\n\n![圖表](/assets/banks/cap-110-math/Q9-figure-1.png)",
+    "correct": "8",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "6",
+      "7",
+      "9"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考數學第9題。",
+    "exp": "正確答案：8。來源：110年國中教育會考數學第9題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -277,22 +272,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q9-question.png"
+      "/assets/banks/cap-110-math/Q9-figure-1.png"
     ],
     "passRate": 0.77,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q10",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-110-math/Q10-question-1.png)\n\n![第10題原卷資料](/assets/banks/cap-110-math/Q10-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "將一半徑為 6 的圓形紙片，沿著兩條半徑剪開形成兩個扇形。若其中一個\n扇形的弧長為 5 π ，則另一個扇形的圓心角度數是多少？\n\n![圖表](/assets/banks/cap-110-math/Q10-figure-1.png)",
+    "correct": "210",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "30",
+      "60",
+      "105"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考數學第10題。",
+    "exp": "正確答案：210。來源：110年國中教育會考數學第10題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -309,23 +305,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q10-question-1.png",
-      "/assets/banks/cap-110-math/Q10-question-2.png"
+      "/assets/banks/cap-110-math/Q10-figure-1.png"
     ],
     "passRate": 0.61,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q11",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-110-math/Q11-question.png)",
-    "correct": "原卷選項 D",
+    "q": "動物園準備了 100 張刮刮樂，打算送給開幕當日的前 100 位遊客每人一張，其中\n可刮中獎品的刮刮樂共有 32 張，表 ( 一 ) 為獎品的種類及數量。若小柏為開幕\n當日的第一位遊客，且每張刮刮樂被小柏拿到的機會相等，則小柏刮中玩偶的\n機率為何？\n表 ( 一 )\n$\\frac{1}{2}$\n$\\frac{1}{16}$\n$\\frac{8}{25}$\n| 獎品 | 數量 |\n| 北極熊玩偶一個 | 1 |\n| 獅子玩偶一個 | 1 |\n| 造型馬克杯一個 | 10 |\n| 紀念鑰匙圈一個 | 20 |\n$\\frac{1}{50}$",
+    "correct": "$\\frac{1}{50}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "$\\frac{1}{2}$",
+      "$\\frac{1}{16}$",
+      "$\\frac{8}{25}$"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考數學第11題。",
+    "exp": "正確答案：$\\frac{1}{50}$。來源：110年國中教育會考數學第11題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -340,23 +336,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q11-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q12",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-110-math/Q12-question.png)",
-    "correct": "原卷選項 B",
+    "q": "美美和小儀到超市購物，且超市正在舉辦摸彩活動，單次消費金額每滿 100 元\n可以拿到 1 張摸彩券。已知美美一次購買 5 盒餅乾拿到 3 張摸彩券；小儀一次\n購買 5 盒餅乾與 1 個蛋糕拿到 4 張摸彩券。若每盒餅乾的售價為 x 元，每個\n蛋糕的售價為 150 元，則 x 的範圍為下列何者？",
+    "correct": "60 ≤ x < 70",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "50 ≤ x < 60",
+      "70 ≤ x < 80",
+      "80 ≤ x < 90"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考數學第12題。",
+    "exp": "正確答案：60 ≤ x < 70。來源：110年國中教育會考數學第12題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -371,23 +366,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q12-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q13",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-110-math/Q13-question-1.png)\n\n![第13題原卷資料](/assets/banks/cap-110-math/Q13-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "已知 a<sub>1</sub>，  a<sub>2</sub> ，……，  a<sub>40</sub>為一等差數列，其中 a<sub>1</sub>為正數，且 a<sub>20</sub> + a<sub>22</sub> = 0。\n\n判斷下列敘述何者正確？",
+    "correct": "a<sub>21</sub> + a<sub>22</sub> < 0",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "a<sub>21</sub> + a<sub>22</sub> > 0",
+      "a<sub>21</sub> × a<sub>22</sub> > 0",
+      "a<sub>21</sub> × a<sub>22</sub> < 0"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考數學第13題。",
+    "exp": "正確答案：a<sub>21</sub> + a<sub>22</sub> < 0。來源：110年國中教育會考數學第13題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -403,24 +397,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q13-question-1.png",
-      "/assets/banks/cap-110-math/Q13-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/cap-110-math/Q14-question.png)",
-    "correct": "原卷選項 C",
+    "q": "已知 a = − $\\frac{5}{223}$ ______   ，    b = $\\frac{6}{263}$ ______   ，    c = − $\\frac{7}{293}$ ______  ，   判斷下列各式之值何者最大？",
+    "correct": "a − b + c",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "a + b + c",
+      "a + b − c",
+      "a − b − c"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考數學第14題。",
+    "exp": "正確答案：a − b + c。來源：110年國中教育會考數學第14題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -435,23 +427,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q14-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-110-math/Q15-question.png)",
-    "correct": "原卷選項 B",
+    "q": "已知 ∆ABC 與 ∆DEF 全等 ， A、B 、  C 的對應點分別\nA\n\n為 D、  E 、  F ， 且 E 點在 AC 上 ， B 、  F 、  C 、  D 四點\n共線，如圖( 五) 所示。若 ∠A = 40° ， ∠CED = 35° ， 則\n下列敘述何者正確？\nB F C D\n圖 ( 五 )\n\n![圖表](/assets/banks/cap-110-math/Q15-figure-1.png)",
+    "correct": "EF = EC，AE ≠ FC",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "EF = EC，AE = FC",
+      "EF ≠ EC，AE = FC",
+      "EF ≠ EC，AE ≠ FC"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考數學第15題。",
+    "exp": "正確答案：EF = EC，AE ≠ FC。來源：110年國中教育會考數學第15題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -467,22 +458,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q15-question.png"
+      "/assets/banks/cap-110-math/Q15-figure-1.png"
     ],
     "passRate": 0.5,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q16",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-110-math/Q16-question-1.png)\n\n![第16題原卷資料](/assets/banks/cap-110-math/Q16-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "圖 ( 六 ) 為某超商促銷活動的內容，今阿賢到該超商拿相差 4 元的 2 種飯糰\n各 1 個結帳時，店員說：「要不要多買 2 瓶指定飲料？搭配促銷活動後 2 組\n優惠價的金額，只比你買2 個飯糰的金額多30 元。」若阿賢只多買1 瓶指定\n飲料，且店員會以對消費者最便宜的方式結帳，則與原本只買2 個飯糰相比，\n\n他要多付多少元？\n圖 ( 六 )\n\n![圖表](/assets/banks/cap-110-math/Q16-figure-1.png)\n\n![圖表](/assets/banks/cap-110-math/Q16-figure-2.png)",
+    "correct": "13",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "12",
+      "15",
+      "16"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考數學第16題。",
+    "exp": "正確答案：13。來源：110年國中教育會考數學第16題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -499,23 +491,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q16-question-1.png",
-      "/assets/banks/cap-110-math/Q16-question-2.png"
+      "/assets/banks/cap-110-math/Q16-figure-1.png",
+      "/assets/banks/cap-110-math/Q16-figure-2.png"
     ],
     "passRate": 0.58,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q17",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-110-math/Q17-question.png)",
-    "correct": "原卷選項 D",
+    "q": "如圖 ( 七 )，梯形 ABCD 中，  AD // BC ，有一圓 O A D\n\n通過 A 、  B 、  C 三點，且 AD 與圓 O 相切於 A 點。\n若 ∠B = 58°，則 BC 的度數為何？\n圖 ( 七 )\n\n![圖表](/assets/banks/cap-110-math/Q17-figure-1.png)",
+    "correct": "128",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "116",
+      "120",
+      "122"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考數學第17題。",
+    "exp": "正確答案：128。來源：110年國中教育會考數學第17題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -531,22 +524,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q17-question.png"
+      "/assets/banks/cap-110-math/Q17-figure-1.png"
     ],
     "passRate": 0.48,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-110-math/Q18-question.png)",
-    "correct": "原卷選項 A",
+    "q": "若坐標平面上二次函數 y = a(x+b)<sup>2</sup>+c 的圖形， 經過平移後可與 y = (x+3)<sup>2</sup>\n的圖形完全疊合，則 a、 b、 c 的值可能為下列哪一組？",
+    "correct": "a = 1，b = 0，c = −2",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "a = 2，b = 6，c = 0",
+      "a = −1，b = −3，c = 0",
+      "a = −2，b = 3，c = −2"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考數學第18題。",
+    "exp": "正確答案：a = 1，b = 0，c = −2。來源：110年國中教育會考數學第18題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -561,23 +555,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q18-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.44,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q19",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-110-math/Q19-question-1.png)\n\n![第19題原卷資料](/assets/banks/cap-110-math/Q19-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "如圖 ( 八 )，  ∆ ABC 中，  D 、   E 、   F 三點分別在 AB、BC、  AC 上，且\n四邊形 BEFD 是以 DE 為對稱軸的線對稱圖形，四邊形 CFDE 是以 FE\n為對稱軸的線對稱圖形。若 ∠C = 40°，則 ∠DFE 的度數為何？\nA\n\nC\nB\n圖 ( 八 )\n\n![圖表](/assets/banks/cap-110-math/Q19-figure-1.png)",
+    "correct": "80",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "65",
+      "70",
+      "75"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考數學第19題。",
+    "exp": "正確答案：80。來源：110年國中教育會考數學第19題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -594,23 +587,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q19-question-1.png",
-      "/assets/banks/cap-110-math/Q19-question-2.png"
+      "/assets/banks/cap-110-math/Q19-figure-1.png"
     ],
     "passRate": 0.53,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q20",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-110-math/Q20-question.png)",
-    "correct": "原卷選項 B",
+    "q": "已知捷立租車行有甲、乙兩個營業據點，顧客租車後當日須於營業結束前在\n任意一個據點還車。某日營業結束清點車輛時，發現在甲歸還的自行車比\n從甲出租的多 4 輛。若當日從甲出租且在甲歸還的自行車為 15 輛，從乙出租\n且在乙歸還的自行車為 13 輛，則關於當日從甲、乙出租的自行車數量，下列\n比較何者正確？",
+    "correct": "從甲出租的比從乙出租的少 2 輛",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "從甲出租的比從乙出租的多 2 輛",
+      "從甲出租的比從乙出租的多 6 輛",
+      "從甲出租的比從乙出租的少 6 輛"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考數學第20題。",
+    "exp": "正確答案：從甲出租的比從乙出租的少 2 輛。來源：110年國中教育會考數學第20題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -625,23 +618,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q20-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.45,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-110-math/Q21-question.png)",
-    "correct": "原卷選項 A",
+    "q": "如圖(九) ， 四邊形 ABCD中 ， ∠1 、  ∠2 、  ∠3 分別為 ∠A 、  ∠B 、  ∠C 的外角。\n判斷下列大小關係何者正確？\nA 1\n\nB C\n圖 ( 九 )\n\n![圖表](/assets/banks/cap-110-math/Q21-figure-1.png)",
+    "correct": "∠1 + ∠3 = ∠ABC + ∠D",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "∠1 + ∠3 < ∠ABC + ∠D",
+      "∠1 + ∠2 + ∠3 = 360°",
+      "∠1 + ∠2 + ∠3 > 360°"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考數學第21題。",
+    "exp": "正確答案：∠1 + ∠3 = ∠ABC + ∠D。來源：110年國中教育會考數學第21題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -657,22 +649,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q21-question.png"
+      "/assets/banks/cap-110-math/Q21-figure-1.png"
     ],
     "passRate": 0.47,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q22",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-110-math/Q22-question-1.png)\n\n![第22題原卷資料](/assets/banks/cap-110-math/Q22-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "若 a 、  b 為正整數，且 a × b = 2<sup>5</sup> × 3<sup>2</sup> × 5，則下列何者不可能為 a 、  b 的最大\n公因數？\n\n![圖表](/assets/banks/cap-110-math/Q22-figure-1.png)",
+    "correct": "8",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "1",
+      "6",
+      "12"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考數學第22題。",
+    "exp": "正確答案：8。來源：110年國中教育會考數學第22題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -689,23 +682,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q22-question-1.png",
-      "/assets/banks/cap-110-math/Q22-question-2.png"
+      "/assets/banks/cap-110-math/Q22-figure-1.png"
     ],
     "passRate": 0.44,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q23",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-110-math/Q23-question.png)",
-    "correct": "原卷選項 A",
+    "q": "如圖 ( 十 )，菱形 ABCD 中，  E 點在 BC 上，  F 點在 CD A\n\n上，  G 點、  H 點在 AD 上，且 AE // HC // GF。若\nAH = 8，  HG = 5，  GD = 4，則下列選項中的線段，何者\n的長度最長？\nB D\nC\n圖 ( 十 )\n\n![圖表](/assets/banks/cap-110-math/Q23-figure-1.png)",
+    "correct": "CF",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "FD",
+      "BE",
+      "EC"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考數學第23題。",
+    "exp": "正確答案：CF。來源：110年國中教育會考數學第23題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -721,22 +714,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q23-question.png"
+      "/assets/banks/cap-110-math/Q23-figure-1.png"
     ],
     "passRate": 0.35,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-110-math/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/cap-110-math/Q24-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "小文原本計畫使用甲、乙兩臺影印機於 10：00 開始一起印製文件並持續到\n下午，但 10：00 時有人正在使用乙，於是他先使用甲印製，於 10：05 才開始\n使用乙一起印製，且到 10：15 時乙印製的總張數與甲相同，到 10：45 時甲、乙\n印製的總張數合計為 2100 張。若甲、乙的印製張數與印製時間皆成正比，\n則依照小文原本的計畫，甲、乙印製的總張數會在哪個時間達到 2100 張？",
+    "correct": "10：42",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "10：40",
+      "10：41",
+      "10：43"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考數學第24題。",
+    "exp": "正確答案：10：42。來源：110年國中教育會考數學第24題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -752,24 +746,22 @@
       "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-110-math/Q24-question-1.png",
-      "/assets/banks/cap-110-math/Q24-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.45,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q25",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-110-math/Q25-question.png)",
-    "correct": "原卷選項 A",
+    "q": "如圖( 十一)，  銳角三角形 ABC 中，  D 點在 BC 上， ∠B = ∠BAD = ∠CAD。\n今欲在 AD 上找一點 P，使得 ∠APC = ∠ADB，以下是甲、乙兩人的作法：\n( 甲 ) 作 AC 的中垂線交 AD 於 P 點，則 P 即為所求\n( 乙 ) 以 C 為圓心，  CD 長為半徑畫弧，交 AD 於異於 D 點\n的一點 P，則 P 即為所求 A\n\n對於甲、乙兩人的作法，下列判斷何者正確？\nB D C\n圖 ( 十一 )\n\n![圖表](/assets/banks/cap-110-math/Q25-figure-1.png)",
+    "correct": "兩人皆正確",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "兩人皆錯誤",
+      "甲正確，乙錯誤",
+      "甲錯誤，乙正確"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考數學第25題。",
+    "exp": "正確答案：兩人皆正確。來源：110年國中教育會考數學第25題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -785,22 +777,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q25-question.png"
+      "/assets/banks/cap-110-math/Q25-figure-1.png"
     ],
     "passRate": 0.27,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-110-math-q26",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-110-math/Q26-question-1.png)\n\n![第26題原卷資料](/assets/banks/cap-110-math/Q26-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "如圖 ( 十二 )，  I 為 ∆ABC 的內心，有一直線通過 I 點且分別與 AB、AC 相交\n於 D 點 、   E 點。若 AD = DE = 5，  AE = 6，則 I 點到 BC 的距離為何？\n$\\frac{24}{11}$ A\n\n$\\frac{30}{11}$\nC\nB\n圖 ( 十二 )\n\n![圖表](/assets/banks/cap-110-math/Q26-figure-1.png)\n\n![圖表](/assets/banks/cap-110-math/Q26-figure-2.png)",
+    "correct": "$\\frac{24}{11}$",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "$\\frac{30}{11}$",
+      "2",
+      "3"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考數學第26題。",
+    "exp": "正確答案：$\\frac{24}{11}$。來源：110年國中教育會考數學第26題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -817,10 +810,11 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-110-math/Q26-question-1.png",
-      "/assets/banks/cap-110-math/Q26-question-2.png"
+      "/assets/banks/cap-110-math/Q26-figure-1.png",
+      "/assets/banks/cap-110-math/Q26-figure-2.png"
     ],
     "passRate": 0.43,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   }
 ]

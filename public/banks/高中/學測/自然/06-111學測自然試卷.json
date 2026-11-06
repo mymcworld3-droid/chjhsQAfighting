@@ -2,15 +2,15 @@
   {
     "id": "gsat-111-science-q1",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-111-science/G1-2-context.png)\n\n![第1題原卷資料](/assets/banks/gsat-111-science/Q1-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n1-2題為題組\n\n圖1為某颱風中心在21～26日的行進及預測路徑。假設颱風可視為固定質量的質點，地球轉動對颱風行進路徑的影響可忽略不計，颱風行進路徑在同一水平面上，且颱風沿預測路徑持續前進不折返。依據上述與圖1回答1-2題。\n\n圖1\n\n25日14時\n\n26日14時\n\n24日14時\n\n23日14時\n\n23日02時\n\n22日14時\n\n22日02時\n\n21日14時\n\n\n\n\n\n\n\n\n\n\n\n已知此颱風在21日14時的暴風半徑為180公里，如白色圓圈所示。試以預測路徑估算自21日14時至22日02時之間，颱風移動的平均時速量值約多少公里？\n\n![圖表](/assets/banks/gsat-111-science/G1-2-figure-1.png)\n",
+    "correct": "10",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "5",
+      "20",
+      "30",
+      "40"
     ],
-    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗自然第1題。",
+    "exp": "正確答案：10。來源：111年學科能力測驗自然第1題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -30,16 +30,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G1-2-context.png",
-      "/assets/banks/gsat-111-science/Q1-question.png"
+      "/assets/banks/gsat-111-science/G1-2-figure-1.png"
     ],
     "passRate": 0.92,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q3",
     "difficulty": "easy",
-    "q": "rE               mE3. 已知地球（E）與火星（M）的平均半徑比值約為1.86，質量比值約為9.3，試問\n                                                          rM              mM\n\n 同一物體在火星表面所受重力約為在地球表面所受重力的多少倍？",
+    "q": "已知地球（E）與火星（M）的平均半徑比值$\\frac{r_E}{r_M}$約為1.86，質量比值$\\frac{m_E}{m_M}$約為9.3，試問同一物體在火星表面所受重力約為在地球表面所受重力的多少倍？",
     "correct": "0.37",
     "wrong": [
       "0.10",
@@ -64,20 +64,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.84,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q5",
     "difficulty": "medium",
-    "q": "若質量為720 公斤的球體，具有3600 千焦耳的動能，則此球體的速率約為多少公尺秒？/",
-    "correct": "10 2",
+    "q": "若質量為720公斤的球體，具有3600千焦耳的動能，則此球體的速率約為多少$公尺/秒$？",
+    "correct": "$10^2$",
     "wrong": [
-      "103",
-      "10 4",
-      "105",
-      "106"
+      "$10^3$",
+      "$10^4$",
+      "$10^5$",
+      "$10^6$"
     ],
-    "exp": "正確答案：10 2。來源：111年學科能力測驗自然第5題。",
+    "exp": "正確答案：$10^2$。來源：111年學科能力測驗自然第5題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -94,20 +95,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q7",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-111-science/G7-8-context.png)\n\n![第7題原卷資料](/assets/banks/gsat-111-science/Q7-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n7-8題為題組\n\n2021年的諾貝爾物理獎聚焦於複雜系統，如：氣候系統。圖3為簡化的地球氣候系統模型圖，圖中實線代表進入系統的太陽輻射，虛線$F_G^{↑}$代表地面向上發出被大氣所吸收的熱輻射，虛線$F_A^{↑}$與$F_A^{↓}$分別代表大氣向外（上）與向內（下）的熱輻射。當太陽輻射的能量進出系統達收支平衡時，大氣內、外長期平均溫度維持恆定。然而，溫室氣體增加，會造成系統能量收支不平衡，長期平均溫度也因而產生變化。\n\n圖4為大氣向外熱輻射功率對熱輻射頻率的曲線圖，5個平滑的細線代表標準的輻射體由克氏（絕對）溫度220 K到300 K，每隔20 K的熱輻射特性曲線。圖4上圖與下圖的黑色波折線，分別代表$CO_2$含量為0與1000 ppm時，地球氣候系統模型預測大氣向外熱輻射功率隨頻率的變化。依據上述圖文資料，回答7-8題。\n\n圖3\n\n土地\n\n太空邊界\n\n大氣\n\n太陽輻射\n\n穿越大氣的\n\n$\\Delta T_內=0$大氣\n\n$F_G^{↑}$\n\n$F_A^{↓}$\n\n$\\Delta T_外=0$大氣\n\n$F_A^{↑}$\n\n圖4\n\n0 ppm\n\nCO<sub>2</sub>\n\n1000 ppm\n\nCO<sub>2</sub>\n\n\n\n\n\n\n\n\n\n熱輻射頻率\n\n大氣向外熱輻射功率\n\n熱輻射頻率\n\n大氣向外熱輻射功率\n\n圖4所預測之地球大氣向外熱輻射，最接近攝氏多少度的標準的輻射體，所發出之熱輻射？\n\n![圖表](/assets/banks/gsat-111-science/G7-8-figure-2.png)\n![圖表](/assets/banks/gsat-111-science/G7-8-figure-1.png)\n",
+    "correct": "$-10$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "270",
+      "260",
+      "100",
+      "$-100$"
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第7題。",
+    "exp": "正確答案：$-10$。來源：111年學科能力測驗自然第7題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -128,11 +130,12 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G7-8-context.png",
-      "/assets/banks/gsat-111-science/Q7-question.png"
+      "/assets/banks/gsat-111-science/G7-8-figure-2.png",
+      "/assets/banks/gsat-111-science/G7-8-figure-1.png"
     ],
     "passRate": 0.77,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q9",
@@ -162,20 +165,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q10",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/gsat-111-science/Q10-question.png)",
-    "correct": "原卷選項 A",
+    "q": "下列離子之荷質比，即$\\frac{電荷}{質量}$比值的關係，何者正確？（原子量H＝1.0、He＝4.0、Li＝6.9）",
+    "correct": "$H^{+}>He^{2+}>Li^{+}$",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "$He^{2+}>Li^{+}>H^{+}$",
+      "$Li^{+}>He^{2+}>H^{+}$",
+      "$He^{2+}>Li^{+}=H^{+}$",
+      "$Li^{+}=H^{+}>He^{2+}$"
     ],
-    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗自然第10題。",
+    "exp": "正確答案：$H^{+}>He^{2+}>Li^{+}$。來源：111年學科能力測驗自然第10題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -190,24 +194,23 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-111-science/Q10-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q11",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/gsat-111-science/Q11-question.png)",
-    "correct": "原卷選項 C",
+    "q": "小婷將混合染料以濾紙層析法分析，在展開液上升至停止線時終止層析。待濾紙乾燥後，觀察發現甲、乙、丙三種成分之相對位置如圖5；並定義Rf值如下：\n$Rf值= \\frac{成分由起始線的移動距離}{同時間展開液由起始線至停止線的移動距離}$\n\n圖5\n\n停止線\n\n起始線\n\n層析\n\n甲\n\n乙\n\n丙\n\nRf值與該成分及展開液的特性有關，可做鑑定之用。\n下列敘述何者正確？\n\n![圖表](/assets/banks/gsat-111-science/Q11-figure-1.png)",
+    "correct": "乙與丙在層析時，移動速率比約為$8:5$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "乙的Rf值為0.2",
+      "甲與丙的Rf值，兩者相加約為0.6",
+      "甲、乙、丙的分子量大小關係為甲＜乙＜丙\n\n![圖表](/assets/banks/gsat-111-science/Q11-option-D-figure-1.png)",
+      "甲、乙、丙的Rf值，會隨著展開液移動距離的增加而變大"
     ],
-    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗自然第11題。",
+    "exp": "正確答案：乙與丙在層析時，移動速率比約為$8:5$。來源：111年學科能力測驗自然第11題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -223,23 +226,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/Q11-question.png"
+      "/assets/banks/gsat-111-science/Q11-figure-1.png",
+      "/assets/banks/gsat-111-science/Q11-option-D-figure-1.png"
     ],
     "passRate": 0.73,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q13",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-111-science/Q13-question.png)",
-    "correct": "原卷選項 E",
+    "q": "已知指示劑X在pH值7.5以下和8.0以上分別是無色和粉紅色，而指示劑Y在pH值4.0-7.5與8.0-10.0時分別是綠色和藍色。若將濃度各0.1 M的溶液甲和乙分別以體積比$1:9$、$1:1$和$9:1$充分混合，再分別用指示劑X和Y測混合溶液，其結果如表1所示：\n\n| 表1 |\n| 溶液體積比（甲：乙） | 指示劑X | 指示劑Y |\n| $1:9$ | 粉紅色 | 藍色 |\n| $1:1$ | 無色 | 綠色 |\n| $9:1$ | 無色 | 綠色 |\n\n根據上述實驗結果，下列何者最有可能為溶液甲和乙的組合？\n\n|  | 甲 | 乙 |\n|\n\n![圖表](/assets/banks/gsat-111-science/Q13-figure-1.png)\n![圖表](/assets/banks/gsat-111-science/Q13-figure-2.png)",
+    "correct": "| $CH_3COOH(aq)$ | $NH_3(aq)$ |",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "| $HCl(aq)$ | $NH_3(aq)$ |\n|",
+      "| $NH_3(aq)$ | $HCl(aq)$ |\n|",
+      "| $NaCl(aq)$ | $NH_3(aq)$ |\n|",
+      "| $NH_3(aq)$ | $CH_3COOH(aq)$ |\n|"
     ],
-    "exp": "正確答案：原卷選項 E。來源：111年學科能力測驗自然第13題。",
+    "exp": "正確答案：| $CH_3COOH(aq)$ | $NH_3(aq)$ |。來源：111年學科能力測驗自然第13題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -255,23 +260,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/Q13-question.png"
+      "/assets/banks/gsat-111-science/Q13-figure-1.png",
+      "/assets/banks/gsat-111-science/Q13-figure-2.png"
     ],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-111-science/Q14-question.png)",
-    "correct": "原卷選項 C",
+    "q": "汽油是含有5至12個碳原子的碳氫化合物，燃燒時會排放$CO_2$，是造成空氣中$CO_2$增加的原因之一。假如以辛烷（$C_8H_{18}$）代表汽油的成分，而且辛烷在引擎運轉時，可完全燃燒，其反應式如下：\n\n$C_8H_{18}(l)+O_2(g) \\to CO_2(g)+H_2O(l)$ （係數尚未平衡）\n\n若一公畝的森林平均每天可吸收16公斤的$CO_2$，當汽車油箱中50公升的辛烷完全燃燒，則所產生的$CO_2$約為一公畝森林多少天的吸收量？（$C_8H_{18}$：密度＝$0.70 g/cm^3$、分子量＝114）",
+    "correct": "6.8",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "0.84",
+      "2.2",
+      "14",
+      "54"
     ],
-    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗自然第14題。",
+    "exp": "正確答案：6.8。來源：111年學科能力測驗自然第14題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -286,24 +293,23 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052612982976213284/06-111%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-111-science/Q14-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-111-science/Q15-question.png)",
-    "correct": "原卷選項 D",
+    "q": "某離子化合物X之溶解度與溫度關係如圖7。林生利用圖8裝置測試體積為$100 cm^3$金屬塊的浮力，且可忽略溫度對其影響。在45℃已達溶解平衡的X水溶液中，尚有未溶解的X固體。將金屬塊完全沒入該溶液中，發現金屬塊重量減輕120克重，若X式量為75，則此X飽和溶液的體積莫耳濃度（M）為何？\n\n圖8\n\n吊秤\n\n金屬塊\n\n圖7\n\n溫度（℃）\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n溶\n\n解\n\n度\n\n（g/100g H<sub>2</sub>O）\n\n![圖表](/assets/banks/gsat-111-science/Q15-figure-1.png)\n\n![圖表](/assets/banks/gsat-111-science/Q15-figure-3.png)",
+    "correct": "4.6",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "2.8",
+      "3.4",
+      "4.0",
+      "5.3"
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第15題。",
+    "exp": "正確答案：4.6。來源：111年學科能力測驗自然第15題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -319,23 +325,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/Q15-question.png"
+      "/assets/banks/gsat-111-science/Q15-figure-1.png",
+      "/assets/banks/gsat-111-science/Q15-figure-3.png"
     ],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q16",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/gsat-111-science/Q16-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖9是殺蟲劑芬普尼的結構；據此，一個芬普尼分子所含的所有氮原子共有幾對孤對電子？",
+    "correct": "4\n\n![圖表](/assets/banks/gsat-111-science/Q16-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "2\n\n圖9\n\n![圖表](/assets/banks/gsat-111-science/Q16-option-A-figure-1.png)",
+      "6\n\n![圖表](/assets/banks/gsat-111-science/Q16-option-C-figure-1.png)",
+      "8\n\n![圖表](/assets/banks/gsat-111-science/Q16-option-D-figure-1.png)",
+      "10\n\n![圖表](/assets/banks/gsat-111-science/Q16-option-E-figure-1.png)\n"
     ],
-    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗自然第16題。",
+    "exp": "正確答案：4\n\n![圖表](/assets/banks/gsat-111-science/Q16-option-B-figure-1.png)。來源：111年學科能力測驗自然第16題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -351,15 +359,20 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/Q16-question.png"
+      "/assets/banks/gsat-111-science/Q16-option-B-figure-1.png",
+      "/assets/banks/gsat-111-science/Q16-option-A-figure-1.png",
+      "/assets/banks/gsat-111-science/Q16-option-C-figure-1.png",
+      "/assets/banks/gsat-111-science/Q16-option-D-figure-1.png",
+      "/assets/banks/gsat-111-science/Q16-option-E-figure-1.png"
     ],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q19",
     "difficulty": "easy",
-    "q": "【共用閱讀資料】\n19-20題為題組\n\n  分析細胞的DNA含量可瞭解組織中細胞的染色體套數或細胞所處之時期。研究者對某\n  一具雙套染色體之生物，將其DNA以螢光物質染色，利用DNA含量與螢光強度成正比\n\n  的原理，統計組織中不同螢光強度的細胞個數。\n\n依據上文，下列對於細胞有絲分裂的敘述，何者正確？",
+    "q": "【共用閱讀資料】\n19-20題為題組\n\n分析細胞的DNA含量可瞭解組織中細胞的染色體套數或細胞所處之時期。研究者對某一具雙套染色體之生物，將其DNA以螢光物質染色，利用DNA含量與螢光強度成正比的原理，統計組織中不同螢光強度的細胞個數。\n\n依據上文，下列對於細胞有絲分裂的敘述，何者正確？",
     "correct": "細胞分裂完成時，細胞具雙套染色體，螢光強度較間期時弱",
     "wrong": [
       "細胞分裂過程中，細胞因具單套染色體，螢光強度最弱",
@@ -388,20 +401,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q29",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/gsat-111-science/G28-29-context.png)\n\n![第29題原卷資料](/assets/banks/gsat-111-science/Q29-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n28-29題為題組\n\n2020年7月30日美國太空總署探測車「毅力號」發射升空，並降落在火星表面「傑澤羅坑」邊緣一個富存黏土礦物與碳酸鹽的三角洲附近（圖12中的白色圓圈區域）。\n\n圖13是圖12的局部放大影像，當中可見（甲）小隕石坑、（乙）波紋狀的風成沙丘、（丙）三角洲。此地貌由老到新的形成順序為何？\n\n圖13\n\n甲\n\n乙\n\n丙\n\n![圖表](/assets/banks/gsat-111-science/Q29-figure-1.png)",
+    "correct": "丙-甲-乙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "甲-乙-丙",
+      "乙-丙-甲",
+      "丙-乙-甲",
+      "乙-甲-丙\n\n![圖表](/assets/banks/gsat-111-science/Q29-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第29題。",
+    "exp": "正確答案：丙-甲-乙。來源：111年學科能力測驗自然第29題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -421,16 +435,17 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G28-29-context.png",
-      "/assets/banks/gsat-111-science/Q29-question.png"
+      "/assets/banks/gsat-111-science/Q29-figure-1.png",
+      "/assets/banks/gsat-111-science/Q29-option-E-figure-1.png"
     ],
     "passRate": 0.51,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q31",
     "difficulty": "medium",
-    "q": "天體的顏色提供豐富訊息。例如：織女星發出藍白光芒，心宿二顏色偏紅，天王星外觀\n\n 為藍綠色，火星呈暗紅色。依據以上描述，下列何者正確？",
+    "q": "天體的顏色提供豐富訊息。例如：織女星發出藍白光芒，心宿二顏色偏紅，天王星外觀為藍綠色，火星呈暗紅色。依據以上描述，下列何者正確？",
     "correct": "織女星的表面溫度比心宿二高",
     "wrong": [
       "天王星的表面溫度比火星高",
@@ -455,20 +470,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.45,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q33",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/gsat-111-science/Q33-question.png)",
-    "correct": "原卷選項 D",
+    "q": "古人將所見星空，想成是繁星投影在一個無限大，以地球為中心且具有相同旋轉軸的天球。太陽一年的視軌跡為黃道，與天球赤道夾$23.5^{\\circ}$。天球概念之示意圖如圖15，若以地球繞太陽公轉來推論太陽在天球中的移動軌跡，圖中對北半球而言，太陽自春分到冬至的移動順序為下列何者？\n\n圖15\n\n天球北極\n\n天球南極\n\n黃道\n\n人馬座\n\n摩羯座\n\n寶瓶座\n\n雙魚座\n\n白羊座\n\n巨蟹座\n\n獅子座\n\n室女座\n\n金牛座\n\n雙子座\n\n天球赤道\n\n天秤座\n\n天蠍座\n\n丙\n\n乙\n\n丁\n\n甲\n\n![圖表](/assets/banks/gsat-111-science/Q33-figure-1.png)\n",
+    "correct": "丁→丙→乙→甲",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "甲→乙→丙→丁",
+      "乙→丙→丁→甲",
+      "甲→丁→丙→乙",
+      "丙→丁→甲→乙\n\n![圖表](/assets/banks/gsat-111-science/Q33-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第33題。",
+    "exp": "正確答案：丁→丙→乙→甲。來源：111年學科能力測驗自然第33題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -484,15 +500,17 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/Q33-question.png"
+      "/assets/banks/gsat-111-science/Q33-figure-1.png",
+      "/assets/banks/gsat-111-science/Q33-option-E-figure-1.png"
     ],
     "passRate": 0.32,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q35",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n35-36題為題組\n\n  日本鰻在河川中成長，將成熟時，洄游數千公里到馬里亞納群島海域產卵。孵化後，幼\n\n  魚隨北赤道洋流與黑潮漂游到近岸，再游進河川。每年冬季都可見日本、韓國、臺灣、\n\n  大陸等地漁民於沿岸捕撈鰻苗供養殖所需。\n\n根據短文，以下推論何者有顯著錯誤？",
+    "q": "【共用閱讀資料】\n35-36題為題組\n\n日本鰻在河川中成長，將成熟時，洄游數千公里到馬里亞納群島海域產卵。孵化後，幼魚隨北赤道洋流與黑潮漂游到近岸，再游進河川。每年冬季都可見日本、韓國、臺灣、大陸等地漁民於沿岸捕撈鰻苗供養殖所需。\n\n根據短文，以下推論何者有<u>顯著錯誤</u>？",
     "correct": "已知黑潮平均流速約1 m/s，相對於日本九州海岸，臺灣鰻苗漁汛多半提早一至兩天",
     "wrong": [
       "若鰻的幼魚被動地隨著黑潮漂送，則鰻苗於東亞的分布情形可以反應黑潮的流況分布",
@@ -521,20 +539,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q36",
     "difficulty": "hard",
-    "q": "【共用閱讀資料】\n35-36題為題組\n\n  日本鰻在河川中成長，將成熟時，洄游數千公里到馬里亞納群島海域產卵。孵化後，幼\n\n  魚隨北赤道洋流與黑潮漂游到近岸，再游進河川。每年冬季都可見日本、韓國、臺灣、\n\n  大陸等地漁民於沿岸捕撈鰻苗供養殖所需。\n\n鰻魚可感知鹽度以找尋適當河川。已知表層之黑潮水鹽度為33 ‰，河水鹽度為1 ‰，\n  假設水體充分混合，當鰻魚所在水域之鹽度為25 ‰時，黑潮水與河水混合的重量比例\n\n  為何？",
-    "correct": "3:1",
+    "q": "【共用閱讀資料】\n35-36題為題組\n\n日本鰻在河川中成長，將成熟時，洄游數千公里到馬里亞納群島海域產卵。孵化後，幼魚隨北赤道洋流與黑潮漂游到近岸，再游進河川。每年冬季都可見日本、韓國、臺灣、大陸等地漁民於沿岸捕撈鰻苗供養殖所需。\n\n鰻魚可感知鹽度以找尋適當河川。已知表層之黑潮水鹽度為33 ‰，河水鹽度為1 ‰，假設水體充分混合，當鰻魚所在水域之鹽度為25 ‰時，黑潮水與河水混合的重量比例為何？",
+    "correct": "$3:1$",
     "wrong": [
-      "2:3",
-      "1:1",
-      "3: 2",
-      "1: 2"
+      "$2:3$",
+      "$1:1$",
+      "$3:2$",
+      "$1:2$"
     ],
-    "exp": "正確答案：3:1。來源：111年學科能力測驗自然第36題。",
+    "exp": "正確答案：$3:1$。來源：111年學科能力測驗自然第36題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -556,20 +575,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.23,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q41",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/gsat-111-science/G37-42-context.png)\n\n![第41題原卷資料](/assets/banks/gsat-111-science/Q41-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n37-42題為題組\n\n黑碳是指生質或化石燃料經不完全燃燒形成的產物，可經過幾千年到幾百萬年，不易分解。小芊想測量古地質樣品中的黑碳，老師告訴小芊，樣品中還有許多含碳物質，如動植物殘骸、化石燃料及油母質等，會影響黑碳含量的評估，因此必須先分離出不是屬於黑碳的碳質。油母質是指動植物遺骸（通常是藻類或木質植物）在地下深處被細菌分解，除去醣類、脂肪酸及胺基酸後，殘留下不溶於有機溶劑的高分子聚合物。\n\n由文獻得知，以油母質與木炭做為實驗樣品，在酸性環境下，使用甲、乙、丙三種不同濃度的二鉻酸（$H_2Cr_2O_7$）進行反應，得不同的反應時間點下，碳的殘留百分比，如圖17。根據上文與實驗結果，回答下列問題。\n\n甲濃度\n\n乙濃度\n\n丙濃度\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n碳\n\n的\n\n殘\n\n留\n\n百\n\n分\n\n比\n\n（%）\n\n反應時間（小時）\n\n油母質樣品\n\n碳\n\n的\n\n殘\n\n留\n\n百\n\n分\n\n比\n\n（%）\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n反應時間（小時）\n\n甲濃度\n\n乙濃度\n\n丙濃度\n\n木炭\n\n圖17\n\n在古土壤與二鉻酸充分反應移除不屬於黑碳的碳質後，以下實驗敘述，何者可以較易且最準確地得到樣品中黑碳含量？\n\n![圖表](/assets/banks/gsat-111-science/G37-42-figure-1.png)\n\n\n\n",
+    "correct": "在氧氣下點火充分燃燒後，產生的氣體依序通入過氯酸鎂、氫氧化鈉後再分別秤重",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "直接烘乾秤重",
+      "以有機溶劑充分潤洗後烘乾秤重",
+      "在氧氣下點火充分燃燒，產生的氣體用排水集氣法收集",
+      "通入氫氣反應，測量生成的甲烷體積"
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第41題。",
+    "exp": "正確答案：在氧氣下點火充分燃燒後，產生的氣體依序通入過氯酸鎂、氫氧化鈉後再分別秤重。來源：111年學科能力測驗自然第41題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -590,24 +610,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G37-42-context.png",
-      "/assets/banks/gsat-111-science/Q41-question.png"
+      "/assets/banks/gsat-111-science/G37-42-figure-1.png"
     ],
     "passRate": 0.35,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q43",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/gsat-111-science/G43-45-context-1.png)\n\n![第43題原卷資料](/assets/banks/gsat-111-science/G43-45-context-2.png)\n\n![第43題原卷資料](/assets/banks/gsat-111-science/Q43-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n43-45題為題組\n\n某海岸有不同高程的海階，如圖18的$T_0$至$T_3$所示。海階常有海蝕凹壁。小莉推論海蝕凹壁為當地堅硬的火成岩壁受潮水長期侵蝕而成。海蝕凹壁上常有大量的穿孔貝附著在凹壁上。穿孔貝僅在潮起潮落之間的高度存活，無法長期離開水面。因此，小莉推論此海階上的海蝕凹壁主要由大地震所造成的垂直抬升而成。小莉詳細丈量每個海階和海蝕凹壁的高程，並利用凹壁上穿孔貝的碳進行碳-14定年分析。所得的結果如表3所示。\n\n圖18\n\n\n\n100（m）\n\n\n\n\n\n\n\n\n\n（m）\n\n火成岩\n\n海蝕凹壁\n\n沉積物\n\nT<sub>3</sub>\n\nT<sub>2</sub>\n\nT<sub>1</sub>\n\nT<sub>0</sub>\n\n| 表3 |\n| 階地 | 累積高程（m） | 定年結果（年） |\n| $T_0$ | 0 | 0 |\n| $T_1$ | 6 | 800 |\n| $T_2$ | 10 | 1600 |\n| $T_3$ | 18 | 2400 |\n\n該海蝕凹壁生成的過程中，下列何項地質作用影響最小？\n\n![圖表](/assets/banks/gsat-111-science/G43-45-figure-1.png)\n",
+    "correct": "變質作用",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "侵蝕作用",
+      "搬運作用",
+      "風化作用",
+      "大地震瞬間抬升"
     ],
-    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗自然第43題。",
+    "exp": "正確答案：變質作用。來源：111年學科能力測驗自然第43題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -628,25 +648,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G43-45-context-1.png",
-      "/assets/banks/gsat-111-science/G43-45-context-2.png",
-      "/assets/banks/gsat-111-science/Q43-question.png"
+      "/assets/banks/gsat-111-science/G43-45-figure-1.png"
     ],
     "passRate": 0.47,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q50",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/gsat-111-science/G49-54-context.png)\n\n![第50題原卷資料](/assets/banks/gsat-111-science/Q50-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n49-54題為題組\n\n測量血液流速的血流儀是以都卜勒效應為原理製成。若血流儀的感測器以頻率為$f$的聲波或光波入射到血液，而接收到的反射波頻率為（$f+\\Delta f$），$\\Delta f$的量值與血液流速可近似為成正比。圖21為探究飲酒對於血液流速影響的監測數據曲線。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n時間（秒）\n\n飲酒前\n\n飲酒後\n\n血液流速增加\n\n圖21\n\n血液流速（相對數值）\n\n感測器靜止放置在皮膚表面，已知血液的流動方向使血液中的物質接近感測器，若監測血液流速的光波其特性代號如表4所示，則在相同的介質之中，入射波與反射波特性的關係，何者正確？\n\n![圖表](/assets/banks/gsat-111-science/G49-54-figure-1.png)\n\n",
+    "correct": "$\\lambda _{\\,I}>\\lambda _{\\,R}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "$v_I>v_R$",
+      "$f_I>f_R$",
+      "$T_I<T_R$",
+      "$\\lambda \\,_I=\\lambda \\,_R$\n\n| 表4 |\n|  | 波速 | 波長 | 頻率 | 週期 |\n| 入射波特性代號 | $v_I$ | $\\lambda _{\\,I}$ | $f_I$ | $T_I$ |\n| 反射波特性代號 | $v_R$ | $\\lambda _{\\,R}$ | $f_R$ | $T_R$ |"
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗自然第50題。",
+    "exp": "正確答案：$\\lambda _{\\,I}>\\lambda _{\\,R}$。來源：111年學科能力測驗自然第50題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -667,24 +686,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G49-54-context.png",
-      "/assets/banks/gsat-111-science/Q50-question.png"
+      "/assets/banks/gsat-111-science/G49-54-figure-1.png"
     ],
     "passRate": 0.67,
-    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q52",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/gsat-111-science/G49-54-context.png)\n\n![第52題原卷資料](/assets/banks/gsat-111-science/Q52-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n49-54題為題組\n\n測量血液流速的血流儀是以都卜勒效應為原理製成。若血流儀的感測器以頻率為$f$的聲波或光波入射到血液，而接收到的反射波頻率為（$f+\\Delta f$），$\\Delta f$的量值與血液流速可近似為成正比。圖21為探究飲酒對於血液流速影響的監測數據曲線。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n時間（秒）\n\n飲酒前\n\n飲酒後\n\n血液流速增加\n\n圖21\n\n血液流速（相對數值）\n\n承49題，依據生物學知識判斷，血液流速變化中高頻的成分$f_H$，主要是由下列何種作用或機制所影響？\n\n![圖表](/assets/banks/gsat-111-science/G49-54-figure-1.png)\n\n",
+    "correct": "心跳",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "呼吸",
+      "排泄",
+      "酒精發酵",
+      "能量產生"
     ],
-    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗自然第52題。",
+    "exp": "正確答案：心跳。來源：111年學科能力測驗自然第52題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -705,22 +724,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G49-54-context.png",
-      "/assets/banks/gsat-111-science/Q52-question.png"
-    ]
+      "/assets/banks/gsat-111-science/G49-54-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q53",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 53 題。\n\n![第53題原卷資料](/assets/banks/gsat-111-science/G49-54-context.png)\n\n![第53題原卷資料](/assets/banks/gsat-111-science/Q53-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n49-54題為題組\n\n測量血液流速的血流儀是以都卜勒效應為原理製成。若血流儀的感測器以頻率為$f$的聲波或光波入射到血液，而接收到的反射波頻率為（$f+\\Delta f$），$\\Delta f$的量值與血液流速可近似為成正比。圖21為探究飲酒對於血液流速影響的監測數據曲線。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n時間（秒）\n\n飲酒前\n\n飲酒後\n\n血液流速增加\n\n圖21\n\n血液流速（相對數值）\n\n依據圖23中之血液抹片圖，並假設血流儀射入一波長800奈米的雷射光，則反射波主要由下列何者所反射？\n\n圖23\n\n![圖表](/assets/banks/gsat-111-science/G49-54-figure-1.png)\n\n\n![圖表](/assets/banks/gsat-111-science/Q53-figure-1.png)",
+    "correct": "紅血球",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "白血球",
+      "血小板",
+      "蛋白質",
+      "水\n\n![圖表](/assets/banks/gsat-111-science/Q53-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗自然第53題。",
+    "exp": "正確答案：紅血球。來源：111年學科能力測驗自然第53題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -741,22 +760,24 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G49-54-context.png",
-      "/assets/banks/gsat-111-science/Q53-question.png"
-    ]
+      "/assets/banks/gsat-111-science/G49-54-figure-1.png",
+      "/assets/banks/gsat-111-science/Q53-figure-1.png",
+      "/assets/banks/gsat-111-science/Q53-option-E-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-science-q58",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/gsat-111-science/G58-60-context.png)\n\n![第58題原卷資料](/assets/banks/gsat-111-science/Q58-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n58-60題為題組\n\n量子科學以光電科技改善了生活，也增進了質量國際標準的精密與穩定。科學家發現電壓、電阻與電磁波能量等電磁量的量子單元，與普朗克常數$h$相關，因此訂$h=6.62607015\\times 10^{-34} J\\cdot s$為新的質量基準。工程師使用類似於圖26的電磁天平來校準質量，並利用經過量子單元校正的電磁量，來測量與換算線圈的電壓與電流，藉以連結質量$M$與普朗克常數$h$。\n\n某生利用積木製作一座類似於圖26等臂的電磁天平。圖中右側為秤盤，左側為線圈和磁鐵，X與Y代表固定磁鐵的兩極。以支點為軸，線圈與秤盤可以是維持於水平的靜態模式，或上下微幅振動的動態模式。\n\n圖26\n\n線圈\n\n\n\n重力\n\n磁力\n\n\n\n\n\n固定磁鐵\n\n關於文中提到的物理量，哪個為基本量？\n\n![圖表](/assets/banks/gsat-111-science/G58-60-figure-1.png)",
+    "correct": "質量",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "電阻",
+      "電壓",
+      "能量",
+      "磁場"
     ],
-    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗自然第58題。",
+    "exp": "正確答案：質量。來源：111年學科能力測驗自然第58題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -776,8 +797,8 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-science/G58-60-context.png",
-      "/assets/banks/gsat-111-science/Q58-question.png"
-    ]
+      "/assets/banks/gsat-111-science/G58-60-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

@@ -2,7 +2,7 @@
   {
     "id": "gsat-112-english-q1",
     "difficulty": "medium",
-    "q": "The bus driver often complains about chewing gum found under passenger seats because it is       and\n   very hard to remove.",
+    "q": "The bus driver often complains about chewing gum found under passenger seats because it is and very hard to remove.",
     "correct": "sticky",
     "wrong": [
       "greasy",
@@ -24,12 +24,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q2",
     "difficulty": "medium",
-    "q": "Jesse is a talented model. He can easily adopt an elegant          for a camera shoot.",
+    "q": "Jesse is a talented model. He can easily adopt an elegant for a camera shoot.",
     "correct": "pose",
     "wrong": [
       "clap",
@@ -51,12 +52,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q3",
     "difficulty": "medium",
-    "q": "In order to draw her family tree, Mary tried to trace her         back to their arrival in North America.",
+    "q": "In order to draw her family tree, Mary tried to trace her back to their arrival in North America.",
     "correct": "ancestors",
     "wrong": [
       "siblings",
@@ -78,12 +80,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q4",
     "difficulty": "medium",
-    "q": "Upon the super typhoon warning, Nancy rushed to the supermarket—only to find the shelves almost\n   ______ and the stock nearly gone.",
+    "q": "Upon the super typhoon warning, Nancy rushed to the supermarket—only to find the shelves almost ______ and the stock nearly gone.",
     "correct": "bare",
     "wrong": [
       "blank",
@@ -105,12 +108,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q5",
     "difficulty": "medium",
-    "q": "Even though Jack said “Sorry!” to me in person, I did not feel any          in his apology.",
+    "q": "Even though Jack said “Sorry!” to me in person, I did not feel any in his apology.",
     "correct": "sincerity",
     "wrong": [
       "liability",
@@ -132,12 +136,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q6",
     "difficulty": "medium",
-    "q": "My grandfather has astonishing powers of              . He can still vividly describe his first day at school\n    as a child.",
+    "q": "My grandfather has astonishing powers of . He can still vividly describe his first day at school as a child.",
     "correct": "recall",
     "wrong": [
       "resolve",
@@ -159,12 +164,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q7",
     "difficulty": "medium",
-    "q": "Recent research has found lots of evidence to          the drug company’s claims about its “miracle”\n    tablets for curing cancer.",
+    "q": "Recent research has found lots of evidence to the drug company’s claims about its “miracle” tablets for curing cancer.",
     "correct": "counter",
     "wrong": [
       "provoke",
@@ -186,12 +192,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q8",
     "difficulty": "medium",
-    "q": "Corrupt officials and misguided policies have          the country’s economy and burdened its people\n   with enormous foreign debts.",
+    "q": "Corrupt officials and misguided policies have the country’s economy and burdened its people with enormous foreign debts.",
     "correct": "crippled",
     "wrong": [
       "accelerated",
@@ -213,12 +220,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q9",
     "difficulty": "medium",
-    "q": "As a record number of fans showed up for the baseball final, the highways around the stadium were\n           with traffic all day.",
+    "q": "As a record number of fans showed up for the baseball final, the highways around the stadium were\nwith traffic all day.",
     "correct": "choked",
     "wrong": [
       "disturbed",
@@ -240,12 +248,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q10",
     "difficulty": "medium",
-    "q": "Studies show that the         unbiased media are in fact often deeply influenced by political ideology.",
+    "q": "Studies show that the unbiased media are in fact often deeply influenced by political ideology.",
     "correct": "supposedly",
     "wrong": [
       "undoubtedly",
@@ -267,12 +276,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q11",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nIn certain forests, when you look up you will see a network of cracks formed by gaps between the outermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing just perfectly so it almost, <u>11</u> , touches the neighboring tree. This beautiful phenomenon is called crown shyness.\n\nScientists have been discussing crown shyness since the 1920s, proposing <u>12</u> explanations for the phenomenon. Some researchers point out that as trees often grow close together, treetops can easily collide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain “shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\nOther scientists suggest that plants, like animals, <u>13</u> resources—nutrients, water, space, and light. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the treetops resulting from crown shyness may allow trees to increase their <u>14</u> light and enhance photosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be able to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to tree. <u>15</u> decades of investigation, there is no consensus on exactly what causes the beautiful and mysterious phenomenon of crown shyness.",
     "correct": "but not quite",
     "wrong": [
       "in no time",
@@ -298,12 +308,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q12",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nIn certain forests, when you look up you will see a network of cracks formed by gaps between the outermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing just perfectly so it almost, <u>11</u> , touches the neighboring tree. This beautiful phenomenon is called crown shyness.\n\nScientists have been discussing crown shyness since the 1920s, proposing <u>12</u> explanations for the phenomenon. Some researchers point out that as trees often grow close together, treetops can easily collide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain “shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\nOther scientists suggest that plants, like animals, <u>13</u> resources—nutrients, water, space, and light. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the treetops resulting from crown shyness may allow trees to increase their <u>14</u> light and enhance photosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be able to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to tree. <u>15</u> decades of investigation, there is no consensus on exactly what causes the beautiful and mysterious phenomenon of crown shyness.",
     "correct": "multiple",
     "wrong": [
       "universal",
@@ -329,12 +340,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q13",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nIn certain forests, when you look up you will see a network of cracks formed by gaps between the outermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing just perfectly so it almost, <u>11</u> , touches the neighboring tree. This beautiful phenomenon is called crown shyness.\n\nScientists have been discussing crown shyness since the 1920s, proposing <u>12</u> explanations for the phenomenon. Some researchers point out that as trees often grow close together, treetops can easily collide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain “shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\nOther scientists suggest that plants, like animals, <u>13</u> resources—nutrients, water, space, and light. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the treetops resulting from crown shyness may allow trees to increase their <u>14</u> light and enhance photosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be able to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to tree. <u>15</u> decades of investigation, there is no consensus on exactly what causes the beautiful and mysterious phenomenon of crown shyness.",
     "correct": "compete for",
     "wrong": [
       "get over",
@@ -360,12 +372,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q14",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nIn certain forests, when you look up you will see a network of cracks formed by gaps between the outermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing just perfectly so it almost, <u>11</u> , touches the neighboring tree. This beautiful phenomenon is called crown shyness.\n\nScientists have been discussing crown shyness since the 1920s, proposing <u>12</u> explanations for the phenomenon. Some researchers point out that as trees often grow close together, treetops can easily collide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain “shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\nOther scientists suggest that plants, like animals, <u>13</u> resources—nutrients, water, space, and light. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the treetops resulting from crown shyness may allow trees to increase their <u>14</u> light and enhance photosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be able to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to tree. <u>15</u> decades of investigation, there is no consensus on exactly what causes the beautiful and mysterious phenomenon of crown shyness.",
     "correct": "exposure to",
     "wrong": [
       "reliance on",
@@ -391,12 +404,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q15",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nIn certain forests, when you look up you will see a network of cracks formed by gaps between the outermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing just perfectly so it almost, <u>11</u> , touches the neighboring tree. This beautiful phenomenon is called crown shyness.\n\nScientists have been discussing crown shyness since the 1920s, proposing <u>12</u> explanations for the phenomenon. Some researchers point out that as trees often grow close together, treetops can easily collide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain “shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\nOther scientists suggest that plants, like animals, <u>13</u> resources—nutrients, water, space, and light. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the treetops resulting from crown shyness may allow trees to increase their <u>14</u> light and enhance photosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be able to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to tree. <u>15</u> decades of investigation, there is no consensus on exactly what causes the beautiful and mysterious phenomenon of crown shyness.",
     "correct": "Despite",
     "wrong": [
       "For",
@@ -422,12 +436,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q16",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nGravity has been at the top of the science agenda since the start of Mars missions. In the earlier days of space travel, scientists tried to overcome the force of gravity so that a rocket could shoot <u>16</u> Earth’s pull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects the astronauts’ <u>17</u> condition.\n\nOur bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g) or the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they are pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n<u>18</u> , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces, very much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie Brown effect” will be more <u>19</u> when the astronauts go on their Mars missions, which will take about three years to complete, much longer than missions to the moon. Moreover, the effect is often <u>20</u> space motion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts, and scientists are still trying to figure out how it may be prevented.",
     "correct": "free of",
     "wrong": [
       "back to",
@@ -453,12 +468,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q17",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nGravity has been at the top of the science agenda since the start of Mars missions. In the earlier days of space travel, scientists tried to overcome the force of gravity so that a rocket could shoot <u>16</u> Earth’s pull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects the astronauts’ <u>17</u> condition.\n\nOur bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g) or the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they are pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n<u>18</u> , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces, very much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie Brown effect” will be more <u>19</u> when the astronauts go on their Mars missions, which will take about three years to complete, much longer than missions to the moon. Moreover, the effect is often <u>20</u> space motion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts, and scientists are still trying to figure out how it may be prevented.",
     "correct": "physical",
     "wrong": [
       "perceptual",
@@ -484,12 +500,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q18",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nGravity has been at the top of the science agenda since the start of Mars missions. In the earlier days of space travel, scientists tried to overcome the force of gravity so that a rocket could shoot <u>16</u> Earth’s pull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects the astronauts’ <u>17</u> condition.\n\nOur bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g) or the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they are pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n<u>18</u> , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces, very much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie Brown effect” will be more <u>19</u> when the astronauts go on their Mars missions, which will take about three years to complete, much longer than missions to the moon. Moreover, the effect is often <u>20</u> space motion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts, and scientists are still trying to figure out how it may be prevented.",
     "correct": "redistribute",
     "wrong": [
       "redistributed",
@@ -515,12 +532,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q19",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nGravity has been at the top of the science agenda since the start of Mars missions. In the earlier days of space travel, scientists tried to overcome the force of gravity so that a rocket could shoot <u>16</u> Earth’s pull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects the astronauts’ <u>17</u> condition.\n\nOur bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g) or the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they are pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n<u>18</u> , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces, very much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie Brown effect” will be more <u>19</u> when the astronauts go on their Mars missions, which will take about three years to complete, much longer than missions to the moon. Moreover, the effect is often <u>20</u> space motion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts, and scientists are still trying to figure out how it may be prevented.",
     "correct": "severe",
     "wrong": [
       "contagious",
@@ -546,12 +564,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q20",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nGravity has been at the top of the science agenda since the start of Mars missions. In the earlier days of space travel, scientists tried to overcome the force of gravity so that a rocket could shoot <u>16</u> Earth’s pull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects the astronauts’ <u>17</u> condition.\n\nOur bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g) or the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they are pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n<u>18</u> , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces, very much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie Brown effect” will be more <u>19</u> when the astronauts go on their Mars missions, which will take about three years to complete, much longer than missions to the moon. Moreover, the effect is often <u>20</u> space motion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts, and scientists are still trying to figure out how it may be prevented.",
     "correct": "accompanied by",
     "wrong": [
       "varied with",
@@ -577,13 +596,14 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q21",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 21 空格最適合的選項。",
-    "correct": "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 21 空格最適合的選項。",
+    "correct": "reach for",
     "wrong": [
       "absorption",
       "active",
@@ -595,7 +615,7 @@
       "status",
       "pass through"
     ],
-    "exp": "正確答案：reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。。來源：112年學科能力測驗英文第21題。",
+    "exp": "正確答案：reach for\n\n四、篇章結構（占8分）\n\n說明︰第31題至第34題為單選題，每題2分。。來源：112年學科能力測驗英文第21題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -615,12 +635,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q22",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 22 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 22 空格最適合的選項。",
     "correct": "active",
     "wrong": [
       "absorption",
@@ -631,7 +652,7 @@
       "even",
       "status",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：active。來源：112年學科能力測驗英文第22題。",
     "subject": "英文",
@@ -653,12 +674,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q23",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 23 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 23 空格最適合的選項。",
     "correct": "even",
     "wrong": [
       "absorption",
@@ -669,7 +691,7 @@
       "effective",
       "status",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：even。來源：112年學科能力測驗英文第23題。",
     "subject": "英文",
@@ -691,12 +713,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q24",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 24 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 24 空格最適合的選項。",
     "correct": "effective",
     "wrong": [
       "absorption",
@@ -707,7 +730,7 @@
       "even",
       "status",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：effective。來源：112年學科能力測驗英文第24題。",
     "subject": "英文",
@@ -729,12 +752,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q25",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 25 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 25 空格最適合的選項。",
     "correct": "absorption",
     "wrong": [
       "active",
@@ -745,7 +769,7 @@
       "even",
       "status",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：absorption。來源：112年學科能力測驗英文第25題。",
     "subject": "英文",
@@ -767,12 +791,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q26",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 26 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 26 空格最適合的選項。",
     "correct": "status",
     "wrong": [
       "absorption",
@@ -783,7 +808,7 @@
       "effective",
       "even",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：status。來源：112年學科能力測驗英文第26題。",
     "subject": "英文",
@@ -805,12 +830,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q27",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 27 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 27 空格最適合的選項。",
     "correct": "option",
     "wrong": [
       "absorption",
@@ -821,7 +847,7 @@
       "even",
       "status",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：option。來源：112年學科能力測驗英文第27題。",
     "subject": "英文",
@@ -843,12 +869,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q28",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 28 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 28 空格最適合的選項。",
     "correct": "alert",
     "wrong": [
       "absorption",
@@ -859,7 +886,7 @@
       "even",
       "status",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：alert。來源：112年學科能力測驗英文第28題。",
     "subject": "英文",
@@ -881,12 +908,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q29",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 29 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 29 空格最適合的選項。",
     "correct": "pass through",
     "wrong": [
       "absorption",
@@ -897,7 +925,7 @@
       "effective",
       "even",
       "status",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：pass through。來源：112年學科能力測驗英文第29題。",
     "subject": "英文",
@@ -919,12 +947,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q30",
     "difficulty": "medium",
-    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 30 空格最適合的選項。",
+    "q": "第21至30題為題組\n\nWater makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain water is considered our best choice, for it contains no sugar and no calories. Yet, is water always the healthiest drink we can <u>21</u> ? Well, it depends on who and where we are, and what we’re doing.\n\nObviously, a physically <u>22</u> person with an outdoor job under the sun will need to drink more fluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than that. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with just plain water means the body has too much water and not enough salt. To <u>23</u> things out, the body will get rid of water by producing urine. For this reason, milk can actually be more <u>24</u> than drinking water. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to help stimulate water <u>25</u> . Coconut water, which contains salt and carbohydrates, is also more functional than water at restoring and maintaining a normal fluid <u>26</u> after exercise.\n\nFor the average person, however, water remains a very good <u>27</u> for keeping hydrated—if you know how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must already have been significant changes in your body for it to eventually <u>28</u> your consciousness. At that point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can cause more water to <u>29</u> the body quickly and come out as urine. To <u>30</u> this, you need to drink water throughout the day to maintain your hydration levels.\n\n請選出第 30 空格最適合的選項。",
     "correct": "combat",
     "wrong": [
       "absorption",
@@ -935,7 +964,7 @@
       "even",
       "status",
       "pass through",
-      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+      "reach for"
     ],
     "exp": "正確答案：combat。來源：112年學科能力測驗英文第30題。",
     "subject": "英文",
@@ -957,17 +986,18 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q31",
     "difficulty": "medium",
-    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 31 空格最適合的選項。",
+    "q": "第31至34題為題組\n\nHave you ever thought of “coloring” the names of the days of the week? When you listen to someone speaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so, it is very likely that you have synesthesia.\n\nSynesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia may experience colors when they hear, read, or even think of letters and numbers. In others, words can trigger a real sensation of taste on their tongue.\n\n<u>31</u> In the early 1990s, however, scientists noticed that synesthetic colors do not change over time. When asked what color is evoked by a letter or number, synesthetic people would persistently give the same answer even if tested months or years apart. <u>32</u> The most compelling support, however, comes from brain scans, which show that color processing areas in the brain light up when these people listen to certain words.\n\nIs synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a genetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been identified yet. <u>33</u> For example, the flavors people with taste-word synesthesia experience are usually childhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often than not have had early musical training.\n\nOnce thought to be extremely rare, synesthesia is now found to affect about one to four percent of the population. <u>34</u> As is often observed, most of us tend to associate lower notes with darker colors and higher notes with brighter colors. Researchers further point out that in most people synesthesia is active only during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 31 空格最適合的選項。",
     "correct": "People with synesthesia used to be accused of making their experiences up.",
     "wrong": [
       "This consistency serves as a proof that synesthesia is real.",
       "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
-      "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。"
+      "Some studies even show that people may all be synesthetic to some degree."
     ],
     "exp": "正確答案：People with synesthesia used to be accused of making their experiences up.。來源：112年學科能力測驗英文第31題。",
     "subject": "英文",
@@ -989,17 +1019,18 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q32",
     "difficulty": "medium",
-    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 32 空格最適合的選項。",
+    "q": "第31至34題為題組\n\nHave you ever thought of “coloring” the names of the days of the week? When you listen to someone speaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so, it is very likely that you have synesthesia.\n\nSynesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia may experience colors when they hear, read, or even think of letters and numbers. In others, words can trigger a real sensation of taste on their tongue.\n\n<u>31</u> In the early 1990s, however, scientists noticed that synesthetic colors do not change over time. When asked what color is evoked by a letter or number, synesthetic people would persistently give the same answer even if tested months or years apart. <u>32</u> The most compelling support, however, comes from brain scans, which show that color processing areas in the brain light up when these people listen to certain words.\n\nIs synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a genetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been identified yet. <u>33</u> For example, the flavors people with taste-word synesthesia experience are usually childhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often than not have had early musical training.\n\nOnce thought to be extremely rare, synesthesia is now found to affect about one to four percent of the population. <u>34</u> As is often observed, most of us tend to associate lower notes with darker colors and higher notes with brighter colors. Researchers further point out that in most people synesthesia is active only during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 32 空格最適合的選項。",
     "correct": "This consistency serves as a proof that synesthesia is real.",
     "wrong": [
       "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
       "People with synesthesia used to be accused of making their experiences up.",
-      "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。"
+      "Some studies even show that people may all be synesthetic to some degree."
     ],
     "exp": "正確答案：This consistency serves as a proof that synesthesia is real.。來源：112年學科能力測驗英文第32題。",
     "subject": "英文",
@@ -1021,17 +1052,18 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q33",
     "difficulty": "medium",
-    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 33 空格最適合的選項。",
+    "q": "第31至34題為題組\n\nHave you ever thought of “coloring” the names of the days of the week? When you listen to someone speaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so, it is very likely that you have synesthesia.\n\nSynesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia may experience colors when they hear, read, or even think of letters and numbers. In others, words can trigger a real sensation of taste on their tongue.\n\n<u>31</u> In the early 1990s, however, scientists noticed that synesthetic colors do not change over time. When asked what color is evoked by a letter or number, synesthetic people would persistently give the same answer even if tested months or years apart. <u>32</u> The most compelling support, however, comes from brain scans, which show that color processing areas in the brain light up when these people listen to certain words.\n\nIs synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a genetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been identified yet. <u>33</u> For example, the flavors people with taste-word synesthesia experience are usually childhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often than not have had early musical training.\n\nOnce thought to be extremely rare, synesthesia is now found to affect about one to four percent of the population. <u>34</u> As is often observed, most of us tend to associate lower notes with darker colors and higher notes with brighter colors. Researchers further point out that in most people synesthesia is active only during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 33 空格最適合的選項。",
     "correct": "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
     "wrong": [
       "This consistency serves as a proof that synesthesia is real.",
       "People with synesthesia used to be accused of making their experiences up.",
-      "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。"
+      "Some studies even show that people may all be synesthetic to some degree."
     ],
     "exp": "正確答案：Meanwhile, environmental influences seem to shape a person’s synesthesia.。來源：112年學科能力測驗英文第33題。",
     "subject": "英文",
@@ -1053,19 +1085,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q34",
     "difficulty": "medium",
-    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 34 空格最適合的選項。",
-    "correct": "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。",
+    "q": "第31至34題為題組\n\nHave you ever thought of “coloring” the names of the days of the week? When you listen to someone speaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so, it is very likely that you have synesthesia.\n\nSynesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia may experience colors when they hear, read, or even think of letters and numbers. In others, words can trigger a real sensation of taste on their tongue.\n\n<u>31</u> In the early 1990s, however, scientists noticed that synesthetic colors do not change over time. When asked what color is evoked by a letter or number, synesthetic people would persistently give the same answer even if tested months or years apart. <u>32</u> The most compelling support, however, comes from brain scans, which show that color processing areas in the brain light up when these people listen to certain words.\n\nIs synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a genetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been identified yet. <u>33</u> For example, the flavors people with taste-word synesthesia experience are usually childhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often than not have had early musical training.\n\nOnce thought to be extremely rare, synesthesia is now found to affect about one to four percent of the population. <u>34</u> As is often observed, most of us tend to associate lower notes with darker colors and higher notes with brighter colors. Researchers further point out that in most people synesthesia is active only during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 34 空格最適合的選項。",
+    "correct": "Some studies even show that people may all be synesthetic to some degree.",
     "wrong": [
       "This consistency serves as a proof that synesthesia is real.",
       "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
       "People with synesthesia used to be accused of making their experiences up."
     ],
-    "exp": "正確答案：Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。。來源：112年學科能力測驗英文第34題。",
+    "exp": "正確答案：Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占24分）\n\n說明︰第35題至第46題為單選題，每題2分。。來源：112年學科能力測驗英文第34題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1085,19 +1118,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q35",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第35題原卷資料](/assets/banks/gsat-112-english/Q35-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n第35至38題為題組\n\nWhen did people first experience the joy of the hula hoop? Although the term did not emerge until the 18<sup>th</sup> century, toy hoops twirled around the waist, limbs, or neck can be traced back to ancient times. As early as 1000 BC, Egyptian children played with hoop toys of dried grapevine. They threw, jumped, and slung them around their bodies as we do today. They also struck them with sticks to roll them down the road. Hoop rolling was also popular in ancient Greece. Their hoops, often made of metal, were not merely toys for Greek children but served as exercise devices as well.\n\nIn the 14<sup>th</sup> century, hoops were popular as a form of recreation in Great Britain. The craze for hoops even resulted in dislocated backs and heart attacks, according to medical records. The term “hula,” however, did not enter the English language until the 1700s, when British sailors first witnessed hula dancing in the Hawaiian Islands. Though no hoops were used, the movements of the ritual dances looked very similar to those in hooping. Thus “hula” and “hoop” came together, resulting in the term “hula hooping.”\n\nHoops spun their way through the cultures of pre-colonial America as well. Often considered as representing the circle of life, hoops featured prominently in the ritual dances of Native Americans. Dancers used small reed hoops as symbolic representations of animals such as eagles or snakes. With very rapid movements, they used the hoops to construct the symbolic forms around their bodies.\n\nThe hula hoop gained international popularity in the late 1950s, when a plastic version was successfully marketed by California’s Wham-O toy company. Twenty-five million plastic hoops were sold in less than four months. The hula hoop “fad” is still going strong today.\n\nWhat question does the passage answer?",
+    "correct": "How was the word “hula-hooping” derived?",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Why did Wham-O start making hula hoops?",
+      "Where did Hawaiian hula dancing come from?",
+      "What was the favorite toy of ancient Egyptian kids?"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗英文第35題。",
+    "exp": "正確答案：How was the word “hula-hooping” derived?。來源：112年學科能力測驗英文第35題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1116,22 +1150,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-english/G35-38-context.png",
-      "/assets/banks/gsat-112-english/Q35-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q36",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第36題原卷資料](/assets/banks/gsat-112-english/Q36-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n第35至38題為題組\n\nWhen did people first experience the joy of the hula hoop? Although the term did not emerge until the 18<sup>th</sup> century, toy hoops twirled around the waist, limbs, or neck can be traced back to ancient times. As early as 1000 BC, Egyptian children played with hoop toys of dried grapevine. They threw, jumped, and slung them around their bodies as we do today. They also struck them with sticks to roll them down the road. Hoop rolling was also popular in ancient Greece. Their hoops, often made of metal, were not merely toys for Greek children but served as exercise devices as well.\n\nIn the 14<sup>th</sup> century, hoops were popular as a form of recreation in Great Britain. The craze for hoops even resulted in dislocated backs and heart attacks, according to medical records. The term “hula,” however, did not enter the English language until the 1700s, when British sailors first witnessed hula dancing in the Hawaiian Islands. Though no hoops were used, the movements of the ritual dances looked very similar to those in hooping. Thus “hula” and “hoop” came together, resulting in the term “hula hooping.”\n\nHoops spun their way through the cultures of pre-colonial America as well. Often considered as representing the circle of life, hoops featured prominently in the ritual dances of Native Americans. Dancers used small reed hoops as symbolic representations of animals such as eagles or snakes. With very rapid movements, they used the hoops to construct the symbolic forms around their bodies.\n\nThe hula hoop gained international popularity in the late 1950s, when a plastic version was successfully marketed by California’s Wham-O toy company. Twenty-five million plastic hoops were sold in less than four months. The hula hoop “fad” is still going strong today.\n\nWhich of the following statements is true about use of the hoop in history?",
+    "correct": "Ancient Greeks used it as a tool for workout.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "The British used it for medical purposes.",
+      "Native Americans used it to train animals.",
+      "Hawaiian dancers used it to represent the circle of life."
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年學科能力測驗英文第36題。",
+    "exp": "正確答案：Ancient Greeks used it as a tool for workout.。來源：112年學科能力測驗英文第36題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1150,22 +1182,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-english/G35-38-context.png",
-      "/assets/banks/gsat-112-english/Q36-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q37",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-112-english/Q37-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n第35至38題為題組\n\nWhen did people first experience the joy of the hula hoop? Although the term did not emerge until the 18<sup>th</sup> century, toy hoops twirled around the waist, limbs, or neck can be traced back to ancient times. As early as 1000 BC, Egyptian children played with hoop toys of dried grapevine. They threw, jumped, and slung them around their bodies as we do today. They also struck them with sticks to roll them down the road. Hoop rolling was also popular in ancient Greece. Their hoops, often made of metal, were not merely toys for Greek children but served as exercise devices as well.\n\nIn the 14<sup>th</sup> century, hoops were popular as a form of recreation in Great Britain. The craze for hoops even resulted in dislocated backs and heart attacks, according to medical records. The term “hula,” however, did not enter the English language until the 1700s, when British sailors first witnessed hula dancing in the Hawaiian Islands. Though no hoops were used, the movements of the ritual dances looked very similar to those in hooping. Thus “hula” and “hoop” came together, resulting in the term “hula hooping.”\n\nHoops spun their way through the cultures of pre-colonial America as well. Often considered as representing the circle of life, hoops featured prominently in the ritual dances of Native Americans. Dancers used small reed hoops as symbolic representations of animals such as eagles or snakes. With very rapid movements, they used the hoops to construct the symbolic forms around their bodies.\n\nThe hula hoop gained international popularity in the late 1950s, when a plastic version was successfully marketed by California’s Wham-O toy company. Twenty-five million plastic hoops were sold in less than four months. The hula hoop “fad” is still going strong today.\n\nWhich of the following is NOT mentioned as a way of enjoying hula hoop fun?",
+    "correct": "Kicking.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Striking.",
+      "Twirling.",
+      "Spinning."
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗英文第37題。",
+    "exp": "正確答案：Kicking.。來源：112年學科能力測驗英文第37題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1184,22 +1214,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-english/G35-38-context.png",
-      "/assets/banks/gsat-112-english/Q37-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q38",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第38題原卷資料](/assets/banks/gsat-112-english/Q38-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n第35至38題為題組\n\nWhen did people first experience the joy of the hula hoop? Although the term did not emerge until the 18<sup>th</sup> century, toy hoops twirled around the waist, limbs, or neck can be traced back to ancient times. As early as 1000 BC, Egyptian children played with hoop toys of dried grapevine. They threw, jumped, and slung them around their bodies as we do today. They also struck them with sticks to roll them down the road. Hoop rolling was also popular in ancient Greece. Their hoops, often made of metal, were not merely toys for Greek children but served as exercise devices as well.\n\nIn the 14<sup>th</sup> century, hoops were popular as a form of recreation in Great Britain. The craze for hoops even resulted in dislocated backs and heart attacks, according to medical records. The term “hula,” however, did not enter the English language until the 1700s, when British sailors first witnessed hula dancing in the Hawaiian Islands. Though no hoops were used, the movements of the ritual dances looked very similar to those in hooping. Thus “hula” and “hoop” came together, resulting in the term “hula hooping.”\n\nHoops spun their way through the cultures of pre-colonial America as well. Often considered as representing the circle of life, hoops featured prominently in the ritual dances of Native Americans. Dancers used small reed hoops as symbolic representations of animals such as eagles or snakes. With very rapid movements, they used the hoops to construct the symbolic forms around their bodies.\n\nThe hula hoop gained international popularity in the late 1950s, when a plastic version was successfully marketed by California’s Wham-O toy company. Twenty-five million plastic hoops were sold in less than four months. The hula hoop “fad” is still going strong today.\n\nAccording to the passage, what materials have been used for making hoops?",
+    "correct": "reed, grapevine, plastic, metal",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "reed, grapevine, bamboo, plastic",
+      "reed, bamboo, plastic, animal skin",
+      "grapevine, plastic, metal, animal skin"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗英文第38題。",
+    "exp": "正確答案：reed, grapevine, plastic, metal。來源：112年學科能力測驗英文第38題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1218,15 +1246,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-english/G35-38-context.png",
-      "/assets/banks/gsat-112-english/Q38-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q39",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhy do farmers in Assam dig trenches in tea gardens?",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nWhen you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean injury, or even death, for Asian elephants roaming Indian tea gardens.\n\nIn the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats and endangering their population. Much of the forest land where tea is grown in Assam is flat and thus farmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches, however, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks when navigating forests, they almost inevitably have to move through the farms. Moreover, because there are fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But baby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and once injured, they might not be able to climb out. When mothers try to dig their babies out, both may be trapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying behind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope is lost.\n\nIs it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an organization that takes the initiative to make it possible. The organization encourages consumers to choose brands that take precautions to protect elephants and has set up a certification program to reward tea growers who are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing. The organization believes that people may be motivated to buy elephant-friendly brands when they know more about the risk tea can pose to these endangered animals.\n\nWhy do farmers in Assam dig trenches in tea gardens?",
     "correct": "To protect tea trees.",
     "wrong": [
       "To trap elephants.",
@@ -1252,12 +1278,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q40",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhy are baby elephants easily injured in the Assam tea gardens according to the passage?",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nWhen you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean injury, or even death, for Asian elephants roaming Indian tea gardens.\n\nIn the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats and endangering their population. Much of the forest land where tea is grown in Assam is flat and thus farmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches, however, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks when navigating forests, they almost inevitably have to move through the farms. Moreover, because there are fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But baby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and once injured, they might not be able to climb out. When mothers try to dig their babies out, both may be trapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying behind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope is lost.\n\nIs it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an organization that takes the initiative to make it possible. The organization encourages consumers to choose brands that take precautions to protect elephants and has set up a certification program to reward tea growers who are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing. The organization believes that people may be motivated to buy elephant-friendly brands when they know more about the risk tea can pose to these endangered animals.\n\nWhy are baby elephants easily injured in the Assam tea gardens according to the passage?",
     "correct": "They have difficulties moving around the uneven fields.",
     "wrong": [
       "They cannot find a safe shelter when climbing out of the trenches.",
@@ -1283,12 +1310,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q41",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhich of the following statements about elephants and the tea gardens is true according to the passage?",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nWhen you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean injury, or even death, for Asian elephants roaming Indian tea gardens.\n\nIn the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats and endangering their population. Much of the forest land where tea is grown in Assam is flat and thus farmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches, however, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks when navigating forests, they almost inevitably have to move through the farms. Moreover, because there are fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But baby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and once injured, they might not be able to climb out. When mothers try to dig their babies out, both may be trapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying behind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope is lost.\n\nIs it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an organization that takes the initiative to make it possible. The organization encourages consumers to choose brands that take precautions to protect elephants and has set up a certification program to reward tea growers who are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing. The organization believes that people may be motivated to buy elephant-friendly brands when they know more about the risk tea can pose to these endangered animals.\n\nWhich of the following statements about elephants and the tea gardens is true according to the passage?",
     "correct": "Elephants are unwilling to leave their injured members behind in the tea gardens.",
     "wrong": [
       "The elephants use the trenches to roam around the tea gardens.",
@@ -1314,12 +1342,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q42",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhat does “it” in the last paragraph refer to?",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nWhen you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean injury, or even death, for Asian elephants roaming Indian tea gardens.\n\nIn the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats and endangering their population. Much of the forest land where tea is grown in Assam is flat and thus farmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches, however, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks when navigating forests, they almost inevitably have to move through the farms. Moreover, because there are fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But baby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and once injured, they might not be able to climb out. When mothers try to dig their babies out, both may be trapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying behind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope is lost.\n\nIs it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an organization that takes the initiative to make it possible. The organization encourages consumers to choose brands that take precautions to protect elephants and has set up a certification program to reward tea growers who are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing. The organization believes that people may be motivated to buy elephant-friendly brands when they know more about the risk tea can pose to these endangered animals.\n\nWhat does “it” in the last paragraph refer to?",
     "correct": "To create a win-win situation for elephants and tea farms.",
     "wrong": [
       "To certify elephant-friendly trenches and organizations.",
@@ -1345,12 +1374,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q43",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第43 至46 題為題組\n\n     Situated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar\nis a tropical archipelago comprised of several scattered islands. This popular beach destination is now\nfamous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past,\ncontrol of Zanzibar meant access to unimaginable wealth.\n\n    From ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route\nbetween Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival\nof its first permanent settlers from the African mainland (around 1000 AD). In the 8th century, Persian\nmerchants built settlements here, which grew over the next four centuries into their trading posts. Between\nthe 12th and 15th centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago\nboth wealth and power.\n\n    During the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the\nspice trade. At the close of the 15th century, Europeans’ craze for spices gave rise to the Spice Route, a\nnetwork of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese\nexplorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he\narrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted\ntraders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and\ngoods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\n    Since the 16th century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the\nBritish, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have\nlived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections,\nscented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian\nOcean an amazing charm that goes far beyond tropical beach fun.\n\nWhich of the following is true about the earliest traders in Zanzibar?",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nSituated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar is a tropical archipelago comprised of several scattered islands. This popular beach destination is now famous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past, control of Zanzibar meant access to unimaginable wealth.\n\nFrom ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route between Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival of its first permanent settlers from the African mainland (around 1000 AD). In the 8<sup>th</sup> century, Persian merchants built settlements here, which grew over the next four centuries into their trading posts. Between the 12<sup>th</sup> and 15<sup>th</sup> centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago both wealth and power.\n\nDuring the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the spice trade. At the close of the 15<sup>th</sup> century, Europeans’ craze for spices gave rise to the Spice Route, a network of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese explorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he arrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted traders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and goods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\nSince the 16<sup>th</sup> century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the British, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have lived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections, scented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian Ocean an amazing charm that goes far beyond tropical beach fun.\n\nWhich of the following is true about the earliest traders in Zanzibar?\n\n![圖表](/assets/banks/gsat-112-english/G43-46-figure-1.png)",
     "correct": "Asian merchants arrived centuries before the African settlers.",
     "wrong": [
       "The earliest traders arrived around 900 AD.",
@@ -1377,19 +1407,22 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G43-46-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q44",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/gsat-112-english/G43-46-context.png)\n\n![第44題原卷資料](/assets/banks/gsat-112-english/Q44-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nSituated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar is a tropical archipelago comprised of several scattered islands. This popular beach destination is now famous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past, control of Zanzibar meant access to unimaginable wealth.\n\nFrom ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route between Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival of its first permanent settlers from the African mainland (around 1000 AD). In the 8<sup>th</sup> century, Persian merchants built settlements here, which grew over the next four centuries into their trading posts. Between the 12<sup>th</sup> and 15<sup>th</sup> centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago both wealth and power.\n\nDuring the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the spice trade. At the close of the 15<sup>th</sup> century, Europeans’ craze for spices gave rise to the Spice Route, a network of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese explorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he arrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted traders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and goods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\nSince the 16<sup>th</sup> century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the British, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have lived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections, scented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian Ocean an amazing charm that goes far beyond tropical beach fun.\n\nAccording to the passage, where is Zanzibar most likely located on the following map?\n\n\n\nAmerica\n\nPacific\n\n\n\nAtlantic\n\n\n\nEurope\n\n\n\nAmerica\n\nAfrica\n\n\n\nIndian\n\n\n\nPacific\n\n\n\n![圖表](/assets/banks/gsat-112-english/G43-46-figure-1.png)\n![圖表](/assets/banks/gsat-112-english/Q44-figure-1.png)",
+    "correct": "B",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "A",
+      "C",
+      "D"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗英文第44題。",
+    "exp": "正確答案：B。來源：112年學科能力測驗英文第44題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1410,14 +1443,15 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-112-english/G43-46-context.png",
-      "/assets/banks/gsat-112-english/Q44-question.png"
-    ]
+      "/assets/banks/gsat-112-english/G43-46-figure-1.png",
+      "/assets/banks/gsat-112-english/Q44-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q45",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第43 至46 題為題組\n\n     Situated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar\nis a tropical archipelago comprised of several scattered islands. This popular beach destination is now\nfamous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past,\ncontrol of Zanzibar meant access to unimaginable wealth.\n\n    From ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route\nbetween Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival\nof its first permanent settlers from the African mainland (around 1000 AD). In the 8th century, Persian\nmerchants built settlements here, which grew over the next four centuries into their trading posts. Between\nthe 12th and 15th centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago\nboth wealth and power.\n\n    During the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the\nspice trade. At the close of the 15th century, Europeans’ craze for spices gave rise to the Spice Route, a\nnetwork of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese\nexplorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he\narrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted\ntraders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and\ngoods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\n    Since the 16th century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the\nBritish, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have\nlived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections,\nscented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian\nOcean an amazing charm that goes far beyond tropical beach fun.\n\nWhich of the following can be inferred from the passage about Zanzibar?",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nSituated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar is a tropical archipelago comprised of several scattered islands. This popular beach destination is now famous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past, control of Zanzibar meant access to unimaginable wealth.\n\nFrom ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route between Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival of its first permanent settlers from the African mainland (around 1000 AD). In the 8<sup>th</sup> century, Persian merchants built settlements here, which grew over the next four centuries into their trading posts. Between the 12<sup>th</sup> and 15<sup>th</sup> centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago both wealth and power.\n\nDuring the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the spice trade. At the close of the 15<sup>th</sup> century, Europeans’ craze for spices gave rise to the Spice Route, a network of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese explorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he arrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted traders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and goods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\nSince the 16<sup>th</sup> century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the British, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have lived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections, scented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian Ocean an amazing charm that goes far beyond tropical beach fun.\n\nWhich of the following can be inferred from the passage about Zanzibar?\n\n![圖表](/assets/banks/gsat-112-english/G43-46-figure-1.png)",
     "correct": "Cloves, vanilla, and cinnamon are common spices in Zanzibar.",
     "wrong": [
       "For centuries, Zanzibar has been a heaven for beach lovers.",
@@ -1444,12 +1478,15 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G43-46-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-english-q46",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第43 至46 題為題組\n\n     Situated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar\nis a tropical archipelago comprised of several scattered islands. This popular beach destination is now\nfamous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past,\ncontrol of Zanzibar meant access to unimaginable wealth.\n\n    From ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route\nbetween Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival\nof its first permanent settlers from the African mainland (around 1000 AD). In the 8th century, Persian\nmerchants built settlements here, which grew over the next four centuries into their trading posts. Between\nthe 12th and 15th centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago\nboth wealth and power.\n\n    During the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the\nspice trade. At the close of the 15th century, Europeans’ craze for spices gave rise to the Spice Route, a\nnetwork of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese\nexplorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he\narrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted\ntraders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and\ngoods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\n    Since the 16th century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the\nBritish, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have\nlived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections,\nscented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian\nOcean an amazing charm that goes far beyond tropical beach fun.\n\nWhich set of words is used in the passage to refer to Zanzibar?",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nSituated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar is a tropical archipelago comprised of several scattered islands. This popular beach destination is now famous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past, control of Zanzibar meant access to unimaginable wealth.\n\nFrom ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route between Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival of its first permanent settlers from the African mainland (around 1000 AD). In the 8<sup>th</sup> century, Persian merchants built settlements here, which grew over the next four centuries into their trading posts. Between the 12<sup>th</sup> and 15<sup>th</sup> centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago both wealth and power.\n\nDuring the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the spice trade. At the close of the 15<sup>th</sup> century, Europeans’ craze for spices gave rise to the Spice Route, a network of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese explorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he arrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted traders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and goods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\nSince the 16<sup>th</sup> century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the British, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have lived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections, scented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian Ocean an amazing charm that goes far beyond tropical beach fun.\n\nWhich set of words is used in the passage to refer to Zanzibar?\n\n![圖表](/assets/banks/gsat-112-english/G43-46-figure-1.png)",
     "correct": "archipelago, islands, jewels, destination",
     "wrong": [
       "islands, settlements, posts, crossroads",
@@ -1476,6 +1513,9 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G43-46-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

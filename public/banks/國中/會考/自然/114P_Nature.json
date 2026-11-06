@@ -2,14 +2,14 @@
   {
     "id": "cap-114-science-q1",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-114-science/Q1-question.png)",
-    "correct": "原卷選項 C",
+    "q": "孕婦產檢時常使用超聲波來檢查腹中胎兒的生長情形，當醫生使用超聲波進行\n檢查時，孕婦對超聲波的聽覺感受，下列說明何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q1-figure-1.png)",
+    "correct": "因頻率過高，故孕婦聽不見超聲波",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "孕婦會聽見低沉的轟隆聲",
+      "孕婦會聽見尖銳刺耳的聲音",
+      "因波速過快，故孕婦聽不見超聲波"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第1題。",
+    "exp": "正確答案：因頻率過高，故孕婦聽不見超聲波。來源：114年國中教育會考自然第1題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -25,22 +25,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q1-question.png"
+      "/assets/banks/cap-114-science/Q1-figure-1.png"
     ],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q2",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-114-science/Q2-question.png)",
-    "correct": "原卷選項 B",
+    "q": "小陞想以圖(一)中的裝置或器材，測量一顆形狀不規則小石頭的密度，他應選\n擇哪兩項來測量？\n\n![圖表](/assets/banks/cap-114-science/Q2-figure-1.png)\n\n\n\n\n\n",
+    "correct": "甲與丙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲與丁",
+      "乙與丁",
+      "乙與丙"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第2題。",
+    "exp": "正確答案：甲與丙。來源：114年國中教育會考自然第2題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -56,15 +57,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q2-question.png"
+      "/assets/banks/cap-114-science/Q2-figure-1.png"
     ],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q3",
     "difficulty": "easy",
-    "q": "有報導指出：「在都市觀察到麻雀的頻率有變少的趨勢，可能的原因很多，其\n  中之一為白尾八哥的入侵。白尾八哥築巢偏好的位置與麻雀相近，食物種類也\n  相似，甚至被觀察到會以麻雀幼鳥為食。」根據上述報導，白尾八哥與麻雀之\n  間最符合下列哪兩種交互作用？",
+    "q": "有報導指出：「在都市觀察到麻雀的頻率有變少的趨勢，可能的原因很多，其\n中之一為白尾八哥的入侵。白尾八哥築巢偏好的位置與麻雀相近，食物種類也\n相似，甚至被觀察到會以麻雀幼鳥為食。」根據上述報導，白尾八哥與麻雀之\n間最符合下列哪兩種交互作用？",
     "correct": "競爭、掠食",
     "wrong": [
       "競爭、共生",
@@ -88,19 +90,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.9,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q4",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-114-science/Q4-question.png)",
-    "correct": "原卷選項 A",
+    "q": "小志將物質分成元素、化合物和混合物三類，並舉例如表(一)。表中各例子所\n含原子種類多寡的比較，下列何者正確？\n表(一)\n\n![圖表](/assets/banks/cap-114-science/Q4-figure-1.png)",
+    "correct": "笑氣＞硫磺",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "硫磺＞笑氣",
+      "硫磺＞花岡岩",
+      "三個例子都一樣多"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第4題。",
+    "exp": "正確答案：笑氣＞硫磺。來源：114年國中教育會考自然第4題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -116,22 +119,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q4-question.png"
+      "/assets/banks/cap-114-science/Q4-figure-1.png"
     ],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q5",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-114-science/Q5-question-1.png)\n\n![第5題原卷資料](/assets/banks/cap-114-science/Q5-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "圖(二)為一鋒面的剖面示意圖，黑色曲線表示鋒面，兩側分別為甲、乙空氣，箭頭\n為空氣沿著鋒面上升的方向，並呈現鋒面附近的雲雨分布情形。關於此鋒面兩側\n\n甲、乙空氣的性質比較，下列何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q5-figure-1.png)",
+    "correct": "甲為冷空氣、乙為暖空氣",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "甲、乙皆為暖空氣",
+      "甲、乙皆為冷空氣",
+      "甲為暖空氣、乙為冷空氣"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第5題。",
+    "exp": "正確答案：甲為冷空氣、乙為暖空氣。來源：114年國中教育會考自然第5題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -148,23 +152,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q5-question-1.png",
-      "/assets/banks/cap-114-science/Q5-question-2.png"
+      "/assets/banks/cap-114-science/Q5-figure-1.png"
     ],
     "passRate": 0.7,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q6",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-114-science/Q6-question.png)",
-    "correct": "原卷選項 A",
+    "q": "臺灣地下水資源豐富，許多地區都有取用地下水，若使用不當則可能造成\n災害。小盈想在簡報中說明過度抽取地下水所造成的影響，則下列照片及其\n說明何者最適合？",
+    "correct": "![圖表](/assets/banks/cap-114-science/Q6-option-A-figure-1.png)",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/cap-114-science/Q6-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q6-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q6-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第6題。",
+    "exp": "正確答案：![圖表](/assets/banks/cap-114-science/Q6-option-A-figure-1.png)。來源：114年國中教育會考自然第6題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -180,22 +184,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q6-question.png"
+      "/assets/banks/cap-114-science/Q6-option-A-figure-1.png",
+      "/assets/banks/cap-114-science/Q6-option-B-figure-1.png",
+      "/assets/banks/cap-114-science/Q6-option-C-figure-1.png",
+      "/assets/banks/cap-114-science/Q6-option-D-figure-1.png"
     ],
     "passRate": 0.95,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q7",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-114-science/Q7-question.png)",
-    "correct": "原卷選項 B",
+    "q": "端午節有「立蛋」的習俗，網路上有民眾說只有在端午節\n正午時，生雞蛋才可立得起來。如圖(三)，該說法的論點是\n\n「端午節時太陽直射北半球，臺灣正好在北半球，因此只有\n在端午節正午時，太陽對生雞蛋的引力與地球對生雞蛋的\n引力會恰好相反，兩力相互拉扯才使得生雞蛋能夠直立。」\n下列四種實驗設計及結果，何者最適合拿來反駁上述說法？\n\n![圖表](/assets/banks/cap-114-science/Q7-figure-1.png)\n\n\n\n",
+    "correct": "使用同一種的生雞蛋，改於聖誕節正午時在臺灣成功立蛋",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "將生雞蛋煮熟後剝殼，改於聖誕節正午時在臺灣成功立蛋",
+      "把生雞蛋換成生鴨蛋，並於端午節正午時在臺灣成功立蛋",
+      "另拿不同種的生雞蛋，並於端午節正午時在臺灣成功立蛋"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第7題。",
+    "exp": "正確答案：使用同一種的生雞蛋，改於聖誕節正午時在臺灣成功立蛋。來源：114年國中教育會考自然第7題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -211,22 +219,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q7-question.png"
+      "/assets/banks/cap-114-science/Q7-figure-1.png"
     ],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q8",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-114-science/Q8-question.png)",
-    "correct": "原卷選項 A",
+    "q": "圖(四)為某蘆筍植株的示意圖，圖中甲部位經過日光照射，呈現\n綠色；乙部位未受到日光照射，呈現白色。有關兩部位進行生理\n作用時所釋出的氣體，下列敘述何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q8-figure-1.png)",
+    "correct": "甲能釋出O<sub>2</sub>，但乙不能",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲能釋出CO<sub>2</sub>，但乙不能",
+      "乙能釋出O<sub>2</sub>，但甲不能",
+      "乙能釋出CO<sub>2</sub>，但甲不能"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第8題。",
+    "exp": "正確答案：甲能釋出O<sub>2</sub>，但乙不能。來源：114年國中教育會考自然第8題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -242,22 +251,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q8-question.png"
+      "/assets/banks/cap-114-science/Q8-figure-1.png"
     ],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q9",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-114-science/Q9-question-1.png)\n\n![第9題原卷資料](/assets/banks/cap-114-science/Q9-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "將一支未削尖的鉛筆置於桌面，鉛筆右端為軟質橡皮，左端為硬質木頭，在其\n兩端分別以手指施水平力，且兩力作用於同一直線上，施力後保持靜止平衡，\n如圖(五)。其中手指施於鉛筆左、右兩端力的大小分別為F<sub>左</sub>、F<sub>右</sub>，鉛筆施於\n左、右兩端手指的反作用力大小分別為F<sub>左</sub>′、F<sub>右</sub>′。已知F<sub>左</sub>為1 N，若不考慮鉛筆\n\n與桌面間的摩擦力，則下列關係何者正確？\n\n![圖表](/assets/banks/cap-114-science/Q9-figure-1.png)",
+    "correct": "F<sub>右</sub>′ ＝F<sub>右</sub>＝1 N",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "F<sub>右</sub>′ ＜F<sub>右</sub>＜1 N",
+      "F<sub>右</sub>′ ＜F<sub>右</sub>＝1 N",
+      "F<sub>右</sub>′ ＝F<sub>右</sub>＜1 N"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第9題。",
+    "exp": "正確答案：F<sub>右</sub>′ ＝F<sub>右</sub>＝1 N。來源：114年國中教育會考自然第9題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -274,23 +284,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q9-question-1.png",
-      "/assets/banks/cap-114-science/Q9-question-2.png"
+      "/assets/banks/cap-114-science/Q9-figure-1.png"
     ],
     "passRate": 0.75,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q10",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-114-science/Q10-question.png)",
-    "correct": "原卷選項 B",
+    "q": "如圖(六)，甲、乙、丙三個金屬球，甲球帶負電，乙、丙兩球帶正電，剛開始乙球\n距離甲球 2 m，距離丙球1 m，之後將乙球向左移動1 m，使乙球距離甲球\n1 m，距離丙球 2 m。若甲、乙間的靜電力大小為 F<sub>甲</sub>，乙、丙間的靜電力大小\n乙\n為 F<sub>乙</sub>，則移動前後，有關 F<sub>甲</sub>、F<sub>乙</sub>的大小變化，下列何者正確？\n丙乙丙\n\n![圖表](/assets/banks/cap-114-science/Q10-figure-1.png)",
+    "correct": "F<sub>甲</sub>變大，F<sub>乙</sub>變小\n乙丙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "F<sub>甲</sub>變大，F<sub>乙</sub>變大\n乙丙",
+      "F<sub>甲</sub>變小，F<sub>乙</sub>變大\n乙丙",
+      "F<sub>甲</sub>變小，F<sub>乙</sub>變小\n乙丙"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第10題。",
+    "exp": "正確答案：F<sub>甲</sub>變大，F<sub>乙</sub>變小\n乙丙。來源：114年國中教育會考自然第10題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -306,20 +316,21 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q10-question.png"
+      "/assets/banks/cap-114-science/Q10-figure-1.png"
     ],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q11",
     "difficulty": "medium",
-    "q": "某電玩公司為了防止兒童誤吞遊戲主機的遊戲卡，因而在遊戲卡塗上苯甲\n  地那銨。苯甲地那銨是非常苦的物質，其濃度只要達到______，也就是每1000 g\n  的溶液中含有30 mg的苯甲地那銨，便會苦到讓人難以忍受。上述空格最適合\n  填入下列何者？",
+    "q": "某電玩公司為了防止兒童誤吞遊戲主機的遊戲卡，因而在遊戲卡塗上苯甲\n地那銨。苯甲地那銨是非常苦的物質，其濃度只要達到______，也就是每1000 g\n的溶液中含有30 mg的苯甲地那銨，便會苦到讓人難以忍受。上述空格最適合\n填入下列何者？",
     "correct": "30 ppm",
     "wrong": [
       "30%",
       "30 mg",
-      "30 g/cm3"
+      "30 g/cm<sup>3</sup>"
     ],
     "exp": "正確答案：30 ppm。來源：114年國中教育會考自然第11題。",
     "subject": "化學",
@@ -338,19 +349,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q12",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-114-science/Q12-question.png)",
-    "correct": "原卷選項 C",
+    "q": "當看到喜愛的明星時，小明站在原地大聲尖叫，而阿華則是追著明星跑。\n表(二)整理上述兩人行為中神經傳導的過程，其中哪一項目的敘述正確？\n表(二)\n\n![圖表](/assets/banks/cap-114-science/Q12-figure-1.png)",
+    "correct": "控制的中樞",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "受器",
+      "動器",
+      "傳導的神經"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第12題。",
+    "exp": "正確答案：控制的中樞。來源：114年國中教育會考自然第12題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -366,15 +378,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q12-question.png"
+      "/assets/banks/cap-114-science/Q12-figure-1.png"
     ],
     "passRate": 0.7,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q13",
     "difficulty": "medium",
-    "q": "房產專家建議，若可以選擇，住在臺北的居民，其陽臺面對的方向盡量不要\n  朝向北邊、東北邊。因為冬天的時候容易下雨，且陽臺面對的方向易有強風，\n  雨水會直接打向陽臺，容易使晾晒的衣物淋溼。專家的這個建議是否適用於\n  其他地區？",
+    "q": "房產專家建議，若可以選擇，住在臺北的居民，其陽臺面對的方向盡量不要\n朝向北邊、東北邊。因為冬天的時候容易下雨，且陽臺面對的方向易有強風，\n雨水會直接打向陽臺，容易使晾晒的衣物淋溼。專家的這個建議是否適用於\n其他地區？",
     "correct": "不適用於高雄，因為冬天時位處季風背風面的高雄氣候偏乾",
     "wrong": [
       "適用於臺南，因為冬天時位處季風迎風面的臺南氣候偏溼",
@@ -398,17 +411,18 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.7,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q14",
     "difficulty": "medium",
-    "q": "有三顆小球，在紅光照射下，觀察到小球分別呈現紅色、紅色、黑色，關於這\n  三顆小球在白光照射下所呈現顏色的推論，下列何者最合理？",
+    "q": "有三顆小球，在紅光照射下，觀察到小球分別呈現紅色、紅色、黑色，關於這\n三顆小球在白光照射下所呈現顏色的推論，下列何者最合理？",
     "correct": "最多有兩顆白球",
     "wrong": [
       "至少有一顆紅球",
       "至少有一顆黑球",
-      "最多有兩顆綠球\n\n                                  3"
+      "最多有兩顆綠球"
     ],
     "exp": "正確答案：最多有兩顆白球。來源：114年國中教育會考自然第14題。",
     "subject": "物理",
@@ -428,19 +442,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.67,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-114-science/Q15-question.png)",
-    "correct": "原卷選項 B",
+    "q": "目前認為地球表層是由數個大小與形狀\n不同的板塊所組成，圖(七)為現今的板塊\n分布示意圖，並標出其中幾個板塊的名稱。\n根據上述資訊，下列說明何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q15-figure-1.png)",
+    "correct": "這些板塊會移動而使陸地與海底的地形也隨著改變",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "這些板塊的交界與各個大陸的海陸交界都",
+      "這些板塊的交界上，皆形成了高聳巨大的陸地山脈",
+      "這些板塊皆位於軟流圈之上，且交界均為中洋脊的位置"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第15題。",
+    "exp": "正確答案：這些板塊會移動而使陸地與海底的地形也隨著改變。來源：114年國中教育會考自然第15題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -456,22 +471,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q15-question.png"
+      "/assets/banks/cap-114-science/Q15-figure-1.png"
     ],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q16",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-114-science/Q16-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(八)是某地的地層剖面示意圖。已知該地由\n\n火山灰堆積形成的岩層約在8百萬年前形成，\n岩脈約在6百萬年前形成，且該地的地層並未經\n過上下翻轉。根據圖中資訊，下列關於各地層\n形成時間之推論，何者最不合理？\n\n![圖表](/assets/banks/cap-114-science/Q16-figure-1.png)",
+    "correct": "石灰岩形成的時間，可能在7 百萬年前",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "砂岩形成的時間，比頁岩形成的時間晚",
+      "岩脈形成的時間，比石灰岩形成的時間晚",
+      "頁岩形成的時間，可能介於6～8百萬年前之間"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第16題。",
+    "exp": "正確答案：石灰岩形成的時間，可能在7 百萬年前。來源：114年國中教育會考自然第16題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -487,22 +503,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q16-question.png"
+      "/assets/banks/cap-114-science/Q16-figure-1.png"
     ],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q17",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-114-science/Q17-question.png)",
-    "correct": "原卷選項 A",
+    "q": "_\n17. 已知Ca和Cl的原子序分別為20、17，Ca <sup>2+</sup>和Cl 的質子數和電子數如表(三)，\n表中w、x、y、z的數值大小比較，下列何者正確？\n表(三)\n\n![圖表](/assets/banks/cap-114-science/Q17-figure-1.png)",
+    "correct": "w＞z",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "x＞y",
+      "x＞z",
+      "y＞w\n![圖表](/assets/banks/cap-114-science/Q17-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第17題。",
+    "exp": "正確答案：w＞z。來源：114年國中教育會考自然第17題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -518,22 +535,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q17-question.png"
+      "/assets/banks/cap-114-science/Q17-figure-1.png",
+      "/assets/banks/cap-114-science/Q17-option-D-figure-1.png"
     ],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-114-science/Q18-question-1.png)\n\n![第18題原卷資料](/assets/banks/cap-114-science/Q18-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "一個質量2 kg的長方體木塊靜置於水平\n桌面上，若對木塊施一水平向東的\n外力F，其摩擦力(f)與外力(F)的關係圖\n如圖(九)。根據此圖判斷下列敘述何者\n正確？",
+    "correct": "若外力F小於400 gw時，則外力F越小，靜摩擦力也越小",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "最大靜摩擦力為300 gw\n![圖表](/assets/banks/cap-114-science/Q18-option-A-figure-1.png)",
+      "外力F由0增加至300 gw時，木塊即開始\n![圖表](/assets/banks/cap-114-science/Q18-option-B-figure-1.png)",
+      "若外力F大於400 gw時，則外力F越大，動摩擦力也越大"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第18題。",
+    "exp": "正確答案：若外力F小於400 gw時，則外力F越小，靜摩擦力也越小。來源：114年國中教育會考自然第18題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -550,23 +569,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q18-question-1.png",
-      "/assets/banks/cap-114-science/Q18-question-2.png"
+      "/assets/banks/cap-114-science/Q18-option-A-figure-1.png",
+      "/assets/banks/cap-114-science/Q18-option-B-figure-1.png"
     ],
     "passRate": 0.59,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q19",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-114-science/Q19-question.png)",
-    "correct": "原卷選項 C",
+    "q": "為為了了減減少少溫溫室室氣氣體體，，地地質質學學家家將將二二氧氧化化碳碳變變成成岩岩石石的的一一部部分分\n將發電廠產生的二氧化碳灌入大量的水中，以管線將這些氣泡水輸送到\n數公里遠的區域，接著透過高壓將氣泡水注入地下一千公尺深的岩層中，這\n些氣泡水會和鈣、鎂等離子反應而「固化」，並填充岩層空隙。二氧化碳一\n旦固化後，就能存在岩層中。\n上述二氧化碳變成岩石一部分的過程，是利用下列二氧化碳(水溶液)的何種性質？",
+    "correct": "可與鈣離子反應產生難溶於水的碳酸鹽",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "密度大於空氣",
+      "溶於水呈酸性",
+      "可與鈉離子反應產生易溶於水的碳酸鹽"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第19題。",
+    "exp": "正確答案：可與鈣離子反應產生難溶於水的碳酸鹽。來源：114年國中教育會考自然第19題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -581,23 +601,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-science/Q19-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q20",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-114-science/Q20-question.png)",
-    "correct": "原卷選項 B",
+    "q": "一群健康成人吃了等量的食物甲或乙之後，平均血糖濃度的變化如圖（十）。已知健康成人空腹平均血糖濃度約為90 mg/dL，根據此圖推論，下列何者最合理？\n\n1 dL＝100 mL。\n\n![圖表](/assets/banks/cap-114-science/Q20-figure-3.png)",
+    "correct": "進食後，甲比乙更早導致胰島素分泌量增加",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "進食後，甲比乙更早導致升糖素分泌量增加",
+      "進食後，乙比甲更早導致升糖素分泌量增加",
+      "進食後，乙比甲更早導致胰島素分泌量增加"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第20題。",
+    "exp": "正確答案：進食後，甲比乙更早導致胰島素分泌量增加。來源：114年國中教育會考自然第20題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -613,22 +632,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q20-question.png"
+      "/assets/banks/cap-114-science/Q20-figure-3.png"
     ],
     "passRate": 0.55,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-114-science/Q21-question-1.png)\n\n![第21題原卷資料](/assets/banks/cap-114-science/Q21-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "購買高濃度的酒精，可自行稀釋及分裝成消毒用酒精，但並非所有的塑膠容器\n都適合盛裝高濃度酒精，有些會被乙醇溶解或腐蝕而使容器變輕。下列研究將\n三種為熱塑性聚合物材質的容器，分別在50℃和70℃的溫度下，浸入高濃度的\n酒精中，容器的質量變化率如圖(十一)：\n\n圖(十一)\n僅依據上述資訊，下列說明何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q21-figure-1.png)\n\n\n\n\n\n\n\n\n\n",
+    "correct": "與50℃相比，三種材質皆是在70℃的條件下容器耗損率較高",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "三種材質中，PET最適合盛裝高濃度酒精",
+      "在兩種溫度下，PP都是最不適合盛裝高濃度酒精",
+      "鏈狀聚合物的材質比網狀聚合物更適合盛裝高濃度酒精"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第21題。",
+    "exp": "正確答案：與50℃相比，三種材質皆是在70℃的條件下容器耗損率較高。來源：114年國中教育會考自然第21題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -645,23 +665,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q21-question-1.png",
-      "/assets/banks/cap-114-science/Q21-question-2.png"
+      "/assets/banks/cap-114-science/Q21-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q22",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-114-science/Q22-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖(十二)為某植物的莖部剖面示意圖。若想利用某儀器探測其蒸散作用的\n速率，關於實驗所需探測的圖中部位及對應理由，下列何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q22-figure-1.png)",
+    "correct": "乙，因為它是運輸水分的部位",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "甲，因為它是運輸水分的部位",
+      "甲，因為它是運輸有機養分的部位",
+      "乙，因為它是運輸有機養分的部位"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第22題。",
+    "exp": "正確答案：乙，因為它是運輸水分的部位。來源：114年國中教育會考自然第22題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -677,22 +697,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q22-question.png"
+      "/assets/banks/cap-114-science/Q22-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q23",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-114-science/Q23-question.png)",
-    "correct": "原卷選項 B",
+    "q": "下列選項為四種在海面上的等壓線分布圖，已知各圖中涵蓋的空間範圍皆相同，\n數值代表該等壓線的氣壓，單位為百帕。根據等壓線上的數值推論，下列\n哪張圖中的甲處風速最大？",
+    "correct": "![圖表](/assets/banks/cap-114-science/Q23-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/cap-114-science/Q23-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q23-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q23-option-D-figure-1.png)\n"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第23題。",
+    "exp": "正確答案：![圖表](/assets/banks/cap-114-science/Q23-option-B-figure-1.png)。來源：114年國中教育會考自然第23題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -708,22 +729,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q23-question.png"
+      "/assets/banks/cap-114-science/Q23-option-B-figure-1.png",
+      "/assets/banks/cap-114-science/Q23-option-A-figure-1.png",
+      "/assets/banks/cap-114-science/Q23-option-C-figure-1.png",
+      "/assets/banks/cap-114-science/Q23-option-D-figure-1.png"
     ],
     "passRate": 0.5,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-114-science/Q24-question.png)",
-    "correct": "原卷選項 A",
+    "q": "表(四)為部分鳥類資料，推論表中所有\n鳥類在分類上的敘述，何者是可能的？\n\n![圖表](/assets/banks/cap-114-science/Q24-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "correct": "最多包含3個目、4個屬",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "最多包含3個目、6個屬",
+      "最多包含4個目、4個屬",
+      "最多包含4個目、6個屬"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第24題。",
+    "exp": "正確答案：最多包含3個目、4個屬。來源：114年國中教育會考自然第24題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -739,22 +764,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q24-question.png"
+      "/assets/banks/cap-114-science/Q24-figure-1.png"
     ],
     "passRate": 0.56,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-114-science/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-114-science/Q25-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "下列實驗探討鋅銅電池電極的面積大小對於電池電壓與電流的影響：\n實驗器材：大電極(3.0 cm×8.0 cm)：大銅片、大鋅片各兩片\n小電極(1.0 cm×8.0 cm)：小銅片、小鋅片各兩片\n除了電極面積不同，其餘實驗條件皆相同，並以三用電表檢測電壓與電流，結果\n如表(五)：\n表(五)\n\n關於此實驗的說明，下列何者合理？\n\n![圖表](/assets/banks/cap-114-science/Q25-figure-1.png)\n\n\n\n\n\n",
+    "correct": "電極面積不同對於電功率變化的影響，正極大於負極",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "電極面積不同對於電功率變化的影響，負極大於正極",
+      "正極面積相同，負極面積不同，對於電壓值變化比例的影響大於電流值",
+      "負極面積相同，正極面積不同，對於電壓值變化比例的影響大於電流值"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第25題。",
+    "exp": "正確答案：電極面積不同對於電功率變化的影響，正極大於負極。來源：114年國中教育會考自然第25題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -771,16 +797,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q25-question-1.png",
-      "/assets/banks/cap-114-science/Q25-question-2.png"
+      "/assets/banks/cap-114-science/Q25-figure-1.png"
     ],
     "passRate": 0.53,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q26",
     "difficulty": "medium",
-    "q": "阿偉想要藉由實驗比較鋁和銅的比熱大小關係，若加熱條件相同，且忽略熱量\n  散失，則下列四種方式，哪一種最合理？",
+    "q": "阿偉想要藉由實驗比較鋁和銅的比熱大小關係，若加熱條件相同，且忽略熱量\n散失，則下列四種方式，哪一種最合理？",
     "correct": "分別加熱相同質量的鋁和銅，溫度上升較快者比熱較小",
     "wrong": [
       "分別加熱相同體積的鋁和銅，先開始熔化者比熱較小",
@@ -804,19 +830,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-114-science/Q27-question.png)",
-    "correct": "原卷選項 D",
+    "q": "博物館展示一臺19世紀的骨董複式顯微鏡，如圖（十三）。小文根據博物館提供的說明，比較該顯微鏡和現代複式顯微鏡各構造的功能，何者差異最大？\n\n![圖表](/assets/banks/cap-114-science/Q27-figure-1.png)",
+    "correct": "古董顯微鏡的丁，對應現代顯微鏡的光圈。",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "古董顯微鏡的甲，對應現代顯微鏡的物鏡。",
+      "古董顯微鏡的乙，對應現代顯微鏡的調節輪。",
+      "古董顯微鏡的丙，對應現代顯微鏡的載物臺。"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第27題。",
+    "exp": "正確答案：古董顯微鏡的丁，對應現代顯微鏡的光圈。。來源：114年國中教育會考自然第27題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -832,22 +859,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q27-question.png"
+      "/assets/banks/cap-114-science/Q27-figure-1.png"
     ],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q28",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-114-science/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/cap-114-science/Q28-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "有些物質可使棕色的碘液進行還原反應，反應後溶液呈無色，例如許多水果所\n含有的維生素C。圖(十四)以維生素C和綠茶茶水分別進行實驗：\n\n僅依據本實驗結果，下列推論何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q28-figure-1.png)\n\n\n\n\n\n\n\n",
+    "correct": "綠茶茶水中必定含有能被氧化的物質",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "綠茶茶水中必定含有維生素C",
+      "綠茶茶水進行氧化反應，維生素C進行還原反應",
+      "因實驗結果溶液顏色改變，故綠茶茶水可做為酸鹼指示劑"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第28題。",
+    "exp": "正確答案：綠茶茶水中必定含有能被氧化的物質。來源：114年國中教育會考自然第28題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -864,23 +892,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q28-question-1.png",
-      "/assets/banks/cap-114-science/Q28-question-2.png"
+      "/assets/banks/cap-114-science/Q28-figure-1.png"
     ],
     "passRate": 0.57,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q29",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-114-science/Q29-question.png)",
-    "correct": "原卷選項 D",
+    "q": "甲、乙、丙三個相同的試管中，分別裝有密度不同的X、Y兩種液體，兩種液體\n不發生化學反應且互不相溶，所占體積及靜止平衡時的狀態如圖(十五)。若裝有\n液體的甲、乙、丙三試管，其總質量分別為m<sub>甲</sub>、m<sub>乙</sub>、m<sub>丙</sub>，則下列關係何者正\n\n確？\n\n![圖表](/assets/banks/cap-114-science/Q29-figure-1.png)\n\n\n\n",
+    "correct": "m<sub>丙</sub>＞m<sub>甲</sub>＞m<sub>乙</sub>",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "m<sub>甲</sub>＝m<sub>乙</sub>＝m<sub>丙</sub>",
+      "m<sub>甲</sub>＞m<sub>丙</sub>＞m<sub>乙</sub>",
+      "m<sub>乙</sub>＞m<sub>甲</sub>＞m<sub>丙</sub>"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第29題。",
+    "exp": "正確答案：m<sub>丙</sub>＞m<sub>甲</sub>＞m<sub>乙</sub>。來源：114年國中教育會考自然第29題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -896,22 +924,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q29-question.png"
+      "/assets/banks/cap-114-science/Q29-figure-1.png"
     ],
     "passRate": 0.54,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q30",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-114-science/Q30-question.png)",
-    "correct": "原卷選項 A",
+    "q": "假設孔雀魚的黑眼睛及紅眼睛由一對遺傳因子所控制，遺傳因子有顯性A與隱\n性a兩種。將甲、乙兩隻黑眼睛孔雀魚交配，所生下的眾多子代有黑眼睛\n及紅眼睛兩種，其中任意選擇兩隻黑眼睛的子代標記為丙、丁，此過程\n如圖(十六)。在不考慮突變的情況下，推測甲、乙、丙、丁中，哪兩隻控制\n眼睛顏色性狀的基因型一定相同？\n\n![圖表](/assets/banks/cap-114-science/Q30-figure-1.png)",
+    "correct": "甲、乙",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲、丙",
+      "乙、丁",
+      "丙、丁"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第30題。",
+    "exp": "正確答案：甲、乙。來源：114年國中教育會考自然第30題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -927,22 +956,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q30-question.png"
+      "/assets/banks/cap-114-science/Q30-figure-1.png"
     ],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q31",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-114-science/Q31-question-1.png)\n\n![第31題原卷資料](/assets/banks/cap-114-science/Q31-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "圖(十七)為甲、乙兩組電流磁效應實驗，兩組實驗所用材料相同，乙組較甲組\n多連接一顆電池，銅線的擺放方向均為南北向。已知下列選項中磁針黑色部分\n為N極，則甲、乙兩組實驗中磁針的偏轉方向，哪一組最合理？\n\n![圖表](/assets/banks/cap-114-science/Q31-figure-1.png)\n\n",
+    "correct": "北\n\n甲乙\n![圖表](/assets/banks/cap-114-science/Q31-option-A-figure-1.png)\n",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/cap-114-science/Q31-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q31-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q31-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第31題。",
+    "exp": "正確答案：北\n\n甲乙\n![圖表](/assets/banks/cap-114-science/Q31-option-A-figure-1.png)\n。來源：114年國中教育會考自然第31題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -959,23 +989,27 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q31-question-1.png",
-      "/assets/banks/cap-114-science/Q31-question-2.png"
+      "/assets/banks/cap-114-science/Q31-figure-1.png",
+      "/assets/banks/cap-114-science/Q31-option-A-figure-1.png",
+      "/assets/banks/cap-114-science/Q31-option-B-figure-1.png",
+      "/assets/banks/cap-114-science/Q31-option-C-figure-1.png",
+      "/assets/banks/cap-114-science/Q31-option-D-figure-1.png"
     ],
     "passRate": 0.47,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q32",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-114-science/Q32-question.png)",
-    "correct": "原卷選項 B",
+    "q": "在適當的條件下，H<sub>2</sub>S和SO<sub>2</sub>會發生反應， 表(六)\n\n生成H <sub>2</sub>O和S。小如記錄某一反應裝置內\n反應前、反應後各物質的質量，如表(六)。\n下列何組數據最可能是上述反應後各物質\n的質量？\n\n![圖表](/assets/banks/cap-114-science/Q32-figure-1.png)",
+    "correct": "![圖表](/assets/banks/cap-114-science/Q32-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/cap-114-science/Q32-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q32-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q32-option-D-figure-1.png)\n![圖表](/assets/banks/cap-114-science/Q32-option-D-figure-2.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第32題。",
+    "exp": "正確答案：![圖表](/assets/banks/cap-114-science/Q32-option-B-figure-1.png)。來源：114年國中教育會考自然第32題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -991,22 +1025,28 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q32-question.png"
+      "/assets/banks/cap-114-science/Q32-figure-1.png",
+      "/assets/banks/cap-114-science/Q32-option-B-figure-1.png",
+      "/assets/banks/cap-114-science/Q32-option-A-figure-1.png",
+      "/assets/banks/cap-114-science/Q32-option-C-figure-1.png",
+      "/assets/banks/cap-114-science/Q32-option-D-figure-1.png",
+      "/assets/banks/cap-114-science/Q32-option-D-figure-2.png"
     ],
     "passRate": 0.47,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q33",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-114-science/Q33-question.png)",
-    "correct": "原卷選項 D",
+    "q": "如圖(十八)，地質鑽探是以鑽頭從地表垂直向下挖掘，\n取得岩石樣本進行分析，如果有斷層通過某處的地下，便\n可藉由地質鑽探了解斷層的特性。某次地震後，斷層破裂\n至地表，其震央與地表上斷層的位置如圖(十九)，甲、乙\n為斷層附近兩處可供地質鑽探使用的土地，若想進行鑽探\n\n並鑽至斷層面，下列選擇方式何者最能達到目的？\n\n![圖表](/assets/banks/cap-114-science/Q33-figure-1.png)",
+    "correct": "無論是正斷層或逆斷層，皆選擇與震央相同側的乙處",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "若斷層為正斷層選甲處，若斷層為逆斷層則選乙處",
+      "若斷層為逆斷層選甲處，若斷層為正斷層則選乙處",
+      "無論是正斷層或逆斷層，皆選擇與震央不同側的甲處"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第33題。",
+    "exp": "正確答案：無論是正斷層或逆斷層，皆選擇與震央相同側的乙處。來源：114年國中教育會考自然第33題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -1022,22 +1062,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q33-question.png"
+      "/assets/banks/cap-114-science/Q33-figure-1.png"
     ],
     "passRate": 0.43,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q34",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-114-science/Q34-question.png)",
-    "correct": "原卷選項 D",
+    "q": "甲、乙兩種生物的比較如表(七)。關於甲、乙所屬的分類，\n\n依序為下列何者？\n\n![圖表](/assets/banks/cap-114-science/Q34-figure-1.png)",
+    "correct": "真菌界、原核生物界",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "原生生物界、真菌界",
+      "原生生物界、植物界",
+      "真菌界、原生生物界"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第34題。",
+    "exp": "正確答案：真菌界、原核生物界。來源：114年國中教育會考自然第34題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -1053,22 +1094,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q34-question.png"
+      "/assets/banks/cap-114-science/Q34-figure-1.png"
     ],
     "passRate": 0.53,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q35",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-114-science/Q35-question-1.png)\n\n![第35題原卷資料](/assets/banks/cap-114-science/Q35-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "圖(二十)為細胞進行甲、乙兩種不同分裂方式的染色體\n變化示意圖。若比較「以葉片繁殖出幼苗」及「以\n種子萌芽成幼苗」的過程中發生的分裂方式，下列\n敘述何者最合理？\n\n![圖表](/assets/banks/cap-114-science/Q35-figure-1.png)",
+    "correct": "兩者皆進行甲",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "兩者皆進行乙",
+      "以葉片繁殖的進行甲，以種子萌芽的進行乙",
+      "以葉片繁殖的進行乙，以種子萌芽的進行甲"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第35題。",
+    "exp": "正確答案：兩者皆進行甲。來源：114年國中教育會考自然第35題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -1085,23 +1127,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q35-question-1.png",
-      "/assets/banks/cap-114-science/Q35-question-2.png"
+      "/assets/banks/cap-114-science/Q35-figure-1.png"
     ],
     "passRate": 0.33,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q36",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-114-science/Q36-question.png)",
-    "correct": "原卷選項 A",
+    "q": "有甲、乙、丙三杯濃度相同的澱粉液，分別加入經不同條件表(八)\n\n處理的等量澱粉酶，經相同的作用時間後，以碘液與本氏液\n分別檢測此三杯溶液，結果如表(八)。根據此結果推測，\n哪杯澱粉液加入的澱粉酶應已完全失去作用？\n\n![圖表](/assets/banks/cap-114-science/Q36-figure-1.png)",
+    "correct": "僅甲",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "僅乙",
+      "甲和丙",
+      "乙和丙"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第36題。",
+    "exp": "正確答案：僅甲。來源：114年國中教育會考自然第36題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -1117,22 +1159,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q36-question.png"
+      "/assets/banks/cap-114-science/Q36-figure-1.png"
     ],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q37",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-114-science/Q37-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖(二十一)為距離太陽最近的五顆行星其公轉軌道示意圖(未依實際距離及大小\n繪製)，假設這五顆行星與太陽皆位於同一平面上，有關星體的排列方式，下列\n\n敘述何者最\n\n![圖表](/assets/banks/cap-114-science/Q37-figure-1.png)",
+    "correct": "若太陽、地球、火星呈一直線，太陽可能位於地球與火星之間",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "若地球、金星、水星呈一直線，地球可能位於金星與水星之間",
+      "若金星、太陽、水星呈一直線，太陽不可能位於金星與水星之間",
+      "若火星、地球、木星呈一直線，地球不可能位於火星與木星之間"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第37題。",
+    "exp": "正確答案：若太陽、地球、火星呈一直線，太陽可能位於地球與火星之間。來源：114年國中教育會考自然第37題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -1148,22 +1191,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q37-question.png"
+      "/assets/banks/cap-114-science/Q37-figure-1.png"
     ],
     "passRate": 0.47,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q38",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-114-science/Q38-question.png)",
-    "correct": "原卷選項 C",
+    "q": "在核發節能標章時須檢測不同品牌、型號的產品是否符合標準，其檢測方式也\n隨年代而改進。表(九)為81年至106年期間檢測某類電扇的風速時，針對電扇樣\n品位置條件所做的改變，關於這項改變的目的，最可能為下列何者？\n表(九)\n\n![圖表](/assets/banks/cap-114-science/Q38-figure-1.png)\n\n\n\n",
+    "correct": "增加電扇樣品位置的控制變因",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "設立可觀察的對照組",
+      "增加不同變因的實驗組",
+      "訂立電扇樣品位置的操作(縱)變因"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第38題。",
+    "exp": "正確答案：增加電扇樣品位置的控制變因。來源：114年國中教育會考自然第38題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -1179,20 +1223,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q38-question.png"
-    ]
+      "/assets/banks/cap-114-science/Q38-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q39",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-114-science/Q39-question-1.png)\n\n![第39題原卷資料](/assets/banks/cap-114-science/Q39-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "一質量固定的物體在水平面上做向東的直線運動，\n圖(二十二)為其速度(v)與時間(t)的關係圖。若此物\n體在t＝2 s、t＝5 s、t＝7 s時，所受合力的大小分別\n為F<sub>2</sub>、F<sub>5</sub>、F<sub>7</sub>，則其大小關係應為下列何者？\n\n![圖表](/assets/banks/cap-114-science/Q39-figure-1.png)",
+    "correct": "F<sub>2</sub>＝F<sub>7</sub>＞F<sub>5</sub>",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "F<sub>2</sub>＜F<sub>7</sub>＜F<sub>5</sub>",
+      "F<sub>2</sub>＞F<sub>7</sub>＞F<sub>5</sub>",
+      "F<sub>2</sub>＝F<sub>7</sub>＜F<sub>5</sub>"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第39題。",
+    "exp": "正確答案：F<sub>2</sub>＝F<sub>7</sub>＞F<sub>5</sub>。來源：114年國中教育會考自然第39題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -1209,21 +1254,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q39-question-1.png",
-      "/assets/banks/cap-114-science/Q39-question-2.png"
-    ]
+      "/assets/banks/cap-114-science/Q39-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q40",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-114-science/Q40-question.png)",
-    "correct": "原卷選項 A",
+    "q": "在燒瓶中裝水並加熱到沸騰後，停止加熱，塞住\n瓶口，翻轉倒置燒瓶，使瓶內的空氣位於上方，\n\n如圖(二十三)。此時拿一袋冰塊放在燒瓶的上方，\n瓶內的氣壓會改變，而水會由下而上開始冒出氣\n泡，是一種物理變化，如圖(二十四)。根據上述說\n明，關於冰塊降溫造成此現象的解釋，下列何者\n最合理？\n\n![圖表](/assets/banks/cap-114-science/Q40-figure-1.png)\n\n",
+    "correct": "瓶內的水蒸氣凝結，接著藉由水汽化達到新的平衡",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "瓶內的水蒸氣蒸發，接著藉由水汽化達到新的平衡",
+      "瓶內的氣壓降低，接著藉由水分解反應產生氣體達到新的平衡",
+      "瓶內的氣壓升高，接著藉由水分解反應產生氣體達到新的平衡"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第40題。",
+    "exp": "正確答案：瓶內的水蒸氣凝結，接著藉由水汽化達到新的平衡。來源：114年國中教育會考自然第40題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -1239,22 +1284,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q40-question.png"
+      "/assets/banks/cap-114-science/Q40-figure-1.png"
     ],
     "passRate": 0.46,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q41",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-114-science/Q41-question.png)",
-    "correct": "原卷選項 D",
+    "q": "圖(二十五)為一篇介紹零碳排放飛機文章中出現的燃料資訊圖，圖中顯示單位\n質量與單位體積的燃料燃燒所產生的能量之比較。以產生相同的能量為前提，\n與其他燃料比較，液化氫具有下列何種特點？\n\n![圖表](/assets/banks/cap-114-science/Q41-figure-1.png)",
+    "correct": "液化氫會較輕，但占用的空間大",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "液化氫會較重，但占用的空間小",
+      "液化氫會較重，且占用的空間大",
+      "液化氫會較輕，且占用的空間小"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第41題。",
+    "exp": "正確答案：液化氫會較輕，但占用的空間大。來源：114年國中教育會考自然第41題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -1270,22 +1316,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q41-question.png"
+      "/assets/banks/cap-114-science/Q41-figure-1.png"
     ],
     "passRate": 0.31,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q42",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-114-science/Q42-question-1.png)\n\n![第42題原卷資料](/assets/banks/cap-114-science/Q42-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "瑞典學生拍攝影片表達節能的重要性，影片中請來奧運自行車選手踩單車\n發電烤吐司，最終選手踩到精疲力竭，才烤好一片吐司，如圖(二十六)，過程\n中發電的平均電功率約700 W，總共產生的電能約0.021 kWh。若以一度電3元\n計算，上述過程產生的電能，其對應的電費應如何計算？\n\n元\n\n![圖表](/assets/banks/cap-114-science/Q42-figure-1.png)\n\n",
+    "correct": "$0.021\\times3$元",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "$\\frac{700}{1000}\\times3$元",
+      "$\\frac{0.021\\times700}{1000}\\times3$元",
+      "$\\frac{0.021\\times1000}{700}\\times3$元"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第42題。",
+    "exp": "正確答案：$0.021\\times3$元。來源：114年國中教育會考自然第42題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -1302,23 +1349,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/Q42-question-1.png",
-      "/assets/banks/cap-114-science/Q42-question-2.png"
+      "/assets/banks/cap-114-science/Q42-figure-1.png"
     ],
     "passRate": 0.37,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q43",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-114-science/G43-44-context.png)\n\n![第43題原卷資料](/assets/banks/cap-114-science/Q43-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答43～44題\n綠蒜頭是一種醃漬食品，一般做法約20天可使蒜頭變綠色。陳同學想要探究\n影響蒜頭變綠色的原因，進行的實驗與說明如下：\n蒜頭燒杯：先將蒜頭剝皮後，選取大小相近的蒜頭每6顆放入一個燒杯，共數杯。\n實實驗驗一一：在數個蒜頭燒杯中各倒入15.0 mL食醋，杯口封膜後置於10℃的低溫環境存\n放，每天記錄蒜頭的「變色比例」。\n變色的蒜頭數量\n變色比例＝ ×100%\n全部的蒜頭數量\n結果發現到第6天有6%蒜頭開始變綠色，直到第15天，所有蒜頭全部開始\n變綠色。\n實實驗驗二二：因為全部變色的時間較長，所以陳同學改變存放蒜頭燒杯的溫度，步驟\n如下：\n1. 在數個蒜頭燒杯中各倒入15.0 mL食醋，杯口封膜。\n_\n2. 分別置於三種溫度環境( 13℃、10℃、25℃)，存放3天。\n3. 由於蒜頭皆無變色，所以全部改置於25℃的環境繼續存放，於第5天時，\n變色比例如表(十)。\n表(十)\n\n![圖表](/assets/banks/cap-114-science/G43-44-figure-1.png)\n實實驗驗三三：根據實驗一、二的結果，陳同學設計實驗三，探究蒜頭置於不同水溶液\n後變綠色的變因。步驟如下：\n1. 在數個蒜頭燒杯中分別倒入四種不同的水溶液15.0 mL，並加水稀釋至pH值\n均為3.0，杯口封膜。\n2. 置於10℃的環境，存放3天。\n3. 由於蒜頭皆無變色，所以全部改置於25℃的環境繼續存放，於第5天時，\n變色比例如表(十一)。\n表(十一)\n![圖表](/assets/banks/cap-114-science/G43-44-figure-2.png)\n\n根據實驗結果，關於不同溫度對蒜頭變綠色的影響，下列說明何者最合理？",
+    "correct": "先低溫處理，接著改在25℃放置會加快變色的速率",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "全程在10℃，變色的速率最快",
+      "全程在25℃，變色的速率最快",
+      "先低溫處理，接著改在25℃放置會減緩變色的速率"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第43題。",
+    "exp": "正確答案：先低溫處理，接著改在25℃放置會加快變色的速率。來源：114年國中教育會考自然第43題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -1338,23 +1385,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G43-44-context.png",
-      "/assets/banks/cap-114-science/Q43-question.png"
+      "/assets/banks/cap-114-science/G43-44-figure-1.png",
+      "/assets/banks/cap-114-science/G43-44-figure-2.png"
     ],
     "passRate": 0.59,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q44",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-114-science/G43-44-context.png)\n\n![第44題原卷資料](/assets/banks/cap-114-science/Q44-question-1.png)\n\n![第44題原卷資料](/assets/banks/cap-114-science/Q44-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答43～44題\n綠蒜頭是一種醃漬食品，一般做法約20天可使蒜頭變綠色。陳同學想要探究\n影響蒜頭變綠色的原因，進行的實驗與說明如下：\n蒜頭燒杯：先將蒜頭剝皮後，選取大小相近的蒜頭每6顆放入一個燒杯，共數杯。\n實實驗驗一一：在數個蒜頭燒杯中各倒入15.0 mL食醋，杯口封膜後置於10℃的低溫環境存\n放，每天記錄蒜頭的「變色比例」。\n變色的蒜頭數量\n變色比例＝ ×100%\n全部的蒜頭數量\n結果發現到第6天有6%蒜頭開始變綠色，直到第15天，所有蒜頭全部開始\n變綠色。\n實實驗驗二二：因為全部變色的時間較長，所以陳同學改變存放蒜頭燒杯的溫度，步驟\n如下：\n1. 在數個蒜頭燒杯中各倒入15.0 mL食醋，杯口封膜。\n_\n2. 分別置於三種溫度環境( 13℃、10℃、25℃)，存放3天。\n3. 由於蒜頭皆無變色，所以全部改置於25℃的環境繼續存放，於第5天時，\n變色比例如表(十)。\n表(十)\n\n![圖表](/assets/banks/cap-114-science/G43-44-figure-1.png)\n實實驗驗三三：根據實驗一、二的結果，陳同學設計實驗三，探究蒜頭置於不同水溶液\n後變綠色的變因。步驟如下：\n1. 在數個蒜頭燒杯中分別倒入四種不同的水溶液15.0 mL，並加水稀釋至pH值\n均為3.0，杯口封膜。\n2. 置於10℃的環境，存放3天。\n3. 由於蒜頭皆無變色，所以全部改置於25℃的環境繼續存放，於第5天時，\n變色比例如表(十一)。\n表(十一)\n![圖表](/assets/banks/cap-114-science/G43-44-figure-2.png)\n\n僅根據實驗三的結果，推測使蒜頭變綠色的有利環境，最可能是下列何者？",
+    "correct": "有– COOH原子團的環境",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "酸性越弱的環境",
+      "酸性越強的環境",
+      "沒有– COOH原子團的環境"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第44題。",
+    "exp": "正確答案：有– COOH原子團的環境。來源：114年國中教育會考自然第44題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -1375,24 +1423,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G43-44-context.png",
-      "/assets/banks/cap-114-science/Q44-question-1.png",
-      "/assets/banks/cap-114-science/Q44-question-2.png"
+      "/assets/banks/cap-114-science/G43-44-figure-1.png",
+      "/assets/banks/cap-114-science/G43-44-figure-2.png"
     ],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q45",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-114-science/G45-46-context.png)\n\n![第45題原卷資料](/assets/banks/cap-114-science/Q45-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答45～46題\n小花至醫院做「出血時間檢查」，步驟如下：\nㄧ、以針刺耳垂使其流血。\n二、等30秒後以濾紙接觸耳垂。\n三、每隔30秒後再次以濾紙接觸耳垂，以此類推直到出血停止。\n小花檢測結果的紀錄如圖(二十七)，圖中●代表每次以濾紙接觸耳垂所得到的\n出血範圍。表(十二)為本項檢查的參考數值與相關判定的資料。\n![圖表](/assets/banks/cap-114-science/G45-46-figure-4.png)\n表(十二)\n![圖表](/assets/banks/cap-114-science/G45-46-figure-1.png)\n\n\n\n\n僅根據小花檢測的初步結果，下列推論何者最合理？",
+    "correct": "出血時間過長，可能罹患X減少症或其他凝血因子異常",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "出血時間過短，須進一步檢查",
+      "出血時間於容許範圍內，可能無異常",
+      "出血時間於容許範圍內，但可能罹患X減少症或其他凝血因子異常"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第45題。",
+    "exp": "正確答案：出血時間過長，可能罹患X減少症或其他凝血因子異常。來源：114年國中教育會考自然第45題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -1412,23 +1460,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G45-46-context.png",
-      "/assets/banks/cap-114-science/Q45-question.png"
+      "/assets/banks/cap-114-science/G45-46-figure-4.png",
+      "/assets/banks/cap-114-science/G45-46-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q46",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-114-science/G45-46-context.png)\n\n![第46題原卷資料](/assets/banks/cap-114-science/Q46-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答45～46題\n小花至醫院做「出血時間檢查」，步驟如下：\nㄧ、以針刺耳垂使其流血。\n二、等30秒後以濾紙接觸耳垂。\n三、每隔30秒後再次以濾紙接觸耳垂，以此類推直到出血停止。\n小花檢測結果的紀錄如圖(二十七)，圖中●代表每次以濾紙接觸耳垂所得到的\n出血範圍。表(十二)為本項檢查的參考數值與相關判定的資料。\n![圖表](/assets/banks/cap-114-science/G45-46-figure-4.png)\n表(十二)\n![圖表](/assets/banks/cap-114-science/G45-46-figure-1.png)\n\n\n\n\n表中的X最可能為下列何者？",
+    "correct": "血小板",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "淋巴",
+      "白血球",
+      "紅血球"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第46題。",
+    "exp": "正確答案：血小板。來源：114年國中教育會考自然第46題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -1448,23 +1497,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G45-46-context.png",
-      "/assets/banks/cap-114-science/Q46-question.png"
+      "/assets/banks/cap-114-science/G45-46-figure-4.png",
+      "/assets/banks/cap-114-science/G45-46-figure-1.png"
     ],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q47",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-114-science/G47-48-context-1.png)\n\n![第47題原卷資料](/assets/banks/cap-114-science/G47-48-context-2.png)\n\n![第47題原卷資料](/assets/banks/cap-114-science/Q47-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答47～48題\n如圖(二十八)，阿貴將砝碼掛在動滑輪下，在砝碼靜止不動後，施力使彈簧秤\n以穩定且緩慢的速度向上移動。他用質量100 g、200 g、300 g的砝碼分別做三次上\n述實驗，並記錄彈簧秤拉力讀數F與砝碼質量M的關係，如圖(二十九)。\n![圖表](/assets/banks/cap-114-science/G47-48-figure-2.png)\n![圖表](/assets/banks/cap-114-science/G47-48-figure-1.png)\n\n阿貴在做砝碼質量為200 g的實驗時，他施一個鉛直向上的定力將彈簧秤以穩\n定且緩慢的速度提高10 cm，並使砝碼上升5 cm，此過程彈簧秤拉力所作的功\n為多少gw．cm？",
+    "correct": "1500",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "1000",
+      "2000",
+      "3000"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第47題。",
+    "exp": "正確答案：1500。來源：114年國中教育會考自然第47題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -1485,24 +1535,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G47-48-context-1.png",
-      "/assets/banks/cap-114-science/G47-48-context-2.png",
-      "/assets/banks/cap-114-science/Q47-question.png"
+      "/assets/banks/cap-114-science/G47-48-figure-2.png",
+      "/assets/banks/cap-114-science/G47-48-figure-1.png"
     ],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q48",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-114-science/G47-48-context-1.png)\n\n![第48題原卷資料](/assets/banks/cap-114-science/G47-48-context-2.png)\n\n![第48題原卷資料](/assets/banks/cap-114-science/Q48-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答47～48題\n如圖(二十八)，阿貴將砝碼掛在動滑輪下，在砝碼靜止不動後，施力使彈簧秤\n以穩定且緩慢的速度向上移動。他用質量100 g、200 g、300 g的砝碼分別做三次上\n述實驗，並記錄彈簧秤拉力讀數F與砝碼質量M的關係，如圖(二十九)。\n![圖表](/assets/banks/cap-114-science/G47-48-figure-2.png)\n![圖表](/assets/banks/cap-114-science/G47-48-figure-1.png)\n\n阿貴經多次重複同樣的實驗所得結果均與圖(二十九)相同，而圖中的三點連\n線之延長線與縱軸F交點不是原點。若不考慮摩擦力，則關於交點不是原點的\n原因，下列敘述何者最合理？",
+    "correct": "阿貴所記錄彈簧秤讀數F，其數值同時受到動滑輪質量及砝碼質量的影響",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "此實驗的誤差很大",
+      "此實驗裝置屬於費力的簡單機械",
+      "阿貴所記錄彈簧秤讀數F，其數值同時受到彈簧秤質量及砝碼質量的影響"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第48題。",
+    "exp": "正確答案：阿貴所記錄彈簧秤讀數F，其數值同時受到動滑輪質量及砝碼質量的影響。來源：114年國中教育會考自然第48題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -1523,24 +1573,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G47-48-context-1.png",
-      "/assets/banks/cap-114-science/G47-48-context-2.png",
-      "/assets/banks/cap-114-science/Q48-question.png"
+      "/assets/banks/cap-114-science/G47-48-figure-2.png",
+      "/assets/banks/cap-114-science/G47-48-figure-1.png"
     ],
     "passRate": 0.54,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q49",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-114-science/G49-50-context.png)\n\n![第49題原卷資料](/assets/banks/cap-114-science/Q49-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答49～50題\n阿平想以一顆球作為模擬月球運行造成月相變化的道具，他先將球的其中一半\n塗黑，表示月球未受陽光照射的部分。圖(三十)為由球的正上方往下看的俯視圖，\n圖(三十一)則是進行模擬操作時，由頭頂正上方往下看的俯視圖。他將自己模擬成\n地球的位置，並將球置於甲處，以模擬上弦月時的月、地相對位置狀態，並依\n箭頭的路徑將球慢慢從甲處移至乙處，使球在乙處時模擬下弦月時的狀態。\n![圖表](/assets/banks/cap-114-science/G49-50-figure-1.png)\n![圖表](/assets/banks/cap-114-science/G49-50-figure-2.png)\n\n\n考量月球在甲、乙兩處的月相，下列俯視圖何者最可能是阿平進行模擬時，球\n於兩處的亮暗面分布狀態？",
+    "correct": "![圖表](/assets/banks/cap-114-science/Q49-option-C-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "乙阿平甲\n![圖表](/assets/banks/cap-114-science/Q49-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q49-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-114-science/Q49-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第49題。",
+    "exp": "正確答案：![圖表](/assets/banks/cap-114-science/Q49-option-C-figure-1.png)。來源：114年國中教育會考自然第49題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -1560,23 +1610,28 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G49-50-context.png",
-      "/assets/banks/cap-114-science/Q49-question.png"
+      "/assets/banks/cap-114-science/G49-50-figure-1.png",
+      "/assets/banks/cap-114-science/G49-50-figure-2.png",
+      "/assets/banks/cap-114-science/Q49-option-C-figure-1.png",
+      "/assets/banks/cap-114-science/Q49-option-A-figure-1.png",
+      "/assets/banks/cap-114-science/Q49-option-B-figure-1.png",
+      "/assets/banks/cap-114-science/Q49-option-D-figure-1.png"
     ],
     "passRate": 0.37,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-science-q50",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-114-science/G49-50-context.png)\n\n![第50題原卷資料](/assets/banks/cap-114-science/Q50-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n閱讀下列敘述後，回答49～50題\n阿平想以一顆球作為模擬月球運行造成月相變化的道具，他先將球的其中一半\n塗黑，表示月球未受陽光照射的部分。圖(三十)為由球的正上方往下看的俯視圖，\n圖(三十一)則是進行模擬操作時，由頭頂正上方往下看的俯視圖。他將自己模擬成\n地球的位置，並將球置於甲處，以模擬上弦月時的月、地相對位置狀態，並依\n箭頭的路徑將球慢慢從甲處移至乙處，使球在乙處時模擬下弦月時的狀態。\n![圖表](/assets/banks/cap-114-science/G49-50-figure-1.png)\n![圖表](/assets/banks/cap-114-science/G49-50-figure-2.png)\n\n\n根據圖(三十一)模擬的月球移動路徑，當月球由甲處移動至乙處的這段時間，\n地球自轉或繞太陽公轉了幾圈？\n\n![圖表](/assets/banks/cap-114-science/Q50-figure-1.png)",
+    "correct": "地球大約自轉了15圈",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "地球大約自轉了半圈",
+      "地球繞太陽大約公轉了半圈",
+      "地球繞太陽大約公轉了15圈"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第50題。",
+    "exp": "正確答案：地球大約自轉了15圈。來源：114年國中教育會考自然第50題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -1596,10 +1651,12 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-science/G49-50-context.png",
-      "/assets/banks/cap-114-science/Q50-question.png"
+      "/assets/banks/cap-114-science/G49-50-figure-1.png",
+      "/assets/banks/cap-114-science/G49-50-figure-2.png",
+      "/assets/banks/cap-114-science/Q50-figure-1.png"
     ],
     "passRate": 0.53,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   }
 ]

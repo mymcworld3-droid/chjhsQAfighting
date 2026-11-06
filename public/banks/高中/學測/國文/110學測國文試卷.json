@@ -26,12 +26,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.93,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q2",
     "difficulty": "easy",
-    "q": "下列文句，完全沒有錯別字的是：",
+    "q": "下列文句，完全<u>沒有</u>錯別字的是：",
     "correct": "集中營裡的迫害手段聳人聽聞，諸多相關照片更是令人不忍卒睹",
     "wrong": [
       "這齣動畫電影劇情緊湊，妙趣恆生，締造本年度最高的票房紀錄",
@@ -55,12 +56,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.88,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q3",
     "difficulty": "easy",
-    "q": "依據文意，甲、乙、丙、丁、戊排列順序最適當的是：\n 牠哭起來固然一片悽慄，\n 甲、這時貓頭鷹「嘿嘿──嘿嘿──嘿嘿──嘿嘿」一波又一波的笑聲\n 乙、特別入秋以後，夜涼如水丙、一輪明月把人幾乎拋入冰河之中\n 丁、尖冷到直直地透進人的骨髓戊、笑起來更帶給人無限尖冷\n 就老吏斷獄那樣地凌遲著整個世間，讓每一個人的再多麼神祕的隱私都沒有地方\n 隱遁起來。（尉天驄〈眾鳥之什〉）",
+    "q": "依據文意，甲、乙、丙、丁、戊排列順序最適當的是：\n\n牠哭起來固然一片悽慄，\n\n甲、<u>這時貓頭鷹「嘿嘿──嘿嘿──嘿嘿──嘿嘿」一波又一波的笑聲</u>\n\n乙、<u>特別入秋以後，夜涼如水</u> ______ 丙、<u>一輪明月把人幾乎拋入冰河之中</u>\n\n丁、<u>尖冷到直直地透進人的骨髓</u> ______ 戊、<u>笑起來更帶給人無限尖冷</u>\n\n就老吏斷獄那樣地凌遲著整個世間，讓每一個人的再多麼神祕的隱私都沒有地方隱遁起來。（尉天驄〈眾鳥之什〉）",
     "correct": "戊丁乙丙甲",
     "wrong": [
       "乙甲丁戊丙",
@@ -84,19 +86,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q4",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-110-chinese/Q4-question.png)",
-    "correct": "原卷選項 C",
+    "q": "閱讀下文，最適合填入□□內的詞依序是：\n\n甲、當你工作時，你是一管蘆笛，通過笛心，將時光的□□演奏成樂音。（紀伯倫《先知》）\n\n乙、山坡上偶爾有幾隻黑白相間的花牛和綿羊，在從容□□草野的空曠。（余光中〈風吹西班牙〉）\n\n丙、植物的緘默總包含千言萬語，但又可以將世間無盡喧囂，□□為深沉的靜謐。（徐國能〈蒲葵〉）\n\n![圖表](/assets/banks/gsat-110-chinese/Q4-figure-1.png)\n![圖表](/assets/banks/gsat-110-chinese/Q4-figure-2.png)",
+    "correct": "呢喃／咀嚼／收攏",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "歌唱／呼吸／幻化",
+      "歌唱／咀嚼／收攏",
+      "呢喃／呼吸／幻化"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗國文第4題。",
+    "exp": "正確答案：呢喃／咀嚼／收攏。來源：110年學科能力測驗國文第4題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -112,15 +115,17 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/Q4-question.png"
+      "/assets/banks/gsat-110-chinese/Q4-figure-1.png",
+      "/assets/banks/gsat-110-chinese/Q4-figure-2.png"
     ],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q5",
     "difficulty": "easy",
-    "q": "關於下文意象，說明最適當的是：\n    在每一個烈陽如漿的白日裡，祖母在田畝中佝僂耕種。在每一節翻土、播種、\n 除草、施肥的動作間，揮汗如雨。強大的日光，攫取祖母髮中的黑色素與汗水蘸\n 成墨汁下嚥，經過時間的消化後排泄出來，叫做黑夜。\n   濃稠的黑夜在暗中默默的成長，流淌於小溪庭院、穀倉柴坊、豬舍雞寮，並\n 不斷的擴張向田畝間的菜圃和水塘。夜色如墨，團團緊緊的包圍村莊，但它卻鎭\n 不住祖母的雙腳，她背負著浩大的夜色，如同白日頂著烈陽，仍不斷的在田畝間\n 穿梭，在豬舍雞寮間忙碌著。（葉國居〈髻鬃花〉）",
+    "q": "關於下文意象，說明最適當的是：\n\n ______ 在每一個烈陽如漿的白日裡，祖母在田畝中佝僂耕種。在每一節翻土、播種、除草、施肥的動作間，揮汗如雨。強大的日光，攫取祖母髮中的黑色素與汗水蘸成墨汁下嚥，經過時間的消化後排泄出來，叫做黑夜。\n\n ______ 濃稠的黑夜在暗中默默的成長，流淌於小溪庭院、穀倉柴坊、豬舍雞寮，並不斷的擴張向田畝間的菜圃和水塘。夜色如墨，團團緊緊的包圍村莊，但它卻鎭不住祖母的雙腳，她背負著浩大的夜色，如同白日頂著烈陽，仍不斷的在田畝間穿梭，在豬舍雞寮間忙碌著。（葉國居〈髻鬃花〉）",
     "correct": "髮中的黑色素與汗水蘸成墨汁：暗喻祖母勞動且漸老的身影",
     "wrong": [
       "烈陽如漿：形容祖母對子孫們的深厚關愛，彷如陽光般溫暖",
@@ -144,12 +149,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.84,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q6",
     "difficulty": "easy",
-    "q": "依據下文，最符合作者對「心結」看法的是：\n   人都說，心結宜解不宜結。又說，解開心結就是海闊天空。可是，人生怎麼\n 少得了心結？一旦海闊天空，人心又將空懸何處？\n   許多人心裡都有心結的場所，例如：故鄉的母校──初戀、體罰、模擬考，\n 都在那裡發生。有些人每次回到故鄉，就一定要去母校走走；有些人卻一定要避\n 開母校。心結可能是甜美的，也可能是痛苦的。不管心結的場所被珍愛，還是被\n 憎惡，此等強烈的愛憎情緒，都證明了心結有多要緊。心結的場所，是數學X軸\n Y軸交叉的原點，有了原點，我們才知自己置身哪一個座標格子裡，才覺得踏實。\n   心結是一支大頭針，可以把一張地圖釘在牆上。如果大頭針掉失了，牆上的\n 地圖也就垮下來。（改寫自紀大偉〈心結〉）",
+    "q": "依據下文，最符合作者對「心結」看法的是：\n\n ______ 人都說，心結宜解不宜結。又說，解開心結就是海闊天空。可是，人生怎麼少得了心結？一旦海闊天空，人心又將空懸何處？\n\n ______ 許多人心裡都有心結的場所，例如：故鄉的母校──初戀、體罰、模擬考，都在那裡發生。有些人每次回到故鄉，就一定要去母校走走；有些人卻一定要避開母校。心結可能是甜美的，也可能是痛苦的。不管心結的場所被珍愛，還是被憎惡，此等強烈的愛憎情緒，都證明了心結有多要緊。心結的場所，是數學X軸Y軸交叉的原點，有了原點，我們才知自己置身哪一個座標格子裡，才覺得踏實。\n\n ______ 心結是一支大頭針，可以把一張地圖釘在牆上。如果大頭針掉失了，牆上的地圖也就垮下來。（改寫自紀大偉〈心結〉）",
     "correct": "人生因心結而有支點、能定著，不致虛空",
     "wrong": [
       "心結或甜美或痛苦，美者宜留，苦者宜解",
@@ -173,12 +179,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.89,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q7",
     "difficulty": "medium",
-    "q": "關於下列新詩，解讀最不適當的是：\n   孤獨的小舟都是歪斜地擱著／全世界的沙灘都是如此的／而如同歪斜的頭\n ／裡面充盈著悲哀（方旗〈小舟〉）",
+    "q": "關於下列新詩，解讀<u>最不適當</u>的是：\n\n ______ 孤獨的小舟都是歪斜地擱著／全世界的沙灘都是如此的／而如同歪斜的頭／裡面充盈著悲哀（方旗〈小舟〉）",
     "correct": "用「沙灘」的單調，暗喻生活千篇一律",
     "wrong": [
       "以「舟」喻人，凸顯生命被擱淺的悲哀",
@@ -202,12 +209,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q8",
     "difficulty": "easy",
-    "q": "下文內最適合填入的詞語依序是：\n  甲、上書陳事，起自戰國，逮於兩漢，風流彌廣。原其體度：攻人主之長短，  之\n   徒也；訐群臣之得失，訟訴之類也；陳國家之利害，  之伍也；帶私情之\n   與奪，  之儔也。總此四塗，賈誠以求位，鬻言以干祿，或無絲毫之益，\n   而有不省之困。（顏之推《顏氏家訓》）\n 乙、大凡為文，須要有溫和敦厚之氣，  告君文字，蓋尤不可無也。（吳訥《文\n   章辨體序》）",
+    "q": "下文<u> ______ </u>內最適合填入的詞語依序是：\n\n甲、上書陳事，起自戰國，逮於兩漢，風流彌廣。原其體度：攻人主之長短，<u> ______ </u>之徒也；訐群臣之得失，訟訴之類也；陳國家之利害，<u> ______ </u>之伍也；帶私情之與奪，<u> ______ </u>之儔也。總此四塗，賈誠以求位，鬻言以干祿，或無絲毫之益，而有不省之困。（顏之推《顏氏家訓》）\n\n乙、大凡為文，須要有溫和敦厚之氣，<u> ______ </u>告君文字，蓋尤不可無也。（吳訥《文章辨體序》）",
     "correct": "諫諍／對策／遊說／章疏",
     "wrong": [
       "諫諍／章疏／遊說／對策",
@@ -231,12 +239,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.77,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q9",
     "difficulty": "easy",
-    "q": "「……者，……也」是古文判斷句的典型結構，例如「南冥者，天池也」，即「所\n 謂南冥就是天池」。下列文句，不是表達判斷語意的是：",
+    "q": "「……者，……也」是古文判斷句的典型結構，例如「南冥者，天池也」，即「所謂南冥就是天池」。下列文句，<u>不是</u>表達判斷語意的是：",
     "correct": "以為凡是州之山水有異態者，皆我有也",
     "wrong": [
       "望之蔚然而深秀者，琅邪也",
@@ -260,12 +269,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q10",
     "difficulty": "medium",
-    "q": "關於下文〈烏鵲歌〉的解釋，最適當的是：\n   韓憑，戰國時為宋康王舍人。妻何氏美，王欲之，捕舍人，築青陵台。何氏\n 作〈烏鵲歌〉以見志，遂自縊死：「南山有烏，北山張羅。烏自高飛，羅當奈何。\n 烏鵲雙飛，不樂鳳凰。妾是庶民，不樂宋王。」（《九國志》）",
+    "q": "關於下文〈烏鵲歌〉的解釋，最適當的是：\n\n ______ 韓憑，戰國時為宋康王舍人。妻何氏美，王欲之，捕舍人，築青陵台。何氏作〈烏鵲歌〉以見志，遂自縊死：「南山有烏，北山張羅。烏自高飛，羅當奈何。烏鵲雙飛，不樂鳳凰。妾是庶民，不樂宋王。」（《九國志》）",
     "correct": "以「高飛」凸顯何氏的自主意志",
     "wrong": [
       "以「烏」暗指宋康王的邪惡",
@@ -289,12 +299,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.75,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q11",
     "difficulty": "medium",
-    "q": "依據下文，最符合主旨的敘述是：\n   天下有可為其半而不可為其全者，偏枯之藥可以治偏枯，倍其偏枯之藥不可\n 以起死人也。天下有可為其全而不可為其半者，樵夫擔薪兩鈞，捷步以趨，去其\n 半而不能行，非力不足，勢不便也。（章學誠《文史通義》）",
+    "q": "依據下文，最符合主旨的敘述是：\n\n ______ 天下有可為其半而不可為其全者，偏枯之藥可以治偏枯，倍其偏枯之藥不可以起死人也。天下有可為其全而不可為其半者，樵夫擔薪兩鈞，捷步以趨，去其半而不能行，非力不足，勢不便也。（章學誠《文史通義》）",
     "correct": "應世處事不能拘執一方，必須衡量狀況，審時度勢以制其宜",
     "wrong": [
       "再珍貴的藥材亦無法起死回生，面對死生窮達，當樂天知命",
@@ -318,12 +329,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q12",
     "difficulty": "medium",
-    "q": "關於下文王若虛的論述方式，說明最適當的是：\n   「郊寒白俗」，詩人類鄙薄之。然鄭厚評詩，荊公、蘇、黃輩曾不比數，而\n 云：「樂天如柳陰春鶯，東野（郊）如草根秋蟲，皆造化中一妙」，何哉？哀樂\n 之真，發乎情性，此詩之正理也。(王若虛《滹南詩話》）",
+    "q": "關於下文王若虛的論述方式，說明最適當的是：\n\n ______ 「郊寒白俗」，詩人類鄙薄之。然鄭厚評詩，荊公、蘇、黃輩曾不比數，而云：「樂天如柳陰春鶯，東野（郊）如草根秋蟲，皆造化中一妙」，何哉？哀樂之真，發乎情性，此詩之正理也。(王若虛《滹南詩話》）",
     "correct": "先述習見論評，再引前人說法表達觀點",
     "wrong": [
       "運用對比映襯以凸顯詩人品格上的差異",
@@ -347,12 +359,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q13",
     "difficulty": "medium",
-    "q": "施先生參加朋友舉辦的宴會，贈詩一首：「桂已飄香菊作花，門前遙駐七香車。\n 競傳丰度誠端好，定卜咸宜到室家。」依據詩意，最適合這場宴會的題辭是：",
+    "q": "施先生參加朋友舉辦的宴會，贈詩一首：「桂已飄香菊作花，門前遙駐七香車。競傳丰度誠端好，定卜咸宜到室家。」依據詩意，最適合這場宴會的題辭是：",
     "correct": "珠聯璧合",
     "wrong": [
       "椿萱並茂",
@@ -376,19 +389,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.75,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-110-chinese/Q14-question.png)",
-    "correct": "原卷選項 A",
+    "q": "依據下表的故事角色設定，推斷古代經典中的人物關係，最適當的敘述是：\n\n| 導師（是必備條件） | 伙伴（是必備條件） |\n| 傳授知識或技能，主角因此獲得啟發 /  / 有時會贈予主角重要或救命之物 /  / 不拘年紀，也可能是平庸、無德之人 | 忠於主角，值得信賴 /  / 目標與主角相同，但地位或能力不如主角 /  / 有時會質疑主角，在衝突中提供建議 |",
+    "correct": "《史記》中，樊噲是劉邦的伙伴",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "《楚辭》中，漁父是屈原的導師",
+      "《紅樓夢》中，薛寶釵是林黛玉的伙伴",
+      "《儒林外史》中，胡屠戶是范進的導師"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗國文第14題。",
+    "exp": "正確答案：《史記》中，樊噲是劉邦的伙伴。來源：110年學科能力測驗國文第14題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -403,23 +417,22 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069610788618143168/110%e5%ad%b8%e6%b8%ac%e5%9c%8b%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-chinese/Q14-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q15",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n15-17為題組。閱讀下列詞選資料，回答15-17題。\n\n                選女入選率高的       【備註】\n                錄詞宋代女詞人及作品數  * 該書選錄詞作總數／該時\n                女人代詞選名李朱孫魏書選錄非佚名詞人總數\n                詞作\n                     清淑夫夫   # 該書所錄李清照、朱淑真人品\n                     照真人人詞作歸屬存疑篇數數數\n    《梅苑》                 1   18   18                     * 421 首／82 人\n  南 《樂府雅詞》            2   33   23             10      * 923 首／95 人\n  宋 《草堂詩餘》            3   13   10         2\n    《唐宋諸賢絕妙詞選》   10   29    8         5    7 選錄「閨秀」1 卷\n    《類編草堂詩餘》        3   15    9         5       # 李2 首\n  明 《詞的》                 6   18    8    2    5       # 李2 首\n  代 《花草粹編》           52  147   43   23    8   11  # 李9 首；朱5 首\n    《古今詞統》           30   62   15    5    5    3  # 李6 首；朱2 首\n\n關於上表內容的探究，最適當的是：",
-    "correct": "參考備註「*」推算《梅苑》、《樂府雅詞》中每位詞人的獲選作品平均量，\n   可對照出李清照詞頗受二書青睞",
+    "q": "【共用閱讀資料】\n<u>15-17為題組</u>。閱讀下列詞選資料，回答15-17題。\n\n| 時代 | 詞選名 | 選錄女詞人數 | 女詞人作品數 | 入選率高的 /  / 宋代女詞人及作品數 | 【備註】 /  / * 該書選錄詞作總數／該書選錄非佚名詞人總數 /  / # 該書所錄李清照、朱淑真詞作歸屬存疑篇數 |\n| 李清照 | 朱淑真 | 孫夫人 | 魏夫人 |\n| 南宋 | 《梅苑》 | 1 | 18 | 18 |  |  |  | * 421首／82人 |\n| 《樂府雅詞》 | 2 | 33 | 23 |  |  | 10 | * 923首／95人 |\n| 《草堂詩餘》 | 3 | 13 | 10 |  | 2 |  |  |\n| 《唐宋諸賢絕妙詞選》 | 10 | 29 | 8 |  | 5 | 7 | 選錄「閨秀」1卷 |\n| 明 /  / 代 | 《類編草堂詩餘》 | 3 | 15 | 9 |  | 5 |  | # 李2首 |\n| 《詞的》 | 6 | 18 | 8 | 2 | 5 |  | # 李2首 |\n| 《花草粹編》 | 52 | 147 | 43 | 23 | 8 | 11 | # 李9首；朱5首 |\n| 《古今詞統》 | 30 | 62 | 15 | 5 | 5 | 3 | # 李6首；朱2首 |\n\n關於上表內容的探究，最適當的是：\n\n",
+    "correct": "參考備註「*」推算《梅苑》、《樂府雅詞》中每位詞人的獲選作品平均量，可對照出李清照詞頗受二書青睞",
     "wrong": [
-      "從四本明代詞選的備註「#」可知，部分繫名為李清照的詞作，真正作者是朱\n   淑真",
-      "南宋詞選偏好孫夫人、魏夫人詞作的情況，到明代有所轉變，二位詞人的地\n   位改由朱淑真取代",
-      "《唐宋諸賢絕妙詞選》肯定女詞人，「閨秀」卷共收錄十位女詞人詞作，每位\n   至少選錄二首作品"
+      "從四本明代詞選的備註「#」可知，部分繫名為李清照的詞作，真正作者是朱淑真",
+      "南宋詞選偏好孫夫人、魏夫人詞作的情況，到明代有所轉變，二位詞人的地位改由朱淑真取代",
+      "《唐宋諸賢絕妙詞選》肯定女詞人，「閨秀」卷共收錄十位女詞人詞作，每位至少選錄二首作品"
     ],
-    "exp": "正確答案：參考備註「*」推算《梅苑》、《樂府雅詞》中每位詞人的獲選作品平均量，\n   可對照出李清照詞頗受二書青睞。來源：110年學科能力測驗國文第15題。",
+    "exp": "正確答案：參考備註「*」推算《梅苑》、《樂府雅詞》中每位詞人的獲選作品平均量，可對照出李清照詞頗受二書青睞。來源：110年學科能力測驗國文第15題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -441,12 +454,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q16",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n15-17為題組。閱讀下列詞選資料，回答15-17題。\n\n                選女入選率高的       【備註】\n                錄詞宋代女詞人及作品數  * 該書選錄詞作總數／該時\n                女人代詞選名李朱孫魏書選錄非佚名詞人總數\n                詞作\n                     清淑夫夫   # 該書所錄李清照、朱淑真人品\n                     照真人人詞作歸屬存疑篇數數數\n    《梅苑》                 1   18   18                     * 421 首／82 人\n  南 《樂府雅詞》            2   33   23             10      * 923 首／95 人\n  宋 《草堂詩餘》            3   13   10         2\n    《唐宋諸賢絕妙詞選》   10   29    8         5    7 選錄「閨秀」1 卷\n    《類編草堂詩餘》        3   15    9         5       # 李2 首\n  明 《詞的》                 6   18    8    2    5       # 李2 首\n  代 《花草粹編》           52  147   43   23    8   11  # 李9 首；朱5 首\n    《古今詞統》           30   62   15    5    5    3  # 李6 首；朱2 首\n\n若以上表為研判依據，關於甲、乙兩項推論，最適當的是：\n 甲、《花草粹編》選錄的詞人總數、詞作總數，均比《樂府雅詞》超出許多。\n 乙、《類編草堂詩餘》僅調整《草堂詩餘》的分類方式，未更動收錄的詞作。",
+    "q": "【共用閱讀資料】\n<u>15-17為題組</u>。閱讀下列詞選資料，回答15-17題。\n\n| 時代 | 詞選名 | 選錄女詞人數 | 女詞人作品數 | 入選率高的 /  / 宋代女詞人及作品數 | 【備註】 /  / * 該書選錄詞作總數／該書選錄非佚名詞人總數 /  / # 該書所錄李清照、朱淑真詞作歸屬存疑篇數 |\n| 李清照 | 朱淑真 | 孫夫人 | 魏夫人 |\n| 南宋 | 《梅苑》 | 1 | 18 | 18 |  |  |  | * 421首／82人 |\n| 《樂府雅詞》 | 2 | 33 | 23 |  |  | 10 | * 923首／95人 |\n| 《草堂詩餘》 | 3 | 13 | 10 |  | 2 |  |  |\n| 《唐宋諸賢絕妙詞選》 | 10 | 29 | 8 |  | 5 | 7 | 選錄「閨秀」1卷 |\n| 明 /  / 代 | 《類編草堂詩餘》 | 3 | 15 | 9 |  | 5 |  | # 李2首 |\n| 《詞的》 | 6 | 18 | 8 | 2 | 5 |  | # 李2首 |\n| 《花草粹編》 | 52 | 147 | 43 | 23 | 8 | 11 | # 李9首；朱5首 |\n| 《古今詞統》 | 30 | 62 | 15 | 5 | 5 | 3 | # 李6首；朱2首 |\n\n若以上表為研判依據，關於甲、乙兩項推論，最適當的是：\n\n甲、《花草粹編》選錄的詞人總數、詞作總數，均比《樂府雅詞》超出許多。\n\n乙、《類編草堂詩餘》僅調整《草堂詩餘》的分類方式，未更動收錄的詞作。\n\n",
     "correct": "甲無法判斷，乙錯誤",
     "wrong": [
       "甲正確，乙錯誤",
@@ -475,19 +489,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q17",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/gsat-110-chinese/G15-17-context.png)\n\n![第17題原卷資料](/assets/banks/gsat-110-chinese/Q17-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n<u>15-17為題組</u>。閱讀下列詞選資料，回答15-17題。\n\n| 時代 | 詞選名 | 選錄女詞人數 | 女詞人作品數 | 入選率高的 /  / 宋代女詞人及作品數 | 【備註】 /  / * 該書選錄詞作總數／該書選錄非佚名詞人總數 /  / # 該書所錄李清照、朱淑真詞作歸屬存疑篇數 |\n| 李清照 | 朱淑真 | 孫夫人 | 魏夫人 |\n| 南宋 | 《梅苑》 | 1 | 18 | 18 |  |  |  | * 421首／82人 |\n| 《樂府雅詞》 | 2 | 33 | 23 |  |  | 10 | * 923首／95人 |\n| 《草堂詩餘》 | 3 | 13 | 10 |  | 2 |  |  |\n| 《唐宋諸賢絕妙詞選》 | 10 | 29 | 8 |  | 5 | 7 | 選錄「閨秀」1卷 |\n| 明 /  / 代 | 《類編草堂詩餘》 | 3 | 15 | 9 |  | 5 |  | # 李2首 |\n| 《詞的》 | 6 | 18 | 8 | 2 | 5 |  | # 李2首 |\n| 《花草粹編》 | 52 | 147 | 43 | 23 | 8 | 11 | # 李9首；朱5首 |\n| 《古今詞統》 | 30 | 62 | 15 | 5 | 5 | 3 | # 李6首；朱2首 |\n\n上表中的詞選多有收錄李清照〈武陵春〉。關於此詞的解讀，<u>最不適當</u>的是：\n\n ______ 風住塵香花已盡，日晚倦梳頭。物是人非事事休，欲語淚先流。 ______ 聞說雙溪春尚好，也擬泛輕舟。只恐雙溪舴艋舟，載不動、許多愁。\n\n",
+    "correct": "以「聞說」、「也擬」、「只恐」層遞表現出愈益濃烈的遊興",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "藉由「花已盡」、「日晚」象徵美好事物的凋逝和歲月的滄桑",
+      "以「倦梳頭」、「淚先流」表現物是人非、世事無常的無力感",
+      "藉由「舴艋舟」之「載不動」，述說自我承受不住憂愁之深重"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗國文第17題。",
+    "exp": "正確答案：以「聞說」、「也擬」、「只恐」層遞表現出愈益濃烈的遊興。來源：110年學科能力測驗國文第17題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -507,24 +522,22 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G15-17-context.png",
-      "/assets/banks/gsat-110-chinese/Q17-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-110-chinese/G18-19-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-110-chinese/Q18-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n<u>18-19為題組</u>。閱讀下文，回答18-19題。\n\n甲\n\n人之所以異於禽獸者，幾希。庶民去之，君子存之。舜明於庶物，察於人倫，由仁義行，非行仁義也。（《孟子》）\n\n乙\n\n「幾希」，言幾於無也，乃一線之象，非一點之象，凡事俱異。凡事之異無多，稍一差錯，則墮入彼中。如禽獸亦未嘗不知「庶物」，只是不「明」；亦未嘗不有「倫類」，只是不「察」；未嘗不有所愛，而不能「行仁」；未嘗不求所宜，而不能「行義」。舉凡日用飲食，俱有異處，而俱差不遠，此其所以必戰兢惕厲，無念無事不思求其所以「異」也。「存之」，謂存其所以異者，以要言之，謂之人道。（《四書箋解》）\n\n下列敘述，最符合乙文對甲文「人禽之辨」詮釋的是：\n\n![圖表](/assets/banks/gsat-110-chinese/G18-19-figure-1.png)\n",
+    "correct": "禽獸亦具對外在事物的認知能力，且擁有情感和好惡",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "人禽在道德意識和日用飲食等各方面，都有很大差異",
+      "人只要稍有過錯，在價值層次上，即墮入禽獸的範疇",
+      "禽獸未嘗無仁義之心，但缺乏追求仁義的意志和智力"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第18題。",
+    "exp": "正確答案：禽獸亦具對外在事物的認知能力，且擁有情感和好惡。來源：110年學科能力測驗國文第18題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -544,23 +557,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G18-19-context.png",
-      "/assets/banks/gsat-110-chinese/Q18-question.png"
+      "/assets/banks/gsat-110-chinese/G18-19-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q19",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/gsat-110-chinese/G18-19-context.png)\n\n![第19題原卷資料](/assets/banks/gsat-110-chinese/Q19-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n<u>18-19為題組</u>。閱讀下文，回答18-19題。\n\n甲\n\n人之所以異於禽獸者，幾希。庶民去之，君子存之。舜明於庶物，察於人倫，由仁義行，非行仁義也。（《孟子》）\n\n乙\n\n「幾希」，言幾於無也，乃一線之象，非一點之象，凡事俱異。凡事之異無多，稍一差錯，則墮入彼中。如禽獸亦未嘗不知「庶物」，只是不「明」；亦未嘗不有「倫類」，只是不「察」；未嘗不有所愛，而不能「行仁」；未嘗不求所宜，而不能「行義」。舉凡日用飲食，俱有異處，而俱差不遠，此其所以必戰兢惕厲，無念無事不思求其所以「異」也。「存之」，謂存其所以異者，以要言之，謂之人道。（《四書箋解》）\n\n依據甲、乙二文，君子面對「幾希之異」的態度是：\n\n![圖表](/assets/banks/gsat-110-chinese/G18-19-figure-1.png)\n",
+    "correct": "嚴別差異，彰示人道的尊嚴和價值",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "存同去異，建立物我共同遵循的仁義準則",
+      "異中求同，探索萬物在紛殊表象下的共同本質",
+      "尊重差異，體認萬物平等，脫離以人為本位的思考"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗國文第19題。",
+    "exp": "正確答案：嚴別差異，彰示人道的尊嚴和價值。來源：110年學科能力測驗國文第19題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -580,23 +593,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G18-19-context.png",
-      "/assets/banks/gsat-110-chinese/Q19-question.png"
+      "/assets/banks/gsat-110-chinese/G18-19-figure-1.png"
     ],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q20",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-110-chinese/G20-21-context.png)\n\n![第20題原卷資料](/assets/banks/gsat-110-chinese/Q20-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n<u>20-21為題組</u>。閱讀下文，回答20-21題。\n\n我曾開玩笑說，專業經理人像哈士奇，吃的是每個月主人給的飼料；創業家像狼，必須聞得到血的味道，捕不到獵物就無法生存。哈士奇的時間是主人的，沒有了主人，他的時間就沒有價值，狼的時間則屬於自己。出售有限的時間，是上班族哈士奇的獲利模式。狼的視野不一樣，他們不會單獨行動，因為狩獵靠的是狼群，所以狼懂得購買別人的時間來做事。\n\n![圖表](/assets/banks/gsat-110-chinese/G20-21-figure-1.png)\n哈士奇的時間如何計價？價格通常來自價值，而「to be（你是誰）」的價值比「to do（做的內容）」高很多。以演講為例，如果會製作精美的簡報，可能一小時計價千元；如果內容很有用，可能一小時值萬元。不過，如果請林志玲演講，企業願意付更高費用的理由，不是簡報精美或內容有用，而是因為演講者是林志玲。\n\n雖然有血統的哈士奇比會看家的土狗值錢，但不斷學習成長的土狗，當他的價值被公司過度低估，那就是他出走的時候。出走的頂尖土狗沒有主人的飼料，很快就會變成狼。（改寫自盧希鵬《為什麼員工都是哈士奇，狼呢？》）\n\n下列敘述，最符合上文觀點的是：",
+    "correct": "人才若形成品牌，便難以用一般標準衡量其價值",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "創業家全憑視野，不需有專業經理人的學養",
+      "狼具有侵略性，迫使哈士奇以販售時間交換生計",
+      "土狗靠出走成為狼，哈士奇靠時間熬得久而成為狼"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第20題。",
+    "exp": "正確答案：人才若形成品牌，便難以用一般標準衡量其價值。來源：110年學科能力測驗國文第20題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -616,23 +629,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G20-21-context.png",
-      "/assets/banks/gsat-110-chinese/Q20-question.png"
+      "/assets/banks/gsat-110-chinese/G20-21-figure-1.png"
     ],
     "passRate": 0.79,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-110-chinese/G20-21-context.png)\n\n![第21題原卷資料](/assets/banks/gsat-110-chinese/Q21-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n<u>20-21為題組</u>。閱讀下文，回答20-21題。\n\n我曾開玩笑說，專業經理人像哈士奇，吃的是每個月主人給的飼料；創業家像狼，必須聞得到血的味道，捕不到獵物就無法生存。哈士奇的時間是主人的，沒有了主人，他的時間就沒有價值，狼的時間則屬於自己。出售有限的時間，是上班族哈士奇的獲利模式。狼的視野不一樣，他們不會單獨行動，因為狩獵靠的是狼群，所以狼懂得購買別人的時間來做事。\n\n![圖表](/assets/banks/gsat-110-chinese/G20-21-figure-1.png)\n哈士奇的時間如何計價？價格通常來自價值，而「to be（你是誰）」的價值比「to do（做的內容）」高很多。以演講為例，如果會製作精美的簡報，可能一小時計價千元；如果內容很有用，可能一小時值萬元。不過，如果請林志玲演講，企業願意付更高費用的理由，不是簡報精美或內容有用，而是因為演講者是林志玲。\n\n雖然有血統的哈士奇比會看家的土狗值錢，但不斷學習成長的土狗，當他的價值被公司過度低估，那就是他出走的時候。出走的頂尖土狗沒有主人的飼料，很快就會變成狼。（改寫自盧希鵬《為什麼員工都是哈士奇，狼呢？》）\n\n依據上文，關於甲、乙兩項推論，最適當的研判是：\n\n甲、〈諫逐客書〉中李斯對秦王說：「今逐客以資敵國，損民以益讎，內自虛而外樹怨於諸侯，求國無危，不可得也。」──李斯是價值被低估而想出走的土狗。\n\n乙、〈虬髯客傳〉中虬髯對李靖說：「某本欲於此世界求事，或當龍戰三二十載，建少功業。今既有主，住亦何為？太原李氏，真英主也。三五年內，即當太平。李郎以英特之才，輔清平之主，竭心盡善，必極人臣。」──虬髯是希望保有自己時間的狼，期許李靖成為優秀的哈士奇。",
+    "correct": "甲錯誤，乙正確",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "甲、乙皆正確",
+      "甲、乙皆錯誤",
+      "甲正確，乙錯誤"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗國文第21題。",
+    "exp": "正確答案：甲錯誤，乙正確。來源：110年學科能力測驗國文第21題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -652,16 +665,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G20-21-context.png",
-      "/assets/banks/gsat-110-chinese/Q21-question.png"
+      "/assets/banks/gsat-110-chinese/G20-21-figure-1.png"
     ],
     "passRate": 0.49,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q22",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n22-23為題組。閱讀下文，回答22-23題。\n   臺北是我出生、成長，居住了三十年的地方，卻不是我的家。因為，比起臺\n 北人，他們更喜歡叫我原住民。\n    「107-2-8號。」監考人員盯著我的族語准考證，「請坐到那邊第三臺電腦。」\n 捏著准考證，我逐步邁向祖靈的召喚。這是一間新穎的電腦教室，日光燈照亮了\n 每一個本該陰暗的角落。側身越過喃喃背誦族語的考生，他們大部分是孩子，稚\n 嫩的臉龐，埋藏著對繁華都市的無限想像。其中少數幾位，是看起來不大適應電\n 腦設備的長輩，眼神中透露出一絲溫柔的倔強。雖然只是在七樓，         ，\n 在這之前，我不曾在臺北遇過這麼多族人齊聚一堂，更從未在他們臉上看見如此\n 戒慎恐懼的模樣。按監考人員指示，我坐入指定位置，左右張望，這所歷史悠久\n 的女校，此刻被賦予傳承臺灣千年傳統文化的神聖使命，而呆坐在試場中心，戶\n 籍設在臺北市的我，卻是整個歷史洪流中的盲點。\n\n  「請檢查桌上貼紙，確認是你的位置。」我是否在正確的位置？成長過程中，\n常有人問我「妳從哪裡來？」若誠實回答臺北，總不免換來「我指的是妳──真\n正──從哪裡來？」配上自認與我心有靈犀的挑眉。無奈的是，這類拒絕接受真\n相的提問總以千變萬化的形式反覆出現──「妳什麼時候過年？我指的是──真\n正──的豐年祭。」或是「妳叫什麼名字？我指的是妳──真正──的名字。」\n  「請戴上耳機測試麥克風，確認音量。」監考人員喚回我紛亂的思緒。\n    「Ciwas lalu mu.」我小心翼翼托著麥克風，謹慎地咬字。Ciwas是我「真正」\n的名字──真正沒人稱呼的名字。（改寫自游以德〈族語認證〉）\n\n依據文意脈絡，文中內最適合填入的文句是：",
+    "q": "【共用閱讀資料】\n<u>22-23為題組</u>。閱讀下文，回答22-23題。\n\n臺北是我出生、成長，居住了三十年的地方，卻不是我的家。因為，比起臺北人，他們更喜歡叫我原住民。\n\n「107-2-8號。」監考人員盯著我的族語准考證，「請坐到那邊第三臺電腦。」捏著准考證，我逐步邁向祖靈的召喚。這是一間新穎的電腦教室，日光燈照亮了每一個本該陰暗的角落。側身越過喃喃背誦族語的考生，他們大部分是孩子，稚嫩的臉龐，埋藏著對繁華都市的無限想像。其中少數幾位，是看起來不大適應電腦設備的長輩，眼神中透露出一絲溫柔的倔強。雖然只是在七樓， ，在這之前，我不曾在臺北遇過這麼多族人齊聚一堂，更從未在他們臉上看見如此戒慎恐懼的模樣。按監考人員指示，我坐入指定位置，左右張望，這所歷史悠久的女校，此刻被賦予傳承臺灣千年傳統文化的神聖使命，而呆坐在試場中心，戶籍設在臺北市的我，卻是整個歷史洪流中的盲點。\n\n「請檢查桌上貼紙，確認是你的位置。」我是否在正確的位置？成長過程中，常有人問我「妳從哪裡來？」若誠實回答臺北，總不免換來「我指的是妳──真正──從哪裡來？」配上自認與我心有靈犀的挑眉。無奈的是，這類拒絕接受真相的提問總以千變萬化的形式反覆出現──「妳什麼時候過年？我指的是──真正──的豐年祭。」或是「妳叫什麼名字？我指的是妳──真正──的名字。」\n\n「請戴上耳機測試麥克風，確認音量。」監考人員喚回我紛亂的思緒。\n\n「Ciwas lalu mu.」我小心翼翼托著麥克風，謹慎地咬字。Ciwas是我「真正」的名字──真正沒人稱呼的名字。（改寫自游以德〈族語認證〉）\n\n依據文意脈絡，文中內最適合填入的文句是：",
     "correct": "考場中隱約瀰漫著一股高海拔的芬多精",
     "wrong": [
       "教室裡彷彿散發著遼闊原野的綠草香味",
@@ -690,12 +703,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q23",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n22-23為題組。閱讀下文，回答22-23題。\n   臺北是我出生、成長，居住了三十年的地方，卻不是我的家。因為，比起臺\n 北人，他們更喜歡叫我原住民。\n    「107-2-8號。」監考人員盯著我的族語准考證，「請坐到那邊第三臺電腦。」\n 捏著准考證，我逐步邁向祖靈的召喚。這是一間新穎的電腦教室，日光燈照亮了\n 每一個本該陰暗的角落。側身越過喃喃背誦族語的考生，他們大部分是孩子，稚\n 嫩的臉龐，埋藏著對繁華都市的無限想像。其中少數幾位，是看起來不大適應電\n 腦設備的長輩，眼神中透露出一絲溫柔的倔強。雖然只是在七樓，         ，\n 在這之前，我不曾在臺北遇過這麼多族人齊聚一堂，更從未在他們臉上看見如此\n 戒慎恐懼的模樣。按監考人員指示，我坐入指定位置，左右張望，這所歷史悠久\n 的女校，此刻被賦予傳承臺灣千年傳統文化的神聖使命，而呆坐在試場中心，戶\n 籍設在臺北市的我，卻是整個歷史洪流中的盲點。\n\n  「請檢查桌上貼紙，確認是你的位置。」我是否在正確的位置？成長過程中，\n常有人問我「妳從哪裡來？」若誠實回答臺北，總不免換來「我指的是妳──真\n正──從哪裡來？」配上自認與我心有靈犀的挑眉。無奈的是，這類拒絕接受真\n相的提問總以千變萬化的形式反覆出現──「妳什麼時候過年？我指的是──真\n正──的豐年祭。」或是「妳叫什麼名字？我指的是妳──真正──的名字。」\n  「請戴上耳機測試麥克風，確認音量。」監考人員喚回我紛亂的思緒。\n    「Ciwas lalu mu.」我小心翼翼托著麥克風，謹慎地咬字。Ciwas是我「真正」\n的名字──真正沒人稱呼的名字。（改寫自游以德〈族語認證〉）\n\n上文反覆提及「真正」一詞，關於此詞所表達的境況或心情，最不適當的敘述是：",
+    "q": "【共用閱讀資料】\n<u>22-23為題組</u>。閱讀下文，回答22-23題。\n\n臺北是我出生、成長，居住了三十年的地方，卻不是我的家。因為，比起臺北人，他們更喜歡叫我原住民。\n\n「107-2-8號。」監考人員盯著我的族語准考證，「請坐到那邊第三臺電腦。」捏著准考證，我逐步邁向祖靈的召喚。這是一間新穎的電腦教室，日光燈照亮了每一個本該陰暗的角落。側身越過喃喃背誦族語的考生，他們大部分是孩子，稚嫩的臉龐，埋藏著對繁華都市的無限想像。其中少數幾位，是看起來不大適應電腦設備的長輩，眼神中透露出一絲溫柔的倔強。雖然只是在七樓， ，在這之前，我不曾在臺北遇過這麼多族人齊聚一堂，更從未在他們臉上看見如此戒慎恐懼的模樣。按監考人員指示，我坐入指定位置，左右張望，這所歷史悠久的女校，此刻被賦予傳承臺灣千年傳統文化的神聖使命，而呆坐在試場中心，戶籍設在臺北市的我，卻是整個歷史洪流中的盲點。\n\n「請檢查桌上貼紙，確認是你的位置。」我是否在正確的位置？成長過程中，常有人問我「妳從哪裡來？」若誠實回答臺北，總不免換來「我指的是妳──真正──從哪裡來？」配上自認與我心有靈犀的挑眉。無奈的是，這類拒絕接受真相的提問總以千變萬化的形式反覆出現──「妳什麼時候過年？我指的是──真正──的豐年祭。」或是「妳叫什麼名字？我指的是妳──真正──的名字。」\n\n「請戴上耳機測試麥克風，確認音量。」監考人員喚回我紛亂的思緒。\n\n「Ciwas lalu mu.」我小心翼翼托著麥克風，謹慎地咬字。Ciwas是我「真正」的名字──真正沒人稱呼的名字。（改寫自游以德〈族語認證〉）\n\n上文反覆提及「真正」一詞，關於此詞所表達的境況或心情，<u>最不適當</u>的敘述是：",
     "correct": "呼應首段「不是我的家」，表達雖生於臺北，仍心繫祖靈，無法接受繁華都城",
     "wrong": [
       "茫然於自己在歷史洪流中的存在位置，並展開對身分歸屬的叩問與追尋",
@@ -724,19 +738,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.41,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/gsat-110-chinese/G24-25-context.png)\n\n![第24題原卷資料](/assets/banks/gsat-110-chinese/Q24-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n<u>24-25為題組</u>。閱讀下文，回答24-25題。\n\n甲\n\n壹山澤，則惡農、慢惰、倍欲之民無所於食；無所於食則必農，農則草必墾矣。貴酒肉之價，重其租，令十倍其樸；然則商賈少，農不能喜酣奭，大臣不為荒飽。商賈少，則上不費粟；民不能善酣奭，則農不慢；大臣不荒，則國事不稽，主無過舉。（《商君書》）\n\n壹山澤：由國家統管山澤之利。\n\n樸：原價。\n\n酣奭：暢飲縱情。\n\n稽：延宕。\n\n乙\n\n慶曆中，議弛茶鹽之禁及減商稅，范文正以為不可：茶鹽、商稅之入，但分減商賈之利耳，行於商賈未甚有害也。今國用未減，歲入不可闕，既不取之於山澤及商賈，須取之於農；與其害農，孰若取之於商賈？今為計莫若先省國用，國用有餘，當先寬賦役，然後及商賈，弛禁非所當先也。其議遂寢。（沈括《夢溪筆談》）\n\n關於甲、乙二文對商賈和山澤之利的態度，敘述最適當的是：\n\n![圖表](/assets/banks/gsat-110-chinese/G24-25-figure-1.png)\n![圖表](/assets/banks/gsat-110-chinese/G24-25-figure-2.png)\n![圖表](/assets/banks/gsat-110-chinese/G24-25-figure-3.png)",
+    "correct": "乙文中，范文正認為維持茶鹽之禁，並不會危及商賈",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲文主張調漲酒肉價格，提高商賈獲利，以活絡經濟",
+      "甲文主張由國家統管山澤之利，將獲利分配給飢乏的百姓",
+      "乙文中，范文正認為歲入短缺時，不應取之於山澤及商賈"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第24題。",
+    "exp": "正確答案：乙文中，范文正認為維持茶鹽之禁，並不會危及商賈。來源：110年學科能力測驗國文第24題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -756,23 +771,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G24-25-context.png",
-      "/assets/banks/gsat-110-chinese/Q24-question.png"
+      "/assets/banks/gsat-110-chinese/G24-25-figure-1.png",
+      "/assets/banks/gsat-110-chinese/G24-25-figure-2.png",
+      "/assets/banks/gsat-110-chinese/G24-25-figure-3.png"
     ],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/gsat-110-chinese/G24-25-context.png)\n\n![第25題原卷資料](/assets/banks/gsat-110-chinese/Q25-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n<u>24-25為題組</u>。閱讀下文，回答24-25題。\n\n甲\n\n壹山澤，則惡農、慢惰、倍欲之民無所於食；無所於食則必農，農則草必墾矣。貴酒肉之價，重其租，令十倍其樸；然則商賈少，農不能喜酣奭，大臣不為荒飽。商賈少，則上不費粟；民不能善酣奭，則農不慢；大臣不荒，則國事不稽，主無過舉。（《商君書》）\n\n壹山澤：由國家統管山澤之利。\n\n樸：原價。\n\n酣奭：暢飲縱情。\n\n稽：延宕。\n\n乙\n\n慶曆中，議弛茶鹽之禁及減商稅，范文正以為不可：茶鹽、商稅之入，但分減商賈之利耳，行於商賈未甚有害也。今國用未減，歲入不可闕，既不取之於山澤及商賈，須取之於農；與其害農，孰若取之於商賈？今為計莫若先省國用，國用有餘，當先寬賦役，然後及商賈，弛禁非所當先也。其議遂寢。（沈括《夢溪筆談》）\n\n關於甲、乙二文對農業和農民的態度，敘述最適當的是：\n\n![圖表](/assets/banks/gsat-110-chinese/G24-25-figure-1.png)\n![圖表](/assets/banks/gsat-110-chinese/G24-25-figure-2.png)\n![圖表](/assets/banks/gsat-110-chinese/G24-25-figure-3.png)",
+    "correct": "甲文主張減少農民酒肉之樂的機會，使其專注於農作",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "乙文中，范文正主張給予農民賦稅優惠，以獎勵務農",
+      "二文皆認為執政者的驕荒怠惰是造成農業不振的主因",
+      "二文皆認為農民是經濟上的弱勢族群，應該予以保護"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗國文第25題。",
+    "exp": "正確答案：甲文主張減少農民酒肉之樂的機會，使其專注於農作。來源：110年學科能力測驗國文第25題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -792,23 +809,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G24-25-context.png",
-      "/assets/banks/gsat-110-chinese/Q25-question.png"
+      "/assets/banks/gsat-110-chinese/G24-25-figure-1.png",
+      "/assets/banks/gsat-110-chinese/G24-25-figure-2.png",
+      "/assets/banks/gsat-110-chinese/G24-25-figure-3.png"
     ],
     "passRate": 0.49,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q26",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/gsat-110-chinese/G26-28-context.png)\n\n![第26題原卷資料](/assets/banks/gsat-110-chinese/Q26-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n<u>26-28為題組</u>。閱讀下文，回答26-28題。\n\n甲\n\n一般人不瞭解文字和思想情感的密切關係，以為更改一兩個字不過是要文字順暢些或是漂亮些。其實更動了文字，就同時更動了思想情感，內容和形式是相隨而變的。例如韓愈在月夜裡聽賈島吟詩，有「鳥宿池邊樹，僧推月下門」兩句，韓愈建議「敲」字為佳。這段文字因緣傳為美談，於今要把咬文嚼字的意思說得好聽一點，都說「推敲」。古今人也都讚賞「敲」字比「推」字下得好，其實這不僅是文字上的分別，同時也是意境上的分別。\n\n「推」固然顯得魯莽一點，但是它表示孤僧步月歸寺，門原來是他自己掩的，於今他「推」。他須自掩自推，足見寺裡只有他孤零零的一個和尚。在這冷寂的場合，他有興致出來步月，興盡而返，獨往獨來，自在無礙。他也自有一副胸襟氣度。「敲」就顯得他拘禮些，也就顯得寺裡有人應門。他彷彿是乘月夜訪友，自己不甘寂寞，那寺裡假如不是熱鬧場合，至少也有些溫暖的人情。比較起來，「敲」的空氣沒有「推」那麼冷寂。就上句「鳥宿池邊樹」看來，「推」似乎比「敲」要調和些。「推」可以無聲，「敲」就不免剝啄有聲，驚起了宿鳥，打破了岑寂，也似乎平添了攪擾。\n\n所以我很懷疑韓愈的修改是否真如古今所稱賞的那麼妥當。究竟哪一種意境是賈島當時在心裡玩索而要表現的，只有他自己知道。「推」字和「敲」字哪一個比較恰當，關鍵在於哪種境界是他當時所要說的且與全詩調和的。在文字上推敲，骨子裡是在思想情感上「推敲」。（改寫自朱光潛《談文學》）\n\n乙\n\n王夫之《薑齋詩話》云：「『僧敲月下門』，只是妄想揣摩，如說他人夢。縱令形容酷似，何嘗毫髮關心？知然者，以其沉吟『推』、『敲』二字，就他作想也。若即景會心，則或推或敲，必居其一。因景因情，自然靈妙，何勞擬議哉？」王夫之以為詩中佳境，對詩人而言，不可「預擬」，初無定景，初非想得，否則，「只是措大燈窗下鑽故紙物事」，或者「妄想揣摩，如說他人夢了」。佳句乃當時情景，即詩人「即景會心」、「因景因情」時所拾得，「何勞擬議哉」？（改寫自蕭馳《聖道與詩心》）\n\n甲文朱光潛「懷疑韓愈的修改是否真如古今所稱賞的那麼妥當」的理由是：\n\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-1.png)\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-2.png)\n\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-4.png)\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-5.png)",
+    "correct": "用「推」字與全詩冷寂的氛圍更相應",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "用「敲」字不能展現詩人的胸襟氣度",
+      "「敲」字有聲響感，攪擾寺內的莊嚴氣氛",
+      "「推」字雖魯莽，但能表達僧人訪友心情"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗國文第26題。",
+    "exp": "正確答案：用「推」字與全詩冷寂的氛圍更相應。來源：110年學科能力測驗國文第26題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -828,23 +847,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G26-28-context.png",
-      "/assets/banks/gsat-110-chinese/Q26-question.png"
+      "/assets/banks/gsat-110-chinese/G26-28-figure-1.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-2.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-4.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-5.png"
     ],
     "passRate": 0.59,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/gsat-110-chinese/G26-28-context.png)\n\n![第27題原卷資料](/assets/banks/gsat-110-chinese/Q27-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n<u>26-28為題組</u>。閱讀下文，回答26-28題。\n\n甲\n\n一般人不瞭解文字和思想情感的密切關係，以為更改一兩個字不過是要文字順暢些或是漂亮些。其實更動了文字，就同時更動了思想情感，內容和形式是相隨而變的。例如韓愈在月夜裡聽賈島吟詩，有「鳥宿池邊樹，僧推月下門」兩句，韓愈建議「敲」字為佳。這段文字因緣傳為美談，於今要把咬文嚼字的意思說得好聽一點，都說「推敲」。古今人也都讚賞「敲」字比「推」字下得好，其實這不僅是文字上的分別，同時也是意境上的分別。\n\n「推」固然顯得魯莽一點，但是它表示孤僧步月歸寺，門原來是他自己掩的，於今他「推」。他須自掩自推，足見寺裡只有他孤零零的一個和尚。在這冷寂的場合，他有興致出來步月，興盡而返，獨往獨來，自在無礙。他也自有一副胸襟氣度。「敲」就顯得他拘禮些，也就顯得寺裡有人應門。他彷彿是乘月夜訪友，自己不甘寂寞，那寺裡假如不是熱鬧場合，至少也有些溫暖的人情。比較起來，「敲」的空氣沒有「推」那麼冷寂。就上句「鳥宿池邊樹」看來，「推」似乎比「敲」要調和些。「推」可以無聲，「敲」就不免剝啄有聲，驚起了宿鳥，打破了岑寂，也似乎平添了攪擾。\n\n所以我很懷疑韓愈的修改是否真如古今所稱賞的那麼妥當。究竟哪一種意境是賈島當時在心裡玩索而要表現的，只有他自己知道。「推」字和「敲」字哪一個比較恰當，關鍵在於哪種境界是他當時所要說的且與全詩調和的。在文字上推敲，骨子裡是在思想情感上「推敲」。（改寫自朱光潛《談文學》）\n\n乙\n\n王夫之《薑齋詩話》云：「『僧敲月下門』，只是妄想揣摩，如說他人夢。縱令形容酷似，何嘗毫髮關心？知然者，以其沉吟『推』、『敲』二字，就他作想也。若即景會心，則或推或敲，必居其一。因景因情，自然靈妙，何勞擬議哉？」王夫之以為詩中佳境，對詩人而言，不可「預擬」，初無定景，初非想得，否則，「只是措大燈窗下鑽故紙物事」，或者「妄想揣摩，如說他人夢了」。佳句乃當時情景，即詩人「即景會心」、「因景因情」時所拾得，「何勞擬議哉」？（改寫自蕭馳《聖道與詩心》）\n\n乙文中，王夫之認為「或推或敲，必居其一」的原因是：\n\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-1.png)\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-2.png)\n\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-4.png)\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-5.png)",
+    "correct": "若賈島能依據真實經驗，寫出當時景物及內在情感，就能清楚應選擇推或敲",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "若韓愈有近似的經驗，就無須揣摩賈島的實際狀況，可直接選出推或敲",
+      "若韓愈能從全詩調和的情境來考慮，就能知道用推或敲，何者意境較佳",
+      "若賈島能從傳統佳作中鍛鍊用字技巧，就能輕易選定推或敲，不必詢問他人"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗國文第27題。",
+    "exp": "正確答案：若賈島能依據真實經驗，寫出當時景物及內在情感，就能清楚應選擇推或敲。來源：110年學科能力測驗國文第27題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -864,23 +886,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G26-28-context.png",
-      "/assets/banks/gsat-110-chinese/Q27-question.png"
+      "/assets/banks/gsat-110-chinese/G26-28-figure-1.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-2.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-4.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-5.png"
     ],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q28",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/gsat-110-chinese/G26-28-context.png)\n\n![第28題原卷資料](/assets/banks/gsat-110-chinese/Q28-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n<u>26-28為題組</u>。閱讀下文，回答26-28題。\n\n甲\n\n一般人不瞭解文字和思想情感的密切關係，以為更改一兩個字不過是要文字順暢些或是漂亮些。其實更動了文字，就同時更動了思想情感，內容和形式是相隨而變的。例如韓愈在月夜裡聽賈島吟詩，有「鳥宿池邊樹，僧推月下門」兩句，韓愈建議「敲」字為佳。這段文字因緣傳為美談，於今要把咬文嚼字的意思說得好聽一點，都說「推敲」。古今人也都讚賞「敲」字比「推」字下得好，其實這不僅是文字上的分別，同時也是意境上的分別。\n\n「推」固然顯得魯莽一點，但是它表示孤僧步月歸寺，門原來是他自己掩的，於今他「推」。他須自掩自推，足見寺裡只有他孤零零的一個和尚。在這冷寂的場合，他有興致出來步月，興盡而返，獨往獨來，自在無礙。他也自有一副胸襟氣度。「敲」就顯得他拘禮些，也就顯得寺裡有人應門。他彷彿是乘月夜訪友，自己不甘寂寞，那寺裡假如不是熱鬧場合，至少也有些溫暖的人情。比較起來，「敲」的空氣沒有「推」那麼冷寂。就上句「鳥宿池邊樹」看來，「推」似乎比「敲」要調和些。「推」可以無聲，「敲」就不免剝啄有聲，驚起了宿鳥，打破了岑寂，也似乎平添了攪擾。\n\n所以我很懷疑韓愈的修改是否真如古今所稱賞的那麼妥當。究竟哪一種意境是賈島當時在心裡玩索而要表現的，只有他自己知道。「推」字和「敲」字哪一個比較恰當，關鍵在於哪種境界是他當時所要說的且與全詩調和的。在文字上推敲，骨子裡是在思想情感上「推敲」。（改寫自朱光潛《談文學》）\n\n乙\n\n王夫之《薑齋詩話》云：「『僧敲月下門』，只是妄想揣摩，如說他人夢。縱令形容酷似，何嘗毫髮關心？知然者，以其沉吟『推』、『敲』二字，就他作想也。若即景會心，則或推或敲，必居其一。因景因情，自然靈妙，何勞擬議哉？」王夫之以為詩中佳境，對詩人而言，不可「預擬」，初無定景，初非想得，否則，「只是措大燈窗下鑽故紙物事」，或者「妄想揣摩，如說他人夢了」。佳句乃當時情景，即詩人「即景會心」、「因景因情」時所拾得，「何勞擬議哉」？（改寫自蕭馳《聖道與詩心》）\n\n依據甲、乙二文，下列敘述<u>最不適當</u>的是：\n\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-1.png)\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-2.png)\n\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-4.png)\n![圖表](/assets/banks/gsat-110-chinese/G26-28-figure-5.png)",
+    "correct": "王夫之、朱光潛均認為推敲文字首重全詩情調一致，才能臻至自然靈妙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "朱光潛強調文字上的斟酌與推敲，其實更動後表現的是不同的思想情感",
+      "王夫之認為在文字上沉吟推敲，即使最終文辭巧妙，仍非出自真實情感",
+      "朱光潛懷疑僧敲月下門未必比僧推月下門更好，王夫之則未做高下評判"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗國文第28題。",
+    "exp": "正確答案：王夫之、朱光潛均認為推敲文字首重全詩情調一致，才能臻至自然靈妙。來源：110年學科能力測驗國文第28題。",
     "subject": "國文",
     "sub_topic": "國文綜合",
     "source": {
@@ -900,16 +925,19 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-chinese/G26-28-context.png",
-      "/assets/banks/gsat-110-chinese/Q28-question.png"
+      "/assets/banks/gsat-110-chinese/G26-28-figure-1.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-2.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-4.png",
+      "/assets/banks/gsat-110-chinese/G26-28-figure-5.png"
     ],
     "passRate": 0.47,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q29",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n29-30為題組。閱讀下文，回答29-30題。\n\n   人能藉手語溝通，可知語音並非語言的必要因素。小鳥啁啾、海豚吱吱，都\n 近似人類語言的溝通系統，可見動物的溝通系統和人類語言的不同，絕非在於缺\n 少語音。\n   動物能在聲音上模仿人類的話語，並不表示牠們擁有語言。會說話的鳥並不\n 會把牠們模仿的聲音切成獨立的單位，而人類語言的特質之一，則是語音或手勢\n 單位的獨立性，單位之間有次序，可重新排序，可合併也可分開。總之，鸚鵡只\n 會說人家教牠或牠所聽到的，再無其他。\n   很多種鳥的叫聲的確具有溝通功能，且同一種鳥可能也有「方言」之別。鳥\n  語（bird calls）是包括一聲或一聲以上的短叫聲，傳達和環境相關的訊息，例如\n 危險、餵食、築巢、群聚等等；鳥鳴（bird songs）則是較為複雜的鳴叫形態，用\n 來宣示勢力範圍，並可吸引配偶。這些鳥叫聲看不出任何內在的結構，也不能像\n 人類語言能分出獨立具有意義的單位。一篇有關知更鳥勢力圈鳴聲的研究中發\n 現：敵對的知更鳥只注意高頻和低頻聲的轉換，何者在前何者在後，其實無關緊\n 要。訊息內容的差異，也只限於這些知更鳥對牠的東西擁有慾多強或牠的抵抗決\n 心多高，以及在勢力圈內築巢的意志多強等等。因此，高、低頻的轉換，只是表\n 達不同感受程度而已。知更鳥的創造力，在於能用不同方式做相同訊息的鳴叫，\n 但牠不能利用各種單位作不同組合，表達不同訊息。（改寫自V. Fromkin等著，\n 黃宣範譯《語言學新引》）\n\n依據上文，下列對於鳥叫聲的敘述，最適當的是：",
+    "q": "【共用閱讀資料】\n<u>29-30為題組</u>。閱讀下文，回答29-30題。\n\n人能藉手語溝通，可知語音並非語言的必要因素。小鳥啁啾、海豚吱吱，都近似人類語言的溝通系統，可見動物的溝通系統和人類語言的不同，絕非在於缺少語音。\n\n動物能在聲音上模仿人類的話語，並不表示牠們擁有語言。會說話的鳥並不會把牠們模仿的聲音切成獨立的單位，而人類語言的特質之一，則是語音或手勢單位的獨立性，單位之間有次序，可重新排序，可合併也可分開。總之，鸚鵡只會說人家教牠或牠所聽到的，再無其他。\n\n很多種鳥的叫聲的確具有溝通功能，且同一種鳥可能也有「方言」之別。鳥語（bird calls）是包括一聲或一聲以上的短叫聲，傳達和環境相關的訊息，例如危險、餵食、築巢、群聚等等；鳥鳴（bird songs）則是較為複雜的鳴叫形態，用來宣示勢力範圍，並可吸引配偶。這些鳥叫聲看不出任何內在的結構，也不能像人類語言能分出獨立具有意義的單位。一篇有關知更鳥勢力圈鳴聲的研究中發\n現：敵對的知更鳥只注意高頻和低頻聲的轉換，何者在前何者在後，其實無關緊要。訊息內容的差異，也只限於這些知更鳥對牠的東西擁有慾多強或牠的抵抗決心多高，以及在勢力圈內築巢的意志多強等等。因此，高、低頻的轉換，只是表達不同感受程度而已。知更鳥的創造力，在於能用不同方式做相同訊息的鳴叫，但牠不能利用各種單位作不同組合，表達不同訊息。（改寫自V. Fromkin等著，黃宣範譯《語言學新引》）\n\n依據上文，下列對於鳥叫聲的敘述，最適當的是：",
     "correct": "知更鳥能以不同頻率的鳴叫轉換，傳達相同的訊息",
     "wrong": [
       "可藉其內在的結構，表達不同程度的感受",
@@ -937,12 +965,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.45,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q30",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n29-30為題組。閱讀下文，回答29-30題。\n\n   人能藉手語溝通，可知語音並非語言的必要因素。小鳥啁啾、海豚吱吱，都\n 近似人類語言的溝通系統，可見動物的溝通系統和人類語言的不同，絕非在於缺\n 少語音。\n   動物能在聲音上模仿人類的話語，並不表示牠們擁有語言。會說話的鳥並不\n 會把牠們模仿的聲音切成獨立的單位，而人類語言的特質之一，則是語音或手勢\n 單位的獨立性，單位之間有次序，可重新排序，可合併也可分開。總之，鸚鵡只\n 會說人家教牠或牠所聽到的，再無其他。\n   很多種鳥的叫聲的確具有溝通功能，且同一種鳥可能也有「方言」之別。鳥\n  語（bird calls）是包括一聲或一聲以上的短叫聲，傳達和環境相關的訊息，例如\n 危險、餵食、築巢、群聚等等；鳥鳴（bird songs）則是較為複雜的鳴叫形態，用\n 來宣示勢力範圍，並可吸引配偶。這些鳥叫聲看不出任何內在的結構，也不能像\n 人類語言能分出獨立具有意義的單位。一篇有關知更鳥勢力圈鳴聲的研究中發\n 現：敵對的知更鳥只注意高頻和低頻聲的轉換，何者在前何者在後，其實無關緊\n 要。訊息內容的差異，也只限於這些知更鳥對牠的東西擁有慾多強或牠的抵抗決\n 心多高，以及在勢力圈內築巢的意志多強等等。因此，高、低頻的轉換，只是表\n 達不同感受程度而已。知更鳥的創造力，在於能用不同方式做相同訊息的鳴叫，\n 但牠不能利用各種單位作不同組合，表達不同訊息。（改寫自V. Fromkin等著，\n 黃宣範譯《語言學新引》）\n\n依據上文，關於動物與人類的語言，推論最適當的是：",
+    "q": "【共用閱讀資料】\n<u>29-30為題組</u>。閱讀下文，回答29-30題。\n\n人能藉手語溝通，可知語音並非語言的必要因素。小鳥啁啾、海豚吱吱，都近似人類語言的溝通系統，可見動物的溝通系統和人類語言的不同，絕非在於缺少語音。\n\n動物能在聲音上模仿人類的話語，並不表示牠們擁有語言。會說話的鳥並不會把牠們模仿的聲音切成獨立的單位，而人類語言的特質之一，則是語音或手勢單位的獨立性，單位之間有次序，可重新排序，可合併也可分開。總之，鸚鵡只會說人家教牠或牠所聽到的，再無其他。\n\n很多種鳥的叫聲的確具有溝通功能，且同一種鳥可能也有「方言」之別。鳥語（bird calls）是包括一聲或一聲以上的短叫聲，傳達和環境相關的訊息，例如危險、餵食、築巢、群聚等等；鳥鳴（bird songs）則是較為複雜的鳴叫形態，用來宣示勢力範圍，並可吸引配偶。這些鳥叫聲看不出任何內在的結構，也不能像人類語言能分出獨立具有意義的單位。一篇有關知更鳥勢力圈鳴聲的研究中發\n現：敵對的知更鳥只注意高頻和低頻聲的轉換，何者在前何者在後，其實無關緊要。訊息內容的差異，也只限於這些知更鳥對牠的東西擁有慾多強或牠的抵抗決心多高，以及在勢力圈內築巢的意志多強等等。因此，高、低頻的轉換，只是表達不同感受程度而已。知更鳥的創造力，在於能用不同方式做相同訊息的鳴叫，但牠不能利用各種單位作不同組合，表達不同訊息。（改寫自V. Fromkin等著，黃宣範譯《語言學新引》）\n\n依據上文，關於動物與人類的語言，推論最適當的是：",
     "correct": "人類語言與其他動物溝通系統的相異，在於複雜的語法結構",
     "wrong": [
       "鸚鵡經由良好的訓練，可以理解沒聽過的人類話語",
@@ -970,12 +999,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.48,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q31",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n31-32為題組。閱讀下文，回答31-32題。\n\n   夫足下之書，始所云者欲至乎道也，而所質者則辭也，無乃務其淺，忘其深，\n 當急者反徐之歟！夫道之大歸非他，欲其得諸心，充諸身，擴而被之國家天下而\n 已，非汲汲乎辭也。其所以不已乎辭者，非得已也。孟子曰：「        」\n 此其所以為孟子也。今足下其自謂已得諸心、充諸身歟？擴而被之國家天下而有\n 不得已歟？不然，何遽急於辭也？（曾鞏〈答李沿書〉）\n\n上文內最適合填入的文句是：",
+    "q": "【共用閱讀資料】\n<u>31-32為題組</u>。閱讀下文，回答31-32題。\n\n夫足下之書，始所云者欲至乎道也，而所質者則辭也，無乃務其淺，忘其深，當急者反徐之歟！夫道之大歸非他，欲其得諸心，充諸身，擴而被之國家天下而已，非汲汲乎辭也。其所以不已乎辭者，非得已也。孟子曰：「 」此其所以為孟子也。今足下其自謂已得諸心、充諸身歟？擴而被之國家天下而有不得已歟？不然，何遽急於辭也？（曾鞏〈答李沿書〉）\n\n上文內最適合填入的文句是：",
     "correct": "予豈好辯哉？予不得已也",
     "wrong": [
       "無辭讓之心，非人也",
@@ -1003,12 +1033,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.45,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q32",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n31-32為題組。閱讀下文，回答31-32題。\n\n   夫足下之書，始所云者欲至乎道也，而所質者則辭也，無乃務其淺，忘其深，\n 當急者反徐之歟！夫道之大歸非他，欲其得諸心，充諸身，擴而被之國家天下而\n 已，非汲汲乎辭也。其所以不已乎辭者，非得已也。孟子曰：「        」\n 此其所以為孟子也。今足下其自謂已得諸心、充諸身歟？擴而被之國家天下而有\n 不得已歟？不然，何遽急於辭也？（曾鞏〈答李沿書〉）\n\n依據上文，曾鞏主要是想提醒李沿：",
+    "q": "【共用閱讀資料】\n<u>31-32為題組</u>。閱讀下文，回答31-32題。\n\n夫足下之書，始所云者欲至乎道也，而所質者則辭也，無乃務其淺，忘其深，當急者反徐之歟！夫道之大歸非他，欲其得諸心，充諸身，擴而被之國家天下而已，非汲汲乎辭也。其所以不已乎辭者，非得已也。孟子曰：「 」此其所以為孟子也。今足下其自謂已得諸心、充諸身歟？擴而被之國家天下而有不得已歟？不然，何遽急於辭也？（曾鞏〈答李沿書〉）\n\n依據上文，曾鞏主要是想提醒李沿：",
     "correct": "為學不宜捨本逐末",
     "wrong": [
       "治天下應恤民重諾",
@@ -1036,12 +1067,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.48,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q33",
     "difficulty": "easy",
-    "q": "【共用閱讀資料】\n33-34為題組。閱讀下文，回答33-34題。\n\n   魏王欲攻邯鄲，季梁聞之，中道而反。衣焦不申，頭塵不去，往見王曰：「今\n 者臣來，見人於大行，方北面而持其駕，告臣曰：『我欲之楚。』臣曰：『君之\n 楚，將奚為北面？』曰：『吾馬良。』臣曰：『馬雖良，此非楚之路也。』曰：\n 『吾用多。』臣曰：『用雖多，此非楚之路也。』曰：『吾御者善。』此數者愈\n 善，而離楚愈遠耳。今王動欲成霸王，舉欲信於天下；恃王國之大、兵之精銳，\n 而攻邯鄲，以廣地尊名。王之動愈數，而離王愈遠耳，猶至楚而北行也。」（《戰\n 國策》）\n\n上文特意描繪季梁往見魏王時「衣焦不申，頭塵不去」的形象，主要在凸顯：",
+    "q": "【共用閱讀資料】\n<u>33-34為題組</u>。閱讀下文，回答33-34題。\n\n魏王欲攻邯鄲，季梁聞之，中道而反。衣焦不申，頭塵不去，往見王曰：「今者臣來，見人於大行，方北面而持其駕，告臣曰：『我欲之楚。』臣曰：『君之楚，將奚為北面？』曰：『吾馬良。』臣曰：『馬雖良，此非楚之路也。』曰：『吾用多。』臣曰：『用雖多，此非楚之路也。』曰：『吾御者善。』此數者愈善，而離楚愈遠耳。今王動欲成霸王，舉欲信於天下；恃王國之大、兵之精銳，而攻邯鄲，以廣地尊名。王之動愈數，而離王愈遠耳，猶至楚而北行也。」（《戰國策》）\n\n上文特意描繪季梁往見魏王時「衣焦不申，頭塵不去」的形象，主要在凸顯：",
     "correct": "事態緊急，不暇梳洗更衣",
     "wrong": [
       "個性率真，不重外貌衣著",
@@ -1069,12 +1101,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.91,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-chinese-q34",
     "difficulty": "easy",
-    "q": "【共用閱讀資料】\n33-34為題組。閱讀下文，回答33-34題。\n\n   魏王欲攻邯鄲，季梁聞之，中道而反。衣焦不申，頭塵不去，往見王曰：「今\n 者臣來，見人於大行，方北面而持其駕，告臣曰：『我欲之楚。』臣曰：『君之\n 楚，將奚為北面？』曰：『吾馬良。』臣曰：『馬雖良，此非楚之路也。』曰：\n 『吾用多。』臣曰：『用雖多，此非楚之路也。』曰：『吾御者善。』此數者愈\n 善，而離楚愈遠耳。今王動欲成霸王，舉欲信於天下；恃王國之大、兵之精銳，\n 而攻邯鄲，以廣地尊名。王之動愈數，而離王愈遠耳，猶至楚而北行也。」（《戰\n 國策》）\n\n下列敘述，最符合上文所欲表達觀點的是：",
+    "q": "【共用閱讀資料】\n<u>33-34為題組</u>。閱讀下文，回答33-34題。\n\n魏王欲攻邯鄲，季梁聞之，中道而反。衣焦不申，頭塵不去，往見王曰：「今者臣來，見人於大行，方北面而持其駕，告臣曰：『我欲之楚。』臣曰：『君之楚，將奚為北面？』曰：『吾馬良。』臣曰：『馬雖良，此非楚之路也。』曰：『吾用多。』臣曰：『用雖多，此非楚之路也。』曰：『吾御者善。』此數者愈善，而離楚愈遠耳。今王動欲成霸王，舉欲信於天下；恃王國之大、兵之精銳，而攻邯鄲，以廣地尊名。王之動愈數，而離王愈遠耳，猶至楚而北行也。」（《戰國策》）\n\n下列敘述，最符合上文所欲表達觀點的是：",
     "correct": "緣木求魚，徒勞無功",
     "wrong": [
       "前車之鑑，可以為師",
@@ -1102,6 +1135,7 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   }
 ]

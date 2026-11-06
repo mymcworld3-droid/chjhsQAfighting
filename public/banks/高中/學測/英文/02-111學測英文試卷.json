@@ -24,7 +24,8 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q2",
@@ -51,12 +52,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q3",
     "difficulty": "medium",
-    "q": "The temple celebrated Mazu Festival by hosting ten days of lion dances, Taiwanese operas, and\n    traditional hand ______ shows.",
+    "q": "The temple celebrated Mazu Festival by hosting ten days of lion dances, Taiwanese operas, and traditional hand ______ shows.",
     "correct": "puppet",
     "wrong": [
       "chat",
@@ -78,12 +80,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q4",
     "difficulty": "medium",
-    "q": "The new vaccine was banned by the Food and Drug Administration due to its          fatal side effects.",
+    "q": "The new vaccine was banned by the Food and Drug Administration due to its fatal side effects.",
     "correct": "potentially",
     "wrong": [
       "delicately",
@@ -105,7 +108,8 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q5",
@@ -132,12 +136,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q6",
     "difficulty": "medium",
-    "q": "An ______ person is usually pleasant and easy to get along with, but don’t expect that he or she will\n   always say “yes” to everything.",
+    "q": "An ______ person is usually pleasant and easy to get along with, but don’t expect that he or she will always say “yes” to everything.",
     "correct": "agreeable",
     "wrong": [
       "enormous",
@@ -159,12 +164,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q7",
     "difficulty": "medium",
-    "q": "Hidden deep in a small alley among various tiny shops, the entrance of the Michelin star restaurant is\n    barely ______ to passersby.",
+    "q": "Hidden deep in a small alley among various tiny shops, the entrance of the Michelin star restaurant is barely ______ to passersby.",
     "correct": "visible",
     "wrong": [
       "identical",
@@ -186,12 +192,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q8",
     "difficulty": "medium",
-    "q": "The original budget for my round-island trip was NT$5,000, but the ______ cost is likely to be 50\n    percent higher.",
+    "q": "The original budget for my round-island trip was NT\\$5,000, but the ______ cost is likely to be 50 percent higher.",
     "correct": "eventual",
     "wrong": [
       "moderate",
@@ -213,12 +220,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q9",
     "difficulty": "medium",
-    "q": "After watching a TV program on natural history, Adam decided to go on a ______ for dinosaur fossils\n    in South Dakota.",
+    "q": "After watching a TV program on natural history, Adam decided to go on a ______ for dinosaur fossils in South Dakota.",
     "correct": "quest",
     "wrong": [
       "trial",
@@ -240,12 +248,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q10",
     "difficulty": "medium",
-    "q": "With pink cherry blossoms blooming everywhere, the valley ______ like a young bride under the bright\n    spring sunshine.",
+    "q": "With pink cherry blossoms blooming everywhere, the valley ______ like a young bride under the bright spring sunshine.",
     "correct": "blushes",
     "wrong": [
       "bounces",
@@ -267,12 +276,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052625594764853905/02-111%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q11",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n   A book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The\nconcept was   11   by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye,\nUK in 1961. Following him, many local people opened their own bookshops, and the small town soon\nbecame a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-\non-Wye   12   up all over the world.\n\n    Although all book towns have a great number of bookshops, that’s where the similarities   13    .\nEach of these towns shows unique features of its own. Some have many small private shops, while others\nhave organizations steered by volunteers. Some even run regular activities to attract visitors. For example,\nan annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts\nauthors to discuss their latest   14    .\n\n    As digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are\nparticularly important to   15    . The feel of a book, the smell, the weight, and the knowledge that a\nparticular book might be more than a hundred years old—all these highlight the importance of preserving\nthe physical book as a complement to technology.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nA book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The concept was <u>11</u> by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye, UK in 1961. Following him, many local people opened their own bookshops, and the small town soon became a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-on-Wye <u>12</u> up all over the world.\n\nAlthough all book towns have a great number of bookshops, that’s where the similarities <u>13</u> . Each of these towns shows unique features of its own. Some have many small private shops, while others have organizations steered by volunteers. Some even run regular activities to attract visitors. For example, an annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts authors to discuss their latest <u>14</u> .\n\nAs digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are particularly important to <u>15</u> . The feel of a book, the smell, the weight, and the knowledge that a particular book might be more than a hundred years old—all these highlight the importance of preserving the physical book as a complement to technology.",
     "correct": "initiated",
     "wrong": [
       "represented",
@@ -299,12 +309,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q12",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n   A book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The\nconcept was   11   by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye,\nUK in 1961. Following him, many local people opened their own bookshops, and the small town soon\nbecame a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-\non-Wye   12   up all over the world.\n\n    Although all book towns have a great number of bookshops, that’s where the similarities   13    .\nEach of these towns shows unique features of its own. Some have many small private shops, while others\nhave organizations steered by volunteers. Some even run regular activities to attract visitors. For example,\nan annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts\nauthors to discuss their latest   14    .\n\n    As digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are\nparticularly important to   15    . The feel of a book, the smell, the weight, and the knowledge that a\nparticular book might be more than a hundred years old—all these highlight the importance of preserving\nthe physical book as a complement to technology.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nA book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The concept was <u>11</u> by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye, UK in 1961. Following him, many local people opened their own bookshops, and the small town soon became a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-on-Wye <u>12</u> up all over the world.\n\nAlthough all book towns have a great number of bookshops, that’s where the similarities <u>13</u> . Each of these towns shows unique features of its own. Some have many small private shops, while others have organizations steered by volunteers. Some even run regular activities to attract visitors. For example, an annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts authors to discuss their latest <u>14</u> .\n\nAs digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are particularly important to <u>15</u> . The feel of a book, the smell, the weight, and the knowledge that a particular book might be more than a hundred years old—all these highlight the importance of preserving the physical book as a complement to technology.",
     "correct": "have been springing",
     "wrong": [
       "spring",
@@ -331,12 +342,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q13",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n   A book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The\nconcept was   11   by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye,\nUK in 1961. Following him, many local people opened their own bookshops, and the small town soon\nbecame a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-\non-Wye   12   up all over the world.\n\n    Although all book towns have a great number of bookshops, that’s where the similarities   13    .\nEach of these towns shows unique features of its own. Some have many small private shops, while others\nhave organizations steered by volunteers. Some even run regular activities to attract visitors. For example,\nan annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts\nauthors to discuss their latest   14    .\n\n    As digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are\nparticularly important to   15    . The feel of a book, the smell, the weight, and the knowledge that a\nparticular book might be more than a hundred years old—all these highlight the importance of preserving\nthe physical book as a complement to technology.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nA book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The concept was <u>11</u> by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye, UK in 1961. Following him, many local people opened their own bookshops, and the small town soon became a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-on-Wye <u>12</u> up all over the world.\n\nAlthough all book towns have a great number of bookshops, that’s where the similarities <u>13</u> . Each of these towns shows unique features of its own. Some have many small private shops, while others have organizations steered by volunteers. Some even run regular activities to attract visitors. For example, an annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts authors to discuss their latest <u>14</u> .\n\nAs digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are particularly important to <u>15</u> . The feel of a book, the smell, the weight, and the knowledge that a particular book might be more than a hundred years old—all these highlight the importance of preserving the physical book as a complement to technology.",
     "correct": "end",
     "wrong": [
       "form",
@@ -363,12 +375,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q14",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n   A book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The\nconcept was   11   by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye,\nUK in 1961. Following him, many local people opened their own bookshops, and the small town soon\nbecame a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-\non-Wye   12   up all over the world.\n\n    Although all book towns have a great number of bookshops, that’s where the similarities   13    .\nEach of these towns shows unique features of its own. Some have many small private shops, while others\nhave organizations steered by volunteers. Some even run regular activities to attract visitors. For example,\nan annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts\nauthors to discuss their latest   14    .\n\n    As digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are\nparticularly important to   15    . The feel of a book, the smell, the weight, and the knowledge that a\nparticular book might be more than a hundred years old—all these highlight the importance of preserving\nthe physical book as a complement to technology.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nA book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The concept was <u>11</u> by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye, UK in 1961. Following him, many local people opened their own bookshops, and the small town soon became a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-on-Wye <u>12</u> up all over the world.\n\nAlthough all book towns have a great number of bookshops, that’s where the similarities <u>13</u> . Each of these towns shows unique features of its own. Some have many small private shops, while others have organizations steered by volunteers. Some even run regular activities to attract visitors. For example, an annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts authors to discuss their latest <u>14</u> .\n\nAs digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are particularly important to <u>15</u> . The feel of a book, the smell, the weight, and the knowledge that a particular book might be more than a hundred years old—all these highlight the importance of preserving the physical book as a complement to technology.",
     "correct": "releases",
     "wrong": [
       "trends",
@@ -395,12 +408,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q15",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第11 至15 題為題組\n   A book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The\nconcept was   11   by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye,\nUK in 1961. Following him, many local people opened their own bookshops, and the small town soon\nbecame a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-\non-Wye   12   up all over the world.\n\n    Although all book towns have a great number of bookshops, that’s where the similarities   13    .\nEach of these towns shows unique features of its own. Some have many small private shops, while others\nhave organizations steered by volunteers. Some even run regular activities to attract visitors. For example,\nan annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts\nauthors to discuss their latest   14    .\n\n    As digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are\nparticularly important to   15    . The feel of a book, the smell, the weight, and the knowledge that a\nparticular book might be more than a hundred years old—all these highlight the importance of preserving\nthe physical book as a complement to technology.\n\n",
+    "q": "【共用閱讀資料】\n第11至15題為題組\n\nA book town is a rural town in which second-hand and antiquarian bookshops are concentrated. The concept was <u>11</u> by Richard Booth, who opened the first second-hand bookshop in Hay-on-Wye, UK in 1961. Following him, many local people opened their own bookshops, and the small town soon became a model of sustainable rural development and tourism. Since the 1970s, book towns like Hay-on-Wye <u>12</u> up all over the world.\n\nAlthough all book towns have a great number of bookshops, that’s where the similarities <u>13</u> . Each of these towns shows unique features of its own. Some have many small private shops, while others have organizations steered by volunteers. Some even run regular activities to attract visitors. For example, an annual book festival is held in Hay-on-Wye. Clunes, in Australia, holds a monthly book talk that hosts authors to discuss their latest <u>14</u> .\n\nAs digital reading is changing our traditional way of reading, book towns like Hay-on-Wye are particularly important to <u>15</u> . The feel of a book, the smell, the weight, and the knowledge that a particular book might be more than a hundred years old—all these highlight the importance of preserving the physical book as a complement to technology.",
     "correct": "keep the printed word alive",
     "wrong": [
       "get their worldwide fame",
@@ -427,12 +441,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q16",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Airline passengers may have noticed that all plane windows have rounded edges, instead of the hard\ncorners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually\nwere designed for reasons   16    aesthetics.\n\n     In the early days of aviation, plane windows   17   square in shape. Then as commercial air travel\nbecame popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke\napart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots\nwhere stress concentrates. The problem is   18   when airplanes fly at higher altitudes, where the\ndifference between the inside and outside pressure increases, causing added stress. When subjected to\nrepeated pressurization high in the sky, the four corners on a square window may   19    .\n\n    Curved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of\ncracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can   20   extreme\ndifferences in pressure inside and outside of an aircraft.\n\n    Thus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight.\nThey are also used on ships and spacecraft for their greater structural integrity.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nAirline passengers may have noticed that all plane windows have rounded edges, instead of the hard corners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually were designed for reasons <u>16</u> aesthetics.\n\nIn the early days of aviation, plane windows <u>17</u> square in shape. Then as commercial air travel became popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke apart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots where stress concentrates. The problem is <u>18</u> when airplanes fly at higher altitudes, where the difference between the inside and outside pressure increases, causing added stress. When subjected to repeated pressurization high in the sky, the four corners on a square window may <u>19</u> .\n\nCurved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of cracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can <u>20</u> extreme differences in pressure inside and outside of an aircraft.\n\nThus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight. They are also used on ships and spacecraft for their greater structural integrity.",
     "correct": "other than",
     "wrong": [
       "contrary to",
@@ -458,12 +473,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q17",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Airline passengers may have noticed that all plane windows have rounded edges, instead of the hard\ncorners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually\nwere designed for reasons   16    aesthetics.\n\n     In the early days of aviation, plane windows   17   square in shape. Then as commercial air travel\nbecame popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke\napart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots\nwhere stress concentrates. The problem is   18   when airplanes fly at higher altitudes, where the\ndifference between the inside and outside pressure increases, causing added stress. When subjected to\nrepeated pressurization high in the sky, the four corners on a square window may   19    .\n\n    Curved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of\ncracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can   20   extreme\ndifferences in pressure inside and outside of an aircraft.\n\n    Thus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight.\nThey are also used on ships and spacecraft for their greater structural integrity.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nAirline passengers may have noticed that all plane windows have rounded edges, instead of the hard corners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually were designed for reasons <u>16</u> aesthetics.\n\nIn the early days of aviation, plane windows <u>17</u> square in shape. Then as commercial air travel became popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke apart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots where stress concentrates. The problem is <u>18</u> when airplanes fly at higher altitudes, where the difference between the inside and outside pressure increases, causing added stress. When subjected to repeated pressurization high in the sky, the four corners on a square window may <u>19</u> .\n\nCurved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of cracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can <u>20</u> extreme differences in pressure inside and outside of an aircraft.\n\nThus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight. They are also used on ships and spacecraft for their greater structural integrity.",
     "correct": "used to be",
     "wrong": [
       "were to be",
@@ -489,12 +505,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q18",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Airline passengers may have noticed that all plane windows have rounded edges, instead of the hard\ncorners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually\nwere designed for reasons   16    aesthetics.\n\n     In the early days of aviation, plane windows   17   square in shape. Then as commercial air travel\nbecame popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke\napart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots\nwhere stress concentrates. The problem is   18   when airplanes fly at higher altitudes, where the\ndifference between the inside and outside pressure increases, causing added stress. When subjected to\nrepeated pressurization high in the sky, the four corners on a square window may   19    .\n\n    Curved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of\ncracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can   20   extreme\ndifferences in pressure inside and outside of an aircraft.\n\n    Thus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight.\nThey are also used on ships and spacecraft for their greater structural integrity.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nAirline passengers may have noticed that all plane windows have rounded edges, instead of the hard corners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually were designed for reasons <u>16</u> aesthetics.\n\nIn the early days of aviation, plane windows <u>17</u> square in shape. Then as commercial air travel became popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke apart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots where stress concentrates. The problem is <u>18</u> when airplanes fly at higher altitudes, where the difference between the inside and outside pressure increases, causing added stress. When subjected to repeated pressurization high in the sky, the four corners on a square window may <u>19</u> .\n\nCurved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of cracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can <u>20</u> extreme differences in pressure inside and outside of an aircraft.\n\nThus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight. They are also used on ships and spacecraft for their greater structural integrity.",
     "correct": "intensified",
     "wrong": [
       "disguised",
@@ -520,12 +537,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q19",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Airline passengers may have noticed that all plane windows have rounded edges, instead of the hard\ncorners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually\nwere designed for reasons   16    aesthetics.\n\n     In the early days of aviation, plane windows   17   square in shape. Then as commercial air travel\nbecame popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke\napart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots\nwhere stress concentrates. The problem is   18   when airplanes fly at higher altitudes, where the\ndifference between the inside and outside pressure increases, causing added stress. When subjected to\nrepeated pressurization high in the sky, the four corners on a square window may   19    .\n\n    Curved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of\ncracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can   20   extreme\ndifferences in pressure inside and outside of an aircraft.\n\n    Thus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight.\nThey are also used on ships and spacecraft for their greater structural integrity.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nAirline passengers may have noticed that all plane windows have rounded edges, instead of the hard corners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually were designed for reasons <u>16</u> aesthetics.\n\nIn the early days of aviation, plane windows <u>17</u> square in shape. Then as commercial air travel became popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke apart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots where stress concentrates. The problem is <u>18</u> when airplanes fly at higher altitudes, where the difference between the inside and outside pressure increases, causing added stress. When subjected to repeated pressurization high in the sky, the four corners on a square window may <u>19</u> .\n\nCurved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of cracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can <u>20</u> extreme differences in pressure inside and outside of an aircraft.\n\nThus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight. They are also used on ships and spacecraft for their greater structural integrity.",
     "correct": "spell disaster",
     "wrong": [
       "cause conflict",
@@ -551,12 +569,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q20",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Airline passengers may have noticed that all plane windows have rounded edges, instead of the hard\ncorners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually\nwere designed for reasons   16    aesthetics.\n\n     In the early days of aviation, plane windows   17   square in shape. Then as commercial air travel\nbecame popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke\napart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots\nwhere stress concentrates. The problem is   18   when airplanes fly at higher altitudes, where the\ndifference between the inside and outside pressure increases, causing added stress. When subjected to\nrepeated pressurization high in the sky, the four corners on a square window may   19    .\n\n    Curved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of\ncracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can   20   extreme\ndifferences in pressure inside and outside of an aircraft.\n\n    Thus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight.\nThey are also used on ships and spacecraft for their greater structural integrity.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nAirline passengers may have noticed that all plane windows have rounded edges, instead of the hard corners commonly found in our house. The round windows are indeed pleasant to the eye, but they actually were designed for reasons <u>16</u> aesthetics.\n\nIn the early days of aviation, plane windows <u>17</u> square in shape. Then as commercial air travel became popular in the 1950s and airplanes began flying higher and faster, three planes mysteriously broke apart in midair. The cause? Square windows. Scientists found that sharp corners are natural weak spots where stress concentrates. The problem is <u>18</u> when airplanes fly at higher altitudes, where the difference between the inside and outside pressure increases, causing added stress. When subjected to repeated pressurization high in the sky, the four corners on a square window may <u>19</u> .\n\nCurved windows, on the other hand, distribute stress around more evenly, reducing the likelihood of cracks or breaks. Circular shapes are also stronger and resist deformation, and therefore can <u>20</u> extreme differences in pressure inside and outside of an aircraft.\n\nThus, round windows are a major safety innovation that keeps planes from disintegrating mid-flight. They are also used on ships and spacecraft for their greater structural integrity.",
     "correct": "tolerate",
     "wrong": [
       "improve",
@@ -582,25 +601,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。本題為文意選填或篇章結構，請選擇對應第 21 空格的原卷選項。\n\n![第21題原卷資料](/assets/banks/gsat-111-english/Q21-question-1.png)\n\n![第21題原卷資料](/assets/banks/gsat-111-english/Q21-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 21 空格最適合的選項。",
+    "correct": "risky",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 I",
-      "原卷選項 J"
+      "possible",
+      "sensation",
+      "cost",
+      "witnessed",
+      "professional",
+      "called for",
+      "tried out",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗英文第21題。",
+    "exp": "正確答案：risky。來源：111年學科能力測驗英文第21題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -620,28 +640,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q21-question-1.png",
-      "/assets/banks/gsat-111-english/Q21-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q22",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 22 題。本題為文意選填或篇章結構，請選擇對應第 22 空格的原卷選項。\n\n![第22題原卷資料](/assets/banks/gsat-111-english/Q22-question-1.png)\n\n![第22題原卷資料](/assets/banks/gsat-111-english/Q22-question-2.png)",
-    "correct": "原卷選項 I",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 22 空格最適合的選項。",
+    "correct": "necessity",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 J"
+      "possible",
+      "sensation",
+      "risky",
+      "cost",
+      "witnessed",
+      "professional",
+      "called for",
+      "tried out",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 I。來源：111年學科能力測驗英文第22題。",
+    "exp": "正確答案：necessity。來源：111年學科能力測驗英文第22題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -661,28 +679,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q22-question-1.png",
-      "/assets/banks/gsat-111-english/Q22-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q23",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 23 題。本題為文意選填或篇章結構，請選擇對應第 23 空格的原卷選項。\n\n![第23題原卷資料](/assets/banks/gsat-111-english/Q23-question-1.png)\n\n![第23題原卷資料](/assets/banks/gsat-111-english/Q23-question-2.png)",
-    "correct": "原卷選項 F",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 23 空格最適合的選項。",
+    "correct": "professional",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 I",
-      "原卷選項 J"
+      "possible",
+      "sensation",
+      "risky",
+      "cost",
+      "witnessed",
+      "called for",
+      "tried out",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 F。來源：111年學科能力測驗英文第23題。",
+    "exp": "正確答案：professional。來源：111年學科能力測驗英文第23題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -702,28 +718,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q23-question-1.png",
-      "/assets/banks/gsat-111-english/Q23-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。本題為文意選填或篇章結構，請選擇對應第 24 空格的原卷選項。\n\n![第24題原卷資料](/assets/banks/gsat-111-english/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/gsat-111-english/Q24-question-2.png)",
-    "correct": "原卷選項 H",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 24 空格最適合的選項。",
+    "correct": "tried out",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 I",
-      "原卷選項 J"
+      "possible",
+      "sensation",
+      "risky",
+      "cost",
+      "witnessed",
+      "professional",
+      "called for",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 H。來源：111年學科能力測驗英文第24題。",
+    "exp": "正確答案：tried out。來源：111年學科能力測驗英文第24題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -743,28 +757,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q24-question-1.png",
-      "/assets/banks/gsat-111-english/Q24-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。本題為文意選填或篇章結構，請選擇對應第 25 空格的原卷選項。\n\n![第25題原卷資料](/assets/banks/gsat-111-english/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/gsat-111-english/Q25-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 25 空格最適合的選項。",
+    "correct": "cost",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 I",
-      "原卷選項 J"
+      "possible",
+      "sensation",
+      "risky",
+      "witnessed",
+      "professional",
+      "called for",
+      "tried out",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗英文第25題。",
+    "exp": "正確答案：cost。來源：111年學科能力測驗英文第25題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -784,28 +796,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q25-question-1.png",
-      "/assets/banks/gsat-111-english/Q25-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q26",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 26 題。本題為文意選填或篇章結構，請選擇對應第 26 空格的原卷選項。\n\n![第26題原卷資料](/assets/banks/gsat-111-english/Q26-question-1.png)\n\n![第26題原卷資料](/assets/banks/gsat-111-english/Q26-question-2.png)",
-    "correct": "原卷選項 G",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 26 空格最適合的選項。",
+    "correct": "called for",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 H",
-      "原卷選項 I",
-      "原卷選項 J"
+      "possible",
+      "sensation",
+      "risky",
+      "cost",
+      "witnessed",
+      "professional",
+      "tried out",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 G。來源：111年學科能力測驗英文第26題。",
+    "exp": "正確答案：called for。來源：111年學科能力測驗英文第26題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -825,28 +835,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q26-question-1.png",
-      "/assets/banks/gsat-111-english/Q26-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。本題為文意選填或篇章結構，請選擇對應第 27 空格的原卷選項。\n\n![第27題原卷資料](/assets/banks/gsat-111-english/Q27-question-1.png)\n\n![第27題原卷資料](/assets/banks/gsat-111-english/Q27-question-2.png)",
-    "correct": "原卷選項 J",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 27 空格最適合的選項。",
+    "correct": "career",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 I"
+      "possible",
+      "sensation",
+      "risky",
+      "cost",
+      "witnessed",
+      "professional",
+      "called for",
+      "tried out",
+      "necessity"
     ],
-    "exp": "正確答案：原卷選項 J。來源：111年學科能力測驗英文第27題。",
+    "exp": "正確答案：career\n\n四、篇章結構（占8分）\n\n說明︰第31題至第34題，每題一個空格，請依文意在文章後所提供的(A)到(D)選項中分別選出最適當者，填入空格中。每題2分。。來源：111年學科能力測驗英文第27題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -866,28 +874,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q27-question-1.png",
-      "/assets/banks/gsat-111-english/Q27-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q28",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 28 題。本題為文意選填或篇章結構，請選擇對應第 28 空格的原卷選項。\n\n![第28題原卷資料](/assets/banks/gsat-111-english/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/gsat-111-english/Q28-question-2.png)",
-    "correct": "原卷選項 E",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 28 空格最適合的選項。",
+    "correct": "witnessed",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 I",
-      "原卷選項 J"
+      "possible",
+      "sensation",
+      "risky",
+      "cost",
+      "professional",
+      "called for",
+      "tried out",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 E。來源：111年學科能力測驗英文第28題。",
+    "exp": "正確答案：witnessed。來源：111年學科能力測驗英文第28題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -907,28 +913,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q28-question-1.png",
-      "/assets/banks/gsat-111-english/Q28-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q29",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 29 題。本題為文意選填或篇章結構，請選擇對應第 29 空格的原卷選項。\n\n![第29題原卷資料](/assets/banks/gsat-111-english/Q29-question-1.png)\n\n![第29題原卷資料](/assets/banks/gsat-111-english/Q29-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 29 空格最適合的選項。",
+    "correct": "possible",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 I",
-      "原卷選項 J"
+      "sensation",
+      "risky",
+      "cost",
+      "witnessed",
+      "professional",
+      "called for",
+      "tried out",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗英文第29題。",
+    "exp": "正確答案：possible。來源：111年學科能力測驗英文第29題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -948,28 +952,26 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q29-question-1.png",
-      "/assets/banks/gsat-111-english/Q29-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q30",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 30 題。本題為文意選填或篇章結構，請選擇對應第 30 空格的原卷選項。\n\n![第30題原卷資料](/assets/banks/gsat-111-english/Q30-question-1.png)\n\n![第30題原卷資料](/assets/banks/gsat-111-english/Q30-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "第21至30題為題組\n\nA stunt person is a man or a woman who performs dangerous acts, usually in the television or movie industry. In this line of work, the person is paid to do daring actions that are deemed too <u>21</u> for the regular actor to perform, including jumping from heights, crashing cars, or fighting with weapons.\n\nStunt work emerged out of <u>22</u> over time. In the early days of the film industry, actors themselves shot acrobatic acts and dangerous scenes, until they began to get injured. There were, however, no <u>23</u> crew members to perform impressive stunts at that time. If something dangerous needed to be done for a scene, the producers would hire anyone crazy or desperate enough to do it. These people were not trained to perform stunts, so they often <u>24</u> things for the first time during the actual shooting. They had to learn from their own mistakes, which <u>25</u> some their lives, and almost all suffered light or severe injuries.\n\nBeginning around 1910, audiences developed a taste for serial action movies, which <u>26</u> the use of dedicated stunt people to perform in dangerous scenes. Such demand increased with the rise of western movies, and many cowboys with masterful skills on horseback found a new <u>27</u> as a stunt person. Tom Mix and Yakima Canutt were among the most famous. The 1960s and ’70s <u>28</u> the development of most modern stunt technology, like air rams and bullet squibs. That technology has continued to evolve into the present.\n\nToday, CGI (computer generated imagery) is widely used in filmmaking, and it is now <u>29</u> to create very lifelike scenes without using real stunt people. However, CGI has difficulties of its own, and there will always be a demand for the realism and thrilling <u>30</u> of an actual stunt. So the stunt industry is probably in no immediate danger of dying off.\n\n請選出第 30 空格最適合的選項。",
+    "correct": "sensation",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E",
-      "原卷選項 F",
-      "原卷選項 G",
-      "原卷選項 H",
-      "原卷選項 I",
-      "原卷選項 J"
+      "possible",
+      "risky",
+      "cost",
+      "witnessed",
+      "professional",
+      "called for",
+      "tried out",
+      "necessity",
+      "career"
     ],
-    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗英文第30題。",
+    "exp": "正確答案：sensation。來源：111年學科能力測驗英文第30題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -989,22 +991,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q30-question-1.png",
-      "/assets/banks/gsat-111-english/Q30-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q31",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 31 題。本題為文意選填或篇章結構，請選擇對應第 31 空格的原卷選項。\n\n![第31題原卷資料](/assets/banks/gsat-111-english/Q31-question-1.png)\n\n![第31題原卷資料](/assets/banks/gsat-111-english/Q31-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "第31至34題為題組\n\nObon, or the Bon Festival, is a Japanese holiday that honors the spirits of the dead. <u>31</u> The festival usually lasts for four to five days in August. During this period, many people travel back to their hometowns and spend time with loved ones, both past and present.\n\nThough not a national holiday, Obon is surely one of the most traditional events of the year. Celebration often begins with mukaebi (welcoming fire), during which people make a small bonfire in front of their house to guide spirits upon their return back home. <u>32</u> Food offerings are presented at house altars and temples. Some regions prepare horses made of cucumbers and cows made of eggplants, hoping that the spirits will come back to Earth quickly, on a horse, and leave slowly, riding the cow.\n\n<u>33</u> Paper lanterns and offerings are sent floating down rivers to accompany the ancestors back to their resting place. Many areas will also organize bon-odori dances. The style of the dances varies from region to region but is normally based on the rhythms of taiko drums. Performers usually play on a tall stage with lanterns and banners strung all around. Participants, often dressed in light cotton kimonos, are encouraged to dance to the music around the stage. <u>34</u> Originally dedicated to the deceased, the dances have now become a symbol of the summer festival themselves.\n\n請選出第 31 空格最適合的選項。",
+    "correct": "Originating from the Chinese Ghost Festival, this annual event has evolved into a time of family reunion.\n\n背面尚有試題",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Some people also visit the cemetery to clean up the family graves and pray for their ancestors.",
+      "Such festive activities are usually held in parks, temples, and other public places around Japan.",
+      "Obon concludes with another bonfire, okuribi, lighting up the sky to see the ancestors’ spirits off."
     ],
-    "exp": "正確答案：原卷選項 D。來源：111年學科能力測驗英文第31題。",
+    "exp": "正確答案：Originating from the Chinese Ghost Festival, this annual event has evolved into a time of family reunion.\n\n背面尚有試題\n\n五、閱讀測驗（占24分）\n\n說明︰第35題至第46題，每題2分。。來源：111年學科能力測驗英文第31題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1024,22 +1024,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q31-question-1.png",
-      "/assets/banks/gsat-111-english/Q31-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q32",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 32 題。本題為文意選填或篇章結構，請選擇對應第 32 空格的原卷選項。\n\n![第32題原卷資料](/assets/banks/gsat-111-english/Q32-question-1.png)\n\n![第32題原卷資料](/assets/banks/gsat-111-english/Q32-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "第31至34題為題組\n\nObon, or the Bon Festival, is a Japanese holiday that honors the spirits of the dead. <u>31</u> The festival usually lasts for four to five days in August. During this period, many people travel back to their hometowns and spend time with loved ones, both past and present.\n\nThough not a national holiday, Obon is surely one of the most traditional events of the year. Celebration often begins with mukaebi (welcoming fire), during which people make a small bonfire in front of their house to guide spirits upon their return back home. <u>32</u> Food offerings are presented at house altars and temples. Some regions prepare horses made of cucumbers and cows made of eggplants, hoping that the spirits will come back to Earth quickly, on a horse, and leave slowly, riding the cow.\n\n<u>33</u> Paper lanterns and offerings are sent floating down rivers to accompany the ancestors back to their resting place. Many areas will also organize bon-odori dances. The style of the dances varies from region to region but is normally based on the rhythms of taiko drums. Performers usually play on a tall stage with lanterns and banners strung all around. Participants, often dressed in light cotton kimonos, are encouraged to dance to the music around the stage. <u>34</u> Originally dedicated to the deceased, the dances have now become a symbol of the summer festival themselves.\n\n請選出第 32 空格最適合的選項。",
+    "correct": "Some people also visit the cemetery to clean up the family graves and pray for their ancestors.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Such festive activities are usually held in parks, temples, and other public places around Japan.",
+      "Obon concludes with another bonfire, okuribi, lighting up the sky to see the ancestors’ spirits off.",
+      "Originating from the Chinese Ghost Festival, this annual event has evolved into a time of family reunion.\n\n背面尚有試題"
     ],
-    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗英文第32題。",
+    "exp": "正確答案：Some people also visit the cemetery to clean up the family graves and pray for their ancestors.。來源：111年學科能力測驗英文第32題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1059,22 +1057,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q32-question-1.png",
-      "/assets/banks/gsat-111-english/Q32-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q33",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 33 題。本題為文意選填或篇章結構，請選擇對應第 33 空格的原卷選項。\n\n![第33題原卷資料](/assets/banks/gsat-111-english/Q33-question-1.png)\n\n![第33題原卷資料](/assets/banks/gsat-111-english/Q33-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "第31至34題為題組\n\nObon, or the Bon Festival, is a Japanese holiday that honors the spirits of the dead. <u>31</u> The festival usually lasts for four to five days in August. During this period, many people travel back to their hometowns and spend time with loved ones, both past and present.\n\nThough not a national holiday, Obon is surely one of the most traditional events of the year. Celebration often begins with mukaebi (welcoming fire), during which people make a small bonfire in front of their house to guide spirits upon their return back home. <u>32</u> Food offerings are presented at house altars and temples. Some regions prepare horses made of cucumbers and cows made of eggplants, hoping that the spirits will come back to Earth quickly, on a horse, and leave slowly, riding the cow.\n\n<u>33</u> Paper lanterns and offerings are sent floating down rivers to accompany the ancestors back to their resting place. Many areas will also organize bon-odori dances. The style of the dances varies from region to region but is normally based on the rhythms of taiko drums. Performers usually play on a tall stage with lanterns and banners strung all around. Participants, often dressed in light cotton kimonos, are encouraged to dance to the music around the stage. <u>34</u> Originally dedicated to the deceased, the dances have now become a symbol of the summer festival themselves.\n\n請選出第 33 空格最適合的選項。",
+    "correct": "Obon concludes with another bonfire, okuribi, lighting up the sky to see the ancestors’ spirits off.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "Some people also visit the cemetery to clean up the family graves and pray for their ancestors.",
+      "Such festive activities are usually held in parks, temples, and other public places around Japan.",
+      "Originating from the Chinese Ghost Festival, this annual event has evolved into a time of family reunion.\n\n背面尚有試題"
     ],
-    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗英文第33題。",
+    "exp": "正確答案：Obon concludes with another bonfire, okuribi, lighting up the sky to see the ancestors’ spirits off.。來源：111年學科能力測驗英文第33題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1094,22 +1090,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q33-question-1.png",
-      "/assets/banks/gsat-111-english/Q33-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q34",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 34 題。本題為文意選填或篇章結構，請選擇對應第 34 空格的原卷選項。\n\n![第34題原卷資料](/assets/banks/gsat-111-english/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/gsat-111-english/Q34-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "第31至34題為題組\n\nObon, or the Bon Festival, is a Japanese holiday that honors the spirits of the dead. <u>31</u> The festival usually lasts for four to five days in August. During this period, many people travel back to their hometowns and spend time with loved ones, both past and present.\n\nThough not a national holiday, Obon is surely one of the most traditional events of the year. Celebration often begins with mukaebi (welcoming fire), during which people make a small bonfire in front of their house to guide spirits upon their return back home. <u>32</u> Food offerings are presented at house altars and temples. Some regions prepare horses made of cucumbers and cows made of eggplants, hoping that the spirits will come back to Earth quickly, on a horse, and leave slowly, riding the cow.\n\n<u>33</u> Paper lanterns and offerings are sent floating down rivers to accompany the ancestors back to their resting place. Many areas will also organize bon-odori dances. The style of the dances varies from region to region but is normally based on the rhythms of taiko drums. Performers usually play on a tall stage with lanterns and banners strung all around. Participants, often dressed in light cotton kimonos, are encouraged to dance to the music around the stage. <u>34</u> Originally dedicated to the deceased, the dances have now become a symbol of the summer festival themselves.\n\n請選出第 34 空格最適合的選項。",
+    "correct": "Such festive activities are usually held in parks, temples, and other public places around Japan.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Some people also visit the cemetery to clean up the family graves and pray for their ancestors.",
+      "Obon concludes with another bonfire, okuribi, lighting up the sky to see the ancestors’ spirits off.",
+      "Originating from the Chinese Ghost Festival, this annual event has evolved into a time of family reunion.\n\n背面尚有試題"
     ],
-    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗英文第34題。",
+    "exp": "正確答案：Such festive activities are usually held in parks, temples, and other public places around Japan.。來源：111年學科能力測驗英文第34題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1129,22 +1123,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/Q34-question-1.png",
-      "/assets/banks/gsat-111-english/Q34-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q35",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/gsat-111-english/G35-38-context.png)\n\n![第35題原卷資料](/assets/banks/gsat-111-english/Q35-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n第 35 至 38 題為題組\nStanding proud in the savannah with their red blankets and painted shields, the Maasai people are one\nof the widely known symbols of East Africa. Their unique style, as remarked by Karen Blixen, author of\nOut of Africa, “has grown from the inside, and is an expression of the race and its history.”\n![圖表](/assets/banks/gsat-111-english/G35-38-figure-1.png)\nThe Maasai are a semi-nomadic group in Kenya and northern Tanzania\nalmost entirely on the meat, blood, and milk of their herds. Over the years, the fearless tribesmen have\nstood strong against slavery, and resisted the urging of the Kenyan and Tanzanian governments to adopt a\nmore modern lifestyle. In fact, they are one of the few tribes that have retained most of their traditions. Up\nuntil recently, the only way for a Maasai boy to achieve warrior status was to single-handedly kill a lion\nwith his spear.\nMaasai clothing varies with age, gender, and place. The most recognizable piece of clothing is the\nshúkà, a sheet of fabric worn wrapped around the body. Red is a popular color, and women generally opt\nfor checked, striped, or patterned pieces of cloth. Young men wear black for several months after their\ncircumcision, a ritual signifying their coming of age. A Maasai warrior is rarely seen without his spear and\nshield. In Blixen’s words, “their weapons and finery are as much a part of their being as are a stag’s antlers”\n(a male deer’s horns).\nBeadwork is an important part of Maasai culture. Beaded jewelry is made by women, and is famous\nfor its complexity. Natural materials such as clay, shells, and ivory were used before trading with the\nEuropeans in the 19<sup>th</sup> century. They were then replaced by colorful glass beads, allowing for more detailed\nbeadwork and color patterns. Multicolored beadwork is popular among both men and women. Each color\nholds a special meaning: White stands for peace, green for land and production, while red—the most\nfavored color among the Maasai—is the symbol of unity and bravery.\n\n111年學測第 6 頁\n英文考科共 11 頁\n\nWhich of the following pictures best represents the image of a typical Maasai warrior?",
+    "correct": "![圖表](/assets/banks/gsat-111-english/Q35-option-B-figure-2.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/gsat-111-english/Q35-option-A-figure-1.png)",
+      "![圖表](/assets/banks/gsat-111-english/Q35-option-C-figure-1.png)",
+      "![圖表](/assets/banks/gsat-111-english/Q35-option-D-figure-3.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：111年學科能力測驗英文第35題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-111-english/Q35-option-B-figure-2.png)。來源：111年學科能力測驗英文第35題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1165,21 +1157,25 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-english/G35-38-context.png",
-      "/assets/banks/gsat-111-english/Q35-question.png"
-    ]
+      "/assets/banks/gsat-111-english/G35-38-figure-1.png",
+      "/assets/banks/gsat-111-english/Q35-option-B-figure-2.png",
+      "/assets/banks/gsat-111-english/Q35-option-A-figure-1.png",
+      "/assets/banks/gsat-111-english/Q35-option-C-figure-1.png",
+      "/assets/banks/gsat-111-english/Q35-option-D-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q36",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/gsat-111-english/G35-38-context.png)\n\n![第36題原卷資料](/assets/banks/gsat-111-english/Q36-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n第35至38題為題組\n\nStanding proud in the savannah with their red blankets and painted shields, the Maasai people are one of the widely known symbols of East Africa. Their unique style, as remarked by Karen Blixen, author of Out of Africa, “has grown from the inside, and is an expression of the race and its history.”\n\nThe Maasai are a semi-nomadic group in Kenya and northern Tanzania, wandering in bands and living almost entirely on the meat, blood, and milk of their herds. Over the years, the fearless tribesmen have stood strong against slavery, and resisted the urging of the Kenyan and Tanzanian governments to adopt a more modern lifestyle. In fact, they are one of the few tribes that have retained most of their traditions. Up until recently, the only way for a Maasai boy to achieve warrior status was to single-handedly kill a lion with his spear.\n\nMaasai clothing varies with age, gender, and place. The most recognizable piece of clothing is the shúkà, a sheet of fabric worn wrapped around the body. Red is a popular color, and women generally opt for checked, striped, or patterned pieces of cloth. Young men wear black for several months after their circumcision, a ritual signifying their coming of age. A Maasai warrior is rarely seen without his spear and shield. In Blixen’s words, “their weapons and finery are as much a part of their being as are a stag’s antlers” (a male deer’s horns).\n\nBeadwork is an important part of Maasai culture. Beaded jewelry is made by women, and is famous for its complexity. Natural materials such as clay, shells, and ivory were used before trading with the Europeans in the 19<sup>th</sup> century. They were then replaced by colorful glass beads, allowing for more detailed beadwork and color patterns. Multicolored beadwork is popular among both men and women. Each color holds a special meaning: White stands for peace, green for land and production, while red—the most favored color among the Maasai—is the symbol of unity and bravery.\n\nWhat can we learn from the passage about the Maasai people?\n\n![圖表](/assets/banks/gsat-111-english/G35-38-figure-1.png)",
+    "correct": "They have been urged by governments to leave behind their traditions.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "They resist foreign influence because they were enslaved in the past.",
+      "A boy has to kill a lion by himself before becoming an adult.",
+      "A Maasai woman is usually good at beadwork and farming."
     ],
-    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗英文第36題。",
+    "exp": "正確答案：They have been urged by governments to leave behind their traditions.。來源：111年學科能力測驗英文第36題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1200,21 +1196,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-english/G35-38-context.png",
-      "/assets/banks/gsat-111-english/Q36-question.png"
-    ]
+      "/assets/banks/gsat-111-english/G35-38-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q37",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-111-english/G35-38-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-111-english/Q37-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n第35至38題為題組\n\nStanding proud in the savannah with their red blankets and painted shields, the Maasai people are one of the widely known symbols of East Africa. Their unique style, as remarked by Karen Blixen, author of Out of Africa, “has grown from the inside, and is an expression of the race and its history.”\n\nThe Maasai are a semi-nomadic group in Kenya and northern Tanzania, wandering in bands and living almost entirely on the meat, blood, and milk of their herds. Over the years, the fearless tribesmen have stood strong against slavery, and resisted the urging of the Kenyan and Tanzanian governments to adopt a more modern lifestyle. In fact, they are one of the few tribes that have retained most of their traditions. Up until recently, the only way for a Maasai boy to achieve warrior status was to single-handedly kill a lion with his spear.\n\nMaasai clothing varies with age, gender, and place. The most recognizable piece of clothing is the shúkà, a sheet of fabric worn wrapped around the body. Red is a popular color, and women generally opt for checked, striped, or patterned pieces of cloth. Young men wear black for several months after their circumcision, a ritual signifying their coming of age. A Maasai warrior is rarely seen without his spear and shield. In Blixen’s words, “their weapons and finery are as much a part of their being as are a stag’s antlers” (a male deer’s horns).\n\nBeadwork is an important part of Maasai culture. Beaded jewelry is made by women, and is famous for its complexity. Natural materials such as clay, shells, and ivory were used before trading with the Europeans in the 19<sup>th</sup> century. They were then replaced by colorful glass beads, allowing for more detailed beadwork and color patterns. Multicolored beadwork is popular among both men and women. Each color holds a special meaning: White stands for peace, green for land and production, while red—the most favored color among the Maasai—is the symbol of unity and bravery.\n\nWhich of the following is true about Maasai clothing and beadwork?\n\n![圖表](/assets/banks/gsat-111-english/G35-38-figure-1.png)",
+    "correct": "Colorful glass jewelry became popular after the 19<sup>th</sup> century.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "Striped and patterned cloth is preferred by young adults.",
+      "Young men cannot wear black until they become warriors.",
+      "The color of the shúkà represented one’s importance in the tribe."
     ],
-    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗英文第37題。",
+    "exp": "正確答案：Colorful glass jewelry became popular after the 19<sup>th</sup> century.。來源：111年學科能力測驗英文第37題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1235,21 +1231,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-english/G35-38-context.png",
-      "/assets/banks/gsat-111-english/Q37-question.png"
-    ]
+      "/assets/banks/gsat-111-english/G35-38-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q38",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/gsat-111-english/G35-38-context.png)\n\n![第38題原卷資料](/assets/banks/gsat-111-english/Q38-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n第35至38題為題組\n\nStanding proud in the savannah with their red blankets and painted shields, the Maasai people are one of the widely known symbols of East Africa. Their unique style, as remarked by Karen Blixen, author of Out of Africa, “has grown from the inside, and is an expression of the race and its history.”\n\nThe Maasai are a semi-nomadic group in Kenya and northern Tanzania, wandering in bands and living almost entirely on the meat, blood, and milk of their herds. Over the years, the fearless tribesmen have stood strong against slavery, and resisted the urging of the Kenyan and Tanzanian governments to adopt a more modern lifestyle. In fact, they are one of the few tribes that have retained most of their traditions. Up until recently, the only way for a Maasai boy to achieve warrior status was to single-handedly kill a lion with his spear.\n\nMaasai clothing varies with age, gender, and place. The most recognizable piece of clothing is the shúkà, a sheet of fabric worn wrapped around the body. Red is a popular color, and women generally opt for checked, striped, or patterned pieces of cloth. Young men wear black for several months after their circumcision, a ritual signifying their coming of age. A Maasai warrior is rarely seen without his spear and shield. In Blixen’s words, “their weapons and finery are as much a part of their being as are a stag’s antlers” (a male deer’s horns).\n\nBeadwork is an important part of Maasai culture. Beaded jewelry is made by women, and is famous for its complexity. Natural materials such as clay, shells, and ivory were used before trading with the Europeans in the 19<sup>th</sup> century. They were then replaced by colorful glass beads, allowing for more detailed beadwork and color patterns. Multicolored beadwork is popular among both men and women. Each color holds a special meaning: White stands for peace, green for land and production, while red—the most favored color among the Maasai—is the symbol of unity and bravery.\n\nWhy does the author quote Blixen’s comment at the end of the third paragraph?\n\n![圖表](/assets/banks/gsat-111-english/G35-38-figure-1.png)",
+    "correct": "To emphasize that weapons are an inseparable part of a Maasai warrior’s outfit.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "To explain how Maasai warriors hunt for deer in the wild.",
+      "To exemplify the types of weapons used by Maasai warriors.",
+      "To show the similarities between the behavior of a Maasai warrior and that of a male deer."
     ],
-    "exp": "正確答案：原卷選項 C。來源：111年學科能力測驗英文第38題。",
+    "exp": "正確答案：To emphasize that weapons are an inseparable part of a Maasai warrior’s outfit.。來源：111年學科能力測驗英文第38題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1270,14 +1266,14 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-english/G35-38-context.png",
-      "/assets/banks/gsat-111-english/Q38-question.png"
-    ]
+      "/assets/banks/gsat-111-english/G35-38-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q39",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第39 至42 題為題組\n   A hard hat is a helmet used mostly at worksites to protect the head from injuries due to falling objects.\nSince its introduction in the early 20th century, the headgear has saved countless lives and is considered the\nnumber one safety tool for construction workers.\n\n    The hard hat was invented in 1919 by Edward W. Bullard, who had just returned from World War I.\nBefore the war, workers used to smear their hats with coal tar for protection of their head. Bullard, having\nwitnessed the life-saving power of the metal helmet in the War, decided to produce a head protection device\nthat was affordable for every worker and lightweight enough to be worn all day long. The Hard Boiled Hat\nwas thus born, using steamed canvas and leather, covered with black paint, and featuring a suspension\nsystem to reduce impact. Soon, hard hats became widely used. The headgear was later made mandatory at\nconstruction sites in major construction projects, such as the Hoover Dam in 1931 and the Golden Gate\nBridge in 1933.\n\n    Over the past century, hard hats have advanced considerably, evolving from canvas and leather to\naluminum, fiberglass, and, eventually, to thermoplastic. Recently, new models have been introduced and\naccessories added to meet the needs of laborers working on various job sites. For instance, a ventilated hard\nhat was developed to keep wearers cooler, and see-through face shields were attached to better see the\nhazards lurking above. Today, attachments include radios, sensors, cameras, and a lot more. A common\ncolor code has also been developed for recognizing people and their roles on site. Yellow is used for general\nlaborers and contractors, white (or sometimes black) for supervisors and managers, and green for inspectors\nand new workers.\n\n   New products continue to expand the market. Global sales of hard hats totaled USD 2.1 billion in 2016,\nand are expected to reach USD 3.19 billion in 2025.\n\nWhich of the following aspects about hard hats is NOT discussed in the passage?",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nA hard hat is a helmet used mostly at worksites to protect the head from injuries due to falling objects. Since its introduction in the early 20<sup>th</sup> century, the headgear has saved countless lives and is considered the number one safety tool for construction workers.\n\nThe hard hat was invented in 1919 by Edward W. Bullard, who had just returned from World War I. Before the war, workers used to smear their hats with coal tar for protection of their head. Bullard, having witnessed the life-saving power of the metal helmet in the War, decided to produce a head protection device that was affordable for every worker and lightweight enough to be worn all day long. The Hard Boiled Hat was thus born, using steamed canvas and leather, covered with black paint, and featuring a suspension system to reduce impact. Soon, hard hats became widely used. The headgear was later made mandatory at construction sites in major construction projects, such as the Hoover Dam in 1931 and the Golden Gate Bridge in 1933.\n\nOver the past century, hard hats have advanced considerably, evolving from canvas and leather to aluminum, fiberglass, and, eventually, to thermoplastic. Recently, new models have been introduced and accessories added to meet the needs of laborers working on various job sites. For instance, a ventilated hard hat was developed to keep wearers cooler, and see-through face shields were attached to better see the hazards lurking above. Today, attachments include radios, sensors, cameras, and a lot more. A common color code has also been developed for recognizing people and their roles on site. Yellow is used for general laborers and contractors, white (or sometimes black) for supervisors and managers, and green for inspectors and new workers.\n\nNew products continue to expand the market. Global sales of hard hats totaled USD 2.1 billion in 2016, and are expected to reach USD 3.19 billion in 2025.\n\nWhich of the following aspects about hard hats is NOT discussed in the passage?",
     "correct": "Their limitations.",
     "wrong": [
       "Their functions.",
@@ -1303,19 +1299,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q40",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/gsat-111-english/G39-42-context.png)\n\n![第40題原卷資料](/assets/banks/gsat-111-english/Q40-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nA hard hat is a helmet used mostly at worksites to protect the head from injuries due to falling objects. Since its introduction in the early 20<sup>th</sup> century, the headgear has saved countless lives and is considered the number one safety tool for construction workers.\n\nThe hard hat was invented in 1919 by Edward W. Bullard, who had just returned from World War I. Before the war, workers used to smear their hats with coal tar for protection of their head. Bullard, having witnessed the life-saving power of the metal helmet in the War, decided to produce a head protection device that was affordable for every worker and lightweight enough to be worn all day long. The Hard Boiled Hat was thus born, using steamed canvas and leather, covered with black paint, and featuring a suspension system to reduce impact. Soon, hard hats became widely used. The headgear was later made mandatory at construction sites in major construction projects, such as the Hoover Dam in 1931 and the Golden Gate Bridge in 1933.\n\nOver the past century, hard hats have advanced considerably, evolving from canvas and leather to aluminum, fiberglass, and, eventually, to thermoplastic. Recently, new models have been introduced and accessories added to meet the needs of laborers working on various job sites. For instance, a ventilated hard hat was developed to keep wearers cooler, and see-through face shields were attached to better see the hazards lurking above. Today, attachments include radios, sensors, cameras, and a lot more. A common color code has also been developed for recognizing people and their roles on site. Yellow is used for general laborers and contractors, white (or sometimes black) for supervisors and managers, and green for inspectors and new workers.\n\nNew products continue to expand the market. Global sales of hard hats totaled USD 2.1 billion in 2016, and are expected to reach USD 3.19 billion in 2025.\n\nIn what order did the following protective hats appear?\n\na. fiberglass hats\n\nb. hats with see-through shields\n\nc. hats with canvas and leather\n\nd. hats with tar over them",
+    "correct": "d🡪c🡪a🡪b",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "c🡪d🡪b🡪a",
+      "c🡪b🡪a🡪d",
+      "d🡪c🡪b🡪a"
     ],
-    "exp": "正確答案：原卷選項 A。來源：111年學科能力測驗英文第40題。",
+    "exp": "正確答案：d🡪c🡪a🡪b。來源：111年學科能力測驗英文第40題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1334,15 +1331,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-english/G39-42-context.png",
-      "/assets/banks/gsat-111-english/Q40-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q41",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第39 至42 題為題組\n   A hard hat is a helmet used mostly at worksites to protect the head from injuries due to falling objects.\nSince its introduction in the early 20th century, the headgear has saved countless lives and is considered the\nnumber one safety tool for construction workers.\n\n    The hard hat was invented in 1919 by Edward W. Bullard, who had just returned from World War I.\nBefore the war, workers used to smear their hats with coal tar for protection of their head. Bullard, having\nwitnessed the life-saving power of the metal helmet in the War, decided to produce a head protection device\nthat was affordable for every worker and lightweight enough to be worn all day long. The Hard Boiled Hat\nwas thus born, using steamed canvas and leather, covered with black paint, and featuring a suspension\nsystem to reduce impact. Soon, hard hats became widely used. The headgear was later made mandatory at\nconstruction sites in major construction projects, such as the Hoover Dam in 1931 and the Golden Gate\nBridge in 1933.\n\n    Over the past century, hard hats have advanced considerably, evolving from canvas and leather to\naluminum, fiberglass, and, eventually, to thermoplastic. Recently, new models have been introduced and\naccessories added to meet the needs of laborers working on various job sites. For instance, a ventilated hard\nhat was developed to keep wearers cooler, and see-through face shields were attached to better see the\nhazards lurking above. Today, attachments include radios, sensors, cameras, and a lot more. A common\ncolor code has also been developed for recognizing people and their roles on site. Yellow is used for general\nlaborers and contractors, white (or sometimes black) for supervisors and managers, and green for inspectors\nand new workers.\n\n   New products continue to expand the market. Global sales of hard hats totaled USD 2.1 billion in 2016,\nand are expected to reach USD 3.19 billion in 2025.\n\nAccording to the passage, which of the following statements is true about the hard hat?",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nA hard hat is a helmet used mostly at worksites to protect the head from injuries due to falling objects. Since its introduction in the early 20<sup>th</sup> century, the headgear has saved countless lives and is considered the number one safety tool for construction workers.\n\nThe hard hat was invented in 1919 by Edward W. Bullard, who had just returned from World War I. Before the war, workers used to smear their hats with coal tar for protection of their head. Bullard, having witnessed the life-saving power of the metal helmet in the War, decided to produce a head protection device that was affordable for every worker and lightweight enough to be worn all day long. The Hard Boiled Hat was thus born, using steamed canvas and leather, covered with black paint, and featuring a suspension system to reduce impact. Soon, hard hats became widely used. The headgear was later made mandatory at construction sites in major construction projects, such as the Hoover Dam in 1931 and the Golden Gate Bridge in 1933.\n\nOver the past century, hard hats have advanced considerably, evolving from canvas and leather to aluminum, fiberglass, and, eventually, to thermoplastic. Recently, new models have been introduced and accessories added to meet the needs of laborers working on various job sites. For instance, a ventilated hard hat was developed to keep wearers cooler, and see-through face shields were attached to better see the hazards lurking above. Today, attachments include radios, sensors, cameras, and a lot more. A common color code has also been developed for recognizing people and their roles on site. Yellow is used for general laborers and contractors, white (or sometimes black) for supervisors and managers, and green for inspectors and new workers.\n\nNew products continue to expand the market. Global sales of hard hats totaled USD 2.1 billion in 2016, and are expected to reach USD 3.19 billion in 2025.\n\nAccording to the passage, which of the following statements is true about the hard hat?",
     "correct": "The inspiration came from the inventor’s wartime experience.",
     "wrong": [
       "Global sales have doubled every ten years.",
@@ -1368,12 +1363,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q42",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第39 至42 題為題組\n   A hard hat is a helmet used mostly at worksites to protect the head from injuries due to falling objects.\nSince its introduction in the early 20th century, the headgear has saved countless lives and is considered the\nnumber one safety tool for construction workers.\n\n    The hard hat was invented in 1919 by Edward W. Bullard, who had just returned from World War I.\nBefore the war, workers used to smear their hats with coal tar for protection of their head. Bullard, having\nwitnessed the life-saving power of the metal helmet in the War, decided to produce a head protection device\nthat was affordable for every worker and lightweight enough to be worn all day long. The Hard Boiled Hat\nwas thus born, using steamed canvas and leather, covered with black paint, and featuring a suspension\nsystem to reduce impact. Soon, hard hats became widely used. The headgear was later made mandatory at\nconstruction sites in major construction projects, such as the Hoover Dam in 1931 and the Golden Gate\nBridge in 1933.\n\n    Over the past century, hard hats have advanced considerably, evolving from canvas and leather to\naluminum, fiberglass, and, eventually, to thermoplastic. Recently, new models have been introduced and\naccessories added to meet the needs of laborers working on various job sites. For instance, a ventilated hard\nhat was developed to keep wearers cooler, and see-through face shields were attached to better see the\nhazards lurking above. Today, attachments include radios, sensors, cameras, and a lot more. A common\ncolor code has also been developed for recognizing people and their roles on site. Yellow is used for general\nlaborers and contractors, white (or sometimes black) for supervisors and managers, and green for inspectors\nand new workers.\n\n   New products continue to expand the market. Global sales of hard hats totaled USD 2.1 billion in 2016,\nand are expected to reach USD 3.19 billion in 2025.\n\nWhich of the following words are used in the passage to refer to the hard hat?\n     a. tool           b. code           c. device         d. helmet         e. accessory       f. headgear",
+    "q": "【共用閱讀資料】\n第39至42題為題組\n\nA hard hat is a helmet used mostly at worksites to protect the head from injuries due to falling objects. Since its introduction in the early 20<sup>th</sup> century, the headgear has saved countless lives and is considered the number one safety tool for construction workers.\n\nThe hard hat was invented in 1919 by Edward W. Bullard, who had just returned from World War I. Before the war, workers used to smear their hats with coal tar for protection of their head. Bullard, having witnessed the life-saving power of the metal helmet in the War, decided to produce a head protection device that was affordable for every worker and lightweight enough to be worn all day long. The Hard Boiled Hat was thus born, using steamed canvas and leather, covered with black paint, and featuring a suspension system to reduce impact. Soon, hard hats became widely used. The headgear was later made mandatory at construction sites in major construction projects, such as the Hoover Dam in 1931 and the Golden Gate Bridge in 1933.\n\nOver the past century, hard hats have advanced considerably, evolving from canvas and leather to aluminum, fiberglass, and, eventually, to thermoplastic. Recently, new models have been introduced and accessories added to meet the needs of laborers working on various job sites. For instance, a ventilated hard hat was developed to keep wearers cooler, and see-through face shields were attached to better see the hazards lurking above. Today, attachments include radios, sensors, cameras, and a lot more. A common color code has also been developed for recognizing people and their roles on site. Yellow is used for general laborers and contractors, white (or sometimes black) for supervisors and managers, and green for inspectors and new workers.\n\nNew products continue to expand the market. Global sales of hard hats totaled USD 2.1 billion in 2016, and are expected to reach USD 3.19 billion in 2025.\n\nWhich of the following words are used in the passage to refer to the hard hat?\n\na. tool b. code c. device d. helmet e. accessory f. headgear",
     "correct": "a, c, d, f",
     "wrong": [
       "a, b, d, e",
@@ -1399,12 +1395,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q43",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第43 至46 題為題組\n     Zebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only\na few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body\nmakes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part\nof their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain\nthe ability to see.\n\n    Recent studies show that humans and zebrafish have the same major organs and share 70 percent of\nthe genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish.\nScientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to\nregenerate such organs as eyes, hearts, and spines.\n\n     Researchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They\nhave learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four\nweeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those\nof humans. If the process can be replicated in humans, it may give rise to new treatments for blindness\ncaused by retinal damage.\n\n     In order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter\ngamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons.\nThey found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of\nGABA concentration will suppress the regeneration process. This suggested that GABA plays an important\nrole in the fish’s ability to regain their sight.\n\n    The team is beginning to test the GABA theory on mice. If that works, human trials will be next on\nthe agenda. If the research proves successful in humans, some of the nearly 40 million blind people\nworldwide may one day have a tiny, striped fish to thank.\n\nWhat can we learn about zebrafish from the passage?",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nZebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only a few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body makes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part of their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain the ability to see.\n\nRecent studies show that humans and zebrafish have the same major organs and share 70 percent of the genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish. Scientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to regenerate such organs as eyes, hearts, and spines.\n\nResearchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They have learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four weeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those of humans. If the process can be replicated in humans, it may give rise to new treatments for blindness caused by retinal damage.\n\nIn order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter gamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons. They found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of GABA concentration will suppress the regeneration process. This suggested that GABA plays an important role in the fish’s ability to regain their sight.\n\nThe team is beginning to test the GABA theory on mice. If that works, human trials will be next on the agenda. If the research proves successful in humans, some of the nearly 40 million blind people worldwide may one day have a tiny, striped fish to thank.\n\nWhat can we learn about zebrafish from the passage?",
     "correct": "What they may offer in medical advancements.",
     "wrong": [
       "How they should be studied in labs.",
@@ -1430,12 +1427,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q44",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第43 至46 題為題組\n     Zebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only\na few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body\nmakes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part\nof their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain\nthe ability to see.\n\n    Recent studies show that humans and zebrafish have the same major organs and share 70 percent of\nthe genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish.\nScientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to\nregenerate such organs as eyes, hearts, and spines.\n\n     Researchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They\nhave learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four\nweeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those\nof humans. If the process can be replicated in humans, it may give rise to new treatments for blindness\ncaused by retinal damage.\n\n     In order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter\ngamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons.\nThey found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of\nGABA concentration will suppress the regeneration process. This suggested that GABA plays an important\nrole in the fish’s ability to regain their sight.\n\n    The team is beginning to test the GABA theory on mice. If that works, human trials will be next on\nthe agenda. If the research proves successful in humans, some of the nearly 40 million blind people\nworldwide may one day have a tiny, striped fish to thank.\n\nWhich of the following statements is true regarding GABA in zebrafish?",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nZebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only a few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body makes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part of their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain the ability to see.\n\nRecent studies show that humans and zebrafish have the same major organs and share 70 percent of the genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish. Scientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to regenerate such organs as eyes, hearts, and spines.\n\nResearchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They have learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four weeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those of humans. If the process can be replicated in humans, it may give rise to new treatments for blindness caused by retinal damage.\n\nIn order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter gamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons. They found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of GABA concentration will suppress the regeneration process. This suggested that GABA plays an important role in the fish’s ability to regain their sight.\n\nThe team is beginning to test the GABA theory on mice. If that works, human trials will be next on the agenda. If the research proves successful in humans, some of the nearly 40 million blind people worldwide may one day have a tiny, striped fish to thank.\n\nWhich of the following statements is true regarding GABA in zebrafish?",
     "correct": "Lowering GABA levels in the brain can stimulate retina regrowth.",
     "wrong": [
       "Increasing GABA level facilitates neuron activities.",
@@ -1461,12 +1459,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q45",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第43 至46 題為題組\n     Zebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only\na few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body\nmakes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part\nof their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain\nthe ability to see.\n\n    Recent studies show that humans and zebrafish have the same major organs and share 70 percent of\nthe genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish.\nScientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to\nregenerate such organs as eyes, hearts, and spines.\n\n     Researchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They\nhave learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four\nweeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those\nof humans. If the process can be replicated in humans, it may give rise to new treatments for blindness\ncaused by retinal damage.\n\n     In order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter\ngamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons.\nThey found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of\nGABA concentration will suppress the regeneration process. This suggested that GABA plays an important\nrole in the fish’s ability to regain their sight.\n\n    The team is beginning to test the GABA theory on mice. If that works, human trials will be next on\nthe agenda. If the research proves successful in humans, some of the nearly 40 million blind people\nworldwide may one day have a tiny, striped fish to thank.\n\nWhich of the following is closest in meaning to “replicated” in the third paragraph?",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nZebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only a few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body makes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part of their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain the ability to see.\n\nRecent studies show that humans and zebrafish have the same major organs and share 70 percent of the genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish. Scientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to regenerate such organs as eyes, hearts, and spines.\n\nResearchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They have learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four weeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those of humans. If the process can be replicated in humans, it may give rise to new treatments for blindness caused by retinal damage.\n\nIn order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter gamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons. They found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of GABA concentration will suppress the regeneration process. This suggested that GABA plays an important role in the fish’s ability to regain their sight.\n\nThe team is beginning to test the GABA theory on mice. If that works, human trials will be next on the agenda. If the research proves successful in humans, some of the nearly 40 million blind people worldwide may one day have a tiny, striped fish to thank.\n\nWhich of the following is closest in meaning to “replicated” in the third paragraph?",
     "correct": "Reproduced.",
     "wrong": [
       "Reassembled.",
@@ -1492,12 +1491,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-english-q46",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第43 至46 題為題組\n     Zebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only\na few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body\nmakes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part\nof their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain\nthe ability to see.\n\n    Recent studies show that humans and zebrafish have the same major organs and share 70 percent of\nthe genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish.\nScientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to\nregenerate such organs as eyes, hearts, and spines.\n\n     Researchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They\nhave learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four\nweeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those\nof humans. If the process can be replicated in humans, it may give rise to new treatments for blindness\ncaused by retinal damage.\n\n     In order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter\ngamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons.\nThey found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of\nGABA concentration will suppress the regeneration process. This suggested that GABA plays an important\nrole in the fish’s ability to regain their sight.\n\n    The team is beginning to test the GABA theory on mice. If that works, human trials will be next on\nthe agenda. If the research proves successful in humans, some of the nearly 40 million blind people\nworldwide may one day have a tiny, striped fish to thank.\n\nAccording to the passage, which of the following is an opinion, but NOT a fact?",
+    "q": "【共用閱讀資料】\n第43至46題為題組\n\nZebrafish, named for their characteristic stripes, have been a popular test subject for researchers. Only a few centimeters in length, the fish breed easily in captivity, grow quickly, and their transparent body makes it easy to study their organs. Above all, they possess some amazing “self-healing” power. When part of their heart is removed, they can grow it back in a matter of weeks. When blinded, they can quickly regain the ability to see.\n\nRecent studies show that humans and zebrafish have the same major organs and share 70 percent of the genes. Moreover, 84 percent of human genes associated with disease find a counterpart in zebrafish. Scientists thus hope that understanding the self-healing mystery of the fish may one day allow humans to regenerate such organs as eyes, hearts, and spines.\n\nResearchers at Vanderbilt University are particularly interested in zebrafish retina regeneration. They have learned that damage of retina can cause blindness in zebrafish, yet it only takes about three to four weeks before vision is restored. The structure and cell types of zebrafish retinas are almost identical to those of humans. If the process can be replicated in humans, it may give rise to new treatments for blindness caused by retinal damage.\n\nIn order to know exactly how zebrafish retina is regenerated, the team looked at the neurotransmitter gamma-aminobutyric acid (GABA), a chemical messenger in the brain that reduces the activity of neurons. They found that lowering GABA levels in zebrafish can trigger retina regeneration, while a high level of GABA concentration will suppress the regeneration process. This suggested that GABA plays an important role in the fish’s ability to regain their sight.\n\nThe team is beginning to test the GABA theory on mice. If that works, human trials will be next on the agenda. If the research proves successful in humans, some of the nearly 40 million blind people worldwide may one day have a tiny, striped fish to thank.\n\nAccording to the passage, which of the following is an opinion, but NOT a fact?",
     "correct": "Understanding regeneration in zebrafish may allow humans to regrow their organs.",
     "wrong": [
       "Humans and zebrafish have 70 percent of genes in common.",
@@ -1523,6 +1523,7 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

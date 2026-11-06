@@ -2,15 +2,15 @@
   {
     "id": "gsat-111-math-b-q1",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-111-math-b/Q1-question.png)",
-    "correct": "原卷選項 1",
+    "q": "試問有多少個整數$x$滿足$2\\left|x\\right|+x<10$？",
+    "correct": "13個",
     "wrong": [
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "14個",
+      "15個",
+      "16個",
+      "無窮多個"
     ],
-    "exp": "正確答案：原卷選項 1。來源：111年學科能力測驗數學B第1題。",
+    "exp": "正確答案：13個。來源：111年學科能力測驗數學B第1題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -25,22 +25,50 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-b/Q1-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-math-b-q2",
+    "difficulty": "medium",
+    "q": "某燈會布置變色閃燈，每次啟動後的閃燈顏色會依照以下的順序做週期性變換：藍-白-紅-白-藍-白-紅-白-藍-白-紅-白…，每四次一循環，其中藍光每次持續5秒，白光每次持續2秒，而紅光每次持續6秒。假設換燈號的時間極短可被忽略，試選出啟動後第99至101秒之間的燈號。",
+    "correct": "皆為紅燈",
+    "wrong": [
+      "皆為藍燈",
+      "皆為白燈",
+      "先亮藍燈再亮白燈",
+      "先亮白燈再亮紅燈"
+    ],
+    "exp": "正確答案：皆為紅燈。來源：111年學科能力測驗數學B第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-b",
+      "question": 2,
+      "file": "高中/學測/數學B/04-111學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1H0uGlpdlowejhNwttEdtIcmiKUmwE5r3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-b-q3",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-111-math-b/Q3-question.png)",
-    "correct": "原卷選項 2",
+    "q": "有八棟大廈排成一列，由左至右分別編號1,2,3,4,5,6,7,8。今電信公司想選取其中三棟大廈的屋頂分別設立一座電信基地台。若基地台不能設立於相鄰的兩棟大廈，以免訊號互相干擾，試問在3號大廈不設立基地台的情況下，有多少種設立基地台的選取方法？",
+    "correct": "13",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "12",
+      "20",
+      "30",
+      "35"
     ],
-    "exp": "正確答案：原卷選項 2。來源：111年學科能力測驗數學B第3題。",
+    "exp": "正確答案：13。來源：111年學科能力測驗數學B第3題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -55,22 +83,81 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-math-b-q4",
+    "difficulty": "medium",
+    "q": "在坐標平面上，已知向量$\\lim _{⃑} PQ\\,=\\left(log\\frac{1}{5},\\,-10^{-5}\\right)$，其中點$P$的坐標為$\\left(log\\frac{1}{2},\\,2^{-5}\\right)$。試選出正確的選項。",
+    "correct": "點$Q$在第二象限",
+    "wrong": [
+      "點$Q$在第一象限",
+      "點$Q$在第三象限",
+      "點$Q$在第四象限",
+      "點$Q$位於坐標軸上\n\n![圖表](/assets/banks/gsat-111-math-b/Q4-option-5-figure-1.png)"
+    ],
+    "exp": "正確答案：點$Q$在第二象限。來源：111年學科能力測驗數學B第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-b",
+      "question": 4,
+      "file": "高中/學測/數學B/04-111學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1H0uGlpdlowejhNwttEdtIcmiKUmwE5r3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "2",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-math-b/Q3-question.png"
-    ]
+      "/assets/banks/gsat-111-math-b/Q4-option-5-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-math-b-q5",
+    "difficulty": "medium",
+    "q": "設矩陣$A=\\left[\\begin{matrix}1 & 1 \\\\ 1 & -1\\end{matrix}\\right]$，若$A^7-3A=\\left[\\begin{matrix}a & b \\\\ c & d\\end{matrix}\\right]$，則$a+b+c+d$之值為下列哪一個選項？",
+    "correct": "$10$",
+    "wrong": [
+      "$-8$",
+      "$-5$",
+      "$5$",
+      "$8$"
+    ],
+    "exp": "正確答案：$10$。來源：111年學科能力測驗數學B第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-b",
+      "question": 5,
+      "file": "高中/學測/數學B/04-111學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1H0uGlpdlowejhNwttEdtIcmiKUmwE5r3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "5",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-b-q6",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/gsat-111-math-b/Q6-question.png)",
-    "correct": "原卷選項 3",
+    "q": "假設地球為一半徑$r$的球體，有一質點自甲地沿著該地所在經線往北移動，抵達北極點時移動所經過的弧線之長度為$\\frac{7}{12}\\pi r$。試問哪一個選項最可能是甲地的位置？",
+    "correct": "東經$75^{\\circ}$、南緯$15^{\\circ}$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 4",
-      "原卷選項 5"
+      "東經$75^{\\circ}$、北緯$15^{\\circ}$",
+      "東經$30^{\\circ}$、南緯$75^{\\circ}$",
+      "西經$30^{\\circ}$、北緯$75^{\\circ}$",
+      "西經$15^{\\circ}$、南緯$30^{\\circ}$"
     ],
-    "exp": "正確答案：原卷選項 3。來源：111年學科能力測驗數學B第6題。",
+    "exp": "正確答案：東經$75^{\\circ}$、南緯$15^{\\circ}$。來源：111年學科能力測驗數學B第6題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -85,22 +172,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-b/Q6-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-b-q7",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-111-math-b/Q7-question.png)",
-    "correct": "原卷選項 5",
+    "q": "畫家把空間景物用單點透視法畫在平面的畫紙上時，有以下原則要遵守：\n一、空間中的直線畫在畫紙上必須是一條直線。\n二、空間直線上點的相關位置必須和畫紙所畫的點的相關位置一致。\n\n三、空間直線上的任四個相異點的$K$值，和畫紙所畫的四個點之$K$值必須相同，其中$K$值的定義如下：直線上任給四個有順序的相異點$P_1,P_2,P_3,P_4$，如下圖。\n其所對應的$K$值定義為\n\n$P_1$\n\n$P_2$\n\n$P_3$\n\n$P_4$\n\n$K=\\frac{\\overline{P_1P_4\\,}\\,\\times \\,\\,\\overline{P_2P_3\\,}\\,}{\\overline{P_1P_3\\,}\\,\\times \\,\\,\\overline{P_2P_4\\,}\\,}$。\n\n今某畫家依照以上原則，將空間中一直線及該線上的四相異點$Q_1\\,,Q_2\\,,Q_3\\,,Q_4\\,$描繪在畫紙上，其中$\\overline{Q_1\\,Q_2}\\,=\\,\\overline{Q_2\\,Q_3}\\,=\\,\\overline{Q_3\\,Q_4}$。若將畫紙上所畫的直線視為一數線，並將線上的點用坐標來表示，則在下列選項的四個坐標中，試問哪一組最可能是該四點在畫紙上的坐標？\n\n![圖表](/assets/banks/gsat-111-math-b/Q7-figure-1.png)",
+    "correct": "$1,\\,\\,7,\\,9,\\,10$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4"
+      "$1,\\,\\,2,\\,4,\\,8$",
+      "$3,\\,4,\\,6,\\,\\,\\,\\,\\,9$",
+      "$1,\\,\\,5,\\,\\,8,\\,\\,9$",
+      "$1,\\,\\,2,\\,4,\\,9$"
     ],
-    "exp": "正確答案：原卷選項 5。來源：111年學科能力測驗數學B第7題。",
+    "exp": "正確答案：$1,\\,\\,7,\\,9,\\,10$。來源：111年學科能力測驗數學B第7題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -116,21 +202,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-math-b/Q7-question.png"
-    ]
+      "/assets/banks/gsat-111-math-b/Q7-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-b-q9",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/gsat-111-math-b/Q9-question.png)",
-    "correct": "原卷選項 1",
+    "q": "設$f(x)=2x^3-3x+1$，下列關於函數$y=f(x)$的圖形之描述，試選出正確的選項。",
+    "correct": "$y=f(x)$的圖形通過點$(1,0)$",
     "wrong": [
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$y=f(x)$的圖形與$x$軸只有一個交點",
+      "點$(1,0)$是$y=f(x)$的圖形之對稱中心",
+      "$y=f(x)$的圖形在對稱中心附近會近似於一直線$y=3x-3$",
+      "$y=3x^3-6x^2+2x$的圖形可由$y=f(x)$的圖形經適當平移得到"
     ],
-    "exp": "正確答案：原卷選項 1。來源：111年學科能力測驗數學B第9題。",
+    "exp": "正確答案：$y=f(x)$的圖形通過點$(1,0)$。來源：111年學科能力測驗數學B第9題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -145,82 +232,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-b/Q9-question.png"
-    ]
-  },
-  {
-    "id": "gsat-111-math-b-q13",
-    "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-111-math-b/Q13-question.png)",
-    "correct": "原卷選項 2",
-    "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
-    ],
-    "exp": "正確答案：原卷選項 2。來源：111年學科能力測驗數學B第13題。",
-    "subject": "數學",
-    "sub_topic": "數學綜合",
-    "source": {
-      "exam": "gsat-111-math-b",
-      "question": 13,
-      "file": "高中/學測/數學B/04-111學測數學b試卷.pdf",
-      "url": "https://drive.google.com/file/d/1H0uGlpdlowejhNwttEdtIcmiKUmwE5r3/view?usp=drivesdk",
-      "pages": [
-        5
-      ],
-      "answer": "2",
-      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
-    },
-    "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-b/Q13-question.png"
-    ]
-  },
-  {
-    "id": "gsat-111-math-b-q14",
-    "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-111-math-b/Q14-question.png)",
-    "correct": "原卷選項 4",
-    "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
-    ],
-    "exp": "正確答案：原卷選項 4。來源：111年學科能力測驗數學B第14題。",
-    "subject": "數學",
-    "sub_topic": "數學綜合",
-    "source": {
-      "exam": "gsat-111-math-b",
-      "question": 14,
-      "file": "高中/學測/數學B/04-111學測數學b試卷.pdf",
-      "url": "https://drive.google.com/file/d/1H0uGlpdlowejhNwttEdtIcmiKUmwE5r3/view?usp=drivesdk",
-      "pages": [
-        6
-      ],
-      "answer": "4",
-      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053363176747148935/04-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
-    },
-    "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-b/Q14-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-b-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-111-math-b/G18-20-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-111-math-b/Q18-question.png)",
-    "correct": "原卷選項 4",
+    "q": "【共用閱讀資料】\n<u>18-20題為題組</u>\n\n瘦長的塔因為年代久遠，塔身容易傾斜。在下方右圖中，以粗黑線條代表塔身，而塔身的長度稱為塔高，塔身與鉛直虛線的夾角$\\theta ^{\\circ}$稱為該塔的傾斜度（$0\\leq \\theta <90$），又塔頂至鉛直虛線的距離稱為該塔的偏移距離。\n\n![圖表](/assets/banks/gsat-111-math-b/G18-20-figure-1.png)\n\n塔身\n\n水平線\n\n塔基\n\n偏移距離\n\n鉛直線\n\n塔頂\n\n$\\theta ^{\\circ}$塔身\n\n根據上述資料，試回答下列問題。\n\n已知世界上傾斜度最高的摩天大樓坐落於阿布達比，其傾斜度達到$18^{\\circ}$，此傾斜度換算成弳（或弧度）為下列哪一個選項？（單選題，5分）",
+    "correct": "$\\frac{\\pi }{10}$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "$\\frac{\\pi }{36}$",
+      "$\\frac{\\pi }{18}$",
+      "$\\frac{\\pi }{20}$",
+      "$\\frac{\\pi }{8}$"
     ],
-    "exp": "正確答案：原卷選項 4。來源：111年學科能力測驗數學B第18題。",
+    "exp": "正確答案：$\\frac{\\pi }{10}$。來源：111年學科能力測驗數學B第18題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -240,8 +266,8 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-math-b/G18-20-context.png",
-      "/assets/banks/gsat-111-math-b/Q18-question.png"
-    ]
+      "/assets/banks/gsat-111-math-b/G18-20-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

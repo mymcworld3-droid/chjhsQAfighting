@@ -1773,13 +1773,36 @@ function formatQuizRichText(text) {
         return token;
     };
 
+    // Tables remain text, including cells with formulas or actual illustrations.
+    let working = source.replace(/^\|[^\n]+\|(?:\n\|[^\n]+\|)+/gm, (table) => {
+        const rows = table.split('\n').map(row => {
+            const formulas = [];
+            const safeRow = row.trim().slice(1, -1).replace(/(?<!\\)\$(?:\\.|[^$\\])*?\$/g, math => {
+                formulas.push(math);
+                return `@@TABLE_MATH_${formulas.length - 1}@@`;
+            });
+            return safeRow.split('|').map(cell => cell.replace(/@@TABLE_MATH_(\d+)@@/g, (_token, index) => formulas[Number(index)]));
+        });
+        const body = rows.filter(row => !row.every(cell => /^\s*:?-+:?\s*$/.test(cell)))
+            .map(row => '<tr>' + row.map(cell => '<td class="border border-white/20 px-3 py-2">' + formatQuizRichText(cell.trim()) + '</td>').join('') + '</tr>').join('');
+        return protect('<div class="my-3 overflow-x-auto"><table class="border-collapse text-left"><tbody>' + body + '</tbody></table></div>');
+    });
+    // Only these attribute-free typography tags are allowed. Other HTML is escaped.
+    working = working.replace(/<(u|sup|sub)>([^<>]*)<\/\1>/gi, (_match, tag, content) => {
+        const name = tag.toLowerCase();
+        return protect('<' + name + '>' + escapeHtml(content) + '</' + name + '>');
+    });
+
     // 先抽出 Markdown 圖片，避免 alt/url 裡的特殊字元被一般文字 escape 破壞。
-    let working = source.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, rawUrl) => {
+    working = working.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, rawUrl) => {
         const safeUrl = sanitizeQuizImageUrl(rawUrl);
         if (!safeUrl) return escapeHtml(_match);
         const safeAlt = escapeHtml(String(alt || ''));
         const safeSrc = escapeHtml(safeUrl);
-        return protect(`<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20"><img src="${safeSrc}" alt="${safeAlt}" class="w-full h-auto block" loading="lazy"></div>`);
+        const imageClass = safeUrl.startsWith('/assets/banks/')
+            ? 'max-w-full w-auto h-auto max-h-[60vh] object-contain block mx-auto'
+            : 'w-full h-auto block';
+        return protect(`<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20"><img src="${safeSrc}" alt="${safeAlt}" class="${imageClass}" loading="lazy"></div>`);
     });
 
     // 抽出 MathJax 區段。支援 $$...$$、$...$、\\[...\\]、\\(...\\)。

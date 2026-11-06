@@ -2,15 +2,15 @@
   {
     "id": "gsat-113-math-a-q1",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-113-math-a/Q1-question.png)",
-    "correct": "原卷選項 2",
+    "q": "研究顯示：服用某藥物後，在使用者體內的藥物殘留量隨時間呈指數型衰退。已知在服用某藥物2小時後，體內仍殘留有該藥物的一半劑量，試問下列哪一選項正確？",
+    "correct": "服用4小時後，體內仍殘留有該藥物的$\\frac{1}{4}$劑量",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "服用3小時後，體內仍殘留有該藥物的$\\frac{1}{3}$劑量",
+      "服用6小時後，體內仍殘留有該藥物的$\\frac{1}{6}$劑量",
+      "服用8小時後，體內仍殘留有該藥物的$\\frac{1}{8}$劑量",
+      "服用10小時後，體內仍殘留有該藥物的$\\frac{1}{10}$劑量\n\n![圖表](/assets/banks/gsat-113-math-a/Q1-option-5-figure-1.png)\n![圖表](/assets/banks/gsat-113-math-a/Q1-option-5-figure-2.png)"
     ],
-    "exp": "正確答案：原卷選項 2。來源：113年學科能力測驗數學A第1題。",
+    "exp": "正確答案：服用4小時後，體內仍殘留有該藥物的$\\frac{1}{4}$劑量。來源：113年學科能力測驗數學A第1題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -26,21 +26,23 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-113-math-a/Q1-question.png"
-    ]
+      "/assets/banks/gsat-113-math-a/Q1-option-5-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q1-option-5-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-a-q2",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/gsat-113-math-a/Q2-question.png)",
-    "correct": "原卷選項 5",
+    "q": "如圖，$OABC-DEFG$為一正方體，試問向量外積$\\lim _{⃑} AD\\,\\,\\times \\lim _{⃑} AG$與下列哪一個向量平行？\n\n![圖表](/assets/banks/gsat-113-math-a/Q2-figure-1.png)\n![圖表](/assets/banks/gsat-113-math-a/Q2-figure-2.png)",
+    "correct": "$\\lim _{⃑} OE$\n\n![圖表](/assets/banks/gsat-113-math-a/Q2-option-5-figure-1.png)",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4"
+      "$\\lim _{⃑} AE$\n\nA\n\nB\n\nE\n\nF\n\nD\n\nG\n\nO\n\nC\n\n![圖表](/assets/banks/gsat-113-math-a/Q2-option-1-figure-1.png)",
+      "$\\lim _{⃑} BE$\n\n![圖表](/assets/banks/gsat-113-math-a/Q2-option-2-figure-1.png)",
+      "$\\lim _{⃑} CE$\n\n![圖表](/assets/banks/gsat-113-math-a/Q2-option-3-figure-1.png)",
+      "$\\lim _{⃑} DE$\n\n![圖表](/assets/banks/gsat-113-math-a/Q2-option-4-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 5。來源：113年學科能力測驗數學A第2題。",
+    "exp": "正確答案：$\\lim _{⃑} OE$\n\n![圖表](/assets/banks/gsat-113-math-a/Q2-option-5-figure-1.png)。來源：113年學科能力測驗數學A第2題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -56,21 +58,28 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-113-math-a/Q2-question.png"
-    ]
+      "/assets/banks/gsat-113-math-a/Q2-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q2-figure-2.png",
+      "/assets/banks/gsat-113-math-a/Q2-option-5-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q2-option-1-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q2-option-2-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q2-option-3-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q2-option-4-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-a-q3",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-113-math-a/Q3-question-1.png)\n\n![第3題原卷資料](/assets/banks/gsat-113-math-a/Q3-question-2.png)",
-    "correct": "原卷選項 1",
+    "q": "設$a\\in \\{-6,-4,-2,2,4,6\\}$，已知$a$為實係數三次多項式$f(x)$的最高次項係數，若函數$y=f(x)$的圖形與$x$軸交於三點，且其$x$坐標成首項為$-7$、公差為$a$的等差數列。試問共有幾個$a$使得$f(0)>0$？",
+    "correct": "1個",
     "wrong": [
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "2個",
+      "3個",
+      "4個",
+      "5個"
     ],
-    "exp": "正確答案：原卷選項 1。來源：113年學科能力測驗數學A第3題。",
+    "exp": "正確答案：1個。來源：113年學科能力測驗數學A第3題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -79,30 +88,27 @@
       "file": "高中/學測/數學A/03-113學測數a試題定稿.pdf",
       "url": "https://drive.google.com/file/d/19DgEJmSBIzT7U3AsrdlJOcYLqGW_3Ksz/view?usp=drivesdk",
       "pages": [
-        2,
-        3
+        2
       ],
       "answer": "1",
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051426632950938748/03-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-a/Q3-question-1.png",
-      "/assets/banks/gsat-113-math-a/Q3-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-a-q4",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-113-math-a/Q4-question.png)",
-    "correct": "原卷選項 2",
+    "q": "試問有多少個實數$x$滿足$sin(x+\\frac{\\pi }{6})=sinx+sin\\frac{\\pi }{6}$且$0\\leq x<2\\pi$？",
+    "correct": "2個",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "1個",
+      "3個",
+      "4個",
+      "5個（含）以上"
     ],
-    "exp": "正確答案：原卷選項 2。來源：113年學科能力測驗數學A第4題。",
+    "exp": "正確答案：2個。來源：113年學科能力測驗數學A第4題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -117,22 +123,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051426632950938748/03-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-a/Q4-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-a-q5",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/gsat-113-math-a/Q5-question.png)",
-    "correct": "原卷選項 4",
+    "q": "將1到50這50個正整數平分成甲乙兩組，每組各25個數，使得甲組的中位數比乙組的中位數小1。試問共有幾種分法？",
+    "correct": "$(C_{12}^{24})^2$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "$C_{25}^{50}$",
+      "$C_{24}^{48}$",
+      "$C_{12}^{24}$",
+      "$C_{24}^{48}\\cdot C_{12}^{24}$"
     ],
-    "exp": "正確答案：原卷選項 4。來源：113年學科能力測驗數學A第5題。",
+    "exp": "正確答案：$(C_{12}^{24})^2$。來源：113年學科能力測驗數學A第5題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -147,22 +152,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051426632950938748/03-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-a/Q5-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-a-q6",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/gsat-113-math-a/Q6-question.png)",
-    "correct": "原卷選項 3",
+    "q": "在同一平面上，相距7公里的$A,B$兩砲台，$A$在$B$的正東方。某次演習時，$A$向西偏北$\\theta$方向發射砲彈，$B$則向東偏北$\\theta$方向發射砲彈，其中$\\theta$為銳角，觀測回報兩砲彈皆命中9公里外的同一目標$P$。接著$A$改向西偏北$\\frac{\\theta }{2}$方向發射砲彈，彈著點為9公里外的點$Q$。試問砲台$B$與彈著點$Q$的距離$\\overline{BQ}$為何？",
+    "correct": "5公里",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 4",
-      "原卷選項 5"
+      "4公里",
+      "4.5公里",
+      "5.5公里",
+      "6公里"
     ],
-    "exp": "正確答案：原卷選項 3。來源：113年學科能力測驗數學A第6題。",
+    "exp": "正確答案：5公里。來源：113年學科能力測驗數學A第6題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -177,22 +181,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051426632950938748/03-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-a/Q6-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-a-q9",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/gsat-113-math-a/Q9-question.png)",
-    "correct": "原卷選項 3",
+    "q": "某實驗室蒐集了大量的$A$、$B$兩相似物種，記錄其身長為$x$（單位：公分）與體重$y$（單位：公克），得$A$、$B$兩物種的平均身長分別為$\\overline{x_A}=5.2$、$\\overline{x_B}=6$，標準差分別為0.3、0.1。令$A$、$B$兩物種的平均體重分別為$\\overline{y_A}$、$\\overline{y_B}$。若$A$、$B$兩物種其體重$y$對身長$x$的迴歸直線分別為$L_A:y=2x-0.6$、$L_B:y=1.5x+0.4$，相關係數分別為0.6、0.3。今發現一隻身長5.6公分、體重8.6公克的個體$P$，試選出正確的選項。",
+    "correct": "就$A$物種而言，個體$P$的體重與平均體重$\\overline{y_A}$之差的絕對值大於一個標準差",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$\\overline{y_A}<\\overline{y_B}$",
+      "$A$物種的體重標準差小於$B$物種的體重標準差",
+      "點$(5.6, 8.6)$到直線$L_A$的距離小於其到直線$L_B$的距離",
+      "點$(5.6, 8.6)$與點($\\overline{x_A}, \\overline{y_A}$)的距離小於其與點($\\overline{x_B}, \\overline{y_B}$)的距離"
     ],
-    "exp": "正確答案：原卷選項 3。來源：113年學科能力測驗數學A第9題。",
+    "exp": "正確答案：就$A$物種而言，個體$P$的體重與平均體重$\\overline{y_A}$之差的絕對值大於一個標準差。來源：113年學科能力測驗數學A第9題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -207,22 +210,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051426632950938748/03-113%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-113-math-a/Q9-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-113-math-a-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-113-math-a/G18-20-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-113-math-a/Q18-question.png)",
-    "correct": "原卷選項 4",
+    "q": "【共用閱讀資料】\n<u>18-20題為題組</u>\n\n坐標空間中，設$O$為原點，$E$為平面$x-z=4$。試回答下列問題。\n\n若原點$O$在平面$E$上的投影點為$Q$，且向量$\\lim _{⃑} OQ$與向量$(1,0,0)$的夾角為$\\alpha$，則$cos\\alpha$之值為下列哪一選項？（單選題，3分）\n\n![圖表](/assets/banks/gsat-113-math-a/G18-20-figure-1.png)\n![圖表](/assets/banks/gsat-113-math-a/Q18-figure-1.png)",
+    "correct": "$\\frac{\\sqrt{2}}{2}$\n\n![圖表](/assets/banks/gsat-113-math-a/Q18-option-4-figure-1.png)",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "$-\\frac{\\sqrt{2}}{2}$",
+      "$-\\frac{1}{2}$",
+      "$\\frac{1}{2}$\n\n![圖表](/assets/banks/gsat-113-math-a/Q18-option-3-figure-1.png)",
+      "$\\frac{\\sqrt{3}}{2}$"
     ],
-    "exp": "正確答案：原卷選項 4。來源：113年學科能力測驗數學A第18題。",
+    "exp": "正確答案：$\\frac{\\sqrt{2}}{2}$\n\n![圖表](/assets/banks/gsat-113-math-a/Q18-option-4-figure-1.png)。來源：113年學科能力測驗數學A第18題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -242,8 +244,11 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-113-math-a/G18-20-context.png",
-      "/assets/banks/gsat-113-math-a/Q18-question.png"
-    ]
+      "/assets/banks/gsat-113-math-a/G18-20-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q18-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q18-option-4-figure-1.png",
+      "/assets/banks/gsat-113-math-a/Q18-option-3-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

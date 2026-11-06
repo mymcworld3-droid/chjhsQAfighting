@@ -2,15 +2,15 @@
   {
     "id": "gsat-110-science-q1",
     "difficulty": "easy",
-    "q": "寒流來襲，某地發生因熱水器使用不當造成的一氧化碳（CO）中毒案例，幸經\n 施予高壓氧及時救回。依上述說明推測，何者是CO導致死亡的主要原因？",
-    "correct": "與 O 2 競爭血紅素，造成血氧濃度嚴重不足",
+    "q": "寒流來襲，某地發生因熱水器使用不當造成的一氧化碳（$CO$）中毒案例，幸經施予高壓氧及時救回。依上述說明推測，何者是$CO$導致死亡的主要原因？",
+    "correct": "與$O_2$競爭血紅素，造成血氧濃度嚴重不足",
     "wrong": [
-      "與 O 2 競爭電子傳遞鏈釋出的電子，造成有氧呼吸作用停止",
+      "與$O_2$競爭電子傳遞鏈釋出的電子，造成有氧呼吸作用停止",
       "阻斷神經通往肌肉的傳導，造成呼吸肌癱瘓而窒息",
       "抑制糖解作用相關酵素功能，造成細胞呼吸作用停止",
-      "與 CO 2 競爭血紅素，造成碳酸鹽無法排出體外而產生酸中毒"
+      "與$CO_2$競爭血紅素，造成碳酸鹽無法排出體外而產生酸中毒"
     ],
-    "exp": "正確答案：與 O 2 競爭血紅素，造成血氧濃度嚴重不足。來源：110年學科能力測驗自然第1題。",
+    "exp": "正確答案：與$O_2$競爭血紅素，造成血氧濃度嚴重不足。來源：110年學科能力測驗自然第1題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -27,12 +27,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q2",
     "difficulty": "easy",
-    "q": "顯微鏡下觀察兔子睪丸切片，可看到3 型細胞如下：\n\n 甲、位於細精管間的細胞\n\n 乙、靠近細精管壁內緣的細胞\n\n 丙、靠近細精管腔，蝌蚪形的細胞\n 有關這3型細胞的敘述，何者正確？",
+    "q": "顯微鏡下觀察兔子睪丸切片，可看到3型細胞如下：\n\n甲、位於細精管間的細胞\n\n乙、靠近細精管壁內緣的細胞\n\n丙、靠近細精管腔，蝌蚪形的細胞\n\n有關這3型細胞的敘述，何者正確？",
     "correct": "甲大量受損可能導致性激素分泌不足",
     "wrong": [
       "甲、丙為生殖細胞",
@@ -57,18 +58,19 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.77,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q3",
     "difficulty": "medium",
-    "q": "某短日照植物的臨界日長為13 小時，若其開花僅受光週期的影響，此植物在哪\n\n 一情況最不易開花？",
+    "q": "某短日照植物的臨界日長為13小時，若其開花僅受光週期的影響，此植物在哪一情況<u>最不易</u>開花？",
     "correct": "夏至時在北半球高緯度地區",
     "wrong": [
       "夏至時在赤道",
       "春分時在赤道",
       "冬至時在赤道",
-      "秋分時在南半球高緯度地區"
+      "秋分時在南半球高緯度地區\n\n![圖表](/assets/banks/gsat-110-science/Q3-option-E-figure-1.png)"
     ],
     "exp": "正確答案：夏至時在北半球高緯度地區。來源：110年學科能力測驗自然第3題。",
     "subject": "生物",
@@ -85,22 +87,25 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [],
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q3-option-E-figure-1.png"
+    ],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q4",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-110-science/Q4-question.png)",
-    "correct": "原卷選項 B",
+    "q": "在適當條件下，某一化學反應的分子示意圖如下所示，其中•和○代表不同元素的原子。\n\n下列關於此反應的敘述，何者<u>錯誤</u>？\n\n![圖表](/assets/banks/gsat-110-science/Q4-figure-1.png)\n![圖表](/assets/banks/gsat-110-science/Q4-figure-2.png)\n",
+    "correct": "是吸熱反應",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "是分解反應",
+      "遵守質量守恆定律",
+      "有一個物質的標準莫耳生成熱為0",
+      "有兩個物質的化學組成符合倍比定律"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第4題。",
+    "exp": "正確答案：是吸熱反應。來源：110年學科能力測驗自然第4題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -116,23 +121,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q4-question.png"
+      "/assets/banks/gsat-110-science/Q4-figure-1.png",
+      "/assets/banks/gsat-110-science/Q4-figure-2.png"
     ],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q5",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/gsat-110-science/Q5-question.png)",
-    "correct": "原卷選項 D",
+    "q": "自然界中，氧化還原反應扮演著重要的角色，下列有關碳循環的過程，何者<u>沒有</u>牽涉到氧化還原反應？",
+    "correct": "二氧化碳溶於水，與鈣離子（$Ca^{2+}$）結合，以碳酸鈣沉澱的方式積存於海底",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "細胞呼吸是利用葡萄糖反應產生二氧化碳，並釋出能量",
+      "生物體內的碳水化合物逐漸在地層中沉積，最後轉變成煤",
+      "煤和石油在空氣中燃燒產生二氧化碳",
+      "二氧化碳經由光合作用轉變為葡萄糖，並釋放出氧氣"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第5題。",
+    "exp": "正確答案：二氧化碳溶於水，與鈣離子（$Ca^{2+}$）結合，以碳酸鈣沉澱的方式積存於海底。來源：110年學科能力測驗自然第5題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -147,22 +154,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/Q5-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.73,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q6",
     "difficulty": "medium",
-    "q": "石蕊在pH 小於4.5 與大於8.3 的溶液中分別呈現紅色與藍色，將白色濾紙分別\n\n 浸置其中，晾乾可得紅色與藍色石蕊試紙。下列敘述何者正確？",
+    "q": "石蕊在pH小於4.5與大於8.3的溶液中分別呈現紅色與藍色，將白色濾紙分別浸置其中，晾乾可得紅色與藍色石蕊試紙。下列敘述何者正確？",
     "correct": "市售胃乳液（含制酸劑）滴在潤溼的紅色石蕊試紙上，試紙變成藍色",
     "wrong": [
       "人體血漿滴在藍色石蕊試紙上，試紙變成紅色",
       "以石蕊試紙測試10 mL的鹽酸，因酸鹼反應，試紙變成白色",
       "將乙酸乙酯滴在潤溼的紅色石蕊試紙上，試紙變成藍色",
-      "pH 6.4的水溶液滴在紅色石蕊試紙上，試紙變成藍色"
+      "$pH$6.4的水溶液滴在紅色石蕊試紙上，試紙變成藍色"
     ],
     "exp": "正確答案：市售胃乳液（含制酸劑）滴在潤溼的紅色石蕊試紙上，試紙變成藍色。來源：110年學科能力測驗自然第6題。",
     "subject": "化學",
@@ -181,20 +187,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.73,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q7",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-110-science/Q7-question.png)",
-    "correct": "原卷選項 C",
+    "q": "下列甲～丁的球－棍分子模型中，斜影、灰、黑球分別代表氧、氫、碳原子。此四個分子中有幾個屬於醇類化合物？\n\n丙\n\n甲\n\n乙\n\n丁\n\n![圖表](/assets/banks/gsat-110-science/Q7-figure-1.png)\n\n![圖表](/assets/banks/gsat-110-science/Q7-figure-3.png)\n\n![圖表](/assets/banks/gsat-110-science/Q7-figure-5.png)\n![圖表](/assets/banks/gsat-110-science/Q7-figure-6.png)\n\n",
+    "correct": "2",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "0",
+      "1",
+      "3",
+      "4"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第7題。",
+    "exp": "正確答案：2。來源：110年學科能力測驗自然第7題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -210,23 +217,27 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q7-question.png"
+      "/assets/banks/gsat-110-science/Q7-figure-1.png",
+      "/assets/banks/gsat-110-science/Q7-figure-3.png",
+      "/assets/banks/gsat-110-science/Q7-figure-5.png",
+      "/assets/banks/gsat-110-science/Q7-figure-6.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q8",
     "difficulty": "easy",
-    "q": "硼的原子序為5，平均原子量為10.81。下列關於硼及其化合物的敘述，何者正\n\n  確？",
-    "correct": "BH 3 不符合八隅體規則",
+    "q": "硼的原子序為5，平均原子量為10.81。下列關於硼及其化合物的敘述，何者正確？",
+    "correct": "$BH_3$不符合八隅體規則",
     "wrong": [
       "沒有同位素",
       "中子數為5",
       "價電子數為2",
-      "NH 4 BF4 為分子化合物"
+      "$NH_4BF_4$為分子化合物"
     ],
-    "exp": "正確答案：BH 3 不符合八隅體規則。來源：110年學科能力測驗自然第8題。",
+    "exp": "正確答案：$BH_3$不符合八隅體規則。來源：110年學科能力測驗自然第8題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -243,20 +254,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q9",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/gsat-110-science/Q9-question.png)",
-    "correct": "原卷選項 A",
+    "q": "丙烯（$C_3H_6$）、丙醛（$C_3H_6O$）、丙酮（$C_3H_6O$）和丙酸（$C_3H_6O_2$）之標準莫耳燃燒熱分別為$-2060$、$-1990$、$-1790$和$-1530 kJ$。此四化合物標準莫耳生成熱的大小順序，下列何者正確？",
+    "correct": "丙酸＜丙酮＜丙醛＜丙烯",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "丙酸＜丙醛＜丙酮＜丙烯",
+      "丙酸＜丙醛＜丙烯＜丙酮",
+      "丙烯＜丙醛＜丙酮＜丙酸",
+      "丙烯＜丙酸＜丙酮＜丙醛"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗自然第9題。",
+    "exp": "正確答案：丙酸＜丙酮＜丙醛＜丙烯。來源：110年學科能力測驗自然第9題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -271,16 +283,15 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/Q9-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q10",
     "difficulty": "medium",
-    "q": "某物質不溶於水，富含一種半導體工業所需的重要元素，且所含另一元素是人體\n\n 不可或缺的成分之一。下列何者最符合以上所述？",
+    "q": "某物質不溶於水，富含一種半導體工業所需的重要元素，且所含另一元素是人體不可或缺的成分之一。下列何者最符合以上所述？",
     "correct": "石英砂",
     "wrong": [
       "硫化鉛",
@@ -305,20 +316,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q11",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/gsat-110-science/Q11-question.png)",
-    "correct": "原卷選項 E",
+    "q": "某單頻光在一種透明水溶液中的傳播速率與該水溶液的密度成\n反比。今以厚度非常薄的均勻透明玻璃平板組成的立方形容器\n盛裝此水溶液，並靜置於水平桌面上後，發現水溶液的密度由\n下而上隨高度遞減。如圖 1 所示，兩道相同單頻光線由空氣中\n斜向射入水溶液，若忽略玻璃的折射，則下列選項的光線行進\n方向何者正確？\n\n![圖表](/assets/banks/gsat-110-science/Q11-figure-1.png)\n\n",
+    "correct": "![圖表](/assets/banks/gsat-110-science/Q11-option-E-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/gsat-110-science/Q11-option-A-figure-1.png)",
+      "![圖表](/assets/banks/gsat-110-science/Q11-option-B-figure-1.png)",
+      "![圖表](/assets/banks/gsat-110-science/Q11-option-C-figure-1.png)",
+      "![圖表](/assets/banks/gsat-110-science/Q11-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第11題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-110-science/Q11-option-E-figure-1.png)。來源：110年學科能力測驗自然第11題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -334,15 +346,21 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q11-question.png"
+      "/assets/banks/gsat-110-science/Q11-figure-1.png",
+      "/assets/banks/gsat-110-science/Q11-option-E-figure-1.png",
+      "/assets/banks/gsat-110-science/Q11-option-A-figure-1.png",
+      "/assets/banks/gsat-110-science/Q11-option-B-figure-1.png",
+      "/assets/banks/gsat-110-science/Q11-option-C-figure-1.png",
+      "/assets/banks/gsat-110-science/Q11-option-D-figure-1.png"
     ],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q12",
     "difficulty": "medium",
-    "q": "下列甲、乙、丙描述的狀況，屬於宇宙演化過程中的不同階段：\n\n 甲、宇宙中大部分粒子為電子與質子，尚未結合成原子\n\n 乙、宇宙中開始出現氦原子\n\n 丙、恆星開始形成\n\n 依時間先後順序排列，下列何者正確？",
+    "q": "下列甲、乙、丙描述的狀況，屬於宇宙演化過程中的不同階段：\n\n甲、宇宙中大部分粒子為電子與質子，尚未結合成原子\n\n乙、宇宙中開始出現氦原子\n\n丙、恆星開始形成\n\n依時間先後順序排列，下列何者正確？",
     "correct": "甲乙丙",
     "wrong": [
       "乙甲丙",
@@ -367,7 +385,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q13",
@@ -397,20 +416,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-110-science/Q14-question.png)",
-    "correct": "原卷選項 C",
+    "q": "下列以SI基本單位表示之物理量單位，何者正確？",
+    "correct": "功率$\\frac{kg\\cdot m^2}{s^3}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "電量$A\\cdot s^2$",
+      "壓力$\\frac{kg}{m\\cdot s}$",
+      "動能$\\frac{kg\\cdot m^2}{s}$",
+      "熱量$\\frac{kg\\cdot m}{s}$"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第14題。",
+    "exp": "正確答案：功率$\\frac{kg\\cdot m^2}{s^3}$。來源：110年學科能力測驗自然第14題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -425,24 +445,23 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/Q14-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-110-science/Q15-question.png)",
-    "correct": "原卷選項 D",
+    "q": "圖2為水平射出的電子束通過雙狹縫A、B的實驗示意圖，圖形不依比例繪製。結果顯示偵測器測得的電子數目分布為干涉條紋狀的圖樣。關於上述實驗結果，下列敘述何者正確？\n\n電子偵測器\n\nA\n\nB\n\n電子束\n\n圖2\n\n雙狹縫",
+    "correct": "電子的速度不同會造成干涉條紋圖樣的改變",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "落在干涉條紋暗帶的電子，其通過狹縫時的速率均比落在亮帶的電子為小",
+      "電子數目出現干涉條紋狀的分布，是電子之間的靜電力所造成",
+      "本實驗結果闡釋了電子具有粒子性",
+      "可確定每個電子由哪一個狹縫通過"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第15題。",
+    "exp": "正確答案：電子的速度不同會造成干涉條紋圖樣的改變。來源：110年學科能力測驗自然第15題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -457,24 +476,23 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/Q15-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.67,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q16",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/gsat-110-science/Q16-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖3為P波與S波從震源傳遞到不同距離所需要的時間，又稱地震波走時曲線圖。今有一地震發生，在某測站測得P波和S波到達的時間差為8秒，則某測站距震源約多少公里？\n\nS波\n\nP波\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n時\n\n間\n\n（秒）\n\n距離（公里）\n\n圖3\n\n![圖表](/assets/banks/gsat-110-science/Q16-figure-1.png)\n![圖表](/assets/banks/gsat-110-science/Q16-figure-2.png)",
+    "correct": "60",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "40",
+      "50",
+      "70",
+      "80\n\n![圖表](/assets/banks/gsat-110-science/Q16-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第16題。",
+    "exp": "正確答案：60。來源：110年學科能力測驗自然第16題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -490,23 +508,26 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q16-question.png"
+      "/assets/banks/gsat-110-science/Q16-figure-1.png",
+      "/assets/banks/gsat-110-science/Q16-figure-2.png",
+      "/assets/banks/gsat-110-science/Q16-option-E-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q17",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/gsat-110-science/Q17-question.png)",
-    "correct": "原卷選項 E",
+    "q": "科學家搭乘潛艇在臺灣東部海域下潛至約四千公尺的深海環境，觀察海水基本性\n質。已知聲速大小與溫度、鹽度、壓力成正比，下列圖片的變化趨勢何者正確？",
+    "correct": "![圖表](/assets/banks/gsat-110-science/Q17-option-E-figure-1.png)\n",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/gsat-110-science/Q17-option-A-figure-1.png)\n\n",
+      "![圖表](/assets/banks/gsat-110-science/Q17-option-B-figure-1.png)\n",
+      "![圖表](/assets/banks/gsat-110-science/Q17-option-C-figure-1.png)\n",
+      "密度\n\n0\n深\n度\n![圖表](/assets/banks/gsat-110-science/Q17-option-D-figure-1.png)\n"
     ],
-    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第17題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-110-science/Q17-option-E-figure-1.png)\n。來源：110年學科能力測驗自然第17題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -522,15 +543,20 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q17-question.png"
+      "/assets/banks/gsat-110-science/Q17-option-E-figure-1.png",
+      "/assets/banks/gsat-110-science/Q17-option-A-figure-1.png",
+      "/assets/banks/gsat-110-science/Q17-option-B-figure-1.png",
+      "/assets/banks/gsat-110-science/Q17-option-C-figure-1.png",
+      "/assets/banks/gsat-110-science/Q17-option-D-figure-1.png"
     ],
     "passRate": 0.57,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q18",
     "difficulty": "medium",
-    "q": "科學家嘗試以各種方法重建地球的歷史，下列有關探索地球歷史的敘述，何者正\n\n  確？",
+    "q": "科學家嘗試以各種方法重建地球的歷史，下列有關探索地球歷史的敘述，何者正確？",
     "correct": "「均變說」是指過去發生地質作用的原理和現在進行地質作用的原理相同",
     "wrong": [
       "古生代的人寫歷史較不精準，所以錯誤百出",
@@ -555,12 +581,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.59,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q19",
     "difficulty": "medium",
-    "q": "十九世紀中期，荷蘭氣象學家白貝羅發現：在北半球，若背對風的來向，則高壓\n  在其右邊，低壓在左邊，這就是有名的白貝羅定律（Buys Ballot’s law）。但後\n\n 來發現，這個經驗定律比較適合應用在航空或航海上，而不太適合在陸地上使用。\n\n 其最主要的原因為何？",
+    "q": "十九世紀中期，荷蘭氣象學家白貝羅發現：在北半球，若背對風的來向，則高壓在其右邊，低壓在左邊，這就是有名的白貝羅定律（Buys Ballot’s law）。但後來發現，這個經驗定律比較適合應用在航空或航海上，而不太適合在陸地上使用。其最主要的原因為何？",
     "correct": "因為海上及空中的摩擦力較小，風向比較不會偏轉",
     "wrong": [
       "因為海上或空中的氣象測站較少，使用經驗定律比較方便",
@@ -585,20 +612,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q20",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-110-science/Q20-question.png)",
-    "correct": "原卷選項 B",
+    "q": "地球自轉軸固定指向北極星，與黃道面的夾角為$66.5^{\\circ}$。若水手在航行的船上觀察北極星的仰角為$35^{\\circ}$，則該船約在北緯幾度？",
+    "correct": "35",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "66.5",
+      "23.5",
+      "11.5",
+      "0"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第20題。",
+    "exp": "正確答案：35。來源：110年學科能力測驗自然第20題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -613,24 +641,23 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/Q20-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.56,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-110-science/Q21-question.png)",
-    "correct": "原卷選項 D",
+    "q": "臺灣的地形複雜，當颱風侵襲時，颱風中心位於不同地點，所造成的風雨型態也不一樣。圖4上半部為2010年9月18日至20日，凡那比颱風侵襲臺灣時的路徑圖，颱風於19日早上在東部海岸登陸。圖4下半部甲、乙、丙為不同時間的每小時累積雨量分布圖，顏色越深表示累積雨量越大。按時間先後排列9月19日05時、11時和17時的降雨情形，其排列順序最有可能為下列何者？\n\n圖4\n\n甲\n\n乙\n\n丙\n\n9/20\n\n\n\n9/19\n\n\n\n9/18\n\n\n\n\n\n\n\n\n\n![圖表](/assets/banks/gsat-110-science/Q21-figure-1.png)",
+    "correct": "乙丙甲",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "甲乙丙",
+      "甲丙乙",
+      "乙甲丙",
+      "丙乙甲\n\n![圖表](/assets/banks/gsat-110-science/Q21-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第21題。",
+    "exp": "正確答案：乙丙甲。來源：110年學科能力測驗自然第21題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -646,23 +673,25 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q21-question.png"
+      "/assets/banks/gsat-110-science/Q21-figure-1.png",
+      "/assets/banks/gsat-110-science/Q21-option-E-figure-1.png"
     ],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q22",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/gsat-110-science/Q22-question.png)",
-    "correct": "原卷選項 E",
+    "q": "豔陽高照的暑假，若要到位於山脈東側的臺東太麻里海邊，進行大約二小時的潮間帶地質調查，由於海邊無遮蔽物且於太陽直射下工作易中暑，在考慮太陽位置及山脈影響下，根據圖5的潮汐表，哪個時間開始地質調查，最可兼顧安全及避免中暑？\n\n潮差（公尺）\n\n\n\n\n\n\n\n–1\n\n–2\n\n7/3\n\n0時\n\n7/4\n\n0時\n\n7/5\n\n7/6\n\n7/7\n\n7/8\n\n7/9\n\n7/10\n\n7/11\n\n7/12\n\n7/13\n\n7/14\n\n7/15\n\n7/16\n\n日期\n\n圖5\n\n![圖表](/assets/banks/gsat-110-science/Q22-figure-1.png)\n",
+    "correct": "7月13日下午3時",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "7月5日上午10時",
+      "7月7日下午3時",
+      "7月9日上午10時",
+      "7月11日上午10時"
     ],
-    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第22題。",
+    "exp": "正確答案：7月13日下午3時。來源：110年學科能力測驗自然第22題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -678,23 +707,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q22-question.png"
+      "/assets/banks/gsat-110-science/Q22-figure-1.png"
     ],
     "passRate": 0.54,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q37",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-110-science/G37-40-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-110-science/Q37-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n37-40為題組\n\n為了維持生命與從事各種工作，人體需要攝取食物與由大氣中獲得氧氣，來提供能量並調節排除熱量的速率，以維持正常體溫。因此，人體可視為一個與周圍環境交互作用的系統，透過新陳代謝，將能量（以下稱之為內能）儲存與轉換，並與環境進行功與熱的交換。假設在時間$\\Delta t$內，某人從事騎車、搬運物品等活動，所做的功為$\\Delta W$，而由身體離開的淨熱量為$\\Delta Q$，則根據能量守恆定律，其身體的內能變化量$\\Delta U$將遵守以下關係式：$-\\Delta U=\\Delta Q+\\Delta W$。上式除以$\\Delta t$後，就成為相關各量之時間變化率之間的關係；一般將$-\\Delta U/\\Delta t$當作此人在上述時間內的代謝率。人在靜止休息時維持基本機能（含體溫）所需的最低代謝率，稱為基礎代謝率。平均說來，每公斤人體質量的基礎代謝率約為$1.0$瓦特。\n\n維持人體新陳代謝所需的能量，是食物被消化後與氧作用所產生的。以碳水化合物（如葡萄糖）為例，將它轉換為人體所需能量的一系列過程，總結起來可簡單表示如下：\n\n$C_6H_{12}O_6+6 O_2\\to 6 CO_2+6 H_2O$\n\n其中每公克的葡萄糖在此反應中釋出的能量約為16千焦耳，我們習慣稱此能量為其單位質量的熱量。依上文回答37-40題。\n\n人體透過呼吸運動吸進體內的氣體，其最主要成分為何？",
+    "correct": "氮氣",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "氧氣",
+      "二氧化碳",
+      "水氣",
+      "臭氧"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第37題。",
+    "exp": "正確答案：氮氣。來源：110年學科能力測驗自然第37題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -713,25 +743,23 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/G37-40-context.png",
-      "/assets/banks/gsat-110-science/Q37-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.31,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q39",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/gsat-110-science/G37-40-context.png)\n\n![第39題原卷資料](/assets/banks/gsat-110-science/Q39-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n37-40為題組\n\n為了維持生命與從事各種工作，人體需要攝取食物與由大氣中獲得氧氣，來提供能量並調節排除熱量的速率，以維持正常體溫。因此，人體可視為一個與周圍環境交互作用的系統，透過新陳代謝，將能量（以下稱之為內能）儲存與轉換，並與環境進行功與熱的交換。假設在時間$\\Delta t$內，某人從事騎車、搬運物品等活動，所做的功為$\\Delta W$，而由身體離開的淨熱量為$\\Delta Q$，則根據能量守恆定律，其身體的內能變化量$\\Delta U$將遵守以下關係式：$-\\Delta U=\\Delta Q+\\Delta W$。上式除以$\\Delta t$後，就成為相關各量之時間變化率之間的關係；一般將$-\\Delta U/\\Delta t$當作此人在上述時間內的代謝率。人在靜止休息時維持基本機能（含體溫）所需的最低代謝率，稱為基礎代謝率。平均說來，每公斤人體質量的基礎代謝率約為$1.0$瓦特。\n\n維持人體新陳代謝所需的能量，是食物被消化後與氧作用所產生的。以碳水化合物（如葡萄糖）為例，將它轉換為人體所需能量的一系列過程，總結起來可簡單表示如下：\n\n$C_6H_{12}O_6+6 O_2\\to 6 CO_2+6 H_2O$\n\n其中每公克的葡萄糖在此反應中釋出的能量約為16千焦耳，我們習慣稱此能量為其單位質量的熱量。依上文回答37-40題。\n\n一名質量為50公斤的學生，在常溫下靜止躺著休息，若他體溫正常且保持恆定不變，則其內能之時間變化率的量值應如何表示？",
+    "correct": "$\\left|\\frac{-\\Delta U}{\\Delta t}\\right|=50 瓦特$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "$\\left|\\frac{\\Delta W}{\\Delta t}\\right|=50 瓦特$",
+      "$\\left|\\Delta W\\right|=50 瓦特$",
+      "$\\left|-\\Delta U\\right|=50 瓦特$",
+      "$\\left|\\Delta Q\\right|=50 瓦特$"
     ],
-    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第39題。",
+    "exp": "正確答案：$\\left|\\frac{-\\Delta U}{\\Delta t}\\right|=50 瓦特$。來源：110年學科能力測驗自然第39題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -750,23 +778,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/G37-40-context.png",
-      "/assets/banks/gsat-110-science/Q39-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q40",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/gsat-110-science/G37-40-context.png)\n\n![第40題原卷資料](/assets/banks/gsat-110-science/Q40-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n37-40為題組\n\n為了維持生命與從事各種工作，人體需要攝取食物與由大氣中獲得氧氣，來提供能量並調節排除熱量的速率，以維持正常體溫。因此，人體可視為一個與周圍環境交互作用的系統，透過新陳代謝，將能量（以下稱之為內能）儲存與轉換，並與環境進行功與熱的交換。假設在時間$\\Delta t$內，某人從事騎車、搬運物品等活動，所做的功為$\\Delta W$，而由身體離開的淨熱量為$\\Delta Q$，則根據能量守恆定律，其身體的內能變化量$\\Delta U$將遵守以下關係式：$-\\Delta U=\\Delta Q+\\Delta W$。上式除以$\\Delta t$後，就成為相關各量之時間變化率之間的關係；一般將$-\\Delta U/\\Delta t$當作此人在上述時間內的代謝率。人在靜止休息時維持基本機能（含體溫）所需的最低代謝率，稱為基礎代謝率。平均說來，每公斤人體質量的基礎代謝率約為$1.0$瓦特。\n\n維持人體新陳代謝所需的能量，是食物被消化後與氧作用所產生的。以碳水化合物（如葡萄糖）為例，將它轉換為人體所需能量的一系列過程，總結起來可簡單表示如下：\n\n$C_6H_{12}O_6+6 O_2\\to 6 CO_2+6 H_2O$\n\n其中每公克的葡萄糖在此反應中釋出的能量約為16千焦耳，我們習慣稱此能量為其單位質量的熱量。依上文回答37-40題。\n\n承上題，若他體內新陳代謝所需能量都來自葡萄糖，則他躺著休息2小時共消耗幾公克葡萄糖？",
+    "correct": "22.5",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "0.450",
+      "62.5",
+      "360",
+      "450"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第40題。",
+    "exp": "正確答案：22.5。來源：110年學科能力測驗自然第40題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -785,17 +811,15 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/G37-40-context.png",
-      "/assets/banks/gsat-110-science/Q40-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q43",
     "difficulty": "hard",
-    "q": "BrDU 是人工合成的核苷酸，可被細胞吸收並使用為DNA 複製原料，過程中與\n\n 腺嘌呤配對。四位同學甲～丁依上述提出相關論述：\n  甲、BrDU是核苷酸，結構包括5碳糖、含氮鹼基與磷酸\n 乙、BrDU在有絲分裂過程中染色體排列於細胞中央時，被嵌入複製中的DNA\n  丙、BrDU與腺嘌呤形成配對，故在細胞複製DNA時取代尿嘧啶\n 丁、細胞完成某次分裂後給予BrDU，待再完成一次分裂後，則所有DNA只有單\n     股含BrDU\n\n 何者為論述正確的同學？",
+    "q": "BrDU是人工合成的核苷酸，可被細胞吸收並使用為DNA複製原料，過程中與腺嘌呤配對。四位同學甲～丁依上述提出相關論述：\n\n甲、BrDU是核苷酸，結構包括5碳糖、含氮鹼基與磷酸\n\n乙、BrDU在有絲分裂過程中染色體排列於細胞中央時，被嵌入複製中的DNA\n\n丙、BrDU與腺嘌呤形成配對，故在細胞複製DNA時取代尿嘧啶\n\n丁、細胞完成某次分裂後給予BrDU，待再完成一次分裂後，則所有DNA只有單股含BrDU\n\n何者為論述正確的同學？",
     "correct": "甲、丁",
     "wrong": [
       "甲、乙",
@@ -820,20 +844,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.29,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q45",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/gsat-110-science/Q45-question.png)",
-    "correct": "原卷選項 E",
+    "q": "圖12中甲、乙、丙是位於臺灣的3個森林實驗樣區內調查到的植物物種及數量分布。有關其所處生態系的敘述，何者最正確？\n\n臺灣冷杉\n\n玉山箭竹\n\n高山櫟\n\n玉山圓柏\n\n臺灣二葉松\n\n臺灣雲杉\n\n紅檜\n\n鐵杉\n\n扁柏\n\n長尾柯\n\n臺灣杉\n\n巒大杉\n\n紅豆杉\n\n牛樟\n\n雀榕\n\n青剛櫟\n\n樟樹\n\n楓香\n\n大葉楠\n\n臺灣肖楠\n\n火燒栲\n\n大頭茶\n\n個體數\n\n甲生態系\n\n乙生態系\n\n丙生態系\n\n圖12\n\n![圖表](/assets/banks/gsat-110-science/Q45-figure-1.png)\n",
+    "correct": "丙生態系為闊葉林生態，為三個生態系中物種多樣性最高的區域",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲生態系為針闊葉混合林，此類型為臺灣特有的生態系",
+      "乙生態系受到的人為干擾情況最嚴重",
+      "乙生態系為臺灣海拔分布最高的生態系",
+      "丙生態系的溼度高，位於海拔1800～2000公尺山區"
     ],
-    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第45題。",
+    "exp": "正確答案：丙生態系為闊葉林生態，為三個生態系中物種多樣性最高的區域。來源：110年學科能力測驗自然第45題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -849,15 +874,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q45-question.png"
+      "/assets/banks/gsat-110-science/Q45-figure-1.png"
     ],
     "passRate": 0.37,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q47",
     "difficulty": "medium",
-    "q": "科學家經多年雜交選育獲得了具黑色斑紋的家蠶新品種。下列選項何者與黑色家\n\n 蠶的培育技術原理相似？",
+    "q": "科學家經多年雜交選育獲得了具黑色斑紋的家蠶新品種。下列選項何者與黑色家蠶的培育技術原理相似？",
     "correct": "孟德爾豌豆試交實驗",
     "wrong": [
       "以轉殖技術產生的抗蟲玉米",
@@ -882,12 +908,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q55",
     "difficulty": "medium",
-    "q": "某星球的平均密度與半徑，分別為地球的0.10 倍與10 倍，則此星球表面的重力\n\n 加速度量值約是地球表面重力加速度量值的幾倍？",
+    "q": "某星球的平均密度與半徑，分別為地球的0.10倍與10倍，則此星球表面的重力加速度量值約是地球表面重力加速度量值的幾倍？",
     "correct": "1.0",
     "wrong": [
       "0.010",
@@ -910,20 +937,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q56",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 56 題。\n\n![第56題原卷資料](/assets/banks/gsat-110-science/Q56-question.png)",
-    "correct": "原卷選項 D",
+    "q": "2020年7月有3艘太空船從地球出發前往火星，此時地球在A處、火星在B處。太空船由火箭推動進入橢圓軌道後在重力下航行，如圖15所示，直到要與火星會合時，再進入繞行火星的軌道，最後於C處會合。已知火星公轉週期為地球公轉週期的1.9倍，則太空船由地球出發到與火星會合，所需時間最接近下列何者？\n\n太陽\n\n\n\n\n\n\n\n太空船軌道\n\n\n\n圖15\n\n地球公轉軌道\n\n火星公轉軌道\n\n![圖表](/assets/banks/gsat-110-science/Q56-figure-1.png)",
+    "correct": "260天\n\n![圖表](/assets/banks/gsat-110-science/Q56-option-D-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "600天",
+      "360天",
+      "300天",
+      "180天"
     ],
-    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第56題。",
+    "exp": "正確答案：260天\n\n![圖表](/assets/banks/gsat-110-science/Q56-option-D-figure-1.png)。來源：110年學科能力測驗自然第56題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -939,21 +967,23 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q56-question.png"
-    ]
+      "/assets/banks/gsat-110-science/Q56-figure-1.png",
+      "/assets/banks/gsat-110-science/Q56-option-D-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q58",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/gsat-110-science/G58-59-context.png)\n\n![第58題原卷資料](/assets/banks/gsat-110-science/Q58-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n58-59為題組\n\n質量$m$的物體在空氣中鉛直落下時，因受到向上阻力$f$，其運動方程式為$ma=mg-f$，式中$a$為物體下落的加速度，$g$為重力加速度。已知阻力$f=kv^2$，其中$v$為物體速率，常數$k$則視物體實際受到阻力的截面積而定；截面積越大則$k$越大。當速率$v$增大時，$f$也會增大，直到$f=mg$時，$a$就等於零，物體開始以等速率$v_t$下降，此$v_t$稱為終端速率。依據上述回答58-59題。\n\n一跳傘者背負降落傘，以初速率$v_0$從靜止的熱氣球上鉛直跳下，在打開降落傘之前達到終端速率$v_1$；然後打開降落傘，降落傘張開後使截面積增大，在落地前達到另一終端速率$v_2$。下列關係式何者正確？",
+    "correct": "$v_1>v_2$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "$v_0>v_1$",
+      "$v_0>v_2$",
+      "$v_2>v_1$",
+      "$v_2=v_1$"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第58題。",
+    "exp": "正確答案：$v_1>v_2$。來源：110年學科能力測驗自然第58題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -972,23 +1002,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/G58-59-context.png",
-      "/assets/banks/gsat-110-science/Q58-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q62",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 62 題。\n\n![第62題原卷資料](/assets/banks/gsat-110-science/Q62-question.png)",
-    "correct": "原卷選項 A",
+    "q": "如圖17所示，某生走在南北方向峽谷中的甲點，兩旁高山的山坡約$60^{\\circ}$向山谷傾斜，在西側山腳有一薄煤層出露，測得煤層傾斜向東、傾角$45^{\\circ}$、走向為南北（走向是煤層水平延伸的方向）。此區地層層序正常，沒有斷層、褶皺或其他因素干擾，今某生從甲點往西水平挖100公尺到乙點後仍不見煤層，某生應該在乙點繼續往哪邊挖才能找到煤層？\n\n高山\n\n\n\n\n\n高山\n\n甲\n\n東\n\n西\n\n乙\n\n圖17\n\n水平面\n\n![圖表](/assets/banks/gsat-110-science/Q62-figure-1.png)",
+    "correct": "往上挖100公尺",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "往地底下挖100公尺",
+      "往南水平挖100公尺",
+      "往北水平挖100公尺",
+      "往西水平挖100公尺"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗自然第62題。",
+    "exp": "正確答案：往上挖100公尺。來源：110年學科能力測驗自然第62題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -1004,21 +1032,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q62-question.png"
-    ]
+      "/assets/banks/gsat-110-science/Q62-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q63",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 63 題。\n\n![第63題原卷資料](/assets/banks/gsat-110-science/G63-64-context.png)\n\n![第63題原卷資料](/assets/banks/gsat-110-science/Q63-question.png)",
-    "correct": "原卷選項 E",
+    "q": "【共用閱讀資料】\n63-64為題組\n\n表2列出5顆恆星的光譜型、視星等及絕對星等，據此回答63-64題。\n\n| 表2 |\n| 星名 | 光譜型 | 視星等（m） | 絕對星等（M） |\n| 甲 | M | 9.5 | 12.8 |\n| 乙 | A | –1.4 | 1.4 |\n| 丙 | K | 8.4 | 11.3 |\n| 丁 | M | 8.9 | 11.1 |\n| 戊 | G | 4.2 | 5.3 |\n\n若不考慮星光在太空與地球大氣中受到吸收的影響，恆星的視星等m、絕對星等M與距離d的關係為$m-M=5 log(d)-5$，其中$log$為對數。依此判斷這5顆恆星中，何者距離我們最遠？",
+    "correct": "戊",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲",
+      "乙",
+      "丙",
+      "丁"
     ],
-    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第63題。",
+    "exp": "正確答案：戊。來源：110年學科能力測驗自然第63題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -1037,23 +1066,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/G63-64-context.png",
-      "/assets/banks/gsat-110-science/Q63-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q64",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 64 題。\n\n![第64題原卷資料](/assets/banks/gsat-110-science/G63-64-context.png)\n\n![第64題原卷資料](/assets/banks/gsat-110-science/Q64-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n63-64為題組\n\n表2列出5顆恆星的光譜型、視星等及絕對星等，據此回答63-64題。\n\n| 表2 |\n| 星名 | 光譜型 | 視星等（m） | 絕對星等（M） |\n| 甲 | M | 9.5 | 12.8 |\n| 乙 | A | –1.4 | 1.4 |\n| 丙 | K | 8.4 | 11.3 |\n| 丁 | M | 8.9 | 11.1 |\n| 戊 | G | 4.2 | 5.3 |\n\n承上題，這5顆恆星中，何者的表面溫度最高？",
+    "correct": "乙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "甲",
+      "丙",
+      "丁",
+      "戊"
     ],
-    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第64題。",
+    "exp": "正確答案：乙。來源：110年學科能力測驗自然第64題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -1072,23 +1099,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-110-science/G63-64-context.png",
-      "/assets/banks/gsat-110-science/Q64-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q65",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 65 題。\n\n![第65題原卷資料](/assets/banks/gsat-110-science/Q65-question.png)",
-    "correct": "原卷選項 A",
+    "q": "海面高度差異是影響海流流動的主要因素之一，而高度梯度越大，流速越快。受\n科氏力影響，一般大洋西側的海流流速較快。利用人造衛星對海洋進行雷達測高\n遙測，可獲知大範圍海域的海面高度變化。下列何者最有可能是人造衛星所獲得\n的南太平洋海面高度的等高線圖？",
+    "correct": "![圖表](/assets/banks/gsat-110-science/Q65-option-A-figure-1.png)",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-110-science/Q65-option-B-figure-1.png)",
+      "![圖表](/assets/banks/gsat-110-science/Q65-option-C-figure-1.png)",
+      "![圖表](/assets/banks/gsat-110-science/Q65-option-D-figure-1.png)",
+      "![圖表](/assets/banks/gsat-110-science/Q65-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗自然第65題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-110-science/Q65-option-A-figure-1.png)。來源：110年學科能力測驗自然第65題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -1104,13 +1129,18 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-110-science/Q65-question.png"
-    ]
+      "/assets/banks/gsat-110-science/Q65-option-A-figure-1.png",
+      "/assets/banks/gsat-110-science/Q65-option-B-figure-1.png",
+      "/assets/banks/gsat-110-science/Q65-option-C-figure-1.png",
+      "/assets/banks/gsat-110-science/Q65-option-D-figure-1.png",
+      "/assets/banks/gsat-110-science/Q65-option-E-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q66",
     "difficulty": "medium",
-    "q": "透過紅色玻璃片，觀看所有景象呈現深淺不一的紅色色調。用來拍攝星空，則所\n\n 有恆星都呈明亮不同的紅色。現透過望遠鏡用相機拍攝星空，針對同一天區，分\n\n 別以紅色及藍色玻璃片各拍一幅影像。依此可獲得恆星的何種訊息？",
+    "q": "透過紅色玻璃片，觀看所有景象呈現深淺不一的紅色色調。用來拍攝星空，則所有恆星都呈明亮不同的紅色。現透過望遠鏡用相機拍攝星空，針對同一天區，分別以紅色及藍色玻璃片各拍一幅影像。依此可獲得恆星的何種訊息？",
     "correct": "比對兩幅影像，能辨別出藍色高溫恆星",
     "wrong": [
       "比對兩幅影像，能判斷出恆星的年齡",
@@ -1133,12 +1163,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-110-science-q67",
     "difficulty": "medium",
-    "q": "科學家常從岩石的特性推測當時的沉積環境。今有某鑽井，由上而下，依序鑽出\n\n 頁岩、砂岩和礫岩。若這些岩層都沒有經過變動，下列有關它們生成的敘述何者\n\n 正確？",
+    "q": "科學家常從岩石的特性推測當時的沉積環境。今有某鑽井，由上而下，依序鑽出頁岩、砂岩和礫岩。若這些岩層都沒有經過變動，下列有關它們生成的敘述何者正確？",
     "correct": "沉積環境的水流速度愈晚期愈慢",
     "wrong": [
       "沉積環境的水愈晚期愈淺",
@@ -1161,6 +1192,7 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

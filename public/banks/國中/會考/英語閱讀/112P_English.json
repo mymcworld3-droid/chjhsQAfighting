@@ -2,14 +2,14 @@
   {
     "id": "cap-112-english-q1",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-112-english/Q1-question.png)",
-    "correct": "原卷選項 B",
+    "q": "Look at the picture.  The man is holding a ______ of grapes in his hands.\n\n![圖表](/assets/banks/cap-112-english/Q1-figure-1.png)",
+    "correct": "basket",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "bag",
+      "bowl",
+      "box"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第1題。",
+    "exp": "正確答案：basket。來源：112年國中教育會考英語閱讀第1題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -25,22 +25,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-112-english/Q1-question.png"
+      "/assets/banks/cap-112-english/Q1-figure-1.png"
     ],
     "passRate": 0.91,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q2",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-112-english/Q2-question.png)",
-    "correct": "原卷選項 D",
+    "q": "Dennis enjoys ______ in public.  He is proud of his beautiful voice.",
+    "correct": "singing",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "dancing",
+      "drawing",
+      "shopping"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考英語閱讀第2題。",
+    "exp": "正確答案：singing。來源：112年國中教育會考英語閱讀第2題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -55,16 +56,15 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/Q2-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.75,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q3",
     "difficulty": "easy",
-    "q": "Mrs. Johnson can’t hear very well. If you need to talk to her, you must ______ .",
+    "q": "Mrs. Johnson can’t hear very well.  If you need to talk to her, you must ______ .",
     "correct": "shout",
     "wrong": [
       "explain",
@@ -88,7 +88,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q4",
@@ -117,12 +118,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.75,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q5",
     "difficulty": "easy",
-    "q": "I tried on these shoes in several different ______ , and I thought the white pair looked best on me.",
+    "q": "I tried on these shoes in several difef rent ______ , and I thought the white pair looked best on me.",
     "correct": "colors",
     "wrong": [
       "prices",
@@ -146,12 +148,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q6",
     "difficulty": "easy",
-    "q": "Rex did not feel the earthquake this morning. He ______ in the park at the time.",
+    "q": "Rex did not feel the earthquake this morning.  He ______ in the park at the time.",
     "correct": "was jogging",
     "wrong": [
       "jogged",
@@ -175,7 +178,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.8,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q7",
@@ -204,12 +208,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.8,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q8",
     "difficulty": "medium",
-    "q": "I didn’t take the bus today because it was ______ .  All the seats were taken and a lot of\n     students were standing.",
+    "q": "I didn’t take the bus today because it was ______ .  All the seats were taken and a lot of\nstudents were standing.",
     "correct": "full",
     "wrong": [
       "dirty",
@@ -233,7 +238,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q9",
@@ -262,12 +268,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q10",
     "difficulty": "medium",
-    "q": "Jerry wanted to know ______ he was kicked off the soccer team, but no one gave him a\n    good reason.",
+    "q": "Jerry wanted to know ______ he was kicked off the soccer team, but no one gave him a\ngood reason.",
     "correct": "why",
     "wrong": [
       "where",
@@ -291,19 +298,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.67,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q11",
     "difficulty": "medium",
-    "q": "Jenny is already forty, doesn’t have a job and often makes trouble for her parents. To them,\n     she is really a(n) ______ .",
-    "correct": "headache\n                                  1",
+    "q": "Jenny is already forty, doesn’t have a job and often makes trouble for her parents.  To them,\nshe is really a(n) ______ .",
+    "correct": "headache",
     "wrong": [
       "daughter",
       "example",
       "gift"
     ],
-    "exp": "正確答案：headache\n                                  1。來源：112年國中教育會考英語閱讀第11題。",
+    "exp": "正確答案：headache。來源：112年國中教育會考英語閱讀第11題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -321,7 +329,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.58,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q12",
@@ -350,7 +359,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q13",
@@ -379,7 +389,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.84,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q14",
@@ -408,7 +419,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q15",
@@ -437,15 +449,16 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q16",
     "difficulty": "medium",
-    "q": "It’s not easy to see those islands clearly from here on sunny days, and it’s even less ______ \n     to see them on cloudy days.",
+    "q": "It’s not easy to see those islands clearly from here on sunny days, and it’s even less\nto see them on cloudy days.",
     "correct": "possible",
     "wrong": [
-      "difficult",
+      "difcfi ult",
       "lucky",
       "special"
     ],
@@ -466,12 +479,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q17",
     "difficulty": "medium",
-    "q": "Do you remember the CD I was looking for for months? I ______ found it in a small shop.\n    Look, here it is!",
+    "q": "Do you remember the CD I was looking for for months?  I ______ found it in a small shop.\nLook, here it is!",
     "correct": "finally",
     "wrong": [
       "almost",
@@ -495,12 +509,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q18",
     "difficulty": "medium",
-    "q": "Business at Jane’s shop has not been good these days. And the new supermarket across the\n      street only makes things ______ .",
+    "q": "Business at Jane’s shop has not been good these days.  And the new supermarket across the\nstreet only makes things ______ .",
     "correct": "worse",
     "wrong": [
       "easier",
@@ -524,7 +539,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.61,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q19",
@@ -553,12 +569,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q20",
     "difficulty": "medium",
-    "q": "I ______ swimming for several years before I went to this high school. I gave it up because of\n     heavy schoolwork.",
+    "q": "I ______ swimming for several years before I went to this high school.  I gave it up because of\nheavy schoolwork.",
     "correct": "practiced",
     "wrong": [
       "have practiced",
@@ -582,7 +599,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.57,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q21",
@@ -611,7 +629,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.49,
-    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q22",
@@ -638,19 +657,20 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q23",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-112-english/Q23-question-1.png)\n\n![第23題原卷資料](/assets/banks/cap-112-english/Q23-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "Now I often think of those days with Pip, my pet dog.  When I read in my room, he\nquietly beside me.",
+    "correct": "used to come and sit",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "will come and sit",
+      "comes and sits",
+      "has come and sat"
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考英語閱讀第23題。",
+    "exp": "正確答案：used to come and sit。來源：112年國中教育會考英語閱讀第23題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -666,22 +686,20 @@
       "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/Q23-question-1.png",
-      "/assets/banks/cap-112-english/Q23-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-112-english/G24-25-context.png)\n\n![第24題原卷資料](/assets/banks/cap-112-english/Q24-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(24-25)\n![圖表](/assets/banks/cap-112-english/G24-25-figure-1.png)\n\n\n\n\n\n\n![圖表](/assets/banks/cap-112-english/G24-25-figure-10.png)\n\n\n![圖表](/assets/banks/cap-112-english/G24-25-figure-11.png)\n\nAmy went to Four Seasons’ Kitchen with her mother after she collected 15 stars.  They\nordered two Garden Sandwiches, an Autumn Wind, and a Winter Snow.  After using the\nstars, how much did they pay for their meals?",
+    "correct": "\\$230.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "\\$290.",
+      "\\$220.",
+      "\\$160."
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第24題。",
+    "exp": "正確答案：\\$230.。來源：112年國中教育會考英語閱讀第24題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -701,21 +719,23 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G24-25-context.png",
-      "/assets/banks/cap-112-english/Q24-question.png"
-    ]
+      "/assets/banks/cap-112-english/G24-25-figure-1.png",
+      "/assets/banks/cap-112-english/G24-25-figure-10.png",
+      "/assets/banks/cap-112-english/G24-25-figure-11.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-112-english/G24-25-context.png)\n\n![第25題原卷資料](/assets/banks/cap-112-english/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-112-english/Q25-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(24-25)\n![圖表](/assets/banks/cap-112-english/G24-25-figure-1.png)\n\n\n\n\n\n\n![圖表](/assets/banks/cap-112-english/G24-25-figure-10.png)\n\n\n![圖表](/assets/banks/cap-112-english/G24-25-figure-11.png)\n\nAmy wants to bring her friends to Four Seasons’ Kitchen in August.  She looks at her\n\ncalendar to pick a time to go there.  Which are the time and date she\ncan choose?\n\n\n\n【原卷閱讀資料】\n【August 行事曆】\n| Sun | Mon | Tue | Wed | Thu | Fri | Sat |\n|  |  | 1 | 2 Summer camp | 3 Summer camp | 4 Summer camp | 5 Summer camp |\n| 6 Summer camp | 7 Summer camp | 8 Summer camp | 9 Summer camp | 10 Summer camp | 11 | 12 Party at Ken’s |\n| 13 | 14 Family trip to the South | 15 Family trip to the South | 16 Family trip to the South | 17 Family trip to the South | 18 Family trip to the South | 19 Family trip to the South |\n| 20 Family trip to the South | 21 Family trip to the South | 22 Family trip to the South | 23 Family trip to the South | 24 Family trip to the South | 25 Family trip to the South | 26 Family trip to the South |\n| 27 Clean the house | 28 | 29 School begins | 30 Baseball game at 6 | 31 |  |  |",
+    "correct": "5:00 pm, August 11.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "8:30 pm, August 1.",
+      "3:00 pm, August 13.",
+      "2:00 pm, August 28."
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第25題。",
+    "exp": "正確答案：5:00 pm, August 11.。來源：112年國中教育會考英語閱讀第25題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -736,22 +756,23 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G24-25-context.png",
-      "/assets/banks/cap-112-english/Q25-question-1.png",
-      "/assets/banks/cap-112-english/Q25-question-2.png"
-    ]
+      "/assets/banks/cap-112-english/G24-25-figure-1.png",
+      "/assets/banks/cap-112-english/G24-25-figure-10.png",
+      "/assets/banks/cap-112-english/G24-25-figure-11.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q26",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-112-english/G26-27-context.png)\n\n![第26題原卷資料](/assets/banks/cap-112-english/Q26-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(26-27)\n【原卷閱讀資料】\nClass: Scrence Date: 2020/6/17\n\nWhat Should You Do If You Find a Baby Bird Out of the Nest?\n\nIf the bird is HURT:\n\nCall the animal center (0-123-4567).\n\nOR\n\nCarefully pick the bird up and take it to an animal hospital.\n(Keep it warm and don’t give it any food!)\n\nIf the bird is NOT HURT:\n© If it has FEW FEATHERS: People believe birds will give\n\n+ You CAN reach the nest up their babies if they have\nt t\nPut the bird back. he smell of people on them.\n\n+ If you CAN'T find or reach the nest | |\n\n— Call the animal center.\n\no If it has FEATHERS: WRONG! Birds don’t care!\n\n+ Just leave it there!\n\n\nAccording to the notes, which is the WRONG way to help a baby bird that is out of its nest?",
+    "correct": "Feed it before you take it to a hospital.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Leave it alone if it is not hurt and has feathers.",
+      "Call the animal center if you can’t find its nest.",
+      "Put it back in its nest if it is not hurt and has few feathers."
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考英語閱讀第26題。",
+    "exp": "正確答案：Feed it before you take it to a hospital.。來源：112年國中教育會考英語閱讀第26題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -770,22 +791,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/G26-27-context.png",
-      "/assets/banks/cap-112-english/Q26-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-112-english/G26-27-context.png)\n\n![第27題原卷資料](/assets/banks/cap-112-english/Q27-question-1.png)\n\n![第27題原卷資料](/assets/banks/cap-112-english/Q27-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(26-27)\n【原卷閱讀資料】\nClass: Scrence Date: 2020/6/17\n\nWhat Should You Do If You Find a Baby Bird Out of the Nest?\n\nIf the bird is HURT:\n\nCall the animal center (0-123-4567).\n\nOR\n\nCarefully pick the bird up and take it to an animal hospital.\n(Keep it warm and don’t give it any food!)\n\nIf the bird is NOT HURT:\n© If it has FEW FEATHERS: People believe birds will give\n\n+ You CAN reach the nest up their babies if they have\nt t\nPut the bird back. he smell of people on them.\n\n+ If you CAN'T find or reach the nest | |\n\n— Call the animal center.\n\no If it has FEATHERS: WRONG! Birds don’t care!\n\n+ Just leave it there!\n\n\nAccording to the notes, what do birds do if their babies have the smell of people on them?",
+    "correct": "They keep taking care of them.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "They push them out of the nest.",
+      "They clean them until the smell goes away.",
+      "They leave them behind and move to a new nest."
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考英語閱讀第27題。",
+    "exp": "正確答案：They keep taking care of them.。來源：112年國中教育會考英語閱讀第27題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -805,23 +824,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/G26-27-context.png",
-      "/assets/banks/cap-112-english/Q27-question-1.png",
-      "/assets/banks/cap-112-english/Q27-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q28",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-112-english/G28-29-context-1.png)\n\n![第28題原卷資料](/assets/banks/cap-112-english/G28-29-context-2.png)\n\n![第28題原卷資料](/assets/banks/cap-112-english/Q28-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n(28-29)\n![圖表](/assets/banks/cap-112-english/G28-29-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntage 階段　waste 浪費　percentage 百分比\n【詞彙】   <sup>s</sup>\n\nAccording to the reading, which is one of the reasons for food waste?",
+    "correct": "There is no refrigerator on the truck to keep food fresh.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "Stores do not know how to pack food well.",
+      "Farmers do not have enough machines to collect food.",
+      "Factories do not have enough trucks to carry food to stores."
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考英語閱讀第28題。",
+    "exp": "正確答案：There is no refrigerator on the truck to keep food fresh.。來源：112年國中教育會考英語閱讀第28題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -842,22 +858,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G28-29-context-1.png",
-      "/assets/banks/cap-112-english/G28-29-context-2.png",
-      "/assets/banks/cap-112-english/Q28-question.png"
-    ]
+      "/assets/banks/cap-112-english/G28-29-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q29",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-112-english/G28-29-context-1.png)\n\n![第29題原卷資料](/assets/banks/cap-112-english/G28-29-context-2.png)\n\n![第29題原卷資料](/assets/banks/cap-112-english/Q29-question-1.png)\n\n![第29題原卷資料](/assets/banks/cap-112-english/Q29-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(28-29)\n![圖表](/assets/banks/cap-112-english/G28-29-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntage 階段　waste 浪費　percentage 百分比\n【詞彙】   <sup>s</sup>\n\nWhich is true about food waste at each stage in the three parts of the world?\nother two areas.",
+    "correct": "South & Southeast Asia has a higher percentage of food waste at Stage 4 than the",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "For each area, the highest percentage of food waste happens at Stage 5.",
+      "Europe has a lower percentage of food waste at Stage 3 than the other two areas.",
+      "North America & Oceania has a higher percentage of food waste at Stage 1 than\nEurope."
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考英語閱讀第29題。",
+    "exp": "正確答案：South & Southeast Asia has a higher percentage of food waste at Stage 4 than the。來源：112年國中教育會考英語閱讀第29題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -879,23 +894,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G28-29-context-1.png",
-      "/assets/banks/cap-112-english/G28-29-context-2.png",
-      "/assets/banks/cap-112-english/Q29-question-1.png",
-      "/assets/banks/cap-112-english/Q29-question-2.png"
-    ]
+      "/assets/banks/cap-112-english/G28-29-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q30",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-112-english/G30-32-context.png)\n\n![第30題原卷資料](/assets/banks/cap-112-english/Q30-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(30-32)\n![圖表](/assets/banks/cap-112-english/G30-32-figure-1.png)\nSometimes when the rain falls hard and fast on you, it might hurt a little.\nBut what happens when it hits a mosquito?  A 2012 study says when a\nraindrop falls on a mosquito, it’s like when a bus hits a person.  Besides,\nthe little insect is hit by a raindrop about once every 20 seconds.\nSo why don’t we see many dead mosquitoes after it rains?\nA mosquito is as big as a raindrop, but it is much lighter — 0.002 g only.  This saves its life\nin raindrop attacks.  Because the mosquito is so light, when it is hit by a raindrop, it won’t\nexperience a force that is strong enough to kill it.\nThe study also found that when a mosquito is hit by a raindrop, the insect is pushed by\nthe raindrop and falls together with it.  But the mosquito doesn’t get wet easily because it\nis covered with hairs which keep off water.  After dropping about 6 cm, it will roll off the\nraindrop and fly away.\nHowever, this trick isn’t always successful.  If the mosquito fil es too low when it is hit by the\nraindrop, it won’t have time to fyl  of.f   Then it will hit the ground and meet its death.\n![圖表](/assets/banks/cap-112-english/G30-32-figure-2.png)\n\nWhat is the trick that the mosquito uses in rain?",
+    "correct": "It drops with the raindrop and then rolls of f it.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "It shakes its body fast enough to get water of.f",
+      "It flies behind the raindrop and pushes it away.",
+      "It rides on the raindrop and lands on the ground."
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第30題。",
+    "exp": "正確答案：It drops with the raindrop and then rolls of f it.。來源：112年國中教育會考英語閱讀第30題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -915,21 +928,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G30-32-context.png",
-      "/assets/banks/cap-112-english/Q30-question.png"
-    ]
+      "/assets/banks/cap-112-english/G30-32-figure-1.png",
+      "/assets/banks/cap-112-english/G30-32-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q31",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-112-english/G30-32-context.png)\n\n![第31題原卷資料](/assets/banks/cap-112-english/Q31-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(30-32)\n![圖表](/assets/banks/cap-112-english/G30-32-figure-1.png)\nSometimes when the rain falls hard and fast on you, it might hurt a little.\nBut what happens when it hits a mosquito?  A 2012 study says when a\nraindrop falls on a mosquito, it’s like when a bus hits a person.  Besides,\nthe little insect is hit by a raindrop about once every 20 seconds.\nSo why don’t we see many dead mosquitoes after it rains?\nA mosquito is as big as a raindrop, but it is much lighter — 0.002 g only.  This saves its life\nin raindrop attacks.  Because the mosquito is so light, when it is hit by a raindrop, it won’t\nexperience a force that is strong enough to kill it.\nThe study also found that when a mosquito is hit by a raindrop, the insect is pushed by\nthe raindrop and falls together with it.  But the mosquito doesn’t get wet easily because it\nis covered with hairs which keep off water.  After dropping about 6 cm, it will roll off the\nraindrop and fly away.\nHowever, this trick isn’t always successful.  If the mosquito fil es too low when it is hit by the\nraindrop, it won’t have time to fyl  of.f   Then it will hit the ground and meet its death.\n![圖表](/assets/banks/cap-112-english/G30-32-figure-2.png)\n\nWhat keeps a mosquito safe in the rain?",
+    "correct": "It is very light.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "It has no body hairs.",
+      "It is as big as a raindrop.",
+      "It is strong enough to fgi ht the force of a raindrop."
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考英語閱讀第31題。",
+    "exp": "正確答案：It is very light.。來源：112年國中教育會考英語閱讀第31題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -949,21 +963,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G30-32-context.png",
-      "/assets/banks/cap-112-english/Q31-question.png"
-    ]
+      "/assets/banks/cap-112-english/G30-32-figure-1.png",
+      "/assets/banks/cap-112-english/G30-32-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q32",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-112-english/G30-32-context.png)\n\n![第32題原卷資料](/assets/banks/cap-112-english/Q32-question-1.png)\n\n![第32題原卷資料](/assets/banks/cap-112-english/Q32-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(30-32)\n![圖表](/assets/banks/cap-112-english/G30-32-figure-1.png)\nSometimes when the rain falls hard and fast on you, it might hurt a little.\nBut what happens when it hits a mosquito?  A 2012 study says when a\nraindrop falls on a mosquito, it’s like when a bus hits a person.  Besides,\nthe little insect is hit by a raindrop about once every 20 seconds.\nSo why don’t we see many dead mosquitoes after it rains?\nA mosquito is as big as a raindrop, but it is much lighter — 0.002 g only.  This saves its life\nin raindrop attacks.  Because the mosquito is so light, when it is hit by a raindrop, it won’t\nexperience a force that is strong enough to kill it.\nThe study also found that when a mosquito is hit by a raindrop, the insect is pushed by\nthe raindrop and falls together with it.  But the mosquito doesn’t get wet easily because it\nis covered with hairs which keep off water.  After dropping about 6 cm, it will roll off the\nraindrop and fly away.\nHowever, this trick isn’t always successful.  If the mosquito fil es too low when it is hit by the\nraindrop, it won’t have time to fyl  of.f   Then it will hit the ground and meet its death.\n![圖表](/assets/banks/cap-112-english/G30-32-figure-2.png)\n\nWhen would it be dangerous for a mosquito in the rain?",
+    "correct": "When it flies too close to the ground.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "When the rain falls too hard and too fast.",
+      "When it is hit by raindrops too many times.",
+      "When it drops for more than 6 cm in the rain."
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考英語閱讀第32題。",
+    "exp": "正確答案：When it flies too close to the ground.。來源：112年國中教育會考英語閱讀第32題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -984,22 +999,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G30-32-context.png",
-      "/assets/banks/cap-112-english/Q32-question-1.png",
-      "/assets/banks/cap-112-english/Q32-question-2.png"
-    ]
+      "/assets/banks/cap-112-english/G30-32-figure-1.png",
+      "/assets/banks/cap-112-english/G30-32-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q33",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-112-english/G33-35-context.png)\n\n![第33題原卷資料](/assets/banks/cap-112-english/Q33-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(33-35)\n![圖表](/assets/banks/cap-112-english/G33-35-figure-1.png)\nYou probably have heard Beethoven’s famous piano piece “For Elise,”\nbut do you know who “Elise” was?\nOne story is that Elise was Elisabeth Röckel.  She once sang in\nBeethoven’s opera Fidelio, and the two became very good friends.\nBeethoven called her “Elise.”  When Röckel was leaving the city of\nVienna, Beethoven wrote “For Elise” to say goodbye to her.  Another\nstory is that Elise was Therese Malfatti.  Beethoven was in love with\nher.  He wrote a piece for her and put “For Therese” on the manuscript.  Malfatti kept the\nmanuscript and left it to her family when she died.  Later, a man copied the manuscript\nand wrote “For Elise” by mistake.  There is another possible Elise: Elise Barensfeld.  She\nlearned the piano from Malfatti, the same Malfatti in the second story.  To help Malfatti,\nBeethoven wrote the piece for her to use to teach Barensfeld.\nThese are just some guesses about who Elise was.  We may never know the right answer.\nNo one knew about the piece until 1867, when the manuscript was found.  This was 40 years\nafter Beethoven’s death, so he wasn’t around to tell us who Elise was.  Only one thing is for\n![圖表](/assets/banks/cap-112-english/G33-35-figure-2.png)\nsure: “For Elise” will always be enjoyed.\n\nWhat do the three stories in the reading all talk about?",
+    "correct": "Why Beethoven wrote “For Elise.”",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Who Beethoven’s true love was.",
+      "Who played “For Elise” the best.",
+      "How “For Elise” became popular."
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考英語閱讀第33題。",
+    "exp": "正確答案：Why Beethoven wrote “For Elise.”。來源：112年國中教育會考英語閱讀第33題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1019,21 +1034,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G33-35-context.png",
-      "/assets/banks/cap-112-english/Q33-question.png"
-    ]
+      "/assets/banks/cap-112-english/G33-35-figure-1.png",
+      "/assets/banks/cap-112-english/G33-35-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q34",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-112-english/G33-35-context.png)\n\n![第34題原卷資料](/assets/banks/cap-112-english/Q34-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n(33-35)\n![圖表](/assets/banks/cap-112-english/G33-35-figure-1.png)\nYou probably have heard Beethoven’s famous piano piece “For Elise,”\nbut do you know who “Elise” was?\nOne story is that Elise was Elisabeth Röckel.  She once sang in\nBeethoven’s opera Fidelio, and the two became very good friends.\nBeethoven called her “Elise.”  When Röckel was leaving the city of\nVienna, Beethoven wrote “For Elise” to say goodbye to her.  Another\nstory is that Elise was Therese Malfatti.  Beethoven was in love with\nher.  He wrote a piece for her and put “For Therese” on the manuscript.  Malfatti kept the\nmanuscript and left it to her family when she died.  Later, a man copied the manuscript\nand wrote “For Elise” by mistake.  There is another possible Elise: Elise Barensfeld.  She\nlearned the piano from Malfatti, the same Malfatti in the second story.  To help Malfatti,\nBeethoven wrote the piece for her to use to teach Barensfeld.\nThese are just some guesses about who Elise was.  We may never know the right answer.\nNo one knew about the piece until 1867, when the manuscript was found.  This was 40 years\nafter Beethoven’s death, so he wasn’t around to tell us who Elise was.  Only one thing is for\n![圖表](/assets/banks/cap-112-english/G33-35-figure-2.png)\nsure: “For Elise” will always be enjoyed.\n\nWhat do we know about “For Elise” from the reading?",
+    "correct": "The manuscript was found after Beethoven died.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "It first appeared in the opera Fidelio.",
+      "The true “Elise” was Elise Barensfeld.",
+      "The manuscript is now kept by the city of Vienna."
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考英語閱讀第34題。",
+    "exp": "正確答案：The manuscript was found after Beethoven died.。來源：112年國中教育會考英語閱讀第34題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1053,21 +1069,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G33-35-context.png",
-      "/assets/banks/cap-112-english/Q34-question.png"
-    ]
+      "/assets/banks/cap-112-english/G33-35-figure-1.png",
+      "/assets/banks/cap-112-english/G33-35-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q35",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-112-english/G33-35-context.png)\n\n![第35題原卷資料](/assets/banks/cap-112-english/Q35-question-1.png)\n\n![第35題原卷資料](/assets/banks/cap-112-english/Q35-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(33-35)\n![圖表](/assets/banks/cap-112-english/G33-35-figure-1.png)\nYou probably have heard Beethoven’s famous piano piece “For Elise,”\nbut do you know who “Elise” was?\nOne story is that Elise was Elisabeth Röckel.  She once sang in\nBeethoven’s opera Fidelio, and the two became very good friends.\nBeethoven called her “Elise.”  When Röckel was leaving the city of\nVienna, Beethoven wrote “For Elise” to say goodbye to her.  Another\nstory is that Elise was Therese Malfatti.  Beethoven was in love with\nher.  He wrote a piece for her and put “For Therese” on the manuscript.  Malfatti kept the\nmanuscript and left it to her family when she died.  Later, a man copied the manuscript\nand wrote “For Elise” by mistake.  There is another possible Elise: Elise Barensfeld.  She\nlearned the piano from Malfatti, the same Malfatti in the second story.  To help Malfatti,\nBeethoven wrote the piece for her to use to teach Barensfeld.\nThese are just some guesses about who Elise was.  We may never know the right answer.\nNo one knew about the piece until 1867, when the manuscript was found.  This was 40 years\nafter Beethoven’s death, so he wasn’t around to tell us who Elise was.  Only one thing is for\n![圖表](/assets/banks/cap-112-english/G33-35-figure-2.png)\nsure: “For Elise” will always be enjoyed.\n\nWhat can we learn about the three women from the stories?",
+    "correct": "Elisabeth Röckel was a close friend of Beethoven’s.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "They were called “Elise” by their friends.",
+      "Therese Malfatti changed “For Elise” to “For Therese.”",
+      "Elise Barensfeld was Beethoven’s student."
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第35題。",
+    "exp": "正確答案：Elisabeth Röckel was a close friend of Beethoven’s.。來源：112年國中教育會考英語閱讀第35題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1088,22 +1105,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G33-35-context.png",
-      "/assets/banks/cap-112-english/Q35-question-1.png",
-      "/assets/banks/cap-112-english/Q35-question-2.png"
-    ]
+      "/assets/banks/cap-112-english/G33-35-figure-1.png",
+      "/assets/banks/cap-112-english/G33-35-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q36",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-112-english/G36-38-context.png)\n\n![第36題原卷資料](/assets/banks/cap-112-english/Q36-question-1.png)\n\n![第36題原卷資料](/assets/banks/cap-112-english/Q36-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(36-38)\n【原卷閱讀資料】\nWhich would you give a boy for his birthday, a toy truck or a doll?  If you choose the\ntruck, well, you’re not alone. Most people think that some toys are for boys and some\nare for girls. We might pick building toys for boys and kitchen toys for girls. But why\ndo we do this? Are boys and girls really born with different interests in toys?\n\nNo, they are not. Children start to show different interests in toys at age three, but\nonly because at this time, they begin to learn about gender and to follow what others\nof their gender do.  If you give a girl kitchen toys, she will think they are girls’ toys\nbecause she sees other girls playing with them. But if you give a girl a toy car and\nshow her a group of girls who are playing with cars, she’ll play with the toy car and\nthink it is a girls’ toy. This “watch and follow” habit often becomes a rule for both\nboys and girls in choosing the “right” toys.\n\nHowever, this rule can be bad for children. Different toys teach children different\nthings. Dolls help with their early language use, and building toys are good for\nlearning math and science. By playing with different toys, children can find out what\nthey are interested in or what they are good at. If they only play one kind of toy, they\nmay lose this important chance. They may also get a wrong idea about what boys\nor girls are able to do. Some doctors worry that children may use the same kind of\nthinking when they look for jobs in the future.  If they do, they may miss something\nmore important than just getting a chance to play with different toys. They may miss\nmany, perhaps better, chances in life.\n\n\nWhat idea does Jesse Cohen talk about in the reading?",
+    "correct": "We should not let gender decide which toys children can play with.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Not all kinds of toys are helpful for children’s learning.",
+      "Parents should give their children the right toys for their age.",
+      "Children should learn about their gender from playing with toys."
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考英語閱讀第36題。",
+    "exp": "正確答案：We should not let gender decide which toys children can play with.。來源：112年國中教育會考英語閱讀第36題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1123,23 +1140,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/G36-38-context.png",
-      "/assets/banks/cap-112-english/Q36-question-1.png",
-      "/assets/banks/cap-112-english/Q36-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q37",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-112-english/G36-38-context.png)\n\n![第37題原卷資料](/assets/banks/cap-112-english/Q37-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(36-38)\n【原卷閱讀資料】\nWhich would you give a boy for his birthday, a toy truck or a doll?  If you choose the\ntruck, well, you’re not alone. Most people think that some toys are for boys and some\nare for girls. We might pick building toys for boys and kitchen toys for girls. But why\ndo we do this? Are boys and girls really born with different interests in toys?\n\nNo, they are not. Children start to show different interests in toys at age three, but\nonly because at this time, they begin to learn about gender and to follow what others\nof their gender do.  If you give a girl kitchen toys, she will think they are girls’ toys\nbecause she sees other girls playing with them. But if you give a girl a toy car and\nshow her a group of girls who are playing with cars, she’ll play with the toy car and\nthink it is a girls’ toy. This “watch and follow” habit often becomes a rule for both\nboys and girls in choosing the “right” toys.\n\nHowever, this rule can be bad for children. Different toys teach children different\nthings. Dolls help with their early language use, and building toys are good for\nlearning math and science. By playing with different toys, children can find out what\nthey are interested in or what they are good at. If they only play one kind of toy, they\nmay lose this important chance. They may also get a wrong idea about what boys\nor girls are able to do. Some doctors worry that children may use the same kind of\nthinking when they look for jobs in the future.  If they do, they may miss something\nmore important than just getting a chance to play with different toys. They may miss\nmany, perhaps better, chances in life.\n\n\nIn the third paragraph, why does Jesse Cohen think “this rule can be bad for children”?\n\n![圖表](/assets/banks/cap-112-english/Q37-figure-1.png)",
+    "correct": "Children may miss the chance to find out what they really like.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Children may not want to share their toys with others.",
+      "Children may have the wrong idea about following rules.",
+      "Children may not be able to learn from playing with toys."
     ],
-    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考英語閱讀第37題。",
+    "exp": "正確答案：Children may miss the chance to find out what they really like.。來源：112年國中教育會考英語閱讀第37題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1160,21 +1174,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G36-38-context.png",
-      "/assets/banks/cap-112-english/Q37-question.png"
-    ]
+      "/assets/banks/cap-112-english/Q37-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q38",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-112-english/G36-38-context.png)\n\n![第38題原卷資料](/assets/banks/cap-112-english/Q38-question-1.png)\n\n![第38題原卷資料](/assets/banks/cap-112-english/Q38-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(36-38)\n【原卷閱讀資料】\nWhich would you give a boy for his birthday, a toy truck or a doll?  If you choose the\ntruck, well, you’re not alone. Most people think that some toys are for boys and some\nare for girls. We might pick building toys for boys and kitchen toys for girls. But why\ndo we do this? Are boys and girls really born with different interests in toys?\n\nNo, they are not. Children start to show different interests in toys at age three, but\nonly because at this time, they begin to learn about gender and to follow what others\nof their gender do.  If you give a girl kitchen toys, she will think they are girls’ toys\nbecause she sees other girls playing with them. But if you give a girl a toy car and\nshow her a group of girls who are playing with cars, she’ll play with the toy car and\nthink it is a girls’ toy. This “watch and follow” habit often becomes a rule for both\nboys and girls in choosing the “right” toys.\n\nHowever, this rule can be bad for children. Different toys teach children different\nthings. Dolls help with their early language use, and building toys are good for\nlearning math and science. By playing with different toys, children can find out what\nthey are interested in or what they are good at. If they only play one kind of toy, they\nmay lose this important chance. They may also get a wrong idea about what boys\nor girls are able to do. Some doctors worry that children may use the same kind of\nthinking when they look for jobs in the future.  If they do, they may miss something\nmore important than just getting a chance to play with different toys. They may miss\nmany, perhaps better, chances in life.\n\n\nIn the reading, after Jesse Cohen talks about an idea, he often gives an example to make it clear.\nBelow are four of the sentences in the third paragraph.  Which is used as an example?\nscience.”\njobs in the future.”\nwith difef rent toys.”",
+    "correct": "“Dolls help with their early language use, and building toys are good for learning math and",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "“However, this rule can be bad for children.”",
+      "“Some doctors worry that children may use the same kind of thinking when they look for",
+      "“If they do, they may miss something more important than just getting a chance to play"
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第38題。",
+    "exp": "正確答案：“Dolls help with their early language use, and building toys are good for learning math and。來源：112年國中教育會考英語閱讀第38題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1195,23 +1209,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/G36-38-context.png",
-      "/assets/banks/cap-112-english/Q38-question-1.png",
-      "/assets/banks/cap-112-english/Q38-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q39",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-112-english/G39-41-context.png)\n\n![第39題原卷資料](/assets/banks/cap-112-english/Q39-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(39-41)\nMarie Colvin was a world-famous war reporter.  She was born in New York, USA,\nin 1956 and died in Homs, Syria, in 2012.\nWhen she was a student at Yale University, Colvin decided that she wanted to be a\nreporter in the future.  She joined the Sunday Times, a UK newspaper, in 1985 and soon\nbecame its Middle East reporter.  Besides the Middle East, she also reported from other\nparts of the world: Chechnya, Kosovo and Sri Lanka, for example.  When she was reporting\non the war in Sri Lanka, she lost her left eye.  But that never stopped her.  She still went to\ndangerous places that few reporters wanted to visit and stayed when others left.\nColvin showed great empathy in her stories.  For her, war reporting was not just some\nquick interviews and a few photos.  She wrote about real people and their real lives.  Her\nwriting made you feel so strongly about these people’s stories, just like they were your own.\nShe hoped that through her work the world would understand what really happened in war,\nand would take action to stop the fighting.\nOn February 22, 2012, the day after she gave her report on the war in Homs, Colvin\nwas killed when the house she was staying in was attacked.  She always knew what price a\nwar reporter might have to pay.  She already lost an eye before.  This time, she gave her life\nto the work she could not give up — telling the true stories to the world.\n![圖表](/assets/banks/cap-112-english/G39-41-figure-1.png)\n\nWhat is the reading mostly about?",
+    "correct": "Marie Colvin’s working life.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Marie Colvin’s war reports.",
+      "Marie Colvin’s schooldays at Yale.",
+      "Marie Colvin’s experiences in Homs."
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第39題。",
+    "exp": "正確答案：Marie Colvin’s working life.。來源：112年國中教育會考英語閱讀第39題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1231,21 +1242,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G39-41-context.png",
-      "/assets/banks/cap-112-english/Q39-question.png"
-    ]
+      "/assets/banks/cap-112-english/G39-41-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q40",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-112-english/G39-41-context.png)\n\n![第40題原卷資料](/assets/banks/cap-112-english/Q40-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n(39-41)\nMarie Colvin was a world-famous war reporter.  She was born in New York, USA,\nin 1956 and died in Homs, Syria, in 2012.\nWhen she was a student at Yale University, Colvin decided that she wanted to be a\nreporter in the future.  She joined the Sunday Times, a UK newspaper, in 1985 and soon\nbecame its Middle East reporter.  Besides the Middle East, she also reported from other\nparts of the world: Chechnya, Kosovo and Sri Lanka, for example.  When she was reporting\non the war in Sri Lanka, she lost her left eye.  But that never stopped her.  She still went to\ndangerous places that few reporters wanted to visit and stayed when others left.\nColvin showed great empathy in her stories.  For her, war reporting was not just some\nquick interviews and a few photos.  She wrote about real people and their real lives.  Her\nwriting made you feel so strongly about these people’s stories, just like they were your own.\nShe hoped that through her work the world would understand what really happened in war,\nand would take action to stop the fighting.\nOn February 22, 2012, the day after she gave her report on the war in Homs, Colvin\nwas killed when the house she was staying in was attacked.  She always knew what price a\nwar reporter might have to pay.  She already lost an eye before.  This time, she gave her life\nto the work she could not give up — telling the true stories to the world.\n![圖表](/assets/banks/cap-112-english/G39-41-figure-1.png)\n\nWhat does it mean when someone has empathy?",
+    "correct": "They are able to understand how other people feel.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "They are good at taking war photos.",
+      "They like to read other people’s life stories.",
+      "They are good at helping people change their own lives."
     ],
-    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考英語閱讀第40題。",
+    "exp": "正確答案：They are able to understand how other people feel.。來源：112年國中教育會考英語閱讀第40題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1265,21 +1276,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G39-41-context.png",
-      "/assets/banks/cap-112-english/Q40-question.png"
-    ]
+      "/assets/banks/cap-112-english/G39-41-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q41",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-112-english/G39-41-context.png)\n\n![第41題原卷資料](/assets/banks/cap-112-english/Q41-question-1.png)\n\n![第41題原卷資料](/assets/banks/cap-112-english/Q41-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(39-41)\nMarie Colvin was a world-famous war reporter.  She was born in New York, USA,\nin 1956 and died in Homs, Syria, in 2012.\nWhen she was a student at Yale University, Colvin decided that she wanted to be a\nreporter in the future.  She joined the Sunday Times, a UK newspaper, in 1985 and soon\nbecame its Middle East reporter.  Besides the Middle East, she also reported from other\nparts of the world: Chechnya, Kosovo and Sri Lanka, for example.  When she was reporting\non the war in Sri Lanka, she lost her left eye.  But that never stopped her.  She still went to\ndangerous places that few reporters wanted to visit and stayed when others left.\nColvin showed great empathy in her stories.  For her, war reporting was not just some\nquick interviews and a few photos.  She wrote about real people and their real lives.  Her\nwriting made you feel so strongly about these people’s stories, just like they were your own.\nShe hoped that through her work the world would understand what really happened in war,\nand would take action to stop the fighting.\nOn February 22, 2012, the day after she gave her report on the war in Homs, Colvin\nwas killed when the house she was staying in was attacked.  She always knew what price a\nwar reporter might have to pay.  She already lost an eye before.  This time, she gave her life\nto the work she could not give up — telling the true stories to the world.\n![圖表](/assets/banks/cap-112-english/G39-41-figure-1.png)\n\nWhich is true about Marie Colvin?",
+    "correct": "The experience in Sri Lanka did not change her way of reporting news.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "The chance to study at Yale made her leave her job in the Middle East.",
+      "She was killed in Homs when she was interviewing soldiers there for her report.",
+      "She was not sure what to do in the future until she worked for the Sunday Times."
     ],
-    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考英語閱讀第41題。",
+    "exp": "正確答案：The experience in Sri Lanka did not change her way of reporting news.。來源：112年國中教育會考英語閱讀第41題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1300,22 +1311,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-112-english/G39-41-context.png",
-      "/assets/banks/cap-112-english/Q41-question-1.png",
-      "/assets/banks/cap-112-english/Q41-question-2.png"
-    ]
+      "/assets/banks/cap-112-english/G39-41-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q42",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-112-english/G42-43-context.png)\n\n![第42題原卷資料](/assets/banks/cap-112-english/Q42-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(42-43)\n【原卷閱讀資料】\nSpeaking American is a great book!\nLucia Leisure ★★★★★\nI just love Josh Katz’s new book!  It’s about  42   in different parts of the US.\nThe information in the book was collected from the quiz that Katz built on the\nwebsite in 2013. The quiz asked what words people use for something, and their\nanswers showed interesting facts. For example, there are different names for\nsports shoes. In most parts of the US, people say “tennis shoes.” In the northeast\nof the country, people wear “sneakers.”  In some towns, “tennis shoes” and\n“sneakers” become “gym shoes.”\n\nThe use of words tells us where people are from, like Katz’s book says. But in\nmy experience, it also shows  43    . My family has lived in New York since my\ngrandparents.  It’s not surprising that I say “sneakers.” But my grandfather says\n“plimsolls,” and my daughter says “kicks” or “vans.” Maybe Katz can study this\ndifference for his next book.\n",
+    "correct": "what things are called",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "how sports are played",
+      "why difef rent languages are spoken",
+      "what words are often spelled difef rently"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考英語閱讀第42題。",
+    "exp": "正確答案：what things are called。來源：112年國中教育會考英語閱讀第42題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1334,22 +1344,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/G42-43-context.png",
-      "/assets/banks/cap-112-english/Q42-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-112-english-q43",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-112-english/G42-43-context.png)\n\n![第43題原卷資料](/assets/banks/cap-112-english/Q43-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(42-43)\n【原卷閱讀資料】\nSpeaking American is a great book!\nLucia Leisure ★★★★★\nI just love Josh Katz’s new book!  It’s about  42   in different parts of the US.\nThe information in the book was collected from the quiz that Katz built on the\nwebsite in 2013. The quiz asked what words people use for something, and their\nanswers showed interesting facts. For example, there are different names for\nsports shoes. In most parts of the US, people say “tennis shoes.” In the northeast\nof the country, people wear “sneakers.”  In some towns, “tennis shoes” and\n“sneakers” become “gym shoes.”\n\nThe use of words tells us where people are from, like Katz’s book says. But in\nmy experience, it also shows  43    . My family has lived in New York since my\ngrandparents.  It’s not surprising that I say “sneakers.” But my grandfather says\n“plimsolls,” and my daughter says “kicks” or “vans.” Maybe Katz can study this\ndifference for his next book.\n",
+    "correct": "how old they are",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "who they speak to",
+      "where they grew up",
+      "whether they are men or women"
     ],
-    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考英語閱讀第43題。",
+    "exp": "正確答案：how old they are。來源：112年國中教育會考英語閱讀第43題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1368,9 +1376,7 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-112-english/G42-43-context.png",
-      "/assets/banks/cap-112-english/Q43-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

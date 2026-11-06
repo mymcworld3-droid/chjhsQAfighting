@@ -2,15 +2,15 @@
   {
     "id": "gsat-112-math-a-q1",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-112-math-a/Q1-question.png)",
-    "correct": "原卷選項 4",
+    "q": "若在計算器中鍵入某正整數N，接著連按「$\\sqrt{}$」鍵（取正平方根）3次，視窗顯示得到答案為2，則N等於下列哪一個選項？",
+    "correct": "$2^8$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "$2^3$",
+      "$2^4$",
+      "$2^6$",
+      "$2^{12}$"
     ],
-    "exp": "正確答案：原卷選項 4。來源：112年學科能力測驗數學A第1題。",
+    "exp": "正確答案：$2^8$。來源：112年學科能力測驗數學A第1題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -25,22 +25,52 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045358876595832120/03-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-112-math-a-q2",
+    "difficulty": "medium",
+    "q": "坐標平面上，以原點O為圓心、1為半徑作圓，分別交坐標軸正向於A、B兩點。在第一象限的圓弧上取一點C作圓的切線分別交兩軸於點D、E，\n如圖所示。令$\\angle OEC=\\theta$，試選出為$tan\\theta$的選項。\n\n\n\n\n\n\n\n\n\n\n\n\n\nθ\n\n\n\n\n\nθ\n\n![圖表](/assets/banks/gsat-112-math-a/Q2-figure-1.png)",
+    "correct": "$\\overline{CD}$",
+    "wrong": [
+      "$\\overline{OE}$",
+      "$\\overline{OC}$\n\nC",
+      "$\\overline{OD}$",
+      "$\\overline{CE}$"
+    ],
+    "exp": "正確答案：$\\overline{CD}$。來源：112年學科能力測驗數學A第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-a",
+      "question": 2,
+      "file": "高中/學測/數學A/03-112學測數學a試卷.pdf",
+      "url": "https://drive.google.com/file/d/1JUPI9xpxqVuKdwNvhYGVEPRoxq5RnR0T/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "5",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045358876595832120/03-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-112-math-a/Q1-question.png"
-    ]
+      "/assets/banks/gsat-112-math-a/Q2-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-math-a-q3",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-112-math-a/Q3-question.png)",
-    "correct": "原卷選項 4",
+    "q": "某生推導出兩物理量$s,t$應滿足一等式。為了驗證其理論，他做了實驗得到15筆兩物理量的數據$(s_k,t_k)$， $k=1,⋯,15$。老師建議他將其中的$t_k$先取對數，在坐標平面上標出對應的點$(s_k,logt_k)$，$k=1,⋯,15$，如圖所示；其中第一個數據為橫軸坐標，第二個數據為縱軸坐標。利用迴歸直線分析，某生印證了其理論。試問該生所得$s,t$的關係式最可能為下列哪一選項？\n\n\n\n\n\n\n\n-1\n\n-2\n\n-2\n\n-1\n\n\n\n\n\n\n\n![圖表](/assets/banks/gsat-112-math-a/Q3-figure-1.png)",
+    "correct": "$t^2=10^s$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "$s=2t$",
+      "$s=3t$",
+      "$t=10^s$",
+      "$t^3=10^s$"
     ],
-    "exp": "正確答案：原卷選項 4。來源：112年學科能力測驗數學A第3題。",
+    "exp": "正確答案：$t^2=10^s$。來源：112年學科能力測驗數學A第3題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -56,21 +86,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-112-math-a/Q3-question.png"
-    ]
+      "/assets/banks/gsat-112-math-a/Q3-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-math-a-q4",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-112-math-a/Q4-question-1.png)\n\n![第4題原卷資料](/assets/banks/gsat-112-math-a/Q4-question-2.png)",
-    "correct": "原卷選項 1",
+    "q": "將數字1、2、3、…、9等9個數字排成九位數（數字不得重複），使得前5位從左至右遞增、且後5位從左至右遞減。試問共有幾個滿足條件的九位數？",
+    "correct": "$\\frac{8!}{4!4!}$",
     "wrong": [
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$\\frac{8!}{5!3!}$",
+      "$\\frac{9!}{5!4!}$",
+      "$\\frac{8!}{5!}$",
+      "$\\frac{9!}{5!}$"
     ],
-    "exp": "正確答案：原卷選項 1。來源：112年學科能力測驗數學A第4題。",
+    "exp": "正確答案：$\\frac{8!}{4!4!}$。來源：112年學科能力測驗數學A第4題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -79,30 +110,27 @@
       "file": "高中/學測/數學A/03-112學測數學a試卷.pdf",
       "url": "https://drive.google.com/file/d/1JUPI9xpxqVuKdwNvhYGVEPRoxq5RnR0T/view?usp=drivesdk",
       "pages": [
-        2,
-        3
+        2
       ],
       "answer": "1",
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045358876595832120/03-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-math-a/Q4-question-1.png",
-      "/assets/banks/gsat-112-math-a/Q4-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-math-a-q5",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/gsat-112-math-a/Q5-question.png)",
-    "correct": "原卷選項 2",
+    "q": "已知坐標空間中P、Q、R為平面$2x-3y+5z=\\sqrt{7}$上不共線三點。\n令$=(a_1,b_1,c_1)$，$=(a_2,b_2,c_2)$。試選出下列行列式中<u>絕對值</u>為最大的選項。",
+    "correct": "$\\left|\\begin{matrix}1 & -1 & 1 \\\\ a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2\\end{matrix}\\right|$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$\\left|\\begin{matrix}-1 & 1 & 1 \\\\ a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2\\end{matrix}\\right|$",
+      "$\\left|\\begin{matrix}1 & 1 & -1 \\\\ a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2\\end{matrix}\\right|$",
+      "$\\left|\\begin{matrix}-1 & -1 & 1 \\\\ a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2\\end{matrix}\\right|$",
+      "$\\left|\\begin{matrix}-1 & -1 & -1 \\\\ a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2\\end{matrix}\\right|$"
     ],
-    "exp": "正確答案：原卷選項 2。來源：112年學科能力測驗數學A第5題。",
+    "exp": "正確答案：$\\left|\\begin{matrix}1 & -1 & 1 \\\\ a_1 & b_1 & c_1 \\\\ a_2 & b_2 & c_2\\end{matrix}\\right|$。來源：112年學科能力測驗數學A第5題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -117,22 +145,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045358876595832120/03-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-math-a/Q5-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-math-a-q6",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/gsat-112-math-a/Q6-question.png)",
-    "correct": "原卷選項 3",
+    "q": "坐標空間中，考慮邊長為1的正立方體，固定一頂點O。從O以外的七個頂點\n隨機選取相異兩點，設此兩點為P、Q，試問所得的內積$\\cdot$之期望值為下列哪一個選項？",
+    "correct": "$\\frac{6}{7}$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$\\frac{4}{7}$",
+      "$\\frac{5}{7}$",
+      "1",
+      "$\\frac{8}{7}$"
     ],
-    "exp": "正確答案：原卷選項 3。來源：112年學科能力測驗數學A第6題。",
+    "exp": "正確答案：$\\frac{6}{7}$。來源：112年學科能力測驗數學A第6題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -147,52 +174,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045358876595832120/03-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-math-a/Q6-question.png"
-    ]
-  },
-  {
-    "id": "gsat-112-math-a-q13",
-    "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-112-math-a/Q13-question.png)",
-    "correct": "原卷選項 2",
-    "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
-    ],
-    "exp": "正確答案：原卷選項 2。來源：112年學科能力測驗數學A第13題。",
-    "subject": "數學",
-    "sub_topic": "數學綜合",
-    "source": {
-      "exam": "gsat-112-math-a",
-      "question": 13,
-      "file": "高中/學測/數學A/03-112學測數學a試卷.pdf",
-      "url": "https://drive.google.com/file/d/1JUPI9xpxqVuKdwNvhYGVEPRoxq5RnR0T/view?usp=drivesdk",
-      "pages": [
-        5
-      ],
-      "answer": "2",
-      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045358876595832120/03-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
-    },
-    "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-112-math-a/Q13-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-112-math-a-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-112-math-a/G18-20-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-112-math-a/Q18-question.png)",
-    "correct": "原卷選項 4",
+    "q": "【共用閱讀資料】\n<u>18-20題為題組</u>\n\n坐標平面上O為原點，給定$A(1,0)$、$B(-2,0)$兩點。另有兩點P、Q在上半平面，\n且滿足$\\overline{AP}=\\overline{OA}$、$\\overline{BQ}=\\overline{OB}$、$\\angle POQ$為直角，如圖所示。令$\\angle AOP=\\theta$。根據上述，\n試回答下列問題。\n\n\n\n\n\n\n\n\n\n\n\n線段$\\overline{OP}$長為下列哪一選項？（單選題，3分）\n\n![圖表](/assets/banks/gsat-112-math-a/G18-20-figure-1.png)\n",
+    "correct": "$2cos\\theta$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "$sin\\theta$",
+      "$cos\\theta$",
+      "$2sin\\theta$",
+      "$cos2\\theta$"
     ],
-    "exp": "正確答案：原卷選項 4。來源：112年學科能力測驗數學A第18題。",
+    "exp": "正確答案：$2cos\\theta$。來源：112年學科能力測驗數學A第18題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -212,8 +208,8 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-112-math-a/G18-20-context.png",
-      "/assets/banks/gsat-112-math-a/Q18-question.png"
-    ]
+      "/assets/banks/gsat-112-math-a/G18-20-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

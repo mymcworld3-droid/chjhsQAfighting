@@ -2,7 +2,7 @@
   {
     "id": "gsat-108-science-q1",
     "difficulty": "medium",
-    "q": "太陽風是太陽表面所噴發出來的高能帶電粒子束。當這些物質到達地球時，時速\n\n 常超過百萬公里。太陽風與下列哪一現象最有直接關係？",
+    "q": "太陽風是太陽表面所噴發出來的高能帶電粒子束。當這些物質到達地球時，時速常超過百萬公里。太陽風與下列哪一現象最有直接關係？",
     "correct": "極光",
     "wrong": [
       "潮汐",
@@ -25,12 +25,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q2",
     "difficulty": "medium",
-    "q": "聖嬰現象是大氣與海洋交互作用下的大自然變化，會導致地球上部分地區短期氣候\n\n 異常。有關聖嬰現象發生時所伴隨的大氣與海洋變化或影響，下列敘述何者錯誤？",
+    "q": "聖嬰現象是大氣與海洋交互作用下的大自然變化，會導致地球上部分地區短期氣候異常。有關聖嬰現象發生時所伴隨的大氣與海洋變化或影響，下列敘述何者<u>錯誤</u>？",
     "correct": "南美洲西岸湧升流增強",
     "wrong": [
       "赤道東風減弱",
@@ -53,12 +54,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q3",
     "difficulty": "medium",
-    "q": "恆星的表面溫度與呈現的星光顏色有關，當我們觀賞夜空中閃爍的恆星，可看出\n\n 恆星的顏色有白、藍、黃、紅等。下列選項中，顏色產生的原理何者相同？",
+    "q": "恆星的表面溫度與呈現的星光顏色有關，當我們觀賞夜空中閃爍的恆星，可看出恆星的顏色有白、藍、黃、紅等。下列選項中，顏色產生的原理何者相同？",
     "correct": "紅色恆星與火山熔岩發出的紅光",
     "wrong": [
       "恆星與煙花的火光",
@@ -81,20 +83,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q4",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-108-science/Q4-question.png)",
-    "correct": "原卷選項 B",
+    "q": "水深越深，波浪的行進速度越快，然而受海底地形起伏影響，當波浪向海岸傳播時，往往會因速度變慢而產生偏折的現象。圖中虛線為等深線，越靠近海岸水深越淺。灰色實線為海浪的波前，箭頭代表波浪的行進方向，假設海底地形變化皆相同，則下列選項何者為最可能的波浪傳播路徑？",
+    "correct": "![圖表](/assets/banks/gsat-108-science/Q4-option-B-figure-2.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-108-science/Q4-option-A-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q4-option-C-figure-2.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q4-option-D-figure-2.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q4-option-E-figure-2.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第4題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-108-science/Q4-option-B-figure-2.png)。來源：108年學科能力測驗自然第4題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -110,13 +113,18 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q4-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q4-option-B-figure-2.png",
+      "/assets/banks/gsat-108-science/Q4-option-A-figure-1.png",
+      "/assets/banks/gsat-108-science/Q4-option-C-figure-2.png",
+      "/assets/banks/gsat-108-science/Q4-option-D-figure-2.png",
+      "/assets/banks/gsat-108-science/Q4-option-E-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q5",
     "difficulty": "medium",
-    "q": "在很多工作環境中，機能衣料提供重要的安全防護，例如：導電性較高的防靜電\n\n 工作服，可抑制人體及服裝累積靜電荷，以消除或減小靜電放電的危害，因此已\n\n 成為石油化工業極基本的防護必需品。下列有關防靜電工作服的敘述，何者不正\n\n  確？",
+    "q": "在很多工作環境中，機能衣料提供重要的安全防護，例如：導電性較高的防靜電工作服，可抑制人體及服裝累積靜電荷，以消除或減小靜電放電的危害，因此已成為石油化工業極基本的防護必需品。下列有關防靜電工作服的敘述，何者<u>不正確</u>？",
     "correct": "導電纖維每單位長度的電阻值越大，越容易使電荷流動而不致累積",
     "wrong": [
       "導電纖維可全部或部分使用金屬或有機物的導電材料製成",
@@ -139,12 +147,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q6",
     "difficulty": "medium",
-    "q": "某生做「電磁感應」的示範實驗時，先將具有鐵心的小線圈串接直流電源供應器，\n\n 形成迴路以產生磁場，再利用一個只串接檢流計的大線圈，套在小線圈外圍檢測\n\n 應電流。下列哪一項操作方式，不可能產生應電流？",
+    "q": "某生做「電磁感應」的示範實驗時，先將具有鐵心的小線圈串接直流電源供應器，形成迴路以產生磁場，再利用一個只串接檢流計的大線圈，套在小線圈外圍檢測應電流。下列哪一項操作方式，<u>不可能</u>產生應電流？",
     "correct": "在大線圈的迴路中串接開關並交替斷開與接通的動作",
     "wrong": [
       "將小線圈在大線圈內外來回抽送",
@@ -167,20 +176,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q7",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-108-science/Q7-question.png)",
-    "correct": "原卷選項 D",
+    "q": "圖1為氫、氦、汞原子的發射光譜，三位同學觀察後發表見解如下：\n\n甲生：正如條碼可用來辨識不同商品，不同原子產生的譜線，可用來辨識原子的種類\n\n圖1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n乙生：不同原子產生的譜線波長不同，是物質呈現不同顏色的主因\n\n丙生：原子僅發射特定波長的光譜線，這是原子具有不連續能階的證據\n\n哪幾位同學的說法是正確的？\n\n![圖表](/assets/banks/gsat-108-science/Q7-figure-1.png)\n",
+    "correct": "僅有甲丙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "僅有甲",
+      "僅有乙",
+      "僅有丙",
+      "僅有乙丙"
     ],
-    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第7題。",
+    "exp": "正確答案：僅有甲丙。來源：108年學科能力測驗自然第7題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -196,13 +206,14 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q7-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q7-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q8",
     "difficulty": "medium",
-    "q": "某生清晨被鬧鐘喚醒，以電動牙刷洗漱，早餐吃的是烤麵包機烤的吐司。出門搭\n\n 公車上學時，遇到同學提起，猛然發現忘了整理昨天數學課的筆記，於是拿出手\n\n 機內建的相機拍攝同學的筆記參考，再使用太陽能電池計算機輔助驗算。在上述\n\n 過程所應用到的工具中，下列哪一選項中的組合最可能應用到光電效應？",
+    "q": "某生清晨被鬧鐘喚醒，以電動牙刷洗漱，早餐吃的是烤麵包機烤的吐司。出門搭公車上學時，遇到同學提起，猛然發現忘了整理昨天數學課的筆記，於是拿出手機內建的相機拍攝同學的筆記參考，再使用太陽能電池計算機輔助驗算。在上述過程所應用到的工具中，下列哪一選項中的組合最可能應用到光電效應？",
     "correct": "手機內建的相機和太陽能電池計算機",
     "wrong": [
       "鬧鐘和電動牙刷",
@@ -225,7 +236,8 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q9",
@@ -253,20 +265,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q10",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/gsat-108-science/Q10-question.png)",
-    "correct": "原卷選項 E",
+    "q": "圖2為人體血液循環系統各部位之相對測量值，序號1表示由心臟出發之血管，經序號2-14之血管後，再由序號15返回心臟。各部位測量之變數包含總截面積、血管壓力及血流速等三項。各變數之測量值均已標準化為0~1之相對數值，下列敘述何者正確？\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n相對測量值\n\n\n\n\n\n\n\n圖2\n\n從心臟出發之測量順序\n\n![圖表](/assets/banks/gsat-108-science/Q10-figure-1.png)",
+    "correct": "血流速與總截面積呈負相關\n\n![圖表](/assets/banks/gsat-108-science/Q10-option-E-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "變數X為總截面積",
+      "變數Y為血管壓力",
+      "變數Z為血流速",
+      "血管壓力與總截面積呈負相關"
     ],
-    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第10題。",
+    "exp": "正確答案：血流速與總截面積呈負相關\n\n![圖表](/assets/banks/gsat-108-science/Q10-option-E-figure-1.png)。來源：108年學科能力測驗自然第10題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -282,13 +295,15 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q10-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q10-figure-1.png",
+      "/assets/banks/gsat-108-science/Q10-option-E-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q11",
     "difficulty": "medium",
-    "q": "螺旋藻為一種藍綠菌，而小球藻則為一種綠藻，螺旋藻及小球藻皆被認為富含人\n\n 體所需的養分。下列有關這兩者的敘述何者正確？",
+    "q": "螺旋藻為一種藍綠菌，而小球藻則為一種綠藻，螺旋藻及小球藻皆被認為富含人體所需的養分。下列有關這兩者的敘述何者正確？",
     "correct": "兩者皆行光合作用光反應產生氧",
     "wrong": [
       "兩者皆具葉綠體",
@@ -311,20 +326,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q12",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/gsat-108-science/Q12-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖3為一般雙子葉植物的種子萌發過程，其上胚軸、下胚軸以及子葉的相對重量變化相當大。下列選項的三者關係圖（ 上胚軸， 下胚軸， 子葉），何者最合理？\n\n子葉\n\n下胚軸\n\n子葉\n\n下胚軸\n\n下胚軸\n\n子葉\n\n圖3",
+    "correct": "![圖表](/assets/banks/gsat-108-science/Q12-option-B-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-108-science/Q12-option-A-figure-2.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q12-option-C-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q12-option-D-figure-2.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q12-option-E-figure-5.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第12題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-108-science/Q12-option-B-figure-1.png)。來源：108年學科能力測驗自然第12題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -340,21 +356,26 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q12-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q12-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q12-option-A-figure-2.png",
+      "/assets/banks/gsat-108-science/Q12-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q12-option-D-figure-2.png",
+      "/assets/banks/gsat-108-science/Q12-option-E-figure-5.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q13",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-108-science/Q13-question.png)",
-    "correct": "原卷選項 E",
+    "q": "無咖啡因（或低咖啡因）的咖啡，能滿足某些喜歡咖啡的香味、卻不希望攝取過量咖啡因的人們。若欲在實驗室裡，從咖啡豆中將咖啡因分離，可先取一裝有熱水的燒杯，倒入咖啡豆後，緩緩加熱、浸泡咖啡豆一段時間，待冷卻後再將乙酸乙酯加入燒杯中。若欲萃取此混合物中的咖啡因，則下列哪一玻璃器材最適合？（已知咖啡因的熔點為235-238℃）。",
+    "correct": "![圖表](/assets/banks/gsat-108-science/Q13-option-E-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/gsat-108-science/Q13-option-A-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q13-option-B-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q13-option-C-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q13-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第13題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-108-science/Q13-option-E-figure-1.png)。來源：108年學科能力測驗自然第13題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -370,13 +391,18 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q13-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q13-option-E-figure-1.png",
+      "/assets/banks/gsat-108-science/Q13-option-A-figure-1.png",
+      "/assets/banks/gsat-108-science/Q13-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q13-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q13-option-D-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q14",
     "difficulty": "medium",
-    "q": "若將等莫耳數的下列化合物完全燃燒，產生二氧化碳與水，則所需消耗氧氣量的\n 大小順序，何者正確？",
+    "q": "若將等莫耳數的下列化合物完全燃燒，產生二氧化碳與水，則所需消耗氧氣量的大小順序，何者正確？",
     "correct": "乙烷＞甲醚＝乙醇＞乙炔＞乙酸",
     "wrong": [
       "乙醇＞乙烷＞乙酸＞甲醚＝乙炔",
@@ -399,20 +425,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-108-science/Q15-question.png)",
-    "correct": "原卷選項 A",
+    "q": "下列有關元素與週期表的敘述，何者正確？",
+    "correct": "兩個水分子$^1H-^{17}O-^1H$與$^1H-^{16}O-^2H$，所含有中子數的總和相同",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "Na、Mg、Al三種金屬元素中，Al的原子半徑最大",
+      "室溫時，VIIA族（或第17族）元素皆是氣體",
+      "週期表左下方元素，較不易失去電子",
+      "鈹（Be）為類金屬元素"
     ],
-    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第15題。",
+    "exp": "正確答案：兩個水分子$^1H-^{17}O-^1H$與$^1H-^{16}O-^2H$，所含有中子數的總和相同。來源：108年學科能力測驗自然第15題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -427,14 +454,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-108-science/Q15-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q16",
     "difficulty": "medium",
-    "q": "電石（又稱電土）的主要成分是碳化鈣（ CaC 2 ），碳化鈣遇水會生成乙炔（ C 2 H 2 ）\n 和氫氧化鈣；所產生的乙炔是傳統電石燈和竹筒炮所用的燃料，也可作為水果催\n  熟劑。今有一電石樣品和水反應所產生的氫氧化鈣水溶液，以1.0 M 鹽酸標準溶\n  液滴定，得知其氫氧根離子的莫耳數為0.020 mol。試問此電石樣品可製得多少\n  公克乙炔？（C＝12, H＝1.0）",
+    "q": "電石（又稱電土）的主要成分是碳化鈣（$CaC_2$），碳化鈣遇水會生成乙炔（$C_2H_2$）和氫氧化鈣；所產生的乙炔是傳統電石燈和竹筒炮所用的燃料，也可作為水果催熟劑。今有一電石樣品和水反應所產生的氫氧化鈣水溶液，以1.0 M鹽酸標準溶液滴定，得知其氫氧根離子的莫耳數為0.020 mol。試問此電石樣品可製得多少公克乙炔？（C＝12, H＝1.0）",
     "correct": "0.26",
     "wrong": [
       "0.13",
@@ -457,20 +483,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q35",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/gsat-108-science/G35-36-context.png)\n\n![第35題原卷資料](/assets/banks/gsat-108-science/Q35-question-1.png)\n\n![第35題原卷資料](/assets/banks/gsat-108-science/Q35-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n35-36為題組\n\n科學的進步有賴科學研究者的投入，能留名科學史的往往是有新發現或開創新領域的科學家，他們的創新性貢獻常能提升大眾的生活水準，造福全人類。\n\n下表所列各科學家與其在物理學上主要貢獻（甲）至（戊）的對應，何者最為恰當？\n\n（甲）發現造成月亮繞地球運行與造成地球上自由落體的力，是同一來源。\n\n（乙）首位提出物質波新學說。\n\n（丙）發現不僅電流會產生磁場，隨時間變化的磁場也能產生電流。\n\n（丁）發現兩帶電質點間的作用力與距離的關係和萬有引力的形式相同。\n\n（戊）提出光子假說解釋光電效應。\n\n| 物理學家 | 庫侖 | 法拉第 | 德布羅意 | 牛頓 | 愛因斯坦 |\n|",
+    "correct": "| 丁 | 丙 | 乙 | 甲 | 戊 |\n|",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "| 甲 | 乙 | 丙 | 丁 | 戊 |\n|",
+      "| 丙 | 甲 | 戊 | 丁 | 乙 |\n|",
+      "| 戊 | 乙 | 甲 | 丁 | 丙 |\n|",
+      "| 乙 | 丙 | 戊 | 甲 | 丁 |"
     ],
-    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第35題。",
+    "exp": "正確答案：| 丁 | 丙 | 乙 | 甲 | 戊 |\n|。來源：108年學科能力測驗自然第35題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -490,24 +517,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-108-science/G35-36-context.png",
-      "/assets/banks/gsat-108-science/Q35-question-1.png",
-      "/assets/banks/gsat-108-science/Q35-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q36",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n35-36為題組\n\n 科學的進步有賴科學研究者的投入，能留名科學史的往往是有新發現或開創新領\n\n 域的科學家，他們的創新性貢獻常能提升大眾的生活水準，造福全人類。\n\n下列科學家與其在生物學上的主要貢獻（甲）至（戊）的對應，何者最為恰當？\n\n （甲）發現單細胞生物和細菌\n\n （乙）發現多細胞生物之細胞\n\n （丙）動物體皆由細胞組成\n\n （丁）說明目前之物種由前一物種分歧而來\n\n （戊）證實生物體之性狀由親代傳至子代，等位基因不變，基因型則有時不同\n\n  生物學家達爾文虎克雷文霍克孟德爾許旺",
-    "correct": "丁乙甲戊丙",
+    "q": "【共用閱讀資料】\n35-36為題組\n\n科學的進步有賴科學研究者的投入，能留名科學史的往往是有新發現或開創新領域的科學家，他們的創新性貢獻常能提升大眾的生活水準，造福全人類。\n\n下列科學家與其在生物學上的主要貢獻（甲）至（戊）的對應，何者最為恰當？\n\n（甲）發現單細胞生物和細菌\n\n（乙）發現多細胞生物之細胞\n\n（丙）動物體皆由細胞組成\n\n（丁）說明目前之物種由前一物種分歧而來\n\n（戊）證實生物體之性狀由親代傳至子代，等位基因不變，基因型則有時不同\n\n| 生物學家 | 達爾文 | 虎克 | 雷文霍克 | 孟德爾 | 許旺 |\n|",
+    "correct": "| 丁 | 乙 | 甲 | 戊 | 丙 |\n|",
     "wrong": [
-      "丙丁乙甲戊",
-      "戊丙丁乙甲",
-      "甲戊丙丁乙",
-      "乙甲戊丙丁"
+      "| 丙 | 丁 | 乙 | 甲 | 戊 |\n|",
+      "| 戊 | 丙 | 丁 | 乙 | 甲 |\n|",
+      "| 甲 | 戊 | 丙 | 丁 | 乙 |\n|",
+      "| 乙 | 甲 | 戊 | 丙 | 丁 |"
     ],
-    "exp": "正確答案：丁乙甲戊丙。來源：108年學科能力測驗自然第36題。",
+    "exp": "正確答案：| 丁 | 乙 | 甲 | 戊 | 丙 |\n|。來源：108年學科能力測驗自然第36題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -527,20 +551,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q37",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-108-science/G37-38-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-108-science/Q37-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n37-38為題組\n颱風之風雨往往對臺灣造成巨大災害，因此對颱風特性的了解是重要的。\n\n圖 11 為某次颱風中心位置隨著日期\n變化的路徑圖（每日凌晨 2 時開始記\n錄，每 6 小時記錄一次）。自 08/06 凌\n晨 2 時至 08/11 凌晨 2 時期間，該颱\n風中心移動的平均速率隨著時間變化\n的趨勢曲線，最接近下列何者？\n\n![圖表](/assets/banks/gsat-108-science/Q37-figure-1.png)\n\n\n\n",
+    "correct": "![圖表](/assets/banks/gsat-108-science/Q37-option-D-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-108-science/Q37-option-A-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q37-option-B-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q37-option-C-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q37-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第37題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-108-science/Q37-option-D-figure-1.png)。來源：108年學科能力測驗自然第37題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -560,22 +585,27 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G37-38-context.png",
-      "/assets/banks/gsat-108-science/Q37-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q37-figure-1.png",
+      "/assets/banks/gsat-108-science/Q37-option-D-figure-1.png",
+      "/assets/banks/gsat-108-science/Q37-option-A-figure-1.png",
+      "/assets/banks/gsat-108-science/Q37-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q37-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q37-option-E-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q38",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/gsat-108-science/G37-38-context.png)\n\n![第38題原卷資料](/assets/banks/gsat-108-science/Q38-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n37-38為題組\n\n颱風之風雨往往對臺灣造成巨大災害，因此對颱風特性的了解是重要的。\n\n某次颱風登陸臺灣前某一時刻的地面天氣簡圖如圖12所示，其中等壓線間距為4百帕（hPa），甲地位於颱風中心，乙、丙兩地則位於颱風東側。甲、乙、丙三地的風速依序最可能為多少公尺/秒？\n\n\n\n\n\n\n\n\n\n\n\n丙\n\n乙\n\n甲\n\n圖12\n\n![圖表](/assets/banks/gsat-108-science/Q38-figure-1.png)",
+    "correct": "3，35，12",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "15，20，25",
+      "0，45，45",
+      "40，25，10",
+      "0，25，40"
     ],
-    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第38題。",
+    "exp": "正確答案：3，35，12。來源：108年學科能力測驗自然第38題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -596,22 +626,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G37-38-context.png",
-      "/assets/banks/gsat-108-science/Q38-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q38-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q39",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/gsat-108-science/G39-40-context.png)\n\n![第39題原卷資料](/assets/banks/gsat-108-science/Q39-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n39-40為題組\n\n科學家發現當物體的尺寸縮小後，其性質往往變化很大，甚至產生新現象。原因之一是物體的體積變小時，其表面積$A$與體積$V$的比值（$A/V$）會增大，且其表面原子數$n$與內部原子數$N$的比值（$n/N$）也隨之增大，此為奈米科技的表面效應。\n\n一半徑為100.0 nm的實心鐵球的$n/N$值，是半徑為1.0 cm的實心鐵球的$n/N$值之多少倍？",
+    "correct": "$10^5$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "$10^{-7}$",
+      "$10^{-5}$",
+      "10",
+      "$10^7$"
     ],
-    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第39題。",
+    "exp": "正確答案：$10^5$。來源：108年學科能力測驗自然第39題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -630,23 +660,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-108-science/G39-40-context.png",
-      "/assets/banks/gsat-108-science/Q39-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q44",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/gsat-108-science/G43-44-context.png)\n\n![第44題原卷資料](/assets/banks/gsat-108-science/Q44-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n43-44為題組\n\n由布設在臺灣的全球衛星定位系統（GPS）地面觀測站，可以估算臺灣現今的地殼變形量。圖15中之箭號為各測站相對於澎湖測站S01R的移動速度。測站2、3、4及5分別位於花東縱谷斷層的兩側。地殼變形的速率非常緩慢，地球科學家常以兩測站的速率差值除以測站距離，得到應變率，單位為1/秒，可估算地殼的變形速率。\n\n圖15\n\n120∘\n\n121∘\n\n122∘\n\n120∘\n\n121∘\n\n122∘\n\n25∘\n\n24∘\n\n23∘\n\n22∘\n\n7\n\n25∘\n\n24∘\n\n23∘\n\n22∘\n\n6\n\n8\n\n9\n\n5\n\n4\n\n2\n\n3\n\n1\n\n10\n\n50mm/yr\n\nS01R\n\n若以測站1和測站S01R的距離為250公里，測站1相對於S01R的速率每年8公分，其應變率最接近何值（單位為1/秒，1年約有$3.15\\times 10^7$秒）？",
+    "correct": "$10^{-14}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "$10^{-8}$",
+      "$10^{-10}$",
+      "$10^{-12}$",
+      "$10^{-16}$"
     ],
-    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第44題。",
+    "exp": "正確答案：$10^{-14}$。來源：108年學科能力測驗自然第44題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -666,23 +694,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-108-science/G43-44-context.png",
-      "/assets/banks/gsat-108-science/Q44-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q45",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/gsat-108-science/G45-46-context.png)\n\n![第45題原卷資料](/assets/banks/gsat-108-science/Q45-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n45-46為題組\n地質學家沿著地面 PP′路線進行地質調查，記錄了野外地質資料如圖 16 所示，其\n中「地層走向」為地層面與水平面的交線，「地層傾角」為地層傾斜方向，及其\n層面與水平面的最大交角：\n![圖表](/assets/banks/gsat-108-science/G45-46-figure-1.png)\n\n\n\n根據野外地質資料所描繪出的地質剖面圖，下列何者正確？\n\n|",
+    "correct": "![圖表](/assets/banks/gsat-108-science/Q45-option-A-figure-3.png)",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-108-science/Q45-option-B-figure-3.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q45-option-C-figure-2.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q45-option-D-figure-2.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q45-option-E-figure-3.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第45題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-108-science/Q45-option-A-figure-3.png)。來源：108年學科能力測驗自然第45題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -702,22 +728,27 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G45-46-context.png",
-      "/assets/banks/gsat-108-science/Q45-question.png"
-    ]
+      "/assets/banks/gsat-108-science/G45-46-figure-1.png",
+      "/assets/banks/gsat-108-science/Q45-option-A-figure-3.png",
+      "/assets/banks/gsat-108-science/Q45-option-B-figure-3.png",
+      "/assets/banks/gsat-108-science/Q45-option-C-figure-2.png",
+      "/assets/banks/gsat-108-science/Q45-option-D-figure-2.png",
+      "/assets/banks/gsat-108-science/Q45-option-E-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q46",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/gsat-108-science/G45-46-context.png)\n\n![第46題原卷資料](/assets/banks/gsat-108-science/Q46-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n45-46為題組\n\n地質學家沿著地面PP′路線進行地質調查，記錄了野外地質資料如圖16所示，其中「地層走向」為地層面與水平面的交線，「地層傾角」為地層傾斜方向，及其層面與水平面的最大交角：\n\n圖16\n\n\n\nP′\n\n逆斷層（鋸齒狀的方向表示斷層面的傾斜方向）\n\n背斜軸\n\n向斜軸\n\n岩層位態（長線為地層走向，短線為地層傾斜方向）\n\n甲\n\n乙\n\n丙\n\n丁\n\n戊\n\n\n\n\n\n\n\n\n\n\n\n地質研究人員進行油氣探勘作業時，由於油氣密度較小、較輕，會沿著地層孔隙向上移動，岩層的上方必須有低孔隙、低滲透率的封閉岩層，形成良好的封閉地質構造，防止油氣向地表逸散。依此地質調查而言，下列哪一選項中的地質構造可能有油氣的蘊藏？\n\n![圖表](/assets/banks/gsat-108-science/G45-46-figure-1.png)\n",
+    "correct": "甲及丙",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "乙及丙",
+      "丙及戊",
+      "甲及戊",
+      "乙及丁"
     ],
-    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第46題。",
+    "exp": "正確答案：甲及丙。來源：108年學科能力測驗自然第46題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -737,22 +768,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G45-46-context.png",
-      "/assets/banks/gsat-108-science/Q46-question.png"
-    ]
+      "/assets/banks/gsat-108-science/G45-46-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q48",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/gsat-108-science/Q48-question.png)",
-    "correct": "原卷選項 E",
+    "q": "海水密度隨鹽度與溫度變化的關係圖（溫鹽圖）如圖 18 所示。鹽度為 X 軸，\n\n溫度為 Y 軸，等值線為密度（例\n3\n如，30 表示密度為 1030 kg/m ）。\n若以下選項中五個垂直剖面的溫\n度和鹽度值都在溫鹽圖的範圍\n內，且壓力對密度的影響極小，可\n忽略不計，則哪個選項中的水體\n垂直穩定度最高（密度向下遞增，\n且上下密度差最大）？\n\n![圖表](/assets/banks/gsat-108-science/Q48-figure-1.png)\n\n",
+    "correct": "（‰）\n水\n深\n增\n加\n\n![圖表](/assets/banks/gsat-108-science/Q48-option-E-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "![圖表](/assets/banks/gsat-108-science/Q48-option-A-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q48-option-B-figure-1.png)",
+      "（℃）\n![圖表](/assets/banks/gsat-108-science/Q48-option-C-figure-1.png)",
+      "（‰）\n水\n深\n增\n加\n![圖表](/assets/banks/gsat-108-science/Q48-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第48題。",
+    "exp": "正確答案：（‰）\n水\n深\n增\n加\n\n![圖表](/assets/banks/gsat-108-science/Q48-option-E-figure-1.png)。來源：108年學科能力測驗自然第48題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -768,21 +799,27 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q48-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q48-figure-1.png",
+      "/assets/banks/gsat-108-science/Q48-option-E-figure-1.png",
+      "/assets/banks/gsat-108-science/Q48-option-A-figure-1.png",
+      "/assets/banks/gsat-108-science/Q48-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q48-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q48-option-D-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q49",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/gsat-108-science/Q49-question.png)",
-    "correct": "原卷選項 E",
+    "q": "地中海因其年平均的蒸發量大於降雨量，所以地中海海水的鹽度高於大西洋。地中海與大西洋的海水在直布羅陀海峽交換，其流量與鹽度的垂直剖面示意圖如圖19，其中從大西洋流入地中海的入流量為Q1，鹽度為S1。從地中海流出的出流量為Q2，鹽度為S2。假設出、入流的溫度相同，且蒸發效應不可忽略，則下列何種組合能夠滿足地中海的海水體積與鹽度維持不變？\n\n圖19\n\n海床\n\n大西洋\n\n地中海\n\n入流量Q1（m<sup>3</sup>/s）\n\n鹽度S1\n\n直布羅陀海峽\n\n淨蒸發\n\n海平面\n\n出流量Q2（m<sup>3</sup>/s）\n\n鹽度S2",
+    "correct": "S1＜S2，Q1＞Q2\n\n![圖表](/assets/banks/gsat-108-science/Q49-option-E-figure-1.png)\n",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "S1＝S2，Q1＝Q2",
+      "S1＝S2，Q1＞Q2\n\n![圖表](/assets/banks/gsat-108-science/Q49-option-B-figure-1.png)",
+      "S1＜S2，Q1＝Q2\n\n![圖表](/assets/banks/gsat-108-science/Q49-option-C-figure-1.png)",
+      "S1＜S2，Q1＜Q2\n\n![圖表](/assets/banks/gsat-108-science/Q49-option-D-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第49題。",
+    "exp": "正確答案：S1＜S2，Q1＞Q2\n\n![圖表](/assets/banks/gsat-108-science/Q49-option-E-figure-1.png)\n。來源：108年學科能力測驗自然第49題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -798,21 +835,25 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q49-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q49-option-E-figure-1.png",
+      "/assets/banks/gsat-108-science/Q49-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q49-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q49-option-D-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q50",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/gsat-108-science/Q50-question.png)",
-    "correct": "原卷選項 C",
+    "q": "一艘探勘潛艇失去推進動力，只能利用進水、排水以控制潛艇的下潛或上浮。在上浮過程中，為了避免上升速度過快，導致人體難以承受壓力驟變，工作人員於是進行潛艇減速。已知該水域水體靜止，且潛艇在進水或排水後的總質量皆可視為$m$，所受浮力的量值為$F_B$、垂直阻力的量值為$F_R$，而重力加速度的量值為$g$，則在潛艇沿垂直方向減速上升的過程中，下列關係何者正確？",
+    "correct": "$F_B-F_R<mg$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "$F_B+F_R=mg$",
+      "$F_B-F_R=mg$",
+      "$F_B+F_R<mg$",
+      "$F_B-F_R>mg$"
     ],
-    "exp": "正確答案：原卷選項 C。來源：108年學科能力測驗自然第50題。",
+    "exp": "正確答案：$F_B-F_R<mg$。來源：108年學科能力測驗自然第50題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -827,14 +868,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-108-science/Q50-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q51",
     "difficulty": "medium",
-    "q": "同步衛星繞地球運行的週期和地球自轉的週期相同。若部署一顆與同步衛星質量\n 相同的新衛星，使其繞行地球一次的時間約為3 小時，且兩顆衛星的軌道均為圓\n\n 形，則該新衛星所受的重力量值約是同步衛星的多少倍？",
+    "q": "同步衛星繞地球運行的週期和地球自轉的週期相同。若部署一顆與同步衛星質量相同的新衛星，使其繞行地球一次的時間約為3小時，且兩顆衛星的軌道均為圓形，則該新衛星所受的重力量值約是同步衛星的多少倍？",
     "correct": "16",
     "wrong": [
       "8",
@@ -857,12 +897,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q53",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n52-53為題組\n\n 科學家發現光碟表面的微結構能提升太陽電池吸收日光的效率。如果先利用高分\n\n 子材料將光碟表面的結構轉印下來，再轉移至太陽電池上，此微結構的尺寸介於\n  150至250 nm 間，不但可讓入射光線在元件內部的移動距離增長，並且可使元件\n\n 吸收幾乎全部波段的日光，進而提升光能轉換成電能的效率，相較於未使用光碟\n 圖案的太陽電池，其元件吸收效率高出22%，效果卓越。\n\n光碟面之微結構的尺寸，約為一個氫原子直徑的多少倍？",
+    "q": "【共用閱讀資料】\n52-53為題組\n\n科學家發現光碟表面的微結構能提升太陽電池吸收日光的效率。如果先利用高分子材料將光碟表面的結構轉印下來，再轉移至太陽電池上，此微結構的尺寸介於150至250 nm 間，不但可讓入射光線在元件內部的移動距離增長，並且可使元件吸收幾乎全部波段的日光，進而提升光能轉換成電能的效率，相較於未使用光碟圖案的太陽電池，其元件吸收效率高出22%，效果卓越。\n\n光碟面之微結構的尺寸，約為一個氫原子直徑的多少倍？",
     "correct": "1000",
     "wrong": [
       "0.1",
@@ -889,20 +930,21 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q54",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/gsat-108-science/G54-56-context.png)\n\n![第54題原卷資料](/assets/banks/gsat-108-science/Q54-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n54-56為題組\n\n一座水庫的蓄水量與從壩底算起的水位關係如表3所列，水位250公尺時為滿水位。在滿水位下方120公尺處，設置壓力水管將水引入發電機，進行水力發電，發電機位於滿水位下方160公尺處，如圖20所示，且越接近壩底，水壩的厚度越厚。（取重力加速度$g$為$10 m/s^2$，水的密度為$1.0 g/cm^3$）\n\n圖20\n\n120 m\n\n160 m\n\n滿水位\n\n機房\n\n壓力水管\n\n發電機\n\n| 表3水庫水位與蓄水量 |\n| 水位（公尺） | 220 | 225 | 230 | 235 | 240 | 245 | 250 |\n| 水量（百萬立方公尺） | 1063 | 1084 | 1110 | 1140 | 1176 | 1217 | 1264 |\n\n依據圖20所示的水力發電設計，就能量轉換的觀點，下列敘述何者正確？\n\n![圖表](/assets/banks/gsat-108-science/G54-56-figure-1.png)\n",
+    "correct": "水的重力位能轉換成電能",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "水的熱能轉換成電能",
+      "水的化學能轉換成電能",
+      "電能轉換成水的力學能",
+      "水的彈性位能轉換成電能"
     ],
-    "exp": "正確答案：原卷選項 C。來源：108年學科能力測驗自然第54題。",
+    "exp": "正確答案：水的重力位能轉換成電能。來源：108年學科能力測驗自然第54題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -922,22 +964,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G54-56-context.png",
-      "/assets/banks/gsat-108-science/Q54-question.png"
-    ]
+      "/assets/banks/gsat-108-science/G54-56-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q55",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 55 題。\n\n![第55題原卷資料](/assets/banks/gsat-108-science/G54-56-context.png)\n\n![第55題原卷資料](/assets/banks/gsat-108-science/Q55-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n54-56為題組\n\n一座水庫的蓄水量與從壩底算起的水位關係如表3所列，水位250公尺時為滿水位。在滿水位下方120公尺處，設置壓力水管將水引入發電機，進行水力發電，發電機位於滿水位下方160公尺處，如圖20所示，且越接近壩底，水壩的厚度越厚。（取重力加速度$g$為$10 m/s^2$，水的密度為$1.0 g/cm^3$）\n\n圖20\n\n120 m\n\n160 m\n\n滿水位\n\n機房\n\n壓力水管\n\n發電機\n\n| 表3水庫水位與蓄水量 |\n| 水位（公尺） | 220 | 225 | 230 | 235 | 240 | 245 | 250 |\n| 水量（百萬立方公尺） | 1063 | 1084 | 1110 | 1140 | 1176 | 1217 | 1264 |\n\n滿水位時，水庫水面的面積最接近多少百萬平方公尺？\n\n![圖表](/assets/banks/gsat-108-science/G54-56-figure-1.png)\n",
+    "correct": "9.4",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "15",
+      "6.5",
+      "5.1",
+      "0.10"
     ],
-    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第55題。",
+    "exp": "正確答案：9.4。來源：108年學科能力測驗自然第55題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -957,22 +999,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G54-56-context.png",
-      "/assets/banks/gsat-108-science/Q55-question.png"
-    ]
+      "/assets/banks/gsat-108-science/G54-56-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q56",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 56 題。\n\n![第56題原卷資料](/assets/banks/gsat-108-science/G54-56-context.png)\n\n![第56題原卷資料](/assets/banks/gsat-108-science/Q56-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n54-56為題組\n\n一座水庫的蓄水量與從壩底算起的水位關係如表3所列，水位250公尺時為滿水位。在滿水位下方120公尺處，設置壓力水管將水引入發電機，進行水力發電，發電機位於滿水位下方160公尺處，如圖20所示，且越接近壩底，水壩的厚度越厚。（取重力加速度$g$為$10 m/s^2$，水的密度為$1.0 g/cm^3$）\n\n圖20\n\n120 m\n\n160 m\n\n滿水位\n\n機房\n\n壓力水管\n\n發電機\n\n| 表3水庫水位與蓄水量 |\n| 水位（公尺） | 220 | 225 | 230 | 235 | 240 | 245 | 250 |\n| 水量（百萬立方公尺） | 1063 | 1084 | 1110 | 1140 | 1176 | 1217 | 1264 |\n\n已知發電廠設計的水流量為$30 m^3/s$，若本發電裝置僅可將水力所提供能量的$25\\%$轉換為電能，且水庫在維持滿水位情況下發電，則本發電廠的最大發電功率約為多少？\n\n![圖表](/assets/banks/gsat-108-science/G54-56-figure-1.png)\n",
+    "correct": "12 MW",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "4 MW",
+      "12 kW",
+      "4 kW",
+      "1.5 kW"
     ],
-    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第56題。",
+    "exp": "正確答案：12 MW。來源：108年學科能力測驗自然第56題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -992,22 +1034,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G54-56-context.png",
-      "/assets/banks/gsat-108-science/Q56-question.png"
-    ]
+      "/assets/banks/gsat-108-science/G54-56-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q57",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 57 題。\n\n![第57題原卷資料](/assets/banks/gsat-108-science/Q57-question.png)",
-    "correct": "原卷選項 B",
+    "q": "圖21之甲、乙兩圖為某性狀之異型合子（H）經雜交（即H$\\times$H）試驗後，其子代（F）表現型之相對頻率分布圖。若依照孟德爾之遺傳法則推理，則甲、乙圖之遺傳類型依序屬於下列何者？\n\n圖21\n\nⅠ\n\nⅡ\n\nⅢ\n\n表現型\n\nⅠ\n\nⅡ\n\nⅢ\n\n表現型\n\n（甲）\n\n（乙）\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n相對頻率\n\n相對頻率\n\n![圖表](/assets/banks/gsat-108-science/Q57-figure-1.png)\n",
+    "correct": "甲為單基因遺傳、乙為中間型遺傳",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "甲為單基因遺傳、乙為多基因遺傳",
+      "甲為中間型遺傳、乙為多基因遺傳",
+      "甲為多基因遺傳、乙為中間型遺傳",
+      "甲為二基因遺傳、乙為三基因遺傳"
     ],
-    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第57題。",
+    "exp": "正確答案：甲為單基因遺傳、乙為中間型遺傳。來源：108年學科能力測驗自然第57題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -1023,13 +1065,14 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q57-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q57-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q58",
     "difficulty": "medium",
-    "q": "一個DNA 分子有兩股多核苷酸鏈。若某DNA 片段經定序後，計算其中一股的\n  鹼基百分率組成，發現腺嘌呤（A）為32%，則推論此DNA 的另一股上，胸腺\n 嘧啶（T）所占之百分比（%）為何？",
+    "q": "一個DNA分子有兩股多核苷酸鏈。若某DNA片段經定序後，計算其中一股的鹼基百分率組成，發現腺嘌呤（A）為32%，則推論此DNA的另一股上，胸腺嘧啶（T）所占之百分比（%）為何？",
     "correct": "32",
     "wrong": [
       "16",
@@ -1052,20 +1095,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q59",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 59 題。\n\n![第59題原卷資料](/assets/banks/gsat-108-science/Q59-question.png)",
-    "correct": "原卷選項 D",
+    "q": "某實驗測定洋蔥根尖細胞中 DNA 的含量，得\n細胞數-DNA 含量的分布圖如圖 22。若改以成\n熟的洋蔥胚乳進行測定，則下列何圖為最可能\n結果？\n\n![圖表](/assets/banks/gsat-108-science/Q59-figure-1.png)",
+    "correct": "細 400\n胞\n300\n數\n200\n（\n個\n100\n）\n0\n0 50 100 150 200\n\n![圖表](/assets/banks/gsat-108-science/Q59-option-D-figure-1.png)\n",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "400\n300\n200\n100\n0\n0 50 100 150 200\n\n![圖表](/assets/banks/gsat-108-science/Q59-option-A-figure-1.png)\n\n",
+      "![圖表](/assets/banks/gsat-108-science/Q59-option-B-figure-1.png)",
+      "細 40\n胞\n30\n數\n20\n（\n個 10\n）\n0\n0 50 100 150 200\n\n![圖表](/assets/banks/gsat-108-science/Q59-option-C-figure-1.png)\n",
+      "細 40\n胞\n30\n數\n20\n（\n個 10\n）\n0\n![圖表](/assets/banks/gsat-108-science/Q59-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第59題。",
+    "exp": "正確答案：細 400\n胞\n300\n數\n200\n（\n個\n100\n）\n0\n0 50 100 150 200\n\n![圖表](/assets/banks/gsat-108-science/Q59-option-D-figure-1.png)\n。來源：108年學科能力測驗自然第59題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -1081,21 +1125,27 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q59-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q59-figure-1.png",
+      "/assets/banks/gsat-108-science/Q59-option-D-figure-1.png",
+      "/assets/banks/gsat-108-science/Q59-option-A-figure-1.png",
+      "/assets/banks/gsat-108-science/Q59-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q59-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q59-option-E-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q60",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 60 題。\n\n![第60題原卷資料](/assets/banks/gsat-108-science/Q60-question.png)",
-    "correct": "原卷選項 D",
+    "q": "現生的不同物種都是經過分歧演化而來，因此物種或類群間的分歧順序可以用樹\n及樹枝的關係來表示，稱之為生命樹。下列構成生物體之自然分群及群間關係的\n生命樹，何者正確？",
+    "correct": "真細菌古菌真核生物\n\n-\n![圖表](/assets/banks/gsat-108-science/Q60-option-D-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "真細菌\n\n![圖表](/assets/banks/gsat-108-science/Q60-option-A-figure-1.png)\n\n",
+      "<sub>真</sub>\n核生物真細菌\n\n![圖表](/assets/banks/gsat-108-science/Q60-option-B-figure-1.png)\n",
+      "古菌真細菌真核生物\n\n![圖表](/assets/banks/gsat-108-science/Q60-option-C-figure-1.png)",
+      "![圖表](/assets/banks/gsat-108-science/Q60-option-E-figure-1.png)\n\n"
     ],
-    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第60題。",
+    "exp": "正確答案：真細菌古菌真核生物\n\n-\n![圖表](/assets/banks/gsat-108-science/Q60-option-D-figure-1.png)。來源：108年學科能力測驗自然第60題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -1111,13 +1161,18 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q60-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q60-option-D-figure-1.png",
+      "/assets/banks/gsat-108-science/Q60-option-A-figure-1.png",
+      "/assets/banks/gsat-108-science/Q60-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q60-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q60-option-E-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q63",
     "difficulty": "medium",
-    "q": "桌上有三瓶溶液，但沒有標籤可以識別。老師告知這三瓶分別是氯化鈉、硫酸鉀\n  與硝酸銨溶液，濃度均為1.0M。試問使用濃度1.0 M 的下列哪一種試劑，可以\n\n 用來區別此三瓶溶液？",
+    "q": "桌上有三瓶溶液，但沒有標籤可以識別。老師告知這三瓶分別是氯化鈉、硫酸鉀與硝酸銨溶液，濃度均為1.0M。試問使用濃度1.0 M的下列哪一種試劑，可以用來區別此三瓶溶液？",
     "correct": "氫氧化鋇溶液",
     "wrong": [
       "氫氧化鈉溶液",
@@ -1140,20 +1195,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q64",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 64 題。\n\n![第64題原卷資料](/assets/banks/gsat-108-science/Q64-question.png)",
-    "correct": "原卷選項 E",
+    "q": "有關$NO_3^{–}$和$CO_3^2^{-}$路易斯結構的敘述，下列何者正確？",
+    "correct": "二者的總電子數相同",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "都只具有單鍵",
+      "$NO_3^{–}$不滿足八隅體規則",
+      "中心原子都具有孤對電子",
+      "二者的孤對電子數不同"
     ],
-    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第64題。",
+    "exp": "正確答案：二者的總電子數相同。來源：108年學科能力測驗自然第64題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -1168,22 +1224,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-108-science/Q64-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q65",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 65 題。\n\n![第65題原卷資料](/assets/banks/gsat-108-science/Q65-question.png)",
-    "correct": "原卷選項 A",
+    "q": "下列8類有機化合物：烷、烯、醇、醛、酮、酯、羧酸、醯胺，其最簡單成員之分子式含有兩個碳原子者，共有幾類？",
+    "correct": "2",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "3\n\n![圖表](/assets/banks/gsat-108-science/Q65-option-B-figure-1.png)",
+      "4\n\n![圖表](/assets/banks/gsat-108-science/Q65-option-C-figure-1.png)",
+      "5\n\n![圖表](/assets/banks/gsat-108-science/Q65-option-D-figure-1.png)",
+      "6\n\n背面還有試題"
     ],
-    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第65題。",
+    "exp": "正確答案：2。來源：108年學科能力測驗自然第65題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -1199,21 +1254,24 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/Q65-question.png"
-    ]
+      "/assets/banks/gsat-108-science/Q65-option-B-figure-1.png",
+      "/assets/banks/gsat-108-science/Q65-option-C-figure-1.png",
+      "/assets/banks/gsat-108-science/Q65-option-D-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-108-science-q66",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 66 題。\n\n![第66題原卷資料](/assets/banks/gsat-108-science/G66-67-context.png)\n\n![第66題原卷資料](/assets/banks/gsat-108-science/Q66-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n66-67為題組\n\n![圖表](/assets/banks/gsat-108-science/G66-67-figure-1.png)\n為了避免農田長滿的雜草與農作物競爭養分，農家常以主要成分為草甘膦的除草劑去除雜草。草甘膦的分子結構如圖24所示。\n\n圖24\n\n下列選項中，哪一個物質的組成元素與草甘膦分子中的組成元素種類相同？",
+    "correct": "核苷酸",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "胺基酸",
+      "葡萄糖",
+      "脂肪酸",
+      "蔗糖"
     ],
-    "exp": "正確答案：原卷選項 C。來源：108年學科能力測驗自然第66題。",
+    "exp": "正確答案：核苷酸。來源：108年學科能力測驗自然第66題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -1233,8 +1291,8 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-108-science/G66-67-context.png",
-      "/assets/banks/gsat-108-science/Q66-question.png"
-    ]
+      "/assets/banks/gsat-108-science/G66-67-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

@@ -27,20 +27,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.81,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q3",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-114-science/Q3-question.png)",
-    "correct": "原卷選項 C",
+    "q": "有關葉片表皮組織的標本製作及觀察實驗，下列何者正確？",
+    "correct": "折撕法是將葉片對折反向撕開，在不平整處取下欲觀察的表皮",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "欲得紫背萬年青的下表皮組織時，需將葉片由下向上對折撕開",
+      "洋蔥表皮細胞呈長方形，其細胞質中易觀察到流動中的葉綠體",
+      "可以利用亞甲藍液將細胞染色，使葉綠體外膜更容易被觀察",
+      "為了區別細胞膜和細胞壁，需先將下表皮樣本浸泡在亞甲藍液中"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年學科能力測驗自然第3題。",
+    "exp": "正確答案：折撕法是將葉片對折反向撕開，在不平整處取下欲觀察的表皮。來源：114年學科能力測驗自然第3題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -55,24 +56,23 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051538671981014603/06-114%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-114-science/Q3-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.9,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q7",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-114-science/G7-8-context.png)\n\n![第7題原卷資料](/assets/banks/gsat-114-science/Q7-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n<u>7-8題為題組</u>\n\n2017年古生物學家利用已有的恐龍化石，配合相關分類群的資料，重新建立恐龍分類群間的演化關係如圖2，並建議以此重建圖決定恐龍的歸類範圍。\n\n甲\n\n乙\n\n丙\n\n丁\n\n庚\n\n己\n\n人\n\n波斯特鱷\n\n西里龍\n\n戊\n\n艾雷拉龍\n\n祿豐龍\n\n梁龍\n\n皮薩諾龍\n\n天宇龍\n\n三角龍\n\n始盜龍\n\n辛\n\n暴龍\n\n麻雀\n\n圖2\n\n早期學者認為：「現生的麻雀和已滅絕的三角龍有一個最近的共同祖先；而此祖先所有的後代歸類為恐龍」。依圖2，早期學者認為的恐龍應該從哪一個共同祖先開始算起？\n\n![圖表](/assets/banks/gsat-114-science/Q7-figure-1.png)",
+    "correct": "庚",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "丁",
+      "戊",
+      "己",
+      "辛\n\n![圖表](/assets/banks/gsat-114-science/Q7-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年學科能力測驗自然第7題。",
+    "exp": "正確答案：庚。來源：114年學科能力測驗自然第7題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -92,21 +92,22 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/G7-8-context.png",
-      "/assets/banks/gsat-114-science/Q7-question.png"
+      "/assets/banks/gsat-114-science/Q7-figure-1.png",
+      "/assets/banks/gsat-114-science/Q7-option-E-figure-1.png"
     ],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q12",
     "difficulty": "medium",
-    "q": "當月球運行到地球與太陽之間且恰好排列成一直線，才會發生日食現象。有關\n\n  日食，下列敘述何者正確？",
+    "q": "當月球運行到地球與太陽之間且恰好排列成一直線，才會發生日食現象。有關日食，下列敘述何者正確？",
     "correct": "地表任一處發生日偏食的機會，大於發生日全食",
     "wrong": [
       "每個月會發生一次日食",
       "發生日食當天，月相為滿月",
-      "地表任一處在12 年當中至少發生一次日全食",
+      "地表任一處在12年當中至少發生一次日全食",
       "發生日全食的時候，月面會呈現暗紅色"
     ],
     "exp": "正確答案：地表任一處發生日偏食的機會，大於發生日全食。來源：114年學科能力測驗自然第12題。",
@@ -126,20 +127,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.7,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q13",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-114-science/Q13-question.png)",
-    "correct": "原卷選項 A",
+    "q": "冬、夏溫差會影響冰原的面積，進而影響地球平均反照率，造成氣候改變。陸地\n面積、與太陽的距離、以及黃赤交角的大小都可能影響冬、夏溫差。如果地表\n海陸分布的情況與現今相同，地球自轉及公轉在下列何種情形下，會在南半球或\n北半球出現最大的冬、夏溫差？",
+    "correct": "![圖表](/assets/banks/gsat-114-science/Q13-option-A-figure-1.png)",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-114-science/Q13-option-B-figure-1.png)",
+      "![圖表](/assets/banks/gsat-114-science/Q13-option-C-figure-1.png)",
+      "-\n![圖表](/assets/banks/gsat-114-science/Q13-option-D-figure-1.png)",
+      "(E\n![圖表](/assets/banks/gsat-114-science/Q13-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年學科能力測驗自然第13題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-114-science/Q13-option-A-figure-1.png)。來源：114年學科能力測驗自然第13題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -155,23 +157,28 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/Q13-question.png"
+      "/assets/banks/gsat-114-science/Q13-option-A-figure-1.png",
+      "/assets/banks/gsat-114-science/Q13-option-B-figure-1.png",
+      "/assets/banks/gsat-114-science/Q13-option-C-figure-1.png",
+      "/assets/banks/gsat-114-science/Q13-option-D-figure-1.png",
+      "/assets/banks/gsat-114-science/Q13-option-E-figure-1.png"
     ],
     "passRate": 0.7,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-114-science/Q15-question.png)",
-    "correct": "原卷選項 B",
+    "q": "下圖4為近百年來全球前五大規模的地震分布圖，皆屬於同一類型的板塊邊界。圖中白色線段標示板塊邊界，白色箭頭為指示板塊運動方向和大小的向量，箭頭線段越長代表運動速率越大。從震央分布和其相鄰近兩個板塊間互相作用的運動方向判斷，這五個地震同屬於下列哪種類型的板塊邊界/構造區域？\n\n圖4\n\n規模9.5\n\n1960/5/22\n\n智利中南部瓦爾迪維亞\n\n規模9.2\n\n1964/3/28\n\n阿拉斯加威廉王子灣\n\n規模9.0\n\n2011/3/11\n\n日本宮城縣外海\n\n規模9.0\n\n1952/11/4\n\n堪察加半島\n\n規模9.1\n\n2004/12/26\n\n印尼蘇門答臘外海\n\n![圖表](/assets/banks/gsat-114-science/Q15-figure-1.png)\n",
+    "correct": "聚合型",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "張裂型",
+      "錯動型",
+      "熱點",
+      "平移斷層型"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年學科能力測驗自然第15題。",
+    "exp": "正確答案：聚合型。來源：114年學科能力測驗自然第15題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -187,18 +194,19 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/Q15-question.png"
+      "/assets/banks/gsat-114-science/Q15-figure-1.png"
     ],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q17",
     "difficulty": "medium",
-    "q": "對於海水鹽度的描述，以下的敘述何者不正確？",
+    "q": "對於海水鹽度的描述，以下的敘述何者<u>不正確</u>？",
     "correct": "赤道附近由於雨量少且蒸發旺盛，海水鹽度因而增高",
     "wrong": [
-      "開放大洋的海水，每公斤含鹽量大約35 公克",
+      "開放大洋的海水，每公斤含鹽量大約35公克",
       "因為淡水匯入稀釋的原因，河口處的海水鹽度較低",
       "黑潮表層水的鹽度較周邊的海水為高",
       "北極海（北冰洋）上層海水的鹽度比印度洋上層海水鹽度較低"
@@ -220,20 +228,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q18",
     "difficulty": "medium",
-    "q": "一般以等級描述星球亮度，視星等數字小代表亮度強。根據長期記錄，發現木星\n  的亮度在 −（負3）星等及3       −（負2）星等之間變化。已知木星半徑約是地球112\n  倍，距離太陽約為日地距離的5 倍，而土星半徑約為地球9 倍，距離太陽約為\n  日地距離的10 倍，反照率則與木星類似。在地面觀測土星時，其最大亮度之\n  星等X，下列何者正確？",
-    "correct": "X > − 2",
+    "q": "一般以等級描述星球亮度，視星等數字小代表亮度強。根據長期記錄，發現木星的亮度在$-3$（負3）星等及$-2$（負2）星等之間變化。已知木星半徑約是地球11倍，距離太陽約為日地距離的5倍，而土星半徑約為地球9倍，距離太陽約為日地距離的10倍，反照率則與木星類似。在地面觀測土星時，其最大亮度之星等X，下列何者正確？",
+    "correct": "$X >-2$",
     "wrong": [
-      "X < − 3",
-      "−3 < X < − 2",
-      "X > 6",
-      "X 依照地球與太陽的距離而不一定"
+      "$X <-3$",
+      "$-3 < X <-2$",
+      "$X > 6$",
+      "X依照地球與太陽的距離而不一定"
     ],
-    "exp": "正確答案：X > − 2。來源：114年學科能力測驗自然第18題。",
+    "exp": "正確答案：$X >-2$。來源：114年學科能力測驗自然第18題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -250,20 +259,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.59,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q20",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-114-science/G20-21-context.png)\n\n![第20題原卷資料](/assets/banks/gsat-114-science/Q20-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n<u>20-21題為題組</u>\n\n比特幣是一種虛擬貨幣，運作時需消耗大量的電能。全球每年因比特幣運作所消耗的電能估計約達$1.2\\,\\times \\,10^{11}$度（約$4.3\\,\\times \\,10^{17} J$）。依據以上資料，回答下列問題。\n\n已知冰的融化熱為80 kcal/kg且1 kcal 約為4 kJ。全球比特幣一年運作所消耗的電能若完全轉換為熱能，約可融化多少公斤0℃的冰山？",
+    "correct": "$10^{12}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "$10^{10}$",
+      "$10^{16}$",
+      "$10^{20}$",
+      "$10^{24}$"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年學科能力測驗自然第20題。",
+    "exp": "正確答案：$10^{12}$。來源：114年學科能力測驗自然第20題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -282,25 +292,23 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-114-science/G20-21-context.png",
-      "/assets/banks/gsat-114-science/Q20-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.55,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-114-science/G20-21-context.png)\n\n![第21題原卷資料](/assets/banks/gsat-114-science/Q21-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n<u>20-21題為題組</u>\n\n比特幣是一種虛擬貨幣，運作時需消耗大量的電能。全球每年因比特幣運作所消耗的電能估計約達$1.2\\,\\times \\,10^{11}$度（約$4.3\\,\\times \\,10^{17} J$）。依據以上資料，回答下列問題。\n\n烏山頭水庫有效蓄水量約為$8.0\\,\\times \\,10^7 m^3$，玉山高度約4000 m。若將全球比特幣運作一年所消耗的電能完全轉換為力學能，且忽略水庫深度的影響，則約可將多少座烏山頭水庫的有效蓄水量從海平面抬升至玉山山頂？（水的密度為$1000 kg/ m^3$、重力加速度為$10 m/s^2$）",
+    "correct": "$10^2$",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "$10^5$",
+      "$10^8$",
+      "$10^{11}$",
+      "$10^{14}$"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年學科能力測驗自然第21題。",
+    "exp": "正確答案：$10^2$。來源：114年學科能力測驗自然第21題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -319,25 +327,23 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-114-science/G20-21-context.png",
-      "/assets/banks/gsat-114-science/Q21-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q22",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/gsat-114-science/G22-23-context.png)\n\n![第22題原卷資料](/assets/banks/gsat-114-science/Q22-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n<u>22-23題為題組</u>\n\n搭載火星探測器的太空船，加速脫離地球引力後，以等速飛行一段距離，然後減速準備登陸火星，過程中太空船持續遠離地球，歷經約200天的飛行抵達火星。從火星以電磁波傳訊到地球，約需10分鐘才能收到訊號。太空船飛行過程持續向地球傳送電磁波，用以監測飛行速度。依據以上資料，回答下列問題。\n\n假設太空船飛行的距離與從火星傳訊到地球的距離大致相同，則該太空船的平均飛行速率約為多少？（真空中的光速約為$3\\,\\times \\,10^8 m/s$）",
+    "correct": "$10^4 m/s$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "$10 m/s$",
+      "$10^2 m/s$",
+      "$10^6 m/s$",
+      "$10^8 m/s$"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年學科能力測驗自然第22題。",
+    "exp": "正確答案：$10^4 m/s$。來源：114年學科能力測驗自然第22題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -356,25 +362,23 @@
       ]
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/gsat-114-science/G22-23-context.png",
-      "/assets/banks/gsat-114-science/Q22-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q24",
     "difficulty": "medium",
-    "q": "下列關於原子能階的敘述，何者錯誤？",
-    "correct": "為了使處於穩定狀態之原子的電子維持在特定的能階上，外界必須持續提供\n\n   特定能量的光子",
+    "q": "下列關於原子能階的敘述，何者<u>錯誤</u>？",
+    "correct": "為了使處於穩定狀態之原子的電子維持在特定的能階上，外界必須持續提供特定能量的光子",
     "wrong": [
       "原子中的電子可能處在不同的能階",
       "一個氫原子雖然只有一個電子，但能階躍遷時可能發射不同波長的光子",
       "原子中的電子吸收能量後，可能從較低的能階躍遷到較高的能階",
       "原子中的電子從一個能階躍遷到另一個能量較低的能階時，會放出光子"
     ],
-    "exp": "正確答案：為了使處於穩定狀態之原子的電子維持在特定的能階上，外界必須持續提供\n\n   特定能量的光子。來源：114年學科能力測驗自然第24題。",
+    "exp": "正確答案：為了使處於穩定狀態之原子的電子維持在特定的能階上，外界必須持續提供特定能量的光子。來源：114年學科能力測驗自然第24題。",
     "subject": "化學",
     "sub_topic": "化學綜合",
     "source": {
@@ -391,20 +395,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.56,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/gsat-114-science/Q25-question.png)",
-    "correct": "原卷選項 D",
+    "q": "科學家進行電子雙狹縫實驗，成功觀測到電子經過雙狹縫後產生干涉分布，其\n圖樣與光通過雙狹縫後的干涉圖樣類似，證明了粒子也具有波動性。下列何者\n最可能為科學家觀察到大量電子經過雙狹縫後的干涉分布？",
+    "correct": "![圖表](/assets/banks/gsat-114-science/Q25-option-D-figure-1.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-114-science/Q25-option-A-figure-1.png)",
+      "![圖表](/assets/banks/gsat-114-science/Q25-option-B-figure-1.png)",
+      "![圖表](/assets/banks/gsat-114-science/Q25-option-C-figure-5.png)",
+      "![圖表](/assets/banks/gsat-114-science/Q25-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年學科能力測驗自然第25題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-114-science/Q25-option-D-figure-1.png)。來源：114年學科能力測驗自然第25題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -420,10 +425,15 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/Q25-question.png"
+      "/assets/banks/gsat-114-science/Q25-option-D-figure-1.png",
+      "/assets/banks/gsat-114-science/Q25-option-A-figure-1.png",
+      "/assets/banks/gsat-114-science/Q25-option-B-figure-1.png",
+      "/assets/banks/gsat-114-science/Q25-option-C-figure-5.png",
+      "/assets/banks/gsat-114-science/Q25-option-E-figure-1.png"
     ],
     "passRate": 0.53,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q26",
@@ -453,20 +463,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.62,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/gsat-114-science/Q27-question.png)",
-    "correct": "原卷選項 D",
+    "q": "如圖5所示，目前許多手機可以進行無線充電。充電時，手機和充電器上各自的線圈系統對齊靠近、靜止置放，而充電器上的線圈電流會隨時間快速變化。在充電的過程中，下列敘述何者正確？\n\n圖5\n\n![圖表](/assets/banks/gsat-114-science/Q27-figure-1.png)",
+    "correct": "手機和充電器上的兩個線圈系統之間會有磁力線通過",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 E"
+      "電流經由導線從充電器流向手機",
+      "手機上之線圈系統四周的磁場始終保持不變",
+      "手機電池所獲得的能量等於充電器所輸出的能量",
+      "充電器上的線圈會隨時間漸漸發熱，手機上的線圈不會"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年學科能力測驗自然第27題。",
+    "exp": "正確答案：手機和充電器上的兩個線圈系統之間會有磁力線通過。來源：114年學科能力測驗自然第27題。",
     "subject": "物理",
     "sub_topic": "物理綜合",
     "source": {
@@ -482,23 +493,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/Q27-question.png"
+      "/assets/banks/gsat-114-science/Q27-figure-1.png"
     ],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q32",
     "difficulty": "medium",
-    "q": "萊克多巴胺俗稱「瘦肉精」，可作為動物飼料添加物，用以幫助肌肉生長，減少\n  體脂肪。將「瘦肉精」樣品進行元素分析，發現含有重量百分比71.75%的碳、\n  7.65%的氫、4.65%的氮與15.95%的氧，試問其分子式為何？（原子量：H＝1.0，\n  C＝12.0，N＝14.0，O＝16.0）",
-    "correct": "C18 H23 NO3",
+    "q": "萊克多巴胺俗稱「瘦肉精」，可作為動物飼料添加物，用以幫助肌肉生長，減少體脂肪。將「瘦肉精」樣品進行元素分析，發現含有重量百分比71.75%的碳、7.65%的氫、4.65%的氮與15.95%的氧，試問其分子式為何？（原子量：H＝1.0，C＝12.0，N＝14.0，O＝16.0）",
+    "correct": "$\\ C_{18}H_{23}NO_3$",
     "wrong": [
-      "C18 H24 N2 O2",
-      "C17 H22 N2 O2",
-      "C17 H21 NO4",
-      "C17 H 21 N 2 O3"
+      "$C_{18}H_{24}N_2O_2$",
+      "$C_{17}H_{22}N_2O_2$",
+      "$C_{17}H_{21}NO_4$",
+      "$\\ C_{17}H_{21}N_2O_3$"
     ],
-    "exp": "正確答案：C18 H23 NO3。來源：114年學科能力測驗自然第32題。",
+    "exp": "正確答案：$\\ C_{18}H_{23}NO_3$。來源：114年學科能力測驗自然第32題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -515,20 +527,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.47,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q34",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/gsat-114-science/Q34-question.png)",
-    "correct": "原卷選項 E",
+    "q": "圖7是三種氣體於不同溫度下在水中的溶解度。此外，小華上網查了$CO_2$於0℃、20℃、40℃與60℃在水中的溶解度，分別是0.334、0.169、0.097、0.058（單位：g/100g水）。下列相關的敘述，何者正確？\n\n圖7\n\n\n\nNH<sub>3</sub>\n\nSO<sub>2</sub>\n\n\n\n溫度 ℃\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n溶\n\n解\n\n度\n\n（g/100g水）\n\n（甲） 在0℃時，氣體在水中的溶解度大小順序為$NH_3< HCl < SO_2$\n\n（乙） 在0-60℃之間，溫度升高時，氣體在水中的溶解度降低\n\n（丙） 將4℃含$CO_2$氣泡飲料喝入體內時，會產生打嗝現象，主要是受到溫度變化的影響\n\n![圖表](/assets/banks/gsat-114-science/Q34-figure-1.png)\n",
+    "correct": "乙與丙",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "只有甲",
+      "只有乙",
+      "只有丙",
+      "甲與乙"
     ],
-    "exp": "正確答案：原卷選項 E。來源：114年學科能力測驗自然第34題。",
+    "exp": "正確答案：乙與丙。來源：114年學科能力測驗自然第34題。",
     "subject": "自然",
     "sub_topic": "自然綜合",
     "source": {
@@ -544,15 +557,16 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/Q34-question.png"
+      "/assets/banks/gsat-114-science/Q34-figure-1.png"
     ],
     "passRate": 0.53,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q36",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n35-36 題為題組\n\n    氧化亞銅為一種半導體材料，其奈米粒子會懸浮在水中，表面可以吸收光能，\n  將二氧化碳轉化成甲醇（ CH3OH ）與氧氣，但氧化亞銅奈米粒子並不會被消耗。\n\n  持續通入二氧化碳於含氧化亞銅的水溶液中使反應進行，發現光照期間，可觀察\n\n  到氧氣生成；若將光源關閉，則沒有氧氣生成。\n\n經過更仔細的實驗觀察，發現另有少量為氫氣的副產物生成，可能是在光照下，\n  水亦可被分解為氫氣與氧氣，反應式為： 2 H2 O → 2 H2 + O2 。若某次實驗結果的氣體\n  產物為氧氣1.40 莫耳與氫氣0.40 莫耳。試問該次實驗生成多少莫耳的甲醇？",
+    "q": "【共用閱讀資料】\n<u>35-36題為題組</u>\n\n氧化亞銅為一種半導體材料，其奈米粒子會懸浮在水中，表面可以吸收光能，將二氧化碳轉化成甲醇（$CH_3OH$）與氧氣，但氧化亞銅奈米粒子並不會被消耗。持續通入二氧化碳於含氧化亞銅的水溶液中使反應進行，發現光照期間，可觀察到氧氣生成；若將光源關閉，則沒有氧氣生成。\n\n經過更仔細的實驗觀察，發現另有少量為氫氣的副產物生成，可能是在光照下，水亦可被分解為氫氣與氧氣，反應式為：$2 H_2O\\to 2 H_2+ O_2$。若某次實驗結果的氣體產物為氧氣1.40莫耳與氫氣0.40莫耳。試問該次實驗生成多少莫耳的甲醇？",
     "correct": "0.8",
     "wrong": [
       "0.4",
@@ -581,20 +595,21 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.42,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q45",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/gsat-114-science/G44-46-context.png)\n\n![第45題原卷資料](/assets/banks/gsat-114-science/Q45-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n44-46 題為題組\n阿明 10 月底在花東山區野外調查時，手機沒有訊號，所幸身上有乾濕球溫度計、\n氣壓計與收音機。此時他從收音機的新聞播報得知中央氣象署已針對康芮颱風發布\n了颱風警報：「強烈颱風康芮 30 日 11 時中心位置在鵝鑾鼻東南方約 470 公里的\n海面上，中心氣壓 915 百帕，近中心最大風速每秒 53 公尺，達 16 級風，7 級風\n暴風半徑 320 公里，10 級風暴風半徑 120 公里，以每小時 19 公里速度向西北\n進行」，圖 11 為康芮颱風的路徑預報圖。根據以上資訊回答 44 至 46 題。\n![圖表](/assets/banks/gsat-114-science/G44-46-figure-1.png)\n\n\n\n第 15 頁請記得在答題卷簽名欄位以正楷簽全名 114年學測\n共 19 頁自然考科\n\n若颱風移動方向與移速變化不大，中心將在31日15時通過阿明所在地區，阿明從31日03時到01日03時連續觀測氣壓，並將其隨時間之變化畫圖記錄，各圖的橫軸是時間往右增加，三角形代表31日15時，下列何者最可能是氣壓隨時間變化的曲線？",
+    "correct": "![圖表](/assets/banks/gsat-114-science/Q45-option-B-figure-2.png)",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D",
-      "原卷選項 E"
+      "![圖表](/assets/banks/gsat-114-science/Q45-option-A-figure-2.png)",
+      "![圖表](/assets/banks/gsat-114-science/Q45-option-C-figure-2.png)",
+      "![圖表](/assets/banks/gsat-114-science/Q45-option-D-figure-2.png)",
+      "![圖表](/assets/banks/gsat-114-science/Q45-option-E-figure-1.png)"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年學科能力測驗自然第45題。",
+    "exp": "正確答案：![圖表](/assets/banks/gsat-114-science/Q45-option-B-figure-2.png)。來源：114年學科能力測驗自然第45題。",
     "subject": "地球科學",
     "sub_topic": "地球科學綜合",
     "source": {
@@ -615,24 +630,29 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/G44-46-context.png",
-      "/assets/banks/gsat-114-science/Q45-question.png"
+      "/assets/banks/gsat-114-science/G44-46-figure-1.png",
+      "/assets/banks/gsat-114-science/Q45-option-B-figure-2.png",
+      "/assets/banks/gsat-114-science/Q45-option-A-figure-2.png",
+      "/assets/banks/gsat-114-science/Q45-option-C-figure-2.png",
+      "/assets/banks/gsat-114-science/Q45-option-D-figure-2.png",
+      "/assets/banks/gsat-114-science/Q45-option-E-figure-1.png"
     ],
     "passRate": 0.65,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q48",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/gsat-114-science/G47-49-context-1.png)\n\n![第48題原卷資料](/assets/banks/gsat-114-science/G47-49-context-2.png)\n\n![第48題原卷資料](/assets/banks/gsat-114-science/Q48-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n<u>47-49題為題組</u>\n\n2024年諾貝爾物理獎主題是仿效腦部神經網路，藉由變化數據節點之間連通的強弱，奠定人工智慧（AI）的基礎。圖12為探究神經細胞之間的連通機制，是1963年諾貝爾生理學或醫學獎主題的示意圖。通過神經細胞膜傳訊的機制放大圖如圖13。\n\n電路模型如圖14，模型中$C_M$代表細胞膜的內、外表面，以及其間的不導電物質。$R_{Na}$與$R_K$為可變電阻，可以改變神經細胞之間連通的強弱，以處理資訊。其中$E_{Na}$、$E_K$與$E_L$分別為離子$Na^{+}$、$K^{+}$與其他離子的平衡電壓，相當於等效電池，可以推送或聚集對應的離子，維持細胞內外離子濃度差異。\n\n已知平衡電壓為$E=-\\frac{\\alpha T}{e} log(\\frac{n_內}{n_外})$，其中$n_內$與$n_外$分別為細胞內部與外部的離子濃度，$\\alpha >0$為轉換常數，$T$為絕對溫度，$e$為基本電量。依據以上資料回答下列問題。\n\n細胞外部\n\nC<sub>M</sub>\n\nR<sub>K</sub>\n\nR<sub>Na</sub>\n\nR<sub>L</sub>\n\nE<sub>K</sub>\n\nE<sub>Na</sub>\n\n＋\n\n－\n\n＋\n\nE<sub>L</sub>\n\n－\n\n＋\n\n－\n\n細胞內部\n\n圖14神經細胞膜電路模型\n\n圖13通過細胞膜傳訊的放大圖\n\n圖12神經細胞之間傳訊示意圖\n\n假設$n_內$與$n_外$維持恆定，則在攝氏27度時的平衡電壓量值約是在攝氏17度時的多少倍？\n\n![圖表](/assets/banks/gsat-114-science/G47-49-figure-1.png)\n",
+    "correct": "300/290",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D",
-      "原卷選項 E"
+      "27/17",
+      "17/27",
+      "290/300",
+      "38/36"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年學科能力測驗自然第48題。",
+    "exp": "正確答案：300/290。來源：114年學科能力測驗自然第48題。",
     "subject": "生物",
     "sub_topic": "生物綜合",
     "source": {
@@ -653,23 +673,22 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/gsat-114-science/G47-49-context-1.png",
-      "/assets/banks/gsat-114-science/G47-49-context-2.png",
-      "/assets/banks/gsat-114-science/Q48-question.png"
+      "/assets/banks/gsat-114-science/G47-49-figure-1.png"
     ],
     "passRate": 0.54,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-114-science-q55",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n55-57 題為題組\n\n    烷類在充足的氧氣下，可進行燃燒反應，產生二氧化碳，並釋出熱量，可作為\n\n  燃料使用。市售的液化天然氣是以甲烷為成分，液化石油氣則是丙烷與丁烷的\n  混合物。表3 為幾種烷類的分子式、分子量及莫耳燃燒熱。1 莫耳碳氫化合物\n\n  完全燃燒生成二氧化碳和水時，所釋出的熱量稱為莫耳燃燒熱。\n\n                        表3\n\n   化合物分子式分子量莫耳燃燒熱（千焦耳/莫耳）\n    甲烷        CH 4             16                       890\n    乙烷        C 2 H 6            30                      1560\n    丁烷        C4 H10            58                      2874\n    戊烷        C5 H12            72                      3509\n    辛烷        C8 H18           114                      5460\n\n根據表3 資料，下列敘述何者正確？",
+    "q": "【共用閱讀資料】\n<u>55-57題為題組</u>\n\n烷類在充足的氧氣下，可進行燃燒反應，產生二氧化碳，並釋出熱量，可作為燃料使用。市售的液化天然氣是以甲烷為成分，液化石油氣則是丙烷與丁烷的混合物。表3為幾種烷類的分子式、分子量及莫耳燃燒熱。1莫耳碳氫化合物完全燃燒生成二氧化碳和水時，所釋出的熱量稱為莫耳燃燒熱。\n\n| 表3 |\n| 化合物 | 分子式 | 分子量 | 莫耳燃燒熱（千焦耳/莫耳） |\n| 甲烷 | $CH_4$ | 16 | 890 |\n| 乙烷 | $C_2H_6$ | 30 | 1560 |\n| 丁烷 | $\\begin{matrix}C_4H_{10}\\end{matrix}$ | 58 | 2874 |\n| 戊烷 | $C_5H_{12}$ | 72 | 3509 |\n| 辛烷 | $C_8H_{18}$ | 114 | 5460 |\n\n根據表3資料，下列敘述何者正確？",
     "correct": "每克烷類燃燒釋出熱量的大小順序為：甲烷＞丁烷＞戊烷",
     "wrong": [
-      "因辛烷分子量較甲烷大，故1 莫耳辛烷比1 莫耳甲烷含有較多的分子數",
-      "每克烷類燃燒釋出熱量皆大於50 千焦耳",
-      "燃燒2 莫耳甲烷比燃燒1 莫耳乙烷，所釋出的熱量要少",
-      "由表3 資料，可以推測己烷的莫耳燃燒熱約為6200（千焦耳/莫耳）"
+      "因辛烷分子量較甲烷大，故1莫耳辛烷比1莫耳甲烷含有較多的分子數",
+      "每克烷類燃燒釋出熱量皆大於50千焦耳",
+      "燃燒2莫耳甲烷比燃燒1莫耳乙烷，所釋出的熱量要少",
+      "由表3資料，可以推測己烷的莫耳燃燒熱約為6200（千焦耳/莫耳）"
     ],
     "exp": "正確答案：每克烷類燃燒釋出熱量的大小順序為：甲烷＞丁烷＞戊烷。來源：114年學科能力測驗自然第55題。",
     "subject": "化學",
@@ -690,6 +709,7 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

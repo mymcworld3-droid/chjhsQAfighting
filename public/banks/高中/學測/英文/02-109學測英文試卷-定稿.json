@@ -2,7 +2,7 @@
   {
     "id": "gsat-109-english-q1",
     "difficulty": "medium",
-    "q": "After hours of discussion, our class finally reached the _____ that we would go to Hualien for our\n    graduation trip.",
+    "q": "After hours of discussion, our class finally reached the _____ that we would go to Hualien for our graduation trip.",
     "correct": "conclusion",
     "wrong": [
       "balance",
@@ -24,12 +24,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q2",
     "difficulty": "medium",
-    "q": "y\n2.  Jane _____ her teacher by passing the exam with a nearly perfect score; she almost failed the course\n     last semester.",
+    "q": "Jane _____ her teacher by passing the exam with a nearly perfect score; she almost failed the course last semester.",
     "correct": "amazed",
     "wrong": [
       "bored",
@@ -51,7 +52,8 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q3",
@@ -78,12 +80,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q4",
     "difficulty": "medium",
-    "q": "p\n4.  Due to the global financial crisis, the country’s exports _____ by 40 percent last month, the largest\n    drop since 2000.",
+    "q": "Due to the global financial crisis, the country’s exports _____ by 40 percent last month, the largest drop since 2000.",
     "correct": "decreased",
     "wrong": [
       "flattered",
@@ -105,12 +108,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q5",
     "difficulty": "medium",
-    "q": "The potato chips have been left uncovered on the table for such a long time that they no longer taste\n    fresh and _____.",
+    "q": "The potato chips have been left uncovered on the table for such a long time that they no longer taste fresh and _____.",
     "correct": "crispy",
     "wrong": [
       "solid",
@@ -132,12 +136,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q6",
     "difficulty": "medium",
-    "q": "py                  g\n6.  The townspeople built a _____ in memory of the brave teacher who sacrificed her life to save her\n    students from a burning bus.",
+    "q": "The townspeople built a _____ in memory of the brave teacher who sacrificed her life to save her students from a burning bus.",
     "correct": "monument",
     "wrong": [
       "refugee",
@@ -159,19 +164,20 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q7",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-109-english/Q7-question.png)",
-    "correct": "原卷選項 C",
+    "q": "The students in Professor Smith’s classical Chinese class are required to _____ poems by famous Chinese poets.",
+    "correct": "recite",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "construct",
+      "expose",
+      "install"
     ],
-    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗英文第7題。",
+    "exp": "正確答案：recite。來源：109年學科能力測驗英文第7題。",
     "subject": "英文",
     "sub_topic": "文法與句構",
     "source": {
@@ -186,14 +192,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-109-english/Q7-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q8",
     "difficulty": "medium",
-    "q": "p\n8.  Although Mr. Tang claims that the house belongs to him, he has not offered any proof of _____.",
+    "q": "Although Mr. Tang claims that the house belongs to him, he has not offered any proof of _____.\n\n![圖表](/assets/banks/gsat-109-english/Q8-figure-1.png)",
     "correct": "ownership",
     "wrong": [
       "convention",
@@ -215,12 +220,15 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [
+      "/assets/banks/gsat-109-english/Q8-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q9",
     "difficulty": "medium",
-    "q": "p                                       p\n9.  Ancient Athens, famous for its early development of the democratic system, is often said to be the\n   _____ of democracy.",
+    "q": "Ancient Athens, famous for its early development of the democratic system, is often said to be the\n\n_____ of democracy.",
     "correct": "cradle",
     "wrong": [
       "mission",
@@ -242,12 +250,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q10",
     "difficulty": "medium",
-    "q": "g\n10. The candy can no longer be sold because it was found to contain artificial ingredients far beyond the\n   _____ level.",
+    "q": "The candy can no longer be sold because it was found to contain artificial ingredients far beyond the\n\n_____ level.",
     "correct": "permissible",
     "wrong": [
       "abundant",
@@ -269,12 +278,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q11",
     "difficulty": "medium",
-    "q": "p                         p\n11. Jack’s excellent performance in last week’s game has _____ all the doubts about his ability to play on\n    our school basketball team.",
+    "q": "Jack’s excellent performance in last week’s game has _____ all the doubts about his ability to play on our school basketball team.",
     "correct": "erased",
     "wrong": [
       "canceled",
@@ -296,12 +306,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q12",
     "difficulty": "medium",
-    "q": "p\n12. It is bullying to _____ a foreign speaker’s accent. No one deserves to be laughed at for their\n    pronunciation.",
+    "q": "It is bullying to _____ a foreign speaker’s accent. No one deserves to be laughed at for their pronunciation.",
     "correct": "mock",
     "wrong": [
       "sneak",
@@ -323,12 +334,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q13",
     "difficulty": "medium",
-    "q": "p   p                g\n13. Mary lost ten kilograms in three months, so her _____ skin-tight jeans are now hanging off her hips.",
+    "q": "Mary lost ten kilograms in three months, so her _____ skin-tight jeans are now hanging off her hips.",
     "correct": "formerly",
     "wrong": [
       "barely",
@@ -350,19 +362,20 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-109-english/Q14-question.png)",
-    "correct": "原卷選項 A",
+    "q": "The police officer showed us pictures of drunk driving accidents to highlight the importance of staying\n\n_____ on the road.",
+    "correct": "sober",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "majestic",
+      "vigorous",
+      "noticeable"
     ],
-    "exp": "正確答案：原卷選項 A。來源：109年學科能力測驗英文第14題。",
+    "exp": "正確答案：sober。來源：109年學科能力測驗英文第14題。",
     "subject": "英文",
     "sub_topic": "文法與句構",
     "source": {
@@ -377,14 +390,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-109-english/Q14-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q15",
     "difficulty": "medium",
-    "q": "j                   g\n15. The claim that eating chocolate can prevent heart disease is _____ because there is not enough scientific\n    evidence to support it.",
+    "q": "The claim that eating chocolate can prevent heart disease is _____ because there is not enough scientific evidence to support it.",
     "correct": "disputable",
     "wrong": [
       "creative",
@@ -406,12 +418,13 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050360046239321866/02-109%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q16",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n    The art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos\ngoes back to ancient Asia and the Middle East. Over the centuries, henna tattoos   16   used in weddings\nand holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art\nform has found a new   17    in the hands of contemporary artists.\n    Henna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer\nfeel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help\nthem   18    the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and\nmessages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer\npatients would   19   use to cover their heads. Many women report that the henna crowns really work as\na healing device, helping them build a more   20    self-image at a time when they are vulnerable and\ndepressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in\nthe project across Canada and the US has grown to over 150.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nThe art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos goes back to ancient Asia and the Middle East. Over the centuries, henna tattoos <u>16</u> used in weddings and holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art form has found a new <u>17</u> in the hands of contemporary artists.\n\nHenna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer feel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help them <u>18</u> the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and messages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer patients would <u>19</u> use to cover their heads. Many women report that the henna crowns really work as a healing device, helping them build a more <u>20</u> self-image at a time when they are vulnerable and depressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in the project across Canada and the US has grown to over 150.",
     "correct": "have been",
     "wrong": [
       "were being",
@@ -437,12 +450,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q17",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n    The art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos\ngoes back to ancient Asia and the Middle East. Over the centuries, henna tattoos   16   used in weddings\nand holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art\nform has found a new   17    in the hands of contemporary artists.\n    Henna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer\nfeel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help\nthem   18    the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and\nmessages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer\npatients would   19   use to cover their heads. Many women report that the henna crowns really work as\na healing device, helping them build a more   20    self-image at a time when they are vulnerable and\ndepressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in\nthe project across Canada and the US has grown to over 150.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nThe art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos goes back to ancient Asia and the Middle East. Over the centuries, henna tattoos <u>16</u> used in weddings and holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art form has found a new <u>17</u> in the hands of contemporary artists.\n\nHenna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer feel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help them <u>18</u> the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and messages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer patients would <u>19</u> use to cover their heads. Many women report that the henna crowns really work as a healing device, helping them build a more <u>20</u> self-image at a time when they are vulnerable and depressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in the project across Canada and the US has grown to over 150.",
     "correct": "application",
     "wrong": [
       "competition",
@@ -468,12 +482,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q18",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n    The art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos\ngoes back to ancient Asia and the Middle East. Over the centuries, henna tattoos   16   used in weddings\nand holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art\nform has found a new   17    in the hands of contemporary artists.\n    Henna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer\nfeel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help\nthem   18    the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and\nmessages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer\npatients would   19   use to cover their heads. Many women report that the henna crowns really work as\na healing device, helping them build a more   20    self-image at a time when they are vulnerable and\ndepressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in\nthe project across Canada and the US has grown to over 150.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nThe art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos goes back to ancient Asia and the Middle East. Over the centuries, henna tattoos <u>16</u> used in weddings and holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art form has found a new <u>17</u> in the hands of contemporary artists.\n\nHenna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer feel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help them <u>18</u> the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and messages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer patients would <u>19</u> use to cover their heads. Many women report that the henna crowns really work as a healing device, helping them build a more <u>20</u> self-image at a time when they are vulnerable and depressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in the project across Canada and the US has grown to over 150.",
     "correct": "cope with",
     "wrong": [
       "carry away",
@@ -499,12 +514,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q19",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n    The art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos\ngoes back to ancient Asia and the Middle East. Over the centuries, henna tattoos   16   used in weddings\nand holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art\nform has found a new   17    in the hands of contemporary artists.\n    Henna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer\nfeel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help\nthem   18    the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and\nmessages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer\npatients would   19   use to cover their heads. Many women report that the henna crowns really work as\na healing device, helping them build a more   20    self-image at a time when they are vulnerable and\ndepressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in\nthe project across Canada and the US has grown to over 150.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nThe art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos goes back to ancient Asia and the Middle East. Over the centuries, henna tattoos <u>16</u> used in weddings and holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art form has found a new <u>17</u> in the hands of contemporary artists.\n\nHenna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer feel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help them <u>18</u> the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and messages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer patients would <u>19</u> use to cover their heads. Many women report that the henna crowns really work as a healing device, helping them build a more <u>20</u> self-image at a time when they are vulnerable and depressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in the project across Canada and the US has grown to over 150.",
     "correct": "otherwise",
     "wrong": [
       "moreover",
@@ -530,12 +546,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q20",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第16 至20 題為題組\n    The art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos\ngoes back to ancient Asia and the Middle East. Over the centuries, henna tattoos   16   used in weddings\nand holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art\nform has found a new   17    in the hands of contemporary artists.\n    Henna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer\nfeel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help\nthem   18    the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and\nmessages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer\npatients would   19   use to cover their heads. Many women report that the henna crowns really work as\na healing device, helping them build a more   20    self-image at a time when they are vulnerable and\ndepressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in\nthe project across Canada and the US has grown to over 150.\n\n",
+    "q": "【共用閱讀資料】\n第16至20題為題組\n\nThe art and tradition of using all-natural paste from the henna plant to create temporary henna tattoos goes back to ancient Asia and the Middle East. Over the centuries, henna tattoos <u>16</u> used in weddings and holiday celebrations because they are thought to carry blessings from the gods. Today, the ancient art form has found a new <u>17</u> in the hands of contemporary artists.\n\nHenna Heals, an artist group based in Canada, uses henna tattoos to help women suffering from cancer feel confident and beautiful again. They draw elegant henna crowns on the women’s bare heads to help them <u>18</u> the loss of their hair after cancer treatment. Featuring floral patterns, religious symbols, and messages of hope, the painted henna crowns are amazing substitutes for the hats and wigs that the cancer patients would <u>19</u> use to cover their heads. Many women report that the henna crowns really work as a healing device, helping them build a more <u>20</u> self-image at a time when they are vulnerable and depressed. According to Frances Darwin, founder of Henna Heals, the number of artists now involved in the project across Canada and the US has grown to over 150.",
     "correct": "positive",
     "wrong": [
       "general",
@@ -561,12 +578,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q21",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第21 至25 題為題組\n   When a person sneezes, the droplets can spread diseases. Now research shows that plants have a\nsomewhat   21   problem. Plant diseases can also spread through tiny water drops that jump off leaves—\na plant’s version of a sneeze.\n     Scientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs\nfrom leaf to leaf.   22    other possible transmission routes, researchers at Virginia Tech observed water\ndrops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could\n“sneeze” and   23    tiny water drops filled with leaf rust germs, spreading the disease to neighboring\nplants.\n    The researchers noticed that small drops of water on the wheat leaves would move to combine and\nform a larger drop. As they were moving, the energy of the droplets in motion would be released. This\nenergy allowed the water   24    into the air, which looked just like sneezing!\n    However, not all plants can sneeze. The ability is   25    to those with leaves that are hydrophobic,\nor repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.\n\n",
+    "q": "【共用閱讀資料】\n第21至25題為題組\n\nWhen a person sneezes, the droplets can spread diseases. Now research shows that plants have a somewhat <u>21</u> problem. Plant diseases can also spread through tiny water drops that jump off leaves—a plant’s version of a sneeze.\n\nScientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs from leaf to leaf. <u>22</u> other possible transmission routes, researchers at Virginia Tech observed water drops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could “sneeze” and <u>23</u> tiny water drops filled with leaf rust germs, spreading the disease to neighboring plants.\n\nThe researchers noticed that small drops of water on the wheat leaves would move to combine and form a larger drop. As they were moving, the energy of the droplets in motion would be released. This energy allowed the water <u>24</u> into the air, which looked just like sneezing!\n\nHowever, not all plants can sneeze. The ability is <u>25</u> to those with leaves that are hydrophobic, or repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.",
     "correct": "similar",
     "wrong": [
       "miserable",
@@ -592,12 +610,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q22",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第21 至25 題為題組\n   When a person sneezes, the droplets can spread diseases. Now research shows that plants have a\nsomewhat   21   problem. Plant diseases can also spread through tiny water drops that jump off leaves—\na plant’s version of a sneeze.\n     Scientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs\nfrom leaf to leaf.   22    other possible transmission routes, researchers at Virginia Tech observed water\ndrops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could\n“sneeze” and   23    tiny water drops filled with leaf rust germs, spreading the disease to neighboring\nplants.\n    The researchers noticed that small drops of water on the wheat leaves would move to combine and\nform a larger drop. As they were moving, the energy of the droplets in motion would be released. This\nenergy allowed the water   24    into the air, which looked just like sneezing!\n    However, not all plants can sneeze. The ability is   25    to those with leaves that are hydrophobic,\nor repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.\n\n",
+    "q": "【共用閱讀資料】\n第21至25題為題組\n\nWhen a person sneezes, the droplets can spread diseases. Now research shows that plants have a somewhat <u>21</u> problem. Plant diseases can also spread through tiny water drops that jump off leaves—a plant’s version of a sneeze.\n\nScientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs from leaf to leaf. <u>22</u> other possible transmission routes, researchers at Virginia Tech observed water drops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could “sneeze” and <u>23</u> tiny water drops filled with leaf rust germs, spreading the disease to neighboring plants.\n\nThe researchers noticed that small drops of water on the wheat leaves would move to combine and form a larger drop. As they were moving, the energy of the droplets in motion would be released. This energy allowed the water <u>24</u> into the air, which looked just like sneezing!\n\nHowever, not all plants can sneeze. The ability is <u>25</u> to those with leaves that are hydrophobic, or repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.",
     "correct": "In a search for",
     "wrong": [
       "As a result of",
@@ -623,12 +642,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q23",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第21 至25 題為題組\n   When a person sneezes, the droplets can spread diseases. Now research shows that plants have a\nsomewhat   21   problem. Plant diseases can also spread through tiny water drops that jump off leaves—\na plant’s version of a sneeze.\n     Scientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs\nfrom leaf to leaf.   22    other possible transmission routes, researchers at Virginia Tech observed water\ndrops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could\n“sneeze” and   23    tiny water drops filled with leaf rust germs, spreading the disease to neighboring\nplants.\n    The researchers noticed that small drops of water on the wheat leaves would move to combine and\nform a larger drop. As they were moving, the energy of the droplets in motion would be released. This\nenergy allowed the water   24    into the air, which looked just like sneezing!\n    However, not all plants can sneeze. The ability is   25    to those with leaves that are hydrophobic,\nor repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.\n\n",
+    "q": "【共用閱讀資料】\n第21至25題為題組\n\nWhen a person sneezes, the droplets can spread diseases. Now research shows that plants have a somewhat <u>21</u> problem. Plant diseases can also spread through tiny water drops that jump off leaves—a plant’s version of a sneeze.\n\nScientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs from leaf to leaf. <u>22</u> other possible transmission routes, researchers at Virginia Tech observed water drops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could “sneeze” and <u>23</u> tiny water drops filled with leaf rust germs, spreading the disease to neighboring plants.\n\nThe researchers noticed that small drops of water on the wheat leaves would move to combine and form a larger drop. As they were moving, the energy of the droplets in motion would be released. This energy allowed the water <u>24</u> into the air, which looked just like sneezing!\n\nHowever, not all plants can sneeze. The ability is <u>25</u> to those with leaves that are hydrophobic, or repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.",
     "correct": "shoot out",
     "wrong": [
       "hold on",
@@ -654,12 +674,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q24",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第21 至25 題為題組\n   When a person sneezes, the droplets can spread diseases. Now research shows that plants have a\nsomewhat   21   problem. Plant diseases can also spread through tiny water drops that jump off leaves—\na plant’s version of a sneeze.\n     Scientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs\nfrom leaf to leaf.   22    other possible transmission routes, researchers at Virginia Tech observed water\ndrops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could\n“sneeze” and   23    tiny water drops filled with leaf rust germs, spreading the disease to neighboring\nplants.\n    The researchers noticed that small drops of water on the wheat leaves would move to combine and\nform a larger drop. As they were moving, the energy of the droplets in motion would be released. This\nenergy allowed the water   24    into the air, which looked just like sneezing!\n    However, not all plants can sneeze. The ability is   25    to those with leaves that are hydrophobic,\nor repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.\n\n",
+    "q": "【共用閱讀資料】\n第21至25題為題組\n\nWhen a person sneezes, the droplets can spread diseases. Now research shows that plants have a somewhat <u>21</u> problem. Plant diseases can also spread through tiny water drops that jump off leaves—a plant’s version of a sneeze.\n\nScientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs from leaf to leaf. <u>22</u> other possible transmission routes, researchers at Virginia Tech observed water drops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could “sneeze” and <u>23</u> tiny water drops filled with leaf rust germs, spreading the disease to neighboring plants.\n\nThe researchers noticed that small drops of water on the wheat leaves would move to combine and form a larger drop. As they were moving, the energy of the droplets in motion would be released. This energy allowed the water <u>24</u> into the air, which looked just like sneezing!\n\nHowever, not all plants can sneeze. The ability is <u>25</u> to those with leaves that are hydrophobic, or repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.",
     "correct": "to jump",
     "wrong": [
       "jump",
@@ -685,12 +706,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q25",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第21 至25 題為題組\n   When a person sneezes, the droplets can spread diseases. Now research shows that plants have a\nsomewhat   21   problem. Plant diseases can also spread through tiny water drops that jump off leaves—\na plant’s version of a sneeze.\n     Scientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs\nfrom leaf to leaf.   22    other possible transmission routes, researchers at Virginia Tech observed water\ndrops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could\n“sneeze” and   23    tiny water drops filled with leaf rust germs, spreading the disease to neighboring\nplants.\n    The researchers noticed that small drops of water on the wheat leaves would move to combine and\nform a larger drop. As they were moving, the energy of the droplets in motion would be released. This\nenergy allowed the water   24    into the air, which looked just like sneezing!\n    However, not all plants can sneeze. The ability is   25    to those with leaves that are hydrophobic,\nor repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.\n\n",
+    "q": "【共用閱讀資料】\n第21至25題為題組\n\nWhen a person sneezes, the droplets can spread diseases. Now research shows that plants have a somewhat <u>21</u> problem. Plant diseases can also spread through tiny water drops that jump off leaves—a plant’s version of a sneeze.\n\nScientists already knew earlier that wind and splashes of rainwater can move bacteria and other germs from leaf to leaf. <u>22</u> other possible transmission routes, researchers at Virginia Tech observed water drops on the leaves of wheat plants that were infected with leaf rust. They found that the sick plants could “sneeze” and <u>23</u> tiny water drops filled with leaf rust germs, spreading the disease to neighboring plants.\n\nThe researchers noticed that small drops of water on the wheat leaves would move to combine and form a larger drop. As they were moving, the energy of the droplets in motion would be released. This energy allowed the water <u>24</u> into the air, which looked just like sneezing!\n\nHowever, not all plants can sneeze. The ability is <u>25</u> to those with leaves that are hydrophobic, or repel water—a special feature that forces the liquid to move away when the leaf is exposed to it.",
     "correct": "unique",
     "wrong": [
       "curious",
@@ -716,12 +738,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q26",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第26 至30 題為題組\n    The idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted\nto   26    people to take January vacations, so they reached out to a psychologist. The scholar then\ndeveloped an equation to find the most depressing day of the year, and it turned out to be the third Monday\nin January. Since then, other companies have jumped on the bandwagon to promote everything from soft\ndrinks to new clothes as a   27    . A group in the UK even started a website devoted to “beating Blue\nMonday.”\n   Many scientists, however, say there is no evidence that Blue Monday causes any more sadness than\nother specific days of the year.   28    , the idea of Blue Monday persists. According to psychologist Dean\nBurnett, people feel down in January   29    post-holiday discontent, and the Blue Monday claim makes\nit seem like there are scientific reasons for this. Also, the idea   30   a very complex issue regarding\ndepression into something simple and easily understandable, and that tends to appeal to a lot of people.\n\n",
+    "q": "【共用閱讀資料】\n第26至30題為題組\n\nThe idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted to <u>26</u> people to take January vacations, so they reached out to a psychologist. The scholar then developed an equation to find the most depressing day of the year, and it turned out to be the third Monday in January. Since then, other companies have jumped on the bandwagon to promote everything from soft drinks to new clothes as a <u>27</u> . A group in the UK even started a website devoted to “beating Blue Monday.”\n\nMany scientists, however, say there is no evidence that Blue Monday causes any more sadness than other specific days of the year. <u>28</u> , the idea of Blue Monday persists. According to psychologist Dean Burnett, people feel down in January <u>29</u> post-holiday discontent, and the Blue Monday claim makes it seem like there are scientific reasons for this. Also, the idea <u>30</u> a very complex issue regarding depression into something simple and easily understandable, and that tends to appeal to a lot of people.",
     "correct": "encourage",
     "wrong": [
       "increase",
@@ -747,12 +770,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q27",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第26 至30 題為題組\n    The idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted\nto   26    people to take January vacations, so they reached out to a psychologist. The scholar then\ndeveloped an equation to find the most depressing day of the year, and it turned out to be the third Monday\nin January. Since then, other companies have jumped on the bandwagon to promote everything from soft\ndrinks to new clothes as a   27    . A group in the UK even started a website devoted to “beating Blue\nMonday.”\n   Many scientists, however, say there is no evidence that Blue Monday causes any more sadness than\nother specific days of the year.   28    , the idea of Blue Monday persists. According to psychologist Dean\nBurnett, people feel down in January   29    post-holiday discontent, and the Blue Monday claim makes\nit seem like there are scientific reasons for this. Also, the idea   30   a very complex issue regarding\ndepression into something simple and easily understandable, and that tends to appeal to a lot of people.\n\n",
+    "q": "【共用閱讀資料】\n第26至30題為題組\n\nThe idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted to <u>26</u> people to take January vacations, so they reached out to a psychologist. The scholar then developed an equation to find the most depressing day of the year, and it turned out to be the third Monday in January. Since then, other companies have jumped on the bandwagon to promote everything from soft drinks to new clothes as a <u>27</u> . A group in the UK even started a website devoted to “beating Blue Monday.”\n\nMany scientists, however, say there is no evidence that Blue Monday causes any more sadness than other specific days of the year. <u>28</u> , the idea of Blue Monday persists. According to psychologist Dean Burnett, people feel down in January <u>29</u> post-holiday discontent, and the Blue Monday claim makes it seem like there are scientific reasons for this. Also, the idea <u>30</u> a very complex issue regarding depression into something simple and easily understandable, and that tends to appeal to a lot of people.",
     "correct": "remedy",
     "wrong": [
       "disguise",
@@ -778,12 +802,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q28",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第26 至30 題為題組\n    The idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted\nto   26    people to take January vacations, so they reached out to a psychologist. The scholar then\ndeveloped an equation to find the most depressing day of the year, and it turned out to be the third Monday\nin January. Since then, other companies have jumped on the bandwagon to promote everything from soft\ndrinks to new clothes as a   27    . A group in the UK even started a website devoted to “beating Blue\nMonday.”\n   Many scientists, however, say there is no evidence that Blue Monday causes any more sadness than\nother specific days of the year.   28    , the idea of Blue Monday persists. According to psychologist Dean\nBurnett, people feel down in January   29    post-holiday discontent, and the Blue Monday claim makes\nit seem like there are scientific reasons for this. Also, the idea   30   a very complex issue regarding\ndepression into something simple and easily understandable, and that tends to appeal to a lot of people.\n\n",
+    "q": "【共用閱讀資料】\n第26至30題為題組\n\nThe idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted to <u>26</u> people to take January vacations, so they reached out to a psychologist. The scholar then developed an equation to find the most depressing day of the year, and it turned out to be the third Monday in January. Since then, other companies have jumped on the bandwagon to promote everything from soft drinks to new clothes as a <u>27</u> . A group in the UK even started a website devoted to “beating Blue Monday.”\n\nMany scientists, however, say there is no evidence that Blue Monday causes any more sadness than other specific days of the year. <u>28</u> , the idea of Blue Monday persists. According to psychologist Dean Burnett, people feel down in January <u>29</u> post-holiday discontent, and the Blue Monday claim makes it seem like there are scientific reasons for this. Also, the idea <u>30</u> a very complex issue regarding depression into something simple and easily understandable, and that tends to appeal to a lot of people.",
     "correct": "And yet",
     "wrong": [
       "If so",
@@ -809,12 +834,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q29",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第26 至30 題為題組\n    The idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted\nto   26    people to take January vacations, so they reached out to a psychologist. The scholar then\ndeveloped an equation to find the most depressing day of the year, and it turned out to be the third Monday\nin January. Since then, other companies have jumped on the bandwagon to promote everything from soft\ndrinks to new clothes as a   27    . A group in the UK even started a website devoted to “beating Blue\nMonday.”\n   Many scientists, however, say there is no evidence that Blue Monday causes any more sadness than\nother specific days of the year.   28    , the idea of Blue Monday persists. According to psychologist Dean\nBurnett, people feel down in January   29    post-holiday discontent, and the Blue Monday claim makes\nit seem like there are scientific reasons for this. Also, the idea   30   a very complex issue regarding\ndepression into something simple and easily understandable, and that tends to appeal to a lot of people.\n\n",
+    "q": "【共用閱讀資料】\n第26至30題為題組\n\nThe idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted to <u>26</u> people to take January vacations, so they reached out to a psychologist. The scholar then developed an equation to find the most depressing day of the year, and it turned out to be the third Monday in January. Since then, other companies have jumped on the bandwagon to promote everything from soft drinks to new clothes as a <u>27</u> . A group in the UK even started a website devoted to “beating Blue Monday.”\n\nMany scientists, however, say there is no evidence that Blue Monday causes any more sadness than other specific days of the year. <u>28</u> , the idea of Blue Monday persists. According to psychologist Dean Burnett, people feel down in January <u>29</u> post-holiday discontent, and the Blue Monday claim makes it seem like there are scientific reasons for this. Also, the idea <u>30</u> a very complex issue regarding depression into something simple and easily understandable, and that tends to appeal to a lot of people.",
     "correct": "owing to",
     "wrong": [
       "as for",
@@ -840,12 +866,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q30",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第26 至30 題為題組\n    The idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted\nto   26    people to take January vacations, so they reached out to a psychologist. The scholar then\ndeveloped an equation to find the most depressing day of the year, and it turned out to be the third Monday\nin January. Since then, other companies have jumped on the bandwagon to promote everything from soft\ndrinks to new clothes as a   27    . A group in the UK even started a website devoted to “beating Blue\nMonday.”\n   Many scientists, however, say there is no evidence that Blue Monday causes any more sadness than\nother specific days of the year.   28    , the idea of Blue Monday persists. According to psychologist Dean\nBurnett, people feel down in January   29    post-holiday discontent, and the Blue Monday claim makes\nit seem like there are scientific reasons for this. Also, the idea   30   a very complex issue regarding\ndepression into something simple and easily understandable, and that tends to appeal to a lot of people.\n\n",
+    "q": "【共用閱讀資料】\n第26至30題為題組\n\nThe idea of Blue Monday dates back to a 2005 campaign by Sky Travel. The travel company wanted to <u>26</u> people to take January vacations, so they reached out to a psychologist. The scholar then developed an equation to find the most depressing day of the year, and it turned out to be the third Monday in January. Since then, other companies have jumped on the bandwagon to promote everything from soft drinks to new clothes as a <u>27</u> . A group in the UK even started a website devoted to “beating Blue Monday.”\n\nMany scientists, however, say there is no evidence that Blue Monday causes any more sadness than other specific days of the year. <u>28</u> , the idea of Blue Monday persists. According to psychologist Dean Burnett, people feel down in January <u>29</u> post-holiday discontent, and the Blue Monday claim makes it seem like there are scientific reasons for this. Also, the idea <u>30</u> a very complex issue regarding depression into something simple and easily understandable, and that tends to appeal to a lot of people.",
     "correct": "breaks down",
     "wrong": [
       "mixes up",
@@ -871,12 +898,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q31",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 31 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 31 空格最適合的選項。",
     "correct": "rare",
     "wrong": [
       "flaw",
@@ -887,7 +915,7 @@
       "range",
       "transfer",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：rare。來源：109年學科能力測驗英文第31題。",
     "subject": "英文",
@@ -909,12 +937,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q32",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 32 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 32 空格最適合的選項。",
     "correct": "attractiveness",
     "wrong": [
       "flaw",
@@ -925,7 +954,7 @@
       "range",
       "transfer",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：attractiveness。來源：109年學科能力測驗英文第32題。",
     "subject": "英文",
@@ -947,12 +976,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q33",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 33 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 33 空格最適合的選項。",
     "correct": "flaw",
     "wrong": [
       "exhibit",
@@ -963,7 +993,7 @@
       "range",
       "transfer",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：flaw。來源：109年學科能力測驗英文第33題。",
     "subject": "英文",
@@ -985,12 +1015,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q34",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 34 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 34 空格最適合的選項。",
     "correct": "transfer",
     "wrong": [
       "flaw",
@@ -1001,7 +1032,7 @@
       "rare",
       "range",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：transfer。來源：109年學科能力測驗英文第34題。",
     "subject": "英文",
@@ -1023,12 +1054,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q35",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 35 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 35 空格最適合的選項。",
     "correct": "exhibit",
     "wrong": [
       "flaw",
@@ -1039,7 +1071,7 @@
       "range",
       "transfer",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：exhibit。來源：109年學科能力測驗英文第35題。",
     "subject": "英文",
@@ -1061,13 +1093,14 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q36",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 36 空格最適合的選項。",
-    "correct": "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 36 空格最適合的選項。",
+    "correct": "presence",
     "wrong": [
       "flaw",
       "exhibit",
@@ -1079,7 +1112,7 @@
       "transfer",
       "natural"
     ],
-    "exp": "正確答案：presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。。來源：109年學科能力測驗英文第36題。",
+    "exp": "正確答案：presence\n\n四、閱讀測驗（占32分）\n\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個選項者，該題以零分計算。。來源：109年學科能力測驗英文第36題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1099,12 +1132,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q37",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 37 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 37 空格最適合的選項。",
     "correct": "chubby",
     "wrong": [
       "flaw",
@@ -1115,7 +1149,7 @@
       "range",
       "transfer",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：chubby。來源：109年學科能力測驗英文第37題。",
     "subject": "英文",
@@ -1137,12 +1171,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q38",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 38 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 38 空格最適合的選項。",
     "correct": "fade",
     "wrong": [
       "flaw",
@@ -1153,7 +1188,7 @@
       "range",
       "transfer",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：fade。來源：109年學科能力測驗英文第38題。",
     "subject": "英文",
@@ -1175,12 +1210,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q39",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 39 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 39 空格最適合的選項。",
     "correct": "natural",
     "wrong": [
       "flaw",
@@ -1191,7 +1227,7 @@
       "rare",
       "range",
       "transfer",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：natural。來源：109年學科能力測驗英文第39題。",
     "subject": "英文",
@@ -1213,12 +1249,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q40",
     "difficulty": "medium",
-    "q": "第31 至40 題為題組\n    Dimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both\ncheeks; a single dimple on one cheek is a relatively   31   phenomenon. Some cultures are found to show\npreference for dimples on one’s cheeks, as the feature is claimed to be a sign of   32    .\n    Though often associated with beauty, most dimples are actually a genetic    33    caused by\nshortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin,\nwhich in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families,\nand are assumed to be an inherited feature. In fact, some researchers believe that the   34    of dimples\nfrom parents to children takes only one gene. If neither of the parents has dimple genes, their children will\nnot   35    the trait.\n    Not all dimples are formed by a genetic defect, though; some may appear due to the   36    of\nexcessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat\ngoes away. Many babies, for example, have dimples on their   37    cheeks. As they grow older and lose\ntheir baby fat, the dimples may   38   with time.\n    For those people who were born without    39    dimples, various methods can be applied to\nsuccessfully create them. These methods   40   from a simple step like makeup to a drastic one like\nsurgery. It all depends on whether you think it is worth the effort.\n\n請選出第 40 空格最適合的選項。",
+    "q": "第31至40題為題組\n\nDimples are small folds or indentations on the cheeks of one’s face. Generally, they appear on both cheeks; a single dimple on one cheek is a relatively <u>31</u> phenomenon. Some cultures are found to show preference for dimples on one’s cheeks, as the feature is claimed to be a sign of <u>32</u> .\n\nThough often associated with beauty, most dimples are actually a genetic <u>33</u> caused by shortened facial muscles. When a person smiles, the shorter-than-normal muscle pulls up the facial skin, which in turn creates a small indentation—or dimple—in the skin. Such dimples tend to occur in families, and are assumed to be an inherited feature. In fact, some researchers believe that the <u>34</u> of dimples from parents to children takes only one gene. If neither of the parents has dimple genes, their children will not <u>35</u> the trait.\n\nNot all dimples are formed by a genetic defect, though; some may appear due to the <u>36</u> of excessive fat on the face. Such dimples are not a permanent trait, for they vanish when the excessive fat goes away. Many babies, for example, have dimples on their <u>37</u> cheeks. As they grow older and lose their baby fat, the dimples may <u>38</u> with time.\n\nFor those people who were born without <u>39</u> dimples, various methods can be applied to successfully create them. These methods <u>40</u> from a simple step like makeup to a drastic one like surgery. It all depends on whether you think it is worth the effort.\n\n請選出第 40 空格最適合的選項。",
     "correct": "range",
     "wrong": [
       "flaw",
@@ -1229,7 +1266,7 @@
       "rare",
       "transfer",
       "natural",
-      "presence\n\n四、閱讀測驗（占3 2 分）\n說明︰第41題至第56題，每題請分別根據各篇文章之文意選出最適當的一個選項，請畫記\n   在答案卡之「選擇題答案區」。各題答對者，得2分；答錯、未作答或畫記多於一個\n   選項者，該題以零分計算。"
+      "presence"
     ],
     "exp": "正確答案：range。來源：109年學科能力測驗英文第40題。",
     "subject": "英文",
@@ -1251,19 +1288,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q41",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/gsat-109-english/G41-44-context.png)\n\n![第41題原卷資料](/assets/banks/gsat-109-english/Q41-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n第41至44題為題組\n\nThe flip-flop is the simplest shoe on the planet. It consists of a piece of rubber, plastic, leather, or woven material in the outline of a foot, with a strap holding the sandal to a wearer’s toes. The name comes from the sound the sandals make when they slap the walking feet.\n\nThe earliest record of people wearing the flip-flop comes from Egypt, but many ancient cultures had their own variants of the footwear. In the Greek version, the toe strap ran between the first and second toes, while Roman sandals had the strap between the second and third toes. The Mesopotamians wore the strap between the third and fourth toes. In India, “toe knob” sandals had a knob between the first and second toes.\n\nModern flip-flops derive from Japanese zōris, which were often worn with socks dividing the big toe from the rest, and were typically made of rice straw. During World War II, Japan seized much of Southeast Asia’s rubber. In 1945, devastated from the war, the country set about establishing a cheap industry that could rebuild its economy. The Japanese used their rubber reserves from the war to mass-produce the simplest Japanese footwear. Rubber thus replaced rice straw as the major material for the flip-flop.\n\nIn the 1950s, flip-flops became popular in the United States as soldiers returning from occupied Japan brought zōris home. The sandals have subsequently undergone redesign, often appearing in bright colors in line with Californian beach culture. They have remained popular due to their convenience, and are often worn with bathing suits or summer clothing. Some people also wear dressy versions for more formal occasions.\n\nDespite their popularity, flip-flops provoke some questions. Their simple design is responsible for many foot injuries. Another issue is the suitability of exposing feet on the street and places other than the beach. But even more serious is their environmental impact: Millions of plastic discards end up in landfills or the ocean, releasing chemicals and at the same time taking centuries to decompose.\n\n![圖表](/assets/banks/gsat-109-english/G41-44-figure-1.png)\n\nWhich culture most likely created the sandals shown in the picture?",
+    "correct": "Roman.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Indian.",
+      "Greek.",
+      "Mesopotamian."
     ],
-    "exp": "正確答案：原卷選項 D。來源：109年學科能力測驗英文第41題。",
+    "exp": "正確答案：Roman.。來源：109年學科能力測驗英文第41題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1283,21 +1321,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-109-english/G41-44-context.png",
-      "/assets/banks/gsat-109-english/Q41-question.png"
-    ]
+      "/assets/banks/gsat-109-english/G41-44-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q42",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/gsat-109-english/G41-44-context.png)\n\n![第42題原卷資料](/assets/banks/gsat-109-english/Q42-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n第41至44題為題組\n\nThe flip-flop is the simplest shoe on the planet. It consists of a piece of rubber, plastic, leather, or woven material in the outline of a foot, with a strap holding the sandal to a wearer’s toes. The name comes from the sound the sandals make when they slap the walking feet.\n\nThe earliest record of people wearing the flip-flop comes from Egypt, but many ancient cultures had their own variants of the footwear. In the Greek version, the toe strap ran between the first and second toes, while Roman sandals had the strap between the second and third toes. The Mesopotamians wore the strap between the third and fourth toes. In India, “toe knob” sandals had a knob between the first and second toes.\n\nModern flip-flops derive from Japanese zōris, which were often worn with socks dividing the big toe from the rest, and were typically made of rice straw. During World War II, Japan seized much of Southeast Asia’s rubber. In 1945, devastated from the war, the country set about establishing a cheap industry that could rebuild its economy. The Japanese used their rubber reserves from the war to mass-produce the simplest Japanese footwear. Rubber thus replaced rice straw as the major material for the flip-flop.\n\nIn the 1950s, flip-flops became popular in the United States as soldiers returning from occupied Japan brought zōris home. The sandals have subsequently undergone redesign, often appearing in bright colors in line with Californian beach culture. They have remained popular due to their convenience, and are often worn with bathing suits or summer clothing. Some people also wear dressy versions for more formal occasions.\n\nDespite their popularity, flip-flops provoke some questions. Their simple design is responsible for many foot injuries. Another issue is the suitability of exposing feet on the street and places other than the beach. But even more serious is their environmental impact: Millions of plastic discards end up in landfills or the ocean, releasing chemicals and at the same time taking centuries to decompose.\n\n![圖表](/assets/banks/gsat-109-english/G41-44-figure-1.png)\n\nWhy is the footwear discussed in the passage called “flip-flop”?",
+    "correct": "Because of the noise it makes.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Because of its changeable design.",
+      "Because of its simple structure.",
+      "Because of the comfort of wearing it."
     ],
-    "exp": "正確答案：原卷選項 A。來源：109年學科能力測驗英文第42題。",
+    "exp": "正確答案：Because of the noise it makes.。來源：109年學科能力測驗英文第42題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1317,21 +1355,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-109-english/G41-44-context.png",
-      "/assets/banks/gsat-109-english/Q42-question.png"
-    ]
+      "/assets/banks/gsat-109-english/G41-44-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q43",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/gsat-109-english/G41-44-context.png)\n\n![第43題原卷資料](/assets/banks/gsat-109-english/Q43-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n第41至44題為題組\n\nThe flip-flop is the simplest shoe on the planet. It consists of a piece of rubber, plastic, leather, or woven material in the outline of a foot, with a strap holding the sandal to a wearer’s toes. The name comes from the sound the sandals make when they slap the walking feet.\n\nThe earliest record of people wearing the flip-flop comes from Egypt, but many ancient cultures had their own variants of the footwear. In the Greek version, the toe strap ran between the first and second toes, while Roman sandals had the strap between the second and third toes. The Mesopotamians wore the strap between the third and fourth toes. In India, “toe knob” sandals had a knob between the first and second toes.\n\nModern flip-flops derive from Japanese zōris, which were often worn with socks dividing the big toe from the rest, and were typically made of rice straw. During World War II, Japan seized much of Southeast Asia’s rubber. In 1945, devastated from the war, the country set about establishing a cheap industry that could rebuild its economy. The Japanese used their rubber reserves from the war to mass-produce the simplest Japanese footwear. Rubber thus replaced rice straw as the major material for the flip-flop.\n\nIn the 1950s, flip-flops became popular in the United States as soldiers returning from occupied Japan brought zōris home. The sandals have subsequently undergone redesign, often appearing in bright colors in line with Californian beach culture. They have remained popular due to their convenience, and are often worn with bathing suits or summer clothing. Some people also wear dressy versions for more formal occasions.\n\nDespite their popularity, flip-flops provoke some questions. Their simple design is responsible for many foot injuries. Another issue is the suitability of exposing feet on the street and places other than the beach. But even more serious is their environmental impact: Millions of plastic discards end up in landfills or the ocean, releasing chemicals and at the same time taking centuries to decompose.\n\n![圖表](/assets/banks/gsat-109-english/G41-44-figure-1.png)\n\nWhich of the following is true about the modern development of the flip-flop?",
+    "correct": "The sandals American soldiers brought home from Japan later became modern flip-flops.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Modern flip-flops originated from Indian toe knob sandals.",
+      "Americans loved the Japanese flip-flop because of its bright colors.",
+      "Rubber became the major material of the flip-flop before World War II."
     ],
-    "exp": "正確答案：原卷選項 D。來源：109年學科能力測驗英文第43題。",
+    "exp": "正確答案：The sandals American soldiers brought home from Japan later became modern flip-flops.。來源：109年學科能力測驗英文第43題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1351,21 +1389,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-109-english/G41-44-context.png",
-      "/assets/banks/gsat-109-english/Q43-question.png"
-    ]
+      "/assets/banks/gsat-109-english/G41-44-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q44",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/gsat-109-english/G41-44-context.png)\n\n![第44題原卷資料](/assets/banks/gsat-109-english/Q44-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n第41至44題為題組\n\nThe flip-flop is the simplest shoe on the planet. It consists of a piece of rubber, plastic, leather, or woven material in the outline of a foot, with a strap holding the sandal to a wearer’s toes. The name comes from the sound the sandals make when they slap the walking feet.\n\nThe earliest record of people wearing the flip-flop comes from Egypt, but many ancient cultures had their own variants of the footwear. In the Greek version, the toe strap ran between the first and second toes, while Roman sandals had the strap between the second and third toes. The Mesopotamians wore the strap between the third and fourth toes. In India, “toe knob” sandals had a knob between the first and second toes.\n\nModern flip-flops derive from Japanese zōris, which were often worn with socks dividing the big toe from the rest, and were typically made of rice straw. During World War II, Japan seized much of Southeast Asia’s rubber. In 1945, devastated from the war, the country set about establishing a cheap industry that could rebuild its economy. The Japanese used their rubber reserves from the war to mass-produce the simplest Japanese footwear. Rubber thus replaced rice straw as the major material for the flip-flop.\n\nIn the 1950s, flip-flops became popular in the United States as soldiers returning from occupied Japan brought zōris home. The sandals have subsequently undergone redesign, often appearing in bright colors in line with Californian beach culture. They have remained popular due to their convenience, and are often worn with bathing suits or summer clothing. Some people also wear dressy versions for more formal occasions.\n\nDespite their popularity, flip-flops provoke some questions. Their simple design is responsible for many foot injuries. Another issue is the suitability of exposing feet on the street and places other than the beach. But even more serious is their environmental impact: Millions of plastic discards end up in landfills or the ocean, releasing chemicals and at the same time taking centuries to decompose.\n\n![圖表](/assets/banks/gsat-109-english/G41-44-figure-1.png)\n\nWhich of the following is NOT mentioned as a concern of wearing the flip-flop?",
+    "correct": "Poor quality.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Personal health.",
+      "Social appropriateness.",
+      "Marine pollution."
     ],
-    "exp": "正確答案：原卷選項 B。來源：109年學科能力測驗英文第44題。",
+    "exp": "正確答案：Poor quality.。來源：109年學科能力測驗英文第44題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1385,14 +1423,14 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-109-english/G41-44-context.png",
-      "/assets/banks/gsat-109-english/Q44-question.png"
-    ]
+      "/assets/banks/gsat-109-english/G41-44-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q45",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第45 至48 題為題組\n    Ships are the lifeline of trade among countries. Almost everything, from food to machinery, comes by\nway of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the\nvessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and\nanchoring it is taken up by a different captain. This captain is called a marine pilot.\n   A marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is\nneeded to direct large ships into a port, where there are often deep water channels surrounded by shallower\nseabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real\nchance of running aground and damaging the ship and the cargo, some of which might be dangerous if\nreleased into a water-based ecosystem.\n     In addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a\nport. During different tides, currents may change from one direction to the other. The same strategy for\ndocking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can\nsignificantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n    Marine pilotage is a job that requires a high degree of proficiency as well as quick and independent\nthinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and\ncontrols the vessel based on his or her knowledge of the port and the situation at hand. The pilot is\nresponsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nWhat is the passage mainly about?",
+    "q": "【共用閱讀資料】\n第45至48題為題組\n\nShips are the lifeline of trade among countries. Almost everything, from food to machinery, comes by way of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the vessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and anchoring it is taken up by a different captain. This captain is called a marine pilot.\n\nA marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is needed to direct large ships into a port, where there are often deep water channels surrounded by shallower seabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real chance of running aground and damaging the ship and the cargo, some of which might be dangerous if released into a water-based ecosystem.\n\nIn addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a port. During different tides, currents may change from one direction to the other. The same strategy for docking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can significantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n\nMarine pilotage is a job that requires a high degree of proficiency as well as quick and independent thinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and controls the vessel based on his or her knowledge of the port and the situation at hand. The pilot is responsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nWhat is the passage mainly about?",
     "correct": "A special profession.",
     "wrong": [
       "Shipping and trading.",
@@ -1418,12 +1456,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q46",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第45 至48 題為題組\n    Ships are the lifeline of trade among countries. Almost everything, from food to machinery, comes by\nway of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the\nvessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and\nanchoring it is taken up by a different captain. This captain is called a marine pilot.\n   A marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is\nneeded to direct large ships into a port, where there are often deep water channels surrounded by shallower\nseabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real\nchance of running aground and damaging the ship and the cargo, some of which might be dangerous if\nreleased into a water-based ecosystem.\n     In addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a\nport. During different tides, currents may change from one direction to the other. The same strategy for\ndocking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can\nsignificantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n    Marine pilotage is a job that requires a high degree of proficiency as well as quick and independent\nthinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and\ncontrols the vessel based on his or her knowledge of the port and the situation at hand. The pilot is\nresponsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nWhich of the following is part of the knowledge that a marine pilot must have?",
+    "q": "【共用閱讀資料】\n第45至48題為題組\n\nShips are the lifeline of trade among countries. Almost everything, from food to machinery, comes by way of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the vessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and anchoring it is taken up by a different captain. This captain is called a marine pilot.\n\nA marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is needed to direct large ships into a port, where there are often deep water channels surrounded by shallower seabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real chance of running aground and damaging the ship and the cargo, some of which might be dangerous if released into a water-based ecosystem.\n\nIn addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a port. During different tides, currents may change from one direction to the other. The same strategy for docking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can significantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n\nMarine pilotage is a job that requires a high degree of proficiency as well as quick and independent thinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and controls the vessel based on his or her knowledge of the port and the situation at hand. The pilot is responsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nWhich of the following is part of the knowledge that a marine pilot must have?",
     "correct": "The weather conditions.",
     "wrong": [
       "The value of the ships.",
@@ -1449,12 +1488,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q47",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第45 至48 題為題組\n    Ships are the lifeline of trade among countries. Almost everything, from food to machinery, comes by\nway of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the\nvessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and\nanchoring it is taken up by a different captain. This captain is called a marine pilot.\n   A marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is\nneeded to direct large ships into a port, where there are often deep water channels surrounded by shallower\nseabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real\nchance of running aground and damaging the ship and the cargo, some of which might be dangerous if\nreleased into a water-based ecosystem.\n     In addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a\nport. During different tides, currents may change from one direction to the other. The same strategy for\ndocking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can\nsignificantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n    Marine pilotage is a job that requires a high degree of proficiency as well as quick and independent\nthinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and\ncontrols the vessel based on his or her knowledge of the port and the situation at hand. The pilot is\nresponsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nWhat does “a crucial time” in the last paragraph refer to?",
+    "q": "【共用閱讀資料】\n第45至48題為題組\n\nShips are the lifeline of trade among countries. Almost everything, from food to machinery, comes by way of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the vessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and anchoring it is taken up by a different captain. This captain is called a marine pilot.\n\nA marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is needed to direct large ships into a port, where there are often deep water channels surrounded by shallower seabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real chance of running aground and damaging the ship and the cargo, some of which might be dangerous if released into a water-based ecosystem.\n\nIn addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a port. During different tides, currents may change from one direction to the other. The same strategy for docking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can significantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n\nMarine pilotage is a job that requires a high degree of proficiency as well as quick and independent thinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and controls the vessel based on his or her knowledge of the port and the situation at hand. The pilot is responsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nWhat does “a crucial time” in the last paragraph refer to?",
     "correct": "When a ship is waiting to enter the port.",
     "wrong": [
       "When the vessel hits a flat.",
@@ -1480,12 +1520,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q48",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第45 至48 題為題組\n    Ships are the lifeline of trade among countries. Almost everything, from food to machinery, comes by\nway of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the\nvessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and\nanchoring it is taken up by a different captain. This captain is called a marine pilot.\n   A marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is\nneeded to direct large ships into a port, where there are often deep water channels surrounded by shallower\nseabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real\nchance of running aground and damaging the ship and the cargo, some of which might be dangerous if\nreleased into a water-based ecosystem.\n     In addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a\nport. During different tides, currents may change from one direction to the other. The same strategy for\ndocking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can\nsignificantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n    Marine pilotage is a job that requires a high degree of proficiency as well as quick and independent\nthinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and\ncontrols the vessel based on his or her knowledge of the port and the situation at hand. The pilot is\nresponsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nHow does the author conclude the passage in the last paragraph?",
+    "q": "【共用閱讀資料】\n第45至48題為題組\n\nShips are the lifeline of trade among countries. Almost everything, from food to machinery, comes by way of the sea in huge ships piloted by captains. But the captain of a ship is responsible for guiding the vessel until they hit a port, waiting to enter the harbor. The task of bringing the ship into the harbor and anchoring it is taken up by a different captain. This captain is called a marine pilot.\n\nA marine pilot is a boat pilot with specialized knowledge of a particular port or harbor. The pilot is needed to direct large ships into a port, where there are often deep water channels surrounded by shallower seabeds. Without the services of a marine pilot, docking ships would be hazardous. There would be a real chance of running aground and damaging the ship and the cargo, some of which might be dangerous if released into a water-based ecosystem.\n\nIn addition to the shallower seabeds, tide and wind pose further challenges for bringing ships into a port. During different tides, currents may change from one direction to the other. The same strategy for docking a vessel during an incoming tide may not work during an outgoing tide. Also, the wind can significantly alter the direction of the ship and how it reacts, adding to the difficulty of anchoring the ship.\n\nMarine pilotage is a job that requires a high degree of proficiency as well as quick and independent thinking. Above all, it is about risk management. A marine pilot goes on board at a crucial time and controls the vessel based on his or her knowledge of the port and the situation at hand. The pilot is responsible for not only the safety of the ship but also the protection of the port and the marine environment.\n\nHow does the author conclude the passage in the last paragraph?",
     "correct": "By summarizing the main points.",
     "wrong": [
       "By adding new details.",
@@ -1511,12 +1552,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q49",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第49 至52 題為題組\n     Probably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel\nblades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and\nhas a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an\nofficial test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity,\nwhile exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the\nmouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity\nlevel (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and\nblended to improve flavor, and is recommended for all-purpose cooking.\n     Packaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when\nexposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote\noxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection\nfrom light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further\nreduces its quality.\n\n     Olive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality\nof olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to\nimprove the transparency of the testing process and boost the accuracy of the results. A redefinition of the\nterm “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil.\nIndustry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nWhat is the passage mainly about?",
+    "q": "【共用閱讀資料】\n第49至52題為題組\n\nProbably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel blades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and has a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an official test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity, while exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the mouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity level (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and blended to improve flavor, and is recommended for all-purpose cooking.\n\nPackaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when exposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote oxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection from light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further reduces its quality.\n\nOlive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality of olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to improve the transparency of the testing process and boost the accuracy of the results. A redefinition of the term “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil. Industry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nWhat is the passage mainly about?",
     "correct": "The quality of olive oil.",
     "wrong": [
       "The flavor of olive oil.",
@@ -1543,12 +1585,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q50",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第49 至52 題為題組\n     Probably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel\nblades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and\nhas a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an\nofficial test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity,\nwhile exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the\nmouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity\nlevel (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and\nblended to improve flavor, and is recommended for all-purpose cooking.\n     Packaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when\nexposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote\noxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection\nfrom light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further\nreduces its quality.\n\n     Olive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality\nof olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to\nimprove the transparency of the testing process and boost the accuracy of the results. A redefinition of the\nterm “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil.\nIndustry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nWhich of the following statements is true about extra virgin olive oil?",
+    "q": "【共用閱讀資料】\n第49至52題為題組\n\nProbably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel blades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and has a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an official test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity, while exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the mouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity level (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and blended to improve flavor, and is recommended for all-purpose cooking.\n\nPackaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when exposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote oxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection from light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further reduces its quality.\n\nOlive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality of olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to improve the transparency of the testing process and boost the accuracy of the results. A redefinition of the term “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil. Industry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nWhich of the following statements is true about extra virgin olive oil?",
     "correct": "It has a lower acidity rate than virgin olive oil.",
     "wrong": [
       "It is free from any bitter flavor.",
@@ -1575,12 +1618,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q51",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第49 至52 題為題組\n     Probably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel\nblades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and\nhas a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an\nofficial test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity,\nwhile exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the\nmouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity\nlevel (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and\nblended to improve flavor, and is recommended for all-purpose cooking.\n     Packaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when\nexposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote\noxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection\nfrom light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further\nreduces its quality.\n\n     Olive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality\nof olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to\nimprove the transparency of the testing process and boost the accuracy of the results. A redefinition of the\nterm “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil.\nIndustry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nAccording to the passage, what is the best way to store olive oil?",
+    "q": "【共用閱讀資料】\n第49至52題為題組\n\nProbably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel blades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and has a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an official test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity, while exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the mouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity level (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and blended to improve flavor, and is recommended for all-purpose cooking.\n\nPackaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when exposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote oxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection from light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further reduces its quality.\n\nOlive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality of olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to improve the transparency of the testing process and boost the accuracy of the results. A redefinition of the term “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil. Industry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nAccording to the passage, what is the best way to store olive oil?",
     "correct": "In an airtight glass bottle in a kitchen cupboard.",
     "wrong": [
       "In a plastic container in a damp cellar.",
@@ -1607,12 +1651,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q52",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第49 至52 題為題組\n     Probably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel\nblades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and\nhas a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an\nofficial test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity,\nwhile exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the\nmouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity\nlevel (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and\nblended to improve flavor, and is recommended for all-purpose cooking.\n     Packaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when\nexposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote\noxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection\nfrom light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further\nreduces its quality.\n\n     Olive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality\nof olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to\nimprove the transparency of the testing process and boost the accuracy of the results. A redefinition of the\nterm “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil.\nIndustry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nWhat is the IOC trying to do?",
+    "q": "【共用閱讀資料】\n第49至52題為題組\n\nProbably the most widely used oil in cooking, olive oil is made by crushing olives with stone or steel blades to release the oil. Extra virgin oil, the finest grade, is made from the first pressing of the olives and has a very low acidity rate (under 1%). To be qualified as “extra virgin,” the oil must also pass both an official test in a laboratory and a sensory evaluation by a trained tasting panel. It must be free from impurity, while exhibiting some fruitiness and creating a pleasant bitter flavor along with a peppery sensation in the mouth. Second on the ranking is virgin olive oil. It is also a first pressing, but has a slightly higher acidity level (under 2%). Lastly, pure olive oil is the cheapest olive oil. It is refined to remove its impurities and blended to improve flavor, and is recommended for all-purpose cooking.\n\nPackaging and storage also have an impact on the quality of olive oil. Olive oil spoils quickly when exposed to direct sunlight, so it should be stored in the dark at 16-18°C. Moisture and oxygen promote oxidation and therefore limit its shelf life. Plastic containers usually do not provide adequate protection from light, heat, or moisture; additionally, small particles in plastics can leak into the oil, which further reduces its quality.\n\nOlive oil tasters have long adopted descriptive terms such as “pure” and “light” to evaluate the quality of olive oil. Recently, however, the International Olive Council (IOC) is seeking input on test methods to improve the transparency of the testing process and boost the accuracy of the results. A redefinition of the term “olive oil” is also proposed to make a clear distinction between virgin olive oil and pure olive oil. Industry members of the IOC hope to promote the trade of olive oil by initiating these changes.\n\nWhat is the IOC trying to do?",
     "correct": "Improve the ways of grading olive oil.",
     "wrong": [
       "Train more qualified olive oil tasters.",
@@ -1639,12 +1684,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q53",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第53 至56 題為題組\n     Researchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in\norder to prevent collisions with animals on the tracks.\n    The country has been troubled by a problem with trains colliding with deer on its railways. According\nto Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30\nminutes resulting from collisions with deer and other wild animals in 2016-17.\n    Deer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up\niron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep\nthe deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red\nlights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n    This new device has been invented by a team at the country’s Railway Technical Research Institute\n(RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert\nother deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens\nthe effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-\nlong recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n   RTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks,\nhave resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer\nare commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhy are deer attracted to train tracks?",
+    "q": "【共用閱讀資料】\n第53至56題為題組\n\nResearchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in order to prevent collisions with animals on the tracks.\n\nThe country has been troubled by a problem with trains colliding with deer on its railways. According to Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30 minutes resulting from collisions with deer and other wild animals in 2016-17.\n\nDeer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up iron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep the deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red lights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n\nThis new device has been invented by a team at the country’s Railway Technical Research Institute (RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert other deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens the effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-long recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n\nRTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks, have resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer are commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhy are deer attracted to train tracks?",
     "correct": "They need nutrition from train tracks.",
     "wrong": [
       "They mate at night near railways.",
@@ -1670,12 +1716,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q54",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第53 至56 題為題組\n     Researchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in\norder to prevent collisions with animals on the tracks.\n    The country has been troubled by a problem with trains colliding with deer on its railways. According\nto Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30\nminutes resulting from collisions with deer and other wild animals in 2016-17.\n    Deer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up\niron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep\nthe deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red\nlights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n    This new device has been invented by a team at the country’s Railway Technical Research Institute\n(RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert\nother deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens\nthe effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-\nlong recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n   RTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks,\nhave resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer\nare commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhat device has NOT been used to solve the railway problem in Japan?",
+    "q": "【共用閱讀資料】\n第53至56題為題組\n\nResearchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in order to prevent collisions with animals on the tracks.\n\nThe country has been troubled by a problem with trains colliding with deer on its railways. According to Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30 minutes resulting from collisions with deer and other wild animals in 2016-17.\n\nDeer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up iron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep the deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red lights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n\nThis new device has been invented by a team at the country’s Railway Technical Research Institute (RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert other deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens the effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-long recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n\nRTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks, have resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer are commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhat device has NOT been used to solve the railway problem in Japan?",
     "correct": "Noisy train tracks.",
     "wrong": [
       "Flashing lights.",
@@ -1702,12 +1749,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q55",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第53 至56 題為題組\n     Researchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in\norder to prevent collisions with animals on the tracks.\n    The country has been troubled by a problem with trains colliding with deer on its railways. According\nto Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30\nminutes resulting from collisions with deer and other wild animals in 2016-17.\n    Deer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up\niron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep\nthe deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red\nlights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n    This new device has been invented by a team at the country’s Railway Technical Research Institute\n(RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert\nother deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens\nthe effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-\nlong recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n   RTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks,\nhave resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer\nare commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhich of the following is true about the deer issue discussed in the passage?",
+    "q": "【共用閱讀資料】\n第53至56題為題組\n\nResearchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in order to prevent collisions with animals on the tracks.\n\nThe country has been troubled by a problem with trains colliding with deer on its railways. According to Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30 minutes resulting from collisions with deer and other wild animals in 2016-17.\n\nDeer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up iron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep the deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red lights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n\nThis new device has been invented by a team at the country’s Railway Technical Research Institute (RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert other deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens the effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-long recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n\nRTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks, have resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer are commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhich of the following is true about the deer issue discussed in the passage?",
     "correct": "RTRI’s new invention prompts deer to run away.",
     "wrong": [
       "People living near the tracks complain about deer snorts.",
@@ -1734,12 +1782,13 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-109-english-q56",
     "difficulty": "medium",
-    "q": "【共用閱讀資料】\n第53 至56 題為題組\n     Researchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in\norder to prevent collisions with animals on the tracks.\n    The country has been troubled by a problem with trains colliding with deer on its railways. According\nto Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30\nminutes resulting from collisions with deer and other wild animals in 2016-17.\n    Deer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up\niron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep\nthe deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red\nlights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n    This new device has been invented by a team at the country’s Railway Technical Research Institute\n(RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert\nother deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens\nthe effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-\nlong recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n   RTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks,\nhave resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer\nare commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhat does the author mean by “the unforgiving nature of tons of onrushing rolling stock” in the\n    third paragraph?",
+    "q": "【共用閱讀資料】\n第53至56題為題組\n\nResearchers in Japan have installed on a train a speaker that barks like a dog and snorts like a deer in order to prevent collisions with animals on the tracks.\n\nThe country has been troubled by a problem with trains colliding with deer on its railways. According to Japan’s transport ministry, there were 613 cases of train services suspended or delayed for at least 30 minutes resulting from collisions with deer and other wild animals in 2016-17.\n\nDeer are attracted to railway lines because of a need for iron in their diets. They lick the rails to pick up iron filings caused by the action of wheels against tracks. This dietary need has led to a constant battle to keep the deer separate from the unforgiving nature of tons of onrushing rolling stock. In the past, flashing red lights and even lion faces have been unsuccessfully trialed in an attempt to keep deer off the tracks.\n\nThis new device has been invented by a team at the country’s Railway Technical Research Institute (RTRI). RTRI officials explain that deer have a habit of repeatedly snorting short, shrill sounds to alert other deer when they perceive danger. The barking of the hound, which drives deer to panic, strengthens the effect of the warning noise, according to the RTRI. When the deer hear a combination of a 3-second-long recording of a deer’s snort and 20 seconds of a barking dog, they panic and flee rapidly.\n\nRTRI researchers say late-night tests, at times when deer are most frequently seen by railway tracks, have resulted in a 45 percent reduction of deer sighting. Future plans include static barking sites where deer are commonly seen, but “the noises will not be blared in areas where people live beside the tracks.”\n\nWhat does the author mean by “the unforgiving nature of tons of onrushing rolling stock” in the\n\nthird paragraph?",
     "correct": "The danger of a fast-moving train.",
     "wrong": [
       "The heavy weight of iron materials.",
@@ -1766,6 +1815,7 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": []
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

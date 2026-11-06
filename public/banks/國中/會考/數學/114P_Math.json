@@ -2,14 +2,14 @@
   {
     "id": "cap-114-math-q1",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-114-math/Q1-question.png)",
-    "correct": "原卷選項 C",
+    "q": "算式 7<sup>10</sup> × 7<sup>2</sup> ÷ 7<sup>4</sup>之值可用下列何者表示？",
+    "correct": "7<sup>8</sup>",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "7<sup>3</sup>",
+      "7<sup>5</sup>",
+      "7<sup>16</sup>"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考數學第1題。",
+    "exp": "正確答案：7<sup>8</sup>。來源：114年國中教育會考數學第1題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -24,23 +24,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q1-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.75,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q2",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-114-math/Q2-question.png)",
-    "correct": "原卷選項 B",
+    "q": "計算 ( 5x<sup>2</sup> − 2x ) − ( 4 − 3x ) 的結果，與下列何者相同？",
+    "correct": "5x<sup>2</sup> + x − 4",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "5x<sup>2</sup> − 3x",
+      "5x<sup>2</sup> − 5x + 4",
+      "5x<sup>2</sup> − 5x − 4"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考數學第2題。",
+    "exp": "正確答案：5x<sup>2</sup> + x − 4。來源：114年國中教育會考數學第2題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -55,23 +54,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q2-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q3",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-114-math/Q3-question-1.png)\n\n![第3題原卷資料](/assets/banks/cap-114-math/Q3-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "圖 ( 一 ) 方格紙格線上的八條等長線段形成一個\n線對稱圖形。圖中有四條線段標示上號碼，判斷\n擦去下列哪個選項中的兩條線段後，剩下的圖形\n不是線對稱圖形？\n\n![圖表](/assets/banks/cap-114-math/Q3-figure-1.png)",
+    "correct": "②和③",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "①和②",
+      "①和③",
+      "②和④"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考數學第3題。",
+    "exp": "正確答案：②和③。來源：114年國中教育會考數學第3題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -88,23 +86,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q3-question-1.png",
-      "/assets/banks/cap-114-math/Q3-question-2.png"
+      "/assets/banks/cap-114-math/Q3-figure-1.png"
     ],
     "passRate": 0.88,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q4",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-114-math/Q4-question.png)",
-    "correct": "原卷選項 B",
+    "q": "37x + 2y = 81  x = a\n4.\t 若二元一次聯立方程式的解為 ，則 a + 2b 之值為何？\n23x − 2y = 39  y = b",
+    "correct": "9",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "33",
+      "−3",
+      "−27"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考數學第4題。",
+    "exp": "正確答案：9。來源：114年國中教育會考數學第4題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -119,23 +117,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q4-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.77,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q5",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-114-math/Q5-question.png)",
-    "correct": "原卷選項 C",
+    "q": "如圖( 二)，  ∆ABC 中有 AD ，D 點在 BC 上。根據\n圖中標示的度數，求 p + q + r 之值是多少？\n圖( 二)\n\n![圖表](/assets/banks/cap-114-math/Q5-figure-1.png)",
+    "correct": "160",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "140",
+      "150",
+      "180"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考數學第5題。",
+    "exp": "正確答案：160。來源：114年國中教育會考數學第5題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -151,22 +148,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q5-question.png"
+      "/assets/banks/cap-114-math/Q5-figure-1.png"
     ],
     "passRate": 0.82,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q6",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-114-math/Q6-question-1.png)\n\n![第6題原卷資料](/assets/banks/cap-114-math/Q6-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "圖( 三) 為一坐標平面，若從平面上的點 ( −1 , 2 )\n出發，向下移動再向右移動，則可能移動到下列\n哪一點？\n圖( 三)\n\n![圖表](/assets/banks/cap-114-math/Q6-figure-1.png)",
+    "correct": "( 4 , 1 )",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "( 4 , 3 )",
+      "( −4 , 1 )",
+      "( −4 , 3 )"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考數學第6題。",
+    "exp": "正確答案：( 4 , 1 )。來源：114年國中教育會考數學第6題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -183,23 +181,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q6-question-1.png",
-      "/assets/banks/cap-114-math/Q6-question-2.png"
+      "/assets/banks/cap-114-math/Q6-figure-1.png"
     ],
     "passRate": 0.77,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q7",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-114-math/Q7-question.png)",
-    "correct": "原卷選項 A",
+    "q": "圖( 四) 為某國預估 50 年後的人口變動數直方圖，各組的數值若為正數表示\n該組人口 50 年後會增加，若為負數表示該組人口 50 年後會減少。根據此圖預估\n該國 60 歲以上的人口，50 年後會增加或減少多少人？\n\n圖( 四)\n\n![圖表](/assets/banks/cap-114-math/Q7-figure-1.png)\n\n![圖表](/assets/banks/cap-114-math/Q7-figure-2.png)\n\n",
+    "correct": "增加 207 萬人",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "增加 425 萬人",
+      "減少 109 萬人",
+      "減少 271 萬人"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考數學第7題。",
+    "exp": "正確答案：增加 207 萬人。來源：114年國中教育會考數學第7題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -215,22 +213,24 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q7-question.png"
+      "/assets/banks/cap-114-math/Q7-figure-1.png",
+      "/assets/banks/cap-114-math/Q7-figure-2.png"
     ],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q8",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-114-math/Q8-question-1.png)\n\n![第8題原卷資料](/assets/banks/cap-114-math/Q8-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "計算 ( 2$\\sqrt{3}$ + $\\sqrt{6}$ ) × $\\sqrt{2}$ 的結果，與下列何者相同？",
+    "correct": "2$\\sqrt{3}$ + 2$\\sqrt{6}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "4$\\sqrt{3}$",
+      "6$\\sqrt{3}$",
+      "4$\\sqrt{3}$ + 2$\\sqrt{6}$"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考數學第8題。",
+    "exp": "正確答案：2$\\sqrt{3}$ + 2$\\sqrt{6}$。來源：114年國中教育會考數學第8題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -246,24 +246,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q8-question-1.png",
-      "/assets/banks/cap-114-math/Q8-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.75,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q9",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-114-math/Q9-question.png)",
-    "correct": "原卷選項 A",
+    "q": "某園區想將 20 個無障礙停車位設置在出入口附近，為了符合規定，規劃每個\n停車位的長度為 600 公分，寬度為 200 公分，並且停車位旁需設置寬度為 150 公分\n的下車區，相鄰的停車位可以共用下車區。若以圖( 五) 的方式讓這些停車位\n相鄰，且兩個相鄰的停車位之間皆有下車區，則圖中的停車位及下車區的總寬度\n是多少公分？\n\n圖( 五)\n\n![圖表](/assets/banks/cap-114-math/Q9-figure-1.png)\n\n",
+    "correct": "6850",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "7000",
+      "7150",
+      "7200"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考數學第9題。",
+    "exp": "正確答案：6850。來源：114年國中教育會考數學第9題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -279,22 +277,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q9-question.png"
+      "/assets/banks/cap-114-math/Q9-figure-1.png"
     ],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q10",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-114-math/Q10-question.png)",
-    "correct": "原卷選項 A",
+    "q": "利用乘法公式判斷，下列算式之值，何者與其他不相同？",
+    "correct": "( 106<sup>2</sup> − 4<sup>2</sup>) × ( 108<sup>2</sup> − 2<sup>2</sup>)",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "( 107<sup>2</sup> − 3<sup>2</sup>) × ( 107<sup>2</sup> − 1<sup>2</sup>)",
+      "( 108<sup>2</sup> − 2<sup>2</sup>) × ( 106<sup>2</sup> − 2<sup>2</sup>)",
+      "( 109<sup>2</sup> − 1<sup>2</sup>) × ( 105<sup>2</sup> − 1<sup>2</sup>)"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考數學第10題。",
+    "exp": "正確答案：( 106<sup>2</sup> − 4<sup>2</sup>) × ( 108<sup>2</sup> − 2<sup>2</sup>)。來源：114年國中教育會考數學第10題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -309,23 +308,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q10-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.58,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q11",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-114-math/Q11-question-1.png)\n\n![第11題原卷資料](/assets/banks/cap-114-math/Q11-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "阿嘉和小楊都有 5 張分別標示數字 1、2、3、4、5 的紙牌，圖( 六) 表示兩人\n的牌中皆有三張牌被自己蓋住的情形。今兩人打算從自己蓋住的紙牌中翻\n開一張牌，若阿嘉蓋住的牌中每張牌被翻開的機會相等，小楊蓋住的牌中每\n張牌被翻開的機會相等，則比較兩人翻開的那張牌上的數字，阿嘉比小楊大\n\n的機率為何？\n\n圖( 六)\n\n![圖表](/assets/banks/cap-114-math/Q11-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "correct": "$\\frac{2}{3}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "$\\frac{1}{3}$",
+      "$\\frac{1}{9}$",
+      "$\\frac{2}{9}$"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考數學第11題。",
+    "exp": "正確答案：$\\frac{2}{3}$。來源：114年國中教育會考數學第11題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -342,23 +340,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q11-question-1.png",
-      "/assets/banks/cap-114-math/Q11-question-2.png"
+      "/assets/banks/cap-114-math/Q11-figure-1.png"
     ],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q12",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-114-math/Q12-question.png)",
-    "correct": "原卷選項 D",
+    "q": "有甲、乙、丙三種三角形木片，其邊長如圖 ( 七 ) 所示，阿林、小博打算利\n用這三種木片各自組合成一個正三角錐。首先兩人皆選一片甲當作底面，\n接著阿林選三片乙當作側面，小博選三片丙當作側面，關於兩人選的木片\n能不能組合成一個正三角錐，下列判斷何者正確？\n\n圖( 七)\n\n![圖表](/assets/banks/cap-114-math/Q12-figure-1.png)\n\n\n\n",
+    "correct": "阿林不能，小博能",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "兩人皆能",
+      "兩人皆不能",
+      "阿林能，小博不能"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考數學第12題。",
+    "exp": "正確答案：阿林不能，小博能。來源：114年國中教育會考數學第12題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -374,22 +372,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q12-question.png"
+      "/assets/banks/cap-114-math/Q12-figure-1.png"
     ],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q13",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-114-math/Q13-question.png)",
-    "correct": "原卷選項 A",
+    "q": "已知甲方程式為 ( x − 4 )<sup>2</sup> = 9，乙方程式為 ( x + 9 )<sup>2</sup> = −4。關於甲、乙兩\n方程式的解的情形，下列敘述何者正確？",
+    "correct": "甲有兩個相異的解，乙無解",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲有兩個相異的解，乙有兩個相異的解",
+      "甲有兩個相同的解，乙無解",
+      "甲有兩個相同的解，乙有兩個相異的解"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考數學第13題。",
+    "exp": "正確答案：甲有兩個相異的解，乙無解。來源：114年國中教育會考數學第13題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -404,23 +403,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q13-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.61,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q14",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/cap-114-math/Q14-question-1.png)\n\n![第14題原卷資料](/assets/banks/cap-114-math/Q14-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "圖 ( 八 ) 為貝可咖啡店的菜單，店家今日\n準備了 120 杯咖啡和 100 個三明治販售。\n若今日準備的餐點全部售出且收入共為\n8700 元，則售出早餐組合的收入在下列\n哪一個範圍？\n圖( 八)\n\n![圖表](/assets/banks/cap-114-math/Q14-figure-1.png)",
+    "correct": "4500 ～ 4599 元",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "4300 ～ 4399 元",
+      "4400 ～ 4499 元",
+      "4600 ～ 4699 元"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考數學第14題。",
+    "exp": "正確答案：4500 ～ 4599 元。來源：114年國中教育會考數學第14題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -437,23 +435,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q14-question-1.png",
-      "/assets/banks/cap-114-math/Q14-question-2.png"
+      "/assets/banks/cap-114-math/Q14-figure-1.png"
     ],
     "passRate": 0.56,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q15",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-114-math/Q15-question.png)",
-    "correct": "原卷選項 B",
+    "q": "如圖 ( 九 )，數線上由左至右有 A(a)、B(b)、C(c)、D(d)、E(e) 五點，且\nAB = BC = CD = DE。若原點在 AE 上，且  a  +  b  =  e ，則下列關於原點\n位置的敘述，何者正確？\n圖( 九)",
+    "correct": "在 BC 上且較接近 C 點",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "在 BC 上且較接近 B 點",
+      "在 CD 上且較接近 C 點",
+      "在 CD 上且較接近 D 點"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考數學第15題。",
+    "exp": "正確答案：在 BC 上且較接近 C 點。來源：114年國中教育會考數學第15題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -468,23 +466,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q15-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.6,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q16",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-114-math/Q16-question.png)",
-    "correct": "原卷選項 D",
+    "q": "如圖( 十)，∆ABC 中，D 點為 AB 的中點，E 點在 AB 上，F 點在 AC 上，\n且 EF // BC。若 AF = 7，FC = 3，則下列敘述何者正確？\n\n圖( 十)\n\n![圖表](/assets/banks/cap-114-math/Q16-figure-1.png)",
+    "correct": "DE < EB，DF 與 EC 不平行",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "DE > EB，DF 與 EC 平行",
+      "DE > EB，DF 與 EC 不平行",
+      "DE < EB，DF 與 EC 平行"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考數學第16題。",
+    "exp": "正確答案：DE < EB，DF 與 EC 不平行。來源：114年國中教育會考數學第16題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -500,22 +497,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q16-question.png"
+      "/assets/banks/cap-114-math/Q16-figure-1.png"
     ],
     "passRate": 0.5,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q17",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-114-math/Q17-question-1.png)\n\n![第17題原卷資料](/assets/banks/cap-114-math/Q17-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "圖( 十一) 是某種螺絲釘上螺紋的示意圖，圖中的虛線皆為水平線或鉛垂線，\n圖上標示出角度，也標示出水平線間或鉛垂線間的距離。根據圖中的標示，\n判斷此種螺絲釘的螺紋深度是螺紋間距的多少倍？\n\n$\\frac{5}{16}$\n\n圖( 十一)\n\n![圖表](/assets/banks/cap-114-math/Q17-figure-1.png)",
+    "correct": "$\\frac{5\\sqrt{3}}{16}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "$\\frac{5}{8}$",
+      "$\\frac{5}{16}$",
+      "$\\frac{5\\sqrt{3}}{8}$"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考數學第17題。",
+    "exp": "正確答案：$\\frac{5\\sqrt{3}}{16}$。來源：114年國中教育會考數學第17題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -532,23 +530,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q17-question-1.png",
-      "/assets/banks/cap-114-math/Q17-question-2.png"
+      "/assets/banks/cap-114-math/Q17-figure-1.png"
     ],
     "passRate": 0.51,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-114-math/Q18-question.png)",
-    "correct": "原卷選項 B",
+    "q": "已知 a、b、c 皆為正整數，且 a、b 兩數的最大公因數與最小公倍數分別為\n11 與 88。關於 a、b、c 三數的最大公因數與最小公倍數，甲、乙兩人分別\n提出看法如下：\n甲： a、b、c 三數的最大公因數可能比 11 大\n乙： a、b、c 三數的最小公倍數可能比 88 小\n對於甲、乙兩人的看法，下列判斷何者正確？",
+    "correct": "甲、乙皆錯誤",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "甲、乙皆正確",
+      "甲正確，乙錯誤",
+      "甲錯誤，乙正確"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考數學第18題。",
+    "exp": "正確答案：甲、乙皆錯誤。來源：114年國中教育會考數學第18題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -563,23 +561,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q18-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.44,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q19",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-114-math/Q19-question.png)",
-    "correct": "原卷選項 C",
+    "q": "圖( 十二) 為金銀河影城的價目表。某\n社團 16 人去此影城看電影，打算以比賽\n獎金 6000 元購買電影票、爆米花與\n飲料。若要讓每人拿到一張電影票和\n一杯飲料，則最多可買多少盒爆米花？\n圖( 十二)\n\n![圖表](/assets/banks/cap-114-math/Q19-figure-1.png)",
+    "correct": "5",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "3",
+      "4",
+      "6"
     ],
-    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考數學第19題。",
+    "exp": "正確答案：5。來源：114年國中教育會考數學第19題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -595,22 +592,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q19-question.png"
+      "/assets/banks/cap-114-math/Q19-figure-1.png"
     ],
     "passRate": 0.48,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q20",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-114-math/Q20-question-1.png)\n\n![第20題原卷資料](/assets/banks/cap-114-math/Q20-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "圖( 十三) 為一張五邊形紙片 ABCDE，F 點在 CD 上，且以 BE、BF、FE 為\n摺線將紙片向內摺至同一平面後，A、C、D 恰重疊在同一點 P，如圖( 十四) 所\n示。若 BE > FE > BF，則根據圖( 十四) 中標示的角，  判斷下列敘述何者正確？\n\n圖( 十三) 圖( 十四)\n\n![圖表](/assets/banks/cap-114-math/Q20-figure-1.png)\n\n",
+    "correct": "∠3 + ∠4 = 90°，∠1 + ∠2 > ∠5 + ∠6",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "∠3 + ∠4 = 90°，∠1 + ∠2 < ∠5 + ∠6",
+      "∠3 + ∠4 ≠ 90°，∠1 + ∠2 > ∠5 + ∠6",
+      "∠3 + ∠4 ≠ 90°，∠1 + ∠2 < ∠5 + ∠6"
     ],
-    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考數學第20題。",
+    "exp": "正確答案：∠3 + ∠4 = 90°，∠1 + ∠2 > ∠5 + ∠6。來源：114年國中教育會考數學第20題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -627,23 +625,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q20-question-1.png",
-      "/assets/banks/cap-114-math/Q20-question-2.png"
+      "/assets/banks/cap-114-math/Q20-figure-1.png"
     ],
     "passRate": 0.35,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q21",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-114-math/Q21-question.png)",
-    "correct": "原卷選項 D",
+    "q": "坐標平面上有二次函數 y = −( x + 7 )<sup>2</sup> + 12 的圖形，今將此圖形向右平移 10\n單位，平移過程中此圖形與 y 軸的交點也會跟著變化。假設此圖形與 y 軸的\n交點為 P，判斷在平移過程中，P 點位置的變化情形為下列何者？",
+    "correct": "先向上再向下",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "持續向下",
+      "持續向上",
+      "先向下再向上"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考數學第21題。",
+    "exp": "正確答案：先向上再向下。來源：114年國中教育會考數學第21題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -658,23 +656,22 @@
       "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-114-math/Q21-question.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.44,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q22",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-114-math/Q22-question.png)",
-    "correct": "原卷選項 B",
+    "q": "如圖( 十五)，∆ADG 的頂點 G 為 ∆ABC 的重心，DG 與 AB 相交於 E 點。\n若 DE ： EG = 3：2，  AE ： EB = 3：4，  則 ∆ADG 面積為 ∆ABC 面積的多少倍？\n$\\frac{5}{12}$\n\n$\\frac{5}{14}$\n$\\frac{5}{15}$\n$\\frac{5}{21}$\n圖( 十五)\n\n![圖表](/assets/banks/cap-114-math/Q22-figure-1.png)",
+    "correct": "$\\frac{5}{14}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "$\\frac{5}{12}$",
+      "$\\frac{5}{15}$",
+      "$\\frac{5}{21}$"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考數學第22題。",
+    "exp": "正確答案：$\\frac{5}{14}$。來源：114年國中教育會考數學第22題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -690,22 +687,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q22-question.png"
+      "/assets/banks/cap-114-math/Q22-figure-1.png"
     ],
     "passRate": 0.33,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q23",
     "difficulty": "hard",
-    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-114-math/Q23-question-1.png)\n\n![第23題原卷資料](/assets/banks/cap-114-math/Q23-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "如圖( 十六)，∆ABC 的三個頂點都在一圓上，固定 A 點將 ∆ABC 依順時針\n方向旋轉，旋轉後的三角形為 ∆AB′C′，且 B′ 會落在同一圓上，其中 AB 與\nAC′ 的夾角為 x°。若 BC = 54°，CA = 62°，則 x 值為何？\n\n圖( 十六)\n\n![圖表](/assets/banks/cap-114-math/Q23-figure-1.png)",
+    "correct": "37",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "27",
+      "31",
+      "32"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考數學第23題。",
+    "exp": "正確答案：37。來源：114年國中教育會考數學第23題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -722,23 +720,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/Q23-question-1.png",
-      "/assets/banks/cap-114-math/Q23-question-2.png"
+      "/assets/banks/cap-114-math/Q23-figure-1.png"
     ],
     "passRate": 0.3,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-114-math/G24-25-context.png)\n\n![第24題原卷資料](/assets/banks/cap-114-math/Q24-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n請閱讀下列選文後，回答 24 ～25 題\n小桃買了ㄧ輛變速自行車，在騎乘時可以切換不同的前齒輪齒數與後齒輪\n齒數的組合來適應各種坡度。已知這輛自行車的前齒輪有 3 種齒數，後齒輪有 6 種\n齒數，如表(一)所示，前齒輪齒數與後齒輪齒數的組合有 3 × 6 = 18 種，因此這\n輛自行車稱為 18 段變速自行車。\n表( 一)\n![圖表](/assets/banks/cap-114-math/G24-25-figure-1.png)\n前齒輪齒數\n已知，齒輪比 =  ，它代表前齒輪轉動一圈會帶動後齒輪轉動\n後齒輪齒數\n多少圈，齒輪比越大，自行車踩起來越費力。\n\n小桃騎乘該自行車時，  原本使用的前齒輪為 33 齒，  後齒輪為 21 齒。根據上\n文，他從原本的前後齒輪組合切換成下列四種組合中的哪一種後，踩起來最\n費力？",
+    "correct": "前齒輪切換為 44 齒，後齒輪不變",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "前齒輪不變，後齒輪切換為 18 齒",
+      "前齒輪不變，後齒輪切換為 24 齒",
+      "前齒輪切換為 22 齒，後齒輪不變"
     ],
-    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考數學第24題。",
+    "exp": "正確答案：前齒輪切換為 44 齒，後齒輪不變。來源：114年國中教育會考數學第24題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -758,23 +756,23 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/G24-25-context.png",
-      "/assets/banks/cap-114-math/Q24-question.png"
+      "/assets/banks/cap-114-math/G24-25-figure-1.png"
     ],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-114-math-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-114-math/G24-25-context.png)\n\n![第25題原卷資料](/assets/banks/cap-114-math/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-114-math/Q25-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n請閱讀下列選文後，回答 24 ～25 題\n小桃買了ㄧ輛變速自行車，在騎乘時可以切換不同的前齒輪齒數與後齒輪\n齒數的組合來適應各種坡度。已知這輛自行車的前齒輪有 3 種齒數，後齒輪有 6 種\n齒數，如表(一)所示，前齒輪齒數與後齒輪齒數的組合有 3 × 6 = 18 種，因此這\n輛自行車稱為 18 段變速自行車。\n表( 一)\n![圖表](/assets/banks/cap-114-math/G24-25-figure-1.png)\n前齒輪齒數\n已知，齒輪比 =  ，它代表前齒輪轉動一圈會帶動後齒輪轉動\n後齒輪齒數\n多少圈，齒輪比越大，自行車踩起來越費力。\n\n即使是不同的前齒輪齒數與後齒輪齒數的組合，仍可能產生相同的齒輪比，\n因此小桃這輛 18 段變速自行車實際上只能夠產生 14 種不同的齒輪比。根據\n上文，判斷這輛自行車切換前齒輪齒數與後齒輪齒數的組合時，下列哪一個\n齒輪比有最多種組合？",
+    "correct": "$\\frac{11}{7}$",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "$\\frac{11}{6}$",
+      "$\\frac{11}{8}$",
+      "$\\frac{11}{9}$"
     ],
-    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考數學第25題。",
+    "exp": "正確答案：$\\frac{11}{7}$。來源：114年國中教育會考數學第25題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -795,11 +793,10 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-114-math/G24-25-context.png",
-      "/assets/banks/cap-114-math/Q25-question-1.png",
-      "/assets/banks/cap-114-math/Q25-question-2.png"
+      "/assets/banks/cap-114-math/G24-25-figure-1.png"
     ],
     "passRate": 0.59,
-    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   }
 ]

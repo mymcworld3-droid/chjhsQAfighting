@@ -2,14 +2,14 @@
   {
     "id": "cap-113-english-q1",
     "difficulty": "easy",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-113-english/Q1-question.png)",
-    "correct": "原卷選項 A",
+    "q": "Look at the picture.  There is ______ under the door.\n\n![圖表](/assets/banks/cap-113-english/Q1-figure-1.png)",
+    "correct": "an envelope",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "a plant",
+      "a sign",
+      "an umbrella"
     ],
-    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考英語閱讀第1題。",
+    "exp": "正確答案：an envelope。來源：113年國中教育會考英語閱讀第1題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -25,10 +25,11 @@
     },
     "difficultySource": "official-pass-rate",
     "requiredImages": [
-      "/assets/banks/cap-113-english/Q1-question.png"
+      "/assets/banks/cap-113-english/Q1-figure-1.png"
     ],
     "passRate": 0.91,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q2",
@@ -57,12 +58,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.86,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q3",
     "difficulty": "medium",
-    "q": "Our school basketball team won the national game last night. We are so ______ them.",
+    "q": "Our school basketball team won the national game last night.  We are so ______ them.",
     "correct": "proud of",
     "wrong": [
       "popular with",
@@ -86,12 +88,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.69,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q4",
     "difficulty": "easy",
-    "q": "Tomorrow is Sam’s last day in the office. Nobody knows why he decided to ______ .",
+    "q": "Tomorrow is Sam’s last day in the ofcfi e.  Nobody knows why he decided to ______ .",
     "correct": "leave",
     "wrong": [
       "hide",
@@ -115,12 +118,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.86,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q5",
     "difficulty": "easy",
-    "q": "It’s not a good idea to go mountain climbing in this bad ______ . We should wait until the\n     typhoon goes away.",
+    "q": "It’s not a good idea to go mountain climbing in this bad ______ .  We should wait until the\ntyphoon goes away.",
     "correct": "weather",
     "wrong": [
       "chance",
@@ -144,7 +148,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.85,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q6",
@@ -173,7 +178,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.74,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q7",
@@ -202,12 +208,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.79,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q8",
     "difficulty": "easy",
-    "q": "Your refrigerator shouldn’t be making loud noises now, but if it ______ does, just give me a\n      call and I’ll come check it again.",
+    "q": "Your refrigerator shouldn’t be making loud noises now, but if it ______ does, just give me a\ncall and I’ll come check it again.",
     "correct": "still",
     "wrong": [
       "already",
@@ -231,17 +238,18 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q9",
     "difficulty": "medium",
-    "q": "After winning money in the card game, Jay decided to try again. He felt that he might also\n    be ______ a second time.",
+    "q": "After winning money in the card game, Jay decided to try again.  He felt that he might also\nbe ______ a second time.",
     "correct": "lucky",
     "wrong": [
       "famous",
       "interested",
-      "ready\n\n                                  1"
+      "ready"
     ],
     "exp": "正確答案：lucky。來源：113年國中教育會考英語閱讀第9題。",
     "subject": "英文",
@@ -261,7 +269,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.71,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q10",
@@ -290,7 +299,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.68,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q11",
@@ -319,7 +329,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q12",
@@ -348,7 +359,8 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.72,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q13",
@@ -377,12 +389,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.78,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q14",
     "difficulty": "easy",
-    "q": "Patty spent several days planning to invite Charlie to dinner, ______ she couldn’t say a word\n    when they met.",
+    "q": "Patty spent several days planning to invite Charlie to dinner, ______ she couldn’t say a word\nwhen they met.",
     "correct": "but",
     "wrong": [
       "if",
@@ -406,12 +419,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.8,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q15",
     "difficulty": "medium",
-    "q": "I can’t tell you what I think of the movie because I ______ it.  I’ll probably watch it this\n     Saturday.",
+    "q": "I can’t tell you what I think of the movie because I ______ it.  I’ll probably watch it this\nSaturday.",
     "correct": "haven’t seen",
     "wrong": [
       "am not seeing",
@@ -435,12 +449,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.63,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q16",
     "difficulty": "medium",
-    "q": "The new guy at the help desk answers calls like a ______ . There are no ups and downs in\n     his voice and you can’t tell if he is happy or sad.",
+    "q": "The new guy at the help desk answers calls like a ______ .  There are no ups and downs in\nhis voice and you can’t tell if he is happy or sad.",
     "correct": "robot",
     "wrong": [
       "father",
@@ -464,12 +479,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.64,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q17",
     "difficulty": "medium",
-    "q": "Jasmine planned to spend her summer in the country, but right after she got there, she started\n    to ______ the noise in the city.",
+    "q": "Jasmine planned to spend her summer in the country, but right after she got there, she started\nto ______ the noise in the city.",
     "correct": "miss",
     "wrong": [
       "enjoy",
@@ -493,12 +509,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.66,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q18",
     "difficulty": "easy",
-    "q": "“Bad traffic” is perhaps the ______ excuse for being late when your boss knows it only takes\n    you five minutes to walk to work.",
+    "q": "“Bad trafcfi ” is perhaps the ______ excuse for being late when your boss knows it only takes\nyou fvi e minutes to walk to work.",
     "correct": "worst",
     "wrong": [
       "easiest",
@@ -522,12 +539,13 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.8,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q19",
     "difficulty": "medium",
-    "q": "The housework in Mr. and Mrs. Wang’s family ______ between them and their kids.\n     Everyone’s got their own job to do.",
+    "q": "The housework in Mr. and Mrs. Wang’s family ______ between them and their kids.\nEveryone’s got their own job to do.",
     "correct": "is shared",
     "wrong": [
       "are shared",
@@ -551,19 +569,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.55,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q20",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-113-english/Q20-question-1.png)\n\n![第20題原卷資料](/assets/banks/cap-113-english/Q20-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "I want to find another dentist because ______ pulled out a good tooth last time I went to him.",
+    "correct": "mine",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "I",
+      "me",
+      "myself"
     ],
-    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考英語閱讀第20題。",
+    "exp": "正確答案：mine。來源：113年國中教育會考英語閱讀第20題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -579,17 +598,15 @@
       "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
     },
     "difficultySource": "official-pass-rate",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/Q20-question-1.png",
-      "/assets/banks/cap-113-english/Q20-question-2.png"
-    ],
+    "requiredImages": [],
     "passRate": 0.58,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q21",
     "difficulty": "medium",
-    "q": "Mom: Linda, you’ve been playing computer games all evening! Have you finished your\n            report?\n     Linda: Well, ______ most of it this afternoon, and I’ll finish it by Friday.",
+    "q": "Mom: \u0007Linda, you’ve been playing computer games all evening!  Have you finished your\nreport?\nLinda:\u0007 Well, ______ most of it this afternoon, and I’ll finish it by Friday.",
     "correct": "I did",
     "wrong": [
       "I would do",
@@ -613,19 +630,20 @@
     "difficultySource": "official-pass-rate",
     "requiredImages": [],
     "passRate": 0.52,
-    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q22",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-113-english/G22-23-context.png)\n\n![第22題原卷資料](/assets/banks/cap-113-english/Q22-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(22-23)\nIt was around eight o’clock on Saturday night.  Philip was at home with his little\nbrother, Jason.  Jason was hungry and kept crying.  But Philip couldn’t cook and their\nfather was not home yet because he was working late in the office.  So Philip decided to\ntake Jason out for some food.\nHalf an hour later, when they came back home, Philip was surprised to find that their\nfather was talking to the police and a woman outside their house.  He didn’t know who\nthe woman was.  She looked scared and stood behind the police.  Philip’s father was very\nangry and kept shouting, “I didn’t do anything wrong!  I forgot my keys and was just\ntrying to get into MY OWN HOUSE!”  But the police didn’t believe him until Philip ran\nto them and explained everything.\nThe police told Philip that the woman called 110 when she saw Philip’s father trying\nto get into a house through a window.  That was how it all happened.\n\nWhy did Philip go out?",
+    "correct": "To buy food for his brother.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "To meet a woman.",
+      "To look for his father.",
+      "To ask the police for help."
     ],
-    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考英語閱讀第22題。",
+    "exp": "正確答案：To buy food for his brother.。來源：113年國中教育會考英語閱讀第22題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -644,22 +662,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/G22-23-context.png",
-      "/assets/banks/cap-113-english/Q22-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q23",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-113-english/G22-23-context.png)\n\n![第23題原卷資料](/assets/banks/cap-113-english/Q23-question-1.png)\n\n![第23題原卷資料](/assets/banks/cap-113-english/Q23-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n(22-23)\nIt was around eight o’clock on Saturday night.  Philip was at home with his little\nbrother, Jason.  Jason was hungry and kept crying.  But Philip couldn’t cook and their\nfather was not home yet because he was working late in the office.  So Philip decided to\ntake Jason out for some food.\nHalf an hour later, when they came back home, Philip was surprised to find that their\nfather was talking to the police and a woman outside their house.  He didn’t know who\nthe woman was.  She looked scared and stood behind the police.  Philip’s father was very\nangry and kept shouting, “I didn’t do anything wrong!  I forgot my keys and was just\ntrying to get into MY OWN HOUSE!”  But the police didn’t believe him until Philip ran\nto them and explained everything.\nThe police told Philip that the woman called 110 when she saw Philip’s father trying\nto get into a house through a window.  That was how it all happened.\n\nWhy was Philip’s father angry?",
+    "correct": "The police didn’t believe what he said.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "He forgot his keys.",
+      "The woman was hiding from him.",
+      "Philip and his brother went out at night."
     ],
-    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考英語閱讀第23題。",
+    "exp": "正確答案：The police didn’t believe what he said.。來源：113年國中教育會考英語閱讀第23題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -679,23 +695,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/G22-23-context.png",
-      "/assets/banks/cap-113-english/Q23-question-1.png",
-      "/assets/banks/cap-113-english/Q23-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q24",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-113-english/G24-25-context.png)\n\n![第24題原卷資料](/assets/banks/cap-113-english/Q24-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n(24-25)\n【原卷閱讀資料】\n£ BAKER’S KITCHEN\n\nSince 1993\n\nWe Give You the Taste of the Good Life\n\nWant to be the first to bring our popular breads home?\nHere is when they come fresh out of the oven every day.\n\nbagels 11:30am\n\n= French bread 7:30am\n\nbread rolls 8:30am «“n pretzels CFricag oom)\n\ncroissants 9:30am TT challah 3:30pm\nSE (*Friday only)\n\nJB white bread 10:30am farm bread 4:30pm\n\nAll breads at half price after Spm (after 7pm on Saturdays and Sundays)\n\nQ\nQ\n=\nwn\nQ\n<\n(0)\n-\n3\n>=\nOo\n=\nLo\n<\nOo\ne\n=\n[2\np=\n[©]\n©\nT.\n3\n«\nQ\n~~\nCo\nQ\n=\n[¢)\n-.\nwn\n2\n—\nQ\np=\n®\np=]\n\n77S\n~//\nrN)\n\nSE __\n\n\n\nKevin is going to buy some fresh bread at Baker’s Kitchen.  He loves white bread, his mom\nlikes farm bread, his father enjoys bagels, and his sister eats only challah.  Which is the\nearliest possible time for him to get all these breads for his family?",
+    "correct": "5:00pm.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "11:00am.",
+      "4:00pm.",
+      "7:00pm."
     ],
-    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考英語閱讀第24題。",
+    "exp": "正確答案：5:00pm.。來源：113年國中教育會考英語閱讀第24題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -714,22 +727,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/G24-25-context.png",
-      "/assets/banks/cap-113-english/Q24-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q25",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-113-english/G24-25-context.png)\n\n![第25題原卷資料](/assets/banks/cap-113-english/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-113-english/Q25-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(24-25)\n【原卷閱讀資料】\n£ BAKER’S KITCHEN\n\nSince 1993\n\nWe Give You the Taste of the Good Life\n\nWant to be the first to bring our popular breads home?\nHere is when they come fresh out of the oven every day.\n\nbagels 11:30am\n\n= French bread 7:30am\n\nbread rolls 8:30am «“n pretzels CFricag oom)\n\ncroissants 9:30am TT challah 3:30pm\nSE (*Friday only)\n\nJB white bread 10:30am farm bread 4:30pm\n\nAll breads at half price after Spm (after 7pm on Saturdays and Sundays)\n\nQ\nQ\n=\nwn\nQ\n<\n(0)\n-\n3\n>=\nOo\n=\nLo\n<\nOo\ne\n=\n[2\np=\n[©]\n©\nT.\n3\n«\nQ\n~~\nCo\nQ\n=\n[¢)\n-.\nwn\n2\n—\nQ\np=\n®\np=]\n\n77S\n~//\nrN)\n\nSE __\n\n\n\nWhat do we know about Baker’s Kitchen?",
+    "correct": "Its breads are half price one hour before closing.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "It is open fvi e days a week.",
+      "Its croissants and pretzels are sold on weekends.",
+      "Its members can save \\$100 when they shop on Fridays."
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第25題。",
+    "exp": "正確答案：Its breads are half price one hour before closing.。來源：113年國中教育會考英語閱讀第25題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -749,23 +760,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/G24-25-context.png",
-      "/assets/banks/cap-113-english/Q25-question-1.png",
-      "/assets/banks/cap-113-english/Q25-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q26",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-113-english/G26-27-context.png)\n\n![第26題原卷資料](/assets/banks/cap-113-english/Q26-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(26-27)\n【原卷閱讀資料】\nINFORMATION ABOUT THE 2021 GREEN FESTIVAL\n. The 2021 Green Festival will be held at Satyr’s Park from April 1 to May 31.\n. You are welcome to take the Free Festival Bus at the Goat Street Station to the\nfestival.\n\n. You can also go to the festival by metro (get oft at the Koala Street Station or the\nTurtle Street Station) or by bus (take No. 28, 103, 125, 157, 259, 505, 908, or 1086).\n\n4. During the festival, Fox Street is closed; no cars can enter the street.\n\n5. Garden Square won't be open for car parking; there will be a farmers’ market at the\nsquare during the festival.\n\n6. During the festival, Faun’s Weekend Flower Market will be open every day from\n8am to 2pm.\n\nCow Road\n\n=\n\nMetro\n28 103\n\n125 1259\n259 Faun's Weekend Satyr's Park\nFlower Market (®GREEN FESTIVAL®)\nLion Road\nJu Garden Square\nMetro |_(FARMERS’ MARKET)\n\n125 1908\n157 11086\n\nF\n=? Festival Bus\n\n=\n\nMetro\n\n192.115 oN(\n199.115 USH\n\nBear Road\n\n28\n157\n\nloaliS o|un|\n\n192.15 1205)\nV SEETIS x0if\n\n1o2.1]1S e|eo)|\n\nnN\n[o2)\n\n125\n\n3\n\n192.115 Addng\n\nHippo Road\n\n![圖表](/assets/banks/cap-113-english/G26-27-figure-2.png)\n\nWhat is recommended to people who want to visit the festival?\n\n![圖表](/assets/banks/cap-113-english/Q26-figure-1.png)",
+    "correct": "Using the free festival bus service.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Visiting the festival on the weekend.",
+      "Entering Satyr’s Park from Fox Street.",
+      "Parking in Garden Square and walking to the festival."
     ],
-    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考英語閱讀第26題。",
+    "exp": "正確答案：Using the free festival bus service.。來源：113年國中教育會考英語閱讀第26題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -785,21 +793,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G26-27-context.png",
-      "/assets/banks/cap-113-english/Q26-question.png"
-    ]
+      "/assets/banks/cap-113-english/G26-27-figure-2.png",
+      "/assets/banks/cap-113-english/Q26-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q27",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-113-english/G26-27-context.png)\n\n![第27題原卷資料](/assets/banks/cap-113-english/Q27-question-1.png)\n\n![第27題原卷資料](/assets/banks/cap-113-english/Q27-question-2.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(26-27)\n【原卷閱讀資料】\nINFORMATION ABOUT THE 2021 GREEN FESTIVAL\n. The 2021 Green Festival will be held at Satyr’s Park from April 1 to May 31.\n. You are welcome to take the Free Festival Bus at the Goat Street Station to the\nfestival.\n\n. You can also go to the festival by metro (get oft at the Koala Street Station or the\nTurtle Street Station) or by bus (take No. 28, 103, 125, 157, 259, 505, 908, or 1086).\n\n4. During the festival, Fox Street is closed; no cars can enter the street.\n\n5. Garden Square won't be open for car parking; there will be a farmers’ market at the\nsquare during the festival.\n\n6. During the festival, Faun’s Weekend Flower Market will be open every day from\n8am to 2pm.\n\nCow Road\n\n=\n\nMetro\n28 103\n\n125 1259\n259 Faun's Weekend Satyr's Park\nFlower Market (®GREEN FESTIVAL®)\nLion Road\nJu Garden Square\nMetro |_(FARMERS’ MARKET)\n\n125 1908\n157 11086\n\nF\n=? Festival Bus\n\n=\n\nMetro\n\n192.115 oN(\n199.115 USH\n\nBear Road\n\n28\n157\n\nloaliS o|un|\n\n192.15 1205)\nV SEETIS x0if\n\n1o2.1]1S e|eo)|\n\nnN\n[o2)\n\n125\n\n3\n\n192.115 Addng\n\nHippo Road\n\n![圖表](/assets/banks/cap-113-english/G26-27-figure-2.png)\n\nWhat can we learn about the farmers’ market from the map?",
+    "correct": "The nearest metro station to the farmers’ market is the Koala Street Station.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "The farmers’ market is next to the fol wer market.",
+      "The farmers’ market and the festival are on the same block.",
+      "You can go to the farmers’ market by taking Bus No. 157 to Puppy Street."
     ],
-    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考英語閱讀第27題。",
+    "exp": "正確答案：The nearest metro station to the farmers’ market is the Koala Street Station.。來源：113年國中教育會考英語閱讀第27題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -820,22 +829,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G26-27-context.png",
-      "/assets/banks/cap-113-english/Q27-question-1.png",
-      "/assets/banks/cap-113-english/Q27-question-2.png"
-    ]
+      "/assets/banks/cap-113-english/G26-27-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q28",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-113-english/G28-29-context.png)\n\n![第28題原卷資料](/assets/banks/cap-113-english/Q28-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(28-29)\n【原卷閱讀資料】\nYan lived a good life in a big house. One day he invited a friend to dinner at his\nhouse. However, on the dinner table there was only one small dish of one small fish.\n            The friend looked quietly at the fish.  It was no bigger than a finger.\n             Then he asked Yan if he could borrow a lamp.\n                “What for?” Yan asked.\n                   “Well, it’s so dark in here,” the friend said with a dry smile,\n                      “I can’t see the other delicious dishes you’ve prepared for me.”\n\n    Chang kept a lot of ducks and chickens on his farm. One day, his best friend\ncame to visit him. At noon, Chang told his friend that he couldn’t let him stay for lunch\nbecause there wasn’t much food to eat. The friend looked out at Chang’s farm animals\nfor a moment. Then he asked Chang if he had a big knife.\n     “Yes, but what for?” Chang asked.\n    “I’m thinking about killing the horse I rode here so we’ll\nhave something for lunch,” the friend said.\n    “But how are you going to go home without it?”\n     “Well, you wouldn’t mind lending me one of your many\nducks or chickens so I can ride it home, would you?”\n\n![圖表](/assets/banks/cap-113-english/G28-29-figure-2.png)\n\n![圖表](/assets/banks/cap-113-english/G28-29-figure-3.png)\n\nWhat kind of people do Yan’s and Chang’s friends most likely think\nYan and Chang are?\n\n![圖表](/assets/banks/cap-113-english/Q28-figure-1.png)",
+    "correct": "They don’t like to share.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "They enjoy good food.",
+      "They like to make friends.",
+      "They don’t like new things."
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第28題。",
+    "exp": "正確答案：They don’t like to share.。來源：113年國中教育會考英語閱讀第28題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -855,21 +863,23 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G28-29-context.png",
-      "/assets/banks/cap-113-english/Q28-question.png"
-    ]
+      "/assets/banks/cap-113-english/G28-29-figure-2.png",
+      "/assets/banks/cap-113-english/G28-29-figure-3.png",
+      "/assets/banks/cap-113-english/Q28-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q29",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-113-english/G28-29-context.png)\n\n![第29題原卷資料](/assets/banks/cap-113-english/Q29-question-1.png)\n\n![第29題原卷資料](/assets/banks/cap-113-english/Q29-question-2.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(28-29)\n【原卷閱讀資料】\nYan lived a good life in a big house. One day he invited a friend to dinner at his\nhouse. However, on the dinner table there was only one small dish of one small fish.\n            The friend looked quietly at the fish.  It was no bigger than a finger.\n             Then he asked Yan if he could borrow a lamp.\n                “What for?” Yan asked.\n                   “Well, it’s so dark in here,” the friend said with a dry smile,\n                      “I can’t see the other delicious dishes you’ve prepared for me.”\n\n    Chang kept a lot of ducks and chickens on his farm. One day, his best friend\ncame to visit him. At noon, Chang told his friend that he couldn’t let him stay for lunch\nbecause there wasn’t much food to eat. The friend looked out at Chang’s farm animals\nfor a moment. Then he asked Chang if he had a big knife.\n     “Yes, but what for?” Chang asked.\n    “I’m thinking about killing the horse I rode here so we’ll\nhave something for lunch,” the friend said.\n    “But how are you going to go home without it?”\n     “Well, you wouldn’t mind lending me one of your many\nducks or chickens so I can ride it home, would you?”\n\n![圖表](/assets/banks/cap-113-english/G28-29-figure-2.png)\n\n![圖表](/assets/banks/cap-113-english/G28-29-figure-3.png)\n\nWhat is it in the second story?",
+    "correct": "The horse.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "A big knife.",
+      "Lunch.",
+      "One of Chang’s ducks or chickens."
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第29題。",
+    "exp": "正確答案：The horse.。來源：113年國中教育會考英語閱讀第29題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -890,22 +900,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G28-29-context.png",
-      "/assets/banks/cap-113-english/Q29-question-1.png",
-      "/assets/banks/cap-113-english/Q29-question-2.png"
-    ]
+      "/assets/banks/cap-113-english/G28-29-figure-2.png",
+      "/assets/banks/cap-113-english/G28-29-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q30",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-113-english/G30-32-context-1.png)\n\n![第30題原卷資料](/assets/banks/cap-113-english/G30-32-context-2.png)\n\n![第30題原卷資料](/assets/banks/cap-113-english/Q30-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(30-32)\nUsually, people visit bookstores to buy books.  But those who walk\ninto Cotoha come to see its owner, Chen Bing-Hong.  They bring him\nbooks with different problems.  Some have lost their covers, some are\nmissing a few pages, and some have pages that are falling out.  Chen can\nalways fix the books and make them whole again.\nChen sees himself as a doctor.  He says that books, like people, get\nsick and need help.  In Taiwan, there are not many “doctors” like him,\nand most of them work for big libraries and museums.  If big libraries and\nmuseums are hospitals, Chen’s bookstore is a health center.  Big libraries\nand museums fix important old books with serious problems, and Chen\nhelps people with books that have smaller problems.  However, the smaller\nsize of the problems doesn’t mean Chen’s job is less important.\nChen gave an example of a science book he once worked on.  It was\nvery old and half of its cover was lost.  Its owner still wanted to keep it\nbecause it was a gift from a teacher who helped him follow his dream of\nstudying science.  When he got his book back, he was very surprised at the\nnew-old book.  He felt he was brought back to the days with his teacher.\nSeeing the owner’s smile made Chen happy, because smiles like that are\nwhat his magic is for.\n\nWhy does the writer talk about doctors and a health center in the reading?",
+    "correct": "To explain Chen’s services.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "To talk about Chen’s future plans.",
+      "To explain Chen’s love for books.",
+      "To show why bookstores are important."
     ],
-    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考英語閱讀第30題。",
+    "exp": "正確答案：To explain Chen’s services.。來源：113年國中教育會考英語閱讀第30題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -925,23 +935,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/G30-32-context-1.png",
-      "/assets/banks/cap-113-english/G30-32-context-2.png",
-      "/assets/banks/cap-113-english/Q30-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q31",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-113-english/G30-32-context-1.png)\n\n![第31題原卷資料](/assets/banks/cap-113-english/G30-32-context-2.png)\n\n![第31題原卷資料](/assets/banks/cap-113-english/Q31-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(30-32)\nUsually, people visit bookstores to buy books.  But those who walk\ninto Cotoha come to see its owner, Chen Bing-Hong.  They bring him\nbooks with different problems.  Some have lost their covers, some are\nmissing a few pages, and some have pages that are falling out.  Chen can\nalways fix the books and make them whole again.\nChen sees himself as a doctor.  He says that books, like people, get\nsick and need help.  In Taiwan, there are not many “doctors” like him,\nand most of them work for big libraries and museums.  If big libraries and\nmuseums are hospitals, Chen’s bookstore is a health center.  Big libraries\nand museums fix important old books with serious problems, and Chen\nhelps people with books that have smaller problems.  However, the smaller\nsize of the problems doesn’t mean Chen’s job is less important.\nChen gave an example of a science book he once worked on.  It was\nvery old and half of its cover was lost.  Its owner still wanted to keep it\nbecause it was a gift from a teacher who helped him follow his dream of\nstudying science.  When he got his book back, he was very surprised at the\nnew-old book.  He felt he was brought back to the days with his teacher.\nSeeing the owner’s smile made Chen happy, because smiles like that are\nwhat his magic is for.\n\nWhy is Chen Bing-Hong’s job important in the example he gave?",
+    "correct": "It helps people think of special moments in the past.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "It allows people to get books as gifts.",
+      "It saves people money on new books.",
+      "It gives people hope to follow their dreams."
     ],
-    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考英語閱讀第31題。",
+    "exp": "正確答案：It helps people think of special moments in the past.。來源：113年國中教育會考英語閱讀第31題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -961,23 +968,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/G30-32-context-1.png",
-      "/assets/banks/cap-113-english/G30-32-context-2.png",
-      "/assets/banks/cap-113-english/Q31-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q32",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-113-english/G30-32-context-1.png)\n\n![第32題原卷資料](/assets/banks/cap-113-english/G30-32-context-2.png)\n\n![第32題原卷資料](/assets/banks/cap-113-english/Q32-question-1.png)\n\n![第32題原卷資料](/assets/banks/cap-113-english/Q32-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(30-32)\nUsually, people visit bookstores to buy books.  But those who walk\ninto Cotoha come to see its owner, Chen Bing-Hong.  They bring him\nbooks with different problems.  Some have lost their covers, some are\nmissing a few pages, and some have pages that are falling out.  Chen can\nalways fix the books and make them whole again.\nChen sees himself as a doctor.  He says that books, like people, get\nsick and need help.  In Taiwan, there are not many “doctors” like him,\nand most of them work for big libraries and museums.  If big libraries and\nmuseums are hospitals, Chen’s bookstore is a health center.  Big libraries\nand museums fix important old books with serious problems, and Chen\nhelps people with books that have smaller problems.  However, the smaller\nsize of the problems doesn’t mean Chen’s job is less important.\nChen gave an example of a science book he once worked on.  It was\nvery old and half of its cover was lost.  Its owner still wanted to keep it\nbecause it was a gift from a teacher who helped him follow his dream of\nstudying science.  When he got his book back, he was very surprised at the\nnew-old book.  He felt he was brought back to the days with his teacher.\nSeeing the owner’s smile made Chen happy, because smiles like that are\nwhat his magic is for.\n\nWhat is his magic?",
+    "correct": "Fixing books.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Making book owners smile.",
+      "Finding books that are long lost.",
+      "Changing his bookstore into a library."
     ],
-    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考英語閱讀第32題。",
+    "exp": "正確答案：Fixing books.。來源：113年國中教育會考英語閱讀第32題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -998,24 +1002,20 @@
       ]
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/cap-113-english/G30-32-context-1.png",
-      "/assets/banks/cap-113-english/G30-32-context-2.png",
-      "/assets/banks/cap-113-english/Q32-question-1.png",
-      "/assets/banks/cap-113-english/Q32-question-2.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q33",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-113-english/G33-35-context.png)\n\n![第33題原卷資料](/assets/banks/cap-113-english/Q33-question-1.png)\n\n![第33題原卷資料](/assets/banks/cap-113-english/Q33-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(33-35)\n【原卷閱讀資料】\nAA DeliciousDelicious SurpriseSurprise andand WelcomeWelcome ChangeChange\n           By Karl Falk, June 1, 2016\n\nIn Austria, there are not many restaurants like Habibi\n& Hawara. Here you can enjoy Austrian and Syrian\nfood together. Two Austrians, Martin Rohla and\nDavid Kreytenberg, started this yummy plan from\ntheir experience of working with refugees.\nEvery year, thousands of people have to leave\ntheir homes and families because of war in their\ncountries. So many of them go to Austria that some\npeople in the country think they have become a problem. They are afraid refugees\nmay take away their jobs and they don’t feel safe around them, either. But Rohla\nand Kreytenberg would beg to differ: The refugees don’t have to be a problem.\nThey want to help them start a new life. They invited refugees to meetings and\nfound that some of them were cooks back in Syria. So the idea of Habibi & Hawara\nwas born—a restaurant that brings together Austrian and Syrian food. “The two\nworlds far away from each other meet together,” Kreytenberg said.\nBut Rohla and Kreytenberg want to do more than just give the refugees work. They\nwant their best workers to buy the restaurant in the end. They hope that Habibi &\nHawara is not just a one-time plan and that other Austrians will join them and help\nmore refugees.\n\n![圖表](/assets/banks/cap-113-english/G33-35-figure-3.png)\n\n\nAccording to the reading, why did Rohla and Kreytenberg open Habibi & Hawara?",
+    "correct": "To help refugees live better in Austria.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "To collect money to help Syria fgi ht the war.",
+      "To help Austrians learn about the war in Syria.",
+      "To help refugees go back to their home countries."
     ],
-    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考英語閱讀第33題。",
+    "exp": "正確答案：To help refugees live better in Austria.。來源：113年國中教育會考英語閱讀第33題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1036,22 +1036,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G33-35-context.png",
-      "/assets/banks/cap-113-english/Q33-question-1.png",
-      "/assets/banks/cap-113-english/Q33-question-2.png"
-    ]
+      "/assets/banks/cap-113-english/G33-35-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q34",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-113-english/G33-35-context.png)\n\n![第34題原卷資料](/assets/banks/cap-113-english/Q34-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(33-35)\n【原卷閱讀資料】\nAA DeliciousDelicious SurpriseSurprise andand WelcomeWelcome ChangeChange\n           By Karl Falk, June 1, 2016\n\nIn Austria, there are not many restaurants like Habibi\n& Hawara. Here you can enjoy Austrian and Syrian\nfood together. Two Austrians, Martin Rohla and\nDavid Kreytenberg, started this yummy plan from\ntheir experience of working with refugees.\nEvery year, thousands of people have to leave\ntheir homes and families because of war in their\ncountries. So many of them go to Austria that some\npeople in the country think they have become a problem. They are afraid refugees\nmay take away their jobs and they don’t feel safe around them, either. But Rohla\nand Kreytenberg would beg to differ: The refugees don’t have to be a problem.\nThey want to help them start a new life. They invited refugees to meetings and\nfound that some of them were cooks back in Syria. So the idea of Habibi & Hawara\nwas born—a restaurant that brings together Austrian and Syrian food. “The two\nworlds far away from each other meet together,” Kreytenberg said.\nBut Rohla and Kreytenberg want to do more than just give the refugees work. They\nwant their best workers to buy the restaurant in the end. They hope that Habibi &\nHawara is not just a one-time plan and that other Austrians will join them and help\nmore refugees.\n\n![圖表](/assets/banks/cap-113-english/G33-35-figure-3.png)\n\n\nWhat can we learn about Habibi & Hawara?",
+    "correct": "It may finally be sold to its workers.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "It was moved from Syria to Austria.",
+      "It has cooking classes in Syrian food.",
+      "It is an important meeting place for Syrians."
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第34題。",
+    "exp": "正確答案：It may finally be sold to its workers.。來源：113年國中教育會考英語閱讀第34題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1072,21 +1071,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G33-35-context.png",
-      "/assets/banks/cap-113-english/Q34-question.png"
-    ]
+      "/assets/banks/cap-113-english/G33-35-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q35",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-113-english/G33-35-context.png)\n\n![第35題原卷資料](/assets/banks/cap-113-english/Q35-question-1.png)\n\n![第35題原卷資料](/assets/banks/cap-113-english/Q35-question-2.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(33-35)\n【原卷閱讀資料】\nAA DeliciousDelicious SurpriseSurprise andand WelcomeWelcome ChangeChange\n           By Karl Falk, June 1, 2016\n\nIn Austria, there are not many restaurants like Habibi\n& Hawara. Here you can enjoy Austrian and Syrian\nfood together. Two Austrians, Martin Rohla and\nDavid Kreytenberg, started this yummy plan from\ntheir experience of working with refugees.\nEvery year, thousands of people have to leave\ntheir homes and families because of war in their\ncountries. So many of them go to Austria that some\npeople in the country think they have become a problem. They are afraid refugees\nmay take away their jobs and they don’t feel safe around them, either. But Rohla\nand Kreytenberg would beg to differ: The refugees don’t have to be a problem.\nThey want to help them start a new life. They invited refugees to meetings and\nfound that some of them were cooks back in Syria. So the idea of Habibi & Hawara\nwas born—a restaurant that brings together Austrian and Syrian food. “The two\nworlds far away from each other meet together,” Kreytenberg said.\nBut Rohla and Kreytenberg want to do more than just give the refugees work. They\nwant their best workers to buy the restaurant in the end. They hope that Habibi &\nHawara is not just a one-time plan and that other Austrians will join them and help\nmore refugees.\n\n![圖表](/assets/banks/cap-113-english/G33-35-figure-3.png)\n\n\nWhat does it mean when people beg to difef r?",
+    "correct": "They do not agree.",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "They look difef rent.",
+      "They cannot speak for others.",
+      "They do not notice something."
     ],
-    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考英語閱讀第35題。",
+    "exp": "正確答案：They do not agree.。來源：113年國中教育會考英語閱讀第35題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1108,22 +1107,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G33-35-context.png",
-      "/assets/banks/cap-113-english/Q35-question-1.png",
-      "/assets/banks/cap-113-english/Q35-question-2.png"
-    ]
+      "/assets/banks/cap-113-english/G33-35-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q36",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-113-english/G36-39-context-1.png)\n\n![第36題原卷資料](/assets/banks/cap-113-english/G36-39-context-2.png)\n\n![第36題原卷資料](/assets/banks/cap-113-english/Q36-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(36-39)\n![圖表](/assets/banks/cap-113-english/G36-39-figure-1.png)\nVOICES OF PEOPLE\nIf you want to learn about bringing back extinct animals, reading\nJohn Smith’s Back from the Dead is a good start.  But I have to say\nI can’t agree with everything he says.\nEllen Zimmer\nFrom his book, I can see Smith is an advocate of bringing extinct animals back.  He\nsays we have lost many animals because we made their living spaces too dirty.  He also\nthinks we must do everything we can to bring them back.  However, I don’t know how\nmuch time and money we would need to make the world a better place for them, and\nhonestly no one knows if they could actually come back.\nSmith also says that bringing back extinct animals may be good for us.  He talks about\nan extinct frog that grew tadpoles in its stomach.  Some women’s babies die before they\nare born, and Smith believes bringing back the frog may be an answer to the problem.\nAccording to him, by studying how the tadpoles grow inside the frog’s stomach, we\nmight be able to fni d new ways to help these women successfully keep their babies.  But\nI don’t think things are as easy as Smith thinks.  We have spent ten years and millions\nof dollars on this kind of frog, but all we have got are only a few dead frog eggs.  If we\ncan’t see a real frog, how can we be sure women will get the help they need?\nDr. Solomon Wang from the Animal Saving Office says the study of bringing back\nextinct animals is “throwing good money after bad.”  And he’s right.  A lot of hard work\nhas been put into this expensive dream, but we haven’t seen anything come out of it.\nSo should we still keep going down this road?\n![圖表](/assets/banks/cap-113-english/G36-39-figure-2.png)\n\nWhat does it mean when someone is an advocate of something?",
+    "correct": "They believe it is good and should be done.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "They talk a lot but do little about it.",
+      "They have had some bad experiences with it.",
+      "They are one of the first people who have done it."
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第36題。",
+    "exp": "正確答案：They believe it is good and should be done.。來源：113年國中教育會考英語閱讀第36題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1144,22 +1142,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G36-39-context-1.png",
-      "/assets/banks/cap-113-english/G36-39-context-2.png",
-      "/assets/banks/cap-113-english/Q36-question.png"
-    ]
+      "/assets/banks/cap-113-english/G36-39-figure-1.png",
+      "/assets/banks/cap-113-english/G36-39-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q37",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-113-english/G36-39-context-1.png)\n\n![第37題原卷資料](/assets/banks/cap-113-english/G36-39-context-2.png)\n\n![第37題原卷資料](/assets/banks/cap-113-english/Q37-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(36-39)\n![圖表](/assets/banks/cap-113-english/G36-39-figure-1.png)\nVOICES OF PEOPLE\nIf you want to learn about bringing back extinct animals, reading\nJohn Smith’s Back from the Dead is a good start.  But I have to say\nI can’t agree with everything he says.\nEllen Zimmer\nFrom his book, I can see Smith is an advocate of bringing extinct animals back.  He\nsays we have lost many animals because we made their living spaces too dirty.  He also\nthinks we must do everything we can to bring them back.  However, I don’t know how\nmuch time and money we would need to make the world a better place for them, and\nhonestly no one knows if they could actually come back.\nSmith also says that bringing back extinct animals may be good for us.  He talks about\nan extinct frog that grew tadpoles in its stomach.  Some women’s babies die before they\nare born, and Smith believes bringing back the frog may be an answer to the problem.\nAccording to him, by studying how the tadpoles grow inside the frog’s stomach, we\nmight be able to fni d new ways to help these women successfully keep their babies.  But\nI don’t think things are as easy as Smith thinks.  We have spent ten years and millions\nof dollars on this kind of frog, but all we have got are only a few dead frog eggs.  If we\ncan’t see a real frog, how can we be sure women will get the help they need?\nDr. Solomon Wang from the Animal Saving Office says the study of bringing back\nextinct animals is “throwing good money after bad.”  And he’s right.  A lot of hard work\nhas been put into this expensive dream, but we haven’t seen anything come out of it.\nSo should we still keep going down this road?\n![圖表](/assets/banks/cap-113-english/G36-39-figure-2.png)\n\nWhat is special about the extinct frog in Smith’s book?",
+    "correct": "It might help fix a health problem.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "It can live in a dirty living space.",
+      "It eats its babies when it cannot find food.",
+      "It is the first extinct animal that people studied."
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第37題。",
+    "exp": "正確答案：It might help fix a health problem.。來源：113年國中教育會考英語閱讀第37題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1180,22 +1178,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G36-39-context-1.png",
-      "/assets/banks/cap-113-english/G36-39-context-2.png",
-      "/assets/banks/cap-113-english/Q37-question.png"
-    ]
+      "/assets/banks/cap-113-english/G36-39-figure-1.png",
+      "/assets/banks/cap-113-english/G36-39-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q38",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-113-english/G36-39-context-1.png)\n\n![第38題原卷資料](/assets/banks/cap-113-english/G36-39-context-2.png)\n\n![第38題原卷資料](/assets/banks/cap-113-english/Q38-question.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n(36-39)\n![圖表](/assets/banks/cap-113-english/G36-39-figure-1.png)\nVOICES OF PEOPLE\nIf you want to learn about bringing back extinct animals, reading\nJohn Smith’s Back from the Dead is a good start.  But I have to say\nI can’t agree with everything he says.\nEllen Zimmer\nFrom his book, I can see Smith is an advocate of bringing extinct animals back.  He\nsays we have lost many animals because we made their living spaces too dirty.  He also\nthinks we must do everything we can to bring them back.  However, I don’t know how\nmuch time and money we would need to make the world a better place for them, and\nhonestly no one knows if they could actually come back.\nSmith also says that bringing back extinct animals may be good for us.  He talks about\nan extinct frog that grew tadpoles in its stomach.  Some women’s babies die before they\nare born, and Smith believes bringing back the frog may be an answer to the problem.\nAccording to him, by studying how the tadpoles grow inside the frog’s stomach, we\nmight be able to fni d new ways to help these women successfully keep their babies.  But\nI don’t think things are as easy as Smith thinks.  We have spent ten years and millions\nof dollars on this kind of frog, but all we have got are only a few dead frog eggs.  If we\ncan’t see a real frog, how can we be sure women will get the help they need?\nDr. Solomon Wang from the Animal Saving Office says the study of bringing back\nextinct animals is “throwing good money after bad.”  And he’s right.  A lot of hard work\nhas been put into this expensive dream, but we haven’t seen anything come out of it.\nSo should we still keep going down this road?\n![圖表](/assets/banks/cap-113-english/G36-39-figure-2.png)\n\nWhy does Ellen Zimmer use the words from Dr. Solomon Wang?",
+    "correct": "To make her idea clearer.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "To start a new topic.",
+      "To share a big dream.",
+      "To invite people to take action."
     ],
-    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考英語閱讀第38題。",
+    "exp": "正確答案：To make her idea clearer.。來源：113年國中教育會考英語閱讀第38題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1216,22 +1214,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G36-39-context-1.png",
-      "/assets/banks/cap-113-english/G36-39-context-2.png",
-      "/assets/banks/cap-113-english/Q38-question.png"
-    ]
+      "/assets/banks/cap-113-english/G36-39-figure-1.png",
+      "/assets/banks/cap-113-english/G36-39-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q39",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-113-english/G36-39-context-1.png)\n\n![第39題原卷資料](/assets/banks/cap-113-english/G36-39-context-2.png)\n\n![第39題原卷資料](/assets/banks/cap-113-english/Q39-question-1.png)\n\n![第39題原卷資料](/assets/banks/cap-113-english/Q39-question-2.png)",
-    "correct": "原卷選項 C",
+    "q": "【共用閱讀資料】\n(36-39)\n![圖表](/assets/banks/cap-113-english/G36-39-figure-1.png)\nVOICES OF PEOPLE\nIf you want to learn about bringing back extinct animals, reading\nJohn Smith’s Back from the Dead is a good start.  But I have to say\nI can’t agree with everything he says.\nEllen Zimmer\nFrom his book, I can see Smith is an advocate of bringing extinct animals back.  He\nsays we have lost many animals because we made their living spaces too dirty.  He also\nthinks we must do everything we can to bring them back.  However, I don’t know how\nmuch time and money we would need to make the world a better place for them, and\nhonestly no one knows if they could actually come back.\nSmith also says that bringing back extinct animals may be good for us.  He talks about\nan extinct frog that grew tadpoles in its stomach.  Some women’s babies die before they\nare born, and Smith believes bringing back the frog may be an answer to the problem.\nAccording to him, by studying how the tadpoles grow inside the frog’s stomach, we\nmight be able to fni d new ways to help these women successfully keep their babies.  But\nI don’t think things are as easy as Smith thinks.  We have spent ten years and millions\nof dollars on this kind of frog, but all we have got are only a few dead frog eggs.  If we\ncan’t see a real frog, how can we be sure women will get the help they need?\nDr. Solomon Wang from the Animal Saving Office says the study of bringing back\nextinct animals is “throwing good money after bad.”  And he’s right.  A lot of hard work\nhas been put into this expensive dream, but we haven’t seen anything come out of it.\nSo should we still keep going down this road?\n![圖表](/assets/banks/cap-113-english/G36-39-figure-2.png)\n\nWhat does Ellen Zimmer most likely think about bringing back extinct animals?\n\n![圖表](/assets/banks/cap-113-english/Q39-figure-1.png)",
+    "correct": "It is not possible.",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 D"
+      "It is possible.",
+      "It is dangerous.",
+      "It is not dangerous."
     ],
-    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考英語閱讀第39題。",
+    "exp": "正確答案：It is not possible.。來源：113年國中教育會考英語閱讀第39題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1253,23 +1251,23 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G36-39-context-1.png",
-      "/assets/banks/cap-113-english/G36-39-context-2.png",
-      "/assets/banks/cap-113-english/Q39-question-1.png",
-      "/assets/banks/cap-113-english/Q39-question-2.png"
-    ]
+      "/assets/banks/cap-113-english/G36-39-figure-1.png",
+      "/assets/banks/cap-113-english/G36-39-figure-2.png",
+      "/assets/banks/cap-113-english/Q39-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q40",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-113-english/G40-43-context-1.png)\n\n![第40題原卷資料](/assets/banks/cap-113-english/G40-43-context-2.png)\n\n![第40題原卷資料](/assets/banks/cap-113-english/Q40-question.png)",
-    "correct": "原卷選項 A",
+    "q": "【共用閱讀資料】\n(40-43)\nA HISTORY LESSON ON THE PANDEMIC\t 2020.10.29\nSince the Covid-19 pandemic started, people have begun “social distancing”—\nkeeping a safe space between you and anyone you don’t live with.  Though it\nhas been a very popular topic this year, social distancing     40     .  In fact, it was\nwidely used in the U.S. in the flu pandemic in 1918.  But how well did it work?  The\nAmericans’ experience can tell us whether it really saved lives.\n![圖表](/assets/banks/cap-113-english/G40-43-figure-1.png)\n\n\n\n\n\nFrom the picture, we can see that    41    started social distancing earlier than\nthe other three cities.  This helped the city keep the number of deaths down.  Besides\ntaking early action, keeping the action long enough was also important in fighting\nthe pandemic.  The picture shows that Portland and Denver did well in the first few\nweeks.  However, both cities    42    , and the numbers of deaths climbed again.\nBut there was one thing Portland did right.  The city used several ways of social\ndistancing at the same time to deal with the pandemic.     43    , sick people were kept\naway from healthy ones; schools were closed; public activities were not allowed.  All\nthese were useful in keeping people safe.\nThe lessons of the 1918 pandemic bring us hope.  While we are still learning to\nfight Covid-19, social distancing may be the best way to get us through the dark days,\nat least for now.\nandemic （疾病的）大流行　per 每(一)\n【詞彙】   <sup>p</sup>",
+    "correct": "is not a new idea",
     "wrong": [
-      "原卷選項 B",
-      "原卷選項 C",
-      "原卷選項 D"
+      "has not been very useful",
+      "may bring some problems",
+      "is not welcomed by everyone"
     ],
-    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考英語閱讀第40題。",
+    "exp": "正確答案：is not a new idea。來源：113年國中教育會考英語閱讀第40題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1290,22 +1288,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G40-43-context-1.png",
-      "/assets/banks/cap-113-english/G40-43-context-2.png",
-      "/assets/banks/cap-113-english/Q40-question.png"
-    ]
+      "/assets/banks/cap-113-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q41",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-113-english/G40-43-context-1.png)\n\n![第41題原卷資料](/assets/banks/cap-113-english/G40-43-context-2.png)\n\n![第41題原卷資料](/assets/banks/cap-113-english/Q41-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(40-43)\nA HISTORY LESSON ON THE PANDEMIC\t 2020.10.29\nSince the Covid-19 pandemic started, people have begun “social distancing”—\nkeeping a safe space between you and anyone you don’t live with.  Though it\nhas been a very popular topic this year, social distancing     40     .  In fact, it was\nwidely used in the U.S. in the flu pandemic in 1918.  But how well did it work?  The\nAmericans’ experience can tell us whether it really saved lives.\n![圖表](/assets/banks/cap-113-english/G40-43-figure-1.png)\n\n\n\n\n\nFrom the picture, we can see that    41    started social distancing earlier than\nthe other three cities.  This helped the city keep the number of deaths down.  Besides\ntaking early action, keeping the action long enough was also important in fighting\nthe pandemic.  The picture shows that Portland and Denver did well in the first few\nweeks.  However, both cities    42    , and the numbers of deaths climbed again.\nBut there was one thing Portland did right.  The city used several ways of social\ndistancing at the same time to deal with the pandemic.     43    , sick people were kept\naway from healthy ones; schools were closed; public activities were not allowed.  All\nthese were useful in keeping people safe.\nThe lessons of the 1918 pandemic bring us hope.  While we are still learning to\nfight Covid-19, social distancing may be the best way to get us through the dark days,\nat least for now.\nandemic （疾病的）大流行　per 每(一)\n【詞彙】   <sup>p</sup>",
+    "correct": "New York",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "Portland",
+      "Denver",
+      "Pittsburgh"
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第41題。",
+    "exp": "正確答案：New York。來源：113年國中教育會考英語閱讀第41題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1326,22 +1323,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G40-43-context-1.png",
-      "/assets/banks/cap-113-english/G40-43-context-2.png",
-      "/assets/banks/cap-113-english/Q41-question.png"
-    ]
+      "/assets/banks/cap-113-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q42",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-113-english/G40-43-context-1.png)\n\n![第42題原卷資料](/assets/banks/cap-113-english/G40-43-context-2.png)\n\n![第42題原卷資料](/assets/banks/cap-113-english/Q42-question.png)",
-    "correct": "原卷選項 B",
+    "q": "【共用閱讀資料】\n(40-43)\nA HISTORY LESSON ON THE PANDEMIC\t 2020.10.29\nSince the Covid-19 pandemic started, people have begun “social distancing”—\nkeeping a safe space between you and anyone you don’t live with.  Though it\nhas been a very popular topic this year, social distancing     40     .  In fact, it was\nwidely used in the U.S. in the flu pandemic in 1918.  But how well did it work?  The\nAmericans’ experience can tell us whether it really saved lives.\n![圖表](/assets/banks/cap-113-english/G40-43-figure-1.png)\n\n\n\n\n\nFrom the picture, we can see that    41    started social distancing earlier than\nthe other three cities.  This helped the city keep the number of deaths down.  Besides\ntaking early action, keeping the action long enough was also important in fighting\nthe pandemic.  The picture shows that Portland and Denver did well in the first few\nweeks.  However, both cities    42    , and the numbers of deaths climbed again.\nBut there was one thing Portland did right.  The city used several ways of social\ndistancing at the same time to deal with the pandemic.     43    , sick people were kept\naway from healthy ones; schools were closed; public activities were not allowed.  All\nthese were useful in keeping people safe.\nThe lessons of the 1918 pandemic bring us hope.  While we are still learning to\nfight Covid-19, social distancing may be the best way to get us through the dark days,\nat least for now.\nandemic （疾病的）大流行　per 每(一)\n【詞彙】   <sup>p</sup>",
+    "correct": "stopped social distancing too soon",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 C",
-      "原卷選項 D"
+      "had higher numbers of deaths",
+      "began social distancing a second time",
+      "had the most days of social distancing"
     ],
-    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考英語閱讀第42題。",
+    "exp": "正確答案：stopped social distancing too soon。來源：113年國中教育會考英語閱讀第42題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1362,22 +1358,21 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G40-43-context-1.png",
-      "/assets/banks/cap-113-english/G40-43-context-2.png",
-      "/assets/banks/cap-113-english/Q42-question.png"
-    ]
+      "/assets/banks/cap-113-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "cap-113-english-q43",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-113-english/G40-43-context-1.png)\n\n![第43題原卷資料](/assets/banks/cap-113-english/G40-43-context-2.png)\n\n![第43題原卷資料](/assets/banks/cap-113-english/Q43-question.png)",
-    "correct": "原卷選項 D",
+    "q": "【共用閱讀資料】\n(40-43)\nA HISTORY LESSON ON THE PANDEMIC\t 2020.10.29\nSince the Covid-19 pandemic started, people have begun “social distancing”—\nkeeping a safe space between you and anyone you don’t live with.  Though it\nhas been a very popular topic this year, social distancing     40     .  In fact, it was\nwidely used in the U.S. in the flu pandemic in 1918.  But how well did it work?  The\nAmericans’ experience can tell us whether it really saved lives.\n![圖表](/assets/banks/cap-113-english/G40-43-figure-1.png)\n\n\n\n\n\nFrom the picture, we can see that    41    started social distancing earlier than\nthe other three cities.  This helped the city keep the number of deaths down.  Besides\ntaking early action, keeping the action long enough was also important in fighting\nthe pandemic.  The picture shows that Portland and Denver did well in the first few\nweeks.  However, both cities    42    , and the numbers of deaths climbed again.\nBut there was one thing Portland did right.  The city used several ways of social\ndistancing at the same time to deal with the pandemic.     43    , sick people were kept\naway from healthy ones; schools were closed; public activities were not allowed.  All\nthese were useful in keeping people safe.\nThe lessons of the 1918 pandemic bring us hope.  While we are still learning to\nfight Covid-19, social distancing may be the best way to get us through the dark days,\nat least for now.\nandemic （疾病的）大流行　per 每(一)\n【詞彙】   <sup>p</sup>",
+    "correct": "For example",
     "wrong": [
-      "原卷選項 A",
-      "原卷選項 B",
-      "原卷選項 C"
+      "Also",
+      "At first",
+      "However"
     ],
-    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考英語閱讀第43題。",
+    "exp": "正確答案：For example。來源：113年國中教育會考英語閱讀第43題。",
     "subject": "英文",
     "sub_topic": "閱讀理解",
     "source": {
@@ -1398,9 +1393,8 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/cap-113-english/G40-43-context-1.png",
-      "/assets/banks/cap-113-english/G40-43-context-2.png",
-      "/assets/banks/cap-113-english/Q43-question.png"
-    ]
+      "/assets/banks/cap-113-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]

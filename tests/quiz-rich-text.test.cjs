@@ -61,3 +61,32 @@ test('MathJax is rerun for the full options set and feedback after dynamic updat
   assert.ok(legacy.includes('window.quizMathSet(fbText, explanationText)'));
   assert.ok(legacy.includes('window.quizMathSet(fbText, currentExp)'));
 });
+
+test('source table cells, underlines and scientific scripts render as safe text', () => {
+  const rich = context.formatQuizRichText;
+  const result = rich('比較 <u>最不可能</u>：H<sub>2</sub>O、2<sup>3</sup>\n| 類別 | 數值 |\n| 甲 | $\\frac{1}{2}$ |');
+  assert.ok(result.includes('<u>最不可能</u>'));
+  assert.ok(result.includes('H<sub>2</sub>O'));
+  assert.ok(result.includes('2<sup>3</sup>'));
+  assert.ok(result.includes('<table'));
+  assert.ok(result.includes(String.raw`$\frac{1}{2}$`));
+  assert.ok(result.includes('<td'));
+  assert.equal(rich('<sup onclick="alert(1)">3</sup>'), '&lt;sup onclick=&quot;alert(1)&quot;&gt;3&lt;/sup&gt;');
+  assert.ok(rich('| <script>alert(1)</script> | 題目 |\n| 甲 | 乙 |').includes('&lt;script&gt;'));
+});
+
+test('absolute-value formulas stay within one table cell and bank figures retain natural sizing', () => {
+  const html = context.formatQuizRichText('| 式子 | 值 |\n| $|x|$ | 1 |');
+  assert.ok(html.includes('$|x|$'));
+  assert.equal((html.match(/<td /g) || []).length, 4);
+  assert.ok(context.formatQuizRichText('![圖](/assets/banks/exam/Q1-figure-1.png)').includes('w-auto'));
+  assert.ok(context.formatQuizRichText('![圖](/quiz.png)').includes('w-full'));
+});
+
+test('literal currency in text tables does not merge columns into math', () => {
+  const output = context.formatQuizRichText(String.raw`| 價格 | 數量 |
+| \$5 | 1 |
+| \$6 | 2 |`);
+  assert.equal((output.match(/<td /g) || []).length, 6);
+  assert.ok(output.includes(String.raw`\$5`));
+});

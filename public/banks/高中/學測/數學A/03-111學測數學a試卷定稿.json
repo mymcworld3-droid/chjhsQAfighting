@@ -2,15 +2,15 @@
   {
     "id": "gsat-111-math-a-q1",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-111-math-a/Q1-question.png)",
-    "correct": "原卷選項 5",
+    "q": "某冰淇淋店最少需準備$n$桶不同口味的冰淇淋，才能滿足廣告所稱「任選兩球不同口味冰淇淋的組合數超過100種」。試問來店顧客從$n$桶中任選兩球（可為同一口味）共有幾種方法？",
+    "correct": "120",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4"
+      "101",
+      "105",
+      "115",
+      "225"
     ],
-    "exp": "正確答案：原卷選項 5。來源：111年學科能力測驗數學A第1題。",
+    "exp": "正確答案：120。來源：111年學科能力測驗數學A第1題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -21,26 +21,54 @@
       "pages": [
         2
       ],
-      "answer": "5",
+      "answer": "4",
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-a/Q1-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-math-a-q2",
+    "difficulty": "medium",
+    "q": "某品牌計算機在計算對數$log_ab$時需按$log （ a ， b ）$。某生在計算$log_ab$時（其中$a>1$且$b>1$）順序弄錯，誤按$log （ b ， a ）$，所得為正確值的$\\frac{9}{4}$倍。試選出$a,b$間的關係式。",
+    "correct": "$a^2=b^3$",
+    "wrong": [
+      "$a^3=b^2$",
+      "$a^4=b^9$",
+      "$2a=3b$",
+      "$3a=2b$"
+    ],
+    "exp": "正確答案：$a^2=b^3$。來源：111年學科能力測驗數學A第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 2,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "1",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-a-q3",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-111-math-a/Q3-question.png)",
-    "correct": "原卷選項 5",
+    "q": "在處理二維數據時，有種方法是將數據垂直投影到某一直線，並以該直線為數線，進而了解投影點所成一維數據的變異。下圖的一組二維數據，試問投影到哪一選項的直線，所得之一維投影數據的變異數會是最小？\n\n![圖表](/assets/banks/gsat-111-math-a/Q3-figure-1.png)",
+    "correct": "$y=-\\frac{x}{2}$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4"
+      "$y=2x$",
+      "$y=-2x$",
+      "$y=-x$",
+      "$y=\\frac{x}{2}$"
     ],
-    "exp": "正確答案：原卷選項 5。來源：111年學科能力測驗數學A第3題。",
+    "exp": "正確答案：$y=-\\frac{x}{2}$。來源：111年學科能力測驗數學A第3題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -56,21 +84,22 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-math-a/Q3-question.png"
-    ]
+      "/assets/banks/gsat-111-math-a/Q3-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-a-q4",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-111-math-a/Q4-question.png)",
-    "correct": "原卷選項 3",
+    "q": "設等差數列$\\left\\langle a_n\\right\\rangle$之首項$a_1$與公差$d$皆為正數，且$loga_1,loga_3,loga_6$依序也成等差數列。試選出數列$loga_1,loga_3,loga_6$的公差。",
+    "correct": "$log\\frac{3}{2}$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 4",
-      "原卷選項 5"
+      "$logd$",
+      "$log\\frac{2}{3}$",
+      "$log2d$",
+      "$log3d$"
     ],
-    "exp": "正確答案：原卷選項 3。來源：111年學科能力測驗數學A第4題。",
+    "exp": "正確答案：$log\\frac{3}{2}$。來源：111年學科能力測驗數學A第4題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -85,22 +114,50 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-a/Q4-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-math-a-q5",
+    "difficulty": "medium",
+    "q": "已知某地區有30%的人口感染某傳染病。針對該傳染病的快篩試劑檢驗，有陽性或陰性兩結果。已知該試劑將染病者判為陽性的機率為80%，將未染病者判為陰性的機率則為60%。為降低該試劑將染病者誤判為陰性的情況，專家建議連續採檢三次。若單次採檢判為陰性者中，染病者的機率為$P$；而連續採檢三次皆判為陰性者中，染病者的機率為$P'$。試問$\\frac{P}{P'}$最接近哪一選項？",
+    "correct": "8",
+    "wrong": [
+      "7",
+      "9",
+      "10",
+      "11"
+    ],
+    "exp": "正確答案：8。來源：111年學科能力測驗數學A第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-111-math-a",
+      "question": 5,
+      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "2",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-a-q6",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/gsat-111-math-a/Q6-question.png)",
-    "correct": "原卷選項 5",
+    "q": "設坐標平面上兩直線$L_1,L_2$的斜率皆為正，且$L_1,L_2$有一夾角的平分線斜率為$\\frac{11}{9}$。另一直線$L$通過點$(2,\\frac{1}{3})$且與$L_1,L_2$所圍的有界區域為正三角形，試問$L$的方程式為下列哪一選項？",
+    "correct": "$27x+33y=65$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 4"
+      "$11x-9y=19$",
+      "$9x+11y=25$",
+      "$11x+9y=25$",
+      "$27x-33y=43$"
     ],
-    "exp": "正確答案：原卷選項 5。來源：111年學科能力測驗數學A第6題。",
+    "exp": "正確答案：$27x+33y=65$。來源：111年學科能力測驗數學A第6題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -115,52 +172,21 @@
       "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
     },
     "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-a/Q6-question.png"
-    ]
-  },
-  {
-    "id": "gsat-111-math-a-q13",
-    "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-111-math-a/Q13-question.png)",
-    "correct": "原卷選項 2",
-    "wrong": [
-      "原卷選項 1",
-      "原卷選項 3",
-      "原卷選項 4",
-      "原卷選項 5"
-    ],
-    "exp": "正確答案：原卷選項 2。來源：111年學科能力測驗數學A第13題。",
-    "subject": "數學",
-    "sub_topic": "數學綜合",
-    "source": {
-      "exam": "gsat-111-math-a",
-      "question": 13,
-      "file": "高中/學測/數學A/03-111學測數學a試卷定稿.pdf",
-      "url": "https://drive.google.com/file/d/1In9rio3sMHhEDmEtcRNLkpsSBIdYRb5C/view?usp=drivesdk",
-      "pages": [
-        5
-      ],
-      "answer": "2",
-      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m053361187672613478/03-111%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8a%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
-    },
-    "difficultySource": "unrated-medium",
-    "requiredImages": [
-      "/assets/banks/gsat-111-math-a/Q13-question.png"
-    ]
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
   },
   {
     "id": "gsat-111-math-a-q18",
     "difficulty": "medium",
-    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-111-math-a/G18-20-context.png)\n\n![第18題原卷資料](/assets/banks/gsat-111-math-a/Q18-question.png)",
-    "correct": "原卷選項 4",
+    "q": "【共用閱讀資料】\n<u>18-20題為題組</u>\n\n坐標平面上有一環狀區域由圓$x^2+y^2=3$的外部與圓$x^2+y^2=4$的內部交集而成。某甲欲用一支長度為1的筆直掃描棒來掃描此環狀區域之$x$軸上方的某區域$R$。他設計掃描棒黑、白兩端分別在半圓$C_1:x^2+y^2=3\\,\\,（y\\geq 0）$、$C_2:x^2+y^2=4\\,（y\\geq 0）$上移動。開始時掃描棒黑端在點$A(\\sqrt{3},0)$，白端在$C_2$的點$B$。接著黑、白兩端各沿著$C_1$、$C_2$逆時針移動，直至白端碰到$C_2$的點${B'}(-2,0)$便停止掃描。\n\n\n\n\n\n試問點$B$的坐標為下列哪一選項？（單選題，3分）\n\n![圖表](/assets/banks/gsat-111-math-a/G18-20-figure-1.png)\n![圖表](/assets/banks/gsat-111-math-a/Q18-figure-1.png)",
+    "correct": "$(\\sqrt{3},1)$",
     "wrong": [
-      "原卷選項 1",
-      "原卷選項 2",
-      "原卷選項 3",
-      "原卷選項 5"
+      "$(0,2)$",
+      "$(1,\\sqrt{3})$",
+      "$(\\sqrt{2},\\sqrt{2})$",
+      "$(2,0)$"
     ],
-    "exp": "正確答案：原卷選項 4。來源：111年學科能力測驗數學A第18題。",
+    "exp": "正確答案：$(\\sqrt{3},1)$。來源：111年學科能力測驗數學A第18題。",
     "subject": "數學",
     "sub_topic": "數學綜合",
     "source": {
@@ -180,8 +206,9 @@
     },
     "difficultySource": "unrated-medium",
     "requiredImages": [
-      "/assets/banks/gsat-111-math-a/G18-20-context.png",
-      "/assets/banks/gsat-111-math-a/Q18-question.png"
-    ]
+      "/assets/banks/gsat-111-math-a/G18-20-figure-1.png",
+      "/assets/banks/gsat-111-math-a/Q18-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
   }
 ]
