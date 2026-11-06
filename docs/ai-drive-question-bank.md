@@ -8,7 +8,7 @@ AI 題庫唯一指定 Google Drive 目錄：
 
 https://drive.google.com/drive/folders/1Z8TgddizbBKYA2h1Ij6nPqXjhGUAVTqF
 
-Drive 中每題一份 `aiq_<scope-hash>_<question-hash>.json`，已通過一次獨立審核才上傳。原始 Prompt 位於 `server.js` 的 `generationPrompt` 和 `fast-quiz-prompt.cjs`，本次不修改。
+Drive 會按**學制／科目／年級／觀念**建立目錄，例如 `Ai題庫／高中／物理／高二／碰撞與動量守恆／`。每題一份 `aiq_<scope-hash>_<question-hash>.json`，通過一次獨立審核才上傳。資料夾名稱由原始題目 metadata 推導，仍保留完整 `catalog.level / subject / topic / difficulty` 供匹配。原始 Prompt 位於 `server.js` 的 `generationPrompt` 和 `fast-quiz-prompt.cjs`，本次不修改。
 
 **部署環境需另外設定 Google Drive API 認證。ChatGPT 已連線的 Google Drive 不會自動授權 Render 主機讀寫。**
 
@@ -96,7 +96,7 @@ PY
 
 目前補題是單一 Node 伺服器內的非同步工作，使用同一用途的任務去重、最多同時 2 件和每執行個體每小時 24 件限制。Render 重啟時，尚未完成的補題可能中斷，但下一位玩家觸發缺題時會重試。跨執行個體的全域工作鎖、持久化補題佇列、增量匯入和管理員人工覆核可作為後續強化。
 
-AI 題庫索引以 Drive 同一資料夾內的 JSON 檔案為準，伺服器快取 2 分鐘。沒有啟用 Drive 認證就不會建立任何檔案。
+AI 題庫索引會讀取對應觀念的分類資料夾，並暫時相容舊根目錄的 JSON，避免搬移期間漏題或重複存入，伺服器快取 2 分鐘。沒有啟用 Drive 認證就不會建立任何檔案。
 
 ## 回歸測試
 
