@@ -296,7 +296,7 @@ function syncContractNavigation() {
     const locked = !place || !unlocked(place);
     contract.disabled = locked;
     contract.setAttribute('aria-disabled', String(locked));
-    contract.setAttribute('aria-label', locked ? '契器，金丹境解鎖' : '契器');
+    contract.setAttribute('aria-label', locked ? '尋器，金丹境解鎖' : '尋器');
     contract.title = locked ? '金丹境解鎖' : '';
   }
   if (!visible()) return;
