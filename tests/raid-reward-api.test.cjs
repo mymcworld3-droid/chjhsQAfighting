@@ -73,7 +73,7 @@ test('raid difficulty selects equal-probability tier materials with three rolls'
   assert.deepEqual(api.rollRaidMaterials('room_x','u1'),api.rollRaidMaterials('room_x','u1'),'replay is deterministic');
 });
 
-test('raid reward grants three material rolls plus refinement seals exactly once', async () => {
+test('raid reward grants refinement seals and essence without wood or iron exactly once', async () => {
   const db = fakeDb({ uid:'u1', stats:{totalScore:68}, materialSystem:{ inventory:{} } });
   const validation = api.validateRaidVictory(wonRoom(), 'u1');
   const fieldValue = { serverTimestamp:() => 12345 };
@@ -83,7 +83,7 @@ test('raid reward grants three material rolls plus refinement seals exactly once
   assert.equal(first.rewards['raid-refine-key-iii'],2);
   assert.equal(first.rewards['nascent-soul-essence'],5);
   assert.equal(db.docs.get('users/u1').materialSystem.inventory['nascent-soul-essence'],5);
-  assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(first.rewards[id]||0),0),3);
+  assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(first.rewards[id]||0),0),0);
   assert.equal(first.firstVictory,true);
   assert.equal(first.dailyFirstVictory,true);
 
@@ -132,7 +132,7 @@ test('same-day second room gets base seals and next Taiwan day gets daily seal b
   assert.equal(b.dailyFirstVictory,false);
   assert.equal(b.rewards['raid-refine-key-ii'],2);
   assert.equal(b.rewards['raid-refine-key-iii'],1);
-  assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(b.rewards[id]||0),0),3);
+  assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(b.rewards[id]||0),0),0);
   assert.equal(c.dailyFirstVictory,true);
   assert.equal(c.rewards['raid-refine-key-ii'],3);
   assert.equal(c.rewards['raid-refine-key-iii'],2);
@@ -156,7 +156,7 @@ test('raid victory only grants configured forge materials, seals and bound fragm
   assert.equal(result.rewards['raid-shen-sword-soul'],undefined);
 });
 
-test('concurrent different rooms grant one first victory one daily bonus and six total material rolls',async()=>{
+test('concurrent rooms grant one first victory and one daily bonus without material rolls',async()=>{
   const db=fakeDb({uid:'u1',stats:{totalScore:68},materialSystem:{inventory:{}}});
   const validation=api.validateRaidVictory(wonRoom(),'u1');
   const results=await Promise.all(['room_aaaa','room_bbbb','room_aaaa'].map(id=>api.awardRaidReward(db,'u1',id,validation,{fieldValue})));
@@ -166,7 +166,7 @@ test('concurrent different rooms grant one first victory one daily bonus and six
   assert.equal(inventory['raid-refine-key-ii'],5);
   assert.equal(inventory['raid-refine-key-iii'],3);
   assert.equal(inventory['nascent-soul-essence'],10);
-  assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(inventory[id]||0),0),6);
+  assert.equal(api.RAID_MATERIAL_POOL.reduce((sum,id)=>sum+(inventory[id]||0),0),0);
 });
 
 test('missing player leaves no reward receipt or partial inventory',async()=>{
@@ -175,7 +175,7 @@ test('missing player leaves no reward receipt or partial inventory',async()=>{
   assert.equal(db.docs.size,0);
 });
 
-test('each tier awards 5/10/15 guaranteed Yuan Ying fragments and its exclusive realm pool', async () => {
+test('each tier awards 5/10/15 guaranteed Yuan Ying fragments without wood or iron', async () => {
   const pools = {
     normal:['qi-spirit-iron','foundation-refined-iron','qi-spirit-wood','foundation-century-wood'],
     hard:['foundation-refined-iron','golden-purple-iron','foundation-century-wood','golden-lightning-wood'],
@@ -191,7 +191,7 @@ test('each tier awards 5/10/15 guaranteed Yuan Ying fragments and its exclusive 
     assert.equal(first.rewards['nascent-soul-essence'],essence);
     assert.equal(first.essenceGranted,essence);
     const rolled = Object.keys(first.rewards).filter(id=>pools[difficulty].includes(id));
-    assert.equal(rolled.reduce((sum,id)=>sum+first.rewards[id],0),3);
+    assert.equal(rolled.reduce((sum,id)=>sum+first.rewards[id],0),0);
     const unexpected = Object.keys(first.rewards).filter(id=>api.RAID_MATERIAL_POOL.includes(id) && !pools[difficulty].includes(id));
     assert.deepEqual(unexpected,[]);
     const replay = await api.awardRaidReward(db,'u1','tier_room_'+difficulty,validation,{fieldValue});

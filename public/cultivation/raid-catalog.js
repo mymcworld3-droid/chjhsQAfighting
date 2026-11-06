@@ -14,8 +14,8 @@ export const RAID_TRIALS = Object.freeze([
     party: '1–4 人',
     recommended: '建議 3 人',
     bossImage: 'assets/story/characters/shen-qingshuang.png',
-    description: '組隊挑戰霜華劍陣，收集煉器素材。',
-    rewards: ['玄鐵／靈木', '精煉玄鐵／百年靈木', '紫金玄鐵／雷擊木', '二階升級石', '三階升級石'],
+    description: '組隊挑戰霜華劍陣，收集升階石與元嬰碎精。',
+    rewards: ['元嬰碎精', '二階升級石', '三階升級石'],
     mechanic: '2 人破陣減傷・3 人觸發合擊'
   }),
   Object.freeze({
@@ -29,7 +29,7 @@ export const RAID_TRIALS = Object.freeze([
     recommended: '開發中',
     bossImage: '',
     description: '新秘境籌備中，敬請期待。',
-    rewards: ['未公開專屬素材'],
+    rewards: ['尚未公開'],
     mechanic: '封印中'
   }),
   Object.freeze({
@@ -43,7 +43,7 @@ export const RAID_TRIALS = Object.freeze([
     recommended: '開發中',
     bossImage: '',
     description: '新秘境籌備中，敬請期待。',
-    rewards: ['秘境玄髓', '清霜劍魄'],
+    rewards: ['尚未公開'],
     mechanic: '封印中'
   })
 ]);

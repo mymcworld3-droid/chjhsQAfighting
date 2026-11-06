@@ -113,7 +113,7 @@ async function awardRaidReward(db, uid, roomId, validation, {
       const firstVictory = !user.raidProgress?.[RAID_BOSS_ID]?.firstVictoryRoomId;
       const dailyFirstVictory = !!date && !dailySnap.exists;
       const tier = raidDifficulty.get(validation.difficulty) || raidDifficulty.TIERS.normal;
-      const granted = { ...rewards, ...rollRaidMaterials(roomId, uid, RAID_MATERIAL_ROLLS, tier.id),
+      const granted = { ...rewards,
         'nascent-soul-essence': tier.fragments };
       if (dailyFirstVictory) {
         granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;

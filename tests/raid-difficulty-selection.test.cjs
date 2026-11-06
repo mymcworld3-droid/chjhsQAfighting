@@ -32,7 +32,7 @@ test('difficulty previews move the existing selection and update rewards and the
     assert.equal(app.card.dataset.raidTheme, id);
     assert.equal(app.properties.get('--raid-selected-index'), Object.keys(DIFFICULTY.TIERS).indexOf(id));
     assert.equal(app.targets.get('.raid-reward-preview b').textContent, '通關必得 元嬰碎精 ×' + tier.fragments);
-    assert.equal(app.targets.get('.raid-reward-preview span').textContent, tier.materialRealms.join('～') + '木鐵素材');
+    assert.equal(app.targets.get('.raid-reward-preview span').textContent, '二階升級石・三階升級石');
     assert.equal(app.buttons.filter(button => button.attributes['aria-pressed'] === 'true').length, 1);
     assert.equal(app.input.value, 'ABC234');
     assert.equal(app.fitCalls(), index + 1);
