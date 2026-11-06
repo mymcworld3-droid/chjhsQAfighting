@@ -126,12 +126,13 @@ const adaptiveLearning = registerAdaptiveLearningApi(app);
 app.get('/api/ai-status', (req, res) => {
     const providers = aiRouter.getStatus();
     res.json({
-        strategy: process.env.AI_PROVIDER_STRATEGY || 'round-robin',
+        strategy: process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY ? 'task-aware-lite-first' : (process.env.AI_PROVIDER_STRATEGY || 'round-robin'),
         count: providers.length,
         providers,
         // Recent actual attempts (including fallbacks), not just configured providers.
         // In-memory per Render instance; no keys, prompts or user identifiers.
-        recent: aiRouter.getRecentActivity()
+        recent: aiRouter.getRecentActivity(),
+        requestsToday: aiRouter.getGeminiRequestUsage()
     });
 });
 
@@ -149,7 +150,7 @@ app.post('/api/analyze-subjects', async (req, res) => {
             要求：統一用繁體中文正式名稱，回傳純 JSON { "subjects": "科目A, 科目B" }。
         `;
 
-        const routed = await aiRouter.generateJSON(prompt);
+        const routed = await aiRouter.generateJSON(prompt, { task:'general' });
         res.json({ subjects: routed.data.subjects, provider: routed.provider, model: routed.model });
 
     } catch (error) {
@@ -252,7 +253,7 @@ ${JSON.stringify(context)}
 {"answer":"你的回答","knowledgePoint":"核心知識點","checkStatus":"valid|issue|uncertain","questionIssue":{"confirmed":false,"confidence":0.0,"reason":"具體錯誤依據，無確定錯誤則留空"}}
 `;
 
-        const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 90000 });
+        const routed = await aiRouter.generateJSON(prompt, { task:'question-helper', timeoutMs: 90000 });
         let answer = String(routed.data?.answer || '').trim();
         if (!answer && !checkOnly) throw new Error('AI 未回傳有效回答');
         const fallbackPoint = userMessage.replace(/[？?！!。,.，]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);
@@ -851,28 +852,33 @@ app.post('/api/generate-quiz', async (req, res) => {
                 planVersion:adaptiveContext?.plan.version || '',
                 forms:bankFacet?.forms || null
             } : null;
-            const verifyAndArchive = async (raw, target) => {
-                if (!target || questionQualityIssue(raw)) return;
-                // Exactly one independent AI review; the existing deterministic rules
-                // (JSON, TeX, answer consistency) have already been applied at generation.
+            // Enforce independent checking BEFORE serving any newly generated
+            // Gemini question. A model's own "correct" field is never enough.
+            const reviewCandidate = async (raw, target, sourceModel = '') => {
+                const deterministicIssue = questionQualityIssue(raw);
+                if (deterministicIssue) throw new Error('題目品質未過關：' + deterministicIssue);
                 const reviewPrompt = [
                     '你是獨立題庫審核員。禁止把題庫的 correct 當成既定真理。',
-                    '第一步：只看題幹與逐項編號的選項，先確認問句是要選正確、錯誤、不符合、錯誤推論所在，還是最佳解釋；依相同判定標準對四項分別驗證。',
-                    '第二步：列出所有真正「符合題目所問」的 0-based 索引 validIndices；零個、多個、條件不足、歧義或需要不存在圖文資料，全部 approved=false。',
-                    '第三步：才核對標示答案與解析；必須 validIndices 恰好為 [0]（因為審核輸入的正解排在索引0）、解析事實和計算全對、難度與範圍符合，才可 approved=true。',
-                    '逆向題不可將「內容本身為真」誤作「符合題目所問」。若題幹問的是推論中錯誤的觀念，選項卻混合正確定律、錯誤敘述及修正建議，可能有多解，應拒絕入庫。',
-                    '若有無法證實的事實、例外、等價答案或選項語意不清，一律不入庫。玩家回報和作者解析都不是證據。',
-                    '題幹：' + String(raw.q || ''),
-                    '候選選項（0 為待核對的暫定標示答案，請先獨立判定）：' +
-                        JSON.stringify([raw.correct, ...raw.wrong].map((text,index)=>({index,text}))),
-                    '指定範圍：' + JSON.stringify(target),
+                    '先獨立確認題幹要求選出正確、錯誤、不符合或最適當的選項；逐項重新解題。',
+                    'validIndices 必須列出所有真正符合題目所問的 0-based 索引；零個、多個、歧義或證據不足都不可通過。',
+                    '檢查事實、定義、運算、數字、單位、選項等價性及解析結論；必要時尋找反例。',
+                    '最後才核對參考答案；只有 validIndices 恰好為 [0]、解析正確且學習範圍符合，才可 approved=true。',
+                    '即使很接近也不能放行未確認的題目。不可把模型自評信心當作事實證據。',
+                    '[題幹]', String(raw.q || ''),
+                    '[選項（先只依題意獨立判定）]',
+                    JSON.stringify([raw.correct, ...raw.wrong].map((text,index)=>({index,text}))),
+                    '[參考資料，僅供獨立解題後核對]',
+                    '指定範圍：' + JSON.stringify(target || {
+                        subject:raw.subject, level, topic:raw.sub_topic || targetTopic, difficulty
+                    }),
                     '參考標示答案：' + JSON.stringify(raw.correct),
                     '參考解析：' + String(raw.exp || ''),
-                    '其他題目資訊：' + JSON.stringify({subject:raw.subject,sub_topic:raw.sub_topic,question_form:raw.question_form}),
-                    '只回傳 JSON {"approved":false,"validIndices":[0],"reason":"繁體中文簡短、具體且可驗證的理由"}；不可把示例的值當成答案。'
+                    '只回傳合法 JSON：{"approved":false,"validIndices":[],"reason":"繁體中文具體理由"}'
                 ].join('\n');
                 const checked = await aiRouter.generateJSON(reviewPrompt, {
-                    parallel:false,timeoutMs:90000,
+                    task:'quiz-review',
+                    excludeModels:sourceModel ? [sourceModel] : [],
+                    timeoutMs:90000,
                     validate:data=>{
                         if (typeof data?.approved !== 'boolean' || typeof data?.reason !== 'string' ||
                             !Array.isArray(data?.validIndices) || !data.validIndices.every(x=>Number.isInteger(x)&&x>=0&&x<4) ||
@@ -880,8 +886,16 @@ app.post('/api/generate-quiz', async (req, res) => {
                             throw Error('AI bank review format invalid');
                     }
                 });
-                if (checked.data.approved === true && checked.data.validIndices.length === 1 &&
-                    checked.data.validIndices[0] === 0) await aiQuestionBank.publish(target, raw, checked.data);
+                if (checked.data.approved !== true || checked.data.validIndices.length !== 1 ||
+                    checked.data.validIndices[0] !== 0) {
+                    throw new Error('獨立審查未通過：' + String(checked.data.reason || '答案不唯一或證據不足').slice(0, 400));
+                }
+                return checked.data;
+            };
+            const verifyAndArchive = async (raw, target) => {
+                if (!target) return;
+                const review = await reviewCandidate(raw, target);
+                await aiQuestionBank.publish(target, raw, review);
             };
             if (bankTarget && attempts === 0) {
                 const bankResult = await aiQuestionBank.find(
@@ -900,7 +914,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                     if (bankResult.count < aiQuestionBank.LOW_WATER) {
                         aiQuestionBank.schedule(bankTarget, async ()=>{
                             const more = await aiRouter.generateJSON(promptForTask(0), {
-                                parallel:false,timeoutMs:90000,
+                                task:'quiz-generate',parallel:false,timeoutMs:90000,
                                 validate:(data)=>{
                                     validateCandidate(data);
                                     taskPlan.validate(data,0);
@@ -926,6 +940,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             // TeX, quality, answer consistency, and duplicate validation below.
             const saved = attempts === 0 ? (adaptiveContext?quizSparePool.takeMatching(spareKey,validateCandidate,data=>adaptiveContext.decision.targets.findIndex(f=>f.id===data.adaptive_facet_id&&f.difficulty===data.adaptive_difficulty)):quizSparePool.take(spareKey, validateCandidate)) : null;
             const routed = saved || await aiRouter.generateJSON(prompt, {
+                task:'quiz-generate',
                 ...(combatFastMode ? { timeoutMs: 90000 } : {}),
                 parallel: true,
                 validate: (parsed, context = {index:0}) => {
@@ -974,6 +989,13 @@ app.post('/api/generate-quiz', async (req, res) => {
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
+
+            // Fail closed: a freshly generated Gemini question must be reviewed
+            // before it is sent to any game mode or signed as a raid question.
+            // Legacy OpenAI-only deployments retain their existing semantics.
+            const independentReview = (typeof process !== 'undefined' && (process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY))
+                ? await reviewCandidate(parsed, bankTarget, routed.model)
+                : null;
 
             // Statistics must never prevent the player receiving a question.
             const trackDelivered = async () => {
@@ -1059,7 +1081,9 @@ app.post('/api/generate-quiz', async (req, res) => {
                 } : bankTarget;
                 const archive = {...parsed};
                 delete archive.adaptive;
-                aiQuestionBank.schedule(archiveTarget, () => verifyAndArchive(archive,archiveTarget));
+                aiQuestionBank.schedule(archiveTarget, () => independentReview
+                    ? aiQuestionBank.publish(archiveTarget, archive, independentReview)
+                    : verifyAndArchive(archive,archiveTarget));
             }
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 

@@ -386,10 +386,14 @@ async function callOpenAICompatible(provider, prompt, images) {
   }
 }
 
-async function generateMultimodalJSON(prompt, images) {
-  if (!images.length) return aiRouter.generateJSON(prompt, { timeoutMs: 120000 });
-  // Match the shared router's round-robin/random strategy instead of always using model 1.
-  const providers = aiRouter.orderedProviders(aiRouter.buildProviders());
+async function generateMultimodalJSON(prompt, images, task = 'dongtian-generate') {
+  if (!images.length) return aiRouter.generateJSON(prompt, { task, timeoutMs: 120000 });
+  // Each Gemini API key offers the same six models; ordinary image-based
+  // generation must use only Lite requests, preserving Flash for review.
+  // The old route remains available if no Gemini keys are configured.
+  const providers = (process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY)
+    ? aiRouter.buildTaskProviders(task)
+    : aiRouter.orderedProviders(aiRouter.buildProviders());
   if (!providers.length) throw new Error('No AI provider configured');
   const errors = [];
   for (const provider of providers) {
@@ -567,7 +571,7 @@ function inferIssuesFromReviewSummary(dongtian, review) {
 async function expandDongtianReviewIssues(dongtian, review) {
   if (Array.isArray(review?.issues) && review.issues.length) return review.issues;
   try {
-    const run = await aiRouter.generateJSON(buildDongtianIssueExpansionPrompt(dongtian, review), { timeoutMs: 90000 });
+    const run = await aiRouter.generateJSON(buildDongtianIssueExpansionPrompt(dongtian, review), { task:'dongtian-escalate', timeoutMs: 90000 });
     const issues = normalizeExpandedDongtianIssues(run.data, dongtian);
     if (issues.length) return issues;
   } catch (error) {
@@ -576,8 +580,8 @@ async function expandDongtianReviewIssues(dongtian, review) {
   return inferIssuesFromReviewSummary(dongtian, review);
 }
 
-async function verifyGeneratedDongtian(dongtian) {
-  const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { timeoutMs: 90000 });
+async function verifyGeneratedDongtian(dongtian, task = 'dongtian-review') {
+  const run = await aiRouter.generateJSON(buildDongtianDoubleCheckPrompt(dongtian), { task, timeoutMs: 90000 });
   const review = normalizeDongtianDoubleCheck(run.data);
   // Deterministic checks override optimistic AI approvals. The reviewer may
   // miss an explicit conflict or return approved=true with issues=[].
@@ -824,12 +828,12 @@ async function rewriteAndValidateQuestion(original, hint, issue, dongtian, maxAt
       const prompt = buildRevisionPrompt(original, hint, issue, dongtian) +
         (failure ? '\n[前次重寫未通過]\n' + cleanText(failure, 800) +
           '\n請重新求解並完整產生 q、correct、wrong[3]、exp；不要註記原題有錯。' : '');
-      rewrite = await aiRouter.generateJSON(prompt, { timeoutMs: 90000 });
+      rewrite = await aiRouter.generateJSON(prompt, { task:'dongtian-repair', timeoutMs: 90000 });
       revised = normalizeStandaloneQuestion(rewrite.data, original);
       Knowledge.assertLabel(revised,original?.subject,Knowledge.labels(original,original?.subject).map(point=>point.id));
       validationRun = await aiRouter.generateJSON(
         buildRevisionValidationPrompt(original, revised, issue, hint, dongtian),
-        { timeoutMs: 90000 }
+        { task:'dongtian-review', timeoutMs: 90000 }
       );
       const validation = normalizeRevisionValidation(validationRun.data);
       lastValidation = validation;
@@ -867,7 +871,7 @@ async function reviewAndRepairGeneratedDongtian(dongtian) {
   // second independent reviewer a chance first; if it still rejects, structure
   // the summary into concrete question IDs so the repair pipeline can act on it.
   if (!current.review.issues.length) {
-    const retry = await verifyGeneratedDongtian(candidate);
+    const retry = await verifyGeneratedDongtian(candidate, 'dongtian-escalate');
     current = retry;
     if (current.review.passed) {
       return { dongtian: candidate, doubleCheck: current, initialDoubleCheck: initial, repairs };
@@ -1079,13 +1083,13 @@ module.exports = function registerDongtianApi(app) {
         return res.status(400).json({ error: '回報資料不完整' });
       }
 
-      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(question, reason, dongtian), { timeoutMs: 90000 });
+      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(question, reason, dongtian), { task:'dongtian-review', timeoutMs: 90000 });
       const review = normalizeQuestionReview(first.data);
       let verification = { confirmError: false, confidence: 0, summary: '第一階段未達複核門檻' };
       let secondProvider = null;
       let secondModel = null;
       if (review.hasError && review.confidence >= 0.65) {
-        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(question, reason, review, dongtian), { timeoutMs: 90000 });
+        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(question, reason, review, dongtian), { task:'dongtian-escalate', timeoutMs: 90000 });
         verification = normalizeReviewVerification(second.data);
         secondProvider = second.provider;
         secondModel = second.model;
@@ -1117,11 +1121,11 @@ module.exports = function registerDongtianApi(app) {
         return res.status(400).json({ error: '修改提示詞必須具體指出原題哪裡錯誤、不精確或有歧義' });
       }
 
-      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(original, hint, dongtian), { timeoutMs: 90000 });
+      const first = await aiRouter.generateJSON(buildQuestionReviewPrompt(original, hint, dongtian), { task:'dongtian-review', timeoutMs: 90000 });
       const review = normalizeQuestionReview(first.data);
       let verification = { confirmError: false, confidence: 0, summary: '' };
       if (review.hasError && review.confidence >= 0.65) {
-        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(original, hint, review, dongtian), { timeoutMs: 90000 });
+        const second = await aiRouter.generateJSON(buildQuestionReviewVerificationPrompt(original, hint, review, dongtian), { task:'dongtian-escalate', timeoutMs: 90000 });
         verification = normalizeReviewVerification(second.data);
       }
       const issueConfirmed = review.hasError && review.confidence >= 0.75 && verification.confirmError && verification.confidence >= 0.75;
@@ -1212,7 +1216,7 @@ module.exports = function registerDongtianApi(app) {
 
       // Pass 1: only identify required question count, metadata and ordered single-choice structure.
       emit({ type: 'planning' });
-      const planningRun = await generateMultimodalJSON(buildPlanningPrompt(text, creatorLevel, images.length, questionAmount), images);
+      const planningRun = await generateMultimodalJSON(buildPlanningPrompt(text, creatorLevel, images.length, questionAmount), images, 'dongtian-plan');
       const plan = normalizeDongtianPlan(planningRun.data, creatorLevel, questionAmount);
       emit({ type: 'planned', total: plan.questionCount, completed: 0 });
 
