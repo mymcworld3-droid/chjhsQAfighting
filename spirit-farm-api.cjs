@@ -101,11 +101,8 @@ function createService({db,now=Date.now,random=Math.random,uuid=crypto.randomUUI
         for(const i of [0,3,6]){const plant=farm.plots[i];if(plant&&i<farm.openPlots&&plant.readyAt>time){const reduction=(plant.watered?0:.1)+(plant.channelBonus?0:.15);plant.watered=true;plant.channelBonus=true;boost(plant,reduction);}}
         result.message='水渠已修復，左側田地自動灌溉，生長時間縮短 25%';
       }else if(op.action==='exchange'){
-        if(Access.score(user)<c.minScore)throw fail(c.materialName+'兌換需達'+(c.minScore===28?'金丹境':'築基初期'));
-        spend({[c.id]:c.exchange});const materialInventory={...(user.materialSystem?.inventory||{})};
-        const quantity=Number(materialInventory[c.material])||0;if(!Number.isSafeInteger(quantity)||quantity<0||quantity>=1000000)throw fail('材料數量異常，請先整理背包');
-        materialInventory[c.material]=quantity+1;user.materialSystem={...user.materialSystem,inventory:materialInventory};tx.update(userRef,{'materialSystem.inventory':materialInventory});
-        result.message='已將 '+c.exchange+' 株'+c.name+'換成'+c.materialName+' ×1，存入背包';
+        // 兼容舊版客戶端請求，但絕不再扣作物或發放停用材料。
+        throw fail('煉器材料兌換已停用，靈田收成可用於播種與建設');
       }else if(op.action==='study'){
         if(farm.study.date!==date)farm.study={date,count:0,seen:[]};
         if(farm.study.count>=Rules.STUDY_CAP)throw fail('今日修習靈氣已納滿，明日可再納取');
