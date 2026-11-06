@@ -16,30 +16,7 @@ const REWARDS = Object.freeze({
   'raid-refine-key-ii': 2,
   'raid-refine-key-iii': 1
 });
-const RAID_MATERIAL_POOL = Object.freeze([
-  'qi-spirit-iron',
-  'foundation-refined-iron',
-  'golden-purple-iron',
-  'qi-spirit-wood',
-  'foundation-century-wood',
-  'golden-lightning-wood',
-  'nascent-star-iron',
-  'nascent-soul-wood'
-]);
-const RAID_MATERIAL_ROLLS = 3;
-
-function rollRaidMaterials(roomId, uid, rolls = RAID_MATERIAL_ROLLS, difficulty = 'normal') {
-  const pool = raidDifficulty.get(difficulty)?.materials || raidDifficulty.TIERS.normal.materials;
-  const granted = {};
-  const total = Math.max(0, Math.floor(Number(rolls) || 0));
-  for (let i = 0; i < total; i += 1) {
-    // Deterministic per room/player/roll; each tier has its own equal-probability material pool.
-    const digest = crypto.createHash('sha256').update(String(roomId) + '\n' + String(uid) + '\nmaterial-roll:' + i).digest();
-    const id = pool[digest.readUInt32BE(0) % pool.length];
-    granted[id] = (granted[id] || 0) + 1;
-  }
-  return granted;
-}
+// 團本不再產出木鐵等一般材料；僅給升階石與元嬰碎精。
 
 function finite(value, fallback = 0) {
   const n = Number(value);
@@ -113,8 +90,11 @@ async function awardRaidReward(db, uid, roomId, validation, {
       const firstVictory = !user.raidProgress?.[RAID_BOSS_ID]?.firstVictoryRoomId;
       const dailyFirstVictory = !!date && !dailySnap.exists;
       const tier = raidDifficulty.get(validation.difficulty) || raidDifficulty.TIERS.normal;
-      const granted = { ...rewards,
-        'nascent-soul-essence': tier.fragments };
+      const granted = {
+        'raid-refine-key-ii': Math.max(0, Math.floor(Number(rewards['raid-refine-key-ii']) || 0)),
+        'raid-refine-key-iii': Math.max(0, Math.floor(Number(rewards['raid-refine-key-iii']) || 0)),
+        'nascent-soul-essence': tier.fragments
+      };
       if (dailyFirstVictory) {
         granted['raid-refine-key-ii'] = (granted['raid-refine-key-ii'] || 0) + 1;
         granted['raid-refine-key-iii'] = (granted['raid-refine-key-iii'] || 0) + 1;
@@ -152,7 +132,7 @@ async function awardRaidReward(db, uid, roomId, validation, {
   });
 
   if (receipt.duplicate) {
-    // 收據中的 inventory 是當時的快照；玩家可能已把素材／印記拿去煉器或交易。
+    // 收據中的 inventory 是當時的快照；玩家可能已用掉升階石。
     // 重複請求必須回傳目前庫存，避免舊收據把已消耗道具復原。
     let currentInventory = null;
     try {
@@ -239,7 +219,7 @@ module.exports = function registerRaidRewardApi(app) {
 };
 module.exports.__test = {
   RAID_ROOM_COLLECTION, CLAIM_COLLECTION, RAID_BOSS_ID, RAID_ROOM_VERSION,
-  REWARDS, RAID_MATERIAL_POOL, RAID_MATERIAL_ROLLS, rollRaidMaterials,
+  REWARDS,
   safeRoomId, claimId, validateRaidVictory, awardRaidReward, createHandler
 };
 
