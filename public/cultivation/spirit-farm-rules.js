@@ -7,9 +7,9 @@
   'use strict';
   const MINUTE = 60000;
   const CROPS = Object.freeze([
-    {id:'jade',name:'青露草',minutes:10,yield:2,companion:'amber',seedCost:{jade:1},material:'qi-spirit-wood',materialName:'靈木',exchange:12,minScore:0,description:'生長快，適合累積建設所需的靈草。'},
-    {id:'amber',name:'赤穗花',minutes:45,yield:3,companion:'moon',seedCost:{jade:3},material:'foundation-century-wood',materialName:'百年靈木',exchange:12,minScore:6,description:'中期收成，是開墾與修復水渠的重要材料。'},
-    {id:'moon',name:'月華蘭',minutes:180,yield:5,companion:'jade',seedCost:{amber:3},material:'golden-lightning-wood',materialName:'雷擊木',exchange:12,minScore:28,description:'適合離線培育，細心照料可提高品質。'}
+    {id:'jade',name:'青露草',minutes:10,yield:2,companion:'amber',seedCost:{jade:1},description:'生長快，適合累積建設所需的靈草。'},
+    {id:'amber',name:'赤穗花',minutes:45,yield:3,companion:'moon',seedCost:{jade:3},description:'中期收成，是開墾與修復水渠的重要材料。'},
+    {id:'moon',name:'月華蘭',minutes:180,yield:5,companion:'jade',seedCost:{amber:3},description:'適合離線培育，細心照料可提高品質。'}
   ].map(Object.freeze));
   const STUDY_CAP = 20, ENERGY_CAP = 60;
   const CHANNEL_COST = Object.freeze({jade:4,amber:2});
@@ -85,7 +85,7 @@
       plots:farm.plots.map((_,i)=>plotView(farm,i,now)),seeds:farm.seeds,harvest:farm.harvest,energy:farm.energy,energyCap:ENERGY_CAP,
       totalHarvest:farm.totalHarvest,mutations:farm.mutations,studyClaimed:farm.study.date===date?farm.study.count:0,studyCap:STUDY_CAP,
       expansionCost:EXPANSION_COSTS[farm.openPlots/3-1]||null,channelCost:CHANNEL_COST,
-      crops:CROPS.map(c=>({...c,exchangeUnlocked:score>=c.minScore}))};
+      crops:CROPS.map(c=>({...c}))};
   }
   return Object.freeze({MINUTE,CROPS,STUDY_CAP,ENERGY_CAP,CHANNEL_COST,EXPANSION_COSTS,integer,crop,inventory,initial,normalize,neighbors,companion,quality,harvestResult,plotView,workPlan,view});
 });
