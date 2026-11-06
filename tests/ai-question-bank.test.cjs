@@ -182,3 +182,56 @@ test('invalid Google OAuth bundle safely disables bank rather than using stale f
   assert(warnings.some(s=>s.includes('AI_QUESTION_BANK_GOOGLE_OAUTH_B64 must be Base64-encoded JSON')));
   assert(!JSON.stringify(warnings).includes('old-secret'));
 });
+
+test('raw JSON OAuth bundle overrides malformed old Base64 and stale individual credentials',async()=>{
+  const good={
+    client_id:'123456-correct.apps.googleusercontent.com',
+    client_secret:'correct-secret:including-+/&',
+    refresh_token:'1//correct-refresh'
+  };
+  const env={
+    AI_QUESTION_BANK_ENABLED:'1',
+    AI_QUESTION_BANK_GOOGLE_OAUTH_JSON:JSON.stringify(good),
+    AI_QUESTION_BANK_GOOGLE_OAUTH_B64:'bad-old-base64',
+    AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'wrong',
+    AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:'wrong',
+    AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:'wrong'
+  };
+  const {resolveOAuthCredentials}=require('../ai-question-bank.cjs');
+  assert.equal(resolveOAuthCredentials(env).source,'json');
+  const infos=[],warnings=[];
+  const bank=createAIQuestionBank({
+    env,
+    logger:{info:x=>infos.push(x),warn:x=>warnings.push(x)},
+    fetcher:async (url,opt)=>{
+      if(url.includes('oauth2.googleapis.com/token')){
+        const form=new URLSearchParams(opt.body);
+        for(const key of ['client_id','client_secret','refresh_token']) assert.equal(form.get(key),good[key]);
+        return {ok:true,json:async()=>({access_token:'token',expires_in:3600})};
+      }
+      if(url.includes('/drive/v3/files?'))return {ok:true,json:async()=>({files:[]})};
+      throw Error('Unexpected URL');
+    }
+  });
+  assert.equal(bank.enabled,true);
+  assert.equal((await bank.find(target)).ready,true);
+  assert(infos.some(s=>s.includes('OAuth source: AI_QUESTION_BANK_GOOGLE_OAUTH_JSON')));
+  assert(!JSON.stringify([...infos,...warnings]).includes(good.refresh_token));
+});
+test('malformed explicit JSON bundle safely disables AI bank and never pretends to activate service account',()=>{
+  const env={
+    AI_QUESTION_BANK_ENABLED:'1',
+    AI_QUESTION_BANK_GOOGLE_OAUTH_JSON:'{"client_id":"partial"}',
+    AI_QUESTION_BANK_GOOGLE_OAUTH_B64:'other-bundle',
+    FIREBASE_A_SERVICE_ACCOUNT_JSON:'{}'
+  };
+  const warnings=[],infos=[];
+  const bank=createAIQuestionBank({
+    env,logger:{warn:x=>warnings.push(x),info:x=>infos.push(x)}
+  });
+  assert.equal(bank.enabled,false);
+  assert(warnings.some(s=>s.includes('AI_QUESTION_BANK_GOOGLE_OAUTH_JSON must be a JSON object')));
+  assert(warnings.some(s=>s.includes('disabled: no usable')));
+  assert(!infos.some(s=>s.includes('service-account mode configured')));
+  assert(!warnings.some(s=>s.includes('missing AI_QUESTION_BANK_GOOGLE_CLIENT_ID')));
+});
