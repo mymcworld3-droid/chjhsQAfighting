@@ -1656,6 +1656,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
         ? local.materialSystem : {inventory:{}};
       local.materialSystem.inventory = { ...(local.materialSystem.inventory || {}) };
       Object.entries(payload.inventory || {}).forEach(([materialId, amount]) => {
+        if (!['raid-refine-key-ii', 'raid-refine-key-iii', 'nascent-soul-essence'].includes(materialId)) return;
         const count = Math.max(0, Math.floor(Number(amount) || 0));
         if (count > 0) local.materialSystem.inventory[materialId] = count;
         else delete local.materialSystem.inventory[materialId];
