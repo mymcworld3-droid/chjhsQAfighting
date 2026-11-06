@@ -25,6 +25,6 @@ test('single-row override loads after realm sorting and admin managers', () => {
   const sorting = main.indexOf("'./cultivation/admin-realm-sorting.js'");
   const single = main.indexOf("'./cultivation/admin-single-row-layout.js'");
   assert.ok(artifact >= 0 && single > artifact);
-  assert.ok(material >= 0 && single > material);
+  assert.equal(material,-1,'retired material manager is no longer loaded');
   assert.ok(sorting >= 0 && single > sorting);
 });
