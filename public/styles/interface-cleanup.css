@@ -95,7 +95,7 @@ body.ui-cleanup #page-home #quest-spotlight-reward {flex:1 1 auto;font-size:10px
 body.ui-cleanup #page-home #quest-spotlight-action {flex-shrink:0;font-size:11px;font-weight:500;color:#dbc18a}
 body.ui-cleanup #page-home .quest-spotlight-ready {border-left-color:#e7c17d;background:#b99a4726!important}
 body.ui-cleanup #page-home .sect-actions {
-  grid-area:affairs;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:none;
+  grid-area:affairs;display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);grid-template-rows:none;
   gap:0;align-self:start;min-width:0;width:100%;margin:0;padding:16px 0 0;
   border:0;border-top:1px solid var(--quiet-line);border-radius:0;background:transparent;box-shadow:none;
 }
