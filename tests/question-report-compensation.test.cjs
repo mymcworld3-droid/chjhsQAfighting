@@ -37,7 +37,7 @@ test('cultivation refund derives only from the actual recorded wrong-answer loss
 });
 
 test('two explicit AI confirmations are required; invalid output must not be a rejection', async () => {
-  const approved = { determinate: true, hasError: true, confidence: 0.95, issueType: 'answer', reason: '解答不正確' };
+  const approved = { determinate: true, hasError: true, validIndices: [0], confidence: 0.95, issueType: 'answer', reason: '解答不正確' };
   let calls = 0;
   const review = await api.reviewQuestion(input, {
     generate: async () => { calls++; return { data: approved }; }
@@ -46,7 +46,7 @@ test('two explicit AI confirmations are required; invalid output must not be a r
   assert.equal(calls, 2);
   calls = 0;
   const refused = await api.reviewQuestion(input, {
-    generate: async () => { calls++; return { data: { ...approved, hasError: false, issueType: 'none' } }; }
+    generate: async () => { calls++; return { data: { ...approved, validIndices: [3], hasError: false, issueType: 'none' } }; }
   });
   assert.equal(refused.status, 'rejected');
   assert.equal(calls, 1);
@@ -61,6 +61,51 @@ test('two explicit AI confirmations are required; invalid output must not be a r
   assert.equal(calls, 2);
   const unknown = await api.reviewQuestion(input, { generate: async () => ({ data: { valid: true } }) });
   assert.equal(unknown.status, 'unavailable');
+});
+
+test('report prompt checks question polarity, option set and never treats the key as proof', async () => {
+  const sample = {
+    question: '一維完全彈性碰撞的兩物體，原先其中一個靜止。有人主張碰撞必使總動能減少，請問以下何種觀念或條件錯誤？',
+    options: [
+      '碰撞後兩物體速度完全不變',
+      '靜止物體會吸收所有動能，使總動能增加',
+      '完全彈性碰撞的總動能守恆',
+      '只有總動量守恆，總動能不可能守恆'
+    ],
+    correctIndex: 2,
+    explanation: '標準答案是總動能守恆。',
+    reason: '問題要求找錯誤，A、B、D 都是錯誤敘述，卻把 C 當唯一正解'
+  };
+  const prompts = [];
+  const verdict = {determinate:true,hasError:true,validIndices:[0,1,3],
+    confidence:0.96,issueType:'ambiguity',reason:'依照題意須找錯誤敘述，A、B、D 皆符合，不能以 C 作唯一正解。'};
+  const result = await api.reviewQuestion(sample,{
+    generate:async prompt=>{prompts.push(prompt);return {data:verdict};}
+  });
+  assert.equal(result.status,'confirmed');
+  assert.equal(result.issueType,'ambiguity');
+  assert.equal(prompts.length,2);
+  for(const prompt of prompts){
+    assert.match(prompt,/問句/);
+    assert.match(prompt,/validIndices/);
+    assert.match(prompt,/題庫標示答案索引/);
+    assert.match(prompt,/玩家回報.*待查證/);
+  }
+});
+
+test('malformed option verdict and conflicting reviewers cannot reject an appeal as if verified', async () => {
+  const malformed = await api.reviewQuestion(input,{
+    generate:async()=>({data:{determinate:true,hasError:false,validIndices:[3,3],confidence:0.95,issueType:'none',reason:'重複索引'}})
+  });
+  assert.equal(malformed.status,'unavailable');
+  let calls=0;
+  const conflict=await api.reviewQuestion(input,{
+    generate:async()=>({data:++calls===1
+      ? {determinate:true,hasError:true,validIndices:[0],confidence:0.95,issueType:'answer',reason:'唯一答案為第一項'}
+      : {determinate:true,hasError:false,validIndices:[3],confidence:0.95,issueType:'none',reason:'第四項才符合條件'}})
+  });
+  assert.equal(conflict.status,'unavailable');
+  assert.equal(calls,2);
 });
 
 function fakeDatabase(gold = 100, score = 28, lastQuizAnswer = null) {
