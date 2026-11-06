@@ -29,13 +29,13 @@ AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN=...
 
 ### 單一憑證包（建議排除 Render 舊值混用時使用）
 
-如果 Cloud Shell 已使用 \`~/drive_oauth_result.json\` 成功向 Google 交換 access token，
-但 Render 使用三個分開的欄位仍發生 \`HTTP 401 invalid_client\`，
-可改為只新增 **一個** Render 環境變數 \`AI_QUESTION_BANK_GOOGLE_OAUTH_B64\`。
+如果 Cloud Shell 已使用 `~/drive_oauth_result.json` 成功向 Google 交換 access token，
+但 Render 使用三個分開的欄位仍發生 `HTTP 401 invalid_client`，
+可改為只新增 **一個** Render 環境變數 `AI_QUESTION_BANK_GOOGLE_OAUTH_B64`。
 
 在 Google Cloud Shell 執行（此指令會印出**可逆 Base64 編碼的全部私密憑證**，切勿截圖、貼至聊天或 commit）：
 
-\`\`\`bash
+```bash
 python3 - <<'PY'
 import base64, json
 from pathlib import Path
@@ -44,11 +44,11 @@ required = {key: data[key] for key in ('client_id','client_secret','refresh_toke
 encoded = base64.b64encode(json.dumps(required, separators=(',',':')).encode()).decode()
 print(encoded)
 PY
-\`\`\`
+```
 
-將輸出的一整行貼入 Render 的 \`AI_QUESTION_BANK_GOOGLE_OAUTH_B64\`，
+將輸出的一整行貼入 Render 的 `AI_QUESTION_BANK_GOOGLE_OAUTH_B64`，
 選擇 **Save and deploy** 或 **Save, rebuild, and deploy**。
-應在 Render Logs 看到 \`[AI bank] OAuth source: AI_QUESTION_BANK_GOOGLE_OAUTH_B64\`。
+應在 Render Logs 看到 `[AI bank] OAuth source: AI_QUESTION_BANK_GOOGLE_OAUTH_B64`。
 當 bundle 有效時，伺服器忽略舊的三個 OAuth 欄位，避免混用不同 OAuth Clients；
 如果 bundle 格式不合法，會安全停用 AI 題庫、回退既有即時出題並提供不含秘密的錯誤訊息。
 Base64 **不是加密**，仍必須視為 secret；成功後可移除 Render 舊三欄位並
