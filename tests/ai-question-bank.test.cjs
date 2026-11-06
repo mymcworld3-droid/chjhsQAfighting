@@ -42,17 +42,35 @@ test('disabled bank never calls Google Drive or schedules work',async()=>{
   assert.equal(bank.schedule(target,()=>{throw Error('must not run');}),false);
 });
 test('publishes one reviewed AI question and can reuse it without reviewing',async()=>{
-  let uploads=0, lists=0;
+  let uploads=0, lists=0, createdFolders=0;
+  const directories = new Map();
+  let uploadParent = null;
   const fetcher=async (url,options={})=>{
     if(url.includes('oauth2.googleapis.com/token'))
       return {ok:true,json:async()=>({access_token:'test',expires_in:3600})};
     if(url.includes('upload/drive/v3/files')) {
       uploads++;
+      const match = String(options.body).match(/"parents":\["([^"]+)"\]/);
+      uploadParent = match?.[1] || null;
       assert.match(options.body, /reviewCount/);
       assert.match(options.body, /aiq_/);
       return {ok:true,json:async()=>({id:'file-1'})};
     }
+    if(url.includes('/drive/v3/files?') && options.method === 'POST') {
+      createdFolders++;
+      const payload=JSON.parse(options.body);
+      const id='folder-' + createdFolders;
+      directories.set(payload.parents[0] + '\\u0000' + payload.name,{id,name:payload.name,mimeType:payload.mimeType});
+      return {ok:true,json:async()=>({id,name:payload.name})};
+    }
     if(url.includes('/drive/v3/files?')){
+      const q=new URL(url).searchParams.get('q')||'';
+      if(q.includes("application/vnd.google-apps.folder")){
+        const parent=q.match(/^'([^']+)' in parents/)?.[1];
+        const name=q.match(/name = '([^']+)'/)?.[1];
+        const folder=directories.get(parent + '\\u0000' + name);
+        return {ok:true,json:async()=>({files:folder?[folder]:[]})};
+      }
       lists++;
       return {ok:true,json:async()=>({files:[]})};
     }
@@ -66,6 +84,9 @@ test('publishes one reviewed AI question and can reuse it without reviewing',asy
   },fetcher});
   assert.equal(await bank.publish(target,question,{approved:true,reason:'獨立解題確認'}),true);
   assert.equal(uploads,1);
+  assert.equal(createdFolders,4);
+  assert.equal(uploadParent,'folder-4');
+  assert.deepEqual([...directories.values()].map(x=>x.name),['高中','物理','高二','圓周運動']);
   assert.equal(await bank.publish(target,question,{approved:true,reason:'同一題'}),false);
   assert.equal(uploads,1);
   const read=await bank.find(target);
@@ -234,4 +255,48 @@ test('malformed explicit JSON bundle safely disables AI bank and never pretends 
   assert(warnings.some(s=>s.includes('disabled: no usable')));
   assert(!infos.some(s=>s.includes('service-account mode configured')));
   assert(!warnings.some(s=>s.includes('missing AI_QUESTION_BANK_GOOGLE_CLIENT_ID')));
+});
+
+test('subject, stage, grade and concept map into human-readable folders',()=>{
+  const {questionFolderSegments}=require('../ai-question-bank.cjs');
+  assert.deepEqual(questionFolderSegments({
+    level:'高中二年級',subject:'物理',
+    topic:'第一學期 · 選修物理Ⅱ：力學二與熱學－碰撞與動量守恆'
+  }), ['高中','物理','高二','碰撞與動量守恆']);
+  assert.deepEqual(questionFolderSegments({
+    level:'國中三年級',subject:'數學',topic:'一元二次方程式'
+  }), ['國中','數學','國三','一元二次方程式']);
+});
+test('legacy flat files remain usable and cannot be re-uploaded during directory migration',async()=>{
+  const id='legacy-file-1',targetQuestion=approved(target);
+  let uploads=0,lists=0;
+  const bank=createAIQuestionBank({
+    env:{
+      AI_QUESTION_BANK_ENABLED:'1',AI_QUESTION_BANK_DRIVE_FOLDER_ID:'root-folder',
+      AI_QUESTION_BANK_GOOGLE_CLIENT_ID:'123456-abcdef.apps.googleusercontent.com',
+      AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET:'test-secret',
+      AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN:'test-refresh'
+    },
+    fetcher:async (url,opts={})=>{
+      if(url.includes('oauth2.googleapis.com/token'))
+        return {ok:true,json:async()=>({access_token:'token',expires_in:3600})};
+      if(url.includes('/drive/v3/files/'+id))
+        return {ok:true,json:async()=>targetQuestion};
+      if(url.includes('upload/drive/v3/files')){uploads++;throw Error('should not upload');}
+      if(url.includes('/drive/v3/files?')){
+        lists++;
+        const q=new URL(url).searchParams.get('q');
+        if(q.includes("application/vnd.google-apps.folder"))return {ok:true,json:async()=>({files:[]})};
+        if(q.includes("'root-folder' in parents"))
+          return {ok:true,json:async()=>({files:[{id,name:'aiq_'+scopeCode(target)+'_legacy.json',mimeType:'application/json'}]})};
+      }
+      throw Error('Unexpected request '+url);
+    }
+  });
+  const found=await bank.find(target);
+  assert.equal(found.ready,true);
+  assert.equal(found.question.q,question.q);
+  assert.equal(await bank.publish(target,question,{approved:true}),false);
+  assert.equal(uploads,0);
+  assert(lists>=2);
 });
