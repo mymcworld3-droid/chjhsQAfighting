@@ -4,6 +4,7 @@
 // Review and reward are separate: a transient AI failure never consumes a claim.
 const crypto = require('node:crypto');
 const aiRouter = require('./ai-router');
+const questionQualityAnalytics = require('./question-quality-analytics.cjs');
 const { adminProject } = require('./firebase-admin-projects.cjs');
 
 const REWARD_GOLD = 100;
@@ -156,7 +157,7 @@ async function awardOnce(db, uid, input, result, { today = dateInTaiwan, fieldVa
   });
 }
 
-function createHandler({ resolve = () => adminProject('A'), review = reviewQuestion, award = awardOnce, logger = console } = {}) {
+function createHandler({ resolve = () => adminProject('A'), review = reviewQuestion, award = awardOnce, recordConfirmed = questionQualityAnalytics.recordConfirmed, logger = console } = {}) {
   return async (req, res) => {
     res.set?.('Cache-Control', 'no-store');
     const bearer = /^Bearer ([A-Za-z0-9_.-]+)$/.exec(String(req.get?.('authorization') || ''));
@@ -205,17 +206,23 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
       if(input.error)return res.status(400).json({status:'invalid',valid:null,reason:input.error});
     }
 
+    const trackConfirmed = async () => {
+      try { await recordConfirmed(project.db, input.question); }
+      catch (error) { logger.warn('[Question quality analytics] review recording failed:', error?.code || error?.message); }
+    };
     const claimRef = project.db.collection('questionErrorCompensations').doc(reportKey(uid, input.question));
     let phase = 'duplicate-check';
     try {
       // Cheap duplicate check before asking AI; the transaction below repeats it for race safety.
       if ((await claimRef.get()).exists) {
+        await trackConfirmed();
         return res.json({ status: 'duplicate', valid: true, compensated: false, goldAdded: 0, cultivationAdded: 0, reason: '這道題目已領取過錯題補償。' });
       }
       phase = 'ai-review';
       const result = await review(input);
       if (result.status === 'unavailable') return res.status(503).json({ ...result, phase, valid: null, compensated: false });
       if (result.status !== 'confirmed') return res.json({ ...result, valid: false, compensated: false });
+      await trackConfirmed();
       phase = 'compensation';
       const outcome = await award(project.db, uid, input, result);
       return res.json({ ...outcome, valid: outcome.status === 'confirmed' || outcome.status === 'duplicate' });

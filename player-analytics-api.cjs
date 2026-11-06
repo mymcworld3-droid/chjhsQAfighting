@@ -3,6 +3,7 @@
 // Anonymous browser cohorts + authenticated player cohorts. Never store quiz text,
 // answers, e-mail, IP addresses or user-agent strings in analytics.
 const crypto = require('node:crypto');
+const questionQualityAnalytics = require('./question-quality-analytics.cjs');
 const { queueAnalyticsCleanup } = require('./analytics-retention.cjs');
 const { adminProject, PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const COOKIE = 'qa_analytics_vid';
@@ -284,7 +285,8 @@ function registerPlayerAnalytics(app, { resolve = role => adminProject(role), lo
     if (admin.data()?.isAdmin !== true) throw httpError(403, '沒有管理員權限。');
     const range = Number(req.body?.range);
     if (![7, 30].includes(range)) throw httpError(400, '日期範圍只允許 7 或 30 日。');
-    res.json(await report(a.db, new Date(), range));
+    const [data, quality] = await Promise.all([report(a.db, new Date(), range), questionQualityAnalytics.summary(a.db)]);
+    res.json({ ...data, questionQuality: quality });
   }));
 }
 module.exports = registerPlayerAnalytics;

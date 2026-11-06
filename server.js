@@ -12,6 +12,7 @@ const registerDongtianApi = require('./dongtian-api');
 const registerTeacherDongtianApi = require('./teacher-dongtian-api.cjs');
 const registerIdentityApi = require('./identity-api');
 const registerQuestionReportApi = require('./question-report-api.cjs');
+const questionQualityAnalytics = require('./question-quality-analytics.cjs');
 const registerArtifactGenerationApi = require('./artifact-generation-api');
 const registerFirebaseProjectAuthApi = require('./firebase-project-auth-api.cjs');
 const registerAutoMigrationApi = require('./firebase-auto-migration-api.cjs');
@@ -914,23 +915,34 @@ app.post('/api/generate-quiz', async (req, res) => {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
 
+            // Statistics must never prevent the player receiving a question.
+            const trackDelivered = async () => {
+                if (String(quizMode || '') === 'classroom-draft') return;
+                try { await questionQualityAnalytics.recordGenerated(playerRepository.resolve().db, parsed.q); }
+                catch (error) { console.warn('[Question quality analytics] generation recording failed:', error?.code || error?.message); }
+            };
+
             if (meditationMode) {
                 const session = await meditationQuiz.createService({db:meditationContext.db}).commitQuestion(
                     meditationContext.uid,meditationContext,parsed);
+                await trackDelivered();
                 return res.json({meditationSession:session,provider:routed.provider,model:routed.model});
             }
             if (towerMode) {
                 const question=await trialTower.commitQuestion(towerContext.db,towerContext.uid,towerContext,parsed);
+                await trackDelivered();
                 return res.json({towerQuestion:question,provider:routed.provider,model:routed.model});
             }
             if (avatarMode) {
                 const question = await immortalChallenge.commitQuestion(avatarContext.db,avatarContext.uid,avatarContext,parsed);
+                await trackDelivered();
                 return res.json({avatarQuestion:question,provider:routed.provider,model:routed.model});
             }
             if (enlightenmentMode) {
                 const question = await enlightenmentTrial.commitQuestion(
                     enlightenmentContext.db,enlightenmentContext.uid,enlightenmentContext,parsed
                 );
+                await trackDelivered();
                 return res.json({trialQuestion:question,provider:routed.provider,model:routed.model});
             }
             if (raidTicketMode) {
@@ -951,6 +963,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                     answerIndex,
                     explanation: String(parsed.exp || '').slice(0, 3000)
                 });
+                await trackDelivered();
                 return res.json({
                     raidQuestion: {
                         id: questionId,
@@ -972,6 +985,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                 });
             }
 
+            await trackDelivered();
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
         } catch (error) {

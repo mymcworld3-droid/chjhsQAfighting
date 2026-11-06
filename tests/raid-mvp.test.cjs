@@ -263,9 +263,10 @@ test('raid hub uses an extensible trial catalog instead of a single hard-coded b
   assert.match(catalogSource,/id: 'shen-qingshuang'/);
   assert.match(catalogSource,/id: 'sealed-trial-02'/);
   assert.match(catalogSource,/id: 'sealed-trial-03'/);
-  assert.match(catalogSource,/玄鐵／靈木/);
-  assert.match(catalogSource,/精煉玄鐵／百年靈木/);
-  assert.match(catalogSource,/紫金玄鐵／雷擊木/);
+  assert.match(catalogSource,/升階石與元嬰碎精/);
+  assert.match(catalogSource,/二階升級石/);
+  assert.match(catalogSource,/三階升級石/);
+  assert.doesNotMatch(catalogSource,/玄鐵|靈木|雷擊木/);
   assert.match(raidSource,/RAID_TRIALS\.map/);
   assert.match(raidSource,/class="raid-trial-list"/);
   assert.match(raidSource,/data-raid-trial=/);
