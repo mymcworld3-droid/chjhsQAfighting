@@ -326,5 +326,6 @@ test('drop probability remains internal and shared ticket is presented at the ra
   assert.doesNotMatch(hub,/選擇試煉後再組隊；每個團本可有獨立 Boss、合作規則與專屬掉落/);
   assert.match(hub,/raid-ticket-status raid-global-ticket/);
   assert.match(hub,/全團本共用/);
-  assert.ok(hub.indexOf('raid-ticket-status raid-global-ticket') < hub.indexOf("'<div class=\"raid-trial-list\""));
+  assert.match(hub, /<nav class="raid-trial-list" aria-label="秘境選擇">/);
+  assert.ok(hub.indexOf('raid-ticket-status raid-global-ticket') < hub.indexOf("'<nav class=\"raid-trial-list\""));
 });

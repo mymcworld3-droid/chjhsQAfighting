@@ -243,17 +243,6 @@ body.xianxia-theme #scope-studio #dongfu-scope-save {
   letter-spacing: .015em;
 }
 
-/* Trial difficulty owns these controls' colors; preserve the shared theme elsewhere. */
-body.xianxia-theme #raid-hub [data-raid-theme] .raid-primary {
-  background: var(--trial-button) !important;
-  border-color: var(--trial-accent) !important;
-  color: var(--trial-ink) !important;
-}
-body.xianxia-theme #raid-hub [data-raid-theme] .raid-ghost {
-  background: #02070c44 !important;
-  border-color: var(--trial-line) !important;
-  color: var(--trial-text) !important;
-}
 body.xianxia-theme :is(.btn-cyber-primary,.bv2-btn.primary,.raid-primary,.quest-claim,
   .refinery-recipe-craft,.uib-use-btn,.uib-equip-btn,.dt-play,.fi-primary,
   .ids-panel button.ids-primary,.sb-page button.sb-primary) :is(small,i),

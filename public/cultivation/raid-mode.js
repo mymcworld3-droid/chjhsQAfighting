@@ -22,7 +22,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
 
   const DIFFICULTY = globalThis.QARaidDifficulty;
   const PAGE_ID = 'page-raid';
-  const STYLE_HREF = 'styles/raid-mode.css?v=20261021-study-layout';
+  const STYLE_HREF = 'styles/raid-mode.css?v=20261106-quiet-layout1';
   const MALE = 'assets/story/characters/player-male-determined.png';
   const FEMALE = 'assets/story/characters/player-female-determined.png';
   const HEARTBEAT_MS = 8000;
@@ -495,28 +495,29 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
       const lockedByRealm = score() < trial.minimumScore;
       const sealed = trial.status !== 'open';
       return '<button type="button" class="raid-trial-card ' + (active ? 'active ' : '') + (sealed ? 'sealed ' : '') +
-        '" data-raid-trial="' + escapeHtml(trial.id) + '">' +
+        '" aria-pressed="' + active + '" data-raid-trial="' + escapeHtml(trial.id) + '">' +
         '<span class="raid-trial-icon">' + (trial.bossImage ? '<img src="' + escapeHtml(trial.bossImage) + '" alt="">' :
           '<i class="fa-solid fa-lock"></i>') + '</span><span class="raid-trial-copy"><small>' +
         escapeHtml(sealed ? '封印中' : (lockedByRealm ? (trial.minimumRealm || '境界未達') + '解鎖' : '可挑戰')) + '</small><strong>' +
-        escapeHtml(trial.title) + '</strong><em>' + escapeHtml(trial.recommended) + '</em></span></button>';
+        escapeHtml(trial.title) + '</strong></span></button>';
     }).join('');
 
     let detail = '';
     if (selected.status !== 'open') {
       detail = '<article class="raid-boss-card locked raid-future-card"><div class="raid-boss-art raid-future-art"><div class="raid-future-seal"><i class="fa-solid fa-lock"></i></div><span>未開放</span></div>' +
-        '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
-        escapeHtml(selected.mechanic) + '</span></div><small>' + escapeHtml(selected.location) + '</small><h3>' +
+        '<div class="raid-boss-info"><p class="raid-party-summary">' + escapeHtml(selected.party) + '</p><small>' + escapeHtml(selected.location) + '</small><h3>' +
         escapeHtml(selected.bossTitle) + '</h3><p>' + escapeHtml(selected.description) + '</p>' +
-        '<div class="raid-future-drop"><i class="fa-solid fa-gem"></i><span><b>預定獎勵方向</b><small>' +
+        '<p class="raid-party-mechanic">' + escapeHtml(selected.mechanic) + '</p>' +
+        '<div class="raid-future-drop"><i class="fa-solid fa-gem" aria-hidden="true"></i><span><b>預計獎勵</b><small>' +
         selected.rewards.map(escapeHtml).join('・') + '</small></span></div></div></article>';
     } else {
       detail = '<article class="raid-boss-card ' + (selectedLocked ? 'locked' : '') + '" data-raid-theme="' + tier.id + '">' +
         '<div class="raid-boss-art"><img src="' + escapeHtml(selected.bossImage || RAID_MVP.bossImage) + '" alt="沈清霜"><span>清霜試煉・' + escapeHtml(tier.name) + '</span></div>' +
-        '<div class="raid-boss-info"><div class="raid-badges"><span>' + escapeHtml(selected.party) + '</span><span>' +
-        escapeHtml(selected.recommended) + '</span><span>' + escapeHtml(selected.mechanic) + '</span></div>' +
+        '<div class="raid-boss-info">' +
         (data().raidProgress?.['shen-qingshuang']?.memento ? '<small>通關紀念・' + escapeHtml(data().raidProgress['shen-qingshuang'].memento.name) + '</small>' : '') +
         '<h3>' + escapeHtml(selected.bossTitle) + '</h3>' +
+        '<p class="raid-party-summary">' + escapeHtml(selected.party) + '・' + escapeHtml(selected.recommended) + '</p>' +
+        '<p class="raid-party-mechanic">' + escapeHtml(selected.mechanic) + '</p>' +
         '<small class="raid-unlock-status">' + escapeHtml(tier.minRealm) + '解鎖・' + tier.minScore + ' 修為</small>' +
         '<div class="raid-reward-preview"><b>通關必得 元嬰碎精 ×' + tier.fragments + '</b><span>' +
           escapeHtml(tier.materialRealms.join('～')) + '木鐵素材</span><span>二階升級石・三階升級石</span></div></div>' +
@@ -536,16 +537,16 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
         (joinCodeLocked ? 'disabled' : '') + '>加入</button></div></div></article>';
     }
 
-    hub.innerHTML = '<header class="raid-heading raid-hub-heading"><button class="raid-back" type="button" data-home><i class="fa-solid fa-arrow-left"></i></button>' +
+    hub.innerHTML = '<header class="raid-heading raid-hub-heading"><button class="raid-back" type="button" data-home aria-label="返回宗門"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>' +
       '<div class="raid-heading-copy"><h2>秘境試煉</h2>' +
       '<div class="raid-ticket-status raid-global-ticket">'+(globalThis.QAItemIcons?.markup('raid-ticket',{size:30})||'')+'<span><b>團本入場券 ' +
         (state.ticketState?.count == null ? '讀取中' : escapeHtml(state.ticketState.count + ' / ' + state.ticketState.cap)) +
         '</b><small>全團本共用・每日 +2・最多 5 張</small></span><span class="raid-global-ticket-dot" aria-hidden="true"' +
         (Number(state.ticketState.count) > 0 ? '' : ' hidden') + '></span></div></div></header>' +
-      '<div class="raid-trial-list" role="list">' + trialCards + '</div>' + detail +
+      '<nav class="raid-trial-list" aria-label="秘境選擇">' + trialCards + '</nav>' + detail +
       (selected.status==='open' ? '<section class="raid-public-recruitment" aria-label="公開隊伍招募">' +
         '<header><h3>公開隊伍</h3>' +
-        '<button class="raid-ghost" type="button" data-public-refresh aria-label="重新整理公開隊伍">刷新</button></header>' +
+        '<button class="raid-ghost" type="button" data-public-refresh aria-label="重新整理公開隊伍">重新整理</button></header>' +
         '<div id="raid-public-rooms" class="raid-public-rooms" aria-live="polite"></div></section>' : '');
 
     renderRecruitmentList();
@@ -644,8 +645,8 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
     const tier = DIFFICULTY.fromRoom(state.room) || DIFFICULTY.TIERS.normal;
     lobby.dataset.partySize = String(members.length);
     lobby.innerHTML =
-      '<header class="raid-heading"><button class="raid-back" type="button" data-leave><i class="fa-solid fa-arrow-left"></i></button>' +
-      '<div><small>RAID PARTY ／ 秘境隊伍</small><h2>清霜試煉・' + escapeHtml(tier.name) + '</h2><p>隊伍代碼 <b class="raid-room-code">' + escapeHtml(state.room.code || '------') + '</b></p></div><span class="raid-seal">' + members.length + '/4</span></header>' +
+      '<header class="raid-heading"><button class="raid-back" type="button" data-leave aria-label="離開隊伍"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>' +
+      '<div><small>秘境隊伍</small><h2>清霜試煉・' + escapeHtml(tier.name) + '</h2><p>隊伍代碼 <b class="raid-room-code">' + escapeHtml(state.room.code || '------') + '</b></p></div><span class="raid-seal">' + members.length + '/4</span></header>' +
       '<div class="raid-party-list" role="list" aria-label="小隊成員" data-party-count="' + members.length + '">' + members.map(member => {
         const hp = Math.max(1, Number(member.maxHp) || 1);
         const ready = member.ready && raidMemberOnline(member);
@@ -666,7 +667,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
         '</button>' : '') +
       '<button class="raid-ghost" type="button" data-copy>複製隊伍代碼</button>' +
       (isHost() ? '<button class="raid-ghost" type="button" data-invite><i class="fa-solid fa-user-plus"></i> 邀請好友</button>' : '') +
-      '<button class="raid-primary" type="button" data-ready data-ready-state="' + (me?.ready ? 'ready' : 'waiting') + '" ' + (state.roomCommand ? 'disabled' : '') + '>' + (state.roomCommand === 'ready' ? '更新中…' : me?.ready ? '取消準備' : '準備出戰') + '</button>' +
+      '<button class="raid-ghost" type="button" data-ready data-ready-state="' + (me?.ready ? 'ready' : 'waiting') + '" ' + (state.roomCommand ? 'disabled' : '') + '>' + (state.roomCommand === 'ready' ? '更新中…' : me?.ready ? '取消準備' : '準備出戰') + '</button>' +
       (isHost() ? '<button class="raid-primary" type="button" data-start ' + (allReady && !state.roomCommand ? '' : 'disabled') + '>' + (state.roomCommand === 'start' ? '開戰中…' : '開始團本') + '</button>' : '<span class="raid-wait-host">等待隊長開始</span>') + '</div>';
     lobby.querySelector('[data-leave]')?.addEventListener('click', leaveRaid);
     lobby.querySelectorAll('[data-kick-member]').forEach(button => {
