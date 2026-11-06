@@ -206,7 +206,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     reconcile();
     // Switching tabs can replace the contract page while its dialog was open.
     if (previewItemId && !$('soulbound-preview')) { previewItemId = ''; previewTrigger = null; }
-    const operation = storedOperation(), current = equipped(), s = snapshot;
+    const operation = storedOperation(), s = snapshot;
     $('soulbound-status').textContent = message;
     $('soulbound-refresh').disabled = busy;
     if (!s) {
@@ -215,7 +215,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       const status = !account ? '請登入後締結本命。' : busy ? '正在同步契印…' : '契印尚未同步，請按「重新同步」。';
       // Keep the same lobby structure before and after sync. A bare showcase
       // first paints the old stacked layout, then jumps when controls arrive.
-      $('soulbound-content').innerHTML = `<div class="sb-summary" aria-busy="true"><div><small>${globalThis.QAItemIcons?.markup('gold',{size:20})||''}靈石餘額</small><strong>—</strong></div><div><small>${globalThis.QAItemIcons?.markup('forge-fragment',{size:20})||''}煉器碎片</small><strong>—</strong></div><div><small>目前本命</small><b>—</b><span>正在讀取契印</span></div><div><small>距離武器保底</small><b>—</b><span>正在同步進度</span></div></div>
+      $('soulbound-content').innerHTML = `<div class="sb-summary" aria-busy="true"><div><small>${globalThis.QAItemIcons?.markup('gold',{size:20})||''}靈石餘額</small><strong>—</strong></div><div><small>${globalThis.QAItemIcons?.markup('forge-fragment',{size:20})||''}煉器碎片</small><strong>—</strong></div><div><small>本命法器抽獎券</small><b>—</b><span>正在同步數量</span></div><div><small>距離武器保底</small><b>—</b><span>正在同步進度</span></div></div>
         <div class="sb-pity"><progress value="0" max="${pool.PITY}" aria-label="保底進度同步中"></progress><span>八種武器同池 · 至多 ${pool.PITY} 抽必得一件完整武器</span></div>
         <div class="sb-lobby">${showcaseMarkup(candidates)}<section class="sb-draw-controls" aria-busy="true"><h3>締結本命</h3><p>八種本命法器一起抽；至多 ${pool.PITY} 抽必得其中一件完整武器。</p>
           <p class="sb-first" role="status">${status}</p>
@@ -228,7 +228,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     }
     const pending = s.pending;
     const rank = s.rank, candidates = pool.candidates(Math.max(0, rank));
-    $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>${globalThis.QAItemIcons?.markup('gold',{size:20})||''}靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>${globalThis.QAItemIcons?.markup('forge-fragment',{size:20})||''}煉器碎片</small><strong>${Number(s.fragments || 0).toLocaleString('zh-TW')}</strong></div><div><small>目前本命</small><b>${esc(current?.name || '尚未調御')}</b><span>${esc(current?.realm || '選擇適合自己的器型')}</span></div><div><small>距離武器保底</small><b>${s.untilPity} 抽</b><span>累計 ${s.draws} 抽 · 出武器後重計</span></div></div>
+    $('soulbound-content').innerHTML = `<div class="sb-summary"><div><small>${globalThis.QAItemIcons?.markup('gold',{size:20})||''}靈石餘額</small><strong>${s.balance.toLocaleString('zh-TW')}</strong></div><div><small>${globalThis.QAItemIcons?.markup('forge-fragment',{size:20})||''}煉器碎片</small><strong>${Number(s.fragments || 0).toLocaleString('zh-TW')}</strong></div><div><small>本命法器抽獎券</small><b>${Number(s.drawTickets || 0).toLocaleString('zh-TW')} 張</b><span>可用於契器抽取</span></div><div><small>距離武器保底</small><b>${s.untilPity} 抽</b><span>累計 ${s.draws} 抽 · 出武器後重計</span></div></div>
       <div class="sb-pity"><progress value="${Number(s.misses || 0)}" max="${pool.PITY}" aria-label="本輪未出武器 ${Number(s.misses || 0)} 抽"></progress><span>八種武器同池 · 至多 ${pool.PITY} 抽必得一件完整武器</span></div>
       ${operation && !pending ? '<button type="button" data-sb-retry class="sb-primary">重試上次未確認的操作</button><p class="sb-note">使用同一編號重試，不會再次扣除碎片或靈石。</p>' : ''}
       ${pending ? '<button type="button" data-sb-resume class="sb-primary">繼續翻牌 · 本批抽結果已保存</button>' : ''}

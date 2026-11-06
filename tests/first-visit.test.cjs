@@ -148,7 +148,7 @@ test('cancelling the popup preserves the guest and allows a second login attempt
   assert.deepEqual(calls.map(row => row[0]), ['link']);
 });
 
-test('arrival assets exist, the survey is absent, and the first quest explicitly opens the newcomer story', () => {
+test('arrival assets exist, the survey and story tasks are hidden', () => {
   const index = fs.readFileSync(path.join(__dirname, '../public/index.html'), 'utf8');
   assert.doesNotMatch(index, /id="page-onboarding"|id="ob-level"|submitOnboarding/);
   for (const id of ['set-level', 'set-strong', 'set-weak']) assert.ok(index.includes(`id="${id}"`));
@@ -159,7 +159,6 @@ test('arrival assets exist, the survey is absent, and the first quest explicitly
     assert.equal(fs.existsSync(path.join(__dirname, '../public/assets/story/opening', file)), true);
   }
   const q = require('../public/cultivation/quest-rules.js').PATH[0];
-  assert.equal(q.chapterId, 'prologue-enter-sect');
-  assert.match(q.title, /第一章/);
-  assert.match(q.description, /不會自動播放/);
+  assert.equal(q.id, 'path-scope');
+  assert.notEqual(q.metric, 'story');
 });

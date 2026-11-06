@@ -106,7 +106,7 @@ test('replaying a completed chapter never writes progress or emits a new viewing
 test('the viewing quest opens its own chapter and gives feedback when the player is busy', () => {
   const client = fs.readFileSync(path.join(__dirname, '../public/cultivation/quest-system.js'), 'utf8');
   const source = client.slice(client.indexOf('  function go('), client.indexOf('  function mount()'));
-  const q = require('../public/cultivation/quest-rules.js').PATH.find(q => q.chapterId === 'qi-five-dongtian');
+  const q = { destination: 'story', chapterId: 'qi-five-dongtian' };
   let opened = true;
   const calls = [], messages = [];
   const ctx = vm.createContext({

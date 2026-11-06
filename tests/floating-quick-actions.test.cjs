@@ -19,7 +19,8 @@ test('secondary records are available through a native collapsed disclosure with
   assert.ok(records);
   assert.match(records[1], /<summary>修行紀錄/);
   for (const id of ['display-score','display-accuracy','display-streak','display-best-streak']) assert.match(records[1],new RegExp(`id="${id}"`));
-  for (const id of ['quest-open','story-archive-launcher','xiuxian-meditate','xiuxian-path','sect-raid-entry','quest-spotlight']) assert.match(home,new RegExp(`id="${id}"`));
+  assert.doesNotMatch(home, /id="story-archive-launcher"/);
+  for (const id of ['quest-open','xiuxian-meditate','xiuxian-path','sect-raid-entry','quest-spotlight']) assert.match(home,new RegExp(`id="${id}"`));
 });
 
 test('the review stylesheet is loaded before app startup and obsolete floating-action geometry is removed', () => {
