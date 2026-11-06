@@ -11,7 +11,7 @@ const REWARD_GOLD = 100;
 const BONUS_CULTIVATION = 1;
 const MAX_REFUND_CULTIVATION = 1;
 const DAILY_LIMIT = 5;
-const AI_DEADLINE_MS = 18000;
+const AI_DEADLINE_MS = 90000;
 
 function normalizeText(value, max = 2000) {
   return String(value || '').normalize('NFC').replace(/\s+/g, ' ').trim().slice(0, max);
@@ -129,7 +129,7 @@ async function reviewQuestion(input, { generate = aiRouter.generateJSON, deadlin
   // First call performs an independent answer audit; a second independent
   // call is required before any claim is confirmed. Inconsistent verdicts are
   // inconclusive, never an automatic award.
-  const firstResult = await withinDeadline(generate(promptFor(input, 1), { timeoutMs: 9000 }), deadlineMs);
+  const firstResult = await withinDeadline(generate(promptFor(input, 1), { timeoutMs: 90000 }), deadlineMs);
   const first = normalizeReview(firstResult?.data, input.options.length);
   if (!first || !first.determinate) return { status: 'unavailable', reason: 'AI 尚未完成獨立驗題，請稍後重新送審。' };
   const uniqueMatchesKey = review => review.validIndices.length === 1 && review.validIndices[0] === input.correctIndex;
@@ -137,7 +137,7 @@ async function reviewQuestion(input, { generate = aiRouter.generateJSON, deadlin
   if (!suspected(first) || first.confidence < 0.75) {
     return { status: 'rejected', reason: first.reason || '目前無法確認題目存在實質錯誤。' };
   }
-  const secondResult = await withinDeadline(generate(promptFor(input, 2), { timeoutMs: 9000 }), deadlineMs);
+  const secondResult = await withinDeadline(generate(promptFor(input, 2), { timeoutMs: 90000 }), deadlineMs);
   const second = normalizeReview(secondResult?.data, input.options.length);
   if (!second || !second.determinate) return { status: 'unavailable', reason: '第二次獨立複核尚未完成，請稍後再試。' };
   if (JSON.stringify(first.validIndices) !== JSON.stringify(second.validIndices)) {

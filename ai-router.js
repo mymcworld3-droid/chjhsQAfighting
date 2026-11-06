@@ -1,7 +1,6 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const refineryErrors = require('./public/cultivation/refinery-errors.js');
 
-const DEFAULT_TIMEOUT_MS = Math.max(3000, Number(process.env.AI_TIMEOUT_MS) || 25000);
+const DEFAULT_TIMEOUT_MS = Math.max(3000, Number(process.env.AI_TIMEOUT_MS) || 90000);
 let roundRobinCursor = 0;
 const recentAttempts = [];
 const MAX_RECENT_ATTEMPTS = 24;
@@ -141,16 +140,65 @@ async function withTimeout(factory, timeoutMs = DEFAULT_TIMEOUT_MS) {
   }
 }
 
-async function callGemini(provider, prompt) {
-  const genAI = new GoogleGenerativeAI(provider.key);
-  const model = genAI.getGenerativeModel({
-    model: provider.model,
-    generationConfig: { responseMimeType: 'application/json' }
-  });
-  // Google SDK version used by this project does not accept AbortSignal here,
-  // so timeout is enforced by racing the promise at the router level.
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+// Use Google's generateContent REST endpoint rather than the legacy JS SDK
+// (pinned to 0.2.1), so the HIGH thinking setting is actually sent on every
+// Gemini request, including the Dongtian multimodal requests.
+function geminiThinkingConfig(model) {
+  if (/^gemini-3(?:[.-]|$)/i.test(model)) return { thinkingLevel: 'HIGH' };
+  // Gemini 2.5 does not support thinkingLevel. Explicitly select its maximum
+  // supported thinking budget rather than silently falling back to its default.
+  if (/^gemini-2\.5-pro(?:-|$)/i.test(model)) return { thinkingBudget: 32768 };
+  if (/^gemini-2\.5-flash(?:-|$)/i.test(model)) return { thinkingBudget: 24576 };
+  throw new Error('Gemini model does not support the enforced HIGH thinking configuration: ' + model);
+}
+
+async function requestGeminiHigh(provider, prompt, images = [], options = {}) {
+  const model = String(provider.model || '').trim();
+  const generationConfig = {
+    responseMimeType: 'application/json',
+    thinkingConfig: geminiThinkingConfig(model)
+  };
+  if (Number.isInteger(options.maxOutputTokens) && options.maxOutputTokens > 0) {
+    generationConfig.maxOutputTokens = options.maxOutputTokens;
+  }
+  const parts = [
+    { text: String(prompt) },
+    ...images.map(image => ({
+      inlineData: { mimeType: image.mimeType, data: image.data }
+    }))
+  ];
+  const response = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent',
+    {
+      method: 'POST',
+      signal: options.signal,
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': provider.key },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts }],
+        generationConfig
+      })
+    }
+  );
+  if (!response.ok) {
+    const detail = (await response.text().catch(() => '')).slice(0, 300);
+    throw Object.assign(new Error('HTTP ' + response.status + (detail ? ': ' + detail : '')), {
+      httpStatus: response.status
+    });
+  }
+  const payload = await response.json();
+  const candidate = payload?.candidates?.[0];
+  const output = (candidate?.content?.parts || [])
+    .filter(part => part && !part.thought && typeof part.text === 'string')
+    .map(part => part.text).join('');
+  if (!output.trim()) {
+    throw new Error('Gemini API returned no JSON text (finishReason: ' +
+      String(candidate?.finishReason || 'unknown') + ')');
+  }
+  return output;
+}
+
+async function callGemini(provider, prompt, signal) {
+  return requestGeminiHigh(provider, prompt, [], { signal });
 }
 
 async function callOpenAICompatible(provider, prompt, signal) {
@@ -184,7 +232,7 @@ async function callOpenAICompatible(provider, prompt, signal) {
 
 async function callProvider(provider, prompt, timeoutMs) {
   if (provider.type === 'gemini') {
-    return withDeadline(callGemini(provider, prompt), timeoutMs);
+    return withTimeout(signal => callGemini(provider, prompt, signal), timeoutMs);
   }
   return withTimeout((signal) => callOpenAICompatible(provider, prompt, signal), timeoutMs);
 }
@@ -315,5 +363,7 @@ module.exports = {
   recordAttempt,
   getRecentActivity,
   safeProviderError,
-  withDeadline
+  withDeadline,
+  requestGeminiHigh,
+  geminiThinkingConfig
 };

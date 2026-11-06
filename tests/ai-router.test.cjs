@@ -183,3 +183,72 @@ test('all server AI features use the shared router and expose safe status metada
   assert.doesNotMatch(server, /model\.generateContent\(/);
   assert.doesNotMatch(server, /GoogleGenerativeAI/);
 });
+
+
+test('Gemini 3.1/3.5 text and image requests explicitly send HIGH thinking', async () => {
+  const oldFetch = global.fetch;
+  const requests = [];
+  global.fetch = async (url, request) => {
+    requests.push({ url, request });
+    return {
+      ok: true,
+      json: async () => ({
+        candidates: [{ content: { parts: [{ text: '{"accepted":true}' }] } }]
+      })
+    };
+  };
+  try {
+    assert.equal(
+      await router.requestGeminiHigh({ key: 'test-key', model: 'gemini-3.1-flash-lite' }, 'Audit this question'),
+      '{"accepted":true}'
+    );
+    assert.equal(
+      await router.requestGeminiHigh(
+        { key: 'test-key', model: 'gemini-3.5-flash-lite' },
+        'Read the image',
+        [{ mimeType: 'image/png', data: 'YWJj' }],
+        { maxOutputTokens: 32768 }
+      ),
+      '{"accepted":true}'
+    );
+  } finally {
+    global.fetch = oldFetch;
+  }
+  assert.equal(requests.length, 2);
+  for (const { url, request } of requests) {
+    assert.match(url, /^https:\/\/generativelanguage\.googleapis\.com\/v1beta\/models\//);
+    assert.equal(request.method, 'POST');
+    assert.equal(request.headers['x-goog-api-key'], 'test-key');
+    const body = JSON.parse(request.body);
+    assert.deepEqual(body.generationConfig.thinkingConfig, { thinkingLevel: 'HIGH' });
+    assert.equal(body.generationConfig.responseMimeType, 'application/json');
+    assert.equal(body.contents[0].role, 'user');
+  }
+  const multimodal = JSON.parse(requests[1].request.body);
+  assert.deepEqual(multimodal.contents[0].parts[1], {
+    inlineData: { mimeType: 'image/png', data: 'YWJj' }
+  });
+  assert.equal(multimodal.generationConfig.maxOutputTokens, 32768);
+});
+
+test('Gemini 2.5 receives maximum reasoning budget, not unsupported thinkingLevel', () => {
+  assert.deepEqual(router.geminiThinkingConfig('gemini-2.5-flash'), { thinkingBudget: 24576 });
+  assert.deepEqual(router.geminiThinkingConfig('gemini-2.5-pro'), { thinkingBudget: 32768 });
+  assert.throws(() => router.geminiThinkingConfig('gemini-2.0-flash'), /does not support/i);
+});
+
+test('Gemini HIGH requests reject missing answers instead of treating them as valid', async () => {
+  const oldFetch = global.fetch;
+  global.fetch = async () => ({
+    ok: true,
+    json: async () => ({ candidates: [{ finishReason: 'MAX_TOKENS', content: { parts: [] } }] })
+  });
+  try {
+    await assert.rejects(router.requestGeminiHigh({
+      key: 'test-key',
+      model: 'gemini-3.1-flash-lite'
+    }, 'Please answer'), /no JSON text/i);
+  } finally {
+    global.fetch = oldFetch;
+  }
+});

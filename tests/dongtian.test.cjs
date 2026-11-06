@@ -387,10 +387,13 @@ test('Dongtian scripts are syntactically valid', () => {
 });
 
 test('Dongtian API supports multimodal Gemini and OpenAI-compatible payloads', () => {
-  assert.match(apiSource, /inlineData/);
+  const routerSource = readFileSync(join(root, 'ai-router.js'), 'utf8');
+  assert.match(apiSource, /aiRouter\.requestGeminiHigh/);
+  assert.match(routerSource, /inlineData/); // Gemini image payload moved into the shared HIGH client.
+  assert.match(routerSource, /thinkingLevel: 'HIGH'/);
   assert.match(apiSource, /type: 'image_url'/);
   assert.match(apiSource, /MAX_IMAGES = 8/);
-  assert.match(apiSource, /maxOutputTokens: 16384/);
+  assert.match(apiSource, /maxOutputTokens: 32768/);
 });
 
 
