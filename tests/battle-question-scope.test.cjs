@@ -9,8 +9,8 @@ const battleSource = readFileSync(join(__dirname, '../public/cultivation/battle-
 const serverSource = readFileSync(join(__dirname, '../server.js'), 'utf8');
 
 function loadScope() {
-  const context = { console };
-  const code = scopeSource.replace(/^export /gm, '') +
+  const context = { console, QAAdaptiveLearningRules: require('../public/cultivation/adaptive-learning-rules.js') };
+  const code = scopeSource.replace(/^import .*;$/gm, '').replace(/^export /gm, '') +
     '\nthis.__scope={normalizeBattleSubject,snapshotBattleKnowledge,resolveBattleKnowledge,pickBattleKnowledge};';
   vm.runInNewContext(code, context);
   return context.__scope;
@@ -26,7 +26,7 @@ test('battle knowledge comes from profile and actual focused game settings', () 
   });
   assert.equal(player.grade, 8);
   assert.equal(player.focused, true);
-  assert.equal(player.difficulty, 'hard');
+  assert.equal(player.difficulty, 'easy');
   assert.equal(player.units[0].subject, '數學');
   assert.match(player.units[0].topic, /一元一次方程式/);
   assert.equal(JSON.stringify(player.weakSubjects), JSON.stringify(['數學', '英文']));
@@ -45,7 +45,7 @@ test('two focused players share only actual overlapping units and lower grade', 
   assert.equal(shared.level, '國中二年級');
   assert.equal(shared.policy, 'common-units');
   assert.equal(shared.units.length, 1);
-  assert.equal(shared.difficulty, 'medium');
+  assert.equal(shared.difficulty, 'easy');
   const choice = s.pickBattleKnowledge(shared, 1);
   assert.equal(choice.subject, '數學');
   assert.equal(choice.specificTopic, '函數');

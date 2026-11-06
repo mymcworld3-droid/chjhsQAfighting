@@ -123,7 +123,7 @@
     profileStack.replaceWith(profileBody);
     profileBody.appendChild(profileStack);
     registerCard('profile', profilePanel, profileBody, {
-      icon: 'fa-user-astronaut', title: '個人資料', summary: '名稱、程度、強弱科與難度', className: 'dongfu-profile-card'
+      icon: 'fa-user-astronaut', title: '個人資料', summary: '名稱、程度與強弱科', className: 'dongfu-profile-card'
     });
 
     const scopeCard = document.createElement('section');

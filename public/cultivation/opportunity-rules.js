@@ -19,6 +19,10 @@
     if (/^(國小|國中|高中|高職)[一二三四五六1-6]年級/.test(p)) return p;
     return text(fallback, 40) || '國中一年級';
   }
+  function rootDifficulty(stats) {
+    const rules = typeof module === 'object' && module.exports ? require('./adaptive-learning-rules.js') : globalThis.QAAdaptiveLearningRules;
+    return rules?.generalDifficulty(stats) || 'easy';
+  }
   function normalizeScope(player = {}) {
     const s = player.gameSettings || {}, level = text(player.profile?.educationLevel, 40) || '國中一年級';
     const mode = ['focused', 'bank'].includes(s.sourceMode) ? s.sourceMode : 'random';
@@ -35,7 +39,7 @@
     }
     units.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
     const source = mode === 'bank' ? text(s.source, 240) : '';
-    const difficulty = ['easy', 'medium', 'hard'].includes(s.difficulty) ? s.difficulty : 'medium';
+    const difficulty = rootDifficulty(player.stats);
     return { version: 1, mode, level, difficulty, source, units };
   }
   function scopeKey(player) { return JSON.stringify(normalizeScope(player)); }

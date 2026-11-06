@@ -27,7 +27,7 @@ function createQuizTaskPlan({targetForm, forms = QUESTION_FORMS, previousMeta = 
   function get(index) {
     if (!Number.isSafeInteger(index) || index < 0) throw Error('出題任務序號無效');
     if (!tasks.has(index)) {
-      const assignment=assignmentForTask?.(index)||{},simple=(assignment.difficulty||difficulty)==='easy'||mode==='raid-quick-simple';
+      const assignment=assignmentForTask?.(index)||{},simple=(assignment.difficulty||difficulty)==='easy';
       const compatible=order.filter(form=>(!simple||SIMPLE_FORMS.has(form))&&(!assignment.forms?.length||assignment.forms.includes(form)));
       const choices=compatible.length?compatible:order.filter(form=>!simple||SIMPLE_FORMS.has(form));
       if(!choices.length)throw Error('沒有符合此考法難度的任務題型');

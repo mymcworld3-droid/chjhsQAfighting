@@ -88,7 +88,7 @@ function createAdaptiveLearning({resolve=()=>playerRepository.resolve(),verify=v
     const c=await context(req,body);
     const conceptId=clean(body.adaptiveConceptId,40);
     if(conceptId&&!c.plan.concepts.some(x=>x.id===conceptId))throw fail('訂正觀念不在目前範圍內');
-    const decision=Rules.decide(c.plan,c.user.stats?.adaptiveLearningV1,{now:now(),pending:Array.isArray(body.adaptivePending)?body.adaptivePending.slice(0,8):[],manualDifficulty:c.user.gameSettings?.difficulty||'auto',conceptId});
+    const decision=Rules.decide(c.plan,c.user.stats?.adaptiveLearningV1,{now:now(),pending:Array.isArray(body.adaptivePending)?body.adaptivePending.slice(0,8):[],conceptId});
     return {...c,decision,target:index=>decision.targets[index%decision.targets.length]};
   }
   function validate(c,data,index){const f=c.target(index);if(data.adaptive_scope_id!==c.scope.scopeId||data.adaptive_facet_id!==f.id||data.adaptive_difficulty!==f.difficulty)throw fail('題目不符合分派的範圍細觀念、考法或難度');return true;}

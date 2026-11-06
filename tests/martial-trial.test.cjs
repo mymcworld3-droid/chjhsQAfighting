@@ -240,7 +240,7 @@ test('questions bind to saved grade/scope, keep answers private and serialize si
  const db=database(user({profile:{educationLevel:'國中二年級'},gameSettings:{sourceMode:'focused',difficulty:'hard',focusedUnits:[{path:'數學/八上',detail:'一元一次方程式'}]}}));
  let state=await Rules.start(db,'u',{requestId:'trusted-scope-start'},NOW);
  const expected=await Rules.prepareQuestion(db,'u',NOW);
- assert.equal(expected.level,'國中二年級');assert.equal(expected.subject,'數學');assert.equal(expected.difficulty,'hard');assert.match(expected.specificTopic,/一元一次/);
+ assert.equal(expected.level,'國中二年級');assert.equal(expected.subject,'數學');assert.equal(expected.difficulty,'easy');assert.match(expected.specificTopic,/一元一次/);
  const parsed={q:'方程式 x + 3 = 5 的解為何？',correct:'2',wrong:['1','3','4'],exp:'兩側同減三，可得 x = 2。'};
  const [a,b]=await Promise.all([Rules.commitQuestion(db,'u',expected,parsed,NOW),Rules.commitQuestion(db,'u',expected,parsed,NOW)]);
  assert.deepEqual(a,b);assert.equal(a.correctIndex,undefined);assert.equal(a.exp,undefined);assert.equal(a.correct,undefined);

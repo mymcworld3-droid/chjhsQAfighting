@@ -4,7 +4,7 @@ const Scope=require('../trial-tower-scope.cjs');
 const legacy=fs.readFileSync('public/main-legacy.js','utf8');
 async function freeRequest(player){
  const requests=[],context=vm.createContext({currentUserData:player,currentLang:'zh',window:{},console:{log(){},error(){}},
-  getRankName:()=> '金丹',getSmartDifficulty:()=> 'medium',quizMetaFromRaw:()=>({}),recentSoloQuestionContext:()=>({}),adaptiveQuestionContext:()=>({}),shuffleArray:v=>v,
+  getRankName:()=> '金丹',getSmartDifficulty:()=> 'easy',quizMetaFromRaw:()=>({}),recentSoloQuestionContext:()=>({}),adaptiveQuestionContext:()=>({}),shuffleArray:v=>v,
   fetch:async(_,options)=>{requests.push(JSON.parse(options.body));return {ok:true,json:async()=>({text:JSON.stringify({q:'何者正確？',correct:'A',wrong:['B','C','D'],exp:'說明'})})};}});
  const start=legacy.indexOf('async function fetchOneQuestion() {'),end=legacy.indexOf('async function handleAnswer',start);
  vm.runInContext(legacy.slice(start,end)+'\nthis.fetchQuiz=fetchOneQuestion;',context);await context.fetchQuiz();return requests[0];
@@ -40,10 +40,13 @@ test('multiple selected units remain eligible regardless of profile grade or wea
  player.gameSettings.sourceMode='focused';player.gameSettings.focusedUnits=[];assert.throws(()=>Scope.snapshot(player),/儲存有效/);
  player.gameSettings.focusedUnits=[{path:'未知科目/八上',detail:'範圍'}];assert.throws(()=>Scope.snapshot(player),/儲存有效/);
 });
-test('automatic difficulty follows free-study rank/streak and explicit hard never weakens',()=>{
- const user={stats:{rankLevel:5,currentStreak:0},profile:{weakSubjects:'物理'},gameSettings:{sourceMode:'focused',difficulty:'auto',focusedUnits:[{path:'物理/高中二年級/自訂/物理',detail:'圓周運動'}]}};
- assert.equal(Scope.pick(Scope.snapshot(user),user).difficulty,'medium');user.gameSettings.difficulty='hard';assert.equal(Scope.pick(Scope.snapshot(user),user).difficulty,'hard');
- user.gameSettings={sourceMode:'random',difficulty:'auto'};user.stats={rankLevel:0,currentStreak:3};assert.equal(Scope.pick(Scope.snapshot(user),user).difficulty,'medium');
+test('difficulty follows learning answers and ignores old preferences and game rank',()=>{
+ const user={stats:{rankLevel:5,currentStreak:3},profile:{weakSubjects:'物理'},gameSettings:{sourceMode:'focused',difficulty:'hard',focusedUnits:[{path:'物理/高中二年級/自訂/物理',detail:'圓周運動'}]}};
+ assert.equal(Scope.pick(Scope.snapshot(user),user).difficulty,'easy');
+ user.stats.knowledgeMap={'物理':{力學:{total:10,correct:9}}};
+ assert.equal(Scope.pick(Scope.snapshot(user),user).difficulty,'medium');
+ user.gameSettings.difficulty='easy';user.stats.knowledgeMap['物理'].力學={total:20,correct:18};
+ assert.equal(Scope.pick(Scope.snapshot(user),user).difficulty,'hard');
 });
 test('saved bank file/directory is used directly, filters difficulty, avoids seen items and cycles only after exhaustion',async()=>{
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'tower-bank-'));test.after(()=>fs.rmSync(root,{recursive:true,force:true}));

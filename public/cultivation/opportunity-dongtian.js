@@ -1,3 +1,4 @@
+import './adaptive-learning-rules.js';
 import './opportunity-rules.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 import { playerRepository } from './data/player-repository.js';

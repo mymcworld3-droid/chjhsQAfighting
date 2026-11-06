@@ -1,3 +1,4 @@
+const AdaptiveDifficulty = require('./public/cultivation/adaptive-learning-rules.js');
 const Growth = require('./public/cultivation/nascent-growth.js');
 const Innate = require('./public/cultivation/innate-ability.js');
 const Combo = require('./public/cultivation/combat-combo.js');
@@ -131,7 +132,7 @@ function trustedKnowledgeScope(data={}){
   let subjects=validUnits.length?[...new Set(validUnits.map(u=>u.subject))]:weak.filter(s=>allowed.includes(s));
   if(!subjects.length)subjects=allowed.filter(s=>BATTLE_SUBJECTS.includes(s));
   return {version:1,grade,level:gradeLabel(grade),subjects:[...new Set(subjects)],units:validUnits,
-    difficulty:['easy','medium','hard'].includes(String(settings.difficulty))?String(settings.difficulty):'medium',
+    difficulty:AdaptiveDifficulty.generalDifficulty(data.stats),
     policy:validUnits.length?'focused-units':'trusted-subjects'};
 }
 function pickTrustedRaidKnowledge(scope,actionId){
