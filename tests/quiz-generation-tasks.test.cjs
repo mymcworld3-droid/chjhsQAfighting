@@ -24,8 +24,8 @@ test('recent forms are avoided when alternatives exist, without inventing forms'
   assert.equal(plan.get(0).form,'multi-step');
   assert([0,1,2].every(i=>!['direct-application','inverse-reasoning'].includes(plan.get(i).form)));
 });
-test('easy questions and dedicated raid quick answers get different single-step tasks',()=>{
-  for(const options of [{difficulty:'easy'},{mode:'raid-quick-simple',difficulty:'hard'}]) {
+test('easy questions get different single-step tasks',()=>{
+  for(const options of [{difficulty:'easy'},{mode:'raid-quick-simple',difficulty:'easy'}]) {
     const plan=createQuizTaskPlan({...options,targetForm:'multi-step'}),tasks=[0,1,2].map(plan.get);
     assert.equal(new Set(tasks.map(t=>t.form)).size,3);
     assert(tasks.every(t=>['direct-application','comparison','error-analysis'].includes(t.form)));
@@ -61,4 +61,11 @@ test('endpoint builds the full specification for each task and validates task bi
   assert.match(server,/validateCandidate\(parsed\);\s*taskPlan\.validate\(parsed, context\.index\)/);
   assert.match(server,/delete parsed\.generation_task_id/);
   assert.doesNotMatch(server,/候選題目差異化/);
+});
+
+test('compact raid questions respect learning difficulty',()=>{
+  const plan=createQuizTaskPlan({mode:'raid-quick-simple',difficulty:'hard',targetForm:'multi-step'});
+  assert.equal(plan.get(0).form,'multi-step');
+  const prompt=quickQuizPrompt({mode:'raid-quick-simple',subject:'數學',difficulty:'hard',quality:{cognitive:3,steps:2}});
+  assert.match(prompt,/難度=hard/);assert.match(prompt,/推理步數=2/);
 });

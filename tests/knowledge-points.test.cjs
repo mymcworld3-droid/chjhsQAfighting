@@ -108,19 +108,19 @@ function generationHarness(candidates) {
 test('quiz API rejects invented or cross-subject labels, retries, and returns scope and knowledge separately',async()=>{
   const question={...math,q:'方程式 x+2=6 中，x 的值為何？',correct:'4',wrong:['2','3','5'],exp:'移項得 x=6-2=4。答案為 4。'};
   const h=generationHarness([{...question,knowledge_point_id:'made-up'},question]);
-  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',quizMode:'battle-fast'});
+  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',difficulty:'medium',quizMode:'battle-fast'});
   assert.equal(h.calls(),2);const generated=JSON.parse(result.body.text);
   assert.equal(generated.sub_topic,'七上第三章 3-2 移項');assert.equal(generated.knowledge_point_id,'math-3');
   assert.equal(generated.knowledge_point,'方程與不等式');assert.equal(generated.knowledge_subject,'數學');
   const wrong=generationHarness([{...question,knowledge_subject:'英文'}]);
-  const failed=await wrong.invoke({subject:'數學',specificTopic:'移項'});
+  const failed=await wrong.invoke({subject:'數學',specificTopic:'移項',difficulty:'medium'});
   assert.equal(failed.status,500);assert.equal(wrong.calls(),3);
 });
 
 test('quiz API normalizes multiple knowledge points while preserving the requested scope',async()=>{
   const points=[{subject:'數學',id:'math-2',name:'代數運算'},{subject:'數學',id:'math-3',name:'方程與不等式'}];
   const h=generationHarness([{knowledge_points:[...points,points[0]],q:'方程式 x+2=6 中，x 的值為何？',correct:'4',wrong:['2','3','5'],exp:'移項得 x=6-2=4。答案為 4。'}]);
-  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',quizMode:'battle-fast'});
+  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',difficulty:'medium',quizMode:'battle-fast'});
   const question=JSON.parse(result.body.text);assert.deepEqual(question.knowledge_points,points);
   assert.equal(question.sub_topic,'七上第三章 3-2 移項');assert.equal(question.knowledge_point_id,'math-2');
 });

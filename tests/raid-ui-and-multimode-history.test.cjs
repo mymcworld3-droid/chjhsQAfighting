@@ -2,11 +2,12 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
 const read=file=>fs.readFileSync(path.join(__dirname,'..',file),'utf8');
-test('raid generator returns to quick simple baseline rather than full standardized learning difficulty',()=>{
+test('raid generator uses learning difficulty in its compact question flow',()=>{
  const raid=read('public/cultivation/raid-question.js'),server=read('server.js');
  assert.match(raid,/quizMode: 'raid-quick-simple'/);
  assert.doesNotMatch(raid,/quizMode: 'raid-standard'/);
- assert.match(server,/if \(raidQuickSimple\) difficulty = 'easy'/);
+ assert.match(server,/raidTrustedDifficulty = trusted.difficulty/);
+ assert.doesNotMatch(server,/if \(raidQuickSimple\) difficulty = 'easy'/);
  assert.match(server,/const raidTicketMode = raidQuickSimple \|\|/);
  assert.match(raid,/if \(body\?\.raidQuestion\)/);
 });

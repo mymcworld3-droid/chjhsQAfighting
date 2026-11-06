@@ -508,6 +508,7 @@ function chooseQuestionForm(previousMeta, seed) {
 const { MODES: FAST_QUIZ_MODES, quickQuizPrompt } = require('./fast-quiz-prompt.cjs');
 const { ANSWER_AND_EXPLANATION_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const raidDifficultyRules = require('./public/cultivation/raid-difficulty.js');
+const AdaptiveDifficulty = require('./public/cultivation/adaptive-learning-rules.js');
 const { createSparePool } = require('./quiz-spare-pool.cjs');
 const quizSparePool = createSparePool({ similar: (a, b) => isTooSimilarQuestion(a, [b]) });
 
@@ -558,6 +559,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                 return res.status(409).json({ error: '團本題號不同步，請等待房間重新同步' });
             }
             const trusted = pickTrustedRaidKnowledge(member.knowledgeScope || {}, raidActionId);
+            raidTrustedDifficulty = trusted.difficulty;
             subject = trusted.subject;
             level = trusted.level;
             rank = Math.max(0, Math.floor(Number(member.rankLevel) || 0));
@@ -581,6 +583,8 @@ app.post('/api/generate-quiz', async (req, res) => {
                 return res.json({trialQuestion:enlightenmentContext.pending});
             }
             subject = enlightenmentContext.subject;
+            const player = await db.collection('users').doc(uid).get();
+            difficulty = AdaptiveDifficulty.generalDifficulty(player.data()?.stats, subject);
             level = enlightenmentContext.level;
             rank = 0;
             knowledgeMap = null;
@@ -613,6 +617,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             avatarContext = {uid,db,...await immortalChallenge.prepareQuestion(db,uid)};
             if (avatarContext.pending) return res.json({avatarQuestion:avatarContext.pending});
             subject = avatarContext.subject; level = avatarContext.level; rank = 0;
+            const player = await db.collection('users').doc(uid).get();
+            difficulty = AdaptiveDifficulty.generalDifficulty(player.data()?.stats, subject);
             knowledgeMap = null; avoidQuestions = avatarContext.history; avoidQuestionMeta = [];
             specificTopic = ''; topic = '';
         } catch (error) {
@@ -626,6 +632,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             meditationContext = {uid,db,...await service.prepareQuestion(uid)};
             if (meditationContext.pending) return res.json({meditationSession:meditationContext.pending});
             subject = meditationContext.subject; level = meditationContext.level; rank = 0;
+            const player = await db.collection('users').doc(uid).get();
+            difficulty = AdaptiveDifficulty.generalDifficulty(player.data()?.stats, subject);
             knowledgeMap = null; avoidQuestions = meditationContext.history; avoidQuestionMeta = [];
             specificTopic = meditationContext.topic; topic = '';
         } catch (error) {
@@ -645,8 +653,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
         }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
     }
-    difficulty = (enlightenmentMode || avatarMode || meditationMode) ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
-        : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
+    difficulty = raidTicketMode ? raidTrustedDifficulty
+        : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'easy');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
     const previousMeta = (Array.isArray(avoidQuestionMeta) ? avoidQuestionMeta : [])
@@ -683,21 +691,11 @@ app.post('/api/generate-quiz', async (req, res) => {
         const stats = knowledgeMap[subject][targetTopic];
         const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
-        // 低正確率代表需要更清楚的鷹架，不代表永遠只做 easy。
-        // 適性調整仍使用降低後的新標準，不恢復舊版高難度。
-        if (!raidQuickSimple) {
-            if (stats.total > 3 && Number(accuracy) < 40 && difficulty === "hard") difficulty = "medium";
-            if (stats.total > 5 && Number(accuracy) > 80) difficulty = "hard";
-        }
+
     }
 
-    if (raidQuickSimple) difficulty = 'easy';
     const randomSeed = Math.random().toString(36).substring(7);
-    const quality = meditationMode
-        ? { cognitive: 2, steps: 2, instruction: '依指定年級，以完整情境與資料進行兩步理解、判讀或推論，不增加超綱前置知識。' }
-        : raidQuickSimple
-        ? { cognitive: 1, steps: 1, instruction: '團本快答題：只考一個核心觀念，題幹短、條件直接，通常一步即可作答。避免陷阱、冗長情境、多階段推理與冷僻細節。' }
-        : qualityPolicy(subject, difficulty);
+    const quality = qualityPolicy(subject, difficulty);
     const targetForm = meditationMode ? meditationContext.form : chooseQuestionForm(previousMeta, randomSeed);
     const recentTemplates = [...new Set(previousMeta.slice(-18).map(item => item.template_id).filter(Boolean))];
     const recentConceptForms = previousMeta.slice(-6)
@@ -904,12 +902,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             parsed.concept_id = String(parsed.concept_id || (subject + ':' + targetTopic)).trim().slice(0, 100);
             parsed.template_id = String(parsed.template_id || (parsed.concept_id + ':' + parsed.question_form))
                 .trim().slice(0, 120);
-            parsed.cognitive_level = raidQuickSimple
-                ? Math.max(1, Math.min(2, Number(parsed.cognitive_level) || 1))
-                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (deliveredDifficulty === 'hard' ? 3 : deliveredDifficulty === 'medium' ? 2 : 1)));
-            parsed.reasoning_steps = raidQuickSimple
-                ? 1
-                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (deliveredDifficulty === 'hard' ? 2 : 1)));
+            parsed.cognitive_level = Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (deliveredDifficulty === 'hard' ? 3 : deliveredDifficulty === 'medium' ? 2 : 1)));
+            parsed.reasoning_steps = Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (deliveredDifficulty === 'hard' ? 2 : 1)));
 
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');

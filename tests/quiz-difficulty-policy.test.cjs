@@ -36,10 +36,10 @@ test('compact combat prompts retain the same depth policy and emit numeric metad
   }
 });
 
-test('dedicated raid quick-answer mode retains its single-step combat pacing',()=>{
+test('raid quick-answer mode follows the assigned learning difficulty',()=>{
   const quality=policy('數學','hard');
   const prompt=quickQuizPrompt({mode:'raid-quick-simple',subject:'數學',difficulty:'hard',quality});
-  assert.match(prompt,/難度=easy/);
-  assert.match(prompt,/推理步數=1/);
-  assert.ok(!prompt.includes(quality.instruction));
+  assert.match(prompt,/難度=hard/);
+  assert.match(prompt,/推理步數=2-3/);
+  assert.ok(prompt.includes(quality.instruction));
 });

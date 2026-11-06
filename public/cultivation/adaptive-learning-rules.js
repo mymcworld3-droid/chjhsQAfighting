@@ -44,7 +44,7 @@
   function status(input){const r=row(input);return !r.n?'待診斷':r.u<POLICY.stableMinimum?'持續診斷':(r.uc+2)/(r.u+4)<.6?'優先補強':(r.uc+2)/(r.u+4)<.78?'持續鞏固':'表現穩定';}
   function needsLesson(state,conceptId){const r=row(state?.concepts?.[conceptId]);return r.w>=POLICY.lessonWrongStreak&&r.n-r.taughtThrough>=POLICY.lessonWrongStreak;}
   function stable(input){const r=row(input);return r.u>=POLICY.stableMinimum&&r.uc/r.u>=.8&&r.w===0&&r.recent.slice(-5).reduce((a,b)=>a+b,0)>=Math.min(4,r.recent.length);}
-  function decide(plan,raw,{now=Date.now(),pending=[],manualDifficulty='auto',conceptId=''}={}){
+  function decide(plan,raw,{now=Date.now(),pending=[],conceptId=''}={}){
     const state=scopeState(raw,plan.scopeId),active=pending.filter(x=>x.scopeId===plan.scopeId).slice(0,8);
     const diagnosticTarget=Math.min(POLICY.diagnosticMax,Math.max(POLICY.diagnosticMin,plan.concepts.length)),slot=state.answered+active.length;
     const requestedRole=slot<diagnosticTarget?'diagnostic':MIX[(slot-diagnosticTarget)%10];
@@ -72,9 +72,8 @@
       return [queued,recentFacet.has(f.id)?1:0,needsLesson(state,f.conceptId)?0:c.w?1:!c.n?2:3,(c.uc+2)/(c.u+4),r.n,r.lastAt];
     }
     pool.sort((a,b)=>{const x=score(a),y=score(b);for(let i=0;i<x.length;i++)if(x[i]!==y[i])return x[i]-y[i];return a.id.localeCompare(b.id);});
-    const cap={easy:0,medium:1,hard:2}[manualDifficulty]??2;
     const targets=pool.map(f=>{
-      const c=row(state.concepts[f.conceptId]),difficulty=['easy','medium','hard'][Math.min(cap,c.level+Number(role==='challenge'&&stable(c)))];
+      const c=row(state.concepts[f.conceptId]),difficulty=['easy','medium','hard'][Math.min(2,c.level+Number(role==='challenge'&&stable(c)))];
       const simple=['direct-application','comparison','error-analysis'];
       let forms=role==='challenge'?(difficulty==='easy'?['comparison','error-analysis']:['scenario-modeling','concept-transfer','data-interpretation','inverse-reasoning']):f.forms;
       if(difficulty==='easy'){const compatible=forms.filter(x=>simple.includes(x));forms=compatible.length?compatible:simple;}
@@ -82,5 +81,18 @@
     });
     return {role,requestedRole,diagnosticTarget,targets};
   }
-  return Object.freeze({POLICY,DAY,REVIEW_DAYS,MIX,row,scopeState,record,status,needsLesson,decide});
+  // For flows without a fine-grained selected scope, use recorded answer history.
+  // A new player starts with an easy diagnostic level; no game rank or saved preference is used.
+  function generalDifficulty(stats={},subject=''){
+    const map=stats?.knowledgeMap||{};
+    const subjects=subject&&map[subject]?[map[subject]]:Object.values(map);
+    let total=0,correct=0;
+    for(const topics of subjects)for(const item of Object.values(topics||{})){
+      const n=count(item?.total);total+=n;correct+=Math.min(n,count(item?.correct));
+    }
+    if(total>=20&&correct/total>=0.8)return 'hard';
+    if(total>=10&&correct/total>=0.8)return 'medium';
+    return 'easy';
+  }
+  return Object.freeze({POLICY,DAY,REVIEW_DAYS,MIX,row,scopeState,record,status,needsLesson,decide,generalDifficulty});
 });

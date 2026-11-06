@@ -46,7 +46,7 @@ test('diagnostic length is 5–8 and ten eligible practice slots contain six rei
   const challenge=Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:9}}},{now:10});
   assert(challenge.targets.every(f=>f.forms.includes('concept-transfer')&&f.difficulty==='medium'));
   const capped=Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:9}}},{now:10,manualDifficulty:'easy'});
-  assert(capped.targets.every(f=>f.difficulty==='easy'&&f.forms.every(x=>['comparison','error-analysis'].includes(x))));
+  assert(capped.targets.every(f=>f.difficulty==='medium')); // old preferences cannot cap adaptive decisions
   const absent=Rules.decide(plan,{scopes:{[plan.scopeId]:{answered:9}}});assert.equal(absent.requestedRole,'challenge');assert.equal(absent.role,'reinforce');
 });
 test('helped completion is retained without becoming independent mastery or passing a scheduled review',()=>{
@@ -68,14 +68,14 @@ test('skip has no false incorrect evidence, and repeated transactions are idempo
   assert.equal(state.skipped,1);assert.equal(state.answered,0);assert.equal(Object.keys(state.concepts).length,0);
   assert.equal(Rules.record(raw,m,event),raw);assert.equal(state.updatedAt,0);
 });
-test('independent success raises difficulty gradually; manual selection remains the ceiling and helped success does not promote',()=>{
+test('independent success raises difficulty gradually; old manual choices are ignored and helped success does not promote',()=>{
   const f=plan.facets[0];let raw;
   for(let i=0;i<10;i++)raw=observe(raw,f,true);
   assert.equal(Rules.scopeState(raw,plan.scopeId).concepts[f.conceptId].level,1);
   const target=(raw,manual)=>Rules.decide(plan,raw,{conceptId:f.conceptId,manualDifficulty:manual}).targets[0];
-  assert.equal(target(raw,'auto').difficulty,'medium');assert.equal(target(raw,'easy').difficulty,'easy');
+  assert.equal(target(raw,'auto').difficulty,'medium');assert.equal(target(raw,'easy').difficulty,'medium');
   for(let i=0;i<10;i++)raw=observe(raw,f,true);
-  assert.equal(target(raw,'auto').difficulty,'hard');assert.equal(target(raw,'medium').difficulty,'medium');
+  assert.equal(target(raw,'auto').difficulty,'hard');assert.equal(target(raw,'medium').difficulty,'hard');
   let helped;for(let i=0;i<20;i++)helped=observe(helped,f,true,{help:1});
   assert.equal(target(helped,'auto').difficulty,'easy');
 });

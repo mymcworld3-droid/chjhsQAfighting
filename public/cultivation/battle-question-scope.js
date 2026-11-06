@@ -1,4 +1,5 @@
-// Shared, deterministic knowledge-range rules for ranked PvP. No browser or Firebase dependencies.
+// Shared, deterministic knowledge-range rules for ranked PvP.
+import './adaptive-learning-rules.js';
 export const BATTLE_SUBJECTS = Object.freeze(['國文', '英文', '數學', '公民', '歷史', '地理', '物理', '化學', '生物']);
 
 export function normalizeBattleSubject(input) {
@@ -62,8 +63,7 @@ export function snapshotBattleKnowledge(data = {}) {
   const settings = data.gameSettings || {};
   const focused = settings.sourceMode === 'focused' && Array.isArray(settings.focusedUnits) && settings.focusedUnits.length > 0;
   const units = focused ? settings.focusedUnits.map(extractUnit).filter(Boolean).slice(0, 24) : [];
-  const rawDifficulty = String(settings.difficulty || 'medium');
-  const difficulty = ['easy', 'medium', 'hard'].includes(rawDifficulty) ? rawDifficulty : 'medium';
+  const difficulty = globalThis.QAAdaptiveLearningRules.generalDifficulty(data.stats);
   return {
     grade: educationGrade(profile.educationLevel || data.educationLevel),
     weakSubjects: subjectsFrom(profile.weakSubjects),
@@ -100,8 +100,8 @@ export function resolveBattleKnowledge(host = {}, guest = {}) {
   }
   // No mutual units/subjects: never impose either player's private focused syllabus.
   if (!subjects.length) subjects = allowed.filter(s => BATTLE_SUBJECTS.includes(s));
-  const fixedDifficulty = host.difficulty === guest.difficulty && ['easy', 'medium', 'hard'].includes(host.difficulty)
-    ? host.difficulty : 'medium';
+  const tiers = ['easy', 'medium', 'hard'];
+  const fixedDifficulty = tiers[Math.min(Math.max(0, tiers.indexOf(host.difficulty)), Math.max(0, tiers.indexOf(guest.difficulty)))];
   return { version: 1, grade, level: gradeLabel(grade), subjects: [...new Set(subjects)], units: commonUnits,
     difficulty: fixedDifficulty, policy: commonUnits.length ? 'common-units' : 'shared-subjects' };
 }

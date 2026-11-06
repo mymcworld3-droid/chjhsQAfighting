@@ -142,7 +142,6 @@ function soloQuestionScope() {
         mode,
         source: mode === 'bank' ? String(settings.source || 'ai') : '',
         units,
-        difficulty: String(settings.difficulty || 'auto'),
         level: String(profile.educationLevel || ''),
         weakSubjects: mode === 'focused' ? String(profile.weakSubjects || '') : '',
         language: 'zh-TW'
@@ -708,7 +707,7 @@ window.logout = () => {
 // 🚪 遊戲啟動閘門：登入後等所有功能腳本載入完成才進遊戲
 // ==========================================
 const GAME_STARTUP_TIPS = [
-    '設定可以調整出題範圍、難度與個人設定。',
+    '設定可以調整出題範圍與個人資料；題目難度依學習足跡調整。',
     '洞天首次完整通關可獲得靈石，題數越多，獎勵也越高。',
     '修煉頁的背包可以查看持有法寶與煉器素材。',
     '築基之後會逐步開啟更多修煉與鬥法內容。',
@@ -2293,9 +2292,6 @@ async function updateSettingsInputs() {
         
         const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'medium', focusedUnits: [] };
         
-        const diffSelect = document.getElementById('set-difficulty');
-        if(diffSelect) diffSelect.value = settings.difficulty || 'auto';
-        
         const sourceModeSelect = document.getElementById('set-source-mode');
         if(sourceModeSelect) {
             sourceModeSelect.value = settings.sourceMode || 'random';
@@ -2357,7 +2353,6 @@ window.saveProfile = async (triggerButton = null) => {
     const rawWeak = document.getElementById('set-weak').value;
     const sourceMode = document.getElementById('set-source-mode').value;
     const source = document.getElementById('set-source-final-value').value; 
-    const difficulty = document.getElementById('set-difficulty').value;
 
     if (!displayName) { alert("名稱不能為空！"); return false; }
     if (sourceMode === 'bank' && (!source || source === 'ai')) { alert("請選擇題庫檔案！"); return false; }
@@ -2377,7 +2372,6 @@ window.saveProfile = async (triggerButton = null) => {
     const newSettings = { 
         sourceMode: sourceMode, 
         source: source, 
-        difficulty: difficulty,
         focusedUnits: [...(window.soloSelectedUnits || [])]
     };
 
@@ -2437,30 +2431,9 @@ function shuffleArray(array) {
     return array;
 }
 
-// [新增] 智慧難度判斷邏輯
-function getSmartDifficulty() {
-    if (!currentUserData || !currentUserData.stats) return 'easy';
-
-    const rank = currentUserData.stats.rankLevel || 0;
-    const streak = currentUserData.stats.currentStreak || 0;
-    
-    // 1. 基礎難度 (依照段位)
-    // 0-1 (青銅/白銀): easy
-    // 2-4 (黃金/鑽石/星耀): medium
-    // 5+ (大師以上): hard
-    let baseDiff = 'easy';
-    if (rank >= 5) baseDiff = 'hard';
-    else if (rank >= 2) baseDiff = 'medium';
-
-    // 2. 連勝加成 (Streak Bonus)
-    // 如果連對 3 題以上，強迫提升一級難度 (挑戰時刻)
-    if (streak >= 3) {
-        if (baseDiff === 'easy') return 'medium';
-        if (baseDiff === 'medium') return 'hard';
-        return 'hard'; // 已經是 hard 就維持
-    }
-
-    return baseDiff;
+// 依答題足跡提供非細觀念出題流程的診斷難度。
+function getSmartDifficulty(subject = '') {
+    return window.QAAdaptiveLearningRules.generalDifficulty(currentUserData?.stats, subject);
 }
 
 async function fillBuffer() {
@@ -2803,10 +2776,7 @@ window.renderSelectedUnitsList = () => {
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'auto', focusedUnits: [] };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
-    let finalDifficulty = settings.difficulty;
-    if (!finalDifficulty || finalDifficulty === 'auto') {
-        finalDifficulty = getSmartDifficulty();
-    }
+    let finalDifficulty = getSmartDifficulty();
 
     const sourceMode = settings.sourceMode || 'random';
 
@@ -2837,9 +2807,7 @@ async function fetchOneQuestion() {
         }
         targetTopic = targetTopic.slice(0, 240);
 
-        const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
-        // 弱科不等於永遠做 easy；最多只把 hard 暫時降為 medium，保留真正練習深度。
-        if (weakSubjects.includes(subject) && finalDifficulty === "hard" && settings.difficulty !== "hard") finalDifficulty = "medium";
+        finalDifficulty = getSmartDifficulty(subject);
 
         console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
@@ -2883,7 +2851,8 @@ async function fetchOneQuestion() {
     } 
     // 2. 題庫練習 (原本的 file based)
     else if (sourceMode === 'bank') {
-        let targetSource = settings.source; 
+        let targetSource = settings.source;
+        finalDifficulty = getSmartDifficulty(String(targetSource || '').split('/')[0]);
         if (!currentBankData || currentBankData.sourcePath !== targetSource) {
             let filesToFetch = [];
             if (targetSource && targetSource.endsWith('.json')) { 
@@ -2948,6 +2917,7 @@ async function fetchOneQuestion() {
     else {
         const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
         let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
+        finalDifficulty = getSmartDifficulty(targetSubject);
         
         try {
             const response = await fetch("/api/generate-quiz", {
@@ -3640,8 +3610,7 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
     const recoveryOrigin = String(practice.recoveryOrigin || '');
     const settings = currentUserData?.gameSettings || {};
     const rankName = getRankName(currentUserData?.stats?.rankLevel || 0);
-    let difficulty = settings.difficulty;
-    if (!difficulty || difficulty === 'auto') difficulty = getSmartDifficulty();
+    let difficulty = getSmartDifficulty(subject);
 
     let specificTopic = knowledgePoint;
     if (recoveryOrigin) specificTopic = `${knowledgePoint}。針對原題「${practice.originQuestion}」的同一概念出一道新情境變式，勿重複原題。`.slice(0,1800);
