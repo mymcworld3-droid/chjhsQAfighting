@@ -5,7 +5,6 @@ const fs = require('fs');
 const crypto = require('crypto');
 const aiRouter = require('./ai-router');
 const { createAIQuestionBank } = require('./ai-question-bank.cjs');
-const aiQuestionBank = createAIQuestionBank();
 const { QUESTION_FORMS, createQuizTaskPlan } = require('./quiz-generation-tasks.cjs');
 const registerAdaptiveLearningApi = require('./adaptive-learning-api.cjs');
 const registerAbilityCoachApi = require('./ability-coach-api.cjs');
@@ -55,6 +54,7 @@ const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question
 const { questionQualityIssue, removeUnstableOptionLabels } = require('./question-quality.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 require('dotenv').config();
+const aiQuestionBank = createAIQuestionBank();
 
 const app = express();
 const port = process.env.PORT || 3000;
