@@ -124,12 +124,14 @@ body.xianxia-theme .quest-spotlight-ready { border-color: #e5bf71; background: l
   #quest-spotlight-reward { flex-basis: 0; }
 }
 .sect-actions {
-  display: grid; grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 0;
+  display: grid; grid-template-rows: none; grid-auto-rows: minmax(0, 1fr); gap: 0;
   align-self: stretch; min-width: 0; padding: 4px 6px;
   border: 1px solid #c2a35d66; border-radius: 12px; overflow: hidden;
   background: linear-gradient(135deg, #20281fef, #111c17f5);
   box-shadow: inset 0 1px #fff3d30c, 0 5px 15px #0002;
 }
+/* Hidden shortcuts should not occupy grid rows or flex space. */
+body.xianxia-theme .sect-actions > .sect-action[hidden] { display: none; }
 body.xianxia-theme .sect-action {
   position: relative; display: flex; align-items: center; gap: 12px; min-height: 52px; width: 100%;
   padding: 8px 10px; border: 0; border-radius: 6px; background: transparent;
