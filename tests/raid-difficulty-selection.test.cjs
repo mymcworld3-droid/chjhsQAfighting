@@ -41,10 +41,13 @@ test('difficulty previews move the existing selection and update rewards and the
 test('locked tiers remain previewable but cannot start a room; returning to an unlocked tier restores entry', () => {
   const app = runtime({ score: 6 });
   app.select('extreme'); assert.equal(app.card.dataset.raidTheme, 'extreme');
+  assert.equal(app.targets.get('.raid-unlock-status').hidden, false);
   assert.ok(app.actions.every(button => button.disabled));
   assert.ok(app.card.classList.values.has('locked'));
   app.select('normal'); assert.ok(app.actions.every(button => !button.disabled));
+  assert.equal(app.targets.get('.raid-unlock-status').hidden, true);
   const empty = runtime({ tickets: 0 }); empty.select('normal'); assert.ok(empty.actions.every(button => button.disabled));
+  assert.equal(empty.targets.get('.raid-unlock-status').hidden, true, 'missing tickets do not imply a locked realm');
 });
 test('invalid choices and active rooms cannot change the selected difficulty', () => {
   const app = runtime(); app.select('invalid'); assert.equal(app.fitCalls(), 0);
