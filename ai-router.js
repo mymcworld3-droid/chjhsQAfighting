@@ -373,7 +373,8 @@ async function generateJSON(prompt, options = {}) {
     throw Object.assign(new Error('No AI provider configured. Set GEMINI_API_KEY(S) or AI_PROVIDERS_JSON.'), { code: 'refinery-ai-config', attempts: [] });
   }
   const timeoutMs = Math.max(3000, Number(options.timeoutMs) || DEFAULT_TIMEOUT_MS);
-  const ordered = options.task ? providers : orderedProviders(providers);
+  const taskIsGemini = Boolean(options.task && providers[0]?.type === 'gemini');
+  const ordered = taskIsGemini ? providers : orderedProviders(providers);
   const errors = [];
   const attempts = [];
   let nextAttemptIndex = 0;
@@ -406,7 +407,7 @@ async function generateJSON(prompt, options = {}) {
 
   // Use distinct credentials in the first wave rather than saturating one
   // Gemini key with multiple models. Cap extra calls to control API spend.
-  const requested = options.task ? 1 : options.parallel === true ? 3 : 1;
+  const requested = taskIsGemini ? 1 : options.parallel === true ? 3 : 1;
   const wave = [];
   const seenCredentials = new Set();
   for (const provider of ordered) {
@@ -438,7 +439,7 @@ async function generateJSON(prompt, options = {}) {
     try { return collect(await attempt(wave[0])); } catch (_) { /* retry other providers */ }
   }
   const attempted = new Set(wave);
-  const maxAttempts = options.task ? Math.min(4, ordered.length) : ordered.length;
+  const maxAttempts = taskIsGemini ? Math.min(4, ordered.length) : ordered.length;
   for (const provider of ordered) {
     if (attempted.has(provider)) continue;
     if (attempted.size >= maxAttempts) break;
@@ -452,6 +453,15 @@ async function generateJSON(prompt, options = {}) {
 }
 
 function getStatus() {
+  const hasExplicitModelList = splitCsv(process.env.GEMINI_MODELS).length || splitCsv(process.env.GEMINI_MODEL).length;
+  // Display all six automatically routed models when Render only has keys.
+  const keys = geminiKeys();
+  if (keys.length && !hasExplicitModelList) {
+    const models = [...GEMINI_LITE_MODELS, ...GEMINI_FLASH_MODELS];
+    return keys.flatMap((_, index) => models.map(model => ({
+      name: 'gemini-' + (index + 1) + '-' + model, type: 'gemini', model
+    })));
+  }
   return buildProviders().map(({ name, type, model }) => ({ name, type, model }));
 }
 
