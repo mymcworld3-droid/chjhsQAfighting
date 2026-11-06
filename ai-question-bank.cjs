@@ -9,6 +9,65 @@ const DRIVE = 'https://www.googleapis.com/drive/v3/files';
 const UPLOAD = 'https://www.googleapis.com/upload/drive/v3/files';
 const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 
+const OAUTH_FIELDS = Object.freeze([
+  'AI_QUESTION_BANK_GOOGLE_CLIENT_ID',
+  'AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET',
+  'AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN'
+]);
+
+// Reports names and status only. Never include credential values, prefixes or hashes.
+function oauthConfigurationChecks(env) {
+  const values = OAUTH_FIELDS.map(name => String(env[name] ?? ''));
+  const missing = OAUTH_FIELDS.filter((_,i) => !values[i].trim());
+  const issues = [];
+  const [id,secret,refresh] = values;
+  if (id.trim() && !id.trim().endsWith('.apps.googleusercontent.com'))
+    issues.push('AI_QUESTION_BANK_GOOGLE_CLIENT_ID looks incorrectly formatted (Google OAuth client IDs end in .apps.googleusercontent.com)');
+  for (const [index,value] of values.entries()) {
+    if (value && value !== value.trim())
+      issues.push(OAUTH_FIELDS[index] + ' contains leading or trailing whitespace');
+    if (value.trim().startsWith('https://') || value.trim().startsWith('http://'))
+      issues.push(OAUTH_FIELDS[index] + ' looks like a URL, not a credential');
+    if (value.length >= 2 && (
+      (value[0] === '"' && value[value.length-1] === '"') ||
+      (value[0] === "'" && value[value.length-1] === "'")
+    )) issues.push(OAUTH_FIELDS[index] + ' has extra surrounding quotes');
+  }
+  if (id && secret && id === secret)
+    issues.push('AI_QUESTION_BANK_GOOGLE_CLIENT_ID and AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET are identical');
+  if (secret && refresh && secret === refresh)
+    issues.push('AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET and AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN are identical');
+  return {missing,issues};
+}
+
+function oauthFailureHint(errorCode, status, mode) {
+  if (mode === 'service-account') {
+    return 'Check AI_QUESTION_BANK_SERVICE_ACCOUNT_JSON or the fallback FIREBASE_A_SERVICE_ACCOUNT_JSON.';
+  }
+  if (errorCode === 'invalid_client' || status === 401)
+    return 'Check AI_QUESTION_BANK_GOOGLE_CLIENT_ID and AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET. Google cannot distinguish which field is incorrect; both must belong to the same OAuth client.';
+  if (errorCode === 'invalid_grant')
+    return 'Check AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN. It may be expired, revoked, copied incorrectly or from a different OAuth client.';
+  if (errorCode === 'unauthorized_client')
+    return 'Check Google OAuth application configuration and authorization status.';
+  if (errorCode === 'invalid_scope')
+    return 'Check Google Drive scope authorization in Google Cloud.';
+  return 'Check Google Cloud OAuth configuration and Render environment variables.';
+}
+
+async function oauthTokenFailure(response, mode) {
+  let code = '';
+  try {
+    const data = await response.json();
+    const safeCodes = ['invalid_client','invalid_grant','unauthorized_client','invalid_scope','access_denied','invalid_request'];
+    if (safeCodes.includes(data?.error)) code = data.error;
+  } catch (_) { /* HTTP status is still enough for a safe diagnostic. */ }
+  // Never display Google's error_description: it could contain sensitive data.
+  return Error('Google Drive OAuth token unavailable: HTTP ' + response.status +
+    (code ? ' (' + code + ')' : '') + '. ' + oauthFailureHint(code, Number(response.status), mode));
+}
+
+
 const trim = (s, size = 200) => String(s || '').normalize('NFC').trim().slice(0, size);
 const normalize = s => trim(s, 240).toLocaleLowerCase('zh-TW').replace(/\s+/g, '');
 const digest = s => crypto.createHash('sha256').update(s).digest('hex');
@@ -41,6 +100,15 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     env.AI_QUESTION_BANK_GOOGLE_CLIENT_SECRET && env.AI_QUESTION_BANK_GOOGLE_REFRESH_TOKEN);
   const serviceJson = env.AI_QUESTION_BANK_SERVICE_ACCOUNT_JSON || env.FIREBASE_A_SERVICE_ACCOUNT_JSON || '';
   const enabled = env.AI_QUESTION_BANK_ENABLED === '1' && (oauth || !!serviceJson);
+  if (env.AI_QUESTION_BANK_ENABLED === '1') {
+    const checks = oauthConfigurationChecks(env);
+    if (checks.missing.length) logger.warn('[AI bank] OAuth configuration: missing ' + checks.missing.join(', ') +
+      (serviceJson ? ' (service account fallback available)' : ''));
+    if (checks.issues.length) logger.warn('[AI bank] OAuth configuration: ' + checks.issues.join('; '));
+    if (oauth) logger.info?.('[AI bank] Google OAuth refresh token configured (secret values hidden)');
+    else if (serviceJson) logger.info?.('[AI bank] Google service-account mode configured (secret values hidden)');
+    else logger.warn('[AI bank] disabled: no complete Google OAuth or service-account credentials');
+  }
   const buckets = new Map();
   const inflight = new Map();
   const activity = [];
@@ -80,7 +148,7 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
       method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
       body:form.toString(),signal:AbortSignal.timeout(15000)
     });
-    if (!response.ok) throw Error('Google Drive OAuth token unavailable: ' + response.status);
+    if (!response.ok) throw await oauthTokenFailure(response, oauth ? 'oauth' : 'service-account');
     const data = await response.json();
     if (!data.access_token) throw Error('No Google Drive access token');
     bearer = data.access_token;
@@ -216,4 +284,4 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
 
   return {enabled, LOW_WATER, find, publish, schedule, scopeCode, compatible};
 }
-module.exports = {createAIQuestionBank, scopeCode, fingerprint, compatible};
+module.exports = {createAIQuestionBank, scopeCode, fingerprint, compatible, oauthConfigurationChecks, oauthFailureHint};
