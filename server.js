@@ -1072,9 +1072,17 @@ app.post('/api/generate-quiz', async (req, res) => {
             // A live-generated fallback still answers immediately. Only its archived
             // copy is independently reviewed once and uploaded to Google Drive.
             if (bankTarget) {
+                // Parallel provider tasks can target different facets. Archive under
+                // the ACTUAL returned facet, not the first provider's planned facet.
+                const servedFacet = adaptiveContext?.plan.facets.find(f=>f.id===parsed.adaptive?.facetId);
+                const archiveTarget = servedFacet ? {
+                    ...bankTarget,facetId:servedFacet.id,
+                    difficulty:parsed.adaptive.difficulty,
+                    role:parsed.adaptive.role,forms:servedFacet.forms
+                } : bankTarget;
                 const archive = {...parsed};
                 delete archive.adaptive;
-                aiQuestionBank.schedule(bankTarget, () => verifyAndArchive(archive,bankTarget));
+                aiQuestionBank.schedule(archiveTarget, () => verifyAndArchive(archive,archiveTarget));
             }
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
