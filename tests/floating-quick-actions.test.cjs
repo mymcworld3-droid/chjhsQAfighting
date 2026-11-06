@@ -24,7 +24,7 @@ test('secondary records are available through a native collapsed disclosure with
 });
 
 test('the review stylesheet is loaded before app startup and obsolete floating-action geometry is removed', () => {
-  const link='styles/interface-cleanup.css?v=20261023-review1';
+  const link='styles/interface-cleanup.css?v=20261106-sect-spacing1';
   assert.ok(index.indexOf(link)>index.indexOf('styles/xianxia-quiet.css'));
   assert.ok(index.indexOf(link)<index.indexOf('main.js?v='));
   assert.doesNotMatch(index, /#bottom-nav>\.xiuxian-quick-actions/);

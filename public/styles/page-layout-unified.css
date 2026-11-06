@@ -124,7 +124,7 @@ body.xianxia-theme .quest-spotlight-ready { border-color: #e5bf71; background: l
   #quest-spotlight-reward { flex-basis: 0; }
 }
 .sect-actions {
-  display: grid; grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 0;
+  display: grid; grid-template-rows: none; grid-auto-rows: minmax(0, 1fr); gap: 0;
   align-self: stretch; min-width: 0; padding: 4px 6px;
   border: 1px solid #c2a35d66; border-radius: 12px; overflow: hidden;
   background: linear-gradient(135deg, #20281fef, #111c17f5);
@@ -136,6 +136,7 @@ body.xianxia-theme .sect-action {
   color: #f1dbad; font: 500 13px/1.4 var(--xq-serif); text-align: left;
   box-shadow: none; cursor: pointer; transition: background .2s;
 }
+.sect-action[hidden] { display: none !important; }
 body.xianxia-theme .sect-action:not(:last-child)::after {
   content: ''; position: absolute; left: 10px; right: 10px; bottom: 0; height: 1px;
   background: #efd7a633; pointer-events: none;
