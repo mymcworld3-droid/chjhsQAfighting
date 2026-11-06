@@ -11,7 +11,7 @@ const main = read('public/main.js');
 
 test('ordinary material drop module is intentionally disabled', () => {
   assert.match(drop,/enabled:false/);
-  assert.match(drop,/source:'raid-only'/);
+  assert.match(drop,/source:'retired'/);
   assert.match(drop,/quizDrops:false/);
   assert.match(drop,/dongtianDrops:false/);
   assert.doesNotMatch(drop,/runTransaction|getFirestore|onSnapshot|Math\.random/);

@@ -136,20 +136,15 @@ test('all nine plots require two crop-funded expansions; construction consumes n
   await f.db.doc('spiritFarms/u1').update({harvest:{jade:18,amber:8,moon:2}});assert.equal((await f.act('expand')).farm.openPlots,6);assert.equal((await f.act('expand')).farm.openPlots,9);
   await assert.rejects(f.act('expand'),/全部開墾/);assert.deepEqual((await f.db.doc('users/u1').get()).data().stats,f.user.stats);
 });
-test('seed exchange uses crop proceeds and harvest returns seed; no client prices or quantities can mint materials',async()=>{
-  const f=await fixture();await f.db.doc('spiritFarms/u1').update({harvest:{jade:12,amber:3,moon:0}});
-  const a=await f.act('seed',{cropId:'moon',quantity:9999,cost:0});assert.equal(a.farm.seeds.moon,2);assert.equal(a.farm.harvest.amber,0);
-  const b=await f.act('exchange',{cropId:'jade',quantity:99999,materialId:'raid-refine-key-iii'});assert.equal(b.materialInventory['qi-spirit-wood'],1);assert.equal(b.materialInventory['raid-refine-key-iii'],undefined);assert.equal(b.materialInventory['qi-spirit-iron'],4);assert.equal(b.farm.harvest.jade,0);
-});
-test('material exchange honors attained realm, credits the existing inventory atomically, and never awards combat stats',async()=>{
-  const f=await fixture({score:0});await f.db.doc('spiritFarms/u1').update({harvest:{jade:0,amber:12,moon:12}});await assert.rejects(f.act('exchange',{cropId:'amber'}),/築基/);await assert.rejects(f.act('exchange',{cropId:'moon'}),/金丹/);
-  await f.db.doc('users/u1').update({trainingAccess:{version:1,highestRealmScore:28}});const a=await f.act('exchange',{cropId:'moon'});assert.equal(a.materialInventory['golden-lightning-wood'],1);
-  assert.deepEqual((await f.db.doc('users/u1').get()).data().stats,f.user.stats);
-});
-test('a write failure rolls back harvest spending and material credit together',async()=>{
-  const f=await fixture();await f.db.doc('spiritFarms/u1').update({harvest:{jade:12,amber:0,moon:0}});const before=await f.raw();
-  const original=f.db.runTransaction.bind(f.db);f.db.runTransaction=worker=>original(async tx=>{const save=tx.set.bind(tx);tx.set=(ref,value)=>{if(ref.path.startsWith('spiritFarms/'))throw Error('unavailable');return save(ref,value);};return worker(tx);});
-  await assert.rejects(f.service.act('u1',request(0,'exchange',{cropId:'jade'})),/unavailable/);assert.deepEqual(await f.raw(),before);assert.deepEqual((await f.db.doc('users/u1').get()).data().materialSystem.inventory,f.user.materialSystem.inventory);
+test('harvest can buy seeds, but retired material exchange is rejected without spending',async()=>{
+  const f=await fixture();
+  await f.db.doc('spiritFarms/u1').update({harvest:{jade:12,amber:3,moon:0}});
+  const seed=await f.act('seed',{cropId:'moon',quantity:9999,cost:0});
+  assert.equal(seed.farm.seeds.moon,2);
+  const before=await f.raw(),player=(await f.db.doc('users/u1').get()).data();
+  await assert.rejects(f.act('exchange',{cropId:'jade',quantity:99999,materialId:'raid-refine-key-iii'}),/煉器材料兌換已停用/);
+  assert.deepEqual(await f.raw(),before);
+  assert.deepEqual((await f.db.doc('users/u1').get()).data(),player);
 });
 test('stale plot IDs, occupied soil, forged time and invalid actions cannot change resources',async()=>{
   const f=await fixture();await plant(f);const before=await f.raw();

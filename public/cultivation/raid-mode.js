@@ -1651,12 +1651,12 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
       if (state.roomId !== roomId || local !== data() || playerRepository.currentUser()?.uid !== uid) return;
       state.rewardClaimedRoomId = roomId;
 
-      // 團本 API 回傳本場素材與印記的權威庫存值；直接合併到本地玩家狀態，
-      // 不再為素材額外從瀏覽器讀取 Firebase users 文件。
+      // 團本 API 回傳升階石與元嬰碎精的權威庫存；不在瀏覽器直接發獎。
       local.materialSystem = local.materialSystem && typeof local.materialSystem === 'object'
         ? local.materialSystem : {inventory:{}};
       local.materialSystem.inventory = { ...(local.materialSystem.inventory || {}) };
       Object.entries(payload.inventory || {}).forEach(([materialId, amount]) => {
+        if (!['raid-refine-key-ii', 'raid-refine-key-iii', 'nascent-soul-essence'].includes(materialId)) return;
         const count = Math.max(0, Math.floor(Number(amount) || 0));
         if (count > 0) local.materialSystem.inventory[materialId] = count;
         else delete local.materialSystem.inventory[materialId];
@@ -1711,7 +1711,7 @@ import { createInnateAbilityEffect, shakeBattleScreen } from './innate-ability-e
         (Number(member.spiritCorrect) > 0 ? '・元嬰碎精 +' + Math.floor(member.spiritCorrect) + '（勝敗皆保留）' : '') + '</small></div>').join('') + '</div>' +
       '<div id="raid-learning-status" class="raid-learning-summary">' + renderRaidLearning(myRoomMember(), state.learningOutcome) + '</div>' +
       globalThis.QACombatContribution.markup(myRoomMember()?.combatContribution) +
-      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '必得元嬰碎精 ×' + tier.fragments + '・通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認元嬰碎精、木鐵素材、煉製印記與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲團本素材與煉製印記。') + '</small></span></div>' +
+      '<div class="raid-prototype-note raid-loot-summary"><i class="fa-solid fa-gem"></i><span id="raid-reward-status"><b>' + (won ? '必得元嬰碎精 ×' + tier.fragments + '・通關戰利品' : '再接再厲') + '</b><small>' + (won ? '正在確認元嬰碎精、升階石與首勝獎勵…' : '答題收益保留；擊敗大師姐另獲元嬰碎精與升階石。') + '</small></span></div>' +
       '<div class="raid-result-actions"><button class="raid-ghost" type="button" data-home>返回宗門</button><button class="raid-ghost" type="button" data-refinery>前往煉器</button><button class="raid-primary" type="button" data-again>重新組隊</button></div></div>';
     result.querySelector('[data-home]')?.addEventListener('click', returnFromRaidResult);
     result.querySelector('[data-again]')?.addEventListener('click', async function () {

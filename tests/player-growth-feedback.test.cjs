@@ -32,11 +32,10 @@ test('material goals aggregate duplicate rows and reserve equipped artifacts', (
   assert.equal(admin[1].missing,1,'admin cannot mint artifact ingredients');
 });
 
-test('resource shortcuts choose a difficulty that can actually drop the requested material', () => {
-  assert.equal(Rules.materialSource('qi-spirit-wood',Difficulty.TIERS,68).difficulty,'normal');
-  assert.equal(Rules.materialSource('golden-purple-iron',Difficulty.TIERS,68).difficulty,'hard');
-  const locked = Rules.materialSource('nascent-star-iron',Difficulty.TIERS,28);
-  assert.equal(locked.difficulty,'extreme'); assert.equal(locked.locked,true); assert.equal(locked.minRealm,'元嬰期');
+test('retired wood and iron cannot be advertised as raid drops',()=>{
+  for(const material of ['qi-spirit-wood','golden-purple-iron','nascent-star-iron']) {
+    assert.equal(Rules.materialSource(material,Difficulty.TIERS,68),null);
+  }
 });
 
 test('stat comparisons include decreases and activation without inventing a zero baseline', () => {

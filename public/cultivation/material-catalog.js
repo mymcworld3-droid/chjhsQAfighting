@@ -1,5 +1,5 @@
-// 煉器素材與法寶配方的資料來源。
-// 素材目錄固定在程式碼中，不再由 Firebase 同步；團本產出鐵材、木材與升級石，靈田也可兌換三種基礎木材。
+// 現役鍛造只使用同款法器、煉器碎片與二／三階升階石。
+// 舊木鐵素材不再發放或參與配方；僅由舊物品分解 API 供玩家換回碎片。
 
 import { ARTIFACT_CATALOG, ARTIFACT_REALMS, getArtifactById } from './artifact-catalog.js';
 import './item-icons.js';
@@ -9,7 +9,7 @@ export const MATERIAL_WEAPON_FORMS = Object.freeze(['','劍','刀','槍','弓','
 export const MIN_ARTIFACT_RECIPE_MATERIALS = 2;
 export const MAX_ARTIFACT_RECIPE_MATERIALS = 8;
 export const MAX_ARTIFACT_RECIPE_NESTING = 2;
-export const MATERIAL_CATALOG_SCHEMA_VERSION = 5;
+export const MATERIAL_CATALOG_SCHEMA_VERSION = 6;
 export const ARTIFACT_RECIPE_SCHEMA_VERSION = 3;
 
 const MATERIAL_REALM_COLORS = Object.freeze({
@@ -47,61 +47,20 @@ export const MATERIAL_REALMS = Object.freeze(ARTIFACT_REALMS.map((realm) => Obje
   dongtianRate: MATERIAL_REALM_DROP_BASE[realm.name]?.dongtianRate || 0.08
 })));
 
-// 現行材料系統只保留本團本的六種木／鐵煉器素材，以及二煉、三煉升級石。
-// 木材也可由靈田收成兌換；升級石仍只由團本取得。
+// 保留的物品型道具僅有二階與三階升階石，舊素材不再出現在目錄。
 const DEFAULT_MATERIAL_CATALOG = [
-  { id: 'qi-spirit-iron', name: '玄鐵', icon: '鐵', category: '鐵材', realm: '煉氣',
-    description: '煉氣境常用鐵材，質地沉穩，適合基礎兵器與法器器胚。只能由對應團本產生。', buyGold: 0 },
-  { id: 'foundation-refined-iron', name: '精煉玄鐵', icon: '鍛鐵', category: '鐵材', realm: '築基',
-    description: '反覆淬鍊後的築基境鐵材，靈力承載能力比玄鐵更高。只能由對應團本產生。', buyGold: 0 },
-  { id: 'golden-purple-iron', name: '紫金玄鐵', icon: '紫鐵', category: '鐵材', realm: '金丹',
-    description: '帶有紫金靈輝的金丹境高階鐵材，可承受更強的法力灌注。只能由對應團本產生。', buyGold: 0 },
-  { id: 'qi-spirit-wood', name: '靈木', icon: '木', category: '木材', realm: '煉氣',
-    description: '帶有淡薄靈氣的煉氣境木材，可用於符器、弓杖與本命法器。可由對應團本取得。', buyGold: 0 },
-  { id: 'foundation-century-wood', name: '百年靈木', icon: '古木', category: '木材', realm: '築基',
-    description: '生長百年的築基境靈木，木質穩定而能長時間蓄靈。可由對應團本取得。', buyGold: 0 },
-  { id: 'golden-lightning-wood', name: '雷擊木', icon: '雷木', category: '木材', realm: '金丹',
-    description: '經天雷洗鍊仍存生機的金丹境木材，兼具堅韌與導靈性。可由對應團本取得。', buyGold: 0 },
-  { id: 'nascent-star-iron', name: '玄冥星鐵', icon: '星鐵', category: '鐵材', realm: '元嬰',
-    description: '元嬰境星辰淬鍊的稀有鐵材，僅從極境清霜試煉取得。', buyGold: 0 },
-  { id: 'nascent-soul-wood', name: '千載魂木', icon: '魂木', category: '木材', realm: '元嬰',
-    description: '經千年溫養的元嬰境靈木，僅從極境清霜試煉取得。', buyGold: 0 },
   { id: 'raid-refine-key-ii', name: '二階升級石', icon: '二階', category: '升級石', realm: '築基',
-    description: '第二煉的必要升級石。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 },
+    description: '第二次煉製所需的升階石，由秘境、試煉塔及任務取得。', buyGold: 0 },
   { id: 'raid-refine-key-iii', name: '三階升級石', icon: '三階', category: '升級石', realm: '金丹',
-    description: '第三煉的必要升級石。只由團本結算取得，不佔八方煉器陣素材格。', buyGold: 0 }
-]
+    description: '第三次煉製所需的升階石，由秘境、試煉塔及任務取得。', buyGold: 0 }
+];
 
 const DEFAULT_MATERIAL_REALM_BY_ID = Object.freeze(Object.fromEntries(
   DEFAULT_MATERIAL_CATALOG.map((item) => [item.id, item.realm])
 ));
 
-const DEFAULT_ARTIFACT_RECIPES = {
-  'seven-treasure-ruler': [
-    { materialId: 'qi-spirit-wood', quantity: 2 },
-    { materialId: 'qi-spirit-iron', quantity: 1 }
-  ],
-  'war-drum': [
-    { materialId: 'foundation-century-wood', quantity: 2 },
-    { materialId: 'qi-spirit-iron', quantity: 1 }
-  ],
-  'enlightenment-lamp': [
-    { materialId: 'qi-spirit-wood', quantity: 1 },
-    { materialId: 'foundation-century-wood', quantity: 1 }
-  ],
-  'mountain-armor': [
-    { materialId: 'golden-purple-iron', quantity: 2 },
-    { materialId: 'foundation-refined-iron', quantity: 2 }
-  ],
-  'void-sword': [
-    { materialId: 'golden-purple-iron', quantity: 3 },
-    { materialId: 'golden-lightning-wood', quantity: 1 }
-  ],
-  'longevity-jade': [
-    { materialId: 'golden-lightning-wood', quantity: 2 },
-    { materialId: 'foundation-century-wood', quantity: 1 }
-  ]
-}
+// 僅供相容舊存檔的配方由伺服器個別追溯煉製次數；新煉製不再有配方。
+const DEFAULT_ARTIFACT_RECIPES = {};
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -136,16 +95,7 @@ export function materialMarketMinimumTotal(materialOrRealm, quantity = 1) {
   return materialMarketReferencePrice(materialOrRealm) * count + 1;
 }
 
-export const RAID_CRAFT_MATERIAL_IDS = Object.freeze([
-  'qi-spirit-iron',
-  'foundation-refined-iron',
-  'golden-purple-iron',
-  'qi-spirit-wood',
-  'foundation-century-wood',
-  'golden-lightning-wood',
-  'nascent-star-iron',
-  'nascent-soul-wood'
-]);
+export const RAID_CRAFT_MATERIAL_IDS = Object.freeze([]);
 export const RAID_REFINEMENT_KEYS = Object.freeze({
   2: 'raid-refine-key-ii',
   3: 'raid-refine-key-iii'
@@ -220,10 +170,10 @@ export function validateMaterialCatalog(items) {
   if (!Array.isArray(items) || !items.length) throw new Error('材料清單不可為空');
   const seen = new Set();
   const allowed = new Set(Object.keys(DEFAULT_MATERIAL_REALM_BY_ID));
-  if (items.length !== allowed.size) throw new Error('現行材料系統固定為 10 種團本道具，不可新增或刪除');
+  if (items.length !== allowed.size) throw new Error('現行鍛造資源僅保留兩種升階石');
   const normalized = items.map((raw) => {
     const item = normalizeMaterialDefinition(raw);
-    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已退出現行煉器系統；目前僅允許本團本八種木鐵素材與兩種升級石`);
+    if (!allowed.has(item.id)) throw new Error(`材料 ${item.id || '空白'} 已停用；鍛造只保留二階、三階升階石`);
     if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(item.id)) throw new Error(`材料 ID 不合法：${item.id || '空白'}`);
     if (seen.has(item.id)) throw new Error(`材料 ID 重複：${item.id}`);
     seen.add(item.id);
@@ -231,7 +181,7 @@ export function validateMaterialCatalog(items) {
     if (!MATERIAL_REALMS.some((realm) => realm.name === item.realm)) throw new Error(`材料 ${item.name} 使用未知境界：${item.realm}`);
     return item;
   });
-  if ([...allowed].some((id) => !seen.has(id))) throw new Error('八種團本道具必須完整保留');
+  if ([...allowed].some((id) => !seen.has(id))) throw new Error('二、三階升階石必須完整保留');
   return normalized;
 }
 
@@ -241,7 +191,7 @@ export function getDefaultMaterialCatalog() {
   return clone(DEFAULT_MATERIAL_CATALOG.map(normalizeMaterialDefinition));
 }
 
-// Schema v5：固定六種煉氣～金丹木／鐵素材＋二煉／三煉升級石。
+// Schema v6：只顯示二、三階升階石，舊素材透過獨立分解相容層保留。
 export function mergeMaterialCatalogWithDefaults(items = []) {
   const merged = new Map(getDefaultMaterialCatalog().map((item) => [item.id, item]));
   (Array.isArray(items) ? items : []).forEach((raw) => {
@@ -430,23 +380,9 @@ export function getDefaultArtifactRecipes() {
   return clone(validateArtifactRecipes(DEFAULT_ARTIFACT_RECIPES));
 }
 
-// Recipe schema migration only: restore built-in recipes that may have been lost
-// by an older catalog race, while preserving remote/admin/AI recipes verbatim.
-// Invalid remote entries are intentionally left for repairArtifactRecipes().
-export function mergeArtifactRecipesWithDefaults(rawRecipes = {}) {
-  const source = rawRecipes && typeof rawRecipes === 'object' && !Array.isArray(rawRecipes)
-    ? rawRecipes : {};
-  const merged = clone(DEFAULT_ARTIFACT_RECIPES);
-  const allowedMaterials = new Set(RAID_CRAFT_MATERIAL_IDS);
-  Object.entries(source).forEach(([artifactId, recipe]) => {
-    const id = String(artifactId || '').trim();
-    if (!id) return;
-    const normalized = normalizeArtifactRecipe(recipe);
-    const usesRetiredMaterial = normalized.some((row) => row.materialId && !allowedMaterials.has(String(row.materialId)));
-    if (usesRetiredMaterial) return;
-    merged[id] = normalized;
-  });
-  return merged;
+// 新版沒有配方；舊配方只在伺服器檢視既有法器升階紀錄時讀取。
+export function mergeArtifactRecipesWithDefaults() {
+  return {};
 }
 
 export function replaceArtifactRecipes(recipes, source = 'runtime') {

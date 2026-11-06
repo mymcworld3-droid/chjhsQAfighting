@@ -60,7 +60,7 @@ test('training modules hydrate and preserve the static page instead of requiring
 
 test('admin artifact and material containers are static and hydrated in place', () => {
   assert.match(index, /id="admin-artifact-manager"[^>]*data-static-layout="1"/);
-  assert.match(index, /id="admin-material-manager"[^>]*data-static-layout="1"/);
+  assert.doesNotMatch(index, /id="admin-material-manager"/);
   assert.match(artifactAdmin, /let panel = document\.getElementById\(PANEL_ID\)/);
   assert.match(artifactAdmin, /artifactManagerHydrated/);
   assert.match(materialAdmin, /let panel = document\.getElementById\(PANEL_ID\)/);

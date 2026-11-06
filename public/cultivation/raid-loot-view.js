@@ -6,7 +6,8 @@ function escape(value) {
     .replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
 }
 export function renderRaidLoot(payload) {
-  const items = Object.entries(payload?.rewards || {}).filter(([,qty]) => Number(qty) > 0);
+  const allowed = new Set(['nascent-soul-essence','raid-refine-key-ii','raid-refine-key-iii']);
+  const items = Object.entries(payload?.rewards || {}).filter(([id,qty]) => allowed.has(id) && Number(qty) > 0);
   const tier = raidDifficulty.get(payload?.difficulty) || raidDifficulty.TIERS.normal;
   return '<b>' + tier.name + '清霜試煉・' + (payload.awarded ? '戰利品已入帳' : '本場戰利品已領取') + '</b>' +
     '<div class="raid-loot-grid">' + items.map(([id,qty]) => {
@@ -22,7 +23,7 @@ export function renderRaidLoot(payload) {
         : '<span aria-hidden="true">' + escape(item?.icon || '材') + '</span>';
       return '<div class="raid-loot-item"><div class="raid-loot-icon">' + icon + '</div><div><strong>' +
         escape(item?.name || id) + ' ×' + Math.floor(Number(qty)) + '</strong><small>' +
-        (id === 'nascent-soul-essence' ? '通關必得・元嬰養成' : key ? key : '團本素材') + '</small></div></div>';
+        (id === 'nascent-soul-essence' ? '通關必得・元嬰養成' : key ? key : '升階石') + '</small></div></div>';
     }).join('') + '</div>' +
     (payload.dailyFirstVictory ? '<small class="raid-loot-bonus">每日首勝：二階升級石、三階升級石各額外 ×1</small>' : '') +
     (payload.firstVictory ? '<div class="raid-memento"><b>首次通關・' + escape(payload.memento?.name || '清霜劍印') +

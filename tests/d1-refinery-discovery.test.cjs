@@ -42,7 +42,7 @@ async function fixture({empty=false,realm='煉氣',stage=2,recipe=[{artifactId:p
   return {db,user,job,catalog,materials,artifact,input:{writes}};
 }
 
-test('ordinary player registers one generated artifact and recipe and awards it atomically',async()=>{
+test.skip('ordinary player registers one generated artifact and recipe and awards it atomically (deprecated AI refinement disabled)',async()=>{
   const f=await fixture();
   await executeCommit(f.db,f.input,context);
   const user=(await f.db.doc('users/alice').get()).data(),catalog=(await f.db.doc(artifactPath).get()).data(),materials=(await f.db.doc(materialPath).get()).data();
@@ -54,7 +54,7 @@ test('ordinary player registers one generated artifact and recipe and awards it 
   assert.equal((await f.db.doc('users/alice').get()).data().artifactSystem.inventory[f.artifact.id],1);
 });
 
-test('first discovery can create absent config documents without publishing fallback catalog entries',async()=>{
+test.skip('first discovery can create absent config documents without publishing fallback catalog entries (deprecated AI refinement disabled)',async()=>{
   const f=await fixture({empty:true});await executeCommit(f.db,f.input,context);
   assert.deepEqual((await f.db.doc(artifactPath).get()).data().items,[f.artifact]);
 });
@@ -86,7 +86,7 @@ for(const [name,mutate] of Object.entries(mutations))test('rejects '+name+' and 
   assert.deepEqual(await Promise.all(paths.map(async path=>(await f.db.doc(path).get()).data())),before);
 });
 
-test('stale concurrent discovery conflicts; retry awards existing recipe without changing ownership',async()=>{
+test.skip('stale concurrent discovery conflicts; retry awards existing recipe without changing ownership (deprecated AI refinement disabled)',async()=>{
   const f=await fixture();await f.db.doc('users/bob').set({...f.user,uid:'bob'});
   const snap=await f.db.doc(artifactPath).get();
   await executeCommit(f.db,f.input,context);
@@ -97,7 +97,7 @@ test('stale concurrent discovery conflicts; retry awards existing recipe without
   assert.equal((await f.db.doc('users/bob').get()).data().artifactSystem.inventory[f.artifact.id],1);
 });
 
-test('server configured bounds and all generated effect forms remain accepted',async()=>{
+test.skip('server configured bounds and all generated effect forms remain accepted (deprecated AI refinement disabled)',async()=>{
   for(const stage of [1,2,3])for(const type of generation.ALLOWED_EFFECTS){
     if(!type.startsWith('equip_') || !generation.effectRange(type,4,stage))continue;
     const f=await fixture({realm:'元嬰',stage,effects:[{type,value:1000,multiplier:2}]});
@@ -108,7 +108,7 @@ test('server configured bounds and all generated effect forms remain accepted',a
   await executeCommit(f.db,f.input,context);
 });
 
-test('soulbound refinement retains and improves the authoritative source effects',async()=>{
+test.skip('soulbound refinement retains and improves the authoritative source effects (deprecated AI refinement disabled)',async()=>{
   const original=pool.ITEMS.find(item=>item.realm==='元嬰')||pool.ITEMS[0];
   const f=await fixture({realm:original.realm,stage:2,recipe:[{artifactId:original.id,quantity:1},{materialId:'qi-spirit-iron',quantity:1}],primaryArtifacts:[original]});
   await executeCommit(f.db,f.input,context);
@@ -122,7 +122,7 @@ test('ordinary material-only discovery cannot publish or award any new artifact'
   assert.deepEqual(await Promise.all(['users/alice',artifactPath,materialPath].map(async path=>(await f.db.doc(path).get()).data())),before);
 });
 
-test('stale administrator bounds cannot change valid system-governed discovery commits',async()=>{
+test.skip('stale administrator bounds cannot change valid system-governed discovery commits (deprecated AI refinement disabled)',async()=>{
   const f=await fixture({bounds:{'2':{equip_attack_flat:{min:9999999,max:9999999}}}});
   await executeCommit(f.db,f.input,context);
   const saved=(await f.db.doc(artifactPath).get()).data().items[0];
@@ -134,4 +134,11 @@ for(const field of ['soulboundRefinementVersion','soulboundBalanceVersion'])test
   const f=await fixture();f.input.writes[0].data.items[0][field]=0;
   await assert.rejects(executeCommit(f.db,f.input,context),error=>error.status===403);
   assert.equal((await f.db.doc('users/alice').get()).data().artifactSystem.inventory[f.artifact.id],undefined);
+});
+
+test('retired AI discovery cannot write artifact or recipe catalogs',()=>{
+  const {authorizeWrite}=require('../d1-browser-api.cjs');
+  for(const id of ['artifactCatalogV1','materialCatalogV1']) {
+    assert.throws(()=>authorizeWrite({role:'A',path:'gameConfig/'+id,before:{},after:{},operation:{type:'update'},context:{uid:'u1',admin:false,decoded:{}}}),/舊版配方與 AI 法寶登錄已停用/);
+  }
 });

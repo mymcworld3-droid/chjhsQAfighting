@@ -44,8 +44,8 @@ test('material and artifact realm colors are visible in the backpack', () => {
 test('legacy wood and iron are hidden from backpack while refinement stones remain', () => {
   assert.match(bag, /if \(RAID_CRAFT_IDS\.has\(id\)\) return/);
   assert.match(bag, /RAID_KEY_IDS = new Set/);
-  assert.match(bag, /第二次煉製的必要升級石/);
-  assert.match(bag, /第三次煉製的必要升級石/);
+  assert.match(bag, /第二次煉製的必要升階石/);
+  assert.match(bag, /第三次煉製的必要升階石/);
 });
 
 test('obsolete renderer and CSS bridge are removed', () => {
@@ -71,7 +71,7 @@ test('new backpack modules load after material and artifact systems and admin so
   const adminManager = main.indexOf("'./cultivation/admin-material-manager.js'");
   const adminSortIndex = main.indexOf("'./cultivation/admin-realm-sorting.js'");
   assert.ok(artifact >= 0 && material > artifact && bagIndex > material);
-  assert.ok(adminManager >= 0 && adminSortIndex > adminManager);
+  assert.ok(adminManager === -1 && adminSortIndex > bagIndex);
 });
 
 
@@ -173,7 +173,7 @@ test('old plain-text training backpack cards are removed from both stage shells'
 });
 
 test('all runtime feature modules share one build query without changing dependency-list paths', () => {
-  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20261022-ocean-balance1'/);
+  assert.match(main,/const XIUXIAN_FEATURE_BUILD = '20261106-forge-stones-only1'/);
   assert.match(main,/await import\(\`\$\{modulePath\}\?v=\$\{XIUXIAN_FEATURE_BUILD\}\`\)/);
   assert.match(main,/'\.\/cultivation\/foundation-training-page\.js'/);
   assert.match(main,/'\.\/cultivation\/cultivation-training-v4\.js'/);

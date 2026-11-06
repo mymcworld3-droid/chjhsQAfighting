@@ -250,8 +250,8 @@ test('ordinary forging favors attack artifacts and allows effective offensive fi
 
 test('fixed raid material metadata is delivered as official ingredient context', () => {
   const materialCatalog = read('public/cultivation/material-catalog.js');
-  assert.match(materialCatalog, /golden-lightning-wood/);
-  assert.match(materialCatalog, /golden-purple-iron/);
+  assert.doesNotMatch(materialCatalog, /id: 'golden-lightning-wood'/);
+  assert.doesNotMatch(materialCatalog, /id: 'golden-purple-iron'/);
   assert.match(aiJobs, /story: item\.story \|\| ''/);
   assert.match(aiJobs, /description: item\.description, story: item\.story \|\| ''/);
   const payload = {

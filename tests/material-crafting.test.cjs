@@ -1,60 +1,43 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const read = (rel) => fs.readFileSync(path.join(__dirname, '..', rel), 'utf8');
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path');
+const read=rel=>fs.readFileSync(path.join(__dirname,'..',rel),'utf8');
+const catalog=read('public/cultivation/material-catalog.js'),sync=read('public/cultivation/material-catalog-sync.js'),system=read('public/cultivation/material-system.js');
+const main=read('public/main.js'),page=read('public/index.html'),ui=read('public/cultivation/simple-forge.js'),server=read('simple-forge-api.cjs');
 
-const catalog = read('public/cultivation/material-catalog.js');
-const sync = read('public/cultivation/material-catalog-sync.js');
-const system = read('public/cultivation/material-system.js');
-const admin = read('public/cultivation/admin-material-manager.js');
-const artifactAdmin = read('public/cultivation/admin-artifact-manager.js');
-const refinery = read('public/cultivation/cultivation-refinery-v2.js');
-const main = read('public/main.js');
-
-test('fixed material catalog contains eight tradable forge materials and two refinement seals', () => {
-  assert.match(catalog,/RAID_CRAFT_MATERIAL_IDS/);
-  for (const id of ['qi-spirit-iron','foundation-refined-iron','golden-purple-iron','qi-spirit-wood','foundation-century-wood','golden-lightning-wood','nascent-star-iron','nascent-soul-wood']) {
-    assert.match(catalog,new RegExp(id));
-  }
-  assert.match(catalog,/2: 'raid-refine-key-ii'/);
-  assert.match(catalog,/3: 'raid-refine-key-iii'/);
-  assert.match(catalog,/items\.length !== allowed\.size/);
+test('forge consumes two identical weapons, forge fragments, and matching stone',()=>{
+ assert.match(server,/count\(artifact\.inventory\[id\]\)<2/);
+ assert.match(server,/fragments\.balance\(user\)<req\.fragments/);
+ assert.match(server,/count\(material\.inventory\[req\.stone\]\)<req\.quantity/);
+ assert.match(server,/forgeFragments:fragments\.balance\(user\)-req\.fragments/);
+ assert.match(server,/generatedByAI:false/);
+ assert.match(ui,/\/api\/simple-forge/);
+ assert.match(ui,/data-sf-upgrade/);
+ assert.doesNotMatch(ui,/\/api\/generate-artifact/);
 });
-
-test('material catalog startup is local-only and does not connect to Firebase config', () => {
-  assert.match(sync,/local-fixed-catalog/);
-  assert.match(sync,/xiuxian:material-catalog-startup-ready/);
-  assert.doesNotMatch(sync,/from 'https:\/\/www\.gstatic\.com\/firebasejs|getFirestore|onSnapshot|setDoc|materialCatalogV1/);
+test('active registry and UI no longer expose craft materials or recipe manager',()=>{
+ assert.match(catalog,/RAID_CRAFT_MATERIAL_IDS = Object\.freeze\(\[\]\)/);
+ assert.match(catalog,/const DEFAULT_ARTIFACT_RECIPES = \{\}/);
+ assert.match(catalog,/2: 'raid-refine-key-ii'/);
+ assert.match(catalog,/3: 'raid-refine-key-iii'/);
+ assert.doesNotMatch(main,/'.\/cultivation\/admin-material-manager\.js'/);
+ assert.doesNotMatch(page,/id="admin-material-manager"/);
+ assert.match(main,/'\.\/cultivation\/simple-forge\.js'/);
 });
-
-test('material system is read-only on the client and has no purchase or Firebase path', () => {
-  assert.match(system,/getXiuxianMaterialInventory/);
-  assert.match(system,/getXiuxianMaterialQuantity/);
-  assert.match(system,/source:'local-readonly'/);
-  assert.doesNotMatch(system,/getFirestore|runTransaction|data-material-buy|buyMaterial|material-store/);
+test('local material catalog cannot mint items or purchase via client',()=>{
+ assert.match(sync,/local-fixed-catalog/);
+ assert.doesNotMatch(sync,/getFirestore|onSnapshot|setDoc|materialCatalogV1/);
+ assert.match(system,/source:'local-readonly'/);
+ assert.doesNotMatch(system,/getFirestore|runTransaction|data-material-buy|buyMaterial/);
 });
-
-test('eight wood/iron materials enter the furnace while refinement seals stay external', () => {
-  assert.match(refinery,/new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
-  assert.match(refinery,/filter\(\(m\) => !raidKeyIds\.has\(m\.id\)/);
-  assert.match(read('public/cultivation/material-catalog.js'),/二階升級石/);
-  assert.match(read('public/cultivation/material-catalog.js'),/三階升級石/);
+test('legacy AI discovery and generator endpoints are disabled',()=>{
+ const d1=read('d1-browser-api.cjs'),http=read('server.js');
+ assert.doesNotMatch(d1,/mayCommitDiscovery/);
+ assert.match(d1,/舊版配方與 AI 法寶登錄已停用/);
+ assert.match(http,/app\.post\('\/api\/generate-artifact'/);
+ assert.match(http,/res\.status\(410\)/);
 });
-
-test('admin material catalog is fixed to ten entries while artifact recipe editor remains available', () => {
-  assert.match(admin,/固定十項/);
-  assert.match(admin,/固定規則/);
-  assert.doesNotMatch(main,/admin-material-realm-editor\.js/);
-  assert.match(artifactAdmin,/煉器配方/);
-  assert.match(artifactAdmin,/data-recipe-material/);
-  assert.match(artifactAdmin,/MIN_ARTIFACT_RECIPE_MATERIALS/);
-});
-
-test('material and inventory modules load before simple refinery', () => {
-  const materialSync = main.indexOf("'./cultivation/material-catalog-sync.js'");
-  const materialSystem = main.indexOf("'./cultivation/material-system.js'");
-  const inventory = main.indexOf("'./cultivation/unified-inventory-grid.js'");
-  const refineryPos = main.indexOf("'./cultivation/simple-forge.js'");
-  assert.ok(materialSync >= 0 && materialSystem > materialSync && inventory > materialSystem && refineryPos > inventory);
+test('material registry and inventory load before the simple forge UI',()=>{
+ const materialSync=main.indexOf("'./cultivation/material-catalog-sync.js'"),materialSystem=main.indexOf("'./cultivation/material-system.js'"),inventory=main.indexOf("'./cultivation/unified-inventory-grid.js'"),forge=main.indexOf("'./cultivation/simple-forge.js'");
+ assert.ok(materialSync>=0&&materialSystem>materialSync&&inventory>materialSystem&&forge>inventory);
 });
