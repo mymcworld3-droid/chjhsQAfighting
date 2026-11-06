@@ -82,6 +82,7 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
       '<h4 class="apa-section">最近 7 天有效答題量</h4><div class="apa-chart" id="apa-chart"></div>',
       '<h4 class="apa-section">最近玩家事件（最多 25 筆）</h4><div class="apa-events" id="apa-events"></div>',
       '<div class="apa-defs">',
+      '<p class="apa-note">題目錯誤率：啟用後已發出的 AI 題目中，經玩家回報且兩次 AI 審查確認有誤的不同題數／已發出的不同 AI 題數。同題多次回報只計一次，題庫、教師草稿與歷史資料不計；未回報的錯題無法辨識。此項為啟用後累計，不受 7／30 日切換影響。</p>',
       '<p class="apa-note">首題開始率：所選期間已結束的 7／30 個台灣日曆日中，首次到訪並在當日成功顯示問道題目的瀏覽器比例；清除 Cookie 或換裝置會成為新訪客。</p>',
       '<p class="apa-note">首三題完成率：同期新建玩家帳號中，已滿首題開始後 24 小時觀察期，且在首題後 24 小時內完成 3 題的比例；略過題目不計。</p>',
       '<p class="apa-note">D1／D7：依 Firebase 帳號建立日期固定分群，第 1／7 個台灣日曆日有回訪即算留存。只使用已結束的完整觀察日（不含今天），分母另行顯示。</p>',
@@ -111,6 +112,9 @@ import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
     if (!panel) return;
     const grid = panel.querySelector('#apa-grid');
     grid.replaceChildren();
+    const quality = data.questionQuality || { generated: 0, confirmed: 0, rate: null };
+    card(grid, '題目錯誤率（累計）', ratio(quality.rate),
+      '審查確認 ' + value(quality.confirmed) + ' 題／生成 ' + value(quality.generated) + ' 題');
     card(grid, '首題開始率', ratio(data.visitors.rate),
       value(data.visitors.started) + '／' + value(data.visitors.total) + ' 位新訪客');
     card(grid, '首三題完成率', ratio(data.firstThree.rate),

@@ -280,3 +280,20 @@ test('report authentication separates missing Admin credentials, bad login, and 
   assert.equal(outage.body.phase, 'authentication');
   assert.equal(fake.claims.size, 0);
 });
+
+
+test('quality tracking runs only after confirmed reviews and does not change compensation', async () => {
+  const { db } = fakeDatabase();
+  const resolve = () => ({ db, auth: { verifyIdToken: async () => ({uid:'tester', aud:'question-learning', iss:'https://securetoken.google.com/question-learning'}) } });
+  const request = { body:input, get:() => 'Bearer valid.token' };
+  const logger = { warn() {}, error() {} };
+  let tracked = 0;
+  const recordConfirmed = async () => { tracked++; throw new Error('statistics unavailable'); };
+  const rejected = response();
+  await api.createHandler({resolve, logger, recordConfirmed, review:async () => ({status:'rejected'})})(request, rejected);
+  assert.equal(tracked, 0);
+  const confirmed = response();
+  await api.createHandler({resolve, logger, recordConfirmed, review:async () => ({status:'confirmed'}), award:async () => ({status:'limit', compensated:false})})(request, confirmed);
+  assert.equal(tracked, 1);
+  assert.equal(confirmed.body.status, 'limit');
+});
