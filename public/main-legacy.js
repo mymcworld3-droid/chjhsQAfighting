@@ -2912,7 +2912,7 @@ async function fetchOneQuestion() {
         finalDifficulty = getSmartDifficulty(targetSubject);
         
         try {
-            const response = await authenticatedMainFetch("/api/generate-quiz", {
+            const response = await (typeof authenticatedMainFetch === "function" ? authenticatedMainFetch : fetch)("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
