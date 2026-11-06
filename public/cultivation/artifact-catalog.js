@@ -259,6 +259,8 @@ export function normalizeArtifactDefinition(raw = {}) {
   item.reviewStatus = raw.reviewStatus === 'pending' ? 'pending' : 'approved';
   item.generatedByAI = raw.generatedByAI === true;
   if(raw.customArtifact===true)item.customArtifact=true;
+  if ([2,3].includes(raw.simpleRefinementStage)) item.simpleRefinementStage = raw.simpleRefinementStage;
+  if (raw.simpleRefinementSource) item.simpleRefinementSource = String(raw.simpleRefinementSource).slice(0,64);
   if(raw.customUpdatedAtMs)item.customUpdatedAtMs=Math.max(0,Math.floor(finite(raw.customUpdatedAtMs,0)));
   if(statLimitWarnings.length)item.statLimitWarnings=statLimitWarnings;
   if (raw.generatedAtMs) item.generatedAtMs = Math.max(0, Math.floor(finite(raw.generatedAtMs, 0)));

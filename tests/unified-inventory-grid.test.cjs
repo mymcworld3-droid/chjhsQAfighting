@@ -41,16 +41,11 @@ test('material and artifact realm colors are visible in the backpack', () => {
   assert.match(bag, /item\.realm/);
 });
 
-test('raid wood/iron materials and bound refinement seals have distinct backpack identity', () => {
-  assert.match(bag, /RAID_CRAFT_MATERIAL_IDS/);
-  assert.match(bag, /RAID_KEY_IDS = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
-  assert.match(bag, /RAID_CRAFT_IDS = new Set\(RAID_CRAFT_MATERIAL_IDS\)/);
-  assert.match(bag, /升級石/);
-  assert.match(bag, /團本煉器素材/);
+test('legacy wood and iron are hidden from backpack while refinement stones remain', () => {
+  assert.match(bag, /if \(RAID_CRAFT_IDS\.has\(id\)\) return/);
+  assert.match(bag, /RAID_KEY_IDS = new Set/);
   assert.match(bag, /第二次煉製的必要升級石/);
   assert.match(bag, /第三次煉製的必要升級石/);
-  assert.match(bag, /可直接放入八方煉器陣/);
-  assert.match(bag, /木／鐵素材可在玩家市集轉手/);
 });
 
 test('obsolete renderer and CSS bridge are removed', () => {

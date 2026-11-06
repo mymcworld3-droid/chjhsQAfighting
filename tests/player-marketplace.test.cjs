@@ -39,49 +39,25 @@ test('trade offers validate quantities, price, inventory, and restrict listed eq
   assert.match(market, /tx\.update\(listingRef, \{ status:'cancelled'/);
 });
 
-test('all six wood/iron raid materials can trade while refinement seals stay bound', () => {
-  assert.match(market,/RAID_CRAFT_MATERIAL_IDS/);
-  assert.match(market,/RAID_REFINEMENT_KEYS/);
-  assert.match(market,/const tradableMaterialIds = new Set\(RAID_CRAFT_MATERIAL_IDS\)/);
-  assert.match(market,/const boundSealIds = new Set\(Object\.values\(RAID_REFINEMENT_KEYS\)\)/);
-  assert.match(market,/tradableMaterialIds\.has\(String\(id \|\| ''\)\) \? getMaterialById\(id\) : null/);
-  assert.match(market,/tradableMaterialIds\.has\(item\.id\) && !boundSealIds\.has\(item\.id\)/);
-  assert.match(market,/八種木／鐵團本素材可自由交易/);
-  assert.match(market,/二階升級石、三階升級石綁定玩家不可交易/);
+test('legacy material listings can be cancelled but not newly traded', () => {
+  assert.match(market, /if \(type !== 'artifact'\)/);
+  assert.match(market, /if \(listing.type !== 'artifact'\)/);
+  assert.match(market, /舊材料與配方已停止交易/);
+  assert.match(market, /mine = ownRows.docs.map/);
+  assert.match(market, /data-pm-cancel/);
 });
 
-test('recipe marketplace sells crafting knowledge while preserving the first discoverer', () => {
-  assert.match(market, /const recipeSnap = type === 'recipe' \? await tx\.get/);
-  assert.match(market, /const recipeSnap = listing\.type === 'recipe' \? await tx\.get/);
-  assert.match(market, /official\.recipeOwnerUid !== seller\.uid/);
-  assert.match(market, /official\.recipeOwnerUid === listing\.sellerUid/);
-  assert.match(market, /recipeLicenses: \{ \.\.\.\(rawBuyer\.recipeLicenses \|\| \{\}\), \[listing\.itemId\]: true \}/);
-  assert.match(market, /永久配方知識/);
-  assert.match(market, /首發者身分不轉移/);
-  assert.match(refinery, /已學會製作方法/);
-  assert.match(refinery, /已學會 \$\{licensed\.length\}/);
-  assert.match(refinery, /xiuxian:recipe-license-updated/);
+test('retired recipe listings remain cancellable', () => {
+  assert.match(market, /if \(listing.type !== 'artifact'\)/);
+  assert.match(market, /舊材料與配方已停止交易/);
+  assert.match(market, /取消委託/);
 });
 
-test('even without a recipe, players can craft; owning the recipe only reveals exact ingredients', () => {
-  const start = jobs.slice(jobs.indexOf('async function startJob('),jobs.indexOf('function apiMaterials()'));
-  assert.match(start, /const plan = buildPlan\(tokens, knownArtifactId, adminOptions\?\.forgeMethod\)/);
-  assert.match(start, /const consumed = consumeRecipe\(raw, plan\.recipe\)/);
-  assert.match(start, /tx\.update\(ref,/);
-  assert.doesNotMatch(start, /raw\.recipeLicenses|尚未取得此配方使用權|尚未取得這張配方的使用權/);
-  assert.doesNotMatch(start, /const recipeSnap = await tx\.get/);
-  assert.match(jobs, /recipeOwnerUid: user\.uid/);
-  assert.doesNotMatch(refinery, /尚未取得這張配方的使用權，請前往交易市集/);
-  assert.match(refinery, /配方是製作指南，不是煉器許可證/);
-  assert.match(refinery, /沒有配方也能自由投入素材嘗試煉製/);
-  assert.match(refinery, /const learned = userData\(\)\?\.recipeLicenses\?\.\[item\.id\] === true/);
-  assert.match(refinery, /const canReadRecipe = recipeAvailableToPlayer\(item, myUid\)/);
-  assert.match(refinery, /const recipe = canReadRecipe \? getArtifactRecipe\(item\.id\) : \[\]/);
-  assert.match(refinery, /const ingredients = canReadRecipe/);
-  assert.match(refinery, /製作方法尚未習得/);
-  assert.match(refinery, /canReadRecipe && item\.description/);
-  assert.match(refinery, /return `<details class="refinery-recipe-card/);
-  assert.match(market, /交易只傳授製作方法/);
+test('simple refinery does not require recipe licenses', () => {
+  const api = read('simple-forge-api.cjs');
+  assert.doesNotMatch(api, /recipeLicenses/);
+  assert.match(api, /兩件完全相同的法器/);
+  assert.match(api, /forgeFragments/);
 });
 test('market technical faults go to admin debugger while players see neutral feedback', () => {
   assert.match(market, /console\.error\('\[Player market\] ' \+ label, error\)/);
@@ -227,27 +203,10 @@ test('material market reference is unified by realm and strictly increases', () 
   assert.equal(calc.minimum('煉氣',0),0);
 });
 
-test('material listing validates total price above unit reference both before and inside Firestore transaction', () => {
-  const catalog = read('public/cultivation/material-catalog.js');
-  const bag = read('public/cultivation/unified-inventory-grid.js');
-  const materialSystem = read('public/cultivation/material-system.js');
-  assert.match(market,/materialMarketReferencePrice, materialMarketMinimumTotal/);
-  assert.match(market,/function checkMaterialListingPrice\(type, item, count, price\)/);
-  assert.match(market,/if \(price < minimum\)/);
-  assert.match(market,/price = amount\(sellPrice, MAX_PRICE, '總價'\);\s*checkMaterialListingPrice\(type, item, count, price\)/);
-  assert.match(market,/checkMaterialListingPrice\(type, itemFor\(type, id\), count, price\)/);
-  assert.match(market,/function updatePriceHint\(\)/);
-  assert.match(market,/id="pm-material-price-hint"/);
-  assert.match(market,/publish\.disabled = busy \|\| !listable\(\)\.length \|\| !canList/);
-  assert.match(market,/event\.target\.id === 'pm-sell-qty' \|\| event\.target\.id === 'pm-sell-price'/);
-  assert.match(market,/境界統一參考單價/);
-  assert.match(catalog,/export function materialMarketReferencePrice\(/);
-  assert.doesNotMatch(materialSystem,/data-material-buy|buyMaterial|material-store/);
-  assert.match(market,/八種木／鐵團本素材可自由交易/);
-  const before = market.slice(market.indexOf('async function createListing()'),market.indexOf('async function buyListing('));
-  assert.ok(before.indexOf('checkMaterialListingPrice(type, itemFor(type, id), count, price)') <
-    before.indexOf("tx.update(sellerRef, { [systemField]: system })"));
-  assert.match(before,/if \(type === 'recipe'\)/);
+test('new material listings are disabled and previous escrow can be cancelled', () => {
+  assert.match(market, /if \(type !== 'artifact'\)/);
+  assert.match(market, /tx\.update\(listingRef, \{ status:'cancelled'/);
+  assert.match(market, /system\.inventory\[listing\.itemId\]/);
 });
 
 test('store switches market type before showing frame and avatar item categories', () => {
