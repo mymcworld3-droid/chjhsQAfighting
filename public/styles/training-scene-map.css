@@ -278,6 +278,8 @@ body.xianxia-theme #page-training .training-scene-detailbar {
 body.xianxia-theme #page-training.training-page-v3.active-page[data-training-place] {
   grid-template-rows: auto auto minmax(0, 1fr) !important;
 }
+/* 契器由場景與底部入口開啟，不列於修煉分頁導覽。 */
+#page-training .training-subtabs-v3 [data-training-tab="contract"] { display: none !important; }
 body.xianxia-theme #page-training[data-training-place] > .training-subtabs-v3 { grid-row: 1; }
 body.xianxia-theme #page-training[data-training-place] > .training-scene-detailbar { grid-row: 2; }
 body.xianxia-theme #page-training[data-training-place] > #training-tab-content { grid-row: 3; }
