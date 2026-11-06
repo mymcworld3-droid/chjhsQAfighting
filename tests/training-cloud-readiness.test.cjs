@@ -7,7 +7,8 @@ const flush = async () => { for (let i = 0; i < 12; i++) await Promise.resolve()
 
 function fixture() {
   let current = 'page-home', uid = 'u1', fitCalls = 0;
-  const clouds = [], loads = [], home = {}, training = {}, timers = [];
+  const clouds = [], loads = [], home = {}, training = {}, timers = [], entries = [];
+  let navigationClick;
   const window = {
     switchToPage(id) { current = id; return id; },
     playStartupCloudCurtain(onClosed, options) {
@@ -24,11 +25,14 @@ function fixture() {
     innerWidth: 390, innerHeight: 844, getMainUser: () => ({ uid }),
     visible: () => current === 'page-training', reducedMotion: () => false,
     document: { hidden: false, getElementById: () => null,
-      querySelector: () => current === 'page-training' ? training : home },
+      querySelector: () => current === 'page-training' ? training : home,
+      addEventListener(name, callback) { if (name === 'click') navigationClick = callback; } },
     markTrainingEntry() {}, markTrainingStable() {}, markTrainingExit() {},
     setTimeout(fn, ms) { timers.push(ms); return timers.length; }, clearTimeout() {},
     showMap() { context.navigationRevision++; }, fit() { fitCalls++; },
-    Rules: { PLACES: [] },
+    Rules: { PLACES: [{ id: 'contract', tab: 'contract' }] },
+    ensure() {}, unlocked: () => true,
+    openPlace(place, tab) { entries.push([place.id, tab || place.tab]); },
     preloadTrainingSceneAssets(orientation) {
       let resolve;
       const promise = new Promise(done => { resolve = done; });
@@ -39,9 +43,47 @@ function fixture() {
   vm.createContext(context);
   const start = source.indexOf('function wrapNavigation() {');
   vm.runInContext(source.slice(start, source.indexOf('\nfunction sync() {', start)) + '\nwrapNavigation();', context);
-  return { window, context, clouds, loads, timers,
+  const clickStart = source.indexOf("  document.addEventListener('click', event => {", source.indexOf('function boot() {'));
+  vm.runInContext(source.slice(clickStart, source.indexOf("  ['xiuxian:user-data-ready'", clickStart)), context);
+  return { window, context, clouds, loads, timers, entries,
+    openContract: () => context.openTrainingPlace('contract'),
+    openMap() {
+      navigationClick({ target: { closest: () => ({ id: 'nav-training', dataset: {} }) } });
+      return window.switchToPage('page-training');
+    },
     current: () => current, fits: () => fitCalls, account(value) { uid = value; } };
 }
+
+test('contract shortcut opens before the curtain reveals and a later map click replaces it', async () => {
+  for (const useMap of [false, true]) {
+    const h = fixture(), result = h.openContract();
+    assert.equal(h.current(), 'page-home');
+    assert.deepEqual(h.entries, [], 'no hidden contract page is activated during closing');
+    if (useMap) assert.equal(h.openMap(), result, 'rapid navigation shares the existing curtain');
+    h.loads[0].resolve(); await h.clouds[0].onClosed();
+    assert.equal(h.current(), 'page-training');
+    assert.deepEqual(h.entries, useMap ? [] : [['contract', 'contract']]);
+    h.clouds[0].finish(true); await result;
+    assert.equal(h.clouds.length, 1);
+  }
+  const h = fixture(); h.context.reducedMotion = () => true;
+  assert.equal(h.openContract(), true);
+  assert.deepEqual(h.entries, [['contract', 'contract']]);
+  assert.equal(h.clouds.length, 0);
+});
+
+test('contract shortcut respects realm locks, leaving the page and account changes', async () => {
+  const locked = fixture(); locked.context.unlocked = () => false;
+  assert.equal(locked.openContract(), false);
+  assert.equal(locked.current(), 'page-home');
+  assert.equal(locked.clouds.length, 0);
+  for (const cancel of [h => h.window.switchToPage('page-store'), h => h.account('u2')]) {
+    const h = fixture(), result = h.openContract();
+    cancel(h); assert.equal(h.clouds[0].options.isCurrent(), false);
+    h.loads[0].resolve(); h.clouds[0].finish(false); await result;
+    assert.deepEqual(h.entries, [], 'cancelled navigation must not open a hidden or different account contract page');
+  }
+});
 
 test('cloud navigation preloads during closing, shares rapid taps, and waits only for actual assets', async () => {
   const h = fixture();

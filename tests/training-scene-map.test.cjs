@@ -48,6 +48,38 @@ test('new accounts see Status; existing Foundation and Golden Core gates are at 
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);
 });
 
+test('contract navigation retains the permanent Golden Core gate and selects only its own tab', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
+  const player = { stats: { totalScore: 0 } }, page = { dataset: {} };
+  const make = () => ({ disabled: true, attributes: {}, selected: false,
+    setAttribute(name, value) { this.attributes[name] = value; },
+    classList: { toggle(_name, value) { this.owner.selected = value; } } });
+  const contract = make(), training = make();
+  contract.classList.owner = contract; training.classList.owner = training;
+  let visible = true;
+  const context = { page, Rules, visible: () => visible,
+    unlocked: place => !!player.stats && Rules.allows(player, place.threshold),
+    document: { getElementById: id => id === 'nav-contract' ? contract : training } };
+  vm.createContext(context);
+  const start = source.indexOf('function syncContractNavigation() {');
+  vm.runInContext(source.slice(start, source.indexOf('\nfunction updateLocks()', start)), context);
+  context.syncContractNavigation(); assert.equal(contract.disabled, true);
+  player.stats.totalScore = 27;
+  context.syncContractNavigation(); assert.equal(contract.disabled, true);
+  player.stats.totalScore = 28; player.trainingAccess = Rules.record(player);
+  context.syncContractNavigation(); assert.equal(contract.disabled, false);
+  assert.equal(contract.attributes['aria-disabled'], 'false');
+  assert.equal(training.selected, true); assert.equal(contract.selected, false);
+  page.dataset.trainingPlace = 'contract'; context.syncContractNavigation();
+  assert.equal(training.selected, false); assert.equal(contract.selected, true);
+  page.dataset.trainingPlace = 'forge'; context.syncContractNavigation();
+  assert.equal(training.selected, true); assert.equal(contract.selected, false);
+  player.stats.totalScore = 0; context.syncContractNavigation();
+  assert.equal(contract.disabled, false, 'earned access survives cultivation deductions');
+  visible = false; training.selected = false;
+  context.syncContractNavigation(); assert.equal(training.selected, false, 'other pages keep their navigation selection');
+});
+
 test('compact contract entrance sits beside the forge and opens its existing tab', () => {
   const contract = Rules.PLACES.find(place => place.id === 'contract');
   assert.equal(contract.name, '契器');
