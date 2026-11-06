@@ -289,8 +289,8 @@ test('adaptive solo handler assigns different fine methods to simultaneous APIs,
     const adaptiveLearning=Adaptive.createAdaptiveLearning({verify:async()=> 'u1',resolve:()=>({db}),generate:async(_prompt,options)=>{
       const data={concepts:Adaptive.seedConcepts(Adaptive.scopeFor(unit))};options.validate(data);return {data};
     }});
-    let handler,calls=0;const pending=[],assignments=[];
-    const context={questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS,createQuizTaskPlan,adaptiveLearning,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,crypto:require('node:crypto'),
+    let handler,calls=0;const pending=[],assignments=[],tracked=[];
+    const context={questionQualityAnalytics:{recordGenerated:async(_db,q,difficulty)=>tracked.push({q,difficulty})},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS,createQuizTaskPlan,adaptiveLearning,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,crypto:require('node:crypto'),
       FAST_QUIZ_MODES:new Set(),quickQuizPrompt:require('../fast-quiz-prompt.cjs').quickQuizPrompt,Knowledge:require('../public/cultivation/knowledge-points.js'),
       ANSWER_AND_EXPLANATION_RULES:'完整單選題',subjectReliabilityPrompt:()=>'',questionQualityIssue:()=>'',removeUnstableOptionLabels:text=>text,
       SUBJECT_SCHEMA:{物理:['圓周運動']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},quizSparePool:createSparePool({similar:(a,b)=>a===b})};
@@ -310,12 +310,13 @@ test('adaptive solo handler assigns different fine methods to simultaneous APIs,
     const first=invoke();await new Promise(resolve=>setImmediate(resolve));assert.equal(calls,3);assert.equal(new Set(assignments.map(x=>x.adaptive_facet_id)).size,3);
     assert(assignments.every(x=>x.adaptive_difficulty==='easy'&&x.scope.subject==='物理'&&x.scope.level==='高中二年級'));
     pending[1]();const delivered=await first;assert.equal(delivered.status,undefined);const question=JSON.parse(delivered.body.text);
+    assert.equal(tracked[0].q,question.q);assert.equal(tracked[0].difficulty,question.adaptive.difficulty);assert.equal(tracked[0].difficulty,'easy');
     assert.equal(question.adaptive.facetId,assignments[1].adaptive_facet_id);assert.equal(question.adaptive.outline.length,6);assert.equal(question.subject,'物理');
     for(const key of ['generation_task_id','adaptive_scope_id','adaptive_facet_id','adaptive_difficulty'])assert(!Object.hasOwn(question,key));
     pending[0]();pending[2]();await new Promise(resolve=>setImmediate(resolve));
     stats={adaptiveLearningV1:Rules.record(undefined,question.adaptive,{correct:true,at:1000})};
     const next=await invoke();assert.equal(calls,3,'an eligible spare for another unpracticed concept is reused');
-    const nextQuestion=JSON.parse(next.body.text);assert.notEqual(nextQuestion.adaptive.conceptId,question.adaptive.conceptId);
+    const nextQuestion=JSON.parse(next.body.text);assert.equal(tracked[1].q,nextQuestion.q);assert.equal(tracked[1].difficulty,nextQuestion.adaptive.difficulty);assert.notEqual(nextQuestion.adaptive.conceptId,question.adaptive.conceptId);
     const denied=await invoke({quizMode:'battle-fast'});assert.equal(denied.status,400);
   });
 });

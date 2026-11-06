@@ -918,7 +918,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             // Statistics must never prevent the player receiving a question.
             const trackDelivered = async () => {
                 if (String(quizMode || '') === 'classroom-draft') return;
-                try { await questionQualityAnalytics.recordGenerated(playerRepository.resolve().db, parsed.q); }
+                try { await questionQualityAnalytics.recordGenerated(playerRepository.resolve().db, parsed.q, deliveredDifficulty); }
                 catch (error) { console.warn('[Question quality analytics] generation recording failed:', error?.code || error?.message); }
             };
 
