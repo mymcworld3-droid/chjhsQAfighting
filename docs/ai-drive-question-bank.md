@@ -54,6 +54,32 @@ PY
 Base64 **不是加密**，仍必須視為 secret；成功後可移除 Render 舊三欄位並
 清理 Cloud Shell 終端機顯示紀錄。
 
+### 平板較容易操作：直接貼單行 JSON
+
+若 Base64 在 iPad／Chrome 複製到 Render 時一直無法解析，可改用
+`AI_QUESTION_BANK_GOOGLE_OAUTH_JSON`。本變數優先於有錯誤的
+`AI_QUESTION_BANK_GOOGLE_OAUTH_B64` 與三個舊 OAuth 變數。
+
+Cloud Shell（**會在螢幕上印出秘密憑證，禁止截圖、分享與 commit**）：
+
+```bash
+python3 - <<'PY'
+import json
+from pathlib import Path
+d=json.loads((Path.home()/'drive_oauth_result.json').read_text())
+keys=('client_id','client_secret','refresh_token')
+print(json.dumps({k:d[k] for k in keys},separators=(',',':')))
+PY
+```
+
+複製輸出的**完整單行 JSON** 到 Render Environment 新增的
+`AI_QUESTION_BANK_GOOGLE_OAUTH_JSON`。不要貼 Cloud Shell 指令、
+任何說明文字或引號；單行 JSON 自己本身有 `{"client_id":...}` 大括號。
+執行 Save, rebuild, and deploy。成功時 Logs 顯示
+`[AI bank] OAuth source: AI_QUESTION_BANK_GOOGLE_OAUTH_JSON`。
+如果新欄位有效，舊 Base64 不必先刪除，但安全起見完成後可以移除失效變數。
+若新欄位無效，系統將安全停用 AI 題庫但原本即時 AI 出題繼續運作。
+
 ## 供題規則
 
 1. **自訂題庫**：依原本 /banks 的 JSON 選擇題目；絕不額外產生題庫，不審核已匯入題目。
