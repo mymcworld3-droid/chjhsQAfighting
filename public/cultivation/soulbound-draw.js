@@ -593,8 +593,15 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     externalDirty = true; if (visible() && !busy) void refresh();
   });
   window.openSoulboundDraw = async () => {
+    if (typeof window.openTrainingPlace === 'function') return window.openTrainingPlace('contract');
+    const uid = getMainUser()?.uid;
+    if (!uid) return false;
     await window.switchToPage?.('page-training');
-    document.querySelector('[data-training-tab="contract"]')?.click();
+    const page = $('page-training'), button = page?.querySelector('[data-training-tab="contract"]');
+    if (getMainUser()?.uid !== uid || !page?.classList.contains('active-page') ||
+        page.classList.contains('hidden') || !button || button.disabled) return false;
+    button.click();
+    return true;
   };
   ['xiuxian:user-ready', 'xiuxian:user-data-ready'].forEach(name => window.addEventListener(name, () => {
     reconcile(); if (visible()) void refresh();

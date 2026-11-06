@@ -53,6 +53,7 @@ function setDetail(placeId) {
   page.dataset.trainingPlace = place.id;
   bar.querySelector('strong').textContent = place.name;
   updateDetailTabs();
+  syncContractNavigation();
 }
 function updateDetailTabs() {
   if (!page) return;
@@ -288,7 +289,23 @@ function renderScene(next) {
   updateLocks();
   if (focused) plane.querySelector(`[data-training-location="${focused}"]:not(:disabled)`)?.focus({ preventScroll: true });
 }
+function syncContractNavigation() {
+  const contract = document.getElementById('nav-contract');
+  const place = Rules.PLACES.find(place => place.id === 'contract');
+  if (contract) {
+    const locked = !place || !unlocked(place);
+    contract.disabled = locked;
+    contract.setAttribute('aria-disabled', String(locked));
+    contract.setAttribute('aria-label', locked ? '契器，金丹境解鎖' : '契器');
+    contract.title = locked ? '金丹境解鎖' : '';
+  }
+  if (!visible()) return;
+  const selected = page.dataset.trainingPlace === 'contract';
+  contract?.classList.toggle('active-nav-btn', selected);
+  document.getElementById('nav-training')?.classList.toggle('active-nav-btn', !selected);
+}
 function updateLocks() {
+  syncContractNavigation();
   if (!plane) { updateTicketIndicators(); return; }
   for (const place of Rules.PLACES) {
     const button = plane.querySelector(`[data-training-location="${place.id}"]`);
@@ -513,6 +530,23 @@ function wrapNavigation() {
   };
   window.switchToPage = navigation;
 }
+function openTrainingPlace(placeId) {
+  ensure();
+  const place = Rules.PLACES.find(place => place.id === placeId);
+  if (!place || !getMainUser()?.uid || !unlocked(place)) return false;
+  const result = window.switchToPage?.(PAGE);
+  if (pageNavigation?.isCurrent()) {
+    // Select the destination while the curtain is closing. Its callback opens
+    // the detail page before revealing it, and a later nav click can replace it.
+    pageNavigation.place = place.id;
+    pageNavigation.tab = place.tab;
+    if (pageNavigation.committed && visible()) openPlace(place);
+    return result;
+  }
+  if (!visible()) return false;
+  openPlace(place);
+  return true;
+}
 function sync() {
   ensure();
   wrapNavigation();
@@ -521,6 +555,7 @@ function sync() {
   scheduleFit();
 }
 function boot() {
+  window.openTrainingPlace = openTrainingPlace;
   loadStyle();
   ensure();
   if (visible()) showMap();
@@ -529,6 +564,10 @@ function boot() {
     if (!target) return;
     if (target.disabled) return;
     if (target.id === 'nav-training' || target.dataset.target === PAGE) {
+      if (pageNavigation?.isCurrent()) {
+        pageNavigation.place = null;
+        pageNavigation.tab = null;
+      }
       if (visible()) showMap();
       return;
     }
