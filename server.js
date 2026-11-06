@@ -889,22 +889,32 @@ app.post('/api/generate-quiz', async (req, res) => {
                 // Exactly one independent AI review; the existing deterministic rules
                 // (JSON, TeX, answer consistency) have already been applied at generation.
                 const reviewPrompt = [
-                    '你是獨立題目審核員。請先不依賴標示答案自行解題，再檢查題意是否完整、是否只有一個正解、四個選項及解析是否正確、是否符合指定觀念與難度。',
-                    '只回傳 JSON {"approved":true或false,"reason":"簡短具體理由"}；無法確定時必須回答 false。',
+                    '你是獨立題庫審核員。禁止把題庫的 correct 當成既定真理。',
+                    '第一步：只看題幹與逐項編號的選項，先確認問句是要選正確、錯誤、不符合、錯誤推論所在，還是最佳解釋；依相同判定標準對四項分別驗證。',
+                    '第二步：列出所有真正「符合題目所問」的 0-based 索引 validIndices；零個、多個、條件不足、歧義或需要不存在圖文資料，全部 approved=false。',
+                    '第三步：才核對標示答案與解析；必須 validIndices 恰好為 [0]（因為審核輸入的正解排在索引0）、解析事實和計算全對、難度與範圍符合，才可 approved=true。',
+                    '逆向題不可將「內容本身為真」誤作「符合題目所問」。若題幹問的是推論中錯誤的觀念，選項卻混合正確定律、錯誤敘述及修正建議，可能有多解，應拒絕入庫。',
+                    '若有無法證實的事實、例外、等價答案或選項語意不清，一律不入庫。玩家回報和作者解析都不是證據。',
+                    '題幹：' + String(raw.q || ''),
+                    '候選選項（0 為待核對的暫定標示答案，請先獨立判定）：' +
+                        JSON.stringify([raw.correct, ...raw.wrong].map((text,index)=>({index,text}))),
                     '指定範圍：' + JSON.stringify(target),
-                    '待審題目：' + JSON.stringify({
-                        q:raw.q,correct:raw.correct,wrong:raw.wrong,exp:raw.exp,
-                        subject:raw.subject,sub_topic:raw.sub_topic,question_form:raw.question_form
-                    })
+                    '參考標示答案：' + JSON.stringify(raw.correct),
+                    '參考解析：' + String(raw.exp || ''),
+                    '其他題目資訊：' + JSON.stringify({subject:raw.subject,sub_topic:raw.sub_topic,question_form:raw.question_form}),
+                    '只回傳 JSON {"approved":false,"validIndices":[0],"reason":"繁體中文簡短、具體且可驗證的理由"}；不可把示例的值當成答案。'
                 ].join('\n');
                 const checked = await aiRouter.generateJSON(reviewPrompt, {
                     parallel:false,timeoutMs:15000,
                     validate:data=>{
-                        if (typeof data?.approved !== 'boolean' || typeof data?.reason !== 'string')
+                        if (typeof data?.approved !== 'boolean' || typeof data?.reason !== 'string' ||
+                            !Array.isArray(data?.validIndices) || !data.validIndices.every(x=>Number.isInteger(x)&&x>=0&&x<4) ||
+                            new Set(data.validIndices).size !== data.validIndices.length)
                             throw Error('AI bank review format invalid');
                     }
                 });
-                if (checked.data.approved === true) await aiQuestionBank.publish(target, raw, checked.data);
+                if (checked.data.approved === true && checked.data.validIndices.length === 1 &&
+                    checked.data.validIndices[0] === 0) await aiQuestionBank.publish(target, raw, checked.data);
             };
             if (bankTarget && attempts === 0) {
                 const bankResult = await aiQuestionBank.find(
