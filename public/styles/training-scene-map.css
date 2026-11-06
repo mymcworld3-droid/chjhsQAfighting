@@ -165,7 +165,6 @@ body.xianxia-theme #page-training .training-place {
   min-width: 0 !important;
   min-height: 0 !important;
   max-width: none !important;
-  overflow: visible !important;
   background: transparent !important;
   box-shadow: none !important;
   opacity: 1 !important;
@@ -177,17 +176,6 @@ body.xianxia-theme #page-training .training-place {
   outline: none;
 }
 .training-place svg { display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.training-place-outline {
-  position: absolute;
-  inset: 0;
-  fill: none;
-  stroke: #fcfffc;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: .85;
-  filter: blur(.8px) drop-shadow(0 0 3px #fcfffccc);
-}
 .training-place-art { position: absolute; inset: 0; pointer-events: none; }
 .training-place-art > svg { position: absolute; inset: 0; }
 /* Animate the artwork independently so the label and hit target remain still. */
@@ -203,7 +191,7 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page .trainin
   50% { transform: translateY(-8px); }
 }
 .training-place-cutout {
-  filter: drop-shadow(0 0 3px #fcfffcdd);
+  filter: drop-shadow(0 4px 6px #05121866);
 }
 .training-place-label {
   position: absolute;
@@ -271,16 +259,11 @@ body.xianxia-theme #page-training.training-scene-map-active.active-page .trainin
 }
 .training-place.is-locked { cursor: default !important; }
 .training-place-lock svg { width: .82em; height: .95em; fill: none; stroke: currentColor; stroke-width: 2; }
-.training-place.is-locked .training-place-outline { opacity: 0; }
 .training-place.is-locked .training-place-cutout { filter: brightness(.32) saturate(.2); }
 .training-place.is-locked .training-place-label { color: #b8c0ba; border-color: #92958d66; background: #0a171cc9; }
 .training-place:not(:disabled):focus-visible .training-place-label { outline: 3px solid white; outline-offset: 4px; }
 .training-place:not(:disabled):focus-visible .training-place-label { background: #18302de6; }
-.training-place:not(:disabled):focus-visible .training-place-outline { opacity: 1; filter: blur(.6px) drop-shadow(0 0 5px #fff); }
-.training-place:not(:disabled):focus-visible .training-place-cutout { filter: drop-shadow(0 0 5px #fff); }
 @media (hover: hover) {
-  .training-place:not(:disabled):hover .training-place-outline { opacity: 1; filter: blur(.6px) drop-shadow(0 0 5px #fff); }
-  .training-place:not(:disabled):hover .training-place-cutout { filter: drop-shadow(0 0 5px #fff); }
   .training-place:not(:disabled):hover .training-place-label { border-color: #e8d6ad; background: #18302de6; }
 }
 body.xianxia-theme #page-training .training-scene-detailbar {
@@ -380,6 +363,5 @@ body.xianxia-theme #page-training .training-scene-back {
 /* Recovery uses the same painting and targets, with no extra cloud surfaces. */
 .training-map[data-render-profile="safe"] .training-map-atmosphere,
 .training-map[data-render-profile="safe"] .training-map-motes{display:none}
-.training-map[data-render-profile="safe"] .training-place-outline{filter:none;stroke-width:1}
-.training-map[data-render-profile="safe"] .training-place-cutout{filter:drop-shadow(0 0 1px #fcfffcdd)}
+.training-map[data-render-profile="safe"] .training-place-cutout{filter:none}
 body.xianxia-theme #page-training .training-map[data-render-profile="safe"] .training-place[data-training-location="rank"] .training-place-art{animation:none!important}
