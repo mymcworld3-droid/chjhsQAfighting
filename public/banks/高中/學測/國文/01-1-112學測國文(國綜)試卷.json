@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": "gsat-112-chinese-q1",
     "difficulty": "easy",
     "q": "下列「」內的字，讀音前後相同的是：",
     "correct": "胡「笳」之拍／僧侶「袈」裟",
@@ -9,11 +9,27 @@
       "驀然而「踣」／「掊」擊對手",
       "「吁」嗟而去／「迂」談闊論"
     ],
-    "exp": "解析：(A)ㄐㄧㄚ／ㄐㄧㄚ。(B)ㄒㄧˋ／ㄋㄧˋ。(C)ㄅㄛˊ／ㄆㄡˇ。(D)ㄒㄩ／ㄩ。來源：112學測國綜第1題。",
-    "subject": "形音義-字音"
+    "exp": "正確答案：胡「笳」之拍／僧侶「袈」裟。來源：112年學科能力測驗國文第1題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 1,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "2",
+    "id": "gsat-112-chinese-q2",
     "difficulty": "easy",
     "q": "下列文句，完全沒有錯別字的是：",
     "correct": "叔叔感慨從小命蹇時乖，一路工讀自學",
@@ -22,137 +38,860 @@
       "這起工安意外明顯是人謀不彰所導致",
       "天燈乘載大家的願望，在歡呼聲中冉冉升空"
     ],
-    "exp": "解析：(A)不「斐」→菲。(B)不「彰」→臧。(D)「乘」載→承。來源：112學測國綜第2題。",
-    "subject": "形音義-字形"
+    "exp": "正確答案：叔叔感慨從小命蹇時乖，一路工讀自學。來源：112年學科能力測驗國文第2題。",
+    "subject": "國文",
+    "sub_topic": "字形辨正",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 2,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "3",
+    "id": "gsat-112-chinese-q3",
     "difficulty": "medium",
-    "q": "下列文句畫底線處的詞語，運用最適當的是：",
-    "correct": "這宗懸案經專案小組擘肌分理，已掌握部分有利線索",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-112-chinese/Q3-question.png)",
+    "correct": "原卷選項 A",
     "wrong": [
-      "經理很欣賞這名愛將，但也常愛屋及烏地袒護其過失",
-      "新品銷量短期內便來者可追，超越廣受好評的老品牌",
-      "闖過準決賽就能占到得隴望蜀的位置，可望角逐冠軍"
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
     ],
-    "exp": "解析：(A)擘肌分理：比喻分析極為細緻。(B)愛屋及烏：愛人及物。(C)來者可追：指未來可補救。(D)得隴望蜀：貪得無厭。來源：112學測國綜第3題。",
-    "subject": "成語運用"
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗國文第3題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 3,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/Q3-question.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "4",
+    "id": "gsat-112-chinese-q4",
     "difficulty": "medium",
-    "q": "關於表一「五位詩人所寫『問候懷想親友詩』統計」、表二「五位詩人述及其他四人的詩數」，最適當的解讀是：",
-    "correct": "李白有不少詩是因問候、懷想親友而寫，但對象不含王維",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-112-chinese/Q4-question.png)",
+    "correct": "原卷選項 D",
     "wrong": [
-      "孟浩然、王昌齡、杜甫皆認識王維，故於表一數字「159」中各計一次",
-      "孟浩然較另四位詩人尤好寫詩交友，王昌齡給每名親友的詩至多兩首",
-      "杜甫的親友比孟浩然少，他與孟浩然的熟識度，比與王維來得高"
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
     ],
-    "exp": "解析：由表二可知李白對王維的詩數為0。來源：112學測國綜第4題。",
-    "subject": "圖表判讀"
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗國文第4題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 4,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/Q4-question.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "5",
+    "id": "gsat-112-chinese-q5",
     "difficulty": "medium",
-    "q": "溝通交涉時，說話者會自居某個角色。關於甲〈燭之武退秦師〉、乙〈鴻門宴〉的解說，最適當的是：\n甲、燭之武謂秦穆公：「且君嘗為晉君賜矣……夫晉，何厭之有？既東封鄭，又欲肆其西封。若不闕秦，將焉取之？」\n乙、樊噲謂項羽：「今沛公先破秦……勞苦而功高如此，未有封侯之賞，而聽細說，欲誅有功之人，此亡秦之續耳。」",
-    "correct": "甲說話者自居討人情／乙自居討公道",
+    "q": "溝通交涉時，說話者會自居某個角色，或讓受話者處於某個角色，以利達成目的。下列\n  關於甲、乙的解說，最適當的是：\n  甲、燭之武謂秦穆公：「且君嘗為晉君賜矣，許君焦、瑕，朝濟而夕設版焉，君之所知\n   也。夫晉，何厭之有？既東封鄭，又欲肆其西封。若不闕秦，將焉取之？」\n  乙、樊噲謂項羽：「今沛公先破秦，入咸陽，毫毛不敢有所近，封閉宮室，還軍霸上，\n   以待大王來。故遣將守關者，備他盜出入與非常也。勞苦而功高如此，未有封侯之\n   賞，而聽細說，欲誅有功之人，此亡秦之續耳。」\n             甲乙",
+    "correct": "受話者處於被辜負的角色受話者處於辜負人的角色",
     "wrong": [
-      "甲說話者自居旁觀者／乙自居當事者",
-      "甲受話者處於被嫉妒／乙受話者處於嫉妒人",
-      "甲受話者處於被辜負／乙受話者處於辜負人"
+      "說話者自居旁觀者的角色說話者自居當事者的角色",
+      "說話者自居討人情的角色說話者自居討公道的角色",
+      "受話者處於被嫉妒的角色受話者處於嫉妒人的角色"
     ],
-    "exp": "解析：甲提往事恩惠以動秦穆公；乙斥責項羽賞罰不公。來源：112學測國綜第5題。",
-    "subject": "文言文理解"
+    "exp": "正確答案：受話者處於被辜負的角色受話者處於辜負人的角色。來源：112年學科能力測驗國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 5,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "6",
+    "id": "gsat-112-chinese-q6",
     "difficulty": "medium",
-    "q": "依據〈補江總白猿傳〉，□□內最適合填入的詞語依序是：\n地有神，善竊少女，而美者□□□□，宜謹護之。」紇甚□□，夜勒兵環其廬……而以女奴十餘□□之。",
+    "q": "依據下文，□□內最適合填入的詞語依序是：\n    紇妻纖白，甚美。其部人曰：「將軍何為挈麗人經此？地有神，善竊少女，而美者\n  □□□□，宜謹護之。」紇甚□□，夜勒兵環其廬，匿婦密室中，謹閉甚固，而以女奴\n\n  十餘□□之。爾夕，陰風晦黑，至五更，寂然無聞。守者怠而假寐，忽若有物驚寤者，\n  即已失妻矣。（〈補江總白猿傳〉）",
     "correct": "尤所難免／疑懼／伺守",
     "wrong": [
       "其來有自／疑懼／迎候",
       "其來有自／倨傲／伺守",
       "尤所難免／倨傲／迎候"
     ],
-    "exp": "解析：美者「尤所難免」被竊；聽聞後「疑懼」；派人「伺守」。來源：112學測國綜第6題。",
-    "subject": "文言實詞填空"
+    "exp": "正確答案：尤所難免／疑懼／伺守。來源：112年學科能力測驗國文第6題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 6,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "7",
+    "id": "gsat-112-chinese-q7",
     "difficulty": "medium",
-    "q": "關於袁枚《隨園食單》中「做菜」與「作文」之間的譬喻，說明最適當的是：",
-    "correct": "料理講究發揮個別的特長，作文亦以呈顯本色為尚",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-112-chinese/Q7-question.png)",
+    "correct": "原卷選項 D",
     "wrong": [
-      "學做料理須知各地菜餚特色，習文當須辨宗門流派",
-      "做菜須向前輩方家學習以精進，為文當須追摹宗師",
-      "漢人未自幼學習而做不好滿菜，學寫文章亦宜趁早"
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
     ],
-    "exp": "解析：袁枚強調「專作自己文字」，如同料理要發揮素材本色。來源：112學測國綜第7題。",
-    "subject": "文言文理解"
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 7,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/Q7-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "26",
+    "id": "gsat-112-chinese-q8",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n8-9為題組。閱讀下文，回答8-9題。\n\n    經保育人士多年努力，黃石公園終於在1995年放生14隻灰狼。灰狼進入生態系統後，\n  開始獵捕加拿大馬鹿。鹿群為了生存，便減少出現在河谷。當河谷的植物不再成為鹿群\n  的盤中飧，就逐漸恢復原先的茂盛，有些樹甚至以五倍速度成長。環境學家蒙比爾特在\n  YouTube介紹上述這一連串的改變，並指出因鹿減少而增生的植被，使河岸不易被沖刷\n  成曲折的模樣。\n    2010年有研究發現：雖然鹿在幾年內減少60%，但樹木從未迅速長高，且鹿仍到狼\n  群出沒頻繁的區域覓食，因為牠們在遼闊的黃石公園裡相遇機率極低。動物學家米德爾\n  頓引述這項研究，認為狼群絕跡確實衝擊黃石公園生態，但過去因此而產生的巨變，不\n  可能藉狼群重返而在短時間內復原。生態學家麥可奈第也指出，鹿的減少確實讓樹木變\n  多，但1990年代蒙大拿州已開放獵捕加拿大馬鹿，而黃石公園的美洲獅與灰熊也對鹿群\n  減少有所貢獻。所以，他認為「『狼改變了河流』，        。」此外，米德\n\n  爾頓承認這個案例讓大家意識到肉食動物對生態系統的重要，但他強調，提供正確訊息\n  仍是環境學家的職責。（改寫自〈「改變美國自然生態的狼英雄」是事實還是神話？〉）\n\n上文內，最適合填入的文句是：",
+    "correct": "其中雖有些許真相，但似乎過於誇大",
+    "wrong": [
+      "是不折不扣的假新聞，完全缺乏實證",
+      "將來可能推翻，但在目前可信度最高",
+      "不可等閒視之，而是應該追蹤的警訊"
+    ],
+    "exp": "正確答案：其中雖有些許真相，但似乎過於誇大。來源：112年學科能力測驗國文第8題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 8,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        8,
+        9
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q9",
     "difficulty": "medium",
-    "q": "下列各組「」內的詞，意義前後相同的是（多選）：",
-    "correct": "蓋藏「既」富，絃誦興焉／「既」親其所親，亦親其所疏",
+    "q": "【共用閱讀資料】\n8-9為題組。閱讀下文，回答8-9題。\n\n    經保育人士多年努力，黃石公園終於在1995年放生14隻灰狼。灰狼進入生態系統後，\n  開始獵捕加拿大馬鹿。鹿群為了生存，便減少出現在河谷。當河谷的植物不再成為鹿群\n  的盤中飧，就逐漸恢復原先的茂盛，有些樹甚至以五倍速度成長。環境學家蒙比爾特在\n  YouTube介紹上述這一連串的改變，並指出因鹿減少而增生的植被，使河岸不易被沖刷\n  成曲折的模樣。\n    2010年有研究發現：雖然鹿在幾年內減少60%，但樹木從未迅速長高，且鹿仍到狼\n  群出沒頻繁的區域覓食，因為牠們在遼闊的黃石公園裡相遇機率極低。動物學家米德爾\n  頓引述這項研究，認為狼群絕跡確實衝擊黃石公園生態，但過去因此而產生的巨變，不\n  可能藉狼群重返而在短時間內復原。生態學家麥可奈第也指出，鹿的減少確實讓樹木變\n  多，但1990年代蒙大拿州已開放獵捕加拿大馬鹿，而黃石公園的美洲獅與灰熊也對鹿群\n  減少有所貢獻。所以，他認為「『狼改變了河流』，        。」此外，米德\n\n  爾頓承認這個案例讓大家意識到肉食動物對生態系統的重要，但他強調，提供正確訊息\n  仍是環境學家的職責。（改寫自〈「改變美國自然生態的狼英雄」是事實還是神話？〉）\n\n「三位學者的言談」是上文重要素材。關於此素材的運用手法，最適當的敘述是：",
+    "correct": "以三人觀點的出現順序，隱然表達對製造「狼英雄」的質疑",
     "wrong": [
-      "克己「復」禮為仁／師道之不「復」可知矣",
-      "微夫人之力不「及」此／奔而入，「及」牆，虛若無物",
-      "為之躊躇滿志，「善」刀而藏之／（項伯）素「善」留侯張良",
-      "余時為桃花所戀，「竟」不忍去湖上／久不見若影，何「竟」日默默在此"
+      "引述三人對「狼英雄」的看法時，僅敘述其論點而省略論據",
+      "先綜述各方對「狼英雄」反應，再以三人為代表分述其觀點",
+      "以訪談形式呈現三人對「狼英雄」的看法，使讀者有參與感"
     ],
-    "exp": "解析：(C)皆為「已經/既然」。(A)實踐/再。(B)達到/接近。(D)擦拭/友善。(E)竟然/全。來源：112學測國綜第26題。",
-    "subject": "一字多義"
+    "exp": "正確答案：以三人觀點的出現順序，隱然表達對製造「狼英雄」的質疑。來源：112年學科能力測驗國文第9題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 9,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        8,
+        9
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "27",
+    "id": "gsat-112-chinese-q10",
     "difficulty": "medium",
-    "q": "下列文句「」內的詞，用來修飾動詞，表示動作程度的是（多選）：",
-    "correct": "侍婢羅列，「頗」僭於上、漁人「甚」異之，復前行、滿目蕭然，感「極」而悲者矣",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/gsat-112-chinese/G10-12-context.png)\n\n![第10題原卷資料](/assets/banks/gsat-112-chinese/Q10-question.png)",
+    "correct": "原卷選項 C",
     "wrong": [
-      "蓋追先帝之「殊」遇，欲報之於陛下也",
-      "行「略」定秦地，函谷關有兵守關，不得入"
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
     ],
-    "exp": "解析：(A)頗 (B)甚 (C)極 為程度副詞。(D)殊 為形容詞。(E)略 為範圍副詞。來源：112學測國綜第27題。",
-    "subject": "語法結構"
+    "exp": "正確答案：原卷選項 C。來源：112年學科能力測驗國文第10題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 10,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        10,
+        12
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G10-12-context.png",
+      "/assets/banks/gsat-112-chinese/Q10-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "28",
+    "id": "gsat-112-chinese-q11",
     "difficulty": "medium",
-    "q": "關於胡晴舫〈祕密〉中對於「祕密」的看法，符合敘述的是（多選）：",
-    "correct": "交換祕密揭示人們畏懼孤獨而有相互取暖的需求、訴說他人祕密既能滿足好奇窺探，又可掩藏自己的祕密、保有祕密，拒絕他人全面讀取自己，反映孤獨的生命基調",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/gsat-112-chinese/G10-12-context.png)\n\n![第11題原卷資料](/assets/banks/gsat-112-chinese/Q11-question.png)",
+    "correct": "原卷選項 C",
     "wrong": [
-      "人類幽暗不安是因為背地裡訴說別人的祕密",
-      "祕密的存在，乃因語言不可盡意的限制，阻隔了人際關係的親密"
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
     ],
-    "exp": "解析：文中指出交換祕密是為了抵抗孤獨，並作為掩飾自我的策略。來源：112學測國綜第28題。",
-    "subject": "現代散文閱讀"
+    "exp": "正確答案：原卷選項 C。來源：112年學科能力測驗國文第11題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 11,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        10,
+        12
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G10-12-context.png",
+      "/assets/banks/gsat-112-chinese/Q11-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "29",
+    "id": "gsat-112-chinese-q12",
     "difficulty": "medium",
-    "q": "關於《論衡》中「夫餘國王」東明的事蹟，符合敘述的是（多選）：",
-    "correct": "曾被棄於豬圈馬槽，不僅未受傷害且受到豬馬呼氣照護、逃避追殺至河邊時，魚鱉浮出讓他踩踏而渡，得以免難",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/gsat-112-chinese/G10-12-context.png)\n\n![第12題原卷資料](/assets/banks/gsat-112-chinese/Q12-question.png)",
+    "correct": "原卷選項 A",
     "wrong": [
-      "為橐離國王和侍婢所生，因其出生時間而被命名為東明",
-      "其母為侍婢而被視為奴僕，後因善騎射被派去放牧牛馬",
-      "為救母而謀反，事敗後南向逃至夫餘，於是成立夫餘國"
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
     ],
-    "exp": "解析：(B)豬馬以氣噓之。(E)魚鱉浮為橋。其餘選項情節不符原文。來源：112學測國綜第29題。",
-    "subject": "文言文理解"
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 12,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        10,
+        12
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G10-12-context.png",
+      "/assets/banks/gsat-112-chinese/Q12-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   },
   {
-    "id": "30",
+    "id": "gsat-112-chinese-q13",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n13-14為題組。閱讀下文，回答13-14題。\n\n    枯山枯水庭園以砂石為主，但是幾乎每一方石庭都缺少不了綠色的點綴。談及日本\n  庭園之綠意，除了草木之外，青苔也是構成的一大要素， 甲 ，尤其是京都的庭園，如\n\n  果沒有青苔，勢將減色不少。苔本是繁殖於地面的一種蘚類植物，只要氣候低濕，可以\n  不種自衍。但是日本的庭園崇尚蒼老之美， 乙 ，因此它也就變成了代表庭園歷史的一\n\n  種標誌了。由於苔本身具有一種厚重的質感，其色雖濃翠，卻不綺豔， 丙 ，加以苔本\n  身所給予人時間之聯想， 丁 ，所以在文學上，任何一個名詞，只要冠以「苔」字，立\n\n  刻能造成蒼涼悲寂的效果，如「苔階」、「苔徑」、「苔井」、「苔池」。而當你面對\n  京都的苔庭時，這蒼涼悲寂的情調就更具體的呈現在眼前了。（改寫自林文月〈京都的\n\n  庭園〉）\n\n依據文意，「而青苔非歷時長久不能蔓衍」應填入：",
+    "correct": "乙",
+    "wrong": [
+      "甲",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：乙。來源：112年學科能力測驗國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 13,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        13,
+        14
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q14",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n13-14為題組。閱讀下文，回答13-14題。\n\n    枯山枯水庭園以砂石為主，但是幾乎每一方石庭都缺少不了綠色的點綴。談及日本\n  庭園之綠意，除了草木之外，青苔也是構成的一大要素， 甲 ，尤其是京都的庭園，如\n\n  果沒有青苔，勢將減色不少。苔本是繁殖於地面的一種蘚類植物，只要氣候低濕，可以\n  不種自衍。但是日本的庭園崇尚蒼老之美， 乙 ，因此它也就變成了代表庭園歷史的一\n\n  種標誌了。由於苔本身具有一種厚重的質感，其色雖濃翠，卻不綺豔， 丙 ，加以苔本\n  身所給予人時間之聯想， 丁 ，所以在文學上，任何一個名詞，只要冠以「苔」字，立\n\n  刻能造成蒼涼悲寂的效果，如「苔階」、「苔徑」、「苔井」、「苔池」。而當你面對\n  京都的苔庭時，這蒼涼悲寂的情調就更具體的呈現在眼前了。（改寫自林文月〈京都的\n\n  庭園〉）\n\n上文有關「苔」的敘述，最適當的是：",
+    "correct": "經過氣候與時間醞釀，形成庭園蒼寂的況味",
+    "wrong": [
+      "庭園設計者藉衍生的文學意象營造悲戚感",
+      "容易生長因而成為打造庭園最主要的元素",
+      "濃翠亮麗點綴暗沉砂石，凸顯庭園色澤對比"
+    ],
+    "exp": "正確答案：經過氣候與時間醞釀，形成庭園蒼寂的況味。來源：112年學科能力測驗國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 14,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        13,
+        14
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q15",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n15-17為題組。閱讀下文，回答15-17題。\n\n    我果戰士有勇，大將有謀，成算在胸，地利足恃，猶不如誘之登岸而設伏殲之。不\n\n  然，汪洋海上以數百人操一舟，東馳西突，以角逐於勝負不可知之地，我即無恙，而彼\n  之所挾者小，我之所勞者大，設防設守，形勢不亦懣乎！然誘之上岸，非有成算，則斷\n  不可。蓋敵一登陸，民心易動，軍心易震，非宿將強兵不能得手也。生，臺人也，為臺\n  灣計，臺北可誘之近岸，臺南則不可。蓋臺北港道深通而有屏蔽，彼之駐輪甚便；若登\n  岸，則反失所恃。臺南則港門雖深，風浪甚苦，四圍無山，港中非可駐輪；彼不登岸，\n  不能久居也。若臺中諸港，沙線淺灘，難駛鐵船。然澎湖不守，則敵人得之，安穩收泊。\n\n  有時展輪四掠，有時載小艇窺闖，臺中難防，臺南、北亦可慮。（洪繻〈籌海議〉）\n\n關於上文對清末臺灣攻守情勢的分析，敘述最適當的是：",
+    "correct": "由海戰與陸戰兩方面揭示敵我利弊",
+    "wrong": [
+      "基於後勤準備已充足而可誘敵深入",
+      "因船艦操作耗人力而主張放棄海戰",
+      "從軍民齊心的優勢判斷可無懼陸戰"
+    ],
+    "exp": "正確答案：由海戰與陸戰兩方面揭示敵我利弊。來源：112年學科能力測驗國文第15題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 15,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n15-17為題組。閱讀下文，回答15-17題。\n\n    我果戰士有勇，大將有謀，成算在胸，地利足恃，猶不如誘之登岸而設伏殲之。不\n\n  然，汪洋海上以數百人操一舟，東馳西突，以角逐於勝負不可知之地，我即無恙，而彼\n  之所挾者小，我之所勞者大，設防設守，形勢不亦懣乎！然誘之上岸，非有成算，則斷\n  不可。蓋敵一登陸，民心易動，軍心易震，非宿將強兵不能得手也。生，臺人也，為臺\n  灣計，臺北可誘之近岸，臺南則不可。蓋臺北港道深通而有屏蔽，彼之駐輪甚便；若登\n  岸，則反失所恃。臺南則港門雖深，風浪甚苦，四圍無山，港中非可駐輪；彼不登岸，\n  不能久居也。若臺中諸港，沙線淺灘，難駛鐵船。然澎湖不守，則敵人得之，安穩收泊。\n\n  有時展輪四掠，有時載小艇窺闖，臺中難防，臺南、北亦可慮。（洪繻〈籌海議〉）\n\n關於①、②是否符合上文看法，最適當的研判是：\n  ①應加強澎湖海防，避免敵軍入侵臺北、臺中、臺南三地。\n\n  ②依臺北、臺南地形評估，引誘敵軍自臺北登岸，是可行的戰略。",
+    "correct": "①、②皆符合",
+    "wrong": [
+      "①符合，②不符合",
+      "①符合，②無法判斷",
+      "①無法判斷，②符合"
+    ],
+    "exp": "正確答案：①、②皆符合。來源：112年學科能力測驗國文第16題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 16,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q17",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n15-17為題組。閱讀下文，回答15-17題。\n\n    我果戰士有勇，大將有謀，成算在胸，地利足恃，猶不如誘之登岸而設伏殲之。不\n\n  然，汪洋海上以數百人操一舟，東馳西突，以角逐於勝負不可知之地，我即無恙，而彼\n  之所挾者小，我之所勞者大，設防設守，形勢不亦懣乎！然誘之上岸，非有成算，則斷\n  不可。蓋敵一登陸，民心易動，軍心易震，非宿將強兵不能得手也。生，臺人也，為臺\n  灣計，臺北可誘之近岸，臺南則不可。蓋臺北港道深通而有屏蔽，彼之駐輪甚便；若登\n  岸，則反失所恃。臺南則港門雖深，風浪甚苦，四圍無山，港中非可駐輪；彼不登岸，\n  不能久居也。若臺中諸港，沙線淺灘，難駛鐵船。然澎湖不守，則敵人得之，安穩收泊。\n\n  有時展輪四掠，有時載小艇窺闖，臺中難防，臺南、北亦可慮。（洪繻〈籌海議〉）\n\n若依據上文設計一款戰爭攻略遊戲「海戰1894」，遊戲腳本中，根據不同的項目，會讓\n  敵我雙方戰力值互有增減。設計者為此遊戲設定的戰力值項目最不可能出現：",
+    "correct": "外援力量",
+    "wrong": [
+      "將士經驗",
+      "地理環境",
+      "攻守路線"
+    ],
+    "exp": "正確答案：外援力量。來源：112年學科能力測驗國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 17,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q18",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n18-20為題組。閱讀下文，回答18-20題。\n\n    李丈參政罷政歸鄉里時，某年二十矣。時時來訪先君，劇談終日。每言秦氏，必曰\n  「咸陽」，憤切慨慷，形於色辭。一日平旦來共飯，謂先君曰：「聞趙相過嶺，悲憂出\n  涕。僕不然，謫命下，青鞋布襪行矣，豈能作兒女態耶！」方言此時，目如炬，聲如鐘，\n  其英偉剛毅之氣，使人興起。後四十年，偶讀公家書，雖徙海表，氣不少衰，叮嚀訓誡\n  之語，皆足垂範百世，猶想見其道青鞋布襪時也。淳熙戊申五月己未，笠澤陸某題。（陸\n  游〈跋李莊簡公家書〉）\n\n關於文中李參政的敘述，最適當的是：",
+    "correct": "雖貶謫海表而坦然赴任，未嘗悲憂，英氣絲毫不減",
+    "wrong": [
+      "少年得志，但因個性耿介，二十歲便罷政而歸鄉里",
+      "常至陸游家，議論秦朝暴政虐民、聚斂咸陽的史事",
+      "訓誨陸游之言響若鐘鳴，示現剛毅氣節，令人激昂"
+    ],
+    "exp": "正確答案：雖貶謫海表而坦然赴任，未嘗悲憂，英氣絲毫不減。來源：112年學科能力測驗國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 18,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        20
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q19",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n18-20為題組。閱讀下文，回答18-20題。\n\n    李丈參政罷政歸鄉里時，某年二十矣。時時來訪先君，劇談終日。每言秦氏，必曰\n  「咸陽」，憤切慨慷，形於色辭。一日平旦來共飯，謂先君曰：「聞趙相過嶺，悲憂出\n  涕。僕不然，謫命下，青鞋布襪行矣，豈能作兒女態耶！」方言此時，目如炬，聲如鐘，\n  其英偉剛毅之氣，使人興起。後四十年，偶讀公家書，雖徙海表，氣不少衰，叮嚀訓誡\n  之語，皆足垂範百世，猶想見其道青鞋布襪時也。淳熙戊申五月己未，笠澤陸某題。（陸\n  游〈跋李莊簡公家書〉）\n\n關於文中陸游的行為或感懷的敘述，最適當的是：",
+    "correct": "憶及青鞋布襪之言而連結今昔，流露對李公的欽仰",
+    "wrong": [
+      "相隔四十年後，因重讀李莊簡公來信而為文回覆",
+      "採用書序體書寫方式，闡述自己撰作本文的動機",
+      "追述昔日共聚議事的情景，感嘆故人遠謫而難再見"
+    ],
+    "exp": "正確答案：憶及青鞋布襪之言而連結今昔，流露對李公的欽仰。來源：112年學科能力測驗國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 19,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        20
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q20",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n18-20為題組。閱讀下文，回答18-20題。\n\n    李丈參政罷政歸鄉里時，某年二十矣。時時來訪先君，劇談終日。每言秦氏，必曰\n  「咸陽」，憤切慨慷，形於色辭。一日平旦來共飯，謂先君曰：「聞趙相過嶺，悲憂出\n  涕。僕不然，謫命下，青鞋布襪行矣，豈能作兒女態耶！」方言此時，目如炬，聲如鐘，\n  其英偉剛毅之氣，使人興起。後四十年，偶讀公家書，雖徙海表，氣不少衰，叮嚀訓誡\n  之語，皆足垂範百世，猶想見其道青鞋布襪時也。淳熙戊申五月己未，笠澤陸某題。（陸\n  游〈跋李莊簡公家書〉）\n\n上文藉細節描述，展現李參政的人格特質。下列文句，亦透過書寫細節以呈現人物性格\n  特質的是：",
+    "correct": "樊噲側其盾以撞，衛士仆地，噲遂入。披帷，西嚮立，瞋目視項王",
+    "wrong": [
+      "將軍向寵，性行淑均，曉暢軍事，試用於昔日，先帝稱之曰「能」",
+      "行次靈石旅舍，既設床，爐中烹肉且熟，張氏以髮長委地，立梳床前",
+      "三人移席，漸入月中。眾視三人坐月中飲，鬚眉畢見，如影之在鏡中"
+    ],
+    "exp": "正確答案：樊噲側其盾以撞，衛士仆地，噲遂入。披帷，西嚮立，瞋目視項王。來源：112年學科能力測驗國文第20題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 20,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        20
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q21",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n21-22為題組。閱讀下文，回答21-22題。\n\n    《論語》是對我平生影響最大，使我受益最多的一本書。\n    早年我所受的傳統教育，以熟讀背誦為主。故所讀的書，無論懂與不懂，都深深地\n  印入腦中。《論語》既是我最早背誦的一本書，也是我最為熟記的一本書。抗戰後期在\n  北平淪陷區，雖然不得不穿著補丁的衣服，吞食難以下嚥的混合麵，我也能不以為苦。\n  因為當面臨這些情境時，《論語》中「     」等語句立即湧現，給予我精神力量，\n  使我可以不復介意。且經由在貧苦中如何自處的反思，進而聯想到「四書」中的其他語\n  句。這種融會貫通的聯想和體悟，應該正是孔子極為重視的一種教學方式。\n    在詩歌教學中，這種聯想作用尤為可貴。子貢從孔子談做人修養的「貧而樂，富而\n  好禮」，聯想到《詩經》的「如切如磋，如琢如磨」，而被孔子讚美是「可與言詩」的\n  人。孔門論詩，特別注重「興」，因此，我日後教授詩詞，也特別注重詩歌中的興發感\n  動。而這種感發，往往與人生之體驗和修養關係密切。\n    我平生讀書的最大樂趣，就是從書中去體會一份活潑的、可以提昇人精神的力量。\n  正是從這一點來說，《論語》是對我影響最大，使我受益最多的一本書。（改寫自葉嘉\n  瑩《論語百則・前言》）\n\n依據文意，最適合填入上文處的文句是：",
+    "correct": "士志於道而恥惡衣惡食者，未足與議也",
+    "wrong": [
+      "食夫稻，衣夫錦，於女安乎",
+      "色惡不食，臭惡不食，失飪不食，不時不食",
+      "菲飲食，而致孝乎鬼神；惡衣服，而致美乎黻冕"
+    ],
+    "exp": "正確答案：士志於道而恥惡衣惡食者，未足與議也。來源：112年學科能力測驗國文第21題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 21,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        22
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q22",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n21-22為題組。閱讀下文，回答21-22題。\n\n    《論語》是對我平生影響最大，使我受益最多的一本書。\n    早年我所受的傳統教育，以熟讀背誦為主。故所讀的書，無論懂與不懂，都深深地\n  印入腦中。《論語》既是我最早背誦的一本書，也是我最為熟記的一本書。抗戰後期在\n  北平淪陷區，雖然不得不穿著補丁的衣服，吞食難以下嚥的混合麵，我也能不以為苦。\n  因為當面臨這些情境時，《論語》中「     」等語句立即湧現，給予我精神力量，\n  使我可以不復介意。且經由在貧苦中如何自處的反思，進而聯想到「四書」中的其他語\n  句。這種融會貫通的聯想和體悟，應該正是孔子極為重視的一種教學方式。\n    在詩歌教學中，這種聯想作用尤為可貴。子貢從孔子談做人修養的「貧而樂，富而\n  好禮」，聯想到《詩經》的「如切如磋，如琢如磨」，而被孔子讚美是「可與言詩」的\n  人。孔門論詩，特別注重「興」，因此，我日後教授詩詞，也特別注重詩歌中的興發感\n  動。而這種感發，往往與人生之體驗和修養關係密切。\n    我平生讀書的最大樂趣，就是從書中去體會一份活潑的、可以提昇人精神的力量。\n  正是從這一點來說，《論語》是對我影響最大，使我受益最多的一本書。（改寫自葉嘉\n  瑩《論語百則・前言》）\n\n下列敘述，最符合上文體會或想法的是：",
+    "correct": "《論語》與《詩經》、「四書」中的語句，可透過聯想體悟相印證",
+    "wrong": [
+      "熟誦經典可將文章的深意烙印腦中，是對當代學子有益的教育方式",
+      "孔門教學注重興發，子貢因以修養之道闡明詩句涵義而受孔子讚賞",
+      "讀書之樂來自探求作品真實體驗，進而連結經典以形成興感的力量"
+    ],
+    "exp": "正確答案：《論語》與《詩經》、「四書」中的語句，可透過聯想體悟相印證。來源：112年學科能力測驗國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 22,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        22
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/gsat-112-chinese/G23-25-context.png)\n\n![第23題原卷資料](/assets/banks/gsat-112-chinese/Q23-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗國文第23題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 23,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G23-25-context.png",
+      "/assets/banks/gsat-112-chinese/Q23-question.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q24",
     "difficulty": "hard",
-    "q": "關於洪崇傑〈稱仔的彼端〉與解昆樺〈在囚獄中獲致潔淨的光〉兩首現代詩的解讀，適當的是（多選）：",
-    "correct": "二詩均以「聽診器」提示醫師的身分，暗指醫者仁心而能聽取民瘼、甲詩認為人民苦難讓詩人悲憫發聲，乙詩認為苦難的人民被書寫而銘刻",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/gsat-112-chinese/G23-25-context.png)\n\n![第24題原卷資料](/assets/banks/gsat-112-chinese/Q24-question.png)",
+    "correct": "原卷選項 D",
     "wrong": [
-      "甲詩「被折斷的秤錘」與乙詩「駝著背」，刻劃人民被拷打的形象",
-      "甲詩的「喘鳴」與乙詩的「癱瘓」，均指日治時期民智仍屬蒙昧無知",
-      "二詩均述及〈一桿稱仔〉，慶幸文字能在當時對抗威權且洗滌人民苦厄"
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
     ],
-    "exp": "解析：聽診器象徵賴和的醫生身分與對社會的診斷。兩詩皆強調賴和對弱勢苦難的記錄。來源：112學測國綜第30題。",
-    "subject": "現代詩歌鑑賞"
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 24,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G23-25-context.png",
+      "/assets/banks/gsat-112-chinese/Q24-question.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q25",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/gsat-112-chinese/G23-25-context.png)\n\n![第25題原卷資料](/assets/banks/gsat-112-chinese/Q25-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗國文第25題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 25,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G23-25-context.png",
+      "/assets/banks/gsat-112-chinese/Q25-question.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q34",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/gsat-112-chinese/G33-35-context.png)\n\n![第34題原卷資料](/assets/banks/gsat-112-chinese/Q34-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗國文第34題。",
+    "subject": "國文",
+    "sub_topic": "文言文閱讀",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 34,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        33,
+        35
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G33-35-context.png",
+      "/assets/banks/gsat-112-chinese/Q34-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-112-chinese-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/gsat-112-chinese/G36-37-context.png)\n\n![第36題原卷資料](/assets/banks/gsat-112-chinese/Q36-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗國文第36題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-112-chinese",
+      "question": 36,
+      "file": "高中/學測/國文/01-1-112學測國文(國綜)試卷.pdf",
+      "url": "https://drive.google.com/file/d/14tEK-2m4KNhQvJxtt6Hvrk2p25fax-3u/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045361875009344702/01-112%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        36,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-112-chinese/G36-37-context.png",
+      "/assets/banks/gsat-112-chinese/Q36-question.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
   }
 ]
-

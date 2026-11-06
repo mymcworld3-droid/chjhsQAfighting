@@ -1,0 +1,1603 @@
+[
+  {
+    "id": "cap-112-science-q1",
+    "difficulty": "easy",
+    "q": "若將某區域的原始森林育林成種植單一物種的樹林時，則此區域最可能出現下\n  列何種變化？",
+    "correct": "生態系變得比較不穩定",
+    "wrong": [
+      "生產者的物種數增加",
+      "消費者的物種數增加",
+      "食物網變得比較複雜"
+    ],
+    "exp": "正確答案：生態系變得比較不穩定。來源：112年國中教育會考自然第1題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 1,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-112-science/Q2-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第2題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 2,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q2-question.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q3",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-112-science/Q3-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第3題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 3,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q3-question.png"
+    ],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q4",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-112-science/Q4-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第4題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 4,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q4-question.png"
+    ],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q5",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-112-science/Q5-question-1.png)\n\n![第5題原卷資料](/assets/banks/cap-112-science/Q5-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第5題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 5,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q5-question-1.png",
+      "/assets/banks/cap-112-science/Q5-question-2.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q6",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-112-science/Q6-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第6題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 6,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q6-question.png"
+    ],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q7",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-112-science/Q7-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第7題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 7,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q7-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q8",
+    "difficulty": "medium",
+    "q": "「若食物中所含的糖分容易被人體快速吸收，則會使血糖急遽上升，而引起\n  某激素分泌增加，進而造成血糖快速下降，甚至形成餐後血糖過低的現象。」\n  根據上述，有關此激素的敘述，下列何者正確？",
+    "correct": "是由胰島分泌的胰島素",
+    "wrong": [
+      "是由肝臟分泌的胰島素",
+      "是由肝臟分泌的升糖素",
+      "是由胰島分泌的升糖素"
+    ],
+    "exp": "正確答案：是由胰島分泌的胰島素。來源：112年國中教育會考自然第8題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 8,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-112-science/Q9-question-1.png)\n\n![第9題原卷資料](/assets/banks/cap-112-science/Q9-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第9題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 9,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q9-question-1.png",
+      "/assets/banks/cap-112-science/Q9-question-2.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q10",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-112-science/Q10-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第10題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 10,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q10-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q11",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-112-science/Q11-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第11題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 11,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q11-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q12",
+    "difficulty": "medium",
+    "q": "道耳頓提出原子說後，越來越多的科學發現及證據顯示，原始的原子說需要修\n  正。下列哪一項最可能是因為電子的發現，原子說需要修正的內容？",
+    "correct": "物質均由原子組成，原子不可再分割",
+    "wrong": [
+      "相同元素的原子，有相同的質量和性質",
+      "不同元素的原子，有不同的質量和性質",
+      "化學反應是原子的重新排列組合，形成新的物質\n\n                                  3"
+    ],
+    "exp": "正確答案：物質均由原子組成，原子不可再分割。來源：112年國中教育會考自然第12題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 12,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-112-science/Q13-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第13題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 13,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q13-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q14",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/cap-112-science/Q14-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第14題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 14,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q14-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-112-science/Q15-question-1.png)\n\n![第15題原卷資料](/assets/banks/cap-112-science/Q15-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第15題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 15,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q15-question-1.png",
+      "/assets/banks/cap-112-science/Q15-question-2.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q16",
+    "difficulty": "medium",
+    "q": "已知維管束植物可進行某種代謝作用，其反應式為：「甲+二氧化碳→氧氣+乙+水」。\n  有關甲的名稱及其在植物體內主要運送的構造，下列何者最合理？",
+    "correct": "水，由木質部運送",
+    "wrong": [
+      "水，由韌皮部運送",
+      "葡萄糖，由木質部運送",
+      "葡萄糖，由韌皮部運送\n\n                           表"
+    ],
+    "exp": "正確答案：水，由木質部運送。來源：112年國中教育會考自然第16題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 16,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-112-science/Q17-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第17題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 17,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q17-question.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-112-science/Q18-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第18題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 18,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q18-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-112-science/Q19-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第19題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 19,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q19-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-112-science/Q20-question-1.png)\n\n![第20題原卷資料](/assets/banks/cap-112-science/Q20-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第20題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 20,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q20-question-1.png",
+      "/assets/banks/cap-112-science/Q20-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-112-science/Q21-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第21題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 21,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q21-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-112-science/Q22-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第22題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 22,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q22-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-112-science/Q23-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第23題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 23,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q23-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-112-science/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/cap-112-science/Q24-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第24題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 24,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q24-question-1.png",
+      "/assets/banks/cap-112-science/Q24-question-2.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-112-science/Q25-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第25題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 25,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q25-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q26",
+    "difficulty": "medium",
+    "q": "砒霜是一種毒物，主成分為三氧化二砷(As 2O3)。古代製作砒霜的技術較不成\n  熟，砒霜中會含有少量的不純物質――硫或硫化物，硫或硫化物接觸到銀，\n  會使銀氧化產生黑色的硫化銀(Ag 2S)，這就是古裝劇中常見的以銀針試毒，\n  銀針變黑即表示有毒。依據上述，下列推論何者最合理？",
+    "correct": "硫化物發生還原反應而使銀針變黑",
+    "wrong": [
+      "銀針變黑，是因為三氧化二砷被還原的結果",
+      "砒霜的純度越高，與銀針反應變黑的結果越明顯",
+      "將銀針改成活性較小的金屬如黃金，也會反應產生硫化物"
+    ],
+    "exp": "正確答案：硫化物發生還原反應而使銀針變黑。來源：112年國中教育會考自然第26題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 26,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-112-science/Q27-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第27題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 27,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q27-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-112-science/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/cap-112-science/Q28-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第28題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 28,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q28-question-1.png",
+      "/assets/banks/cap-112-science/Q28-question-2.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-112-science/Q29-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第29題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 29,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q29-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-112-science/Q30-question-1.png)\n\n![第30題原卷資料](/assets/banks/cap-112-science/Q30-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第30題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 30,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q30-question-1.png",
+      "/assets/banks/cap-112-science/Q30-question-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-112-science/Q31-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第31題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 31,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q31-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-112-science/Q32-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第32題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 32,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q32-question.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-112-science/Q33-question-1.png)\n\n![第33題原卷資料](/assets/banks/cap-112-science/Q33-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第33題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 33,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q33-question-1.png",
+      "/assets/banks/cap-112-science/Q33-question-2.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-112-science/Q34-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第34題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 34,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q34-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q35",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-112-science/Q35-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第35題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 35,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q35-question.png"
+    ],
+    "passRate": 0.36,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q36",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-112-science/Q36-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第36題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 36,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q36-question.png"
+    ],
+    "passRate": 0.34,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q37",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-112-science/Q37-question-1.png)\n\n![第37題原卷資料](/assets/banks/cap-112-science/Q37-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第37題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 37,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q37-question-1.png",
+      "/assets/banks/cap-112-science/Q37-question-2.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q38",
+    "difficulty": "medium",
+    "q": "軟骨發育不全症是體染色體中FGFR3基因發生突變所造成，患者具有身材矮小、\n  四肢短小變形等特徵，若親代只有其中一方為患者，子代就會有50%以上的\n  罹病率。已知阿佑因發生突變而患有軟骨發育不全症，但其父母皆未患病，\n  若以F代表突變的FGFR3遺傳因子，f代表正常的FGFR3遺傳因子，則關於阿佑\n  父母基因型的推論，下列何者最合理？",
+    "correct": "父：ff、母：ff",
+    "wrong": [
+      "父：Ff、母：Ff",
+      "父：Ff、母：ff",
+      "父：FF、母：FF"
+    ],
+    "exp": "正確答案：父：ff、母：ff。來源：112年國中教育會考自然第38題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 38,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "cap-112-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-112-science/Q39-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第39題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 39,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-112-science-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-112-science/Q40-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第40題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 40,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q40-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-112-science/Q41-question-1.png)\n\n![第41題原卷資料](/assets/banks/cap-112-science/Q41-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第41題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 41,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q41-question-1.png",
+      "/assets/banks/cap-112-science/Q41-question-2.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q42",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-112-science/Q42-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第42題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 42,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/Q42-question.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-112-science/G43-44-context.png)\n\n![第43題原卷資料](/assets/banks/cap-112-science/Q43-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第43題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 43,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G43-44-context.png",
+      "/assets/banks/cap-112-science/Q43-question.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-112-science/G43-44-context.png)\n\n![第44題原卷資料](/assets/banks/cap-112-science/Q44-question-1.png)\n\n![第44題原卷資料](/assets/banks/cap-112-science/Q44-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年國中教育會考自然第44題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 44,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G43-44-context.png",
+      "/assets/banks/cap-112-science/Q44-question-1.png",
+      "/assets/banks/cap-112-science/Q44-question-2.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-112-science/G45-46-context.png)\n\n![第45題原卷資料](/assets/banks/cap-112-science/Q45-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第45題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 45,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G45-46-context.png",
+      "/assets/banks/cap-112-science/Q45-question.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-112-science/G45-46-context.png)\n\n![第46題原卷資料](/assets/banks/cap-112-science/Q46-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第46題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 46,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G45-46-context.png",
+      "/assets/banks/cap-112-science/Q46-question.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q47",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-112-science/G47-48-context-1.png)\n\n![第47題原卷資料](/assets/banks/cap-112-science/G47-48-context-2.png)\n\n![第47題原卷資料](/assets/banks/cap-112-science/Q47-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第47題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 47,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        47,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G47-48-context-1.png",
+      "/assets/banks/cap-112-science/G47-48-context-2.png",
+      "/assets/banks/cap-112-science/Q47-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-112-science/G47-48-context-1.png)\n\n![第48題原卷資料](/assets/banks/cap-112-science/G47-48-context-2.png)\n\n![第48題原卷資料](/assets/banks/cap-112-science/Q48-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年國中教育會考自然第48題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 48,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        47,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G47-48-context-1.png",
+      "/assets/banks/cap-112-science/G47-48-context-2.png",
+      "/assets/banks/cap-112-science/Q48-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q49",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-112-science/G49-50-context.png)\n\n![第49題原卷資料](/assets/banks/cap-112-science/Q49-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年國中教育會考自然第49題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 49,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        49,
+        50
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G49-50-context.png",
+      "/assets/banks/cap-112-science/Q49-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-112-science-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-112-science/G49-50-context.png)\n\n![第50題原卷資料](/assets/banks/cap-112-science/Q50-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年國中教育會考自然第50題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-112-science",
+      "question": 50,
+      "file": "國中/會考/自然/112P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/1udjGfXmM3_Qz0tXqk0Ztz9_skDx99SXa/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        49,
+        50
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-science/G49-50-context.png",
+      "/assets/banks/cap-112-science/Q50-question.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link"
+  }
+]

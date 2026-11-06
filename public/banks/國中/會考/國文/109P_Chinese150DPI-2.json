@@ -1,0 +1,1547 @@
+[
+  {
+    "id": "cap-109-chinese-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-109-chinese/Q1-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第1題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 1,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q1-question.png"
+    ],
+    "passRate": 0.92,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q2",
+    "difficulty": "easy",
+    "q": "「寧可讓學得快的人等，也不能讓不會的人繼續不會。」下列何者最符合這句話\n  所強調的教育理念？",
+    "correct": "無論良與莠，一個都不放棄",
+    "wrong": [
+      "強化資優教育，培養菁英",
+      "提倡忍讓，加強品格教育",
+      "視學生資質，給予適當教導"
+    ],
+    "exp": "正確答案：無論良與莠，一個都不放棄。來源：109年國中教育會考國文第2題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 2,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q3",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-109-chinese/Q3-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第3題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 3,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q3-question.png"
+    ],
+    "passRate": 0.95,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q4",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-109-chinese/Q4-question-1.png)\n\n![第4題原卷資料](/assets/banks/cap-109-chinese/Q4-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第4題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 4,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q4-question-1.png",
+      "/assets/banks/cap-109-chinese/Q4-question-2.png"
+    ],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q5",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-109-chinese/Q5-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 5,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q5-question.png"
+    ],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q6",
+    "difficulty": "easy",
+    "q": "下列文句，何者詞語使用最恰當？",
+    "correct": "見到故居破敗，不免有些傷感",
+    "wrong": [
+      "酒後不開車，未免發生事故",
+      "他毫無商量餘地，避免不近人情",
+      "他決心改正遲到毛病，難免受處罰"
+    ],
+    "exp": "正確答案：見到故居破敗，不免有些傷感。來源：109年國中教育會考國文第6題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 6,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q7",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-109-chinese/Q7-question-1.png)\n\n![第7題原卷資料](/assets/banks/cap-109-chinese/Q7-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 7,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q7-question-1.png",
+      "/assets/banks/cap-109-chinese/Q7-question-2.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q8",
+    "difficulty": "medium",
+    "q": "「和你的詩作凍結在一起或因某幾首詩而大獲激賞是痛苦的事。真正的生命存\n  在於寫作當中，而非經年累月一再朗讀同樣的幾首詩。我們不斷的需要有新\n  的洞察和觀點，我們的生活也非一成不變。你無法在幾首詩裡便挖掘出永恆\n  不滅的真理。」就創作而言，這段文字的觀點，與下列何者最接近？",
+    "correct": "創作應力求突破窠臼，不斷創新",
+    "wrong": [
+      "持續寫作，就能成就不朽的巨作",
+      "師法各家作品，塑造自我的風格",
+      "嘗試不同的生活，激發創作靈感"
+    ],
+    "exp": "正確答案：創作應力求突破窠臼，不斷創新。來源：109年國中教育會考國文第8題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 8,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q9",
+    "difficulty": "easy",
+    "q": "「朋友曾問過我一個問題□失去視力和失去聽力，害怕哪一項？我思考許久，\n  最後坦承：什麼也不想失去。眼睛的世界那樣可喜，聽見的聲音卻更像一種\n  心靈的共振□閉上眼睛也能讓情節自己呼應。我不能放棄兩者□也不願被兩\n  者放棄。」這段文字空格處的標點符號，依序填入下列何者最恰當？",
+    "correct": "： ， ，",
+    "wrong": [
+      "， 。 ；",
+      "， ； 、",
+      "： 。 、"
+    ],
+    "exp": "正確答案：： ， ，。來源：109年國中教育會考國文第9題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 9,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q10",
+    "difficulty": "medium",
+    "q": "「此事關係重大，一定要在時限內完成，不得有誤。」句中「得」字的字義與\n  下列何者相同？",
+    "correct": "「得」過且過",
+    "wrong": [
+      "相「得」益彰",
+      "忘懷「得」失",
+      "洋洋自「得」"
+    ],
+    "exp": "正確答案：「得」過且過。來源：109年國中教育會考國文第10題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 10,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q11",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-109-chinese/Q11-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第11題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 11,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q11-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-109-chinese/Q12-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 12,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q12-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-109-chinese/Q13-question-1.png)\n\n![第13題原卷資料](/assets/banks/cap-109-chinese/Q13-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 13,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q13-question-1.png",
+      "/assets/banks/cap-109-chinese/Q13-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q14",
+    "difficulty": "medium",
+    "q": "「『個人資料保護法』強調，須經當事人同意才能蒐集與處理其個資，而且\n  僅能用於特定目的。眾人為使用地圖導航或方便聯繫，只能同意交付行蹤與\n  通訊內容給Google或LINE這些資訊服務業者，若不同意就不能使用服務。然\n  而，業者也因此得以持續使用源源不絕的個資。」根據這段文字，下列關於\n  個資蒐集或處理的敘述，何者最恰當？",
+    "correct": "「當事人同意」及「用於特定目的」讓業者可合法處理個資",
+    "wrong": [
+      "使用者交付行蹤與通訊內容是為了讓業者蒐集個資",
+      "Google與LINE的安全機制可以有效防止個資外流",
+      "「個人資料保護法」規定若不同意交付個資就不能使用服務"
+    ],
+    "exp": "正確答案：「當事人同意」及「用於特定目的」讓業者可合法處理個資。來源：109年國中教育會考國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 14,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q15",
+    "difficulty": "medium",
+    "q": "「如果我們以人文關懷角度切入，不難發現囤積者的生命都承受著失落與喪\n  慟。囤積，其實是一種無法割捨的情感阻礙。只有透過囤積，他們以為自己\n  並未失去什麼。所以從這個角度來看，囤積者實際上無法處理的，是關於\n  □□。」根據文意脈絡，空格處填入下列何者最恰當？",
+    "correct": "分離",
+    "wrong": [
+      "收納",
+      "時間",
+      "理想"
+    ],
+    "exp": "正確答案：分離。來源：109年國中教育會考國文第15題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 15,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-109-chinese/Q16-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第16題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 16,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q16-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-109-chinese/Q17-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 17,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q17-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q18",
+    "difficulty": "medium",
+    "q": "「用兵久則驕惰自生，驕惰則未有不敗者。勤字所以醫惰，慎字所以醫驕，二\n  字之先，須有一誠字以為本。立意要將此事知得透，辨得穿。精誠所至，金石\n  為開，鬼神亦避，此在己之誠也。」根據這段文字，下列敘述何者正確？",
+    "correct": "勤慎用兵，以誠為本",
+    "wrong": [
+      "祭祀鬼神，心誠則靈",
+      "慎可以醫惰，勤可以醫驕",
+      "修身首重勤，次為慎，終為誠\n                                  4"
+    ],
+    "exp": "正確答案：勤慎用兵，以誠為本。來源：109年國中教育會考國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 18,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q19",
+    "difficulty": "medium",
+    "q": "「65%的英國人承認壺裡的水裝太滿，其實他們通常只需要泡一杯茶。有人算\n  出，使用電水壺一天額外產生的能源消耗，足以點亮英國一個晚上所有的路\n  燈。」根據這段文字，可明確推論出下列何者？",
+    "correct": "至少65%的英國人意識到自己煮了過多的水",
+    "wrong": [
+      "35%的英國人只喝冷水不喝熱茶",
+      "英國多數的電水壺一次只能煮出一杯茶的水量",
+      "點亮英國一整晚燈的電量相當於使用電水壺一天"
+    ],
+    "exp": "正確答案：至少65%的英國人意識到自己煮了過多的水。來源：109年國中教育會考國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 19,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q20",
+    "difficulty": "medium",
+    "q": "下列文句「」中的字，何者讀音正確？",
+    "correct": "「囿」於成見，他一直排斥這項工作：ㄧㄡˋ",
+    "wrong": [
+      "他對朋友的要求總是「慨」然應允：ㄍㄞˋ",
+      "警方追捕多年的通「緝」犯，終於在今日落網：ㄐㄧˊ",
+      "這家公司處理消費糾紛的過程粗「糙」，引起民眾反彈：ㄗㄠˋ"
+    ],
+    "exp": "正確答案：「囿」於成見，他一直排斥這項工作：ㄧㄡˋ。來源：109年國中教育會考國文第20題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 20,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q21",
+    "difficulty": "medium",
+    "q": "小淳參加王爺爺的壽宴，在會場聽到以下對話，哪一組用詞最為得體？",
+    "correct": "李太太：「王大哥，看你們賢喬梓父慈子孝，令人好生羨慕！」\n   王爺爺之子：「託您的福。」",
+    "wrong": [
+      "王爺爺之子：「林先生、林太太，歡迎賢伉儷大駕光臨。」\n   林先生：「敝伉儷恭賀令堂生日快樂。」",
+      "張先生：「王爺爺，祝您生日快樂。」\n   王爺爺：「小張，歡迎你光臨貴府。」",
+      "王奶奶：「很榮幸內人我可以替您服務。」\n   陳太太：「不敢，麻煩王奶奶了。」"
+    ],
+    "exp": "正確答案：李太太：「王大哥，看你們賢喬梓父慈子孝，令人好生羨慕！」\n   王爺爺之子：「託您的福。」。來源：109年國中教育會考國文第21題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 21,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q22",
+    "difficulty": "medium",
+    "q": "「鳩摩羅什願凡所宣譯傳流後世，每云：『天竺國俗甚重文制，其宮商體韻以\n  入弦為善，以歌嘆為貴。改梵為漢，失其藻蔚，雖得大意，殊隔文體。有似嚼\n  飯與人，非徒失味，乃令嘔也。』」根據這段文字，下列何者最符合鳩摩羅什\n  對譯經的看法？",
+    "correct": "保留原文形式之美並不容易",
+    "wrong": [
+      "可因國情不同而修改內容",
+      "首要關鍵在於音律的和諧",
+      "應避免以華麗辭藻干擾文意"
+    ],
+    "exp": "正確答案：保留原文形式之美並不容易。來源：109年國中教育會考國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 22,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-109-chinese/Q23-question-1.png)\n\n![第23題原卷資料](/assets/banks/cap-109-chinese/Q23-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第23題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 23,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q23-question-1.png",
+      "/assets/banks/cap-109-chinese/Q23-question-2.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-109-chinese/Q24-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 24,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q24-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-109-chinese/Q25-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考國文第25題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 25,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q25-question.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q26",
+    "difficulty": "medium",
+    "q": "下列文句，何者文意通暢、用詞最為恰當？",
+    "correct": "他成功的振興經濟，解民倒懸，獲得眾人愛戴",
+    "wrong": [
+      "在我軍堅守防線之下，敵軍難以越瑤池一步",
+      "她性格豪邁直爽，英姿煥發，彷彿小家碧玉",
+      "教育小孩的方法必須剛烈並濟，才能達到效果"
+    ],
+    "exp": "正確答案：他成功的振興經濟，解民倒懸，獲得眾人愛戴。來源：109年國中教育會考國文第26題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 26,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-109-chinese/Q27-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第27題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 27,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q27-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q28",
+    "difficulty": "medium",
+    "q": "「以為攝影捕攫物象而加以複製便是寫實，是忽略了攝影和其他藝術共通的創\n  作元素：主觀的選擇。一旦必須通過人的意識選擇安排而呈現，絕對的客觀\n  便失去了意義。」這段文字的涵義與下列何者最接近？",
+    "correct": "攝影被視為創作，必然具有主觀意識的安排\n                                  6",
+    "wrong": [
+      "客觀的寫實是攝影和其他藝術共通的元素",
+      "攝影藝術所追求的終極境界是絕對的客觀",
+      "個人喜好不同，欣賞攝影作品的角度就不同"
+    ],
+    "exp": "正確答案：攝影被視為創作，必然具有主觀意識的安排\n                                  6。來源：109年國中教育會考國文第28題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 28,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q29",
+    "difficulty": "medium",
+    "q": "下列文句「」中的詞語，何者使用最恰當？",
+    "correct": "災民困在地基被掏空的房舍中，如「魚游沸鼎」，岌岌可危",
+    "wrong": [
+      "祭拜祖先時要「舉案齊眉」，以示虔敬",
+      "他在山上隱居，過著「浮雲蔽日」的生活",
+      "社區居民應守望相助，「以鄰為壑」，維護住家平安"
+    ],
+    "exp": "正確答案：災民困在地基被掏空的房舍中，如「魚游沸鼎」，岌岌可危。來源：109年國中教育會考國文第29題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 29,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-109-chinese/Q30-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第30題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 30,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q30-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q31",
+    "difficulty": "medium",
+    "q": "下列文句，何者用字完全正確？",
+    "correct": "藝術電影叫好不叫座，觀眾寥寥可數",
+    "wrong": [
+      "本公司通訊報名截止日期以郵戮為憑",
+      "半掩的門扉後，漏出一張天真爛漫的笑臉",
+      "求職屢屢碰壁的迥境，打擊了一顆年輕的心"
+    ],
+    "exp": "正確答案：藝術電影叫好不叫座，觀眾寥寥可數。來源：109年國中教育會考國文第31題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 31,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-109-chinese/Q32-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第32題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 32,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q32-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-109-chinese/Q33-question-1.png)\n\n![第33題原卷資料](/assets/banks/cap-109-chinese/Q33-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第33題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 33,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q33-question-1.png",
+      "/assets/banks/cap-109-chinese/Q33-question-2.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q34",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-109-chinese/Q34-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第34題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 34,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/Q34-question.png"
+    ],
+    "passRate": 0.25,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q35",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-109-chinese/G35-36-context.png)\n\n![第35題原卷資料](/assets/banks/cap-109-chinese/Q35-question-1.png)\n\n![第35題原卷資料](/assets/banks/cap-109-chinese/Q35-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第35題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 35,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G35-36-context.png",
+      "/assets/banks/cap-109-chinese/Q35-question-1.png",
+      "/assets/banks/cap-109-chinese/Q35-question-2.png"
+    ],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q36",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-109-chinese/G35-36-context.png)\n\n![第36題原卷資料](/assets/banks/cap-109-chinese/Q36-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第36題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 36,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G35-36-context.png",
+      "/assets/banks/cap-109-chinese/Q36-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-109-chinese/G37-38-context.png)\n\n![第37題原卷資料](/assets/banks/cap-109-chinese/Q37-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第37題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 37,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G37-38-context.png",
+      "/assets/banks/cap-109-chinese/Q37-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-109-chinese/G37-38-context.png)\n\n![第38題原卷資料](/assets/banks/cap-109-chinese/Q38-question-1.png)\n\n![第38題原卷資料](/assets/banks/cap-109-chinese/Q38-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考國文第38題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 38,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G37-38-context.png",
+      "/assets/banks/cap-109-chinese/Q38-question-1.png",
+      "/assets/banks/cap-109-chinese/Q38-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-109-chinese-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-109-chinese/G39-40-context.png)\n\n![第39題原卷資料](/assets/banks/cap-109-chinese/Q39-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第39題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 39,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        39,
+        40
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G39-40-context.png",
+      "/assets/banks/cap-109-chinese/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-109-chinese-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-109-chinese/G39-40-context.png)\n\n![第40題原卷資料](/assets/banks/cap-109-chinese/Q40-question-1.png)\n\n![第40題原卷資料](/assets/banks/cap-109-chinese/Q40-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第40題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 40,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        39,
+        40
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G39-40-context.png",
+      "/assets/banks/cap-109-chinese/Q40-question-1.png",
+      "/assets/banks/cap-109-chinese/Q40-question-2.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-109-chinese/G41-42-context.png)\n\n![第41題原卷資料](/assets/banks/cap-109-chinese/Q41-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考國文第41題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 41,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        41,
+        42
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G41-42-context.png",
+      "/assets/banks/cap-109-chinese/Q41-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q42",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-109-chinese/G41-42-context.png)\n\n![第42題原卷資料](/assets/banks/cap-109-chinese/Q42-question-1.png)\n\n![第42題原卷資料](/assets/banks/cap-109-chinese/Q42-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第42題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 42,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        41,
+        42
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G41-42-context.png",
+      "/assets/banks/cap-109-chinese/Q42-question-1.png",
+      "/assets/banks/cap-109-chinese/Q42-question-2.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-109-chinese/G43-44-context.png)\n\n![第43題原卷資料](/assets/banks/cap-109-chinese/Q43-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考國文第43題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 43,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G43-44-context.png",
+      "/assets/banks/cap-109-chinese/Q43-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-109-chinese/G43-44-context.png)\n\n![第44題原卷資料](/assets/banks/cap-109-chinese/Q44-question-1.png)\n\n![第44題原卷資料](/assets/banks/cap-109-chinese/Q44-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考國文第44題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 44,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G43-44-context.png",
+      "/assets/banks/cap-109-chinese/Q44-question-1.png",
+      "/assets/banks/cap-109-chinese/Q44-question-2.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q45",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-109-chinese/G45-46-context.png)\n\n![第45題原卷資料](/assets/banks/cap-109-chinese/Q45-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考國文第45題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 45,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G45-46-context.png",
+      "/assets/banks/cap-109-chinese/Q45-question.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-109-chinese/G45-46-context.png)\n\n![第46題原卷資料](/assets/banks/cap-109-chinese/Q46-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第46題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 46,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G45-46-context.png",
+      "/assets/banks/cap-109-chinese/Q46-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q47",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-109-chinese/G47-48-context.png)\n\n![第47題原卷資料](/assets/banks/cap-109-chinese/Q47-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考國文第47題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 47,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        47,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G47-48-context.png",
+      "/assets/banks/cap-109-chinese/Q47-question.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-chinese-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-109-chinese/G47-48-context.png)\n\n![第48題原卷資料](/assets/banks/cap-109-chinese/Q48-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考國文第48題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-109-chinese",
+      "question": 48,
+      "file": "國中/會考/國文/109P_Chinese150DPI-2.pdf",
+      "url": "https://drive.google.com/file/d/1znjSfm0Cj1IXR2oqRaLjjrh3F7o0uST3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        47,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-chinese/G47-48-context.png",
+      "/assets/banks/cap-109-chinese/Q48-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  }
+]

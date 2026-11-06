@@ -305,40 +305,7 @@ app.get('/api/assets', (req, res) => {
 // ==========================================
 // API 4: 取得題庫檔案列表 (保持不變)
 // ==========================================
-app.get('/api/banks', (req, res) => {
-    const banksDir = path.join(__dirname, 'public', 'banks');
-
-    if (!fs.existsSync(banksDir)) {
-        fs.mkdirSync(banksDir);
-    }
-
-    const getFilesRecursively = (dir, fileList = [], rootDir = banksDir) => {
-        const files = fs.readdirSync(dir);
-        
-        files.forEach(file => {
-            const filePath = path.join(dir, file);
-            const stat = fs.statSync(filePath);
-
-            if (stat.isDirectory()) {
-                getFilesRecursively(filePath, fileList, rootDir);
-            } else {
-                if (file.endsWith('.json')) {
-                    const relativePath = path.relative(rootDir, filePath).split(path.sep).join('/');
-                    fileList.push(relativePath);
-                }
-            }
-        });
-        return fileList;
-    };
-
-    try {
-        const allFiles = getFilesRecursively(banksDir);
-        res.json({ files: allFiles });
-    } catch (e) {
-        console.error("讀取題庫失敗:", e);
-        res.json({ files: [] });
-    }
-});
+require('./bank-catalog.cjs').registerBankApi(app, path.join(__dirname, 'public'));
 
 // ==========================================
 // 定義學科與子題型架構 (Knowledge Schema)

@@ -1,0 +1,1400 @@
+[
+  {
+    "id": "cap-109-english-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-109-english/Q1-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第1題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 1,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/Q1-question.png"
+    ],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q2",
+    "difficulty": "medium",
+    "q": "My mom puts the _____ on to keep her hands away from water when she washes\n     the dishes.",
+    "correct": "gloves",
+    "wrong": [
+      "jacket",
+      "ring",
+      "socks"
+    ],
+    "exp": "正確答案：gloves。來源：109年國中教育會考英語閱讀第2題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 2,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q3",
+    "difficulty": "medium",
+    "q": "Can you _____ your feet a little off the floor?  I want to see if my keys are under the\n     sofa.",
+    "correct": "raise",
+    "wrong": [
+      "check",
+      "kick",
+      "show"
+    ],
+    "exp": "正確答案：raise。來源：109年國中教育會考英語閱讀第3題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 3,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q4",
+    "difficulty": "medium",
+    "q": "_____ of my sisters are older than I am. I’m the youngest of the three children in my\n     family.",
+    "correct": "Both",
+    "wrong": [
+      "Few",
+      "Most",
+      "Some"
+    ],
+    "exp": "正確答案：Both。來源：109年國中教育會考英語閱讀第4題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 4,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q5",
+    "difficulty": "medium",
+    "q": "The beach near our town is a very _____ place. Every summer at least one kid dies\n     there in the water.",
+    "correct": "dangerous",
+    "wrong": [
+      "exciting",
+      "lonely",
+      "popular"
+    ],
+    "exp": "正確答案：dangerous。來源：109年國中教育會考英語閱讀第5題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 5,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q6",
+    "difficulty": "easy",
+    "q": "My wife enjoys going to the movies with her friends, but I like to watch TV at home\n    by _____.",
+    "correct": "myself",
+    "wrong": [
+      "I",
+      "me",
+      "mine"
+    ],
+    "exp": "正確答案：myself。來源：109年國中教育會考英語閱讀第6題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 6,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q7",
+    "difficulty": "medium",
+    "q": "For the past twenty years, my father _____ in a school library. But he’ll leave the job\n     next month.",
+    "correct": "has worked",
+    "wrong": [
+      "worked",
+      "is working",
+      "works"
+    ],
+    "exp": "正確答案：has worked。來源：109年國中教育會考英語閱讀第7題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 7,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q8",
+    "difficulty": "medium",
+    "q": "It’s great that we can buy train tickets over the phone without going out.  It _____ us\n    a lot of time.",
+    "correct": "saves",
+    "wrong": [
+      "lends",
+      "prepares",
+      "takes"
+    ],
+    "exp": "正確答案：saves。來源：109年國中教育會考英語閱讀第8題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 8,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-109-english/Q9-question-1.png)\n\n![第9題原卷資料](/assets/banks/cap-109-english/Q9-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第9題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 9,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/Q9-question-1.png",
+      "/assets/banks/cap-109-english/Q9-question-2.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q10",
+    "difficulty": "medium",
+    "q": "Jill: Have you decided _____ you will celebrate your 30th birthday?\n     Sue: Yeah, I’m going to have a big barbecue party.",
+    "correct": "how",
+    "wrong": [
+      "where",
+      "what",
+      "when"
+    ],
+    "exp": "正確答案：how。來源：109年國中教育會考英語閱讀第10題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 10,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q11",
+    "difficulty": "medium",
+    "q": "Alison doesn’t like _____ what to do. She only does things she wants to do.",
+    "correct": "to be told",
+    "wrong": [
+      "told",
+      "to tell",
+      "be told"
+    ],
+    "exp": "正確答案：to be told。來源：109年國中教育會考英語閱讀第11題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 11,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q12",
+    "difficulty": "hard",
+    "q": "Josh has planned to make a trip to New York and _____ some of his friends there.",
+    "correct": "visit",
+    "wrong": [
+      "visits",
+      "visiting",
+      "visited"
+    ],
+    "exp": "正確答案：visit。來源：109年國中教育會考英語閱讀第12題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 12,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.34,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q13",
+    "difficulty": "medium",
+    "q": "Ms. Johnson has been taking phone calls since she entered the office this morning.\n     Just when she thought she could finally leave work, _____ call came in.",
+    "correct": "another",
+    "wrong": [
+      "each",
+      "the next",
+      "the other"
+    ],
+    "exp": "正確答案：another。來源：109年國中教育會考英語閱讀第13題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 13,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q14",
+    "difficulty": "medium",
+    "q": "We were so sure that Jerry _____ well on the difficult job. His past experience in\n     other work showed he was the right guy for it. So when he failed, no one believed it.",
+    "correct": "would do",
+    "wrong": [
+      "had done",
+      "did",
+      "has done"
+    ],
+    "exp": "正確答案：would do。來源：109年國中教育會考英語閱讀第14題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 14,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q15",
+    "difficulty": "hard",
+    "q": "For Mike, the price is _____ important thing when he shops for jeans. He cares even\n    more about the shape and the size of the pockets.",
+    "correct": "the least\n\n                                  2",
+    "wrong": [
+      "the more",
+      "the most",
+      "the less"
+    ],
+    "exp": "正確答案：the least\n\n                                  2。來源：109年國中教育會考英語閱讀第15題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 15,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-109-english/G16-17-context.png)\n\n![第16題原卷資料](/assets/banks/cap-109-english/Q16-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考英語閱讀第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 16,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        16,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G16-17-context.png",
+      "/assets/banks/cap-109-english/Q16-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-109-english/G16-17-context.png)\n\n![第17題原卷資料](/assets/banks/cap-109-english/Q17-question-1.png)\n\n![第17題原卷資料](/assets/banks/cap-109-english/Q17-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考英語閱讀第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 17,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        16,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G16-17-context.png",
+      "/assets/banks/cap-109-english/Q17-question-1.png",
+      "/assets/banks/cap-109-english/Q17-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-109-english/G18-19-context.png)\n\n![第18題原卷資料](/assets/banks/cap-109-english/Q18-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考英語閱讀第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 18,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G18-19-context.png",
+      "/assets/banks/cap-109-english/Q18-question.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-109-english/G18-19-context.png)\n\n![第19題原卷資料](/assets/banks/cap-109-english/Q19-question-1.png)\n\n![第19題原卷資料](/assets/banks/cap-109-english/Q19-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 19,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G18-19-context.png",
+      "/assets/banks/cap-109-english/Q19-question-1.png",
+      "/assets/banks/cap-109-english/Q19-question-2.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-109-english/G20-21-context.png)\n\n![第20題原卷資料](/assets/banks/cap-109-english/Q20-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 20,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G20-21-context.png",
+      "/assets/banks/cap-109-english/Q20-question.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-109-english/G20-21-context.png)\n\n![第21題原卷資料](/assets/banks/cap-109-english/Q21-question-1.png)\n\n![第21題原卷資料](/assets/banks/cap-109-english/Q21-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 21,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G20-21-context.png",
+      "/assets/banks/cap-109-english/Q21-question-1.png",
+      "/assets/banks/cap-109-english/Q21-question-2.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q22",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-109-english/G22-24-context.png)\n\n![第22題原卷資料](/assets/banks/cap-109-english/Q22-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 22,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G22-24-context.png",
+      "/assets/banks/cap-109-english/Q22-question.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-109-english/G22-24-context.png)\n\n![第23題原卷資料](/assets/banks/cap-109-english/Q23-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 23,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G22-24-context.png",
+      "/assets/banks/cap-109-english/Q23-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-109-english/G22-24-context.png)\n\n![第24題原卷資料](/assets/banks/cap-109-english/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/cap-109-english/Q24-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 24,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G22-24-context.png",
+      "/assets/banks/cap-109-english/Q24-question-1.png",
+      "/assets/banks/cap-109-english/Q24-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-109-english/G25-27-context.png)\n\n![第25題原卷資料](/assets/banks/cap-109-english/Q25-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 25,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        25,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G25-27-context.png",
+      "/assets/banks/cap-109-english/Q25-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-109-english/G25-27-context.png)\n\n![第26題原卷資料](/assets/banks/cap-109-english/Q26-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考英語閱讀第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 26,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        25,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G25-27-context.png",
+      "/assets/banks/cap-109-english/Q26-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-109-english/G25-27-context.png)\n\n![第27題原卷資料](/assets/banks/cap-109-english/Q27-question-1.png)\n\n![第27題原卷資料](/assets/banks/cap-109-english/Q27-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考英語閱讀第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 27,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        25,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G25-27-context.png",
+      "/assets/banks/cap-109-english/Q27-question-1.png",
+      "/assets/banks/cap-109-english/Q27-question-2.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-109-english/G28-30-context.png)\n\n![第28題原卷資料](/assets/banks/cap-109-english/Q28-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 28,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        28,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G28-30-context.png",
+      "/assets/banks/cap-109-english/Q28-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-109-english/G28-30-context.png)\n\n![第29題原卷資料](/assets/banks/cap-109-english/Q29-question-1.png)\n\n![第29題原卷資料](/assets/banks/cap-109-english/Q29-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 29,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        28,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G28-30-context.png",
+      "/assets/banks/cap-109-english/Q29-question-1.png",
+      "/assets/banks/cap-109-english/Q29-question-2.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-109-english/G28-30-context.png)\n\n![第30題原卷資料](/assets/banks/cap-109-english/Q30-question-1.png)\n\n![第30題原卷資料](/assets/banks/cap-109-english/Q30-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 30,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        9,
+        10,
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        28,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G28-30-context.png",
+      "/assets/banks/cap-109-english/Q30-question-1.png",
+      "/assets/banks/cap-109-english/Q30-question-2.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-109-english/G31-34-context.png)\n\n![第31題原卷資料](/assets/banks/cap-109-english/Q31-question-1.png)\n\n![第31題原卷資料](/assets/banks/cap-109-english/Q31-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考英語閱讀第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 31,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-context.png",
+      "/assets/banks/cap-109-english/Q31-question-1.png",
+      "/assets/banks/cap-109-english/Q31-question-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-109-english/G31-34-context.png)\n\n![第32題原卷資料](/assets/banks/cap-109-english/Q32-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 32,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-context.png",
+      "/assets/banks/cap-109-english/Q32-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-109-english/G31-34-context.png)\n\n![第33題原卷資料](/assets/banks/cap-109-english/Q33-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 33,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-context.png",
+      "/assets/banks/cap-109-english/Q33-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-109-english/G31-34-context.png)\n\n![第34題原卷資料](/assets/banks/cap-109-english/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-109-english/Q34-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考英語閱讀第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 34,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-context.png",
+      "/assets/banks/cap-109-english/Q34-question-1.png",
+      "/assets/banks/cap-109-english/Q34-question-2.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-109-english/G35-37-context.png)\n\n![第35題原卷資料](/assets/banks/cap-109-english/Q35-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考英語閱讀第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 35,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G35-37-context.png",
+      "/assets/banks/cap-109-english/Q35-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-109-english/G35-37-context.png)\n\n![第36題原卷資料](/assets/banks/cap-109-english/Q36-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 36,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G35-37-context.png",
+      "/assets/banks/cap-109-english/Q36-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-109-english/G35-37-context.png)\n\n![第37題原卷資料](/assets/banks/cap-109-english/Q37-question-1.png)\n\n![第37題原卷資料](/assets/banks/cap-109-english/Q37-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 37,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G35-37-context.png",
+      "/assets/banks/cap-109-english/Q37-question-1.png",
+      "/assets/banks/cap-109-english/Q37-question-2.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-109-english/G38-41-context.png)\n\n![第38題原卷資料](/assets/banks/cap-109-english/Q38-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考英語閱讀第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 38,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G38-41-context.png",
+      "/assets/banks/cap-109-english/Q38-question.png"
+    ]
+  },
+  {
+    "id": "cap-109-english-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-109-english/G38-41-context.png)\n\n![第39題原卷資料](/assets/banks/cap-109-english/Q39-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考英語閱讀第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 39,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G38-41-context.png",
+      "/assets/banks/cap-109-english/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-109-english-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-109-english/G38-41-context.png)\n\n![第40題原卷資料](/assets/banks/cap-109-english/Q40-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考英語閱讀第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 40,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G38-41-context.png",
+      "/assets/banks/cap-109-english/Q40-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-english-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-109-english/G38-41-context.png)\n\n![第41題原卷資料](/assets/banks/cap-109-english/Q41-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考英語閱讀第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 41,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G38-41-context.png",
+      "/assets/banks/cap-109-english/Q41-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  }
+]

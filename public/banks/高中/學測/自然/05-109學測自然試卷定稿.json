@@ -1,0 +1,1362 @@
+[
+  {
+    "id": "gsat-109-science-q1",
+    "difficulty": "easy",
+    "q": "下列甲、乙、丙三個敘述為原子內部結構探究的三個過程，依發生時間先後排序\n\n 何者正確？\n\n 甲：夸克的發現。\n\n 乙：電子只在特定軌道運行。\n 丙：利用α -粒子撞擊金箔，發現原子核的存在。",
+    "correct": "丙乙甲",
+    "wrong": [
+      "甲乙丙",
+      "甲丙乙",
+      "乙丙甲",
+      "乙甲丙"
+    ],
+    "exp": "正確答案：丙乙甲。來源：109年學科能力測驗自然第1題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 1,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q2",
+    "difficulty": "easy",
+    "q": "王君搭乘熱氣球在廣闊無風的平原上空觀賞風景，熱氣球以等速度5.0 m/s 鉛直\n  上升時，王君不小心使相機從離地高度為100 m 處離手而成為自由落體，若不計\n 空氣阻力並取重力加速度為 10 m/s 2 ，則相機著地前瞬間的速度量值約為多少m/s ？",
+    "correct": "45",
+    "wrong": [
+      "55",
+      "35",
+      "25",
+      "15"
+    ],
+    "exp": "正確答案：45。來源：109年學科能力測驗自然第2題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 2,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.94,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q3",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-109-science/Q3-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年學科能力測驗自然第3題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 3,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q3-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q4",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-109-science/Q4-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年學科能力測驗自然第4題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 4,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q4-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q5",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/gsat-109-science/Q5-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年學科能力測驗自然第5題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 5,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q5-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q6",
+    "difficulty": "medium",
+    "q": "某天文學家鎖定甲、乙兩個天體的觀測資料進行分析，之後確定其中一個是星系\n  而另一個是星系團。若甲的質量約為乙的1000 倍，且甲、乙兩天體相同元素所\n\n 發出的對應光譜線，甲的波長皆大於乙，則下列敘述何者正確？",
+    "correct": "甲為星系團，遠離速率較乙大",
+    "wrong": [
+      "甲為星系團，遠離速率較乙小",
+      "甲為星系，距離較乙遠",
+      "乙為星系團，遠離速率較甲小",
+      "甲為星系，距離較乙近"
+    ],
+    "exp": "正確答案：甲為星系團，遠離速率較乙大。來源：109年學科能力測驗自然第6題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 6,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q7",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-109-science/Q7-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第7題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 7,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q7-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q8",
+    "difficulty": "easy",
+    "q": "於電子顯微鏡下觀察微生物，除了觀察是否具有細胞核之外，下列何者也可用來\n\n 區分所見微生物為原核生物或原生生物？",
+    "correct": "具有粒線體者為原生生物",
+    "wrong": [
+      "具有核糖體者為原生生物",
+      "具有染色體者為原核生物",
+      "具有鞭毛者為原核生物",
+      "具有細胞壁者為原核生物"
+    ],
+    "exp": "正確答案：具有粒線體者為原生生物。來源：109年學科能力測驗自然第8題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 8,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q9",
+    "difficulty": "medium",
+    "q": "巴拉刈是一種常用來做為除草劑的強氧化劑，可抑制光反應電子傳遞的過程。對\n\n 人來說，巴拉刈也是劇毒，如果進入細胞會產生大量的過氧化物。下列敘述何者\n\n  正確？",
+    "correct": "巴拉刈以吸收電子方式干擾電子傳遞過程",
+    "wrong": [
+      "植物在噴灑巴拉刈後仍可持續進行碳反應",
+      "巴拉刈分解後產生氧使細胞加速受損",
+      "巴拉刈在葉綠體的作用位置主要在基質",
+      "巴拉刈對植物與動物造成毒害的主要胞器完全相同"
+    ],
+    "exp": "正確答案：巴拉刈以吸收電子方式干擾電子傳遞過程。來源：109年學科能力測驗自然第9題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 9,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q10",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/gsat-109-science/Q10-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年學科能力測驗自然第10題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 10,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q10-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q11",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/gsat-109-science/G11-12-context.png)\n\n![第11題原卷資料](/assets/banks/gsat-109-science/Q11-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第11題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 11,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        12
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G11-12-context.png",
+      "/assets/banks/gsat-109-science/Q11-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/gsat-109-science/G11-12-context.png)\n\n![第12題原卷資料](/assets/banks/gsat-109-science/Q12-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第12題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 12,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        12
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G11-12-context.png",
+      "/assets/banks/gsat-109-science/Q12-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q13",
+    "difficulty": "medium",
+    "q": "在某化學實驗室找到一瓶沒有標示的固體藥品，經由實驗檢測發現此固體藥品不\n\n 導電，可溶於水，且水溶液不導電，也不會使石蕊試紙變色。則下列哪一項可能\n\n 為此未知藥品？",
+    "correct": "葡萄糖（ C6 H12 O6 ）",
+    "wrong": [
+      "苯甲酸（ C6 H5 COOH）",
+      "醋酸鈉（ CH3 COONa ）",
+      "碘化鉀（KI）",
+      "氯化銨（ NH 4 Cl ）"
+    ],
+    "exp": "正確答案：葡萄糖（ C6 H12 O6 ）。來源：109年學科能力測驗自然第13題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 13,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q14",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-109-science/Q14-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第14題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 14,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q14-question.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-109-science/Q15-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年學科能力測驗自然第15題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 15,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q15-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q16",
+    "difficulty": "medium",
+    "q": "下列表格中，哪一個選項的三個元素分別符合表格中所列之條件？\n\n     元素態為網狀固體導電、導熱性佳原子半徑為同族最小",
+    "correct": "Si                Mg                N",
+    "wrong": [
+      "C                     Ar                     F",
+      "P                      Al                        Li",
+      "B                          Si                N",
+      "C                   Na                     Al"
+    ],
+    "exp": "正確答案：Si                Mg                N。來源：109年學科能力測驗自然第16題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 16,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/gsat-109-science/Q17-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年學科能力測驗自然第17題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 17,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q17-question.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/gsat-109-science/Q18-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年學科能力測驗自然第18題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 18,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q18-question.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/gsat-109-science/G19-20-context.png)\n\n![第19題原卷資料](/assets/banks/gsat-109-science/Q19-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第19題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 19,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        19,
+        20
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G19-20-context.png",
+      "/assets/banks/gsat-109-science/Q19-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-109-science/G19-20-context.png)\n\n![第20題原卷資料](/assets/banks/gsat-109-science/Q20-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年學科能力測驗自然第20題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 20,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        19,
+        20
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G19-20-context.png",
+      "/assets/banks/gsat-109-science/Q20-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-109-science/Q21-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：109年學科能力測驗自然第21題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 21,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q21-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q22",
+    "difficulty": "medium",
+    "q": "臺灣造山運動活躍，山崩事件時有所聞，下列有關影響臺灣山崩因素的敘述何者\n\n  正確？",
+    "correct": "節理（岩層破裂面）發達密集的山壁，山崩越容易發生",
+    "wrong": [
+      "板塊運動速率越快，山崩越不容易發生",
+      "岩層含水量越低，山崩越容易發生",
+      "坡度大小不重要，若岩性堅硬、耐風化，則不易山崩",
+      "岩層和坡面的傾斜方向相同，且岩層傾角比坡面傾角小，則不會山崩"
+    ],
+    "exp": "正確答案：節理（岩層破裂面）發達密集的山壁，山崩越容易發生。來源：109年學科能力測驗自然第22題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 22,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q23",
+    "difficulty": "medium",
+    "q": "地震大多為斷層錯動所造成，其能量以地震波的形式向外傳遞，地震波及斷層錯\n\n 動都可能造成災害。下列有關地震的敘述，何者正確？",
+    "correct": "地震可引起土壤液化，造成建築物下陷、倒塌",
+    "wrong": [
+      "地震規模大小與斷層錯動所釋放的能量無關",
+      "從地震的P波和S波速率及單一測站測得的P波和S波到達時間差，即可算出該\n\n   地震震源的位置",
+      "地震震度隨著距離震源越遠，震度越小，和各地地質無關",
+      "地震波的波速越快，造成的地表搖晃越大"
+    ],
+    "exp": "正確答案：地震可引起土壤液化，造成建築物下陷、倒塌。來源：109年學科能力測驗自然第23題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 23,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q37",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n36-40為題組\n\n 生活於大自然裡，人們不時可感覺到或看見電的效應，例如靜電放電、閃電。劇烈\n\n 天氣常伴隨閃電，以致強烈對流及降雨的地區閃電頻率較高。除上述現象外，生物\n\n 體也利用電來運作，以達成協調的目的。\n\n 生物體所有細胞膜的兩側均有電位差，形成膜電位。生物體存活期間，其細胞都維\n\n 持一定水平的膜電位，以確保細胞內之微環境恆定。神經生物學家觀察細胞膜之電\n\n 位變化，發現神經細胞受刺激後，細胞膜局部區域的電位會急遽升高。這項電位改\n\n 變會沿著軸突傳遞，引起神經衝動，也稱為動作電位。動作電位不僅使神經元達成\n\n 傳遞訊息的目的，也是肌肉收縮的生理基礎。腦的活動需依靠許多神經細胞集體運\n\n 作。腦波圖即為腦細胞運作時的電壓（電位差）隨著時間變化的紀錄，常用於醫療\n\n 診斷或神經科學探究。\n\n 此外，用電對現代生活不可或缺。日常生活的電能是由其他能量轉換而來，如何有\n\n 效地將其他能量轉換成電能一直是科技研究重要課題，當能量形式的轉換次數愈多，\n\n 能量損失也愈多，因此若能經由一次直接轉換成電能，將可減少能量損失。\n\n下列有關細胞膜及其電位之敘述，何者正確？",
+    "correct": "神經衝動發生時，軸突上之電位會陸續發生變化",
+    "wrong": [
+      "在靜止狀態下，細胞膜的兩側電荷分布相同",
+      "神經細胞受刺激後，會產生由細胞本體流向軸突的電流",
+      "動作電位是神經細胞之間所發生的電位變化",
+      "除了神經元外，其他細胞之膜不會產生動作電位"
+    ],
+    "exp": "正確答案：神經衝動發生時，軸突上之電位會陸續發生變化。來源：109年學科能力測驗自然第37題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 37,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        36,
+        40
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/gsat-109-science/G36-40-context.png)\n\n![第38題原卷資料](/assets/banks/gsat-109-science/Q38-question-1.png)\n\n![第38題原卷資料](/assets/banks/gsat-109-science/Q38-question-2.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：109年學科能力測驗自然第38題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 38,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        36,
+        40
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G36-40-context.png",
+      "/assets/banks/gsat-109-science/Q38-question-1.png",
+      "/assets/banks/gsat-109-science/Q38-question-2.png"
+    ]
+  },
+  {
+    "id": "gsat-109-science-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n36-40為題組\n\n 生活於大自然裡，人們不時可感覺到或看見電的效應，例如靜電放電、閃電。劇烈\n\n 天氣常伴隨閃電，以致強烈對流及降雨的地區閃電頻率較高。除上述現象外，生物\n\n 體也利用電來運作，以達成協調的目的。\n\n 生物體所有細胞膜的兩側均有電位差，形成膜電位。生物體存活期間，其細胞都維\n\n 持一定水平的膜電位，以確保細胞內之微環境恆定。神經生物學家觀察細胞膜之電\n\n 位變化，發現神經細胞受刺激後，細胞膜局部區域的電位會急遽升高。這項電位改\n\n 變會沿著軸突傳遞，引起神經衝動，也稱為動作電位。動作電位不僅使神經元達成\n\n 傳遞訊息的目的，也是肌肉收縮的生理基礎。腦的活動需依靠許多神經細胞集體運\n\n 作。腦波圖即為腦細胞運作時的電壓（電位差）隨著時間變化的紀錄，常用於醫療\n\n 診斷或神經科學探究。\n\n 此外，用電對現代生活不可或缺。日常生活的電能是由其他能量轉換而來，如何有\n\n 效地將其他能量轉換成電能一直是科技研究重要課題，當能量形式的轉換次數愈多，\n\n 能量損失也愈多，因此若能經由一次直接轉換成電能，將可減少能量損失。\n\n依據圖8 所示，下列關於腦電波的敘述何者正確？",
+    "correct": "睏倦入眠時，腦電波的頻率大於5 Hz",
+    "wrong": [
+      "腦電波的頻率為波長與波速的乘積",
+      "深睡時，腦電波的頻率最高",
+      "深睡時，腦電波的週期大於2秒",
+      "清醒活動時，腦電波的頻率最高，大於1000 Hz"
+    ],
+    "exp": "正確答案：睏倦入眠時，腦電波的頻率大於5 Hz。來源：109年學科能力測驗自然第39題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 39,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        36,
+        40
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-109-science-q41",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n41-42為題組\n\n 組成生物體的主要元素有碳、氫、氮及氧等。這些元素先形成各種大小不等的物\n\n 質分子，如單醣和胺基酸。再經同化作用合成較大的物質，如多醣和蛋白質。這\n\n 些物質分子可以形成細胞結構，或是調節生理機能。\n\n生物體內的某分子具有下列性質：\n （1）至少含碳、氫、氮及氧四種元素\n （2）含氮的重量百分比超過3%\n （3）若含有磷元素時，磷的重量百分比極低\n  （4）分子量約為葡萄糖分子量的150 倍\n\n 下列何者最有可能為此分子？",
+    "correct": "蛋白質",
+    "wrong": [
+      "胺基酸",
+      "脂肪",
+      "澱粉",
+      "DNA"
+    ],
+    "exp": "正確答案：蛋白質。來源：109年學科能力測驗自然第41題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 41,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        41,
+        42
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q43",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/gsat-109-science/G43-44-context.png)\n\n![第43題原卷資料](/assets/banks/gsat-109-science/Q43-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第43題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 43,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G43-44-context.png",
+      "/assets/banks/gsat-109-science/Q43-question.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q44",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/gsat-109-science/G43-44-context.png)\n\n![第44題原卷資料](/assets/banks/gsat-109-science/Q44-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年學科能力測驗自然第44題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 44,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G43-44-context.png",
+      "/assets/banks/gsat-109-science/Q44-question.png"
+    ],
+    "passRate": 0.29,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/gsat-109-science/G46-47-context.png)\n\n![第46題原卷資料](/assets/banks/gsat-109-science/Q46-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年學科能力測驗自然第46題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 46,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        46,
+        47
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G46-47-context.png",
+      "/assets/banks/gsat-109-science/Q46-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q47",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/gsat-109-science/G46-47-context.png)\n\n![第47題原卷資料](/assets/banks/gsat-109-science/Q47-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：109年學科能力測驗自然第47題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 47,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        46,
+        47
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G46-47-context.png",
+      "/assets/banks/gsat-109-science/Q47-question.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/gsat-109-science/G48-49-context.png)\n\n![第48題原卷資料](/assets/banks/gsat-109-science/Q48-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第48題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 48,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        48,
+        49
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G48-49-context.png",
+      "/assets/banks/gsat-109-science/Q48-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q49",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/gsat-109-science/G48-49-context.png)\n\n![第49題原卷資料](/assets/banks/gsat-109-science/Q49-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年學科能力測驗自然第49題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 49,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        48,
+        49
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/G48-49-context.png",
+      "/assets/banks/gsat-109-science/Q49-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q51",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 51 題。\n\n![第51題原卷資料](/assets/banks/gsat-109-science/Q51-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：109年學科能力測驗自然第51題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 51,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q51-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q53",
+    "difficulty": "medium",
+    "q": "林奈及其後繼者的系統分類中，任何一個物種均可唯一地被歸類於屬、科、目、\n  綱、門及界等六個層級之一。然而1990 年代之後，「域」被外加於「界」之上，\n\n 並普遍為生物學界所接受。下列何者是促成此一行動之關鍵？",
+    "correct": "發現現生古（細）菌較相似於真核生物，而非（真）細菌",
+    "wrong": [
+      "發現DNA病毒",
+      "發現RNA病毒",
+      "發現具有雙層脂質外膜的病毒",
+      "發現（真）細菌存在的地層比古（細）菌更為古老"
+    ],
+    "exp": "正確答案：發現現生古（細）菌較相似於真核生物，而非（真）細菌。來源：109年學科能力測驗自然第53題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 53,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-109-science-q57",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 57 題。\n\n![第57題原卷資料](/assets/banks/gsat-109-science/Q57-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年學科能力測驗自然第57題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 57,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q57-question.png"
+    ]
+  },
+  {
+    "id": "gsat-109-science-q58",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/gsat-109-science/Q58-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年學科能力測驗自然第58題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 58,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-109-science/Q58-question.png"
+    ]
+  },
+  {
+    "id": "gsat-109-science-q61",
+    "difficulty": "medium",
+    "q": "某一金屬離子溶液，其實驗結果如下：\n （1）加入碘離子或氯離子於溶液中，皆會形成沉澱\n （2）將鎳金屬片放入此金屬離子溶液中，發現溶液由無色轉變為綠色\n （3）將銅片放入此金屬離子溶液中，會發生氧化還原反應\n\n 下列何者為此金屬離子？",
+    "correct": "銀離子",
+    "wrong": [
+      "鐵（Ⅲ）離子",
+      "銅離子",
+      "鉛離子",
+      "汞離子"
+    ],
+    "exp": "正確答案：銀離子。來源：109年學科能力測驗自然第61題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 61,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-109-science-q62",
+    "difficulty": "medium",
+    "q": "依照距離地球由近而遠排列：月球、木星、織女星、X、仙女座星系。X 最可能\n\n 是下列何者？",
+    "correct": "銀河系中心",
+    "wrong": [
+      "室女座星系團",
+      "哈雷彗星",
+      "天王星",
+      "冥王星"
+    ],
+    "exp": "正確答案：銀河系中心。來源：109年學科能力測驗自然第62題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 62,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-109-science-q63",
+    "difficulty": "medium",
+    "q": "已知未飽和空氣塊的溫度直減率約為10℃/公里，飽和空氣塊的溫度直減率約為\n  6℃/公里。若觀測員在地面空地量到氣溫、露點溫度皆為30℃，則在地面的一個\n 空氣塊，若不與環境交換熱量，上升到2 公里高度時，其氣溫、露點溫度為下列\n\n  何者？",
+    "correct": "氣溫18℃、露點溫度18℃",
+    "wrong": [
+      "氣溫10℃、露點溫度10℃",
+      "氣溫10℃、露點溫度18℃",
+      "氣溫18℃、露點溫度30℃",
+      "氣溫30℃、露點溫度30℃"
+    ],
+    "exp": "正確答案：氣溫18℃、露點溫度18℃。來源：109年學科能力測驗自然第63題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 63,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-109-science-q64",
+    "difficulty": "medium",
+    "q": "如果某大氣模式涵蓋範圍為臺灣所在的東亞地區，該模式在水平方向無法解析小\n  於60 公里的大氣系統變化。這樣的模式適合處理下列哪一種大氣現象？",
+    "correct": "鋒面的位置",
+    "wrong": [
+      "龍捲風的位置",
+      "午後熱對流的強度",
+      "聖嬰現象發生時，整個赤道太平洋海面上的大氣變化",
+      "颱風侵襲臺灣時，受颱風影響範圍內街道上的最大風速"
+    ],
+    "exp": "正確答案：鋒面的位置。來源：109年學科能力測驗自然第64題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 64,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-109-science-q68",
+    "difficulty": "medium",
+    "q": "電波望遠鏡之父顏斯基（Karl Jansky）利用自製天線偵測暴風雨的電波訊號\n\n 時，另外發現不明來源的訊號。他花了一年時間研究這個不明電波，發現每隔\n   23 小時56 分出現一次最大值。根據這個發現，可以猜測這個不明電波最可能\n\n 來自何處？",
+    "correct": "銀河系中心",
+    "wrong": [
+      "地球電離層",
+      "太陽",
+      "金星",
+      "月球"
+    ],
+    "exp": "正確答案：銀河系中心。來源：109年學科能力測驗自然第68題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-109-science",
+      "question": 68,
+      "file": "高中/學測/自然/05-109學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/13Yz4UmVtTcrg0dEt1H7SI1vgnuzypCLG/view?usp=drivesdk",
+      "pages": [
+        20
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0k050345789551950743/05-109%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  }
+]

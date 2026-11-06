@@ -1,0 +1,182 @@
+[
+  {
+    "id": "gsat-112-math-b-q1",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/gsat-112-math-b/Q1-question.png)",
+    "correct": "原卷選項 1",
+    "wrong": [
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 4",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 1。來源：112年學科能力測驗數學B第1題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 1,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "1",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q1-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-math-b-q3",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/gsat-112-math-b/Q3-question.png)",
+    "correct": "原卷選項 4",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 4。來源：112年學科能力測驗數學B第3題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 3,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q3-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-math-b-q6",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/gsat-112-math-b/Q6-question.png)",
+    "correct": "原卷選項 3",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 4",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 3。來源：112年學科能力測驗數學B第6題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 6,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q6-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-math-b-q7",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-112-math-b/Q7-question.png)",
+    "correct": "原卷選項 4",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 4。來源：112年學科能力測驗數學B第7題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 7,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q7-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-math-b-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-112-math-b/Q13-question.png)",
+    "correct": "原卷選項 2",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 3",
+      "原卷選項 4",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 2。來源：112年學科能力測驗數學B第13題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 13,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "2",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q13-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-math-b-q14",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-112-math-b/Q14-question.png)",
+    "correct": "原卷選項 4",
+    "wrong": [
+      "原卷選項 1",
+      "原卷選項 2",
+      "原卷選項 3",
+      "原卷選項 5"
+    ],
+    "exp": "正確答案：原卷選項 4。來源：112年學科能力測驗數學B第14題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 14,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q14-question.png"
+    ]
+  }
+]

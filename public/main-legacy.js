@@ -93,6 +93,7 @@ let bufferFillPromise = null;
 let currentBankData = null; 
 let presenceInterval = null; 
 let allBankFiles = [];
+let bankAvailability = new Map();
 let currentSelectSlot = null;
 
 let isAnswering = false;             // 防止答題連點
@@ -178,6 +179,7 @@ function recentSoloQuestionContext() {
         ...soloQuestionCache.getQueue()
     ].filter(Boolean).map(item => ({
         q: item?.data?.q || '',
+        bankQuestionId: item?.bankQuestionId || '',
         concept_id: item?.meta?.concept_id || '',
         template_id: item?.meta?.template_id || '',
         question_form: item?.meta?.question_form || '',
@@ -2164,7 +2166,7 @@ function updateUIStats() {
 
 function buildPathTree(paths) {
     const tree = { name: "root", children: {} };
-    paths.forEach(path => {
+    [...new Set(paths)].sort().forEach(path => {
         const parts = path.split('/');
         let current = tree;
         parts.forEach((part, index) => {
@@ -2215,6 +2217,8 @@ window.renderCascadingSelectors = (tree, currentPath) => {
             const opt = document.createElement('option');
             opt.value = key;
             opt.innerText = node.type === 'file' ? `📄 ${key.replace('.json', '')}` : `📂 ${key}`;
+            const availability = node.type === 'file' ? bankAvailability.get(node.fullPath) : null;
+            if (availability) opt.innerText += `（可用 ${availability.available}/${availability.total} 題${availability.pendingImages ? '，待補圖 ' + availability.pendingImages : ''}）`;
             if (selectedParts[level] === key) opt.selected = true;
             select.appendChild(opt);
         });
@@ -2315,8 +2319,9 @@ async function updateSettingsInputs() {
                 const res = await fetch('/api/banks');
                 const data = await res.json();
                 if (data.files && Array.isArray(data.files)) {
-                    allBankFiles = data.files;
-                    const tree = buildPathTree(data.files);
+                    allBankFiles = [...new Set(data.files)];
+                    bankAvailability = new Map((data.banks || []).map(bank => [bank.file, bank]));
+                    const tree = buildPathTree(allBankFiles);
                     renderCascadingSelectors(tree, settings.source || 'ai');
                 }
             } catch (e) { console.error("Error loading banks", e); }
@@ -2565,7 +2570,7 @@ window.startQuizFlow = async (isNewSession = false) => {
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
             console.error(e);
             void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
-            alert("無法開始，請稍後再試");
+            alert(e?.message || "無法開始，請稍後再試");
             switchToPage('page-home');
         }
     }
@@ -2844,53 +2849,34 @@ async function fetchOneQuestion() {
     // 2. 題庫練習 (原本的 file based)
     else if (sourceMode === 'bank') {
         let targetSource = settings.source;
-        finalDifficulty = getSmartDifficulty(String(targetSource || '').split('/')[0]);
+        const bankSubject = String(targetSource || '').split('/').reverse().find(part => ['國文', '英文', '英語閱讀', '數學', '數學A', '數學B', '社會', '自然'].includes(part));
+        finalDifficulty = getSmartDifficulty(({ 英語閱讀: '英文', 數學A: '數學', 數學B: '數學' })[bankSubject] || bankSubject);
         if (!currentBankData || currentBankData.sourcePath !== targetSource) {
-            let filesToFetch = [];
-            if (targetSource && targetSource.endsWith('.json')) { 
-                filesToFetch = [targetSource]; 
-            } else if (targetSource && targetSource !== 'ai') {
-                if (allBankFiles.length === 0) {
-                    try { 
-                        const res = await fetch('/api/banks'); 
-                        const data = await res.json(); 
-                        allBankFiles = data.files || []; 
-                    } catch (e) { console.error(e); }
-                }
-                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                if (filesToFetch.length === 0) throw new Error('自訂題庫找不到題目，不會自動改為 AI 出題');
-            } else {
-                throw new Error('自訂題庫來源不存在，不會自動改為 AI 出題');
-            }
-
-            try {
-                const fetchPromises = filesToFetch.map(filePath => 
-                    fetch(`/banks/${filePath}?t=${Date.now()}`)
-                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-                        .catch(err => [])
-                );
-                const results = await Promise.all(fetchPromises);
-                const mergedQuestions = results.flat();
-                if (mergedQuestions.length === 0) throw new Error("No questions");
-                currentBankData = { sourcePath: targetSource, questions: mergedQuestions, drawBags: {} };
-            } catch (e) { 
-                console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
-                throw new Error("自訂題庫讀取失敗，不會自動改為 AI 出題"); 
-            }
+            if (!targetSource || targetSource === 'ai') throw new Error('請先選擇要使用的題庫。');
+            const response = await fetch('/api/bank-questions?source=' + encodeURIComponent(targetSource), { cache: 'no-store' });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || '題庫讀取失敗，請稍後重試。');
+            if (!Array.isArray(result.questions) || !result.questions.length) throw new Error('所選題庫目前沒有可作答的題目。');
+            currentBankData = { sourcePath: targetSource, questions: result.questions, drawBags: {} };
         }
 
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        const recentBankContext = recentSoloQuestionContext();
+        const seenBankIds = new Set(recentBankContext.avoidQuestionMeta.map(item => item.bankQuestionId).filter(Boolean));
+        const pendingBankIds = new Set([soloQuestionCache.getActive(), ...soloQuestionCache.getQueue()].map(item => item?.bankQuestionId).filter(Boolean));
         const seenQuestions = new Set(
-            recentSoloQuestionContext().avoidQuestions
+            recentBankContext.avoidQuestions
                 .map(value => String(value || '').toLowerCase().replace(/\s+/g, ''))
                 .filter(Boolean)
         );
-        const unseenPool = pool.filter(item =>
-            !seenQuestions.has(String(item?.q || '').toLowerCase().replace(/\s+/g, ''))
+        const availablePool = pool.filter(item => !pendingBankIds.has(item.id));
+        if (!availablePool.length) throw new Error('所選題庫的題目都已在待答清單中。');
+        const unseenPool = availablePool.filter(item =>
+            item.id ? !seenBankIds.has(item.id) : !seenQuestions.has(String(item?.q || '').toLowerCase().replace(/\s+/g, ''))
         );
         // 題庫尚有沒做過的題時，只從未看過的題抽；全部做完才開啟新一輪。
-        const drawPool = unseenPool.length > 0 ? unseenPool : pool;
+        const drawPool = unseenPool.length > 0 ? unseenPool : availablePool;
         const rawData = pickBankQuestionWithoutReplacement(
             drawPool,
             `${targetSource || 'bank'}|${filteredQuestions.length > 0 ? finalDifficulty : 'all'}|${drawPool.length}`
@@ -2900,6 +2886,7 @@ async function fetchOneQuestion() {
         
         return { 
             data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp }, 
+            bankQuestionId: rawData.id,
             rank: rankName, 
             badge: `🎯 ${displaySubject} | ${({easy: '簡單', medium: '中等', hard: '困難'})[finalDifficulty] || '適性練習'}`,
             learningSubject:displaySubject, learningTopic:rawData.sub_topic || '題庫', learningDifficulty:rawData.difficulty || finalDifficulty
@@ -3996,7 +3983,7 @@ window.getQuizInterfaceState=()=>{
     const container=document.getElementById('options-container'),stem=document.getElementById('question-text');
     const buttons=Array.from(container?.querySelectorAll('button[id^="option-btn-"]')||[]);
     const answered=quizHelperState.answered,pending=!answered&&(isAnswering||(window.currentActiveQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.()));
-    return {expectedOptions:Math.min(6,window.currentActiveQuiz?.data?.opts?.length||0),renderedOptions:buttons.length,
+    return {expectedOptions:Math.min(10,window.currentActiveQuiz?.data?.opts?.length||0),renderedOptions:buttons.length,
         clickableOptions:buttons.filter(button=>!button.disabled&&typeof button.onclick==='function'&&button.getClientRects().length).length,
         answerPending:!!pending,mathFallback:!![stem,container].some(node=>node?.querySelector('.quiz-math-fallback')),
         mathError:!![stem,container].some(node=>node?.querySelector('mjx-merror,.mjx-merror,[data-mjx-error]'))};

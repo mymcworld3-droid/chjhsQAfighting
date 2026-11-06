@@ -1,0 +1,1166 @@
+[
+  {
+    "id": "gsat-110-science-q1",
+    "difficulty": "easy",
+    "q": "寒流來襲，某地發生因熱水器使用不當造成的一氧化碳（CO）中毒案例，幸經\n 施予高壓氧及時救回。依上述說明推測，何者是CO導致死亡的主要原因？",
+    "correct": "與 O 2 競爭血紅素，造成血氧濃度嚴重不足",
+    "wrong": [
+      "與 O 2 競爭電子傳遞鏈釋出的電子，造成有氧呼吸作用停止",
+      "阻斷神經通往肌肉的傳導，造成呼吸肌癱瘓而窒息",
+      "抑制糖解作用相關酵素功能，造成細胞呼吸作用停止",
+      "與 CO 2 競爭血紅素，造成碳酸鹽無法排出體外而產生酸中毒"
+    ],
+    "exp": "正確答案：與 O 2 競爭血紅素，造成血氧濃度嚴重不足。來源：110年學科能力測驗自然第1題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 1,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q2",
+    "difficulty": "easy",
+    "q": "顯微鏡下觀察兔子睪丸切片，可看到3 型細胞如下：\n\n 甲、位於細精管間的細胞\n\n 乙、靠近細精管壁內緣的細胞\n\n 丙、靠近細精管腔，蝌蚪形的細胞\n 有關這3型細胞的敘述，何者正確？",
+    "correct": "甲大量受損可能導致性激素分泌不足",
+    "wrong": [
+      "甲、丙為生殖細胞",
+      "丙具有雙套染色體",
+      "乙是甲特化形成",
+      "丙具減數分裂能力"
+    ],
+    "exp": "正確答案：甲大量受損可能導致性激素分泌不足。來源：110年學科能力測驗自然第2題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 2,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q3",
+    "difficulty": "medium",
+    "q": "某短日照植物的臨界日長為13 小時，若其開花僅受光週期的影響，此植物在哪\n\n 一情況最不易開花？",
+    "correct": "夏至時在北半球高緯度地區",
+    "wrong": [
+      "夏至時在赤道",
+      "春分時在赤道",
+      "冬至時在赤道",
+      "秋分時在南半球高緯度地區"
+    ],
+    "exp": "正確答案：夏至時在北半球高緯度地區。來源：110年學科能力測驗自然第3題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 3,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q4",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-110-science/Q4-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第4題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 4,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q4-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q5",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/gsat-110-science/Q5-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第5題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 5,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q5-question.png"
+    ],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q6",
+    "difficulty": "medium",
+    "q": "石蕊在pH 小於4.5 與大於8.3 的溶液中分別呈現紅色與藍色，將白色濾紙分別\n\n 浸置其中，晾乾可得紅色與藍色石蕊試紙。下列敘述何者正確？",
+    "correct": "市售胃乳液（含制酸劑）滴在潤溼的紅色石蕊試紙上，試紙變成藍色",
+    "wrong": [
+      "人體血漿滴在藍色石蕊試紙上，試紙變成紅色",
+      "以石蕊試紙測試10 mL的鹽酸，因酸鹼反應，試紙變成白色",
+      "將乙酸乙酯滴在潤溼的紅色石蕊試紙上，試紙變成藍色",
+      "pH 6.4的水溶液滴在紅色石蕊試紙上，試紙變成藍色"
+    ],
+    "exp": "正確答案：市售胃乳液（含制酸劑）滴在潤溼的紅色石蕊試紙上，試紙變成藍色。來源：110年學科能力測驗自然第6題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 6,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q7",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-110-science/Q7-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第7題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 7,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q7-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q8",
+    "difficulty": "easy",
+    "q": "硼的原子序為5，平均原子量為10.81。下列關於硼及其化合物的敘述，何者正\n\n  確？",
+    "correct": "BH 3 不符合八隅體規則",
+    "wrong": [
+      "沒有同位素",
+      "中子數為5",
+      "價電子數為2",
+      "NH 4 BF4 為分子化合物"
+    ],
+    "exp": "正確答案：BH 3 不符合八隅體規則。來源：110年學科能力測驗自然第8題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 8,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/gsat-110-science/Q9-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗自然第9題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 9,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q9-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q10",
+    "difficulty": "medium",
+    "q": "某物質不溶於水，富含一種半導體工業所需的重要元素，且所含另一元素是人體\n\n 不可或缺的成分之一。下列何者最符合以上所述？",
+    "correct": "石英砂",
+    "wrong": [
+      "硫化鉛",
+      "氯化鈣",
+      "氧化鐵",
+      "大理石"
+    ],
+    "exp": "正確答案：石英砂。來源：110年學科能力測驗自然第10題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 10,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q11",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/gsat-110-science/Q11-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第11題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 11,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q11-question.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q12",
+    "difficulty": "medium",
+    "q": "下列甲、乙、丙描述的狀況，屬於宇宙演化過程中的不同階段：\n\n 甲、宇宙中大部分粒子為電子與質子，尚未結合成原子\n\n 乙、宇宙中開始出現氦原子\n\n 丙、恆星開始形成\n\n 依時間先後順序排列，下列何者正確？",
+    "correct": "甲乙丙",
+    "wrong": [
+      "乙甲丙",
+      "丙乙甲",
+      "丙甲乙",
+      "甲丙乙"
+    ],
+    "exp": "正確答案：甲乙丙。來源：110年學科能力測驗自然第12題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 12,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q13",
+    "difficulty": "medium",
+    "q": "下列關於基本交互作用力的敘述，何者正確？",
+    "correct": "物體的彈性伸縮力和物體間的摩擦力都源自電磁力",
+    "wrong": [
+      "原子核內質子和中子之間的交互作用主要是弱力",
+      "強力的作用尺度一定比弱力的作用尺度為小",
+      "電子會衰變是其內部的弱力作用所造成",
+      "重力不是物體之間的基本交互作用力"
+    ],
+    "exp": "正確答案：物體的彈性伸縮力和物體間的摩擦力都源自電磁力。來源：110年學科能力測驗自然第13題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 13,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q14",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/gsat-110-science/Q14-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第14題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 14,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q14-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-110-science/Q15-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第15題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 15,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q15-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/gsat-110-science/Q16-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第16題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 16,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q16-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/gsat-110-science/Q17-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第17題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 17,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q17-question.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q18",
+    "difficulty": "medium",
+    "q": "科學家嘗試以各種方法重建地球的歷史，下列有關探索地球歷史的敘述，何者正\n\n  確？",
+    "correct": "「均變說」是指過去發生地質作用的原理和現在進行地質作用的原理相同",
+    "wrong": [
+      "古生代的人寫歷史較不精準，所以錯誤百出",
+      "根據疊置定律，可推測岩脈的生成時間比圍繞岩脈的地層晚",
+      "相對地質年代係根據放射性元素定年，以分辨岩層年代的早晚",
+      "利用放射性元素定年，母元素的量經過2個半衰期後只剩原來的二分之一"
+    ],
+    "exp": "正確答案：「均變說」是指過去發生地質作用的原理和現在進行地質作用的原理相同。來源：110年學科能力測驗自然第18題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 18,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q19",
+    "difficulty": "medium",
+    "q": "十九世紀中期，荷蘭氣象學家白貝羅發現：在北半球，若背對風的來向，則高壓\n  在其右邊，低壓在左邊，這就是有名的白貝羅定律（Buys Ballot’s law）。但後\n\n 來發現，這個經驗定律比較適合應用在航空或航海上，而不太適合在陸地上使用。\n\n 其最主要的原因為何？",
+    "correct": "因為海上及空中的摩擦力較小，風向比較不會偏轉",
+    "wrong": [
+      "因為海上或空中的氣象測站較少，使用經驗定律比較方便",
+      "因為陸地上的氣壓梯度力比較小，風速比較快",
+      "因為陸上氣象資訊更新較快，不必使用經驗定律",
+      "因為航運比陸運更需要氣象資訊"
+    ],
+    "exp": "正確答案：因為海上及空中的摩擦力較小，風向比較不會偏轉。來源：110年學科能力測驗自然第19題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 19,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/gsat-110-science/Q20-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第20題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 20,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q20-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/gsat-110-science/Q21-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第21題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 21,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q21-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/gsat-110-science/Q22-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第22題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 22,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q22-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q37",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-110-science/G37-40-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-110-science/Q37-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第37題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 37,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        40
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/G37-40-context.png",
+      "/assets/banks/gsat-110-science/Q37-question.png"
+    ],
+    "passRate": 0.31,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/gsat-110-science/G37-40-context.png)\n\n![第39題原卷資料](/assets/banks/gsat-110-science/Q39-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年學科能力測驗自然第39題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 39,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        40
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/G37-40-context.png",
+      "/assets/banks/gsat-110-science/Q39-question.png"
+    ]
+  },
+  {
+    "id": "gsat-110-science-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/gsat-110-science/G37-40-context.png)\n\n![第40題原卷資料](/assets/banks/gsat-110-science/Q40-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第40題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 40,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        40
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/G37-40-context.png",
+      "/assets/banks/gsat-110-science/Q40-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q43",
+    "difficulty": "hard",
+    "q": "BrDU 是人工合成的核苷酸，可被細胞吸收並使用為DNA 複製原料，過程中與\n\n 腺嘌呤配對。四位同學甲～丁依上述提出相關論述：\n  甲、BrDU是核苷酸，結構包括5碳糖、含氮鹼基與磷酸\n 乙、BrDU在有絲分裂過程中染色體排列於細胞中央時，被嵌入複製中的DNA\n  丙、BrDU與腺嘌呤形成配對，故在細胞複製DNA時取代尿嘧啶\n 丁、細胞完成某次分裂後給予BrDU，待再完成一次分裂後，則所有DNA只有單\n     股含BrDU\n\n 何者為論述正確的同學？",
+    "correct": "甲、丁",
+    "wrong": [
+      "甲、乙",
+      "乙、丙",
+      "乙、丁",
+      "甲、丙"
+    ],
+    "exp": "正確答案：甲、丁。來源：110年學科能力測驗自然第43題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 43,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.29,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q45",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/gsat-110-science/Q45-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第45題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 45,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q45-question.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q47",
+    "difficulty": "medium",
+    "q": "科學家經多年雜交選育獲得了具黑色斑紋的家蠶新品種。下列選項何者與黑色家\n\n 蠶的培育技術原理相似？",
+    "correct": "孟德爾豌豆試交實驗",
+    "wrong": [
+      "以轉殖技術產生的抗蟲玉米",
+      "複製動物桃莉羊",
+      "以組織培養繁殖蝴蝶蘭",
+      "殖入生長激素基因的鮭魚"
+    ],
+    "exp": "正確答案：孟德爾豌豆試交實驗。來源：110年學科能力測驗自然第47題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 47,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "gsat-110-science-q55",
+    "difficulty": "medium",
+    "q": "某星球的平均密度與半徑，分別為地球的0.10 倍與10 倍，則此星球表面的重力\n\n 加速度量值約是地球表面重力加速度量值的幾倍？",
+    "correct": "1.0",
+    "wrong": [
+      "0.010",
+      "0.10",
+      "10",
+      "100"
+    ],
+    "exp": "正確答案：1.0。來源：110年學科能力測驗自然第55題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 55,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-110-science-q56",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 56 題。\n\n![第56題原卷資料](/assets/banks/gsat-110-science/Q56-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年學科能力測驗自然第56題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 56,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q56-question.png"
+    ]
+  },
+  {
+    "id": "gsat-110-science-q58",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/gsat-110-science/G58-59-context.png)\n\n![第58題原卷資料](/assets/banks/gsat-110-science/Q58-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第58題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 58,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        58,
+        59
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/G58-59-context.png",
+      "/assets/banks/gsat-110-science/Q58-question.png"
+    ]
+  },
+  {
+    "id": "gsat-110-science-q62",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 62 題。\n\n![第62題原卷資料](/assets/banks/gsat-110-science/Q62-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗自然第62題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 62,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q62-question.png"
+    ]
+  },
+  {
+    "id": "gsat-110-science-q63",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 63 題。\n\n![第63題原卷資料](/assets/banks/gsat-110-science/G63-64-context.png)\n\n![第63題原卷資料](/assets/banks/gsat-110-science/Q63-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：110年學科能力測驗自然第63題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 63,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        63,
+        64
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/G63-64-context.png",
+      "/assets/banks/gsat-110-science/Q63-question.png"
+    ]
+  },
+  {
+    "id": "gsat-110-science-q64",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 64 題。\n\n![第64題原卷資料](/assets/banks/gsat-110-science/G63-64-context.png)\n\n![第64題原卷資料](/assets/banks/gsat-110-science/Q64-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年學科能力測驗自然第64題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 64,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        63,
+        64
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/G63-64-context.png",
+      "/assets/banks/gsat-110-science/Q64-question.png"
+    ]
+  },
+  {
+    "id": "gsat-110-science-q65",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 65 題。\n\n![第65題原卷資料](/assets/banks/gsat-110-science/Q65-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年學科能力測驗自然第65題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 65,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-110-science/Q65-question.png"
+    ]
+  },
+  {
+    "id": "gsat-110-science-q66",
+    "difficulty": "medium",
+    "q": "透過紅色玻璃片，觀看所有景象呈現深淺不一的紅色色調。用來拍攝星空，則所\n\n 有恆星都呈明亮不同的紅色。現透過望遠鏡用相機拍攝星空，針對同一天區，分\n\n 別以紅色及藍色玻璃片各拍一幅影像。依此可獲得恆星的何種訊息？",
+    "correct": "比對兩幅影像，能辨別出藍色高溫恆星",
+    "wrong": [
+      "比對兩幅影像，能判斷出恆星的年齡",
+      "比對兩幅影像，能判斷出恆星的距離",
+      "從藍色玻璃片影像中，能辨別哪些是低溫恆星",
+      "在紅色玻璃片影像中，紅色恆星非常明亮"
+    ],
+    "exp": "正確答案：比對兩幅影像，能辨別出藍色高溫恆星。來源：110年學科能力測驗自然第66題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 66,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        20
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-110-science-q67",
+    "difficulty": "medium",
+    "q": "科學家常從岩石的特性推測當時的沉積環境。今有某鑽井，由上而下，依序鑽出\n\n 頁岩、砂岩和礫岩。若這些岩層都沒有經過變動，下列有關它們生成的敘述何者\n\n 正確？",
+    "correct": "沉積環境的水流速度愈晚期愈慢",
+    "wrong": [
+      "沉積環境的水愈晚期愈淺",
+      "火山激烈噴發，火山彈四射後，沉積礫岩",
+      "斷層作用，使原來礫岩粉化成砂岩和頁岩",
+      "山崩生成礫岩，而後礫岩風化，形成砂岩、頁岩"
+    ],
+    "exp": "正確答案：沉積環境的水流速度愈晚期愈慢。來源：110年學科能力測驗自然第67題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-110-science",
+      "question": 67,
+      "file": "高中/學測/自然/110學測自然試卷.pdf",
+      "url": "https://drive.google.com/file/d/18eGGwu1LwavApJuJIC-1ghiLaRVMYWnj/view?usp=drivesdk",
+      "pages": [
+        20
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0l069604324792865462/110%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  }
+]

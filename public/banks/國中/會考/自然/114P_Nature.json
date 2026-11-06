@@ -1,0 +1,1605 @@
+[
+  {
+    "id": "cap-114-science-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-114-science/Q1-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第1題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 1,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q1-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-114-science/Q2-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第2題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 2,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q2-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q3",
+    "difficulty": "easy",
+    "q": "有報導指出：「在都市觀察到麻雀的頻率有變少的趨勢，可能的原因很多，其\n  中之一為白尾八哥的入侵。白尾八哥築巢偏好的位置與麻雀相近，食物種類也\n  相似，甚至被觀察到會以麻雀幼鳥為食。」根據上述報導，白尾八哥與麻雀之\n  間最符合下列哪兩種交互作用？",
+    "correct": "競爭、掠食",
+    "wrong": [
+      "競爭、共生",
+      "共生、掠食",
+      "寄生、掠食"
+    ],
+    "exp": "正確答案：競爭、掠食。來源：114年國中教育會考自然第3題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 3,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q4",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-114-science/Q4-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第4題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 4,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q4-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q5",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-114-science/Q5-question-1.png)\n\n![第5題原卷資料](/assets/banks/cap-114-science/Q5-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第5題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 5,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q5-question-1.png",
+      "/assets/banks/cap-114-science/Q5-question-2.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q6",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-114-science/Q6-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第6題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 6,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q6-question.png"
+    ],
+    "passRate": 0.95,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q7",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-114-science/Q7-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第7題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 7,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q7-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q8",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-114-science/Q8-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第8題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 8,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q8-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-114-science/Q9-question-1.png)\n\n![第9題原卷資料](/assets/banks/cap-114-science/Q9-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第9題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 9,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q9-question-1.png",
+      "/assets/banks/cap-114-science/Q9-question-2.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q10",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-114-science/Q10-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第10題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 10,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q10-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q11",
+    "difficulty": "medium",
+    "q": "某電玩公司為了防止兒童誤吞遊戲主機的遊戲卡，因而在遊戲卡塗上苯甲\n  地那銨。苯甲地那銨是非常苦的物質，其濃度只要達到______，也就是每1000 g\n  的溶液中含有30 mg的苯甲地那銨，便會苦到讓人難以忍受。上述空格最適合\n  填入下列何者？",
+    "correct": "30 ppm",
+    "wrong": [
+      "30%",
+      "30 mg",
+      "30 g/cm3"
+    ],
+    "exp": "正確答案：30 ppm。來源：114年國中教育會考自然第11題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 11,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-114-science/Q12-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第12題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 12,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q12-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q13",
+    "difficulty": "medium",
+    "q": "房產專家建議，若可以選擇，住在臺北的居民，其陽臺面對的方向盡量不要\n  朝向北邊、東北邊。因為冬天的時候容易下雨，且陽臺面對的方向易有強風，\n  雨水會直接打向陽臺，容易使晾晒的衣物淋溼。專家的這個建議是否適用於\n  其他地區？",
+    "correct": "不適用於高雄，因為冬天時位處季風背風面的高雄氣候偏乾",
+    "wrong": [
+      "適用於臺南，因為冬天時位處季風迎風面的臺南氣候偏溼",
+      "適用於基隆，因為冬天時位處季風背風面的基隆氣候偏溼",
+      "不適用於宜蘭，因為冬天時位處季風迎風面的宜蘭氣候偏乾"
+    ],
+    "exp": "正確答案：不適用於高雄，因為冬天時位處季風背風面的高雄氣候偏乾。來源：114年國中教育會考自然第13題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 13,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q14",
+    "difficulty": "medium",
+    "q": "有三顆小球，在紅光照射下，觀察到小球分別呈現紅色、紅色、黑色，關於這\n  三顆小球在白光照射下所呈現顏色的推論，下列何者最合理？",
+    "correct": "最多有兩顆白球",
+    "wrong": [
+      "至少有一顆紅球",
+      "至少有一顆黑球",
+      "最多有兩顆綠球\n\n                                  3"
+    ],
+    "exp": "正確答案：最多有兩顆白球。來源：114年國中教育會考自然第14題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 14,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/cap-114-science/Q15-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第15題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 15,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q15-question.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-114-science/Q16-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第16題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 16,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q16-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-114-science/Q17-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第17題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 17,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q17-question.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-114-science/Q18-question-1.png)\n\n![第18題原卷資料](/assets/banks/cap-114-science/Q18-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第18題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 18,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q18-question-1.png",
+      "/assets/banks/cap-114-science/Q18-question-2.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-114-science/Q19-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第19題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 19,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q19-question.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-114-science/Q20-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第20題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 20,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q20-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-114-science/Q21-question-1.png)\n\n![第21題原卷資料](/assets/banks/cap-114-science/Q21-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第21題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 21,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q21-question-1.png",
+      "/assets/banks/cap-114-science/Q21-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-114-science/Q22-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第22題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 22,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q22-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-114-science/Q23-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第23題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 23,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q23-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-114-science/Q24-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第24題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 24,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q24-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-114-science/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-114-science/Q25-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第25題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 25,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q25-question-1.png",
+      "/assets/banks/cap-114-science/Q25-question-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q26",
+    "difficulty": "medium",
+    "q": "阿偉想要藉由實驗比較鋁和銅的比熱大小關係，若加熱條件相同，且忽略熱量\n  散失，則下列四種方式，哪一種最合理？",
+    "correct": "分別加熱相同質量的鋁和銅，溫度上升較快者比熱較小",
+    "wrong": [
+      "分別加熱相同體積的鋁和銅，先開始熔化者比熱較小",
+      "分別加熱相同體積的鋁和銅，溫度上升較快者比熱較小",
+      "分別加熱相同質量的鋁和銅，先開始熔化者比熱較小"
+    ],
+    "exp": "正確答案：分別加熱相同質量的鋁和銅，溫度上升較快者比熱較小。來源：114年國中教育會考自然第26題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 26,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q27",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-114-science/Q27-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第27題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 27,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q27-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-114-science/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/cap-114-science/Q28-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第28題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 28,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q28-question-1.png",
+      "/assets/banks/cap-114-science/Q28-question-2.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-114-science/Q29-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第29題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 29,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q29-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-114-science/Q30-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第30題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 30,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q30-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-114-science/Q31-question-1.png)\n\n![第31題原卷資料](/assets/banks/cap-114-science/Q31-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第31題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 31,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q31-question-1.png",
+      "/assets/banks/cap-114-science/Q31-question-2.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-114-science/Q32-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第32題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 32,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q32-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-114-science/Q33-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第33題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 33,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q33-question.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-114-science/Q34-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第34題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 34,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q34-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q35",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-114-science/Q35-question-1.png)\n\n![第35題原卷資料](/assets/banks/cap-114-science/Q35-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第35題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 35,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q35-question-1.png",
+      "/assets/banks/cap-114-science/Q35-question-2.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-114-science/Q36-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第36題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 36,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q36-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-114-science/Q37-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第37題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 37,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q37-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-114-science/Q38-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第38題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 38,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q38-question.png"
+    ]
+  },
+  {
+    "id": "cap-114-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-114-science/Q39-question-1.png)\n\n![第39題原卷資料](/assets/banks/cap-114-science/Q39-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第39題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 39,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q39-question-1.png",
+      "/assets/banks/cap-114-science/Q39-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-114-science-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-114-science/Q40-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：114年國中教育會考自然第40題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 40,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q40-question.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q41",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-114-science/Q41-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第41題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 41,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q41-question.png"
+    ],
+    "passRate": 0.31,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q42",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-114-science/Q42-question-1.png)\n\n![第42題原卷資料](/assets/banks/cap-114-science/Q42-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第42題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 42,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/Q42-question-1.png",
+      "/assets/banks/cap-114-science/Q42-question-2.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-114-science/G43-44-context.png)\n\n![第43題原卷資料](/assets/banks/cap-114-science/Q43-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第43題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 43,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G43-44-context.png",
+      "/assets/banks/cap-114-science/Q43-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-114-science/G43-44-context.png)\n\n![第44題原卷資料](/assets/banks/cap-114-science/Q44-question-1.png)\n\n![第44題原卷資料](/assets/banks/cap-114-science/Q44-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第44題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 44,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G43-44-context.png",
+      "/assets/banks/cap-114-science/Q44-question-1.png",
+      "/assets/banks/cap-114-science/Q44-question-2.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-114-science/G45-46-context.png)\n\n![第45題原卷資料](/assets/banks/cap-114-science/Q45-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第45題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 45,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G45-46-context.png",
+      "/assets/banks/cap-114-science/Q45-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-114-science/G45-46-context.png)\n\n![第46題原卷資料](/assets/banks/cap-114-science/Q46-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第46題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 46,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G45-46-context.png",
+      "/assets/banks/cap-114-science/Q46-question.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q47",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-114-science/G47-48-context-1.png)\n\n![第47題原卷資料](/assets/banks/cap-114-science/G47-48-context-2.png)\n\n![第47題原卷資料](/assets/banks/cap-114-science/Q47-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第47題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 47,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        47,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G47-48-context-1.png",
+      "/assets/banks/cap-114-science/G47-48-context-2.png",
+      "/assets/banks/cap-114-science/Q47-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-114-science/G47-48-context-1.png)\n\n![第48題原卷資料](/assets/banks/cap-114-science/G47-48-context-2.png)\n\n![第48題原卷資料](/assets/banks/cap-114-science/Q48-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：114年國中教育會考自然第48題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 48,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        47,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G47-48-context-1.png",
+      "/assets/banks/cap-114-science/G47-48-context-2.png",
+      "/assets/banks/cap-114-science/Q48-question.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q49",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/cap-114-science/G49-50-context.png)\n\n![第49題原卷資料](/assets/banks/cap-114-science/Q49-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：114年國中教育會考自然第49題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 49,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        49,
+        50
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G49-50-context.png",
+      "/assets/banks/cap-114-science/Q49-question.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  },
+  {
+    "id": "cap-114-science-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-114-science/G49-50-context.png)\n\n![第50題原卷資料](/assets/banks/cap-114-science/Q50-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：114年國中教育會考自然第50題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "cap-114-science",
+      "question": 50,
+      "file": "國中/會考/自然/114P_Nature.pdf",
+      "url": "https://drive.google.com/file/d/13aczDcYAFejtExDH6PohlS7FM_YVgzlG/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        49,
+        50
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-science/G49-50-context.png",
+      "/assets/banks/cap-114-science/Q50-question.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link"
+  }
+]

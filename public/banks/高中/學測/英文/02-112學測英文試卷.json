@@ -1,0 +1,1481 @@
+[
+  {
+    "id": "gsat-112-english-q1",
+    "difficulty": "medium",
+    "q": "The bus driver often complains about chewing gum found under passenger seats because it is       and\n   very hard to remove.",
+    "correct": "sticky",
+    "wrong": [
+      "greasy",
+      "clumsy",
+      "mighty"
+    ],
+    "exp": "正確答案：sticky。來源：112年學科能力測驗英文第1題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 1,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q2",
+    "difficulty": "medium",
+    "q": "Jesse is a talented model. He can easily adopt an elegant          for a camera shoot.",
+    "correct": "pose",
+    "wrong": [
+      "clap",
+      "toss",
+      "snap"
+    ],
+    "exp": "正確答案：pose。來源：112年學科能力測驗英文第2題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 2,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q3",
+    "difficulty": "medium",
+    "q": "In order to draw her family tree, Mary tried to trace her         back to their arrival in North America.",
+    "correct": "ancestors",
+    "wrong": [
+      "siblings",
+      "commuters",
+      "instructors"
+    ],
+    "exp": "正確答案：ancestors。來源：112年學科能力測驗英文第3題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 3,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q4",
+    "difficulty": "medium",
+    "q": "Upon the super typhoon warning, Nancy rushed to the supermarket—only to find the shelves almost\n   ______ and the stock nearly gone.",
+    "correct": "bare",
+    "wrong": [
+      "blank",
+      "hollow",
+      "queer"
+    ],
+    "exp": "正確答案：bare。來源：112年學科能力測驗英文第4題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 4,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q5",
+    "difficulty": "medium",
+    "q": "Even though Jack said “Sorry!” to me in person, I did not feel any          in his apology.",
+    "correct": "sincerity",
+    "wrong": [
+      "liability",
+      "generosity",
+      "integrity"
+    ],
+    "exp": "正確答案：sincerity。來源：112年學科能力測驗英文第5題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 5,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q6",
+    "difficulty": "medium",
+    "q": "My grandfather has astonishing powers of              . He can still vividly describe his first day at school\n    as a child.",
+    "correct": "recall",
+    "wrong": [
+      "resolve",
+      "fraction",
+      "privilege"
+    ],
+    "exp": "正確答案：recall。來源：112年學科能力測驗英文第6題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 6,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q7",
+    "difficulty": "medium",
+    "q": "Recent research has found lots of evidence to          the drug company’s claims about its “miracle”\n    tablets for curing cancer.",
+    "correct": "counter",
+    "wrong": [
+      "provoke",
+      "expose",
+      "convert"
+    ],
+    "exp": "正確答案：counter。來源：112年學科能力測驗英文第7題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 7,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q8",
+    "difficulty": "medium",
+    "q": "Corrupt officials and misguided policies have          the country’s economy and burdened its people\n   with enormous foreign debts.",
+    "correct": "crippled",
+    "wrong": [
+      "accelerated",
+      "rendered",
+      "ventured"
+    ],
+    "exp": "正確答案：crippled。來源：112年學科能力測驗英文第8題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 8,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q9",
+    "difficulty": "medium",
+    "q": "As a record number of fans showed up for the baseball final, the highways around the stadium were\n           with traffic all day.",
+    "correct": "choked",
+    "wrong": [
+      "disturbed",
+      "enclosed",
+      "injected"
+    ],
+    "exp": "正確答案：choked。來源：112年學科能力測驗英文第9題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 9,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q10",
+    "difficulty": "medium",
+    "q": "Studies show that the         unbiased media are in fact often deeply influenced by political ideology.",
+    "correct": "supposedly",
+    "wrong": [
+      "undoubtedly",
+      "roughly",
+      "understandably"
+    ],
+    "exp": "正確答案：supposedly。來源：112年學科能力測驗英文第10題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 10,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q11",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "correct": "but not quite",
+    "wrong": [
+      "in no time",
+      "by all means",
+      "and pretty much"
+    ],
+    "exp": "正確答案：but not quite。來源：112年學科能力測驗英文第11題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 11,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        15
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q12",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "correct": "multiple",
+    "wrong": [
+      "universal",
+      "productive",
+      "conventional"
+    ],
+    "exp": "正確答案：multiple。來源：112年學科能力測驗英文第12題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 12,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        15
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q13",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "correct": "compete for",
+    "wrong": [
+      "get over",
+      "give way to",
+      "make up for"
+    ],
+    "exp": "正確答案：compete for。來源：112年學科能力測驗英文第13題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 13,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        15
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q14",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "correct": "exposure to",
+    "wrong": [
+      "reliance on",
+      "sensitivity to",
+      "reflection on"
+    ],
+    "exp": "正確答案：exposure to。來源：112年學科能力測驗英文第14題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 14,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        15
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q15",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第11 至15 題為題組\n\n     In certain forests, when you look up you will see a network of cracks formed by gaps between the\noutermost edges of tree branches. It looks like a precisely engineered jigsaw puzzle, each branch growing\njust perfectly so it almost,   11    , touches the neighboring tree. This beautiful phenomenon is called\ncrown shyness.\n\n     Scientists have been discussing crown shyness since the 1920s, proposing   12    explanations for\nthe phenomenon. Some researchers point out that as trees often grow close together, treetops can easily\ncollide and break when swayed by the wind. In order to protect their branches from breakage, trees maintain\n“shyness gaps”—spaces large enough to prevent them from touching their neighbors.\n\n    Other scientists suggest that plants, like animals,   13    resources—nutrients, water, space, and\nlight. In forested areas with thick tree crowns, there is intense struggle for these resources. Gaps in the\ntreetops resulting from crown shyness may allow trees to increase their    14     light and enhance\nphotosynthesis. Additionally, by having branches that do not touch those of their neighbors, trees may be\nable to limit the spread of leaf-eating insects, and potentially also the transmission of diseases from tree to\ntree.   15   decades of investigation, there is no consensus on exactly what causes the beautiful and\nmysterious phenomenon of crown shyness.\n\n",
+    "correct": "Despite",
+    "wrong": [
+      "For",
+      "Besides",
+      "Concerning"
+    ],
+    "exp": "正確答案：Despite。來源：112年學科能力測驗英文第15題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 15,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        15
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "correct": "free of",
+    "wrong": [
+      "back to",
+      "long before",
+      "straight on"
+    ],
+    "exp": "正確答案：free of。來源：112年學科能力測驗英文第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 16,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        16,
+        20
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q17",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "correct": "physical",
+    "wrong": [
+      "perceptual",
+      "mental",
+      "external"
+    ],
+    "exp": "正確答案：physical。來源：112年學科能力測驗英文第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 17,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        16,
+        20
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q18",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "correct": "redistribute",
+    "wrong": [
+      "redistributed",
+      "redistributing",
+      "being redistributed"
+    ],
+    "exp": "正確答案：redistribute。來源：112年學科能力測驗英文第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 18,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        16,
+        20
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q19",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "correct": "severe",
+    "wrong": [
+      "contagious",
+      "unusual",
+      "aggressive"
+    ],
+    "exp": "正確答案：severe。來源：112年學科能力測驗英文第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 19,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        16,
+        20
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q20",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第16 至20 題為題組\n\n     Gravity has been at the top of the science agenda since the start of Mars missions. In the earlier days\nof space travel, scientists tried to overcome the force of gravity so that a rocket could shoot   16    Earth’s\npull in order to land humans on the moon. Today, they are more interested in how reduced gravity affects\nthe astronauts’   17    condition.\n\n    Our bodies have evolved to exist within Earth’s gravity (1 g), not in the weightlessness of space (0 g)\nor the microgravity of Mars (0.3 g). When on Earth, we have more fluids in our lower body because they\nare pulled down by Earth’s gravity. However, with the absence of gravity in the outer space, our body fluids\n  18    , shifting toward the upper body and the head. As a result, the astronauts have swollen, puffy faces,\nvery much resembling that of the round-headed Charlie Brown in the famous comic strip. This “Charlie\nBrown effect” will be more   19   when the astronauts go on their Mars missions, which will take about\nthree years to complete, much longer than missions to the moon. Moreover, the effect is often   20   space\nmotion sickness, headaches, and nausea. Such a syndrome is considered the top health risk for the astronauts,\nand scientists are still trying to figure out how it may be prevented.\n\n",
+    "correct": "accompanied by",
+    "wrong": [
+      "varied with",
+      "brought about",
+      "transferred from"
+    ],
+    "exp": "正確答案：accompanied by。來源：112年學科能力測驗英文第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 20,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        16,
+        20
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q21",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 21 空格最適合的選項。",
+    "correct": "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。",
+    "wrong": [
+      "absorption",
+      "active",
+      "alert",
+      "combat",
+      "option",
+      "effective",
+      "even",
+      "status",
+      "pass through"
+    ],
+    "exp": "正確答案：reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。。來源：112年學科能力測驗英文第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 21,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "J",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q22",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 22 空格最適合的選項。",
+    "correct": "active",
+    "wrong": [
+      "absorption",
+      "alert",
+      "combat",
+      "option",
+      "effective",
+      "even",
+      "status",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：active。來源：112年學科能力測驗英文第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 22,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q23",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 23 空格最適合的選項。",
+    "correct": "even",
+    "wrong": [
+      "absorption",
+      "active",
+      "alert",
+      "combat",
+      "option",
+      "effective",
+      "status",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：even。來源：112年學科能力測驗英文第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 23,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "G",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q24",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 24 空格最適合的選項。",
+    "correct": "effective",
+    "wrong": [
+      "absorption",
+      "active",
+      "alert",
+      "combat",
+      "option",
+      "even",
+      "status",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：effective。來源：112年學科能力測驗英文第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 24,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "F",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q25",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 25 空格最適合的選項。",
+    "correct": "absorption",
+    "wrong": [
+      "active",
+      "alert",
+      "combat",
+      "option",
+      "effective",
+      "even",
+      "status",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：absorption。來源：112年學科能力測驗英文第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 25,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q26",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 26 空格最適合的選項。",
+    "correct": "status",
+    "wrong": [
+      "absorption",
+      "active",
+      "alert",
+      "combat",
+      "option",
+      "effective",
+      "even",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：status。來源：112年學科能力測驗英文第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 26,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "H",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q27",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 27 空格最適合的選項。",
+    "correct": "option",
+    "wrong": [
+      "absorption",
+      "active",
+      "alert",
+      "combat",
+      "effective",
+      "even",
+      "status",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：option。來源：112年學科能力測驗英文第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 27,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q28",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 28 空格最適合的選項。",
+    "correct": "alert",
+    "wrong": [
+      "absorption",
+      "active",
+      "combat",
+      "option",
+      "effective",
+      "even",
+      "status",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：alert。來源：112年學科能力測驗英文第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 28,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q29",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 29 空格最適合的選項。",
+    "correct": "pass through",
+    "wrong": [
+      "absorption",
+      "active",
+      "alert",
+      "combat",
+      "option",
+      "effective",
+      "even",
+      "status",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：pass through。來源：112年學科能力測驗英文第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 29,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "I",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q30",
+    "difficulty": "medium",
+    "q": "第21 至30 題為題組\n\n    Water makes up more than half of our body weight. To sustain this amount of fluid in our bodies, plain\nwater is considered our best choice, for it contains no sugar and no calories. Yet, is water always the\nhealthiest drink we can   21  ? Well, it depends on who and where we are, and what we’re doing.\n\n     Obviously, a physically   22   person with an outdoor job under the sun will need to drink more\nfluid than a desk-bound person who lives and works in an air-conditioned place. But there’s more to it than\nthat. When a person sweats, he loses water and salt, so he needs to replace both. Replacing lost fluid with\njust plain water means the body has too much water and not enough salt. To   23    things out, the body\nwill get rid of water by producing urine. For this reason, milk can actually be more   24   than drinking\nwater. Milk naturally contains salt and lactose, a sugar which the human body needs in small amounts to\nhelp stimulate water   25     . Coconut water, which contains salt and carbohydrates, is also more\nfunctional than water at restoring and maintaining a normal fluid   26    after exercise.\n\n    For the average person, however, water remains a very good   27    for keeping hydrated—if you\nknow how to drink it. The secret is: Never wait until the body is telling you you’re thirsty, since there must\nalready have been significant changes in your body for it to eventually   28   your consciousness. At\nthat point, it might be well past the best moment to take in fluid. Also, drinking a lot of liquid in one go can\ncause more water to   29    the body quickly and come out as urine. To   30    this, you need to drink\nwater throughout the day to maintain your hydration levels.\n\n請選出第 30 空格最適合的選項。",
+    "correct": "combat",
+    "wrong": [
+      "absorption",
+      "active",
+      "alert",
+      "option",
+      "effective",
+      "even",
+      "status",
+      "pass through",
+      "reach for\n\n四、篇章結構（占8 分）\n\n說明︰第31題至第34題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：combat。來源：112年學科能力測驗英文第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 30,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        21,
+        30
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q31",
+    "difficulty": "medium",
+    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 31 空格最適合的選項。",
+    "correct": "People with synesthesia used to be accused of making their experiences up.",
+    "wrong": [
+      "This consistency serves as a proof that synesthesia is real.",
+      "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
+      "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：People with synesthesia used to be accused of making their experiences up.。來源：112年學科能力測驗英文第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 31,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q32",
+    "difficulty": "medium",
+    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 32 空格最適合的選項。",
+    "correct": "This consistency serves as a proof that synesthesia is real.",
+    "wrong": [
+      "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
+      "People with synesthesia used to be accused of making their experiences up.",
+      "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：This consistency serves as a proof that synesthesia is real.。來源：112年學科能力測驗英文第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 32,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q33",
+    "difficulty": "medium",
+    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 33 空格最適合的選項。",
+    "correct": "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
+    "wrong": [
+      "This consistency serves as a proof that synesthesia is real.",
+      "People with synesthesia used to be accused of making their experiences up.",
+      "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。"
+    ],
+    "exp": "正確答案：Meanwhile, environmental influences seem to shape a person’s synesthesia.。來源：112年學科能力測驗英文第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 33,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q34",
+    "difficulty": "medium",
+    "q": "第31 至34 題為題組\n\n    Have you ever thought of “coloring” the names of the days of the week? When you listen to someone\nspeaking, do you see a rainbow of colors? Or perhaps Mozart’s music tastes like an apple pie to you? If so,\nit is very likely that you have synesthesia.\n\n     Synesthesia is a condition in which people’s senses intermix. In some cases, people with synesthesia\nmay experience colors when they hear, read, or even think of letters and numbers. In others, words can\ntrigger a real sensation of taste on their tongue.\n\n      31    In the early 1990s, however, scientists noticed that synesthetic colors do not change over time.\nWhen asked what color is evoked by a letter or number, synesthetic people would persistently give the same\nanswer even if tested months or years apart.   32   The most compelling support, however, comes from\nbrain scans, which show that color processing areas in the brain light up when these people listen to certain\nwords.\n\n      Is synesthesia genetically inherited or acquired after birth? Scientists agree that synesthesia has a\ngenetic basis, because it frequently runs in families. But an actual synesthesia gene (or genes) has not been\nidentified yet.   33   For example, the flavors people with taste-word synesthesia experience are usually\nchildhood flavors, such as chocolate or strawberries. Also, people with color-music synesthesia more often\nthan not have had early musical training.\n\n    Once thought to be extremely rare, synesthesia is now found to affect about one to four percent of the\npopulation.   34   As is often observed, most of us tend to associate lower notes with darker colors and\nhigher notes with brighter colors. Researchers further point out that in most people synesthesia is active\nonly during the first months of their infancy, while this ability remains forever in certain individuals.\n\n請選出第 34 空格最適合的選項。",
+    "correct": "Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。",
+    "wrong": [
+      "This consistency serves as a proof that synesthesia is real.",
+      "Meanwhile, environmental influences seem to shape a person’s synesthesia.",
+      "People with synesthesia used to be accused of making their experiences up."
+    ],
+    "exp": "正確答案：Some studies even show that people may all be synesthetic to some degree.\n\n五、閱讀測驗（占2 4 分）\n\n說明︰第35題至第46題為單選題，每題2分。。來源：112年學科能力測驗英文第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 34,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第35題原卷資料](/assets/banks/gsat-112-english/Q35-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：112年學科能力測驗英文第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 35,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G35-38-context.png",
+      "/assets/banks/gsat-112-english/Q35-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-english-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第36題原卷資料](/assets/banks/gsat-112-english/Q36-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：112年學科能力測驗英文第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 36,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G35-38-context.png",
+      "/assets/banks/gsat-112-english/Q36-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-english-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-112-english/Q37-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：112年學科能力測驗英文第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 37,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G35-38-context.png",
+      "/assets/banks/gsat-112-english/Q37-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-english-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/gsat-112-english/G35-38-context.png)\n\n![第38題原卷資料](/assets/banks/gsat-112-english/Q38-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗英文第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 38,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G35-38-context.png",
+      "/assets/banks/gsat-112-english/Q38-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-english-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhy do farmers in Assam dig trenches in tea gardens?",
+    "correct": "To protect tea trees.",
+    "wrong": [
+      "To trap elephants.",
+      "To expand tea farms.",
+      "To mark boundaries of tea gardens."
+    ],
+    "exp": "正確答案：To protect tea trees.。來源：112年學科能力測驗英文第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 39,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        39,
+        42
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q40",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhy are baby elephants easily injured in the Assam tea gardens according to the passage?",
+    "correct": "They have difficulties moving around the uneven fields.",
+    "wrong": [
+      "They cannot find a safe shelter when climbing out of the trenches.",
+      "They cannot locate the landmarks while trying to navigate forests.",
+      "They are trapped by the sharp branches of the tea trees."
+    ],
+    "exp": "正確答案：They have difficulties moving around the uneven fields.。來源：112年學科能力測驗英文第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 40,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        39,
+        42
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q41",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhich of the following statements about elephants and the tea gardens is true according to the passage?",
+    "correct": "Elephants are unwilling to leave their injured members behind in the tea gardens.",
+    "wrong": [
+      "The elephants use the trenches to roam around the tea gardens.",
+      "The fast growth of the tea gardens destroys the elephants’ food source.",
+      "Pregnant elephants avoid delivering babies in the tea gardens for fear of being disturbed."
+    ],
+    "exp": "正確答案：Elephants are unwilling to leave their injured members behind in the tea gardens.。來源：112年學科能力測驗英文第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 41,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        39,
+        42
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q42",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第39 至42 題為題組\n\n   When you enjoy your morning cup of tea, you are probably not aware that those tea leaves can mean\ninjury, or even death, for Asian elephants roaming Indian tea gardens.\n\n     In the Indian state of Assam, growing numbers of tea farms are destroying the Asian elephant’s habitats\nand endangering their population. Much of the forest land where tea is grown in Assam is flat and thus\nfarmers must dig drainage trenches to prevent water from accumulating and hurting the shrubs. The trenches,\nhowever, can be death traps for the elephants. Since the elephants need to use tea plantations as landmarks\nwhen navigating forests, they almost inevitably have to move through the farms. Moreover, because there\nare fewer humans around, pregnant females often use tea-growing areas as safe shelters to give birth. But\nbaby elephants, not used to negotiating rough ground, may easily fall into the trenches and get hurt; and\nonce injured, they might not be able to climb out. When mothers try to dig their babies out, both may be\ntrapped and smothered by thick mud. Furthermore, elephants are known to resist leaving their sick or dying\nbehind, and a herd may linger at a trench with a trapped baby for hours, reluctant to move on until all hope\nis lost.\n\n      Is it possible for elephants to coexist with the prosperous tea business? Elephant Friendly Tea is an\norganization that takes the initiative to make it possible. The organization encourages consumers to choose\nbrands that take precautions to protect elephants and has set up a certification program to reward tea growers\nwho are doing it right. Until now, only smaller tea brands have been certified, but awareness is growing.\nThe organization believes that people may be motivated to buy elephant-friendly brands when they know\nmore about the risk tea can pose to these endangered animals.\n\nWhat does “it” in the last paragraph refer to?",
+    "correct": "To create a win-win situation for elephants and tea farms.",
+    "wrong": [
+      "To certify elephant-friendly trenches and organizations.",
+      "To reward tea growers for protecting the environment.",
+      "To encourage consumers to choose high-quality brands."
+    ],
+    "exp": "正確答案：To create a win-win situation for elephants and tea farms.。來源：112年學科能力測驗英文第42題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 42,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        39,
+        42
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q43",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第43 至46 題為題組\n\n     Situated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar\nis a tropical archipelago comprised of several scattered islands. This popular beach destination is now\nfamous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past,\ncontrol of Zanzibar meant access to unimaginable wealth.\n\n    From ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route\nbetween Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival\nof its first permanent settlers from the African mainland (around 1000 AD). In the 8th century, Persian\nmerchants built settlements here, which grew over the next four centuries into their trading posts. Between\nthe 12th and 15th centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago\nboth wealth and power.\n\n    During the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the\nspice trade. At the close of the 15th century, Europeans’ craze for spices gave rise to the Spice Route, a\nnetwork of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese\nexplorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he\narrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted\ntraders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and\ngoods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\n    Since the 16th century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the\nBritish, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have\nlived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections,\nscented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian\nOcean an amazing charm that goes far beyond tropical beach fun.\n\nWhich of the following is true about the earliest traders in Zanzibar?",
+    "correct": "Asian merchants arrived centuries before the African settlers.",
+    "wrong": [
+      "The earliest traders arrived around 900 AD.",
+      "Most of the earliest merchants came from Africa.",
+      "Traders from Persia settled down permanently around 1000 AD."
+    ],
+    "exp": "正確答案：Asian merchants arrived centuries before the African settlers.。來源：112年學科能力測驗英文第43題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 43,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        43,
+        46
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/gsat-112-english/G43-46-context.png)\n\n![第44題原卷資料](/assets/banks/gsat-112-english/Q44-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：112年學科能力測驗英文第44題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 44,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        43,
+        46
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-english/G43-46-context.png",
+      "/assets/banks/gsat-112-english/Q44-question.png"
+    ]
+  },
+  {
+    "id": "gsat-112-english-q45",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第43 至46 題為題組\n\n     Situated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar\nis a tropical archipelago comprised of several scattered islands. This popular beach destination is now\nfamous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past,\ncontrol of Zanzibar meant access to unimaginable wealth.\n\n    From ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route\nbetween Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival\nof its first permanent settlers from the African mainland (around 1000 AD). In the 8th century, Persian\nmerchants built settlements here, which grew over the next four centuries into their trading posts. Between\nthe 12th and 15th centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago\nboth wealth and power.\n\n    During the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the\nspice trade. At the close of the 15th century, Europeans’ craze for spices gave rise to the Spice Route, a\nnetwork of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese\nexplorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he\narrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted\ntraders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and\ngoods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\n    Since the 16th century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the\nBritish, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have\nlived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections,\nscented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian\nOcean an amazing charm that goes far beyond tropical beach fun.\n\nWhich of the following can be inferred from the passage about Zanzibar?",
+    "correct": "Cloves, vanilla, and cinnamon are common spices in Zanzibar.",
+    "wrong": [
+      "For centuries, Zanzibar has been a heaven for beach lovers.",
+      "Besides spices, Zanzibar is well known for a great variety of jewelry.",
+      "Vasco da Gama was Zanzibar’s first foreign ruler during the Age of Exploration."
+    ],
+    "exp": "正確答案：Cloves, vanilla, and cinnamon are common spices in Zanzibar.。來源：112年學科能力測驗英文第45題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 45,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        43,
+        46
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-112-english-q46",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n第43 至46 題為題組\n\n     Situated off the coast of Tanzania and washed by the warm, clean waters of the Indian Ocean, Zanzibar\nis a tropical archipelago comprised of several scattered islands. This popular beach destination is now\nfamous for its white sand beaches, slender palms, and turquoise seas. But few people know that in the past,\ncontrol of Zanzibar meant access to unimaginable wealth.\n\n    From ancient times, Zanzibar has been a trading hotspot, thanks to its location on the trade route\nbetween Arabia and Africa. Traders from Asia had already visited the islands 900 years before the arrival\nof its first permanent settlers from the African mainland (around 1000 AD). In the 8th century, Persian\nmerchants built settlements here, which grew over the next four centuries into their trading posts. Between\nthe 12th and 15th centuries, trade increased between Arabia, Persia, and Zanzibar, bringing the archipelago\nboth wealth and power.\n\n    During the Age of Exploration, commerce in Zanzibar quickly boomed, largely due to the rise of the\nspice trade. At the close of the 15th century, Europeans’ craze for spices gave rise to the Spice Route, a\nnetwork of sea lanes joining Europe with the Far East, where most spices came from. In 1498, Portuguese\nexplorer Vasco da Gama made the first sea voyage to India, via the southernmost tip of Africa. In 1499, he\narrived at Zanzibar, an archipelago sitting at the crossroads of the Spice Route. The islands soon attracted\ntraders from different lands. Hundreds of ships sailing the Spice Route docked here, bringing spices and\ngoods for transaction, and Zanzibar became one of the biggest trading centers in the world.\n\n    Since the 16th century, Zanzibar has come under the rule of the Portuguese, the Arabians, and then the\nBritish, each leaving a mark on the place. The paths of various religions also crossed here: Muslims have\nlived peacefully with Christians and Buddhists on the islands for centuries. The unique cultural intersections,\nscented with the aroma of cloves, vanilla, and cinnamon floating in the air, give these jewels on the Indian\nOcean an amazing charm that goes far beyond tropical beach fun.\n\nWhich set of words is used in the passage to refer to Zanzibar?",
+    "correct": "archipelago, islands, jewels, destination",
+    "wrong": [
+      "islands, settlements, posts, crossroads",
+      "islands, posts, jewels, destination",
+      "archipelago, settlements, paths, islands"
+    ],
+    "exp": "正確答案：archipelago, islands, jewels, destination。來源：112年學科能力測驗英文第46題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "gsat-112-english",
+      "question": 46,
+      "file": "高中/學測/英文/02-112學測英文試卷.pdf",
+      "url": "https://drive.google.com/file/d/1UHcv-TeY1ykwtfv5KF0M4jE-EUcbAleC/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045359936769376687/02-112%e5%ad%b8%e6%b8%ac%e8%8b%b1%e6%96%87%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        43,
+        46
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  }
+]

@@ -1,0 +1,1392 @@
+[
+  {
+    "id": "cap-113-chinese-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-113-chinese/Q1-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考國文第1題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 1,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q1-question.png"
+    ],
+    "passRate": 0.95,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q2",
+    "difficulty": "easy",
+    "q": "下列文句，何者用字完全正確？",
+    "correct": "樹欲靜而風不止，為人子女盡孝要及時",
+    "wrong": [
+      "那張字畫的真跡被竊後，至今不知所衷",
+      "他只知言襲前人作法，完全不懂得變通",
+      "你去失誤招領處詢問，也許能找回錢包"
+    ],
+    "exp": "正確答案：樹欲靜而風不止，為人子女盡孝要及時。來源：113年國中教育會考國文第2題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 2,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q3",
+    "difficulty": "easy",
+    "q": "下列文句中的謙詞，何者使用最恰當？",
+    "correct": "同樂會時，班長自告奮勇：「如果大家不嫌棄，我就獻醜了。」",
+    "wrong": [
+      "足球賽後，亞軍隊伍向冠軍隊伍道賀：「承讓了，恭喜！」",
+      "主席在會議的結語：「感謝各位提供的淺見，我們會審慎評估。」",
+      "對宴會的主人說：「謝謝你準備的薄酌，讓大家吃得非常滿足。」"
+    ],
+    "exp": "正確答案：同樂會時，班長自告奮勇：「如果大家不嫌棄，我就獻醜了。」。來源：113年國中教育會考國文第3題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 3,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q4",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-113-chinese/Q4-question-1.png)\n\n![第4題原卷資料](/assets/banks/cap-113-chinese/Q4-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第4題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 4,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q4-question-1.png",
+      "/assets/banks/cap-113-chinese/Q4-question-2.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q5",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-113-chinese/Q5-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 5,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q5-question.png"
+    ],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q6",
+    "difficulty": "medium",
+    "q": "下列詞語中的「落」字，何者與「月落星沉」的「落」字意義相同？",
+    "correct": "水「落」石出",
+    "wrong": [
+      "下「落」不明",
+      "草木疏「落」",
+      "丟三「落」四"
+    ],
+    "exp": "正確答案：水「落」石出。來源：113年國中教育會考國文第6題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 6,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q7",
+    "difficulty": "medium",
+    "q": "「人生，其實像一條從寬闊的平原走進森林的路。在平原上同伴可以結夥而行，\n  歡樂地前推後擠、相濡以沫。一旦進入森林，草叢和荊棘擋路，情形就變了，\n  各人專心走各人的路，尋找各人的方向。」這段文字的觀點與下列何者相去最遠？",
+    "correct": "不論結伴或是獨行，皆應樂觀面對人生",
+    "wrong": [
+      "人生總有坎坷，不會永遠是平順坦途",
+      "天下無不散的筵席，朋友總有分離的時候",
+      "人的選擇不同，每個人都得自己去創造未來"
+    ],
+    "exp": "正確答案：不論結伴或是獨行，皆應樂觀面對人生。來源：113年國中教育會考國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 7,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q8",
+    "difficulty": "medium",
+    "q": "下列文句「」中的字，何者讀音正確？",
+    "correct": "這場音樂會的門票開賣不久就售「罄」：ㄑㄧㄥˋ",
+    "wrong": [
+      "在賣場集滿點數就可「兌」換商品：ㄩㄝˋ",
+      "一望無「垠」的海面上漂流著幾艘小船：ㄍㄣ",
+      "櫃檯上的花瓶插了一束紫色的「桔」梗花：ㄓㄜˊ"
+    ],
+    "exp": "正確答案：這場音樂會的門票開賣不久就售「罄」：ㄑㄧㄥˋ。來源：113年國中教育會考國文第8題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 8,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-113-chinese/Q9-question-1.png)\n\n![第9題原卷資料](/assets/banks/cap-113-chinese/Q9-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第9題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 9,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q9-question-1.png",
+      "/assets/banks/cap-113-chinese/Q9-question-2.png"
+    ],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q10",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-113-chinese/Q10-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第10題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 10,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q10-question.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q11",
+    "difficulty": "easy",
+    "q": "下列各項比賽優勝的獎牌題辭，何者搭配最恰當？\n\n       比賽項目題辭",
+    "correct": "書法鐵畫銀鉤",
+    "wrong": [
+      "演說妙筆生花",
+      "作文新鶯出谷",
+      "歌唱口若懸河"
+    ],
+    "exp": "正確答案：書法鐵畫銀鉤。來源：113年國中教育會考國文第11題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 11,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q12",
+    "difficulty": "medium",
+    "q": "「老農家貧在山住，耕種山田三四畝。苗疏稅多不得食，輸入官倉化為土。歲暮\n  鋤犁傍空室，呼兒登山收橡實。西江賈客珠百斛，船中養犬長食肉。」關於這首\n  詩的說明，下列敘述何者最恰當？",
+    "correct": "就內涵而言，描繪農民於繁重稅賦下艱困的生活",
+    "wrong": [
+      "就形式而言，是一首七言律詩",
+      "就類別而言，是一首山居躬耕的閒適詩",
+      "就技巧而言，以農家與商賈對比，凸顯人情的可貴"
+    ],
+    "exp": "正確答案：就內涵而言，描繪農民於繁重稅賦下艱困的生活。來源：113年國中教育會考國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 12,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q13",
+    "difficulty": "medium",
+    "q": "「遺忘就像舞臺打燈後的暗處，漆黑越大片，就越能凸顯光照的明亮。遺忘幫我\n  們揀選人生最值得珍惜的過往片段。因此，遺忘是無須哀悼的，忘的越多，就\n  越應該把眼光投向光照的所在，那才是值得留戀的人事代謝。」下列何者最接近\n  本文作者的觀點？",
+    "correct": "不被遺忘的事物才最值得珍惜",
+    "wrong": [
+      "生命中的人事代謝無須遺忘",
+      "遺忘如同舞臺上光照的所在",
+      "遺忘越多越能看見人生光明面\n\n                                  3"
+    ],
+    "exp": "正確答案：不被遺忘的事物才最值得珍惜。來源：113年國中教育會考國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 13,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q14",
+    "difficulty": "medium",
+    "q": "「玉慘花愁出鳳城，蓮花樓下柳青青。尊前一唱〈陽關曲〉，別個人人第五\n  程？  尋好夢，夢難成。有誰知我此時情？枕前淚共階前雨，隔個窗兒滴到\n  明。」關於這闋詞的分析，下列敘述何者錯誤？",
+    "correct": "下闋首句點出「我」為了追尋理想而遠離佳人",
+    "wrong": [
+      "首句情景交融，「慘」、「愁」二字點出別情",
+      "末尾二句暗示「我」滿懷離情別緒，一夜未眠",
+      "上闋描寫分別時的情景，下闋描寫別後的思情"
+    ],
+    "exp": "正確答案：下闋首句點出「我」為了追尋理想而遠離佳人。來源：113年國中教育會考國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 14,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q15",
+    "difficulty": "easy",
+    "q": "「溝通包含了三要素：內容、語調、非語言行為。若某人說話時的語調、手勢、\n  表情，和他所說的內容不一致或情境模糊時，人們比較容易受到語調和非語言\n  行為的影響。」下列情境，何者最符合這段文字的內容？",
+    "correct": "朋友收到禮物時臭著臉說「謝謝」，會覺得他其實並不開心",
+    "wrong": [
+      "說話用字過度簡潔，會讓人覺得沒有禮貌",
+      "同樣的內容，由嚴肅的老師說出來比較具有說服力",
+      "聽廣播時，因看不到主持人的表情、手勢，無法判斷內容的真實性"
+    ],
+    "exp": "正確答案：朋友收到禮物時臭著臉說「謝謝」，會覺得他其實並不開心。來源：113年國中教育會考國文第15題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 15,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q16",
+    "difficulty": "medium",
+    "q": "下列文句中的詞語，何者使用最恰當？",
+    "correct": "對於行將就木之人，世間的一切已無須牽掛",
+    "wrong": [
+      "飲食應注重營養均衡，五穀不分才健康",
+      "這房子經歷風災依然堅固，真是不愧屋漏",
+      "使用儀器以蠡測海後，他終於得到準確數據"
+    ],
+    "exp": "正確答案：對於行將就木之人，世間的一切已無須牽掛。來源：113年國中教育會考國文第16題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 16,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-113-chinese/Q17-question-1.png)\n\n![第17題原卷資料](/assets/banks/cap-113-chinese/Q17-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 17,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q17-question-1.png",
+      "/assets/banks/cap-113-chinese/Q17-question-2.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-113-chinese/Q18-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 18,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q18-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q19",
+    "difficulty": "medium",
+    "q": "「蝸以涎見覓，蟬以聲見黏，螢以光見獲。故愛身者，不貴赫赫之名。」這句話\n  的涵義與下列何者最接近？",
+    "correct": "樹大招風風損樹，人為名高傷喪身",
+    "wrong": [
+      "人過留名，雁過留聲",
+      "所榮者善行，所恥者惡名",
+      "名不可簡而成，譽不可巧而立"
+    ],
+    "exp": "正確答案：樹大招風風損樹，人為名高傷喪身。來源：113年國中教育會考國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 19,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-113-chinese/Q20-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第20題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 20,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q20-question.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-113-chinese/Q21-question-1.png)\n\n![第21題原卷資料](/assets/banks/cap-113-chinese/Q21-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考國文第21題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 21,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q21-question-1.png",
+      "/assets/banks/cap-113-chinese/Q21-question-2.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-113-chinese/Q22-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 22,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q22-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-113-chinese/Q23-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考國文第23題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 23,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q23-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q24",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-113-chinese/Q24-question-1.png)\n\n![第24題原卷資料](/assets/banks/cap-113-chinese/Q24-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 24,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/Q24-question-1.png",
+      "/assets/banks/cap-113-chinese/Q24-question-2.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q25",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-113-chinese/G25-26-context.png)\n\n![第25題原卷資料](/assets/banks/cap-113-chinese/Q25-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第25題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 25,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        25,
+        26
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G25-26-context.png",
+      "/assets/banks/cap-113-chinese/Q25-question.png"
+    ],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q26",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-113-chinese/G25-26-context.png)\n\n![第26題原卷資料](/assets/banks/cap-113-chinese/Q26-question-1.png)\n\n![第26題原卷資料](/assets/banks/cap-113-chinese/Q26-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考國文第26題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 26,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        25,
+        26
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G25-26-context.png",
+      "/assets/banks/cap-113-chinese/Q26-question-1.png",
+      "/assets/banks/cap-113-chinese/Q26-question-2.png"
+    ],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q27",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 27 題。\n\n![第27題原卷資料](/assets/banks/cap-113-chinese/G27-28-context.png)\n\n![第27題原卷資料](/assets/banks/cap-113-chinese/Q27-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第27題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 27,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        27,
+        28
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G27-28-context.png",
+      "/assets/banks/cap-113-chinese/Q27-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q28",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-113-chinese/G27-28-context.png)\n\n![第28題原卷資料](/assets/banks/cap-113-chinese/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/cap-113-chinese/Q28-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第28題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 28,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        27,
+        28
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G27-28-context.png",
+      "/assets/banks/cap-113-chinese/Q28-question-1.png",
+      "/assets/banks/cap-113-chinese/Q28-question-2.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q29",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-113-chinese/G29-30-context.png)\n\n![第29題原卷資料](/assets/banks/cap-113-chinese/Q29-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考國文第29題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 29,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        29,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G29-30-context.png",
+      "/assets/banks/cap-113-chinese/Q29-question.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q30",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-113-chinese/G29-30-context.png)\n\n![第30題原卷資料](/assets/banks/cap-113-chinese/Q30-question-1.png)\n\n![第30題原卷資料](/assets/banks/cap-113-chinese/Q30-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考國文第30題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 30,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        29,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G29-30-context.png",
+      "/assets/banks/cap-113-chinese/Q30-question-1.png",
+      "/assets/banks/cap-113-chinese/Q30-question-2.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-113-chinese/G31-32-context.png)\n\n![第31題原卷資料](/assets/banks/cap-113-chinese/Q31-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第31題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 31,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        31,
+        32
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G31-32-context.png",
+      "/assets/banks/cap-113-chinese/Q31-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q32",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-113-chinese/G31-32-context.png)\n\n![第32題原卷資料](/assets/banks/cap-113-chinese/Q32-question-1.png)\n\n![第32題原卷資料](/assets/banks/cap-113-chinese/Q32-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：113年國中教育會考國文第32題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 32,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        31,
+        32
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G31-32-context.png",
+      "/assets/banks/cap-113-chinese/Q32-question-1.png",
+      "/assets/banks/cap-113-chinese/Q32-question-2.png"
+    ],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q33",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-113-chinese/G33-35-context.png)\n\n![第33題原卷資料](/assets/banks/cap-113-chinese/Q33-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第33題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 33,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        33,
+        35
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G33-35-context.png",
+      "/assets/banks/cap-113-chinese/Q33-question.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q34",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-113-chinese/G33-35-context.png)\n\n![第34題原卷資料](/assets/banks/cap-113-chinese/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-113-chinese/Q34-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考國文第34題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 34,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        33,
+        35
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G33-35-context.png",
+      "/assets/banks/cap-113-chinese/Q34-question-1.png",
+      "/assets/banks/cap-113-chinese/Q34-question-2.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q35",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-113-chinese/G33-35-context.png)\n\n![第35題原卷資料](/assets/banks/cap-113-chinese/Q35-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考國文第35題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 35,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        33,
+        35
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G33-35-context.png",
+      "/assets/banks/cap-113-chinese/Q35-question.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-113-chinese/G36-37-context.png)\n\n![第36題原卷資料](/assets/banks/cap-113-chinese/Q36-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考國文第36題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 36,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        36,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G36-37-context.png",
+      "/assets/banks/cap-113-chinese/Q36-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q37",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-113-chinese/G36-37-context.png)\n\n![第37題原卷資料](/assets/banks/cap-113-chinese/Q37-question-1.png)\n\n![第37題原卷資料](/assets/banks/cap-113-chinese/Q37-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第37題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 37,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        36,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G36-37-context.png",
+      "/assets/banks/cap-113-chinese/Q37-question-1.png",
+      "/assets/banks/cap-113-chinese/Q37-question-2.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-113-chinese/G38-39-context.png)\n\n![第38題原卷資料](/assets/banks/cap-113-chinese/Q38-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第38題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 38,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        38,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G38-39-context.png",
+      "/assets/banks/cap-113-chinese/Q38-question.png"
+    ]
+  },
+  {
+    "id": "cap-113-chinese-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-113-chinese/G38-39-context.png)\n\n![第39題原卷資料](/assets/banks/cap-113-chinese/Q39-question-1.png)\n\n![第39題原卷資料](/assets/banks/cap-113-chinese/Q39-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第39題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 39,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        38,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G38-39-context.png",
+      "/assets/banks/cap-113-chinese/Q39-question-1.png",
+      "/assets/banks/cap-113-chinese/Q39-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-113-chinese-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-113-chinese/G40-42-context.png)\n\n![第40題原卷資料](/assets/banks/cap-113-chinese/Q40-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：113年國中教育會考國文第40題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 40,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        40,
+        42
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G40-42-context.png",
+      "/assets/banks/cap-113-chinese/Q40-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-113-chinese/G40-42-context.png)\n\n![第41題原卷資料](/assets/banks/cap-113-chinese/Q41-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：113年國中教育會考國文第41題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 41,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        40,
+        42
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G40-42-context.png",
+      "/assets/banks/cap-113-chinese/Q41-question.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  },
+  {
+    "id": "cap-113-chinese-q42",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-113-chinese/G40-42-context.png)\n\n![第42題原卷資料](/assets/banks/cap-113-chinese/Q42-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：113年國中教育會考國文第42題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-113-chinese",
+      "question": 42,
+      "file": "國中/會考/國文/113P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1KVSAM_S6dDjB-5PrNqkJVF3UFEfshJT1/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        40,
+        42
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-chinese/G40-42-context.png",
+      "/assets/banks/cap-113-chinese/Q42-question.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link"
+  }
+]

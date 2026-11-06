@@ -1,0 +1,2004 @@
+[
+  {
+    "id": "cap-109-social-q1",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 1 題。\n\n![第1題原卷資料](/assets/banks/cap-109-social/Q1-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第1題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 1,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q1-question.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q2",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 2 題。\n\n![第2題原卷資料](/assets/banks/cap-109-social/Q2-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第2題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 2,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q2-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q3",
+    "difficulty": "medium",
+    "q": "每年10月起至翌年4月底，捕撈鰻魚魚苗是臺灣沿海漁民傳統產業活動之一，\n  更是許多漁民維持生計的重要經濟來源。農委會於2013年訂定相關捕撈規定，\n  其中一項是：每年自3月1日至10月31日止，禁止於距岸三浬內海域、潮間帶及\n  河口水域以任何方式捕撈鰻苗。上述規定最可能是為了達成下列何種目的？",
+    "correct": "增加漁業資源",
+    "wrong": [
+      "推廣休閒漁業",
+      "改變食用魚的種類",
+      "避免國際漁事糾紛"
+    ],
+    "exp": "正確答案：增加漁業資源。來源：109年國中教育會考社會第3題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 3,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q4",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/cap-109-social/Q4-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第4題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 4,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q4-question.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q5",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 5 題。\n\n![第5題原卷資料](/assets/banks/cap-109-social/Q5-question-1.png)\n\n![第5題原卷資料](/assets/banks/cap-109-social/Q5-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第5題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 5,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q5-question-1.png",
+      "/assets/banks/cap-109-social/Q5-question-2.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q6",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-109-social/Q6-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第6題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 6,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q6-question.png"
+    ],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q7",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/cap-109-social/Q7-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第7題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 7,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q7-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q8",
+    "difficulty": "easy",
+    "q": "保存古蹟的意義，在於它們能引領後人回到歷史現場，去感受當時的重大變\n  遷或現象。基隆的「海門天險」與臺南的「億載金城」均為國定古蹟，這兩\n  處古蹟的出現，反映當時有何迫切的需要？",
+    "correct": "防止列強入侵",
+    "wrong": [
+      "招撫原住民",
+      "拓墾丘陵、山地",
+      "掃蕩武裝抗日勢力"
+    ],
+    "exp": "正確答案：防止列強入侵。來源：109年國中教育會考社會第8題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 8,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q9",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 9 題。\n\n![第9題原卷資料](/assets/banks/cap-109-social/Q9-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第9題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 9,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q9-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q10",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-109-social/Q10-question-1.png)\n\n![第10題原卷資料](/assets/banks/cap-109-social/Q10-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第10題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 10,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q10-question-1.png",
+      "/assets/banks/cap-109-social/Q10-question-2.png"
+    ],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q11",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 11 題。\n\n![第11題原卷資料](/assets/banks/cap-109-social/Q11-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第11題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 11,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q11-question.png"
+    ],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q12",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/cap-109-social/Q12-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第12題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 12,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q12-question.png"
+    ],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q13",
+    "difficulty": "easy",
+    "q": "我國對於收賄的公務員，可處以十年以上有期徒刑，但民間企業員工出現同\n  樣的行為，卻常以刑罰較輕的背信罪處罰。上述相同的行為，會因犯罪者身\n  分不同而受到不同懲罰的情況，與下列何種原則的關係最密切？",
+    "correct": "罪刑法定",
+    "wrong": [
+      "誠實信用",
+      "契約自由",
+      "無罪推定"
+    ],
+    "exp": "正確答案：罪刑法定。來源：109年國中教育會考社會第13題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 13,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q14",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 14 題。\n\n![第14題原卷資料](/assets/banks/cap-109-social/Q14-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第14題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 14,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q14-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q15",
+    "difficulty": "medium",
+    "q": "新聞報導：日前因人為疏失造成全臺數百萬戶大停電，立法院不分朝野為了追\n  究責任，將請行政院院長提出專案報告。此外，在野黨立委認為近來行政團隊\n  表現不佳，若專案報告無法切中要點、妥善檢討，將對行政院院長提出不信任\n  案。根據我國政府機關間的互動關係判斷，上述內容主要隱含下列何項概念？",
+    "correct": "分權制衡",
+    "wrong": [
+      "均權制度",
+      "主權在民",
+      "地方自治\n\n                                  3"
+    ],
+    "exp": "正確答案：分權制衡。來源：109年國中教育會考社會第15題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 15,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-109-social/Q16-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第16題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 16,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q16-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q17",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-109-social/Q17-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第17題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 17,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q17-question.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q18",
+    "difficulty": "medium",
+    "q": "小雅在澳洲雪梨(33.9°S，151.2°E)欣賞表(四)\n  完跨年煙火後，想緊接著挑戰利用時差 都市經緯度飛行時間\n  前往另一個都市再次跨年。若僅考慮飛甲  36.8°S，174.7°E 3小時10分\n  行時間和時差，則從雪梨搭飛機前往表\n                    乙  21.2°S，159.8°W 6小時10分  (四)中哪個都市，最可能完成此項挑戰？\n                    丙  35.7°N，139.7°E 9小時35分",
+    "correct": "乙",
+    "wrong": [
+      "甲",
+      "丙",
+      "丁丁   26.2°S，28.0°E  14小時0分"
+    ],
+    "exp": "正確答案：乙。來源：109年國中教育會考社會第18題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 18,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-109-social/Q19-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第19題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 19,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q19-question.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q20",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 20 題。\n\n![第20題原卷資料](/assets/banks/cap-109-social/Q20-question-1.png)\n\n![第20題原卷資料](/assets/banks/cap-109-social/Q20-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第20題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 20,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q20-question-1.png",
+      "/assets/banks/cap-109-social/Q20-question-2.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q21",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 21 題。\n\n![第21題原卷資料](/assets/banks/cap-109-social/Q21-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第21題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 21,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q21-question.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q22",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 22 題。\n\n![第22題原卷資料](/assets/banks/cap-109-social/Q22-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第22題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 22,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q22-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q23",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 23 題。\n\n![第23題原卷資料](/assets/banks/cap-109-social/Q23-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第23題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 23,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q23-question.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q24",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 24 題。\n\n![第24題原卷資料](/assets/banks/cap-109-social/Q24-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第24題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 24,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q24-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-109-social/Q25-question-1.png)\n\n![第25題原卷資料](/assets/banks/cap-109-social/Q25-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第25題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 25,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q25-question-1.png",
+      "/assets/banks/cap-109-social/Q25-question-2.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q26",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-109-social/Q26-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第26題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 26,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q26-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q27",
+    "difficulty": "medium",
+    "q": "我國為防治家庭暴力採行了不少措施，如設置婦幼保護專線、協助安置被\n  害人等。若子女對父母親有言語或肢體等暴力行為，根據我國法律規定，\n  如欲達成法律上的隔離效力，可供受害者尋求協助的機關，及此機關所能\n  採行的因應作為，下列配對組合何者正確？",
+    "correct": "地方法院、核發保護令",
+    "wrong": [
+      "警察機關、核發保護令",
+      "地方法院、宣告停止親權",
+      "警察機關、宣告停止親權"
+    ],
+    "exp": "正確答案：地方法院、核發保護令。來源：109年國中教育會考社會第27題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 27,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q28",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-109-social/Q28-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第28題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 28,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q28-question.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q29",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 29 題。\n\n![第29題原卷資料](/assets/banks/cap-109-social/Q29-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第29題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 29,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q29-question.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-109-social/Q30-question-1.png)\n\n![第30題原卷資料](/assets/banks/cap-109-social/Q30-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第30題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 30,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q30-question-1.png",
+      "/assets/banks/cap-109-social/Q30-question-2.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q31",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 31 題。\n\n![第31題原卷資料](/assets/banks/cap-109-social/Q31-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第31題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 31,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q31-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q32",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 32 題。\n\n![第32題原卷資料](/assets/banks/cap-109-social/Q32-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第32題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 32,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q32-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q33",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-109-social/Q33-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第33題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 33,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q33-question.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q34",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-109-social/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-109-social/Q34-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第34題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 34,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q34-question-1.png",
+      "/assets/banks/cap-109-social/Q34-question-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-109-social/Q35-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第35題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 35,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q35-question.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-109-social/Q36-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第36題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 36,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q36-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-109-social/Q37-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第37題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 37,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q37-question.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-109-social/Q38-question-1.png)\n\n![第38題原卷資料](/assets/banks/cap-109-social/Q38-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第38題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 38,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q38-question-1.png",
+      "/assets/banks/cap-109-social/Q38-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-109-social-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-109-social/Q39-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第39題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 39,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-109-social-q40",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-109-social/Q40-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第40題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 40,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q40-question.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-109-social/Q41-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第41題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 41,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q41-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q42",
+    "difficulty": "medium",
+    "q": "小剛買了一些除蚤藥替小貓除蚤，但後來小貓走丟了，於是他將未使用完的\n  除蚤藥放上網路出售，沒想到縣政府以違反《動物用藥品管理法》為由，對\n  小剛開出九萬元的罰單。上述小剛承擔的法律責任，其性質與下列何者相同？",
+    "correct": "餐廳因消防檢查不合規定遭停止營業\n\n                                  9",
+    "wrong": [
+      "網路賣家拒絕退換售出的瑕疵商品",
+      "曉華屢次虐待動物遭處以有期徒刑",
+      "快遞公司未依契約規定時間送貨到府"
+    ],
+    "exp": "正確答案：餐廳因消防檢查不合規定遭停止營業\n\n                                  9。來源：109年國中教育會考社會第42題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 42,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q43",
+    "difficulty": "medium",
+    "q": "南美洲南端海運天然限制多，橫越安地斯山脈又常受冬季降雪阻礙交通，因此\n  智利與阿根廷兩國計畫興建打通安地斯山脈的隧道。該隧道不僅可大幅縮短運\n  輸時間，也降低氣候對貨運的影響，有利於大西洋岸國家與太平洋岸國家間的\n  貿易。在上述工程完工後，下列何者的運輸時間可望降低？",
+    "correct": "阿根廷至中國",
+    "wrong": [
+      "智利至日本",
+      "智利至紐西蘭",
+      "阿根廷至英國"
+    ],
+    "exp": "正確答案：阿根廷至中國。來源：109年國中教育會考社會第43題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 43,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-109-social/Q44-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第44題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 44,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q44-question.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-109-social/Q45-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第45題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 45,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q45-question.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-109-social/Q46-question-1.png)\n\n![第46題原卷資料](/assets/banks/cap-109-social/Q46-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第46題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 46,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q46-question-1.png",
+      "/assets/banks/cap-109-social/Q46-question-2.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q47",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-109-social/Q47-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第47題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 47,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q47-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q48",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-109-social/Q48-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第48題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 48,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q48-question.png"
+    ],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q49",
+    "difficulty": "medium",
+    "q": "「哈薩克近來外匯收入大幅萎縮，於是政策規畫出口馬奶的加工乳品，以增加\n  外匯。」上述政策最可能是因應下列何種商品國際市場價格的變動？",
+    "correct": "石油價格慘跌",
+    "wrong": [
+      "石油價格飆升",
+      "咖啡價格慘跌",
+      "咖啡價格飆升\n\n                                    表(十四)"
+    ],
+    "exp": "正確答案：石油價格慘跌。來源：109年國中教育會考社會第49題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 49,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/cap-109-social/Q50-question-1.png)\n\n![第50題原卷資料](/assets/banks/cap-109-social/Q50-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第50題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 50,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q50-question-1.png",
+      "/assets/banks/cap-109-social/Q50-question-2.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q51",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 51 題。\n\n![第51題原卷資料](/assets/banks/cap-109-social/Q51-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第51題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 51,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q51-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q52",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 52 題。\n\n![第52題原卷資料](/assets/banks/cap-109-social/Q52-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第52題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 52,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q52-question.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q53",
+    "difficulty": "medium",
+    "q": "阿娟參加旅行團到某城市觀光，拿到了如下的旅遊簡介：「此城市地理位置\n  優越，既連接兩大洲，又位居黑海通往地中海航道的必經之地，曾經先後作\n  為兩個大帝國的首都長達一千六百多年之久。城內有著拜占庭帝國所修築的\n  古城牆、鄂圖曼土耳其帝國華麗的皇宮，以及宏偉的基督教教堂與清真寺等\n  文化遺產，展現了這座城市輝煌悠久的歷史。」根據內容判斷，阿娟到訪的\n  城市最可能是下列何者？",
+    "correct": "伊斯坦堡",
+    "wrong": [
+      "羅馬",
+      "開羅",
+      "耶路撒冷"
+    ],
+    "exp": "正確答案：伊斯坦堡。來源：109年國中教育會考社會第53題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 53,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q54",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/cap-109-social/Q54-question-1.png)\n\n![第54題原卷資料](/assets/banks/cap-109-social/Q54-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第54題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 54,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q54-question-1.png",
+      "/assets/banks/cap-109-social/Q54-question-2.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q55",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 55 題。\n\n![第55題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第55題原卷資料](/assets/banks/cap-109-social/Q55-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第55題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 55,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q55-question.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q56",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 56 題。\n\n![第56題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第56題原卷資料](/assets/banks/cap-109-social/Q56-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第56題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 56,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q56-question.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q57",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 57 題。\n\n![第57題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第57題原卷資料](/assets/banks/cap-109-social/Q57-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：109年國中教育會考社會第57題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 57,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q57-question.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q58",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 58 題。\n\n![第58題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第58題原卷資料](/assets/banks/cap-109-social/Q58-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第58題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 58,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q58-question.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q59",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 59 題。\n\n![第59題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第59題原卷資料](/assets/banks/cap-109-social/Q59-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第59題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 59,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q59-question.png"
+    ],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q60",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 60 題。\n\n![第60題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第60題原卷資料](/assets/banks/cap-109-social/Q60-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第60題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 60,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q60-question.png"
+    ],
+    "passRate": 0.92,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q61",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 61 題。\n\n![第61題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第61題原卷資料](/assets/banks/cap-109-social/Q61-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：109年國中教育會考社會第61題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 61,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q61-question.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q62",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 62 題。\n\n![第62題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第62題原卷資料](/assets/banks/cap-109-social/Q62-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：109年國中教育會考社會第62題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 62,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q62-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  },
+  {
+    "id": "cap-109-social-q63",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 63 題。\n\n![第63題原卷資料](/assets/banks/cap-109-social/G55-63-context.png)\n\n![第63題原卷資料](/assets/banks/cap-109-social/Q63-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：109年國中教育會考社會第63題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 63,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/G55-63-context.png",
+      "/assets/banks/cap-109-social/Q63-question.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link"
+  }
+]

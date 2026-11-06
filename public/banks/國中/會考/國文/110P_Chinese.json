@@ -1,0 +1,1551 @@
+[
+  {
+    "id": "cap-110-chinese-q1",
+    "difficulty": "easy",
+    "q": "下列文句中的連詞，何者使用最恰當？",
+    "correct": "即使生活變得富裕，也不應該浪費",
+    "wrong": [
+      "除非是很小的錯誤，也可能釀成大害",
+      "只有從根本解決，就能為人民改善生活",
+      "與其老師怎樣費心勸說，他還是我行我素"
+    ],
+    "exp": "正確答案：即使生活變得富裕，也不應該浪費。來源：110年國中教育會考國文第1題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 1,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q2",
+    "difficulty": "easy",
+    "q": "「人生是短暫的，死亡是自然的，認清了這點，活著的時候才可以真正的投入。」\n  這句話的涵義，與下列何者最接近？",
+    "correct": "了解生命的限制，坦然面對死亡，就能盡情地活著",
+    "wrong": [
+      "經歷死亡幽谷，才能發現活著的可貴",
+      "能將死亡置之度外的人往往雖死猶生",
+      "生命的價值在於不斷挑戰自我，安於現狀等於死亡"
+    ],
+    "exp": "正確答案：了解生命的限制，坦然面對死亡，就能盡情地活著。來源：110年國中教育會考國文第2題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 2,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q3",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 3 題。\n\n![第3題原卷資料](/assets/banks/cap-110-chinese/Q3-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第3題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 3,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q3-question.png"
+    ],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q4",
+    "difficulty": "easy",
+    "q": "下列選項「」中的字，何組讀音相同？",
+    "correct": "「抵」死不從／蒞臨府「邸」",
+    "wrong": [
+      "「恪」守本分／獨創一「格」",
+      "字「斟」句酌／「勘」正訛誤",
+      "鍾靈「毓」秀／才「疏」學淺"
+    ],
+    "exp": "正確答案：「抵」死不從／蒞臨府「邸」。來源：110年國中教育會考國文第4題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 4,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q5",
+    "difficulty": "easy",
+    "q": "「山田汽車成立於西元1916年。高橋汽車在山田汽車成立100週年時發表一段\n  賀詞：『感謝100年來的競爭，沒有你的那30年有點孤獨。』」根據這段文\n  字，高橋汽車最可能成立於西元哪一年？",
+    "correct": "1886",
+    "wrong": [
+      "1816",
+      "1846",
+      "1946\n\n                                  1"
+    ],
+    "exp": "正確答案：1886。來源：110年國中教育會考國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 5,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q6",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 6 題。\n\n![第6題原卷資料](/assets/banks/cap-110-chinese/Q6-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考國文第6題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 6,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q6-question.png"
+    ],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q7",
+    "difficulty": "medium",
+    "q": "愛爾蘭文學家喬哀思流亡海外多年，其創作大多根植於早年在愛爾蘭都柏林\n  的生活。他曾說：「有一天，都柏林這座城市毀了，人們也可以憑藉我的小\n  說，一磚一瓦的將之重建。」透過這句話可看出小說具有什麼作用？",
+    "correct": "記錄地方文史風物",
+    "wrong": [
+      "勾勒未來生活圖象",
+      "重振戰後失落的人心",
+      "展現社區營造的力量"
+    ],
+    "exp": "正確答案：記錄地方文史風物。來源：110年國中教育會考國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 7,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q8",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 8 題。\n\n![第8題原卷資料](/assets/banks/cap-110-chinese/Q8-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考國文第8題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 8,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q8-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q9",
+    "difficulty": "easy",
+    "q": "「落帆逗淮鎮，停舫臨孤驛。浩浩風起波，冥冥日沉夕。人歸山郭暗，雁下蘆洲\n  白。獨夜憶秦關，聽鐘未眠客。」關於這首詩的分析，下列敘述何者最恰當？",
+    "correct": "末兩句點出客因心有所思而不成眠",
+    "wrong": [
+      "首兩句寫出與友餞別的地點與時間",
+      "以「風起」、「日沉」自喻懷才不遇",
+      "以「雁下蘆洲白」表示太陽將升起"
+    ],
+    "exp": "正確答案：末兩句點出客因心有所思而不成眠。來源：110年國中教育會考國文第9題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 9,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q10",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/cap-110-chinese/Q10-question-1.png)\n\n![第10題原卷資料](/assets/banks/cap-110-chinese/Q10-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第10題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 10,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q10-question-1.png",
+      "/assets/banks/cap-110-chinese/Q10-question-2.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q11",
+    "difficulty": "medium",
+    "q": "下列文句「」中的稱謂，何者使用最恰當？",
+    "correct": "「小女」的于歸之宴，請您務必賞光",
+    "wrong": [
+      "謝謝您的蒞臨，「貴校」蓬蓽生輝",
+      "「家弟」近期要搬家，忙得不可開交",
+      "為了準備求職面試，「舍姐」緊張不已"
+    ],
+    "exp": "正確答案：「小女」的于歸之宴，請您務必賞光。來源：110年國中教育會考國文第11題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 11,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q12",
+    "difficulty": "medium",
+    "q": "「樹型直挺高壯的，無一不被畫上記號，陸續走向腰斬的命運。唯獨畸形虛\n  弱的劣木，有的彎曲不直，有的枝枒過多，有的菌蟲蛀洞，有的矮小窄細，\n  幸運地逃過一劫，殘喘至今，成了旅客心中敬畏的神木。」這段文字所要表\n  達的意旨，與下列何者最接近？",
+    "correct": "無用之用，是為大用",
+    "wrong": [
+      "前事不忘，後事之師",
+      "一沙一世界，一花一天堂",
+      "出淤泥而不染，濯清漣而不妖"
+    ],
+    "exp": "正確答案：無用之用，是為大用。來源：110年國中教育會考國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 12,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/cap-110-chinese/Q13-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 13,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q13-question.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q14",
+    "difficulty": "medium",
+    "q": "「許多科技大廠致力發展AI產業，但在支援中文化系統卻遇到困難。原因是\n  中文的同音異字令語音辨識難度增加，而中文常與外語混用，以及次文化用\n  語等都成為系統干擾。」根據這段文字，下列文句語音辨識錯誤的原因，何\n  者未被提及？",
+    "correct": "他在床上睡著了 → 他在船上睡著了",
+    "wrong": [
+      "他是個勢利眼 → 他是個視力眼",
+      "班導要求按時交作業 → 扳倒要求按時交作業",
+      "Facebook的用戶眾多 → 非死不可的用戶眾多"
+    ],
+    "exp": "正確答案：他在床上睡著了 → 他在船上睡著了。來源：110年國中教育會考國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 14,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q15",
+    "difficulty": "medium",
+    "q": "下列文句「」中的詞語，何者使用最恰當？",
+    "correct": "他把這些事混為一談，其實根本是「風馬牛不相及」",
+    "wrong": [
+      "既然每個人選都很優秀，不如「兩害相權取其輕」",
+      "窮困之際竟幸運中了頭獎，真是有如「雨後春筍」",
+      "比賽中就算占上風也要保持謹慎，以免「轉悲為喜」\n\n                                  3"
+    ],
+    "exp": "正確答案：他把這些事混為一談，其實根本是「風馬牛不相及」。來源：110年國中教育會考國文第15題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 15,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q16",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 16 題。\n\n![第16題原卷資料](/assets/banks/cap-110-chinese/Q16-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第16題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 16,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q16-question.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q17",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 17 題。\n\n![第17題原卷資料](/assets/banks/cap-110-chinese/Q17-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 17,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q17-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q18",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 18 題。\n\n![第18題原卷資料](/assets/banks/cap-110-chinese/Q18-question-1.png)\n\n![第18題原卷資料](/assets/banks/cap-110-chinese/Q18-question-2.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 18,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q18-question-1.png",
+      "/assets/banks/cap-110-chinese/Q18-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q19",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 19 題。\n\n![第19題原卷資料](/assets/banks/cap-110-chinese/Q19-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 19,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q19-question.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q20",
+    "difficulty": "easy",
+    "q": "「旅行沒有公式，更沒有所謂必看、必玩或必吃。這個世界很大，擺脫行程\n  的綑綁，我們會感受更多的驚喜。」這段文字的涵義，與下列何者最接近？",
+    "correct": "無目的的漫遊會有意外的收穫",
+    "wrong": [
+      "事先規劃才算深度旅遊",
+      "人們要有實踐壯遊的夢想",
+      "人生就像是一趟未知的旅程"
+    ],
+    "exp": "正確答案：無目的的漫遊會有意外的收穫。來源：110年國中教育會考國文第20題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 20,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q21",
+    "difficulty": "medium",
+    "q": "下列文句，何者詞語使用最恰當？",
+    "correct": "曾幾何時，家鄉景物已完全改變",
+    "wrong": [
+      "他為人謙和有禮，總是前倨後恭",
+      "他一進車廂，就先入為主搶了靠窗座位",
+      "體育課後教室變得汗牛充棟，又臭又悶"
+    ],
+    "exp": "正確答案：曾幾何時，家鄉景物已完全改變。來源：110年國中教育會考國文第21題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 21,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q22",
+    "difficulty": "medium",
+    "q": "「有些人才，只是放錯了位置，就成了庸才。」這句話的涵義，與下列何者\n  最接近？",
+    "correct": "天地無棄物，用人當取其所長",
+    "wrong": [
+      "天才與瘋子往往只有一線之隔",
+      "平凡人透過努力也能變得傑出",
+      "人須自知自愛，方能獲得尊重"
+    ],
+    "exp": "正確答案：天地無棄物，用人當取其所長。來源：110年國中教育會考國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 22,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q23",
+    "difficulty": "medium",
+    "q": "下列詞語「」中的注音寫成國字後，何者兩兩相同？",
+    "correct": "無「ㄨㄤˋ」之災／自大狂「ㄨㄤˋ」",
+    "wrong": [
+      "信筆「ㄊㄨˊ」鴉／如火如「ㄊㄨˊ」",
+      "勞而無「ㄍㄨㄥ」／分「ㄍㄨㄥ」合作",
+      "遺珠之「ㄏㄢˋ」／震「ㄏㄢˋ」人心"
+    ],
+    "exp": "正確答案：無「ㄨㄤˋ」之災／自大狂「ㄨㄤˋ」。來源：110年國中教育會考國文第23題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 23,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q24",
+    "difficulty": "medium",
+    "q": "「讀書若是□□□□，便把活潑的讀書心性束縛了。窮研細究，把通篇文章分\n  析得支離破碎，結果往往化甘旨為嚼蠟，脫離了意境，『甚解』卻變成撿了\n  芝麻丟西瓜，因小失大。」根據文意脈絡，空格處填入下列何者最恰當？",
+    "correct": "逐字求解\n\n                                  5",
+    "wrong": [
+      "茫然不解",
+      "一知半解",
+      "不求甚解"
+    ],
+    "exp": "正確答案：逐字求解\n\n                                  5。來源：110年國中教育會考國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 24,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q25",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 25 題。\n\n![第25題原卷資料](/assets/banks/cap-110-chinese/Q25-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第25題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 25,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q25-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q26",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 26 題。\n\n![第26題原卷資料](/assets/banks/cap-110-chinese/Q26-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第26題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 26,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q26-question.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q27",
+    "difficulty": "medium",
+    "q": "王國維評姜白石詞：「古今詞人格調之高，無如白石。惜不於意境上用力，\n  故覺無言外之味、弦外之響。終不能與於第一流之作者也。」下列何者最符\n  合這段文字的觀點？",
+    "correct": "白石非第一流之作者",
+    "wrong": [
+      "白石之詞善於經營意境",
+      "有弦外之響者必是第一流詞作",
+      "詞有言外之意方顯作者格調之高"
+    ],
+    "exp": "正確答案：白石非第一流之作者。來源：110年國中教育會考國文第27題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 27,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q28",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 28 題。\n\n![第28題原卷資料](/assets/banks/cap-110-chinese/Q28-question-1.png)\n\n![第28題原卷資料](/assets/banks/cap-110-chinese/Q28-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第28題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 28,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q28-question-1.png",
+      "/assets/banks/cap-110-chinese/Q28-question-2.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q29",
+    "difficulty": "medium",
+    "q": "「夫山之異於眾者，尚能待人而自見，而況人之異於眾者哉！天於詭奇之地不\n  多設，人於登臨之樂不常遇。有其地而非其人，有其人而非其地，皆不足以\n  盡夫遊觀之樂也。今靈巖為名山，諸公為名士，蓋必相須而適相值，夫豈偶\n  然哉！宜其目領而心解，景會而理得也。」下列敘述何者與這段文字中的觀\n  點最接近？",
+    "correct": "要盡遊觀之樂，須有特別的景致與懂得欣賞的人",
+    "wrong": [
+      "若能保持心靈的澄淨，所到之處都會是美景",
+      "徜徉於大自然中，可洗滌世俗的汙濁與煩憂",
+      "只要有名士登臨，無論怎樣的山水都可成為名勝"
+    ],
+    "exp": "正確答案：要盡遊觀之樂，須有特別的景致與懂得欣賞的人。來源：110年國中教育會考國文第29題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 29,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q30",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 30 題。\n\n![第30題原卷資料](/assets/banks/cap-110-chinese/Q30-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第30題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 30,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q30-question.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q31",
+    "difficulty": "medium",
+    "q": "「有覆於上者如天，載於下者如地，而百姓不之知。有恩信及一物，教化及\n  一夫，民則歸之。其猶豐年與旱歲也：豐年之民，不知甘雨柔風之力，不知\n  生育長養之仁，而曰：『我耕作以時，倉廩以實』。旱歲之民，則野枯苗\n  縮，然後決川以灌之。然則一川之仁豈深於四時也哉？」下列何者最能與這\n  段文字的意旨相呼應？",
+    "correct": "對外人的一時之助充滿感謝，卻忽略父母深恩",
+    "wrong": [
+      "對感情的得失順其自然，不執著強求",
+      "平日砥礪心志，災禍發生時才能處變不驚",
+      "購買生產過剩的農產品，幫助農民度過難關"
+    ],
+    "exp": "正確答案：對外人的一時之助充滿感謝，卻忽略父母深恩。來源：110年國中教育會考國文第31題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 31,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q32",
+    "difficulty": "medium",
+    "q": "「必備匙箸兩副，食前多品。擇取欲食者，以別箸取之，置一器中，食之必\n  盡。飯前以別匙分而另置，始膳。吳后嘗問其故，曰：『不欲以殘食與宮人食\n  也。』」這段文字記載宋高宗的用膳習慣，據此可看出他具備什麼樣的特質？",
+    "correct": "待下體貼細心\n\n                                  7",
+    "wrong": [
+      "用餐講究排場",
+      "飲食注重養生",
+      "對妻言聽計從"
+    ],
+    "exp": "正確答案：待下體貼細心\n\n                                  7。來源：110年國中教育會考國文第32題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 32,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q33",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 33 題。\n\n![第33題原卷資料](/assets/banks/cap-110-chinese/G33-34-context.png)\n\n![第33題原卷資料](/assets/banks/cap-110-chinese/Q33-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考國文第33題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 33,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        33,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G33-34-context.png",
+      "/assets/banks/cap-110-chinese/Q33-question.png"
+    ],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q34",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 34 題。\n\n![第34題原卷資料](/assets/banks/cap-110-chinese/G33-34-context.png)\n\n![第34題原卷資料](/assets/banks/cap-110-chinese/Q34-question-1.png)\n\n![第34題原卷資料](/assets/banks/cap-110-chinese/Q34-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第34題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 34,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        33,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G33-34-context.png",
+      "/assets/banks/cap-110-chinese/Q34-question-1.png",
+      "/assets/banks/cap-110-chinese/Q34-question-2.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q35",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/cap-110-chinese/G35-36-context.png)\n\n![第35題原卷資料](/assets/banks/cap-110-chinese/Q35-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第35題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 35,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G35-36-context.png",
+      "/assets/banks/cap-110-chinese/Q35-question.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q36",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 36 題。\n\n![第36題原卷資料](/assets/banks/cap-110-chinese/G35-36-context.png)\n\n![第36題原卷資料](/assets/banks/cap-110-chinese/Q36-question-1.png)\n\n![第36題原卷資料](/assets/banks/cap-110-chinese/Q36-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第36題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 36,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G35-36-context.png",
+      "/assets/banks/cap-110-chinese/Q36-question-1.png",
+      "/assets/banks/cap-110-chinese/Q36-question-2.png"
+    ],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q37",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/cap-110-chinese/G37-38-context.png)\n\n![第37題原卷資料](/assets/banks/cap-110-chinese/Q37-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第37題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 37,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G37-38-context.png",
+      "/assets/banks/cap-110-chinese/Q37-question.png"
+    ],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/cap-110-chinese/G37-38-context.png)\n\n![第38題原卷資料](/assets/banks/cap-110-chinese/Q38-question-1.png)\n\n![第38題原卷資料](/assets/banks/cap-110-chinese/Q38-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考國文第38題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 38,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G37-38-context.png",
+      "/assets/banks/cap-110-chinese/Q38-question-1.png",
+      "/assets/banks/cap-110-chinese/Q38-question-2.png"
+    ]
+  },
+  {
+    "id": "cap-110-chinese-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/cap-110-chinese/G39-41-context.png)\n\n![第39題原卷資料](/assets/banks/cap-110-chinese/Q39-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考國文第39題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 39,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        39,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G39-41-context.png",
+      "/assets/banks/cap-110-chinese/Q39-question.png"
+    ]
+  },
+  {
+    "id": "cap-110-chinese-q40",
+    "difficulty": "easy",
+    "q": "請依下列原卷資料作答第 40 題。\n\n![第40題原卷資料](/assets/banks/cap-110-chinese/G39-41-context.png)\n\n![第40題原卷資料](/assets/banks/cap-110-chinese/Q40-question-1.png)\n\n![第40題原卷資料](/assets/banks/cap-110-chinese/Q40-question-2.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第40題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 40,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        39,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G39-41-context.png",
+      "/assets/banks/cap-110-chinese/Q40-question-1.png",
+      "/assets/banks/cap-110-chinese/Q40-question-2.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q41",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 41 題。\n\n![第41題原卷資料](/assets/banks/cap-110-chinese/G39-41-context.png)\n\n![第41題原卷資料](/assets/banks/cap-110-chinese/Q41-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第41題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 41,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        39,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G39-41-context.png",
+      "/assets/banks/cap-110-chinese/Q41-question.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q42",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 42 題。\n\n![第42題原卷資料](/assets/banks/cap-110-chinese/G42-43-context.png)\n\n![第42題原卷資料](/assets/banks/cap-110-chinese/Q42-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考國文第42題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 42,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        42,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G42-43-context.png",
+      "/assets/banks/cap-110-chinese/Q42-question.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q43",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 43 題。\n\n![第43題原卷資料](/assets/banks/cap-110-chinese/G42-43-context.png)\n\n![第43題原卷資料](/assets/banks/cap-110-chinese/Q43-question-1.png)\n\n![第43題原卷資料](/assets/banks/cap-110-chinese/Q43-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：110年國中教育會考國文第43題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 43,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        42,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G42-43-context.png",
+      "/assets/banks/cap-110-chinese/Q43-question-1.png",
+      "/assets/banks/cap-110-chinese/Q43-question-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/cap-110-chinese/G44-45-context.png)\n\n![第44題原卷資料](/assets/banks/cap-110-chinese/Q44-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考國文第44題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 44,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        44,
+        45
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G44-45-context.png",
+      "/assets/banks/cap-110-chinese/Q44-question.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/cap-110-chinese/G44-45-context.png)\n\n![第45題原卷資料](/assets/banks/cap-110-chinese/Q45-question-1.png)\n\n![第45題原卷資料](/assets/banks/cap-110-chinese/Q45-question-2.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：110年國中教育會考國文第45題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 45,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        44,
+        45
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G44-45-context.png",
+      "/assets/banks/cap-110-chinese/Q45-question-1.png",
+      "/assets/banks/cap-110-chinese/Q45-question-2.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q46",
+    "difficulty": "hard",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/cap-110-chinese/G46-48-context.png)\n\n![第46題原卷資料](/assets/banks/cap-110-chinese/Q46-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考國文第46題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 46,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G46-48-context.png",
+      "/assets/banks/cap-110-chinese/Q46-question.png"
+    ],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q47",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 47 題。\n\n![第47題原卷資料](/assets/banks/cap-110-chinese/G46-48-context.png)\n\n![第47題原卷資料](/assets/banks/cap-110-chinese/Q47-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：110年國中教育會考國文第47題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 47,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G46-48-context.png",
+      "/assets/banks/cap-110-chinese/Q47-question.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  },
+  {
+    "id": "cap-110-chinese-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/cap-110-chinese/G46-48-context.png)\n\n![第48題原卷資料](/assets/banks/cap-110-chinese/Q48-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：110年國中教育會考國文第48題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 48,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G46-48-context.png",
+      "/assets/banks/cap-110-chinese/Q48-question.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link"
+  }
+]

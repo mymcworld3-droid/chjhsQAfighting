@@ -1,0 +1,1240 @@
+[
+  {
+    "id": "gsat-108-science-q1",
+    "difficulty": "medium",
+    "q": "太陽風是太陽表面所噴發出來的高能帶電粒子束。當這些物質到達地球時，時速\n\n 常超過百萬公里。太陽風與下列哪一現象最有直接關係？",
+    "correct": "極光",
+    "wrong": [
+      "潮汐",
+      "日全食",
+      "流星雨",
+      "沙塵暴"
+    ],
+    "exp": "正確答案：極光。來源：108年學科能力測驗自然第1題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 1,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q2",
+    "difficulty": "medium",
+    "q": "聖嬰現象是大氣與海洋交互作用下的大自然變化，會導致地球上部分地區短期氣候\n\n 異常。有關聖嬰現象發生時所伴隨的大氣與海洋變化或影響，下列敘述何者錯誤？",
+    "correct": "南美洲西岸湧升流增強",
+    "wrong": [
+      "赤道東風減弱",
+      "赤道東太平洋地區海溫上升",
+      "赤道西太平洋地區海水高度降低",
+      "赤道西太平洋地區降雨量減少"
+    ],
+    "exp": "正確答案：南美洲西岸湧升流增強。來源：108年學科能力測驗自然第2題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 2,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q3",
+    "difficulty": "medium",
+    "q": "恆星的表面溫度與呈現的星光顏色有關，當我們觀賞夜空中閃爍的恆星，可看出\n\n 恆星的顏色有白、藍、黃、紅等。下列選項中，顏色產生的原理何者相同？",
+    "correct": "紅色恆星與火山熔岩發出的紅光",
+    "wrong": [
+      "恆星與煙花的火光",
+      "紅色恆星與紅色的火星",
+      "藍色恆星與藍色的花",
+      "藍色恆星與瓦斯燃燒發出的藍光"
+    ],
+    "exp": "正確答案：紅色恆星與火山熔岩發出的紅光。來源：108年學科能力測驗自然第3題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 3,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q4",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 4 題。\n\n![第4題原卷資料](/assets/banks/gsat-108-science/Q4-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第4題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 4,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q4-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q5",
+    "difficulty": "medium",
+    "q": "在很多工作環境中，機能衣料提供重要的安全防護，例如：導電性較高的防靜電\n\n 工作服，可抑制人體及服裝累積靜電荷，以消除或減小靜電放電的危害，因此已\n\n 成為石油化工業極基本的防護必需品。下列有關防靜電工作服的敘述，何者不正\n\n  確？",
+    "correct": "導電纖維每單位長度的電阻值越大，越容易使電荷流動而不致累積",
+    "wrong": [
+      "導電纖維可全部或部分使用金屬或有機物的導電材料製成",
+      "在紡織時按照一定比例均勻混入導電纖維，可製成防靜電織物",
+      "為防止服裝累積靜電荷，可利用具有導電性的織物製作工作服",
+      "防靜電工作服可利用接地導引電荷或中和放電的方式，防止累積靜電荷"
+    ],
+    "exp": "正確答案：導電纖維每單位長度的電阻值越大，越容易使電荷流動而不致累積。來源：108年學科能力測驗自然第5題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 5,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q6",
+    "difficulty": "medium",
+    "q": "某生做「電磁感應」的示範實驗時，先將具有鐵心的小線圈串接直流電源供應器，\n\n 形成迴路以產生磁場，再利用一個只串接檢流計的大線圈，套在小線圈外圍檢測\n\n 應電流。下列哪一項操作方式，不可能產生應電流？",
+    "correct": "在大線圈的迴路中串接開關並交替斷開與接通的動作",
+    "wrong": [
+      "將小線圈在大線圈內外來回抽送",
+      "將電源供應器的電壓忽大忽小的調節",
+      "將電源供應器的正負端交換連接小線圈的兩端",
+      "在小線圈的迴路中串接開關並交替斷開與接通的動作"
+    ],
+    "exp": "正確答案：在大線圈的迴路中串接開關並交替斷開與接通的動作。來源：108年學科能力測驗自然第6題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 6,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q7",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 7 題。\n\n![第7題原卷資料](/assets/banks/gsat-108-science/Q7-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第7題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 7,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q7-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q8",
+    "difficulty": "medium",
+    "q": "某生清晨被鬧鐘喚醒，以電動牙刷洗漱，早餐吃的是烤麵包機烤的吐司。出門搭\n\n 公車上學時，遇到同學提起，猛然發現忘了整理昨天數學課的筆記，於是拿出手\n\n 機內建的相機拍攝同學的筆記參考，再使用太陽能電池計算機輔助驗算。在上述\n\n 過程所應用到的工具中，下列哪一選項中的組合最可能應用到光電效應？",
+    "correct": "手機內建的相機和太陽能電池計算機",
+    "wrong": [
+      "鬧鐘和電動牙刷",
+      "電動牙刷和公車",
+      "烤麵包機和手機內建的相機",
+      "烤麵包機和太陽能電池計算機"
+    ],
+    "exp": "正確答案：手機內建的相機和太陽能電池計算機。來源：108年學科能力測驗自然第8題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 8,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q9",
+    "difficulty": "medium",
+    "q": "細菌和人體細胞的構造，有共通性也有歧異性，下列有關兩者的比較何者正確？",
+    "correct": "兩者的細胞質中都有核糖體",
+    "wrong": [
+      "兩者的細胞核中都有粒線體",
+      "兩者的細胞內都有高基氏體",
+      "細菌沒有細胞膜，但有細胞壁與外界區隔",
+      "人體細胞沒有細胞壁，內部的次構造皆用膜包圍"
+    ],
+    "exp": "正確答案：兩者的細胞質中都有核糖體。來源：108年學科能力測驗自然第9題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 9,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q10",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 10 題。\n\n![第10題原卷資料](/assets/banks/gsat-108-science/Q10-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第10題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 10,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q10-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q11",
+    "difficulty": "medium",
+    "q": "螺旋藻為一種藍綠菌，而小球藻則為一種綠藻，螺旋藻及小球藻皆被認為富含人\n\n 體所需的養分。下列有關這兩者的敘述何者正確？",
+    "correct": "兩者皆行光合作用光反應產生氧",
+    "wrong": [
+      "兩者皆具葉綠體",
+      "兩者的細胞壁主要皆由肽聚糖組成",
+      "在三域系統中螺旋藻是細菌，而小球藻是植物",
+      "螺旋藻以葉黃素，而小球藻則以葉綠素為主要光合色素"
+    ],
+    "exp": "正確答案：兩者皆行光合作用光反應產生氧。來源：108年學科能力測驗自然第11題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 11,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q12",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 12 題。\n\n![第12題原卷資料](/assets/banks/gsat-108-science/Q12-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第12題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 12,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q12-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q13",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 13 題。\n\n![第13題原卷資料](/assets/banks/gsat-108-science/Q13-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第13題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 13,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q13-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q14",
+    "difficulty": "medium",
+    "q": "若將等莫耳數的下列化合物完全燃燒，產生二氧化碳與水，則所需消耗氧氣量的\n 大小順序，何者正確？",
+    "correct": "乙烷＞甲醚＝乙醇＞乙炔＞乙酸",
+    "wrong": [
+      "乙醇＞乙烷＞乙酸＞甲醚＝乙炔",
+      "乙炔＞乙烷＞乙醇＞甲醚＞乙酸",
+      "乙炔＝乙烷＞乙醇＞乙酸＞甲醚",
+      "甲醚＝乙醇＞乙酸＞乙烷＞乙炔"
+    ],
+    "exp": "正確答案：乙烷＞甲醚＝乙醇＞乙炔＞乙酸。來源：108年學科能力測驗自然第14題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 14,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q15",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 15 題。\n\n![第15題原卷資料](/assets/banks/gsat-108-science/Q15-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第15題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 15,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q15-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q16",
+    "difficulty": "medium",
+    "q": "電石（又稱電土）的主要成分是碳化鈣（ CaC 2 ），碳化鈣遇水會生成乙炔（ C 2 H 2 ）\n 和氫氧化鈣；所產生的乙炔是傳統電石燈和竹筒炮所用的燃料，也可作為水果催\n  熟劑。今有一電石樣品和水反應所產生的氫氧化鈣水溶液，以1.0 M 鹽酸標準溶\n  液滴定，得知其氫氧根離子的莫耳數為0.020 mol。試問此電石樣品可製得多少\n  公克乙炔？（C＝12, H＝1.0）",
+    "correct": "0.26",
+    "wrong": [
+      "0.13",
+      "0.39",
+      "0.52",
+      "0.65"
+    ],
+    "exp": "正確答案：0.26。來源：108年學科能力測驗自然第16題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 16,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q35",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 35 題。\n\n![第35題原卷資料](/assets/banks/gsat-108-science/G35-36-context.png)\n\n![第35題原卷資料](/assets/banks/gsat-108-science/Q35-question-1.png)\n\n![第35題原卷資料](/assets/banks/gsat-108-science/Q35-question-2.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第35題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 35,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G35-36-context.png",
+      "/assets/banks/gsat-108-science/Q35-question-1.png",
+      "/assets/banks/gsat-108-science/Q35-question-2.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n35-36為題組\n\n 科學的進步有賴科學研究者的投入，能留名科學史的往往是有新發現或開創新領\n\n 域的科學家，他們的創新性貢獻常能提升大眾的生活水準，造福全人類。\n\n下列科學家與其在生物學上的主要貢獻（甲）至（戊）的對應，何者最為恰當？\n\n （甲）發現單細胞生物和細菌\n\n （乙）發現多細胞生物之細胞\n\n （丙）動物體皆由細胞組成\n\n （丁）說明目前之物種由前一物種分歧而來\n\n （戊）證實生物體之性狀由親代傳至子代，等位基因不變，基因型則有時不同\n\n  生物學家達爾文虎克雷文霍克孟德爾許旺",
+    "correct": "丁乙甲戊丙",
+    "wrong": [
+      "丙丁乙甲戊",
+      "戊丙丁乙甲",
+      "甲戊丙丁乙",
+      "乙甲戊丙丁"
+    ],
+    "exp": "正確答案：丁乙甲戊丙。來源：108年學科能力測驗自然第36題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 36,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q37",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 37 題。\n\n![第37題原卷資料](/assets/banks/gsat-108-science/G37-38-context.png)\n\n![第37題原卷資料](/assets/banks/gsat-108-science/Q37-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第37題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 37,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G37-38-context.png",
+      "/assets/banks/gsat-108-science/Q37-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q38",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 38 題。\n\n![第38題原卷資料](/assets/banks/gsat-108-science/G37-38-context.png)\n\n![第38題原卷資料](/assets/banks/gsat-108-science/Q38-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第38題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 38,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G37-38-context.png",
+      "/assets/banks/gsat-108-science/Q38-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q39",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 39 題。\n\n![第39題原卷資料](/assets/banks/gsat-108-science/G39-40-context.png)\n\n![第39題原卷資料](/assets/banks/gsat-108-science/Q39-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第39題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 39,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        39,
+        40
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G39-40-context.png",
+      "/assets/banks/gsat-108-science/Q39-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q44",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 44 題。\n\n![第44題原卷資料](/assets/banks/gsat-108-science/G43-44-context.png)\n\n![第44題原卷資料](/assets/banks/gsat-108-science/Q44-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第44題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 44,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        43,
+        44
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G43-44-context.png",
+      "/assets/banks/gsat-108-science/Q44-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q45",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 45 題。\n\n![第45題原卷資料](/assets/banks/gsat-108-science/G45-46-context.png)\n\n![第45題原卷資料](/assets/banks/gsat-108-science/Q45-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第45題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 45,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G45-46-context.png",
+      "/assets/banks/gsat-108-science/Q45-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q46",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 46 題。\n\n![第46題原卷資料](/assets/banks/gsat-108-science/G45-46-context.png)\n\n![第46題原卷資料](/assets/banks/gsat-108-science/Q46-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第46題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 46,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        45,
+        46
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G45-46-context.png",
+      "/assets/banks/gsat-108-science/Q46-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q48",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 48 題。\n\n![第48題原卷資料](/assets/banks/gsat-108-science/Q48-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第48題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 48,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q48-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q49",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 49 題。\n\n![第49題原卷資料](/assets/banks/gsat-108-science/Q49-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第49題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 49,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q49-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q50",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 50 題。\n\n![第50題原卷資料](/assets/banks/gsat-108-science/Q50-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：108年學科能力測驗自然第50題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 50,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q50-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q51",
+    "difficulty": "medium",
+    "q": "同步衛星繞地球運行的週期和地球自轉的週期相同。若部署一顆與同步衛星質量\n 相同的新衛星，使其繞行地球一次的時間約為3 小時，且兩顆衛星的軌道均為圓\n\n 形，則該新衛星所受的重力量值約是同步衛星的多少倍？",
+    "correct": "16",
+    "wrong": [
+      "8",
+      "1",
+      "1/8",
+      "1/16"
+    ],
+    "exp": "正確答案：16。來源：108年學科能力測驗自然第51題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 51,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q53",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n52-53為題組\n\n 科學家發現光碟表面的微結構能提升太陽電池吸收日光的效率。如果先利用高分\n\n 子材料將光碟表面的結構轉印下來，再轉移至太陽電池上，此微結構的尺寸介於\n  150至250 nm 間，不但可讓入射光線在元件內部的移動距離增長，並且可使元件\n\n 吸收幾乎全部波段的日光，進而提升光能轉換成電能的效率，相較於未使用光碟\n 圖案的太陽電池，其元件吸收效率高出22%，效果卓越。\n\n光碟面之微結構的尺寸，約為一個氫原子直徑的多少倍？",
+    "correct": "1000",
+    "wrong": [
+      "0.1",
+      "1",
+      "10",
+      "10000"
+    ],
+    "exp": "正確答案：1000。來源：108年學科能力測驗自然第53題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 53,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        52,
+        53
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q54",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 54 題。\n\n![第54題原卷資料](/assets/banks/gsat-108-science/G54-56-context.png)\n\n![第54題原卷資料](/assets/banks/gsat-108-science/Q54-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：108年學科能力測驗自然第54題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 54,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        54,
+        56
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G54-56-context.png",
+      "/assets/banks/gsat-108-science/Q54-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q55",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 55 題。\n\n![第55題原卷資料](/assets/banks/gsat-108-science/G54-56-context.png)\n\n![第55題原卷資料](/assets/banks/gsat-108-science/Q55-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第55題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 55,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        54,
+        56
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G54-56-context.png",
+      "/assets/banks/gsat-108-science/Q55-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q56",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 56 題。\n\n![第56題原卷資料](/assets/banks/gsat-108-science/G54-56-context.png)\n\n![第56題原卷資料](/assets/banks/gsat-108-science/Q56-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第56題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 56,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        54,
+        56
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G54-56-context.png",
+      "/assets/banks/gsat-108-science/Q56-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q57",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 57 題。\n\n![第57題原卷資料](/assets/banks/gsat-108-science/Q57-question.png)",
+    "correct": "原卷選項 B",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 B。來源：108年學科能力測驗自然第57題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 57,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q57-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q58",
+    "difficulty": "medium",
+    "q": "一個DNA 分子有兩股多核苷酸鏈。若某DNA 片段經定序後，計算其中一股的\n  鹼基百分率組成，發現腺嘌呤（A）為32%，則推論此DNA 的另一股上，胸腺\n 嘧啶（T）所占之百分比（%）為何？",
+    "correct": "32",
+    "wrong": [
+      "16",
+      "18",
+      "24",
+      "36"
+    ],
+    "exp": "正確答案：32。來源：108年學科能力測驗自然第58題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 58,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q59",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 59 題。\n\n![第59題原卷資料](/assets/banks/gsat-108-science/Q59-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第59題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 59,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q59-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q60",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 60 題。\n\n![第60題原卷資料](/assets/banks/gsat-108-science/Q60-question.png)",
+    "correct": "原卷選項 D",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 D。來源：108年學科能力測驗自然第60題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 60,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q60-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q63",
+    "difficulty": "medium",
+    "q": "桌上有三瓶溶液，但沒有標籤可以識別。老師告知這三瓶分別是氯化鈉、硫酸鉀\n  與硝酸銨溶液，濃度均為1.0M。試問使用濃度1.0 M 的下列哪一種試劑，可以\n\n 用來區別此三瓶溶液？",
+    "correct": "氫氧化鋇溶液",
+    "wrong": [
+      "氫氧化鈉溶液",
+      "硝酸銀溶液",
+      "硫酸溶液",
+      "碳酸氫鈉溶液"
+    ],
+    "exp": "正確答案：氫氧化鋇溶液。來源：108年學科能力測驗自然第63題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 63,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": []
+  },
+  {
+    "id": "gsat-108-science-q64",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 64 題。\n\n![第64題原卷資料](/assets/banks/gsat-108-science/Q64-question.png)",
+    "correct": "原卷選項 E",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D"
+    ],
+    "exp": "正確答案：原卷選項 E。來源：108年學科能力測驗自然第64題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 64,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q64-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q65",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 65 題。\n\n![第65題原卷資料](/assets/banks/gsat-108-science/Q65-question.png)",
+    "correct": "原卷選項 A",
+    "wrong": [
+      "原卷選項 B",
+      "原卷選項 C",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 A。來源：108年學科能力測驗自然第65題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 65,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/Q65-question.png"
+    ]
+  },
+  {
+    "id": "gsat-108-science-q66",
+    "difficulty": "medium",
+    "q": "請依下列原卷資料作答第 66 題。\n\n![第66題原卷資料](/assets/banks/gsat-108-science/G66-67-context.png)\n\n![第66題原卷資料](/assets/banks/gsat-108-science/Q66-question.png)",
+    "correct": "原卷選項 C",
+    "wrong": [
+      "原卷選項 A",
+      "原卷選項 B",
+      "原卷選項 D",
+      "原卷選項 E"
+    ],
+    "exp": "正確答案：原卷選項 C。來源：108年學科能力測驗自然第66題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-108-science",
+      "question": 66,
+      "file": "高中/學測/自然/01-108學測自然試卷定稿.pdf",
+      "url": "https://drive.google.com/file/d/1DaxW7PGrHpMqPZ9p9R8FmBiBP_9F_GSA/view?usp=drivesdk",
+      "pages": [
+        20
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0j196569388835229864/05-108%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        66,
+        67
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-108-science/G66-67-context.png",
+      "/assets/banks/gsat-108-science/Q66-question.png"
+    ]
+  }
+]
