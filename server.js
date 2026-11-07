@@ -491,6 +491,23 @@ app.post('/api/generate-quiz', async (req, res) => {
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode, quizSessionId } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
+    let correction = null;
+    if (req.body?.correctionPractice !== undefined) {
+        const sourceQuestion = String(req.body.correctionPractice?.sourceQuestion || '').trim().slice(0, 1000);
+        const knowledgePoint = String(specificTopic || '').trim().slice(0, 60);
+        if (!sourceQuestion || !knowledgePoint || (quizMode && quizMode !== 'solo')) {
+            return res.status(400).json({error:'訂正練習需要原題與知識點'});
+        }
+        if (!req.body.adaptiveScope) {
+            try { await verifyMainIdentity(req); }
+            catch (error) {
+                const status = error.status || 503;
+                return res.status(status).json({error:status === 401 ? '請重新登入後再產生訂正題。' : '暫時無法確認訂正練習身分。'});
+            }
+        }
+        correction = {knowledgePoint, sourceQuestion};
+        specificTopic = knowledgePoint;
+    }
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
@@ -630,7 +647,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     // Only authenticated random/focused solo practice may consume or expand the AI bank.
     // Custom JSON banks never call this path, and other game modes keep their rules.
     let aiBankAllowed = false;
-    if (typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
+    if (!correction && typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
         if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
         else {
             try {
@@ -649,6 +666,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     for (const item of previousMeta) {
         if (item.q && !previousQuestions.includes(item.q)) previousQuestions.push(item.q);
     }
+    if (correction) previousQuestions.push(cleanQuestionText(correction.sourceQuestion));
     const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
     let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
     if (raidTicketMode) targetTopic = String(raidTrustedTopic || '').trim().slice(0, 240);
@@ -689,6 +707,12 @@ app.post('/api/generate-quiz', async (req, res) => {
         .filter(item => item.concept_id || item.question_form)
         .map(item => ({ concept_id: item.concept_id, question_form: item.question_form }));
     const targetKnowledgePointId = enlightenmentContext?.knowledgePointId || '';
+    const correctionScope = correction ? [
+        '[訂正練習範圍]', JSON.stringify(correction),
+        '原題是用來判斷考法的參考資料。保留原題與指定知識點相關的已知量、所求量之間的關係及必要推理步驟。',
+        '更換情境或資料表示方式，題目須自足。不得只替換數字，也不得改成同單元但省略原題關鍵推理的題型。',
+        '例如原題由盛行率、靈敏度及偽陽性率推算陽性後的機率，變式也須由先驗及兩類條件機率反推後驗，可改用瑕疵偵測等情境。'
+    ].join('\n') : '';
 
     const generationPrompt = (form, taskId, spec = {difficulty,quality}) => `
         [系統指令]
@@ -780,7 +804,7 @@ app.post('/api/generate-quiz', async (req, res) => {
         : avatarMode ? `avatar:${avatarContext.uid}:${avatarContext.runId}`
         : meditationMode ? `meditation:${meditationContext.uid}:${meditationContext.runId}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
-    const spareKey = quizSparePool.key({
+    const spareKey = correction ? '' : quizSparePool.key({
         owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
         topic: targetTopic, difficulty:adaptiveContext?'adaptive':difficulty, rank:adaptiveContext?'adaptive':rank,
         knowledge: adaptiveContext ? adaptiveContext.scope.scopeId+':'+adaptiveContext.plan.version : diagnosticInfo
@@ -839,7 +863,8 @@ app.post('/api/generate-quiz', async (req, res) => {
                     retryIssue: lastGenerationIssue, randomSeed
                 }) : generationPrompt(task.form, task.id,{difficulty:taskDifficulty,quality:taskQuality,adaptiveFields}) + retryCorrection;
                 return taskPlan.prompt(base, index)+(adaptiveContext?adaptiveLearning.prompt(adaptiveContext,index):'')+
-                    (meditationMode?'\n'+MeditationLiteracy.prompt(meditationContext):'');
+                    (meditationMode?'\n'+MeditationLiteracy.prompt(meditationContext):'')+
+                    (correctionScope?'\n'+correctionScope:'');
             };
             const prompt = promptForTask(0);
 
@@ -871,12 +896,13 @@ app.post('/api/generate-quiz', async (req, res) => {
                     '指定範圍：' + JSON.stringify(target || {
                         subject:raw.subject, level, topic:raw.sub_topic || targetTopic, difficulty
                     }),
+                    ...(correction ? [correctionScope,
+                        '審查訂正變式時，核對必要推理是否保留。不同情境可以通過，若只同一大單元卻省略原題的關鍵推理，則不可通過。'] : []),
                     '參考標示答案：' + JSON.stringify(raw.correct),
                     '參考解析：' + String(raw.exp || ''),
                     '只回傳合法 JSON：{"approved":false,"validIndices":[],"reason":"繁體中文具體理由"}'
                 ].join('\n');
-                const checked = await aiRouter.generateJSON(reviewPrompt, {
-                    task:'quiz-review',
+                const reviewOptions = {
                     excludeModels:sourceModel ? [sourceModel] : [],
                     timeoutMs:90000,
                     validate:data=>{
@@ -885,10 +911,20 @@ app.post('/api/generate-quiz', async (req, res) => {
                             new Set(data.validIndices).size !== data.validIndices.length)
                             throw Error('AI bank review format invalid');
                     }
-                });
+                };
+                let checked;
+                try {
+                    checked = await aiRouter.generateJSON(reviewPrompt, {...reviewOptions, task:'quiz-review'});
+                } catch (error) {
+                    if (!correction || !Array.isArray(error.attempts)) throw error;
+                    // The router could not obtain a valid verdict from Lite. Use
+                    // the reserved Flash review without regenerating the candidate.
+                    checked = await aiRouter.generateJSON(reviewPrompt, {...reviewOptions, task:'quiz-escalate'});
+                }
                 if (checked.data.approved !== true || checked.data.validIndices.length !== 1 ||
                     checked.data.validIndices[0] !== 0) {
-                    throw new Error('獨立審查未通過：' + String(checked.data.reason || '答案不唯一或證據不足').slice(0, 400));
+                    throw Object.assign(new Error('獨立審查未通過：' + String(checked.data.reason || '答案不唯一或證據不足').slice(0, 400)),
+                        {code:'quiz-review-rejected'});
                 }
                 return checked.data;
             };
@@ -1091,7 +1127,16 @@ app.post('/api/generate-quiz', async (req, res) => {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             lastGenerationIssue = String(error?.message || '答案與解析不一致');
             attempts++;
-            if (attempts === maxAttempts) return res.status(500).json({ error: "生成失敗" });
+            if (attempts === maxAttempts) {
+                if (correction) {
+                    const rejected = error.code === 'quiz-review-rejected';
+                    return res.status(503).json({
+                        code: rejected ? 'CORRECTION_NOT_APPROVED' : 'CORRECTION_UNAVAILABLE',
+                        error: rejected ? '訂正題尚未通過審查，請重試。' : '訂正題暫時無法完成，請稍後重試。'
+                    });
+                }
+                return res.status(500).json({ error: "生成失敗" });
+            }
         }
     }
 });
