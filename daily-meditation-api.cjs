@@ -4,6 +4,7 @@ const { playerRepository } = require('./server-repositories.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const Rules = require('./public/cultivation/daily-meditation-rules.js');
 const Literacy = require('./daily-meditation-literacy.cjs');
+const {SETS,getDailySet,dailyPlan} = require('./daily-meditation-set.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 const Growth = require('./public/cultivation/nascent-growth.js');
 const Quests = require('./public/cultivation/quest-rules.js');
@@ -24,7 +25,7 @@ function dailyResult(user, result, uid, date) {
   return null;
 }
 const resultTotal = result => result?.total===5?5:3;
-const sessionTotal = session => session?.version===2?Literacy.TOTAL:session?.questions?.length||Literacy.TOTAL;
+const sessionTotal = session => session?.version>=2?Literacy.TOTAL:session?.questions?.length||Literacy.TOTAL;
 function publicRow(user, result, uid) {
   return {uid,name:String(user.displayName || '修士').slice(0,40),stars:Math.min(resultTotal(result),count(result.stars)),
     correct:Math.min(resultTotal(result),count(result.stars)),total:resultTotal(result),
@@ -33,7 +34,7 @@ function publicRow(user, result, uid) {
 function publicSession(session) {
   if (!session) return null;
   const index=session.index, entry=session.questions[index], answer=session.answers[index];
-  return {date:session.date,runId:session.runId||'',mode:session.version===2?'literacy':'review',total:sessionTotal(session),index,answered:session.answers.length,correct:session.answers.filter(x=>x.isCorrect).length,
+  return {date:session.date,runId:session.runId||'',mode:session.version>=2?'literacy':'review',total:sessionTotal(session),index,answered:session.answers.length,correct:session.answers.filter(x=>x.isCorrect).length,
     questionAnswered:!!answer,question:entry?{id:entry.id,q:entry.data.q,opts:entry.data.opts,source:entry.source,subject:entry.subject||'',level:session.level||''}:null,
     feedback:answer?{isCorrect:answer.isCorrect,correctIdx:entry.data.ans,exp:entry.data.exp || ''}:null};
 }
@@ -41,7 +42,7 @@ function economy(user) {
   return {gold:count(user.stats?.gold),score:count(user.stats?.totalScore),rank:count(user.stats?.rankLevel),
     drawTickets:count(user.soulboundDrawTickets),raidTickets:user.raidTickets || null,growthState:Growth.prepare(user)};
 }
-function createService({db,now=Date.now,random=Math.random}={}) {
+function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet(db,{now,random}),logger=console}={}) {
   const dateNow=()=>Rules.meditationDateKey(new Date(now()));
   const refs=(uid,date)=>({user:db.collection('users').doc(uid),session:db.collection(SESSIONS).doc(dayId(uid,date)),result:db.collection(RESULTS).doc(dayId(uid,date))});
   function sameDay(date) { if(date!==dateNow())throw fail('已跨日，請重新確認今日閉關'); }
@@ -75,11 +76,15 @@ function createService({db,now=Date.now,random=Math.random}={}) {
   }
   async function status(uid) {
     const date=dateNow();
-    return db.runTransaction(async tx=>{
+    const result=await db.runTransaction(async tx=>{
       const c=await context(tx,uid,date);sameDay(date);
       if(c.result && (!c.resultExists || count(c.result.bestStars)<c.stars))tx.set(c.refs.result,{...c.result,bestStars:c.stars});
       return view(c,uid,date);
     });
+    // Login already requests this status without awaiting it from the normal
+    // quiz path. Elect today's one background job even if nobody opens 閉關.
+    void dailySets.ensure(uid).catch(()=>logger.warn?.('[Daily meditation] scheduling unavailable'));
+    return result;
   }
   async function start(uid) {
     const date=dateNow();
@@ -87,11 +92,13 @@ function createService({db,now=Date.now,random=Math.random}={}) {
       const c=await own(tx,uid,date);sameDay(date);
       if(c.result)return {completed:true,session:null};
       if(c.session)return {completed:false,session:publicSession(c.session)};
-      // An already-started legacy set can still settle once under its original
-      // three-question rules; new daily sets always contain five literacy tasks.
-      const plan=Literacy.plan(c.user);
-      const session={uid,date,version:2,runId:crypto.randomUUID(),level:plan[0].level,
-        plan,index:0,questions:[],answers:[],issuedAtMs:0};
+      // Existing v1/v2 sessions keep their progress. New sessions all reference
+      // the same server-prepared daily set, regardless of player grade/scope.
+      const snap=await tx.get(db.collection(SETS).doc(date)),daily=snap.exists?snap.data():null;
+      const plan=daily?.plan||dailyPlan();
+      const questions=daily?.status==='ready'&&daily.questions?.length===Literacy.TOTAL?daily.questions:[];
+      const session={uid,date,version:3,runId:crypto.randomUUID(),level:plan[0].level,
+        plan,index:0,questions,answers:[],issuedAtMs:questions.length?now():0};
       tx.set(c.refs.session,session);
       return {completed:false,session:publicSession(session)};
     });
@@ -100,6 +107,15 @@ function createService({db,now=Date.now,random=Math.random}={}) {
     const date=dateNow();
     return db.runTransaction(async tx=>{
       const c=await own(tx,uid,date),s=c.session;sameDay(date);
+      if(s?.version===3&&!c.result){
+        if(s.answers[s.index])throw fail('本題已作答，請先進入下一題');
+        if(!s.questions[s.index]){
+          const snap=await tx.get(db.collection(SETS).doc(date)),daily=snap.exists?snap.data():null;
+          if(daily?.status!=='ready'||daily.questions?.length!==Literacy.TOTAL)throw fail('今日閉關題庫正在準備中，請稍後重新同步。',503);
+          s.questions=daily.questions;s.issuedAtMs=now();tx.set(c.refs.session,s);
+        }
+        return {pending:publicSession(s)};
+      }
       if(!s||s.version!==2||c.result)throw fail('請先開始今日五題素養閉關');
       const entry=s.questions[s.index];
       if(s.answers[s.index])throw fail('本題已作答，請先進入下一題');
@@ -171,14 +187,14 @@ function createService({db,now=Date.now,random=Math.random}={}) {
       const fragments=score>=68 && full?3:0;
       const growth=Growth.award(user,fragments),answerTimeMs=answers.reduce((sum,row)=>sum+row.activeMs,0);
       const record={lastDate:date,streak,totalDays:count(old.totalDays)+1,bestStreak:Math.max(streak,count(old.bestStreak)),
-        lastResult:{correct,total,mode:c.session.version===2?'literacy':'review',stars:correct,answerTimeMs,cultivation:reward.cultivation+soulCultivation,
+        lastResult:{correct,total,mode:c.session.version>=2?'literacy':'review',stars:correct,answerTimeMs,cultivation:reward.cultivation+soulCultivation,
           soulCultivation,gold:reward.gold,fragments,realm:reward.realm},updatedAt:new Date(now())};
       const patch={dailyMeditation:record,questProgress:Quests.recordEvent(user.questProgress,'meditation',date),
         'stats.totalScore':score+record.lastResult.cultivation,'stats.gold':count(user.stats?.gold)+reward.gold,...Growth.patch(growth)};
       tx.update(c.refs.user,patch);
       const result={uid,date,completed:true,total,stars:correct,answerTimeMs,rewardScore:score,claimed:[],bestStars:correct,finishedAtMs:now()};
       tx.set(c.refs.result,result);
-      tx.set(db.collection('exam_logs').doc('meditation_'+dayId(uid,date)),{uid,mode:'daily-meditation',topic:c.session.version===2?'閉關素養題':'閉關錯題',
+      tx.set(db.collection('exam_logs').doc('meditation_'+dayId(uid,date)),{uid,mode:'daily-meditation',topic:c.session.version>=2?'閉關素養題':'閉關錯題',
         question:'每日閉關 · '+correct+'/'+total,isCorrect:full,correctCount:correct,totalCount:total,
         dailyMeditationAnswers:answers,timestamp:new Date(now())});
       user.dailyMeditation=record;user.stats ||= {};user.stats.totalScore=patch['stats.totalScore'];user.stats.gold=patch['stats.gold'];Growth.apply(user,growth);

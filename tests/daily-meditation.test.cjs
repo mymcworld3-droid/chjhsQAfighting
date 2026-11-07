@@ -154,7 +154,7 @@ test('new meditation runner gets server sessions and never submits its own corre
   assert.match(source, /request\('start'\)/);
   assert.match(source, /questionId:session.question.id,choice,activeMs/);
   assert.match(source, /request\('finish'\)/);
-  assert.match(api, /Literacy.plan\(c.user\)/);
+  assert.match(api, /daily\?\.plan\|\|dailyPlan\(\)/);
   assert.match(api, /sessionTotal\(c.session\)/);
   assert.match(api, /dailyMeditationAnswers:answers/);
 });
