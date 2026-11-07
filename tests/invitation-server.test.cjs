@@ -152,7 +152,8 @@ test('resume forces a fresh connection even when the old poll started recently',
     startInvitationListener() { starts++; }, flushPendingIncomingInvites() {}
   };
   const legacy = read('public/main-legacy.js');
-  vm.runInNewContext(legacy.slice(legacy.indexOf('function refreshInvitationListener('), legacy.indexOf("window.addEventListener('online'")), context);
+  const start = legacy.indexOf('function refreshInvitationListener(');
+  vm.runInNewContext(legacy.slice(start, legacy.indexOf("window.addEventListener('online'", start)), context);
   context.refreshInvitationListenerAfterResume();
   // Feature-ready events cannot downgrade the pending resume reconnect.
   context.scheduleInvitationListenerRefresh();

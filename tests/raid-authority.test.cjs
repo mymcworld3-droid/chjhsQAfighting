@@ -78,7 +78,11 @@ test('encrypted raid question ticket hides the answer and rejects tampering', ()
   assert.equal(tickets.assertRaidQuestionTicket(payload,{
     uid:'u1',roomId:'room12345',actionId:2,questionId:'raidq-1'
   }).answerIndex,3);
-  assert.throws(()=>tickets.readRaidQuestionTicket(token.slice(0,-2)+'aa',{env,now:2000}),/票證/);
+  // Change an actual authentication byte; replacing Base64 padding bits can
+  // decode to the original tag and make this assertion randomly fail.
+  const parts=token.split('.'), tag=Buffer.from(parts[3],'base64url');
+  tag[0]^=1;parts[3]=tag.toString('base64url');
+  assert.throws(()=>tickets.readRaidQuestionTicket(parts.join('.'),{env,now:2000}),/票證/);
 });
 
 test('raid protocol ignores client combat claims and uses trusted A/C server resolution', () => {

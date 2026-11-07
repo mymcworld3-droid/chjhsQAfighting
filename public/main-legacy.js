@@ -87,9 +87,10 @@ let chatUnsub = null;                // 聊天室監聽
 let currentBattleId = null;          // 當前對戰 ID
 let isBattleActive = false;          // 是否在對戰中
 let quizBuffer = [];                 // 題目緩衝
-const BUFFER_SIZE = 1;               // 只預取一題，減少切換範圍時浪費的 API 呼叫
+const BUFFER_SIZE = 5;               // 目前範圍的可用待答題少於五題就背景補足
 let isFetchingBuffer = false;
 let bufferFillPromise = null; 
+let bufferNextQuestionPromise = null;
 let currentBankData = null; 
 let presenceInterval = null; 
 let allBankFiles = [];
@@ -1413,6 +1414,7 @@ onAuthStateChanged(auth, async (user) => {
 
             // 所有腳本都已成功載入，現在才正式啟動其餘監聽與遊戲介面。
             if (auth.currentUser?.uid !== user.uid) return;
+            checkSoloQuestionStock();
             startPresenceSystem();
             refreshInvitationListener();
             listenToSystemCommands();  
@@ -2456,34 +2458,56 @@ function getSmartDifficulty(subject = '') {
     return window.QAAdaptiveLearningRules.generalDifficulty(currentUserData?.stats, subject);
 }
 
-async function fillBuffer() {
+function checkSoloQuestionStock() {
+    if (!auth.currentUser?.uid || !currentUserData || !window.__xiuxianFeaturesReady ||
+        !window.__xiuxianMigrationApproved) return;
+    void fillBuffer();
+}
+// Keep stock ready while the player is on any page, including after onboarding,
+// remote scope changes and a temporary generation/network failure.
+window.addEventListener('xiuxian:quest-progress-updated', checkSoloQuestionStock);
+window.addEventListener('online', checkSoloQuestionStock);
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) checkSoloQuestionStock();
+});
+setInterval(checkSoloQuestionStock, 30000);
+
+async function fillBuffer({ firstReady = false } = {}) {
     const scope = syncSoloQuestionCache();
     const uid = auth.currentUser?.uid || '';
+    const revision = soloCacheRevision;
     // When the player opens the quiz during prefetch, share that existing request.
-    if (isFetchingBuffer) return bufferFillPromise;
-    if (!scope || !uid || quizBuffer.length >= BUFFER_SIZE) return;
+    if (isFetchingBuffer) return firstReady ? bufferNextQuestionPromise : bufferFillPromise;
+    if (!scope || !uid || soloQuestionCache.pendingCount() >= BUFFER_SIZE) return;
     isFetchingBuffer = true;
     bufferFillPromise = (async () => {
         try {
-            while (quizBuffer.length < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) && auth.currentUser?.uid === uid) {
-                const question = await fetchOneQuestion();
-                // Reject an API response from a previous account or range.
-                if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
-                    soloQuestionScope() !== scope) break;
-                if (!soloQuestionCache.append(question)) break;
-                quizBuffer = soloQuestionCache.getQueue();
+            while (soloQuestionCache.pendingCount() < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) &&
+                auth.currentUser?.uid === uid && soloCacheRevision === revision) {
+                let ready;
+                bufferNextQuestionPromise = new Promise(resolve => { ready = resolve; });
+                try {
+                    const question = await fetchOneQuestion();
+                    // Reject an API response from a previous account or range.
+                    if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
+                        soloQuestionScope() !== scope || soloCacheRevision !== revision) break;
+                    if (!soloQuestionCache.append(question)) break;
+                    quizBuffer = soloQuestionCache.getQueue();
+                } finally { ready(); }
             }
         } catch (e) { console.warn("Background fetch failed", e); }
-    })();
-    try { await bufferFillPromise; }
-    finally {
-        isFetchingBuffer = false;
-        bufferFillPromise = null;
-        if (auth.currentUser?.uid && currentUserData && soloQuestionScope() !== scope) {
-            syncSoloQuestionCache();
-            void fillBuffer();
+        finally {
+            isFetchingBuffer = false;
+            bufferFillPromise = null;
+            bufferNextQuestionPromise = null;
+            if (auth.currentUser?.uid && currentUserData &&
+                (soloCacheRevision !== revision || soloQuestionScope() !== scope)) {
+                syncSoloQuestionCache();
+                void fillBuffer();
+            }
         }
-    }
+    })();
+    return firstReady ? bufferNextQuestionPromise : bufferFillPromise;
 }
 
 // ==========================================
@@ -2558,8 +2582,13 @@ window.startQuizFlow = async (isNewSession = false) => {
 
     // Restore an unanswered active question before using the prefetched queue.
     let nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
+    if (!nextQ) {
+        document.getElementById('quiz-loading').classList.remove('hidden');
+        document.getElementById('loading-text').innerText = '正在填充題庫中';
+    }
     if (!nextQ && isFetchingBuffer) {
-        await fillBuffer();
+        // Show the first ready question while the remaining stock fills in the background.
+        await fillBuffer({ firstReady: true });
         if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid ||
             soloQuestionScope() !== scope) return;
         nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
@@ -2570,8 +2599,6 @@ window.startQuizFlow = async (isNewSession = false) => {
         renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
         void fillBuffer();
     } else {
-        document.getElementById('quiz-loading').classList.remove('hidden');
-        document.getElementById('loading-text').innerText = t('loading_text');
         try {
             const q = await fetchOneQuestion();
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
@@ -3018,6 +3045,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
     const adaptiveRows = window.QAAdaptiveLearning?.answer(quiz, isCorrect, userIdx < 0) || [];
+    if (quiz?.mode!=='trial-tower' && !extendedPracticeState.active) void fillBuffer();
     globalThis.QAGameAudio?.answer(isCorrect, 'solo:' + (window.quizStartTime || '') + ':' + (quiz?.id || questionText));
     quizHelperState.answered = true;
     if (quiz) delete quiz.helperReviewRedacted;
@@ -3290,7 +3318,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
     }
 
-    if (quiz?.mode!=='trial-tower' && !extendedPracticeState.active) fillBuffer();
 }
 
 async function generateVisualAid(imagePrompt) {
