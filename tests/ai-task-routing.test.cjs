@@ -87,10 +87,14 @@ test('HTTP 429 quarantines a limited model and falls back without repeatedly spe
   assert.deepEqual(called, ['gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-3.1-flash-lite']);
 });
 
-test('new quiz answers must pass independent Lite review before delivery when Gemini keys are configured', async () => {
-  for (const approved of [false,true]) {
+test('quiz review rejects invalid answers and correction uses the Flash reserve only when Lite gives no verdict', async () => {
+  for (const {approved, correction, liteUnavailable} of [
+    {approved:false}, {approved:true}, {approved:false,correction:true},
+    {approved:true,correction:true,liteUnavailable:true}
+  ]) {
     let handler, generations = 0, audits = 0;
     const calls = [];
+    const sourceQuestion = '原題要求用疾病盛行率、靈敏度與偽陽性率求陽性者患病的機率。' + '補充說明。'.repeat(60) + '最末條件';
     const ctx = {
       process:{env:{GEMINI_API_KEYS:'test-key'}},
       console:{log(){},error(){},warn(){}},Math,
@@ -99,6 +103,8 @@ test('new quiz answers must pass independent Lite review before delivery when Ge
       getRandomItem:items=>items[0],
       questionQualityAnalytics:{recordGenerated:async()=>{}},
       playerRepository:{resolve:()=>({db:{}})},
+      verifyMainIdentity:async()=> 'player',
+      aiQuestionBank:{enabled:true,find:async()=>{throw Error('correction must bypass the shared AI bank');}},
       QUESTION_FORMS:require('../quiz-generation-tasks.cjs').QUESTION_FORMS,
       createQuizTaskPlan:require('../quiz-generation-tasks.cjs').createQuizTaskPlan,
       FAST_QUIZ_MODES:require('../fast-quiz-prompt.cjs').MODES,
@@ -112,19 +118,39 @@ test('new quiz answers must pass independent Lite review before delivery when Ge
     };
     ctx.aiRouter = {generateJSON:async(prompt,opts)=>{
       calls.push(opts.task);
-      if (opts.task==='quiz-review') {
+      if (opts.task==='quiz-review' || opts.task==='quiz-escalate') {
         audits++;
+        if (correction) {
+          assert.ok(prompt.includes(sourceQuestion), 'review receives the complete correction reference');
+          assert.match(prompt, /省略原題的關鍵推理/);
+        }
+        assert.ok(opts.excludeModels.includes('gemini-3.5-flash-lite'));
+        if (liteUnavailable && opts.task==='quiz-review') {
+          throw Object.assign(Error('Lite HTTP 503'),{attempts:[{httpStatus:503}]});
+        }
         return {data:{approved,validIndices:approved?[0]:[0,1],reason:approved?'算式正確':'此題有多解'},model:'gemini-3.1-flash-lite',provider:'review'};
       }
       assert.equal(opts.task,'quiz-generate');
+      if (correction) {
+        assert.ok(prompt.includes(sourceQuestion), 'generation receives the original even beyond the topic length limit');
+        assert.match(prompt, /先驗及兩類條件機率反推後驗/);
+      }
       generations++;
       const taskLine=prompt.split('\n').find(x=>x.startsWith('任務規格 JSON：'));
       const task=JSON.parse(taskLine.slice('任務規格 JSON：'.length));
-      return {model:'gemini-3.5-flash-lite',provider:'generate',data:{
+      const candidate = correction ? {
+        q:'晶片中有 10% 是瑕疵品。檢測會標記 90% 的瑕疵品，也會標記 10% 的良品。任取一顆被標記的晶片，它有瑕疵的機率是多少？',
+        correct:'50%',wrong:['10%','18%','90%'],
+        exp:'以 100 顆晶片估算，標記的瑕疵品有 9 顆，標記的良品也有 9 顆。18 顆被標記晶片中有 9 顆瑕疵品，答案為 50%。',
+        knowledge_points:[{subject:'數學',id:'math-7',name:'機率與統計'}]
+      } : {
         q:'解方程式 x+2=6，x 的數值為何？',
         correct:'4',wrong:['2','3','5'],
         exp:'從 x+2=6 兩邊減去 2，得到 x=4，所以正確答案為 4。',
-        subject:'數學',knowledge_points:[{subject:'數學',id:'math-3',name:'方程與不等式'}],
+        knowledge_points:[{subject:'數學',id:'math-3',name:'方程與不等式'}]
+      };
+      return {model:'gemini-3.5-flash-lite',provider:'generate',data:{
+        ...candidate,subject:'數學',
         generation_task_id:task.generation_task_id,question_form:task.question_form
       }};
     }};
@@ -132,18 +158,21 @@ test('new quiz answers must pass independent Lite review before delivery when Ge
     const endpointStart=server.indexOf("app.post('/api/generate-quiz',"),endpointEnd=server.indexOf('// API 5:',endpointStart);
     vm.runInNewContext(server.slice(start,helperEnd) + server.slice(endpointStart,endpointEnd),ctx);
     const output={};
-    await handler({body:{subject:'數學',specificTopic:'一次方程式',level:'國中一年級',quizMode:'solo'}},{
+    await handler({body:{subject:'數學',specificTopic:correction?'條件機率':'一次方程式',level:correction?'高中二年級':'國中一年級',difficulty:'medium',quizMode:'solo',
+      ...(correction ? {correctionPractice:{sourceQuestion}} : {})}},{
       status(n){output.status=n;return this;}, json(value){output.body=value;return this;}
     });
-    assert.equal(audits,approved?1:3);
+    assert.equal(audits,liteUnavailable?2:approved?1:3);
     assert.equal(generations,approved?1:3);
     assert.deepEqual(calls.slice(0,2),['quiz-generate','quiz-review']);
+    assert.equal(calls.filter(task=>task==='quiz-escalate').length,liteUnavailable?1:0);
     if (approved) {
-      assert.equal(JSON.parse(output.body.text).correct,'4');
+      assert.equal(JSON.parse(output.body.text).correct,correction?'50%':'4');
       assert.equal(output.status,undefined);
     } else {
-      assert.equal(output.status,500);
-      assert.equal(output.body.error,'生成失敗');
+      assert.equal(output.status,correction?503:500);
+      if(correction)assert.equal(output.body.code,'CORRECTION_NOT_APPROVED');
+      else assert.equal(output.body.error,'生成失敗');
       assert.equal(output.body.text,undefined,'rejected question must never be served');
     }
   }

@@ -3637,31 +3637,36 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
     const subject = String(practice.subject || quizHelperState.subject || '綜合').trim().slice(0, 40);
     const knowledgePoint = String(practice.knowledgePoint || '本題核心觀念').trim().slice(0, 60);
     const recoveryOrigin = String(practice.recoveryOrigin || '');
-    const settings = currentUserData?.gameSettings || {};
     const rankName = getRankName(currentUserData?.stats?.rankLevel || 0);
-    let difficulty = getSmartDifficulty(subject);
+    const difficulty = recoveryOrigin
+        ? (practice.quiz?.learningDifficulty === 'hard' ? 'hard' : 'medium')
+        : getSmartDifficulty(subject);
 
-    let specificTopic = knowledgePoint;
-    if (recoveryOrigin) specificTopic = `${knowledgePoint}。針對原題「${practice.originQuestion}」的同一概念出一道新情境變式，勿重複原題。`.slice(0,1800);
     const adaptive = recoveryOrigin ? practice.quiz?.adaptive : null;
-    const response = await (adaptive ? (window.QAAdaptiveLearning?.fetchQuiz || fetch) : fetch)('/api/generate-quiz', {
+    const request = adaptive ? (window.QAAdaptiveLearning?.fetchQuiz || authenticatedMainFetch)
+        : recoveryOrigin ? authenticatedMainFetch : fetch;
+    const response = await request('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             subject,
-            specificTopic,
+            specificTopic: knowledgePoint,
             level: currentUserData?.profile?.educationLevel || 'General',
             rank: rankName,
             difficulty,
             language: 'zh-TW',
             knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
             quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
-                    ...recentSoloQuestionContext(),
+            ...recentSoloQuestionContext(),
+            ...(recoveryOrigin ? {correctionPractice: {sourceQuestion: practice.originQuestion || recoveryOrigin}} : {}),
             ...(adaptive ? {...adaptiveQuestionContext(adaptive.scope), adaptiveConceptId:adaptive.conceptId} : {})
         })
     });
-    if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-    const payload = await response.json();
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        const message = typeof payload.error === 'string' ? payload.error : `Server Error: ${response.status}`;
+        throw Object.assign(new Error(message), {status: response.status, code: payload.code});
+    }
     let aiText = payload.text;
     const jsonMatch = String(aiText || '').match(/\{[\s\S]*\}/);
     if (jsonMatch) aiText = jsonMatch[0];
@@ -3729,7 +3734,7 @@ function queueCorrectionPractice(practice) {
             console.warn('[Correction practice]', error);
             if (generation === soloCacheRevision && auth.currentUser?.uid === practice.uid && soloQuestionScope() === practice.scope) {
                 syncCorrectionPracticeButton(practice.quiz, { failed: true });
-                window.showToast?.('訂正題暫時生成失敗，一般練習仍可繼續。');
+                window.showToast?.(error.status && error.message ? error.message : '訂正題暫時生成失敗，一般練習仍可繼續。');
             }
         } finally {
             if (requests.get(key) === job) requests.delete(key);
