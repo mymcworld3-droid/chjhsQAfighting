@@ -4,12 +4,15 @@ const {createService,SESSIONS,RESULTS,dayId}=require('../daily-meditation-api.cj
 const Literacy=require('../daily-meditation-literacy.cjs');
 const Rules=require('../public/cultivation/daily-meditation-rules.js');
 const {fakeDb}=require('./helpers/inventory-db.cjs');
-const {generated,ready}=require('./helpers/meditation-literacy.cjs');
+const {generated,ready,seedLegacySession}=require('./helpers/meditation-literacy.cjs');
 const INITIAL=Date.parse('2026-11-04T04:00:00Z');
 function fixture(level='國中二年級'){
   let time=INITIAL;
   const db=fakeDb({uid:'u1',displayName:'修士',profile:{educationLevel:level},stats:{gold:100,totalScore:68}});
-  const service=createService({db,now:()=>time,random:()=>.5});
+  // Existing v2 sessions are retained during rollout; the shared v3 daily sets
+  // have their own multi-player/background-job regression coverage.
+  seedLegacySession(db,Rules.meditationDateKey(new Date(INITIAL)),level);
+  const service=createService({db,now:()=>time,random:()=>.5,dailySets:{ensure:async()=>{}}});
   return {db,service,advance:ms=>time+=ms,user:()=>db.docs.get('users/u1')};
 }
 async function answerCurrent(f,correct=true){let session=(await f.service.start('u1')).session;
@@ -17,7 +20,7 @@ async function answerCurrent(f,correct=true){let session=(await f.service.start(
   const saved=f.db.docs.get(SESSIONS+'/'+dayId('u1',session.date));
   return f.service.answer('u1',{questionId:session.question.id,choice:correct?saved.questions[session.index].data.ans:(saved.questions[session.index].data.ans+1)%4,activeMs:1000});
 }
-test('five fresh daily questions cover the five subjects and bind the saved grade',async()=>{
+test('legacy five-question sessions retain their five subjects and saved grade through rollout',async()=>{
   const f=fixture('國小四年級');await f.service.start('u1');
   f.user().profile.educationLevel='高中一年級';
   const subjects=[];

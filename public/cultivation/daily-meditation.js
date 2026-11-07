@@ -207,7 +207,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     html+='<p class="dm-note">自己與互為好友的同門，答對一題各得一星；達到節點即可領獎，每日最多十五星。好友稍後出關仍會增加進度。元嬰碎精與本命法器抽獎券可提前累積，金丹境開放抽取。團本券已滿時，該券折為額外靈石。</p>';
     if(state.completed){
       html+='<h3 class="dm-section-title">今日出關 · '+state.personalStars+' 星</h3>'+summary([['答對',state.personalStars+' / '+personalTotal,'jade'],['作答時間',duration(result.answerTimeMs),'blue'],['個人靈石','+'+(result.gold||0),'gold'],['個人元嬰碎精','+'+(result.fragments||0),'violet']]);
-      html+='<h3 class="dm-section-title">好友今日成績</h3><p class="dm-timing">星數優先，同星依作答時間排序。各自的題目與年級可能不同，排行供交流參考。</p><table class="dm-board"><thead><tr><th>排名</th><th>同門</th><th>星數</th><th>作答時間</th></tr></thead><tbody>'+state.rankings.map(row=>'<tr'+(row.uid===uid()?' class="is-me"':'')+'><td>'+row.rank+'</td><td>'+esc(row.name)+(row.uid===uid()?'（你）':'')+'</td><td>'+row.stars+' / '+(row.total || QUESTION_TOTAL)+'</td><td>'+esc(duration(row.answerTimeMs))+'</td></tr>').join('')+'</tbody></table>';
+      html+='<h3 class="dm-section-title">好友今日成績</h3><p class="dm-timing">全服每日使用同一組五題。星數優先，同星依作答時間排序。</p><table class="dm-board"><thead><tr><th>排名</th><th>同門</th><th>星數</th><th>作答時間</th></tr></thead><tbody>'+state.rankings.map(row=>'<tr'+(row.uid===uid()?' class="is-me"':'')+'><td>'+row.rank+'</td><td>'+esc(row.name)+(row.uid===uid()?'（你）':'')+'</td><td>'+row.stars+' / '+(row.total || QUESTION_TOTAL)+'</td><td>'+esc(duration(row.answerTimeMs))+'</td></tr>').join('')+'</tbody></table>';
       html+='<p class="dm-note">僅列出今日已完成閉關的好友。每日 00:00（台灣時間）重置。</p><button type="button" class="dm-action dm-action-secondary" id="dm-done">返回宗門</button>';
     }
     setContent(html);if(!clearStatus&&savedStatus)notify(savedStatus);
@@ -228,7 +228,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     if(!session||!node('dm-content'))return;
     pauseClock();const q=session.question,total=session.total||QUESTION_TOTAL;
     if(!q){
-      setContent('<div class="dm-eyebrow">素養閉關 · 第 '+(session.index+1)+' / '+total+' 題</div><p class="dm-note">'+(questionLoading?'正在準備符合年級的生活情境與判讀題…':'本題尚未準備完成，可重新準備並接續今日進度。')+'</p>'+(questionLoading?'':'<button type="button" class="dm-action" id="dm-prepare">準備本題</button>'));
+      setContent('<div class="dm-eyebrow">全服每日素養 · 第 '+(session.index+1)+' / '+total+' 題</div><p class="dm-note">'+(questionLoading?'正在讀取今日共用題目…':'今日閉關題庫正在準備中，稍後可重新同步並接續今日進度。')+'</p>'+(questionLoading?'':'<button type="button" class="dm-action" id="dm-prepare">重新讀取</button>'));
       node('dm-prepare')?.addEventListener('click',()=>void task(prepareCurrentQuestion));return;
     }
     setContent('<div class="dm-eyebrow">'+esc(q.source)+' · '+(session.index+1)+' / '+total+' · 已得 '+session.correct+' 星</div><div class="dm-progress"><span style="width:'+Math.round(session.answered/total*100)+'%"></span></div><h3 class="dm-question" id="dm-question"></h3><div class="dm-options" id="dm-options"></div><div id="dm-feedback" class="dm-note"></div>');
@@ -329,6 +329,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
     if(document.hidden||navigator.onLine===false||busy||!uid())return;
     if(session?.date===today()&&!state?.completed)return;
     const opened=!!node('daily-meditation-overlay');
+    if(state?.date!==today()){void refresh().catch(()=>{});return;}
     const waiting=panelState().done&&userData()?.friends?.length>0&&(!state||state.date!==today()||state.stars<15);
     // The badge is already on before personal completion. Stop background
     // friend reads once all fifteen stars have arrived.

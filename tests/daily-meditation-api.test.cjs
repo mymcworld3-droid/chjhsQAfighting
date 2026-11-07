@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const {fakeDb}=require('./helpers/inventory-db.cjs');
 const {createService,createHandler,dayId,SESSIONS,RESULTS}=require('../daily-meditation-api.cjs').__test;
 const Rules=require('../public/cultivation/daily-meditation-rules.js');
-const {generated,ready}=require('./helpers/meditation-literacy.cjs');
+const {generated,ready,seedShared}=require('./helpers/meditation-literacy.cjs');
 const Growth=require('../public/cultivation/nascent-growth.js');
 const Pool=require('../public/cultivation/soulbound-pool.js');
 const {transaction:draw}=require('../soulbound-draw-api.cjs').__test;
@@ -19,7 +19,8 @@ function fixture(extra={}) {
     return result;
   };
   for(let i=0;i<3;i++)db.docs.set('exam_logs/old'+i,{uid:'u1',mode:'infinite',question:'歷史錯題'+i,options:['正確','錯誤'],correctIdx:0,userIdx:1,isCorrect:false,timestamp:initialTime-i});
-  const service=createService({db,now:()=>time,random:()=>.5});
+  seedShared(db,date);
+  const service=createService({db,now:()=>time,random:()=>.5,dailySets:{ensure:async()=>{}}});
   return {db,service,user:()=>db.docs.get('users/u1'),advance:ms=>time+=ms,setTime:ms=>time=ms,queries:()=>queries};
 }
 function friend(f,id,stars,time=1000,{mutual=true,completed=true}={}) {
@@ -39,10 +40,10 @@ async function complete(f,correct=5) {
   return f.service.finish('u1');
 }
 
-test('daily start creates five fresh literacy tasks independent of the mistake pool and resumes the same set',async()=>{
+test('daily start uses the five prepared shared tasks independent of the mistake pool and resumes the same set',async()=>{
   const f=fixture(),a=await f.service.start('u1'),b=await f.service.start('u1');
   assert.equal(a.session.runId,b.session.runId);assert.equal(f.queries(),0);
-  assert.equal(a.session.total,5);assert.equal(a.session.mode,'literacy');assert.equal(a.session.question,null);
+  assert.equal(a.session.total,5);assert.equal(a.session.mode,'literacy');assert.ok(a.session.question);
   const current=await ready(f,a.session);
   assert.equal(current.question.ans,undefined);assert.equal(current.question.correctIdx,undefined);assert.equal(current.question.exp,undefined);
   assert.equal((await f.service.start('u1')).session.question.id,current.question.id);

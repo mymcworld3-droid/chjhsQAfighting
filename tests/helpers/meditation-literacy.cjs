@@ -15,4 +15,16 @@ async function ready(f,session,uid='u1'){
   const expected=await f.service.prepareQuestion(uid);
   return f.service.commitQuestion(uid,expected,generated(expected));
 }
-module.exports={generated,ready};
+function seedShared(db,date){
+  const {SETS,dailyPlan,makeQuestion}=require('../../daily-meditation-set.cjs');
+  const plan=dailyPlan(),questions=plan.map((domain,index)=>{
+    const expected={...domain,index,date};return makeQuestion(generated(expected),expected,()=>.5);
+  });
+  db.docs.set(SETS+'/'+date,{date,version:1,status:'ready',plan,questions,reviewCount:1});
+}
+function seedLegacySession(db,date,level='國中一年級'){
+  const {plan}=require('../../daily-meditation-literacy.cjs');
+  db.docs.set('meditationSessions/'+date+'_u1',{uid:'u1',date,version:2,runId:'legacy-five-question-session',
+    level,plan:plan({profile:{educationLevel:level}}),index:0,questions:[],answers:[],issuedAtMs:0});
+}
+module.exports={generated,ready,seedShared,seedLegacySession};
