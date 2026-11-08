@@ -333,7 +333,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       const ingredients = canReadRecipe
         ? `<div class="refinery-recipe-ingredients-head"><b><i class="fa-solid fa-cubes-stacked"></i> 合成材料</b><span>${cost} / ${SLOT_COUNT} 格 · ${missing ? `尚缺 ${missing} 個` : '素材齊備'}</span></div>
            <ul class="refinery-recipe-ingredients">${recipe.map(recipeIngredientMarkup).join('')}</ul>`
-        : `<div class="refinery-recipe-sealed" role="note"><div class="refinery-recipe-seal-mark"><i class="fa-solid fa-lock"></i></div><strong>製作方法尚未習得</strong><p>此配方的素材與數量尚未公開。可在交易市集取得製作指南，或自行投入材料探索。</p></div>`;
+        : `<div class="refinery-recipe-sealed" role="note"><div class="refinery-recipe-seal-mark"><i class="fa-solid fa-lock"></i></div><strong>製作方法尚未習得</strong><p>此配方的素材與數量尚未公開。可自行投入材料探索。</p></div>`;
       const fragments = Math.max(0, Number(userData()?.forgeFragments) || 0);
       const canCraft = !!myUid && canReadRecipe && unique && !missing && plan?.valid && keyStatus.enough &&
         fragments >= Number(plan.fragments || 0) && !busy && !job;
@@ -387,7 +387,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       <summary><span class="refinery-recipe-book-heading"><i class="fa-solid fa-scroll"></i><strong>配方圖鑑</strong><small>煉器配方</small></span><span class="refinery-recipe-summary-count">首發 ${owned.length} · 已學會 ${licensed.length} · 登錄 ${known.length}</span><i class="fa-solid fa-chevron-down refinery-recipe-book-chevron"></i></summary>
       <div class="refinery-recipe-book-content">
         <p class="refinery-recipe-guide"><i class="fa-solid fa-circle-info"></i><span>配方是製作指南，不是煉器許可證。沒有配方也能自由投入素材嘗試煉製；首發者永久保有發現紀錄，購買配方後可查看具體素材與數量。</span></p>
-        <div class="refinery-recipe-toolbar"><span><i class="fa-solid fa-layer-group"></i> 已收錄 ${known.length} 張法寶配方</span><button type="button" class="refinery-clear refinery-recipe-market" data-refinery-open-market><i class="fa-solid fa-scale-balanced"></i> 前往交易市集</button></div>
+        <div class="refinery-recipe-toolbar"><span><i class="fa-solid fa-layer-group"></i> 已收錄 ${known.length} 張法寶配方</span></div>
         <div class="refinery-recipe-grid">${cards || '<div class="refinery-recipe-empty"><i class="fa-solid fa-book-open"></i><strong>尚無已登錄的配方</strong><p>投入 2～8 個素材，開爐探索第一張配方。</p></div>'}</div>
       </div>
     </details>`;
@@ -458,7 +458,6 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       .refinery-recipe-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
       .refinery-recipe-toolbar>span{color:#b9a77f;font-size:11px;font-weight:800}
       .refinery-recipe-toolbar>span i{margin-right:5px;color:#e9cd84}
-      .refinery-recipe-market{min-height:35px!important;padding:8px 12px!important;border-color:rgba(216,177,93,.36)!important;color:#f0d28c!important;font-size:10px!important}
       .refinery-recipe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));align-items:start;gap:12px}
       .refinery-recipe-card{box-sizing:border-box;min-width:0;margin:0;padding:0;border:1px solid color-mix(in srgb,var(--recipe-realm-color,#d8b15d) 32%,rgba(216,177,93,.12));border-radius:15px;background:linear-gradient(155deg,rgba(37,31,25,.96),rgba(15,14,13,.98));overflow:hidden;box-shadow:inset 0 1px rgba(255,255,255,.05),0 10px 22px rgba(0,0,0,.15)}
       .refinery-recipe-card.is-owner{border-color:rgba(249,210,124,.66);background:linear-gradient(150deg,#342916,#17130d);box-shadow:0 0 0 1px rgba(244,199,94,.045),0 12px 30px rgba(0,0,0,.2)}
@@ -497,7 +496,7 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       .refinery-recipe-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px 16px;border:1px dashed rgba(216,177,93,.24);border-radius:13px;text-align:center;color:#d4bc86;font-size:12px}
       .refinery-recipe-empty i{font-size:23px}
       .refinery-recipe-empty p{margin:0;color:#a99a7c;font-size:10px}
-      @media(max-width:520px){.refinery-recipe-book>summary{flex-wrap:wrap;padding:11px 12px}.refinery-recipe-summary-count{margin-left:0}.refinery-recipe-book-content{padding:10px;max-height:72dvh}.refinery-recipe-card-head{flex-wrap:wrap}.refinery-recipe-access{margin-left:auto}.refinery-recipe-ingredients{grid-template-columns:1fr}.refinery-recipe-toolbar{align-items:stretch}.refinery-recipe-market{width:100%}}
+      @media(max-width:520px){.refinery-recipe-book>summary{flex-wrap:wrap;padding:11px 12px}.refinery-recipe-summary-count{margin-left:0}.refinery-recipe-book-content{padding:10px;max-height:72dvh}.refinery-recipe-card-head{flex-wrap:wrap}.refinery-recipe-access{margin-left:auto}.refinery-recipe-ingredients{grid-template-columns:1fr}}
       /* Browser UA <details> hiding must win over our card layout rules.
          Explicitly hide the details body when closed, including in WebKit/iPadOS. */
       #page-training .refinery-recipe-book:not([open]) > .refinery-recipe-book-content,
@@ -971,7 +970,6 @@ import { MATERIAL_CATALOG, ARTIFACT_RECIPES, RAID_REFINEMENT_KEYS, getMaterialBy
       page?.querySelector('[data-training-tab="bag"]')?.click();
       window.openCultivationEquipment?.();
     });
-    content.querySelector('[data-refinery-open-market]')?.addEventListener('click', () => window.openPlayerMarketplace?.('recipe'));
     content.querySelector('[data-refinery-recipe-book]')?.addEventListener('toggle', (event) => {
       recipeBookOpen = event.currentTarget.open;
     });

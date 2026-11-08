@@ -1033,19 +1033,12 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </div>
             </div>
 
-            <!-- 交易市集入口直接存在頁面內，不依賴非同步模組掛載才出現。 -->
-            <div id="player-market-switch" class="flex gap-2 my-3" role="group" aria-label="坊市與玩家交易">
-                <button type="button" id="pm-view-shop" class="active flex-1 rounded-lg border border-yellow-900/40 px-3 py-3 text-xs font-bold" style="background:#4c3618;color:#fff0c6">坊市商品</button>
-                <button type="button" id="pm-view-market" onclick="window.openPlayerMarketplace?.('all')" class="flex-1 rounded-lg border border-yellow-900/40 px-3 py-3 text-xs font-bold" style="background:#15120c;color:#ead29b">玩家交易市集</button>
-            </div>
-
             <div class="ui-store-categories flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-xl" role="group" aria-label="商品類型">
                 <button onclick="filterStore('all', this)" class="store-tab active flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_all">全部</button>
                 <button onclick="filterStore('frame', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_frame">相框</button>
                 <button onclick="filterStore('avatar', this)" class="store-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all" data-i18n="tab_avatar">頭像</button>
             </div>
 
-            <p id="pm-market-load-state" class="text-xs text-amber-200" aria-live="polite"></p>
             <button type="button" id="store-avatar-reset" class="btn-cyber-ghost mb-4 px-3 py-2" onclick="unequipAvatar()" data-i18n="btn_unequip_avatar" hidden>取消裝備</button>
 
             <!-- 使用 Tailwind 的響應式網格 (sm, md, lg, xl) 自動調整欄數 -->
@@ -1053,7 +1046,6 @@ body.xianxia-theme main:has(#page-training.active-page),
                 <!-- 改為 col-span-full 確保載入文字在任何欄數下都能置中 -->
                 <div class="col-span-full text-center py-10 text-gray-500 text-xs font-mono">資料載入中…</div>
             </div>
-            <section id="player-market" class="hidden" aria-label="交易市集"></section>
         </div>
 
         <!-- 正式鬥法由 battle-mode-v2.js 建立唯一的配對／開場／戰場／結算畫面。

@@ -194,6 +194,6 @@ test('challenge routes authenticate and the quiz pipeline binds scope and signed
   await handler({get:()=>''},res);assert.equal(status,401);assert.equal(payload.ok,false);
   const server=readFileSync('server.js','utf8');assert.match(server,/avatarContext = \{uid,db,\.\.\.await immortalChallenge.prepareQuestion/);
   assert.match(server,/immortalChallenge.commitQuestion/);assert.match(server,/avatarMode \? `avatar:/);
-  const browser=readFileSync('d1-browser-api.cjs','utf8');const policy=browser.slice(browser.indexOf("col==='worldImmortals'"),browser.indexOf("col==='marketListings'"));
+  const browser=readFileSync('d1-browser-api.cjs','utf8');const policy=browser.slice(browser.indexOf("col==='worldImmortals'"),browser.indexOf("col==='rooms'",browser.indexOf("col==='worldImmortals'")));
   assert.doesNotMatch(policy,/challengeScore/);assert.match(policy,/throw fail/);
 });

@@ -319,15 +319,11 @@ test('legacy and known-recipe paths block minting while equipment slot stays ope
   const legacy = read('public/cultivation/artifact-system.js');
   const jobs = read('public/cultivation/refinery-ai-jobs.js');
   const equip = read('public/cultivation/unified-inventory-grid.js');
-  const market = read('public/cultivation/player-marketplace.js');
   assert.match(legacy, /async function craftArtifact\(\) \{\s*throw new Error\('鍛造僅開放本命法器精煉/);
   assert.match(jobs, /hasSoulboundBase/);
   assert.match(jobs, /realSoulboundSource/);
   assert.match(equip, /點擊選擇本命法器/);
   assert.match(equip, /data-uib-empty-slot/);
   assert.match(equip, /window\.openSoulboundDraw/);
-  assert.match(market, /function isSoulboundListing\(type, id\)/);
-  assert.match(market, /if \(isSoulboundListing\(type, listing.itemId\)\) throw new Error/);
-  assert.match(market, /不可上架或販售配方/);
   assert.match(read('docs/design/soulbound-artifact-rules.md'), /常駐契器台已實作/);
 });

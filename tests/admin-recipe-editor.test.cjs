@@ -83,32 +83,20 @@ test('admin can inspect and explicitly reassign a recipe owner, including a publ
   assert.match(artifactManager, /配方：\$\{escapeHtml\(recipeSummaryText\(item\.id\)\)\} · 擁有人：/);
 });
 
-test('admin can publish a saved recipe at a validated price without transferring ownership', () => {
-  assert.match(artifactManager, /管理員配方上架/);
-  assert.match(artifactManager, /data-aam-list-recipe/);
-  assert.match(artifactManager, /function adminListRecipe\(/);
-  assert.match(artifactManager, /Number\.isSafeInteger\(price\)/);
-  assert.match(artifactManager, /userSnap\.data\(\)\?\.isAdmin !== true/);
-  assert.match(artifactManager, /recipeSnap\.data\(\)\?\.recipes\?\.\[artifactId\]/);
-  assert.match(artifactManager, /tx\.set\(listingRef,/);
-  assert.match(artifactManager, /adminManaged:true, type:'recipe', itemId:artifactId/);
-  assert.match(artifactManager, /recipeSaleLocked:true/);
-  assert.match(artifactManager, /replaceArtifactCatalog\(updatedCatalog, 'admin-recipe-listing'\)/);
+test('admin recipe editing retains prior license visibility and has no listing action', () => {
+  assert.doesNotMatch(artifactManager, /data-aam-list-recipe|marketListings|管理員配方上架/);
   assert.match(artifactManager, /lockedIds\.has\(item\.id\)/);
   assert.match(artifactManager, /recipeSaleLocked: original\?\.recipeSaleLocked === true/);
-  assert.match(artifactManager, /請先儲存配方或擁有人變更，再上架/);
 });
 
 
-test('recipe ownership and market listing follow artifact effects and use independent layout', () => {
+test('recipe ownership follows artifact effects and uses independent layout', () => {
   const editor = artifactManager.slice(artifactManager.indexOf('modal.innerHTML ='));
   const effect = editor.indexOf('<div class="aam-effects-editor">');
   const owner = editor.indexOf('<section class="aam-recipe-owner-editor">');
-  const listing = editor.indexOf('<section class="aam-recipe-listing">');
   const recipe = editor.indexOf('recipeEditorMarkup(item)}');
-  assert.ok(effect >= 0 && effect < owner && owner < listing && listing < recipe);
+  assert.ok(effect >= 0 && effect < owner && owner < recipe);
   assert.doesNotMatch(editor, /aam-recipe-owner-editor aam-field full/);
-  assert.doesNotMatch(editor, /aam-recipe-listing aam-field full/);
   assert.match(artifactManager, /\.aam-owner-toggle input\[type="checkbox"\]\{[^}]*width:16px!important;[^}]*height:16px!important;/);
   assert.match(artifactManager, /\.aam-owner-current-uid\{overflow-wrap:anywhere/);
   assert.match(artifactManager, /\.aam-owner-fields\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);

@@ -6,7 +6,7 @@ const fail=(message='無權存取這筆資料',status=403,code='permission-denie
 const same=(a,b)=>JSON.stringify(Codec.encode(a??null))===JSON.stringify(Codec.encode(b??null));
 const changed=(a,b)=>[...new Set([...Object.keys(a||{}),...Object.keys(b||{})])].filter(k=>!same(a?.[k],b?.[k]));
 const only=(keys,allowed)=>keys.every(k=>allowed.includes(k));
-const PUBLIC=new Set(['users','worldImmortals','products','gameConfig','system','global_chat','marketListings','rooms','raidRooms','dongtianIndex']);
+const PUBLIC=new Set(['users','worldImmortals','products','gameConfig','system','global_chat','rooms','raidRooms','dongtianIndex']);
 function publicPlayer(data) {
   const keys=['uid','displayName','photoURL','friendCode','equipped','lastActive','createdAt'];
   const result=Object.fromEntries(keys.filter(k=>data[k]!==undefined).map(k=>[k,data[k]]));
@@ -31,8 +31,11 @@ function mayRead({role,path,data,uid,admin}) {
 }
 function buildTarget(db,target) {
   if(target?.role!==db.role)throw fail('資料區不符',400,'invalid-argument');
-  if(target.kind==='doc')return db.doc(validPath(target.path));
-  let query=db.collection(validPath(target.path,false));
+  const isDocument=target.kind==='doc';
+  const path=validPath(target.path,isDocument);
+  if(path.split('/',1)[0]==='marketListings')throw fail('玩家交易市集已關閉');
+  if(isDocument)return db.doc(path);
+  let query=db.collection(path);
   if(!Array.isArray(target.constraints)||target.constraints.length>12)throw fail('查詢條件過多',400,'invalid-argument');
   for(const c of target.constraints) {
     if(!['where','orderBy','limit','startAfter'].includes(c.type)||!Array.isArray(c.args))throw fail('查詢格式不符',400,'invalid-argument');
@@ -52,7 +55,7 @@ function requireScopedQuery(query,context) {
   if(col==='dongtians'&&!query.filters.some(([f,op,v])=>(f==='ownerUid'&&v===context.uid||f==='status'&&v==='active')&&op==='=='))throw fail();
   if(!PUBLIC.has(col)&&!['dongtians','dongtianReports','exam_logs','dongtianPlays'].includes(col))throw fail();
 }
-function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
+function authorizeWrite({role,path,before,after,context,preview}) {
   const {uid,admin,decoded}=context;
   const [col,id,...nested]=path.split('/');
   if(nested.length)throw fail();
@@ -73,22 +76,6 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
       if(!same(before?.friends||[],after.friends||[]) ||
         Boolean(before?.friendInvitesDisabled)!==Boolean(after.friendInvitesDisabled))throw fail();
       return;
-    }
-    if(operation.type==='update'&&Object.keys(operation.data||{}).length===1) {
-      const own=preview.get('users/'+uid);
-      // A purchase may credit exactly one seller. The listing and buyer debit must
-      // be in this same guarded SQL transaction; arbitrary peer gold writes fail.
-      if(Object.hasOwn(operation.data,'stats.gold')) {
-        for(const [listingPath,next] of preview) {
-          if(!listingPath.startsWith('marketListings/')||next?.sellerUid!==id||next?.buyerUid!==uid||next?.status!=='sold')continue;
-          const old=tx.reads.get(listingPath)?.data();
-          const buyer=tx.reads.get('users/'+uid)?.data();
-          if(old?.status==='active'&&Number.isSafeInteger(old.price)&&old.price>0&&own&&
-            same({...old,status:'sold',buyerUid:uid,completedAtMs:next.completedAtMs},next)&&
-            after.stats?.gold===(Number(before?.stats?.gold)||0)+old.price&&
-            own.stats?.gold===(Number(buyer?.stats?.gold)||0)-old.price&&own.stats.gold>=0)return;
-        }
-      }
     }
     throw fail();
   }
@@ -125,12 +112,6 @@ function authorizeWrite({role,path,before,after,operation,context,tx,preview}) {
   if(role==='A'&&col==='worldImmortals') {
     if(before?.uid===uid && (after===null||only(keys,['displayName'])))return;
     // Seat ownership and defender builds are awarded only by the verified combat API.
-    throw fail();
-  }
-  if(role==='A'&&col==='marketListings') {
-    if(before===null&&after?.sellerUid===uid&&after.status==='active'&&Number.isSafeInteger(after.price)&&after.price>0)return;
-    if(before?.status==='active'&&after&&only(keys,['status','buyerUid','completedAtMs'])&&
-      (before.sellerUid===uid&&after.status==='cancelled'||after.buyerUid===uid&&after.status==='sold'))return;
     throw fail();
   }
   if(['A','C'].includes(role)&&col==='rooms') {
@@ -188,7 +169,7 @@ async function executeCommit(db,input,context) {
     context={...context,admin:own.data()?.isAdmin===true};
   }
   const preview=tx.preview();
-  for(const op of tx.writes)authorizeWrite({role:db.role,path:op.ref.path,before:tx.reads.get(op.ref.path).data()??null,after:preview.get(op.ref.path),operation:op,context,tx,preview});
+  for(const op of tx.writes)authorizeWrite({role:db.role,path:op.ref.path,before:tx.reads.get(op.ref.path).data()??null,after:preview.get(op.ref.path),context,preview});
   await tx.commit();
 }
 function registerD1BrowserApi(app,{env=process.env,resolve=role=>adminProject(role),store=role=>getD1Store(role,env)}={}) {

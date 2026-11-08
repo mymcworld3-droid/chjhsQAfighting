@@ -50,7 +50,7 @@ async function read(ref,signal){return hydrate(ref,await request({action:'read',
 export function getDoc(ref){return isD1?read(ref):native.getDoc(ref);}
 export function getDocs(ref){return isD1?read(ref):native.getDocs(ref);}
 export function getDocsFromServer(ref){return isD1?read(ref):native.getDocsFromServer(ref);}
-// No durable offline cache: using a network read avoids returning stale market inventory.
+// No durable offline cache: using a network read avoids returning stale inventory.
 export function getDocsFromCache(ref){return isD1?read(ref):native.getDocsFromCache(ref);}
 function writer(db){
   const writes=[];

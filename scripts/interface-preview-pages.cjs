@@ -11,7 +11,7 @@ module.exports=async function capturePages({page,frame,origin,root,output,report
  };
  const catalogs=`import * as A from '/cultivation/artifact-catalog.js';import * as M from '/cultivation/material-catalog.js';
  const {ARTIFACT_CATALOG,ARTIFACT_EQUIP_SLOTS,getArtifactById,artifactRealmColor,realmForScore,realmOrderByName}=A;
- const {MATERIAL_CATALOG,ARTIFACT_RECIPES,RAID_REFINEMENT_KEYS,RAID_CRAFT_MATERIAL_IDS,getMaterialById,getArtifactRecipe,materialRealmColor,materialRealmOrderByName,materialMarketReferencePrice,materialMarketMinimumTotal,artifactRecipeDepth,MAX_ARTIFACT_RECIPE_NESTING}=M;`;
+ const {MATERIAL_CATALOG,ARTIFACT_RECIPES,RAID_REFINEMENT_KEYS,RAID_CRAFT_MATERIAL_IDS,getMaterialById,getArtifactRecipe,materialRealmColor,materialRealmOrderByName,artifactRecipeDepth,MAX_ARTIFACT_RECIPE_NESTING}=M;`;
  await add(`${catalogs}
  import '/cultivation/training-access-rules.js';import '/cultivation/soul-talents.js';import '/cultivation/nascent-growth.js';import '/cultivation/innate-ability.js';
  const core={type:'ocean',grade:3,createdAt:1};
@@ -58,9 +58,6 @@ module.exports=async function capturePages({page,frame,origin,root,output,report
  document.querySelector('#leaderboard-body').innerHTML=['沈清霜','雲間客','青雲行者','松風','白小滿'].map((x,i)=>'<tr><td class="text-yellow-200/70">'+(i+1)+'</td><td><div class="flex items-center gap-3"><span class="ui-avatar-viewport" style="width:32px;height:32px;background:#c8ad7210">'+x[0]+'</span><span>'+x+'</span></div></td><td class="text-right"><span class="text-xs text-yellow-100/70">'+(i<2?'煉虛':'化神')+'</span><small class="block text-gray-500">'+(580-i*86)+' 修為</small></td></tr>').join('');
  const options=document.querySelector('#options-container');options.innerHTML='';document.querySelector('#quiz-container').classList.remove('hidden');document.querySelector('#quiz-badge').textContent='數學 · 一次函數';document.querySelector('#question-text').textContent='若 f(x) = 2x + 3，則 f(4) 的值為何？';for(const [i,v]of ['7','9','11','13'].entries()){const b=document.createElement('button');b.type='button';b.className='w-full text-left p-4 bg-slate-700 rounded-lg border border-slate-600 flex items-center gap-3';b.innerHTML='<span class="flex items-center justify-center shrink-0">'+String.fromCharCode(65+i)+'</span><span class="quiz-rich-option">'+v+'</span>';options.append(b);}
  });
- await module('cultivation/player-marketplace.js','  function boot()',auth+catalogs,
- `currentUid='layout-preview';active=MATERIAL_CATALOG.filter(x=>RAID_CRAFT_MATERIAL_IDS.includes(x.id)).slice(0,4).map((x,i)=>({id:'listing'+i,type:'material',itemId:x.id,itemName:x.name,itemRealm:x.realm,itemIcon:x.icon||'材',quantity:4+i,price:120+i*50,sellerUid:'preview-seller',sellerName:['雲間客','松風'][i%2],status:'active'}));
- window.__uiMarket=open=>{mount();switchMarket(open);if(open)render();};`);
  // Real cultivation renderers, with side-effectful boot routines excluded.
  await module('cultivation/cultivation-training-v4.js','  function boot()',
  `${auth}import '/cultivation/golden-core-pity.js';import '/cultivation/golden-core-art.js';import '/cultivation/soul-talents.js';import '/cultivation/nascent-growth.js';import '/cultivation/innate-ability.js';
@@ -92,7 +89,7 @@ window.__uiBattle=()=>{ensurePage();window.switchToPage('page-battle');state.rol
  await frame.waitForFunction(()=>window.__uiMap&&window.__uiTraining&&window.__uiRaid);
  for(const name of ['training-fluid-layout.js','content-capacity-layout.js','market-fluid-layout.js','battle-v3-stability-ui.js']) await frame.addScriptTag({url:origin+'/cultivation/'+name});
  const scenarios=[
-  ['settings','page-settings'],['store','page-store'],['market','page-store'],['social','page-social'],['chat','page-social'],['history','page-history'],['rank','page-rank'],['training-map','page-training'],['core','page-training'],['nascent','page-training'],['nascent-detail','page-training'],['refinery','page-training'],['equipment','page-training'],['bag','page-training'],['contract','page-training'],['status','page-training'],['raid','page-raid'],['quiz','page-quiz'],['battle','page-battle']
+  ['settings','page-settings'],['store','page-store'],['social','page-social'],['chat','page-social'],['history','page-history'],['rank','page-rank'],['training-map','page-training'],['core','page-training'],['nascent','page-training'],['nascent-detail','page-training'],['refinery','page-training'],['equipment','page-training'],['bag','page-training'],['contract','page-training'],['status','page-training'],['raid','page-raid'],['quiz','page-quiz'],['battle','page-battle']
  ];
  // Add all native tabs so the same markup is exercised across stages.
  await frame.evaluate(()=>{const tabs=document.querySelector('.training-subtabs-v3');for(const [id,label,icon]of [['nascent-soul','元神','fa-child-reaching'],['contract','契器','fa-dharmachakra'],['status','狀態','fa-chart-simple']])if(!tabs.querySelector('[data-training-tab="'+id+'"]'))tabs.insertAdjacentHTML('beforeend','<button type="button" class="training-subtab-v3" data-training-tab="'+id+'" aria-selected="false"><i class="fa-solid '+icon+'"></i><span>'+label+'</span></button>');});
@@ -107,7 +104,6 @@ window.__uiBattle=()=>{ensurePage();window.switchToPage('page-battle');state.rol
     window.switchToPage(id);window.__uiRaid.unlock();
     if(id==='page-social')window.switchSocialTab(name==='chat'?'chat':'friends');
     if(name==='raid')window.__uiRaid.render();
-    if(id==='page-store')window.__uiMarket(name==='market');
     if(name==='battle')window.__uiBattle();
     if(id==='page-training'){
       const tab={core:'core',nascent:'nascent-soul','nascent-detail':'nascent-soul',refinery:'refinery',equipment:'equipment',bag:'bag',contract:'contract',status:'status'}[name];
@@ -145,6 +141,5 @@ window.__uiBattle=()=>{ensurePage();window.switchToPage('page-battle');state.rol
  }
  // Exercise the controls that change presentation without invoking gameplay APIs.
  await frame.evaluate(()=>window.switchToPage('page-settings'));await frame.locator('[data-dongfu-section="profile"]').click();assert.equal(await frame.locator('#dongfu-profile-body').isVisible(),true);
- await frame.evaluate(()=>window.switchToPage('page-store'));await frame.evaluate(()=>window.__uiMarket(false));await frame.locator('.store-tab').nth(1).click();assert.equal(await frame.locator('.store-card:visible').count(),3);assert.ok(await frame.locator('.store-tab').nth(1).evaluate(e=>e.classList.contains('active-tab')));
- await frame.evaluate(()=>window.__uiMarket(true));await frame.locator('.pm-compose>summary').click();await frame.locator('#pm-sell-price').fill('240');assert.equal(await frame.locator('.pm-compose').getAttribute('open'),'');await frame.evaluate(()=>window.__uiMarket(true));assert.equal(await frame.locator('.pm-compose').getAttribute('open'),'');
+ await frame.evaluate(()=>window.switchToPage('page-store'));await frame.locator('.store-tab').nth(1).click();assert.equal(await frame.locator('.store-card:visible').count(),3);assert.ok(await frame.locator('.store-tab').nth(1).evaluate(e=>e.classList.contains('active-tab')));
 };

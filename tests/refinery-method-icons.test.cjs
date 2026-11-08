@@ -12,7 +12,6 @@ const refinery = read('public/cultivation/cultivation-refinery-v2.js');
 const jobs = read('public/cultivation/refinery-ai-jobs.js');
 const catalog = read('public/cultivation/artifact-catalog.js');
 const bag = read('public/cultivation/unified-inventory-grid.js');
-const market = read('public/cultivation/player-marketplace.js');
 
 test('forge methods create distinct discovery signatures and are sent to artifact generation', () => {
   assert.ok(api.FORGE_METHODS.has ? api.FORGE_METHODS.has('劍道鍛造') : api.FORGE_METHODS.includes('劍道鍛造'));
@@ -84,6 +83,4 @@ test('materials use round icons while artifacts keep a distinct framed shape acr
   assert.match(bag, /\.uib-modal-material \.uib-modal-icon\{border-radius:50%!important/);
   assert.match(bag, /data-uib-item\^="artifact:"/);
 
-  assert.match(market, /#player-market \.pm-material \.pm-icon\{border-radius:50%/);
-  assert.match(market, /#player-market \.pm-artifact \.pm-icon/);
 });

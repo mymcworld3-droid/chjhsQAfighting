@@ -1337,6 +1337,18 @@ onAuthStateChanged(auth, async (user) => {
 
         const userRef = doc(db, "users", user.uid);
         try {
+            // Read the backpack only after the server has had a chance to return old consignments.
+            try {
+                const token = await user.getIdToken();
+                const response = await fetch('/api/inventory/retired-market-returns', {
+                    method: 'POST', headers: { Authorization: 'Bearer ' + token },
+                    signal: AbortSignal.timeout(5000)
+                });
+                if (!response.ok) console.warn('[Retired market returns]', response.status);
+            } catch (error) {
+                console.warn('[Retired market returns]', error.name);
+            }
+            if (auth.currentUser?.uid !== user.uid) return;
             const docSnap = await getDoc(userRef);
             if (auth.currentUser?.uid !== user.uid) return;
             

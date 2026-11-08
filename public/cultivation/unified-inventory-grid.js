@@ -6,7 +6,6 @@ import {
   getMaterialById,
   materialRealmColor,
   materialRealmOrderByName,
-  materialMarketReferencePrice,
   artifactRecipeDepth,
   MAX_ARTIFACT_RECIPE_NESTING,
   RAID_REFINEMENT_KEYS,

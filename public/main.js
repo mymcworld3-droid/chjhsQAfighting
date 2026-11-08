@@ -115,49 +115,6 @@ const XIUXIAN_FEATURE_BUILD = '20261106-forge-stones-only1';
 const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
-// 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
-let xiuxianMarketLoad = null;
-function loadPlayerMarketSafely() {
-  if (!xiuxianMarketLoad) {
-    xiuxianMarketLoad = import(`./cultivation/player-marketplace.js?v=${XIUXIAN_FEATURE_BUILD}`)
-      .catch((error) => {
-        console.error('[Xiuxian] Optional player marketplace failed:', error);
-        window.__xiuxianMarketplaceLoadError = true;
-        const status = document.getElementById('pm-market-load-state');
-        if (status) status.textContent = '交易市集目前無法載入，請重新整理遊戲後再試。';
-        // 保留重新嘗試的入口，但不可將市集故障加入遊戲啟動失敗清單。
-        xiuxianMarketLoad = null;
-        return false;
-      });
-  }
-  return xiuxianMarketLoad;
-}
-const queueMarketOpen = (view = 'all') => {
-  // 即使市集模組尚在載入，也先切進坊市並顯示市集容器，
-  // 避免玩家按下入口後看起來毫無反應。
-  window.switchToPage?.('page-store');
-  const page = document.getElementById('page-store');
-  const panel = document.getElementById('player-market');
-  const tabs = page?.querySelector('.store-tab')?.parentElement;
-  const grid = document.getElementById('store-grid');
-  page?.classList.add('pm-market-active');
-  panel?.classList.remove('hidden');
-  panel?.style.setProperty('display','block','important');
-  tabs?.style.setProperty('display','none','important');
-  grid?.style.setProperty('display','none','important');
-  const status = document.getElementById('pm-market-load-state');
-  if (status) status.textContent = '正在載入交易市集…';
-  void loadPlayerMarketSafely().then((loaded) => {
-    if (loaded !== false && window.openPlayerMarketplace !== queueMarketOpen) {
-      window.openPlayerMarketplace?.(view);
-    } else if (loaded !== false) {
-      const status = document.getElementById('pm-market-load-state');
-      if (status) status.textContent = '交易市集正在準備中，請稍後再按一次。';
-    }
-  });
-};
-window.openPlayerMarketplace = queueMarketOpen;
-
 window.__xiuxianFeaturesReady = false;
 window.waitForXiuxianFeatures = () => xiuxianFeatureGate;
 
@@ -212,8 +169,6 @@ async function loadXiuxianFeaturesSafely() {
   void import('./cultivation/alliance-friend-chat.js?v=20261016-chat1')
     .catch(error => console.warn('[Alliance chat] optional module unavailable:', error));
   resolveXiuxianFeatureGate(result);
-  // 遊戲已可開始，再載入市集。市集若故障不影響其餘功能。
-  void loadPlayerMarketSafely();
 }
 
 function cultivationUserDataReady() {
@@ -239,8 +194,6 @@ function startXiuxianFeaturesWhenReady() {
     xiuxianFeatureLoadStarted = true;
     if (xiuxianReadyTimer) clearTimeout(xiuxianReadyTimer);
     xiuxianReadyTimer = null;
-    // 市集與主遊戲解耦：玩家資料一就緒便準備入口，不受其他可選功能載入順序影響。
-    void loadPlayerMarketSafely();
     loadXiuxianFeaturesSafely();
     return;
   }

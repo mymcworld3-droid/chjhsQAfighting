@@ -627,7 +627,7 @@ test('recipe compendium protects unknown formulas and still shows public, first-
   assert.match(refinery, /refinery-recipe-sealed/);
   assert.match(refinery, /此配方的素材與數量尚未公開/);
   assert.match(refinery, /配方是製作指南，不是煉器許可證/);
-  assert.match(refinery, /前往交易市集/);
+  assert.match(refinery, /可自行投入材料探索/);
 });
 
 test('real refinery runtime style replaces the legacy preload so recipe cards render on iPad', () => {
@@ -803,8 +803,7 @@ test('more ingredients improve inverse damage caps', () => {
   assert.ok(more.max<range.max);
   assert.ok(fewer.min>range.min);
 });
-test('raid material icons remain visually distinct in refinery, backpack and marketplace', () => {
+test('raid material icons remain visually distinct in refinery and backpack', () => {
   assert.match(refinery,/refinery-mat-icon\.is-material[^\n]*border-radius:50%/);
   assert.match(read('public/cultivation/unified-inventory-grid.js'),/uib-item\[data-uib-item\^="material:"\][^\n]*border-radius:50%/);
-  assert.match(read('public/cultivation/player-marketplace.js'),/\.pm-material \.pm-icon\{border-radius:50%/);
 });

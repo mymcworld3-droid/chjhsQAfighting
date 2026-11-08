@@ -11,7 +11,6 @@ test('repository map centralizes A / BD / C domain ownership', () => {
   const server = read('server-repositories.cjs');
   for (const source of [client, server]) {
     assert.match(source, /player:\s*'A'/);
-    assert.match(source, /market:\s*'A'/);
     assert.match(source, /dongtian:\s*'BD'/);
     assert.match(source, /battle:\s*'C'/);
     assert.match(source, /raid:\s*'C'/);

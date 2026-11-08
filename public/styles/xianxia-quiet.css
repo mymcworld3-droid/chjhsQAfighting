@@ -84,7 +84,7 @@ body.xianxia-theme :is(.text-gray-400,.text-gray-500,.text-gray-600,.stat-label)
 body.xianxia-theme :is(.text-white,.text-slate-100) { color: var(--xq-paper) !important; }
 body.xianxia-theme :is(.uib-name,.uib-equip-slot-label,.uib-equip-slot-name,
   .refinery-mat-copy strong,.artifact-name-row strong,.dt-item-name,
-  .pm-card-head b,.aam-copy strong,.amm-copy strong,.admin-collapse-title) {
+  .aam-copy strong,.amm-copy strong,.admin-collapse-title) {
   font-weight: 600 !important;
   text-shadow: none !important;
 }
@@ -165,14 +165,14 @@ body.xianxia-theme .quest-tabs button[aria-selected=true] {
 
 /* Repeated surfaces: one fine outline, no bevel or glow. Quality colors and
    selected/locked states remain owned by each inventory component. */
-body.xianxia-theme :is(.quest-card,.dt-item,.dt-create,.pm-card,.pm-compose,
+body.xianxia-theme :is(.quest-card,.dt-item,.dt-create,
   .aam-item,.amm-item,.artifact-item,.inventory-item,.admin-item-row,.xpp-equip),
 body.xianxia-theme #store-grid > .store-card,
 body.xianxia-theme #page-admin :is(.admin-collapse-card,.admin-stat-card) {
   background: var(--quiet-surface) !important;
   box-shadow: none !important;
 }
-body.xianxia-theme :is(.quest-card,.dt-item,.dt-create,.pm-card,.pm-compose),
+body.xianxia-theme :is(.quest-card,.dt-item,.dt-create),
 body.xianxia-theme #store-grid > .store-card,
 body.xianxia-theme #page-admin :is(.admin-collapse-card,.admin-stat-card) {
   border-color: var(--quiet-line) !important;

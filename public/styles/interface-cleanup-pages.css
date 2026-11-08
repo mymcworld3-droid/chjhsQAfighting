@@ -43,11 +43,7 @@ html body.ui-cleanup #page-settings .dongfu-profile-card .space-y-4>:is(p,button
 .ui-settings-links {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0 16px}
 html body.ui-cleanup #page-settings .ui-settings-links>button {margin:0;min-height:48px;background:transparent!important;border:1px solid var(--review-line)!important;color:#bbb19c!important;font-weight:400!important;letter-spacing:.02em!important}
 html body.ui-cleanup #page-settings>button[data-i18n="btn_logout"] {border:0;border-top:1px solid var(--review-line);border-radius:0;background:transparent;color:#bb9682;font-weight:400;letter-spacing:.04em}
-/* Shop tabs separate browsing from the player market; products keep rarity cues. */
-html body.ui-cleanup #page-store>#player-market-switch {width:min(100%,420px);margin:0 0 18px;gap:0;padding:3px;background:#ffffff04;border:1px solid var(--review-line);border-radius:9px}
-html body.ui-cleanup #page-store #player-market-switch>button {min-height:44px;border:0!important;border-radius:6px;padding:10px 12px;font-size:13px;font-weight:500;box-shadow:none;white-space:normal}
-html body.ui-cleanup #page-store #player-market-switch>button.active {background:#c5a66b22!important;color:#ead3a1!important}
-html body.ui-cleanup #page-store #player-market-switch>button:not(.active) {background:transparent!important;color:#aaa28f!important}
+/* Shop products keep rarity cues. */
 html body.ui-cleanup #page-store .ui-store-categories {gap:24px;padding:0 0 10px;background:transparent!important;border-radius:0;border-bottom:1px solid var(--review-line)}
 html body.ui-cleanup #page-store .ui-store-categories>.store-tab {flex:0 0 auto;min-height:40px!important;padding:8px 2px;border:0!important;border-radius:0!important;background:transparent!important;font-size:13px!important;color:#969180!important}
 html body.ui-cleanup #page-store .ui-store-categories>.store-tab:is(.active,.active-tab) {color:#e1c58e!important;border-bottom:2px solid #c2a46a!important}
@@ -56,12 +52,6 @@ html body.ui-cleanup #page-store #store-grid {grid-template-columns:repeat(5,min
 html body.ui-cleanup #page-store #store-grid>.store-card {border:1px solid var(--review-line)!important;border-radius:10px!important;box-shadow:none!important;background:#ffffff03!important;padding:14px!important;min-width:0}
 html body.ui-cleanup #page-store #store-grid>.store-card>button {min-height:40px!important;font-weight:500!important;background:#c9ac6d18;border-color:#c9ac6d44}
 html body.ui-cleanup #page-store #store-user-points {font-size:16px;font-variant-numeric:tabular-nums}
-html body.ui-cleanup #page-store #pm-market-load-state:empty {display:none}
-html body.ui-cleanup #player-market .pm-header {padding:16px 0;border:0;background:transparent;box-shadow:none}
-html body.ui-cleanup #player-market .pm-filters {gap:8px;padding-bottom:16px}
-html body.ui-cleanup #player-market .pm-filters>button {min-height:40px;border-radius:6px;background:transparent;border-color:var(--review-line);font-size:12px!important}
-html body.ui-cleanup #player-market .pm-card {border:1px solid var(--review-line)!important;border-radius:10px!important;background:#ffffff03!important;box-shadow:none!important;padding:16px}
-html body.ui-cleanup #player-market .pm-compose {border-color:var(--review-line)!important;background:#ffffff03!important;box-shadow:none!important}
 /* Friends and chat keep their independent scroll areas and notification rules. */
 html body.ui-cleanup #page-social {height:calc(100dvh - 168px);min-height:0;overflow:hidden;flex-shrink:0}
 html body.ui-cleanup #page-social.active-page {display:flex;flex-direction:column}
@@ -136,7 +126,6 @@ html body.ui-cleanup :is(.quest-dialog,.xpp-dialog,.dm-card,.uib-modal) {border-
   html body.ui-cleanup #page-store #store-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px}
   html body.ui-cleanup #page-store #store-grid>.store-card {padding:12px!important}
   html body.ui-cleanup #page-store .ui-store-categories {gap:22px}
-  html body.ui-cleanup #page-store>#player-market-switch {width:100%;margin-bottom:14px}
   html body.ui-cleanup #page-social {height:calc(100dvh - 84px)}
   html body.ui-cleanup #page-social .ui-social-heading h2 {padding-bottom:10px}
   html body.ui-cleanup #page-social #section-friends {padding-top:16px}
@@ -158,19 +147,6 @@ html body.ui-cleanup :is(.quest-dialog,.xpp-dialog,.dm-card,.uib-modal) {border-
  html body.ui-cleanup>.ns-orb-detail[data-ns-portrait-sheet] {border-radius:16px 16px 0 0;padding-bottom:max(16px,env(safe-area-inset-bottom,0px))}
  html body.ui-cleanup>.ns-orb-detail[data-ns-portrait-sheet] p {font-size:13px;line-height:1.6}
 }
-/* The commission form is secondary to the market listings. Keep it reachable
-   with a native disclosure; the renderer preserves the player's open state. */
-html body.ui-cleanup #player-market .pm-compose {padding:0 16px;margin:0 0 18px;border-radius:8px}
-html body.ui-cleanup #player-market .pm-compose>summary {display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;padding:14px 0;cursor:pointer;font-size:14px;color:#d8c39a;list-style:none}
-html body.ui-cleanup #player-market .pm-compose>summary::-webkit-details-marker {display:none}
-html body.ui-cleanup #player-market .pm-compose>summary:after {content:'＋';font-size:18px;color:#b4a17c}
-html body.ui-cleanup #player-market .pm-compose[open]>summary:after {content:'−'}
-html body.ui-cleanup #player-market .pm-compose>summary>span {font-size:11px;color:#948a75;margin-left:auto}
-html body.ui-cleanup #player-market .pm-compose[open] {padding-bottom:16px}
-html body.ui-cleanup #player-market .pm-header small {font-size:10px;font-weight:400}
-html body.ui-cleanup #player-market .pm-header h3 {font-size:22px;font-weight:500}
-html body.ui-cleanup #player-market .pm-header p {max-width:650px;font-size:12px;color:#a99e86}
-html body.ui-cleanup #player-market .pm-grid {gap:14px}
 html body.ui-cleanup #page-battle .bv2-shell>.bv2-head {border:0;border-bottom:1px solid var(--review-line);border-radius:0;background:transparent;box-shadow:none}
 html body.ui-cleanup #page-battle .bv2-head h2 {font-size:23px;font-weight:500}
 html body.ui-cleanup #page-battle .bv2-room-badge {background:#c3a36812;box-shadow:none;border-color:var(--review-line)}
@@ -182,9 +158,5 @@ html body.ui-cleanup #page-battle .bv2-option b {font-size:16px;font-weight:400}
 html body.ui-cleanup #scope-studio :is(.ss-panel,.cs-panel) {border-color:var(--review-line);box-shadow:none;border-radius:9px}
 html body.ui-cleanup #scope-studio :is(.ss-tabs,.cs-page-actions) {box-shadow:none;background:transparent}
 @media(max-width:700px) {
- html body.ui-cleanup #player-market .pm-header {align-items:flex-start;gap:10px}
- html body.ui-cleanup #player-market .pm-header h3 {font-size:20px}
- html body.ui-cleanup #player-market .pm-compose>summary>span {display:none}
- html body.ui-cleanup #player-market .pm-header>b {font-size:12px}
  html body.ui-cleanup #page-battle .bv2-option {min-height:54px;padding:12px 14px}
 }
