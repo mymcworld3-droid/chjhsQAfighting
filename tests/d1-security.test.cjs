@@ -28,12 +28,18 @@ test('D1 browser cannot bypass friend consent or change invitation preferences',
   await assert.rejects(executeCommit(db,{writes:[write('users/alice',{friendInvitesDisabled:true})]},context),e=>e.status===403);
   assert.deepEqual((await db.doc('users/bob').get()).data().friends,[]);
 });
-test('D1 marketplace seller credit requires an atomic listing transition and buyer debit',async()=>{
+test('D1 rejects retired market writes, including complete purchases and admin listings',async()=>{
   const {db}=setup();await db.doc('users/alice').set({uid:'alice',isAdmin:false,stats:{gold:100}});await db.doc('users/bob').set({uid:'bob',stats:{gold:10}});
   await db.doc('marketListings/item').set({sellerUid:'bob',buyerUid:'',price:30,status:'active',completedAtMs:0});
   const ws=[write('users/alice',{'stats.gold':70}),write('users/bob',{'stats.gold':40}),write('marketListings/item',{status:'sold',buyerUid:'alice',completedAtMs:1})];
-  await executeCommit(db,{writes:ws},context);assert.equal((await db.doc('users/bob').get()).data().stats.gold,40);
   await assert.rejects(executeCommit(db,{writes:ws},context),e=>e.status===403);
+  const listing=write('marketListings/new',{sellerUid:'alice',type:'recipe',status:'active',price:30},'set');
+  await assert.rejects(executeCommit(db,{writes:[listing]},context),e=>e.status===403);
+  await db.doc('users/alice').update({isAdmin:true});
+  await assert.rejects(executeCommit(db,{writes:[listing]},context),e=>e.status===403);
+  assert.equal((await db.doc('users/alice').get()).data().stats.gold,100);
+  assert.equal((await db.doc('users/bob').get()).data().stats.gold,10);
+  assert.equal((await db.doc('marketListings/item').get()).data().status,'active');
 });
 test('D1 private documents and public player projection protect email and private learning fields',()=>{
   assert.equal(mayRead({role:'A',path:'exam_logs/x',data:{uid:'bob'},uid:'alice',admin:false}),false);

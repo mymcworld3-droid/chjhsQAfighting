@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
 const directory = path.resolve(__dirname, '../docs/design/interface-cleanup');
 const groups = [
   ['日常與交流', 'overview-pages.jpg', [
-    ['settings', '設定'], ['store', '坊市'], ['market', '玩家交易'],
+    ['settings', '設定'], ['store', '坊市'],
     ['social', '仙盟好友'], ['chat', '全服聊天'], ['history', '答題紀錄'],
     ['rank', '九州仙榜'], ['raid', '秘境試煉'], ['quiz', '問道答題'], ['battle', '論道鬥法']
   ]],

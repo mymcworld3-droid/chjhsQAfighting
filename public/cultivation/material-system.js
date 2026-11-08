@@ -1,7 +1,7 @@
 import { MATERIAL_CATALOG, getMaterialById } from './material-catalog.js';
 
 // 素材本身不再由前端直接連 Firebase。
-// 此模組只提供本地查詢／顯示；實際產出由團本伺服器結算，交易由市集流程處理。
+// 此模組只提供本地查詢／顯示；實際產出由團本伺服器結算。
 (function () {
   'use strict';
 

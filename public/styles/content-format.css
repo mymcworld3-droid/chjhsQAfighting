@@ -92,11 +92,11 @@ body.xianxia-theme :is(.ui-avatar-viewport,.bv2-avatar,.xpp-avatar) > :is(span,i
   grid-area: 1 / 1;
 }
 
-/* The same item may appear in the bag, forge, marketplace, admin and loot view. */
+/* The same item may appear in the bag, forge, admin and loot view. */
 body.xianxia-theme :is(.uib-icon,.uib-modal-icon,.uib-equip-slot-frame.is-artifact,
   .refinery-mat-icon,.refinery-key-icon,.refinery-slot .icon,
   .refinery-recipe-artifact-icon,.refinery-recipe-material-icon,
-  .aam-icon,.amm-icon,.pm-icon,.raid-loot-icon,.dt-preview) img {
+  .aam-icon,.amm-icon,.raid-loot-icon,.dt-preview) img {
   width: 100% !important;
   height: 100% !important;
   min-width: 0;
@@ -109,7 +109,7 @@ body.xianxia-theme :is(.uib-icon,.uib-modal-icon,.uib-equip-slot-frame.is-artifa
   border-radius: 0;
 }
 body.xianxia-theme :is(.uib-icon,.uib-modal-icon,.refinery-mat-icon,.refinery-key-icon,
-  .aam-icon,.amm-icon,.pm-icon,.dt-preview) {
+  .aam-icon,.amm-icon,.dt-preview) {
   display: grid;
   grid-template-columns: minmax(0,1fr);
   grid-template-rows: minmax(0,1fr);
@@ -126,18 +126,17 @@ body.xianxia-theme :is(.btn-cyber-primary,.btn-cyber-accent,.btn-cyber-ghost,.xi
   .dm-action,.dt-generate,.dt-play,.dt-delete,.dt-repair,.dt-next,.dt-back,.dt-exit,
   .dt-report-question,.dt-modal-actions button,.dt-upload,
   .uib-use-btn,.uib-equip-btn,.refinery-clear,
-  .refinery-recipe-craft,.refinery-recipe-market,.revival-pill-use,.core-equip-btn,
+  .refinery-recipe-craft,.revival-pill-use,.core-equip-btn,
   .core-equip-warning-cancel,.core-equip-warning-confirm,.ns-reset-btn,.ns-detail-action,
   .fi-primary,.fi-ghost,.immortal-btn,.five-immortals-help,.dt-entry-start,
-  .aam-add,.aam-add-effect,.aam-admin-list-recipe,.aam-cancel,.aam-save,
+  .aam-add,.aam-add-effect,.aam-cancel,.aam-save,
   .amm-cancel,.amm-save,.aiim-btn,.aiim-stop,.aum-action,
   .bt-primary,.bt-later,.qfd-next,.qfd-later,
   .newbie-tutorial-next,.newbie-tutorial-prev,.newbie-tutorial-skip,
   .golden-core-tutorial-next,.golden-core-tutorial-prev,.golden-core-tutorial-skip,
   .aam-item-actions button,.amm-actions button,.artifact-actions button,
-  .pm-card-foot button,.pm-connection button,.admin-product-close,
+  .admin-product-close,
   .admin-product-editor-actions button),
-body.xianxia-theme #player-market #pm-publish,
 body.xianxia-theme #scope-studio :is(.ss-close,.cs-page-actions button),
 body.xianxia-theme #scope-studio #dongfu-scope-save,
 body.xianxia-theme #store-grid > .store-card > button,
@@ -175,7 +174,6 @@ body.xianxia-theme :is(.bv2-icon-btn,.raid-back,.uib-close,.xpp-close,.dm-close,
 
 /* Category tabs have the same typography; each feature keeps its active color. */
 body.xianxia-theme :is(.store-tab,.quest-tabs button,.training-subtab-v3),
-body.xianxia-theme #player-market .pm-filters button,
 body.xianxia-theme #scope-studio .ss-tabs button {
   box-sizing: border-box;
   min-height: var(--ui-action-height) !important;
@@ -191,19 +189,19 @@ body.xianxia-theme #scope-studio h2 {
   font: 600 clamp(22px,2.4vw,28px)/1.35 var(--ui-serif) !important;
   letter-spacing: .06em;
 }
-body.xianxia-theme :is(.quest-heading h3,.pm-header h3,.uib-modal-head h3,
+body.xianxia-theme :is(.quest-heading h3,.uib-modal-head h3,
   .dt-modal-card h3,.dm-heading,.aam-head h3,.amm-head h3),
 body.xianxia-theme #scope-studio .ss-panel-head strong {
   font: 700 18px/1.45 var(--ui-serif) !important;
 }
-body.xianxia-theme :is(.quest-card h4,.dt-create h4,.dt-library h4,.pm-compose h4,
+body.xianxia-theme :is(.quest-card h4,.dt-create h4,.dt-library h4,
   .xpp-section h3,.cs-stage-title h4) {
   font: 700 16px/1.45 var(--ui-serif) !important;
 }
 
 /* Repeated content cards use the same corners. Fullscreen surfaces and scenic
    home panels keep their existing frame and composition. */
-body.xianxia-theme :is(.quest-card,.dt-item,.dt-create,.pm-card,.pm-compose,
+body.xianxia-theme :is(.quest-card,.dt-item,.dt-create,
   .aam-item,.amm-item,.artifact-item,.refinery-material,.xpp-equip,.uib-item) {
   border-radius: var(--ui-card-radius) !important;
   min-width: 0;
@@ -211,16 +209,16 @@ body.xianxia-theme :is(.quest-card,.dt-item,.dt-create,.pm-card,.pm-compose,
 body.xianxia-theme :is(.dt-modal-card,.xpp-dialog,.uib-modal,.dm-card) {
   border-radius: var(--ui-panel-radius) !important;
 }
-body.xianxia-theme :is(.quest-card-heading,.dt-item-top,.pm-card-head,.aam-copy,
+body.xianxia-theme :is(.quest-card-heading,.dt-item-top,.aam-copy,
   .amm-copy,.xpp-core > div) { min-width: 0; }
 body.xianxia-theme .dt-item-top { flex-wrap: wrap; }
-body.xianxia-theme :is(.dt-item-name,.pm-card-head b,.aam-copy strong,.amm-copy strong,
+body.xianxia-theme :is(.dt-item-name,.aam-copy strong,.amm-copy strong,
   .uib-name,.refinery-mat-copy strong,.artifact-name-row strong) {
   font-family: var(--ui-font);
   font-size: var(--ui-small) !important;
   line-height: 1.5;
 }
-body.xianxia-theme :is(.dt-item-meta,.dt-owner-reward,.pm-seller,.pm-hint,.aam-meta,
+body.xianxia-theme :is(.dt-item-meta,.dt-owner-reward,.aam-meta,
   .amm-meta,.artifact-meta,.uib-toolbar label,.uib-summary span,
   .refinery-mat-copy small,.quest-progress-label,.xpp-equip small) {
   font-family: var(--ui-font);
@@ -228,7 +226,7 @@ body.xianxia-theme :is(.dt-item-meta,.dt-owner-reward,.pm-seller,.pm-hint,.aam-m
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
-body.xianxia-theme :is(.quest-progress-label b,.pm-price-reference,.xpp-stats b,
+body.xianxia-theme :is(.quest-progress-label b,.xpp-stats b,
   .uib-qty,.refinery-mat-qty,.dt-generation-head strong,.dt-result-grid strong) {
   font-variant-numeric: tabular-nums;
 }
@@ -287,7 +285,6 @@ body.xianxia-theme :is(input:not([type="checkbox"]):not([type="radio"]):not([typ
 }
 body.xianxia-theme :is(.input-cyber,.dt-input,.dt-modal textarea),
 body.xianxia-theme #scope-studio :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea),
-body.xianxia-theme #player-market .pm-form :is(input,select),
 body.xianxia-theme .uib-toolbar select {
   font-family: var(--ui-font) !important;
   font-size: 14px !important;

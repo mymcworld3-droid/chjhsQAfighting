@@ -61,8 +61,6 @@ body.xianxia-theme #page-store #store-grid { grid-template-columns: repeat(auto-
   body.xianxia-theme :is(#page-home,#page-store,#page-rank,#page-settings,#page-history,#page-admin) { padding-inline: 12px; }
   body.xianxia-theme :is(#page-store,#page-history) > .sticky:first-child { gap: 8px; flex-wrap: wrap; }
   body.xianxia-theme #page-store > .sticky:first-child > :last-child { flex: none; }
-  body.xianxia-theme #page-store #player-market-switch { margin-block: 8px 12px; }
-  body.xianxia-theme #page-store #player-market-switch button { min-width: 0; white-space: normal; line-height: 1.35; }
   body.xianxia-theme #page-rank .glass-panel { overflow-x: auto; }
   body.xianxia-theme #page-rank table { min-width: 320px; }
   body.xianxia-theme #page-settings > .glass-panel { padding: 16px; margin-bottom: 14px; }

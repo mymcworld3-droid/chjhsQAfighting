@@ -5,7 +5,6 @@ import { getFirebaseProjectServices, ensureSecondaryFirebaseAuth } from '../fire
 export const DOMAIN_PROJECT_ROLES = Object.freeze({
   player: 'A',
   economy: 'A',
-  market: 'A',
   settlement: 'A',
   dongtian: 'BD',
   battle: 'C',
