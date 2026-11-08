@@ -67,19 +67,20 @@ async function persist(state) {
 function sync() {
   const state = account();
   if (!state) return;
-  remember(state, Rules.score(data()));
+  remember(state, Rules.rawScore(data()));
   void persist(state);
 }
 window.getTrainingAccessScore = function () {
   const state = account();
   if (!state) return 0;
-  return Math.max(Rules.score(data()), state?.highest || 0);
+  const highest = Math.max(Rules.rawScore(data()), state.highest);
+  return window.QACultivationRebootClient?.realmScore(highest, data()) ?? highest;
 };
 window.isTrainingPlaceUnlocked = id => {
   const place = Rules.PLACES.find(place => place.id === id);
   return !!data()?.stats && !!place && window.getTrainingAccessScore() >= place.threshold;
 };
-['xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:migration-ready', 'xiuxian:features-ready', 'online']
+['xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:migration-ready', 'xiuxian:features-ready', 'xiuxian:cultivation-path-updated', 'online']
   .forEach(name => window.addEventListener(name, sync));
 globalThis.document?.addEventListener('visibilitychange', () => {
   if (document.visibilityState !== 'hidden') sync();

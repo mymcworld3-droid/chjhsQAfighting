@@ -1,10 +1,3 @@
-import { ARTIFACT_CATALOG, realmOrderByName } from './artifact-catalog.js';
-import {
-  MATERIAL_CATALOG,
-  ARTIFACT_RECIPES,
-  getMaterialById,
-  materialRealmOrderByName
-} from './material-catalog.js';
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import './training-access-rules.js';
@@ -12,7 +5,7 @@ import './golden-core-art.js';
 import { trainingRenderReady, trainingRenderProfile } from './training-render-guard.js';
 
 // 啟動資源預熱：玩家資料已由 main-legacy 載入，本模組只在 startup gate 期間
-// 整理法寶／材料／配方資料，圖片只預熱金丹、修煉場景與材料；法寶圖片按需顯示。
+// 預熱金丹及修煉場景。
 const STARTUP_IMAGE_LIMIT = 48;
 const STARTUP_TIMEOUT_MS = 5200;
 const IMAGE_CONCURRENCY = 4;
@@ -25,10 +18,6 @@ function userData() {
   try { return window.getCurrentUserData?.() || {}; } catch (_) { return {}; }
 }
 
-function qty(value) {
-  return Math.max(0, Math.floor(Number(value) || 0));
-}
-
 function unique(values) {
   return [...new Set(values.filter(Boolean))];
 }
@@ -39,92 +28,17 @@ function dispatchProgress(phase, loaded = 0, total = 0, extra = {}) {
   }));
 }
 
-function recipeMaterialIdsForArtifacts(ids) {
-  const result = [];
-  ids.forEach((artifactId) => {
-    const recipe = ARTIFACT_RECIPES?.[artifactId];
-    const rows = Array.isArray(recipe)
-      ? recipe
-      : (Array.isArray(recipe?.materials) ? recipe.materials : []);
-    rows.forEach((row) => {
-      const id = String(row?.id || row?.materialId || '').trim();
-      if (id) result.push(id);
-    });
-  });
-  return unique(result);
-}
-
-function collectPriorityDefinitions() {
-  const data = userData();
-  const artifactInventory = data?.artifactSystem?.inventory || {};
-  const materialInventory = data?.materialSystem?.inventory || {};
-  const equipped = data?.artifactSystem?.equipped || {};
-
-  const ownedArtifactIds = Object.entries(artifactInventory)
-    .filter(([, count]) => qty(count) > 0)
-    .map(([id]) => id);
-  const equippedArtifactIds = Object.values(equipped).map(String).filter(Boolean);
-  const ownedMaterialIds = Object.entries(materialInventory)
-    .filter(([, count]) => qty(count) > 0)
-    .map(([id]) => id);
-
-  const currentRealmOrder = Math.max(
-    0,
-    Math.min(10, Math.floor(Number(data?.stats?.rankLevel) || 0))
-  );
-
-  const nearbyArtifacts = ARTIFACT_CATALOG
-    .filter((item) => realmOrderByName(item?.realm || '凡人') <= currentRealmOrder + 1)
-    .map((item) => item.id);
-  const nearbyMaterials = MATERIAL_CATALOG
-    .filter((item) => materialRealmOrderByName(item?.realm || '凡人') <= currentRealmOrder + 1)
-    .map((item) => item.id);
-
-  const recipeMaterialIds = recipeMaterialIdsForArtifacts(unique([
-    ...equippedArtifactIds,
-    ...ownedArtifactIds,
-    ...nearbyArtifacts.slice(0, 12)
-  ]));
-
-  const artifactIds = unique([
-    ...equippedArtifactIds,
-    ...ownedArtifactIds,
-    ...nearbyArtifacts
-  ]);
-  const materialIds = unique([
-    ...ownedMaterialIds,
-    ...recipeMaterialIds,
-    ...nearbyMaterials
-  ]);
-
-  return {
-    artifactIds,
-    materialIds,
-    equippedArtifactIds,
-    ownedArtifactIds,
-    ownedMaterialIds,
-    recipeMaterialIds
-  };
-}
-
-function definitionImageUrls(defs) {
-  return unique(defs.map((item) => String(item?.imageUrl || '').trim()));
-}
-
 function trainingSceneImages(orientation) {
   const layout = globalThis.QATrainingSceneLayouts[orientation];
   return [layout.image,
     ...(trainingRenderProfile() === 'safe' ? [] : layout.layers.map(layer => layer.image)),
-    ...Object.values(layout.places).filter(place => !place.painted).map(place => place.sprite.image)];
+    ...globalThis.QATrainingAccessRules.PLACES.map(place => layout.places[place.id])
+      .filter(place => !place.painted).map(place => place.sprite.image)];
 }
 
 function collectStartupImageUrls() {
-  const priority = collectPriorityDefinitions();
   const sceneOrientation = window.matchMedia?.('(orientation: portrait)')?.matches ? 'portrait' : 'landscape';
 
-  const ownedMaterials = priority.ownedMaterialIds.map(getMaterialById).filter(Boolean);
-  const recipeMaterials = priority.recipeMaterialIds.map(getMaterialById).filter(Boolean);
-  const nearbyMaterials = priority.materialIds.map(getMaterialById).filter(Boolean);
   const art = globalThis.QAGoldenCoreArt;
   const training = userData().cultivationTraining || {};
   const coreImages = unique([
@@ -136,19 +50,14 @@ function collectStartupImageUrls() {
     ...coreImages,
     ...SCENE_ART[sceneOrientation],
     ...trainingSceneImages(sceneOrientation),
-    ...definitionImageUrls(ownedMaterials),
-    ...definitionImageUrls(recipeMaterials),
-    ...definitionImageUrls(nearbyMaterials)
   ]);
 
   return {
-    priority,
     coreImageCount: coreImages.length,
     startup: urls.slice(0, STARTUP_IMAGE_LIMIT),
     remaining: unique([
       ...SCENE_ART[sceneOrientation === 'portrait' ? 'landscape' : 'portrait'],
       ...trainingSceneImages(sceneOrientation === 'portrait' ? 'landscape' : 'portrait'),
-      ...definitionImageUrls(MATERIAL_CATALOG)
     ]).filter((url) => !urls.slice(0, STARTUP_IMAGE_LIMIT).includes(url))
   };
 }
@@ -216,26 +125,15 @@ async function prepareStartupResources() {
   // A low-profile launch must not decode the unused high-profile scenery,
   // including the opposite orientation's background warmup queue.
   await trainingRenderReady;
-  dispatchProgress('catalogs', 0, 1);
 
-  // Catalog sync modules are loaded before this module. At this point their
-  // featureReady promises have already resolved, so these arrays are the
-  // authoritative startup snapshot (or their safe defaults after timeout).
   const images = collectStartupImageUrls();
   const snapshot = {
-    artifactCount: ARTIFACT_CATALOG.length,
-    materialCount: MATERIAL_CATALOG.length,
-    recipeCount: Object.keys(ARTIFACT_RECIPES || {}).length,
-    ownedArtifactCount: images.priority.ownedArtifactIds.length,
-    ownedMaterialCount: images.priority.ownedMaterialIds.length,
-    equippedArtifactCount: images.priority.equippedArtifactIds.length,
     coreImageCount: images.coreImageCount || 0,
     startupImageCount: images.startup.length,
     backgroundImageCount: images.remaining.length
   };
 
   window.__xiuxianStartupResourceSnapshot = snapshot;
-  dispatchProgress('catalogs', 1, 1, snapshot);
 
   let result = { total: 0, loaded: 0, failed: 0 };
   if (images.startup.length) {

@@ -96,7 +96,7 @@ test('an ineligible teammate prevents battle start before any party ticket is de
   assert.equal(f.c.docs.get('raidRooms/room12345').status,'waiting');
 });
 
-test('the trial catalog, raid engine and training map agree on the Foundation unlock', ()=>{
+test('legacy raid definitions stay compatible while the map retires the entrance', ()=>{
   const read=name=>fs.readFileSync(path.join(__dirname,'../public/cultivation',name),'utf8');
   const context={};
   vm.runInNewContext(read('raid-engine.js').replace(/^export /gm,'')+'\n'+
@@ -104,8 +104,9 @@ test('the trial catalog, raid engine and training map agree on the Foundation un
     '\nthis.engine=RAID_MVP;this.trial=RAID_TRIALS[0];',context);
   const secret=Rules.PLACES.find(place=>place.id==='secret');
   assert.equal(context.engine.minimumScore,6);
-  assert.equal(context.trial.minimumScore,secret.threshold);
-  assert.equal(context.trial.minimumRealm,secret.realm);
+  assert.equal(context.trial.minimumScore,6);
+  assert.equal(context.trial.minimumRealm,'築基期');
+  assert.equal(secret, undefined);
 });
 
 test('hard/extreme rooms require their own trusted realm and quick matchmaking never downgrades tier',async()=>{

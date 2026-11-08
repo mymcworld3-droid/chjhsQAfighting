@@ -2,27 +2,34 @@
 const { playerRepository } = require('./server-repositories.cjs');
 const { PROJECT_IDS } = require('./firebase-admin-projects.cjs');
 const rules = require('./public/cultivation/quest-rules.js');
+const { stateRef: pathStateRef } = require('./cultivation-reboot-api.cjs');
+const Cultivation = require('./public/cultivation/cultivation-reboot-rules.js');
 const error = (message, status = 409) => Object.assign(new Error(message), { status });
 
 // Claim state lives outside the client-written player document. The same
 // transaction advances the chain and deposits rewards, including materials.
-async function questTransaction(db, uid, request = null, now = new Date()) {
+async function questTransaction(db, uid, request = null, now = new Date(), reboot = false) {
   const date = rules.dateKey(now), userRef = db.collection('users').doc(uid),
     stateRef = db.collection('questStates').doc(uid),
     enlightenmentRef = db.collection('enlightenmentTrialStates').doc(uid);
   return db.runTransaction(async tx => {
-    const [userSnap, stateSnap, enlightenmentSnap] = await Promise.all([tx.get(userRef), tx.get(stateRef), tx.get(enlightenmentRef)]);
+    const [userSnap, stateSnap, enlightenmentSnap, pathSnap] = await Promise.all([
+      tx.get(userRef), tx.get(stateRef), tx.get(enlightenmentRef), reboot ? tx.get(pathStateRef(db, uid)) : null
+    ]);
     if (!userSnap.exists) throw error('玩家資料不存在', 404);
     const user = userSnap.data() || {}, rawState = stateSnap.exists ? stateSnap.data() : {};
     if (user.uid && user.uid !== uid) throw error('玩家身分不符', 403);
     const state = rules.normalizeState(rawState, date);
     const verifiedTrial = enlightenmentSnap.exists ? enlightenmentSnap.data() : null;
+    const pathState = pathSnap?.data() || {};
+    const questView = () => rules.view(user, state, date, verifiedTrial, { reboot,
+      realmScore: Cultivation.realmScore(Cultivation.number(user.stats?.totalScore), pathState) });
     let stateChanged = false;
     // Mint today's assignments once on the server; a new realm or ability score
     // cannot reshuffle missions halfway through the day.
     if (state.commissionDate !== date || state.commissionIds.length !== 2) {
       state.commissionDate = date;
-      state.commissionIds = rules.dailyCommissions(user, uid, date).map(q=>q.id);
+      state.commissionIds = rules.dailyCommissions(user, uid, date, { reboot }).map(q=>q.id);
       state.commissionClaimed = [];
       stateChanged = true;
     }
@@ -36,16 +43,16 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       const list = request.kind === 'path' ? rules.PATH : request.kind === 'daily' ? rules.DAILY
         : request.kind === 'weekly' ? rules.WEEKLY : rules.COMMISSION_POOL;
       const index = list.findIndex(q => q.id === request.id);
-      if (index < 0 || (request.kind === 'commission' && !state.commissionIds.includes(request.id)))
+      if (index < 0 || (reboot && list[index].metric === 'raid') || (request.kind === 'commission' && !state.commissionIds.includes(request.id)))
         throw error('找不到今日指定的委託', 400);
       const duplicate = request.kind === 'path' ? state.pathClaimed.includes(request.id)
         : request.kind === 'commission' ? state.commissionClaimed.includes(request.id)
         : request.kind === 'weekly' && state.weeklyKey === rules.weekKey(date)
           ? state.weeklyClaimed.includes(request.id) : state.dailyClaimed.includes(request.id);
-      const ticketOnly = request.kind === 'path' && duplicate && list[index].reward.drawTickets > 0 &&
+      const ticketOnly = !reboot && request.kind === 'path' && duplicate && list[index].reward.drawTickets > 0 &&
         (state.pathTicketAmounts[request.id] || 0) < list[index].reward.drawTickets;
       if (!duplicate || ticketOnly) {
-        const snapshot = rules.view(user, state, date, verifiedTrial);
+        const snapshot = questView();
         const q = ticketOnly ? snapshot.pathTicketRewards.find(q => q.id === request.id)
           : request.kind === 'path' ? snapshot.path
           : request.kind === 'commission' ? snapshot.commissions.find(q => q.id === request.id)
@@ -83,13 +90,13 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       }
     }
     if (stateChanged) tx.set(stateRef, state);
-    return { ok: true, awarded, reward, quests: rules.view(user, state, date, verifiedTrial),
+    return { ok: true, awarded, reward, quests: questView(),
       drawTickets: Math.max(0, Math.floor(Number(user.soulboundDrawTickets) || 0)),
       balances: { gold: Math.max(0, Number(user.stats?.gold) || 0), totalScore: Math.max(0, Number(user.stats?.totalScore) || 0) },
       materials: Object.fromEntries(['raid-refine-key-ii', 'raid-refine-key-iii'].map(id => [id, Math.max(0, Number(user.materialSystem?.inventory?.[id]) || 0)])) };
   });
 }
-function createHandler({ resolveA = () => playerRepository.resolve(), claim = false, logger = console, now = () => new Date() } = {}) {
+function createHandler({ resolveA = () => playerRepository.resolve(), claim = false, logger = console, now = () => new Date(), reboot = false } = {}) {
   return async (req, res) => {
     res.set?.('Cache-Control', 'no-store');
     try {
@@ -101,15 +108,15 @@ function createHandler({ resolveA = () => playerRepository.resolve(), claim = fa
       if (!identity?.uid || identity.aud !== PROJECT_IDS.A || identity.iss !== 'https://securetoken.google.com/' + PROJECT_IDS.A) throw error('登入身分驗證失敗', 401);
       const request = claim ? { kind: req.body?.kind, id: req.body?.id,
         date: req.body?.date, weeklyKey: req.body?.weeklyKey } : null;
-      return res.json(await questTransaction(a.db, identity.uid, request, now()));
+      return res.json(await questTransaction(a.db, identity.uid, request, now(), reboot));
     } catch (e) {
       if (!e.status) logger.error('[Quests]', e.code || e.message);
       return res.status(e.status || 503).json({ ok: false, error: e.status ? e.message : '任務同步尚未完成，請稍後重試' });
     }
   };
 }
-module.exports = app => {
-  app.get('/api/quests', createHandler());
-  app.post('/api/quests/claim', createHandler({ claim: true }));
+module.exports = (app, options) => {
+  app.get('/api/quests', createHandler(options));
+  app.post('/api/quests/claim', createHandler({ ...options, claim: true }));
 };
 module.exports.__test = { questTransaction, createHandler };

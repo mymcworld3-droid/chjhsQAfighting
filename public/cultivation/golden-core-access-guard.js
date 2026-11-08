@@ -1,4 +1,4 @@
-// 狀態從角色建立起即可查看；築基 6 開背包、煉器；金丹 28 才解鎖金丹功能。
+// 狀態從角色建立起即可查看；築基 6 開行囊，金丹入口依境界與渡劫紀錄解鎖。
 (function () {
   'use strict';
 
@@ -51,7 +51,7 @@
   }
 
   function coreAllowed() {
-    return migrationReady() && (score() >= GOLDEN_CORE_SCORE || window.getTrainingAccessScore?.() >= GOLDEN_CORE_SCORE);
+    return migrationReady() && (window.getTrainingAccessScore?.() ?? score()) >= GOLDEN_CORE_SCORE;
   }
 
   function removeAllTrainingUI() {

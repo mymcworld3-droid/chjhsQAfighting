@@ -84,13 +84,9 @@ test('all major admin areas can collapse and dynamic admin panels are wrapped to
   assert.match(collapsible, /localStorage\.setItem\(STORAGE_KEY/);
 });
 
-test('feature load order syncs catalog before artifact engine and loads admin manager before collapsible wrapper', () => {
-  const syncIndex = main.indexOf("'./cultivation/artifact-catalog-sync.js'");
-  const engineIndex = main.indexOf("'./cultivation/artifact-system.js'");
-  const managerIndex = main.indexOf("'./cultivation/admin-artifact-manager.js'");
-  const collapseIndex = main.indexOf("'./cultivation/admin-panel-collapsible.js'");
-  assert.ok(syncIndex >= 0 && engineIndex > syncIndex);
-  assert.ok(managerIndex >= 0 && collapseIndex > managerIndex);
+test('the feature registry omits retired artifact management and catalog syncing', () => {
+  assert.doesNotMatch(main, /artifact-(?:catalog-sync|system)\.js|admin-artifact-manager\.js/);
+  assert.match(main, /admin-panel-collapsible\.js/);
 });
 
 test('available artifact effects are grouped into collapsible independently scrollable categories', () => {

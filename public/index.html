@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="app-zoom-locked">
 <head>
+    <link rel="stylesheet" href="styles/cultivation-reboot.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <title data-i18n="app_title">青雲問道 · 以學入道</title>
@@ -802,10 +803,10 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <span class="sect-action-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 9c-4-3-8-3-12-2v19c4-1 8-1 12 2 4-3 8-3 12-2V7c-4-1-8-1-12 2zm0 0v19M8 12l4 1m-4 5 4 1m8-6 4-1m-4 7 4-1"/></svg></span>
                         <span class="sect-action-label">境界圖錄</span>
                     </button>
-                    <button id="sect-raid-entry" class="sect-action" type="button" onclick="openRaidHub()">
+                    <button id="sect-cultivation-entry" class="sect-action" type="button" data-open-cultivation-path aria-haspopup="dialog" aria-controls="cultivation-path-dialog">
                         <span class="sect-action-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 26 10 9l6 10 6-14 7 21M7 26h18M14 26v-7h6v7M21 8l3 3M9 12l3 3"/></svg></span>
-                        <span class="sect-action-label">秘境試煉</span>
-                        <span id="sect-raid-ticket-dot" class="sect-action-dot raid-ticket-dot" hidden aria-hidden="true"></span>
+                        <span class="sect-action-label">流派與渡劫</span>
+                        <span class="sect-action-dot" hidden aria-hidden="true"></span>
                     </button>
                 </aside>
 
@@ -854,11 +855,8 @@ body.xianxia-theme main:has(#page-training.active-page),
                 <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true">
                     <i class="fa-solid fa-circle-dot"></i><span>金丹</span>
                 </button>
-                <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false">
-                    <i class="fa-solid fa-hammer"></i><span>煉器</span>
-                </button>
                 <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false">
-                    <i class="fa-solid fa-box-open"></i><span>背包與裝備</span>
+                    <i class="fa-solid fa-box-open"></i><span>行囊</span>
                 </button>
             </div>
 
@@ -1226,13 +1224,7 @@ body.xianxia-theme main:has(#page-training.active-page),
         <div id="page-admin" class="page-section hidden px-4">
             <h2 class="text-xl font-bold text-red-500 mb-4 font-sci mt-4">管理後台</h2>
 
-            <section id="admin-artifact-manager" class="glass-panel p-4 rounded-xl mb-4 admin-preload-shell" data-static-layout="1" data-admin-section-title="法寶管理" data-admin-section-icon="fa-hammer">
-                <div class="aam-head">
-                    <div><h3><i class="fa-solid fa-hammer"></i> 法寶管理</h3><p>法寶資料載入後會直接填入此區，不重新插入面板。</p></div>
-                    <button type="button" class="aam-add" id="admin-artifact-add" disabled><i class="fa-solid fa-plus"></i> 新增法寶</button>
-                </div>
-                <div id="admin-artifact-list" class="aam-list"><div class="text-xs text-gray-500 py-3">載入法寶資料…</div></div>
-            </section>
+
 
             <div class="glass-panel p-4 rounded-xl border border-cyan-500/30 mb-4 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -1330,11 +1322,6 @@ body.xianxia-theme main:has(#page-training.active-page),
                     <span class="text-[10px] font-bold text-gray-500 group-hover:text-cyan-400 group-[.active-nav-btn]:text-cyan-400 transition-colors font-sci tracking-wider" data-i18n="nav_home">宗門</span>
                 </button>
 
-                <button id="nav-contract" type="button" onclick="openSoulboundDraw()" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" disabled aria-disabled="true" aria-label="尋器，金丹境解鎖" title="金丹境解鎖">
-                    <div class="relative p-1"><i class="fa-solid fa-dharmachakra text-lg" aria-hidden="true"></i></div>
-                    <span class="text-[10px]">尋器</span>
-                </button>
-
                 <button onclick="loadStoreItems(); switchToPage('page-store')" class="nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all" data-target="page-store">
                     <div class="relative p-1">
                         <i class="fa-solid fa-store text-xl text-gray-500 group-hover:text-pink-400 group-[.active-nav-btn]:text-pink-400 transition-colors mb-0.5"></i>
@@ -1354,6 +1341,16 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
         </div>
     </nav>
+
+    <dialog id="cultivation-path-dialog" class="cultivation-path-dialog" aria-labelledby="cultivation-path-title">
+        <header class="path-heading">
+            <div><small>問道宗 · 內丹修行</small><h2 id="cultivation-path-title">流派與渡劫</h2>
+                <p>立下傳承，磨礪道基，渡過金丹天劫。</p></div>
+            <button type="button" class="path-close" data-path-close aria-label="關閉修行面板" autofocus>×</button>
+        </header>
+        <div data-path-content></div>
+        <p class="path-feedback" data-path-feedback role="status"></p>
+    </dialog>
 
     <div id="toast-container" class="fixed top-20 right-4 z-[100] flex flex-col gap-2 w-72 pointer-events-none *:pointer-events-auto"></div>
 

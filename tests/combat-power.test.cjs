@@ -68,6 +68,5 @@ test('battle and status snapshot the same combat rating, without touching actual
   assert.match(status, /金丹 · 品質/);
   assert.match(battle, /combatPower: Math\.max\(0, Math\.round\(Number\(window\.getCombatPower\?\.\(\)\.total\)/);
   assert.match(battle, /function playerPowerLabel/);
-  assert.match(bag, /window\.calculateArtifactPower\?\.\(item\)/);
-  assert.match(bag, /法寶戰力/);
+  assert.doesNotMatch(bag, /calculateArtifactPower|法寶戰力/);
 });

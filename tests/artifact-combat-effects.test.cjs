@@ -209,7 +209,7 @@ test('lifesteal, reflect, low-hp bonuses and on-correct shield are present in re
   assert.equal(defense.reflectDamage, 20);
 });
 
-test('artifact system snapshots equipped combat effects and legacy PvP carries them into room state', () => {
+test('both duel entry points retain the shared effect snapshot format', () => {
   assert.match(system, /window\.getArtifactBattleSnapshot/);
   assert.match(system, /BATTLE_RUNTIME_EFFECTS/);
   assert.match(system, /openingShield/);
@@ -226,7 +226,8 @@ test('artifact system snapshots equipped combat effects and legacy PvP carries t
   const systemIndex = main.indexOf("'./cultivation/artifact-system.js'");
   const battleEffectsIndex = main.indexOf("'./cultivation/artifact-battle-effects.js'");
   const battleIndex = main.indexOf("'./cultivation/battle-mode-v2.js'");
-  assert.ok(systemIndex >= 0 && battleEffectsIndex > systemIndex && battleIndex > battleEffectsIndex);
+  assert.equal(systemIndex, -1);
+  assert.ok(battleEffectsIndex >= 0 && battleIndex > battleEffectsIndex);
 });
 
 test('admin guide includes copy-enemy effect and both flat/percentage defensive choices', () => {

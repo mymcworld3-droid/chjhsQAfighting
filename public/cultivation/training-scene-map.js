@@ -10,13 +10,11 @@ const Rules = globalThis.QATrainingAccessRules;
 const Layouts = globalThis.QATrainingSceneLayouts;
 const SVG = 'http://www.w3.org/2000/svg';
 const PAGE = 'page-training';
-const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', refinery: 'forge', bag: 'vault', equipment: 'vault', contract: 'contract', status: 'status' };
+const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', bag: 'vault', status: 'status' };
 const DETAIL_TABS = [
   { id: 'core', name: '金丹', icon: 'fa-circle-dot', threshold: 28, unlock: '金丹境解鎖' },
   { id: 'nascent-soul', name: '元嬰', icon: 'fa-child-reaching', threshold: 68, unlock: '元嬰境解鎖' },
-  { id: 'refinery', name: '煉器', icon: 'fa-hammer', threshold: 6, unlock: '築基期解鎖' },
-  { id: 'contract', name: '契器', icon: 'fa-dharmachakra', threshold: 28, unlock: '金丹境解鎖' },
-  { id: 'bag', name: '背包與裝備', icon: 'fa-box-open', threshold: 6, unlock: '築基期解鎖' }
+  { id: 'bag', name: '行囊', icon: 'fa-box-open', threshold: 6, unlock: '築基期解鎖' }
 ];
 let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
@@ -44,7 +42,7 @@ function loadStyle() {
 }
 function setDetail(placeId) {
   if (!page) return;
-  const place = placeId === 'contract' ? { id: 'contract', name: '契器台' } : Rules.PLACES.find(place => place.id === placeId);
+  const place = Rules.PLACES.find(place => place.id === placeId);
   if (!place) return;
   if (pageNavigation?.isCurrent()) pageNavigation.place = place.id;
   page.classList.remove('training-scene-map-active');
@@ -53,7 +51,7 @@ function setDetail(placeId) {
   page.dataset.trainingPlace = place.id;
   bar.querySelector('strong').textContent = place.name;
   updateDetailTabs();
-  syncContractNavigation();
+  syncTrainingNavigation();
 }
 function updateDetailTabs() {
   if (!page) return;
@@ -110,13 +108,9 @@ function showMap({ focus = false } = {}) {
   if (focus) map.querySelector('.training-place:not(:disabled)')?.focus({ preventScroll: true });
 }
 function openPlace(place, selectedTab = place.tab) {
-  if (selectedTab === 'equipment') selectedTab = 'bag';
   if (place.page) {
-    if (place.page === 'page-raid') window.openRaidHub?.();
-    else {
-      window.switchToPage?.(place.page);
-      if (place.page === 'page-rank') void window.loadLeaderboard?.();
-    }
+    window.switchToPage?.(place.page);
+    if (place.page === 'page-rank') void window.loadLeaderboard?.();
     return;
   }
   const tab = selectedTab === 'status' ? page.querySelector('#training-status-tab')
@@ -289,24 +283,12 @@ function renderScene(next) {
   updateLocks();
   if (focused) plane.querySelector(`[data-training-location="${focused}"]:not(:disabled)`)?.focus({ preventScroll: true });
 }
-function syncContractNavigation() {
-  const contract = document.getElementById('nav-contract');
-  const place = Rules.PLACES.find(place => place.id === 'contract');
-  if (contract) {
-    const locked = !place || !unlocked(place);
-    contract.disabled = locked;
-    contract.setAttribute('aria-disabled', String(locked));
-    contract.setAttribute('aria-label', locked ? '尋器，金丹境解鎖' : '尋器');
-    contract.title = locked ? '金丹境解鎖' : '';
-  }
-  if (!visible()) return;
-  const selected = page.dataset.trainingPlace === 'contract';
-  contract?.classList.toggle('active-nav-btn', selected);
-  document.getElementById('nav-training')?.classList.toggle('active-nav-btn', !selected);
+function syncTrainingNavigation() {
+  if (visible()) document.getElementById('nav-training')?.classList.add('active-nav-btn');
 }
 function updateLocks() {
-  syncContractNavigation();
-  if (!plane) { updateTicketIndicators(); return; }
+  syncTrainingNavigation();
+  if (!plane) { updateGrowthIndicators(); return; }
   for (const place of Rules.PLACES) {
     const button = plane.querySelector(`[data-training-location="${place.id}"]`);
     if (!button) continue;
@@ -317,61 +299,22 @@ function updateLocks() {
     button.querySelector('.training-place-realm').hidden = !locked;
     button.querySelector('.training-place-lock').hidden = !locked;
   }
-  updateTicketIndicators();
+  updateGrowthIndicators();
 }
-function updateTicketIndicators() {
+function updateGrowthIndicators() {
   const player = window.getCurrentUserData?.(), uid = getMainUser()?.uid;
-  const secret = Rules.PLACES.find(place => place.id === 'secret');
   const accountReady = !!uid && !!player?.stats && (!player.uid || player.uid === uid);
-  const ready = accountReady && unlocked(secret) && Number(player.raidTickets?.count) >= 1;
-  const forgeJob = accountReady ? player.refineryJobV1 : null;
-  const forgeReady = !!(forgeJob?.id && Number(forgeJob.readyAtMs || 0) <= Date.now());
   const growth = globalThis.QANascentGrowth;
   const canUpgrade = !!(accountReady && growth?.branches(player.cultivationTraining?.equippedCore)
     .some(branch => growth.status(player, branch.id).ok));
-  const innate=accountReady?globalThis.QAInnateAbility?.status(player):null;
-  const innateReady=!!(innate?.ok&&(!innate.path||innate.canUpgrade));
-  const building = plane?.querySelector('[data-training-location="secret"]');
-  const nav = document.getElementById('nav-training');
-  const home = document.getElementById('sect-raid-entry');
-  for (const [button, host] of [[nav, nav?.querySelector('.training-nav-orb')],
-    [building, building?.querySelector('.training-place-label')], [home, home]]) {
-    if (!button || !host) continue;
-    let dot = host.querySelector('.raid-ticket-dot');
-    if (!dot) {
-      dot = document.createElement('span');
-      dot.className = 'raid-ticket-dot';
-      dot.setAttribute('aria-hidden', 'true');
-      host.appendChild(dot);
-    }
-    const pending = button === nav ? ready || canUpgrade || innateReady || forgeReady : ready;
-    dot.hidden = !pending;
-    const description = [ready ? '尚有團本入場券，可挑戰秘境試煉' : '', button === nav && canUpgrade ? '元嬰有分支可升級' : '',button === nav && innateReady ? '本命神通可覺醒或升階' : '', button === nav && forgeReady ? '煉器已完成，可立即開爐' : ''].filter(Boolean).join('；');
-    if (pending) button.setAttribute('aria-description', description);
-    else button.removeAttribute('aria-description');
-  }
-  // Forge completion is distinct from raid tickets and nascent upgrades.
-  // Keep a dot on the forge building and on the refinery detail tab.
-  const forgeCandidate = plane?.querySelector('[data-training-location="forge"]');
-  const forge = forgeCandidate?.dataset?.trainingLocation === 'forge' ? forgeCandidate : null;
-  const forgeTab = document.querySelector?.('#page-training [data-training-tab="refinery"]');
-  for (const [button, host] of [[forge, forge?.querySelector('.training-place-label')], [forgeTab, forgeTab]]) {
-    if (!button || !host) continue;
-    let dot = host.querySelector('.refinery-ready-dot');
-    if (!dot) {
-      dot = document.createElement('span');
-      dot.className = 'refinery-ready-dot';
-      dot.setAttribute('aria-hidden', 'true');
-      host.appendChild(dot);
-    }
-    dot.hidden = !forgeReady;
-    if (forgeReady) button.setAttribute('aria-description', '煉器完成，請前往八方煉器陣開爐');
-    else button.removeAttribute('aria-description');
-  }
+  const innate = accountReady ? globalThis.QAInnateAbility?.status(player) : null;
+  const innateReady = !!(innate?.ok && (!innate.path || innate.canUpgrade));
   if (growth) {
     const room = plane?.querySelector('[data-training-location="meditation"]');
     const soulTab = document.querySelector?.('#page-training [data-training-tab="nascent-soul"]');
-    for (const [button, host] of [[room, room?.querySelector('.training-place-label')], [soulTab, soulTab]]) {
+    const nav = document.getElementById('nav-training');
+    for (const [button, host] of [[room, room?.querySelector('.training-place-label')], [soulTab, soulTab],
+      [nav, nav?.querySelector('.training-nav-orb')]]) {
       if (!button || !host) continue;
       let dot = host.querySelector('.nascent-upgrade-dot');
       if (!dot) {
@@ -576,14 +519,11 @@ function boot() {
   }, true);
   ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:features-ready', 'xiuxian:training-access-updated',
     'foundation-training-stage-changed', 'golden-core-access-changed'].forEach(name => window.addEventListener(name, sync));
-  window.addEventListener('xiuxian:raid-tickets-updated', updateTicketIndicators);
-  window.addEventListener('material-system-updated', updateTicketIndicators);
-  window.addEventListener('golden-core-equipped-changed', updateTicketIndicators);
-  window.addEventListener('xiuxian:refinery-job-updated', updateTicketIndicators);
-  // Readiness changes with wall-clock time even if the player never opens the forge.
-  setInterval(updateTicketIndicators, 10000);
+  window.addEventListener('material-system-updated', updateGrowthIndicators);
+  window.addEventListener('golden-core-equipped-changed', updateGrowthIndicators);
+  setInterval(updateGrowthIndicators, 10000);
   const navGrid = document.getElementById('nav-grid');
-  if (navGrid) new MutationObserver(updateTicketIndicators).observe(navGrid, { childList:true });
+  if (navGrid) new MutationObserver(updateGrowthIndicators).observe(navGrid, { childList:true });
   window.addEventListener('resize', scheduleFit, { passive: true });
   sync();
 }

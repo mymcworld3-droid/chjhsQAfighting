@@ -4,6 +4,7 @@ const {playerRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity,issueRaidQuestionTicket,readRaidQuestionTicket,assertRaidQuestionTicket}=require('./raid-question-ticket.cjs');
 const {educationCohort,TRIBULATION_SCORE}=require('./world-immortals-cleanup-api.cjs').__test;
 const Combat=require('./immortal-avatar-combat.cjs');
+const Path=require('./cultivation-reboot-api.cjs');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const COLLECTION='immortalAvatarSessions',TTL=60*60*1000,MAX_ROUNDS=24;
 const ROLES=Object.freeze({'ru-xian':{name:'儒仙',subject:'國文'},'fa-xian':{name:'法仙',subject:'社會'},
@@ -35,14 +36,14 @@ function snapshot(state,now=Date.now()){
     intent:Combat.intent(state.style,state.round+1),question:!expired&&state.pendingQuestion?.expiresAtMs>now?publicQuestion(state.pendingQuestion):null,
     lastReview:state.lastReview||null,result:state.result||null,expiresAtMs:state.expiresAtMs};
 }
-async function start(db,uid,body={},now=Date.now()){
+async function start(db,uid,body={},now=Date.now(),reboot=false){
   const role=clean(body.role),style=body.style||'assault';
   if(!ROLES[role]||!Object.hasOwn(Combat.STYLES,style))throw fail('仙位或守擂風格無效',400);
   return db.runTransaction(async tx=>{
     const [playerSnap,sessionSnap,configSnap]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref(db,uid)),
-      tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
+      tx.get(reboot?Path.stateRef(db,uid):db.collection('gameConfig').doc('artifactCatalogV1'))]);
     const user=playerSnap.exists?playerSnap.data():null,cohort=educationCohort(user?.profile?.educationLevel);
-    checkPlayer(user,cohort);
+    checkPlayer(reboot&&user?Path.combatPlayer(user,configSnap.data()):user,cohort);
     const live=sessionSnap.exists?sessionSnap.data():null;
     if(live?.status==='active'&&live.expiresAtMs>now){
       if(live.role!==role||live.cohort!==cohort)throw fail('還有一場化身挑戰，請先返回該場或結束挑戰');
@@ -53,9 +54,11 @@ async function start(db,uid,body={},now=Date.now()){
     const raw=seats[Object.keys(ROLES).indexOf(role)],seat=raw.exists?raw.data():null;
     const ownerSnap=seat?.uid?await tx.get(db.collection('users').doc(seat.uid)):null;
     const target=seat&&eligible(ownerSnap?.exists?ownerSnap.data():null,cohort)?seat:null;
-    const config=configSnap.data()||{},challenger=Combat.snapshot(uid,user,config);
+    const saved=configSnap.data(),config=reboot?{}:saved||{};
+    const build=Combat.snapshot(uid,reboot?Path.combatPlayer(user,saved):user,config);
+    const challenger=reboot?Path.combatSkills(build,saved):build;
     let defender=target?.avatarVersion===2&&target.avatar?structuredClone(target.avatar):
-      target?Combat.snapshot(target.uid,ownerSnap.data(),config):
+      target?Combat.snapshot(target.uid,reboot?{...ownerSnap.data(),artifactSystem:{}}:ownerSnap.data(),config):
         Combat.snapshot('npc-'+role,{displayName:ROLES[role].name+'鎮殿化身',stats:{attack:160,maxHp:1000,totalScore:1268}},config);
     // Defending against your own snapshot is practice. Distinct IDs are required
     // for combat seeds and winner selection even when both builds share an owner.
@@ -68,14 +71,17 @@ async function start(db,uid,body={},now=Date.now()){
     tx.set(ref(db,uid),state);return snapshot(state,now);
   });
 }
-async function configure(db,uid,body={},now=Date.now()){
+async function configure(db,uid,body={},now=Date.now(),reboot=false){
   if(!ROLES[body.role]||!Object.hasOwn(Combat.STYLES,body.style))throw fail('請選擇有效的仙位與守擂風格',400);
   return db.runTransaction(async tx=>{
-    const [p,c]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
-    const user=p.exists?p.data():null,cohort=educationCohort(user?.profile?.educationLevel);checkPlayer(user,cohort);
+    const [p,c]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(reboot?Path.stateRef(db,uid):db.collection('gameConfig').doc('artifactCatalogV1'))]);
+    const user=p.exists?p.data():null,cohort=educationCohort(user?.profile?.educationLevel);
+    const saved=c.data(),projected=reboot&&user?Path.combatPlayer(user,saved):user;
+    checkPlayer(projected,cohort);
     const seatRef=db.collection('worldImmortals').doc(seatId(cohort,body.role)),seat=await tx.get(seatRef);
     if(!seat.exists||seat.data()?.uid!==uid)throw fail('只有在榜仙主能更新自己的守擂化身',403);
-    const avatar=Combat.snapshot(uid,user,c.data()||{});
+    const build=Combat.snapshot(uid,projected,reboot?{}:saved||{});
+    const avatar=reboot?Path.combatSkills(build,saved):build;
     tx.update(seatRef,{avatarVersion:2,avatar,avatarPower:avatar.power,avatarStyle:body.style,
       avatarRevision:crypto.randomUUID(),avatarUpdatedAtMs:now});
     return {ok:true,avatar:fighter(avatar),style:body.style};
@@ -170,20 +176,20 @@ async function abandon(db,uid,body={},now=Date.now()){
     return {ok:true,state:snapshot(state,now)};
   });
 }
-function handler(action,{resolveA=()=>playerRepository.resolve(),clock=()=>Date.now(),logger=console}={}){
+function handler(action,{resolveA=()=>playerRepository.resolve(),clock=()=>Date.now(),logger=console,reboot=false}={}){
   return async(req,res)=>{
     res.set?.('Cache-Control','no-store');
     try{
       const uid=await verifyMainIdentity(req,{resolveA}),db=resolveA().db,now=clock();
       if(action==='status'){const s=await ref(db,uid).get();return res.json({ok:true,state:snapshot(s.exists?s.data():null,now)});}
-      if(action==='start')return res.json({ok:true,state:await start(db,uid,req.body,now)});
-      return res.json(await ({configure,answer,abandon}[action])(db,uid,req.body,now));
+      if(action==='start')return res.json({ok:true,state:await start(db,uid,req.body,now,reboot)});
+      return res.json(await ({configure,answer,abandon}[action])(db,uid,req.body,now,reboot));
     }catch(e){if(!e.status)logger.error('[Immortal avatar]',e.message);
       return res.status(e.status||503).json({ok:false,error:e.status?e.message:'化身戰場同步暫時未完成，請重試原操作'});}
   };
 }
-module.exports=app=>{
-  app.get('/api/immortals/challenge',handler('status'));
-  for(const action of ['start','configure','answer','abandon'])app.post('/api/immortals/challenge/'+action,handler(action));
+module.exports=(app,options)=>{
+  app.get('/api/immortals/challenge',handler('status',options));
+  for(const action of ['start','configure','answer','abandon'])app.post('/api/immortals/challenge/'+action,handler(action,options));
 };
 module.exports.__test={start,configure,prepareQuestion,commitQuestion,answer,abandon,snapshot,handler,revision,eligible,COLLECTION,MAX_ROUNDS};

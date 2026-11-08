@@ -22,7 +22,7 @@ test('active registry and UI no longer expose craft materials or recipe manager'
  assert.match(catalog,/3: 'raid-refine-key-iii'/);
  assert.doesNotMatch(main,/'.\/cultivation\/admin-material-manager\.js'/);
  assert.doesNotMatch(page,/id="admin-material-manager"/);
- assert.match(main,/'\.\/cultivation\/simple-forge\.js'/);
+ assert.doesNotMatch(main,/'\.\/cultivation\/simple-forge\.js'/);
 });
 test('local material catalog cannot mint items or purchase via client',()=>{
  assert.match(sync,/local-fixed-catalog/);
@@ -34,10 +34,11 @@ test('legacy AI discovery and generator endpoints are disabled',()=>{
  const d1=read('d1-browser-api.cjs'),http=read('server.js');
  assert.doesNotMatch(d1,/mayCommitDiscovery/);
  assert.match(d1,/舊版配方與 AI 法寶登錄已停用/);
- assert.match(http,/app\.post\('\/api\/generate-artifact'/);
+ assert.match(http,/'\/api\/generate-artifact'/);
  assert.match(http,/res\.status\(410\)/);
 });
-test('material registry and inventory load before the simple forge UI',()=>{
+test('the satchel loads independently of the retired catalog and forge',()=>{
  const materialSync=main.indexOf("'./cultivation/material-catalog-sync.js'"),materialSystem=main.indexOf("'./cultivation/material-system.js'"),inventory=main.indexOf("'./cultivation/unified-inventory-grid.js'"),forge=main.indexOf("'./cultivation/simple-forge.js'");
- assert.ok(materialSync>=0&&materialSystem>materialSync&&inventory>materialSystem&&forge>inventory);
+ assert.ok(inventory>=0);
+ assert.deepEqual([materialSync,materialSystem,forge],[-1,-1,-1]);
 });

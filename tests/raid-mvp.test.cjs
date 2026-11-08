@@ -99,7 +99,7 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.doesNotMatch(roomApiSource, /MAX_BOSS_ACTIONS/);
   assert.doesNotMatch(roomSource, /maxActions/);
   assert.match(raidSource, /advancingBossAction/);
-  assert.match(serverSource, /registerRaidRoomApi\(app\)/);
+  assert.doesNotMatch(serverSource, /registerRaidRoomApi\(app\)/);
 });
 
 test('raid uses recorded learning difficulty and retains the Wen Dao interface', () => {
@@ -122,7 +122,7 @@ test('raid answers are settled by the server and wrong answers never trigger a l
 });
 
 test('raid UI includes party lobby, join code, responsive fullscreen questions and optional feature loading', () => {
-  assert.match(mainSource, /'\.\/cultivation\/raid-mode\.js'/);
+  assert.doesNotMatch(mainSource, /'\.\/cultivation\/raid-mode\.js'/);
   assert.match(cssSource, /\.raid-question-view\{position:absolute!important;inset:0!important[^}]*height:100%!important/);
   assert.match(cssSource, /\.raid-page\{[^}]*height:100%[^}]*overflow:hidden/);
   assert.match(cssSource, /html\.raid-page-open,body\.raid-page-open\{[^}]*overflow:hidden!important/);

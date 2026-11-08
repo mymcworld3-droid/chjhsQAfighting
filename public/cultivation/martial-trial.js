@@ -14,14 +14,14 @@ import {createInnateAbilityEffect,specialImpactKind,shakeBattleScreen} from './i
  const escape=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
  const count=n=>Math.max(0,Math.round(Number(n)||0));
  const alive=id=>id===serial&&owner===getMainUser()?.uid&&!!document.getElementById('martial-trial-modal');
- const unlocked=()=>Math.max(Number(window.getCurrentUserData?.()?.stats?.totalScore)||0,Number(window.getTrainingAccessScore?.())||0)>=28;
+ const unlocked=()=>(window.getTrainingAccessScore?.() ?? (Number(window.getCurrentUserData?.()?.stats?.totalScore) || 0)) >= 28;
  function loadStyle(){if(!document.getElementById('tower-duel-style')){const link=document.createElement('link');link.id='tower-duel-style';link.rel='stylesheet';link.href='styles/battle-mode-v2.css?v=20261105-shared-stage1';document.head.appendChild(link);}if(document.getElementById('martial-trial-style'))return;const link=document.createElement('link');link.id='martial-trial-style';link.rel='stylesheet';link.href='styles/martial-trial.css?v=20261106-claimed-rewards1';document.head.appendChild(link);}
  async function request(action,body){
   const response=await authenticatedMainFetch('/api/martial-trial'+(action?'/'+action:''),body?{method:'POST',body:JSON.stringify(body)}:{});
   const result=await response.json();if(!response.ok||!result.ok)throw Object.assign(new Error(result.error||'試煉同步失敗'),{status:response.status});return result.state;
  }
  function claimedRewardLabel(){return '<span class="tt-claimed-label"><span aria-hidden="true">✓</span> 已領取</span>';}
- function rewardMarkup(reward,claimed=false){return `<div class="tt-rewards${claimed?' is-claimed':''}">${Rewards.rows(reward).map(row=>`<span>${globalThis.QAItemIcons?.markup(row.icon,{size:20})||''}<b>${escape(row.name)} ×${row.quantity}</b>${claimed?'<span class="tt-reward-check" aria-hidden="true">✓</span>':''}</span>`).join('')}</div>`;}
+ function rewardMarkup(reward,claimed=false){return `<div class="tt-rewards${claimed?' is-claimed':''}">${Rewards.rows(reward).filter(row=>['gold','nascent-soul-essence'].includes(row.icon)).map(row=>`<span>${globalThis.QAItemIcons?.markup(row.icon,{size:20})||''}<b>${escape(row.name)} ×${row.quantity}</b>${claimed?'<span class="tt-reward-check" aria-hidden="true">✓</span>':''}</span>`).join('')}</div>`;}
  function rewardPreview(floor){
   const claimed=state.claimedFloors?.includes(floor),available=floor<=state.bestFloor,ticketPending=state.unclaimedTicketFloors?.includes(floor),bonusPending=state.unclaimedBonusFloors?.includes(floor),complete=claimed&&!ticketPending&&!bonusPending;
   return `<section class="tt-reward-preview ${complete?'is-claimed':''}"><div><strong>第 ${floor} 層首通獎勵</strong><small>${bonusPending?'通關獎勵加碼待補領':ticketPending?'通關抽獎券待補領':complete?claimedRewardLabel()+' · 重打不重複發放':available?'已通關 · 可補領':'首次通關後自動入帳'}</small></div>${rewardMarkup(Rewards.forFloor(floor),complete)}</section>`;

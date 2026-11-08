@@ -3,6 +3,7 @@ const crypto=require('node:crypto');
 const {playerRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity}=require('./raid-question-ticket.cjs');
 const {trustedRaidPlayerSnapshot}=require('./raid-authority.cjs');
+const Path=require('./cultivation-reboot-api.cjs');
 const StudyScope=require('./trial-tower-scope.cjs');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Combat=require('./immortal-avatar-combat.cjs');
@@ -51,17 +52,22 @@ function refreshStudyScope(record,user){
 }
 function economy(user){return {gold:count(user.stats?.gold),forgeFragments:count(user.forgeFragments),drawTickets:count(user.soulboundDrawTickets),
  materials:Object.fromEntries(Object.keys(Rewards.ITEMS).map(id=>[id,count(user.materialSystem?.inventory?.[id])]))};}
-function award(record,user,floors,ticketFloors=[],bonusFloors=[]){
+function award(record,user,floors,ticketFloors=[],bonusFloors=[],reboot=false){
  const allowed=new Set(Rewards.pending(record)),earned=[...new Set(floors)].filter(f=>allowed.has(f));
  const ticketAllowed=new Set(Rewards.ticketBackfill(record)),tickets=[...new Set(ticketFloors)].filter(f=>ticketAllowed.has(f));
  const bonusAllowed=new Set(Rewards.bonusPending(record)),bonuses=[...new Set(bonusFloors)].filter(f=>bonusAllowed.has(f));
  if(!earned.length&&!tickets.length&&!bonuses.length)return null;
  const reward=Rewards.payout(earned,tickets,bonuses);
- const patch={
-  'stats.gold':count(user.stats?.gold)+reward.gold,forgeFragments:count(user.forgeFragments)+reward.forgeFragments,
-  soulboundDrawTickets:count(user.soulboundDrawTickets)+reward.drawTickets
- };
- user.stats||={};user.stats.gold=patch['stats.gold'];user.forgeFragments=patch.forgeFragments;user.soulboundDrawTickets=patch.soulboundDrawTickets;
+ if(reboot){
+  reward.forgeFragments=0;reward.drawTickets=0;
+  reward.materials=Object.fromEntries(Object.entries(reward.materials).filter(([id])=>id==='nascent-soul-essence'));
+ }
+ const patch={'stats.gold':count(user.stats?.gold)+reward.gold};
+ user.stats||={};user.stats.gold=patch['stats.gold'];
+ if(!reboot){
+  patch.forgeFragments=user.forgeFragments=count(user.forgeFragments)+reward.forgeFragments;
+  patch.soulboundDrawTickets=user.soulboundDrawTickets=count(user.soulboundDrawTickets)+reward.drawTickets;
+ }
  user.materialSystem||={};user.materialSystem.inventory||={};
  for(const [id,quantity]of Object.entries(reward.materials)){
   const next=count(user.materialSystem.inventory[id])+quantity;user.materialSystem.inventory[id]=next;patch['materialSystem.inventory.'+id]=next;
@@ -74,7 +80,7 @@ function award(record,user,floors,ticketFloors=[],bonusFloors=[]){
  return {floors:earned,ticketFloors:tickets,bonusFloors:bonuses,reward,patch};
 }
 function result(record,user,now,granted){return {...view(record,now),economy:economy(user),...(granted?{awarded:{floors:granted.floors,ticketFloors:granted.ticketFloors,bonusFloors:granted.bonusFloors,reward:granted.reward}}:{})};}
-function settleQuestion(record,user,q,choice,now,start=record.run,verifiedError=false){
+function settleQuestion(record,user,q,choice,now,start=record.run,verifiedError=false,reboot=false){
  const run=record.run,revising=start.round<run.round,correct=Number.isInteger(choice)?choice===q.correctIndex:null;
  // Keep the entire private pre-round combat state: HP alone cannot restore shields,
  // one-use equipment or innate counters when an approved report corrects a round.
@@ -90,7 +96,7 @@ function settleQuestion(record,user,q,choice,now,start=record.run,verifiedError=
   run.status=outcome.won?(run.floor===MAX_FLOOR?'complete':'cleared'):'defeated';
   if(outcome.won){
    record.bestFloor=Math.max(count(record.bestFloor),run.floor);record.totalWins=count(record.totalWins)+1;
-   granted=award(record,user,[run.floor]);if(granted)run.lastReward={floors:granted.floors,reward:granted.reward};
+   granted=award(record,user,[run.floor],[],[],reboot);if(granted)run.lastReward={floors:granted.floors,reward:granted.reward};
   }
  }
  // A correction/extension may already have prefetched the following question.
@@ -130,18 +136,22 @@ function remember(record,action,body){
  record.lastRequest={id:requestKey(body),signature:signature(action,body)};
  record.recentRequests=[...(record.recentRequests||[]),record.lastRequest].slice(-64);
 }
-async function start(db,uid,body={},now=Date.now()){
+async function start(db,uid,body={},now=Date.now(),reboot=false){
  requestKey(body);
  return db.runTransaction(async tx=>{
-  const [p,s,c]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref(db,uid)),tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
+  const buildRef=reboot?Path.stateRef(db,uid):db.collection('gameConfig').doc('artifactCatalogV1');
+  const [p,s,c]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref(db,uid)),tx.get(buildRef)]);
   if(!p.exists)throw fail('玩家資料不存在',404);
-  const user=p.data();if(Access.score(user)<28)throw fail('金丹境開放試煉之塔',403);
+  const user=p.data(), saved=c.exists?c.data():null;
+  const fighter=reboot?Path.combatPlayer(user,saved):user;
+  if(Access.score(fighter)<28)throw fail('金丹境開放試煉之塔',403);
   const record=s.exists?s.data():{version:1,uid,bestFloor:0,totalWins:0,run:null};
   const repeated=replay(record,'start',body,now);if(repeated)return {...repeated,economy:economy(user)};
   if(record.run?.version===2&&record.run?.expiresAtMs>now&&['active','cleared'].includes(record.run.status))return result(record,user,now);
   const floor=body.floor===undefined?checkpoint(record.bestFloor):Number(body.floor);
   if(!Number.isInteger(floor)||floor<1||floor>checkpoint(record.bestFloor))throw fail('請由已解鎖的試煉起點開始',400);
-  const build=trustedRaidPlayerSnapshot(user,uid,c.exists?c.data():{});
+  const snapshot=trustedRaidPlayerSnapshot(fighter,uid,reboot?{}:saved||{});
+  const build=reboot?Path.combatSkills(snapshot,saved):snapshot;
   // Combat HP stays temporary; only verified first clears award resources.
   build.hp=build.maxHp;build.coreShield=false;build.gender=user.storyProgressV1?.gender==='female'?'female':'male';
   record.knowledgeScope=StudyScope.snapshot(user);record.scopeKey=StudyScope.key(record.knowledgeScope);
@@ -149,7 +159,7 @@ async function start(db,uid,body={},now=Date.now()){
   tx.set(ref(db,uid),record);return result(record,user,now);
  });
 }
-async function act(db,uid,action,body={},now=Date.now()){
+async function act(db,uid,action,body={},now=Date.now(),reboot=false){
  requestKey(body);
  if(!['turn','next','abandon','claim','replace','practice','cancel-practice','hint'].includes(action))throw fail('闖塔操作無效',400);
  if(action==='turn'&&(!Number.isInteger(body.choice)||body.choice<0||body.choice>3||body.tactic!==undefined))throw fail('請選擇題目答案',400);
@@ -160,7 +170,7 @@ async function act(db,uid,action,body={},now=Date.now()){
   const repeated=replay(record,action,body,now);if(repeated)return {...repeated,economy:economy(user)};
   if(action==='claim'){
    if(!record)throw fail('尚無可領取的通關獎勵');
-   const granted=award(record,user,Rewards.pending(record),Rewards.ticketBackfill(record),Rewards.bonusPending(record));
+   const granted=award(record,user,Rewards.pending(record),reboot?[]:Rewards.ticketBackfill(record),Rewards.bonusPending(record),reboot);
    if(granted)tx.update(db.collection('users').doc(uid),granted.patch);
    remember(record,action,body);tx.set(ref(db,uid),record);return result(record,user,now,granted);
   }
@@ -198,12 +208,12 @@ async function act(db,uid,action,body={},now=Date.now()){
     else{
      const start=run.lastTurnStart;
      if(start?.questionId!==q.id||start.runId!==run.runId||start.round!==run.round-1)throw fail('此舊回合缺少完整戰鬥紀錄，無法補算；請由下一回合繼續');
-     const settled=settleQuestion(record,user,q,run.lastTurn.selectedChoice,now,start,true);granted=settled.granted;
+     const settled=settleQuestion(record,user,q,run.lastTurn.selectedChoice,now,start,true,reboot);granted=settled.granted;
      tx.set(db.collection('exam_logs').doc(settled.logKey),settled.log);
     }
    }else{
     if(run.status!=='active'||run.pendingQuestion?.id!==q.id)throw fail('本回合已結束，請重新同步');
-    const settled=settleQuestion(record,user,q,null,now,run,true);granted=settled.granted;
+    const settled=settleQuestion(record,user,q,null,now,run,true,reboot);granted=settled.granted;
     tx.set(db.collection('exam_logs').doc(settled.logKey),settled.log);
    }
    if(granted)tx.update(db.collection('users').doc(uid),granted.patch);
@@ -218,7 +228,7 @@ async function act(db,uid,action,body={},now=Date.now()){
    if(!q||q.id!==body.questionId)throw fail('請先取得本回合題目並作答',409);
    if(q.scopeKey!==StudyScope.key(StudyScope.snapshot(user)))throw fail('出題範圍已變更，請同步戰場後重新取得題目');
    q.help=Math.max(count(q.help),Math.min(3,count(body.help)));
-   const settled=settleQuestion(record,user,q,body.choice,now);granted=settled.granted;
+   const settled=settleQuestion(record,user,q,body.choice,now,run,false,reboot);granted=settled.granted;
    tx.set(db.collection('exam_logs').doc(settled.logKey),settled.log);
    if(granted)tx.update(db.collection('users').doc(uid),granted.patch);
   }
@@ -269,16 +279,17 @@ async function reportInput(db,uid,body,now=Date.now()){
  if(run?.version!==2||run.runId!==body.towerRunId||!q||run.expiresAtMs<=now)throw fail('回報題目已更新，請重新開啟',409);
  return {question:q.q,options:q.opts,correctIndex:q.correctIndex,explanation:q.exp,userReason:body.userReason};
 }
-function handler(action,{resolveA=()=>playerRepository.resolve(),clock=()=>Date.now(),logger=console}={}){
+function handler(action,{resolveA=()=>playerRepository.resolve(),clock=()=>Date.now(),logger=console,reboot=false}={}){
  return async(req,res)=>{
   res.set?.('Cache-Control','no-store');
   try{
    const uid=await verifyMainIdentity(req,{resolveA}),db=resolveA().db,now=clock();
    const state=action==='status'?await status(db,uid,now):
-    action==='start'?await start(db,uid,req.body,now):await act(db,uid,action,req.body,now);
+    action==='start'?await start(db,uid,req.body,now,reboot):await act(db,uid,action,req.body,now,reboot);
+   if(reboot)state.unclaimedTicketFloors=[];
    res.json({ok:true,state});
   }catch(e){if(!e.status)logger.error('[Martial trial]',e.message);res.status(e.status||503).json({ok:false,error:e.status?e.message:'試煉同步未完成，請重試原操作'});}
  };
 }
-module.exports=app=>{app.get('/api/martial-trial',handler('status'));for(const action of ['start','turn','next','abandon','claim','replace','practice','cancel-practice','hint'])app.post('/api/martial-trial/'+action,handler(action));};
+module.exports=(app, options)=>{app.get('/api/martial-trial',handler('status',options));for(const action of ['start','turn','next','abandon','claim','replace','practice','cancel-practice','hint'])app.post('/api/martial-trial/'+action,handler(action,options));};
 module.exports.__test={COLLECTION,MAX_FLOOR,TTL,TURN_DELAY,start,act,status,view,enemy,checkpoint,handler,prepareQuestion,commitQuestion,reportInput};

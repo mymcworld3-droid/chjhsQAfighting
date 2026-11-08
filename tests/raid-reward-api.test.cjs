@@ -84,11 +84,11 @@ test('raid reward grants refinement seals and essence without wood or iron exact
   assert.deepEqual(db.docs.get('users/u1').materialSystem.inventory,before);
 });
 
-test('raid reward API is registered and client claims through settlement repository', () => {
+test('legacy raid reward code stays available for compatibility without a live endpoint', () => {
   const server = read('server.js');
   const raid = read('public/cultivation/raid-mode.js');
   const repository = read('public/cultivation/data/reward-repository.js');
-  assert.match(server, /registerRaidRewardApi\(app\)/);
+  assert.doesNotMatch(server, /registerRaidRewardApi\(app\)/);
   assert.match(raid, /rewardRepository\.claimRaid\(roomId\)/);
   assert.match(repository, /\/api\/raid\/reward/);
   assert.match(repository, /authenticatedMainFetch/);

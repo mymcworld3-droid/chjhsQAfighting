@@ -6,6 +6,7 @@ const fail=(message='無權存取這筆資料',status=403,code='permission-denie
 const same=(a,b)=>JSON.stringify(Codec.encode(a??null))===JSON.stringify(Codec.encode(b??null));
 const changed=(a,b)=>[...new Set([...Object.keys(a||{}),...Object.keys(b||{})])].filter(k=>!same(a?.[k],b?.[k]));
 const only=(keys,allowed)=>keys.every(k=>allowed.includes(k));
+const SERVER_ONLY_COLLECTIONS=new Set(['cultivationRebootStates']);
 const PUBLIC=new Set(['users','worldImmortals','products','gameConfig','system','global_chat','rooms','raidRooms','dongtianIndex']);
 function publicPlayer(data) {
   const keys=['uid','displayName','photoURL','friendCode','equipped','lastActive','createdAt'];
@@ -33,6 +34,7 @@ function buildTarget(db,target) {
   if(target?.role!==db.role)throw fail('資料區不符',400,'invalid-argument');
   const isDocument=target.kind==='doc';
   const path=validPath(target.path,isDocument);
+  if(SERVER_ONLY_COLLECTIONS.has(path.split('/',1)[0]))throw fail();
   if(path.split('/',1)[0]==='marketListings')throw fail('玩家交易市集已關閉');
   if(isDocument)return db.doc(path);
   let query=db.collection(path);
@@ -58,7 +60,7 @@ function requireScopedQuery(query,context) {
 function authorizeWrite({role,path,before,after,context,preview}) {
   const {uid,admin,decoded}=context;
   const [col,id,...nested]=path.split('/');
-  if(nested.length)throw fail();
+  if(nested.length||SERVER_ONLY_COLLECTIONS.has(col))throw fail();
   if(admin)return; // role was read from the authoritative profile BEFORE the transaction.
   if(role==='A'&&col==='gameConfig'&&['artifactCatalogV1','materialCatalogV1'].includes(id)) {
     throw fail('舊版配方與 AI 法寶登錄已停用，請改用武器升階系統');

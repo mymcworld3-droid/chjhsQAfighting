@@ -67,24 +67,9 @@ test('a team member refreshes spent tickets once when a room push announces the 
   stop();
 });
 
-test('sect, training navigation and map indicators share authenticated unlocked ticket state',()=>{
+test('retired ticket reminders are absent from the active training map',()=>{
   const source=read('training-scene-map.js');
-  const start=source.indexOf('function updateTicketIndicators()'),end=source.indexOf('\nfunction fit()',start);
-  let uid='a',player={uid,stats:{totalScore:5},raidTickets:{count:3}};
-  const makeHost=()=>({dot:null,querySelector(){return this.dot;},appendChild(dot){this.dot=dot;},setAttribute(){},removeAttribute(){}});
-  const hostA=makeHost(),hostB=makeHost(),home=makeHost();
-  const button=host=>({querySelector:()=>host,setAttribute(){},removeAttribute(){}});
-  const nav=button(hostA),building=button(hostB);
-  const context={Rules,getMainUser:()=>uid ? {uid} : null,
-    unlocked:place=>Rules.allows(player,place.threshold),
-    plane:{querySelector:()=>building},document:{getElementById:id=>id==='sect-raid-entry'?home:nav,createElement:()=>({setAttribute(){}})},
-    window:{getCurrentUserData:()=>player}};
-  vm.runInNewContext(source.slice(start,end)+'\nthis.update=updateTicketIndicators;',context);
-  const check=visible=>{context.update();assert.equal(hostA.dot.hidden,!visible);assert.equal(hostB.dot.hidden,!visible);assert.equal(home.dot.hidden,!visible);};
-  check(false);player.stats.totalScore=6;check(true);
-  player.raidTickets.count=0;check(false);player.raidTickets.count=1;check(true);
-  player.trainingAccess=Rules.record(player);player.stats.totalScore=0;check(true);
-  uid='b';check(false);uid=null;check(false);
+  assert.doesNotMatch(source, /raid-ticket-dot|sect-raid-entry|openRaidHub/);
 });
 
 test('daily ticket refresh runs at Taiwan midnight and waits for visibility when the page is hidden',()=>{
@@ -106,7 +91,7 @@ test('daily ticket refresh runs at Taiwan midnight and waits for visibility when
 
 test('upgrade reminders use real branch costs, caps, core types and current account without changing points',()=>{
   const Growth = require('../public/cultivation/nascent-growth.js');
-  const source=read('training-scene-map.js'),start=source.indexOf('function updateTicketIndicators()'),end=source.indexOf('\nfunction fit()',start);
+  const source=read('training-scene-map.js'),start=source.indexOf('function updateGrowthIndicators()'),end=source.indexOf('\nfunction fit()',start);
   let uid='a',player;
   const host=()=>({children:[],attributes:{},querySelector(selector){return this.children.find(dot=>dot.className===selector.slice(1))||null;},appendChild(dot){this.children.push(dot);},setAttribute(key,value){this.attributes[key]=value;},removeAttribute(key){delete this.attributes[key];}});
   const navHost=host(),roomHost=host(),secretHost=host(),soulTab=host(),home=host();
@@ -115,8 +100,8 @@ test('upgrade reminders use real branch costs, caps, core types and current acco
   const context={Rules,QANascentGrowth:Growth,getMainUser:()=>uid?{uid}:null,
     unlocked:place=>Rules.allows(player,place.threshold),plane:{querySelector:selector=>selector.includes('meditation')?room:secret},
     document:{getElementById:id=>id==='nav-training'?nav:home,querySelector:()=>soulTab,createElement:()=>({setAttribute(){}})},window:{getCurrentUserData:()=>player}};
-  vm.runInNewContext(source.slice(start,end)+'\nthis.update=updateTicketIndicators;',context);
-  const check=(grow,raid=false)=>{const before=JSON.stringify(player);context.update();assert.equal(JSON.stringify(player),before,'checking badges never spends or migrates resources');assert.equal(!navHost.querySelector('.raid-ticket-dot').hidden,grow||raid);assert.equal(!roomHost.querySelector('.nascent-upgrade-dot').hidden,grow);assert.equal(!soulTab.querySelector('.nascent-upgrade-dot').hidden,grow);assert.equal(!secretHost.querySelector('.raid-ticket-dot').hidden,raid);};
+  vm.runInNewContext(source.slice(start,end)+'\nthis.update=updateGrowthIndicators;',context);
+  const check=grow=>{const before=JSON.stringify(player);context.update();assert.equal(JSON.stringify(player),before,'checking badges never spends or migrates resources');assert.equal(!navHost.querySelector('.nascent-upgrade-dot').hidden,grow);assert.equal(!roomHost.querySelector('.nascent-upgrade-dot').hidden,grow);assert.equal(!soulTab.querySelector('.nascent-upgrade-dot').hidden,grow);assert.equal(secretHost.children.length,0);};
   for(const type of ['ocean','taichu','ningxin','pojing','xingchen','wugou','thunder','reverse','sword']){
     const core={type,grade:5},branches=Growth.branches(core);
     player={uid,stats:{totalScore:68},cultivationTraining:{equippedCore:core},nascentSoulGrowth:{version:1,branches:Object.fromEntries(branches.map(branch=>[branch.id,10]))},materialSystem:{inventory:{[Growth.ITEM_ID]:100}}};
@@ -130,7 +115,7 @@ test('upgrade reminders use real branch costs, caps, core types and current acco
   delete player.cultivationTraining.equippedCore;check(false);
   player.cultivationTraining.equippedCore={type:'sword',grade:5};player.stats.totalScore=67;check(false);
   player.stats.totalScore=68;player.materialSystem.inventory[Growth.ITEM_ID]=0;check(false);
-  player.raidTickets={count:1};check(false,true);
-  player.materialSystem.inventory[Growth.ITEM_ID]=1;check(true,true);
+  player.raidTickets={count:1};check(false);
+  player.materialSystem.inventory[Growth.ITEM_ID]=1;check(true);
   uid='other';check(false);uid=null;check(false);
 });

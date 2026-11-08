@@ -57,28 +57,19 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/cultivation-core-visual.js',
   './cultivation/cultivation-core-equip-warning.js',
   './cultivation/cultivation-combat-stats.js',
-  './cultivation/artifact-catalog-sync.js',
-  './cultivation/material-catalog-sync.js',
-  './cultivation/artifact-system.js',
-  './cultivation/soulbound-draw.js',
   './cultivation/artifact-battle-effects.js',
   './cultivation/combat-power.js',
   './cultivation/player-profile.js',
   './cultivation/friend-requests.js',
-  './cultivation/material-system.js',
   './cultivation/startup-resource-preloader.js',
-  './cultivation/inventory-dismantle.js',
   './cultivation/unified-inventory-grid.js',
-  './cultivation/simple-forge.js',
   './cultivation/training-fluid-layout.js',
   './cultivation/market-fluid-layout.js',
-  './cultivation/material-realm-ui.js',
   './cultivation/content-capacity-layout.js',
-  './cultivation/material-drop-system.js',
   './cultivation/battle-v3-stability-ui.js',
   './cultivation/battle-mode-v2.js',
-  './cultivation/raid-mode.js',
   './cultivation/cultivation-status-panel.js',
+  './cultivation/cultivation-reboot-ui.js',
   './cultivation/martial-trial.js',
   './cultivation/wendao-modes.js',
   './cultivation/training-scene-map.js',
@@ -99,9 +90,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/admin-self-transfer.js',
   './cultivation/admin-account-manager.js',
   './cultivation/admin-player-analytics.js',
-  './cultivation/admin-artifact-manager.js',
-  './cultivation/admin-artifact-delete.js',
-  './cultivation/admin-item-image-manager.js',
   './cultivation/admin-panel-collapsible.js',
   './cultivation/admin-realm-sorting.js',
   './cultivation/admin-single-row-layout.js'
@@ -111,8 +99,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261106-forge-stones-only1';
-const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
+const XIUXIAN_FEATURE_BUILD = '20261108-cultivation-reboot1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 window.__xiuxianFeaturesReady = false;
@@ -129,9 +116,7 @@ async function loadXiuxianFeaturesSafely() {
     }));
     try {
       let loadedModule;
-      if (modulePath === './cultivation/raid-mode.js') {
-        loadedModule = await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
-      } else if (
+      if (
         modulePath === './cultivation/battle-v3-stability-ui.js' ||
         modulePath === './cultivation/battle-mode-v2.js'
       ) {

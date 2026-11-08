@@ -73,7 +73,7 @@
       return `
         <div class="status-core-empty">
           <i class="fa-solid fa-circle-notch"></i>
-          <span>${(Number(window.getCurrentUserData?.()?.stats?.totalScore) || 0) < 28 ? '尚未凝丹 · 金丹境解鎖' : '目前沒有調御中的金丹丹相'}</span>
+          <span>${(window.getTrainingAccessScore?.() || 0) < 28 ? '尚未凝丹 · 金丹境解鎖' : '目前沒有調御中的金丹丹相'}</span>
         </div>
       `;
     }
@@ -237,10 +237,10 @@
           <div class="status-power-sources">
             <div><span>基礎</span><b>${formatStatNumber(power.base)}</b></div>
             <div><span>金丹 · 品質</span><b>${formatStatNumber(power.core)}</b></div>
-            <div><span>裝備 · 境界與屬性</span><b>${formatStatNumber(power.equipment)}</b></div>
           </div>
-          ${power.items?.length ? `<div class="status-power-items">${power.items.map(item => `<span>${escapeHtml(item.name)}（${escapeHtml(item.realm)}） +${formatStatNumber(item.power)}</span>`).join("")}</div>` : ""}
-          <p class="status-power-note">僅計入目前啟用金丹及已裝備法寶；停用金丹不計戰力。戰力不直接增加鬥法傷害。</p>
+          <p class="status-power-note">基礎戰力包含流派與境界屬性；戰力評分與鬥法傷害分開計算。</p>
+          <button type="button" class="path-training-link" data-open-cultivation-path aria-haspopup="dialog"
+            aria-controls="cultivation-path-dialog">流派與渡劫</button>
         </div>
         <div class="status-section status-core-section">
           <div class="status-section-title"><span>目前調御金丹</span><small>調御狀態</small></div>

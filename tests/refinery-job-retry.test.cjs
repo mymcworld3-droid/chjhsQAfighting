@@ -46,7 +46,7 @@ test('retrying discovery after a successful AI response reuses that response and
   assert.doesNotMatch(ui, /人工智慧/);
 });
 
-test('simple forge replaces the old generation modules', () => {
-  assert.match(main, /cultivation\/simple-forge\.js/);
+test('no forge implementation is loaded', () => {
+  assert.doesNotMatch(main, /cultivation\/simple-forge\.js/);
   assert.doesNotMatch(main, /cultivation\/refinery-ai-jobs\.js/);
 });

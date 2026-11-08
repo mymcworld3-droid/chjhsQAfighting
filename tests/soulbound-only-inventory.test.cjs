@@ -121,28 +121,18 @@ test('generation API rejects no-base requests before AI and forces soulbound out
   } finally {router.generateJSON=original;console.error=log;}
 });
 
-test('actual merged inventory renders one soulbound slot and keeps materials visible until selecting that slot',()=>{
-  const user={artifactSystem:{inventory:{[sword.id]:1,'mountain-armor':1},equipped:{護身法寶:'mountain-armor'}},materialSystem:{inventory:{ore:2}}};
+test('actual satchel renders nascent resources without leaking saved legacy gear or material rows',()=>{
+  const Growth=require('../public/cultivation/nascent-growth.js');
+  const user={artifactSystem:{inventory:{[sword.id]:1}},materialSystem:{inventory:{ore:2,[Growth.ITEM_ID]:5}}};
   const window={getCurrentUserData:()=>user};
   const ctx={window,document:{readyState:'loading',addEventListener(){}},localStorage:{getItem:()=>null},
-    ARTIFACT_EQUIP_SLOTS:catalog.active,getArtifactById:catalog.getArtifactById,
-    realmOrderByName:name=>api.REALMS.indexOf(name),materialRealmOrderByName:name=>api.REALMS.indexOf(name),materialRealmColor:()=>'#fff',
-    QANascentGrowth:{prepare:()=>({inventory:{ore:2}})},getMaterialById:()=>ore,
-    MAX_ARTIFACT_RECIPE_NESTING:2,RAID_REFINEMENT_KEYS:{},RAID_CRAFT_MATERIAL_IDS:[],artifactRecipeDepth:()=>0,
-    soulboundItemFrameMarkup:()=>'<span class="frame"></span>'};
-  const code=strip(read('public/cultivation/unified-inventory-grid.js')).replace(/\}\)\(\);\s*$/,`window.renderTest=()=>rootMarkup(collectItems());
-    window.pickTest=()=>{equipmentPickSlot='本命法寶';};})();`);
+    realmOrderByName:name=>api.REALMS.indexOf(name),QANascentGrowth:Growth};
+  const code=strip(read('public/cultivation/unified-inventory-grid.js')).replace('})();', 'window.renderTest=()=>rootMarkup(collectItems());})();');
   vm.runInNewContext(code,ctx);
-  let html=window.renderTest();
-  assert.equal((html.match(/data-uib-empty-slot=/g)||[]).length,1);
-  assert.match(html,/data-uib-empty-slot="本命法寶"/);
-  assert.match(html,/data-uib-item="material:ore"/);
-  assert.match(html,/data-uib-item="artifact:mountain-armor"/);
-  assert.doesNotMatch(html,/class="uib-equipped"/,'obsolete slots must not show as equipped');
-  window.pickTest();html=window.renderTest();
-  assert.match(html,new RegExp('data-uib-item="artifact:'+sword.id+'"'));
-  assert.doesNotMatch(html,/data-uib-item="material:ore"|data-uib-item="artifact:mountain-armor"/);
-  assert.match(html,/data-uib-cancel-equip/);
+  const html=window.renderTest();
+  assert.match(html,/元嬰碎精/);
+  assert.match(html,/×5/);
+  assert.doesNotMatch(html,/data-uib-empty-slot|material:ore|artifact:/);
 });
 
 test('paid soulbound jobs made impossible by the new caps refund their original resources once',async()=>{

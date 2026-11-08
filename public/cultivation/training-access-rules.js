@@ -4,10 +4,7 @@
   const REALMS = Object.freeze([0, 6, 28, 68, 188, 428, 642, 1268, 1868]);
   const PLACES = Object.freeze([
     { id: 'meditation', name: '修煉室', threshold: 28, realm: '金丹境', tab: 'core' },
-    { id: 'forge', name: '鍛造坊', threshold: 6, realm: '築基初期', tab: 'refinery' },
-    { id: 'contract', name: '契器', threshold: 28, realm: '金丹境', tab: 'contract' },
-    { id: 'vault', name: '寶庫', threshold: 6, realm: '築基初期', tab: 'bag' },
-    { id: 'secret', name: '秘境', threshold: 6, realm: '築基期', page: 'page-raid' },
+    { id: 'vault', name: '行囊', threshold: 6, realm: '築基初期', tab: 'bag' },
     { id: 'status', name: '狀態', threshold: 0, realm: '', tab: 'status' },
     { id: 'rank', name: '仙榜', threshold: 0, realm: '', page: 'page-rank' }
   ].map(Object.freeze));
@@ -27,8 +24,12 @@
     const soul = Object.values(player?.nascentSoulGrowth?.branches || {}).some(value => number(value) > 0);
     return core ? (soul ? 68 : 28) : 0;
   }
-  function score(player) {
+  function rawScore(player) {
     return Math.max(number(player?.stats?.totalScore), savedScore(player), legacyScore(player));
+  }
+  function score(player) {
+    const value = rawScore(player);
+    return root.QACultivationRebootClient?.realmScore(value, player) ?? value;
   }
   // Realm breakthroughs permanently add 100 max HP each after Foundation Establishment.
   // Use attained-realm access (including saved highest realm) so correcting an answer
@@ -38,10 +39,10 @@
     return 100 * REALMS.filter(threshold => threshold >= 28 && threshold <= attained).length;
   }
   function record(player, previous = 0) {
-    return { version: 1, highestRealmScore: realmScore(Math.max(score(player), number(previous))) };
+    return { version: 1, highestRealmScore: realmScore(Math.max(rawScore(player), number(previous))) };
   }
   function allows(player, threshold) { return score(player) >= number(threshold); }
-  const api = Object.freeze({ REALMS, PLACES, number, realmScore, savedScore, legacyScore, score, hpBonus, record, allows });
+  const api = Object.freeze({ REALMS, PLACES, number, realmScore, savedScore, legacyScore, rawScore, score, hpBonus, record, allows });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QATrainingAccessRules = api;
 })(globalThis);

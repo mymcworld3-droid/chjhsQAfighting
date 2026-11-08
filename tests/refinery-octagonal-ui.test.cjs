@@ -43,13 +43,12 @@ test('octagonal forge keeps existing functional hooks', () => {
   assert.match(refinery, /querySelector\('\[data-refinery-craft\]'\)\?\.addEventListener\('click', craft\)/);
 });
 
-test('both training stages preload the simplified forge shell', () => {
-  assert.match(training,/training-shared-shells\.js/);
-  assert.match(foundation,/training-shared-shells\.js/);
-  const source=read('public/cultivation/training-shared-shells.js');
-  assert.match(source,/法器煉製/);
-  assert.match(source,/正在載入法器、碎片與升級石/);
-  assert.doesNotMatch(source,/加入材料/);
+test('both training stages keep a satchel loading shell without a refinery tab', () => {
+  for (const file of ['public/cultivation/cultivation-training-v4.js', 'public/cultivation/foundation-training-page.js']) {
+    const source = read(file);
+    assert.match(source, /uib-bag-loading/);
+    assert.doesNotMatch(source, /data-training-tab="refinery"|refineryShellMarkup/);
+  }
 });
 
 test('preloaded index contains octagonal refinery CSS before hydration', () => {

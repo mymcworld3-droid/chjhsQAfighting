@@ -1,5 +1,4 @@
-import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
-// 築基期修煉頁：6～27 修為開放背包與煉器；踏入金丹後交棒給完整修煉模組。
+// 築基期修煉頁：築基開放行囊；踏入金丹後交棒給完整修煉模組。
 (function () {
   'use strict';
 
@@ -19,8 +18,6 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 
   function foundationStage() {
     const value = score();
-    // 築基的背包與煉器屬於基礎修煉功能，只依實際修為解鎖。
-    // 舊角色若缺少 progressionMigrationV2 標記，也不能因此永久失去煉器。
     return !!window.getCurrentUserData?.()?.stats &&
       value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE;
   }
@@ -52,7 +49,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 
   function bagMarkup() {
     // 真正背包由 unified-inventory-grid 接手；不要先畫舊式純文字卡。
-    return equipmentShellMarkup() + '<section class="uib-bag-loading" aria-hidden="true"></section>';
+    return '<section class="uib-bag-loading" aria-hidden="true"></section>';
   }
 
   function createPage() {
@@ -67,8 +64,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       page.innerHTML = `
         <div class="training-page-heading-v3"></div>
         <div class="training-subtabs-v3" role="tablist">
-          <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-          <button type="button" class="training-subtab-v3 active" data-training-tab="bag" aria-selected="true"><i class="fa-solid fa-box-open"></i><span>背包與裝備</span></button>
+          <button type="button" class="training-subtab-v3 active" data-training-tab="bag" aria-selected="true"><i class="fa-solid fa-box-open"></i><span>行囊</span></button>
         </div>
         <div id="training-tab-content">${bagMarkup()}</div>
       `;
@@ -93,8 +89,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
     const tabs = page.querySelector('.training-subtabs-v3');
     if (tabs && !tabs.querySelector('[data-training-tab="bag"]')) {
       tabs.insertAdjacentHTML('afterbegin', `
-        <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-        <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包與裝備</span></button>
+        <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>行囊</span></button>
       `);
     }
     page.querySelector('[data-training-tab="equipment"]')?.remove();
@@ -120,26 +115,6 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       return window.beginSceneTransition?.(content, content, 'alchemy', 'training-tab', true,
         next > (current < 0 ? tabs.length - 1 : current) ? 1 : -1);
     }
-
-    page.querySelector('[data-training-tab="refinery"]')?.addEventListener('click', () => {
-      if (!foundationStage()) return;
-      const finishTransition = beginTabSlide('refinery');
-      // 同一個入口交給煉器模組負責狀態、內容與事件，避免兩個 click handler
-      // 在使用者快速切換時互相覆寫。模組尚未準備好時才顯示預載殼層。
-      const content = page.querySelector('#training-tab-content');
-      if (typeof window.openCultivationRefinery === 'function') {
-        window.openCultivationRefinery();
-      } else {
-        page.querySelectorAll('[data-training-tab]').forEach((tab) => {
-          const selected = tab.dataset.trainingTab === 'refinery';
-          tab.classList.toggle('active', selected);
-          tab.setAttribute('aria-selected', selected ? 'true' : 'false');
-        });
-        if (content && !content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
-        window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
-      }
-      finishTransition?.();
-    });
 
     page.querySelector('[data-training-tab="bag"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;

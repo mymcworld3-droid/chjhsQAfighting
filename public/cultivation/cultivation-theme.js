@@ -76,7 +76,7 @@
 
   function openRealmAtlas() {
     document.getElementById('xiuxian-realm-atlas')?.remove();
-    const current = realmFor(score());
+    const current = realmFor(window.QACultivationRebootClient?.realmScore(score()) ?? score());
     const grouped = REALMS.filter((realm, index) => index === 0 || realm.name !== REALMS[index - 1].name);
     const dialog = document.createElement('div');
     dialog.id = 'xiuxian-realm-atlas';
@@ -183,8 +183,10 @@
     rewriteLabels();
 
     const value = score();
-    const realm = progressFor(value)?.realm || realmFor(value);
-    const next = nextRealm(value);
+    const access = window.QACultivationRebootClient?.realmScore(value) ?? value;
+    const realm = progressFor(access)?.realm || realmFor(access);
+    const next = nextRealm(access);
+    const awaitingTrial = next?.need === 28 && access < next.need && value >= next.need;
 
     const avatarContainer = document.getElementById('home-avatar-container');
     const avatarSlot = document.getElementById('xiuxian-avatar-slot');
@@ -212,15 +214,15 @@
     if (sub) sub.textContent = realm.sub;
 
     const bar = document.getElementById('xiuxian-progress');
-    if (bar) bar.style.width = `${pct(value)}%`;
+    if (bar) bar.style.width = `${awaitingTrial ? 100 : pct(access)}%`;
 
     const nextEl = document.getElementById('xiuxian-next');
-    if (nextEl) nextEl.textContent = next?.name === '真仙' && value >= next.need ? '需登上九州五大仙榜' : next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已成真仙';
+    if (nextEl) nextEl.textContent = awaitingTrial ? '待渡金丹天劫' : next?.name === '真仙' && value >= next.need ? '需登上九州五大仙榜' : next ? `${Math.max(0, next.need - value).toLocaleString()} 修為` : '已成真仙';
 
     const label = document.getElementById('xiuxian-progress-label');
     if (label) label.textContent = next?.name === '真仙' && value >= next.need ? '半仙已成 · 爭奪真仙席位' : next ? `下一境界：${next.name} ${next.sub}` : '榜上有名，位列真仙';
 
-    const retraining=window.QAVoidRetraining?.phase(value)>=0;
+    const retraining=window.QAVoidRetraining?.phase(access)>=0;
     realmEl?.classList?.toggle?.('is-retraining',retraining);
     rank?.classList?.toggle?.('is-retraining',retraining);
     const note=document.getElementById('xiuxian-retraining');

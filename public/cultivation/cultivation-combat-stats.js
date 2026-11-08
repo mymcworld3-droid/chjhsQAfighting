@@ -47,8 +47,10 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
     const base = normalized(data?.stats || {});
     const realmHp = window.QATrainingAccessRules?.hpBonus(data) || 0;
     // Realm/元嬰 bonuses are projections. Never add them to permanent stats.maxHp.
-    const projectedMaxHp = base.maxHp + realmHp;
-    const projected = { ...base, maxHp: projectedMaxHp,
+    const path = window.QACultivationRebootClient?.bonuses(data);
+    const attack = base.attack + (path?.attack || 0);
+    const projectedMaxHp = base.maxHp + realmHp + (path?.maxHp || 0);
+    const projected = { attack, maxHp: projectedMaxHp,
       hp: Math.round(projectedMaxHp * (base.hp / base.maxHp)) };
     const soul = window.getNascentSoulBattleSnapshot?.();
     if (!soul) return projected;
@@ -56,7 +58,7 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
     const hpFlat = Math.max(0, Math.min(10000, Math.round(Number(soul.maxHpFlat) || 0)));
     const maxHp = projected.maxHp + hpFlat;
     return {
-      attack: base.attack + attackFlat,
+      attack: attack + attackFlat,
       maxHp,
       hp: Math.max(0, Math.min(maxHp, Math.round(maxHp * (base.hp / base.maxHp))))
     };

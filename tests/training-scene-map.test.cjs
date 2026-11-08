@@ -43,61 +43,23 @@ test('new accounts see Status; existing Foundation and Golden Core gates are at 
   const player = { stats: { totalScore: 0 } };
   assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status', 'rank']);
   player.stats.totalScore = 6;
-  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'vault', 'secret', 'status', 'rank']);
+  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['vault', 'status', 'rank']);
   player.stats.totalScore = 28;
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);
 });
 
-test('contract navigation retains the permanent Golden Core gate and selects only its own tab', () => {
+test('the training map routes to the existing nav without a contract destination', () => {
   const source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
-  const player = { stats: { totalScore: 0 } }, page = { dataset: {} };
-  const make = () => ({ disabled: true, attributes: {}, selected: false,
-    setAttribute(name, value) { this.attributes[name] = value; },
-    classList: { toggle(_name, value) { this.owner.selected = value; } } });
-  const contract = make(), training = make();
-  contract.classList.owner = contract; training.classList.owner = training;
-  let visible = true;
-  const context = { page, Rules, visible: () => visible,
-    unlocked: place => !!player.stats && Rules.allows(player, place.threshold),
-    document: { getElementById: id => id === 'nav-contract' ? contract : training } };
-  vm.createContext(context);
-  const start = source.indexOf('function syncContractNavigation() {');
-  vm.runInContext(source.slice(start, source.indexOf('\nfunction updateLocks()', start)), context);
-  context.syncContractNavigation(); assert.equal(contract.disabled, true);
-  player.stats.totalScore = 27;
-  context.syncContractNavigation(); assert.equal(contract.disabled, true);
-  player.stats.totalScore = 28; player.trainingAccess = Rules.record(player);
-  context.syncContractNavigation(); assert.equal(contract.disabled, false);
-  assert.equal(contract.attributes['aria-disabled'], 'false');
-  assert.equal(training.selected, true); assert.equal(contract.selected, false);
-  page.dataset.trainingPlace = 'contract'; context.syncContractNavigation();
-  assert.equal(training.selected, false); assert.equal(contract.selected, true);
-  page.dataset.trainingPlace = 'forge'; context.syncContractNavigation();
-  assert.equal(training.selected, true); assert.equal(contract.selected, false);
-  player.stats.totalScore = 0; context.syncContractNavigation();
-  assert.equal(contract.disabled, false, 'earned access survives cultivation deductions');
-  visible = false; training.selected = false;
-  context.syncContractNavigation(); assert.equal(training.selected, false, 'other pages keep their navigation selection');
+  assert.doesNotMatch(source, /nav-contract|openSoulboundDraw/);
+  assert.match(source, /function syncTrainingNavigation\(\)/);
+  assert.equal(Rules.PLACES.some(place => place.id === 'contract'), false);
 });
 
-test('compact contract entrance sits beside the forge and opens its existing tab', () => {
-  const contract = Rules.PLACES.find(place => place.id === 'contract');
-  assert.equal(contract.name, '契器');
-  assert.equal(contract.threshold, 28);
-  for (const layout of Object.values(Layouts)) {
-    const forge = layout.places.forge.bounds, altar = layout.places.contract.bounds;
-    assert.ok(altar[2] < forge[2]);
-    assert.ok(altar[0] >= forge[0] + forge[2]);
-    assert.ok(altar[0] - forge[0] - forge[2] < layout.width * .03);
-  }
-  const calls = [], source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
-  const context = { window: { resetTrainingScroll() {} },
-    page: { querySelector(selector) { assert.equal(selector, '[data-training-tab="contract"]'); return { click: () => calls.push('contract') }; } },
-    setDetail: id => calls.push(id), bar: { querySelector: () => ({ focus() {} }) } };
-  vm.createContext(context);
-  vm.runInContext(source.slice(source.indexOf('function openPlace('), source.indexOf('\nasync function animate')) + '\nthis.openPlace = openPlace;', context);
-  context.openPlace(contract);
-  assert.deepEqual(calls, ['contract', 'contract']);
+test('the existing vault opens the satchel at its training map location', () => {
+  const vault = Rules.PLACES.find(place => place.id === 'vault');
+  assert.equal(vault.threshold, 6);
+  assert.equal(vault.tab, 'bag');
+  for (const layout of Object.values(Layouts)) assert.ok(layout.places.vault.bounds);
 });
 
 test('entrance unlocks are monotonic through deductions and remote account restores', () => {
@@ -146,7 +108,7 @@ test('both integrated scene plates match their assets and contain non-overlappin
     assert.equal(file.readUInt32BE(16), layout.width, `${name} image width`);
     assert.equal(file.readUInt32BE(20), layout.height, `${name} image height`);
     assert.ok(Math.abs(layout.width / layout.height - (name === 'portrait' ? 9 / 16 : 16 / 9)) < .001);
-    assert.deepEqual(Object.keys(layout.places).sort(), Rules.PLACES.map(place => place.id).sort());
+    assert.ok(Rules.PLACES.every(place => Object.hasOwn(layout.places, place.id)));
     const regions = Object.values(layout.places);
     for (const region of regions) {
       const sprite = region.sprite;

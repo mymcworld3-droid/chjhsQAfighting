@@ -52,7 +52,8 @@ test('combat and cultivation read generic artifact effects without artifact-spec
   const combatIndex = main.indexOf("'./cultivation/cultivation-combat-stats.js'");
   const artifactIndex = main.indexOf("'./cultivation/artifact-system.js'");
   const battleIndex = main.indexOf("'./cultivation/battle-mode-v2.js'");
-  assert.ok(combatIndex >= 0 && artifactIndex > combatIndex && battleIndex > artifactIndex);
+  assert.equal(artifactIndex, -1);
+  assert.ok(combatIndex >= 0 && battleIndex > combatIndex);
 
   assert.match(system, /window\.getCombatStats = wrapped/);
   assert.match(system, /timed_attack_multiplier/);

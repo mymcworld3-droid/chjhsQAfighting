@@ -18,8 +18,7 @@ test('artifact delete uses trusted backend instead of client-wide Firestore acce
   assert.match(del, /requestArtifactDeletion\('preview', itemId\)/);
   assert.match(del, /requestArtifactDeletion\('delete', itemId\)/);
   assert.doesNotMatch(del, /getFirestore|getDocs\(|writeBatch\(|collection\(db, 'users'\)/);
-  assert.match(server, /registerAdminArtifactDeleteApi/);
-  assert.match(server, /registerAdminArtifactDeleteApi\(app\)/);
+  assert.doesNotMatch(server, /registerAdminArtifactDeleteApi\(app\)/);
 });
 
 test('backend verifies A identity and administrator role before scanning players', () => {
@@ -64,10 +63,7 @@ test('artifact delete button appears only for existing editor records', () => {
   assert.match(del, /ARTIFACT_CATALOG\.some\(item => item\.id === itemId\)/);
 });
 
-test('delete enhancer loads after artifact manager and before admin collapsible wrapper', () => {
-  const managerIndex = main.indexOf("'./cultivation/admin-artifact-manager.js'");
-  const deleteIndex = main.indexOf("'./cultivation/admin-artifact-delete.js'");
-  const collapseIndex = main.indexOf("'./cultivation/admin-panel-collapsible.js'");
-  assert.ok(managerIndex >= 0 && deleteIndex > managerIndex);
-  assert.ok(collapseIndex > deleteIndex);
+test('artifact admin tools are retired while general admin controls still load', () => {
+  assert.doesNotMatch(main, /admin-artifact-(?:manager|delete)\.js/);
+  assert.match(main, /admin-panel-collapsible\.js/);
 });

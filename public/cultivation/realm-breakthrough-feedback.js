@@ -43,7 +43,8 @@
     const data = window.getCurrentUserData?.();
     if (!data?.stats) return null;
     const value = Number(data.stats.totalScore);
-    return Number.isFinite(value) ? Math.max(0, value) : null;
+    if (!Number.isFinite(value)) return null;
+    return window.QACultivationRebootClient?.realmScore(Math.max(0, value), data) ?? Math.max(0, value);
   }
 
   function realmIndexFor(value) {
@@ -201,7 +202,10 @@
     }
     const previousIndex=lastRealmIndex,previousView=lastRealmView,previousStep=lastRealmStep;
     lastRealmIndex=currentIndex;lastRealmStep=currentStep;lastRealmView=currentView;
-    if(currentStep>previousStep)showBreakthrough(previousIndex,currentIndex,previousView,currentView);
+    const displayedInTrial = previousIndex < 9 && currentIndex >= 9 &&
+      document.getElementById('cultivation-path-dialog')?.open;
+    if (currentStep > previousStep && !displayedInTrial)
+      showBreakthrough(previousIndex,currentIndex,previousView,currentView);
   }
 
   window.showFirstQiBreakthrough = async () => {

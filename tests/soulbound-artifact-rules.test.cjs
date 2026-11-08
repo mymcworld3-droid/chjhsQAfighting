@@ -315,15 +315,15 @@ test('an already-paid old known job upgrades on opening and a failed commit retr
   assert.deepEqual(docs.get('users/tester'),before);
 });
 
-test('legacy and known-recipe paths block minting while equipment slot stays operable', () => {
+test('legacy forge code stays closed and the satchel retires its equipment entry', () => {
   const legacy = read('public/cultivation/artifact-system.js');
   const jobs = read('public/cultivation/refinery-ai-jobs.js');
   const equip = read('public/cultivation/unified-inventory-grid.js');
   assert.match(legacy, /async function craftArtifact\(\) \{\s*throw new Error\('鍛造僅開放本命法器精煉/);
   assert.match(jobs, /hasSoulboundBase/);
   assert.match(jobs, /realSoulboundSource/);
-  assert.match(equip, /點擊選擇本命法器/);
-  assert.match(equip, /data-uib-empty-slot/);
-  assert.match(equip, /window\.openSoulboundDraw/);
+  assert.doesNotMatch(equip, /點擊選擇本命法器/);
+  assert.doesNotMatch(equip, /data-uib-empty-slot/);
+  assert.doesNotMatch(equip, /window\.openSoulboundDraw/);
   assert.match(read('docs/design/soulbound-artifact-rules.md'), /常駐契器台已實作/);
 });

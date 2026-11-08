@@ -45,7 +45,7 @@ test('Status opens at account creation, Foundation features at 6, Golden Core at
   assert.match(guard, /html:not\(\.training-access-ready\) #nav-training/);
   assert.doesNotMatch(guard, /html:not\(\.golden-core-access-ready\) #training-status-tab/);
   assert.doesNotMatch(readRoot('index.html'), /html:not\(\.golden-core-access-ready\) #training-status-tab/);
-  assert.match(guard, /migrationReady\(\) && \(score\(\) >= GOLDEN_CORE_SCORE \|\| window\.getTrainingAccessScore\?\.\(\) >= GOLDEN_CORE_SCORE\)/);
+  assert.match(guard, /migrationReady\(\) && \(window\.getTrainingAccessScore\?\.\(\) \?\? score\(\)\) >= GOLDEN_CORE_SCORE/);
   assert.match(guard, /\[data-training-tab="core"\]/);
   assert.match(statusPanel, /function ensureInitialStatusShell\(\)/);
   assert.match(statusPanel, /window\.isFoundationTrainingStage\?\.\(\) \|\| window\.isGoldenCoreUnlocked\?\.\(\)/);
@@ -56,7 +56,7 @@ test('Status opens at account creation, Foundation features at 6, Golden Core at
   assert.match(foundationTraining, /value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
   assert.doesNotMatch(foundationTraining, /return migrationReady\(\) && value >= FOUNDATION_SCORE/);
   assert.match(foundationTraining, /data-training-tab="bag"/);
-  assert.match(foundationTraining, /data-training-tab="refinery"/);
+  assert.doesNotMatch(foundationTraining, /data-training-tab="refinery"/);
   assert.match(foundationTraining, /if \(coreTab\) coreTab\.disabled = true/);
   assert.match(foundationTraining, /const preserveStatus = !!page\.querySelector\('#training-status-tab\.active'\)/);
   assert.match(foundationTraining, /if \(tabs && !tabs\.querySelector\('\[data-training-tab="bag"\]'\)\)/);
@@ -308,10 +308,10 @@ test('grade and subject preferences are optional Dongfu settings, and navigation
 
 
 
-test('Foundation refinery access does not depend on the legacy migration marker', () => {
-  assert.match(foundationTraining, /築基期修煉頁：6～27 修為開放背包與煉器/);
+test('Foundation satchel access does not depend on the legacy migration marker', () => {
+  assert.match(foundationTraining, /築基期修煉頁：築基開放行囊/);
   assert.match(foundationTraining, /return !!window\.getCurrentUserData\?\.\(\)\?\.stats[\s\S]*value >= FOUNDATION_SCORE && value < GOLDEN_CORE_SCORE/);
-  assert.match(guard, /築基 6 開背包、煉器/);
+  assert.match(guard, /築基 6 開行囊/);
   assert.doesNotMatch(guard, /function trainingAllowed\(\) \{\s*return migrationReady\(\)/);
-  assert.match(guard, /function coreAllowed\(\) \{\s*return migrationReady\(\) && \(score\(\) >= GOLDEN_CORE_SCORE \|\| window\.getTrainingAccessScore\?\.\(\) >= GOLDEN_CORE_SCORE\)/);
+  assert.match(guard, /function coreAllowed\(\) \{\s*return migrationReady\(\) && \(window\.getTrainingAccessScore\?\.\(\) \?\? score\(\)\) >= GOLDEN_CORE_SCORE/);
 });

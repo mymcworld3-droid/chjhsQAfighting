@@ -27,10 +27,10 @@ test('inventory and refinery adapt across desktop tablet and mobile widths', () 
   assert.match(layout, /refinery-material-roll-body[\s\S]*overflow:auto!important/);
 });
 
-test('fluid training layout loads after the simplified refinery', () => {
-  const refinery = main.indexOf("'./cultivation/simple-forge.js'");
+test('fluid training layout loads after the satchel', () => {
+  const inventory = main.indexOf("'./cultivation/unified-inventory-grid.js'");
   const fluid = main.indexOf("'./cultivation/training-fluid-layout.js'");
-  assert.ok(refinery >= 0 && fluid > refinery);
+  assert.ok(inventory >= 0 && fluid > inventory);
 });
 
 

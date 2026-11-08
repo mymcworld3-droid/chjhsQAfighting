@@ -1,7 +1,6 @@
 import {} from './golden-core-pity.js';
 import './golden-core-art.js';
 import {} from './soul-talents.js';
-import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {} from './nascent-growth.js';
 import {} from './innate-ability.js';
@@ -172,7 +171,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     {
       id: 'thunder', name: '萬劫雷霆丹', icon: '⚡', tone: 'thunder',
       effect(grade) {
-        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；答對時有 ${chanceByGrade(grade, 30, 5, 70)}% 機率使本回合反擊傷害 +75%（與元嬰、法寶加成相加，例如法寶 16% 觸發後變 91%；基於實際普通承傷，不含真傷；團本持續至下次首領攻擊，不疊加）。`;
+        return `進入下一境界前最後 ${breakthroughPercent(grade)}% 的修為區間時，悟道成功額外 +1 修為；答對時有 ${chanceByGrade(grade, 30, 5, 70)}% 機率使本回合反擊傷害 +75%（與元嬰加成相加，基於實際普通承傷，不含真傷）。`;
       },
       ability: '以雷劫淬丹，答對蓄雷，受擊反攻。',
       upkeep: '須先答對蓄雷，再承受攻擊；未受擊不造成額外傷害。',
@@ -326,11 +325,11 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   }
 
   function isUnlocked() {
-    return currentScore() >= GOLDEN_CORE_SCORE || window.getTrainingAccessScore?.() >= GOLDEN_CORE_SCORE;
+    return (window.getTrainingAccessScore?.() ?? currentScore()) >= GOLDEN_CORE_SCORE;
   }
 
   function nascentUnlocked() {
-    return currentScore() >= NASCENT_SOUL_THRESHOLD || window.getTrainingAccessScore?.() >= NASCENT_SOUL_THRESHOLD;
+    return (window.getTrainingAccessScore?.() ?? currentScore()) >= NASCENT_SOUL_THRESHOLD;
   }
 
   function loadStyle() {
@@ -535,7 +534,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
   function nascentSoulTabMarkup() {
     if (!nascentUnlocked()) return '<section class="ns-panel"><h3>元嬰未成</h3><p>修為達到 68 後，方可凝聚本命元嬰。</p></section>';
-    const getFragmentsButton = '<button type="button" class="ns-get-fragments-btn" data-ns-get-fragments aria-label="前往秘境獲取元嬰碎精"><i class="fa-solid fa-gem" aria-hidden="true"></i><span>獲取碎精</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>';
+    const getFragmentsButton = '<button type="button" class="ns-get-fragments-btn" data-ns-get-fragments aria-label="前往每日閉關獲取元嬰碎精"><i class="fa-solid fa-gem" aria-hidden="true"></i><span>獲取碎精</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>';
     if (!state.equippedCore) return `<section class="ns-panel"><h3>尚未調御金丹</h3><p>請先在金丹頁調御丹相，再溫養元嬰。</p>${getFragmentsButton}</section>`;
     const player = window.getCurrentUserData?.() || {};
     const prepared = Growth.prepare(player);
@@ -672,8 +671,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   function bindSoulActions() {
     const content = document.getElementById('training-tab-content');
     content?.querySelector('[data-ns-get-fragments]')?.addEventListener('click', () => {
-      if (typeof window.openRaidHub === 'function') window.openRaidHub();
-      else toast('秘境試煉尚未準備好，請稍後再試。');
+      window.openDailyMeditation?.();
     });
     const inspect = (id, choosing = false) => {
       soulView.selected = id;
@@ -711,7 +709,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
   function bagTabMarkup() {
     // 背包物品改由統一背包模組渲染，避免舊的純文字卡先出現在畫面。
-    return equipmentShellMarkup() + '<section class="uib-bag-loading" aria-hidden="true"></section>';
+    return '<section class="uib-bag-loading" aria-hidden="true"></section>';
   }
 
   function renderTrainingPage() {
@@ -720,26 +718,17 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     document.querySelector('[data-ns-portrait-sheet]')?.remove?.();
     const soulLabel=document.querySelector('#page-training [data-training-tab="nascent-soul"] span');
     if(soulLabel)soulLabel.textContent=Innate.status(window.getCurrentUserData?.()||{}).ok?'元神':'元嬰';
-    // 煉器／裝備可提前返回，先清理元嬰專屬的一屏模式，避免裁切其他分頁。
+    // 切換其他分頁時，先清理元嬰專屬的一屏模式，避免裁切其他分頁。
     if (activeTab !== 'nascent-soul') {
       document.body.classList.remove('ns-map-active');
       Object.assign(soulView, {selected:null, choosing:false});
       content.onkeydown = null;
     }
-    if (activeTab === 'contract') {
-      window.mountSoulboundTrainingPage?.(content);
-      return;
-    }
-    if (activeTab === 'refinery') {
-      if (!content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
-      window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
-      return;
-    }
     // 舊畫面仍是元嬰分支時，只更新數值，不視為再次切入分頁。
     const previouslySoulMap = !!content.querySelector('.ns-growth-panel');
     content.innerHTML = activeTab === 'bag' ? bagTabMarkup()
       : activeTab === 'nascent-soul' ? nascentSoulTabMarkup() : coreTabMarkup();
-    const enteringSoulMap = activeTab === 'nascent-soul' && (currentScore() >= NASCENT_SOUL_THRESHOLD || window.getTrainingAccessScore?.() >= NASCENT_SOUL_THRESHOLD);
+    const enteringSoulMap = activeTab === 'nascent-soul' && nascentUnlocked();
     document.body.classList.remove('ns-map-active');
     // 從可能已捲動的煉器／背包切入元嬰時，讓分頁與碎精摘要回到畫面最上方。
     if (enteringSoulMap && !previouslySoulMap) {
@@ -798,9 +787,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
         <div class="training-subtabs-v3" role="tablist">
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" disabled><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包與裝備</span></button>
+          <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>行囊</span></button>
         </div>
         <div id="training-tab-content"></div>
       `;
@@ -842,10 +829,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     if (soulTab) { soulTab.hidden = false; soulTab.disabled = !nascentUnlocked(); }
     tabs.querySelector('[data-training-tab="equipment"]')?.remove();
 
-    if (!tabs.querySelector('[data-training-tab="contract"]')) {
-      tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>契器</span></button>');
-    }
-
     if (page.dataset.trainingV4Bound !== '1') {
       page.dataset.trainingV4Bound = '1';
       page.querySelectorAll('[data-training-tab]').forEach((button) => {
@@ -853,12 +836,12 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           if (!isUnlocked() || page.dataset.foundationTraining === '1') return;
           const requested = button.dataset.trainingTab;
           const content = document.getElementById('training-tab-content');
-          const theme = requested === 'refinery' ? 'alchemy' : requested === 'nascent-soul' ? 'raid' : 'alchemy';
+          const theme = requested === 'nascent-soul' ? 'raid' : 'alchemy';
           const tabOrder = [...page.querySelectorAll('[data-training-tab]')].map(tab => tab.dataset.trainingTab);
           const fromStatus = !page.querySelector('[data-training-tab].active');
           const direction = fromStatus || tabOrder.indexOf(requested) < tabOrder.indexOf(activeTab) ? -1 : 1;
           const finishTransition = requested !== activeTab || fromStatus ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
-          activeTab = ['bag', 'refinery', 'contract'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
+          activeTab = requested === 'bag' || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
             tab.classList.toggle('active', selected);
@@ -908,10 +891,14 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
   function showCoreDetails(core) {
     const type = coreType(core.type);
+    const current = window.getEquippedGoldenCoreState?.();
+    const path = current?.type === core.type && current?.grade === core.grade &&
+      window.QACultivationRebootClient?.bonuses(window.getCurrentUserData?.(), current);
+    const resonance = path?.resonating ? `<p><strong>流派共鳴：</strong>${path.resonanceText}</p>` : '';
     modalShell('training-v3-detail-modal', `${core.grade} 品 · ${type.name}`, `
       <div class="training-v3-detail-top">${coreVisualMarkup(core, false)}</div>
       <div class="training-v3-lore training-core-detail-two">
-        <div class="training-core-feature"><span>特性</span><p><strong>效果：</strong>${type.effect(core.grade)}</p><p><strong>神通：</strong>${type.ability}</p><p><strong>元嬰左脈：</strong>${globalThis.QASoulTalents?.TYPES[core.type]?.trait || '本命能力'}（元嬰境界後修習）</p><p><strong>修煉：</strong>${type.upkeep}</p><p><strong>提醒：</strong>${type.warning}</p></div>
+        <div class="training-core-feature"><span>特性</span><p><strong>效果：</strong>${type.effect(core.grade)}</p>${resonance}<p><strong>神通：</strong>${type.ability}</p><p><strong>元嬰左脈：</strong>${globalThis.QASoulTalents?.TYPES[core.type]?.trait || '本命能力'}（元嬰境界後修習）</p><p><strong>修煉：</strong>${type.upkeep}</p><p><strong>提醒：</strong>${type.warning}</p></div>
         <div class="training-core-story"><span>故事</span><p>${type.note}</p><p>此丹並非外來丹藥，而是修士在自身靈田／丹田中凝聚，並可透過洗髓重塑丹性與品級的本命金丹。</p></div>
       </div>
     `);
@@ -1248,7 +1235,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   function boot() {
     window.matchMedia('(orientation: portrait)').addEventListener('change', syncSoulDetailLayout);
     window.matchMedia('(max-height: 600px)').addEventListener('change', syncSoulDetailLayout);
-    window.addEventListener('xiuxian:contract-page-opened', () => { activeTab = 'contract'; });
     loadStyle();
     restoreRemoteTraining();
     syncUnlock();

@@ -15,6 +15,7 @@ import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
 import { authenticatedMainFetch } from './cultivation/data/project-repository.js';
+import { clearCultivationReboot, initializeCultivationReboot } from './cultivation/cultivation-reboot-client.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, signInAnonymously, linkWithPopup, signInWithCredential, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -560,6 +561,9 @@ function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData
 
 // 僅在 HTML 顯示場合附加境界紋章；AI 題目難度與資料欄位仍保留純文字境界。
 function getRankMarkup(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
+    if (uid === window.getRealmUserUid?.() && Number.isFinite(Number(score))) {
+        score = window.QACultivationRebootClient?.realmScore(Number(score)) ?? Number(score);
+    }
     const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
         : window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
     const realm = window.QAVoidRetraining?.display(score,REALMS[idx] || REALMS[0]) || REALMS[idx] || REALMS[0];
@@ -1258,12 +1262,6 @@ window.addEventListener('xiuxian:startup-resource-progress', (event) => {
     const detail = event.detail || {};
     const text = document.getElementById('game-startup-gate-text');
     if (!text) return;
-    if (detail.phase === 'catalogs') {
-        text.textContent = detail.loaded >= detail.total
-            ? '法寶、材料與煉器配方已整理完成…'
-            : '正在整理法寶、材料與煉器配方…';
-        return;
-    }
     if (detail.phase === 'images') {
         const loaded = Math.max(0, Number(detail.loaded) || 0);
         const total = Math.max(0, Number(detail.total) || 0);
@@ -1273,7 +1271,7 @@ window.addEventListener('xiuxian:startup-resource-progress', (event) => {
         return;
     }
     if (detail.phase === 'ready') {
-        text.textContent = '金丹圖片、材料與修煉資源已就緒…';
+        text.textContent = '金丹圖片與修煉資源已就緒…';
     }
 });
 
@@ -1308,6 +1306,9 @@ window.addEventListener('xiuxian:user-data-ready', subscribeOwnImmortalBoard);
 window.addEventListener('xiuxian:quest-progress-updated', () => {
     const group = window.getLeaderboardEducationGroup?.(currentUserData?.profile?.educationLevel);
     if (group !== immortalBoardGroup) subscribeOwnImmortalBoard();
+});
+window.addEventListener('xiuxian:cultivation-path-updated', () => {
+    if (window.__xiuxianFeaturesReady) updateUIStats();
 });
 window.addEventListener('xiuxian:immortals-updated', () => {
     if (currentUserData) updateUIStats();
@@ -1394,8 +1395,11 @@ onAuthStateChanged(auth, async (user) => {
             showGameStartupGate('正在核對資料搬移狀態…');
             try {
                 await waitForVerifiedPlayerMigration(user);
+                if (auth.currentUser?.uid !== user.uid) return;
+                showGameStartupGate('正在同步修行流派與突破紀錄…');
+                await initializeCultivationReboot(user.uid);
             } catch (error) {
-                console.error('[Startup migration]', error);
+                console.error('[Player startup]', error);
                 showGameStartupFailure(error.message || '資料準備未完成，請重新整理後再試。');
                 return;
             }
@@ -1468,6 +1472,7 @@ onAuthStateChanged(auth, async (user) => {
         window.__xiuxianMigrationApproved = false;
         checkAdminRole(false);
         currentUserData = null;
+        clearCultivationReboot();
         window.QAFriendRequests?.reset();
         soloCacheIdentity = '';
         soloCacheRevision += 1;
@@ -2134,7 +2139,8 @@ function updateUIStats() {
     if(typeof stats.totalCorrect === 'undefined') stats.totalCorrect = 0;
     if(typeof stats.totalAnswered === 'undefined') stats.totalAnswered = 0;
 
-    const rankIndex = Math.min(stats.rankLevel, REALMS.length - 1);
+    const projectedScore = window.QACultivationRebootClient?.realmScore(currentScore) ?? currentScore;
+    const rankIndex = calculateRankFromScore(projectedScore);
     const currentRealm = REALMS[rankIndex];
     const rankEl = document.getElementById('display-rank');
     rankEl.innerHTML = getRankMarkup(stats.rankLevel); 
@@ -2148,9 +2154,9 @@ function updateUIStats() {
         const currentBase = currentRealm.need;
         const nextBase = REALMS[rankIndex + 1].need;
         const required = nextBase - currentBase;
-        const earned = currentScore - currentBase;
+        const earned = Math.max(0, currentScore - currentBase);
         progressPercent = Math.max(0, Math.min((earned / required) * 100, 100));
-        currentStarsDisplay = Math.max(0, earned);
+        currentStarsDisplay = Math.min(required, earned);
         maxStarsDisplay = required;
     } else {
         currentStarsDisplay = currentScore - currentRealm.need;
@@ -2158,8 +2164,8 @@ function updateUIStats() {
         progressPercent = 100;
     }
 
-    if (window.QAVoidRetraining?.phase(currentScore) >= 0) {
-        const progress = window.QAVoidRetraining.progress(currentScore,REALMS,rankIndex);
+    if (window.QAVoidRetraining?.phase(projectedScore) >= 0) {
+        const progress = window.QAVoidRetraining.progress(projectedScore,REALMS,rankIndex);
         progressPercent = progress.ratio * 100;
         currentStarsDisplay = progress.earned;
         maxStarsDisplay = progress.required;

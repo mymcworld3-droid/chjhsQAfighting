@@ -88,14 +88,14 @@
     for (const char of String(value)) { hash ^= char.charCodeAt(0); hash = Math.imul(hash, 16777619); }
     return hash >>> 0;
   }
-  function dailyCommissions(user = {}, uid = '', date = dateKey()) {
+  function dailyCommissions(user = {}, uid = '', date = dateKey(), { reboot = false } = {}) {
     const score = number(user?.stats?.totalScore);
     const solo = COMMISSION_POOL.filter(q => q.metric === 'solo');
     const learningMap = user?.stats?.knowledgeMap || {};
     const hasWeakTopic = Object.values(learningMap).some(subject => subject && typeof subject === 'object' &&
       Object.values(subject).some(x => x && typeof x === 'object' && number(x.total) >= 5 &&
         ((number(x.correct) + 2) / (number(x.total) + 4)) < .78));
-    const other = COMMISSION_POOL.filter(q => q.metric !== 'solo' && score >= q.minScore &&
+    const other = COMMISSION_POOL.filter(q => q.metric !== 'solo' && (!reboot || q.metric !== 'raid') && score >= q.minScore &&
       (q.metric !== 'enlightenment' || hasWeakTopic));
     const first = solo[seedNumber(uid + '|' + date + '|solo') % solo.length];
     const second = other[seedNumber(uid + '|' + date + '|activity') % other.length];
@@ -174,25 +174,38 @@
     if (kind === 'path' && q.metric === 'raid' && user?.raidProgress?.['shen-qingshuang']?.firstVictoryRoomId) return Math.max(1, p.totals.raid);
     return kind !== 'path' ? p.daily.counts[q.metric] : p.totals[q.metric];
   }
-  function view(user = {}, rawState = {}, date = dateKey(), verifiedTrial = null) {
+  function view(user = {}, rawState = {}, date = dateKey(), verifiedTrial = null, { reboot = false, realmScore } = {}) {
     const p = normalizeProgress(user.questProgress, date), state = normalizeState(rawState, date);
+    const available = list => reboot ? list.filter(q => q.metric !== 'raid') : list;
+    const path = available(PATH);
+    const next = path.findIndex(q => !state.pathClaimed.includes(q.id));
     function row(q, kind, claimed = false) {
-      const current = Math.min(q.target, progressValue(q, user, p, kind, date, verifiedTrial));
+      const progress = reboot && q.metric === 'score' ? realmScore : progressValue(q, user, p, kind, date, verifiedTrial);
+      const current = Math.min(q.target, progress);
       const locked = number(user?.stats?.totalScore) < q.minScore;
-      return { ...q, current, claimed, locked, complete: current >= q.target, claimable: !claimed && !locked && current >= q.target };
+      let display = q;
+      if (reboot) {
+        display = { ...q, reward: { ...q.reward, drawTickets: 0, materials: {} } };
+        if (q.id === 'path-golden') {
+          display.description = '修為達 28 並渡過天劫，或承接已有的金丹境界。';
+          display.destination = 'cultivation';
+        }
+        if (q.id === 'week-activity-2') display.description = '本週累積完成 2 次閉關、洞天或鬥法等修行活動，不須每日連續。';
+      }
+      return { ...display, current, claimed, locked, complete: current >= q.target, claimable: !claimed && !locked && current >= q.target };
     }
-    return { date, pathIndex: state.pathIndex, pathCompleted: PATH.filter(q => state.pathClaimed.includes(q.id)).length, pathTotal: PATH.length,
-      path: state.pathIndex < PATH.length ? row(PATH[state.pathIndex], 'path') : null,
-      pathTicketRewards: PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
+    return { date, pathIndex: next < 0 ? path.length : next, pathCompleted: path.filter(q => state.pathClaimed.includes(q.id)).length, pathTotal: path.length,
+      path: next < 0 ? null : row(path[next], 'path'),
+      pathTicketRewards: reboot ? [] : PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
         (state.pathTicketAmounts[q.id] || 0) < q.reward.drawTickets).map(q => ({ ...q, supplemental: true,
           description: '已完成此仙道任務，可補領尚未領取的本命法器抽獎券。',
           current: 1, target: 1, complete: true, claimable: true, claimed: false, locked: false,
           reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets - (state.pathTicketAmounts[q.id] || 0) } })),
       weeklyKey:weekKey(date),weekStart:weekKey(date),
-      weekly: WEEKLY.map(q => row(q,'weekly',state.weeklyClaimed.includes(q.id))),
-      daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))),
+      weekly: available(WEEKLY).map(q => row(q,'weekly',state.weeklyClaimed.includes(q.id))),
+      daily: available(DAILY).map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))),
       commissions:(state.commissionIds||[]).map(id=>COMMISSION_POOL.find(q=>q.id===id))
-        .filter(Boolean).map(q=>row(q,'commission',state.commissionClaimed.includes(q.id))) };
+        .filter(q=>q&&(!reboot||q.metric!=='raid')).map(q=>row(q,'commission',state.commissionClaimed.includes(q.id))) };
   }
   return { PATH, LEGACY_PATH, DAILY, WEEKLY, COMMISSION_POOL, dailyCommissions, seedNumber, dateKey, weekKey, normalizeProgress, recordEvent, normalizeState, view };
 });

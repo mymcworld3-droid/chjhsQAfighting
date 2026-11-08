@@ -63,14 +63,11 @@ test('successful account deletion clears local session state', () => {
   assert.match(accountDelete, /account-permanently-deleted/);
 });
 
-test('four-slot artifact equipment remains complete and persisted', () => {
+test('legacy artifact storage remains compatible and the satchel omits equipment controls', () => {
   assert.match(catalog, /ARTIFACT_EQUIP_SLOTS = Object\.freeze\(\['本命法寶', '護身法寶', '佩飾法寶', '輔助法寶'\]\)/);
   assert.match(artifactSystem, /next\.equipped\[slot\] = itemId/);
   assert.match(artifactSystem, /delete next\.equipped\[slot\]/);
   assert.match(artifactSystem, /window\.getArtifactEquipmentSlots/);
   assert.match(artifactSystem, /window\.getArtifactEquipmentStatus/);
-  assert.match(bag, /class="uib-equipment-grid"/);
-  assert.match(bag, /data-uib-equipped-item/);
-  assert.match(bag, /data-uib-empty-slot/);
-  assert.match(bag, /window\.toggleEquipArtifact/);
+  assert.doesNotMatch(bag, /uib-equipment-grid|data-uib-equipped-item|data-uib-empty-slot|toggleEquipArtifact/);
 });

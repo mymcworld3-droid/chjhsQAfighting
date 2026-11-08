@@ -14,29 +14,21 @@ const registerTeacherDongtianApi = require('./teacher-dongtian-api.cjs');
 const registerIdentityApi = require('./identity-api');
 const registerQuestionReportApi = require('./question-report-api.cjs');
 const questionQualityAnalytics = require('./question-quality-analytics.cjs');
-const registerArtifactGenerationApi = require('./artifact-generation-api');
 const registerFirebaseProjectAuthApi = require('./firebase-project-auth-api.cjs');
 const registerAutoMigrationApi = require('./firebase-auto-migration-api.cjs');
 const registerPlayerProvisionApi = require('./firebase-player-provision-api.cjs');
 const registerAdminAccountApi = require('./admin-account-api.cjs');
 const registerPlayerAnalyticsApi = require('./player-analytics-api.cjs');
-const registerAdminArtifactDeleteApi = require('./admin-artifact-delete-api.cjs');
-const { registerItemImageApi } = require('./item-image-api.cjs');
-const registerRaidRewardApi = require('./raid-reward-api.cjs');
-const registerRaidRoomApi = require('./raid-room-api.cjs');
 const registerBattleRewardApi = require('./battle-reward-api.cjs');
 const registerDongtianSettlementApi = require('./dongtian-settlement-api.cjs');
 const registerImmortalsCleanupApi = require('./world-immortals-cleanup-api.cjs');
 const registerInvitationApi = require('./invitation-api.cjs');
 const registerFriendRequestsApi = require('./friend-requests-api.cjs');
-const registerSoulboundDrawApi = require('./soulbound-draw-api.cjs');
 const registerMeditationApi = require('./daily-meditation-api.cjs');
 const meditationQuiz = require('./daily-meditation-api.cjs').__test;
 const MeditationLiteracy = require('./daily-meditation-literacy.cjs');
 const registerSpiritFarmApi = require('./spirit-farm-api.cjs');
-const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const { registerRetiredMarketApi } = require('./retired-market-api.cjs');
-const registerSimpleForgeApi = require('./simple-forge-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
 const enlightenmentTrial = require('./enlightenment-trial-api.cjs').__test;
@@ -85,14 +77,17 @@ app.use('/api', (req,res,next) => {
 const adminD1Migration = require('./d1-admin-migration-api.cjs')(app);
 require('./d1-browser-api.cjs').registerD1BrowserApi(app);
 registerGameStage(app);
+require('./cultivation-reboot-api.cjs').registerCultivationReboot(app);
 app.use(express.static(path.join(__dirname, 'public')));
 registerDongtianApi(app);
 registerTeacherDongtianApi(app);
 registerIdentityApi(app);
 registerQuestionReportApi(app);
-// Retired forge clients must not continue to create AI-generated artifacts.
-app.post('/api/generate-artifact', (req, res) => res.status(410).json({error:'AI 煉器已停用，請更新遊戲後使用法器煉製。'}));
-registerArtifactGenerationApi(app);
+// Retire the old entry points on this server while leaving shared player documents intact.
+app.use(['/api/raid', '/api/soulbound', '/api/simple-forge', '/api/inventory/dismantle',
+  '/api/generate-artifact', '/api/artifact-effect-ranges', '/api/artifact-depth-effect-ranges',
+  '/api/item-image', '/api/admin/item-image', '/api/admin/artifacts'],
+  (req, res) => res.status(410).json({ error: '此玩法在修行實驗分支已結束。' }));
 registerFirebaseProjectAuthApi(app);
 const migrationController = registerAutoMigrationApi(app);
 registerPlayerProvisionApi(app, { migrationController });
@@ -100,25 +95,18 @@ registerAdminAccountApi(app);
 registerPlayerAnalyticsApi(app);
 registerAbilityCoachApi(app);
 registerFriendChatApi(app);
-registerAdminArtifactDeleteApi(app);
-registerItemImageApi(app);
-registerRaidRoomApi(app);
-registerRaidRewardApi(app);
 registerBattleRewardApi(app);
 registerDongtianSettlementApi(app);
 registerImmortalsCleanupApi(app);
 const invitationHub = registerInvitationApi(app);
 registerFriendRequestsApi(app, { hub: invitationHub });
-registerQuestApi(app);
+registerQuestApi(app, { reboot: true });
 registerEnlightenmentTrialApi(app);
-registerImmortalChallengeApi(app);
-registerMartialTrialApi(app);
-registerSoulboundDrawApi(app);
-registerMeditationApi(app);
+registerImmortalChallengeApi(app, { reboot: true });
+registerMartialTrialApi(app, { reboot: true });
+registerMeditationApi(app, { reboot: true });
 registerSpiritFarmApi(app);
-registerInventoryDismantleApi(app);
 registerRetiredMarketApi(app);
-registerSimpleForgeApi(app);
 registerOpportunityApi(app);
 registerGameIssueApi(app);
 registerClassroomApi(app);
@@ -1168,6 +1156,5 @@ app.get('/api/units', (req, res) => {
 app.listen(port, () => {
     // Resume only an already administrator-authorized durable job after a restart.
     void adminD1Migration.resume().catch(error => console.warn('[D1 migration resume]', error.code || 'unavailable'));
-    if (process.env.GAME_DATA_MAINTENANCE !== '1') registerRaidRoomApi.startScheduler();
     console.log(`Server is running on port ${port}`);
 });

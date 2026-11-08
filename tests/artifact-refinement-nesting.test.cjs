@@ -151,9 +151,9 @@ test('retired material store no longer performs legacy forge transactions', () =
   assert.match(aiJobs, /delete artifactSystem\.inventory\[row\.artifactId\]/);
 });
 
-test('backpack exposes the actual refinement stage', () => {
-  assert.match(bag, /item\?\.simpleRefinementStage/);
-  assert.match(bag, /煉製次數/);
+test('satchel does not expose a refinement stage', () => {
+  const bag = read('public/cultivation/unified-inventory-grid.js');
+  assert.doesNotMatch(bag, /simpleRefinementStage|refinementDepth|煉製次數/);
 });
 
 test('owned refinery ingredients use deterministic realm then name ordering', () => {

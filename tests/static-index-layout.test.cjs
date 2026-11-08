@@ -43,7 +43,7 @@ test('home cultivation panel is present in index before JS hydration', () => {
 test('training page and all primary tabs are static in index', () => {
   assert.match(index, /id="page-training"[^>]*data-static-layout="1"/);
   assert.match(index, /data-training-tab="core"/);
-  assert.match(index, /data-training-tab="refinery"/);
+  assert.doesNotMatch(index, /data-training-tab="refinery"/);
   assert.match(index, /data-training-tab="bag"/);
   assert.match(index, /id="training-tab-content"/);
   assert.match(index, /training-static-core-shell/);
@@ -58,8 +58,8 @@ test('training modules hydrate and preserve the static page instead of requiring
   assert.match(guard, /page\.classList\.add\('hidden'\)/);
 });
 
-test('admin artifact and material containers are static and hydrated in place', () => {
-  assert.match(index, /id="admin-artifact-manager"[^>]*data-static-layout="1"/);
+test('retired admin containers are absent from the active layout', () => {
+  assert.doesNotMatch(index, /id="admin-artifact-manager"/);
   assert.doesNotMatch(index, /id="admin-material-manager"/);
   assert.match(artifactAdmin, /let panel = document\.getElementById\(PANEL_ID\)/);
   assert.match(artifactAdmin, /artifactManagerHydrated/);

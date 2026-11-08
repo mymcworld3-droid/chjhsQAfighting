@@ -73,14 +73,8 @@ test('artifact catalog permanently stores form, forge method and core effect', (
   assert.match(catalog, /coreEffect:/);
 });
 
-test('materials use round icons while artifacts keep a distinct framed shape across major UIs', () => {
-  assert.match(refinery, /refinery-mat-icon is-material/);
-  assert.match(refinery, /refinery-mat-icon is-artifact/);
-  assert.match(refinery, /\.refinery-mat-icon\.is-material[^\n]*border-radius:50%/);
-  assert.match(refinery, /\.refinery-slot\.is-material \.icon[^\n]*border-radius:50%/);
-
-  assert.match(bag, /data-uib-item\^="material:"/);
-  assert.match(bag, /\.uib-modal-material \.uib-modal-icon\{border-radius:50%!important/);
-  assert.match(bag, /data-uib-item\^="artifact:"/);
-
+test('retired materials and artifacts do not participate in the active satchel', () => {
+  const satchel = read('public/cultivation/unified-inventory-grid.js');
+  assert.doesNotMatch(satchel, /artifactSystem|material-catalog|soulboundItemFrameMarkup/);
+  assert.match(satchel, /nascentMaterial/);
 });

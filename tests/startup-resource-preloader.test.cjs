@@ -26,33 +26,26 @@ test('startup waits for authoritative artifacts and local fixed materials', () =
   assert.doesNotMatch(materialSync, /getFirestore|onSnapshot|setDoc/);
 });
 
-test('inventory and refinery resource preloader runs before unified inventory UI', () => {
-  const materialSystemPos = main.indexOf("'./cultivation/material-system.js'");
+test('cultivation image preloading completes before the satchel module loads', () => {
   const preloadPos = main.indexOf("'./cultivation/startup-resource-preloader.js'");
   const inventoryPos = main.indexOf("'./cultivation/unified-inventory-grid.js'");
-  assert.ok(materialSystemPos >= 0);
-  assert.ok(preloadPos > materialSystemPos);
-  assert.ok(inventoryPos > preloadPos);
+  assert.ok(preloadPos >= 0 && inventoryPos > preloadPos);
   assert.match(preload, /export const featureReady = prepareStartupResources\(\)/);
 });
 
-test('startup preloader prioritizes owned equipped and recipe resources', () => {
-  assert.match(preload, /artifactSystem\?\.inventory/);
-  assert.match(preload, /artifactSystem\?\.equipped/);
-  assert.match(preload, /materialSystem\?\.inventory/);
-  assert.match(preload, /ARTIFACT_RECIPES/);
-  assert.match(preload, /recipeMaterialIdsForArtifacts/);
+test('startup preloader warms the Golden Core and scenery without reading retired catalogs', () => {
+  assert.doesNotMatch(preload, /artifactSystem|materialSystem|ARTIFACT_RECIPES/);
+  assert.match(preload, /QAGoldenCoreArt/);
   assert.match(preload, /STARTUP_IMAGE_LIMIT = 48/);
   assert.match(preload, /IMAGE_CONCURRENCY = 4/);
   assert.match(preload, /warmRemainingInBackground/);
 });
 
-test('startup gate reports catalog and image warmup progress', () => {
+test('startup gate reports image warmup progress', () => {
   assert.match(preload, /xiuxian:startup-resource-progress/);
   assert.match(legacy, /xiuxian:startup-resource-progress/);
-  assert.match(legacy, /正在整理法寶、材料與煉器配方/);
   assert.match(legacy, /正在預載金丹圖片與修煉資源/);
-  assert.match(legacy, /金丹圖片、材料與修煉資源已就緒/);
+  assert.match(legacy, /金丹圖片與修煉資源已就緒/);
 });
 
 function imagePlan(player, profile = 'balanced') {
@@ -83,7 +76,8 @@ test('low rendering preloads only composite scenery for both orientations, inclu
     assert.equal(urls.includes(`assets/training/cutouts/${id}-ai.webp`), false,
       'painted buildings must not decode a second building or acquire a different stair alignment');
   }
-  for (const id of ['contract', 'rank']) assert.ok(plan.startup.includes(Layouts.landscape.places[id].sprite.image));
+  assert.ok(plan.startup.includes(Layouts.landscape.places.rank.sprite.image));
+  assert.ok(!urls.includes(Layouts.landscape.places.contract.sprite.image));
   const high = imagePlan({ stats: { totalScore: 28 } }, 'balanced');
   assert.ok(high.startup.includes(Layouts.landscape.layers[0].image));
   assert.ok(high.remaining.includes(Layouts.portrait.layers[0].image));

@@ -34,7 +34,7 @@ test('new users store artifact equipment in users/{uid}, and existing users load
   assert.match(system, /tx\.update\(ref, \{ \[FIELD\]: committed \}\)/);
   assert.match(system, /next\.equipped\[slot\] = itemId/);
   assert.match(system, /delete next\.equipped\[slot\]/);
-  assert.match(bag, /userData\(\)\?\.artifactSystem\?\.equipped\?\.\[slot\]/);
+  assert.doesNotMatch(bag, /artifactSystem\?\.equipped/);
 });
 
 test('equipped slots survive reload while remote catalog is loading', () => {

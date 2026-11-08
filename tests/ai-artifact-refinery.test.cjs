@@ -390,7 +390,7 @@ test('unknown recipe generation sends all material information and existing arti
   assert.match(aiJobs, /existingArtifacts: apiArtifacts\(\)/);
   assert.match(aiJobs, /selectedIngredients: job\.ingredients/);
   assert.match(aiJobs, /fetch\('\/api\/generate-artifact'/);
-  assert.match(server, /registerArtifactGenerationApi\(app\)/);
+  assert.doesNotMatch(server, /registerArtifactGenerationApi\(app\)/);
 });
 
 test('new AI artifact becomes usable immediately and is persisted as a permanent recipe marked pending review', () => {
@@ -447,8 +447,8 @@ test('admin keeps newest pending AI artifacts above approved realm-sorted artifa
   assert.match(adminSort, /generatedAtMs/);
 });
 
-test('new forge replaces AI refinery modules', () => {
-  assert.match(main, /cultivation\/simple-forge\.js/);
+test('neither the simple forge nor AI refinery modules run in the experiment', () => {
+  assert.doesNotMatch(main, /cultivation\/simple-forge\.js/);
   assert.doesNotMatch(main, /cultivation\/refinery-ai-jobs\.js/);
   assert.doesNotMatch(main, /cultivation\/cultivation-refinery-v2\.js/);
 });

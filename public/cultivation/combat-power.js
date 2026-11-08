@@ -110,17 +110,17 @@ export function getCurrentCombatPower() {
   const data = window.getCurrentUserData?.() || {};
   const core = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
   const soul = window.getNascentSoulBattleSnapshot?.() || null;
-  const system = data.artifactSystem || {};
+  const path = window.QACultivationRebootClient?.bonuses(data);
   const stats = { ...(data.stats || {}) };
-  stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) + (globalThis.QATrainingAccessRules?.hpBonus(data) || 0);
+  stats.attack = positive(stats.attack ?? 200) + (path?.attack || 0);
+  stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) +
+    (globalThis.QATrainingAccessRules?.hpBonus(data) || 0) + (path?.maxHp || 0);
   if (soul) {
     // 戰力展示反映元嬰屬性，但不把法寶加成重複計入基礎數值。
     stats.attack = positive(stats.attack ?? 200) + positive(soul.attackFlat);
     stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) + positive(soul.maxHpFlat);
   }
-  return calculateCombatPower({
-    stats, core, equipped: system.equipped || {}, inventory: system.inventory || {}
-  });
+  return calculateCombatPower({ stats, core });
 }
 
 window.calculateGoldenCorePower = calculateGoldenCorePower;

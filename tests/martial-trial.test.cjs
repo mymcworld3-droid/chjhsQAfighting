@@ -124,7 +124,7 @@ test('routes require verified main-project identity and register only domain end
  const res={set(){},status(s){this.code=s;return this;},json(v){this.value=v;}};
  await Rules.handler('status',{resolveA:()=>{throw Error('should not resolve without bearer');},logger:{error(){}}})({get:()=>''},res);
  assert.equal(res.code,401);
- assert.match(fs.readFileSync('server.js','utf8'),/registerMartialTrialApi\(app\)/);
+ assert.match(fs.readFileSync('server.js','utf8'),/registerMartialTrialApi\(app, \{ reboot: true \}\)/);
 });
 
 

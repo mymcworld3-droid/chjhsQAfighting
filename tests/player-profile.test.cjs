@@ -22,10 +22,9 @@ function profileModule() {
   const context = {
     window: {
       getGoldenCorePublicDetails: c => ({...c, name:'太初回元丹', effect:'每次悟道回元',equipped:true}),
-      calculateCombatPower: ({core,equipped,inventory}) => {
+      calculateCombatPower: ({core}) => {
         const corePower = core ? 4000+(9-core.grade)*2000 : 0;
-        const equipment = equipped['本命法寶']==='sword'&&inventory.sword>0 ? 900:0;
-        return {total:600+corePower+equipment,base:600,core:corePower,equipment,items:[]};
+        return {total:600+corePower,base:600,core:corePower,equipment:0,items:[]};
       },
       calculateArtifactPower: item => item?.id==='sword'?900:0
     },
@@ -50,7 +49,7 @@ test('ranking, friends and chat avatars and names open the same UID-backed read-
   assert.match(main,/cultivation\/combat-power\.js'[\s\S]*cultivation\/player-profile\.js'/);
 });
 
-test('remote equipped Golden Core, quality, the equipped soulbound artifact and total accuracy appear in public projection', () => {
+test('the public profile keeps core quality and accuracy while omitting legacy equipped artifacts', () => {
   const {projectProfile, profileMarkup} = profileModule();
   const raw = {
     displayName:'道友',
@@ -64,15 +63,13 @@ test('remote equipped Golden Core, quality, the equipped soulbound artifact and 
   assert.equal(p.accuracy,'70.0%');
   assert.equal(p.core.grade,3,'use attuned core not washed candidate');
   assert.equal(p.power.core,16000);
-  assert.equal(p.power.equipment,900);
-  assert.equal(p.power.total,17500);
-  assert.equal(p.slots.length,1);
-  assert.equal(p.slots[0].item.name,'測試仙劍');
+  assert.equal(p.power.equipment,0);
+  assert.equal(p.power.total,16600);
   const html=profileMarkup(p);
   assert.match(html,/太初回元丹/);
   assert.match(html,/70\.0%/);
-  assert.match(html,/17,500/);
-  assert.match(html,/測試仙劍/);
+  assert.match(html,/16,600/);
+  assert.doesNotMatch(html,/測試仙劍/);
   assert.doesNotMatch(html,/護身法寶|佩飾法寶|輔助法寶/);
   assert.doesNotMatch(html,/sword.*grade:1/);
 });
@@ -84,7 +81,7 @@ test('no answers and no equipped Golden Core show accurate empty states', () => 
   assert.equal(p.core,null);
   assert.equal(p.power.core,0);
   assert.match(profileMarkup(p),/目前沒有調御中的本命金丹/);
-  assert.equal(p.slots.every(x=>x.item===null),true);
+  assert.doesNotMatch(profileMarkup(p), /已裝備法寶/);
 });
 
 test('player-generated names and effect text are escaped and private fields are not rendered', () => {

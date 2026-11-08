@@ -50,7 +50,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const current = account === getMainUser()?.uid ? snapshot : null;
     const ready = !!q?.claimable;
     const labels = { scope: '設定範圍', solo: '繼續問道', meditation: '開始閉關',
-      enlightenment: '悟道試煉', battle: '前往鬥法', raid: '前往秘境', dongtian: '前往洞天',
+      enlightenment: '悟道試煉', battle: '前往鬥法', cultivation: '前往渡劫', dongtian: '前往洞天',
       story: '觀看劇情' };
     const action = ready ? (q.supplemental ? '補領抽獎券' : '領取獎勵') : labels[q?.destination] || '查看任務';
     const title = q?.title || (current ? '繼續探索仙途' : busy ? '正在同步任務…' : '查看修行任務');
@@ -218,7 +218,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
       meditation: () => { void window.openDailyMeditation?.(); },
       enlightenment: () => { window.dispatchEvent(new CustomEvent('xiuxian:enlightenment-open')); },
       battle: () => { void window.startBattleMatchmaking?.(); },
-      raid: () => { void window.openRaidHub?.(); },
+      cultivation: () => { $('sect-cultivation-entry')?.click(); },
       dongtian: () => { window.openDongtianPanel?.(); },
       story: () => {
         const opened = window.openXiuxianStoryChapter?.(q.chapterId);
@@ -286,6 +286,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
   mount();
   ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:quest-progress-updated', 'xiuxian:enlightenment-updated', 'xiuxian:story-chapter-completed'].forEach(name => window.addEventListener(name, invalidate));
   window.addEventListener('material-system-updated', e => { if (!e.detail?.questReward) invalidate(); });
+  window.addEventListener('xiuxian:cultivation-path-updated', invalidate);
   window.addEventListener('xiuxian:stats-updated', e => { if (!applyingReward && e.detail?.source !== 'quest-reward') invalidate(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) invalidate(); });
   // Only invalidate at a date change, without periodic API polling.

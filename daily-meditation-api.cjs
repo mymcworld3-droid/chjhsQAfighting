@@ -42,7 +42,7 @@ function economy(user) {
   return {gold:count(user.stats?.gold),score:count(user.stats?.totalScore),rank:count(user.stats?.rankLevel),
     drawTickets:count(user.soulboundDrawTickets),raidTickets:user.raidTickets || null,growthState:Growth.prepare(user)};
 }
-function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet(db,{now,random}),logger=console}={}) {
+function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet(db,{now,random}),logger=console,reboot=false}={}) {
   const dateNow=()=>Rules.meditationDateKey(new Date(now()));
   const refs=(uid,date)=>({user:db.collection('users').doc(uid),session:db.collection(SESSIONS).doc(dayId(uid,date)),result:db.collection(RESULTS).doc(dayId(uid,date))});
   function sameDay(date) { if(date!==dateNow())throw fail('已跨日，請重新確認今日閉關'); }
@@ -65,10 +65,14 @@ function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet
     c.stars=Math.min(15,Math.max(count(c.result?.bestStars),c.rows.reduce((sum,row)=>sum+row.stars,0)));
     return c;
   }
+  function coopReward(score,stars) {
+    const reward=Rules.meditationCoopReward(score,stars);
+    return reboot?{...reward,raidTickets:0,drawTickets:0}:reward;
+  }
   function view(c,uid,date) {
     const claimed=Array.isArray(c.result?.claimed)?c.result.claimed:[];
     const milestones=Rules.MEDITATION_COOP_STEPS.map(step=>({stars:step.stars,
-      reward:Rules.meditationCoopReward(c.result?.rewardScore ?? count(c.user.stats?.totalScore),step.stars),
+      reward:coopReward(c.result?.rewardScore ?? count(c.user.stats?.totalScore),step.stars),
       claimed:claimed.includes(step.stars),claimable:!!c.result && c.stars>=step.stars && !claimed.includes(step.stars)}));
     return {date,completed:!!c.result,record:c.user.dailyMeditation || {},drawTickets:count(c.user.soulboundDrawTickets),personalStars:c.result?Math.min(resultTotal(c.result),count(c.result.stars)):0,personalTotal:c.result?resultTotal(c.result):c.session?sessionTotal(c.session):Literacy.TOTAL,
       stars:c.stars,milestones,claimable:milestones.some(x=>x.claimable),
@@ -211,7 +215,7 @@ function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet
       const claimed=Array.isArray(c.result.claimed)?c.result.claimed:[];
       if(claimed.includes(body.stars))return {...view(c,uid,date),claimedNow:false,economy:economy(c.user)};
       if(c.stars<body.stars)throw fail('好友共修星星尚未達到此節點');
-      const reward=Rules.meditationCoopReward(c.result.rewardScore,body.stars),user=c.user,patch={};
+      const reward=coopReward(c.result.rewardScore,body.stars),user=c.user,patch={};
       let gold=reward.gold,raidTicketsAdded=0,convertedRaidGold=0;
       if(reward.raidTickets){
         const tickets=accrueRaidTickets(user,date),added=Math.min(reward.raidTickets,tickets.cap-tickets.count);
@@ -220,8 +224,11 @@ function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet
         if(!added){convertedRaidGold=Rules.meditationCoopReward(c.result.rewardScore,9).gold;gold+=convertedRaidGold;}
       }
       patch['stats.gold']=count(user.stats?.gold)+gold;
-      patch.soulboundDrawTickets=count(user.soulboundDrawTickets)+reward.drawTickets;
-      user.soulboundDrawTickets=patch.soulboundDrawTickets;user.stats ||= {};user.stats.gold=patch['stats.gold'];
+      if(!reboot){
+        patch.soulboundDrawTickets=count(user.soulboundDrawTickets)+reward.drawTickets;
+        user.soulboundDrawTickets=patch.soulboundDrawTickets;
+      }
+      user.stats ||= {};user.stats.gold=patch['stats.gold'];
       if(reward.fragments){const growth=Growth.award(user,reward.fragments);Object.assign(patch,Growth.patch(growth));Growth.apply(user,growth);}
       tx.update(c.refs.user,patch);
       c.result={...c.result,claimed:[...claimed,body.stars],bestStars:c.stars};
@@ -231,7 +238,7 @@ function createService({db,now=Date.now,random=Math.random,dailySets=getDailySet
   }
   return {status,start,prepareQuestion,commitQuestion,answer,next,finish,claim};
 }
-function createHandler({action='status',resolveA=()=>playerRepository.resolve(),now=Date.now,random=Math.random,logger=console}={}) {
+function createHandler({action='status',resolveA=()=>playerRepository.resolve(),now=Date.now,random=Math.random,logger=console,reboot=false}={}) {
   return async (req,res)=>{
     res.set?.('Cache-Control','private, no-store');
     try {
@@ -240,10 +247,10 @@ function createHandler({action='status',resolveA=()=>playerRepository.resolve(),
       const a=resolveA();let identity;
       try{identity=await a.auth.verifyIdToken(match[1],true);}catch(_){throw fail('登入已失效，請重新登入',401);}
       if(!validUid(identity?.uid)||identity.aud!==PROJECT_IDS.A||identity.iss!=='https://securetoken.google.com/'+PROJECT_IDS.A)throw fail('登入身分驗證失敗',401);
-      const service=createService({db:a.db,now,random});
+      const service=createService({db:a.db,now,random,reboot});
       return res.json({ok:true,...await service[action](identity.uid,req.body||{})});
     }catch(error){if(!error.status)logger.error('[Meditation]',error.message);return res.status(error.status||503).json({ok:false,error:error.status?error.message:'閉關同步未完成，請重試原操作'});}
   };
 }
-module.exports=app=>{for(const action of ['status','start','answer','next','finish','claim'])app.post('/api/meditation/'+action,createHandler({action}));};
+module.exports=(app,options)=>{for(const action of ['status','start','answer','next','finish','claim'])app.post('/api/meditation/'+action,createHandler({...options,action}));};
 module.exports.__test={createService,createHandler,publicSession,dayId,RESULTS,SESSIONS,dailyResult,sessionTotal,resultTotal};

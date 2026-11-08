@@ -234,15 +234,15 @@ test('Cloudflare image response keeps base64 intact and uses four steps', async 
   assert.equal(Object.hasOwn(body, 'seed'), false);
 });
 
-test('server and clients wire secure backfill and automatic generated-artifact images', () => {
+test('legacy image handlers remain inspectable while their live entry points are retired', () => {
   const server = read('server.js');
   const main = read('public/main.js');
   const admin = read('public/cultivation/admin-item-image-manager.js');
   const refinery = read('public/cultivation/refinery-ai-jobs.js');
   const artifactCatalog = read('public/cultivation/artifact-catalog.js');
   const materialCatalog = read('public/cultivation/material-catalog.js');
-  assert.match(server, /registerItemImageApi\(app\)/);
-  assert.match(main, /admin-item-image-manager\.js/);
+  assert.doesNotMatch(server, /registerItemImageApi\(app\)/);
+  assert.doesNotMatch(main, /admin-item-image-manager\.js/);
   assert.match(admin, /補圖/);
   assert.match(admin, /一鍵重生/);
   assert.match(admin, /regenerateAll/);
@@ -259,7 +259,7 @@ test('active inventory and refinery surfaces render generated images with icon f
   const refinery = read('public/cultivation/cultivation-refinery-v2.js');
   const materials = read('public/cultivation/material-system.js');
   assert.match(bag, /function imageMarkup\(/);
-  assert.match(bag, /imageUrl: item\?\.imageUrl \|\| ''/);
+  assert.match(bag, /if \(!url\) return escapeHtml\(fallback/);
   assert.match(bag, /uib-icon img/);
   assert.match(refinery, /function itemImageMarkup\(/);
   assert.match(refinery, /m\.imageUrl \|\| ''/);

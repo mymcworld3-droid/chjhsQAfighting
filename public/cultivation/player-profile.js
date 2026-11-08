@@ -1,7 +1,7 @@
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, getDoc } from '../data-store.js';
-import { ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIFACT_EQUIP_SLOTS, getArtifactById, realmForScore } from './artifact-catalog.js';
+import { realmForScore } from './artifact-catalog.js';
 import './training-access-rules.js';
 import { resolvePlayerAvatar } from './profile-avatar.js';
 
@@ -28,28 +28,6 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     return '';
   }
 
-  const PERCENT_EFFECTS = new Set([
-    'equip_attack_percent', 'equip_hp_percent', 'equip_damage_percent',
-    'equip_damage_reduction_percent', 'equip_crit_chance', 'equip_crit_damage_percent',
-    'equip_combo_chance', 'equip_combo_damage_percent', 'equip_lifesteal_percent', 'equip_reflect_percent',
-    'equip_low_hp_damage_percent', 'equip_low_hp_reduction_percent',
-    'equip_first_hit_reduction_percent', 'equip_damage_cap_percent'
-  ]);
-  const EFFECT_NAMES = Object.freeze({
-    equip_attack_flat:'攻擊', equip_attack_percent:'攻擊',
-    equip_hp_flat:'生命', equip_hp_percent:'生命',
-    equip_damage_percent:'增傷', equip_damage_reduction_flat:'固定減傷',
-    equip_damage_reduction_percent:'減傷', equip_crit_chance:'暴擊率',
-    equip_crit_damage_percent:'暴傷', equip_combo_chance:'連擊率', equip_combo_damage_percent:'連擊傷害加成',
-    equip_lifesteal_percent:'吸血', equip_reflect_percent:'反傷',
-    equip_shield_flat:'護盾', equip_true_damage_flat:'真實傷害',
-    equip_low_hp_damage_percent:'低血量增傷', equip_low_hp_reduction_percent:'低血量減傷',
-    equip_first_hit_reduction_percent:'首次受傷減傷',
-    equip_damage_cap_percent:'單次傷害上限',
-    equip_on_correct_shield_flat:'答對護盾',
-    equip_cheat_death:'免死一次', equip_copy_enemy_artifact:'複製敵方法寶'
-  });
-
   function equippedCore(data, self) {
     const runtime = self ? window.getEquippedGoldenCoreState?.() : null;
     const remote = data?.cultivationTraining || {};
@@ -58,29 +36,9 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     if (!enabled) return null;
     const raw = runtime || remote.equippedCore ||
       (remote.equipped === true ? remote.core : null);
-    if (number(data?.stats?.totalScore) < 28 || !raw?.type) return null;
+    if ((window.QATrainingAccessRules?.score(data) ?? number(data?.stats?.totalScore)) < 28 || !raw?.type) return null;
     return window.getGoldenCorePublicDetails?.(raw) ||
       { type: raw.type, name: '本命金丹', grade: Math.min(9, Math.max(1, number(raw.grade) || 9)), effect: '' };
-  }
-
-  function equippedArtifact(data, slot) {
-    const id = String(data?.artifactSystem?.equipped?.[slot] || '');
-    if (!id || number(data?.artifactSystem?.inventory?.[id]) < 1) return null;
-    const item = getArtifactById(id);
-    if (!item || !Array.isArray(item.effects) || !item.effects.some((effect) => String(effect?.type || '').startsWith('equip_'))) return null;
-    const assigned = ARTIFACT_EQUIP_SLOTS.includes(item.equipSlot) ? item.equipSlot : '';
-    if (assigned !== slot) return null;
-    return item;
-  }
-
-  function effectLabel(effect) {
-    const type = String(effect?.type || '');
-    const name = EFFECT_NAMES[type];
-    if (!name) return '';
-    if (type === 'equip_cheat_death' || type === 'equip_copy_enemy_artifact') return name;
-    const value = number(effect.value);
-    return name + ' ' + (type === 'equip_damage_cap_percent' ? '' : '+') +
-      (PERCENT_EFFECTS.has(type) ? (value * 100).toLocaleString('zh-TW', { maximumFractionDigits: 1 }) + '%' : fmt(value));
   }
 
   // Exposed pure projection for regression tests and other public profile entry points.
@@ -88,43 +46,33 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const stats = data?.stats || {};
     const score = number(stats.totalScore);
     const core = equippedCore(data, self);
-    const power = window.calculateCombatPower?.({
+    const power = (self && window.getCombatPower?.()) || window.calculateCombatPower?.({
       stats: { attack: stats.attack ?? 200,
         maxHp: Math.max(1, Number(stats.maxHp) || 1000) + (window.QATrainingAccessRules?.hpBonus(data) || 0) } ,
-      core, equipped: data?.artifactSystem?.equipped || {},
-      inventory: data?.artifactSystem?.inventory || {}
+      core
     }) || { total: 0, base: 0, core: 0, equipment: 0, items: [] };
     const answered = number(stats.totalAnswered);
     const correct = Math.min(answered, number(stats.totalCorrect));
-    const baseRealm = realmForScore(score);
-    const realm = (window.QAVoidRetraining?.display(score,baseRealm) || baseRealm)?.name || '凡人';
-    const slots = ARTIFACT_EQUIP_SLOTS.map(slot => ({ slot, item: equippedArtifact(data, slot) }));
+    const access = self ? window.QACultivationRebootClient?.realmScore(score, data) ?? score : score;
+    const baseRealm = realmForScore(access);
+    const realm = (window.QAVoidRetraining?.display(access, baseRealm) || baseRealm)?.name || '凡人';
     return {
       uid, name: String(data?.displayName || '無名修士'), avatar: safeImage(resolvePlayerAvatar(data)),
       // A high enough score alone does not award the top-five True Immortal title.
-      realm: realm === '真仙' ? '半仙' : realm, score, power, core, slots,
+      realm: realm === '真仙' ? '半仙' : realm, score, power, core,
       answered, correct, accuracy: answered ? (correct / answered * 100).toFixed(1) + '%' : '尚無紀錄'
     };
   }
 
   function profileMarkup(profile) {
     const core = profile.core;
-    const slots = profile.slots.map(({slot,item}) => {
-      const power = item ? Math.max(0, Number(window.calculateArtifactPower?.(item)) || 0) : 0;
-      const effects = item?.effects?.map(effectLabel).filter(Boolean).slice(0, 5) || [];
-      return '<article class="xpp-equip"><span>' + esc(slot) + '</span>' +
-        (item ? '<strong>' + esc(item.name) + '</strong><small>' + esc(item.realm) +
-          ' · 戰力 +' + fmt(power) + '</small>' +
-          (effects.length ? '<p>' + effects.map(esc).join(' · ') + '</p>' : '') :
-          '<strong class="xpp-empty">尚未裝備</strong>') + '</article>';
-    }).join('');
     return '<div class="xpp-hero">' +
       '<div class="xpp-avatar"><img data-xpp-avatar alt="玩家頭像" hidden><i class="fa-solid fa-user"></i></div>' +
       '<div class="xpp-identity"><span>修士資料 · PLAYER PROFILE</span><h2>' + esc(profile.name) +
       '</h2><p>' + esc(profile.realm) + ' · 修為 ' + fmt(profile.score) + '</p></div></div>' +
       '<div class="xpp-power"><span>綜合戰力</span><strong>' + fmt(profile.power.total) +
       '</strong><small>基礎 ' + fmt(profile.power.base) + ' ／ 金丹 ' + fmt(profile.power.core) +
-      ' ／ 裝備 ' + fmt(profile.power.equipment) + '</small></div>' +
+      '</small></div>' +
       '<div class="xpp-stats"><div><span>答對率</span><b>' + esc(profile.accuracy) +
       '</b></div><div><span>累計答對</span><b>' + fmt(profile.correct) +
       '</b></div><div><span>累計答題</span><b>' + fmt(profile.answered) + '</b></div></div>' +
@@ -133,8 +81,6 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
         fmt(core.grade) + ' 品 · 戰力 +' + fmt(profile.power.core) + '</b></div>' +
         (core.effect ? '<p>' + esc(core.effect) + '</p>' : '') + '</div>' :
         '<p class="xpp-note">目前沒有調御中的本命金丹。</p>') + '</section>' +
-      '<section class="xpp-section"><h3>已裝備法寶</h3><div class="xpp-equipment">' +
-      slots + '</div></section>' +
       '<p class="xpp-footnote">顯示該修士已保存的公開戰鬥資料；戰力為綜合評分，不直接增加鬥法傷害。</p>';
   }
 

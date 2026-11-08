@@ -41,9 +41,10 @@
 
   function refresh(score) {
     const value = Math.max(0, Number(score) || 0);
-    const projected=window.QAVoidRetraining?.progress(value,REALMS,REALMS.indexOf(realmFor(value)));
-    const realm = projected?.realm || realmFor(value);
-    const next = nextRealm(value);
+    const access = window.QACultivationRebootClient?.realmScore(value) ?? value;
+    const projected=window.QAVoidRetraining?.progress(access,REALMS,REALMS.indexOf(realmFor(access)));
+    const realm = projected?.realm || realmFor(access);
+    const next = nextRealm(access);
 
     const scoreEl = document.getElementById('xiuxian-score');
     const realmEl = document.getElementById('xiuxian-realm');
@@ -76,7 +77,8 @@
       ((value - realm.need) / Math.max(1, next.need - realm.need)) * 100
     ));
     barEl.style.width = `${percent}%`;
-    nextEl.textContent = `${Math.max(0, next.need - value).toLocaleString()} 修為`;
+    const awaitingTrial = next.need === 28 && value >= next.need && access < next.need;
+    nextEl.textContent = awaitingTrial ? '待渡金丹天劫' : `${Math.max(0, next.need - value).toLocaleString()} 修為`;
     labelEl.textContent = `下一境界：${next.name} ${next.sub}`;
     return true;
   }

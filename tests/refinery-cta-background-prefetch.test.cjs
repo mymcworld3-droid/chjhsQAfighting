@@ -20,15 +20,10 @@ test('forge keeps one primary action and synchronizes its ready state',()=>{
   assert.match(ui,/屬性由系統固定上下限管理/);
 });
 
-test('ready forge indicator reaches map, detail tab, and bottom navigation',()=>{
-  assert.match(scene,/player\.refineryJobV1/);
-  assert.match(scene,/Number\(forgeJob\.readyAtMs \|\| 0\) <= Date\.now\(\)/);
-  assert.match(scene,/button === nav \? ready \|\| canUpgrade \|\| innateReady \|\| forgeReady : ready/);
-  assert.match(scene,/data-training-location="forge"/);
-  assert.match(scene,/data-training-tab="refinery"/);
-  assert.match(scene,/xiuxian:refinery-job-updated/);
-  assert.match(scene,/setInterval\(updateTicketIndicators, 10000\)/);
-  assert.match(css,/\.refinery-ready-dot\[hidden\]/);
+test('the map retires forge reminders and continues to show nascent progression',()=>{
+  assert.doesNotMatch(scene,/refineryJobV1|refinery-ready-dot|refinery-job-updated/);
+  assert.match(scene,/nascent-upgrade-dot/);
+  assert.match(css,/\.nascent-upgrade-dot\[hidden\]/);
 });
 
 test('online new forge jobs precompute one artifact; claiming waits for pending request and still transacts',()=>{
