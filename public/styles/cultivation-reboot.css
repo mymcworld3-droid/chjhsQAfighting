@@ -218,19 +218,27 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   align-self: center;
 }
 .path-tree-node:is([data-slot="origin"], [data-slot="seal"]) .path-tree-node-name { font-size: .92rem; color: var(--path-tone); }
-/* Shape follows the actual node attribute: blade, vitality, critical, defense, etc. */
-.path-tree-orb .ns-orb-progress { transform: none; }
-.path-tree-orb .ns-orb-surface { inset: 18%; border-radius: 18%; background: radial-gradient(circle at 36% 28%, #bca17344, transparent 58%), #211d19; }
-.path-tree-node[data-node-shape="circle"] .ns-orb-surface { border-radius: 50%; }
-.path-tree-node[data-node-shape="blade"] .ns-orb-surface { transform: rotate(45deg) scale(.87); }
-.path-tree-node[data-node-shape="blade"] .path-tree-icon { transform: rotate(-45deg); }
-.path-tree-node[data-node-shape="heart"] .ns-orb-surface { border-radius: 49% 49% 44% 44%; }
-.path-tree-node[data-node-shape="star"] .ns-orb-surface { clip-path: polygon(50% 2%,64% 32%,98% 35%,73% 58%,79% 96%,50% 74%,21% 96%,27% 58%,2% 35%,36% 32%); }
-.path-tree-node[data-node-shape="hex"] .ns-orb-surface { clip-path: polygon(24% 0,76% 0,100% 50%,76% 100%,24% 100%,0 50%); }
-.path-tree-node[data-node-shape="shield"] .ns-orb-surface { clip-path: polygon(50% 0,97% 20%,97% 56%,72% 87%,50% 100%,28% 87%,3% 56%,3% 20%); }
-.path-tree-node[data-node-shape="bolt"] .ns-orb-surface { clip-path: polygon(60% 0,16% 55%,48% 55%,37% 100%,90% 41%,59% 41%); }
-.path-tree-node[data-node-shape="drop"] .ns-orb-surface { border-radius: 60% 60% 50% 50%; }
-.path-tree-node[data-node-shape="capstone"] .ns-orb-surface { inset: 19%; border-color: var(--path-tone); border-radius: 24%; box-shadow: 0 0 17px color-mix(in srgb, var(--path-tone) 25%, transparent), inset 0 0 12px #0009; }
+/* All nodes stay round. Only the central attribute icon varies. */
+.path-tree-orb .ns-orb-surface {
+  display: grid;
+  place-items: center;
+  inset: 12%;
+  border-radius: 50%;
+  clip-path: none;
+  transform: none;
+}
+.path-tree-orb .path-tree-icon {
+  width: 46%;
+  height: 46%;
+  flex: none;
+  transform: none;
+}
+.path-tree-node[data-slot="seal"] .ns-orb-surface {
+  border-radius: 50%;
+  border-color: var(--path-tone);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--path-tone) 22%, transparent),
+              inset -4px -6px 12px #0009;
+}
 .path-tree-node[data-slot="seal"] .path-tree-node-effect { font-weight: 700; }
 
 .path-tree-page button:focus-visible, .path-tree-scroll:focus-visible { outline: 2px solid #f7e0a3; outline-offset: 2px; }
