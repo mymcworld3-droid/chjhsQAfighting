@@ -15,84 +15,466 @@
   })));
   const NODES_PER_CHAPTER = 7;
 
+  // Preserve saved node IDs and each realm's seven-point budget.
+  // Every learnable node has ONE attribute; the capstone bonus is its one unique trait.
   const DESIGNS = {
-    sword: {
-      lanes: ['劍骨', '疊鋒'],
-      marks: ['初鋒', '凝芒', '聽劍', '御霄', '歸虛', '合鋒', '斷雷', '仙鋒'],
-      seals: ['一線開鋒', '劍丹同鳴', '飛劍成陣', '一念千鋒', '無形劍意', '人劍合一', '劍斷天雷', '一劍照天'],
-      a: [['淬刃', { attack: 4 }], ['飛星', { equip_crit_chance: 0.005 }], ['礪骨', { attack: 5 }]],
-      b: [['分影', { equip_combo_damage_percent: 0.01 }], ['追鋒', { equip_crit_damage_percent: 0.01 }],
-        ['疊刃', { equip_combo_damage_percent: 0.015 }]],
-      seal: { attack: 8, equip_combo_damage_percent: 0.02, equip_combo_chance: 0.003 },
-      traits: [
-        { equip_crit_chance: 0.012 },
-        { equip_crit_damage_percent: 0.06 },
-        { equip_combo_damage_percent: 0.05 },
-        { equip_combo_chance: 0.004 },
-        { equip_low_hp_damage_percent: 0.055 },
-        { equip_damage_percent: 0.035 },
-        { equip_streak_damage_percent: 0.09 },
-        { equip_crit_chance: 0.025, equip_crit_damage_percent: 0.09 }
+  "sword": {
+    "lanes": [
+      "破鋒",
+      "迴劍"
+    ],
+    "marks": [
+      "初鋒",
+      "劍丹",
+      "劍魄",
+      "御霄",
+      "虛刃",
+      "合劍",
+      "斬劫",
+      "問仙"
+    ],
+    "a": [
+      [
+        "淬刃",
+        {
+          "attack": 5
+        }
+      ],
+      [
+        "識隙",
+        {
+          "equip_crit_chance": 0.005
+        }
+      ],
+      [
+        "穿鋒",
+        {
+          "equip_crit_damage_percent": 0.02
+        }
       ]
-    },
-    body: {
-      lanes: ['體魄', '護體'],
-      marks: ['鍛筋', '鳴骨', '鎮脈', '立嶽', '虛身', '磐軀', '承雷', '仙骨'],
-      seals: ['鐵骨初成', '血氣成輪', '山息入脈', '肉身鎮嶽', '虛境不動', '金剛法身', '千雷不摧', '萬山歸身'],
-      a: [['煉骨', { maxHp: 12 }], ['伏甲', { equip_damage_reduction_flat: 1 }], ['通脈', { maxHp: 18 }]],
-      b: [['生甲', { equip_on_correct_shield_flat: 2 }], ['厚甲', { equip_first_hit_reduction_percent: 0.01 }],
-        ['磐息', { equip_on_correct_shield_flat: 3 }]],
-      seal: { maxHp: 22, equip_on_correct_shield_flat: 4, equip_damage_reduction_flat: 1 },
-      traits: [
-        { equip_first_hit_reduction_percent: 0.08 },
-        { equip_on_correct_shield_flat: 6 },
-        { equip_damage_reduction_flat: 3 },
-        { equip_shield_flat: 45 },
-        { equip_low_hp_reduction_percent: 0.10 },
-        { equip_damage_reduction_percent: 0.045 },
-        { equip_reflect_percent: 0.10 },
-        { equip_damage_cap_percent: 0.40 }
+    ],
+    "b": [
+      [
+        "起劍",
+        {
+          "attack": 5
+        }
+      ],
+      [
+        "疊影",
+        {
+          "equip_combo_chance": 0.004
+        }
+      ],
+      [
+        "追斬",
+        {
+          "equip_combo_damage_percent": 0.018
+        }
       ]
-    },
-    spell: {
-      lanes: ['法脈', '雷訣'],
-      marks: ['引電', '照符', '定陣', '御雷', '虛引', '合篆', '劫印', '天符'],
-      seals: ['雷符入門', '丹火凝篆', '雷紋開脈', '御雷成陣', '雷入虛空', '五雷合印', '九霄劫法', '天雷正印'],
-      a: [['引弧', { equip_true_damage_flat: 3 }], ['銘篆', { attack: 4 }], ['刻雷', { equip_true_damage_flat: 4 }]],
-      b: [['布陣', { equip_damage_percent: 0.0075 }], ['聚符', { equip_streak_damage_percent: 0.01 }],
-        ['天罡', { equip_damage_percent: 0.0075 }]],
-      seal: { equip_true_damage_flat: 7, equip_damage_percent: 0.0125 },
-      traits: [
-        { equip_true_damage_flat: 5 },
-        { equip_true_damage_flat: 3, equip_streak_damage_percent: 0.04 },
-        { equip_damage_percent: 0.025, equip_crit_chance: 0.02 },
-        { equip_streak_damage_percent: 0.07, equip_crit_damage_percent: 0.04 },
-        { equip_low_hp_damage_percent: 0.05, equip_true_damage_flat: 5 },
-        { equip_damage_percent: 0.035, equip_streak_damage_percent: 0.07 },
-        { equip_crit_chance: 0.02, equip_true_damage_flat: 7 },
-        { equip_true_damage_flat: 10, equip_damage_percent: 0.04 }
+    ],
+    "seals": [
+      [
+        "劍心初鳴",
+        "暴擊更容易觸發。",
+        {
+          "equip_crit_chance": 0.014
+        }
+      ],
+      [
+        "丹鋒同響",
+        "連擊更容易觸發。",
+        {
+          "equip_combo_chance": 0.014
+        }
+      ],
+      [
+        "劍魄破空",
+        "暴擊時造成更高傷害。",
+        {
+          "equip_crit_damage_percent": 0.075
+        }
+      ],
+      [
+        "千鋒御霄",
+        "連擊的追加傷害提高。",
+        {
+          "equip_combo_damage_percent": 0.085
+        }
+      ],
+      [
+        "虛刃逆命",
+        "生命降至 30% 以下時，提高輸出。",
+        {
+          "equip_low_hp_damage_percent": 0.07
+        }
+      ],
+      [
+        "萬劍歸一",
+        "普通攻擊傷害全面提高。",
+        {
+          "equip_damage_percent": 0.04
+        }
+      ],
+      [
+        "斬雷九式",
+        "每次連續答對第三題時，提高該次傷害。",
+        {
+          "equip_streak_damage_percent": 0.1
+        }
+      ],
+      [
+        "飛仙一劍",
+        "命中時額外造成無視普通減傷的真實傷害。",
+        {
+          "equip_true_damage_flat": 16
+        }
       ]
-    },
-    insight: {
-      lanes: ['心海', '歸元'],
-      marks: ['澄念', '觀心', '返照', '明性', '虛懷', '合道', '破妄', '仙念'],
-      seals: ['明心立本', '一念丹明', '心照元海', '萬念歸一', '虛室生白', '道心合真', '雷中見性', '一心照世'],
-      a: [['澄心', { maxHp: 12 }], ['守念', { equip_damage_reduction_percent: 0.005 }], ['養元', { maxHp: 14 }]],
-      b: [['回息', { equip_lifesteal_percent: 0.005 }], ['省身', { equip_low_hp_damage_percent: 0.0125 }],
-        ['歸流', { equip_lifesteal_percent: 0.0075 }]],
-      seal: { maxHp: 20, equip_lifesteal_percent: 0.01, equip_low_hp_reduction_percent: 0.01 },
-      traits: [
-        { equip_lifesteal_percent: 0.02 },
-        { equip_lifesteal_percent: 0.012, equip_on_correct_shield_flat: 5 },
-        { equip_low_hp_damage_percent: 0.05, equip_lifesteal_percent: 0.015 },
-        { equip_first_hit_reduction_percent: 0.075, equip_lifesteal_percent: 0.02 },
-        { equip_low_hp_reduction_percent: 0.08, equip_lifesteal_percent: 0.02 },
-        { equip_reflect_percent: 0.09, equip_lifesteal_percent: 0.02 },
-        { equip_damage_reduction_percent: 0.04, equip_lifesteal_percent: 0.025 },
-        { equip_cheat_death: 1 }
+    ]
+  },
+  "body": {
+    "lanes": [
+      "鎮嶽",
+      "回震"
+    ],
+    "marks": [
+      "鍛骨",
+      "血丹",
+      "元軀",
+      "岳身",
+      "虛體",
+      "合岳",
+      "承雷",
+      "仙骨"
+    ],
+    "a": [
+      [
+        "煉骨",
+        {
+          "maxHp": 12
+        }
+      ],
+      [
+        "沉息",
+        {
+          "equip_damage_reduction_flat": 1
+        }
+      ],
+      [
+        "鎮山",
+        {
+          "attack": 4
+        }
       ]
-    }
-  };
+    ],
+    "b": [
+      [
+        "振臂",
+        {
+          "attack": 4
+        }
+      ],
+      [
+        "凝甲",
+        {
+          "equip_on_correct_shield_flat": 3
+        }
+      ],
+      [
+        "反震",
+        {
+          "equip_reflect_percent": 0.012
+        }
+      ]
+    ],
+    "seals": [
+      [
+        "鐵脈初成",
+        "受到攻擊時，抵銷一部分固定傷害。",
+        {
+          "equip_damage_reduction_flat": 3
+        }
+      ],
+      [
+        "血氣護元",
+        "每場戰鬥第一次受傷時，額外減免傷害。",
+        {
+          "equip_first_hit_reduction_percent": 0.1
+        }
+      ],
+      [
+        "元軀生甲",
+        "答對後立即獲得額外護盾。",
+        {
+          "equip_on_correct_shield_flat": 7
+        }
+      ],
+      [
+        "山岳法身",
+        "進入戰鬥時帶有額外護盾。",
+        {
+          "equip_shield_flat": 60
+        }
+      ],
+      [
+        "虛身不墜",
+        "生命低於 30% 時提高減傷。",
+        {
+          "equip_low_hp_reduction_percent": 0.12
+        }
+      ],
+      [
+        "金剛不動",
+        "降低受到的普通傷害。",
+        {
+          "equip_damage_reduction_percent": 0.065
+        }
+      ],
+      [
+        "雷震返天",
+        "受擊時反彈一部分傷害。",
+        {
+          "equip_reflect_percent": 0.13
+        }
+      ],
+      [
+        "仙骨不滅",
+        "單次承受的傷害不超過生命上限的一定比例。",
+        {
+          "equip_damage_cap_percent": 0.42
+        }
+      ]
+    ]
+  },
+  "spell": {
+    "lanes": [
+      "雷殛",
+      "符陣"
+    ],
+    "marks": [
+      "引電",
+      "丹篆",
+      "元雷",
+      "天符",
+      "虛引",
+      "合印",
+      "劫雷",
+      "道篆"
+    ],
+    "a": [
+      [
+        "聚雷",
+        {
+          "attack": 5
+        }
+      ],
+      [
+        "破罡",
+        {
+          "equip_true_damage_flat": 4
+        }
+      ],
+      [
+        "雷目",
+        {
+          "equip_crit_chance": 0.006
+        }
+      ]
+    ],
+    "b": [
+      [
+        "啟篆",
+        {
+          "attack": 5
+        }
+      ],
+      [
+        "連符",
+        {
+          "equip_streak_damage_percent": 0.015
+        }
+      ],
+      [
+        "開陣",
+        {
+          "equip_damage_percent": 0.012
+        }
+      ]
+    ],
+    "seals": [
+      [
+        "雷符入脈",
+        "命中時附加無視普通減傷的雷傷。",
+        {
+          "equip_true_damage_flat": 5
+        }
+      ],
+      [
+        "紫電照丹",
+        "雷擊更容易暴擊。",
+        {
+          "equip_crit_chance": 0.018
+        }
+      ],
+      [
+        "元雷連誦",
+        "每次連續答對第三題時，追加雷法傷害。",
+        {
+          "equip_streak_damage_percent": 0.06
+        }
+      ],
+      [
+        "諸符共振",
+        "提高普通攻擊造成的總傷害。",
+        {
+          "equip_damage_percent": 0.04
+        }
+      ],
+      [
+        "虛雷噬命",
+        "生命低於 30% 時，雷術威力提高。",
+        {
+          "equip_low_hp_damage_percent": 0.07
+        }
+      ],
+      [
+        "五雷合印",
+        "暴擊時，法術傷害進一步提高。",
+        {
+          "equip_crit_damage_percent": 0.08
+        }
+      ],
+      [
+        "萬劫引電",
+        "雷法命中更容易接續連擊。",
+        {
+          "equip_combo_chance": 0.01
+        }
+      ],
+      [
+        "天符歸一",
+        "連擊造成更高追加傷害。",
+        {
+          "equip_combo_damage_percent": 0.1
+        }
+      ]
+    ]
+  },
+  "insight": {
+    "lanes": [
+      "觀心",
+      "歸元"
+    ],
+    "marks": [
+      "澄念",
+      "丹心",
+      "元識",
+      "明性",
+      "虛懷",
+      "合道",
+      "破妄",
+      "仙念"
+    ],
+    "a": [
+      [
+        "明志",
+        {
+          "attack": 4
+        }
+      ],
+      [
+        "回息",
+        {
+          "equip_lifesteal_percent": 0.006
+        }
+      ],
+      [
+        "養元",
+        {
+          "maxHp": 15
+        }
+      ]
+    ],
+    "b": [
+      [
+        "照心",
+        {
+          "attack": 4
+        }
+      ],
+      [
+        "凝神",
+        {
+          "equip_damage_reduction_percent": 0.008
+        }
+      ],
+      [
+        "返照",
+        {
+          "equip_reflect_percent": 0.012
+        }
+      ]
+    ],
+    "seals": [
+      [
+        "明心立本",
+        "攻擊命中時，回復更多生命。",
+        {
+          "equip_lifesteal_percent": 0.023
+        }
+      ],
+      [
+        "心海起波",
+        "答對後獲得護心之盾。",
+        {
+          "equip_on_correct_shield_flat": 5
+        }
+      ],
+      [
+        "元神照隙",
+        "生命低於 30% 時，額外提高反擊輸出。",
+        {
+          "equip_low_hp_damage_percent": 0.06
+        }
+      ],
+      [
+        "一念守真",
+        "第一次遭受攻擊時，顯著減少傷害。",
+        {
+          "equip_first_hit_reduction_percent": 0.09
+        }
+      ],
+      [
+        "虛室生白",
+        "生命低於 30% 時，提高生存能力。",
+        {
+          "equip_low_hp_reduction_percent": 0.1
+        }
+      ],
+      [
+        "道心返照",
+        "被攻擊時，反彈一部分傷害。",
+        {
+          "equip_reflect_percent": 0.1
+        }
+      ],
+      [
+        "劫中無我",
+        "降低受到的普通傷害。",
+        {
+          "equip_damage_reduction_percent": 0.05
+        }
+      ],
+      [
+        "一念長生",
+        "每場戰鬥第一次遭受致命一擊時，保留 1 點生命。",
+        {
+          "equip_cheat_death": 1
+        }
+      ]
+    ]
+  }
+};
 
   const FLAT = {
     attack: '攻擊', maxHp: '生命上限', equip_true_damage_flat: '命中真實傷害',
@@ -119,16 +501,14 @@
       const { id, index } = chapter;
       const lane = key => design[key].map(([title, bonuses], step) => Object.freeze({
         id: `${id}-${key}${step + 1}`, slot: `${key}${step + 1}`, name: `${design.marks[index]}・${title}`,
-        bonuses: stageBonuses({ attack: 1, ...bonuses }, index)
+        bonuses: stageBonuses(bonuses, index)
       }));
-      const baseBonuses = stageBonuses({ attack: 6, ...design.seal }, index);
-      const trait = stageBonuses(design.traits[index], index);
-      const combined = { ...baseBonuses };
-      for (const [attribute, value] of Object.entries(trait)) combined[attribute] = (combined[attribute] || 0) + value;
+      const [traitName, traitText, effect] = design.seals[index];
+      const trait = stageBonuses(effect, index);
       return Object.freeze({ ...chapter, lanes: Object.freeze(design.lanes), nodes: Object.freeze([
         ...lane('a'), ...lane('b'),
-        Object.freeze({ id: `${id}-seal`, slot: 'seal', name: design.seals[index],
-          baseBonuses, trait, bonuses: Object.freeze(combined) })
+        Object.freeze({ id: `${id}-seal`, slot: 'seal', name: traitName,
+          traitName, traitText, trait, bonuses: trait })
       ]) });
     }));
   }
