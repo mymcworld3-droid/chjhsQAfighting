@@ -262,10 +262,10 @@ function renderNode() {
   const state = cultivationView()?.state;
   const route = Rules.ROUTES[state?.route];
   if (route && selectedNode === ORIGIN.id) {
-    const gains = [route.attack && `攻擊 +${route.attack}`, route.hp && `生命上限 +${route.hp}`, route.effectText(route.base)];
     nodeTitle.textContent = ORIGIN.name;
     nodeRank.textContent = route.name;
-    nodeBody.innerHTML = `${bonusMarkup(gains.filter(Boolean))}<p class="ns-detail-preview">選定流派時已取得這些加成。</p>`;
+    nodeBody.innerHTML = `${bonusMarkup([route.effectText(route.base)])}
+      <p class="ns-detail-preview">此為流派的起始天賦；其餘基礎攻擊與生命加成已直接計入角色能力。</p>`;
     nodeFooter.hidden = true;
     return;
   }
