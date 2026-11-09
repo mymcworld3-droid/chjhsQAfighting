@@ -3,9 +3,15 @@ import { cultivationRequest, cultivationView } from './cultivation-reboot-client
 const Rules = globalThis.QACultivationRebootRules;
 const Nodes = globalThis.QACultivationPathNodes;
 const TAB = '#page-training [data-training-tab="path"]';
-const dialog = document.getElementById('cultivation-node-dialog');
-const nodeDetail = dialog.querySelector('[data-node-detail]');
-const message = dialog.querySelector('[data-node-message]');
+const detail = document.getElementById('cultivation-node-panel-template').content.firstElementChild;
+const nodeTitle = detail.querySelector('#cultivation-node-title');
+const nodeRank = detail.querySelector('[data-node-rank]');
+const nodeBody = detail.querySelector('[data-node-detail]');
+const nodePoints = detail.querySelector('[data-node-points]');
+const message = detail.querySelector('[data-node-message]');
+const learnButton = detail.querySelector('[data-learn-path-node]');
+const closeButton = detail.querySelector('[data-close-path-node]');
+const sheetLayout = matchMedia('(orientation: portrait), (max-height: 600px)');
 let selectedNode = '';
 let learning = false;
 let syncing = false;
@@ -20,8 +26,31 @@ const amount = value => Rules.number(value).toLocaleString('zh-TW');
 function activeTab() {
   const tab = document.querySelector(TAB);
   const page = tab?.closest('#page-training');
-  return tab?.classList.contains('active') && page.classList.contains('active-page') &&
+  return tab?.classList.contains('active') && !tab.disabled && page.classList.contains('active-page') &&
     page.dataset.trainingPlace === 'meditation';
+}
+
+const detailNavigation = new MutationObserver(() => {
+  if (!activeTab() || !document.querySelector('#training-tab-content .path-tree-workspace')) closeNode(false);
+});
+
+function selectedButton() {
+  return document.querySelector(`#training-tab-content [data-cultivation-node="${CSS.escape(selectedNode)}"]`);
+}
+
+function positionNodeDetail() {
+  if (!selectedNode || !activeTab()) return;
+  const workspace = document.querySelector('#training-tab-content .path-tree-workspace');
+  if (!workspace) return;
+  const sheet = sheetLayout.matches;
+  workspace.classList.toggle('has-detail', !sheet);
+  detail.toggleAttribute('data-ns-portrait-sheet', sheet);
+  const parent = sheet ? document.body : workspace;
+  if (detail.parentElement !== parent) {
+    const focused = detail.contains(document.activeElement) ? document.activeElement : null;
+    parent.append(detail);
+    focused?.focus({ preventScroll: true });
+  }
 }
 
 function chapterMarkup(chapter, score, learned) {
@@ -30,7 +59,7 @@ function chapterMarkup(chapter, score, learned) {
     const status = Nodes.nodeState(chapter, node, score, learned, progress);
     const isSeal = node.slot === 'seal';
     return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
-      data-node-state="${status}" aria-haspopup="dialog" aria-controls="cultivation-node-dialog">
+      data-node-state="${status}" aria-haspopup="dialog" aria-controls="cultivation-node-dialog" aria-expanded="${node.id === selectedNode}">
         <span class="path-tree-orb" aria-hidden="true">
           <svg class="ns-orb-ring" viewBox="0 0 100 100">
             <circle class="ns-orb-track" cx="50" cy="50" r="45"/>
@@ -75,8 +104,10 @@ function treeMarkup(state) {
       ${chapters.map(chapter => `<button type="button" data-path-tree-jump="${chapter.id}"
         class="${score >= chapter.need ? 'is-attained' : ''}">${chapter.name}</button>`).join('')}
     </nav>
-    <div class="path-tree-scroll" tabindex="0" role="region" aria-label="流派節點圖">
-      <div class="path-tree-board">${chapters.map(chapter => chapterMarkup(chapter, score, learned)).join('')}</div>
+    <div class="path-tree-workspace">
+      <div class="path-tree-scroll" tabindex="0" role="region" aria-label="流派節點圖">
+        <div class="path-tree-board">${chapters.map(chapter => chapterMarkup(chapter, score, learned)).join('')}</div>
+      </div>
     </div>
   </section>`;
 }
@@ -87,12 +118,18 @@ function render() {
   const { state } = cultivationView() || {};
   const oldScroll = container.querySelector('.path-tree-scroll');
   const offset = { left: oldScroll?.scrollLeft || 0, top: oldScroll?.scrollTop || 0 };
+  const focused = detail.contains(document.activeElement) ? document.activeElement : null;
   container.innerHTML = state?.route ? treeMarkup(state) : `<section class="path-tree-page path-tree-empty">
     <div class="path-card"><small>問道宗 · 四脈傳承</small><h2>立下你的修行流派</h2>
       <p>劍修、體修、法修與悟道修各有一條從築基通往半仙的研修路。</p>
       <button type="button" class="path-training-link" data-open-cultivation-path data-path-choose-on-page
         aria-haspopup="dialog" aria-controls="cultivation-path-dialog">選擇流派</button></div>
   </section>`;
+  if (selectedNode) {
+    renderNode();
+    positionNodeDetail();
+    focused?.focus({ preventScroll: true });
+  }
   container.querySelector('.path-tree-scroll')?.scrollTo(offset);
 }
 
@@ -134,13 +171,16 @@ function nodeMessage(status, chapter, node, progress) {
   if (status === 'prerequisite') return node.slot.endsWith('1')
     ? '請先點亮前一境界的大節點。' : '請先研修同一脈的上一個節點。';
   if (status === 'points') return `下一點研修於 ${amount(progress.nextAt)} 修為取得。`;
-  return `本階段尚有 ${progress.available} 點研修。點亮此節點需 1 點。`;
+  return '點亮此節點需 1 點研修。';
 }
 
 function renderNode() {
   const state = cultivationView()?.state;
   const target = Nodes.findNode(state?.route, selectedNode);
-  if (!target) return;
+  if (!target) {
+    if (selectedNode) closeNode(false);
+    return;
+  }
   const { chapter, node } = target;
   const score = Rules.realmScore(state.peakScore, state);
   const learned = Nodes.learnedSet(state);
@@ -148,32 +188,50 @@ function renderNode() {
   const status = Nodes.nodeState(chapter, node, score, learned, progress);
   const route = Rules.ROUTES[state.route];
   const track = node.slot === 'seal' ? '大節點' : chapter.lanes[node.slot.startsWith('a') ? 0 : 1];
-  dialog.style.setProperty('--path-tone', route.color);
-  nodeDetail.innerHTML = `<section class="path-card path-node-card">
-    <small>${route.name} · ${chapter.name} · ${track}</small><h3>${node.name}</h3>
-    <ul>${Nodes.describe(node.bonuses).map(line => `<li>${line}</li>`).join('')}</ul>
-    <p>${nodeMessage(status, chapter, node, progress)}</p>
-    <button type="button" class="path-primary" data-learn-path-node ${learning || status !== 'ready' ? 'disabled' : ''}>
-      ${learning ? '正在研修…' : status === 'ready' ? '研修此節點' : STATUS_TEXT[status]}</button>
-  </section>`;
+  nodeTitle.textContent = node.name;
+  nodeRank.textContent = `${route.name} · ${chapter.name} · ${track}`;
+  nodeBody.innerHTML = `<ul class="path-node-bonuses">${Nodes.describe(node.bonuses).map(line => `<li>${line}</li>`).join('')}</ul>
+    <p class="ns-detail-preview">${nodeMessage(status, chapter, node, progress)}</p>`;
+  nodePoints.textContent = `可用 ${progress.available} 點研修`;
+  learnButton.disabled = learning || status !== 'ready';
+  learnButton.textContent = learning ? '正在研修…' : status === 'ready' ? '研修此節點' : STATUS_TEXT[status];
 }
 
-function openNode(id) {
-  selectedNode = id;
+function openNode(button) {
+  if (!activeTab()) return;
+  selectedButton()?.setAttribute('aria-expanded', 'false');
+  selectedNode = button.dataset.cultivationNode;
+  button.setAttribute('aria-expanded', 'true');
   message.textContent = '';
   renderNode();
-  if (!dialog.open) dialog.showModal();
+  if (!selectedNode) return;
+  positionNodeDetail();
+  detailNavigation.observe(button.closest('#page-training'), { attributes: true, attributeFilter: ['class', 'data-training-place'] });
+  detailNavigation.observe(document.querySelector(TAB), { attributes: true, attributeFilter: ['class', 'disabled'] });
+  detailNavigation.observe(button.closest('#training-tab-content'), { childList: true });
+  closeButton.focus({ preventScroll: true });
+}
+
+function closeNode(restoreFocus = true) {
+  const button = selectedButton();
+  selectedNode = '';
+  detailNavigation.disconnect();
+  document.querySelector('#training-tab-content .path-tree-workspace')?.classList.remove('has-detail');
+  detail.remove();
+  button?.setAttribute('aria-expanded', 'false');
+  if (restoreFocus) button?.focus({ preventScroll: true });
 }
 
 async function learnNode() {
   if (learning || !selectedNode) return;
+  const nodeId = selectedNode;
   learning = true;
   renderNode();
   message.textContent = '';
   try {
-    await cultivationRequest('learn', { node: selectedNode });
+    await cultivationRequest('learn', { node: nodeId });
   } catch (error) {
-    message.textContent = error.status ? error.message : '研修暫時無法保存，請重試。';
+    if (selectedNode === nodeId) message.textContent = error.status ? error.message : '研修暫時無法保存，請重試。';
     if (error.status === 409) await sync();
   } finally {
     learning = false;
@@ -197,22 +255,20 @@ document.addEventListener('click', event => {
   if (!target || target.disabled) return;
   if (target.matches(TAB)) selectTab(target);
   else if (target.hasAttribute('data-open-cultivation-tree')) window.openTrainingPlace?.('meditation');
-  else if (target.dataset.cultivationNode) openNode(target.dataset.cultivationNode);
+  else if (target.dataset.cultivationNode) openNode(target);
   else if (target.dataset.pathTreeJump) jumpToChapter(target.dataset.pathTreeJump);
   else if (target.hasAttribute('data-path-tree-refresh')) void sync();
 });
-dialog.querySelector('[data-close-path-node]').addEventListener('click', () => dialog.close());
-dialog.addEventListener('click', event => {
-  if (event.target.closest('[data-learn-path-node]')) void learnNode();
-});
-dialog.addEventListener('close', () => {
-  const node = [...document.querySelectorAll('[data-cultivation-node]')]
-    .find(button => button.dataset.cultivationNode === selectedNode);
-  node?.focus({ preventScroll: true });
+closeButton.addEventListener('click', () => closeNode());
+learnButton.addEventListener('click', () => void learnNode());
+sheetLayout.addEventListener('change', positionNodeDetail);
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || !selectedNode || event.defaultPrevented || document.querySelector('dialog[open]')) return;
+  event.preventDefault();
+  closeNode();
 });
 window.addEventListener('xiuxian:cultivation-path-updated', () => {
-  if (!cultivationView() && dialog.open) dialog.close();
+  if (selectedNode && !cultivationView()) closeNode(false);
   render();
-  if (dialog.open) renderNode();
 });
 window.addEventListener('golden-core-equipped-changed', render);

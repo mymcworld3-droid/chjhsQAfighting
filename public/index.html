@@ -1355,14 +1355,20 @@ body.xianxia-theme main:has(#page-training.active-page),
         <p class="path-feedback" data-path-feedback role="status"></p>
     </dialog>
 
-    <dialog id="cultivation-node-dialog" class="cultivation-path-dialog path-node-dialog" aria-labelledby="cultivation-node-title">
-        <header class="path-heading">
-            <div><small>問道宗 · 流派傳承</small><h2 id="cultivation-node-title">節點研修</h2></div>
-            <button type="button" class="path-close" data-close-path-node aria-label="關閉節點詳情" autofocus>×</button>
-        </header>
-        <div data-node-detail></div>
-        <p class="path-feedback" data-node-message role="status"></p>
-    </dialog>
+    <template id="cultivation-node-panel-template">
+        <aside id="cultivation-node-dialog" class="ns-orb-detail path-node-detail" role="dialog" aria-modal="false" aria-labelledby="cultivation-node-title">
+            <button type="button" class="ns-detail-close" data-close-path-node aria-label="關閉節點資料">×</button>
+            <header class="ns-orb-detail-header">
+                <h3 id="cultivation-node-title"></h3><span class="ns-detail-rank" data-node-rank></span>
+            </header>
+            <div class="ns-detail-body" data-node-detail></div>
+            <footer class="ns-detail-footer">
+                <small class="ns-detail-owned" data-node-points></small>
+                <p class="path-feedback" data-node-message role="status"></p>
+                <button type="button" class="core-wash-btn" data-learn-path-node></button>
+            </footer>
+        </aside>
+    </template>
 
     <div id="toast-container" class="fixed top-20 right-4 z-[100] flex flex-col gap-2 w-72 pointer-events-none *:pointer-events-auto"></div>
 

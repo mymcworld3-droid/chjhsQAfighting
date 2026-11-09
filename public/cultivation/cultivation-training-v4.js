@@ -719,7 +719,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     if (page?.querySelector('[data-training-tab="path"].active, #training-status-tab.active')) return;
     const content = document.getElementById('training-tab-content');
     if (!content) return;
-    document.querySelector('[data-ns-portrait-sheet]')?.remove?.();
+    document.querySelector('#ns-node-dialog[data-ns-portrait-sheet]')?.remove?.();
     const soulLabel=document.querySelector('#page-training [data-training-tab="nascent-soul"] span');
     if(soulLabel)soulLabel.textContent=Innate.status(window.getCurrentUserData?.()||{}).ok?'元神':'元嬰';
     // 切換其他分頁時，先清理元嬰專屬的一屏模式，避免裁切其他分頁。

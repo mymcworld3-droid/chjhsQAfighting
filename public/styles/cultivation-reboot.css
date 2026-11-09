@@ -135,15 +135,23 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   white-space: nowrap;
 }
 .path-tree-jumps button.is-attained { color: var(--path-tone); border-color: var(--path-line); }
-.path-tree-scroll {
+.path-tree-workspace {
+  position: relative;
+  display: flex;
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
+}
+.path-tree-scroll {
+  flex: none;
+  width: 100%;
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-color: #987042 #211812;
   scrollbar-width: thin;
+  transition: width .28s cubic-bezier(.2,.7,.2,1);
 }
+.path-tree-workspace.has-detail .path-tree-scroll { width: 70%; }
 .path-tree-board { display: grid; gap: 1.25rem; padding: 0 .2rem .4rem; }
 .path-tree-chapter {
   --node-gap: .55rem;
@@ -192,13 +200,17 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   width: min(100%, var(--orb-size));
   aspect-ratio: 1;
   color: var(--path-muted);
+  transition: transform .18s, filter .18s;
 }
 .path-tree-orb .ns-orb-progress { visibility: hidden; }
 .path-tree-node[data-node-state="ready"] .ns-orb-track { stroke: var(--path-tone); stroke-dasharray: 5 4; }
 .path-tree-node[data-node-state="learned"] .ns-orb-progress { visibility: visible; }
 .path-tree-node:is([data-node-state="ready"], [data-node-state="learned"]) .path-tree-orb { color: var(--path-tone); }
 .path-tree-node:hover .path-tree-orb,
+.path-tree-node[aria-expanded="true"] .path-tree-orb,
 .path-tree-node[data-node-state="learned"] .path-tree-orb { filter: drop-shadow(0 0 .35rem currentColor); }
+.path-tree-node[aria-expanded="true"] .path-tree-orb { transform: scale(1.1); }
+.path-tree-node[aria-expanded="true"] .ns-orb-track { stroke: var(--path-tone); }
 .path-tree-node[data-node-state="realm"] .path-tree-orb { opacity: .55; }
 .path-tree-node-name { font-size: .79rem; font-weight: 800; line-height: 1.2; overflow-wrap: anywhere; }
 .path-tree-node-state { color: var(--path-muted); font-size: .67rem; line-height: 1.2; }
@@ -221,11 +233,10 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
 .path-tree-page button:focus-visible, .path-tree-scroll:focus-visible { outline: 2px solid #f7e0a3; outline-offset: 2px; }
 .path-tree-empty { justify-content: center; align-items: center; }
 .path-tree-empty .path-card { width: min(100%, 34rem); }
-.path-node-dialog { width: min(28rem, calc(100% - 1.5rem)); }
-.path-node-card { --path-tone: inherit; }
-.path-node-card small { color: var(--path-muted); }
-.path-node-card h3 { color: var(--path-tone); font-weight: 800; font-size: 1.2rem; }
-.path-node-card ul { list-style: disc; margin: .5rem 0; padding-inline-start: 1.15rem; color: var(--path-tone); }
+.path-node-bonuses { list-style: disc; margin: 0; padding-inline-start: 1.15rem; color: #f4d494; }
+.path-node-detail button:focus-visible { outline: 2px solid #ffe1a0; outline-offset: 2px; }
+.path-node-detail [data-learn-path-node]:disabled { opacity: .58; cursor: default; }
+.path-node-detail [data-node-message]:empty { display: none; }
 .path-training-link:disabled { opacity: .5; }
 
 @media (orientation: landscape) {
@@ -265,4 +276,7 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   .path-tree-node::after { top: 100%; left: calc(50% - .5px); width: 1px; height: var(--node-gap); }
   .path-tree-chapter:not(:last-child)::after { top: 100%; left: 50%; width: 2px; height: 1.25rem; }
   .path-tree-heading .path-seal { flex-basis: 1.9rem; width: 1.9rem; height: 1.9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .path-tree-scroll, .path-tree-orb { transition: none; }
 }
