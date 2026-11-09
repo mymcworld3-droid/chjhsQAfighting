@@ -1,6 +1,6 @@
 import './training-access-rules.js';
-import './cultivation-path-nodes.js';
-import './cultivation-reboot-rules.js';
+import './cultivation-path-nodes.js?v=20261109-path-v2';
+import './cultivation-reboot-rules.js?v=20261109-path-v2';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 
 const Rules = globalThis.QACultivationRebootRules;
