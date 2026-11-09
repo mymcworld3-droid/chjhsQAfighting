@@ -72,10 +72,6 @@ function chapterMarkup(chapter, score, learned) {
       </button>`;
   }).join('');
   return `<section class="path-tree-chapter" data-cultivation-chapter="${chapter.id}" aria-label="${chapter.name}">
-    <header><div><small>第 ${chapter.index + 1} 階</small><h3>${chapter.name}</h3></div>
-      <div class="path-tree-progress"><b>${progress.spent}／${Nodes.NODES_PER_CHAPTER} 節點</b>
-        <small>${score < chapter.need ? `需 ${amount(chapter.need)} 修為` : `可用 ${progress.available} 點研修`}</small></div>
-    </header>
     <div class="path-tree-grid">
       <span class="path-tree-lane" data-lane="a">${chapter.lanes[0]}</span>
       <span class="path-tree-lane" data-lane="b">${chapter.lanes[1]}</span>${nodes}
@@ -98,12 +94,7 @@ function treeMarkup(state) {
       <button class="path-training-link" type="button" data-open-cultivation-path aria-haspopup="dialog"
         aria-controls="cultivation-path-dialog">${state.trial?.status === 'active' ? '接續天劫' : '金丹天劫'}</button>
     </header>
-    <p class="path-tree-note">每個境界各有 7 點研修。修滿任一脈並點亮大節點，便可在境界達標後接續下一階。</p>
     ${syncError ? '<p class="path-tree-notice">研修紀錄暫時無法同步。<button type="button" data-path-tree-refresh>重新同步</button></p>' : ''}
-    <nav class="path-tree-jumps" aria-label="前往境界節點">
-      ${chapters.map(chapter => `<button type="button" data-path-tree-jump="${chapter.id}"
-        class="${score >= chapter.need ? 'is-attained' : ''}">${chapter.name}</button>`).join('')}
-    </nav>
     <div class="path-tree-workspace">
       <div class="path-tree-scroll" tabindex="0" role="region" aria-label="流派節點圖">
         <div class="path-tree-board">${chapters.map(chapter => chapterMarkup(chapter, score, learned)).join('')}</div>
@@ -239,24 +230,12 @@ async function learnNode() {
   }
 }
 
-function jumpToChapter(id) {
-  const scroller = document.querySelector('#training-tab-content .path-tree-scroll');
-  const chapter = [...scroller.querySelectorAll('[data-cultivation-chapter]')]
-    .find(item => item.dataset.cultivationChapter === id);
-  if (!chapter) return;
-  const start = scroller.getBoundingClientRect(), end = chapter.getBoundingClientRect();
-  const horizontal = matchMedia('(orientation: landscape)').matches;
-  scroller.scrollTo(horizontal ? { left: scroller.scrollLeft + end.left - start.left } :
-    { top: scroller.scrollTop + end.top - start.top });
-}
-
 document.addEventListener('click', event => {
   const target = event.target.closest('button');
   if (!target || target.disabled) return;
   if (target.matches(TAB)) selectTab(target);
   else if (target.hasAttribute('data-open-cultivation-tree')) window.openTrainingPlace?.('meditation');
   else if (target.dataset.cultivationNode) openNode(target);
-  else if (target.dataset.pathTreeJump) jumpToChapter(target.dataset.pathTreeJump);
   else if (target.hasAttribute('data-path-tree-refresh')) void sync();
 });
 closeButton.addEventListener('click', () => closeNode());

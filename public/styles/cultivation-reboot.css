@@ -119,22 +119,8 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   line-height: 1.4;
 }
 .path-tree-heading .path-training-link { white-space: nowrap; flex: none; }
-.path-tree-note, .path-tree-notice { margin: 0; color: var(--path-muted); font-size: .75rem; line-height: 1.4; }
+.path-tree-notice { margin: 0; color: var(--path-muted); font-size: .75rem; line-height: 1.4; }
 .path-tree-notice button { padding-inline: .3rem; text-decoration: underline; color: var(--path-tone); }
-.path-tree-jumps { display: flex; gap: .25rem; align-items: stretch; }
-.path-tree-jumps button {
-  flex: 1;
-  min-width: 0;
-  min-height: 2rem;
-  padding: .2rem .1rem;
-  border: 1px solid #edcc8333;
-  border-radius: .4rem;
-  color: #b7aa95;
-  background: #1c1814;
-  font-size: clamp(.65rem, 1.3vw, .8rem);
-  white-space: nowrap;
-}
-.path-tree-jumps button.is-attained { color: var(--path-tone); border-color: var(--path-line); }
 .path-tree-workspace {
   position: relative;
   display: flex;
@@ -160,15 +146,8 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   min-width: 0;
   align-self: start;
   padding: .62rem;
-  border: 1px solid #edcc8338;
-  border-radius: .75rem;
-  background: radial-gradient(ellipse at 15% 0%, #2d241a, transparent 64%), #171310;
   scroll-snap-align: start;
 }
-.path-tree-chapter > header { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .45rem; }
-.path-tree-chapter h3 { margin: 0; color: var(--path-tone); font-size: 1.08rem; font-weight: 800; line-height: 1.1; }
-.path-tree-chapter > header small { display: block; color: var(--path-muted); font-size: .69rem; }
-.path-tree-progress { text-align: end; font-size: .76rem; }
 .path-tree-grid { display: grid; gap: var(--node-gap); isolation: isolate; }
 .path-tree-lane { display: grid; place-items: center; color: var(--path-tone); font-size: .72rem; white-space: nowrap; }
 .path-tree-lane[data-lane="a"] { grid-area: a-title; }
@@ -262,8 +241,6 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
 @media (orientation: landscape) and (max-height: 470px) {
   .path-tree-heading { padding-block: .28rem; }
   .path-tree-heading .path-training-link { min-height: 2rem; }
-  .path-tree-note { font-size: .65rem; }
-  .path-tree-jumps button { min-height: 1.65rem; }
   .path-tree-chapter { --path-orb-size: 2.5rem; }
 }
 @media (orientation: portrait) {
