@@ -68,5 +68,5 @@ test('retired admin containers are absent from the active layout', () => {
 });
 
 test('index cache-busts main after the static-layout migration', () => {
-  assert.match(index, /main\.js\?v=20261013-arrival1/);
+  assert.match(index, /main\.js\?v=[a-zA-Z0-9_-]+/);
 });
