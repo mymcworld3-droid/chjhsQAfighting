@@ -87,9 +87,7 @@ function treeMarkup(state) {
   const chapters = Nodes.tree(state.route);
   return `<section class="path-tree-page" style="--path-tone:${route.color}" aria-label="${route.name}研修">
     <header class="path-tree-heading">
-      <span class="path-seal" aria-hidden="true">${route.glyph}</span>
-      <div class="path-tree-name"><small>流派研修</small><h2>${route.name}</h2></div>
-      <p class="path-tree-perks"><span>攻擊 +${bonus.attack}</span><span>生命上限 +${bonus.maxHp}</span>
+      <p class="path-tree-perks"><span>攻擊 <strong>+${bonus.attack}</strong></span><span>生命上限 <strong>+${bonus.maxHp}</strong></span>
         <span>${bonus.skillText}</span></p>
       <button class="path-training-link" type="button" data-open-cultivation-path aria-haspopup="dialog"
         aria-controls="cultivation-path-dialog">${state.trial?.status === 'active' ? '接續天劫' : '金丹天劫'}</button>
@@ -110,11 +108,11 @@ function render() {
   const oldScroll = container.querySelector('.path-tree-scroll');
   const offset = { left: oldScroll?.scrollLeft || 0, top: oldScroll?.scrollTop || 0 };
   const focused = detail.contains(document.activeElement) ? document.activeElement : null;
-  container.innerHTML = state?.route ? treeMarkup(state) : `<section class="path-tree-page path-tree-empty">
-    <div class="path-card"><small>問道宗 · 四脈傳承</small><h2>立下你的修行流派</h2>
-      <p>劍修、體修、法修與悟道修各有一條從築基通往半仙的研修路。</p>
-      <button type="button" class="path-training-link" data-open-cultivation-path data-path-choose-on-page
-        aria-haspopup="dialog" aria-controls="cultivation-path-dialog">選擇流派</button></div>
+  container.innerHTML = state?.route ? treeMarkup(state) : `<section class="path-tree-page path-tree-empty" aria-labelledby="path-choice-title">
+    <h2 id="path-choice-title">選擇流派</h2>
+    <p>劍修、體修、法修、悟道修</p>
+    <button type="button" class="path-training-link" data-open-cultivation-path data-path-choose-on-page
+      aria-haspopup="dialog" aria-controls="cultivation-path-dialog">查看流派</button>
   </section>`;
   if (selectedNode) {
     renderNode();

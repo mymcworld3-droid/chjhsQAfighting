@@ -101,24 +101,31 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   display: flex;
   align-items: center;
   gap: clamp(.35rem, 1vw, .85rem);
-  padding: .5rem .65rem;
-  background: radial-gradient(ellipse at 12% 0%, #3a2a1b, transparent 62%), #191511;
-  border: 1px solid #edcc8340;
-  border-radius: .65rem;
+  padding: .2rem .25rem .45rem;
+  border-bottom: 1px solid #b5ac7629;
 }
-.path-tree-name { flex: none; }
-.path-tree-name small { color: var(--path-muted); font-size: .7rem; }
-.path-tree-name h2 { margin: 0; font-size: clamp(1rem, 3vw, 1.42rem); color: var(--path-tone); font-weight: 800; line-height: 1.15; }
 .path-tree-perks {
   flex: 1;
   display: flex;
   flex-wrap: wrap;
-  gap: .15rem .6rem;
+  gap: .2rem .9rem;
   margin: 0;
-  font-size: clamp(.67rem, 1.2vw, .85rem);
-  line-height: 1.4;
+  color: var(--path-muted);
+  font-size: .82rem;
+  line-height: 1.5;
 }
-.path-tree-heading .path-training-link { white-space: nowrap; flex: none; }
+.path-tree-perks strong { color: var(--path-text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.path-tree-heading .path-training-link,
+.path-tree-empty .path-training-link {
+  min-height: 2.5rem;
+  flex: none;
+  color: var(--path-text);
+  border-color: #b5ac7666;
+  background: transparent;
+  white-space: nowrap;
+}
+.path-tree-heading .path-training-link:hover,
+.path-tree-empty .path-training-link:hover { background: #ffffff0a; }
 .path-tree-notice { margin: 0; color: var(--path-muted); font-size: .75rem; line-height: 1.4; }
 .path-tree-notice button { padding-inline: .3rem; text-decoration: underline; color: var(--path-tone); }
 .path-tree-workspace {
@@ -138,13 +145,11 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   transition: width .28s cubic-bezier(.2,.7,.2,1);
 }
 .path-tree-workspace.has-detail .path-tree-scroll { width: 70%; }
-.path-tree-board { display: grid; gap: 1.25rem; padding: 0 .2rem .4rem; }
+.path-tree-board { box-sizing: border-box; display: grid; gap: 1.25rem; padding: 0 .2rem .4rem; }
 .path-tree-chapter {
   --node-gap: .55rem;
   --path-orb-size: 3.125rem;
-  position: relative;
   min-width: 0;
-  align-self: start;
   padding: .62rem;
   scroll-snap-align: start;
 }
@@ -179,19 +184,16 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   width: min(100%, var(--orb-size));
   aspect-ratio: 1;
   color: var(--path-muted);
-  transition: transform .18s, filter .18s;
+  transition: transform .18s;
 }
 .path-tree-orb .ns-orb-progress { visibility: hidden; }
 .path-tree-node[data-node-state="ready"] .ns-orb-track { stroke: var(--path-tone); stroke-dasharray: 5 4; }
 .path-tree-node[data-node-state="learned"] .ns-orb-progress { visibility: visible; }
 .path-tree-node:is([data-node-state="ready"], [data-node-state="learned"]) .path-tree-orb { color: var(--path-tone); }
-.path-tree-node:hover .path-tree-orb,
-.path-tree-node[aria-expanded="true"] .path-tree-orb,
-.path-tree-node[data-node-state="learned"] .path-tree-orb { filter: drop-shadow(0 0 .35rem currentColor); }
-.path-tree-node[aria-expanded="true"] .path-tree-orb { transform: scale(1.1); }
-.path-tree-node[aria-expanded="true"] .ns-orb-track { stroke: var(--path-tone); }
+.path-tree-node[aria-expanded="true"] .path-tree-orb { transform: scale(1.08); }
+.path-tree-node:is(:hover, [aria-expanded="true"]) .ns-orb-track { stroke: var(--path-tone); }
 .path-tree-node[data-node-state="realm"] .path-tree-orb { opacity: .55; }
-.path-tree-node-name { font-size: .79rem; font-weight: 800; line-height: 1.2; overflow-wrap: anywhere; }
+.path-tree-node-name { font-size: .82rem; font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
 .path-tree-node-state { color: var(--path-muted); font-size: .67rem; line-height: 1.2; }
 .path-tree-node[data-node-state="ready"] .path-tree-node-state { color: var(--path-tone); }
 .path-tree-node[data-node-state="learned"] .path-tree-node-state::before { content: '✓ '; color: var(--path-tone); }
@@ -201,7 +203,7 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   align-self: center;
 }
 .path-tree-node[data-slot="seal"] .path-tree-node-name { font-size: .92rem; color: var(--path-tone); }
-.path-tree-node::after, .path-tree-chapter:not(:last-child)::after {
+.path-tree-node::after {
   content: '';
   position: absolute;
   background: var(--path-line);
@@ -210,8 +212,9 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
 .path-tree-node[data-slot="seal"]::after { content: none; }
 .path-tree-node[data-node-state="learned"]::after { background: var(--path-tone); }
 .path-tree-page button:focus-visible, .path-tree-scroll:focus-visible { outline: 2px solid #f7e0a3; outline-offset: 2px; }
-.path-tree-empty { justify-content: center; align-items: center; }
-.path-tree-empty .path-card { width: min(100%, 34rem); }
+.path-tree-empty { justify-content: center; align-items: center; text-align: center; }
+.path-tree-empty h2 { margin: 0; font-size: 1.15rem; font-weight: 600; }
+.path-tree-empty p { margin: 0 0 .35rem; color: var(--path-muted); font-size: .85rem; }
 .path-node-bonuses { list-style: disc; margin: 0; padding-inline-start: 1.15rem; color: #f4d494; }
 .path-node-detail button:focus-visible { outline: 2px solid #ffe1a0; outline-offset: 2px; }
 .path-node-detail [data-learn-path-node]:disabled { opacity: .58; cursor: default; }
@@ -221,11 +224,18 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
 @media (orientation: landscape) {
   .path-tree-scroll { scroll-snap-type: x proximity; }
   .path-tree-board {
+    min-height: 100%;
     grid-auto-flow: column;
     grid-auto-columns: minmax(min(30rem, 100%), 76%);
   }
+  .path-tree-chapter {
+    --path-orb-size: clamp(3.125rem, 10vh, 4.5rem);
+    display: grid;
+  }
   .path-tree-grid {
+    align-items: center;
     grid-template-columns: max-content repeat(3, minmax(0, 1fr)) minmax(5.6rem, 1.15fr);
+    grid-template-rows: repeat(2, minmax(min-content, 1fr));
     grid-template-areas: 'a-title a1 a2 a3 seal' 'b-title b1 b2 b3 seal';
   }
   .path-tree-node::after {
@@ -236,7 +246,6 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
     height: 1px;
   }
   .path-tree-node:is([data-slot="a3"], [data-slot="b3"])::after { width: calc(50% + var(--node-gap)); }
-  .path-tree-chapter:not(:last-child)::after { left: 100%; top: 55%; width: 1.25rem; height: 2px; }
 }
 @media (orientation: landscape) and (max-height: 470px) {
   .path-tree-heading { padding-block: .28rem; }
@@ -251,8 +260,6 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
     grid-template-areas: 'a-title b-title' 'a1 b1' 'a2 b2' 'a3 b3' 'seal seal';
   }
   .path-tree-node::after { top: 100%; left: calc(50% - .5px); width: 1px; height: var(--node-gap); }
-  .path-tree-chapter:not(:last-child)::after { top: 100%; left: 50%; width: 2px; height: 1.25rem; }
-  .path-tree-heading .path-seal { flex-basis: 1.9rem; width: 1.9rem; height: 1.9rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .path-tree-scroll, .path-tree-orb { transition: none; }
