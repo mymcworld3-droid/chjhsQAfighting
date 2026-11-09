@@ -128,7 +128,10 @@ function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
   const icon = ATTRIBUTE_ICONS[Object.keys(node.bonuses)[0]] || 'sword';
   const shape = node.slot === 'origin' ? 'circle' : isSeal ? 'capstone' : (SHAPES_BY_ICON[icon] || 'circle');
   const outline = ORB_SHAPES[shape];
-  const effect = Nodes.describe(node.bonuses)[0] || '';
+  const [attribute, value] = Object.entries(node.bonuses)[0] || [];
+  const effect = attribute === 'equip_cheat_death' ? '保命 1 次'
+    : attribute === 'equip_damage_cap_percent' ? `承傷上限 ${Math.round(value * 100)}%`
+    : Nodes.describe(node.bonuses)[0] || '';
   const stateLabel = isSeal ? `大節點 · ${caption}` : caption;
   return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
       data-node-shape="${shape}" data-node-state="${status}" aria-label="${node.name}，${effect}，${stateLabel}"
