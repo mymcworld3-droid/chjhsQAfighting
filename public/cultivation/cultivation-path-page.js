@@ -4,6 +4,16 @@ const Rules = globalThis.QACultivationRebootRules;
 const Nodes = globalThis.QACultivationPathNodes;
 const TAB = '#page-training [data-training-tab="path"]';
 const ORIGIN = { id: 'origin', slot: 'origin', name: '起點' };
+const NODE_ICONS = {
+  origin: 'M12 21v-9m0 4C6 16 3 12 3 8c5 0 9 2 9 8Zm0-4c0-6 4-9 9-9 0 5-3 9-9 9Z',
+  a1: 'M12 3 22 20H2Z',
+  a2: 'M9 3h6v6h6v6h-6v6H9v-6H3V9h6Z',
+  a3: 'M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z',
+  b1: 'M12 3 20 6v5c0 5-4 8-8 10-4-2-8-5-8-10V6Z',
+  b2: 'M3 8c3-4 6-4 9 0s6 4 9 0M3 16c3-4 6-4 9 0s6 4 9 0',
+  b3: 'M20 16A9 9 0 0 1 8 4a9 9 0 1 0 12 12Z',
+  seal: 'M12 2 21 12 12 22 3 12Z M3 12h18'
+};
 const detail = document.getElementById('cultivation-node-panel-template').content.firstElementChild;
 const nodeTitle = detail.querySelector('#cultivation-node-title');
 const nodeRank = detail.querySelector('[data-node-rank]');
@@ -62,7 +72,6 @@ function positionNodeDetail() {
 
 function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
   const isSeal = node.slot === 'seal';
-  const icon = node.id === ORIGIN.id ? 'fa-seedling' : isSeal ? 'fa-gem' : 'fa-circle-dot';
   return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
       data-node-state="${status}" aria-haspopup="dialog" aria-controls="cultivation-node-dialog" aria-expanded="${node.id === selectedNode}">
         <span class="path-tree-orb" aria-hidden="true">
@@ -70,7 +79,7 @@ function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
             <circle class="ns-orb-track" cx="50" cy="50" r="45"/>
             <circle class="ns-orb-progress" cx="50" cy="50" r="45"/>
           </svg>
-          <span class="ns-orb-surface"><i class="fa-solid ${icon}"></i></span>
+          <span class="ns-orb-surface"><svg class="path-tree-icon" viewBox="0 0 24 24"><path d="${NODE_ICONS[node.slot]}"/></svg></span>
         </span>
         <span class="path-tree-node-name">${node.name}</span>
         <span class="path-tree-node-state">${isSeal ? '大節點 · ' : ''}${caption}</span>
