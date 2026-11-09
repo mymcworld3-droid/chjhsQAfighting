@@ -100,7 +100,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261108-cultivation-reboot1';
+const XIUXIAN_FEATURE_BUILD = '20261109-path-v2';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 window.__xiuxianFeaturesReady = false;
