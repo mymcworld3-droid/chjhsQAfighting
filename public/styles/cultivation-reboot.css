@@ -147,6 +147,7 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
 .path-tree-board { display: grid; gap: 1.25rem; padding: 0 .2rem .4rem; }
 .path-tree-chapter {
   --node-gap: .55rem;
+  --path-orb-size: 3.125rem;
   position: relative;
   min-width: 0;
   align-self: start;
@@ -160,7 +161,7 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
 .path-tree-chapter h3 { margin: 0; color: var(--path-tone); font-size: 1.08rem; font-weight: 800; line-height: 1.1; }
 .path-tree-chapter > header small { display: block; color: var(--path-muted); font-size: .69rem; }
 .path-tree-progress { text-align: end; font-size: .76rem; }
-.path-tree-grid { display: grid; gap: var(--node-gap); }
+.path-tree-grid { display: grid; gap: var(--node-gap); isolation: isolate; }
 .path-tree-lane { display: grid; place-items: center; color: var(--path-tone); font-size: .72rem; white-space: nowrap; }
 .path-tree-lane[data-lane="a"] { grid-area: a-title; }
 .path-tree-lane[data-lane="b"] { grid-area: b-title; }
@@ -172,34 +173,41 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
 .path-tree-node[data-slot="b3"] { grid-area: b3; }
 .path-tree-node[data-slot="seal"] { grid-area: seal; }
 .path-tree-node {
+  --orb-size: var(--path-orb-size);
   position: relative;
-  box-sizing: border-box;
   display: grid;
-  align-content: center;
+  align-content: start;
+  justify-items: center;
   gap: .17rem;
   min-width: 0;
-  min-height: 3.15rem;
-  padding: .36rem .25rem;
-  border: 1px solid #e3c58744;
-  border-radius: .55rem;
+  padding: 0;
+  border: 0;
   color: var(--path-text);
-  background: #211c18;
+  background: transparent;
   text-align: center;
+  cursor: pointer;
 }
-.path-tree-node-name { font-size: .79rem; font-weight: 800; line-height: 1.2; }
+.path-tree-orb {
+  position: relative;
+  width: min(100%, var(--orb-size));
+  aspect-ratio: 1;
+  color: var(--path-muted);
+}
+.path-tree-orb .ns-orb-progress { visibility: hidden; }
+.path-tree-node[data-node-state="ready"] .ns-orb-track { stroke: var(--path-tone); stroke-dasharray: 5 4; }
+.path-tree-node[data-node-state="learned"] .ns-orb-progress { visibility: visible; }
+.path-tree-node:is([data-node-state="ready"], [data-node-state="learned"]) .path-tree-orb { color: var(--path-tone); }
+.path-tree-node:hover .path-tree-orb,
+.path-tree-node[data-node-state="learned"] .path-tree-orb { filter: drop-shadow(0 0 .35rem currentColor); }
+.path-tree-node[data-node-state="realm"] .path-tree-orb { opacity: .55; }
+.path-tree-node-name { font-size: .79rem; font-weight: 800; line-height: 1.2; overflow-wrap: anywhere; }
 .path-tree-node-state { color: var(--path-muted); font-size: .67rem; line-height: 1.2; }
-.path-tree-node[data-node-state="ready"] { border-color: var(--path-tone); }
 .path-tree-node[data-node-state="ready"] .path-tree-node-state { color: var(--path-tone); }
-.path-tree-node[data-node-state="learned"] {
-  background: color-mix(in srgb, var(--path-tone) 18%, #211c18);
-  border-color: var(--path-tone);
-}
 .path-tree-node[data-node-state="learned"] .path-tree-node-state::before { content: '✓ '; color: var(--path-tone); }
-.path-tree-node[data-node-state="realm"] { color: #bdaf99; background: #191714; }
+.path-tree-node[data-node-state="realm"] { color: #bdaf99; }
 .path-tree-node[data-slot="seal"] {
-  border-style: double;
-  border-width: 3px;
-  background: radial-gradient(ellipse at center, #3b2a1b, #1d1712);
+  --orb-size: calc(var(--path-orb-size) + .875rem);
+  align-self: center;
 }
 .path-tree-node[data-slot="seal"] .path-tree-node-name { font-size: .92rem; color: var(--path-tone); }
 .path-tree-node::after, .path-tree-chapter:not(:last-child)::after {
@@ -230,7 +238,14 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
     grid-template-columns: max-content repeat(3, minmax(0, 1fr)) minmax(5.6rem, 1.15fr);
     grid-template-areas: 'a-title a1 a2 a3 seal' 'b-title b1 b2 b3 seal';
   }
-  .path-tree-node::after { left: 100%; top: calc(50% - .5px); width: var(--node-gap); height: 1px; }
+  .path-tree-node::after {
+    z-index: -1;
+    left: 50%;
+    top: calc(var(--orb-size) / 2);
+    width: calc(100% + var(--node-gap));
+    height: 1px;
+  }
+  .path-tree-node:is([data-slot="a3"], [data-slot="b3"])::after { width: calc(50% + var(--node-gap)); }
   .path-tree-chapter:not(:last-child)::after { left: 100%; top: 55%; width: 1.25rem; height: 2px; }
 }
 @media (orientation: landscape) and (max-height: 470px) {
@@ -238,7 +253,7 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   .path-tree-heading .path-training-link { min-height: 2rem; }
   .path-tree-note { font-size: .65rem; }
   .path-tree-jumps button { min-height: 1.65rem; }
-  .path-tree-node { min-height: 2.6rem; }
+  .path-tree-chapter { --path-orb-size: 2.5rem; }
 }
 @media (orientation: portrait) {
   .path-tree-scroll { overflow-x: hidden; }
@@ -248,7 +263,6 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
     grid-template-areas: 'a-title b-title' 'a1 b1' 'a2 b2' 'a3 b3' 'seal seal';
   }
   .path-tree-node::after { top: 100%; left: calc(50% - .5px); width: 1px; height: var(--node-gap); }
-  .path-tree-node[data-slot="seal"] { min-height: 3.75rem; }
   .path-tree-chapter:not(:last-child)::after { top: 100%; left: 50%; width: 2px; height: 1.25rem; }
   .path-tree-heading .path-seal { flex-basis: 1.9rem; width: 1.9rem; height: 1.9rem; }
 }

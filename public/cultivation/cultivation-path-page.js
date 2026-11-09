@@ -28,10 +28,18 @@ function chapterMarkup(chapter, score, learned) {
   const progress = Nodes.chapterProgress(chapter, score, learned);
   const nodes = chapter.nodes.map(node => {
     const status = Nodes.nodeState(chapter, node, score, learned, progress);
+    const isSeal = node.slot === 'seal';
     return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
       data-node-state="${status}" aria-haspopup="dialog" aria-controls="cultivation-node-dialog">
+        <span class="path-tree-orb" aria-hidden="true">
+          <svg class="ns-orb-ring" viewBox="0 0 100 100">
+            <circle class="ns-orb-track" cx="50" cy="50" r="45"/>
+            <circle class="ns-orb-progress" cx="50" cy="50" r="45"/>
+          </svg>
+          <span class="ns-orb-surface"><i class="fa-solid ${isSeal ? 'fa-gem' : 'fa-circle-dot'}"></i></span>
+        </span>
         <span class="path-tree-node-name">${node.name}</span>
-        <span class="path-tree-node-state">${node.slot === 'seal' ? '大節點 · ' : ''}${STATUS_TEXT[status]}</span>
+        <span class="path-tree-node-state">${isSeal ? '大節點 · ' : ''}${STATUS_TEXT[status]}</span>
       </button>`;
   }).join('');
   return `<section class="path-tree-chapter" data-cultivation-chapter="${chapter.id}" aria-label="${chapter.name}">
