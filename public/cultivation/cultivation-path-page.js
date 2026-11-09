@@ -5,14 +5,35 @@ const Nodes = globalThis.QACultivationPathNodes;
 const TAB = '#page-training [data-training-tab="path"]';
 const ORIGIN = { id: 'origin', slot: 'origin', name: '起點' };
 const NODE_ICONS = {
-  origin: 'M12 21v-9m0 4C6 16 3 12 3 8c5 0 9 2 9 8Zm0-4c0-6 4-9 9-9 0 5-3 9-9 9Z',
-  a1: 'M12 3 22 20H2Z',
-  a2: 'M9 3h6v6h6v6h-6v6H9v-6H3V9h6Z',
-  a3: 'M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z',
-  b1: 'M12 3 20 6v5c0 5-4 8-8 10-4-2-8-5-8-10V6Z',
-  b2: 'M3 8c3-4 6-4 9 0s6 4 9 0M3 16c3-4 6-4 9 0s6 4 9 0',
-  b3: 'M20 16A9 9 0 0 1 8 4a9 9 0 1 0 12 12Z',
-  seal: 'M12 2 21 12 12 22 3 12Z M3 12h18'
+  sword: 'M3 21l5-5m-3-3 6 6m-4-4L17 3h4v4L9 17',
+  heart: 'M12 21 4 13a5 5 0 0 1 8-6 5 5 0 0 1 8 6Z',
+  barrier: 'M12 3 20 6v5c0 5-4 8-8 10-4-2-8-5-8-10V6Zm-3 9h6m-3-3v6',
+  guard: 'M12 3 20 6v5c0 5-4 8-8 10-4-2-8-5-8-10V6Zm-3 9h6',
+  lightning: 'M13 2 4 14h7l-1 8 10-12h-7Z',
+  target: 'M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM12 2v4m0 12v4M2 12h4m12 0h4',
+  burst: 'M12 2l2.5 6.5L21 6l-2.5 6.5L22 17l-7-1-3 6-3-6-7 1 3.5-4.5L3 6l6.5 2.5Z',
+  combo: 'M3 21 17 7m-7 1 4 4m-9 2 4 4M9 21 21 9m-8-1 6-5h2v2',
+  streak: 'M3 18l5-7 4 4 8-10m-6 0h6v6M3 11l3-4',
+  lifesteal: 'M12 2c2 5 7 8 7 13a7 7 0 1 1-14 0c0-5 5-8 7-13Zm-3 13h6m-3-3v6',
+  lowHealth: 'M12 21 4 13a5 5 0 0 1 8-6 5 5 0 0 1 8 6ZM9 12h6'
+};
+const ATTRIBUTE_ICONS = {
+  attack: 'sword',
+  maxHp: 'heart',
+  equip_true_damage_flat: 'lightning',
+  equip_on_correct_shield_flat: 'barrier',
+  equip_damage_reduction_flat: 'guard',
+  equip_first_hit_reduction_percent: 'guard',
+  equip_damage_reduction_percent: 'guard',
+  equip_low_hp_reduction_percent: 'guard',
+  equip_crit_chance: 'target',
+  equip_crit_damage_percent: 'burst',
+  equip_combo_chance: 'combo',
+  equip_combo_damage_percent: 'combo',
+  equip_damage_percent: 'sword',
+  equip_streak_damage_percent: 'streak',
+  equip_lifesteal_percent: 'lifesteal',
+  equip_low_hp_damage_percent: 'lowHealth'
 };
 const detail = document.getElementById('cultivation-node-panel-template').content.firstElementChild;
 const nodeTitle = detail.querySelector('#cultivation-node-title');
@@ -70,6 +91,12 @@ function positionNodeDetail() {
   }
 }
 
+function attributeIcons(bonuses) {
+  const icons = new Set(Object.entries(bonuses).filter(([, value]) => value > 0)
+    .map(([attribute]) => ATTRIBUTE_ICONS[attribute]).filter(Boolean));
+  return [...icons].map(icon => `<svg class="path-tree-icon" viewBox="0 0 24 24"><path d="${NODE_ICONS[icon]}"/></svg>`).join('');
+}
+
 function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
   const isSeal = node.slot === 'seal';
   return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
@@ -79,16 +106,18 @@ function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
             <circle class="ns-orb-track" cx="50" cy="50" r="45"/>
             <circle class="ns-orb-progress" cx="50" cy="50" r="45"/>
           </svg>
-          <span class="ns-orb-surface"><svg class="path-tree-icon" viewBox="0 0 24 24"><path d="${NODE_ICONS[node.slot]}"/></svg></span>
+          <span class="ns-orb-surface">${attributeIcons(node.bonuses)}</span>
         </span>
         <span class="path-tree-node-name">${node.name}</span>
         <span class="path-tree-node-state">${isSeal ? '大節點 · ' : ''}${caption}</span>
       </button>`;
 }
 
-function chapterMarkup(chapter, score, learned) {
+function chapterMarkup(chapter, score, learned, route) {
   const progress = Nodes.chapterProgress(chapter, score, learned);
-  const origin = chapter.index === 0 ? nodeMarkup(ORIGIN, 'learned', '已啟用') : '';
+  const origin = chapter.index === 0 ? nodeMarkup({ ...ORIGIN,
+    bonuses: { attack: route.attack, maxHp: route.hp, [route.effect]: route.base }
+  }, 'learned', '已啟用') : '';
   const nodes = chapter.nodes.map(node => nodeMarkup(node, Nodes.nodeState(chapter, node, score, learned, progress))).join('');
   return `<section class="path-tree-chapter" data-cultivation-chapter="${chapter.id}" aria-label="${chapter.name}">
     <div class="path-tree-grid">${origin}${nodes}</div>
@@ -143,7 +172,7 @@ function treeMarkup(state) {
       <div class="path-tree-scroll" tabindex="0" role="region" aria-label="流派節點圖">
         <div class="path-tree-board">
           <svg class="path-tree-links" aria-hidden="true">${linkMarkup(chapters, learned)}</svg>
-          ${chapters.map(chapter => chapterMarkup(chapter, score, learned)).join('')}
+          ${chapters.map(chapter => chapterMarkup(chapter, score, learned, route)).join('')}
         </div>
       </div>
     </div>
