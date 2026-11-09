@@ -20,25 +20,6 @@ const NODE_ICONS = {
   limit: 'M12 3 20 6v5c0 5-4 8-8 10-4-2-8-5-8-10V6Zm-4 7h8m-4 0v6',
   survive: 'M12 21 4 13a5 5 0 0 1 8-6 5 5 0 0 1 8 6Zm-3-9h6m-3-3v6'
 };
-// The outline communicates the attribute family, not an arbitrary decoration.
-const ORB_SHAPES = Object.freeze({
-  circle: 'M50 5 A45 45 0 1 1 49.99 5 Z',
-  blade: 'M50 5 L95 50 L50 95 L5 50 Z',
-  heart: 'M50 86 C25 70 8 52 10 32 C12 13 38 9 50 29 C62 9 88 13 90 32 C92 52 75 70 50 86 Z',
-  star: 'M50 5 L63 34 L95 36 L70 56 L78 89 L50 71 L22 89 L30 56 L5 36 L37 34 Z',
-  hex: 'M28 7 L72 7 L95 50 L72 93 L28 93 L5 50 Z',
-  shield: 'M50 5 L89 19 L89 45 C89 69 74 84 50 95 C26 84 11 69 11 45 L11 19 Z',
-  bolt: 'M59 5 L20 54 L46 54 L38 95 L82 41 L57 41 Z',
-  drop: 'M50 5 C63 29 86 51 86 67 A36 36 0 1 1 14 67 C14 51 37 29 50 5 Z',
-  mirror: 'M50 5 L89 29 L89 71 L50 95 L11 71 L11 29 Z',
-  capstone: 'M50 4 L64 25 L90 19 L80 45 L96 60 L68 66 L62 94 L44 77 L16 86 L22 58 L4 42 L32 33 Z'
-});
-const SHAPES_BY_ICON = Object.freeze({
-  sword: 'blade', heart: 'heart', guard: 'shield', barrier: 'shield', lightning: 'bolt',
-  target: 'star', burst: 'star', combo: 'hex', streak: 'bolt',
-  lifesteal: 'drop', lowHealth: 'heart', reflect: 'mirror', limit: 'shield', survive: 'heart'
-});
-
 const ATTRIBUTE_ICONS = {
   attack: 'sword',
   maxHp: 'heart',
@@ -125,21 +106,18 @@ function attributeIcons(bonuses) {
 
 function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
   const isSeal = node.slot === 'seal';
-  const icon = ATTRIBUTE_ICONS[Object.keys(node.bonuses)[0]] || 'sword';
-  const shape = node.slot === 'origin' ? 'circle' : isSeal ? 'capstone' : (SHAPES_BY_ICON[icon] || 'circle');
-  const outline = ORB_SHAPES[shape];
   const [attribute, value] = Object.entries(node.bonuses)[0] || [];
   const effect = attribute === 'equip_cheat_death' ? '保命 1 次'
     : attribute === 'equip_damage_cap_percent' ? `承傷上限 ${Math.round(value * 100)}%`
     : Nodes.describe(node.bonuses)[0] || '';
   const stateLabel = isSeal ? `大節點 · ${caption}` : caption;
   return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
-      data-node-shape="${shape}" data-node-state="${status}" aria-label="${node.name}，${effect}，${stateLabel}"
+      data-node-state="${status}" aria-label="${node.name}，${effect}，${stateLabel}"
       aria-haspopup="dialog" aria-controls="cultivation-node-dialog" aria-expanded="${node.id === selectedNode}">
         <span class="path-tree-orb" aria-hidden="true">
           <svg class="ns-orb-ring" viewBox="0 0 100 100">
-            <path class="ns-orb-track" d="${outline}"/>
-            <path class="ns-orb-progress" d="${outline}"/>
+            <circle class="ns-orb-track" cx="50" cy="50" r="45"/>
+            <circle class="ns-orb-progress" cx="50" cy="50" r="45"/>
           </svg>
           <span class="ns-orb-surface">${attributeIcons(node.bonuses)}</span>
         </span>
