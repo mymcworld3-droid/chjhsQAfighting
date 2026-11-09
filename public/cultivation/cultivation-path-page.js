@@ -3,15 +3,22 @@ import { cultivationRequest, cultivationView } from './cultivation-reboot-client
 const Rules = globalThis.QACultivationRebootRules;
 const Nodes = globalThis.QACultivationPathNodes;
 const TAB = '#page-training [data-training-tab="path"]';
+const ORIGIN = { id: 'origin', slot: 'origin', name: '起點' };
 const detail = document.getElementById('cultivation-node-panel-template').content.firstElementChild;
 const nodeTitle = detail.querySelector('#cultivation-node-title');
 const nodeRank = detail.querySelector('[data-node-rank]');
 const nodeBody = detail.querySelector('[data-node-detail]');
+const nodeFooter = detail.querySelector('.ns-detail-footer');
 const nodePoints = detail.querySelector('[data-node-points]');
 const message = detail.querySelector('[data-node-message]');
 const learnButton = detail.querySelector('[data-learn-path-node]');
 const closeButton = detail.querySelector('[data-close-path-node]');
 const sheetLayout = matchMedia('(orientation: portrait), (max-height: 600px)');
+const landscapeLayout = matchMedia('(orientation: landscape)');
+const linkObserver = new ResizeObserver(([{ target }]) => {
+  if (target.isConnected) drawLinks(target);
+  else linkObserver.disconnect();
+});
 let selectedNode = '';
 let learning = false;
 let syncing = false;
@@ -53,30 +60,60 @@ function positionNodeDetail() {
   }
 }
 
-function chapterMarkup(chapter, score, learned) {
-  const progress = Nodes.chapterProgress(chapter, score, learned);
-  const nodes = chapter.nodes.map(node => {
-    const status = Nodes.nodeState(chapter, node, score, learned, progress);
-    const isSeal = node.slot === 'seal';
-    return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
+function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
+  const isSeal = node.slot === 'seal';
+  const icon = node.id === ORIGIN.id ? 'fa-seedling' : isSeal ? 'fa-gem' : 'fa-circle-dot';
+  return `<button type="button" class="path-tree-node" data-cultivation-node="${node.id}" data-slot="${node.slot}"
       data-node-state="${status}" aria-haspopup="dialog" aria-controls="cultivation-node-dialog" aria-expanded="${node.id === selectedNode}">
         <span class="path-tree-orb" aria-hidden="true">
           <svg class="ns-orb-ring" viewBox="0 0 100 100">
             <circle class="ns-orb-track" cx="50" cy="50" r="45"/>
             <circle class="ns-orb-progress" cx="50" cy="50" r="45"/>
           </svg>
-          <span class="ns-orb-surface"><i class="fa-solid ${isSeal ? 'fa-gem' : 'fa-circle-dot'}"></i></span>
+          <span class="ns-orb-surface"><i class="fa-solid ${icon}"></i></span>
         </span>
         <span class="path-tree-node-name">${node.name}</span>
-        <span class="path-tree-node-state">${isSeal ? '大節點 · ' : ''}${STATUS_TEXT[status]}</span>
+        <span class="path-tree-node-state">${isSeal ? '大節點 · ' : ''}${caption}</span>
       </button>`;
-  }).join('');
+}
+
+function chapterMarkup(chapter, score, learned) {
+  const progress = Nodes.chapterProgress(chapter, score, learned);
+  const origin = chapter.index === 0 ? nodeMarkup(ORIGIN, 'learned', '已啟用') : '';
+  const nodes = chapter.nodes.map(node => nodeMarkup(node, Nodes.nodeState(chapter, node, score, learned, progress))).join('');
   return `<section class="path-tree-chapter" data-cultivation-chapter="${chapter.id}" aria-label="${chapter.name}">
-    <div class="path-tree-grid">
-      <span class="path-tree-lane" data-lane="a">${chapter.lanes[0]}</span>
-      <span class="path-tree-lane" data-lane="b">${chapter.lanes[1]}</span>${nodes}
-    </div>
+    <div class="path-tree-grid">${origin}${nodes}</div>
   </section>`;
+}
+
+function linkMarkup(chapters, learned) {
+  let entry = ORIGIN.id;
+  return chapters.map(({ nodes }) => {
+    const [a1, a2, a3, b1, b2, b3, seal] = nodes.map(node => node.id);
+    const links = [[entry, a1], [a1, a2], [a2, a3], [a3, seal],
+      [entry, b1], [b1, b2], [b2, b3], [b3, seal]];
+    entry = seal;
+    return links.map(([from, to]) => {
+      const completed = learned.has(to) && (from === ORIGIN.id || learned.has(from));
+      return `<path data-from="${from}" data-to="${to}"${completed ? ' class="is-learned"' : ''}/>`;
+    }).join('');
+  }).join('');
+}
+
+function drawLinks(board) {
+  const bounds = board.getBoundingClientRect();
+  if (!bounds.width || !bounds.height) return;
+  const points = new Map([...board.querySelectorAll('[data-cultivation-node]')].map(button => {
+    const orb = button.querySelector('.path-tree-orb').getBoundingClientRect();
+    return [button.dataset.cultivationNode, { x: orb.left - bounds.left + orb.width / 2, y: orb.top - bounds.top + orb.height / 2 }];
+  }));
+  const horizontal = landscapeLayout.matches;
+  for (const path of board.querySelectorAll('.path-tree-links path')) {
+    const from = points.get(path.dataset.from), to = points.get(path.dataset.to);
+    const middle = horizontal ? (from.x + to.x) / 2 : (from.y + to.y) / 2;
+    const controls = horizontal ? `${middle} ${from.y} ${middle} ${to.y}` : `${from.x} ${middle} ${to.x} ${middle}`;
+    path.setAttribute('d', `M ${from.x} ${from.y} C ${controls} ${to.x} ${to.y}`);
+  }
 }
 
 function treeMarkup(state) {
@@ -95,7 +132,10 @@ function treeMarkup(state) {
     ${syncError ? '<p class="path-tree-notice">研修紀錄暫時無法同步。<button type="button" data-path-tree-refresh>重新同步</button></p>' : ''}
     <div class="path-tree-workspace">
       <div class="path-tree-scroll" tabindex="0" role="region" aria-label="流派節點圖">
-        <div class="path-tree-board">${chapters.map(chapter => chapterMarkup(chapter, score, learned)).join('')}</div>
+        <div class="path-tree-board">
+          <svg class="path-tree-links" aria-hidden="true">${linkMarkup(chapters, learned)}</svg>
+          ${chapters.map(chapter => chapterMarkup(chapter, score, learned)).join('')}
+        </div>
       </div>
     </div>
   </section>`;
@@ -108,6 +148,7 @@ function render() {
   const oldScroll = container.querySelector('.path-tree-scroll');
   const offset = { left: oldScroll?.scrollLeft || 0, top: oldScroll?.scrollTop || 0 };
   const focused = detail.contains(document.activeElement) ? document.activeElement : null;
+  linkObserver.disconnect();
   container.innerHTML = state?.route ? treeMarkup(state) : `<section class="path-tree-page path-tree-empty" aria-labelledby="path-choice-title">
     <h2 id="path-choice-title">選擇流派</h2>
     <p>劍修、體修、法修、悟道修</p>
@@ -120,6 +161,11 @@ function render() {
     focused?.focus({ preventScroll: true });
   }
   container.querySelector('.path-tree-scroll')?.scrollTo(offset);
+  const board = container.querySelector('.path-tree-board');
+  if (board) {
+    drawLinks(board);
+    linkObserver.observe(board);
+  }
 }
 
 async function sync() {
@@ -163,8 +209,21 @@ function nodeMessage(status, chapter, node, progress) {
   return '點亮此節點需 1 點研修。';
 }
 
+function bonusMarkup(lines) {
+  return `<ul class="path-node-bonuses">${lines.map(line => `<li>${line}</li>`).join('')}</ul>`;
+}
+
 function renderNode() {
   const state = cultivationView()?.state;
+  const route = Rules.ROUTES[state?.route];
+  if (route && selectedNode === ORIGIN.id) {
+    const gains = [route.attack && `攻擊 +${route.attack}`, route.hp && `生命上限 +${route.hp}`, route.effectText(route.base)];
+    nodeTitle.textContent = ORIGIN.name;
+    nodeRank.textContent = route.name;
+    nodeBody.innerHTML = `${bonusMarkup(gains.filter(Boolean))}<p class="ns-detail-preview">選定流派時已取得這些加成。</p>`;
+    nodeFooter.hidden = true;
+    return;
+  }
   const target = Nodes.findNode(state?.route, selectedNode);
   if (!target) {
     if (selectedNode) closeNode(false);
@@ -175,12 +234,11 @@ function renderNode() {
   const learned = Nodes.learnedSet(state);
   const progress = Nodes.chapterProgress(chapter, score, learned);
   const status = Nodes.nodeState(chapter, node, score, learned, progress);
-  const route = Rules.ROUTES[state.route];
-  const track = node.slot === 'seal' ? '大節點' : chapter.lanes[node.slot.startsWith('a') ? 0 : 1];
   nodeTitle.textContent = node.name;
-  nodeRank.textContent = `${route.name} · ${chapter.name} · ${track}`;
-  nodeBody.innerHTML = `<ul class="path-node-bonuses">${Nodes.describe(node.bonuses).map(line => `<li>${line}</li>`).join('')}</ul>
+  nodeRank.textContent = `${route.name} · ${chapter.name}${node.slot === 'seal' ? ' · 大節點' : ''}`;
+  nodeBody.innerHTML = `${bonusMarkup(Nodes.describe(node.bonuses))}
     <p class="ns-detail-preview">${nodeMessage(status, chapter, node, progress)}</p>`;
+  nodeFooter.hidden = false;
   nodePoints.textContent = `可用 ${progress.available} 點研修`;
   learnButton.disabled = learning || status !== 'ready';
   learnButton.textContent = learning ? '正在研修…' : status === 'ready' ? '研修此節點' : STATUS_TEXT[status];
@@ -212,7 +270,7 @@ function closeNode(restoreFocus = true) {
 }
 
 async function learnNode() {
-  if (learning || !selectedNode) return;
+  if (learning || !selectedNode || selectedNode === ORIGIN.id) return;
   const nodeId = selectedNode;
   learning = true;
   renderNode();
