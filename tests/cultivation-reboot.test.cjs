@@ -103,7 +103,7 @@ test('route, training and the last trial turn are transactional across tabs and 
   assert.equal(current.score, 24);
 });
 
-test('all four trees have 56 named nodes and eight capstones from Foundation to Half Immortal', () => {
+test('all four trees have 56 single-attribute nodes and eight distinctive capstones per route', () => {
   const allNames = new Set();
   const traits = new Set();
   for (const route of Object.keys(Rules.ROUTES)) {
@@ -112,20 +112,29 @@ test('all four trees have 56 named nodes and eight capstones from Foundation to 
     assert.deepEqual(chapters.map(chapter => chapter.need), Access.REALMS.slice(1));
     assert.deepEqual(chapters.map(chapter => chapter.name), ['築基', '金丹', '元嬰', '化神', '煉虛', '合體', '渡劫', '半仙']);
     const learned = new Set();
+    const routeTraits = new Set();
     for (const chapter of chapters) {
       assert.equal(chapter.nodes.length, 7);
       assert.equal(chapter.nodes.filter(node => node.slot === 'seal').length, 1);
+      for (const lane of ['a', 'b'])
+        assert.ok(chapter.nodes.some(node => node.slot.startsWith(lane) && Object.hasOwn(node.bonuses, 'attack')),
+          `${route.name} ${chapter.name} ${lane} 脈需有攻擊力節點`);
       assert.equal(Nodes.chapterProgress(chapter, chapter.need, learned).available, 1);
       assert.equal(Nodes.chapterProgress(chapter, chapter.full, learned).available, 7);
       for (const node of chapter.nodes) {
         assert.equal(Nodes.nodeState(chapter, node, chapter.full, learned), 'ready');
-        assert.ok(node.bonuses.attack > 0, node.name);
-        assert.ok(Nodes.describe(node.bonuses).length);
+        assert.equal(Object.keys(node.bonuses).length, 1, `${node.name} 不可包含複數屬性`);
+        assert.ok(Object.values(node.bonuses)[0] > 0, node.name);
+        assert.equal(Nodes.describe(node.bonuses).length, 1);
         if (node.slot === 'seal') {
-          const keys = Object.keys(node.trait).sort();
-          const signature = keys.join(',');
-          assert.ok(keys.length && !traits.has(signature), node.name);
-          traits.add(signature);
+          const keys = Object.keys(node.trait);
+          assert.equal(keys.length, 1);
+          assert.deepEqual(node.bonuses, node.trait);
+          assert.ok(node.traitText && node.traitName === node.name);
+          assert.ok(!traits.has(node.traitName), node.name);
+          assert.ok(!routeTraits.has(keys[0]), `${route.name} 的大節點效果不可重複`);
+          traits.add(node.traitName);
+          routeTraits.add(keys[0]);
           const snapshot = Rules.battleSnapshot({ route, pathNodes: [node.id] });
           for (const key of keys) {
             assert.ok(snapshot.effects.some(effect => effect.type === key && effect.value >= node.trait[key]), key);
@@ -165,8 +174,9 @@ test('the server gates each chapter, prerequisites, the capstone and each chapte
   await assert.rejects(learn('core-a1'), /尚未達到/);
   const { pathNodes } = (await Reboot.stateRef(db, 'u1').get()).data();
   assert.deepEqual(pathNodes, ['foundation-a1', 'foundation-a2', 'foundation-a3', 'foundation-seal']);
-  assert.equal(Rules.bonuses(state).attack, 30);
-  assert.equal(Rules.bonuses(state).effects.find(effect => effect.type === 'equip_combo_chance').value, .023);
+  assert.equal(Rules.bonuses(state).attack, 17);
+  assert.equal(Rules.bonuses(state).effects.find(effect => effect.type === 'equip_combo_chance').value, .02);
+  assert.equal(Rules.bonuses(state).effects.find(effect => effect.type === 'equip_crit_chance').value, .019);
   const golden = { ...state, seal: { achievedAtMs: 1 } };
   const chapter = Nodes.tree('sword')[1];
   assert.equal(Nodes.nodeState(chapter, chapter.nodes[0], Rules.realmScore(golden.peakScore, golden), Nodes.learnedSet(golden)), 'ready');
