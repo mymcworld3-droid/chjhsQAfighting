@@ -123,7 +123,7 @@ function nodeMarkup(node, status, caption = STATUS_TEXT[status]) {
 function chapterMarkup(chapter, score, learned, route) {
   const progress = Nodes.chapterProgress(chapter, score, learned);
   const origin = chapter.index === 0 ? nodeMarkup({ ...ORIGIN,
-    bonuses: { attack: route.attack, maxHp: route.hp, [route.effect]: route.base }
+    bonuses: { [route.effect]: route.base }
   }, 'learned', '已啟用') : '';
   const nodes = chapter.nodes.map(node => nodeMarkup(node, Nodes.nodeState(chapter, node, score, learned, progress))).join('');
   return `<section class="path-tree-chapter" data-cultivation-chapter="${chapter.id}" aria-label="${chapter.name}">
@@ -281,8 +281,9 @@ function renderNode() {
   const status = Nodes.nodeState(chapter, node, score, learned, progress);
   nodeTitle.textContent = node.name;
   nodeRank.textContent = `${route.name} · ${chapter.name}${node.slot === 'seal' ? ' · 大節點' : ''}`;
-  const trait = node.trait ? `<p class="ns-detail-preview">專屬特性</p>${bonusMarkup(Nodes.describe(node.trait))}` : '';
-  nodeBody.innerHTML = `${bonusMarkup(Nodes.describe(node.baseBonuses ?? node.bonuses))}${trait}
+  const trait = node.trait ? '<p class="ns-detail-preview">專屬特性</p>' : '';
+  const traitText = node.traitText ? `<p class="ns-detail-preview">${node.traitText}</p>` : '';
+  nodeBody.innerHTML = `${trait}${bonusMarkup(Nodes.describe(node.bonuses))}${traitText}
     <p class="ns-detail-preview">${nodeMessage(status, chapter, node, progress)}</p>`;
   nodeFooter.hidden = false;
   nodePoints.textContent = `可用 ${progress.available} 點研修`;
