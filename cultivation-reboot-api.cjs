@@ -102,8 +102,8 @@ function combatPlayer(player, state) {
 }
 
 function combatSkills(build, state) {
-  return { ...build, artifactBattle: Rules.battleSnapshot(state, build.goldenCore),
-    artifactShield: 0, equipment: [] };
+  const artifactBattle = Rules.battleSnapshot(state, build.goldenCore);
+  return { ...build, artifactBattle, artifactShield: artifactBattle.openingShield, equipment: [] };
 }
 
 function registerCultivationReboot(app, { resolveA = () => playerRepository.resolve(), logger = console } = {}) {

@@ -23,7 +23,17 @@
       a: [['淬刃', { attack: 4 }], ['飛星', { equip_crit_chance: 0.005 }], ['礪骨', { attack: 5 }]],
       b: [['分影', { equip_combo_damage_percent: 0.01 }], ['追鋒', { equip_crit_damage_percent: 0.01 }],
         ['疊刃', { equip_combo_damage_percent: 0.015 }]],
-      seal: { attack: 8, equip_combo_damage_percent: 0.02, equip_combo_chance: 0.003 }
+      seal: { attack: 8, equip_combo_damage_percent: 0.02, equip_combo_chance: 0.003 },
+      traits: [
+        { equip_crit_chance: 0.012 },
+        { equip_crit_damage_percent: 0.06 },
+        { equip_combo_damage_percent: 0.05 },
+        { equip_combo_chance: 0.004 },
+        { equip_low_hp_damage_percent: 0.055 },
+        { equip_damage_percent: 0.035 },
+        { equip_streak_damage_percent: 0.09 },
+        { equip_crit_chance: 0.025, equip_crit_damage_percent: 0.09 }
+      ]
     },
     body: {
       lanes: ['體魄', '護體'],
@@ -32,7 +42,17 @@
       a: [['煉骨', { maxHp: 12 }], ['伏甲', { equip_damage_reduction_flat: 1 }], ['通脈', { maxHp: 18 }]],
       b: [['生甲', { equip_on_correct_shield_flat: 2 }], ['厚甲', { equip_first_hit_reduction_percent: 0.01 }],
         ['磐息', { equip_on_correct_shield_flat: 3 }]],
-      seal: { maxHp: 22, equip_on_correct_shield_flat: 4, equip_damage_reduction_flat: 1 }
+      seal: { maxHp: 22, equip_on_correct_shield_flat: 4, equip_damage_reduction_flat: 1 },
+      traits: [
+        { equip_first_hit_reduction_percent: 0.08 },
+        { equip_on_correct_shield_flat: 6 },
+        { equip_damage_reduction_flat: 3 },
+        { equip_shield_flat: 45 },
+        { equip_low_hp_reduction_percent: 0.10 },
+        { equip_damage_reduction_percent: 0.045 },
+        { equip_reflect_percent: 0.10 },
+        { equip_damage_cap_percent: 0.40 }
+      ]
     },
     spell: {
       lanes: ['法脈', '雷訣'],
@@ -41,7 +61,17 @@
       a: [['引弧', { equip_true_damage_flat: 3 }], ['銘篆', { attack: 4 }], ['刻雷', { equip_true_damage_flat: 4 }]],
       b: [['布陣', { equip_damage_percent: 0.0075 }], ['聚符', { equip_streak_damage_percent: 0.01 }],
         ['天罡', { equip_damage_percent: 0.0075 }]],
-      seal: { equip_true_damage_flat: 7, equip_damage_percent: 0.0125 }
+      seal: { equip_true_damage_flat: 7, equip_damage_percent: 0.0125 },
+      traits: [
+        { equip_true_damage_flat: 5 },
+        { equip_true_damage_flat: 3, equip_streak_damage_percent: 0.04 },
+        { equip_damage_percent: 0.025, equip_crit_chance: 0.02 },
+        { equip_streak_damage_percent: 0.07, equip_crit_damage_percent: 0.04 },
+        { equip_low_hp_damage_percent: 0.05, equip_true_damage_flat: 5 },
+        { equip_damage_percent: 0.035, equip_streak_damage_percent: 0.07 },
+        { equip_crit_chance: 0.02, equip_true_damage_flat: 7 },
+        { equip_true_damage_flat: 10, equip_damage_percent: 0.04 }
+      ]
     },
     insight: {
       lanes: ['心海', '歸元'],
@@ -50,20 +80,32 @@
       a: [['澄心', { maxHp: 12 }], ['守念', { equip_damage_reduction_percent: 0.005 }], ['養元', { maxHp: 14 }]],
       b: [['回息', { equip_lifesteal_percent: 0.005 }], ['省身', { equip_low_hp_damage_percent: 0.0125 }],
         ['歸流', { equip_lifesteal_percent: 0.0075 }]],
-      seal: { maxHp: 20, equip_lifesteal_percent: 0.01, equip_low_hp_reduction_percent: 0.01 }
+      seal: { maxHp: 20, equip_lifesteal_percent: 0.01, equip_low_hp_reduction_percent: 0.01 },
+      traits: [
+        { equip_lifesteal_percent: 0.02 },
+        { equip_lifesteal_percent: 0.012, equip_on_correct_shield_flat: 5 },
+        { equip_low_hp_damage_percent: 0.05, equip_lifesteal_percent: 0.015 },
+        { equip_first_hit_reduction_percent: 0.075, equip_lifesteal_percent: 0.02 },
+        { equip_low_hp_reduction_percent: 0.08, equip_lifesteal_percent: 0.02 },
+        { equip_reflect_percent: 0.09, equip_lifesteal_percent: 0.02 },
+        { equip_damage_reduction_percent: 0.04, equip_lifesteal_percent: 0.025 },
+        { equip_cheat_death: 1 }
+      ]
     }
   };
 
   const FLAT = {
     attack: '攻擊', maxHp: '生命上限', equip_true_damage_flat: '命中真實傷害',
-    equip_on_correct_shield_flat: '答對護盾', equip_damage_reduction_flat: '固定減傷'
+    equip_on_correct_shield_flat: '答對護盾', equip_damage_reduction_flat: '固定減傷',
+    equip_shield_flat: '開場護盾'
   };
   const PERCENT = {
     equip_crit_chance: '暴擊率', equip_crit_damage_percent: '暴擊傷害', equip_combo_chance: '連擊率',
     equip_combo_damage_percent: '連擊傷害', equip_first_hit_reduction_percent: '首次受傷減免',
     equip_damage_percent: '普通傷害', equip_streak_damage_percent: '三連答額外傷害',
     equip_damage_reduction_percent: '普通傷害減免', equip_lifesteal_percent: '吸血率',
-    equip_low_hp_damage_percent: '低血量增傷', equip_low_hp_reduction_percent: '低血量減傷'
+    equip_low_hp_damage_percent: '低血量增傷', equip_low_hp_reduction_percent: '低血量減傷',
+    equip_reflect_percent: '反傷比例'
   };
 
   function stageBonuses(bonuses, index) {
@@ -77,11 +119,16 @@
       const { id, index } = chapter;
       const lane = key => design[key].map(([title, bonuses], step) => Object.freeze({
         id: `${id}-${key}${step + 1}`, slot: `${key}${step + 1}`, name: `${design.marks[index]}・${title}`,
-        bonuses: stageBonuses(bonuses, index)
+        bonuses: stageBonuses({ attack: 1, ...bonuses }, index)
       }));
+      const baseBonuses = stageBonuses({ attack: 6, ...design.seal }, index);
+      const trait = stageBonuses(design.traits[index], index);
+      const combined = { ...baseBonuses };
+      for (const [attribute, value] of Object.entries(trait)) combined[attribute] = (combined[attribute] || 0) + value;
       return Object.freeze({ ...chapter, lanes: Object.freeze(design.lanes), nodes: Object.freeze([
         ...lane('a'), ...lane('b'),
-        Object.freeze({ id: `${id}-seal`, slot: 'seal', name: design.seals[index], bonuses: stageBonuses(design.seal, index) })
+        Object.freeze({ id: `${id}-seal`, slot: 'seal', name: design.seals[index],
+          baseBonuses, trait, bonuses: Object.freeze(combined) })
       ]) });
     }));
   }
@@ -135,8 +182,13 @@
   }
 
   function describe(bonuses) {
-    return Object.entries(bonuses).map(([key, value]) => Object.hasOwn(FLAT, key)
-      ? `${FLAT[key]} +${value}` : `${PERCENT[key]} +${Math.round(value * 10000) / 100}%`);
+    return Object.entries(bonuses).map(([key, value]) => {
+      if (Object.hasOwn(FLAT, key)) return `${FLAT[key]} +${value}`;
+      const percent = Math.round(value * 10000) / 100;
+      if (key === 'equip_damage_cap_percent') return `單次承傷上限為生命上限的 ${percent}%`;
+      if (key === 'equip_cheat_death') return '每場戰鬥首次遭受致命一擊時保留 1 點生命';
+      return `${PERCENT[key]} +${percent}%`;
+    });
   }
 
   const api = Object.freeze({ CHAPTERS, NODES_PER_CHAPTER, tree, learnedSet, chapterProgress, nodeState,

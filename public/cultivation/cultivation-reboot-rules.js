@@ -32,7 +32,7 @@
       name: '體修', glyph: '體', color: '#e8a283',
       practice: '淬鍊筋骨或修習護體，以生命和護盾打持久戰。',
       skill: '磐石護身',
-      attack: 0, attackStep: 0, hp: 100, hpStep: 25,
+      attack: 3, attackStep: 0, hp: 100, hpStep: 25,
       skillGrowth: foundation => foundation * 2,
       effect: 'equip_on_correct_shield_flat', base: 18, step: 5, resonance: 14,
       effectText: value => `答對後獲得 ${value} 護盾`,
@@ -56,7 +56,7 @@
       name: '悟道修', glyph: '悟', color: '#9fdcc3',
       practice: '觀照心海或參悟歸元，在攻防往返中回復生命。',
       skill: '歸元心法',
-      attack: 0, attackStep: 0, hp: 45, hpStep: 18,
+      attack: 3, attackStep: 0, hp: 45, hpStep: 18,
       skillGrowth: (foundation, technique) => Math.min(foundation, technique) * 0.006,
       effect: 'equip_lifesteal_percent', base: 0.04, step: 0.007, resonance: 0.03,
       effectText: value => `攻擊吸血 ${percent(value)}`,
@@ -142,7 +142,9 @@
   }
 
   function battleSnapshot(state, core) {
-    return { version: 1, effects: bonuses(state, core).effects, openingShield: 0 };
+    const { effects } = bonuses(state, core);
+    const openingShield = effects.find(effect => effect.type === 'equip_shield_flat')?.value || 0;
+    return { version: 1, effects, openingShield };
   }
 
   const api = Object.freeze({ FOUNDATION, GOLDEN_CORE, BREAKTHROUGH_ATTACK, BREAKTHROUGH_HP,

@@ -196,7 +196,7 @@ html body.ui-cleanup #page-training[data-training-place="meditation"] > #trainin
   color: var(--path-muted);
   transition: transform .18s;
 }
-.path-tree-orb .ns-orb-surface { display: flex; align-items: center; justify-content: center; gap: 4%; }
+.path-tree-orb .ns-orb-surface { display: flex; flex-wrap: wrap; align-items: center; align-content: center; justify-content: center; gap: 4%; }
 .path-tree-icon { flex: none; width: 28%; aspect-ratio: 1; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .path-tree-icon:only-child { width: 46%; }
 .path-tree-orb .ns-orb-progress { visibility: hidden; }

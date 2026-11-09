@@ -15,13 +15,17 @@ const NODE_ICONS = {
   combo: 'M3 21 17 7m-7 1 4 4m-9 2 4 4M9 21 21 9m-8-1 6-5h2v2',
   streak: 'M3 18l5-7 4 4 8-10m-6 0h6v6M3 11l3-4',
   lifesteal: 'M12 2c2 5 7 8 7 13a7 7 0 1 1-14 0c0-5 5-8 7-13Zm-3 13h6m-3-3v6',
-  lowHealth: 'M12 21 4 13a5 5 0 0 1 8-6 5 5 0 0 1 8 6ZM9 12h6'
+  lowHealth: 'M12 21 4 13a5 5 0 0 1 8-6 5 5 0 0 1 8 6ZM9 12h6',
+  reflect: 'M4 17h11a5 5 0 0 0 0-10h-5m4-4-4 4 4 4',
+  limit: 'M12 3 20 6v5c0 5-4 8-8 10-4-2-8-5-8-10V6Zm-4 7h8m-4 0v6',
+  survive: 'M12 21 4 13a5 5 0 0 1 8-6 5 5 0 0 1 8 6Zm-3-9h6m-3-3v6'
 };
 const ATTRIBUTE_ICONS = {
   attack: 'sword',
   maxHp: 'heart',
   equip_true_damage_flat: 'lightning',
   equip_on_correct_shield_flat: 'barrier',
+  equip_shield_flat: 'barrier',
   equip_damage_reduction_flat: 'guard',
   equip_first_hit_reduction_percent: 'guard',
   equip_damage_reduction_percent: 'guard',
@@ -33,7 +37,10 @@ const ATTRIBUTE_ICONS = {
   equip_damage_percent: 'sword',
   equip_streak_damage_percent: 'streak',
   equip_lifesteal_percent: 'lifesteal',
-  equip_low_hp_damage_percent: 'lowHealth'
+  equip_low_hp_damage_percent: 'lowHealth',
+  equip_reflect_percent: 'reflect',
+  equip_damage_cap_percent: 'limit',
+  equip_cheat_death: 'survive'
 };
 const detail = document.getElementById('cultivation-node-panel-template').content.firstElementChild;
 const nodeTitle = detail.querySelector('#cultivation-node-title');
@@ -274,7 +281,8 @@ function renderNode() {
   const status = Nodes.nodeState(chapter, node, score, learned, progress);
   nodeTitle.textContent = node.name;
   nodeRank.textContent = `${route.name} · ${chapter.name}${node.slot === 'seal' ? ' · 大節點' : ''}`;
-  nodeBody.innerHTML = `${bonusMarkup(Nodes.describe(node.bonuses))}
+  const trait = node.trait ? `<p class="ns-detail-preview">專屬特性</p>${bonusMarkup(Nodes.describe(node.trait))}` : '';
+  nodeBody.innerHTML = `${bonusMarkup(Nodes.describe(node.baseBonuses ?? node.bonuses))}${trait}
     <p class="ns-detail-preview">${nodeMessage(status, chapter, node, progress)}</p>`;
   nodeFooter.hidden = false;
   nodePoints.textContent = `可用 ${progress.available} 點研修`;
