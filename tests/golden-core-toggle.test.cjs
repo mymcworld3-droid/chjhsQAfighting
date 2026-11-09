@@ -29,6 +29,7 @@ function runtime() {
   };
   const context = {
     window, document, console, Math, Date, JSON, Number, String, Object, Array,
+    QATrainingAccessRules: require('../public/cultivation/training-access-rules.js'),
     getApp: () => ({}), getAuth: () => ({ currentUser: { uid: 'fixture-user' } }),
     getFirestore: () => ({}), doc: (_db, ...path) => path.join('/'),
     updateDoc: async (_ref, payload) => { remote.push(payload); },

@@ -70,6 +70,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/battle-mode-v2.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/cultivation-reboot-ui.js',
+  './cultivation/cultivation-path-page.js',
   './cultivation/martial-trial.js',
   './cultivation/wendao-modes.js',
   './cultivation/training-scene-map.js',

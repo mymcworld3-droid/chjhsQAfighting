@@ -148,6 +148,18 @@
       return;
     }
 
+    // A successful Golden Core breakthrough can happen while the path tree is open.
+    if (score() >= GOLDEN_CORE_SCORE) {
+      if (nav) delete nav.dataset.foundationTraining;
+      if (page) {
+        page.classList.remove('foundation-training-page');
+        delete page.dataset.foundationTraining;
+        delete page.dataset.foundationTrainingReady;
+      }
+      document.body.classList.remove('foundation-training-only');
+      return;
+    }
+
     const wasVisible = !!page && !page.classList.contains('hidden');
     if (wasVisible && typeof window.switchToPage === 'function') {
       window.switchToPage('page-home');

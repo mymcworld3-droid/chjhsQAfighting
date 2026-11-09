@@ -1,4 +1,3 @@
-import './training-access-rules.js';
 import { ACTIVE_ARTIFACT_EQUIP_SLOTS as ARTIFACT_EQUIP_SLOTS, getArtifactById, realmOrderByName } from './artifact-catalog.js';
 
 // 戰力是獨立展示用的綜合評分，不參與傷害、配對或勝負判定。
@@ -113,8 +112,7 @@ export function getCurrentCombatPower() {
   const path = window.QACultivationRebootClient?.bonuses(data);
   const stats = { ...(data.stats || {}) };
   stats.attack = positive(stats.attack ?? 200) + (path?.attack || 0);
-  stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) +
-    (globalThis.QATrainingAccessRules?.hpBonus(data) || 0) + (path?.maxHp || 0);
+  stats.maxHp = Math.max(1, finite(stats.maxHp, 1000)) + (path?.maxHp || 0);
   if (soul) {
     // 戰力展示反映元嬰屬性，但不把法寶加成重複計入基礎數值。
     stats.attack = positive(stats.attack ?? 200) + positive(soul.attackFlat);

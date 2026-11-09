@@ -48,7 +48,7 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const core = equippedCore(data, self);
     const power = (self && window.getCombatPower?.()) || window.calculateCombatPower?.({
       stats: { attack: stats.attack ?? 200,
-        maxHp: Math.max(1, Number(stats.maxHp) || 1000) + (window.QATrainingAccessRules?.hpBonus(data) || 0) } ,
+        maxHp: Math.max(1, Number(stats.maxHp) || 1000) },
       core
     }) || { total: 0, base: 0, core: 0, equipment: 0, items: [] };
     const answered = number(stats.totalAnswered);

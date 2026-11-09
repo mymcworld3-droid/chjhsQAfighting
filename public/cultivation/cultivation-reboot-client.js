@@ -1,3 +1,5 @@
+import './training-access-rules.js';
+import './cultivation-path-nodes.js';
 import './cultivation-reboot-rules.js';
 import { authenticatedMainFetch, getMainUser } from './data/project-repository.js';
 
@@ -28,7 +30,7 @@ export async function cultivationRequest(action, payload = {}) {
     const previous = view?.state;
     result.state.peakScore = Math.max(previous?.peakScore || 0, result.state.peakScore);
     view = result;
-    if (!previous || previous.revision !== result.state.revision)
+    if (!previous || previous.revision !== result.state.revision || previous.peakScore !== result.state.peakScore)
       window.dispatchEvent(new CustomEvent('xiuxian:cultivation-path-updated'));
   }
   return view;

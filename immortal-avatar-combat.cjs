@@ -47,7 +47,7 @@ function snapshot(uid,user,config={}){
         artifactName:item.name,soulbound:slot==='本命法寶',effectIndex});
     });
   }
-  const baseAtk=count(user.stats?.attack,200),baseMaxHp=Math.max(1,count(user.stats?.maxHp,1000)+Access.hpBonus(user));
+  const baseAtk=count(user.stats?.attack,200),baseMaxHp=Math.max(1,count(user.stats?.maxHp,1000));
   const atk=Math.max(1,Math.round((baseAtk+Math.min(2000,soul?.attackFlat||0)+attackFlat)*attackMultiplier));
   const maxHp=Math.max(1,Math.round((baseMaxHp+Math.min(10000,soul?.maxHpFlat||0)+hpFlat)*hpMultiplier));
   const shield=effects.filter(e=>e.type==='equip_shield_flat').reduce((n,e)=>n+e.value,0);

@@ -1,4 +1,3 @@
-import './training-access-rules.js';
 import { getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getFirestore, doc, updateDoc } from '../data-store.js';
@@ -45,11 +44,10 @@ import { getFirestore, doc, updateDoc } from '../data-store.js';
   window.getCombatStats = function () {
     const data = window.getCurrentUserData?.();
     const base = normalized(data?.stats || {});
-    const realmHp = window.QATrainingAccessRules?.hpBonus(data) || 0;
-    // Realm/元嬰 bonuses are projections. Never add them to permanent stats.maxHp.
+    // Path and saved soul bonuses are projections over the player's base stats.
     const path = window.QACultivationRebootClient?.bonuses(data);
     const attack = base.attack + (path?.attack || 0);
-    const projectedMaxHp = base.maxHp + realmHp + (path?.maxHp || 0);
+    const projectedMaxHp = base.maxHp + (path?.maxHp || 0);
     const projected = { attack, maxHp: projectedMaxHp,
       hp: Math.round(projectedMaxHp * (base.hp / base.maxHp)) };
     const soul = window.getNascentSoulBattleSnapshot?.();

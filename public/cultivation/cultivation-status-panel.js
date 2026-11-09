@@ -238,9 +238,9 @@
             <div><span>基礎</span><b>${formatStatNumber(power.base)}</b></div>
             <div><span>金丹 · 品質</span><b>${formatStatNumber(power.core)}</b></div>
           </div>
-          <p class="status-power-note">基礎戰力包含流派與境界屬性；戰力評分與鬥法傷害分開計算。</p>
-          <button type="button" class="path-training-link" data-open-cultivation-path aria-haspopup="dialog"
-            aria-controls="cultivation-path-dialog">流派與渡劫</button>
+          <p class="status-power-note">基礎戰力包含目前生效的屬性加成。戰力評分與鬥法傷害分開計算。</p>
+          <button type="button" class="path-training-link" data-open-cultivation-tree
+            ${(window.getTrainingAccessScore?.() || 0) < 6 ? 'disabled' : ''}>流派研修</button>
         </div>
         <div class="status-section status-core-section">
           <div class="status-section-title"><span>目前調御金丹</span><small>調御狀態</small></div>

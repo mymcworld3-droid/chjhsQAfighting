@@ -39,12 +39,13 @@ test('reduced-motion training navigation stays synchronous and inside the docume
   assert.equal(calls, 50);
 });
 
-test('new accounts see Status; existing Foundation and Golden Core gates are at 6 and 28', () => {
+test('Foundation opens the path tree from the existing Meditation Room', () => {
   const player = { stats: { totalScore: 0 } };
   assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status', 'rank']);
   player.stats.totalScore = 6;
-  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['vault', 'status', 'rank']);
-  player.stats.totalScore = 28;
+  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['meditation', 'vault', 'status', 'rank']);
+  assert.equal(Rules.PLACES.find(place => place.id === 'meditation').tab, 'path');
+  assert.equal(Rules.NASCENT_EDITOR_ENABLED, false);
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);
 });
 

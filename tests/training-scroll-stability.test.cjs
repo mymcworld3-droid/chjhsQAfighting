@@ -57,7 +57,7 @@ function trainingRenderRuntime() {
     set innerHTML(value) { markup = value; },
     querySelector: selector => selector === '.ns-growth-panel' && markup.includes('ns-growth-panel') ? {} : null
   };
-  const main = {scrollTop:200}, page = {scrollTop:80};
+  const main = {scrollTop:200}, page = {scrollTop:80, querySelector: () => null};
   const context = {
     soulView:{selected:'attack',choosing:false},
     Innate:require('../public/cultivation/innate-ability.js'),window:{getCurrentUserData:()=>({}),dispatchEvent(){}},CustomEvent:class {},
@@ -76,8 +76,19 @@ function trainingRenderRuntime() {
   const end = training.indexOf('  function createNavButton()',start);
   vm.createContext(context);
   vm.runInContext(training.slice(start,end),context);
-  return {context,main,page,render:() => context.renderTrainingPage()};
+  return {context,main,page,content,render:() => context.renderTrainingPage()};
 }
+
+test('Golden Core refreshes leave the active path tab and scroll containers intact', () => {
+  const runtime = trainingRenderRuntime();
+  runtime.context.activeTab = 'core';
+  runtime.page.querySelector = () => ({});
+  runtime.content.innerHTML = 'path tree';
+  runtime.render();
+  assert.equal(runtime.content.innerHTML, 'path tree');
+  assert.equal(runtime.main.scrollTop, 200);
+  assert.equal(runtime.page.scrollTop, 80);
+});
 
 test('redrawing existing nascent branches preserves both scroll containers', () => {
   const runtime = trainingRenderRuntime();

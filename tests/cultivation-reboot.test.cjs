@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const Rules = require('../public/cultivation/cultivation-reboot-rules.js');
 const Access = require('../public/cultivation/training-access-rules.js');
+const Nodes = require('../public/cultivation/cultivation-path-nodes.js');
 const Reboot = require('../cultivation-reboot-api.cjs');
 const Tower = require('../martial-trial-api.cjs').__test;
 const { questTransaction } = require('../quest-api.cjs').__test;
@@ -49,7 +50,7 @@ for (const [id, route] of Object.entries(Rules.ROUTES)) {
   });
 }
 
-test('each training path has its own mastery progression and core resonance', () => {
+test('existing two-track mastery keeps its earned bonuses and core resonance', () => {
   const bonus = (route, foundation, technique, seal = null, core = false) =>
     Rules.bonuses({ route, training: { foundation, technique }, seal }, core);
   assert.equal(bonus('sword', 4, 0).attack - bonus('sword', 3, 0).attack, 12);
@@ -68,17 +69,17 @@ test('route, training and the last trial turn are transactional across tabs and 
   await assert.rejects(move(state, 'choose', { route: ['body'] }), /未知的修行流派/);
   ({ state } = await move(state, 'choose', { route: 'body' }));
   await assert.rejects(move(state, 'choose', { route: 'sword' }), /已立下流派/);
-  const results = await Promise.allSettled([move(state, 'train', { track: 'foundation' }),
-    move(state, 'train', { track: 'technique' })]);
+  const results = await Promise.allSettled([move(state, 'learn', { node: 'foundation-a1' }),
+    move(state, 'learn', { node: 'foundation-b1' })]);
   assert.equal(results.filter(result => result.status === 'fulfilled').length, 1);
   ({ state } = await sync());
-  assert.equal(state.training.foundation + state.training.technique, 1);
+  assert.equal(state.pathNodes.length, 1);
   await assert.rejects(move(state, 'start'), /金丹修為/);
   await user.update({ 'stats.totalScore': 82, 'stats.rankLevel': 10, trainingAccess: { version: 1, highestRealmScore: 68 } });
   ({ state } = await sync());
   assert.equal(state.legacyAccess, false, 'later shared milestones never bypass the trial');
   assert.equal(Rules.realmScore(82, state), 27);
-  assert.equal(Rules.availablePoints(state), 6);
+  assert.equal(Nodes.chapterProgress(Nodes.tree('body')[0], 27, Nodes.learnedSet(state)).available, 6);
   ({ state } = await move(state, 'start'));
   for (const [round, wave] of Rules.ROUTES.body.waves.entries()) {
     if (round === 2) ({ state } = await sync());
@@ -100,6 +101,74 @@ test('route, training and the last trial turn are transactional across tabs and 
   const current = await sync();
   assert.equal(Rules.realmScore(current.score, current.state), 28);
   assert.equal(current.score, 24);
+});
+
+test('all four trees have 56 named nodes and eight capstones from Foundation to Half Immortal', () => {
+  const allNames = new Set();
+  for (const route of Object.keys(Rules.ROUTES)) {
+    const chapters = Nodes.tree(route);
+    assert.deepEqual(chapters.map(chapter => chapter.need), Access.REALMS.slice(1));
+    assert.deepEqual(chapters.map(chapter => chapter.name), ['築基', '金丹', '元嬰', '化神', '煉虛', '合體', '渡劫', '半仙']);
+    const learned = new Set();
+    for (const chapter of chapters) {
+      assert.equal(chapter.nodes.length, 7);
+      assert.equal(chapter.nodes.filter(node => node.slot === 'seal').length, 1);
+      assert.equal(Nodes.chapterProgress(chapter, chapter.need, learned).available, 1);
+      assert.equal(Nodes.chapterProgress(chapter, chapter.full, learned).available, 7);
+      for (const node of chapter.nodes) {
+        assert.equal(Nodes.nodeState(chapter, node, chapter.full, learned), 'ready');
+        assert.ok(Nodes.describe(node.bonuses).length);
+        assert.ok(!allNames.has(node.name), node.name);
+        allNames.add(node.name);
+        learned.add(node.id);
+      }
+    }
+    assert.equal(learned.size, 56);
+  }
+});
+
+test('the server gates each chapter, prerequisites, the capstone and each chapter point budget', async () => {
+  const { db, save, sync, move, user } = fixture(6);
+  await save();
+  let { state } = await sync();
+  ({ state } = await move(state, 'choose', { route: 'sword' }));
+  const learn = async node => { ({ state } = await move(state, 'learn', { node })); };
+  await assert.rejects(learn('core-a1'), /尚未達到/);
+  await assert.rejects(learn('foundation-a2'), /前置/);
+  await assert.rejects(learn('foundation-seal'), /一脈/);
+  await assert.rejects(learn(['foundation-a1']), /找不到/);
+  await learn('foundation-a1');
+  await assert.rejects(learn('foundation-a1'), /已研修/);
+  await assert.rejects(learn('foundation-b1'), /研修點不足/);
+  await user.update({ 'stats.totalScore': 99 });
+  await learn('foundation-a2');
+  await learn('foundation-a3');
+  await learn('foundation-seal');
+  await assert.rejects(learn('core-a1'), /尚未達到/);
+  const { pathNodes } = (await Reboot.stateRef(db, 'u1').get()).data();
+  assert.deepEqual(pathNodes, ['foundation-a1', 'foundation-a2', 'foundation-a3', 'foundation-seal']);
+  assert.equal(Rules.bonuses(state).attack, 29);
+  assert.equal(Rules.bonuses(state).effects.find(effect => effect.type === 'equip_combo_chance').value, .023);
+  const golden = { ...state, seal: { achievedAtMs: 1 } };
+  const chapter = Nodes.tree('sword')[1];
+  assert.equal(Nodes.nodeState(chapter, chapter.nodes[0], Rules.realmScore(golden.peakScore, golden), Nodes.learnedSet(golden)), 'ready');
+  assert.equal(Nodes.nodeState(chapter, chapter.nodes[0], 99, new Set()), 'prerequisite');
+  assert.equal((await user.get()).data().stats.maxHp, 1000);
+});
+
+test('old path saves retain their exact bonuses when their first node is learned', async () => {
+  const { db, save, sync, move } = fixture(70);
+  await save();
+  const { state } = await sync();
+  const ref = Reboot.stateRef(db, 'u1');
+  const { pathNodes, ...old } = state;
+  await ref.set({ ...old, route: 'body', training: { foundation: 3, technique: 2 } });
+  const restored = (await sync()).state;
+  const before = Rules.bonuses(restored);
+  const updated = (await move(restored, 'learn', { node: 'foundation-a1' })).state;
+  assert.deepEqual(updated.training, { foundation: 3, technique: 2 });
+  assert.equal(Rules.bonuses(updated).maxHp, before.maxHp + 12);
+  assert.deepEqual(Rules.bonuses(updated).effects, before.effects);
 });
 
 test('failed attempts keep overflow and can be retried, and existing Golden Cores are recognized', async () => {
@@ -139,7 +208,7 @@ test('the existing trial tower consumes the branch build and blocks a pending Go
   await user.update({ 'cultivationTraining.equippedCore': { type: 'sword', grade: 4 } });
   const active = await Tower.start(db, 'u1', { requestId: 'start-sealed' }, 12345, true);
   assert.equal(active.challenger.atk, 216);
-  assert.equal(active.challenger.maxHp, 1160);
+  assert.equal(active.challenger.maxHp, 1060);
   const run = (await db.collection(Tower.COLLECTION).doc('u1').get()).data().run;
   assert.deepEqual(run.challenger.artifactBattle.effects.map(effect => [effect.type, effect.value]),
     [['equip_true_damage_flat', 18]]);

@@ -1,10 +1,11 @@
 (function (root) {
   'use strict';
 
+  const Nodes = typeof module === 'object' && module.exports
+    ? require('./cultivation-path-nodes.js') : root.QACultivationPathNodes;
   const FOUNDATION = 6;
   const GOLDEN_CORE = 28;
-  const MAX_TRAINING = 8;
-  const MAX_POINTS = 12;
+  const LEGACY_MAX_TRAINING = 8;
   const BREAKTHROUGH_ATTACK = 10;
   const BREAKTHROUGH_HP = 60;
 
@@ -18,9 +19,8 @@
     sword: {
       name: '劍修', glyph: '劍', color: '#f1ca83',
       practice: '磨礪劍骨或演練疊鋒，在鬥法中打出連擊。',
-      foundation: '磨礪劍骨', technique: '演練疊鋒', skill: '疊鋒劍意',
+      skill: '疊鋒劍意',
       attack: 12, attackStep: 4, hp: 0, hpStep: 0,
-      growth: '每練成四重劍骨，再提高 8 點攻擊。',
       attackMilestone: foundation => Math.floor(foundation / 4) * 8,
       effect: 'equip_combo_chance', base: 0.02, step: 0.005, resonance: 0.015,
       effectText: value => `連擊機率 +${percent(value)}`,
@@ -31,9 +31,8 @@
     body: {
       name: '體修', glyph: '體', color: '#e8a283',
       practice: '淬鍊筋骨或修習護體，以生命和護盾打持久戰。',
-      foundation: '淬鍊筋骨', technique: '修習護體', skill: '磐石護身',
+      skill: '磐石護身',
       attack: 0, attackStep: 0, hp: 100, hpStep: 25,
-      growth: '每重筋骨也會強化護體，使護盾增加 2 點。',
       skillGrowth: foundation => foundation * 2,
       effect: 'equip_on_correct_shield_flat', base: 18, step: 5, resonance: 14,
       effectText: value => `答對後獲得 ${value} 護盾`,
@@ -44,9 +43,8 @@
     spell: {
       name: '法修', glyph: '法', color: '#b9b5fb',
       practice: '精研法脈或推演雷訣，以無視普通減傷的真傷克敵。',
-      foundation: '精研法脈', technique: '推演雷訣', skill: '九霄雷訣',
+      skill: '九霄雷訣',
       attack: 6, attackStep: 3, hp: 0, hpStep: 0,
-      growth: '雷訣每練成三重可凝一枚雷印，再增加 6 點真實傷害。',
       skillGrowth: (_foundation, technique) => Math.floor(technique / 3) * 6,
       effect: 'equip_true_damage_flat', base: 9, step: 3, resonance: 9,
       effectText: value => `命中追加 ${value} 真實傷害`,
@@ -57,9 +55,8 @@
     insight: {
       name: '悟道修', glyph: '悟', color: '#9fdcc3',
       practice: '觀照心海或參悟歸元，在攻防往返中回復生命。',
-      foundation: '觀照心海', technique: '參悟歸元', skill: '歸元心法',
+      skill: '歸元心法',
       attack: 0, attackStep: 0, hp: 45, hpStep: 18,
-      growth: '心海與歸元每同時精進一重，再增加 0.6 個百分點吸血。',
       skillGrowth: (foundation, technique) => Math.min(foundation, technique) * 0.006,
       effect: 'equip_lifesteal_percent', base: 0.04, step: 0.007, resonance: 0.03,
       effectText: value => `攻擊吸血 ${percent(value)}`,
@@ -72,12 +69,6 @@
   const TRIAL = Object.freeze({ resolve: 9, energy: 3, maxEnergy: 5, seals: 15 });
   const number = value => Number.isFinite(Number(value)) ? Math.max(0, Math.floor(Number(value))) : 0;
   const percent = value => `${Math.round(value * 1000) / 10}%`;
-
-  function availablePoints(state) {
-    if (number(state?.peakScore) < FOUNDATION) return 0;
-    const earned = Math.min(MAX_POINTS, 1 + Math.floor((state.peakScore - FOUNDATION) / 12));
-    return Math.max(0, earned - number(state.training?.foundation) - number(state.training?.technique));
-  }
 
   function realmScore(score, state) {
     if (state?.seal) return Math.max(GOLDEN_CORE, score);
@@ -127,20 +118,25 @@
   }
 
   function bonuses(state, coreActive = false) {
-    const route = ROUTES[state?.route];
+    const route = Object.hasOwn(ROUTES, state?.route) ? ROUTES[state.route] : null;
     if (!route) return { attack: 0, maxHp: 0, effects: [], skillText: '', resonanceText: '' };
-    const foundation = Math.min(MAX_TRAINING, number(state.training?.foundation));
-    const technique = Math.min(MAX_TRAINING, number(state.training?.technique));
+    // Carry forward bonuses already earned in the old two-track system.
+    const foundation = Math.min(LEGACY_MAX_TRAINING, number(state.training?.foundation));
+    const technique = Math.min(LEGACY_MAX_TRAINING, number(state.training?.technique));
     const resonating = !!state.seal && !!coreActive;
     const skill = route.base + technique * route.step + (route.skillGrowth?.(foundation, technique) || 0) +
       (resonating ? route.resonance : 0);
+    const { attack = 0, maxHp = 0, ...skills } = Nodes.totals(state);
+    skills[route.effect] = (skills[route.effect] || 0) + skill;
     const masteryAttack = route.attackMilestone?.(foundation) || 0;
     return {
-      attack: route.attack + foundation * route.attackStep + masteryAttack + (state.seal ? BREAKTHROUGH_ATTACK : 0),
-      maxHp: route.hp + foundation * route.hpStep + (state.seal ? BREAKTHROUGH_HP : 0),
-      effects: [{ type: route.effect, value: Number(skill.toFixed(4)), artifactId: 'cultivation-' + state.route,
-        artifactName: route.skill, soulbound: false, effectIndex: 0 }],
-      resonating, skillText: route.effectText(skill),
+      attack: attack + route.attack + foundation * route.attackStep + masteryAttack + (state.seal ? BREAKTHROUGH_ATTACK : 0),
+      maxHp: maxHp + route.hp + foundation * route.hpStep + (state.seal ? BREAKTHROUGH_HP : 0),
+      effects: Object.entries(skills).map(([type, value], effectIndex) => ({
+        type, value: Number(value.toFixed(4)), artifactId: 'cultivation-' + state.route,
+        artifactName: route.skill, soulbound: false, effectIndex
+      })),
+      resonating, skillText: route.effectText(Number(skills[route.effect].toFixed(4))),
       resonanceText: route.effectText(route.resonance)
     };
   }
@@ -149,8 +145,8 @@
     return { version: 1, effects: bonuses(state, core).effects, openingShield: 0 };
   }
 
-  const api = Object.freeze({ FOUNDATION, GOLDEN_CORE, MAX_TRAINING, BREAKTHROUGH_ATTACK, BREAKTHROUGH_HP,
-    ROUTES, ACTIONS, TRIAL, number, availablePoints, realmScore, canStart, waveFor, newAttempt, playTurn,
+  const api = Object.freeze({ FOUNDATION, GOLDEN_CORE, BREAKTHROUGH_ATTACK, BREAKTHROUGH_HP,
+    ROUTES, ACTIONS, TRIAL, number, realmScore, canStart, waveFor, newAttempt, playTurn,
     bonuses, battleSnapshot });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QACultivationRebootRules = api;

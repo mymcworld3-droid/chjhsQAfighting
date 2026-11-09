@@ -488,8 +488,7 @@ export const featureReady = (async () => {
     const data = userData();
     const stats = data?.stats || {};
     const path = window.QACultivationRebootClient?.bonuses(data);
-    const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000) +
-      (globalThis.QATrainingAccessRules?.hpBonus(data) || 0) + (path?.maxHp || 0)));
+    const maxHp = Math.max(1, Math.round(finite(stats.maxHp, 1000) + (path?.maxHp || 0)));
     return {
       attack: Math.max(1, Math.round(finite(stats.attack, 200) + (path?.attack || 0))),
       hp: maxHp,

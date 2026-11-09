@@ -183,7 +183,7 @@ import { realmOrderByName } from './artifact-catalog.js';
 
     let extra = '';
     if (item.nascentMaterial) {
-      extra = '<div class="uib-detail-section"><span>元嬰養成</span><p>可在修煉室的元嬰／元神分頁提升分支與本命神通。</p></div>';
+      extra = '<div class="uib-detail-section"><span>元嬰養成</span><p>用於元嬰分支及本命神通養成。</p></div>';
     } else if (item.id === 'revival-pill') {
       extra = `<div class="uib-detail-section"><span>使用效果</span><p>服用後立即增加 ${item.cultivationGain || 100} 修為。</p><button type="button" class="uib-use-btn" data-uib-use="revival-pill">服用一顆</button></div>`;
     }

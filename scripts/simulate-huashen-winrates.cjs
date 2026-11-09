@@ -3,7 +3,6 @@
 // Usage: node scripts/simulate-huashen-winrates.cjs [accuracy=0.7] [games/pair=400] [score=350]
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto');
 const root=path.join(__dirname,'..');
-const Access=require('../public/cultivation/training-access-rules.js');
 const Growth=require('../public/cultivation/nascent-growth.js');
 const Innate=require('../public/cultivation/innate-ability.js');
 const Talents=require('../public/cultivation/soul-talents.js');
@@ -21,7 +20,6 @@ for(const name of ['artifact-battle-effects.js','battle-engine-v2.js']){
 const options=Object.keys(Talents.TYPES).flatMap(type=>Innate.branches(type).map(row=>({
   type,branch:row.id,name:row.name,core:Talents.TYPES[type].name
 })));
-const realmHp=Access.hpBonus({stats:{totalScore:score}});
 function player(opt,uid){
   const core={type:opt.type,grade:1};
   const soul=Growth.bonuses({
@@ -29,7 +27,7 @@ function player(opt,uid){
     cultivationTraining:{equippedCore:core},
     nascentSoulGrowth:{version:1,branches:Object.fromEntries(Growth.branches(core).map(row=>[row.id,10]))}
   },core);
-  const hp=1000+realmHp+soul.maxHpFlat;
+  const hp=1000+soul.maxHpFlat;
   return {uid,totalScore:score,trainingAccessScore:score,goldenCore:core,nascentSoul:soul,
     atk:200+soul.attackFlat,hp,maxHp:hp,coreCorrectStreak:0,coreShield:false,
     innateAbility:{version:1,type:opt.type,branch:opt.branch,level:10},innateAbilityState:null,
@@ -86,6 +84,6 @@ const byCore=Object.keys(Talents.TYPES).map(type=>{
   const branches=rank.filter(row=>row.type===type);
   return {type,meanWinPercent:+(branches.reduce((sum,row)=>sum+row.winPercent,0)/branches.length).toFixed(2)};
 });
-console.log(JSON.stringify({accuracy,score,realmHp,baseHp:1000,grade:1,nascentMaxed:true,innateLevel:10,
+console.log(JSON.stringify({accuracy,score,baseHp:1000,grade:1,nascentMaxed:true,innateLevel:10,
   equipment:'none',maxRounds:15,gamesPerPair:games,matchCount:pairs.length*games,byCore,rank,
   sameCore:pairs.filter(row=>options.some(o=>o.name===row.a&&o.type===options.find(p=>p.name===row.b)?.type))},null,2));

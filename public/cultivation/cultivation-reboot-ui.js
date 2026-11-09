@@ -1,7 +1,7 @@
 import { cultivationRequest, cultivationView } from './cultivation-reboot-client.js';
 
 const Rules = globalThis.QACultivationRebootRules;
-const { ROUTES, ACTIONS, TRIAL, GOLDEN_CORE, FOUNDATION, MAX_TRAINING } = Rules;
+const { ROUTES, ACTIONS, TRIAL, GOLDEN_CORE, FOUNDATION } = Rules;
 const dialog = document.getElementById('cultivation-path-dialog');
 const content = dialog.querySelector('[data-path-content]');
 const feedback = dialog.querySelector('[data-path-feedback]');
@@ -9,6 +9,7 @@ const homeEntry = document.getElementById('sect-cultivation-entry');
 let selected = '';
 let pending = false;
 let session = 0;
+let choosingOnPage = false;
 
 const label = value => Rules.number(value).toLocaleString('zh-TW');
 const disabled = value => value ? ' disabled' : '';
@@ -17,33 +18,16 @@ function chosenRoute(state) {
   const route = ROUTES[state.route];
   const core = window.getEquippedGoldenCoreState?.();
   const bonus = Rules.bonuses(state, core);
-  const points = Rules.availablePoints(state);
-  const tracks = ['foundation', 'technique'];
-  const entries = tracks.map(track => {
-    const rank = state.training[track];
-    const next = Rules.bonuses({ ...state, training: { ...state.training, [track]: rank + 1 } }, core);
-    const changes = [
-      next.attack > bonus.attack ? `+${next.attack - bonus.attack} 攻擊` : '',
-      next.maxHp > bonus.maxHp ? `+${next.maxHp - bonus.maxHp} 生命上限` : '',
-      next.skillText !== bonus.skillText ? next.skillText : ''
-    ].filter(Boolean);
-    const preview = rank >= MAX_TRAINING ? '此方向已圓滿' : `下一重 · ${changes.join(' · ')}`;
-    return `<button type="button" class="path-track" data-path-action="train" data-track="${track}"${disabled(!points || rank >= MAX_TRAINING)}>
-      <span><strong>${route[track]}</strong><b>${rank}／${MAX_TRAINING} 重</b></span>
-      <small>${preview}</small></button>`;
-  }).join('');
   return `<section class="path-card path-practice" style="--path-tone:${route.color}" aria-label="流派養成">
     <div class="path-card-heading"><span class="path-seal" aria-hidden="true">${route.glyph}</span>
-      <div><small>已立流派</small><h3>${route.name}</h3></div><span class="path-chip">${points} 點研修</span></div>
+      <div><small>已立流派</small><h3>${route.name}</h3></div></div>
     <p>${route.practice}</p>
-    <p class="path-note">${route.growth}</p>
     <dl class="path-bonuses">
       <div><dt>攻擊</dt><dd>+${bonus.attack}</dd></div>
       <div><dt>生命上限</dt><dd>+${bonus.maxHp}</dd></div>
       <div><dt>${route.skill}</dt><dd>${bonus.skillText}</dd></div>
     </dl>
-    <div class="path-tracks">${entries}</div>
-    <p class="path-note">築基獲得 1 點研修。歷史最高修為每再增加 12 點，再獲得 1 點，最多 12 點。兩條路線共用研修點。</p>
+    <button type="button" class="path-training-link" data-path-action="tree">查看${route.name}研修節點</button>
     <p class="path-note">渡劫後調御金丹，可共鳴並額外獲得「${bonus.resonanceText}」。</p>
   </section>`;
 }
@@ -124,13 +108,13 @@ function render() {
   if (!dialog.open) return;
   const active = document.activeElement;
   const focus = active?.dataset.pathAction;
-  const key = active?.dataset.track || active?.dataset.route || active?.dataset.move;
+  const key = active?.dataset.route || active?.dataset.move;
   content.innerHTML = state.trial?.status === 'active' ? trialMarkup(state, score)
     : `${state.route ? chosenRoute(state) : selection(state)}${trialMarkup(state, score)}`;
   if (pending) content.querySelectorAll('button').forEach(button => { button.disabled = true; });
   if (focus) {
     const matching = [...content.querySelectorAll('button:not(:disabled)')].find(button =>
-      button.dataset.pathAction === focus && (button.dataset.track || button.dataset.route || button.dataset.move) === key);
+      button.dataset.pathAction === focus && (button.dataset.route || button.dataset.move) === key);
     (matching || dialog.querySelector('[data-path-close]')).focus({ preventScroll: true });
   }
 }
@@ -143,7 +127,8 @@ async function run(action, body) {
   render();
   let error = '';
   try {
-    await cultivationRequest(action, body);
+    const updated = await cultivationRequest(action, body);
+    if (current === session && action === 'choose' && updated?.state.route && choosingOnPage) dialog.close();
   } catch (failure) {
     error = failure.status ? failure.message : '修行資料暫時無法同步，請重試。';
     if (action !== 'sync') {
@@ -158,9 +143,10 @@ async function run(action, body) {
   }
 }
 
-function open() {
+function open(fromTree) {
   if (dialog.open || !cultivationView()) return;
   selected = '';
+  choosingOnPage = fromTree;
   session += 1;
   pending = false;
   dialog.showModal();
@@ -169,7 +155,8 @@ function open() {
 }
 
 document.addEventListener('click', event => {
-  if (event.target.closest('[data-open-cultivation-path]')) open();
+  const trigger = event.target.closest('[data-open-cultivation-path]');
+  if (trigger) open(trigger.hasAttribute('data-path-choose-on-page'));
 });
 dialog.querySelector('[data-path-close]').addEventListener('click', () => dialog.close());
 content.addEventListener('click', event => {
@@ -181,7 +168,10 @@ content.addEventListener('click', event => {
     selected = button.dataset.route;
     render();
   } else if (action === 'choose') void run('choose', { route: selected });
-  else if (action === 'train') void run('train', { track: button.dataset.track });
+  else if (action === 'tree') {
+    dialog.close();
+    window.openTrainingPlace?.('meditation');
+  }
   else if (action === 'turn') void run('turn', { attemptId: trial.id, round: trial.round, move: button.dataset.move });
   else void run(action);
 });

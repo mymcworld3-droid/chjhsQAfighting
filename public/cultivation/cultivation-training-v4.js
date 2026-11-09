@@ -1,5 +1,6 @@
 import {} from './golden-core-pity.js';
 import './golden-core-art.js';
+import './training-access-rules.js';
 import {} from './soul-talents.js';
 import { createGoldenCoreWashAnimation } from './golden-core-wash-animation.js';
 import {} from './nascent-growth.js';
@@ -14,6 +15,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   'use strict';
 
   const GOLDEN_CORE_SCORE = 28;
+  const { NASCENT_EDITOR_ENABLED } = globalThis.QATrainingAccessRules;
   const WASH_COST = 100;
   const Pity = globalThis.QAGoldenCorePity;
   const WASH_FIELD = 'goldenCoreWashV1';
@@ -713,6 +715,8 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   }
 
   function renderTrainingPage() {
+    const page = document.getElementById('page-training');
+    if (page?.querySelector('[data-training-tab="path"].active, #training-status-tab.active')) return;
     const content = document.getElementById('training-tab-content');
     if (!content) return;
     document.querySelector('[data-ns-portrait-sheet]')?.remove?.();
@@ -734,7 +738,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     if (enteringSoulMap && !previouslySoulMap) {
       const main = document.querySelector('main');
       if (main) main.scrollTop = 0;
-      const page = document.getElementById('page-training');
       if (page) page.scrollTop = 0;
     }
     if (activeTab === 'bag') {
@@ -786,7 +789,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
         </div>
         <div class="training-subtabs-v3" role="tablist">
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" disabled><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>行囊</span></button>
         </div>
         <div id="training-tab-content"></div>
@@ -822,7 +824,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     }
     coreTab?.classList.remove('hidden');
     let soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
-    if (!soulTab) {
+    if (NASCENT_EDITOR_ENABLED && !soulTab) {
       coreTab?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false"><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>');
       soulTab = tabs.querySelector('[data-training-tab="nascent-soul"]');
     }
@@ -831,16 +833,16 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
     if (page.dataset.trainingV4Bound !== '1') {
       page.dataset.trainingV4Bound = '1';
-      page.querySelectorAll('[data-training-tab]').forEach((button) => {
+      page.querySelectorAll('[data-training-tab]:not([data-training-tab="path"])').forEach((button) => {
         button.addEventListener('click', () => {
           if (!isUnlocked() || page.dataset.foundationTraining === '1') return;
           const requested = button.dataset.trainingTab;
           const content = document.getElementById('training-tab-content');
           const theme = requested === 'nascent-soul' ? 'raid' : 'alchemy';
           const tabOrder = [...page.querySelectorAll('[data-training-tab]')].map(tab => tab.dataset.trainingTab);
-          const fromStatus = !page.querySelector('[data-training-tab].active');
-          const direction = fromStatus || tabOrder.indexOf(requested) < tabOrder.indexOf(activeTab) ? -1 : 1;
-          const finishTransition = requested !== activeTab || fromStatus ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
+          const selectedTab = page.querySelector('[data-training-tab].active')?.dataset.trainingTab;
+          const direction = !selectedTab || tabOrder.indexOf(requested) < tabOrder.indexOf(selectedTab) ? -1 : 1;
+          const finishTransition = requested !== selectedTab ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
           activeTab = requested === 'bag' || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
@@ -854,6 +856,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     }
 
     page.dataset.trainingV4Ready = '1';
+    if (page.querySelector('[data-training-tab="path"].active, #training-status-tab.active')) return;
     activeTab = 'core';
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
       const selected = tab.dataset.trainingTab === activeTab;
@@ -1099,7 +1102,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     if (!state.announced) {
       state.announced = true;
       saveLocal();
-      toast('金丹已成，「修煉」分頁已開啟。');
+      toast('金丹已成，金丹分頁已開啟。');
     }
   }
 
@@ -1233,8 +1236,10 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   }
 
   function boot() {
-    window.matchMedia('(orientation: portrait)').addEventListener('change', syncSoulDetailLayout);
-    window.matchMedia('(max-height: 600px)').addEventListener('change', syncSoulDetailLayout);
+    if (NASCENT_EDITOR_ENABLED) {
+      window.matchMedia('(orientation: portrait)').addEventListener('change', syncSoulDetailLayout);
+      window.matchMedia('(max-height: 600px)').addEventListener('change', syncSoulDetailLayout);
+    }
     loadStyle();
     restoreRemoteTraining();
     syncUnlock();

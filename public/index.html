@@ -852,6 +852,9 @@ body.xianxia-theme main:has(#page-training.active-page),
             </div>
 
             <div class="training-subtabs-v3" role="tablist">
+                <button type="button" class="training-subtab-v3" data-training-tab="path" aria-selected="false">
+                    <i class="fa-solid fa-diagram-project" aria-hidden="true"></i><span>流派</span>
+                </button>
                 <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true">
                     <i class="fa-solid fa-circle-dot"></i><span>金丹</span>
                 </button>
@@ -1350,6 +1353,15 @@ body.xianxia-theme main:has(#page-training.active-page),
         </header>
         <div data-path-content></div>
         <p class="path-feedback" data-path-feedback role="status"></p>
+    </dialog>
+
+    <dialog id="cultivation-node-dialog" class="cultivation-path-dialog path-node-dialog" aria-labelledby="cultivation-node-title">
+        <header class="path-heading">
+            <div><small>問道宗 · 流派傳承</small><h2 id="cultivation-node-title">節點研修</h2></div>
+            <button type="button" class="path-close" data-close-path-node aria-label="關閉節點詳情" autofocus>×</button>
+        </header>
+        <div data-node-detail></div>
+        <p class="path-feedback" data-node-message role="status"></p>
     </dialog>
 
     <div id="toast-container" class="fixed top-20 right-4 z-[100] flex flex-col gap-2 w-72 pointer-events-none *:pointer-events-auto"></div>

@@ -2,8 +2,10 @@
 (function (root) {
   'use strict';
   const REALMS = Object.freeze([0, 6, 28, 68, 188, 428, 642, 1268, 1868]);
+  // The experimental branch pauses the 元嬰／元神 editor; saved abilities still apply.
+  const NASCENT_EDITOR_ENABLED = false;
   const PLACES = Object.freeze([
-    { id: 'meditation', name: '修煉室', threshold: 28, realm: '金丹境', tab: 'core' },
+    { id: 'meditation', name: '修煉室', threshold: 6, realm: '築基初期', tab: 'path' },
     { id: 'vault', name: '行囊', threshold: 6, realm: '築基初期', tab: 'bag' },
     { id: 'status', name: '狀態', threshold: 0, realm: '', tab: 'status' },
     { id: 'rank', name: '仙榜', threshold: 0, realm: '', page: 'page-rank' }
@@ -31,18 +33,11 @@
     const value = rawScore(player);
     return root.QACultivationRebootClient?.realmScore(value, player) ?? value;
   }
-  // Realm breakthroughs permanently add 100 max HP each after Foundation Establishment.
-  // Use attained-realm access (including saved highest realm) so correcting an answer
-  // cannot remove health already earned. This is a combat projection, not a DB write.
-  function hpBonus(player) {
-    const attained = score(player);
-    return 100 * REALMS.filter(threshold => threshold >= 28 && threshold <= attained).length;
-  }
   function record(player, previous = 0) {
     return { version: 1, highestRealmScore: realmScore(Math.max(rawScore(player), number(previous))) };
   }
   function allows(player, threshold) { return score(player) >= number(threshold); }
-  const api = Object.freeze({ REALMS, PLACES, number, realmScore, savedScore, legacyScore, rawScore, score, hpBonus, record, allows });
+  const api = Object.freeze({ REALMS, PLACES, NASCENT_EDITOR_ENABLED, number, realmScore, savedScore, legacyScore, rawScore, score, record, allows });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.QATrainingAccessRules = api;
 })(globalThis);

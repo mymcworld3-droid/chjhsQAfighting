@@ -1,6 +1,7 @@
 import './training-access-rules.js';
 import './nascent-growth.js';
 import './innate-ability.js';
+import { cultivationView } from './cultivation-reboot-client.js';
 import './training-scene-layer-art.js';
 import './training-scene-layouts.js';
 import { getMainUser } from './data/project-repository.js';
@@ -10,12 +11,13 @@ const Rules = globalThis.QATrainingAccessRules;
 const Layouts = globalThis.QATrainingSceneLayouts;
 const SVG = 'http://www.w3.org/2000/svg';
 const PAGE = 'page-training';
-const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', bag: 'vault', status: 'status' };
+const tabPlace = { path: 'meditation', core: 'meditation', 'nascent-soul': 'meditation', bag: 'vault', status: 'status' };
 const DETAIL_TABS = [
+  { id: 'path', name: '流派', icon: 'fa-diagram-project', threshold: 6, unlock: '築基初期解鎖' },
   { id: 'core', name: '金丹', icon: 'fa-circle-dot', threshold: 28, unlock: '金丹境解鎖' },
   { id: 'nascent-soul', name: '元嬰', icon: 'fa-child-reaching', threshold: 68, unlock: '元嬰境解鎖' },
   { id: 'bag', name: '行囊', icon: 'fa-box-open', threshold: 6, unlock: '築基期解鎖' }
-];
+].filter(tab => Rules.NASCENT_EDITOR_ENABLED || tab.id !== 'nascent-soul');
 let page, map, scenery, plane, bar, background, resizeObserver, pageObserver;
 let orientation = '', scheduled = false, running = false, navigation = null;
 let navigationRevision = 0;
@@ -58,6 +60,8 @@ function updateDetailTabs() {
   const list = page.querySelector('.training-subtabs-v3');
   if (!list) return;
   const score = window.getTrainingAccessScore?.() ?? Rules.score(window.getCurrentUserData?.());
+  const route = cultivationView()?.state.route;
+  const pathName = globalThis.QACultivationRebootRules.ROUTES[route]?.name;
   list.querySelector('[data-training-tab="equipment"]')?.remove();
   const buttons = DETAIL_TABS.map(def => {
     let button = list.querySelector(`[data-training-tab="${def.id}"]`);
@@ -76,13 +80,13 @@ function updateDetailTabs() {
     button.classList.remove('hidden');
     button.disabled = locked;
     button.classList.toggle('is-locked', locked);
-    if(def.id==='nascent-soul') {
-      const label=button.querySelector('span');
-      if(label)label.textContent=score>=188?'元神':'元嬰';
-    }
+    let displayName = def.name;
+    if (def.id === 'path') displayName = pathName || def.name;
+    if (def.id === 'nascent-soul' && score >= 188) displayName = '元神';
+    const label = button.querySelector('span');
+    if (label && label.textContent !== displayName) label.textContent = displayName;
     button.setAttribute('role', 'tab');
     button.setAttribute('aria-disabled', String(locked));
-    const displayName=def.id==='nascent-soul'&&score>=188?'元神':def.name;
     button.setAttribute('aria-label', locked ? `${displayName}，${def.unlock}` : displayName);
     button.title = locked ? def.unlock : '';
     return button;
@@ -288,7 +292,8 @@ function syncTrainingNavigation() {
 }
 function updateLocks() {
   syncTrainingNavigation();
-  if (!plane) { updateGrowthIndicators(); return; }
+  if (Rules.NASCENT_EDITOR_ENABLED) updateGrowthIndicators();
+  if (!plane) return;
   for (const place of Rules.PLACES) {
     const button = plane.querySelector(`[data-training-location="${place.id}"]`);
     if (!button) continue;
@@ -299,7 +304,6 @@ function updateLocks() {
     button.querySelector('.training-place-realm').hidden = !locked;
     button.querySelector('.training-place-lock').hidden = !locked;
   }
-  updateGrowthIndicators();
 }
 function updateGrowthIndicators() {
   const player = window.getCurrentUserData?.(), uid = getMainUser()?.uid;
@@ -518,12 +522,14 @@ function boot() {
     if (target.closest(`#${PAGE}`)) setDetail(tabPlace[target.dataset.trainingTab || 'status']);
   }, true);
   ['xiuxian:user-data-ready', 'xiuxian:user-ready', 'xiuxian:stats-updated', 'xiuxian:features-ready', 'xiuxian:training-access-updated',
-    'foundation-training-stage-changed', 'golden-core-access-changed'].forEach(name => window.addEventListener(name, sync));
-  window.addEventListener('material-system-updated', updateGrowthIndicators);
-  window.addEventListener('golden-core-equipped-changed', updateGrowthIndicators);
-  setInterval(updateGrowthIndicators, 10000);
-  const navGrid = document.getElementById('nav-grid');
-  if (navGrid) new MutationObserver(updateGrowthIndicators).observe(navGrid, { childList:true });
+    'foundation-training-stage-changed', 'golden-core-access-changed', 'xiuxian:cultivation-path-updated'].forEach(name => window.addEventListener(name, sync));
+  if (Rules.NASCENT_EDITOR_ENABLED) {
+    window.addEventListener('material-system-updated', updateGrowthIndicators);
+    window.addEventListener('golden-core-equipped-changed', updateGrowthIndicators);
+    setInterval(updateGrowthIndicators, 10000);
+    const navGrid = document.getElementById('nav-grid');
+    if (navGrid) new MutationObserver(updateGrowthIndicators).observe(navGrid, { childList:true });
+  }
   window.addEventListener('resize', scheduleFit, { passive: true });
   sync();
 }

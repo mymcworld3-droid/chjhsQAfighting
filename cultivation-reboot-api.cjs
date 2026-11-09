@@ -5,6 +5,7 @@ const { playerRepository } = require('./server-repositories.cjs');
 const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const Access = require('./public/cultivation/training-access-rules.js');
 const Rules = require('./public/cultivation/cultivation-reboot-rules.js');
+const Nodes = require('./public/cultivation/cultivation-path-nodes.js');
 
 // A server-owned record in the existing player database. Old clients can update
 // the entire users document without overwriting the experimental progression.
@@ -16,7 +17,7 @@ function initialState(player) {
   const peakScore = Access.score(player);
   return {
     version: 1, revision: 0, legacyAccess: peakScore >= Rules.GOLDEN_CORE,
-    route: null, training: { foundation: 0, technique: 0 }, peakScore, trial: null, seal: null
+    route: null, pathNodes: [], peakScore, trial: null, seal: null
   };
 }
 
@@ -28,12 +29,17 @@ function applyAction(state, score, request, attemptId, now) {
       if (state.peakScore < Rules.FOUNDATION) throw fail('築基初期開放修行流派。');
       if (typeof request.route !== 'string' || !Object.hasOwn(Rules.ROUTES, request.route)) throw fail('未知的修行流派。', 400);
       return { ...state, route: request.route };
-    case 'train': {
-      const track = request.track;
-      if (!['foundation', 'technique'].includes(track)) throw fail('未知的修行方向。', 400);
-      if (!state.route || !Rules.availablePoints(state) || state.training[track] >= Rules.MAX_TRAINING)
-        throw fail('目前無法提升此修行方向。');
-      return { ...state, training: { ...state.training, [track]: state.training[track] + 1 } };
+    case 'learn': {
+      const target = Nodes.findNode(state.route, request.node);
+      if (!target) throw fail('找不到這個流派節點。', 400);
+      const { chapter, node } = target;
+      const learned = Nodes.learnedSet(state);
+      const access = Rules.realmScore(state.peakScore, state);
+      const status = Nodes.nodeState(chapter, node, access, learned);
+      const errors = { learned: '此節點已研修。', realm: '尚未達到此節點的境界。',
+        prerequisite: '請先研修前置節點。', lane: '請先修成其中一脈。', points: '本境界的研修點不足。' };
+      if (status !== 'ready') throw fail(errors[status]);
+      return { ...state, pathNodes: [...learned, node.id] };
     }
     case 'start':
       if (!Rules.canStart(score, state)) throw fail('須立下流派並達到金丹修為才能引劫。');
@@ -107,7 +113,7 @@ function registerCultivationReboot(app, { resolveA = () => playerRepository.reso
       if (!req.get('authorization')) throw fail('請先登入再修行。', 401);
       const uid = await verifyMainIdentity(req, { resolveA });
       const body = req.body;
-      if (!body || !['sync', 'choose', 'train', 'start', 'turn'].includes(body.action))
+      if (!body || !['sync', 'choose', 'learn', 'start', 'turn'].includes(body.action))
         throw fail('未知的修行操作。', 400);
       if (body.action !== 'sync' && !Number.isSafeInteger(body.revision))
         throw fail('請先同步修行紀錄。', 400);

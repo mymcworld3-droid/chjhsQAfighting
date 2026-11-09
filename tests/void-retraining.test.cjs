@@ -73,12 +73,13 @@ test('solo animation sees a retraining phase change even though the stored major
  const before=api.cultivationProgress(430,REALMS),fill=api.cultivationProgress(433,REALMS,before.cursor),next=api.cultivationProgress(433,REALMS);
  assert.equal(before.index,next.index);assert.notEqual(before.step,next.step);assert.equal(fill.ratio,1);assert.equal(next.realm.name,'築基期（煉虛）');
 });
-test('retraining retains the attained realm HP without granting it again at each repeated phase',()=>{
- for(const score of [428,431,442,462,522,641])assert.equal(Access.hpBonus({stats:{totalScore:score}}),400,score);
- assert.equal(Access.hpBonus({stats:{totalScore:642}}),500);
+test('retraining retains the attained realm gates independently of combat HP', () => {
+ for (const score of [428,431,442,462,522,641]) assert.equal(Access.realmScore(score),428);
+ assert.equal(Access.realmScore(642),642);
  const saved={stats:{totalScore:500},trainingAccess:{version:1,highestRealmScore:788}};
- assert.equal(Access.hpBonus(saved),500,'existing attained Fusion health remains');
+ assert.equal(Access.score(saved),642);
 });
+
 test('Fusion rewards, draw tier and path quest become available at 642 on the server and in shared rules',()=>{
  assert.equal(Draw.REALMS[Draw.rankFor(641)].name,'煉虛');assert.equal(Draw.REALMS[Draw.rankFor(642)].name,'合體');
  assert.equal(Daily.meditationReward(641,1,5).realm,'煉虛');assert.equal(Daily.meditationReward(642,1,5).realm,'合體');
