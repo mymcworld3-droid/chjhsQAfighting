@@ -49,6 +49,7 @@ const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameIssueApi = require('./game-issue-api.cjs');
 const registerClassroomApi = require('./classroom-api.cjs');
 const registerGameStage = require('./game-stage.cjs');
+const registerDeploymentGuard = require('./deployment-guard.cjs');
 const { raidRepository, playerRepository } = require('./server-repositories.cjs');
 const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
@@ -84,6 +85,7 @@ app.use('/api', (req,res,next) => {
 });
 const adminD1Migration = require('./d1-admin-migration-api.cjs')(app);
 require('./d1-browser-api.cjs').registerD1BrowserApi(app);
+registerDeploymentGuard(app);
 registerGameStage(app);
 app.use(express.static(path.join(__dirname, 'public')));
 registerDongtianApi(app);
