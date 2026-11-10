@@ -1464,17 +1464,17 @@ body.xianxia-theme main:has(#page-training.active-page),
     </button>
 
     <script>
-      // 登入仍以線上驗證為準；只將本專案的靜態模組保存在瀏覽器。
-      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-        navigator.serviceWorker.register('./sw.js', { scope: './', updateViaCache: 'none' }).then(() => {
-          // 完成首次遊戲載入後，以低併發預存尚未保存在 CacheStorage 的 JS/CSS。
-          // 不預先下載大型角色圖、題庫或任何 Firebase 資料。
-          const prefetch = () => navigator.serviceWorker.ready.then(reg => {
-            reg.active?.postMessage({ type: 'XIUXIAN_PREFETCH_MODULES' });
-          }).catch(error => console.warn('[Local modules] prefetch unavailable:', error));
-          if (window.__xiuxianFeaturesReady) prefetch();
-          else window.addEventListener('xiuxian:features-ready', prefetch, { once: true });
-        }).catch(error => console.warn('[Local modules] cache unavailable:', error));
+      // 新版本不再註冊 Service Worker；只清理舊版留下的註冊與快取。
+      // 不影響 Firebase、玩家資料、圖片或答題狀態。
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations()
+          .then(regs => Promise.all(regs.filter(reg => reg.scope.startsWith(location.origin + '/'))
+            .map(reg => reg.unregister())))
+          .catch(err => console.warn('[Deployment] Old Service Worker cleanup:', err));
+      }
+      if ('caches' in window) {
+        caches.keys().then(keys => Promise.all(keys.filter(name => name.startsWith('xiuxian-'))
+          .map(name => caches.delete(name)))).catch(() => {});
       }
     </script>
     <script src="visual-viewport-guard.js?v=20261013-page-layout1"></script>
