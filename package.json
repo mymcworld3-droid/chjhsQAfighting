@@ -13,7 +13,9 @@
     "migrate:dongtian": "node scripts/migrate-dongtian-to-bd.cjs",
     "migrate:d1": "node scripts/migrate-firestore-to-d1.cjs",
     "test:d1": "node --test tests/d1-*.test.cjs",
-    "audit:code": "node --experimental-vm-modules scripts/audit-code.cjs"
+    "audit:code": "node --experimental-vm-modules scripts/audit-code.cjs",
+    "prestart": "node scripts/build-module-versions.cjs",
+    "predev": "node scripts/build-module-versions.cjs"
   },
   "keywords": [],
   "author": "",
