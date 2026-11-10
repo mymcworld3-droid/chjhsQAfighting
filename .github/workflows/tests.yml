@@ -1,25 +1,33 @@
-name: Cultivation regression tests
+name: All branches - deploy safety and regression tests
 
 on:
   push:
-    branches: [main, original, grid-world, stamina-battle]
+    branches: ['**']
   pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
-      - name: Checkout
+      - name: Checkout exact branch commit
         uses: actions/checkout@v4
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Install dependencies
+          cache: npm
+      - name: Install dependencies and rebuild manifest
         run: npm install --no-audit --no-fund
-      - name: Verify local module versions
+      - name: Confirm auto-generated asset manifest
         run: npm run check:module-versions
-      - name: Run tests
+      - name: Verify server and deployment scripts
+        run: |
+          node --check server.js
+          node --check deployment-guard.cjs
+          node --check game-stage.cjs
+          node --check public/deploy-guard.js
+          node --check public/sw.js
+      - name: Run deployment safeguards and gameplay tests
         run: npm test
