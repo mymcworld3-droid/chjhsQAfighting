@@ -1,21 +1,124 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#000000">
-  <title>青雲問道 · 以學入道</title>
-  <link rel="icon" type="image/png" href="assets/qingyun-wendao-icon.png">
-  <link rel="apple-touch-icon" href="assets/qingyun-wendao-icon.png">
-  <link rel="stylesheet" href="styles/game-stage.css?v=20261023-scroll-containment1">
-  <script defer src="game-stage-rules.js"></script>
-  <script defer src="game-stage.js?v=20261023-scroll-containment1"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f6fb">
+  <meta name="description" content="選擇學習範圍，挑戰十道題目。答對得分、答錯扣生命，簡單又專注。">
+  <title>十題挑戰｜極簡學習遊戲</title>
+  <link rel="stylesheet" href="/simple-quiz.css">
+  <script>
+    window.MathJax = {
+      tex: {inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},
+      options: {skipHtmlTags:['script','noscript','style','textarea','pre','code']}
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script defer src="/simple-quiz.js"></script>
 </head>
 <body>
-  <div id="game-safe-area" aria-hidden="true"></div>
-  <main id="game-stage" aria-label="青雲問道">
-    <iframe id="game-frame" title="青雲問道遊戲畫面" allow="clipboard-write; fullscreen" allowfullscreen></iframe>
+  <header class="topbar">
+    <div class="mark" aria-hidden="true">Q</div>
+    <div>
+      <div class="brand">十題挑戰</div>
+      <div class="brand-subtitle">最單純的答題小遊戲</div>
+    </div>
+    <span class="top-tag">只管答題，享受過關</span>
+  </header>
+  <main class="layout">
+    <section class="screen" id="setup-screen" aria-labelledby="setup-title">
+      <div class="panel">
+        <div class="eyebrow">READY TO PLAY?</div>
+        <h1 id="setup-title">選好範圍，開始闖關。</h1>
+        <p class="intro">只有一件事：答對題目、往前闖關。沒有複雜的養成、裝備或貨幣，只留下選範圍與原本的 AI 出題功能。</p>
+        <div class="rule-strip">
+          <span>10 題一局</span>
+          <span>答對＋10 分</span>
+          <span>答錯扣 1 顆心</span>
+          <span>3 顆心用完結束</span>
+        </div>
+        <div class="section-title">出題範圍</div>
+        <div class="fields">
+          <label class="field">
+            <span class="field-label">年級</span>
+            <select id="grade" aria-label="年級"><option value="">載入中…</option></select>
+          </label>
+          <label class="field">
+            <span class="field-label">科目</span>
+            <select id="subject" aria-label="科目"><option value="">載入中…</option></select>
+          </label>
+          <label class="field">
+            <span class="field-label">章節</span>
+            <select id="unit" aria-label="章節"><option value="">請先選科目</option></select>
+          </label>
+          <label class="field" id="detail-wrap" hidden>
+            <span class="field-label">細項（可選）</span>
+            <select id="detail" aria-label="章節細項"><option value="">整個章節</option></select>
+          </label>
+        </div>
+        <div class="actions">
+          <button id="start-button" class="button primary button-wide" type="button" disabled>開始挑戰</button>
+          <button id="reload-scopes" class="button secondary" type="button" hidden>重載範圍</button>
+        </div>
+        <p class="helper" id="scope-message" role="status" aria-live="polite"></p>
+        <p class="small-note">範圍資料沿用原專案的課綱複習整理，並非各出版社最新正式目次；AI 題目可能偶爾超出指定範圍。答題不需要登入。</p>
+      </div>
+    </section>
+
+    <section class="screen" id="game-screen" hidden aria-labelledby="question-title">
+      <div class="game-meta">
+        <span class="pill">十題挑戰進行中</span>
+        <button id="quit-button" class="quit" type="button">離開並重新選範圍</button>
+      </div>
+      <div class="panel question-panel">
+        <div class="scope-line" id="game-scope"></div>
+        <div class="stats">
+          <div><div class="stat-label">進度</div><div class="stat-value" id="question-index">第 1 / 10 題</div></div>
+          <div><div class="stat-label">分數</div><div class="stat-value" id="points">0</div></div>
+          <div><div class="stat-label">剩餘生命</div><div class="stat-value lives" id="lives" aria-live="polite">♥♥♥</div></div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-track">
+            <div id="progress-fill" class="progress-fill" role="progressbar" aria-label="作答進度" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="width:0"></div>
+          </div>
+          <div class="progress-stages" id="progress-stages" aria-hidden="true"></div>
+        </div>
+        <div id="question-loading" class="question-loading" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <div id="loading-text">正在準備題目…</div>
+          <button id="retry-button" class="button secondary" type="button" hidden>再試一次</button>
+        </div>
+        <div id="question-content" hidden>
+          <div class="question-topic" id="question-topic">綜合測驗</div>
+          <h2 class="question-text" id="question-title"></h2>
+          <div class="answer-list" id="answer-list" aria-label="選擇答案"></div>
+          <section id="answer-feedback" class="answer-feedback" hidden aria-label="本題結果" aria-live="polite">
+            <div class="feedback-title" id="feedback-title"></div>
+            <div class="correct-answer" id="correct-answer"></div>
+            <p class="explanation" id="explanation"></p>
+            <div class="feedback-actions"><button id="next-button" type="button" class="button primary">下一題</button></div>
+          </section>
+        </div>
+      </div>
+      <p class="footer">可以按 A–D 或 1–4 選答案，Enter 前往下一題。</p>
+    </section>
+
+    <section class="screen" id="result-screen" hidden aria-labelledby="result-title">
+      <div class="panel result-panel">
+        <div class="result-badge" aria-hidden="true">★</div>
+        <div class="eyebrow">GAME OVER</div>
+        <h1 id="result-title">挑戰完成！</h1>
+        <div class="result-score" id="result-score">0</div>
+        <div class="result-caption">本局得分</div>
+        <p class="result-detail" id="result-detail"></p>
+        <p class="result-scope" id="result-scope"></p>
+        <div class="result-best">這個範圍的最高分：<span id="result-best">0</span></div>
+        <div class="actions">
+          <button class="button primary button-wide" type="button" id="play-again">再玩一局</button>
+          <button class="button secondary" type="button" id="choose-again">更換範圍</button>
+        </div>
+      </div>
+    </section>
   </main>
-  <noscript>請開啟 JavaScript 以進入青雲問道。</noscript>
 </body>
 </html>
