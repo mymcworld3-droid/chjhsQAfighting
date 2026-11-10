@@ -11,3 +11,13 @@
 - 清理本機分支前檢查工作目錄與 worktree，不得丟棄未提交修改或強制刪除仍有未保存工作的工作區。
 - 此要求已授權例行的合併後分支清理，不必為同一清理動作重複詢問使用者；仍須遵守工具與平台必要的權限要求。
 - 若工具沒有刪除能力或缺少權限，應明確回報尚未完成、原因與所需處理，不能宣稱已清理。完成後簡短列出刪除結果及保留分支的理由。
+
+## 所有分支的部署快取防護（永久維護規則）
+
+任何分支（含未來的新分支）修改首頁、前端模組或部署設定，都必須保留 `deployment-guard.cjs`、`public/deploy-guard.js`、`tests/deployment-guard.test.cjs` 與 `.github/workflows/tests.yml`：
+- `server.js` 必須先呼叫 `registerDeploymentGuard(app)`，再註冊頁面或靜態檔路由；HTML 入口使用 `sendPage()`。
+- HTML、Service Worker 與版本清單不可使用可能導致顯示過期版本的快取；舊 `xiuxian-*` CacheStorage 必須有遷移清理機制，不可無故復原舊的離線快取。
+- 每次安裝、啟動須重新生成 `module-versions.json`，所有分支的 CI 必須執行部署防護測試。
+- 必須可從 `/api/deploy-info` 和畫面左下角查到**目前服務正在執行的實際分支與 commit**，不能僅顯示 repository 預設分支。
+- Render 的 Branch、Auto-Deploy 等平台設定無法透過一般 Git commit 自動更改。不得將「GitHub 已更新」表述成「Render 已部署」，必須核對部署紀錄。
+- 詳細檢查與排錯流程見 `docs/deployment-consistency.md`。
