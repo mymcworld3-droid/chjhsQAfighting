@@ -1,5 +1,8 @@
-/* Simple quiz has no offline app shell. Drop the legacy xiuxian Service Worker caches
- * to prevent previously-installed workers from showing old branch pages.
+/*
+ * Cache migration worker. Previous versions cached full pages, mapped
+ * index.html to stage.html and saved JS/CSS under a stale manifest.
+ * This replacement intentionally intercepts no requests and removes
+ * only caches created by the old xiuxian worker.
  */
 'use strict';
 self.addEventListener('install', event => {
@@ -7,10 +10,10 @@ self.addEventListener('install', event => {
 });
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
-    const cacheNames = await caches.keys();
-    await Promise.all(cacheNames.filter(name => name.startsWith('xiuxian-')).map(name => caches.delete(name)));
+    const names = await caches.keys();
+    await Promise.all(names.filter(name => name.startsWith('xiuxian-'))
+      .map(name => caches.delete(name)));
     await self.clients.claim();
-    // The simple-quiz app does not register a replacement worker.
     await self.registration.unregister();
   })());
 });
