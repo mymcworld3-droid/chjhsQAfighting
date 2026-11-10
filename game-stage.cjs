@@ -1,7 +1,10 @@
 'use strict';
-const path = require('node:path');
+// The legacy game retains its stage/iframe navigation, but every HTML entry
+// receives the same deployment indicator and never uses stale document caches.
+const { sendPage } = require('./deployment-guard.cjs');
 module.exports = function registerGameStage(app) {
-  const publicDir = path.join(__dirname,'public');
-  app.get(['/','/index.html'],(_,res) => res.sendFile(path.join(publicDir,'stage.html')));
-  app.get('/app.html',(_,res) => res.sendFile(path.join(publicDir,'index.html')));
+  const stage = sendPage('stage.html');
+  const game = sendPage('index.html');
+  app.get(['/', '/index.html', '/stage.html'], stage);
+  app.get('/app.html', game);
 };
