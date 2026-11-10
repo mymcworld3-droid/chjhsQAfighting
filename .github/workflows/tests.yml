@@ -1,4 +1,4 @@
-name: All branches - deploy safety and regression tests
+name: All branches - deployment safety
 
 on:
   push:
@@ -6,28 +6,47 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  verify:
+  deploy-safety:
+    name: Deployment integrity (all branches)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
-      - name: Checkout exact branch commit
+      - name: Checkout the exact branch commit
         uses: actions/checkout@v4
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
-      - name: Install dependencies and rebuild manifest
+      - name: Install dependencies and rebuild asset versions
         run: npm install --no-audit --no-fund
-      - name: Confirm auto-generated asset manifest
+      - name: Verify generated version manifest
         run: npm run check:module-versions
-      - name: Verify server and deployment scripts
+      - name: Verify executable code
         run: |
           node --check server.js
           node --check deployment-guard.cjs
           node --check game-stage.cjs
           node --check public/deploy-guard.js
           node --check public/sw.js
-      - name: Run deployment safeguards and gameplay tests
-        run: npm test
+      - name: Test deployment caching and migration
+        run: node --test tests/deployment-guard.test.cjs tests/local-module-cache.test.cjs
+
+  main-regressions:
+    name: Gameplay regressions (main)
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm install --no-audit --no-fund
+      - run: npm test
