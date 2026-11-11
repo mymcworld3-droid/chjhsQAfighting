@@ -30,7 +30,10 @@ export function installTacticalKeyboardGuard(root){
   const report=active=>{
     if(lastSignal===active)return;
     lastSignal=active;
-    try{parent?.postMessage({type:'qa:game-typing',active},window.location.origin);}catch(_){}
+    try{
+      parent?.QAGameStage?.setKeyboardEditing?.(active);
+      parent?.postMessage({type:'qa:game-typing',active},window.location.origin);
+    }catch(_){};
   };
   const isTypingControl=node=>!!node?.matches?.('input:not([type=hidden]),textarea,[contenteditable=true]');
   const readDesign=()=>{
