@@ -1,5 +1,5 @@
 name: Remove stamina weapons (one-time validated migration)
-# Preserve original artifact equipment/refinery and remove the weapon draw tab.
+# Preserve original artifact equipment/refinery; remove only five-weapon features.
 on:
   push:
     branches: [feature/stamina-remove-weapons-20261111]
