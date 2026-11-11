@@ -3,7 +3,11 @@
   const stage = document.getElementById('game-stage'), frame = document.getElementById('game-frame');
   const safeArea = document.getElementById('game-safe-area');
   let state, queued = 0;
+  let keyboardEditing = false;
   function sync() {
+    // Mobile virtual keyboards can shrink the CSS viewport enough to flip
+    // the aspect mode. Never refit or rescale the iframe during text editing.
+    if (keyboardEditing && state) return;
     const root = document.documentElement;
     const layoutWidth = Math.max(1, Number(root.clientWidth) || Number(window.innerWidth) || 1);
     const layoutHeight = Math.max(1, Number(root.clientHeight) || Number(window.innerHeight) || 1);
@@ -34,11 +38,20 @@
     queued = requestAnimationFrame(() => { queued = 0; sync(); });
   }
   function resetOuterScroll() {
+    // During keyboard focus, Safari/Android may pan the visual viewport to the
+    // caret. Resetting that pan on each scroll triggers a visible feedback loop.
+    if (keyboardEditing) return;
     // Only reset the shell; the app's main, questions and dialogs retain their scroll.
     stage.scrollTop = 0; stage.scrollLeft = 0;
     if (window.scrollX || window.scrollY) window.scrollTo(0,0);
   }
   window.QAGameStage = Object.freeze({getState:() => ({...state}),sync});
+  window.addEventListener('message',event=>{
+    if(event.source!==frame.contentWindow||event.origin!==location.origin||
+      event.data?.type!=='qa:game-typing'||typeof event.data.active!=='boolean')return;
+    keyboardEditing=event.data.active;
+    if(!keyboardEditing)schedule();
+  });
   sync();
   resetOuterScroll();
   const url = new URL('app.html',location.href);
