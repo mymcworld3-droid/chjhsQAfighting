@@ -471,7 +471,7 @@ async function submitPair(){
   busy=true;const e=epoch,account=uid,serial=++op;
   const questions=pairQuestions.slice(),choices=pairChoices.slice(),reviewed=[];
   const initialScore=Number(localUser().stats?.totalScore)||0;
-  let priorScore=initialScore,gain=0;
+  let priorScore=initialScore,cultivationVisual=null;
   root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=true);
   const submit=$('[data-submit-pair]');if(submit){submit.disabled=true;submit.textContent='正在批改兩題…';}
   try{
@@ -485,7 +485,14 @@ async function submitPair(){
       reviewed.push(review);pairReviews=reviewed.slice();
       window.QAGameAudio?.answer(review.correct,'tactical:'+state.id+':'+q.id);
       const score=Number(state.progress?.stats?.totalScore);
-      if(Number.isFinite(score)){gain+=Math.max(0,score-priorScore);priorScore=score;}
+      if(state.mode==='pve'&&Number.isFinite(score)&&score>priorScore&&!cultivationVisual
+        &&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
+        const source=root.querySelector('[data-choice-for="'+i+'"][data-choice="'+choices[i]+'"]');
+        cultivationVisual=beginSoloCultivationFeedback({
+          scoreBefore:initialScore,source,realms:window.QASoloRealms,activeWhen:()=>opened&&modalOpen
+        });
+      }
+      if(Number.isFinite(score))priorScore=score;
       applyProgress(state);
       const status=$('[data-pair-status]');
       if(status)status.textContent=`已批改 ${reviewed.length} / ${questions.length} 題`;
@@ -498,15 +505,15 @@ async function submitPair(){
       ${quizTools()}</div>`,{quiz:true});
     renderer?.update(state,uid,action,null);
     const netGain=Math.max(0,priorScore-initialScore);
-    if(state.mode==='pve'&&netGain>0&&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
-      const correctIndex=reviewed.findIndex(review=>review.correct);
-      const source=root.querySelector(`[data-pair-entry="${Math.max(0,correctIndex)}"] .tc-options .bg-green-600`)
-        ||root.querySelector('.tc-pair-review .tc-options > button');
-      const feedback=beginSoloCultivationFeedback({scoreBefore:initialScore,source,realms:window.QASoloRealms,activeWhen:()=>opened&&modalOpen});
-      void feedback.play({gain:netGain,totalScore:priorScore});
-    }
+    if(cultivationVisual&&netGain>0)void cultivationVisual.play({gain:netGain,totalScore:priorScore});
+    else cultivationVisual?.cancel();
   }catch(err){
-    if(!valid(e,account))return;
+    if(!valid(e,account)){cultivationVisual?.cancel();return;}
+    if(cultivationVisual){
+      const partialGain=Math.max(0,priorScore-initialScore);
+      if(partialGain>0)void cultivationVisual.play({gain:partialGain,totalScore:priorScore});
+      else cultivationVisual.cancel();
+    }
     if(reviewed.length){
       pairQuestions=questions.slice(reviewed.length);
       pairChoices=choices.slice(reviewed.length);
