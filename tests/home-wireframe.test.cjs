@@ -118,3 +118,23 @@ test('iPad landscape does not place the trial CTA below the whole daily card and
   assert.equal((html.match(/id="btn-home-start"/g)||[]).length,1);
   assert.match(html,/id="btn-home-start"[^>]+onclick="startQuizFlow\(\)"/);
 });
+
+test('portrait side panels are anchored in the circle row instead of covering the entire viewport',()=>{
+  const portrait=css.slice(css.lastIndexOf('@media (orientation: portrait)'));
+  assert.match(portrait,/"left emblem right"/);
+  assert.match(portrait,/"\. practice \."/);
+  assert.match(portrait,/"realm realm realm"/);
+  assert.match(portrait,/"daily daily daily"/);
+  assert.match(portrait,/position:relative!important/);
+  assert.match(portrait,/transform:none!important/);
+  assert.match(portrait,/top:auto!important/);
+  assert.match(portrait,/grid-row:2!important/);
+  assert.match(portrait,/grid-area:left!important/);
+  assert.match(portrait,/grid-area:right!important/);
+  assert.match(portrait,/width:100%!important/);
+  assert.match(portrait,/@media \(orientation:portrait\) and \(max-width:390px\)/);
+  assert.match(css,/position:fixed!important;top:50%;transform:translateY\(-50%\)/);
+  // Buttons stay inside home-layout; no DOM hoisting into document.body.
+  assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
+  assert.match(html,/home-wireframe\.css\?v=20261111-portrait-circle-rails/);
+});
