@@ -13,7 +13,7 @@ let root=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let autoQuizKey='',quizContext=null;
-let pairQuestions=[],pairChoices=[];
+let pairQuestions=[],pairChoices=[],pairReviews=[];
 const $=selector=>root?.querySelector(selector);
 const myActor=()=>state?.actors.find(a=>a.uid===uid);
 const myAction=()=>state?.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
@@ -343,17 +343,32 @@ async function send(command){
 async function execute(){if(selection)await send({type:action,x:selection.x,y:selection.y});}
 async function question(){
   if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
-  const e=epoch,account=uid;
-  busy=true;notice('');showModal('<h2>正在準備題目…</h2><button type="button" data-dismiss>返回戰場</button>');
+  const e=epoch,account=uid,remaining=Math.max(1,R.LIMITS.questions-myActor().questions);
+  busy=true;notice('');showModal('<h2>正在準備兩題…</h2><p>完成後會在同一頁顯示，選好答案再一起送出。</p><button type="button" data-dismiss>返回戰場</button>');
   try{
-    const q=state.question||(await api('/api/generate-quiz',{quizMode:'tactical',roomId:state.id})).tacticalQuestion;
-    if(!valid(e,account))return;if(!q)throw Error('題目尚未準備完成，請重試');state.question=q;
-    if(modalOpen)paintQuestion(q);
-  }catch(err){if(valid(e,account))showModal('<h2>題目尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-dismiss>返回戰場後重試</button>');}
-  finally{if(valid(e,account)){busy=false;updateControls();schedule();}}
+    const first=state.question||(await api('/api/generate-quiz',{quizMode:'tactical',roomId:state.id,batchSlot:0})).tacticalQuestion;
+    if(!valid(e,account))return;
+    if(!first)throw Error('第一題尚未準備完成，請重試');
+    state.question=first;
+    const second=remaining>=2?(state.questionFollowup||(await api('/api/generate-quiz',{quizMode:'tactical',roomId:state.id,batchSlot:1})).tacticalQuestion):null;
+    if(!valid(e,account))return;
+    if(remaining>=2&&!second)throw Error('第二題尚未準備完成，請重試');
+    state.questionFollowup=second;
+    pairQuestions=[first,...(second?[second]:[])];pairChoices=pairQuestions.map(()=>-1);pairReviews=[];
+    if(modalOpen)paintQuestion();
+  }catch(err){
+    if(valid(e,account))showModal('<h2>題目尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-quiz>重新準備兩題</button><button type="button" data-dismiss>返回戰場</button>');
+  }finally{if(valid(e,account)){busy=false;updateControls();schedule();}}
 }
-function questionSheet(q,review=null){
-  return `<div class="glass-panel tc-question-sheet"><div class="quiz-card-tools"><span class="tc-question-badge">${esc([q.subject,q.topic].filter(Boolean).join(' · ')||'問道試煉')}</span></div><h3 class="tc-question">${rich(q.q)}</h3></div><div class="tc-options">${q.opts.map((v,i)=>`<button type="button" ${review?`disabled class="cursor-not-allowed ${i===review.answerIndex?'bg-green-600':i===review.choice?'bg-red-600':''}"`:`data-choice="${i}"`}><span>${String.fromCharCode(65+i)}</span><span class="quiz-rich-option">${rich(v)}${review&&i===review.answerIndex?' ✓':''}</span></button>`).join('')}</div>`;
+function questionSheet(q,review=null,index=0){
+  const options=review?.opts||q.opts;
+  const buttons=options.map((value,i)=>`<button type="button" ${review?`disabled class="cursor-not-allowed ${i===review.answerIndex?'bg-green-600':i===review.choice?'bg-red-600':''}"`:`data-choice-for="${index}" data-choice="${i}"`}><span>${String.fromCharCode(65+i)}</span><span class="quiz-rich-option">${rich(value)}${review&&i===review.answerIndex?' ✓':''}</span></button>`).join('');
+  return `<article class="tc-pair-entry" data-pair-entry="${index}">
+    <div class="glass-panel tc-question-sheet"><div class="quiz-card-tools"><span class="tc-question-badge">${esc([q.subject,q.topic].filter(Boolean).join(' · ')||'自由問道')}</span></div><span class="tc-question-number">第 ${index+1} 題</span><h3 class="tc-question">${rich(review?.q||q.q)}</h3>
+    ${state.mode==='pve'?`<div class="tc-pair-card-tools"><button type="button" data-question-helper-for="${index}"><i class="fa-solid fa-comments"></i> 問道助手</button><button type="button" data-question-report-for="${index}"><i class="fa-solid fa-triangle-exclamation"></i> 題目有錯</button></div>`:''}</div>
+    <div class="tc-options">${buttons}</div>
+    ${review?`<section class="glass-panel tc-feedback"><h3 class="tc-feedback-title ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3><div class="tc-explanation"><span class="tc-explanation-label">解析</span><div class="tc-feedback-text">${rich(review.explanation)}</div></div></section>`:''}
+  </article>`;
 }
 function setQuizContext(q,review=null){
   if(quizContext?.id!==q.id||quizContext.roomId!==state.id){
