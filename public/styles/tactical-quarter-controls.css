@@ -360,3 +360,8 @@
 #tactical-combat.tc-quarter-layout .tc-modal .tc-question{line-height:1.95!important}
 
 #tactical-combat.tc-quarter-layout .tc-modal .tc-options>button{color:#eee8d5!important}
+
+/* Review-state colors match the established solo-question cards instead of
+   the global gradient palette. Restrict to this PvE modal only. */
+html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg-green-600{background:#285a40!important;border-color:#a8d1a4!important}
+html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg-red-600{background:#69372f!important;border-color:#e2ad9a!important}
