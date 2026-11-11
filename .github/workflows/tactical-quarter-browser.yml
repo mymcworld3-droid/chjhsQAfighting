@@ -1,0 +1,30 @@
+name: Browser check quarter-circle battle layout (one-time)
+on:
+  push:
+    branches: [verify/stamina-quarter-browser-20261111]
+    paths: [.github/workflows/tactical-quarter-browser.yml]
+permissions:
+  contents: read
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install project and Playwright
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save playwright@1.56.1 --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Run actual browser tactical gameplay scenarios
+        run: node scripts/test-tactical-browser.cjs /tmp/tactical-quarter-visuals
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tactical-quarter-browser-screenshots
+          path: /tmp/tactical-quarter-visuals
+          if-no-files-found: ignore
