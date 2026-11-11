@@ -172,7 +172,9 @@ test('parallel question API slots can commit out of order without leaking answer
     wrong:['切線方向','遠離圓心','與速度同向'],exp:'向心加速度朝向圓心。'
   },fixed);
   assert.equal('answerIndex' in followup,false);
-  assert.equal((await api.state(db,'u1',fixed)).question,null);
+  const beforeFirst=await api.state(db,'u1',fixed);
+  assert.equal(beforeFirst.question,null);
+  assert.equal(beforeFirst.questionFollowup,null,'normal polling cannot expose the second question first');
   const first=await api.commitQuestion(db,'u1',firstScope,{
     q:'二加三等於多少？',correct:'5',wrong:['2','3','4'],exp:'2+3=5。'
   },fixed);
