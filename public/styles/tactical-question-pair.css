@@ -1,7 +1,8 @@
 /*
  * Stamina questions use the free-question layout, not a lookalike tile grid.
- * The original #page-quiz structure is repeated vertically for two questions:
- * quote parchment -> A/B/C/D jade options -> explanation -> three footer actions.
+ * One #page-quiz question is shown at a time:
+ * quote parchment -> A/B/C/D jade options -> per-question submit/feedback.
+ * The second question automatically follows the first successful submission.
  * Keep all selectors scoped to the tactical question dialog.
  */
 #tactical-combat .tc-modal:has(.tc-quiz){
@@ -19,7 +20,7 @@
   padding:0!important;
 }
 #tactical-combat .tc-quiz{
-  /* Allow both complete question sheets to use the entire available screen width. */
+  /* Each complete question sheet uses the full available screen width. */
   width:100%!important;
   max-width:none!important;
   min-width:0!important;
@@ -170,7 +171,7 @@
   background:transparent!important;border:1px solid transparent!important;border-radius:8px!important;
 }
 #tactical-combat .tc-quiz .quiz-footer-actions > button:hover{color:#9dc6ac!important;border-color:#85a58a80!important}
-/* One submit action after the two complete free-quiz question blocks. */
+/* One submit action per question; transition to the next is automatic. */
 #tactical-combat .tc-quiz .tc-pair-submit{
   display:flex;flex-direction:column;gap:12px;
   padding:20px;margin-top:8px;
@@ -179,6 +180,17 @@
 }
 #tactical-combat .tc-quiz .tc-pair-submit [data-pair-status]{
   color:#aab7a6;font-size:13px;text-align:center;
+}
+#tactical-combat .tc-quiz .tc-pair-previous{
+  margin-bottom:4px;
+  padding:10px 14px;
+  border:1px solid #8fba9380;
+  border-radius:5px;
+  background:#193c2c;
+  color:#d4f0d0;
+  text-align:center;
+  font-size:13px;
+  line-height:1.6;
 }
 #tactical-combat .tc-quiz .tc-pair-submit [data-submit-pair]{
   width:100%;min-height:46px;
