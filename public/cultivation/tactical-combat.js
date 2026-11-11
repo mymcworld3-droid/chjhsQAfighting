@@ -71,7 +71,7 @@ function ensure(){
     else if(b.hasAttribute('data-leave'))leaveDialog();
     else if(b.hasAttribute('data-forfeit')){hideModal();void send({type:'leave'});}
     else if(b.dataset.choiceFor!==undefined)selectPairChoice(Number(b.dataset.choiceFor),Number(b.dataset.choice));
-    else if(b.dataset.choice!==undefined)void answer(Number(b.dataset.choice));
+    else if(b.dataset.choice!==undefined)selectPairChoice(0,Number(b.dataset.choice));
     else if(b.hasAttribute('data-copy'))void navigator.clipboard?.writeText(state.id.replace('arena-','')).then(()=>notice('戰場代碼已複製')).catch(()=>notice('請長按上方代碼複製'));
   });
   root.addEventListener('keydown',event=>{
@@ -432,27 +432,88 @@ async function reportQuestion(helperReason=''){
   }catch(err){if(sameQuiz(ctx))status.textContent=err.message+'，可再次送出重試。';}
   finally{ctx.reportBusy=false;if(sameQuiz(ctx)&&$('[data-report-send]'))$('[data-report-send]').disabled=false;}
 }
-function paintQuestion(q){
-  setQuizContext(q);
-  showModal(`<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'答題 '+myActor().questions+'/2 · 答對 +4／答錯 +1 體力'}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div><div class="quiz-main-column">${questionSheet(q)}${quizTools()}</div>`,{quiz:true});
+function activatePairContext(index){
+  const q=pairQuestions[index];if(!q)return;
+  setQuizContext(q,pairReviews[index]||null);
+  const tools=$('.tc-question-tools');if(tools)tools.outerHTML=quizTools();
+}
+function selectPairChoice(index,choice){
+  if(busy||pairReviews.length||!pairQuestions[index]||!Number.isInteger(choice)||choice<0||choice>3)return;
+  pairChoices[index]=choice;
+  root.querySelectorAll('[data-choice-for="'+index+'"]').forEach(button=>{
+    const picked=Number(button.dataset.choice)===choice;
+    button.classList.toggle('is-picked',picked);
+    button.setAttribute('aria-pressed',String(picked));
+  });
+  const ready=pairChoices.length===pairQuestions.length&&pairChoices.every(value=>value>=0);
+  const button=$('[data-submit-pair]');if(button)button.disabled=!ready;
+  const status=$('[data-pair-status]');if(status)status.textContent=ready?'兩題答案已選好，可以一次送出。':`已選 ${pairChoices.filter(value=>value>=0).length} / ${pairQuestions.length} 題`;
+}
+function paintQuestion(){
+  if(!pairQuestions.length)return;
+  pairReviews=[];setQuizContext(pairQuestions[0]);
+  const remaining=pairQuestions.length;
+  showModal(`<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'自由問道式答題 · 體力充能'}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
+    <div class="quiz-main-column tc-pair-column"><div class="tc-pair-heading"><strong>${remaining===2?'雙題問道':'補完本輪題目'}</strong><span>答對 +4、答錯 +1 體力／題</span></div>
+    <div class="tc-pair-grid">${pairQuestions.map((q,i)=>questionSheet(q,null,i)).join('')}</div>
+    <footer class="tc-pair-footer"><span data-pair-status role="status" aria-live="polite">已選 0 / ${remaining} 題</span><button type="button" class="tc-primary" data-submit-pair disabled>${remaining===2?'一次送出兩題':'送出剩餘題目'}</button></footer>
+    ${quizTools()}</div>`,{quiz:true});
   updateClock();
 }
-async function answer(choice){
-  if(busy||!state?.question)return;busy=true;const e=epoch,account=uid,q=state.question,serial=++op;
-  root.querySelectorAll('[data-choice]').forEach(b=>b.disabled=true);
+async function submitPair(){
+  if(busy||!pairQuestions.length||pairChoices.length!==pairQuestions.length||pairChoices.some(choice=>choice<0))return;
+  busy=true;const e=epoch,account=uid,serial=++op;
+  const questions=pairQuestions.slice(),choices=pairChoices.slice(),reviewed=[];
+  const source=root.querySelector('[data-choice-for="0"][data-choice="'+choices[0]+'"]');
+  const initialScore=Number(localUser().stats?.totalScore)||0;
+  let priorScore=initialScore,gain=0;
+  root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=true);
+  const submit=$('[data-submit-pair]');if(submit){submit.disabled=true;submit.textContent='正在批改兩題…';}
   try{
-    const result=await api('/api/tactical/answer',{roomId:state.id,questionId:q.id,choice});
-    if(!valid(e,account))return;
-    state=result.state;applyProgress(state);clockOffset=state.serverNowMs-Date.now();appliedOp=serial;const review=state.review;
-    window.QAGameAudio?.answer(review.correct,'tactical:'+state.id+':'+q.id);
-    setQuizContext(q,review);
-    showModal(`<div class="tc-dialog-heading"><small>體力 +${review.gain}${state.quizRound?' · 已完成 '+myActor().questions+'/2':''}</small></div><div class="quiz-main-column">${questionSheet({...q,q:review.q,opts:review.opts},review)}<section class="glass-panel tc-feedback"><h3 class="tc-feedback-title ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'}</h3><div class="tc-explanation"><span class="tc-explanation-label">解析</span><div class="tc-feedback-text">${rich(review.explanation)}</div></div><button type="button" class="tc-primary" data-continue>${state.quizRound&&canQuestion()?'下一題':'返回戰場'}</button></section>${quizTools()}</div>`,{quiz:true});
+    for(let i=0;i<questions.length;i++){
+      const q=questions[i];
+      const result=await api('/api/tactical/answer',{roomId:state.id,questionId:q.id,choice:choices[i]});
+      if(!valid(e,account))return;
+      if(result.state?.review?.questionId!==q.id)throw Error('答題狀態不同步，請重新開啟答題');
+      state=result.state;clockOffset=state.serverNowMs-Date.now();appliedOp=serial;
+      const review=state.review;
+      reviewed.push(review);pairReviews=reviewed.slice();
+      window.QAGameAudio?.answer(review.correct,'tactical:'+state.id+':'+q.id);
+      const score=Number(state.progress?.stats?.totalScore);
+      if(Number.isFinite(score)){gain+=Math.max(0,score-priorScore);priorScore=score;}
+      applyProgress(state);
+      const status=$('[data-pair-status]');
+      if(status)status.textContent=`已批改 ${reviewed.length} / ${questions.length} 題`;
+    }
+    pairReviews=reviewed;
+    setQuizContext(questions[0],reviewed[0]);
+    showModal(`<div class="tc-dialog-heading"><small>${state.quizRound?'第 '+state.quizRound+' 輪':'問道試煉'}</small><span class="tc-pair-complete">本次 ${reviewed.filter(r=>r.correct).length} / ${reviewed.length} 題答對</span></div>
+      <div class="quiz-main-column tc-pair-column"><div class="tc-pair-grid tc-pair-review">${questions.map((q,i)=>questionSheet(q,reviewed[i],i)).join('')}</div>
+      <footer class="tc-pair-footer"><span>已依每題結果結算體力與修為</span><button type="button" class="tc-primary" data-continue>返回戰場</button></footer>
+      ${quizTools()}</div>`,{quiz:true});
     renderer?.update(state,uid,action,null);
-  }catch(err){if(valid(e,account)){
-    const message=document.createElement('p');message.className='tc-wrong';message.setAttribute('role','alert');message.textContent=err.message+'；可再按一次答案重試，體力不會重複計算。';
-    $('[data-modal] .tc-dialog')?.append(message);root.querySelectorAll('[data-choice]').forEach(b=>b.disabled=false);
-  }}
-  finally{if(valid(e,account)){busy=false;updateControls();schedule();}}
+    if(state.mode==='pve'&&gain>0&&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
+      const feedback=beginSoloCultivationFeedback({scoreBefore:initialScore,source,realms:window.QASoloRealms,activeWhen:()=>opened&&modalOpen&&state?.id===questions[0]?.roomId||opened&&modalOpen});
+      void feedback.play({gain,totalScore:priorScore});
+    }
+  }catch(err){
+    if(!valid(e,account))return;
+    if(reviewed.length){
+      pairQuestions=questions.slice(reviewed.length);
+      pairChoices=choices.slice(reviewed.length);
+      pairReviews=[];
+      if(pairQuestions.length){
+        paintQuestion();
+        notice('已完成 '+reviewed.length+' 題並儲存獎勵；其餘題目可重新送出。'+err.message);
+        const status=$('[data-pair-status]');if(status)status.textContent='前面題目已儲存，請送出剩餘題目。';
+        pairChoices.forEach((choice,i)=>selectPairChoice(i,choice));
+      }else showModal('<h2>答題已完成</h2><p>請同步戰場查看結果。</p><button type="button" data-continue>返回戰場</button>');
+    }else{
+      const status=$('[data-pair-status]');if(status)status.textContent=err.message+'；可再次送出，獎勵不會重複發放。';
+      root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=false);
+      if(submit){submit.disabled=false;submit.textContent='重新送出兩題';}
+    }
+  }finally{if(valid(e,account)){busy=false;updateControls();schedule();}}
 }
 function schedule(){
   clearTimeout(poll);if(!opened||document.hidden||!state||state.status==='finished')return;
@@ -504,7 +565,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
