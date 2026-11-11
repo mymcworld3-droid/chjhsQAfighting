@@ -1172,6 +1172,7 @@ app.post('/api/generate-quiz', generateQuiz);
 // game, not after they open the stamina quiz screen.
 const tacticalBankPrewarmer=createTacticalBankPrewarmer({
     bank:aiQuestionBank,
+    similar:(candidate,previous)=>isTooSimilarQuestion(candidate,[previous]),
     generate:async(target,{avoidQuestions=[]}={})=>{
         let status=200,reply=null;
         await generateQuiz({
@@ -1210,7 +1211,28 @@ app.post('/api/tactical/bank-warm',async(req,res)=>{
             return res.json({ok:true,enabled:true,queued:0,cooldown:true});
         tacticalBankWarmLast.set(uid,{at:current,key:warmKey});
         while(tacticalBankWarmLast.size>3000)tacticalBankWarmLast.delete(tacticalBankWarmLast.keys().next().value);
-        const result=tacticalBankPrewarmer.enqueue(targets);
+        // "Five ready" means five *usable* questions, not five including
+        // recently answered or still-reserved questions in the current battle.
+        let recentQuestions=[];
+        try{
+            const db=playerRepository.resolve().db;
+            const pointerSnap=await db.collection('tacticalBattlePlayers').doc(uid).get();
+            const pointer=pointerSnap.exists?pointerSnap.data()||{}:{};
+            const roomId=pointer.roomIds?.pve||pointer.roomIds?.pvp||pointer.roomId||'';
+            if(/^arena-[a-f0-9]{16}$/.test(roomId)){
+                const roomSnap=await db.collection('tacticalBattleRooms').doc(roomId).get();
+                const room=roomSnap.exists?roomSnap.data()||{}:{};
+                if(room.actors?.some(actor=>actor.uid===uid&&!actor.bot)){
+                    recentQuestions=[
+                        ...(Array.isArray(room.questionHistory)?room.questionHistory:[]),
+                        room.pending?.[uid]?.q,room.pendingFollowup?.[uid]?.q
+                    ].filter(q=>typeof q==='string'&&q.trim()).slice(-26);
+                }
+            }
+        }catch(error){
+            console.warn('[Tactical bank] Unable to inspect recent questions:',String(error?.message||error).slice(0,90));
+        }
+        const result=tacticalBankPrewarmer.enqueue(targets,recentQuestions);
         return res.json({ok:true,...result});
     }catch(error){
         const status=error?.status||503;
