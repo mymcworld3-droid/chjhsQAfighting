@@ -516,7 +516,7 @@
     s.turnStartedAtMs=now;
     for(const a of s.actors){a.questions=0;a.quizExpired=false;}
     // Never carry an in-flight generation or an unanswered question into a new round.
-    s.pending={};
+    s.pending={};s.pendingFollowup={};
   }
   function readyForAction(s,a){return a.questions>=LIMITS.questions||a.quizExpired;}
   function nextAction(s,now){
@@ -587,7 +587,7 @@
         if(s===state)s=clone(state);
         if(quizDue<=actionDue){
           for(const a of s.actors.filter(a=>!readyForAction(s,a))){
-            a.quizExpired=true;delete s.pending?.[a.uid];
+            a.quizExpired=true;delete s.pending?.[a.uid];delete s.pendingFollowup?.[a.uid];
             log(s,a.name+'答題倒數結束，未作答題目不獲得體力','quiz-timeout',{actor:a.uid});
           }
           if(s.phase==='waiting-answer')nextAction(s,due);
