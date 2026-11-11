@@ -114,3 +114,29 @@ test('queued refills continue after the shared scheduler releases its two active
   assert.equal(scheduled,4);
   assert.equal(maxActive,2);
 });
+
+test('stock counts exclude previously answered and still-reserved questions',async()=>{
+  const stored=['old-1','old-2','fresh-1','fresh-2','fresh-3'];
+  const excluded=['old-1','old-2'];
+  const generated=[];
+  const bank={
+    enabled:true,
+    schedule(_target,job){Promise.resolve().then(job);return true;},
+    async find(_target,avoided,similar,options){
+      assert.equal(options.deadlineMs,90000);
+      return {ready:true,count:stored.filter(q=>!avoided.some(old=>similar(q,old))).length};
+    }
+  };
+  const warmer=createTacticalBankPrewarmer({bank,similar:(a,b)=>a===b,
+    generate:async(_target,{avoidQuestions})=>{
+      generated.push(avoidQuestions);
+      stored.push('fresh-'+(stored.length-2));
+      return {stored:true,q:stored.at(-1)};
+    }
+  });
+  warmer.enqueue([physics],excluded);
+  await until(()=>generated.length===2&&warmer.statistics().running===0);
+  assert.deepEqual(generated[0],excluded);
+  assert.equal(generated[1].length,3,'also avoid the first newly generated question');
+  assert.equal(stored.length,7,'restore five distinct usable questions');
+});
