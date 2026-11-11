@@ -1,0 +1,48 @@
+name: Validate quarter UI against complete browser gameplay (one-time)
+on:
+  push:
+    branches: [fix/stamina-quarter-quiz-typography-20261111]
+    paths: [.github/workflows/tactical-quarter-browser-fix.yml]
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies and browser
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save playwright@1.56.1 --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Regenerate asset manifest
+        run: |
+          npm run build:module-versions
+          npm run check:module-versions
+      - name: Run full project suite
+        run: npm test
+      - name: Check gameplay through real mobile and desktop browser
+        run: node scripts/test-tactical-browser.cjs /tmp/tactical-quarter-browser-fix
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tactical-quarter-browser-screenshots
+          path: /tmp/tactical-quarter-browser-fix
+          if-no-files-found: ignore
+      - name: Commit browser-verified improvements
+        run: |
+          git rm .github/workflows/tactical-quarter-browser-fix.yml
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix(tactical): preserve original question typography within radial HUD'
+          git push origin HEAD:refs/heads/fix/stamina-quarter-quiz-typography-20261111
