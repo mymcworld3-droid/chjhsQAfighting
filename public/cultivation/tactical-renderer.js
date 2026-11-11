@@ -250,29 +250,18 @@ export class TacticalRenderer{
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
     c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
     const view=this.preview?.view||{x:0,y:0,width:s.width,height:s.height};
-    // The stamina branch paints terrain across the full canvas, rather than
-    // confining scenery to a small boxed battlefield. Game tiles remain finite.
-    const seamless=!this.preview&&!!canvas.closest('#tactical-combat.tc-quarter-layout');
+    // The canvas fills the available area, but only actual map tiles are
+    // painted: never mirror or repeat terrain outside the server's grid.
+    const frameless=!this.preview&&!!canvas.closest('#tactical-combat.tc-quarter-layout');
     const g=Camera.geometry(this.camera,w,h,view);this.camera=Camera.normalize(this.camera,w,h,view);
     const cell=this.cell=g.cell,ox=this.ox=g.ox,oy=this.oy=g.oy;
     const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid&&(!s.quizRound||s.phase==='action'),reduced=this.reducedMotion.matches;
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
     c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
-    // Seamless visual terrain beyond the playable grid. Outside cells are
-    // decorative only: clicks, movement and attacks still use R.inside().
-    const mirror=(value,count)=>{
-      const n=Math.max(1,count),period=n*2,m=((value%period)+period)%period;
-      return m<n?m:period-1-m;
-    };
-    const startX=seamless?Math.floor(-ox/cell)-1:view.x;
-    const endX=seamless?Math.ceil((w-ox)/cell)+1:view.x+view.width;
-    const startY=seamless?Math.floor(-oy/cell)-1:view.y;
-    const endY=seamless?Math.ceil((h-oy)/cell)+1:view.y+view.height;
-    for(let y=startY;y<endY;y++)for(let x=startX;x<endX;x++){
-      const px=Math.round(ox+x*cell),py=Math.round(oy+y*cell),edgeX=Math.round(ox+(x+1)*cell),edgeY=Math.round(oy+(y+1)*cell);
-      const inside=x>=0&&x<s.width&&y>=0&&y<s.height;
-      const groundX=inside?x:mirror(x,s.width),groundY=inside?y:mirror(y,s.height);
-      const t=s.ground?.[groundY*s.width+groundX]??s.terrain;
+    // Finite map: show only tiles within the actual battlefield dimensions.
+    // The surrounding canvas stays empty for drag/zoom without fake terrain.
+    for(let y=view.y;y<view.y+view.height;y++)for(let x=view.x;x<view.x+view.width;x++){
+      const px=Math.round(ox+x*cell),py=Math.round(oy+y*cell),edgeX=Math.round(ox+(x+1)*cell),edgeY=Math.round(oy+(y+1)*cell),t=s.ground?.[y*s.width+x]??s.terrain;
       if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=(x+y)%2?'#5b6650':'#5f6b53';c.fillRect(px,py,edgeX-px,edgeY-py);}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
     }
@@ -326,7 +315,7 @@ export class TacticalRenderer{
     }
     if(scene)this.drawEffect(scene,progress,true);
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
-    if(!seamless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
+    if(!frameless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
     if(!this.preview&&(animating||myTurn&&this.mode==='move'&&this.range.length&&!reduced))this.frame=requestAnimationFrame(()=>this.draw());
   }
 }
