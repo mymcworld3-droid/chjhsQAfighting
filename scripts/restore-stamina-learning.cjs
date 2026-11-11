@@ -55,14 +55,37 @@ const dependencyRoots = [
 const featureTests=run('ls-tree','-r','--name-only','origin/main','tests').split('\n')
   .filter(p=>/^tests\/(?:daily-meditation|adaptive-learning|ai-question-bank|bank-catalog|quiz-generation-tasks|quiz-prompt-reliability|parallel-quiz)/.test(p))
   .filter(p=>p.endsWith('.test.cjs'));
-for(const file of [...copyExact,...dependencyRoots,...featureTests]){
+// Existing stamina assertions for the replaced question generator and
+// main learning client describe the superseded workflows. Restore main's
+// corresponding tests, while retaining stamina tactical/weapon tests and
+// the original stamina realm curve assertions.
+const compatibilityTests=[
+ 'tests/answer-gold-rules.test.cjs',
+ 'tests/combat-quiz-latency.test.cjs',
+ 'tests/comprehensive-custom-scope.test.cjs',
+ 'tests/deferred-extension-practice.test.cjs',
+ 'tests/firestore-quota-resilience.test.cjs',
+ 'tests/focused-custom-scope.test.cjs',
+ 'tests/invitation-server.test.cjs',
+ 'tests/knowledge-points.test.cjs',
+ 'tests/nascent-soul.test.cjs',
+ 'tests/player-growth-feedback.test.cjs',
+ 'tests/quiz-parallel-providers.test.cjs',
+ 'tests/quiz-spare-pool.test.cjs',
+ 'tests/raid-mvp.test.cjs',
+ 'tests/raid-ui-and-multimode-history.test.cjs',
+ 'tests/scope-fullscreen.test.cjs',
+ 'tests/solo-question-cache.test.cjs'
+].filter(presentMain);
+const updatedTests=[...new Set([...featureTests,...compatibilityTests])];
+for(const file of [...copyExact,...dependencyRoots,...updatedTests]){
   assert(presentMain(file),'Source missing on main: '+file);
   run('restore','--source=origin/main','--staged','--worktree','--',file);
 }
 
 // Import direct module dependencies needed by the exact updated frontend.
 // Do NOT override an existing stamina module: that would replace battle logic.
-const newFiles = new Set([...copyExact.filter(f=>fs.existsSync(f)&&fs.statSync(f).isFile()),...dependencyRoots,...featureTests]);
+const newFiles = new Set([...copyExact.filter(f=>fs.existsSync(f)&&fs.statSync(f).isFile()),...dependencyRoots,...updatedTests]);
 const need = [...newFiles];
 const rgx=/(?:from\s*|import\s*|require\s*\()\s*['"](\.[^'"]+)['"]/g;
 const nodeBuiltins = new Set(require('node:module').builtinModules);
