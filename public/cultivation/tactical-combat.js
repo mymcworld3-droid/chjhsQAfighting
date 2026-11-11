@@ -427,7 +427,13 @@ async function reportQuestion(helperReason=''){
     if(!sameQuiz(ctx))return;
     const message=result.reason+(result.compensated?` 已補償 ${result.goldAdded} 靈石、${result.cultivationAdded} 修為。`:'')+
       (result.staminaRefunded>0?` 已返還 ${result.staminaRefunded} 體力。`:'');
-    status.textContent=message;if(result.questionSkipped)notice(message);
+    status.textContent=message;
+    if(result.questionSkipped){
+      pairQuestions=[];pairChoices=[];pairReviews=[];
+      hideModal();paint();notice(message);
+      if(canQuestion())void question();
+      return;
+    }
     if(result.compensated&&!result.battle){const user=localUser();user.stats||={};user.stats.gold=result.newGold;user.stats.totalScore=result.newTotalScore;window.updateUIStats?.();window.refreshXiuxianLiveSync?.(result.newTotalScore);}
   }catch(err){if(sameQuiz(ctx))status.textContent=err.message+'，可再次送出重試。';}
   finally{ctx.reportBusy=false;if(sameQuiz(ctx)&&$('[data-report-send]'))$('[data-report-send]').disabled=false;}
@@ -464,7 +470,6 @@ async function submitPair(){
   if(busy||!pairQuestions.length||pairChoices.length!==pairQuestions.length||pairChoices.some(choice=>choice<0))return;
   busy=true;const e=epoch,account=uid,serial=++op;
   const questions=pairQuestions.slice(),choices=pairChoices.slice(),reviewed=[];
-  const source=root.querySelector('[data-choice-for="0"][data-choice="'+choices[0]+'"]');
   const initialScore=Number(localUser().stats?.totalScore)||0;
   let priorScore=initialScore,gain=0;
   root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=true);
@@ -492,9 +497,13 @@ async function submitPair(){
       <footer class="tc-pair-footer"><span>已依每題結果結算體力與修為</span><button type="button" class="tc-primary" data-continue>返回戰場</button></footer>
       ${quizTools()}</div>`,{quiz:true});
     renderer?.update(state,uid,action,null);
-    if(state.mode==='pve'&&gain>0&&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
-      const feedback=beginSoloCultivationFeedback({scoreBefore:initialScore,source,realms:window.QASoloRealms,activeWhen:()=>opened&&modalOpen&&state?.id===questions[0]?.roomId||opened&&modalOpen});
-      void feedback.play({gain,totalScore:priorScore});
+    const netGain=Math.max(0,priorScore-initialScore);
+    if(state.mode==='pve'&&netGain>0&&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
+      const correctIndex=reviewed.findIndex(review=>review.correct);
+      const source=root.querySelector(`[data-pair-entry="${Math.max(0,correctIndex)}"] .tc-options .bg-green-600`)
+        ||root.querySelector('.tc-pair-review .tc-options > button');
+      const feedback=beginSoloCultivationFeedback({scoreBefore:initialScore,source,realms:window.QASoloRealms,activeWhen:()=>opened&&modalOpen});
+      void feedback.play({gain:netGain,totalScore:priorScore});
     }
   }catch(err){
     if(!valid(e,account))return;
@@ -506,6 +515,7 @@ async function submitPair(){
         paintQuestion();
         notice('已完成 '+reviewed.length+' 題並儲存獎勵；其餘題目可重新送出。'+err.message);
         const status=$('[data-pair-status]');if(status)status.textContent='前面題目已儲存，請送出剩餘題目。';
+        busy=false;
         pairChoices.forEach((choice,i)=>selectPairChoice(i,choice));
       }else showModal('<h2>答題已完成</h2><p>請同步戰場查看結果。</p><button type="button" data-continue>返回戰場</button>');
     }else{
