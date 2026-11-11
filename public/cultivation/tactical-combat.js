@@ -701,7 +701,7 @@ function openQuestionTool(kind){
   const heading=$('.tc-dialog-heading');if(heading)heading.inert=true;
   // Do not open the virtual keyboard just by showing the dialog. The user
   // explicitly taps the textarea; focus only a non-editable close control.
-  panel.querySelector('[data-tool-close]')?.focus({preventScroll:true});
+  panel.querySelector?.('[data-tool-close]')?.focus({preventScroll:true});
 }
 function closeQuestionTool(restore=true){
   for(const kind of ['helper','report']){const panel=$(`[data-${kind}-panel]`);if(panel&&!panel.hidden){panel.hidden=true;const trigger=$(`[data-${kind}-toggle]`);trigger?.setAttribute('aria-expanded','false');if(restore)trigger?.focus({preventScroll:true});}}
