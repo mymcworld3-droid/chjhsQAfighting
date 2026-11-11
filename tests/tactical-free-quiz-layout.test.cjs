@@ -8,6 +8,7 @@ const source=fs.readFileSync(path.join(root,'public/cultivation/tactical-combat.
 const styles=fs.readFileSync(path.join(root,'public/styles/tactical-question-pair.css'),'utf8');
 const mainHtml=fs.readFileSync(path.join(root,'public/index.html'),'utf8');
 const mainCss=fs.readFileSync(path.join(root,'public/styles/quiz-scroll.css'),'utf8');
+const mainJs=fs.readFileSync(path.join(root,'public/main-legacy.js'),'utf8');
 const cut=(from,to)=>{
   const start=source.indexOf(from),end=source.indexOf(to,start);
   assert.ok(start>=0&&end>start,'source anchors must exist: '+from);
@@ -30,7 +31,7 @@ test('each stamina question repeats the actual free-question card, four answer r
     'w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border',
     'quiz-footer-actions'];
   for(const fragment of common){
-    assert.ok(mainHtml.includes(fragment),'main quiz lacks canonical fragment '+fragment);
+    assert.ok(mainHtml.includes(fragment)||mainJs.includes(fragment),'main quiz lacks canonical fragment '+fragment);
     assert.ok(stem.includes(fragment),'stamina quiz has drifted from main quiz: '+fragment);
   }
   assert.equal((stem.match(/data-choice-for="0"/g)||[]).length,4);
