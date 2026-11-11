@@ -1,4 +1,4 @@
-/* 問道試煉戰場：嚴格依照手繪稿。中央一張地圖、左下充能、
+/* 問道試煉戰場：無邊界全幅地圖、左下充能、
    右下攻擊／移動／結束回合。其餘操作不在此畫面露出。
    PvP、答題彈窗、妖獸介紹仍使用原本畫面與流程。 */
 #tactical-combat.tc-quarter-layout{
@@ -42,14 +42,14 @@
 }
 #tactical-combat.tc-quarter-layout .tc-arena>canvas{
   position:absolute;
-  top:9%;left:18%;
-  width:64%!important;height:56%!important;
+  inset:0;
+  width:100%!important;height:100%!important;
   display:block;
   min-height:0!important;
-  border:2px solid var(--tc-gold);
-  border-radius:7px;
+  border:0!important;
+  border-radius:0!important;
   background:#222c25;
-  box-shadow:0 2px 16px rgba(0,0,0,.28);
+  box-shadow:none!important;
   cursor:grab;
   touch-action:none!important;
   overscroll-behavior:contain;
@@ -279,9 +279,6 @@
   #tactical-combat.tc-quarter-layout{
     --tc-dial:min(50vw,31vh);
   }
-  #tactical-combat.tc-quarter-layout .tc-arena>canvas{
-    top:8%;left:7%;width:86%!important;height:55%!important;
-  }
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector{
     font-size:clamp(13px,3.8vw,20px)!important;
   }
@@ -297,9 +294,6 @@
 }
 @media(orientation:landscape) and (max-height:460px){
   #tactical-combat.tc-quarter-layout{--tc-dial:min(29vw,48vh)}
-  #tactical-combat.tc-quarter-layout .tc-arena>canvas{
-    top:7%;height:58%!important;
-  }
 }
 @media(prefers-reduced-motion:reduce){
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector,
