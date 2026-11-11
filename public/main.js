@@ -1,6 +1,6 @@
 // 核心登入模組必須優先且獨立載入。
 // Google 登入本身不被附加模組阻斷；登入後的遊戲則必須等所有修仙模組載入成功才開始。
-import './main-legacy.js?v=20261111-stamina-pair1';
+import './main-legacy.js?v=20261111-stamina-question-bank-prewarm-v1';
 import './cultivation/dongtian-entry.js';
 // Sound is optional and cannot hold up authentication or gameplay readiness.
 void import('./game-audio.js').catch(error => console.warn('[Game audio] unavailable', error));
@@ -114,7 +114,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261111-stamina-pizza-sector-wheel-v1';
+const XIUXIAN_FEATURE_BUILD = '20261111-stamina-pizza-sector-wheel-bank-v1';
 const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
