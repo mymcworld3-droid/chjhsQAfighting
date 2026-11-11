@@ -1,0 +1,40 @@
+name: Rebuild verified module manifest after quarter HUD (one-time)
+on:
+  push:
+    branches: [fix/stamina-quarter-module-manifest-20261111]
+    paths: [.github/workflows/refresh-quarter-manifest.yml]
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install and rebuild module versions
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:module-versions
+          npm run check:module-versions
+      - name: Validate code and complete test suite
+        run: |
+          node --check public/cultivation/tactical-combat.js
+          node --check public/cultivation/tactical-renderer.js
+          npm test
+          git diff --check
+      - name: Save verified module manifest to staging
+        run: |
+          git rm .github/workflows/refresh-quarter-manifest.yml
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix(tactical): refresh module manifest for radial UI stylesheet'
+          git push origin HEAD:refs/heads/fix/stamina-quarter-module-manifest-20261111
