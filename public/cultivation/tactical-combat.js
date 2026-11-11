@@ -2,6 +2,7 @@ import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js';
 import {EnemyDemo} from './tactical-enemy-demo.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
+import {beginSoloCultivationFeedback} from './solo-cultivation-feedback.js';
 
 const R=globalThis.QATactical;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -12,10 +13,11 @@ let root=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let autoQuizKey='',quizContext=null;
+let pairQuestions=[],pairChoices=[];
 const $=selector=>root?.querySelector(selector);
 const myActor=()=>state?.actors.find(a=>a.uid===uid);
 const myAction=()=>state?.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
-function canQuestion(){try{R.canAnswer(state,uid,Date.now()+clockOffset);return !!state.quizRound||myActor().stamina<10;}catch(_){return false;}}
+function canQuestion(){try{R.canAnswer(state,uid,Date.now()+clockOffset);return !!state.quizRound||myActor().stamina<10||!!state.question||!!state.questionFollowup;}catch(_){return false;}}
 
 async function api(path,body,signal){
   const response=await authenticatedMainFetch(path,{...(body?{method:'POST',body:JSON.stringify(body)}:{method:'GET'}),signal:signal?AbortSignal.any([signal,AbortSignal.timeout(65000)]):AbortSignal.timeout(65000)});
@@ -30,6 +32,7 @@ function ensure(){
   if(root)return;
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261111-green-energy-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261111-a';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
@@ -55,7 +58,10 @@ function ensure(){
     else if(b.hasAttribute('data-end'))void send({type:'end'});
     else if(b.hasAttribute('data-quiz'))void question();
     else if(b.hasAttribute('data-dismiss')){hideModal();if(state&&$('canvas'))paint();}
-    else if(b.hasAttribute('data-continue')){if(state.quizRound&&canQuestion())void question();else{hideModal();paint();}}
+    else if(b.hasAttribute('data-continue')){hideModal();paint();if(state.quizRound&&canQuestion())void question();}
+    else if(b.hasAttribute('data-question-helper-for')){activatePairContext(Number(b.dataset.questionHelperFor));openQuestionTool('helper');}
+    else if(b.hasAttribute('data-question-report-for')){activatePairContext(Number(b.dataset.questionReportFor));openQuestionTool('report');}
+    else if(b.hasAttribute('data-submit-pair'))void submitPair();
     else if(b.hasAttribute('data-helper-toggle'))openQuestionTool('helper');
     else if(b.hasAttribute('data-tool-close'))closeQuestionTool();
     else if(b.dataset.helperPreset){$('[data-helper-input]').value=b.dataset.helperPreset;void askHelper();}
@@ -64,6 +70,7 @@ function ensure(){
     else if(b.hasAttribute('data-report-send'))void reportQuestion();
     else if(b.hasAttribute('data-leave'))leaveDialog();
     else if(b.hasAttribute('data-forfeit')){hideModal();void send({type:'leave'});}
+    else if(b.dataset.choiceFor!==undefined)selectPairChoice(Number(b.dataset.choiceFor),Number(b.dataset.choice));
     else if(b.dataset.choice!==undefined)void answer(Number(b.dataset.choice));
     else if(b.hasAttribute('data-copy'))void navigator.clipboard?.writeText(state.id.replace('arena-','')).then(()=>notice('戰場代碼已複製')).catch(()=>notice('請長按上方代碼複製'));
   });
@@ -301,7 +308,7 @@ function accept(next,serial){
       detail:{uid,trial:next.trial,terrain:next.terrain,map:next.map}
     }));
   }
-  if(modalOpen&&$('[data-choice]')&&oldQuestion&&!next?.question){hideModal();notice('本輪答題已結束，請查看戰場。');}
+  if(modalOpen&&$('[data-choice]')&&oldQuestion&&!next?.question){hideModal();pairQuestions=[];pairChoices=[];notice('本輪答題已結束，請查看戰場。');}
   paint({preserveModal:modalOpen});
 }
 function applyProgress(next){
@@ -482,7 +489,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;quizContext?.abort.abort();quizContext=null;autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
