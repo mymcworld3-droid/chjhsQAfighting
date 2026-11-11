@@ -1,4 +1,5 @@
 name: Verify green charging arc and ready pulse (one-time)
+# Check the full-energy disabled state before a trial-ending attack.
 on:
   push:
     branches: [feature/stamina-green-energy-dial-20261111]
