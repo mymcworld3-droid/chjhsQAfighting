@@ -1,4 +1,5 @@
 name: Validate updated stamina home wireframe (one-time)
+# Assert the authentic daily question progress against the existing quest snapshot.
 on:
   push:
     branches: [feature/stamina-home-wireframe-progress-20261111]
