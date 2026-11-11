@@ -292,6 +292,12 @@
   vector-effect:non-scaling-stroke;
 }
 #tactical-combat.tc-quarter-layout .tc-action-lines path:first-child{stroke-width:1.2}
+#tactical-combat.tc-quarter-layout .tc-action-lines .tc-wheel-lane-guide{
+  stroke:#10291f;
+  stroke-width:1.65;
+  opacity:.9;
+}
+/* Slim wedges sit between the inset rails with a visible margin on all sides. */
 /* A real circular sector, clipped by its own concentric SVG arcs. */
 #tactical-combat.tc-quarter-layout .tc-wheel-slider{
   position:absolute;inset:0;z-index:6;
@@ -304,13 +310,13 @@
   transition:transform .40s cubic-bezier(.22,.85,.22,1);
 }
 #tactical-combat.tc-quarter-layout .tc-wheel-slider-shape{
-  fill:#dbb56c;stroke:#fff0bd;stroke-width:1.2;
+  fill:#dbb56c;stroke:#fff0bd;stroke-width:.85;
   stroke-linejoin:round;
-  filter:drop-shadow(0 0 1.3px #f8de9c);
+  filter:drop-shadow(0 0 .9px #f8de9c);
 }
 #tactical-combat.tc-quarter-layout .tc-wheel-slider-detail .tc-wheel-slider-shape{
   fill:#61bd87;stroke:#ddffdd;
-  filter:drop-shadow(0 0 1.3px #a7ffb1);
+  filter:drop-shadow(0 0 .9px #a7ffb1);
 }
 #tactical-combat.tc-quarter-layout .tc-wheel-slider.is-dragging .tc-wheel-slider-rotor{
   transition:none!important;
