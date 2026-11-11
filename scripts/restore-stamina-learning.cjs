@@ -87,6 +87,27 @@ for(const file of [...copyExact,...dependencyRoots,...updatedTests]){
 // Keep the original stamina-only gameplay assertions; the newer main source
 // assumes avatar, raid-drop and raid-hub rules that are intentionally NOT
 // being ported. Adapt only tests for those preserved contracts.
+// The stamina battle has a dedicated quick/simple raid mode (one reasoning
+// step regardless of player learning difficulty). Its tactical quiz mode must
+// remain available, while ALL non-tactical learning logic stays exact to main.
+{
+ const p='fast-quiz-prompt.cjs';
+ let q=fs.readFileSync(p,'utf8');
+ q=once(q,"'meditation-literacy']);","'meditation-literacy','tactical']);");
+ q=once(q,"  const safe = (value, n=140) => String(value ?? '').slice(0,n);",
+      "  const safe = (value, n=140) => String(value ?? '').slice(0,n);\n  const quick = mode === 'raid-quick-simple';");
+ q=once(q,"cognitive_level: Number.parseInt(quality.cognitive,10) || 2,",
+      "cognitive_level: quick ? 1 : (Number.parseInt(quality.cognitive,10) || 2),");
+ q=once(q,"reasoning_steps: Number.parseInt(quality.steps,10) || 2",
+      "reasoning_steps: quick ? 1 : (Number.parseInt(quality.steps,10) || 2)");
+ q=once(q,"safe(difficulty,16)+'；段位='","(quick?'easy':safe(difficulty,16))+'；段位='");
+ q=once(q,"'題型='+safe(targetForm,40)+'；認知層級='+(quality.cognitive||2)+",
+      "'題型='+safe(targetForm,40)+'；認知層級='+(quick?1:quality.cognitive||2)+");
+ q=once(q,"'；推理步數='+(quality.steps||2),","'；推理步數='+(quick?1:quality.steps||2),");
+ q=once(q,"quality.instruction ? '深度要求：'+safe(quality.instruction,300) : '',",
+      "!quick && quality.instruction ? '深度要求：'+safe(quality.instruction,300) : '',");
+ put(p,q);
+}
 const originalTest = file => cp.execFileSync('git',['show','origin/stamina-battle:'+file],{encoding:'utf8'});
 const testBlock = (source,name) => {
  const at=source.indexOf("test('"+name+"'");
@@ -100,6 +121,22 @@ const replaceBlock=(source,name,block)=>{
  const end=source.indexOf('\ntest(',at+5);
  return source.slice(0,at)+block+'\n\n'+(end<0?'':source.slice(end+1));
 };
+{
+ const p='tests/quiz-generation-tasks.test.cjs';
+ let t=fs.readFileSync(p,'utf8');
+ const oldName='compact raid questions respect learning difficulty';
+ const block=[
+ "test('stamina quick raid is one-step regardless of practice difficulty',()=>{",
+ "  const plan=createQuizTaskPlan({mode:'raid-quick-simple',difficulty:'easy',targetForm:'multi-step'});",
+ "  assert.ok(['direct-application','comparison','error-analysis'].includes(plan.get(0).form));",
+ "  const prompt=quickQuizPrompt({mode:'raid-quick-simple',subject:'數學',difficulty:'hard',quality:{cognitive:3,steps:2}});",
+ "  assert.match(prompt,/難度=easy/);",
+ "  assert.match(prompt,/推理步數=1/);",
+ "});"
+ ].join('\n');
+ t=replaceBlock(t,oldName,block);
+ put(p,t.trimEnd()+'\n');
+}
 {
  const p='tests/answer-gold-rules.test.cjs';
  put(p,fs.readFileSync(p,'utf8').replaceAll('642','788'));
@@ -174,6 +211,9 @@ const featureSection=mainServer.slice(fresh.a,fresh.z);
 assert(featureSection.includes("require('./bank-catalog.cjs').registerBankApi"),'Main bank catalogue not included');
 assert(featureSection.includes("app.post('/api/generate-quiz'"),'Main quiz core not included');
 staminaServer=staminaServer.slice(0,old.a)+featureSection+staminaServer.slice(old.z);
+// Keep stamina's fast raid single-step task assignment; not a learning mode.
+staminaServer=once(staminaServer,"    difficulty = raidTicketMode ? raidTrustedDifficulty",
+ "    difficulty = raidQuickSimple ? 'easy' : raidTicketMode ? raidTrustedDifficulty");
 
 // Add the public main implementation's dependencies, without replacing the
 // original stamina API registrations/weapon routes.
