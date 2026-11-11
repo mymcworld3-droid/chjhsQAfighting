@@ -675,9 +675,9 @@ async function question(){
   pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';
   busy=true;notice('');
   showModal('<h2>正在取得第一題…</h2><p>第一題就緒後立即開放作答，下一題同步在背景準備。</p><button type="button" data-dismiss>返回戰場</button>');
-  // Launch separate API requests on different servers/providers concurrently.
-  // Pre-generated, unreviewed candidates may be staged by the bank worker,
-  // but only validated questions are scored in a live battle.
+  // Start two API requests concurrently; the AI router can use independent
+  // configured model/key capacity. Unreviewed spare drafts remain server-only
+  // and cannot be scored until independent quality approval.
   if(remaining>=2){
     if(existingSecond)pairQuestions[1]=existingSecond;
     else void fetchPairFollowup(e,account,roomId,generation);
