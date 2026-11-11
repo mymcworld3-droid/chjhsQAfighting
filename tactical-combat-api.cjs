@@ -47,6 +47,8 @@ function snapshot(s,uid){
   const out=disarm(copy(s));delete out.pending;delete out.reviews;delete out.receipts;delete out.answerStamina;delete out.questionRefunds;
   out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
   out.question=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pending?.[uid]):null;
+  out.questionFollowup=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pendingFollowup?.[uid]):null;
+  delete out.pendingFollowup;delete out.reviewHistory;
   out.serverNowMs=Date.now();
   out.review=s.reviews?.[uid]||null;
   out.actors=out.actors.map(a=>{delete a.knowledgeScope;return a;});
@@ -215,19 +217,22 @@ async function command(db,uid,input,now=Date.now()){
     if(expired!==raw){const updates=await settle(tx,db,expired);tx.set(db.collection(ROOMS).doc(expired.id),expired);return withProgress(expired,uid,updates[uid]);}
     if(input.type!=='leave'&&Number(input.revision)!==raw.revision&&!(raw.quizRound&&Number.isInteger(input.actionRevision)&&input.actionRevision===raw.actionRevision))throw error('戰場已更新，請重新選擇行動');
     let s=input.type==='leave'?Rules.forfeit(raw,uid,now):Rules.apply(raw,uid,input,now);
-    if(input.type==='end'||input.type==='leave')delete s.pending?.[uid];
+    if(input.type==='end'||input.type==='leave'){delete s.pending?.[uid];delete s.pendingFollowup?.[uid];}
     s.receipts=[...(s.receipts||[]),{uid,id}].slice(-48);
     const updates=await settle(tx,db,s);tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,updates[uid]);
   });
 }
-async function prepareQuestion(db,uid,id,now=Date.now()){
+async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
   if(!roomId(id))throw error('戰場代碼無效',400);
   const s=disarm(exists(await db.collection(ROOMS).doc(id).get())),a=member(s,uid);
+  const batchSlot=requestedSlot===1?1:0;
   Rules.canAnswer(s,uid,now);
-  if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina)throw error('請先使用體力，或結束回合');
-  const scope=pickTrustedRaidKnowledge(a.knowledgeScope,a.answered+1);
-  return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,subject:scope.subject,topic:scope.specificTopic,
-    difficulty:scope.difficulty,level:scope.level,history:(s.questionHistory||[]).slice(-24),pending:publicQuestion(s.pending?.[uid])};
+  if(a.questions+batchSlot>=Rules.LIMITS.questions)throw error('此輪剩餘題數不足');
+  const pending=batchSlot===1?s.pendingFollowup?.[uid]:s.pending?.[uid];
+  if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina&&!pending)throw error('請先使用體力，或結束回合');
+  const scope=pickTrustedRaidKnowledge(a.knowledgeScope,a.answered+batchSlot+1);
+  return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,batchSlot,subject:scope.subject,topic:scope.specificTopic,
+    difficulty:scope.difficulty,level:scope.level,history:[...(s.questionHistory||[]),...(batchSlot&&s.pending?.[uid]?[s.pending[uid].q]:[])].slice(-24),pending:publicQuestion(pending)};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
   const choices=[parsed.correct,...(parsed.wrong||[])].map(v=>String(v||'').trim().slice(0,1000));
@@ -239,8 +244,14 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
     const s=await readRoom(tx,db,expected.roomId,uid),a=member(s,uid);
     if((s.quizRound?s.quizRound!==expected.quizRound:s.turnUid!==uid||s.turn!==expected.turn)||a.answered!==expected.index)throw error('回合已更新，請重新取得題目');
     try{Rules.canAnswer(s,uid,now);}catch(_){throw error('回合已更新，請重新取得題目');}
-    if(s.pending?.[uid])return publicQuestion(s.pending[uid]);
-    s.pending||={};s.pending[uid]=q;
+    if(a.questions+(expected.batchSlot===1?1:0)>=Rules.LIMITS.questions)throw error('本輪剩餘題數不足');
+    const followup=expected.batchSlot===1;
+    const existing=followup?s.pendingFollowup?.[uid]:s.pending?.[uid];
+    if(existing)return publicQuestion(existing);
+    if(followup&&!s.pending?.[uid])throw error('請先準備第一題');
+    if(followup&&s.pending[uid].q===q.q)throw error('兩題內容重複，請重新產生');
+    if(followup){s.pendingFollowup||={};s.pendingFollowup[uid]=q;}
+    else{s.pending||={};s.pending[uid]=q;}
     tx.set(db.collection(ROOMS).doc(s.id),s);return publicQuestion(q);
   });
 }
@@ -256,7 +267,12 @@ async function answer(db,uid,input,now=Date.now()){
     // Keep only the authoritative shortfall, including the cap at answer time.
     // A review may finish after another answer has replaced the visible review.
     s.answerStamina||={};s.answerStamina[q.id]={uid,shortfall:correct?0:Math.max(0,Math.min(Rules.LIMITS.correct,Rules.LIMITS.stamina-before.stamina)-(after.stamina-before.stamina))};
-    delete s.pending[uid];s.questionHistory=[...(s.questionHistory||[]),q.q].slice(-24);
+    s.reviewHistory||={};s.reviewHistory[q.id]={...s.reviews[uid],uid};
+    const oldReviewIds=Object.keys(s.reviewHistory);if(oldReviewIds.length>32)delete s.reviewHistory[oldReviewIds[0]];
+    if(s.pendingFollowup?.[uid])s.pending[uid]=s.pendingFollowup[uid];
+    else delete s.pending[uid];
+    delete s.pendingFollowup?.[uid];
+    s.questionHistory=[...(s.questionHistory||[]),q.q].slice(-24);
     const stats=user.stats||{},patch={'stats.totalAnswered':Rules.num(stats.totalAnswered)+1,
       'stats.totalCorrect':Rules.num(stats.totalCorrect)+(correct?1:0),
       'stats.knowledgePointMapV1':Knowledge.record(stats.knowledgePointMapV1||{},q,correct)};
@@ -294,7 +310,10 @@ async function refundQuestionStamina(db,uid,id,questionId){
       let shortfall=0;
       if(pending?.id===questionId){
         Rules.canAnswer(s,uid);skipped=true;shortfall=Rules.LIMITS.correct;
-        a.questions++;delete s.pending[uid];
+        a.questions++;
+        if(s.pendingFollowup?.[uid])s.pending[uid]=s.pendingFollowup[uid];
+        else delete s.pending[uid];
+        delete s.pendingFollowup?.[uid];
         s.questionHistory=[...(s.questionHistory||[]),pending.q].slice(-24);
       }else if(record?.uid===uid)shortfall=record.shortfall;
       // Backward compatibility for an answer made before the shortfall ledger existed.
@@ -321,7 +340,7 @@ async function reportQuestion(db,uid,input,{review,award}={}){
   if(s.mode!=='pve')throw error('問道試煉才能使用此回報入口',400);
   if(String(input.reason||'').normalize('NFC').replace(/\s+/g,' ').trim().length<6)throw error('請具體描述題目的錯誤，至少輸入 6 個字元。',400);
   if(s.questionRefunds?.[input.questionId]?.uid===uid)return {status:'duplicate',compensated:false,reason:'本題已完成錯題補償。',...await refundQuestionStamina(db,uid,s.id,input.questionId)};
-  const q=s.pending?.[uid]?.id===input.questionId?s.pending[uid]:s.reviews?.[uid]?.questionId===input.questionId?s.reviews[uid]:null;
+  const q=s.pending?.[uid]?.id===input.questionId?s.pending[uid]:s.pendingFollowup?.[uid]?.id===input.questionId?s.pendingFollowup[uid]:s.reviewHistory?.[input.questionId]?.uid===uid?s.reviewHistory[input.questionId]:s.reviews?.[uid]?.questionId===input.questionId?s.reviews[uid]:null;
   if(!q)throw error('題目已變更，請回到目前題目重新回報');
   const trusted=reports.validateReport({question:q.q,options:q.opts,correctIndex:q.answerIndex,explanation:q.explanation,userReason:input.reason});
   if(trusted.error)throw error(trusted.error,400);
