@@ -16,7 +16,7 @@ let attackChoice='attack',wheelIgnoreClickUntil=0;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let autoQuizKey='',quizContext=null;
-let pairQuestions=[],pairChoices=[],pairReviews=[];
+let pairQuestions=[],pairChoices=[],pairReviews=[],pairDisplayIndex=0;
 let pairWhiteboardIndex=-1,pairWhiteboardPointer=null;
 const pairWhiteboardInk=new Map();
 const $=selector=>root?.querySelector(selector);
@@ -73,6 +73,8 @@ function ensure(){
     else if(b.hasAttribute('data-pair-whiteboard-clear'))clearPairWhiteboard();
     else if(b.hasAttribute('data-pair-whiteboard-close'))closePairWhiteboard();
     else if(b.hasAttribute('data-submit-pair'))void submitPair();
+    else if(b.hasAttribute('data-next-pair-question'))showNextPairQuestion();
+    else if(b.hasAttribute('data-finish-pair-review'))finishPairReview();
     else if(b.hasAttribute('data-helper-toggle'))openQuestionTool('helper');
     else if(b.hasAttribute('data-tool-close'))closeQuestionTool();
     else if(b.dataset.helperPreset){$('[data-helper-input]').value=b.dataset.helperPreset;void askHelper();}
@@ -627,7 +629,7 @@ async function execute(){if(selection)await send({type:action,x:selection.x,y:se
 async function question(){
   if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
   const e=epoch,account=uid,remaining=Math.max(1,R.LIMITS.questions-myActor().questions);
-  busy=true;notice('');showModal('<h2>正在準備題目…</h2><p>一次準備本輪兩題，先顯示第一題；作答後自動接續第二題。</p><button type="button" data-dismiss>返回戰場</button>');
+  busy=true;notice('');showModal('<h2>正在準備題目…</h2><p>一次準備本輪兩題，每題點選答案後立即批改；讀完解析再按下一題。</p><button type="button" data-dismiss>返回戰場</button>');
   try{
     const first=state.question||(await api('/api/generate-quiz',{quizMode:'tactical',roomId:state.id,batchSlot:0})).tacticalQuestion;
     if(!valid(e,account))return;
@@ -637,7 +639,7 @@ async function question(){
     if(!valid(e,account))return;
     if(remaining>=2&&!second)throw Error('第二題尚未準備完成，請重試');
     state.questionFollowup=second;
-    pairQuestions=[first,...(second?[second]:[])];pairChoices=pairQuestions.map(()=>-1);pairReviews=[];
+    pairQuestions=[first,...(second?[second]:[])];pairChoices=pairQuestions.map(()=>-1);pairReviews=[];pairDisplayIndex=0;
     if(modalOpen)paintQuestion();
   }catch(err){
     if(valid(e,account))showModal('<h2>題目尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-quiz>重新準備兩題</button><button type="button" data-dismiss>返回戰場</button>');
@@ -756,7 +758,7 @@ function activatePairContext(index){
   const tools=$('.tc-question-tools');if(tools)tools.outerHTML=quizTools();
 }
 function selectPairChoice(index,choice){
-  if(busy||index!==pairReviews.length||!pairQuestions[index]||!Number.isInteger(choice)||choice<0||choice>3)return;
+  if(busy||index!==pairDisplayIndex||index!==pairReviews.length||!pairQuestions[index]||!Number.isInteger(choice)||choice<0||choice>3)return;
   pairChoices[index]=choice;
   // A single option tap commits this answer immediately. submitPair sets
   // busy synchronously, so rapid second taps cannot dispatch another answer.
@@ -857,44 +859,26 @@ function pairWhiteboardMarkup(){
     </div>
   </section>`;
 }
-function previousQuestionExplanation(q,review,index){
-  if(!q||!review)return '';
-  const opts=review.opts||q.opts||[];
-  const selected=opts[review.choice];
-  const correct=opts[review.answerIndex];
-  const selectedText=selected===undefined?'未提供':String.fromCharCode(65+Number(review.choice))+'．'+rich(selected);
-  const correctText=correct===undefined?'未提供':String.fromCharCode(65+Number(review.answerIndex))+'．'+rich(correct);
-  return `<details class="tc-previous-explanation" open>
-    <summary>
-      <span class="tc-previous-result ${review.correct?'is-correct':'is-wrong'}">上一題${review.correct?'答對':'答錯'} · 體力 +${Number(review.gain)||0}</span>
-      <span class="tc-previous-summary-hint">第 ${index+1} 題完整解析（點此收合／展開）</span>
-    </summary>
-    <div class="tc-previous-explanation-body">
-      <div class="tc-previous-question"><strong>上一題題目</strong><div>${rich(review.q||q.q)}</div></div>
-      <div class="tc-previous-answer"><strong>你的答案</strong><span>${selectedText}</span></div>
-      <div class="tc-previous-answer is-answer"><strong>正確答案</strong><span>${correctText}</span></div>
-      <div class="tc-previous-explanation-text"><strong>題解參悟</strong><div>${rich(review.explanation||'本題目前沒有附上詳細解析。')}</div></div>
-      <button type="button" data-question-report-for="${index}" class="tc-previous-report">上一題有錯？回報題目</button>
-    </div>
-  </details>`;
-}
 function pairLayout(reviews=null,questions=pairQuestions){
   const done=Array.isArray(reviews),count=questions.length;
-  const current=pairReviews.length;
-  const previous=!done&&current>0?previousQuestionExplanation(questions[current-1],pairReviews[current-1],current-1):'';
-  // Only one UNANSWERED question is displayed. The preceding answer's complete
-  // explanation remains expanded above it, so automatic progression never
-  // removes feedback before the user has time to read.
+  const current=pairDisplayIndex,review=!done?pairReviews[current]||null:null;
+  // The reviewed question remains on screen, including its actual options,
+  // green/red marking and full explanation, until Next is explicitly clicked.
   const sheets=done?questions.map((q,i)=>questionSheet(q,reviews[i],i)).join(''):
-    (questions[current]?questionSheet(questions[current],null,current):'');
+    (questions[current]?questionSheet(questions[current],review,current):'');
   const progress=done?'已完成 '+count+' / '+count+' 題':'第 '+(current+1)+' / '+count+' 題';
   return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'} · ${progress}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
   <div class="quiz-question-helper-layout helper-collapsed">
     <div class="quiz-main-column tc-pair-column">
-      ${previous}
       <div class="tc-pair-list">${sheets}</div>
       ${done?`<div class="tc-pair-summary" role="status"><i class="fa-solid fa-circle-check"></i> 本次答對 ${reviews.filter(r=>r.correct).length} / ${reviews.length} 題 · 修為與體力已結算</div>
           <div class="flex gap-3 tc-pair-buttons"><button type="button" data-exit class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回宗門</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">返回戰場</button></div>`:
+        review?`<div class="tc-pair-reviewed-actions">
+           <div class="tc-pair-review-status" role="status">第 ${current+1} 題已批改，請先閱讀上方解析。</div>
+           <button type="button" class="btn-cyber-primary tc-pair-next" ${current+1<count?'data-next-pair-question':'data-finish-pair-review'}>
+             ${current+1<count?'下一題':'查看本輪答題結果'}
+           </button>
+         </div>`:
         `<div class="tc-pair-submit">
            <div data-pair-status role="status" aria-live="polite">第 ${current+1} / ${count} 題 · 點選答案後直接批改。</div>
            <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" hidden>重新送出本題</button>
@@ -905,17 +889,29 @@ function pairLayout(reviews=null,questions=pairQuestions){
   ${pairWhiteboardMarkup()}`;
 }
 function paintQuestion(){
-  if(!pairQuestions.length||pairReviews.length>=pairQuestions.length)return;
-  const current=pairReviews.length;
-  setQuizContext(pairQuestions[current]);
+  if(!pairQuestions.length||pairDisplayIndex>=pairQuestions.length)return;
+  const current=pairDisplayIndex;
+  setQuizContext(pairQuestions[current],pairReviews[current]||null);
   showModal(pairLayout(),{quiz:true});
+  updateClock();
+}
+function showNextPairQuestion(){
+  if(busy||!modalOpen||pairDisplayIndex>=pairQuestions.length-1||!pairReviews[pairDisplayIndex])return;
+  pairDisplayIndex++;
+  paintQuestion();
+}
+function finishPairReview(){
+  if(busy||!modalOpen||!pairQuestions.length||pairReviews.length!==pairQuestions.length
+    ||pairDisplayIndex!==pairQuestions.length-1)return;
+  setQuizContext(pairQuestions[0],pairReviews[0]);
+  showModal(pairLayout(pairReviews,pairQuestions),{quiz:true});
   updateClock();
 }
 async function submitPair(){
   // The first question is graded before the next is displayed. No second
   // press of 答題充能 and no double-answer form is required.
   const index=pairReviews.length,q=pairQuestions[index],choice=pairChoices[index];
-  if(busy||!q||!Number.isInteger(choice)||choice<0||choice>3)return;
+  if(busy||index!==pairDisplayIndex||!q||!Number.isInteger(choice)||choice<0||choice>3)return;
   busy=true;
   const e=epoch,account=uid,serial=++op,roomId=state.id;
   const initialScore=Number(localUser().stats?.totalScore)||0;
@@ -949,15 +945,9 @@ async function submitPair(){
     const gain=Number.isFinite(score)?Math.max(0,score-initialScore):0;
     if(cultivationVisual&&gain>0)void cultivationVisual.play({gain,totalScore:score});
     else cultivationVisual?.cancel();
-    if(pairReviews.length<pairQuestions.length){
-      // No intermediate charging button: immediately render question two.
-      paintQuestion();
-    }else{
-      // Complete review retains both answer explanations and report links.
-      setQuizContext(pairQuestions[index],review);
-      showModal(pairLayout(pairReviews,pairQuestions),{quiz:true});
-      updateClock();
-    }
+    // Stay on this SAME question, showing correctness, the marked answers
+    // and explanation. The next page is opened only by the Next button.
+    paintQuestion();
   }catch(err){
     if(!valid(e,account)){cultivationVisual?.cancel();return;}
     const label=$('[data-pair-status]');
@@ -1019,7 +1009,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
