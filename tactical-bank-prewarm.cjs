@@ -24,7 +24,7 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
         const accepted=bank.schedule(target,async()=>{
           let count=0;
           try{
-            let inventory=await bank.find(target,[],()=>false);
+            let inventory=await bank.find(target,[],()=>false,{deadlineMs:90000});
             if(!inventory.ready)throw Error('AI question bank unavailable');
             count=inventory.count;
             const newlyGenerated=[];
@@ -34,7 +34,7 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
               const result=await generate(target,{avoidQuestions:newlyGenerated});
               if(!result?.stored)break;
               newlyGenerated.push(result.q);
-              inventory=await bank.find(target,[],()=>false);
+              inventory=await bank.find(target,[],()=>false,{deadlineMs:90000});
               if(!inventory.ready)break;
               count=inventory.count;
             }
