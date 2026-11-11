@@ -1,0 +1,48 @@
+name: Remove stamina weapons (one-time validated migration)
+on:
+  push:
+    branches: [feature/stamina-remove-weapons-20261111]
+    paths: [.github/workflows/remove-stamina-weapons.yml]
+permissions:
+  contents: write
+jobs:
+  remove-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Remove weapon features and preserve existing player records
+        run: node scripts/remove-stamina-weapons-once.cjs
+      - name: Install and refresh asset versions
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:module-versions
+          npm run check:module-versions
+      - name: Verify changed code and formatting
+        run: |
+          node --check server.js
+          node --check tactical-combat-api.cjs
+          node --check raid-authority.cjs
+          node --check public/cultivation/tactical-rules.js
+          node --check public/cultivation/tactical-combat.js
+          node --check public/cultivation/cultivation-training-v4.js
+          node --check public/cultivation/foundation-training-page.js
+          git diff --check
+      - name: Run all current regression tests
+        run: npm test
+      - name: Commit validated result to staging branch only
+        run: |
+          git rm -f .github/workflows/remove-stamina-weapons.yml scripts/remove-stamina-weapons-once.cjs
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat(stamina): retire weapon features and preserve standard tactical combat'
+          git push origin HEAD:refs/heads/feature/stamina-remove-weapons-20261111
