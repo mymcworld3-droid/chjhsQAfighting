@@ -6,12 +6,13 @@ const index = readFileSync(join(__dirname, '../public/index.html'), 'utf8');
 const home = index.slice(index.indexOf('<div id="page-home"'), index.indexOf('<div id="page-training"'));
 const nav = index.slice(index.indexOf('<nav id="bottom-nav"'), index.indexOf('<div id="toast-container"'));
 
-test('the home practice area owns the original solo and duel entry actions exactly once', () => {
+test('home practice retains solo entry and intentionally omits the duel shortcut', () => {
   assert.match(home, /<section class="home-practice" aria-label="今日修行">/);
   assert.match(home, /id="btn-home-start"[^>]*onclick="startQuizFlow\(\)"/);
-  assert.match(home, /id="btn-home-pvp"[^>]*onclick="startBattleMatchmaking\(\)"/);
+  assert.doesNotMatch(home, /id="btn-home-pvp"|>鬥法論道</);
   assert.doesNotMatch(nav, /xiuxian-quick-actions|btn-home-start|btn-home-pvp/);
-  for (const id of ['btn-home-start','btn-home-pvp']) assert.equal((index.match(new RegExp(`id="${id}"`,'g'))||[]).length,1);
+  assert.equal((index.match(/id="btn-home-start"/g)||[]).length,1);
+  assert.equal((index.match(/id="btn-home-pvp"/g)||[]).length,0);
 });
 
 test('secondary records are available through a native collapsed disclosure with their data bindings intact', () => {
