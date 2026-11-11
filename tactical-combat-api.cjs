@@ -231,6 +231,8 @@ async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
   const pending=batchSlot===1?s.pendingFollowup?.[uid]:s.pending?.[uid];
   if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina&&!pending)throw error('請先使用體力，或結束回合');
   const scope=pickTrustedRaidKnowledge(a.knowledgeScope,a.answered+batchSlot+1);
+  // The scope is computed on the server. A client's batchSlot cannot cause
+  // generation beyond the remaining two-question allowance.
   return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,batchSlot,subject:scope.subject,topic:scope.specificTopic,
     difficulty:scope.difficulty,level:scope.level,history:[...(s.questionHistory||[]),...(batchSlot&&s.pending?.[uid]?[s.pending[uid].q]:[])].slice(-24),pending:publicQuestion(pending)};
 }
@@ -248,8 +250,12 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
     const followup=expected.batchSlot===1;
     const existing=followup?s.pendingFollowup?.[uid]:s.pending?.[uid];
     if(existing)return publicQuestion(existing);
-    if(followup&&!s.pending?.[uid])throw error('請先準備第一題');
-    if(followup&&s.pending[uid].q===q.q)throw error('兩題內容重複，請重新產生');
+    // Slot 1 may be generated and committed while slot 0 is still in flight.
+    // Neither draft is visible to the player until slot 0 has been assigned.
+    // Both slot orders reject exact duplicates and the transaction remains
+    // turn/revision-scoped, so a stale parallel request cannot replace a question.
+    const counterpart=followup?s.pending?.[uid]:s.pendingFollowup?.[uid];
+    if(counterpart&&counterpart.q===q.q)throw error('兩題內容重複，請重新產生');
     if(followup){s.pendingFollowup||={};s.pendingFollowup[uid]=q;}
     else{s.pending||={};s.pending[uid]=q;}
     tx.set(db.collection(ROOMS).doc(s.id),s);return publicQuestion(q);
