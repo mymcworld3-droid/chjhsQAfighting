@@ -302,3 +302,88 @@ body.tactical-open #solo-cultivation-feedback{
   fill:#000!important;
   stroke:none!important;
 }
+
+/* Mobile keyboard: keep the logical game canvas fixed while placing only the
+   active editor over the visual viewport not covered by the keyboard. */
+#tactical-combat.tc-typing-locked {
+  inset:auto!important;
+  top:0!important;
+  left:0!important;
+  width:var(--tc-locked-width,100%)!important;
+  height:var(--tc-locked-height,100%)!important;
+  max-width:none!important;
+  max-height:none!important;
+}
+#tactical-combat.tc-typing-locked,
+#tactical-combat.tc-typing-locked .tc-modal,
+#tactical-combat.tc-typing-locked .tc-quiz,
+#tactical-combat.tc-typing-locked .tc-tool-overlay,
+#tactical-combat.tc-typing-locked .quiz-helper-panel {
+  scroll-behavior:auto!important;
+}
+#tactical-combat.tc-keyboard-visible .tc-quiz {
+  /* The question scroller must not chase the focused textarea. */
+  overflow:hidden!important;
+}
+#tactical-combat.tc-keyboard-visible .tc-quiz .tc-tool-overlay:not([hidden]) {
+  position:fixed!important;
+  inset:auto!important;
+  top:var(--tc-visible-top,0px)!important;
+  left:var(--tc-visible-left,0px)!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:var(--tc-visible-width,100%)!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:var(--tc-visible-height,100%)!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:stretch!important;
+  justify-content:stretch!important;
+  overflow:hidden!important;
+  border-radius:0!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#tactical-combat.tc-keyboard-visible .tc-quiz .tc-helper-overlay .quiz-helper-panel {
+  display:flex!important;
+  flex-direction:column!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-height:100%!important;
+  overflow:hidden!important;
+  border-radius:0!important;
+}
+#tactical-combat.tc-keyboard-visible .tc-quiz .tc-report-overlay .tc-report-box {
+  flex:1 1 auto!important;
+  width:100%!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:100%!important;
+  margin:0!important;
+  border-radius:0!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+  padding:14px max(12px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+}
+#tactical-combat .tc-tool-overlay :is(textarea,input),
+#tactical-combat .tc-join input {
+  /* At least 16px avoids iOS auto-zoom on input focus. */
+  font-size:16px!important;
+  -webkit-text-size-adjust:100%;
+}
+#tactical-combat .tc-helper-overlay .quiz-helper-compose {
+  flex:0 0 auto!important;
+  min-height:0;
+}
+#tactical-combat .tc-helper-overlay .quiz-helper-prompts,
+#tactical-combat .tc-helper-overlay .quiz-helper-header,
+#tactical-combat .tc-helper-overlay .quiz-helper-status {
+  flex-shrink:0;
+}
