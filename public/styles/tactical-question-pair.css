@@ -2,7 +2,8 @@
  * Stamina questions use the free-question layout, not a lookalike tile grid.
  * One #page-quiz question is shown at a time:
  * quote parchment -> A/B/C/D jade options -> instant grading/feedback.
- * The second question automatically follows the first successful submission.
+ * After instant grading, the explanation stays on the same question
+ * until the player explicitly presses 下一題.
  * Keep all selectors scoped to the tactical question dialog.
  */
 #tactical-combat .tc-modal:has(.tc-quiz){
@@ -171,8 +172,8 @@
   background:transparent!important;border:1px solid transparent!important;border-radius:8px!important;
 }
 #tactical-combat .tc-quiz .quiz-footer-actions > button:hover{color:#9dc6ac!important;border-color:#85a58a80!important}
-/* One tap grades the chosen option. The status area reports the result while
-   the next question opens automatically; submit is available only on error. */
+/* One tap grades the chosen option; the next page opens only when the
+   reader explicitly presses 下一題. Submit is only a network-error fallback. */
 #tactical-combat .tc-quiz .tc-pair-submit{
   display:flex;flex-direction:column;gap:12px;
   padding:12px 16px;margin-top:8px;
@@ -182,58 +183,44 @@
 #tactical-combat .tc-quiz .tc-pair-submit [data-pair-status]{
   color:#aab7a6;font-size:13px;text-align:center;
 }
-/* The previously graded answer stays readable while question two is active.
-   The player controls when to collapse the explanation; there is no timer. */
-#tactical-combat .tc-quiz .tc-previous-explanation{
-  margin:0 0 20px;padding:0;
-  border:1px solid #91ae8e9c;
-  border-left:4px solid #b9b174;
-  border-radius:7px;
-  background:linear-gradient(120deg,#203b30,#11251f);
-  color:#f1e9d5;
-}
-#tactical-combat .tc-quiz .tc-previous-explanation>summary{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:14px 16px;cursor:pointer;
-  font-size:13px;line-height:1.5;
+/* Keep the complete correct/wrong feedback within its original question.
+   Only the reviewed screen has a Next button; no floating previous-question
+   explanation appears above the next question. */
+#tactical-combat .tc-quiz .tc-pair-reviewed-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:12px;
+  margin:12px 0 28px;
+  padding:20px 18px;
+  border:1px solid #9bb79b80;
   border-radius:6px;
+  background:linear-gradient(135deg,#213c2e,#10271e);
 }
-#tactical-combat .tc-quiz .tc-previous-explanation>summary:focus-visible{
-  outline:2px solid #e8d39a;outline-offset:-3px;
+#tactical-combat .tc-quiz .tc-pair-review-status{
+  color:#d5e6ce;
+  font-size:13px;
+  text-align:center;
+  line-height:1.7;
 }
-#tactical-combat .tc-quiz .tc-previous-result{
-  flex:0 0 auto;color:#a9ecc0;font-weight:800;
+#tactical-combat .tc-quiz .tc-pair-reviewed-actions .tc-pair-next{
+  display:block;
+  width:100%;
+  min-height:48px!important;
+  border-radius:6px!important;
+  padding:11px 20px!important;
+  background:linear-gradient(120deg,#be9f60,#d6bd82)!important;
+  border:1px solid #eddb9e!important;
+  color:#192a20!important;
+  font:700 15px/1.45 var(--xq-serif,'Noto Serif TC',serif)!important;
+  cursor:pointer;
 }
-#tactical-combat .tc-quiz .tc-previous-result.is-wrong{color:#f2b6a4}
-#tactical-combat .tc-quiz .tc-previous-summary-hint{
-  color:#d5d1b3;text-align:right;font-size:12px;
+#tactical-combat .tc-quiz .tc-pair-reviewed-actions .tc-pair-next:hover{
+  background:linear-gradient(120deg,#d0b276,#f1d39b)!important;
 }
-#tactical-combat .tc-quiz .tc-previous-explanation-body{
-  display:grid;gap:12px;padding:16px;
-  border-top:1px solid #a3b79b48;
-  font-size:13px;line-height:1.85;
-}
-#tactical-combat .tc-quiz .tc-previous-explanation-body :is(.tc-previous-question,.tc-previous-answer,.tc-previous-explanation-text){
-  padding:12px 14px;border:1px solid #7f9b7b55;border-radius:5px;
-  background:#0e211caa;min-width:0;overflow-wrap:anywhere;
-}
-#tactical-combat .tc-quiz .tc-previous-explanation-body strong{
-  display:block;margin-bottom:6px;color:#dbc68f;font-size:12px;
-}
-#tactical-combat .tc-quiz .tc-previous-explanation-body .tc-previous-answer.is-answer{
-  border-color:#8aba8a80;background:#193b2bac;
-}
-#tactical-combat .tc-quiz .tc-previous-explanation-body .tc-previous-answer.is-answer strong{
-  color:#a8e4af;
-}
-#tactical-combat .tc-quiz .tc-previous-explanation-body :is(.tc-previous-question,.tc-previous-answer,.tc-previous-explanation-text) :is(mjx-container,.MathJax,.katex,math){
-  color:inherit!important;
-}
-#tactical-combat .tc-quiz .tc-previous-report{
-  justify-self:start;min-height:36px!important;
-  background:transparent!important;border:1px solid #bdaf7c75!important;
-  border-radius:5px!important;color:#e5d5a9!important;
-  padding:7px 12px!important;font-size:12px;
+#tactical-combat .tc-quiz .tc-pair-reviewed-actions .tc-pair-next:focus-visible{
+  outline:3px solid #d8f0b7;
+  outline-offset:3px;
 }
 #tactical-combat .tc-quiz .tc-pair-submit [data-submit-pair]{
   width:100%;min-height:46px;
