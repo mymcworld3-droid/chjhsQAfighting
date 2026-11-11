@@ -37,7 +37,7 @@ function refreshFromProgress(){
   // rules use the same seed and stage as the server that builds the battle.
   const info=window.getCurrentUserData?.()?.tacticalTrialV1;
   const scene=Ecology.fromProgress(info,Tactical);
-  if(scene)display(scene);
+  if(scene && (!loadedPreview?.stage || scene.stage>loadedPreview.stage))display(scene);
   else if(!loadedPreview)display(Ecology.DEFAULT);
 }
 async function syncTrialState(){
@@ -52,7 +52,7 @@ async function syncTrialState(){
       if(currentUid()!==uid)return;
       // An active server battle outranks the next-stage approximation.
       const scene=Ecology.fromBattle(data.state);
-      if(scene)display(scene);
+      if(scene && (!loadedPreview?.stage || scene.stage>=loadedPreview.stage))display(scene);
     }catch(_){/* Preview must not interrupt navigation or question generation. */}
   })().finally(()=>{query=null;});
   await query;
