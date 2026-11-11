@@ -45,12 +45,17 @@
     stage.scrollTop = 0; stage.scrollLeft = 0;
     if (window.scrollX || window.scrollY) window.scrollTo(0,0);
   }
-  window.QAGameStage = Object.freeze({getState:() => ({...state}),sync});
+  function setKeyboardEditing(active){
+    keyboardEditing=!!active;
+    if(!keyboardEditing)schedule();
+  }
+  // Same-origin child can lock immediately at pointerdown, before a virtual
+  // keyboard fires resize; postMessage below remains a defensive fallback.
+  window.QAGameStage = Object.freeze({getState:() => ({...state}),sync,setKeyboardEditing});
   window.addEventListener('message',event=>{
     if(event.source!==frame.contentWindow||event.origin!==location.origin||
       event.data?.type!=='qa:game-typing'||typeof event.data.active!=='boolean')return;
-    keyboardEditing=event.data.active;
-    if(!keyboardEditing)schedule();
+    setKeyboardEditing(event.data.active);
   });
   sync();
   resetOuterScroll();
