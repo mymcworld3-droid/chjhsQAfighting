@@ -51,10 +51,21 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
           }
         });
         if(!accepted){
-          // The existing bank scheduler may be busy with ordinary study
-          // questions or have reached its hourly quota. Never bypass it.
+          // The shared bank may be busy reviewing normal questions. Retry a
+          // bounded number of times without bypassing its concurrency/quota.
           working.delete(key);
-          cooldown.set(key,now()+30*1000);
+          const tries=Number(entry.retries||0);
+          const delay=30000*(tries+1);
+          cooldown.set(key,now()+delay);
+          if(tries<3){
+            const retry=setTimeout(()=>{
+              if(!queue.has(key)&&!working.has(key)){
+                queue.set(key,{...entry,retries:tries+1});
+                pump();
+              }
+            },delay);
+            retry.unref?.();
+          }
           continue;
         }
       }
