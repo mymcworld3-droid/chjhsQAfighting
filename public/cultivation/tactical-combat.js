@@ -1,4 +1,3 @@
-import './weapon-system-rules.js';
 import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js';
 import {EnemyDemo} from './tactical-enemy-demo.js';
@@ -112,8 +111,8 @@ function paint({preserveModal=false}={}){
   if(!renderer||!$('canvas'))buildGame();
   const me=myActor(),myTurn=myAction();
   $('[data-map-name]').textContent=state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name;
-  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.shield||a.slow||a.weapon&&a.uid===uid?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':'',a.weapon&&a.uid===uid?esc(globalThis.QAWeapons.get(a.weapon.type).label)+' · '+globalThis.QAWeapons.realmFor(a.weapon).name+'境':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
-  $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&(a.intent||a.weapon)).map(a=>`<p><b>${esc(a.name)}</b>${a.weapon?esc(globalThis.QAWeapons.get(a.weapon.type).name)+' · '+globalThis.QAWeapons.realmFor(a.weapon).name+'境':''}${a.intent?'<span>'+esc(a.intent.text)+'</span>':''}</p>`).join('');
+  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
+  $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&a.intent).map(a=>'<p><b>'+esc(a.name)+'</b><span>'+esc(a.intent.text)+'</span></p>').join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>出手 ${me.attacks}/2</small>`;
   $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
@@ -130,7 +129,7 @@ function updateControls(){
   $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
   const basic=R.basicFor(me),directional=['line','cleave'].includes(basic.kind);
-  $('[data-action="attack"]').textContent=`${me.weapon?globalThis.QAWeapons.get(me.weapon.type).label:'攻擊'} · ${basic.cost}`;
+  $('[data-action="attack"]').textContent='攻擊 · '+basic.cost;
   let label=action==='attack'?(directional?'選擇攻擊方向':basic.kind==='ring'?'震擊周圍':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='';
   const d=selection&&(basic.kind==='cleave'||selection.x===me.x||selection.y===me.y)?R.attackDirection(me,selection):null;
   const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
@@ -189,7 +188,7 @@ function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'本關妖獸已盡，前方還有新的地勢與敵人。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}${state.weaponRewards?.[uid]?.chests?' · 兵器匣 ×'+state.weaponRewards[uid].chests+'（尋器頁開啟）':''}</p><button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-exit>返回宗門</button>`);return;
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'本關妖獸已盡，前方還有新的地勢與敵人。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-exit>返回宗門</button>`);return;
   }
   showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
 }

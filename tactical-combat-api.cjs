@@ -1,7 +1,6 @@
 'use strict';
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
-const Weapons=require('./public/cultivation/weapon-system-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
 const Gold=require('./public/cultivation/answer-gold-rules.js');
@@ -20,6 +19,20 @@ const copy=v=>JSON.parse(JSON.stringify(v));
 const exists=s=>s?.exists?s.data():null;
 // Keep the legacy pointer for older clients, but resume each mode independently.
 const currentRoomId=(pointer,mode)=>pointer?.roomIds?.[mode]||pointer?.roomId;
+// Legacy in-progress battles had snapshot weapon multipliers; remove them once.
+function disarm(s){
+  if(!s)return s;
+  for(const a of s.actors||[]){
+    const w=a.weapon;
+    if(w&&!a.bot){
+      const n=Number(w.realm),mult=Number.isFinite(n)?1+.025*Math.max(0,Math.min(9,Math.floor(n))):1;
+      if(mult>1){a.atk=Math.max(1,Math.round(a.atk/mult));if(a.baseAtk)a.baseAtk=Math.max(1,Math.round(a.baseAtk/mult));}
+    }
+    delete a.weapon;
+  }
+  delete s.weaponRewards;
+  return s;
+}
 function member(s,uid){const a=s?.actors?.find(a=>a.uid===uid&&!a.bot);if(!a)throw error('你不是此戰場的參戰玩家',403);return a;}
 function publicQuestion(q){return q?{id:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,...Knowledge.metadata(q,q.subject)}:null;}
 const seenSpecies=pointer=>[...new Set((Array.isArray(pointer?.bestiary?.seen)?pointer.bestiary.seen:[]).filter(id=>Number.isInteger(id)&&!!Rules.MONSTERS[id]))];
@@ -31,7 +44,7 @@ function ensureIntroductions(s,uid,pointer){
 }
 function snapshot(s,uid){
   if(!s)return null;member(s,uid);
-  const out=copy(s);delete out.pending;delete out.reviews;delete out.receipts;delete out.answerStamina;delete out.questionRefunds;
+  const out=disarm(copy(s));delete out.pending;delete out.reviews;delete out.receipts;delete out.answerStamina;delete out.questionRefunds;
   out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
   out.question=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pending?.[uid]):null;
   out.serverNowMs=Date.now();
@@ -47,11 +60,10 @@ function patchedUser(user,patch){
   for(const [key,value]of Object.entries(patch))if(key.startsWith('stats.'))next.stats[key.slice(6)]=value;else next[key]=value;
   return next;
 }
-function playerActor(user,uid,selection,catalog,armory){
+function playerActor(user,uid,selection,catalog){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
   const branch=Rules.savedBranch(user,type).id;
-  const weapon=Weapons.snapshot(armory),multiplier=Weapons.attackMultiplier(weapon);
-  return {...trusted,atk:Math.round(trusted.atk*multiplier),baseAtk:Math.round(trusted.baseAtk*multiplier),enemyScaleAttack:trusted.atk,weapon,
+  return {...trusted,enemyScaleAttack:trusted.atk,
     core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0};
 }
 function trialProgress(raw,seed){
@@ -72,10 +84,9 @@ function rewardFor(s,a,user){
 async function settle(tx,db,s){
   const updates={};if(s.status!=='finished')return updates;
   const people=s.actors.filter(a=>!a.bot&&!s.rewarded.includes(a.uid));
-  const [users,pointers,armories]=await Promise.all([
+  const [users,pointers]=await Promise.all([
     Promise.all(people.map(a=>tx.get(db.collection('users').doc(a.uid)))),
-    Promise.all(people.map(a=>tx.get(db.collection(PLAYERS).doc(a.uid)))),
-    Promise.all(people.map(a=>tx.get(db.collection('weaponArmories').doc(a.uid))))
+    Promise.all(people.map(a=>tx.get(db.collection(PLAYERS).doc(a.uid))))
   ]);
   people.forEach((a,i)=>{
     const u=exists(users[i]);if(!u)return;const reward=rewardFor(s,a,u);
@@ -87,8 +98,6 @@ async function settle(tx,db,s){
       const next={...campaign,stage:Math.min(1000000,campaign.stage+1),best:Math.max(campaign.best||0,campaign.stage)};
       patch.tacticalTrialV1=next;s.nextStage=next.stage;
       tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,trial:next});
-      if(a.correct>0){const earned=Weapons.grantTrial(exists(armories[i]),campaign.stage);
-        if(earned.earned){patch.weaponSystemV1=earned.state;s.weaponRewards||={};s.weaponRewards[a.uid]={chests:earned.earned};tx.set(db.collection('weaponArmories').doc(a.uid),earned.state);}}
     }
     if(reward){patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;patch['stats.totalScore']=Rules.num(u.stats?.totalScore)+reward.cultivation;}
     if(reward&&s.mode==='pvp'){
@@ -102,7 +111,7 @@ async function settle(tx,db,s){
 }
 async function readRoom(tx,db,id,uid){
   if(!roomId(id))throw error('戰場代碼無效',400);
-  const s=exists(await tx.get(db.collection(ROOMS).doc(id)));if(!s)throw error('戰場不存在',404);member(s,uid);return s;
+  const s=disarm(exists(await tx.get(db.collection(ROOMS).doc(id))));if(!s)throw error('戰場不存在',404);member(s,uid);return s;
 }
 async function start(db,uid,selection={},now=Date.now()){
   const mode=selection.mode==='pvp'?'pvp':'pve',map=Rules.mapFor(selection.map).id;
@@ -119,11 +128,11 @@ async function start(db,uid,selection={},now=Date.now()){
   const newId='arena-'+crypto.randomBytes(8).toString('hex'),seed=crypto.randomBytes(16).toString('hex');
   return db.runTransaction(async tx=>{
     const pointerRef=db.collection(PLAYERS).doc(uid),userRef=db.collection('users').doc(uid);
-    const [pointerSnap,userSnap,catalogSnap,armorySnap]=await Promise.all([tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1')),tx.get(db.collection('weaponArmories').doc(uid))]);
+    const [pointerSnap,userSnap,catalogSnap]=await Promise.all([tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
     const pointer=exists(pointerSnap)||{},priorId=currentRoomId(pointer,mode);
     const stored=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
-    const prior=stored?.mode===mode?stored:null;
+    const prior=stored?.mode===mode?disarm(stored):null;
     // Preserve an unfinished legacy trial when first entering PvP (and vice versa).
     const roomIds={...pointer.roomIds,...(stored?{[stored.mode]:stored.id}:{})};
     const campaign=trialProgress(pointer.trial,seed);
@@ -141,7 +150,7 @@ async function start(db,uid,selection={},now=Date.now()){
     const candidate=wanted||candidates.find(s=>!s.actors.some(a=>a.uid===uid)&&(!prior||s.id<prior.id))?.id;
     const target=candidate?exists(await tx.get(db.collection(ROOMS).doc(candidate))):null;
     if(wanted&&(!target||target.mode!=='pvp'||target.status!=='waiting'||target.createdAtMs<now-15*60000))throw error('此戰場已開始或已失效');
-    const a=playerActor(user,uid,selection,exists(catalogSnap)||{},exists(armorySnap));
+    const a=playerActor(user,uid,selection,exists(catalogSnap)||{});
     if(mode==='pvp'&&a.trainingAccessScore<6)throw error('築基期解鎖鬥法論道');
     let s;
     if(target&&target.status==='waiting'&&!target.actors.some(p=>p.uid===uid)&&target.createdAtMs>now-15*60000){
@@ -170,7 +179,7 @@ async function state(db,uid,now=Date.now(),mode=''){
   if(mode&&mode!=='pve'&&mode!=='pvp')throw error('戰場模式無效',400);
   const pointer=exists(await db.collection(PLAYERS).doc(uid).get()),id=mode?currentRoomId(pointer,mode):pointer?.roomId;if(!id)return null;
   // No write for ordinary reads. Only an expired PvP turn requires a transaction.
-  const stored=exists(await db.collection(ROOMS).doc(id).get());if(!stored||mode&&stored.mode!==mode)return null;
+  const stored=disarm(exists(await db.collection(ROOMS).doc(id).get()));if(!stored||mode&&stored.mode!==mode)return null;
   member(stored,uid);
   if(stored.status==='active')ensureIntroductions(stored,uid,pointer);
   if(stored.status==='waiting'&&stored.createdAtMs<now-15*60000)return command(db,uid,{roomId:stored.id,type:'leave',requestId:crypto.randomUUID()},now);
@@ -213,7 +222,7 @@ async function command(db,uid,input,now=Date.now()){
 }
 async function prepareQuestion(db,uid,id,now=Date.now()){
   if(!roomId(id))throw error('戰場代碼無效',400);
-  const s=exists(await db.collection(ROOMS).doc(id).get()),a=member(s,uid);
+  const s=disarm(exists(await db.collection(ROOMS).doc(id).get())),a=member(s,uid);
   Rules.canAnswer(s,uid,now);
   if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina)throw error('請先使用體力，或結束回合');
   const scope=pickTrustedRaidKnowledge(a.knowledgeScope,a.answered+1);

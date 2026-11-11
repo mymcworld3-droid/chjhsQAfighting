@@ -730,13 +730,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
       Object.assign(soulView, {selected:null, choosing:false});
       content.onkeydown = null;
     }
-    if(window.QA_WEAPON_SYSTEM_ENABLED&&['refinery','equipment','contract'].includes(activeTab)){
-      window.mountWeaponForge?.(content,activeTab==='contract'?'acquire':'weapons');return;
-    }
-    if (activeTab === 'contract') {
-      window.mountSoulboundTrainingPage?.(content);
-      return;
-    }
+    if(activeTab==='contract')activeTab='bag';
     if (activeTab === 'refinery') {
       if (!content.querySelector('.cultivation-refinery')) content.innerHTML = refineryShellMarkup();
       window.dispatchEvent(new CustomEvent('xiuxian:refinery-open-request'));
@@ -809,7 +803,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           <button type="button" class="training-subtab-v3 active" data-training-tab="core" aria-selected="true"><i class="fa-solid fa-circle-dot"></i><span>金丹</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="nascent-soul" aria-selected="false" disabled><i class="fa-solid fa-child-reaching"></i><span>元嬰</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="refinery" aria-selected="false"><i class="fa-solid fa-hammer"></i><span>煉器</span></button>
-          <button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>尋器</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>
           <button type="button" class="training-subtab-v3" data-training-tab="bag" aria-selected="false"><i class="fa-solid fa-box-open"></i><span>背包</span></button>
         </div>
@@ -822,6 +815,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     delete page.dataset.foundationTraining;
     page.classList.remove('foundation-training-page');
     page.classList.add('training-page', 'training-page-v3');
+    page.querySelectorAll('[data-training-tab="contract"]').forEach(button=>button.remove());
     if (alreadyHydrated) {
       const soulTab = page.querySelector('[data-training-tab="nascent-soul"]');
       if (soulTab) { soulTab.hidden = false; soulTab.disabled = !nascentUnlocked(); }
@@ -856,10 +850,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
         '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
     }
 
-    if (!tabs.querySelector('[data-training-tab="contract"]')) {
-      tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>尋器</span></button>');
-    }
-
     if (page.dataset.trainingV4Bound !== '1') {
       page.dataset.trainingV4Bound = '1';
       page.querySelectorAll('[data-training-tab]').forEach((button) => {
@@ -872,7 +862,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
           const fromStatus = !page.querySelector('[data-training-tab].active');
           const direction = fromStatus || tabOrder.indexOf(requested) < tabOrder.indexOf(activeTab) ? -1 : 1;
           const finishTransition = requested !== activeTab || fromStatus ? window.beginSceneTransition?.(content, content, theme, 'training-tab', true, direction) : null;
-          activeTab = ['bag', 'refinery', 'equipment', 'contract'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
+          activeTab = ['bag','refinery','equipment'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';
           page.querySelectorAll('[data-training-tab]').forEach((tab) => {
             const selected = tab.dataset.trainingTab === activeTab;
             tab.classList.toggle('active', selected);
@@ -1261,7 +1251,6 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
 
   function boot() {
     window.matchMedia('(orientation: portrait)').addEventListener('change', syncSoulDetailLayout);
-    window.addEventListener('xiuxian:contract-page-opened', () => { activeTab = 'contract'; });
     loadStyle();
     restoreRemoteTraining();
     syncUnlock();
