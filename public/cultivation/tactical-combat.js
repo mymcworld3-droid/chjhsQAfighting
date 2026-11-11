@@ -14,6 +14,8 @@ let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let autoQuizKey='',quizContext=null;
 let pairQuestions=[],pairChoices=[],pairReviews=[];
+let pairWhiteboardIndex=-1,pairWhiteboardPointer=null;
+const pairWhiteboardInk=new Map();
 const $=selector=>root?.querySelector(selector);
 const myActor=()=>state?.actors.find(a=>a.uid===uid);
 const myAction=()=>state?.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
@@ -61,6 +63,9 @@ function ensure(){
     else if(b.hasAttribute('data-continue')){hideModal();paint();if(state.quizRound&&canQuestion())void question();}
     else if(b.hasAttribute('data-question-helper-for')){activatePairContext(Number(b.dataset.questionHelperFor));openQuestionTool('helper');}
     else if(b.hasAttribute('data-question-report-for')){activatePairContext(Number(b.dataset.questionReportFor));openQuestionTool('report');}
+    else if(b.hasAttribute('data-pair-whiteboard-for'))openPairWhiteboard(Number(b.dataset.pairWhiteboardFor));
+    else if(b.hasAttribute('data-pair-whiteboard-clear'))clearPairWhiteboard();
+    else if(b.hasAttribute('data-pair-whiteboard-close'))closePairWhiteboard();
     else if(b.hasAttribute('data-submit-pair'))void submitPair();
     else if(b.hasAttribute('data-helper-toggle'))openQuestionTool('helper');
     else if(b.hasAttribute('data-tool-close'))closeQuestionTool();
@@ -74,8 +79,12 @@ function ensure(){
     else if(b.dataset.choice!==undefined)selectPairChoice(0,Number(b.dataset.choice));
     else if(b.hasAttribute('data-copy'))void navigator.clipboard?.writeText(state.id.replace('arena-','')).then(()=>notice('戰場代碼已複製')).catch(()=>notice('請長按上方代碼複製'));
   });
+  root.addEventListener('pointerdown',pairWhiteboardPointerDown);
+  root.addEventListener('pointermove',pairWhiteboardPointerMove);
+  root.addEventListener('pointerup',pairWhiteboardPointerUp);
+  root.addEventListener('pointercancel',pairWhiteboardPointerUp);
   root.addEventListener('keydown',event=>{
-    if(event.key==='Escape'){event.preventDefault();if($('[data-question-tool]:not([hidden])')){closeQuestionTool();return;}$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
+    if(event.key==='Escape'){event.preventDefault();if($('[data-pair-whiteboard-panel]:not(.hidden)')){closePairWhiteboard();return;}if($('[data-question-tool]:not([hidden])')){closeQuestionTool();return;}$('[data-intro-ack]')?close():modalOpen?hideModal():close();}
     if(event.key==='Tab'){
       const scope=$('[data-question-tool]:not([hidden])')||(modalOpen?$('[data-modal]'):root),focusable=[...scope.querySelectorAll('button:not(:disabled),input,textarea,canvas[tabindex],summary')].filter(el=>el.getClientRects().length);
       if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);
@@ -269,7 +278,7 @@ function showModal(html,{quiz=false,encounter=false}={}){
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
   $('[data-modal] .tc-dialog').focus();window.quizMathTypeset?.($('[data-modal]'));
 }
-function hideModal(){if(!root)return;introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
+function hideModal(){if(!root)return;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
 function showEnemyIntro(error=''){
   const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length;
   showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>第 ${p.unlockStage} 關起登場</p></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
@@ -391,8 +400,9 @@ function questionSheet(q,review=null,index=0){
       </div>
     </div>`:''}
     <div class="mt-8 flex gap-3 w-full quiz-footer-actions tc-question-footer">
+      <button type="button" data-dismiss class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i><span>返回戰場</span></button>
       <button type="button" data-question-report-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group"><i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i><span>題目有錯</span></button>
-      <button type="button" data-question-helper-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-comments"></i><span>問道助手</span></button>
+      <button type="button" data-question-helper-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-comments group-hover:-translate-y-0.5 transition-transform"></i><span>問道助手</span></button>
     </div>
   </article>`;
 }
@@ -480,6 +490,74 @@ function selectPairChoice(index,choice){
   const ready=pairChoices.length===pairQuestions.length&&pairChoices.every(value=>value>=0);
   const button=$('[data-submit-pair]');if(button)button.disabled=!ready;
   const status=$('[data-pair-status]');if(status)status.textContent=ready?'兩題答案已選好，可以一次送出。':`已選 ${pairChoices.filter(value=>value>=0).length} / ${pairQuestions.length} 題`;
+}
+
+function pairWhiteboardCanvas(){
+  return $('[data-pair-whiteboard-canvas]');
+}
+function redrawPairWhiteboard(){
+  const canvas=pairWhiteboardCanvas();if(!canvas||pairWhiteboardIndex<0)return;
+  const rect=canvas.getBoundingClientRect();
+  if(!rect.width||!rect.height)return;
+  const ratio=Math.min(2,window.devicePixelRatio||1),width=rect.width,height=rect.height;
+  canvas.width=Math.max(1,Math.round(width*ratio));
+  canvas.height=Math.max(1,Math.round(height*ratio));
+  const ctx=canvas.getContext('2d');if(!ctx)return;
+  ctx.setTransform(ratio,0,0,ratio,0,0);
+  ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#294934';ctx.fillStyle='#294934';ctx.lineWidth=2.8;
+  for(const line of pairWhiteboardInk.get(pairQuestions[pairWhiteboardIndex]?.id)||[]){
+    if(!line.length)continue;
+    ctx.beginPath();ctx.moveTo(line[0].x*width,line[0].y*height);
+    for(const point of line.slice(1))ctx.lineTo(point.x*width,point.y*height);
+    if(line.length===1){ctx.arc(line[0].x*width,line[0].y*height,1.5,0,Math.PI*2);ctx.fill();}
+    else ctx.stroke();
+  }
+}
+function openPairWhiteboard(index){
+  if(!Number.isInteger(index)||index<0||index>=pairQuestions.length)return;
+  const panel=$('[data-pair-whiteboard-panel]');
+  if(!panel)return;
+  pairWhiteboardIndex=index;panel.classList.remove('hidden');
+  const stem=$('[data-question-text="'+index+'"]');
+  const target=$('[data-pair-whiteboard-question]');
+  if(target){target.innerHTML=stem?.innerHTML||rich(pairQuestions[index].q);void window.quizMathTypeset?.(target);}
+  requestAnimationFrame(()=>{redrawPairWhiteboard();panel.querySelector('[data-pair-whiteboard-close]')?.focus({preventScroll:true});});
+}
+function closePairWhiteboard(){
+  const panel=$('[data-pair-whiteboard-panel]');
+  panel?.classList.add('hidden');pairWhiteboardPointer=null;pairWhiteboardIndex=-1;
+}
+function clearPairWhiteboard(){
+  if(pairWhiteboardIndex<0)return;
+  pairWhiteboardInk.delete(pairQuestions[pairWhiteboardIndex]?.id);redrawPairWhiteboard();
+}
+function pairWhiteboardPoint(canvas,event){
+  const rect=canvas.getBoundingClientRect();
+  return {x:Math.max(0,Math.min(1,(event.clientX-rect.left)/Math.max(1,rect.width))),
+          y:Math.max(0,Math.min(1,(event.clientY-rect.top)/Math.max(1,rect.height)))};
+}
+function pairWhiteboardPointerDown(event){
+  const canvas=event.target.closest?.('[data-pair-whiteboard-canvas]');
+  if(!canvas||pairWhiteboardIndex<0)return;
+  event.preventDefault();canvas.setPointerCapture(event.pointerId);
+  const id=pairQuestions[pairWhiteboardIndex]?.id;
+  if(!id)return;
+  const strokes=pairWhiteboardInk.get(id)||[];
+  strokes.push([pairWhiteboardPoint(canvas,event)]);
+  pairWhiteboardInk.set(id,strokes);
+  pairWhiteboardPointer={id,pointerId:event.pointerId};
+  redrawPairWhiteboard();
+}
+function pairWhiteboardPointerMove(event){
+  const current=pairWhiteboardPointer,canvas=pairWhiteboardCanvas();
+  if(!current||current.pointerId!==event.pointerId||!canvas)return;
+  event.preventDefault();
+  pairWhiteboardInk.get(current.id)?.at(-1)?.push(pairWhiteboardPoint(canvas,event));
+  redrawPairWhiteboard();
+}
+function pairWhiteboardPointerUp(event){
+  if(pairWhiteboardPointer?.pointerId!==event.pointerId)return;
+  pairWhiteboardPointer=null;
 }
 function pairWhiteboardMarkup(){
   return `<section class="quiz-whiteboard-panel hidden tc-pair-whiteboard" data-pair-whiteboard-panel role="dialog" aria-modal="true" aria-label="計算白板">
@@ -640,7 +718,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
