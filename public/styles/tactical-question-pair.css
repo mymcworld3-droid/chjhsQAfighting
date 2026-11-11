@@ -1,107 +1,233 @@
-/* 體力分支雙題共用自由問道的深青綠、宣紙題卷與玉色選項風格。
-   僅套用於戰場答題，不改動中央地圖與左右四分之一圓操控。 */
-#tactical-combat .tc-modal:has(.tc-quiz) {
+/*
+ * Stamina questions use the free-question layout, not a lookalike tile grid.
+ * The original #page-quiz structure is repeated vertically for two questions:
+ * quote parchment -> A/B/C/D jade options -> explanation -> three footer actions.
+ * Keep all selectors scoped to the tactical question dialog.
+ */
+#tactical-combat .tc-modal:has(.tc-quiz){
+  --ui-font:var(--xq-serif,'Noto Serif TC',serif);
   --xq-ink:#0d211f;--xq-surface:#142d29;--xq-paper:#f1e9d5;
-  --xq-gold:#d4b879;--xq-jade:#9dc6ac;--xq-muted:#aab7a6;
+  --xq-jade:#9dc6ac;--xq-gold:#d4b879;--xq-muted:#aab7a6;
   --review-muted:#aab7a6;--review-paper:#f1e9d5;
-  --quiet-line:rgba(199,181,133,.25);--glass-bg:rgba(19,42,37,.94);
-  background:linear-gradient(110deg,rgba(8,26,23,.96),rgba(8,26,23,.99))!important;
-  padding:12px;place-items:stretch center;
+  --xq-line:rgba(199,181,133,.25);--quiet-line:rgba(199,181,133,.25);
+  --glass-bg:rgba(19,42,37,.94);
+  background:linear-gradient(90deg,rgba(8,26,23,.93),rgba(8,26,23,.97)),var(--xq-scene-art) center/cover!important;
+  place-items:start center;
+  padding:0!important;
 }
-#tactical-combat .tc-quiz {
-  color:#eee8d5;
-  width:min(1360px,100%)!important;
+#tactical-combat .tc-quiz{
+  width:min(820px,100%)!important;
   max-height:100%;min-height:0;
-  overflow:auto;overscroll-behavior:contain;
-  padding:10px 14px 20px!important;
-  display:flex;flex-direction:column;
+  padding:16px 16px 24px!important;
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+  gap:0!important;color:#f1e9d5;
+  background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
   font-family:var(--xq-serif,'Noto Serif TC',serif);
 }
-#tactical-combat .tc-quiz .tc-dialog-heading{position:sticky;top:0;z-index:4;background:#0d211ff2;padding:5px 4px 12px}
-#tactical-combat .tc-quiz .tc-dialog-heading small{color:#d4b879;line-height:1.5}
-#tactical-combat .tc-quiz .tc-dialog-heading button{color:#f1e9d5!important}
-#tactical-combat .tc-quiz .tc-pair-column{min-width:0;display:flex;flex-direction:column;gap:14px}
-#tactical-combat .tc-pair-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#f1e9d5;flex-wrap:wrap}
-#tactical-combat .tc-pair-heading strong{font-size:18px;letter-spacing:.06em}
-#tactical-combat .tc-pair-heading span{font-size:12px;color:#aab7a6}
-#tactical-combat .tc-pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:18px}
-#tactical-combat .tc-pair-entry{display:flex;flex-direction:column;gap:12px;min-width:0}
-#tactical-combat .tc-pair-entry .tc-question-sheet.glass-panel{
-  position:relative;margin:0;min-height:132px;
+#tactical-combat .tc-quiz .tc-dialog-heading{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 0 12px;margin-bottom:4px;gap:12px;
+  color:#aab7a6;
+}
+#tactical-combat .tc-quiz .tc-dialog-heading small{font-size:11px;color:#aab7a6}
+#tactical-combat .tc-quiz .tc-dialog-heading button{min-height:35px!important;color:#f1e9d5!important}
+#tactical-combat .tc-quiz .quiz-question-helper-layout{display:block;margin:0 0 1rem;width:100%}
+#tactical-combat .tc-quiz .quiz-main-column{display:block;min-width:0;width:100%}
+#tactical-combat .tc-quiz .tc-pair-list{display:flex;flex-direction:column;gap:0}
+#tactical-combat .tc-quiz .tc-pair-entry{display:block;min-width:0;margin-bottom:34px}
+#tactical-combat .tc-quiz .tc-pair-entry + .tc-pair-entry{
+  padding-top:26px;border-top:1px solid rgba(199,181,133,.25);
+}
+/* Same question parchment geometry as #page-quiz .quiz-main-column > .glass-panel:first-child */
+#tactical-combat .tc-quiz .tc-pair-entry > .tc-question-sheet.glass-panel{
+  position:relative;display:block;min-height:0;
+  margin:0 0 16px!important;
   background:linear-gradient(110deg,#efe7cf,#e0d6b9)!important;
   border:1px solid #c5b480!important;border-left:5px solid #8c7750!important;
   border-radius:4px!important;
-  padding:46px 20px 15px!important;
+  padding:60px 32px 30px!important;
   color:#25392e!important;
   box-shadow:0 14px 35px #04151140,inset 0 0 35px #947b4620!important;
 }
-#tactical-combat .tc-pair-entry .tc-question-number{position:absolute;top:12px;left:16px;font-size:12px;color:#64573a;font-weight:700}
-#tactical-combat .tc-pair-entry .quiz-card-tools{top:10px;right:12px;max-width:62%}
-#tactical-combat .tc-pair-entry .tc-question-badge{
-  color:#64573a!important;background:#c9b98e33!important;border-color:#96855760!important;
-  max-width:100%;font-size:11px;overflow-wrap:anywhere;
+#tactical-combat .tc-quiz .tc-question-sheet .quiz-card-tools{
+  position:absolute;top:12px;right:14px;z-index:2;
+  display:flex;align-items:center;gap:8px;
+  max-width:calc(100% - 28px);
 }
-#tactical-combat .tc-pair-entry .tc-question,
-#tactical-combat .tc-pair-entry .tc-question *{
+#tactical-combat .tc-quiz .tc-question-badge{
+  padding:4px 8px!important;font-size:11px!important;
+  line-height:1.5;color:#64573a!important;
+  background:#c9b98e33!important;border:1px solid #96855760!important;
+  border-radius:4px;white-space:normal;overflow-wrap:anywhere;
+}
+#tactical-combat .tc-quiz .quiz-whiteboard-toggle{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:34px!important;white-space:nowrap;
+  padding:5px 10px!important;
+  color:#f1e9d5!important;background:#19352c!important;
+  border:1px solid #9aab825c!important;border-radius:4px!important;
+}
+#tactical-combat .tc-quiz .tc-question-sheet > .text-6xl{
+  display:block;color:rgba(100,145,117,.18)!important;pointer-events:none;
+}
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question,
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question *{
   color:#25392e!important;text-shadow:none!important;
 }
-#tactical-combat .tc-pair-entry .tc-question{font-size:18px!important;line-height:1.9!important;font-weight:500!important;letter-spacing:.02em}
-#tactical-combat .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
-#tactical-combat .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) *{color:inherit!important}
-#tactical-combat .tc-pair-card-tools{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;padding-top:9px;border-top:1px solid #96855755}
-#tactical-combat .tc-pair-card-tools button{font-size:11px;min-height:32px!important;padding:5px 10px!important;border:1px solid #86988377!important;border-radius:4px!important;background:#19352c!important;color:#f1e9d5!important}
-#tactical-combat .tc-pair-entry .tc-options{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-#tactical-combat .tc-pair-entry .tc-options>button{
-  min-width:0;min-height:60px;margin:0;padding:12px 14px;
-  display:flex;gap:12px;align-items:center;text-align:left;line-height:1.65;
-  background:#173128!important;color:#eee8d5!important;
-  border:1px solid #b4ae8650!important;border-radius:5px!important;box-shadow:none!important;
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question{
+  margin:0!important;font-size:19px!important;line-height:1.95!important;
+  font-weight:500!important;letter-spacing:.02em;
+  overflow-wrap:anywhere;position:relative;z-index:1;
 }
-#tactical-combat .tc-pair-entry .tc-options>button:not(:disabled):hover{background:#254534!important;border-color:#d1bd7d!important}
-#tactical-combat .tc-pair-entry .tc-options>button.is-picked{
-  background:#27553d!important;border-color:#f3d18c!important;box-shadow:inset 0 0 0 1px #f3d18c,0 0 15px #a8c89a3b!important;
+/* Match free-quiz formula contrast inside all four visual regions. */
+#tactical-combat .tc-quiz .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
+#tactical-combat .tc-quiz .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) *{
+  color:inherit!important;
 }
-#tactical-combat .tc-pair-entry .tc-options>button>span:first-child{
-  flex:0 0 30px;min-height:32px;display:grid;place-items:center;
-  color:#decb98!important;background:#a5b58a12;border:1px solid #a7ac7750;border-radius:3px;font-size:13px;
+/* Identical single-column four-option layout, spacing and pill lettering. */
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  gap:12px!important;margin:0!important;padding:0!important;
 }
-#tactical-combat .tc-pair-entry .tc-options>.bg-green-600{background:#285a40!important;border-color:#a8d1a4!important;opacity:1!important}
-#tactical-combat .tc-pair-entry .tc-options>.bg-red-600{background:#6b3830!important;border-color:#d9a492!important;opacity:1!important}
-#tactical-combat .tc-pair-entry .tc-options>button:disabled{opacity:1}
-#tactical-combat .tc-pair-entry .tc-feedback.glass-panel{
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > button{
+  display:flex;align-items:center;gap:12px;text-align:left;
+  width:100%;min-width:0;min-height:68px!important;
+  margin:0!important;padding:16px 20px!important;
+  font-size:14px;line-height:1.65;
+  color:#eee8d5!important;
+  background:#173128!important;border:1px solid #b4ae8650!important;
+  border-radius:5px!important;box-shadow:none!important;
+  transition:background .18s ease,border-color .18s ease!important;
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > button:not(:disabled):hover{
+  background:#254534!important;border-color:#d1bd7d!important;
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > button:disabled{opacity:1!important}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > button.is-picked{
+  background:#254c39!important;border-color:#d1bd7d!important;
+  box-shadow:inset 0 0 0 1px #d1bd7d!important;
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > button > span:first-child{
+  display:grid;place-items:center;
+  width:30px!important;height:32px!important;flex:0 0 30px;
+  background:#a5b58a12!important;color:#decb98!important;
+  border:1px solid #a7ac7750!important;border-radius:3px!important;
+  font-size:13px!important;
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > button .quiz-rich-option{
+  flex:1;min-width:0;overflow-wrap:anywhere;
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > .bg-green-600{
+  background:#285a40!important;border-color:#a8d1a4!important;
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options > .bg-red-600{
+  background:#6b3830!important;border-color:#d9a492!important;
+}
+/* Same feedback surface and text hierarchy as #page-quiz #feedback-section. */
+#tactical-combat .tc-quiz .tc-feedback-section.glass-panel{
   background:linear-gradient(135deg,#1f372d,#112520)!important;
   border:1px solid #a6b78d70!important;border-radius:6px!important;
-  padding:14px!important;display:flex;gap:10px;min-width:0;
+  padding:20px!important;margin-top:24px!important;color:#f1e9d5;
 }
-#tactical-combat .tc-pair-entry .tc-feedback-title.tc-correct{color:#b2e0b7!important}
-#tactical-combat .tc-pair-entry .tc-feedback-title.tc-wrong{color:#efb496!important}
-#tactical-combat .tc-pair-entry .tc-feedback-text{color:#eee8d5;line-height:1.8}
-#tactical-combat .tc-pair-footer{
-  position:sticky;bottom:0;z-index:3;display:flex;align-items:center;
-  justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 12px;
-  border:1px solid #9aaf8873;background:#102b24f5;box-shadow:0 -4px 28px #081811a8;
+#tactical-combat .tc-quiz .tc-feedback-section .tc-correct{color:#9fd4a8!important}
+#tactical-combat .tc-quiz .tc-feedback-section .tc-wrong{color:#efb496!important}
+#tactical-combat .tc-quiz .tc-feedback-section .tc-feedback-text{color:#eee8d5;line-height:1.8}
+#tactical-combat .tc-quiz .quiz-footer-actions{
+  margin-top:28px!important;display:flex;gap:12px;width:100%;
 }
-#tactical-combat .tc-pair-footer span{color:#d9d4b7;font-size:13px}
-#tactical-combat .tc-pair-footer [data-submit-pair],
-#tactical-combat .tc-pair-footer [data-continue]{min-width:180px;min-height:46px;border-radius:5px;background:#2a5942!important;color:#fff4df!important;border:1px solid #a4c5a0!important}
-#tactical-combat .tc-pair-footer button:disabled{opacity:.45;cursor:not-allowed}
-#tactical-combat .tc-pair-complete{font-size:13px;color:#b3e3b7}
-#tactical-combat .tc-pair-column>.tc-question-tools{border:0;padding:0}
-#tactical-combat .tc-pair-column>.tc-question-tools>.tc-tools-buttons{display:none}
-#tactical-combat .tc-quiz .tc-tool-overlay{z-index:8}
-@media(max-width:850px){
-  #tactical-combat .tc-pair-grid{grid-template-columns:1fr;gap:22px}
-  #tactical-combat .tc-quiz{width:min(820px,100%)!important;padding:6px 8px 16px!important}
-  #tactical-combat .tc-pair-entry .tc-question{font-size:17px!important}
-  #tactical-combat .tc-pair-entry .tc-options>button{min-height:56px}
-  #tactical-combat .tc-pair-footer{padding:10px}
+#tactical-combat .tc-quiz .quiz-footer-actions > button{
+  flex:1;min-width:0;min-height:44px!important;
+  margin:0;padding:12px!important;
+  font-size:12px;color:#aab7a6!important;
+  white-space:normal;line-height:1.6;
+  background:transparent!important;border:1px solid transparent!important;border-radius:8px!important;
 }
-@media(max-width:420px){
-  #tactical-combat .tc-modal:has(.tc-quiz){padding:6px}
-  #tactical-combat .tc-pair-footer [data-submit-pair],#tactical-combat .tc-pair-footer [data-continue]{flex:1;min-width:0}
-  #tactical-combat .tc-pair-heading strong{font-size:16px}
-  #tactical-combat .tc-pair-entry .tc-question-sheet.glass-panel{padding:42px 14px 14px!important}
+#tactical-combat .tc-quiz .quiz-footer-actions > button:hover{color:#9dc6ac!important;border-color:#85a58a80!important}
+/* One submit action after the two complete free-quiz question blocks. */
+#tactical-combat .tc-quiz .tc-pair-submit{
+  display:flex;flex-direction:column;gap:12px;
+  padding:20px;margin-top:8px;
+  background:linear-gradient(135deg,#1f372d,#112520);
+  border:1px solid #a6b78d70;border-radius:6px;
+}
+#tactical-combat .tc-quiz .tc-pair-submit [data-pair-status]{
+  color:#aab7a6;font-size:13px;text-align:center;
+}
+#tactical-combat .tc-quiz .tc-pair-submit [data-submit-pair]{
+  width:100%;min-height:46px;
+}
+#tactical-combat .tc-quiz .tc-pair-buttons{
+  display:flex;gap:12px;margin-top:14px;
+}
+#tactical-combat .tc-quiz .tc-pair-buttons > button{
+  background:#19352c!important;border:1px solid #85a58a80!important;color:#f1e9d5!important;
+  min-height:44px!important;
+}
+#tactical-combat .tc-quiz .tc-pair-summary{
+  padding:12px 16px;text-align:center;font-size:13px;color:#d4e6c4;
+  border:1px solid #a6b78d70;border-radius:6px;background:#15362a;
+}
+/* Main free-quiz collapsed helper placement: right-edge tab, one helper for this question session. */
+#tactical-combat .tc-quiz .tc-quiz-tools-shell{position:static;min-height:0;padding:0}
+#tactical-combat .tc-quiz .tc-question-tools{border:0;padding:0;display:block}
+#tactical-combat .tc-quiz .tc-question-tools>.tc-tools-buttons{display:contents}
+#tactical-combat .tc-quiz .tc-question-tools .quiz-helper-launcher{
+  position:fixed;top:42%;right:0;z-index:12;
+  display:inline-flex!important;align-items:center;justify-content:center;gap:8px;
+  width:auto;min-width:62px;height:52px;min-height:52px!important;
+  padding:0 12px!important;
+  border-radius:999px 4px 4px 999px!important;
+  border:1px solid #a7ac7770!important;
+  color:#f0ddb0!important;background:linear-gradient(135deg,#314c3d,#182a22)!important;
+  box-shadow:0 10px 28px #02080680!important;
+  font-size:12px;font-weight:800;
+}
+#tactical-combat .tc-quiz .tc-question-tools .quiz-helper-launcher .quiz-helper-launcher-label{display:inline}
+#tactical-combat .tc-quiz .tc-tool-overlay{z-index:32}
+/* When opened, main quiz places the helper on the right on desktop and fullscreen on mobile. */
+@media(min-width:1100px){
+  #tactical-combat .tc-quiz .tc-helper-overlay{
+    inset:88px max(16px,calc((100vw - 1220px)/2 + 16px)) auto auto;
+    width:clamp(310px,29vw,350px);height:min(680px,calc(100dvh - 116px));
+    min-height:420px;padding:0;background:transparent;backdrop-filter:none;overflow:visible;
+  }
+  #tactical-combat .tc-quiz .tc-helper-overlay .quiz-helper-panel{
+    border:1px solid #8e784d;border-radius:12px;
+    box-shadow:0 14px 34px #02080670;
+  }
+}
+@media(max-width:1099px){
+  #tactical-combat .tc-quiz .tc-helper-overlay{inset:0;width:100vw;height:100dvh;background:#101c18}
+  #tactical-combat .tc-quiz .tc-helper-overlay .quiz-helper-panel{border-radius:0}
+}
+/* Same fullscreen whiteboard DOM and handwritten canvas as free-quiz. */
+#tactical-combat .tc-quiz .tc-pair-whiteboard{
+  position:fixed!important;inset:0!important;z-index:55!important;
+  width:100%;height:100%;padding:0!important;background:#132a23!important;
+}
+#tactical-combat .tc-quiz .tc-pair-whiteboard.hidden{display:none!important}
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-dialog{
+  position:absolute;inset:0;width:100%;height:100%;
+  display:flex;flex-direction:column;background:#132a23;
+}
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-stage{flex:1;min-height:0}
+#tactical-combat .tc-quiz [data-pair-whiteboard-canvas]{
+  display:block;width:100%;height:100%;max-width:100%;
+  touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair;
+}
+#tactical-combat .tc-quiz .quiz-whiteboard-action{
+  background:#203b30e8!important;color:#fff3cf!important;
+  border:1px solid #b9a87055!important;
+}
+@media(max-width:600px){
+  #tactical-combat .tc-quiz{padding:12px 12px 20px!important}
+  #tactical-combat .tc-quiz .tc-pair-entry>.tc-question-sheet.glass-panel{padding:58px 20px 24px!important}
+  #tactical-combat .tc-quiz .tc-question-sheet .tc-question{font-size:17px!important}
+  #tactical-combat .tc-quiz .tc-options>button{padding:14px 16px!important}
+  #tactical-combat .tc-quiz .quiz-footer-actions{gap:6px!important}
+  #tactical-combat .tc-quiz .quiz-footer-actions>button{font-size:11px;padding:9px 5px!important}
+  #tactical-combat .tc-quiz .tc-pair-entry+.tc-pair-entry{padding-top:20px}
 }
 @media(prefers-reduced-motion:reduce){
-  #tactical-combat .tc-pair-entry .tc-options>button{transition:none!important}
+  #tactical-combat .tc-quiz .tc-options>button{transition:none!important}
 }
