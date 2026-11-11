@@ -1,5 +1,5 @@
 name: One-time restore learning features to stamina (staging)
-# Validate full shared learning source and consistent test formatting.
+# Check shared learning sources without changing stamina quick raid policy.
 on:
   push:
     branches:
