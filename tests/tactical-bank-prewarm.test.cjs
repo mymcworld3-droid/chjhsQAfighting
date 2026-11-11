@@ -44,8 +44,9 @@ test('on login a low-stock topic fills to five independently reviewed bank entri
   assert.equal(warmer.enqueue([physics]).queued,0,'an in-flight scope cannot be queued again');
   await until(()=>counts.get(keyOf(physics))===5&&warmer.statistics().running===0);
   assert.equal(delivered.length,3);
-  assert.equal(delivered[1].avoidQuestions.length,1,'fresh questions must avoid previous candidates');
-  assert.equal(delivered[2].avoidQuestions.length,2);
+  assert.equal(delivered[0].avoidQuestions.length,0);
+  assert.equal(delivered[1].avoidQuestions.length,0,'the first two candidates launch concurrently');
+  assert.equal(delivered[2].avoidQuestions.length,2,'the next batch avoids both approved candidates');
   assert.equal(bank.jobs,1,'all five stock additions share one low-water job');
 });
 
@@ -137,6 +138,27 @@ test('stock counts exclude previously answered and still-reserved questions',asy
   warmer.enqueue([physics],excluded);
   await until(()=>generated.length===2&&warmer.statistics().running===0);
   assert.deepEqual(generated[0],excluded);
-  assert.equal(generated[1].length,3,'also avoid the first newly generated question');
+  assert.deepEqual(generated[1],excluded,'both initial requests are concurrent and use the same excluded set');
   assert.equal(stored.length,7,'restore five distinct usable questions');
+});
+
+test('a single scope starts two provider requests concurrently, never more than two',async()=>{
+  const counts=new Map();let active=0,peak=0,done=0;
+  const bank=fakeBank(counts);
+  const warmer=createTacticalBankPrewarmer({
+    bank,maxPerTarget:4,
+    generate:async(target,{avoidQuestions})=>{
+      assert(avoidQuestions.length<=done);
+      active++;peak=Math.max(peak,active);
+      await new Promise(resolve=>setTimeout(resolve,8));
+      active--;done++;
+      const k=keyOf(target);counts.set(k,(counts.get(k)||0)+1);
+      return {stored:true,q:'並行已審核題目 '+done};
+    }
+  });
+  warmer.enqueue([physics]);
+  await until(()=>done===4&&warmer.statistics().running===0);
+  assert.equal(peak,2);
+  assert.equal(counts.get(keyOf(physics)),4);
+  assert.equal(bank.jobs,1);
 });
