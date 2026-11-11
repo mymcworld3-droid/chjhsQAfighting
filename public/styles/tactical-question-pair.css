@@ -12,11 +12,18 @@
   --xq-line:rgba(199,181,133,.25);--quiet-line:rgba(199,181,133,.25);
   --glass-bg:rgba(19,42,37,.94);
   background:linear-gradient(90deg,rgba(8,26,23,.93),rgba(8,26,23,.97)),var(--xq-scene-art) center/cover!important;
-  place-items:start center;
+  /* Full viewport grid track: do not inherit the old centered 820px column. */
+  grid-template-columns:minmax(0,1fr);
+  place-items:start stretch;
+  width:100%;
   padding:0!important;
 }
 #tactical-combat .tc-quiz{
-  width:min(820px,100%)!important;
+  /* Allow both complete question sheets to use the entire available screen width. */
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
   max-height:100%;min-height:0;
   padding:16px 16px 24px!important;
   overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
@@ -70,10 +77,30 @@
 #tactical-combat .tc-quiz .tc-question-sheet > .text-6xl{
   display:block;color:rgba(100,145,117,.18)!important;pointer-events:none;
 }
+/* Regardless of rich-text markup, inline styles, MathJax or KaTeX, all stem
+   glyphs must be pure black on the parchment, not theme green or white. */
 #tactical-combat .tc-quiz .tc-question-sheet .tc-question,
 #tactical-combat .tc-quiz .tc-question-sheet .tc-question *{
-  color:#25392e!important;text-shadow:none!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  text-shadow:none!important;
 }
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question :is(mjx-container,.MathJax,.katex,.katex-display,math,.quiz-math-fallback),
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question :is(mjx-container,.MathJax,.katex,.katex-display,math,.quiz-math-fallback) *{
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question mjx-container[jax="SVG"] svg,
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question mjx-container[jax="SVG"] svg *,
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question .katex svg,
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question .katex svg *{
+  fill:#000!important;
+}
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question svg :is(text,tspan){
+  fill:#000!important;
+  stroke:none!important;
+}
+
 #tactical-combat .tc-quiz .tc-question-sheet .tc-question{
   margin:0!important;font-size:19px!important;line-height:1.95!important;
   font-weight:500!important;letter-spacing:.02em;
