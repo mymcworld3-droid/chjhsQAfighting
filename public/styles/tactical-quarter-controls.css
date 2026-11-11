@@ -200,9 +200,9 @@
   outline-offset:-5px!important;
 }
 
-/* Three concentric quarter-wheel layers: center ends the turn, middle
-   selects move/attack, outer switches player target or equipped skills.
-   The selected labelled capsule slides along its own quarter-circle. */
+/* The selected buttons are curved pizza-edge annular sectors.
+   Their SVG rotors glide over the middle action and outer target/skill rings;
+   label text follows the slices without any pill-shaped background. */
 #tactical-combat.tc-quarter-layout .tc-quarter-action{
   right:0;
   width:var(--tc-wheel);height:var(--tc-wheel);
@@ -292,33 +292,52 @@
   vector-effect:non-scaling-stroke;
 }
 #tactical-combat.tc-quarter-layout .tc-action-lines path:first-child{stroke-width:1.2}
+/* A real circular sector, clipped by its own concentric SVG arcs. */
+#tactical-combat.tc-quarter-layout .tc-wheel-slider{
+  position:absolute;inset:0;z-index:6;
+  display:block;width:100%;height:100%;
+  overflow:hidden;pointer-events:none;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-slider-rotor{
+  transform-origin:100px 100px;
+  transform-box:view-box;
+  transition:transform .40s cubic-bezier(.22,.85,.22,1);
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-slider-shape{
+  fill:#dbb56c;stroke:#fff0bd;stroke-width:1.2;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 1.3px #f8de9c);
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-slider-detail .tc-wheel-slider-shape{
+  fill:#61bd87;stroke:#ddffdd;
+  filter:drop-shadow(0 0 1.3px #a7ffb1);
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-slider.is-dragging .tc-wheel-slider-rotor{
+  transition:none!important;
+}
+/* The words travel with the sector, but are never rounded capsules. */
 #tactical-combat.tc-quarter-layout .tc-wheel-marker{
   position:absolute;z-index:7;pointer-events:none;
-  display:flex;align-items:center;justify-content:center;
-  width:clamp(46px,21%,85px);
-  min-height:clamp(24px,3.2vw,34px);
-  padding:3px 4px;
-  border-radius:999px;border:1.5px solid #fff5cb;
-  background:linear-gradient(145deg,#f9dfa0,#b99147);
-  color:#27301e;
-  font:700 clamp(10px,1.25vw,15px)/1.12 "Noto Serif TC","Songti TC",sans-serif;
+  display:block;
+  width:clamp(44px,23%,92px);
+  padding:0;margin:0;min-height:0;
+  border:0;border-radius:0;background:transparent;
+  box-shadow:none;
+  color:#241d11;
+  font:700 clamp(11px,1.5vw,19px)/1.13 "Noto Serif TC","Songti TC",sans-serif;
   text-align:center;white-space:normal;overflow-wrap:anywhere;
-  box-shadow:0 0 0 2px #18261ba8,0 2px 16px #f3d8898c;
+  text-shadow:0 1px 0 #fff1bb8c;
   transform:translate(-50%,-50%);
-  transition:left .40s cubic-bezier(.2,.8,.2,1),top .40s cubic-bezier(.2,.8,.2,1),background .2s ease;
+  transition:left .40s cubic-bezier(.22,.85,.22,1),top .40s cubic-bezier(.22,.85,.22,1);
 }
 #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
-  width:clamp(52px,27%,105px);
-  min-height:clamp(24px,3.2vw,36px);
-  border-color:#d4ffe4;
-  background:linear-gradient(145deg,#b9ffca,#3eb789);
-  color:#173127;
-  font-size:clamp(9px,1.15vw,14px);
-  box-shadow:0 0 0 2px #183321a6,0 2px 14px #82f3b388;
+  width:clamp(50px,29%,114px);
+  color:#11271c;
+  font-size:clamp(10px,1.35vw,17px);
+  text-shadow:0 1px 0 #d8ffe599;
 }
 #tactical-combat.tc-quarter-layout .tc-wheel-marker.is-dragging{
   transition:none!important;
-  box-shadow:0 0 0 3px #f7f7cf8c,0 2px 19px #e8ffcd;
 }
 /* Sketch ratios stay correct inside the portrait 9:16 game frame. */
 @media(orientation:portrait){
@@ -330,13 +349,12 @@
     font-size:clamp(9px,2.7vw,15px)!important;
   }
   #tactical-combat.tc-quarter-layout .tc-wheel-marker{
-    width:clamp(38px,22%,70px);
-    min-height:22px;
-    font-size:clamp(9px,2.5vw,12px);
+    width:clamp(30px,24%,72px);
+    font-size:clamp(9px,2.7vw,13px);
   }
   #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
-    width:clamp(44px,29%,78px);
-    font-size:clamp(8px,2.3vw,11px);
+    width:clamp(38px,29%,88px);
+    font-size:clamp(9px,2.35vw,12px);
   }
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector{
     font-size:clamp(13px,3.8vw,20px)!important;
@@ -360,6 +378,7 @@
 @media(prefers-reduced-motion:reduce){
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector,
   #tactical-combat.tc-quarter-layout .tc-wheel-marker,
+  #tactical-combat.tc-quarter-layout .tc-wheel-slider-rotor,
   #tactical-combat.tc-quarter-layout [data-energy-segment]{
     transition:none!important;
   }
