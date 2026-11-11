@@ -29,7 +29,7 @@ function selectedCore(){const user=localUser(),score=window.QATrainingAccessRule
 function ensure(){
   if(root)return;
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
-  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261111-quadrant4';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261111-sketch5';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
@@ -99,35 +99,68 @@ function buildGame(){
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">攻擊 · 2</button><button type="button" data-action="skill">技能</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
   if(state?.mode==='pve'){
-    // Keep existing signed server actions and unique data-* handlers. Only move
-    // their visual controls into the two hand-drawn quarter-circle panels.
+    // Strict sketch: only the map, a bottom-left charging dial and a
+    // bottom-right attack/move/end-turn dial are visible. Keep unused
+    // gameplay data nodes for existing rendering and server code, hidden.
     const command=$('.tc-command');
+    const tick=(i)=>{
+      const angle=(-90+(i+.5)*9)*Math.PI/180;
+      const coordinate=r=>[Math.round(Math.cos(angle)*r*100)/100,
+        Math.round((100+Math.sin(angle)*r)*100)/100];
+      const a=coordinate(80),b=coordinate(95);
+      return `<line data-energy-tick="${i}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"></line>`;
+    };
+    const wedge=(start,end,outer=100,inner=69)=>{
+      const points=[];
+      for(let i=0;i<=12;i++){
+        const angle=(start+(end-start)*i/12)*Math.PI/180;
+        points.push([100+outer*Math.cos(angle),100+outer*Math.sin(angle)]);
+      }
+      for(let i=12;i>=0;i--){
+        const angle=(start+(end-start)*i/12)*Math.PI/180;
+        points.push([100+inner*Math.cos(angle),100+inner*Math.sin(angle)]);
+      }
+      return 'polygon('+points.map(([x,y])=>x.toFixed(3)+'% '+y.toFixed(3)+'%').join(',')+')';
+    };
     const energy=document.createElement('section');
     energy.className='tc-quarter tc-quarter-energy';
-    energy.setAttribute('aria-label','答題充能與體力');
-    energy.innerHTML='<svg class="tc-energy-arc" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path class="tc-arc-track" d="M 5 5 A 95 95 0 0 1 100 100" pathLength="10"></path><path class="tc-arc-fill" data-energy-arc d="M 5 5 A 95 95 0 0 1 100 100" pathLength="10" stroke-dasharray="0 10"></path><path class="tc-arc-ticks" d="M 5 5 A 95 95 0 0 1 100 100" pathLength="10" stroke-dasharray=".7 .3"></path></svg><span class="tc-energy-rule">答對 +4 · 答錯 +1</span>';
-    energy.append(command.querySelector('[data-stamina]'),command.querySelector('[data-quiz]'));
+    energy.setAttribute('aria-label','答題充能與能量');
+    energy.innerHTML='<svg class="tc-energy-ticks" viewBox="0 0 100 100" aria-hidden="true">'
+      +Array.from({length:10},(_,i)=>tick(i)).join('')+'</svg>';
+    energy.append(command.querySelector('[data-stamina]'));
+    const quiz=command.querySelector('[data-quiz]');
+    quiz.innerHTML='<span class="tc-energy-bolt" aria-hidden="true">ϟ</span><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>';
+    quiz.setAttribute('aria-label','答題充能');
+    energy.append(quiz);
+
     const actions=document.createElement('section');
     actions.className='tc-quarter tc-quarter-action';
-    actions.setAttribute('aria-label','移動、攻擊、技能與回合操作');
-    actions.innerHTML='<span class="tc-actions-caption" aria-hidden="true">行動</span>';
-    const confirm=command.querySelector('[data-execute]');
-    actions.append(command.querySelector('.tc-action-tabs'),command.querySelector('.tc-turn-buttons'));
+    actions.setAttribute('aria-label','行動操作');
+    actions.innerHTML='<svg class="tc-action-lines" viewBox="0 0 100 100" aria-hidden="true">'
+      +'<path d="M 100 0 A 100 100 0 0 0 0 100"/>'
+      +'<path d="M 100 31 A 69 69 0 0 0 31 100"/>'
+      +'<path d="M 29.289 29.289 L 51.21 51.21"/></svg>';
+    const tabs=command.querySelector('.tc-action-tabs');
+    const attack=tabs.querySelector('[data-action="attack"]');
+    const move=tabs.querySelector('[data-action="move"]');
+    const end=command.querySelector('[data-end]');
+    attack.className='tc-sector tc-sector-attack';
+    attack.style.clipPath=wedge(-90,-135);
+    attack.innerHTML='<span>攻擊</span>';
+    move.className='tc-sector tc-sector-move';
+    move.style.clipPath=wedge(-135,-180);
+    move.innerHTML='<span>移動</span>';
+    end.className='tc-sector tc-sector-end';
+    end.style.clipPath=wedge(-90,-180,69,0);
+    end.innerHTML='<span>結束\n回合</span>';
+    actions.append(tabs,end);
     command.prepend(energy,actions);
-    command.append(confirm);
-    const heading=$('.tc-arena-heading');
-    const zoomHelp=document.createElement('span');
-    zoomHelp.className='tc-map-gesture';
-    zoomHelp.textContent='拖曳平移 · 雙指／滾輪縮放';
-    heading.append(zoomHelp);
-    const reset=document.createElement('button');
-    reset.type='button';
-    reset.setAttribute('data-reset-view','');
-    reset.textContent='地圖置中';
-    reset.setAttribute('aria-label','重設地圖位置與縮放');
-    heading.append(reset);
   }
-  renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);}},()=>{
+  renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);
+    // The sketch has no extra confirm button: choosing a valid map tile
+    // directly executes the selected move or directional attack.
+    if(root.classList.contains('tc-quarter-layout')&&['move','attack'].includes(action)&&!$('[data-execute]').disabled)void execute();
+  }},()=>{
     if(!opened||!state||!renderer)return;updateControls();
     if(!renderer.isAnimating&&state.status==='finished'&&!modalOpen)resultDialog();
     else if(!renderer.isAnimating&&!modalOpen&&state.quizRound)schedule();
@@ -146,8 +179,12 @@ function paint({preserveModal=false}={}){
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
   $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&a.intent).map(a=>'<p><b>'+esc(a.name)+'</b><span>'+esc(a.intent.text)+'</span></p>').join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>出手 ${me.attacks}/2</small>`;
-  const energyArc=$('[data-energy-arc]');if(energyArc)energyArc.setAttribute('stroke-dasharray',`${Math.max(0,Math.min(10,me.stamina))} 10`);
-  $('[data-quiz]').textContent=canQuestion()?`答題充能 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
+  if(root.classList.contains('tc-quarter-layout')){
+    const amount=Math.max(0,Math.min(R.LIMITS.stamina,me.stamina));
+    $('[data-energy-number]').textContent=String(amount);
+    root.querySelectorAll('[data-energy-tick]').forEach(line=>line.classList.toggle('is-filled',Number(line.dataset.energyTick)<amount));
+    $('[data-quiz]').setAttribute('aria-label',`答題充能，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
+  }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   renderer.update(state,uid,action,selection);updateControls();updateClock();
   if(state.status==='finished'&&!renderer.isAnimating&&!modalOpen)resultDialog();
@@ -162,7 +199,7 @@ function updateControls(){
   $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
   const basic=R.basicFor(me),directional=['line','cleave'].includes(basic.kind);
-  $('[data-action="attack"]').textContent='攻擊 · '+basic.cost;
+  if(!root.classList.contains('tc-quarter-layout'))$('[data-action="attack"]').textContent='攻擊 · '+basic.cost;
   let label=action==='attack'?(directional?'選擇攻擊方向':basic.kind==='ring'?'震擊周圍':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='';
   const d=selection&&(basic.kind==='cleave'||selection.x===me.x||selection.y===me.y)?R.attackDirection(me,selection):null;
   const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
