@@ -550,6 +550,8 @@ const REALMS = [
     { name: '半仙', sub: '仙門在望', need: 1868 },
     { name: '真仙', sub: '榜上仙位', need: 1868 }
 ];
+// Share the same realm thresholds with stamina-branch cultivation feedback.
+window.QASoloRealms = REALMS;
 
 function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
     const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
