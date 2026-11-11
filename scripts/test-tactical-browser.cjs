@@ -463,9 +463,10 @@ async function main(){
             actorDisplay:getComputedStyle(root.querySelector('.tc-actors')).display,
             margin:getComputedStyle(root.querySelector('.tc-main')).overflow};
         });
-        assert.equal(layout.titleDisplay,'none');
+        assert.equal(layout.titleDisplay,'flex','title/turn/收起 header remains visible');
+        assert.equal(await quick.locator('[data-close]').isVisible(),true,'收起 stays visible');
         assert.equal(layout.actorDisplay,'none');
-        assert.deepEqual(layout.visible.sort(),['attack','end','move','quiz'].sort());
+        assert.deepEqual(layout.visible.sort(),['attack','close','end','move','quiz'].sort());
         assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
         assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);
         assert.ok(Math.abs(layout.map.x-.18)<.025||Math.abs(layout.map.x-.07)<.025);

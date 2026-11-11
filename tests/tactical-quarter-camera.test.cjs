@@ -80,7 +80,9 @@ test('PvE follows the sketch: central map, left energy and right three actions o
   assert.match(css,/\.tc-quarter-energy\{[\s\S]*?border-radius:0 100% 0 0/);
   assert.match(css,/\.tc-quarter-action\{[\s\S]*?border-radius:100% 0 0 0/);
   assert.match(css,/touch-action:none!important/);
-  assert.match(css,/\.tc-top\{display:none!important\}/);
+  assert.match(css,/\.tc-top\{[\s\S]*?display:flex!important/);
+  assert.match(css,/\.tc-top \[data-close\]\{/);
+  assert.match(ui,/data-close aria-label="收起戰場">收起<\/button>/);
   assert.match(css,/@media\(orientation:portrait\)/);
 });
 

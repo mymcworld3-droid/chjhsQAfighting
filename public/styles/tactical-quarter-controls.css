@@ -7,7 +7,22 @@
   --tc-gold:#c6b68d;
   background:var(--tc-ink);
 }
-#tactical-combat.tc-quarter-layout .tc-top{display:none!important}
+/* Keep the original top title, turn/status text and 收起 button. The game
+   flex layout reserves space for this header, so the map/dials remain below. */
+#tactical-combat.tc-quarter-layout .tc-top{
+  display:flex!important;
+  flex:0 0 auto!important;
+  position:relative;
+  z-index:6;
+  align-items:center;
+  justify-content:space-between;
+}
+#tactical-combat.tc-quarter-layout .tc-top [data-close]{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
 #tactical-combat.tc-quarter-layout .tc-main.tc-game{
   flex:1;display:block!important;position:relative;
   min-height:0;min-width:0;
