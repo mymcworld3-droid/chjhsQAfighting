@@ -1,0 +1,43 @@
+name: Validate portrait dock beside trial circle (one time)
+on:
+  push:
+    branches: [fix/stamina-portrait-pinned-sidebars-20261111]
+    paths: [.github/workflows/verify-portrait-rails.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Refresh and validate asset manifest
+        run: |
+          npm run build:module-versions
+          npm run check:module-versions
+      - name: Verify source and grid regression tests
+        run: |
+          node --check public/cultivation/home-wireframe.js
+          node --check tests/home-wireframe.test.cjs
+          git diff --check
+          node --test tests/home-wireframe.test.cjs
+      - name: Run full test suite
+        run: npm test
+      - name: Commit tested change to staging
+        run: |
+          git rm .github/workflows/verify-portrait-rails.yml
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix(home): dock side shortcuts by trial circle in portrait'
+          git push origin HEAD:refs/heads/fix/stamina-portrait-pinned-sidebars-20261111
