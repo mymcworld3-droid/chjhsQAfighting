@@ -1,0 +1,1877 @@
+[
+  {
+    "id": "gsat-111-social-q1",
+    "difficulty": "easy",
+    "q": "某國媒體報導，該國原住民族罹患心理疾病比率、自殺率、平均壽命與全國之比較，如表1。該報導在未詳查原住民族生活困境的情形下，即宣稱這是因為原住民族不注重身心健康，例如偏好高脂肪、高甜度垃圾食物所致。類似此種缺乏同理與理解的報導，最可能引導社會大眾對原住民個人或民族形成何種更加不利的社會印象？\n\n表1\n\n|  | 原住民族 | 全國 |\n| 罹患心理疾病比率（%） | 14.2 | 9.0 |\n| 自殺率（人／每十萬人） | 15.7 | 8.8 |\n| 平均壽命（歲） | 69.3 | 76.1 |",
+    "correct": "原住民個人缺少為自己健康負責的態度",
+    "wrong": [
+      "原住民個人常缺少改變傳統習慣的意願",
+      "原住民族缺少傳統飲食文化的知識傳承",
+      "原住民族缺少改變現代生活步調的策略"
+    ],
+    "exp": "正確答案：原住民個人缺少為自己健康負責的態度。來源：111年學科能力測驗社會第1題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 1,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q2",
+    "difficulty": "easy",
+    "q": "圖1是某國政治宣傳的圖片，有學者指出：此圖呈現該國執政領袖、執政黨和人民三者的關係，可清楚看出民主國家運作與該國存有最根本的差異。請問下列何者應為該學者所指的最根本差異？\n\n圖1\n\n![圖表](/assets/banks/gsat-111-social/Q2-figure-1.png)",
+    "correct": "執政領袖和執政黨皆是國家管理人，而非效忠對象",
+    "wrong": [
+      "存在多黨競爭，難有全民效忠服從的政黨",
+      "肯認多元認同，不易服從單一的政治領袖",
+      "執政領袖和執政黨只是代表政府，人民應效忠政府"
+    ],
+    "exp": "正確答案：執政領袖和執政黨皆是國家管理人，而非效忠對象。來源：111年學科能力測驗社會第2題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 2,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/Q2-figure-1.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q3",
+    "difficulty": "medium",
+    "q": "小安研究某國財產制度，蒐集該國某年遺產繼承統計資料（表2）。她推論造成男女數據差異的成因，除與該國傳統社會觀念有關外，與其民法繼承法律的規定亦有關聯。下列該國繼承制度所採取的原理原則，何者與表中數據所呈現之性別差異最為相關？\n\n表2\n\n| 所有法定繼承人之 / 性別比 | 法定繼承人中實際取得遺產者之性別比 |\n| 男 | 女 | 男 | 女 |\n| 64% | 36% | 72% | 28% |",
+    "correct": "准許被繼承人在生前以遺囑自由處置一定範圍財產",
+    "wrong": [
+      "民法繼承法律在繼承權利方面採取性別平權的原則",
+      "以特定親屬繼承為原則，並以配偶為當然的繼承人",
+      "繼承人償還被繼承人的債務，以繼承所得遺產為限"
+    ],
+    "exp": "正確答案：准許被繼承人在生前以遺囑自由處置一定範圍財產。來源：111年學科能力測驗社會第3題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 3,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q4",
+    "difficulty": "medium",
+    "q": "表3是某市府對購買新型低汙染機車，以及報廢舊機車換購新型低汙染機車（汰舊換新）的補助。若這兩年新購置機車的數量與品質皆相同，僅有政府補助金額改變，則今年相較於去年，對消費者行為和空氣汙染的影響為何？\n\n表3\n\n| 年份 | 新購機車補助 | 汰舊換新補助 |\n| 去年 | 10000元 | 8000元 |\n| 今年 | 6000元 | 10000元 |",
+    "correct": "更多人願意汰舊換新，且今年的政策比較能改善空汙",
+    "wrong": [
+      "更多人願意汰舊換新，但去年的政策比較能改善空汙",
+      "更多人願意新購機車，且今年的政策比較能改善空汙",
+      "更多人願意新購機車，但去年的政策比較能改善空汙"
+    ],
+    "exp": "正確答案：更多人願意汰舊換新，且今年的政策比較能改善空汙。來源：111年學科能力測驗社會第4題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 4,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q5",
+    "difficulty": "easy",
+    "q": "某校歷史課程進行「歷史考察」學習時，要求同學事先蒐集族譜、臺灣總督府旅券（護照）、同鄉會名簿等史料，並進入內政部網站閱讀人口和戶口調查資料。該「歷史考察」的主題最可能是：",
+    "correct": "人群的移動與交流",
+    "wrong": [
+      "國家的建立與形塑",
+      "文化的類型與變遷",
+      "宗教的起源與傳播"
+    ],
+    "exp": "正確答案：人群的移動與交流。來源：111年學科能力測驗社會第5題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 5,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q6",
+    "difficulty": "easy",
+    "q": "一位學者提到：過去歷史研究的主體，往往偏重於統治者的歷史，比較忽略人民的歷史，其實，人民才是我們應該關心的主體。下列哪個主題最接近這位學者主張的研究方向？",
+    "correct": "清代臺灣沿海的王爺信仰",
+    "wrong": [
+      "鄭氏王朝在臺的屯田政策",
+      "清代臺灣職官制度的演變",
+      "日本在臺殖民體制的建立"
+    ],
+    "exp": "正確答案：清代臺灣沿海的王爺信仰。來源：111年學科能力測驗社會第6題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 6,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q7",
+    "difficulty": "medium",
+    "q": "二十世紀初期，某人嚴厲抨擊貨幣的使用：「誰還需要該死的貨幣？生活意味著食物、衣服、房子與休息，沒有貨幣這種金屬與碎紙片，我們依然可以快樂生活。貨幣將會失去意義，政府應以實物取代貨幣，作為工作所得」。此人的論述反映下列哪個主義的觀點？",
+    "correct": "共產主義",
+    "wrong": [
+      "重商主義",
+      "自由主義",
+      "法西斯主義"
+    ],
+    "exp": "正確答案：共產主義。來源：111年學科能力測驗社會第7題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 7,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q8",
+    "difficulty": "medium",
+    "q": "中國傳統政治制度歷經漢、唐的演變而大備，日、韓等國立國較晚，其各種制度參酌中國者甚多，也有徒取其形式而忽略其精神的。例如：有某個制度在中國具有公平與促進社會流動的意義，在東亞的日本、朝鮮卻成為保障特定對象的工具。這個制度最可能是：",
+    "correct": "科舉",
+    "wrong": [
+      "戶籍",
+      "律令",
+      "賦役"
+    ],
+    "exp": "正確答案：科舉。來源：111年學科能力測驗社會第8題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 8,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q9",
+    "difficulty": "easy",
+    "q": "十五至十六世紀間，某王國曾興建一座大型的宮殿，此建築物分為三部分：正殿為國王舉行各種典禮和議政的場所；北殿專為接待中國的冊封使之用；南殿則自十七世紀初期開始，用來接待日本薩摩藩官員。該宮殿最可能位於：",
+    "correct": "琉球",
+    "wrong": [
+      "朝鮮",
+      "暹羅",
+      "安南"
+    ],
+    "exp": "正確答案：琉球。來源：111年學科能力測驗社會第9題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 9,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q10",
+    "difficulty": "easy",
+    "q": "某校歷史課進行「歐洲與非、美兩洲的交流」探究學習時，以一幅歐洲十七世紀流傳的蔗糖生產過程圖（圖2），說明當時蔗糖逐漸取代蜂蜜，成為歐洲人最重要的甜味來源。圖中糖廠最可能在何地區？\n\n圖2\n\n![圖表](/assets/banks/gsat-111-social/Q10-figure-1.png)\n",
+    "correct": "中美洲西印度群島",
+    "wrong": [
+      "北非的阿爾及利亞",
+      "北美洲的紐芬蘭島",
+      "中部非洲剛果盆地"
+    ],
+    "exp": "正確答案：中美洲西印度群島。來源：111年學科能力測驗社會第10題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 10,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/Q10-figure-1.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q11",
+    "difficulty": "easy",
+    "q": "清宣統三年十二月二十五日（1912年2月12日），清帝溥儀頒布退位詔書。但在國立故宮博物院典藏的清代檔案中，發現一件進呈給溥儀的奏摺，時間標註為「宣統十六年七月」。我們應如何解釋這個現象？",
+    "correct": "清帝雖退位，政府仍同意其繼續使用帝號和原有紀年",
+    "wrong": [
+      "宣統朝只有三年，應該是清政府官員誤植年代的奏摺",
+      "洪憲帝制時，為獲滿族支持而以宣統紀年進呈的奏摺",
+      "滿洲國成立，其政府官員上奏給溥儀，故以宣統紀年"
+    ],
+    "exp": "正確答案：清帝雖退位，政府仍同意其繼續使用帝號和原有紀年。來源：111年學科能力測驗社會第11題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 11,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q12",
+    "difficulty": "easy",
+    "q": "金門有許多洋樓，建築上裝飾著象徵吉祥如意的鳳梨、祈求多子多孫的麥穗、象徵科舉及第的螃蟹（以「甲殼」比喻「科甲」）、表示時間的西洋時鐘或扛著屋簷的印度苦力（象徵屋主的社會地位）。這些建築裝飾反映以下何種歷史現象？",
+    "correct": "民國早期，僑民從南洋帶回西方建築風格並融入金門傳統裝飾",
+    "wrong": [
+      "荷蘭人主導遠東貿易時期，當時盛行的建築風格也流傳至金門",
+      "鄭成功家族前往巴達維亞貿易，並將當地的建築特色帶回金門",
+      "日本占領金門時，其商人引進當時歐洲最流行的巴洛克式裝飾"
+    ],
+    "exp": "正確答案：民國早期，僑民從南洋帶回西方建築風格並融入金門傳統裝飾。來源：111年學科能力測驗社會第12題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 12,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q13",
+    "difficulty": "medium",
+    "q": "據統計，二次世界大戰期間德國平民死亡約117萬人，占該國1939年總人口1.6%；蘇聯平民死亡約1400萬人，占該國1939年總人口7.3%。蘇聯平民死亡人數與比率均遠多於德國的原因為何？",
+    "correct": "蘇聯是主要戰場，戰火摧殘人命外，還有缺糧飢荒問題",
+    "wrong": [
+      "納粹黨在東歐多處設立大型滅絕營，用毒氣殺害當地人",
+      "德、義、日軸心國武器優越，超過蘇聯、英、美同盟國",
+      "為對付全球反共產勢力，大量的蘇聯士兵駐防東歐國家"
+    ],
+    "exp": "正確答案：蘇聯是主要戰場，戰火摧殘人命外，還有缺糧飢荒問題。來源：111年學科能力測驗社會第13題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 13,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q14",
+    "difficulty": "medium",
+    "q": "圖3為1500年至1799年間，從歐洲出發，前往亞洲海域貿易前三名國家的船隻數量變化圖。根據該圖，甲、乙、丙依序是哪些國家？\n\n（單位：艘）\n\n（年）\n\n圖3\n\n![圖表](/assets/banks/gsat-111-social/Q14-figure-1.png)\n\n\n",
+    "correct": "葡萄牙、荷蘭、英國",
+    "wrong": [
+      "西班牙、英國、荷蘭",
+      "荷蘭、英國、西班牙",
+      "英國、葡萄牙、荷蘭"
+    ],
+    "exp": "正確答案：葡萄牙、荷蘭、英國。來源：111年學科能力測驗社會第14題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 14,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/Q14-figure-1.png"
+    ],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q15",
+    "difficulty": "medium",
+    "q": "中國的百貨公司成立以來，多以「洋貨」為主打商品。民國初年，某一事件發生期間，上海一間百貨公司在報紙上刊登「敬告國人書」：「外交失敗，悲憤同深，……敝公司雖係統辦環球貨品，然宗旨首重國貨，歐美貨次之，其某國貨，則僅供市上之需求耳。」並表示某國貨品存貨出清，即不再販售。不過，抵制某國貨品的聲浪如排山倒海而來，該公司只好再度聲明：概將某國貨品「完全收束不賣，寧願犧牲血本，以示與眾共棄之決心。」請問「某一事件」指的是：",
+    "correct": "五四運動",
+    "wrong": [
+      "三一運動",
+      "九一八事變",
+      "七七事變"
+    ],
+    "exp": "正確答案：五四運動。來源：111年學科能力測驗社會第15題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 15,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q16",
+    "difficulty": "medium",
+    "q": "一份資料提到：1933年的雙十國慶酒會選在臺北的鐵道旅館舉辦，出席的貴賓有美國、義大利駐臺領事及臺灣總督府高級長官。會場懸掛中華民國國旗，慶典中除演奏中華民國國歌外，還高呼「中華民國萬歲」。這段資料如何解讀最合理？",
+    "correct": "當時來臺的中國僑民日多，國府已在臺北設立領事館，故能舉辦國慶活動",
+    "wrong": [
+      "當時滿洲國成立不久，日本乃邀請滿洲國官員來臺舉辦慶祝雙十國慶活動",
+      "當時中日兩國的關係親密和善，臺灣總督府乃主動舉辦慶祝雙十國慶酒會",
+      "當時的臺灣總督府正在進行皇民化政策，故舉辦雙十酒會來攏絡臺灣人民"
+    ],
+    "exp": "正確答案：當時來臺的中國僑民日多，國府已在臺北設立領事館，故能舉辦國慶活動。來源：111年學科能力測驗社會第16題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 16,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q17",
+    "difficulty": "easy",
+    "q": "某國的動力織布機技術在十九世紀初獨步全球，該國嚴格控管此關鍵技術，避免秘密外洩。一名外國技師刻意潛入該國工廠學習，花費六個月將所有技術細節記在腦中，回國後憑記憶建立相同的動力織布工廠，推動自己國家的工業技術革新。此情況最可能是：",
+    "correct": "他從英國偷學技術，帶回美國",
+    "wrong": [
+      "他從英國偷學技術，帶回日本",
+      "他從美國偷學技術，帶回印度",
+      "他從美國偷學技術，帶回俄國"
+    ],
+    "exp": "正確答案：他從英國偷學技術，帶回美國。來源：111年學科能力測驗社會第17題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 17,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q18",
+    "difficulty": "medium",
+    "q": "表4為聯合國2020年發表的都市化資料，推估到2030年全球將有60.4%人口居住在都市地區。其中與歐、北美兩洲都市化程度相當的某洲，其經濟發展程度卻無歐、北美兩洲高。造成此現象的主要原因，最可能為下列何者？\n\n表4\n\n| 區域 | 都市化程度（%） |\n| 2000年 | 2010年 | 2020年 | 2030年 /  / （推估） |\n| 全球 | 46.7 | 51.7 | 56.2 | 60.4 |\n| 非洲 | 35 | 38.9 | 43.5 | 48.4 |\n| 亞洲 | 37.5 | 44.8 | 51.1 | 56.7 |\n| 歐洲 | 71.1 | 72.9 | 74.9 | 77.5 |\n| 中南美洲 | 75.5 | 78.6 | 81.2 | 83.6 |\n| 北美洲 | 79.1 | 80.8 | 82.6 | 84.7 |",
+    "correct": "鄉村生計艱困導致大量人口湧進大都市",
+    "wrong": [
+      "人口數量為全球第一且全部集中在都市",
+      "都市皆主要生產農業加工品經濟價值低",
+      "都市的基礎設施健全吸引鄉村人口移居"
+    ],
+    "exp": "正確答案：鄉村生計艱困導致大量人口湧進大都市。來源：111年學科能力測驗社會第18題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 18,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q19",
+    "difficulty": "easy",
+    "q": "COVID-19疫情爆發以後，許多國家積極研發與生產疫苗。2021年，歐盟與美國、中國、印度、臺灣等已有疫苗生產廠，但大多實施出口管制，優先留給其公民施打；相較下，非洲地區目前疫苗嚴重不足，而非洲聯盟也計畫在2040年擴大疫苗生產到足敷非洲大陸60%所需。COVID-19疫苗生產的時空差異，最適合以下列哪個概念解釋？",
+    "correct": "核心與邊陲",
+    "wrong": [
+      "時空收斂",
+      "區位移轉",
+      "擴散與反吸"
+    ],
+    "exp": "正確答案：核心與邊陲。來源：111年學科能力測驗社會第19題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 19,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q20",
+    "difficulty": "medium",
+    "q": "某小組在進行地理問題探究學習時，蒐集到1960、1980、2000和2020等4年臺東地區工商消費電話簿，電話簿載有各行業營業場所的地址和電話號碼。該學習小組探究的主題最可能是下列何者？",
+    "correct": "臺東市都市機能結構變遷",
+    "wrong": [
+      "臺東市都市住宅用地擴張",
+      "臺東市土地競租曲線消長",
+      "臺東地區都市成長的歷程"
+    ],
+    "exp": "正確答案：臺東市都市機能結構變遷。來源：111年學科能力測驗社會第20題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 20,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q21",
+    "difficulty": "medium",
+    "q": "公平貿易指的是在農產品的產銷過程中，確保生產者獲得公平的報酬、勞動者獲得應有的保障、環境可以得到保護的一種制度。圖4為參與公平貿易生產商的分布，這些生產商的分布區，具有哪些共同的時空背景？\n\n圖4\n\n![圖表](/assets/banks/gsat-111-social/Q21-figure-1.png)",
+    "correct": "多位於熱帶氣候區，二十世紀中期以前曾先後遭歐洲列強殖民",
+    "wrong": [
+      "多位於熱帶沙漠區，八至九世紀時曾為阿拉伯帝國的勢力範圍",
+      "多位於熱帶季風區，十至十三世紀曾為東亞人群外流的移入地",
+      "多位於信風帶，二十世紀後期冷戰期間曾為美蘇競爭的緩衝區"
+    ],
+    "exp": "正確答案：多位於熱帶氣候區，二十世紀中期以前曾先後遭歐洲列強殖民。來源：111年學科能力測驗社會第21題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 21,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/Q21-figure-1.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q22",
+    "difficulty": "medium",
+    "q": "據統計，2020年澳大利亞農業缺工嚴重，導致部分農產品無人收成、處理，以致許多農產品價格高漲。形成此現象的原因之一，為澳大利亞因應COVID-19疫情而進行邊境管制，使過去占農場勞力來源高達八成的國外背包打工客，在2020年來澳的人數大減。若僅針對上述澳大利亞的農業發展、農產價格與背包打工客的關係，擬定相關的全球化議題進行探究，下列哪個議題最為適合？",
+    "correct": "全球化的貢獻與挑戰",
+    "wrong": [
+      "全球化與區域結盟",
+      "全球化與交通革新",
+      "全球化與多元文化"
+    ],
+    "exp": "正確答案：全球化的貢獻與挑戰。來源：111年學科能力測驗社會第22題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 22,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>23-25為題組</u>\n\n◎ 美雲是單身職業婦女，獨力照顧同住的年邁母親，其餘兄弟並未分擔。近來母親失智情況惡化，她猶豫是否辭去工作照顧或聘請全天看護，但二者皆可能帶來身心與經濟壓力。美雲的困境反映我國因人口日趨老化，家屬照顧年長者的負擔也日益加重。因應上述問題，晚近政府積極改善長期照顧制度，例如：（甲）廣設日間照顧中心；（乙）改善外國籍家庭看護工引進政策；（丙）建立全國長照人員證照制度；（丁）提供直接補助給需要長照的家庭。請問：\n\n依據題文資訊，政府改善長照制度所欲達成的最重要政策目標為何？",
+    "correct": "促進社會安全：因應人口結構變遷以保障人民生活的尊嚴",
+    "wrong": [
+      "保障勞動參與：增加長照勞力供給以保障勞工的就業機會",
+      "提倡兩性平權：確保家庭照護之責任由子女共同平均分擔",
+      "促進經濟平等：藉社會福利制度達成財富與資源重新分配"
+    ],
+    "exp": "正確答案：促進社會安全：因應人口結構變遷以保障人民生活的尊嚴。來源：111年學科能力測驗社會第23題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 23,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q24",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>23-25為題組</u>\n\n◎ 美雲是單身職業婦女，獨力照顧同住的年邁母親，其餘兄弟並未分擔。近來母親失智情況惡化，她猶豫是否辭去工作照顧或聘請全天看護，但二者皆可能帶來身心與經濟壓力。美雲的困境反映我國因人口日趨老化，家屬照顧年長者的負擔也日益加重。因應上述問題，晚近政府積極改善長期照顧制度，例如：（甲）廣設日間照顧中心；（乙）改善外國籍家庭看護工引進政策；（丙）建立全國長照人員證照制度；（丁）提供直接補助給需要長照的家庭。請問：\n\n依據題文資訊，政府實際執行（甲）與（丁）政策對當年GDP的計算與直接影響為何？",
+    "correct": "丁政策計入政府移轉性支付，不影響GDP",
+    "wrong": [
+      "甲政策計入政府支出，不影響GDP",
+      "甲政策計入政府移轉性支付，將增加GDP",
+      "丁政策計入政府支出，將增加GDP"
+    ],
+    "exp": "正確答案：丁政策計入政府移轉性支付，不影響GDP。來源：111年學科能力測驗社會第24題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 24,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>23-25為題組</u>\n\n◎ 美雲是單身職業婦女，獨力照顧同住的年邁母親，其餘兄弟並未分擔。近來母親失智情況惡化，她猶豫是否辭去工作照顧或聘請全天看護，但二者皆可能帶來身心與經濟壓力。美雲的困境反映我國因人口日趨老化，家屬照顧年長者的負擔也日益加重。因應上述問題，晚近政府積極改善長期照顧制度，例如：（甲）廣設日間照顧中心；（乙）改善外國籍家庭看護工引進政策；（丙）建立全國長照人員證照制度；（丁）提供直接補助給需要長照的家庭。請問：\n\n依據題文資訊，政府改善長照制度的政策作為，何者最適合由政府委託民間執行？",
+    "correct": "甲",
+    "wrong": [
+      "乙",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：甲。來源：111年學科能力測驗社會第25題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 25,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q26",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>26-27為題組</u>\n\n同學在進行歷史專題報告時，蒐集到一份1830年代北臺灣的史料，指出：「淡（水）廳貨之大者，莫如油、米，次（其次）麻、豆，次（其次）糖、菁（染料），至茄藤、通草之屬，多出於內山，樟腦、茶葉惟淡北內港始有之。商人雇船裝載，擇內地可售之處，本省則運至漳、泉、福州，往北則運至寧波、上海，往南則運至澳門等處。凡港路可通者，無不爭相貿易，取其所售之值，購買飲食、衣服及日用必需要物等件，隨船載回發賣。」依據前述記載，請問：\n\n該同學如要去考察最靠近樟腦和茶葉產地的地點，下列何地最適合？",
+    "correct": "大溪（大嵙崁）",
+    "wrong": [
+      "基隆（雞籠）",
+      "萬華（艋舺）",
+      "淡水（滬尾）"
+    ],
+    "exp": "正確答案：大溪（大嵙崁）。來源：111年學科能力測驗社會第26題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 26,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        26,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q27",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>26-27為題組</u>\n\n同學在進行歷史專題報告時，蒐集到一份1830年代北臺灣的史料，指出：「淡（水）廳貨之大者，莫如油、米，次（其次）麻、豆，次（其次）糖、菁（染料），至茄藤、通草之屬，多出於內山，樟腦、茶葉惟淡北內港始有之。商人雇船裝載，擇內地可售之處，本省則運至漳、泉、福州，往北則運至寧波、上海，往南則運至澳門等處。凡港路可通者，無不爭相貿易，取其所售之值，購買飲食、衣服及日用必需要物等件，隨船載回發賣。」依據前述記載，請問：\n\n上述史料最適合作為下列哪項推論的佐證？",
+    "correct": "兩岸物產可互補形成生產分工",
+    "wrong": [
+      "外國洋行已在臺灣設立並發展",
+      "漢人和原住民族貿易相當熱絡",
+      "農業和農產加工技術已很成熟"
+    ],
+    "exp": "正確答案：兩岸物產可互補形成生產分工。來源：111年學科能力測驗社會第27題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 27,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        26,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q28",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n<u>28-29為題組</u>\n\n照片1是甲、乙兩種農作物的收成景象。其中甲作物的播種季節，氣溫需要在$15^{\\circ}C$以上，且成長期的氣溫還要穩定上升，能維持於$20^{\\circ}C - 30^{\\circ}C$更有助生長發育。請問：\n\n甲\n\n乙\n\n照片1\n\n圖5是歐洲行政區域簡圖。若僅考慮作物生長與氣溫的關係，2010年代中期甲作物在歐洲的主要產區，最可能為下列何者？\n\n子\n\n丑\n\n卯\n\n寅\n\n圖5\n\n![圖表](/assets/banks/gsat-111-social/G28-29-figure-1.png)\n\n![圖表](/assets/banks/gsat-111-social/Q28-figure-1.png)",
+    "correct": "寅",
+    "wrong": [
+      "子",
+      "丑",
+      "卯\n\n![圖表](/assets/banks/gsat-111-social/Q28-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：寅。來源：111年學科能力測驗社會第28題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 28,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        28,
+        29
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G28-29-figure-1.png",
+      "/assets/banks/gsat-111-social/Q28-figure-1.png",
+      "/assets/banks/gsat-111-social/Q28-option-D-figure-1.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q29",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n<u>28-29為題組</u>\n\n照片1是甲、乙兩種農作物的收成景象。其中甲作物的播種季節，氣溫需要在$15^{\\circ}C$以上，且成長期的氣溫還要穩定上升，能維持於$20^{\\circ}C - 30^{\\circ}C$更有助生長發育。請問：\n\n甲\n\n乙\n\n照片1\n\n透過甲、乙兩張照片推論這兩個農業生產活動，最可能具有下列哪項共同的經營特色？\n\n![圖表](/assets/banks/gsat-111-social/G28-29-figure-1.png)\n",
+    "correct": "採取專業化耕作，呈現規模經濟經營型態",
+    "wrong": [
+      "自然投入重灌溉，人為投入重視生物科技",
+      "在農場旁設立工廠，進行農產品初級加工",
+      "作物送往畜牧場，形成農牧產業連鎖關係"
+    ],
+    "exp": "正確答案：採取專業化耕作，呈現規模經濟經營型態。來源：111年學科能力測驗社會第29題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 29,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        28,
+        29
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G28-29-figure-1.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q30",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>30-31為題組</u>\n\n圖6為某地的等高線地形圖，甲、乙、丙、丁為該地的四條登山步道，子、丑、寅、卯為該地的四個觀景台。請問：\n\n丑\n\n \n\n丙\n\n \n\n \n\n登山步道\n\n觀景台\n\n乙\n\n \n\n \n\n甲\n\n \n\n \n\n丁\n\n \n\n \n\n寅\n\n \n\n \n\n\n\n\n\n0.3 KM\n\n卯\n\n \n\n \n\n子\n\n \n\n \n\n\n\n圖6\n\n若要觀看東北方向的低處景觀，圖6中哪個觀景台的視野最開闊？\n\n![圖表](/assets/banks/gsat-111-social/Q30-figure-1.png)",
+    "correct": "子",
+    "wrong": [
+      "丑",
+      "寅",
+      "卯"
+    ],
+    "exp": "正確答案：子。來源：111年學科能力測驗社會第30題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 30,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        30,
+        31
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/Q30-figure-1.png"
+    ],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q31",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n<u>30-31為題組</u>\n\n圖6為某地的等高線地形圖，甲、乙、丙、丁為該地的四條登山步道，子、丑、寅、卯為該地的四個觀景台。請問：\n\n丑\n\n \n\n丙\n\n \n\n \n\n登山步道\n\n觀景台\n\n乙\n\n \n\n \n\n甲\n\n \n\n \n\n丁\n\n \n\n \n\n寅\n\n \n\n \n\n\n\n\n\n0.3 KM\n\n卯\n\n \n\n \n\n子\n\n \n\n \n\n\n\n圖6\n\n圖6中哪條登山步道，最可能是沿著谷地設置？\n\n![圖表](/assets/banks/gsat-111-social/Q31-figure-1.png)",
+    "correct": "丁",
+    "wrong": [
+      "甲",
+      "乙",
+      "丙"
+    ],
+    "exp": "正確答案：丁。來源：111年學科能力測驗社會第31題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 31,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        30,
+        31
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/Q31-figure-1.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q32",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>32-33為題組</u>\n\n石滬是臺灣某些地區重要的文化地景，它是在高低潮間的平坦地區，利用附近的石塊堆築的半圓形或馬蹄形捕魚陷阱，其漁獲原理之一是漲潮時魚群游至被淹沒的石滬內覓食，退潮時魚群被石滬伸腳阻擋，並留置於露出海面的石滬滬房內。請問：\n\n石滬最可能出現在下列哪種海岸地形上？",
+    "correct": "海蝕平台",
+    "wrong": [
+      "潟湖",
+      "沙嘴",
+      "海階"
+    ],
+    "exp": "正確答案：海蝕平台。來源：111年學科能力測驗社會第32題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 32,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        32,
+        33
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q33",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>32-33為題組</u>\n\n石滬是臺灣某些地區重要的文化地景，它是在高低潮間的平坦地區，利用附近的石塊堆築的半圓形或馬蹄形捕魚陷阱，其漁獲原理之一是漲潮時魚群游至被淹沒的石滬內覓食，退潮時魚群被石滬伸腳阻擋，並留置於露出海面的石滬滬房內。請問：\n\n依據石滬捕魚的原理，漁民為獲取最大漁獲量，設置石滬時最可能採取圖7中哪種開口方向？\n\n滬房\n\n伸腳\n\n陸地\n\n\n\n\n\n水\n\n深\n\n(m)\n\n甲\n\n乙\n\n丙\n\n丁\n\n圖7\n\n![圖表](/assets/banks/gsat-111-social/Q33-figure-1.png)\n",
+    "correct": "甲",
+    "wrong": [
+      "乙",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：甲。來源：111年學科能力測驗社會第33題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 33,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        32,
+        33
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/Q33-figure-1.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q34",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>34-35為題組</u>\n\n1855年清代某官僚在日記中指出：在某地區，山坡地上種滿了高粱、玉米，河中的沙洲多已開闢為田園；平地的樹木已被砍伐殆盡，偏遠地區的原始林區也已被開發。據此，他主張：亂世的根源，在於人口數量太多。追求長治久安的方法，就要透過放寬殺女嬰的禁令、發放避孕或墮胎的藥品、延後男女婚姻年齡等策略，以控制人口增加的速度。該官僚分析人口問題的成因雖然正確，但主張的減緩人口成長策略卻過於激進且不人道，並未獲得社會及各級官員認同，也未被政府採納。請問：\n\n該官僚在日記中的論述，最適合作為該地區當時下列哪項事實的佐證？",
+    "correct": "超過環境負載力上限",
+    "wrong": [
+      "區域互賴已超過限度",
+      "原住居民已遷徙他鄉",
+      "產業分工已發展成熟"
+    ],
+    "exp": "正確答案：超過環境負載力上限。來源：111年學科能力測驗社會第34題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 34,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        34,
+        35
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q35",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>34-35為題組</u>\n\n1855年清代某官僚在日記中指出：在某地區，山坡地上種滿了高粱、玉米，河中的沙洲多已開闢為田園；平地的樹木已被砍伐殆盡，偏遠地區的原始林區也已被開發。據此，他主張：亂世的根源，在於人口數量太多。追求長治久安的方法，就要透過放寬殺女嬰的禁令、發放避孕或墮胎的藥品、延後男女婚姻年齡等策略，以控制人口增加的速度。該官僚分析人口問題的成因雖然正確，但主張的減緩人口成長策略卻過於激進且不人道，並未獲得社會及各級官員認同，也未被政府採納。請問：\n\n由該官僚主張的減緩人口成長策略判斷，其所處的時代，經濟活動最可能有何特徵？",
+    "correct": "農業生產需要大量體力勞動",
+    "wrong": [
+      "資源採集需要族群密切合作",
+      "貿易活動需要精確計算能力",
+      "城市對鄰近鄉村依賴程度低"
+    ],
+    "exp": "正確答案：農業生產需要大量體力勞動。來源：111年學科能力測驗社會第35題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 35,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        34,
+        35
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>36-37為題組</u>\n\n圖8及圖9為兩個不同年份拍攝的臺灣某高鐵車站及其周邊地區遙測衛星影像圖，照片2是圖9中某地的實景照片。請問：\n\n圖9\n\n丙\n\n乙\n\n甲\n\n高鐵\n\n車\n\n站\n\n丁\n\n甲\n\n乙\n\n丙\n\n丁\n\n高鐵\n\n車\n\n站\n\n圖8\n\n照片2\n\n照片2最可能位於圖9中何處？\n\n![圖表](/assets/banks/gsat-111-social/G36-37-figure-1.png)",
+    "correct": "丙",
+    "wrong": [
+      "甲",
+      "乙",
+      "丁"
+    ],
+    "exp": "正確答案：丙。來源：111年學科能力測驗社會第36題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 36,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        36,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G36-37-figure-1.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q37",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>36-37為題組</u>\n\n圖8及圖9為兩個不同年份拍攝的臺灣某高鐵車站及其周邊地區遙測衛星影像圖，照片2是圖9中某地的實景照片。請問：\n\n圖9\n\n丙\n\n乙\n\n甲\n\n高鐵\n\n車\n\n站\n\n丁\n\n甲\n\n乙\n\n丙\n\n丁\n\n高鐵\n\n車\n\n站\n\n圖8\n\n照片2\n\n依據圖8、圖9影像資訊的差異，下列對於該地區的推論，哪項最為合理？\n\n![圖表](/assets/banks/gsat-111-social/G36-37-figure-1.png)",
+    "correct": "鐵道建設早於此區的發展",
+    "wrong": [
+      "中心商業區進行市地重劃",
+      "農地多轉為發展休閒農業",
+      "河川曾因洪患災害而改道"
+    ],
+    "exp": "正確答案：鐵道建設早於此區的發展。來源：111年學科能力測驗社會第37題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 37,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        36,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G36-37-figure-1.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q38",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>38-41為題組</u>\n\n臺灣曾於民國38年5月實施戒嚴。當時由警備總部公告的《戒嚴令》第二條規定：「自同日起，除基隆、高雄、馬公三港口在本部監護之下，仍予開放，並規定省內海上交通航線（辦法另行公布）外，其餘各港，一律封鎖，嚴禁出入。」第四條也列舉處以死刑的各項「擾亂治安」行為，包括：造謠惑眾、聚眾暴動、擾亂金融、搶奪財物、鼓動學潮、破壞交通通信、妨害公眾用水及電氣煤氣事業、持有槍彈或爆裂物等。該次戒嚴歷經38年，直至民國76年始依總統令解除（圖10）。請問：\n\n圖10\n\n若僅依照《戒嚴令》第二條規定的內容，下列哪兩地的交通航線仍有機會從事貨物運輸的往來？\n\n![圖表](/assets/banks/gsat-111-social/G38-41-figure-1.png)\n![圖表](/assets/banks/gsat-111-social/Q38-figure-1.png)",
+    "correct": "蘇澳－安平",
+    "wrong": [
+      "新竹－廈門",
+      "臺中－香港",
+      "花蓮－東京"
+    ],
+    "exp": "正確答案：蘇澳－安平。來源：111年學科能力測驗社會第38題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 38,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G38-41-figure-1.png",
+      "/assets/banks/gsat-111-social/Q38-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>38-41為題組</u>\n\n臺灣曾於民國38年5月實施戒嚴。當時由警備總部公告的《戒嚴令》第二條規定：「自同日起，除基隆、高雄、馬公三港口在本部監護之下，仍予開放，並規定省內海上交通航線（辦法另行公布）外，其餘各港，一律封鎖，嚴禁出入。」第四條也列舉處以死刑的各項「擾亂治安」行為，包括：造謠惑眾、聚眾暴動、擾亂金融、搶奪財物、鼓動學潮、破壞交通通信、妨害公眾用水及電氣煤氣事業、持有槍彈或爆裂物等。該次戒嚴歷經38年，直至民國76年始依總統令解除（圖10）。請問：\n\n圖10\n\n《戒嚴令》第二條規定最主要的目的應是：\n\n![圖表](/assets/banks/gsat-111-social/G38-41-figure-1.png)",
+    "correct": "管制大陸地區軍民撤離來臺以穩定臺灣政情",
+    "wrong": [
+      "禁止臺灣生產的米、糖外銷，以免發生糧荒",
+      "切斷臺灣與前殖民母國日本之間的政治聯繫",
+      "與美國共同協議以便執行圍堵共產主義政策"
+    ],
+    "exp": "正確答案：管制大陸地區軍民撤離來臺以穩定臺灣政情。來源：111年學科能力測驗社會第39題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 39,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G38-41-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q40",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>38-41為題組</u>\n\n臺灣曾於民國38年5月實施戒嚴。當時由警備總部公告的《戒嚴令》第二條規定：「自同日起，除基隆、高雄、馬公三港口在本部監護之下，仍予開放，並規定省內海上交通航線（辦法另行公布）外，其餘各港，一律封鎖，嚴禁出入。」第四條也列舉處以死刑的各項「擾亂治安」行為，包括：造謠惑眾、聚眾暴動、擾亂金融、搶奪財物、鼓動學潮、破壞交通通信、妨害公眾用水及電氣煤氣事業、持有槍彈或爆裂物等。該次戒嚴歷經38年，直至民國76年始依總統令解除（圖10）。請問：\n\n圖10\n\n《戒嚴令》第四條的規定，因為下列哪項理由而「違反」法治國家應遵循的法律原則？\n\n![圖表](/assets/banks/gsat-111-social/G38-41-figure-1.png)",
+    "correct": "國家對於違反行為不分輕重均判死刑",
+    "wrong": [
+      "國家禁止的行為與防止擾亂治安無關",
+      "國家只限制部分違法行為而違反平等",
+      "國家以法規範事後溯及既往處罰人民"
+    ],
+    "exp": "正確答案：國家對於違反行為不分輕重均判死刑。來源：111年學科能力測驗社會第40題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 40,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G38-41-figure-1.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q41",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n<u>38-41為題組</u>\n\n臺灣曾於民國38年5月實施戒嚴。當時由警備總部公告的《戒嚴令》第二條規定：「自同日起，除基隆、高雄、馬公三港口在本部監護之下，仍予開放，並規定省內海上交通航線（辦法另行公布）外，其餘各港，一律封鎖，嚴禁出入。」第四條也列舉處以死刑的各項「擾亂治安」行為，包括：造謠惑眾、聚眾暴動、擾亂金融、搶奪財物、鼓動學潮、破壞交通通信、妨害公眾用水及電氣煤氣事業、持有槍彈或爆裂物等。該次戒嚴歷經38年，直至民國76年始依總統令解除（圖10）。請問：\n\n圖10\n\n圖10的解除《戒嚴令》公告，同時有3人署名，可用以佐證我國憲政體制的何種特徵？\n\n![圖表](/assets/banks/gsat-111-social/G38-41-figure-1.png)",
+    "correct": "總統和行政院的關係及運作含有內閣制的精神",
+    "wrong": [
+      "總統為三軍統帥且國防部為行政院各部會之首",
+      "總統發布命令皆須行政院長與國防部長之副署",
+      "行政院長與國防部長皆須遵循總統的命令行事"
+    ],
+    "exp": "正確答案：總統和行政院的關係及運作含有內閣制的精神。來源：111年學科能力測驗社會第41題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 41,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G38-41-figure-1.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q42",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>42-43為題組</u>\n\n由於網路地圖技術的革新，地圖繪製的技術不再專屬於政府和企業，非專業的民眾透過網路協作及編輯，可以參與集體建置和提供具空間分布性質的資料與地圖。以往政府提供的地圖，或企業為商業利益製作的地圖，例如Google等商用電子地圖服務，主要提供主流群體所需，卻未必符合某些群體的生活體驗或需求。近年來，由民眾參與的開放式電子地圖協作平台，其圖資允許所有人使用及編輯，無須付費，可以將圖資用於個人、教育、商業、政府以及其他用途，如救災資訊地圖、飲水機分布地圖等。請問：\n\n依據題文所述的協作平台特性，對電子地圖市場的經濟效率最可能產生下列何種影響？",
+    "correct": "自由編輯地圖可滿足更多市場需求，提升經濟效率",
+    "wrong": [
+      "免費查詢地圖資訊可降低外部成本，提升經濟效率",
+      "開放式地圖只有滿足特定群體需求，減少經濟效率",
+      "免費的圖資降低電子地圖市場價值，減少經濟效率"
+    ],
+    "exp": "正確答案：自由編輯地圖可滿足更多市場需求，提升經濟效率。來源：111年學科能力測驗社會第42題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 42,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        42,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q43",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>42-43為題組</u>\n\n由於網路地圖技術的革新，地圖繪製的技術不再專屬於政府和企業，非專業的民眾透過網路協作及編輯，可以參與集體建置和提供具空間分布性質的資料與地圖。以往政府提供的地圖，或企業為商業利益製作的地圖，例如Google等商用電子地圖服務，主要提供主流群體所需，卻未必符合某些群體的生活體驗或需求。近年來，由民眾參與的開放式電子地圖協作平台，其圖資允許所有人使用及編輯，無須付費，可以將圖資用於個人、教育、商業、政府以及其他用途，如救災資訊地圖、飲水機分布地圖等。請問：\n\n由於開放式電子地圖協作平台允許使用者新增屬性及空間資料，下列何者最可能是由民眾透過上述協作平台產出的空間資料及可運用的服務？",
+    "correct": "社群自行建置登山步道地圖，可即時查詢及記錄路徑",
+    "wrong": [
+      "中央氣象局製作的地面天氣圖，可觀測各地的沙塵暴",
+      "查詢由政府委製的公車APP即時資訊，減少候車時間",
+      "鐵路局製作女性專用車廂車次表，提高女性乘車意願"
+    ],
+    "exp": "正確答案：社群自行建置登山步道地圖，可即時查詢及記錄路徑。來源：111年學科能力測驗社會第43題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 43,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        42,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q44",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>44-46為題組</u>\n\n一位出生於阿富汗的思想家，據聞是穆罕默德的後裔，在十九世紀後期見到當時伊斯蘭世界受到西方列強勢力入侵，伊斯蘭族群四分五裂，且當時最大的伊斯蘭帝國—鄂圖曼帝國也無法善盡保護伊斯蘭世界之責。為了讓伊斯蘭世界團結共同抵禦列強，他走訪中東、北非、歐洲各地，倡議「泛伊斯蘭主義」，嘗試建立跨宗派、地域、民族的單一伊斯蘭國度。「泛伊斯蘭主義」不是與西方對抗的軍事行動策略，也非教條儀式與民族主義，而是強調以伊斯蘭的基本信仰為普遍生活倫理規範，以此團結伊斯蘭世界並促進其政治現代化。請問：\n\n當時鄂圖曼帝國面臨的危機為何？",
+    "correct": "新帝國主義者覬覦近東地理區位與資源，使得國土深受威脅",
+    "wrong": [
+      "帝國多次進攻基督教大城維也納未果，伊斯蘭勢力擴張失敗",
+      "世界大戰爆發，帝國加入德、奧匈帝國陣營，戰後國勢衰弱",
+      "軍人凱末爾推動西化政策，引起保守者反抗，國內政局不安"
+    ],
+    "exp": "正確答案：新帝國主義者覬覦近東地理區位與資源，使得國土深受威脅。來源：111年學科能力測驗社會第44題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 44,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        44,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q45",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>44-46為題組</u>\n\n一位出生於阿富汗的思想家，據聞是穆罕默德的後裔，在十九世紀後期見到當時伊斯蘭世界受到西方列強勢力入侵，伊斯蘭族群四分五裂，且當時最大的伊斯蘭帝國—鄂圖曼帝國也無法善盡保護伊斯蘭世界之責。為了讓伊斯蘭世界團結共同抵禦列強，他走訪中東、北非、歐洲各地，倡議「泛伊斯蘭主義」，嘗試建立跨宗派、地域、民族的單一伊斯蘭國度。「泛伊斯蘭主義」不是與西方對抗的軍事行動策略，也非教條儀式與民族主義，而是強調以伊斯蘭的基本信仰為普遍生活倫理規範，以此團結伊斯蘭世界並促進其政治現代化。請問：\n\n依據題文資訊，下列有關該思想家主張的敘述，何者最能凸顯「泛伊斯蘭主義」的社會規範功能？",
+    "correct": "重建伊斯蘭文化共同價值與集體信念",
+    "wrong": [
+      "對抗西方諸列強入侵的武力團結主義",
+      "避免伊斯蘭世界分裂的國家民族主義",
+      "教育穆斯林信徒遵守伊斯蘭宗教儀式"
+    ],
+    "exp": "正確答案：重建伊斯蘭文化共同價值與集體信念。來源：111年學科能力測驗社會第45題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 45,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        44,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q46",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>44-46為題組</u>\n\n一位出生於阿富汗的思想家，據聞是穆罕默德的後裔，在十九世紀後期見到當時伊斯蘭世界受到西方列強勢力入侵，伊斯蘭族群四分五裂，且當時最大的伊斯蘭帝國—鄂圖曼帝國也無法善盡保護伊斯蘭世界之責。為了讓伊斯蘭世界團結共同抵禦列強，他走訪中東、北非、歐洲各地，倡議「泛伊斯蘭主義」，嘗試建立跨宗派、地域、民族的單一伊斯蘭國度。「泛伊斯蘭主義」不是與西方對抗的軍事行動策略，也非教條儀式與民族主義，而是強調以伊斯蘭的基本信仰為普遍生活倫理規範，以此團結伊斯蘭世界並促進其政治現代化。請問：\n\n該思想家的出生地被納入伊斯蘭世界的一部分，最可能是透過下列哪種文化擴散過程？",
+    "correct": "從阿拉伯半島向東北經過伊朗高原擴散而來",
+    "wrong": [
+      "從尼羅河流域向西越過撒哈拉沙漠擴散而來",
+      "從尼羅河流域向北越過地中海海域擴散而來",
+      "從阿拉伯半島向東南經過南洋群島擴散而來"
+    ],
+    "exp": "正確答案：從阿拉伯半島向東北經過伊朗高原擴散而來。來源：111年學科能力測驗社會第46題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 46,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        44,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q47",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>47-48為題組</u>\n\n公民課自主學習時研讀到下列資料：一般人使用網路後通常會留下數位紀錄，稱為網路「足跡」。某大型網路平台商除經營社交媒體，也跨足各種服務。該平台商自稱擁有用戶的基本資料，當串連到用戶瀏覽紀錄、搜尋關鍵詞、消費行為、社群媒體活動等足跡，就可預知使用者的價值偏好與習慣，進而能幫其客戶向使用者投放準確的廣告或政治宣傳，獲利豐厚。某資訊人權監督團體提出警告：「該平台商的行為經常沒有使用者的充分授權，也未充分告知，但卻擁有左右使用者認知與行為的能力」。然而，大眾對此風險卻不一定能充分認識。曾有調查指出，相較於教育程度高者，教育程度較低者因接觸數位風險教育機會較少，故使用網路服務時更缺乏警覺，也更容易受網路資訊影響。請問：\n\n依資訊人權監督團體所提出的警告，顯示其最擔心網路平台商下列哪項行為？",
+    "correct": "持續監視並且操縱使用者行為",
+    "wrong": [
+      "蒐集並分析使用者的網路足跡",
+      "提供政黨關於民意走向的分析",
+      "製作廣告資訊影響消費者偏好"
+    ],
+    "exp": "正確答案：持續監視並且操縱使用者行為。來源：111年學科能力測驗社會第47題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 47,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        47,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q49",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>49-50為題組</u>\n\n某國在2015年修改選舉法規，提高某項民意代表的女性保障席次。表5是修法前後兩個年度，該項民意代表選舉的比較。請問：\n\n表5\n\n| 比較項目 | 年度 |\n| 2014年 | 2018年 |\n| 選區數 | 207 | 208 |\n| 總席次 | 987 | 992 |\n| 候選人總數 | 2167 | 2286 |\n| 女性候選人數 /  / （占候選人總數的百分比） | 359 /  / （16.6） | 505 /  / （22.1） |\n| 女性當選席次 /  / （占總席次的百分比） | 176 /  / （17.8） | 225 /  / （22.7） |\n| 法定女性保障名額 /  / （占總席次的百分比） | 99 /  / （10.0） | 170 /  / （17.1） |\n| 透過女性保障名額的當選席次 /  / （占女性當選席次的百分比） | 31 /  / （17.6） | 32 /  / （14.2） |\n\n表5資料最足以支持下列哪項關於該國女性參政的推論？",
+    "correct": "女性保障名額的主要效益，在於強化女性投入選舉的誘因",
+    "wrong": [
+      "女性當選席次的成長，主要是受惠於女性保障名額的增加",
+      "女性保障名額與保障名額的當選席次，兩者具有正向相關",
+      "女性保障名額當選席次變化，可證明積極平權措施的效益"
+    ],
+    "exp": "正確答案：女性保障名額的主要效益，在於強化女性投入選舉的誘因。來源：111年學科能力測驗社會第49題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 49,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        49,
+        50
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q51",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>51-52為題組</u>\n\n某地區因氣候乾燥，雷暴閃電誘發的火苗引發大規模森林野火，經濟損失慘重。此地是著名的葡萄酒鄉，葡萄酒產量占該國的90%，但森林野火波及並燒毀許多葡萄園和酒莊，嚴重影響當年葡萄酒市場。有學者認為，此極端氣候與該國過高的排碳量有關，主要來自石油的消耗。為避免災害再次發生，該國政府將於2035年禁止燃油車的使用並逐步改用綠能發電。此舉不利多數產業的發展，引發許多業者不滿。請問：\n\n依據題文，下列何者最能呈現該國面臨的問題？",
+    "correct": "氣候的變遷導致環境保護與生產成本之間所面臨的兩難問題",
+    "wrong": [
+      "石油消耗過多造成油價高漲，迫使政府改用綠色能源的問題",
+      "綠能發展與作物轉型兩者之間將形成資源配置上的取捨問題",
+      "葡萄酒產業使資源消耗殆盡，進而造成氣候變遷與環保問題"
+    ],
+    "exp": "正確答案：氣候的變遷導致環境保護與生產成本之間所面臨的兩難問題。來源：111年學科能力測驗社會第51題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 51,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        51,
+        52
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q53",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>53-54為題組</u>\n\n大量使用塑膠吸管所造成的健康與海洋生態破壞問題讓人擔憂。假定某國的民意強烈要求政府應立刻大幅度限制塑膠吸管的使用，且依據現行法律，主管機關已有充分法律授權可發布命令、訂定實施細則與開始日期，以管制塑膠吸管使用；但該機關卻認為茲事體大，仍依循該國法律對制訂行政命令的過程，預先將草案公告周知，並依法舉辦聽證，廣納各界意見，再審慎決定規定內容。請問：\n\n從外部成本的觀點，下列敘述何者符合該國政府政策的意涵？",
+    "correct": "社會成本高於私人成本，從整體社會的觀點塑膠吸管的生產數量過多",
+    "wrong": [
+      "社會成本高於私人成本，從市場經濟的觀點塑膠吸管的生產數量過多",
+      "私人成本高於社會成本，從市場經濟的觀點政府應管制塑膠吸管使用",
+      "私人成本高於社會成本，從整體社會的觀點政府應管制塑膠吸管使用"
+    ],
+    "exp": "正確答案：社會成本高於私人成本，從整體社會的觀點塑膠吸管的生產數量過多。來源：111年學科能力測驗社會第53題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 53,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        53,
+        54
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q55",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n55-56為題組\n\n西晉末年，北方戰亂，長安、洛陽二京傾覆，山西、河北淪陷。面對時局的變動，人民有不同的作法。學者指出，中原士庶避難者約有兩途，或入遼東，或徙江左。入遼者，接受慕容氏招撫；過江和遷於淮漢流域者，為數尤多，遂創二百七十年偏安之局。其不克遷徙者，則鳩合宗黨，保聚險固，自治自衛，以圖苟免於胡人或寇賊之難。還有一種流人，其背棄鄉貫，轉徙他方，與前者相似；而憑堅乘險，保守塢聚，又與後者彷彿。請問：\n\n上述史事的時代背景，應是：",
+    "correct": "內遷胡人舉兵起事",
+    "wrong": [
+      "遊牧民族避寒南侵",
+      "匈奴勢盛南下牧馬",
+      "蒙古鐵騎橫掃中原"
+    ],
+    "exp": "正確答案：內遷胡人舉兵起事。來源：111年學科能力測驗社會第55題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 55,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        55,
+        56
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q57",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n57-58為題組\n\n經調查，臺灣在COVID-19疫情三級警戒時期，約40%的企業因異地生產導致產能調配不易；約20%的企業，其產品物流配送受阻；約20%的企業，營運不受疫情影響；另有20%的企業，反受疫情刺激需求而增加訂單。其中工廠據點較分散，在海外疫情熱區設有生產據點的企業，其產能調配受影響最明顯；如一些機械與電機、電子零組件及光電、車輛與金屬產業等，其零組件配送受阻比例較高，研判應是海運作業耽誤所致。為了因應疫情的衝擊，許多企業優先選擇的經營策略是：以資訊科技提供遠端客服或維運，並精簡行銷、研發等以降低營運成本。請問：\n\n許多企業為了因應疫情衝擊而優先選擇的經營策略，需要下列哪項要素的配合，才能有效達成？",
+    "correct": "知識經濟發達",
+    "wrong": [
+      "產業群聚普遍",
+      "經濟結構轉型",
+      "產品規格化普及"
+    ],
+    "exp": "正確答案：知識經濟發達。來源：111年學科能力測驗社會第57題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 57,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        57,
+        58
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q59",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n59-60為題組\n\n美國與墨西哥的經貿關係向來密切，在兩國邊界形成的都會區域（圖11），早已發展出產業分工關係。然而，美國在川普總統主政時，以防止非法移民不斷湧入、保障本國勞工就業機會以及強化國土邊境安全為由，曾在政府預算中編列經費，擴大築牆；但當時國會認為，此舉既浪費納稅人的錢，又製造與鄰國的緊張關係。因築牆爭議無法達成共識，曾一度導致聯邦政府預算無法通過，使得某些政府部門暫時停止運作。請問：\n\n聖地牙哥\n\n提華納\n\n高\n\n低\n\n人\n\n口\n\n密\n\n度\n\n\n\n10 km\n\n\n\n圖11\n\n題文所述之築牆爭議導致某些聯邦政府部門停擺，其原因最可能與該國哪項政府體制的特性及運作有關？\n\n![圖表](/assets/banks/gsat-111-social/G59-60-figure-1.png)",
+    "correct": "總統與國會各自代表的兩權完全分立，易有政治對立僵局",
+    "wrong": [
+      "國會有權拒絕副署總統簽署的法案，阻礙法案公布和施行",
+      "國會對於涉及鄰國邊界的重要外交事務，依法擁有否決權",
+      "總統為國家最高行政首長，有權暫時停止政府部門的運作"
+    ],
+    "exp": "正確答案：總統與國會各自代表的兩權完全分立，易有政治對立僵局。來源：111年學科能力測驗社會第59題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 59,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        59,
+        60
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G59-60-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q61",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n61-64為題組\n\n日治時期，臺灣總督府為開發山林資源，拓殖其經濟利益，初期認為山林中的「蕃人」是阻礙開發的「凶惡之徒」，不但不承認其傳統權益，甚至用武力征伐；後期又進行大規模「集團移住」計畫，迫使各原住民部落離開其傳統生活空間，遷移到山腳地帶。部落間原有的往來因此被切斷，重新配置的部落也無法和其他部落建立合作關係，以致內部社會關係瓦解，達到總督府期待的可使原住民「舊來勢力關係中斷」。以立霧溪流域的太魯閣族群來說，集團移住的結果，不僅部落被撤離原居住地，且多數部落遭到分割，還有許多部落被嵌入布農族的傳統領域，造成賽德克族、太魯閣族及布農族混居的情況。請問：\n\n當今哪項原住民族議題，和臺灣總督府推動的原住民族集團移住計畫關係最密切？",
+    "correct": "傳統領域的劃設",
+    "wrong": [
+      "傳統姓名的回復",
+      "正名運動的展開",
+      "族語復振的推展"
+    ],
+    "exp": "正確答案：傳統領域的劃設。來源：111年學科能力測驗社會第61題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 61,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        61,
+        64
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q62",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n61-64為題組\n\n日治時期，臺灣總督府為開發山林資源，拓殖其經濟利益，初期認為山林中的「蕃人」是阻礙開發的「凶惡之徒」，不但不承認其傳統權益，甚至用武力征伐；後期又進行大規模「集團移住」計畫，迫使各原住民部落離開其傳統生活空間，遷移到山腳地帶。部落間原有的往來因此被切斷，重新配置的部落也無法和其他部落建立合作關係，以致內部社會關係瓦解，達到總督府期待的可使原住民「舊來勢力關係中斷」。以立霧溪流域的太魯閣族群來說，集團移住的結果，不僅部落被撤離原居住地，且多數部落遭到分割，還有許多部落被嵌入布農族的傳統領域，造成賽德克族、太魯閣族及布農族混居的情況。請問：\n\n題文所述總督府的支配控制及治理措施，有些仍影響至今，包括現行有關原住民族權益的相關法制；但也有些已經因應國際人權觀念趨勢、多元文化發展而有所改變。下列政策何者最能凸顯這樣的改變？",
+    "correct": "設有部落會議的原住民族部落，經核定後可取得公法人的主體地位",
+    "wrong": [
+      "國家為國有林地所有權人，原住民得由政府機構許可取用森林資源",
+      "將原住民立法委員的選舉，分為「山地」與「平地」原住民選舉區",
+      "設立原住民保留地以保障原住民生計，並限制將土地轉予非原住民"
+    ],
+    "exp": "正確答案：設有部落會議的原住民族部落，經核定後可取得公法人的主體地位。來源：111年學科能力測驗社會第62題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 62,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        17
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        61,
+        64
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q65",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>65-67為題組</u>\n\n猶太教與基督教的信仰屬性，及其對「神的選民」的看法略有異同，以致二者常有紛爭。西元一世紀，猶太宗教領袖在耶路撒冷以基督教傳道者保羅褻瀆猶太教，且無法證明自己清白為由，控告保羅並要求對其處刑。當時羅馬法律規定：非經審判，羅馬公民不得被捆綁、監禁或鞭打。保羅因具有羅馬公民身分，故要求交羅馬當局處理，於是當地總督在夏季末期，將保羅押送至羅馬審判。圖12為羅馬帝國時期東地中海的航運路線圖，虛線為押送保羅航線，實線為地中海貿易線。請問：\n\n亞歷山大\n\n克里特島\n\n羅馬\n\n耶路撒冷\n\n圖12\n\n文中所敘述之事件，乃發生於羅馬人統治的時代。時至今日，若以法治國家理念檢視此案，可看出題文中羅馬法律保障羅馬公民的規定，與下列何種近代法律重要原則的精神最為接近？\n\n![圖表](/assets/banks/gsat-111-social/G65-67-figure-1.png)\n",
+    "correct": "無罪推定原則",
+    "wrong": [
+      "自由心證原則",
+      "公開審理原則",
+      "偵查不公開原則"
+    ],
+    "exp": "正確答案：無罪推定原則。來源：111年學科能力測驗社會第65題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 65,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        65,
+        67
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G65-67-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-social-q66",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>65-67為題組</u>\n\n猶太教與基督教的信仰屬性，及其對「神的選民」的看法略有異同，以致二者常有紛爭。西元一世紀，猶太宗教領袖在耶路撒冷以基督教傳道者保羅褻瀆猶太教，且無法證明自己清白為由，控告保羅並要求對其處刑。當時羅馬法律規定：非經審判，羅馬公民不得被捆綁、監禁或鞭打。保羅因具有羅馬公民身分，故要求交羅馬當局處理，於是當地總督在夏季末期，將保羅押送至羅馬審判。圖12為羅馬帝國時期東地中海的航運路線圖，虛線為押送保羅航線，實線為地中海貿易線。請問：\n\n亞歷山大\n\n克里特島\n\n羅馬\n\n耶路撒冷\n\n圖12\n\n保羅從耶路撒冷被押解去羅馬的航程中，前期與一般貿易航線類似，沿著陸地前行，利用地形來減輕航行的障礙。若從行星風系的大氣環流角度，押解保羅的航程沿陸地前行，最可能是為了避開哪一行星風帶或氣壓帶的影響？\n\n![圖表](/assets/banks/gsat-111-social/G65-67-figure-1.png)\n",
+    "correct": "盛行西風帶",
+    "wrong": [
+      "東北信風帶",
+      "極圈氣旋帶",
+      "副熱帶高壓帶"
+    ],
+    "exp": "正確答案：盛行西風帶。來源：111年學科能力測驗社會第66題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "gsat-111-social",
+      "question": 66,
+      "file": "高中/學測/社會/05-111學測社會試卷.pdf",
+      "url": "https://drive.google.com/file/d/1siRUFuy9KdOhfaVRselj0h3qqUjAT1m8/view?usp=drivesdk",
+      "pages": [
+        18
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052614459126969237/05-111%e5%ad%b8%e6%b8%ac%e7%a4%be%e6%9c%83%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88..pdf",
+      "group": [
+        65,
+        67
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-111-social/G65-67-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  }
+]

@@ -57,6 +57,14 @@ test('closed-panel friend checks wait five minutes and do not read when the play
   f.advance(240000);f.poll();await flush();assert.equal(f.calls.length,3);
 });
 
+test('Taiwan midnight checks the new daily task from the home page even before personal completion and without friends',async()=>{
+  const f=runtime();await f.refresh();assert.equal(f.calls.length,1);
+  f.poll();await flush();assert.equal(f.calls.length,1);
+  f.date('2026-10-18');f.poll();await flush();assert.equal(f.calls.length,2);
+  assert.ok(f.calls.every(url=>url==='/api/meditation/status'));
+  f.poll();await flush();assert.equal(f.calls.length,2);
+});
+
 test('a mutation or account switch prevents old pending status replies from replacing new state',async()=>{
   const f=runtime();let release;
   f.respond(()=>new Promise(resolve=>{release=resolve;}));

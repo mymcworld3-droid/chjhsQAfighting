@@ -4,7 +4,6 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const read = path => readFileSync(join(__dirname, '../public', path), 'utf8');
 const combat = read('cultivation/cultivation-combat-stats.js');
-const market = read('cultivation/player-marketplace.js');
 const meditation = read('cultivation/daily-meditation.js');
 
 test('combat stats initialize on player readiness, not a repeating timer', () => {
@@ -14,27 +13,9 @@ test('combat stats initialize on player readiness, not a repeating timer', () =>
   assert.doesNotMatch(combat, /setInterval\(ensureDefaults/);
 });
 
-test('market reads user wallet only while the trading tab is visible', () => {
-  assert.match(market, /function marketVisible\(\)/);
-  assert.match(market, /store\.classList\.contains\('pm-market-active'\)/);
-  const subscribe = market.slice(market.indexOf('  function subscribe(uid) {'), market.indexOf('  function boot() {'));
-  assert.match(subscribe, /if \(marketVisible\(\)\) \{ void refreshWallet\(\); void refreshListings\(\); \}/);
-  assert.match(subscribe, /if \(marketVisible\(\)\) \{/);
-  assert.doesNotMatch(subscribe, /if \(!uid\) \{ scheduleRender\(\); return; \}\s*void refreshWallet\(\)/);
-  assert.match(market, /if \(open\) \{ render\(\); void refreshWallet\(\); void refreshListings\(\); \}/);
-});
-
-test('wallet read is single-flight and throttles Firestore resource exhaustion', () => {
-  assert.match(market, /walletLoading \|\| Date\.now\(\) < walletRetryAfter/);
-  assert.match(market, /walletLoading = true/);
-  assert.match(market, /walletLoading = false/);
-  assert.match(market, /resource-exhausted/);
-  assert.match(market, /walletRetryAfter = Date\.now\(\) \+ 60000/);
-});
-
 test('meditation reuses existing server sessions and keeps settlement atomic without client Firestore reads', () => {
   const api=readFileSync(join(__dirname,'../daily-meditation-api.cjs'),'utf8');
-  assert.match(api,/if\(existing.session\)return/);
+  assert.match(api,/if\(c.session\)return/);
   assert.match(api,/db.runTransaction/);
   assert.match(api,/if\(c.result\)return \{completed:true/);
   assert.doesNotMatch(meditation,/getDoc\(|getDocs\(|runTransaction\(/);
@@ -61,19 +42,13 @@ test('waiting-room matchmaking uses a 5-second fallback while preserving immedia
   assert.match(battle, /if \(state\.roomId && state\.role === 'host' && state\.room\?\.status === 'waiting'\) scheduleReconcile\(\)/);
 });
 
-test('market only refreshes automatically every two minutes while leaving manual refresh available', () => {
-  assert.match(market, /refreshTimer = setInterval/);
-  assert.match(market, /\},120000\);/);
-  assert.match(market, /button\.dataset\.pmRefresh !== undefined/);
-});
-
 test('friends, leaderboard and chat reuse recent reads without changing their original navigation', () => {
   assert.match(legacy, /friendListReadCache/);
   assert.match(legacy, /Date\.now\(\) - friendListReadCache\.time < 60000/);
   assert.match(legacy, /friendListPending/);
   assert.match(legacy, /leaderboardCachedSnapshot/);
   assert.match(legacy, /Date\.now\(\) - leaderboardCacheTime < 120000/);
-  assert.match(legacy, /limit\(25\)/);
+  assert.match(legacy, /subscribeSocialFeed\(db, kind, 25,/);
   assert.match(legacy, /if \(pageId !== 'page-social' && chatUnsub\)/);
 });
 

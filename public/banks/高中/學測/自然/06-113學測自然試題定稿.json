@@ -1,0 +1,751 @@
+[
+  {
+    "id": "gsat-113-science-q1",
+    "difficulty": "easy",
+    "q": "探討活動時，小明觀察染色後細胞的形態並繪得如圖1的細胞圖。這圖所顯示的細胞最可能是來自下列何處的樣本？\n\n圖1\n\n![圖表](/assets/banks/gsat-113-science/Q1-figure-1.png)",
+    "correct": "口腔黏膜",
+    "wrong": [
+      "血液",
+      "洋蔥根尖",
+      "洋蔥表皮",
+      "水蘊草葉片"
+    ],
+    "exp": "正確答案：口腔黏膜。來源：113年學科能力測驗自然第1題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 1,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q1-figure-1.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q6",
+    "difficulty": "easy",
+    "q": "已知一段雙股去氧核糖核酸，其中一股的含氮鹼基序列為ATTGCCTTA，A為腺嘌呤、T為胸腺嘧啶、C為胞嘧啶、G為鳥糞嘌呤，下列有關<u>此段雙股</u>去氧核糖核酸的敘述，何者正確？",
+    "correct": "鳥糞嘌呤與胞嘧啶個數相加等於腺嘌呤個數",
+    "wrong": [
+      "腺嘌呤個數與胞嘧啶相同",
+      "腺嘌呤個數為胸腺嘧啶的兩倍",
+      "嘧啶總個數多於嘌呤總個數",
+      "嘌呤總個數多於嘧啶總個數"
+    ],
+    "exp": "正確答案：鳥糞嘌呤與胞嘧啶個數相加等於腺嘌呤個數。來源：113年學科能力測驗自然第6題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 6,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q8",
+    "difficulty": "easy",
+    "q": "小明探討演化理論之發展歷史，發現達爾文手繪之共同祖先概念圖饒富科學趣味，並仿製達爾文首次繪出的生命樹如圖4；其中之節點為共同祖先，線段表示物種之存續。若以現代觀點解釋之，①為親緣關係樹的根，甲～丁為端末物種，以甲乙代表甲和乙之親緣關係，其餘類推，並以XY＞YZ的「＞」表示XY的親疏關係較YZ親（近），則下列關係何者正確？\n\n乙\n\n圖4\n\n丙\n\n丁\n\n①\n\n甲\n\n![圖表](/assets/banks/gsat-113-science/Q8-figure-1.png)",
+    "correct": "甲乙＜乙丁",
+    "wrong": [
+      "甲乙＞甲丙",
+      "甲乙＜甲丁",
+      "甲乙＞乙丙",
+      "甲乙＞丙丁"
+    ],
+    "exp": "正確答案：甲乙＜乙丁。來源：113年學科能力測驗自然第8題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 8,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q8-figure-1.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q9",
+    "difficulty": "medium",
+    "q": "有關現行的生物分類系統，下列敘述何者正確？",
+    "correct": "屬是將（物）種加以歸類後的第一個層級",
+    "wrong": [
+      "階層愈高，其內的（物）種間相似的特徵愈多，成員也較多",
+      "階層愈低，其內（物）種較少，親緣關係也較疏遠",
+      "任取兩個同目的（物）種必較同科的兩（物）種在親緣關係上疏遠",
+      "（物）種是分類的基本單位，只能以形態相區別"
+    ],
+    "exp": "正確答案：屬是將（物）種加以歸類後的第一個層級。來源：113年學科能力測驗自然第9題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 9,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q10",
+    "difficulty": "medium",
+    "q": "五種化合物的分子式分別是甲（$C_{19}H_{19}N_7O_6$）、乙（$C_{20}H_{30}O$）、丙（$C_{28}H_{44}O$）、丁（$C_6H_8O_6$）與戊（$C_{29}H_{50}O_2$）。某化合物經完全燃燒後，所得二氧化碳與水重量比為11：3，則此化合物為下列哪一種？（原子量C＝12.0、H＝1.00、O＝16.0）",
+    "correct": "丁",
+    "wrong": [
+      "甲",
+      "乙",
+      "丙",
+      "戊"
+    ],
+    "exp": "正確答案：丁。來源：113年學科能力測驗自然第10題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 10,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q12",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n12-13題為題組\n\n黃鐵礦（$FeS_2$）是地表上主要礦物之一，通常與他種岩石的硫化物或氧化物伴生。地質學家為了解黃鐵礦成分，進行以下的實驗。其實驗步驟如下：\n\n步驟1：將黃鐵礦實驗樣品磨成粉末，於3個錐形瓶（標號1～3）中分別放置0.35 克樣品，並加入50 mL的酸性溶液。\n\n步驟2：將3個錐形瓶置放在室溫，但不同氧氣分壓下。\n\n步驟3：經過一天後，取出20 mL上層澄清液，測量溶液中含鐵總濃度（$[Fe_{total}]$，包含Fe(Ⅱ)與Fe(Ⅲ)）、$SO_4^{2-}$濃度（$[SO_4^{2-}]$）及含硫總濃度（$[S_{total}]$，包含$[SO_4^{2-}]$與其它含硫物質濃度）。\n\n上述含硫總濃度是先用化學方法，將溶液中所有硫化物氧化成$SO_4^{2-}$後，再加以測量，實驗結果列於表1。\n\n| 表1黃鐵礦樣品在不同氧氣分壓下溶解後成分分析 |\n| 樣品 | 氧氣的分壓（atm） | $[Fe_{total}]$（mM） | $[SO_4^{2-}]$/$[Fe_{total}]$ | $[S_{total}]$/$[Fe_{total}]$ |\n| 1 | 0.21 | $2.4 \\times 10^{-2}$ | 1.46 | 1.74 |\n| 2 | $3.0 \\times 10^{-3}$ | $1.4 \\times 10^{-3}$ | 1.39 | 1.72 |\n| 3 | $3.3 \\times 10^{-5}$ | $3.8 \\times 10^{-4}$ | 1.24 | 1.70 |\n\n欲測量含硫物質的總濃度時，可選用以下哪種試劑，將水溶液內的硫化物都氧化成$SO_4^{2-}$？",
+    "correct": "$H_2O_2(aq)$",
+    "wrong": [
+      "$NH_3(aq)$",
+      "$Zn(s)$",
+      "$HCl(aq)$",
+      "$KCl(aq)$"
+    ],
+    "exp": "正確答案：$H_2O_2(aq)$。來源：113年學科能力測驗自然第12題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 12,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        12,
+        13
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q14",
+    "difficulty": "medium",
+    "q": "硼烷氨（$H_3NBH_3$）是一種固態能源，可與鹽酸反應產生氫氣。假設在25℃、1 atm 下，取1.54克硼烷氨與足量的鹽酸反應，可完全轉變成硼酸（$H_3BO_3$）、氯化銨（$NH_4Cl$）與氫氣，反應式如下：\n\n$H_3NBH_3+HCl+H_2O\\to H_3BO_3+NH_4Cl+H_2$ （未平衡）\n\n試問所產生氫氣的體積是多少升？（25℃、1 atm，1莫耳氫氣的體積為24.5升；原子量C＝12.0、H＝1.00、O＝16.0、N＝14.0、B＝10.8）",
+    "correct": "3.68",
+    "wrong": [
+      "1.23",
+      "3.36",
+      "4.90",
+      "6.00"
+    ],
+    "exp": "正確答案：3.68。來源：113年學科能力測驗自然第14題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 14,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q15",
+    "difficulty": "medium",
+    "q": "李小仁買了一條流行的飛天小丑魚，是一種質量很輕類似氣球的飛行玩具，但是買回來後發現，廠商沒有將飛天小丑魚灌入氣體。於是，李小仁前往附近店家尋找，並填充一定量體積的氦氣，但是找了幾家，發現氦氣的純度有所差異，皆含有體積1%氣體雜質。試問含有下列何種雜質會使飛天小丑魚最容易浮起？\n（原子量C＝12.0、N＝14.0、O＝16.0、Ne＝20.2、Ar＝40.0）",
+    "correct": "氖氣",
+    "wrong": [
+      "二氧化碳",
+      "氮氣",
+      "氬氣",
+      "氧氣"
+    ],
+    "exp": "正確答案：氖氣。來源：113年學科能力測驗自然第15題。",
+    "subject": "化學",
+    "sub_topic": "化學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 15,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n16-17題為題組\n\n海水去鹽淡化，可讓水資源再利用。某實驗室發現咖啡渣可作為水純化的材料。首先將咖啡渣在極高溫下碳化成奈米材料，再混以具油脂特性的無色透明矽烷，均勻地灑在一杯海水的表面上，然後放置在一具有斜度上蓋的透明容器（如圖5所示），經在太陽光照射之下，底部漸漸發現有經過凝結後的純水。\n\n研究人員針對四種情況，分別是（甲）未照光、（乙）照光、（丙）照光並灑上碳化咖啡粉，以及（丁）照光並灑上混有矽烷的碳化咖啡粉，且後兩種情況使用同樣重量的咖啡粉。在同樣的時間內，測量水杯重量的減少程度，並將實驗結果繪製成圖6。\n\n圖5\n\n純水\n\n海水\n\n碳化後粉末\n\n圖6\n\n照光並灑上混有矽烷的碳化咖啡粉\n\n照光並灑上碳化咖啡粉\n\n照光\n\n未照光\n\n甲\n\n乙\n\n丙\n\n丁\n\n\n\n–0.2\n\n–0.4\n\n–1\n\n–0.6\n\n–0.8\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n時間（min）\n\n重\n\n量\n\n的\n\n改\n\n變（kg/m<sup>2</sup>）\n\n實驗的結果發現，在水的表面灑上碳化後的咖啡粉，可以增加水的揮發效果，其可能原因為何？\n\n![圖表](/assets/banks/gsat-113-science/G16-17-figure-2.png)\n![圖表](/assets/banks/gsat-113-science/G16-17-figure-1.png)\n",
+    "correct": "碳化後的咖啡粉，吸光吸熱的效果增加",
+    "wrong": [
+      "碳化後的咖啡粉變輕，與水一起揮發",
+      "碳化後的咖啡粉變重，把水擠出容器外",
+      "碳化後的咖啡粉易溶於水，促進水的揮發",
+      "碳化後的咖啡粉不易吸水，水就容易揮發"
+    ],
+    "exp": "正確答案：碳化後的咖啡粉，吸光吸熱的效果增加。來源：113年學科能力測驗自然第16題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 16,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        16,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G16-17-figure-2.png",
+      "/assets/banks/gsat-113-science/G16-17-figure-1.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q21",
+    "difficulty": "easy",
+    "q": "眼球的主要結構及成像原理，和相機類似，如圖7所示。光進入眼球時，會經過「角膜」、「瞳孔」與「水晶體」，「瞳孔」如同相機的光圈，可縮放以控制進光量的多寡；而「角膜」與「水晶體」如同相機鏡頭中的透鏡。最後成像在「視網膜」，如同相機的感光元件。下列敘述，何者正確？\n\n圖7\n\n視網膜\n\n角膜\n\n瞳孔\n\n水晶體\n\n![圖表](/assets/banks/gsat-113-science/Q21-figure-1.png)",
+    "correct": "遠方物體在照相機感光元件上形成倒立實像，在眼睛的視網膜上也是形成倒立實像",
+    "wrong": [
+      "進入眼球的光可在視網膜上成像，主要由於干涉現象\n\n![圖表](/assets/banks/gsat-113-science/Q21-option-A-figure-1.png)",
+      "物體成像在視網膜的前方或後方，可配戴凹透鏡或凸透鏡來矯正，主要是利用光的繞射現象\n\n![圖表](/assets/banks/gsat-113-science/Q21-option-B-figure-1.png)",
+      "若遠處物體的成像位置在相機的感光元件之前，可改用感光程度更高的元件，使影像由模糊變為清晰",
+      "若成像模糊，照相機是調整鏡頭與感光元件的距離，而眼睛則只靠縮放瞳孔，使成像清晰"
+    ],
+    "exp": "正確答案：遠方物體在照相機感光元件上形成倒立實像，在眼睛的視網膜上也是形成倒立實像。來源：113年學科能力測驗自然第21題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 21,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q21-figure-1.png",
+      "/assets/banks/gsat-113-science/Q21-option-A-figure-1.png",
+      "/assets/banks/gsat-113-science/Q21-option-B-figure-1.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n24-25題為題組\n\n電冰箱的操作原理是利用低溫的冷媒來冷卻冰箱裡的食物，再用壓縮機壓縮吸收熱能後的冷媒，提高其溫度，以利於其後之散熱過程。冷媒經散熱片把熱能釋放到周遭空氣中後，經過降溫、降壓又可以用來冷卻冰箱裡的食物，如此構成冷卻的循環，而循環過程會消耗電能。\n\n冰箱、冷凍庫的效率可看其性能係數，其定義為：$性能係數=\\frac{轉移的熱能}{輸入的功}$。若一電冰箱性能係數為2.5，則輸入1.0度電約可轉移多少熱能？（1度電＝1 kW·h，輸入的功可視為輸入的電能）",
+    "correct": "$9.0\\times 10^6 J$",
+    "wrong": [
+      "$3.6\\times 10^6 J$",
+      "$7.2\\times 10^6 J$",
+      "$1.1\\times 10^7 J$",
+      "$1.4\\times 10^7 J$"
+    ],
+    "exp": "正確答案：$9.0\\times 10^6 J$。來源：113年學科能力測驗自然第25題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 25,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q26",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n26-27題為題組\n\n汽車的安全系統判斷車身受到撞擊而急遽減速時，裝在方向盤裡的安全氣囊即會充氣彈出，透過內部氣體的緩衝，配合安全帶的作用，來降低駕駛人受到的衝擊力。\n\n圖9\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n飽和壓力\n\n充氣時間（ms）\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n充\n\n氣\n\n壓\n\n力\n\n（kPa）\n\n圖9為一款汽車安全氣囊的充氣壓力與充氣時間的關係圖（100 kPa大約為1大氣壓）。在駕駛人撞擊到安全氣囊前，必須要有足夠的時間讓安全氣囊至少充氣達飽和壓力的一半以上，才能藉由緩衝達到保護駕駛人的效果。依據上述文字與圖9，回答第26～27題。\n\n根據圖9，開始充氣的安全氣囊，至少約需時多少，可達保護駕駛人的氣壓？\n\n![圖表](/assets/banks/gsat-113-science/G26-27-figure-1.png)\n",
+    "correct": "30 ms",
+    "wrong": [
+      "10 ms",
+      "20 ms",
+      "40 ms",
+      "50 ms"
+    ],
+    "exp": "正確答案：30 ms。來源：113年學科能力測驗自然第26題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 26,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        26,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G26-27-figure-1.png"
+    ],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q27",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n26-27題為題組\n\n汽車的安全系統判斷車身受到撞擊而急遽減速時，裝在方向盤裡的安全氣囊即會充氣彈出，透過內部氣體的緩衝，配合安全帶的作用，來降低駕駛人受到的衝擊力。\n\n圖9\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n飽和壓力\n\n充氣時間（ms）\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n充\n\n氣\n\n壓\n\n力\n\n（kPa）\n\n圖9為一款汽車安全氣囊的充氣壓力與充氣時間的關係圖（100 kPa大約為1大氣壓）。在駕駛人撞擊到安全氣囊前，必須要有足夠的時間讓安全氣囊至少充氣達飽和壓力的一半以上，才能藉由緩衝達到保護駕駛人的效果。依據上述文字與圖9，回答第26～27題。\n\n質量為50 kg的駕駛人在國道開車，以108 km/h（即30 m/s）的速度向東前進。假設該車在發生正面撞擊的瞬間，安全帶與車體支撐立即開始施予駕駛人一個固定的水平力，而方向盤的轉軸也立即收縮，致使方向盤向前水平移動，安全氣囊也開始充氣。若駕駛人接觸到氣囊時，其速度為54 km/h向東，而安全氣囊充氣恰達飽和壓力的一半，則駕駛人受到的水平定力約為多少？\n\n![圖表](/assets/banks/gsat-113-science/G26-27-figure-1.png)\n",
+    "correct": "25000 N",
+    "wrong": [
+      "150000 N",
+      "8880 N",
+      "1000 N",
+      "250 N"
+    ],
+    "exp": "正確答案：25000 N。來源：113年學科能力測驗自然第27題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 27,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        26,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G26-27-figure-1.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q29",
+    "difficulty": "medium",
+    "q": "海洋裡有各種不同時間尺度的運動和現象，例如：（甲）潮汐、（乙）聖嬰現象、（丙）湧浪、（丁）風浪、（戊）溫鹽環流。這些運動和現象的大致週期，從長至短的順序為何？",
+    "correct": "戊乙甲丙丁",
+    "wrong": [
+      "甲乙丙戊丁",
+      "戊甲丙丁乙",
+      "甲丙乙戊丁",
+      "乙戊甲丙丁"
+    ],
+    "exp": "正確答案：戊乙甲丙丁。來源：113年學科能力測驗自然第29題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 29,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q31",
+    "difficulty": "hard",
+    "q": "地震預警是利用地震資訊的快速發布，讓地震波尚未到達的地區能即時因應。假設從地震發生到市民收到中央氣象署預警通知所需時間為10秒，P波的速率為每秒5公里，S波的速率為每秒3公里。假設震波速率不變，某地震發生後，若臺北測站測得的P波比S波早到20秒，則臺北市民在這地震的S波到達前，有多少秒可做緊急應變？",
+    "correct": "40",
+    "wrong": [
+      "30",
+      "35",
+      "45",
+      "50"
+    ],
+    "exp": "正確答案：40。來源：113年學科能力測驗自然第31題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 31,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.31,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q32",
+    "difficulty": "hard",
+    "q": "北半球有一溫帶氣旋，其地面氣壓與鋒面的分布如圖11所示。下列有關此天氣圖的敘述，何者正確？\n\n圖11\n\n\n\n丁\n\n甲\n\n丙\n\n乙\n\n![圖表](/assets/banks/gsat-113-science/Q32-figure-1.png)",
+    "correct": "丁地點大約吹西北風",
+    "wrong": [
+      "甲地點大約吹西風",
+      "乙地點的溫度最低",
+      "丙地點的氣壓最高",
+      "乙地點的天氣是陰雨天"
+    ],
+    "exp": "正確答案：丁地點大約吹西北風。來源：113年學科能力測驗自然第32題。",
+    "subject": "地球科學",
+    "sub_topic": "地球科學綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 32,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q32-figure-1.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q36",
+    "difficulty": "hard",
+    "q": "相對於目前海水面高度，2萬年前至今的全球海水面變化如圖13。造成近2萬年以來海水面變動最可能的原因為何？\n\n圖13\n\n\n\n\n\n\n\n\n\n\n\n（千年前）\n\n\n\n–20\n\n–40\n\n–60\n\n–80\n\n–100０0\n\n–120\n\n（公尺）\n\n![圖表](/assets/banks/gsat-113-science/Q36-figure-1.png)",
+    "correct": "太陽入射量變化造成冰川\n體積消融",
+    "wrong": [
+      "造山作用的影響",
+      "人類活動造成的溫室效應",
+      "全球降雨量大增",
+      "海底火山噴發\n\n![圖表](/assets/banks/gsat-113-science/Q36-option-E-figure-1.png)"
+    ],
+    "exp": "正確答案：太陽入射量變化造成冰川\n體積消融。來源：113年學科能力測驗自然第36題。",
+    "subject": "自然",
+    "sub_topic": "自然綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 36,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q36-figure-1.png",
+      "/assets/banks/gsat-113-science/Q36-option-E-figure-1.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q37",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n37-39題為題組\n\n媽媽去購物商場買烤全雞，聽老闆說這些雞只需要約40天就達到上市的尺寸。近數十年，高產肉雞育種選拔計畫有著重要的突破，在持續的選拔下，以56日齡雞隻為例，可從1957年的905克/隻提升到2005年時的4202克/隻（如圖14所示）。此外，為降低飼養成本，育種過程也會參考肉雞的飼料轉化率，即肉雞每單位肉重所需的飼料重量（如圖15）。\n\n圖15\n\n西元（年）\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n飼料轉化率\n\n圖14\n\n\n\n\n\n\n\n依據肉雞育種的目的及手段，下列推論何者<u>不正確</u>？\n\n![圖表](/assets/banks/gsat-113-science/G37-39-figure-1.png)\n\n",
+    "correct": "經過育種後的高產肉雞已和原始雞種相異，屬於不同物種",
+    "wrong": [
+      "人擇達成高產肉雞的過程中仍有基因突變或重組之發生",
+      "原始雞種族群很可能比高產肉雞含有更多的遺傳變異",
+      "降低飼養天數和飼料成本是人擇的雙目標",
+      "飼料配方是否改變也應加入探討育種計畫的成效"
+    ],
+    "exp": "正確答案：經過育種後的高產肉雞已和原始雞種相異，屬於不同物種。來源：113年學科能力測驗自然第37題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 37,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G37-39-figure-1.png"
+    ],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n37-39題為題組\n\n媽媽去購物商場買烤全雞，聽老闆說這些雞只需要約40天就達到上市的尺寸。近數十年，高產肉雞育種選拔計畫有著重要的突破，在持續的選拔下，以56日齡雞隻為例，可從1957年的905克/隻提升到2005年時的4202克/隻（如圖14所示）。此外，為降低飼養成本，育種過程也會參考肉雞的飼料轉化率，即肉雞每單位肉重所需的飼料重量（如圖15）。\n\n圖15\n\n西元（年）\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n飼料轉化率\n\n圖14\n\n\n\n\n\n\n\n與高產肉雞類似的純種賽馬選育計畫顯示，自1949年以前的50～100年間獲得相當的秒數進展（以跑快者為勝），但1950以後則效果不佳（圖16）。下列何者可能是效果<u>不如預期</u>的最合理推測？\n\n圖16\n\n\n\n\n\n\n\n\n\n西元（年）\n\n\n\n\n\n\n\n\n\n\n\n時間（秒）\n\n![圖表](/assets/banks/gsat-113-science/G37-39-figure-1.png)\n\n\n![圖表](/assets/banks/gsat-113-science/Q39-figure-1.png)\n",
+    "correct": "純種族群內適當的基因變異已接近選盡",
+    "wrong": [
+      "賽馬族群大小經歷反覆選育後逐漸變小",
+      "賽馬的選育計畫執行不徹底而無效",
+      "跑快的表徵是後天獲得不能被遺傳",
+      "還沒找到有潛力可靠的可轉殖基因\n\n背面還有試題"
+    ],
+    "exp": "正確答案：純種族群內適當的基因變異已接近選盡。來源：113年學科能力測驗自然第39題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 39,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G37-39-figure-1.png",
+      "/assets/banks/gsat-113-science/Q39-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q40",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n40-43題為題組\n\n捕蠅草捕蟲的趣事是生物適應的現象之一。捕蠅草生長在養分及礦物質缺乏的溼地，為了生存，它演化出肉食性的特質。它的葉片特化成捕器，是可以吸引、捕抓及消化小型節肢動物的器官。捕器閉合的物理機制源自於葉片細胞的膨脹與收縮。當水分從內層細胞流入外層細胞時，內層細胞收縮、外層細胞膨脹，因而造成葉片彎曲而閉合（圖17）。\n\n圖17\n\n中肋\n\n葉片\n\n外層細胞\n\n內層細胞\n\n焮毛\n\n捕器葉片的內側有焮毛，可感應獵物的觸動。每次觸發焮毛會產生一個電位。研究顯示，產生第一次電位時，葉片仍會保持張開，並記憶第一次的觸發。若在20秒內發生第二次觸發，葉片才會快速閉合困住獵物。科學家在葉子中肋和葉片分別插入電極進行充電，以模擬焮毛被觸發時產生電位的現象，他們發現無論是分段充電，還是連續充電，充電電量都要達到14 μC，葉片才會在大約0.5秒內快速閉合。然而，若將捕蠅草的土壤浸潤在pH值高於4.5的溶液中，就算觸發焮毛產生電位，也無法讓葉子閉合。\n\n有關捕蠅草捕器閉合的機制，下列促使兩側葉片合攏的敘述何者正確？\n\n![圖表](/assets/banks/gsat-113-science/G40-43-figure-1.png)\n",
+    "correct": "外層細胞的細胞膜施加於細胞壁的壓力變大，內層變小",
+    "wrong": [
+      "外層細胞的細胞膜施加於細胞壁的壓力變小，內層變大",
+      "內外層細胞的細胞膜施加於細胞壁的壓力同時變小",
+      "內外層細胞的細胞膜施加於細胞壁的壓力同時變大",
+      "僅電位改變，細胞膜施加於細胞壁的壓力維持不變"
+    ],
+    "exp": "正確答案：外層細胞的細胞膜施加於細胞壁的壓力變大，內層變小。來源：113年學科能力測驗自然第40題。",
+    "subject": "生物",
+    "sub_topic": "生物綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 40,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/G40-43-figure-1.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q44",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n44-46題為題組\n\n如圖18所示，一金屬導線製成的線圈迴路固定不動，迴路中有一電阻$R$。迴路左側環圈甲的正上方有一下端為S極的細長磁鐵棒。假設磁鐵棒的磁力線僅穿過環圈甲，且迴路中金屬導線的電阻可忽略。\n\n圖18\n\n\n\n\n\n\n\n甲\n\n乙\n\n考慮磁鐵棒以等速度朝環圈甲移動前進，穿過環圈甲，至完全移離環圈甲的整個過程，下列敘述何者正確？\n\n![圖表](/assets/banks/gsat-113-science/Q44-figure-1.png)",
+    "correct": "若迴路對移動磁鐵棒施加磁力，則其方向恆向上",
+    "wrong": [
+      "迴路產生應電流，其值隨時間增加而持續增大",
+      "迴路產生應電流，其值隨時間增加而持續減小\n\n![圖表](/assets/banks/gsat-113-science/Q44-option-B-figure-1.png)",
+      "迴路產生應電流，其方向恆為順時針方向",
+      "迴路產生應電流，其方向恆為逆時針方向"
+    ],
+    "exp": "正確答案：若迴路對移動磁鐵棒施加磁力，則其方向恆向上。來源：113年學科能力測驗自然第44題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 44,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        16
+      ],
+      "answer": "E",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        44,
+        46
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-113-science/Q44-figure-1.png",
+      "/assets/banks/gsat-113-science/Q44-option-B-figure-1.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-113-science-q55",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n54-56題為題組\n\n做為實證科學之一，天文學的發展仰賴大量的觀測結果。近百年以來，天文觀測的手段也早就由可見光延伸到電磁波的其他波段，甚至是電磁波以外的觀測手段。這些突破性的觀測成果，更讓科學家們發現宇宙當中前人所未知的領域。\n\n科學家們建造各式各樣的望遠鏡來收集電磁波訊號。新一代地面望遠鏡的口徑都愈來愈大，原因為何？",
+    "correct": "口徑愈大，可以收集到的訊號愈多，可以看到星等數值更大的天體",
+    "wrong": [
+      "電磁波所行走的路徑會隨著宇宙膨脹而增加，所以需要大口徑望遠鏡",
+      "口徑愈大，受到大氣擾動的影響愈小，可以看得愈清晰",
+      "隨著經濟發展，建造大口徑望遠鏡有助於提升國防產業的技術",
+      "遙遠的天體會隨著宇宙膨脹而變大，所以需要大口徑望遠鏡"
+    ],
+    "exp": "正確答案：口徑愈大，可以收集到的訊號愈多，可以看到星等數值更大的天體。來源：113年學科能力測驗自然第55題。",
+    "subject": "物理",
+    "sub_topic": "物理綜合",
+    "source": {
+      "exam": "gsat-113-science",
+      "question": 55,
+      "file": "高中/學測/自然/06-113學測自然試題定稿.pdf",
+      "url": "https://drive.google.com/file/d/15GFbsRbQFEPgLHzOsvbKPdedRh8KzFqM/view?usp=drivesdk",
+      "pages": [
+        19
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0o051420394003729671/06-113%e5%ad%b8%e6%b8%ac%e8%87%aa%e7%84%b6%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        54,
+        56
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  }
+]

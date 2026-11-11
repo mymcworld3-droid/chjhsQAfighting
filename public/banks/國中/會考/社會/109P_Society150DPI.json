@@ -1,0 +1,2016 @@
+[
+  {
+    "id": "cap-109-social-q1",
+    "difficulty": "easy",
+    "q": "小嵐到某國旅遊時，寄明信片回\n臺灣，圖(一)是明信片上具有該\n國特色的郵戳。根據郵戳上的資\n訊判斷，小嵐最可能到下列何國\n旅遊？\n\n![圖表](/assets/banks/cap-109-social/Q1-figure-1.png)",
+    "correct": "芬蘭",
+    "wrong": [
+      "日本",
+      "英國",
+      "紐西蘭"
+    ],
+    "exp": "正確答案：芬蘭。來源：109年國中教育會考社會第1題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 1,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q1-figure-1.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q2",
+    "difficulty": "easy",
+    "q": "根據中國氣象部門的統計，西北和華北地區沙塵暴發生年均次數，1987至\n1999年期間為5.85次，2011至2015年期間則減少為3.5次。下列何者與上述環\n境問題的改善有密切關連？\n\n![圖表](/assets/banks/cap-109-social/Q2-figure-1.png)",
+    "correct": "河西走廊的防護林工程",
+    "wrong": [
+      "洞庭湖的退田還湖政策",
+      "三江平原的排水改善計畫",
+      "藏南縱谷的退牧還林政策"
+    ],
+    "exp": "正確答案：河西走廊的防護林工程。來源：109年國中教育會考社會第2題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 2,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q2-figure-1.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q3",
+    "difficulty": "medium",
+    "q": "每年10月起至翌年4月底，捕撈鰻魚魚苗是臺灣沿海漁民傳統產業活動之一，\n更是許多漁民維持生計的重要經濟來源。農委會於2013年訂定相關捕撈規定，\n其中一項是：每年自3月1日至10月31日止，禁止於距岸三浬內海域、潮間帶及\n河口水域以任何方式捕撈鰻苗。上述規定最可能是為了達成下列何種目的？",
+    "correct": "增加漁業資源",
+    "wrong": [
+      "推廣休閒漁業",
+      "改變食用魚的種類",
+      "避免國際漁事糾紛"
+    ],
+    "exp": "正確答案：增加漁業資源。來源：109年國中教育會考社會第3題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 3,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q4",
+    "difficulty": "medium",
+    "q": "政府計畫興建一條快速道路，規畫的路線如\n圖(二)所示。道路沿線有山地及河流阻隔，因\n此經過河谷需興建橋梁，遇到山脊則需開挖\n隧道，以求最短距離。根據圖(二)的等高線判\n斷，甲、乙、丙三個路段需興建的項目，依序\n為下列何者？\n\n![圖表](/assets/banks/cap-109-social/Q4-figure-1.png)",
+    "correct": "橋梁-隧道-橋梁",
+    "wrong": [
+      "隧道-橋梁-隧道",
+      "隧道-隧道-橋梁",
+      "橋梁-橋梁-隧道\n![圖表](/assets/banks/cap-109-social/Q4-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：橋梁-隧道-橋梁。來源：109年國中教育會考社會第4題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 4,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q4-figure-1.png",
+      "/assets/banks/cap-109-social/Q4-option-D-figure-1.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q5",
+    "difficulty": "medium",
+    "q": "圖(三)為位在臺灣北部的某工業區及其鄰近社區的\n分布圖，工業區排放廢氣會影響鄰近社區的空氣品\n質。若僅根據臺灣不同季節的盛行風向判斷，冬季\n時圖中哪一社區受該工業區廢氣的影響最大？",
+    "correct": "丁\n![圖表](/assets/banks/cap-109-social/Q5-option-D-figure-1.png)",
+    "wrong": [
+      "甲",
+      "乙\n![圖表](/assets/banks/cap-109-social/Q5-option-B-figure-1.png)",
+      "丙"
+    ],
+    "exp": "正確答案：丁\n![圖表](/assets/banks/cap-109-social/Q5-option-D-figure-1.png)。來源：109年國中教育會考社會第5題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 5,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q5-option-D-figure-1.png",
+      "/assets/banks/cap-109-social/Q5-option-B-figure-1.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q6",
+    "difficulty": "easy",
+    "q": "圖(四)為臺灣部分原住民族群的祭典與主\n要分布圖。若按圖片內容判斷，雅美族\n(達悟族)應為圖中何者？\n\n![圖表](/assets/banks/cap-109-social/Q6-figure-1.png)",
+    "correct": "丙",
+    "wrong": [
+      "甲",
+      "乙",
+      "丁"
+    ],
+    "exp": "正確答案：丙。來源：109年國中教育會考社會第6題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 6,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q6-figure-1.png"
+    ],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q7",
+    "difficulty": "medium",
+    "q": "圖(五)呈現某事件前夕，當地的社會\n情況。此事件最可能是下列何者？\n\n![圖表](/assets/banks/cap-109-social/Q7-figure-1.png)",
+    "correct": "法國大革命",
+    "wrong": [
+      "美國獨立",
+      "日本大化革新",
+      "中國武昌起義"
+    ],
+    "exp": "正確答案：法國大革命。來源：109年國中教育會考社會第7題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 7,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q7-figure-1.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q8",
+    "difficulty": "easy",
+    "q": "保存古蹟的意義，在於它們能引領後人回到歷史現場，去感受當時的重大變\n遷或現象。基隆的「海門天險」與臺南的「億載金城」均為國定古蹟，這兩\n處古蹟的出現，反映當時有何迫切的需要？",
+    "correct": "防止列強入侵",
+    "wrong": [
+      "招撫原住民",
+      "拓墾丘陵、山地",
+      "掃蕩武裝抗日勢力"
+    ],
+    "exp": "正確答案：防止列強入侵。來源：109年國中教育會考社會第8題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 8,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q9",
+    "difficulty": "medium",
+    "q": "上課時老師用圖(六)到\n圖(七)的變化來說明某\n位君主的改革，根據內\n容判斷，此君主最可能\n是下列何者？\n表(一)\n\n![圖表](/assets/banks/cap-109-social/Q9-figure-1.png)\n\n",
+    "correct": "秦始皇",
+    "wrong": [
+      "齊桓公",
+      "漢武帝",
+      "北魏孝文"
+    ],
+    "exp": "正確答案：秦始皇。來源：109年國中教育會考社會第9題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 9,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q9-figure-1.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q10",
+    "difficulty": "easy",
+    "q": "表(一)是不同時期臺灣官方曾經明文規定的\n節日。根據內容判斷，其中何者最不可能\n是由日本統治時期的政府所指定？",
+    "correct": "甲",
+    "wrong": [
+      "乙",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：甲。來源：109年國中教育會考社會第10題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 10,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q11",
+    "difficulty": "easy",
+    "q": "近年來由於網路通訊軟體發達，大量訊息在手機\n的聯繫群組間快速流傳。圖(八)是小芳家庭群組\n裡的對話，根據圖中內容判斷，在網路科技發達\n的時代，下列何者更應受到重視？\n\n![圖表](/assets/banks/cap-109-social/Q11-figure-1.png)",
+    "correct": "媒體識讀的素養",
+    "wrong": [
+      "醫療技術的提升",
+      "資訊科技的設備",
+      "生命倫理的推廣"
+    ],
+    "exp": "正確答案：媒體識讀的素養。來源：109年國中教育會考社會第11題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 11,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q11-figure-1.png"
+    ],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q12",
+    "difficulty": "easy",
+    "q": "表(二)為甲國人口發展趨勢的推估數\n據。根據表中內容判斷，政府最可\n能以下列哪一項政策來面對此種發\n展趨勢？\n| 年分 / (年) | 人口結構(%) |  |  |\n|  | 14歲以下 | 15-64歲 | 65歲以上 |\n| 2000 | 21.2 | 70.3 | 8.5 |\n| 2008 | 17.0 | 72.6 | 10.4 |\n| 2016 | 13.2 | 73.4 | 13.4 |\n| 2036 | 10.3 | 61.3 | 28.4 |\n| 2056 | 8.0 | 52.5 | 39.5 |",
+    "correct": "健全老人福利制度",
+    "wrong": [
+      "增加多元入學管道",
+      "提高失業給付金額",
+      "保障性別平等權利"
+    ],
+    "exp": "正確答案：健全老人福利制度。來源：109年國中教育會考社會第12題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 12,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q13",
+    "difficulty": "easy",
+    "q": "我國對於收賄的公務員，可處以十年以上有期徒刑，但民間企業員工出現同\n樣的行為，卻常以刑罰較輕的背信罪處罰。上述相同的行為，會因犯罪者身\n分不同而受到不同懲罰的情況，與下列何種原則的關係最密切？",
+    "correct": "罪刑法定",
+    "wrong": [
+      "誠實信用",
+      "契約自由",
+      "無罪推定"
+    ],
+    "exp": "正確答案：罪刑法定。來源：109年國中教育會考社會第13題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 13,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q14",
+    "difficulty": "easy",
+    "q": "某工廠擁有三條生產線，分別生產甲、乙、丙三項產品，\n銷\n上半年的銷售成果如圖(九)所示。近日廠長決定停止生產其\n貨\n中一項產品，並把該生產線轉為生產其他二項產品中的其\n(收\n中一種，期望增加工廠的利潤。在考量各產線上半年獲利入\n百\n的狀況下，根據圖中資訊判斷，下列四個方案中，何者最\n)萬\n能達成廠長的目標？\n元\n\n![圖表](/assets/banks/cap-109-social/Q14-figure-1.png)",
+    "correct": "停止生產乙，增加生產甲",
+    "wrong": [
+      "停止生產甲，增加生產乙",
+      "停止生產甲，增加生產丙",
+      "停止生產乙，增加生產丙"
+    ],
+    "exp": "正確答案：停止生產乙，增加生產甲。來源：109年國中教育會考社會第14題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 14,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q14-figure-1.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q15",
+    "difficulty": "medium",
+    "q": "新聞報導：日前因人為疏失造成全臺數百萬戶大停電，立法院不分朝野為了追\n究責任，將請行政院院長提出專案報告。此外，在野黨立委認為近來行政團隊\n表現不佳，若專案報告無法切中要點、妥善檢討，將對行政院院長提出不信任\n案。根據我國政府機關間的互動關係判斷，上述內容主要隱含下列何項概念？",
+    "correct": "分權制衡",
+    "wrong": [
+      "均權制度",
+      "主權在民",
+      "地方自治"
+    ],
+    "exp": "正確答案：分權制衡。來源：109年國中教育會考社會第15題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 15,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q16",
+    "difficulty": "medium",
+    "q": "2016年設計的某地理桌遊，遊戲\n\n規則為比較各國的人口總數，玩\n家必須將抽到的卡牌，放入正確\n的位置，使其由大到小排列。若\n小屏抽到的是印度，她應該將該\n卡牌放置在圖(十)中的哪個位置才\n正確？\n表(三)\n\n![圖表](/assets/banks/cap-109-social/Q16-figure-1.png)",
+    "correct": "乙",
+    "wrong": [
+      "甲",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：乙。來源：109年國中教育會考社會第16題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 16,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q16-figure-1.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q17",
+    "difficulty": "easy",
+    "q": "表(三)為中國2006至2015年外商投資\n總額最多和最少的四個行政區。根\n據表中呈現外商投資的空間差異，\n下列哪一項策略最能夠改善表中所\n呈現的問題？",
+    "correct": "推動與中亞國家的邊境貿易",
+    "wrong": [
+      "促進東北老舊工業區轉型",
+      "與東協簽署自由貿易協定",
+      "取消一胎化的計畫生育政策"
+    ],
+    "exp": "正確答案：推動與中亞國家的邊境貿易。來源：109年國中教育會考社會第17題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 17,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q18",
+    "difficulty": "medium",
+    "q": "表(四)\n18. 小雅在澳洲雪梨(33.9°S，151.2°E)欣賞\n完跨年煙火後，想緊接著挑戰利用時差\n前往另一個都市再次跨年。若僅考慮飛\n行時間和時差，則從雪梨搭飛機前往表\n(四)中哪個都市，最可能完成此項挑戰？\n| 都市 | 經緯度 | 飛行時間 |\n| 甲 | 36.8°S，174.7°E | 3小時10分 |\n| 乙 | 21.2°S，159.8°W | 6小時10分 |\n| 丙 | 35.7°N，139.7°E | 9小時35分 |\n| 丁 | 26.2°S，28.0°E | 14小時0分 |",
+    "correct": "乙",
+    "wrong": [
+      "甲",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：乙。來源：109年國中教育會考社會第18題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 18,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q19",
+    "difficulty": "medium",
+    "q": "「臺灣某行政區的山地面積比例高於75%，100公尺以下平地面積則不到25%。\n該區平原為數條河川共同沖積而成，甲山脈呈東北—西南走向越過平原西北方，\n平原南方為乙山脈的北端起點，平原東部則有縱向海岸沙丘分布。」上述行\n政區應為下列何者？",
+    "correct": "宜蘭縣",
+    "wrong": [
+      "南投縣",
+      "苗栗縣\n![圖表](/assets/banks/cap-109-social/Q19-option-B-figure-1.png)",
+      "臺東縣\n![圖表](/assets/banks/cap-109-social/Q19-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：宜蘭縣。來源：109年國中教育會考社會第19題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 19,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q19-option-B-figure-1.png",
+      "/assets/banks/cap-109-social/Q19-option-D-figure-1.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q20",
+    "difficulty": "medium",
+    "q": "圖(十一)為中國湖泊分區圖，根據湖水含鹽\n度可分為淡水湖與鹹水湖，其中鹹水湖主要\n分布在圖中何區？",
+    "correct": "丁\n![圖表](/assets/banks/cap-109-social/Q20-option-D-figure-1.png)",
+    "wrong": [
+      "甲\n![圖表](/assets/banks/cap-109-social/Q20-option-A-figure-1.png)",
+      "乙\n![圖表](/assets/banks/cap-109-social/Q20-option-B-figure-1.png)",
+      "丙\n![圖表](/assets/banks/cap-109-social/Q20-option-C-figure-1.png)"
+    ],
+    "exp": "正確答案：丁\n![圖表](/assets/banks/cap-109-social/Q20-option-D-figure-1.png)。來源：109年國中教育會考社會第20題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 20,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q20-option-D-figure-1.png",
+      "/assets/banks/cap-109-social/Q20-option-A-figure-1.png",
+      "/assets/banks/cap-109-social/Q20-option-B-figure-1.png",
+      "/assets/banks/cap-109-social/Q20-option-C-figure-1.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q21",
+    "difficulty": "medium",
+    "q": "清朝統治時期的臺灣社會族群複雜，一旦發生糾紛，常以祖籍、姓氏等名義聚眾\n互相敵對，其中規模較大的武力衝突就有數十次之多。造成上述社會衝突的原因\n很多，下列何者是主要因素之一？",
+    "correct": "爭奪經濟利益\n![圖表](/assets/banks/cap-109-social/Q21-option-C-figure-1.png)",
+    "wrong": [
+      "要求臺灣建省",
+      "對抗外來宗教\n![圖表](/assets/banks/cap-109-social/Q21-option-B-figure-1.png)",
+      "抵制鐵路建設\n![圖表](/assets/banks/cap-109-social/Q21-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：爭奪經濟利益\n![圖表](/assets/banks/cap-109-social/Q21-option-C-figure-1.png)。來源：109年國中教育會考社會第21題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 21,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q21-option-C-figure-1.png",
+      "/assets/banks/cap-109-social/Q21-option-B-figure-1.png",
+      "/assets/banks/cap-109-social/Q21-option-D-figure-1.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q22",
+    "difficulty": "medium",
+    "q": "圖(十二)是臺灣史上的一份官方文件，此文件發布\n的時代背景最可能是下列何者？",
+    "correct": "日本戰敗，中華民國政府接收臺灣\n![圖表](/assets/banks/cap-109-social/Q22-option-B-figure-1.png)",
+    "wrong": [
+      "《馬關條約》簽訂，日本統治臺灣\n![圖表](/assets/banks/cap-109-social/Q22-option-A-figure-1.png)",
+      "國共內戰失利，中華民國政府遷臺\n![圖表](/assets/banks/cap-109-social/Q22-option-C-figure-1.png)",
+      "民國六十年，中華民國退出聯合國\n![圖表](/assets/banks/cap-109-social/Q22-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：日本戰敗，中華民國政府接收臺灣\n![圖表](/assets/banks/cap-109-social/Q22-option-B-figure-1.png)。來源：109年國中教育會考社會第22題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 22,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q22-option-B-figure-1.png",
+      "/assets/banks/cap-109-social/Q22-option-A-figure-1.png",
+      "/assets/banks/cap-109-social/Q22-option-C-figure-1.png",
+      "/assets/banks/cap-109-social/Q22-option-D-figure-1.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q23",
+    "difficulty": "medium",
+    "q": "表(五)為1514 至1800年黑奴被販運到主\n表(五)\n要三大洲的統計數據。乙最可能是下列\n哪一洲？\n| 洲別 / 時間 | 甲 | 乙 | 丙 |\n| 1514-1600年 | 652 | 58,754 | 168 |\n| 1601-1700年 | 4,160 | 645,460 | 847 |\n| 1701-1800年 | 4,515 | 4,569,975 | 2,658 |\n單位：人",
+    "correct": "美洲",
+    "wrong": [
+      "亞洲",
+      "非洲",
+      "歐洲"
+    ],
+    "exp": "正確答案：美洲。來源：109年國中教育會考社會第23題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 23,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q24",
+    "difficulty": "medium",
+    "q": "以下是中國某座城市的介紹：「現在城內的『沂水路』全長三百多公尺。\n之前德國統治這座城市的時候，叫做『迪德里希斯街』；後來日本占領時，\n叫做『赤羽町』。雖然這是條很短的路，卻記錄了此城市的演變過程。」此\n一城市最可能是下列何者？",
+    "correct": "青島",
+    "wrong": [
+      "瀋陽",
+      "南京",
+      "重慶\n![圖表](/assets/banks/cap-109-social/Q24-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：青島。來源：109年國中教育會考社會第24題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 24,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q24-option-D-figure-1.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q25",
+    "difficulty": "medium",
+    "q": "圖(十三)是玉潔參觀「歷代中國婦女生活文\n物展」時，在某朝代的展示區內所看到的\n文物簡介。依內容判斷，此朝代最可能是\n下列何者？",
+    "correct": "唐代\n![圖表](/assets/banks/cap-109-social/Q25-option-B-figure-1.png)",
+    "wrong": [
+      "漢代",
+      "宋代",
+      "明代\n![圖表](/assets/banks/cap-109-social/Q25-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：唐代\n![圖表](/assets/banks/cap-109-social/Q25-option-B-figure-1.png)。來源：109年國中教育會考社會第25題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 25,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q25-option-B-figure-1.png",
+      "/assets/banks/cap-109-social/Q25-option-D-figure-1.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q26",
+    "difficulty": "easy",
+    "q": "右列是某學者對於我國犯罪防治研\n根據犯罪案件統計顯示，都市地區與\n究報告的部分內容，根據其內容判\n鄉村地區的犯罪型態不同，二者在殺\n斷，若要減少都市地區財產犯罪案\n人、傷害等暴力犯罪的犯罪率無顯著\n件發生，下列何項建議最符合文末\n差異；但在汽(機)車竊盜、強盜、搶\n的論點？\n奪等財產犯罪，都市地區的犯罪率明\n顯較高。因此，若要減少都市地區財\n產犯罪的案件，可以朝鄉村地區的特\n性來思考對策。",
+    "correct": "強化民眾社區意識",
+    "wrong": [
+      "增加基層警察人數",
+      "修法加重罰鍰金額",
+      "協助安裝保全設施"
+    ],
+    "exp": "正確答案：強化民眾社區意識。來源：109年國中教育會考社會第26題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 26,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q27",
+    "difficulty": "medium",
+    "q": "我國為防治家庭暴力採行了不少措施，如設置婦幼保護專線、協助安置被\n害人等。若子女對父母親有言語或肢體等暴力行為，根據我國法律規定，\n如欲達成法律上的隔離效力，可供受害者尋求協助的機關，及此機關所能\n採行的因應作為，下列配對組合何者正確？",
+    "correct": "地方法院、核發保護令",
+    "wrong": [
+      "警察機關、核發保護令",
+      "地方法院、宣告停止親權",
+      "警察機關、宣告停止親權"
+    ],
+    "exp": "正確答案：地方法院、核發保護令。來源：109年國中教育會考社會第27題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 27,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q28",
+    "difficulty": "easy",
+    "q": "新聞報導：我國毒品危害的問題，恐有向高中、國中等校園蔓延的跡象，\n值得政府關注。根據調查發現，觸碰毒品的兒童及少年，多數與其家庭功\n能不彰，或是成長過程中充滿挫折感有關，加上他們常會仿效同學的行為\n模式以尋求同儕認同，進而導致毒品在校園內擴散。關於上述內容，下列\n何項敘述最適當？\n【詞彙】  需求層次理論＝個人需求層次理論",
+    "correct": "文中內容與需求層次理論相關",
+    "wrong": [
+      "學生涉毒皆須負完全刑事責任",
+      "學生涉毒主要是受傳播媒體影響",
+      "文中內容強調終身學習的重要性"
+    ],
+    "exp": "正確答案：文中內容與需求層次理論相關。來源：109年國中教育會考社會第28題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 28,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q29",
+    "difficulty": "medium",
+    "q": "小姿：「擔任調解委員這麼多年，從沒像今年這麼忙過！」\n小儀：「今年本區聲請調解的事件比去年增加了五成，大家真是辛苦了！」\n在上述對話內容中，大幅增加的事件類型最可能為下列何項組合？",
+    "correct": "民事紛爭、告訴乃論的刑事案件",
+    "wrong": [
+      "行政紛爭、告訴乃論的刑事案件",
+      "行政紛爭、非告訴乃論的刑事案件",
+      "民事紛爭、非告訴乃論的刑事案件\n![圖表](/assets/banks/cap-109-social/Q29-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：民事紛爭、告訴乃論的刑事案件。來源：109年國中教育會考社會第29題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 29,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q29-option-D-figure-1.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q30",
+    "difficulty": "medium",
+    "q": "圖(十四)為我國廣義的法律位階示意圖，圖中灰色區塊\n所代表的法律類型，具有下列何項特色？",
+    "correct": "可由行政機關訂定\n![圖表](/assets/banks/cap-109-social/Q30-option-A-figure-1.png)",
+    "wrong": [
+      "必須經總統公布施行\n![圖表](/assets/banks/cap-109-social/Q30-option-B-figure-1.png)",
+      "內容多為原則性的規範\n![圖表](/assets/banks/cap-109-social/Q30-option-C-figure-1.png)",
+      "修改必須經公民投票複決\n![圖表](/assets/banks/cap-109-social/Q30-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：可由行政機關訂定\n![圖表](/assets/banks/cap-109-social/Q30-option-A-figure-1.png)。來源：109年國中教育會考社會第30題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 30,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q30-option-A-figure-1.png",
+      "/assets/banks/cap-109-social/Q30-option-B-figure-1.png",
+      "/assets/banks/cap-109-social/Q30-option-C-figure-1.png",
+      "/assets/banks/cap-109-social/Q30-option-D-figure-1.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q31",
+    "difficulty": "medium",
+    "q": "臺灣高鐵於2007年1月通表(六)\n車後，對其他運輸工具的\n營運產生顯著影響。表\n(六)為臺北往返四個地點\n的國內空運航線載客人數\n統計，其中一條為離島航\n線，三條為本島西部航\n線。依據表中資訊判斷，\n| 航線 / 年分 | 甲 | 乙 | 丙 | 丁 |\n| 2005 | 3,003,189 | 1,161,105 | 77,127 | 64,488 |\n| 2006 | 2,651,120 | 1,061,387 | 42,216 | 50,570 |\n| 2007 | 1,335,717 | 511,670 | 3,559 | 45,829 |\n| 2008 | 341,972 | 107,270 | - | 57,762 |\n| 2009 | 22,784 | - | - | 69,121 |\n何者最可能是離島航線？\n註：- 表示該航線停飛單位：人",
+    "correct": "丁",
+    "wrong": [
+      "甲",
+      "乙",
+      "丙"
+    ],
+    "exp": "正確答案：丁。來源：109年國中教育會考社會第31題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 31,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q32",
+    "difficulty": "medium",
+    "q": "圖(十五)顯示2011年9月18日發生的強烈地震震央\n位置，除了建築物倒塌造成的人員傷亡外，由於\n某些因素影響使得搜救工作不易進行，導致死傷\n人數持續攀升。根據當地地形、氣候等環境條件\n判斷，造成上文中搜救困難的因素最可能為下列\n何者？\n\n![圖表](/assets/banks/cap-109-social/Q32-figure-1.png)",
+    "correct": "連日降雨，造成土石流掩埋道路",
+    "wrong": [
+      "山區冰河快速消融以致山洪暴發",
+      "正值沙塵暴盛行時節，能見度低",
+      "引發大規模海嘯，海水淹沒災區"
+    ],
+    "exp": "正確答案：連日降雨，造成土石流掩埋道路。來源：109年國中教育會考社會第32題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 32,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q32-figure-1.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q33",
+    "difficulty": "medium",
+    "q": "表(七)\n33. 表(七)為2014年及預測2050年各洲的人口\n數，根據其變化趨勢判斷，丙最可能為下列\n何者？\n| 年分 / 洲別 | 2014年 | 2050年 |\n| 甲 | 1,136 | 2,428 |\n| 乙 | 972 | 1,217 |\n| 丙 | 741 | 726 |\n| 丁 | 4,351 | 5,252 |\n| 大洋洲 | 39 | 60 |\n單位：百萬人",
+    "correct": "歐洲",
+    "wrong": [
+      "非洲",
+      "美洲",
+      "亞洲"
+    ],
+    "exp": "正確答案：歐洲。來源：109年國中教育會考社會第33題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 33,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q34",
+    "difficulty": "medium",
+    "q": "表(八)為北半球四個都市的年平表(八)\n均降水日數統計，根據表中資\n訊判斷，何者最可能位於熱帶\n莽原氣候區？\n| 月分 / 都市 | 3-5 | 6-8 | 9-11 | 12-2 | 合計 |\n| 甲 | 31.0 | 24.0 | 30.0 | 34.0 | 119.0 |\n| 乙 | 19.3 | 6.8 | 21.4 | 26.4 | 73.9 |\n| 丙 | 22.3 | 26.1 | 23.7 | 20.8 | 92.9 |\n| 丁 | 10.0 | 44.0 | 17.0 | 0.0 | 71.0 |\n單位：天",
+    "correct": "丁",
+    "wrong": [
+      "甲",
+      "乙",
+      "丙"
+    ],
+    "exp": "正確答案：丁。來源：109年國中教育會考社會第34題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 34,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q35",
+    "difficulty": "medium",
+    "q": "以下是關於十七世紀臺灣地震的紀錄：「這年二月\n十五日發生強烈地震，這是我們入臺統治以來最大的\n地震，漢人店鋪倒塌二十多間，還有婦人及小孩被壓\n死，熱蘭遮城也多處龜裂。長官立刻向總部呈報，要求\n儘快從暹羅(今泰國)運木材來進行修復工作。」文中的\n「總部」，最可能位於圖(十六)中甲、乙、丙、丁何處？\n\n![圖表](/assets/banks/cap-109-social/Q35-figure-1.png)",
+    "correct": "丙",
+    "wrong": [
+      "甲",
+      "乙",
+      "丁"
+    ],
+    "exp": "正確答案：丙。來源：109年國中教育會考社會第35題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 35,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q35-figure-1.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q36",
+    "difficulty": "medium",
+    "q": "表(九)是四個歐洲國家\n表(九)\n在第一次世界大戰爆發\n後的反應，根據表中內\n容判斷，何者屬於「同\n盟國」陣營？\n| 國家 | 事件後的反應 |\n| 甲 | 得到德國全力支持，向塞爾維亞宣戰。 |\n| 乙 | 全面動員軍隊，對付奧匈帝國等國。 |\n| 丙 | 為支持同一民族，同時向法國和俄國宣戰。 |\n| 丁 | 因德軍入侵比利時，向德國宣戰。 |",
+    "correct": "甲丙",
+    "wrong": [
+      "丙丁",
+      "甲乙",
+      "乙丁\n![圖表](/assets/banks/cap-109-social/Q36-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：甲丙。來源：109年國中教育會考社會第36題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 36,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q36-option-D-figure-1.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q37",
+    "difficulty": "medium",
+    "q": "圖(十七)是臺灣某一時期報紙刊載的徵人\n啟事。根據內容判斷，這最可能是下列何\n時的報紙？",
+    "correct": "1930年代\n![圖表](/assets/banks/cap-109-social/Q37-option-C-figure-1.png)",
+    "wrong": [
+      "1830年代\n![圖表](/assets/banks/cap-109-social/Q37-option-A-figure-1.png)",
+      "1860年代\n![圖表](/assets/banks/cap-109-social/Q37-option-B-figure-1.png)",
+      "1960年代\n![圖表](/assets/banks/cap-109-social/Q37-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：1930年代\n![圖表](/assets/banks/cap-109-social/Q37-option-C-figure-1.png)。來源：109年國中教育會考社會第37題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 37,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q37-option-C-figure-1.png",
+      "/assets/banks/cap-109-social/Q37-option-A-figure-1.png",
+      "/assets/banks/cap-109-social/Q37-option-B-figure-1.png",
+      "/assets/banks/cap-109-social/Q37-option-D-figure-1.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q38",
+    "difficulty": "medium",
+    "q": "圖(十八)與圖(十九)分別為\n官方頒發的牌符及當時可通\n行使用的路線。根據內容判\n斷，這兩幅圖最適合用來說\n明下列何者？\n【詞彙】  牌符：由官方頒發，官員可利用此證件，\n要求路線上的交通站提供食宿及車馬。\n\n![圖表](/assets/banks/cap-109-social/Q38-figure-1.png)",
+    "correct": "蒙古帝國的勢力範圍",
+    "wrong": [
+      "兩漢時期的對外征伐",
+      "大唐帝國的統治區域",
+      "盛清時期的開疆闢土"
+    ],
+    "exp": "正確答案：蒙古帝國的勢力範圍。來源：109年國中教育會考社會第38題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 38,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q38-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q39",
+    "difficulty": "medium",
+    "q": "阿鴻參加大學同學會，同桌有四位任職於我國中\n央政府機關的同學，分別談論了自己的工作職\n權，聊天內容與座位如圖(二十)所示。若阿鴻兩旁\n的同學分別任職於行政院與司法院，根據圖中內\n容判斷，他的座位最可能位於圖中何處？\n\n![圖表](/assets/banks/cap-109-social/Q39-figure-1.png)",
+    "correct": "甲",
+    "wrong": [
+      "乙",
+      "丙",
+      "丁"
+    ],
+    "exp": "正確答案：甲。來源：109年國中教育會考社會第39題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 39,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q39-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q40",
+    "difficulty": "medium",
+    "q": "老師說明需求法則時，列出五組商品的價格\n與數量，如表(十)，請同學依需求法則，從表\n中選出三個價量關係，並繪製成需求曲線。\n若某位同學的作答結果正確，則下列何者最\n可能是他選擇的組合？\n| 表(十) |  |  |\n| 價量關係 | 價格(元) | 數量(個) |\n| 甲 | 100 | 40 |\n| 乙 | 80 | 30 |\n| 丙 | 60 | 50 |\n| 丁 | 40 | 130 |\n| 戊 | 20 | 110 |",
+    "correct": "乙、丙、戊",
+    "wrong": [
+      "甲、乙、丙",
+      "甲、乙、丁",
+      "乙、丁、戊"
+    ],
+    "exp": "正確答案：乙、丙、戊。來源：109年國中教育會考社會第40題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 40,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q41",
+    "difficulty": "medium",
+    "q": "圖(二十一)為《民法》中年齡與行為能力程度行為能力程度\n的示意圖，甲、乙、丙分別代表不同程度的行甲乙丙\n0\n為能力。下列何者最可能與圖中的「甲」屬於年齡(歲)\n相同程度的行為能力？ 圖(二十一)",
+    "correct": "受到法院監護宣告的大明",
+    "wrong": [
+      "遭到宣告褫奪公權的阿世",
+      "8歲因故仍未就學的小龍",
+      "9歲意外失去雙親的琪琪"
+    ],
+    "exp": "正確答案：受到法院監護宣告的大明。來源：109年國中教育會考社會第41題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 41,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q42",
+    "difficulty": "medium",
+    "q": "小剛買了一些除蚤藥替小貓除蚤，但後來小貓走丟了，於是他將未使用完的\n除蚤藥放上網路出售，沒想到縣政府以違反《動物用藥品管理法》為由，對\n小剛開出九萬元的罰單。上述小剛承擔的法律責任，其性質與下列何者相同？",
+    "correct": "餐廳因消防檢查不合規定遭停止營業",
+    "wrong": [
+      "網路賣家拒絕退換售出的瑕疵商品",
+      "曉華屢次虐待動物遭處以有期徒刑",
+      "快遞公司未依契約規定時間送貨到府"
+    ],
+    "exp": "正確答案：餐廳因消防檢查不合規定遭停止營業。來源：109年國中教育會考社會第42題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 42,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q43",
+    "difficulty": "medium",
+    "q": "南美洲南端海運天然限制多，橫越安地斯山脈又常受冬季降雪阻礙交通，因此\n智利與阿根廷兩國計畫興建打通安地斯山脈的隧道。該隧道不僅可大幅縮短運\n輸時間，也降低氣候對貨運的影響，有利於大西洋岸國家與太平洋岸國家間的\n貿易。在上述工程完工後，下列何者的運輸時間可望降低？",
+    "correct": "阿根廷至中國",
+    "wrong": [
+      "智利至日本",
+      "智利至紐西蘭",
+      "阿根廷至英國"
+    ],
+    "exp": "正確答案：阿根廷至中國。來源：109年國中教育會考社會第43題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 43,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q44",
+    "difficulty": "medium",
+    "q": "小明將臺北捷運路網圖與臺灣北部行政區\n圖以捷運淡水站為基準點套疊，顯示如圖\n(二十二)所示的現象：路網圖中各站位置與\n行政區圖中的實際位置並不一致。造成上\n述現象的原因最可能為下列何者？\n\n![圖表](/assets/banks/cap-109-social/Q44-figure-1.png)",
+    "correct": "路網圖的比例尺較行政區圖大",
+    "wrong": [
+      "路網圖為被簡化過的地圖",
+      "路網圖涵蓋的範圍較行政區圖大",
+      "路網圖繪製的時間較行政區圖早"
+    ],
+    "exp": "正確答案：路網圖的比例尺較行政區圖大。來源：109年國中教育會考社會第44題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 44,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q44-figure-1.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q45",
+    "difficulty": "medium",
+    "q": "圖(二十三)是某一港口附近的各國\n商館平面示意圖，根據圖中內容判\n斷，此一港口最可能是下列何者？\n\n![圖表](/assets/banks/cap-109-social/Q45-figure-1.png)\n\n",
+    "correct": "十九世紀前期的廣州",
+    "wrong": [
+      "十七世紀後期的長崎",
+      "十八世紀前期的香港",
+      "十八世紀後期的安平"
+    ],
+    "exp": "正確答案：十九世紀前期的廣州。來源：109年國中教育會考社會第45題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 45,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q45-figure-1.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q46",
+    "difficulty": "medium",
+    "q": "表（十一）介紹歐洲某一文化潮流的背景與特色，表中的「？」最適合填入下列何者？\n| 項目 | 內容 |\n| 起源地 | 義大利北部 |\n| 背景 | 與拜占庭、伊斯蘭世界貿易交流；城市的發展及市民階級的崛起；銀行家、富商對藝文活動的贊助。 |\n| 特色 | 重新發現古典文化的價值；繪畫、雕刻等藝術的創新；「？」。 |",
+    "correct": "方言文學的興起",
+    "wrong": [
+      "印象畫派的流行",
+      "浪漫主義的發展",
+      "封建制度的形成"
+    ],
+    "exp": "正確答案：方言文學的興起。來源：109年國中教育會考社會第46題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 46,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q47",
+    "difficulty": "medium",
+    "q": "表(十二)為某蛋糕店主打商品於試賣期間的記錄內容，\n其中甲、乙、丙、丁、戊分別表示由高到低的五種價\n格。該店販售的商品皆為當日製作，絕不販售隔夜商\n品。若表中甲、乙、丙、丁、戊皆非均衡價格，且不考\n量其他因素，則此商品的均衡價格最可能介於下列哪二\n者之間？\n| 表(十二) |  |\n| 當日 / 價格 / (元) | 平均未賣出 / 的商品數量 / (個/天) |\n| 甲 | 7 |\n| 乙 | 4 |\n| 丙 | 2 |\n| 丁 | 0 |\n| 戊 | 0 |",
+    "correct": "丙、丁",
+    "wrong": [
+      "甲、乙",
+      "乙、丙",
+      "丁、戊"
+    ],
+    "exp": "正確答案：丙、丁。來源：109年國中教育會考社會第47題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 47,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q48",
+    "difficulty": "hard",
+    "q": "老闆僱用小偉、大智、阿雯為店員，並計畫選出其中表(十三)\n二人合作製作煎餃與包子，表(十三)為此三人工作成\n效的資訊。老闆發現依比較利益法則分工，小偉不論\n與誰合作，皆是負責製作包子；而大智不論與誰合\n作，皆是負責製作煎餃，根據表中資訊判斷，下列對\n應關係何者正確？\n| 產品 / 店員 | 包子 | 煎餃 |\n| 甲 | 50 | 60 |\n| 乙 | 50 | 50 |\n| 丙 | 40 | 50 |\n單位：個/小時",
+    "correct": "甲：阿雯，乙：小偉，丙：大智",
+    "wrong": [
+      "甲：小偉，乙：大智，丙：阿雯",
+      "甲：大智，乙：小偉，丙：阿雯",
+      "甲：小偉，乙：阿雯，丙：大智"
+    ],
+    "exp": "正確答案：甲：阿雯，乙：小偉，丙：大智。來源：109年國中教育會考社會第48題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 48,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q49",
+    "difficulty": "medium",
+    "q": "「哈薩克近來外匯收入大幅萎縮，於是政策規畫出口馬奶的加工乳品，以增加\n外匯。」上述政策最可能是因應下列何種商品國際市場價格的變動？\n表(十四)",
+    "correct": "石油價格慘跌",
+    "wrong": [
+      "石油價格飆升",
+      "咖啡價格慘跌",
+      "咖啡價格飆升"
+    ],
+    "exp": "正確答案：石油價格慘跌。來源：109年國中教育會考社會第49題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 49,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q50",
+    "difficulty": "medium",
+    "q": "歡樂國採行與英國相仿的內閣制，表\n(十四)是該國近日的選舉結果。根據表中\n資料判斷，選舉過後，該國新聞媒體刊出\n哪一評論內容最適當？",
+    "correct": "甲黨將主導組成新內閣",
+    "wrong": [
+      "籌組聯合政府勢在必行",
+      "選後將邁入多黨制時代",
+      "甲黨領袖成為國家元首"
+    ],
+    "exp": "正確答案：甲黨將主導組成新內閣。來源：109年國中教育會考社會第50題。",
+    "subject": "公民",
+    "sub_topic": "公民綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 50,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q51",
+    "difficulty": "medium",
+    "q": "小倫和小真正在討論歷史上某文明所實行的制度，\n如圖(二十四)所示。他們討論的主題最可能是下列\n何者？\n\n![圖表](/assets/banks/cap-109-social/Q51-figure-1.png)",
+    "correct": "雅典民主制度",
+    "wrong": [
+      "印度種姓制度",
+      "周代宗法制度",
+      "西歐封建制度"
+    ],
+    "exp": "正確答案：雅典民主制度。來源：109年國中教育會考社會第51題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 51,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q51-figure-1.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q52",
+    "difficulty": "medium",
+    "q": "表(十五)是甲、乙兩國匯率變動的情形，以吸引乙\n國遊客為主的甲國觀光業者，看到此變化後感到\n很憂心。根據表中內容判斷，若甲國的物價水準\n維持不變，下列何者最可能是上述業者的憂慮？\n| 表(十五) |  |\n| 時間 | 1甲幣可兌換的乙幣 |\n| 去年 | 10 |\n| 今年 | 20 |",
+    "correct": "乙國人到甲國旅遊意願下降",
+    "wrong": [
+      "甲國觀光業者經營成本提高",
+      "乙國人的平均薪資所得減少",
+      "甲國觀光業者數量大幅增加"
+    ],
+    "exp": "正確答案：乙國人到甲國旅遊意願下降。來源：109年國中教育會考社會第52題。",
+    "subject": "社會",
+    "sub_topic": "社會綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 52,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q53",
+    "difficulty": "medium",
+    "q": "阿娟參加旅行團到某城市觀光，拿到了如下的旅遊簡介：「此城市地理位置\n優越，既連接兩大洲，又位居黑海通往地中海航道的必經之地，曾經先後作\n為兩個大帝國的首都長達一千六百多年之久。城內有著拜占庭帝國所修築的\n古城牆、鄂圖曼土耳其帝國華麗的皇宮，以及宏偉的基督教教堂與清真寺等\n文化遺產，展現了這座城市輝煌悠久的歷史。」根據內容判斷，阿娟到訪的\n城市最可能是下列何者？",
+    "correct": "伊斯坦堡",
+    "wrong": [
+      "羅馬",
+      "開羅",
+      "耶路撒冷"
+    ],
+    "exp": "正確答案：伊斯坦堡。來源：109年國中教育會考社會第53題。",
+    "subject": "地理",
+    "sub_topic": "地理綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 53,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q54",
+    "difficulty": "medium",
+    "q": "表(十六)為日治後期全臺灣某項土地利用\n方式的地租調查資料，根據表中資料判\n斷，該項土地利用方式最可能為下列何\n者？\n| 表(十六) |  |  |\n| 稅務官署別 | 面積 / (甲) | 地租 / (円) |\n| 臺南州稅務課 | 3,943 | 8,138 |\n| 嘉義稅務出張所 | 2,306 | 5,963 |\n| 高雄州稅務課 | 530 | 1,058 |\n| 彰化稅務出張所 | 275 | 247 |\n| 全臺灣合計 | 7,054 | 15,406 |\n円:日圓",
+    "correct": "鹽田",
+    "wrong": [
+      "林地",
+      "茶園",
+      "溫泉"
+    ],
+    "exp": "正確答案：鹽田。來源：109年國中教育會考社會第54題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 54,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q55",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n根據酒類的原料來源判斷，蘭姆酒的產地最可能集中在下列何處？",
+    "correct": "加勒比海地區",
+    "wrong": [
+      "北美五大湖區",
+      "環地中海地區",
+      "環波羅的海地區"
+    ],
+    "exp": "正確答案：加勒比海地區。來源：109年國中教育會考社會第55題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 55,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q56",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n根據上文判斷，下列哪個國家的酒類消費量可能最低？",
+    "correct": "沙烏地阿拉伯",
+    "wrong": [
+      "印度",
+      "加拿大",
+      "西班牙"
+    ],
+    "exp": "正確答案：沙烏地阿拉伯。來源：109年國中教育會考社會第56題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 56,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q57",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n文末關於臺灣酒類的販賣規定，最主要是因為下列何項考量？",
+    "correct": "維護兒童及少年的健康",
+    "wrong": [
+      "提高合法製酒商的利潤",
+      "確保穆斯林飲食符合戒律",
+      "保障實體零售業者的權利"
+    ],
+    "exp": "正確答案：維護兒童及少年的健康。來源：109年國中教育會考社會第57題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 57,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q58",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n文中所提及的行政區內，最不可能選出下列何項公職人員？",
+    "correct": "市議員",
+    "wrong": [
+      "鄉長",
+      "立法委員",
+      "市民代表"
+    ],
+    "exp": "正確答案：市議員。來源：109年國中教育會考社會第58題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 58,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q59",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n文中政府的作為，其目的最可能為下列何者？",
+    "correct": "降低外部成本",
+    "wrong": [
+      "投資觀光資源",
+      "管理經濟秩序",
+      "提升外部效益"
+    ],
+    "exp": "正確答案：降低外部成本。來源：109年國中教育會考社會第59題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 59,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q60",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n文中農民的心聲，主要是從下列何種社會規範的角度提出看法？",
+    "correct": "倫理道德",
+    "wrong": [
+      "風俗習慣",
+      "法律規定",
+      "宗教信仰"
+    ],
+    "exp": "正確答案：倫理道德。來源：109年國中教育會考社會第60題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 60,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.92,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q61",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n根據上文，美國首次派遣第十五步兵團至中國的原因，最可能是下列何者？",
+    "correct": "義和團事件爆發，引發八國聯軍",
+    "wrong": [
+      "鴉片戰爭結束後，要求給予特權",
+      "趁英法聯軍之際，脅迫開放天津",
+      "與列強瓜分中國，從中獲得利益"
+    ],
+    "exp": "正確答案：義和團事件爆發，引發八國聯軍。來源：109年國中教育會考社會第61題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 61,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q62",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n根據上文，第十五步兵團介入中國內戰，間接保護天津民眾安全，當時中國\n的主要政治情況為何？\n\n![圖表](/assets/banks/cap-109-social/Q62-figure-1.png)",
+    "correct": "地方軍事強人憑藉武力以奪取地盤，割據一方",
+    "wrong": [
+      "立憲派與革命派爭論不休，滿清帝制搖搖欲墜",
+      "日本扶植汪精衛政權，對抗在重慶的國民政府",
+      "國民黨與共產黨不斷衝突，共黨全面控制中國"
+    ],
+    "exp": "正確答案：地方軍事強人憑藉武力以奪取地盤，割據一方。來源：109年國中教育會考社會第62題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 62,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-social/Q62-figure-1.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-social-q63",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n二、題組：(55～63題)\n閱讀下列選文，回答第 55 至 57 題：\n酒為人類飲用歷史非常悠久的加工飲品，由植\n物發酵製成，表(十七)為不同酒類的原料與著名產\n地。酒除了作為飲品之外也有醫療、衛生等用途，\n就像現在把酒精作為簡易殺菌使用一樣，在中世紀\n歐洲，高酒精濃度的伏特加或白蘭地，即成為防範\n鼠疫蔓延的消毒藥，或戰場上傷病軍人的治療用\n| 表(十七) |  |  |\n| 酒名 | 原料 | 著名產地 |\n| 清酒 | 米 | 日本 |\n| 香檳 | 葡萄 | 法國 |\n| 伏特加 | 穀類 | 俄羅斯 |\n| 蘭姆酒 | 甘蔗 | 古巴 |\n藥。因此，酒對於文明的發展有其貢獻，對於某些\n國家甚至有舉足輕重的影響力。\n酒雖作為全球重要的飲品之一，但在某些地區，因為宗教或政治等因素是禁\n止製酒、賣酒或是飲酒的，例如穆斯林禁止飲酒，因此在伊斯蘭世界多以法律明\n文禁止買賣酒類。在臺灣，現行法律則規定須取得製造許可才可以製酒，民眾私\n釀酒僅限自用，每戶以100公升為限；且酒的販賣或轉讓不得以自動販賣機、郵\n購、電子購物或其他無法辨識購買者或受讓者年齡等方式為之。\n\n根據上文，美國決定撤離第十五步兵團，最可能與下列何者有關？",
+    "correct": "盧溝橋事變",
+    "wrong": [
+      "九一八事變",
+      "一二八事變",
+      "珍珠港事變"
+    ],
+    "exp": "正確答案：盧溝橋事變。來源：109年國中教育會考社會第63題。",
+    "subject": "歷史",
+    "sub_topic": "歷史綜合",
+    "source": {
+      "exam": "cap-109-social",
+      "question": 63,
+      "file": "國中/會考/社會/109P_Society150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1BfTLQQX-0jIEUG-5wlZ0axGCoD-oTMLp/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        55,
+        63
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  }
+]

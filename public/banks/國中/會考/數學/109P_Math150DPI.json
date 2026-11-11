@@ -1,0 +1,821 @@
+[
+  {
+    "id": "cap-109-math-q1",
+    "difficulty": "easy",
+    "q": "已知 a = ( −12 ) × ( −23 ) × ( −34 ) × ( −45 )，b = ( −123 ) × ( −234 ) × ( −345 )，\n判斷下列敘述何者正確？",
+    "correct": "a 為正數，  b 為負數",
+    "wrong": [
+      "a、b 皆為正數",
+      "a、  b 皆為負數",
+      "a 為負數，  b 為正數"
+    ],
+    "exp": "正確答案：a 為正數，  b 為負數。來源：109年國中教育會考數學第1題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 1,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q2",
+    "difficulty": "easy",
+    "q": "算式 2<sup>3</sup> × 5<sup>3</sup>之值為何？",
+    "correct": "1000",
+    "wrong": [
+      "30",
+      "90",
+      "1000000"
+    ],
+    "exp": "正確答案：1000。來源：109年國中教育會考數學第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 2,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q3",
+    "difficulty": "easy",
+    "q": "小真煮好了 25 顆湯圓，其中 15 顆為芝麻湯圓，10 顆為花生湯圓。已知小真\n想從煮好的湯圓中撈一顆，若每顆湯圓被小真撈到的機會相等，則他撈到花生\n湯圓的機率為何？",
+    "correct": "$\\frac{2}{5}$",
+    "wrong": [
+      "$\\frac{1}{2}$",
+      "$\\frac{2}{3}$",
+      "$\\frac{1}{10}$"
+    ],
+    "exp": "正確答案：$\\frac{2}{5}$。來源：109年國中教育會考數學第3題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 3,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q4",
+    "difficulty": "medium",
+    "q": "算式 $\\sqrt{2}$ × ( $\\sqrt{48}$ − $\\sqrt{12}$ ) 之值為何？",
+    "correct": "2$\\sqrt{6}$",
+    "wrong": [
+      "6$\\sqrt{2}$",
+      "2$\\sqrt{21}$",
+      "4$\\sqrt{6}$ − 2$\\sqrt{3}$"
+    ],
+    "exp": "正確答案：2$\\sqrt{6}$。來源：109年國中教育會考數學第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 4,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q5",
+    "difficulty": "easy",
+    "q": "如圖 ( 一 )，平行四邊形 ABCD 中， ∠ A = 100<sup>°</sup>。\n若 ∠ABD：  ∠DBC = 3：  2，  則 ∠DBC 的度數為何？\n圖( 一)\n\n![圖表](/assets/banks/cap-109-math/Q5-figure-1.png)",
+    "correct": "32",
+    "wrong": [
+      "40",
+      "48",
+      "60"
+    ],
+    "exp": "正確答案：32。來源：109年國中教育會考數學第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 5,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q5-figure-1.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q6",
+    "difficulty": "easy",
+    "q": "圖 ( 二 ) 數線上的 A、  B、  C 三點所表示的數分別為 a、  b、  c，且原點為 O。\n根據圖中各點位置，判斷下列四個式子的值何者最大？\n\n圖( 二)\n\n![圖表](/assets/banks/cap-109-math/Q6-figure-1.png)",
+    "correct": "a  +  b",
+    "wrong": [
+      "a  +  c",
+      "a − c",
+      "b − c"
+    ],
+    "exp": "正確答案：a  +  b。來源：109年國中教育會考數學第6題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 6,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q6-figure-1.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q7",
+    "difficulty": "medium",
+    "q": "計算 2 x <sup>2</sup> − 3 除以 x + 1 後，得商式和餘式分別為何？",
+    "correct": "商式為 2 x − 2，餘式為 −1",
+    "wrong": [
+      "商式為 2，餘式為 −5",
+      "商式為 2 x − 5，餘式為 5",
+      "商式為 2 x + 2，餘式為 −1"
+    ],
+    "exp": "正確答案：商式為 2 x − 2，餘式為 −1。來源：109年國中教育會考數學第7題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 7,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q8",
+    "difficulty": "medium",
+    "q": "下列何者可表示成兩個質數的乘積？",
+    "correct": "82",
+    "wrong": [
+      "81",
+      "83",
+      "84"
+    ],
+    "exp": "正確答案：82。來源：109年國中教育會考數學第8題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 8,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q9",
+    "difficulty": "easy",
+    "q": "已知小薇住家的西方 100 公尺處為車站，住家的北方 200 公尺處為學校，且\n從學校往東方走 100 公尺，  再往南方走 400 公尺可到達公園。若小薇將住家、\n車站、學校分別標示在坐標平面上的 ( 2 , 0 )、  ( 0 , 0 )、  ( 2 , 4 ) 三點，則公園\n應標示在此坐標平面上的哪一點？",
+    "correct": "( 4 , −4 )",
+    "wrong": [
+      "( 4 , 12 )",
+      "( 0 , −4 )",
+      "( 0 , 12 )"
+    ],
+    "exp": "正確答案：( 4 , −4 )。來源：109年國中教育會考數學第9題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 9,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q10",
+    "difficulty": "medium",
+    "q": "若一元二次方程式 5 ( x − 4 )<sup>2</sup>= 125 的解為 a、  b ，  且 a > b，  則 2a + b 之值\n為何？",
+    "correct": "17",
+    "wrong": [
+      "−7",
+      "−1",
+      "11"
+    ],
+    "exp": "正確答案：17。來源：109年國中教育會考數學第10題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 10,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q11",
+    "difficulty": "medium",
+    "q": "圖( 三) 的坐標平面上有 A 、  B 、  C 、  D 四點，其中\n恰有三點在函數 y = px + q 的圖形上，且 p 、  q 為\n兩數。根據圖中四點的位置，判斷下列哪一點不在\n函數 y = px + q 的圖形上？",
+    "correct": "B",
+    "wrong": [
+      "A",
+      "C",
+      "D"
+    ],
+    "exp": "正確答案：B。來源：109年國中教育會考數學第11題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 11,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q12",
+    "difficulty": "medium",
+    "q": "圖 ( 四 ) 表示平面上 A 、  B 兩點與直線 L 的位置關係，其中 B 點在 L 上。\n若有一動點 P 從 A 點開始移動，移動過程中與 B 點的距離保持不變，則下列\n關於 P 點移動路徑的敘述，何者正確？\n圖( 四)",
+    "correct": "在以 B 點為圓心且通過 A 點的圓上",
+    "wrong": [
+      "在與直線 L 平行且通過 A 點的直線上",
+      "在與直線 L 垂直且通過 A 點的直線上",
+      "在以 AB 為直徑的圓上"
+    ],
+    "exp": "正確答案：在以 B 點為圓心且通過 A 點的圓上。來源：109年國中教育會考數學第12題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 12,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q13",
+    "difficulty": "medium",
+    "q": "圖 ( 五 ) 為甲班 36 名學生參加投籃測驗\n的投進球數長條圖。判斷甲班學生中，\n有多少人的投進球數小於該班學生投進\n球數的中位數？\n圖( 五)\n\n![圖表](/assets/banks/cap-109-math/Q13-figure-1.png)",
+    "correct": "14",
+    "wrong": [
+      "10",
+      "17",
+      "18"
+    ],
+    "exp": "正確答案：14。來源：109年國中教育會考數學第13題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 13,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q13-figure-1.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q14",
+    "difficulty": "medium",
+    "q": "圖( 六) 為朵朵披薩屋的公告。若一個夏威夷披薩\n調漲前的售價為 x 元，則會員購買一個夏威夷披薩\n的花費，公告前後相差多少元？\n圖( 六)\n\n![圖表](/assets/banks/cap-109-math/Q14-figure-1.png)",
+    "correct": "0.14 x",
+    "wrong": [
+      "0.05 x",
+      "0.09 x",
+      "0.15 x"
+    ],
+    "exp": "正確答案：0.14 x。來源：109年國中教育會考數學第14題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 14,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q14-figure-1.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q15",
+    "difficulty": "medium",
+    "q": "平行四邊形 ABCD 中，  E 點在 BC 上，  P 、  Q 兩點在 AD 上，  其位置如\n圖 ( 七 ) 所示。若 PB 與 AE 相交於 R 點，  QB 與 AE 相交於 S 點，則下列\n\n三角形面積的大小關係，何者正確？\n圖( 七)\n\n![圖表](/assets/banks/cap-109-math/Q15-figure-1.png)",
+    "correct": "∆PBE = ∆QBE ，  ∆PRE < ∆QSE",
+    "wrong": [
+      "∆PBE > ∆QBE ，  ∆PRE > ∆QSE",
+      "∆PBE < ∆QBE ，  ∆PRE < ∆QSE",
+      "∆PBE = ∆QBE ，  ∆PRE > ∆QSE"
+    ],
+    "exp": "正確答案：∆PBE = ∆QBE ，  ∆PRE < ∆QSE。來源：109年國中教育會考數學第15題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 15,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q15-figure-1.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q16",
+    "difficulty": "medium",
+    "q": "中秋節時阿柚製作的廣式月餅、蛋黃酥、鳳梨酥的數量比為 2 ： 1 ： 3 ，其中\n只有製作廣式月餅和蛋黃酥時使用鹹蛋黃。若阿柚製作每個廣式月餅時使用 2 顆\n鹹蛋黃，製作每個蛋黃酥時使用 1 顆鹹蛋黃，且總共使用 120 顆鹹蛋黃，則\n他製作了幾個鳳梨酥？",
+    "correct": "72",
+    "wrong": [
+      "45",
+      "60",
+      "120"
+    ],
+    "exp": "正確答案：72。來源：109年國中教育會考數學第16題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 16,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q17",
+    "difficulty": "medium",
+    "q": "如圖 ( 八 )， P 點為矩形 ABCD 兩對角線的交點，\n將 P 點分別以 AD 、  BC 為對稱軸畫出對稱點 Q、  R ，\n形成六邊形 QABRCD 。若 AB = 2 ，  AD = 4 ，則\n六邊形 QABRCD 的周長為何？\n圖( 八)\n\n![圖表](/assets/banks/cap-109-math/Q17-figure-1.png)",
+    "correct": "4 + 4$\\sqrt{5}$",
+    "wrong": [
+      "12",
+      "4 + 2$\\sqrt{6}$",
+      "4 + 4$\\sqrt{3}$"
+    ],
+    "exp": "正確答案：4 + 4$\\sqrt{5}$。來源：109年國中教育會考數學第17題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 17,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q17-figure-1.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q18",
+    "difficulty": "medium",
+    "q": "圖 ( 九 ) 為小麗和小歐依序進入電梯時，電梯因超重而警示音響起的過程，且\n過程中沒有其他人進出。\n\n圖( 九)\n已知當電梯乘載的重量超過 300 公斤時警示音會響起，且小麗、小歐的重量\n分別為 50 公斤、  70 公斤。  若小麗進入電梯前，  電梯內已乘載的重量為 x 公斤，\n則所有滿足題意的 x 可用下列哪一個不等式表示？\n\n![圖表](/assets/banks/cap-109-math/Q18-figure-1.png)\n\n",
+    "correct": "180 < x ≤ 250",
+    "wrong": [
+      "180 < x ≤ 300",
+      "230 < x ≤ 250",
+      "230 < x ≤ 300"
+    ],
+    "exp": "正確答案：180 < x ≤ 250。來源：109年國中教育會考數學第18題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 18,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q18-figure-1.png"
+    ],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q19",
+    "difficulty": "medium",
+    "q": "圓上有 A 、  B 、  C 、  D 四點，  其位置如圖(十)所示，\n其中 AC 與 BD 相交於 E 點，且 AB = BC 。根據圖中\n標示的角度，  判斷下列四條線段何者的長度最長？\n圖( 十)\n\n![圖表](/assets/banks/cap-109-math/Q19-figure-1.png)",
+    "correct": "BE",
+    "wrong": [
+      "AE",
+      "CE",
+      "DE"
+    ],
+    "exp": "正確答案：BE。來源：109年國中教育會考數學第19題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 19,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q19-figure-1.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q20",
+    "difficulty": "medium",
+    "q": "圖 ( 十一 ) 的正三角形 ABC 與正方形 CDEF 中，\nB 、  C 、  D 三點共線，且 AC = 10 ，  CF = 8 。\n若有一動點 P 沿著 CA 由 C 往 A 移動，則 FP\n的長度最小為多少？\n圖( 十一)\n\n![圖表](/assets/banks/cap-109-math/Q20-figure-1.png)",
+    "correct": "4",
+    "wrong": [
+      "5",
+      "4$\\sqrt{3}$",
+      "5$\\sqrt{3}$"
+    ],
+    "exp": "正確答案：4。來源：109年國中教育會考數學第20題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 20,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q20-figure-1.png"
+    ],
+    "passRate": 0.44,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q21",
+    "difficulty": "hard",
+    "q": "坐標平面上有一水平線 L 與二次函數 y = a ( x + 7 )<sup>2</sup> − 10 的圖形，其中 a 為\n一正數，且 L 與二次函數圖形相交於 A 、  C 兩點，與 y 軸相交於 B 點，其\n位置如圖 ( 十二 ) 所示。若 AB ： BC = 5 ： 1 ，則 AC 的長度為何？\n\n圖( 十二)\n\n![圖表](/assets/banks/cap-109-math/Q21-figure-1.png)",
+    "correct": "21",
+    "wrong": [
+      "17",
+      "19",
+      "24"
+    ],
+    "exp": "正確答案：21。來源：109年國中教育會考數學第21題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 21,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q21-figure-1.png"
+    ],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q22",
+    "difficulty": "medium",
+    "q": "如圖 ( 十三 )，直線 L 將正九邊形 ABCDEFGHI 分割成兩個區域，且分別與\nAB 、   EF 相交於 P 點、  Q 點。若 ∠APQ 的外角為 75 <sup>°</sup>，則 ∠PQE 的度數為何？\n\n圖( 十三)\n\n![圖表](/assets/banks/cap-109-math/Q22-figure-1.png)",
+    "correct": "85",
+    "wrong": [
+      "75",
+      "95",
+      "105"
+    ],
+    "exp": "正確答案：85。來源：109年國中教育會考數學第22題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 22,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q22-figure-1.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q23",
+    "difficulty": "hard",
+    "q": "已知有若干片相同的拼圖，其形狀如圖 ( 十四 ) 所示，且拼圖依同方向排列時\n可緊密拼成一列，此時底部可與直線貼齊。當 4 片拼圖緊密拼成一列時長度為\n23 公分，  如圖 ( 十五 ) 所示。當 10 片拼圖緊密拼成一列時長度為 56 公分，\n如圖 ( 十六 ) 所示。求圖 ( 十四 ) 中的拼圖長度為多少公分？\n\n圖( 十四)\n\n圖( 十五)\n\n圖( 十六)\n\n![圖表](/assets/banks/cap-109-math/Q23-figure-1.png)\n\n\n\n\n\n",
+    "correct": "6.5",
+    "wrong": [
+      "5.5",
+      "5.6",
+      "5.75"
+    ],
+    "exp": "正確答案：6.5。來源：109年國中教育會考數學第23題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 23,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q23-figure-1.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q24",
+    "difficulty": "hard",
+    "q": "圖( 十七) 為三角形紙片 ABC ，其中 D 點和 E 點將 AB 分成三等分，  F 點為 DE\n中點。若小慕從 AB 上的一點 P ，沿著與直線 BC 平行的方向將紙片剪開後，剪下\n的小三角形紙片面積為 ∆ABC 的 $\\frac{1}{3}$，  則下列關於 P 點位置的敘述，  何者正確？\n\n圖( 十七)\n\n![圖表](/assets/banks/cap-109-math/Q24-figure-1.png)",
+    "correct": "在 FE 上，但不與 F 點也不與 E 點重合",
+    "wrong": [
+      "與 D 點重合",
+      "與 E 點重合",
+      "在 DF 上，但不與 D 點也不與 F 點重合"
+    ],
+    "exp": "正確答案：在 FE 上，但不與 F 點也不與 E 點重合。來源：109年國中教育會考數學第24題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 24,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q24-figure-1.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q25",
+    "difficulty": "medium",
+    "q": "圖( 十八) 為有春蛋糕店的價目表，阿凱原本拿了 4 個蛋糕去結帳，結帳時發現\n該店正在舉辦優惠活動，優惠方式為每買 5 個蛋糕，其中 1 個價格最低的\n蛋糕免費，因此阿凱後來多買了 1 個黑櫻桃蛋糕。若阿凱原本的結帳金額\n為 x 元，後來的結帳金額為 y 元，則 x 與 y 的關係式不可能為下列何者？\n\n圖( 十八)\n\n![圖表](/assets/banks/cap-109-math/Q25-figure-1.png)",
+    "correct": "y = x + 5",
+    "wrong": [
+      "y = x",
+      "y = x + 10",
+      "y = x + 15"
+    ],
+    "exp": "正確答案：y = x + 5。來源：109年國中教育會考數學第25題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 25,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q25-figure-1.png"
+    ],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-math-q26",
+    "difficulty": "medium",
+    "q": "如圖 ( 十九 )，銳角三角形 ABC 中，  O 點為 AB 中點。甲、乙兩人想在 AC\n上找一點 P ，使得 ∆ABP 的外心為 O ，其作法分別如下：\n( 甲 ) 作過 B 且與 AC 垂直的直線，交 AC 於 P 點，則 P 即為所求\n( 乙 ) 以 O 為圓心，  OA 長為半徑畫弧，交 AC 於 P 點，則 P 即為所求\n\n對於甲、乙兩人的作法，下列判斷何者正確？\n圖( 十九)\n\n![圖表](/assets/banks/cap-109-math/Q26-figure-1.png)",
+    "correct": "兩人皆正確",
+    "wrong": [
+      "兩人皆錯誤",
+      "甲正確，乙錯誤",
+      "甲錯誤，乙正確"
+    ],
+    "exp": "正確答案：兩人皆正確。來源：109年國中教育會考數學第26題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-109-math",
+      "question": 26,
+      "file": "國中/會考/數學/109P_Math150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1FUINY5M_cVhxGvg9GxiJCWrYvNStiSei/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-math/Q26-figure-1.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  }
+]

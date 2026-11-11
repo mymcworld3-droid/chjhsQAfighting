@@ -86,14 +86,21 @@ function generationHarness(candidates) {
   let handler,calls=0;const prompts=[];
   const source=fs.readFileSync(require.resolve('../server.js'),'utf8');
   const a=source.indexOf("app.post('/api/generate-quiz',"),b=source.indexOf('// API 5:',a);
-  const context={Knowledge,app:{post:(_,fn)=>handler=fn},FAST_QUIZ_MODES:MODES,
+  const context={questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},Knowledge,createQuizTaskPlan:require('../quiz-generation-tasks.cjs').createQuizTaskPlan,app:{post:(_,fn)=>handler=fn},FAST_QUIZ_MODES:MODES,
     SUBJECT_SCHEMA:{數學:['原範圍']},SUBJECT_DETAILS:{},QUESTION_FORMS:['multi-step'],
     cleanQuestionText:x=>String(x),normalizeQuestionMeta:x=>x,getRandomItem:x=>x[0],
     qualityPolicy:()=>({cognitive:2,steps:2,instruction:'理解推理'}),chooseQuestionForm:()=> 'multi-step',
     ANSWER_AND_EXPLANATION_RULES:'獨立驗算',subjectReliabilityPrompt:require('../quiz-answer-prompt.cjs').subjectReliabilityPrompt,quickQuizPrompt,
     isTooSimilarQuestion:()=>false,questionQualityIssue:()=>'',removeUnstableOptionLabels:x=>x,
     quizSparePool:{key:()=>'',take:()=>null,markServed(){},offer(){}},
-    aiRouter:{async generateJSON(prompt,options){prompts.push(prompt);const data=candidates[Math.min(calls++,candidates.length-1)];options.validate(data);return {data:{...data},provider:'test',model:'test'};}},
+    aiRouter:{async generateJSON(prompt,options){
+      prompts.push(prompt);
+      const task=JSON.parse(prompt.split('\n').find(line=>line.startsWith('任務規格 JSON：')).slice('任務規格 JSON：'.length));
+      const candidate=candidates[Math.min(calls++,candidates.length-1)];
+      const data={...candidate,question_form:candidate.question_form||task.question_form,
+        generation_task_id:candidate.generation_task_id||task.generation_task_id};
+      options.validate(data,{index:0});return {data,provider:'test',model:'test'};
+    }},
     console:{log(){},error(){}},crypto:require('node:crypto')};
   vm.runInNewContext(source.slice(a,b),context);
   return {prompts,calls:()=>calls,async invoke(body){const result={};await handler({body},{status(n){result.status=n;return this;},json(x){result.body=JSON.parse(JSON.stringify(x));return this;}});return result;}};
@@ -101,19 +108,19 @@ function generationHarness(candidates) {
 test('quiz API rejects invented or cross-subject labels, retries, and returns scope and knowledge separately',async()=>{
   const question={...math,q:'方程式 x+2=6 中，x 的值為何？',correct:'4',wrong:['2','3','5'],exp:'移項得 x=6-2=4。答案為 4。'};
   const h=generationHarness([{...question,knowledge_point_id:'made-up'},question]);
-  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',quizMode:'battle-fast'});
+  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',difficulty:'medium',quizMode:'battle-fast'});
   assert.equal(h.calls(),2);const generated=JSON.parse(result.body.text);
   assert.equal(generated.sub_topic,'七上第三章 3-2 移項');assert.equal(generated.knowledge_point_id,'math-3');
   assert.equal(generated.knowledge_point,'方程與不等式');assert.equal(generated.knowledge_subject,'數學');
   const wrong=generationHarness([{...question,knowledge_subject:'英文'}]);
-  const failed=await wrong.invoke({subject:'數學',specificTopic:'移項'});
+  const failed=await wrong.invoke({subject:'數學',specificTopic:'移項',difficulty:'medium'});
   assert.equal(failed.status,500);assert.equal(wrong.calls(),3);
 });
 
 test('quiz API normalizes multiple knowledge points while preserving the requested scope',async()=>{
   const points=[{subject:'數學',id:'math-2',name:'代數運算'},{subject:'數學',id:'math-3',name:'方程與不等式'}];
   const h=generationHarness([{knowledge_points:[...points,points[0]],q:'方程式 x+2=6 中，x 的值為何？',correct:'4',wrong:['2','3','5'],exp:'移項得 x=6-2=4。答案為 4。'}]);
-  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',quizMode:'battle-fast'});
+  const result=await h.invoke({subject:'數學',specificTopic:'七上第三章 3-2 移項',difficulty:'medium',quizMode:'battle-fast'});
   const question=JSON.parse(result.body.text);assert.deepEqual(question.knowledge_points,points);
   assert.equal(question.sub_topic,'七上第三章 3-2 移項');assert.equal(question.knowledge_point_id,'math-2');
 });

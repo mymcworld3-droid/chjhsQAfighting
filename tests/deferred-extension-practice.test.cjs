@@ -53,6 +53,7 @@ function setup() {
         renderQuiz: (data, rank, badge) => renders.push({ data, rank, badge }),
         getRankName: () => '練氣', getSmartDifficulty: () => '中等',
         shuffleArray: items => items, quizMetaFromRaw: () => ({}), recentSoloQuestionContext: () => ({}),
+        authenticatedMainFetch: (...args) => context.fetch(...args),
         fetch: async (url, init) => {
             assert.equal(url, '/api/generate-quiz');
             const body = JSON.parse(init.body);
@@ -256,6 +257,9 @@ test('ready correction appends behind the buffer but is selected next without di
     assert.equal(h.cache.getQueue()[0].data.q, h.buffered.data.q);
     const correction = h.cache.getQueue()[1];
     assert.equal(correction.recoveryOrigin, h.normal.data.q);
+    assert.equal(h.generated[0].specificTopic, '功與動能');
+    assert.equal(h.generated[0].correctionPractice.sourceQuestion, h.normal.data.q);
+    assert.equal(h.generated[0].difficulty, 'medium');
     assert.equal(correction.extendedPractice, false, 'one correction does not enter endless extension mode');
     assert.match(correction.badge, /訂正練習/);
     assert.match(h.get('solo-correction-practice').textContent, /已就緒/);
@@ -304,11 +308,12 @@ test('repeated correction clicks share one generation and the ready question can
 test('correction generation failure preserves the normal buffer and allows an explicit retry', async () => {
     const h = setup(); h.complete();
     const fetch = h.context.fetch;
-    h.context.fetch = async () => { throw Error('offline'); };
+    h.context.fetch = async () => ({ok:false,status:503,json:async()=>({code:'CORRECTION_NOT_APPROVED',error:'訂正題尚未通過審查，請重試。'})});
     await h.w.startQuizExtendedPractice('功與動能', { correction: true });
     assert.equal(h.cache.getQueue().length, 1);
     assert.equal(h.get('solo-correction-practice').disabled, false);
     assert.match(h.get('solo-correction-practice').textContent, /重試/);
+    assert.equal(h.toasts.at(-1), '訂正題尚未通過審查，請重試。');
     h.context.fetch = fetch;
     await h.w.startQuizExtendedPractice('功與動能', { correction: true });
     assert.equal(h.cache.getQueue().filter(item => item.recoveryOrigin).length, 1);

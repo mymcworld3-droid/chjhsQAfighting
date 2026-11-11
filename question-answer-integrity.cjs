@@ -1,4 +1,5 @@
 'use strict';
+const { numericExpression, numericCalculationIssue } = require('./numeric-calculation-guard.cjs');
 
 // Lightweight, deterministic checks supplement (but do not replace) independent
 // model review. Only block issues provable from the returned data.
@@ -63,22 +64,13 @@ function explicitSolutionAnswer(explanation) {
 }
 
 function arithmeticExpected(question) {
-  const stem = clean(question);
-  // Only expressions explicitly asking the result of a single integer
-  // arithmetic operation; never evaluate arbitrary user-provided JavaScript.
-  const match = /(?:計算|求|試求|算出|等於|=|？|\?)\s*[:：]?\s*[\(（]?\s*(-?\d{1,6})\s*([+＋\-−×*÷/])\s*(-?\d{1,6})\s*[\)）]?\s*(?:=|等於|的值|結果|是多少|為何|[？?])?/u.exec(stem)
-    || /^\s*(-?\d{1,6})\s*([+＋\-−×*÷/])\s*(-?\d{1,6})\s*(?:=|等於|的值|結果|是多少|為何|[？?])/u.exec(stem);
+  const stem = String(question ?? '').trim();
+  // Match a complete arithmetic question, not the first two terms of a longer
+  // expression or an operation embedded in an algebra/story question.
+  const match = /^(?:(?:計算|求|試求|算出)\s*[:：]?\s*)?(.+?)\s*(?:=\s*[?？]|等於多少|的值|的結果|結果|是多少|為何|[?？])\s*[。.?？]*$/u.exec(stem);
   if (!match) return null;
-  const a = Number(match[1]), b = Number(match[3]);
-  let answer;
-  switch (match[2]) {
-    case '+': case '＋': answer = a + b; break;
-    case '-': case '−': answer = a - b; break;
-    case '×': case '*': answer = a * b; break;
-    case '÷': case '/': answer = b ? a / b : NaN; break;
-    default: return null;
-  }
-  return Number.isSafeInteger(answer) ? String(answer) : null;
+  const result = numericExpression(match[1]);
+  return result?.d === 1n ? String(result.n) : null;
 }
 
 function questionIntegrityIssue(input, { rejectRepairNotes = true } = {}) {
@@ -99,10 +91,14 @@ function questionIntegrityIssue(input, { rejectRepairNotes = true } = {}) {
     if ((matchingChoices.length || numericChoices && numericAnswer(answer) !== null) && answerKey(correct) !== answer)
       return '解析所標示的最終答案與 correct 不一致';
   }
-  const expected = arithmeticExpected(q);
+  const expected = arithmeticExpected(input?.q);
   if (expected !== null && choices.every(x => /^-?\d+$/.test(normalized(x))) &&
       normalized(correct) !== expected)
     return '題目明確算式的數值答案與 correct 不一致';
+  // Preserve Unicode superscripts until the arithmetic lexer converts them;
+  // NFKC alone would turn 3² into 32 rather than 3^2.
+  const calculationIssue = numericCalculationIssue(input?.exp);
+  if (calculationIssue) return calculationIssue;
   return '';
 }
 

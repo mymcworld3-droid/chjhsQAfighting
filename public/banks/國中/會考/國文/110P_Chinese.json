@@ -1,0 +1,1541 @@
+[
+  {
+    "id": "cap-110-chinese-q1",
+    "difficulty": "easy",
+    "q": "下列文句中的連詞，何者使用最恰當？",
+    "correct": "即使生活變得富裕，也不應該浪費",
+    "wrong": [
+      "除非是很小的錯誤，也可能釀成大害",
+      "只有從根本解決，就能為人民改善生活",
+      "與其老師怎樣費心勸說，他還是我行我素"
+    ],
+    "exp": "正確答案：即使生活變得富裕，也不應該浪費。來源：110年國中教育會考國文第1題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 1,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.93,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q2",
+    "difficulty": "easy",
+    "q": "「人生是短暫的，死亡是自然的，認清了這點，活著的時候才可以真正的投入。」\n這句話的涵義，與下列何者最接近？",
+    "correct": "了解生命的限制，坦然面對死亡，就能盡情地活著",
+    "wrong": [
+      "經歷死亡幽谷，才能發現活著的可貴",
+      "能將死亡置之度外的人往往雖死猶生",
+      "生命的價值在於不斷挑戰自我，安於現狀等於死亡"
+    ],
+    "exp": "正確答案：了解生命的限制，坦然面對死亡，就能盡情地活著。來源：110年國中教育會考國文第2題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 2,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q3",
+    "difficulty": "easy",
+    "q": "這是某相機使用說明書的一部分：\n對於以下主體，可能無法成功自動對焦：\n◆ 與背景色彩相近的主體\n◆ 自動對焦點同時覆蓋遠近主體\n◆ 重複的圖案\n根據以上說明，這臺相機在相同的設定下，下列哪一個景物最容易自動對焦？\n\n![圖表](/assets/banks/cap-110-chinese/Q3-figure-1.png)\n\n\n\n\n\n",
+    "correct": "沙漠中的綠色\n仙人掌",
+    "wrong": [
+      "雪地上的雪人",
+      "欄杆後的盆栽",
+      "花色相同的馬\n賽克磁磚"
+    ],
+    "exp": "正確答案：沙漠中的綠色\n仙人掌。來源：110年國中教育會考國文第3題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 3,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q3-figure-1.png"
+    ],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q4",
+    "difficulty": "easy",
+    "q": "下列選項「」中的字，何組讀音相同？",
+    "correct": "「抵」死不從／蒞臨府「邸」",
+    "wrong": [
+      "「恪」守本分／獨創一「格」",
+      "字「斟」句酌／「勘」正訛誤",
+      "鍾靈「毓」秀／才「疏」學淺"
+    ],
+    "exp": "正確答案：「抵」死不從／蒞臨府「邸」。來源：110年國中教育會考國文第4題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 4,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q5",
+    "difficulty": "easy",
+    "q": "「山田汽車成立於西元1916年。高橋汽車在山田汽車成立100週年時發表一段\n賀詞：『感謝100年來的競爭，沒有你的那30年有點孤獨。』」根據這段文\n字，高橋汽車最可能成立於西元哪一年？",
+    "correct": "1886",
+    "wrong": [
+      "1816",
+      "1846",
+      "1946"
+    ],
+    "exp": "正確答案：1886。來源：110年國中教育會考國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 5,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q6",
+    "difficulty": "easy",
+    "q": "〈盆栽〉向陽\n\n做為盆栽，他已覺頗為滿意\n在方圓有限的盆裡，他擁有\n自己的領域，擁有陽光、水\n以及空氣。且較諸同儕幸運\n為無懼於戶外的風雨他竊喜\n\n站在被保護的窗緣，他謳歌\n廣邈無邊的天地，讚頌風暴\n雷電之壯麗。而對於被摧折\n遍地的花草樹木則嗤之以鼻\n較諸粗俗，他寧取盆中長綠\n\n這首詩中「盆栽」對生活的態度，與下列何者最接近？",
+    "correct": "安守現實，自得其樂",
+    "wrong": [
+      "享受挑戰，追求卓越",
+      "突破藩籬，渴望自由",
+      "寧為玉碎，不為瓦全"
+    ],
+    "exp": "正確答案：安守現實，自得其樂。來源：110年國中教育會考國文第6題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 6,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q7",
+    "difficulty": "medium",
+    "q": "愛爾蘭文學家喬哀思流亡海外多年，其創作大多根植於早年在愛爾蘭都柏林\n的生活。他曾說：「有一天，都柏林這座城市毀了，人們也可以憑藉我的小\n說，一磚一瓦的將之重建。」透過這句話可看出小說具有什麼作用？",
+    "correct": "記錄地方文史風物",
+    "wrong": [
+      "勾勒未來生活圖象",
+      "重振戰後失落的人心",
+      "展現社區營造的力量"
+    ],
+    "exp": "正確答案：記錄地方文史風物。來源：110年國中教育會考國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 7,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q8",
+    "difficulty": "easy",
+    "q": "「昔人未見麟，問嘗見者：『麟何類乎？』見者曰：『麟如麟也。』問者曰：\n『若吾嘗見麟，則不問子矣。而云麟如麟，寧可解哉？』見者曰：『麟者，麇<sub>1</sub>\n\n身牛尾，鹿蹄馬背。』問者豁然而解。」根據這則故事，下列敘述何者最恰當？\n\n![圖表](/assets/banks/cap-110-chinese/Q8-figure-1.png)",
+    "correct": "見者最後以具體事物為喻，輔助說明",
+    "wrong": [
+      "問者蓄意為難，明知故問",
+      "見者實未曾見麟，信口開河",
+      "問者終不得其解，寧可自尋答案"
+    ],
+    "exp": "正確答案：見者最後以具體事物為喻，輔助說明。來源：110年國中教育會考國文第8題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 8,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q8-figure-1.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q9",
+    "difficulty": "easy",
+    "q": "「落帆逗淮鎮，停舫臨孤驛。浩浩風起波，冥冥日沉夕。人歸山郭暗，雁下蘆洲\n白。獨夜憶秦關，聽鐘未眠客。」關於這首詩的分析，下列敘述何者最恰當？",
+    "correct": "末兩句點出客因心有所思而不成眠",
+    "wrong": [
+      "首兩句寫出與友餞別的地點與時間",
+      "以「風起」、「日沉」自喻懷才不遇",
+      "以「雁下蘆洲白」表示太陽將升起"
+    ],
+    "exp": "正確答案：末兩句點出客因心有所思而不成眠。來源：110年國中教育會考國文第9題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 9,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q10",
+    "difficulty": "medium",
+    "q": "「獨創不代表完全嶄新，更非與傳統和過去截然無關。相反地，所有藝術的\n起點都來自於模仿與學習。什麼才是獨創？我們一生下來，世界就開始影響\n我們，而這種影響一直持續，直到我們過完此生。除了精力、氣力和意志以\n外，還有什麼是屬於我們自己的呢？」這段話的觀點與下列何者最接近？",
+    "correct": "獨創並不意味與傳統全然無關",
+    "wrong": [
+      "精力、氣力和意志有助於獨創",
+      "每件藝術品都必須以獨創為起點",
+      "擺脫世界對我們的影響才能獨創"
+    ],
+    "exp": "正確答案：獨創並不意味與傳統全然無關。來源：110年國中教育會考國文第10題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 10,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q11",
+    "difficulty": "medium",
+    "q": "下列文句「」中的稱謂，何者使用最恰當？",
+    "correct": "「小女」的于歸之宴，請您務必賞光",
+    "wrong": [
+      "謝謝您的蒞臨，「貴校」蓬蓽生輝",
+      "「家弟」近期要搬家，忙得不可開交",
+      "為了準備求職面試，「舍姐」緊張不已"
+    ],
+    "exp": "正確答案：「小女」的于歸之宴，請您務必賞光。來源：110年國中教育會考國文第11題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 11,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q12",
+    "difficulty": "medium",
+    "q": "「樹型直挺高壯的，無一不被畫上記號，陸續走向腰斬的命運。唯獨畸形虛\n弱的劣木，有的彎曲不直，有的枝枒過多，有的菌蟲蛀洞，有的矮小窄細，\n幸運地逃過一劫，殘喘至今，成了旅客心中敬畏的神木。」這段文字所要表\n達的意旨，與下列何者最接近？",
+    "correct": "無用之用，是為大用",
+    "wrong": [
+      "前事不忘，後事之師",
+      "一沙一世界，一花一天堂",
+      "出淤泥而不染，濯清漣而不妖"
+    ],
+    "exp": "正確答案：無用之用，是為大用。來源：110年國中教育會考國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 12,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q13",
+    "difficulty": "medium",
+    "q": "小楓在古玩店看到一枚仿古錢幣，仔細一看，發現這是將\n「唯」、「吾」、「知」、「足」四字字體共用「口」形，\n所合成的一個圖象。下列圖象何者也是用類似的方式合成？\n\n![圖表](/assets/banks/cap-110-chinese/Q13-figure-1.png)",
+    "correct": "![圖表](/assets/banks/cap-110-chinese/Q13-option-A-figure-1.png)",
+    "wrong": [
+      "![圖表](/assets/banks/cap-110-chinese/Q13-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-110-chinese/Q13-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-110-chinese/Q13-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：![圖表](/assets/banks/cap-110-chinese/Q13-option-A-figure-1.png)。來源：110年國中教育會考國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 13,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q13-figure-1.png",
+      "/assets/banks/cap-110-chinese/Q13-option-A-figure-1.png",
+      "/assets/banks/cap-110-chinese/Q13-option-B-figure-1.png",
+      "/assets/banks/cap-110-chinese/Q13-option-C-figure-1.png",
+      "/assets/banks/cap-110-chinese/Q13-option-D-figure-1.png"
+    ],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q14",
+    "difficulty": "medium",
+    "q": "「許多科技大廠致力發展AI產業，但在支援中文化系統卻遇到困難。原因是\n中文的同音異字令語音辨識難度增加，而中文常與外語混用，以及次文化用\n語等都成為系統干擾。」根據這段文字，下列文句語音辨識錯誤的原因，何\n者未被提及？",
+    "correct": "他在床上睡著了 → 他在船上睡著了",
+    "wrong": [
+      "他是個勢利眼 → 他是個視力眼",
+      "班導要求按時交作業 → 扳倒要求按時交作業",
+      "Facebook的用戶眾多 → 非死不可的用戶眾多"
+    ],
+    "exp": "正確答案：他在床上睡著了 → 他在船上睡著了。來源：110年國中教育會考國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 14,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q15",
+    "difficulty": "medium",
+    "q": "下列文句「」中的詞語，何者使用最恰當？",
+    "correct": "他把這些事混為一談，其實根本是「風馬牛不相及」",
+    "wrong": [
+      "既然每個人選都很優秀，不如「兩害相權取其輕」",
+      "窮困之際竟幸運中了頭獎，真是有如「雨後春筍」",
+      "比賽中就算占上風也要保持謹慎，以免「轉悲為喜」"
+    ],
+    "exp": "正確答案：他把這些事混為一談，其實根本是「風馬牛不相及」。來源：110年國中教育會考國文第15題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 15,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q16",
+    "difficulty": "medium",
+    "q": "國中小新住民子女與非新住民子女人數統計圖\n\n(人)\n3,000,00\n住民子女\n住民子女\n2,500,00 民子女\n2,000,00\n1,500,00\n1,000,00\n500,00\n根據這張圖表，下列敘述何者錯誤？\n\n![圖表](/assets/banks/cap-110-chinese/Q16-figure-1.png)",
+    "correct": "國小新住民子女人數漸趨上升",
+    "wrong": [
+      "國中小學生總人數漸趨下降",
+      "國中新住民子女所占比例漸趨上升",
+      "國中小非新住民子女所占比例漸趨下降"
+    ],
+    "exp": "正確答案：國小新住民子女人數漸趨上升。來源：110年國中教育會考國文第16題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 16,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q16-figure-1.png"
+    ],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q17",
+    "difficulty": "medium",
+    "q": "「洛陽之俗，大抵好牡丹，春時城中無分貴賤皆插花，雖負擔者亦然。花開\n時，士庶競為遊遨，至花落乃罷。洛陽至東京六驛，舊不進花，自今歲遣衙\n校一員，乘驛馬，一日一夕至京師。所進不過姚黃魏紫三數朵。以菜葉實竹\n籠子，藉<sub>1</sub>覆之使馬上不動搖，以蠟封蒂，乃數日不落。」根據這段文字，下\n\n列關於牡丹的敘述何者最恰當？\n\n![圖表](/assets/banks/cap-110-chinese/Q17-figure-1.png)",
+    "correct": "姚黃魏紫指的皆是牡丹",
+    "wrong": [
+      "洛陽權貴才有資格買牡丹",
+      "牡丹運送前須以蠟整株封存",
+      "牡丹運送時以菜葉提供其養分"
+    ],
+    "exp": "正確答案：姚黃魏紫指的皆是牡丹。來源：110年國中教育會考國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 17,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q17-figure-1.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q18",
+    "difficulty": "medium",
+    "q": "「臺灣海峽黑水溝的形成是受地形影響，使水流加速，最快可達每秒四公尺。\n當湍急的水流帶走水中的沉積與雜屑，海水少了許多反射陽光的雜質，使光\n線能貫穿深處，所呈現的色澤就如墨黑般的深藍。」根據這段文字，下列敘\n述何者最恰當？",
+    "correct": "黑水溝的水較清澈，透光性較佳",
+    "wrong": [
+      "海水的雜質含量與水流速度無關",
+      "海水的流速變慢，顏色就會變深",
+      "黑水溝的流速至少為每秒四公尺"
+    ],
+    "exp": "正確答案：黑水溝的水較清澈，透光性較佳。來源：110年國中教育會考國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 18,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q19",
+    "difficulty": "medium",
+    "q": "「               ______      。所以，我們寧願放掉功課而選擇看漫畫、滑手機，因後者\n帶來的快樂往往是立即的。此外，開心時大腦會分泌多巴胺，讓人容易重複\n相同的行為，難怪我們會不斷看漫畫、滑手機，直到考試時間逼近，才開始\n熬夜抱佛腳。」根據文意脈絡，畫線處填入下列何者最恰當？",
+    "correct": "人類等待報酬的時間越短，動力越強",
+    "wrong": [
+      "距離考試越近，讀書的效果越好",
+      "時間越晚，大腦分泌的多巴胺越多",
+      "重複相同行為的次數越多，人們越快樂"
+    ],
+    "exp": "正確答案：人類等待報酬的時間越短，動力越強。來源：110年國中教育會考國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 19,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q20",
+    "difficulty": "easy",
+    "q": "「旅行沒有公式，更沒有所謂必看、必玩或必吃。這個世界很大，擺脫行程\n的綑綁，我們會感受更多的驚喜。」這段文字的涵義，與下列何者最接近？",
+    "correct": "無目的的漫遊會有意外的收穫",
+    "wrong": [
+      "事先規劃才算深度旅遊",
+      "人們要有實踐壯遊的夢想",
+      "人生就像是一趟未知的旅程"
+    ],
+    "exp": "正確答案：無目的的漫遊會有意外的收穫。來源：110年國中教育會考國文第20題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 20,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q21",
+    "difficulty": "medium",
+    "q": "下列文句，何者詞語使用最恰當？",
+    "correct": "曾幾何時，家鄉景物已完全改變",
+    "wrong": [
+      "他為人謙和有禮，總是前倨後恭",
+      "他一進車廂，就先入為主搶了靠窗座位",
+      "體育課後教室變得汗牛充棟，又臭又悶"
+    ],
+    "exp": "正確答案：曾幾何時，家鄉景物已完全改變。來源：110年國中教育會考國文第21題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 21,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q22",
+    "difficulty": "medium",
+    "q": "「有些人才，只是放錯了位置，就成了庸才。」這句話的涵義，與下列何者\n最接近？",
+    "correct": "天地無棄物，用人當取其所長",
+    "wrong": [
+      "天才與瘋子往往只有一線之隔",
+      "平凡人透過努力也能變得傑出",
+      "人須自知自愛，方能獲得尊重"
+    ],
+    "exp": "正確答案：天地無棄物，用人當取其所長。來源：110年國中教育會考國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 22,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q23",
+    "difficulty": "medium",
+    "q": "下列詞語「」中的注音寫成國字後，何者兩兩相同？",
+    "correct": "無「ㄨㄤˋ」之災／自大狂「ㄨㄤˋ」",
+    "wrong": [
+      "信筆「ㄊㄨˊ」鴉／如火如「ㄊㄨˊ」",
+      "勞而無「ㄍㄨㄥ」／分「ㄍㄨㄥ」合作",
+      "遺珠之「ㄏㄢˋ」／震「ㄏㄢˋ」人心"
+    ],
+    "exp": "正確答案：無「ㄨㄤˋ」之災／自大狂「ㄨㄤˋ」。來源：110年國中教育會考國文第23題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 23,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q24",
+    "difficulty": "medium",
+    "q": "「讀書若是□□□□，便把活潑的讀書心性束縛了。窮研細究，把通篇文章分\n析得支離破碎，結果往往化甘旨為嚼蠟，脫離了意境，『甚解』卻變成撿了\n芝麻丟西瓜，因小失大。」根據文意脈絡，空格處填入下列何者最恰當？",
+    "correct": "逐字求解",
+    "wrong": [
+      "茫然不解",
+      "一知半解",
+      "不求甚解"
+    ],
+    "exp": "正確答案：逐字求解。來源：110年國中教育會考國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 24,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q25",
+    "difficulty": "medium",
+    "q": "辛棄疾〈西江月〉江行采石岸，戲作漁夫詞\n千丈懸崖削翠，一川落日鎔金。白鷗來往本無心。選甚風波一任。 ______ 別浦\n\n魚肥堪膾，前村酒美重斟。千年往事已沉沉。閒管興亡則甚。\n關於這闋詞的分析，下列敘述何者最恰當？",
+    "correct": "上、下片的首二句皆為對仗句",
+    "wrong": [
+      "題目為〈西江月〉，後附小序",
+      "上片先情後景，下片先景後情",
+      "結尾寫出以天下為己任的抱負"
+    ],
+    "exp": "正確答案：上、下片的首二句皆為對仗句。來源：110年國中教育會考國文第25題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 25,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q26",
+    "difficulty": "medium",
+    "q": "彭玉麟任江南巡按時，有人告訴他武昌知府靠逢迎拍馬才能升官。彭公\n聽了大怒，召知府來斥責，武昌知府恭謹地說：「卑職奉承的對象，都是喜\n歡被奉承的人，像大人您這樣公正嚴明，卑職再會奉承也沒有用啊！」彭公\n聽了得意地笑說：「我就知道你拍不了我的馬屁。」\n根據這則故事，關於彭公和武昌知府的敘述何者最不恰當？",
+    "correct": "武昌知府不會對公正之人逢迎",
+    "wrong": [
+      "彭公自認不喜歡被人奉承",
+      "彭公被拍了馬屁還不自知",
+      "武昌知府逢迎拍馬的能力極佳"
+    ],
+    "exp": "正確答案：武昌知府不會對公正之人逢迎。來源：110年國中教育會考國文第26題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 26,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q27",
+    "difficulty": "medium",
+    "q": "王國維評姜白石詞：「古今詞人格調之高，無如白石。惜不於意境上用力，\n故覺無言外之味、弦外之響。終不能與於第一流之作者也。」下列何者最符\n合這段文字的觀點？",
+    "correct": "白石非第一流之作者",
+    "wrong": [
+      "白石之詞善於經營意境",
+      "有弦外之響者必是第一流詞作",
+      "詞有言外之意方顯作者格調之高"
+    ],
+    "exp": "正確答案：白石非第一流之作者。來源：110年國中教育會考國文第27題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 27,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q28",
+    "difficulty": "medium",
+    "q": "「淳于恭，字孟孫，北海人。人有盜刈<sub>1</sub>恭禾者，恭見之，念其愧，因伏草\n中，至去乃起。」根據這則故事，下列敘述何者最恰當？\n\n![圖表](/assets/banks/cap-110-chinese/Q28-figure-1.png)",
+    "correct": "淳于恭個性溫厚寬容，能體恤他人",
+    "wrong": [
+      "當時五穀歉收，盜賊四處搶糧",
+      "北海地區盜賊兇悍，人民不敢與之對抗",
+      "淳于恭伏於草中，乃因心中有愧，不欲見人"
+    ],
+    "exp": "正確答案：淳于恭個性溫厚寬容，能體恤他人。來源：110年國中教育會考國文第28題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 28,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q28-figure-1.png"
+    ],
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q29",
+    "difficulty": "medium",
+    "q": "「夫山之異於眾者，尚能待人而自見，而況人之異於眾者哉！天於詭奇之地不\n多設，人於登臨之樂不常遇。有其地而非其人，有其人而非其地，皆不足以\n盡夫遊觀之樂也。今靈巖為名山，諸公為名士，蓋必相須而適相值，夫豈偶\n然哉！宜其目領而心解，景會而理得也。」下列敘述何者與這段文字中的觀\n點最接近？",
+    "correct": "要盡遊觀之樂，須有特別的景致與懂得欣賞的人",
+    "wrong": [
+      "若能保持心靈的澄淨，所到之處都會是美景",
+      "徜徉於大自然中，可洗滌世俗的汙濁與煩憂",
+      "只要有名士登臨，無論怎樣的山水都可成為名勝"
+    ],
+    "exp": "正確答案：要盡遊觀之樂，須有特別的景致與懂得欣賞的人。來源：110年國中教育會考國文第29題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 29,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q30",
+    "difficulty": "medium",
+    "q": "胡旦晚年病目，閉門閒居。一日，史館共議作一貴侯傳，其人少賤，嘗\n屠豕豬。史官以為諱之即非實錄，書之即難為辭。相與見旦，旦曰：「何不曰\n『某少嘗操刀以割』，示有宰天下之志。」莫不嘆服。\n根據這則故事，下列關於胡旦的敘述何者最恰當？",
+    "correct": "史官因不知如何記實而登門求教",
+    "wrong": [
+      "年少時曾操刀殺豬",
+      "史官共議為其立傳",
+      "眾人因其有宰割天下之志而嘆服"
+    ],
+    "exp": "正確答案：史官因不知如何記實而登門求教。來源：110年國中教育會考國文第30題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 30,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q31",
+    "difficulty": "medium",
+    "q": "「有覆於上者如天，載於下者如地，而百姓不之知。有恩信及一物，教化及\n一夫，民則歸之。其猶豐年與旱歲也：豐年之民，不知甘雨柔風之力，不知\n生育長養之仁，而曰：『我耕作以時，倉廩以實』。旱歲之民，則野枯苗\n縮，然後決川以灌之。然則一川之仁豈深於四時也哉？」下列何者最能與這\n段文字的意旨相呼應？",
+    "correct": "對外人的一時之助充滿感謝，卻忽略父母深恩",
+    "wrong": [
+      "對感情的得失順其自然，不執著強求",
+      "平日砥礪心志，災禍發生時才能處變不驚",
+      "購買生產過剩的農產品，幫助農民度過難關"
+    ],
+    "exp": "正確答案：對外人的一時之助充滿感謝，卻忽略父母深恩。來源：110年國中教育會考國文第31題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 31,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q32",
+    "difficulty": "medium",
+    "q": "「必備匙箸兩副，食前多品。擇取欲食者，以別箸取之，置一器中，食之必\n盡。飯前以別匙分而另置，始膳。吳后嘗問其故，曰：『不欲以殘食與宮人食\n也。』」這段文字記載宋高宗的用膳習慣，據此可看出他具備什麼樣的特質？",
+    "correct": "待下體貼細心",
+    "wrong": [
+      "用餐講究排場",
+      "飲食注重養生",
+      "對妻言聽計從"
+    ],
+    "exp": "正確答案：待下體貼細心。來源：110年國中教育會考國文第32題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 32,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q33",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答33～34題：\n喝茶加檸檬是美式作法，英國人則不然。早期開始流行茶葉時，英國人模\n仿中國人使用瓷具泡茶，但若直接倒入熱茶可能導致瓷杯過熱破裂，故先加入\n牛奶來降溫。當時的上流社會也因此會比較彼此的瓷器等級，若茶具能接受牛\n奶後加，表示此家族擁有的茶具等級更高。\n中上階級的喝茶習慣，是先用茶壺浸泡茶葉，形成淡茶後再倒入單耳瓷杯\n裡。通常伯爵茶、烏龍茶是上流社會裡常見的茶品，茶色呈淡褐色，加入牛奶\n飲用，因為多會搭配甜品，通常不會加糖。而勞動階級的飲茶方式，則是以茶\n包沖泡於馬克杯中形成濃茶後再加入糖，牛奶則可融合濃茶的苦澀味，既濃又甜\n的阿薩姆故而成為受歡迎的茶，是需要消耗大量熱量的勞工階級喜愛的口味。\n在階級制度逐漸模糊的今天，茶葉如何沖泡或牛奶先加後加，已不大有明\n顯界線。方便快速的茶包市面上隨處可見，再講究一些的，也能在茶葉專賣店\n找到喜歡的茶葉。至於是否要加牛奶，英國人會告訴你：「什麼都不加的紅\n茶，只比白開水好喝一點而已。」\n――改寫自謝昀瑾〈喝茶加不加糖，原來和階級有關〉\n\n根據本文，下列何者最可能是以前英國勞動階級的喝茶方式？",
+    "correct": "茶具：馬克杯；濃淡：濃；茶種：阿薩姆；加糖：是。",
+    "wrong": [
+      "茶具：瓷器；濃淡：淡；茶種：阿薩姆；加糖：是。",
+      "茶具：瓷器；濃淡：濃；茶種：伯爵茶；加糖：是。",
+      "茶具：馬克杯；濃淡：淡；茶種：阿薩姆；加糖：否。"
+    ],
+    "exp": "正確答案：茶具：馬克杯；濃淡：濃；茶種：阿薩姆；加糖：是。。來源：110年國中教育會考國文第33題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 33,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        33,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.91,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q34",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答33～34題：\n喝茶加檸檬是美式作法，英國人則不然。早期開始流行茶葉時，英國人模\n仿中國人使用瓷具泡茶，但若直接倒入熱茶可能導致瓷杯過熱破裂，故先加入\n牛奶來降溫。當時的上流社會也因此會比較彼此的瓷器等級，若茶具能接受牛\n奶後加，表示此家族擁有的茶具等級更高。\n中上階級的喝茶習慣，是先用茶壺浸泡茶葉，形成淡茶後再倒入單耳瓷杯\n裡。通常伯爵茶、烏龍茶是上流社會裡常見的茶品，茶色呈淡褐色，加入牛奶\n飲用，因為多會搭配甜品，通常不會加糖。而勞動階級的飲茶方式，則是以茶\n包沖泡於馬克杯中形成濃茶後再加入糖，牛奶則可融合濃茶的苦澀味，既濃又甜\n的阿薩姆故而成為受歡迎的茶，是需要消耗大量熱量的勞工階級喜愛的口味。\n在階級制度逐漸模糊的今天，茶葉如何沖泡或牛奶先加後加，已不大有明\n顯界線。方便快速的茶包市面上隨處可見，再講究一些的，也能在茶葉專賣店\n找到喜歡的茶葉。至於是否要加牛奶，英國人會告訴你：「什麼都不加的紅\n茶，只比白開水好喝一點而已。」\n――改寫自謝昀瑾〈喝茶加不加糖，原來和階級有關〉\n\n根據本文，可以推知下列何者？",
+    "correct": "英國人喝紅茶大多會加牛奶",
+    "wrong": [
+      "美國人喝茶習慣不加糖",
+      "美國人使用的茶具較為高級",
+      "英國的高級茶具不能直接注入熱茶"
+    ],
+    "exp": "正確答案：英國人喝紅茶大多會加牛奶。來源：110年國中教育會考國文第34題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 34,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        33,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q35",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答35～36題：\n「閱讀」是最適合一個人進行的行為，毫無落單的疑慮，它要求靜默，摒\n除和人交談的需求。我在圖書館，拿起書，坐定在某一處，沉入書中世界。在\n此，我不再是被他人拋下的，是我選擇背對那些喧譁。一開始僅僅是裝模作\n樣，但我漸漸發現，手中捧讀的，往往是其他質數的孤獨。這一冊冊的創作，\n使我瞭解到，在廣漠人世裡，不只我是落單者，正如37後面有41，101前面有\n97。身為質數，在數列裡，我們無法緊挨著取暖，總是隔著許多無法理解我們\n的他人，但那孤獨正是因為身具的奇特性質而來。那麼，我，與其他親愛的質\n數，難道不正因此是特別的？於是才終於相信，自己不是被除法剩下的那孤絕\n丁零的餘數，而是個不需他人合成的質數。後來，我體認到這些同為質數者，\n是以寫作面對自身的孤絕、痛苦，且彷彿因此得到救贖。同時，也正因其出眾\n的書寫，寫定了自身價值。我驚喜地發現，那不會離開自我的「一」，能與自\n身緊緊相繫的，原來正是「寫作」。\n――徐孟芳〈質數〉\n\n根據本文，下列「」中詞語所指的內容何者最不恰當？",
+    "correct": "孤絕丁零的「餘數」：作品",
+    "wrong": [
+      "其他「質數」的孤獨：個人",
+      "在「數列」裡：眾人",
+      "不會離開自我的「一」：寫作"
+    ],
+    "exp": "正確答案：孤絕丁零的「餘數」：作品。來源：110年國中教育會考國文第35題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 35,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答35～36題：\n「閱讀」是最適合一個人進行的行為，毫無落單的疑慮，它要求靜默，摒\n除和人交談的需求。我在圖書館，拿起書，坐定在某一處，沉入書中世界。在\n此，我不再是被他人拋下的，是我選擇背對那些喧譁。一開始僅僅是裝模作\n樣，但我漸漸發現，手中捧讀的，往往是其他質數的孤獨。這一冊冊的創作，\n使我瞭解到，在廣漠人世裡，不只我是落單者，正如37後面有41，101前面有\n97。身為質數，在數列裡，我們無法緊挨著取暖，總是隔著許多無法理解我們\n的他人，但那孤獨正是因為身具的奇特性質而來。那麼，我，與其他親愛的質\n數，難道不正因此是特別的？於是才終於相信，自己不是被除法剩下的那孤絕\n丁零的餘數，而是個不需他人合成的質數。後來，我體認到這些同為質數者，\n是以寫作面對自身的孤絕、痛苦，且彷彿因此得到救贖。同時，也正因其出眾\n的書寫，寫定了自身價值。我驚喜地發現，那不會離開自我的「一」，能與自\n身緊緊相繫的，原來正是「寫作」。\n――徐孟芳〈質數〉\n\n根據本文，下列何者最符合作者的觀點？",
+    "correct": "藉由寫作可以肯定自我",
+    "wrong": [
+      "孤獨是一種救贖",
+      "閱讀使人感到更加孤獨",
+      "不受他人干擾才能專心創作"
+    ],
+    "exp": "正確答案：藉由寫作可以肯定自我。來源：110年國中教育會考國文第36題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 36,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q37",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答37～38題：\n國際上對於糧食安全的認定標準，目前多依據「糧食安全階段綜合分類」\n（IPC），該指標將糧食安全分為五個等級，其中對於「饑荒（famine）」的定\n義是：「某個地區至少20%的家戶面臨食物極度短缺且無力再撐下去，急性營\n養不良的人口比例超過30%，以及死亡率達到每天每一萬人中有兩人以上因營\n養不良而死亡」，如此才能宣布該地區發生饑荒。「饑荒」這個詞對於形塑輿\n論有非常大的影響力，必須謹慎使用，唯有達到一定標準、需要動員國際力量\n救援時，才會使用「饑荒」一詞。如果國際救援團體經常使用這個詞，就可能\n被視為「放羊的孩子」，失去這個詞彙原有的功能。\n然而，這也導致一些不合理的情況。2014年，一群糧食安全專家前往南蘇\n丹，評估當地情形是否符合饑荒的標準。這支團隊仔細審查南蘇丹人民的營養\n不良率，還有莊稼遭到破壞與牲畜數量減少的情形，終於做出結論：當地情況\n雖然符合IPC的第四階段（緊急），卻還沒達到第五階段（饑荒）的標準。因\n為遲遲無法動員救援力量、籌募善款，南蘇丹情勢便持續惡化，直到2017年才\n得以對外宣布「饑荒」，隨後獲得國際的關注。短短三週內，光是在英國就募\n得五千萬英鎊的賑災捐款。\n這就是詞彙的力量。雖然沒有法律效力，卻具有左右無數人生死存亡的力量。\n――改寫自海特．麥當納〈F開頭的字〉\n\n根據本文，下列關於「饑荒」的敘述，何者最恰當？",
+    "correct": "在國際社會中，「饑荒」一詞受到重視而且具影響力",
+    "wrong": [
+      "按IPC標準，「緊急」的情況比「饑荒」的情況嚴重",
+      "「饑荒」這個詞會影響國家的形象，故不能隨意使用",
+      "南蘇丹於2017年發布「饑荒」，被視為「放羊的孩子」"
+    ],
+    "exp": "正確答案：在國際社會中，「饑荒」一詞受到重視而且具影響力。來源：110年國中教育會考國文第37題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 37,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q38",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答37～38題：\n國際上對於糧食安全的認定標準，目前多依據「糧食安全階段綜合分類」\n（IPC），該指標將糧食安全分為五個等級，其中對於「饑荒（famine）」的定\n義是：「某個地區至少20%的家戶面臨食物極度短缺且無力再撐下去，急性營\n養不良的人口比例超過30%，以及死亡率達到每天每一萬人中有兩人以上因營\n養不良而死亡」，如此才能宣布該地區發生饑荒。「饑荒」這個詞對於形塑輿\n論有非常大的影響力，必須謹慎使用，唯有達到一定標準、需要動員國際力量\n救援時，才會使用「饑荒」一詞。如果國際救援團體經常使用這個詞，就可能\n被視為「放羊的孩子」，失去這個詞彙原有的功能。\n然而，這也導致一些不合理的情況。2014年，一群糧食安全專家前往南蘇\n丹，評估當地情形是否符合饑荒的標準。這支團隊仔細審查南蘇丹人民的營養\n不良率，還有莊稼遭到破壞與牲畜數量減少的情形，終於做出結論：當地情況\n雖然符合IPC的第四階段（緊急），卻還沒達到第五階段（饑荒）的標準。因\n為遲遲無法動員救援力量、籌募善款，南蘇丹情勢便持續惡化，直到2017年才\n得以對外宣布「饑荒」，隨後獲得國際的關注。短短三週內，光是在英國就募\n得五千萬英鎊的賑災捐款。\n這就是詞彙的力量。雖然沒有法律效力，卻具有左右無數人生死存亡的力量。\n――改寫自海特．麥當納〈F開頭的字〉\n\n某一總家戶數2萬、總人口數10萬的地區發生糧食短缺，根據「糧食安全階段綜合分類」的標準，該區在下列何種狀態時達到「饑荒」的標準？",
+    "correct": "食物極度短缺且無力再撐下去的家戶數：5000戶；急性營養不良的人口比例：35%；每天因營養不良而死亡的人數：25人。",
+    "wrong": [
+      "食物極度短缺且無力再撐下去的家戶數：4500戶；急性營養不良的人口比例：35%；每天因營養不良而死亡的人數：15人。",
+      "食物極度短缺且無力再撐下去的家戶數：3500戶；急性營養不良的人口比例：40%；每天因營養不良而死亡的人數：20人。",
+      "食物極度短缺且無力再撐下去的家戶數：3000戶；急性營養不良的人口比例：40%；每天因營養不良而死亡的人數：10人。"
+    ],
+    "exp": "正確答案：食物極度短缺且無力再撐下去的家戶數：5000戶；急性營養不良的人口比例：35%；每天因營養不良而死亡的人數：25人。。來源：110年國中教育會考國文第38題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 38,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        37,
+        38
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答39～41題：\n颱風來了。\n颱風來自遙遠的海面，總是選擇花蓮為登陸地點。在夏天漫長而炎熱的一\n長串又一長串日子裡，有時我們會感覺天地間突然好像有一點反常的運作，日\n頭黯淡，到處吹著不緩不急的風。起先就是這樣的，那風也不是夏日海邊習習\n的涼風，帶著一層鬱燠的氣息，甚至是溫熱的，但又沒有一點溼意。樹葉飄飄\n自相拍打，螞蟻在牆角匆忙地奔走，隔壁院子裡的公雞奇怪地和帶著小雛的母\n雞一起擠在雨廊下，很不安地東張西望，電線桿上的麻雀都不知道飛到哪裡去\n了。若是抬頭看後面的大山，你會發覺那山比平時更清朗更明亮，樹木歷歷可\n數，蒼翠裡彷彿鍍著一層銀光。\n起先是陣陣急雨被強風颳來，擊打鐵皮屋頂和木板牆。坐在榻榻米上，我\n什麼都看不見，只聽到風雨的聲音一陣比一陣大。那時我可以想像，來了來\n了，從遙遠的海面正有一團黑黑的氣體向花蓮這個方向滾來，以一定的速度，\n挾萬頃雨水，撕裂廣大的天幕，正向這個方面滾來，空中的雲煙激越若沸水，\n海水翻騰搖擺，憤怒地向陸地投射。我坐在昏黃的電燈下專心聽颱風猛烈地拍\n著，搖著，呼吼著。我傾耳再聽，可以感覺到海岸上狂濤攻擊防波堤的號角和\n鼙鼓，一陣急似一陣，而天就這樣黑下來了。\n是的，颱風從海上來，迅速撲向這低伏在山下的小城。在風球一一升起之\n後，我們知道風將帶著巨量的雨水□□過小城的上空，把一些大樹連根拔起，\n把籬笆一一掀倒，把電線桿推翻，甚至把誰家將就的屋頂吹跑，把橋梁和鐵路\n移動一個位置，讓山石和泥濘□入公路，堵住來往的交通。在我幼小的心靈\n裡，颱風帶來一個狂暴的奇異的夜，電燈不亮了，小桌上點一根蠟燭，火光在\n轟然的黑暗裡搖晃，有時突然□出一朵花來。我瞪著那燭光看，聽風雨呼嘯通\n過，似乎不會有停止的時候，然後眼睛就累了。醒來時發現自己還是安全地躺\n在蚊帳裡，風雨早已停了，明亮的光線透過窗上那木板的隙縫照在我臉上，很\n安靜，只有帳外一隻蚊子飛行的嚶嗡，和平常一樣在清晨的微涼中飄忽來去。\n颱風已經遠遠走了。\n――改寫自楊牧〈戰火在天外燃燒〉\n\n根據本文最後一段的文意脈絡，空格處依序應填入下列何者最恰當？",
+    "correct": "狂奔／傾／爆",
+    "wrong": [
+      "散步／堆／綻",
+      "輕掠／鋪／澆",
+      "灌溉／搖／開"
+    ],
+    "exp": "正確答案：狂奔／傾／爆。來源：110年國中教育會考國文第39題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 39,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        39,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q40",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答39～41題：\n颱風來了。\n颱風來自遙遠的海面，總是選擇花蓮為登陸地點。在夏天漫長而炎熱的一\n長串又一長串日子裡，有時我們會感覺天地間突然好像有一點反常的運作，日\n頭黯淡，到處吹著不緩不急的風。起先就是這樣的，那風也不是夏日海邊習習\n的涼風，帶著一層鬱燠的氣息，甚至是溫熱的，但又沒有一點溼意。樹葉飄飄\n自相拍打，螞蟻在牆角匆忙地奔走，隔壁院子裡的公雞奇怪地和帶著小雛的母\n雞一起擠在雨廊下，很不安地東張西望，電線桿上的麻雀都不知道飛到哪裡去\n了。若是抬頭看後面的大山，你會發覺那山比平時更清朗更明亮，樹木歷歷可\n數，蒼翠裡彷彿鍍著一層銀光。\n起先是陣陣急雨被強風颳來，擊打鐵皮屋頂和木板牆。坐在榻榻米上，我\n什麼都看不見，只聽到風雨的聲音一陣比一陣大。那時我可以想像，來了來\n了，從遙遠的海面正有一團黑黑的氣體向花蓮這個方向滾來，以一定的速度，\n挾萬頃雨水，撕裂廣大的天幕，正向這個方面滾來，空中的雲煙激越若沸水，\n海水翻騰搖擺，憤怒地向陸地投射。我坐在昏黃的電燈下專心聽颱風猛烈地拍\n著，搖著，呼吼著。我傾耳再聽，可以感覺到海岸上狂濤攻擊防波堤的號角和\n鼙鼓，一陣急似一陣，而天就這樣黑下來了。\n是的，颱風從海上來，迅速撲向這低伏在山下的小城。在風球一一升起之\n後，我們知道風將帶著巨量的雨水□□過小城的上空，把一些大樹連根拔起，\n把籬笆一一掀倒，把電線桿推翻，甚至把誰家將就的屋頂吹跑，把橋梁和鐵路\n移動一個位置，讓山石和泥濘□入公路，堵住來往的交通。在我幼小的心靈\n裡，颱風帶來一個狂暴的奇異的夜，電燈不亮了，小桌上點一根蠟燭，火光在\n轟然的黑暗裡搖晃，有時突然□出一朵花來。我瞪著那燭光看，聽風雨呼嘯通\n過，似乎不會有停止的時候，然後眼睛就累了。醒來時發現自己還是安全地躺\n在蚊帳裡，風雨早已停了，明亮的光線透過窗上那木板的隙縫照在我臉上，很\n安靜，只有帳外一隻蚊子飛行的嚶嗡，和平常一樣在清晨的微涼中飄忽來去。\n颱風已經遠遠走了。\n――改寫自楊牧〈戰火在天外燃燒〉\n\n根據本文，下列敘述何者最恰當？",
+    "correct": "藉由聽到的聲音可以想像颱風的威力",
+    "wrong": [
+      "颱風來臨前，山川草木變得模糊不清",
+      "颱風之夜雷電交加，讓動物驚慌亂竄",
+      "岸邊的風球升起就表示颱風已經遠離"
+    ],
+    "exp": "正確答案：藉由聽到的聲音可以想像颱風的威力。來源：110年國中教育會考國文第40題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 40,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        39,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q41",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答39～41題：\n颱風來了。\n颱風來自遙遠的海面，總是選擇花蓮為登陸地點。在夏天漫長而炎熱的一\n長串又一長串日子裡，有時我們會感覺天地間突然好像有一點反常的運作，日\n頭黯淡，到處吹著不緩不急的風。起先就是這樣的，那風也不是夏日海邊習習\n的涼風，帶著一層鬱燠的氣息，甚至是溫熱的，但又沒有一點溼意。樹葉飄飄\n自相拍打，螞蟻在牆角匆忙地奔走，隔壁院子裡的公雞奇怪地和帶著小雛的母\n雞一起擠在雨廊下，很不安地東張西望，電線桿上的麻雀都不知道飛到哪裡去\n了。若是抬頭看後面的大山，你會發覺那山比平時更清朗更明亮，樹木歷歷可\n數，蒼翠裡彷彿鍍著一層銀光。\n起先是陣陣急雨被強風颳來，擊打鐵皮屋頂和木板牆。坐在榻榻米上，我\n什麼都看不見，只聽到風雨的聲音一陣比一陣大。那時我可以想像，來了來\n了，從遙遠的海面正有一團黑黑的氣體向花蓮這個方向滾來，以一定的速度，\n挾萬頃雨水，撕裂廣大的天幕，正向這個方面滾來，空中的雲煙激越若沸水，\n海水翻騰搖擺，憤怒地向陸地投射。我坐在昏黃的電燈下專心聽颱風猛烈地拍\n著，搖著，呼吼著。我傾耳再聽，可以感覺到海岸上狂濤攻擊防波堤的號角和\n鼙鼓，一陣急似一陣，而天就這樣黑下來了。\n是的，颱風從海上來，迅速撲向這低伏在山下的小城。在風球一一升起之\n後，我們知道風將帶著巨量的雨水□□過小城的上空，把一些大樹連根拔起，\n把籬笆一一掀倒，把電線桿推翻，甚至把誰家將就的屋頂吹跑，把橋梁和鐵路\n移動一個位置，讓山石和泥濘□入公路，堵住來往的交通。在我幼小的心靈\n裡，颱風帶來一個狂暴的奇異的夜，電燈不亮了，小桌上點一根蠟燭，火光在\n轟然的黑暗裡搖晃，有時突然□出一朵花來。我瞪著那燭光看，聽風雨呼嘯通\n過，似乎不會有停止的時候，然後眼睛就累了。醒來時發現自己還是安全地躺\n在蚊帳裡，風雨早已停了，明亮的光線透過窗上那木板的隙縫照在我臉上，很\n安靜，只有帳外一隻蚊子飛行的嚶嗡，和平常一樣在清晨的微涼中飄忽來去。\n颱風已經遠遠走了。\n――改寫自楊牧〈戰火在天外燃燒〉\n\n關於本文的寫作手法，下列敘述何者最恰當？",
+    "correct": "以細筆表現颱風將至到離去的種種景象",
+    "wrong": [
+      "用颱風的狂暴象徵作者內心的憤怒",
+      "模仿孩童的語氣來描寫心中對颱風的恐懼",
+      "藉由誇飾的筆法描述颱風肆虐後造成的災害"
+    ],
+    "exp": "正確答案：以細筆表現颱風將至到離去的種種景象。來源：110年國中教育會考國文第41題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 41,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        39,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q42",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下小說，並回答42～43題：\n洪七公竹棒一擺，就要上前動手。黃藥師搖頭道：「你適才跟老毒物打了\n這麼久，雖然說不上筋疲力盡，卻也是大累了一場，黃某豈能撿這個便宜？咱\n們還是等到正午再比，你好好養力罷。」洪七公雖知他說得有理，但不耐煩再\n等，堅要立時比武。黃藥師坐在石上，不去睬他。\n黃蓉見兩人爭執難決，說道：「爹爹，師父，我倒有個法兒在此。你倆既\n可立時比武，爹爹又不占便宜。」兩人齊道：「好啊，什麼法兒？」黃蓉道：\n「你們兩位是多年好友，不論誰勝誰敗，總是傷了和氣。可是今日華山論劍，\n卻又勢須分出勝敗，比出誰為天下第一，是不是？」\n洪、黃二人本就想到此事，這時聽她言語，似乎倒有一個妙法竟可三全其\n美，既能立時動手，又可不讓黃藥師占便宜，而且還能使兩家不傷和氣，齊問：\n「你有什麼好主意？」黃蓉道：「是這樣：爹爹先跟郭靖過招，瞧在第幾招上\n打敗了他，然後師父再與郭靖過招。若是爹爹用九十九招取勝，而師父用了\n一百招，那就是爹爹勝了。倘若師父只用九十八招，那就是師父勝了。」\n洪七公笑道：「妙極，妙極！」黃蓉道：「郭靖先和爹爹比，兩人都是精\n力充沛，待與師父再比，兩人都是打過了一場，豈不是公平得緊麼？」黃藥師\n點點頭道：「這法兒不錯。」\n――改寫自金庸《射鵰英雄傳》\n\n根據本文，黃蓉提議的優點不包含下列何者？",
+    "correct": "減少比賽的場次",
+    "wrong": [
+      "顧及比賽的公平性",
+      "毋須等待，可立刻開戰",
+      "不必直接對戰，不傷和氣"
+    ],
+    "exp": "正確答案：減少比賽的場次。來源：110年國中教育會考國文第42題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 42,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        42,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q43",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下小說，並回答42～43題：\n洪七公竹棒一擺，就要上前動手。黃藥師搖頭道：「你適才跟老毒物打了\n這麼久，雖然說不上筋疲力盡，卻也是大累了一場，黃某豈能撿這個便宜？咱\n們還是等到正午再比，你好好養力罷。」洪七公雖知他說得有理，但不耐煩再\n等，堅要立時比武。黃藥師坐在石上，不去睬他。\n黃蓉見兩人爭執難決，說道：「爹爹，師父，我倒有個法兒在此。你倆既\n可立時比武，爹爹又不占便宜。」兩人齊道：「好啊，什麼法兒？」黃蓉道：\n「你們兩位是多年好友，不論誰勝誰敗，總是傷了和氣。可是今日華山論劍，\n卻又勢須分出勝敗，比出誰為天下第一，是不是？」\n洪、黃二人本就想到此事，這時聽她言語，似乎倒有一個妙法竟可三全其\n美，既能立時動手，又可不讓黃藥師占便宜，而且還能使兩家不傷和氣，齊問：\n「你有什麼好主意？」黃蓉道：「是這樣：爹爹先跟郭靖過招，瞧在第幾招上\n打敗了他，然後師父再與郭靖過招。若是爹爹用九十九招取勝，而師父用了\n一百招，那就是爹爹勝了。倘若師父只用九十八招，那就是師父勝了。」\n洪七公笑道：「妙極，妙極！」黃蓉道：「郭靖先和爹爹比，兩人都是精\n力充沛，待與師父再比，兩人都是打過了一場，豈不是公平得緊麼？」黃藥師\n點點頭道：「這法兒不錯。」\n――改寫自金庸《射鵰英雄傳》\n\n根據黃蓉所提的賽制，假設比武結果最後是黃藥師天下第一，下列哪件事一\n定會發生？",
+    "correct": "黃藥師打贏郭靖",
+    "wrong": [
+      "郭靖打贏洪七公",
+      "洪七公打贏黃藥師",
+      "黃藥師打贏洪七公"
+    ],
+    "exp": "正確答案：黃藥師打贏郭靖。來源：110年國中教育會考國文第43題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 43,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        42,
+        43
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q44",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答44～45題：\n陸羽《茶經》論水云：「山水上，石泉又上，江水次而井水下。」又「江\n水取去人遠者，井取汲多者。」其說止於此，未嘗品第天下之水味。張又新\n《煎茶水記》云劉伯芻謂水有七等，以揚子江為第一，惠山石泉為第二，虎丘\n井第三，淮水居末。又載羽為李季卿論水次第有二十種，江水居山水上，井水\n居江水上。二說皆與《茶經》不合。\n水味有美惡而已，欲求天下之水一一而次第之者，謬說也。羽之論水，惡\n渟浸１而喜泉源，故井取多汲者。江雖長，然眾水雜聚，故次山水。惟此說近物\n\n理云。\n――改寫自歐陽脩〈大明水記〉\n\n根據本文，下列敘述何者最恰當？\n\n![圖表](/assets/banks/cap-110-chinese/Q44-figure-1.png)",
+    "correct": "依《茶經》論水的標準，揚子江優於虎丘井",
+    "wrong": [
+      "張又新將天下的水按水質分成二十種",
+      "歐陽脩按水源的遠近和高低評定水質",
+      "在《煎茶水記》中，張又新反駁劉伯芻看法"
+    ],
+    "exp": "正確答案：依《茶經》論水的標準，揚子江優於虎丘井。來源：110年國中教育會考國文第44題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 44,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        44,
+        45
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/Q44-figure-1.png"
+    ],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q45",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文，並回答44～45題：\n陸羽《茶經》論水云：「山水上，石泉又上，江水次而井水下。」又「江\n水取去人遠者，井取汲多者。」其說止於此，未嘗品第天下之水味。張又新\n《煎茶水記》云劉伯芻謂水有七等，以揚子江為第一，惠山石泉為第二，虎丘\n井第三，淮水居末。又載羽為李季卿論水次第有二十種，江水居山水上，井水\n居江水上。二說皆與《茶經》不合。\n水味有美惡而已，欲求天下之水一一而次第之者，謬說也。羽之論水，惡\n渟浸１而喜泉源，故井取多汲者。江雖長，然眾水雜聚，故次山水。惟此說近物\n\n理云。\n――改寫自歐陽脩〈大明水記〉\n\n關於本文的寫作手法，下列敘述何者最恰當？",
+    "correct": "首段提出各家之說，末段表明作者的觀點",
+    "wrong": [
+      "首段評比水質高下，末段以各家之說佐證",
+      "首段引述《茶經》的說法，末段舉各家之說駁斥",
+      "首段分論不同水源的特性，末段以取水標準總結"
+    ],
+    "exp": "正確答案：首段提出各家之說，末段表明作者的觀點。來源：110年國中教育會考國文第45題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 45,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        14,
+        15
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        44,
+        45
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q46",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n請閱讀以下短文與表格，並回答46～48題：\n【甲】\n柳開少好任氣，大言凌物1。應舉時，以文章投於主考簾前，凡千軸，載以\n獨輪車。引試2日，自擁車入，欲以此駭眾取名。其時張景能文有名，唯袖一書\n\n簾前獻之。主考大稱賞，擢景優等。時人為之語曰：「柳開千軸，不如張景一書。」\n――改寫自沈括《夢溪筆談》\n【乙】\n張景，字晦之，江陵公安人。幼能長言，嗜學尤力。貧不治產，往從柳\n開。開以文自名，而薦寵士類，一見歡甚，悉出家書予之，由是屬辭益有法\n度。開每曰：「今朝中之士，誰踰晦之者！」即厚饋，使如京師。後中進士。\n――改寫自宋祁〈故大理評事張公3墓誌銘4〉\n【丙】相關人物簡表\n![圖表](/assets/banks/cap-110-chinese/G46-48-figure-1.png)\n| 姓名 | 西元生卒年 | 中舉年分 |\n| 柳開 | 948～1001 | 973 |\n| 張景 | 970～1018 | 1000 |\n| 宋祁 | 998～1061 | 1024 |\n| 沈括 | 1031～1095 | 1063 |\n\n下列文句「」中字的意義說明，何者最恰當？",
+    "correct": "使「如」京師――前往",
+    "wrong": [
+      "駭眾取「名」――姓名",
+      "嗜學「尤」力――尚且",
+      "「悉」出家書予之――明白"
+    ],
+    "exp": "正確答案：使「如」京師――前往。來源：110年國中教育會考國文第46題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 46,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G46-48-figure-1.png"
+    ],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q47",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文與表格，並回答46～48題：\n【甲】\n柳開少好任氣，大言凌物1。應舉時，以文章投於主考簾前，凡千軸，載以\n獨輪車。引試2日，自擁車入，欲以此駭眾取名。其時張景能文有名，唯袖一書\n\n簾前獻之。主考大稱賞，擢景優等。時人為之語曰：「柳開千軸，不如張景一書。」\n――改寫自沈括《夢溪筆談》\n【乙】\n張景，字晦之，江陵公安人。幼能長言，嗜學尤力。貧不治產，往從柳\n開。開以文自名，而薦寵士類，一見歡甚，悉出家書予之，由是屬辭益有法\n度。開每曰：「今朝中之士，誰踰晦之者！」即厚饋，使如京師。後中進士。\n――改寫自宋祁〈故大理評事張公3墓誌銘4〉\n【丙】相關人物簡表\n![圖表](/assets/banks/cap-110-chinese/G46-48-figure-1.png)\n| 姓名 | 西元生卒年 | 中舉年分 |\n| 柳開 | 948～1001 | 973 |\n| 張景 | 970～1018 | 1000 |\n| 宋祁 | 998～1061 | 1024 |\n| 沈括 | 1031～1095 | 1063 |\n\n關於甲、乙兩文的內容，下列說明何者最不恰當？",
+    "correct": "兩文皆凸顯柳開自大的形象",
+    "wrong": [
+      "甲文比較柳開、張景才華的高下",
+      "乙文敘述張景投靠柳開後的際遇",
+      "兩文皆肯定張景不凡的文才"
+    ],
+    "exp": "正確答案：兩文皆凸顯柳開自大的形象。來源：110年國中教育會考國文第47題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 47,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G46-48-figure-1.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-chinese-q48",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀以下短文與表格，並回答46～48題：\n【甲】\n柳開少好任氣，大言凌物1。應舉時，以文章投於主考簾前，凡千軸，載以\n獨輪車。引試2日，自擁車入，欲以此駭眾取名。其時張景能文有名，唯袖一書\n\n簾前獻之。主考大稱賞，擢景優等。時人為之語曰：「柳開千軸，不如張景一書。」\n――改寫自沈括《夢溪筆談》\n【乙】\n張景，字晦之，江陵公安人。幼能長言，嗜學尤力。貧不治產，往從柳\n開。開以文自名，而薦寵士類，一見歡甚，悉出家書予之，由是屬辭益有法\n度。開每曰：「今朝中之士，誰踰晦之者！」即厚饋，使如京師。後中進士。\n――改寫自宋祁〈故大理評事張公3墓誌銘4〉\n【丙】相關人物簡表\n![圖表](/assets/banks/cap-110-chinese/G46-48-figure-1.png)\n| 姓名 | 西元生卒年 | 中舉年分 |\n| 柳開 | 948～1001 | 973 |\n| 張景 | 970～1018 | 1000 |\n| 宋祁 | 998～1061 | 1024 |\n| 沈括 | 1031～1095 | 1063 |\n\n根據丙表所列舉的年分，對照甲、乙兩文內容，下列推論何者最合理？\n\n![圖表](/assets/banks/cap-110-chinese/Q48-figure-1.png)",
+    "correct": "乙文所述內容較甲文可信",
+    "wrong": [
+      "柳開中舉前已受張景愛戴",
+      "宋祁跟柳開兩人頗有交情",
+      "甲文的寫作時間早於乙文"
+    ],
+    "exp": "正確答案：乙文所述內容較甲文可信。來源：110年國中教育會考國文第48題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "cap-110-chinese",
+      "question": 48,
+      "file": "國中/會考/國文/110P_Chinese.pdf",
+      "url": "https://drive.google.com/file/d/1_zOkG8306-N3i34O1Zj1H-2v4i_IgHm3/view?usp=drivesdk",
+      "pages": [
+        15
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        46,
+        48
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-chinese/G46-48-figure-1.png",
+      "/assets/banks/cap-110-chinese/Q48-figure-1.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  }
+]

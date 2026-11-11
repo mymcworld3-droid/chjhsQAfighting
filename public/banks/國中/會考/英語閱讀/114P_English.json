@@ -1,0 +1,1409 @@
+[
+  {
+    "id": "cap-114-english-q1",
+    "difficulty": "easy",
+    "q": "Look at the picture.  A ______ is fyl ing over the houses.\n\n![圖表](/assets/banks/cap-114-english/Q1-figure-1.png)",
+    "correct": "plane",
+    "wrong": [
+      "bird",
+      "butterfyl",
+      "kite"
+    ],
+    "exp": "正確答案：plane。來源：114年國中教育會考英語閱讀第1題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 1,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/Q1-figure-1.png"
+    ],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q2",
+    "difficulty": "easy",
+    "q": "When I was a teenager, I was very ______ .  But now, it’s easier for me to talk to people.",
+    "correct": "shy",
+    "wrong": [
+      "happy",
+      "lazy",
+      "popular"
+    ],
+    "exp": "正確答案：shy。來源：114年國中教育會考英語閱讀第2題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 2,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q3",
+    "difficulty": "medium",
+    "q": "Lena doesn’t want to go ______ with John because she is afraid of water.",
+    "correct": "sailing",
+    "wrong": [
+      "dancing",
+      "hiking",
+      "shopping"
+    ],
+    "exp": "正確答案：sailing。來源：114年國中教育會考英語閱讀第3題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 3,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q4",
+    "difficulty": "easy",
+    "q": "Cindy enjoys ______ her dad read stories to her before bed.",
+    "correct": "listening to",
+    "wrong": [
+      "to listen to",
+      "listen to",
+      "listens to"
+    ],
+    "exp": "正確答案：listening to。來源：114年國中教育會考英語閱讀第4題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 4,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q5",
+    "difficulty": "easy",
+    "q": "Dad is busy cooking in the kitchen.  Dinner will be ______ in ten minutes.",
+    "correct": "ready",
+    "wrong": [
+      "free",
+      "full",
+      "medium"
+    ],
+    "exp": "正確答案：ready。來源：114年國中教育會考英語閱讀第5題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 5,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q6",
+    "difficulty": "easy",
+    "q": "There are so many new ______ in the ofcfi e.  It’ll take me some time to remember who is\nwho.",
+    "correct": "faces",
+    "wrong": [
+      "ideas",
+      "rules",
+      "tools"
+    ],
+    "exp": "正確答案：faces。來源：114年國中教育會考英語閱讀第6題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 6,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q7",
+    "difficulty": "easy",
+    "q": "I feel like a ______ .  I was looking for my keys for hours but they have been in my pocket\nthe whole time.",
+    "correct": "fool",
+    "wrong": [
+      "ghost",
+      "king",
+      "stranger"
+    ],
+    "exp": "正確答案：fool。來源：114年國中教育會考英語閱讀第7題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 7,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q8",
+    "difficulty": "easy",
+    "q": "Mr. and Mrs. Wu have three daughters.  Two are in high school, and ______ is in\nelementary school.",
+    "correct": "the other",
+    "wrong": [
+      "each",
+      "the one",
+      "the next"
+    ],
+    "exp": "正確答案：the other。來源：114年國中教育會考英語閱讀第8題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 8,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q9",
+    "difficulty": "medium",
+    "q": "It is hard for trees to ______ along this beach because of the strong winds from the sea.",
+    "correct": "grow",
+    "wrong": [
+      "blow",
+      "build",
+      "follow"
+    ],
+    "exp": "正確答案：grow。來源：114年國中教育會考英語閱讀第9題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 9,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q10",
+    "difficulty": "easy",
+    "q": "Christmas ______ and I want to visit my aunt abroad.  Do you have any plans yet?",
+    "correct": "is coming",
+    "wrong": [
+      "came",
+      "comes",
+      "was coming"
+    ],
+    "exp": "正確答案：is coming。來源：114年國中教育會考英語閱讀第10題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 10,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q11",
+    "difficulty": "medium",
+    "q": "Jo won’t be happy if you’re late for his party tonight, so ______ sure that you arrive on time.",
+    "correct": "make",
+    "wrong": [
+      "makes",
+      "to make",
+      "is making"
+    ],
+    "exp": "正確答案：make。來源：114年國中教育會考英語閱讀第11題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 11,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q12",
+    "difficulty": "easy",
+    "q": "You may have a long drive because of the terrible ______ .  There are usually a lot of cars\nand buses during this time.",
+    "correct": "trafcfi",
+    "wrong": [
+      "experience",
+      "machine",
+      "service"
+    ],
+    "exp": "正確答案：trafcfi。來源：114年國中教育會考英語閱讀第12題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 12,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q13",
+    "difficulty": "medium",
+    "q": "In the future, there will ______ be greater basketball players than Stephen Curry, but now\nwe believe he is the best!",
+    "correct": "perhaps",
+    "wrong": [
+      "again",
+      "already",
+      "never"
+    ],
+    "exp": "正確答案：perhaps。來源：114年國中教育會考英語閱讀第13題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 13,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q14",
+    "difficulty": "medium",
+    "q": "I guess the rainwater has come in from the kitchen.  See?  ______ of the windows are closed\nexcept the one in the kitchen.",
+    "correct": "All",
+    "wrong": [
+      "Both",
+      "Most",
+      "Some"
+    ],
+    "exp": "正確答案：All。來源：114年國中教育會考英語閱讀第14題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 14,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q15",
+    "difficulty": "medium",
+    "q": "______ machines have been used to pick fruits for a long time, they were not used on\nstrawberry farms until several years ago.",
+    "correct": "Although",
+    "wrong": [
+      "Because",
+      "Before",
+      "If"
+    ],
+    "exp": "正確答案：Although。來源：114年國中教育會考英語閱讀第15題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 15,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q16",
+    "difficulty": "medium",
+    "q": "There are online videos that teach you exercises you can do at home.  They’ll ______ you a\ntrip to the gym, and some money too.",
+    "correct": "save",
+    "wrong": [
+      "cost",
+      "give",
+      "keep"
+    ],
+    "exp": "正確答案：save。來源：114年國中教育會考英語閱讀第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 16,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q17",
+    "difficulty": "medium",
+    "q": "Jane’s parents are always happy to see their grandchildren, but mine ______ less so when I\nvisit them with my kids.",
+    "correct": "are",
+    "wrong": [
+      "is",
+      "do",
+      "does"
+    ],
+    "exp": "正確答案：are。來源：114年國中教育會考英語閱讀第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 17,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q18",
+    "difficulty": "medium",
+    "q": "Before she ______ about it, you should tell Daphne you broke her favorite cup.",
+    "correct": "asks",
+    "wrong": [
+      "asked",
+      "was asking",
+      "will ask"
+    ],
+    "exp": "正確答案：asks。來源：114年國中教育會考英語閱讀第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 18,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q19",
+    "difficulty": "medium",
+    "q": "It was very windy this morning.  Some of the shirts on the balcony were blown away\nin the pond.",
+    "correct": "and fell",
+    "wrong": [
+      "fell",
+      "fallen",
+      "and fallen"
+    ],
+    "exp": "正確答案：and fell。來源：114年國中教育會考英語閱讀第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 19,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q20",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(20-21)\nRex is a dog that lives at the bakery next to our school.  He is cute and friendly.\nEvery morning, he stands in front of the school to welcome everybody.  We all see Rex\nas one of us.  But one Monday morning, I was surprised that Rex was not there to say\nhello to us.  “Rex is in the hospital.  He was hit by a car last night,” my classmate told me.\nWe went to see Rex in the hospital that day after school.  Two weeks later, Rex was much\nbetter, and we decided to take him for a walk every evening.  Because of the exercise, Rex\nbecame healthier and stronger.  Soon he could happily run and jump again.  He is now as\nhandsome and strong as before!\n![圖表](/assets/banks/cap-114-english/G20-21-figure-1.png)\n\nWhat happened to Rex?",
+    "correct": "He got hurt.",
+    "wrong": [
+      "He got lost.",
+      "He bit people.",
+      "He ate too much."
+    ],
+    "exp": "正確答案：He got hurt.。來源：114年國中教育會考英語閱讀第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 20,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G20-21-figure-1.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q21",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(20-21)\nRex is a dog that lives at the bakery next to our school.  He is cute and friendly.\nEvery morning, he stands in front of the school to welcome everybody.  We all see Rex\nas one of us.  But one Monday morning, I was surprised that Rex was not there to say\nhello to us.  “Rex is in the hospital.  He was hit by a car last night,” my classmate told me.\nWe went to see Rex in the hospital that day after school.  Two weeks later, Rex was much\nbetter, and we decided to take him for a walk every evening.  Because of the exercise, Rex\nbecame healthier and stronger.  Soon he could happily run and jump again.  He is now as\nhandsome and strong as before!\n![圖表](/assets/banks/cap-114-english/G20-21-figure-1.png)\n\nHow did the writer help Rex?",
+    "correct": "By making him exercise.",
+    "wrong": [
+      "By calling the police.",
+      "By taking him to see a doctor.",
+      "By looking for a new home for him."
+    ],
+    "exp": "正確答案：By making him exercise.。來源：114年國中教育會考英語閱讀第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 21,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G20-21-figure-1.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q22",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(22-23)\n![圖表](/assets/banks/cap-114-english/G22-23-figure-1.png)\n\n\n\n【原卷閱讀資料】\n€)- Come on, Mark. Don't start again. )\n\nLinda\n\nMark\n\nED ours stealing Jenny’s thunder. Jenny was telling us about her big news. \")\n\nLad very important to her. And you want us to hear about your new job now?\n【原卷閱讀資料】\n=X didn’t mean that. just... )\n\nMark\n\n| agree. Last time when we were talking about how delicious Linda’s cake\nwas, you started telling us about the chocolate cake you made at home.\n\n= All right, all right, my problem. Sorry, Jenny. I'll never do that\nNark again. So do you want to know what job | got?\n\nWhat do we know about Mark from the dialogue?",
+    "correct": "He made Linda unhappy.",
+    "wrong": [
+      "He is looking for a new job.",
+      "He did not like Linda’s cake.",
+      "He is getting married to Jenny."
+    ],
+    "exp": "正確答案：He made Linda unhappy.。來源：114年國中教育會考英語閱讀第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 22,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        22,
+        23
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G22-23-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(22-23)\n![圖表](/assets/banks/cap-114-english/G22-23-figure-1.png)\n\n\n\n【原卷閱讀資料】\n€)- Come on, Mark. Don't start again. )\n\nLinda\n\nMark\n\nED ours stealing Jenny’s thunder. Jenny was telling us about her big news. \")\n\nLad very important to her. And you want us to hear about your new job now?\n【原卷閱讀資料】\n=X didn’t mean that. just... )\n\nMark\n\n| agree. Last time when we were talking about how delicious Linda’s cake\nwas, you started telling us about the chocolate cake you made at home.\n\n= All right, all right, my problem. Sorry, Jenny. I'll never do that\nNark again. So do you want to know what job | got?\n\nWhich is most likely an example of stealing someone＇s thunder?\nwe chose.\n\n![圖表](/assets/banks/cap-114-english/Q23-figure-1.png)",
+    "correct": "Jeff tells everyone he’ll move abroad when Ivy is still telling them about her baby.",
+    "wrong": [
+      "Dennis never changes his mind except when his wife tells him to.",
+      "Melisa tells Tom she’ll go to the party but tells her mom she’ll stay home.",
+      "\u0007Alisa says she doesn’t care what we have for lunch but also doesn’t like the restaurant"
+    ],
+    "exp": "正確答案：Jeff tells everyone he’ll move abroad when Ivy is still telling them about her baby.。來源：114年國中教育會考英語閱讀第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 23,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        22,
+        23
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G22-23-figure-1.png",
+      "/assets/banks/cap-114-english/Q23-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q24",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(24-25)\nBuy a White Lake City Card When You’re in the City\nWith any of the Cards, you can\n-\t visit the city by metro, bus, or train as many times as you want. *\n-\t take one child under 12 with you for free.\n-\t save 20% on tickets to public museums.\n\u0007The 1-day, 3-day, and 5-day Cards are for trips from Monday to Friday, and the\nWeekend Card is for trips on weekends and holidays.\nCheck the map and buy the right Card for the zones you’ll be entering.\n![圖表](/assets/banks/cap-114-english/G24-25-figure-1.png)\nCard Zone 1 Zones 1-2 Zones 1-3\n1-day \\$20 \\$40 \\$60\n3-day \\$40 \\$60 \\$80\n5-day \\$50 \\$80 \\$110\nWeekend \\$30 \\$50 \\$80\n* The Cards are only for trips inside the three zones.\n![圖表](/assets/banks/cap-114-english/G24-25-figure-2.png)\n![圖表](/assets/banks/cap-114-english/G24-25-figure-3.png)\n\nWhat can you do with a White Lake City Card?",
+    "correct": "Move around the city by metro as much as you want.",
+    "wrong": [
+      "Save 20% on children’s train tickets.",
+      "Visit any public museum in the city for free.",
+      "Take a train to places out of the three zones."
+    ],
+    "exp": "正確答案：Move around the city by metro as much as you want.。來源：114年國中教育會考英語閱讀第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 24,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G24-25-figure-1.png",
+      "/assets/banks/cap-114-english/G24-25-figure-2.png",
+      "/assets/banks/cap-114-english/G24-25-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(24-25)\nBuy a White Lake City Card When You’re in the City\nWith any of the Cards, you can\n-\t visit the city by metro, bus, or train as many times as you want. *\n-\t take one child under 12 with you for free.\n-\t save 20% on tickets to public museums.\n\u0007The 1-day, 3-day, and 5-day Cards are for trips from Monday to Friday, and the\nWeekend Card is for trips on weekends and holidays.\nCheck the map and buy the right Card for the zones you’ll be entering.\n![圖表](/assets/banks/cap-114-english/G24-25-figure-1.png)\nCard Zone 1 Zones 1-2 Zones 1-3\n1-day \\$20 \\$40 \\$60\n3-day \\$40 \\$60 \\$80\n5-day \\$50 \\$80 \\$110\nWeekend \\$30 \\$50 \\$80\n* The Cards are only for trips inside the three zones.\n![圖表](/assets/banks/cap-114-english/G24-25-figure-2.png)\n![圖表](/assets/banks/cap-114-english/G24-25-figure-3.png)\n\nStacy is going to White Lake City and is staying at a hotel near the White Lake Main\nStation.  She wants to visit the Museum of White Lake City History on Friday and see\nWhite Lake on Saturday.  If she plans to buy (a) White Lake City Card(s), which of the four\nchoices will be best for her and cost her the least?",
+    "correct": "A 1-day Card for Zone 1 and a Weekend Card for Zones 1-2.",
+    "wrong": [
+      "A 3-day Card for Zone 1.",
+      "A Weekend Card for Zones 1-3.",
+      "A 1-day Card for Zones 1-2 and a Weekend Card for Zones 1-2."
+    ],
+    "exp": "正確答案：A 1-day Card for Zone 1 and a Weekend Card for Zones 1-2.。來源：114年國中教育會考英語閱讀第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 25,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G24-25-figure-1.png",
+      "/assets/banks/cap-114-english/G24-25-figure-2.png",
+      "/assets/banks/cap-114-english/G24-25-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q26",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(26-28)\n![圖表](/assets/banks/cap-114-english/G26-28-figure-1.png)\nAt 5 o’clock every morning, while most people are sleeping,\n16-year-old Libby Larson is already up.  She mops the floor, gets\nthe mail and the newspapers, and gets ready for visitors to Rolling\nAcres.  Libby’s grandparents started Rolling Acres in 1970, and\nsince then all of the Larson family have been working there.\nRolling Acres used to be just a sheep farm, but now, with its fruit\ntrees, vegetable gardens, and many other kinds of animals, it has\nbecome a popular place for families to go on vacation.  Visitors can\npick fruits, collect eggs, and feed the animals.  It is one of Libby’s\njobs to show kids how to feed the baby sheep.\nFor her work, Libby is paid \\$10 an hour.  This summer, she expects to make about \\$1,200\nand plans to buy a cell phone.  Her friends think it’s great to make that much money in a\nsummer.  However, for Libby, working at a family business also means making sacrifices.\n“I’d love to sleep until noon or go to summer camp like other kids.  My friends stopped\ninviting me on trips because I’m always busy in the summer.”  However, Libby also said,\n“But it’s better to see both sides.  Working with your family is great.  You feel closer to\neach other.”\n\nWhat is Rolling Acres?",
+    "correct": "A vacation farm.",
+    "wrong": [
+      "A zoo.",
+      "A campground.",
+      "A family restaurant."
+    ],
+    "exp": "正確答案：A vacation farm.。來源：114年國中教育會考英語閱讀第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 26,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        26,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G26-28-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q27",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(26-28)\n![圖表](/assets/banks/cap-114-english/G26-28-figure-1.png)\nAt 5 o’clock every morning, while most people are sleeping,\n16-year-old Libby Larson is already up.  She mops the floor, gets\nthe mail and the newspapers, and gets ready for visitors to Rolling\nAcres.  Libby’s grandparents started Rolling Acres in 1970, and\nsince then all of the Larson family have been working there.\nRolling Acres used to be just a sheep farm, but now, with its fruit\ntrees, vegetable gardens, and many other kinds of animals, it has\nbecome a popular place for families to go on vacation.  Visitors can\npick fruits, collect eggs, and feed the animals.  It is one of Libby’s\njobs to show kids how to feed the baby sheep.\nFor her work, Libby is paid \\$10 an hour.  This summer, she expects to make about \\$1,200\nand plans to buy a cell phone.  Her friends think it’s great to make that much money in a\nsummer.  However, for Libby, working at a family business also means making sacrifices.\n“I’d love to sleep until noon or go to summer camp like other kids.  My friends stopped\ninviting me on trips because I’m always busy in the summer.”  However, Libby also said,\n“But it’s better to see both sides.  Working with your family is great.  You feel closer to\neach other.”\n\nWhat do we learn from the first paragraph?\n\n![圖表](/assets/banks/cap-114-english/Q27-figure-1.png)",
+    "correct": "What Libby does at Rolling Acres.",
+    "wrong": [
+      "What visitors think of Rolling Acres.",
+      "Why Libby’s grandparents started Rolling Acres.",
+      "What the Larson family’s plans are for Rolling Acres."
+    ],
+    "exp": "正確答案：What Libby does at Rolling Acres.。來源：114年國中教育會考英語閱讀第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 27,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        26,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G26-28-figure-1.png",
+      "/assets/banks/cap-114-english/Q27-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q28",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(26-28)\n![圖表](/assets/banks/cap-114-english/G26-28-figure-1.png)\nAt 5 o’clock every morning, while most people are sleeping,\n16-year-old Libby Larson is already up.  She mops the floor, gets\nthe mail and the newspapers, and gets ready for visitors to Rolling\nAcres.  Libby’s grandparents started Rolling Acres in 1970, and\nsince then all of the Larson family have been working there.\nRolling Acres used to be just a sheep farm, but now, with its fruit\ntrees, vegetable gardens, and many other kinds of animals, it has\nbecome a popular place for families to go on vacation.  Visitors can\npick fruits, collect eggs, and feed the animals.  It is one of Libby’s\njobs to show kids how to feed the baby sheep.\nFor her work, Libby is paid \\$10 an hour.  This summer, she expects to make about \\$1,200\nand plans to buy a cell phone.  Her friends think it’s great to make that much money in a\nsummer.  However, for Libby, working at a family business also means making sacrifices.\n“I’d love to sleep until noon or go to summer camp like other kids.  My friends stopped\ninviting me on trips because I’m always busy in the summer.”  However, Libby also said,\n“But it’s better to see both sides.  Working with your family is great.  You feel closer to\neach other.”\n\nWhat does making sacrifci es mean?",
+    "correct": "Giving up something important to do something else.",
+    "wrong": [
+      "Learning to make money and use it wisely.",
+      "Getting to know difef rent sides of your family.",
+      "Making excuses for failing to do something difcfi ult."
+    ],
+    "exp": "正確答案：Giving up something important to do something else.。來源：114年國中教育會考英語閱讀第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 28,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        26,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G26-28-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q29",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(29-31)\nAround the year 400, people came to Easter Island.\nSo many trees here!\nIn their free time, they loved\nThey used trees to make fire and making statues with big rocks.  With\nbuild houses.  Because of the trees, the trees they cut down, they could\npeople had a great life on the island. move the statues around easily.\nTrees were needed and used in every part of their life.\nYears passed, and there were fewer and fewer trees on Easter Island.\nWithout enough trees to keep\nAnd I’m hungry.\nwater under the ground, the land\nI’m thirsty.\nbecame dry, and plants didn’t grow.\n![圖表](/assets/banks/cap-114-english/G29-31-figure-1.png)\nPeople began to fight for water and food.  The statues were moved to fighting\ngrounds to show their power.  The last trees were probably cut down at this time.\n\n\nWhat do the comics tell us?",
+    "correct": "Save our planet before it’s too late.",
+    "wrong": [
+      "Enjoy life while we can.",
+      "Follow the old ways of life.",
+      "Treat others the way we want to be treated."
+    ],
+    "exp": "正確答案：Save our planet before it’s too late.。來源：114年國中教育會考英語閱讀第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 29,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G29-31-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q30",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(29-31)\nAround the year 400, people came to Easter Island.\nSo many trees here!\nIn their free time, they loved\nThey used trees to make fire and making statues with big rocks.  With\nbuild houses.  Because of the trees, the trees they cut down, they could\npeople had a great life on the island. move the statues around easily.\nTrees were needed and used in every part of their life.\nYears passed, and there were fewer and fewer trees on Easter Island.\nWithout enough trees to keep\nAnd I’m hungry.\nwater under the ground, the land\nI’m thirsty.\nbecame dry, and plants didn’t grow.\n![圖表](/assets/banks/cap-114-english/G29-31-figure-1.png)\nPeople began to fight for water and food.  The statues were moved to fighting\ngrounds to show their power.  The last trees were probably cut down at this time.\n\n\nWhat can we learn about the people in the comics?",
+    "correct": "They used statues to show how strong they were.",
+    "wrong": [
+      "They made fire before starting a fgi ht.",
+      "They fought for land and plants all the time.",
+      "They prayed to the statues beside a large fire."
+    ],
+    "exp": "正確答案：They used statues to show how strong they were.。來源：114年國中教育會考英語閱讀第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 30,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G29-31-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q31",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(29-31)\nAround the year 400, people came to Easter Island.\nSo many trees here!\nIn their free time, they loved\nThey used trees to make fire and making statues with big rocks.  With\nbuild houses.  Because of the trees, the trees they cut down, they could\npeople had a great life on the island. move the statues around easily.\nTrees were needed and used in every part of their life.\nYears passed, and there were fewer and fewer trees on Easter Island.\nWithout enough trees to keep\nAnd I’m hungry.\nwater under the ground, the land\nI’m thirsty.\nbecame dry, and plants didn’t grow.\n![圖表](/assets/banks/cap-114-english/G29-31-figure-1.png)\nPeople began to fight for water and food.  The statues were moved to fighting\ngrounds to show their power.  The last trees were probably cut down at this time.\n\n\nWhat does did it in Picture 7 mean?",
+    "correct": "Cut down the last trees.",
+    "wrong": [
+      "Fall to the ground.",
+      "Move the statues to fgi hting grounds.",
+      "Understand how important trees were."
+    ],
+    "exp": "正確答案：Cut down the last trees.。來源：114年國中教育會考英語閱讀第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 31,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        8,
+        9,
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G29-31-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q32",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(32-34)\n【原卷閱讀資料】\nMany years ago, Dan Ariely bought a cabinet from IKEA. IKEA is a\nfamous furniture store that sells boxes of furniture parts. People who\nbuy them have to put all the parts together themselves.  It took Ariely hours to build\nhis cabinet. Ariely didn’t really enjoy himself when he was trying to put all the parts\ntogether. However, after he finished, he felt quite good about himself and his cabinet.\nLater, he found that he loved his cabinet more than any of his other furniture.\n\n                 Ariely wanted to know if anyone shared his feelings, so he did\n                a fun origami study. He invited two groups of people to join his\n                   study. He called one group “builders” and the other group “buyers.”\nBuilders were told to make origami, like paper frogs or paper birds. When they\nfinished, they were asked how much they would spend on their works. Ariely then\nshowed the origami to buyers and asked them how much they would pay for them.\nThe two groups gave very different answers. Though buyers would pay only five\ncents for builders’ origami, builders would spend 25 cents!  Interestingly, builders\nbelieved others would think their works were good enough to cost that much money!\n\nAriely’s study showed that he was not alone in his IKEA experience — we just love\nthings more, sometimes blindly, when we make them ourselves. Ariely called it “the\nIKEA effect.”\n\n![圖表](/assets/banks/cap-114-english/G32-34-figure-3.png)\n\n\nWhat did Ariely try to find out in the origami study?",
+    "correct": "If anyone shared his IKEA experience.",
+    "wrong": [
+      "If he could stop the IKEA efef ct.",
+      "Why people love making origami.",
+      "Why IKEA furniture is so famous."
+    ],
+    "exp": "正確答案：If anyone shared his IKEA experience.。來源：114年國中教育會考英語閱讀第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 32,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G32-34-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q33",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(32-34)\n【原卷閱讀資料】\nMany years ago, Dan Ariely bought a cabinet from IKEA. IKEA is a\nfamous furniture store that sells boxes of furniture parts. People who\nbuy them have to put all the parts together themselves.  It took Ariely hours to build\nhis cabinet. Ariely didn’t really enjoy himself when he was trying to put all the parts\ntogether. However, after he finished, he felt quite good about himself and his cabinet.\nLater, he found that he loved his cabinet more than any of his other furniture.\n\n                 Ariely wanted to know if anyone shared his feelings, so he did\n                a fun origami study. He invited two groups of people to join his\n                   study. He called one group “builders” and the other group “buyers.”\nBuilders were told to make origami, like paper frogs or paper birds. When they\nfinished, they were asked how much they would spend on their works. Ariely then\nshowed the origami to buyers and asked them how much they would pay for them.\nThe two groups gave very different answers. Though buyers would pay only five\ncents for builders’ origami, builders would spend 25 cents!  Interestingly, builders\nbelieved others would think their works were good enough to cost that much money!\n\nAriely’s study showed that he was not alone in his IKEA experience — we just love\nthings more, sometimes blindly, when we make them ourselves. Ariely called it “the\nIKEA effect.”\n\n![圖表](/assets/banks/cap-114-english/G32-34-figure-3.png)\n\n\nWhich is true about the origami study?",
+    "correct": "Buyers would spend less on builders’ origami than builders would.",
+    "wrong": [
+      "Builders and buyers needed to decide a price on the origami they made.",
+      "Builders knew others would not pay as much for the origami as they would.",
+      "Buyers would spend more on builders’ origami after knowing how they were made."
+    ],
+    "exp": "正確答案：Buyers would spend less on builders’ origami than builders would.。來源：114年國中教育會考英語閱讀第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 33,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G32-34-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q34",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(32-34)\n【原卷閱讀資料】\nMany years ago, Dan Ariely bought a cabinet from IKEA. IKEA is a\nfamous furniture store that sells boxes of furniture parts. People who\nbuy them have to put all the parts together themselves.  It took Ariely hours to build\nhis cabinet. Ariely didn’t really enjoy himself when he was trying to put all the parts\ntogether. However, after he finished, he felt quite good about himself and his cabinet.\nLater, he found that he loved his cabinet more than any of his other furniture.\n\n                 Ariely wanted to know if anyone shared his feelings, so he did\n                a fun origami study. He invited two groups of people to join his\n                   study. He called one group “builders” and the other group “buyers.”\nBuilders were told to make origami, like paper frogs or paper birds. When they\nfinished, they were asked how much they would spend on their works. Ariely then\nshowed the origami to buyers and asked them how much they would pay for them.\nThe two groups gave very different answers. Though buyers would pay only five\ncents for builders’ origami, builders would spend 25 cents!  Interestingly, builders\nbelieved others would think their works were good enough to cost that much money!\n\nAriely’s study showed that he was not alone in his IKEA experience — we just love\nthings more, sometimes blindly, when we make them ourselves. Ariely called it “the\nIKEA effect.”\n\n![圖表](/assets/banks/cap-114-english/G32-34-figure-3.png)\n\n\nJerry just can’t get his daughter Mia to eat more vegetables at dinner.  Every time he tries\nto do so, there is always a lot of shouting and crying.  If Jerry wants to have Mia eat more\nvegetables by using the IKEA efef ct, what should he do?",
+    "correct": "Ask Mia to help him cook vegetables for her meal.",
+    "wrong": [
+      "Tell Mia that he cooks the vegetables just for her.",
+      "Give Mia her favorite candy after she eats vegetables.",
+      "Ask Mia what vegetables she likes and cook them for her."
+    ],
+    "exp": "正確答案：Ask Mia to help him cook vegetables for her meal.。來源：114年國中教育會考英語閱讀第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 34,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        10,
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G32-34-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q35",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\n![圖表](/assets/banks/cap-114-english/G35-37-figure-1.png)\nIn the picture is a UK electricity worker in the 1970s.  Pictures like this appeared in\nmany newspapers at the time.  In 1972, electricity workers in the UK asked to be paid more,\nand they decided to stop working until their wish was answered.  The government worried\nthat there wouldn’t be enough electricity for the country if these workers didn’t go to work,\nso it agreed to give them the pay rise.  However, the story didn’t end there.\nA year later, the electricity workers asked for another pay rise.  To get what they\nwanted, they worked shorter hours and acted like they would walk away from their job\nanytime.  But this time, the government decided to fight.  To save electricity, it made new\nrules for people to follow.  For example, each family could turn on the heat in only one\nroom; TV stations had to stop their shows at 10:30 p.m.; businesses could open only three\ndays a week.\nPeople’s lives were greatly changed.  Without enough heat to keep the house warm,\npeople covered themselves in blankets all the time.  Hospitals had to use candles because\nthey couldn’t keep all the lights on.  Factories couldn’t keep their machines working.  Many\npeople lost their jobs.  For months, people were paying the price while the electricity\nworkers were fighting for their wish.  In the end, the government agreed to the second pay\nrise.  This picture shows what many people thought of the electricity workers during the\n“dark” time.\n![圖表](/assets/banks/cap-114-english/G35-37-figure-2.png)\n\nWhat is the reading mainly about?",
+    "correct": "The history behind the picture of a UK electricity worker.",
+    "wrong": [
+      "The tips on using a picture to tell a story.",
+      "The change that electricity brought to people’s lives.",
+      "The story of a famous UK electricity worker from the 1970s."
+    ],
+    "exp": "正確答案：The history behind the picture of a UK electricity worker.。來源：114年國中教育會考英語閱讀第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 35,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G35-37-figure-1.png",
+      "/assets/banks/cap-114-english/G35-37-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\n![圖表](/assets/banks/cap-114-english/G35-37-figure-1.png)\nIn the picture is a UK electricity worker in the 1970s.  Pictures like this appeared in\nmany newspapers at the time.  In 1972, electricity workers in the UK asked to be paid more,\nand they decided to stop working until their wish was answered.  The government worried\nthat there wouldn’t be enough electricity for the country if these workers didn’t go to work,\nso it agreed to give them the pay rise.  However, the story didn’t end there.\nA year later, the electricity workers asked for another pay rise.  To get what they\nwanted, they worked shorter hours and acted like they would walk away from their job\nanytime.  But this time, the government decided to fight.  To save electricity, it made new\nrules for people to follow.  For example, each family could turn on the heat in only one\nroom; TV stations had to stop their shows at 10:30 p.m.; businesses could open only three\ndays a week.\nPeople’s lives were greatly changed.  Without enough heat to keep the house warm,\npeople covered themselves in blankets all the time.  Hospitals had to use candles because\nthey couldn’t keep all the lights on.  Factories couldn’t keep their machines working.  Many\npeople lost their jobs.  For months, people were paying the price while the electricity\nworkers were fighting for their wish.  In the end, the government agreed to the second pay\nrise.  This picture shows what many people thought of the electricity workers during the\n“dark” time.\n![圖表](/assets/banks/cap-114-english/G35-37-figure-2.png)\n\nIn the UK in the 1970s, what did people most likely think of the UK electricity workers?\n\n![圖表](/assets/banks/cap-114-english/Q36-figure-1.png)",
+    "correct": "They were asking too much and did not know when to stop.",
+    "wrong": [
+      "They were not brave enough to fix their problems.",
+      "They worked like robots and never learned to change.",
+      "They did not care whether their job might hurt people’s health."
+    ],
+    "exp": "正確答案：They were asking too much and did not know when to stop.。來源：114年國中教育會考英語閱讀第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 36,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G35-37-figure-1.png",
+      "/assets/banks/cap-114-english/G35-37-figure-2.png",
+      "/assets/banks/cap-114-english/Q36-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q37",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\n![圖表](/assets/banks/cap-114-english/G35-37-figure-1.png)\nIn the picture is a UK electricity worker in the 1970s.  Pictures like this appeared in\nmany newspapers at the time.  In 1972, electricity workers in the UK asked to be paid more,\nand they decided to stop working until their wish was answered.  The government worried\nthat there wouldn’t be enough electricity for the country if these workers didn’t go to work,\nso it agreed to give them the pay rise.  However, the story didn’t end there.\nA year later, the electricity workers asked for another pay rise.  To get what they\nwanted, they worked shorter hours and acted like they would walk away from their job\nanytime.  But this time, the government decided to fight.  To save electricity, it made new\nrules for people to follow.  For example, each family could turn on the heat in only one\nroom; TV stations had to stop their shows at 10:30 p.m.; businesses could open only three\ndays a week.\nPeople’s lives were greatly changed.  Without enough heat to keep the house warm,\npeople covered themselves in blankets all the time.  Hospitals had to use candles because\nthey couldn’t keep all the lights on.  Factories couldn’t keep their machines working.  Many\npeople lost their jobs.  For months, people were paying the price while the electricity\nworkers were fighting for their wish.  In the end, the government agreed to the second pay\nrise.  This picture shows what many people thought of the electricity workers during the\n“dark” time.\n![圖表](/assets/banks/cap-114-english/G35-37-figure-2.png)\n\nWhy does the writer put the “ ” mark around the word dark in the last sentence?",
+    "correct": "To mean both the days without lights and the difcfi ult lives people lived.",
+    "wrong": [
+      "To say that the “dark” time was actually not dark.",
+      "To tell people that the word was said by the government.",
+      "To show that the government and the electricity workers both lost their fgi hts."
+    ],
+    "exp": "正確答案：To mean both the days without lights and the difcfi ult lives people lived.。來源：114年國中教育會考英語閱讀第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 37,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        12,
+        13,
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-114-english/G35-37-figure-1.png",
+      "/assets/banks/cap-114-english/G35-37-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q38",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-43)\nMost kids want gifts from their parents on their birthdays, but Cameron doesn’t.  On his\nbirthday, he gives his mom a gift.  He ______ 38 ______ doing this in his first year of junior high\nschool.  That year, during one class, he watched a video about how a baby is pushed from its\nmother’s body.  After class, ______ 39 ______ .  How brave a woman is to have a baby!  Thank God I’ll\nnever have to do that!\nWhen Cameron came home that day, he held his mom in his arms for a long time.  He\ndecided that his birthday ______ 40 ______ .  During those nine months inside his mom, he just ate and\nslept while his mom was doing all the hard work.  So why should he get a birthday gift for\ndoing nothing?  If anyone should get a gift on his birthday, it should be his mom.\nThe ______ 41 ______ “birthday gift” Cameron prepared was a bag of cookies he baked.  The cookies\ntasted so bad, but his mom said they were the best thing she ever got.  Hearing that ______ 42 ______ .\nIt was so much better than getting a gift.  Now, on his birthday every year, Cameron makes\na gift for his mother to thank her for giving him life.\nThis year, Cameron ______ 43 ______ his mom a nice dress.  A few months ago, he learned to make\ndresses at school and decided to make one for his mom.  Now the dress is finished and\nhanging behind Cameron’s bedroom door.  He believes the gift will tell his mother how\nmuch he loves her.",
+    "correct": "started",
+    "wrong": [
+      "starts",
+      "has started",
+      "will start"
+    ],
+    "exp": "正確答案：started。來源：114年國中教育會考英語閱讀第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 38,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        38,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-43)\nMost kids want gifts from their parents on their birthdays, but Cameron doesn’t.  On his\nbirthday, he gives his mom a gift.  He ______ 38 ______ doing this in his first year of junior high\nschool.  That year, during one class, he watched a video about how a baby is pushed from its\nmother’s body.  After class, ______ 39 ______ .  How brave a woman is to have a baby!  Thank God I’ll\nnever have to do that!\nWhen Cameron came home that day, he held his mom in his arms for a long time.  He\ndecided that his birthday ______ 40 ______ .  During those nine months inside his mom, he just ate and\nslept while his mom was doing all the hard work.  So why should he get a birthday gift for\ndoing nothing?  If anyone should get a gift on his birthday, it should be his mom.\nThe ______ 41 ______ “birthday gift” Cameron prepared was a bag of cookies he baked.  The cookies\ntasted so bad, but his mom said they were the best thing she ever got.  Hearing that ______ 42 ______ .\nIt was so much better than getting a gift.  Now, on his birthday every year, Cameron makes\na gift for his mother to thank her for giving him life.\nThis year, Cameron ______ 43 ______ his mom a nice dress.  A few months ago, he learned to make\ndresses at school and decided to make one for his mom.  Now the dress is finished and\nhanging behind Cameron’s bedroom door.  He believes the gift will tell his mother how\nmuch he loves her.",
+    "correct": "he couldn’t stop thinking about two things",
+    "wrong": [
+      "he got quite scared of two things",
+      "he still couldn’t understand two things",
+      "he did two things that would change his life"
+    ],
+    "exp": "正確答案：he couldn’t stop thinking about two things。來源：114年國中教育會考英語閱讀第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 39,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        38,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q40",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-43)\nMost kids want gifts from their parents on their birthdays, but Cameron doesn’t.  On his\nbirthday, he gives his mom a gift.  He ______ 38 ______ doing this in his first year of junior high\nschool.  That year, during one class, he watched a video about how a baby is pushed from its\nmother’s body.  After class, ______ 39 ______ .  How brave a woman is to have a baby!  Thank God I’ll\nnever have to do that!\nWhen Cameron came home that day, he held his mom in his arms for a long time.  He\ndecided that his birthday ______ 40 ______ .  During those nine months inside his mom, he just ate and\nslept while his mom was doing all the hard work.  So why should he get a birthday gift for\ndoing nothing?  If anyone should get a gift on his birthday, it should be his mom.\nThe ______ 41 ______ “birthday gift” Cameron prepared was a bag of cookies he baked.  The cookies\ntasted so bad, but his mom said they were the best thing she ever got.  Hearing that ______ 42 ______ .\nIt was so much better than getting a gift.  Now, on his birthday every year, Cameron makes\na gift for his mother to thank her for giving him life.\nThis year, Cameron ______ 43 ______ his mom a nice dress.  A few months ago, he learned to make\ndresses at school and decided to make one for his mom.  Now the dress is finished and\nhanging behind Cameron’s bedroom door.  He believes the gift will tell his mother how\nmuch he loves her.",
+    "correct": "should not be about him, but about his mom",
+    "wrong": [
+      "should be spent helping his mom",
+      "should be a time of welcoming a new start",
+      "should not be celebrated for just one day, but for nine months"
+    ],
+    "exp": "正確答案：should not be about him, but about his mom。來源：114年國中教育會考英語閱讀第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 40,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        38,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q41",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-43)\nMost kids want gifts from their parents on their birthdays, but Cameron doesn’t.  On his\nbirthday, he gives his mom a gift.  He ______ 38 ______ doing this in his first year of junior high\nschool.  That year, during one class, he watched a video about how a baby is pushed from its\nmother’s body.  After class, ______ 39 ______ .  How brave a woman is to have a baby!  Thank God I’ll\nnever have to do that!\nWhen Cameron came home that day, he held his mom in his arms for a long time.  He\ndecided that his birthday ______ 40 ______ .  During those nine months inside his mom, he just ate and\nslept while his mom was doing all the hard work.  So why should he get a birthday gift for\ndoing nothing?  If anyone should get a gift on his birthday, it should be his mom.\nThe ______ 41 ______ “birthday gift” Cameron prepared was a bag of cookies he baked.  The cookies\ntasted so bad, but his mom said they were the best thing she ever got.  Hearing that ______ 42 ______ .\nIt was so much better than getting a gift.  Now, on his birthday every year, Cameron makes\na gift for his mother to thank her for giving him life.\nThis year, Cameron ______ 43 ______ his mom a nice dress.  A few months ago, he learned to make\ndresses at school and decided to make one for his mom.  Now the dress is finished and\nhanging behind Cameron’s bedroom door.  He believes the gift will tell his mother how\nmuch he loves her.",
+    "correct": "first",
+    "wrong": [
+      "last",
+      "only",
+      "other"
+    ],
+    "exp": "正確答案：first。來源：114年國中教育會考英語閱讀第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 41,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        38,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q42",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-43)\nMost kids want gifts from their parents on their birthdays, but Cameron doesn’t.  On his\nbirthday, he gives his mom a gift.  He ______ 38 ______ doing this in his first year of junior high\nschool.  That year, during one class, he watched a video about how a baby is pushed from its\nmother’s body.  After class, ______ 39 ______ .  How brave a woman is to have a baby!  Thank God I’ll\nnever have to do that!\nWhen Cameron came home that day, he held his mom in his arms for a long time.  He\ndecided that his birthday ______ 40 ______ .  During those nine months inside his mom, he just ate and\nslept while his mom was doing all the hard work.  So why should he get a birthday gift for\ndoing nothing?  If anyone should get a gift on his birthday, it should be his mom.\nThe ______ 41 ______ “birthday gift” Cameron prepared was a bag of cookies he baked.  The cookies\ntasted so bad, but his mom said they were the best thing she ever got.  Hearing that ______ 42 ______ .\nIt was so much better than getting a gift.  Now, on his birthday every year, Cameron makes\na gift for his mother to thank her for giving him life.\nThis year, Cameron ______ 43 ______ his mom a nice dress.  A few months ago, he learned to make\ndresses at school and decided to make one for his mom.  Now the dress is finished and\nhanging behind Cameron’s bedroom door.  He believes the gift will tell his mother how\nmuch he loves her.",
+    "correct": "made his heart sing",
+    "wrong": [
+      "made his head hurt",
+      "made him change his mind",
+      "made him give up baking"
+    ],
+    "exp": "正確答案：made his heart sing。來源：114年國中教育會考英語閱讀第42題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 42,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        38,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-114-english-q43",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-43)\nMost kids want gifts from their parents on their birthdays, but Cameron doesn’t.  On his\nbirthday, he gives his mom a gift.  He ______ 38 ______ doing this in his first year of junior high\nschool.  That year, during one class, he watched a video about how a baby is pushed from its\nmother’s body.  After class, ______ 39 ______ .  How brave a woman is to have a baby!  Thank God I’ll\nnever have to do that!\nWhen Cameron came home that day, he held his mom in his arms for a long time.  He\ndecided that his birthday ______ 40 ______ .  During those nine months inside his mom, he just ate and\nslept while his mom was doing all the hard work.  So why should he get a birthday gift for\ndoing nothing?  If anyone should get a gift on his birthday, it should be his mom.\nThe ______ 41 ______ “birthday gift” Cameron prepared was a bag of cookies he baked.  The cookies\ntasted so bad, but his mom said they were the best thing she ever got.  Hearing that ______ 42 ______ .\nIt was so much better than getting a gift.  Now, on his birthday every year, Cameron makes\na gift for his mother to thank her for giving him life.\nThis year, Cameron ______ 43 ______ his mom a nice dress.  A few months ago, he learned to make\ndresses at school and decided to make one for his mom.  Now the dress is finished and\nhanging behind Cameron’s bedroom door.  He believes the gift will tell his mother how\nmuch he loves her.",
+    "correct": "is going to give",
+    "wrong": [
+      "gives",
+      "has given",
+      "gave"
+    ],
+    "exp": "正確答案：is going to give。來源：114年國中教育會考英語閱讀第43題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-114-english",
+      "question": 43,
+      "file": "國中/會考/英語閱讀/114P_English.pdf",
+      "url": "https://drive.google.com/file/d/1JZ8tM_5W_b57YraHdqTLzLL42Aurwf-D/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/175hz0lHG4GTDNxYet9lrRDu0lmC_G08o/view?usp=drive_link",
+      "group": [
+        38,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  }
+]

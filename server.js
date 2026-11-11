@@ -4,6 +4,15 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const aiRouter = require('./ai-router');
+const { createAIQuestionBank } = require('./ai-question-bank.cjs');
+const { QUESTION_FORMS, createQuizTaskPlan } = require('./quiz-generation-tasks.cjs');
+const registerAdaptiveLearningApi = require('./adaptive-learning-api.cjs');
+const questionQualityAnalytics = require('./question-quality-analytics.cjs');
+const meditationQuiz = require('./daily-meditation-api.cjs').__test;
+const MeditationLiteracy = require('./daily-meditation-literacy.cjs');
+const immortalChallenge = require('./immortal-challenge-api.cjs').__test;
+const trialTower = require('./martial-trial-api.cjs').__test;
+const trialTowerScope = require('./trial-tower-scope.cjs');
 const registerAbilityCoachApi = require('./ability-coach-api.cjs');
 const registerFriendChatApi = require('./alliance-friend-chat-api.cjs');
 const registerDongtianApi = require('./dongtian-api');
@@ -44,6 +53,7 @@ const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question
 const { questionQualityIssue, removeUnstableOptionLabels } = require('./question-quality.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
 require('dotenv').config();
+const aiQuestionBank = createAIQuestionBank();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -106,6 +116,7 @@ registerInventoryDismantleApi(app);
 registerOpportunityApi(app);
 registerGameIssueApi(app);
 registerClassroomApi(app);
+const adaptiveLearning = registerAdaptiveLearningApi(app);
 
 // 僅回傳已配置 provider 的名稱與模型，不暴露 API key。
 app.get('/api/ai-status', (req, res) => {
@@ -269,40 +280,7 @@ app.get('/api/assets', (req, res) => {
 // ==========================================
 // API 4: 取得題庫檔案列表 (保持不變)
 // ==========================================
-app.get('/api/banks', (req, res) => {
-    const banksDir = path.join(__dirname, 'public', 'banks');
-
-    if (!fs.existsSync(banksDir)) {
-        fs.mkdirSync(banksDir);
-    }
-
-    const getFilesRecursively = (dir, fileList = [], rootDir = banksDir) => {
-        const files = fs.readdirSync(dir);
-        
-        files.forEach(file => {
-            const filePath = path.join(dir, file);
-            const stat = fs.statSync(filePath);
-
-            if (stat.isDirectory()) {
-                getFilesRecursively(filePath, fileList, rootDir);
-            } else {
-                if (file.endsWith('.json')) {
-                    const relativePath = path.relative(rootDir, filePath).split(path.sep).join('/');
-                    fileList.push(relativePath);
-                }
-            }
-        });
-        return fileList;
-    };
-
-    try {
-        const allFiles = getFilesRecursively(banksDir);
-        res.json({ files: allFiles });
-    } catch (e) {
-        console.error("讀取題庫失敗:", e);
-        res.json({ files: [] });
-    }
-});
+require('./bank-catalog.cjs').registerBankApi(app, path.join(__dirname, 'public'));
 
 // ==========================================
 // 定義學科與子題型架構 (Knowledge Schema)
@@ -377,11 +355,6 @@ function getRandomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-
-const QUESTION_FORMS = Object.freeze([
-    'direct-application', 'inverse-reasoning', 'error-analysis', 'scenario-modeling',
-    'data-interpretation', 'comparison', 'multi-step', 'concept-transfer'
-]);
 
 function cleanQuestionText(value) {
     return String(value || '').trim().slice(0, 500);
@@ -483,6 +456,7 @@ function chooseQuestionForm(previousMeta, seed) {
 const { MODES: FAST_QUIZ_MODES, quickQuizPrompt } = require('./fast-quiz-prompt.cjs');
 const { ANSWER_AND_EXPLANATION_RULES, subjectReliabilityPrompt } = require('./quiz-answer-prompt.cjs');
 const raidDifficultyRules = require('./public/cultivation/raid-difficulty.js');
+const AdaptiveDifficulty = require('./public/cultivation/adaptive-learning-rules.js');
 const { createSparePool } = require('./quiz-spare-pool.cjs');
 const quizSparePool = createSparePool({ similar: (a, b) => isTooSimilarQuestion(a, [b]) });
 
@@ -491,10 +465,33 @@ app.post('/api/generate-quiz', async (req, res) => {
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode, quizSessionId } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
+    let correction = null;
+    if (req.body?.correctionPractice !== undefined) {
+        const sourceQuestion = String(req.body.correctionPractice?.sourceQuestion || '').trim().slice(0, 1000);
+        const knowledgePoint = String(specificTopic || '').trim().slice(0, 60);
+        if (!sourceQuestion || !knowledgePoint || (quizMode && quizMode !== 'solo')) {
+            return res.status(400).json({error:'訂正練習需要原題與知識點'});
+        }
+        if (!req.body.adaptiveScope) {
+            try { await verifyMainIdentity(req); }
+            catch (error) {
+                const status = error.status || 503;
+                return res.status(status).json({error:status === 401 ? '請重新登入後再產生訂正題。' : '暫時無法確認訂正練習身分。'});
+            }
+        }
+        correction = {knowledgePoint, sourceQuestion};
+        specificTopic = knowledgePoint;
+    }
     const raidQuickSimple = String(quizMode || '') === 'raid-quick-simple';
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
     const tacticalMode = String(quizMode || '') === 'tactical';
+    const towerMode = String(quizMode || '') === 'trial-tower';
+    let towerContext = null;
+    const avatarMode = String(quizMode || '') === 'immortal-avatar';
+    let avatarContext = null;
+    const meditationMode = String(quizMode || '') === 'meditation-literacy';
+    let meditationContext = null;
     const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
@@ -502,6 +499,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     let raidTrustedTopic = '';
     let raidTrustedDifficulty = 'medium';
     let enlightenmentContext = null;
+    let adaptiveContext = null;
     let tacticalContext = null;
     if (tacticalMode) {
         try {
@@ -540,6 +538,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                 return res.status(409).json({ error: '團本題號不同步，請等待房間重新同步' });
             }
             const trusted = pickTrustedRaidKnowledge(member.knowledgeScope || {}, raidActionId);
+            raidTrustedDifficulty = trusted.difficulty;
             subject = trusted.subject;
             level = trusted.level;
             rank = Math.max(0, Math.floor(Number(member.rankLevel) || 0));
@@ -563,6 +562,8 @@ app.post('/api/generate-quiz', async (req, res) => {
                 return res.json({trialQuestion:enlightenmentContext.pending});
             }
             subject = enlightenmentContext.subject;
+            const player = await db.collection('users').doc(uid).get();
+            difficulty = AdaptiveDifficulty.generalDifficulty(player.data()?.stats, subject);
             level = enlightenmentContext.level;
             rank = 0;
             knowledgeMap = null;
@@ -572,8 +573,80 @@ app.post('/api/generate-quiz', async (req, res) => {
             return res.status(error.status||503).json({error:error.status?error.message:'悟道試煉題目準備失敗'});
         }
     }
-    difficulty = enlightenmentMode ? 'medium' : raidTicketMode ? (raidQuickSimple ? 'easy' : raidTrustedDifficulty)
-        : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium');
+    if (towerMode) {
+        try {
+            const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
+            towerContext = {uid,db,...await trialTower.prepareQuestion(db,uid)};
+            if (towerContext.pending) return res.json({towerQuestion:towerContext.pending});
+            if (towerContext.bankSource) {
+                const parsed=await trialTowerScope.bankQuestion(towerContext);
+                const question=await trialTower.commitQuestion(db,uid,towerContext,parsed);
+                return res.json({towerQuestion:question});
+            }
+            subject=towerContext.subject;level=towerContext.level;rank=0;difficulty=towerContext.difficulty;
+            specificTopic=towerContext.specificTopic;topic='';knowledgeMap=null;
+            avoidQuestions=towerContext.history;avoidQuestionMeta=[];
+        } catch(error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'試煉之塔題目準備失敗'});
+        }
+    }
+    if (avatarMode) {
+        try {
+            const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
+            avatarContext = {uid,db,...await immortalChallenge.prepareQuestion(db,uid)};
+            if (avatarContext.pending) return res.json({avatarQuestion:avatarContext.pending});
+            subject = avatarContext.subject; level = avatarContext.level; rank = 0;
+            const player = await db.collection('users').doc(uid).get();
+            difficulty = AdaptiveDifficulty.generalDifficulty(player.data()?.stats, subject);
+            knowledgeMap = null; avoidQuestions = avatarContext.history; avoidQuestionMeta = [];
+            specificTopic = ''; topic = '';
+        } catch (error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'化身挑戰題目準備失敗'});
+        }
+    }
+    if (meditationMode) {
+        try {
+            const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
+            const service = meditationQuiz.createService({db});
+            meditationContext = {uid,db,...await service.prepareQuestion(uid)};
+            if (meditationContext.pending) return res.json({meditationSession:meditationContext.pending});
+            subject = meditationContext.subject; level = meditationContext.level; rank = 0;
+            const player = await db.collection('users').doc(uid).get();
+            difficulty = AdaptiveDifficulty.generalDifficulty(player.data()?.stats, subject);
+            knowledgeMap = null; avoidQuestions = meditationContext.history; avoidQuestionMeta = [];
+            specificTopic = meditationContext.topic; topic = '';
+        } catch (error) {
+            return res.status(error.status||503).json({error:error.status?error.message:'閉關素養題準備失敗'});
+        }
+    }
+    if(towerMode&&towerContext.adaptiveScope){
+        try{
+            adaptiveContext=await adaptiveLearning.prepare(req,{adaptiveScope:towerContext.adaptiveScope,adaptiveConceptId:towerContext.adaptiveConceptId||''});
+            difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
+        }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
+    }else if(req.body?.adaptiveScope){
+        if(quizMode&&quizMode!=='solo')return res.status(400).json({error:'背景適性學習僅用於一般問道試煉'});
+        try{
+            adaptiveContext=await adaptiveLearning.prepare(req);
+            subject=adaptiveContext.scope.subject;level=adaptiveContext.scope.level;specificTopic=adaptiveContext.scope.topic;
+            difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
+        }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
+    }
+    // Only authenticated random/focused solo practice may consume or expand the AI bank.
+    // Custom JSON banks never call this path, and other game modes keep their rules.
+    let aiBankAllowed = false;
+    if (!correction && typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
+        if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
+        else {
+            try {
+                const bankUid = await verifyMainIdentity(req);
+                const bankUser = await playerRepository.resolve().db.collection('users').doc(bankUid).get();
+                aiBankAllowed = !!bankUser.exists && bankUser.data()?.gameSettings?.sourceMode === 'random';
+            } catch (_) { /* unauthenticated legacy calls still use the original generator */ }
+        }
+    }
+    difficulty = raidQuickSimple ? 'easy' : raidTicketMode ? raidTrustedDifficulty
+        : (['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'easy');
     const previousQuestions = (Array.isArray(avoidQuestions) ? avoidQuestions : [])
         .map(cleanQuestionText).filter(Boolean).slice(-80);
     const previousMeta = (Array.isArray(avoidQuestionMeta) ? avoidQuestionMeta : [])
@@ -581,6 +654,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     for (const item of previousMeta) {
         if (item.q && !previousQuestions.includes(item.q)) previousQuestions.push(item.q);
     }
+    if (correction) previousQuestions.push(cleanQuestionText(correction.sourceQuestion));
     const fingerprint = value => String(value).replace(/\s+/g, '').toLowerCase();
     let targetTopic = String(specificTopic || topic || '').trim().slice(0, 240);
     if (raidTicketMode) targetTopic = String(raidTrustedTopic || '').trim().slice(0, 240);
@@ -610,27 +684,25 @@ app.post('/api/generate-quiz', async (req, res) => {
         const stats = knowledgeMap[subject][targetTopic];
         const accuracy = stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0;
         diagnosticInfo = `[玩家數據] 在「${subject}-${targetTopic}」上正確率為 ${accuracy}% (已練 ${stats.total} 題)。`;
-        // 低正確率代表需要更清楚的鷹架，不代表永遠只做 easy。
-        // 適性調整仍使用降低後的新標準，不恢復舊版高難度。
-        if (!raidQuickSimple) {
-            if (stats.total > 3 && Number(accuracy) < 40 && difficulty === "hard") difficulty = "medium";
-            if (stats.total > 5 && Number(accuracy) > 80) difficulty = "hard";
-        }
+
     }
 
-    if (raidQuickSimple) difficulty = 'easy';
     const randomSeed = Math.random().toString(36).substring(7);
-    const quality = raidQuickSimple
-        ? { cognitive: 1, steps: 1, instruction: '團本快答題：只考一個核心觀念，題幹短、條件直接，通常一步即可作答。避免陷阱、冗長情境、多階段推理與冷僻細節。' }
-        : qualityPolicy(subject, difficulty);
-    const targetForm = chooseQuestionForm(previousMeta, randomSeed);
+    const quality = qualityPolicy(subject, difficulty);
+    const targetForm = meditationMode ? meditationContext.form : chooseQuestionForm(previousMeta, randomSeed);
     const recentTemplates = [...new Set(previousMeta.slice(-18).map(item => item.template_id).filter(Boolean))];
     const recentConceptForms = previousMeta.slice(-6)
         .filter(item => item.concept_id || item.question_form)
         .map(item => ({ concept_id: item.concept_id, question_form: item.question_form }));
     const targetKnowledgePointId = enlightenmentContext?.knowledgePointId || '';
+    const correctionScope = correction ? [
+        '[訂正練習範圍]', JSON.stringify(correction),
+        '原題是用來判斷考法的參考資料。保留原題與指定知識點相關的已知量、所求量之間的關係及必要推理步驟。',
+        '更換情境或資料表示方式，題目須自足。不得只替換數字，也不得改成同單元但省略原題關鍵推理的題型。',
+        '例如原題由盛行率、靈敏度及偽陽性率推算陽性後的機率，變式也須由先驗及兩類條件機率反推後驗，可改用瑕疵偵測等情境。'
+    ].join('\n') : '';
 
-    const generationPrompt = `
+    const generationPrompt = (form, taskId, spec = {difficulty,quality}) => `
         [系統指令]
         你是一名 AI 教師，請生成一道「單選題」。
         ${ANSWER_AND_EXPLANATION_RULES}
@@ -641,18 +713,19 @@ app.post('/api/generate-quiz', async (req, res) => {
         指定題型：${targetTopic}
         題型要求：${topicDescription}
         適用程度：${level}，段位：${rank}
-        難度設定：${difficulty}
+        難度設定：${spec.difficulty}
         隨機因子：${randomSeed}
 
         只能考查指定程度內的指定科目與單元，不得超綱或擅自替換單元。
+        ${towerMode?towerContext.practiceInstruction||'':''}
 
         不得只換數字、人名、物品、地點或敘述，
         重出相同解法骨架。
 
-        本題指定表現形式：${targetForm}
-        認知層級約：${quality.cognitive}
-        合理推理步數約：${quality.steps}
-        深度要求：${quality.instruction}
+        本題指定表現形式：${form}
+        認知層級約：${spec.quality.cognitive}
+        合理推理步數約：${spec.quality.steps}
+        深度要求：${spec.quality.instruction}
 
         近期禁止骨架：${recentTemplates.length ? JSON.stringify(recentTemplates) : '無'}
         近期概念／題型組合：${recentConceptForms.length ? JSON.stringify(recentConceptForms) : '無'}
@@ -700,9 +773,11 @@ app.post('/api/generate-quiz', async (req, res) => {
             "knowledge_points": [{"subject":"${Knowledge.subject(subject)}","id":"固定清單中的 ID","name":"對應的固定知識點名稱"}],
             "concept_id": "穩定且短小的考點ID",
             "template_id": "描述解題骨架的ID",
-            "question_form": "${targetForm}",
-            "cognitive_level": ${Number.parseInt(quality.cognitive, 10)},
-            "reasoning_steps": ${Number.parseInt(quality.steps, 10)}
+            "question_form": "${form}",
+            "generation_task_id": ${JSON.stringify(taskId)},
+            ${spec.adaptiveFields?Object.entries(spec.adaptiveFields).map(([k,v])=>JSON.stringify(k)+':'+JSON.stringify(v)+',').join('\n'):''}
+            "cognitive_level": ${Number.parseInt(spec.quality.cognitive, 10)},
+            "reasoning_steps": ${Number.parseInt(spec.quality.steps, 10)}
         }
         請檢查：答案 "correct" 只有一個、錯誤答案中沒有正確答案、選項必須在選項裡不可在題目裡、不可為多選題。
     `;
@@ -714,11 +789,14 @@ app.post('/api/generate-quiz', async (req, res) => {
     const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
         : tacticalMode ? `tactical:${tacticalContext.uid}:${tacticalContext.roomId}`
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
+        : towerMode ? `tower:${towerContext.uid}:${towerContext.runId}`
+        : avatarMode ? `avatar:${avatarContext.uid}:${avatarContext.runId}`
+        : meditationMode ? `meditation:${meditationContext.uid}:${meditationContext.runId}`
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
-    const spareKey = quizSparePool.key({
-        owner: sessionOwner, mode: String(quizMode || 'solo'), subject, level,
-        topic: targetTopic, difficulty, rank,
-        knowledge: diagnosticInfo // never share between different diagnostic modes
+    const spareKey = correction ? '' : quizSparePool.key({
+        owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
+        topic: targetTopic, difficulty:adaptiveContext?'adaptive':difficulty, rank:adaptiveContext?'adaptive':rank,
+        knowledge: adaptiveContext ? adaptiveContext.scope.scopeId+':'+adaptiveContext.plan.version : diagnosticInfo
     });
     const validateCandidate = (parsed, extraQuestions = [], extraTemplates = []) => {
         Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
@@ -733,6 +811,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             isTooSimilarQuestion(parsed.q, [...previousQuestions, ...extraQuestions])) {
             throw new Error('AI 題目未通過範圍、格式或結構去重檢查');
         }
+        if (meditationMode) MeditationLiteracy.assertQuestion(parsed,meditationContext);
         const qualityIssue = questionQualityIssue(parsed);
         if (qualityIssue) throw new Error('AI 題目品質檢查失敗：' + qualityIssue);
         const cleanedExplanation = removeUnstableOptionLabels(parsed.exp);
@@ -743,6 +822,8 @@ app.post('/api/generate-quiz', async (req, res) => {
         if (template && [...recentTemplates, ...extraTemplates].includes(template)) {
             throw new Error('AI 題目與近期解題骨架重複');
         }
+        if(adaptiveContext&&(!adaptiveContext.decision.targets.some(f=>f.id===parsed.adaptive_facet_id&&f.difficulty===parsed.adaptive_difficulty&&f.forms.includes(parsed.question_form))||
+            parsed.adaptive_scope_id!==adaptiveContext.scope.scopeId))throw new Error('備用題不符合目前範圍的學習安排');
         return true;
     };
 
@@ -757,22 +838,142 @@ app.post('/api/generate-quiz', async (req, res) => {
             const retryCorrection = lastGenerationIssue ?
                 '\n[前一版未通過驗證]\n' + lastGenerationIssue.slice(0, 600) +
                 '\n這一版必須從頭重寫整個題目 JSON 的 q、correct、wrong、exp，不能只在解析加註更正。' : '';
-            const prompt = combatFastMode ? quickQuizPrompt({
-                mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty,
-                previousQuestions, previousMeta, targetForm, quality,
-                knowledgePointId: targetKnowledgePointId,
-                retryIssue: lastGenerationIssue, randomSeed
-            }) : generationPrompt + retryCorrection;
+            const taskPlan = createQuizTaskPlan({targetForm, forms:meditationMode?MeditationLiteracy.FORMS:QUESTION_FORMS, previousMeta,
+                difficulty, mode:String(quizMode || 'solo'),assignmentForTask:adaptiveContext?index=>adaptiveContext.target(index):undefined});
+            const promptForTask = index => {
+                const task = taskPlan.get(index);
+                const facet=adaptiveContext?.target(index),taskDifficulty=facet?.difficulty||difficulty;
+                const taskQuality=adaptiveContext?qualityPolicy(subject,taskDifficulty):quality;
+                const adaptiveFields=adaptiveContext?{adaptive_scope_id:adaptiveContext.scope.scopeId,adaptive_facet_id:facet.id,adaptive_difficulty:taskDifficulty}:null;
+                const base = combatFastMode ? quickQuizPrompt({
+                    mode: String(quizMode), subject, level, topic: targetTopic, rank, difficulty:taskDifficulty,
+                    previousQuestions, previousMeta, targetForm:task.form, quality:taskQuality,adaptiveFields,
+                    knowledgePointId: targetKnowledgePointId, generationTaskId:task.id,
+                    retryIssue: lastGenerationIssue, randomSeed
+                }) : generationPrompt(task.form, task.id,{difficulty:taskDifficulty,quality:taskQuality,adaptiveFields}) + retryCorrection;
+                return taskPlan.prompt(base, index)+(adaptiveContext?adaptiveLearning.prompt(adaptiveContext,index):'')+
+                    (meditationMode?'\n'+MeditationLiteracy.prompt(meditationContext):'')+
+                    (correctionScope?'\n'+correctionScope:'');
+            };
+            const prompt = promptForTask(0);
+
+            // Read only already-published AI questions; never re-run an AI review when serving one.
+            // Fine-grained focused requests must match the same facet, role, plan and difficulty.
+            const bankFacet = adaptiveContext?.target(0);
+            const bankTarget = aiBankAllowed ? {
+                subject, level, topic:targetTopic, difficulty:bankFacet?.difficulty || difficulty,
+                facetId:bankFacet?.id || '',role:adaptiveContext?.decision.role || '',
+                planVersion:adaptiveContext?.plan.version || '',
+                forms:bankFacet?.forms || null
+            } : null;
+            // Enforce independent checking BEFORE serving any newly generated
+            // Gemini question. A model's own "correct" field is never enough.
+            const reviewCandidate = async (raw, target, sourceModel = '') => {
+                const deterministicIssue = questionQualityIssue(raw);
+                if (deterministicIssue) throw new Error('題目品質未過關：' + deterministicIssue);
+                const reviewPrompt = [
+                    '你是獨立題庫審核員。禁止把題庫的 correct 當成既定真理。',
+                    '先獨立確認題幹要求選出正確、錯誤、不符合或最適當的選項；逐項重新解題。',
+                    'validIndices 必須列出所有真正符合題目所問的 0-based 索引；零個、多個、歧義或證據不足都不可通過。',
+                    '檢查事實、定義、運算、數字、單位、選項等價性及解析結論；必要時尋找反例。',
+                    '最後才核對參考答案；只有 validIndices 恰好為 [0]、解析正確且學習範圍符合，才可 approved=true。',
+                    '即使很接近也不能放行未確認的題目。不可把模型自評信心當作事實證據。',
+                    '[題幹]', String(raw.q || ''),
+                    '[選項（先只依題意獨立判定）]',
+                    JSON.stringify([raw.correct, ...raw.wrong].map((text,index)=>({index,text}))),
+                    '[參考資料，僅供獨立解題後核對]',
+                    '指定範圍：' + JSON.stringify(target || {
+                        subject:raw.subject, level, topic:raw.sub_topic || targetTopic, difficulty
+                    }),
+                    ...(correction ? [correctionScope,
+                        '審查訂正變式時，核對必要推理是否保留。不同情境可以通過，若只同一大單元卻省略原題的關鍵推理，則不可通過。'] : []),
+                    '參考標示答案：' + JSON.stringify(raw.correct),
+                    '參考解析：' + String(raw.exp || ''),
+                    '只回傳合法 JSON：{"approved":false,"validIndices":[],"reason":"繁體中文具體理由"}'
+                ].join('\n');
+                const reviewOptions = {
+                    excludeModels:sourceModel ? [sourceModel] : [],
+                    timeoutMs:90000,
+                    validate:data=>{
+                        if (typeof data?.approved !== 'boolean' || typeof data?.reason !== 'string' ||
+                            !Array.isArray(data?.validIndices) || !data.validIndices.every(x=>Number.isInteger(x)&&x>=0&&x<4) ||
+                            new Set(data.validIndices).size !== data.validIndices.length)
+                            throw Error('AI bank review format invalid');
+                    }
+                };
+                let checked;
+                try {
+                    checked = await aiRouter.generateJSON(reviewPrompt, {...reviewOptions, task:'quiz-review'});
+                } catch (error) {
+                    if (!correction || !Array.isArray(error.attempts)) throw error;
+                    // The router could not obtain a valid verdict from Lite. Use
+                    // the reserved Flash review without regenerating the candidate.
+                    checked = await aiRouter.generateJSON(reviewPrompt, {...reviewOptions, task:'quiz-escalate'});
+                }
+                if (checked.data.approved !== true || checked.data.validIndices.length !== 1 ||
+                    checked.data.validIndices[0] !== 0) {
+                    throw Object.assign(new Error('獨立審查未通過：' + String(checked.data.reason || '答案不唯一或證據不足').slice(0, 400)),
+                        {code:'quiz-review-rejected'});
+                }
+                return checked.data;
+            };
+            const verifyAndArchive = async (raw, target) => {
+                if (!target) return;
+                const review = await reviewCandidate(raw, target);
+                await aiQuestionBank.publish(target, raw, review);
+            };
+            if (bankTarget && attempts === 0) {
+                const bankResult = await aiQuestionBank.find(
+                    bankTarget, previousQuestions, (q, old) => isTooSimilarQuestion(q, [old]));
+                if (bankResult.question) {
+                    const bankQuestion = {...bankResult.question};
+                    if (adaptiveContext) {
+                        const f = adaptiveContext.target(0);
+                        bankQuestion.adaptive = adaptiveLearning.metadata(adaptiveContext, {
+                            adaptive_scope_id:adaptiveContext.scope.scopeId,
+                            adaptive_facet_id:f.id,adaptive_difficulty:f.difficulty
+                        });
+                    }
+                    // Expand on low stock. This runs after the cached question is returned
+                    // and must not delay a player or replace the unanswered question.
+                    if (bankResult.count < aiQuestionBank.LOW_WATER) {
+                        aiQuestionBank.schedule(bankTarget, async ()=>{
+                            const more = await aiRouter.generateJSON(promptForTask(0), {
+                                task:'quiz-generate',parallel:false,timeoutMs:90000,
+                                validate:(data)=>{
+                                    validateCandidate(data);
+                                    taskPlan.validate(data,0);
+                                    if (adaptiveContext) adaptiveLearning.validate(adaptiveContext,data,0);
+                                }
+                            });
+                            const candidate = {...more.data};
+                            candidate.subject = subject;
+                            candidate.sub_topic = targetTopic;
+                            Object.assign(candidate,Knowledge.metadata(candidate,subject));
+                            delete candidate.generation_task_id;
+                            delete candidate.adaptive_scope_id;
+                            delete candidate.adaptive_facet_id;
+                            delete candidate.adaptive_difficulty;
+                            await verifyAndArchive(candidate,bankTarget);
+                        });
+                    }
+                    return res.json({text:JSON.stringify(bankQuestion),provider:'ai-bank',model:'approved',fromAiBank:true});
+                }
+            }
             // Shorter instructions and bounded provider latency only for combat.
             // Every generated candidate still undergoes the SAME server-side
             // TeX, quality, answer consistency, and duplicate validation below.
-            const saved = attempts === 0 ? quizSparePool.take(spareKey, validateCandidate) : null;
+            const saved = attempts === 0 ? (adaptiveContext?quizSparePool.takeMatching(spareKey,validateCandidate,data=>adaptiveContext.decision.targets.findIndex(f=>f.id===data.adaptive_facet_id&&f.difficulty===data.adaptive_difficulty)):quizSparePool.take(spareKey, validateCandidate)) : null;
             const routed = saved || await aiRouter.generateJSON(prompt, {
-                ...(combatFastMode ? { timeoutMs: 16000 } : {}),
+                task:'quiz-generate',
+                ...(combatFastMode ? { timeoutMs: 90000 } : {}),
                 parallel: true,
-                validate: validateCandidate,
-                promptForProvider: (base, index) => index === 0 ? base
-                    : base + `\n[候選題目差異化] 本次候選編號 ${index + 1}，請以不同情境、數字與考點切入，但維持指定學制、範圍及難度，產生獨立完整單選題。`,
+                validate: (parsed, context = {index:0}) => {
+                    validateCandidate(parsed);
+                    taskPlan.validate(parsed, context.index);
+                    if(adaptiveContext)adaptiveLearning.validate(adaptiveContext,parsed,context.index);
+                },
+                promptForProvider: (_base, index) => promptForTask(index),
                 onWinner: winner => quizSparePool.markServed(spareKey, winner.data),
                 onSpare: spare => quizSparePool.offer(spareKey, spare)
             });
@@ -798,30 +999,62 @@ app.post('/api/generate-quiz', async (req, res) => {
             parsed.sub_topic = targetTopic;
             Knowledge.assertLabel(parsed, subject, targetKnowledgePointId);
             Object.assign(parsed, Knowledge.metadata(parsed, subject));
+            if(adaptiveContext)parsed.adaptive=adaptiveLearning.metadata(adaptiveContext,parsed);
+            const deliveredDifficulty=parsed.adaptive?.difficulty||difficulty;
+            delete parsed.generation_task_id;
+            delete parsed.adaptive_scope_id;delete parsed.adaptive_facet_id;delete parsed.adaptive_difficulty;
             parsed.question_form = QUESTION_FORMS.includes(String(parsed.question_form || ''))
                 ? String(parsed.question_form) : targetForm;
             parsed.concept_id = String(parsed.concept_id || (subject + ':' + targetTopic)).trim().slice(0, 100);
             parsed.template_id = String(parsed.template_id || (parsed.concept_id + ':' + parsed.question_form))
                 .trim().slice(0, 120);
-            parsed.cognitive_level = raidQuickSimple
-                ? Math.max(1, Math.min(2, Number(parsed.cognitive_level) || 1))
-                : Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (difficulty === 'hard' ? 3 : difficulty === 'medium' ? 2 : 1)));
-            parsed.reasoning_steps = raidQuickSimple
-                ? 1
-                : Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (difficulty === 'hard' ? 2 : 1)));
+            parsed.cognitive_level = Math.max(1, Math.min(5, Number(parsed.cognitive_level) || (deliveredDifficulty === 'hard' ? 3 : deliveredDifficulty === 'medium' ? 2 : 1)));
+            parsed.reasoning_steps = Math.max(1, Math.min(6, Number(parsed.reasoning_steps) || (deliveredDifficulty === 'hard' ? 2 : 1)));
 
             if (recentTemplates.includes(parsed.template_id)) {
                 throw new Error('AI 題目與近期解題骨架重複');
             }
 
+            // Fail closed: a freshly generated Gemini question must be reviewed
+            // before it is sent to any game mode or signed as a raid question.
+            // Legacy OpenAI-only deployments retain their existing semantics.
+            const independentReview = (typeof process !== 'undefined' && (process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY))
+                ? await reviewCandidate(parsed, bankTarget, routed.model)
+                : null;
+
+            // Statistics must never prevent the player receiving a question.
+            const trackDelivered = async () => {
+                if (String(quizMode || '') === 'classroom-draft') return;
+                try { await questionQualityAnalytics.recordGenerated(playerRepository.resolve().db, parsed.q, deliveredDifficulty); }
+                catch (error) { console.warn('[Question quality analytics] generation recording failed:', error?.code || error?.message); }
+            };
+
             if (tacticalMode) {
                 const question=await tacticalCombat.commitQuestion(tacticalContext.db,tacticalContext.uid,tacticalContext,parsed);
+                await trackDelivered();
                 return res.json({tacticalQuestion:question});
+            }
+            if (meditationMode) {
+                const session = await meditationQuiz.createService({db:meditationContext.db}).commitQuestion(
+                    meditationContext.uid,meditationContext,parsed);
+                await trackDelivered();
+                return res.json({meditationSession:session,provider:routed.provider,model:routed.model});
+            }
+            if (towerMode) {
+                const question=await trialTower.commitQuestion(towerContext.db,towerContext.uid,towerContext,parsed);
+                await trackDelivered();
+                return res.json({towerQuestion:question,provider:routed.provider,model:routed.model});
+            }
+            if (avatarMode) {
+                const question = await immortalChallenge.commitQuestion(avatarContext.db,avatarContext.uid,avatarContext,parsed);
+                await trackDelivered();
+                return res.json({avatarQuestion:question,provider:routed.provider,model:routed.model});
             }
             if (enlightenmentMode) {
                 const question = await enlightenmentTrial.commitQuestion(
                     enlightenmentContext.db,enlightenmentContext.uid,enlightenmentContext,parsed
                 );
+                await trackDelivered();
                 return res.json({trialQuestion:question,provider:routed.provider,model:routed.model});
             }
             if (raidTicketMode) {
@@ -842,6 +1075,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                     answerIndex,
                     explanation: String(parsed.exp || '').slice(0, 3000)
                 });
+                await trackDelivered();
                 return res.json({
                     raidQuestion: {
                         id: questionId,
@@ -863,13 +1097,40 @@ app.post('/api/generate-quiz', async (req, res) => {
                 });
             }
 
+            await trackDelivered();
+            // A live-generated fallback still answers immediately. Only its archived
+            // copy is independently reviewed once and uploaded to Google Drive.
+            if (bankTarget) {
+                // Parallel provider tasks can target different facets. Archive under
+                // the ACTUAL returned facet, not the first provider's planned facet.
+                const servedFacet = adaptiveContext?.plan.facets.find(f=>f.id===parsed.adaptive?.facetId);
+                const archiveTarget = servedFacet ? {
+                    ...bankTarget,facetId:servedFacet.id,
+                    difficulty:parsed.adaptive.difficulty,
+                    role:parsed.adaptive.role,forms:servedFacet.forms
+                } : bankTarget;
+                const archive = {...parsed};
+                delete archive.adaptive;
+                aiQuestionBank.schedule(archiveTarget, () => independentReview
+                    ? aiQuestionBank.publish(archiveTarget, archive, independentReview)
+                    : verifyAndArchive(archive,archiveTarget));
+            }
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
         } catch (error) {
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             lastGenerationIssue = String(error?.message || '答案與解析不一致');
             attempts++;
-            if (attempts === maxAttempts) return res.status(500).json({ error: "生成失敗" });
+            if (attempts === maxAttempts) {
+                if (correction) {
+                    const rejected = error.code === 'quiz-review-rejected';
+                    return res.status(503).json({
+                        code: rejected ? 'CORRECTION_NOT_APPROVED' : 'CORRECTION_UNAVAILABLE',
+                        error: rejected ? '訂正題尚未通過審查，請重試。' : '訂正題暫時無法完成，請稍後重試。'
+                    });
+                }
+                return res.status(500).json({ error: "生成失敗" });
+            }
         }
     }
 });

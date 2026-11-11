@@ -1,15 +1,20 @@
+import { createStudyQuestionBridge } from './cultivation/study-question-bridge.js';
+import './cultivation/void-retraining-rules.js';
 import {} from './cultivation/solo-learning-rules.js';
 import './cultivation/knowledge-points.js';
+import './cultivation/adaptive-learning.js';
 import './cultivation/ability-insights-core.js';
 import './cultivation/answer-gold-rules.js';
 import './cultivation/quest-rules.js';
 import './cultivation/first-visit.js';
 import { resolvePlayerAvatar } from './cultivation/profile-avatar.js';
 import './cultivation/curriculum-range-rules.js';
+import { subscribeSocialFeed } from './cultivation/social-feed.js';
 import { beginSceneTransition, sceneTheme } from './cultivation/scene-transitions.js';
 import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
+import { authenticatedMainFetch } from './cultivation/data/project-repository.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, signInAnonymously, linkWithPopup, signInWithCredential, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -82,12 +87,14 @@ let chatUnsub = null;                // 聊天室監聽
 let currentBattleId = null;          // 當前對戰 ID
 let isBattleActive = false;          // 是否在對戰中
 let quizBuffer = [];                 // 題目緩衝
-const BUFFER_SIZE = 1;               // 只預取一題，減少切換範圍時浪費的 API 呼叫
+const BUFFER_SIZE = 5;               // 目前範圍的可用待答題少於五題就背景補足
 let isFetchingBuffer = false;
 let bufferFillPromise = null; 
+let bufferNextQuestionPromise = null;
 let currentBankData = null; 
 let presenceInterval = null; 
 let allBankFiles = [];
+let bankAvailability = new Map();
 let currentSelectSlot = null;
 
 let isAnswering = false;             // 防止答題連點
@@ -114,6 +121,13 @@ const soloQuestionCache = createSoloQuestionCache(window.localStorage);
 let soloCacheIdentity = '';
 let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
+window.persistAdaptiveActiveQuiz = quiz => {
+    if(quiz?.mode==='trial-tower'){window.persistTrialTowerStudyHint?.(quiz);return;}
+    if (soloQuestionCache.isCurrent(auth.currentUser?.uid, soloQuestionScope())) soloQuestionCache.persistActive(quiz);
+};
+function adaptiveQuestionContext(unit) {
+    return window.QAAdaptiveLearning?.request(unit, [soloQuestionCache.getActive(), ...soloQuestionCache.getQueue()]) || {};
+}
 
 function soloQuestionScope() {
     const settings = currentUserData?.gameSettings || {};
@@ -131,7 +145,6 @@ function soloQuestionScope() {
         mode,
         source: mode === 'bank' ? String(settings.source || 'ai') : '',
         units,
-        difficulty: String(settings.difficulty || 'auto'),
         level: String(profile.educationLevel || ''),
         weakSubjects: mode === 'focused' ? String(profile.weakSubjects || '') : '',
         language: 'zh-TW'
@@ -167,6 +180,7 @@ function recentSoloQuestionContext() {
         ...soloQuestionCache.getQueue()
     ].filter(Boolean).map(item => ({
         q: item?.data?.q || '',
+        bankQuestionId: item?.bankQuestionId || '',
         concept_id: item?.meta?.concept_id || '',
         template_id: item?.meta?.template_id || '',
         question_form: item?.meta?.question_form || '',
@@ -540,7 +554,7 @@ const REALMS = [
 function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
     const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
         : window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
-    const r = REALMS[idx];
+    const r = window.QAVoidRetraining?.display(score,REALMS[idx]) || REALMS[idx];
     return `${r.name} ${r.sub}`;
 }
 
@@ -548,8 +562,8 @@ function getRankName(level, uid = auth.currentUser?.uid, score = currentUserData
 function getRankMarkup(level, uid = auth.currentUser?.uid, score = currentUserData?.stats?.totalScore) {
     const idx = Number.isFinite(Number(score)) ? calculateRankFromScore(Number(score), uid)
         : window.limitImmortalRank(Math.min(level || 0, REALMS.length - 1), score, REALMS, uid);
-    const realm = REALMS[idx] || REALMS[0];
-    return `${window.getRealmIconMarkup?.(realm.name, '', uid) || ''} ${realm.name} ${realm.sub}`;
+    const realm = window.QAVoidRetraining?.display(score,REALMS[idx] || REALMS[0]) || REALMS[idx] || REALMS[0];
+    return `${window.getRealmIconMarkup?.(realm.baseName || realm.name, '', uid) || ''} ${realm.name} ${realm.sub}`;
 }
 
 function calculateRankFromScore(totalScore, uid = auth.currentUser?.uid) {
@@ -697,7 +711,7 @@ window.logout = () => {
 // 🚪 遊戲啟動閘門：登入後等所有功能腳本載入完成才進遊戲
 // ==========================================
 const GAME_STARTUP_TIPS = [
-    '設定可以調整出題範圍、難度與個人設定。',
+    '設定可以調整出題範圍與個人資料；題目難度依學習足跡調整。',
     '洞天首次完整通關可獲得靈石，題數越多，獎勵也越高。',
     '修煉頁的背包可以查看持有法寶與煉器素材。',
     '築基之後會逐步開啟更多修煉與鬥法內容。',
@@ -1323,6 +1337,18 @@ onAuthStateChanged(auth, async (user) => {
 
         const userRef = doc(db, "users", user.uid);
         try {
+            // Read the backpack only after the server has had a chance to return old consignments.
+            try {
+                const token = await user.getIdToken();
+                const response = await fetch('/api/inventory/retired-market-returns', {
+                    method: 'POST', headers: { Authorization: 'Bearer ' + token },
+                    signal: AbortSignal.timeout(5000)
+                });
+                if (!response.ok) console.warn('[Retired market returns]', response.status);
+            } catch (error) {
+                console.warn('[Retired market returns]', error.name);
+            }
+            if (auth.currentUser?.uid !== user.uid) return;
             const docSnap = await getDoc(userRef);
             if (auth.currentUser?.uid !== user.uid) return;
             
@@ -1400,6 +1426,7 @@ onAuthStateChanged(auth, async (user) => {
 
             // 所有腳本都已成功載入，現在才正式啟動其餘監聽與遊戲介面。
             if (auth.currentUser?.uid !== user.uid) return;
+            checkSoloQuestionStock();
             startPresenceSystem();
             refreshInvitationListener();
             listenToSystemCommands();  
@@ -1506,20 +1533,23 @@ function injectSocialUI() {
                 <i class="fa-solid fa-comments"></i> 仙盟 <span id="alliance-chat-title-unread" class="alliance-chat-badge with-count" hidden aria-label="未讀好友訊息"></span>
             </h2>
             
-            <div class="ui-social-tabs flex px-4 gap-2 mb-2">
-                <button onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
+            <div class="ui-social-tabs flex px-4 gap-2 mb-2" role="tablist" aria-label="仙盟功能">
+                <button type="button" role="tab" aria-controls="section-friends" aria-selected="true" onclick="switchSocialTab('friends')" id="tab-btn-friends" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg">
                     <i class="fa-solid fa-user-group"></i> 好友 <span id="alliance-friend-unread" class="alliance-chat-badge with-count" hidden aria-label="好友私訊未讀"></span>
                 </button>
-                <button onclick="switchSocialTab('chat')" id="tab-btn-chat" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
-                    <i class="fa-solid fa-earth-asia"></i> 全服聊天 <span id="alliance-global-unread" class="alliance-chat-badge" hidden aria-label="全服有新訊息"></span>
+                <button type="button" role="tab" aria-controls="section-chat" aria-selected="false" onclick="switchSocialTab('chat')" id="tab-btn-chat" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-comments"></i> 聊天室 <span id="alliance-global-unread" class="alliance-chat-badge" hidden aria-label="聊天室有新訊息"></span>
                 </button>
-                <button onclick="switchSocialTab('classes')" id="tab-btn-classes" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                <button type="button" role="tab" aria-controls="section-shares" aria-selected="false" onclick="switchSocialTab('shares')" id="tab-btn-shares" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
+                    <i class="fa-solid fa-scroll"></i> 範圍分享 <span id="alliance-scope-unread" class="alliance-chat-badge" hidden aria-label="有新的範圍分享"></span>
+                </button>
+                <button type="button" role="tab" aria-controls="section-classes" aria-selected="false" onclick="switchSocialTab('classes')" id="tab-btn-classes" class="flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700">
                     <i class="fa-solid fa-chalkboard-user"></i> 班級
                 </button>
             </div>
         </div>
 
-        <div id="section-friends" class="flex-1 overflow-y-auto p-4 pb-20">
+        <div id="section-friends" role="tabpanel" aria-labelledby="tab-btn-friends" class="flex-1 overflow-y-auto p-4 pb-20">
             <div class="ui-friend-code bg-slate-800 p-4 rounded-xl border border-slate-700 mb-4">
                 <div class="text-xs text-gray-400 mb-1">我的好友代碼</div>
                 <div class="flex justify-between items-center">
@@ -1539,8 +1569,12 @@ function injectSocialUI() {
             </div>
         </div>
 
-        <div id="section-classes" class="hidden flex-1 overflow-y-auto p-4 pb-20" aria-label="教師與班級"><p role="status">正在準備班級功能…</p></div>
-        <div id="section-chat" class="hidden flex-1 flex flex-col overflow-hidden relative pb-16">
+        <div id="section-classes" role="tabpanel" aria-labelledby="tab-btn-classes" class="hidden flex-1 overflow-y-auto p-4 pb-20" aria-label="教師與班級"><p role="status">正在準備班級功能…</p></div>
+        <div id="section-shares" role="tabpanel" aria-labelledby="tab-btn-shares" class="hidden flex-1 flex flex-col overflow-hidden">
+            <div class="ui-scope-share-heading"><p>查看道友分享的修習範圍，加入自己的清單。</p><button type="button" class="btn-cyber-ghost" onclick="window.openCurriculumStudio?.()">分享我的範圍</button></div>
+            <div id="scope-share-messages" class="flex-1 overflow-y-auto p-4" aria-label="範圍分享清單"><p role="status">正在讀取範圍分享…</p></div>
+        </div>
+        <div id="section-chat" role="tabpanel" aria-labelledby="tab-btn-chat" class="hidden flex-1 flex flex-col overflow-hidden relative pb-16">
             <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
                 <div class="text-center text-gray-500 text-xs py-4">歡迎來到全服聊天室 👋<br>請保持友善發言</div>
             </div>
@@ -1559,72 +1593,54 @@ function injectSocialUI() {
     window.QAClassrooms?.mount();
 }
 
-// 切換分頁 (好友/聊天/班級)
+// 好友、聊天室、範圍分享與班級各自顯示；只監聽目前開啟的公開清單。
 window.switchSocialTab = (tab) => {
-    if (!['friends', 'chat', 'classes'].includes(tab)) return;
-    const btnFriends = document.getElementById('tab-btn-friends');
-    const btnChat = document.getElementById('tab-btn-chat');
-    const secFriends = document.getElementById('section-friends');
-    const secChat = document.getElementById('section-chat');
-    const secClasses = document.getElementById('section-classes');
-    const btnClasses = document.getElementById('tab-btn-classes');
-    const next = { friends: secFriends, chat: secChat, classes: secClasses }[tab];
-    const previous = [secFriends, secChat, secClasses].find(el => el && !el.classList.contains('hidden'));
+    const tabs = ['friends', 'chat', 'shares', 'classes'];
+    if (!tabs.includes(tab)) return;
+    const next = document.getElementById('section-' + tab);
+    const previous = tabs.map(name => document.getElementById('section-' + name))
+        .find(element => element && !element.classList.contains('hidden'));
     const finishTransition = beginSceneTransition(previous, next, 'cloud', 'social');
-    secClasses.classList.toggle('hidden', tab !== 'classes');
-    btnClasses.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all ' + (tab === 'classes' ? 'bg-cyan-600 text-white shadow-lg' : 'bg-slate-800 text-gray-400 hover:bg-slate-700');
-
-    if (tab === 'classes') {
-        secFriends.classList.add('hidden'); secChat.classList.add('hidden');
-        for (const button of [btnFriends, btnChat]) button.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700';
-        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-        void window.QAClassrooms?.open();
-    } else if (tab === 'friends') {
-        btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
-        btnChat.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700";
-        secFriends.classList.remove('hidden');
-        secChat.classList.add('hidden');
-        
-        // 切回好友時，取消聊天室監聽以省流量
-        if (chatUnsub) { chatUnsub(); chatUnsub = null; }
-        loadFriendList();
-    } else {
-        btnChat.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-cyan-600 text-white shadow-lg";
-        btnFriends.className = "flex-1 py-2 text-xs font-bold rounded-lg transition-all bg-slate-800 text-gray-400 hover:bg-slate-700";
-        secChat.classList.remove('hidden');
-        secFriends.classList.add('hidden');
-        
-        // 啟用聊天室監聽：清除全服分頁內的紅點，但不影響好友私訊紅點。
-        listenToGlobalChat();
-        window.QAFriendChat?.ackGlobalChat();
+    for (const name of tabs) {
+        const active = name === tab, button = document.getElementById('tab-btn-' + name);
+        document.getElementById('section-' + name).classList.toggle('hidden', !active);
+        button.setAttribute('aria-selected', String(active));
+        button.className = 'flex-1 py-2 text-xs font-bold rounded-lg transition-all ' +
+            (active ? 'bg-cyan-600 text-white shadow-lg' : 'bg-slate-800 text-gray-400 hover:bg-slate-700');
+    }
+    if (chatUnsub) { chatUnsub(); chatUnsub = null; }
+    if (tab === 'friends') loadFriendList();
+    else if (tab === 'classes') void window.QAClassrooms?.open();
+    else {
+        listenToGlobalChat(tab);
+        if (tab === 'shares') window.QAFriendChat?.ackScopeShares();
+        else window.QAFriendChat?.ackGlobalChat();
     }
     window.QAFriendChat?.updateBadges();
     finishTransition();
 };
 
-// 監聽聊天訊息
-function listenToGlobalChat() {
-    if (chatUnsub) return; // 避免重複監聽
-
-    const chatContainer = document.getElementById('chat-messages');
-    const q = query(collection(db, "global_chat"), orderBy("timestamp", "desc"), limit(25));
-
-    chatUnsub = onSnapshot(q, (snapshot) => {
-        if(snapshot.size > 0 && chatContainer.innerHTML.includes('歡迎來到全服聊天室')) {
-            chatContainer.innerHTML = '';
+function listenToGlobalChat(kind = 'chat') {
+    if (chatUnsub || !auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+    const container = document.getElementById(kind === 'shares' ? 'scope-share-messages' : 'chat-messages');
+    container.innerHTML = '<p class="ui-social-status" role="status">正在讀取' + (kind === 'shares' ? '範圍分享' : '聊天訊息') + '…</p>';
+    chatUnsub = subscribeSocialFeed(db, kind, 25, docs => {
+        if (auth.currentUser?.uid !== uid) return;
+        container.replaceChildren();
+        if (!docs.length) {
+            const empty = document.createElement('p');
+            empty.className = 'ui-social-status';
+            empty.textContent = kind === 'shares' ? '還沒有範圍分享，先分享你的修習清單吧。' : '歡迎來到全服聊天室，請保持友善發言。';
+            container.appendChild(empty);
         }
-
-        const messages = [];
-        snapshot.forEach(doc => messages.push({id: doc.id, ...doc.data()}));
-        messages.reverse(); // 轉成 舊 -> 新
-
-        chatContainer.innerHTML = '';
-        messages.forEach(msg => {
-            renderChatMessage(msg, chatContainer);
-        });
-
-        // 自動捲動到底部
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        const ordered = kind === 'shares' ? docs : docs.slice().reverse();
+        ordered.forEach(doc => renderChatMessage({id: doc.id, ...doc.data()}, container));
+        if (kind === 'chat') container.scrollTop = container.scrollHeight;
+    }, error => {
+        if (auth.currentUser?.uid !== uid) return;
+        container.textContent = '讀取失敗，請重新開啟此分頁。';
+        console.warn('[Social feed]', error);
     });
 }
 
@@ -1771,13 +1787,36 @@ function formatQuizRichText(text) {
         return token;
     };
 
+    // Tables remain text, including cells with formulas or actual illustrations.
+    let working = source.replace(/^\|[^\n]+\|(?:\n\|[^\n]+\|)+/gm, (table) => {
+        const rows = table.split('\n').map(row => {
+            const formulas = [];
+            const safeRow = row.trim().slice(1, -1).replace(/(?<!\\)\$(?:\\.|[^$\\])*?\$/g, math => {
+                formulas.push(math);
+                return `@@TABLE_MATH_${formulas.length - 1}@@`;
+            });
+            return safeRow.split('|').map(cell => cell.replace(/@@TABLE_MATH_(\d+)@@/g, (_token, index) => formulas[Number(index)]));
+        });
+        const body = rows.filter(row => !row.every(cell => /^\s*:?-+:?\s*$/.test(cell)))
+            .map(row => '<tr>' + row.map(cell => '<td class="border border-white/20 px-3 py-2">' + formatQuizRichText(cell.trim()) + '</td>').join('') + '</tr>').join('');
+        return protect('<div class="my-3 overflow-x-auto"><table class="border-collapse text-left"><tbody>' + body + '</tbody></table></div>');
+    });
+    // Only these attribute-free typography tags are allowed. Other HTML is escaped.
+    working = working.replace(/<(u|sup|sub)>([^<>]*)<\/\1>/gi, (_match, tag, content) => {
+        const name = tag.toLowerCase();
+        return protect('<' + name + '>' + escapeHtml(content) + '</' + name + '>');
+    });
+
     // 先抽出 Markdown 圖片，避免 alt/url 裡的特殊字元被一般文字 escape 破壞。
-    let working = source.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, rawUrl) => {
+    working = working.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, rawUrl) => {
         const safeUrl = sanitizeQuizImageUrl(rawUrl);
         if (!safeUrl) return escapeHtml(_match);
         const safeAlt = escapeHtml(String(alt || ''));
         const safeSrc = escapeHtml(safeUrl);
-        return protect(`<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20"><img src="${safeSrc}" alt="${safeAlt}" class="w-full h-auto block" loading="lazy"></div>`);
+        const imageClass = safeUrl.startsWith('/assets/banks/')
+            ? 'max-w-full w-auto h-auto max-h-[60vh] object-contain block mx-auto'
+            : 'w-full h-auto block';
+        return protect(`<div class="my-3 rounded-lg overflow-hidden border border-white/10 shadow-lg bg-black/20"><img src="${safeSrc}" alt="${safeAlt}" class="${imageClass}" loading="lazy"></div>`);
     });
 
     // 抽出 MathJax 區段。支援 $$...$$、$...$、\\[...\\]、\\(...\\)。
@@ -1959,7 +1998,8 @@ window.promptXiuxianEducationLevel = () => {
 };
 
 // 修改原本的 switchToPage
-window.switchToPage = (pageId) => {
+window.switchToPage = (pageId, {preserveTrialTower = false} = {}) => {
+    if(!preserveTrialTower && document.getElementById('martial-trial-modal'))window.closeTrialTower?.();
     if (pageId === 'page-social' && window.promptXiuxianEducationLevel()) return false;
     if (isBattleActive && pageId !== 'page-battle') {
         alert("鬥法進行中！");
@@ -2118,6 +2158,13 @@ function updateUIStats() {
         progressPercent = 100;
     }
 
+    if (window.QAVoidRetraining?.phase(currentScore) >= 0) {
+        const progress = window.QAVoidRetraining.progress(currentScore,REALMS,rankIndex);
+        progressPercent = progress.ratio * 100;
+        currentStarsDisplay = progress.earned;
+        maxStarsDisplay = progress.required;
+    }
+
     const starValEl = document.getElementById('display-stars');
     if (starValEl) {
         starValEl.innerText = currentStarsDisplay;
@@ -2156,7 +2203,7 @@ function updateUIStats() {
 
 function buildPathTree(paths) {
     const tree = { name: "root", children: {} };
-    paths.forEach(path => {
+    [...new Set(paths)].sort().forEach(path => {
         const parts = path.split('/');
         let current = tree;
         parts.forEach((part, index) => {
@@ -2207,6 +2254,8 @@ window.renderCascadingSelectors = (tree, currentPath) => {
             const opt = document.createElement('option');
             opt.value = key;
             opt.innerText = node.type === 'file' ? `📄 ${key.replace('.json', '')}` : `📂 ${key}`;
+            const availability = node.type === 'file' ? bankAvailability.get(node.fullPath) : null;
+            if (availability) opt.innerText += `（可用 ${availability.available}/${availability.total} 題${availability.pendingImages ? '，待補圖 ' + availability.pendingImages : ''}）`;
             if (selectedParts[level] === key) opt.selected = true;
             select.appendChild(opt);
         });
@@ -2285,9 +2334,6 @@ async function updateSettingsInputs() {
         
         const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'medium', focusedUnits: [] };
         
-        const diffSelect = document.getElementById('set-difficulty');
-        if(diffSelect) diffSelect.value = settings.difficulty || 'auto';
-        
         const sourceModeSelect = document.getElementById('set-source-mode');
         if(sourceModeSelect) {
             sourceModeSelect.value = settings.sourceMode || 'random';
@@ -2310,8 +2356,9 @@ async function updateSettingsInputs() {
                 const res = await fetch('/api/banks');
                 const data = await res.json();
                 if (data.files && Array.isArray(data.files)) {
-                    allBankFiles = data.files;
-                    const tree = buildPathTree(data.files);
+                    allBankFiles = [...new Set(data.files)];
+                    bankAvailability = new Map((data.banks || []).map(bank => [bank.file, bank]));
+                    const tree = buildPathTree(allBankFiles);
                     renderCascadingSelectors(tree, settings.source || 'ai');
                 }
             } catch (e) { console.error("Error loading banks", e); }
@@ -2349,7 +2396,6 @@ window.saveProfile = async (triggerButton = null) => {
     const rawWeak = document.getElementById('set-weak').value;
     const sourceMode = document.getElementById('set-source-mode').value;
     const source = document.getElementById('set-source-final-value').value; 
-    const difficulty = document.getElementById('set-difficulty').value;
 
     if (!displayName) { alert("名稱不能為空！"); return false; }
     if (sourceMode === 'bank' && (!source || source === 'ai')) { alert("請選擇題庫檔案！"); return false; }
@@ -2369,7 +2415,6 @@ window.saveProfile = async (triggerButton = null) => {
     const newSettings = { 
         sourceMode: sourceMode, 
         source: source, 
-        difficulty: difficulty,
         focusedUnits: [...(window.soloSelectedUnits || [])]
     };
 
@@ -2409,15 +2454,6 @@ window.saveProfile = async (triggerButton = null) => {
     return true;
 };
 
-async function switchToAI() {
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { "gameSettings.sourceMode": 'random' });
-    currentUserData.gameSettings.sourceMode = 'random';
-    const sm = document.getElementById('set-source-mode');
-    if(sm) { sm.value = 'random'; toggleSourceMode(); }
-    syncSoloQuestionCache();
-    return fetchOneQuestion(); 
-}
-
 // ==========================================
 //  出題核心 (AI / 題庫 - 支援資料夾混合)
 // ==========================================
@@ -2429,62 +2465,61 @@ function shuffleArray(array) {
     return array;
 }
 
-// [新增] 智慧難度判斷邏輯
-function getSmartDifficulty() {
-    if (!currentUserData || !currentUserData.stats) return 'easy';
-
-    const rank = currentUserData.stats.rankLevel || 0;
-    const streak = currentUserData.stats.currentStreak || 0;
-    
-    // 1. 基礎難度 (依照段位)
-    // 0-1 (青銅/白銀): easy
-    // 2-4 (黃金/鑽石/星耀): medium
-    // 5+ (大師以上): hard
-    let baseDiff = 'easy';
-    if (rank >= 5) baseDiff = 'hard';
-    else if (rank >= 2) baseDiff = 'medium';
-
-    // 2. 連勝加成 (Streak Bonus)
-    // 如果連對 3 題以上，強迫提升一級難度 (挑戰時刻)
-    if (streak >= 3) {
-        if (baseDiff === 'easy') return 'medium';
-        if (baseDiff === 'medium') return 'hard';
-        return 'hard'; // 已經是 hard 就維持
-    }
-
-    return baseDiff;
+// 依答題足跡提供非細觀念出題流程的診斷難度。
+function getSmartDifficulty(subject = '') {
+    return window.QAAdaptiveLearningRules.generalDifficulty(currentUserData?.stats, subject);
 }
 
-async function fillBuffer() {
-    // Tactical questions are issued on demand by the authenticated battlefield API.
-    if (window.QA_TACTICAL_BATTLE_ENABLED) return;
+function checkSoloQuestionStock() {
+    if (!auth.currentUser?.uid || !currentUserData || !window.__xiuxianFeaturesReady ||
+        !window.__xiuxianMigrationApproved) return;
+    void fillBuffer();
+}
+// Keep stock ready while the player is on any page, including after onboarding,
+// remote scope changes and a temporary generation/network failure.
+window.addEventListener('xiuxian:quest-progress-updated', checkSoloQuestionStock);
+window.addEventListener('online', checkSoloQuestionStock);
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) checkSoloQuestionStock();
+});
+setInterval(checkSoloQuestionStock, 30000);
+
+async function fillBuffer({ firstReady = false } = {}) {
     const scope = syncSoloQuestionCache();
     const uid = auth.currentUser?.uid || '';
+    const revision = soloCacheRevision;
     // When the player opens the quiz during prefetch, share that existing request.
-    if (isFetchingBuffer) return bufferFillPromise;
-    if (!scope || !uid || quizBuffer.length >= BUFFER_SIZE) return;
+    if (isFetchingBuffer) return firstReady ? bufferNextQuestionPromise : bufferFillPromise;
+    if (!scope || !uid || soloQuestionCache.pendingCount() >= BUFFER_SIZE) return;
     isFetchingBuffer = true;
     bufferFillPromise = (async () => {
         try {
-            while (quizBuffer.length < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) && auth.currentUser?.uid === uid) {
-                const question = await fetchOneQuestion();
-                // Reject an API response from a previous account or range.
-                if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
-                    soloQuestionScope() !== scope) break;
-                if (!soloQuestionCache.append(question)) break;
-                quizBuffer = soloQuestionCache.getQueue();
+            while (soloQuestionCache.pendingCount() < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) &&
+                auth.currentUser?.uid === uid && soloCacheRevision === revision) {
+                let ready;
+                bufferNextQuestionPromise = new Promise(resolve => { ready = resolve; });
+                try {
+                    const question = await fetchOneQuestion();
+                    // Reject an API response from a previous account or range.
+                    if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
+                        soloQuestionScope() !== scope || soloCacheRevision !== revision) break;
+                    if (!soloQuestionCache.append(question)) break;
+                    quizBuffer = soloQuestionCache.getQueue();
+                } finally { ready(); }
             }
         } catch (e) { console.warn("Background fetch failed", e); }
-    })();
-    try { await bufferFillPromise; }
-    finally {
-        isFetchingBuffer = false;
-        bufferFillPromise = null;
-        if (auth.currentUser?.uid && currentUserData && soloQuestionScope() !== scope) {
-            syncSoloQuestionCache();
-            void fillBuffer();
+        finally {
+            isFetchingBuffer = false;
+            bufferFillPromise = null;
+            bufferNextQuestionPromise = null;
+            if (auth.currentUser?.uid && currentUserData &&
+                (soloCacheRevision !== revision || soloQuestionScope() !== scope)) {
+                syncSoloQuestionCache();
+                void fillBuffer();
+            }
         }
-    }
+    })();
+    return firstReady ? bufferNextQuestionPromise : bufferFillPromise;
 }
 
 // ==========================================
@@ -2559,8 +2594,13 @@ window.startQuizFlow = async (isNewSession = false) => {
 
     // Restore an unanswered active question before using the prefetched queue.
     let nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
+    if (!nextQ) {
+        document.getElementById('quiz-loading').classList.remove('hidden');
+        document.getElementById('loading-text').innerText = '正在填充題庫中';
+    }
     if (!nextQ && isFetchingBuffer) {
-        await fillBuffer();
+        // Show the first ready question while the remaining stock fills in the background.
+        await fillBuffer({ firstReady: true });
         if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid ||
             soloQuestionScope() !== scope) return;
         nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
@@ -2571,8 +2611,6 @@ window.startQuizFlow = async (isNewSession = false) => {
         renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
         void fillBuffer();
     } else {
-        document.getElementById('quiz-loading').classList.remove('hidden');
-        document.getElementById('loading-text').innerText = t('loading_text');
         try {
             const q = await fetchOneQuestion();
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
@@ -2594,7 +2632,7 @@ window.startQuizFlow = async (isNewSession = false) => {
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
             console.error(e);
             void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
-            alert("無法開始，請稍後再試");
+            alert(e?.message || "無法開始，請稍後再試");
             switchToPage('page-home');
         }
     }
@@ -2797,10 +2835,7 @@ window.renderSelectedUnitsList = () => {
 async function fetchOneQuestion() {
     const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'auto', focusedUnits: [] };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
-    let finalDifficulty = settings.difficulty;
-    if (!finalDifficulty || finalDifficulty === 'auto') {
-        finalDifficulty = getSmartDifficulty();
-    }
+    let finalDifficulty = getSmartDifficulty();
 
     const sourceMode = settings.sourceMode || 'random';
 
@@ -2831,14 +2866,12 @@ async function fetchOneQuestion() {
         }
         targetTopic = targetTopic.slice(0, 240);
 
-        const weakSubjects = (currentUserData.profile.weakSubjects || "").split(',').map(s => s.trim());
-        // 弱科不等於永遠做 easy；最多只把 hard 暫時降為 medium，保留真正練習深度。
-        if (weakSubjects.includes(subject) && finalDifficulty === "hard" && settings.difficulty !== "hard") finalDifficulty = "medium";
+        finalDifficulty = getSmartDifficulty(subject);
 
         console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
         try {
-            const response = await fetch("/api/generate-quiz", {
+            const response = await (window.QAAdaptiveLearning?.fetchQuiz || fetch)("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -2850,7 +2883,8 @@ async function fetchOneQuestion() {
                     language: 'zh-TW',
                     knowledgeMap: currentUserData.stats.knowledgeMap || {},
                     quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
-                    ...recentSoloQuestionContext()
+                    ...recentSoloQuestionContext(),
+                    ...adaptiveQuestionContext(randomUnit)
                 })
             });
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
@@ -2864,9 +2898,10 @@ async function fetchOneQuestion() {
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
                 meta: quizMetaFromRaw(rawData),
+                adaptive: rawData.adaptive,
                 rank: rankName,
                 badge: `🎯 ${subject} | ${rawData.sub_topic || '精選'}`,
-                learningSubject:subject, learningTopic:rawData.sub_topic || '精選', learningDifficulty:finalDifficulty
+                learningSubject:subject, learningTopic:rawData.sub_topic || '精選', learningDifficulty:rawData.adaptive?.difficulty || finalDifficulty
             };
         } catch (e) {
             console.error("[AI-出題失敗]", e);
@@ -2875,53 +2910,35 @@ async function fetchOneQuestion() {
     } 
     // 2. 題庫練習 (原本的 file based)
     else if (sourceMode === 'bank') {
-        let targetSource = settings.source; 
+        let targetSource = settings.source;
+        const bankSubject = String(targetSource || '').split('/').reverse().find(part => ['國文', '英文', '英語閱讀', '數學', '數學A', '數學B', '社會', '自然'].includes(part));
+        finalDifficulty = getSmartDifficulty(({ 英語閱讀: '英文', 數學A: '數學', 數學B: '數學' })[bankSubject] || bankSubject);
         if (!currentBankData || currentBankData.sourcePath !== targetSource) {
-            let filesToFetch = [];
-            if (targetSource && targetSource.endsWith('.json')) { 
-                filesToFetch = [targetSource]; 
-            } else if (targetSource && targetSource !== 'ai') {
-                if (allBankFiles.length === 0) {
-                    try { 
-                        const res = await fetch('/api/banks'); 
-                        const data = await res.json(); 
-                        allBankFiles = data.files || []; 
-                    } catch (e) { console.error(e); }
-                }
-                filesToFetch = allBankFiles.filter(f => f.startsWith(targetSource + '/'));
-                if (filesToFetch.length === 0) return await switchToAI();
-            } else {
-                return await switchToAI();
-            }
-
-            try {
-                const fetchPromises = filesToFetch.map(filePath => 
-                    fetch(`/banks/${filePath}?t=${Date.now()}`)
-                        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-                        .catch(err => [])
-                );
-                const results = await Promise.all(fetchPromises);
-                const mergedQuestions = results.flat();
-                if (mergedQuestions.length === 0) throw new Error("No questions");
-                currentBankData = { sourcePath: targetSource, questions: mergedQuestions, drawBags: {} };
-            } catch (e) { 
-                console.error("[Fetch-Bank-Error] 題庫讀取失敗:", e); 
-                return await switchToAI(); 
-            }
+            if (!targetSource || targetSource === 'ai') throw new Error('請先選擇要使用的題庫。');
+            const response = await fetch('/api/bank-questions?source=' + encodeURIComponent(targetSource), { cache: 'no-store' });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || '題庫讀取失敗，請稍後重試。');
+            if (!Array.isArray(result.questions) || !result.questions.length) throw new Error('所選題庫目前沒有可作答的題目。');
+            currentBankData = { sourcePath: targetSource, questions: result.questions, drawBags: {} };
         }
 
         const filteredQuestions = currentBankData.questions.filter(q => q.difficulty === finalDifficulty);
         const pool = filteredQuestions.length > 0 ? filteredQuestions : currentBankData.questions;
+        const recentBankContext = recentSoloQuestionContext();
+        const seenBankIds = new Set(recentBankContext.avoidQuestionMeta.map(item => item.bankQuestionId).filter(Boolean));
+        const pendingBankIds = new Set([soloQuestionCache.getActive(), ...soloQuestionCache.getQueue()].map(item => item?.bankQuestionId).filter(Boolean));
         const seenQuestions = new Set(
-            recentSoloQuestionContext().avoidQuestions
+            recentBankContext.avoidQuestions
                 .map(value => String(value || '').toLowerCase().replace(/\s+/g, ''))
                 .filter(Boolean)
         );
-        const unseenPool = pool.filter(item =>
-            !seenQuestions.has(String(item?.q || '').toLowerCase().replace(/\s+/g, ''))
+        const availablePool = pool.filter(item => !pendingBankIds.has(item.id));
+        if (!availablePool.length) throw new Error('所選題庫的題目都已在待答清單中。');
+        const unseenPool = availablePool.filter(item =>
+            item.id ? !seenBankIds.has(item.id) : !seenQuestions.has(String(item?.q || '').toLowerCase().replace(/\s+/g, ''))
         );
         // 題庫尚有沒做過的題時，只從未看過的題抽；全部做完才開啟新一輪。
-        const drawPool = unseenPool.length > 0 ? unseenPool : pool;
+        const drawPool = unseenPool.length > 0 ? unseenPool : availablePool;
         const rawData = pickBankQuestionWithoutReplacement(
             drawPool,
             `${targetSource || 'bank'}|${filteredQuestions.length > 0 ? finalDifficulty : 'all'}|${drawPool.length}`
@@ -2931,6 +2948,7 @@ async function fetchOneQuestion() {
         
         return { 
             data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp }, 
+            bankQuestionId: rawData.id,
             rank: rankName, 
             badge: `🎯 ${displaySubject} | ${({easy: '簡單', medium: '中等', hard: '困難'})[finalDifficulty] || '適性練習'}`,
             learningSubject:displaySubject, learningTopic:rawData.sub_topic || '題庫', learningDifficulty:rawData.difficulty || finalDifficulty
@@ -2940,9 +2958,10 @@ async function fetchOneQuestion() {
     else {
         const allSubjects = ["國文", "英文", "數學", "公民", "歷史", "地理", "物理", "化學", "生物"];
         let targetSubject = allSubjects[Math.floor(Math.random() * allSubjects.length)];
+        finalDifficulty = getSmartDifficulty(targetSubject);
         
         try {
-            const response = await fetch("/api/generate-quiz", {
+            const response = await (typeof authenticatedMainFetch === "function" ? authenticatedMainFetch : fetch)("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -3025,16 +3044,20 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     if (quiz) {
         if (answeredSoloQuizzes.has(quiz)) return;
         answeredSoloQuizzes.add(quiz);
-        syncSoloQuestionCache();
-        if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
-            soloQuestionCache.consumeActive({ remember: true });
-        } else {
-            soloQuestionCache.remember?.(quiz);
+        if(quiz.mode!=='trial-tower'){
+            syncSoloQuestionCache();
+            if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
+                soloQuestionCache.consumeActive({ remember: true });
+            } else {
+                soloQuestionCache.remember?.(quiz);
+            }
         }
     }
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
+    const adaptiveRows = window.QAAdaptiveLearning?.answer(quiz, isCorrect, userIdx < 0) || [];
+    if (quiz?.mode!=='trial-tower' && !extendedPracticeState.active) void fillBuffer();
     globalThis.QAGameAudio?.answer(isCorrect, 'solo:' + (window.quizStartTime || '') + ':' + (quiz?.id || questionText));
     quizHelperState.answered = true;
     if (quiz) delete quiz.helperReviewRedacted;
@@ -3077,6 +3100,26 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         const fallback = window.formatQuizRichText || window.quizMathRichText || (text => String(text ?? ''));
         fbText.innerHTML = fallback(explanationText);
         void window.MathJax?.typesetPromise?.([fbText]).catch(err => console.warn('[Quiz explanation MathJax]', err));
+    }
+
+    // 訂正操作隨答錯解析立即出現，不等待儲存；置於下一題上方。
+    document.getElementById('solo-correction-practice')?.remove();
+    document.getElementById('solo-correction-hint')?.remove();
+    const correctionActions = document.getElementById('solo-correction-actions') || fbSection;
+    if (!isCorrect && userIdx >= 0 && quiz && correctionActions) {
+        const correction = document.createElement('button');
+        correction.id = 'solo-correction-practice'; correction.type = 'button';
+        correction.className = 'btn-cyber-primary mt-3 px-4 py-2 rounded-lg text-xs';
+        correction.textContent = '加入訂正練習 · 訂正修為 +1';
+        correction.onclick = () => {
+            void window.startQuizExtendedPractice(quiz.learningTopic || quiz.meta?.concept_id || '本題核心觀念', { correction: true });
+        };
+        correctionActions.appendChild(correction);
+        const hint = document.createElement('button'); hint.id = 'solo-correction-hint'; hint.type = 'button';
+        hint.className = 'btn-cyber-ghost mt-3 mr-2 px-4 py-2 rounded-lg text-xs';
+        hint.textContent = '先看概念提示';
+        hint.onclick = () => window.askQuizHelperPreset?.('請針對我這題的錯誤給一個簡短的概念提示，協助我理解關鍵步驟，再嘗試同概念訂正題。');
+        correctionActions.appendChild(hint);
     }
 
     if (soloSession.active) {
@@ -3139,7 +3182,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
         
         scoreGain = window.QAAnswerGoldRules.perCorrect(scoreBeforeAnswer) + learningReward.gold;
-        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
+        fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2 border border-yellow-500 rounded px-1">+${scoreGain}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${cultivationReward.gain} 修為</span>`;
     } else {
         if (!cultivationReward.streakPreserved) stats.currentStreak = 0;
         if (cultivationReward.penalty > 0) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">-${cultivationReward.penalty} 修為</span>`;
@@ -3175,7 +3218,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
     // stay local until the next reward. A report explicitly saves its last answer
     // before the API can calculate a trusted refund.
     const shouldSaveAnswer = isCorrect || (learningRules && userIdx >= 0) || stats.totalScore !== scoreBeforeAnswer ||
-        !!stats.goldenCoreShield !== shieldBeforeAnswer;
+        !!stats.goldenCoreShield !== shieldBeforeAnswer || !!quiz?.adaptive;
     const cultivationDelta = stats.totalScore - scoreBeforeAnswer;
     const recoveryCoreGain = cultivationReward.recoveryBonusGain;
     const originalGoldenMessage = cultivationReward.goldenCoreMessage;
@@ -3187,17 +3230,26 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
                 const snap = await tx.get(ref);
                 if (!snap.exists()) throw new Error('玩家資料不存在');
                 const remote = snap.data();
+                const towerReceipts=Array.isArray(remote.stats?.trialTowerStudyAnswersV1)?remote.stats.trialTowerStudyAnswersV1:[];
+                if(quiz?.mode==='trial-tower'&&towerReceipts.includes(quiz.id)){
+                    cultivationReward.gain=0;scoreGain=0;return remote.stats;
+                }
                 const verifiedLearning = learningRules?.reward(remote.stats || {}, quiz, isCorrect, remote.profile) || learningReward;
                 correctionFeedback = verifiedLearning.recoveryFeedback || null;
                 const verifiedGold = isCorrect ? window.QAAnswerGoldRules.perCorrect(remote.stats?.totalScore) + verifiedLearning.gold : 0;
                 const learningDelta = verifiedLearning.gain - learningReward.gain +
                     (verifiedLearning.recovery ? 0 : -recoveryCoreGain);
                 const savedStats = { ...stats,
+                    ...(remote.stats?.trialTowerStudyAnswersV1?{trialTowerStudyAnswersV1:towerReceipts}:{}),
+                    ...(quiz?.mode==='trial-tower'?{trialTowerStudyAnswersV1:[...towerReceipts,quiz.id].slice(-64)}:{}),
+                    ...(remote.stats?.adaptiveLearningV1 ? {adaptiveLearningV1:remote.stats.adaptiveLearningV1} : {}),
+                    ...(adaptiveRows.length ? {adaptiveLearningV1:window.QAAdaptiveLearning.merge(remote.stats?.adaptiveLearningV1, adaptiveRows)} : {}),
                     ...(verifiedLearning.progress ? {soloLearningV1:verifiedLearning.progress} : {}),
                     gold: Math.max(0, Number(remote.stats?.gold) || 0) + verifiedGold,
                     totalScore: Math.max(0, (Number(remote.stats?.totalScore) || 0) + cultivationDelta + learningDelta),
                     knowledgePointMapV1: window.QAKnowledgePoints.record(remote.stats?.knowledgePointMapV1 || {}, quiz, isCorrect)
                 };
+                if (!remote.stats?.adaptiveLearningV1 && !adaptiveRows.length) delete savedStats.adaptiveLearningV1;
                 cultivationReward.gain = Math.max(0,cultivationDelta + learningDelta);
                 scoreGain = verifiedGold;
                 cultivationReward.learningGain = verifiedLearning.gain;
@@ -3214,8 +3266,10 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             }).then(savedStats => {
                 if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) throw new Error('帳號已更換，請重新整理。');
                 Object.assign(stats, savedStats);
+                window.QAAdaptiveLearning?.acknowledge(answerUser.uid, adaptiveRows);
+                void window.QAAdaptiveLearning?.afterSaved(quiz);
                 updateUIStats();
-                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}💰 · +${cultivationReward.gain} 修為</span>`;
+                if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${cultivationReward.gain} 修為</span>`;
                 window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
             }).then(async () => {
                 await cultivationFeedback?.play({ gain: cultivationReward.gain, totalScore: stats.totalScore });
@@ -3228,7 +3282,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             ? persistAnswer()
             : null;
         if (!shouldSaveAnswer) showCultivationFeedback(cultivationReward, isCorrect);
-        void addDoc(collection(db, "exam_logs"), { 
+        if(quiz?.mode!=='trial-tower') void addDoc(collection(db, "exam_logs"), {
             uid: auth.currentUser.uid, 
             email: auth.currentUser.email || '',
             question: questionText, 
@@ -3243,6 +3297,8 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             knowledgePoint: window.QAKnowledgePoints.label(quiz)?.name || '',
             knowledgePoints: window.QAKnowledgePoints.labels(quiz),
             // AI-generated question metadata, not an AI inference from correctness.
+            ...(quiz?.adaptive ? {adaptiveScopeId:quiz.adaptive.scopeId, adaptiveConceptId:quiz.adaptive.conceptId,
+                adaptiveFacetId:quiz.adaptive.facetId, assistanceLevel:quiz.adaptiveHelp || 0, adaptiveSkipped:userIdx < 0} : {}),
             questionForm: String(quiz?.meta?.question_form || '').slice(0, 40),
             cognitiveLevel: Number(quiz?.meta?.cognitive_level) || null,
             reasoningSteps: Number(quiz?.meta?.reasoning_steps) || null,
@@ -3266,7 +3322,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         }
         if (p1) await p1;
         answerSaved = true;
-    } catch (e) { console.error("Firebase Error", e); }
+    } catch (e) { console.error("Firebase Error", e); void window.QAAdaptiveLearning?.flush(answerUser.uid); }
     finally { cultivationFeedback?.cancel(); }
 
     if (answerSaved && userIdx >= 0) {
@@ -3274,24 +3330,6 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
         void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
     }
 
-    document.getElementById('solo-correction-practice')?.remove();
-    document.getElementById('solo-correction-hint')?.remove();
-    if (!isCorrect && userIdx >= 0 && quiz && fbSection) {
-        const hint = document.createElement('button'); hint.id = 'solo-correction-hint'; hint.type = 'button';
-        hint.className = 'btn-cyber-ghost mt-3 mr-2 px-4 py-2 rounded-lg text-xs';
-        hint.textContent = '先看概念提示';
-        hint.onclick = () => window.askQuizHelperPreset?.('請針對我這題的錯誤給一個簡短的概念提示，協助我理解關鍵步驟，再嘗試同概念訂正題。');
-        fbSection.appendChild(hint);
-        const correction = document.createElement('button');
-        correction.id = 'solo-correction-practice'; correction.type = 'button';
-        correction.className = 'btn-cyber-primary mt-3 px-4 py-2 rounded-lg text-xs';
-        correction.textContent = '加入訂正練習 · 訂正修為 +1';
-        correction.onclick = () => {
-            void window.startQuizExtendedPractice(quiz.learningTopic || quiz.meta?.concept_id || '本題核心觀念', { correction: true });
-        };
-        fbSection.appendChild(correction);
-    }
-    if (!extendedPracticeState.active) fillBuffer();
 }
 
 async function generateVisualAid(imagePrompt) {
@@ -3313,6 +3351,13 @@ const extendedPracticeState = {
 window.isExtendedPracticeActive = () => extendedPracticeState.active;
 
 function syncQuizExtendedPracticeControls() {
+    if(window.currentActiveQuiz?.mode==='trial-tower'){
+        const state=window.getTrialTowerPracticeState?.()||{},stop=document.getElementById('btn-extended-practice-stop');
+        stop?.classList.toggle('hidden',!state.extension);
+        if(stop){stop.title='結束延伸練習';const label=stop.querySelector('span');if(label)label.textContent='延伸中';}
+        for(const button of document.querySelectorAll('.quiz-helper-practice-btn'))button.disabled=!!state.queued?.some(p=>p.point===button.dataset.knowledgePoint);
+        return;
+    }
     const pending = extendedPracticeState.pending;
     const stop = document.getElementById('btn-extended-practice-stop');
     stop?.classList.toggle('hidden', !extendedPracticeState.active && !pending);
@@ -3481,7 +3526,7 @@ function initQuizHelper() {
 
 function resetQuizHelper(data = {}, { topic = '' } = {}) {
     const pending = extendedPracticeState.pending;
-    if (pending && (pending.quiz !== window.currentActiveQuiz || pending.uid !== auth.currentUser?.uid || pending.scope !== soloQuestionScope())) {
+    if (window.currentActiveQuiz?.mode!=='trial-tower' && pending && (pending.quiz !== window.currentActiveQuiz || pending.uid !== auth.currentUser?.uid || pending.scope !== soloQuestionScope())) {
         extendedPracticeState.pending = null;
     }
     initQuizHelper();
@@ -3532,35 +3577,45 @@ async function sendQuizHelperMessage(rawMessage, { intent = 'discussion' } = {})
     const thinkingBubble = quizHelperAppendThinking();
 
     try {
+        const interfaceState=window.getQuizInterfaceState?.();
+        const helperText=value=>window.QAMathGuard?.normalizeMathText?.(value)??value;
         const response = await fetch('/api/question-helper', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                question: quizHelperState.question,
-                options: quizHelperState.options,
+                question: helperText(quizHelperState.question),
+                options: quizHelperState.options.map(helperText),
                 subject: quizHelperState.subject,
                 message,
                 ...(intent === 'check-question' ? { intent } : {}),
                 history,
                 answered: quizHelperState.answered,
-                explanation: quizHelperState.explanation,
+                ...(interfaceState?{interfaceState}:{}),
+                explanation: helperText(quizHelperState.explanation),
                 selectedOption: quizHelperState.answered && Number.isInteger(quizHelperState.selectedIndex)
-                    ? quizHelperState.options[quizHelperState.selectedIndex] || '' : '',
+                    ? helperText(quizHelperState.options[quizHelperState.selectedIndex] || '') : '',
                 correctOption: Number.isInteger(quizHelperState.correctIndex)
-                    ? quizHelperState.options[quizHelperState.correctIndex] || '' : ''
+                    ? helperText(quizHelperState.options[quizHelperState.correctIndex] || '') : ''
             })
         });
         const payload = await response.json().catch(() => ({}));
         if (requestId !== quizHelperState.requestSerial || requestQuestion !== quizHelperState.question) return;
         thinkingBubble?.remove();
         if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
-        const answer = String(payload.answer || '').trim();
+        let answer = String(payload.answer || '').trim();
         if (!answer) throw new Error('問道助手沒有回傳內容');
+        if(payload.interfaceIssue && window.repairQuizOptions?.()){
+            const restored=window.getQuizInterfaceState?.();
+            if(restored?.expectedOptions>0&&restored.renderedOptions===restored.expectedOptions&&restored.clickableOptions===restored.expectedOptions)
+                answer+='\n本題的選項按鈕已恢復，請再試著點選。';
+        }
         const knowledgePoint = String(payload.knowledgePoint || '').trim().slice(0, 60);
+        if (!payload.interfaceIssue && !quizHelperState.answered && intent !== 'check-question' && window.currentActiveQuiz === requestQuiz && auth.currentUser?.uid === requestUid)
+            window.QAAdaptiveLearning?.hint(requestQuiz);
         quizHelperState.messages.push({ role: 'assistant', text: answer, knowledgePoint });
         quizHelperAppendMessage('assistant', answer, { knowledgePoint });
         if (status) status.textContent = '';
-        if (payload.questionIssue?.confirmed === true) {
+        if (!payload.interfaceIssue && payload.questionIssue?.confirmed === true) {
             void window.reportQuizHelperIssue({ quiz: requestQuiz, uid: requestUid, reason: payload.questionIssue.reason,
                 ...(payload.checkOnly === true ? { hideAnswer: true } : {}) });
         }
@@ -3594,30 +3649,36 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
     const subject = String(practice.subject || quizHelperState.subject || '綜合').trim().slice(0, 40);
     const knowledgePoint = String(practice.knowledgePoint || '本題核心觀念').trim().slice(0, 60);
     const recoveryOrigin = String(practice.recoveryOrigin || '');
-    const settings = currentUserData?.gameSettings || {};
     const rankName = getRankName(currentUserData?.stats?.rankLevel || 0);
-    let difficulty = settings.difficulty;
-    if (!difficulty || difficulty === 'auto') difficulty = getSmartDifficulty();
+    const difficulty = recoveryOrigin
+        ? (practice.quiz?.learningDifficulty === 'hard' ? 'hard' : 'medium')
+        : getSmartDifficulty(subject);
 
-    let specificTopic = knowledgePoint;
-    if (recoveryOrigin) specificTopic = `${knowledgePoint}。針對原題「${practice.originQuestion}」的同一概念出一道新情境變式，勿重複原題。`.slice(0,1800);
-    const response = await fetch('/api/generate-quiz', {
+    const adaptive = recoveryOrigin ? practice.quiz?.adaptive : null;
+    const request = adaptive ? (window.QAAdaptiveLearning?.fetchQuiz || authenticatedMainFetch)
+        : recoveryOrigin ? authenticatedMainFetch : fetch;
+    const response = await request('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             subject,
-            specificTopic,
+            specificTopic: knowledgePoint,
             level: currentUserData?.profile?.educationLevel || 'General',
             rank: rankName,
             difficulty,
             language: 'zh-TW',
             knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
             quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
-                    ...recentSoloQuestionContext()
+            ...recentSoloQuestionContext(),
+            ...(recoveryOrigin ? {correctionPractice: {sourceQuestion: practice.originQuestion || recoveryOrigin}} : {}),
+            ...(adaptive ? {...adaptiveQuestionContext(adaptive.scope), adaptiveConceptId:adaptive.conceptId} : {})
         })
     });
-    if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-    const payload = await response.json();
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        const message = typeof payload.error === 'string' ? payload.error : `Server Error: ${response.status}`;
+        throw Object.assign(new Error(message), {status: response.status, code: payload.code});
+    }
     let aiText = payload.text;
     const jsonMatch = String(aiText || '').match(/\{[\s\S]*\}/);
     if (jsonMatch) aiText = jsonMatch[0];
@@ -3632,12 +3693,13 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
             exp: rawData.exp
         },
         meta: quizMetaFromRaw(rawData),
+        adaptive: rawData.adaptive,
         rank: rankName,
         badge: `${recoveryOrigin ? '📝 訂正練習' : '📚 延伸練習'} | ${subject} · ${knowledgePoint}`,
         extendedPractice: !recoveryOrigin,
         extendedPracticeSubject: subject,
         extendedPracticeKnowledgePoint: knowledgePoint,
-        learningSubject:subject, learningTopic:knowledgePoint, learningDifficulty:difficulty,
+        learningSubject:subject, learningTopic:knowledgePoint, learningDifficulty:rawData.adaptive?.difficulty || difficulty,
         recoveryOrigin
     };
 }
@@ -3684,7 +3746,7 @@ function queueCorrectionPractice(practice) {
             console.warn('[Correction practice]', error);
             if (generation === soloCacheRevision && auth.currentUser?.uid === practice.uid && soloQuestionScope() === practice.scope) {
                 syncCorrectionPracticeButton(practice.quiz, { failed: true });
-                window.showToast?.('訂正題暫時生成失敗，一般練習仍可繼續。');
+                window.showToast?.(error.status && error.message ? error.message : '訂正題暫時生成失敗，一般練習仍可繼續。');
             }
         } finally {
             if (requests.get(key) === job) requests.delete(key);
@@ -3698,6 +3760,7 @@ window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
     if (!point || !currentUserData) return;
 
     const currentQuiz = window.currentActiveQuiz;
+    if(currentQuiz?.mode==='trial-tower')return window.queueTrialTowerPractice?.({questionId:currentQuiz.id,point,correction:!!options.correction});
     const uid = auth.currentUser?.uid;
     if (!currentQuiz?.data || !uid || soloNextBusy || window.isOpportunityActive?.()) return;
 
@@ -3721,6 +3784,7 @@ window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
 };
 
 window.endQuizExtendedPractice = () => {
+    if(window.currentActiveQuiz?.mode==='trial-tower'){window.cancelTrialTowerPractice?.();return;}
     if (!extendedPracticeState.active && !extendedPracticeState.pending) return;
     const wasActive = extendedPracticeState.active;
     extendedPracticeState.active = false;
@@ -3875,6 +3939,7 @@ function initQuizWhiteboard() {
     document.addEventListener('keydown', (event) => {
         const { panel } = quizWhiteboardElements();
         if (event.key !== 'Escape' || !panel || panel.classList.contains('hidden')) return;
+        event.preventDefault();event.stopImmediatePropagation();
         window.toggleQuizWhiteboard(false);
     });
 }
@@ -3922,7 +3987,9 @@ window.toggleQuizWhiteboard = (forceOpen) => {
     }
 };
 
-function renderQuiz(data, rank, topic) {
+function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
+    document.getElementById('solo-correction-practice')?.remove();
+    document.getElementById('solo-correction-hint')?.remove();
     const quizPage = document.getElementById('page-quiz');
     const finishQuestionTransition = beginSceneTransition(quizPage, quizPage, 'scroll', 'solo-question', true);
     // Rendering stays synchronous; the old question dissolves over the new one.
@@ -3930,6 +3997,7 @@ function renderQuiz(data, rank, topic) {
     // 每一道新題使用全新的計算空間與問答脈絡，避免上一題殘留。
     resetQuizWhiteboard({ close: true });
     resetQuizHelper(data, { topic });
+    window.QAAdaptiveLearning?.render(window.currentActiveQuiz);
     syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
@@ -3948,27 +4016,62 @@ function renderQuiz(data, rank, topic) {
     if (whiteboardQuestionEl) whiteboardQuestionEl.innerHTML = renderedQuestion;
 
     // 所有選項均採與題幹／解析完全相同的安全 LaTeX 格式化器。
-    container.replaceChildren(); 
-    data.opts.forEach((optText, idx) => {
-        const btn = document.createElement('button');
-        btn.id = `option-btn-${idx}`;
-        // 🔥 這裡修復了斷裂的字串與 class 名稱
-        btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
-        btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${(window.quizMathRichText || formatQuizRichText)(optText)}</span>`;
-        btn.onclick = () => handleAnswer(idx, data.ans, data.q, data.exp);
-        container.appendChild(btn);
-    });
+    const optionsQuiz=window.currentActiveQuiz,optionsUid=auth.currentUser?.uid||'';
+    const buildOptions=()=>{
+        container.replaceChildren();
+        data.opts.forEach((optText, idx) => {
+            const btn = document.createElement('button');
+            btn.id = `option-btn-${idx}`;
+            btn.className = "w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2";
+            btn.innerHTML = `<span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+idx)}</span><span class="flex-1 quiz-rich-option">${(window.quizMathRichText || formatQuizRichText)(optText)}</span>`;
+            btn.onclick = () => onAnswer ? onAnswer(idx) : handleAnswer(idx, data.ans, data.q, data.exp);
+            container.appendChild(btn);
+        });
+    };
+    buildOptions();
+    window.repairQuizOptions=()=>{
+        if(window.currentActiveQuiz!==optionsQuiz||(auth.currentUser?.uid||'')!==optionsUid||quizHelperState.answered||isAnswering)return false;
+        if(optionsQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.())return false;
+        window.quizMathClear?.(container);buildOptions();void window.quizMathTypeset?.(container);return true;
+    };
 
     // The same unanswered question can be revisited; reuse its event ID.
     const analyticsQuiz = window.currentActiveQuiz;
     if (analyticsQuiz) analyticsQuiz.analyticsStartEventId ||= window.newPlayerAnalyticsEventId?.();
-    void window.trackPlayerAnalytics?.('question_started', { mode: 'solo', eventId: analyticsQuiz?.analyticsStartEventId });
+    if (!study) void window.trackPlayerAnalytics?.('question_started', { mode: 'solo', eventId: analyticsQuiz?.analyticsStartEventId });
 
     // 等 MathJax 初始化後依序排版，避免快速換題時併發渲染。
     const mathTargets = [questionTextEl, container, whiteboardQuestionEl].filter(Boolean);
     if (window.quizMathTypeset) void window.quizMathTypeset(mathTargets);
     else void window.MathJax?.typesetPromise?.(mathTargets).catch(err => console.warn('[Quiz Math]', err));
 }
+
+window.getQuizInterfaceState=()=>{
+    const container=document.getElementById('options-container'),stem=document.getElementById('question-text');
+    const buttons=Array.from(container?.querySelectorAll('button[id^="option-btn-"]')||[]);
+    const answered=quizHelperState.answered,pending=!answered&&(isAnswering||(window.currentActiveQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.()));
+    return {expectedOptions:Math.min(10,window.currentActiveQuiz?.data?.opts?.length||0),renderedOptions:buttons.length,
+        clickableOptions:buttons.filter(button=>!button.disabled&&typeof button.onclick==='function'&&button.getClientRects().length).length,
+        answerPending:!!pending,mathFallback:!![stem,container].some(node=>node?.querySelector('.quiz-math-fallback')),
+        mathError:!![stem,container].some(node=>node?.querySelector('mjx-merror,.mjx-merror,[data-mjx-error]'))};
+};
+
+window.QAStudyQuestion = createStudyQuestionBridge({
+    userId: () => auth.currentUser?.uid, rankName: () => getRankName(currentUserData?.stats?.rankLevel || 0),
+    render: renderQuiz, answer: handleAnswer, resetWhiteboard: resetQuizWhiteboard, resetHelper: resetQuizHelper,
+    syncTools: syncQuizExtendedPracticeControls, practiceStatus: syncCorrectionPracticeButton,
+    beginSession() {
+        const previous={soloSession,extended:{...extendedPracticeState}};
+        soloSession={active:true,mode:'trial-tower',correctCount:0,wrongCount:0,history:[],currentStep:0};
+        for(const id of ['solo-correct-count','solo-wrong-count']){const el=document.getElementById(id);if(el)el.textContent='0';}
+        Object.assign(extendedPracticeState,{active:false,pending:null,correctionRequests:new Map()});
+        return previous;
+    },
+    endSession(previous,sameOwner) {
+        if(previous&&sameOwner){soloSession=previous.soloSession;Object.assign(extendedPracticeState,previous.extended);}
+        else{soloSession={active:false};Object.assign(extendedPracticeState,{active:false,pending:null,correctionRequests:new Map()});}
+    }
+});
 
 // Open the normal scope editor without recording an answer or changing the streak.
 window.openQuizScopeSettings = () => {
@@ -4169,6 +4272,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
             body: JSON.stringify({
+                ...(quiz.mode==='trial-tower'?{towerRunId:quiz.towerRunId,towerQuestionId:quiz.towerQuestionId}:{}),
                 question: quiz.data.q,
                 options: quiz.data.opts,
                 correctIndex: quiz.data.ans,
@@ -4197,6 +4301,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
             closeReportModal();
             // A late review must not skip the player's newer question.
             if (window.currentActiveQuiz !== quiz) return;
+            if(quiz.mode==='trial-tower'){void quiz.onVerifiedSkip?.();return;}
             syncSoloQuestionCache();
             if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
                 soloQuestionCache.consumeActive({ remember: true });
@@ -4223,21 +4328,23 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
                 currentUserData.stats.totalScore = Number(result.newTotalScore);
                 updateUIStats();
             }
+            if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
             renderReportOutcome({
                 kind: 'approved',
                 title: '審查通過 ✅',
                 message: (result.reason || '題目確認有誤。') +
                     '\n返還修為 ' + refunded + '，額外獎勵 +' + extra +
                     ' 修為；共 +' + (refunded + extra) + ' 修為、100 靈石已入帳。',
-                actionText: '跳過錯題',
+                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
                 onAction: skipVerifiedQuestion
             });
         } else if (result.status === 'duplicate') {
+            if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
             renderReportOutcome({
                 kind: 'approved',
                 title: '此題已通過審查 ✅',
-                message: '先前已領取這道題目的補償，不會重複發放；可以直接跳過錯題。',
-                actionText: '跳過錯題',
+                message: '先前已領取這道題目的補償，不會重複發放；'+(quiz.mode==='trial-tower'?'本回合可返回戰場出招。':'可以直接跳過錯題。'),
+                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
                 onAction: skipVerifiedQuestion
             });
         } else if (result.status === 'rejected') {
@@ -6803,7 +6910,7 @@ window.loadStoreItems = async () => {
             } else if (isOwned) {
                 btnAction = `<button onclick="equipItem('${item.type}', '${pid}', '${item.value}')" class="w-full mt-auto bg-slate-600 hover:bg-slate-500 text-white text-xs py-2 rounded font-bold tracking-wider">${t('btn_equip')}</button>`;
             } else {
-                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded flex items-center justify-center gap-1 font-bold"><i class="fa-solid fa-coins text-yellow-300"></i> ${item.price}</button>`;
+                btnAction = `<button onclick="buyItem('${pid}', ${item.price})" class="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white text-xs py-2 rounded flex items-center justify-center gap-1 font-bold">${globalThis.QAItemIcons?.markup('gold',{size:18})||''} ${item.price}</button>`;
             }
 
             const card = document.createElement('div');

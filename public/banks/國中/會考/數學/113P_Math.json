@@ -1,0 +1,797 @@
+[
+  {
+    "id": "cap-113-math-q1",
+    "difficulty": "easy",
+    "q": "算式 $\\frac{3}{7}$ − (−$\\frac{1}{4}$) 之值為何？\n\n$\\frac{5}{28}$\n$\\frac{4}{11}$",
+    "correct": "$\\frac{19}{28}$",
+    "wrong": [
+      "$\\frac{5}{28}$",
+      "$\\frac{4}{11}$",
+      "$\\frac{2}{3}$"
+    ],
+    "exp": "正確答案：$\\frac{19}{28}$。來源：113年國中教育會考數學第1題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 1,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q2",
+    "difficulty": "easy",
+    "q": "圖( 一) 為一個直三角柱的展開圖，其中三個面被\n標示為甲、乙、丙。將此展開圖摺成直三角柱後，\n判斷下列敘述何者正確？\n圖( 一)\n\n![圖表](/assets/banks/cap-113-math/Q2-figure-1.png)",
+    "correct": "甲與乙平行，甲與丙垂直",
+    "wrong": [
+      "甲與乙平行，甲與丙平行",
+      "甲與乙垂直，甲與丙垂直",
+      "甲與乙垂直，甲與丙平行"
+    ],
+    "exp": "正確答案：甲與乙平行，甲與丙垂直。來源：113年國中教育會考數學第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 2,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q2-figure-1.png"
+    ],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q3",
+    "difficulty": "easy",
+    "q": "5x − 3y = 28  x = a\n3.\t 若二元一次聯立方程式的解為 ，則 a + b 之值為何？\ny = −3x  y = b\n{ {",
+    "correct": "−4",
+    "wrong": [
+      "−28",
+      "−14",
+      "14"
+    ],
+    "exp": "正確答案：−4。來源：113年國中教育會考數學第3題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 3,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q4",
+    "difficulty": "easy",
+    "q": "若想在圖(二)的方格紙上沿著格線畫出坐標平面的 x 軸、\ny 軸並標記原點，且以小方格邊長作為單位長，則下列\n哪一種畫法可在方格紙的範圍內標出 (5, 3 )、 (−4 , −4 )、\n(−3 , 4 )、(3, −5 ) 四點？\n\n![圖表](/assets/banks/cap-113-math/Q4-figure-1.png)",
+    "correct": "![圖表](/assets/banks/cap-113-math/Q4-option-D-figure-1.png)",
+    "wrong": [
+      "![圖表](/assets/banks/cap-113-math/Q4-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-113-math/Q4-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-113-math/Q4-option-C-figure-1.png)"
+    ],
+    "exp": "正確答案：![圖表](/assets/banks/cap-113-math/Q4-option-D-figure-1.png)。來源：113年國中教育會考數學第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 4,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q4-figure-1.png",
+      "/assets/banks/cap-113-math/Q4-option-D-figure-1.png",
+      "/assets/banks/cap-113-math/Q4-option-A-figure-1.png",
+      "/assets/banks/cap-113-math/Q4-option-B-figure-1.png",
+      "/assets/banks/cap-113-math/Q4-option-C-figure-1.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q5",
+    "difficulty": "easy",
+    "q": "阿賢利用便利貼拼成一個聖誕樹圖案，\n\n聖誕樹圖案共有 10 層，每一層由三列\n的便利貼拼成，前 3 層如圖 ( 三 ) 所\n\n示。若同一層中每一列皆比前一列多\n2 張，且每一層第一列皆比前一層第一列\n\n多 2 張，則此聖誕樹圖案由多少張便利貼\n拼成？\n圖( 三)\n\n![圖表](/assets/banks/cap-113-math/Q5-figure-1.png)\n\n\n\n\n\n",
+    "correct": "360",
+    "wrong": [
+      "354",
+      "384",
+      "390"
+    ],
+    "exp": "正確答案：360。來源：113年國中教育會考數學第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 5,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q5-figure-1.png"
+    ],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q6",
+    "difficulty": "medium",
+    "q": "箱內有 50 顆白球和 10 顆紅球，小慧打算從箱內抽球 31 次，每次從箱內\n抽出一球，如果抽出白球則將白球放回箱內，如果抽出紅球則不將紅球放回\n箱內。已知小慧在前 30 次抽球中共抽出紅球 4 次，若她第 31 次抽球時箱內\n的每顆球被抽出的機會相等，則這次她抽出紅球的機率為何？\n$\\frac{5}{12}$\n$\\frac{3}{28}$",
+    "correct": "$\\frac{3}{28}$",
+    "wrong": [
+      "$\\frac{1}{5}$",
+      "$\\frac{1}{6}$",
+      "$\\frac{5}{12}$"
+    ],
+    "exp": "正確答案：$\\frac{3}{28}$。來源：113年國中教育會考數學第6題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 6,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q7",
+    "difficulty": "medium",
+    "q": "圖( 四) 圖( 五) 圖( 六)\n圖 ( 四 ) 有 A、  B 兩種圖案，其中 A 經過上下翻轉後與 B 相同，且圖案的\n外圍是正方形，圖( 五) 是將四個 A 圖以緊密且不重疊的方式排列成大正方形，\n圖( 六) 是將兩個 A 圖與兩個 B 圖以緊密且不重疊的方式排列成大正方形。\n判斷圖( 五)、  圖( 六) 是否為線對稱圖形？\n\n![圖表](/assets/banks/cap-113-math/Q7-figure-1.png)\n\n\n\n\n\n",
+    "correct": "圖( 五) 不是，圖( 六) 是",
+    "wrong": [
+      "圖( 五)、圖( 六) 皆是",
+      "圖( 五)、圖( 六) 皆不是",
+      "圖( 五) 是，圖( 六) 不是"
+    ],
+    "exp": "正確答案：圖( 五) 不是，圖( 六) 是。來源：113年國中教育會考數學第7題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 7,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q7-figure-1.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q8",
+    "difficulty": "medium",
+    "q": "若 a = 3.2 × 10<sup>−5</sup>， b = 7.5 × 10<sup>−5</sup>， c = 6.3 × 10<sup>−6</sup>，則 a、 b、c 三數的大小關係\n為何？",
+    "correct": "c < a < b",
+    "wrong": [
+      "a < b < c",
+      "a < c < b",
+      "c < b < a"
+    ],
+    "exp": "正確答案：c < a < b。來源：113年國中教育會考數學第8題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 8,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q9",
+    "difficulty": "easy",
+    "q": "癌症分期是為了區別惡性腫瘤影響人體健康的程度，某國統計 2011 年確診\n四種癌症一到四期的患者在 3 年後存活的比率 ( 3 年存活率 )，並依據癌症\n類別與不同分期將資料整理成圖( 七)。\n\n圖( 七)\n甲、乙兩人對該國 2011 年確診上述四種癌症的患者提出看法如下：\n( 甲) 一到四期的乳癌患者的 3 年存活率皆高於 50%\n( 乙) 在這四種癌症中，三期與四期的 3 年存活率相差最多的是胃癌\n對於甲、乙兩人的看法，下列判斷何者正確？\n\n![圖表](/assets/banks/cap-113-math/Q9-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\n",
+    "correct": "甲正確，乙錯誤",
+    "wrong": [
+      "甲、乙皆正確",
+      "甲、乙皆錯誤",
+      "甲錯誤，乙正確"
+    ],
+    "exp": "正確答案：甲正確，乙錯誤。來源：113年國中教育會考數學第9題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 9,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q9-figure-1.png"
+    ],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q10",
+    "difficulty": "medium",
+    "q": "下列何者為多項式 5x ( 5x −2 ) − 4( 5x −2 )<sup>2</sup>的因式分解？",
+    "correct": "( 5x − 2 )( −15x + 8 )",
+    "wrong": [
+      "( 5x − 2 )( 25x − 8 )",
+      "( 5x − 2 )( 5x − 4 )",
+      "( 5x − 2 )( −20x + 4 )"
+    ],
+    "exp": "正確答案：( 5x − 2 )( −15x + 8 )。來源：113年國中教育會考數學第10題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 10,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q11",
+    "difficulty": "medium",
+    "q": "將 $\\frac{9}{4 − \\sqrt{7}}$化簡為 a + b$\\sqrt{7}$，其中 a、b 為整數，求 a + b 之值為何？",
+    "correct": "5",
+    "wrong": [
+      "3",
+      "−9",
+      "−15"
+    ],
+    "exp": "正確答案：5。來源：113年國中教育會考數學第11題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 11,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q12",
+    "difficulty": "medium",
+    "q": "甲、乙兩個二次函數分別為 y = ( x + 20 )<sup>2</sup> + 60、y = − ( x − 30 )<sup>2</sup> + 60，判斷\n下列敘述何者正確？",
+    "correct": "乙有最大值，且其值為 x = 30 時的 y 值",
+    "wrong": [
+      "甲有最大值，且其值為 x = 20 時的 y 值",
+      "甲有最小值，且其值為 x = 20 時的 y 值",
+      "乙有最小值，且其值為 x = 30 時的 y 值"
+    ],
+    "exp": "正確答案：乙有最大值，且其值為 x = 30 時的 y 值。來源：113年國中教育會考數學第12題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 12,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q13",
+    "difficulty": "medium",
+    "q": "圖( 八) 為阿成調整他的電腦畫面的解析度時看到的選項，當他從建議選項\n1920 × 1080 調整成 1400 × 1050 時，  由於比例改變( 1920：  1080 ≠ 1400：  1050 )，\n畫面左右會出現黑色區域，當比例不變就不會有此問題。判斷阿成將他的\n電腦畫面解析度從 1920 × 1080 調整成下列哪一種時，畫面左右不會出現\n解析度\n黑色區域？\n\n圖( 八)\n\n![圖表](/assets/banks/cap-113-math/Q13-figure-1.png)",
+    "correct": "1600 × 900",
+    "wrong": [
+      "1680 × 1050",
+      "1440 × 900",
+      "1280 × 1024"
+    ],
+    "exp": "正確答案：1600 × 900。來源：113年國中教育會考數學第13題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 13,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q13-figure-1.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q14",
+    "difficulty": "medium",
+    "q": "小玲搭飛機出國旅遊，已知她搭飛機產生的\n碳排放量為 800 公斤，為了彌補這些碳排放量，\n她決定上下班時從駕駛汽車改成搭公車。依據\n圖( 九) 的資訊，假設小玲每日上下班駕駛汽車\n或搭公車的來回總距離皆為 20 公里，則與\n駕駛汽車相比，她至少要改搭公車上下班幾天，\n減少產生的碳排放量才會超過她搭飛機產生的\n圖( 九)\n碳排放量？\n\n![圖表](/assets/banks/cap-113-math/Q14-figure-1.png)",
+    "correct": "308 天",
+    "wrong": [
+      "310 天",
+      "309 天",
+      "307 天"
+    ],
+    "exp": "正確答案：308 天。來源：113年國中教育會考數學第14題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 14,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q14-figure-1.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q15",
+    "difficulty": "medium",
+    "q": "甲、乙兩個最簡分數分別為 $\\frac{10}{a}$、$\\frac{18}{b}$，其中 a、b 為正整數。若將甲、乙通分\n\n化成相同的分母後，甲的分子變為 50，乙的分子變為 54，則下列關於 a 的\n敘述，何者正確？",
+    "correct": "a 是 3 的倍數，但不是 5 的倍數",
+    "wrong": [
+      "a 是 3 的倍數，也是 5 的倍數",
+      "a 是 5 的倍數，但不是 3 的倍數",
+      "a 不是 3 的倍數，也不是 5 的倍數"
+    ],
+    "exp": "正確答案：a 是 3 的倍數，但不是 5 的倍數。來源：113年國中教育會考數學第15題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 15,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q16",
+    "difficulty": "medium",
+    "q": "有研究報告指出，1880 年至 2020 年全球平均氣溫上升趨勢約為每十年上升\n0.08 ℃。已知 2020 年全球平均氣溫為 14.88 ℃，假設未來的全球平均氣溫\n上升趨勢與上述趨勢相同，且每年上升的度數相同，則預估 2020 年之後第 x 年\n的全球平均氣溫為多少 ℃ ？( 以 x 表示)",
+    "correct": "14.88 + 0.008x",
+    "wrong": [
+      "14.88 + 0.08x",
+      "14.88 + 0.08 [ x + ( 2020 − 1880 )]",
+      "14.88 + 0.008 [ x + ( 2020 − 1880 )]"
+    ],
+    "exp": "正確答案：14.88 + 0.008x。來源：113年國中教育會考數學第16題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 16,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q17",
+    "difficulty": "medium",
+    "q": "∆ABC 中，∠B = 55°， ∠C = 65°。今分別以 B、C 為圓心，BC 長為半徑\n畫圓B 、圓 C，關於 A 點位置，下列敘述何者正確？",
+    "correct": "在圓 B 外部，在圓 C 內部",
+    "wrong": [
+      "在圓 B 外部，在圓 C 外部",
+      "在圓 B 內部，在圓 C 內部",
+      "在圓 B 內部，在圓 C 外部"
+    ],
+    "exp": "正確答案：在圓 B 外部，在圓 C 內部。來源：113年國中教育會考數學第17題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 17,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q18",
+    "difficulty": "medium",
+    "q": "如圖( 十)，平行四邊形 ABCD 與平行四邊形 EFGH 全等，且 A、 B、 C、D\n的對應頂點分別是 H、  E、  F、  G，  其中 E 在 DC 上，  F 在 BC 上，  C 在 FG 上。\n若 AB = 7，AD = 5，FC = 3，則四邊形 ECGH 的周長為何？\n\n圖( 十)\n\n![圖表](/assets/banks/cap-113-math/Q18-figure-1.png)",
+    "correct": "21",
+    "wrong": [
+      "20",
+      "19",
+      "18"
+    ],
+    "exp": "正確答案：21。來源：113年國中教育會考數學第18題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 18,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q18-figure-1.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q19",
+    "difficulty": "medium",
+    "q": "圖 ( 十一 ) 的數線上有 A(−2)、O(0)、B(2) 三點。今打算在此數線上標示\nP ( p)、  Q(q) 兩點，且 p、  q 互為倒數，  若 P 在 A 的左側，  則下列敘述何者正確？\n圖( 十一)",
+    "correct": "Q 在 AO 上，且 AQ > QO",
+    "wrong": [
+      "Q 在 AO 上，且 AQ < QO",
+      "Q 在 OB 上，且 OQ < QB",
+      "Q 在 OB 上，且 OQ > QB"
+    ],
+    "exp": "正確答案：Q 在 AO 上，且 AQ > QO。來源：113年國中教育會考數學第19題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 19,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q20",
+    "difficulty": "medium",
+    "q": "四邊形 ABCD 中，  E、F 兩點在 BC 上，G 點\n在 AD 上，各點位置如圖( 十二) 所示。連接\nGE、  GF 後，  根據圖(十二)中標示的角與角度，\n判斷下列關係何者正確？\n圖( 十二)\n\n![圖表](/assets/banks/cap-113-math/Q20-figure-1.png)",
+    "correct": "∠1 + ∠4 > ∠2 + ∠3",
+    "wrong": [
+      "∠1 + ∠2 < ∠3 + ∠4",
+      "∠1 + ∠2 > ∠3 + ∠4",
+      "∠1 + ∠4 < ∠2 + ∠3"
+    ],
+    "exp": "正確答案：∠1 + ∠4 > ∠2 + ∠3。來源：113年國中教育會考數學第20題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 20,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q20-figure-1.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q21",
+    "difficulty": "hard",
+    "q": "如圖( 十三)，AC、BD 皆為半圓，AC 與 BD 相交於 E 點，其中 A、 B、C、\nD 在同一直線上，且 B 為 AC 的中點。若 CE = 58°，則 BE 的度數為何？\n\n圖( 十三)\n\n![圖表](/assets/banks/cap-113-math/Q21-figure-1.png)",
+    "correct": "64",
+    "wrong": [
+      "58",
+      "60",
+      "62"
+    ],
+    "exp": "正確答案：64。來源：113年國中教育會考數學第21題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 21,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q21-figure-1.png"
+    ],
+    "passRate": 0.38,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q22",
+    "difficulty": "hard",
+    "q": "如圖( 十四)，ΔABC 內部有一點 D，且 ΔDAB、ΔDBC、ΔDCA 的面積\n分別為 5、4、3 。若 ΔABC 的重心為 G，則下列敘述何者正確？\n\n圖( 十四)\n\n![圖表](/assets/banks/cap-113-math/Q22-figure-1.png)",
+    "correct": "ΔGBC 與 ΔDBC 的面積相同，且 DG 與 BC 平行",
+    "wrong": [
+      "ΔGBC 與 ΔDBC 的面積相同，且 DG 與 BC 不平行",
+      "ΔGCA 與 ΔDCA 的面積相同，且 DG 與 AC 平行",
+      "ΔGCA 與 ΔDCA 的面積相同，且 DG 與 AC 不平行"
+    ],
+    "exp": "正確答案：ΔGBC 與 ΔDBC 的面積相同，且 DG 與 BC 平行。來源：113年國中教育會考數學第22題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 22,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q22-figure-1.png"
+    ],
+    "passRate": 0.34,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q23",
+    "difficulty": "hard",
+    "q": "如圖( 十五)，等腰梯形紙片 ABCD 中，AD // BC，AB = DC，∠B = ∠C，\n且 E 點在 BC 上，DE // AB。今以 DE 為摺線將 C 點向左摺後，C 點恰落在\nAB 上，如圖( 十六) 所示。若 CE = 2，DE = 4，則圖( 十六) 的 BC 與 AC\n\n的長度比為何？\n圖( 十五) 圖( 十六)\n\n![圖表](/assets/banks/cap-113-math/Q23-figure-1.png)\n\n",
+    "correct": "1：3",
+    "wrong": [
+      "1：2",
+      "2：3",
+      "3：5"
+    ],
+    "exp": "正確答案：1：3。來源：113年國中教育會考數學第23題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 23,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-113-math/Q23-figure-1.png"
+    ],
+    "passRate": 0.3,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q24",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n體重為衡量個人健康的重要指標之一，表（一）為成年人利用身高（公尺）計算理想體重（公斤）的三種方式。由於這些計算方式沒有考慮脂肪及肌肉重量占體重的比例，因此結果僅供參考。設身高為 $h$ 公尺。\n| 算法 | 女性理想體重（公斤） | 男性理想體重（公斤） |\n| ① | $h^2\\times22$ | $h^2\\times22$ |\n| ② | $(100h-70)\\times0.6$ | $(100h-80)\\times0.7$ |\n| ③ | $(100h-158)\\times0.5+52$ | $(100h-170)\\times0.6+62$ |\n\n以下為甲、乙兩個關於成年女性理想體重的敘述：\n（甲）有的女性使用算法①與算法②算出的理想體重會相同。\n（乙）有的女性使用算法②與算法③算出的理想體重會相同。\n對於甲、乙兩個敘述，下列判斷何者正確？",
+    "correct": "甲錯誤，乙正確",
+    "wrong": [
+      "甲、乙皆正確",
+      "甲、乙皆錯誤",
+      "甲正確，乙錯誤"
+    ],
+    "exp": "正確答案：甲錯誤，乙正確。來源：113年國中教育會考數學第24題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 24,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.35,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-113-math-q25",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n體重為衡量個人健康的重要指標之一，表（一）為成年人利用身高（公尺）計算理想體重（公斤）的三種方式。由於這些計算方式沒有考慮脂肪及肌肉重量占體重的比例，因此結果僅供參考。設身高為 $h$ 公尺。\n| 算法 | 女性理想體重（公斤） | 男性理想體重（公斤） |\n| ① | $h^2\\times22$ | $h^2\\times22$ |\n| ② | $(100h-70)\\times0.6$ | $(100h-80)\\times0.7$ |\n| ③ | $(100h-158)\\times0.5+52$ | $(100h-170)\\times0.6+62$ |\n\n無論我們使用哪一種算法計算理想體重，都可將個人的實際體重歸類為表（二）的其中一種類別。\n| 實際體重 | 類別 |\n| 大於理想體重的120% | 肥胖 |\n| 介於理想體重的110%～120% | 過重 |\n| 介於理想體重的90%～110% | 正常 |\n| 介於理想體重的80%～90% | 過輕 |\n| 小於理想體重的80% | 消瘦 |\n當身高1.8公尺的成年男性使用算法②計算理想體重並根據表（二）歸類，實際體重介於 $70\\times90\\%$ 公斤至 $70\\times110\\%$ 公斤之間會被歸類為正常。若將上述身高1.8公尺且實際體重被歸類為正常的成年男性，重新以算法③計算理想體重並根據表（二）歸類，則所有可能被歸類的類別為何？",
+    "correct": "正常、過重",
+    "wrong": [
+      "正常",
+      "正常、過輕",
+      "正常、過重、過輕"
+    ],
+    "exp": "正確答案：正常、過重。來源：113年國中教育會考數學第25題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-113-math",
+      "question": 25,
+      "file": "國中/會考/數學/113P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1toVPl4rjebXO_zZAHN9ZpzoHGCIqdmHF/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1cWlogP9FBRX1eD5kjgVDP2_6f8VCLSB4/view?usp=drive_link",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.33,
+    "passRateSource": "https://drive.google.com/file/d/1NpFiGL8A6KVR-Hyn_M7u1JhvXNOTqPOr/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  }
+]

@@ -1,0 +1,1378 @@
+[
+  {
+    "id": "cap-110-english-q1",
+    "difficulty": "easy",
+    "q": "In the picture, the boy is       the old man.\n\n![圖表](/assets/banks/cap-110-english/Q1-figure-1.png)",
+    "correct": "bowing to",
+    "wrong": [
+      "smiling at",
+      "dancing with",
+      "cheering for"
+    ],
+    "exp": "正確答案：bowing to。來源：110年國中教育會考英語閱讀第1題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 1,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/Q1-figure-1.png"
+    ],
+    "passRate": 0.94,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q2",
+    "difficulty": "easy",
+    "q": "Listen!  The baby       in the bedroom.  Why don’t you go in and take a look?",
+    "correct": "is crying",
+    "wrong": [
+      "cried",
+      "cries",
+      "will cry"
+    ],
+    "exp": "正確答案：is crying。來源：110年國中教育會考英語閱讀第2題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 2,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.86,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q3",
+    "difficulty": "easy",
+    "q": "Jill is       that the city park is closed for the music festival because now she can’t\njog there.",
+    "correct": "unhappy",
+    "wrong": [
+      "excited",
+      "proud",
+      "scared"
+    ],
+    "exp": "正確答案：unhappy。來源：110年國中教育會考英語閱讀第3題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 3,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q4",
+    "difficulty": "easy",
+    "q": "Steven wants to be a      , because he loves to watch people enjoy the food he prepares.",
+    "correct": "cook",
+    "wrong": [
+      "doctor",
+      "driver",
+      "farmer"
+    ],
+    "exp": "正確答案：cook。來源：110年國中教育會考英語閱讀第4題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 4,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q5",
+    "difficulty": "easy",
+    "q": "Paul misses his parents a lot.  He       them since he came to work in Taiwan a\nyear ago.",
+    "correct": "hasn’t seen",
+    "wrong": [
+      "didn’t see",
+      "doesn’t see",
+      "won’t see"
+    ],
+    "exp": "正確答案：hasn’t seen。來源：110年國中教育會考英語閱讀第5題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 5,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q6",
+    "difficulty": "easy",
+    "q": "Our teacher Ms. Wu seldom laughs, but when she      , everyone in the same\nbuilding can hear her.",
+    "correct": "does",
+    "wrong": [
+      "can",
+      "has",
+      "will"
+    ],
+    "exp": "正確答案：does。來源：110年國中教育會考英語閱讀第6題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 6,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q7",
+    "difficulty": "medium",
+    "q": "My sister is coming to my home today.  She       with me for a week.",
+    "correct": "will stay",
+    "wrong": [
+      "stays",
+      "stayed",
+      "has stayed"
+    ],
+    "exp": "正確答案：will stay。來源：110年國中教育會考英語閱讀第7題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 7,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q8",
+    "difficulty": "medium",
+    "q": "Edward had worked as a computer engineer for ten years.  This       helped him a\nlot when he started his own computer shop.",
+    "correct": "experience",
+    "wrong": [
+      "chance",
+      "hobby",
+      "knowledge"
+    ],
+    "exp": "正確答案：experience。來源：110年國中教育會考英語閱讀第8題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 8,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q9",
+    "difficulty": "medium",
+    "q": "If you’re interested in our business plan,       this number and ask for Ms. Lee.\nShe’ll answer your questions.",
+    "correct": "call",
+    "wrong": [
+      "calling",
+      "and call",
+      "to call"
+    ],
+    "exp": "正確答案：call。來源：110年國中教育會考英語閱讀第9題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 9,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q10",
+    "difficulty": "medium",
+    "q": "Jimmy would not get up for breakfast,       his dad had already tried to pull him\nfrom his bed several times.",
+    "correct": "although",
+    "wrong": [
+      "because",
+      "if",
+      "until"
+    ],
+    "exp": "正確答案：although。來源：110年國中教育會考英語閱讀第10題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 10,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q11",
+    "difficulty": "easy",
+    "q": "Duncan spent all his money trying to       the bookstore his mom left him.  Sadly,\nthe business never got better, and he had to close it in the end.",
+    "correct": "save",
+    "wrong": [
+      "build",
+      "buy",
+      "start"
+    ],
+    "exp": "正確答案：save。來源：110年國中教育會考英語閱讀第11題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 11,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q12",
+    "difficulty": "easy",
+    "q": "Fiona loves listening to her children sing songs       at school.",
+    "correct": "they learned",
+    "wrong": [
+      "are learned",
+      "that learned",
+      "that they are learned"
+    ],
+    "exp": "正確答案：they learned。來源：110年國中教育會考英語閱讀第12題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 12,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q13",
+    "difficulty": "easy",
+    "q": "Beverly eats lots of snacks       meals.  That’s why she is often too full to eat\nanything at mealtimes.",
+    "correct": "between",
+    "wrong": [
+      "after",
+      "during",
+      "from"
+    ],
+    "exp": "正確答案：between。來源：110年國中教育會考英語閱讀第13題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 13,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q14",
+    "difficulty": "easy",
+    "q": "Nora: Can I check your drawer for some tools we can use?\nMatt: Sure.  Take a look.  See if you can find       in there.",
+    "correct": "any",
+    "wrong": [
+      "it",
+      "others",
+      "those"
+    ],
+    "exp": "正確答案：any。來源：110年國中教育會考英語閱讀第14題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 14,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q15",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n(15-16)\n![圖表](/assets/banks/cap-110-english/G15-16-figure-4.png)\n![圖表](/assets/banks/cap-110-english/G15-16-figure-1.png)\n\n\n\n\n\n\nWe’ve prepared many wonderful surprises for you at e-BeautiMed, BeautiMed’s\nonline store!\n![圖表](/assets/banks/cap-110-english/G15-16-figure-10.png)\nJoin “BeautiMed Friend” online for free and get 2000\nBeautiMed points!\n\nAlready a “BeautiMed Friend” ?  Come collect your free\ngift by entering your “BeautiMed Friend” card number at\ne-BeautiMed before 8/31.\n![圖表](/assets/banks/cap-110-english/G15-16-figure-11.png)\nGet 500 BeautiMed points by shopping at e-BeautiMed and\nyou’ll get 500 more points if you spend more than \\$1,000.\n\nShop at e-BeautiMed during 7/1-8/31 and you may win \\$5,000\nor free movie tickets!\n\nInvite a friend to join “BeautiMed Friend” and you both can\nget 1000 points each!\n![圖表](/assets/banks/cap-110-english/G15-16-figure-14.png)\n\nWhat is this ad for?",
+    "correct": "Telling people they can shop at BeautiMed on the Internet now.",
+    "wrong": [
+      "Teaching people how to use their BeautiMed points.",
+      "Inviting people to share their shopping experience at e-BeautiMed.",
+      "Letting people know what is on sale at e-BeautiMed from 7/1 to 8/31."
+    ],
+    "exp": "正確答案：Telling people they can shop at BeautiMed on the Internet now.。來源：110年國中教育會考英語閱讀第15題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 15,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        15,
+        16
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G15-16-figure-4.png",
+      "/assets/banks/cap-110-english/G15-16-figure-1.png",
+      "/assets/banks/cap-110-english/G15-16-figure-10.png",
+      "/assets/banks/cap-110-english/G15-16-figure-11.png",
+      "/assets/banks/cap-110-english/G15-16-figure-14.png"
+    ],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(15-16)\n![圖表](/assets/banks/cap-110-english/G15-16-figure-4.png)\n![圖表](/assets/banks/cap-110-english/G15-16-figure-1.png)\n\n\n\n\n\n\nWe’ve prepared many wonderful surprises for you at e-BeautiMed, BeautiMed’s\nonline store!\n![圖表](/assets/banks/cap-110-english/G15-16-figure-10.png)\nJoin “BeautiMed Friend” online for free and get 2000\nBeautiMed points!\n\nAlready a “BeautiMed Friend” ?  Come collect your free\ngift by entering your “BeautiMed Friend” card number at\ne-BeautiMed before 8/31.\n![圖表](/assets/banks/cap-110-english/G15-16-figure-11.png)\nGet 500 BeautiMed points by shopping at e-BeautiMed and\nyou’ll get 500 more points if you spend more than \\$1,000.\n\nShop at e-BeautiMed during 7/1-8/31 and you may win \\$5,000\nor free movie tickets!\n\nInvite a friend to join “BeautiMed Friend” and you both can\nget 1000 points each!\n![圖表](/assets/banks/cap-110-english/G15-16-figure-14.png)\n\nWhat will NOT get you BeautiMed points?",
+    "correct": "Entering the “BeautiMed Friend” card number.",
+    "wrong": [
+      "Shopping at e-BeautiMed.",
+      "Joining “BeautiMed Friend” online.",
+      "Inviting a friend to join “BeautiMed Friend.”"
+    ],
+    "exp": "正確答案：Entering the “BeautiMed Friend” card number.。來源：110年國中教育會考英語閱讀第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 16,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        15,
+        16
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G15-16-figure-4.png",
+      "/assets/banks/cap-110-english/G15-16-figure-1.png",
+      "/assets/banks/cap-110-english/G15-16-figure-10.png",
+      "/assets/banks/cap-110-english/G15-16-figure-11.png",
+      "/assets/banks/cap-110-english/G15-16-figure-14.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q17",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(17-18)\nJoey: L ynn, have you tried Caldron?  I’ve heard that restaurant is good.\nLynn: I  have.  I went there once for Tom’s party.\nJoey: A nd?\nLynn: W ell, I never thought I would have to cook for myself when eating out.\nJoey: B ut it’s fun to cook your own food.\nLynn: I  don’t see any fun in that.  Besides, I want nice food.\nJoey: S o you didn’t like the food there?\nLynn: Everything tasted the same.  I mean, they were all cooked in the same boiling\npot.  How could they taste different?  I just kept throwing strange things into\nthe pot.  I didn’t even know what half the things were made of.\nJoey: D on’t worry.  Everything should be safe to eat after a hot bath in the pot.\nAnd you didn’t get sick after that, right?  Besides, you tried something\ndifferent there.  Still a good experience, I think?\nLynn: I  don’t think we share the same idea of good experiences.\n\nLynn took some photos at Tom’s party.  Which is most likely one of them?",
+    "correct": "![圖表](/assets/banks/cap-110-english/Q17-option-B-figure-1.png)\n![圖表](/assets/banks/cap-110-english/Q17-option-B-figure-2.png)",
+    "wrong": [
+      "![圖表](/assets/banks/cap-110-english/Q17-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-110-english/Q17-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-110-english/Q17-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：![圖表](/assets/banks/cap-110-english/Q17-option-B-figure-1.png)\n![圖表](/assets/banks/cap-110-english/Q17-option-B-figure-2.png)。來源：110年國中教育會考英語閱讀第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 17,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        17,
+        18
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/Q17-option-B-figure-1.png",
+      "/assets/banks/cap-110-english/Q17-option-B-figure-2.png",
+      "/assets/banks/cap-110-english/Q17-option-A-figure-1.png",
+      "/assets/banks/cap-110-english/Q17-option-C-figure-1.png",
+      "/assets/banks/cap-110-english/Q17-option-D-figure-1.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q18",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(17-18)\nJoey: L ynn, have you tried Caldron?  I’ve heard that restaurant is good.\nLynn: I  have.  I went there once for Tom’s party.\nJoey: A nd?\nLynn: W ell, I never thought I would have to cook for myself when eating out.\nJoey: B ut it’s fun to cook your own food.\nLynn: I  don’t see any fun in that.  Besides, I want nice food.\nJoey: S o you didn’t like the food there?\nLynn: Everything tasted the same.  I mean, they were all cooked in the same boiling\npot.  How could they taste different?  I just kept throwing strange things into\nthe pot.  I didn’t even know what half the things were made of.\nJoey: D on’t worry.  Everything should be safe to eat after a hot bath in the pot.\nAnd you didn’t get sick after that, right?  Besides, you tried something\ndifferent there.  Still a good experience, I think?\nLynn: I  don’t think we share the same idea of good experiences.\n\nWhat can we learn about Lynn from the dialogue?",
+    "correct": "She did not enjoy the food at Caldron.",
+    "wrong": [
+      "She does not cook.",
+      "She likes to try new food.",
+      "She changed Joey’s idea about Caldron."
+    ],
+    "exp": "正確答案：She did not enjoy the food at Caldron.。來源：110年國中教育會考英語閱讀第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 18,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        17,
+        18
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q19",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(19-21)\nBelow is a page from Katie’s diary.\n【原卷閱讀資料】\nDear Diary, a June 7, 20717\n\n| was very sad to hear what happened to Woollie yesterday.\nWoollie was my favorite sheep. | have a storybook about Woollie.\nIt says when Woollie was four, he ran away from Mr. Armstrong’s\nfarm, and it took Mr. Armstrong six years to find Woollie. But\nWoollie had grown so much fleece that he didn’t even look like a\nsheep. Mr. Armstrong decided to cut his fleece on TV so everyone\ncould see. Daddy said this happened on the day | was born.\nWoollie’s fleece weighed 27 kg, and could make clothes for 20 large\nmen. | asked Daddy if his favorite vest was made from Woollie’s\nfleece. Daddy said no, because Woollie’s fleece was sold to collect\nmoney for sick kids. In the storybook, Woollie was taken to see\nMs. Stella Clark, the leader of our city then. They even had tea\ntogether. Daddy said Woollie did meet Ms. Clark, but he wasn’t\nsure if they had tea. Daddy said Woollie was put down because he\nwas too sick and there was no way to help him. | cried. | hope\nWoollie will be happy up there in the sky.\n\nfleece ¥& weigh Ei\n\nWhat do we know about Woollie from Katie’s diary?",
+    "correct": "Woollie was older than Katie.",
+    "wrong": [
+      "Woollie was taken to visit sick kids.",
+      "Woollie was sick when he ran away.",
+      "Woollie looked strange without his fel ece."
+    ],
+    "exp": "正確答案：Woollie was older than Katie.。來源：110年國中教育會考英語閱讀第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 19,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        19,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q20",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(19-21)\nBelow is a page from Katie’s diary.\n【原卷閱讀資料】\nDear Diary, a June 7, 20717\n\n| was very sad to hear what happened to Woollie yesterday.\nWoollie was my favorite sheep. | have a storybook about Woollie.\nIt says when Woollie was four, he ran away from Mr. Armstrong’s\nfarm, and it took Mr. Armstrong six years to find Woollie. But\nWoollie had grown so much fleece that he didn’t even look like a\nsheep. Mr. Armstrong decided to cut his fleece on TV so everyone\ncould see. Daddy said this happened on the day | was born.\nWoollie’s fleece weighed 27 kg, and could make clothes for 20 large\nmen. | asked Daddy if his favorite vest was made from Woollie’s\nfleece. Daddy said no, because Woollie’s fleece was sold to collect\nmoney for sick kids. In the storybook, Woollie was taken to see\nMs. Stella Clark, the leader of our city then. They even had tea\ntogether. Daddy said Woollie did meet Ms. Clark, but he wasn’t\nsure if they had tea. Daddy said Woollie was put down because he\nwas too sick and there was no way to help him. | cried. | hope\nWoollie will be happy up there in the sky.\n\nfleece ¥& weigh Ei\n\nWhich picture of Woollie and Ms. Clark did Katie talk about in her diary?",
+    "correct": "![圖表](/assets/banks/cap-110-english/Q20-option-C-figure-1.png)",
+    "wrong": [
+      "![圖表](/assets/banks/cap-110-english/Q20-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-110-english/Q20-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-110-english/Q20-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：![圖表](/assets/banks/cap-110-english/Q20-option-C-figure-1.png)。來源：110年國中教育會考英語閱讀第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 20,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        19,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/Q20-option-C-figure-1.png",
+      "/assets/banks/cap-110-english/Q20-option-A-figure-1.png",
+      "/assets/banks/cap-110-english/Q20-option-B-figure-1.png",
+      "/assets/banks/cap-110-english/Q20-option-D-figure-1.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q21",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(19-21)\nBelow is a page from Katie’s diary.\n【原卷閱讀資料】\nDear Diary, a June 7, 20717\n\n| was very sad to hear what happened to Woollie yesterday.\nWoollie was my favorite sheep. | have a storybook about Woollie.\nIt says when Woollie was four, he ran away from Mr. Armstrong’s\nfarm, and it took Mr. Armstrong six years to find Woollie. But\nWoollie had grown so much fleece that he didn’t even look like a\nsheep. Mr. Armstrong decided to cut his fleece on TV so everyone\ncould see. Daddy said this happened on the day | was born.\nWoollie’s fleece weighed 27 kg, and could make clothes for 20 large\nmen. | asked Daddy if his favorite vest was made from Woollie’s\nfleece. Daddy said no, because Woollie’s fleece was sold to collect\nmoney for sick kids. In the storybook, Woollie was taken to see\nMs. Stella Clark, the leader of our city then. They even had tea\ntogether. Daddy said Woollie did meet Ms. Clark, but he wasn’t\nsure if they had tea. Daddy said Woollie was put down because he\nwas too sick and there was no way to help him. | cried. | hope\nWoollie will be happy up there in the sky.\n\nfleece ¥& weigh Ei\n\nWhat happened when Woollie was put down?",
+    "correct": "He died.",
+    "wrong": [
+      "He was sold.",
+      "He couldn’t be found.",
+      "He became famous."
+    ],
+    "exp": "正確答案：He died.。來源：110年國中教育會考英語閱讀第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 21,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        19,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/1hfOMmh6c_zmNNXIEkjnCdtZcx-QMfY3a/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q22",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(22-24)\n![圖表](/assets/banks/cap-110-english/G22-24-figure-1.png)\nHere’s The Piano Lesson, one of Henri\nMatisse’s most famous paintings.  The boy in\nthe picture is the painter’s son, Pierre.  In the\npicture, Pierre looks quite serious.  Why?  Well,\nlook at the yellow candle on the red piano.  It’s\nalmost burned down.  So maybe Pierre has\nalready practiced for hours.  And Matisse uses a\nlot of gray, not a very fun color, right?  It shows\nhow the poor kid feels, don’t you think?\nOn the top right corner, you can see a woman\nsitting straight on a seat.  Is she Pierre’s piano\nteacher?  Or his mother?  Well, if you’re a\nMatisse fan, you’ll know this is in fact another\npainting by him, Woman on a High Stool.   Interesting, right?  Matisse likes to do that\na lot.  In fact, there’s another work by Matisse in the picture.  Did you find it?  Right!\nThe sculpture on the bottom left corner!\nMatisse painted this picture in 1916.  Pierre was already 16 then, but the artist\n![圖表](/assets/banks/cap-110-english/G22-24-figure-3.png)\npainted his son much younger than he really was.  Pierre\nhad gone away to be a soldier, and Matisse didn’t know\nwhether he would come back.  Maybe this is a worried\nfather’s way to remember the good old days.\n![圖表](/assets/banks/cap-110-english/G22-24-figure-2.png)\n\nWhat can we learn about The Piano Lesson from the reading?",
+    "correct": "Matisse painted it when his son was away from home.",
+    "wrong": [
+      "The woman who sits on a seat behind the boy is his mother.",
+      "Matisse uses yellow and red to show that his son was happy.",
+      "The candle on the piano shows that the piano lesson has just begun."
+    ],
+    "exp": "正確答案：Matisse painted it when his son was away from home.。來源：110年國中教育會考英語閱讀第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 22,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G22-24-figure-1.png",
+      "/assets/banks/cap-110-english/G22-24-figure-3.png",
+      "/assets/banks/cap-110-english/G22-24-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(22-24)\n![圖表](/assets/banks/cap-110-english/G22-24-figure-1.png)\nHere’s The Piano Lesson, one of Henri\nMatisse’s most famous paintings.  The boy in\nthe picture is the painter’s son, Pierre.  In the\npicture, Pierre looks quite serious.  Why?  Well,\nlook at the yellow candle on the red piano.  It’s\nalmost burned down.  So maybe Pierre has\nalready practiced for hours.  And Matisse uses a\nlot of gray, not a very fun color, right?  It shows\nhow the poor kid feels, don’t you think?\nOn the top right corner, you can see a woman\nsitting straight on a seat.  Is she Pierre’s piano\nteacher?  Or his mother?  Well, if you’re a\nMatisse fan, you’ll know this is in fact another\npainting by him, Woman on a High Stool.   Interesting, right?  Matisse likes to do that\na lot.  In fact, there’s another work by Matisse in the picture.  Did you find it?  Right!\nThe sculpture on the bottom left corner!\nMatisse painted this picture in 1916.  Pierre was already 16 then, but the artist\n![圖表](/assets/banks/cap-110-english/G22-24-figure-3.png)\npainted his son much younger than he really was.  Pierre\nhad gone away to be a soldier, and Matisse didn’t know\nwhether he would come back.  Maybe this is a worried\nfather’s way to remember the good old days.\n![圖表](/assets/banks/cap-110-english/G22-24-figure-2.png)\n\nWhat does do that mean in the reading?",
+    "correct": "Put his earlier art work in a new painting.",
+    "wrong": [
+      "Put his family in his paintings.",
+      "Paint to remember the good old days.",
+      "Use a lot of fun colors in his art works."
+    ],
+    "exp": "正確答案：Put his earlier art work in a new painting.。來源：110年國中教育會考英語閱讀第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 23,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G22-24-figure-1.png",
+      "/assets/banks/cap-110-english/G22-24-figure-3.png",
+      "/assets/banks/cap-110-english/G22-24-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q24",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(22-24)\n![圖表](/assets/banks/cap-110-english/G22-24-figure-1.png)\nHere’s The Piano Lesson, one of Henri\nMatisse’s most famous paintings.  The boy in\nthe picture is the painter’s son, Pierre.  In the\npicture, Pierre looks quite serious.  Why?  Well,\nlook at the yellow candle on the red piano.  It’s\nalmost burned down.  So maybe Pierre has\nalready practiced for hours.  And Matisse uses a\nlot of gray, not a very fun color, right?  It shows\nhow the poor kid feels, don’t you think?\nOn the top right corner, you can see a woman\nsitting straight on a seat.  Is she Pierre’s piano\nteacher?  Or his mother?  Well, if you’re a\nMatisse fan, you’ll know this is in fact another\npainting by him, Woman on a High Stool.   Interesting, right?  Matisse likes to do that\na lot.  In fact, there’s another work by Matisse in the picture.  Did you find it?  Right!\nThe sculpture on the bottom left corner!\nMatisse painted this picture in 1916.  Pierre was already 16 then, but the artist\n![圖表](/assets/banks/cap-110-english/G22-24-figure-3.png)\npainted his son much younger than he really was.  Pierre\nhad gone away to be a soldier, and Matisse didn’t know\nwhether he would come back.  Maybe this is a worried\nfather’s way to remember the good old days.\n![圖表](/assets/banks/cap-110-english/G22-24-figure-2.png)\n\nWhat is NOT used in the reading to refer to Henri Matisse?\n\n![圖表](/assets/banks/cap-110-english/Q24-figure-1.png)",
+    "correct": "The poor kid.",
+    "wrong": [
+      "The artist.",
+      "The painter.",
+      "A worried father."
+    ],
+    "exp": "正確答案：The poor kid.。來源：110年國中教育會考英語閱讀第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 24,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G22-24-figure-1.png",
+      "/assets/banks/cap-110-english/G22-24-figure-3.png",
+      "/assets/banks/cap-110-english/G22-24-figure-2.png",
+      "/assets/banks/cap-110-english/Q24-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-28)\nOn Teachers’ Day, we thank our teachers for their hard work.  We also celebrate\nthis day to remember Confucius, the great Chinese teacher from 2,500 years ago.\nWell, that’s everything we’re taught about Teachers’ Day.  But, the first Teachers’\nDay was not on Confucius’s birthday, and it was not about thanking our teachers.\nIn 1930, Mr. Tai Shuang-qiu and other teachers celebrated the first Teachers’\nDay in Nanjing.  But there was nothing to celebrate.  Teachers were paid very little\nand not respected.  These teachers took this chance to shout out their problems.  They\nhad Teachers’ Day on June 6 because the date was easy to remember and near the\nend of the school year.  This action by Mr. Tai and the other teachers was welcomed\nand followed by teachers from other cities.  In 1939, the government made Teachers’\nDay a national holiday.  However, it was on August 27, the day when Confucius’s\nbirthday was celebrated.  Not everyone hailed this decision: Teachers’ Day was never\nabout Confucius, and Confucius couldn’t speak for all the teachers either.\nOne funny thing was that the government was wrong about the date of\nConfucius’s birthday.  In 1952, people found out he was in fact born on September\n28.  That was when we started to celebrate Teachers’ Day on Confucius’s real\nbirthday.\nespect 尊敬   government 政府\n【詞彙】  <sup>r</sup>\n\nWhat idea is talked about in the reading?",
+    "correct": "Why Teachers’ Day was celebrated at first.",
+    "wrong": [
+      "How Teachers’ Day is celebrated now.",
+      "Why Confucius was seen as a great teacher.",
+      "How teachers today feel about Teachers’ Day."
+    ],
+    "exp": "正確答案：Why Teachers’ Day was celebrated at first.。來源：110年國中教育會考英語閱讀第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 25,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q26",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-28)\nOn Teachers’ Day, we thank our teachers for their hard work.  We also celebrate\nthis day to remember Confucius, the great Chinese teacher from 2,500 years ago.\nWell, that’s everything we’re taught about Teachers’ Day.  But, the first Teachers’\nDay was not on Confucius’s birthday, and it was not about thanking our teachers.\nIn 1930, Mr. Tai Shuang-qiu and other teachers celebrated the first Teachers’\nDay in Nanjing.  But there was nothing to celebrate.  Teachers were paid very little\nand not respected.  These teachers took this chance to shout out their problems.  They\nhad Teachers’ Day on June 6 because the date was easy to remember and near the\nend of the school year.  This action by Mr. Tai and the other teachers was welcomed\nand followed by teachers from other cities.  In 1939, the government made Teachers’\nDay a national holiday.  However, it was on August 27, the day when Confucius’s\nbirthday was celebrated.  Not everyone hailed this decision: Teachers’ Day was never\nabout Confucius, and Confucius couldn’t speak for all the teachers either.\nOne funny thing was that the government was wrong about the date of\nConfucius’s birthday.  In 1952, people found out he was in fact born on September\n28.  That was when we started to celebrate Teachers’ Day on Confucius’s real\nbirthday.\nespect 尊敬   government 政府\n【詞彙】  <sup>r</sup>\n\nWhich is true about Teachers’ Day from the reading?",
+    "correct": "It used to be celebrated on different dates.",
+    "wrong": [
+      "It was started by students for their teachers.",
+      "It has been celebrated in Nanjing for over 2,500 years.",
+      "Teachers decided to celebrate it on Confucius’s birthday."
+    ],
+    "exp": "正確答案：It used to be celebrated on different dates.。來源：110年國中教育會考英語閱讀第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 26,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q27",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-28)\nOn Teachers’ Day, we thank our teachers for their hard work.  We also celebrate\nthis day to remember Confucius, the great Chinese teacher from 2,500 years ago.\nWell, that’s everything we’re taught about Teachers’ Day.  But, the first Teachers’\nDay was not on Confucius’s birthday, and it was not about thanking our teachers.\nIn 1930, Mr. Tai Shuang-qiu and other teachers celebrated the first Teachers’\nDay in Nanjing.  But there was nothing to celebrate.  Teachers were paid very little\nand not respected.  These teachers took this chance to shout out their problems.  They\nhad Teachers’ Day on June 6 because the date was easy to remember and near the\nend of the school year.  This action by Mr. Tai and the other teachers was welcomed\nand followed by teachers from other cities.  In 1939, the government made Teachers’\nDay a national holiday.  However, it was on August 27, the day when Confucius’s\nbirthday was celebrated.  Not everyone hailed this decision: Teachers’ Day was never\nabout Confucius, and Confucius couldn’t speak for all the teachers either.\nOne funny thing was that the government was wrong about the date of\nConfucius’s birthday.  In 1952, people found out he was in fact born on September\n28.  That was when we started to celebrate Teachers’ Day on Confucius’s real\nbirthday.\nespect 尊敬   government 政府\n【詞彙】  <sup>r</sup>\n\nWhat does “not everyone hailed this decision” mean in the reading?",
+    "correct": "Not everyone welcomed the decision.",
+    "wrong": [
+      "Not everyone cared about the decision.",
+      "Not everyone heard about the decision.",
+      "Not everyone remembered the decision."
+    ],
+    "exp": "正確答案：Not everyone welcomed the decision.。來源：110年國中教育會考英語閱讀第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 27,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q28",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-28)\nOn Teachers’ Day, we thank our teachers for their hard work.  We also celebrate\nthis day to remember Confucius, the great Chinese teacher from 2,500 years ago.\nWell, that’s everything we’re taught about Teachers’ Day.  But, the first Teachers’\nDay was not on Confucius’s birthday, and it was not about thanking our teachers.\nIn 1930, Mr. Tai Shuang-qiu and other teachers celebrated the first Teachers’\nDay in Nanjing.  But there was nothing to celebrate.  Teachers were paid very little\nand not respected.  These teachers took this chance to shout out their problems.  They\nhad Teachers’ Day on June 6 because the date was easy to remember and near the\nend of the school year.  This action by Mr. Tai and the other teachers was welcomed\nand followed by teachers from other cities.  In 1939, the government made Teachers’\nDay a national holiday.  However, it was on August 27, the day when Confucius’s\nbirthday was celebrated.  Not everyone hailed this decision: Teachers’ Day was never\nabout Confucius, and Confucius couldn’t speak for all the teachers either.\nOne funny thing was that the government was wrong about the date of\nConfucius’s birthday.  In 1952, people found out he was in fact born on September\n28.  That was when we started to celebrate Teachers’ Day on Confucius’s real\nbirthday.\nespect 尊敬   government 政府\n【詞彙】  <sup>r</sup>\n\nWhat does the writer try to do with this reading?",
+    "correct": "To tell a piece of history that few people know about.",
+    "wrong": [
+      "To talk about a problem that no one notices.",
+      "To share a fun experience that was not common.",
+      "To give an example of an idea that is hard to understand."
+    ],
+    "exp": "正確答案：To tell a piece of history that few people know about.。來源：110年國中教育會考英語閱讀第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 28,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        25,
+        28
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q29",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(29-31)\n![圖表](/assets/banks/cap-110-english/G29-31-figure-1.png)\nDear Traveler,\nYou have bought an NFR ticket online for a train that runs between White\nWater City and Cloud City.\nWe are sorry to tell you that, because of the typhoon last month, the Sand\nTown – Spring Town line will be closed between August 14 and 28 2016.  During\nthis time, some trains will change lines and will not stop at a few stations.\nThere will be free buses to take travelers to these stations.  Please check below\nfor the changes.  Visit http://www.nfr.gov/ for more information.\nWe wish you a nice summer.\nLena Muller\nNational Formosa Railway\n![圖表](/assets/banks/cap-110-english/G29-31-figure-2.png)\n1. Trains that run between Green City and Cloud\n\nCity will take the Smoke Town – Spring Town\nline, and will stop at every station.  Below are\nthe trains that will change lines.\nWater City\nCity\nSand Town\noke Town\nGray Village\n|  | Train | New Line (from 8/14 to 8/28) |\n| Going / South | RL101 | White Water City \u001f Cloud City |\n|  | RL102 | White Water City \u001f Spring Town |\n|  | RL103 | Green City \u001f Cloud City |\n| Going / North | RL201 | Spring Town \u001f Green City |\n|  | RL202 | Cloud City \u001f Green City |\nHill Town\nBlack Tow\n2. The free buses for the Sand Town – Spring\nTown line will wait at Green City (going south)\nSpring Town\nand Spring Town (going north) stations.  No\nClou\nstop at Gray Village.\n\n\nWhy does National Formosa Railway write this letter?",
+    "correct": "Some of its trains will run on different lines.",
+    "wrong": [
+      "There is a train ticket sale.",
+      "A train line will be closed in July.",
+      "It will open a new train line in August."
+    ],
+    "exp": "正確答案：Some of its trains will run on different lines.。來源：110年國中教育會考英語閱讀第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 29,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G29-31-figure-1.png",
+      "/assets/banks/cap-110-english/G29-31-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q30",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(29-31)\n![圖表](/assets/banks/cap-110-english/G29-31-figure-1.png)\nDear Traveler,\nYou have bought an NFR ticket online for a train that runs between White\nWater City and Cloud City.\nWe are sorry to tell you that, because of the typhoon last month, the Sand\nTown – Spring Town line will be closed between August 14 and 28 2016.  During\nthis time, some trains will change lines and will not stop at a few stations.\nThere will be free buses to take travelers to these stations.  Please check below\nfor the changes.  Visit http://www.nfr.gov/ for more information.\nWe wish you a nice summer.\nLena Muller\nNational Formosa Railway\n![圖表](/assets/banks/cap-110-english/G29-31-figure-2.png)\n1. Trains that run between Green City and Cloud\n\nCity will take the Smoke Town – Spring Town\nline, and will stop at every station.  Below are\nthe trains that will change lines.\nWater City\nCity\nSand Town\noke Town\nGray Village\n|  | Train | New Line (from 8/14 to 8/28) |\n| Going / South | RL101 | White Water City \u001f Cloud City |\n|  | RL102 | White Water City \u001f Spring Town |\n|  | RL103 | Green City \u001f Cloud City |\n| Going / North | RL201 | Spring Town \u001f Green City |\n|  | RL202 | Cloud City \u001f Green City |\nHill Town\nBlack Tow\n2. The free buses for the Sand Town – Spring\nTown line will wait at Green City (going south)\nSpring Town\nand Spring Town (going north) stations.  No\nClou\nstop at Gray Village.\n\n\nWhat is true about NFR’s trains between August 14 and 28 2016?",
+    "correct": "People can go to Hill Town on any train that runs between Green City and Cloud City.",
+    "wrong": [
+      "No trains will stop at Spring Town.",
+      "Trains that change lines will all stop at Cloud City.",
+      "People can take the free buses to any station on the Sand Town - Spring Town line."
+    ],
+    "exp": "正確答案：People can go to Hill Town on any train that runs between Green City and Cloud City.。來源：110年國中教育會考英語閱讀第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 30,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G29-31-figure-1.png",
+      "/assets/banks/cap-110-english/G29-31-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q31",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(29-31)\n![圖表](/assets/banks/cap-110-english/G29-31-figure-1.png)\nDear Traveler,\nYou have bought an NFR ticket online for a train that runs between White\nWater City and Cloud City.\nWe are sorry to tell you that, because of the typhoon last month, the Sand\nTown – Spring Town line will be closed between August 14 and 28 2016.  During\nthis time, some trains will change lines and will not stop at a few stations.\nThere will be free buses to take travelers to these stations.  Please check below\nfor the changes.  Visit http://www.nfr.gov/ for more information.\nWe wish you a nice summer.\nLena Muller\nNational Formosa Railway\n![圖表](/assets/banks/cap-110-english/G29-31-figure-2.png)\n1. Trains that run between Green City and Cloud\n\nCity will take the Smoke Town – Spring Town\nline, and will stop at every station.  Below are\nthe trains that will change lines.\nWater City\nCity\nSand Town\noke Town\nGray Village\n|  | Train | New Line (from 8/14 to 8/28) |\n| Going / South | RL101 | White Water City \u001f Cloud City |\n|  | RL102 | White Water City \u001f Spring Town |\n|  | RL103 | Green City \u001f Cloud City |\n| Going / North | RL201 | Spring Town \u001f Green City |\n|  | RL202 | Cloud City \u001f Green City |\nHill Town\nBlack Tow\n2. The free buses for the Sand Town – Spring\nTown line will wait at Green City (going south)\nSpring Town\nand Spring Town (going north) stations.  No\nClou\nstop at Gray Village.\n\n\nJames lives in Smoke Town.  He wants to go to Black Town on August 19.  How can\nhe get there?",
+    "correct": "Take Train RL202 to Green City, get off there, and take the free bus.",
+    "wrong": [
+      "Take Train RL103 to Green City, get off there, and take the free bus.",
+      "Take Train RL102 to Spring Town, get off there, and take Train RL201.",
+      "Take Train RL101 to Cloud City, get off there, and take the free bus."
+    ],
+    "exp": "正確答案：Take Train RL202 to Green City, get off there, and take the free bus.。來源：110年國中教育會考英語閱讀第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 31,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        9,
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        29,
+        31
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G29-31-figure-1.png",
+      "/assets/banks/cap-110-english/G29-31-figure-2.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q32",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(32-34)\n![圖表](/assets/banks/cap-110-english/G32-34-figure-4.png)\n![圖表](/assets/banks/cap-110-english/G32-34-figure-1.png)\n\n\nIn Darayya, a city in Syria, there’s a library, and it has 15,000 books on almost\nevery subject you can think of.  However, it is different from any libraries you know:\nIt is a secret underground library, and only people in Darayya know where it is.\nOver the years, war has shaken Darayya badly.  Every day, houses are bombed\nand people are killed.  Stores are closed one after another, and so are schools.  To\nhelp the kids in Darayya with their learning, Anas Ahmad, a 19-year-old student, and\nhis friends decided to build a library.  They built the library under the ground to keep\nit safe from bombing.  But it is dangerous to collect books for the library.  Often,\nAhmad and his friends look for books in houses that were bombed.  They need to be\ncareful because they may be killed in another bombing.\nYou may ask, “In a place like Darayya, would people be interested in books?”\n“Just like the body needs food, the mind needs books,” says one library user.  In the\nlibrary, people enjoy their time of reading and forget about the terrible world above,\nso their life doesn’t seem so hard.   Through reading, they are able to dream of a\nbetter life after war.\nar 戰爭   bomb 轟炸   seem 彷彿\n【詞彙】  <sup>w</sup>\n\nBelow are the ideas that are talked about in the reading.\na. The problems Darayya has.\nb. How Darayya’s library was started.\nc. What makes Darayya’s library special.\n\nd. How Darayya’s library helps people there.\nIn what order does the writer put his ideas in the reading?\n\n![圖表](/assets/banks/cap-110-english/Q32-figure-1.png)",
+    "correct": "c ______ a ______ b ______ d.",
+    "wrong": [
+      "c ______ b ______ a ______ d.",
+      "b ______ a ______ d ______ c.",
+      "a ______ c ______ b ______ d."
+    ],
+    "exp": "正確答案：c ______ a ______ b ______ d.。來源：110年國中教育會考英語閱讀第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 32,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G32-34-figure-4.png",
+      "/assets/banks/cap-110-english/G32-34-figure-1.png",
+      "/assets/banks/cap-110-english/Q32-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q33",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(32-34)\n![圖表](/assets/banks/cap-110-english/G32-34-figure-4.png)\n![圖表](/assets/banks/cap-110-english/G32-34-figure-1.png)\n\n\nIn Darayya, a city in Syria, there’s a library, and it has 15,000 books on almost\nevery subject you can think of.  However, it is different from any libraries you know:\nIt is a secret underground library, and only people in Darayya know where it is.\nOver the years, war has shaken Darayya badly.  Every day, houses are bombed\nand people are killed.  Stores are closed one after another, and so are schools.  To\nhelp the kids in Darayya with their learning, Anas Ahmad, a 19-year-old student, and\nhis friends decided to build a library.  They built the library under the ground to keep\nit safe from bombing.  But it is dangerous to collect books for the library.  Often,\nAhmad and his friends look for books in houses that were bombed.  They need to be\ncareful because they may be killed in another bombing.\nYou may ask, “In a place like Darayya, would people be interested in books?”\n“Just like the body needs food, the mind needs books,” says one library user.  In the\nlibrary, people enjoy their time of reading and forget about the terrible world above,\nso their life doesn’t seem so hard.   Through reading, they are able to dream of a\nbetter life after war.\nar 戰爭   bomb 轟炸   seem 彷彿\n【詞彙】  <sup>w</sup>\n\nWhy do people in Darayya go to the library even during the war?",
+    "correct": "They find joy and hope in reading.",
+    "wrong": [
+      "They can get free food.",
+      "They want to learn how to win the war.",
+      "Their school teachers give lessons there."
+    ],
+    "exp": "正確答案：They find joy and hope in reading.。來源：110年國中教育會考英語閱讀第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 33,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        11
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G32-34-figure-4.png",
+      "/assets/banks/cap-110-english/G32-34-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q34",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(32-34)\n![圖表](/assets/banks/cap-110-english/G32-34-figure-4.png)\n![圖表](/assets/banks/cap-110-english/G32-34-figure-1.png)\n\n\nIn Darayya, a city in Syria, there’s a library, and it has 15,000 books on almost\nevery subject you can think of.  However, it is different from any libraries you know:\nIt is a secret underground library, and only people in Darayya know where it is.\nOver the years, war has shaken Darayya badly.  Every day, houses are bombed\nand people are killed.  Stores are closed one after another, and so are schools.  To\nhelp the kids in Darayya with their learning, Anas Ahmad, a 19-year-old student, and\nhis friends decided to build a library.  They built the library under the ground to keep\nit safe from bombing.  But it is dangerous to collect books for the library.  Often,\nAhmad and his friends look for books in houses that were bombed.  They need to be\ncareful because they may be killed in another bombing.\nYou may ask, “In a place like Darayya, would people be interested in books?”\n“Just like the body needs food, the mind needs books,” says one library user.  In the\nlibrary, people enjoy their time of reading and forget about the terrible world above,\nso their life doesn’t seem so hard.   Through reading, they are able to dream of a\nbetter life after war.\nar 戰爭   bomb 轟炸   seem 彷彿\n【詞彙】  <sup>w</sup>\n\nWhat do we know about Darayya’s library?",
+    "correct": "It was built during the war.",
+    "wrong": [
+      "It has been bombed many times.",
+      "It was built to remember people who died in the war.",
+      "Most of its books are collected from outside of Darayya."
+    ],
+    "exp": "正確答案：It was built during the war.。來源：110年國中教育會考英語閱讀第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 34,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        32,
+        34
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G32-34-figure-4.png",
+      "/assets/banks/cap-110-english/G32-34-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q35",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\nFrom: Mia Loren <mloren@qmail.com>\nTo:  Dave Doddo <dd1225@qmail.com>\nDate: Tue, Oct 24, 2017 at 10:01 AM\nSubject: Daniel’s 5th Birthday Party – This Saturday!\nHello Dave,\nWe’re happy to invite you and your family to Daniel’s fifth birthday\nparty this Saturday.\nWe know we told you that the party would be in  ______  35 ______  .  However,\nwe just moved to Carlton City last month, so the party won’t be in\nPattersons Town.  It’ll be at Mosman Garden right next to Victor Zoo,\njust across from our new apartment.  Please don’t go to Northbank\nPark next to our old house.\nThe weather report said that it may be rainy this weekend, but  ______  36 ______  .\nIf it rains, we’ll move the party inside our home.  However, if we’re\n37 ______   and it is fine, we’ll still have the party at the garden.\nAgain, we’re all very happy and excited to welcome you to join us for\nsome fun this weekend!\nBest,\nMia, Sam & Daniel",
+    "correct": "Northbank Park",
+    "wrong": [
+      "Victor Zoo",
+      "Carlton City",
+      "Mosman Garden"
+    ],
+    "exp": "正確答案：Northbank Park。來源：110年國中教育會考英語閱讀第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 35,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\nFrom: Mia Loren <mloren@qmail.com>\nTo:  Dave Doddo <dd1225@qmail.com>\nDate: Tue, Oct 24, 2017 at 10:01 AM\nSubject: Daniel’s 5th Birthday Party – This Saturday!\nHello Dave,\nWe’re happy to invite you and your family to Daniel’s fifth birthday\nparty this Saturday.\nWe know we told you that the party would be in  ______  35 ______  .  However,\nwe just moved to Carlton City last month, so the party won’t be in\nPattersons Town.  It’ll be at Mosman Garden right next to Victor Zoo,\njust across from our new apartment.  Please don’t go to Northbank\nPark next to our old house.\nThe weather report said that it may be rainy this weekend, but  ______  36 ______  .\nIf it rains, we’ll move the party inside our home.  However, if we’re\n37 ______   and it is fine, we’ll still have the party at the garden.\nAgain, we’re all very happy and excited to welcome you to join us for\nsome fun this weekend!\nBest,\nMia, Sam & Daniel",
+    "correct": "we have a plan if this happens",
+    "wrong": [
+      "we could just wait for the rain to stop",
+      "we should be fine if the rain isn’t too heavy",
+      "we will let you know if we’ll still have the party"
+    ],
+    "exp": "正確答案：we have a plan if this happens。來源：110年國中教育會考英語閱讀第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 36,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        12
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q37",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\nFrom: Mia Loren <mloren@qmail.com>\nTo:  Dave Doddo <dd1225@qmail.com>\nDate: Tue, Oct 24, 2017 at 10:01 AM\nSubject: Daniel’s 5th Birthday Party – This Saturday!\nHello Dave,\nWe’re happy to invite you and your family to Daniel’s fifth birthday\nparty this Saturday.\nWe know we told you that the party would be in  ______  35 ______  .  However,\nwe just moved to Carlton City last month, so the party won’t be in\nPattersons Town.  It’ll be at Mosman Garden right next to Victor Zoo,\njust across from our new apartment.  Please don’t go to Northbank\nPark next to our old house.\nThe weather report said that it may be rainy this weekend, but  ______  36 ______  .\nIf it rains, we’ll move the party inside our home.  However, if we’re\n37 ______   and it is fine, we’ll still have the party at the garden.\nAgain, we’re all very happy and excited to welcome you to join us for\nsome fun this weekend!\nBest,\nMia, Sam & Daniel",
+    "correct": "lucky",
+    "wrong": [
+      "crazy",
+      "good",
+      "strong"
+    ],
+    "exp": "正確答案：lucky。來源：110年國中教育會考英語閱讀第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 37,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q38",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nUsually I wouldn’t cross the park at this time\n                     of night. But walking around the park would take\n                more time, and it was raining so hard that I couldn’t\n                  even see clearly what was right before me. So I\n                    entered the park. And that was the first stupid thing\n                        I did tonight.\n   Soon after I walked into the park, I saw a man under a tree up\nahead. My heart fell. The stories I’d heard about the park  ______  38 ______  into\nmy head at this moment. Anyone with a clear mind would just turn back.\nBut me? No. I did  ______  39 ______  stupid thing: I decided to hurry past him.\n     Just when I was passing the man, he raised his head and gave me the\nstrangest smile ever.  I got scared and started running. “Hey!” the man\nshouted from behind. “Wait!” He was running after me!\n     I ran like crazy.  I had hoped the trees would keep some rain off.\nAnd they  ______  40 ______  . But they also made the park look even darker.  I\ncouldn’t see what was ahead of me. Then, I ran into something.  It was\nthe man!\n    “Don’t kill me!” I cried.\n    “What?  I  ______  41 ______  to give back your bag! You dropped it,” the man\ngave me my bag.\n   Now, I felt saying that to the man was the stupidest thing I did\ntonight.\n\n![圖表](/assets/banks/cap-110-english/G38-41-figure-3.png)\n",
+    "correct": "were all coming",
+    "wrong": [
+      "are all coming",
+      "have all come",
+      "would all come"
+    ],
+    "exp": "正確答案：were all coming。來源：110年國中教育會考英語閱讀第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 38,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nUsually I wouldn’t cross the park at this time\n                     of night. But walking around the park would take\n                more time, and it was raining so hard that I couldn’t\n                  even see clearly what was right before me. So I\n                    entered the park. And that was the first stupid thing\n                        I did tonight.\n   Soon after I walked into the park, I saw a man under a tree up\nahead. My heart fell. The stories I’d heard about the park  ______  38 ______  into\nmy head at this moment. Anyone with a clear mind would just turn back.\nBut me? No. I did  ______  39 ______  stupid thing: I decided to hurry past him.\n     Just when I was passing the man, he raised his head and gave me the\nstrangest smile ever.  I got scared and started running. “Hey!” the man\nshouted from behind. “Wait!” He was running after me!\n     I ran like crazy.  I had hoped the trees would keep some rain off.\nAnd they  ______  40 ______  . But they also made the park look even darker.  I\ncouldn’t see what was ahead of me. Then, I ran into something.  It was\nthe man!\n    “Don’t kill me!” I cried.\n    “What?  I  ______  41 ______  to give back your bag! You dropped it,” the man\ngave me my bag.\n   Now, I felt saying that to the man was the stupidest thing I did\ntonight.\n\n![圖表](/assets/banks/cap-110-english/G38-41-figure-3.png)\n",
+    "correct": "another",
+    "wrong": [
+      "one",
+      "the last",
+      "the other"
+    ],
+    "exp": "正確答案：another。來源：110年國中教育會考英語閱讀第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 39,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q40",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nUsually I wouldn’t cross the park at this time\n                     of night. But walking around the park would take\n                more time, and it was raining so hard that I couldn’t\n                  even see clearly what was right before me. So I\n                    entered the park. And that was the first stupid thing\n                        I did tonight.\n   Soon after I walked into the park, I saw a man under a tree up\nahead. My heart fell. The stories I’d heard about the park  ______  38 ______  into\nmy head at this moment. Anyone with a clear mind would just turn back.\nBut me? No. I did  ______  39 ______  stupid thing: I decided to hurry past him.\n     Just when I was passing the man, he raised his head and gave me the\nstrangest smile ever.  I got scared and started running. “Hey!” the man\nshouted from behind. “Wait!” He was running after me!\n     I ran like crazy.  I had hoped the trees would keep some rain off.\nAnd they  ______  40 ______  . But they also made the park look even darker.  I\ncouldn’t see what was ahead of me. Then, I ran into something.  It was\nthe man!\n    “Don’t kill me!” I cried.\n    “What?  I  ______  41 ______  to give back your bag! You dropped it,” the man\ngave me my bag.\n   Now, I felt saying that to the man was the stupidest thing I did\ntonight.\n\n![圖表](/assets/banks/cap-110-english/G38-41-figure-3.png)\n",
+    "correct": "did",
+    "wrong": [
+      "have",
+      "had",
+      "would"
+    ],
+    "exp": "正確答案：did。來源：110年國中教育會考英語閱讀第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 40,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-110-english-q41",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nUsually I wouldn’t cross the park at this time\n                     of night. But walking around the park would take\n                more time, and it was raining so hard that I couldn’t\n                  even see clearly what was right before me. So I\n                    entered the park. And that was the first stupid thing\n                        I did tonight.\n   Soon after I walked into the park, I saw a man under a tree up\nahead. My heart fell. The stories I’d heard about the park  ______  38 ______  into\nmy head at this moment. Anyone with a clear mind would just turn back.\nBut me? No. I did  ______  39 ______  stupid thing: I decided to hurry past him.\n     Just when I was passing the man, he raised his head and gave me the\nstrangest smile ever.  I got scared and started running. “Hey!” the man\nshouted from behind. “Wait!” He was running after me!\n     I ran like crazy.  I had hoped the trees would keep some rain off.\nAnd they  ______  40 ______  . But they also made the park look even darker.  I\ncouldn’t see what was ahead of me. Then, I ran into something.  It was\nthe man!\n    “Don’t kill me!” I cried.\n    “What?  I  ______  41 ______  to give back your bag! You dropped it,” the man\ngave me my bag.\n   Now, I felt saying that to the man was the stupidest thing I did\ntonight.\n\n![圖表](/assets/banks/cap-110-english/G38-41-figure-3.png)\n",
+    "correct": "was trying",
+    "wrong": [
+      "try",
+      "would try",
+      "will try"
+    ],
+    "exp": "正確答案：was trying。來源：110年國中教育會考英語閱讀第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-110-english",
+      "question": 41,
+      "file": "國中/會考/英語閱讀/110P_English.pdf",
+      "url": "https://drive.google.com/file/d/1GkCXrehOJej1Ge7gBfwXA_nMZ8VMuD9l/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1z7jBxC9t24e2Y3WK71XxWe0JOjJRLcNW/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-110-english/G38-41-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  }
+]

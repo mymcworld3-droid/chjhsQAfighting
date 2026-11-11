@@ -1,10 +1,101 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const refineryErrors = require('./public/cultivation/refinery-errors.js');
 
-const DEFAULT_TIMEOUT_MS = Math.max(3000, Number(process.env.AI_TIMEOUT_MS) || 25000);
+const DEFAULT_TIMEOUT_MS = Math.max(3000, Number(process.env.AI_TIMEOUT_MS) || 90000);
 let roundRobinCursor = 0;
 const recentAttempts = [];
 const MAX_RECENT_ATTEMPTS = 24;
+
+const GEMINI_LITE_MODELS = Object.freeze(['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite']);
+const GEMINI_FLASH_MODELS = Object.freeze(['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3-flash', 'gemini-2.5-flash']);
+const TASK_MODELS = Object.freeze({
+  'quiz-generate': GEMINI_LITE_MODELS,
+  'quiz-review': [...GEMINI_LITE_MODELS].reverse(),
+  'quiz-escalate': GEMINI_FLASH_MODELS,
+  'question-helper': GEMINI_LITE_MODELS,
+  'appeal-review': [...GEMINI_LITE_MODELS].reverse(),
+  'appeal-confirm': GEMINI_FLASH_MODELS,
+  'dongtian-plan': GEMINI_LITE_MODELS,
+  'dongtian-generate': GEMINI_LITE_MODELS,
+  'dongtian-review': [...GEMINI_LITE_MODELS].reverse(),
+  'dongtian-repair': GEMINI_LITE_MODELS,
+  'dongtian-escalate': GEMINI_FLASH_MODELS,
+  general: GEMINI_LITE_MODELS
+});
+let taskCursor = 0;
+const geminiUsage = new Map();
+const geminiCooldowns = new Map();
+const GEMINI_QUOTA_COOLDOWN_MS = 30 * 60 * 1000;
+
+// Request-based budgets, not tokens. Optional per-model daily caps can be set
+// as AI_GEMINI_RPD_LIMITS_JSON. The underlying Google quota is per project;
+// this process-local guard is a best-effort extra ceiling, never an authority
+// for quotas across multiple Render instances or keys in the same project.
+function getModelDailyLimit(model) {
+  const config = safeJsonParse(process.env.AI_GEMINI_RPD_LIMITS_JSON || '{}', {});
+  const n = Number(config && config[model]);
+  return Number.isSafeInteger(n) && n > 0 ? n : null;
+}
+function geminiQuotaKey(provider) {
+  return provider.model + '\n' + provider.key;
+}
+function isGeminiAvailable(provider) {
+  const quotaKey = geminiQuotaKey(provider);
+  if ((geminiCooldowns.get(quotaKey) || 0) > Date.now()) return false;
+  const entry = geminiUsage.get(quotaKey);
+  const date = new Date().toISOString().slice(0, 10);
+  const limit = getModelDailyLimit(provider.model);
+  return !limit || !entry || entry.date !== date || entry.used < limit;
+}
+function reserveGeminiRequest(provider) {
+  if (!isGeminiAvailable(provider)) {
+    const error = new Error('Gemini model request quota unavailable: ' + provider.model);
+    error.httpStatus = 429;
+    error.localQuota = true;
+    throw error;
+  }
+  const key = geminiQuotaKey(provider);
+  const date = new Date().toISOString().slice(0, 10);
+  const previous = geminiUsage.get(key);
+  geminiUsage.set(key, { date, used: previous?.date === date ? previous.used + 1 : 1 });
+}
+function getGeminiRequestUsage() {
+  // No credentials and no per-key secret-derived IDs are exposed.
+  const date = new Date().toISOString().slice(0, 10), totals = new Map();
+  for (const [key,entry] of geminiUsage) {
+    if (entry.date !== date) continue;
+    const model = key.split('\n')[0];
+    totals.set(model, (totals.get(model) || 0) + entry.used);
+  }
+  return [...totals].map(([model, requests]) => ({ model, requests }));
+}
+function geminiKeys() {
+  return [...new Set([...splitCsv(process.env.GEMINI_API_KEYS), ...splitCsv(process.env.GEMINI_API_KEY)])];
+}
+
+// Every configured Gemini key has the six known models. Task routing intentionally
+// does NOT depend on the legacy GEMINI_MODELS list; otherwise an old Render setting
+// would prevent access to the Flash review reserve. Ordinary work never consumes
+// Flash requests, even when all Flash models are configured on the same key.
+function buildTaskProviders(task = 'general', options = {}) {
+  const keys = geminiKeys();
+  if (!keys.length) return buildOpenAICompatProviders();
+  const excluded = new Set(options.excludeModels || []);
+  const models = (TASK_MODELS[task] || TASK_MODELS.general).filter(model => !excluded.has(model));
+  const first = taskCursor++ % keys.length;
+  const orderedKeys = keys.slice(first).concat(keys.slice(0, first));
+  const candidates = [];
+  // Alternate model before key so each provider wave can use the second Lite
+  // even when several keys share the same Google project.
+  for (const key of orderedKeys) {
+    for (const model of models) {
+      const keyIndex = keys.indexOf(key) + 1;
+      const provider = { type:'gemini', name:'gemini-' + keyIndex + '-' + model, key, model };
+      if (isGeminiAvailable(provider)) candidates.push(provider);
+    }
+  }
+  return candidates;
+}
+
 
 // Diagnostics are in-memory and contain no keys, prompts, user IDs or raw error bodies.
 function recordAttempt(provider, outcome, error = null) {
@@ -20,6 +111,10 @@ function recordAttempt(provider, outcome, error = null) {
   };
   recentAttempts.push(entry);
   if (recentAttempts.length > MAX_RECENT_ATTEMPTS) recentAttempts.shift();
+  if (provider.type === 'gemini' && httpStatus === 429 && !error?.localQuota) {
+    // Fail over to another model/key; never hammer a quota-exhausted endpoint.
+    geminiCooldowns.set(geminiQuotaKey(provider), Date.now() + GEMINI_QUOTA_COOLDOWN_MS);
+  }
 }
 
 function getRecentActivity() {
@@ -141,16 +236,67 @@ async function withTimeout(factory, timeoutMs = DEFAULT_TIMEOUT_MS) {
   }
 }
 
-async function callGemini(provider, prompt) {
-  const genAI = new GoogleGenerativeAI(provider.key);
-  const model = genAI.getGenerativeModel({
-    model: provider.model,
-    generationConfig: { responseMimeType: 'application/json' }
-  });
-  // Google SDK version used by this project does not accept AbortSignal here,
-  // so timeout is enforced by racing the promise at the router level.
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+// Use Google's generateContent REST endpoint rather than the legacy JS SDK
+// (pinned to 0.2.1), so the HIGH thinking setting is actually sent on every
+// Gemini request, including the Dongtian multimodal requests.
+function geminiThinkingConfig(model) {
+  if (/^gemini-3(?:[.-]|$)/i.test(model)) return { thinkingLevel: 'HIGH' };
+  // Gemini 2.5 does not support thinkingLevel. Explicitly select its maximum
+  // supported thinking budget rather than silently falling back to its default.
+  if (/^gemini-2\.5-pro(?:-|$)/i.test(model)) return { thinkingBudget: 32768 };
+  if (/^gemini-2\.5-flash(?:-|$)/i.test(model)) return { thinkingBudget: 24576 };
+  throw new Error('Gemini model does not support the enforced HIGH thinking configuration: ' + model);
+}
+
+async function requestGeminiHigh(provider, prompt, images = [], options = {}) {
+  const model = String(provider.model || '').trim();
+  geminiThinkingConfig(model); // Reject unsupported models before spending any requests.
+  reserveGeminiRequest(provider);
+  const generationConfig = {
+    responseMimeType: 'application/json',
+    thinkingConfig: geminiThinkingConfig(model)
+  };
+  if (Number.isInteger(options.maxOutputTokens) && options.maxOutputTokens > 0) {
+    generationConfig.maxOutputTokens = options.maxOutputTokens;
+  }
+  const parts = [
+    { text: String(prompt) },
+    ...images.map(image => ({
+      inlineData: { mimeType: image.mimeType, data: image.data }
+    }))
+  ];
+  const response = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent',
+    {
+      method: 'POST',
+      signal: options.signal,
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': provider.key },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts }],
+        generationConfig
+      })
+    }
+  );
+  if (!response.ok) {
+    const detail = (await response.text().catch(() => '')).slice(0, 300);
+    throw Object.assign(new Error('HTTP ' + response.status + (detail ? ': ' + detail : '')), {
+      httpStatus: response.status
+    });
+  }
+  const payload = await response.json();
+  const candidate = payload?.candidates?.[0];
+  const output = (candidate?.content?.parts || [])
+    .filter(part => part && !part.thought && typeof part.text === 'string')
+    .map(part => part.text).join('');
+  if (!output.trim()) {
+    throw new Error('Gemini API returned no JSON text (finishReason: ' +
+      String(candidate?.finishReason || 'unknown') + ')');
+  }
+  return output;
+}
+
+async function callGemini(provider, prompt, signal) {
+  return requestGeminiHigh(provider, prompt, [], { signal });
 }
 
 async function callOpenAICompatible(provider, prompt, signal) {
@@ -184,7 +330,7 @@ async function callOpenAICompatible(provider, prompt, signal) {
 
 async function callProvider(provider, prompt, timeoutMs) {
   if (provider.type === 'gemini') {
-    return withDeadline(callGemini(provider, prompt), timeoutMs);
+    return withTimeout(signal => callGemini(provider, prompt, signal), timeoutMs);
   }
   return withTimeout((signal) => callOpenAICompatible(provider, prompt, signal), timeoutMs);
 }
@@ -219,26 +365,28 @@ async function withDeadline(promise,timeoutMs) {
   finally{clearTimeout(timer);}
 }
 
-// Concurrent quiz providers race to return the first syntactically valid JSON.
-// If the first wave fails, preserve the existing sequential provider fallback.
-// Requests use the same prompt; server-side quiz integrity checks still run.
+// Concurrent providers return the first fully validated result. Callers may
+// assign a different task to every attempt, including sequential fallbacks.
 async function generateJSON(prompt, options = {}) {
-  const providers = buildProviders();
+  const providers = options.task ? buildTaskProviders(options.task, options) : buildProviders();
   if (!providers.length) {
     throw Object.assign(new Error('No AI provider configured. Set GEMINI_API_KEY(S) or AI_PROVIDERS_JSON.'), { code: 'refinery-ai-config', attempts: [] });
   }
   const timeoutMs = Math.max(3000, Number(options.timeoutMs) || DEFAULT_TIMEOUT_MS);
-  const ordered = orderedProviders(providers);
+  const taskIsGemini = Boolean(options.task && providers[0]?.type === 'gemini');
+  const ordered = taskIsGemini ? providers : orderedProviders(providers);
   const errors = [];
   const attempts = [];
-  const attempt = async (provider, index = 0) => {
+  let nextAttemptIndex = 0;
+  const attempt = async (provider) => {
+    const index = nextAttemptIndex++;
     const started = Date.now();
     try {
       const candidatePrompt = typeof options.promptForProvider === 'function' ? options.promptForProvider(prompt, index) : prompt;
       const raw = await callProvider(provider, candidatePrompt, timeoutMs);
       const text = extractJsonText(raw);
       const data = JSON.parse(text);
-      if (typeof options.validate === 'function') options.validate(data);
+      if (typeof options.validate === 'function') options.validate(data, {index, provider:provider.name, model:provider.model});
       recordAttempt(provider, 'success');
       console.log(`[AI Router] ${provider.name}/${provider.model} success`);
       return { data, text, provider: provider.name, model: provider.model };
@@ -259,7 +407,7 @@ async function generateJSON(prompt, options = {}) {
 
   // Use distinct credentials in the first wave rather than saturating one
   // Gemini key with multiple models. Cap extra calls to control API spend.
-  const requested = options.parallel === true ? 3 : 1;
+  const requested = taskIsGemini ? 1 : options.parallel === true ? 3 : 1;
   const wave = [];
   const seenCredentials = new Set();
   for (const provider of ordered) {
@@ -283,17 +431,20 @@ async function generateJSON(prompt, options = {}) {
   };
   if (wave.length > 1) {
     try {
-      return await Promise.any(wave.map((provider, index) => attempt(provider, index).then(collect)));
+      return await Promise.any(wave.map(provider => attempt(provider).then(collect)));
     } catch (_) {
       // All parallel attempts failed; remaining providers still get a chance.
     }
   } else if (wave.length === 1) {
-    try { return collect(await attempt(wave[0], 0)); } catch (_) { /* retry other providers */ }
+    try { return collect(await attempt(wave[0])); } catch (_) { /* retry other providers */ }
   }
   const attempted = new Set(wave);
-  for (const [index, provider] of ordered.entries()) {
+  const maxAttempts = taskIsGemini ? Math.min(4, ordered.length) : ordered.length;
+  for (const provider of ordered) {
     if (attempted.has(provider)) continue;
-    try { return collect(await attempt(provider, index)); } catch (_) { /* continue fallback */ }
+    if (attempted.size >= maxAttempts) break;
+    attempted.add(provider);
+    try { return collect(await attempt(provider)); } catch (_) { /* continue fallback */ }
   }
   const codes = new Set(attempts.map(item => item.code));
   throw Object.assign(new Error(`All AI providers failed: ${errors.join(' | ')}`), {
@@ -302,6 +453,15 @@ async function generateJSON(prompt, options = {}) {
 }
 
 function getStatus() {
+  const hasExplicitModelList = splitCsv(process.env.GEMINI_MODELS).length || splitCsv(process.env.GEMINI_MODEL).length;
+  // Display all six automatically routed models when Render only has keys.
+  const keys = geminiKeys();
+  if (keys.length && !hasExplicitModelList) {
+    const models = [...GEMINI_LITE_MODELS, ...GEMINI_FLASH_MODELS];
+    return keys.flatMap((_, index) => models.map(model => ({
+      name: 'gemini-' + (index + 1) + '-' + model, type: 'gemini', model
+    })));
+  }
   return buildProviders().map(({ name, type, model }) => ({ name, type, model }));
 }
 
@@ -314,5 +474,10 @@ module.exports = {
   recordAttempt,
   getRecentActivity,
   safeProviderError,
-  withDeadline
+  withDeadline,
+  requestGeminiHigh,
+  geminiThinkingConfig,
+  buildTaskProviders,
+  getGeminiRequestUsage,
+  TASK_MODELS
 };

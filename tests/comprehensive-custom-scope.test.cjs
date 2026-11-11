@@ -10,7 +10,7 @@ test('random quizzes ignore saved custom ranges while focused quizzes still hono
     focusedUnits: [{ path: '歷史/七年級', detail: '歷史章節' }] },
     profile: { educationLevel: '國中一年級', weakSubjects: '' }, stats: { rankLevel: 0, knowledgeMap: {} } };
   const context = vm.createContext({ currentUserData: player, currentLang: 'zh', window: {}, quizMetaFromRaw: () => ({}), console: { log() {}, error() {} },
-    getRankName: () => '煉氣', getSmartDifficulty: () => 'medium', recentSoloQuestionContext: () => ({}),
+    getRankName: () => '煉氣', getSmartDifficulty: () => 'medium', recentSoloQuestionContext: () => ({}), adaptiveQuestionContext: () => ({}),
     shuffleArray: a => a, fetch: async (_, input) => { requests.push(JSON.parse(input.body)); return { ok: true,
       json: async () => ({ text: JSON.stringify({ q: 'Q', correct: 'A', wrong: ['B','C','D'], exp: 'E' }) }) }; } });
   const start = legacy.indexOf('async function fetchOneQuestion() {'), end = legacy.indexOf('async function handleAnswer', start);

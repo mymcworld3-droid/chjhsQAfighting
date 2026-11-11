@@ -1,0 +1,944 @@
+[
+  {
+    "id": "gsat-114-chinese-q1",
+    "difficulty": "easy",
+    "q": "下列「」內的字，讀音前後相同的是：",
+    "correct": "「舁」出寶貨／吾生須「臾」",
+    "wrong": [
+      "切而「啗」之／「諂」詞令色",
+      "「迤」邐而行／外「弛」內張",
+      "若分「畛」域／暴「殄」天物"
+    ],
+    "exp": "正確答案：「舁」出寶貨／吾生須「臾」。來源：114年學科能力測驗國文第1題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 1,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.9,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q2",
+    "difficulty": "easy",
+    "q": "下列文句，完全<u>沒有</u>錯別字的是：",
+    "correct": "他剽竊別人智慧，還恬不知恥地炫耀",
+    "wrong": [
+      "辯論比賽上，辯士伶牙利齒能言善道",
+      "老張刻意賣弄學問，反顯得矯柔造作",
+      "科學交流會後，李同學覺得大有展獲"
+    ],
+    "exp": "正確答案：他剽竊別人智慧，還恬不知恥地炫耀。來源：114年學科能力測驗國文第2題。",
+    "subject": "國文",
+    "sub_topic": "字形辨正",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 2,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.95,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q3",
+    "difficulty": "easy",
+    "q": "依據下文，□□內最適合填入的詞語依序是：\n\n月亮從大大小小的雲朵裡照下來，就像是從厚薄不勻的□□□中滲出來的，滴到柏油路上，濃一塊，淡一塊，成了深深淺淺的□□。□□的城市。街上的人都那麼匆匆地趕路，各找各的營養。（聶華苓〈月光•枯井•三腳貓〉）\n\n![圖表](/assets/banks/gsat-114-chinese/Q3-figure-1.png)",
+    "correct": "破海綿／青蒼／貧血",
+    "wrong": [
+      "破海綿／皎潔／貪婪",
+      "舊報紙／青蒼／貪婪",
+      "舊報紙／皎潔／貧血"
+    ],
+    "exp": "正確答案：破海綿／青蒼／貧血。來源：114年學科能力測驗國文第3題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 3,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/Q3-figure-1.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q4",
+    "difficulty": "easy",
+    "q": "丘成桐是知名數學家，下文將數學與文學並談，主要用意是強調：\n\n《詩經》的「北風其涼」，假風以刺威虐；「雨雪霏霏」，因雪以愍征役─皆興發於此而義歸於彼。有深度的文學作品必須有「義」、有「比興」，數學亦如是。我們在尋求真知時，往往只能依循研究的大方向，憑著對大自然的感覺邁進，這種感覺因個人的修養而定。文學家為了描述最佳意境，不見得忠實描寫現象界。如賈島追究「僧推月下門」與「僧敲月下門」的區別，並不在乎所說的是不同的事實。數學家創造美好的理論，也不必依隨大自然的規律，只要邏輯推導沒有問題，就可以盡情發揮想像力。\n（改寫自丘成桐〈數學和中國文學的比較〉）",
+    "correct": "數學家在論證有效下，可如詩人般馳騁想像，憑感覺創造理論",
+    "wrong": [
+      "數學家若兼具文學修養，即可將寫作原理轉用於創造數學理論",
+      "數學家雖可不依大自然規律，但無法如詩人般不忠實描寫現象",
+      "數學家的意圖，如同「比興」言在此而意在彼，有待讀者解謎"
+    ],
+    "exp": "正確答案：數學家在論證有效下，可如詩人般馳騁想像，憑感覺創造理論。來源：114年學科能力測驗國文第4題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 4,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q5",
+    "difficulty": "easy",
+    "q": "下文<u> ______ </u>處，若要填入使文意前後連貫的文句，最適當的是：\n\n吾聞之，六國合從，而辯說之材出；劉、項並世，而籌畫戰鬥之徒起；唐太宗欲治，而謨謀諫諍之佐來。此數輩者，方此數君未出之時，蓋未嘗有也。<u> ______ </u>。天下之廣，人物之眾，而曰果無材可用者，吾不信也。（王安石〈材論〉）",
+    "correct": "人君苟欲之，斯至矣",
+    "wrong": [
+      "古之人，於材有以教育成就之",
+      "人之有異能於其身，猶錐之在囊",
+      "後之在位者，蓋未嘗求其說而試之以實也"
+    ],
+    "exp": "正確答案：人君苟欲之，斯至矣。來源：114年學科能力測驗國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 5,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q6",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>6-8為題組</u>。閱讀下文，回答6-8題。\n\n深夜，斜臥床榻，隨手抽取一本小几上疊放的書漫讀助眠，已是長年習慣。書宜輕巧易掌握，內容勿過於深奧嚴肅，否則刺激興奮，反失效果。那夜，從書堆抽出體積特小的日本岩波書店口袋型書，曾閱讀過部分而未竟，書頁間夾著一張書籤，姑且從有書籤的那頁讀起來。翻閱兩三頁後，忽有一張小小的短箋滑下，上面印著淺淺好看藍紫色的鉛印字：\n\n山笑─根據《廣辭苑》\n\n俳句的季節語。謂眾樹一齊吐芽的春季華麗景致。相對的，「山眠」指枯槁失卻精采的山，「山粧」則是被紅葉裝扮的山，各為冬、秋季節語。見於北宋畫家、兼山水畫理論家郭熙的「四時山」。\n\n《廣辭苑》雖未採入，但青青的夏季的山是「山滴」。\n\n這幾行文字與我手中捧讀的書全不相關。把紙片反過來看，正中央印著岩波書店新印製的辭典《廣辭苑》書脊樣本，原來正面文字是為第五版《廣辭苑》做的廣告。\n\n廣告何以題為「山笑」，又引用郭熙「四時山」的字句呢？根據《廣辭苑》，「山笑」一詞，是俳句（日本古典短詩）的季節語，典出於北宋郭熙的《山水訓》。按捺不住好奇，索性走到書房去查究。《山水訓》的原文是這樣的：「真山水之煙嵐，四時不同。春山淡冶而如笑，夏山蒼翠而如滴，秋山明淨而如粧，冬山慘淡而如睡。」雖然日文廣告詞引述的文字，把原文的「如笑」、「如滴」、「如粧」、「如睡」改為「山笑」、「山滴」、「山粧」、「山眠」，以適合其語言習慣，且文章次序也略有變動，但郭熙的絕妙比喻，卻被生動地化為一則含帶商業性質的文字裡，不得不令人佩服！至於在四季不同山色中擇取「山笑」為題，從我正在閱讀的書印刷發行時間推斷，應是配合此書是春季版的效果，也是神來之筆。\n\n日本的文士不僅寫作漢詩文，即使和歌、俳句也深受中國文化影響，這段廣告詞可以為證。查得這些來龍去脈，我心中釋然，雖則睡意全消，卻經驗了一次愉悅的失眠。（改寫自林文月〈山笑〉）\n\n有關書中紙片訊息的解讀，敘述最適當的是：\n\n![圖表](/assets/banks/gsat-114-chinese/Q6-figure-1.png)",
+    "correct": "《廣辭苑》對季節語的解釋，和《山水訓》不完全相同\n\n![圖表](/assets/banks/gsat-114-chinese/Q6-option-D-figure-1.png)",
+    "wrong": [
+      "為目前正在閱讀之書的廣告文案\n\n![圖表](/assets/banks/gsat-114-chinese/Q6-option-A-figure-1.png)",
+      "《廣辭苑》收錄俳句四季的季節語詞條\n\n滿分上上籤\n\n![圖表](/assets/banks/gsat-114-chinese/Q6-option-B-figure-1.png)",
+      "以「山笑」為廣告主題，是依循季節的順序\n\n![圖表](/assets/banks/gsat-114-chinese/Q6-option-C-figure-1.png)"
+    ],
+    "exp": "正確答案：《廣辭苑》對季節語的解釋，和《山水訓》不完全相同\n\n![圖表](/assets/banks/gsat-114-chinese/Q6-option-D-figure-1.png)。來源：114年學科能力測驗國文第6題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 6,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        6,
+        8
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/Q6-figure-1.png",
+      "/assets/banks/gsat-114-chinese/Q6-option-D-figure-1.png",
+      "/assets/banks/gsat-114-chinese/Q6-option-A-figure-1.png",
+      "/assets/banks/gsat-114-chinese/Q6-option-B-figure-1.png",
+      "/assets/banks/gsat-114-chinese/Q6-option-C-figure-1.png"
+    ],
+    "passRate": 0.79,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q7",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>6-8為題組</u>。閱讀下文，回答6-8題。\n\n深夜，斜臥床榻，隨手抽取一本小几上疊放的書漫讀助眠，已是長年習慣。書宜輕巧易掌握，內容勿過於深奧嚴肅，否則刺激興奮，反失效果。那夜，從書堆抽出體積特小的日本岩波書店口袋型書，曾閱讀過部分而未竟，書頁間夾著一張書籤，姑且從有書籤的那頁讀起來。翻閱兩三頁後，忽有一張小小的短箋滑下，上面印著淺淺好看藍紫色的鉛印字：\n\n山笑─根據《廣辭苑》\n\n俳句的季節語。謂眾樹一齊吐芽的春季華麗景致。相對的，「山眠」指枯槁失卻精采的山，「山粧」則是被紅葉裝扮的山，各為冬、秋季節語。見於北宋畫家、兼山水畫理論家郭熙的「四時山」。\n\n《廣辭苑》雖未採入，但青青的夏季的山是「山滴」。\n\n這幾行文字與我手中捧讀的書全不相關。把紙片反過來看，正中央印著岩波書店新印製的辭典《廣辭苑》書脊樣本，原來正面文字是為第五版《廣辭苑》做的廣告。\n\n廣告何以題為「山笑」，又引用郭熙「四時山」的字句呢？根據《廣辭苑》，「山笑」一詞，是俳句（日本古典短詩）的季節語，典出於北宋郭熙的《山水訓》。按捺不住好奇，索性走到書房去查究。《山水訓》的原文是這樣的：「真山水之煙嵐，四時不同。春山淡冶而如笑，夏山蒼翠而如滴，秋山明淨而如粧，冬山慘淡而如睡。」雖然日文廣告詞引述的文字，把原文的「如笑」、「如滴」、「如粧」、「如睡」改為「山笑」、「山滴」、「山粧」、「山眠」，以適合其語言習慣，且文章次序也略有變動，但郭熙的絕妙比喻，卻被生動地化為一則含帶商業性質的文字裡，不得不令人佩服！至於在四季不同山色中擇取「山笑」為題，從我正在閱讀的書印刷發行時間推斷，應是配合此書是春季版的效果，也是神來之筆。\n\n日本的文士不僅寫作漢詩文，即使和歌、俳句也深受中國文化影響，這段廣告詞可以為證。查得這些來龍去脈，我心中釋然，雖則睡意全消，卻經驗了一次愉悅的失眠。（改寫自林文月〈山笑〉）\n\n文末作者說自己「經驗了一次愉悅的失眠」，最可能的原因是：\n\n![圖表](/assets/banks/gsat-114-chinese/G6-8-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G6-8-figure-2.png)\n![圖表](/assets/banks/gsat-114-chinese/G6-8-figure-3.png)\n\n![圖表](/assets/banks/gsat-114-chinese/Q7-figure-1.png)",
+    "correct": "掘發郭熙的文句化用於廣告之妙\n\n籤詩占卜遊戲APP",
+    "wrong": [
+      "受到廣告的吸引而渴望讀完此書",
+      "俳句優美典雅文詞讓人陶醉不已",
+      "能查證俳句發展脈絡而感到驕傲"
+    ],
+    "exp": "正確答案：掘發郭熙的文句化用於廣告之妙\n\n籤詩占卜遊戲APP。來源：114年學科能力測驗國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 7,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        6,
+        8
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G6-8-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G6-8-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G6-8-figure-3.png",
+      "/assets/banks/gsat-114-chinese/Q7-figure-1.png"
+    ],
+    "passRate": 0.84,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q8",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>6-8為題組</u>。閱讀下文，回答6-8題。\n\n深夜，斜臥床榻，隨手抽取一本小几上疊放的書漫讀助眠，已是長年習慣。書宜輕巧易掌握，內容勿過於深奧嚴肅，否則刺激興奮，反失效果。那夜，從書堆抽出體積特小的日本岩波書店口袋型書，曾閱讀過部分而未竟，書頁間夾著一張書籤，姑且從有書籤的那頁讀起來。翻閱兩三頁後，忽有一張小小的短箋滑下，上面印著淺淺好看藍紫色的鉛印字：\n\n山笑─根據《廣辭苑》\n\n俳句的季節語。謂眾樹一齊吐芽的春季華麗景致。相對的，「山眠」指枯槁失卻精采的山，「山粧」則是被紅葉裝扮的山，各為冬、秋季節語。見於北宋畫家、兼山水畫理論家郭熙的「四時山」。\n\n《廣辭苑》雖未採入，但青青的夏季的山是「山滴」。\n\n這幾行文字與我手中捧讀的書全不相關。把紙片反過來看，正中央印著岩波書店新印製的辭典《廣辭苑》書脊樣本，原來正面文字是為第五版《廣辭苑》做的廣告。\n\n廣告何以題為「山笑」，又引用郭熙「四時山」的字句呢？根據《廣辭苑》，「山笑」一詞，是俳句（日本古典短詩）的季節語，典出於北宋郭熙的《山水訓》。按捺不住好奇，索性走到書房去查究。《山水訓》的原文是這樣的：「真山水之煙嵐，四時不同。春山淡冶而如笑，夏山蒼翠而如滴，秋山明淨而如粧，冬山慘淡而如睡。」雖然日文廣告詞引述的文字，把原文的「如笑」、「如滴」、「如粧」、「如睡」改為「山笑」、「山滴」、「山粧」、「山眠」，以適合其語言習慣，且文章次序也略有變動，但郭熙的絕妙比喻，卻被生動地化為一則含帶商業性質的文字裡，不得不令人佩服！至於在四季不同山色中擇取「山笑」為題，從我正在閱讀的書印刷發行時間推斷，應是配合此書是春季版的效果，也是神來之筆。\n\n日本的文士不僅寫作漢詩文，即使和歌、俳句也深受中國文化影響，這段廣告詞可以為證。查得這些來龍去脈，我心中釋然，雖則睡意全消，卻經驗了一次愉悅的失眠。（改寫自林文月〈山笑〉）\n\n某籤詩占卜遊戲APP受到上文啟發，與文具福氣包合作，擬印製如右上圖的祝福卡片置入包中，<u> ______ </u>內最適合選用的詩句是：\n\n![圖表](/assets/banks/gsat-114-chinese/G6-8-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G6-8-figure-2.png)\n![圖表](/assets/banks/gsat-114-chinese/G6-8-figure-3.png)\n",
+    "correct": "綠柳蒼蒼正當時，任君此去作乾坤。花果結實無殘謝，福祿自有慶家門",
+    "wrong": [
+      "欲去長江水闊茫，行船把定未遭風。戶內用心再作福，看看魚水得相逢",
+      "蛩吟唧唧守孤幃，千里懸懸望信歸。等得榮華公子到，秋冬括括雨霏霏",
+      "八十原來是太公，看看晚景遇文王。目下緊事休相問，勸君且守待運通"
+    ],
+    "exp": "正確答案：綠柳蒼蒼正當時，任君此去作乾坤。花果結實無殘謝，福祿自有慶家門。來源：114年學科能力測驗國文第8題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 8,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        6,
+        8
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G6-8-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G6-8-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G6-8-figure-3.png"
+    ],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q9",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>9-10為題組</u>。閱讀下文，回答9-10題。\n\n甘蔗是煉糖原料。溫暖潮濕的臺灣適合甘蔗生長，元朝汪大淵《島夷志略》即有「釀蔗漿為酒」的記載。荷蘭占領臺灣後，引進製糖技術，將成品銷往日本。日本因地理環境，長期以來大量依賴外國的進口糖。日治時期，臺灣總督府積極推動糖業現代化，成立新式製糖廠。發達的糖業帶動了甜點、煉乳相關產業的發展。現今頗受歡迎的日本明治巧克力，其製造商「明治製菓」，其實創立於臺灣。\n\n市面上常見的甘蔗，有供榨汁用的白甘蔗與可直接啃食的紅甘蔗。啃甘蔗在焦桐眼中，是複雜的口腔運動。《晉書》載名士顧愷之「每食甘蔗，恆自尾至本，人或怪之。云：『漸入佳境』。」余光中〈埔里甘蔗〉認為吃甘蔗：「無論是倒啖或者順吃／每一口都是口福／第一口就咬入了佳境／卻笑東晉的名士／嚼來還是太拘謹。」同時分享心得：「而真要啖得痛快／就務必冰得徹底／嚐到那樣的甜頭，幾乎／捨不得吐掉渣子／直到嚥最後的一口／還舔著黏黏的手指頭／像剛斷奶的孩子。」\n\n大伙一起啃甘蔗曾是許多人共同的回憶。洪愛珠在〈蘆洲老區涼水兩味〉中，憶起幼時家族老小並肩而坐啃甘蔗，覺得「於齒間碾緊，吮汁，樂呵呵吐出一碗渣來，是一種粗爽樸素的消遣。」但現在如果突然想啃，也不易買到。因而不禁說道:「時間這躡步之賊，是如此將一個許多人啃甘蔗的社會，置換成甘蔗難尋的社會。」\n\n根據上文，關於甘蔗食用與糖業發展，敘述最適當的是：",
+    "correct": "日本積極在殖民地推動糖業現代化，期能解決對進口糖的依賴",
+    "wrong": [
+      "根據文獻記錄，元代即已種植甘蔗並熬蔗漿為糖",
+      "臺灣製糖工業濫觴於日治時期，生產的糖銷往日本",
+      "「明治製菓」創立於臺灣，以進口糖為原料生產巧克力"
+    ],
+    "exp": "正確答案：日本積極在殖民地推動糖業現代化，期能解決對進口糖的依賴。來源：114年學科能力測驗國文第9題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 9,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        9,
+        10
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q10",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>9-10為題組</u>。閱讀下文，回答9-10題。\n\n甘蔗是煉糖原料。溫暖潮濕的臺灣適合甘蔗生長，元朝汪大淵《島夷志略》即有「釀蔗漿為酒」的記載。荷蘭占領臺灣後，引進製糖技術，將成品銷往日本。日本因地理環境，長期以來大量依賴外國的進口糖。日治時期，臺灣總督府積極推動糖業現代化，成立新式製糖廠。發達的糖業帶動了甜點、煉乳相關產業的發展。現今頗受歡迎的日本明治巧克力，其製造商「明治製菓」，其實創立於臺灣。\n\n市面上常見的甘蔗，有供榨汁用的白甘蔗與可直接啃食的紅甘蔗。啃甘蔗在焦桐眼中，是複雜的口腔運動。《晉書》載名士顧愷之「每食甘蔗，恆自尾至本，人或怪之。云：『漸入佳境』。」余光中〈埔里甘蔗〉認為吃甘蔗：「無論是倒啖或者順吃／每一口都是口福／第一口就咬入了佳境／卻笑東晉的名士／嚼來還是太拘謹。」同時分享心得：「而真要啖得痛快／就務必冰得徹底／嚐到那樣的甜頭，幾乎／捨不得吐掉渣子／直到嚥最後的一口／還舔著黏黏的手指頭／像剛斷奶的孩子。」\n\n大伙一起啃甘蔗曾是許多人共同的回憶。洪愛珠在〈蘆洲老區涼水兩味〉中，憶起幼時家族老小並肩而坐啃甘蔗，覺得「於齒間碾緊，吮汁，樂呵呵吐出一碗渣來，是一種粗爽樸素的消遣。」但現在如果突然想啃，也不易買到。因而不禁說道:「時間這躡步之賊，是如此將一個許多人啃甘蔗的社會，置換成甘蔗難尋的社會。」\n\n關於文中引述眾人吃甘蔗的經驗，敘述<u>不適當</u>的是：",
+    "correct": "余光中以剛斷奶的孩子為喻，流露的情懷與洪愛珠的躡步之賊相同",
+    "wrong": [
+      "由顧愷之與時人對話可知，倒吃甘蔗並不是當時常見的吃法",
+      "余光中與顧愷之看法不同，認為順吃或倒啖，無害甘蔗甜美",
+      "洪愛珠陳述啃甘蔗時口腔中進行的連續動作，呈現焦桐所謂的複雜"
+    ],
+    "exp": "正確答案：余光中以剛斷奶的孩子為喻，流露的情懷與洪愛珠的躡步之賊相同。來源：114年學科能力測驗國文第10題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 10,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        9,
+        10
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q11",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>11-12為題組</u>。閱讀下文，回答11-12題。\n\n論小人者，必論其心。小人庸多善事，其心未有無所為而為者。若徒論外事人品真偽，學術邪正，幾不可辨矣。論君子者，又不當徒論其心，心雖純正，而行事偶失，亦即是過。故論小人以心者，所以防閑小人之法；論君子以事者，所以造就君子之方。（魏禧《魏叔子日錄》）\n\n關於「君子行事」，下列最符合上文觀點的是：\n\n![圖表](/assets/banks/gsat-114-chinese/G11-12-figure-1.png)",
+    "correct": "必然具有良善的動機",
+    "wrong": [
+      "縱有疏失也不易察覺",
+      "經常招致小人的詆毀",
+      "能引領世風正向發展"
+    ],
+    "exp": "正確答案：必然具有良善的動機。來源：114年學科能力測驗國文第11題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 11,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        12
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G11-12-figure-1.png"
+    ],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q12",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>11-12為題組</u>。閱讀下文，回答11-12題。\n\n論小人者，必論其心。小人庸多善事，其心未有無所為而為者。若徒論外事人品真偽，學術邪正，幾不可辨矣。論君子者，又不當徒論其心，心雖純正，而行事偶失，亦即是過。故論小人以心者，所以防閑小人之法；論君子以事者，所以造就君子之方。（魏禧《魏叔子日錄》）\n\n依據上文，「論小人者，必論其心」旨在告訴讀者：\n\n![圖表](/assets/banks/gsat-114-chinese/G11-12-figure-1.png)",
+    "correct": "不可被小人的作為所蒙蔽",
+    "wrong": [
+      "小人也有心存善念的可能",
+      "小人無目標的行事易壞事",
+      "必須致力讓小人改邪歸正"
+    ],
+    "exp": "正確答案：不可被小人的作為所蒙蔽。來源：114年學科能力測驗國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 12,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        11,
+        12
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G11-12-figure-1.png"
+    ],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q13",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>13-14為題組</u>。閱讀下文，回答13-14題。\n\n![圖表](/assets/banks/gsat-114-chinese/G13-14-figure-1.png)\n\n現在流行區分E人、I人。不只我們透過MBTI認識自己或他人的性格，動漫\n\n遊戲和歷史人物也有MBTI，例如有人說李白是ENFP。\n\nMBTI（邁爾斯‒布里格斯性格類型）\n\n| 你的關注取向 | E | 樂於加入群體活動，大方分享看法，成為眾人的焦點。 | I | 喜歡獨處的自在，傾向保留內心的想法，少與陌生人談話。 |\n| 你習慣的資訊 | S | 注重實用思維，偏好具體的指引與實踐的細節。 | N | 擅長抽象思考，用簡要的語言掌握概念與大方向。 |\n| 你做決定的方式 | T | 在乎原則、公理、正義、倫常，對事不對人。 | F | 重視和諧、體諒，常把人們的情緒納入處事的考量。 |\n| 你的生活態度 | J | 目標導向，希望一切在掌控中，按部就班照計畫實現。 | P | 保持開放的選擇，隨著現況調整，能接受意想不到的改變。 |\n\n甲\n\n![圖表](/assets/banks/gsat-114-chinese/G13-14-figure-2.png)\n\nMBTI以四個向度勾勒人的性格，每個向度都有一組對立型態。如果只取這個框架簡單易記的優點，拿它來分析古人，是可以提高識別度。\n\n古人也有類似的思維。例如司馬遷的父親曾說「儒家」是「博而寡要，勞而少功，是以其事難盡從。然其序君臣父子之禮，列夫婦長幼之別，不可易也。」而「道家」則是「與時遷移，應物變化，立俗施事，無所不宜，指約而易操，事少而功多。」他把這兩家當成性格互異者，若參照MBTI，他心目中的儒家性格是<u> ______ </u>成分較多，道家性格則<u> ______ </u>較明顯。\n\n乙\n\n但若從《論語》、《孟子》找句子，有符合S的<u>　①　</u>，也有符合N的<u>　②　</u>；有符合T的<u>　③　</u>，也有符合F的<u>　④　</u>。可見這種框架固然可提高識別度，但也可能遮蔽原本多元的面向。\n\n丙\n\n乙若依上文MBTI研判，兩處<u> ______ </u>內依序應是：",
+    "correct": "ST／NP",
+    "wrong": [
+      "SF／NT",
+      "TJ／FP",
+      "FJ／TP"
+    ],
+    "exp": "正確答案：ST／NP。來源：114年學科能力測驗國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 13,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        13,
+        14
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G13-14-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G13-14-figure-2.png"
+    ],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q14",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>13-14為題組</u>。閱讀下文，回答13-14題。\n\n![圖表](/assets/banks/gsat-114-chinese/G13-14-figure-1.png)\n\n現在流行區分E人、I人。不只我們透過MBTI認識自己或他人的性格，動漫\n\n遊戲和歷史人物也有MBTI，例如有人說李白是ENFP。\n\nMBTI（邁爾斯‒布里格斯性格類型）\n\n| 你的關注取向 | E | 樂於加入群體活動，大方分享看法，成為眾人的焦點。 | I | 喜歡獨處的自在，傾向保留內心的想法，少與陌生人談話。 |\n| 你習慣的資訊 | S | 注重實用思維，偏好具體的指引與實踐的細節。 | N | 擅長抽象思考，用簡要的語言掌握概念與大方向。 |\n| 你做決定的方式 | T | 在乎原則、公理、正義、倫常，對事不對人。 | F | 重視和諧、體諒，常把人們的情緒納入處事的考量。 |\n| 你的生活態度 | J | 目標導向，希望一切在掌控中，按部就班照計畫實現。 | P | 保持開放的選擇，隨著現況調整，能接受意想不到的改變。 |\n\n甲\n\n![圖表](/assets/banks/gsat-114-chinese/G13-14-figure-2.png)\n\nMBTI以四個向度勾勒人的性格，每個向度都有一組對立型態。如果只取這個框架簡單易記的優點，拿它來分析古人，是可以提高識別度。\n\n古人也有類似的思維。例如司馬遷的父親曾說「儒家」是「博而寡要，勞而少功，是以其事難盡從。然其序君臣父子之禮，列夫婦長幼之別，不可易也。」而「道家」則是「與時遷移，應物變化，立俗施事，無所不宜，指約而易操，事少而功多。」他把這兩家當成性格互異者，若參照MBTI，他心目中的儒家性格是<u> ______ </u>成分較多，道家性格則<u> ______ </u>較明顯。\n\n乙\n\n但若從《論語》、《孟子》找句子，有符合S的<u>　①　</u>，也有符合N的<u>　②　</u>；有符合T的<u>　③　</u>，也有符合F的<u>　④　</u>。可見這種框架固然可提高識別度，但也可能遮蔽原本多元的面向。\n\n丙\n\n依上文MBTI，丙的舉證，<u>不適當</u>的是：",
+    "correct": "④理義之悅我心，猶芻豢之悅我口",
+    "wrong": [
+      "①五畝之宅，樹之以桑，五十者可以衣帛矣；雞豚狗彘之畜，無失其時，七十者可以食肉矣",
+      "②政者，正也。子帥以正，孰敢不正",
+      "③鄉愿，德之賊也"
+    ],
+    "exp": "正確答案：④理義之悅我心，猶芻豢之悅我口。來源：114年學科能力測驗國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 14,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        13,
+        14
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G13-14-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G13-14-figure-2.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q15",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>15-19為題組</u>。閱讀下文，回答15-19題。\n\n對三國歷史稍有了解的人都知道赤壁之戰，然而赤壁最初在李白、杜甫詩中，不過是一個地名。「折戟沉沙鐵未銷，自將磨洗認前朝。東風不與周郎便，銅雀春深鎖二喬。」杜牧這首〈赤壁〉最早將赤壁之戰與銅雀臺連結，並賦予「赤壁」具體的形象與情感。「赤壁」自此取代銅雀臺，支配了人們對三國的想像，直至今天。\n\n〈赤壁〉開篇看似平直，卻涵藏深刻。眼前古戟因經歷實戰而折斷，「折」字傳達出戰爭的暴力。杜牧磨洗戟，並非如兵士般用以傷敵，而是為辨認前朝。於是，戟由「武」的工具變成了「文」的載體。詩的後半藉「東風」引入虛設的情境：若周瑜未得到偶然的助力，二喬姊妹將被魏俘虜而禁錮在銅雀臺。首句的未銷之「鐵」，在末句做為囚禁二喬的鐵鎖重現。「春深」表示草木茂盛，與「折戟」所象徵的受挫欲望，形成對比。〈赤壁〉為杜牧在黃州任官時所寫，以磨洗折戟，強調了與歷史的相遇是個人性的，通過與古物直接接觸而實現。\n\n蘇軾被貶黃州，留下前後〈赤壁賦〉、〈念奴嬌‧赤壁懷古〉等影響深遠的名作，標誌了「赤壁」建構過程的第二個關鍵時刻。\n\n〈赤壁賦〉中，蘇子吟誦的〈月出〉與扣舷所歌的「望美人兮天一方」，傳達了求而不得的情思。歌詩裡的悲愁渴望，削弱了「飲酒樂甚」的稱述。不過蘇子並未意識到這點，反歸咎於吹簫客的悲音，因而發出「何為其然也」的扣問。客在回答中引述〈短歌行〉詩句，又接連提出問題。客雖未明言曹操橫槊賦詩所賦的就是〈短歌行〉，卻在赤壁之戰與曹操此詩間，建立起含蓄的關聯。作者蘇軾通過客，為〈短歌行〉標示了一個具體的創作時空，並從此左右後人對此詩的解讀。\n\n客對赤壁之遊提供了與蘇子截然不同的視角，先前①<u>「凌萬頃之茫然、羽化登仙」的</u><u>浪漫描寫，</u><u>被他成功地一一否認</u>。面對客的反駁，蘇子先②<u>以莊子式的相對論回應「羨長江之無窮」</u>，再申明清風明月，他與客可以取之、用之、享受之。但它們同樣需要一個感受主體才得以存在（耳得之而為聲，目遇之而成色），而且被主體的感受塗上了主觀色彩。故山水之美不過是心境的反映。由此推論，蘇子在賦文開篇所感受到的一派空明飄逸，亦是蘇子自身的延伸。\n\n〈赤壁賦〉中蘇子萬物終歸不變的議論，若對照〈短歌行〉「明明如月，何時可掇？憂從中來，不可斷絕」，便帶出一層新的涵義：個人生命終期於盡，不像長江明月永恆，唯一能使之永恆的是歌詩文字。文字將一世梟雄對應於某個轉瞬即逝的困局而生發的憂思，塑造為一篇經久的藝術作品，在曹操和他的水軍艦隊灰飛煙滅後，依然感動著千載之後的人們。於是，在曹操釃酒臨江而賦詩的形象中，我們看到了飲酒作歌的蘇子與創作〈赤壁賦〉的蘇軾。蘇、曹二人的受挫，並不有損其文學創造的偉大。(改寫自田曉菲《赤壁之戟》)\n\n下列敘述，最符合本文對杜牧〈赤壁〉一詩意象解讀的是：\n\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-2.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-3.png)",
+    "correct": "「戟」被賦予殺敵之外的作用，呈現了文武交疊的影像",
+    "wrong": [
+      "「鐵未銷」暗示戰事慘烈，並隱喻赤壁之戰的影響深鉅",
+      "「東風」喻生命的復甦，意謂二喬在銅雀臺享受新生活",
+      "「銅雀」指銅雀臺，藉空間的閉鎖以暗示政治權力轉移"
+    ],
+    "exp": "正確答案：「戟」被賦予殺敵之外的作用，呈現了文武交疊的影像。來源：114年學科能力測驗國文第15題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 15,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G15-19-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-3.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>15-19為題組</u>。閱讀下文，回答15-19題。\n\n對三國歷史稍有了解的人都知道赤壁之戰，然而赤壁最初在李白、杜甫詩中，不過是一個地名。「折戟沉沙鐵未銷，自將磨洗認前朝。東風不與周郎便，銅雀春深鎖二喬。」杜牧這首〈赤壁〉最早將赤壁之戰與銅雀臺連結，並賦予「赤壁」具體的形象與情感。「赤壁」自此取代銅雀臺，支配了人們對三國的想像，直至今天。\n\n〈赤壁〉開篇看似平直，卻涵藏深刻。眼前古戟因經歷實戰而折斷，「折」字傳達出戰爭的暴力。杜牧磨洗戟，並非如兵士般用以傷敵，而是為辨認前朝。於是，戟由「武」的工具變成了「文」的載體。詩的後半藉「東風」引入虛設的情境：若周瑜未得到偶然的助力，二喬姊妹將被魏俘虜而禁錮在銅雀臺。首句的未銷之「鐵」，在末句做為囚禁二喬的鐵鎖重現。「春深」表示草木茂盛，與「折戟」所象徵的受挫欲望，形成對比。〈赤壁〉為杜牧在黃州任官時所寫，以磨洗折戟，強調了與歷史的相遇是個人性的，通過與古物直接接觸而實現。\n\n蘇軾被貶黃州，留下前後〈赤壁賦〉、〈念奴嬌‧赤壁懷古〉等影響深遠的名作，標誌了「赤壁」建構過程的第二個關鍵時刻。\n\n〈赤壁賦〉中，蘇子吟誦的〈月出〉與扣舷所歌的「望美人兮天一方」，傳達了求而不得的情思。歌詩裡的悲愁渴望，削弱了「飲酒樂甚」的稱述。不過蘇子並未意識到這點，反歸咎於吹簫客的悲音，因而發出「何為其然也」的扣問。客在回答中引述〈短歌行〉詩句，又接連提出問題。客雖未明言曹操橫槊賦詩所賦的就是〈短歌行〉，卻在赤壁之戰與曹操此詩間，建立起含蓄的關聯。作者蘇軾通過客，為〈短歌行〉標示了一個具體的創作時空，並從此左右後人對此詩的解讀。\n\n客對赤壁之遊提供了與蘇子截然不同的視角，先前①<u>「凌萬頃之茫然、羽化登仙」的</u><u>浪漫描寫，</u><u>被他成功地一一否認</u>。面對客的反駁，蘇子先②<u>以莊子式的相對論回應「羨長江之無窮」</u>，再申明清風明月，他與客可以取之、用之、享受之。但它們同樣需要一個感受主體才得以存在（耳得之而為聲，目遇之而成色），而且被主體的感受塗上了主觀色彩。故山水之美不過是心境的反映。由此推論，蘇子在賦文開篇所感受到的一派空明飄逸，亦是蘇子自身的延伸。\n\n〈赤壁賦〉中蘇子萬物終歸不變的議論，若對照〈短歌行〉「明明如月，何時可掇？憂從中來，不可斷絕」，便帶出一層新的涵義：個人生命終期於盡，不像長江明月永恆，唯一能使之永恆的是歌詩文字。文字將一世梟雄對應於某個轉瞬即逝的困局而生發的憂思，塑造為一篇經久的藝術作品，在曹操和他的水軍艦隊灰飛煙滅後，依然感動著千載之後的人們。於是，在曹操釃酒臨江而賦詩的形象中，我們看到了飲酒作歌的蘇子與創作〈赤壁賦〉的蘇軾。蘇、曹二人的受挫，並不有損其文學創造的偉大。(改寫自田曉菲《赤壁之戟》)\n\n下列敘述，最符合本文對杜牧〈赤壁〉寫作特色說明的是：\n\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-2.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-3.png)",
+    "correct": "藉東風興發想像，隱含人未必是歷史成敗的關鍵",
+    "wrong": [
+      "結合銅雀臺的典故，首開以赤壁之戰入詩的風氣",
+      "透過特寫古兵器戟，寄託以文治取代武事的理想",
+      "經由磨洗動作暗示真相難明，並批判梟雄的野心"
+    ],
+    "exp": "正確答案：藉東風興發想像，隱含人未必是歷史成敗的關鍵。來源：114年學科能力測驗國文第16題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 16,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G15-19-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-3.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q17",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>15-19為題組</u>。閱讀下文，回答15-19題。\n\n對三國歷史稍有了解的人都知道赤壁之戰，然而赤壁最初在李白、杜甫詩中，不過是一個地名。「折戟沉沙鐵未銷，自將磨洗認前朝。東風不與周郎便，銅雀春深鎖二喬。」杜牧這首〈赤壁〉最早將赤壁之戰與銅雀臺連結，並賦予「赤壁」具體的形象與情感。「赤壁」自此取代銅雀臺，支配了人們對三國的想像，直至今天。\n\n〈赤壁〉開篇看似平直，卻涵藏深刻。眼前古戟因經歷實戰而折斷，「折」字傳達出戰爭的暴力。杜牧磨洗戟，並非如兵士般用以傷敵，而是為辨認前朝。於是，戟由「武」的工具變成了「文」的載體。詩的後半藉「東風」引入虛設的情境：若周瑜未得到偶然的助力，二喬姊妹將被魏俘虜而禁錮在銅雀臺。首句的未銷之「鐵」，在末句做為囚禁二喬的鐵鎖重現。「春深」表示草木茂盛，與「折戟」所象徵的受挫欲望，形成對比。〈赤壁〉為杜牧在黃州任官時所寫，以磨洗折戟，強調了與歷史的相遇是個人性的，通過與古物直接接觸而實現。\n\n蘇軾被貶黃州，留下前後〈赤壁賦〉、〈念奴嬌‧赤壁懷古〉等影響深遠的名作，標誌了「赤壁」建構過程的第二個關鍵時刻。\n\n〈赤壁賦〉中，蘇子吟誦的〈月出〉與扣舷所歌的「望美人兮天一方」，傳達了求而不得的情思。歌詩裡的悲愁渴望，削弱了「飲酒樂甚」的稱述。不過蘇子並未意識到這點，反歸咎於吹簫客的悲音，因而發出「何為其然也」的扣問。客在回答中引述〈短歌行〉詩句，又接連提出問題。客雖未明言曹操橫槊賦詩所賦的就是〈短歌行〉，卻在赤壁之戰與曹操此詩間，建立起含蓄的關聯。作者蘇軾通過客，為〈短歌行〉標示了一個具體的創作時空，並從此左右後人對此詩的解讀。\n\n客對赤壁之遊提供了與蘇子截然不同的視角，先前①<u>「凌萬頃之茫然、羽化登仙」的</u><u>浪漫描寫，</u><u>被他成功地一一否認</u>。面對客的反駁，蘇子先②<u>以莊子式的相對論回應「羨長江之無窮」</u>，再申明清風明月，他與客可以取之、用之、享受之。但它們同樣需要一個感受主體才得以存在（耳得之而為聲，目遇之而成色），而且被主體的感受塗上了主觀色彩。故山水之美不過是心境的反映。由此推論，蘇子在賦文開篇所感受到的一派空明飄逸，亦是蘇子自身的延伸。\n\n〈赤壁賦〉中蘇子萬物終歸不變的議論，若對照〈短歌行〉「明明如月，何時可掇？憂從中來，不可斷絕」，便帶出一層新的涵義：個人生命終期於盡，不像長江明月永恆，唯一能使之永恆的是歌詩文字。文字將一世梟雄對應於某個轉瞬即逝的困局而生發的憂思，塑造為一篇經久的藝術作品，在曹操和他的水軍艦隊灰飛煙滅後，依然感動著千載之後的人們。於是，在曹操釃酒臨江而賦詩的形象中，我們看到了飲酒作歌的蘇子與創作〈赤壁賦〉的蘇軾。蘇、曹二人的受挫，並不有損其文學創造的偉大。(改寫自田曉菲《赤壁之戟》)\n\n依據上文，客在〈赤壁賦〉中扮演的角色，說明最適當的是：\n\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-2.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-3.png)",
+    "correct": "照見蘇子欲求，提出質疑引發反思",
+    "wrong": [
+      "帶出曹操詩句，建構一世梟雄形象",
+      "對照古今，揭示鐘鼎山林的人生領悟",
+      "開展想像，呈顯空明飄逸的主體心境"
+    ],
+    "exp": "正確答案：照見蘇子欲求，提出質疑引發反思。來源：114年學科能力測驗國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 17,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G15-19-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-3.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q18",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>15-19為題組</u>。閱讀下文，回答15-19題。\n\n對三國歷史稍有了解的人都知道赤壁之戰，然而赤壁最初在李白、杜甫詩中，不過是一個地名。「折戟沉沙鐵未銷，自將磨洗認前朝。東風不與周郎便，銅雀春深鎖二喬。」杜牧這首〈赤壁〉最早將赤壁之戰與銅雀臺連結，並賦予「赤壁」具體的形象與情感。「赤壁」自此取代銅雀臺，支配了人們對三國的想像，直至今天。\n\n〈赤壁〉開篇看似平直，卻涵藏深刻。眼前古戟因經歷實戰而折斷，「折」字傳達出戰爭的暴力。杜牧磨洗戟，並非如兵士般用以傷敵，而是為辨認前朝。於是，戟由「武」的工具變成了「文」的載體。詩的後半藉「東風」引入虛設的情境：若周瑜未得到偶然的助力，二喬姊妹將被魏俘虜而禁錮在銅雀臺。首句的未銷之「鐵」，在末句做為囚禁二喬的鐵鎖重現。「春深」表示草木茂盛，與「折戟」所象徵的受挫欲望，形成對比。〈赤壁〉為杜牧在黃州任官時所寫，以磨洗折戟，強調了與歷史的相遇是個人性的，通過與古物直接接觸而實現。\n\n蘇軾被貶黃州，留下前後〈赤壁賦〉、〈念奴嬌‧赤壁懷古〉等影響深遠的名作，標誌了「赤壁」建構過程的第二個關鍵時刻。\n\n〈赤壁賦〉中，蘇子吟誦的〈月出〉與扣舷所歌的「望美人兮天一方」，傳達了求而不得的情思。歌詩裡的悲愁渴望，削弱了「飲酒樂甚」的稱述。不過蘇子並未意識到這點，反歸咎於吹簫客的悲音，因而發出「何為其然也」的扣問。客在回答中引述〈短歌行〉詩句，又接連提出問題。客雖未明言曹操橫槊賦詩所賦的就是〈短歌行〉，卻在赤壁之戰與曹操此詩間，建立起含蓄的關聯。作者蘇軾通過客，為〈短歌行〉標示了一個具體的創作時空，並從此左右後人對此詩的解讀。\n\n客對赤壁之遊提供了與蘇子截然不同的視角，先前①<u>「凌萬頃之茫然、羽化登仙」的</u><u>浪漫描寫，</u><u>被他成功地一一否認</u>。面對客的反駁，蘇子先②<u>以莊子式的相對論回應「羨長江之無窮」</u>，再申明清風明月，他與客可以取之、用之、享受之。但它們同樣需要一個感受主體才得以存在（耳得之而為聲，目遇之而成色），而且被主體的感受塗上了主觀色彩。故山水之美不過是心境的反映。由此推論，蘇子在賦文開篇所感受到的一派空明飄逸，亦是蘇子自身的延伸。\n\n〈赤壁賦〉中蘇子萬物終歸不變的議論，若對照〈短歌行〉「明明如月，何時可掇？憂從中來，不可斷絕」，便帶出一層新的涵義：個人生命終期於盡，不像長江明月永恆，唯一能使之永恆的是歌詩文字。文字將一世梟雄對應於某個轉瞬即逝的困局而生發的憂思，塑造為一篇經久的藝術作品，在曹操和他的水軍艦隊灰飛煙滅後，依然感動著千載之後的人們。於是，在曹操釃酒臨江而賦詩的形象中，我們看到了飲酒作歌的蘇子與創作〈赤壁賦〉的蘇軾。蘇、曹二人的受挫，並不有損其文學創造的偉大。(改寫自田曉菲《赤壁之戟》)\n\n上文畫線處如欲引述〈赤壁賦〉原文為論據，是否適當的研判是：\n\n①挾飛仙以遨遊，抱明月而長終。知不可乎驟得。\n\n②且夫天地之間，物各有主，苟非吾之所有，雖一毫而莫取。\n\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-2.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-3.png)",
+    "correct": "①適當，②不適當",
+    "wrong": [
+      "①、②皆適當",
+      "①不適當，②無法判斷",
+      "①無法判斷，②不適當"
+    ],
+    "exp": "正確答案：①適當，②不適當。來源：114年學科能力測驗國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 18,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G15-19-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-3.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q19",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>15-19為題組</u>。閱讀下文，回答15-19題。\n\n對三國歷史稍有了解的人都知道赤壁之戰，然而赤壁最初在李白、杜甫詩中，不過是一個地名。「折戟沉沙鐵未銷，自將磨洗認前朝。東風不與周郎便，銅雀春深鎖二喬。」杜牧這首〈赤壁〉最早將赤壁之戰與銅雀臺連結，並賦予「赤壁」具體的形象與情感。「赤壁」自此取代銅雀臺，支配了人們對三國的想像，直至今天。\n\n〈赤壁〉開篇看似平直，卻涵藏深刻。眼前古戟因經歷實戰而折斷，「折」字傳達出戰爭的暴力。杜牧磨洗戟，並非如兵士般用以傷敵，而是為辨認前朝。於是，戟由「武」的工具變成了「文」的載體。詩的後半藉「東風」引入虛設的情境：若周瑜未得到偶然的助力，二喬姊妹將被魏俘虜而禁錮在銅雀臺。首句的未銷之「鐵」，在末句做為囚禁二喬的鐵鎖重現。「春深」表示草木茂盛，與「折戟」所象徵的受挫欲望，形成對比。〈赤壁〉為杜牧在黃州任官時所寫，以磨洗折戟，強調了與歷史的相遇是個人性的，通過與古物直接接觸而實現。\n\n蘇軾被貶黃州，留下前後〈赤壁賦〉、〈念奴嬌‧赤壁懷古〉等影響深遠的名作，標誌了「赤壁」建構過程的第二個關鍵時刻。\n\n〈赤壁賦〉中，蘇子吟誦的〈月出〉與扣舷所歌的「望美人兮天一方」，傳達了求而不得的情思。歌詩裡的悲愁渴望，削弱了「飲酒樂甚」的稱述。不過蘇子並未意識到這點，反歸咎於吹簫客的悲音，因而發出「何為其然也」的扣問。客在回答中引述〈短歌行〉詩句，又接連提出問題。客雖未明言曹操橫槊賦詩所賦的就是〈短歌行〉，卻在赤壁之戰與曹操此詩間，建立起含蓄的關聯。作者蘇軾通過客，為〈短歌行〉標示了一個具體的創作時空，並從此左右後人對此詩的解讀。\n\n客對赤壁之遊提供了與蘇子截然不同的視角，先前①<u>「凌萬頃之茫然、羽化登仙」的</u><u>浪漫描寫，</u><u>被他成功地一一否認</u>。面對客的反駁，蘇子先②<u>以莊子式的相對論回應「羨長江之無窮」</u>，再申明清風明月，他與客可以取之、用之、享受之。但它們同樣需要一個感受主體才得以存在（耳得之而為聲，目遇之而成色），而且被主體的感受塗上了主觀色彩。故山水之美不過是心境的反映。由此推論，蘇子在賦文開篇所感受到的一派空明飄逸，亦是蘇子自身的延伸。\n\n〈赤壁賦〉中蘇子萬物終歸不變的議論，若對照〈短歌行〉「明明如月，何時可掇？憂從中來，不可斷絕」，便帶出一層新的涵義：個人生命終期於盡，不像長江明月永恆，唯一能使之永恆的是歌詩文字。文字將一世梟雄對應於某個轉瞬即逝的困局而生發的憂思，塑造為一篇經久的藝術作品，在曹操和他的水軍艦隊灰飛煙滅後，依然感動著千載之後的人們。於是，在曹操釃酒臨江而賦詩的形象中，我們看到了飲酒作歌的蘇子與創作〈赤壁賦〉的蘇軾。蘇、曹二人的受挫，並不有損其文學創造的偉大。(改寫自田曉菲《赤壁之戟》)\n\n關於杜牧與蘇軾的赤壁書寫，最符合上文觀點的是：\n\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-2.png)\n![圖表](/assets/banks/gsat-114-chinese/G15-19-figure-3.png)",
+    "correct": "皆對歷史事件賦予個人想像，而將赤壁轉變為文學意象",
+    "wrong": [
+      "皆在歌詠前代詩人的同時，重疊自身影像以寄託心志",
+      "均拼貼片斷訊息以進行歷史想像，重現赤壁之戰發生場景",
+      "均透過人與自然的對比，凸顯文學書寫對生命有限的突破"
+    ],
+    "exp": "正確答案：皆對歷史事件賦予個人想像，而將赤壁轉變為文學意象。來源：114年學科能力測驗國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 19,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        15,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G15-19-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G15-19-figure-3.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q20",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>20-21為題組</u>。閱讀下文，回答20-21題。\n\n廳壁不宜太素，亦忌太華。名人尺幅，自不可少，但須濃淡得宜，錯綜有致。予謂裱軸不如實貼；軸慮風起動搖，損傷名跡，實貼則無是患，且覺大小咸宜也。實貼又不如實畫，「何年顧虎頭，滿壁畫滄洲」自是高人韻事。予齋頭偶仿此制，而又變幻其形，良朋至止，無不耳目一新，低回留之不能去者。\n\n顧虎頭:東晉畫家顧愷之。\n\n滄洲:古稱隱士居住的地方。\n\n因予性嗜禽鳥，而又最惡樊籠，二事難全，終年搜索枯腸，一悟遂成良法。乃於廳旁四壁，倩四名手，盡寫著色花樹，而繞以雲煙，即以所愛禽鳥，蓄於虯枝老幹之上。畫止空跡，鳥有實形，如何可蓄？曰：不難，蓄之須自鸚鵡始。從來蓄鸚鵡者必用銅架，即以銅架去其三面，止存立腳之一條，並飲水啄粟之二管。先於所畫松枝之上，穴一小小壁孔，後以架鸚鵡者插入其中，務使極固，庶往來跳躍，不致動搖。松為著色之松，鳥亦有色之鳥，互相映發，有如一筆寫成。\n\n良朋至止，仰觀壁畫，忽見枝頭鳥動，葉底翎張，無不色變神飛，詫為仙筆；乃驚疑未定，又復載飛載鳴，似欲翱翔而下矣。諦觀熟視，方知個裡情形，有不抵掌叫絕，而稱巧奪天工者乎？（節錄自李漁《閒情偶寄‧廳壁》）\n\n關於上文對廳堂壁面的設計，敘述最適當的是：\n\n![圖表](/assets/banks/gsat-114-chinese/G20-21-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G20-21-figure-2.png)",
+    "correct": "邀請名家實畫景物於壁面，並融入個人喜好選擇題材",
+    "wrong": [
+      "風格極簡或華麗皆可接受，但不能缺少名人書畫作品",
+      "書畫貼於壁面以免風吹損傷，且可依喜好來裁切尺寸",
+      "將滄洲直接繪於廳堂壁面，藉此懷念當年相識的舊友"
+    ],
+    "exp": "正確答案：邀請名家實畫景物於壁面，並融入個人喜好選擇題材。來源：114年學科能力測驗國文第20題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 20,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G20-21-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G20-21-figure-2.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q21",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>20-21為題組</u>。閱讀下文，回答20-21題。\n\n廳壁不宜太素，亦忌太華。名人尺幅，自不可少，但須濃淡得宜，錯綜有致。予謂裱軸不如實貼；軸慮風起動搖，損傷名跡，實貼則無是患，且覺大小咸宜也。實貼又不如實畫，「何年顧虎頭，滿壁畫滄洲」自是高人韻事。予齋頭偶仿此制，而又變幻其形，良朋至止，無不耳目一新，低回留之不能去者。\n\n顧虎頭:東晉畫家顧愷之。\n\n滄洲:古稱隱士居住的地方。\n\n因予性嗜禽鳥，而又最惡樊籠，二事難全，終年搜索枯腸，一悟遂成良法。乃於廳旁四壁，倩四名手，盡寫著色花樹，而繞以雲煙，即以所愛禽鳥，蓄於虯枝老幹之上。畫止空跡，鳥有實形，如何可蓄？曰：不難，蓄之須自鸚鵡始。從來蓄鸚鵡者必用銅架，即以銅架去其三面，止存立腳之一條，並飲水啄粟之二管。先於所畫松枝之上，穴一小小壁孔，後以架鸚鵡者插入其中，務使極固，庶往來跳躍，不致動搖。松為著色之松，鳥亦有色之鳥，互相映發，有如一筆寫成。\n\n良朋至止，仰觀壁畫，忽見枝頭鳥動，葉底翎張，無不色變神飛，詫為仙筆；乃驚疑未定，又復載飛載鳴，似欲翱翔而下矣。諦觀熟視，方知個裡情形，有不抵掌叫絕，而稱巧奪天工者乎？（節錄自李漁《閒情偶寄‧廳壁》）\n\n根據上文朋友抵掌稱「巧奪天工」的原因，最可能是：\n\n![圖表](/assets/banks/gsat-114-chinese/G20-21-figure-1.png)\n![圖表](/assets/banks/gsat-114-chinese/G20-21-figure-2.png)",
+    "correct": "驚嘆虛實相映的樹林與鸚鵡，理解裝置方法後方恍然大悟",
+    "wrong": [
+      "觀賞繞以雲煙的花樹與鸚鵡，對畫壁的開創之舉驚為仙筆",
+      "肯定主人的創意，既將花樹繪於壁面，又打造鸚鵡的樂園",
+      "發現裝置能操控鸚鵡，使其動靜自如，顯現主人深知鳥性"
+    ],
+    "exp": "正確答案：驚嘆虛實相映的樹林與鸚鵡，理解裝置方法後方恍然大悟。來源：114年學科能力測驗國文第21題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 21,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G20-21-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G20-21-figure-2.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q22",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>22-24為題組</u>。閱讀下文，回答22-24題。\n\n甲\n\n《小兒藥證直訣》匯集北宋兒科大家錢乙的醫療觀點與方法，是世界現存最早的兒科專著。錢乙注重五臟、五行間的生剋關係，並提出相應的治法和方劑，而小兒臟腑柔弱，故主張用藥應避免強攻。\n\n書中保存了二十多個醫療案例與一百多種方劑。這些方劑或以五臟與五色的對應關係命名，如導赤散、益黃散、瀉白散、瀉青丸；或以方中主要藥材阿膠命名，如阿膠散。\n\n生\n\n生\n\n生\n\n生\n\n生\n\n阿膠散是錢乙研創新方的代表，注重補肺止咳的主要療效，又用甘草、糯米護脾胃以培土生金。至於化裁古方，如香連丸，主治熱痢。古制用黃連苦降以清熱，木香芳烈以行滯。錢乙則加入豆蔻溫澀止瀉，命名豆蔻香連丸。雖同樣治療腹痛腹瀉，但寒熱通澀之性有別。\n\n乙\n\n東都張氏孫，九歲，病肺熱。……其證：嗽喘，悶亂，飲水不止，全不能食。錢氏用使君子丸、<u> ______ </u>。張曰：「本有熱，何以又行溫藥？他醫用涼藥攻之，一月尚無效。」錢曰：「涼藥久則寒不能食。小兒虛不能食，當補脾，候飲食如故，即瀉肺經，病必愈矣。」服補脾藥二日，其子欲飲食。錢以<u> ______ </u>瀉其肺，遂愈。張曰：「何以不虛？」錢曰：「先實其脾，然後瀉其肺，故不虛也。」（《小兒藥證直訣》）\n\n甲文敘及「豆蔻香連丸」，主要是為了強調錢乙：\n\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-1.png)\n\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-3.png)\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-4.png)",
+    "correct": "不拘限於傳統，合宜調整用藥",
+    "wrong": [
+      "善於改變藥性，易溫澀為寒涼",
+      "致力考察古今方劑藥材的差異",
+      "積極保存古代醫典所載的名藥"
+    ],
+    "exp": "正確答案：不拘限於傳統，合宜調整用藥。來源：114年學科能力測驗國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 22,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G22-24-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G22-24-figure-3.png",
+      "/assets/banks/gsat-114-chinese/G22-24-figure-4.png"
+    ],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>22-24為題組</u>。閱讀下文，回答22-24題。\n\n甲\n\n《小兒藥證直訣》匯集北宋兒科大家錢乙的醫療觀點與方法，是世界現存最早的兒科專著。錢乙注重五臟、五行間的生剋關係，並提出相應的治法和方劑，而小兒臟腑柔弱，故主張用藥應避免強攻。\n\n書中保存了二十多個醫療案例與一百多種方劑。這些方劑或以五臟與五色的對應關係命名，如導赤散、益黃散、瀉白散、瀉青丸；或以方中主要藥材阿膠命名，如阿膠散。\n\n生\n\n生\n\n生\n\n生\n\n生\n\n阿膠散是錢乙研創新方的代表，注重補肺止咳的主要療效，又用甘草、糯米護脾胃以培土生金。至於化裁古方，如香連丸，主治熱痢。古制用黃連苦降以清熱，木香芳烈以行滯。錢乙則加入豆蔻溫澀止瀉，命名豆蔻香連丸。雖同樣治療腹痛腹瀉，但寒熱通澀之性有別。\n\n乙\n\n東都張氏孫，九歲，病肺熱。……其證：嗽喘，悶亂，飲水不止，全不能食。錢氏用使君子丸、<u> ______ </u>。張曰：「本有熱，何以又行溫藥？他醫用涼藥攻之，一月尚無效。」錢曰：「涼藥久則寒不能食。小兒虛不能食，當補脾，候飲食如故，即瀉肺經，病必愈矣。」服補脾藥二日，其子欲飲食。錢以<u> ______ </u>瀉其肺，遂愈。張曰：「何以不虛？」錢曰：「先實其脾，然後瀉其肺，故不虛也。」（《小兒藥證直訣》）\n\n依據甲文附圖，乙文<u> ______ </u>內應填入的藥名，依序應是：\n\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-1.png)\n\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-3.png)\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-4.png)",
+    "correct": "益黃散／瀉白散",
+    "wrong": [
+      "導赤散／瀉白散",
+      "導赤散／瀉青丸",
+      "益黃散／瀉青丸"
+    ],
+    "exp": "正確答案：益黃散／瀉白散。來源：114年學科能力測驗國文第23題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 23,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G22-24-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G22-24-figure-3.png",
+      "/assets/banks/gsat-114-chinese/G22-24-figure-4.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q24",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n<u>22-24為題組</u>。閱讀下文，回答22-24題。\n\n甲\n\n《小兒藥證直訣》匯集北宋兒科大家錢乙的醫療觀點與方法，是世界現存最早的兒科專著。錢乙注重五臟、五行間的生剋關係，並提出相應的治法和方劑，而小兒臟腑柔弱，故主張用藥應避免強攻。\n\n書中保存了二十多個醫療案例與一百多種方劑。這些方劑或以五臟與五色的對應關係命名，如導赤散、益黃散、瀉白散、瀉青丸；或以方中主要藥材阿膠命名，如阿膠散。\n\n生\n\n生\n\n生\n\n生\n\n生\n\n阿膠散是錢乙研創新方的代表，注重補肺止咳的主要療效，又用甘草、糯米護脾胃以培土生金。至於化裁古方，如香連丸，主治熱痢。古制用黃連苦降以清熱，木香芳烈以行滯。錢乙則加入豆蔻溫澀止瀉，命名豆蔻香連丸。雖同樣治療腹痛腹瀉，但寒熱通澀之性有別。\n\n乙\n\n東都張氏孫，九歲，病肺熱。……其證：嗽喘，悶亂，飲水不止，全不能食。錢氏用使君子丸、<u> ______ </u>。張曰：「本有熱，何以又行溫藥？他醫用涼藥攻之，一月尚無效。」錢曰：「涼藥久則寒不能食。小兒虛不能食，當補脾，候飲食如故，即瀉肺經，病必愈矣。」服補脾藥二日，其子欲飲食。錢以<u> ______ </u>瀉其肺，遂愈。張曰：「何以不虛？」錢曰：「先實其脾，然後瀉其肺，故不虛也。」（《小兒藥證直訣》）\n\n綜合甲乙二文，下列①、②是否符合錢乙醫療觀點，最適當的研判是：\n\n①五臟母子相生，治療時宜先補母，母實之後再瀉子。\n\n②不強攻病證，待小兒飲食恢復正常後，方對症用藥。\n\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-1.png)\n\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-3.png)\n![圖表](/assets/banks/gsat-114-chinese/G22-24-figure-4.png)",
+    "correct": "①、②皆符合",
+    "wrong": [
+      "①、②皆不符合",
+      "①符合，②不符合",
+      "①不符合，②符合"
+    ],
+    "exp": "正確答案：①、②皆符合。來源：114年學科能力測驗國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 24,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G22-24-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G22-24-figure-3.png",
+      "/assets/banks/gsat-114-chinese/G22-24-figure-4.png"
+    ],
+    "passRate": 0.3,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q32",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>32-36為題組</u>。閱讀下文，回答32-36題。\n\n|  / ![圖表](/assets/banks/gsat-114-chinese/G32-36-figure-1.png) /  | 張氏以髮長委地，立梳床前。靖方刷馬，忽有一人，中形，赤髯而虯，乘蹇驢而來，投革囊於爐前，取枕攲臥，看張氏梳頭。靖怒甚，未決，猶刷馬。張氏熟視其面，一手握髮，一手映身搖示靖，令勿怒。急急梳頭畢，斂衽前問其姓。臥客答曰：「姓張。」對曰：「妾亦姓張，合是妹。」遽拜之。……張氏遙呼曰：「李郎且來拜三兄！」靖驟拜之，遂環坐。曰：「煮者何肉？」曰：「羊肉，計已熟矣。」客曰：「飢甚！」靖出市胡餅。客抽腰間匕首，切肉共食。……客曰：「觀李郎之行，貧士也，何以致斯異人？」曰：「靖雖貧，亦有心者焉。他人見問，固不言，兄之問，則無隱耳。」具言其由。曰：「然則將何之？」曰：「將避地太原。」客曰：「然，吾故謂非君所能致也。」曰：「有酒乎？」靖曰：「主人西則酒肆也。」靖取酒一斗，酒既巡，客曰：「吾有少下酒物，李郎能同之乎？」靖曰：「不敢。」於是開革囊，取一人頭並心肝，卻頭囊中，以匕首切心肝共食之。曰：「此人天下負心者，銜之十年，今始獲，吾憾釋矣。」又曰：「觀李郎儀形器宇，真丈夫也。」 |\n|  / ![圖表](/assets/banks/gsat-114-chinese/G32-36-figure-2.png) /  | 貼這段〈虯髯客傳〉，是打算討論明天的報告？ |\n|  /  /  | 有默契。我們現在完全沒主題、沒框架…… |\n|  / ![圖表](/assets/banks/gsat-114-chinese/G32-36-figure-3.png) /  | 那就拿「概念框架」當框架吧！ |\n|  /  /  | 什麼？不懂！ |\n|  /  /  | 凡是理解、思考，都需要概念框架。剛才你說「有默契」，就是明白對方有相同的理解框架；又說「不懂」，則是缺乏理解對方的框架。框架不同的人，很容易雞同鴨講。若不試著接近對方的框架，就無法消除隔閡。 |\n|  /  /  | 這麼說，《西遊記》的唐僧剛收孫悟空為徒時，曾因為孫悟空打死強盜大吵一架，就是沒有相同理解框架。孫悟空強調那是正當防衛，唐僧則認為打劫罪不致死，不該傷人性命。 |\n|  /  /  | 唐僧斥責孫悟空沒有慈悲好善之心，「去不得西天，做不得和尚」，也出自特定的身分框架。 |\n|  /  /  | 哈！你們不打遊戲去看《西遊記》？不過，身分確實是人際關係的常見框架。「你是哥哥，怎不讓弟弟？」就是在設定兄長本分框架。紅拂去找李靖並說「願託喬木」，則是引導對方走進終身伴侶的框架。 |\n|  /  /  | 孫悟空氣得丟下師父，本想回花果山，但東海龍王提醒他：若不保護唐僧，「到底是個妖仙，休想得成正果」。孫悟空想了想，選擇回唐僧身邊。 |\n|  /  /  | 當初他大鬧天宮，得到「弼馬溫」一職，又棄官自封「齊天大聖」，應該也是在找合適的身分框架。 |\n|  /  /  | 人們常說要跳脫框架，活出自我。但孫悟空若不走進「西天取經」的框架，就成不了「鬥戰聖佛」。人們即使能擺脫一個框架，也無法擺脫所有框架。甚至可以說，若沒活在某個框架裡，可能也不知道什麼是自我肯定的方式。 |\n\n下列①、②「→」後，是就前人名言所提出的看法。關於這兩項看法是否符合上文觀點，最適當的研判是：（占2分，單選題）\n\n①「你可以從外表的美評論一朵花或一隻蝴蝶，但不能以此評論一個人。」→人其實不適合以任何框架「評論」，有框架反而會壓抑才能的發揮。\n\n②「這世界不是缺少美，而是缺少發現美的眼睛。」→發現與否，其實無關眼睛構造，而是得先具備「看見」某個事物的概念框架，才能發現它的美。",
+    "correct": "①不符合，②符合",
+    "wrong": [
+      "①、②皆符合",
+      "①、②皆不符合",
+      "①符合，②不符合"
+    ],
+    "exp": "正確答案：①不符合，②符合。來源：114年學科能力測驗國文第32題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 32,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        32,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G32-36-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G32-36-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G32-36-figure-3.png"
+    ],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-chinese-q33",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>32-36為題組</u>。閱讀下文，回答32-36題。\n\n|  / ![圖表](/assets/banks/gsat-114-chinese/G32-36-figure-1.png) /  | 張氏以髮長委地，立梳床前。靖方刷馬，忽有一人，中形，赤髯而虯，乘蹇驢而來，投革囊於爐前，取枕攲臥，看張氏梳頭。靖怒甚，未決，猶刷馬。張氏熟視其面，一手握髮，一手映身搖示靖，令勿怒。急急梳頭畢，斂衽前問其姓。臥客答曰：「姓張。」對曰：「妾亦姓張，合是妹。」遽拜之。……張氏遙呼曰：「李郎且來拜三兄！」靖驟拜之，遂環坐。曰：「煮者何肉？」曰：「羊肉，計已熟矣。」客曰：「飢甚！」靖出市胡餅。客抽腰間匕首，切肉共食。……客曰：「觀李郎之行，貧士也，何以致斯異人？」曰：「靖雖貧，亦有心者焉。他人見問，固不言，兄之問，則無隱耳。」具言其由。曰：「然則將何之？」曰：「將避地太原。」客曰：「然，吾故謂非君所能致也。」曰：「有酒乎？」靖曰：「主人西則酒肆也。」靖取酒一斗，酒既巡，客曰：「吾有少下酒物，李郎能同之乎？」靖曰：「不敢。」於是開革囊，取一人頭並心肝，卻頭囊中，以匕首切心肝共食之。曰：「此人天下負心者，銜之十年，今始獲，吾憾釋矣。」又曰：「觀李郎儀形器宇，真丈夫也。」 |\n|  / ![圖表](/assets/banks/gsat-114-chinese/G32-36-figure-2.png) /  | 貼這段〈虯髯客傳〉，是打算討論明天的報告？ |\n|  /  /  | 有默契。我們現在完全沒主題、沒框架…… |\n|  / ![圖表](/assets/banks/gsat-114-chinese/G32-36-figure-3.png) /  | 那就拿「概念框架」當框架吧！ |\n|  /  /  | 什麼？不懂！ |\n|  /  /  | 凡是理解、思考，都需要概念框架。剛才你說「有默契」，就是明白對方有相同的理解框架；又說「不懂」，則是缺乏理解對方的框架。框架不同的人，很容易雞同鴨講。若不試著接近對方的框架，就無法消除隔閡。 |\n|  /  /  | 這麼說，《西遊記》的唐僧剛收孫悟空為徒時，曾因為孫悟空打死強盜大吵一架，就是沒有相同理解框架。孫悟空強調那是正當防衛，唐僧則認為打劫罪不致死，不該傷人性命。 |\n|  /  /  | 唐僧斥責孫悟空沒有慈悲好善之心，「去不得西天，做不得和尚」，也出自特定的身分框架。 |\n|  /  /  | 哈！你們不打遊戲去看《西遊記》？不過，身分確實是人際關係的常見框架。「你是哥哥，怎不讓弟弟？」就是在設定兄長本分框架。紅拂去找李靖並說「願託喬木」，則是引導對方走進終身伴侶的框架。 |\n|  /  /  | 孫悟空氣得丟下師父，本想回花果山，但東海龍王提醒他：若不保護唐僧，「到底是個妖仙，休想得成正果」。孫悟空想了想，選擇回唐僧身邊。 |\n|  /  /  | 當初他大鬧天宮，得到「弼馬溫」一職，又棄官自封「齊天大聖」，應該也是在找合適的身分框架。 |\n|  /  /  | 人們常說要跳脫框架，活出自我。但孫悟空若不走進「西天取經」的框架，就成不了「鬥戰聖佛」。人們即使能擺脫一個框架，也無法擺脫所有框架。甚至可以說，若沒活在某個框架裡，可能也不知道什麼是自我肯定的方式。 |\n\n下列文句，意在表達「有其他概念框架可以選擇」的是：（占2分，單選題）",
+    "correct": "若亡鄭而有益於君，敢以煩執事。越國以鄙遠，君知其難也，焉用亡鄭以陪鄰",
+    "wrong": [
+      "河內凶，則移其民於河東，移其粟於河內。河東凶，亦然",
+      "竊慕管夫人之墨竹，紙上生風；敢藉陶彭澤之黃花，圖中寫影",
+      "彼節者有間，而刀刃者無厚，以無厚入有間，恢恢乎其於遊刃必有餘地矣"
+    ],
+    "exp": "正確答案：若亡鄭而有益於君，敢以煩執事。越國以鄙遠，君知其難也，焉用亡鄭以陪鄰。來源：114年學科能力測驗國文第33題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-114-chinese",
+      "question": 33,
+      "file": "高中/學測/國文/01-114學測國綜試題.pdf",
+      "url": "https://drive.google.com/file/d/1DCDu_GPHoFbqhSqe_n6yBi3P2iIojZA2/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051548831591816379/01-114%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        32,
+        36
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-114-chinese/G32-36-figure-1.png",
+      "/assets/banks/gsat-114-chinese/G32-36-figure-2.png",
+      "/assets/banks/gsat-114-chinese/G32-36-figure-3.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/1hwzaBmzmD0sYPw4q1KVCBW6Vq5OviriH/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  }
+]

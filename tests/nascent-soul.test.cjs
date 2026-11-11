@@ -47,7 +47,7 @@ test('each cave completion awards number of correct answers; stage thresholds ar
 test('raids, perfect meditation and cooperative nodes award fragments; solo and cave retain cultivation',()=>{
  const solo=read('public/main-legacy.js'),daily=read('daily-meditation-api.cjs'),cave=read('dongtian-settlement-api.cjs');
  assert.doesNotMatch(solo,/nascentSoulSpiritReward|savedStats.nascentSoulSpirit/);
- assert.match(daily,/const fragments=score>=68 && correct===3\?3:0/);
+ assert.match(daily,/const fragments=score>=68 && full\?3:0/);
  assert.match(daily,/Growth.patch\(growth\)/);assert.doesNotMatch(cave,/stats.nascentSoulSpirit.*increment/);
 });
 
