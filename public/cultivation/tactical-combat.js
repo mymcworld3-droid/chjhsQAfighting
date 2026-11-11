@@ -362,12 +362,38 @@ async function question(){
 }
 function questionSheet(q,review=null,index=0){
   const options=review?.opts||q.opts;
-  const buttons=options.map((value,i)=>`<button type="button" ${review?`disabled class="cursor-not-allowed ${i===review.answerIndex?'bg-green-600':i===review.choice?'bg-red-600':''}"`:`data-choice-for="${index}" data-choice="${i}"`}><span>${String.fromCharCode(65+i)}</span><span class="quiz-rich-option">${rich(value)}${review&&i===review.answerIndex?' ✓':''}</span></button>`).join('');
+  const buttons=options.map((value,i)=>{
+    const resultClass=review?(i===review.answerIndex?' bg-green-600 border-green-400 text-white':i===review.choice?' bg-red-600 border-red-400 text-white':''):'';
+    const selected=!review&&pairChoices[index]===i;
+    return `<button type="button" class="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2${resultClass}${selected?' is-picked':''}" ${review?'disabled class': ''}${review?'':''} ${review?'disabled':`data-choice-for="${index}" data-choice="${i}" aria-pressed="${selected}"`}>
+      <span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+i)}</span>
+      <span class="flex-1 quiz-rich-option">${rich(value)}${review&&i===review.answerIndex?' ✓':''}</span>
+    </button>`;
+  }).join('');
   return `<article class="tc-pair-entry" data-pair-entry="${index}">
-    <div class="glass-panel tc-question-sheet"><div class="quiz-card-tools"><span class="tc-question-badge">${esc([q.subject,q.topic].filter(Boolean).join(' · ')||'自由問道')}</span></div><span class="tc-question-number">第 ${index+1} 題</span><h3 class="tc-question">${rich(review?.q||q.q)}</h3>
-    ${state.mode==='pve'?`<div class="tc-pair-card-tools"><button type="button" data-question-helper-for="${index}"><i class="fa-solid fa-comments"></i> 問道助手</button><button type="button" data-question-report-for="${index}"><i class="fa-solid fa-triangle-exclamation"></i> 題目有錯</button></div>`:''}</div>
-    <div class="tc-options">${buttons}</div>
-    ${review?`<section class="glass-panel tc-feedback"><h3 class="tc-feedback-title ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3><div class="tc-explanation"><span class="tc-explanation-label">解析</span><div class="tc-feedback-text">${rich(review.explanation)}</div></div></section>`:''}
+    <div class="glass-panel p-6 rounded-2xl mb-4 border-l-4 border-cyan-500 relative tc-question-sheet">
+      <div class="quiz-card-tools absolute top-3 right-3 z-20 flex items-center gap-2">
+        <span class="text-[10px] bg-slate-900/50 px-2 py-1 rounded border border-white/10 text-cyan-300 backdrop-blur-md tc-question-badge">${esc([q.subject,q.topic].filter(Boolean).join(' · ')||'問道試煉')} · 第 ${index+1} 題</span>
+        <button type="button" class="quiz-whiteboard-toggle" data-pair-whiteboard-for="${index}" title="開啟計算白板" aria-label="第 ${index+1} 題計算白板"><i class="fa-solid fa-pen-to-square"></i><span>白板</span></button>
+      </div>
+      <div class="text-6xl text-cyan-500/10 absolute -top-2 -left-2"><i class="fa-solid fa-quote-left"></i></div>
+      <h3 class="text-lg font-bold leading-relaxed relative z-10 text-white tc-question" data-question-text="${index}">${rich(review?.q||q.q)}</h3>
+    </div>
+    <div class="tc-options space-y-3" data-options-container="${index}">${buttons}</div>
+    ${review?`<div class="tc-feedback-section mt-6 glass-panel p-5 rounded-xl border border-white/10 animate-fade-in-up">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="text-2xl"><i class="fa-solid ${review.correct?'fa-circle-check text-green-400':'fa-circle-xmark text-red-400'}"></i></div>
+        <h3 class="text-lg font-bold font-sci ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3>
+      </div>
+      <div class="bg-slate-950/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-white/5 mb-4">
+        <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> 題解參悟</span>
+        <span class="tc-feedback-text">${rich(review.explanation)}</span>
+      </div>
+    </div>`:''}
+    <div class="mt-8 flex gap-3 w-full quiz-footer-actions tc-question-footer">
+      <button type="button" data-question-report-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group"><i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i><span>題目有錯</span></button>
+      <button type="button" data-question-helper-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-comments"></i><span>問道助手</span></button>
+    </div>
   </article>`;
 }
 function setQuizContext(q,review=null){
@@ -379,7 +405,7 @@ function setQuizContext(q,review=null){
 function quizTools(){
   if(state.mode!=='pve')return '';
   const message=(m)=>`<p class="quiz-helper-message ${m.role==='user'?'user':'assistant'}"><span class="quiz-helper-message-stack"><span class="quiz-helper-message-body">${m.role==='user'?esc(m.text):rich(m.text)}</span></span></p>`;
-  return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" class="btn-cyber-ghost" data-report-toggle aria-haspopup="dialog" aria-expanded="false"><i class="fa-solid fa-triangle-exclamation"></i> 問題回報</button><button type="button" class="btn-cyber-ghost" data-helper-toggle aria-haspopup="dialog" aria-expanded="false"><i class="fa-solid fa-comments"></i> 問道助手</button></div>
+  return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" class="quiz-helper-launcher" data-helper-toggle aria-haspopup="dialog" aria-expanded="false" title="開啟問道助手"><i class="fa-solid fa-comments"></i><span class="quiz-helper-launcher-label">問道</span></button></div>
     <div class="tc-tool-overlay tc-report-overlay" data-question-tool="report" data-report-panel hidden><section class="tc-report-box glass-panel" role="dialog" aria-modal="true" aria-labelledby="tc-report-title"><h3 id="tc-report-title"><i class="fa-solid fa-triangle-exclamation"></i> 回報題目錯誤</h3><p>請簡述題目問題 (例如: 答案錯誤、選項重複、錯字)，AI 將進行嚴格審查。</p><label class="sr-only" for="tc-report-reason">問題描述（至少六個字）</label><textarea id="tc-report-reason" data-report-reason maxlength="1200" rows="4" placeholder="請輸入問題描述..."></textarea><p data-report-status role="status" aria-live="polite"></p><div class="tc-report-actions"><button type="button" class="btn-cyber-ghost" data-tool-close>取消</button><button type="button" class="btn-cyber-primary" data-report-send>送出審查</button></div></section></div>
     <div class="tc-tool-overlay tc-helper-overlay" data-question-tool="helper" data-helper-panel hidden><section class="quiz-helper-panel" role="dialog" aria-modal="true" aria-labelledby="tc-helper-title"><header class="quiz-helper-header"><div class="quiz-helper-heading"><span class="quiz-helper-avatar"><i class="fa-solid fa-user-graduate"></i></span><div><strong id="tc-helper-title">問道助手</strong><small>一起核對、討論題目</small></div></div><button type="button" class="quiz-helper-collapse" data-tool-close aria-label="關閉問道助手">×</button></header><div class="quiz-helper-messages" data-helper-messages role="log" aria-label="問道助手對話">${quizContext.messages.map(message).join('')}</div><div class="quiz-helper-prompts" aria-label="快速提問"><button type="button" data-helper-preset="給我一個提示，但不要直接告訴我答案。">給我提示</button><button type="button" data-helper-preset="這題應該先從哪個觀念開始？">從哪開始</button><button type="button" data-helper-preset="可以把這題拆成幾個步驟嗎？">拆解步驟</button><button type="button" data-helper-preset="請檢查題目條件和選項是否一致，作答前不要透露答案。">檢查題目</button></div><div class="quiz-helper-compose"><textarea id="tc-helper-input" data-helper-input maxlength="600" rows="1" placeholder="輸入你對這題的疑問…" aria-label="輸入對題目的疑問"></textarea><button type="button" data-helper-send aria-label="送出問題"><i class="fa-solid fa-paper-plane"></i></button></div><div class="quiz-helper-status" data-helper-status role="status" aria-live="polite"></div></section></div></section>`;
 }
