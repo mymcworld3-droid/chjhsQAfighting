@@ -57,33 +57,45 @@ test('pan and pinch do not alter game state or server-authoritative tile geometr
   assert.doesNotMatch(ui,/postMessage|window\.location\.reload\(\)/);
 });
 
-test('the primary PvE interface has two quarter dials, a map and real answer charging',()=>{
-  assert.match(ui,/className='tc-quarter tc-quarter-energy'/);
-  assert.match(ui,/className='tc-quarter tc-quarter-action'/);
-  assert.match(ui,/答對 \+4 · 答錯 \+1/);
-  assert.match(ui,/stroke-dasharray/);
-  assert.match(ui,/querySelector\('\[data-stamina\]'\)/);
-  assert.match(ui,/querySelector\('\[data-quiz\]'\)/);
-  assert.match(ui,/querySelector\('\.tc-action-tabs'\)/);
-  assert.match(ui,/querySelector\('\.tc-turn-buttons'\)/);
-  assert.match(ui,/command\.append\(confirm\)/);
+test('PvE follows the sketch: central map, left energy and right three actions only',()=>{
+  for(const marker of [
+    "className='tc-quarter tc-quarter-energy'",
+    "className='tc-quarter tc-quarter-action'",
+    "className='tc-sector tc-sector-attack'",
+    "className='tc-sector tc-sector-move'",
+    "className='tc-sector tc-sector-end'",
+    "attack.innerHTML='<span>攻擊</span>'",
+    "move.innerHTML='<span>移動</span>'",
+    "data-energy-number","data-energy-tick",
+    "querySelector('[data-stamina]')",
+    "querySelector('[data-quiz]')"
+  ])assert.ok(ui.includes(marker),marker);
+  for(const forbidden of ['tc-energy-rule','tc-actions-caption','tc-map-gesture','地圖置中']){
+    assert.ok(!ui.includes(forbidden),'no unrequested UI: '+forbidden);
+  }
+  for(const hidden of ['tc-arena-heading','tc-selection','tc-actors','tc-skill-info',
+    'tc-game-footer','tc-turn-buttons','data-execute','data-action="skill"']){
+    assert.ok(css.includes(hidden),'the extra interface remains invisible: '+hidden);
+  }
   assert.match(css,/\.tc-quarter-energy\{[\s\S]*?border-radius:0 100% 0 0/);
   assert.match(css,/\.tc-quarter-action\{[\s\S]*?border-radius:100% 0 0 0/);
-  assert.match(css,/\.tc-arena canvas\{[\s\S]*?touch-action:none!important/);
+  assert.match(css,/touch-action:none!important/);
+  assert.match(css,/\.tc-top\{display:none!important\}/);
   assert.match(css,/@media\(orientation:portrait\)/);
 });
 
-test('all existing gameplay actions remain reachable and separated from camera gestures',()=>{
+test('PvE uses tap-to-act, retaining server-authoritative quiz and turn actions',()=>{
   for(const marker of ['data-action="move"','data-action="attack"','data-action="skill"',
     'data-guard','data-end','data-execute','data-quiz']){
     assert.ok(ui.includes(marker),marker);
   }
-  for(const marker of ["send({type:'guard'})","send({type:'end'})",
-    "renderer?.resetView()",'void question()','void execute()']){
-    assert.ok(ui.includes(marker),marker);
-  }
-  assert.match(ui,/root\.classList\.toggle\('tc-quarter-layout',state\?\.mode==='pve'\)/);
-  assert.match(ui,/root\.classList\.remove\('tc-quarter-layout'\)/);
-  assert.match(css,/#tactical-combat\.tc-quarter-layout/);
+  for(const marker of [
+    "send({type:'guard'})","send({type:'end'})",
+    "renderer?.resetView()",'void question()','void execute()',
+    "['move','attack'].includes(action)",
+    "root.classList.toggle('tc-quarter-layout',state?.mode==='pve')",
+    "root.classList.remove('tc-quarter-layout')"
+  ])assert.ok(ui.includes(marker),marker);
   assert.doesNotMatch(ui,/LIMITS\.stamina\s*=/);
+  assert.match(css,/#tactical-combat\.tc-quarter-layout/);
 });
