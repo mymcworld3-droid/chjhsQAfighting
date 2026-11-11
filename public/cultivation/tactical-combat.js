@@ -3,6 +3,7 @@ import {TacticalRenderer} from './tactical-renderer.js?v=20261111-stamina-cost-e
 import {EnemyDemo} from './tactical-enemy-demo.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {beginSoloCultivationFeedback} from './solo-cultivation-feedback.js';
+import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 import {warmTacticalBank} from './tactical-bank-warm.js';
 
 const R=globalThis.QATactical;
@@ -10,7 +11,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const rich=v=>window.quizMathRichText?.(String(v||''))||esc(v);
 const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
-let root=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
+let root=null,keyboardGuard=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',wheelIgnoreClickUntil=0;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
@@ -33,14 +34,16 @@ function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
 function selectedCore(){const user=localUser(),score=window.QATrainingAccessRules?.score(user)??Number(user.stats?.totalScore||0);const raw=score<28||user.cultivationTraining?.coreEnabled===false?null:user.cultivationTraining?.equippedCore;return R.CORES[raw?.type]?raw.type:'none';}
 function ensure(){
-  if(root)return;
+  if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261111-stamina-cost-equal-dials-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261111-stamina-sequential-quiz-v1';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
-  document.body.append(root);$('[data-close]').onclick=close;
+  document.body.append(root);
+  keyboardGuard=installTacticalKeyboardGuard(root);
+  $('[data-close]').onclick=close;
   root.addEventListener('click',event=>{
     const b=event.target.closest('button');if(!b||b.disabled)return;
     if(b.closest('.tc-quarter-action')&&Date.now()<wheelIgnoreClickUntil)return;
@@ -545,7 +548,7 @@ function showModal(html,{quiz=false,encounter=false}={}){
   introDemo?.destroy();introDemo=null;
   modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
-  $('[data-modal] .tc-dialog').focus();window.quizMathTypeset?.($('[data-modal]'));
+  $('[data-modal] .tc-dialog').focus({preventScroll:true});window.quizMathTypeset?.($('[data-modal]'));
 }
 function hideModal(){if(!root)return;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
 function showEnemyIntro(error=''){
@@ -696,7 +699,9 @@ function openQuestionTool(kind){
   panel.hidden=false;$(`[data-${kind}-toggle]`)?.setAttribute('aria-expanded','true');
   const column=$('.quiz-main-column');if(column)for(const child of column.children)if(!child.classList.contains('tc-question-tools'))child.inert=true;
   const heading=$('.tc-dialog-heading');if(heading)heading.inert=true;
-  $(`[data-${kind==='helper'?'helper-input':'report-reason'}]`)?.focus();
+  // Do not open the virtual keyboard just by showing the dialog. The user
+  // explicitly taps the textarea; focus only a non-editable close control.
+  panel.querySelector('[data-tool-close]')?.focus({preventScroll:true});
 }
 function closeQuestionTool(restore=true){
   for(const kind of ['helper','report']){const panel=$(`[data-${kind}-panel]`);if(panel&&!panel.hidden){panel.hidden=true;const trigger=$(`[data-${kind}-toggle]`);trigger?.setAttribute('aria-expanded','false');if(restore)trigger?.focus();}}
@@ -991,7 +996,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
