@@ -641,7 +641,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
     <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261023-review1">
     <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261023-review1">
-    <link rel="stylesheet" href="styles/home-ecology-dashboard.css?v=20261111-sketch1">
+    <link rel="stylesheet" href="styles/home-wireframe.css?v=20261111-layout2">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
       #btn-show-debug{
@@ -751,39 +751,24 @@ body.xianxia-theme main:has(#page-training.active-page),
                 </section>
 
 
-                <!-- Sketch-based home: six shortcuts around the ecological CG octagon. -->
-                <section id="home-ecology" class="home-ecology" aria-labelledby="home-ecology-name" data-static-layout="1">
-                  <div class="home-ecology-header"><span class="home-ecology-kicker">問道場地 · 生態觀景</span><span class="home-ecology-overline">目前展示場地 <span id="home-ecology-position">1 / 4</span></span></div>
-                  <div class="home-ecology-body">
-                    <aside class="home-ecology-rail" aria-label="場地左側快捷選單">
-                      <button class="home-ecology-action" type="button" data-home-action="path"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>圖錄</span></button>
-                      <button class="home-ecology-action" type="button" data-home-action="rank"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排行</span></button>
-                      <button class="home-ecology-action" type="button" data-home-action="share"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>分享</span></button>
-                    </aside>
-                    <div class="home-ecology-center">
-                      <div class="home-ecology-octagon" aria-label="目前問道場地生態 CG 畫面">
-                        <div class="home-ecology-ring"><div class="home-ecology-visual">
-                          <picture class="home-ecology-picture" id="home-ecology-picture"><source media="(orientation: portrait)" srcset="assets/scenes/mountains-portrait-ai.webp"><img src="assets/scenes/mountains-landscape-ai.webp" alt="雲海繚繞的問道宗主峰 CG 場景" loading="eager" decoding="async"></picture>
-                          <div class="home-ecology-fog" aria-hidden="true"></div><div class="home-ecology-leaves" aria-hidden="true"></div>
-                          <div id="home-ecology-region" class="home-ecology-image-title">青雲主峰</div>
-                        </div></div>
-                      </div>
-                      <div class="home-ecology-scene-info"><h3 id="home-ecology-name">問道宗 · 雲海</h3></div>
-                      <p id="home-ecology-description" class="home-ecology-description">雲海繞峰，山間靈氣流轉。從這裡前往宗門各處修行。</p>
-                      <div class="home-ecology-controls">
-                        <button class="home-ecology-cycle" type="button" data-scene-delta="-1" aria-label="上一處場地"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
-                        <button class="home-ecology-enter" type="button" id="home-ecology-enter"><span>走入宗門</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
-                        <button class="home-ecology-cycle" type="button" data-scene-delta="1" aria-label="下一處場地"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
-                      </div>
+                <!-- 依照玩家線框稿：菱形僅代表圖示，快捷按鈕沿用矩形造型。 -->
+                <aside class="home-wireframe-rail is-left" aria-label="左側快捷操作">
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="path" aria-label="圖錄"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>圖錄</span></button>
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="rank" aria-label="排行"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排行</span></button>
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="share" aria-label="分享"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>分享</span></button>
+                </aside>
+                <section id="home-realm-emblem" class="home-realm-emblem" aria-label="當前境界徽記">
+                    <div class="home-realm-disc">
+                        <span class="home-disc-symbol" aria-hidden="true">道</span>
+                        <span id="home-realm-emblem-name">凡人</span>
                     </div>
-                    <aside class="home-ecology-rail" aria-label="場地右側每日活動">
-                      <button class="home-ecology-action" type="button" data-home-action="quest" aria-haspopup="dialog"><i class="fa-solid fa-scroll" aria-hidden="true"></i><span>任務</span><b class="home-ecology-alert" data-home-alert="quest" hidden aria-hidden="true"></b></button>
-                      <button class="home-ecology-action" type="button" data-home-action="meditation"><i class="fa-solid fa-yin-yang" aria-hidden="true"></i><span>今日閉關</span><b class="home-ecology-alert" data-home-alert="meditation" hidden aria-hidden="true"></b></button>
-                      <button class="home-ecology-action" type="button" data-home-action="raid"><i class="fa-solid fa-dungeon" aria-hidden="true"></i><span>副本</span><b class="home-ecology-alert" data-home-alert="raid" hidden aria-hidden="true"></b></button>
-                    </aside>
-                  </div>
-                  <div class="home-ecology-footer"><span id="home-ecology-ambient">晴光 · 青雲主峰</span><button type="button" data-home-action="story"><i class="fa-solid fa-feather" aria-hidden="true"></i> 宗門劇情</button></div>
+                    <span class="home-disc-caption">問道 · 修行</span>
                 </section>
+                <aside class="home-wireframe-rail is-right" aria-label="右側每日活動">
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="quest" aria-label="任務"><i class="fa-solid fa-scroll" aria-hidden="true"></i><span>任務</span><b class="home-wireframe-alert" data-home-alert="quest" hidden aria-hidden="true"></b></button>
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="meditation" aria-label="閉關"><i class="fa-solid fa-yin-yang" aria-hidden="true"></i><span>閉關</span><b class="home-wireframe-alert" data-home-alert="meditation" hidden aria-hidden="true"></b></button>
+                    <button class="home-wireframe-shortcut" type="button" data-home-action="raid" aria-label="副本"><i class="fa-solid fa-dungeon" aria-hidden="true"></i><span>副本</span><b class="home-wireframe-alert" data-home-alert="raid" hidden aria-hidden="true"></b></button>
+                </aside>
 
                 <section class="home-practice" aria-label="今日修行">
                     <h3 class="home-section-label">今日修行</h3>
@@ -810,6 +795,8 @@ body.xianxia-theme main:has(#page-training.active-page),
         </div>
                 </section>
 
+                <section class="home-daily-progress" aria-label="今日進度與待辦事項">
+                    <h3 class="home-mini-label">今日進度</h3>
                 <div id="quest-spotlight-slot" hidden>
                     <button id="quest-spotlight" class="quest-spotlight" type="button" aria-label="查看當前任務">
                         <span class="quest-spotlight-heading"><span id="quest-spotlight-kind">當前任務</span><span id="quest-spotlight-progress"></span></span>
@@ -818,6 +805,15 @@ body.xianxia-theme main:has(#page-training.active-page),
                     </button>
                     <p id="quest-spotlight-status" role="status" aria-live="polite"></p>
                 </div>
+
+                </section>
+                <section class="home-correction-panel" id="home-correction-panel" aria-label="我的訂正進度">
+                    <button id="home-correction-open" type="button" class="home-correction-card" data-home-action="correction" aria-label="查看我的訂正進度並前往問道">
+                        <span class="home-correction-top"><span>我的訂正進度</span><strong id="home-correction-count">0 / 0</strong></span>
+                        <span id="home-correction-meter" class="home-correction-meter" role="progressbar" aria-label="最近保留錯題的訂正進度" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0"><i id="home-correction-fill"></i></span>
+                        <span class="home-correction-foot"><span id="home-correction-note">正在同步訂正紀錄…</span><span>前往問道 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></span>
+                    </button>
+                </section>
 
                 <aside class="sect-actions" aria-label="宗門事務">
                     <button id="quest-open" class="sect-action" type="button" aria-haspopup="dialog" aria-controls="quest-dialog" aria-expanded="false">
