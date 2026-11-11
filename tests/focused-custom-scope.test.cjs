@@ -82,10 +82,10 @@ test('saving focused custom ranges persists them and both solo quizzes and oppor
     getCleanSubjects: async s => s, alert: () => { throw Error('unexpected validation error'); }, CustomEvent: class {},
     localStorage: { removeItem() {} }, syncSoloQuestionCache() {}, fillBuffer() {}, setTimeout() {},
     currentLang: 'zh', quizMetaFromRaw: () => ({}), console: { log() {}, error() {} },
-    getRankName: () => '煉氣', getSmartDifficulty: () => 'medium', recentSoloQuestionContext: () => ({}), shuffleArray: a => a,
+    getRankName: () => '煉氣', getSmartDifficulty: () => 'medium', recentSoloQuestionContext: () => ({}), adaptiveQuestionContext: () => ({}), shuffleArray: a => a,
     fetch: async (_, options) => { requests.push(JSON.parse(options.body)); return { ok: true,
       json: async () => ({ text: JSON.stringify({ q: 'Q', correct: 'A', wrong: ['B', 'C', 'D'], exp: 'E' }) }) }; } });
-  const saveStart = legacy.indexOf('window.saveProfile = async'), saveEnd = legacy.indexOf('async function switchToAI()', saveStart);
+  const saveStart = legacy.indexOf('window.saveProfile = async'), saveEnd = legacy.indexOf('function shuffleArray(', saveStart);
   vm.runInContext(legacy.slice(saveStart, saveEnd), context);
   assert.equal(await context.window.saveProfile(), true);
   assert.equal(writes.length, 1); assert.equal(writes[0].ref.id, 'u1');

@@ -1,0 +1,1394 @@
+[
+  {
+    "id": "cap-109-english-q1",
+    "difficulty": "easy",
+    "q": "Look at the picture.  The man is holding one of the _____.\n\n![圖表](/assets/banks/cap-109-english/Q1-figure-1.png)",
+    "correct": "glasses",
+    "wrong": [
+      "bowls",
+      "plates",
+      "spoons"
+    ],
+    "exp": "正確答案：glasses。來源：109年國中教育會考英語閱讀第1題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 1,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/Q1-figure-1.png"
+    ],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q2",
+    "difficulty": "medium",
+    "q": "My mom puts the _____ on to keep her hands away from water when she washes\nthe dishes.",
+    "correct": "gloves",
+    "wrong": [
+      "jacket",
+      "ring",
+      "socks"
+    ],
+    "exp": "正確答案：gloves。來源：109年國中教育會考英語閱讀第2題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 2,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q3",
+    "difficulty": "medium",
+    "q": "Can you _____ your feet a little off the fol or?  I want to see if my keys are under the\nsofa.",
+    "correct": "raise",
+    "wrong": [
+      "check",
+      "kick",
+      "show"
+    ],
+    "exp": "正確答案：raise。來源：109年國中教育會考英語閱讀第3題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 3,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q4",
+    "difficulty": "medium",
+    "q": "_____ of my sisters are older than I am.  I’m the youngest of the three children in my\nfamily.",
+    "correct": "Both",
+    "wrong": [
+      "Few",
+      "Most",
+      "Some"
+    ],
+    "exp": "正確答案：Both。來源：109年國中教育會考英語閱讀第4題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 4,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q5",
+    "difficulty": "medium",
+    "q": "The beach near our town is a very _____ place.  Every summer at least one kid dies\nthere in the water.",
+    "correct": "dangerous",
+    "wrong": [
+      "exciting",
+      "lonely",
+      "popular"
+    ],
+    "exp": "正確答案：dangerous。來源：109年國中教育會考英語閱讀第5題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 5,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q6",
+    "difficulty": "easy",
+    "q": "My wife enjoys going to the movies with her friends, but I like to watch TV at home\nby _____.",
+    "correct": "myself",
+    "wrong": [
+      "I",
+      "me",
+      "mine"
+    ],
+    "exp": "正確答案：myself。來源：109年國中教育會考英語閱讀第6題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 6,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q7",
+    "difficulty": "medium",
+    "q": "For the past twenty years, my father _____ in a school library.  But he’ll leave the job\nnext month.",
+    "correct": "has worked",
+    "wrong": [
+      "worked",
+      "is working",
+      "works"
+    ],
+    "exp": "正確答案：has worked。來源：109年國中教育會考英語閱讀第7題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 7,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q8",
+    "difficulty": "medium",
+    "q": "It’s great that we can buy train tickets over the phone without going out.  It _____ us\na lot of time.",
+    "correct": "saves",
+    "wrong": [
+      "lends",
+      "prepares",
+      "takes"
+    ],
+    "exp": "正確答案：saves。來源：109年國中教育會考英語閱讀第8題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 8,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q9",
+    "difficulty": "medium",
+    "q": "Mozart _____ his first music when he was only six years old.",
+    "correct": "wrote",
+    "wrong": [
+      "is writing",
+      "has written",
+      "will write"
+    ],
+    "exp": "正確答案：wrote。來源：109年國中教育會考英語閱讀第9題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 9,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q10",
+    "difficulty": "medium",
+    "q": "Jill: Have you decided _____ you will celebrate your 30<sup>th</sup> birthday?\nSue: Yeah, I’m going to have a big barbecue party.",
+    "correct": "how",
+    "wrong": [
+      "where",
+      "what",
+      "when"
+    ],
+    "exp": "正確答案：how。來源：109年國中教育會考英語閱讀第10題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 10,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q11",
+    "difficulty": "medium",
+    "q": "Alison doesn’t like _____ what to do.  She only does things she wants to do.",
+    "correct": "to be told",
+    "wrong": [
+      "told",
+      "to tell",
+      "be told"
+    ],
+    "exp": "正確答案：to be told。來源：109年國中教育會考英語閱讀第11題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 11,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q12",
+    "difficulty": "hard",
+    "q": "Josh has planned to make a trip to New York and _____ some of his friends there.",
+    "correct": "visit",
+    "wrong": [
+      "visits",
+      "visiting",
+      "visited"
+    ],
+    "exp": "正確答案：visit。來源：109年國中教育會考英語閱讀第12題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 12,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.34,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q13",
+    "difficulty": "medium",
+    "q": "Ms. Johnson has been taking phone calls since she entered the offci e this morning.\nJust when she thought she could finally leave work, _____ call came in.",
+    "correct": "another",
+    "wrong": [
+      "each",
+      "the next",
+      "the other"
+    ],
+    "exp": "正確答案：another。來源：109年國中教育會考英語閱讀第13題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 13,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.4,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q14",
+    "difficulty": "medium",
+    "q": "We were so sure that Jerry _____ well on the diffci ult job.  His past experience in\nother work showed he was the right guy for it.  So when he failed, no one believed it.",
+    "correct": "would do",
+    "wrong": [
+      "had done",
+      "did",
+      "has done"
+    ],
+    "exp": "正確答案：would do。來源：109年國中教育會考英語閱讀第14題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 14,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q15",
+    "difficulty": "hard",
+    "q": "For Mike, the price is _____ important thing when he shops for jeans.  He cares even\nmore about the shape and the size of the pockets.",
+    "correct": "the least",
+    "wrong": [
+      "the more",
+      "the most",
+      "the less"
+    ],
+    "exp": "正確答案：the least。來源：109年國中教育會考英語閱讀第15題。",
+    "subject": "英文",
+    "sub_topic": "文法與句構",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 15,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.37,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(16-17)\nWhen it arrives,\nEveryone cheers.\nThe shirts and shorts dance\nOn the clothesline,\nThe trees and flowers wave\nLike they’re saying hi,\nAnd the clouds are so excited\nTo have a running race.\nWhen it comes,\nDad’s face falls.\nHis coat and jeans jump\nOff the clothesline\nInto the pond.\nThe tree leaves hop off\nAnd have a party on his new car.\nWhen it gets here,\nA lot of fun things I notice:\nThe pond’s face,\nSad and old with lines;\nMrs. Smith’s bread,\nDelicious and freshly baked.\nBut what smell is it?\nOh, no, it’s from Mr. Brown’s feet!\n![圖表](/assets/banks/cap-109-english/G16-17-figure-1.png)\n\nWhat is it in the reading?",
+    "correct": "The wind.",
+    "wrong": [
+      "The sun.",
+      "The rain.",
+      "The rainbow."
+    ],
+    "exp": "正確答案：The wind.。來源：109年國中教育會考英語閱讀第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 16,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        16,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G16-17-figure-1.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q17",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(16-17)\nWhen it arrives,\nEveryone cheers.\nThe shirts and shorts dance\nOn the clothesline,\nThe trees and flowers wave\nLike they’re saying hi,\nAnd the clouds are so excited\nTo have a running race.\nWhen it comes,\nDad’s face falls.\nHis coat and jeans jump\nOff the clothesline\nInto the pond.\nThe tree leaves hop off\nAnd have a party on his new car.\nWhen it gets here,\nA lot of fun things I notice:\nThe pond’s face,\nSad and old with lines;\nMrs. Smith’s bread,\nDelicious and freshly baked.\nBut what smell is it?\nOh, no, it’s from Mr. Brown’s feet!\n![圖表](/assets/banks/cap-109-english/G16-17-figure-1.png)\n\nHow does Dad feel“when it comes”?",
+    "correct": "He is not happy.",
+    "wrong": [
+      "He is scared.",
+      "He is excited.",
+      "He is not interested."
+    ],
+    "exp": "正確答案：He is not happy.。來源：109年國中教育會考英語閱讀第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 17,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        16,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G16-17-figure-1.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q18",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(18-19)\n![圖表](/assets/banks/cap-109-english/G18-19-figure-1.png)\n\n\n\n\n\n\n\n\n\n\nWhat can we learn about Buffy’s friends?",
+    "correct": "Matt has experience of yard sales.",
+    "wrong": [
+      "Jamie had a successful yard sale last week.",
+      "Albert thinks weather is important for yard sales.",
+      "Debby thinks things are cheaper online than at yard sales."
+    ],
+    "exp": "正確答案：Matt has experience of yard sales.。來源：109年國中教育會考英語閱讀第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 18,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G18-19-figure-1.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q19",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(18-19)\n![圖表](/assets/banks/cap-109-english/G18-19-figure-1.png)\n\n\n\n\n\n\n\n\n\n\nWhat do Buffy’s friends think about having a yard sale?",
+    "correct": "Jamie agrees with Debby that it’s a lot of trouble to prepare for it.",
+    "wrong": [
+      "Albert and Matt think it’s a nice way to make friends.",
+      "Debby and Albert think it’s diffci ult to make money from it.",
+      "Matt agrees with Jamie that it’s a good chance to help people."
+    ],
+    "exp": "正確答案：Jamie agrees with Debby that it’s a lot of trouble to prepare for it.。來源：109年國中教育會考英語閱讀第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 19,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G18-19-figure-1.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q20",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(20-21)\nHere is an ad for Sunny Market.\n\nFrom Jan. 4 to Feb. 4, for each \\$50 you spend With Sunny Sun pictures, you\n(on anything EXCEPT books and CDs) at Sunny can get one of the prizes below\n![圖表](/assets/banks/cap-109-english/G20-21-figure-1.png)\nMarket, you’ll get a Sunny Sun picture . for free or at low prices!!\n(2 pictures for every \\$100, 3 pictures for every\n\\$150, …)    Sunny Cup       Chocolate\n![圖表](/assets/banks/cap-109-english/G20-21-figure-2.png)\n\n\n★  Collect 12 pictures, and you can get a Sunny\nCup for free!\n\n★  Collect 10 pictures, and you can get any of\nthe desserts on the right for free!    Fruitcake         Ice cream\n\n\n★  Collect 6 pictures, and you can buy a Sunny\nCup for \\$200, or any of the desserts on the\nright for \\$100!\nFrom Jan. 4 to Feb. 10, you can use Sunny\nSun pictures to get Sunny Cups or desserts.\n\nFrom the ad, which is true about Sunny Sun pictures?",
+    "correct": "You cannot get Sunny Sun pictures when you buy books.",
+    "wrong": [
+      "The first day to use Sunny Sun pictures is Feb. 4.",
+      "The last day to collect Sunny Sun pictures is Feb. 10.",
+      "You cannot use Sunny Sun pictures to get free desserts."
+    ],
+    "exp": "正確答案：You cannot get Sunny Sun pictures when you buy books.。來源：109年國中教育會考英語閱讀第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 20,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G20-21-figure-1.png",
+      "/assets/banks/cap-109-english/G20-21-figure-2.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q21",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(20-21)\nHere is an ad for Sunny Market.\n\nFrom Jan. 4 to Feb. 4, for each \\$50 you spend With Sunny Sun pictures, you\n(on anything EXCEPT books and CDs) at Sunny can get one of the prizes below\n![圖表](/assets/banks/cap-109-english/G20-21-figure-1.png)\nMarket, you’ll get a Sunny Sun picture . for free or at low prices!!\n(2 pictures for every \\$100, 3 pictures for every\n\\$150, …)    Sunny Cup       Chocolate\n![圖表](/assets/banks/cap-109-english/G20-21-figure-2.png)\n\n\n★  Collect 12 pictures, and you can get a Sunny\nCup for free!\n\n★  Collect 10 pictures, and you can get any of\nthe desserts on the right for free!    Fruitcake         Ice cream\n\n\n★  Collect 6 pictures, and you can buy a Sunny\nCup for \\$200, or any of the desserts on the\nright for \\$100!\nFrom Jan. 4 to Feb. 10, you can use Sunny\nSun pictures to get Sunny Cups or desserts.\n\nSammy has 7 Sunny Sun pictures.  She wants to get a Sunny Cup.  How can she get one?",
+    "correct": "Use 6 Sunny Sun pictures and pay \\$200.",
+    "wrong": [
+      "Use 6 Sunny Sun pictures and pay \\$100.",
+      "Spend \\$150 to get 3 more Sunny Sun pictures.",
+      "Spend \\$200 to get 4 more Sunny Sun pictures."
+    ],
+    "exp": "正確答案：Use 6 Sunny Sun pictures and pay \\$200.。來源：109年國中教育會考英語閱讀第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 21,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        20,
+        21
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G20-21-figure-1.png",
+      "/assets/banks/cap-109-english/G20-21-figure-2.png"
+    ],
+    "passRate": 0.74,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q22",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n(22-24)\n![圖表](/assets/banks/cap-109-english/G22-24-figure-1.png)\nNow I’m going to show you how to work with chocolate.  I’ll\ndo it in a “bain-marie,” or, well, some people call it “water bath.”\nI myself love the name “bain-marie.”  To make a “bain-marie,”\nyou need two pots, one bigger than the other.\nFirst, break the chocolate into small pieces and put them in the\nsmaller pot.  Usually when making chocolate desserts, you’ll need to\nmix chocolate with butter and sugar.  So if you do, put them in the\npot too.\nNow, half flil the bigger pot with warm water.  Put the smaller\npot over the bigger one, and start to slowly mix the chocolate, the butter, and\nthe sugar together.  Keep the water under 50ºC, or the chocolate may lose its\nshine.  And make sure that no water goes in the smaller pot, or the chocolate will\nbecome hard and cannot be used.\nKeep mixing for about five to ten minutes, and the job is done.  Easy, right?\n![圖表](/assets/banks/cap-109-english/G22-24-figure-2.png)\n\nFrom the reading, which picture best shows the “bain-marie” way of working with\nchocolate?",
+    "correct": "![圖表](/assets/banks/cap-109-english/Q22-option-B-figure-1.png)",
+    "wrong": [
+      "![圖表](/assets/banks/cap-109-english/Q22-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-109-english/Q22-option-C-figure-1.png)",
+      "![圖表](/assets/banks/cap-109-english/Q22-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：![圖表](/assets/banks/cap-109-english/Q22-option-B-figure-1.png)。來源：109年國中教育會考英語閱讀第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 22,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G22-24-figure-1.png",
+      "/assets/banks/cap-109-english/G22-24-figure-2.png",
+      "/assets/banks/cap-109-english/Q22-option-B-figure-1.png",
+      "/assets/banks/cap-109-english/Q22-option-A-figure-1.png",
+      "/assets/banks/cap-109-english/Q22-option-C-figure-1.png",
+      "/assets/banks/cap-109-english/Q22-option-D-figure-1.png"
+    ],
+    "passRate": 0.76,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(22-24)\n![圖表](/assets/banks/cap-109-english/G22-24-figure-1.png)\nNow I’m going to show you how to work with chocolate.  I’ll\ndo it in a “bain-marie,” or, well, some people call it “water bath.”\nI myself love the name “bain-marie.”  To make a “bain-marie,”\nyou need two pots, one bigger than the other.\nFirst, break the chocolate into small pieces and put them in the\nsmaller pot.  Usually when making chocolate desserts, you’ll need to\nmix chocolate with butter and sugar.  So if you do, put them in the\npot too.\nNow, half flil the bigger pot with warm water.  Put the smaller\npot over the bigger one, and start to slowly mix the chocolate, the butter, and\nthe sugar together.  Keep the water under 50ºC, or the chocolate may lose its\nshine.  And make sure that no water goes in the smaller pot, or the chocolate will\nbecome hard and cannot be used.\nKeep mixing for about five to ten minutes, and the job is done.  Easy, right?\n![圖表](/assets/banks/cap-109-english/G22-24-figure-2.png)\n\nWhat does them mean in the reading?",
+    "correct": "Butter and sugar.",
+    "wrong": [
+      "Bains-marie.",
+      "Chocolate desserts.",
+      "Small pieces of chocolate."
+    ],
+    "exp": "正確答案：Butter and sugar.。來源：109年國中教育會考英語閱讀第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 23,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G22-24-figure-1.png",
+      "/assets/banks/cap-109-english/G22-24-figure-2.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q24",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(22-24)\n![圖表](/assets/banks/cap-109-english/G22-24-figure-1.png)\nNow I’m going to show you how to work with chocolate.  I’ll\ndo it in a “bain-marie,” or, well, some people call it “water bath.”\nI myself love the name “bain-marie.”  To make a “bain-marie,”\nyou need two pots, one bigger than the other.\nFirst, break the chocolate into small pieces and put them in the\nsmaller pot.  Usually when making chocolate desserts, you’ll need to\nmix chocolate with butter and sugar.  So if you do, put them in the\npot too.\nNow, half flil the bigger pot with warm water.  Put the smaller\npot over the bigger one, and start to slowly mix the chocolate, the butter, and\nthe sugar together.  Keep the water under 50ºC, or the chocolate may lose its\nshine.  And make sure that no water goes in the smaller pot, or the chocolate will\nbecome hard and cannot be used.\nKeep mixing for about five to ten minutes, and the job is done.  Easy, right?\n![圖表](/assets/banks/cap-109-english/G22-24-figure-2.png)\n\nFrom the reading, which is true about working with chocolate?",
+    "correct": "The water in the pot should not be warmer than 50ºC.",
+    "wrong": [
+      "It is better to use a “bain-marie” than a “water bath.”",
+      "It is better to finish mixing it in less than fvi e minutes.",
+      "We should not mix butter and sugar together at the same time."
+    ],
+    "exp": "正確答案：The water in the pot should not be warmer than 50ºC.。來源：109年國中教育會考英語閱讀第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 24,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        22,
+        24
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G22-24-figure-1.png",
+      "/assets/banks/cap-109-english/G22-24-figure-2.png"
+    ],
+    "passRate": 0.65,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-27)\n![圖表](/assets/banks/cap-109-english/G25-27-figure-1.png)\n\nTaiwanese Bian-dang in Manhattan, New York City\n\n5/30/ 2014     by Eva Schmidt\n\nDuring lunch time, on 53<sup>rd</sup> Street, you’ll see\na long line of  people in front of  a Taiwanese food\ntruck for their “bian-dang,” a Taiwanese word for\n“lunch box.”  On the menu you can find fried chicken with rice, pork dumplings,\ntea eggs, and other popular Taiwanese dishes.\nThe owners of  the food truck are Thomas and Diana Yang, two\nTaiwanese-Americans.  This brother-sister team started their business in 2009.\nBack then, there were a few Taiwanese restaurants in the city and several thousand\nfood trucks, but the Yangs were the first to sell Taiwanese food on a food truck.\nAt first, business was slack.  People thought they were just another Chinese food\ntruck, and the food truck’s name, “Cravings,” often made people think of  desserts, not\nlunch.  Few people would stop by and try their food.  “I couldn’t even give away free\nfood,” said Thomas.  To catch people’s eye, they painted their truck blue, and drew\nTaiwan’s national flower, the plum blossom, on it.  They also changed the food truck’s\nname to “bian-dang.”  Soon people started to notice them, and business finally got\nbetter.  Now on a good day, they can sell about 150 bian-dangs in about two hours.\nSo what’s next for Thomas and Diana?  Well, they hope one day there will be a\nblock with Taiwanese food in the city, just like there is a Chinatown, a Korea Town,\nand a Little Italy.  And their bian-dang food truck might just help to make that happen.\n![圖表](/assets/banks/cap-109-english/G25-27-figure-3.png)\n\nWhat does the news story say about the Yangs’ food truck?",
+    "correct": "How they fixed their business problems.",
+    "wrong": [
+      "What people love about their food.",
+      "What made them start their business.",
+      "How they made delicious fried chicken."
+    ],
+    "exp": "正確答案：How they fixed their business problems.。來源：109年國中教育會考英語閱讀第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 25,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        25,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G25-27-figure-1.png",
+      "/assets/banks/cap-109-english/G25-27-figure-3.png"
+    ],
+    "passRate": 0.55,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q26",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-27)\n![圖表](/assets/banks/cap-109-english/G25-27-figure-1.png)\n\nTaiwanese Bian-dang in Manhattan, New York City\n\n5/30/ 2014     by Eva Schmidt\n\nDuring lunch time, on 53<sup>rd</sup> Street, you’ll see\na long line of  people in front of  a Taiwanese food\ntruck for their “bian-dang,” a Taiwanese word for\n“lunch box.”  On the menu you can find fried chicken with rice, pork dumplings,\ntea eggs, and other popular Taiwanese dishes.\nThe owners of  the food truck are Thomas and Diana Yang, two\nTaiwanese-Americans.  This brother-sister team started their business in 2009.\nBack then, there were a few Taiwanese restaurants in the city and several thousand\nfood trucks, but the Yangs were the first to sell Taiwanese food on a food truck.\nAt first, business was slack.  People thought they were just another Chinese food\ntruck, and the food truck’s name, “Cravings,” often made people think of  desserts, not\nlunch.  Few people would stop by and try their food.  “I couldn’t even give away free\nfood,” said Thomas.  To catch people’s eye, they painted their truck blue, and drew\nTaiwan’s national flower, the plum blossom, on it.  They also changed the food truck’s\nname to “bian-dang.”  Soon people started to notice them, and business finally got\nbetter.  Now on a good day, they can sell about 150 bian-dangs in about two hours.\nSo what’s next for Thomas and Diana?  Well, they hope one day there will be a\nblock with Taiwanese food in the city, just like there is a Chinatown, a Korea Town,\nand a Little Italy.  And their bian-dang food truck might just help to make that happen.\n![圖表](/assets/banks/cap-109-english/G25-27-figure-3.png)\n\nWhat does it mean when business is slack?",
+    "correct": "It is bad.",
+    "wrong": [
+      "It is for sale.",
+      "It is growing.",
+      "It is open every day."
+    ],
+    "exp": "正確答案：It is bad.。來源：109年國中教育會考英語閱讀第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 26,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        25,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G25-27-figure-1.png",
+      "/assets/banks/cap-109-english/G25-27-figure-3.png"
+    ],
+    "passRate": 0.63,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q27",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-27)\n![圖表](/assets/banks/cap-109-english/G25-27-figure-1.png)\n\nTaiwanese Bian-dang in Manhattan, New York City\n\n5/30/ 2014     by Eva Schmidt\n\nDuring lunch time, on 53<sup>rd</sup> Street, you’ll see\na long line of  people in front of  a Taiwanese food\ntruck for their “bian-dang,” a Taiwanese word for\n“lunch box.”  On the menu you can find fried chicken with rice, pork dumplings,\ntea eggs, and other popular Taiwanese dishes.\nThe owners of  the food truck are Thomas and Diana Yang, two\nTaiwanese-Americans.  This brother-sister team started their business in 2009.\nBack then, there were a few Taiwanese restaurants in the city and several thousand\nfood trucks, but the Yangs were the first to sell Taiwanese food on a food truck.\nAt first, business was slack.  People thought they were just another Chinese food\ntruck, and the food truck’s name, “Cravings,” often made people think of  desserts, not\nlunch.  Few people would stop by and try their food.  “I couldn’t even give away free\nfood,” said Thomas.  To catch people’s eye, they painted their truck blue, and drew\nTaiwan’s national flower, the plum blossom, on it.  They also changed the food truck’s\nname to “bian-dang.”  Soon people started to notice them, and business finally got\nbetter.  Now on a good day, they can sell about 150 bian-dangs in about two hours.\nSo what’s next for Thomas and Diana?  Well, they hope one day there will be a\nblock with Taiwanese food in the city, just like there is a Chinatown, a Korea Town,\nand a Little Italy.  And their bian-dang food truck might just help to make that happen.\n![圖表](/assets/banks/cap-109-english/G25-27-figure-3.png)\n\nWhat does that mean in the news story?",
+    "correct": "A city block that sells Taiwanese food.",
+    "wrong": [
+      "A Taiwanese restaurant.",
+      "A second Taiwanese food truck.",
+      "A business that is popular across the country."
+    ],
+    "exp": "正確答案：A city block that sells Taiwanese food.。來源：109年國中教育會考英語閱讀第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 27,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        25,
+        27
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G25-27-figure-1.png",
+      "/assets/banks/cap-109-english/G25-27-figure-3.png"
+    ],
+    "passRate": 0.62,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q28",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(28-30)\nThis is a letter by Selena Bieber to the students in her school.\n【原卷閱讀資料】\nhttp://www.nvhsstudsup.org/openletter\n       Later Is Better!\n                           Selena Bieber\n                      Northville High School\n\nDo you feel it’s hard to get up early for school and even harder to listen\nwell in the first class at 8 a.m.?  Well, this happens to most of us and is\nnot helpful for our learning!\n\nSome studies show that teenagers’ brains make melatonin, the hormone that\nhelps sleep, between 11 p.m. and 8 a.m. So it’s better for us to sleep during\nthese nine hours. But here comes the problem. We’re asked to get to school\nby 7:30 a.m.  That means we have to get up before 7, when our brains\nshould still be sleeping.  That’s why we’re always so tired and can’t think\nclearly in early morning classes. No clear head, no good learning, right?\n\nIf we can’t change how our body works, why can’t school start later?  In\nthis way, we can not only sleep more but also learn better!\n\nWant to help us make it happen?\nVisit www.nvhsstudsup.org/later-better to learn more.\n\n\nWhat problem is Selena Bieber trying to fix?",
+    "correct": "Classes start too early in the morning.",
+    "wrong": [
+      "High school lessons are too diffci ult.",
+      "Too many students are late for school.",
+      "Lunch break is too short for taking a rest."
+    ],
+    "exp": "正確答案：Classes start too early in the morning.。來源：109年國中教育會考英語閱讀第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 28,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        28,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q29",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(28-30)\nThis is a letter by Selena Bieber to the students in her school.\n【原卷閱讀資料】\nhttp://www.nvhsstudsup.org/openletter\n       Later Is Better!\n                           Selena Bieber\n                      Northville High School\n\nDo you feel it’s hard to get up early for school and even harder to listen\nwell in the first class at 8 a.m.?  Well, this happens to most of us and is\nnot helpful for our learning!\n\nSome studies show that teenagers’ brains make melatonin, the hormone that\nhelps sleep, between 11 p.m. and 8 a.m. So it’s better for us to sleep during\nthese nine hours. But here comes the problem. We’re asked to get to school\nby 7:30 a.m.  That means we have to get up before 7, when our brains\nshould still be sleeping.  That’s why we’re always so tired and can’t think\nclearly in early morning classes. No clear head, no good learning, right?\n\nIf we can’t change how our body works, why can’t school start later?  In\nthis way, we can not only sleep more but also learn better!\n\nWant to help us make it happen?\nVisit www.nvhsstudsup.org/later-better to learn more.\n\n\nWhat can we learn from the letter?",
+    "correct": "It is easier to fall asleep when the brain is making melatonin.",
+    "wrong": [
+      "Too much melatonin can hurt teenagers’ brain.",
+      "The brain stops making melatonin after 11 p.m.",
+      "Sleeping longer helps the body make more melatonin."
+    ],
+    "exp": "正確答案：It is easier to fall asleep when the brain is making melatonin.。來源：109年國中教育會考英語閱讀第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 29,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        28,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.51,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q30",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(28-30)\nThis is a letter by Selena Bieber to the students in her school.\n【原卷閱讀資料】\nhttp://www.nvhsstudsup.org/openletter\n       Later Is Better!\n                           Selena Bieber\n                      Northville High School\n\nDo you feel it’s hard to get up early for school and even harder to listen\nwell in the first class at 8 a.m.?  Well, this happens to most of us and is\nnot helpful for our learning!\n\nSome studies show that teenagers’ brains make melatonin, the hormone that\nhelps sleep, between 11 p.m. and 8 a.m. So it’s better for us to sleep during\nthese nine hours. But here comes the problem. We’re asked to get to school\nby 7:30 a.m.  That means we have to get up before 7, when our brains\nshould still be sleeping.  That’s why we’re always so tired and can’t think\nclearly in early morning classes. No clear head, no good learning, right?\n\nIf we can’t change how our body works, why can’t school start later?  In\nthis way, we can not only sleep more but also learn better!\n\nWant to help us make it happen?\nVisit www.nvhsstudsup.org/later-better to learn more.\n\n\nBelow is some information from another study.\nWe studied 48 high school students and found that the students who went\nto bed earlier did better on their school tests.  This is not only true for\nthose who slept nine hours, but also true for those who slept less.  And\nsome of them agreed that they learned better in early morning classes.\nDo the ideas in Selena Bieber’s letter agree with the information?",
+    "correct": "No, because her letter says teenagers’ brains do not work well in early morning classes.",
+    "wrong": [
+      "Yes, because her letter says it is better to sleep from 11 p.m. to 8 a.m.",
+      "Yes, because her letter says getting up early is not helpful for learning.",
+      "No, because her letter says students are asked to get to school by 7:30 a.m."
+    ],
+    "exp": "正確答案：No, because her letter says teenagers’ brains do not work well in early morning classes.。來源：109年國中教育會考英語閱讀第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 30,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        9,
+        10,
+        11
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        28,
+        30
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.46,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q31",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(31-34)\n【原卷閱讀資料】\nKivalina, an island village in Alaska, USA,\n                                                    is known by only a few people.  It cannot be\n                                  found on most maps of Alaska because it is\n                                      only 10 km2. This small Arctic village is home\n                                     to 400 Inuit people*. However, their home\n                                           will become uninhabitable because the\n                                     island could be covered by the Chukchi\nSea by 2025. These Inuit people will have to leave their home.\n     But life now is already difficult. Over the past twenty years, winters have\nbecome warmer, the Arctic ice has kept melting, and the sea has been rising.\nThese changes have made it harder to live by hunting and fishing than before.\nWhat’s worse, there is no Arctic ice thick enough to keep them safe from terrible\nwind and rain.\n     These Inuit people think it is the oil and power companies in Alaska that\nhave brought all these troubles, but they are the ones who are paying the price.\nIt would cost hundreds of millions to move their village, and they have no idea\nwhere to get the money. Groups like ReLocate are working together with the\nInuit people to save Kivalina, but nobody is sure if their hard work will come to\nanything.  All the Inuit people can do now is to pray the rising sea will not cover\ntheir home too soon.\n\n* The Inuit people are a group of people who live in the Arctic.\n\n![圖表](/assets/banks/cap-109-english/G31-34-figure-2.png)\nelt 融化  hunt 打獵  company 公司\n【詞彙】  <sup>m</sup>\n\nWhat can we learn about Kivalina?",
+    "correct": "It is fgi hting for one last hope.",
+    "wrong": [
+      "It is waiting to shine.",
+      "It has become history.",
+      "It has given up its chance to rise."
+    ],
+    "exp": "正確答案：It is fgi hting for one last hope.。來源：109年國中教育會考英語閱讀第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 31,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-figure-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q32",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(31-34)\n【原卷閱讀資料】\nKivalina, an island village in Alaska, USA,\n                                                    is known by only a few people.  It cannot be\n                                  found on most maps of Alaska because it is\n                                      only 10 km2. This small Arctic village is home\n                                     to 400 Inuit people*. However, their home\n                                           will become uninhabitable because the\n                                     island could be covered by the Chukchi\nSea by 2025. These Inuit people will have to leave their home.\n     But life now is already difficult. Over the past twenty years, winters have\nbecome warmer, the Arctic ice has kept melting, and the sea has been rising.\nThese changes have made it harder to live by hunting and fishing than before.\nWhat’s worse, there is no Arctic ice thick enough to keep them safe from terrible\nwind and rain.\n     These Inuit people think it is the oil and power companies in Alaska that\nhave brought all these troubles, but they are the ones who are paying the price.\nIt would cost hundreds of millions to move their village, and they have no idea\nwhere to get the money. Groups like ReLocate are working together with the\nInuit people to save Kivalina, but nobody is sure if their hard work will come to\nanything.  All the Inuit people can do now is to pray the rising sea will not cover\ntheir home too soon.\n\n* The Inuit people are a group of people who live in the Arctic.\n\n![圖表](/assets/banks/cap-109-english/G31-34-figure-2.png)\nelt 融化  hunt 打獵  company 公司\n【詞彙】  <sup>m</sup>\n\nWhat does it mean when we say a place is uninhabitable?",
+    "correct": "It cannot be lived in.",
+    "wrong": [
+      "It is not big.",
+      "It is not popular.",
+      "It cannot be bought."
+    ],
+    "exp": "正確答案：It cannot be lived in.。來源：109年國中教育會考英語閱讀第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 32,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-figure-2.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q33",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(31-34)\n【原卷閱讀資料】\nKivalina, an island village in Alaska, USA,\n                                                    is known by only a few people.  It cannot be\n                                  found on most maps of Alaska because it is\n                                      only 10 km2. This small Arctic village is home\n                                     to 400 Inuit people*. However, their home\n                                           will become uninhabitable because the\n                                     island could be covered by the Chukchi\nSea by 2025. These Inuit people will have to leave their home.\n     But life now is already difficult. Over the past twenty years, winters have\nbecome warmer, the Arctic ice has kept melting, and the sea has been rising.\nThese changes have made it harder to live by hunting and fishing than before.\nWhat’s worse, there is no Arctic ice thick enough to keep them safe from terrible\nwind and rain.\n     These Inuit people think it is the oil and power companies in Alaska that\nhave brought all these troubles, but they are the ones who are paying the price.\nIt would cost hundreds of millions to move their village, and they have no idea\nwhere to get the money. Groups like ReLocate are working together with the\nInuit people to save Kivalina, but nobody is sure if their hard work will come to\nanything.  All the Inuit people can do now is to pray the rising sea will not cover\ntheir home too soon.\n\n* The Inuit people are a group of people who live in the Arctic.\n\n![圖表](/assets/banks/cap-109-english/G31-34-figure-2.png)\nelt 融化  hunt 打獵  company 公司\n【詞彙】  <sup>m</sup>\n\nWhat does the writer think about the Inuit people in Kivalina?",
+    "correct": "They might not be able to get enough money to move their village.",
+    "wrong": [
+      "Their way of living has been hurting the earth.",
+      "They should make the oil and power companies fix their problems.",
+      "There are better ways than to move their village to somewhere else."
+    ],
+    "exp": "正確答案：They might not be able to get enough money to move their village.。來源：109年國中教育會考英語閱讀第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 33,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-figure-2.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q34",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(31-34)\n【原卷閱讀資料】\nKivalina, an island village in Alaska, USA,\n                                                    is known by only a few people.  It cannot be\n                                  found on most maps of Alaska because it is\n                                      only 10 km2. This small Arctic village is home\n                                     to 400 Inuit people*. However, their home\n                                           will become uninhabitable because the\n                                     island could be covered by the Chukchi\nSea by 2025. These Inuit people will have to leave their home.\n     But life now is already difficult. Over the past twenty years, winters have\nbecome warmer, the Arctic ice has kept melting, and the sea has been rising.\nThese changes have made it harder to live by hunting and fishing than before.\nWhat’s worse, there is no Arctic ice thick enough to keep them safe from terrible\nwind and rain.\n     These Inuit people think it is the oil and power companies in Alaska that\nhave brought all these troubles, but they are the ones who are paying the price.\nIt would cost hundreds of millions to move their village, and they have no idea\nwhere to get the money. Groups like ReLocate are working together with the\nInuit people to save Kivalina, but nobody is sure if their hard work will come to\nanything.  All the Inuit people can do now is to pray the rising sea will not cover\ntheir home too soon.\n\n* The Inuit people are a group of people who live in the Arctic.\n\n![圖表](/assets/banks/cap-109-english/G31-34-figure-2.png)\nelt 融化  hunt 打獵  company 公司\n【詞彙】  <sup>m</sup>\n\nWhat does the reading say about the Arctic ice?",
+    "correct": "The Arctic ice helped the Inuit people in Kivalina during bad weather.",
+    "wrong": [
+      "The Arctic ice covered 10 km<sup>2</sup> of Kivalina.",
+      "The melting Arctic ice kills about 400 Inuit people each year.",
+      "The melting Arctic ice has given the Inuit people enough water to use."
+    ],
+    "exp": "正確答案：The Arctic ice helped the Inuit people in Kivalina during bad weather.。來源：109年國中教育會考英語閱讀第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 34,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        11,
+        12,
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        31,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-109-english/G31-34-figure-2.png"
+    ],
+    "passRate": 0.54,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q35",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\nAfter a lot of tests and interviews, you finally got into a good school or got a good\njob.  But there’s a problem: it’s a long way from home.  “Well, I can take the bus or\ndrive,” you might think.  But before you decide whether it’s OK to have such a long\ncommute, it’s best to know    35  .\nHaving a long commute means you’ll get fewer hours of sleep, and that’ll make\nyou feel tired easily.  You’ll also have less time for friends and family, for exercise, or\nfor a nice meal.\nA long commute not only eats up your time but also   36  .  Studies show that\npeople who have a long commute get fat easily and often have neck or back problems.\nIt’s easier for them to have heart problems too.     37  .  Studies find that these people\nget angry more often, feel less happy with their lives, and do less well at work.\nNow, does that good school or that good job still sound good to you?\nnterview 面試  commute 通勤\n【詞彙】  <sup>i</sup>",
+    "correct": "how it will change your life",
+    "wrong": [
+      "what else you can do",
+      "how you can enjoy it more",
+      "what is the best way of commute for you"
+    ],
+    "exp": "正確答案：how it will change your life。來源：109年國中教育會考英語閱讀第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 35,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\nAfter a lot of tests and interviews, you finally got into a good school or got a good\njob.  But there’s a problem: it’s a long way from home.  “Well, I can take the bus or\ndrive,” you might think.  But before you decide whether it’s OK to have such a long\ncommute, it’s best to know    35  .\nHaving a long commute means you’ll get fewer hours of sleep, and that’ll make\nyou feel tired easily.  You’ll also have less time for friends and family, for exercise, or\nfor a nice meal.\nA long commute not only eats up your time but also   36  .  Studies show that\npeople who have a long commute get fat easily and often have neck or back problems.\nIt’s easier for them to have heart problems too.     37  .  Studies find that these people\nget angry more often, feel less happy with their lives, and do less well at work.\nNow, does that good school or that good job still sound good to you?\nnterview 面試  commute 通勤\n【詞彙】  <sup>i</sup>",
+    "correct": "hurts your health",
+    "wrong": [
+      "costs you money",
+      "makes traffci  terrible",
+      "kills the planet slowly"
+    ],
+    "exp": "正確答案：hurts your health。來源：109年國中教育會考英語閱讀第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 36,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q37",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(35-37)\nAfter a lot of tests and interviews, you finally got into a good school or got a good\njob.  But there’s a problem: it’s a long way from home.  “Well, I can take the bus or\ndrive,” you might think.  But before you decide whether it’s OK to have such a long\ncommute, it’s best to know    35  .\nHaving a long commute means you’ll get fewer hours of sleep, and that’ll make\nyou feel tired easily.  You’ll also have less time for friends and family, for exercise, or\nfor a nice meal.\nA long commute not only eats up your time but also   36  .  Studies show that\npeople who have a long commute get fat easily and often have neck or back problems.\nIt’s easier for them to have heart problems too.     37  .  Studies find that these people\nget angry more often, feel less happy with their lives, and do less well at work.\nNow, does that good school or that good job still sound good to you?\nnterview 面試  commute 通勤\n【詞彙】  <sup>i</sup>",
+    "correct": "But that’s not all",
+    "wrong": [
+      "And that’s why",
+      "And here’s an example",
+      "But that can be stopped"
+    ],
+    "exp": "正確答案：But that’s not all。來源：109年國中教育會考英語閱讀第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 37,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q38",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nNOlympics in Munich\n\n                                                        11/11/2013\n\n    People in the city of Munich have spoken their mind: they do not\nwant to host the Winter Olympics in 2022. To the cities that fight for this\nchance,  38  . The Olympics usually do a lot of good to the host city. The\nGames bring in jobs, visitors, and, most important of all, money. So why\ndid people in Munich say no?\n    The Olympics  39   for people in Munich.  For them, the world’s\nbiggest sports festival could invite serious trouble. There would be a lot of\nbuilding work before the Games, and during the Games, too much traffic\nand too many visitors.  Life would become terrible and nature would be\nhurt. And  40   : Munich hosted the 1972 Summer Olympics, and its\nneighbor, the mountain town Garmisch-Partenkirchen, hosted the 1936\nWinter Olympics.\n      Still, the heavy price Munich paid does not worry the cities that are\nin the race to get the 2022 Winter Olympics.   41   , they are happy that\nMunich said no to the Olympics—their chances of getting the Games have\nbecome higher.\nost 舉辦  Olympics 奧運  visitor 遊客\n【詞彙】  <sup>h</sup>",
+    "correct": "this is surely a surprise",
+    "wrong": [
+      "this sounds like a good idea",
+      "this is perhaps a smart answer",
+      "this is old news they have heard"
+    ],
+    "exp": "正確答案：this is surely a surprise。來源：109年國中教育會考英語閱讀第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 38,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nNOlympics in Munich\n\n                                                        11/11/2013\n\n    People in the city of Munich have spoken their mind: they do not\nwant to host the Winter Olympics in 2022. To the cities that fight for this\nchance,  38  . The Olympics usually do a lot of good to the host city. The\nGames bring in jobs, visitors, and, most important of all, money. So why\ndid people in Munich say no?\n    The Olympics  39   for people in Munich.  For them, the world’s\nbiggest sports festival could invite serious trouble. There would be a lot of\nbuilding work before the Games, and during the Games, too much traffic\nand too many visitors.  Life would become terrible and nature would be\nhurt. And  40   : Munich hosted the 1972 Summer Olympics, and its\nneighbor, the mountain town Garmisch-Partenkirchen, hosted the 1936\nWinter Olympics.\n      Still, the heavy price Munich paid does not worry the cities that are\nin the race to get the 2022 Winter Olympics.   41   , they are happy that\nMunich said no to the Olympics—their chances of getting the Games have\nbecome higher.\nost 舉辦  Olympics 奧運  visitor 遊客\n【詞彙】  <sup>h</sup>",
+    "correct": "are a different story",
+    "wrong": [
+      "had given hopes",
+      "bring a bright future",
+      "have been a great plan"
+    ],
+    "exp": "正確答案：are a different story。來源：109年國中教育會考英語閱讀第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 39,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q40",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nNOlympics in Munich\n\n                                                        11/11/2013\n\n    People in the city of Munich have spoken their mind: they do not\nwant to host the Winter Olympics in 2022. To the cities that fight for this\nchance,  38  . The Olympics usually do a lot of good to the host city. The\nGames bring in jobs, visitors, and, most important of all, money. So why\ndid people in Munich say no?\n    The Olympics  39   for people in Munich.  For them, the world’s\nbiggest sports festival could invite serious trouble. There would be a lot of\nbuilding work before the Games, and during the Games, too much traffic\nand too many visitors.  Life would become terrible and nature would be\nhurt. And  40   : Munich hosted the 1972 Summer Olympics, and its\nneighbor, the mountain town Garmisch-Partenkirchen, hosted the 1936\nWinter Olympics.\n      Still, the heavy price Munich paid does not worry the cities that are\nin the race to get the 2022 Winter Olympics.   41   , they are happy that\nMunich said no to the Olympics—their chances of getting the Games have\nbecome higher.\nost 舉辦  Olympics 奧運  visitor 遊客\n【詞彙】  <sup>h</sup>",
+    "correct": "this is not a guess; it is a lesson they learned from hard experience",
+    "wrong": [
+      "this will not go away; it will stay",
+      "they are not just saying it; they are going to do it",
+      "they do not speak for others; they only speak for themselves"
+    ],
+    "exp": "正確答案：this is not a guess; it is a lesson they learned from hard experience。來源：109年國中教育會考英語閱讀第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 40,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-109-english-q41",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(38-41)\n【原卷閱讀資料】\nNOlympics in Munich\n\n                                                        11/11/2013\n\n    People in the city of Munich have spoken their mind: they do not\nwant to host the Winter Olympics in 2022. To the cities that fight for this\nchance,  38  . The Olympics usually do a lot of good to the host city. The\nGames bring in jobs, visitors, and, most important of all, money. So why\ndid people in Munich say no?\n    The Olympics  39   for people in Munich.  For them, the world’s\nbiggest sports festival could invite serious trouble. There would be a lot of\nbuilding work before the Games, and during the Games, too much traffic\nand too many visitors.  Life would become terrible and nature would be\nhurt. And  40   : Munich hosted the 1972 Summer Olympics, and its\nneighbor, the mountain town Garmisch-Partenkirchen, hosted the 1936\nWinter Olympics.\n      Still, the heavy price Munich paid does not worry the cities that are\nin the race to get the 2022 Winter Olympics.   41   , they are happy that\nMunich said no to the Olympics—their chances of getting the Games have\nbecome higher.\nost 舉辦  Olympics 奧運  visitor 遊客\n【詞彙】  <sup>h</sup>",
+    "correct": "In fact",
+    "wrong": [
+      "If so",
+      "However",
+      "Finally"
+    ],
+    "exp": "正確答案：In fact。來源：109年國中教育會考英語閱讀第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-109-english",
+      "question": 41,
+      "file": "國中/會考/英語閱讀/109P_English150DPI.pdf",
+      "url": "https://drive.google.com/file/d/1GwZCHBrXXl2KXlJrmZarJA5IEkPRY8w1/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1zj_iw_7T3M6BgmGZkFOIIGNghr02dWPk/view?usp=drive_link",
+      "group": [
+        38,
+        41
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/152pYdizLEA7frTUgrMgyHo12qCKWSTyJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  }
+]

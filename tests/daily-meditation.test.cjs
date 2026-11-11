@@ -26,13 +26,13 @@ test('streak advances across month boundaries, breaks after missed day', () => {
 });
 
 test('early streak rewards start on day two, cultivation bonus on day three', () => {
-  assert.equal(meditationReward(28, 1, 3).cultivation, 3);
-  assert.equal(meditationReward(28, 1, 3).gold, 30);
-  assert.equal(meditationReward(28, 2, 3).gold, 40);
-  assert.equal(meditationReward(28, 3, 3).cultivation, 4);
-  assert.equal(meditationReward(28, 3, 3).gold, 45);
-  assert.equal(meditationReward(28, 7, 3).cultivation, 5);
-  assert.equal(meditationReward(28, 7, 3).gold, 70);
+  assert.equal(meditationReward(28, 1, 5).cultivation, 3);
+  assert.equal(meditationReward(28, 1, 5).gold, 30);
+  assert.equal(meditationReward(28, 2, 5).gold, 40);
+  assert.equal(meditationReward(28, 3, 5).cultivation, 4);
+  assert.equal(meditationReward(28, 3, 5).gold, 45);
+  assert.equal(meditationReward(28, 7, 5).cultivation, 5);
+  assert.equal(meditationReward(28, 7, 5).gold, 70);
 });
 
 test('every realm uses its own reward threshold', () => {
@@ -42,17 +42,17 @@ test('every realm uses its own reward threshold', () => {
     [788, 7, 100], [1268, 8, 130], [1868, 9, 160], [2588, 10, 200]
   ];
   for (const [score, cultivation, gold] of expected) {
-    const reward = meditationReward(score, 1, 3);
+    const reward = meditationReward(score, 1, 5);
     assert.equal(reward.cultivation, cultivation, 'cultivation at ' + score);
     assert.equal(reward.gold, gold, 'spirit stones at ' + score);
   }
 });
 
-test('two correct answers grant half base plus full streak; poor results grant only five stones', () => {
-  const partial = meditationReward(28, 7, 2);
+test('three or four of five correct answers grant half base plus full streak; poor results grant only five stones', () => {
+  const partial = meditationReward(28, 7, 3);
   assert.equal(partial.cultivation, 4);
   assert.equal(partial.gold, 55);
-  for (const count of [0, 1]) {
+  for (const count of [0, 1, 2]) {
     const reward = meditationReward(2588, 90, count);
     assert.equal(reward.cultivation, 0);
     assert.equal(reward.gold, 5);
@@ -60,10 +60,10 @@ test('two correct answers grant half base plus full streak; poor results grant o
 });
 
 test('streak bonus is capped from day ninety onwards', () => {
-  assert.equal(meditationReward(2588, 90, 3).cultivation, 16);
-  assert.equal(meditationReward(2588, 90, 3).gold, 400);
-  assert.equal(meditationReward(2588, 10000, 3).cultivation, 16);
-  assert.equal(meditationReward(2588, 10000, 3).gold, 400);
+  assert.equal(meditationReward(2588, 90, 5).cultivation, 16);
+  assert.equal(meditationReward(2588, 90, 5).gold, 400);
+  assert.equal(meditationReward(2588, 10000, 5).cultivation, 16);
+  assert.equal(meditationReward(2588, 10000, 5).gold, 400);
 });
 
 test('meditation challenge is registered and local check-in is no longer used', () => {
@@ -154,7 +154,7 @@ test('new meditation runner gets server sessions and never submits its own corre
   assert.match(source, /request\('start'\)/);
   assert.match(source, /questionId:session.question.id,choice,activeMs/);
   assert.match(source, /request\('finish'\)/);
-  assert.match(api, /Mistakes.chooseMeditationMistakes\(pool,3,random\)/);
-  assert.match(api, /selected.length<3/);
+  assert.match(api, /daily\?\.plan\|\|dailyPlan\(\)/);
+  assert.match(api, /sessionTotal\(c.session\)/);
   assert.match(api, /dailyMeditationAnswers:answers/);
 });

@@ -1,0 +1,1411 @@
+[
+  {
+    "id": "cap-111-english-q1",
+    "difficulty": "easy",
+    "q": "Look at the picture.  The woman is putting ______ on the\ncake.\n\n![圖表](/assets/banks/cap-111-english/Q1-figure-1.png)",
+    "correct": "candles",
+    "wrong": [
+      "forks",
+      "plates",
+      "strawberries"
+    ],
+    "exp": "正確答案：candles。來源：111年國中教育會考英語閱讀第1題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 1,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/Q1-figure-1.png"
+    ],
+    "passRate": 0.94,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q2",
+    "difficulty": "easy",
+    "q": "The movie starts at two o’clock, ______ let’s meet at the theater at one forty-five.",
+    "correct": "so",
+    "wrong": [
+      "or",
+      "if",
+      "because"
+    ],
+    "exp": "正確答案：so。來源：111年國中教育會考英語閱讀第2題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 2,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q3",
+    "difficulty": "easy",
+    "q": "Peter is afraid of the dark.  He even leaves the ______ on when sleeping.",
+    "correct": "lights",
+    "wrong": [
+      "computer",
+      "fans",
+      "music"
+    ],
+    "exp": "正確答案：lights。來源：111年國中教育會考英語閱讀第3題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 3,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q4",
+    "difficulty": "easy",
+    "q": "Pam is a ______ baseball player; she has more fans than any other player on her team.",
+    "correct": "popular",
+    "wrong": [
+      "boring",
+      "heavy",
+      "rich"
+    ],
+    "exp": "正確答案：popular。來源：111年國中教育會考英語閱讀第4題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 4,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q5",
+    "difficulty": "easy",
+    "q": "I did not do my homework, so my teacher said I ______ stay after school to finish it.",
+    "correct": "had to",
+    "wrong": [
+      "failed to",
+      "hoped to",
+      "used to"
+    ],
+    "exp": "正確答案：had to。來源：111年國中教育會考英語閱讀第5題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 5,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q6",
+    "difficulty": "easy",
+    "q": "Kevin has only enough money for the bag or the shoes.  That is a hard ______ to\nmake because he likes them both.",
+    "correct": "choice",
+    "wrong": [
+      "gift",
+      "rule",
+      "trick"
+    ],
+    "exp": "正確答案：choice。來源：111年國中教育會考英語閱讀第6題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 6,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q7",
+    "difficulty": "easy",
+    "q": "It was ______ for us to answer the math question because we’ve done the same kind\nof questions many times.",
+    "correct": "easy",
+    "wrong": [
+      "common",
+      "safe",
+      "special"
+    ],
+    "exp": "正確答案：easy。來源：111年國中教育會考英語閱讀第7題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 7,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q8",
+    "difficulty": "medium",
+    "q": "Although it took me lots of time ______ a big meal for ten people, I was happy that\neveryone enjoyed it.",
+    "correct": "to prepare",
+    "wrong": [
+      "prepare",
+      "preparing",
+      "prepared"
+    ],
+    "exp": "正確答案：to prepare。來源：111年國中教育會考英語閱讀第8題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 8,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.75,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q9",
+    "difficulty": "medium",
+    "q": "Don’t let the children swim in the river.  We don’t know how ______ it is.  It could be\ndangerous.",
+    "correct": "deep",
+    "wrong": [
+      "far",
+      "long",
+      "thick"
+    ],
+    "exp": "正確答案：deep。來源：111年國中教育會考英語閱讀第9題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 9,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q10",
+    "difficulty": "medium",
+    "q": "Bob is ______ of the boys in the family.  He never does any housework.  His brothers\nat least take out the garbage sometimes.",
+    "correct": "the laziest",
+    "wrong": [
+      "lazier",
+      "the lazy",
+      "the lazier"
+    ],
+    "exp": "正確答案：the laziest。來源：111年國中教育會考英語閱讀第10題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 10,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.73,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q11",
+    "difficulty": "medium",
+    "q": "Aunt Gina has lived in this town for more than sixty years, so she ______ it very well.",
+    "correct": "knows",
+    "wrong": [
+      "will know",
+      "knew",
+      "was going to know"
+    ],
+    "exp": "正確答案：knows。來源：111年國中教育會考英語閱讀第11題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 11,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q12",
+    "difficulty": "easy",
+    "q": "We won’t see the sun even after the typhoon leaves, because the news said that\nheavier rain will soon ______  .",
+    "correct": "follow",
+    "wrong": [
+      "catch",
+      "move",
+      "stop"
+    ],
+    "exp": "正確答案：follow。來源：111年國中教育會考英語閱讀第12題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 12,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q13",
+    "difficulty": "easy",
+    "q": "Yesterday when I got home from work, my brother ______ for dinner, so he invited me\nto join him.",
+    "correct": "was going out",
+    "wrong": [
+      "goes out",
+      "went out",
+      "has gone out"
+    ],
+    "exp": "正確答案：was going out。來源：111年國中教育會考英語閱讀第13題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 13,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q14",
+    "difficulty": "medium",
+    "q": "You were ______ not to lend Amy money.  She never gives back what she borrows.",
+    "correct": "wise",
+    "wrong": [
+      "crazy",
+      "helpful",
+      "wrong"
+    ],
+    "exp": "正確答案：wise。來源：111年國中教育會考英語閱讀第14題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 14,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q15",
+    "difficulty": "medium",
+    "q": "Have you found a summer job yet?  Mr. Firth ______ someone to take care of his kids\nduring the vacation.  Maybe you can talk to him.",
+    "correct": "is looking for",
+    "wrong": [
+      "has looked for",
+      "looks for",
+      "was looking for"
+    ],
+    "exp": "正確答案：is looking for。來源：111年國中教育會考英語閱讀第15題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 15,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q16",
+    "difficulty": "medium",
+    "q": "David looked out of the balcony window and saw a woman get in his car ______ away.",
+    "correct": "and drive",
+    "wrong": [
+      "drive",
+      "drove",
+      "and drove"
+    ],
+    "exp": "正確答案：and drive。來源：111年國中教育會考英語閱讀第16題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 16,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q17",
+    "difficulty": "medium",
+    "q": "The police haven’t found the little girl who ______ at a supermarket.  They’ll keep\ndoing all they can to find her.",
+    "correct": "was taken away",
+    "wrong": [
+      "took away",
+      "taken away",
+      "has taken away"
+    ],
+    "exp": "正確答案：was taken away。來源：111年國中教育會考英語閱讀第17題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 17,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.68,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q18",
+    "difficulty": "medium",
+    "q": "Buses to the airport only come once every hour, and we just missed ______  .  Why don’t\nwe take a taxi?",
+    "correct": "one",
+    "wrong": [
+      "another",
+      "it",
+      "them"
+    ],
+    "exp": "正確答案：one。來源：111年國中教育會考英語閱讀第18題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 18,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q19",
+    "difficulty": "medium",
+    "q": "Ariel ______ every night for a week before her Chinese test and got a very good grade.",
+    "correct": "studied",
+    "wrong": [
+      "studies",
+      "has studied",
+      "was going to study"
+    ],
+    "exp": "正確答案：studied。來源：111年國中教育會考英語閱讀第19題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 19,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q20",
+    "difficulty": "medium",
+    "q": "While reading this story, Brad saw the word “trolling” and didn’t know what it meant.\nJosh turned off  the screen and sat back.  “Why are they trolling me like this?”  He didn’t\nunderstand.  They wanted him to share what he thought about the show, and he did.\nAnd now look what he got.  In the end, all they wanted was nice words.\nHe found several meanings of the word in a dictionary.  Which one should Brad\nchoose?",
+    "correct": "To write something on the Internet to hurt someone or make them angry.",
+    "wrong": [
+      "To celebrate in song.",
+      "To make someone or something move around.",
+      "To pull a fishing line through the water, often from a boat."
+    ],
+    "exp": "正確答案：To write something on the Internet to hurt someone or make them angry.。來源：111年國中教育會考英語閱讀第20題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 20,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.6,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q21",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(21-22)\n【原卷閱讀資料】\noS TEE EEE EEE EE EEE EEE EEE EEE EEE EEE EEE EE EEE EE EES EE EEE EE EE a,\n\nYou Drink Tea-Rock & We Send You to the USA\n\nThank You for Being with Us for Twenty Summers & Winters\n\nCut out the picture of the tea cup on a bottle of Tea-Rock tea, collect two\nof the pictures, and paste them on a postcard. On the postcard, be sure\nto write down your name, birthday, telephone number, e-mail address,\nand your favorite Tea-Rock tea. Send the postcard to “Tea-Rock 20,\" PO\nBox 70265, Miao-Song (1/10/2010 ~ 3/15/2010). You have a chance to win\n2 tickets from Taipei to New York!\n\n1st Prize: 2 tickets from Taipei to New York ~~ | ~==—7]\n2nd Prize: A Sonia 42\" TV\n\n(\n| |\n3rd Prize: A Sonia MP4 Player ! 2 |\nAnd many more surprises for you! | ES i\nL J\n\nWant to know more?\n\nGo to http://www.tearock.com.tw/tearock20.aspx or call us at (07)777- 77. /\n\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n\n\nWhat does Tea-Rock celebrate?",
+    "correct": "Their 20<sup>th</sup> year of business.",
+    "wrong": [
+      "Their sales in 20 countries.",
+      "The coming out of their 20<sup>th</sup> kind of tea.",
+      "The opening of their 20<sup>th</sup> store in the USA."
+    ],
+    "exp": "正確答案：Their 20<sup>th</sup> year of business.。來源：111年國中教育會考英語閱讀第21題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 21,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        21,
+        22
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.45,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q22",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(21-22)\n【原卷閱讀資料】\noS TEE EEE EEE EE EEE EEE EEE EEE EEE EEE EEE EE EEE EE EES EE EEE EE EE a,\n\nYou Drink Tea-Rock & We Send You to the USA\n\nThank You for Being with Us for Twenty Summers & Winters\n\nCut out the picture of the tea cup on a bottle of Tea-Rock tea, collect two\nof the pictures, and paste them on a postcard. On the postcard, be sure\nto write down your name, birthday, telephone number, e-mail address,\nand your favorite Tea-Rock tea. Send the postcard to “Tea-Rock 20,\" PO\nBox 70265, Miao-Song (1/10/2010 ~ 3/15/2010). You have a chance to win\n2 tickets from Taipei to New York!\n\n1st Prize: 2 tickets from Taipei to New York ~~ | ~==—7]\n2nd Prize: A Sonia 42\" TV\n\n(\n| |\n3rd Prize: A Sonia MP4 Player ! 2 |\nAnd many more surprises for you! | ES i\nL J\n\nWant to know more?\n\nGo to http://www.tearock.com.tw/tearock20.aspx or call us at (07)777- 77. /\n\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n|\n\n\nHere is the postcard Jason is going to send to Tea-Rock 20.  What else does he need to\nput on the postcard before he sends it?\n\n![圖表](/assets/banks/cap-111-english/Q22-figure-1.png)\n\n![圖表](/assets/banks/cap-111-english/Q22-figure-2.png)\n\n![圖表](/assets/banks/cap-111-english/Q22-figure-3.png)\n\n",
+    "correct": "His birthday.",
+    "wrong": [
+      "His age.",
+      "His address.",
+      "Another picture of the tea cup."
+    ],
+    "exp": "正確答案：His birthday.。來源：111年國中教育會考英語閱讀第22題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 22,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        21,
+        22
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/Q22-figure-1.png",
+      "/assets/banks/cap-111-english/Q22-figure-2.png",
+      "/assets/banks/cap-111-english/Q22-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(23-24)\nBelow is an infographic.\n![圖表](/assets/banks/cap-111-english/G23-24-figure-1.png)\n\n\n\n\n\n\n\n\n\nWhat can we learn about sugar from the infographic?",
+    "correct": "400 ml of rice milk has less sugar than 400 ml of grape juice.",
+    "wrong": [
+      "There are 4 g of sugar in 66 g of ice cream.",
+      "A woman can eat as much sugar a day as a man can.",
+      "Taiwan eats more sugar for each person than the US does."
+    ],
+    "exp": "正確答案：400 ml of rice milk has less sugar than 400 ml of grape juice.。來源：111年國中教育會考英語閱讀第23題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 23,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        23,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G23-24-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q24",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(23-24)\nBelow is an infographic.\n![圖表](/assets/banks/cap-111-english/G23-24-figure-1.png)\n\n\n\n\n\n\n\n\n\nWhat can be a reason why the list of “Sugar that is hidden in foods and drinks”\nis put in the infographic?",
+    "correct": "To tell us that we often have more sugar than we can without knowing it.",
+    "wrong": [
+      "To help us understand how sugar hurts our body.",
+      "To show what kinds of foods and drinks are popular with children.",
+      "To let us know how much sugar is enough to make foods and drinks taste good."
+    ],
+    "exp": "正確答案：To tell us that we often have more sugar than we can without knowing it.。來源：111年國中教育會考英語閱讀第24題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 24,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        5,
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        23,
+        24
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G23-24-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-26)\nDarrell\t: \u0007Marina…Marina…MARINA!\nMarina\t: \u0007Oh, sorry.  I didn’t hear you.  I was thinking about my homework.\nDarrell\t: \u0007What’s it about?\nMarina\t: \u0007Well, I need to draw a future house for my art class, but I haven’t got any\nideas.  Maybe I should go to the library and look for something useful.\nDarrell\t: \u0007Or you can try Pinterest.\nMarina\t: \u0007Isn’t it a shopping app?\nDarrell\t: \u0007Not really.  Many people share their works on Pinterest and tell you how\nthey made them.  I’m sure you can get some ideas there.\nMarina\t: \u0007Sounds like you use it often.\nDarrell\t: \u0007Yeah.  Just last week I went there and found the A to Z of making\nchocolate cake—from choosing good chocolate to baking the cake to making\nsugar flowers on top.\nMarina\t: \u0007Really?  I’ll check it out later.  Thanks a lot.\n\nWhy did Darrell tell Marina to go to Pinterest?",
+    "correct": "To find some examples for her homework.",
+    "wrong": [
+      "To shop for things that are needed for art classes.",
+      "To meet new friends who have the same interests.",
+      "To share her works and tell people how they are made."
+    ],
+    "exp": "正確答案：To find some examples for her homework.。來源：111年國中教育會考英語閱讀第25題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 25,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        25,
+        26
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q26",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(25-26)\nDarrell\t: \u0007Marina…Marina…MARINA!\nMarina\t: \u0007Oh, sorry.  I didn’t hear you.  I was thinking about my homework.\nDarrell\t: \u0007What’s it about?\nMarina\t: \u0007Well, I need to draw a future house for my art class, but I haven’t got any\nideas.  Maybe I should go to the library and look for something useful.\nDarrell\t: \u0007Or you can try Pinterest.\nMarina\t: \u0007Isn’t it a shopping app?\nDarrell\t: \u0007Not really.  Many people share their works on Pinterest and tell you how\nthey made them.  I’m sure you can get some ideas there.\nMarina\t: \u0007Sounds like you use it often.\nDarrell\t: \u0007Yeah.  Just last week I went there and found the A to Z of making\nchocolate cake—from choosing good chocolate to baking the cake to making\nsugar flowers on top.\nMarina\t: \u0007Really?  I’ll check it out later.  Thanks a lot.\n\nWhat does it mean when you learn something from A to Z?",
+    "correct": "You learn everything about it.",
+    "wrong": [
+      "You can learn it at any time.",
+      "You learn it in a baking class.",
+      "You spend all your life learning it."
+    ],
+    "exp": "正確答案：You learn everything about it.。來源：111年國中教育會考英語閱讀第26題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 26,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        25,
+        26
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q27",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(27-29)\nTabata training is a very popular way of exercising these days.  It doesn’t take\nmuch time or space, and it burns calories faster than other ways of exercising.\nThe idea of Tabata training is simple: exercise for 20 seconds, rest for 10 seconds,\nand then repeat (at least eight times).  The moves for the 20-second exercise are not\ndifficult to learn.  Jumping jacks, high knees, squats, and planks are some of the most\ncommon moves.  You can decide yourself what moves to do in your Tabata training.\nFor example, you can do more leg exercises if you want strong legs.\n![圖表](/assets/banks/cap-111-english/G27-29-figure-1.png)\n\n\n\nOne great thing about Tabata training is that your body will keep burning\ncalories for at least an hour after 4 minutes of Tabata training.  But to have this\nwonderful “afterburn,” you need to exercise really hard during each 20 seconds.\nIf you seldom exercise or have heart problems, this exercise may not be good for\nyou.  But for people who enjoy exercising but are too busy to go to the gym, Tabata\ntraining might just be the answer.\n![圖表](/assets/banks/cap-111-english/G27-29-figure-5.png)\n\nWhich idea is talked about in the first paragraph of the reading?\n\n![圖表](/assets/banks/cap-111-english/Q27-figure-1.png)",
+    "correct": "How you should do Tabata training.",
+    "wrong": [
+      "What is the best time for Tabata training.",
+      "Who first had the idea of Tabata training.",
+      "How often you should do Tabata training."
+    ],
+    "exp": "正確答案：How you should do Tabata training.。來源：111年國中教育會考英語閱讀第27題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 27,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        27,
+        29
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G27-29-figure-1.png",
+      "/assets/banks/cap-111-english/G27-29-figure-5.png",
+      "/assets/banks/cap-111-english/Q27-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q28",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(27-29)\nTabata training is a very popular way of exercising these days.  It doesn’t take\nmuch time or space, and it burns calories faster than other ways of exercising.\nThe idea of Tabata training is simple: exercise for 20 seconds, rest for 10 seconds,\nand then repeat (at least eight times).  The moves for the 20-second exercise are not\ndifficult to learn.  Jumping jacks, high knees, squats, and planks are some of the most\ncommon moves.  You can decide yourself what moves to do in your Tabata training.\nFor example, you can do more leg exercises if you want strong legs.\n![圖表](/assets/banks/cap-111-english/G27-29-figure-1.png)\n\n\n\nOne great thing about Tabata training is that your body will keep burning\ncalories for at least an hour after 4 minutes of Tabata training.  But to have this\nwonderful “afterburn,” you need to exercise really hard during each 20 seconds.\nIf you seldom exercise or have heart problems, this exercise may not be good for\nyou.  But for people who enjoy exercising but are too busy to go to the gym, Tabata\ntraining might just be the answer.\n![圖表](/assets/banks/cap-111-english/G27-29-figure-5.png)\n\nWho might find that Tabata training is right for them?",
+    "correct": "People who already have a habit of exercising.",
+    "wrong": [
+      "People who enjoy team sports.",
+      "People who want to start exercising.",
+      "People who want to fix their heart problems."
+    ],
+    "exp": "正確答案：People who already have a habit of exercising.。來源：111年國中教育會考英語閱讀第28題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 28,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        27,
+        29
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G27-29-figure-1.png",
+      "/assets/banks/cap-111-english/G27-29-figure-5.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q29",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(27-29)\nTabata training is a very popular way of exercising these days.  It doesn’t take\nmuch time or space, and it burns calories faster than other ways of exercising.\nThe idea of Tabata training is simple: exercise for 20 seconds, rest for 10 seconds,\nand then repeat (at least eight times).  The moves for the 20-second exercise are not\ndifficult to learn.  Jumping jacks, high knees, squats, and planks are some of the most\ncommon moves.  You can decide yourself what moves to do in your Tabata training.\nFor example, you can do more leg exercises if you want strong legs.\n![圖表](/assets/banks/cap-111-english/G27-29-figure-1.png)\n\n\n\nOne great thing about Tabata training is that your body will keep burning\ncalories for at least an hour after 4 minutes of Tabata training.  But to have this\nwonderful “afterburn,” you need to exercise really hard during each 20 seconds.\nIf you seldom exercise or have heart problems, this exercise may not be good for\nyou.  But for people who enjoy exercising but are too busy to go to the gym, Tabata\ntraining might just be the answer.\n![圖表](/assets/banks/cap-111-english/G27-29-figure-5.png)\n\nWhich is true about Tabata training?",
+    "correct": "You are free to choose your own moves.",
+    "wrong": [
+      "It is difficult to learn the moves.",
+      "You need a large space to do the exercises.",
+      "You cannot rest between moves if you want the afterburn."
+    ],
+    "exp": "正確答案：You are free to choose your own moves.。來源：111年國中教育會考英語閱讀第29題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 29,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        27,
+        29
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G27-29-figure-1.png",
+      "/assets/banks/cap-111-english/G27-29-figure-5.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q30",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(30-32)\n![圖表](/assets/banks/cap-111-english/G30-32-figure-1.png)\n\n![圖表](/assets/banks/cap-111-english/G30-32-figure-2.png)\nThe problem of long working hours is a real headache in our country. It\nkills many people every year (see Figure 1), and many companies are trying\nto change that.  They have at least one “No Overtime Day” in a week, and it\nis often Wednesday. On “No Overtime Day,” workers are asked to leave their\noffices before 8 p.m. At 8 p.m., companies play the song “There’s Always\nTomorrow” and turn off all the lights.\nHowever, after the workers walk out of their offices, they don’t go home.\nSome go back later, turn on their table lamps, and keep working, and others\nfind somewhere else to work until very late at night. Restaurants and coffee\nshops are busier on Wednesday evenings, and they have started selling drinks\nand meals for these workers.\nBut why do these people keep working?  A study shows that workers who\nwork more hours often have a bigger chance to get paid more and rise higher\nin their companies.  This is true for both men and women (see Figure 2).\nWorking long hours has become a way to show that people are hard-working.\nClearly, this must be changed before the problem gets any worse.\n![圖表](/assets/banks/cap-111-english/G30-32-figure-4.png)\nFigure 1\n\n\nFigure 2\n\n\nThere are four important points in the report:\na. What “No Overtime Day” is\nb. Why “No Overtime Day” fails\nc.\tWhy there is “No Overtime Day” in the country\n\nd. How workers deal with “No Overtime Day”\nHow are they ordered in the report?\n\n![圖表](/assets/banks/cap-111-english/Q30-figure-1.png)",
+    "correct": "c→a→d→b.",
+    "wrong": [
+      "a→c→d→b.",
+      "a→d→c→b.",
+      "c→a→b→d."
+    ],
+    "exp": "正確答案：c→a→d→b.。來源：111年國中教育會考英語閱讀第30題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 30,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        30,
+        32
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G30-32-figure-1.png",
+      "/assets/banks/cap-111-english/G30-32-figure-2.png",
+      "/assets/banks/cap-111-english/G30-32-figure-4.png",
+      "/assets/banks/cap-111-english/Q30-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q31",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(30-32)\n![圖表](/assets/banks/cap-111-english/G30-32-figure-1.png)\n\n![圖表](/assets/banks/cap-111-english/G30-32-figure-2.png)\nThe problem of long working hours is a real headache in our country. It\nkills many people every year (see Figure 1), and many companies are trying\nto change that.  They have at least one “No Overtime Day” in a week, and it\nis often Wednesday. On “No Overtime Day,” workers are asked to leave their\noffices before 8 p.m. At 8 p.m., companies play the song “There’s Always\nTomorrow” and turn off all the lights.\nHowever, after the workers walk out of their offices, they don’t go home.\nSome go back later, turn on their table lamps, and keep working, and others\nfind somewhere else to work until very late at night. Restaurants and coffee\nshops are busier on Wednesday evenings, and they have started selling drinks\nand meals for these workers.\nBut why do these people keep working?  A study shows that workers who\nwork more hours often have a bigger chance to get paid more and rise higher\nin their companies.  This is true for both men and women (see Figure 2).\nWorking long hours has become a way to show that people are hard-working.\nClearly, this must be changed before the problem gets any worse.\n![圖表](/assets/banks/cap-111-english/G30-32-figure-4.png)\nFigure 1\n\n\nFigure 2\n\n\nWhat does this mean in the report?",
+    "correct": "The way workers show they are hard-working.",
+    "wrong": [
+      "Restaurants and coffee shops open until very late at night.",
+      "Workers do not go home when they walk out of the office.",
+      "\u0007The number of workers who get paid more and rise higher in the company."
+    ],
+    "exp": "正確答案：The way workers show they are hard-working.。來源：111年國中教育會考英語閱讀第31題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 31,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        30,
+        32
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G30-32-figure-1.png",
+      "/assets/banks/cap-111-english/G30-32-figure-2.png",
+      "/assets/banks/cap-111-english/G30-32-figure-4.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q32",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(30-32)\n![圖表](/assets/banks/cap-111-english/G30-32-figure-1.png)\n\n![圖表](/assets/banks/cap-111-english/G30-32-figure-2.png)\nThe problem of long working hours is a real headache in our country. It\nkills many people every year (see Figure 1), and many companies are trying\nto change that.  They have at least one “No Overtime Day” in a week, and it\nis often Wednesday. On “No Overtime Day,” workers are asked to leave their\noffices before 8 p.m. At 8 p.m., companies play the song “There’s Always\nTomorrow” and turn off all the lights.\nHowever, after the workers walk out of their offices, they don’t go home.\nSome go back later, turn on their table lamps, and keep working, and others\nfind somewhere else to work until very late at night. Restaurants and coffee\nshops are busier on Wednesday evenings, and they have started selling drinks\nand meals for these workers.\nBut why do these people keep working?  A study shows that workers who\nwork more hours often have a bigger chance to get paid more and rise higher\nin their companies.  This is true for both men and women (see Figure 2).\nWorking long hours has become a way to show that people are hard-working.\nClearly, this must be changed before the problem gets any worse.\n![圖表](/assets/banks/cap-111-english/G30-32-figure-4.png)\nFigure 1\n\n\nFigure 2\n\n\nWhat can we learn from Figure 1 and Figure 2?\nwork the same hours as women.\nwhen they work 2,200 hours.",
+    "correct": "\u0007Men and women have almost the same chance to get paid more and rise higher",
+    "wrong": [
+      "Long working hours killed more women than men in 2014.",
+      "Long working hours kills more and more workers every year.",
+      "\u0007Men usually have a bigger chance to get paid more and rise higher when they"
+    ],
+    "exp": "正確答案：\u0007Men and women have almost the same chance to get paid more and rise higher。來源：111年國中教育會考英語閱讀第32題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 32,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        30,
+        32
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G30-32-figure-1.png",
+      "/assets/banks/cap-111-english/G30-32-figure-2.png",
+      "/assets/banks/cap-111-english/G30-32-figure-4.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q33",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(33-36)\nhttp://www.aab.com/news/language-and-power-756315\nLanguage and Power: Cameroon’s Story\nBy Elisa Grant, 2 Oct 2017\nIn the modern world, being able to speak English\nis often a way to get power. However, this is not\ntrue for English speakers in Cameroon. To know\nwhy things are different in this African country,\nwe need to go back one hundred years.\nIn 1919, Kamerun (the name of Cameroon at\nthe time) was cut into two parts: one belonged\nto France, and the other belonged to the UK.  In\n1960, the French Cameroon became the Republic of Cameroun, and the UK’s\npart joined it in 1961.  The new country changed its name to the Federal\nRepublic of Cameroon.  Although both French and English are Cameroon’s\nofficial languages, only around 20% of its people speak English.  Also, the\ngovernment has been in French speakers’ hands since the two parts became\none country.\nFor a long time, Cameroon’s English speakers have felt they are not welcome\nin their own country.  For example, it is very difficult for them to find jobs\nin the government, and they are often asked to speak French in business and\nat official events.  They have become more resentful at the government and\ndecided to fight for themselves.  Since last year, the English speakers have\ntried to build their own country.  Yesterday, they said in a public meeting\nthat they were not part of Cameroon anymore.  They are now a new country,\n“Ambazonia.”  When the police tried to stop the meeting, at least eight people\nwere killed.\nRead more\nfcfi ial 官方的     government 政府\n【詞彙】  <sup>o</sup>\n\nWhich map is most likely the map of Cameroon in 1962?\n\n![圖表](/assets/banks/cap-111-english/Q33-figure-1.png)",
+    "correct": "![圖表](/assets/banks/cap-111-english/Q33-option-D-figure-1.png)",
+    "wrong": [
+      "![圖表](/assets/banks/cap-111-english/Q33-option-A-figure-1.png)",
+      "![圖表](/assets/banks/cap-111-english/Q33-option-B-figure-1.png)",
+      "![圖表](/assets/banks/cap-111-english/Q33-option-C-figure-1.png)"
+    ],
+    "exp": "正確答案：![圖表](/assets/banks/cap-111-english/Q33-option-D-figure-1.png)。來源：111年國中教育會考英語閱讀第33題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 33,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/Q33-figure-1.png",
+      "/assets/banks/cap-111-english/Q33-option-D-figure-1.png",
+      "/assets/banks/cap-111-english/Q33-option-A-figure-1.png",
+      "/assets/banks/cap-111-english/Q33-option-B-figure-1.png",
+      "/assets/banks/cap-111-english/Q33-option-C-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q34",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(33-36)\nhttp://www.aab.com/news/language-and-power-756315\nLanguage and Power: Cameroon’s Story\nBy Elisa Grant, 2 Oct 2017\nIn the modern world, being able to speak English\nis often a way to get power. However, this is not\ntrue for English speakers in Cameroon. To know\nwhy things are different in this African country,\nwe need to go back one hundred years.\nIn 1919, Kamerun (the name of Cameroon at\nthe time) was cut into two parts: one belonged\nto France, and the other belonged to the UK.  In\n1960, the French Cameroon became the Republic of Cameroun, and the UK’s\npart joined it in 1961.  The new country changed its name to the Federal\nRepublic of Cameroon.  Although both French and English are Cameroon’s\nofficial languages, only around 20% of its people speak English.  Also, the\ngovernment has been in French speakers’ hands since the two parts became\none country.\nFor a long time, Cameroon’s English speakers have felt they are not welcome\nin their own country.  For example, it is very difficult for them to find jobs\nin the government, and they are often asked to speak French in business and\nat official events.  They have become more resentful at the government and\ndecided to fight for themselves.  Since last year, the English speakers have\ntried to build their own country.  Yesterday, they said in a public meeting\nthat they were not part of Cameroon anymore.  They are now a new country,\n“Ambazonia.”  When the police tried to stop the meeting, at least eight people\nwere killed.\nRead more\nfcfi ial 官方的     government 政府\n【詞彙】  <sup>o</sup>\n\nWhat does resentful mean in the reading?",
+    "correct": "Angry.",
+    "wrong": [
+      "Sad.",
+      "Careful.",
+      "Worried."
+    ],
+    "exp": "正確答案：Angry.。來源：111年國中教育會考英語閱讀第34題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 34,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q35",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(33-36)\nhttp://www.aab.com/news/language-and-power-756315\nLanguage and Power: Cameroon’s Story\nBy Elisa Grant, 2 Oct 2017\nIn the modern world, being able to speak English\nis often a way to get power. However, this is not\ntrue for English speakers in Cameroon. To know\nwhy things are different in this African country,\nwe need to go back one hundred years.\nIn 1919, Kamerun (the name of Cameroon at\nthe time) was cut into two parts: one belonged\nto France, and the other belonged to the UK.  In\n1960, the French Cameroon became the Republic of Cameroun, and the UK’s\npart joined it in 1961.  The new country changed its name to the Federal\nRepublic of Cameroon.  Although both French and English are Cameroon’s\nofficial languages, only around 20% of its people speak English.  Also, the\ngovernment has been in French speakers’ hands since the two parts became\none country.\nFor a long time, Cameroon’s English speakers have felt they are not welcome\nin their own country.  For example, it is very difficult for them to find jobs\nin the government, and they are often asked to speak French in business and\nat official events.  They have become more resentful at the government and\ndecided to fight for themselves.  Since last year, the English speakers have\ntried to build their own country.  Yesterday, they said in a public meeting\nthat they were not part of Cameroon anymore.  They are now a new country,\n“Ambazonia.”  When the police tried to stop the meeting, at least eight people\nwere killed.\nRead more\nfcfi ial 官方的     government 政府\n【詞彙】  <sup>o</sup>\n\nWhat does Cameroon’s government most likely think of Ambazonia?",
+    "correct": "It does not agree that Ambazonia is a country.",
+    "wrong": [
+      "It plans to do business with Ambazonia.",
+      "It needs Ambazonia for money and help.",
+      "It does not want to be part of Ambazonia."
+    ],
+    "exp": "正確答案：It does not agree that Ambazonia is a country.。來源：111年國中教育會考英語閱讀第35題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 35,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q36",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(33-36)\nhttp://www.aab.com/news/language-and-power-756315\nLanguage and Power: Cameroon’s Story\nBy Elisa Grant, 2 Oct 2017\nIn the modern world, being able to speak English\nis often a way to get power. However, this is not\ntrue for English speakers in Cameroon. To know\nwhy things are different in this African country,\nwe need to go back one hundred years.\nIn 1919, Kamerun (the name of Cameroon at\nthe time) was cut into two parts: one belonged\nto France, and the other belonged to the UK.  In\n1960, the French Cameroon became the Republic of Cameroun, and the UK’s\npart joined it in 1961.  The new country changed its name to the Federal\nRepublic of Cameroon.  Although both French and English are Cameroon’s\nofficial languages, only around 20% of its people speak English.  Also, the\ngovernment has been in French speakers’ hands since the two parts became\none country.\nFor a long time, Cameroon’s English speakers have felt they are not welcome\nin their own country.  For example, it is very difficult for them to find jobs\nin the government, and they are often asked to speak French in business and\nat official events.  They have become more resentful at the government and\ndecided to fight for themselves.  Since last year, the English speakers have\ntried to build their own country.  Yesterday, they said in a public meeting\nthat they were not part of Cameroon anymore.  They are now a new country,\n“Ambazonia.”  When the police tried to stop the meeting, at least eight people\nwere killed.\nRead more\nfcfi ial 官方的     government 政府\n【詞彙】  <sup>o</sup>\n\nWhat does Elisa Grant try to tell readers by talking about the history of Cameroon?",
+    "correct": "Why English speakers in Cameroon have less power.",
+    "wrong": [
+      "Why speaking English is a way to get power.",
+      "Why the two parts of Cameroon became one country.",
+      "Why only 20% of the people in Cameroon speak English."
+    ],
+    "exp": "正確答案：Why English speakers in Cameroon have less power.。來源：111年國中教育會考英語閱讀第36題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 36,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        11,
+        12,
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        33,
+        36
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q37",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(37-39)\n【原卷閱讀資料】\nTHE SOUTHEND TRAIL has been popular with nature lovers for years.\nThe 120-km trail passes beautiful lakes, crosses rivers, and goes through\nmountains and hills.  This gives bird lovers some of the best places for\nbirdwatching. The trail also takes you to the Southend Museum and to two\nfamous castles, Edward Castle and\nSloan Castle.\nIt’s best to plan one day for one part\nof the trail and start your hike early\nin the morning, because each part\ntakes at least seven hours.  If you\ndon’t want to walk, you can bike, but\nmake sure you stay on the main trail,\nbecause the side trails are not wide\nenough for biking.\nThere are two types of lodging\nfor visitors. Camping is popular in\nsummer, but it is only allowed on a few campgrounds (see the map). A more\ncomfortable one is to stay at a hotel in one of the towns. You can find some\nvery nice ones that also have breakfast.\n\n![圖表](/assets/banks/cap-111-english/G37-39-figure-3.png)\n\n\nWhat is recommended to people who are visiting the Southend Trail?\n\n![圖表](/assets/banks/cap-111-english/Q37-figure-1.png)",
+    "correct": "Hiking one part of the trail a day.",
+    "wrong": [
+      "Camping on the side trails.",
+      "Biking along the side trails.",
+      "Visiting the museum in the morning."
+    ],
+    "exp": "正確答案：Hiking one part of the trail a day.。來源：111年國中教育會考英語閱讀第37題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 37,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G37-39-figure-3.png",
+      "/assets/banks/cap-111-english/Q37-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q38",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(37-39)\n【原卷閱讀資料】\nTHE SOUTHEND TRAIL has been popular with nature lovers for years.\nThe 120-km trail passes beautiful lakes, crosses rivers, and goes through\nmountains and hills.  This gives bird lovers some of the best places for\nbirdwatching. The trail also takes you to the Southend Museum and to two\nfamous castles, Edward Castle and\nSloan Castle.\nIt’s best to plan one day for one part\nof the trail and start your hike early\nin the morning, because each part\ntakes at least seven hours.  If you\ndon’t want to walk, you can bike, but\nmake sure you stay on the main trail,\nbecause the side trails are not wide\nenough for biking.\nThere are two types of lodging\nfor visitors. Camping is popular in\nsummer, but it is only allowed on a few campgrounds (see the map). A more\ncomfortable one is to stay at a hotel in one of the towns. You can find some\nvery nice ones that also have breakfast.\n\n![圖表](/assets/banks/cap-111-english/G37-39-figure-3.png)\n\n\nWhat does lodging mean in the reading?",
+    "correct": "A place to stay in.",
+    "wrong": [
+      "A meal to have.",
+      "A time for visiting.",
+      "A way of moving around."
+    ],
+    "exp": "正確答案：A place to stay in.。來源：111年國中教育會考英語閱讀第38題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 38,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        13
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G37-39-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q39",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(37-39)\n【原卷閱讀資料】\nTHE SOUTHEND TRAIL has been popular with nature lovers for years.\nThe 120-km trail passes beautiful lakes, crosses rivers, and goes through\nmountains and hills.  This gives bird lovers some of the best places for\nbirdwatching. The trail also takes you to the Southend Museum and to two\nfamous castles, Edward Castle and\nSloan Castle.\nIt’s best to plan one day for one part\nof the trail and start your hike early\nin the morning, because each part\ntakes at least seven hours.  If you\ndon’t want to walk, you can bike, but\nmake sure you stay on the main trail,\nbecause the side trails are not wide\nenough for biking.\nThere are two types of lodging\nfor visitors. Camping is popular in\nsummer, but it is only allowed on a few campgrounds (see the map). A more\ncomfortable one is to stay at a hotel in one of the towns. You can find some\nvery nice ones that also have breakfast.\n\n![圖表](/assets/banks/cap-111-english/G37-39-figure-3.png)\n\n\nKaylen will start his trip from Cove.  He plans to visit one of the old castles.  He also\nwants to go birdwatching near the river.  Which parts of the trail should Kaylen go on?",
+    "correct": "Parts 1 and 2.",
+    "wrong": [
+      "Parts 1 and 2a.",
+      "Parts 2 and 3.",
+      "Parts 4 and 4a."
+    ],
+    "exp": "正確答案：Parts 1 and 2.。來源：111年國中教育會考英語閱讀第39題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 39,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        13,
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        37,
+        39
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G37-39-figure-3.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q40",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(40-43)\nEnglish words are made of 26 letters, and palindromes and anagrams are two kinds\nof word games about spelling.  A palindrome is a word or a sentence that reads the\nsame from left to right or from right to left,    40   , “eye,” “Bob,” “my gym,” and\n“Was it a car or a cat I saw?”  An anagram of a word or words is made by putting the\n\nletters of the word or words in a different way.  Look at the words and their anagrams\nbelow.  Can you think of other possible anagrams of these words?\n![圖表](/assets/banks/cap-111-english/G40-43-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\nAnagrams are often longer words that don’t really mean anything but are fun to\nsay.  Sometimes they can even mean something    42   , like when a common word,\n“restaurant,” becomes “Eat rats, run!”\nActually, palindromes and anagrams are    43   .  Palindromes can be used to learn\nmathematics and make music.  Anagrams are also a good way to hide something.  In\nhistory, people often hid their important studies in anagrams.  Can you think of any\nother way to use them?",
+    "correct": "for example",
+    "wrong": [
+      "in fact",
+      "at first",
+      "of course"
+    ],
+    "exp": "正確答案：for example。來源：111年國中教育會考英語閱讀第40題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 40,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q41",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(40-43)\nEnglish words are made of 26 letters, and palindromes and anagrams are two kinds\nof word games about spelling.  A palindrome is a word or a sentence that reads the\nsame from left to right or from right to left,    40   , “eye,” “Bob,” “my gym,” and\n“Was it a car or a cat I saw?”  An anagram of a word or words is made by putting the\n\nletters of the word or words in a different way.  Look at the words and their anagrams\nbelow.  Can you think of other possible anagrams of these words?\n![圖表](/assets/banks/cap-111-english/G40-43-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\nAnagrams are often longer words that don’t really mean anything but are fun to\nsay.  Sometimes they can even mean something    42   , like when a common word,\n“restaurant,” becomes “Eat rats, run!”\nActually, palindromes and anagrams are    43   .  Palindromes can be used to learn\nmathematics and make music.  Anagrams are also a good way to hide something.  In\nhistory, people often hid their important studies in anagrams.  Can you think of any\nother way to use them?",
+    "correct": "it makes",
+    "wrong": [
+      "take sit",
+      "Ms Easy",
+      "me steak"
+    ],
+    "exp": "正確答案：it makes。來源：111年國中教育會考英語閱讀第41題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 41,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q42",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(40-43)\nEnglish words are made of 26 letters, and palindromes and anagrams are two kinds\nof word games about spelling.  A palindrome is a word or a sentence that reads the\nsame from left to right or from right to left,    40   , “eye,” “Bob,” “my gym,” and\n“Was it a car or a cat I saw?”  An anagram of a word or words is made by putting the\n\nletters of the word or words in a different way.  Look at the words and their anagrams\nbelow.  Can you think of other possible anagrams of these words?\n![圖表](/assets/banks/cap-111-english/G40-43-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\nAnagrams are often longer words that don’t really mean anything but are fun to\nsay.  Sometimes they can even mean something    42   , like when a common word,\n“restaurant,” becomes “Eat rats, run!”\nActually, palindromes and anagrams are    43   .  Palindromes can be used to learn\nmathematics and make music.  Anagrams are also a good way to hide something.  In\nhistory, people often hid their important studies in anagrams.  Can you think of any\nother way to use them?",
+    "correct": "strange",
+    "wrong": [
+      "difcfi ult",
+      "delicious",
+      "important"
+    ],
+    "exp": "正確答案：strange。來源：111年國中教育會考英語閱讀第42題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 42,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-111-english-q43",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n(40-43)\nEnglish words are made of 26 letters, and palindromes and anagrams are two kinds\nof word games about spelling.  A palindrome is a word or a sentence that reads the\nsame from left to right or from right to left,    40   , “eye,” “Bob,” “my gym,” and\n“Was it a car or a cat I saw?”  An anagram of a word or words is made by putting the\n\nletters of the word or words in a different way.  Look at the words and their anagrams\nbelow.  Can you think of other possible anagrams of these words?\n![圖表](/assets/banks/cap-111-english/G40-43-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\nAnagrams are often longer words that don’t really mean anything but are fun to\nsay.  Sometimes they can even mean something    42   , like when a common word,\n“restaurant,” becomes “Eat rats, run!”\nActually, palindromes and anagrams are    43   .  Palindromes can be used to learn\nmathematics and make music.  Anagrams are also a good way to hide something.  In\nhistory, people often hid their important studies in anagrams.  Can you think of any\nother way to use them?",
+    "correct": "more than just games",
+    "wrong": [
+      "often played in public",
+      "not so popular as before",
+      "not first used to learn words"
+    ],
+    "exp": "正確答案：more than just games。來源：111年國中教育會考英語閱讀第43題。",
+    "subject": "英文",
+    "sub_topic": "閱讀理解",
+    "source": {
+      "exam": "cap-111-english",
+      "question": 43,
+      "file": "國中/會考/英語閱讀/111P_English.pdf",
+      "url": "https://drive.google.com/file/d/1pndXun6XwNJFrNon9v_agVl_DCaUx3Hj/view?usp=drivesdk",
+      "pages": [
+        14
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1IeMHI4BmTpC_2Oc1lQ1Qj6XWHDf9qwGd/view?usp=drive_link",
+      "group": [
+        40,
+        43
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/cap-111-english/G40-43-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  }
+]

@@ -1,0 +1,213 @@
+[
+  {
+    "id": "gsat-112-math-b-q1",
+    "difficulty": "medium",
+    "q": "某抽水站發現其用電量（單位：度）與抽水馬達轉速（單位：rpm）的三次方成正比。\n根據上述，試問下列這五個圖中，哪一個最可以描述此抽水站的用電量 y（度）與抽水\n馬達轉速 x （rpm）的對應關係？",
+    "correct": "x\n1\n\n![圖表](/assets/banks/gsat-112-math-b/Q1-option-1-figure-1.png)",
+    "wrong": [
+      "y\n\n1\nx\n1\n![圖表](/assets/banks/gsat-112-math-b/Q1-option-2-figure-1.png)",
+      "x\n1\n![圖表](/assets/banks/gsat-112-math-b/Q1-option-3-figure-1.png)",
+      "y\n\nx\n1\n![圖表](/assets/banks/gsat-112-math-b/Q1-option-4-figure-1.png)",
+      "y\n\n1\nx\n1\n![圖表](/assets/banks/gsat-112-math-b/Q1-option-5-figure-1.png)"
+    ],
+    "exp": "正確答案：x\n1\n\n![圖表](/assets/banks/gsat-112-math-b/Q1-option-1-figure-1.png)。來源：112年學科能力測驗數學B第1題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 1,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "1",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q1-option-1-figure-1.png",
+      "/assets/banks/gsat-112-math-b/Q1-option-2-figure-1.png",
+      "/assets/banks/gsat-112-math-b/Q1-option-3-figure-1.png",
+      "/assets/banks/gsat-112-math-b/Q1-option-4-figure-1.png",
+      "/assets/banks/gsat-112-math-b/Q1-option-5-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-112-math-b-q2",
+    "difficulty": "medium",
+    "q": "考慮實數二階方陣$\\left[\\begin{matrix}a & b \\\\ c & d\\end{matrix}\\right]$，若$\\left[\\begin{matrix}0 & 1 \\\\ 1 & 0\\end{matrix}\\right]\\left[\\begin{matrix}a & b \\\\ c & d\\end{matrix}\\right]\\left[\\begin{matrix}1 & 0 \\\\ 0 & -2\\end{matrix}\\right]=\\left[\\begin{matrix}3 & -4 \\\\ -9 & -7\\end{matrix}\\right]$，則$c-2b$的值為何？",
+    "correct": "$-4$",
+    "wrong": [
+      "$-11$",
+      "$1$",
+      "$10$",
+      "$11$"
+    ],
+    "exp": "正確答案：$-4$。來源：112年學科能力測驗數學B第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 2,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "2",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-112-math-b-q3",
+    "difficulty": "medium",
+    "q": "地面上有甲、乙兩大樓，已知甲的高度大於乙，且甲、乙兩大樓的水平距離為150公尺。某人從甲樓頂拉一條繩索到乙樓頂，並從甲樓頂測得乙樓頂的俯角為$22^{\\circ}$。假設該繩索被拉成直線，試問繩索的長度（單位：公尺）最接近下列哪個選項？（註：眼睛往下看目標物時，視線與水平線間的夾角稱為俯角）",
+    "correct": "$\\frac{150}{cos22^{\\circ}}$",
+    "wrong": [
+      "$150$",
+      "$150sin22^{\\circ}$",
+      "$150cos22^{\\circ}$",
+      "$\\frac{150}{sin22^{\\circ}}$"
+    ],
+    "exp": "正確答案：$\\frac{150}{cos22^{\\circ}}$。來源：112年學科能力測驗數學B第3題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 3,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-112-math-b-q4",
+    "difficulty": "medium",
+    "q": "某校期中考試有29名考生，且成績均相異，統計後得到位於第25、第50、第75與第95百分位數的考生成績分別為41、60、74與92分。後來發現成績有誤需要調整分數，成績較高的前15名學生的分數應該要各加5分，其餘學生成績不變。假設調整後第25、第50、第75與第95百分位數的考生成績分別為$a$、$b$、$c$與$d$分，則數組$(a,b,c,d)$為下列哪個選項？",
+    "correct": "(41, 65, 79, 97)",
+    "wrong": [
+      "(41, 60, 74, 92)",
+      "(41, 60, 74, 97)",
+      "(46, 65, 79, 92)",
+      "(46, 65, 79, 97)"
+    ],
+    "exp": "正確答案：(41, 65, 79, 97)。來源：112年學科能力測驗數學B第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 4,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-112-math-b-q5",
+    "difficulty": "medium",
+    "q": "袋子裡有編號分別為1, 2, … , 100的100顆球，某甲從袋中隨機抽取一球，每顆球被抽到的機率均相等。試問在下列哪個選項的條件下，某甲抽到7號球的條件機率最大？",
+    "correct": "某甲抽到球的號碼小於10",
+    "wrong": [
+      "某甲抽到球的號碼是奇數",
+      "某甲抽到球的號碼是質數",
+      "某甲抽到球的號碼是7的倍數",
+      "某甲抽到球的號碼不是5的倍數"
+    ],
+    "exp": "正確答案：某甲抽到球的號碼小於10。來源：112年學科能力測驗數學B第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 5,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "5",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-112-math-b-q6",
+    "difficulty": "medium",
+    "q": "某甲計算多項式$f(x)=x^3+ax^2+bx+c$除以$g(x)=ax^3+bx^2+cx+d$的餘式，其中$a,b,c,d$為實數，且$a\\neq 0$。他誤看成$g(x)$除以$f(x)$，計算後得出餘式為$-3x-17$。假設$f(x)$除以$g(x)$正確的餘式等於$px^2+qx+r$，則$p$的值會等於下列哪個選項？",
+    "correct": "$0$",
+    "wrong": [
+      "$-3$",
+      "$-1$",
+      "$2$",
+      "$3$"
+    ],
+    "exp": "正確答案：$0$。來源：112年學科能力測驗數學B第6題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 6,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-112-math-b-q7",
+    "difficulty": "medium",
+    "q": "已知某手電筒照射的光線為直圓錐狀，且光發散的夾角為$60^{\\circ}$，如圖所示。設牆壁與地板垂直且交界處為直線$L$，將此手電筒以垂直於$L$的方向照射，即此直圓錐的軸與$L$垂直。若手電筒照射在牆壁上的光線邊緣為拋物線的一部份，則在地板上的光線邊緣為下列哪種圖形的一部份？\n\n手電筒\n\n牆壁\n\n60°\n\n拋物線\n\n地板\n\n\n\n![圖表](/assets/banks/gsat-112-math-b/Q7-figure-1.png)",
+    "correct": "長短軸不相等的橢圓",
+    "wrong": [
+      "兩相交直線",
+      "圓形",
+      "拋物線",
+      "雙曲線"
+    ],
+    "exp": "正確答案：長短軸不相等的橢圓。來源：112年學科能力測驗數學B第7題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-112-math-b",
+      "question": 7,
+      "file": "高中/學測/數學B/04-112學測數學b試卷.pdf",
+      "url": "https://drive.google.com/file/d/1d4gjLBZJr9xvyDYvqLWjyNmZPMXVBDSh/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0n045357541158913049/04-112%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e9%81%b8%e6%93%87%28%e5%a1%ab%29%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-112-math-b/Q7-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  }
+]

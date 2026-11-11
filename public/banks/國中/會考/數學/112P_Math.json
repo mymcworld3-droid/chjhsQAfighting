@@ -1,0 +1,807 @@
+[
+  {
+    "id": "cap-112-math-q1",
+    "difficulty": "easy",
+    "q": "(−3)<sup>3</sup> 之值為何？",
+    "correct": "−27",
+    "wrong": [
+      "−9",
+      "9",
+      "27"
+    ],
+    "exp": "正確答案：−27。來源：112年國中教育會考數學第1題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 1,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q2",
+    "difficulty": "easy",
+    "q": "下列何者為多項式 x<sup>2</sup> − 36 的因式？",
+    "correct": "x − 6",
+    "wrong": [
+      "x − 3",
+      "x − 4",
+      "x − 9\n![圖表](/assets/banks/cap-112-math/Q2-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：x − 6。來源：112年國中教育會考數學第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 2,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q2-option-D-figure-1.png"
+    ],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q3",
+    "difficulty": "easy",
+    "q": "圖( 一) 的立體圖形由相同大小的正方體積木堆疊\n而成。判斷拿走圖( 一) 的哪一個積木後，此圖形\n前視圖的形狀會改變？\n圖( 一)",
+    "correct": "乙\n![圖表](/assets/banks/cap-112-math/Q3-option-B-figure-1.png)",
+    "wrong": [
+      "甲\n![圖表](/assets/banks/cap-112-math/Q3-option-A-figure-1.png)",
+      "丙\n![圖表](/assets/banks/cap-112-math/Q3-option-C-figure-1.png)",
+      "丁\n![圖表](/assets/banks/cap-112-math/Q3-option-D-figure-1.png)"
+    ],
+    "exp": "正確答案：乙\n![圖表](/assets/banks/cap-112-math/Q3-option-B-figure-1.png)。來源：112年國中教育會考數學第3題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 3,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q3-option-B-figure-1.png",
+      "/assets/banks/cap-112-math/Q3-option-A-figure-1.png",
+      "/assets/banks/cap-112-math/Q3-option-C-figure-1.png",
+      "/assets/banks/cap-112-math/Q3-option-D-figure-1.png"
+    ],
+    "passRate": 0.89,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q4",
+    "difficulty": "easy",
+    "q": "化簡 $\\sqrt{135}$ 的結果為下列何者？",
+    "correct": "3 $\\sqrt{15}$",
+    "wrong": [
+      "3$\\sqrt{5}$",
+      "27$\\sqrt{5}$",
+      "9 $\\sqrt{15}$"
+    ],
+    "exp": "正確答案：3 $\\sqrt{15}$。來源：112年國中教育會考數學第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 4,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        2,
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.8,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q5",
+    "difficulty": "easy",
+    "q": "坐標平面上，一次函數 y = −2x − 6 的圖形通過下列哪一個點？",
+    "correct": "(−4 , 2 )",
+    "wrong": [
+      "(−4 , 1 )",
+      "(−4 , −1)",
+      "(−4 , −2)"
+    ],
+    "exp": "正確答案：(−4 , 2 )。來源：112年國中教育會考數學第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 5,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q6",
+    "difficulty": "easy",
+    "q": "已知 a = −1，b = −1 $\\frac{3}{4}$ ，c = −1 $\\frac{5}{8}$ ，下列關於 a、b、c 三數的大小關係，何者\n\n正確？",
+    "correct": "a > c > b",
+    "wrong": [
+      "a > b > c",
+      "b > c > a",
+      "c > b > a"
+    ],
+    "exp": "正確答案：a > c > b。來源：112年國中教育會考數學第6題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 6,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q7",
+    "difficulty": "medium",
+    "q": "如圖( 二)，坐標平面上直線 L 的方程式為 x = −5，\n直線 M 的方程式為 y = −3，P 點的坐標為 (a , b )。\n根據圖( 二) 中 P 點位置判斷，下列關係何者正確？\n圖( 二)\n\n![圖表](/assets/banks/cap-112-math/Q7-figure-1.png)",
+    "correct": "a < −5，b > −3",
+    "wrong": [
+      "a < −5，b < −3",
+      "a > −5，b > −3",
+      "a > −5，b < −3"
+    ],
+    "exp": "正確答案：a < −5，b > −3。來源：112年國中教育會考數學第7題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 7,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q7-figure-1.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q8",
+    "difficulty": "medium",
+    "q": "如圖( 三)，梯形 ABCD 中，AD // BC。若 ∠ADC = 140°，且 BD⊥CD，\n則 ∠DBC 的度數為何？ A D\n\nB C\n圖( 三)\n\n![圖表](/assets/banks/cap-112-math/Q8-figure-1.png)",
+    "correct": "50",
+    "wrong": [
+      "30",
+      "40",
+      "60"
+    ],
+    "exp": "正確答案：50。來源：112年國中教育會考數學第8題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 8,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q8-figure-1.png"
+    ],
+    "passRate": 0.7,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q9",
+    "difficulty": "medium",
+    "q": "有多少個正整數是 18 的倍數，同時也是 216 的因數？",
+    "correct": "6",
+    "wrong": [
+      "2",
+      "10",
+      "12"
+    ],
+    "exp": "正確答案：6。來源：112年國中教育會考數學第9題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 9,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.72,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q10",
+    "difficulty": "medium",
+    "q": "利用公式解可得一元二次方程式 3x<sup>2</sup> − 11x − 1 = 0 的兩解為 a、b，且 a > b，\n求 a 值為何？",
+    "correct": "$\\frac{11 + \\sqrt{133}}{6}$",
+    "wrong": [
+      "$\\frac{−11 + \\sqrt{109}}{6}$",
+      "$\\frac{−11 + \\sqrt{133}}{6}$",
+      "$\\frac{11 + \\sqrt{109}}{6}$"
+    ],
+    "exp": "正確答案：$\\frac{11 + \\sqrt{133}}{6}$。來源：112年國中教育會考數學第10題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 10,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q11",
+    "difficulty": "medium",
+    "q": "業者販售含咖啡因飲料時通常會以紅、黃、綠三色來標示每杯飲料的咖啡因\n含量，各顏色的意義如表( 一) 所示。\n表( ㄧ) 表( 二)\n\n我國建議每位成人一日的咖啡因攝取量不超過 300 毫克，歐盟則建議一日\n不超過 400 毫克。表( 二) 為某商店美式咖啡的容量及咖啡因含量標示，已知\n該店美式咖啡每毫升的咖啡因含量相同，判斷一位成人一日喝 2 杯該店中杯的\n美式咖啡，其咖啡因攝取量是否符合我國或歐盟的建議？\n\n![圖表](/assets/banks/cap-112-math/Q11-figure-1.png)\n\n\n\n\n\n\n\n\n\n",
+    "correct": "不符合我國，符合歐盟",
+    "wrong": [
+      "符合我國也符合歐盟",
+      "不符合我國也不符合歐盟",
+      "符合我國，不符合歐盟"
+    ],
+    "exp": "正確答案：不符合我國，符合歐盟。來源：112年國中教育會考數學第11題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 11,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q11-figure-1.png"
+    ],
+    "passRate": 0.66,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q12",
+    "difficulty": "medium",
+    "q": "盒玩的販售方式是將一款玩具裝在盒子中販賣，購買者只能從外盒知道購買\n的是哪一系列玩具，但無法知道是系列中的哪一款。圖 ( 四 )、圖 ( 五 ) 分別\n為動物系列、汽車系列盒玩中所有可能出現的款式。\n\n圖( 四) 圖( 五)\n已知小友喜歡圖( 四) 中的 A 款、C 款，喜歡圖( 五) 中的 B 款，若他打算\n購買圖( 四) 的盒玩一盒，且他買到圖( 四) 中每款玩具的機會相等；他也打算\n購買圖( 五) 的盒玩一盒，且他買到圖( 五) 中每款玩具的機會相等，則他買\n到的兩盒盒玩內的玩具都是他喜歡的款式的機率為何？\n$\\frac{1}{15}$\n$\\frac{1}{10}$\n$\\frac{2}{11}$\n$\\frac{3}{11}$\n\n![圖表](/assets/banks/cap-112-math/Q12-figure-1.png)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "correct": "$\\frac{1}{15}$",
+    "wrong": [
+      "$\\frac{1}{10}$",
+      "$\\frac{2}{11}$",
+      "$\\frac{3}{11}$"
+    ],
+    "exp": "正確答案：$\\frac{1}{15}$。來源：112年國中教育會考數學第12題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 12,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q12-figure-1.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q13",
+    "difficulty": "medium",
+    "q": "如圖 ( 六 )，直角柱 ABCDEF 的底面為直角三角形。\n若 ∠ABC = ∠DEF = 90°，  BC > AB > BE，則連接 AE\n後，下列敘述何者正確？\n圖( 六)\n\n![圖表](/assets/banks/cap-112-math/Q13-figure-1.png)",
+    "correct": "∠ACB  <  ∠FDE，∠AEB  >  ∠ACB",
+    "wrong": [
+      "∠ACB  <  ∠FDE，∠AEB  <  ∠ACB",
+      "∠ACB  >  ∠FDE，∠AEB  >  ∠ACB",
+      "∠ACB  >  ∠FDE，∠AEB  <  ∠ACB"
+    ],
+    "exp": "正確答案：∠ACB  <  ∠FDE，∠AEB  >  ∠ACB。來源：112年國中教育會考數學第13題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 13,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        5,
+        6
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q13-figure-1.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q14",
+    "difficulty": "medium",
+    "q": "坐標平面上有兩個二次函數的圖形，其頂點 P、Q 皆在 x 軸上，且有一水平線\n與兩圖形相交於 A、B、C、D 四點，各點位置如圖( 七) 所示。若 AB = 10，\n\nBC = 5，CD = 6，則 PQ 的長度為何？\n圖( 七)\n\n![圖表](/assets/banks/cap-112-math/Q14-figure-1.png)",
+    "correct": "8",
+    "wrong": [
+      "7",
+      "9",
+      "10"
+    ],
+    "exp": "正確答案：8。來源：112年國中教育會考數學第14題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 14,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q14-figure-1.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q15",
+    "difficulty": "medium",
+    "q": "若想在等差數列 1 , 2 , 3 , 4 , 5中插入一些數，使得新的數列也是等差數列，且\n新的數列的首項仍是 1，末項仍是 5，則新的數列的項數可能為下列何者？",
+    "correct": "33",
+    "wrong": [
+      "11",
+      "15",
+      "30"
+    ],
+    "exp": "正確答案：33。來源：112年國中教育會考數學第15題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 15,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.42,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q16",
+    "difficulty": "medium",
+    "q": "已知某速食店販售的套餐內容為一片雞排和一杯可樂，且一份套餐的價錢比\n單點一片雞排再單點一杯可樂的總價錢便宜 40 元。阿俊打算到該速食店\n買兩份套餐，若他發現店內有單點一片雞排就再送一片雞排的促銷活動，\n且單點一片雞排再單點兩杯可樂的總價錢，比兩份套餐的總價錢便宜 10 元，\n則根據題意可得到下列哪一個結論？",
+    "correct": "單點一片雞排的價錢必為 90 元",
+    "wrong": [
+      "一份套餐的價錢必為 140 元",
+      "一份套餐的價錢必為 120 元",
+      "單點一片雞排的價錢必為 70 元"
+    ],
+    "exp": "正確答案：單點一片雞排的價錢必為 90 元。來源：112年國中教育會考數學第16題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 16,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        6,
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q17",
+    "difficulty": "medium",
+    "q": "圖 ( 八 ) 的方格紙中，每個方格的邊長\n為 1，A、O 兩點皆在格線的交點上。\n今在此方格紙格線的交點上另外找兩點\nB、C，使得 ΔABC 的外心為 O，求\nBC 的長度為何？\n圖( 八)\n\n![圖表](/assets/banks/cap-112-math/Q17-figure-1.png)",
+    "correct": "$\\sqrt{20}$",
+    "wrong": [
+      "4",
+      "5",
+      "$\\sqrt{10}$"
+    ],
+    "exp": "正確答案：$\\sqrt{20}$。來源：112年國中教育會考數學第17題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 17,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q17-figure-1.png"
+    ],
+    "passRate": 0.49,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q18",
+    "difficulty": "medium",
+    "q": "表( 三)\n18. 樂樂停車場為 24 小時營業，其收費方式如\n\n表( 三) 所示。已知阿虹某日 10:00 進場\n停車，停了 x 小時後離場，x 為整數。若\n阿虹離場的時間介於當日的 20:00 ~ 24:00\n間，則他此次停車的費用為多少元？\n\n![圖表](/assets/banks/cap-112-math/Q18-figure-1.png)",
+    "correct": "5x + 50",
+    "wrong": [
+      "5x + 30",
+      "5x + 150",
+      "5x + 200"
+    ],
+    "exp": "正確答案：5x + 50。來源：112年國中教育會考數學第18題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 18,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q18-figure-1.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q19",
+    "difficulty": "medium",
+    "q": "圖 ( 九 ) 為一圓形紙片，A、B、C 為圓周上三點，其中 AC 為直徑。今以\nAB 為摺線將紙片向右摺後，紙片蓋住部分的 AC，而 AB 上與 AC 重疊的點\n為 D，如圖( 十) 所示。若 BC = 35°，則 AD 的度數為何？\n\n圖( 九) 圖( 十)\n\n![圖表](/assets/banks/cap-112-math/Q19-figure-1.png)\n\n",
+    "correct": "110",
+    "wrong": [
+      "105",
+      "120",
+      "145"
+    ],
+    "exp": "正確答案：110。來源：112年國中教育會考數學第19題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 19,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        7,
+        8
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q19-figure-1.png"
+    ],
+    "passRate": 0.48,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q20",
+    "difficulty": "medium",
+    "q": "如圖( 十一)，ΔABC 中，D 點在 BC 上，且 BD\n的中垂線與 AB 相交於 E 點，CD 的中垂線與 AC\n相交於 F 點。已知 ΔABC 的三個內角皆不相等，\n根據圖( 十一) 中標示的角，  判斷下列敘述何者正確？\n圖( 十一)\n\n![圖表](/assets/banks/cap-112-math/Q20-figure-1.png)",
+    "correct": "∠1 ≠ ∠3，∠2 = ∠4",
+    "wrong": [
+      "∠1 = ∠3，∠2 = ∠4",
+      "∠1 = ∠3，∠2 ≠ ∠4",
+      "∠1 ≠ ∠3，∠2 ≠ ∠4"
+    ],
+    "exp": "正確答案：∠1 ≠ ∠3，∠2 = ∠4。來源：112年國中教育會考數學第20題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 20,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        8
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q20-figure-1.png"
+    ],
+    "passRate": 0.43,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q21",
+    "difficulty": "medium",
+    "q": "圖( 十二)\n有一東西向的直線吊橋橫跨溪谷，小維、阿良分別從西橋頭、東橋頭同時開始\n往吊橋的另一頭筆直地走過去，  如圖( 十二) 所示。 已知小維從西橋頭走了\n84 步，阿良從東橋頭走了 60 步時，兩人在吊橋上的某點交會，且交會之後\n阿良再走 70 步恰好走到西橋頭。若小維每步的距離相等，阿良每步的距離\n相等，則交會之後小維再走多少步會恰好走到東橋頭？\n\n![圖表](/assets/banks/cap-112-math/Q21-figure-1.png)",
+    "correct": "72",
+    "wrong": [
+      "46",
+      "50",
+      "60"
+    ],
+    "exp": "正確答案：72。來源：112年國中教育會考數學第21題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 21,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        8,
+        9
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q21-figure-1.png"
+    ],
+    "passRate": 0.41,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q22",
+    "difficulty": "hard",
+    "q": "如圖 ( 十三 )，正方形 ABCD 與 ΔEBC 中，AD 分別與\nEB、EC 相交於 F 點、G 點。若 ΔEBG 的面積為 6，\n正方形 ABCD 的面積為 16，則 FG 與 BC 的長度比為何？\n圖( 十三)\n\n![圖表](/assets/banks/cap-112-math/Q22-figure-1.png)",
+    "correct": "3 : 7",
+    "wrong": [
+      "3 : 5",
+      "3 : 6",
+      "3 : 8"
+    ],
+    "exp": "正確答案：3 : 7。來源：112年國中教育會考數學第22題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 22,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        9
+      ],
+      "answer": "C",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q22-figure-1.png"
+    ],
+    "passRate": 0.27,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q23",
+    "difficulty": "hard",
+    "q": "如圖( 十四)，矩形 ABCD 中，  AB = 6，AD = 8，且有一點 P 從 B 點沿著\nBD 往 D 點移動。若過 P 點作 AB 的垂線交 AB 於 E 點，過 P 點作 AD 的\n\n垂線交 AD 於 F 點，則 EF 的長度最小為多少？\n圖( 十四)\n\n![圖表](/assets/banks/cap-112-math/Q23-figure-1.png)",
+    "correct": "$\\frac{24}{5}$",
+    "wrong": [
+      "$\\frac{14}{5}$",
+      "5",
+      "7"
+    ],
+    "exp": "正確答案：$\\frac{24}{5}$。來源：112年國中教育會考數學第23題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 23,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        9,
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/Q23-figure-1.png"
+    ],
+    "passRate": 0.23,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q24",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀下列敘述後，回答 24 ～25 題\n人口老化是國家人口分布向高年齡偏移的現象，許多國家已開始面臨此問題。\n依國際常用定義，一個國家中的 65 歲以上人口占總人口的百分比為 7% 以上(含)\n且未達 14% 時稱作「高齡化社會」，14% 以上(含)且未達 20% 時稱作「高齡\n社會」， 20% 以上(含)時稱作「超高齡社會」。\n![圖表](/assets/banks/cap-112-math/G24-25-figure-1.png)\n\n圖( 十五) 為某機構於 2020 年繪製的四個國家 65 歲以上人口占總人口百分比\n之折線圖，其中 2020 年之後的數值為推估值。\n\n圖( 十五)\n根據圖 ( 十五 ) 推測，下列哪一個國家從進入「高齡社會」到進入「超高齡\n社會」所花的時間最短？\n\n![圖表](/assets/banks/cap-112-math/Q24-figure-1.png)\n\n\n\n",
+    "correct": "韓國",
+    "wrong": [
+      "法國",
+      "義大利",
+      "美國"
+    ],
+    "exp": "正確答案：韓國。來源：112年國中教育會考數學第24題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 24,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "D",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/G24-25-figure-1.png",
+      "/assets/banks/cap-112-math/Q24-figure-1.png"
+    ],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "cap-112-math-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n請閱讀下列敘述後，回答 24 ～25 題\n人口老化是國家人口分布向高年齡偏移的現象，許多國家已開始面臨此問題。\n依國際常用定義，一個國家中的 65 歲以上人口占總人口的百分比為 7% 以上(含)\n且未達 14% 時稱作「高齡化社會」，14% 以上(含)且未達 20% 時稱作「高齡\n社會」， 20% 以上(含)時稱作「超高齡社會」。\n![圖表](/assets/banks/cap-112-math/G24-25-figure-1.png)\n\n已知 2019 年我國進入「高齡社會」，預測 2025 年會進入「超高齡社會」。\n假設我國 2019 年與 2025 年總人口數皆為 2300 萬人，且 2019 年我國 65 歲\n以上人口占總人口的百分比恰好達到「高齡社會」的最低標準，則根據上述\n預測，  關於我國 65 歲以上人口數，2025 年與 2019 年相比至少增加了多少萬人？",
+    "correct": "138",
+    "wrong": [
+      "161",
+      "322",
+      "460"
+    ],
+    "exp": "正確答案：138。來源：112年國中教育會考數學第25題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "cap-112-math",
+      "question": 25,
+      "file": "國中/會考/數學/112P_Math.pdf",
+      "url": "https://drive.google.com/file/d/1WQbb07g-JzclLSqRwvJw-akxJY04GODk/view?usp=drivesdk",
+      "pages": [
+        10,
+        11
+      ],
+      "answer": "A",
+      "answerUrl": "https://drive.google.com/file/d/1OT5r0que_0bXSy0kwLEOEJMssce2OnL0/view?usp=drive_link",
+      "group": [
+        24,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/cap-112-math/G24-25-figure-1.png"
+    ],
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/16ysF1jgYwJ_1gmt0veV1Z8398BmIQbjJ/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  }
+]

@@ -102,12 +102,12 @@ test('shared room layer supports party lifecycle, boss HP and reconnect', () => 
   assert.match(serverSource, /registerRaidRoomApi\(app\)/);
 });
 
-test('raid retains the original concise AI difficulty but adopts Wen Dao interface styling', () => {
+test('raid uses recorded learning difficulty and retains the Wen Dao interface', () => {
   assert.match(questionSource, /difficulty:\s*'medium'/);
   assert.match(questionSource, /quizMode:\s*'raid-quick-simple'/);
   assert.match(serverSource, /raidQuickSimple/);
-  assert.match(serverSource, /if \(raidQuickSimple\) difficulty = 'easy'/);
-  assert.match(serverSource, /raidQuickSimple\s*\? 1\s*:/);
+  assert.match(serverSource, /raidTrustedDifficulty = trusted.difficulty/);
+  assert.doesNotMatch(serverSource, /if \(raidQuickSimple\) difficulty = 'easy'/);
 });
 
 test('raid answers are settled by the server and wrong answers never trigger a local boss strike', () => {

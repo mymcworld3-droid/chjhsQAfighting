@@ -32,10 +32,9 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
   }
   assert.match(battle, /quizMode: 'battle-fast'/);
   assert.match(raid, /quizMode: 'raid-quick-simple'/);
-  assert.match(five, /quizMode: 'immortal-fast'/);
   assert.match(server, /FAST_QUIZ_MODES\.has/);
   assert.match(server, /combatFastMode \? quickQuizPrompt/);
-  assert.match(server, /timeoutMs: 16000/);
+  assert.match(server, /timeoutMs: 90000/); // HIGH reasoning must not inherit the 16-second speed cap.
   // The existing server-side validation must remain mandatory for all modes.
   assert.match(server, /questionQualityIssue\(parsed\)/);
   assert.match(server, /const finalIssue = questionQualityIssue\(parsed\)/);

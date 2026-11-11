@@ -95,7 +95,8 @@ test('full-screen studio reparents original selectors and persistent selected li
   assert.match(studio,/window\.confirm\('/);
   assert.doesNotMatch(studio,/ss-cart-note|複習提示/);
   assert.match(studio,/window\.soloSelectedUnits = clone\(JSON\.parse\(baseline\.units\)\)/);
-  assert.match(legacy,/return true;\s*\};\s*async function switchToAI/);
+  assert.match(legacy,/return true;\s*\};\s*\/\/ =+/);
+  assert.doesNotMatch(legacy,/return await switchToAI\(/);
   assert.match(guard,/const persisted = await baseSaveProfile\.apply\(this, args\)/);
   assert.match(guard,/if \(persisted !== true\)/);
 });

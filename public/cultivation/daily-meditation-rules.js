@@ -6,7 +6,7 @@ const DAILY_MEDITATION_REALMS = Object.freeze([
   { min: 68, name: '元嬰', cultivation: 4, gold: 45 },
   { min: 188, name: '化神', cultivation: 5, gold: 60 },
   { min: 428, name: '煉虛', cultivation: 6, gold: 80 },
-  { min: 788, name: '合體', cultivation: 7, gold: 100 },
+  { min: 642, name: '合體', cultivation: 7, gold: 100 },
   { min: 1268, name: '渡劫', cultivation: 8, gold: 130 },
   { min: 1868, name: '半仙', cultivation: 9, gold: 160 },
   { min: 2588, name: '仙道精進', cultivation: 10, gold: 200 }
@@ -41,14 +41,16 @@ function nextMeditationStreak(previousDate, previousStreak, today) {
   return current - previous === 86400000
     ? Math.max(0, Math.floor(Number(previousStreak) || 0)) + 1 : 1;
 }
-function meditationReward(score, streak, correct) {
+const MEDITATION_QUESTION_COUNT = 5;
+function meditationReward(score, streak, correct, total = MEDITATION_QUESTION_COUNT) {
   const points = Math.max(0, Number(score) || 0);
   const days = Math.max(1, Math.floor(Number(streak) || 1));
-  const count = Math.max(0, Math.min(3, Math.floor(Number(correct) || 0)));
+  const size = total === 3 ? 3 : MEDITATION_QUESTION_COUNT;
+  const count = Math.max(0, Math.min(size, Math.floor(Number(correct) || 0)));
   const realm = DAILY_MEDITATION_REALMS.filter(row => points >= row.min).at(-1);
   const bonus = DAILY_MEDITATION_STREAKS.filter(row => days >= row.min).at(-1);
-  if (count < 2) return { cultivation: 0, gold: 5, baseCultivation: 0, baseGold: 5, bonusCultivation: 0, bonusGold: 0, realm: realm.name, streak: days };
-  const full = count === 3;
+  if (count < Math.ceil(size * .6)) return { cultivation: 0, gold: 5, baseCultivation: 0, baseGold: 5, bonusCultivation: 0, bonusGold: 0, realm: realm.name, streak: days };
+  const full = count === size;
   const baseCultivation = full ? realm.cultivation : Math.ceil(realm.cultivation / 2);
   const baseGold = full ? realm.gold : Math.ceil(realm.gold / 2);
   return {
@@ -82,7 +84,7 @@ function rankMeditators(rows) {
     return {...row,rank};
   });
 }
-const dailyMeditationRules = { DAILY_MEDITATION_REALMS, DAILY_MEDITATION_STREAKS, meditationDateKey,
+const dailyMeditationRules = { MEDITATION_QUESTION_COUNT, DAILY_MEDITATION_REALMS, DAILY_MEDITATION_STREAKS, meditationDateKey,
   nextMeditationStreak, meditationReward, MEDITATION_COOP_STEPS, meditationCoopReward, rankMeditators };
 if (typeof module === 'object' && module.exports) module.exports = dailyMeditationRules;
 else globalThis.QADailyMeditationRules = dailyMeditationRules;

@@ -1,0 +1,240 @@
+[
+  {
+    "id": "gsat-114-math-b-q1",
+    "difficulty": "medium",
+    "q": "設數線上有一點P滿足P到1的距離加上P到4的距離等於4。試問這樣的P有幾個？",
+    "correct": "2個",
+    "wrong": [
+      "0個",
+      "1個",
+      "3個",
+      "無限多個"
+    ],
+    "exp": "正確答案：2個。來源：114年學科能力測驗數學B第1題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 1,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-math-b-q2",
+    "difficulty": "medium",
+    "q": "設$A$為$3\\times 2$階矩陣，且$A\\left[\\begin{matrix}1 & 0 \\\\ -1 & 1\\end{matrix}\\right]=\\left[\\begin{matrix}4 & -6 \\\\ -2 & 1 \\\\ 3 & 5\\end{matrix}\\right]$。若$A\\left[\\begin{matrix}1 \\\\ 0\\end{matrix}\\right]=\\left[\\begin{matrix}a \\\\ b \\\\ c\\end{matrix}\\right]$，試問$a+b+c$之值為何？",
+    "correct": "5",
+    "wrong": [
+      "0",
+      "2",
+      "4",
+      "8"
+    ],
+    "exp": "正確答案：5。來源：114年學科能力測驗數學B第2題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 2,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-math-b-q3",
+    "difficulty": "medium",
+    "q": "已知實數$a,b$滿足$\\frac{1}{2}<a<1$及$1<b<2$。試問下列哪個選項的值最小？",
+    "correct": "$log(a^2)$",
+    "wrong": [
+      "$0$",
+      "$loga$",
+      "$logb$",
+      "$\\frac{1}{logb}$"
+    ],
+    "exp": "正確答案：$log(a^2)$。來源：114年學科能力測驗數學B第3題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 3,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-math-b-q4",
+    "difficulty": "medium",
+    "q": "某商店推出抽獎活動，提供香蕉、鳳梨、蘋果、橘子四種不同款式的水果公仔當獎品。每次抽獎可得1個公仔，且每種款式被抽中的機率皆相等。某甲決定抽獎四次，試問他恰抽到三種不同款式公仔的機率為何？",
+    "correct": "$\\frac{9}{16}$",
+    "wrong": [
+      "$\\frac{5}{16}$",
+      "$\\frac{3}{8}$",
+      "$\\frac{1}{2}$",
+      "$\\frac{5}{8}$"
+    ],
+    "exp": "正確答案：$\\frac{9}{16}$。來源：114年學科能力測驗數學B第4題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 4,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-math-b-q5",
+    "difficulty": "medium",
+    "q": "空間中有兩相交直線$L,M$，其夾角為$24^{\\circ}$。將$M$繞著$L$轉一圈，可得一個直圓錐面。今有平面$E$與直線$L$平行，試問平面$E$與此直圓錐面的截痕是下列哪一個選項？",
+    "correct": "雙曲線",
+    "wrong": [
+      "拋物線",
+      "橢圓（長短軸不相等）",
+      "圓",
+      "兩相交直線"
+    ],
+    "exp": "正確答案：雙曲線。來源：114年學科能力測驗數學B第5題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 5,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "1",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-math-b-q6",
+    "difficulty": "medium",
+    "q": "設$a,b,c$為實數，且多項式$f(x)=a(x-1)(x-3)+b(x-1)(x-4)+c(x-3)(x-4)$經化簡後，得$f(x)=x^2$。有關$a,b,c$的大小關係，試選出正確的選項。",
+    "correct": "$a>c>b$",
+    "wrong": [
+      "$a>b>c$",
+      "$b>c>a$",
+      "$c>a>b$",
+      "$c>b>a$"
+    ],
+    "exp": "正確答案：$a>c>b$。來源：114年學科能力測驗數學B第6題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 6,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "2",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-math-b-q7",
+    "difficulty": "medium",
+    "q": "某人使用單點透視法，以地平線上一點為消失點，將地平面上的六根鉛直柱子$A,B,C,D,E,F$畫在坐標平面上，各柱柱頂與柱底的坐標如下表，並且讓點V(4,9)代表消失點，如圖所示。\n因圖形中A、F兩柱的柱底連線與柱頂連線均平行於地平線，故A、F兩柱的實際高度相等。根據上述，試選出實際高度最大的柱子。\n\n地平線\n\n| 柱子 | A | B | C | D | E | F |\n| 柱頂坐標 | (0,8) | (2,3) | (4,6) | (6,8) | (8,5) | (10,8) |\n| 柱底坐標 | (0,6) | (2,0) | (4,3) | (6,5) | (8,1) | (10,6) |\n\n![圖表](/assets/banks/gsat-114-math-b/Q7-figure-1.png)",
+    "correct": "D",
+    "wrong": [
+      "A",
+      "B",
+      "C",
+      "E"
+    ],
+    "exp": "正確答案：D。來源：114年學科能力測驗數學B第7題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 7,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "4",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [
+      "/assets/banks/gsat-114-math-b/Q7-figure-1.png"
+    ],
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-114-math-b-q18",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>18-20題為題組</u>\n\n地球受到太陽照射過來的紫外線強度以UVI數值表示，一單位UVI的照射強度相當於每平方公尺100焦耳的能量。根據上述，試回答下列問題。\n\n已知UVI數值與所在高度呈指數關係：高度每上升300公尺，其UVI數值增加上升前的4%。在地平面上接收到太陽發出每平方公尺400焦耳的紫外線，則到了離地平面4500公尺高的山上，接收到紫外線的UVI數值為下列哪一個選項？（單選題，3分）",
+    "correct": "$4\\,\\,(1+0.04)^{15}$",
+    "wrong": [
+      "$4\\,\\,(1+0.04\\times 15)$",
+      "$4\\,\\,(1+0.04^{15})$",
+      "$4\\times 100\\,\\,(1+0.04)^{15}$",
+      "$4\\times 100\\,\\,\\,(1+0.04^{45})$"
+    ],
+    "exp": "正確答案：$4\\,\\,(1+0.04)^{15}$。來源：114年學科能力測驗數學B第18題。",
+    "subject": "數學",
+    "sub_topic": "數學綜合",
+    "source": {
+      "exam": "gsat-114-math-b",
+      "question": 18,
+      "file": "高中/學測/數學B/04-114學測數學b試題.pdf",
+      "url": "https://drive.google.com/file/d/1HbCD6fzDZcHu1GM94jilKQHAO-ICA3sp/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "3",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0p051541901400830673/04-114%e5%ad%b8%e6%b8%ac%e6%95%b8%e5%ad%b8b%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        20
+      ]
+    },
+    "difficultySource": "unrated-medium",
+    "requiredImages": [],
+    "contentFormat": "text-and-figures-v2"
+  }
+]

@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": "gsat-111-chinese-q1",
     "difficulty": "easy",
     "q": "下列「」內的字，讀音前後相同的是：",
     "correct": "既瘖且「痺」／彈箏搏「髀」",
@@ -9,466 +9,938 @@
       "「攢」蹙累積／踰牆「鑽」穴",
       "「剜」肉補瘡／壯士斷「腕」"
     ],
-    "exp": "「痺」與「髀」皆音ㄅㄧˋ。其餘為：(B)ㄓˋ / ㄍㄨㄟˇ；(C)ㄘㄨㄢˊ / ㄗㄨㄢ；(D)ㄨㄢ / ㄨㄢˋ。來源：111學測國綜第1題 。",
-    "subject": "形音義"
+    "exp": "正確答案：既瘖且「痺」／彈箏搏「髀」。來源：111年學科能力測驗國文第1題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 1,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.88,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "2",
+    "id": "gsat-111-chinese-q2",
     "difficulty": "easy",
-    "q": "下列文句，完全沒有錯別字的是：",
+    "q": "下列文句，完全<u>沒有</u>錯別字的是：",
     "correct": "清晨的山谷中，不見遊客聚集，萬物靜寂，闃然無聲",
     "wrong": [
       "觀音山，故名思義是因遠眺貌似觀音躺臥而得名",
       "年終特賣會，在買一送一的強力促銷下，驅之若鶩者多",
       "有些人誤以為投資一本萬利，因而錯判形勢，終至傾家盪產"
     ],
-    "exp": "「故」名應為「顧」；驅之若「鶩」應為「趨」；傾家「盪」產應為「蕩」。來源：111學測國綜第2題 。",
-    "subject": "字形辨正"
+    "exp": "正確答案：清晨的山谷中，不見遊客聚集，萬物靜寂，闃然無聲。來源：111年學科能力測驗國文第2題。",
+    "subject": "國文",
+    "sub_topic": "字形辨正",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 2,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "3",
-    "difficulty": "medium",
-    "q": "下列文句畫底線處的詞語，運用不適當的是：",
-    "correct": "依循既往，墨守成規，很難在文創產業頭角崢嶸",
+    "id": "gsat-111-chinese-q3",
+    "difficulty": "easy",
+    "q": "下列文句<u>畫底線</u>處的詞語，運用<u>不適當</u>的是：",
+    "correct": "世事變化無常，有如<u>白駒過隙</u>，總讓人感觸良多",
     "wrong": [
-      "世事變化無常，有如白駒過隙，總讓人感觸良多",
-      "一味索求而不節制，無疑是竭澤而漁，自斷後路",
-      "他們陷入進退維谷的狀態，心慌意亂，難以抉擇"
+      "一味索求而不節制，無疑是<u>竭澤而漁</u>，自斷後路",
+      "依循既往，墨守成規，很難在文創產業<u>頭角崢嶸</u>",
+      "他們陷入<u>進退維谷</u>的狀態，心慌意亂，難以抉擇"
     ],
-    "exp": "「頭角崢嶸」形容年輕人表現突出，不適用於形容產業競爭獲勝。來源：111學測國綜第3題 。",
-    "subject": "成語運用"
+    "exp": "正確答案：世事變化無常，有如<u>白駒過隙</u>，總讓人感觸良多。來源：111年學科能力測驗國文第3題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 3,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.87,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "4",
-    "difficulty": "medium",
-    "q": "依據文內學者資訊，關於斯卡羅族的敘述，最適當的是：",
+    "id": "gsat-111-chinese-q4",
+    "difficulty": "easy",
+    "q": "依據下列框內資訊，關於斯卡羅族的敘述，最適當的是：\n\n斯卡羅族居住於海拔三百公尺以下，在清代已接觸較多漢人文化；在臺灣接受日本統治後，即以和平、合作的態度迅速成立國語傳習所。同化的程度越深，自我的認知越淡，族群離散也越快。\n\n據大正六年調查，斯卡羅族豬朥束社僅八十九戶，連同射麻里社十九戶、龍鑾社二十一戶、貓仔社十多戶，即使加上已移住他鄉的族人，也不過二一〇戶，約一千人。到了昭和五年至七年臺北帝國大學調查時，只剩五百人左右。\n\n學者乙\n\n學者甲\n\n![圖表](/assets/banks/gsat-111-chinese/Q4-figure-1.png)\n",
     "correct": "族人響應日人政策設校學日語，間接導致族群日趨式微",
     "wrong": [
       "漢人文化對傳統習俗造成強烈衝擊，導致族人避居外地",
       "低海拔地區的生活條件不良，使族人的向心力日益淡薄",
       "大正六年，已有逾半戶數移住他鄉，且多遷居豬朥束社"
     ],
-    "exp": "學者甲指出同化越深族群離散越快，日治時期成立國語傳習所加速了此過程。來源：111學測國綜第4題 。",
-    "subject": "現代文本閱讀"
+    "exp": "正確答案：族人響應日人政策設校學日語，間接導致族群日趨式微。來源：111年學科能力測驗國文第4題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 4,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/Q4-figure-1.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "5",
-    "difficulty": "hard",
-    "q": "依據王夢鷗論「不求甚解」的讀書態度，敘述最適當的是：",
+    "id": "gsat-111-chinese-q5",
+    "difficulty": "easy",
+    "q": "依據下文，關於文中所論不求甚解的讀書態度，敘述最適當的是：\n\n讀書不求甚解的態度之一，是服膺高度的審美能力，要求讀書引發一種渾成的心智，如同詩的境遇，它雖借助於文字符號的撩撥，但讀書者實際所取得的，是自我的美經驗之誕甦。其中經不起任何外力挑剔，或慎思明辨等等反省解釋來「徒亂人意」。（改寫自王夢鷗《傳統文學論衡‧自序》）",
     "correct": "毋須經由純理性的知解鍛造",
     "wrong": [
       "僅適於閱讀感性的詩歌作品",
       "不需要理解文字符號的涵義",
       "應契合社會公認的審美內涵"
     ],
-    "exp": "文中提到此態度是為了取得自我美經驗之誕甦，經不起理性反省解釋的「徒亂人意」。來源：111學測國綜第5題 。",
-    "subject": "文學論評"
+    "exp": "正確答案：毋須經由純理性的知解鍛造。來源：111年學科能力測驗國文第5題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 5,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.82,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "6",
-    "difficulty": "hard",
-    "q": "依據杜詩詩意與格律，□□內最適合填入的詞語依序是：",
+    "id": "gsat-111-chinese-q6",
+    "difficulty": "easy",
+    "q": "閱讀下列杜詩，依據詩意與格律，□□內最適合填入的詞語依序是：\n\n甲、灩澦既沒孤根深，西來水多愁太陰。江天□□鳥雙去，風雨□□龍一吟。\n（杜甫〈灩澦〉）\n\n乙、舍西柔桑葉可拈，江畔細麥復□□。人生幾何春已夏，不放香醪如蜜甜。\n（杜甫〈絕句漫興九首〉其八）",
     "correct": "漠漠／時時／纖纖",
     "wrong": [
       "漠漠／瑟瑟／亭亭",
       "朗朗／時時／亭亭",
       "朗朗／瑟瑟／纖纖"
     ],
-    "exp": "「江天漠漠」與「風雨時時」符合意境與平仄，「細麥纖纖」形容細緻貌。來源：111學測國綜第6題 。",
-    "subject": "古典詩歌"
+    "exp": "正確答案：漠漠／時時／纖纖。來源：111年學科能力測驗國文第6題。",
+    "subject": "國文",
+    "sub_topic": "詞語與成語",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 6,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        2
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.81,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "7",
-    "difficulty": "medium",
-    "q": "依據《莊子》關於「不龜手之藥」的敘述，最適當的是：",
-    "correct": "它功能單一卻帶來不同效益",
+    "id": "gsat-111-chinese-q7",
+    "difficulty": "easy",
+    "q": "依據下文，關於不龜手之藥的敘述，最適當的是：\n\n宋人有善為不龜手之藥者，世世以洴澼絖為事。客聞之，請買其方百金。聚族而謀曰：「我世世為洴澼絖，不過數金；今一朝而鬻技百金，請與之。」客得之，以說吳王。越有難，吳王使之將，冬與越人水戰，大敗越人，裂地而封之。（《莊子‧逍遙遊》）\n\n![圖表](/assets/banks/gsat-111-chinese/Q7-figure-1.png)",
+    "correct": "它功能單一卻帶來不同效益\n\n洴澼絖：\n\n漂洗絲絮。",
     "wrong": [
       "宋人認為它實際價格為百金",
       "越人用它來治療洴澼絖之害",
       "吳王為爭奪它派遣軍隊攻越"
     ],
-    "exp": "藥方功能相同（預防手裂），但宋人用來漂洗，客則用來輔助水戰立功封地。來源：111學測國綜第7題 。",
-    "subject": "文言散文"
+    "exp": "正確答案：它功能單一卻帶來不同效益\n\n洴澼絖：\n\n漂洗絲絮。。來源：111年學科能力測驗國文第7題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 7,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/Q7-figure-1.png"
+    ],
+    "passRate": 0.77,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "8",
+    "id": "gsat-111-chinese-q8",
     "difficulty": "medium",
-    "q": "關於曹操所頒布的經濟紓困方案，敘述最適當的是：",
+    "q": "依據下文，關於曹操所頒布的經濟紓困方案與背景，敘述最適當的是：\n\n王（曹操）令曰：「去冬天降疫癘，民有凋傷，軍興於外，墾田損少，吾甚憂之。其令吏民男女：女年七十已上無夫子，若年十二已下無父母兄弟，及目無所見，手不能作，足不能行，而無妻子父兄產業者，廩食終身，幼者至十二止。貧窮不能自贍者，隨口給貸。老耄須待養者，年九十已上，復不事，家一人。」（陳壽《三國志‧魏書》）\n\n![圖表](/assets/banks/gsat-111-chinese/Q8-figure-1.png)",
     "correct": "家無財產，亦無親屬可照顧之身體殘疾者，國家將其列入需紓困對象",
     "wrong": [
       "因疫癘橫行與軍隊大肆劫掠，帶來大量人民死亡，影響經濟生產甚鉅",
       "國家給予七十歲以上的老婦與幼兒終身照顧，後者滿十二歲即不適用",
       "貧窮到無法自給之人與九十歲以上待養的長者，適用同樣的紓困方案"
     ],
-    "exp": "文中明確提到「無妻子父兄產業者，廩食終身」，包含孤兒、寡母與殘疾者。來源：111學測國綜第8題 。",
-    "subject": "歷史文獻閱讀"
+    "exp": "正確答案：家無財產，亦無親屬可照顧之身體殘疾者，國家將其列入需紓困對象。來源：111年學科能力測驗國文第8題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 8,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf"
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/Q8-figure-1.png"
+    ],
+    "passRate": 0.67,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "9",
-    "difficulty": "medium",
-    "q": "依據簡媜〈迷霧中，呼喚我的名字〉，關於「媜」字的說明，最適當的是：",
+    "id": "gsat-111-chinese-q9",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>9-11為題組</u>。閱讀下文，回答9-11題。\n\n記得小學四年級以前寫自己的名字是「楨」，導師說我是女生，應改成「嫃」，從此我寫自己的名字都是「嫃」。直到高中入學被一位大嬸譏笑：「連自己的名字都寫錯。」此生第一次翻看戶口名簿，果然是「媜」。\n\n可惜因多次播遷，已無任何文件可以證明我的名字曾寫成「楨」與「嫃」。日前查詢國小國中名冊，所留檔案皆是「媜」，戶政單位手抄戶籍登記簿上也是「媜」，並無改名註記。\n\n姓名乃標示「我是誰」之首端。「媜」字神祕莫測，《康熙字典》才找得到，讀音如「爭」非「真」。折騰到十七歲，字寫對了，會念了，但不知是什麼意思。……大學時上聲韻學，得知「媜」字確實念「爭」，義為「女字」，女子名字。撰聯名家張佛千先生曾以我名為題賜下一聯：「文章高詣貴在簡，女子美字古曰媜。」蘊涵勉勵之意。女子美字，既云女子有個美好的名字，又可衍義為寫得一手好字，再撮要假借為博得「文章美名」的女子，誰云不宜。\n\n貞，會意字，甲骨文字形似一口寶鼎加上一支神杖「卜」形，相合而為：依據鼎內火炙變化而察看神跡。遠古殷商，無事不占卜，貞人即卜人，卜者釋義需求正確、堅定，故衍生貞定、堅貞、貞節之辭，所指皆是不可動搖的精神境界。《康熙字典》收有「媜」字，自字面推想，从女从貞，寓意品德貞潔女子，然我更愛這麼想：一個善占卜的女巫。而「簡」本是遠古用來書寫的狹長竹片，既簡且媜，一個聚精會神觀察大鼎內火炙變化再將占卜結果寫在竹片上的女巫形象，躍然而出。（改寫自簡媜〈迷霧中，呼喚我的名字〉）\n\n依據上文，關於「媜」字的說明，最適當的是：",
     "correct": "可以被聯想成品德貞潔的女子",
     "wrong": [
       "與「楨、嫃」二字讀音相同",
       "在甲骨文中象徵占卜的女巫",
       "《康熙字典》釋為女子寫得一手好字"
     ],
-    "exp": "作者提到由「从女从貞」可聯想出品德貞潔。來源：111學測國綜第9題 。",
-    "subject": "現代散文閱讀"
+    "exp": "正確答案：可以被聯想成品德貞潔的女子。來源：111年學科能力測驗國文第9題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 9,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        9,
+        11
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.83,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "10",
+    "id": "gsat-111-chinese-q10",
     "difficulty": "medium",
-    "q": "承上文，有關作者名字的敘述，最不符合文意的是：",
-    "correct": "作者初次翻看戶口名簿，才發現一直寫錯名字",
+    "q": "【共用閱讀資料】\n<u>9-11為題組</u>。閱讀下文，回答9-11題。\n\n記得小學四年級以前寫自己的名字是「楨」，導師說我是女生，應改成「嫃」，從此我寫自己的名字都是「嫃」。直到高中入學被一位大嬸譏笑：「連自己的名字都寫錯。」此生第一次翻看戶口名簿，果然是「媜」。\n\n可惜因多次播遷，已無任何文件可以證明我的名字曾寫成「楨」與「嫃」。日前查詢國小國中名冊，所留檔案皆是「媜」，戶政單位手抄戶籍登記簿上也是「媜」，並無改名註記。\n\n姓名乃標示「我是誰」之首端。「媜」字神祕莫測，《康熙字典》才找得到，讀音如「爭」非「真」。折騰到十七歲，字寫對了，會念了，但不知是什麼意思。……大學時上聲韻學，得知「媜」字確實念「爭」，義為「女字」，女子名字。撰聯名家張佛千先生曾以我名為題賜下一聯：「文章高詣貴在簡，女子美字古曰媜。」蘊涵勉勵之意。女子美字，既云女子有個美好的名字，又可衍義為寫得一手好字，再撮要假借為博得「文章美名」的女子，誰云不宜。\n\n貞，會意字，甲骨文字形似一口寶鼎加上一支神杖「卜」形，相合而為：依據鼎內火炙變化而察看神跡。遠古殷商，無事不占卜，貞人即卜人，卜者釋義需求正確、堅定，故衍生貞定、堅貞、貞節之辭，所指皆是不可動搖的精神境界。《康熙字典》收有「媜」字，自字面推想，从女从貞，寓意品德貞潔女子，然我更愛這麼想：一個善占卜的女巫。而「簡」本是遠古用來書寫的狹長竹片，既簡且媜，一個聚精會神觀察大鼎內火炙變化再將占卜結果寫在竹片上的女巫形象，躍然而出。（改寫自簡媜〈迷霧中，呼喚我的名字〉）\n\n依據上文，有關作者名字的敘述，最<u>不符合</u>文意的是：",
+    "correct": "上高中前，作者一直將自己的名字寫成「嫃」",
     "wrong": [
-      "上高中前，作者一直將自己的名字寫成「嫃」",
+      "作者初次翻看戶口名簿，才發現一直寫錯名字",
       "作者不但曾將自己的名字寫錯，讀音也不正確",
       "相較於从女从貞的寓意，作者更喜愛女巫形象"
     ],
-    "exp": "作者是因為被大嬸嘲笑才去翻戶口名簿發現錯誤，而非翻看才發現。來源：111學測國綜第10題 。",
-    "subject": "現代散文閱讀"
+    "exp": "正確答案：上高中前，作者一直將自己的名字寫成「嫃」。來源：111年學科能力測驗國文第10題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 10,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        3
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        9,
+        11
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.71,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "11",
-    "difficulty": "medium",
-    "q": "關於量詞（單位詞）的用法，如「一位大嬸」、「一手好字」、「一口寶鼎」，敘述最適當的是：",
-    "correct": "「位」、「手」、「口」對於後面所接的名詞，能提供形貌或特質的訊息",
+    "id": "gsat-111-chinese-q11",
+    "difficulty": "easy",
+    "q": "【共用閱讀資料】\n<u>9-11為題組</u>。閱讀下文，回答9-11題。\n\n記得小學四年級以前寫自己的名字是「楨」，導師說我是女生，應改成「嫃」，從此我寫自己的名字都是「嫃」。直到高中入學被一位大嬸譏笑：「連自己的名字都寫錯。」此生第一次翻看戶口名簿，果然是「媜」。\n\n可惜因多次播遷，已無任何文件可以證明我的名字曾寫成「楨」與「嫃」。日前查詢國小國中名冊，所留檔案皆是「媜」，戶政單位手抄戶籍登記簿上也是「媜」，並無改名註記。\n\n姓名乃標示「我是誰」之首端。「媜」字神祕莫測，《康熙字典》才找得到，讀音如「爭」非「真」。折騰到十七歲，字寫對了，會念了，但不知是什麼意思。……大學時上聲韻學，得知「媜」字確實念「爭」，義為「女字」，女子名字。撰聯名家張佛千先生曾以我名為題賜下一聯：「文章高詣貴在簡，女子美字古曰媜。」蘊涵勉勵之意。女子美字，既云女子有個美好的名字，又可衍義為寫得一手好字，再撮要假借為博得「文章美名」的女子，誰云不宜。\n\n貞，會意字，甲骨文字形似一口寶鼎加上一支神杖「卜」形，相合而為：依據鼎內火炙變化而察看神跡。遠古殷商，無事不占卜，貞人即卜人，卜者釋義需求正確、堅定，故衍生貞定、堅貞、貞節之辭，所指皆是不可動搖的精神境界。《康熙字典》收有「媜」字，自字面推想，从女从貞，寓意品德貞潔女子，然我更愛這麼想：一個善占卜的女巫。而「簡」本是遠古用來書寫的狹長竹片，既簡且媜，一個聚精會神觀察大鼎內火炙變化再將占卜結果寫在竹片上的女巫形象，躍然而出。（改寫自簡媜〈迷霧中，呼喚我的名字〉）\n\n右框中的六組詞語，前三組取自上文，後三組取自高中教材。其中<u>畫底線</u>的詞，位置都在「數詞」與「名詞」之間。關於這些詞的用法，敘述最適當的是：\n\n一<u>位</u>大嬸一<u>手</u>好字\n\n一<u>口</u>寶鼎一<u>桿</u>稱仔\n\n一<u>船</u>星輝一<u>碟</u>茴香豆\n\n![圖表](/assets/banks/gsat-111-chinese/Q11-figure-1.png)",
+    "correct": "意思相當於「個」，其後皆為可數的名詞",
     "wrong": [
-      "「位」、「口」、「桿」意思相當於「個」，其後皆為可數的名詞",
-      "除了「手」、「星輝」外，其餘與後面的名詞間，均可加「的」",
-      "這些量詞若不出現，亦可清楚表達而不影響語意"
+      "對於後面所接的名詞，能提供形貌的訊息",
+      "除了外，其餘與後面的名詞間，均可加「的」",
+      "若不出現，亦可清楚表達而不影響語意"
     ],
-    "exp": "漢語量詞具有描摹功能，能使名詞具象化。來源：111學測國綜第11題 。",
-    "subject": "現代漢語語法"
+    "exp": "正確答案：意思相當於「個」，其後皆為可數的名詞。來源：111年學科能力測驗國文第11題。",
+    "subject": "國文",
+    "sub_topic": "字音辨正",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 11,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        3,
+        4
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        9,
+        11
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/Q11-figure-1.png"
+    ],
+    "passRate": 0.85,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "12",
+    "id": "gsat-111-chinese-q12",
     "difficulty": "medium",
-    "q": "依據張岱《陶庵夢憶‧自序》，關於撰寫此書的敘述，最適當的是：",
+    "q": "【共用閱讀資料】\n<u>12-13為題組</u>。閱讀下文，回答12-13題。\n\n雞鳴枕上，夜氣方回，因想余生平，繁華靡麗，過眼皆空，五十年來，總成一夢。……遙思往事，憶即書之，持向佛前，一一懺悔。不次歲月，異年譜也；不分門類，別志林也。偶拈一則，如遊舊徑，如見故人、城郭、人民，翻用自喜，真所謂癡人前不得說夢矣。昔有西陵腳夫，為人擔酒，失足破其甕，念無以償，癡坐佇想曰：「得是夢便好。」一寒士鄉試中式，方赴鹿鳴宴，恍然猶意非真，自嚙其臂曰：「莫是夢否？」一夢耳，惟恐其非夢，又惟恐其是夢，其為癡人則一也。余今大夢將寤，猶事雕蟲，又是一番夢囈。（張岱《陶庵夢憶‧自序》）\n\n依據上文，關於張岱撰《陶庵夢憶》，敘述最適當的是：",
     "correct": "內容是對五十年人生的回憶",
     "wrong": [
       "對信手拈來的寫法感到欣喜",
       "常於深夜寫書，至雞鳴破曉時才肯擱筆",
       "早年已悟繁華如夢，遂於書中深自懺悔"
     ],
-    "exp": "自序開頭即言「五十年來，總成一夢」。來源：111學測國綜第12題 。",
-    "subject": "古典散文"
+    "exp": "正確答案：內容是對五十年人生的回憶。來源：111年學科能力測驗國文第12題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 12,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        12,
+        13
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.57,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "13",
+    "id": "gsat-111-chinese-q13",
     "difficulty": "medium",
-    "q": "關於《陶庵夢憶》序文中提到的「腳夫」與「寒士」，敘述最適當的是：",
+    "q": "【共用閱讀資料】\n<u>12-13為題組</u>。閱讀下文，回答12-13題。\n\n雞鳴枕上，夜氣方回，因想余生平，繁華靡麗，過眼皆空，五十年來，總成一夢。……遙思往事，憶即書之，持向佛前，一一懺悔。不次歲月，異年譜也；不分門類，別志林也。偶拈一則，如遊舊徑，如見故人、城郭、人民，翻用自喜，真所謂癡人前不得說夢矣。昔有西陵腳夫，為人擔酒，失足破其甕，念無以償，癡坐佇想曰：「得是夢便好。」一寒士鄉試中式，方赴鹿鳴宴，恍然猶意非真，自嚙其臂曰：「莫是夢否？」一夢耳，惟恐其非夢，又惟恐其是夢，其為癡人則一也。余今大夢將寤，猶事雕蟲，又是一番夢囈。（張岱《陶庵夢憶‧自序》）\n\n關於上文「腳夫」、「寒士」的敘述，最適當的是：",
     "correct": "腳夫失足破甕，無法承受突發逆境，憾其非夢",
     "wrong": [
       "腳夫和寒士能以豁達心境待人接物",
       "腳夫和寒士各有其專注執著的興趣",
       "寒士名落孫山，對於學識缺乏信心，疑其是夢"
     ],
-    "exp": "腳夫希望破甕是場夢以脫困，寒士中舉則因太過驚喜而疑其非真，兩者皆為「癡人」。來源：111學測國綜第13題 。",
-    "subject": "古典散文"
+    "exp": "正確答案：腳夫失足破甕，無法承受突發逆境，憾其非夢。來源：111年學科能力測驗國文第13題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 13,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        4
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        12,
+        13
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "14",
-    "difficulty": "medium",
-    "q": "依據張李德和〈畫菊自序〉，關於其自述「莫自知其鳩拙云爾」的心態，最不可能的是：",
+    "id": "gsat-111-chinese-q14",
+    "difficulty": "hard",
+    "q": "【共用閱讀資料】\n<u>14-17為題組</u>。閱讀下文，回答14-17題。\n\n人為萬物之靈，志有萬端之異。學琴學詩均從所好，工書工畫各有專長，是故咳唾珠玉，謫仙闢詩學之源；節奏鏗鏘，蔡女撰胡笳之拍，此皆不墮聰明，而有志竟成者也。若夫銀鈎鐵畫，固屬難窺；儷白妃青，亦非易事。余因停機教子之餘，調藥助夫之暇，竊慕管夫人之墨竹，紙上生風；敢藉陶彭澤之黃花，圖中寫影。庶幾秋姿不老，四座流芬，得比勁節長垂，千人共仰，竟率意而鴉塗，莫自知其鳩拙云爾！（張李德和〈畫菊自序〉）\n\n甲\n\n茲就詞章論，世多訾女子之作，大抵裁紅刻翠，寫怨言情，千篇一律，不脫閨人口吻者。予以為抒寫性情，本應各如其分，惟須推陳出新，不襲窠臼，尤貴格律雋雅，情性真切，即為佳作。詩中之溫、李，詞中之周、柳，皆以柔豔擅長，男子且然，況於女子寫其本色，亦復何妨？（呂碧城〈女界近況雜談〉）\n\n呂碧城（1883～1943），被譽為近三百年來最後一位女詞人。\n\n乙\n\n依據甲文，關於作者自述「莫自知其鳩拙云爾」的心態，最<u>不可能</u>的是：\n\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-2.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-3.png)",
     "correct": "無法預先了解後人對自己畫作的評價，也就不在意任何評論",
     "wrong": [
       "既然有志於丹青之道，總要努力以赴，愚拙與否便毋須介懷",
       "只能利用相夫教子以外的時間從事創作，故自婉言技巧尚拙",
       "以率意塗抹謙稱自己的畫作，凸顯想要創作的欲望非常強烈"
     ],
-    "exp": "此語多為文人謙辭，並非完全不在意評論。來源：111學測國綜第14題 。",
-    "subject": "古典散文"
+    "exp": "正確答案：無法預先了解後人對自己畫作的評價，也就不在意任何評論。來源：111年學科能力測驗國文第14題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 14,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        14,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G14-17-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-2.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-3.png"
+    ],
+    "passRate": 0.39,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "15",
+    "id": "gsat-111-chinese-q15",
     "difficulty": "medium",
-    "q": "依據呂碧城論女子詞章，敘述最適當的是：",
+    "q": "【共用閱讀資料】\n<u>14-17為題組</u>。閱讀下文，回答14-17題。\n\n人為萬物之靈，志有萬端之異。學琴學詩均從所好，工書工畫各有專長，是故咳唾珠玉，謫仙闢詩學之源；節奏鏗鏘，蔡女撰胡笳之拍，此皆不墮聰明，而有志竟成者也。若夫銀鈎鐵畫，固屬難窺；儷白妃青，亦非易事。余因停機教子之餘，調藥助夫之暇，竊慕管夫人之墨竹，紙上生風；敢藉陶彭澤之黃花，圖中寫影。庶幾秋姿不老，四座流芬，得比勁節長垂，千人共仰，竟率意而鴉塗，莫自知其鳩拙云爾！（張李德和〈畫菊自序〉）\n\n甲\n\n茲就詞章論，世多訾女子之作，大抵裁紅刻翠，寫怨言情，千篇一律，不脫閨人口吻者。予以為抒寫性情，本應各如其分，惟須推陳出新，不襲窠臼，尤貴格律雋雅，情性真切，即為佳作。詩中之溫、李，詞中之周、柳，皆以柔豔擅長，男子且然，況於女子寫其本色，亦復何妨？（呂碧城〈女界近況雜談〉）\n\n呂碧城（1883～1943），被譽為近三百年來最後一位女詞人。\n\n乙\n\n依據乙文，敘述最適當的是：\n\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-2.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-3.png)",
     "correct": "女子創作可不忌裁紅刻翠，但直寫自己的真誠感受",
     "wrong": [
       "為推陳出新，不襲窠臼，男女皆應拋棄格律的束縛",
       "詞章以閨人口吻成其本色，故男女表現宜各如其分",
       "女子習寫詞章，可模仿以柔豔詩詞著稱的男性作家"
     ],
-    "exp": "作者認為抒寫性情應各如其分，女性寫其柔豔本色亦無妨，關鍵在於情性真切。來源：111學測國綜第15題 。",
-    "subject": "古典散文"
+    "exp": "正確答案：女子創作可不忌裁紅刻翠，但直寫自己的真誠感受。來源：111年學科能力測驗國文第15題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 15,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        14,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G14-17-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-2.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-3.png"
+    ],
+    "passRate": 0.61,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "16",
-    "difficulty": "hard",
-    "q": "關於張李德和與呂碧城文中所蘊含的創作觀念，下列推論最不適當的是：",
+    "id": "gsat-111-chinese-q16",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>14-17為題組</u>。閱讀下文，回答14-17題。\n\n人為萬物之靈，志有萬端之異。學琴學詩均從所好，工書工畫各有專長，是故咳唾珠玉，謫仙闢詩學之源；節奏鏗鏘，蔡女撰胡笳之拍，此皆不墮聰明，而有志竟成者也。若夫銀鈎鐵畫，固屬難窺；儷白妃青，亦非易事。余因停機教子之餘，調藥助夫之暇，竊慕管夫人之墨竹，紙上生風；敢藉陶彭澤之黃花，圖中寫影。庶幾秋姿不老，四座流芬，得比勁節長垂，千人共仰，竟率意而鴉塗，莫自知其鳩拙云爾！（張李德和〈畫菊自序〉）\n\n甲\n\n茲就詞章論，世多訾女子之作，大抵裁紅刻翠，寫怨言情，千篇一律，不脫閨人口吻者。予以為抒寫性情，本應各如其分，惟須推陳出新，不襲窠臼，尤貴格律雋雅，情性真切，即為佳作。詩中之溫、李，詞中之周、柳，皆以柔豔擅長，男子且然，況於女子寫其本色，亦復何妨？（呂碧城〈女界近況雜談〉）\n\n呂碧城（1883～1943），被譽為近三百年來最後一位女詞人。\n\n乙\n\n關於甲、乙二文所蘊含的創作觀念，下列推論最<u>不適當</u>的是：\n\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-2.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-3.png)",
     "correct": "甲文「志有萬端之異」與乙文「情性真切」，都從性別角度論證創作合宜性",
     "wrong": [
-      "甲文顯示創作並未違背傳統性別角色規範",
-      "乙文認為「閨人」與「柔豔」可為女性創作本色",
-      "乙文所舉前輩作家（溫、李、周、柳）較具打破性別刻板印象意味"
+      "甲文的「之餘、之暇」透露出張李德和的創作並未違背傳統性別角色規範",
+      "乙文認為「閨人」與「柔豔」皆為女性創作本色，女性其實不必引以為非",
+      "乙文所舉前輩作家，較甲文所舉前輩作家更具破除當時性別刻板印象的意味"
     ],
-    "exp": "「志有萬端之異」是從個人志向出發，而非性別角度。來源：111學測國綜第16題 。",
-    "subject": "文本比較"
+    "exp": "正確答案：甲文「志有萬端之異」與乙文「情性真切」，都從性別角度論證創作合宜性。來源：111年學科能力測驗國文第16題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 16,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        14,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G14-17-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-2.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-3.png"
+    ],
+    "passRate": 0.58,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "17",
-    "difficulty": "hard",
-    "q": "下列詩詞與呂碧城所提及的「柔豔風格」最相近的是：",
+    "id": "gsat-111-chinese-q17",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>14-17為題組</u>。閱讀下文，回答14-17題。\n\n人為萬物之靈，志有萬端之異。學琴學詩均從所好，工書工畫各有專長，是故咳唾珠玉，謫仙闢詩學之源；節奏鏗鏘，蔡女撰胡笳之拍，此皆不墮聰明，而有志竟成者也。若夫銀鈎鐵畫，固屬難窺；儷白妃青，亦非易事。余因停機教子之餘，調藥助夫之暇，竊慕管夫人之墨竹，紙上生風；敢藉陶彭澤之黃花，圖中寫影。庶幾秋姿不老，四座流芬，得比勁節長垂，千人共仰，竟率意而鴉塗，莫自知其鳩拙云爾！（張李德和〈畫菊自序〉）\n\n甲\n\n茲就詞章論，世多訾女子之作，大抵裁紅刻翠，寫怨言情，千篇一律，不脫閨人口吻者。予以為抒寫性情，本應各如其分，惟須推陳出新，不襲窠臼，尤貴格律雋雅，情性真切，即為佳作。詩中之溫、李，詞中之周、柳，皆以柔豔擅長，男子且然，況於女子寫其本色，亦復何妨？（呂碧城〈女界近況雜談〉）\n\n呂碧城（1883～1943），被譽為近三百年來最後一位女詞人。\n\n乙\n\n下列詩詞與乙文所提及的柔豔風格，最相近的是：\n\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-2.png)\n![圖表](/assets/banks/gsat-111-chinese/G14-17-figure-3.png)",
     "correct": "朔雁傳書絕，湘篁染淚多。無由見顏色，還自託微波",
     "wrong": [
       "世機消已盡，巾屨亦飄然。一室故山月，滿瓶秋澗泉",
       "灞橋雪。茫茫萬徑人蹤滅。人蹤滅。此時方見，乾坤空闊",
       "游宦成羈旅。短檣吟倚閑凝竚。萬水千山迷遠近，想鄉關何處"
     ],
-    "exp": "正確項帶有哀婉、柔美的特質（溫庭筠風格）。來源：111學測國綜第17題 。",
-    "subject": "古典詩詞風格"
+    "exp": "正確答案：朔雁傳書絕，湘篁染淚多。無由見顏色，還自託微波。來源：111年學科能力測驗國文第17題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 17,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        4,
+        5
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        14,
+        17
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G14-17-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-2.png",
+      "/assets/banks/gsat-111-chinese/G14-17-figure-3.png"
+    ],
+    "passRate": 0.56,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "18",
+    "id": "gsat-111-chinese-q18",
     "difficulty": "easy",
-    "q": "下列文句的「厭」，與「王欲無厭」意義相同的是：",
+    "q": "【共用閱讀資料】\n<u>18-19為題組</u>。閱讀下文，回答18-19題。\n\n周厲王使芮伯帥師伐戎，得良馬焉，將以獻於王。芮季曰：「不如捐之。王欲無厭，而多信人之言。今以師歸而獻馬焉，王之左右必以子獲為不止一馬，而皆求於子。子無以應之，則將嘵於王，王必信之。是賈禍也。」弗聽，卒獻之。榮夷公果使有求焉，弗得，遂譖諸王曰：「伯也隱。」王怒逐芮伯。君子謂芮伯亦有罪焉。爾知王之瀆貨而啟之，芮伯之罪也。（劉基《郁離子‧獻馬》）\n\n下列文句的「厭」，與「王欲無厭，而多信人之言」的「厭」意義相同的是：",
     "correct": "學而不「厭」，誨人不倦，何有於我哉",
     "wrong": [
       "館人「厭」之，忍弗言。將行，贈之以狗",
       "君子之道：淡而不「厭」，簡而文，溫而理",
-      "近世「厭」常而反古，專尚奇麗"
+      "近世「厭」常而反古，專尚奇麗。吾為衣食所迫，不能免俗"
     ],
-    "exp": "題幹與正確項之「厭」皆為「滿足」之意 [cite: 2]。來源：111學測國綜第18題 。",
-    "subject": "文言字義"
+    "exp": "正確答案：學而不「厭」，誨人不倦，何有於我哉。來源：111年學科能力測驗國文第18題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 18,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "A",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.78,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "19",
+    "id": "gsat-111-chinese-q19",
     "difficulty": "medium",
-    "q": "依據《郁離子‧獻馬》，關於文中人物對獻馬的看法，敘述最適當的是：",
+    "q": "【共用閱讀資料】\n<u>18-19為題組</u>。閱讀下文，回答18-19題。\n\n周厲王使芮伯帥師伐戎，得良馬焉，將以獻於王。芮季曰：「不如捐之。王欲無厭，而多信人之言。今以師歸而獻馬焉，王之左右必以子獲為不止一馬，而皆求於子。子無以應之，則將嘵於王，王必信之。是賈禍也。」弗聽，卒獻之。榮夷公果使有求焉，弗得，遂譖諸王曰：「伯也隱。」王怒逐芮伯。君子謂芮伯亦有罪焉。爾知王之瀆貨而啟之，芮伯之罪也。（劉基《郁離子‧獻馬》）\n\n依據上文，關於文中人物對獻馬的看法，敘述最適當的是：",
     "correct": "芮季和君子相同，都認為芮伯之舉使王想得更多馬",
     "wrong": [
       "芮季和榮夷公相同，都想從芮伯那裡獲得一匹良馬",
       "榮夷公和周厲王相同，都認為芮伯不應只獻一匹馬",
       "榮夷公和君子相同，都認為芮伯隱藏了其他的良馬"
     ],
-    "exp": "芮季勸不要獻，怕引起貪念；君子評芮伯有罪，因其「啟」王之貪。來源：111學測國綜第19題 。",
-    "subject": "文言散文"
+    "exp": "正確答案：芮季和君子相同，都認為芮伯之舉使王想得更多馬。來源：111年學科能力測驗國文第19題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 19,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        5
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        18,
+        19
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "20",
+    "id": "gsat-111-chinese-q20",
     "difficulty": "medium",
-    "q": "關於「鄭崇和」的生平與家庭，依據資料甲敘述最適當的是：",
+    "q": "【共用閱讀資料】\n<u>20-22為題組</u>。閱讀下文，回答20-22題。\n\n| 國定古蹟鄭崇和墓介紹（位於苗栗縣後龍鎮） /  / 皇 /  / 清 /  / 誥 /  / 贈 /  / 二通 /  / 品奉 /  / 夫大 /  / 人夫 /  / 顯 /  / 祖 /  / 妣考 /  / 鄭祀 /  / 門鄉 /  / 陳賢 /  / 太祠 /  / 夫鄭 /  / 人公 /  / 合 /  / 葬 /  / 佳 /  / 城 /  / 四 /  / 大 /  / 房 /  / 孫 /  / 男 /  / 如如如如 /  / 蘭雲梁椿 /  / 等 /  / 重 /  / 修 /  / 甲 | 墓碑部分文字 |\n| 墓始建於道光7年，規制悉依《大清會典事例》，占地廣大，氣勢宏偉，又於同治6年重修。鄭崇和生於乾隆21年，卒於道光7年。康熙年間，始祖鄭懷仁自福建漳州遷入金門（浯江）。乾隆40年，三世長子鄭國周率四弟國唐、五弟國慶及國唐四子崇和來臺，定居後龍。鄭崇和少時好讀書，但屢試不第，後來捐為監生。他先在後龍教書，後遷至竹塹。鄭家因從事土地開墾，遂成為竹塹鉅富。鄭崇和生活儉約，厚待親族，也留心公共事務，濟助鄉里，義行深受肯定，去世後即獲朝廷同意入祀鄉賢祠。 /  / 鄭崇和先是收養大哥鄭崇聰之子用鍾，後生三子：用錫、用錦、用銛。用鍾雖無功名，但以經營實業著稱。用錦是秀才，用銛是歲貢生，用錫是道光3年進士，官至禮部員外郎。鄭崇和父以子貴，去世後也獲誥贈。 /  / 鄭崇和之妻卒於道光25年，原葬寶斗仁山，後移葬與鄭崇和同穴。在臺灣現存古墓中，鄭崇和墓規模僅次於嘉義王得祿（一品官）墓，與新竹鄭用錫墓相似。 |\n\n乙\n\n| 鄭崇和臨終前交代 | 《古蹟指定及廢止審查辦法》第二條 /  / 丙 |\n| 作善降祥，作惡降殃，天之理也。吾見今人受祖父生前蔭庇，歿後又妄信風水，乞靈枯骨，不亦慎乎﹖吾歿後，爾輩勿惑堪輿家言，貪尋吉地，為福利計。吾後龍山中田有老屋地焉，營而葬之，吾願足矣。將來為吉為凶，爾輩自取之，何與墳塋？ | 古蹟之指定，應符合下列基準之一： /  / 一、具高度歷史、藝術或科學價值者。 /  / 二、表現各時代營造技術流派特色者。 /  / 三、具稀少性，不易再現者。 /  / 國定古蹟之指定基準，係擇前項已指定之古蹟中較具重要、保存完整並為各時代或某類型之典範者。 |\n\n依據資料甲，下列關於鄭崇和的敘述，最適當的是：\n\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-3.png)\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-1.png)\n\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-4.png)\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-5.png)",
     "correct": "長子由大房過繼，是鄭家家業發達關鍵人物之一",
     "wrong": [
       "十九歲時，隨祖父、父親、叔叔遷居後龍",
       "生前即因兒子們功名有成，晉升為通奉大夫",
       "妻子姓陳，仙逝較早，故於鄭崇和過世後才同葬"
     ],
-    "exp": "文中提及收養大哥之子用鍾，用鍾以經營實業著稱。來源：111學測國綜第20題 。",
-    "subject": "古蹟資料閱讀"
+    "exp": "正確答案：長子由大房過繼，是鄭家家業發達關鍵人物之一。來源：111年學科能力測驗國文第20題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 20,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        22
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G20-22-figure-3.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-4.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-5.png"
+    ],
+    "passRate": 0.52,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "21",
+    "id": "gsat-111-chinese-q21",
     "difficulty": "medium",
-    "q": "關於「鄭崇和墓」的敘述，最適當的是：",
+    "q": "【共用閱讀資料】\n<u>20-22為題組</u>。閱讀下文，回答20-22題。\n\n| 國定古蹟鄭崇和墓介紹（位於苗栗縣後龍鎮） /  / 皇 /  / 清 /  / 誥 /  / 贈 /  / 二通 /  / 品奉 /  / 夫大 /  / 人夫 /  / 顯 /  / 祖 /  / 妣考 /  / 鄭祀 /  / 門鄉 /  / 陳賢 /  / 太祠 /  / 夫鄭 /  / 人公 /  / 合 /  / 葬 /  / 佳 /  / 城 /  / 四 /  / 大 /  / 房 /  / 孫 /  / 男 /  / 如如如如 /  / 蘭雲梁椿 /  / 等 /  / 重 /  / 修 /  / 甲 | 墓碑部分文字 |\n| 墓始建於道光7年，規制悉依《大清會典事例》，占地廣大，氣勢宏偉，又於同治6年重修。鄭崇和生於乾隆21年，卒於道光7年。康熙年間，始祖鄭懷仁自福建漳州遷入金門（浯江）。乾隆40年，三世長子鄭國周率四弟國唐、五弟國慶及國唐四子崇和來臺，定居後龍。鄭崇和少時好讀書，但屢試不第，後來捐為監生。他先在後龍教書，後遷至竹塹。鄭家因從事土地開墾，遂成為竹塹鉅富。鄭崇和生活儉約，厚待親族，也留心公共事務，濟助鄉里，義行深受肯定，去世後即獲朝廷同意入祀鄉賢祠。 /  / 鄭崇和先是收養大哥鄭崇聰之子用鍾，後生三子：用錫、用錦、用銛。用鍾雖無功名，但以經營實業著稱。用錦是秀才，用銛是歲貢生，用錫是道光3年進士，官至禮部員外郎。鄭崇和父以子貴，去世後也獲誥贈。 /  / 鄭崇和之妻卒於道光25年，原葬寶斗仁山，後移葬與鄭崇和同穴。在臺灣現存古墓中，鄭崇和墓規模僅次於嘉義王得祿（一品官）墓，與新竹鄭用錫墓相似。 |\n\n乙\n\n| 鄭崇和臨終前交代 | 《古蹟指定及廢止審查辦法》第二條 /  / 丙 |\n| 作善降祥，作惡降殃，天之理也。吾見今人受祖父生前蔭庇，歿後又妄信風水，乞靈枯骨，不亦慎乎﹖吾歿後，爾輩勿惑堪輿家言，貪尋吉地，為福利計。吾後龍山中田有老屋地焉，營而葬之，吾願足矣。將來為吉為凶，爾輩自取之，何與墳塋？ | 古蹟之指定，應符合下列基準之一： /  / 一、具高度歷史、藝術或科學價值者。 /  / 二、表現各時代營造技術流派特色者。 /  / 三、具稀少性，不易再現者。 /  / 國定古蹟之指定基準，係擇前項已指定之古蹟中較具重要、保存完整並為各時代或某類型之典範者。 |\n\n依據資料甲、乙，下列關於鄭崇和墓的敘述，最適當的是：\n\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-3.png)\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-1.png)\n\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-4.png)\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-5.png)",
     "correct": "「祀鄉賢祠」記於墓碑，可見既是當時官方認可功績，家族也視為無上光榮",
     "wrong": [
       "鄭崇和雖自認深受祖先陰宅風水庇蔭而富裕，但不願子孫迷信擇地求福之說",
       "鄭用錫等雖按鄭崇和遺願將其葬於老家山中，但鄭如椿等仍另外擇吉地遷葬",
       "最初形制簡約，後因鄭用錫中進士並授官，始據《大清會典事例》擴大規模"
     ],
-    "exp": "入祀鄉賢祠是地方極高榮譽，故刻於碑上。來源：111學測國綜第21題 。",
-    "subject": "古蹟資料閱讀"
-  },
-  {
-    "id": "22",
-    "difficulty": "hard",
-    "q": "依據《古蹟指定基準》，判斷鄭崇和墓與王得祿墓被列為古蹟的推論：",
-    "correct": "王得祿墓的歷史價值，可能是被列入古蹟的條件之一",
-    "wrong": [
-      "鄭用錫墓因展現營造技術流派特色，而列為國定古蹟",
-      "兩項推論皆正確",
-      "兩項推論皆錯誤"
+    "exp": "正確答案：「祀鄉賢祠」記於墓碑，可見既是當時官方認可功績，家族也視為無上光榮。來源：111年學科能力測驗國文第21題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 21,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        22
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G20-22-figure-3.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-4.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-5.png"
     ],
-    "exp": "資料丙指出古蹟指定需具高度歷史價值。來源：111學測國綜第22題 。",
-    "subject": "行政法規應用"
+    "passRate": 0.59,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "23",
+    "id": "gsat-111-chinese-q22",
     "difficulty": "medium",
-    "q": "依據朱熹對《論語》「三畏」的解說，下列敘述不符合意旨的是：",
+    "q": "【共用閱讀資料】\n<u>20-22為題組</u>。閱讀下文，回答20-22題。\n\n| 國定古蹟鄭崇和墓介紹（位於苗栗縣後龍鎮） /  / 皇 /  / 清 /  / 誥 /  / 贈 /  / 二通 /  / 品奉 /  / 夫大 /  / 人夫 /  / 顯 /  / 祖 /  / 妣考 /  / 鄭祀 /  / 門鄉 /  / 陳賢 /  / 太祠 /  / 夫鄭 /  / 人公 /  / 合 /  / 葬 /  / 佳 /  / 城 /  / 四 /  / 大 /  / 房 /  / 孫 /  / 男 /  / 如如如如 /  / 蘭雲梁椿 /  / 等 /  / 重 /  / 修 /  / 甲 | 墓碑部分文字 |\n| 墓始建於道光7年，規制悉依《大清會典事例》，占地廣大，氣勢宏偉，又於同治6年重修。鄭崇和生於乾隆21年，卒於道光7年。康熙年間，始祖鄭懷仁自福建漳州遷入金門（浯江）。乾隆40年，三世長子鄭國周率四弟國唐、五弟國慶及國唐四子崇和來臺，定居後龍。鄭崇和少時好讀書，但屢試不第，後來捐為監生。他先在後龍教書，後遷至竹塹。鄭家因從事土地開墾，遂成為竹塹鉅富。鄭崇和生活儉約，厚待親族，也留心公共事務，濟助鄉里，義行深受肯定，去世後即獲朝廷同意入祀鄉賢祠。 /  / 鄭崇和先是收養大哥鄭崇聰之子用鍾，後生三子：用錫、用錦、用銛。用鍾雖無功名，但以經營實業著稱。用錦是秀才，用銛是歲貢生，用錫是道光3年進士，官至禮部員外郎。鄭崇和父以子貴，去世後也獲誥贈。 /  / 鄭崇和之妻卒於道光25年，原葬寶斗仁山，後移葬與鄭崇和同穴。在臺灣現存古墓中，鄭崇和墓規模僅次於嘉義王得祿（一品官）墓，與新竹鄭用錫墓相似。 |\n\n乙\n\n| 鄭崇和臨終前交代 | 《古蹟指定及廢止審查辦法》第二條 /  / 丙 |\n| 作善降祥，作惡降殃，天之理也。吾見今人受祖父生前蔭庇，歿後又妄信風水，乞靈枯骨，不亦慎乎﹖吾歿後，爾輩勿惑堪輿家言，貪尋吉地，為福利計。吾後龍山中田有老屋地焉，營而葬之，吾願足矣。將來為吉為凶，爾輩自取之，何與墳塋？ | 古蹟之指定，應符合下列基準之一： /  / 一、具高度歷史、藝術或科學價值者。 /  / 二、表現各時代營造技術流派特色者。 /  / 三、具稀少性，不易再現者。 /  / 國定古蹟之指定基準，係擇前項已指定之古蹟中較具重要、保存完整並為各時代或某類型之典範者。 |\n\n資料丙《古蹟指定及廢止審查辦法》為民國108年修訂版，若以資料丙審視資料甲，關於、兩項推論的研判，最適當的是：\n\n鄭用錫墓展現清代「營造技術流派特色」，而列為國定古蹟。\n\n王得祿墓的歷史價值，可能是被列入古蹟的條件之一。\n\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-3.png)\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-1.png)\n\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-4.png)\n![圖表](/assets/banks/gsat-111-chinese/G20-22-figure-5.png)",
+    "correct": "無法判斷，正確",
+    "wrong": [
+      "、皆正確",
+      "正確，錯誤",
+      "無法判斷，錯誤"
+    ],
+    "exp": "正確答案：無法判斷，正確。來源：111年學科能力測驗國文第22題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 22,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        6
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        20,
+        22
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G20-22-figure-3.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-4.png",
+      "/assets/banks/gsat-111-chinese/G20-22-figure-5.png"
+    ],
+    "passRate": 0.44,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-chinese-q23",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>23-25為題組</u>。閱讀下文，回答23-25題。\n\n甲\n\n| 《論語》原文 | 朱熹的解說 |\n| 子曰：「君子有三畏：畏天命，畏大人，畏聖人之言。小人不知天命，而不畏也，狎大人，侮聖人之言。」 | 「大人」不止有位者，是指有位、有齒、有德者。 /  / 「畏天命」三字好。是理會得道理，便謹去做，不敢違，便是畏之也。如非禮勿視聽言動，與夫戒慎恐懼，皆所以畏天命也。 /  / 要緊全在知上。纔知得（天命），便自不容不畏。 |\n\n乙\n\n| 《孟子》原文 | 朱熹的解說 |\n| 說大人，則藐之，勿視其巍巍然。堂高數仞，榱題數尺，我得志，弗為也；食前方丈，侍妾數百人，我得志，弗為也；……在彼者，皆我所不為也；在我者，皆古之制也。吾何畏彼哉！ | 這為世上有人把大人許多崇高富貴當事，有言不敢出口，故孟子云爾。 /  / 《論語》說「畏大人」，此卻說「藐大人」。大人固當畏，而所謂「藐」者，乃不是藐他，只是藐他許多「堂高數仞，榱題數尺」之類。 |\n\n下列敘述，<u>不符合</u>資料甲意旨的是：\n\n榱題：屋椽的兩端之處。\n\n![圖表](/assets/banks/gsat-111-chinese/G23-25-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G23-25-figure-2.png)\n![圖表](/assets/banks/gsat-111-chinese/Q23-figure-1.png)",
     "correct": "君子須知得天命，天命可知遂不可畏",
     "wrong": [
       "君子得識天命所歸，遂謹於視聽言動",
       "小人處懵然狀態，故不知且不畏天命",
       "小人不畏天命，遂輕慢位高權重之人"
     ],
-    "exp": "朱熹認為「知得（天命），便自不容不畏」，而非可知則不可畏。來源：111學測國綜第23題 。",
-    "subject": "經典解讀"
-  },
-  {
-    "id": "24",
-    "difficulty": "medium",
-    "q": "下列人物及其言行，與孟子所藐的、徒有富貴卻無德的「大人」最接近的是：",
-    "correct": "楊素：奢貴自奉，禮異人臣。每公卿入言，賓客上謁，未嘗不踞床而見",
-    "wrong": [
-      "鄭文公：無禮於晉，且貳於楚也",
-      "項羽：樊噲瞋目視項王，項王按劍而跽",
-      "劉備：每與臣論此事，未嘗不嘆息痛恨於桓、靈也"
+    "exp": "正確答案：君子須知得天命，天命可知遂不可畏。來源：111年學科能力測驗國文第23題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 23,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G23-25-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G23-25-figure-2.png",
+      "/assets/banks/gsat-111-chinese/Q23-figure-1.png"
     ],
-    "exp": "楊素表現出孟子所言「巍巍然」且傲慢的負面大人形象。來源：111學測國綜第24題 。",
-    "subject": "人物辨析"
+    "passRate": 0.47,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "25",
-    "difficulty": "hard",
-    "q": "關於《論語》畏大人與《孟子》藐大人的說法，最適當的是：",
+    "id": "gsat-111-chinese-q24",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>23-25為題組</u>。閱讀下文，回答23-25題。\n\n甲\n\n| 《論語》原文 | 朱熹的解說 |\n| 子曰：「君子有三畏：畏天命，畏大人，畏聖人之言。小人不知天命，而不畏也，狎大人，侮聖人之言。」 | 「大人」不止有位者，是指有位、有齒、有德者。 /  / 「畏天命」三字好。是理會得道理，便謹去做，不敢違，便是畏之也。如非禮勿視聽言動，與夫戒慎恐懼，皆所以畏天命也。 /  / 要緊全在知上。纔知得（天命），便自不容不畏。 |\n\n乙\n\n| 《孟子》原文 | 朱熹的解說 |\n| 說大人，則藐之，勿視其巍巍然。堂高數仞，榱題數尺，我得志，弗為也；食前方丈，侍妾數百人，我得志，弗為也；……在彼者，皆我所不為也；在我者，皆古之制也。吾何畏彼哉！ | 這為世上有人把大人許多崇高富貴當事，有言不敢出口，故孟子云爾。 /  / 《論語》說「畏大人」，此卻說「藐大人」。大人固當畏，而所謂「藐」者，乃不是藐他，只是藐他許多「堂高數仞，榱題數尺」之類。 |\n\n下列人物及其言行表現，與孟子所藐的「大人」最接近的是：\n\n|  | 人物 | 言行表現 |\n|\n\n![圖表](/assets/banks/gsat-111-chinese/G23-25-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G23-25-figure-2.png)",
+    "correct": "| 楊素 | 奢貴自奉，禮異人臣。每公卿入言，賓客上謁，未嘗不踞床而見 |",
+    "wrong": [
+      "| 鄭文公 | 無禮於晉，且貳於楚也 |\n|",
+      "| 項羽 | （樊噲）瞋目視項王，……項王按劍而跽曰：「客何為者？」 |\n|",
+      "| 劉備 | （劉備）每與臣（諸葛亮）論此事，未嘗不嘆息痛恨於桓、靈也 |\n|"
+    ],
+    "exp": "正確答案：| 楊素 | 奢貴自奉，禮異人臣。每公卿入言，賓客上謁，未嘗不踞床而見 |。來源：111年學科能力測驗國文第24題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 24,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "D",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G23-25-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G23-25-figure-2.png"
+    ],
+    "passRate": 0.53,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
+  },
+  {
+    "id": "gsat-111-chinese-q25",
+    "difficulty": "medium",
+    "q": "【共用閱讀資料】\n<u>23-25為題組</u>。閱讀下文，回答23-25題。\n\n甲\n\n| 《論語》原文 | 朱熹的解說 |\n| 子曰：「君子有三畏：畏天命，畏大人，畏聖人之言。小人不知天命，而不畏也，狎大人，侮聖人之言。」 | 「大人」不止有位者，是指有位、有齒、有德者。 /  / 「畏天命」三字好。是理會得道理，便謹去做，不敢違，便是畏之也。如非禮勿視聽言動，與夫戒慎恐懼，皆所以畏天命也。 /  / 要緊全在知上。纔知得（天命），便自不容不畏。 |\n\n乙\n\n| 《孟子》原文 | 朱熹的解說 |\n| 說大人，則藐之，勿視其巍巍然。堂高數仞，榱題數尺，我得志，弗為也；食前方丈，侍妾數百人，我得志，弗為也；……在彼者，皆我所不為也；在我者，皆古之制也。吾何畏彼哉！ | 這為世上有人把大人許多崇高富貴當事，有言不敢出口，故孟子云爾。 /  / 《論語》說「畏大人」，此卻說「藐大人」。大人固當畏，而所謂「藐」者，乃不是藐他，只是藐他許多「堂高數仞，榱題數尺」之類。 |\n\n下列關於資料甲、乙的敘述，最適當的是：\n\n![圖表](/assets/banks/gsat-111-chinese/G23-25-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G23-25-figure-2.png)",
     "correct": "合於古制的大人，當不為孟子所藐，且同於孔子所畏",
     "wrong": [
       "小人所狎，是那些徒有高位，但非齒、德兼備的大人",
       "彼等小人專為狎大人、侮聖人之事，因此無法知天命",
       "孟子提出藐大人的說法，是因自己本無意於大人之位"
     ],
-    "exp": "朱熹解釋孔孟觀點並不衝突，孔子畏其德位，孟子藐其外在富貴。來源：111學測國綜第25題 。",
-    "subject": "思想比較"
+    "exp": "正確答案：合於古制的大人，當不為孟子所藐，且同於孔子所畏。來源：111年學科能力測驗國文第25題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 25,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        7
+      ],
+      "answer": "C",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        23,
+        25
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G23-25-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G23-25-figure-2.png"
+    ],
+    "passRate": 0.5,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "26",
+    "id": "gsat-111-chinese-q33",
     "difficulty": "medium",
-    "q": "下列各組「」內的詞，意義前後相同的是（多選）：",
-    "correct": "「悉」來合券／「悉」以充贈；向使四君卻客而不「內」／毋「內」諸侯",
+    "q": "【共用閱讀資料】\n<u>33-34為題組</u>。閱讀下文，回答33-34題。\n\n道士笑曰：「我固謂不能作苦，今果然。明早當遣汝行。」王曰：「弟子操作多日，師略授小技，此來為不負也。」道士問：「何術之求？」王曰：「每見師行處，牆壁所不能隔，但得此法足矣。」道士笑而允之。乃傳以訣，令自咒畢，呼曰：「入之！」王面牆不敢入。又曰：「試入之。」王果從容入，及牆而阻。道士曰：「俯首輒入，勿逡巡！」王果去牆數步，奔而入，及牆，虛若無物，回視，果在牆外矣。大喜，入謝。道士曰：「歸宜潔持，否則不驗。」遂助資斧遣之歸。抵家，自詡遇仙，堅壁所不能阻。妻不信。王效其作為，去牆數尺，奔而入；頭觸硬壁，驀然而踣。妻扶視之，額上墳起如巨卵焉。妻揶揄之。王慚忿，罵老道士之無良而已。（蒲松齡《聊齋志異・勞山道士》）\n\n甲\n\n奇門遁甲之書，所在多有，然皆非真傳。真傳不過口訣數語，不著諸紙墨也。德州宋先生清遠言：曾訪一友，友留之宿，曰：「良夜月明，觀一戲劇可乎？」因取凳十餘，縱橫布院中，與清遠明燭飲堂上。二鼓後，見一人踰垣入，環轉階前，每遇一凳，輒蹣跚，努力良久，乃跨過。始而順行，曲踊一二百度；轉而逆行，又曲踊一二百度。疲極踣臥，天已向曙矣。友引至堂上，詰問何來。叩首曰：「吾實偷兒，入宅以後，惟見層層皆短垣，愈越愈不能盡，窘而退出，又愈越愈不能盡，故困頓見擒，死生惟命。」友笑遣之。謂清遠，曰：「昨卜有此偷兒來，故戲以小術。」問：「此何術？」曰：「奇門法也。他人得之，恐召禍；君真端謹，如願學，當授君。」清遠謝不願。友太息曰：「願學者不可傳，可傳者不願學，此術其終絕矣。」意若有失，悵悵送之返。（紀昀《閱微草堂筆記・如是我聞二》）\n\n乙\n\n上引甲、乙二文皆以記敘為主。關於文中運用的寫作手法，敘述最適當的是：（占2分，單選題）\n\n![圖表](/assets/banks/gsat-111-chinese/G33-34-figure-1.png)\n![圖表](/assets/banks/gsat-111-chinese/G33-34-figure-2.png)",
+    "correct": "甲文未見作者現身說法；乙文則隱然有作者身影，且於述說宋清遠及其友人的故事前表達看法",
     "wrong": [
-      "吾十「有」五／男「有」分",
-      "小學而大遺，吾未「見」其明也／鬚眉畢「見」",
-      "庭中始為籬，「已」為牆／「已」不概見矣"
+      "甲文從頭至尾順時敘寫；乙文「二鼓後，……友笑遣之」則是在順時敘寫之外插補的追憶",
+      "甲文的「牆」是王生的學習場所，也象徵王生的心理障礙；乙文的「短垣」是偷兒的關卡，也象徵宋清遠畏苦怕難",
+      "甲文藉妻「揶揄」與王生「慚忿」的對比，凸顯王生的愧疚；乙文藉宋清遠「謝」與友人「悵然」的對比，凸顯宋清遠的清高"
     ],
-    "exp": "正確組意義分別為「皆」與「接納（通納）」 [cite: 3]。來源：111學測國綜第26題 。",
-    "subject": "文言字義"
+    "exp": "正確答案：甲文未見作者現身說法；乙文則隱然有作者身影，且於述說宋清遠及其友人的故事前表達看法。來源：111年學科能力測驗國文第33題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 33,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        10
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        33,
+        34
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [
+      "/assets/banks/gsat-111-chinese/G33-34-figure-1.png",
+      "/assets/banks/gsat-111-chinese/G33-34-figure-2.png"
+    ],
+    "passRate": 0.64,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   },
   {
-    "id": "27",
+    "id": "gsat-111-chinese-q37",
     "difficulty": "medium",
-    "q": "依據關於親子聯繫時間的判斷文，下列解讀適當的是（多選）：",
-    "correct": "除非另有協議，某方能與孩子聯繫的時間僅為每週一、三、五晚上；條件制約的結果為「每週一、三、五晚上7時至8時之間，且每日合計不得超過30分鐘」",
+    "q": "【共用閱讀資料】\n35-37為題組。閱讀下文，回答35-37題。\n卡夫卡說：「世上有無窮的希望，只是不屬於我們。」他筆下的人物，都致力於看\n似可及的目標，卻始終搆不到成功的邊。在這驟然黯淡的世界，把卡夫卡的話反過來講\n好像也通：「世上毫無希望，除了屬於我們的希望。」\n我講的是氣候變遷。人們絞盡腦汁想控制碳排放，實在頗有卡夫卡小說的氣氛。我\n常聽人說：只要眾志成城，就能「解決」氣候變遷問題—在1988年有科學證據時，這\n可能是事實，但過去三十年，排放到大氣中的碳，卻相當於兩百年來工業化社會的碳排\n放量。\n科學家研判：倘若全球平均溫度上升超過2℃，大勢將無可挽回。「政府間氣候變\n遷專門委員會」的說法是：要把上升溫度控制在2℃以內，必須在「下一個」三十年間，\n把淨排放降到零。\n決策人士所提的解方，在我看來應有幾個先決條件。首先，製造汙染的國家得關閉\n大部分能源與運輸的基礎設施。根據《自然》期刊某篇論文的說法，現有全球基礎設施\n倘若運作到正常壽命終止，碳排放量將超出大災難來臨前所能接受的限額—這還不\n包括數千個施工中和已規劃的計畫。其次，應有周全的能源政策。說到這裡，不得不提\n個笑話—歐盟使用生質燃料，卻使印尼因種植油棕樹、採收棕櫚油而加速濫伐。最後，\n人人對受限的生活必須照單全收，為後世、為遠方受威脅的國家忍受不便。\n你可以說我悲觀，但我實在不覺得人們能在短期內貫徹解方。有些行動派人士主張，\n若公開承認問題無法解決，會降低大眾採取改善行動的意願。這讓我想到某些宗教領袖，\n生怕大眾若少了永遠得救的保證，就懶得循規蹈矩。我因此很好奇，倘若我們決定告訴\n自己真相，接下來會如何？\n長遠來說，當溫度越過無法回頭的點，我們只能接受世界的變化。但短期來看，碳\n排放減半，多少可延緩面對臨界點的時間。宗教改革時有個教義問題：行善是因為能進\n天堂？或單純因為行善是好事？如今儘管「天堂」是個問號，你還是很清楚，如果人人\n行善，世界就可能更好。（改寫自強納森‧法蘭岑〈倘若我們不再假裝〉）\n\n第 11 頁 111年學測\n共 11 頁國語文綜合能力測驗\n\n下列2021年的新聞，能印證作者「悲觀面」想法的是？",
+    "correct": "英、美等國承諾，2022年底前終止海外未減排化石燃料的直接投資，日、韓等大金主國未加入連署",
     "wrong": [
-      "判決文的「條件」僅指「除了兩造另有協議及放假日外」",
-      "每週二、四兩日，為自由聯繫時間，不受每日30分鐘之限制",
-      "假如每週一、三、五遇放假日，也須比照平日約定計算時長"
+      "已開發國家承諾於2023年前，每年提供1000億美元協助開發中國家因應氣候變遷",
+      "懸宕多年的《巴黎協定》全球碳交易市場規則，於氣候峰會確立架構，有助於政府與企業交換碳權",
+      "印度提議將氣候峰會協定的措辭，由碳排放「逐步淘汰」改為「逐步減少」，獲中國、伊朗、南非等國支持"
     ],
-    "exp": "本題測驗法律文本的條件與結果邏輯。來源：111學測國綜第27題 。",
-    "subject": "邏輯應用"
-  },
-  {
-    "id": "28",
-    "difficulty": "medium",
-    "q": "關於林語堂〈孤崖一枝花〉的描述及其寓意，敘述適當的是（多選）：",
-    "correct": "花朵以其美麗引人目光，卻非為了迎合路人方始盛開；花開喻指忠實展現自我，孤崖喻指不被他人理解的處境",
-    "wrong": [
-      "花朵扎根於堅硬的石縫裡，故能避風躲雨，綻放光彩",
-      "花朵之生滅既取決於栽植環境，也受到栽植方法影響",
-      "花開喻指為社會奉獻的志意，孤崖喻指忘懷得失的人格"
-    ],
-    "exp": "作者強調「率性」，即不論是否有人看見，皆要展現本性。來源：111學測國綜第28題 。",
-    "subject": "現代散文寓意"
-  },
-  {
-    "id": "29",
-    "difficulty": "hard",
-    "q": "某導演籌拍南宋背景劇，下列編劇構想中時代與敘述正確的是（多選）：",
-    "correct": "依序排列《詩經》、《楚辭》、《世說》、《杜工部集》顯示掌握文學順序；安排男主角自述認同陶潛、周敦頤，表現不慕榮利、高潔性格",
-    "wrong": [
-      "男主角以「欲窮千里目，更上一層樓」回應流水對",
-      "女主角引用元、白「新樂府」規勸男主角別盡是吟風弄月",
-      "男主角讀《三國演義》卷首的〈臨江仙〉"
-    ],
-    "exp": "南宋已有上述四書；陶潛為先聖，周敦頤為北宋理學家。其餘項涉及後世作品或文體不合。來源：111學測國綜第29題 。",
-    "subject": "文學常識"
-  },
-  {
-    "id": "30",
-    "difficulty": "hard",
-    "q": "關於龔鼎孳〈吃野菜說〉的寫法與文意，敘述適當的是（多選）：",
-    "correct": "本文先敘春景，繼而談野菜味，接著論心中感，最後期許士大夫；文中兩次提到「達官貴人」，第二次是批判其對下層民生的漠然",
-    "wrong": [
-      "作者援引蘇軾，認為野菜對寒士而言勝過太牢之饌",
-      "文中提到中原現況是烏鳶與饑民搶食其賴以維生的雁糞、榆皮",
-      "「不可無」，指士大夫須食野菜方能回歸素樸自然之味"
-    ],
-    "exp": "作者藉吃野菜感嘆民生疾苦，並期許官員體恤百姓。來源：111學測國綜第30題 。",
-    "subject": "古典散文"
-  },
-  {
-    "id": "31",
-    "difficulty": "medium",
-    "q": "關於鄭燮（鄭板橋）對讀書的見解，敘述適當的是（多選）：",
-    "correct": "以孔子和蘇軾為例，說明讀書貴在鑽研不懈，而非只是迅速瀏覽；以〈項羽本紀〉為例，說明讀書必須懂得慎擇和精讀",
-    "wrong": [
-      "以孔子韋編三絕說明其有過目成誦的本領",
-      "以蘇軾讀〈阿房宮賦〉說明夜闌人靜更能領略況味",
-      "以虞世南書不再讀說明盡信書不如無書"
-    ],
-    "exp": "鄭燮主張讀書不應求速，而應精讀、反覆鑽研。來源：111學測國綜第31題 。",
-    "subject": "古典散文"
-  },
-  {
-    "id": "32",
-    "difficulty": "medium",
-    "q": "鄭燮寫信給堂弟鄭墨，適當的書信語言（啟封詞／提稱語／結尾頌詞）是：",
-    "correct": "台啟／足下／近安",
-    "wrong": [
-      "大啟／左右／大安",
-      "敬啟／惠鑒／文安",
-      "鈞啟／如晤／勛安"
-    ],
-    "exp": "對平輩堂弟應使用較親近且平等的稱謂。來源：111學測國綜第32題 。",
-    "subject": "應用文（書信）"
-  },
-  {
-    "id": "33",
-    "difficulty": "hard",
-    "q": "關於《聊齋志異‧勞山道士》與《閱微草堂筆記》提及法術的故事手法，敘述最適當的是：",
-    "correct": "甲文未見作者現身說法；乙文則隱然有作者身影，且於述說前表達看法",
-    "wrong": [
-      "甲文從頭至尾順時敘寫；乙文則是純粹的追憶",
-      "甲文的「牆」象徵王生的心理障礙；乙文的「短垣」象徵畏苦怕難",
-      "甲文藉妻與王生對比凸顯愧疚；乙文藉宋與友人對比凸顯清高"
-    ],
-    "exp": "《閱微草堂筆記》常有作者紀昀的議論口吻，而《聊齋》多為全知敘事。來源：111學測國綜第33題 。",
-    "subject": "文言小說比較"
-  },
-  {
-    "id": "34",
-    "difficulty": "hard",
-    "q": "依據甲、乙二文，學法術的條件三應填入為何？並抄錄對應文句：",
-    "correct": "條件三：品德端謹（或誠心專注）；文句：歸宜潔持，否則不驗（甲文）或君真端謹，如願學，當授君（乙文）",
-    "wrong": [
-      "條件三：天資聰穎",
-      "條件三：背景顯赫",
-      "條件三：不畏艱難"
-    ],
-    "exp": "兩文皆強調法術與人的操守、心態有關 [cite: 4]。來源：111學測國綜第34題 。",
-    "subject": "文本條件分析"
-  },
-  {
-    "id": "35",
-    "difficulty": "hard",
-    "q": "依據〈倘若我們不再假裝〉，人們一直「假裝」能做到什麼事？",
-    "correct": "假裝只要眾志成城，就能「解決」氣候變遷問題",
-    "exp": "作者指出氣候變遷問題已難以逆轉，人們卻仍假裝可以解決。來源：111學測國綜第35題 。",
-    "subject": "現代散文（議論）"
-  },
-  {
-    "id": "36",
-    "difficulty": "hard",
-    "q": "作者希望在氣候變遷問題上，人們應有怎樣的認識與作法？",
-    "correct": "應正視真相（承認問題不可完全解決），但仍須盡力行善（減少排碳）以改善現狀",
-    "exp": "作者以宗教行善為喻，強調即便沒有「天堂」的保證，行善本身仍是必要的。來源：111學測國綜第36題 。",
-    "subject": "現代散文（議論）"
-  },
-  {
-    "id": "37",
-    "difficulty": "hard",
-    "q": "下列2021年的新聞，哪一項最能印證作者在氣候變遷問題上的「悲觀面」想法？",
-    "correct": "英、美等國承諾終止海外化石燃料投資，但日、韓等大金主國未加入連署；印度提議將「逐步淘汰」改為「逐步減少」，獲中、南非等國支持",
-    "wrong": [
-      "已開發國家承諾提供1000億美元協助發展中國家",
-      "《巴黎協定》全球碳交易市場規則確立架構",
-      "所有開發中國家皆同意立即停止使用化石燃料"
-    ],
-    "exp": "這些新聞反映了各國在利益衝突下難以達成共識且行動遲緩 [cite: 5]。來源：111學測國綜第37題 。",
-    "subject": "新聞印證"
+    "exp": "正確答案：英、美等國承諾，2022年底前終止海外未減排化石燃料的直接投資，日、韓等大金主國未加入連署。來源：111年學科能力測驗國文第37題。",
+    "subject": "國文",
+    "sub_topic": "國文綜合",
+    "source": {
+      "exam": "gsat-111-chinese",
+      "question": 37,
+      "file": "高中/學測/國文/01-1-111學測國綜試卷.pdf",
+      "url": "https://drive.google.com/file/d/11lbd2cDSHfZW_hdfHV6YwNgU2xfneS-G/view?usp=drivesdk",
+      "pages": [
+        11,
+        12
+      ],
+      "answer": "B",
+      "answerUrl": "https://www.ceec.edu.tw/files/file_pool/1/0m052627939544064589/01-111%e5%ad%b8%e6%b8%ac%e5%9c%8b%e8%aa%9e%e6%96%87%e7%b6%9c%e5%90%88%e8%83%bd%e5%8a%9b%e6%b8%ac%e9%a9%97%e9%81%b8%e6%93%87%e9%a1%8c%e7%ad%94%e6%a1%88.pdf",
+      "group": [
+        35,
+        37
+      ]
+    },
+    "difficultySource": "official-pass-rate",
+    "requiredImages": [],
+    "passRate": 0.69,
+    "passRateSource": "https://drive.google.com/file/d/1Pzu_Pw8vZGV074zemF0BQp59nJgQgEsO/view?usp=drive_link",
+    "contentFormat": "text-and-figures-v2"
   }
 ]
-

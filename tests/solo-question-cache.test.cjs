@@ -151,9 +151,9 @@ test('seen-question history survives reload and blocks exact or long structural 
 
 test('solo quiz uses restored active question before hitting the API and saves each prefetched result', () => {
   assert.match(legacy, /let nextQ = soloQuestionCache.getActive\(\) \|\| soloQuestionCache.takeNext\(\)/);
-  assert.match(legacy, /const BUFFER_SIZE = 1;/);
+  assert.match(legacy, /const BUFFER_SIZE = 5;/);
   assert.match(legacy, /if \(!nextQ && isFetchingBuffer\)/);
-  assert.match(legacy, /if \(isFetchingBuffer\) return bufferFillPromise/);
+  assert.match(legacy, /if \(isFetchingBuffer\) return firstReady \? bufferNextQuestionPromise : bufferFillPromise/);
   assert.match(legacy, /soloQuestionCache.append\(question\)/);
   assert.match(legacy, /soloQuestionCache.setActive\(q\)/);
   assert.match(legacy, /soloQuestionCache\.consumeActive\(\{ remember: true \}\)/);
@@ -232,7 +232,7 @@ test('helper replies expose knowledge-point extended practice', () => {
   assert.match(legacy, /quiz-helper-practice-btn/);
   assert.match(legacy, /window\.startQuizExtendedPractice = async/);
   assert.match(legacy, /async function fetchExtendedPracticeQuestion\(practice = extendedPracticeState\)/);
-  assert.match(legacy, /let specificTopic = knowledgePoint/);
+  assert.match(legacy, /specificTopic: knowledgePoint/);
   assert.match(legacy, /extendedPracticeState\.active/);
   assert.match(legacy, /window\.endQuizExtendedPractice =/);
   assert.match(xianxia, /\.quiz-helper-practice-btn/);
@@ -246,4 +246,14 @@ test('core import and page query change together to refresh browser cached code'
   assert.match(main, /main-legacy\.js\?v=20261013-arrival1/);
   assert.match(index, /main\.js\?v=20261013-arrival1/);
   assert.match(index, /xianxia\.css\?v=20261013-ai-scenes1/);
+});
+
+test('assistance on the exact active question survives reload and cannot replace an unanswered question',()=>{
+  const {createSoloQuestionCache}=cacheAPI(),storage=createMemoryStorage(),cache=createSoloQuestionCache(storage);
+  cache.activate('uid-help',scope());const quiz=makeQuiz('待答且已使用提示的題目');quiz.adaptive={questionId:'help-question'};
+  cache.setActive(quiz);quiz.adaptiveHelp=2;quiz.adaptiveLessonHelp=true;
+  assert.equal(cache.persistActive(quiz),true);assert.equal(cache.persistActive({...quiz,data:{...quiz.data,q:'另一題'}}),false);
+  const reloaded=createSoloQuestionCache(storage);reloaded.activate('uid-help',scope());
+  assert.equal(reloaded.getActive().adaptiveHelp,2);assert.equal(reloaded.getActive().adaptiveLessonHelp,true);assert.equal(reloaded.getActive().data.q,quiz.data.q);
+  cache.consumeActive();assert.equal(cache.persistActive(quiz),false);
 });
