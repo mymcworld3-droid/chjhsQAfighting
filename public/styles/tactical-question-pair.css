@@ -1,0 +1,107 @@
+/* 體力分支雙題共用自由問道的深青綠、宣紙題卷與玉色選項風格。
+   僅套用於戰場答題，不改動中央地圖與左右四分之一圓操控。 */
+#tactical-combat .tc-modal:has(.tc-quiz) {
+  --xq-ink:#0d211f;--xq-surface:#142d29;--xq-paper:#f1e9d5;
+  --xq-gold:#d4b879;--xq-jade:#9dc6ac;--xq-muted:#aab7a6;
+  --review-muted:#aab7a6;--review-paper:#f1e9d5;
+  --quiet-line:rgba(199,181,133,.25);--glass-bg:rgba(19,42,37,.94);
+  background:linear-gradient(110deg,rgba(8,26,23,.96),rgba(8,26,23,.99))!important;
+  padding:12px;place-items:stretch center;
+}
+#tactical-combat .tc-quiz {
+  color:#eee8d5;
+  width:min(1360px,100%)!important;
+  max-height:100%;min-height:0;
+  overflow:auto;overscroll-behavior:contain;
+  padding:10px 14px 20px!important;
+  display:flex;flex-direction:column;
+  font-family:var(--xq-serif,'Noto Serif TC',serif);
+}
+#tactical-combat .tc-quiz .tc-dialog-heading{position:sticky;top:0;z-index:4;background:#0d211ff2;padding:5px 4px 12px}
+#tactical-combat .tc-quiz .tc-dialog-heading small{color:#d4b879;line-height:1.5}
+#tactical-combat .tc-quiz .tc-dialog-heading button{color:#f1e9d5!important}
+#tactical-combat .tc-quiz .tc-pair-column{min-width:0;display:flex;flex-direction:column;gap:14px}
+#tactical-combat .tc-pair-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#f1e9d5;flex-wrap:wrap}
+#tactical-combat .tc-pair-heading strong{font-size:18px;letter-spacing:.06em}
+#tactical-combat .tc-pair-heading span{font-size:12px;color:#aab7a6}
+#tactical-combat .tc-pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:18px}
+#tactical-combat .tc-pair-entry{display:flex;flex-direction:column;gap:12px;min-width:0}
+#tactical-combat .tc-pair-entry .tc-question-sheet.glass-panel{
+  position:relative;margin:0;min-height:132px;
+  background:linear-gradient(110deg,#efe7cf,#e0d6b9)!important;
+  border:1px solid #c5b480!important;border-left:5px solid #8c7750!important;
+  border-radius:4px!important;
+  padding:46px 20px 15px!important;
+  color:#25392e!important;
+  box-shadow:0 14px 35px #04151140,inset 0 0 35px #947b4620!important;
+}
+#tactical-combat .tc-pair-entry .tc-question-number{position:absolute;top:12px;left:16px;font-size:12px;color:#64573a;font-weight:700}
+#tactical-combat .tc-pair-entry .quiz-card-tools{top:10px;right:12px;max-width:62%}
+#tactical-combat .tc-pair-entry .tc-question-badge{
+  color:#64573a!important;background:#c9b98e33!important;border-color:#96855760!important;
+  max-width:100%;font-size:11px;overflow-wrap:anywhere;
+}
+#tactical-combat .tc-pair-entry .tc-question,
+#tactical-combat .tc-pair-entry .tc-question *{
+  color:#25392e!important;text-shadow:none!important;
+}
+#tactical-combat .tc-pair-entry .tc-question{font-size:18px!important;line-height:1.9!important;font-weight:500!important;letter-spacing:.02em}
+#tactical-combat .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
+#tactical-combat .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) *{color:inherit!important}
+#tactical-combat .tc-pair-card-tools{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;padding-top:9px;border-top:1px solid #96855755}
+#tactical-combat .tc-pair-card-tools button{font-size:11px;min-height:32px!important;padding:5px 10px!important;border:1px solid #86988377!important;border-radius:4px!important;background:#19352c!important;color:#f1e9d5!important}
+#tactical-combat .tc-pair-entry .tc-options{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+#tactical-combat .tc-pair-entry .tc-options>button{
+  min-width:0;min-height:60px;margin:0;padding:12px 14px;
+  display:flex;gap:12px;align-items:center;text-align:left;line-height:1.65;
+  background:#173128!important;color:#eee8d5!important;
+  border:1px solid #b4ae8650!important;border-radius:5px!important;box-shadow:none!important;
+}
+#tactical-combat .tc-pair-entry .tc-options>button:not(:disabled):hover{background:#254534!important;border-color:#d1bd7d!important}
+#tactical-combat .tc-pair-entry .tc-options>button.is-picked{
+  background:#27553d!important;border-color:#f3d18c!important;box-shadow:inset 0 0 0 1px #f3d18c,0 0 15px #a8c89a3b!important;
+}
+#tactical-combat .tc-pair-entry .tc-options>button>span:first-child{
+  flex:0 0 30px;min-height:32px;display:grid;place-items:center;
+  color:#decb98!important;background:#a5b58a12;border:1px solid #a7ac7750;border-radius:3px;font-size:13px;
+}
+#tactical-combat .tc-pair-entry .tc-options>.bg-green-600{background:#285a40!important;border-color:#a8d1a4!important;opacity:1!important}
+#tactical-combat .tc-pair-entry .tc-options>.bg-red-600{background:#6b3830!important;border-color:#d9a492!important;opacity:1!important}
+#tactical-combat .tc-pair-entry .tc-options>button:disabled{opacity:1}
+#tactical-combat .tc-pair-entry .tc-feedback.glass-panel{
+  background:linear-gradient(135deg,#1f372d,#112520)!important;
+  border:1px solid #a6b78d70!important;border-radius:6px!important;
+  padding:14px!important;display:flex;gap:10px;min-width:0;
+}
+#tactical-combat .tc-pair-entry .tc-feedback-title.tc-correct{color:#b2e0b7!important}
+#tactical-combat .tc-pair-entry .tc-feedback-title.tc-wrong{color:#efb496!important}
+#tactical-combat .tc-pair-entry .tc-feedback-text{color:#eee8d5;line-height:1.8}
+#tactical-combat .tc-pair-footer{
+  position:sticky;bottom:0;z-index:3;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 12px;
+  border:1px solid #9aaf8873;background:#102b24f5;box-shadow:0 -4px 28px #081811a8;
+}
+#tactical-combat .tc-pair-footer span{color:#d9d4b7;font-size:13px}
+#tactical-combat .tc-pair-footer [data-submit-pair],
+#tactical-combat .tc-pair-footer [data-continue]{min-width:180px;min-height:46px;border-radius:5px;background:#2a5942!important;color:#fff4df!important;border:1px solid #a4c5a0!important}
+#tactical-combat .tc-pair-footer button:disabled{opacity:.45;cursor:not-allowed}
+#tactical-combat .tc-pair-complete{font-size:13px;color:#b3e3b7}
+#tactical-combat .tc-pair-column>.tc-question-tools{border:0;padding:0}
+#tactical-combat .tc-pair-column>.tc-question-tools>.tc-tools-buttons{display:none}
+#tactical-combat .tc-quiz .tc-tool-overlay{z-index:8}
+@media(max-width:850px){
+  #tactical-combat .tc-pair-grid{grid-template-columns:1fr;gap:22px}
+  #tactical-combat .tc-quiz{width:min(820px,100%)!important;padding:6px 8px 16px!important}
+  #tactical-combat .tc-pair-entry .tc-question{font-size:17px!important}
+  #tactical-combat .tc-pair-entry .tc-options>button{min-height:56px}
+  #tactical-combat .tc-pair-footer{padding:10px}
+}
+@media(max-width:420px){
+  #tactical-combat .tc-modal:has(.tc-quiz){padding:6px}
+  #tactical-combat .tc-pair-footer [data-submit-pair],#tactical-combat .tc-pair-footer [data-continue]{flex:1;min-width:0}
+  #tactical-combat .tc-pair-heading strong{font-size:16px}
+  #tactical-combat .tc-pair-entry .tc-question-sheet.glass-panel{padding:42px 14px 14px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat .tc-pair-entry .tc-options>button{transition:none!important}
+}
