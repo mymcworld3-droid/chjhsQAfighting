@@ -182,16 +182,58 @@
 #tactical-combat .tc-quiz .tc-pair-submit [data-pair-status]{
   color:#aab7a6;font-size:13px;text-align:center;
 }
-#tactical-combat .tc-quiz .tc-pair-previous{
-  margin-bottom:4px;
-  padding:10px 14px;
-  border:1px solid #8fba9380;
-  border-radius:5px;
-  background:#193c2c;
-  color:#d4f0d0;
-  text-align:center;
-  font-size:13px;
-  line-height:1.6;
+/* The previously graded answer stays readable while question two is active.
+   The player controls when to collapse the explanation; there is no timer. */
+#tactical-combat .tc-quiz .tc-previous-explanation{
+  margin:0 0 20px;padding:0;
+  border:1px solid #91ae8e9c;
+  border-left:4px solid #b9b174;
+  border-radius:7px;
+  background:linear-gradient(120deg,#203b30,#11251f);
+  color:#f1e9d5;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation>summary{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 16px;cursor:pointer;
+  font-size:13px;line-height:1.5;
+  border-radius:6px;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation>summary:focus-visible{
+  outline:2px solid #e8d39a;outline-offset:-3px;
+}
+#tactical-combat .tc-quiz .tc-previous-result{
+  flex:0 0 auto;color:#a9ecc0;font-weight:800;
+}
+#tactical-combat .tc-quiz .tc-previous-result.is-wrong{color:#f2b6a4}
+#tactical-combat .tc-quiz .tc-previous-summary-hint{
+  color:#d5d1b3;text-align:right;font-size:12px;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation-body{
+  display:grid;gap:12px;padding:16px;
+  border-top:1px solid #a3b79b48;
+  font-size:13px;line-height:1.85;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation-body :is(.tc-previous-question,.tc-previous-answer,.tc-previous-explanation-text){
+  padding:12px 14px;border:1px solid #7f9b7b55;border-radius:5px;
+  background:#0e211caa;min-width:0;overflow-wrap:anywhere;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation-body strong{
+  display:block;margin-bottom:6px;color:#dbc68f;font-size:12px;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation-body .tc-previous-answer.is-answer{
+  border-color:#8aba8a80;background:#193b2bac;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation-body .tc-previous-answer.is-answer strong{
+  color:#a8e4af;
+}
+#tactical-combat .tc-quiz .tc-previous-explanation-body :is(.tc-previous-question,.tc-previous-answer,.tc-previous-explanation-text) :is(mjx-container,.MathJax,.katex,math){
+  color:inherit!important;
+}
+#tactical-combat .tc-quiz .tc-previous-report{
+  justify-self:start;min-height:36px!important;
+  background:transparent!important;border:1px solid #bdaf7c75!important;
+  border-radius:5px!important;color:#e5d5a9!important;
+  padding:7px 12px!important;font-size:12px;
 }
 #tactical-combat .tc-quiz .tc-pair-submit [data-submit-pair]{
   width:100%;min-height:46px;
