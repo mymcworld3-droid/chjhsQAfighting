@@ -6,7 +6,6 @@ const $=id=>document.getElementById(id);
 const Ecology=globalThis.QAHomeTrialEcology;
 const Tactical=globalThis.QATactical;
 let initialized=false,selectedUid='',loadedPreview=null,query=null,lastQueryAt=0;
-let homeLeftRail=null,homeRightRail=null,homeLayout=null;
 
 function currentUid(){return getMainUser?.()?.uid||'';}
 function visible(){return $('page-home')?.classList.contains('active-page')===true;}
@@ -79,24 +78,6 @@ function activate(action){
       if(window.switchToPage?.('page-social')!==false)window.switchSocialTab?.('shares');return;
   }
 }
-// On portrait Safari, the app scrolls inside <main>. Put the two sidebar
-// panels directly beneath <body> so their position:fixed is always based on
-// the visual viewport, regardless of future page transforms or scroll state.
-// Landscape restores the original layout ownership without cloning buttons.
-function syncPortraitRails(){
-  if(!homeLeftRail||!homeRightRail||!homeLayout)return;
-  const portrait=window.matchMedia?.('(orientation: portrait)').matches ??
-    window.innerHeight>window.innerWidth;
-  if(portrait){
-    if(homeLeftRail.parentElement!==document.body)document.body.appendChild(homeLeftRail);
-    if(homeRightRail.parentElement!==document.body)document.body.appendChild(homeRightRail);
-  }else{
-    const emblem=$('home-realm-emblem'),practice=homeLayout.querySelector('.home-practice');
-    if(homeLeftRail.parentElement!==homeLayout)homeLayout.insertBefore(homeLeftRail,emblem||homeLayout.firstChild);
-    if(homeRightRail.parentElement!==homeLayout)homeLayout.insertBefore(homeRightRail,practice||null);
-  }
-  document.body.classList.toggle('home-rails-portal',portrait);
-}
 function mirrorAlert(sourceId,action){
   const target=document.querySelector('[data-home-alert="'+action+'"]');
   const source=$(sourceId);
@@ -109,20 +90,10 @@ function init(){
   if(initialized||!$('home-realm-emblem'))return;
   initialized=true;
   const root=$('page-home');
-  homeLayout=root.querySelector('.home-layout');
-  homeLeftRail=root.querySelector('.home-wireframe-rail.is-left');
-  homeRightRail=root.querySelector('.home-wireframe-rail.is-right');
-  // Delegation on document preserves the original shortcuts after the panels
-  // are hoisted out of the internally scrolling <main> on portrait screens.
-  document.addEventListener('click',event=>{
+  root.addEventListener('click',event=>{
     const button=event.target.closest?.('[data-home-action]');
-    if(!button||!visible())return;
-    if(root.contains(button)||homeLeftRail?.contains(button)||homeRightRail?.contains(button))
-      activate(button.dataset.homeAction);
+    if(button&&root.contains(button))activate(button.dataset.homeAction);
   });
-  syncPortraitRails();
-  window.addEventListener('resize',syncPortraitRails);
-  window.addEventListener('orientationchange',syncPortraitRails);
   for(const name of ['xiuxian:user-data-ready','xiuxian:user-ready','xiuxian:stats-updated'])
     window.addEventListener(name,update);
   window.addEventListener('xiuxian:tactical-trial-updated',event=>{
