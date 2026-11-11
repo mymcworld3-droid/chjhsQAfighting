@@ -204,6 +204,12 @@ function accept(next,serial){
   const oldQuestion=state?.question?.id;
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   state=next;if(!keepSelection)selection=null;
+  if(next?.mode==='pve'&&next.trial){
+    // Send only the authoritative habitat metadata, not actor/quiz state.
+    window.dispatchEvent(new CustomEvent('xiuxian:tactical-trial-updated',{
+      detail:{uid,trial:next.trial,terrain:next.terrain,map:next.map}
+    }));
+  }
   if(modalOpen&&$('[data-choice]')&&oldQuestion&&!next?.question){hideModal();notice('本輪答題已結束，請查看戰場。');}
   paint({preserveModal:modalOpen});
 }
