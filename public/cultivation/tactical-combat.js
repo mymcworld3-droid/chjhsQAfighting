@@ -857,22 +857,45 @@ function pairWhiteboardMarkup(){
     </div>
   </section>`;
 }
+function previousQuestionExplanation(q,review,index){
+  if(!q||!review)return '';
+  const opts=review.opts||q.opts||[];
+  const selected=opts[review.choice];
+  const correct=opts[review.answerIndex];
+  const selectedText=selected===undefined?'未提供':String.fromCharCode(65+Number(review.choice))+'．'+rich(selected);
+  const correctText=correct===undefined?'未提供':String.fromCharCode(65+Number(review.answerIndex))+'．'+rich(correct);
+  return `<details class="tc-previous-explanation" open>
+    <summary>
+      <span class="tc-previous-result ${review.correct?'is-correct':'is-wrong'}">上一題${review.correct?'答對':'答錯'} · 體力 +${Number(review.gain)||0}</span>
+      <span class="tc-previous-summary-hint">第 ${index+1} 題完整解析（點此收合／展開）</span>
+    </summary>
+    <div class="tc-previous-explanation-body">
+      <div class="tc-previous-question"><strong>上一題題目</strong><div>${rich(review.q||q.q)}</div></div>
+      <div class="tc-previous-answer"><strong>你的答案</strong><span>${selectedText}</span></div>
+      <div class="tc-previous-answer is-answer"><strong>正確答案</strong><span>${correctText}</span></div>
+      <div class="tc-previous-explanation-text"><strong>題解參悟</strong><div>${rich(review.explanation||'本題目前沒有附上詳細解析。')}</div></div>
+      <button type="button" data-question-report-for="${index}" class="tc-previous-report">上一題有錯？回報題目</button>
+    </div>
+  </details>`;
+}
 function pairLayout(reviews=null,questions=pairQuestions){
   const done=Array.isArray(reviews),count=questions.length;
   const current=pairReviews.length;
-  const last=pairReviews[current-1];
-  // Answer one complete free-quiz sheet at a time; only final review lists both.
+  const previous=!done&&current>0?previousQuestionExplanation(questions[current-1],pairReviews[current-1],current-1):'';
+  // Only one UNANSWERED question is displayed. The preceding answer's complete
+  // explanation remains expanded above it, so automatic progression never
+  // removes feedback before the user has time to read.
   const sheets=done?questions.map((q,i)=>questionSheet(q,reviews[i],i)).join(''):
     (questions[current]?questionSheet(questions[current],null,current):'');
   const progress=done?'已完成 '+count+' / '+count+' 題':'第 '+(current+1)+' / '+count+' 題';
   return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'} · ${progress}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
   <div class="quiz-question-helper-layout helper-collapsed">
     <div class="quiz-main-column tc-pair-column">
+      ${previous}
       <div class="tc-pair-list">${sheets}</div>
       ${done?`<div class="tc-pair-summary" role="status"><i class="fa-solid fa-circle-check"></i> 本次答對 ${reviews.filter(r=>r.correct).length} / ${reviews.length} 題 · 修為與體力已結算</div>
           <div class="flex gap-3 tc-pair-buttons"><button type="button" data-exit class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回宗門</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">返回戰場</button></div>`:
         `<div class="tc-pair-submit">
-           ${last?`<div class="tc-pair-previous" role="status">上一題${last.correct?'答對':'答錯'} · 體力 +${last.gain} · 獎勵已結算，繼續下一題</div>`:''}
            <div data-pair-status role="status" aria-live="polite">第 ${current+1} / ${count} 題 · 點選答案後直接批改。</div>
            <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" hidden>重新送出本題</button>
          </div>`}
