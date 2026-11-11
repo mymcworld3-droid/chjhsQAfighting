@@ -26,6 +26,9 @@ const copyExact = [
   // Adaptive concept diagnosis, practice, learning history and quiz cache.
   'adaptive-learning-api.cjs',
   'public/cultivation/adaptive-learning.js',
+  'public/cultivation/study-question-bridge.js',
+  'public/cultivation/void-retraining-rules.js',
+  'public/cultivation/social-feed.js',
   'public/cultivation/adaptive-learning-rules.js',
   'public/cultivation/curriculum-scope.js',
   'public/solo-question-cache.js',
@@ -47,14 +50,19 @@ const dependencyRoots = [
   'immortal-challenge-api.cjs','immortal-avatar-combat.cjs',
   'martial-trial-api.cjs','trial-tower-scope.cjs'
 ];
-for(const file of [...copyExact,...dependencyRoots]){
+// Bring the MAIN tests that assert the new three feature sets. Old 3-question
+// meditation assertions are not the rules being restored.
+const featureTests=run('ls-tree','-r','--name-only','origin/main','tests').split('\n')
+  .filter(p=>/^tests\/(?:daily-meditation|adaptive-learning|ai-question-bank|bank-catalog|quiz-generation-tasks|quiz-prompt-reliability|parallel-quiz)/.test(p))
+  .filter(p=>p.endsWith('.test.cjs'));
+for(const file of [...copyExact,...dependencyRoots,...featureTests]){
   assert(presentMain(file),'Source missing on main: '+file);
   run('restore','--source=origin/main','--staged','--worktree','--',file);
 }
 
 // Import direct module dependencies needed by the exact updated frontend.
 // Do NOT override an existing stamina module: that would replace battle logic.
-const newFiles = new Set([...copyExact.filter(f=>fs.existsSync(f)&&fs.statSync(f).isFile()),...dependencyRoots]);
+const newFiles = new Set([...copyExact.filter(f=>fs.existsSync(f)&&fs.statSync(f).isFile()),...dependencyRoots,...featureTests]);
 const need = [...newFiles];
 const rgx=/(?:from\s*|import\s*|require\s*\()\s*['"](\.[^'"]+)['"]/g;
 const nodeBuiltins = new Set(require('node:module').builtinModules);
@@ -143,6 +151,11 @@ put('server.js',staminaServer);
 // Use the complete updated adaptive client, keeping the tactical isolation
 // which prevents the obsolete standalone quiz buffer from running in battle.
 let legacy=fromMain('public/main-legacy.js');
+// Never change the stamina branch's actual cultivation realm boundary.
+legacy=once(legacy,"{ name: '合體', sub: '天地合一', need: 642 }","{ name: '合體', sub: '天地合一', need: 788 }");
+legacy=once(legacy,
+ "const BUFFER_SIZE = 5;               // 目前範圍的可用待答題少於五題就背景補足",
+ "const BUFFER_SIZE = 1;               // Preserve stamina's single-question cache budget");
 legacy=once(legacy,
  "function checkSoloQuestionStock() {\n",
  "function checkSoloQuestionStock() {\n    if (window.QA_TACTICAL_BATTLE_ENABLED) return;\n");
