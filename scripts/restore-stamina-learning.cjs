@@ -131,7 +131,7 @@ const replaceBlock=(source,name,block)=>{
  ]){
     current=replaceBlock(current,name,testBlock(old,name));
  }
- put(p,current);
+ put(p,current.trimEnd()+'\n');
 }
 
 // Import direct module dependencies needed by the exact updated frontend.
