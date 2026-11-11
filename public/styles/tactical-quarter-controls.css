@@ -3,7 +3,7 @@
    PvP、答題彈窗、妖獸介紹仍使用原本畫面與流程。 */
 #tactical-combat.tc-quarter-layout{
   --tc-dial: min(30vw,44vh);
-  --tc-wheel:min(39vw,60vh);
+  --tc-wheel:var(--tc-dial); /* right wheel matches the left charging dial */
   --tc-ink:#161b17;
   --tc-gold:#c6b68d;
   background:var(--tc-ink);
@@ -238,7 +238,7 @@
   color:#fff7db!important;
 }
 #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[aria-pressed=true]>span{
-  opacity:0; /* The moving capsule carries the selected label instead. */
+  opacity:0; /* The curved moving sector carries the selected name and cost. */
 }
 #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector:hover:not(:disabled){
   background:#526a50!important;
@@ -248,7 +248,27 @@
 }
 #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector>span{
   position:absolute;display:block;pointer-events:none;
-  white-space:normal;line-height:1.22;overflow-wrap:anywhere;
+  white-space:normal;line-height:1.12;overflow-wrap:anywhere;
+}
+/* Option labels and the sliding outer sector both display the exact cost.
+   Smaller second lines stay within the recessed annular track. */
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-wheel-name{
+  display:block;
+  font-weight:700;
+  line-height:1.1;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-wheel-cost{
+  display:block;
+  margin-top:2px;
+  font-size:.72em;
+  line-height:1.1;
+  font-weight:600;
+  letter-spacing:-.025em;
+  white-space:nowrap;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span{
+  font-size:clamp(9px,1.05vw,16px);
+  line-height:1.06;
 }
 #tactical-combat.tc-quarter-layout .tc-sector-attack>span{
   left:58%;top:39%;width:37%;
@@ -339,7 +359,8 @@
 #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
   width:clamp(50px,29%,114px);
   color:#11271c;
-  font-size:clamp(10px,1.35vw,17px);
+  font-size:clamp(10px,1.2vw,15px);
+  line-height:1.06;
   text-shadow:0 1px 0 #d8ffe599;
 }
 #tactical-combat.tc-quarter-layout .tc-wheel-marker.is-dragging{
@@ -349,7 +370,6 @@
 @media(orientation:portrait){
   #tactical-combat.tc-quarter-layout{
     --tc-dial:min(50vw,31vh);
-    --tc-wheel:min(55vw,37vh);
   }
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
     font-size:clamp(9px,2.7vw,15px)!important;
@@ -359,8 +379,15 @@
     font-size:clamp(9px,2.7vw,13px);
   }
   #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
-    width:clamp(38px,29%,88px);
-    font-size:clamp(9px,2.35vw,12px);
+    width:clamp(42px,30%,88px);
+    font-size:clamp(9px,2.2vw,12px);
+  }
+  #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span{
+    font-size:clamp(9px,2.2vw,12px);
+  }
+  #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-wheel-cost{
+    margin-top:1px;
+    font-size:.74em;
   }
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector{
     font-size:clamp(13px,3.8vw,20px)!important;
@@ -378,7 +405,6 @@
 @media(orientation:landscape) and (max-height:460px){
   #tactical-combat.tc-quarter-layout{
     --tc-dial:min(29vw,48vh);
-    --tc-wheel:min(38vw,58vh);
   }
 }
 @media(prefers-reduced-motion:reduce){
