@@ -103,12 +103,16 @@ function buildGame(){
     // bottom-right attack/move/end-turn dial are visible. Keep unused
     // gameplay data nodes for existing rendering and server code, hidden.
     const command=$('.tc-command');
-    const tick=(i)=>{
-      const angle=(-90+(i+.5)*9)*Math.PI/180;
-      const coordinate=r=>[Math.round(Math.cos(angle)*r*100)/100,
-        Math.round((100+Math.sin(angle)*r)*100)/100];
-      const a=coordinate(80),b=coordinate(95);
-      return `<line data-energy-tick="${i}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"></line>`;
+    // Ten luminous curved segments follow the quarter-circle's perimeter.
+    const energySegment=i=>{
+      const radius=90;
+      const polar=degrees=>{
+        const radians=degrees*Math.PI/180;
+        return [(radius*Math.cos(radians)).toFixed(3),
+          (100+radius*Math.sin(radians)).toFixed(3)];
+      };
+      const start=polar(-90+i*9+1.35),end=polar(-90+(i+1)*9-1.35);
+      return `<path data-energy-segment="${i}" d="M ${start[0]} ${start[1]} A 90 90 0 0 1 ${end[0]} ${end[1]}"></path>`;
     };
     const wedge=(start,end,outer=100,inner=69)=>{
       const points=[];
@@ -125,11 +129,20 @@ function buildGame(){
     const energy=document.createElement('section');
     energy.className='tc-quarter tc-quarter-energy';
     energy.setAttribute('aria-label','答題充能與能量');
-    energy.innerHTML='<svg class="tc-energy-ticks" viewBox="0 0 100 100" aria-hidden="true">'
-      +Array.from({length:10},(_,i)=>tick(i)).join('')+'</svg>';
+    energy.innerHTML='<svg class="tc-energy-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">'
+      +'<path class="tc-energy-track" d="M 0 10 A 90 90 0 0 1 90 100"></path>'
+      +Array.from({length:10},(_,i)=>energySegment(i)).join('')+'</svg>';
     energy.append(command.querySelector('[data-stamina]'));
     const quiz=command.querySelector('[data-quiz]');
-    quiz.innerHTML='<span class="tc-energy-bolt" aria-hidden="true">ϟ</span><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>';
+    // A precise custom lightning vector stays sharp across device sizes.
+    quiz.innerHTML='<svg class="tc-energy-bolt" viewBox="0 0 72 100" aria-hidden="true" focusable="false">'
+      +'<defs><linearGradient id="tc-bolt-gradient" x1="0" y1="0" x2="0.95" y2="1">'
+      +'<stop offset="0%" stop-color="#fcffe5"/><stop offset="48%" stop-color="#d9ffd4"/>'
+      +'<stop offset="100%" stop-color="#8cffb4"/></linearGradient></defs>'
+      +'<path class="tc-bolt-outline" d="M 43 6 L 16 50 Q 14 54 20 54 H 37 L 26 94 L 63 37 H 43 L 50 6 Z"></path>'
+      +'<path class="tc-bolt-fill" d="M 43 6 L 16 50 Q 14 54 20 54 H 37 L 26 94 L 63 37 H 43 L 50 6 Z"></path>'
+      +'<path class="tc-bolt-glint" d="M 42 17 L 27 46 H 40"></path>'
+      +'</svg><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>';
     quiz.setAttribute('aria-label','答題充能');
     energy.append(quiz);
 
@@ -182,7 +195,8 @@ function paint({preserveModal=false}={}){
   if(root.classList.contains('tc-quarter-layout')){
     const amount=Math.max(0,Math.min(R.LIMITS.stamina,me.stamina));
     $('[data-energy-number]').textContent=String(amount);
-    root.querySelectorAll('[data-energy-tick]').forEach(line=>line.classList.toggle('is-filled',Number(line.dataset.energyTick)<amount));
+    root.querySelectorAll('[data-energy-segment]').forEach(segment=>
+      segment.classList.toggle('is-filled',Number(segment.dataset.energySegment)<amount));
     $('[data-quiz]').setAttribute('aria-label',`答題充能，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
@@ -193,7 +207,14 @@ function paint({preserveModal=false}={}){
 function updateControls(){
   if(!$('[data-selection]')||!state)return;
   const me=myActor(),mine=myAction(),sk=R.branchFor(me).skill,animating=renderer?.isAnimating,locked=busy||animating;
-  $('[data-quiz]').disabled=!canQuestion()||locked;
+  const quizButton=$('[data-quiz]');
+  quizButton.disabled=!canQuestion()||locked;
+  if(root.classList.contains('tc-quarter-layout')){
+    const ready=!quizButton.disabled&&!modalOpen;
+    quizButton.classList.toggle('is-charge-ready',ready);
+    quizButton.setAttribute('aria-description',ready?
+      '可以答題充能，按下開始答題':'目前無法答題充能');
+  }
   $('[data-guard]').disabled=!mine||locked||me.attacks>=2;$('[data-end]').disabled=!mine||locked;
   $('[data-sync]').disabled=locked;root.classList.toggle('tc-animating',!!animating);
   $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
