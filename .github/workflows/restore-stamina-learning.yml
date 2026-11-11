@@ -1,5 +1,5 @@
 name: One-time restore learning features to stamina (staging)
-# Validate latest shared learning source with legacy tactical-specific regressions intact.
+# Validate full shared learning source and consistent test formatting.
 on:
   push:
     branches:
