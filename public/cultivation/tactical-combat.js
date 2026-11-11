@@ -3,6 +3,7 @@ import {TacticalRenderer} from './tactical-renderer.js?v=20261111-stamina-slide-
 import {EnemyDemo} from './tactical-enemy-demo.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {beginSoloCultivationFeedback} from './solo-cultivation-feedback.js';
+import {warmTacticalBank} from './tactical-bank-warm.js';
 
 const R=globalThis.QATactical;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -465,6 +466,8 @@ function accept(next,serial){
   const oldQuestion=state?.question?.id;
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   state=next;if(!keepSelection)selection=null;
+  // Refill upcoming reviewed questions in the background while battle UI is active.
+  if(next?.status==='active')void warmTacticalBank(Math.max(1,(next.actors?.find(a=>a.uid===uid)?.answered||0)+1));
   if(next?.mode==='pve'&&next.trial){
     // Send only the authoritative habitat metadata, not actor/quiz state.
     window.dispatchEvent(new CustomEvent('xiuxian:tactical-trial-updated',{
