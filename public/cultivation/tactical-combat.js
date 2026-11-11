@@ -113,7 +113,41 @@ function renderHub(){
 }
 
 const WHEEL_ANGLES=Object.freeze({upper:-112.5,lower:-157.5,center:-135});
-const WHEEL_RADII=Object.freeze({action:61.5,detail:87});
+// Each slider has free space on BOTH radial sides of its own ring.
+// Action lane: 49–74, selection: 54–70; detail lane: 74–100, selection: 79–95.
+const WHEEL_LANES=Object.freeze({
+  action:Object.freeze({inner:54,outer:70}),
+  detail:Object.freeze({inner:79,outer:95})
+});
+const WHEEL_RADII=Object.freeze({
+  action:(WHEEL_LANES.action.inner+WHEEL_LANES.action.outer)/2,
+  detail:(WHEEL_LANES.detail.inner+WHEEL_LANES.detail.outer)/2
+});
+// Width is proportional to the available angle per option, with breathing room.
+// One target -> 38°, two choices -> 31.5° (previously always 45°).
+function wheelSliceDegrees(count){
+  return Math.min(38,90/Math.max(1,count)*.7);
+}
+function wheelSlicePath(count,outer,inner){
+  const radians=d=>d*Math.PI/180;
+  const polar=(degrees,radius)=>[
+    100+radius*Math.cos(radians(degrees)),
+    100+radius*Math.sin(radians(degrees))
+  ].map(value=>value.toFixed(4)).join(' ');
+  const half=wheelSliceDegrees(count)/2;
+  const first=WHEEL_ANGLES.upper+half,last=WHEEL_ANGLES.upper-half;
+  return 'M '+polar(first,outer)
+    +' A '+outer+' '+outer+' 0 0 0 '+polar(last,outer)
+    +' L '+polar(last,inner)
+    +' A '+inner+' '+inner+' 0 0 1 '+polar(first,inner)+' Z';
+}
+function wheelSliderShape(slider,count){
+  if(!slider||slider.dataset.optionCount===String(count))return;
+  const kind=slider.classList.contains('tc-wheel-slider-detail')?'detail':'action';
+  const lane=WHEEL_LANES[kind];
+  slider.querySelector('.tc-wheel-slider-shape')?.setAttribute('d',wheelSlicePath(count,lane.outer,lane.inner));
+  slider.dataset.optionCount=String(count);
+}
 function wheelMarker(marker,angle,radius){
   if(!marker)return;
   const rad=angle*Math.PI/180;
@@ -239,19 +273,9 @@ function buildGame(){
     makeChoice('player','玩家',-90,-180,'tc-detail-player');
     makeChoice('attack','普通攻擊',-90,-135,'tc-detail-basic');
     makeChoice('skill',R.branchFor(myActor()).skill.name,-135,-180,'tc-detail-skill');
-    // Both selection indicators are annular 45-degree sectors with true
-    // circular edges. The underlying clipped buttons remain interactive.
-    const polar=(degrees,radius)=>{
-      const rad=degrees*Math.PI/180;
-      return [100+radius*Math.cos(rad),100+radius*Math.sin(rad)]
-        .map(value=>value.toFixed(4)).join(' ');
-    };
-    const sectorPath=(outer,inner)=>{
-      const start=-90,end=-135;
-      return 'M '+polar(start,outer)+' A '+outer+' '+outer+' 0 0 0 '+polar(end,outer)
-        +' L '+polar(end,inner)+' A '+inner+' '+inner+' 0 0 1 '+polar(start,inner)+' Z';
-    };
-    const makeSlider=(kind,outer,inner)=>{
+    // Narrow curved selection pieces glide *inside* each ring. The visible
+    // arc angle is driven by the number of choices, not hard-coded to 45°.
+    const makeSlider=(kind,choicesCount)=>{
       const ns='http://www.w3.org/2000/svg';
       const svg=document.createElementNS(ns,'svg');
       svg.classList.add('tc-wheel-slider','tc-wheel-slider-'+kind);
@@ -262,12 +286,12 @@ function buildGame(){
       rotor.classList.add('tc-wheel-slider-rotor');
       const shape=document.createElementNS(ns,'path');
       shape.classList.add('tc-wheel-slider-shape');
-      shape.setAttribute('d',sectorPath(outer,inner));
       rotor.append(shape);svg.append(rotor);
+      wheelSliderShape(svg,choicesCount);
       return svg;
     };
-    const actionSlider=makeSlider('action',74,49);
-    const detailSlider=makeSlider('detail',100,74);
+    const actionSlider=makeSlider('action',2);
+    const detailSlider=makeSlider('detail',1);
     const actionMarker=document.createElement('span');
     actionMarker.className='tc-wheel-marker tc-wheel-action-marker';
     actionMarker.setAttribute('aria-hidden','true');
@@ -454,6 +478,12 @@ function updateControls(){
     const detailAngle=attacking?(action==='skill'?WHEEL_ANGLES.lower:WHEEL_ANGLES.upper):WHEEL_ANGLES.center;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
     wheelMarker(detailThumb,detailAngle,WHEEL_RADII.detail);
+    // Fixed hit sectors stay large, while the moving slice gets a gap from
+    // its neighbours. The outer lane has 1 player or 2 attack choices.
+    const actionCount=ring.querySelectorAll('[data-wheel-action]').length;
+    const detailCount=[player,basicOption,skillOption].filter(b=>b&&!b.hidden).length;
+    wheelSliderShape($('.tc-wheel-slider-action'),actionCount);
+    wheelSliderShape($('.tc-wheel-slider-detail'),detailCount);
     wheelSliderAngle($('.tc-wheel-slider-action'),actionAngle);
     wheelSliderAngle($('.tc-wheel-slider-detail'),detailAngle);
   }
