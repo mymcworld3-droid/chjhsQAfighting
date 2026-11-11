@@ -83,7 +83,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/raid-mode.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/training-scene-map.js',
-  './cultivation/home-ecology-dashboard.js',
+  './cultivation/home-wireframe.js',
   './cultivation/realm-breakthrough-feedback.js',
   './cultivation/cultivation-rank-sync.js',
   './cultivation/curriculum-scope.js',
