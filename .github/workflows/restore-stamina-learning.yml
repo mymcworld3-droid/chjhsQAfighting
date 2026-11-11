@@ -1,5 +1,5 @@
 name: One-time restore learning features to stamina (staging)
-# Rerun validation after preserving stamina-specific progression and feature tests.
+# Rerun validation with the exact updated main learning-core compatibility tests.
 on:
   push:
     branches:
