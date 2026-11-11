@@ -85,3 +85,15 @@ test('outer stage code freezes its scaling, bypasses scroll-reset loops and chec
   assert.match(stageSource,/setKeyboardEditing\(active\)/);
   assert.match(stageSource,/event\.source!==frame\.contentWindow\|\|event\.origin!==location\.origin/);
 });
+
+test('typing overlay uses the keyboard-safe region, keeps composer visible and disables iOS zoom',()=>{
+  const css=fs.readFileSync(path.join(__dirname,'../public/styles/tactical-question-pair.css'),'utf8');
+  const combat=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
+  assert.match(css,/#tactical-combat\.tc-keyboard-visible \.tc-quiz \.tc-tool-overlay:not\(\[hidden\]\)/);
+  assert.match(css,/height:var\(--tc-visible-height,100%\)!important/);
+  assert.match(css,/\.quiz-helper-prompts\{\s*display:none!important/);
+  assert.match(css,/font-size:16px!important/);
+  const opening=combat.slice(combat.indexOf('function openQuestionTool('),combat.indexOf('function closeQuestionTool('));
+  assert.match(opening,/panel\.querySelector\?\.\('\[data-tool-close\]'\)\?\.focus\(\{preventScroll:true\}\)/);
+  assert.doesNotMatch(opening,/helper-input.*\.focus\(/);
+});
