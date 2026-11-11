@@ -8,7 +8,7 @@ const keyOf = target => JSON.stringify([
 ]);
 
 function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
-  lowWater=5,maxTargets=2,maxConcurrent=2,maxPerTarget=5}={}){
+  lowWater=5,maxTargets=2,maxConcurrent=2,maxPerTarget=5,similar=()=>false}={}){
   if(!bank||typeof generate!=='function')throw Error('Bank and generator are required');
   const queue=new Map(),working=new Set(),cooldown=new Map();
   let pumpPending=false;
@@ -19,22 +19,23 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
     queueMicrotask(()=>{
       pumpPending=false;
       while(working.size<maxConcurrent&&queue.size){
-        const [key,target]=queue.entries().next().value;
+        const [key,entry]=queue.entries().next().value;
         queue.delete(key);working.add(key);
+        const {target,excluded}=entry;
         const accepted=bank.schedule(target,async()=>{
           let count=0;
           try{
-            let inventory=await bank.find(target,[],()=>false,{deadlineMs:90000});
+            let inventory=await bank.find(target,excluded,similar,{deadlineMs:90000});
             if(!inventory.ready)throw Error('AI question bank unavailable');
             count=inventory.count;
             const newlyGenerated=[];
             for(let i=0;i<maxPerTarget&&count<lowWater;i++){
               // The generator uses the main quiz quality pipeline and publishes
               // only after an independent answer/consistency review.
-              const result=await generate(target,{avoidQuestions:newlyGenerated});
+              const result=await generate(target,{avoidQuestions:[...excluded,...newlyGenerated]});
               if(!result?.stored)break;
               newlyGenerated.push(result.q);
-              inventory=await bank.find(target,[],()=>false,{deadlineMs:90000});
+              inventory=await bank.find(target,excluded,similar,{deadlineMs:90000});
               if(!inventory.ready)break;
               count=inventory.count;
             }
@@ -60,18 +61,26 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
     });
   };
 
-  function enqueue(targets){
+  function enqueue(targets,excluded=[]){
     if(!bank.enabled)return {enabled:false,queued:0,pending:0};
     let added=0;
     const seen=new Set();
+    const avoided=[...new Set((Array.isArray(excluded)?excluded:[])
+      .map(q=>String(q||'').trim().slice(0,4000)).filter(Boolean))].slice(-24);
     for(const target of (Array.isArray(targets)?targets:[]).slice(0,maxTargets)){
       if(!target?.subject||!target?.level||!target?.difficulty)continue;
       const key=keyOf(target);
       if(seen.has(key))continue;
       seen.add(key);
-      if(queue.has(key)||working.has(key)||now()<(cooldown.get(key)||0))continue;
-      queue.set(key,{subject:String(target.subject),level:String(target.level),
-        topic:String(target.topic||''),difficulty:String(target.difficulty)});
+      if(queue.has(key)){
+        const queued=queue.get(key);
+        queued.excluded=[...new Set([...queued.excluded,...avoided])].slice(-48);
+        continue;
+      }
+      if(working.has(key)||now()<(cooldown.get(key)||0))continue;
+      queue.set(key,{target:{subject:String(target.subject),level:String(target.level),
+        topic:String(target.topic||''),difficulty:String(target.difficulty)},
+        excluded:avoided.slice()});
       added++;
     }
     // Keep queue bounded if many players trigger this in the same process.
