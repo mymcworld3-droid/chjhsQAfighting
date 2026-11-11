@@ -290,3 +290,81 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     min-height:85px!important;
   }
 }
+
+/* Portrait: the three shortcuts on each side belong to the trial-image ROW.
+   They remain grouped in one panel, but no longer pin to the viewport and
+   consequently cannot overlay the realm card, trial CTA or daily progress.
+   Landscape continues using the viewport-fixed side panels above. */
+@media (orientation: portrait) {
+  body.ui-cleanup #page-home > .home-layout,
+  body.ui-cleanup #page-home > .home-layout:has(>#quest-spotlight-slot[hidden]) {
+    grid-template-columns:clamp(48px,13vw,70px) minmax(0,1fr) clamp(48px,13vw,70px)!important;
+    grid-template-areas:
+      "realm realm realm"
+      "left emblem right"
+      ". practice ."
+      "daily daily daily"
+      "records records records"!important;
+    grid-template-rows:auto auto auto auto auto!important;
+    column-gap:clamp(5px,1.6vw,14px)!important;
+    row-gap:clamp(10px,1.8vh,18px)!important;
+    align-items:start!important;
+  }
+  body.ui-cleanup #page-home .home-wireframe-rail {
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    transform:none!important;
+    grid-row:2!important;
+    grid-column:auto!important;
+    align-self:center!important;
+    justify-self:stretch!important;
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    padding:4px 2px!important;
+    margin:0!important;
+    z-index:2;
+  }
+  body.ui-cleanup #page-home .home-wireframe-rail.is-left {
+    grid-area:left!important;
+  }
+  body.ui-cleanup #page-home .home-wireframe-rail.is-right {
+    grid-area:right!important;
+  }
+  body.ui-cleanup #page-home .home-realm-emblem {
+    grid-area:emblem!important;
+    align-self:center!important;
+    min-width:0!important;
+    min-height:0!important;
+    width:100%;
+    margin:0!important;
+    padding:0!important;
+    gap:8px!important;
+  }
+  body.ui-cleanup #page-home .home-realm-disc {
+    width:min(100%,360px)!important;
+  }
+  body.ui-cleanup #page-home .home-practice {
+    grid-area:practice!important;
+    align-self:start!important;
+  }
+  body.ui-cleanup #page-home .home-daily-progress {
+    grid-area:daily!important;
+  }
+}
+@media (orientation:portrait) and (max-width:390px) {
+  body.ui-cleanup #page-home > .home-layout,
+  body.ui-cleanup #page-home > .home-layout:has(>#quest-spotlight-slot[hidden]) {
+    grid-template-columns:48px minmax(0,1fr) 48px!important;
+    column-gap:5px!important;
+  }
+  body.ui-cleanup #page-home .home-wireframe-shortcut {
+    min-height:56px!important;
+    padding:6px 1px!important;
+    font-size:9px!important;
+  }
+}
