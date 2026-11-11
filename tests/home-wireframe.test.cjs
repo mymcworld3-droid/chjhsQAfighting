@@ -100,3 +100,21 @@ test('daily task, JSON/AI bank, and original battle systems stay mounted',()=>{
   assert.match(battle,/window\.startBattleMatchmaking=\(\)=>open\('pvp'\)/);
   assert.doesNotMatch(js,/runTransaction|\.update\(/);
 });
+
+test('iPad landscape does not place the trial CTA below the whole daily card and scene',()=>{
+  const desktop=css.slice(css.indexOf('body.ui-cleanup #page-home>.home-layout,'));
+  const head=desktop.slice(0,desktop.indexOf('body.ui-cleanup #page-home>.home-layout>.sect-actions'));
+  assert.match(head,/"left realm emblem right"/);
+  assert.match(head,/"left daily practice right"/);
+  assert.match(head,/"left records \\. right"/);
+  assert.doesNotMatch(head,/"left daily emblem right"|"left records practice right"/);
+  assert.match(css,/grid-area:emblem/);
+  assert.match(css,/grid-area:practice!important/);
+  assert.match(css,/grid-area:daily/);
+  // The bottom navigation is fixed; the page must leave a safe scroll area.
+  assert.match(css,/padding-bottom:calc\(100px \+ env\(safe-area-inset-bottom,0px\)\)!important/);
+  assert.match(css,/@media \(min-width:851px\) and \(max-height:760px\)/);
+  // Preserve the existing verified CTA and its click handler.
+  assert.equal((html.match(/id="btn-home-start"/g)||[]).length,1);
+  assert.match(html,/id="btn-home-start"[^>]+onclick="startQuizFlow\(\)"/);
+});
