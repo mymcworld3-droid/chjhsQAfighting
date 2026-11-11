@@ -61,7 +61,7 @@ test('rollover and account changes cannot expose expired rewards or another play
   user({ uid: 'u2' });
   assert.equal(ctx.recommendedQuest(), null);
   ctx.renderSpotlight();
-  assert.equal(elements.get('quest-spotlight-title').textContent, '查看修行任務');
+  assert.equal(elements.get('quest-spotlight-title').textContent, '查看今日任務');
   user(null); ctx.renderSpotlight();
   assert.equal(elements.get('quest-spotlight-slot').hidden, true);
 });
@@ -82,4 +82,18 @@ test('home rendering reuses data, shows tickets first and disables claims while 
   assert.equal(elements.get('quest-spotlight').disabled, true);
   ctx.status('獎勵已領取');
   assert.equal(elements.get('quest-spotlight-status').textContent, '獎勵已領取');
+});
+
+test('the main progress card prioritizes genuine daily progress over path or weekly objectives',()=>{
+  const {ctx,data,elements}=fixture();
+  data.path=quest('main-path',9,10,{claimable:true});
+  data.weekly=[quest('weekly',45,50,{claimable:true})];
+  data.daily=[quest('daily-solo-ten',9,10,{reward:{gold:80,cultivation:1,drawTickets:0}})];
+  ctx.renderSpotlight();
+  assert.equal(elements.get('quest-spotlight-title').textContent,'daily-solo-ten');
+  assert.equal(elements.get('quest-spotlight-progress').textContent,'答對 9／10');
+  assert.equal(elements.get('quest-spotlight-reward').textContent,'80 靈石 · 1 修為');
+  data.daily[0].claimed=true;
+  ctx.renderSpotlight();
+  assert.equal(elements.get('quest-spotlight-title').textContent,'今日任務皆已完成');
 });

@@ -36,18 +36,33 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     const ratio = q => Math.min(1, Math.max(0, Number(q.current) || 0) / Math.max(1, Number(q.target) || 1));
     return candidates.sort((a, b) => ratio(b.q) - ratio(a.q))[0] || null;
   }
+  // 主頁左側只呈現今日實際任務；仙道、每週任務仍保留在原任務視窗。
+  function recommendedDailyQuest() {
+    if (!snapshot || account !== getMainUser()?.uid ||
+        snapshot.date !== window.XianxiaQuestRules.dateKey()) return null;
+    const rows = [
+      ...(snapshot.daily || []).map(q => ({ q, kind: 'daily' })),
+      ...(snapshot.commissions || []).map(q => ({ q, kind: 'commission' }))
+    ];
+    // 舊資料尚未初始化日常任務時，維持原有的可用入口。
+    if (!rows.length) return recommendedQuest();
+    const available = rows.filter(({q}) => q && !q.claimed && !q.locked);
+    return available.find(({q}) => q.claimable) ||
+      available.sort((a,b) => Math.min(1,Number(b.q.current||0)/Math.max(1,Number(b.q.target||1))) -
+                              Math.min(1,Number(a.q.current||0)/Math.max(1,Number(a.q.target||1))))[0] || null;
+  }
   function renderSpotlight() {
     const slot = $('quest-spotlight-slot'), button = $('quest-spotlight');
     if (!slot || !button) return;
     slot.hidden = !getMainUser()?.uid;
-    const item = recommendedQuest(), q = item?.q;
+    const item = recommendedDailyQuest(), q = item?.q;
     const current = account === getMainUser()?.uid ? snapshot : null;
     const ready = !!q?.claimable;
     const labels = { scope: '設定範圍', solo: '繼續問道', meditation: '開始閉關',
       enlightenment: '悟道試煉', battle: '前往鬥法', raid: '前往秘境', dongtian: '前往洞天',
       story: '觀看劇情' };
     const action = ready ? (q.supplemental ? '補領抽獎券' : '領取獎勵') : labels[q?.destination] || '查看任務';
-    const title = q?.title || (current ? '繼續探索仙途' : busy ? '正在同步任務…' : '查看修行任務');
+    const title = q?.title || (current?.date === window.XianxiaQuestRules.dateKey() ? '今日任務皆已完成' : busy ? '正在同步今日任務…' : '查看今日任務');
     const reward = q ? [q.reward.drawTickets ? `抽獎券 ×${q.reward.drawTickets}` : '',
       rewardText({ ...q.reward, drawTickets: 0 })].filter(Boolean).join(' · ') : '查看完整任務與獎勵';
     const progressLabel = { solo: '答對', score: '修為', battle: '鬥法', raid: '通關',
@@ -239,7 +254,7 @@ import { authenticatedMainFetch, getMainUser } from './data/project-repository.j
     });
     $('quest-spotlight')?.addEventListener('click', () => {
       if (busy || !reconcileAccount()) return;
-      const item = recommendedQuest();
+      const item = recommendedDailyQuest();
       if (!item) { entry.click(); return; }
       status('');
       if (item.q.claimable) void claim(item.q, item.kind);
