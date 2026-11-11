@@ -503,7 +503,7 @@ app.post('/api/generate-quiz', async (req, res) => {
     if (tacticalMode) {
         try {
             const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
-            tacticalContext = {uid,db,...await tacticalCombat.prepareQuestion(db,uid,String(req.body?.roomId||''))};
+            tacticalContext = {uid,db,...await tacticalCombat.prepareQuestion(db,uid,String(req.body?.roomId||''),Date.now(),req.body?.batchSlot===1?1:0)};
             if (tacticalContext.pending) return res.json({tacticalQuestion:tacticalContext.pending});
             subject=tacticalContext.subject;level=tacticalContext.level;rank=0;knowledgeMap=null;
             difficulty=tacticalContext.difficulty;specificTopic=tacticalContext.topic;topic=tacticalContext.topic;
