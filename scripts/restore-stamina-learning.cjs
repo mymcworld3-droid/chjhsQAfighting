@@ -21,8 +21,9 @@ const copyExact = [
   'public/banks','data/bank-import',
   // Google's AI question bank and the approved-question reuse paths.
   'ai-question-bank.cjs','ai-router.js','bank-catalog.cjs',
-  'quiz-generation-tasks.cjs','quiz-spare-pool.cjs',
+  'quiz-generation-tasks.cjs','quiz-spare-pool.cjs','fast-quiz-prompt.cjs',
   'question-quality.cjs','question-quality-analytics.cjs','quiz-answer-prompt.cjs',
+  'question-answer-integrity.cjs','numeric-calculation-guard.cjs',
   // Adaptive concept diagnosis, practice, learning history and quiz cache.
   'adaptive-learning-api.cjs',
   'public/cultivation/adaptive-learning.js',
@@ -81,6 +82,56 @@ const updatedTests=[...new Set([...featureTests,...compatibilityTests])];
 for(const file of [...copyExact,...dependencyRoots,...updatedTests]){
   assert(presentMain(file),'Source missing on main: '+file);
   run('restore','--source=origin/main','--staged','--worktree','--',file);
+}
+
+// Keep the original stamina-only gameplay assertions; the newer main source
+// assumes avatar, raid-drop and raid-hub rules that are intentionally NOT
+// being ported. Adapt only tests for those preserved contracts.
+const originalTest = file => cp.execFileSync('git',['show','origin/stamina-battle:'+file],{encoding:'utf8'});
+const testBlock = (source,name) => {
+ const at=source.indexOf("test('"+name+"'");
+ assert(at>=0,'Test not found: '+name);
+ const end=source.indexOf('\ntest(',at+5);
+ return source.slice(at,end<0?source.length:end).trimEnd();
+};
+const replaceBlock=(source,name,block)=>{
+ const at=source.indexOf("test('"+name+"'");
+ assert(at>=0,'Test not found: '+name);
+ const end=source.indexOf('\ntest(',at+5);
+ return source.slice(0,at)+block+'\n\n'+(end<0?'':source.slice(end+1));
+};
+{
+ const p='tests/answer-gold-rules.test.cjs';
+ put(p,fs.readFileSync(p,'utf8').replaceAll('642','788'));
+}
+{
+ const p='tests/combat-quiz-latency.test.cjs';
+ let current=fs.readFileSync(p,'utf8');
+ const old=originalTest(p);
+ current=current.replace("  assert.match(five, /quizMode: 'immortal-avatar'/);\n","");
+ const originals=[
+   testBlock(old,'Five Immortals accepts real API correct/wrong output with the correct answer preserved'),
+   testBlock(old,'Five Immortals prefetches only one next question per live challenge and never repeats answered question')
+ ];
+ current=replaceBlock(current,'avatar quizzes use a signed server question and prefetch only after the current turn settles',originals.join('\n\n'));
+ put(p,current);
+}
+{
+ const p='tests/player-growth-feedback.test.cjs';
+ put(p,replaceBlock(fs.readFileSync(p,'utf8'),'retired wood and iron cannot be advertised as raid drops',
+   testBlock(originalTest(p),'resource shortcuts choose a difficulty that can actually drop the requested material')));
+}
+{
+ const p='tests/raid-mvp.test.cjs';
+ let current=fs.readFileSync(p,'utf8');
+ const old=originalTest(p);
+ for(const name of [
+    'raid hub uses an extensible trial catalog instead of a single hard-coded boss entry',
+    'drop probability remains internal and shared ticket is presented at the raid-system level'
+ ]){
+    current=replaceBlock(current,name,testBlock(old,name));
+ }
+ put(p,current);
 }
 
 // Import direct module dependencies needed by the exact updated frontend.
@@ -176,15 +227,8 @@ put('server.js',staminaServer);
 let legacy=fromMain('public/main-legacy.js');
 // Never change the stamina branch's actual cultivation realm boundary.
 legacy=once(legacy,"{ name: '合體', sub: '天地合一', need: 642 }","{ name: '合體', sub: '天地合一', need: 788 }");
-legacy=once(legacy,
- "const BUFFER_SIZE = 5;               // 目前範圍的可用待答題少於五題就背景補足",
- "const BUFFER_SIZE = 1;               // Preserve stamina's single-question cache budget");
-legacy=once(legacy,
- "function checkSoloQuestionStock() {\n",
- "function checkSoloQuestionStock() {\n    if (window.QA_TACTICAL_BATTLE_ENABLED) return;\n");
-legacy=once(legacy,
- "async function fillBuffer({ firstReady = false } = {}) {\n",
- "async function fillBuffer({ firstReady = false } = {}) {\n    if (window.QA_TACTICAL_BATTLE_ENABLED) return;\n");
+// Preserve latest main's 5-question background stock for ordinary solo study.
+// Tactical battles use the independent trusted tactical question endpoint.
 put('public/main-legacy.js',legacy);
 
 // Minimal stylesheet inclusion; do not replace stamina's page layout,
