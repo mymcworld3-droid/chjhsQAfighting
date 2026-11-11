@@ -1,22 +1,88 @@
 import './tactical-rules.js';
 import './tactical-animation.js';
+import './tactical-camera.js';
 const R=globalThis.QATactical;
 const A=globalThis.QATacticalAnimation;
+const Camera=globalThis.QATacticalCamera;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.images={};this.frame=0;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.images={};this.frame=0;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
       const img=new Image();img.onload=()=>this.draw();img.onerror=()=>this.draw();img.src=url;this.images[id]=img;
     }
     this.resize=new ResizeObserver(()=>this.draw());this.resize.observe(canvas);
+
+    // Pointer Events support one-finger/map drag, two-finger pinch and
+    // mouse drag. A dragged gesture is NEVER interpreted as a grid command.
+    const point=e=>{const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};};
+    const view=()=>this.preview?.view||{x:0,y:0,width:this.state?.width||1,height:this.state?.height||1};
+    const size=()=>{const r=canvas.getBoundingClientRect();return{w:r.width,h:r.height};};
+    const midpoint=()=>{
+      const a=[...this.touches.values()];if(a.length<2)return null;
+      return {x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2,
+        gap:Math.max(1,Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y))};
+    };
+    this.onPointerDown=e=>{
+      if(!this.state||this.preview||this.paused||e.pointerType==='mouse'&&e.button!==0)return;
+      const p=point(e);
+      this.touches.set(e.pointerId,{...p,startX:p.x,startY:p.y});
+      if(this.touches.size>=2){this.dragging=true;this.pinch=midpoint();}
+      try{canvas.setPointerCapture(e.pointerId);}catch(_){}
+    };
+    this.onPointerMove=e=>{
+      const before=this.touches.get(e.pointerId);if(!before)return;
+      const after=point(e),deltaX=after.x-before.x,deltaY=after.y-before.y;
+      before.x=after.x;before.y=after.y;
+      const {w,h}=size(),v=view();
+      if(this.touches.size>=2){
+        const next=midpoint();
+        if(this.pinch&&next){
+          this.camera=Camera.pan(this.camera,next.x-this.pinch.x,next.y-this.pinch.y,w,h,v);
+          this.camera=Camera.zoomAt(this.camera,this.camera.zoom*next.gap/this.pinch.gap,next.x,next.y,w,h,v);
+          this.pinch=next;this.dragging=true;
+          this.draw();e.preventDefault();
+        }
+      }else{
+        if(Math.hypot(after.x-before.startX,after.y-before.startY)>7)this.dragging=true;
+        if(this.dragging){
+          this.camera=Camera.pan(this.camera,deltaX,deltaY,w,h,v);
+          this.draw();e.preventDefault();
+        }
+      }
+    };
+    this.onPointerEnd=e=>{
+      if(!this.touches.has(e.pointerId))return;
+      if(this.dragging)this.suppressClickUntil=Date.now()+500;
+      this.touches.delete(e.pointerId);
+      try{if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);}catch(_){}
+      if(this.touches.size===1){
+        const only=[...this.touches.values()][0];only.startX=only.x;only.startY=only.y;this.dragging=true;
+      }else if(!this.touches.size)this.dragging=false;
+      this.pinch=null;
+    };
+    this.onWheel=e=>{
+      if(!this.state||this.preview||this.paused)return;
+      e.preventDefault();
+      const p=point(e),{w,h}=size();
+      this.camera=Camera.zoomAt(this.camera,this.camera.zoom*Math.exp(-e.deltaY*.0013),p.x,p.y,w,h,view());
+      this.draw();
+    };
+    canvas.addEventListener('pointerdown',this.onPointerDown);
+    canvas.addEventListener('pointermove',this.onPointerMove);
+    canvas.addEventListener('pointerup',this.onPointerEnd);
+    canvas.addEventListener('pointercancel',this.onPointerEnd);
+    canvas.addEventListener('lostpointercapture',this.onPointerEnd);
+    canvas.addEventListener('wheel',this.onWheel,{passive:false});
     canvas.addEventListener('click',event=>{
-      if(!this.state||this.preview||this.isAnimating||this.paused)return;const rect=canvas.getBoundingClientRect(),x=Math.floor((event.clientX-rect.left-this.ox)/this.cell),y=Math.floor((event.clientY-rect.top-this.oy)/this.cell);
-      if(R.inside(this.state,{x,y}))this.onSelect({x,y});
+      if(!this.state||this.preview||this.isAnimating||this.paused||Date.now()<this.suppressClickUntil)return;
+      const rect=canvas.getBoundingClientRect();
+      const p=Camera.tileAt(this.camera,event.clientX-rect.left,event.clientY-rect.top,rect.width,rect.height,{x:0,y:0,width:this.state.width,height:this.state.height});
+      if(R.inside(this.state,p))this.onSelect(p);
     });
     canvas.addEventListener('keydown',event=>{
       if(!this.state||this.preview||this.isAnimating||this.paused)return;const delta={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[event.key];
@@ -26,7 +92,7 @@ export class TacticalRenderer{
   }
   update(state,uid,mode,selection){
     this.preview=null;
-    if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){this.queue=[];this.scene=null;}
+    if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;}
     if(!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
@@ -52,7 +118,8 @@ export class TacticalRenderer{
     return this.scene?Math.min(1,(now-this.scene.started)/this.scene.duration):0;
   }
   setPaused(value){if(this.paused===value)return;this.paused=value;this.draw();}
-  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);}
+  resetView(){this.camera=Camera.create();this.draw();}
+  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
@@ -183,7 +250,8 @@ export class TacticalRenderer{
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
     c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
     const view=this.preview?.view||{x:0,y:0,width:s.width,height:s.height};
-    const cell=this.cell=Math.min((w-20)/view.width,(h-24)/view.height),ox=this.ox=Math.round((w-cell*view.width)/2)-view.x*cell,oy=this.oy=Math.round((h-cell*view.height)/2)-view.y*cell;
+    const g=Camera.geometry(this.camera,w,h,view);this.camera=Camera.normalize(this.camera,w,h,view);
+    const cell=this.cell=g.cell,ox=this.ox=g.ox,oy=this.oy=g.oy;
     const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid&&(!s.quizRound||s.phase==='action'),reduced=this.reducedMotion.matches;
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
     c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';

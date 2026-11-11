@@ -29,6 +29,7 @@ function selectedCore(){const user=localUser(),score=window.QATrainingAccessRule
 function ensure(){
   if(root)return;
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261111-quadrant1';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
@@ -44,6 +45,7 @@ function ensure(){
     else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open('pve');
     else if(b.hasAttribute('data-exit'))close();
     else if(b.hasAttribute('data-sync'))void sync();
+    else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
     else if(b.dataset.action){action=b.dataset.action;selection=null;
       const me=state?.actors.find(a=>a.uid===uid);if(me&&(action==='skill'&&R.branchFor(me).skill.range===0||action==='attack'&&R.basicFor(me).kind==='ring'))selection={x:me.x,y:me.y};
@@ -77,7 +79,7 @@ function ensure(){
 }
 function destroyRenderer(){renderer?.destroy();renderer=null;}
 function renderHub(){
-  destroyRenderer();const c=selectedCore(),core=R.CORES[c];
+  destroyRenderer();root.classList.remove('tc-quarter-layout');const c=selectedCore(),core=R.CORES[c];
   const chosen=R.savedBranch(localUser(),c);
   $('[data-title]').textContent='鬥法論道';$('[data-turn]').textContent='';
   $('[data-main]').className='tc-main tc-hub';
@@ -92,9 +94,39 @@ function renderHub(){
 }
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
+  root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
   $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div></section>
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">攻擊 · 2</button><button type="button" data-action="skill">技能</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
+  if(state?.mode==='pve'){
+    // Keep existing signed server actions and unique data-* handlers. Only move
+    // their visual controls into the two hand-drawn quarter-circle panels.
+    const command=$('.tc-command');
+    const energy=document.createElement('section');
+    energy.className='tc-quarter tc-quarter-energy';
+    energy.setAttribute('aria-label','答題充能與體力');
+    energy.innerHTML='<svg class="tc-energy-arc" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path class="tc-arc-track" d="M 5 5 A 95 95 0 0 1 100 100" pathLength="10"></path><path class="tc-arc-fill" data-energy-arc d="M 5 5 A 95 95 0 0 1 100 100" pathLength="10" stroke-dasharray="0 10"></path><path class="tc-arc-ticks" d="M 5 5 A 95 95 0 0 1 100 100" pathLength="10" stroke-dasharray=".7 .3"></path></svg><span class="tc-energy-rule">答對 +4 · 答錯 +1</span>';
+    energy.append(command.querySelector('[data-stamina]'),command.querySelector('[data-quiz]'));
+    const actions=document.createElement('section');
+    actions.className='tc-quarter tc-quarter-action';
+    actions.setAttribute('aria-label','移動、攻擊、技能與回合操作');
+    actions.innerHTML='<span class="tc-actions-caption" aria-hidden="true">行動</span>';
+    const confirm=command.querySelector('[data-execute]');
+    actions.append(command.querySelector('.tc-action-tabs'),command.querySelector('.tc-turn-buttons'));
+    command.prepend(energy,actions);
+    command.append(confirm);
+    const heading=$('.tc-arena-heading');
+    const zoomHelp=document.createElement('span');
+    zoomHelp.className='tc-map-gesture';
+    zoomHelp.textContent='拖曳平移 · 雙指／滾輪縮放';
+    heading.append(zoomHelp);
+    const reset=document.createElement('button');
+    reset.type='button';
+    reset.setAttribute('data-reset-view','');
+    reset.textContent='地圖置中';
+    reset.setAttribute('aria-label','重設地圖位置與縮放');
+    heading.append(reset);
+  }
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);}},()=>{
     if(!opened||!state||!renderer)return;updateControls();
     if(!renderer.isAnimating&&state.status==='finished'&&!modalOpen)resultDialog();
@@ -105,7 +137,7 @@ function paint({preserveModal=false}={}){
   if(!state)return renderHub();if(!preserveModal)hideModal();
   $('[data-title]').textContent=state.mode==='pve'?'問道試煉':'鬥法論道';
   if(state.status==='waiting'){
-    destroyRenderer();$('[data-main]').className='tc-main tc-waiting';
+    destroyRenderer();root.classList.remove('tc-quarter-layout');$('[data-main]').className='tc-main tc-waiting';
     $('[data-main]').innerHTML=`<div><h2>配對中…</h2><p>也可將代碼傳給道友加入。</p><code>${esc(state.id.replace('arena-',''))}</code><button type="button" data-copy>複製代碼</button><button type="button" data-leave>取消配對</button></div>`;return;
   }
   if(!renderer||!$('canvas'))buildGame();
@@ -114,7 +146,8 @@ function paint({preserveModal=false}={}){
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
   $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&a.intent).map(a=>'<p><b>'+esc(a.name)+'</b><span>'+esc(a.intent.text)+'</span></p>').join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>出手 ${me.attacks}/2</small>`;
-  $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
+  const energyArc=$('[data-energy-arc]');if(energyArc)energyArc.setAttribute('stroke-dasharray',`${Math.max(0,Math.min(10,me.stamina))} 10`);
+  $('[data-quiz]').textContent=canQuestion()?`答題充能 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   renderer.update(state,uid,action,selection);updateControls();updateClock();
   if(state.status==='finished'&&!renderer.isAnimating&&!modalOpen)resultDialog();
@@ -392,7 +425,7 @@ async function open(nextMode='pve'){
 }
 function close(){
   if(!root)return;quizContext?.abort.abort();quizContext=null;autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
-  root.hidden=true;document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
+  root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
 window.startQuizFlow=()=>open('pve');
