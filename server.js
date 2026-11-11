@@ -1168,6 +1168,53 @@ async function generateQuiz(req, res) {
 }
 app.post('/api/generate-quiz', generateQuiz);
 
+// Pre-compute and save approved questions while players are elsewhere in the
+// game, not after they open the stamina quiz screen.
+const tacticalBankPrewarmer=createTacticalBankPrewarmer({
+    bank:aiQuestionBank,
+    generate:async(target,{avoidQuestions=[]}={})=>{
+        let status=200,reply=null;
+        await generateQuiz({
+            body:{quizMode:'tactical-bank-fill',avoidQuestions},
+            // Set only by the authenticated warmup route below, never from
+            // request JSON. A client cannot obtain answer keys through this mode.
+            __trustedTacticalBankTarget:target
+        },{
+            status(code){status=code;return this;},
+            json(payload){reply=payload;return payload;}
+        });
+        if(status>=400||!reply?.bankFilled)throw Error('題庫候補題目未通過審核：'+String(reply?.error||status));
+        return {stored:reply.stored,q:reply.q};
+    }
+});
+const tacticalBankWarmLast=new Map();
+
+app.post('/api/tactical/bank-warm',async(req,res)=>{
+    try{
+        const uid=await verifyMainIdentity(req);
+        if(!aiQuestionBank.enabled)return res.json({ok:true,enabled:false,queued:0});
+        const snap=await playerRepository.resolve().db.collection('users').doc(uid).get();
+        if(!snap.exists)return res.status(404).json({error:'玩家資料不存在'});
+        // No user-supplied subject/topic/answer is ever trusted.
+        const scope=trustedKnowledgeScope(snap.data()||{});
+        const offset=Math.max(1,Math.min(10000,Math.floor(Number(req.body?.offset)||1)));
+        const current=Date.now(),last=tacticalBankWarmLast.get(uid)||0;
+        if(current-last<45000)return res.json({ok:true,enabled:true,queued:0,cooldown:true});
+        tacticalBankWarmLast.set(uid,current);
+        while(tacticalBankWarmLast.size>3000)tacticalBankWarmLast.delete(tacticalBankWarmLast.keys().next().value);
+        const targets=[offset,offset+1].map(index=>{
+            const choice=pickTrustedRaidKnowledge(scope,index);
+            return {subject:choice.subject,level:choice.level,topic:choice.specificTopic||'綜合測驗',
+                difficulty:choice.difficulty};
+        });
+        const result=tacticalBankPrewarmer.enqueue(targets);
+        return res.json({ok:true,...result});
+    }catch(error){
+        const status=error?.status||503;
+        return res.status(status).json({error:status===401?'請重新登入後再準備題庫':status===404?'玩家資料不存在':'題庫背景排程暫時無法啟動'});
+    }
+});
+
 // ==========================================
 // API 5: 取得中學單元列表 (遞迴讀取)
 // ==========================================
