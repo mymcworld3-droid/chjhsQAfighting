@@ -231,3 +231,15 @@
 @media(prefers-reduced-motion:reduce){
   #tactical-combat .tc-quiz .tc-options>button{transition:none!important}
 }
+
+/* The shared free-quiz cultivation animation must remain above the tactical stage
+   (#tactical-combat has z-index:24000); it must not be hidden behind the dialog. */
+body.tactical-open #solo-cultivation-feedback{
+  z-index:25000!important;
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options>button:not(:disabled):active{
+  transform:scale(.99);
+}
+#tactical-combat .tc-quiz .tc-pair-entry .tc-options>button:focus-visible{
+  outline:2px solid #d1bd7d!important;outline-offset:2px;
+}
