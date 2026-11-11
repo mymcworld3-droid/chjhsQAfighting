@@ -186,13 +186,13 @@ save('tests/no-weapon-system.test.cjs',[
 "test('weapon pages and scripts no longer load',()=>{",
 "  const main=read('public/main.js'),html=read('public/index.html');",
 "  assert.doesNotMatch(main,/weapon-forge\\.js|QA_WEAPON_SYSTEM_ENABLED = true/);",
-"  assert.doesNotMatch(html,/<button[^>]+data-training-tab=\"(?:refinery|equipment|contract)\"/);",
+"  assert.doesNotMatch(html,/<button[^>]+data-training-tab=\"contract\"/);",
 "  assert.doesNotMatch(read('public/cultivation/tactical-combat.js'),/QAWeapons|weaponRewards/);",
 "  assert.doesNotMatch(read('public/cultivation/tactical-renderer.js'),/weapon-system-rules/);",
 "  const access=require('../public/cultivation/training-access-rules.js');",
-"  assert.equal(access.PLACES.some(x=>x.id==='contract'),false);
-  assert.equal(access.PLACES.some(x=>x.id==='forge'),true);",
+"  assert.equal(access.PLACES.some(x=>x.id==='contract'),false);",
+"  assert.equal(access.PLACES.some(x=>x.id==='forge'),true);",
 "});",
 ""
 ].join('\n'));
-console.log('Removed weapon draw, forge, weapon scaling and chests; player inventory data left untouched.');
+console.log('Retired five-weapon draw, forging and battle buffs; retained ordinary artifacts and saved inventory.');
