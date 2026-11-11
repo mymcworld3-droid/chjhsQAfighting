@@ -365,7 +365,7 @@ function questionSheet(q,review=null,index=0){
   const buttons=options.map((value,i)=>{
     const resultClass=review?(i===review.answerIndex?' bg-green-600 border-green-400 text-white':i===review.choice?' bg-red-600 border-red-400 text-white':''):'';
     const selected=!review&&pairChoices[index]===i;
-    return `<button type="button" class="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2${resultClass}${selected?' is-picked':''}" ${review?'disabled class': ''}${review?'':''} ${review?'disabled':`data-choice-for="${index}" data-choice="${i}" aria-pressed="${selected}"`}>
+    return `<button type="button" class="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex items-center gap-3 active:scale-95 mb-2${resultClass}${selected?' is-picked':''}"  ${review?'disabled':`data-choice-for="${index}" data-choice="${i}" aria-pressed="${selected}"`}>
       <span class="bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-blue-400 border border-slate-600 shrink-0">${String.fromCharCode(65+i)}</span>
       <span class="flex-1 quiz-rich-option">${rich(value)}${review&&i===review.answerIndex?' ✓':''}</span>
     </button>`;
@@ -481,15 +481,50 @@ function selectPairChoice(index,choice){
   const button=$('[data-submit-pair]');if(button)button.disabled=!ready;
   const status=$('[data-pair-status]');if(status)status.textContent=ready?'兩題答案已選好，可以一次送出。':`已選 ${pairChoices.filter(value=>value>=0).length} / ${pairQuestions.length} 題`;
 }
+function pairWhiteboardMarkup(){
+  return `<section class="quiz-whiteboard-panel hidden tc-pair-whiteboard" data-pair-whiteboard-panel role="dialog" aria-modal="true" aria-label="計算白板">
+    <button type="button" class="quiz-whiteboard-backdrop" data-pair-whiteboard-close aria-label="關閉白板"></button>
+    <div class="quiz-whiteboard-dialog">
+      <div class="quiz-whiteboard-toolbar">
+        <div class="quiz-whiteboard-title"><i class="fa-solid fa-chalkboard"></i><span>計算白板</span></div>
+        <div class="quiz-whiteboard-actions">
+          <button type="button" class="quiz-whiteboard-action" data-pair-whiteboard-clear><i class="fa-solid fa-eraser"></i><span>清空</span></button>
+          <button type="button" class="quiz-whiteboard-action" data-pair-whiteboard-close><i class="fa-solid fa-xmark"></i><span>關閉</span></button>
+        </div>
+      </div>
+      <div class="quiz-whiteboard-question-wrap">
+        <div class="quiz-whiteboard-question-label"><i class="fa-solid fa-scroll"></i><span>題目</span></div>
+        <div class="quiz-whiteboard-question" data-pair-whiteboard-question></div>
+      </div>
+      <div class="quiz-whiteboard-stage"><canvas data-pair-whiteboard-canvas aria-label="可手寫計算的白板"></canvas></div>
+    </div>
+  </section>`;
+}
+function pairLayout(reviews=null,questions=pairQuestions){
+  const done=Array.isArray(reviews);
+  const count=questions.length;
+  return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
+  <div class="quiz-question-helper-layout helper-collapsed">
+    <div class="quiz-main-column tc-pair-column">
+      <div class="tc-pair-list">${questions.map((q,i)=>questionSheet(q,done?reviews[i]:null,i)).join('')}</div>
+      ${done?`<div class="tc-pair-summary" role="status"><i class="fa-solid fa-circle-check"></i> 本次答對 ${reviews.filter(r=>r.correct).length} / ${reviews.length} 題 · 修為與體力已結算</div>
+          <div class="flex gap-3 tc-pair-buttons"><button type="button" data-continue class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回戰場</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">繼續試煉</button></div>`:
+        `<div class="tc-pair-submit">
+           <div data-pair-status role="status" aria-live="polite">已選 0 / ${count} 題</div>
+           <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" disabled>${count===2?'一次送出兩題':'送出剩餘題目'}</button>
+         </div>
+         <div class="mt-8 flex gap-3 w-full quiz-footer-actions">
+           <button type="button" data-dismiss class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i><span>返回戰場</span></button>
+         </div>`}
+    </div>
+    <aside class="tc-quiz-tools-shell" aria-label="問道助手">${quizTools()}</aside>
+  </div>
+  ${pairWhiteboardMarkup()}`;
+}
 function paintQuestion(){
   if(!pairQuestions.length)return;
   pairReviews=[];setQuizContext(pairQuestions[0]);
-  const remaining=pairQuestions.length;
-  showModal(`<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'自由問道式答題 · 體力充能'}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
-    <div class="quiz-main-column tc-pair-column"><div class="tc-pair-heading"><strong>${remaining===2?'雙題問道':'補完本輪題目'}</strong><span>答對 +4、答錯 +1 體力／題</span></div>
-    <div class="tc-pair-grid">${pairQuestions.map((q,i)=>questionSheet(q,null,i)).join('')}</div>
-    <footer class="tc-pair-footer"><span data-pair-status role="status" aria-live="polite">已選 0 / ${remaining} 題</span><button type="button" class="tc-primary" data-submit-pair disabled>${remaining===2?'一次送出兩題':'送出剩餘題目'}</button></footer>
-    ${quizTools()}</div>`,{quiz:true});
+  showModal(pairLayout(),{quiz:true});
   updateClock();
 }
 async function submitPair(){
@@ -525,10 +560,7 @@ async function submitPair(){
     }
     pairReviews=reviewed;
     setQuizContext(questions[0],reviewed[0]);
-    showModal(`<div class="tc-dialog-heading"><small>${state.quizRound?'第 '+state.quizRound+' 輪':'問道試煉'}</small><span class="tc-pair-complete">本次 ${reviewed.filter(r=>r.correct).length} / ${reviewed.length} 題答對</span></div>
-      <div class="quiz-main-column tc-pair-column"><div class="tc-pair-grid tc-pair-review">${questions.map((q,i)=>questionSheet(q,reviewed[i],i)).join('')}</div>
-      <footer class="tc-pair-footer"><span>已依每題結果結算體力與修為</span><button type="button" class="tc-primary" data-continue>返回戰場</button></footer>
-      ${quizTools()}</div>`,{quiz:true});
+    showModal(pairLayout(reviewed,questions),{quiz:true});
     renderer?.update(state,uid,action,null);
     const netGain=Math.max(0,priorScore-initialScore);
     if(cultivationVisual&&netGain>0)void cultivationVisual.play({gain:netGain,totalScore:priorScore});
