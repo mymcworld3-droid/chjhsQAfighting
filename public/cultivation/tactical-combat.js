@@ -111,6 +111,8 @@ function renderHub(){
     <details class="tc-codex"><summary>金丹技能</summary>${Object.entries(R.CORES).filter(([key])=>key!=='none').map(([,c])=>`<section><h3>${esc(c.name)}</h3>${c.branches.map(b=>`<p><b>${esc(b.name)} · ${esc(b.skill.name)}</b> ${esc(b.skill.description)}</p>`).join('')}</section>`).join('')}</details></div>`;
 }
 
+const WHEEL_ANGLES=Object.freeze({upper:-112.5,lower:-157.5,center:-135});
+const WHEEL_RADII=Object.freeze({action:61.5,detail:87});
 function wheelMarker(marker,angle,radius){
   if(!marker)return;
   const rad=angle*Math.PI/180;
@@ -120,14 +122,24 @@ function wheelMarker(marker,angle,radius){
 function selectWheel(value){
   if(!state||busy||renderer?.isAnimating||!myAction())return;
   if(value==='attack-ring')value=attackChoice;
-  if(value==='player'){if(action!=='move')return;}
-  else if(value==='move')action='move';
+  const previous=action;
+  if(value==='player'){
+    // Only the current player can be moved. Choosing that target does not
+    // send an action or reset an already selected destination tile.
+    if(action!=='move')return;
+    updateControls();
+    return;
+  }
+  if(value==='move')action='move';
   else if(value==='attack'||value==='skill'){action=value;attackChoice=value;}
   else return;
-  selection=null;
-  const me=myActor();
-  if(me&&(action==='skill'&&R.branchFor(me).skill.range===0||action==='attack'&&R.basicFor(me).kind==='ring')){
-    selection={x:me.x,y:me.y};
+  if(action!==previous){
+    selection=null;
+    const me=myActor();
+    if(me&&(action==='skill'&&R.branchFor(me).skill.range===0||
+        action==='attack'&&R.basicFor(me).kind==='ring')){
+      selection={x:me.x,y:me.y};
+    }
   }
   updateControls();
   renderer?.update(state,uid,action,selection);
@@ -223,18 +235,21 @@ function buildGame(){
     const actionMarker=document.createElement('span');
     actionMarker.className='tc-wheel-marker tc-wheel-action-marker';
     actionMarker.setAttribute('aria-hidden','true');
+    actionMarker.textContent='移動';
     const detailMarker=document.createElement('span');
     detailMarker.className='tc-wheel-marker tc-wheel-detail-marker';
     detailMarker.setAttribute('aria-hidden','true');
+    detailMarker.textContent='玩家';
     actions.append(tabs,choices,end,actionMarker,detailMarker);
-    // Dragging a ring rotates its indicator and snaps to the nearest option;
-    // taps retain native button clicks and keyboard activation.
+    // Both rings are independently draggable. A click selects a fixed
+    // station; the labelled slider smoothly glides to that station.
     let pointer=null;
     const pointerAngle=e=>{
       const bounds=actions.getBoundingClientRect();
       return Math.max(-180,Math.min(-90,Math.atan2(e.clientY-bounds.bottom,e.clientX-bounds.right)*180/Math.PI));
     };
     actions.addEventListener('pointerdown',e=>{
+      if(pointer||e.target.closest('[data-end]'))return;
       const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
       if(!b||b.disabled)return;
       pointer={id:e.pointerId,x:e.clientX,y:e.clientY,ring:b.dataset.wheelChoice?'detail':'action',moved:false};
@@ -242,24 +257,56 @@ function buildGame(){
     actions.addEventListener('pointermove',e=>{
       if(!pointer||pointer.id!==e.pointerId)return;
       if(Math.hypot(e.clientX-pointer.x,e.clientY-pointer.y)>8){
-        if(!pointer.moved){pointer.moved=true;try{actions.setPointerCapture(e.pointerId);}catch(_){}}
-        wheelMarker(pointer.ring==='detail'?detailMarker:actionMarker,pointerAngle(e),pointer.ring==='detail'?76:51);
+        if(!pointer.moved){
+          pointer.moved=true;
+          try{actions.setPointerCapture(e.pointerId);}catch(_){}
+          // Direct tracking should not ease behind the finger.
+          (pointer.ring==='detail'?detailMarker:actionMarker).classList.add('is-dragging');
+        }
+        wheelMarker(pointer.ring==='detail'?detailMarker:actionMarker,
+          pointerAngle(e),WHEEL_RADII[pointer.ring]);
         e.preventDefault();
       }
     });
     const endPointer=e=>{
       if(!pointer||pointer.id!==e.pointerId)return;
       const gesture=pointer;pointer=null;
+      const marker=gesture.ring==='detail'?detailMarker:actionMarker;
+      marker.classList.remove('is-dragging');
       if(actions.hasPointerCapture?.(e.pointerId))actions.releasePointerCapture(e.pointerId);
       if(e.type==='pointercancel'){updateControls();return;}
       if(!gesture.moved)return;
       wheelIgnoreClickUntil=Date.now()+350;
-      const next=gesture.ring==='action'?(pointerAngle(e)>-135?'attack-ring':'move'):
-        action==='move'?'player':pointerAngle(e)>-135?'attack':'skill';
-      selectWheel(next);updateControls();
+      const next=gesture.ring==='action'?
+        (pointerAngle(e)>WHEEL_ANGLES.center?'attack-ring':'move'):
+        (action==='move'?'player':pointerAngle(e)>WHEEL_ANGLES.center?'attack':'skill');
+      selectWheel(next);
+      updateControls(); // also snaps back if the turn became locked
     };
     actions.addEventListener('pointerup',endPointer);
     actions.addEventListener('pointercancel',endPointer);
+    actions.addEventListener('lostpointercapture',e=>{
+      if(pointer&&pointer.id===e.pointerId){pointer=null;actionMarker.classList.remove('is-dragging');
+        detailMarker.classList.remove('is-dragging');updateControls();}
+    });
+    actions.addEventListener('keydown',e=>{
+      const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
+      if(!b||!['ArrowLeft','ArrowRight'].includes(e.key))return;
+      e.preventDefault();
+      const upper=e.key==='ArrowRight';
+      if(b.dataset.wheelAction){
+        const next=upper?'attack-ring':'move';
+        selectWheel(next);
+        (upper?attack:move).focus();
+      }else if(action==='move'){
+        selectWheel('player');
+        choices.querySelector('[data-wheel-choice="player"]').focus();
+      }else{
+        const next=upper?'attack':'skill';
+        selectWheel(next);
+        choices.querySelector('[data-wheel-choice="'+next+'"]').focus();
+      }
+    });
     command.prepend(energy,actions);
   }
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);
@@ -339,8 +386,8 @@ function updateControls(){
     const player=$('[data-wheel-choice="player"]');
     const basicOption=$('[data-wheel-choice="attack"]');
     const skillOption=$('[data-wheel-choice="skill"]');
-    if(player)player.hidden=attacking;
-    if(basicOption)basicOption.hidden=!attacking;
+    if(player){player.hidden=attacking;player.setAttribute('aria-label','移動目標：玩家');}
+    if(basicOption){basicOption.hidden=!attacking;basicOption.setAttribute('aria-label','普通攻擊');}
     if(skillOption){
       skillOption.hidden=!attacking;
       skillOption.querySelector('span').textContent=sk.name;
@@ -353,8 +400,12 @@ function updateControls(){
     }
     const ring=$('.tc-quarter-action');
     ring?.setAttribute('aria-label',attacking?'行動：攻擊；技能：'+(action==='skill'?sk.name:basic.name):'行動：移動；目標：玩家');
-    wheelMarker($('.tc-wheel-action-marker'),attacking?-112.5:-157.5,51);
-    wheelMarker($('.tc-wheel-detail-marker'),attacking?(action==='skill'?-157.5:-112.5):-135,76);
+    const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
+    actionThumb.textContent=attacking?'攻擊':'移動';
+    detailThumb.textContent=attacking?(action==='skill'?sk.name:basic.name):'玩家';
+    detailThumb.title=attacking?(action==='skill'?sk.name:basic.name):'玩家';
+    wheelMarker(actionThumb,attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower,WHEEL_RADII.action);
+    wheelMarker(detailThumb,attacking?(action==='skill'?WHEEL_ANGLES.lower:WHEEL_ANGLES.upper):WHEEL_ANGLES.center,WHEEL_RADII.detail);
   }
   $('[data-range-legend]').textContent=(action==='move'?'灰格可走':'紅格射程')+' · 紅框預告';
   const hint=action==='move'?'點選灰格移動':action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):sk.range===0?'按下確認施放技能':'點選紅格施放技能';
