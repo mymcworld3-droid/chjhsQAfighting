@@ -115,7 +115,7 @@ export function installTacticalKeyboardGuard(root){
   window.visualViewport?.addEventListener('resize',schedule,{passive:true});
   window.visualViewport?.addEventListener('scroll',schedule,{passive:true});
   window.addEventListener('resize',schedule,{passive:true});
-  return {schedule,dispose(){
+  return {schedule,blur:onBlur,dispose(){
     clearTimeout(release);
     if(raf)cancelAnimationFrame(raf);
     unlock();
