@@ -43,7 +43,7 @@ function curvePoint(start, control, end, t) {
 window.isSoloCultivationFeedbackActive = () => !!activeFeedback;
 window.waitForSoloCultivationFeedback = () => activeFeedback?.finished || Promise.resolve();
 
-export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
+export function beginSoloCultivationFeedback({ scoreBefore, source, realms, activeWhen }) {
   activeFeedback?.cancel();
   const realmList = realms.map(realm => ({ ...realm }));
   const sourceRect = source?.getBoundingClientRect();
@@ -66,10 +66,10 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
   const fill = root.querySelector('.solo-cultivation-fill');
   const receiver = root.querySelector('.solo-cultivation-receiver');
   const gainLabel = root.querySelector('.solo-cultivation-gain');
-  const nextButton = document.getElementById('btn-next-step');
+  const nextButton = activeWhen ? null : document.getElementById('btn-next-step');
   const wasDisabled = nextButton?.disabled;
   if (nextButton) nextButton.disabled = true;
-  const quizPage = document.getElementById('page-quiz');
+  const quizPage = activeWhen ? null : document.getElementById('page-quiz');
   const pageObserver = quizPage ? new MutationObserver(pageChanged) : null;
   pageObserver?.observe(quizPage, { attributes: true, attributeFilter: ['class'] });
 
@@ -124,7 +124,7 @@ export function beginSoloCultivationFeedback({ scoreBefore, source, realms }) {
   }
 
   function pageChanged() {
-    if (!document.getElementById('page-quiz')?.classList.contains('active-page')) finish();
+    if (activeWhen ? !activeWhen() : !document.getElementById('page-quiz')?.classList.contains('active-page')) finish();
   }
   function visibilityChanged() { if (document.visibilityState === 'hidden') finish(); }
 
