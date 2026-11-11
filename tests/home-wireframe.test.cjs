@@ -106,7 +106,7 @@ test('iPad landscape does not place the trial CTA below the whole daily card and
   const head=desktop.slice(0,desktop.indexOf('body.ui-cleanup #page-home>.home-layout>.sect-actions'));
   assert.match(head,/"left realm emblem right"/);
   assert.match(head,/"left daily practice right"/);
-  assert.match(head,/"left records \\. right"/);
+  assert.match(head,/"left records \. right"/);
   assert.doesNotMatch(head,/"left daily emblem right"|"left records practice right"/);
   assert.match(css,/grid-area:emblem/);
   assert.match(css,/grid-area:practice!important/);
