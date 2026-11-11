@@ -10,6 +10,7 @@ const rich=v=>window.quizMathRichText?.(String(v||''))||esc(v);
 const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
+let attackChoice='attack',wheelIgnoreClickUntil=0;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let autoQuizKey='',quizContext=null;
@@ -41,6 +42,7 @@ function ensure(){
   document.body.append(root);$('[data-close]').onclick=close;
   root.addEventListener('click',event=>{
     const b=event.target.closest('button');if(!b||b.disabled)return;
+    if(b.closest('.tc-quarter-action')&&Date.now()<wheelIgnoreClickUntil)return;
     if(b.dataset.mode){if(b.dataset.mode==='pve')void open('pve');else{mode='pvp';renderHub();}}
     else if(b.dataset.map){map=b.dataset.map;renderHub();}
     else if(b.hasAttribute('data-start'))void start();
@@ -52,9 +54,9 @@ function ensure(){
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
-    else if(b.dataset.action){action=b.dataset.action;selection=null;
-      const me=state?.actors.find(a=>a.uid===uid);if(me&&(action==='skill'&&R.branchFor(me).skill.range===0||action==='attack'&&R.basicFor(me).kind==='ring'))selection={x:me.x,y:me.y};
-      updateControls();renderer?.update(state,uid,action,selection);}
+    else if(b.dataset.wheelChoice){selectWheel(b.dataset.wheelChoice);}
+    else if(b.dataset.wheelAction){selectWheel(b.dataset.wheelAction);}
+    else if(b.dataset.action){selectWheel(b.dataset.action);}
     else if(b.hasAttribute('data-execute'))void execute();
     else if(b.hasAttribute('data-guard'))void send({type:'guard'});
     else if(b.hasAttribute('data-end'))void send({type:'end'});
@@ -108,6 +110,29 @@ function renderHub(){
     <details class="tc-codex"><summary>玩法說明</summary><p>每輪各答兩題，先答完者先行動；對手須在 50 秒內完成答題。每人行動 30 秒。</p><p>答對 +4 體力，答錯 +1，上限 10。每格移動消耗 1 體力，攻擊依兵器消耗；每回合最多攻擊或施法兩次，剩餘體力可保留。</p><p>灰格可移動，紅格為攻擊範圍，紅框為怪物攻擊預告。</p></details>
     <details class="tc-codex"><summary>金丹技能</summary>${Object.entries(R.CORES).filter(([key])=>key!=='none').map(([,c])=>`<section><h3>${esc(c.name)}</h3>${c.branches.map(b=>`<p><b>${esc(b.name)} · ${esc(b.skill.name)}</b> ${esc(b.skill.description)}</p>`).join('')}</section>`).join('')}</details></div>`;
 }
+
+function wheelMarker(marker,angle,radius){
+  if(!marker)return;
+  const rad=angle*Math.PI/180;
+  marker.style.left=(100+radius*Math.cos(rad)).toFixed(3)+'%';
+  marker.style.top=(100+radius*Math.sin(rad)).toFixed(3)+'%';
+}
+function selectWheel(value){
+  if(!state||busy||renderer?.isAnimating||!myAction())return;
+  if(value==='attack-ring')value=attackChoice;
+  if(value==='player'){if(action!=='move')return;}
+  else if(value==='move')action='move';
+  else if(value==='attack'||value==='skill'){action=value;attackChoice=value;}
+  else return;
+  selection=null;
+  const me=myActor();
+  if(me&&(action==='skill'&&R.branchFor(me).skill.range===0||action==='attack'&&R.basicFor(me).kind==='ring')){
+    selection={x:me.x,y:me.y};
+  }
+  updateControls();
+  renderer?.update(state,uid,action,selection);
+}
+
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
@@ -164,31 +189,83 @@ function buildGame(){
 
     const actions=document.createElement('section');
     actions.className='tc-quarter tc-quarter-action';
-    actions.setAttribute('aria-label','行動操作');
+    actions.setAttribute('aria-label','滑動選擇行動、目標與技能');
     actions.innerHTML='<svg class="tc-action-lines" viewBox="0 0 100 100" aria-hidden="true">'
       +'<path d="M 100 0 A 100 100 0 0 0 0 100"/>'
-      +'<path d="M 100 31 A 69 69 0 0 0 31 100"/>'
-      +'<path d="M 29.289 29.289 L 51.21 51.21"/></svg>';
+      +'<path d="M 100 26 A 74 74 0 0 0 26 100"/>'
+      +'<path d="M 100 51 A 49 49 0 0 0 51 100"/></svg>';
     const tabs=command.querySelector('.tc-action-tabs');
     const attack=tabs.querySelector('[data-action="attack"]');
     const move=tabs.querySelector('[data-action="move"]');
     const end=command.querySelector('[data-end]');
     attack.className='tc-sector tc-sector-attack';
-    attack.style.clipPath=wedge(-90,-135);
+    attack.dataset.wheelAction='attack-ring';
+    attack.style.clipPath=wedge(-90,-135,74,49);
     attack.innerHTML='<span>攻擊</span>';
     move.className='tc-sector tc-sector-move';
-    move.style.clipPath=wedge(-135,-180);
+    move.dataset.wheelAction='move';
+    move.style.clipPath=wedge(-135,-180,74,49);
     move.innerHTML='<span>移動</span>';
     end.className='tc-sector tc-sector-end';
-    end.style.clipPath=wedge(-90,-180,69,0);
+    end.style.clipPath=wedge(-90,-180,49,0);
     end.innerHTML='<span>結束\n回合</span>';
-    actions.append(tabs,end);
+    const choices=document.createElement('div');choices.className='tc-wheel-options';
+    const makeChoice=(value,label,begin,finish,klass)=>{
+      const b=document.createElement('button');b.type='button';
+      b.dataset.wheelChoice=value;b.className='tc-sector '+klass;
+      b.style.clipPath=wedge(begin,finish,100,74);
+      const text=document.createElement('span');text.textContent=label;
+      b.append(text);choices.append(b);return b;
+    };
+    makeChoice('player','玩家',-90,-180,'tc-detail-player');
+    makeChoice('attack','普通攻擊',-90,-135,'tc-detail-basic');
+    makeChoice('skill',R.branchFor(myActor()).skill.name,-135,-180,'tc-detail-skill');
+    const actionMarker=document.createElement('span');
+    actionMarker.className='tc-wheel-marker tc-wheel-action-marker';
+    actionMarker.setAttribute('aria-hidden','true');
+    const detailMarker=document.createElement('span');
+    detailMarker.className='tc-wheel-marker tc-wheel-detail-marker';
+    detailMarker.setAttribute('aria-hidden','true');
+    actions.append(tabs,choices,end,actionMarker,detailMarker);
+    // Dragging a ring rotates its indicator and snaps to the nearest option;
+    // taps retain native button clicks and keyboard activation.
+    let pointer=null;
+    const pointerAngle=e=>{
+      const bounds=actions.getBoundingClientRect();
+      return Math.max(-180,Math.min(-90,Math.atan2(e.clientY-bounds.bottom,e.clientX-bounds.right)*180/Math.PI));
+    };
+    actions.addEventListener('pointerdown',e=>{
+      const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
+      if(!b||b.disabled)return;
+      pointer={id:e.pointerId,x:e.clientX,y:e.clientY,ring:b.dataset.wheelChoice?'detail':'action',moved:false};
+    });
+    actions.addEventListener('pointermove',e=>{
+      if(!pointer||pointer.id!==e.pointerId)return;
+      if(Math.hypot(e.clientX-pointer.x,e.clientY-pointer.y)>8){
+        if(!pointer.moved){pointer.moved=true;try{actions.setPointerCapture(e.pointerId);}catch(_){}}
+        wheelMarker(pointer.ring==='detail'?detailMarker:actionMarker,pointerAngle(e),pointer.ring==='detail'?76:51);
+        e.preventDefault();
+      }
+    });
+    const endPointer=e=>{
+      if(!pointer||pointer.id!==e.pointerId)return;
+      const gesture=pointer;pointer=null;
+      if(actions.hasPointerCapture?.(e.pointerId))actions.releasePointerCapture(e.pointerId);
+      if(e.type==='pointercancel'){updateControls();return;}
+      if(!gesture.moved)return;
+      wheelIgnoreClickUntil=Date.now()+350;
+      const next=gesture.ring==='action'?(pointerAngle(e)>-135?'attack-ring':'move'):
+        action==='move'?'player':pointerAngle(e)>-135?'attack':'skill';
+      selectWheel(next);updateControls();
+    };
+    actions.addEventListener('pointerup',endPointer);
+    actions.addEventListener('pointercancel',endPointer);
     command.prepend(energy,actions);
   }
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,action,selection);
     // The sketch has no extra confirm button: choosing a valid map tile
     // directly executes the selected move or directional attack.
-    if(root.classList.contains('tc-quarter-layout')&&['move','attack'].includes(action)&&!$('[data-execute]').disabled)void execute();
+    if(root.classList.contains('tc-quarter-layout')&&['move','attack','skill'].includes(action)&&!$('[data-execute]').disabled)void execute();
   }},()=>{
     if(!opened||!state||!renderer)return;updateControls();
     if(!renderer.isAnimating&&state.status==='finished'&&!modalOpen)resultDialog();
@@ -252,7 +329,33 @@ function updateControls(){
   $('[data-skill-title]').textContent=action==='move'?'移動說明':`${shown.name} · ${shown.cost} 體力${action==='skill'&&cooling?' · 冷卻 '+cooling+' 回合':''}`;
   $('[data-skill]').innerHTML=action==='move'?'<p>每格消耗 1 體力；緩速時消耗增加。選好位置後按下移動確認。</p>':`<p>${esc(shown.description)}</p>`;
   $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
-  root.querySelectorAll('[data-action]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.action===action));b.disabled=!mine||locked;});
+  const quarter=root.classList.contains('tc-quarter-layout');
+  root.querySelectorAll('[data-action]').forEach(b=>{
+    b.setAttribute('aria-pressed',String(b.dataset.action===action||(quarter&&b.dataset.action==='attack'&&action==='skill')));
+    b.disabled=!mine||locked;
+  });
+  if(quarter){
+    const attacking=action!=='move';
+    const player=$('[data-wheel-choice="player"]');
+    const basicOption=$('[data-wheel-choice="attack"]');
+    const skillOption=$('[data-wheel-choice="skill"]');
+    if(player)player.hidden=attacking;
+    if(basicOption)basicOption.hidden=!attacking;
+    if(skillOption){
+      skillOption.hidden=!attacking;
+      skillOption.querySelector('span').textContent=sk.name;
+      skillOption.setAttribute('aria-label','使用技能：'+sk.name);
+    }
+    for(const option of [player,basicOption,skillOption]){
+      if(!option)continue;
+      option.disabled=!mine||locked;
+      option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?action:'player')));
+    }
+    const ring=$('.tc-quarter-action');
+    ring?.setAttribute('aria-label',attacking?'行動：攻擊；技能：'+(action==='skill'?sk.name:basic.name):'行動：移動；目標：玩家');
+    wheelMarker($('.tc-wheel-action-marker'),attacking?-112.5:-157.5,51);
+    wheelMarker($('.tc-wheel-detail-marker'),attacking?(action==='skill'?-157.5:-112.5):-135,76);
+  }
   $('[data-range-legend]').textContent=(action==='move'?'灰格可走':'紅格射程')+' · 紅框預告';
   const hint=action==='move'?'點選灰格移動':action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):sk.range===0?'按下確認施放技能':'點選紅格施放技能';
   $('[data-selection]').textContent=selection?`${action==='attack'&&basic.kind==='ring'?'震擊周圍一圈 · '+R.skillCells(state,me,basic,selection).length+' 格':action==='attack'&&directional&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,basic,selection).length+' 格':t?`${t.name} · 生命 ${t.hp}/${t.maxHp}`:`位置 ${selection.x+1}, ${selection.y+1}`}${error?' · '+error:''}`:mine?hint:'等待對手行動';
@@ -701,6 +804,7 @@ async function open(nextMode='pve'){
   if(opened&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
   if(opened)close();
   lastTrigger=document.activeElement;mode=nextMode;root.dataset.mode=mode;
+  action='move';attackChoice='attack';selection=null;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;
   if(!uid){window.showToast?.('請先登入後進入戰場');return;}
   epoch++;opened=true;busy=true;op=0;appliedOp=0;document.body.classList.add('tactical-open');
