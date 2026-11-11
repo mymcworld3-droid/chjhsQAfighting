@@ -5,6 +5,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const aiRouter = require('./ai-router');
 const { createAIQuestionBank } = require('./ai-question-bank.cjs');
+const { createTacticalBankPrewarmer } = require('./tactical-bank-prewarm.cjs');
 const { QUESTION_FORMS, createQuizTaskPlan } = require('./quiz-generation-tasks.cjs');
 const registerAdaptiveLearningApi = require('./adaptive-learning-api.cjs');
 const questionQualityAnalytics = require('./question-quality-analytics.cjs');
@@ -47,7 +48,7 @@ const registerGameIssueApi = require('./game-issue-api.cjs');
 const registerClassroomApi = require('./classroom-api.cjs');
 const registerGameStage = require('./game-stage.cjs');
 const { raidRepository, playerRepository } = require('./server-repositories.cjs');
-const { pickTrustedRaidKnowledge } = require('./raid-authority.cjs');
+const { pickTrustedRaidKnowledge, trustedKnowledgeScope } = require('./raid-authority.cjs');
 const { verifyMainIdentity, issueRaidQuestionTicket } = require('./raid-question-ticket.cjs');
 const { questionQualityIssue, removeUnstableOptionLabels } = require('./question-quality.cjs');
 const Knowledge = require('./public/cultivation/knowledge-points.js');
@@ -459,7 +460,7 @@ const AdaptiveDifficulty = require('./public/cultivation/adaptive-learning-rules
 const { createSparePool } = require('./quiz-spare-pool.cjs');
 const quizSparePool = createSparePool({ similar: (a, b) => isTooSimilarQuestion(a, [b]) });
 
-app.post('/api/generate-quiz', async (req, res) => {
+async function generateQuiz(req, res) {
     // 兼容前端可能傳來的 specificTopic 或 topic
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode, quizSessionId } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
@@ -485,6 +486,18 @@ app.post('/api/generate-quiz', async (req, res) => {
     const raidTicketMode = raidQuickSimple || String(quizMode || '') === 'raid-standard';
     const enlightenmentMode = String(quizMode || '') === 'enlightenment-trial';
     const tacticalMode = String(quizMode || '') === 'tactical';
+    // This mode is reachable only from an in-process authenticated prewarm job.
+    const tacticalBankFill = String(quizMode || '') === 'tactical-bank-fill';
+    if (tacticalBankFill) {
+        if (!req.__trustedTacticalBankTarget || !aiQuestionBank.enabled)
+            return res.status(403).json({error:'此題庫背景模式不可直接呼叫'});
+        const target=req.__trustedTacticalBankTarget;
+        subject=target.subject;level=target.level;difficulty=target.difficulty;
+        specificTopic=target.topic||'綜合測驗';topic=specificTopic;
+        rank=0;knowledgeMap=null;
+        avoidQuestions=Array.isArray(req.body?.avoidQuestions)?req.body.avoidQuestions:[];
+        avoidQuestionMeta=[];
+    }
     const towerMode = String(quizMode || '') === 'trial-tower';
     let towerContext = null;
     const avatarMode = String(quizMode || '') === 'immortal-avatar';
@@ -506,7 +519,7 @@ app.post('/api/generate-quiz', async (req, res) => {
             tacticalContext = {uid,db,...await tacticalCombat.prepareQuestion(db,uid,String(req.body?.roomId||''),Date.now(),req.body?.batchSlot===1?1:0)};
             if (tacticalContext.pending) return res.json({tacticalQuestion:tacticalContext.pending});
             subject=tacticalContext.subject;level=tacticalContext.level;rank=0;knowledgeMap=null;
-            difficulty=tacticalContext.difficulty;specificTopic=tacticalContext.topic;topic=tacticalContext.topic;
+            difficulty=tacticalContext.difficulty;specificTopic=tacticalContext.topic||'綜合測驗';topic=specificTopic;
             avoidQuestions=tacticalContext.history;avoidQuestionMeta=[];
         } catch(error) {
             return res.status(error.status||503).json({error:error.status?error.message:'戰場題目準備失敗，請重試'});
@@ -631,9 +644,9 @@ app.post('/api/generate-quiz', async (req, res) => {
             difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
         }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
     }
-    // Only authenticated random/focused solo practice may consume or expand the AI bank.
-    // Custom JSON banks never call this path, and other game modes keep their rules.
-    let aiBankAllowed = false;
+    // Tactics consume the same independently approved, durable AI bank as solo.
+    // PvE/PvP question answers remain server-only and are shuffled per battle.
+    let aiBankAllowed = aiQuestionBank.enabled && (tacticalMode || tacticalBankFill);
     if (!correction && typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
         if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
         else {
@@ -921,7 +934,7 @@ app.post('/api/generate-quiz', async (req, res) => {
                 const review = await reviewCandidate(raw, target);
                 await aiQuestionBank.publish(target, raw, review);
             };
-            if (bankTarget && attempts === 0) {
+            if (bankTarget && attempts === 0 && !tacticalBankFill) {
                 const bankResult = await aiQuestionBank.find(
                     bankTarget, previousQuestions, (q, old) => isTooSimilarQuestion(q, [old]));
                 if (bankResult.question) {
@@ -955,6 +968,12 @@ app.post('/api/generate-quiz', async (req, res) => {
                             delete candidate.adaptive_difficulty;
                             await verifyAndArchive(candidate,bankTarget);
                         });
+                    }
+                    if (tacticalMode) {
+                        const question=await tacticalCombat.commitQuestion(tacticalContext.db,tacticalContext.uid,tacticalContext,bankQuestion);
+                        await questionQualityAnalytics.recordGenerated(playerRepository.resolve().db, bankQuestion.q, difficulty)
+                            .catch(()=>{});
+                        return res.json({tacticalQuestion:question,provider:'ai-bank',model:'approved',fromAiBank:true});
                     }
                     return res.json({text:JSON.stringify(bankQuestion),provider:'ai-bank',model:'approved',fromAiBank:true});
                 }
@@ -1028,9 +1047,23 @@ app.post('/api/generate-quiz', async (req, res) => {
                 catch (error) { console.warn('[Question quality analytics] generation recording failed:', error?.code || error?.message); }
             };
 
+            if (tacticalBankFill) {
+                // Fill the durable Drive JSON bank ONLY after the independent review,
+                // never merely because the generation provider supplied 'correct'.
+                const verdict=independentReview||await reviewCandidate(parsed,bankTarget,routed.model);
+                const stored=await aiQuestionBank.publish(bankTarget,parsed,verdict);
+                return res.json({bankFilled:true,stored,q:parsed.q});
+            }
             if (tacticalMode) {
                 const question=await tacticalCombat.commitQuestion(tacticalContext.db,tacticalContext.uid,tacticalContext,parsed);
                 await trackDelivered();
+                if (bankTarget) {
+                    const archive={...parsed};
+                    aiQuestionBank.schedule(bankTarget,async()=>{
+                        const verdict=independentReview||await reviewCandidate(archive,bankTarget,routed.model);
+                        await aiQuestionBank.publish(bankTarget,archive,verdict);
+                    });
+                }
                 return res.json({tacticalQuestion:question});
             }
             if (meditationMode) {
@@ -1132,7 +1165,8 @@ app.post('/api/generate-quiz', async (req, res) => {
             }
         }
     }
-});
+}
+app.post('/api/generate-quiz', generateQuiz);
 
 // ==========================================
 // API 5: 取得中學單元列表 (遞迴讀取)
