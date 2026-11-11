@@ -120,6 +120,12 @@ function wheelMarker(marker,angle,radius){
   marker.style.left=(100+radius*Math.cos(rad)).toFixed(3)+'%';
   marker.style.top=(100+radius*Math.sin(rad)).toFixed(3)+'%';
 }
+// The slider is an actual curved annular pizza-sector, not a floating pill.
+// Its SVG rotor pivots at the bottom-right corner of the quarter-circle.
+function wheelSliderAngle(slider,angle){
+  const rotor=slider?.querySelector('.tc-wheel-slider-rotor');
+  if(rotor)rotor.style.transform='rotate('+(angle-WHEEL_ANGLES.upper).toFixed(3)+'deg)';
+}
 function selectWheel(value){
   if(!state||busy||renderer?.isAnimating||!myAction())return;
   if(value==='attack-ring')value=attackChoice;
@@ -233,6 +239,35 @@ function buildGame(){
     makeChoice('player','玩家',-90,-180,'tc-detail-player');
     makeChoice('attack','普通攻擊',-90,-135,'tc-detail-basic');
     makeChoice('skill',R.branchFor(myActor()).skill.name,-135,-180,'tc-detail-skill');
+    // Both selection indicators are annular 45-degree sectors with true
+    // circular edges. The underlying clipped buttons remain interactive.
+    const polar=(degrees,radius)=>{
+      const rad=degrees*Math.PI/180;
+      return [100+radius*Math.cos(rad),100+radius*Math.sin(rad)]
+        .map(value=>value.toFixed(4)).join(' ');
+    };
+    const sectorPath=(outer,inner)=>{
+      const start=-90,end=-135;
+      return 'M '+polar(start,outer)+' A '+outer+' '+outer+' 0 0 0 '+polar(end,outer)
+        +' L '+polar(end,inner)+' A '+inner+' '+inner+' 0 0 1 '+polar(start,inner)+' Z';
+    };
+    const makeSlider=(kind,outer,inner)=>{
+      const ns='http://www.w3.org/2000/svg';
+      const svg=document.createElementNS(ns,'svg');
+      svg.classList.add('tc-wheel-slider','tc-wheel-slider-'+kind);
+      svg.setAttribute('viewBox','0 0 100 100');
+      svg.setAttribute('aria-hidden','true');
+      svg.setAttribute('focusable','false');
+      const rotor=document.createElementNS(ns,'g');
+      rotor.classList.add('tc-wheel-slider-rotor');
+      const shape=document.createElementNS(ns,'path');
+      shape.classList.add('tc-wheel-slider-shape');
+      shape.setAttribute('d',sectorPath(outer,inner));
+      rotor.append(shape);svg.append(rotor);
+      return svg;
+    };
+    const actionSlider=makeSlider('action',74,49);
+    const detailSlider=makeSlider('detail',100,74);
     const actionMarker=document.createElement('span');
     actionMarker.className='tc-wheel-marker tc-wheel-action-marker';
     actionMarker.setAttribute('aria-hidden','true');
@@ -241,7 +276,7 @@ function buildGame(){
     detailMarker.className='tc-wheel-marker tc-wheel-detail-marker';
     detailMarker.setAttribute('aria-hidden','true');
     detailMarker.textContent='玩家';
-    actions.append(tabs,choices,end,actionMarker,detailMarker);
+    actions.append(tabs,choices,end,actionSlider,detailSlider,actionMarker,detailMarker);
     // Both rings are independently draggable. A click selects a fixed
     // station; the labelled slider smoothly glides to that station.
     let pointer=null;
@@ -261,11 +296,14 @@ function buildGame(){
         if(!pointer.moved){
           pointer.moved=true;
           try{actions.setPointerCapture(e.pointerId);}catch(_){}
-          // Direct tracking should not ease behind the finger.
+          // Drag follows the finger instantly; releasing snaps to a station.
           (pointer.ring==='detail'?detailMarker:actionMarker).classList.add('is-dragging');
+          (pointer.ring==='detail'?detailSlider:actionSlider).classList.add('is-dragging');
         }
+        const angle=pointerAngle(e);
         wheelMarker(pointer.ring==='detail'?detailMarker:actionMarker,
-          pointerAngle(e),WHEEL_RADII[pointer.ring]);
+          angle,WHEEL_RADII[pointer.ring]);
+        wheelSliderAngle(pointer.ring==='detail'?detailSlider:actionSlider,angle);
         e.preventDefault();
       }
     });
@@ -274,6 +312,7 @@ function buildGame(){
       const gesture=pointer;pointer=null;
       const marker=gesture.ring==='detail'?detailMarker:actionMarker;
       marker.classList.remove('is-dragging');
+      (gesture.ring==='detail'?detailSlider:actionSlider).classList.remove('is-dragging');
       if(actions.hasPointerCapture?.(e.pointerId))actions.releasePointerCapture(e.pointerId);
       if(e.type==='pointercancel'){updateControls();return;}
       if(!gesture.moved)return;
@@ -287,8 +326,14 @@ function buildGame(){
     actions.addEventListener('pointerup',endPointer);
     actions.addEventListener('pointercancel',endPointer);
     actions.addEventListener('lostpointercapture',e=>{
-      if(pointer&&pointer.id===e.pointerId){pointer=null;actionMarker.classList.remove('is-dragging');
-        detailMarker.classList.remove('is-dragging');updateControls();}
+      if(pointer&&pointer.id===e.pointerId){
+        pointer=null;
+        actionMarker.classList.remove('is-dragging');
+        detailMarker.classList.remove('is-dragging');
+        actionSlider.classList.remove('is-dragging');
+        detailSlider.classList.remove('is-dragging');
+        updateControls();
+      }
     });
     actions.addEventListener('keydown',e=>{
       const b=e.target.closest('button[data-wheel-action],button[data-wheel-choice]');
@@ -405,8 +450,12 @@ function updateControls(){
     actionThumb.textContent=attacking?'攻擊':'移動';
     detailThumb.textContent=attacking?(action==='skill'?sk.name:basic.name):'玩家';
     detailThumb.title=attacking?(action==='skill'?sk.name:basic.name):'玩家';
-    wheelMarker(actionThumb,attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower,WHEEL_RADII.action);
-    wheelMarker(detailThumb,attacking?(action==='skill'?WHEEL_ANGLES.lower:WHEEL_ANGLES.upper):WHEEL_ANGLES.center,WHEEL_RADII.detail);
+    const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
+    const detailAngle=attacking?(action==='skill'?WHEEL_ANGLES.lower:WHEEL_ANGLES.upper):WHEEL_ANGLES.center;
+    wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
+    wheelMarker(detailThumb,detailAngle,WHEEL_RADII.detail);
+    wheelSliderAngle($('.tc-wheel-slider-action'),actionAngle);
+    wheelSliderAngle($('.tc-wheel-slider-detail'),detailAngle);
   }
   $('[data-range-legend]').textContent=(action==='move'?'灰格可走':'紅格射程')+' · 紅框預告';
   const hint=action==='move'?'點選灰格移動':action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):sk.range===0?'按下確認施放技能':'點選紅格施放技能';
