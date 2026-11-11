@@ -18,6 +18,7 @@ let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=nu
 let autoQuizKey='',quizContext=null;
 let pairQuestions=[],pairChoices=[],pairReviews=[],pairDisplayIndex=0;
 let pairGeneration=0,pairFollowupPromise=null,pairFollowupError='';
+let preloadedTacticalQuestions=null;
 let pairWhiteboardIndex=-1,pairWhiteboardPointer=null;
 const pairWhiteboardInk=new Map();
 const $=selector=>root?.querySelector(selector);
@@ -439,6 +440,8 @@ function paint({preserveModal=false}={}){
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   renderer.update(state,uid,action,selection);updateControls();updateClock();
+  // Resume/open through room-state polling also prefetches before any click.
+  if(!modalOpen)preloadTacticalQuestions();
   if(state.status==='finished'&&!renderer.isAnimating&&!modalOpen)resultDialog();
   else if(state.mode==='pve'&&state.newEnemies?.length)showEnemyIntro();
 }
@@ -586,6 +589,10 @@ function accept(next,serial){
   const oldQuestion=state?.question?.id;
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   state=next;if(!keepSelection)selection=null;
+  // Kick off real match-scoped question requests immediately on an eligible
+  // battle state, even while the player is reading an encounter introduction.
+  // This happens before they can press the charging wheel.
+  if(next?.status==='active'&&!(modalOpen&&pairQuestions.length))preloadTacticalQuestions();
   // Refill upcoming reviewed questions in the background while battle UI is active.
   if(next?.status==='active')void warmTacticalBank(Math.max(1,(next.actors?.find(a=>a.uid===uid)?.answered||0)+1));
   if(next?.mode==='pve'&&next.trial){
@@ -627,8 +634,51 @@ async function send(command){
   });
 }
 async function execute(){if(selection)await send({type:action,x:selection.x,y:selection.y});}
-// Two model/API requests run concurrently. The second is a prefetch, not
-// a prerequisite for showing the first question. Answer keys never leave the server.
+// Start both requests as soon as a battle can accept a charge, BEFORE the
+// player presses the charging button. The server still checks the selected
+// learning scope, round eligibility and answers, and returns no answer keys.
+function tacticalPreloadKey(){
+  const me=myActor();
+  if(!state||!me)return '';
+  return [epoch,uid,state.id,state.turn,state.quizRound||0,me.questions,me.answered].join(':');
+}
+function preloadTacticalQuestions(){
+  if(!opened||!state||state.status!=='active'||!canQuestion())return null;
+  if(modalOpen&&pairQuestions.length)return null;
+  const key=tacticalPreloadKey();
+  if(!key)return null;
+  if(preloadedTacticalQuestions?.key===key)return preloadedTacticalQuestions;
+  const e=epoch,account=uid,roomId=state.id;
+  const remaining=Math.max(1,R.LIMITS.questions-myActor().questions);
+  const job={key,first:null,second:null,firstError:'',secondError:'',
+    firstPromise:null,secondPromise:null};
+  preloadedTacticalQuestions=job;
+  const launch=(slot)=>{
+    const prior=slot===0?state.question:state.questionFollowup;
+    return Promise.resolve(prior||api('/api/generate-quiz',{
+      quizMode:'tactical',roomId,batchSlot:slot
+    }).then(result=>result.tacticalQuestion)).then(q=>{
+      if(preloadedTacticalQuestions===job&&valid(e,account)&&state?.id===roomId&&q?.id){
+        if(slot===0)job.first=q;
+        else job.second=q;
+      }
+      return q?.id?q:null;
+    }).catch(error=>{
+      if(preloadedTacticalQuestions===job){
+        if(slot===0)job.firstError=error.message;
+        else job.secondError=error.message;
+      }
+      return null;
+    });
+  };
+  // Launch without waiting for either request. Both promises absorb errors so
+  // the user can keep playing while the bank/model works.
+  job.firstPromise=launch(0);
+  job.secondPromise=remaining>=2?launch(1):Promise.resolve(null);
+  return job;
+}
+// The two requests may resolve in either order. The second is never a
+// prerequisite for showing the first question, and keys stay on the server.
 function pairIsCurrent(e,account,roomId,generation){
   return valid(e,account)&&state?.id===roomId&&pairGeneration===generation;
 }
@@ -668,22 +718,38 @@ async function question(){
   if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
   const e=epoch,account=uid,roomId=state.id;
   const remaining=Math.max(1,R.LIMITS.questions-myActor().questions);
+  // Reuse the same in-flight/ready questions. Clicking must never launch an
+  // identical pair of API calls while a background request is already pending.
+  const ready=preloadedTacticalQuestions?.key===tacticalPreloadKey()
+    ?preloadedTacticalQuestions:preloadTacticalQuestions();
   const generation=++pairGeneration;
-  const existingFirst=state.question,existingSecond=state.questionFollowup;
+  const existingFirst=state.question||ready?.first;
+  const existingSecond=state.questionFollowup||ready?.second;
   pairQuestions=Array(remaining).fill(null);
   pairChoices=Array(remaining).fill(-1);
   pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';
-  busy=true;notice('');
-  showModal('<h2>正在取得第一題…</h2><p>第一題就緒後立即開放作答，下一題同步在背景準備。</p><button type="button" data-dismiss>返回戰場</button>');
-  // Start two API requests concurrently; the AI router can use independent
-  // configured model/key capacity. Unreviewed spare drafts remain server-only
-  // and cannot be scored until independent quality approval.
   if(remaining>=2){
     if(existingSecond)pairQuestions[1]=existingSecond;
-    else void fetchPairFollowup(e,account,roomId,generation);
+    else if(ready?.secondPromise){
+      const preloadSecond=ready.secondPromise.then(item=>{
+        if(item?.id&&pairIsCurrent(e,account,roomId,generation)
+          &&item.id!==pairQuestions[0]?.id&&!pairQuestions[1]){
+          pairQuestions[1]=item;
+        }
+        return pairQuestions[1]||null;
+      });
+      pairFollowupPromise=preloadSecond.finally(()=>{
+        if(pairFollowupPromise===wrapped)pairFollowupPromise=null;
+      });
+      const wrapped=pairFollowupPromise;
+    }else void fetchPairFollowup(e,account,roomId,generation);
   }
+  busy=true;notice('');
+  if(!existingFirst)showModal('<h2>正在取得第一題…</h2><p>題目已提前在背景請求，取得第一題後立即開放作答。</p><button type="button" data-dismiss>返回戰場</button>');
+  else showModal('<h2>題目已準備好</h2><p>正在開啟題目…</p>');
   try{
-    const first=existingFirst||(await api('/api/generate-quiz',{quizMode:'tactical',roomId,batchSlot:0})).tacticalQuestion;
+    let first=existingFirst||(await ready?.firstPromise);
+    if(!first?.id)first=(await api('/api/generate-quiz',{quizMode:'tactical',roomId,batchSlot:0})).tacticalQuestion;
     if(!pairIsCurrent(e,account,roomId,generation))return;
     if(!first?.id)throw Error('第一題尚未準備完成，請重試');
     state.question=first;
@@ -1082,7 +1148,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairGeneration++;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
