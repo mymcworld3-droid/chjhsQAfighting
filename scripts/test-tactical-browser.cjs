@@ -505,13 +505,8 @@ async function main(){
       await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
       assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),8);
       await quick.waitForFunction(()=>document.querySelector('[data-quiz]')?.classList.contains('is-charge-ready'));
-      await quick.locator('[data-action="attack"]').click();
-      await cell(quick,2,1);
-      await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');
-      const result=await read(quick);
-      assert.ok(result.actors[1].hp<500,'the map click executes a valid directional attack without confirmation');
-      assert.equal(result.actors[0].stamina,6);
-      assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),6);
+      // Verify disabled/no pulse BEFORE attacking: killing the final enemy
+      // can finish the trial and freeze its last displayed state.
       const full=db.records.get(key);
       full.actors[0].stamina=10;
       full.actors[0].questions=2;
@@ -523,7 +518,20 @@ async function main(){
           btn?.disabled&&!btn.classList.contains('is-charge-ready');
       });
       assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),10);
-      assert.equal(await quick.locator('[data-quiz]').isDisabled(),true);
+      full.actors[0].stamina=8;
+      full.actors[0].questions=0;
+      full.revision++;
+      await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+      await quick.waitForFunction(()=>
+        document.querySelector('[data-energy-number]')?.textContent==='8'&&
+        document.querySelector('[data-quiz]')?.classList.contains('is-charge-ready'));
+      await quick.locator('[data-action="attack"]').click();
+      await cell(quick,2,1);
+      await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');
+      const result=await read(quick);
+      assert.ok(result.actors[1].hp<500,'the map click executes a valid directional attack without confirmation');
+      assert.equal(result.actors[0].stamina,6);
+      assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),6);
       assert.deepEqual(errors,[]);
       console.log('Exact sketch browser check passed: only the required controls in three viewport orientations, real server attack triggered by one tile tap.');
       return;
