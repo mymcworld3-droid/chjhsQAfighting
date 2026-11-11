@@ -111,9 +111,10 @@ function buildGame(){
     actions.className='tc-quarter tc-quarter-action';
     actions.setAttribute('aria-label','移動、攻擊、技能與回合操作');
     actions.innerHTML='<span class="tc-actions-caption" aria-hidden="true">行動</span>';
-    actions.append(command.querySelector('.tc-action-tabs'),
-      command.querySelector('[data-execute]'),command.querySelector('.tc-turn-buttons'));
+    const confirm=command.querySelector('[data-execute]');
+    actions.append(command.querySelector('.tc-action-tabs'),command.querySelector('.tc-turn-buttons'));
     command.prepend(energy,actions);
+    command.append(confirm);
     const heading=$('.tc-arena-heading');
     const zoomHelp=document.createElement('span');
     zoomHelp.className='tc-map-gesture';
