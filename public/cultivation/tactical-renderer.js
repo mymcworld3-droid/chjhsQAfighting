@@ -1,4 +1,3 @@
-import './weapon-system-rules.js';
 import './tactical-rules.js';
 import './tactical-animation.js';
 const R=globalThis.QATactical;

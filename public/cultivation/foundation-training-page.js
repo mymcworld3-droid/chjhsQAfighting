@@ -80,6 +80,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
     const preserveStatus = !!page.querySelector('#training-status-tab.active');
     page.dataset.foundationTraining = '1';
     page.classList.add('foundation-training-page', 'training-page', 'training-page-v3');
+    page.querySelectorAll('[data-training-tab="contract"]').forEach(button=>button.remove());
     if (alreadyHydrated) return;
     page.dataset.foundationTrainingReady = '1';
 
@@ -104,10 +105,6 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
       const bag = page.querySelector('[data-training-tab="bag"]');
       bag?.insertAdjacentHTML('beforebegin', '<button type="button" class="training-subtab-v3" data-training-tab="equipment" aria-selected="false"><i class="fa-solid fa-shield-halved"></i><span>裝備</span></button>');
     }
-    if (window.QA_WEAPON_SYSTEM_ENABLED && tabs && !tabs.querySelector('[data-training-tab="contract"]')) {
-      tabs.querySelector('[data-training-tab="refinery"]')?.insertAdjacentHTML('afterend', '<button type="button" class="training-subtab-v3" data-training-tab="contract" aria-selected="false"><i class="fa-solid fa-dharmachakra"></i><span>尋器</span></button>');
-    }
-
     page.querySelectorAll('[data-training-tab]').forEach((tab) => {
       const selected = !preserveStatus && tab.dataset.trainingTab === 'bag';
       tab.classList.toggle('active', selected);
@@ -130,25 +127,9 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
         next > (current < 0 ? tabs.length - 1 : current) ? 1 : -1);
     }
 
-    page.querySelector('[data-training-tab="contract"]')?.addEventListener('click', () => {
-      if (!foundationStage() || !window.QA_WEAPON_SYSTEM_ENABLED) return;
-      const finishTransition = beginTabSlide('contract');
-      page.querySelectorAll('[data-training-tab]').forEach(tab => {
-        const selected = tab.dataset.trainingTab === 'contract';
-        tab.classList.toggle('active', selected);
-        tab.setAttribute('aria-selected', String(selected));
-      });
-      window.mountWeaponForge?.(page.querySelector('#training-tab-content'), 'acquire');
-      finishTransition?.();
-    });
-
     page.querySelector('[data-training-tab="refinery"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;
       const finishTransition = beginTabSlide('refinery');
-      if(window.QA_WEAPON_SYSTEM_ENABLED){
-        page.querySelectorAll('[data-training-tab]').forEach(tab=>{const selected=tab.dataset.trainingTab==='refinery';tab.classList.toggle('active',selected);tab.setAttribute('aria-selected',String(selected));});
-        window.mountWeaponForge?.(page.querySelector('#training-tab-content'));finishTransition?.();return;
-      }
       // 同一個入口交給煉器模組負責狀態、內容與事件，避免兩個 click handler
       // 在使用者快速切換時互相覆寫。模組尚未準備好時才顯示預載殼層。
       const content = page.querySelector('#training-tab-content');
@@ -168,7 +149,6 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
 
     page.querySelector('[data-training-tab="equipment"]')?.addEventListener('click', () => {
       if (!foundationStage()) return;
-      if(window.QA_WEAPON_SYSTEM_ENABLED){window.openWeaponForge?.();return;}
       const finishTransition = beginTabSlide('equipment');
       page.querySelectorAll('[data-training-tab]').forEach((tab) => {
         const selected = tab.dataset.trainingTab === 'equipment';

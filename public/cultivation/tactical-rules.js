@@ -1,8 +1,8 @@
 /* Shared, deterministic stamina battlefield. Server owns every state transition. */
 (function(root,factory){
-  const api=factory(typeof module==='object'&&module.exports?require('./weapon-system-rules.js'):root.QAWeapons);
+  const api=factory();
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QATactical=api;
-})(globalThis,W=>{
+})(globalThis,()=>{
   'use strict';
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
@@ -54,7 +54,7 @@
     ])
   });
   const BASIC=skill('attack','普通攻擊',2,2,'line',1,'選擇上下左右一個方向，攻擊該方向兩格；遇障礙停止。',{cooldown:0});
-  const basicFor=a=>W?.attackSkill(a?.weapon)||BASIC;
+  const basicFor=()=>BASIC;
   // The existing spirit page remains the single branch-selection surface.
   const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
     ningxin:{focus:'focus',calm:'barrier'},pojing:{execute:'execute',momentum:'breach'},xingchen:{meteor:'meteor',moon:'orbit'},
@@ -191,7 +191,6 @@
     const maxHp=Math.max(1,num(raw.maxHp)||1000);
     return {uid:String(raw.uid),name:String(raw.name||'修士').slice(0,40),team:raw.team||'player',bot:!!raw.bot,
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
-      ...(W?.get(raw.weapon?.type)?{weapon:{version:W.VERSION,type:raw.weapon.type,realm:W.realmIndex(raw.weapon)}}:{}),
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),

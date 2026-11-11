@@ -43,31 +43,19 @@ test('new accounts see Status; existing Foundation and Golden Core gates are at 
   const player = { stats: { totalScore: 0 } };
   assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['status', 'rank']);
   player.stats.totalScore = 6;
-  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'contract', 'vault', 'secret', 'status', 'rank']);
+  assert.deepEqual(Rules.PLACES.filter(place => Rules.allows(player, place.threshold)).map(place => place.id), ['forge', 'vault', 'secret', 'status', 'rank']);
   player.stats.totalScore = 28;
   assert.equal(Rules.PLACES.every(place => Rules.allows(player, place.threshold)), true);
 });
 
-test('compact contract entrance sits beside the forge and opens its existing tab', () => {
-  const contract = Rules.PLACES.find(place => place.id === 'contract');
-  assert.equal(contract.name, '尋器');
-  assert.equal(contract.threshold, 6);
-  for (const layout of Object.values(Layouts)) {
-    const forge = layout.places.forge.bounds, altar = layout.places.contract.bounds;
-    assert.ok(altar[2] < forge[2]);
-    assert.ok(altar[0] >= forge[0] + forge[2]);
-    assert.ok(altar[0] - forge[0] - forge[2] < layout.width * .03);
+test('weapon-draw altar is removed but normal artifact forge is preserved',()=>{
+  assert.equal(Rules.PLACES.some(place=>place.id==='contract'),false);
+  assert.equal(Rules.PLACES.some(place=>place.id==='forge'),true);
+  for(const layout of Object.values(Layouts)){
+    assert.equal(layout.places.contract,undefined);
+    assert.ok(layout.places.forge);
   }
-  const calls = [], source = fs.readFileSync(path.join(__dirname, '../public/cultivation/training-scene-map.js'), 'utf8');
-  const context = { window: { resetTrainingScroll() {} },
-    page: { querySelector(selector) { assert.equal(selector, '[data-training-tab="contract"]'); return { click: () => calls.push('contract') }; } },
-    setDetail: id => calls.push(id), bar: { querySelector: () => ({ focus() {} }) } };
-  vm.createContext(context);
-  vm.runInContext(source.slice(source.indexOf('function openPlace('), source.indexOf('\nasync function animate')) + '\nthis.openPlace = openPlace;', context);
-  context.openPlace(contract);
-  assert.deepEqual(calls, ['contract', 'contract']);
 });
-
 test('entrance unlocks are monotonic through deductions and remote account restores', () => {
   const player = { stats: { totalScore: 68, gold: 500 } };
   player.trainingAccess = Rules.record(player);

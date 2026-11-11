@@ -32,10 +32,8 @@ void import('./account-delete.js').catch((error) => {
 });
 
 window.QA_TACTICAL_BATTLE_ENABLED = true;
-window.QA_WEAPON_SYSTEM_ENABLED = true;
-if(document.body)document.body.dataset.weaponSystem = '1';
+window.QA_WEAPON_SYSTEM_ENABLED = false;
 const XIUXIAN_FEATURE_MODULES = [
-  './cultivation/weapon-forge.js',
   './cultivation/realm-icons.js',
   './cultivation/realm-icon-motion.js',
   './cultivation/cultivation-theme.js',
