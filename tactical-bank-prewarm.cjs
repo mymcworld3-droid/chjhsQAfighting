@@ -44,7 +44,9 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
             logger.warn?.('[Tactical bank] background refill failed:',String(error?.message||error).slice(0,160));
           }finally{
             working.delete(key);
-            pump();
+            // Let the shared bank scheduler release its active slot first;
+            // a microtask here could outrun its Promise.finally().
+            setTimeout(pump,0);
           }
         });
         if(!accepted){
