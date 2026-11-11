@@ -438,6 +438,64 @@ async function main(){
   try{
     await modeEntryChecks();
     if(process.env.TACTICAL_NAV_ONLY){assert.deepEqual(errors,[]);return;}
+    if(process.env.TACTICAL_SKETCH_ONLY){
+      const quick=await make('u1',{width:1280,height:720});
+      await quick.locator('#entry').click();
+      await quick.locator('.tc-arena canvas').waitFor();
+      await quick.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+      if(await quick.locator('[data-intro-ack]').count()){
+        await quick.locator('[data-intro-ack]').click();
+        await quick.locator('[data-intro-ack]').waitFor({state:'detached'});
+      }
+      const validate=async()=>{
+        const layout=await quick.evaluate(()=>{
+          const root=document.querySelector('#tactical-combat');
+          const main=root.querySelector('.tc-main').getBoundingClientRect();
+          const rect=selector=>{const r=root.querySelector(selector).getBoundingClientRect();return {x:(r.left-main.left)/main.width,y:(r.top-main.top)/main.height,w:r.width/main.width,h:r.height/main.height}};
+          const visible=[...root.querySelectorAll('button')].filter(button=>{
+            const css=getComputedStyle(button);
+            return css.display!=='none'&&css.visibility!=='hidden'&&button.getClientRects().length>0&&
+              button.getBoundingClientRect().width>1&&button.getBoundingClientRect().height>1;
+          }).map(button=>button.dataset.action||Object.keys(button.dataset).join(','));
+          return {map:rect('.tc-arena>canvas'),energy:rect('.tc-quarter-energy'),
+            actions:rect('.tc-quarter-action'),visible,
+            titleDisplay:getComputedStyle(root.querySelector('.tc-top')).display,
+            actorDisplay:getComputedStyle(root.querySelector('.tc-actors')).display,
+            margin:getComputedStyle(root.querySelector('.tc-main')).overflow};
+        });
+        assert.equal(layout.titleDisplay,'none');
+        assert.equal(layout.actorDisplay,'none');
+        assert.deepEqual(layout.visible.sort(),['attack','end','move','quiz'].sort());
+        assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
+        assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);
+        assert.ok(Math.abs(layout.map.x-.18)<.025||Math.abs(layout.map.x-.07)<.025);
+        assert.ok(layout.map.w>.60&&layout.map.h>.48);
+        return layout;
+      };
+      for(const [width,height,label]of [[1280,720,'sketch-landscape'],[393,852,'sketch-portrait'],[844,390,'sketch-phone-landscape']]){
+        await quick.setViewportSize({width,height});
+        const layout=await validate();
+        await quick.screenshot({path:path.join(output,label+'.png')});
+        console.log('Sketch layout verified '+label,JSON.stringify(layout));
+      }
+      await quick.setViewportSize({width:1280,height:720});
+      const battle=await read(quick),key=service.ROOMS+'/'+battle.id,room=db.records.get(key);
+      room.blocks=[];room.revision++;
+      Object.assign(room.actors[0],{x:1,y:1,stamina:8,attacks:0,actions:0});
+      Object.assign(room.actors[1],{x:2,y:1,hp:500});
+      room.pendingIntroductions={u1:[]};
+      await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+      await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
+      await quick.locator('[data-action="attack"]').click();
+      await cell(quick,2,1);
+      await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');
+      const result=await read(quick);
+      assert.ok(result.actors[1].hp<500,'the map click executes a valid directional attack without confirmation');
+      assert.equal(result.actors[0].stamina,6);
+      assert.deepEqual(errors,[]);
+      console.log('Exact sketch browser check passed: only the required controls in three viewport orientations, real server attack triggered by one tile tap.');
+      return;
+    }
     const mobile=await make('u1',{width:393,height:852});
     await mobile.locator('#entry').click();await mobile.locator('#startup-cloud-curtain').waitFor();
     await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
