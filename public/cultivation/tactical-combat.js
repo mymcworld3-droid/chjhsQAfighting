@@ -17,6 +17,7 @@ let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
 let autoQuizKey='',quizContext=null;
 let pairQuestions=[],pairChoices=[],pairReviews=[],pairDisplayIndex=0;
+let pairGeneration=0,pairFollowupPromise=null,pairFollowupError='';
 let pairWhiteboardIndex=-1,pairWhiteboardPointer=null;
 const pairWhiteboardInk=new Map();
 const $=selector=>root?.querySelector(selector);
@@ -626,24 +627,76 @@ async function send(command){
   });
 }
 async function execute(){if(selection)await send({type:action,x:selection.x,y:selection.y});}
+// Two model/API requests run concurrently. The second is a prefetch, not
+// a prerequisite for showing the first question. Answer keys never leave the server.
+function pairIsCurrent(e,account,roomId,generation){
+  return valid(e,account)&&state?.id===roomId&&pairGeneration===generation;
+}
+function fetchPairFollowup(e,account,roomId,generation){
+  if(pairQuestions.length<2)return Promise.resolve(null);
+  if(pairQuestions[1])return Promise.resolve(pairQuestions[1]);
+  if(pairFollowupPromise)return pairFollowupPromise;
+  pairFollowupError='';
+  const flight=(async()=>{
+    // A long-running slot-1 generation may lose the race to the first answer.
+    // If that happens, re-request slot 0 after the first answer advances state.
+    let lastError=null;
+    for(let attempt=0;attempt<3;attempt++){
+      if(!pairIsCurrent(e,account,roomId,generation))return null;
+      const slot=pairReviews.length>0?0:1;
+      try{
+        const item=(slot===1?state.questionFollowup:state.question)
+          ||(await api('/api/generate-quiz',{quizMode:'tactical',roomId,batchSlot:slot})).tacticalQuestion;
+        if(!pairIsCurrent(e,account,roomId,generation))return null;
+        if(!item?.id)throw Error('下一題尚未準備完成');
+        // An answer response may have promoted a committed follow-up first.
+        if(!pairQuestions[1])pairQuestions[1]=item;
+        return pairQuestions[1];
+      }catch(error){
+        lastError=error;
+        if(!pairIsCurrent(e,account,roomId,generation))return null;
+        if(attempt===2||error.status&&![409,429,500,503].includes(error.status))break;
+      }
+    }
+    pairFollowupError=lastError?.message||'下一題暫時未就緒';
+    return null;
+  })().finally(()=>{if(pairFollowupPromise===flight)pairFollowupPromise=null;});
+  pairFollowupPromise=flight;
+  return flight;
+}
 async function question(){
   if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
-  const e=epoch,account=uid,remaining=Math.max(1,R.LIMITS.questions-myActor().questions);
-  busy=true;notice('');showModal('<h2>正在準備題目…</h2><p>一次準備本輪兩題，每題點選答案後立即批改；讀完解析再按下一題。</p><button type="button" data-dismiss>返回戰場</button>');
+  const e=epoch,account=uid,roomId=state.id;
+  const remaining=Math.max(1,R.LIMITS.questions-myActor().questions);
+  const generation=++pairGeneration;
+  const existingFirst=state.question,existingSecond=state.questionFollowup;
+  pairQuestions=Array(remaining).fill(null);
+  pairChoices=Array(remaining).fill(-1);
+  pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';
+  busy=true;notice('');
+  showModal('<h2>正在取得第一題…</h2><p>第一題就緒後立即開放作答，下一題同步在背景準備。</p><button type="button" data-dismiss>返回戰場</button>');
+  // Launch separate API requests on different servers/providers concurrently.
+  // Pre-generated, unreviewed candidates may be staged by the bank worker,
+  // but only validated questions are scored in a live battle.
+  if(remaining>=2){
+    if(existingSecond)pairQuestions[1]=existingSecond;
+    else void fetchPairFollowup(e,account,roomId,generation);
+  }
   try{
-    const first=state.question||(await api('/api/generate-quiz',{quizMode:'tactical',roomId:state.id,batchSlot:0})).tacticalQuestion;
-    if(!valid(e,account))return;
-    if(!first)throw Error('第一題尚未準備完成，請重試');
+    const first=existingFirst||(await api('/api/generate-quiz',{quizMode:'tactical',roomId,batchSlot:0})).tacticalQuestion;
+    if(!pairIsCurrent(e,account,roomId,generation))return;
+    if(!first?.id)throw Error('第一題尚未準備完成，請重試');
     state.question=first;
-    const second=remaining>=2?(state.questionFollowup||(await api('/api/generate-quiz',{quizMode:'tactical',roomId:state.id,batchSlot:1})).tacticalQuestion):null;
-    if(!valid(e,account))return;
-    if(remaining>=2&&!second)throw Error('第二題尚未準備完成，請重試');
-    state.questionFollowup=second;
-    pairQuestions=[first,...(second?[second]:[])];pairChoices=pairQuestions.map(()=>-1);pairReviews=[];pairDisplayIndex=0;
+    pairQuestions[0]=first;
     if(modalOpen)paintQuestion();
   }catch(err){
-    if(valid(e,account))showModal('<h2>題目尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-quiz>重新準備兩題</button><button type="button" data-dismiss>返回戰場</button>');
-  }finally{if(valid(e,account)){busy=false;updateControls();schedule();}}
+    if(pairIsCurrent(e,account,roomId,generation))
+      showModal('<h2>第一題尚未就緒</h2><p>'+esc(err.message)+'</p><button type="button" data-quiz>重新準備第一題</button><button type="button" data-dismiss>返回戰場</button>');
+  }finally{
+    if(pairIsCurrent(e,account,roomId,generation)){
+      busy=false;updateControls();schedule();
+    }
+  }
 }
 function questionSheet(q,review=null,index=0){
   const options=review?.opts||q.opts;
@@ -743,7 +796,7 @@ async function reportQuestion(helperReason=''){
       (result.staminaRefunded>0?` 已返還 ${result.staminaRefunded} 體力。`:'');
     status.textContent=message;
     if(result.questionSkipped){
-      pairQuestions=[];pairChoices=[];pairReviews=[];
+      pairGeneration++;pairQuestions=[];pairChoices=[];pairReviews=[];pairFollowupPromise=null;
       hideModal();paint();notice(message);
       if(canQuestion())void question();
       return;
@@ -895,9 +948,25 @@ function paintQuestion(){
   showModal(pairLayout(),{quiz:true});
   updateClock();
 }
-function showNextPairQuestion(){
+async function showNextPairQuestion(){
   if(busy||!modalOpen||pairDisplayIndex>=pairQuestions.length-1||!pairReviews[pairDisplayIndex])return;
+  if(!pairQuestions[pairDisplayIndex+1]){
+    const button=$('[data-next-pair-question]');
+    if(button){button.disabled=true;button.textContent='正在取得下一題…';}
+    const e=epoch,account=uid,roomId=state.id,generation=pairGeneration;
+    const pending=pairFollowupPromise||fetchPairFollowup(e,account,roomId,generation);
+    let next=await pending;
+    if(!pairIsCurrent(e,account,roomId,generation)||!modalOpen)return;
+    if(!next)next=await fetchPairFollowup(e,account,roomId,generation);
+    if(!pairIsCurrent(e,account,roomId,generation)||!modalOpen)return;
+    if(!next){
+      if(button){button.disabled=false;button.textContent='下一題（重新取得）';}
+      notice(pairFollowupError||'正在填充題庫，請再按一次下一題');
+      return;
+    }
+  }
   pairDisplayIndex++;
+  notice('');
   paintQuestion();
 }
 function finishPairReview(){
@@ -931,6 +1000,10 @@ async function submitPair(){
     appliedOp=serial;
     const review=state.review;
     pairReviews.push(review);
+    // If the backend already promoted a ready follow-up into the current
+    // pending slot, use it even when the parallel preload is still in flight.
+    if(index===0&&pairQuestions.length>1&&!pairQuestions[1]&&state.question?.id)
+      pairQuestions[1]=state.question;
     window.QAGameAudio?.answer(review.correct,'tactical:'+roomId+':'+q.id);
     const score=Number(state.progress?.stats?.totalScore);
     if(state.mode==='pve'&&Number.isFinite(score)&&score>initialScore
@@ -1009,7 +1082,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairGeneration++;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
