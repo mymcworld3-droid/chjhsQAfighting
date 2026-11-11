@@ -2,7 +2,7 @@
 
 // Refill the durable, independently reviewed AI question bank before battle.
 // Work is queued only on an authenticated player's server-derived scope.
-// No answers or unreviewed candidates are ever sent to the browser.
+// Candidate generation is concurrent; approval still gates publishing/serving.
 const keyOf = target => JSON.stringify([
   target.subject, target.level, target.topic, target.difficulty
 ]);
@@ -29,15 +29,32 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
             if(!inventory.ready)throw Error('AI question bank unavailable');
             count=inventory.count;
             const newlyGenerated=[];
-            for(let i=0;i<maxPerTarget&&count<lowWater;i++){
-              // The generator uses the main quiz quality pipeline and publishes
-              // only after an independent answer/consistency review.
-              const result=await generate(target,{avoidQuestions:[...excluded,...newlyGenerated]});
-              if(!result?.stored)break;
-              newlyGenerated.push(result.q);
+            let requested=0,stalled=0;
+            while(requested<maxPerTarget&&count<lowWater&&stalled<2){
+              // Start up to two generation + independent-review pipelines at
+              // once. They use the router's distinct available provider/API
+              // capacity, not a sequential single-key loop.
+              const size=Math.min(2,maxPerTarget-requested,lowWater-count);
+              const batch=Array.from({length:size},()=>generate(target,{
+                avoidQuestions:[...excluded,...newlyGenerated]
+              }));
+              requested+=size;
+              const results=await Promise.allSettled(batch);
+              let made=0;
+              for(const row of results){
+                if(row.status==='fulfilled'&&row.value?.stored){
+                  made++;
+                  newlyGenerated.push(row.value.q);
+                }
+                else if(row.status==='rejected')
+                  logger.warn?.('[Tactical bank] provider candidate failed:',String(row.reason?.message||row.reason).slice(0,120));
+              }
               inventory=await bank.find(target,excluded,similar,{deadlineMs:90000});
               if(!inventory.ready)break;
-              count=inventory.count;
+              const updated=inventory.count;
+              stalled=updated>count?0:stalled+1;
+              count=updated;
+              if(!made)break;
             }
             cooldown.set(key,now()+(count>=lowWater?10*60*1000:60*1000));
           }catch(error){
