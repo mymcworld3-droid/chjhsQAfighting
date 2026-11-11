@@ -394,3 +394,20 @@ body.tactical-open #solo-cultivation-feedback{
   scroll-padding-bottom:24px;
   padding-bottom:max(100px,calc(var(--tc-locked-height,640px) - var(--tc-visible-top,0px) - var(--tc-visible-height,640px) + 24px))!important;
 }
+
+/* Reserve the reduced-height editor for the message field, not shortcut chips.
+   The shortcuts reappear automatically when the keyboard closes. */
+#tactical-combat.tc-keyboard-visible .tc-helper-overlay .quiz-helper-prompts{
+  display:none!important;
+}
+#tactical-combat.tc-keyboard-visible .tc-helper-overlay .quiz-helper-header{
+  min-height:42px!important;
+  padding:5px 10px!important;
+}
+#tactical-combat.tc-keyboard-visible .tc-helper-overlay .quiz-helper-compose{
+  padding:5px 8px max(5px,env(safe-area-inset-bottom))!important;
+}
+#tactical-combat.tc-keyboard-visible .tc-helper-overlay .quiz-helper-status{
+  min-height:0!important;
+  padding:0 8px 3px!important;
+}
