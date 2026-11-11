@@ -308,13 +308,17 @@ async function refundQuestionStamina(db,uid,id,questionId){
     if(s.status==='active'){
       const pending=s.pending?.[uid],record=s.answerStamina?.[questionId],answered=s.reviews?.[uid];
       let shortfall=0;
-      if(pending?.id===questionId){
+      if(pending?.id===questionId||s.pendingFollowup?.[uid]?.id===questionId){
         Rules.canAnswer(s,uid);skipped=true;shortfall=Rules.LIMITS.correct;
+        const isFollowup=s.pendingFollowup?.[uid]?.id===questionId;
+        const discarded=isFollowup?s.pendingFollowup[uid]:pending;
         a.questions++;
-        if(s.pendingFollowup?.[uid])s.pending[uid]=s.pendingFollowup[uid];
-        else delete s.pending[uid];
+        if(!isFollowup){
+          if(s.pendingFollowup?.[uid])s.pending[uid]=s.pendingFollowup[uid];
+          else delete s.pending[uid];
+        }
         delete s.pendingFollowup?.[uid];
-        s.questionHistory=[...(s.questionHistory||[]),pending.q].slice(-24);
+        s.questionHistory=[...(s.questionHistory||[]),discarded.q].slice(-24);
       }else if(record?.uid===uid)shortfall=record.shortfall;
       // Backward compatibility for an answer made before the shortfall ledger existed.
       else if(answered?.questionId===questionId&&!answered.correct)shortfall=Math.max(0,Rules.LIMITS.correct-Rules.num(answered.gain));
@@ -356,7 +360,7 @@ async function reportQuestion(db,uid,input,{review,award}={}){
     return {...outcome,status:'confirmed',reason:'獨立審核已確認本題有誤。'+(outcome.status==='limit'?outcome.reason:''),...await refundQuestionStamina(db,uid,s.id,input.questionId)};
   }
   // Before answering, never reveal the answer through an AI review reason.
-  return s.pending?.[uid]?.id===input.questionId?{...result,reason:result.status==='rejected'?'獨立審核未確認本題有實質錯誤。':result.reason}:result;
+  return (s.pending?.[uid]?.id===input.questionId||s.pendingFollowup?.[uid]?.id===input.questionId)?{...result,reason:result.status==='rejected'?'獨立審核未確認本題有實質錯誤。':result.reason}:result;
 }
 function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,logger=console}={}){
   const route=fn=>async(req,res)=>{
