@@ -1,4 +1,5 @@
 name: Validate quarter UI against complete browser gameplay (one-time)
+# Recheck exact quiz option palette alongside preserved original typography.
 on:
   push:
     branches: [fix/stamina-quarter-quiz-typography-20261111]
