@@ -156,6 +156,40 @@ test('server hides pending answers, rejects out-of-turn generation and credits r
   await assert.rejects(api.prepareQuestion(db,'u2',s.id,fixed),/參戰/);
   assert.equal((await api.state(db,'u1',fixed)).question,null);
 });
+test('parallel question API slots can commit out of order without leaking answers',async()=>{
+  const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed);
+  // Both scopes are prepared before either model/API has generated a result.
+  const [firstScope,secondScope]=await Promise.all([
+    api.prepareQuestion(db,'u1',s.id,fixed,0),
+    api.prepareQuestion(db,'u1',s.id,fixed,1)
+  ]);
+  assert.equal(firstScope.batchSlot,0);
+  assert.equal(secondScope.batchSlot,1);
+  // The second API completes first; the server reserves it without exposing it
+  // as the current answerable question.
+  const followup=await api.commitQuestion(db,'u1',secondScope,{
+    q:'圓周運動的向心加速度指向何處？',correct:'圓心',
+    wrong:['切線方向','遠離圓心','與速度同向'],exp:'向心加速度朝向圓心。'
+  },fixed);
+  assert.equal('answerIndex' in followup,false);
+  assert.equal((await api.state(db,'u1',fixed)).question,null);
+  const first=await api.commitQuestion(db,'u1',firstScope,{
+    q:'二加三等於多少？',correct:'5',wrong:['2','3','4'],exp:'2+3=5。'
+  },fixed);
+  const before=await api.state(db,'u1',fixed);
+  assert.equal(before.question.id,first.id);
+  assert.equal(before.questionFollowup.id,followup.id);
+  assert.equal('answerIndex' in before.questionFollowup,false);
+  const answerIndex=db.records.get(api.ROOMS+'/'+s.id).pending.u1.answerIndex;
+  const after=await api.answer(db,'u1',{
+    roomId:s.id,questionId:first.id,choice:answerIndex
+  },fixed+1);
+  assert.equal(after.question.id,followup.id,'the already-generated second question is promoted');
+  assert.equal(after.actors.find(actor=>actor.uid==='u1').questions,1);
+  await assert.rejects(api.commitQuestion(db,'u1',secondScope,{
+    q:'延遲到前一輪的舊題',correct:'是',wrong:['否','未知','都不對'],exp:'舊題不可覆蓋'
+  },fixed+1),/回合已更新/);
+});
 test('server commands reject stale revisions, ignore client damage, and replay movement without charging twice',async()=>{
   const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed);
   const pos=R.neighbours(s,s.actors[0]).find(p=>!R.at(s,p));
