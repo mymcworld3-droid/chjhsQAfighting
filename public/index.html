@@ -641,6 +641,7 @@ body.xianxia-theme main:has(#page-training.active-page),
     <link rel="stylesheet" href="styles/xianxia-quiet.css?v=20261016-portrait-hide-full-header1">
     <link rel="stylesheet" href="styles/interface-cleanup.css?v=20261023-review1">
     <link rel="stylesheet" href="styles/interface-cleanup-pages.css?v=20261023-review1">
+    <link rel="stylesheet" href="styles/home-ecology-dashboard.css?v=20261111-sketch1">
     <style id="debug-top-layer-style">
       /* Admin debugger must remain above every app modal, battle overlay and tutorial layer. */
       #btn-show-debug{
@@ -747,6 +748,41 @@ body.xianxia-theme main:has(#page-training.active-page),
                         <span id="xiuxian-next" class="xiuxian-value">5 修為</span>
                     </div>
                     <div class="xiuxian-row"><span class="xiuxian-label" id="xiuxian-meditation-streak">連續閉關 0 日 · 累計 0 日</span></div>
+                </section>
+
+
+                <!-- Sketch-based home: six shortcuts around the ecological CG octagon. -->
+                <section id="home-ecology" class="home-ecology" aria-labelledby="home-ecology-name" data-static-layout="1">
+                  <div class="home-ecology-header"><span class="home-ecology-kicker">問道場地 · 生態觀景</span><span class="home-ecology-overline">目前展示場地 <span id="home-ecology-position">1 / 4</span></span></div>
+                  <div class="home-ecology-body">
+                    <aside class="home-ecology-rail" aria-label="場地左側快捷選單">
+                      <button class="home-ecology-action" type="button" data-home-action="path"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>圖錄</span></button>
+                      <button class="home-ecology-action" type="button" data-home-action="rank"><i class="fa-solid fa-ranking-star" aria-hidden="true"></i><span>排行</span></button>
+                      <button class="home-ecology-action" type="button" data-home-action="share"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>分享</span></button>
+                    </aside>
+                    <div class="home-ecology-center">
+                      <div class="home-ecology-octagon" aria-label="目前問道場地生態 CG 畫面">
+                        <div class="home-ecology-ring"><div class="home-ecology-visual">
+                          <picture class="home-ecology-picture" id="home-ecology-picture"><source media="(orientation: portrait)" srcset="assets/scenes/mountains-portrait-ai.webp"><img src="assets/scenes/mountains-landscape-ai.webp" alt="雲海繚繞的問道宗主峰 CG 場景" loading="eager" decoding="async"></picture>
+                          <div class="home-ecology-fog" aria-hidden="true"></div><div class="home-ecology-leaves" aria-hidden="true"></div>
+                          <div id="home-ecology-region" class="home-ecology-image-title">青雲主峰</div>
+                        </div></div>
+                      </div>
+                      <div class="home-ecology-scene-info"><h3 id="home-ecology-name">問道宗 · 雲海</h3></div>
+                      <p id="home-ecology-description" class="home-ecology-description">雲海繞峰，山間靈氣流轉。從這裡前往宗門各處修行。</p>
+                      <div class="home-ecology-controls">
+                        <button class="home-ecology-cycle" type="button" data-scene-delta="-1" aria-label="上一處場地"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                        <button class="home-ecology-enter" type="button" id="home-ecology-enter"><span>走入宗門</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                        <button class="home-ecology-cycle" type="button" data-scene-delta="1" aria-label="下一處場地"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                    <aside class="home-ecology-rail" aria-label="場地右側每日活動">
+                      <button class="home-ecology-action" type="button" data-home-action="quest" aria-haspopup="dialog"><i class="fa-solid fa-scroll" aria-hidden="true"></i><span>任務</span><b class="home-ecology-alert" data-home-alert="quest" hidden aria-hidden="true"></b></button>
+                      <button class="home-ecology-action" type="button" data-home-action="meditation"><i class="fa-solid fa-yin-yang" aria-hidden="true"></i><span>今日閉關</span><b class="home-ecology-alert" data-home-alert="meditation" hidden aria-hidden="true"></b></button>
+                      <button class="home-ecology-action" type="button" data-home-action="raid"><i class="fa-solid fa-dungeon" aria-hidden="true"></i><span>副本</span><b class="home-ecology-alert" data-home-alert="raid" hidden aria-hidden="true"></b></button>
+                    </aside>
+                  </div>
+                  <div class="home-ecology-footer"><span id="home-ecology-ambient">晴光 · 青雲主峰</span><button type="button" data-home-action="story"><i class="fa-solid fa-feather" aria-hidden="true"></i> 宗門劇情</button></div>
                 </section>
 
                 <section class="home-practice" aria-label="今日修行">
