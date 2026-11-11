@@ -704,7 +704,7 @@ function openQuestionTool(kind){
   panel.querySelector('[data-tool-close]')?.focus({preventScroll:true});
 }
 function closeQuestionTool(restore=true){
-  for(const kind of ['helper','report']){const panel=$(`[data-${kind}-panel]`);if(panel&&!panel.hidden){panel.hidden=true;const trigger=$(`[data-${kind}-toggle]`);trigger?.setAttribute('aria-expanded','false');if(restore)trigger?.focus();}}
+  for(const kind of ['helper','report']){const panel=$(`[data-${kind}-panel]`);if(panel&&!panel.hidden){panel.hidden=true;const trigger=$(`[data-${kind}-toggle]`);trigger?.setAttribute('aria-expanded','false');if(restore)trigger?.focus({preventScroll:true});}}
   const column=$('.quiz-main-column');if(column)for(const child of column.children)child.inert=false;
   const heading=$('.tc-dialog-heading');if(heading)heading.inert=false;
 }
