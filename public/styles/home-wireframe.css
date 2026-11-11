@@ -1,16 +1,18 @@
 
 /* Homepage wireframe, based on the supplied sketch. No ecology/cg story picker. */
-body.ui-cleanup #page-home{width:100%;max-width:1400px!important;margin:auto;padding-inline:clamp(10px,2vw,30px)!important}
+body.ui-cleanup #page-home{width:100%;max-width:1400px!important;margin:auto;padding-inline:clamp(10px,2vw,30px)!important;padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))!important}
 body.ui-cleanup #page-home>.xianxia-page-heading{display:none!important}
 body.ui-cleanup #page-home>.home-layout,
 body.ui-cleanup #page-home>.home-layout:has(>#quest-spotlight-slot[hidden]){
   display:grid!important;
   grid-template-columns:74px minmax(265px,1.05fr) minmax(300px,1fr) 74px!important;
+  /* The scene and realm card occupy only the first row.  Keep the trial
+     button in row 2 alongside today's task, never after their combined height. */
   grid-template-areas:
     "left realm emblem right"
-    "left daily emblem right"
-    "left records practice right"!important;
-  grid-template-rows:minmax(180px,auto) minmax(155px,auto) auto!important;
+    "left daily practice right"
+    "left records . right"!important;
+  grid-template-rows:minmax(0,auto) auto auto!important;
   column-gap:clamp(12px,2.3vw,36px)!important;
   row-gap:clamp(10px,1.6vh,18px)!important;
   padding:0!important;
@@ -269,4 +271,22 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
   body.ui-cleanup #page-home #xiuxian-panel .xiuxian-kicker,
   body.ui-cleanup #page-home #xiuxian-panel .xiuxian-invocation{display:none!important}
   .home-realm-disc .home-ecology-name{font-size:clamp(10px,3vw,14px)}
+}
+
+/* Short landscape Safari viewports keep the trial CTA above the bottom nav.
+   For taller screens, the normal 272px scene circle is unchanged. */
+@media (min-width:851px) and (max-height:760px){
+  body.ui-cleanup #page-home>.home-layout{
+    row-gap:8px!important;
+  }
+  body.ui-cleanup #page-home .home-realm-emblem{
+    min-height:260px;
+    gap:7px;
+  }
+  body.ui-cleanup #page-home .home-realm-disc{
+    width:min(100%,220px);
+  }
+  body.ui-cleanup #page-home .home-practice #btn-home-start{
+    min-height:85px!important;
+  }
 }
