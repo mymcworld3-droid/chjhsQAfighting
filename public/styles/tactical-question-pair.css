@@ -387,3 +387,10 @@ body.tactical-open #solo-cultivation-feedback{
 #tactical-combat .tc-helper-overlay .quiz-helper-status {
   flex-shrink:0;
 }
+
+/* Keep the PvP room-code box reachable even when it is not inside a quiz overlay. */
+#tactical-combat.tc-keyboard-visible .tc-main.tc-hub{
+  scroll-behavior:auto!important;
+  scroll-padding-bottom:24px;
+  padding-bottom:max(100px,calc(var(--tc-locked-height,640px) - var(--tc-visible-top,0px) - var(--tc-visible-height,640px) + 24px))!important;
+}
