@@ -753,16 +753,17 @@ function activatePairContext(index){
 function selectPairChoice(index,choice){
   if(busy||index!==pairReviews.length||!pairQuestions[index]||!Number.isInteger(choice)||choice<0||choice>3)return;
   pairChoices[index]=choice;
+  // A single option tap commits this answer immediately. submitPair sets
+  // busy synchronously, so rapid second taps cannot dispatch another answer.
   root.querySelectorAll('[data-choice-for="'+index+'"]').forEach(button=>{
     const picked=Number(button.dataset.choice)===choice;
     button.classList.toggle('is-picked',picked);
     button.setAttribute('aria-pressed',String(picked));
+    button.disabled=true;
   });
-  const current=pairReviews.length;
-  const ready=index===current&&pairChoices[current]>=0;
-  const button=$('[data-submit-pair]');if(button)button.disabled=!ready;
   const status=$('[data-pair-status]');
-  if(status)status.textContent=ready?`第 ${current+1} / ${pairQuestions.length} 題 · 已選好答案，可以送出本題。`:`第 ${current+1} / ${pairQuestions.length} 題 · 請選擇答案。`;
+  if(status)status.textContent=`第 ${index+1} / ${pairQuestions.length} 題 · 正在批改…`;
+  void submitPair();
 }
 
 function pairWhiteboardCanvas(){
@@ -867,8 +868,8 @@ function pairLayout(reviews=null,questions=pairQuestions){
           <div class="flex gap-3 tc-pair-buttons"><button type="button" data-exit class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回宗門</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">返回戰場</button></div>`:
         `<div class="tc-pair-submit">
            ${last?`<div class="tc-pair-previous" role="status">上一題${last.correct?'答對':'答錯'} · 體力 +${last.gain} · 獎勵已結算，繼續下一題</div>`:''}
-           <div data-pair-status role="status" aria-live="polite">第 ${current+1} / ${count} 題 · 請選擇答案。</div>
-           <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" disabled>送出本題</button>
+           <div data-pair-status role="status" aria-live="polite">第 ${current+1} / ${count} 題 · 點選答案後直接批改。</div>
+           <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" hidden>重新送出本題</button>
          </div>`}
     </div>
     <aside class="tc-quiz-tools-shell" aria-label="問道助手">${quizTools()}</aside>
@@ -893,7 +894,7 @@ async function submitPair(){
   const source=root.querySelector('[data-choice-for="'+index+'"][data-choice="'+choice+'"]');
   root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=true);
   const submit=$('[data-submit-pair]');
-  if(submit){submit.disabled=true;submit.textContent='正在批改本題…';}
+  if(submit){submit.hidden=true;submit.disabled=true;}
   const status=$('[data-pair-status]');
   if(status)status.textContent=`正在批改第 ${index+1} / ${pairQuestions.length} 題…`;
   let cultivationVisual=null;
@@ -932,9 +933,9 @@ async function submitPair(){
   }catch(err){
     if(!valid(e,account)){cultivationVisual?.cancel();return;}
     const label=$('[data-pair-status]');
-    if(label)label.textContent=err.message+'；可重新送出本題。';
+    if(label)label.textContent=err.message+'；可以重新點選答案，或重試送出已選答案。';
     root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=false);
-    if(submit){submit.disabled=false;submit.textContent='重新送出本題';}
+    if(submit){submit.hidden=false;submit.disabled=false;submit.textContent='重試送出';}
   }finally{
     if(valid(e,account)){busy=false;updateControls();schedule();}
   }
