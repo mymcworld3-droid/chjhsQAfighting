@@ -154,6 +154,21 @@ function wheelMarker(marker,angle,radius){
   marker.style.left=(100+radius*Math.cos(rad)).toFixed(3)+'%';
   marker.style.top=(100+radius*Math.sin(rad)).toFixed(3)+'%';
 }
+// Keep outer-sector labels and sliding indicator consistent with actual cost.
+// Reuse the nodes so frequent battle updates do not restart the slide animation.
+function wheelText(container,name,cost){
+  if(!container)return;
+  let title=container.querySelector('.tc-wheel-name');
+  let fee=container.querySelector('.tc-wheel-cost');
+  if(!title||!fee){
+    container.replaceChildren();
+    title=document.createElement('span');title.className='tc-wheel-name';
+    fee=document.createElement('small');fee.className='tc-wheel-cost';
+    container.append(title,fee);
+  }
+  if(title.textContent!==name)title.textContent=name;
+  if(fee.textContent!==cost)fee.textContent=cost;
+}
 // The slider is an actual curved annular pizza-sector, not a floating pill.
 // Its SVG rotor pivots at the bottom-right corner of the quarter-circle.
 function wheelSliderAngle(slider,angle){
@@ -268,16 +283,18 @@ function buildGame(){
     end.style.clipPath=wedge(-90,-180,49,0);
     end.innerHTML='<span>結束\n回合</span>';
     const choices=document.createElement('div');choices.className='tc-wheel-options';
-    const makeChoice=(value,label,begin,finish,klass)=>{
+    const makeChoice=(value,label,begin,finish,klass,cost)=>{
       const b=document.createElement('button');b.type='button';
       b.dataset.wheelChoice=value;b.className='tc-sector '+klass;
       b.style.clipPath=wedge(begin,finish,100,74);
-      const text=document.createElement('span');text.textContent=label;
+      const text=document.createElement('span');
+      wheelText(text,label,cost);
       b.append(text);choices.append(b);return b;
     };
-    makeChoice('player','玩家',-90,-180,'tc-detail-player');
-    makeChoice('attack','普通攻擊',-90,-135,'tc-detail-basic');
-    makeChoice('skill',R.branchFor(myActor()).skill.name,-135,-180,'tc-detail-skill');
+    const hero=myActor();
+    makeChoice('player','玩家',-90,-180,'tc-detail-player',(1+(hero.slow||0))+' 體力/格');
+    makeChoice('attack','普通攻擊',-90,-135,'tc-detail-basic',R.basicFor(hero).cost+' 體力');
+    makeChoice('skill',R.branchFor(hero).skill.name,-135,-180,'tc-detail-skill',R.branchFor(hero).skill.cost+' 體力');
     // Narrow curved selection pieces glide *inside* each ring. The visible
     // arc angle is driven by the number of choices, not hard-coded to 45°.
     const makeSlider=(kind,choicesCount)=>{
@@ -436,10 +453,11 @@ function updateControls(){
   const t=selection?R.at(state,selection):null;
   const basic=R.basicFor(me),directional=['line','cleave'].includes(basic.kind);
   if(!root.classList.contains('tc-quarter-layout'))$('[data-action="attack"]').textContent='攻擊 · '+basic.cost;
-  let label=action==='attack'?(directional?'選擇攻擊方向':basic.kind==='ring'?'震擊周圍':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='';
+  let label=action==='attack'?(directional?'選擇攻擊方向':basic.kind==='ring'?'震擊周圍':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='',moveStamina=null;
   const d=selection&&(basic.kind==='cleave'||selection.x===me.x||selection.y===me.y)?R.attackDirection(me,selection):null;
   const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
   if(action==='move'&&selection){const path=R.path(state,me,selection,uid),cost=(path?.length-1)*(1+(me.slow||0));
+    if(path&&path.length>1)moveStamina=cost;
     label=path&&path.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
     if(!path||path.length<2)error='此地格無法到達';else if(cost>me.stamina)error='體力不足';
   }else if(selection){
@@ -461,12 +479,22 @@ function updateControls(){
     const player=$('[data-wheel-choice="player"]');
     const basicOption=$('[data-wheel-choice="attack"]');
     const skillOption=$('[data-wheel-choice="skill"]');
-    if(player){player.hidden=attacking;player.setAttribute('aria-label','移動目標：玩家');}
-    if(basicOption){basicOption.hidden=!attacking;basicOption.setAttribute('aria-label','普通攻擊');}
+    const moveCostLabel=moveStamina===null?(1+(me.slow||0))+' 體力/格':moveStamina+' 體力';
+    const basicCostLabel=basic.cost+' 體力',skillCostLabel=sk.cost+' 體力';
+    if(player){
+      player.hidden=attacking;
+      wheelText(player.querySelector('span'),'玩家',moveCostLabel);
+      player.setAttribute('aria-label','移動目標：玩家，'+moveCostLabel);
+    }
+    if(basicOption){
+      basicOption.hidden=!attacking;
+      wheelText(basicOption.querySelector('span'),basic.name,basicCostLabel);
+      basicOption.setAttribute('aria-label',basic.name+'，消耗 '+basicCostLabel);
+    }
     if(skillOption){
       skillOption.hidden=!attacking;
-      skillOption.querySelector('span').textContent=sk.name;
-      skillOption.setAttribute('aria-label','使用技能：'+sk.name);
+      wheelText(skillOption.querySelector('span'),sk.name,skillCostLabel);
+      skillOption.setAttribute('aria-label','使用技能：'+sk.name+'，消耗 '+skillCostLabel);
     }
     for(const option of [player,basicOption,skillOption]){
       if(!option)continue;
@@ -474,11 +502,13 @@ function updateControls(){
       option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?action:'player')));
     }
     const ring=$('.tc-quarter-action');
-    ring?.setAttribute('aria-label',attacking?'行動：攻擊；技能：'+(action==='skill'?sk.name:basic.name):'行動：移動；目標：玩家');
+    const chosenName=attacking?(action==='skill'?sk.name:basic.name):'玩家';
+    const chosenCost=attacking?(action==='skill'?skillCostLabel:basicCostLabel):moveCostLabel;
+    ring?.setAttribute('aria-label',attacking?'行動：攻擊；'+chosenName+'，消耗 '+chosenCost:'行動：移動；目標：玩家，'+chosenCost);
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
-    detailThumb.textContent=attacking?(action==='skill'?sk.name:basic.name):'玩家';
-    detailThumb.title=attacking?(action==='skill'?sk.name:basic.name):'玩家';
+    wheelText(detailThumb,chosenName,chosenCost);
+    detailThumb.title=chosenName+' · '+chosenCost;
     const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
     const detailAngle=attacking?(action==='skill'?WHEEL_ANGLES.lower:WHEEL_ANGLES.upper):WHEEL_ANGLES.center;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
