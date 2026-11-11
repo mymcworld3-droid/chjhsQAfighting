@@ -246,7 +246,12 @@ function buildGame(){
     actions.innerHTML='<svg class="tc-action-lines" viewBox="0 0 100 100" aria-hidden="true">'
       +'<path d="M 100 0 A 100 100 0 0 0 0 100"/>'
       +'<path d="M 100 26 A 74 74 0 0 0 26 100"/>'
-      +'<path d="M 100 51 A 49 49 0 0 0 51 100"/></svg>';
+      +'<path d="M 100 51 A 49 49 0 0 0 51 100"/>'
+      // Thin rails surround the shorter/narrower coloured moving slices.
+      +'<path class="tc-wheel-lane-guide" d="M 100 5 A 95 95 0 0 0 5 100"/>'
+      +'<path class="tc-wheel-lane-guide" d="M 100 21 A 79 79 0 0 0 21 100"/>'
+      +'<path class="tc-wheel-lane-guide" d="M 100 30 A 70 70 0 0 0 30 100"/>'
+      +'<path class="tc-wheel-lane-guide" d="M 100 46 A 54 54 0 0 0 46 100"/></svg>';
     const tabs=command.querySelector('.tc-action-tabs');
     const attack=tabs.querySelector('[data-action="attack"]');
     const move=tabs.querySelector('[data-action="move"]');
