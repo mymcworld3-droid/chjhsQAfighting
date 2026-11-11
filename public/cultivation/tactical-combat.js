@@ -689,14 +689,12 @@ function pairLayout(reviews=null,questions=pairQuestions){
     <div class="quiz-main-column tc-pair-column">
       <div class="tc-pair-list">${questions.map((q,i)=>questionSheet(q,done?reviews[i]:null,i)).join('')}</div>
       ${done?`<div class="tc-pair-summary" role="status"><i class="fa-solid fa-circle-check"></i> 本次答對 ${reviews.filter(r=>r.correct).length} / ${reviews.length} 題 · 修為與體力已結算</div>
-          <div class="flex gap-3 tc-pair-buttons"><button type="button" data-continue class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回戰場</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">繼續試煉</button></div>`:
+          <div class="flex gap-3 tc-pair-buttons"><button type="button" data-exit class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回宗門</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">返回戰場</button></div>`:
         `<div class="tc-pair-submit">
            <div data-pair-status role="status" aria-live="polite">已選 0 / ${count} 題</div>
            <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" disabled>${count===2?'一次送出兩題':'送出剩餘題目'}</button>
          </div>
-         <div class="mt-8 flex gap-3 w-full quiz-footer-actions">
-           <button type="button" data-dismiss class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i><span>返回戰場</span></button>
-         </div>`}
+`}
     </div>
     <aside class="tc-quiz-tools-shell" aria-label="問道助手">${quizTools()}</aside>
   </div>
