@@ -128,9 +128,9 @@ patch('public/cultivation/cultivation-training-v4.js',s=>{
   s=cut(s,"    if(window.QA_WEAPON_SYSTEM_ENABLED&&['refinery','equipment','contract'].includes(activeTab)){",
     "    if (activeTab === 'refinery') {",
     "    if(activeTab==='contract')activeTab='bag';\n");
-  const noDrawTab=s.replace(/^[ \\t]*<button[^>]*data-training-tab="contract"[^>]*>.*<\\/button>\\n/m,'');
-  assert.notEqual(noDrawTab,s,'Contract tab markup must be retired');
-  s=noDrawTab;
+  const removedTab=s.split('\n').find(row=>row.trim().startsWith('<button')&&row.includes('data-training-tab="contract"'));
+  assert(removedTab,'Contract tab markup must be retired');
+  s=ln(s,removedTab);
   s=cut(s,"    if (!tabs.querySelector('[data-training-tab=\"contract\"]')) {",
     "    if (page.dataset.trainingV4Bound !== '1') {");
   s=one(s,"    page.classList.add('training-page', 'training-page-v3');",
