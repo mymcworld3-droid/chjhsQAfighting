@@ -130,7 +130,7 @@ test('stock counts exclude previously answered and still-reserved questions',asy
   const warmer=createTacticalBankPrewarmer({bank,similar:(a,b)=>a===b,
     generate:async(_target,{avoidQuestions})=>{
       generated.push(avoidQuestions);
-      stored.push('fresh-'+(stored.length-2));
+      stored.push('fresh-'+(stored.length-1));
       return {stored:true,q:stored.at(-1)};
     }
   });
