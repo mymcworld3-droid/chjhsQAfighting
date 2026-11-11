@@ -1,4 +1,5 @@
 name: Validate retained trial header (one-time)
+# Restored 收起 is intentionally visible as the fifth button.
 on:
   push:
     branches: [fix/stamina-trial-restore-topbar-20261111]
