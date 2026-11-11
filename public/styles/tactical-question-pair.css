@@ -1,7 +1,7 @@
 /*
  * Stamina questions use the free-question layout, not a lookalike tile grid.
  * One #page-quiz question is shown at a time:
- * quote parchment -> A/B/C/D jade options -> per-question submit/feedback.
+ * quote parchment -> A/B/C/D jade options -> instant grading/feedback.
  * The second question automatically follows the first successful submission.
  * Keep all selectors scoped to the tactical question dialog.
  */
@@ -171,10 +171,11 @@
   background:transparent!important;border:1px solid transparent!important;border-radius:8px!important;
 }
 #tactical-combat .tc-quiz .quiz-footer-actions > button:hover{color:#9dc6ac!important;border-color:#85a58a80!important}
-/* One submit action per question; transition to the next is automatic. */
+/* One tap grades the chosen option. The status area reports the result while
+   the next question opens automatically; submit is available only on error. */
 #tactical-combat .tc-quiz .tc-pair-submit{
   display:flex;flex-direction:column;gap:12px;
-  padding:20px;margin-top:8px;
+  padding:12px 16px;margin-top:8px;
   background:linear-gradient(135deg,#1f372d,#112520);
   border:1px solid #a6b78d70;border-radius:6px;
 }
@@ -194,6 +195,9 @@
 }
 #tactical-combat .tc-quiz .tc-pair-submit [data-submit-pair]{
   width:100%;min-height:46px;
+}
+#tactical-combat .tc-quiz .tc-pair-submit [data-submit-pair][hidden]{
+  display:none!important;
 }
 #tactical-combat .tc-quiz .tc-pair-buttons{
   display:flex;gap:12px;margin-top:14px;
