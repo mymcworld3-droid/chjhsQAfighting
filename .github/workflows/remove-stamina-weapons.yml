@@ -1,4 +1,5 @@
 name: Remove stamina weapons (one-time validated migration)
+# Ordinary artifact refinery/equipment remain available.
 on:
   push:
     branches: [feature/stamina-remove-weapons-20261111]
