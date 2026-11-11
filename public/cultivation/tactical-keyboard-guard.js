@@ -46,11 +46,11 @@ export function installTacticalKeyboardGuard(root){
     raf=0;
     if(!locked||!root.isConnected)return;
     const control=document.activeElement;
-    const overlay=isTypingControl(control)?control.closest?.('[data-question-tool]:not([hidden])'):null;
-    if(!overlay||!root.contains(overlay)){
+    if(!isTypingControl(control)||!root.contains(control)){
       root.classList.remove('tc-keyboard-visible');
       return;
     }
+    const overlay=control.closest?.('[data-question-tool]:not([hidden])');
     const design=readDesign();
     let bounds=projectKeyboardViewport(outerViewport,design.stage,design);
     if(!bounds){
@@ -70,6 +70,15 @@ export function installTacticalKeyboardGuard(root){
     root.style.setProperty('--tc-visible-width',bounds.width.toFixed(1)+'px');
     root.style.setProperty('--tc-visible-height',bounds.height.toFixed(1)+'px');
     root.classList.add('tc-keyboard-visible');
+    if(!overlay){
+      // The PvP room-code input is in the scrollable hub, not a full-screen
+      // tool dialog. Keep it above the keyboard without scrolling the iframe.
+      const field=control.getBoundingClientRect?.();
+      const scrollArea=control.closest?.('.tc-main,.tc-hub');
+      const difference=field?.bottom-(bounds.top+bounds.height-18);
+      if(scrollArea&&Number.isFinite(difference)&&difference>12)
+        scrollArea.scrollTop+=difference;
+    }
   };
   const schedule=()=>{
     if(raf)return;
