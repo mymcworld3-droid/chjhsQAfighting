@@ -348,7 +348,7 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     return items;
   }
 
-  async function find(target, excluded = [], isSimilar = () => false) {
+  async function find(target, excluded = [], isSimilar = () => false, {deadlineMs=2500} = {}) {
     if (!enabled || now() < unavailableUntil) return {ready:false,question:null,count:0};
     try {
       // A cold Drive read must never make the player wait for a long Drive API
@@ -357,7 +357,10 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
       const items = (await Promise.race([
         readBucket(target),
         new Promise((_, reject) => {
-          timeout = setTimeout(() => reject(Error('AI bank read deadline')), 2500);
+          // Browser requests still use 2.5s. Server-only background refills
+          // may wait for a cold Drive directory read without delaying a player.
+          timeout = setTimeout(() => reject(Error('AI bank read deadline')),
+            Math.min(120000,Math.max(500,Number(deadlineMs)||2500)));
         })
       ]).finally(() => clearTimeout(timeout))).filter(entry => compatible(entry, target));
       const eligible = items.filter(entry => !excluded.some(q => isSimilar(entry.question.q, q)));
