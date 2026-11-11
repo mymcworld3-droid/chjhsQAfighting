@@ -76,7 +76,6 @@ function ensure(){
     else if(b.hasAttribute('data-pair-whiteboard-close'))closePairWhiteboard();
     else if(b.hasAttribute('data-submit-pair'))void submitPair();
     else if(b.hasAttribute('data-next-pair-question'))showNextPairQuestion();
-    else if(b.hasAttribute('data-finish-pair-review'))finishPairReview();
     else if(b.hasAttribute('data-helper-toggle'))openQuestionTool('helper');
     else if(b.hasAttribute('data-tool-close'))closeQuestionTool();
     else if(b.dataset.helperPreset){$('[data-helper-input]').value=b.dataset.helperPreset;void askHelper();}
@@ -978,30 +977,25 @@ function pairWhiteboardMarkup(){
     </div>
   </section>`;
 }
-function pairLayout(reviews=null,questions=pairQuestions){
-  const done=Array.isArray(reviews),count=questions.length;
-  const current=pairDisplayIndex,review=!done?pairReviews[current]||null:null;
-  // The reviewed question remains on screen, including its actual options,
-  // green/red marking and full explanation, until Next is explicitly clicked.
-  const sheets=done?questions.map((q,i)=>questionSheet(q,reviews[i],i)).join(''):
-    (questions[current]?questionSheet(questions[current],review,current):'');
-  const progress=done?'已完成 '+count+' / '+count+' 題':'第 '+(current+1)+' / '+count+' 題';
-  return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'} · ${progress}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
+function pairLayout(){
+  const count=pairQuestions.length,current=pairDisplayIndex;
+  const review=pairReviews[current]||null;
+  // Grade and explain each question on its own screen. After the final
+  // explanation, the player goes straight back to the battlefield.
+  const sheet=pairQuestions[current]?questionSheet(pairQuestions[current],review,current):'';
+  return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'} · 第 ${current+1} / ${count} 題</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
   <div class="quiz-question-helper-layout helper-collapsed">
     <div class="quiz-main-column tc-pair-column">
-      <div class="tc-pair-list">${sheets}</div>
-      ${done?`<div class="tc-pair-summary" role="status"><i class="fa-solid fa-circle-check"></i> 本次答對 ${reviews.filter(r=>r.correct).length} / ${reviews.length} 題 · 修為與體力已結算</div>
-          <div class="flex gap-3 tc-pair-buttons"><button type="button" data-exit class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回宗門</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">返回戰場</button></div>`:
-        review?`<div class="tc-pair-reviewed-actions">
-           <div class="tc-pair-review-status" role="status">第 ${current+1} 題已批改，請先閱讀上方解析。</div>
-           <button type="button" class="btn-cyber-primary tc-pair-next" ${current+1<count?'data-next-pair-question':'data-finish-pair-review'}>
-             ${current+1<count?'下一題':'查看本輪答題結果'}
-           </button>
-         </div>`:
-        `<div class="tc-pair-submit">
-           <div data-pair-status role="status" aria-live="polite">第 ${current+1} / ${count} 題 · 點選答案後直接批改。</div>
-           <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" hidden>重新送出本題</button>
-         </div>`}
+      <div class="tc-pair-list">${sheet}</div>
+      ${review?`<div class="tc-pair-reviewed-actions">
+        <div class="tc-pair-review-status" role="status">第 ${current+1} 題已批改，請先閱讀上方解析。</div>
+        <button type="button" class="btn-cyber-primary tc-pair-next" ${current+1<count?'data-next-pair-question':'data-dismiss'}>
+          ${current+1<count?'下一題':'返回戰場'}
+        </button>
+      </div>`:`<div class="tc-pair-submit">
+        <div data-pair-status role="status" aria-live="polite">第 ${current+1} / ${count} 題 · 點選答案後直接批改。</div>
+        <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" hidden>重新送出本題</button>
+      </div>`}
     </div>
     <aside class="tc-quiz-tools-shell" aria-label="問道助手">${quizTools()}</aside>
   </div>
@@ -1034,13 +1028,6 @@ async function showNextPairQuestion(){
   pairDisplayIndex++;
   notice('');
   paintQuestion();
-}
-function finishPairReview(){
-  if(busy||!modalOpen||!pairQuestions.length||pairReviews.length!==pairQuestions.length
-    ||pairDisplayIndex!==pairQuestions.length-1)return;
-  setQuizContext(pairQuestions[0],pairReviews[0]);
-  showModal(pairLayout(pairReviews,pairQuestions),{quiz:true});
-  updateClock();
 }
 async function submitPair(){
   // The first question is graded before the next is displayed. No second
