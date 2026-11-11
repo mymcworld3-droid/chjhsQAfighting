@@ -1,4 +1,5 @@
 name: Validate floating trial homepage (one-time)
+# Revalidate after updating the historic home-duel test to the intentional deletion.
 on:
   push:
     branches: [feature/stamina-home-floating-trial-20261111]
