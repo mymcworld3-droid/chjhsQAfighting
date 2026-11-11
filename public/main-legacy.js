@@ -15,6 +15,7 @@ import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
 import { authenticatedMainFetch } from './cultivation/data/project-repository.js';
+import { warmTacticalBank } from './cultivation/tactical-bank-warm.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, signInAnonymously, linkWithPopup, signInWithCredential, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -1429,6 +1430,8 @@ onAuthStateChanged(auth, async (user) => {
             // 所有腳本都已成功載入，現在才正式啟動其餘監聽與遊戲介面。
             if (auth.currentUser?.uid !== user.uid) return;
             checkSoloQuestionStock();
+            // Prepare five reviewed stamina questions per upcoming scope before players enter combat.
+            void warmTacticalBank(1);
             startPresenceSystem();
             refreshInvitationListener();
             listenToSystemCommands();  
@@ -2443,6 +2446,8 @@ window.saveProfile = async (triggerButton = null) => {
     localStorage.removeItem('currentQuiz'); 
     syncSoloQuestionCache();
     fillBuffer();
+    // Updated grade, focused units or difficulty require a fresh trusted bank fill.
+    void warmTacticalBank(1,{force:true});
     
     if (btn) {
         const originalLabel = btn.id === 'dongfu-scope-save' ? '儲存出題範圍' : '更新設定';
