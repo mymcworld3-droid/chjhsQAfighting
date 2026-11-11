@@ -358,3 +358,5 @@
 /* Preserve the original quiz page's 17px × 1.95 typographic rhythm; the new
    battlefield HUD must never alter the reading experience in question modals. */
 #tactical-combat.tc-quarter-layout .tc-modal .tc-question{line-height:1.95!important}
+
+#tactical-combat.tc-quarter-layout .tc-modal .tc-options>button{color:#eee8d5!important}
