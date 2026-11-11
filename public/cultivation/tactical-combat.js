@@ -624,7 +624,7 @@ async function execute(){if(selection)await send({type:action,x:selection.x,y:se
 async function question(){
   if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
   const e=epoch,account=uid,remaining=Math.max(1,R.LIMITS.questions-myActor().questions);
-  busy=true;notice('');showModal('<h2>正在準備兩題…</h2><p>完成後會在同一頁顯示，選好答案再一起送出。</p><button type="button" data-dismiss>返回戰場</button>');
+  busy=true;notice('');showModal('<h2>正在準備題目…</h2><p>一次準備本輪兩題，先顯示第一題；作答後自動接續第二題。</p><button type="button" data-dismiss>返回戰場</button>');
   try{
     const first=state.question||(await api('/api/generate-quiz',{quizMode:'tactical',roomId:state.id,batchSlot:0})).tacticalQuestion;
     if(!valid(e,account))return;
@@ -751,16 +751,18 @@ function activatePairContext(index){
   const tools=$('.tc-question-tools');if(tools)tools.outerHTML=quizTools();
 }
 function selectPairChoice(index,choice){
-  if(busy||pairReviews.length||!pairQuestions[index]||!Number.isInteger(choice)||choice<0||choice>3)return;
+  if(busy||index!==pairReviews.length||!pairQuestions[index]||!Number.isInteger(choice)||choice<0||choice>3)return;
   pairChoices[index]=choice;
   root.querySelectorAll('[data-choice-for="'+index+'"]').forEach(button=>{
     const picked=Number(button.dataset.choice)===choice;
     button.classList.toggle('is-picked',picked);
     button.setAttribute('aria-pressed',String(picked));
   });
-  const ready=pairChoices.length===pairQuestions.length&&pairChoices.every(value=>value>=0);
+  const current=pairReviews.length;
+  const ready=index===current&&pairChoices[current]>=0;
   const button=$('[data-submit-pair]');if(button)button.disabled=!ready;
-  const status=$('[data-pair-status]');if(status)status.textContent=ready?'兩題答案已選好，可以一次送出。':`已選 ${pairChoices.filter(value=>value>=0).length} / ${pairQuestions.length} 題`;
+  const status=$('[data-pair-status]');
+  if(status)status.textContent=ready?`第 ${current+1} / ${pairQuestions.length} 題 · 已選好答案，可以送出本題。`:`第 ${current+1} / ${pairQuestions.length} 題 · 請選擇答案。`;
 }
 
 function pairWhiteboardCanvas(){
@@ -850,92 +852,92 @@ function pairWhiteboardMarkup(){
   </section>`;
 }
 function pairLayout(reviews=null,questions=pairQuestions){
-  const done=Array.isArray(reviews);
-  const count=questions.length;
-  return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
+  const done=Array.isArray(reviews),count=questions.length;
+  const current=pairReviews.length;
+  const last=pairReviews[current-1];
+  // Answer one complete free-quiz sheet at a time; only final review lists both.
+  const sheets=done?questions.map((q,i)=>questionSheet(q,reviews[i],i)).join(''):
+    (questions[current]?questionSheet(questions[current],null,current):'');
+  const progress=done?'已完成 '+count+' / '+count+' 題':'第 '+(current+1)+' / '+count+' 題';
+  return `<div class="tc-dialog-heading"><small>${state.quizRound?'<span data-quiz-clock></span>':'問道試煉 · 答題充能'} · ${progress}</small><button type="button" data-dismiss aria-label="返回戰場">返回戰場</button></div>
   <div class="quiz-question-helper-layout helper-collapsed">
     <div class="quiz-main-column tc-pair-column">
-      <div class="tc-pair-list">${questions.map((q,i)=>questionSheet(q,done?reviews[i]:null,i)).join('')}</div>
+      <div class="tc-pair-list">${sheets}</div>
       ${done?`<div class="tc-pair-summary" role="status"><i class="fa-solid fa-circle-check"></i> 本次答對 ${reviews.filter(r=>r.correct).length} / ${reviews.length} 題 · 修為與體力已結算</div>
           <div class="flex gap-3 tc-pair-buttons"><button type="button" data-exit class="btn-cyber-ghost flex-1 py-3 rounded-lg text-xs">返回宗門</button><button type="button" data-continue class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs">返回戰場</button></div>`:
         `<div class="tc-pair-submit">
-           <div data-pair-status role="status" aria-live="polite">已選 0 / ${count} 題</div>
-           <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" disabled>${count===2?'一次送出兩題':'送出剩餘題目'}</button>
-         </div>
-`}
+           ${last?`<div class="tc-pair-previous" role="status">上一題${last.correct?'答對':'答錯'} · 體力 +${last.gain} · 獎勵已結算，繼續下一題</div>`:''}
+           <div data-pair-status role="status" aria-live="polite">第 ${current+1} / ${count} 題 · 請選擇答案。</div>
+           <button type="button" data-submit-pair class="btn-cyber-primary flex-1 py-3 rounded-lg text-xs" disabled>送出本題</button>
+         </div>`}
     </div>
     <aside class="tc-quiz-tools-shell" aria-label="問道助手">${quizTools()}</aside>
   </div>
   ${pairWhiteboardMarkup()}`;
 }
 function paintQuestion(){
-  if(!pairQuestions.length)return;
-  pairReviews=[];setQuizContext(pairQuestions[0]);
+  if(!pairQuestions.length||pairReviews.length>=pairQuestions.length)return;
+  const current=pairReviews.length;
+  setQuizContext(pairQuestions[current]);
   showModal(pairLayout(),{quiz:true});
   updateClock();
 }
 async function submitPair(){
-  if(busy||!pairQuestions.length||pairChoices.length!==pairQuestions.length||pairChoices.some(choice=>choice<0))return;
-  busy=true;const e=epoch,account=uid,serial=++op;
-  const questions=pairQuestions.slice(),choices=pairChoices.slice(),reviewed=[];
+  // The first question is graded before the next is displayed. No second
+  // press of 答題充能 and no double-answer form is required.
+  const index=pairReviews.length,q=pairQuestions[index],choice=pairChoices[index];
+  if(busy||!q||!Number.isInteger(choice)||choice<0||choice>3)return;
+  busy=true;
+  const e=epoch,account=uid,serial=++op,roomId=state.id;
   const initialScore=Number(localUser().stats?.totalScore)||0;
-  let priorScore=initialScore,cultivationVisual=null;
+  const source=root.querySelector('[data-choice-for="'+index+'"][data-choice="'+choice+'"]');
   root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=true);
-  const submit=$('[data-submit-pair]');if(submit){submit.disabled=true;submit.textContent='正在批改兩題…';}
+  const submit=$('[data-submit-pair]');
+  if(submit){submit.disabled=true;submit.textContent='正在批改本題…';}
+  const status=$('[data-pair-status]');
+  if(status)status.textContent=`正在批改第 ${index+1} / ${pairQuestions.length} 題…`;
+  let cultivationVisual=null;
   try{
-    for(let i=0;i<questions.length;i++){
-      const q=questions[i];
-      const result=await api('/api/tactical/answer',{roomId:state.id,questionId:q.id,choice:choices[i]});
-      if(!valid(e,account))return;
-      if(result.state?.review?.questionId!==q.id)throw Error('答題狀態不同步，請重新開啟答題');
-      state=result.state;clockOffset=state.serverNowMs-Date.now();appliedOp=serial;
-      const review=state.review;
-      reviewed.push(review);pairReviews=reviewed.slice();
-      window.QAGameAudio?.answer(review.correct,'tactical:'+state.id+':'+q.id);
-      const score=Number(state.progress?.stats?.totalScore);
-      if(state.mode==='pve'&&Number.isFinite(score)&&score>priorScore&&!cultivationVisual
-        &&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
-        const source=root.querySelector('[data-choice-for="'+i+'"][data-choice="'+choices[i]+'"]');
-        cultivationVisual=beginSoloCultivationFeedback({
-          scoreBefore:initialScore,source,realms:window.QASoloRealms,activeWhen:()=>opened&&modalOpen
-        });
-      }
-      if(Number.isFinite(score))priorScore=score;
-      applyProgress(state);
-      const status=$('[data-pair-status]');
-      if(status)status.textContent=`已批改 ${reviewed.length} / ${questions.length} 題`;
+    const result=await api('/api/tactical/answer',{roomId,questionId:q.id,choice});
+    if(!valid(e,account)||!state||state.id!==roomId)return;
+    if(result.state?.review?.questionId!==q.id)throw Error('答題狀態不同步，請重新開啟答題');
+    state=result.state;
+    if(Number.isFinite(state.serverNowMs))clockOffset=state.serverNowMs-Date.now();
+    appliedOp=serial;
+    const review=state.review;
+    pairReviews.push(review);
+    window.QAGameAudio?.answer(review.correct,'tactical:'+roomId+':'+q.id);
+    const score=Number(state.progress?.stats?.totalScore);
+    if(state.mode==='pve'&&Number.isFinite(score)&&score>initialScore
+      &&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
+      cultivationVisual=beginSoloCultivationFeedback({
+        scoreBefore:initialScore,source,realms:window.QASoloRealms,
+        activeWhen:()=>opened&&modalOpen
+      });
     }
-    pairReviews=reviewed;
-    setQuizContext(questions[0],reviewed[0]);
-    showModal(pairLayout(reviewed,questions),{quiz:true});
+    applyProgress(state);
     renderer?.update(state,uid,action,null);
-    const netGain=Math.max(0,priorScore-initialScore);
-    if(cultivationVisual&&netGain>0)void cultivationVisual.play({gain:netGain,totalScore:priorScore});
+    const gain=Number.isFinite(score)?Math.max(0,score-initialScore):0;
+    if(cultivationVisual&&gain>0)void cultivationVisual.play({gain,totalScore:score});
     else cultivationVisual?.cancel();
+    if(pairReviews.length<pairQuestions.length){
+      // No intermediate charging button: immediately render question two.
+      paintQuestion();
+    }else{
+      // Complete review retains both answer explanations and report links.
+      setQuizContext(pairQuestions[index],review);
+      showModal(pairLayout(pairReviews,pairQuestions),{quiz:true});
+      updateClock();
+    }
   }catch(err){
     if(!valid(e,account)){cultivationVisual?.cancel();return;}
-    if(cultivationVisual){
-      const partialGain=Math.max(0,priorScore-initialScore);
-      if(partialGain>0)void cultivationVisual.play({gain:partialGain,totalScore:priorScore});
-      else cultivationVisual.cancel();
-    }
-    if(reviewed.length){
-      pairQuestions=questions.slice(reviewed.length);
-      pairChoices=choices.slice(reviewed.length);
-      pairReviews=[];
-      if(pairQuestions.length){
-        paintQuestion();
-        notice('已完成 '+reviewed.length+' 題並儲存獎勵；其餘題目可重新送出。'+err.message);
-        const status=$('[data-pair-status]');if(status)status.textContent='前面題目已儲存，請送出剩餘題目。';
-        busy=false;
-        pairChoices.forEach((choice,i)=>selectPairChoice(i,choice));
-      }else showModal('<h2>答題已完成</h2><p>請同步戰場查看結果。</p><button type="button" data-continue>返回戰場</button>');
-    }else{
-      const status=$('[data-pair-status]');if(status)status.textContent=err.message+'；可再次送出，獎勵不會重複發放。';
-      root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=false);
-      if(submit){submit.disabled=false;submit.textContent='重新送出兩題';}
-    }
-  }finally{if(valid(e,account)){busy=false;updateControls();schedule();}}
+    const label=$('[data-pair-status]');
+    if(label)label.textContent=err.message+'；可重新送出本題。';
+    root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=false);
+    if(submit){submit.disabled=false;submit.textContent='重新送出本題';}
+  }finally{
+    if(valid(e,account)){busy=false;updateControls();schedule();}
+  }
 }
 function schedule(){
   clearTimeout(poll);if(!opened||document.hidden||!state||state.status==='finished')return;
