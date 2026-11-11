@@ -50,9 +50,11 @@ test('two full size question sheets show at once, stacked, with one submit opera
   assert.doesNotMatch(styles,/grid-template-columns:repeat\(2/);
 });
 
-test('stamina sheet uses main question page dimensions, whiteboard and option sizing',()=>{
-  assert.match(mainCss,/max-width:\s*820px/);
-  assert.match(styles,/width:min\(820px,100%\)/);
+test('stamina sheet uses full available width without the main page 820px cap, retaining whiteboard and option sizing',()=>{
+  assert.match(mainCss,/max-width:\s*820px/); // Legacy main page remains unchanged.
+  assert.match(styles,/grid-template-columns:minmax\(0,1fr\)/);
+  assert.match(styles,/width:100%!important;\s*max-width:none!important;/);
+  assert.doesNotMatch(styles,/width:min\(820px,100%\)/);
   assert.match(mainCss,/min-height:\s*68px/);
   assert.match(styles,/min-height:68px/);
   assert.match(mainCss,/padding:\s*16px 20px/);
@@ -79,4 +81,15 @@ test('the existing free-quiz cultivation animation is visible above the battle o
   assert.match(source,/beginSoloCultivationFeedback/);
   assert.match(styles,/body\.tactical-open #solo-cultivation-feedback/);
   assert.match(styles,/z-index:25000/);
+});
+
+
+test('every form of question-stem text and rendered math uses pure black without recoloring answer options',()=>{
+  assert.match(styles,/\.tc-question-sheet \.tc-question,\s*#tactical-combat \.tc-quiz \.tc-question-sheet \.tc-question \*\{\s*color:#000!important;/);
+  assert.match(styles,/-webkit-text-fill-color:#000!important/);
+  assert.match(styles,/mjx-container\[jax="SVG"\] svg/);
+  assert.match(styles,/\.katex svg/);
+  assert.match(styles,/svg :is\(text,tspan\)/);
+  assert.match(styles,/\.tc-options > button\{/);
+  assert.match(styles,/color:#eee8d5!important/);
 });
