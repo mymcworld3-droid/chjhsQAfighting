@@ -47,7 +47,10 @@ function snapshot(s,uid){
   const out=disarm(copy(s));delete out.pending;delete out.reviews;delete out.receipts;delete out.answerStamina;delete out.questionRefunds;
   out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
   out.question=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pending?.[uid]):null;
-  out.questionFollowup=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pendingFollowup?.[uid]):null;
+  // Slot 1 can finish before slot 0; do not surface it through ordinary
+  // room-state polling until the first question is committed.
+  out.questionFollowup=s.status==='active'&&(s.quizRound||s.turnUid===uid)&&!!s.pending?.[uid]
+    ?publicQuestion(s.pendingFollowup?.[uid]):null;
   delete out.pendingFollowup;delete out.reviewHistory;
   out.serverNowMs=Date.now();
   out.review=s.reviews?.[uid]||null;
