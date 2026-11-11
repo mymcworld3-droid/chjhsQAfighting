@@ -93,33 +93,49 @@
 #tactical-combat.tc-quarter-layout .tc-quarter-energy{
   left:0;
   border-radius:0 100% 0 0;
-  background:#273129;
+  border-color:rgba(68,199,122,.75);
+  background:radial-gradient(circle at 19% 90%,#11291e 0%,#143c29 53%,#13261d 100%);
 }
-#tactical-combat.tc-quarter-layout .tc-energy-ticks{
+/* Ten thick curved green bar segments, fed directly by server stamina. */
+#tactical-combat.tc-quarter-layout .tc-energy-ring{
   position:absolute;z-index:2;
   inset:0;width:100%;height:100%;
   pointer-events:none;
+  overflow:visible;
 }
-#tactical-combat.tc-quarter-layout .tc-energy-ticks line{
-  stroke:#657166;
-  stroke-width:.8;
+#tactical-combat.tc-quarter-layout .tc-energy-track{
+  fill:none;
+  stroke:#214d35;
+  stroke-width:8;
   stroke-linecap:round;
-  transition:stroke .15s ease;
+  opacity:.86;
 }
-#tactical-combat.tc-quarter-layout .tc-energy-ticks line.is-filled{
-  stroke:#e2c682;
-  stroke-width:1.35;
+#tactical-combat.tc-quarter-layout [data-energy-segment]{
+  fill:none;
+  stroke:#356048;
+  stroke-width:6.9;
+  stroke-linecap:round;
+  opacity:.74;
+  transition:stroke .25s ease,opacity .25s ease,filter .25s ease;
 }
+#tactical-combat.tc-quarter-layout [data-energy-segment].is-filled{
+  stroke:#45f48e;
+  stroke-width:7.1;
+  opacity:1;
+  filter:drop-shadow(0 0 2.6px rgba(54,239,128,.9));
+}
+/* The inner quadrant is the charging action, not a decorative button.
+   Green pulsing appears only while the existing quiz action is enabled. */
 #tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
   position:absolute;left:0;bottom:0;z-index:3;
   width:69%;height:69%;
   min-width:0;min-height:0!important;
   margin:0;padding:0!important;
-  border:2px solid var(--tc-gold)!important;
+  border:2px solid #328a59!important;
   border-radius:0 100% 0 0!important;
-  background:#19241d!important;
-  box-shadow:none!important;
-  color:#dfc990!important;
+  background:radial-gradient(circle at 34% 63%,#1b4931 0%,#143926 55%,#112c20 100%)!important;
+  box-shadow:inset 0 0 17px rgba(33,115,63,.25)!important;
+  color:#e6ffe9!important;
   cursor:pointer;
   opacity:1;
 }
@@ -127,19 +143,43 @@
   cursor:default;
   opacity:1!important;
 }
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+  background:radial-gradient(circle at 38% 46%,#2bb964 0%,#198446 59%,#0f4b2f 100%)!important;
+  border-color:#66f5a1!important;
+  animation:tc-charge-ready-pulse 1.75s ease-in-out infinite;
+}
 #tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]:hover:not(:disabled){
-  background:#2a3c2c!important;
-  border-color:#f1d7a2!important;
+  border-color:#a2ffca!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready:hover{
+  background:radial-gradient(circle at 42% 45%,#42cf78 0%,#248f51 64%,#13482e 100%)!important;
+}
+@keyframes tc-charge-ready-pulse{
+  0%,100%{
+    filter:brightness(1) drop-shadow(0 0 2px rgba(36,223,99,.24));
+  }
+  50%{
+    filter:brightness(1.17) drop-shadow(0 0 11px rgba(52,238,121,.72));
+  }
 }
 #tactical-combat.tc-quarter-layout .tc-energy-bolt{
-  position:absolute;left:21%;top:34%;
-  font-family:system-ui,sans-serif;
-  font-size:clamp(43px,8vw,106px);
-  font-weight:400;
-  line-height:1;
-  transform:rotate(-9deg);
-  color:#e4cc90;
+  position:absolute;left:18%;top:23%;
+  width:39%;height:59%;
+  display:block;
+  overflow:visible;
   pointer-events:none;
+  filter:drop-shadow(0 2px 2px rgba(4,45,22,.58)) drop-shadow(0 0 7px rgba(159,255,175,.62));
+}
+#tactical-combat.tc-quarter-layout .tc-bolt-outline{
+  fill:none;stroke:#0b4b2c;stroke-width:6.3;stroke-linejoin:round;
+}
+#tactical-combat.tc-quarter-layout .tc-bolt-fill{
+  fill:url(#tc-bolt-gradient);
+  stroke:#e9ffdd;stroke-width:1.3;stroke-linejoin:round;
+}
+#tactical-combat.tc-quarter-layout .tc-bolt-glint{
+  fill:none;stroke:#fff;stroke-width:2.7;stroke-linejoin:round;
+  stroke-linecap:round;opacity:.82;
 }
 #tactical-combat.tc-quarter-layout .tc-energy-number{
   position:absolute;right:12%;bottom:9%;
@@ -149,7 +189,8 @@
   font-weight:600;
   line-height:1.05;
   text-align:center;
-  color:#f4e1aa;
+  color:#eaffdf;
+  text-shadow:0 0 8px rgba(91,243,138,.66);
   pointer-events:none;
 }
 #tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]:focus-visible,
@@ -248,7 +289,7 @@
     font-size:clamp(15px,4vw,25px)!important;
   }
   #tactical-combat.tc-quarter-layout .tc-energy-bolt{
-    font-size:clamp(37px,12vw,68px);
+    left:17%;top:23%;width:42%;height:60%;
   }
   #tactical-combat.tc-quarter-layout .tc-energy-number{
     font-size:clamp(23px,6vw,38px);
@@ -262,7 +303,14 @@
 }
 @media(prefers-reduced-motion:reduce){
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector,
-  #tactical-combat.tc-quarter-layout .tc-energy-ticks line{transition:none!important}
+  #tactical-combat.tc-quarter-layout [data-energy-segment]{
+    transition:none!important;
+  }
+  #tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+    animation:none!important;
+    filter:none!important;
+    box-shadow:inset 0 0 18px rgba(84,224,130,.35)!important;
+  }
 }
 /* Keep the original question screen unchanged during answer/review modals. */
 #tactical-combat.tc-quarter-layout .tc-modal .tc-question{line-height:1.95!important}

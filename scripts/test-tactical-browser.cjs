@@ -457,7 +457,17 @@ async function main(){
             return css.display!=='none'&&css.visibility!=='hidden'&&button.getClientRects().length>0&&
               button.getBoundingClientRect().width>1&&button.getBoundingClientRect().height>1;
           }).map(button=>button.dataset.action||Object.keys(button.dataset).join(','));
-          return {map:rect('.tc-arena>canvas'),energy:rect('.tc-quarter-energy'),
+          const button=root.querySelector('.tc-quarter-energy>[data-quiz]');
+          const segments=[...root.querySelectorAll('[data-energy-segment]')];
+          const charging={total:segments.length,
+            filled:segments.filter(segment=>segment.classList.contains('is-filled')).length,
+            number:Number(root.querySelector('[data-energy-number]')?.textContent),
+            ready:button.classList.contains('is-charge-ready'),
+            disabled:button.disabled,
+            animation:getComputedStyle(button).animationName,
+            background:getComputedStyle(button).backgroundImage,
+            lightning:root.querySelector('.tc-bolt-fill')?.getAttribute('d')};
+          return {charging,map:rect('.tc-arena>canvas'),energy:rect('.tc-quarter-energy'),
             actions:rect('.tc-quarter-action'),visible,
             titleDisplay:getComputedStyle(root.querySelector('.tc-top')).display,
             actorDisplay:getComputedStyle(root.querySelector('.tc-actors')).display,
@@ -466,6 +476,12 @@ async function main(){
         assert.equal(layout.titleDisplay,'flex','title/turn/收起 header remains visible');
         assert.equal(await quick.locator('[data-close]').isVisible(),true,'收起 stays visible');
         assert.equal(layout.actorDisplay,'none');
+        assert.equal(layout.charging.total,10,'green energy bar has ten visible segments');
+        assert.equal(layout.charging.filled,layout.charging.number,'live stamina number matches illuminated segments');
+        assert.ok(layout.charging.lightning?.includes('L 63 37'),'vector lightning path is present');
+        assert.match(layout.charging.background,/gradient/,'charging surface is a green gradient');
+        assert.equal(layout.charging.ready,!layout.charging.disabled,'pulse only appears when quiz is actionable');
+        if(layout.charging.ready)assert.equal(layout.charging.animation,'tc-charge-ready-pulse');
         assert.deepEqual(layout.visible.sort(),['attack','close','end','move','quiz'].sort());
         assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
         assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);
@@ -487,12 +503,35 @@ async function main(){
       room.pendingIntroductions={u1:[]};
       await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
       await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
+      assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),8);
+      await quick.waitForFunction(()=>document.querySelector('[data-quiz]')?.classList.contains('is-charge-ready'));
+      // Verify disabled/no pulse BEFORE attacking: killing the final enemy
+      // can finish the trial and freeze its last displayed state.
+      const full=db.records.get(key);
+      full.actors[0].stamina=10;
+      full.actors[0].questions=2;
+      full.revision++;
+      await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+      await quick.waitForFunction(()=>{
+        const btn=document.querySelector('[data-quiz]');
+        return document.querySelector('[data-energy-number]')?.textContent==='10' &&
+          btn?.disabled&&!btn.classList.contains('is-charge-ready');
+      });
+      assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),10);
+      full.actors[0].stamina=8;
+      full.actors[0].questions=0;
+      full.revision++;
+      await quick.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
+      await quick.waitForFunction(()=>
+        document.querySelector('[data-energy-number]')?.textContent==='8'&&
+        document.querySelector('[data-quiz]')?.classList.contains('is-charge-ready'));
       await quick.locator('[data-action="attack"]').click();
       await cell(quick,2,1);
       await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='6');
       const result=await read(quick);
       assert.ok(result.actors[1].hp<500,'the map click executes a valid directional attack without confirmation');
       assert.equal(result.actors[0].stamina,6);
+      assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),6);
       assert.deepEqual(errors,[]);
       console.log('Exact sketch browser check passed: only the required controls in three viewport orientations, real server attack triggered by one tile tap.');
       return;

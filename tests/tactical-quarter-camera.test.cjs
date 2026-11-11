@@ -66,7 +66,7 @@ test('PvE follows the sketch: central map, left energy and right three actions o
     "className='tc-sector tc-sector-end'",
     "attack.innerHTML='<span>攻擊</span>'",
     "move.innerHTML='<span>移動</span>'",
-    "data-energy-number","data-energy-tick",
+    "data-energy-number","data-energy-segment",
     "querySelector('[data-stamina]')",
     "querySelector('[data-quiz]')"
   ])assert.ok(ui.includes(marker),marker);
@@ -100,4 +100,39 @@ test('PvE uses tap-to-act, retaining server-authoritative quiz and turn actions'
   ])assert.ok(ui.includes(marker),marker);
   assert.doesNotMatch(ui,/LIMITS\.stamina\s*=/);
   assert.match(css,/#tactical-combat\.tc-quarter-layout/);
+});
+
+
+test('green arc has ten live curved segments and the charging button uses a crisp lightning SVG',()=>{
+  assert.match(ui,/const energySegment=i=>/);
+  assert.match(ui,/A 90 90 0 0 1/);
+  assert.match(ui,/Array\.from\(\{length:10\},\(_,i\)=>energySegment\(i\)\)/);
+  assert.match(ui,/data-energy-segment/);
+  assert.match(ui,/Number\(segment\.dataset\.energySegment\)<amount/);
+  assert.match(ui,/viewBox="0 0 72 100"/);
+  assert.match(ui,/tc-bolt-gradient/);
+  assert.match(ui,/tc-bolt-fill/);
+  assert.match(ui,/tc-bolt-glint/);
+  assert.doesNotMatch(ui,/>ϟ</);
+  assert.match(css,/\.tc-energy-ring\{/);
+  assert.match(css,/\.tc-energy-track\{/);
+  assert.match(css,/\[data-energy-segment\]\.is-filled\{/);
+  assert.match(css,/stroke:#45f48e/);
+  assert.match(css,/\.tc-quarter-energy\>\[data-quiz\]\.is-charge-ready\{/);
+  assert.match(css,/@keyframes tc-charge-ready-pulse/);
+  assert.match(css,/radial-gradient\(circle at 38% 46%,#2bb964/);
+});
+
+test('ready-to-answer pulse is controlled by live quiz availability and respects reduced motion',()=>{
+  assert.match(ui,/quizButton\.disabled=!canQuestion\(\)\|\|locked/);
+  assert.match(ui,/const ready=!quizButton\.disabled&&!modalOpen/);
+  assert.match(ui,/quizButton\.classList\.toggle\('is-charge-ready',ready\)/);
+  assert.match(ui,/aria-description/);
+  assert.match(css,/animation:tc-charge-ready-pulse 1\.75s ease-in-out infinite/);
+  assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
+  assert.match(css,/animation:none!important/);
+  assert.match(css,/\.tc-energy-number\{/);
+  assert.match(css,/\.tc-energy-bolt\{/);
+  assert.match(ui,/data-close aria-label="收起戰場">收起<\/button>/);
+  assert.match(css,/\.tc-top\{[\s\S]*?display:flex!important/);
 });
