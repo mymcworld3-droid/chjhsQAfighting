@@ -1,0 +1,43 @@
+name: Validate floating trial homepage (one-time)
+on:
+  push:
+    branches: [feature/stamina-home-floating-trial-20261111]
+    paths: [.github/workflows/verify-home-floating-trial.yml]
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Restore npm dependencies and refresh asset manifest
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:module-versions
+          npm run check:module-versions
+      - name: Verify frontend syntax and clean patch
+        run: |
+          node --check public/cultivation/home-wireframe.js
+          node --check public/cultivation/home-trial-ecology.js
+          node --check public/cultivation/tactical-combat.js
+          node --check public/main.js
+          git diff --check
+      - name: Run full regression tests
+        run: npm test
+      - name: Commit tested application only
+        run: |
+          git rm .github/workflows/verify-home-floating-trial.yml
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat(home): pinned combined shortcuts and live trial scenery'
+          git push origin HEAD:refs/heads/feature/stamina-home-floating-trial-20261111
