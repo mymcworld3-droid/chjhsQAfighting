@@ -84,6 +84,25 @@ test('Safari browser bar height changes refit the shell even when root clientHei
   assert.equal(h.loads(),1);
 });
 
+
+test('software keyboard never resizes or rotates the scaled iframe while editing',()=>{
+  const h=stageRuntime();
+  const original=h.window.QAGameStage.getState();
+  h.window.QAGameStage.setKeyboardEditing(true);
+  Object.assign(h.bounds,{height:320});
+  h.handlers.resize();h.flush();
+  assert.deepEqual(h.window.QAGameStage.getState(),original,
+    'keyboard must not change 9:16 design into a landscape canvas');
+  h.window.scrollY=120;
+  h.handlers.scroll();
+  assert.equal(h.window.scrollY,120,
+    'the outer scroll guard must not fight caret-driven viewport panning');
+  h.window.QAGameStage.setKeyboardEditing(false);
+  h.flush();
+  assert.notDeepEqual(h.window.QAGameStage.getState(),original,
+    'regular layout measurements resume after the editor closes');
+});
+
 test('shell focus scrolling and back navigation reset only the outer containers',()=>{
   const h=stageRuntime();
   h.stage.scrollTop=90;h.stage.scrollLeft=25;h.stageHandlers.scroll();
