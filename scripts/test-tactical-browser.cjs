@@ -353,36 +353,53 @@ async function main(){
     assert.ok(result.length>150,'render every core, monster attack and monster movement through the real canvas');
     assert.ok(result.every(r=>r.changed),'different action phases must produce visibly different pixels');
   }
-  async function weaponBattleChecks(view){
-    const current=await read(view),key=service.ROOMS+'/'+current.id,saved=structuredClone(db.records.get(key));
-    const fixtures=[
-      {type:'sword',label:'劍',points:[[7,5],[9,7],[6,5],[10,6]],damage:[200,200,0,0],aim:[7,6],cells:9,cost:2},
-      {type:'spear',label:'槍',points:[[7,6],[8,6],[9,6],[10,6],[11,6]],damage:[180,180,180,180,0],aim:[7,6],cells:4,cost:2},
-      {type:'saber',label:'刀',points:[[7,4],[8,8],[9,6]],damage:[230,230,0],aim:[7,6],cells:10,cost:3},
-      {type:'hammer',label:'錘',points:[[5,5],[6,5],[7,5],[5,6],[7,6],[5,7],[6,7],[7,7],[8,6]],damage:[300,300,300,300,300,300,300,300,0],cells:8,cost:3},
-      {type:'bow',label:'弓',points:[[11,11],[7,6]],damage:[170,0],aim:[11,11],cost:2}
-    ];
+  async function weaponlessTacticalChecks(view){
+    // The five-weapon system has been removed. Test the current directional
+    // two-cell basic attack and verify UI hit testing after map zoom / pan.
+    const current=await read(view),key=service.ROOMS+'/'+current.id;
+    const saved=structuredClone(db.records.get(key));
     await view.setViewportSize({width:393,height:852});
-    for(const fixture of fixtures){
-      const previous=await read(view),room=Rules.create({id:current.id,mode:'pve',players:[{...saved.actors[0],weapon:{type:fixture.type,realm:1},atk:200}],trial:saved.trial});
-      room.width=room.height=13;room.blocks=[];room.ground=Array(169).fill(0);room.pendingIntroductions={u1:[]};
-      Object.assign(room.actors[0],{x:6,y:6,stamina:10});
-      room.actors=[room.actors[0],...fixture.points.map(([x,y],i)=>Rules.actor({uid:'weapon-target-'+i,name:'演武妖獸',bot:true,team:'monster',species:0,atk:100,maxHp:2000},{x,y,intent:{kind:'wait',cells:[],text:'演武中'}}))];
-      room.revision=previous.revision+1;db.records.set(key,room);
-      await view.locator('[data-sync]').click();await view.waitForFunction(()=>document.querySelector('[data-stamina] strong').textContent==='10'&&!document.querySelector('[data-end]').disabled);
-      assert.match(await view.locator('.tc-actor.is-self').textContent(),/築基境/);
-      assert.equal(await view.locator('[data-action="attack"]').textContent(),fixture.label+' · '+fixture.cost);
-      await view.locator('[data-action="attack"]').click();
-      if(fixture.aim)await cell(view,...fixture.aim);
-      if(fixture.cells)assert.match(await view.locator('[data-selection]').textContent(),new RegExp(fixture.cells+' 格'));
-      else assert.match(await view.locator('[data-skill]').textContent(),/方形五格/);
-      assert.equal(await view.locator('[data-execute]').isEnabled(),true);
-      await view.screenshot({path:path.join(output,'weapon-range-'+fixture.type+'-mobile.png')});await ratio(view);
-      await view.locator('[data-execute]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
-      const hit=await read(view);assert.deepEqual(hit.actors.slice(1).map(a=>2000-a.hp),fixture.damage,fixture.type+' applies the previewed footprint');
-      assert.equal(hit.actors[0].stamina,10-fixture.cost);assert.equal(hit.actors[0].attacks,1);assert.equal(hit.actors[0].hp,room.actors[0].hp);
-    }
-    saved.revision=(await read(view)).revision+1;db.records.set(key,saved);await view.locator('[data-sync]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    const room=Rules.create({id:current.id,mode:'pve',
+      players:[{...saved.actors[0],atk:200}],trial:saved.trial});
+    room.width=room.height=13;room.blocks=[];room.ground=Array(169).fill(0);
+    room.pendingIntroductions={u1:[]};room.status='active';
+    Object.assign(room.actors[0],{x:6,y:6,stamina:10,attacks:0,actions:0});
+    const enemyPositions=[[7,6],[8,6],[9,6],[6,7]];
+    room.actors=[room.actors[0],...enemyPositions.map(([x,y],i)=>
+      Rules.actor({uid:'basic-target-'+i,name:'演武妖獸',bot:true,
+        team:'monster',species:0,atk:100,maxHp:2000},{x,y,
+        intent:{kind:'wait',cells:[],text:'演武中'}}))];
+    room.revision=current.revision+1;db.records.set(key,room);
+    await view.locator('[data-sync]').click();
+    await view.waitForFunction(()=>
+      document.querySelector('[data-stamina] strong')?.textContent==='10'&&
+      !document.querySelector('[data-end]')?.disabled);
+    assert.equal((await view.locator('[data-action="attack"]').textContent()).trim(),'攻擊 · 2');
+    assert.equal(await view.locator('.tc-quarter-energy').count(),1);
+    assert.equal(await view.locator('.tc-quarter-action').count(),1);
+    const ui=await view.evaluate(()=>{
+      const c=document.querySelector('.tc-arena canvas'),r=c.getBoundingClientRect();
+      const ctx=window.getComputedStyle(c);
+      return {touchAction:ctx.touchAction,width:r.width,height:r.height};
+    });
+    assert.equal(ui.touchAction,'none');
+    assert.ok(ui.width>200&&ui.height>100);
+    await view.locator('[data-action="attack"]').click();
+    await cell(view,7,6);
+    assert.match(await view.locator('[data-execute]').textContent(),/向右攻擊/);
+    assert.equal(await view.locator('[data-execute]').isEnabled(),true);
+    await view.screenshot({path:path.join(output,'quarter-directional-attack.png')});
+    await view.locator('[data-execute]').click();
+    await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    const hit=await read(view),damage=hit.actors.slice(1).map(a=>2000-a.hp);
+    assert.ok(damage[0]>0&&damage[1]>0,'two forward cells are hit');
+    assert.equal(damage[2],0,'third forward cell is out of range');
+    assert.equal(damage[3],0,'side cell is not part of attack');
+    assert.equal(hit.actors[0].stamina,8,'normal attack costs exactly 2 stamina');
+    assert.equal(hit.actors[0].weapon,undefined);
+    saved.revision=hit.revision+1;db.records.set(key,saved);
+    await view.locator('[data-sync]').click();
+    await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
     await view.locator('[data-action="move"]').click();
   }
   async function modeEntryChecks(){
@@ -470,7 +487,7 @@ async function main(){
     await rangePreviewChecks(mobile);
     await animationChecks(mobile);
     await animationRenderingCoverage(mobile);
-    await weaponBattleChecks(mobile);
+    await weaponlessTacticalChecks(mobile);
     // Reproduce the reported exhausted-stamina view with the densest later-stage HUD.
     const room=await read(mobile),key=service.ROOMS+'/'+room.id,saved=db.records.get(key);
     let denseStage=10;while(true){const layout=Rules.stageLayout('layout-fit',denseStage);if(layout.width===11&&layout.enemies.length===4)break;denseStage++;}
