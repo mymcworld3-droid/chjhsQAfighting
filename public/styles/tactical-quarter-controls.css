@@ -1,4 +1,4 @@
-/* 問道試煉戰場：中央非全幅地圖、左下充能、
+/* 問道試煉戰場：全幅可操作畫布、有限大小地圖、左下充能、
    右下攻擊／移動／結束回合。其餘操作不在此畫面露出。
    PvP、答題彈窗、妖獸介紹仍使用原本畫面與流程。 */
 #tactical-combat.tc-quarter-layout{
@@ -43,8 +43,8 @@
 }
 #tactical-combat.tc-quarter-layout .tc-arena>canvas{
   position:absolute;
-  top:6%;left:10%;
-  width:80%!important;height:68%!important;
+  inset:0;
+  width:100%!important;height:100%!important;
   display:block;
   min-height:0!important;
   border:0!important;
@@ -301,9 +301,6 @@
   #tactical-combat.tc-quarter-layout{
     --tc-dial:min(50vw,31vh);
     --tc-wheel:min(55vw,37vh);
-  }
-  #tactical-combat.tc-quarter-layout .tc-arena>canvas{
-    top:7%;left:5%;width:90%!important;height:62%!important;
   }
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
     font-size:clamp(9px,2.7vw,15px)!important;
