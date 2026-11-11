@@ -800,6 +800,7 @@ async function generateQuiz(req, res) {
     const requestedSession = String(quizSessionId || '');
     const sessionOwner = raidTicketMode ? `raid:${raidIdentity}:${raidRoomId}`
         : tacticalMode ? `tactical:${tacticalContext.uid}:${tacticalContext.roomId}`
+        : tacticalBankFill ? `tactical-bank:${aiQuestionBank.scopeCode(req.__trustedTacticalBankTarget)}`
         : enlightenmentMode ? `trial:${enlightenmentContext.uid}`
         : towerMode ? `tower:${towerContext.uid}:${towerContext.runId}`
         : avatarMode ? `avatar:${avatarContext.uid}:${avatarContext.runId}`
@@ -1150,6 +1151,11 @@ async function generateQuiz(req, res) {
             return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
 
         } catch (error) {
+            // Parallel slot-1 generation can legitimately become stale when
+            // the user answers slot 0 first. Return that conflict immediately
+            // instead of buying three more API generations for a dead slot.
+            if(tacticalMode&&error?.status===409)
+                return res.status(409).json({error:error.message});
             console.error(`Attempt ${attempts + 1} failed:`, error.message);
             lastGenerationIssue = String(error?.message || '答案與解析不一致');
             attempts++;
