@@ -95,57 +95,46 @@ patch('public/cultivation/tactical-renderer.js',s=>ln(s,"import './weapon-system
 patch('public/main.js',s=>{
   s=ln(s,"window.QA_WEAPON_SYSTEM_ENABLED = true;","window.QA_WEAPON_SYSTEM_ENABLED = false;");
   s=ln(s,"if(document.body)document.body.dataset.weaponSystem = '1';");
-  for(const name of ['weapon-forge.js','soulbound-draw.js','refinery-ai-jobs.js','cultivation-refinery-v2.js'])s=ln(s,"  './cultivation/"+name+"',");
-  return s;
+  return ln(s,"  './cultivation/weapon-forge.js',");
 });
 patch('public/index.html',s=>{
-  s=ln(s,'    <link rel="stylesheet" href="styles/weapon-forge.css">');
-  return s.replace(/^[^\n]*<button[^>]*data-training-tab="(?:refinery|equipment|contract)"[^>]*>.*?<\/button>\n/gm,'');
+  return ln(s,'    <link rel="stylesheet" href="styles/weapon-forge.css">');
 });
-patch('public/cultivation/training-access-rules.js',s=>{
-  s=ln(s,"    { id: 'forge', name: '鍛造坊', threshold: 6, realm: '築基初期', tab: 'refinery' },");
-  return ln(s,"    { id: 'contract', name: '尋器', threshold: 6, realm: '築基期', tab: 'contract' },");
-});
+patch('public/cultivation/training-access-rules.js',s=>
+  ln(s,"    { id: 'contract', name: '尋器', threshold: 6, realm: '築基期', tab: 'contract' },")
+);
 patch('public/cultivation/training-scene-layouts.js',s=>{
-  s=s.replace(/^.*\b(?:forge|contract): place\('(?:forge|contract)'.*\n/gm,'');
-  return ln(s,"    { id: 'island-forge', kind: 'island' },");
+  const next=s.replace(/^.*\bcontract: place\('contract'.*\n/gm,'');
+  assert.notEqual(next,s,'Missing weapon-draw map places');
+  return next;
 });
 patch('public/cultivation/training-scene-map.js',s=>{
   s=one(s,"const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', refinery: 'forge', bag: 'vault', equipment: 'vault', contract: 'contract', status: 'status' };",
-    "const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', bag: 'vault', status: 'status' };");
-  for(const text of ["  { id: 'refinery', name: '煉器', icon: 'fa-hammer', threshold: 6, unlock: '築基期解鎖' },",
-   "  { id: 'contract', name: '尋器', icon: 'fa-dharmachakra', threshold: 6, unlock: '築基期解鎖' },",
-   "  { id: 'equipment', name: '裝備', icon: 'fa-shield-halved', threshold: 6, unlock: '築基期解鎖' },"])s=ln(s,text);
-  s=one(s,"  const forgeJob = accountReady ? player.refineryJobV1 : null;\n  const forgeReady = !!(forgeJob?.id && Number(forgeJob.readyAtMs || 0) <= Date.now());\n","");
-  s=one(s,"ready || canUpgrade || innateReady || forgeReady","ready || canUpgrade || innateReady");
-  s=one(s,", button === nav && forgeReady ? '煉器已完成，可立即開爐' : ''","");
-  s=cut(s,"  // Forge completion is distinct from raid tickets and nascent upgrades.\n","  if (growth) {\n");
-  s=ln(s,"  window.addEventListener('xiuxian:refinery-job-updated', updateTicketIndicators);");
-  return one(s,"  // Readiness changes with wall-clock time even if the player never opens the forge.\n  setInterval(updateTicketIndicators, 10000);",
-    "  setInterval(updateTicketIndicators, 10000);");
+    "const tabPlace = { core: 'meditation', 'nascent-soul': 'meditation', refinery: 'forge', bag: 'vault', equipment: 'vault', status: 'status' };");
+  return ln(s,"  { id: 'contract', name: '尋器', icon: 'fa-dharmachakra', threshold: 6, unlock: '築基期解鎖' },");
 });
 patch('public/cultivation/foundation-training-page.js',s=>{
-  s=ln(s,"import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';");
-  s=s.replace(/^[^\n]*<button[^>]*data-training-tab="(?:refinery|equipment|contract)"[^>]*>.*?<\/button>\n/gm,'');
-  s=cut(s,"    // 舊靜態殼層也補齊裝備入口，四個裝配欄由統一裝備視圖渲染。\n",
+  s=cut(s,"    if (window.QA_WEAPON_SYSTEM_ENABLED && tabs && !tabs.querySelector('[data-training-tab=\"contract\"]')) {",
     "    page.querySelectorAll('[data-training-tab]').forEach((tab) => {");
   s=cut(s,"    page.querySelector('[data-training-tab=\"contract\"]')?.addEventListener('click', () => {",
-    "    page.querySelector('[data-training-tab=\"bag\"]')?.addEventListener('click', () => {");
+    "    page.querySelector('[data-training-tab=\"refinery\"]')?.addEventListener('click', () => {");
+  s=cut(s,"      if(window.QA_WEAPON_SYSTEM_ENABLED){",
+    "      // 同一個入口交給煉器模組負責狀態、內容與事件，避免兩個 click handler");
+  s=ln(s,"      if(window.QA_WEAPON_SYSTEM_ENABLED){window.openWeaponForge?.();return;}");
   return one(s,"    page.classList.add('foundation-training-page', 'training-page', 'training-page-v3');",
-    "    page.classList.add('foundation-training-page', 'training-page', 'training-page-v3');\n    page.querySelectorAll('[data-training-tab=\"refinery\"],[data-training-tab=\"contract\"],[data-training-tab=\"equipment\"]').forEach(button=>button.remove());");
+    "    page.classList.add('foundation-training-page', 'training-page', 'training-page-v3');\n    page.querySelectorAll('[data-training-tab=\"contract\"]').forEach(button=>button.remove());");
 });
 patch('public/cultivation/cultivation-training-v4.js',s=>{
-  s=ln(s,"import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-shells.js';");
   s=cut(s,"    if(window.QA_WEAPON_SYSTEM_ENABLED&&['refinery','equipment','contract'].includes(activeTab)){",
-    "    // 舊畫面仍是元嬰分支時，只更新數值，不視為再次切入分頁。\n",
-    "    if(['refinery','equipment','contract'].includes(activeTab))activeTab='bag';\n");
-  s=s.replace(/^[^\n]*<button[^>]*data-training-tab="(?:refinery|equipment|contract)"[^>]*>.*?<\/button>\n/gm,'');
-  s=cut(s,"    if (!tabs.querySelector('[data-training-tab=\"equipment\"]')) {",
+    "    if (activeTab === 'refinery') {",
+    "    if(activeTab==='contract')activeTab='bag';\n");
+  s=ln(s,"           <button type=\"button\" class=\"training-subtab-v3\" data-training-tab=\"contract\" aria-selected=\"false\"><i class=\"fa-solid fa-dharmachakra\"></i><span>尋器</span></button>");
+  s=cut(s,"    if (!tabs.querySelector('[data-training-tab=\"contract\"]')) {",
     "    if (page.dataset.trainingV4Bound !== '1') {");
   s=one(s,"    page.classList.add('training-page', 'training-page-v3');",
-    "    page.classList.add('training-page', 'training-page-v3');\n    page.querySelectorAll('[data-training-tab=\"refinery\"],[data-training-tab=\"contract\"],[data-training-tab=\"equipment\"]').forEach(button=>button.remove());");
+    "    page.classList.add('training-page', 'training-page-v3');\n    page.querySelectorAll('[data-training-tab=\"contract\"]').forEach(button=>button.remove());");
   s=one(s,"activeTab = ['bag', 'refinery', 'equipment', 'contract'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';",
-    "activeTab = requested==='bag' || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';");
+    "activeTab = ['bag','refinery','equipment'].includes(requested) || (requested === 'nascent-soul' && nascentUnlocked()) ? requested : 'core';");
   return ln(s,"    window.addEventListener('xiuxian:contract-page-opened', () => { activeTab = 'contract'; });");
 });
 for(const p of [
@@ -159,16 +148,15 @@ for(const p of [
 'tests/weapon-system.test.cjs','scripts/test-weapon-forge-browser.cjs'
 ]){assert(fs.existsSync(p),'Missing weapon file '+p);fs.rmSync(p);}
 patch('tests/training-scene-map.test.cjs',s=>{
-  s=one(s,"['forge', 'contract', 'vault', 'secret', 'status', 'rank']","['vault', 'secret', 'status', 'rank']");
-  s=cut(s,
-    "test('compact contract entrance sits beside the forge and opens its existing tab', () => {",
-    "test('entrance unlocks are monotonic through deductions and remote account restores', () => {",
-    [
-      "test('retired forge and weapon draw entrances are absent',()=>{",
-      "  assert.equal(Rules.PLACES.some(place=>['forge','contract'].includes(place.id)),false);",
+  s=one(s,"['forge', 'contract', 'vault', 'secret', 'status', 'rank']","['forge', 'vault', 'secret', 'status', 'rank']");
+  s=cut(s,"test('compact contract entrance sits beside the forge and opens its existing tab', () => {",
+    "test('entrance unlocks are monotonic through deductions and remote account restores', () => {",[
+      "test('weapon-draw altar is removed but normal artifact forge is preserved',()=>{",
+      "  assert.equal(Rules.PLACES.some(place=>place.id==='contract'),false);",
+      "  assert.equal(Rules.PLACES.some(place=>place.id==='forge'),true);",
       "  for(const layout of Object.values(Layouts)){",
-      "    assert.equal(layout.places.forge,undefined);",
       "    assert.equal(layout.places.contract,undefined);",
+      "    assert.ok(layout.places.forge);",
       "  }",
       "});",
       ""
@@ -202,7 +190,8 @@ save('tests/no-weapon-system.test.cjs',[
 "  assert.doesNotMatch(read('public/cultivation/tactical-combat.js'),/QAWeapons|weaponRewards/);",
 "  assert.doesNotMatch(read('public/cultivation/tactical-renderer.js'),/weapon-system-rules/);",
 "  const access=require('../public/cultivation/training-access-rules.js');",
-"  assert.equal(access.PLACES.some(x=>['forge','contract'].includes(x.id)),false);",
+"  assert.equal(access.PLACES.some(x=>x.id==='contract'),false);
+  assert.equal(access.PLACES.some(x=>x.id==='forge'),true);",
 "});",
 ""
 ].join('\n'));
