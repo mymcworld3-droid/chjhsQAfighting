@@ -89,3 +89,28 @@ test('two different subjects prewarm without mixing topic or grade',async()=>{
   assert.equal(generated.filter(t=>t.subject==='歷史').length,2);
   assert(generated.every(t=>t.level==='高中二年級'));
 });
+
+test('queued refills continue after the shared scheduler releases its two active jobs',async()=>{
+  const topics=[physics,history,
+    {...physics,topic:'等加速度運動'},{...history,topic:'世界史'}];
+  const counts=new Map();let active=0,maxActive=0,scheduled=0;
+  const bank={
+    enabled:true,
+    schedule(target,job){
+      if(active>=2)return false;
+      active++;scheduled++;maxActive=Math.max(maxActive,active);
+      Promise.resolve().then(job).finally(()=>{active--;});
+      return true;
+    },
+    async find(target){return {ready:true,count:counts.get(keyOf(target))||0};}
+  };
+  const warmer=createTacticalBankPrewarmer({bank,maxPerTarget:1,generate:async target=>{
+    const key=keyOf(target);counts.set(key,(counts.get(key)||0)+1);
+    return {stored:true,q:'approved'};
+  }});
+  warmer.enqueue(topics.slice(0,2));
+  warmer.enqueue(topics.slice(2));
+  await until(()=>topics.every(t=>counts.get(keyOf(t))===1));
+  assert.equal(scheduled,4);
+  assert.equal(maxActive,2);
+});
