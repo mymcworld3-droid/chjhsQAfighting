@@ -270,3 +270,19 @@ body.tactical-open #solo-cultivation-feedback{
 #tactical-combat .tc-quiz .tc-pair-entry .tc-options>button:focus-visible{
   outline:2px solid #d1bd7d!important;outline-offset:2px;
 }
+
+/* The whiteboard copies the current stem, so its rendered words and equations
+   must follow the same pure-black ink rule as the parchment question card. */
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question,
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question *{
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question mjx-container[jax="SVG"] svg *,
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question .katex svg *{
+  fill:#000!important;
+}
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question svg :is(text,tspan){
+  fill:#000!important;
+  stroke:none!important;
+}
