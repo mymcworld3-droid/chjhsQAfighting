@@ -948,7 +948,7 @@ async function generateQuiz(req, res) {
                     }
                     // Expand on low stock. This runs after the cached question is returned
                     // and must not delay a player or replace the unanswered question.
-                    if (bankResult.count < aiQuestionBank.LOW_WATER) {
+                    if (bankResult.count < (tacticalMode ? 5 : aiQuestionBank.LOW_WATER)) {
                         aiQuestionBank.schedule(bankTarget, async ()=>{
                             const more = await aiRouter.generateJSON(promptForTask(0), {
                                 task:'quiz-generate',parallel:false,timeoutMs:90000,
@@ -1198,15 +1198,18 @@ app.post('/api/tactical/bank-warm',async(req,res)=>{
         // No user-supplied subject/topic/answer is ever trusted.
         const scope=trustedKnowledgeScope(snap.data()||{});
         const offset=Math.max(1,Math.min(10000,Math.floor(Number(req.body?.offset)||1)));
-        const current=Date.now(),last=tacticalBankWarmLast.get(uid)||0;
-        if(current-last<45000)return res.json({ok:true,enabled:true,queued:0,cooldown:true});
-        tacticalBankWarmLast.set(uid,current);
-        while(tacticalBankWarmLast.size>3000)tacticalBankWarmLast.delete(tacticalBankWarmLast.keys().next().value);
         const targets=[offset,offset+1].map(index=>{
             const choice=pickTrustedRaidKnowledge(scope,index);
             return {subject:choice.subject,level:choice.level,topic:choice.specificTopic||'綜合測驗',
                 difficulty:choice.difficulty};
         });
+        const current=Date.now(),warmKey=JSON.stringify(targets),last=tacticalBankWarmLast.get(uid);
+        // The same scope is rate-limited. A changed grade, unit or battle
+        // position gets its own prewarm opportunity immediately.
+        if(last?.key===warmKey&&current-last.at<45000)
+            return res.json({ok:true,enabled:true,queued:0,cooldown:true});
+        tacticalBankWarmLast.set(uid,{at:current,key:warmKey});
+        while(tacticalBankWarmLast.size>3000)tacticalBankWarmLast.delete(tacticalBankWarmLast.keys().next().value);
         const result=tacticalBankPrewarmer.enqueue(targets);
         return res.json({ok:true,...result});
     }catch(error){
