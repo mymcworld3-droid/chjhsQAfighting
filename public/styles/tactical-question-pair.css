@@ -429,3 +429,65 @@ body.tactical-open #solo-cultivation-feedback{
   min-height:0!important;
   padding:0 8px 3px!important;
 }
+
+
+/* Main solo learning feedback, shared footprint and post-answer correction. */
+#tactical-combat .tc-quiz .tc-solo-learning-reward{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  margin:8px 0 12px;
+  font-size:13px;
+  line-height:1.65;
+  color:#e8d29d;
+}
+#tactical-combat .tc-quiz .tc-solo-learning-reward span{
+  padding:3px 9px;
+  border:1px solid rgba(233,209,145,.33);
+  border-radius:6px;
+  background:rgba(70,58,32,.24);
+}
+#tactical-combat .tc-quiz .tc-solo-learning-reward small{
+  width:100%;
+  color:#c9dbd7;
+}
+#tactical-combat .tc-quiz .tc-correction-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:13px;
+}
+#tactical-combat .tc-quiz .tc-correction-actions button{
+  min-height:40px;
+  padding:9px 12px;
+  border-radius:7px;
+  font-size:12px;
+  line-height:1.55;
+}
+#tactical-combat .tc-quiz .tc-correction-actions small{
+  width:100%;
+  font-size:11px;
+  line-height:1.55;
+  color:#b5c8be;
+}
+#tactical-combat .tc-quiz .tc-correction-actions button:disabled{
+  opacity:.6;
+  cursor:default;
+}
+/* The actual main adaptive-learning renderer appends these elements to the
+   tactical question host, so it shares the same study content, not a clone. */
+#tactical-combat .tc-quiz .adaptive-scope-progress,
+#tactical-combat .tc-quiz .adaptive-concept-lesson{
+  width:100%;
+  max-width:100%;
+  margin:10px 0 18px;
+  overflow-wrap:anywhere;
+}
+#tactical-combat .tc-quiz .adaptive-scope-progress summary{
+  cursor:pointer;
+}
+#tactical-combat .tc-quiz .adaptive-scope-progress li{
+  line-height:1.75;
+}
