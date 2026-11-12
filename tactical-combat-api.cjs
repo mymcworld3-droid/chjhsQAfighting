@@ -158,7 +158,9 @@ async function chooseSchool(db,uid,input){
     if(!next.starterClaimed){
       const starter=Manuals.starterFor(school);
       next.books[starter]||={exp:0};next.starterClaimed=true;
-      if(!next.equipped.length)next.equipped.push(Manuals.BY_BOOK[starter].skills[0].id);
+      const introductory=Manuals.BY_BOOK[starter].skills[0];
+      if(!next.equipped.length&&Manuals.meetsRealm(introductory,TrainingAccess.score(exists(user))))
+        next.equipped.push(introductory.id);
     }
     tx.set(ref,next);return Manuals.publicState(next,TrainingAccess.score(exists(user)));
   });
