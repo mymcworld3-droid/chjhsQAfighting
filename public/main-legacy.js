@@ -2,7 +2,7 @@ import { createStudyQuestionBridge } from './cultivation/study-question-bridge.j
 import './cultivation/void-retraining-rules.js';
 import {} from './cultivation/solo-learning-rules.js';
 import './cultivation/knowledge-points.js';
-import './cultivation/adaptive-learning.js';
+import './cultivation/adaptive-learning.js?v=20261112-stamina-main-solo-learning-parity-v1';
 import './cultivation/ability-insights-core.js';
 import './cultivation/answer-gold-rules.js';
 import './cultivation/quest-rules.js';
