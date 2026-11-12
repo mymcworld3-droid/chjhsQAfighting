@@ -378,6 +378,14 @@ async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
   if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina&&!pending)
     throw error('請先使用體力，或結束回合');
   const choice=StudyScope.pick(study,user,a.answered+batchSlot);
+  // Match main solo's selected-bank subject-specific adaptive difficulty
+  // rather than averaging an unrelated subject's learning history.
+  if(study.mode==='bank'){
+    const normalized={英語閱讀:'英文',數學A:'數學',數學B:'數學',數學甲:'數學',數學乙:'數學',
+      地球科學:'地科',自然科學:'自然'};
+    const bankSubject=normalized[choice.subject]||choice.subject;
+    choice.difficulty=AdaptiveRules.generalDifficulty(user.stats,bankSubject);
+  }
   return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,batchSlot,
     subject:choice.subject,topic:choice.specificTopic,bankSource:choice.bankSource||'',
     adaptiveScope:choice.adaptiveScope||null,
