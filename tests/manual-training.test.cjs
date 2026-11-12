@@ -7,8 +7,8 @@ const API=require('../tactical-combat-api.cjs').__test;
 const {database}=require('./helpers/tactical-db.cjs');
 const now=2000000000000;
 const bookRecord=db=>db.records.get(API.MANUALS+'/u1');
-const lowBeast=(id,x,y,hp=80)=>R.actor({
-  uid:id,name:id,bot:true,team:'monster',atk:15,maxHp:hp
+const lowBeast=(id,x,y,hp=80,level=1)=>R.actor({
+  uid:id,name:id,bot:true,team:'monster',atk:15,maxHp:hp,level
 },{x,y});
 
 test('each of the four manuals has exactly three skills unlocked at Lv.1 / Lv.5 / Lv.10',()=>{
@@ -157,6 +157,31 @@ test('server blocks early skill equipment even when manual XP is high',async()=>
   await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-sever']}),/境界未達/);
   user.stats.totalScore=68;
   assert.deepEqual((await API.equipManualSkills(db,'u1',{skillIds:['sky-sever']})).equipped,['sky-sever']);
+});
+test('real battle killing blows award the sum of each defeated beast realm XP',()=>{
+  const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
+    players:[{uid:'u1',name:'u1',atk:200,maxHp:1000,
+      trainingAccessScore:28,manualSkills:['wind-slash']}],now});
+  s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10});
+  s.actors=[s.actors[0],lowBeast('low',2,3,80,1),
+    lowBeast('mid',3,3,80,5),lowBeast('high',4,3,80,20),
+    lowBeast('spare',6,6,1200,20)];
+  const after=R.apply(s,'u1',{type:'manual',skillId:'wind-slash',x:2,y:3},now);
+  assert.equal(after.manualExp.u1['sword-wind'],260);
+  assert.equal(after.manualKills,undefined,'new battles use EXP receipts, not kill counts');
+  assert.deepEqual(after.events.filter(e=>e.type==='manual-mastery').map(e=>e.exp),[50,70,140]);
+});
+test('battle authority refuses equipped skills when actor realm is too low',()=>{
+  const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
+    players:[{uid:'u1',name:'u1',atk:200,maxHp:1000,
+      trainingAccessScore:5,manualSkills:['sky-pierce']}],now});
+  s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10});
+  s.actors=[s.actors[0],lowBeast('low',2,3)];
+  assert.throws(()=>R.apply(s,'u1',{type:'manual',skillId:'sky-pierce',x:2,y:3},now),
+    /尚未裝備|尚未解鎖/);
+  s.actors[0].trainingAccessScore=6;
+  const after=R.apply(s,'u1',{type:'manual',skillId:'sky-pierce',x:2,y:3},now);
+  assert(after.manualExp.u1['sword-sky']>0);
 });
 test('cumulative kill receipts translate into XP, unlocking Lv.5 and Lv.10 without duplication',()=>{
   const raw={version:2,books:{'sword-wind':{exp:0}},equipped:['wind-slash']};
