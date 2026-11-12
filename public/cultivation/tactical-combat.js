@@ -631,8 +631,13 @@ function accept(next,serial){
   if(next?.serverNowMs)clockOffset=next.serverNowMs-Date.now();
   applyProgress(next);
   const oldQuestion=state?.question?.id;
+  const previousKills=state?.id===next?.id?(state.manualKills?.[uid]||{}):{};
+  const gained=Object.entries(next?.manualKills?.[uid]||{}).reduce((sum,[bookId,count])=>
+    sum+Math.max(0,Number(count||0)-Number(previousKills[bookId]||0)),0);
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   state=next;if(!keepSelection)selection=null;
+  if(gained)notice('功法擊殺靈獸，熟練度 +'+gained);
+  if(next?.manualDrops?.[uid])window.dispatchEvent(new CustomEvent('xiuxian:manual-loot'));
   // Kick off real match-scoped question requests immediately on an eligible
   // battle state, even while the player is reading an encounter introduction.
   // This happens before they can press the charging wheel.
