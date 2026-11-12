@@ -359,6 +359,9 @@ async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
   const choice=StudyScope.pick(study,user,a.answered+batchSlot);
   return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,batchSlot,
     subject:choice.subject,topic:choice.specificTopic,bankSource:choice.bankSource||'',
+    adaptiveScope:choice.adaptiveScope||null,
+    adaptivePending:[s.pending?.[uid]?.adaptive,s.pendingFollowup?.[uid]?.adaptive]
+      .filter(Boolean).map(x=>({scopeId:x.scopeId,conceptId:x.conceptId,facetId:x.facetId})),
     difficulty:choice.difficulty,level:choice.level,scopeKey,
     // Either parallel slot may finish first. Exclude its stored stem from
     // the other slot's candidate pool, including file-bank selections.
@@ -366,6 +369,7 @@ async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
       ...(batchSlot===1&&s.pending?.[uid]?[s.pending[uid].q]:[]),
       ...(batchSlot===0&&s.pendingFollowup?.[uid]?[s.pendingFollowup[uid].q]:[])
     ].slice(-24),
+    historyMeta:[...(s.questionHistoryMeta||[])].slice(-24),
     pending:publicQuestion(pending)};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
