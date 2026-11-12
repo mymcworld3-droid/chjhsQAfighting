@@ -252,7 +252,7 @@ test('updating practice scope invalidates both old pending slots and rejects lat
     wrong:['都是正數','都是負數','全部變零'],exp:'同號得正，異號得負。'
   },fixed);
   // The player changes the selected scope while the same battle remains active.
-  user.gameSettings={sourceMode:'focused',focusedUnits:[
+  db.records.get('users/u1').gameSettings={sourceMode:'focused',focusedUnits:[
     {path:'英文/國中二年級/第二學期',detail:'現在完成式'}
   ]};
   const next=await api.prepareQuestion(db,'u1',session.id,fixed);
@@ -282,7 +282,7 @@ test('an in-flight old scoped answer cannot give rewards after settings change',
     q:'古埃及主要依靠哪條河？',correct:'尼羅河',
     wrong:['萊茵河','長江','亞馬遜河'],exp:'尼羅河定期氾濫提供肥沃土壤。'
   },fixed);
-  user.gameSettings={sourceMode:'focused',focusedUnits:[{path:'化學/高中一年級',detail:'氧化還原'}]};
+  db.records.get('users/u1').gameSettings={sourceMode:'focused',focusedUnits:[{path:'化學/高中一年級',detail:'氧化還原'}]};
   await assert.rejects(api.answer(db,'u1',{
     roomId:session.id,questionId:q.id,choice:0
   },fixed+1),/修習範圍已變更/);
