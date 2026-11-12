@@ -57,6 +57,38 @@ test('tactical fast prompts preserve the complete selected curriculum unit and m
   assert.match(server,/trialTowerScope\.pick\(scope,owner,index-1\)/);
 });
 
+test('stamina quiz uses the very same solo prompt and learning engines with battle isolated to stamina', () => {
+  const server=read('server.js');
+  const battle=read('tactical-combat-api.cjs');
+  const ui=read('public/cultivation/tactical-combat.js');
+  const learning=read('public/cultivation/adaptive-learning.js');
+  const mainSolo=read('public/main-legacy.js');
+  assert.match(server,/const combatFastMode = !tacticalMode && FAST_QUIZ_MODES\.has/);
+  assert.match(server,/adaptiveContext=await adaptiveLearning\.prepare\(req,\{/);
+  assert.match(server,/adaptiveScope:tacticalContext\.adaptiveScope/);
+  assert.match(server,/mode:tacticalMode\?'solo':String\(quizMode \|\| 'solo'\)/);
+  assert.match(battle,/SoloLearning\.reward\(stats,learningQuiz,correct,user\.profile\|\|\{\}\)/);
+  assert.match(battle,/AdaptiveRules\.record\(/);
+  assert.match(battle,/Knowledge\.record\(stats\.knowledgePointMapV1\|\|\{\},q,correct\)/);
+  assert.match(battle,/stats\.soloLearningV1/);
+  assert.match(battle,/stats\.adaptiveLearningV1/);
+  assert.match(battle,/questionForm:q\.meta\?\.question_form/);
+  assert.match(battle,/assistanceLevel:help/);
+  assert.match(ui,/window\.QAAdaptiveLearning\?\.render\?\.\(/);
+  assert.match(ui,/window\.QAAdaptiveLearning\?\.afterSaved\?\.\(learningQuiz\)/);
+  assert.match(ui,/window\.QAAdaptiveLearning\?\.hint\(ctx\.learningQuiz\)/);
+  assert.match(ui,/window\.currentTacticalQuiz=quizContext\.learningQuiz/);
+  assert.match(learning,/function render\(quiz, questionHost = null\)/);
+  assert.match(mainSolo,/window\.queueTacticalSoloCorrection/);
+  assert.match(mainSolo,/return queueCorrectionPractice\(/);
+  assert.match(mainSolo,/window\.queueTacticalSoloExtension/);
+  assert.match(mainSolo,/await fetchExtendedPracticeQuestion\(practice\)/);
+  // Critical: do not invoke the client solo answer handler too, which would
+  // award currency, write exam_logs and duplicate the server-side battle answer.
+  assert.doesNotMatch(ui,/handleAnswer\(/);
+  assert.match(ui,/questionId:q\.id,choice,help,timeTaken/);
+});
+
 test('Five Immortals accepts real API correct/wrong output with the correct answer preserved', () => {
   const source = read('public/cultivation/five-immortals.js');
   const start = source.indexOf('  function normalizeQuestion(raw) {');
