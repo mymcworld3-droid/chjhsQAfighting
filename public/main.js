@@ -33,6 +33,7 @@ void import('./account-delete.js').catch((error) => {
 
 window.QA_TACTICAL_BATTLE_ENABLED = true;
 window.QA_WEAPON_SYSTEM_ENABLED = false;
+window.QA_MANUAL_TRAINING_ONLY = true;
 const XIUXIAN_FEATURE_MODULES = [
   './cultivation/realm-icons.js',
   './cultivation/realm-icon-motion.js',
@@ -83,6 +84,7 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/raid-mode.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/training-scene-map.js',
+  './cultivation/manual-training-page.js',
   './cultivation/home-wireframe.js',
   './cultivation/realm-breakthrough-feedback.js',
   './cultivation/cultivation-rank-sync.js',
@@ -114,7 +116,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261112-stamina-saved-range-fix-v1';
+const XIUXIAN_FEATURE_BUILD = '20261112-manual-cultivation-v1';
 const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 

@@ -719,6 +719,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   }
 
   function renderTrainingPage() {
+    if (window.QA_MANUAL_TRAINING_ONLY) return;
     const content = document.getElementById('training-tab-content');
     if (!content) return;
     document.querySelector('[data-ns-portrait-sheet]')?.remove?.();
@@ -1235,6 +1236,7 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
   function syncUnlock() {
     const unlocked = window.isGoldenCoreUnlocked?.() ?? isUnlocked();
     if (unlocked) void migrateSoulResources();
+    if (window.QA_MANUAL_TRAINING_ONLY) {lastUnlocked=unlocked;return;}
     if (lastUnlocked === unlocked) {
       if (unlocked) {
         const soulTab = document.querySelector('#page-training [data-training-tab="nascent-soul"]');

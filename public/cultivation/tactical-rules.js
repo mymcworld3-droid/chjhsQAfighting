@@ -4,6 +4,8 @@
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QATactical=api;
 })(globalThis,()=>{
   'use strict';
+  const Manuals=(typeof module==='object'&&module.exports)
+    ?require('./manual-rules.js'):root.QAManuals;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
     {id:'courtyard',name:'演武庭',width:7,height:7,terrain:2,description:'開闊石庭，練習近身與迂迴。'},
@@ -55,6 +57,10 @@
   });
   const BASIC=skill('attack','普通攻擊',2,2,'line',1,'選擇上下左右一個方向，攻擊該方向兩格；遇障礙停止。',{cooldown:0});
   const basicFor=()=>BASIC;
+  function manualSkillFor(actor,id){
+    if(!actor||!Array.isArray(actor.manualSkills)||!actor.manualSkills.includes(id))return null;
+    return Manuals?.BY_SKILL?.[id]||null;
+  }
   // The existing spirit page remains the single branch-selection surface.
   const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
     ningxin:{focus:'focus',calm:'barrier'},pojing:{execute:'execute',momentum:'breach'},xingchen:{meteor:'meteor',moon:'orbit'},
@@ -197,6 +203,7 @@
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
+      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills:[...new Set(raw.manualSkills.filter(id=>!!Manuals?.BY_SKILL?.[id]))].slice(0,3)}:{}),
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
@@ -279,8 +286,16 @@
     log(s,source.name+' → '+target.name+' −'+dealt+(absorbed?'（護盾 '+absorbed+'）':''),'damage',{actor:source.uid,target:target.uid,damage:dealt,skill:opts.skill||'attack',x:target.x,y:target.y,
       animation:{kind:'damage',style:opts.skill||'attack',origin:point(source),target:point(target),changes:[appearance(target)],numbers:[{uid:target.uid,damage:dealt,absorbed}]}});
     if(opts.leech&&dealt){const heal=Math.min(source.maxHp-source.hp,Math.round(dealt*opts.leech));source.hp+=heal;recovery(s,source,heal);}
+    if(target.hp<=0&&target.bot&&source&&!source.bot&&opts.manualId&&Manuals?.BY_BOOK?.[opts.manualId]){
+      s.manualKills||={};s.manualKills[source.uid]||={};
+      s.manualKills[source.uid][opts.manualId]=(s.manualKills[source.uid][opts.manualId]||0)+1;
+      log(s,source.name+'以功法擊殺 '+target.name+'，'+Manuals.BY_BOOK[opts.manualId].name+' 熟練度 +1',
+        'manual-mastery',{actor:source.uid,manualId:opts.manualId,skill:opts.skill});
+    }
     if(target.counter&&alive(target)&&!opts.reflected){
-      const reflect=target.counter;target.counter=0;damage(s,target,source,target.atk*reflect,{reflected:true,skill:'counter'});
+      const reflect=target.counter,manualId=target.counterManualId;
+      target.counter=0;delete target.counterManualId;
+      damage(s,target,source,target.atk*reflect,{reflected:true,skill:manualId?'manual-counter':'counter',manualId});
     }
     return dealt;
   }
@@ -353,12 +368,12 @@
       a.shield=Math.min(a.maxHp,Math.max(a.shield,Math.round(a.maxHp*(sk.shield||0))));
       if(sk.cleanse)a.slow=0;recovery(s,a,a.hp-hp,a.shield-shield);return;
     }
-    if(sk.kind==='counter'){a.guard=.4;a.counter=sk.power;castEvent.animation.changes=[appearance(a)];return;}
+    if(sk.kind==='counter'){a.guard=.4;a.counter=sk.power;a.counterManualId=sk.manualId||null;castEvent.animation.changes=[appearance(a)];return;}
     if(sk.kind==='blink'){
       const origin=point(a),shield=a.shield;
       a.x=p.x;a.y=p.y;if(sk.shield)a.shield=Math.max(a.shield,Math.round(a.maxHp*sk.shield));
       motion(s,a,[origin,point(a)],'teleport');recovery(s,a,0,a.shield-shield);
-      if(sk.burst)for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&dist(a,t)<=1))damage(s,a,t,a.atk*sk.burst,{skill:sk.id});return;
+      if(sk.burst)for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&dist(a,t)<=1))damage(s,a,t,a.atk*sk.burst,{skill:sk.id,manualId:sk.manualId});return;
     }
     if(sk.kind==='meteor'){
       s.effects.push({owner:a.uid,team:a.team,skill:sk.id,cells:skillCells(s,a,sk,p),power:a.atk*sk.power,due:a.turns+1});return;
@@ -376,7 +391,7 @@
     for(const t of targets){
       if(!alive(a))break;
       let power=sk.power;if(sk.execute&&t.hp/t.maxHp<=.4)power=2.2;if(sk.missing)power+=1.15*(1-a.hp/a.maxHp);
-      damage(s,a,t,a.atk*power,{...sk,skill:sk.id});
+      damage(s,a,t,a.atk*power,{...sk,skill:sk.id,manualId:sk.manualId});
       if(sk.slow&&alive(t)){t.slow=1;t.slowUntil=t.turns+1;}if(sk.push&&alive(t))push(s,a,t,sk.push);
     }
   }
@@ -503,6 +518,7 @@
     s.turnUid=a.uid;a.turns++;if(!s.quizRound)a.questions=0;a.attacks=0;a.actions=0;a.guard=0;a.counter=0;
     if(s.quizRound){s.phase='action';s.actionRevision=s.revision+1;}
     if((a.slowUntil||0)<a.turns)a.slow=0;
+    if(a.counterManualId&&!a.counter)delete a.counterManualId;
     s.turnStartedAtMs=now;s.deadlineMs=s.mode==='pvp'?now+LIMITS.turnMs:0;
     const due=s.effects.filter(e=>e.owner===a.uid&&e.due<=a.turns);
     s.effects=s.effects.filter(e=>!due.includes(e));
@@ -553,8 +569,11 @@
       if(cost>a.stamina)fail('體力不足以走到這裡');
       a.stamina-=cost;a.x=p.x;a.y=p.y;a.slow=0;
       log(s,a.name+'移動 '+(route.length-1)+' 格，消耗 '+cost+' 體力','move',{actor:a.uid,path:route,animation:{kind:'move',style:'walk',changes:[appearance(a)]}});
-    }else if(command.type==='attack'||command.type==='skill'){
-      cast(s,a,command.type==='attack'?basicFor(a):branchFor(a).skill,p);
+    }else if(command.type==='attack'||command.type==='skill'||command.type==='manual'){
+      const selected=command.type==='attack'?basicFor(a):
+        command.type==='skill'?branchFor(a).skill:manualSkillFor(a,command.skillId);
+      if(!selected)fail('尚未裝備或解鎖此功法技能');
+      cast(s,a,selected,p);
     }else if(command.type==='guard'){
       if(a.attacks>=LIMITS.attacks)fail('本回合已使用兩次攻擊／技能');a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
     }else if(command.type==='end'){
@@ -618,5 +637,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

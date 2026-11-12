@@ -19,9 +19,9 @@ const display=x=>String(x);
 const sheet=new Function('rich','esc','pairChoices','state',
   cut('function questionSheet(','function setQuizContext(')+'return questionSheet;'
 )(display,display,[-1,-1],{mode:'pve'});
-const layout=new Function('quizTools','questionSheet','pairQuestions','state',
+const layout=new Function('quizTools','questionSheet','pairQuestions','state','pairDisplayIndex','pairReviews',
   cut('function pairWhiteboardMarkup(){','async function submitPair(){')+'return pairLayout;'
-)(()=>'<section class="tc-question-tools"></section>',sheet,[sample('1'),sample('2')],{quizRound:0});
+)(()=>'<section class="tc-question-tools"></section>',sheet,[sample('1'),sample('2')],{quizRound:0},0,[]);
 
 test('each stamina question repeats the actual free-question card, four answer rows and three footer controls',()=>{
   const stem=sheet(sample('1'),null,0);
@@ -39,11 +39,12 @@ test('each stamina question repeats the actual free-question card, four answer r
   assert.match(stem,/quiz-whiteboard-toggle/);
 });
 
-test('two full size question sheets show at once, stacked, with one submit operation',()=>{
+test('stamina questions are reviewed one at a time, with explanation before advancing',()=>{
   const rendered=layout(null,[sample('1'),sample('2')]);
-  assert.equal((rendered.match(/class="tc-pair-entry"/g)||[]).length,2);
+  assert.equal((rendered.match(/class="tc-pair-entry"/g)||[]).length,1);
   assert.equal((rendered.match(/data-submit-pair/g)||[]).length,1);
-  assert.match(rendered,/一次送出兩題/);
+  assert.match(rendered,/點選答案後直接批改/);
+  assert.doesNotMatch(rendered,/一次送出兩題/);
   assert.match(rendered,/quiz-main-column tc-pair-column/);
   assert.match(rendered,/quiz-question-helper-layout helper-collapsed/);
   assert.match(styles,/\.tc-pair-list\{display:flex;flex-direction:column/);
