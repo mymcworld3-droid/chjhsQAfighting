@@ -75,6 +75,8 @@ function ensure(){
     else if(b.hasAttribute('data-continue')){hideModal();paint();if(state.quizRound&&canQuestion())void question();}
     else if(b.hasAttribute('data-question-helper-for')){activatePairContext(Number(b.dataset.questionHelperFor));openQuestionTool('helper');}
     else if(b.hasAttribute('data-question-report-for')){activatePairContext(Number(b.dataset.questionReportFor));openQuestionTool('report');}
+    else if(b.hasAttribute('data-solo-correction-for'))void queueTacticalCorrection(Number(b.dataset.soloCorrectionFor));
+    else if(b.hasAttribute('data-correction-hint-for')){activatePairContext(Number(b.dataset.correctionHintFor));openQuestionTool('helper');$('[data-helper-input]').value='請針對我這題的錯誤給一個簡短的概念提示，協助我理解關鍵步驟，再嘗試同概念訂正題。';void askHelper();}
     else if(b.hasAttribute('data-pair-whiteboard-for'))openPairWhiteboard(Number(b.dataset.pairWhiteboardFor));
     else if(b.hasAttribute('data-pair-whiteboard-clear'))clearPairWhiteboard();
     else if(b.hasAttribute('data-pair-whiteboard-close'))closePairWhiteboard();
@@ -862,6 +864,11 @@ function questionSheet(q,review=null,index=0){
         <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> 題解參悟</span>
         <span class="tc-feedback-text">${rich(review.explanation)}</span>
       </div>
+      ${!review.correct&&review.choice>=0&&state.mode==='pve'?`<div class="tc-correction-actions">
+        <button type="button" class="btn-cyber-primary" data-solo-correction-for="${index}">加入訂正練習 · 訂正修為 +1</button>
+        <button type="button" class="btn-cyber-ghost" data-correction-hint-for="${index}">先看概念提示</button>
+        <small>訂正題將使用主問道相同的生成演算法，加入下一次一般問道的優先題庫。</small>
+      </div>`:''}
     </div>`:''}
     <div class="mt-8 flex gap-3 w-full quiz-footer-actions tc-question-footer">
       <button type="button" data-dismiss class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i><span>返回戰場</span></button>
@@ -869,6 +876,27 @@ function questionSheet(q,review=null,index=0){
       <button type="button" data-question-helper-for="${index}" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group"><i class="fa-solid fa-comments group-hover:-translate-y-0.5 transition-transform"></i><span>問道助手</span></button>
     </div>
   </article>`;
+}
+async function queueTacticalCorrection(index){
+  const q=pairQuestions[index],review=pairReviews[index];
+  if(state?.mode!=='pve'||!q||!review||review.correct||review.choice<0)return;
+  const button=root?.querySelector('[data-solo-correction-for="'+index+'"]');
+  if(!button||button.disabled)return;
+  button.disabled=true;button.textContent='訂正題生成中…';
+  try{
+    if(typeof window.queueTacticalSoloCorrection!=='function')
+      throw Error('主問道訂正練習尚未就緒');
+    await window.queueTacticalSoloCorrection({
+      question:q.q,subject:q.subject,
+      topic:q.learningTopic||q.topic,
+      difficulty:q.learningDifficulty,
+      adaptive:q.adaptive||null
+    });
+    if(button.isConnected)button.textContent='訂正題已加入 · 下次一般問道優先';
+  }catch(error){
+    if(button.isConnected){button.disabled=false;button.textContent='加入訂正練習 · 重試';}
+    window.showToast?.(error?.message||'訂正題暫時無法生成');
+  }
 }
 function setQuizContext(q,review=null){
   if(quizContext?.id!==q.id||quizContext.roomId!==state.id){
