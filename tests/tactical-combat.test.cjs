@@ -203,6 +203,91 @@ test('parallel question API slots can commit out of order without leaking answer
     q:'延遲到前一輪的舊題',correct:'是',wrong:['否','未知','都不對'],exp:'舊題不可覆蓋'
   },fixed+1),/回合已更新/);
 });
+test('tactical questions follow saved focused units, selected grade and high school math track',async()=>{
+  const db=database(),player=db.records.get('users/u1');
+  player.gameSettings={sourceMode:'focused',focusedUnits:[
+    {path:'數學/高中二年級/第一學期/數學A/108課綱複習版',
+      detail:'排列組合與機率',sub_topics:['二項分布','條件機率']},
+    {path:'物理/高中二年級/第一學期/物理',
+      detail:'鉛直圓周運動',sub_topics:['最低點的向心力']}
+  ]};
+  // The student profile is only 國一: explicitly selected 高二 content still wins.
+  const session=await api.start(db,'u1',{mode:'pve'},fixed);
+  const [first,second]=await Promise.all([
+    api.prepareQuestion(db,'u1',session.id,fixed,0),
+    api.prepareQuestion(db,'u1',session.id,fixed,1)
+  ]);
+  assert.equal(first.subject,'數學');
+  assert.equal(first.level,'高中二年級');
+  assert.match(first.topic,/數學A/);
+  assert.match(first.topic,/條件機率/);
+  assert.equal(second.subject,'物理');
+  assert.equal(second.level,'高中二年級');
+  assert.match(second.topic,/鉛直圓周運動/);
+  assert.equal(first.scopeKey,second.scopeKey);
+  assert(!first.bankSource&&!second.bankSource);
+});
+test('the selected use-bank mode is returned to tactical generation instead of random AI',async()=>{
+  const db=database(),player=db.records.get('users/u1');
+  player.gameSettings={sourceMode:'bank',source:'數學/國中二年級/代數.json'};
+  const session=await api.start(db,'u1',{mode:'pve'},fixed);
+  const prepared=await api.prepareQuestion(db,'u1',session.id,fixed);
+  assert.equal(prepared.bankSource,player.gameSettings.source);
+  assert.equal(prepared.level,'國中一年級');
+  assert.match(require('node:fs').readFileSync(require('node:path').join(__dirname,'../server.js'),'utf8'),
+    /if \(tacticalContext\.bankSource\)/);
+});
+test('updating practice scope invalidates both old pending slots and rejects late model output',async()=>{
+  const db=database(),user=db.records.get('users/u1');
+  user.gameSettings={sourceMode:'focused',focusedUnits:[{path:'數學/七上.json',detail:'整數運算'}]};
+  const session=await api.start(db,'u1',{mode:'pve'},fixed);
+  const original=await api.prepareQuestion(db,'u1',session.id,fixed);
+  const first=await api.commitQuestion(db,'u1',original,{
+    q:'負數加法怎麼計算？',correct:'看正負號',
+    wrong:['只取絕對值','一律相乘','一律加零'],exp:'整數加法依符號規則。'
+  },fixed);
+  const following=await api.prepareQuestion(db,'u1',session.id,fixed,1);
+  await api.commitQuestion(db,'u1',following,{
+    q:'負數乘法怎麼計算？',correct:'依負號個數判斷正負',
+    wrong:['都是正數','都是負數','全部變零'],exp:'同號得正，異號得負。'
+  },fixed);
+  // The player changes the selected scope while the same battle remains active.
+  user.gameSettings={sourceMode:'focused',focusedUnits:[
+    {path:'英文/國中二年級/第二學期',detail:'現在完成式'}
+  ]};
+  const next=await api.prepareQuestion(db,'u1',session.id,fixed);
+  assert.equal(next.subject,'英文');
+  assert.match(next.topic,/現在完成式/);
+  assert.equal(next.pending,null);
+  const raw=db.records.get(api.ROOMS+'/'+session.id);
+  assert(!raw.pending?.u1&&!raw.pendingFollowup?.u1,'old questions must be purged');
+  await assert.rejects(api.answer(db,'u1',{
+    roomId:session.id,questionId:first.id,choice:0
+  },fixed+1),/失效|結算/);
+  await assert.rejects(api.commitQuestion(db,'u1',original,{
+    q:'舊模型的結果不可寫回',correct:'a',wrong:['b','c','d'],exp:'old'
+  },fixed),/修習範圍已變更/);
+  const replacement=await api.commitQuestion(db,'u1',next,{
+    q:'現在完成式是什麼？',correct:'have 加上過去分詞',
+    wrong:['只有現在式','現在進行式','未來進行式'],exp:'現在完成式使用 have/has。'
+  },fixed);
+  assert.equal(replacement.subject,'英文');
+});
+test('an in-flight old scoped answer cannot give rewards after settings change',async()=>{
+  const db=database(),user=db.records.get('users/u1');
+  user.gameSettings={sourceMode:'focused',focusedUnits:[{path:'歷史/七上',detail:'古文明'}]};
+  const session=await api.start(db,'u1',{mode:'pve'},fixed);
+  const prepared=await api.prepareQuestion(db,'u1',session.id,fixed);
+  const q=await api.commitQuestion(db,'u1',prepared,{
+    q:'古埃及主要依靠哪條河？',correct:'尼羅河',
+    wrong:['萊茵河','長江','亞馬遜河'],exp:'尼羅河定期氾濫提供肥沃土壤。'
+  },fixed);
+  user.gameSettings={sourceMode:'focused',focusedUnits:[{path:'化學/高中一年級',detail:'氧化還原'}]};
+  await assert.rejects(api.answer(db,'u1',{
+    roomId:session.id,questionId:q.id,choice:0
+  },fixed+1),/修習範圍已變更/);
+  assert.equal(db.records.get('users/u1').stats.totalAnswered||0,0);
+});
 test('server commands reject stale revisions, ignore client damage, and replay movement without charging twice',async()=>{
   const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed);
   const pos=R.neighbours(s,s.actors[0]).find(p=>!R.at(s,p));
