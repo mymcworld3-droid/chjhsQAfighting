@@ -59,7 +59,8 @@
   const basicFor=()=>BASIC;
   function manualSkillFor(actor,id){
     if(!actor||!Array.isArray(actor.manualSkills)||!actor.manualSkills.includes(id))return null;
-    return Manuals?.BY_SKILL?.[id]||null;
+    const skill=Manuals?.BY_SKILL?.[id];
+    return skill&&Manuals.meetsRealm(skill,actor.trainingAccessScore)?skill:null;
   }
   // The existing spirit page remains the single branch-selection surface.
   const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
@@ -287,10 +288,13 @@
       animation:{kind:'damage',style:opts.skill||'attack',origin:point(source),target:point(target),changes:[appearance(target)],numbers:[{uid:target.uid,damage:dealt,absorbed}]}});
     if(opts.leech&&dealt){const heal=Math.min(source.maxHp-source.hp,Math.round(dealt*opts.leech));source.hp+=heal;recovery(s,source,heal);}
     if(target.hp<=0&&target.bot&&source&&!source.bot&&opts.manualId&&Manuals?.BY_BOOK?.[opts.manualId]){
-      s.manualKills||={};s.manualKills[source.uid]||={};
-      s.manualKills[source.uid][opts.manualId]=(s.manualKills[source.uid][opts.manualId]||0)+1;
-      log(s,source.name+'以功法擊殺 '+target.name+'，'+Manuals.BY_BOOK[opts.manualId].name+' 經驗 +'+Manuals.EXP_PER_KILL,
-        'manual-mastery',{actor:source.uid,manualId:opts.manualId,skill:opts.skill});
+      const beastRealm=Manuals.realmForStage(target.level),exp=beastRealm.exp;
+      s.manualExp||={};s.manualExp[source.uid]||={};
+      s.manualExp[source.uid][opts.manualId]=(s.manualExp[source.uid][opts.manualId]||0)+exp;
+      log(s,source.name+'以功法擊殺 '+beastRealm.name+'境 '+target.name+
+        '，'+Manuals.BY_BOOK[opts.manualId].name+' 經驗 +'+exp+' EXP',
+        'manual-mastery',{actor:source.uid,manualId:opts.manualId,skill:opts.skill,
+          beastRealm:beastRealm.name,exp});
     }
     if(target.counter&&alive(target)&&!opts.reflected){
       const reflect=target.counter,manualId=target.counterManualId;
