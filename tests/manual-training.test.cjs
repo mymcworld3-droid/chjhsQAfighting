@@ -109,9 +109,12 @@ test('only equipped manual killing blows grant EXP, once per idempotent request'
 test('per-skill realm requirements are independent of manual level, using current cultivation realm cutoffs',()=>{
   const first=Catalog.BY_SKILL['wind-slash'],second=Catalog.BY_SKILL['wind-step'],
     third=Catalog.BY_SKILL['wind-thousand'],advanced=Catalog.BY_SKILL['sky-pierce'];
-  assert.deepEqual([first.realmRequired,second.realmRequired,third.realmRequired],[0,6,28]);
+  assert.deepEqual([first.realmRequired,second.realmRequired,third.realmRequired],[1,6,28]);
   assert.deepEqual(Catalog.BY_BOOK['sword-sky'].skills.map(s=>s.realmRequired),[6,28,68]);
   assert.deepEqual(Catalog.BY_BOOK['body-dragon'].skills.map(s=>s.realmRequired),[6,28,68]);
+  assert.equal(Catalog.meetsRealm(first,0),false);
+  assert.equal(Catalog.meetsRealm(first,1),true);
+  assert.equal(Catalog.realmForScore(0).name,'凡人');
   assert.equal(Catalog.meetsRealm(second,5),false);
   assert.equal(Catalog.meetsRealm(second,6),true);
   assert.equal(Catalog.meetsRealm(third,27),false);
