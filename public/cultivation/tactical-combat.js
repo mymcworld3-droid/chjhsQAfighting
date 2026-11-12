@@ -457,7 +457,7 @@ function paint({preserveModal=false}={}){
   if(!renderer||!$('canvas'))buildGame();
   const me=myActor(),myTurn=myAction();
   $('[data-map-name]').textContent=state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name;
-  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
+  $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
   $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&a.intent).map(a=>'<p><b>'+esc(a.name)+'</b><span>'+esc(a.intent.text)+'</span></p>').join('');
   $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>出手 ${me.attacks}/2</small>`;
   if(root.classList.contains('tc-quarter-layout')){
@@ -606,8 +606,9 @@ function showModal(html,{quiz=false,encounter=false}={}){
 }
 function hideModal(){if(!root)return;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
 function showEnemyIntro(error=''){
-  const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length;
-  showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>第 ${p.unlockStage} 關起登場</p></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
+  const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length,
+    beastRealm=Manuals.realmForStage(state.trial?.stage||1);
+  showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>${beastRealm.name}境 · 功法擊殺 +${beastRealm.exp} EXP</p><small>第 ${p.unlockStage} 關起登場</small></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
   introDemo=new EnemyDemo($('[data-enemy-demo]'),species);
 }
 async function acknowledgeIntro(){
@@ -636,12 +637,18 @@ function accept(next,serial){
   if(next?.serverNowMs)clockOffset=next.serverNowMs-Date.now();
   applyProgress(next);
   const oldQuestion=state?.question?.id;
-  const previousKills=state?.id===next?.id?(state.manualKills?.[uid]||{}):{};
-  const gained=Object.entries(next?.manualKills?.[uid]||{}).reduce((sum,[bookId,count])=>
+  const sameRoom=state?.id===next?.id;
+  const previousExp=sameRoom?(state.manualExp?.[uid]||{}):{};
+  const previousKills=sameRoom?(state.manualKills?.[uid]||{}):{};
+  const gainedExp=Object.entries(next?.manualExp?.[uid]||{}).reduce((sum,[bookId,total])=>
+    sum+Math.max(0,Number(total||0)-Number(previousExp[bookId]||0)),0);
+  // Compatibility with unfinished battles saved before beast-specific XP existed.
+  const legacyGained=Object.entries(next?.manualKills?.[uid]||{}).reduce((sum,[bookId,count])=>
     sum+Math.max(0,Number(count||0)-Number(previousKills[bookId]||0)),0);
+  const gainedExpTotal=gainedExp+legacyGained*Manuals.EXP_PER_KILL;
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   state=next;if(!keepSelection)selection=null;
-  if(gained)notice('功法熟練經驗 +'+(gained*Manuals.EXP_PER_KILL)+' EXP');
+  if(gainedExpTotal)notice('功法熟練經驗 +'+gainedExpTotal+' EXP');
   if(next?.manualDrops?.[uid])window.dispatchEvent(new CustomEvent('xiuxian:manual-loot'));
   // Kick off real match-scoped question requests immediately on an eligible
   // battle state, even while the player is reading an encounter introduction.
