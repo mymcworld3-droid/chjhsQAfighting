@@ -3,6 +3,8 @@ const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
 const Manuals=require('./public/cultivation/manual-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
+const SoloLearning=require('./public/cultivation/solo-learning-rules.js');
+const AdaptiveRules=require('./public/cultivation/adaptive-learning-rules.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
 const Gold=require('./public/cultivation/answer-gold-rules.js');
 const {recordEvent}=require('./public/cultivation/quest-rules.js');
@@ -36,7 +38,12 @@ function disarm(s){
   return s;
 }
 function member(s,uid){const a=s?.actors?.find(a=>a.uid===uid&&!a.bot);if(!a)throw error('你不是此戰場的參戰玩家',403);return a;}
-function publicQuestion(q){return q?{id:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,...Knowledge.metadata(q,q.subject)}:null;}
+function publicQuestion(q){return q?{
+  id:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,
+  learningTopic:q.learningTopic||q.topic,learningDifficulty:q.difficulty||'easy',
+  meta:q.meta||{},...(q.adaptive?{adaptive:q.adaptive}:{}),
+  ...Knowledge.metadata(q,q.subject)
+}:null;}
 const seenSpecies=pointer=>[...new Set((Array.isArray(pointer?.bestiary?.seen)?pointer.bestiary.seen:[]).filter(id=>Number.isInteger(id)&&!!Rules.MONSTERS[id]))];
 function ensureIntroductions(s,uid,pointer){
   if(s.mode!=='pve'||Array.isArray(s.pendingIntroductions?.[uid]))return false;
@@ -378,6 +385,18 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
   let answerIndex=0;for(let i=3;i>0;i--){const j=crypto.randomInt(i+1);[choices[i],choices[j]]=[choices[j],choices[i]];if(answerIndex===i)answerIndex=j;else if(answerIndex===j)answerIndex=i;}
   const q={id:crypto.randomUUID(),q:String(parsed.q).slice(0,4000),opts:choices,answerIndex,explanation:String(parsed.exp||'').slice(0,5000),
     subject:expected.subject,topic:expected.topic||String(parsed.sub_topic||'').slice(0,100),
+    learningTopic:String(parsed.sub_topic||expected.topic||'本題概念').slice(0,240),
+    difficulty:parsed.adaptive?.difficulty||parsed.difficulty||expected.difficulty||'easy',
+    // Preserve the very same reasoning and knowledge-point labels used by
+    // main's quizMetaFromRaw, rather than discarding them on battle commit.
+    meta:{
+      concept_id:String(parsed.concept_id||'').slice(0,100),
+      template_id:String(parsed.template_id||'').slice(0,120),
+      question_form:String(parsed.question_form||'').slice(0,60),
+      cognitive_level:Math.max(1,Math.min(5,Number(parsed.cognitive_level)||1)),
+      reasoning_steps:Math.max(1,Math.min(6,Number(parsed.reasoning_steps)||1))
+    },
+    ...(parsed.adaptive?{adaptive:parsed.adaptive}:{}),
     scopeKey:expected.scopeKey,...Knowledge.metadata(parsed,expected.subject),createdAtMs:now};
   return db.runTransaction(async tx=>{
     const s=await readRoom(tx,db,expected.roomId,uid),a=member(s,uid);
@@ -421,6 +440,7 @@ async function answer(db,uid,input,now=Date.now()){
     else delete s.pending[uid];
     delete s.pendingFollowup?.[uid];
     s.questionHistory=[...(s.questionHistory||[]),q.q].slice(-24);
+    s.questionHistoryMeta=[...(s.questionHistoryMeta||[]),{...q.meta,q:q.q}].slice(-24);
     const stats=user.stats||{},patch={'stats.totalAnswered':Rules.num(stats.totalAnswered)+1,
       'stats.totalCorrect':Rules.num(stats.totalCorrect)+(correct?1:0),
       'stats.knowledgePointMapV1':Knowledge.record(stats.knowledgePointMapV1||{},q,correct)};
