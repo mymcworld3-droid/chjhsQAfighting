@@ -8,6 +8,24 @@
   // Each successful manual killing blow earns XP for that scripture.
   // Lv. 1 -> 2 costs 40 XP; each following level costs 20 XP more.
   const EXP_PER_KILL=50,MAX_EXP=100000000;
+  // Exactly the existing cultivation score cutoffs, with human-readable realm labels.
+  const REALMS=Object.freeze([
+    {name:'煉氣',score:0,stage:1,exp:50},
+    {name:'築基',score:6,stage:5,exp:70},
+    {name:'金丹',score:28,stage:10,exp:100},
+    {name:'元嬰',score:68,stage:20,exp:140},
+    {name:'化神',score:188,stage:35,exp:190},
+    {name:'煉虛',score:428,stage:55,exp:250},
+    {name:'合體',score:788,stage:80,exp:330},
+    {name:'渡劫',score:1268,stage:110,exp:430},
+    {name:'真仙',score:1868,stage:150,exp:550}
+  ].map(Object.freeze));
+  const normalizedScore=value=>Number.isFinite(Number(value))?
+    Math.max(0,Math.floor(Number(value))):0;
+  const realmForScore=score=>REALMS.findLast(realm=>normalizedScore(score)>=realm.score)||REALMS[0];
+  const realmForStage=stage=>REALMS.findLast(realm=>Math.max(1,Math.floor(Number(stage)||1))>=realm.stage)||REALMS[0];
+  const expForBeast=stage=>realmForStage(stage).exp;
+  const meetsRealm=(skill,score)=>normalizedScore(score)>=skill.realmRequired;
   const xpForNextLevel=level=>40+20*(Math.max(1,Math.floor(level))-1);
   const totalExpForLevel=level=>{
     const steps=Math.max(0,Math.floor(level)-1);
@@ -39,7 +57,9 @@
     Object.freeze({id,name,cost,range,kind,power,description,cooldown:2,...extra});
   const book=(id,name,school,description,skills)=>Object.freeze({
     id,name,school,description,skills:Object.freeze(skills.map((skill,index)=>
-      Object.freeze({...skill,manualId:id,levelRequired:[1,5,10][index]})))
+      Object.freeze({...skill,manualId:id,levelRequired:[1,5,10][index],
+        realmRequired:school==='sword'&&id==='sword-sky'||school==='body'&&id==='body-dragon'
+          ?[6,28,68][index]:[0,6,28][index]})))
   });
   const BOOKS=Object.freeze([
     book('sword-wind','流風劍訣','sword','以靈巧身法引動劍氣。',[
@@ -65,7 +85,11 @@
   ]);
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
-  const publicSkill=(skill,level)=>({...skill,unlocked:level>=skill.levelRequired});
+  const publicSkill=(skill,level,score)=>{
+    const mastered=level>=skill.levelRequired,realmReady=meetsRealm(skill,score);
+    return {...skill,mastered,realmReady,realmName:realmForScore(skill.realmRequired).name,
+      unlocked:mastered&&realmReady};
+  };
   function normalize(raw){
     const books={};
     for(const [id,record] of Object.entries(raw?.books||{})){
@@ -90,16 +114,16 @@
     return !!skill&&!!s.books[skill.manualId]
       &&levelForExp(s.books[skill.manualId].exp)>=skill.levelRequired;
   }
-  function publicState(raw){
-    const s=normalize(raw);
+  function publicState(raw,realmScore=0){
+    const s=normalize(raw),score=normalizedScore(realmScore);
     // Do not expose undiscovered scriptures to the cultivation UI.
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
       return {id:book.id,name:book.name,school:book.school,description:book.description,
-        owned:true,...levelInfo,skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level))};
+        owned:true,...levelInfo,skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score))};
     });
-    return {...s,library};
+    return {...s,realmScore:score,realmName:realmForScore(score).name,library};
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,xpForNextLevel,totalExpForLevel,levelForExp,mastery,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
 });
