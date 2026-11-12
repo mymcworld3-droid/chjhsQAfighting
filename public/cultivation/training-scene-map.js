@@ -543,6 +543,7 @@ function boot() {
   sync();
 }
 export const featureReady = trainingRenderReady.then(() => {
+  if (window.QA_MANUAL_TRAINING_ONLY) return;
   window.openTrainingSceneMap = showMap;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
