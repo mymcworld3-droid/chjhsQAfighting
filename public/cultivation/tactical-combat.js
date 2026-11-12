@@ -298,7 +298,7 @@ function buildGame(){
       b.append(text);choices.append(b);return b;
     };
     const hero=myActor();
-    makeChoice('player','玩家',-90,-180,'tc-detail-player',(1+(hero.slow||0))+' 體力/格');
+    makeChoice('player','玩家',-90,-180,'tc-detail-player','1 體力/格');
     makeChoice('attack','普通攻擊',-90,-135,'tc-detail-basic',R.basicFor(hero).cost+' 體力');
     makeChoice('skill',R.branchFor(hero).skill.name,-135,-180,'tc-detail-skill',R.branchFor(hero).skill.cost+' 體力');
     // Narrow curved selection pieces glide *inside* each ring. The visible
@@ -464,10 +464,10 @@ function updateControls(){
   let label=action==='attack'?(directional?'選擇攻擊方向':basic.kind==='ring'?'震擊周圍':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='',moveStamina=null;
   const d=selection&&(basic.kind==='cleave'||selection.x===me.x||selection.y===me.y)?R.attackDirection(me,selection):null;
   const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
-  if(action==='move'&&selection){const path=R.path(state,me,selection,uid),cost=(path?.length-1)*(1+(me.slow||0));
+  if(action==='move'&&selection){const path=R.path(state,me,selection,uid),cost=path?path.length-1:0;
     if(path&&path.length>1)moveStamina=cost;
     label=path&&path.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
-    if(!path||path.length<2)error='此地格無法到達';else if(cost>me.stamina)error='體力不足';
+    if(!path||path.length<2)error='此地格無法到達';else if(me.slow&&cost>2)error='緩速中，一次最多移動 2 格';else if(cost>me.stamina)error='體力不足';
   }else if(selection){
     const chosen=action==='attack'?basic:sk;label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':chosen.name)+' · '+chosen.cost+' 體力';
     try{R.validateSkill(state,me,chosen,selection);}catch(e){error=e.message;}
@@ -475,7 +475,7 @@ function updateControls(){
   const cooling=Math.max(0,(me.cooldowns[sk.id]||0)-me.turns);
   const shown=action==='attack'?basic:sk;
   $('[data-skill-title]').textContent=action==='move'?'移動說明':`${shown.name} · ${shown.cost} 體力${action==='skill'&&cooling?' · 冷卻 '+cooling+' 回合':''}`;
-  $('[data-skill]').innerHTML=action==='move'?'<p>每格消耗 1 體力；緩速時消耗增加。選好位置後按下移動確認。</p>':`<p>${esc(shown.description)}</p>`;
+  $('[data-skill]').innerHTML=action==='move'?'<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':`<p>${esc(shown.description)}</p>`;
   $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
   const quarter=root.classList.contains('tc-quarter-layout');
   root.querySelectorAll('[data-action]').forEach(b=>{
@@ -487,7 +487,7 @@ function updateControls(){
     const player=$('[data-wheel-choice="player"]');
     const basicOption=$('[data-wheel-choice="attack"]');
     const skillOption=$('[data-wheel-choice="skill"]');
-    const moveCostLabel=moveStamina===null?(1+(me.slow||0))+' 體力/格':moveStamina+' 體力';
+    const moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
     const basicCostLabel=basic.cost+' 體力',skillCostLabel=sk.cost+' 體力';
     if(player){
       player.hidden=attacking;
