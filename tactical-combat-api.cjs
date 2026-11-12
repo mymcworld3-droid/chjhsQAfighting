@@ -1,6 +1,7 @@
 'use strict';
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
+const Manuals=require('./public/cultivation/manual-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
 const Gold=require('./public/cultivation/answer-gold-rules.js');
@@ -12,7 +13,7 @@ const {verifyMainIdentity}=require('./raid-question-ticket.cjs');
 const {FieldValue}=require('./storage-values.cjs');
 // New server-only documents share the player repository so answers, rewards and
 // stamina commit atomically under the existing Firestore/D1 adapter.
-const ROOMS='tacticalBattleRooms',PLAYERS='tacticalBattlePlayers';
+const ROOMS='tacticalBattleRooms',PLAYERS='tacticalBattlePlayers',MANUALS='tacticalManuals';
 const error=(message,status=409)=>Object.assign(new Error(message),{status});
 const roomId=value=>/^arena-[a-f0-9]{16}$/.test(String(value))?String(value):'';
 const requestId=value=>/^[A-Za-z0-9_-]{8,100}$/.test(String(value))?String(value):'';
@@ -66,11 +67,12 @@ function patchedUser(user,patch){
   for(const [key,value]of Object.entries(patch))if(key.startsWith('stats.'))next.stats[key.slice(6)]=value;else next[key]=value;
   return next;
 }
-function playerActor(user,uid,selection,catalog){
+function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
   const branch=Rules.savedBranch(user,type).id;
   return {...trusted,enemyScaleAttack:trusted.atk,
-    core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0};
+    core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0,
+    manualSkills:Manuals.normalize(manualRecord).equipped};
 }
 function trialProgress(raw,seed){
   return {version:1,seed:/^[a-f0-9]{32}$/.test(raw?.seed)?raw.seed:seed,
@@ -87,24 +89,106 @@ function rewardFor(s,a,user){
   if(s.actors.filter(p=>!p.bot).reduce((n,p)=>n+p.answered,0)<2)return null;
   return {gold:win?500:draw?250:200,cultivation:win?5+Growth.cultivation(user,'battle'):draw?2:0,win,draw};
 }
+// Kills are counted exclusively in Rules.damage when an equipped manual skill
+// deals the killing blow to a PvE creature. Persist the delta once per room.
+function applyManualKills(s,uid,raw){
+  const next=Manuals.normalize(raw);
+  const seen=s.manualKills?.[uid]||{},applied=s.manualApplied?.[uid]||{};
+  let changed=false;
+  for(const [id,total] of Object.entries(seen)){
+    if(!Manuals.BY_BOOK[id]||!next.books[id])continue;
+    const current=Math.max(0,Math.trunc(Number(total)||0));
+    const previous=Math.max(0,Math.trunc(Number(applied[id])||0));
+    if(current<=previous)continue;
+    next.books[id].kills=Math.min(100000,next.books[id].kills+current-previous);
+    s.manualApplied||={};s.manualApplied[uid]||={};s.manualApplied[uid][id]=current;
+    changed=true;
+  }
+  return {state:next,changed};
+}
+async function saveManualKills(tx,db,s,uid){
+  if(!s.manualKills?.[uid])return;
+  const ref=db.collection(MANUALS).doc(uid);
+  const applied=applyManualKills(s,uid,exists(await tx.get(ref)));
+  if(applied.changed)tx.set(ref,applied.state);
+}
+function rollManualDrop(s,uid,raw){
+  const state=Manuals.normalize(raw);
+  const available=Manuals.BOOKS.filter(book=>!state.books[book.id]);
+  if(!available.length)return {state,changed:false,drop:null};
+  if(state.dropMisses<3&&crypto.randomInt(100)>=30){
+    state.dropMisses++;return {state,changed:true,drop:null};
+  }
+  const sameSchool=available.filter(book=>book.school===state.school);
+  const pool=sameSchool.length&&crypto.randomInt(100)<70?sameSchool:available;
+  const picked=pool[crypto.randomInt(pool.length)];
+  state.books[picked.id]={kills:0};
+  state.dropMisses=0;
+  s.manualDrops||={};s.manualDrops[uid]={id:picked.id,name:picked.name};
+  return {state,changed:true,drop:picked.id};
+}
+async function manualsState(db,uid){
+  const [player,record]=await Promise.all([db.collection('users').doc(uid).get(),db.collection(MANUALS).doc(uid).get()]);
+  if(!exists(player))throw error('玩家資料不存在',404);
+  return Manuals.publicState(exists(record));
+}
+async function chooseSchool(db,uid,input){
+  const school=String(input?.school||'');
+  if(!['sword','body'].includes(school))throw error('請選擇劍修或體修',400);
+  return db.runTransaction(async tx=>{
+    const ref=db.collection(MANUALS).doc(uid);
+    const [user,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
+    if(!exists(user))throw error('玩家資料不存在',404);
+    const next=Manuals.normalize(exists(record));next.school=school;
+    if(!next.starterClaimed){
+      const starter=Manuals.starterFor(school);
+      next.books[starter]||={kills:0};next.starterClaimed=true;
+      if(!next.equipped.length)next.equipped.push(Manuals.BY_BOOK[starter].skills[0].id);
+    }
+    tx.set(ref,next);return Manuals.publicState(next);
+  });
+}
+async function equipManualSkills(db,uid,input){
+  const ids=input?.skillIds;
+  if(!Array.isArray(ids)||ids.length>3||ids.some(id=>typeof id!=='string')||new Set(ids).size!==ids.length)
+    throw error('最多裝備三個不重複的功法技能',400);
+  return db.runTransaction(async tx=>{
+    const ref=db.collection(MANUALS).doc(uid);
+    const [user,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
+    if(!exists(user))throw error('玩家資料不存在',404);
+    const next=Manuals.normalize(exists(record));
+    if(ids.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備尚未解鎖的技能',403);
+    next.equipped=[...ids];tx.set(ref,next);
+    return Manuals.publicState(next);
+  });
+}
+
 async function settle(tx,db,s){
   const updates={};if(s.status!=='finished')return updates;
   const people=s.actors.filter(a=>!a.bot&&!s.rewarded.includes(a.uid));
-  const [users,pointers]=await Promise.all([
+  const [users,pointers,manualRecords]=await Promise.all([
     Promise.all(people.map(a=>tx.get(db.collection('users').doc(a.uid)))),
-    Promise.all(people.map(a=>tx.get(db.collection(PLAYERS).doc(a.uid))))
+    Promise.all(people.map(a=>tx.get(db.collection(PLAYERS).doc(a.uid)))),
+    Promise.all(people.map(a=>tx.get(db.collection(MANUALS).doc(a.uid))))
   ]);
   people.forEach((a,i)=>{
     const u=exists(users[i]);if(!u)return;const reward=rewardFor(s,a,u);
     s.rewarded.push(a.uid);s.rewards||={};s.rewards[a.uid]=reward||{gold:0,cultivation:0,win:s.winner===a.team};
     const patch={};
     const pointer=exists(pointers[i]),campaign=pointer?.trial;
-    if(s.mode==='pve'&&s.trial&&s.winner===a.team&&s.finishReason==='hp'&&currentRoomId(pointer,'pve')===s.id&&
-       campaign?.seed===s.trial.seed&&campaign.stage===s.trial.stage){
+    const manualRef=db.collection(MANUALS).doc(a.uid);
+    const mastered=applyManualKills(s,a.uid,exists(manualRecords[i]));
+    let manualChanged=mastered.changed;
+    const manuals=mastered.state;
+    const cleared=s.mode==='pve'&&s.trial&&s.winner===a.team&&s.finishReason==='hp'&&currentRoomId(pointer,'pve')===s.id&&
+       campaign?.seed===s.trial.seed&&campaign.stage===s.trial.stage;
+    if(cleared){
       const next={...campaign,stage:Math.min(1000000,campaign.stage+1),best:Math.max(campaign.best||0,campaign.stage)};
       patch.tacticalTrialV1=next;s.nextStage=next.stage;
       tx.set(db.collection(PLAYERS).doc(a.uid),{...pointer,trial:next});
+      if(reward){const dropped=rollManualDrop(s,a.uid,manuals);manualChanged=manualChanged||dropped.changed;}
     }
+    if(manualChanged)tx.set(manualRef,manuals);
     if(reward){patch['stats.gold']=Rules.num(u.stats?.gold)+reward.gold;patch['stats.totalScore']=Rules.num(u.stats?.totalScore)+reward.cultivation;}
     if(reward&&s.mode==='pvp'){
       patch.questProgress=recordEvent(u.questProgress,'battle');
@@ -134,7 +218,9 @@ async function start(db,uid,selection={},now=Date.now()){
   const newId='arena-'+crypto.randomBytes(8).toString('hex'),seed=crypto.randomBytes(16).toString('hex');
   return db.runTransaction(async tx=>{
     const pointerRef=db.collection(PLAYERS).doc(uid),userRef=db.collection('users').doc(uid);
-    const [pointerSnap,userSnap,catalogSnap]=await Promise.all([tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1'))]);
+    const [pointerSnap,userSnap,catalogSnap,manualSnap]=await Promise.all([
+      tx.get(pointerRef),tx.get(userRef),tx.get(db.collection('gameConfig').doc('artifactCatalogV1')),
+      tx.get(db.collection(MANUALS).doc(uid))]);
     const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
     const pointer=exists(pointerSnap)||{},priorId=currentRoomId(pointer,mode);
     const stored=priorId?exists(await tx.get(db.collection(ROOMS).doc(priorId))):null;
@@ -156,7 +242,7 @@ async function start(db,uid,selection={},now=Date.now()){
     const candidate=wanted||candidates.find(s=>!s.actors.some(a=>a.uid===uid)&&(!prior||s.id<prior.id))?.id;
     const target=candidate?exists(await tx.get(db.collection(ROOMS).doc(candidate))):null;
     if(wanted&&(!target||target.mode!=='pvp'||target.status!=='waiting'||target.createdAtMs<now-15*60000))throw error('此戰場已開始或已失效');
-    const a=playerActor(user,uid,selection,exists(catalogSnap)||{});
+    const a=playerActor(user,uid,selection,exists(catalogSnap)||{},exists(manualSnap));
     if(mode==='pvp'&&a.trainingAccessScore<6)throw error('築基期解鎖鬥法論道');
     let s;
     if(target&&target.status==='waiting'&&!target.actors.some(p=>p.uid===uid)&&target.createdAtMs>now-15*60000){
@@ -223,7 +309,8 @@ async function command(db,uid,input,now=Date.now()){
     let s=input.type==='leave'?Rules.forfeit(raw,uid,now):Rules.apply(raw,uid,input,now);
     if(input.type==='end'||input.type==='leave'){delete s.pending?.[uid];delete s.pendingFollowup?.[uid];}
     s.receipts=[...(s.receipts||[]),{uid,id}].slice(-48);
-    const updates=await settle(tx,db,s);tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,updates[uid]);
+    const updates=s.status==='finished'?await settle(tx,db,s):(await saveManualKills(tx,db,s,uid),{});
+    tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,updates[uid]);
   });
 }
 async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
@@ -420,6 +507,9 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
     catch(e){if(!e.status)logger.error('[Tactical combat]',e?.message||e);return res.status(e.status||503).json({ok:false,error:e.status?e.message:'戰場同步失敗，請稍後重試'});}
   };
   app.get('/api/tactical/state',route((db,uid,req)=>state(db,uid,Date.now(),req.query?.mode||'')));
+  app.get('/api/tactical/manuals',route((db,uid)=>manualsState(db,uid)));
+  app.post('/api/tactical/manuals/school',route((db,uid,req)=>chooseSchool(db,uid,req.body)));
+  app.post('/api/tactical/manuals/equip',route((db,uid,req)=>equipManualSkills(db,uid,req.body)));
   app.post('/api/tactical/start',route((db,uid,req)=>start(db,uid,req.body)));
   app.post('/api/tactical/action',route((db,uid,req)=>command(db,uid,req.body)));
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
@@ -427,4 +517,4 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/report-question',route((db,uid,req)=>reportQuestion(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
+module.exports.__test={ROOMS,PLAYERS,MANUALS,manualsState,chooseSchool,equipManualSkills,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
