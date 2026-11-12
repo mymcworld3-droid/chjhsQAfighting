@@ -70,6 +70,17 @@ test('move highlights match every legal server move, including detours, occupanc
   const s=battle();s.actors[0].stamina=10;s.actors[0].actions=R.LIMITS.actions;
   assert.deepEqual(R.moveCells(s,s.actors[0]),[]);
 });
+test('movement always charges one stamina per traversed cell, even under slow',()=>{
+  const s=battle();s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:7,slow:1});
+  const cells=R.moveCells(s,s.actors[0]);
+  assert(cells.some(cell=>cell.x===2&&cell.y===3&&cell.cost===1));
+  assert(cells.some(cell=>cell.x===3&&cell.y===3&&cell.cost===2));
+  assert(!cells.some(cell=>cell.x===4&&cell.y===3),'緩速只限制單次移動距離');
+  assert.throws(()=>R.apply(s,'u1',{type:'move',x:4,y:3},fixed),/緩速/);
+  const next=R.apply(s,'u1',{type:'move',x:3,y:3},fixed);
+  assert.equal(next.actors[0].stamina,5);
+  assert.equal(next.actors[0].slow,0,'移動後解除緩速');
+});
 test('core aim ranges follow their own line, area, teleport and self-cast shapes',()=>{
   const s=battle();s.blocks=[{x:3,y:2}];Object.assign(s.actors[0],{x:3,y:3,stamina:10});
   const a=s.actors[0],line=R.CORES.ocean.branches[0].skill,area=R.CORES.thunder.branches[0].skill;
@@ -120,7 +131,7 @@ test('shield pierce, counter and slow have distinct tactical effects',()=>{
   s=R.apply(s,'u1',{type:'skill',x:2,y:3},fixed);assert.equal(s.actors[1].hp,750);assert.equal(s.actors[1].shield,999);
   s=battle('pvp',{players:[hero('u1',{core:'ocean',branch:'tide'}),hero('u2')]});s.blocks=[];s.actors[1].x=3;s.actors[0].stamina=10;
   s=R.apply(s,'u1',{type:'skill',x:3,y:3},fixed);s=R.apply(s,'u1',{type:'end'},fixed);assert.equal(s.actors[1].slow,1);
-  s=R.apply(s,'u2',{type:'move',x:3,y:4},fixed);assert.equal(s.actors[1].stamina,0);
+  s=R.apply(s,'u2',{type:'move',x:3,y:4},fixed);assert.equal(s.actors[1].stamina,1,'緩速不再增加每格體力消耗');
   s=battle('pvp');s.blocks=[];s.actors[1].x=2;s.actors[1].counter=.8;
   s=R.apply(s,'u1',{type:'attack',x:2,y:3},fixed);assert.equal(s.actors[0].hp,840);assert.equal(s.actors[1].counter,0);
 });
