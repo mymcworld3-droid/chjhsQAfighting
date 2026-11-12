@@ -50,7 +50,7 @@ function markup(){
       </div>`;
   }).join('');
   const cards=current.library.filter(book=>book.owned).map(book=>{
-    const next=book.skills.find(s=>!s.mastered);
+    const next=book.skills.find(s=>!s.unlocked);
     const skills=book.skills.map((skill,i)=>{
       const active=equipped.includes(skill.id);
       const unlocked=skill.unlocked;
@@ -72,7 +72,7 @@ function markup(){
       <div class="manual-exp-track" role="progressbar" aria-label="${esc(book.name)}熟練經驗" aria-valuemin="0"
         aria-valuemax="${book.expToNext}" aria-valuenow="${book.expInLevel}">
         <div class="manual-exp-fill" style="width:${book.progress}%"></div></div>
-      <small>${next?`Lv. ${next.levelRequired} 解鎖「${esc(next.name)}」`:'三招已全部解鎖'}</small>
+      <small>${next?`${!next.mastered?'功法 Lv. '+next.levelRequired+' · ':''}${!next.realmReady?'修士 '+next.realmName+'境 · ':''}解鎖「${esc(next.name)}」`:'三招已全部解鎖'}</small>
     </div>`;
     return `<article class="manual-book owned" data-manual-book="${esc(book.id)}">
       <div class="manual-book-top"><div class="manual-book-glyph"><i class="fa-solid ${icon(book.school)}"></i></div>
