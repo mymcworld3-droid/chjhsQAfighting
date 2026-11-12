@@ -203,7 +203,7 @@
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
-      manualSkills:Array.isArray(raw.manualSkills)?[...new Set(raw.manualSkills.filter(id=>!!Manuals?.BY_SKILL?.[id]))].slice(0,3):[],
+      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills:[...new Set(raw.manualSkills.filter(id=>!!Manuals?.BY_SKILL?.[id]))].slice(0,3)}:{}),
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
