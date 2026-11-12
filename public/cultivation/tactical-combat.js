@@ -604,7 +604,7 @@ function showModal(html,{quiz=false,encounter=false}={}){
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
   $('[data-modal] .tc-dialog').focus({preventScroll:true});window.quizMathTypeset?.($('[data-modal]'));
 }
-function hideModal(){if(!root)return;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
+function hideModal(){if(!root)return;window.currentTacticalQuiz=null;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
 function showEnemyIntro(error=''){
   const species=state.newEnemies[0],p=R.monsterProfile(species),remaining=state.newEnemies.length;
   showModal(`<div class="tc-enemy-heading"><div class="tc-enemy-portrait" role="img" aria-label="${esc(p.name)}" style="background-position:${species%5/4*100}% ${Math.floor(species/5)/3*100}%"></div><div><small>初遇妖獸${state.trial?' · 第 '+state.trial.stage+' 關':''}</small><h2>${esc(p.name)}</h2><p>第 ${p.unlockStage} 關起登場</p></div></div><div class="tc-enemy-body"><section class="tc-enemy-attack"><small>攻擊方式</small><h3>${esc(p.attackName)}</h3><p>${esc(p.attackText)}</p></section><figure class="tc-enemy-demo" data-enemy-demo><div class="tc-demo-heading"><b>招式演練</b><span data-demo-mode>自動循環</span></div><canvas role="img" aria-label="${esc(p.name)}的移動、命中與閃避模擬" data-demo-species="${species}"></canvas><figcaption data-demo-caption role="status" aria-live="polite"></figcaption><div class="tc-demo-tools"><span>紅框：攻擊預告 · 金圈：修士</span><button type="button" data-demo-toggle>暫停</button><button type="button" data-demo-next hidden>下一步</button><button type="button" data-demo-replay>重播</button></div></figure><dl class="tc-enemy-details"><dt>移動</dt><dd>${esc(p.moveText)}</dd><dt>應對</dt><dd>${esc(p.tip)}</dd></dl></div><p class="tc-enemy-error" role="alert" ${error?'':'hidden'}>${esc(error)}</p><div class="tc-enemy-footer"><button type="button" class="tc-primary" data-intro-ack ${busy?'disabled':''}>${remaining>1?'記住招式 · 下一種（'+(remaining-1)+'）':'記住招式 · 開始行動'}</button><button type="button" data-exit>收起試煉</button></div>`,{encounter:true});
@@ -868,8 +868,24 @@ function questionSheet(q,review=null,index=0){
 function setQuizContext(q,review=null){
   if(quizContext?.id!==q.id||quizContext.roomId!==state.id){
     quizContext?.abort.abort();
-    quizContext={id:q.id,roomId:state.id,q,review,owner:uid,epoch,abort:new AbortController(),messages:[],helperBusy:false,reportBusy:false};
-  }else quizContext.review=review;
+    // Same quiz fields as the main solo controller. This view is never used
+    // to award or persist an answer: the trusted battle transaction does that.
+    const learningQuiz={
+      id:q.id,data:{q:q.q,opts:q.opts},
+      learningSubject:q.subject,
+      learningTopic:q.learningTopic||q.topic,
+      learningDifficulty:q.learningDifficulty||'easy',
+      meta:q.meta||{},adaptive:q.adaptive||null,
+      adaptiveAnswered:!!review,adaptiveHelp:0
+    };
+    quizContext={id:q.id,roomId:state.id,q,review,owner:uid,epoch,
+      abort:new AbortController(),messages:[],helperBusy:false,reportBusy:false,
+      shownAtMs:Date.now(),learningQuiz};
+  }else {
+    quizContext.review=review;
+    quizContext.learningQuiz.adaptiveAnswered=!!review;
+  }
+  window.currentTacticalQuiz=quizContext.learningQuiz;
 }
 function quizTools(){
   if(state.mode!=='pve')return '';
@@ -898,6 +914,8 @@ async function askHelper(){
   const ctx=quizContext,input=$('[data-helper-input]'),message=input?.value.trim().slice(0,600);
   if(!ctx||!message||ctx.helperBusy||state.mode!=='pve')return;
   const history=ctx.messages.slice(-6);ctx.messages.push({role:'user',text:message});ctx.helperBusy=true;
+  // Record assistance in the same adaptive-learning format as main solo.
+  if(!ctx.review)window.QAAdaptiveLearning?.hint(ctx.learningQuiz);
   const append=(role,text)=>{const row=document.createElement('p'),label=document.createElement('span'),body=document.createElement('span');row.className='quiz-helper-message '+(role==='user'?'user':'assistant');label.className='quiz-helper-message-stack';body.className='quiz-helper-message-body';if(role==='user')body.textContent=text;else body.innerHTML=rich(text);label.append(body);row.append(label);$('[data-helper-messages]')?.append(row);window.quizMathTypeset?.(body);};
   append('user',message);input.value='';$('[data-helper-send]').disabled=true;$('[data-helper-status]').textContent='問道助手正在思考…';
   try{
@@ -1071,6 +1089,10 @@ function paintQuestion(){
   const current=pairDisplayIndex;
   setQuizContext(pairQuestions[current],pairReviews[current]||null);
   showModal(pairLayout(),{quiz:true});
+  // Render the main branch's actual 範圍學習足跡 component and status
+  // algorithm inside the tactical question, not a look-alike widget.
+  window.QAAdaptiveLearning?.render?.(
+    quizContext.learningQuiz,$('[data-question-text="'+current+'"]'));
   updateClock();
 }
 async function showNextPairQuestion(){
@@ -1102,6 +1124,9 @@ async function submitPair(){
   busy=true;
   const e=epoch,account=uid,serial=++op,roomId=state.id;
   const initialScore=Number(localUser().stats?.totalScore)||0;
+  const learningQuiz=quizContext?.id===q.id?quizContext.learningQuiz:null;
+  const help=Math.min(3,Math.max(0,Number(learningQuiz?.adaptiveHelp)||0));
+  const timeTaken=Math.max(0,(Date.now()-(quizContext?.shownAtMs||Date.now()))/1000);
   const source=root.querySelector('[data-choice-for="'+index+'"][data-choice="'+choice+'"]');
   root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=true);
   const submit=$('[data-submit-pair]');
@@ -1110,7 +1135,7 @@ async function submitPair(){
   if(status)status.textContent=`正在批改第 ${index+1} / ${pairQuestions.length} 題…`;
   let cultivationVisual=null;
   try{
-    const result=await api('/api/tactical/answer',{roomId,questionId:q.id,choice});
+    const result=await api('/api/tactical/answer',{roomId,questionId:q.id,choice,help,timeTaken});
     if(!valid(e,account)||!state||state.id!==roomId)return;
     if(result.state?.review?.questionId!==q.id)throw Error('答題狀態不同步，請重新開啟答題');
     state=result.state;
@@ -1139,6 +1164,15 @@ async function submitPair(){
     // Stay on this SAME question, showing correctness, the marked answers
     // and explanation. The next page is opened only by the Next button.
     paintQuestion();
+    if(learningQuiz?.adaptive){
+      learningQuiz.adaptiveAnswered=true;
+      // Server already recorded the answer. Request only the shared concept
+      // lesson/UI; do not also call client answer(), avoiding duplicate logs.
+      void window.QAAdaptiveLearning?.afterSaved?.(learningQuiz);
+    }
+    if(state.mode==='pve')void window.trackPlayerAnalytics?.('answer_completed',{
+      mode:'solo',eventId:window.newPlayerAnalyticsEventId?.()||q.id
+    });
   }catch(err){
     if(!valid(e,account)){cultivationVisual?.cancel();return;}
     const label=$('[data-pair-status]');
@@ -1200,7 +1234,7 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
