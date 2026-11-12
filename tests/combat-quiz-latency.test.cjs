@@ -41,6 +41,22 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
   assert.match(server, /issueRaidQuestionTicket/);
 });
 
+test('tactical fast prompts preserve the complete selected curriculum unit and math track', () => {
+  const topic='高中二年級／第一學期／數學A：'+'排列組合、二項分布、條件機率、'.repeat(9);
+  assert(topic.length>180&&topic.length<=240);
+  const prompt=quickQuizPrompt({
+    mode:'tactical',subject:'數學',level:'高中二年級',
+    topic,difficulty:'medium'
+  });
+  assert(prompt.includes(topic),'full saved topic must not be truncated');
+  assert.match(prompt,/不得用同科其他章節/);
+  assert.match(prompt,/數學A/);
+  const server=read('server.js');
+  assert.match(server,/tacticalSourceBankCatalog\.load\(tacticalContext\.bankSource\)/);
+  assert.match(server,/Array\.isArray\(q\.wrong\)&&q\.wrong\.length===3/);
+  assert.match(server,/trialTowerScope\.pick\(scope,owner,index-1\)/);
+});
+
 test('Five Immortals accepts real API correct/wrong output with the correct answer preserved', () => {
   const source = read('public/cultivation/five-immortals.js');
   const start = source.indexOf('  function normalizeQuestion(raw) {');
