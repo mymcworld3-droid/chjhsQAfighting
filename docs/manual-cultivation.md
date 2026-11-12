@@ -9,7 +9,7 @@
 3. 完成問道試煉 PvE 關卡（必須正常擊敗靈獸、至少答對一題、並成功結算）後，若仍有未收錄功法，30% 機率得到一本未收錄功法。連續三次合格通關未掉落時，下一次必掉；同派書籍優先權為 70%，且仍有機會取得另一派。
 4. 每本功法固定三個技能；使用該功法技能 **最後一擊擊殺** PvE 靈獸才增加熟練 EXP。獎勵依靈獸的境界（由當場試煉關卡決定）分為 50–550 EXP，越高境界越高。功法從 Lv. 1 開始，升級需求為 `40 + 20 × (目前等級 - 1)` EXP；Lv. 5、Lv. 10 分別滿足第二、三招的**功法等級條件**，仍須達到各招指定的修士境界。普攻、金丹攻擊與 PvP 擊殺不提供功法經驗。
 5. 可跨功法、跨劍修與體修自由裝備至多三種**不同且已解鎖**的技能。空裝備欄合法。更換配置僅影響下一場新對局；未完成場次保持進場時的技能快照。
-6. PvE 在右下操作圓盤選「攻擊 → 功法」，再選擇已裝配的招式；PvP 在原操作區使用已裝配的功法按鈕。所有招式與金丹技能共用兩次出手限制、10 點體力上限及回合冷卻。
+6. PvE **左下充能圓盤第二層**直接顯示目前最多三招已裝備功法技能，點擊一招後在地圖選擇攻擊目標；右側圓盤只負責「攻擊／移動／結束回合」及目標選擇，沒有額外功法彈出選單。未裝備任何功法技能時，左圈預設只有「普通攻擊」；只要裝備一招以上，普通攻擊就被所有裝備技能取代、不再顯示也不能使用。PvP 在操作區直接列出已裝備技能，沒有裝備時才顯示普通攻擊。金丹技能從所有體力戰棋戰鬥停用。所有普通攻擊／功法技能共用每回合兩次出手、10 點體力上限及技能冷卻。
 
 ## 初版功法
 
@@ -20,7 +20,7 @@
 | 體修 | 玄嶽鍛體訣 | 碎岩拳 | 震嶽罡勁 | 崩山重拳 |
 | 體修 | 龍象真身訣 | 龍象衝拳 | 金剛護體 | 龍象震天 |
 
-每級所需 EXP 遞增 20 點：Lv. 1→2 需 40、Lv. 2→3 需 60、Lv. 3→4 需 80、Lv. 4→5 需 100；Lv. 5 累積 280 EXP、Lv. 10 累積 1080 EXP。
+**所有功法第一招消耗 2 體力**，後兩招維持原本個別體力消耗。每級所需 EXP 遞增 20 點：Lv. 1→2 需 40、Lv. 2→3 需 60、Lv. 3→4 需 80、Lv. 4→5 需 100；Lv. 5 累積 280 EXP、Lv. 10 累積 1080 EXP。
 
 藏經閣只展示已獲得的功法，取消頂部大型介紹區，改以每本功法的等級、當級 EXP 進度條與下一招解鎖等級呈現。招式射程、體力、倍率、冷卻與 EXP 公式都在 `public/cultivation/manual-rules.js` 定義。
 
@@ -58,7 +58,7 @@
 - 新版戰場以 `tacticalBattleRooms/{id}.manualExp` 與 `manualAppliedExp` 記錄各功法本場累積 EXP 與已領 EXP，避免指令重送重複領取；舊版進行中的戰鬥仍支援 `manualKills` 與 `manualApplied`，按舊版每擊殺 50 EXP 完成結算。戰場每次死亡事件只計入一次，且計算都在伺服器完成。
 - `tacticalBattleRooms/{id}.manualDrops` 保存該關已結算的掉落結果。發獎、試煉下一關進度、功法授予與房間結束共同使用資料庫交易；同一關不能靠重送領取多次。
 - 客戶端不能自行指定武功傷害、掉落、熟練度、靈獸境界、正解或解鎖條件。伺服器用 `training-access-rules.js` 的玩家修為門檻校驗裝備資格，新開戰場時固定技能快照，戰鬥施法時依角色修為再次檢查技能境界。
-- 原本的金丹、元嬰伺服器資料與戰鬥投影保留相容；僅隱藏舊修煉 UI。其他功能若仍需金丹效果，依舊可從原玩家紀錄取得。
+- 金丹、元嬰等原有伺服器持有資料繼續保留，不會清空玩家原本修為和金丹，但金丹技能無法再透過體力戰棋操作：舊客戶端傳送的 `type:"skill"` 也會被伺服器拒絕。
 - 沒有刪除舊金丹、元神資料，也不會把舊功法重新抽取；只在既有功法的熟練紀錄上進行可重複執行的升級轉換。
 
 ## API
@@ -66,12 +66,12 @@
 - `GET /api/tactical/manuals`：回傳本人功法及技能解鎖狀態。
 - `POST /api/tactical/manuals/school`：`{school:"sword"|"body"}`。
 - `POST /api/tactical/manuals/equip`：`{skillIds:[...]}`，最多三種已解鎖技能。
-- `POST /api/tactical/action`：`{type:"manual",skillId,x,y,roomId,revision,requestId}`。舊有普通攻擊、金丹技能、移動、護身、結束回合請求保持相容。
+- `POST /api/tactical/action`：`{type:"manual",skillId,x,y,roomId,revision,requestId}`；有裝備功法時拒絕 `type:"attack"` 普通攻擊，未裝備時允許；全面拒絕 `type:"skill"` 金丹技能。移動、護身、結束回合維持原本 API。
 
 ## 驗證
 
 ```bash
-node --test tests/manual-training.test.cjs
+node --test tests/manual-training.test.cjs tests/tactical-left-manual-wheel.test.cjs
 node --test tests/tactical-combat.test.cjs tests/tactical-question-pair.test.cjs
 npm run check:module-versions
 npm test
