@@ -5,7 +5,8 @@ const Knowledge=require('./public/cultivation/knowledge-points.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
 const Gold=require('./public/cultivation/answer-gold-rules.js');
 const {recordEvent}=require('./public/cultivation/quest-rules.js');
-const {trustedRaidPlayerSnapshot,pickTrustedRaidKnowledge}=require('./raid-authority.cjs');
+const {trustedRaidPlayerSnapshot}=require('./raid-authority.cjs');
+const StudyScope=require('./trial-tower-scope.cjs');
 const {playerRepository}=require('./server-repositories.cjs');
 const {verifyMainIdentity}=require('./raid-question-ticket.cjs');
 const {FieldValue}=require('./storage-values.cjs');
@@ -227,26 +228,60 @@ async function command(db,uid,input,now=Date.now()){
 }
 async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
   if(!roomId(id))throw error('戰場代碼無效',400);
-  const s=disarm(exists(await db.collection(ROOMS).doc(id).get())),a=member(s,uid);
   const batchSlot=requestedSlot===1?1:0;
+  // Use the live, server-verified choices from the SAME profile/settings as
+  // regular solo practice. The old raid scope discarded selected upper-grade
+  // chapters, ignored bank mode, and persisted after scope changes.
+  const [roomSnap,userSnap]=await Promise.all([
+    db.collection(ROOMS).doc(id).get(),db.collection('users').doc(uid).get()
+  ]);
+  let s=disarm(exists(roomSnap)),a=member(s,uid);
+  const user=exists(userSnap);if(!user)throw error('玩家資料不存在',404);
+  const study=StudyScope.snapshot(user),scopeKey=StudyScope.key(study);
+  if(!study.level)throw error('請先設定修習年級');
+  // Old questions from a previous selection must not be handed out. Clear
+  // both slots atomically if either one belongs to a different saved scope.
+  const outdated=[s.pending?.[uid],s.pendingFollowup?.[uid]].some(
+    q=>q&&q.scopeKey!==scopeKey);
+  if(outdated){
+    s=await db.runTransaction(async tx=>{
+      const current=await readRoom(tx,db,id,uid);
+      const freshUser=exists(await tx.get(db.collection('users').doc(uid)));
+      if(!freshUser)throw error('玩家資料不存在',404);
+      if(StudyScope.key(StudyScope.snapshot(freshUser))!==scopeKey)
+        throw error('修習範圍已更新，請重新取得題目');
+      if([current.pending?.[uid],current.pendingFollowup?.[uid]].some(q=>q&&q.scopeKey!==scopeKey)){
+        delete current.pending?.[uid];delete current.pendingFollowup?.[uid];
+        tx.set(db.collection(ROOMS).doc(id),current);
+      }
+      return current;
+    });
+    a=member(s,uid);
+  }
   Rules.canAnswer(s,uid,now);
   if(a.questions+batchSlot>=Rules.LIMITS.questions)throw error('此輪剩餘題數不足');
   const pending=batchSlot===1?s.pendingFollowup?.[uid]:s.pending?.[uid];
-  if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina&&!pending)throw error('請先使用體力，或結束回合');
-  const scope=pickTrustedRaidKnowledge(a.knowledgeScope,a.answered+batchSlot+1);
-  // The scope is computed on the server. A client's batchSlot cannot cause
-  // generation beyond the remaining two-question allowance.
-  return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,batchSlot,subject:scope.subject,topic:scope.specificTopic,
-    difficulty:scope.difficulty,level:scope.level,history:[...(s.questionHistory||[]),...(batchSlot&&s.pending?.[uid]?[s.pending[uid].q]:[])].slice(-24),pending:publicQuestion(pending)};
+  if(!s.quizRound&&a.stamina>=Rules.LIMITS.stamina&&!pending)
+    throw error('請先使用體力，或結束回合');
+  const choice=StudyScope.pick(study,user,a.answered+batchSlot);
+  return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,batchSlot,
+    subject:choice.subject,topic:choice.specificTopic,bankSource:choice.bankSource||'',
+    difficulty:choice.difficulty,level:choice.level,scopeKey,
+    history:[...(s.questionHistory||[]),...(batchSlot&&s.pending?.[uid]?[s.pending[uid].q]:[])].slice(-24),
+    pending:publicQuestion(pending)};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
   const choices=[parsed.correct,...(parsed.wrong||[])].map(v=>String(v||'').trim().slice(0,1000));
   if(choices.length!==4||new Set(choices).size!==4||choices.some(v=>!v))throw error('題目選項未通過驗證');
   let answerIndex=0;for(let i=3;i>0;i--){const j=crypto.randomInt(i+1);[choices[i],choices[j]]=[choices[j],choices[i]];if(answerIndex===i)answerIndex=j;else if(answerIndex===j)answerIndex=i;}
   const q={id:crypto.randomUUID(),q:String(parsed.q).slice(0,4000),opts:choices,answerIndex,explanation:String(parsed.exp||'').slice(0,5000),
-    subject:expected.subject,topic:expected.topic||String(parsed.sub_topic||'').slice(0,100),...Knowledge.metadata(parsed,expected.subject),createdAtMs:now};
+    subject:expected.subject,topic:expected.topic||String(parsed.sub_topic||'').slice(0,100),
+    scopeKey:expected.scopeKey,...Knowledge.metadata(parsed,expected.subject),createdAtMs:now};
   return db.runTransaction(async tx=>{
     const s=await readRoom(tx,db,expected.roomId,uid),a=member(s,uid);
+    const currentUser=exists(await tx.get(db.collection('users').doc(uid)));
+    if(!currentUser||StudyScope.key(StudyScope.snapshot(currentUser))!==expected.scopeKey)
+      throw error('修習範圍已變更，請重新取得題目');
     if((s.quizRound?s.quizRound!==expected.quizRound:s.turnUid!==uid||s.turn!==expected.turn)||a.answered!==expected.index)throw error('回合已更新，請重新取得題目');
     try{Rules.canAnswer(s,uid,now);}catch(_){throw error('回合已更新，請重新取得題目');}
     if(a.questions+(expected.batchSlot===1?1:0)>=Rules.LIMITS.questions)throw error('本輪剩餘題數不足');
@@ -271,6 +306,8 @@ async function answer(db,uid,input,now=Date.now()){
     const userRef=db.collection('users').doc(uid),user=exists(await tx.get(userRef));if(!user)throw error('玩家資料不存在',404);
     if(raw.reviews?.[uid]?.questionId===input.questionId)return withProgress(raw,uid,user);
     const q=raw.pending?.[uid];if(!q||q.id!==input.questionId)throw error('此題已結算或已失效');
+    if(q.scopeKey!==StudyScope.key(StudyScope.snapshot(user)))
+      throw error('修習範圍已變更，請重新取得題目');
     const correct=input.choice===q.answerIndex,s=Rules.answer(raw,uid,correct,now),before=member(raw,uid),after=member(s,uid);
     s.reviews||={};s.reviews[uid]={questionId:q.id,q:q.q,opts:q.opts,subject:q.subject,topic:q.topic,correct,choice:input.choice,answerIndex:q.answerIndex,explanation:q.explanation,gain:after.stamina-before.stamina};
     // Keep only the authoritative shortfall, including the cap at answer time.
