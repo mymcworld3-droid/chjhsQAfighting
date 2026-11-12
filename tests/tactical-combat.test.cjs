@@ -94,46 +94,58 @@ test('core aim ranges follow their own line, area, teleport and self-cast shapes
     if(sk.kind==='blink')assert.ok(range.every(p=>!R.at(s,p)));
   }
 });
-test('blink burst preview covers the same adjacent enemies as the actual cast',()=>{
-  const s=battle('pve',{players:[hero('u1',{core:'pojing',branch:'breach'})]});s.blocks=[];s.actors[0].stamina=10;
-  const p={x:3,y:3};s.actors=[s.actors[0],R.actor(hero('m1',{bot:true,team:'monster'}),{x:4,y:3}),R.actor(hero('m2',{bot:true,team:'monster'}),{x:4,y:4})];
-  const cells=R.skillCells(s,s.actors[0],R.branchFor(s.actors[0]).skill,p),next=R.apply(s,'u1',{type:'skill',...p},fixed);
-  assert.ok(cells.some(c=>c.x===4&&c.y===3));assert.ok(!cells.some(c=>c.x===4&&c.y===4));
-  assert.equal(next.actors[1].hp,760);assert.equal(next.actors[2].hp,1000);
+test('historical golden-core previews remain read-only; actual core casts are disabled',()=>{
+  const s=battle('pve',{players:[hero('u1',{core:'pojing',branch:'breach'})]});
+  s.blocks=[];s.actors[0].stamina=10;
+  const p={x:3,y:3};
+  s.actors=[s.actors[0],R.actor(hero('m1',{bot:true,team:'monster'}),{x:4,y:3})];
+  const cells=R.skillCells(s,s.actors[0],R.branchFor(s.actors[0]).skill,p);
+  assert.ok(cells.some(c=>c.x===4&&c.y===3));
+  assert.throws(()=>R.apply(s,'u1',{type:'skill',...p},fixed),/金丹技能已停用/);
+  assert.equal(s.actors[0].stamina,10);
+  assert.equal(s.actors[1].hp,1000);
 });
-test('all nine cores have two distinct executable branches and immutable cooldowns',()=>{
+test('golden-core metadata is preserved, but all eighteen old tactical casts are blocked',()=>{
   let count=0;
   for(const [type,c]of Object.entries(R.CORES)){
-    if(type==='none')continue;assert.equal(c.branches.length,2);
+    if(type==='none')continue;
+    assert.equal(c.branches.length,2);
     for(const b of c.branches){
-      let s=battle('pvp',{players:[hero('u1',{core:type,branch:b.id}),hero('u2')]});s.blocks=[];
-      const a=s.actors[0];a.x=1;a.y=3;a.hp=500;a.stamina=10;s.actors[1].x=2;
-      const sk=b.skill,p=sk.range===0?{x:a.x,y:a.y}:sk.kind==='blink'?{x:2,y:2}:{x:2,y:3};
-      const next=R.apply(s,'u1',{type:'skill',...p},fixed);
-      assert.equal(next.actors[0].stamina,10-sk.cost,type+':'+b.id);
-      assert.equal(next.actors[0].cooldowns[sk.id],3);assert.equal(a.stamina,10);
-      assert.throws(()=>R.apply(next,'u1',{type:'skill',...p},fixed),/冷卻|體力/);count++;
+      const s=battle('pvp',{players:[hero('u1',{core:type,branch:b.id}),hero('u2')]});
+      s.blocks=[];s.actors[0].stamina=10;
+      assert.throws(()=>R.apply(s,'u1',{type:'skill',x:2,y:3},fixed),/金丹技能已停用/);
+      assert.equal(s.actors[0].stamina,10);
+      assert.deepEqual(s.actors[0].cooldowns,{});
+      count++;
     }
   }
   assert.equal(count,18);
 });
-test('telegraphed monsters can be dodged, and delayed meteors resolve after opponent response',()=>{
-  let s=battle();s.blocks=[];s.actors[1].x=2;s.actors[1].intent={kind:'strike',cells:[{x:1,y:3}]};
-  s=R.apply(s,'u1',{type:'move',x:1,y:2},fixed);s=R.apply(s,'u1',{type:'end'},fixed);
-  assert.equal(s.actors[0].hp,1000);assert.ok(s.events.some(e=>e.type==='dodge'));
-  s=battle('pvp',{players:[hero('u1',{core:'xingchen',branch:'meteor'}),hero('u2')]});s.blocks=[];s.actors[0].stamina=10;s.actors[1].x=3;
-  s=R.apply(s,'u1',{type:'skill',x:3,y:3},fixed);assert.equal(s.actors[1].hp,1000);assert.equal(s.effects.length,1);
-  s=R.apply(s,'u1',{type:'end'},fixed);s=R.apply(s,'u2',{type:'end'},fixed);
-  assert.equal(s.actors[1].hp,620);assert.equal(s.effects.length,0);
+test('monster warning zones still allow dodging; retired golden-core meteors cannot be scheduled',()=>{
+  let s=battle();s.blocks=[];s.actors[1].x=2;
+  s.actors[1].intent={kind:'strike',cells:[{x:1,y:3}]};
+  s=R.apply(s,'u1',{type:'move',x:1,y:2},fixed);
+  s=R.apply(s,'u1',{type:'end'},fixed);
+  assert.equal(s.actors[0].hp,1000);
+  assert.ok(s.events.some(e=>e.type==='dodge'));
+  s=battle('pvp',{players:[hero('u1',{core:'xingchen',branch:'meteor'}),hero('u2')]});
+  s.blocks=[];s.actors[0].stamina=10;s.actors[1].x=3;
+  assert.throws(()=>R.apply(s,'u1',{type:'skill',x:3,y:3},fixed),/金丹技能已停用/);
+  assert.equal(s.effects.length,0);
 });
-test('shield pierce, counter and slow have distinct tactical effects',()=>{
-  let s=battle('pvp',{players:[hero('u1',{core:'wugou',branch:'purify'}),hero('u2')]});s.blocks=[];s.actors[1].x=2;s.actors[1].shield=999;s.actors[1].guard=.4;s.actors[0].stamina=10;
-  s=R.apply(s,'u1',{type:'skill',x:2,y:3},fixed);assert.equal(s.actors[1].hp,750);assert.equal(s.actors[1].shield,999);
-  s=battle('pvp',{players:[hero('u1',{core:'ocean',branch:'tide'}),hero('u2')]});s.blocks=[];s.actors[1].x=3;s.actors[0].stamina=10;
-  s=R.apply(s,'u1',{type:'skill',x:3,y:3},fixed);s=R.apply(s,'u1',{type:'end'},fixed);assert.equal(s.actors[1].slow,1);
-  s=R.apply(s,'u2',{type:'move',x:3,y:4},fixed);assert.equal(s.actors[1].stamina,1,'緩速不再增加每格體力消耗');
-  s=battle('pvp');s.blocks=[];s.actors[1].x=2;s.actors[1].counter=.8;
-  s=R.apply(s,'u1',{type:'attack',x:2,y:3},fixed);assert.equal(s.actors[0].hp,840);assert.equal(s.actors[1].counter,0);
+test('manual counter remains available and basic attacks work when no manual is equipped',()=>{
+  let s=battle('pvp',{players:[
+    hero('u1',{manualSkills:['dragon-guard'],trainingAccessScore:28}),hero('u2')
+  ]});
+  s.blocks=[];s.actors[1].x=2;s.actors[0].stamina=10;
+  s=R.apply(s,'u1',{type:'manual',skillId:'dragon-guard',x:1,y:3},fixed);
+  assert.equal(s.actors[0].counter,.55);
+  assert.equal(s.actors[0].stamina,7);
+  s=R.apply(s,'u1',{type:'end'},fixed);
+  s=R.apply(s,'u2',{type:'attack',x:1,y:3},fixed);
+  assert.equal(s.actors[0].hp,880,'manual guard reduces incoming basic damage');
+  assert.equal(s.actors[1].hp,890,'manual counter reflects to the opponent');
+  assert.equal(s.actors[0].counter,0);
 });
 test('PvP timeout advances the turn and two consecutive missed own turns forfeit',()=>{
   let s=battle('pvp');s=R.expire(s,fixed+R.LIMITS.turnMs);assert.equal(s.turnUid,'u2');

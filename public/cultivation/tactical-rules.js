@@ -573,9 +573,16 @@
       if(cost>a.stamina)fail('體力不足以走到這裡');
       a.stamina-=cost;a.x=p.x;a.y=p.y;a.slow=0;
       log(s,a.name+'移動 '+(route.length-1)+' 格，消耗 '+cost+' 體力','move',{actor:a.uid,path:route,animation:{kind:'move',style:'walk',changes:[appearance(a)]}});
-    }else if(command.type==='attack'||command.type==='skill'||command.type==='manual'){
-      const selected=command.type==='attack'?basicFor(a):
-        command.type==='skill'?branchFor(a).skill:manualSkillFor(a,command.skillId);
+    }else if(command.type==='skill'){
+      // Golden-core techniques are retired from tactical combat, including
+      // clients still sending an old 'skill' command.
+      fail('金丹技能已停用');
+    }else if(command.type==='attack'||command.type==='manual'){
+      // An equipped manual replaces basic attack rather than adding a second
+      // independent attack button. The server enforces the same policy as UI.
+      if(command.type==='attack'&&a.manualSkills?.length)fail('已裝備功法技能，普通攻擊已被替換');
+      if(command.type==='manual'&&!a.manualSkills?.length)fail('尚未裝備功法技能');
+      const selected=command.type==='attack'?basicFor(a):manualSkillFor(a,command.skillId);
       if(!selected)fail('尚未裝備或解鎖此功法技能');
       cast(s,a,selected,p);
     }else if(command.type==='guard'){
