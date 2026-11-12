@@ -2,6 +2,7 @@
 const crypto=require('node:crypto');
 const Rules=require('./public/cultivation/tactical-rules.js');
 const Manuals=require('./public/cultivation/manual-rules.js');
+const TrainingAccess=require('./public/cultivation/training-access-rules.js');
 const Knowledge=require('./public/cultivation/knowledge-points.js');
 const SoloLearning=require('./public/cultivation/solo-learning-rules.js');
 const AdaptiveRules=require('./public/cultivation/adaptive-learning-rules.js');
@@ -55,7 +56,8 @@ function snapshot(s,uid){
   if(!s)return null;member(s,uid);
   const out=disarm(copy(s));delete out.pending;delete out.reviews;delete out.receipts;delete out.answerStamina;delete out.questionRefunds;
   // Only the requesting player's manual progress and loot are public.
-  delete out.manualApplied;
+  delete out.manualApplied;delete out.manualAppliedExp;
+  if(out.manualExp)out.manualExp=out.manualExp[uid]?{[uid]:out.manualExp[uid]}:{};
   if(out.manualKills)out.manualKills=out.manualKills[uid]?{[uid]:out.manualKills[uid]}:{};
   if(out.manualDrops)out.manualDrops=out.manualDrops[uid]?{[uid]:out.manualDrops[uid]}:{};
   out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
@@ -81,9 +83,12 @@ function patchedUser(user,patch){
 function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
   const branch=Rules.savedBranch(user,type).id;
-  return {...trusted,enemyScaleAttack:trusted.atk,
+  const trainingAccessScore=TrainingAccess.score(user);
+  const equipped=Manuals.normalize(manualRecord).equipped.filter(id=>
+    Manuals.meetsRealm(Manuals.BY_SKILL[id],trainingAccessScore));
+  return {...trusted,enemyScaleAttack:trusted.atk,trainingAccessScore,
     core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0,
-    manualSkills:Manuals.normalize(manualRecord).equipped};
+    manualSkills:equipped};
 }
 function trialProgress(raw,seed){
   return {version:1,seed:/^[a-f0-9]{32}$/.test(raw?.seed)?raw.seed:seed,
@@ -100,27 +105,31 @@ function rewardFor(s,a,user){
   if(s.actors.filter(p=>!p.bot).reduce((n,p)=>n+p.answered,0)<2)return null;
   return {gold:win?500:draw?250:200,cultivation:win?5+Growth.cultivation(user,'battle'):draw?2:0,win,draw};
 }
-// Killing blows in Rules.damage award XP (not levels directly).
-// The room tracks cumulative awarded blows; manualApplied prevents retries
-// from awarding the same XP a second time.
+// Legacy rooms kept kill counts and their idempotent receipts. Modern rooms
+// keep accumulated XP so different beast realms reward different amounts.
+// Each room tracks how much was already applied to prevent replay rewards.
 function applyManualKills(s,uid,raw){
   const next=Manuals.normalize(raw);
-  const seen=s.manualKills?.[uid]||{},applied=s.manualApplied?.[uid]||{};
   let changed=false;
-  for(const [id,total] of Object.entries(seen)){
-    if(!Manuals.BY_BOOK[id]||!next.books[id])continue;
-    const current=Math.max(0,Math.trunc(Number(total)||0));
-    const previous=Math.max(0,Math.trunc(Number(applied[id])||0));
-    if(current<=previous)continue;
-    next.books[id].exp=Math.min(Manuals.MAX_EXP,
-      next.books[id].exp+(current-previous)*Manuals.EXP_PER_KILL);
-    s.manualApplied||={};s.manualApplied[uid]||={};s.manualApplied[uid][id]=current;
-    changed=true;
+  function applyLedger(ledgerName,appliedName,multiplier){
+    const seen=s[ledgerName]?.[uid]||{},applied=s[appliedName]?.[uid]||{};
+    for(const [id,total] of Object.entries(seen)){
+      if(!Manuals.BY_BOOK[id]||!next.books[id])continue;
+      const current=Math.max(0,Math.trunc(Number(total)||0));
+      const previous=Math.max(0,Math.trunc(Number(applied[id])||0));
+      if(current<=previous)continue;
+      next.books[id].exp=Math.min(Manuals.MAX_EXP,
+        next.books[id].exp+(current-previous)*multiplier);
+      s[appliedName]||={};s[appliedName][uid]||={};s[appliedName][uid][id]=current;
+      changed=true;
+    }
   }
+  applyLedger('manualKills','manualApplied',Manuals.EXP_PER_KILL);
+  applyLedger('manualExp','manualAppliedExp',1);
   return {state:next,changed};
 }
 async function saveManualKills(tx,db,s,uid){
-  if(!s.manualKills?.[uid])return;
+  if(!s.manualKills?.[uid]&&!s.manualExp?.[uid])return;
   const ref=db.collection(MANUALS).doc(uid);
   const applied=applyManualKills(s,uid,exists(await tx.get(ref)));
   if(applied.changed)tx.set(ref,applied.state);
@@ -142,8 +151,8 @@ function rollManualDrop(s,uid,raw){
 }
 async function manualsState(db,uid){
   const [player,record]=await Promise.all([db.collection('users').doc(uid).get(),db.collection(MANUALS).doc(uid).get()]);
-  if(!exists(player))throw error('玩家資料不存在',404);
-  return Manuals.publicState(exists(record));
+  const user=exists(player);if(!user)throw error('玩家資料不存在',404);
+  return Manuals.publicState(exists(record),TrainingAccess.score(user));
 }
 async function chooseSchool(db,uid,input){
   const school=String(input?.school||'');
@@ -156,9 +165,11 @@ async function chooseSchool(db,uid,input){
     if(!next.starterClaimed){
       const starter=Manuals.starterFor(school);
       next.books[starter]||={exp:0};next.starterClaimed=true;
-      if(!next.equipped.length)next.equipped.push(Manuals.BY_BOOK[starter].skills[0].id);
+      const introductory=Manuals.BY_BOOK[starter].skills[0];
+      if(!next.equipped.length&&Manuals.meetsRealm(introductory,TrainingAccess.score(exists(user))))
+        next.equipped.push(introductory.id);
     }
-    tx.set(ref,next);return Manuals.publicState(next);
+    tx.set(ref,next);return Manuals.publicState(next,TrainingAccess.score(exists(user)));
   });
 }
 async function equipManualSkills(db,uid,input){
@@ -170,9 +181,12 @@ async function equipManualSkills(db,uid,input){
     const [user,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
     if(!exists(user))throw error('玩家資料不存在',404);
     const next=Manuals.normalize(exists(record));
-    if(ids.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備尚未解鎖的技能',403);
+    const score=TrainingAccess.score(exists(user));
+    if(ids.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備功法等級尚未解鎖的技能',403);
+    if(ids.some(id=>!Manuals.meetsRealm(Manuals.BY_SKILL[id],score)))
+      throw error('修士境界未達到此功法技能的門檻',403);
     next.equipped=[...ids];tx.set(ref,next);
-    return Manuals.publicState(next);
+    return Manuals.publicState(next,score);
   });
 }
 

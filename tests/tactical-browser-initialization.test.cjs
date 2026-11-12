@@ -18,7 +18,7 @@ test('tactical manuals and combat rules bootstrap without Node globals in a brow
   vm.runInContext(read('tactical-rules.js'),context,{filename:'tactical-rules.js'});
   assert.ok(context.QATactical,'browser combat rules are initialized');
   assert.equal(context.QATactical.LIMITS.stamina,10);
-  const hero={manualSkills:['wind-slash']};
+  const hero={manualSkills:['wind-slash'],trainingAccessScore:1};
   assert.equal(context.QATactical.manualSkillFor(hero,'wind-slash').name,'流風斬');
   assert.equal(context.QATactical.manualSkillFor(hero,'wind-thousand'),null);
   assert.equal(context.QATactical.CORES.thunder.branches.length,2);
@@ -27,7 +27,7 @@ test('tactical manuals and combat rules bootstrap without Node globals in a brow
 test('Node and browser module registries expose the same manual skill',()=>{
   const manuals=require('../public/cultivation/manual-rules.js');
   const rules=require('../public/cultivation/tactical-rules.js');
-  assert.equal(rules.manualSkillFor({manualSkills:['rock-fist']},'rock-fist').id,'rock-fist');
+  assert.equal(rules.manualSkillFor({manualSkills:['rock-fist'],trainingAccessScore:1},'rock-fist').id,'rock-fist');
   assert.equal(manuals.BY_SKILL['rock-fist'].manualId,'body-rock');
 });
 
