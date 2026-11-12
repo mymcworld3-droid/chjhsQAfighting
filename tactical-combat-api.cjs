@@ -47,6 +47,10 @@ function ensureIntroductions(s,uid,pointer){
 function snapshot(s,uid){
   if(!s)return null;member(s,uid);
   const out=disarm(copy(s));delete out.pending;delete out.reviews;delete out.receipts;delete out.answerStamina;delete out.questionRefunds;
+  // Only the requesting player's manual progress and loot are public.
+  delete out.manualApplied;
+  if(out.manualKills)out.manualKills=out.manualKills[uid]?{[uid]:out.manualKills[uid]}:{};
+  if(out.manualDrops)out.manualDrops=out.manualDrops[uid]?{[uid]:out.manualDrops[uid]}:{};
   out.newEnemies=s.mode==='pve'?[...(s.pendingIntroductions?.[uid]||[])]:[];delete out.pendingIntroductions;
   out.question=s.status==='active'&&(s.quizRound||s.turnUid===uid)?publicQuestion(s.pending?.[uid]):null;
   // Slot 1 can finish before slot 0; do not surface it through ordinary
