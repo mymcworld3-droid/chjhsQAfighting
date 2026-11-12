@@ -90,9 +90,15 @@ function clearView() {
 }
 function showLesson(quiz, lesson, { beforeAnswer = false } = {}) {
   const uid = getMainUser()?.uid, meta = quiz?.adaptive;
-  if (!uid || window.currentActiveQuiz !== quiz || !meta || !scopeSelected(meta) || lesson.scopeId !== meta.scopeId || lesson.conceptId !== meta.conceptId) return;
+  const tactical=window.currentTacticalQuiz===quiz;
+  if (!uid || !(window.currentActiveQuiz===quiz||tactical) || !meta || !scopeSelected(meta) || lesson.scopeId !== meta.scopeId || lesson.conceptId !== meta.conceptId) return;
   document.getElementById('adaptive-concept-lesson')?.remove();
-  const host = document.getElementById(beforeAnswer ? 'question-text' : 'feedback-text'); if (!host) return;
+  const host = tactical
+    ? document.querySelector(beforeAnswer
+      ? '#tactical-combat [data-question-text]'
+      : '#tactical-combat .tc-feedback-text')
+    : document.getElementById(beforeAnswer ? 'question-text' : 'feedback-text');
+  if (!host) return;
   const panel = document.createElement('section'); panel.id = 'adaptive-concept-lesson'; panel.className = 'adaptive-concept-lesson';
   const heading = document.createElement('h3'); heading.textContent = '觀念補給 · ' + lesson.concept;
   panel.appendChild(heading);
@@ -111,10 +117,13 @@ function showLesson(quiz, lesson, { beforeAnswer = false } = {}) {
   void flush(uid);
   void window.quizMathTypeset?.([panel]);
 }
-function render(quiz) {
+function render(quiz, questionHost = null) {
   clearView();
   const meta = quiz?.adaptive; if (!meta?.outline || !scopeSelected(meta)) return;
-  const state = currentState(meta), host = document.getElementById('question-text'); if (!host) return;
+  // The same learning-footprint renderer works in the main quiz and the
+  // tactical question overlay. No second copy of the algorithm or markup.
+  const state = currentState(meta), host = questionHost || document.getElementById('question-text');
+  if (!host) return;
   const details = document.createElement('details'); details.id = 'adaptive-scope-progress'; details.className = 'adaptive-scope-progress';
   const summary = document.createElement('summary');
   const target = Math.min(Rules.POLICY.diagnosticMax, Math.max(Rules.POLICY.diagnosticMin, meta.outline.length));
@@ -153,7 +162,9 @@ async function afterSaved(quiz, { beforeAnswer = false } = {}) {
     const lesson = await response.json();
     if (getMainUser()?.uid !== user.uid || !scopeSelected(meta)) return;
     lessons.set(key, lesson); while (lessons.size > 64) lessons.delete(lessons.keys().next().value);
-    const active = window.currentActiveQuiz;
+    const battle=window.currentTacticalQuiz;
+    const active=battle?.adaptive?.scopeId===meta.scopeId&&battle.adaptive.conceptId===meta.conceptId
+      ?battle:window.currentActiveQuiz;
     if (active?.adaptive?.scopeId === meta.scopeId && active.adaptive.conceptId === meta.conceptId)
       showLesson(active, lesson, { beforeAnswer: active !== quiz || beforeAnswer ? !active.adaptiveAnswered : false });
   } catch (error) { console.warn('[Adaptive lesson]', error?.code || 'unavailable'); }
