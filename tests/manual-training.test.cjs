@@ -94,18 +94,70 @@ test('only equipped manual killing blows grant EXP, once per idempotent request'
   const request={roomId:state.id,revision:state.revision,requestId:'manual-kill-once-01',
     type:'manual',skillId:'wind-slash',x:2,y:3};
   const first=await API.command(db,'u1',request,now);
-  assert.equal(first.manualKills.u1['sword-wind'],3);
+  assert.equal(first.manualExp.u1['sword-wind'],150);
   assert.equal(bookRecord(db).books['sword-wind'].exp,150);
   assert.equal(Catalog.mastery(150).level,3);
   assert.equal(first.actors[0].stamina,7);
   const again=await API.command(db,'u1',request,now);
-  assert.equal(again.manualKills.u1['sword-wind'],3);
+  assert.equal(again.manualExp.u1['sword-wind'],150);
   assert.equal(bookRecord(db).books['sword-wind'].exp,150);
   await assert.rejects(API.command(db,'u1',{...request,requestId:'manual-forged-02',
     skillId:'wind-thousand',revision:first.revision},now),/尚未裝備/);
   assert.equal(bookRecord(db).books['sword-wind'].exp,150);
 });
 
+test('per-skill realm requirements are independent of manual level, using current cultivation realm cutoffs',()=>{
+  const first=Catalog.BY_SKILL['wind-slash'],second=Catalog.BY_SKILL['wind-step'],
+    third=Catalog.BY_SKILL['wind-thousand'],advanced=Catalog.BY_SKILL['sky-pierce'];
+  assert.deepEqual([first.realmRequired,second.realmRequired,third.realmRequired],[0,6,28]);
+  assert.deepEqual(Catalog.BY_BOOK['sword-sky'].skills.map(s=>s.realmRequired),[6,28,68]);
+  assert.deepEqual(Catalog.BY_BOOK['body-dragon'].skills.map(s=>s.realmRequired),[6,28,68]);
+  assert.equal(Catalog.meetsRealm(second,5),false);
+  assert.equal(Catalog.meetsRealm(second,6),true);
+  assert.equal(Catalog.meetsRealm(third,27),false);
+  assert.equal(Catalog.meetsRealm(third,28),true);
+  assert.equal(Catalog.meetsRealm(advanced,5),false);
+  assert.equal(Catalog.meetsRealm(advanced,6),true);
+  const state={books:{'sword-sky':{exp:1080}},equipped:['sky-pierce','sky-cloud','sky-sever']};
+  const low=Catalog.publicState(state,5);
+  assert.equal(low.library[0].skills[0].unlocked,false);
+  assert.equal(low.library[0].skills[0].mastered,true);
+  assert.equal(low.library[0].skills[0].realmReady,false);
+  const intermediate=Catalog.publicState(state,28);
+  assert.deepEqual(intermediate.library[0].skills.map(s=>s.unlocked),[true,true,false]);
+  assert.deepEqual(Catalog.publicState(state,68).library[0].skills.map(s=>s.unlocked),[true,true,true]);
+  assert.equal(R.manualSkillFor({manualSkills:['sky-pierce'],trainingAccessScore:5},'sky-pierce'),null);
+  assert.equal(R.manualSkillFor({manualSkills:['sky-pierce'],trainingAccessScore:6},'sky-pierce')?.id,'sky-pierce');
+});
+test('spirit-beast realm rewards grow by trial stage, while the Lv. 5 and 10 EXP formula stays intact',()=>{
+  assert.deepEqual(Catalog.REALMS.map(r=>r.exp),[50,70,100,140,190,250,330,430,550]);
+  assert.deepEqual(Catalog.REALMS.map(r=>r.stage),[1,5,10,20,35,55,80,110,150]);
+  for(let i=0;i<Catalog.REALMS.length;i++){
+    const realm=Catalog.REALMS[i],upper=Catalog.REALMS[i+1];
+    assert.equal(Catalog.expForBeast(realm.stage),realm.exp);
+    assert.equal(Catalog.realmForStage(realm.stage).name,realm.name);
+    if(upper)assert.equal(Catalog.expForBeast(upper.stage-1),realm.exp);
+    if(upper)assert(upper.exp>realm.exp);
+  }
+  assert.equal(Catalog.totalExpForLevel(5),280);
+  assert.equal(Catalog.totalExpForLevel(10),1080);
+});
+test('server blocks early skill equipment even when manual XP is high',async()=>{
+  const db=database();
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  const user=db.records.get('users/u1'),manual=db.records.get(API.MANUALS+'/u1');
+  manual.books['sword-sky']={exp:1080};
+  user.stats.totalScore=5;
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-pierce']}),/境界未達/);
+  user.stats.totalScore=6;
+  assert.deepEqual((await API.equipManualSkills(db,'u1',{skillIds:['sky-pierce']})).equipped,['sky-pierce']);
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-cloud']}),/境界未達/);
+  user.stats.totalScore=28;
+  assert.deepEqual((await API.equipManualSkills(db,'u1',{skillIds:['sky-cloud']})).equipped,['sky-cloud']);
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['sky-sever']}),/境界未達/);
+  user.stats.totalScore=68;
+  assert.deepEqual((await API.equipManualSkills(db,'u1',{skillIds:['sky-sever']})).equipped,['sky-sever']);
+});
 test('cumulative kill receipts translate into XP, unlocking Lv.5 and Lv.10 without duplication',()=>{
   const raw={version:2,books:{'sword-wind':{exp:0}},equipped:['wind-slash']};
   const battle={manualKills:{u1:{'sword-wind':6}}};
@@ -125,6 +177,20 @@ test('cumulative kill receipts translate into XP, unlocking Lv.5 and Lv.10 witho
   assert(Catalog.unlocked(maxed.state,'wind-thousand'));
 });
 
+test('modern XP receipts aggregate different beast realms and reject double awards',()=>{
+  const state={version:2,books:{'sword-wind':{exp:0}},equipped:['wind-slash']};
+  const room={manualExp:{u1:{'sword-wind':50+70+140}}};
+  const first=API.applyManualKills(room,'u1',state);
+  assert.equal(first.state.books['sword-wind'].exp,260);
+  assert.equal(first.changed,true);
+  const second=API.applyManualKills(room,'u1',first.state);
+  assert.equal(second.changed,false);
+  assert.equal(second.state.books['sword-wind'].exp,260);
+  room.manualExp.u1['sword-wind']+=100;
+  const third=API.applyManualKills(room,'u1',second.state);
+  assert.equal(third.state.books['sword-wind'].exp,360);
+  assert.equal(Catalog.levelForExp(360),5);
+});
 test('ordinary or golden-core kills cannot grant manual mastery',()=>{
   const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
     players:[{uid:'u1',name:'u1',atk:200,maxHp:1000,manualSkills:['rock-fist']}],now});
