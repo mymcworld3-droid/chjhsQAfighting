@@ -85,3 +85,15 @@
  .manual-slot strong{font-size:13px}.manual-slot small{font-size:10px}
  .manual-slot button{padding:5px 8px}
 }
+
+/* Compact, optional beast-realm XP reference—no permanently expanded table. */
+.manual-xp-reference{margin:7px 3px 20px;border-top:1px solid #b7a57a39;
+ padding:10px 3px;color:#b4c9ba;font-size:12px}
+.manual-xp-reference summary{cursor:pointer;display:list-item;width:fit-content;
+ color:#dec69c;font-weight:700}
+.manual-xp-reference>div{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.manual-xp-reference>div>span{background:#20392a;border:1px solid #65887168;
+ border-radius:7px;padding:6px 10px;white-space:nowrap;font-size:12px}
+.manual-xp-reference b{color:#bce5ac;font-variant-numeric:tabular-nums}
+.manual-xp-reference p{color:#9bb09b;line-height:1.6;font-size:12px;margin-top:9px}
+.manual-technique .manual-lock{line-height:1.6;display:inline-block}
