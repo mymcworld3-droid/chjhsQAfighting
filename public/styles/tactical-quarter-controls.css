@@ -97,6 +97,49 @@
   border-color:rgba(68,199,122,.75);
   background:radial-gradient(circle at 19% 90%,#11291e 0%,#143c29 53%,#13261d 100%);
 }
+/* The left outer rim still measures stamina. The new second ring is the
+   directly tappable manual-skill bar; the central green quadrant stays quiz. */
+#tactical-combat.tc-quarter-layout .tc-left-technique-ring{display:contents}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique{
+  position:absolute;inset:0;z-index:4;
+  display:block;width:100%;height:100%;
+  min-height:0!important;min-width:0!important;
+  margin:0!important;padding:0!important;
+  background:#28513a!important;color:#e5f8dc!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;text-shadow:none;
+  cursor:pointer;touch-action:manipulation;
+  font-family:"Noto Serif TC","Songti TC",sans-serif!important;
+  transition:background-color .15s ease,filter .15s ease;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique[aria-pressed=true]{
+  background:#499e63!important;color:#fffde6!important;
+  filter:brightness(1.06);
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique:disabled{
+  opacity:.72!important;cursor:default;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique:hover:not(:disabled){
+  background:#3a8255!important;
+}
+#tactical-combat.tc-quarter-layout .tc-left-technique-label{
+  position:absolute;display:block;pointer-events:none;
+  width:clamp(34px,35%,96px);
+  transform:translate(-50%,-50%);
+  text-align:center;line-height:1.1;white-space:normal;
+  font-size:clamp(9px,1.07vw,15px);
+  overflow-wrap:anywhere;
+}
+#tactical-combat.tc-quarter-layout .tc-left-technique-label strong{
+  display:block;font-weight:800;line-height:1.08;
+}
+#tactical-combat.tc-quarter-layout .tc-left-technique-label small{
+  display:block;margin-top:3px;
+  font-size:.75em;line-height:1.06;white-space:nowrap;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique:focus-visible{
+  outline:3px solid #f7efba!important;outline-offset:-5px!important;
+}
 /* Ten thick curved green bar segments, fed directly by server stamina. */
 #tactical-combat.tc-quarter-layout .tc-energy-ring{
   position:absolute;z-index:2;
@@ -285,7 +328,7 @@
   background:#365a41!important;color:#f3f9de!important;
 }
 #tactical-combat.tc-quarter-layout .tc-detail-basic>span{
-  left:47%;top:16%;width:40%;
+  left:16%;top:34%;width:44%;
 }
 #tactical-combat.tc-quarter-layout .tc-detail-skill>span{
   left:1%;top:61%;width:40%;
@@ -427,31 +470,20 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
 html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg-red-600{background:#69372f!important;border-color:#e2ad9a!important}
 
 
-/* Optional techniques appear only when the player opens 功法 on the attack dial. */
-#tactical-combat.tc-quarter-layout .tc-detail-basic>span{left:44%;top:13%;width:42%}
-#tactical-combat.tc-quarter-layout .tc-detail-skill>span{left:23%;top:39%;width:42%}
-#tactical-combat.tc-quarter-layout .tc-detail-manual>span{left:1%;top:63%;width:42%}
-#tactical-combat.tc-quarter-layout .tc-manual-picker{
-  display:flex;flex-direction:column;gap:7px;position:absolute;z-index:11;
-  right:calc(var(--tc-dial) * .60);bottom:7px;
-  width:clamp(120px,18vw,216px);
-  padding:10px;background:#17271ef5;color:#f4e9d2;
-  border:1px solid #8fb58b;border-radius:11px;
-  box-shadow:0 4px 18px #080f0bc7;
+/* With all techniques on the left wheel, the right outer band is only
+   the attack target (or the moving player)—never a skill selector. */
+#tactical-combat.tc-quarter-layout .tc-detail-basic>span{left:16%;top:34%;width:44%}
+@media(orientation:portrait){
+  #tactical-combat.tc-quarter-layout .tc-left-technique-label{
+    width:clamp(32px,35%,76px);
+    font-size:clamp(9px,2.65vw,12px);
+  }
+  #tactical-combat.tc-quarter-layout .tc-left-technique-label small{font-size:.75em;margin-top:2px}
 }
-#tactical-combat.tc-quarter-layout .tc-manual-picker[hidden]{display:none!important}
-#tactical-combat.tc-quarter-layout .tc-manual-picker button{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
-  gap:4px;min-height:40px;padding:6px 9px;
-  border:1px solid #5a916d;border-radius:7px;
-  background:#294633;color:#f6e5c9;
-  font-weight:700;font-size:clamp(11px,1.15vw,14px);text-align:left;
-}
-#tactical-combat.tc-quarter-layout .tc-manual-picker button small{
-  font-size:10px;color:#a8dfb3;white-space:nowrap
-}
-#tactical-combat.tc-quarter-layout .tc-manual-picker button:focus-visible{
-  outline:2px solid #e2c785;outline-offset:2px
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique{
+    transition:none!important;
+  }
 }
 #tactical-combat .tc-manual-loot{
   margin:10px 0;padding:11px 13px;background:#20432b;
