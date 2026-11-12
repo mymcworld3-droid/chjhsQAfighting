@@ -10,7 +10,7 @@
   const EXP_PER_KILL=50,MAX_EXP=100000000;
   // Exactly the existing cultivation score cutoffs, with human-readable realm labels.
   const REALMS=Object.freeze([
-    {name:'煉氣',score:0,stage:1,exp:50},
+    {name:'煉氣',score:1,stage:1,exp:50},
     {name:'築基',score:6,stage:5,exp:70},
     {name:'金丹',score:28,stage:10,exp:100},
     {name:'元嬰',score:68,stage:20,exp:140},
@@ -22,7 +22,7 @@
   ].map(Object.freeze));
   const normalizedScore=value=>Number.isFinite(Number(value))?
     Math.max(0,Math.floor(Number(value))):0;
-  const realmForScore=score=>REALMS.findLast(realm=>normalizedScore(score)>=realm.score)||REALMS[0];
+  const realmForScore=score=>REALMS.findLast(realm=>normalizedScore(score)>=realm.score)||{name:'凡人',score:0};
   const realmForStage=stage=>REALMS.findLast(realm=>Math.max(1,Math.floor(Number(stage)||1))>=realm.stage)||REALMS[0];
   const expForBeast=stage=>realmForStage(stage).exp;
   const meetsRealm=(skill,score)=>normalizedScore(score)>=skill.realmRequired;
@@ -59,7 +59,7 @@
     id,name,school,description,skills:Object.freeze(skills.map((skill,index)=>
       Object.freeze({...skill,manualId:id,levelRequired:[1,5,10][index],
         realmRequired:school==='sword'&&id==='sword-sky'||school==='body'&&id==='body-dragon'
-          ?[6,28,68][index]:[0,6,28][index]})))
+          ?[6,28,68][index]:[1,6,28][index]})))
   });
   const BOOKS=Object.freeze([
     book('sword-wind','流風劍訣','sword','以靈巧身法引動劍氣。',[
