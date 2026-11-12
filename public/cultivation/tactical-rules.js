@@ -289,7 +289,7 @@
     if(target.hp<=0&&target.bot&&source&&!source.bot&&opts.manualId&&Manuals?.BY_BOOK?.[opts.manualId]){
       s.manualKills||={};s.manualKills[source.uid]||={};
       s.manualKills[source.uid][opts.manualId]=(s.manualKills[source.uid][opts.manualId]||0)+1;
-      log(s,source.name+'以功法擊殺 '+target.name+'，'+Manuals.BY_BOOK[opts.manualId].name+' 熟練度 +1',
+      log(s,source.name+'以功法擊殺 '+target.name+'，'+Manuals.BY_BOOK[opts.manualId].name+' 經驗 +'+Manuals.EXP_PER_KILL,
         'manual-mastery',{actor:source.uid,manualId:opts.manualId,skill:opts.skill});
     }
     if(target.counter&&alive(target)&&!opts.reflected){

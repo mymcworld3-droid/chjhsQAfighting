@@ -641,7 +641,7 @@ function accept(next,serial){
     sum+Math.max(0,Number(count||0)-Number(previousKills[bookId]||0)),0);
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
   state=next;if(!keepSelection)selection=null;
-  if(gained)notice('功法擊殺靈獸，熟練度 +'+gained);
+  if(gained)notice('功法熟練經驗 +'+(gained*Manuals.EXP_PER_KILL)+' EXP');
   if(next?.manualDrops?.[uid])window.dispatchEvent(new CustomEvent('xiuxian:manual-loot'));
   // Kick off real match-scoped question requests immediately on an eligible
   // battle state, even while the player is reading an encounter introduction.

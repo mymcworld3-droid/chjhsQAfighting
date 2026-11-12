@@ -5,11 +5,41 @@
   else root.QAManuals=api;
 })(globalThis,()=>{
   'use strict';
+  // Each successful manual killing blow earns XP for that scripture.
+  // Lv. 1 -> 2 costs 40 XP; each following level costs 20 XP more.
+  const EXP_PER_KILL=50,MAX_EXP=100000000;
+  const xpForNextLevel=level=>40+20*(Math.max(1,Math.floor(level))-1);
+  const totalExpForLevel=level=>{
+    const steps=Math.max(0,Math.floor(level)-1);
+    return 10*steps*(steps+3);
+  };
+  function levelForExp(raw){
+    const xp=Math.max(0,Math.min(MAX_EXP,Math.floor(Number(raw)||0)));
+    let level=Math.max(1,Math.floor((Math.sqrt(9+xp/2.5)-3)/2)+1);
+    // Protect exact level boundaries from floating-point rounding.
+    while(level>1&&totalExpForLevel(level)>xp)level--;
+    while(totalExpForLevel(level+1)<=xp)level++;
+    return level;
+  }
+  function mastery(raw){
+    const exp=Math.max(0,Math.min(MAX_EXP,Math.floor(Number(raw)||0)));
+    const level=levelForExp(exp),current=exp-totalExpForLevel(level),needed=xpForNextLevel(level);
+    return {level,exp,totalExp:exp,expInLevel:current,expToNext:needed,progress:Math.min(100,Math.floor(current/needed*100))};
+  }
+  // Old saves only tracked kills. Map their existing unlock thresholds to
+  // Lv. 5 / Lv. 10 so nobody loses an already-unlocked skill during migration.
+  function legacyKillsToExp(raw){
+    const kills=Math.max(0,Math.floor(Number(raw)||0));
+    const toFive=totalExpForLevel(5),toTen=totalExpForLevel(10);
+    if(kills<=3)return Math.floor(toFive*kills/3);
+    if(kills<=8)return toFive+Math.floor((toTen-toFive)*(kills-3)/5);
+    return Math.min(MAX_EXP,toTen+(kills-8)*EXP_PER_KILL);
+  }
   const technique=(id,name,cost,range,kind,power,description,extra={})=>
     Object.freeze({id,name,cost,range,kind,power,description,cooldown:2,...extra});
   const book=(id,name,school,description,skills)=>Object.freeze({
     id,name,school,description,skills:Object.freeze(skills.map((skill,index)=>
-      Object.freeze({...skill,manualId:id,killsRequired:[0,3,8][index]})))
+      Object.freeze({...skill,manualId:id,levelRequired:[1,5,10][index]})))
   });
   const BOOKS=Object.freeze([
     book('sword-wind','流風劍訣','sword','以靈巧身法引動劍氣。',[
@@ -35,32 +65,41 @@
   ]);
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
-  const publicSkill=(skill,kills)=>({...skill,unlocked:kills>=skill.killsRequired});
+  const publicSkill=(skill,level)=>({...skill,unlocked:level>=skill.levelRequired});
   function normalize(raw){
     const books={};
     for(const [id,record] of Object.entries(raw?.books||{})){
-      if(BY_BOOK[id])books[id]={kills:Math.max(0,Math.min(100000,Math.trunc(Number(record?.kills)||0)))};
+      if(!BY_BOOK[id])continue;
+      const exp=Object.prototype.hasOwnProperty.call(record||{},'exp')
+        ?Number(record.exp):legacyKillsToExp(record?.kills);
+      books[id]={exp:mastery(exp).exp};
     }
     const school=['sword','body'].includes(raw?.school)?raw.school:null;
     const equipped=[];
     for(const id of (Array.isArray(raw?.equipped)?raw.equipped:[])){
-      const skill=BY_SKILL[id],kills=books[skill?.manualId]?.kills||0;
-      if(skill&&books[skill.manualId]&&kills>=skill.killsRequired&&!equipped.includes(id)&&equipped.length<3)equipped.push(id);
+      const skill=BY_SKILL[id],owned=books[skill?.manualId];
+      if(skill&&owned&&levelForExp(owned.exp)>=skill.levelRequired
+        &&!equipped.includes(id)&&equipped.length<3)equipped.push(id);
     }
-    return {version:1,school,books,equipped,dropMisses:Math.max(0,Math.min(3,Math.trunc(Number(raw?.dropMisses)||0))),starterClaimed:raw?.starterClaimed===true};
+    return {version:2,school,books,equipped,
+      dropMisses:Math.max(0,Math.min(3,Math.trunc(Number(raw?.dropMisses)||0))),
+      starterClaimed:raw?.starterClaimed===true};
   }
   function unlocked(state,id){
     const s=normalize(state),skill=BY_SKILL[id];
-    return !!skill&&!!s.books[skill.manualId]&&s.books[skill.manualId].kills>=skill.killsRequired;
+    return !!skill&&!!s.books[skill.manualId]
+      &&levelForExp(s.books[skill.manualId].exp)>=skill.levelRequired;
   }
   function publicState(raw){
     const s=normalize(raw);
-    return {...s,library:BOOKS.map(book=>{
-      const own=s.books[book.id],kills=own?.kills||0;
-      return {id:book.id,name:book.name,school:book.school,description:book.description,owned:!!own,kills,
-        skills:book.skills.map(skill=>publicSkill(skill,kills))};
-    })};
+    // Do not expose undiscovered scriptures to the cultivation UI.
+    const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
+      const levelInfo=mastery(s.books[book.id].exp);
+      return {id:book.id,name:book.name,school:book.school,description:book.description,
+        owned:true,...levelInfo,skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level))};
+    });
+    return {...s,library};
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,normalize,unlocked,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,xpForNextLevel,totalExpForLevel,levelForExp,mastery,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
 });

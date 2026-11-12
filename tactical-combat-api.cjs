@@ -93,8 +93,9 @@ function rewardFor(s,a,user){
   if(s.actors.filter(p=>!p.bot).reduce((n,p)=>n+p.answered,0)<2)return null;
   return {gold:win?500:draw?250:200,cultivation:win?5+Growth.cultivation(user,'battle'):draw?2:0,win,draw};
 }
-// Kills are counted exclusively in Rules.damage when an equipped manual skill
-// deals the killing blow to a PvE creature. Persist the delta once per room.
+// Killing blows in Rules.damage award XP (not levels directly).
+// The room tracks cumulative awarded blows; manualApplied prevents retries
+// from awarding the same XP a second time.
 function applyManualKills(s,uid,raw){
   const next=Manuals.normalize(raw);
   const seen=s.manualKills?.[uid]||{},applied=s.manualApplied?.[uid]||{};
@@ -104,7 +105,8 @@ function applyManualKills(s,uid,raw){
     const current=Math.max(0,Math.trunc(Number(total)||0));
     const previous=Math.max(0,Math.trunc(Number(applied[id])||0));
     if(current<=previous)continue;
-    next.books[id].kills=Math.min(100000,next.books[id].kills+current-previous);
+    next.books[id].exp=Math.min(Manuals.MAX_EXP,
+      next.books[id].exp+(current-previous)*Manuals.EXP_PER_KILL);
     s.manualApplied||={};s.manualApplied[uid]||={};s.manualApplied[uid][id]=current;
     changed=true;
   }
@@ -117,7 +119,7 @@ async function saveManualKills(tx,db,s,uid){
   if(applied.changed)tx.set(ref,applied.state);
 }
 function rollManualDrop(s,uid,raw){
-  const state=raw?.version===1?raw:Manuals.normalize(raw);
+  const state=raw?.version===2?raw:Manuals.normalize(raw);
   const available=Manuals.BOOKS.filter(book=>!state.books[book.id]);
   if(!available.length)return {state,changed:false,drop:null};
   if(state.dropMisses<3&&crypto.randomInt(100)>=30){
@@ -126,7 +128,7 @@ function rollManualDrop(s,uid,raw){
   const sameSchool=available.filter(book=>book.school===state.school);
   const pool=sameSchool.length&&crypto.randomInt(100)<70?sameSchool:available;
   const picked=pool[crypto.randomInt(pool.length)];
-  state.books[picked.id]={kills:0};
+  state.books[picked.id]={exp:0};
   state.dropMisses=0;
   s.manualDrops||={};s.manualDrops[uid]={id:picked.id,name:picked.name};
   return {state,changed:true,drop:picked.id};
@@ -146,7 +148,7 @@ async function chooseSchool(db,uid,input){
     const next=Manuals.normalize(exists(record));next.school=school;
     if(!next.starterClaimed){
       const starter=Manuals.starterFor(school);
-      next.books[starter]||={kills:0};next.starterClaimed=true;
+      next.books[starter]||={exp:0};next.starterClaimed=true;
       if(!next.equipped.length)next.equipped.push(Manuals.BY_BOOK[starter].skills[0].id);
     }
     tx.set(ref,next);return Manuals.publicState(next);
