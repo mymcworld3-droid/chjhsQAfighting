@@ -8,12 +8,13 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
   if (!MODES.has(mode)) throw new Error('Unsupported fast quiz mode');
   const safe = (value, n=140) => String(value ?? '').slice(0,n);
   const quick = mode === 'raid-quick-simple';
+  const topicLimit = mode === 'tactical' ? 240 : 180;
   const previous = previousQuestions.slice(-10).map(value => safe(value,140));
   const previousForms = previousMeta.slice(-7).map(item => [safe(item.concept_id,45),safe(item.template_id,60),safe(item.question_form,35)]);
   const spec = {
     q: '完整題幹', correct: '唯一正解',
     wrong: ['確定錯誤一','確定錯誤二','確定錯誤三'],
-    exp: '精簡且答案一致的解析', subject: safe(subject,40), sub_topic: safe(topic,180),
+    exp: '精簡且答案一致的解析', subject: safe(subject,40), sub_topic: safe(topic,topicLimit),
     knowledge_points:[{subject:Knowledge.subject(subject),id:'清單中的 ID',name:'清單中的名稱'}],
     concept_id: '考點短ID', template_id: '解題骨架短ID', question_form: safe(targetForm,40),
     ...(generationTaskId ? {generation_task_id:safe(generationTaskId,100)} : {}),
@@ -25,9 +26,10 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     '你是台灣國教專業教師。只出一道高品質繁體中文單選題，回傳純 JSON。',
     ANSWER_AND_EXPLANATION_RULES,
     subjectReliabilityPrompt(subject),
-    '科目='+safe(subject,40)+'；程度='+safe(level,32)+'；指定範圍='+safe(topic,180)+'；難度='+
+    '科目='+safe(subject,40)+'；程度='+safe(level,32)+'；指定範圍='+safe(topic,topicLimit)+'；難度='+
       (quick?'easy':safe(difficulty,16))+'；段位='+Number(rank||0)+'；隨機種子='+safe(randomSeed,24),
     '保持指定學制與難度，禁止超綱或跨科；題目要清楚且有推理深度，勿冗長。',
+    mode === 'tactical' ? '此題用於問道試煉，必須嚴格考查已儲存的指定章節、分流及核心考點；不得用同科其他章節、同年級其他單元、不同數學版本或個人預設年級代替。' : '',
     '題型='+safe(targetForm,40)+'；認知層級='+(quick?1:quality.cognitive||2)+
       '；推理步數='+(quick?1:quality.steps||2),
     !quick && quality.instruction ? '深度要求：'+safe(quality.instruction,300) : '',
