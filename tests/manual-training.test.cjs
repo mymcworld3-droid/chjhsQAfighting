@@ -219,13 +219,18 @@ test('modern XP receipts aggregate different beast realms and reject double awar
   assert.equal(third.state.books['sword-wind'].exp,360);
   assert.equal(Catalog.levelForExp(360),5);
 });
-test('ordinary or golden-core kills cannot grant manual mastery',()=>{
+test('equipped manuals replace basic attack and golden-core commands are retired',()=>{
   const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
-    players:[{uid:'u1',name:'u1',atk:200,maxHp:1000,manualSkills:['rock-fist']}],now});
+    players:[{uid:'u1',name:'u1',atk:200,maxHp:1000,trainingAccessScore:1,
+      manualSkills:['rock-fist']}],now});
   s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10});
   s.actors=[s.actors[0],lowBeast('weak',2,3),lowBeast('far',6,6,900)];
-  const killed=R.apply(s,'u1',{type:'attack',x:2,y:3},now);
-  assert.equal(killed.manualKills,undefined);
+  assert.throws(()=>R.apply(s,'u1',{type:'attack',x:2,y:3},now),/普通攻擊已被替換/);
+  assert.throws(()=>R.apply(s,'u1',{type:'skill',x:2,y:3},now),/金丹技能已停用/);
+  assert.equal(s.manualExp,undefined);
+  const killed=R.apply(s,'u1',{type:'manual',skillId:'rock-fist',x:2,y:3},now);
+  assert.equal(killed.manualExp.u1['body-rock'],50);
+  assert.equal(killed.actors[0].stamina,8,'first manual skill costs 2');
 });
 
 test('trial clear awards a fresh manual with zero EXP, once, in the same transaction',async()=>{
@@ -235,7 +240,8 @@ test('trial clear awards a fresh manual with zero EXP, once, in the same transac
   const state=await API.start(db,'u1',{mode:'pve'},now),raw=db.records.get(API.ROOMS+'/'+state.id);
   raw.blocks=[];Object.assign(raw.actors[0],{x:1,y:3,stamina:10,correct:1});
   raw.actors=[raw.actors[0],lowBeast('last',2,3)];
-  const request={roomId:state.id,revision:state.revision,requestId:'manual-clear-0001',type:'attack',x:2,y:3};
+  const request={roomId:state.id,revision:state.revision,requestId:'manual-clear-0001',
+    type:'manual',skillId:'rock-fist',x:2,y:3};
   const complete=await API.command(db,'u1',request,now);
   assert.equal(complete.status,'finished');
   const drop=complete.manualDrops?.u1;
