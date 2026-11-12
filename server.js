@@ -518,6 +518,14 @@ async function generateQuiz(req, res) {
             const uid = await verifyMainIdentity(req), db = playerRepository.resolve().db;
             tacticalContext = {uid,db,...await tacticalCombat.prepareQuestion(db,uid,String(req.body?.roomId||''),Date.now(),req.body?.batchSlot===1?1:0)};
             if (tacticalContext.pending) return res.json({tacticalQuestion:tacticalContext.pending});
+            if (tacticalContext.bankSource) {
+                // The player selected 使用題庫: serve a real question from that
+                // authorized file/folder, not an unrelated AI-generated one.
+                const parsed=await trialTowerScope.bankQuestion(tacticalContext);
+                const question=await tacticalCombat.commitQuestion(
+                    tacticalContext.db,tacticalContext.uid,tacticalContext,parsed);
+                return res.json({tacticalQuestion:question,provider:'selected-bank'});
+            }
             subject=tacticalContext.subject;level=tacticalContext.level;rank=0;knowledgeMap=null;
             difficulty=tacticalContext.difficulty;specificTopic=tacticalContext.topic||'綜合測驗';topic=specificTopic;
             avoidQuestions=tacticalContext.history;avoidQuestionMeta=[];
@@ -1202,11 +1210,14 @@ app.post('/api/tactical/bank-warm',async(req,res)=>{
         if(!aiQuestionBank.enabled)return res.json({ok:true,enabled:false,queued:0});
         const snap=await playerRepository.resolve().db.collection('users').doc(uid).get();
         if(!snap.exists)return res.status(404).json({error:'玩家資料不存在'});
-        // No user-supplied subject/topic/answer is ever trusted.
-        const scope=trustedKnowledgeScope(snap.data()||{});
+        // Background stock uses the exact same saved subject/grade/unit policy
+        // as live tactical generation. Never use raid's lower-grade filtering.
+        const owner=snap.data()||{},scope=trialTowerScope.snapshot(owner);
+        if(scope.mode==='bank')
+            return res.json({ok:true,enabled:false,queued:0,reason:'selected-local-bank'});
         const offset=Math.max(1,Math.min(10000,Math.floor(Number(req.body?.offset)||1)));
         const targets=[offset,offset+1].map(index=>{
-            const choice=pickTrustedRaidKnowledge(scope,index);
+            const choice=trialTowerScope.pick(scope,owner,index-1);
             return {subject:choice.subject,level:choice.level,topic:choice.specificTopic||'綜合測驗',
                 difficulty:choice.difficulty};
         });
