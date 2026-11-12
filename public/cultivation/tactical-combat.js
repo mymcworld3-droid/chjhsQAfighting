@@ -221,6 +221,17 @@ function buildGame(){
   $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div></section>
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">攻擊 · 2</button><button type="button" data-action="skill">技能</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
+  if(state?.mode==='pvp'){
+    const tabs=$('.tc-action-tabs');
+    for(const id of myActor()?.manualSkills||[]){
+      const skill=R.manualSkillFor(myActor(),id);if(!skill)continue;
+      const button=document.createElement('button');
+      button.type='button';button.dataset.action='manual:'+id;
+      button.textContent=skill.name+' · '+skill.cost;
+      button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+skill.cost+' 體力');
+      tabs.append(button);
+    }
+  }
   if(state?.mode==='pve'){
     // Strict sketch: only the map, a bottom-left charging dial and a
     // bottom-right attack/move/end-turn dial are visible. Keep unused
@@ -499,7 +510,7 @@ function updateControls(){
   $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
   const quarter=root.classList.contains('tc-quarter-layout');
   root.querySelectorAll('[data-action]').forEach(b=>{
-    b.setAttribute('aria-pressed',String(b.dataset.action===action||(quarter&&b.dataset.action==='attack'&&action==='skill')));
+    b.setAttribute('aria-pressed',String(b.dataset.action===action||(action==='manual'&&b.dataset.action==='manual:'+selectedManualSkill)||(quarter&&b.dataset.action==='attack'&&['skill','manual'].includes(action))));
     b.disabled=!mine||locked;
   });
   if(quarter){
