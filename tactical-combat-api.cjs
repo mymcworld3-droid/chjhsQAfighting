@@ -480,7 +480,7 @@ async function answer(db,uid,input,now=Date.now()){
         :previousScore>=28?-1:0;
       patch['stats.totalScore']=Math.max(0,previousScore+cultivation);
       patch['stats.lastQuizAnswer']={
-        question:String(q.q).normalize('NFC').replace(/\\s+/g,' ').trim().slice(0,1500),
+        question:String(q.q).normalize('NFC').replace(/\s+/g,' ').trim().slice(0,1500),
         isCorrect:correct,scoreBefore:previousScore,scoreAfter:patch['stats.totalScore'],
         penalty:Math.max(0,previousScore-patch['stats.totalScore']),answeredAtMs:now
       };
