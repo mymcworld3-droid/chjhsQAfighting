@@ -280,7 +280,8 @@ app.get('/api/assets', (req, res) => {
 // ==========================================
 // API 4: 取得題庫檔案列表 (保持不變)
 // ==========================================
-require('./bank-catalog.cjs').registerBankApi(app, path.join(__dirname, 'public'));
+const tacticalSourceBankCatalog=require('./bank-catalog.cjs')
+    .registerBankApi(app, path.join(__dirname, 'public'));
 
 // ==========================================
 // 定義學科與子題型架構 (Knowledge Schema)
@@ -521,7 +522,23 @@ async function generateQuiz(req, res) {
             if (tacticalContext.bankSource) {
                 // The player selected 使用題庫: serve a real question from that
                 // authorized file/folder, not an unrelated AI-generated one.
-                const parsed=await trialTowerScope.bankQuestion(tacticalContext);
+                // Match normal 使用題庫 exactly: approved/ready questions only,
+                // respecting the selected JSON file or folder and avoiding
+                // pending-image or review-required entries.
+                const selected=tacticalSourceBankCatalog.load(tacticalContext.bankSource);
+                if(!selected.files.length)
+                    return res.status(404).json({error:'找不到所選題庫，請重新選擇範圍'});
+                if(!selected.questions.length)
+                    return res.status(409).json({error:'所選題庫尚無完成校對及補圖的可用題目'});
+                const matching=selected.questions.filter(
+                    q=>q.difficulty===tacticalContext.difficulty);
+                const available=matching.length?matching:selected.questions;
+                const fresh=available.filter(q=>!tacticalContext.history.some(
+                    old=>isTooSimilarQuestion(q.q,[old])));
+                const pool=fresh.length?fresh:available;
+                const parsed=pool[crypto.randomInt(pool.length)];
+                if(!tacticalContext.subject)
+                    tacticalContext.subject=String(parsed.subject||'題庫').slice(0,40);
                 const question=await tacticalCombat.commitQuestion(
                     tacticalContext.db,tacticalContext.uid,tacticalContext,parsed);
                 return res.json({tacticalQuestion:question,provider:'selected-bank'});
