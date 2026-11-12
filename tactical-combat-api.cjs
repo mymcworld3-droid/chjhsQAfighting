@@ -113,7 +113,7 @@ async function saveManualKills(tx,db,s,uid){
   if(applied.changed)tx.set(ref,applied.state);
 }
 function rollManualDrop(s,uid,raw){
-  const state=Manuals.normalize(raw);
+  const state=raw?.version===1?raw:Manuals.normalize(raw);
   const available=Manuals.BOOKS.filter(book=>!state.books[book.id]);
   if(!available.length)return {state,changed:false,drop:null};
   if(state.dropMisses<3&&crypto.randomInt(100)>=30){
