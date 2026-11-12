@@ -3805,6 +3805,14 @@ window.queueTacticalSoloCorrection = ({question,subject,topic,difficulty,adaptiv
     return queueCorrectionPractice({
         quiz,uid,scope:soloQuestionScope(),subject:quiz.learningSubject,
         knowledgePoint:point,originQuestion:origin,recoveryOrigin:origin
+    }).then(question => {
+        // Main's queue catches generator errors to keep normal solo flowing.
+        // Verify its actual durable queue before telling the tactical player
+        // that the correction was prepared successfully.
+        const present=soloQuestionCache.getQueue().some(item =>
+            item?.recoveryOrigin===origin&&item?.extendedPracticeKnowledgePoint===point);
+        if(!question&&!present)throw Error('訂正題暫時未能生成，請點選重試');
+        return question||present;
     });
 };
 
