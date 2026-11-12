@@ -42,7 +42,7 @@ test('three combat modes use a compact but strict full-question AI prompt', () =
 });
 
 test('tactical fast prompts preserve the complete selected curriculum unit and math track', () => {
-  const topic='高中二年級／第一學期／數學A：'+'排列組合、二項分布、條件機率、'.repeat(9);
+  const topic='高中二年級／第一學期／數學A：'+'排列組合、二項分布、條件機率、'.repeat(13);
   assert(topic.length>180&&topic.length<=240);
   const prompt=quickQuizPrompt({
     mode:'tactical',subject:'數學',level:'高中二年級',
