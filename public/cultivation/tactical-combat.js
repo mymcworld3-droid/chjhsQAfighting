@@ -852,6 +852,11 @@ function questionSheet(q,review=null,index=0){
       <div class="flex items-center gap-3 mb-3">
         <div class="text-2xl"><i class="fa-solid ${review.correct?'fa-circle-check text-green-400':'fa-circle-xmark text-red-400'}"></i></div>
         <h3 class="text-lg font-bold font-sci ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3>
+        ${state.mode==='pve'&&review.reward?`<div class="tc-solo-learning-reward">
+          <span>${review.reward.cultivation>=0?'+':''}${review.reward.cultivation} 修為</span>
+          ${review.correct?`<span>+${review.reward.gold} 靈石</span>`:''}
+          ${review.reward.learning?`<small>${esc(review.reward.learning)}</small>`:''}
+        </div>`:''}
       </div>
       <div class="bg-slate-950/50 p-4 rounded-lg text-sm text-gray-300 leading-relaxed border border-white/5 mb-4">
         <span class="text-cyan-400 font-bold block mb-1 text-xs uppercase tracking-wider"><i class="fa-solid fa-magnifying-glass"></i> 題解參悟</span>
