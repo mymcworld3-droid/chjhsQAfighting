@@ -460,7 +460,9 @@ function paint({preserveModal=false}={}){
 }
 function updateControls(){
   if(!$('[data-selection]')||!state)return;
-  const me=myActor(),mine=myAction(),sk=R.branchFor(me).skill,animating=renderer?.isAnimating,locked=busy||animating;
+  const me=myActor(),mine=myAction(),sk=R.branchFor(me).skill,
+    activeSkill=action==='manual'?R.manualSkillFor(me,selectedManualSkill):sk,
+    animating=renderer?.isAnimating,locked=busy||animating;
   const quizButton=$('[data-quiz]');
   quizButton.disabled=!canQuestion()||locked;
   if(root.classList.contains('tc-quarter-layout')){
@@ -483,11 +485,15 @@ function updateControls(){
     label=path&&path.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
     if(!path||path.length<2)error='此地格無法到達';else if(me.slow&&cost>2)error='緩速中，一次最多移動 2 格';else if(cost>me.stamina)error='體力不足';
   }else if(selection){
-    const chosen=action==='attack'?basic:sk;label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':chosen.name)+' · '+chosen.cost+' 體力';
-    try{R.validateSkill(state,me,chosen,selection);}catch(e){error=e.message;}
+    const chosen=action==='attack'?basic:activeSkill;
+    if(!chosen)error='尚未裝備此功法技能';
+    else {
+      label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':chosen.name)+' · '+chosen.cost+' 體力';
+      try{R.validateSkill(state,me,chosen,selection);}catch(e){error=e.message;}
+    }
   }
   const cooling=Math.max(0,(me.cooldowns[sk.id]||0)-me.turns);
-  const shown=action==='attack'?basic:sk;
+  const shown=action==='attack'?basic:activeSkill||sk;
   $('[data-skill-title]').textContent=action==='move'?'移動說明':`${shown.name} · ${shown.cost} 體力${action==='skill'&&cooling?' · 冷卻 '+cooling+' 回合':''}`;
   $('[data-skill]').innerHTML=action==='move'?'<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':`<p>${esc(shown.description)}</p>`;
   $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
@@ -501,6 +507,14 @@ function updateControls(){
     const player=$('[data-wheel-choice="player"]');
     const basicOption=$('[data-wheel-choice="attack"]');
     const skillOption=$('[data-wheel-choice="skill"]');
+    const manualOption=$('[data-wheel-choice="manual-menu"]');
+    const skills=(me.manualSkills||[]).map(id=>R.manualSkillFor(me,id)).filter(Boolean);
+    const picker=$('.tc-manual-picker');
+    if(picker){
+      picker.hidden=!manualPickerOpen||!attacking||!skills.length;
+      if(!picker.hidden)picker.innerHTML=skills.map(entry=>
+        '<button type="button" data-manual-pick="'+esc(entry.id)+'">'+esc(entry.name)+' <small>'+entry.cost+' 體力</small></button>').join('');
+    }
     const moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
     const basicCostLabel=basic.cost+' 體力',skillCostLabel=sk.cost+' 體力';
     if(player){
@@ -518,34 +532,39 @@ function updateControls(){
       wheelText(skillOption.querySelector('span'),sk.name,skillCostLabel);
       skillOption.setAttribute('aria-label','使用技能：'+sk.name+'，消耗 '+skillCostLabel);
     }
-    for(const option of [player,basicOption,skillOption]){
+    if(manualOption){
+      manualOption.hidden=!attacking;
+      manualOption.disabled=!mine||locked||!skills.length;
+      wheelText(manualOption.querySelector('span'),action==='manual'?shown.name:'功法',action==='manual'?shown.cost+' 體力':'選擇技能');
+    }
+    for(const option of [player,basicOption,skillOption,manualOption]){
       if(!option)continue;
-      option.disabled=!mine||locked;
-      option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?action:'player')));
+      option.disabled=option===manualOption?(!mine||locked||!skills.length):(!mine||locked);
+      option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?(action==='manual'?'manual-menu':action):'player')));
     }
     const ring=$('.tc-quarter-action');
-    const chosenName=attacking?(action==='skill'?sk.name:basic.name):'玩家';
-    const chosenCost=attacking?(action==='skill'?skillCostLabel:basicCostLabel):moveCostLabel;
+    const chosenName=attacking?(action==='manual'?shown.name:action==='skill'?sk.name:basic.name):'玩家';
+    const chosenCost=attacking?(action==='manual'?shown.cost+' 體力':action==='skill'?skillCostLabel:basicCostLabel):moveCostLabel;
     ring?.setAttribute('aria-label',attacking?'行動：攻擊；'+chosenName+'，消耗 '+chosenCost:'行動：移動；目標：玩家，'+chosenCost);
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
     wheelText(detailThumb,chosenName,chosenCost);
     detailThumb.title=chosenName+' · '+chosenCost;
     const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
-    const detailAngle=attacking?(action==='skill'?WHEEL_ANGLES.lower:WHEEL_ANGLES.upper):WHEEL_ANGLES.center;
+    const detailAngle=attacking?(action==='manual'?-165:action==='skill'?-135:-105):WHEEL_ANGLES.center;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
     wheelMarker(detailThumb,detailAngle,WHEEL_RADII.detail);
     // Fixed hit sectors stay large, while the moving slice gets a gap from
     // its neighbours. The outer lane has 1 player or 2 attack choices.
     const actionCount=ring.querySelectorAll('[data-wheel-action]').length;
-    const detailCount=[player,basicOption,skillOption].filter(b=>b&&!b.hidden).length;
+    const detailCount=[player,basicOption,skillOption,manualOption].filter(b=>b&&!b.hidden).length;
     wheelSliderShape($('.tc-wheel-slider-action'),actionCount);
     wheelSliderShape($('.tc-wheel-slider-detail'),detailCount);
     wheelSliderAngle($('.tc-wheel-slider-action'),actionAngle);
     wheelSliderAngle($('.tc-wheel-slider-detail'),detailAngle);
   }
   $('[data-range-legend]').textContent=(action==='move'?'灰格可走':'紅格射程')+' · 紅框預告';
-  const hint=action==='move'?'點選灰格移動':action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):sk.range===0?'按下確認施放技能':'點選紅格施放技能';
+  const hint=action==='move'?'點選灰格移動':action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):shown.range===0?'按下確認施放技能':'點選紅格施放技能';
   $('[data-selection]').textContent=selection?`${action==='attack'&&basic.kind==='ring'?'震擊周圍一圈 · '+R.skillCells(state,me,basic,selection).length+' 格':action==='attack'&&directional&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,basic,selection).length+' 格':t?`${t.name} · 生命 ${t.hp}/${t.maxHp}`:`位置 ${selection.x+1}, ${selection.y+1}`}${error?' · '+error:''}`:mine?hint:'等待對手行動';
   if(animating)$('[data-selection]').textContent=renderer.currentAction;
 }
@@ -584,6 +603,7 @@ async function acknowledgeIntro(){
 }
 function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
+  const drop=state.manualDrops?.[uid];
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
     showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'本關妖獸已盡，前方還有新的地勢與敵人。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-exit>返回宗門</button>`);return;
