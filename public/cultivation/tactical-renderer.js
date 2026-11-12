@@ -3,7 +3,7 @@ import './tactical-rules.js';
 import './tactical-animation.js';
 import './tactical-camera.js';
 const R=globalThis.QATactical;
-const attackSkill=(actor,mode)=>mode==='attack'?R.basicFor(actor):mode.startsWith('manual:')?R.manualSkillFor(actor,mode.slice(7)):R.branchFor(actor).skill;
+const attackSkill=(actor,mode)=>mode==='attack'?R.basicFor(actor):mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.branchFor(actor).skill;
 const A=globalThis.QATacticalAnimation;
 const Camera=globalThis.QATacticalCamera;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
