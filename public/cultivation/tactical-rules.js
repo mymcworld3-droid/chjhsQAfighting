@@ -18,7 +18,7 @@
     ]),
     ocean:core('大海無垠丹','#72cbd6',[
       {id:'surge',name:'逐浪',skill:skill('surge','千尺潮湧',4,4,'line',1.45,'直線攻擊至四格，將命中者推開兩格。',{push:2})},
-      {id:'tide',name:'滄海',skill:skill('tide','滄海困陣',4,3,'area',1.1,'攻擊目標及相鄰格；命中者下次移動每格多耗 1 體力。',{slow:true,radius:1})}
+      {id:'tide',name:'滄海',skill:skill('tide','滄海困陣',4,3,'area',1.1,'攻擊目標及相鄰格；命中者下次單次移動最多兩格。',{slow:true,radius:1})}
     ]),
     taichu:core('太初回元丹','#9fdb9a',[
       {id:'renew',name:'生息',skill:skill('renew','太初生息',4,0,'restore',.32,'回復 32% 生命，需等待兩次自身回合才能再用。')},
@@ -81,9 +81,9 @@
     monster('靈狼',1,'撲咬',{shape:'point',range:1},'追獵',{kind:'chase',steps:2},'鎖定相鄰的一格，下回合撲咬該紅框。','沿通路追近，每回合最多走兩格。','在結束回合前離開紅框，可避開撲咬。'),
     monster('玄甲山豬',4,'直線衝撞',{shape:'charge',range:3,power:1.15},'對準衝線',{kind:'align',steps:1},'沿上下左右一個方向衝撞三格；紅框整條路徑都危險，遇障礙或角色停止。','每回合走一格，尋找能對準你的直線。','側移離開整條紅框，不要只沿衝撞方向後退。'),
     monster('竹林靈狼',3,'側身爪掃',{shape:'arc',range:1},'繞側疾走',{kind:'flank',steps:3},'掃擊正前與兩側斜前，共三格。','優先繞向側面，每回合最多走三格。','退到爪掃背面，或離開整排紅框。'),
-    monster('青竹蛇',5,'穿竹毒牙',{shape:'line',range:2,slow:true},'交錯蛇行',{kind:'weave',steps:2},'直線刺穿兩格；命中後，下次移動每格消耗兩點體力。','交替優先橫向與縱向繞行，每回合最多兩格。','往側面移開毒牙直線，命中後先留足移動體力。'),
+    monster('青竹蛇',5,'穿竹毒牙',{shape:'line',range:2,slow:true},'交錯蛇行',{kind:'weave',steps:2},'直線刺穿兩格；命中後，下次單次移動最多兩格。','交替優先橫向與縱向繞行，每回合最多兩格。','往側面移開毒牙直線，命中後注意單次移動距離受限。'),
     monster('山魈',9,'躍擊',{shape:'pounce',range:3,power:1.1},'越障跳躍',{kind:'leap',steps:2},'鎖定三格內的一個落點；下回合躍到附近，砸擊原先標記的一格。','可跳過中間障礙，落在兩格內的空地。','離開原本的紅框即可，躍擊不會追蹤你移動後的位置。'),
-    monster('妖藤',7,'纏根爆發',{shape:'blast',range:3,radius:1,slow:true},'盤根',{kind:'rooted',steps:0},'鎖定落點與四個相鄰格，形成五格十字；命中會使下次移動耗體力加倍。','固定原地，不會追趕。','一次移出整個十字，或利用射程外的位置整備。'),
+    monster('妖藤',7,'纏根爆發',{shape:'blast',range:3,radius:1,slow:true},'盤根',{kind:'rooted',steps:0},'鎖定落點與四個相鄰格，形成五格十字；命中後下次單次移動最多兩格。','固定原地，不會追趕。','一次移出整個十字，或利用射程外的位置整備。'),
     monster('沙蠍',6,'尾針射擊',{shape:'shot',range:3},'保持距離',{kind:'kite',steps:1,minDistance:2,ideal:3},'鎖定視線內三格的一格射出尾針。','每回合走一格；過近時會後退，優先維持遠射距離。','貼近可迫使牠重新拉開距離；射擊前先離開標記格。'),
     monster('荒漠蜥蜴',8,'扇形吐息',{shape:'cone',range:2},'游移',{kind:'strafe',steps:2,ideal:2},'朝前方吐息兩層：第一層一格、第二層三格。','每回合最多兩格，尋找能用吐息罩住你的角度。','向左右離開扇形，比沿吐息方向後退更安全。'),
     monster('巖甲獸',2,'震地',{shape:'cross',range:1,power:1.1},'重步',{kind:'heavy',steps:1},'同時震擊周身上下左右四格。','緩慢接近，每回合只走一格。','退到兩格外，別站在任一相鄰紅框。'),
@@ -91,9 +91,9 @@
     monster('赤焰獸',18,'烈焰吐息',{shape:'cone',range:3,power:1.1},'疾進',{kind:'rush',steps:3},'向前方噴出三層扇形烈焰，最遠一層寬五格。','沿一個方向快速接近，最多三格；轉彎時停下。','靠近扇形側緣脫離，不要一路往最寬的外圈退。'),
     monster('熔岩蜥蜴',19,'熔岩光束',{shape:'line',range:4,power:1.1},'側步瞄準',{kind:'sidestep',steps:1,ideal:4},'朝一條直線貫穿四格，遇障礙停止。','每回合側移一格，優先尋找長距離直線。','移到相鄰的另一行或列，或利用石障截斷光束。'),
     monster('霜羽鷹',12,'俯衝翼斬',{shape:'dive',range:4,sight:false},'振翅越障',{kind:'fly',steps:3,minDistance:2,ideal:3},'鎖定落點及其左右兩格，俯衝斬擊整排三格；障礙無法遮住俯衝。','飛越中間障礙，最多移到三格內的空地。','往紅框排的前方或後方移開，別只沿紅框橫移。'),
-    monster('雪狼',11,'霜牙',{shape:'point',range:1,slow:true},'踏雪奔行',{kind:'chase',steps:3},'咬擊相鄰一格；命中後，下次移動每格消耗兩點體力。','每回合最多追近三格。','看到霜牙紅框就先閃開，避免緩速後逃不出下一招。'),
+    monster('雪狼',11,'霜牙',{shape:'point',range:1,slow:true},'踏雪奔行',{kind:'chase',steps:3},'咬擊相鄰一格；命中後，下次單次移動最多兩格。','每回合最多追近三格。','看到霜牙紅框就先閃開，避免緩速後逃不出下一招。'),
     monster('毒蟾',13,'落毒環',{shape:'ring',range:4,sight:false,slow:true},'蛙躍',{kind:'hop',steps:2},'落毒形成八格方環；紅框有毒，環中央沒有紅框的一格安全。','可越過中間障礙，跳到兩格內的空地。','離開毒環，或移入中央安全格；障礙擋不住落毒。'),
-    monster('澤蛇',14,'三岔毒刺',{shape:'fork',range:2,slow:true},'疾速蛇行',{kind:'weave',steps:3},'朝正前、左斜前與右斜前各刺出兩格；命中使下次移動耗體力加倍。','交替優先橫向與縱向，每回合最多走三格。','利用三條紅線之間的空格，或退到牠的身後。'),
+    monster('澤蛇',14,'三岔毒刺',{shape:'fork',range:2,slow:true},'疾速蛇行',{kind:'weave',steps:3},'朝正前、左斜前與右斜前各刺出兩格；命中後下次單次移動最多兩格。','交替優先橫向與縱向，每回合最多走三格。','利用三條紅線之間的空格，或退到牠的身後。'),
     monster('潮汐蟹',15,'雙鉗橫掃',{shape:'sides',range:2,push:1},'橫行',{kind:'sideways',steps:2},'同時橫掃左右各兩格，命中會將你推開一格。','橫向最多走兩格；縱向調位每回合只走一格。','從上方或下方接近，避開牠所在的橫排。'),
     monster('海岸靈龜',16,'外圈震波',{shape:'shell',range:2,power:1.1},'退守',{kind:'kite',steps:1,minDistance:2,ideal:2},'攻擊周身第二圈方環；貼身第一圈和更遠處都不在紅框內。','每回合走一格，過近時退後，維持外圈距離。','可以貼身進內圈，也可以退出最外圈。'),
     monster('古陣守衛',10,'十字鎮壓／落石',{shape:'guardian',range:3,power:1.15},'鎮守調位',{kind:'sentinel',steps:1},'交替使用四向三格十字，以及鎖定落點的五格落石；每次以當前紅框為準。','每回合調位一格，尋找鎮壓軸線。','先確認這回合是十字還是落石，再移出全部紅框。'),
@@ -162,9 +162,11 @@
   }
   function moveCells(s,a){
     if(!a||!alive(a)||a.actions>=LIMITS.actions)return [];
-    const step=1+(a.slow||0),queue=[{x:a.x,y:a.y,cost:0}],seen=new Set([key(a)]),cells=[];
+    // One traversed cell always costs one stamina; slow caps the next move at 2 cells.
+    const limit=(a.slow||0)>0?Math.min(a.stamina,2):a.stamina;
+    const queue=[{x:a.x,y:a.y,cost:0}],seen=new Set([key(a)]),cells=[];
     for(let i=0;i<queue.length;i++){
-      const p=queue[i],cost=p.cost+step;if(cost>a.stamina)continue;
+      const p=queue[i],cost=p.cost+1;if(cost>limit)continue;
       for(const n of neighbours(s,p))if(!seen.has(key(n))&&!at(s,n)){
         const cell={...n,cost};seen.add(key(n));cells.push(cell);queue.push(cell);
       }
@@ -545,8 +547,10 @@
     if(a.actions>=LIMITS.actions&&command.type!=='end')fail('本回合行動已達上限，請結束回合');
     const p={x:command.x,y:command.y};
     if(command.type==='move'){
-      const route=path(s,a,p,a.uid),cost=(route?.length-1)*(1+(a.slow||0));
-      if(!route||route.length<2)fail('此地格無法到達');if(cost>a.stamina)fail('體力不足以走到這裡');
+      const route=path(s,a,p,a.uid),cost=route?route.length-1:0;
+      if(!route||route.length<2)fail('此地格無法到達');
+      if(a.slow&&cost>2)fail('緩速中，本次最多移動 2 格');
+      if(cost>a.stamina)fail('體力不足以走到這裡');
       a.stamina-=cost;a.x=p.x;a.y=p.y;a.slow=0;
       log(s,a.name+'移動 '+(route.length-1)+' 格，消耗 '+cost+' 體力','move',{actor:a.uid,path:route,animation:{kind:'move',style:'walk',changes:[appearance(a)]}});
     }else if(command.type==='attack'||command.type==='skill'){
