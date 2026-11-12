@@ -97,7 +97,7 @@ test('only equipped manual killing blows grant EXP, once per idempotent request'
   assert.equal(first.manualExp.u1['sword-wind'],150);
   assert.equal(bookRecord(db).books['sword-wind'].exp,150);
   assert.equal(Catalog.mastery(150).level,3);
-  assert.equal(first.actors[0].stamina,7);
+  assert.equal(first.actors[0].stamina,8,'first manual technique costs two stamina');
   const again=await API.command(db,'u1',request,now);
   assert.equal(again.manualExp.u1['sword-wind'],150);
   assert.equal(bookRecord(db).books['sword-wind'].exp,150);
