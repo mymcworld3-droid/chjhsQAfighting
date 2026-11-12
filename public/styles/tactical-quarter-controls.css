@@ -425,3 +425,35 @@
 #tactical-combat.tc-quarter-layout .tc-modal .tc-options>button{color:#eee8d5!important}
 html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg-green-600{background:#285a40!important;border-color:#a8d1a4!important}
 html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg-red-600{background:#69372f!important;border-color:#e2ad9a!important}
+
+
+/* Optional techniques appear only when the player opens 功法 on the attack dial. */
+#tactical-combat.tc-quarter-layout .tc-detail-basic>span{left:44%;top:13%;width:42%}
+#tactical-combat.tc-quarter-layout .tc-detail-skill>span{left:23%;top:39%;width:42%}
+#tactical-combat.tc-quarter-layout .tc-detail-manual>span{left:1%;top:63%;width:42%}
+#tactical-combat.tc-quarter-layout .tc-manual-picker{
+  display:flex;flex-direction:column;gap:7px;position:absolute;z-index:11;
+  right:calc(var(--tc-dial) * .60);bottom:7px;
+  width:clamp(120px,18vw,216px);
+  padding:10px;background:#17271ef5;color:#f4e9d2;
+  border:1px solid #8fb58b;border-radius:11px;
+  box-shadow:0 4px 18px #080f0bc7;
+}
+#tactical-combat.tc-quarter-layout .tc-manual-picker[hidden]{display:none!important}
+#tactical-combat.tc-quarter-layout .tc-manual-picker button{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  gap:4px;min-height:40px;padding:6px 9px;
+  border:1px solid #5a916d;border-radius:7px;
+  background:#294633;color:#f6e5c9;
+  font-weight:700;font-size:clamp(11px,1.15vw,14px);text-align:left;
+}
+#tactical-combat.tc-quarter-layout .tc-manual-picker button small{
+  font-size:10px;color:#a8dfb3;white-space:nowrap
+}
+#tactical-combat.tc-quarter-layout .tc-manual-picker button:focus-visible{
+  outline:2px solid #e2c785;outline-offset:2px
+}
+#tactical-combat .tc-manual-loot{
+  margin:10px 0;padding:11px 13px;background:#20432b;
+  border:1px solid #d9be7a;border-radius:9px;color:#f5dda2;
+}
