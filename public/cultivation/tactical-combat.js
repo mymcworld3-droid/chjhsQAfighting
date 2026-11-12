@@ -30,7 +30,11 @@ const myAction=()=>state?.status==='active'&&state.turnUid===uid&&(!state.quizRo
 function canQuestion(){try{R.canAnswer(state,uid,Date.now()+clockOffset);return !!state.quizRound||myActor().stamina<10||!!state.question||!!state.questionFollowup;}catch(_){return false;}}
 
 async function api(path,body,signal){
-  const response=await authenticatedMainFetch(path,{...(body?{method:'POST',body:JSON.stringify(body)}:{method:'GET'}),signal:signal?AbortSignal.any([signal,AbortSignal.timeout(65000)]):AbortSignal.timeout(65000)});
+  // Same full solo prompt/adaptive analysis can need more time than the old
+  // short combat prompt. Fetch starts before charge, so keep its own deadline
+  // without unnecessarily interrupting the player at 65 seconds.
+  const maxMs=path==='/api/generate-quiz'?120000:65000;
+  const response=await authenticatedMainFetch(path,{...(body?{method:'POST',body:JSON.stringify(body)}:{method:'GET'}),signal:signal?AbortSignal.any([signal,AbortSignal.timeout(maxMs)]):AbortSignal.timeout(maxMs)});
   const data=await response.json().catch(()=>({}));
   if(!response.ok||data.error)throw Object.assign(Error(data.error||'戰場連線暫時中斷'),{status:response.status});
   return data;
