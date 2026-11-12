@@ -639,7 +639,15 @@ async function execute(){if(selection)await send({type:action,x:selection.x,y:se
 function tacticalPreloadKey(){
   const me=myActor();
   if(!state||!me)return '';
-  return [epoch,uid,state.id,state.turn,state.quizRound||0,me.questions,me.answered].join(':');
+  // Changing the practice selection invalidates even an already preloaded
+  // question. The backend independently checks the saved server-side scope.
+  const user=localUser(),settings=user.gameSettings||{};
+  const selected=JSON.stringify([
+    settings.sourceMode||'random',settings.source||'',
+    settings.sourceMode==='focused'?settings.focusedUnits||[]:[],
+    user.profile?.educationLevel||''
+  ]);
+  return [epoch,uid,state.id,state.turn,state.quizRound||0,me.questions,me.answered,selected].join(':');
 }
 function preloadTacticalQuestions(){
   if(!opened||!state||state.status!=='active'||!canQuestion())return null;
@@ -653,10 +661,11 @@ function preloadTacticalQuestions(){
     firstPromise:null,secondPromise:null};
   preloadedTacticalQuestions=job;
   const launch=(slot)=>{
-    const prior=slot===0?state.question:state.questionFollowup;
-    return Promise.resolve(prior||api('/api/generate-quiz',{
+    // Always confirm the question against the currently SAVED scope, even if
+    // a room snapshot has an old pending question from a previous selection.
+    return api('/api/generate-quiz',{
       quizMode:'tactical',roomId,batchSlot:slot
-    }).then(result=>result.tacticalQuestion)).then(q=>{
+    }).then(result=>result.tacticalQuestion).then(q=>{
       if(preloadedTacticalQuestions===job&&valid(e,account)&&state?.id===roomId&&q?.id){
         if(slot===0)job.first=q;
         else job.second=q;
@@ -694,8 +703,9 @@ function fetchPairFollowup(e,account,roomId,generation){
       if(!pairIsCurrent(e,account,roomId,generation))return null;
       const slot=pairReviews.length>0?0:1;
       try{
-        const item=(slot===1?state.questionFollowup:state.question)
-          ||(await api('/api/generate-quiz',{quizMode:'tactical',roomId,batchSlot:slot})).tacticalQuestion;
+        const item=(await api('/api/generate-quiz',{
+          quizMode:'tactical',roomId,batchSlot:slot
+        })).tacticalQuestion;
         if(!pairIsCurrent(e,account,roomId,generation))return null;
         if(!item?.id)throw Error('下一題尚未準備完成');
         // An answer response may have promoted a committed follow-up first.
@@ -722,8 +732,8 @@ async function question(){
   const ready=preloadedTacticalQuestions?.key===tacticalPreloadKey()
     ?preloadedTacticalQuestions:preloadTacticalQuestions();
   const generation=++pairGeneration;
-  const existingFirst=state.question||ready?.first;
-  const existingSecond=state.questionFollowup||ready?.second;
+  const existingFirst=ready?.first;
+  const existingSecond=ready?.second;
   pairQuestions=Array(remaining).fill(null);
   pairChoices=Array(remaining).fill(-1);
   pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';
