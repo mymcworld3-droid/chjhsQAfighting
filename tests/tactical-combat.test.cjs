@@ -161,11 +161,79 @@ test('server hides pending answers, rejects out-of-turn generation and credits r
   const request={roomId:s.id,questionId:q.id,choice:answerIndex};
   const [a,b]=await Promise.all([api.answer(db,'u1',request,fixed+1),api.answer(db,'u1',request,fixed+1)]);
   assert.equal(a.actors[0].stamina,6);assert.equal(b.actors[0].stamina,6);
-  assert.equal(db.records.get('users/u1').stats.totalAnswered,1);assert.equal(db.records.get('users/u1').stats.totalScore,31);
+  assert.equal(db.records.get('users/u1').stats.totalAnswered,1);assert.equal(db.records.get('users/u1').stats.totalScore,32);
   assert.equal(a.progress.stats.gold,30);assert.equal(b.progress.stats.gold,30);
   assert.equal([...db.records.keys()].filter(k=>k.startsWith('exam_logs/')).length,1);
   await assert.rejects(api.prepareQuestion(db,'u2',s.id,fixed),/參戰/);
   assert.equal((await api.state(db,'u1',fixed)).question,null);
+});
+test('tactical battle answers persist the very same solo adaptive footprint, reasoning metadata and reward rules',async()=>{
+  const db=database(),user=db.records.get('users/u1');
+  user.gameSettings={sourceMode:'focused',focusedUnits:[
+    {path:'數學/高中二年級/第一學期/數學A',detail:'二項分布'}
+  ]};
+  user.profile.weakSubjects='數學';
+  const s=await api.start(db,'u1',{mode:'pve'},fixed);
+  const expected=await api.prepareQuestion(db,'u1',s.id,fixed);
+  const q=await api.commitQuestion(db,'u1',expected,{
+    q:'袋中共有五個球，如何計算抽到指定顏色的機率？',
+    correct:'以符合條件情形數除以全部等可能情形數',
+    wrong:['只計算總球數','只看袋子顏色','依抽取順序直接相加'],
+    exp:'在每一結果等可能時，機率等於符合條件情形數除以全部可能結果數。',
+    subject:'數學',sub_topic:'二項分布',
+    concept_id:'probability',template_id:'ratio-probability',
+    question_form:'direct-application',cognitive_level:2,reasoning_steps:1,
+    knowledge_points:[{subject:'數學',id:'math-7',name:'機率與統計'}],
+    adaptive:{questionId:'3a7e51d1-6a72-4ca5-ae8d-29d1a06f4b60',
+      scopeId:'0123456789abcdef01234567',conceptId:'c_0123456789abcdef',
+      facetId:'f_0123456789abcdef',difficulty:'hard',role:'diagnostic',
+      scope:{path:'數學/高中二年級/第一學期/數學A',detail:'二項分布'}}
+  },fixed);
+  assert.equal(q.meta.question_form,'direct-application');
+  assert.equal(q.learningDifficulty,'hard');
+  assert.equal(q.adaptive.role,'diagnostic');
+  assert.equal('answerIndex'in q,false);
+  const correctIndex=db.records.get(api.ROOMS+'/'+s.id).pending.u1.answerIndex;
+  const result=await api.answer(db,'u1',{
+    roomId:s.id,questionId:q.id,choice:correctIndex,help:2,timeTaken:18.5
+  },fixed+1000);
+  const stats=db.records.get('users/u1').stats;
+  assert.equal(stats.totalAnswered,1);
+  assert.equal(stats.totalCorrect,1);
+  assert.equal(stats.totalScore,34,'main base +2, hard +1, weak subject +1');
+  assert.equal(stats.gold,50,'realm 30, hard 10, weak subject 10');
+  assert.equal(stats.soloLearningV1.version,1);
+  assert.equal(stats.knowledgePointMapV1.數學['math-7'].total,1);
+  assert.equal(stats.knowledgeMap.數學['二項分布'].correct,1);
+  assert.equal(stats.adaptiveLearningV1.scopes['0123456789abcdef01234567'].answered,1);
+  const facet=stats.adaptiveLearningV1.scopes['0123456789abcdef01234567'].facets['f_0123456789abcdef'];
+  assert.equal(facet.n,1);assert.equal(facet.h,1);assert.equal(facet.u,0);
+  assert.equal(result.review.reward.cultivation,4);
+  const logs=[...db.records].filter(([k])=>k.startsWith('exam_logs/'));
+  assert.equal(logs.length,1);
+  const log=logs[0][1];
+  assert.equal(log.questionForm,'direct-application');
+  assert.equal(log.conceptId,'probability');
+  assert.equal(log.assistanceLevel,2);
+  assert.equal(log.timeTaken,18.5);
+  assert.equal(log.knowledgePointId,'math-7');
+  await api.answer(db,'u1',{roomId:s.id,questionId:q.id,choice:correctIndex,help:0},fixed+1000);
+  assert.equal(db.records.get('users/u1').stats.adaptiveLearningV1.scopes['0123456789abcdef01234567'].answered,1,'replay must not duplicate footprint');
+});
+test('tactical wrong answer uses main solo mistake ledger and records the last penalized answer',async()=>{
+  const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed);
+  const scope=await api.prepareQuestion(db,'u1',s.id,fixed);
+  const q=await api.commitQuestion(db,'u1',scope,{
+    q:'下列何者等於 2+3？',correct:'5',
+    wrong:['4','6','8'],exp:'二加三等於五。',subject:'數學'
+  },fixed);
+  const answer=db.records.get(api.ROOMS+'/'+s.id).pending.u1.answerIndex;
+  await api.answer(db,'u1',{roomId:s.id,questionId:q.id,choice:(answer+1)%4},fixed+1000);
+  const stats=db.records.get('users/u1').stats;
+  assert.equal(stats.totalScore,29);
+  assert.equal(stats.soloLearningV1.mistakes[require('../public/cultivation/solo-learning-rules.js').key(q.q)].recovered,false);
+  assert.equal(stats.lastQuizAnswer.penalty,1);
+  assert.equal(stats.currentStreak,0);
 });
 test('parallel question API slots can commit out of order without leaking answers',async()=>{
   const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed);
