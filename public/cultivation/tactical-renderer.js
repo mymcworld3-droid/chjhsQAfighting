@@ -3,7 +3,7 @@ import './tactical-rules.js';
 import './tactical-animation.js';
 import './tactical-camera.js';
 const R=globalThis.QATactical;
-const attackSkill=(actor,mode)=>mode==='attack'?R.basicFor(actor):mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.branchFor(actor).skill;
+const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
 const Camera=globalThis.QATacticalCamera;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
@@ -273,7 +273,7 @@ export class TacticalRenderer{
       const alpha=reduced ? .4 : .18+.34*(.5+.5*Math.sin(now*2*Math.PI/1400));
       for(const p of this.range)fill(p,`rgba(128,128,128,${alpha})`,'#dadde18c');
     }
-    if(myTurn&&(this.mode==='attack'||this.mode==='skill'||this.mode.startsWith('manual:'))){
+    if(myTurn&&(this.mode==='attack'||this.mode.startsWith('manual:'))){
       const sk=attackSkill(mine,this.mode);
       for(const p of this.range)fill(p,'#e445454d','#ed6a6a99');
       if(this.selection&&(this.range.some(p=>R.key(p)===R.key(this.selection))||sk.kind==='ring'&&R.key(this.selection)===R.key(mine)))for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
