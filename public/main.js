@@ -116,7 +116,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261112-manual-startup-fix-v2';
+const XIUXIAN_FEATURE_BUILD = '20261112-manual-xp-levels-v3';
 const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
