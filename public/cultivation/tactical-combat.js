@@ -188,7 +188,12 @@ function wheelSliderAngle(slider,angle){
 function selectWheel(value){
   if(!state||busy||renderer?.isAnimating||!myAction())return;
   if(value==='attack-ring')value=attackChoice;
-  if(value==='manual-menu'){manualPickerOpen=!manualPickerOpen;updateControls();return;}
+  if(value==='manual-menu'){
+    if(!(myActor()?.manualSkills||[]).length){notice('請先到修煉頁裝備功法技能');return;}
+    if(action==='move'){action='attack';attackChoice='attack';selection=null;}
+    manualPickerOpen=!manualPickerOpen;
+    updateControls();renderer?.update(state,uid,battlefieldMode(),selection);return;
+  }
   const previous=action;
   if(value==='player'){
     // Only the current player can be moved. Choosing that target does not
