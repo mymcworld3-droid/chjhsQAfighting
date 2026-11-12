@@ -130,7 +130,27 @@ async function mutate(url,body){
   finally{busy=false;root?.querySelectorAll('button').forEach(button=>button.disabled=
     button.hasAttribute('data-manual-equip')&&(current?.equipped.includes(button.dataset.manualEquip)||current?.equipped.length>=3));}
 }
+function ensureNav(){
+  const parent=document.getElementById('nav-grid');
+  if(!parent)return;
+  let nav=document.getElementById('nav-training');
+  if(!nav){
+    nav=document.createElement('button');
+    nav.id='nav-training';nav.type='button';nav.dataset.target='page-training';
+    nav.className='nav-btn training-nav-btn group flex-1 flex flex-col items-center justify-center h-full transition-all';
+    nav.innerHTML='<div class="relative p-1 training-nav-orb"><i class="fa-solid fa-book-open text-lg"></i></div><span class="text-[10px] mt-1">修煉</span>';
+    const home=parent.querySelector('[data-target="page-home"]');
+    if(home)home.insertAdjacentElement('afterend',nav);else parent.appendChild(nav);
+    nav.addEventListener('click',()=>window.switchToPage?.('page-training'));
+  }
+  delete nav.dataset.foundationTraining;
+  nav.hidden=false;nav.disabled=false;
+  nav.classList.remove('hidden','is-locked');
+  nav.setAttribute('aria-label','功法修煉');
+  document.body.classList.add('cultivation-training-unlocked');
+}
 function boot(){
+  ensureNav();
   ensure();
   root?.addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||busy)return;
@@ -143,7 +163,7 @@ function boot(){
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';}if(visible())void load({force:true});});
   window.addEventListener('xiuxian:manual-loot',()=>{if(visible())void load({force:true});});
   if(visible())void load({force:true});
 }
