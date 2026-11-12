@@ -216,6 +216,7 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
   }
 
   function sync() {
+    if (window.QA_MANUAL_TRAINING_ONLY) return;
     const active = foundationStage();
     if (lastStage === active) return;
 
