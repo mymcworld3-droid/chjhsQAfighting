@@ -14,7 +14,7 @@ const rich=v=>window.quizMathRichText?.(String(v||''))||esc(v);
 const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,keyboardGuard=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
-let attackChoice='attack',selectedManualSkill='',manualPickerOpen=false,wheelIgnoreClickUntil=0;
+let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
@@ -26,6 +26,19 @@ let pairWhiteboardIndex=-1,pairWhiteboardPointer=null;
 const pairWhiteboardInk=new Map();
 const $=selector=>root?.querySelector(selector);
 const myActor=()=>state?.actors.find(a=>a.uid===uid);
+const equippedTechniques=hero=>(hero?.manualSkills||[]).map(id=>R.manualSkillFor(hero,id)).filter(Boolean);
+function syncEquippedAttack(hero=myActor()){
+  const skills=equippedTechniques(hero);
+  if(skills.length){
+    if(!skills.some(skill=>skill.id===selectedManualSkill))selectedManualSkill=skills[0].id;
+    attackChoice='manual:'+selectedManualSkill;
+    if(action==='attack'||action==='skill'){action='manual';selection=null;}
+  }else{
+    selectedManualSkill='';attackChoice='attack';
+    if(action==='manual'||action==='skill'){action='attack';selection=null;}
+  }
+  return skills;
+}
 const myAction=()=>state?.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
 function canQuestion(){try{R.canAnswer(state,uid,Date.now()+clockOffset);return !!state.quizRound||myActor().stamina<10||!!state.question||!!state.questionFollowup;}catch(_){return false;}}
 
@@ -41,11 +54,10 @@ async function api(path,body,signal){
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
-function selectedCore(){const user=localUser(),score=window.QATrainingAccessRules?.score(user)??Number(user.stats?.totalScore||0);const raw=score<28||user.cultivationTraining?.coreEnabled===false?null:user.cultivationTraining?.equippedCore;return R.CORES[raw?.type]?raw.type:'none';}
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
-  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261112-manual-cultivation-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261112-left-technique-ring-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261112-stamina-main-solo-learning-parity-v1';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
@@ -67,7 +79,7 @@ function ensure(){
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
-    else if(b.dataset.manualPick){selectWheel('manual:'+b.dataset.manualPick);}
+    else if(b.dataset.leftAttack){selectWheel(b.dataset.leftAttack);}
     else if(b.dataset.wheelChoice){selectWheel(b.dataset.wheelChoice);}
     else if(b.dataset.wheelAction){selectWheel(b.dataset.wheelAction);}
     else if(b.dataset.action){selectWheel(b.dataset.action);}
@@ -115,18 +127,16 @@ function ensure(){
 }
 function destroyRenderer(){renderer?.destroy();renderer=null;}
 function renderHub(){
-  destroyRenderer();root.classList.remove('tc-quarter-layout');const c=selectedCore(),core=R.CORES[c];
-  const chosen=R.savedBranch(localUser(),c);
+  destroyRenderer();root.classList.remove('tc-quarter-layout');
   $('[data-title]').textContent='鬥法論道';$('[data-turn]').textContent='';
   $('[data-main]').className='tc-main tc-hub';
   $('[data-main]').innerHTML=`<div class="tc-hub-config">
     ${state&&['active','waiting'].includes(state.status)?'<button type="button" data-resume>繼續戰鬥</button>':''}
     <span class="tc-label" id="tc-map-label">戰場</span><div class="tc-maps" role="group" aria-labelledby="tc-map-label">${R.MAPS.map(m=>`<button type="button" data-map="${m.id}" aria-pressed="${map===m.id}"><b>${m.name}</b></button>`).join('')}</div>
-    <details class="tc-equipped-skill"><summary>${esc(chosen.skill.name)}<span>${chosen.skill.cost} 體力</span></summary><p>${esc(core.name)} · ${esc(chosen.skill.description)}</p><small>沿用已裝配分支，可於元神頁面調整。</small></details>
     <button type="button" class="tc-primary" data-start ${busy?'disabled':''}>開始配對</button>
     <div class="tc-join"><input data-code aria-label="戰場代碼" maxlength="22" placeholder="輸入道友的戰場代碼"><button type="button" data-join>加入</button></div>
     <details class="tc-codex"><summary>玩法說明</summary><p>每輪各答兩題，先答完者先行動；對手須在 50 秒內完成答題。每人行動 30 秒。</p><p>答對 +4 體力，答錯 +1，上限 10。每格移動消耗 1 體力，攻擊依兵器消耗；每回合最多攻擊或施法兩次，剩餘體力可保留。</p><p>灰格可移動，紅格為攻擊範圍，紅框為怪物攻擊預告。</p></details>
-    <details class="tc-codex"><summary>金丹技能</summary>${Object.entries(R.CORES).filter(([key])=>key!=='none').map(([,c])=>`<section><h3>${esc(c.name)}</h3>${c.branches.map(b=>`<p><b>${esc(b.name)} · ${esc(b.skill.name)}</b> ${esc(b.skill.description)}</p>`).join('')}</section>`).join('')}</details></div>`;
+</div>`;
 }
 
 const WHEEL_ANGLES=Object.freeze({upper:-112.5,lower:-157.5,center:-135});
@@ -194,32 +204,24 @@ function wheelSliderAngle(slider,angle){
 }
 function selectWheel(value){
   if(!state||busy||renderer?.isAnimating||!myAction())return;
+  syncEquippedAttack();
   if(value==='attack-ring')value=attackChoice;
-  if(value==='manual-menu'){
-    if(!(myActor()?.manualSkills||[]).length){notice('請先到修煉頁裝備功法技能');return;}
-    if(action==='move'){action='attack';attackChoice='attack';selection=null;}
-    manualPickerOpen=!manualPickerOpen;
-    updateControls();renderer?.update(state,uid,battlefieldMode(),selection);return;
-  }
-  const previous=action;
   if(value==='player'){
-    // Only the current player can be moved. Choosing that target does not
-    // send an action or reset an already selected destination tile.
     if(action!=='move')return;
-    updateControls();
-    return;
+    updateControls();return;
   }
-  if(value==='move'){action='move';manualPickerOpen=false;}
-  else if(value==='attack'||value==='skill'){action=value;attackChoice=value;manualPickerOpen=false;}
-  else if(value.startsWith('manual:')&&R.manualSkillFor(myActor(),value.slice(7))){
-    action='manual';selectedManualSkill=value.slice(7);attackChoice=value;manualPickerOpen=false;
+  const previousAction=action,previousManual=selectedManualSkill;
+  if(value==='move')action='move';
+  else if(value==='attack'&&!equippedTechniques(myActor()).length){
+    action='attack';attackChoice='attack';
+  }else if(value.startsWith('manual:')&&R.manualSkillFor(myActor(),value.slice(7))){
+    action='manual';selectedManualSkill=value.slice(7);
+    attackChoice=value;
   }else return;
-  if(action!==previous){
+  if(action!==previousAction||selectedManualSkill!==previousManual){
     selection=null;
-    const me=myActor();
-    if(me&&(action==='manual'&&R.manualSkillFor(me,selectedManualSkill)?.range===0||
-        action==='skill'&&R.branchFor(me).skill.range===0||
-        action==='attack'&&R.basicFor(me).kind==='ring')){
+    const me=myActor(),attackSkill=action==='manual'?R.manualSkillFor(me,selectedManualSkill):R.basicFor(me);
+    if(me&&action!=='move'&&(attackSkill?.range===0||attackSkill?.kind==='ring')){
       selection={x:me.x,y:me.y};
     }
   }
@@ -231,17 +233,22 @@ function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
   $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div></section>
-    <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">攻擊 · 2</button><button type="button" data-action="skill">技能</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
+    <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">普通攻擊 · 2</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
   if(state?.mode==='pvp'){
-    const tabs=$('.tc-action-tabs');
-    for(const id of myActor()?.manualSkills||[]){
-      const skill=R.manualSkillFor(myActor(),id);if(!skill)continue;
-      const button=document.createElement('button');
-      button.type='button';button.dataset.action='manual:'+id;
-      button.textContent=skill.name+' · '+skill.cost;
-      button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+skill.cost+' 體力');
-      tabs.append(button);
+    const tabs=$('.tc-action-tabs'),skills=equippedTechniques(myActor());
+    if(skills.length){
+      const attack=tabs.querySelector('[data-action="attack"]');
+      attack.dataset.action='manual:'+skills[0].id;
+      attack.textContent=skills[0].name+' · '+skills[0].cost;
+      attack.setAttribute('aria-label','功法技能：'+skills[0].name+'，消耗 '+skills[0].cost+' 體力');
+      for(const skill of skills.slice(1)){
+        const button=document.createElement('button');
+        button.type='button';button.dataset.action='manual:'+skill.id;
+        button.textContent=skill.name+' · '+skill.cost;
+        button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+skill.cost+' 體力');
+        tabs.append(button);
+      }
     }
   }
   if(state?.mode==='pve'){
@@ -291,6 +298,42 @@ function buildGame(){
       +'</svg><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>';
     quiz.setAttribute('aria-label','答題充能');
     energy.append(quiz);
+    // The second ring of the LEFT charging quarter is now the skill bar.
+    // All equipped techniques replace basic attack; with none, show basic.
+    // The outermost luminous green stamina track remains unobstructed.
+    const available=equippedTechniques(myActor());
+    const leftSkills=available.length?available:[R.basicFor(myActor())];
+    const leftWedge=(begin,finish,outer=86,inner=70)=>{
+      const pts=[];
+      for(let i=0;i<=16;i++){
+        const radians=(begin+(finish-begin)*i/16)*Math.PI/180;
+        pts.push([outer*Math.cos(radians),100+outer*Math.sin(radians)]);
+      }
+      for(let i=16;i>=0;i--){
+        const radians=(begin+(finish-begin)*i/16)*Math.PI/180;
+        pts.push([inner*Math.cos(radians),100+inner*Math.sin(radians)]);
+      }
+      return 'polygon('+pts.map(([x,y])=>x.toFixed(3)+'% '+y.toFixed(3)+'%').join(',')+')';
+    };
+    const techniqueRing=document.createElement('div');
+    techniqueRing.className='tc-left-technique-ring';
+    techniqueRing.setAttribute('role','group');
+    techniqueRing.setAttribute('aria-label','攻擊技能，點選後直接在地圖指定攻擊目標');
+    for(const [index,technique] of leftSkills.entries()){
+      const start=-90+90*index/leftSkills.length,finish=-90+90*(index+1)/leftSkills.length;
+      const radians=(start+finish)/2*Math.PI/180,radius=78;
+      const button=document.createElement('button');
+      button.type='button';button.className='tc-left-technique';
+      button.dataset.leftAttack=available.length?'manual:'+technique.id:'attack';
+      button.setAttribute('aria-label',technique.name+'，消耗 '+technique.cost+' 體力');
+      button.style.clipPath=leftWedge(start,finish);
+      button.innerHTML='<span class="tc-left-technique-label" style="left:'+
+        (radius*Math.cos(radians)).toFixed(2)+'%;top:'+
+        (100+radius*Math.sin(radians)).toFixed(2)+'%"><strong>'+
+        esc(technique.name)+'</strong><small>'+technique.cost+' 體力</small></span>';
+      techniqueRing.append(button);
+    }
+    energy.append(techniqueRing);
 
     const actions=document.createElement('section');
     actions.className='tc-quarter tc-quarter-action';
@@ -330,9 +373,7 @@ function buildGame(){
     };
     const hero=myActor();
     makeChoice('player','玩家',-90,-180,'tc-detail-player','1 體力/格');
-    makeChoice('attack','普通攻擊',-90,-120,'tc-detail-basic',R.basicFor(hero).cost+' 體力');
-    makeChoice('skill',R.branchFor(hero).skill.name,-120,-150,'tc-detail-skill',R.branchFor(hero).skill.cost+' 體力');
-    makeChoice('manual-menu','功法',-150,-180,'tc-detail-manual','選擇技能');
+    makeChoice('attack-ring','攻擊目標',-90,-180,'tc-detail-basic',R.basicFor(hero).cost+' 體力');
     // Narrow curved selection pieces glide *inside* each ring. The visible
     // arc angle is driven by the number of choices, not hard-coded to 45°.
     const makeSlider=(kind,choicesCount)=>{
@@ -403,7 +444,7 @@ function buildGame(){
       wheelIgnoreClickUntil=Date.now()+350;
       const next=gesture.ring==='action'?
         (pointerAngle(e)>WHEEL_ANGLES.center?'attack-ring':'move'):
-        (action==='move'?'player':pointerAngle(e)>-120?'attack':pointerAngle(e)>-150?'skill':'manual-menu');
+        (action==='move'?'player':'attack-ring');
       selectWheel(next);
       updateControls(); // also snaps back if the turn became locked
     };
@@ -432,17 +473,12 @@ function buildGame(){
         selectWheel('player');
         choices.querySelector('[data-wheel-choice="player"]').focus();
       }else{
-        const values=['attack','skill','manual-menu'];
-        const position=action==='attack'?0:action==='skill'?1:2;
-        const next=values[(position+(upper?1:2))%3];
+        const next='attack-ring';
         selectWheel(next);
         choices.querySelector('[data-wheel-choice="'+next+'"]').focus();
       }
     });
     command.prepend(energy,actions);
-    const picker=document.createElement('div');picker.className='tc-manual-picker';picker.hidden=true;
-    picker.setAttribute('role','group');picker.setAttribute('aria-label','選擇裝備的功法技能');
-    $('[data-main]').append(picker);
   }
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,battlefieldMode(),selection);
     // The sketch has no extra confirm button: choosing a valid map tile
@@ -455,7 +491,7 @@ function buildGame(){
   });
 }
 function paint({preserveModal=false}={}){
-  if(!state)return renderHub();if(!preserveModal)hideModal();
+  if(!state)return renderHub();syncEquippedAttack();if(!preserveModal)hideModal();
   $('[data-title]').textContent=state.mode==='pve'?'問道試煉':'鬥法論道';
   if(state.status==='waiting'){
     destroyRenderer();root.classList.remove('tc-quarter-layout');$('[data-main]').className='tc-main tc-waiting';
@@ -483,9 +519,9 @@ function paint({preserveModal=false}={}){
 }
 function updateControls(){
   if(!$('[data-selection]')||!state)return;
-  const me=myActor(),mine=myAction(),sk=R.branchFor(me).skill,
-    activeSkill=action==='manual'?R.manualSkillFor(me,selectedManualSkill):sk,
-    animating=renderer?.isAnimating,locked=busy||animating;
+  const me=myActor(),mine=myAction(),basic=R.basicFor(me),
+    chosenSkill=action==='manual'?R.manualSkillFor(me,selectedManualSkill):basic,
+    shown=chosenSkill||basic,animating=renderer?.isAnimating,locked=busy||animating;
   const quizButton=$('[data-quiz]');
   quizButton.disabled=!canQuestion()||locked;
   if(root.classList.contains('tc-quarter-layout')){
@@ -494,103 +530,105 @@ function updateControls(){
     quizButton.setAttribute('aria-description',ready?
       '可以答題充能，按下開始答題':'目前無法答題充能');
   }
-  $('[data-guard]').disabled=!mine||locked||me.attacks>=2;$('[data-end]').disabled=!mine||locked;
-  $('[data-sync]').disabled=locked;root.classList.toggle('tc-animating',!!animating);
+  $('[data-guard]').disabled=!mine||locked||me.attacks>=2;
+  $('[data-end]').disabled=!mine||locked;
+  $('[data-sync]').disabled=locked;
+  root.classList.toggle('tc-animating',!!animating);
   $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
-  const basic=R.basicFor(me),directional=['line','cleave'].includes(basic.kind);
-  if(!root.classList.contains('tc-quarter-layout'))$('[data-action="attack"]').textContent='攻擊 · '+basic.cost;
-  let label=action==='attack'?(directional?'選擇攻擊方向':basic.kind==='ring'?'震擊周圍':'選擇敵人'):action==='move'?'選擇移動位置':'選擇施放位置',error='',moveStamina=null;
-  const d=selection&&(basic.kind==='cleave'||selection.x===me.x||selection.y===me.y)?R.attackDirection(me,selection):null;
+  const directional=['line','cleave'].includes(shown.kind),quarter=root.classList.contains('tc-quarter-layout');
+  const basicTab=$('[data-action="attack"]');
+  if(basicTab&&!quarter)basicTab.textContent='普通攻擊 · '+basic.cost;
+  let label=action==='move'?'選擇移動位置':directional?'選擇攻擊方向':
+    shown.kind==='ring'?'震擊周圍':'選擇施放位置';
+  let error='',moveStamina=null;
+  const d=selection&&directional&&(selection.x===me.x||selection.y===me.y)?
+    R.attackDirection(me,selection):null;
   const direction=d?(d.x>0?'右':d.x<0?'左':d.y>0?'下':'上'):'';
-  if(action==='move'&&selection){const path=R.path(state,me,selection,uid),cost=path?path.length-1:0;
-    if(path&&path.length>1)moveStamina=cost;
-    label=path&&path.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
-    if(!path||path.length<2)error='此地格無法到達';else if(me.slow&&cost>2)error='緩速中，一次最多移動 2 格';else if(cost>me.stamina)error='體力不足';
+  if(action==='move'&&selection){
+    const route=R.path(state,me,selection,uid),cost=route?route.length-1:0;
+    if(route&&route.length>1)moveStamina=cost;
+    label=route&&route.length>1?`移動至此 · ${cost} 體力`:'無法移動至此';
+    if(!route||route.length<2)error='此地格無法到達';
+    else if(me.slow&&cost>2)error='緩速中，一次最多移動 2 格';
+    else if(cost>me.stamina)error='體力不足';
   }else if(selection){
-    const chosen=action==='attack'?basic:activeSkill;
-    if(!chosen)error='尚未裝備此功法技能';
+    if(action==='manual'&&!chosenSkill)error='尚未裝備此功法技能';
     else {
-      label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':chosen.name)+' · '+chosen.cost+' 體力';
-      try{R.validateSkill(state,me,chosen,selection);}catch(e){error=e.message;}
+      label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':shown.name)+' · '+shown.cost+' 體力';
+      try{R.validateSkill(state,me,shown,selection);}catch(e){error=e.message;}
     }
   }
-  const cooling=Math.max(0,(me.cooldowns[sk.id]||0)-me.turns);
-  const shown=action==='attack'?basic:activeSkill||sk;
-  $('[data-skill-title]').textContent=action==='move'?'移動說明':`${shown.name} · ${shown.cost} 體力${action==='skill'&&cooling?' · 冷卻 '+cooling+' 回合':''}`;
-  $('[data-skill]').innerHTML=action==='move'?'<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':`<p>${esc(shown.description)}</p>`;
-  $('[data-execute]').textContent=error||label;$('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
-  const quarter=root.classList.contains('tc-quarter-layout');
+  const cooling=action==='manual'?Math.max(0,(me.cooldowns[shown.id]||0)-me.turns):0;
+  $('[data-skill-title]').textContent=action==='move'?'移動說明':
+    `${shown.name} · ${shown.cost} 體力${cooling?' · 冷卻 '+cooling+' 回合':''}`;
+  $('[data-skill]').innerHTML=action==='move'?
+    '<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':
+    `<p>${esc(shown.description)}</p>`;
+  $('[data-execute]').textContent=error||label;
+  $('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
   root.querySelectorAll('[data-action]').forEach(b=>{
-    b.setAttribute('aria-pressed',String(b.dataset.action===action||(action==='manual'&&b.dataset.action==='manual:'+selectedManualSkill)||(quarter&&b.dataset.action==='attack'&&['skill','manual'].includes(action))));
+    b.setAttribute('aria-pressed',String(b.dataset.action===action||
+      (action==='manual'&&b.dataset.action==='manual:'+selectedManualSkill)||
+      (quarter&&b.dataset.action==='attack'&&action==='manual')));
     b.disabled=!mine||locked;
   });
   if(quarter){
     const attacking=action!=='move';
     const player=$('[data-wheel-choice="player"]');
-    const basicOption=$('[data-wheel-choice="attack"]');
-    const skillOption=$('[data-wheel-choice="skill"]');
-    const manualOption=$('[data-wheel-choice="manual-menu"]');
-    const skills=(me.manualSkills||[]).map(id=>R.manualSkillFor(me,id)).filter(Boolean);
-    const picker=$('.tc-manual-picker');
-    if(picker){
-      picker.hidden=!manualPickerOpen||!attacking||!skills.length;
-      if(!picker.hidden)picker.innerHTML=skills.map(entry=>
-        '<button type="button" data-manual-pick="'+esc(entry.id)+'">'+esc(entry.name)+' <small>'+entry.cost+' 體力</small></button>').join('');
-    }
-    const moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
-    const basicCostLabel=basic.cost+' 體力',skillCostLabel=sk.cost+' 體力';
+    const target=$('[data-wheel-choice="attack-ring"]');
+    const chosenCost=shown.cost+' 體力',moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
     if(player){
       player.hidden=attacking;
       wheelText(player.querySelector('span'),'玩家',moveCostLabel);
       player.setAttribute('aria-label','移動目標：玩家，'+moveCostLabel);
     }
-    if(basicOption){
-      basicOption.hidden=!attacking;
-      wheelText(basicOption.querySelector('span'),basic.name,basicCostLabel);
-      basicOption.setAttribute('aria-label',basic.name+'，消耗 '+basicCostLabel);
+    if(target){
+      target.hidden=!attacking;
+      wheelText(target.querySelector('span'),'攻擊目標',chosenCost);
+      target.setAttribute('aria-label','攻擊目標；使用左側選中的'+shown.name+'，消耗 '+chosenCost);
     }
-    if(skillOption){
-      skillOption.hidden=!attacking;
-      wheelText(skillOption.querySelector('span'),sk.name,skillCostLabel);
-      skillOption.setAttribute('aria-label','使用技能：'+sk.name+'，消耗 '+skillCostLabel);
-    }
-    if(manualOption){
-      manualOption.hidden=!attacking;
-      manualOption.disabled=!mine||locked||!skills.length;
-      wheelText(manualOption.querySelector('span'),action==='manual'?shown.name:'功法',action==='manual'?shown.cost+' 體力':'選擇技能');
-    }
-    for(const option of [player,basicOption,skillOption,manualOption]){
+    for(const option of [player,target]){
       if(!option)continue;
-      option.disabled=option===manualOption?(!mine||locked||!skills.length):(!mine||locked);
-      option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?(action==='manual'?'manual-menu':action):'player')));
+      option.disabled=!mine||locked;
+      option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?'attack-ring':'player')));
     }
+    // The left ring is the only skill selector. It displays either the
+    // equipped manual skills or, if none, a single basic-attack sector.
+    root.querySelectorAll('[data-left-attack]').forEach(button=>{
+      button.disabled=!mine||locked;
+      button.setAttribute('aria-pressed',String(button.dataset.leftAttack===attackChoice));
+    });
     const ring=$('.tc-quarter-action');
-    const chosenName=attacking?(action==='manual'?shown.name:action==='skill'?sk.name:basic.name):'玩家';
-    const chosenCost=attacking?(action==='manual'?shown.cost+' 體力':action==='skill'?skillCostLabel:basicCostLabel):moveCostLabel;
-    ring?.setAttribute('aria-label',attacking?'行動：攻擊；'+chosenName+'，消耗 '+chosenCost:'行動：移動；目標：玩家，'+chosenCost);
+    const targetName=attacking?'攻擊目標':'玩家',targetCost=attacking?chosenCost:moveCostLabel;
+    ring?.setAttribute('aria-label',attacking?
+      '行動：攻擊；左圈所選'+shown.name+'，消耗 '+chosenCost:
+      '行動：移動；目標：玩家，'+moveCostLabel);
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
-    wheelText(detailThumb,chosenName,chosenCost);
-    detailThumb.title=chosenName+' · '+chosenCost;
+    wheelText(detailThumb,targetName,targetCost);
+    detailThumb.title=targetName+' · '+targetCost;
     const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
-    const detailAngle=attacking?(action==='manual'?-165:action==='skill'?-135:-105):WHEEL_ANGLES.center;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
-    wheelMarker(detailThumb,detailAngle,WHEEL_RADII.detail);
-    // Fixed hit sectors stay large, while the moving slice gets a gap from
-    // its neighbours. The outer lane has 1 player or 2 attack choices.
-    const actionCount=ring.querySelectorAll('[data-wheel-action]').length;
-    const detailCount=[player,basicOption,skillOption,manualOption].filter(b=>b&&!b.hidden).length;
-    wheelSliderShape($('.tc-wheel-slider-action'),actionCount);
-    wheelSliderShape($('.tc-wheel-slider-detail'),detailCount);
+    wheelMarker(detailThumb,WHEEL_ANGLES.center,WHEEL_RADII.detail);
+    wheelSliderShape($('.tc-wheel-slider-action'),ring.querySelectorAll('[data-wheel-action]').length);
+    wheelSliderShape($('.tc-wheel-slider-detail'),1);
     wheelSliderAngle($('.tc-wheel-slider-action'),actionAngle);
-    wheelSliderAngle($('.tc-wheel-slider-detail'),detailAngle);
+    wheelSliderAngle($('.tc-wheel-slider-detail'),WHEEL_ANGLES.center);
   }
   $('[data-range-legend]').textContent=(action==='move'?'灰格可走':'紅格射程')+' · 紅框預告';
-  const hint=action==='move'?'點選灰格移動':action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):shown.range===0?'按下確認施放技能':'點選紅格施放技能';
-  $('[data-selection]').textContent=selection?`${action==='attack'&&basic.kind==='ring'?'震擊周圍一圈 · '+R.skillCells(state,me,basic,selection).length+' 格':action==='attack'&&directional&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,basic,selection).length+' 格':t?`${t.name} · 生命 ${t.hp}/${t.maxHp}`:`位置 ${selection.x+1}, ${selection.y+1}`}${error?' · '+error:''}`:mine?hint:'等待對手行動';
+  const hint=action==='move'?'點選灰格移動':
+    action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):
+    shown.range===0?'點選自己施放技能':'點選紅格施放技能';
+  $('[data-selection]').textContent=selection?
+    `${action==='attack'&&basic.kind==='ring'?'震擊周圍一圈 · '+R.skillCells(state,me,basic,selection).length+' 格':
+      action==='attack'&&directional&&direction?'向'+direction+'攻擊 '+R.skillCells(state,me,basic,selection).length+' 格':
+      t?t.name+' · 生命 '+t.hp+'/'+t.maxHp:'位置 '+(selection.x+1)+', '+(selection.y+1)}
+      ${error?' · '+error:''}`:
+    mine?hint:'等待對手行動';
   if(animating)$('[data-selection]').textContent=renderer.currentAction;
 }
+
 function updateClock(){
   if(!opened||!state)return;
   if(getMainUser()?.uid!==uid){state=null;close();return;}
@@ -1297,7 +1335,7 @@ async function open(nextMode='pve'){
   if(opened&&mode==='pve'&&nextMode==='pve'&&trialEntry?.uid===getMainUser()?.uid)return trialEntry.promise;
   if(opened)close();
   lastTrigger=document.activeElement;mode=nextMode;root.dataset.mode=mode;
-  action='move';attackChoice='attack';selectedManualSkill='';manualPickerOpen=false;selection=null;
+  action='move';attackChoice='attack';selectedManualSkill='';selection=null;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;
   if(!uid){window.showToast?.('請先登入後進入戰場');return;}
   epoch++;opened=true;busy=true;op=0;appliedOp=0;document.body.classList.add('tactical-open');
