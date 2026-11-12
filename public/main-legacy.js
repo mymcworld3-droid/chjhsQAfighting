@@ -3790,6 +3790,24 @@ window.startQuizExtendedPractice = async (knowledgePoint, options = {}) => {
         : `已排入「${point}」，完成本題後按「下一題」開始延伸練習。`);
 };
 
+// Tactical wrong answers can be sent into the SAME solo correction queue and
+// prompt pipeline without copying that algorithm into the battle page.
+window.queueTacticalSoloCorrection = ({question,subject,topic,difficulty,adaptive}={}) => {
+    const uid=auth.currentUser?.uid;
+    const origin=String(question||'').trim().slice(0,1000);
+    const point=String(topic||'本題核心觀念').trim().slice(0,60);
+    if(!uid||!currentUserData||!origin||!point)
+        return Promise.reject(Error('訂正練習需要已登入的有效錯題'));
+    syncSoloQuestionCache();
+    const quiz={data:{q:origin},learningSubject:String(subject||'綜合').slice(0,40),
+        learningTopic:point,learningDifficulty:difficulty||'medium',
+        ...(adaptive?{adaptive}:{})};
+    return queueCorrectionPractice({
+        quiz,uid,scope:soloQuestionScope(),subject:quiz.learningSubject,
+        knowledgePoint:point,originQuestion:origin,recoveryOrigin:origin
+    });
+};
+
 window.endQuizExtendedPractice = () => {
     if(window.currentActiveQuiz?.mode==='trial-tower'){window.cancelTrialTowerPractice?.();return;}
     if (!extendedPracticeState.active && !extendedPracticeState.pending) return;
