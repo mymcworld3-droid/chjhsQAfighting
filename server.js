@@ -528,11 +528,14 @@ async function generateQuiz(req, res) {
                 const selected=tacticalSourceBankCatalog.load(tacticalContext.bankSource);
                 if(!selected.files.length)
                     return res.status(404).json({error:'找不到所選題庫，請重新選擇範圍'});
-                if(!selected.questions.length)
-                    return res.status(409).json({error:'所選題庫尚無完成校對及補圖的可用題目'});
-                const matching=selected.questions.filter(
+                const usable=selected.questions.filter(q=>
+                    Array.isArray(q.wrong)&&q.wrong.length===3
+                    &&typeof q.exp==='string'&&q.exp.trim());
+                if(!usable.length)
+                    return res.status(409).json({error:'所選題庫尚無完成校對、補圖及具備解析的四選一題目'});
+                const matching=usable.filter(
                     q=>q.difficulty===tacticalContext.difficulty);
-                const available=matching.length?matching:selected.questions;
+                const available=matching.length?matching:usable;
                 const fresh=available.filter(q=>!tacticalContext.history.some(
                     old=>isTooSimilarQuestion(q.q,[old])));
                 const pool=fresh.length?fresh:available;
