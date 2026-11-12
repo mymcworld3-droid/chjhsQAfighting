@@ -404,6 +404,7 @@ async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
     // Preserve the very same reasoning and knowledge-point labels used by
     // main's quizMetaFromRaw, rather than discarding them on battle commit.
     meta:{
+      ...Knowledge.metadata(parsed,expected.subject),
       concept_id:String(parsed.concept_id||'').slice(0,100),
       template_id:String(parsed.template_id||'').slice(0,120),
       question_form:String(parsed.question_form||'').slice(0,60),
