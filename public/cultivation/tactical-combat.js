@@ -228,17 +228,22 @@ function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
   $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div></section>
-    <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">攻擊 · 2</button><button type="button" data-action="skill">技能</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
+    <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">普通攻擊 · 2</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
   if(state?.mode==='pvp'){
-    const tabs=$('.tc-action-tabs');
-    for(const id of myActor()?.manualSkills||[]){
-      const skill=R.manualSkillFor(myActor(),id);if(!skill)continue;
-      const button=document.createElement('button');
-      button.type='button';button.dataset.action='manual:'+id;
-      button.textContent=skill.name+' · '+skill.cost;
-      button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+skill.cost+' 體力');
-      tabs.append(button);
+    const tabs=$('.tc-action-tabs'),skills=equippedTechniques(myActor());
+    if(skills.length){
+      const attack=tabs.querySelector('[data-action="attack"]');
+      attack.dataset.action='manual:'+skills[0].id;
+      attack.textContent=skills[0].name+' · '+skills[0].cost;
+      attack.setAttribute('aria-label','功法技能：'+skills[0].name+'，消耗 '+skills[0].cost+' 體力');
+      for(const skill of skills.slice(1)){
+        const button=document.createElement('button');
+        button.type='button';button.dataset.action='manual:'+skill.id;
+        button.textContent=skill.name+' · '+skill.cost;
+        button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+skill.cost+' 體力');
+        tabs.append(button);
+      }
     }
   }
   if(state?.mode==='pve'){
@@ -288,6 +293,42 @@ function buildGame(){
       +'</svg><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>';
     quiz.setAttribute('aria-label','答題充能');
     energy.append(quiz);
+    // The second ring of the LEFT charging quarter is now the skill bar.
+    // All equipped techniques replace basic attack; with none, show basic.
+    // The outermost luminous green stamina track remains unobstructed.
+    const available=equippedTechniques(myActor());
+    const leftSkills=available.length?available:[R.basicFor(myActor())];
+    const leftWedge=(begin,finish,outer=86,inner=70)=>{
+      const pts=[];
+      for(let i=0;i<=16;i++){
+        const radians=(begin+(finish-begin)*i/16)*Math.PI/180;
+        pts.push([outer*Math.cos(radians),100+outer*Math.sin(radians)]);
+      }
+      for(let i=16;i>=0;i--){
+        const radians=(begin+(finish-begin)*i/16)*Math.PI/180;
+        pts.push([inner*Math.cos(radians),100+inner*Math.sin(radians)]);
+      }
+      return 'polygon('+pts.map(([x,y])=>x.toFixed(3)+'% '+y.toFixed(3)+'%').join(',')+')';
+    };
+    const techniqueRing=document.createElement('div');
+    techniqueRing.className='tc-left-technique-ring';
+    techniqueRing.setAttribute('role','group');
+    techniqueRing.setAttribute('aria-label','攻擊技能，點選後直接在地圖指定攻擊目標');
+    for(const [index,technique] of leftSkills.entries()){
+      const start=-90+90*index/leftSkills.length,finish=-90+90*(index+1)/leftSkills.length;
+      const radians=(start+finish)/2*Math.PI/180,radius=78;
+      const button=document.createElement('button');
+      button.type='button';button.className='tc-left-technique';
+      button.dataset.leftAttack=available.length?'manual:'+technique.id:'attack';
+      button.setAttribute('aria-label',technique.name+'，消耗 '+technique.cost+' 體力');
+      button.style.clipPath=leftWedge(start,finish);
+      button.innerHTML='<span class="tc-left-technique-label" style="left:'+
+        (radius*Math.cos(radians)).toFixed(2)+'%;top:'+
+        (100+radius*Math.sin(radians)).toFixed(2)+'%"><strong>'+
+        esc(technique.name)+'</strong><small>'+technique.cost+' 體力</small></span>';
+      techniqueRing.append(button);
+    }
+    energy.append(techniqueRing);
 
     const actions=document.createElement('section');
     actions.className='tc-quarter tc-quarter-action';
@@ -327,9 +368,7 @@ function buildGame(){
     };
     const hero=myActor();
     makeChoice('player','玩家',-90,-180,'tc-detail-player','1 體力/格');
-    makeChoice('attack','普通攻擊',-90,-120,'tc-detail-basic',R.basicFor(hero).cost+' 體力');
-    makeChoice('skill',R.branchFor(hero).skill.name,-120,-150,'tc-detail-skill',R.branchFor(hero).skill.cost+' 體力');
-    makeChoice('manual-menu','功法',-150,-180,'tc-detail-manual','選擇技能');
+    makeChoice('attack-ring','攻擊目標',-90,-180,'tc-detail-basic',R.basicFor(hero).cost+' 體力');
     // Narrow curved selection pieces glide *inside* each ring. The visible
     // arc angle is driven by the number of choices, not hard-coded to 45°.
     const makeSlider=(kind,choicesCount)=>{
@@ -400,7 +439,7 @@ function buildGame(){
       wheelIgnoreClickUntil=Date.now()+350;
       const next=gesture.ring==='action'?
         (pointerAngle(e)>WHEEL_ANGLES.center?'attack-ring':'move'):
-        (action==='move'?'player':pointerAngle(e)>-120?'attack':pointerAngle(e)>-150?'skill':'manual-menu');
+        (action==='move'?'player':'attack-ring');
       selectWheel(next);
       updateControls(); // also snaps back if the turn became locked
     };
@@ -429,17 +468,12 @@ function buildGame(){
         selectWheel('player');
         choices.querySelector('[data-wheel-choice="player"]').focus();
       }else{
-        const values=['attack','skill','manual-menu'];
-        const position=action==='attack'?0:action==='skill'?1:2;
-        const next=values[(position+(upper?1:2))%3];
+        const next='attack-ring';
         selectWheel(next);
         choices.querySelector('[data-wheel-choice="'+next+'"]').focus();
       }
     });
     command.prepend(energy,actions);
-    const picker=document.createElement('div');picker.className='tc-manual-picker';picker.hidden=true;
-    picker.setAttribute('role','group');picker.setAttribute('aria-label','選擇裝備的功法技能');
-    $('[data-main]').append(picker);
   }
   renderer=new TacticalRenderer($('canvas'),p=>{if(!busy){selection=p;updateControls();renderer.update(state,uid,battlefieldMode(),selection);
     // The sketch has no extra confirm button: choosing a valid map tile
