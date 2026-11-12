@@ -3816,6 +3816,35 @@ window.queueTacticalSoloCorrection = ({question,subject,topic,difficulty,adaptiv
     });
 };
 
+// A tactical helper may recommend an extension topic. Use the original
+// fetchExtendedPracticeQuestion generator and its normal solo cache, preserving
+// the selected subject, stored range and avoidance history.
+window.queueTacticalSoloExtension = async ({question,subject,topic,adaptive}={}) => {
+    const uid=auth.currentUser?.uid;
+    const point=String(topic||'').trim().slice(0,60);
+    if(!uid||!currentUserData||!point)
+        throw Error('延伸練習需要已登入帳號及明確觀念');
+    syncSoloQuestionCache();
+    const scope=soloQuestionScope();
+    const practice={
+        uid,subject:String(subject||'綜合').slice(0,40),
+        knowledgePoint:point,originQuestion:String(question||'').slice(0,1000),
+        quiz:{learningDifficulty:getSmartDifficulty(subject),
+            ...(adaptive?{adaptive}:{})},recoveryOrigin:''
+    };
+    const existing=soloQuestionCache.getQueue().find(item =>
+        item?.extendedPractice===true&&item?.extendedPracticeKnowledgePoint===point);
+    if(existing)return existing;
+    const generated=await fetchExtendedPracticeQuestion(practice);
+    if(auth.currentUser?.uid!==uid||soloQuestionScope()!==scope||
+       !soloQuestionCache.isCurrent(uid,scope))
+        throw Error('修習範圍已變更，請重新選擇延伸練習');
+    if(!soloQuestionCache.append(generated))
+        throw Error('此延伸題已在待答題庫中');
+    quizBuffer=soloQuestionCache.getQueue();
+    return generated;
+};
+
 window.endQuizExtendedPractice = () => {
     if(window.currentActiveQuiz?.mode==='trial-tower'){window.cancelTrialTowerPractice?.();return;}
     if (!extendedPracticeState.active && !extendedPracticeState.pending) return;
