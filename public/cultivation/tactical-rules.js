@@ -5,7 +5,7 @@
 })(globalThis,()=>{
   'use strict';
   const Manuals=(typeof module==='object'&&module.exports)
-    ?require('./manual-rules.js'):root.QAManuals;
+    ?require('./manual-rules.js'):globalThis.QAManuals;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
     {id:'courtyard',name:'演武庭',width:7,height:7,terrain:2,description:'開闊石庭，練習近身與迂迴。'},
