@@ -84,7 +84,7 @@ function ensure(){
     else if(b.hasAttribute('data-next-pair-question'))showNextPairQuestion();
     else if(b.hasAttribute('data-helper-toggle'))openQuestionTool('helper');
     else if(b.hasAttribute('data-tool-close'))closeQuestionTool();
-    else if(b.dataset.helperPreset){$('[data-helper-input]').value=b.dataset.helperPreset;void askHelper();}
+    else if(b.dataset.helperPreset){$('[data-helper-input]').value=b.dataset.helperPreset;void askHelper(b.dataset.helperIntent||'discussion');}
     else if(b.hasAttribute('data-helper-send'))void askHelper();
     else if(b.hasAttribute('data-report-toggle'))openQuestionTool('report');
     else if(b.hasAttribute('data-report-send'))void reportQuestion();
@@ -932,7 +932,7 @@ function quizTools(){
   const message=(m)=>`<p class="quiz-helper-message ${m.role==='user'?'user':'assistant'}"><span class="quiz-helper-message-stack"><span class="quiz-helper-message-body">${m.role==='user'?esc(m.text):rich(m.text)}</span></span></p>`;
   return `<section class="tc-question-tools" aria-label="題目協助"><div class="tc-tools-buttons"><button type="button" class="quiz-helper-launcher" data-helper-toggle aria-haspopup="dialog" aria-expanded="false" title="開啟問道助手"><i class="fa-solid fa-comments"></i><span class="quiz-helper-launcher-label">問道</span></button></div>
     <div class="tc-tool-overlay tc-report-overlay" data-question-tool="report" data-report-panel hidden><section class="tc-report-box glass-panel" role="dialog" aria-modal="true" aria-labelledby="tc-report-title"><h3 id="tc-report-title"><i class="fa-solid fa-triangle-exclamation"></i> 回報題目錯誤</h3><p>請簡述題目問題 (例如: 答案錯誤、選項重複、錯字)，AI 將進行嚴格審查。</p><label class="sr-only" for="tc-report-reason">問題描述（至少六個字）</label><textarea id="tc-report-reason" data-report-reason maxlength="1200" rows="4" placeholder="請輸入問題描述..."></textarea><p data-report-status role="status" aria-live="polite"></p><div class="tc-report-actions"><button type="button" class="btn-cyber-ghost" data-tool-close>取消</button><button type="button" class="btn-cyber-primary" data-report-send>送出審查</button></div></section></div>
-    <div class="tc-tool-overlay tc-helper-overlay" data-question-tool="helper" data-helper-panel hidden><section class="quiz-helper-panel" role="dialog" aria-modal="true" aria-labelledby="tc-helper-title"><header class="quiz-helper-header"><div class="quiz-helper-heading"><span class="quiz-helper-avatar"><i class="fa-solid fa-user-graduate"></i></span><div><strong id="tc-helper-title">問道助手</strong><small>一起核對、討論題目</small></div></div><button type="button" class="quiz-helper-collapse" data-tool-close aria-label="關閉問道助手">×</button></header><div class="quiz-helper-messages" data-helper-messages role="log" aria-label="問道助手對話">${quizContext.messages.map(message).join('')}</div><div class="quiz-helper-prompts" aria-label="快速提問"><button type="button" data-helper-preset="給我一個提示，但不要直接告訴我答案。">給我提示</button><button type="button" data-helper-preset="這題應該先從哪個觀念開始？">從哪開始</button><button type="button" data-helper-preset="可以把這題拆成幾個步驟嗎？">拆解步驟</button><button type="button" data-helper-preset="請檢查題目條件和選項是否一致，作答前不要透露答案。">檢查題目</button></div><div class="quiz-helper-compose"><textarea id="tc-helper-input" data-helper-input maxlength="600" rows="1" placeholder="輸入你對這題的疑問…" aria-label="輸入對題目的疑問"></textarea><button type="button" data-helper-send aria-label="送出問題"><i class="fa-solid fa-paper-plane"></i></button></div><div class="quiz-helper-status" data-helper-status role="status" aria-live="polite"></div></section></div></section>`;
+    <div class="tc-tool-overlay tc-helper-overlay" data-question-tool="helper" data-helper-panel hidden><section class="quiz-helper-panel" role="dialog" aria-modal="true" aria-labelledby="tc-helper-title"><header class="quiz-helper-header"><div class="quiz-helper-heading"><span class="quiz-helper-avatar"><i class="fa-solid fa-user-graduate"></i></span><div><strong id="tc-helper-title">問道助手</strong><small>一起核對、討論題目</small></div></div><button type="button" class="quiz-helper-collapse" data-tool-close aria-label="關閉問道助手">×</button></header><div class="quiz-helper-messages" data-helper-messages role="log" aria-label="問道助手對話">${quizContext.messages.map(message).join('')}</div><div class="quiz-helper-prompts" aria-label="快速提問"><button type="button" data-helper-preset="給我一個提示，但不要直接告訴我答案。">給我提示</button><button type="button" data-helper-preset="這題應該先從哪個觀念開始？">從哪開始</button><button type="button" data-helper-preset="可以把這題拆成幾個步驟嗎？">拆解步驟</button><button type="button" data-helper-preset="請檢查題目條件和選項是否一致，作答前不要透露答案。" data-helper-intent="check-question">檢查題目</button></div><div class="quiz-helper-compose"><textarea id="tc-helper-input" data-helper-input maxlength="600" rows="1" placeholder="輸入你對這題的疑問…" aria-label="輸入對題目的疑問"></textarea><button type="button" data-helper-send aria-label="送出問題"><i class="fa-solid fa-paper-plane"></i></button></div><div class="quiz-helper-status" data-helper-status role="status" aria-live="polite"></div></section></div></section>`;
 }
 function openQuestionTool(kind){
   closeQuestionTool(false);
@@ -950,21 +950,31 @@ function closeQuestionTool(restore=true){
   const heading=$('.tc-dialog-heading');if(heading)heading.inert=false;
 }
 function sameQuiz(ctx){return quizContext===ctx&&valid(ctx.epoch,ctx.owner);}
-async function askHelper(){
+async function askHelper(intent='discussion'){
   const ctx=quizContext,input=$('[data-helper-input]'),message=input?.value.trim().slice(0,600);
   if(!ctx||!message||ctx.helperBusy||state.mode!=='pve')return;
   const history=ctx.messages.slice(-6);ctx.messages.push({role:'user',text:message});ctx.helperBusy=true;
-  // Record assistance in the same adaptive-learning format as main solo.
-  if(!ctx.review)window.QAAdaptiveLearning?.hint(ctx.learningQuiz);
+  // As in main solo, only a successful assistant response counts as help;
+  // a pure question-integrity check is not a learning hint.
   const append=(role,text)=>{const row=document.createElement('p'),label=document.createElement('span'),body=document.createElement('span');row.className='quiz-helper-message '+(role==='user'?'user':'assistant');label.className='quiz-helper-message-stack';body.className='quiz-helper-message-body';if(role==='user')body.textContent=text;else body.innerHTML=rich(text);label.append(body);row.append(label);$('[data-helper-messages]')?.append(row);window.quizMathTypeset?.(body);};
   append('user',message);input.value='';$('[data-helper-send]').disabled=true;$('[data-helper-status]').textContent='問道助手正在思考…';
   try{
     const review=ctx.review,q=ctx.q;
-    const result=await api('/api/question-helper',{question:q.q,options:q.opts,subject:q.subject,message,history,answered:!!review,
-      explanation:review?.explanation||'',selectedOption:review?q.opts[review.choice]:'',correctOption:review?q.opts[review.answerIndex]:''},ctx.abort.signal);
+    const math=v=>window.QAMathGuard?.normalizeMathText?.(v)??v;
+    const result=await api('/api/question-helper',{
+      question:math(q.q),options:q.opts.map(math),subject:q.subject,message,
+      ...(intent==='check-question'?{intent}:{}),
+      history,answered:!!review,
+      explanation:math(review?.explanation||''),
+      selectedOption:review?math(q.opts[review.choice]||''):'',
+      correctOption:review?math(q.opts[review.answerIndex]||''):''
+    },ctx.abort.signal);
     if(!sameQuiz(ctx))return;
     if(!result.answer)throw Error('問道助手暫時沒有回覆，請重試。');
-    ctx.messages.push({role:'assistant',text:result.answer});append('assistant',result.answer);$('[data-helper-status]').textContent='';
+    if(!review&&!result.interfaceIssue&&intent!=='check-question')
+      window.QAAdaptiveLearning?.hint(ctx.learningQuiz);
+    ctx.messages.push({role:'assistant',text:result.answer});
+    append('assistant',result.answer);$('[data-helper-status]').textContent='';
     if(result.questionIssue?.confirmed)void reportQuestion(result.questionIssue.reason);
   }catch(err){if(sameQuiz(ctx)&&$('[data-helper-status]'))$('[data-helper-status]').textContent=err.message;}
   finally{ctx.helperBusy=false;if(sameQuiz(ctx)&&$('[data-helper-send]'))$('[data-helper-send]').disabled=false;}
