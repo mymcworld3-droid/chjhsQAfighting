@@ -23,7 +23,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261112-mastery-levels-v2';
+    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261112-realm-experience-v3';
     document.head.append(link);
   }
   return root;
@@ -50,16 +50,20 @@ function markup(){
       </div>`;
   }).join('');
   const cards=current.library.filter(book=>book.owned).map(book=>{
-    const next=book.skills.find(s=>!s.unlocked);
+    const next=book.skills.find(s=>!s.mastered);
     const skills=book.skills.map((skill,i)=>{
       const active=equipped.includes(skill.id);
       const unlocked=skill.unlocked;
+      const requirements=[
+        !skill.mastered?'功法 Lv. '+skill.levelRequired:null,
+        !skill.realmReady?'修士 '+skill.realmName+'境':null
+      ].filter(Boolean);
       return `<div class="manual-technique ${unlocked?'':'is-locked'}">
         <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}</b>
-          <small>${skill.cost} 體力 · ${skill.range} 格</small></div>
+          <small>${skill.cost} 體力 · ${skill.range} 格 · ${skill.realmName}境</small></div>
         <p>${esc(skill.description)}</p>
         ${unlocked?`<button type="button" data-manual-equip="${esc(skill.id)}" ${active||equipped.length>=3?'disabled':''}>${active?'已裝備':'裝備技能'}</button>`:
-          `<span class="manual-lock"><i class="fa-solid fa-lock"></i> Lv. ${skill.levelRequired} 解鎖</span>`}
+          `<span class="manual-lock"><i class="fa-solid fa-lock"></i> 需達 ${requirements.join('、')}</span>`}
       </div>`;
     }).join('');
     const progress=`<div class="manual-mastery">
@@ -89,7 +93,10 @@ function markup(){
     <section class="manual-library"><div class="manual-section-title"><h3>已獲得的功法</h3>
       <button type="button" class="manual-refresh" data-manual-refresh title="同步功法"><i class="fa-solid fa-rotate"></i> 更新</button>
       </div><div class="manual-book-grid">${cards||'<p class="manual-empty">尚無功法，選擇劍修或體修即可獲得一本入門功法。</p>'}</div></section>
-    <p class="manual-rules-foot">以功法技能擊殺試煉靈獸可獲得 ${Catalog.EXP_PER_KILL} EXP。功法達 Lv. 5、Lv. 10 解鎖第二、第三招。</p>
+    <details class="manual-xp-reference"><summary>查看靈獸境界 EXP 獎勵</summary>
+      <div>${Catalog.REALMS.map(realm=>`<span>${realm.name}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
+      <p>使用功法技能擊殺靈獸才能累積經驗。每招同時需要達到功法等級與修士境界。</p>
+    </details>
     <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>`;
 }
 function paint(message=''){
