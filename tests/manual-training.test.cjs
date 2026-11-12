@@ -11,30 +11,68 @@ const lowBeast=(id,x,y,hp=80)=>R.actor({
   uid:id,name:id,bot:true,team:'monster',atk:15,maxHp:hp
 },{x,y});
 
-test('four scriptures each contain three skills and separate, exact killing-blow unlock thresholds',()=>{
+test('each of the four manuals has exactly three skills unlocked at Lv.1 / Lv.5 / Lv.10',()=>{
   assert.equal(Catalog.BOOKS.length,4);
   assert.equal(Catalog.BOOKS.filter(book=>book.school==='sword').length,2);
   assert.equal(Catalog.BOOKS.filter(book=>book.school==='body').length,2);
   for(const book of Catalog.BOOKS){
     assert.equal(book.skills.length,3);
-    assert.deepEqual(book.skills.map(skill=>skill.killsRequired),[0,3,8]);
+    assert.deepEqual(book.skills.map(skill=>skill.levelRequired),[1,5,10]);
   }
-  const raw={school:'sword',books:{'sword-wind':{kills:3}},equipped:['wind-slash','wind-step','wind-thousand','wind-slash']};
-  assert.deepEqual(Catalog.normalize(raw).equipped,['wind-slash','wind-step']);
-  assert.equal(Catalog.unlocked(raw,'wind-thousand'),false);
+  assert.equal(Catalog.EXP_PER_KILL,50);
 });
 
-test('school selection grants one starter book and switching does not duplicate its grant',async()=>{
+test('XP required increases with every level and exact level boundaries are respected',()=>{
+  assert.deepEqual([1,2,3,4,5].map(Catalog.xpForNextLevel),[40,60,80,100,120]);
+  for(let level=1;level<=100;level++){
+    const next=Catalog.totalExpForLevel(level);
+    assert.equal(Catalog.levelForExp(next),level);
+    assert.equal(Catalog.mastery(next).expInLevel,0);
+    if(level>1)assert.equal(Catalog.levelForExp(next-1),level-1);
+    assert(Catalog.xpForNextLevel(level+1)>Catalog.xpForNextLevel(level));
+  }
+  assert.equal(Catalog.totalExpForLevel(5),280);
+  assert.equal(Catalog.totalExpForLevel(10),1080);
+  assert.equal(Catalog.levelForExp(279),4);
+  assert.equal(Catalog.levelForExp(1079),9);
+  const raw={school:'sword',books:{'sword-wind':{exp:280}},
+    equipped:['wind-slash','wind-step','wind-thousand']};
+  assert.deepEqual(Catalog.normalize(raw).equipped,['wind-slash','wind-step']);
+  raw.books['sword-wind'].exp=1080;
+  assert.deepEqual(Catalog.normalize(raw).equipped,['wind-slash','wind-step','wind-thousand']);
+});
+
+test('only owned manuals are returned, and legacy kill records retain their unlocked skills',()=>{
+  assert.equal(Catalog.publicState(null).library.length,0);
+  const legacy={version:1,school:'sword',
+    books:{'sword-wind':{kills:8},'body-rock':{kills:3}},
+    equipped:['wind-slash','wind-step','wind-thousand','wind-slash']};
+  const normalized=Catalog.normalize(legacy);
+  assert.equal(normalized.version,2);
+  assert.equal(normalized.books['sword-wind'].exp,1080);
+  assert.equal(normalized.books['body-rock'].exp,280);
+  assert.deepEqual(normalized.equipped,['wind-slash','wind-step','wind-thousand']);
+  assert.equal(Catalog.normalize(normalized).books['sword-wind'].exp,1080);
+  const visible=Catalog.publicState(legacy);
+  assert.equal(visible.library.length,2);
+  assert(visible.library.every(book=>book.owned&&book.level>=5));
+  assert.equal(visible.library.find(book=>book.id==='sword-wind').level,10);
+});
+
+test('school selection grants one starter manual and switching does not duplicate its grant',async()=>{
   const db=database();
   const first=await API.chooseSchool(db,'u1',{school:'sword'});
   assert.equal(first.school,'sword');
-  assert.equal(first.library.find(book=>book.id==='sword-wind').owned,true);
+  assert.equal(first.library.length,1,'unobtained manuals stay hidden');
+  assert.equal(first.library[0].id,'sword-wind');
+  assert.equal(first.library[0].level,1);
   assert.deepEqual(first.equipped,['wind-slash']);
   const second=await API.chooseSchool(db,'u1',{school:'body'});
   assert.equal(second.school,'body');
-  assert.equal(second.library.filter(book=>book.owned).length,1);
+  assert.equal(second.library.length,1);
   assert.deepEqual(second.equipped,['wind-slash'],'cross-school skills remain selectable');
   assert.equal(bookRecord(db).starterClaimed,true);
+  assert.deepEqual(bookRecord(db).books['sword-wind'],{exp:0});
 });
 
 test('server rejects unowned, locked, duplicate and four-slot loadouts',async()=>{
@@ -45,10 +83,10 @@ test('server rejects unowned, locked, duplicate and four-slot loadouts',async()=
   await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['a','b','c','d']}),/最多/);
   const state=await API.equipManualSkills(db,'u1',{skillIds:[]});
   assert.equal(state.equipped.length,0);
-  assert.equal((await API.manualsState(db,'u2')).books['body-rock'],undefined);
+  assert.equal((await API.manualsState(db,'u2')).library.length,0);
 });
 
-test('only equipped manual attacks can execute, and killing creatures grants mastery exactly once',async()=>{
+test('only equipped manual killing blows grant EXP, once per idempotent request',async()=>{
   const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
   const state=await API.start(db,'u1',{mode:'pve'},now),raw=db.records.get(API.ROOMS+'/'+state.id);
   raw.blocks=[];Object.assign(raw.actors[0],{x:1,y:3,stamina:10});
@@ -57,18 +95,37 @@ test('only equipped manual attacks can execute, and killing creatures grants mas
     type:'manual',skillId:'wind-slash',x:2,y:3};
   const first=await API.command(db,'u1',request,now);
   assert.equal(first.manualKills.u1['sword-wind'],3);
-  assert.equal(bookRecord(db).books['sword-wind'].kills,3);
-  assert.equal(Catalog.unlocked(bookRecord(db),'wind-step'),true);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,150);
+  assert.equal(Catalog.mastery(150).level,3);
   assert.equal(first.actors[0].stamina,7);
   const again=await API.command(db,'u1',request,now);
   assert.equal(again.manualKills.u1['sword-wind'],3);
-  assert.equal(bookRecord(db).books['sword-wind'].kills,3);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,150);
   await assert.rejects(API.command(db,'u1',{...request,requestId:'manual-forged-02',
     skillId:'wind-thousand',revision:first.revision},now),/尚未裝備/);
-  assert.equal(bookRecord(db).books['sword-wind'].kills,3);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,150);
 });
 
-test('ordinary and golden-core kills cannot grant manual mastery',()=>{
+test('cumulative kill receipts translate into XP, unlocking Lv.5 and Lv.10 without duplication',()=>{
+  const raw={version:2,books:{'sword-wind':{exp:0}},equipped:['wind-slash']};
+  const battle={manualKills:{u1:{'sword-wind':6}}};
+  const first=API.applyManualKills(battle,'u1',raw);
+  assert(first.changed);
+  assert.equal(first.state.books['sword-wind'].exp,300);
+  assert.equal(Catalog.levelForExp(300),5);
+  assert(Catalog.unlocked(first.state,'wind-step'));
+  assert(!Catalog.unlocked(first.state,'wind-thousand'));
+  const replay=API.applyManualKills(battle,'u1',first.state);
+  assert.equal(replay.changed,false);
+  assert.equal(replay.state.books['sword-wind'].exp,300);
+  battle.manualKills.u1['sword-wind']=22;
+  const maxed=API.applyManualKills(battle,'u1',replay.state);
+  assert.equal(maxed.state.books['sword-wind'].exp,1100);
+  assert.equal(Catalog.levelForExp(1100),10);
+  assert(Catalog.unlocked(maxed.state,'wind-thousand'));
+});
+
+test('ordinary or golden-core kills cannot grant manual mastery',()=>{
   const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
     players:[{uid:'u1',name:'u1',atk:200,maxHp:1000,manualSkills:['rock-fist']}],now});
   s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10});
@@ -77,7 +134,7 @@ test('ordinary and golden-core kills cannot grant manual mastery',()=>{
   assert.equal(killed.manualKills,undefined);
 });
 
-test('trial clear awards an unowned book with pity, once, in the same transaction',async()=>{
+test('trial clear awards a fresh manual with zero EXP, once, in the same transaction',async()=>{
   const db=database();
   await API.chooseSchool(db,'u1',{school:'body'});
   const ref=API.MANUALS+'/u1';db.records.get(ref).dropMisses=3;
@@ -89,7 +146,7 @@ test('trial clear awards an unowned book with pity, once, in the same transactio
   assert.equal(complete.status,'finished');
   const drop=complete.manualDrops?.u1;
   assert.ok(drop?.id&&drop?.name);
-  assert.equal(bookRecord(db).books[drop.id].kills,0);
+  assert.equal(bookRecord(db).books[drop.id].exp,0);
   const count=Object.keys(bookRecord(db).books).length;
   const replay=await API.command(db,'u1',request,now);
   assert.equal(replay.manualDrops?.u1?.id,drop.id);
