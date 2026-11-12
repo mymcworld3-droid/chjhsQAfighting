@@ -76,6 +76,7 @@ function ensure(){
     else if(b.hasAttribute('data-question-helper-for')){activatePairContext(Number(b.dataset.questionHelperFor));openQuestionTool('helper');}
     else if(b.hasAttribute('data-question-report-for')){activatePairContext(Number(b.dataset.questionReportFor));openQuestionTool('report');}
     else if(b.hasAttribute('data-solo-correction-for'))void queueTacticalCorrection(Number(b.dataset.soloCorrectionFor));
+    else if(b.dataset.helperExtend)void queueTacticalExtension(b.dataset.helperExtend,b);
     else if(b.hasAttribute('data-correction-hint-for')){activatePairContext(Number(b.dataset.correctionHintFor));openQuestionTool('helper');$('[data-helper-input]').value='請針對我這題的錯誤給一個簡短的概念提示，協助我理解關鍵步驟，再嘗試同概念訂正題。';void askHelper();}
     else if(b.hasAttribute('data-pair-whiteboard-for'))openPairWhiteboard(Number(b.dataset.pairWhiteboardFor));
     else if(b.hasAttribute('data-pair-whiteboard-clear'))clearPairWhiteboard();
@@ -905,6 +906,22 @@ async function queueTacticalCorrection(index){
     window.showToast?.(error?.message||'訂正題暫時無法生成');
   }
 }
+async function queueTacticalExtension(point,button){
+  if(!quizContext||!point||state?.mode!=='pve'||button.disabled)return;
+  button.disabled=true;button.textContent='延伸題準備中…';
+  try{
+    if(typeof window.queueTacticalSoloExtension!=='function')
+      throw Error('主問道延伸練習尚未就緒');
+    await window.queueTacticalSoloExtension({
+      question:quizContext.q.q,subject:quizContext.q.subject,
+      topic:point,adaptive:quizContext.q.adaptive||null
+    });
+    if(button.isConnected)button.textContent='延伸題已加入一般問道';
+  }catch(error){
+    if(button.isConnected){button.disabled=false;button.textContent='延伸練習 · 點此重試';}
+    window.showToast?.(error?.message||'延伸題暫時無法準備');
+  }
+}
 function setQuizContext(q,review=null){
   if(quizContext?.id!==q.id||quizContext.roomId!==state.id){
     quizContext?.abort.abort();
@@ -956,7 +973,7 @@ async function askHelper(intent='discussion'){
   const history=ctx.messages.slice(-6);ctx.messages.push({role:'user',text:message});ctx.helperBusy=true;
   // As in main solo, only a successful assistant response counts as help;
   // a pure question-integrity check is not a learning hint.
-  const append=(role,text)=>{const row=document.createElement('p'),label=document.createElement('span'),body=document.createElement('span');row.className='quiz-helper-message '+(role==='user'?'user':'assistant');label.className='quiz-helper-message-stack';body.className='quiz-helper-message-body';if(role==='user')body.textContent=text;else body.innerHTML=rich(text);label.append(body);row.append(label);$('[data-helper-messages]')?.append(row);window.quizMathTypeset?.(body);};
+  const append=(role,text)=>{const row=document.createElement('p'),label=document.createElement('span'),body=document.createElement('span');row.className='quiz-helper-message '+(role==='user'?'user':'assistant');label.className='quiz-helper-message-stack';body.className='quiz-helper-message-body';if(role==='user')body.textContent=text;else body.innerHTML=rich(text);label.append(body);row.append(label);$('[data-helper-messages]')?.append(row);window.quizMathTypeset?.(body);return row;};
   append('user',message);input.value='';$('[data-helper-send]').disabled=true;$('[data-helper-status]').textContent='問道助手正在思考…';
   try{
     const review=ctx.review,q=ctx.q;
@@ -973,8 +990,18 @@ async function askHelper(intent='discussion'){
     if(!result.answer)throw Error('問道助手暫時沒有回覆，請重試。');
     if(!review&&!result.interfaceIssue&&intent!=='check-question')
       window.QAAdaptiveLearning?.hint(ctx.learningQuiz);
-    ctx.messages.push({role:'assistant',text:result.answer});
-    append('assistant',result.answer);$('[data-helper-status]').textContent='';
+    const point=String(result.knowledgePoint||'').trim().slice(0,60);
+    ctx.messages.push({role:'assistant',text:result.answer,knowledgePoint:point});
+    const reply=append('assistant',result.answer);
+    if(point&&state.mode==='pve'&&reply){
+      const extend=document.createElement('button');
+      extend.type='button';extend.className='quiz-helper-practice-btn';
+      extend.dataset.helperExtend=point;
+      extend.textContent='延伸練習 · '+point;
+      extend.title='使用主問道相同的生成演算法，加入一般問道待答題庫';
+      reply.querySelector('.quiz-helper-message-stack')?.append(extend);
+    }
+    $('[data-helper-status]').textContent='';
     if(result.questionIssue?.confirmed)void reportQuestion(result.questionIssue.reason);
   }catch(err){if(sameQuiz(ctx)&&$('[data-helper-status]'))$('[data-helper-status]').textContent=err.message;}
   finally{ctx.helperBusy=false;if(sameQuiz(ctx)&&$('[data-helper-send]'))$('[data-helper-send]').disabled=false;}
