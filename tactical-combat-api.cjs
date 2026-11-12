@@ -441,28 +441,82 @@ async function answer(db,uid,input,now=Date.now()){
     delete s.pendingFollowup?.[uid];
     s.questionHistory=[...(s.questionHistory||[]),q.q].slice(-24);
     s.questionHistoryMeta=[...(s.questionHistoryMeta||[]),{...q.meta,q:q.q}].slice(-24);
-    const stats=user.stats||{},patch={'stats.totalAnswered':Rules.num(stats.totalAnswered)+1,
+    // Main quiz's two shared learning engines are the source of truth:
+    // (1) fixed-point ability footprint, (2) concept mistakes/hard/weak reward.
+    // Fine-grained adaptive mastery is written into the SAME transaction, not
+    // by a second browser-side write that might race the battle transaction.
+    const stats=user.stats||{},learningQuiz={
+      data:{q:q.q},learningSubject:q.subject,
+      learningTopic:q.learningTopic||q.topic,
+      learningDifficulty:q.difficulty,
+      answerSelectedIndex:input.choice
+    };
+    const learningContext=SoloLearning.context(learningQuiz);
+    const learningReward=SoloLearning.reward(stats,learningQuiz,correct,user.profile||{});
+    const patch={
+      'stats.totalAnswered':Rules.num(stats.totalAnswered)+1,
       'stats.totalCorrect':Rules.num(stats.totalCorrect)+(correct?1:0),
-      'stats.knowledgePointMapV1':Knowledge.record(stats.knowledgePointMapV1||{},q,correct)};
-    const topic=['__proto__','constructor','prototype'].includes(q.topic)?'本題概念':q.topic||'本題概念';
-    const map={...(stats.knowledgeMap||{})},topics={...(map[q.subject]||{})},prior=topics[topic]||{};
-    topics[topic]={...prior,total:Rules.num(prior.total)+1,correct:Rules.num(prior.correct)+(correct?1:0)};map[q.subject]=topics;patch['stats.knowledgeMap']=map;
-    // Preserve normal solo progression, with server-derived amounts.
+      'stats.knowledgePointMapV1':Knowledge.record(stats.knowledgePointMapV1||{},q,correct)
+    };
+    const subject=learningContext.subject,topic=learningContext.topic;
+    const map={...(stats.knowledgeMap||{})},topics={...(map[subject]||{})},prior=topics[topic]||{};
+    topics[topic]={...prior,total:Rules.num(prior.total)+1,correct:Rules.num(prior.correct)+(correct?1:0)};
+    map[subject]=topics;patch['stats.knowledgeMap']=map;
+    const help=Math.max(0,Math.min(3,Math.floor(Number(input.help)||0)));
+    if(q.adaptive?.scopeId){
+      patch['stats.adaptiveLearningV1']=AdaptiveRules.record(
+        stats.adaptiveLearningV1,q.adaptive,{
+          id:q.adaptive.questionId,correct,skipped:false,help,at:now
+        });
+    }
+    const previousScore=Rules.num(stats.totalScore);
+    let cultivation=0,goldAdded=0;
     if(s.mode==='pve'){
-      const gain=correct?1+Growth.cultivation(user,'solo'):Rules.num(stats.totalScore)>=28?-1:0;
-      patch['stats.totalScore']=Math.max(0,Rules.num(stats.totalScore)+gain);
-      patch['stats.lastQuizAnswer']={question:q.q,isCorrect:correct,scoreBefore:Rules.num(stats.totalScore),scoreAfter:patch['stats.totalScore'],
-        penalty:Math.max(0,Rules.num(stats.totalScore)-patch['stats.totalScore']),answeredAtMs:now};
+      patch['stats.soloLearningV1']=learningReward.progress;
+      // Main progression awards +1 before 金丹, +2 from 金丹 onward;
+      // learning bonuses use the exact main solo rule, not tactical guesses.
+      // Existing server-authoritative battle tally remains separate.
+      cultivation=correct?(previousScore>=28?2:1)+Growth.cultivation(user,'solo')+learningReward.gain
+        :previousScore>=28?-1:0;
+      patch['stats.totalScore']=Math.max(0,previousScore+cultivation);
+      patch['stats.lastQuizAnswer']={
+        question:String(q.q).normalize('NFC').replace(/\\s+/g,' ').trim().slice(0,1500),
+        isCorrect:correct,scoreBefore:previousScore,scoreAfter:patch['stats.totalScore'],
+        penalty:Math.max(0,previousScore-patch['stats.totalScore']),answeredAtMs:now
+      };
       patch['stats.currentStreak']=correct?Rules.num(stats.currentStreak)+1:0;
       patch['stats.bestStreak']=Math.max(Rules.num(stats.bestStreak),patch['stats.currentStreak']);
-      if(correct){patch['stats.gold']=Rules.num(stats.gold)+Gold.perCorrect(stats.totalScore);patch.questProgress=recordEvent(user.questProgress,'solo');}
+      if(correct){
+        goldAdded=Gold.perCorrect(previousScore)+learningReward.gold;
+        patch['stats.gold']=Rules.num(stats.gold)+goldAdded;
+        patch.questProgress=recordEvent(user.questProgress,'solo');
+      }
     }
+    // Return actual wallet/progression gains so the same answer review can
+    // show them without trusting a client-supplied reward calculation.
+    s.reviews[uid].reward={
+      cultivation, gold:goldAdded, learning:learningReward.message||''
+    };
+    s.reviewHistory[q.id].reward=s.reviews[uid].reward;
     const logId=crypto.createHash('sha256').update(s.id+'\n'+uid+'\n'+q.id).digest('hex');
     tx.update(userRef,patch);
-    tx.set(db.collection('exam_logs').doc(logId),{uid,question:q.q,options:q.opts,correctIdx:q.answerIndex,userIdx:input.choice,
-      isCorrect:correct,explanation:q.explanation,subject:q.subject,subTopic:q.topic,...Knowledge.metadata(q,q.subject),
-      mode:s.mode==='pve'?'infinite':'duel',topic:s.mode==='pve'?'Solo':'Duel',rankAtTime:s.mode==='pve'?'問道獵妖':'戰棋鬥法',
-      timestamp:FieldValue.serverTimestamp(),timeTaken:Math.max(0,now-q.createdAtMs)});
+    const point=Knowledge.label(q,q.subject);
+    tx.set(db.collection('exam_logs').doc(logId),{
+      uid,question:q.q,options:q.opts,correctIdx:q.answerIndex,userIdx:input.choice,
+      isCorrect:correct,explanation:q.explanation,subject:learningContext.subject,subTopic:learningContext.topic,
+      knowledgeSubject:point?.subject||'',knowledgePointId:point?.id||'',
+      knowledgePoint:point?.name||'',knowledgePoints:Knowledge.labels(q,q.subject),
+      questionForm:q.meta?.question_form||'',
+      cognitiveLevel:q.meta?.cognitive_level||null,reasoningSteps:q.meta?.reasoning_steps||null,
+      conceptId:q.meta?.concept_id||'',
+      ...(q.adaptive?{adaptiveScopeId:q.adaptive.scopeId,
+        adaptiveConceptId:q.adaptive.conceptId,adaptiveFacetId:q.adaptive.facetId,
+        assistanceLevel:help,adaptiveSkipped:false}:{}),
+      mode:s.mode==='pve'?'infinite':'duel',topic:s.mode==='pve'?'Solo':'Duel',
+      rankAtTime:s.mode==='pve'?'問道獵妖':'戰棋鬥法',
+      timestamp:FieldValue.serverTimestamp(),
+      timeTaken:Math.max(0,Math.min(86400,Number(input.timeTaken)||0))
+    });
     tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,patchedUser(user,patch));
   });
 }
