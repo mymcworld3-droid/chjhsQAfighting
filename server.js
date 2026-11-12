@@ -505,7 +505,9 @@ async function generateQuiz(req, res) {
     let avatarContext = null;
     const meditationMode = String(quizMode || '') === 'meditation-literacy';
     let meditationContext = null;
-    const combatFastMode = FAST_QUIZ_MODES.has(String(quizMode || ''));
+    // Tactical mode is an ordinary solo question interleaved with combat.
+    // Keep the same main-solo generation prompt, not a compact combat variant.
+    const combatFastMode = !tacticalMode && FAST_QUIZ_MODES.has(String(quizMode || ''));
     let raidIdentity = null;
     let raidRoomId = '';
     let raidActionId = 0;
@@ -548,7 +550,7 @@ async function generateQuiz(req, res) {
             }
             subject=tacticalContext.subject;level=tacticalContext.level;rank=0;knowledgeMap=null;
             difficulty=tacticalContext.difficulty;specificTopic=tacticalContext.topic||'綜合測驗';topic=specificTopic;
-            avoidQuestions=tacticalContext.history;avoidQuestionMeta=[];
+            avoidQuestions=tacticalContext.history;avoidQuestionMeta=tacticalContext.historyMeta||[];
         } catch(error) {
             return res.status(error.status||503).json({error:error.status?error.message:'戰場題目準備失敗，請重試'});
         }
@@ -664,6 +666,27 @@ async function generateQuiz(req, res) {
             adaptiveContext=await adaptiveLearning.prepare(req,{adaptiveScope:towerContext.adaptiveScope,adaptiveConceptId:towerContext.adaptiveConceptId||''});
             difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
         }catch(error){return res.status(error.status||503).json({error:error.status?error.message:'範圍分析暫未完成，請稍後重試'});}
+    }else if(tacticalMode&&tacticalContext?.adaptiveScope){
+        // The selected chapter uses the same diagnostic/review schedule and
+        // facet-specific generation criteria as main's focused solo quiz.
+        try {
+            adaptiveContext=await adaptiveLearning.prepare(req,{
+                adaptiveScope:tacticalContext.adaptiveScope,
+                adaptivePending:tacticalContext.adaptivePending||[]
+            });
+            // Concurrent first/second slots request different plan targets.
+            const choose=adaptiveContext.target;
+            adaptiveContext.target=index=>choose(index+(tacticalContext.batchSlot||0));
+            subject=adaptiveContext.scope.subject;
+            level=adaptiveContext.scope.level;
+            specificTopic=adaptiveContext.scope.topic;
+            topic=specificTopic;
+            difficulty=adaptiveContext.target(0).difficulty;knowledgeMap=null;
+        } catch(error){
+            return res.status(error.status||503).json({
+                error:error.status?error.message:'範圍細觀念分析暫未完成，請稍後重試'
+            });
+        }
     }else if(req.body?.adaptiveScope){
         if(quizMode&&quizMode!=='solo')return res.status(400).json({error:'背景適性學習僅用於一般問道試煉'});
         try{
@@ -675,6 +698,10 @@ async function generateQuiz(req, res) {
     // Tactics consume the same independently approved, durable AI bank as solo.
     // PvE/PvP question answers remain server-only and are shuffled per battle.
     let aiBankAllowed = aiQuestionBank.enabled && (tacticalMode || tacticalBankFill);
+    // Match the solo source policy: custom focused units cannot receive
+    // generic pre-reviewed bank items in lieu of their exact selected scope.
+    if(tacticalMode&&adaptiveContext&&(adaptiveContext.scope.path.includes('/自訂/')||adaptiveContext.scope.path.endsWith('/自訂')))
+        aiBankAllowed=false;
     if (!correction && typeof aiQuestionBank !== 'undefined' && aiQuestionBank.enabled && (!quizMode || quizMode === 'solo')) {
         if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
         else {
@@ -880,7 +907,7 @@ async function generateQuiz(req, res) {
                 '\n[前一版未通過驗證]\n' + lastGenerationIssue.slice(0, 600) +
                 '\n這一版必須從頭重寫整個題目 JSON 的 q、correct、wrong、exp，不能只在解析加註更正。' : '';
             const taskPlan = createQuizTaskPlan({targetForm, forms:meditationMode?MeditationLiteracy.FORMS:QUESTION_FORMS, previousMeta,
-                difficulty, mode:String(quizMode || 'solo'),assignmentForTask:adaptiveContext?index=>adaptiveContext.target(index):undefined});
+                difficulty, mode:tacticalMode?'solo':String(quizMode || 'solo'),assignmentForTask:adaptiveContext?index=>adaptiveContext.target(index):undefined});
             const promptForTask = index => {
                 const task = taskPlan.get(index);
                 const facet=adaptiveContext?.target(index),taskDifficulty=facet?.difficulty||difficulty;
