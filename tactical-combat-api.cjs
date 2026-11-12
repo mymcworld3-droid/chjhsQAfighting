@@ -267,7 +267,12 @@ async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
   return {roomId:id,turn:s.turn,quizRound:s.quizRound||0,index:a.answered,batchSlot,
     subject:choice.subject,topic:choice.specificTopic,bankSource:choice.bankSource||'',
     difficulty:choice.difficulty,level:choice.level,scopeKey,
-    history:[...(s.questionHistory||[]),...(batchSlot&&s.pending?.[uid]?[s.pending[uid].q]:[])].slice(-24),
+    // Either parallel slot may finish first. Exclude its stored stem from
+    // the other slot's candidate pool, including file-bank selections.
+    history:[...(s.questionHistory||[]),
+      ...(batchSlot===1&&s.pending?.[uid]?[s.pending[uid].q]:[]),
+      ...(batchSlot===0&&s.pendingFollowup?.[uid]?[s.pendingFollowup[uid].q]:[])
+    ].slice(-24),
     pending:publicQuestion(pending)};
 }
 async function commitQuestion(db,uid,expected,parsed,now=Date.now()){
