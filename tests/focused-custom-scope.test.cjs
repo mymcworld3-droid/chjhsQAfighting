@@ -92,6 +92,7 @@ test('saving focused custom ranges persists them and both solo quizzes and oppor
   assert.equal(writes[0].value.gameSettings.focusedUnits[0].detail, '一次函數的斜率');
   assert.equal(writes[0].value.gameSettings.comprehensiveUnits, undefined, 'saving removes obsolete comprehensive custom ranges');
   const quizStart = legacy.indexOf('async function fetchOneQuestion() {'), quizEnd = legacy.indexOf('async function handleAnswer', quizStart);
+  context.authenticatedMainFetch = context.fetch;
   vm.runInContext(legacy.slice(quizStart, quizEnd) + '\nthis.fetchQuiz = fetchOneQuestion;', context);
   await context.fetchQuiz();
   assert.equal(requests[0].subject, '數學'); assert.equal(requests[0].specificTopic, '一次函數的斜率');

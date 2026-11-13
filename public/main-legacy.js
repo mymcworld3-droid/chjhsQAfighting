@@ -15,7 +15,6 @@ import './cultivation/true-immortal.js';
 import { createSoloQuestionCache } from './solo-question-cache.js';
 import { ensureSecondaryFirebaseAuth } from './cultivation/firebase-projects.js';
 import { authenticatedMainFetch } from './cultivation/data/project-repository.js';
-import { warmTacticalBank } from './cultivation/tactical-bank-warm.js';
 // 🔥 修正：使用純 URL 引入 Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, signInAnonymously, linkWithPopup, signInWithCredential, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -122,6 +121,7 @@ const soloQuestionCache = createSoloQuestionCache(window.localStorage);
 let soloCacheIdentity = '';
 let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
+const soloDraws = new WeakMap();
 window.persistAdaptiveActiveQuiz = quiz => {
     if(quiz?.mode==='trial-tower'){window.persistTrialTowerStudyHint?.(quiz);return;}
     if (soloQuestionCache.isCurrent(auth.currentUser?.uid, soloQuestionScope())) soloQuestionCache.persistActive(quiz);
@@ -160,6 +160,7 @@ function syncSoloQuestionCache() {
     if (soloCacheIdentity !== identity) {
         // Discard the previous account/range and any in-flight buffer when scope changes.
         soloQuestionCache.activate(uid, scope);
+        soloQuestionCache.discardUnverified();
         soloCacheIdentity = identity;
         soloCacheRevision += 1;
         quizBuffer = soloQuestionCache.getQueue();
@@ -1430,8 +1431,6 @@ onAuthStateChanged(auth, async (user) => {
             // 所有腳本都已成功載入，現在才正式啟動其餘監聽與遊戲介面。
             if (auth.currentUser?.uid !== user.uid) return;
             checkSoloQuestionStock();
-            // Prepare five reviewed stamina questions per upcoming scope before players enter combat.
-            void warmTacticalBank(1);
             startPresenceSystem();
             refreshInvitationListener();
             listenToSystemCommands();  
@@ -2446,8 +2445,6 @@ window.saveProfile = async (triggerButton = null) => {
     localStorage.removeItem('currentQuiz'); 
     syncSoloQuestionCache();
     fillBuffer();
-    // Updated grade, focused units or difficulty require a fresh trusted bank fill.
-    void warmTacticalBank(1,{force:true});
     
     if (btn) {
         const originalLabel = btn.id === 'dongfu-scope-save' ? '儲存出題範圍' : '更新設定';
@@ -2529,6 +2526,64 @@ async function fillBuffer({ firstReady = false } = {}) {
     return firstReady ? bufferNextQuestionPromise : bufferFillPromise;
 }
 
+// Ordinary study and PvE draw from the same account/range queue.
+async function takeSoloQuestion({ isCurrent = () => true, onEmpty = () => {} } = {}) {
+    const scope = syncSoloQuestionCache();
+    const uid = auth.currentUser?.uid;
+    const revision = soloCacheRevision;
+    const current = () => isCurrent() && auth.currentUser?.uid === uid &&
+        soloCacheRevision === revision && soloQuestionScope() === scope;
+    if (!scope || !uid || !current()) return null;
+
+    let quiz = soloQuestionCache.takeNext();
+    if (!quiz) onEmpty();
+    if (!quiz && isFetchingBuffer) {
+        await fillBuffer({ firstReady: true });
+        if (!current()) return null;
+        quiz = soloQuestionCache.takeNext();
+    }
+    if (!quiz) {
+        const generated = await fetchOneQuestion();
+        if (!current()) return null;
+        quiz = soloQuestionCache.takeNext();
+        if (quiz) soloQuestionCache.append(generated);
+        else {
+            soloQuestionCache.setActive(generated);
+            quiz = generated;
+        }
+    }
+    soloDraws.set(quiz, revision);
+    quizBuffer = soloQuestionCache.getQueue();
+    void fillBuffer();
+    return quiz;
+}
+
+window.QASoloQuestionQueue = Object.freeze({
+    take: takeSoloQuestion,
+    isCurrent(quiz) {
+        syncSoloQuestionCache();
+        return !!quiz && soloDraws.get(quiz) === soloCacheRevision && !!auth.currentUser?.uid;
+    },
+    refreshUnverified() {
+        soloQuestionCache.discardUnverified();
+        void fillBuffer();
+    },
+    persist(quiz) {
+        syncSoloQuestionCache();
+        return soloQuestionCache.persistActive(quiz);
+    },
+    consume(quiz) {
+        syncSoloQuestionCache();
+        if (soloDraws.get(quiz) !== soloCacheRevision || !auth.currentUser?.uid) return;
+        soloDraws.delete(quiz);
+        if (soloQuestionCache.getActive() === quiz) soloQuestionCache.consumeActive({ remember: true });
+        else soloQuestionCache.remember(quiz);
+        if (window.currentActiveQuiz === quiz) window.currentActiveQuiz = null;
+        quizBuffer = soloQuestionCache.getQueue();
+        void fillBuffer();
+    }
+});
+
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
@@ -2599,49 +2654,30 @@ window.startQuizFlow = async (isNewSession = false) => {
         }
     }
 
-    // Restore an unanswered active question before using the prefetched queue.
-    let nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
-    if (!nextQ) {
-        document.getElementById('quiz-loading').classList.remove('hidden');
-        document.getElementById('loading-text').innerText = '正在填充題庫中';
-    }
-    if (!nextQ && isFetchingBuffer) {
-        // Show the first ready question while the remaining stock fills in the background.
-        await fillBuffer({ firstReady: true });
-        if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid ||
-            soloQuestionScope() !== scope) return;
-        nextQ = soloQuestionCache.getActive() || soloQuestionCache.takeNext();
-    }
-    quizBuffer = soloQuestionCache.getQueue();
-    if (nextQ) {
-        window.currentActiveQuiz = nextQ;
-        renderQuiz(nextQ.data, nextQ.rank, nextQ.badge);
-        void fillBuffer();
-    } else {
-        try {
-            const q = await fetchOneQuestion();
-            if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
+    try {
+        const quiz = await takeSoloQuestion({
+            isCurrent: () => opening === soloQuizOpenSerial,
+            onEmpty: () => {
+                document.getElementById('quiz-loading').classList.remove('hidden');
+                document.getElementById('loading-text').innerText = '正在填充題庫中';
+            }
+        });
+        if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
+        if (!quiz) {
             if (soloQuestionScope() !== scope) {
                 syncSoloQuestionCache();
                 void window.startQuizFlow();
-                return;
             }
-            let displayQuestion = q;
-            if (window.hasReadySoloCorrection?.()) {
-                soloQuestionCache.append(q);
-                displayQuestion = soloQuestionCache.takeNext() || q;
-            } else soloQuestionCache.setActive(q);
-            window.currentActiveQuiz = displayQuestion;
-            quizBuffer = soloQuestionCache.getQueue();
-            renderQuiz(displayQuestion.data, displayQuestion.rank, displayQuestion.badge);
-            void fillBuffer();
-        } catch (e) {
-            if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
-            console.error(e);
-            void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
-            alert(e?.message || "無法開始，請稍後再試");
-            switchToPage('page-home');
+            return;
         }
+        window.currentActiveQuiz = quiz;
+        renderQuiz(quiz.data, quiz.rank, quiz.badge);
+    } catch (error) {
+        if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
+        console.error(error);
+        void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
+        alert(error?.message || '無法開始，請稍後再試');
+        switchToPage('page-home');
     }
 
 };
@@ -2878,7 +2914,7 @@ async function fetchOneQuestion() {
         console.log(`[AI-專注出題] 學科: ${subject} | 範圍: ${targetTopic} | 難度: ${finalDifficulty}`);
 
         try {
-            const response = await (window.QAAdaptiveLearning?.fetchQuiz || fetch)("/api/generate-quiz", {
+            const response = await (window.QAAdaptiveLearning?.fetchQuiz || authenticatedMainFetch)("/api/generate-quiz", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -2904,6 +2940,7 @@ async function fetchOneQuestion() {
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
+                soloProof: data.soloProof,
                 meta: quizMetaFromRaw(rawData),
                 adaptive: rawData.adaptive,
                 rank: rankName,
@@ -2993,6 +3030,7 @@ async function fetchOneQuestion() {
             let allOptions = shuffleArray([rawData.correct, ...rawData.wrong]);
             return {
                 data: { q: rawData.q, opts: allOptions, ans: allOptions.indexOf(rawData.correct), exp: rawData.exp },
+                soloProof: data.soloProof,
                 meta: quizMetaFromRaw(rawData),
                 rank: rankName,
                 badge: `🎯 ${rawData.subject} | ${rawData.sub_topic || '綜合'}`,
@@ -3663,7 +3701,7 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
 
     const adaptive = recoveryOrigin ? practice.quiz?.adaptive : null;
     const request = adaptive ? (window.QAAdaptiveLearning?.fetchQuiz || authenticatedMainFetch)
-        : recoveryOrigin ? authenticatedMainFetch : fetch;
+        : authenticatedMainFetch;
     const response = await request('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -3677,6 +3715,7 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
             knowledgeMap: currentUserData?.stats?.knowledgeMap || {},
             quizSessionId: (globalThis.__xiuxianQuizBatchSession || (globalThis.__xiuxianQuizBatchSession = (globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)))) + '-' + (currentUserData?.uid || 'guest'),
             ...recentSoloQuestionContext(),
+            ...(!recoveryOrigin ? {soloExtension: true} : {}),
             ...(recoveryOrigin ? {correctionPractice: {sourceQuestion: practice.originQuestion || recoveryOrigin}} : {}),
             ...(adaptive ? {...adaptiveQuestionContext(adaptive.scope), adaptiveConceptId:adaptive.conceptId} : {})
         })
@@ -3699,6 +3738,7 @@ async function fetchExtendedPracticeQuestion(practice = extendedPracticeState) {
             ans: allOptions.indexOf(rawData.correct),
             exp: rawData.exp
         },
+        soloProof: payload.soloProof,
         meta: quizMetaFromRaw(rawData),
         adaptive: rawData.adaptive,
         rank: rankName,

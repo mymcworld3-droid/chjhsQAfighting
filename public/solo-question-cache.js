@@ -202,6 +202,15 @@ export function createSoloQuestionCache(storage) {
     return true;
   }
 
+  function discardUnverified() {
+    // Cached AI questions from older builds have no server receipt. Keep the
+    // ordinary history and all file-bank questions, which the server can verify.
+    const usable = item => !!(item?.soloProof || item?.bankQuestionId);
+    if (active && !usable(active)) active = null;
+    queue = queue.filter(usable);
+    save();
+  }
+
   function consumeActive({ remember: shouldRemember = false } = {}) {
     if (!active) return false;
     if (shouldRemember) remember(active);
@@ -212,6 +221,6 @@ export function createSoloQuestionCache(storage) {
 
   return {
     activate, getActive, getQueue, getHistory, pendingCount, isPersistent,
-    isCurrent, isDuplicate, append, takeNext, setActive, persistActive, remember, consumeActive
+    isCurrent, isDuplicate, append, takeNext, setActive, persistActive, remember, consumeActive, discardUnverified
   };
 }

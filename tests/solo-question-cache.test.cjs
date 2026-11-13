@@ -150,12 +150,12 @@ test('seen-question history survives reload and blocks exact or long structural 
 });
 
 test('solo quiz uses restored active question before hitting the API and saves each prefetched result', () => {
-  assert.match(legacy, /let nextQ = soloQuestionCache.getActive\(\) \|\| soloQuestionCache.takeNext\(\)/);
+  assert.match(legacy, /let quiz = soloQuestionCache.takeNext\(\)/);
   assert.match(legacy, /const BUFFER_SIZE = 5;/);
-  assert.match(legacy, /if \(!nextQ && isFetchingBuffer\)/);
+  assert.match(legacy, /if \(!quiz && isFetchingBuffer\)/);
   assert.match(legacy, /if \(isFetchingBuffer\) return firstReady \? bufferNextQuestionPromise : bufferFillPromise/);
   assert.match(legacy, /soloQuestionCache.append\(question\)/);
-  assert.match(legacy, /soloQuestionCache.setActive\(q\)/);
+  assert.match(legacy, /soloQuestionCache.setActive\(generated\)/);
   assert.match(legacy, /soloQuestionCache\.consumeActive\(\{ remember: true \}\)/);
   assert.match(legacy, /recentSoloQuestionContext\(\)/);
   assert.match(legacy, /avoidQuestionMeta/);
@@ -243,9 +243,9 @@ test('helper replies expose knowledge-point extended practice', () => {
 
 
 test('core import and page query change together to refresh browser cached code', () => {
-  assert.match(main, /main-legacy\.js\?v=20261013-arrival1/);
-  assert.match(index, /main\.js\?v=20261013-arrival1/);
-  assert.match(index, /xianxia\.css\?v=20261013-ai-scenes1/);
+  const coreVersion = main.match(/main-legacy\.js\?v=([^']+)/)?.[1];
+  assert.ok(coreVersion);
+  assert.equal(index.match(/src="main\.js\?v=([^"]+)"/)?.[1], coreVersion);
 });
 
 test('assistance on the exact active question survives reload and cannot replace an unanswered question',()=>{

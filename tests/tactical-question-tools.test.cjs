@@ -1,23 +1,25 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
-const toolsSource=source.slice(source.indexOf('function setQuizContext('),source.indexOf('function paintQuestion('));
+const toolsSource=source.slice(source.indexOf('function soloSubmission('),source.indexOf('async function soloBattleQuestion('))
+  + source.slice(source.indexOf('function setQuizContext('),source.indexOf('function paintQuestion('));
 const q={id:'question-one',q:'計算二加三的結果？',opts:['1','2','3','5'],subject:'數學'};
 const node=()=>({value:'',textContent:'',hidden:false,disabled:false,children:[],focus(){},append(...v){this.children.push(...v);},setAttribute(){}});
 function client(reply=async()=>({answer:'先把兩個數相加。'})){
   const nodes=new Map(),requests=[];const $=key=>{if(!nodes.has(key))nodes.set(key,node());return nodes.get(key);};
   const user={stats:{gold:0,totalScore:30}},legacyQuiz={data:{q:'另一頁的題目'}};
   const accepted=[],notices=[];
-  const ctx={quizContext:null,state:{id:'arena-one',mode:'pve'},uid:'u1',epoch:1,op:0,AbortController,
+  const ctx={quizContext:null,pairGeneration:0,pairQuestions:[],pairChoices:[],pairReviews:[],pairFollowupPromise:null,state:{id:'arena-one',mode:'pve'},uid:'u1',epoch:1,op:0,AbortController,
     valid:(e,uid)=>ctx.epoch===e&&uid===ctx.uid,localUser:()=>user,$,esc:String,rich:String,
     document:{createElement:node},window:{currentActiveQuiz:legacyQuiz,quizMathTypeset(){},updateUIStats(){},refreshXiuxianLiveSync(){}},
+    hideModal(){},paint(){},canQuestion:()=>false,
     accept(next){accepted.push(next);ctx.state=next;if(next.progress)Object.assign(user.stats,next.progress.stats);},notice:message=>notices.push(message),
     api:async(url,body,signal)=>{requests.push({url,body,signal});return reply(url,body);}};
   vm.createContext(ctx);vm.runInContext(toolsSource,ctx);ctx.setQuizContext(q);
   return {ctx,$,requests,user,legacyQuiz,accepted,notices};
 }
 test('trial tools appear below the answer options and keep the original solo quiz state isolated',async()=>{
-  const c=client();assert.match(c.ctx.quizTools(),/問題回報/);assert.match(c.ctx.quizTools(),/問道助手/);
+  const c=client();assert.match(c.ctx.quizTools(),/回報題目錯誤/);assert.match(c.ctx.quizTools(),/問道助手/);
   c.$('[data-helper-input]').value='第一步怎麼算？';await c.ctx.askHelper();
   assert.equal(c.requests[0].url,'/api/question-helper');assert.equal(c.requests[0].body.question,q.q);
   assert.equal(c.requests[0].body.answered,false);assert.equal(c.requests[0].body.correctOption,'');
@@ -79,11 +81,12 @@ test('a delayed refund updates the same room without overwriting the next questi
 });
 test('background state synchronization preserves the current question; expiry closes an invalid question',()=>{
   const acceptSource=source.slice(source.indexOf('function accept('),source.indexOf('function applyProgress('));
-  let hides=0,preserved;const ctx={state:{id:'room',revision:1,question:{id:'q'}},appliedOp:0,clockOffset:0,modalOpen:true,
+  let hides=0,preserved;const ctx={state:{id:'room',mode:'pvp',revision:1,question:{id:'q'}},appliedOp:0,clockOffset:0,modalOpen:true,
+    Manuals:{EXP_PER_KILL:1},uid:'u1',pairQuestions:[],pairChoices:[],
     $:()=>({}),applyProgress(){},hideModal(){hides++;ctx.modalOpen=false;},notice(){},paint(options){preserved=options.preserveModal;}};
   vm.createContext(ctx);vm.runInContext(acceptSource,ctx);
-  ctx.accept({id:'room',revision:2,question:{id:'q'}},1);assert.equal(hides,0);assert.equal(preserved,true);
-  ctx.accept({id:'room',revision:3,question:null},2);assert.equal(hides,1);assert.equal(preserved,false);
+  ctx.accept({id:'room',mode:'pvp',revision:2,question:{id:'q'}},1);assert.equal(hides,0);assert.equal(preserved,true);
+  ctx.accept({id:'room',mode:'pvp',revision:3,question:null},2);assert.equal(hides,1);assert.equal(preserved,false);
   ctx.state={id:'room',revision:4,quizRound:1,actionRevision:3,phase:'action',turnUid:'u1'};
   const selected={x:2,y:3};ctx.selection=selected;
   ctx.accept({...ctx.state,revision:5},3);assert.equal(ctx.selection,selected,'opponent answers preserve the selected target');

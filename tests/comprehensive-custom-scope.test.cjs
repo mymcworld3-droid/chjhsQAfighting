@@ -14,6 +14,7 @@ test('random quizzes ignore saved custom ranges while focused quizzes still hono
     shuffleArray: a => a, fetch: async (_, input) => { requests.push(JSON.parse(input.body)); return { ok: true,
       json: async () => ({ text: JSON.stringify({ q: 'Q', correct: 'A', wrong: ['B','C','D'], exp: 'E' }) }) }; } });
   const start = legacy.indexOf('async function fetchOneQuestion() {'), end = legacy.indexOf('async function handleAnswer', start);
+  context.authenticatedMainFetch = context.fetch;
   vm.runInContext(legacy.slice(start, end) + '\nthis.fetchQuiz = fetchOneQuestion;', context);
   await context.fetchQuiz();
   assert.equal(requests[0].specificTopic, undefined);

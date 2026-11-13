@@ -12,8 +12,8 @@ const bank=fs.readFileSync(path.join(root,'ai-question-bank.cjs'),'utf8');
 test('bank warming is authenticated and derives school grade, subject and topic on server',()=>{
   assert.match(server,/app\.post\('\/api\/tactical\/bank-warm',async\(req,res\)=>\{/);
   assert.match(server,/const uid=await verifyMainIdentity\(req\)/);
-  assert.match(server,/const scope=trustedKnowledgeScope\(snap\.data\(\)\|\|\{\}\)/);
-  assert.match(server,/const choice=pickTrustedRaidKnowledge\(scope,index\)/);
+  assert.match(server,/scope=trialTowerScope\.snapshot\(owner\)/);
+  assert.match(server,/const choice=trialTowerScope\.pick\(scope,owner,index-1\)/);
   assert.match(server,/__trustedTacticalBankTarget:target/);
   assert.match(server,/if \(!req\.__trustedTacticalBankTarget \|\| !aiQuestionBank\.enabled\)/);
 });
@@ -32,9 +32,13 @@ test('background work must finish independent review before archiving, never ret
   assert.match(bank,/status:'approved'/);
 });
 
-test('refill is triggered on login, settings changes and active stamina battles',()=>{
-  assert.match(client,/void warmTacticalBank\(1\)/);
-  assert.match(client,/void warmTacticalBank\(1,\{force:true\}\)/);
-  assert.match(battle,/void warmTacticalBank\(Math\.max\(1,\(next\.actors\?\.find\(a=>a\.uid===uid\)\?\.answered\|\|0\)\+1\)\)/);
-  assert.match(bank,/async function find\(target, excluded = \[\], isSimilar = \(\) => false, \{deadlineMs=2500\} = \{\}\)/);
+test('PvE reads the shared solo stock and its background refill is independent of the battlefield',()=>{
+  assert.match(client,/checkSoloQuestionStock\(\);/);
+  assert.match(client,/const BUFFER_SIZE = 5;/);
+  assert.match(client,/if \(!scope \|\| !uid \|\| soloQuestionCache\.pendingCount\(\) >= BUFFER_SIZE\) return;/);
+  assert.doesNotMatch(client,/warmTacticalBank/);
+  assert.doesNotMatch(battle,/warmTacticalBank/);
+  assert.match(battle,/if\(state\.mode==='pve'\)return soloBattleQuestion\(\);/);
+  assert.match(battle,/const quiz=await queue\.take\(\{isCurrent,onEmpty\}\)/);
+  assert.match(battle,/if\(!opened\|\|state\?\.mode!=='pvp'/);
 });

@@ -42,6 +42,7 @@ const registerQuestApi = require('./quest-api.cjs');
 const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
 const registerTacticalCombatApi = require('./tactical-combat-api.cjs');
 const tacticalCombat = registerTacticalCombatApi.__test;
+const soloQuestionReceipt = require('./solo-question-receipt.cjs');
 const enlightenmentTrial = require('./enlightenment-trial-api.cjs').__test;
 const registerOpportunityApi = require('./opportunity-api.cjs');
 const registerGameIssueApi = require('./game-issue-api.cjs');
@@ -466,7 +467,22 @@ async function generateQuiz(req, res) {
     let { subject, level, rank, difficulty, knowledgeMap, specificTopic, topic, avoidQuestions, avoidQuestionMeta, quizMode, quizSessionId } = req.body || {};
     subject = String(subject || '').trim().slice(0, 40);
     level = String(level || '國中一年級').slice(0, 32);
+    let soloIdentity = '';
     let correction = null;
+    const soloResponse = async (parsed, payload) => {
+        let soloProof;
+        if (!quizMode || quizMode === 'solo') {
+            try {
+                const uid = adaptiveContext?.uid || soloIdentity || await verifyMainIdentity(req);
+                soloProof = soloQuestionReceipt.issue(uid, parsed, {
+                    difficulty,
+                    recoveryOrigin: correction?.sourceQuestion,
+                    practiceTopic: correction?.knowledgePoint || (req.body?.soloExtension ? String(specificTopic || '').slice(0, 60) : '')
+                });
+            } catch (_) { /* Public/legacy quiz callers can still receive their questions. */ }
+        }
+        return res.json({ ...payload, text: JSON.stringify(parsed), ...(soloProof ? { soloProof } : {}) });
+    };
     if (req.body?.correctionPractice !== undefined) {
         const sourceQuestion = String(req.body.correctionPractice?.sourceQuestion || '').trim().slice(0, 1000);
         const knowledgePoint = String(specificTopic || '').trim().slice(0, 60);
@@ -474,7 +490,7 @@ async function generateQuiz(req, res) {
             return res.status(400).json({error:'訂正練習需要原題與知識點'});
         }
         if (!req.body.adaptiveScope) {
-            try { await verifyMainIdentity(req); }
+            try { soloIdentity = await verifyMainIdentity(req); }
             catch (error) {
                 const status = error.status || 503;
                 return res.status(status).json({error:status === 401 ? '請重新登入後再產生訂正題。' : '暫時無法確認訂正練習身分。'});
@@ -706,7 +722,7 @@ async function generateQuiz(req, res) {
         if (adaptiveContext) aiBankAllowed = !/\/自訂(?:\/|$)/.test(adaptiveContext.scope.path); // custom focused ranges never expand the AI bank
         else {
             try {
-                const bankUid = await verifyMainIdentity(req);
+                const bankUid = soloIdentity ||= await verifyMainIdentity(req);
                 const bankUser = await playerRepository.resolve().db.collection('users').doc(bankUid).get();
                 aiBankAllowed = !!bankUser.exists && bankUser.data()?.gameSettings?.sourceMode === 'random';
             } catch (_) { /* unauthenticated legacy calls still use the original generator */ }
@@ -1031,7 +1047,7 @@ async function generateQuiz(req, res) {
                             .catch(()=>{});
                         return res.json({tacticalQuestion:question,provider:'ai-bank',model:'approved',fromAiBank:true});
                     }
-                    return res.json({text:JSON.stringify(bankQuestion),provider:'ai-bank',model:'approved',fromAiBank:true});
+                    return soloResponse(bankQuestion, {provider:'ai-bank',model:'approved',fromAiBank:true});
                 }
             }
             // Shorter instructions and bounded provider latency only for combat.
@@ -1203,7 +1219,7 @@ async function generateQuiz(req, res) {
                     ? aiQuestionBank.publish(archiveTarget, archive, independentReview)
                     : verifyAndArchive(archive,archiveTarget));
             }
-            return res.json({ text: JSON.stringify(parsed), provider: routed.provider, model: routed.model });
+            return soloResponse(parsed, { provider: routed.provider, model: routed.model });
 
         } catch (error) {
             // Parallel slot-1 generation can legitimately become stale when
