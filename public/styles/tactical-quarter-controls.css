@@ -597,3 +597,109 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
     width:clamp(30px,25%,56px);font-size:clamp(9px,2.5vw,11px);
   }
 }
+
+/* Recast both controls as a restrained jade-and-bronze instrument. The
+   existing sectors and their hit areas stay in place; only their finish and
+   the selected indicators change. */
+#tactical-combat.tc-quarter-layout .tc-quarter{
+  border:1px solid #b9a77a99;
+  box-shadow:0 -5px 22px #08100db3,inset 0 0 0 3px #101b16;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter::after{
+  content:"";position:absolute;inset:4px;z-index:8;pointer-events:none;
+  border:1px solid #d9c79238;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy::after{border-radius:0 100% 0 0}
+#tactical-combat.tc-quarter-layout .tc-quarter-action::after{border-radius:100% 0 0 0}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy{
+  background:radial-gradient(circle at 0 100%,#254135 0%,#1b3027 68%,#111e19 100%);
+}
+#tactical-combat.tc-quarter-layout .tc-energy-track{
+  stroke:#0d1c16;stroke-width:5.8;opacity:1;
+}
+#tactical-combat.tc-quarter-layout [data-energy-segment]{
+  stroke:#52675a;stroke-width:4.1;opacity:.75;
+}
+#tactical-combat.tc-quarter-layout [data-energy-segment].is-filled{
+  stroke:#8ad7a1;stroke-width:4.5;opacity:1;
+  filter:drop-shadow(0 0 1.8px #6cc98a99);
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
+  border:1px solid #91ac85a6!important;
+  background:radial-gradient(circle at 10% 90%,#335b41 0%,#203d2d 55%,#162a20 100%)!important;
+  box-shadow:inset 0 0 0 4px #13261b80,inset 0 0 28px #0c1f16c9!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+  border-color:#9ed2a2!important;
+  background:radial-gradient(circle at 12% 88%,#477a51 0%,#285539 57%,#193a29 100%)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-energy-bolt{
+  left:22%;top:26%;width:29%;height:47%;
+  filter:drop-shadow(0 2px 3px #102619a6) drop-shadow(0 0 5px #84d49a70);
+}
+#tactical-combat.tc-quarter-layout .tc-energy-number{
+  right:15%;bottom:12%;font-size:clamp(23px,3.2vw,44px);
+  font-weight:500;color:#edf0d8;text-shadow:0 2px 6px #0c2516;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique{
+  background:linear-gradient(140deg,#354c3c,#20362b 68%,#192c23)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique[aria-pressed=true]{
+  background:linear-gradient(140deg,#577c5d,#315940 70%,#244632)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action{
+  background:radial-gradient(circle at 100% 100%,#17251e,#24362b 70%,#17251d);
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector{
+  background:linear-gradient(135deg,#33463a,#24362b 65%,#1a2b21)!important;
+  color:#ede5cf!important;
+  text-shadow:0 1px 3px #0a1711;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
+  background:linear-gradient(135deg,#3a5040,#283c2f 65%,#1c3024)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[aria-pressed=true],
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice][aria-pressed=true]{
+  background:linear-gradient(135deg,#4c6650,#314c39 70%,#243e2e)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector:hover:not(:disabled){
+  background:linear-gradient(135deg,#536c54,#35513d)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector-end{
+  background:radial-gradient(circle at 100% 100%,#2b4031,#192b20 77%)!important;
+  font-size:clamp(14px,1.8vw,24px)!important;
+  font-weight:600!important;letter-spacing:.08em;
+}
+#tactical-combat.tc-quarter-layout .tc-action-lines path,
+#tactical-combat.tc-quarter-layout .tc-action-lines line{stroke:#b3a37c;stroke-width:.7;opacity:.55}
+#tactical-combat.tc-quarter-layout .tc-action-lines .tc-wheel-lane-guide{stroke:#10251a;stroke-width:1;opacity:.55}
+/* A fine outline follows the selected sector; its small floating label is
+   readable without the former opaque, oversized blocks. */
+#tactical-combat.tc-quarter-layout .tc-wheel-slider-shape{
+  fill:#d9bd8124;stroke:#d9c28b;stroke-width:.8;
+  filter:drop-shadow(0 0 1px #e5c98966);
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-slider-detail .tc-wheel-slider-shape{
+  fill:#9bcba32b;stroke:#a9d8b2;
+  filter:drop-shadow(0 0 1px #92dca666);
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-marker{
+  width:auto;min-width:0;max-width:35%;padding:4px 8px;
+  border:1px solid #d3bc87aa;border-radius:6px;
+  background:#20372cef;box-shadow:0 2px 7px #07110dc0;
+  color:#f3e7c7;text-shadow:none;
+  font-size:clamp(10px,1.05vw,15px);font-weight:700;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
+  border-color:#a7cfacaa;color:#e5f4dc;
+  font-size:clamp(9px,.95vw,13px);
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-cost{font-weight:500}
+@media(orientation:portrait){
+  #tactical-combat.tc-quarter-layout .tc-wheel-marker{
+    padding:3px 5px;font-size:clamp(9px,2.6vw,12px);
+  }
+  #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{font-size:clamp(9px,2.3vw,11px)}
+  #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector-end{font-size:clamp(14px,3.5vw,20px)!important}
+  #tactical-combat.tc-quarter-layout .tc-energy-number{font-size:clamp(22px,5vw,32px)}
+}
