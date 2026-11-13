@@ -4,7 +4,9 @@
   if(typeof module==='object'&&module.exports)module.exports=api;else root.QATactical=api;
 })(globalThis,()=>{
   'use strict';
-  const Manuals=(typeof module==='object'&&module.exports)
+  // Some pages load the shared rules before the manual catalog. Resolve the
+  // browser catalog at use time so the first import cannot hide equipped skills.
+  const manuals=()=>typeof module==='object'&&module.exports
     ?require('./manual-rules.js'):globalThis.QAManuals;
   const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
@@ -59,7 +61,7 @@
   const basicFor=()=>BASIC;
   function manualSkillFor(actor,id){
     if(!actor||!Array.isArray(actor.manualSkills)||!actor.manualSkills.includes(id))return null;
-    const skill=Manuals?.BY_SKILL?.[id];
+    const Manuals=manuals(),skill=Manuals?.BY_SKILL?.[id];
     return skill&&Manuals.meetsRealm(skill,actor.trainingAccessScore)?skill:null;
   }
   // The existing spirit page remains the single branch-selection surface.
@@ -204,7 +206,7 @@
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
-      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills:[...new Set(raw.manualSkills.filter(id=>!!Manuals?.BY_SKILL?.[id]))].slice(0,3)}:{}),
+      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills:[...new Set(raw.manualSkills.filter(id=>!!manuals()?.BY_SKILL?.[id]))].slice(0,3)}:{}),
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
@@ -287,6 +289,7 @@
     log(s,source.name+' → '+target.name+' −'+dealt+(absorbed?'（護盾 '+absorbed+'）':''),'damage',{actor:source.uid,target:target.uid,damage:dealt,skill:opts.skill||'attack',x:target.x,y:target.y,
       animation:{kind:'damage',style:opts.skill||'attack',origin:point(source),target:point(target),changes:[appearance(target)],numbers:[{uid:target.uid,damage:dealt,absorbed}]}});
     if(opts.leech&&dealt){const heal=Math.min(source.maxHp-source.hp,Math.round(dealt*opts.leech));source.hp+=heal;recovery(s,source,heal);}
+    const Manuals=manuals();
     if(target.hp<=0&&target.bot&&source&&!source.bot&&opts.manualId&&Manuals?.BY_BOOK?.[opts.manualId]){
       const beastRealm=Manuals.realmForStage(target.level),exp=beastRealm.exp;
       s.manualExp||={};s.manualExp[source.uid]||={};

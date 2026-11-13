@@ -75,7 +75,7 @@ test('stamina quiz uses the very same solo prompt and learning engines with batt
   assert.match(battle,/questionForm:q\.meta\?\.question_form/);
   assert.match(battle,/assistanceLevel:help/);
   assert.match(ui,/window\.QAAdaptiveLearning\?\.render\?\.\(/);
-  assert.match(ui,/window\.QAAdaptiveLearning\?\.afterSaved\?\.\(learningQuiz\)/);
+  assert.match(mainSolo,/if \(quiz\.adaptive\) void window\.QAAdaptiveLearning\?\.afterSaved\(quiz\)/);
   assert.match(ui,/window\.QAAdaptiveLearning\?\.hint\(ctx\.learningQuiz\)/);
   assert.match(ui,/window\.currentTacticalQuiz=quizContext\.learningQuiz/);
   assert.match(learning,/function render\(quiz, questionHost = null\)/);
@@ -86,7 +86,8 @@ test('stamina quiz uses the very same solo prompt and learning engines with batt
   // Critical: do not invoke the client solo answer handler too, which would
   // award currency, write exam_logs and duplicate the server-side battle answer.
   assert.doesNotMatch(ui,/handleAnswer\(/);
-  assert.match(ui,/questionId:q\.id,choice,help,timeTaken/);
+  assert.match(ui,/\.\.\.input,choice,help:quiz\.adaptiveHelp\|\|0/);
+  assert.match(mainSolo,/handleAnswer\(review\.choice, review\.answerIndex, quiz\.data\.q, review\.explanation, settlement\)/);
 });
 
 test('Five Immortals accepts real API correct/wrong output with the correct answer preserved', () => {

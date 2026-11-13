@@ -3,7 +3,6 @@ import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261112-manual-cultivation-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
-import {beginSoloCultivationFeedback} from './solo-cultivation-feedback.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 
 const R=globalThis.QATactical;
@@ -204,7 +203,7 @@ function wheelSliderAngle(slider,angle){
 function selectWheel(value){
   if(!state||busy||renderer?.isAnimating||!myAction())return;
   syncEquippedAttack();
-  if(value==='attack-ring')value=attackChoice;
+  if(value==='attack-ring'||value==='attack')value=attackChoice;
   if(value==='player'){
     if(action!=='move')return;
     updateControls();return;
@@ -602,7 +601,8 @@ function updateControls(){
       button.setAttribute('aria-pressed',String(button.dataset.leftAttack===attackChoice));
     });
     const ring=$('.tc-quarter-action');
-    const targetName=attacking?'攻擊目標':'玩家',targetCost=attacking?chosenCost:moveCostLabel;
+    const targetName=attacking?(action==='manual'?shown.name:'攻擊目標'):'玩家';
+    const targetCost=attacking?chosenCost:moveCostLabel;
     ring?.setAttribute('aria-label',attacking?
       '行動：攻擊；左圈所選'+shown.name+'，消耗 '+chosenCost:
       '行動：移動；目標：玩家，'+moveCostLabel);
@@ -739,7 +739,17 @@ async function send(command){
       if(err.status===409){const latest=await api('/api/tactical/state?mode='+mode);if(latest.state)accept(latest.state,++op);}throw err;}
   });
 }
-async function execute(){if(selection)await send({type:action,x:selection.x,y:selection.y,...(action==='manual'?{skillId:selectedManualSkill}:{})});}
+async function execute(){
+  const previousMode=battlefieldMode();
+  syncEquippedAttack();
+  if(battlefieldMode()!==previousMode){
+    selection=null;
+    updateControls();
+    renderer?.update(state,uid,battlefieldMode(),selection);
+    return;
+  }
+  if(selection)await send({type:action,x:selection.x,y:selection.y,...(action==='manual'?{skillId:selectedManualSkill}:{})});
+}
 // Start both requests as soon as a battle can accept a charge, BEFORE the
 // player presses the charging button. The server still checks the selected
 // learning scope, round eligibility and answers, and returns no answer keys.
@@ -830,26 +840,6 @@ function fetchPairFollowup(e,account,roomId,generation){
   pairFollowupPromise=flight;
   return flight;
 }
-async function takeSoloBattleQuestion(isCurrent, onEmpty) {
-  const queue=window.QASoloQuestionQueue;
-  if(!queue)throw Error('一般題庫尚未就緒，請稍後再試');
-  const quiz=await queue.take({isCurrent,onEmpty});
-  if(!quiz)return null;
-  if(!quiz.bankQuestionId&&!quiz.soloProof){
-    queue.refreshUnverified();
-    throw Error('題目驗證資料尚未就緒，請重新取得題目');
-  }
-  if(quiz.bankQuestionId&&!quiz.soloDrawId){
-    quiz.soloDrawId=id();
-    queue.persist(quiz);
-  }
-  return {
-    id:quiz.bankQuestionId?'bank-'+quiz.soloDrawId:'solo-'+quiz.soloProof.split('.')[1],
-    q:quiz.data.q,opts:quiz.data.opts,subject:quiz.learningSubject,
-    topic:quiz.learningTopic,learningTopic:quiz.learningTopic,learningDifficulty:quiz.learningDifficulty,
-    meta:quiz.meta,adaptive:quiz.adaptive,soloQuiz:quiz,turn:state.turn
-  };
-}
 function soloSubmission(q){
   const quiz=q.soloQuiz;
   if(!quiz)return {};
@@ -860,34 +850,55 @@ function soloSubmission(q){
   };
 }
 async function soloBattleQuestion(){
-  const generation=++pairGeneration;
-  const e=epoch,account=uid,roomId=state.id;
-  const isCurrent=()=>pairIsCurrent(e,account,roomId,generation);
-  pairQuestions=Array(Math.max(1,R.LIMITS.questions-myActor().questions)).fill(null);
-  pairChoices=Array(pairQuestions.length).fill(-1);
-  pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';
-  busy=true;notice('');
-  // Show an immediate, dismissible loading surface only on an empty queue.
-  // When there is already stock, the first card is shown directly.
-  let loadingShown=false;
-  try {
-    const first=await takeSoloBattleQuestion(isCurrent,()=>{
-      loadingShown=true;
-      showModal('<h2>正在填充題庫中</h2><button type="button" data-dismiss>返回戰場</button>');
-    });
-    if(!isCurrent())return;
-    if(!first)throw Error('修習範圍已變更，請重新開啟答題');
-    if(loadingShown&&!modalOpen)return;
-    pairQuestions[0]=first;
-    paintQuestion();
-  } catch(error) {
-    if(isCurrent()&&(!loadingShown||modalOpen))
-      showModal('<h2>暫時無法取得題目</h2><p>'+esc(error.message)+'</p><button type="button" data-quiz>重試</button><button type="button" data-dismiss>返回戰場</button>');
-  } finally {
-    if(isCurrent()){
-      busy=false;updateControls();schedule();
+  const study=window.QATrialQuestion;
+  if(!study){notice('答題頁尚未就緒，請稍後再試');return;}
+  const e=epoch,account=uid,roomId=state.id,turn=state.turn;
+  const current=()=>valid(e,account)&&state?.id===roomId&&state.turn===turn;
+  const inputFor=quiz=>{
+    if(!current())throw Error('試煉回合已更新，請返回戰場');
+    const questionId=quiz.bankQuestionId?'bank-'+quiz.soloDrawId:
+      quiz.soloProof?'solo-'+quiz.soloProof.split('.')[1]:'';
+    if(!questionId)throw Error('題目驗證資料尚未就緒，請重新取得題目');
+    return {roomId,questionId,...soloSubmission({q:quiz.data.q,opts:quiz.data.opts,soloQuiz:quiz,turn})};
+  };
+  const back=()=>{
+    if(!study.close())return;
+    window.switchToPage?.(previousPage);
+    if(!valid(e,account)||state?.id!==roomId)return;
+    root.hidden=false;
+    renderer?.setPaused(false);
+    paint();
+    $('[data-quiz]')?.focus({preventScroll:true});
+  };
+  const previousPage=document.querySelector('.page-section.active-page')?.id||'page-home';
+  hideModal();
+  renderer?.setPaused(true);
+  root.hidden=true;
+  await study.open({
+    back,
+    leave:close,
+    hasNext:()=>current()&&myActor().questions<R.LIMITS.questions,
+    next:async()=>{
+      if(current()&&myActor().questions<R.LIMITS.questions)await study.next();
+      else back();
+    },
+    async submit(quiz,choice,startedAt){
+      const input=inputFor(quiz);
+      const {state:next}=await api('/api/tactical/answer',{
+        ...input,choice,help:quiz.adaptiveHelp||0,
+        timeTaken:Math.max(0,(Date.now()-startedAt)/1000)
+      });
+      if(next?.review?.questionId!==input.questionId)throw Error('答題狀態不同步，請重試');
+      // Let the common feedback renderer capture the pre-answer score first.
+      if(current()){state=next;appliedOp=++op;}
+      return {review:next.review,applyProgress:()=>{if(getMainUser()?.uid===account)applyProgress(next);}};
+    },
+    async report(quiz,reason){
+      const {state:result}=await api('/api/tactical/report-question',{...inputFor(quiz),reason});
+      if(current()&&result.battle){state=result.battle;appliedOp=++op;applyProgress(state);}
+      return result;
     }
-  }
+  });
 }
 async function question(){
   if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
@@ -1284,29 +1295,6 @@ function paintQuestion(){
 }
 async function showNextPairQuestion(){
   if(busy||!modalOpen||pairDisplayIndex>=pairQuestions.length-1||!pairReviews[pairDisplayIndex])return;
-  if(!pairQuestions[pairDisplayIndex+1]&&state.mode==='pve'){
-    const index=pairDisplayIndex+1;
-    const e=epoch,account=uid,roomId=state.id,generation=pairGeneration;
-    const isCurrent=()=>modalOpen&&pairIsCurrent(e,account,roomId,generation);
-    const button=$('[data-next-pair-question]');
-    if(button)button.disabled=true;
-    try {
-      const next=await takeSoloBattleQuestion(isCurrent,()=>{
-        if(button)button.textContent='正在填充題庫中';
-      });
-      if(!isCurrent())return;
-      if(!next)throw Error('修習範圍已變更，請重新取得題目');
-      pairQuestions[index]=next;
-    } catch(error) {
-      if(isCurrent()&&button){
-        button.disabled=false;
-        button.textContent='重試下一題';
-        const status=$('.tc-pair-review-status');
-        if(status)status.textContent=error.message;
-      }
-      return;
-    }
-  }
   if(!pairQuestions[pairDisplayIndex+1]){
     const button=$('[data-next-pair-question]');
     if(button){button.disabled=true;button.textContent='正在取得下一題…';}
@@ -1333,25 +1321,14 @@ async function submitPair(){
   if(busy||index!==pairDisplayIndex||!q||!Number.isInteger(choice)||choice<0||choice>=q.opts.length)return;
   busy=true;
   const e=epoch,account=uid,serial=++op,roomId=state.id;
-  const initialScore=Number(localUser().stats?.totalScore)||0;
-  const learningQuiz=quizContext?.id===q.id?quizContext.learningQuiz:null;
-  const help=Math.min(3,Math.max(0,Number(learningQuiz?.adaptiveHelp)||0));
   const timeTaken=Math.max(0,(Date.now()-(quizContext?.shownAtMs||Date.now()))/1000);
-  const source=root.querySelector('[data-choice-for="'+index+'"][data-choice="'+choice+'"]');
   root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=true);
   const submit=$('[data-submit-pair]');
   if(submit){submit.hidden=true;submit.disabled=true;}
   const status=$('[data-pair-status]');
   if(status)status.textContent=`正在批改第 ${index+1} / ${pairQuestions.length} 題…`;
-  let cultivationVisual=null;
   try{
-    if(q.soloQuiz&&!window.QASoloQuestionQueue?.isCurrent(q.soloQuiz))
-      throw Error('修習範圍已變更，請返回戰場重新開啟答題');
-    const result=await api('/api/tactical/answer',{
-      roomId,questionId:q.id,choice,help,timeTaken,...soloSubmission(q)
-    });
-    if(result.state?.review?.questionId===q.id&&q.soloQuiz)
-      window.QASoloQuestionQueue?.consume(q.soloQuiz);
+    const result=await api('/api/tactical/answer',{roomId,questionId:q.id,choice,timeTaken});
     if(!valid(e,account)||!state||state.id!==roomId)return;
     if(result.state?.review?.questionId!==q.id)throw Error('答題狀態不同步，請重新開啟答題');
     state=result.state;
@@ -1361,36 +1338,14 @@ async function submitPair(){
     pairReviews.push(review);
     // If the backend already promoted a ready follow-up into the current
     // pending slot, use it even when the parallel preload is still in flight.
-    if(!q.soloQuiz&&index===0&&pairQuestions.length>1&&!pairQuestions[1]&&state.question?.id)
+    if(index===0&&pairQuestions.length>1&&!pairQuestions[1]&&state.question?.id)
       pairQuestions[1]=state.question;
     window.QAGameAudio?.answer(review.correct,'tactical:'+roomId+':'+q.id);
-    const score=Number(state.progress?.stats?.totalScore);
-    if(state.mode==='pve'&&Number.isFinite(score)&&score>initialScore
-      &&Array.isArray(window.QASoloRealms)&&window.QASoloRealms.length){
-      cultivationVisual=beginSoloCultivationFeedback({
-        scoreBefore:initialScore,source,realms:window.QASoloRealms,
-        activeWhen:()=>opened&&modalOpen
-      });
-    }
     applyProgress(state);
     renderer?.update(state,uid,action,null);
-    const gain=Number.isFinite(score)?Math.max(0,score-initialScore):0;
-    if(cultivationVisual&&gain>0)void cultivationVisual.play({gain,totalScore:score});
-    else cultivationVisual?.cancel();
-    // Stay on this SAME question, showing correctness, the marked answers
-    // and explanation. The next page is opened only by the Next button.
     paintQuestion();
-    if(learningQuiz?.adaptive){
-      learningQuiz.adaptiveAnswered=true;
-      // Server already recorded the answer. Request only the shared concept
-      // lesson/UI; do not also call client answer(), avoiding duplicate logs.
-      void window.QAAdaptiveLearning?.afterSaved?.(learningQuiz);
-    }
-    if(state.mode==='pve')void window.trackPlayerAnalytics?.('answer_completed',{
-      mode:'solo',eventId:window.newPlayerAnalyticsEventId?.()||q.id
-    });
   }catch(err){
-    if(!valid(e,account)){cultivationVisual?.cancel();return;}
+    if(!valid(e,account))return;
     const label=$('[data-pair-status]');
     if(label)label.textContent=err.message+'；可以重新點選答案，或重試送出已選答案。';
     root.querySelectorAll('[data-choice-for]').forEach(button=>button.disabled=false);
@@ -1450,7 +1405,8 @@ async function open(nextMode='pve'){
   finally{if(valid(e,account)){busy=false;if(state&&['active','waiting'].includes(state.status))paint();else renderHub();schedule();}}
 }
 function close(){
-  if(!root)return;keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  if(!root)return;
+  window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
@@ -1458,5 +1414,5 @@ window.startQuizFlow=()=>open('pve');
 window.startBattleMatchmaking=()=>open('pvp');
 window.joinBattleRoomV2=code=>{void open('pvp').then(()=>{if(valid(epoch,uid))void start(String(code||''));});};
 window.addEventListener('xiuxian:user-data-ready',()=>{if(opened&&getMainUser()?.uid!==uid){state=null;close();}});
-document.addEventListener('visibilitychange',()=>{if(!opened)return;if(document.hidden)clearTimeout(poll);else void sync();});
+document.addEventListener('visibilitychange',()=>{if(!opened||root.hidden)return;if(document.hidden)clearTimeout(poll);else void sync();});
 export {open as openTacticalCombat};

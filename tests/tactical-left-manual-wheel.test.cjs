@@ -122,3 +122,27 @@ test('resuming an unfinished trial loads the current equipped skills without res
   assert.deepEqual(cleared.actors.find(a=>a.uid==='u1').manualSkills,[]);
   assert.equal(cleared.id,first.id);
 });
+
+test('browser rules imported before the manual catalog still resolve the equipped attack',()=>{
+  const vm=require('node:vm');
+  const rulesSource=fs.readFileSync(path.join(folder,'cultivation/tactical-rules.js'),'utf8');
+  const manualSource=fs.readFileSync(path.join(folder,'cultivation/manual-rules.js'),'utf8');
+  const browser=vm.createContext({});
+  vm.runInContext(rulesSource,browser);
+  vm.runInContext(manualSource,browser);
+  const hero=makeActor(['wind-slash'],6);
+  assert.equal(browser.QATactical.manualSkillFor(hero,'wind-slash')?.id,'wind-slash');
+
+  const start=ui.indexOf('const equippedTechniques='),end=ui.indexOf('const myAction=',start);
+  const pick=ui.slice(ui.indexOf('function selectWheel('),ui.indexOf('function buildGame('));
+  const factory=new Function('R','hero',`
+    let attackChoice='attack',selectedManualSkill='',action='move',selection=null;
+    const myActor=()=>hero,myAction=()=>true,updateControls=()=>{};
+    const state={},busy=false,renderer=null,uid='u1';
+    ${ui.slice(start,end)}
+    ${pick}
+    selectWheel('attack-ring');
+    return {action,selectedManualSkill};
+  `);
+  assert.deepEqual(factory(browser.QATactical,hero),{action:'manual',selectedManualSkill:'wind-slash'});
+});

@@ -155,7 +155,10 @@ html body.xianxia-theme #page-quiz .quiz-helper-launcher {
   border-color: #a7ac7770 !important;
 }
 @media (min-width:1100px) {
-  html body.xianxia-theme #page-quiz:has(.quiz-helper-shell:not(.collapsed)) { max-width: 1220px !important; }
+  html body.xianxia-theme.trial-question-active #page-quiz,
+  html body.xianxia-theme #page-quiz:has(.quiz-helper-shell:not(.collapsed)) {
+    max-width: 1220px !important;
+  }
 }
 @media (max-width:600px) {
   html body.xianxia-theme #page-quiz { padding-inline: 12px; }

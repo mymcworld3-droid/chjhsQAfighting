@@ -70,11 +70,12 @@ function setup() {
     context.cache.setActive(normal);
     context.cache.append(buffered);
     context.soloQuestionCache = context.cache;
-    vm.runInContext('let soloQuizOpenSerial = 0, soloCacheRevision = 0, soloDraws = new WeakMap(), quizBuffer = [], isFetchingBuffer = false; const soloSession = { active:true, mode:"infinite", correctCount:0, wrongCount:0 };'
+    vm.runInContext('let trialQuestionSession = null, soloQuizOpenSerial = 0, soloCacheRevision = 0, soloDraws = new WeakMap(), quizBuffer = [], isFetchingBuffer = false; const soloSession = { active:true, mode:"infinite", correctCount:0, wrongCount:0 };'
         + section('const extendedPracticeState =', 'const quizHelperState =')
         + section('let soloNextBusy = false;', 'async function handleAnswer(')
         + section('async function fetchExtendedPracticeQuestion(', 'const quizWhiteboardState =')
         + section('async function takeSoloQuestion(', 'window.startQuizFlow =')
+        + section('function displaySoloQuiz(', 'const openSoloQuestionPage')
         + section('window.startQuizFlow =', '// 🆕 單人模式選擇與啟動邏輯')
         + '\n globalThis.extension = extendedPracticeState;', context);
     return {

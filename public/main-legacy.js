@@ -121,6 +121,7 @@ const soloQuestionCache = createSoloQuestionCache(window.localStorage);
 let soloCacheIdentity = '';
 let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
+let trialQuestionSession = null;
 const soloDraws = new WeakMap();
 window.persistAdaptiveActiveQuiz = quiz => {
     if(quiz?.mode==='trial-tower'){window.persistTrialTowerStudyHint?.(quiz);return;}
@@ -2012,6 +2013,7 @@ window.switchToPage = (pageId, {preserveTrialTower = false} = {}) => {
 
     const nextPage = document.getElementById(pageId);
     if (!nextPage) return;
+    if (pageId !== 'page-quiz' && trialQuestionSession) trialQuestionSession.leave();
     const finishTransition = beginSceneTransition(document.querySelector('.page-section.active-page'), nextPage, sceneTheme(pageId));
 
     // 問道答題時使用專注模式：隱藏全站底部導覽，離開答題頁後自動恢復。
@@ -2587,7 +2589,7 @@ window.QASoloQuestionQueue = Object.freeze({
 // ==========================================
 //  Quiz UI Logic
 // ==========================================
-window.startQuizFlow = async (isNewSession = false) => {
+window.startQuizFlow = async function startSoloQuizFlow(isNewSession = false) {
     if (!soloSession.active && !isNewSession) {
         // 直接默認啟動無限模式
         soloSession = {
@@ -2600,6 +2602,7 @@ window.startQuizFlow = async (isNewSession = false) => {
     }
 
     switchToPage('page-quiz');
+    if (trialQuestionSession) document.getElementById('trial-question-status')?.remove();
     
     document.getElementById('quiz-container').classList.add('hidden');
     document.getElementById('feedback-section').classList.add('hidden');
@@ -2622,7 +2625,7 @@ window.startQuizFlow = async (isNewSession = false) => {
     // 返回題面時沿用尚未完成的延伸題，包含已停止延伸但尚未答完的本題。
     const activeQuiz = window.currentActiveQuiz;
     if (activeQuiz?.extendedPractice && !answeredSoloQuizzes.has(activeQuiz)) {
-        renderQuiz(activeQuiz.data, activeQuiz.rank, activeQuiz.badge);
+        displaySoloQuiz(activeQuiz);
         return;
     }
 
@@ -2631,7 +2634,7 @@ window.startQuizFlow = async (isNewSession = false) => {
         const correction = soloQuestionCache.takeNext();
         quizBuffer = soloQuestionCache.getQueue();
         window.currentActiveQuiz = correction;
-        renderQuiz(correction.data, correction.rank, correction.badge);
+        displaySoloQuiz(correction);
         void fillBuffer();
         return;
     }
@@ -2643,7 +2646,7 @@ window.startQuizFlow = async (isNewSession = false) => {
             const q = await fetchExtendedPracticeQuestion();
             if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
             window.currentActiveQuiz = q;
-            renderQuiz(q.data, q.rank, q.badge);
+            displaySoloQuiz(q);
             return;
         } catch (error) {
             console.error('[Extended Practice]', error);
@@ -2666,16 +2669,20 @@ window.startQuizFlow = async (isNewSession = false) => {
         if (!quiz) {
             if (soloQuestionScope() !== scope) {
                 syncSoloQuestionCache();
-                void window.startQuizFlow();
+                void startSoloQuizFlow();
             }
             return;
         }
         window.currentActiveQuiz = quiz;
-        renderQuiz(quiz.data, quiz.rank, quiz.badge);
+        displaySoloQuiz(quiz);
     } catch (error) {
         if (opening !== soloQuizOpenSerial || auth.currentUser?.uid !== uid) return;
         console.error(error);
         void window.trackPlayerAnalytics?.('question_load_failed', { mode: 'solo' });
+        if (trialQuestionSession) {
+            showTrialQuestionStatus(error.message, () => startSoloQuizFlow());
+            return;
+        }
         alert(error?.message || '無法開始，請稍後再試');
         switchToPage('page-home');
     }
@@ -3069,6 +3076,10 @@ window.nextQuestion = async () => {
     }
     window.currentActiveQuiz = null;
     try {
+        if (trialQuestionSession) {
+            await trialQuestionSession.next();
+            return;
+        }
         const intercepted = extendedPracticeState.active || window.hasReadySoloCorrection?.() ? false : await window.maybeEncounterOpportunity?.({ quiz });
         if (auth.currentUser?.uid !== account) return;
         if (!intercepted) await window.startQuizFlow();
@@ -3083,13 +3094,17 @@ window.nextQuestion = async () => {
     }
 };
 
-async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
+async function handleAnswer(userIdx, correctIdx, questionText, explanation, settlement = null) {
     if (!currentUserData) return;
     const quiz = window.currentActiveQuiz;
     if (quiz) {
         if (answeredSoloQuizzes.has(quiz)) return;
         answeredSoloQuizzes.add(quiz);
-        if(quiz.mode!=='trial-tower'){
+        if(settlement){
+            window.QASoloQuestionQueue.consume(quiz);
+            window.currentActiveQuiz = quiz;
+        }
+        else if(quiz.mode!=='trial-tower'){
             syncSoloQuestionCache();
             if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
                 soloQuestionCache.consumeActive({ remember: true });
@@ -3101,7 +3116,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
 
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
-    const adaptiveRows = window.QAAdaptiveLearning?.answer(quiz, isCorrect, userIdx < 0) || [];
+    const adaptiveRows = settlement ? [] : window.QAAdaptiveLearning?.answer(quiz, isCorrect, userIdx < 0) || [];
     if (quiz?.mode!=='trial-tower' && !extendedPracticeState.active) void fillBuffer();
     globalThis.QAGameAudio?.answer(isCorrect, 'solo:' + (window.quizStartTime || '') + ':' + (quiz?.id || questionText));
     quizHelperState.answered = true;
@@ -3185,6 +3200,32 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation) {
             nextBtn.className = "btn-cyber-primary flex-1 py-3 rounded-lg text-xs bg-cyan-600 text-white";
             nextBtn.onclick = window.nextQuestion; 
         }
+    }
+
+    if (settlement) {
+        const { review, applyProgress } = settlement;
+        const before = Math.max(0, Number(currentUserData.stats.totalScore) || 0);
+        const visual = isCorrect ? beginSoloCultivationFeedback({
+            scoreBefore: before, source: document.getElementById(`option-btn-${correctIdx}`), realms: REALMS
+        }) : null;
+        applyProgress();
+        quiz.answerSelectedIndex = userIdx;
+        quiz.adaptiveAnswered = true;
+        if (quiz.adaptive) void window.QAAdaptiveLearning?.afterSaved(quiz);
+        const reward = review.reward || {};
+        const gain = Math.max(0, Number(reward.cultivation) || 0);
+        const penalty = Math.max(0, -(Number(reward.cultivation) || 0));
+        if (isCorrect) fbTitle.innerHTML += ` <span class="text-yellow-400 text-sm ml-2">+${Number(reward.gold) || 0}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${gain} 修為</span>`;
+        else if (penalty) fbTitle.innerHTML += ` <span class="text-red-400 text-sm ml-2">-${penalty} 修為</span>`;
+        if (visual && gain) void visual.play({ gain, totalScore: currentUserData.stats.totalScore });
+        else visual?.cancel();
+        showCultivationFeedback({ gain, penalty, learningMessage: reward.learning }, isCorrect);
+        const next = document.getElementById('btn-next-step');
+        next.textContent = trialQuestionSession?.hasNext() ? `下一題 (目前連對: ${currentUserData.stats.currentStreak || 0})` : '返回戰場';
+        next.onclick = window.nextQuestion;
+        const eventId = quiz.analyticsAnswerEventId ||= window.newPlayerAnalyticsEventId?.();
+        void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
+        return;
     }
 
     let stats = currentUserData.stats;
@@ -4089,6 +4130,104 @@ window.toggleQuizWhiteboard = (forceOpen) => {
     }
 };
 
+function showTrialQuestionStatus(message, retry) {
+    document.getElementById('trial-question-status')?.remove();
+    const status = document.createElement('div');
+    status.id = 'trial-question-status';
+    status.className = 'glass-panel p-4 mb-4';
+    status.setAttribute('role', 'alert');
+    const text = document.createElement('p');
+    text.textContent = message || '暫時無法完成，請稍後再試。';
+    status.append(text);
+    for (const [label, action] of [['重試', retry], ['返回戰場', () => trialQuestionSession?.back()]]) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn-cyber-primary mt-3 mr-2 px-4 py-2 rounded-lg text-xs';
+        button.textContent = label;
+        button.onclick = action;
+        status.append(button);
+    }
+    document.getElementById('page-quiz').prepend(status);
+}
+
+function displaySoloQuiz(quiz) {
+    const session = trialQuestionSession;
+    if (!session) {
+        renderQuiz(quiz.data, quiz.rank, quiz.badge);
+        return;
+    }
+    soloDraws.set(quiz, soloCacheRevision);
+    session.question = quiz;
+    session.skipped = false;
+    if (quiz.bankQuestionId && !quiz.soloDrawId) {
+        quiz.soloDrawId = globalThis.crypto.randomUUID();
+        soloQuestionCache.persistActive(quiz);
+    }
+    const choose = async (index) => {
+        if (session.pending || session.skipped || trialQuestionSession !== session ||
+            window.currentActiveQuiz !== quiz || answeredSoloQuizzes.has(quiz)) return;
+        if (!quiz.bankQuestionId && !quiz.soloProof) {
+            window.QASoloQuestionQueue.refreshUnverified();
+            if (quiz.extendedPractice) window.currentActiveQuiz = null;
+            showTrialQuestionStatus('題目驗證資料尚未就緒，請重新取題。', () => window.QATrialQuestion.next());
+            return;
+        }
+        if (!window.QASoloQuestionQueue.isCurrent(quiz)) {
+            showTrialQuestionStatus('修習範圍已變更，請重新取題。', () => window.QATrialQuestion.next());
+            return;
+        }
+        const options = document.getElementById('options-container');
+        document.getElementById('trial-question-status')?.remove();
+        session.pending = true;
+        for (const button of options.children) button.disabled = true;
+        try {
+            const settlement = await session.submit(quiz, index, window.quizStartTime);
+            if (trialQuestionSession !== session || window.currentActiveQuiz !== quiz) {
+                window.QASoloQuestionQueue.consume(quiz);
+                settlement.applyProgress();
+                return;
+            }
+            const { review } = settlement;
+            await handleAnswer(review.choice, review.answerIndex, quiz.data.q, review.explanation, settlement);
+        } catch (error) {
+            if (trialQuestionSession !== session || window.currentActiveQuiz !== quiz) return;
+            for (const button of options.children) button.disabled = false;
+            showTrialQuestionStatus(error.message, () => choose(index));
+        } finally {
+            session.pending = false;
+        }
+    };
+    renderQuiz(quiz.data, quiz.rank, quiz.badge, { onAnswer: choose });
+}
+
+const openSoloQuestionPage = window.startQuizFlow;
+window.QATrialQuestion = Object.freeze({
+    async open(callbacks) {
+        trialQuestionSession = { ...callbacks };
+        document.body.classList.add('trial-question-active');
+        await openSoloQuestionPage();
+    },
+    async next() {
+        if (trialQuestionSession) await openSoloQuestionPage();
+    },
+    close() {
+        if (!trialQuestionSession) return false;
+        const { question } = trialQuestionSession;
+        trialQuestionSession = null;
+        soloQuizOpenSerial += 1;
+        if (window.currentActiveQuiz === question && answeredSoloQuizzes.has(question)) window.currentActiveQuiz = null;
+        document.getElementById('trial-question-status')?.remove();
+        if (question && reportQuizSnapshot === question) {
+            reportQuizSnapshot = null;
+            document.getElementById('report-modal')?.classList.add('hidden', 'opacity-0');
+        }
+        resetQuizWhiteboard({ close: true });
+        quizHelperState.requestSerial++;
+        document.body.classList.remove('quiz-helper-fullscreen-open', 'trial-question-active');
+        return true;
+    }
+});
+
 function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     document.getElementById('solo-correction-practice')?.remove();
     document.getElementById('solo-correction-hint')?.remove();
@@ -4132,7 +4271,7 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     };
     buildOptions();
     window.repairQuizOptions=()=>{
-        if(window.currentActiveQuiz!==optionsQuiz||(auth.currentUser?.uid||'')!==optionsUid||quizHelperState.answered||isAnswering)return false;
+        if(window.currentActiveQuiz!==optionsQuiz||(auth.currentUser?.uid||'')!==optionsUid||quizHelperState.answered||isAnswering||trialQuestionSession?.pending||trialQuestionSession?.skipped)return false;
         if(optionsQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.())return false;
         window.quizMathClear?.(container);buildOptions();void window.quizMathTypeset?.(container);return true;
     };
@@ -4151,7 +4290,7 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
 window.getQuizInterfaceState=()=>{
     const container=document.getElementById('options-container'),stem=document.getElementById('question-text');
     const buttons=Array.from(container?.querySelectorAll('button[id^="option-btn-"]')||[]);
-    const answered=quizHelperState.answered,pending=!answered&&(isAnswering||(window.currentActiveQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.()));
+    const answered=quizHelperState.answered,pending=!answered&&(isAnswering||trialQuestionSession?.pending||(window.currentActiveQuiz?.mode==='trial-tower'&&!window.QAStudyQuestion?.canAnswer?.()));
     return {expectedOptions:Math.min(10,window.currentActiveQuiz?.data?.opts?.length||0),renderedOptions:buttons.length,
         clickableOptions:buttons.filter(button=>!button.disabled&&typeof button.onclick==='function'&&button.getClientRects().length).length,
         answerPending:!!pending,mathFallback:!![stem,container].some(node=>node?.querySelector('.quiz-math-fallback')),
@@ -4177,7 +4316,7 @@ window.QAStudyQuestion = createStudyQuestionBridge({
 
 // Open the normal scope editor without recording an answer or changing the streak.
 window.openQuizScopeSettings = () => {
-    if (isAnswering || window.isSoloCultivationFeedbackActive?.()) return false;
+    if (isAnswering || trialQuestionSession?.pending || window.isSoloCultivationFeedbackActive?.()) return false;
     if (typeof window.openCurriculumStudio !== 'function') {
         window.showToast?.('範圍設定準備中，請稍後再試。');
         return false;
@@ -4341,6 +4480,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
         reportStatus('登入狀態已變更，請重新登入。', true);
         return;
     }
+    const trial = trialQuestionSession;
     reportSubmitting = true;
     reportStatus();
     reportView('loading');
@@ -4367,10 +4507,10 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
         }
         reportStage = 'get-token';
         reportLoadingStatus('正在確認登入狀態…');
-        const token = await user.getIdToken();
+        const token = trial ? null : await user.getIdToken();
         reportStage = 'request';
         reportLoadingStatus('已送交 AI 審核，正在核對題目與補償…');
-        const res = await fetch('/api/verify-report', {
+        const res = trial ? null : await fetch('/api/verify-report', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
             body: JSON.stringify({
@@ -4384,7 +4524,14 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
         });
         reportStage = 'response';
         reportLoadingStatus('正在確認審核結果…');
-        const result = await res.json().catch(() => ({}));
+        const result = trial ? await trial.report(quiz, reason) : await res.json().catch(() => ({}));
+        if (trial && (trialQuestionSession !== trial || window.currentActiveQuiz !== quiz)) return result;
+        if (trial && result.questionSkipped) {
+            trial.skipped = true;
+            window.QASoloQuestionQueue.consume(quiz);
+            window.currentActiveQuiz = quiz;
+            for (const button of document.getElementById('options-container').children) button.disabled = true;
+        }
         if (quiz.helperReviewRedacted === true) {
             // 審核仍使用完整證據；作答前的結果視窗與重試表單不顯示可能含正解的理由。
             result.reason = result.status === 'confirmed' || result.status === 'duplicate'
@@ -4392,9 +4539,9 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
                 : result.status === 'rejected' ? '獨立審核未確認這道題目有實質錯誤。'
                     : '本次題目審核尚未完成，請稍後重試。';
         }
-        if (!res.ok || ['unavailable', 'invalid', 'unauthorized'].includes(result.status)) {
-            const error = new Error(result.reason || `題目回報暫時無法處理（HTTP ${res.status}），請稍後重試。`);
-            error.httpStatus = res.status;
+        if ((res && !res.ok) || ['unavailable', 'invalid', 'unauthorized'].includes(result.status)) {
+            const error = new Error(result.reason || '題目回報暫時無法處理，請稍後重試。');
+            error.httpStatus = res?.status;
             error.phase = result.phase || reportStage;
             throw error;
         }
@@ -4403,6 +4550,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
             closeReportModal();
             // A late review must not skip the player's newer question.
             if (window.currentActiveQuiz !== quiz) return;
+            if(trial){void trial.next();return;}
             if(quiz.mode==='trial-tower'){void quiz.onVerifiedSkip?.();return;}
             syncSoloQuestionCache();
             if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {
@@ -4440,6 +4588,9 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
                 actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
                 onAction: skipVerifiedQuestion
             });
+        } else if (trial && result.questionSkipped && !result.compensated) {
+            renderReportOutcome({kind:'approved', title:'審查通過 ✅', message:result.reason,
+                actionText:'跳過錯題', onAction:skipVerifiedQuestion});
         } else if (result.status === 'duplicate') {
             if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
             renderReportOutcome({
@@ -4472,6 +4623,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
         }
         return result;
     } catch (error) {
+        if (trial && (trialQuestionSession !== trial || window.currentActiveQuiz !== quiz)) return;
         // 明確記錄階段及 HTTP 狀態，避免只看見 main-legacy.js 的統一警告行號。
         console.warn('[Question report]', {
             phase: error?.phase || reportStage,

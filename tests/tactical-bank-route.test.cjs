@@ -39,6 +39,7 @@ test('PvE reads the shared solo stock and its background refill is independent o
   assert.doesNotMatch(client,/warmTacticalBank/);
   assert.doesNotMatch(battle,/warmTacticalBank/);
   assert.match(battle,/if\(state\.mode==='pve'\)return soloBattleQuestion\(\);/);
-  assert.match(battle,/const quiz=await queue\.take\(\{isCurrent,onEmpty\}\)/);
+  assert.match(battle,/const study=window\.QATrialQuestion/);
+  assert.match(client,/const quiz = await takeSoloQuestion\(/);
   assert.match(battle,/if\(!opened\|\|state\?\.mode!=='pvp'/);
 });

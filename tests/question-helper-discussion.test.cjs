@@ -89,7 +89,8 @@ test('pre-answer discussion includes fallible reference, labeled options and pla
     assert.equal(data.selectedOption, '', 'a candidate claim is not a submitted option');
     assert.deepEqual(data.reference, { answer: '60 J', explanation: problem.explanation });
     assert.deepEqual(data.options, [{ label: 'A', text: '58 J' }, { label: 'B', text: '60 J' }, { label: 'C', text: '29 J' }]);
-    assert.equal(settings.timeoutMs, 25000);
+    assert.equal(settings.task, 'question-helper');
+    assert.equal(settings.timeoutMs, 90000);
     assert.match(prompt, /無論是否已作答.*獨立核算/);
     assert.match(prompt, /也可以確認或更正/);
     assert.match(prompt, /不是正確性的保證/);
@@ -231,7 +232,7 @@ test('pre-answer automatic review results cannot reveal the solution, including 
     const source=legacy.slice(legacy.indexOf('window.submitReport = async'),legacy.indexOf('//  🚀 隨機邀請系統'));
     for(const status of ['rejected','unavailable','confirmed']) {
         const quiz={data:{q:problem.question},helperReviewRedacted:true},outcomes=[],requests=[];
-        const ctx={window:{currentActiveQuiz:quiz,closeReportModal(){}},reportSubmitting:false,reportQuizSnapshot:quiz,
+        const ctx={window:{currentActiveQuiz:quiz,closeReportModal(){}},trialQuestionSession:null,reportSubmitting:false,reportQuizSnapshot:quiz,
             document:{getElementById:()=>({value:'可能存在答案或解析不一致'})},auth:{currentUser:{uid:'u',getIdToken:async()=> 'test'}},
             currentUserData:{uid:'u'},reportStatus(){},reportView(){},reportLoadingStatus(){},
             renderReportOutcome:value=>outcomes.push(value),console:{warn(){}},

@@ -187,6 +187,25 @@ app.post('/api/question-helper', async (req, res) => {
             return res.status(400).json({ error: '缺少題目或提問內容' });
         }
 
+        const rawUI=req.body?.interfaceState;
+        const uiCount=value=>Number.isInteger(value)&&value>=0&&value<=6?value:0;
+        const interfaceState=rawUI&&typeof rawUI==='object'?{
+            expectedOptions:Math.min(options.length,uiCount(rawUI.expectedOptions)),renderedOptions:uiCount(rawUI.renderedOptions),clickableOptions:uiCount(rawUI.clickableOptions),
+            answerPending:rawUI.answerPending===true,mathFallback:rawUI.mathFallback===true,mathError:rawUI.mathError===true
+        }:null;
+        const controlsMissing=interfaceState&&!answered&&!interfaceState.answerPending&&interfaceState.expectedOptions>0&&
+            (interfaceState.renderedOptions<interfaceState.expectedOptions||interfaceState.clickableOptions<interfaceState.expectedOptions);
+        const controlsReport=/(?:按鈕).{0,12}(?:沒有|不見|消失|不能|無法|點不了|按不了|沒反應)|(?:沒有|沒顯示|看不到|不見|消失|點不了|按不了|無法點).{0,8}(?:選項按鈕|按鈕)|選項.{0,8}(?:不見|消失|點不了|按不了|無法點)|(?:options?|buttons?).{0,20}(?:missing|disappear|cannot click|not clickable)/i.test(userMessage);
+        const mathReport=/(?:公式|數學式).{0,12}(?:亂碼|方框|破損|顯示不出|顯示異常|顯示錯誤)|(?:亂碼|方框|渲染異常).{0,12}(?:公式|數學式)/.test(userMessage);
+        if(controlsMissing||controlsReport||mathReport||interfaceState?.mathError){
+            const kind=controlsMissing||controlsReport?'answer-controls':'math-render';
+            const answer=answered?'這題已經作答，選項會鎖定。你可以按「繼續」接著進行；若公式顯示異常，可先參考文字版公式。':
+                interfaceState?.answerPending?'目前答案正在結算，選項會暫時鎖定。請稍候完成同步，再繼續進行。':
+                kind==='answer-controls'?'你遇到的是選項顯示或點擊異常。我會先嘗試恢復本題的作答按鈕，保留目前題目與對話；不會替你選答案。':
+                '目前遇到公式顯示異常，會先嘗試恢復本題選項，公式暫以可讀文字顯示。修復介面不會替你作答，也不會判定題目內容有錯。';
+            return res.json({answer,knowledgePoint:'',questionIssue:null,interfaceIssue:{kind},checkOnly:false});
+        }
+
         const context = {
             subject,
             question,
@@ -195,6 +214,7 @@ app.post('/api/question-helper', async (req, res) => {
             intent: checkOnly ? 'check-question' : intent,
             selectedOption,
             reference: { answer: correctOption, explanation },
+            ...(interfaceState?{interfaceState}:{}),
             history,
             message: userMessage
         };
@@ -224,11 +244,12 @@ ${JSON.stringify(context)}
 7. 數學式可使用 $...$ TeX 語法。回答以約 300 個中文字為原則，核對依據或玩家要求詳細說明時可適度增加。
 8. 從這次討論整理出一個最適合延伸練習的核心知識點，knowledgePoint 要簡短、具體，可直接作為下一題出題範圍，例如「功與動能定理」、「一元一次方程式移項」、「現在完成式」。
 9. 若你已獨立核算並能具體指出題幹、選項、標示答案或解析的實質錯誤，questionIssue.confirmed 填 true，confidence 填 0～1，reason 填可核對的錯誤依據（至少六個字）。只有證據充分且信心至少 0.8 才標記；玩家答錯、仍有疑問、缺少圖表、條件式推論或玩家要求回報，本身都不能作為確認有錯的依據。確認有錯後系統會自動代填理由並送交獨立審核，不要再要求玩家手動回報，也不要宣稱補償已入帳。
+介面注意事項：interfaceState 是目前選項按鈕及公式顯示的狀態；選項不能點、按鈕消失或公式亂碼屬於介面異常，應先處理操作問題，不要當成玩家不會解題，不要代選或揭曉正解，也不能僅憑介面異常確認題目內容有錯或要求送審領補償。
 10. 請只回傳合法 JSON：
 {"answer":"你的回答","knowledgePoint":"核心知識點","checkStatus":"valid|issue|uncertain","questionIssue":{"confirmed":false,"confidence":0.0,"reason":"具體錯誤依據，無確定錯誤則留空"}}
 `;
 
-        const routed = await aiRouter.generateJSON(prompt, { timeoutMs: 25000 });
+        const routed = await aiRouter.generateJSON(prompt, { task:'question-helper', timeoutMs: 90000 });
         let answer = String(routed.data?.answer || '').trim();
         if (!answer && !checkOnly) throw new Error('AI 未回傳有效回答');
         const fallbackPoint = userMessage.replace(/[？?！!。,.，]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40);

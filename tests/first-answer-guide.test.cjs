@@ -65,7 +65,7 @@ test('setting the question scope opens the editor without scoring or abandoning 
   const legacy=read('main-legacy.js');
   const code=legacy.slice(legacy.indexOf('window.openQuizScopeSettings ='),legacy.indexOf('// 問道題目錯誤回報'));
   const calls=[],quiz={data:{q:'原題'},answered:false};
-  const ctx=vm.createContext({isAnswering:false,window:{currentActiveQuiz:quiz,switchToPage:page=>calls.push(page),openCurriculumStudio:()=>calls.push('scope')}});
+  const ctx=vm.createContext({isAnswering:false,trialQuestionSession:null,window:{currentActiveQuiz:quiz,switchToPage:page=>calls.push(page),openCurriculumStudio:()=>calls.push('scope')}});
   vm.runInContext(code,ctx);assert.equal(ctx.window.openQuizScopeSettings(),true);assert.deepEqual(calls,['page-settings','scope']);
   assert.equal(ctx.window.currentActiveQuiz,quiz);assert.equal(quiz.answered,false);
   ctx.isAnswering=true;assert.equal(ctx.window.openQuizScopeSettings(),false);assert.equal(calls.length,2);

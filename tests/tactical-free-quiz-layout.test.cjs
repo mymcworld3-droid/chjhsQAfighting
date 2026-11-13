@@ -78,10 +78,13 @@ test('review reproduces the main feedback structure without changing either ques
   assert.match(styles,/\.tc-feedback-section\.glass-panel/);
 });
 
-test('the existing free-quiz cultivation animation is visible above the battle overlay',()=>{
-  assert.match(source,/beginSoloCultivationFeedback/);
-  assert.match(styles,/body\.tactical-open #solo-cultivation-feedback/);
-  assert.match(styles,/z-index:25000/);
+test('PvE uses the shared answer page and its ordinary cultivation feedback',()=>{
+  const legacy=fs.readFileSync(path.join(root,'public/main-legacy.js'),'utf8');
+  assert.match(source,/const study=window\.QATrialQuestion/);
+  assert.match(source,/root\.hidden=true;\s*await study\.open/);
+  assert.match(legacy,/renderQuiz\(quiz\.data, quiz\.rank, quiz\.badge, \{ onAnswer: choose \}\)/);
+  assert.match(legacy,/handleAnswer\(review\.choice, review\.answerIndex, quiz\.data\.q, review\.explanation, settlement\)/);
+  assert.match(legacy,/beginSoloCultivationFeedback/);
 });
 
 
