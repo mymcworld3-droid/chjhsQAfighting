@@ -57,7 +57,7 @@ function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
-  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261112-left-technique-ring-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261113-battle-visual-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261112-stamina-main-solo-learning-parity-v1';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
@@ -299,10 +299,10 @@ function buildGame(){
     quiz.setAttribute('aria-label','答題充能');
     energy.append(quiz);
     // The second ring of the LEFT charging quarter is now the skill bar.
-    // All equipped techniques replace basic attack; with none, show basic.
+    // Equipped techniques are shown here; basic attack remains on the right wheel.
     // The outermost luminous green stamina track remains unobstructed.
     const available=equippedTechniques(myActor());
-    const leftSkills=available.length?available:[R.basicFor(myActor())];
+    const leftSkills=available;
     const leftWedge=(begin,finish,outer=86,inner=70)=>{
       const pts=[];
       for(let i=0;i<=16;i++){
@@ -324,14 +324,18 @@ function buildGame(){
       const radians=(start+finish)/2*Math.PI/180,radius=78;
       const button=document.createElement('button');
       button.type='button';button.className='tc-left-technique';
-      button.dataset.leftAttack=available.length?'manual:'+technique.id:'attack';
+      button.dataset.leftAttack='manual:'+technique.id;
       button.setAttribute('aria-label',technique.name+'，消耗 '+technique.cost+' 體力');
       button.style.clipPath=leftWedge(start,finish);
-      button.innerHTML='<span class="tc-left-technique-label" style="left:'+
-        (radius*Math.cos(radians)).toFixed(2)+'%;top:'+
-        (100+radius*Math.sin(radians)).toFixed(2)+'%"><strong>'+
-        esc(technique.name)+'</strong><small>'+technique.cost+' 體力</small></span>';
-      techniqueRing.append(button);
+      // Keep labels outside the clipped hit areas, so the narrow curved
+      // sectors do not cut off equipped skill names or their costs.
+      const label=document.createElement('span');
+      label.className='tc-left-technique-label';
+      label.setAttribute('aria-hidden','true');
+      label.style.left=(radius*Math.cos(radians)).toFixed(2)+'%';
+      label.style.top=(100+radius*Math.sin(radians)).toFixed(2)+'%';
+      label.innerHTML='<strong>'+esc(technique.name)+'</strong><small>'+technique.cost+' 體力</small>';
+      techniqueRing.append(button,label);
     }
     energy.append(techniqueRing);
 
@@ -593,8 +597,7 @@ function updateControls(){
       option.disabled=!mine||locked;
       option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?'attack-ring':'player')));
     }
-    // The left ring is the only skill selector. It displays either the
-    // equipped manual skills or, if none, a single basic-attack sector.
+    // The left ring displays equipped manual skills; basic attack is on the right.
     root.querySelectorAll('[data-left-attack]').forEach(button=>{
       button.disabled=!mine||locked;
       button.setAttribute('aria-pressed',String(button.dataset.leftAttack===attackChoice));

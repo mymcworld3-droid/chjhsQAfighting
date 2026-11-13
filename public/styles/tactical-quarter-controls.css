@@ -489,3 +489,111 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
   margin:10px 0;padding:11px 13px;background:#20432b;
   border:1px solid #d9be7a;border-radius:9px;color:#f5dda2;
 }
+
+/* Battle controls: aged bronze edging and jade light, within the original
+   quarter-circle geometry. The canvas and all hit areas remain unchanged. */
+#tactical-combat.tc-quarter-layout{
+  --tc-gold:#a9956b;
+  --tc-ink:#141b17;
+}
+#tactical-combat.tc-quarter-layout .tc-top{
+  background:linear-gradient(90deg,#171c17 0%,#20251d 52%,#151a16 100%);
+  border-bottom:1px solid #8b79544f;
+  box-shadow:0 3px 14px #090e0bb3;
+}
+#tactical-combat.tc-quarter-layout .tc-top h1{
+  color:#e9dfc7;
+  font-weight:600;
+  text-shadow:0 1px 8px #000b;
+}
+#tactical-combat.tc-quarter-layout .tc-top-right>span{color:#c6b99c}
+#tactical-combat.tc-quarter-layout .tc-top [data-close]{
+  color:#ddd0ae;background:#242a21;border-color:#82755399;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter{
+  border-color:#a7987099;
+  box-shadow:inset 0 0 0 3px #0d1812aa,0 0 18px #07110eb3;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy{
+  background:radial-gradient(circle at 8% 100%,#263e2e 0%,#182d20 60%,#1e2e22 100%);
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action{
+  background:radial-gradient(circle at 100% 100%,#142019 0%,#283329 62%,#19251e 100%);
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique{
+  background:linear-gradient(140deg,#344a36,#203527 62%,#192d21)!important;
+  color:#e7e4c9!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique[aria-pressed=true]{
+  background:linear-gradient(140deg,#64855a,#365f40 65%,#294d33)!important;
+  color:#fff5d6!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy .tc-left-technique:hover:not(:disabled){
+  background:linear-gradient(140deg,#557557,#31563b)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-energy-track{stroke:#263d2b;opacity:1}
+#tactical-combat.tc-quarter-layout [data-energy-segment]{stroke:#405746;opacity:.9}
+#tactical-combat.tc-quarter-layout [data-energy-segment].is-filled{
+  stroke:#7de5a0;filter:drop-shadow(0 0 2px #4bd77d);
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
+  border-color:#6b9774!important;
+  background:radial-gradient(circle at 28% 70%,#31563a 0%,#1e3b29 58%,#172b20 100%)!important;
+  box-shadow:inset 0 0 0 3px #11251a99,inset 0 0 22px #0b1d13aa!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready{
+  border-color:#9adca7!important;
+  background:radial-gradient(circle at 30% 67%,#43865a 0%,#286443 55%,#19452e 100%)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz].is-charge-ready:hover{
+  background:radial-gradient(circle at 30% 67%,#58a36c 0%,#327850 60%,#1d5035 100%)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-energy-bolt{
+  filter:drop-shadow(0 2px 3px #102619) drop-shadow(0 0 5px #83df9b80);
+}
+#tactical-combat.tc-quarter-layout .tc-energy-number{
+  color:#f0f3d6;text-shadow:0 2px 5px #0c2516,0 0 8px #7cdf8e80;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector{
+  background:linear-gradient(135deg,#374337,#222e24 70%,#18251c)!important;
+  color:#e3d7b9!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]{
+  background:linear-gradient(135deg,#3c493a,#243729 65%,#1b2c21)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[aria-pressed=true],
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice][aria-pressed=true]{
+  background:linear-gradient(135deg,#667658,#415c43 65%,#304c36)!important;
+  color:#fff4d6!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector:hover:not(:disabled){
+  background:linear-gradient(135deg,#66775b,#405943)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector-end{
+  background:radial-gradient(circle at 100% 100%,#25382a,#17251b 75%)!important;
+}
+#tactical-combat.tc-quarter-layout .tc-action-lines path,
+#tactical-combat.tc-quarter-layout .tc-action-lines line{stroke:#b1a078;opacity:.8}
+#tactical-combat.tc-quarter-layout .tc-action-lines .tc-wheel-lane-guide{stroke:#12271b;opacity:.85}
+#tactical-combat.tc-quarter-layout .tc-wheel-slider-shape{
+  fill:#c6aa73;stroke:#f2dfb0;filter:drop-shadow(0 0 1px #e5c989);
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-slider-detail .tc-wheel-slider-shape{
+  fill:#79b38a;stroke:#cce8ca;filter:drop-shadow(0 0 1px #8dd8a2);
+}
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector:disabled{
+  color:#9b9f8b!important;
+}
+
+/* Labels are siblings of the clipped skill hit areas so names remain legible. */
+#tactical-combat.tc-quarter-layout .tc-left-technique-label{
+  z-index:5;width:clamp(30px,25%,74px);
+  font-family:"Noto Serif TC","Songti TC",serif;
+  font-size:clamp(9px,1vw,14px);
+  color:#f4edd6;text-shadow:0 1px 3px #06150d,0 0 4px #06150d;
+}
+@media(orientation:portrait){
+  #tactical-combat.tc-quarter-layout .tc-left-technique-label{
+    width:clamp(30px,25%,56px);font-size:clamp(9px,2.5vw,11px);
+  }
+}

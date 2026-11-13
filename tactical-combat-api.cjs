@@ -262,6 +262,21 @@ async function start(db,uid,selection={},now=Date.now()){
         prior.trial={version:1,seed:campaign.seed,stage:campaign.stage,layoutVersion:0,title:Rules.mapFor(prior.map).name};
         changed=true;tx.set(pointerRef,{...pointer,trial:campaign});
       }
+      if(prior.mode==='pve'){
+        // Resume the same board with the currently equipped, server-validated
+        // techniques. Older rooms contain a loadout snapshot from their creation.
+        const actor=prior.actors.find(p=>p.uid===uid);
+        const score=TrainingAccess.score(user);
+        const equipped=Manuals.normalize(exists(manualSnap)).equipped.filter(id=>
+          Manuals.meetsRealm(Manuals.BY_SKILL[id],score));
+        if(actor&&(actor.trainingAccessScore!==score||
+          JSON.stringify(actor.manualSkills||[])!==JSON.stringify(equipped))){
+          actor.trainingAccessScore=score;
+          actor.manualSkills=equipped;
+          prior.revision=(prior.revision||0)+1;
+          changed=true;
+        }
+      }
       changed=ensureIntroductions(prior,uid,pointer)||changed;
       if(changed)tx.set(db.collection(ROOMS).doc(prior.id),prior);
       return snapshot(prior,uid);
