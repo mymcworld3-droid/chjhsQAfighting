@@ -3221,7 +3221,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
         else visual?.cancel();
         showCultivationFeedback({ gain, penalty, learningMessage: reward.learning }, isCorrect);
         const next = document.getElementById('btn-next-step');
-        next.textContent = trialQuestionSession?.hasNext() ? `下一題 (目前連對: ${currentUserData.stats.currentStreak || 0})` : '返回戰場';
+        next.textContent = '返回戰場';
         next.onclick = window.nextQuestion;
         const eventId = quiz.analyticsAnswerEventId ||= window.newPlayerAnalyticsEventId?.();
         void window.trackPlayerAnalytics?.('answer_completed', { mode: 'solo', eventId });
@@ -4550,7 +4550,7 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
             closeReportModal();
             // A late review must not skip the player's newer question.
             if (window.currentActiveQuiz !== quiz) return;
-            if(trial){void trial.next();return;}
+            if(trial){void trial.skip();return;}
             if(quiz.mode==='trial-tower'){void quiz.onVerifiedSkip?.();return;}
             syncSoloQuestionCache();
             if (soloQuestionCache.getActive()?.data?.q === quiz.data?.q) {

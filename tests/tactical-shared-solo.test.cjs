@@ -97,3 +97,21 @@ test('an independently confirmed unanswered question is skipped once and cannot 
   assert.equal(report.staminaRefunded, 4);
   await assert.rejects(battle.answer(db, uid, input, Date.now(), read), /已結算/);
 });
+
+test('two separately opened questions can charge in one turn, including at full stamina', async () => {
+  const db = database();
+  const room = await battle.start(db, uid, { mode: 'pve' });
+  db.records.get(battle.ROOMS + '/' + room.id).actors[0].stamina = 9;
+  const first = await battle.answer(db, uid, aiAnswer(room), Date.now(), read);
+  assert.equal(first.actors[0].questions, 1);
+  assert.equal(first.actors[0].stamina, 10);
+  const second = await battle.answer(db, uid, aiAnswer(room, {
+    question: { ...parsed, q: '二加四的結果為何？', correct: '6' }
+  }), Date.now(), read);
+  assert.equal(second.actors[0].questions, 2);
+  assert.equal(second.actors[0].stamina, 10);
+  assert.equal(second.progress.stats.totalAnswered, 2);
+  await assert.rejects(battle.answer(db, uid, aiAnswer(room, {
+    question: { ...parsed, q: '二加一的結果為何？', correct: '3', wrong: ['5', '6', '4'] }
+  }), Date.now(), read), /已完成兩題/);
+});

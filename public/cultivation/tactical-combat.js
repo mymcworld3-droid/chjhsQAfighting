@@ -38,7 +38,7 @@ function syncEquippedAttack(hero=myActor()){
   return skills;
 }
 const myAction=()=>state?.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
-function canQuestion(){try{R.canAnswer(state,uid,Date.now()+clockOffset);return !!state.quizRound||myActor().stamina<10||!!state.question||!!state.questionFollowup;}catch(_){return false;}}
+function canQuestion(){try{R.canAnswer(state,uid,Date.now()+clockOffset);return state.mode==='pve'||!!state.quizRound||myActor().stamina<R.LIMITS.stamina||!!state.question||!!state.questionFollowup;}catch(_){return false;}}
 
 async function api(path,body,signal){
   // Same full solo prompt/adaptive analysis can need more time than the old
@@ -510,7 +510,9 @@ function paint({preserveModal=false}={}){
     $('[data-energy-number]').textContent=String(amount);
     root.querySelectorAll('[data-energy-segment]').forEach(segment=>
       segment.classList.toggle('is-filled',Number(segment.dataset.energySegment)<amount));
-    $('[data-quiz]').setAttribute('aria-label',`答題充能，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
+    const quizButton=$('[data-quiz]');
+    quizButton.title=`本回合充能 ${me.questions} / ${R.LIMITS.questions} 次`;
+    quizButton.setAttribute('aria-label',`答題充能，${quizButton.title}，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';
   $('[data-log]').innerHTML=state.events.slice(-5).map(e=>`<p class="is-${esc(e.type)}">${esc(e.text)}</p>`).join('');
   renderer.update(state,uid,battlefieldMode(),selection);updateControls();updateClock();
@@ -881,8 +883,8 @@ async function soloBattleQuestion(){
   await study.open({
     back,
     leave:close,
-    hasNext:()=>current()&&myActor().questions<R.LIMITS.questions,
-    next:async()=>{
+    next:back,
+    skip:async()=>{
       if(current()&&myActor().questions<R.LIMITS.questions)await study.next();
       else back();
     },
@@ -905,7 +907,7 @@ async function soloBattleQuestion(){
   });
 }
 async function question(){
-  if(!state||busy||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
+  if(!state||busy||root.hidden||!canQuestion()||renderer?.isAnimating&&!modalOpen)return;
   if(state.mode==='pve')return soloBattleQuestion();
   const e=epoch,account=uid,roomId=state.id;
   const remaining=Math.max(1,R.LIMITS.questions-myActor().questions);

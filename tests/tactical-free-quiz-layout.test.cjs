@@ -97,3 +97,40 @@ test('every form of question-stem text and rendered math uses pure black without
   assert.match(styles,/\.tc-options > button\{/);
   assert.match(styles,/color:#eee8d5!important/);
 });
+
+test('PvE returns to the battlefield after each answer and can reopen charging until both uses are spent',async()=>{
+  const rules=require('../public/cultivation/tactical-rules.js');
+  const eligibility=source.slice(source.indexOf('function canQuestion()'),source.indexOf('async function api('));
+  const soloPage=source.slice(source.indexOf('async function soloBattleQuestion()'),source.indexOf('async function question()'));
+  const setup=new Function('R','state','study',`
+    const uid='hero',epoch=0,clockOffset=0,root={hidden:false},renderer={setPaused(){}};
+    const window={QATrialQuestion:study},document={querySelector:()=>null};
+    const myActor=()=>state.actors[0],valid=()=>true,close=()=>{},hideModal=()=>{},paint=()=>{},$=()=>null;
+    ${eligibility}${soloPage}
+    return {canQuestion,soloBattleQuestion,root};
+  `);
+  const hero={uid:'hero',hp:100,questions:0,stamina:10};
+  const state={id:'test',mode:'pve',status:'active',turn:1,turnUid:hero.uid,actors:[hero]};
+  let callbacks,open=false,advanced=0;
+  const study={
+    open(options){callbacks=options;open=true;},
+    close(){const wasOpen=open;open=false;return wasOpen;},
+    next(){advanced++;}
+  };
+  const flow=setup(rules,state,study);
+  for(let use=1;use<=2;use++){
+    assert.equal(flow.canQuestion(),true);
+    await flow.soloBattleQuestion();
+    assert.equal(flow.root.hidden,true);
+    if(use===1){
+      await callbacks.skip();
+      assert.equal(advanced,1);
+      assert.equal(flow.root.hidden,true);
+    }
+    hero.questions=use;
+    callbacks.next();
+    assert.equal(flow.root.hidden,false);
+    assert.equal(advanced,1);
+  }
+  assert.equal(flow.canQuestion(),false);
+});
