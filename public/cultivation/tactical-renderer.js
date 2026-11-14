@@ -126,6 +126,17 @@ export class TacticalRenderer{
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
   }
+  drawFlyingSword(p,color){
+    const c=this.ctx,cell=this.cell,x=this.ox+(p.x+.5)*cell,y=this.oy+(p.y+.28)*cell;
+    c.save();
+    c.translate(x,y);c.rotate(Math.PI/5);
+    c.strokeStyle=color;c.fillStyle=color;c.shadowBlur=cell*.12;c.shadowColor=color;
+    c.lineWidth=Math.max(1.5,cell*.032);c.beginPath();
+    c.moveTo(0,-cell*.23);c.lineTo(cell*.047,cell*.09);c.lineTo(-cell*.047,cell*.09);c.closePath();c.fill();
+    c.beginPath();c.moveTo(-cell*.09,cell*.1);c.lineTo(cell*.09,cell*.1);
+    c.moveTo(0,cell*.09);c.lineTo(0,cell*.2);c.stroke();
+    c.restore();
+  }
   drawEffect(scene,p,above){
     const c=this.ctx,size=this.cell,{ox,oy}=this,beat=Math.sin(Math.PI*p),color=scene.color||'#e6ca8c';
     const center=a=>({x:ox+(a.x+.5)*size,y:oy+(a.y+.45)*size});
@@ -171,6 +182,23 @@ export class TacticalRenderer{
           beam({x:head.x-size*.25,y:head.y-size*.65},head,'#dfb8ed');
           c.globalAlpha=1-p*.55;c.fillStyle='#f5d4ac';c.beginPath();c.arc(head.x,head.y,size*.11,0,Math.PI*2);c.fill();
           if(p>.5){ring(pt,(p-.5)*1.4,(1-p)*1.5,'#efd7a3');motes(pt,'#cfb7e7',5,.65);}
+        }
+      }else if(style==='flying-sword'){
+        beam(from,to,'#d1efe1');ring(to,.22+beat*.25,beat,'#d1efe1');
+      }else if(style==='sword-array'){
+        for(const ray of scene.rays||[])beam(center(ray.at(-1)),to);
+        ring(to,.2+beat*.35,beat);
+      }else if(style==='dash-cleave'){
+        const dx=to.x-from.x,dy=to.y-from.y;
+        for(const cell of cells)ring(center(cell),.18+beat*.28,beat);
+        for(let strike=0;strike<(scene.hits||1);strike++){
+          const phase=Math.max(0,Math.min(1,p*2-strike)),wave=Math.sin(Math.PI*phase);
+          if(!wave||!cells.length)continue;
+          c.globalAlpha=wave;c.strokeStyle=color;c.lineWidth=size*.08;c.beginPath();
+          const ends=[center(cells[0]),center(cells.at(-1))];
+          const turn=Math.atan2(dy,dx);
+          const skew=.22*size*(1-2*strike),sx=Math.sin(turn)*skew,sy=Math.cos(turn)*skew;
+          c.moveTo(ends[0].x-sx,ends[0].y-sy);c.quadraticCurveTo(to.x,to.y-size*.46,ends[1].x+sx,ends[1].y+sy);c.stroke();
         }
       }else if(style==='meteor'){
         for(const cell of cells){const pt=center(cell);ring(pt,.2+beat*.15,beat);c.globalAlpha=beat;c.fillStyle='#e0c5f5';c.fillRect(pt.x-1,pt.y-size*.34,2,size*.2);}
@@ -220,7 +248,7 @@ export class TacticalRenderer{
     for(const number of numbers){
       const a=scene.before.find(a=>a.uid===number.uid);if(!a)continue;
       const at=center(a),lines=number.text?[{text:number.text,ink:'#ede1b9'}]:[
-        ...(number.damage!==undefined?[{text:'−'+number.damage,ink:'#ffe0c5'}]:[]),
+        ...(number.damage!==undefined?[{text:'−'+number.damage+(number.hits?' · '+number.hits+' 段':''),ink:'#ffe0c5'}]:[]),
         ...(number.absorbed?[{text:'護盾 −'+number.absorbed,ink:'#bde5ed'}]:[]),
         ...(number.heal?[{text:'+'+number.heal+' 生命',ink:'#d1edb5'}]:[]),
         ...(number.shield?[{text:'護盾 +'+number.shield,ink:'#bde5ed'}]:[]),
@@ -275,8 +303,12 @@ export class TacticalRenderer{
     }
     if(myTurn&&(this.mode==='attack'||this.mode.startsWith('manual:'))){
       const sk=attackSkill(mine,this.mode);
-      for(const p of this.range)fill(p,'#e445454d','#ed6a6a99');
-      if(this.selection&&(this.range.some(p=>R.key(p)===R.key(this.selection))||sk.kind==='ring'&&R.key(this.selection)===R.key(mine)))for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
+      const aimedPath=['dash-cleave','flying-sword'].includes(sk.kind);
+      for(const p of this.range)fill(p,aimedPath?'#dec17b45':'#e445454d',aimedPath?'#e5cc87':'#ed6a6a99');
+      if(this.selection&&(this.range.some(p=>R.key(p)===R.key(this.selection))||sk.kind==='ring'&&R.key(this.selection)===R.key(mine))){
+        for(const p of R.techniquePath(s,mine,sk,this.selection).slice(1))fill(p,'#e9cf8165','#e5cc87');
+        for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
+      }
     }
     if(!animating){
       for(const e of s.effects)for(const p of e.cells)fill(p,'#9b7aec55','#d5b8ff');
@@ -314,6 +346,15 @@ export class TacticalRenderer{
       const bar=cell*.65;c.fillStyle='#14251c';c.fillRect(px-bar/2,py+cell*.38,bar,4);c.fillStyle=enemy?'#df8a73':'#c8d895';c.fillRect(px-bar/2,py+cell*.38,bar*a.hp/a.maxHp,4);
       if(!animating&&s.turnUid===a.uid){c.fillStyle='#f9e6ad';c.beginPath();c.moveTo(px-4,py-cell*.6);c.lineTo(px+4,py-cell*.6);c.lineTo(px,py-cell*.48);c.fill();}
       c.restore();
+    }
+    for(const a of positions){
+      const sword=a.flyingSword;
+      const own=a.uid===this.uid;
+      if(scene?.style==='flying-sword'&&scene.actor===a.uid){
+        const {origin,target}=scene;
+        this.drawFlyingSword(sword?{x:origin.x+(target.x-origin.x)*progress,y:origin.y+(target.y-origin.y)*progress}:target,
+          own?'#d1efe1':'#f6c8a9');
+      }else if(sword)this.drawFlyingSword(sword,own?'#d1efe1':'#f6c8a9');
     }
     if(scene)this.drawEffect(scene,progress,true);
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');

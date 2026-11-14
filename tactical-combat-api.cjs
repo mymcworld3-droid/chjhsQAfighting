@@ -187,6 +187,8 @@ async function equipManualSkills(db,uid,input){
     if(ids.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備功法等級尚未解鎖的技能',403);
     if(ids.some(id=>!Manuals.meetsRealm(Manuals.BY_SKILL[id],score)))
       throw error('修士境界未達到此功法技能的門檻',403);
+    if(new Set(ids.map(id=>Manuals.BY_SKILL[id].moveId)).size!==ids.length)
+      throw error('相同招式只能裝備一次，請選擇其所屬功法',400);
     next.equipped=[...ids];tx.set(ref,next);
     return Manuals.publicState(next,score);
   });

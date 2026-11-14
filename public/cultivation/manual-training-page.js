@@ -36,6 +36,14 @@ async function request(url,body){
   if(!response.ok||!result.ok)throw Error(result.error||'功法資料同步失敗');
   return result.state;
 }
+function equippedVersion(id,equipped=current?.equipped||[]){
+  const move=Catalog.BY_SKILL[id]?.moveId;
+  return equipped.find(other=>Catalog.BY_SKILL[other]?.moveId===move);
+}
+function equipDisabled(id,equipped=current?.equipped||[]){
+  const other=equippedVersion(id,equipped);
+  return other===id||(!other&&equipped.length>=3);
+}
 function markup(){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const owned=current.library.filter(item=>item.owned).length;
@@ -44,7 +52,7 @@ function markup(){
     const id=equipped[i],skill=Catalog.BY_SKILL[id];
     return `<div class="manual-slot ${id?'is-active':''}">
       <small>第 ${i+1} 技能欄</small>
-      ${skill?`<strong>${esc(skill.name)}</strong><span>消耗 ${skill.cost} 體力</span>
+      ${skill?`<strong>${esc(skill.name)}</strong><span>${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span>
         <button type="button" data-manual-remove="${esc(id)}">卸下</button>`:
         '<span class="manual-slot-empty">尚未裝備</span>'}
       </div>`;
@@ -52,7 +60,7 @@ function markup(){
   const cards=current.library.filter(book=>book.owned).map(book=>{
     const next=book.skills.find(s=>!s.unlocked);
     const skills=book.skills.map((skill,i)=>{
-      const active=equipped.includes(skill.id);
+      const other=equippedVersion(skill.id,equipped);
       const unlocked=skill.unlocked;
       const requirements=[
         !skill.mastered?'功法 Lv. '+skill.levelRequired:null,
@@ -60,9 +68,9 @@ function markup(){
       ].filter(Boolean);
       return `<div class="manual-technique ${unlocked?'':'is-locked'}">
         <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}</b>
-          <small>${skill.cost} 體力 · ${skill.range} 格 · ${skill.realmName}境</small></div>
+          <small>${skill.cost} 體力 · ${skill.unlimited?'無固定射程':skill.range+' 格'} · ${skill.realmName}境</small></div>
         <p>${esc(skill.description)}</p>
-        ${unlocked?`<button type="button" data-manual-equip="${esc(skill.id)}" ${active||equipped.length>=3?'disabled':''}>${active?'已裝備':'裝備技能'}</button>`:
+        ${unlocked?`<button type="button" data-manual-equip="${esc(skill.id)}" ${equipDisabled(skill.id,equipped)?'disabled':''}>${other===skill.id?'已裝備':other?'改用本功法':'裝備技能'}</button>`:
           `<span class="manual-lock"><i class="fa-solid fa-lock"></i> 需達 ${requirements.join('、')}</span>`}
       </div>`;
     }).join('');
@@ -88,7 +96,7 @@ function markup(){
       <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
         <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
         <i class="fa-solid fa-hand-fist"></i> 體修</button></div></section>
-    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。更動只影響下一場新戰鬥。</p></div>
+    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。重新進入試煉時會套用目前配置。</p></div>
       <div class="manual-slot-grid">${slots}</div></section>
     <section class="manual-library"><div class="manual-section-title"><h3>已獲得的功法</h3>
       <button type="button" class="manual-refresh" data-manual-refresh title="同步功法"><i class="fa-solid fa-rotate"></i> 更新</button>
@@ -133,7 +141,7 @@ async function mutate(url,body){
     window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
   }catch(error){paint(error.message);}
   finally{busy=false;root?.querySelectorAll('button').forEach(button=>button.disabled=
-    button.hasAttribute('data-manual-equip')&&(current?.equipped.includes(button.dataset.manualEquip)||current?.equipped.length>=3));}
+    button.hasAttribute('data-manual-equip')&&equipDisabled(button.dataset.manualEquip));}
 }
 function ensureNav(){
   const parent=document.getElementById('nav-grid');
@@ -161,7 +169,11 @@ function boot(){
     const button=event.target.closest('button');if(!button||busy)return;
     if(button.hasAttribute('data-manual-refresh')){void load({force:true});return;}
     if(button.dataset.manualSchool){void mutate('/api/tactical/manuals/school',{school:button.dataset.manualSchool});return;}
-    if(button.dataset.manualEquip){void mutate('/api/tactical/manuals/equip',{skillIds:[...(current?.equipped||[]),button.dataset.manualEquip]});return;}
+    if(button.dataset.manualEquip){
+      const id=button.dataset.manualEquip,equipped=current?.equipped||[],other=equippedVersion(id,equipped);
+      const skillIds=other?equipped.map(slot=>slot===other?id:slot):[...equipped,id];
+      void mutate('/api/tactical/manuals/equip',{skillIds});return;
+    }
     if(button.dataset.manualRemove){void mutate('/api/tactical/manuals/equip',
       {skillIds:(current?.equipped||[]).filter(id=>id!==button.dataset.manualRemove)});}
   });

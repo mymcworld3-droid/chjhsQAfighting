@@ -542,7 +542,8 @@ function updateControls(){
   const basicTab=$('[data-action="attack"]');
   if(basicTab&&!quarter)basicTab.textContent='普通攻擊 · '+basic.cost;
   let label=action==='move'?'選擇移動位置':directional?'選擇攻擊方向':
-    shown.kind==='ring'?'震擊周圍':'選擇施放位置';
+    shown.kind==='ring'?'震擊周圍':shown.kind==='dash-cleave'?'選擇突進落點':
+      shown.kind==='flying-sword'?(me.flyingSword?'選擇飛劍移動位置':'選擇召劍位置'):'選擇施放位置';
   let error='',moveStamina=null;
   const d=selection&&directional&&(selection.x===me.x||selection.y===me.y)?
     R.attackDirection(me,selection):null;
@@ -561,7 +562,7 @@ function updateControls(){
       try{R.validateSkill(state,me,shown,selection);}catch(e){error=e.message;}
     }
   }
-  const cooling=action==='manual'?Math.max(0,(me.cooldowns[shown.id]||0)-me.turns):0;
+  const cooling=action==='manual'?Math.max(0,R.cooldownUntil(me,shown)-me.turns):0;
   $('[data-skill-title]').textContent=action==='move'?'移動說明':
     `${shown.name} · ${shown.cost} 體力${cooling?' · 冷卻 '+cooling+' 回合':''}`;
   $('[data-skill]').innerHTML=action==='move'?
@@ -618,9 +619,12 @@ function updateControls(){
     wheelSliderAngle($('.tc-wheel-slider-action'),actionAngle);
     wheelSliderAngle($('.tc-wheel-slider-detail'),WHEEL_ANGLES.center);
   }
-  $('[data-range-legend]').textContent=(action==='move'?'灰格可走':'紅格射程')+' · 紅框預告';
+  $('[data-range-legend]').textContent=(action==='move'?'灰格可走':
+    ['dash-cleave','flying-sword'].includes(shown.kind)?'金格為落點':'紅格射程')+' · 紅框預告';
   const hint=action==='move'?'點選灰格移動':
     action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):
+    shown.kind==='dash-cleave'?'點選金色地格突進，紅格為斬擊範圍':
+    shown.kind==='flying-sword'?(me.flyingSword?'點選金色地格御劍':'點選金色地格召喚飛劍'):
     shown.range===0?'點選自己施放技能':'點選紅格施放技能';
   $('[data-selection]').textContent=selection?
     `${action==='attack'&&basic.kind==='ring'?'震擊周圍一圈 · '+R.skillCells(state,me,basic,selection).length+' 格':

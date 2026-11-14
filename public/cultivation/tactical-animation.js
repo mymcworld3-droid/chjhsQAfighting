@@ -33,7 +33,7 @@
     for(const event of events){
       const raw=event.animation||(['move','monster-move','displace'].includes(event.type)?{kind:'move',style:'walk'}:null);
       if(!raw)continue;
-      const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,numbers:raw.numbers||[],before:copy(actors)};
+      const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,numbers:(raw.numbers||[]).map(number=>({...number})),before:copy(actors)};
       if(scene.kind==='cast'&&['lunge','pounce','dive'].includes(scene.style)){
         const a=actors.find(a=>a.uid===scene.actor);if(a)scene.origin={x:a.x,y:a.y};
       }
@@ -49,7 +49,14 @@
       // retain their own beat because their source/skill differ.
       const last=scenes.at(-1);
       if(scene.kind==='damage'&&last?.kind==='damage'&&scene.actor===last.actor&&scene.skill===last.skill){
-        last.numbers=[...last.numbers,...scene.numbers];last.after=scene.after;last.label=scene.label;
+        for(const number of scene.numbers){
+          const earlier=last.numbers.find(item=>item.uid===number.uid);
+          if(earlier&&number.damage!==undefined&&earlier.damage!==undefined){
+            Object.assign(earlier,{damage:earlier.damage+number.damage,
+              absorbed:(earlier.absorbed||0)+(number.absorbed||0),hits:(earlier.hits||1)+1});
+          }else last.numbers.push({...number});
+        }
+        last.after=scene.after;last.label=scene.label;
       }else scenes.push(scene);
     }
     if(previous.status!=='finished'&&next.status==='finished'){

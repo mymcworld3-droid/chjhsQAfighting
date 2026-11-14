@@ -11,9 +11,9 @@ const lowBeast=(id,x,y,hp=80,level=1)=>R.actor({
   uid:id,name:id,bot:true,team:'monster',atk:15,maxHp:hp,level
 },{x,y});
 
-test('each of the four manuals has exactly three skills unlocked at Lv.1 / Lv.5 / Lv.10',()=>{
-  assert.equal(Catalog.BOOKS.length,4);
-  assert.equal(Catalog.BOOKS.filter(book=>book.school==='sword').length,2);
+test('each of the five manuals has exactly three skills unlocked at Lv.1 / Lv.5 / Lv.10',()=>{
+  assert.equal(Catalog.BOOKS.length,5);
+  assert.equal(Catalog.BOOKS.filter(book=>book.school==='sword').length,3);
   assert.equal(Catalog.BOOKS.filter(book=>book.school==='body').length,2);
   for(const book of Catalog.BOOKS){
     assert.equal(book.skills.length,3);
@@ -253,4 +253,98 @@ test('trial clear awards a fresh manual with zero EXP, once, in the same transac
   assert.equal(Object.keys(bookRecord(db).books).length,count);
   assert.equal(db.records.get(API.PLAYERS+'/u1').trial.stage,2);
   assert.equal(db.records.get('users/u1').stats.gold,35);
+});
+
+test('the original sword manuals retain their save slots while shared techniques use one slot',async()=>{
+  const db=database(),ref=API.MANUALS+'/u1';
+  db.records.get('users/u1').stats.totalScore=68;
+  const owned={'sword-wind':{exp:1080},'sword-sky':{exp:1080},'sword-flight':{exp:1080}};
+  db.records.set(ref,{version:2,books:owned,equipped:['wind-slash','wind-step','sky-sever']});
+  const state=await API.manualsState(db,'u1');
+  assert.deepEqual(state.equipped,['wind-slash','wind-step','sky-sever']);
+  assert.deepEqual(state.library.map(book=>[book.name,...book.skills.map(skill=>skill.name)]),[
+    ['流風劍訣','流風斬','突進橫斬','遠線破擊'],
+    ['御劍真訣','流風斬','召劍','遠線破擊'],
+    ['八方劍典','流風斬','交叉劍斬','八方合劍']
+  ]);
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['wind-slash','sky-pierce']}),/相同招式/);
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:['wind-thousand','flight-break']}),/相同招式/);
+  await API.equipManualSkills(db,'u1',{skillIds:['flight-slash']});
+  const battle=await API.start(db,'u1',{mode:'pve'},now);
+  const raw=db.records.get(API.ROOMS+'/'+battle.id),hero=raw.actors[0];
+  raw.blocks=[];Object.assign(hero,{x:1,y:3,stamina:10});
+  raw.actors=[hero,lowBeast('beast',2,3,1)];
+  const result=await API.command(db,'u1',{type:'manual',skillId:'flight-slash',x:2,y:3,
+    roomId:battle.id,revision:battle.revision,requestId:'shared-sword-source-01'},now);
+  assert.deepEqual(result.manualExp.u1,{'sword-flight':50});
+});
+
+function swordBattle(skillId,beasts){
+  const battle=R.create({id:'arena-sword-manuals',mode:'pve',
+    players:[{uid:'u1',atk:100,maxHp:1000,trainingAccessScore:68,manualSkills:[skillId]}],now});
+  const hero=battle.actors[0];
+  battle.width=12;battle.height=9;battle.blocks=[];
+  Object.assign(hero,{x:1,y:4,stamina:10});
+  battle.actors=[hero,...beasts];
+  return battle;
+}
+const castSword=(battle,skillId,x,y)=>R.apply(battle,'u1',{type:'manual',skillId,x,y},now);
+
+test('flying sword persists, crosses enemies on its own path and can be used twice in a turn',()=>{
+  const skill='flight-summon',battle=swordBattle(skill,[lowBeast('m1',5,4,500),lowBeast('m2',7,4,500)]);
+  battle.blocks=[{x:8,y:4}];
+  const summoned=castSword(battle,skill,4,4);
+  assert.deepEqual(summoned.actors[0].flyingSword,{x:4,y:4});
+  assert.equal(summoned.actors[0].stamina,7);
+  assert.equal(summoned.actors[1].hp,500);
+  assert.throws(()=>castSword(summoned,skill,8,4),/直線地格/);
+  const moved=castSword(summoned,skill,7,4);
+  assert.deepEqual(moved.actors[0].flyingSword,{x:7,y:4});
+  assert.equal(moved.actors[0].stamina,4);
+  assert.deepEqual(moved.actors.slice(1).map(a=>a.hp),[390,390]);
+  assert.throws(()=>castSword(moved,skill,6,4),/兩次/);
+  const scenes=require('../public/cultivation/tactical-animation.js').plan(summoned,moved,'u1');
+  assert.deepEqual(scenes[0].origin,{x:4,y:4});
+  assert.deepEqual(scenes[0].after[0].flyingSword,{x:7,y:4});
+});
+
+test('dash cleave previews a clear landing and strikes the next row in two hits',()=>{
+  const skill='wind-step',battle=swordBattle(skill,[
+    lowBeast('center',6,4,500),lowBeast('side',6,3,500),lowBeast('outside',7,4,500)]);
+  const hero=battle.actors[0],technique=Catalog.BY_SKILL[skill],landing={x:5,y:4};
+  assert.deepEqual(R.skillCells(battle,hero,technique,landing),[{x:6,y:3},{x:6,y:4},{x:6,y:5}]);
+  assert.throws(()=>castSword(battle,skill,6,4),/可突進/);
+  const after=castSword(battle,skill,5,4);
+  assert.deepEqual([after.actors[0].x,after.actors[0].y,after.actors[0].stamina],[5,4,5]);
+  assert.deepEqual(after.actors.slice(1).map(a=>a.hp),[320,320,500]);
+  assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='center').length,2);
+  assert.equal(after.events.find(e=>e.animation?.style==='dash').path.length,5);
+});
+
+test('sword arrays draw nine and twenty-one cells and resolve the center in multiple hits',()=>{
+  for(const [skill,size,hits,centerHP] of [['sky-cloud',9,2,340],['sky-sever',21,8,260]]){
+    const battle=swordBattle(skill,[lowBeast('center',4,4,500),lowBeast('diagonal',6,6,500)]);
+    const technique=Catalog.BY_SKILL[skill],center={x:4,y:4};
+    assert.equal(R.skillCells(battle,battle.actors[0],technique,center).length,size);
+    const after=castSword(battle,skill,center.x,center.y);
+    assert.equal(after.actors[1].hp,centerHP);
+    assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='center').length,hits);
+    assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='diagonal').length,1);
+    const scenes=require('../public/cultivation/tactical-animation.js').plan(battle,after,'u1');
+    const centerNumbers=scenes.find(scene=>scene.kind==='damage').numbers.find(number=>number.uid==='center');
+    assert.deepEqual([centerNumbers.damage,centerNumbers.hits],[500-centerHP,hits]);
+    battle.blocks=[{x:5,y:5}];
+    assert(!R.skillCells(battle,battle.actors[0],technique,center).some(p=>p.x===6&&p.y===6));
+  }
+});
+
+test('far break reaches beyond four cells and pushes survivors farthest first up to stone or edge',()=>{
+  for(const [blocks,edge] of [[[],11],[[{x:10,y:4}],9]]){
+    const skill='wind-thousand',battle=swordBattle(skill,[
+      lowBeast('near',3,4,500),lowBeast('far',8,4,500),lowBeast('other-row',9,3,500)]);
+    battle.blocks=blocks;
+    const after=castSword(battle,skill,edge,4);
+    assert.deepEqual(after.actors.slice(1).map(a=>[a.x,a.hp]),[[edge-1,350],[edge,350],[9,500]]);
+    assert.deepEqual(after.events.filter(e=>e.animation?.style==='push').map(e=>e.actor),['far','near']);
+  }
 });
