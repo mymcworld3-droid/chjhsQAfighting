@@ -35,7 +35,7 @@
 .enlightenment-empty{color:var(--review-muted,#ada591)}
 .enlightenment-error{color:#efaaa2;line-height:1.7}
 .ai-ability-priority [data-ability-start]{margin-left:8px;border:1px solid #c8ad63a9;background:#9975382a;color:inherit;border-radius:9px;padding:8px 12px;cursor:pointer}
-#enlightenment-trial :is(mjx-container,.MathJax,mjx-container *,.MathJax *){color:#fff!important;-webkit-text-fill-color:#fff!important}
+#enlightenment-trial :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),#enlightenment-trial :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) *{color:inherit!important;-webkit-text-fill-color:currentColor!important}
 @media(max-width:600px){.enlightenment-overlay{padding:10px}.enlightenment-panel{max-height:calc(100dvh - 20px)}.enlightenment-panel>header{padding:10px 16px}.enlightenment-panel>header h2{font-size:20px}#enlightenment-body{padding:16px}.enlightenment-question{font-size:18px}}
 .enlightenment-options button.correct{border-color:#67bc8d;background:#244c36;color:#d2f1dc;opacity:1}
 .enlightenment-options button.wrong{border-color:#ce8277;background:#4b2a28;color:#f1cccc;opacity:1}

@@ -112,6 +112,7 @@
 #tactical-combat .tc-quiz .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
 #tactical-combat .tc-quiz .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) *{
   color:inherit!important;
+  -webkit-text-fill-color:currentColor!important;
 }
 /* Identical single-column four-option layout, spacing and pill lettering. */
 #tactical-combat .tc-quiz .tc-pair-entry .tc-options{

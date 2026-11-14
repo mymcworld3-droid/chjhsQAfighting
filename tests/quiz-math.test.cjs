@@ -79,3 +79,31 @@ test('all live question, choices and explanation surfaces use the shared formatt
   assert.match(server,/數學式使用 TeX/);
   assert.match(server,/公式定界符、大括號與 left\/right 必須成對/);
 });
+
+
+test('math glyph colors inherit surrounding text across all question and explanation surfaces', () => {
+  const shared = read('styles/interface-cleanup-pages.css');
+  const classroom = read('styles/classroom.css');
+  const enlightenment = read('styles/enlightenment-trial.css');
+  const solo = read('styles/quiz-scroll.css');
+  const tactical = read('styles/tactical-question-pair.css');
+  const bright = read('xianxia-bright-accents.css');
+
+  assert.match(shared, /html body :is\(mjx-container,\.MathJax,\.katex,\.katex-display,math,\.quiz-math-fallback\)/);
+  assert.match(shared, /color:inherit!important;\s*-webkit-text-fill-color:currentColor!important/);
+  assert.match(shared, /mjx-container\[jax="SVG"\] svg :is\(use,path\)/);
+  assert.match(shared, /fill:currentColor!important/);
+  assert.doesNotMatch(shared, /mjx-container[\s\S]{0,300}color:#fff!important/);
+
+  for (const [name, sheet] of [['classroom', classroom], ['enlightenment', enlightenment],
+    ['solo quiz', solo], ['tactical quiz', tactical], ['bright theme', bright]]) {
+    assert.match(sheet, /color:\s*inherit\s*!important/, name + ' must inherit equation ink');
+    assert.match(sheet, /-webkit-text-fill-color:\s*currentColor\s*!important/, name + ' must override stale glyph ink');
+  }
+  assert.doesNotMatch(classroom, /\.cc-shell mjx-container\{color:#fff!important/);
+  assert.doesNotMatch(enlightenment, /#enlightenment-trial :is\([^}]*\)\{color:#fff!important/);
+  assert.match(enlightenment, /\.enlightenment-options button\.correct\{[^}]*color:#d2f1dc/);
+  assert.match(enlightenment, /\.enlightenment-options button\.wrong\{[^}]*color:#f1cccc/);
+  assert.match(solo, /#question-text[^\n]*\{/);
+  assert.match(tactical, /\.tc-question-sheet \.tc-question\{/);
+});

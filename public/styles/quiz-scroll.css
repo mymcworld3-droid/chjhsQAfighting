@@ -56,6 +56,7 @@ html body.xianxia-theme #page-quiz #question-text {
 html body.xianxia-theme #page-quiz :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
 html body.xianxia-theme #page-quiz :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) * {
   color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
 }
 html body.xianxia-theme #page-quiz .quiz-main-column > .glass-panel:first-child > .text-6xl {
   display: block;
@@ -187,5 +188,9 @@ html body.xianxia-theme #page-quiz .quiz-helper-launcher {
 }
 #page-quiz .adaptive-concept-lesson h3 { font-weight: 700; font-size: 1rem; }
 #page-quiz .adaptive-concept-lesson h4 { font-weight: 700; margin-top: .65rem; }
-#page-quiz .adaptive-concept-lesson mjx-container,
-#page-quiz .adaptive-concept-lesson .katex { color: #173e2c !important; background: transparent !important; }
+#page-quiz .adaptive-concept-lesson :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
+#page-quiz .adaptive-concept-lesson :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) * {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: transparent !important;
+}

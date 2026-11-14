@@ -29,6 +29,7 @@
 .cc-options>div{white-space:pre-wrap;overflow-wrap:anywhere}
 .cc-options button[aria-pressed=true]{border-color:#d4b46e;background:#57472d}.cc-options .cc-correct{border-color:#82ab86;background:#223829}
 .cc-explanation{white-space:pre-wrap;overflow-wrap:anywhere;padding-top:12px;border-top:1px solid #6d604647;color:#e1d7c7}
-.cc-shell mjx-container{color:#fff!important}.cc-shell progress{width:100%;height:7px;accent-color:#c7a56b}
+.cc-shell :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),.cc-shell :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) *{color:inherit!important;-webkit-text-fill-color:currentColor!important}
+.cc-shell progress{width:100%;height:7px;accent-color:#c7a56b}
 .cc-stat{font-size:25px;color:#ead3a0;font-variant-numeric:tabular-nums}.cc-shell details>summary{cursor:pointer;color:#d9be82;padding:7px 0}
 @media(max-width:540px){#section-classes{padding:12px 12px 84px}.cc-card{padding:13px}.cc-fields{grid-template-columns:1fr}.cc-shell button{min-height:42px}.cc-toolbar h3{font-size:17px}}

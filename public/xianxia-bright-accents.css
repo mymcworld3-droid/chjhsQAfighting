@@ -342,7 +342,8 @@ body.xianxia-theme #question-text *{
 }
 body.xianxia-theme #tactical-combat .tc-question :is(mjx-container,mjx-container *),
 body.xianxia-theme #question-text :is(mjx-container,mjx-container *){
-  color:#211a10!important;
+  color:inherit!important;
+  -webkit-text-fill-color:currentColor!important;
 }
 body.xianxia-theme #tactical-combat .tc-question-badge,
 body.xianxia-theme #quiz-badge{

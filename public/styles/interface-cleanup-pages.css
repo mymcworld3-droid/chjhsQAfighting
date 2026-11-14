@@ -344,12 +344,16 @@ html body.ui-cleanup #soulbound-page .sb-header>div {display:none}
 html body.ui-cleanup #soulbound-page .sb-header {justify-content:flex-end;padding:0;margin:0;border:0;min-height:40px}
 html body.ui-cleanup #soulbound-page #soulbound-refresh {min-height:36px;padding:5px 12px;font-size:11px;background:transparent;border-color:var(--review-line)}
 
-/* Keep rendered LaTeX white on the original dark question cards, including
-   MathJax SVG/CHTML descendants that inherited the old parchment ink color. */
-html body.xianxia-theme :is(mjx-container,.MathJax),
-html body.xianxia-theme :is(mjx-container,.MathJax) *,
-html body.xianxia-theme :is(#question-text,#feedback-text,#options-container,#bv2-question,#page-raid) :is(mjx-container,.MathJax,mjx-container *,.MathJax *),
-html body.xianxia-theme #tactical-combat .tc-quiz :is(mjx-container,.MathJax,mjx-container *,.MathJax *) {
-  color:#fff!important;
-  -webkit-text-fill-color:#fff!important;
+/* Match local text ink in all math-rich content: questions, options, answers,
+   explanations, feedback, classroom, Dongtian, practice and modal overlays.
+   Light parchment keeps dark formulas; dark surfaces keep light formulas. */
+html body :is(mjx-container,.MathJax,.katex,.katex-display,math,.quiz-math-fallback),
+html body :is(mjx-container,.MathJax,.katex,.katex-display,math,.quiz-math-fallback) *{
+  color:inherit!important;
+  -webkit-text-fill-color:currentColor!important;
+}
+/* MathJax SVG and KaTeX glyphs also use SVG fill, not just CSS color. */
+html body mjx-container[jax="SVG"] svg :is(use,path),
+html body .katex svg :is(use,path){
+  fill:currentColor!important;
 }
