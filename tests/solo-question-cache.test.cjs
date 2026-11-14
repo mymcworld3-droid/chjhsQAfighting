@@ -150,7 +150,7 @@ test('seen-question history survives reload and blocks exact or long structural 
 });
 
 test('solo quiz uses restored active question before hitting the API and saves each prefetched result', () => {
-  assert.match(legacy, /let quiz = soloQuestionCache.takeNext\(\)/);
+  assert.match(legacy, /const takeNext = \(\) => soloQuestionCache.takeNext\(/);
   assert.match(legacy, /const BUFFER_SIZE = 5;/);
   assert.match(legacy, /if \(!quiz && isFetchingBuffer\)/);
   assert.match(legacy, /if \(isFetchingBuffer\) return firstReady \? bufferNextQuestionPromise : bufferFillPromise/);
@@ -256,4 +256,69 @@ test('assistance on the exact active question survives reload and cannot replace
   const reloaded=createSoloQuestionCache(storage);reloaded.activate('uid-help',scope());
   assert.equal(reloaded.getActive().adaptiveHelp,2);assert.equal(reloaded.getActive().adaptiveLessonHelp,true);assert.equal(reloaded.getActive().data.q,quiz.data.q);
   cache.consumeActive();assert.equal(cache.persistActive(quiz),false);
+});
+
+test('a ready challenge can move ahead of ordinary stock while active and correction questions keep priority',()=>{
+  const {createSoloQuestionCache}=cacheAPI();
+  const cache=createSoloQuestionCache(createMemoryStorage());
+  cache.activate('player',scope());
+  const active=makeQuiz('目前答題'),normal=makeQuiz('先準備的一般題');
+  const challenge={...makeQuiz('新生成的進階題'),adaptive:{role:'challenge'}};
+  const correction={...makeQuiz('需要訂正的練習'),recoveryOrigin:'已做錯的題'};
+  cache.setActive(active);
+  for(const quiz of [normal,challenge,correction])assert(cache.append(quiz));
+  const draw=()=>cache.takeNext(quiz=>quiz.adaptive?.role==='challenge');
+  for(const expected of [active,correction,challenge,normal]){
+    assert.equal(draw(),expected);
+    cache.consumeActive();
+  }
+});
+
+test('upgrading the diagnostic policy replaces queued legacy easy diagnostics and retains the active question',()=>{
+  const {createSoloQuestionCache}=cacheAPI();
+  const cache=createSoloQuestionCache(createMemoryStorage());
+  cache.activate('player',scope());
+  const easy={role:'diagnostic',difficulty:'easy'};
+  const active={...makeQuiz('正在回答的診斷'),adaptive:easy};
+  const old={...makeQuiz('舊版簡單診斷'),adaptive:easy};
+  const newQuiz={...makeQuiz('新版觀念練習'),adaptive:{...easy,policyVersion:2}};
+  const correction={...makeQuiz('需要訂正的原題'),adaptive:easy,recoveryOrigin:'原題'};
+  cache.setActive(active);
+  for(const quiz of [old,newQuiz,correction])assert(cache.append(quiz));
+  cache.discardLegacyDiagnostics(2);
+  assert.equal(cache.takeNext(),active);
+  assert.deepEqual(Array.from(cache.getQueue()),[newQuiz,correction]);
+});
+
+test('the shared refill reserves a challenge even when five ordinary questions are already ready',async()=>{
+  const Rules=require('../public/cultivation/adaptive-learning-rules.js');
+  const unit={path:'數學/八下/單元',detail:'幾何',sub_topics:[]};
+  const scopeId='1'.repeat(24),conceptId='c_'+'2'.repeat(16);
+  const stats={adaptiveLearningV1:{scopes:{[scopeId]:{recent:Array.from({length:2},()=>({
+    conceptId,role:'diagnostic',difficulty:'medium',correct:true,help:0
+  }))}}}};
+  const {createSoloQuestionCache}=cacheAPI();
+  const cache=createSoloQuestionCache(createMemoryStorage());
+  cache.activate('player','range');
+  for(const stem of ['三角形','正方形','圓形','角度','面積'])assert(cache.append(makeQuiz(stem)));
+  const challenge={...makeQuiz('跨圖形推理'),adaptive:{scopeId,conceptId,scope:unit,role:'challenge',difficulty:'hard'}};
+  const calls=[];
+  const sandbox={
+    auth:{currentUser:{uid:'player'}},currentUserData:{stats,gameSettings:{sourceMode:'focused',focusedUnits:[unit]}},
+    window:{QAAdaptiveLearningRules:Rules},soloQuestionCache:cache,adaptiveSoloUnits:new Map([[scopeId,unit]]),
+    syncSoloQuestionCache:()=> 'range',soloQuestionScope:()=> 'range',soloDraws:new WeakMap(),console,
+    fetchOneQuestion:async target=>{calls.push(target);return challenge;}
+  };
+  vm.createContext(sandbox);
+  vm.runInContext(`let isFetchingBuffer=false, bufferNextQuestionPromise=null, bufferFillPromise=null;
+    let quizBuffer=[], soloCacheRevision=1;
+    const BUFFER_SIZE=5;
+    ${legacy.slice(legacy.indexOf('function pendingSoloChallenge('),legacy.indexOf('window.QASoloQuestionQueue ='))}
+    globalThis.flow={fillBuffer,takeSoloQuestion};
+  `,sandbox);
+  await sandbox.flow.fillBuffer();
+  assert.deepEqual(calls,[unit]);
+  assert.equal(cache.pendingCount(),6);
+  assert.equal(await sandbox.flow.takeSoloQuestion(),challenge);
+  assert.equal(calls.length,1);
 });

@@ -23,7 +23,7 @@ function enqueue(uid, meta, event) {
   const rows = read(uid);
   if (!rows.some(x => x.event.id === event.id)) rows.push({ meta: {
     scopeId: meta.scopeId, conceptId: meta.conceptId, facetId: meta.facetId,
-    questionId: meta.questionId, role: meta.role
+    questionId: meta.questionId, role: meta.role, difficulty: meta.difficulty
   }, event });
   write(uid, rows.slice(-64));
 }
@@ -54,7 +54,7 @@ async function flush(uid = getMainUser()?.uid) {
 }
 function request(scope, questions = []) {
   return { adaptiveScope: scope, adaptivePending: questions.filter(Boolean).map(q => q.adaptive).filter(Boolean)
-    .slice(0, 8).map(x => ({ scopeId: x.scopeId, conceptId: x.conceptId, facetId: x.facetId })) };
+    .slice(0, 8).map(x => ({ scopeId: x.scopeId, conceptId: x.conceptId, facetId: x.facetId, role: x.role })) };
 }
 async function fetchQuiz(input, init) {
   const uid = getMainUser()?.uid;
@@ -126,7 +126,7 @@ function render(quiz, questionHost = null) {
   if (!host) return;
   const details = document.createElement('details'); details.id = 'adaptive-scope-progress'; details.className = 'adaptive-scope-progress';
   const summary = document.createElement('summary');
-  const target = Math.min(Rules.POLICY.diagnosticMax, Math.max(Rules.POLICY.diagnosticMin, meta.outline.length));
+  const target = Rules.diagnosticTarget(meta.outline.length);
   summary.textContent = '範圍學習足跡' + (state.answered < target ? ` · 診斷 ${Math.min(target, state.answered)}/${target}` : '') + ' · ' + meta.concept;
   details.appendChild(summary);
   const note = document.createElement('p'); note.textContent = meta.provisional ? '目前使用暫定細項，AI 分析完成後會再補齊。' : '依作答與提示使用逐步調整；未練習的觀念保持待診斷。'; details.appendChild(note);

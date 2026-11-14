@@ -123,6 +123,7 @@ let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
 let trialQuestionSession = null;
 const soloDraws = new WeakMap();
+const adaptiveSoloUnits = new Map();
 window.persistAdaptiveActiveQuiz = quiz => {
     if(quiz?.mode==='trial-tower'){window.persistTrialTowerStudyHint?.(quiz);return;}
     if (soloQuestionCache.isCurrent(auth.currentUser?.uid, soloQuestionScope())) soloQuestionCache.persistActive(quiz);
@@ -162,6 +163,9 @@ function syncSoloQuestionCache() {
         // Discard the previous account/range and any in-flight buffer when scope changes.
         soloQuestionCache.activate(uid, scope);
         soloQuestionCache.discardUnverified();
+        const adaptivePolicy = window.QAAdaptiveLearningRules?.POLICY.version;
+        if (adaptivePolicy) soloQuestionCache.discardLegacyDiagnostics(adaptivePolicy);
+        adaptiveSoloUnits.clear();
         soloCacheIdentity = identity;
         soloCacheRevision += 1;
         quizBuffer = soloQuestionCache.getQueue();
@@ -2490,27 +2494,58 @@ document.addEventListener('visibilitychange', () => {
 });
 setInterval(checkSoloQuestionStock, 30000);
 
+function pendingSoloChallenge() {
+    const rules = window.QAAdaptiveLearningRules;
+    const raw = currentUserData?.stats?.adaptiveLearningV1;
+    const selected = currentUserData?.gameSettings?.focusedUnits || [];
+    if (!rules || currentUserData?.gameSettings?.sourceMode !== 'focused') return null;
+    const candidates = Object.keys(raw?.scopes || {})
+        .map(id => [id, rules.scopeState(raw, id)])
+        .filter(([, state]) => rules.earlyChallenge(state).length)
+        .sort(([, a], [, b]) => b.updatedAt - a.updatedAt);
+    const signature = value => JSON.stringify([value?.path, value?.detail || '', [...(value?.sub_topics || [])].sort()]);
+    for (const [id, state] of candidates) {
+        const unit = adaptiveSoloUnits.get(id) || soloQuestionCache.getQueue()
+            .find(item => item?.adaptive?.scopeId === id)?.adaptive?.scope;
+        if (unit && selected.some(value => signature(value) === signature(unit))) {
+            return { id, unit, concepts: rules.earlyChallenge(state) };
+        }
+    }
+    return null;
+}
+
+function matchesSoloChallenge(quiz, challenge) {
+    const meta = quiz?.adaptive;
+    return !!challenge && meta?.scopeId === challenge.id && meta.role === 'challenge' &&
+        meta.difficulty === 'hard' && challenge.concepts.includes(meta.conceptId);
+}
+
 async function fillBuffer({ firstReady = false } = {}) {
     const scope = syncSoloQuestionCache();
     const uid = auth.currentUser?.uid || '';
     const revision = soloCacheRevision;
     // When the player opens the quiz during prefetch, share that existing request.
     if (isFetchingBuffer) return firstReady ? bufferNextQuestionPromise : bufferFillPromise;
-    if (!scope || !uid || soloQuestionCache.pendingCount() >= BUFFER_SIZE) return;
+    const challenge = pendingSoloChallenge();
+    const needsChallenge = () => challenge && soloQuestionCache.pendingCount() <= BUFFER_SIZE &&
+        ![soloQuestionCache.getActive(), ...soloQuestionCache.getQueue()].some(quiz => matchesSoloChallenge(quiz, challenge));
+    if (!scope || !uid || (soloQuestionCache.pendingCount() >= BUFFER_SIZE && !needsChallenge())) return;
     isFetchingBuffer = true;
     bufferFillPromise = (async () => {
         try {
-            while (soloQuestionCache.pendingCount() < BUFFER_SIZE && soloQuestionCache.isCurrent(uid, scope) &&
+            while ((soloQuestionCache.pendingCount() < BUFFER_SIZE || needsChallenge()) && soloQuestionCache.isCurrent(uid, scope) &&
                 auth.currentUser?.uid === uid && soloCacheRevision === revision) {
                 let ready;
                 bufferNextQuestionPromise = new Promise(resolve => { ready = resolve; });
                 try {
-                    const question = await fetchOneQuestion();
+                    const target = needsChallenge() ? challenge : null;
+                    const question = await fetchOneQuestion(target?.unit);
                     // Reject an API response from a previous account or range.
                     if (!soloQuestionCache.isCurrent(uid, scope) || auth.currentUser?.uid !== uid ||
                         soloQuestionScope() !== scope || soloCacheRevision !== revision) break;
                     if (!soloQuestionCache.append(question)) break;
                     quizBuffer = soloQuestionCache.getQueue();
+                    if (target && !matchesSoloChallenge(question, target)) break;
                 } finally { ready(); }
             }
         } catch (e) { console.warn("Background fetch failed", e); }
@@ -2528,6 +2563,16 @@ async function fillBuffer({ firstReady = false } = {}) {
     return firstReady ? bufferNextQuestionPromise : bufferFillPromise;
 }
 
+function refreshAdaptiveSoloStock(meta) {
+    if (meta.scopeId && meta.scope) adaptiveSoloUnits.set(meta.scopeId, meta.scope);
+    const uid = auth.currentUser?.uid, scope = soloQuestionScope();
+    const refill = () => {
+        if (uid === auth.currentUser?.uid && scope === soloQuestionScope()) void fillBuffer();
+    };
+    if (bufferFillPromise) void bufferFillPromise.then(refill);
+    else refill();
+}
+
 // Ordinary study and PvE draw from the same account/range queue.
 async function takeSoloQuestion({ isCurrent = () => true, onEmpty = () => {} } = {}) {
     const scope = syncSoloQuestionCache();
@@ -2537,17 +2582,19 @@ async function takeSoloQuestion({ isCurrent = () => true, onEmpty = () => {} } =
         soloCacheRevision === revision && soloQuestionScope() === scope;
     if (!scope || !uid || !current()) return null;
 
-    let quiz = soloQuestionCache.takeNext();
+    const challenge = pendingSoloChallenge();
+    const takeNext = () => soloQuestionCache.takeNext(quiz => matchesSoloChallenge(quiz, challenge));
+    let quiz = takeNext();
     if (!quiz) onEmpty();
     if (!quiz && isFetchingBuffer) {
         await fillBuffer({ firstReady: true });
         if (!current()) return null;
-        quiz = soloQuestionCache.takeNext();
+        quiz = takeNext();
     }
     if (!quiz) {
-        const generated = await fetchOneQuestion();
+        const generated = await fetchOneQuestion(challenge?.unit);
         if (!current()) return null;
-        quiz = soloQuestionCache.takeNext();
+        quiz = takeNext();
         if (quiz) soloQuestionCache.append(generated);
         else {
             soloQuestionCache.setActive(generated);
@@ -2882,7 +2929,7 @@ window.renderSelectedUnitsList = () => {
     });
 };
 
-async function fetchOneQuestion() {
+async function fetchOneQuestion(preferredUnit) {
     const settings = currentUserData.gameSettings || { sourceMode: 'random', source: 'ai', difficulty: 'auto', focusedUnits: [] };
     const rankName = getRankName(currentUserData.stats.rankLevel || 0);
     let finalDifficulty = getSmartDifficulty();
@@ -2892,7 +2939,7 @@ async function fetchOneQuestion() {
     // 1. 專注練習 (AI)
     const practiceUnits = sourceMode === 'focused' ? settings.focusedUnits : [];
     if (Array.isArray(practiceUnits) && practiceUnits.length > 0) {
-        const randomUnit = practiceUnits[Math.floor(Math.random() * practiceUnits.length)];
+        const randomUnit = preferredUnit || practiceUnits[Math.floor(Math.random() * practiceUnits.length)];
         const parts = randomUnit.path.split('/');
         const subject = parts[0];
         // 專注練習的年級以選定單元為準，不應被玩家的個人程度覆蓋。
@@ -3117,7 +3164,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
     const timeTaken = (Date.now() - (window.quizStartTime || Date.now())) / 1000;
     const isCorrect = userIdx === correctIdx;
     const adaptiveRows = settlement ? [] : window.QAAdaptiveLearning?.answer(quiz, isCorrect, userIdx < 0) || [];
-    if (quiz?.mode!=='trial-tower' && !extendedPracticeState.active) void fillBuffer();
+    if (quiz?.mode!=='trial-tower' && !extendedPracticeState.active && !quiz?.adaptive) void fillBuffer();
     globalThis.QAGameAudio?.answer(isCorrect, 'solo:' + (window.quizStartTime || '') + ':' + (quiz?.id || questionText));
     quizHelperState.answered = true;
     if (quiz) delete quiz.helperReviewRedacted;
@@ -3209,6 +3256,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
             scoreBefore: before, source: document.getElementById(`option-btn-${correctIdx}`), realms: REALMS
         }) : null;
         applyProgress();
+        if (quiz.adaptive) refreshAdaptiveSoloStock(quiz.adaptive);
         quiz.answerSelectedIndex = userIdx;
         quiz.adaptiveAnswered = true;
         if (quiz.adaptive) void window.QAAdaptiveLearning?.afterSaved(quiz);
@@ -3353,6 +3401,7 @@ async function handleAnswer(userIdx, correctIdx, questionText, explanation, sett
                 if (auth.currentUser?.uid !== answerUser.uid || currentUserData?.stats !== stats) throw new Error('帳號已更換，請重新整理。');
                 Object.assign(stats, savedStats);
                 window.QAAdaptiveLearning?.acknowledge(answerUser.uid, adaptiveRows);
+                if (quiz?.adaptive) refreshAdaptiveSoloStock(quiz.adaptive);
                 void window.QAAdaptiveLearning?.afterSaved(quiz);
                 updateUIStats();
                 if (isCorrect && fbTitle) fbTitle.innerHTML = `${t('msg_correct')} <span class="text-yellow-400 text-sm ml-2">+${scoreGain}${globalThis.QAItemIcons?.markup('gold',{size:18})||' 靈石'} · +${cultivationReward.gain} 修為</span>`;

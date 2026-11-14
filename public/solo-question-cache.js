@@ -164,12 +164,13 @@ export function createSoloQuestionCache(storage) {
     return true;
   }
 
-  function takeNext() {
+  function takeNext(preferred = () => false) {
     if (active) return active;
     // 訂正題生成後仍追加在隊尾；取下一題時優先選已完成的訂正題。
     // 目前正在作答的 active 永遠不被中途替換。
     const correction = queue.findIndex(item => !!item.recoveryOrigin);
-    active = (correction >= 0 ? queue.splice(correction, 1)[0] : queue.shift()) || null;
+    const index = correction >= 0 ? correction : queue.findIndex(preferred);
+    active = queue.splice(Math.max(0, index), 1)[0] || null;
     save();
     return active;
   }
@@ -211,6 +212,17 @@ export function createSoloQuestionCache(storage) {
     save();
   }
 
+  function discardLegacyDiagnostics(policyVersion) {
+    const retained = queue.filter(item => {
+      const meta = item.adaptive;
+      return !meta || item.recoveryOrigin || meta.role !== 'diagnostic' ||
+        meta.difficulty !== 'easy' || Number(meta.policyVersion) >= policyVersion;
+    });
+    if (retained.length === queue.length) return;
+    queue = retained;
+    save();
+  }
+
   function consumeActive({ remember: shouldRemember = false } = {}) {
     if (!active) return false;
     if (shouldRemember) remember(active);
@@ -221,6 +233,6 @@ export function createSoloQuestionCache(storage) {
 
   return {
     activate, getActive, getQueue, getHistory, pendingCount, isPersistent,
-    isCurrent, isDuplicate, append, takeNext, setActive, persistActive, remember, consumeActive, discardUnverified
+    isCurrent, isDuplicate, append, takeNext, setActive, persistActive, remember, consumeActive, discardUnverified, discardLegacyDiagnostics
   };
 }

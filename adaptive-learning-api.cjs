@@ -94,10 +94,10 @@ function createAdaptiveLearning({resolve=()=>playerRepository.resolve(),verify=v
   function validate(c,data,index){const f=c.target(index);if(data.adaptive_scope_id!==c.scope.scopeId||data.adaptive_facet_id!==f.id||data.adaptive_difficulty!==f.difficulty)throw fail('題目不符合分派的範圍細觀念、考法或難度');return true;}
   function prompt(c,index){const f=c.target(index),state=Rules.scopeState(c.user.stats?.adaptiveLearningV1,c.scope.scopeId);return '\n[範圍細觀念與考法]\n'+JSON.stringify({scope:c.scope,concept:f.concept,method:f.name,role:c.decision.role,adaptive_scope_id:c.scope.scopeId,adaptive_facet_id:f.id,adaptive_difficulty:f.difficulty})+
     '\n只考這個細觀念與考法，具體已知與所求必須符合指定目標，不可換成其他位置、物理量或另一個考法。題幹要足以獨立解題，不假設學生讀過前題。JSON 必須回傳以上三個 adaptive_ 欄位。'+
-    (c.decision.role==='challenge'?'挑戰題使用範圍內的新應用、表示方式或遷移情境；仍遵守指定難度與推理步數上限，不得藉挑戰之名超綱。':'診斷與補強題用清楚、充分的條件辨識一個核心觀念，避免刻意設陷阱。')+
+    (c.decision.role==='challenge'?'挑戰題使用範圍內的新應用、表示方式或遷移情境；仍遵守指定難度與推理步數上限，不得藉挑戰之名超綱。':'以清楚、充分的條件考查核心觀念，依指定難度加入應用與推理，避免刻意設陷阱。')+
     (Rules.row(state.concepts[f.conceptId]).w>=2?'這是概念補給後的新情境練習。保持指定細觀念與考法，使用新的情境或表示方式，不能只替換舊題數字。':'')+
     (vertical(c.scope)?'最高點、水平位置、最低點與各點速率、張力各自分開。明示繩／桿／軌道及忽略阻力等適用條件。':'');}
-  function metadata(c,data){const f=c.plan.facets.find(x=>x.id===data.adaptive_facet_id);if(!f||data.adaptive_scope_id!==c.scope.scopeId)throw fail('範圍考法已失效');return {questionId:crypto.randomUUID(),scopeId:c.scope.scopeId,planVersion:c.plan.version,scope:selection(c.scope),subject:c.scope.subject,topic:c.scope.topic,conceptId:f.conceptId,facetId:f.id,concept:f.concept,method:f.name,difficulty:data.adaptive_difficulty,role:c.decision.role,provisional:c.plan.provisional,
+  function metadata(c,data){const f=c.plan.facets.find(x=>x.id===data.adaptive_facet_id);if(!f||data.adaptive_scope_id!==c.scope.scopeId)throw fail('範圍考法已失效');return {questionId:crypto.randomUUID(),scopeId:c.scope.scopeId,planVersion:c.plan.version,scope:selection(c.scope),subject:c.scope.subject,topic:c.scope.topic,conceptId:f.conceptId,facetId:f.id,concept:f.concept,method:f.name,difficulty:data.adaptive_difficulty,role:c.decision.role,policyVersion:Rules.POLICY.version,provisional:c.plan.provisional,
     outline:c.plan.concepts.map(x=>({id:x.id,name:x.name,methods:x.methods.map(m=>({id:m.id,name:m.name}))}))};}
   async function lesson(req){
     const c=await context(req),concept=c.plan.concepts.find(x=>x.id===req.body?.conceptId),state=Rules.scopeState(c.user.stats?.adaptiveLearningV1,c.scope.scopeId);

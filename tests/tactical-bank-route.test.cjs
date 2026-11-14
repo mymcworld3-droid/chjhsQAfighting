@@ -35,7 +35,7 @@ test('background work must finish independent review before archiving, never ret
 test('PvE reads the shared solo stock and its background refill is independent of the battlefield',()=>{
   assert.match(client,/checkSoloQuestionStock\(\);/);
   assert.match(client,/const BUFFER_SIZE = 5;/);
-  assert.match(client,/if \(!scope \|\| !uid \|\| soloQuestionCache\.pendingCount\(\) >= BUFFER_SIZE\) return;/);
+  assert.match(client,/if \(!scope \|\| !uid \|\| \(soloQuestionCache\.pendingCount\(\) >= BUFFER_SIZE && !needsChallenge\(\)\)\) return;/);
   assert.doesNotMatch(client,/warmTacticalBank/);
   assert.doesNotMatch(battle,/warmTacticalBank/);
   assert.match(battle,/if\(state\.mode==='pve'\)return soloBattleQuestion\(\);/);

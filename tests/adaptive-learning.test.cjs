@@ -29,25 +29,25 @@ test('vertical-circle scope separates all three positions and both quantities, w
 });
 test('diagnosis covers untouched concepts before repeating a concept; pending questions reserve coverage too',()=>{
   let state;const selected=[];
-  for(let i=0;i<6;i++){const decision=Rules.decide(plan,state),target=decision.targets[0];assert.equal(decision.role,'diagnostic');selected.push(target.conceptId);state=observe(state,target,true);}
-  assert.equal(new Set(selected).size,6);assert.equal(Rules.scopeState(state,plan.scopeId).answered,6);
+  for(let i=0;i<3;i++){const decision=Rules.decide(plan,state),target=decision.targets[0];assert.equal(decision.role,'diagnostic');selected.push(target.conceptId);state=observe(state,target,true);}
+  assert.equal(new Set(selected).size,3);assert.equal(Rules.scopeState(state,plan.scopeId).answered,3);
   const first=Rules.decide(plan,null).targets[0];
   const second=Rules.decide(plan,null,{pending:[meta(first)]}).targets[0];assert.notEqual(second.conceptId,first.conceptId);
   assert.equal(Rules.status(null),'待診斷');assert.equal(Rules.status(Rules.scopeState(state,plan.scopeId).concepts[first.conceptId]),'持續診斷');
 });
-test('diagnostic length is 5–8 and ten eligible practice slots contain six reinforcements, two reviews, two challenges',()=>{
+test('diagnostic length is 2–3 and ten eligible practice slots contain six reinforcements, two reviews, two challenges',()=>{
   const short={...plan,concepts:plan.concepts.slice(0,2)},long={...plan,concepts:Array.from({length:20},()=>plan.concepts[0])};
-  assert.equal(Rules.decide(short).diagnosticTarget,5);assert.equal(Rules.decide(long).diagnosticTarget,8);
+  assert.equal(Rules.decide(short).diagnosticTarget,2);assert.equal(Rules.decide(long).diagnosticTarget,3);
   const row={n:10,c:10,u:10,uc:10,recent:[1,1,1,1,1],dueAt:1,level:0};
   const s={facets:Object.fromEntries(plan.facets.map(x=>[x.id,row])),concepts:Object.fromEntries(plan.concepts.map(x=>[x.id,row]))};
   const roles=[];
-  for(let i=0;i<10;i++)roles.push(Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:6+i}}},{now:10}).role);
+  for(let i=0;i<10;i++)roles.push(Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:3+i}}},{now:10}).role);
   assert.deepEqual(roles.reduce((a,k)=>(a[k]=(a[k]||0)+1,a),{}),{reinforce:6,review:2,challenge:2});
-  const challenge=Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:9}}},{now:10});
-  assert(challenge.targets.every(f=>f.forms.includes('concept-transfer')&&f.difficulty==='medium'));
-  const capped=Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:9}}},{now:10,manualDifficulty:'easy'});
-  assert(capped.targets.every(f=>f.difficulty==='medium')); // old preferences cannot cap adaptive decisions
-  const absent=Rules.decide(plan,{scopes:{[plan.scopeId]:{answered:9}}});assert.equal(absent.requestedRole,'challenge');assert.equal(absent.role,'reinforce');
+  const challenge=Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:3}}},{now:10});
+  assert(challenge.targets.every(f=>f.forms.includes('concept-transfer')&&f.difficulty==='hard'));
+  const capped=Rules.decide(plan,{scopes:{[plan.scopeId]:{...s,answered:3}}},{now:10,manualDifficulty:'easy'});
+  assert(capped.targets.every(f=>f.difficulty==='hard')); // old preferences cannot cap adaptive decisions
+  const absent=Rules.decide(plan,{scopes:{[plan.scopeId]:{answered:3}}});assert.equal(absent.requestedRole,'challenge');assert.equal(absent.role,'reinforce');
 });
 test('helped completion is retained without becoming independent mastery or passing a scheduled review',()=>{
   const f=plan.facets[0];let raw=observe(null,f,true,{at:0});
@@ -68,16 +68,39 @@ test('skip has no false incorrect evidence, and repeated transactions are idempo
   assert.equal(state.skipped,1);assert.equal(state.answered,0);assert.equal(Object.keys(state.concepts).length,0);
   assert.equal(Rules.record(raw,m,event),raw);assert.equal(state.updatedAt,0);
 });
-test('independent success raises difficulty gradually; old manual choices are ignored and helped success does not promote',()=>{
-  const f=plan.facets[0];let raw;
-  for(let i=0;i<10;i++)raw=observe(raw,f,true);
-  assert.equal(Rules.scopeState(raw,plan.scopeId).concepts[f.conceptId].level,1);
-  const target=(raw,manual)=>Rules.decide(plan,raw,{conceptId:f.conceptId,manualDifficulty:manual}).targets[0];
-  assert.equal(target(raw,'auto').difficulty,'medium');assert.equal(target(raw,'easy').difficulty,'medium');
-  for(let i=0;i<10;i++)raw=observe(raw,f,true);
-  assert.equal(target(raw,'auto').difficulty,'hard');assert.equal(target(raw,'medium').difficulty,'hard');
-  let helped;for(let i=0;i<20;i++)helped=observe(helped,f,true,{help:1});
-  assert.equal(target(helped,'auto').difficulty,'easy');
+test('two independent medium answers offer an early hard challenge across practiced concepts',()=>{
+  const [a,b]=plan.concepts.map(c=>c.methods[0]);
+  const answer=(raw,facet,help=0,correct=true)=>Rules.record(raw,meta(facet,{difficulty:'medium'}),{correct,help});
+  assert.equal(Rules.decide(plan,null).targets[0].difficulty,'medium');
+  const first=answer(null,a);
+  assert.equal(Rules.decide(plan,first).role,'diagnostic');
+  const helped=answer(first,b,1);
+  assert.equal(Rules.decide(plan,helped).role,'diagnostic');
+  const ready=answer(first,b);
+  const challenge=Rules.decide(plan,ready);
+  assert.equal(challenge.role,'challenge');
+  assert(challenge.targets.every(t=>t.difficulty==='hard'&&[a.conceptId,b.conceptId].includes(t.conceptId)));
+  const reserved=Rules.decide(plan,ready,{pending:[meta(challenge.targets[0],{role:'challenge'})]});
+  assert.notEqual(reserved.role,'challenge');
+  const wrong=answer(ready,b,0,false);
+  const recovery=Rules.decide(plan,answer(wrong,b,0,false));
+  assert.equal(recovery.role,'reinforce');
+  assert(recovery.targets.every(t=>t.conceptId===b.conceptId&&t.difficulty==='easy'));
+});
+
+test('four independent attempts can promote medium to hard, with assistance and failures handled separately',()=>{
+  const f=plan.facets[0],target=raw=>Rules.decide(plan,raw,{conceptId:f.conceptId}).targets[0];
+  const answer=(raw,correct,help=0)=>Rules.record(raw,meta(f,{difficulty:'medium'}),{correct,help});
+  let raw;
+  for(const correct of [true,true,false,true])raw=answer(raw,correct);
+  assert.equal(target(raw).difficulty,'hard');
+  raw=answer(answer(raw,false),false);
+  assert.equal(target(raw).difficulty,'easy');
+  raw=answer(raw,true);
+  assert.equal(target(raw).difficulty,'medium');
+  let helped;
+  for(let i=0;i<8;i++)helped=answer(helped,true,1);
+  assert.equal(target(helped).difficulty,'medium');
 });
 test('review advances 1, 3, 7 days only after due independent answers; error resets the interval',()=>{
   const f=plan.facets[0],D=Rules.DAY;let raw=observe(null,f,true,{at:100});
@@ -121,7 +144,7 @@ test('parallel facets have strict scope, method and difficulty binding and metad
   const f=fixture(),c=await f.api.prepare(f.req),assigned=[0,1,2].map(i=>c.target(i));assert.equal(new Set(assigned.map(x=>x.id)).size,3);
   const data={adaptive_scope_id:c.scope.scopeId,adaptive_facet_id:assigned[1].id,adaptive_difficulty:assigned[1].difficulty};
   assert(f.api.validate(c,data,1));assert.throws(()=>f.api.validate(c,data,0));assert.throws(()=>f.api.validate(c,{...data,adaptive_difficulty:'hard'},1));
-  const m=f.api.metadata(c,data);assert.equal(m.facetId,assigned[1].id);assert.equal(m.outline.length,6);assert.equal(m.difficulty,'easy');
+  const m=f.api.metadata(c,data);assert.equal(m.facetId,assigned[1].id);assert.equal(m.outline.length,6);assert.equal(m.difficulty,'medium');
   assert(!JSON.stringify(m).includes('apiKey'));assert.match(f.api.prompt(c,1),/繩／桿／軌道/);
 });
 test('lesson is eligible only for the wrong concept, cached, and contains no identity or invented diagnosis of the student',async()=>{
