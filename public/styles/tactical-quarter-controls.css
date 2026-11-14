@@ -705,7 +705,7 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
 }
 
 
-// Always-visible reason for unavailable attacks in the PvE no-confirm layout.
+/* Visible reason for unavailable attacks in the PvE no-confirm layout. */
 #tactical-combat .tc-action-feedback[hidden]{display:none!important}
 #tactical-combat:not(.tc-quarter-layout) .tc-action-feedback{display:none!important}
 #tactical-combat.tc-quarter-layout .tc-action-feedback{
