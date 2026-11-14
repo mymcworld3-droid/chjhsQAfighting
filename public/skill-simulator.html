@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c1712">
+  <title>功法演武 · 青雲問道</title>
+  <link rel="stylesheet" href="/styles/skill-simulator.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="seal" aria-hidden="true">道</span><div><small>青雲問道</small><h1>功法演武</h1></div></div>
+      <button class="quiet" type="button" id="reset">重置戰場</button>
+    </header>
+
+    <main class="workspace">
+      <section class="battle-panel" aria-label="模擬戰場">
+        <div class="battle-heading">
+          <div><h2>演武場</h2><p id="battle-status">選擇招式，點擊地圖施放</p></div>
+          <button type="button" id="reset-view" class="quiet small">重置視角</button>
+        </div>
+        <div class="canvas-wrap"><canvas id="battle" tabindex="0" aria-label="模擬戰場，可點擊地格選擇目標"></canvas></div>
+        <div class="battle-foot">
+          <span id="actor-status"></span>
+          <span>拖曳地圖 · 捏合縮放</span>
+        </div>
+      </section>
+
+      <aside class="controls" aria-label="演武設定">
+        <section class="panel skill-panel">
+          <div class="section-title"><h2>選擇招式</h2><span id="skill-count"></span></div>
+          <div class="field-row">
+            <label>流派<select id="school"><option value="sword">劍修</option><option value="body">體修</option></select></label>
+            <label>招式<select id="skill"></select></label>
+          </div>
+          <div class="skill-detail">
+            <div class="skill-name"><span class="skill-glyph" id="glyph" aria-hidden="true">劍</span><div><h3 id="skill-name"></h3><span id="skill-stats"></span></div></div>
+            <p id="skill-description"></p>
+            <button type="button" class="primary" id="cast-self" hidden>施放蓄勢</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title"><h2>配置戰場</h2></div>
+          <div class="tool-grid" role="group" aria-label="地圖操作">
+            <button type="button" data-tool="cast" aria-pressed="true">施放招式</button>
+            <button type="button" data-tool="hero" aria-pressed="false">放置角色</button>
+            <button type="button" data-tool="monster" aria-pressed="false">增減靈獸</button>
+            <button type="button" data-tool="block" aria-pressed="false">增減障礙</button>
+          </div>
+          <p class="tool-hint" id="tool-hint">點擊紅色或金色格子施放招式。飛劍可再次施放來移動。</p>
+          <label class="toggle"><input type="checkbox" id="free-cast" checked><span>自由施放</span><small>自動補滿體力、重置冷卻與出手次數</small></label>
+          <button type="button" id="next-turn" class="secondary">結束回合</button>
+        </section>
+        <p class="note" id="message" role="status" aria-live="polite"></p>
+      </aside>
+    </main>
+  </div>
+  <script type="module" src="/cultivation/skill-simulator.js"></script>
+</body>
+</html>

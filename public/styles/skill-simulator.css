@@ -1,0 +1,60 @@
+:root{color-scheme:dark;--ink:#e8ebdc;--muted:#a4b6a3;--line:#b7d6a62c;--gold:#ecd39a;--green:#a4d6af}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:radial-gradient(ellipse at 10% -5%,#263d2d 0,transparent 42%),radial-gradient(ellipse at 92% 88%,#192a20 0,transparent 40%),#0b1510;font-family:"Noto Sans TC","PingFang TC",system-ui,sans-serif}
+button,select,input{font:inherit}
+button,select{color:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+button:focus-visible,select:focus-visible,input:focus-visible,canvas:focus-visible{outline:2px solid #cce6b5;outline-offset:3px}
+.app{max-width:1540px;margin:auto;padding:26px 34px 36px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:13px}
+.seal{width:40px;height:40px;display:grid;place-items:center;border:1px solid #d2bb7b77;border-radius:11px;color:#ecd49d;background:#d9bc7020;font-family:serif;font-size:22px}
+.brand small{display:block;font-size:11px;letter-spacing:.2em;color:#a6bd9f}
+h1,h2,h3,p{margin:0}
+h1{font-size:24px;letter-spacing:.08em;font-weight:650}
+h2{font-size:16px;font-weight:650;letter-spacing:.03em}
+h3{font-size:19px;letter-spacing:.04em}
+button{border:1px solid var(--line);border-radius:10px;background:#edf8df0b;padding:11px 14px;transition:background .15s,border-color .15s}
+button:hover:not(:disabled){background:#d6e7ca18;border-color:#b7d6a680}
+.quiet{background:#17281f;color:#cfddcb}
+.quiet.small{padding:8px 10px;font-size:12px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.battle-panel,.panel{background:linear-gradient(155deg,#1a2b20f2,#101d16f5);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 45px #0003}
+.battle-panel{overflow:hidden;min-width:0}
+.battle-heading{padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.battle-heading p{margin-top:5px;font-size:12px;color:var(--muted)}
+.canvas-wrap{height:min(65vh,680px);min-height:380px;background:#19291e;overflow:hidden}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.battle-foot{display:flex;justify-content:space-between;gap:12px;padding:14px 22px;color:var(--muted);font-size:12px}
+.controls{display:grid;gap:14px;min-width:0}
+.panel{padding:19px}
+.section-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:15px}
+.section-title span{font-size:12px;color:#a8bea5}
+.field-row{display:grid;grid-template-columns:105px minmax(0,1fr);gap:10px}
+label{font-size:12px;color:var(--muted)}
+select{display:block;width:100%;margin-top:7px;padding:10px 9px;border:1px solid var(--line);border-radius:9px;background:#0e1d15;color:#e8eddf;min-width:0}
+.skill-detail{border-top:1px solid var(--line);margin-top:18px;padding-top:17px}
+.skill-name{display:flex;align-items:center;gap:11px}
+.skill-glyph{display:grid;place-items:center;width:43px;height:43px;flex:none;color:#b8efd1;border:1px solid #a2e0b653;border-radius:11px;background:#8ed2a219;font-family:serif;font-size:23px}
+.skill-name span:not(.skill-glyph){display:block;color:#c4d8b4;font-size:12px;margin-top:4px}
+.skill-detail p,.tool-hint{color:#afc0ae;font-size:13px;line-height:1.7}
+.skill-detail p{margin-top:14px;min-height:3em}
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tool-grid button{padding:10px 6px;font-size:13px}
+.tool-grid button[aria-pressed="true"]{color:#f3e7c6;border-color:#d7bf83a8;background:#d4b77726}
+.tool-hint{margin:12px 0 14px;min-height:3em}
+.toggle{display:grid;grid-template-columns:18px 1fr;column-gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:15px;color:#e2e9d8;font-size:13px}
+.toggle input{accent-color:#7dba8b;width:16px;height:16px;margin:0}
+.toggle small{grid-column:2;color:#9daf9d;line-height:1.5;margin-top:3px}
+.primary,.secondary{width:100%;margin-top:14px;font-weight:600}
+.primary{background:#bad3a3;color:#102016;border-color:#cadfb6}
+.primary:hover:not(:disabled){background:#d9e8c8;color:#102016}
+.secondary{background:#e9c98216;color:#e4d1a2;border-color:#cfbb873c}
+.note{font-size:12px;line-height:1.5;color:#eac78f;min-height:1.5em;padding:0 3px}
+@media(max-width:800px){
+  .app{padding:16px 14px 28px}.topbar{margin-bottom:15px}.brand small{font-size:10px}.seal{width:36px;height:36px}h1{font-size:20px}
+  .workspace{grid-template-columns:1fr;gap:12px}.controls{gap:10px}.battle-heading{padding:14px 15px}.battle-foot{padding:10px 15px;font-size:11px}.canvas-wrap{height:46vh;min-height:290px;max-height:440px}.panel{padding:16px}.skill-detail p{min-height:0}.note{padding-bottom:5px}
+}
+@media(max-width:390px){.canvas-wrap{height:40vh;min-height:255px}.battle-foot{flex-wrap:wrap}.field-row{grid-template-columns:90px minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
