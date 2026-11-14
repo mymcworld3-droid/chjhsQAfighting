@@ -504,7 +504,7 @@ function paint({preserveModal=false}={}){
   $('[data-map-name]').textContent=state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name;
   $('[data-actors]').innerHTML=state.actors.map(a=>`<div class="tc-actor ${a.uid===uid?'is-self':''} ${a.hp<=0?'is-down':''}" aria-label="${esc(a.name)}，生命 ${a.hp} / ${a.maxHp}"><div><b>${esc(a.name)}</b><span>${a.hp}/${a.maxHp}</span></div><div class="tc-health"><i style="width:${a.hp/a.maxHp*100}%"></i></div>${a.bot?`<small>${Manuals.realmForStage(a.level).name}境 · 功法 +${Manuals.expForBeast(a.level)} EXP</small>`:''}${a.shield||a.slow?`<small>${[a.shield?'護盾 '+a.shield:'',a.slow?'緩速':''].filter(Boolean).join(' · ')}</small>`:''}</div>`).join('');
   $('[data-combat-info]').innerHTML=state.actors.filter(a=>a.hp>0&&a.intent).map(a=>'<p><b>'+esc(a.name)+'</b><span>'+esc(a.intent.text)+'</span></p>').join('');
-  $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>出手 ${me.attacks}/2</small>`;
+  $('[data-stamina]').innerHTML=`<b>體力 <strong>${me.stamina}</strong><span> / ${R.LIMITS.stamina}</span></b><div>${Array.from({length:10},(_,i)=>`<i class="${i<me.stamina?'filled':''}"></i>`).join('')}</div><small>出手 ${me.attacks}/${R.attackLimit(me)}</small>`;
   if(root.classList.contains('tc-quarter-layout')){
     const amount=Math.max(0,Math.min(R.LIMITS.stamina,me.stamina));
     $('[data-energy-number]').textContent=String(amount);
@@ -534,13 +534,14 @@ function updateControls(){
     quizButton.setAttribute('aria-description',ready?
       '可以答題充能，按下開始答題':'目前無法答題充能');
   }
-  $('[data-guard]').disabled=!mine||locked||me.attacks>=2;
+  $('[data-guard]').disabled=!mine||locked||me.attacks>=R.attackLimit(me);
   $('[data-end]').disabled=!mine||locked;
   $('[data-sync]').disabled=locked;
   root.classList.toggle('tc-animating',!!animating);
   $('[data-stamina]').classList.toggle('tc-gaining',!modalOpen&&renderer?.currentKind==='answer');
   const t=selection?R.at(state,selection):null;
-  const directional=['line','cleave'].includes(shown.kind),quarter=root.classList.contains('tc-quarter-layout');
+  const directional=['line','cleave','fist-sweep','fist-throw','fist-chain'].includes(shown.kind);
+  const quarter=root.classList.contains('tc-quarter-layout'),cost=R.techniqueCost(me,shown);
   const basicTab=$('[data-action="attack"]');
   if(basicTab&&!quarter)basicTab.textContent='普通攻擊 · '+basic.cost;
   let label=action==='move'?'選擇移動位置':directional?'選擇攻擊方向':
@@ -560,13 +561,13 @@ function updateControls(){
   }else if(selection){
     if(action==='manual'&&!chosenSkill)error='尚未裝備此功法技能';
     else {
-      label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':shown.name)+' · '+shown.cost+' 體力';
+      label=(action==='attack'&&directional&&direction?'向'+direction+'攻擊':shown.name)+' · '+cost+' 體力';
       try{R.validateSkill(state,me,shown,selection);}catch(e){error=e.message;}
     }
   }
   const cooling=action==='manual'?Math.max(0,R.cooldownUntil(me,shown)-me.turns):0;
   $('[data-skill-title]').textContent=action==='move'?'移動說明':
-    `${shown.name} · ${shown.cost} 體力${cooling?' · 冷卻 '+cooling+' 回合':''}`;
+    `${shown.name} · ${cost} 體力${cooling?' · 冷卻 '+cooling+' 回合':''}`;
   $('[data-skill]').innerHTML=action==='move'?
     '<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':
     `<p>${esc(shown.description)}</p>`;
@@ -577,12 +578,20 @@ function updateControls(){
       (action==='manual'&&b.dataset.action==='manual:'+selectedManualSkill)||
       (quarter&&b.dataset.action==='attack'&&action==='manual')));
     b.disabled=!mine||locked;
+    if(!quarter&&b.dataset.action.startsWith('manual:')){
+      const technique=R.manualSkillFor(me,b.dataset.action.slice(7));
+      if(technique){
+        const cost=R.techniqueCost(me,technique);
+        b.textContent=technique.name+' · '+cost;
+        b.setAttribute('aria-label','功法技能：'+technique.name+'，消耗 '+cost+' 體力');
+      }
+    }
   });
   if(quarter){
     const attacking=action!=='move';
     const player=$('[data-wheel-choice="player"]');
     const target=$('[data-wheel-choice="attack-ring"]');
-    const chosenCost=shown.cost+' 體力',moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
+    const chosenCost=cost+' 體力',moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
     if(player){
       player.hidden=attacking;
       wheelText(player.querySelector('span'),'玩家',moveCostLabel);
@@ -602,6 +611,12 @@ function updateControls(){
     root.querySelectorAll('[data-left-attack]').forEach(button=>{
       button.disabled=!mine||locked;
       button.setAttribute('aria-pressed',String(button.dataset.leftAttack===attackChoice));
+      const technique=R.manualSkillFor(me,button.dataset.leftAttack.slice(7));
+      if(technique){
+        const cost=R.techniqueCost(me,technique);
+        button.setAttribute('aria-label',technique.name+'，消耗 '+cost+' 體力');
+        button.nextElementSibling.querySelector('small').textContent=cost+' 體力';
+      }
     });
     const ring=$('.tc-quarter-action');
     const targetName=attacking?(action==='manual'?shown.name:'攻擊目標'):'玩家';
@@ -625,8 +640,10 @@ function updateControls(){
     ['dash-cleave','flying-sword'].includes(shown.kind)?'金格為落點':'紅格射程')+' · 紅框預告';
   const hint=action==='move'?'點選灰格移動':
     action==='attack'?(directional?'點選紅格，選擇攻擊方向':'點選紅格內的敵人'):
-    shown.kind==='dash-cleave'?'點選金色地格突進，紅格為斬擊範圍':
+    shown.kind==='dash-cleave'?'點選金色地格突進，紅格為攻擊範圍':
     shown.kind==='flying-sword'?(me.flyingSword?'點選金色地格御劍':'點選金色地格召喚飛劍'):
+    shown.kind==='fist-focus'?'點選自己蓄勢，施放後立即結束回合':
+    directional?'點選紅格，選擇出拳或出劍方向':
     shown.range===0?'點選自己施放技能':'點選紅格施放技能';
   $('[data-selection]').textContent=selection?
     `${action==='attack'&&basic.kind==='ring'?'震擊周圍一圈 · '+R.skillCells(state,me,basic,selection).length+' 格':
@@ -647,6 +664,8 @@ function updateClock(){
   $('[data-turn]').textContent=state.status==='waiting'?'等待配對':state.status==='finished'?'戰鬥結束':state.quizRound?
     `第 ${state.quizRound} 輪 · ${quizLabel||state.phase==='answer'&&'雙方答題'||state.phase==='waiting-answer'&&'等待對手完成答題'||(mine?'你的行動':'對手行動')}${state.phase==='action'?' · 行動 '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`:
     `${state.trial?'第 '+state.trial.stage+' 關 · ':''}第 ${state.turn} 回合 · ${mine?'你的行動':'對手行動'}${state.deadlineMs?' · '+Math.max(0,Math.ceil((state.deadlineMs-now)/1000))+' 秒':''}`;
+  const fighter=myActor(),focus=fighter?R.focusTurns(fighter):0;
+  if(state.status==='active'&&mine&&focus)$('[data-turn]').textContent+=` · 蓄勢 ${focus} 回合 · 出手 ${fighter.attacks}/${R.attackLimit(fighter)}`;
   $('[data-quiz-clock]')?.replaceChildren(document.createTextNode(quizLabel||'兩題已完成'));
   const answerExpired=state.answerDeadlineMs&&now>=state.answerDeadlineMs&&state.actors.some(a=>a.questions<2&&!a.quizExpired);
   if(state.status==='active'&&(state.deadlineMs&&now>=state.deadlineMs||answerExpired)&&!busy&&Date.now()>=deadlineSyncAt){deadlineSyncAt=Date.now()+retryMs;void sync();}

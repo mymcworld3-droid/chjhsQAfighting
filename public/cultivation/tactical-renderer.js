@@ -188,6 +188,12 @@ export class TacticalRenderer{
       }else if(style==='sword-array'){
         for(const ray of scene.rays||[])beam(center(ray.at(-1)),to);
         ring(to,.2+beat*.35,beat);
+      }else if(style==='fist-focus'){
+        ring(from,.24+p*.55,beat,'#f4d38e');motes(from,'#f4d38e',16,.65);
+      }else if(['fist-throw','fist-sweep','fist-chain'].includes(style)){
+        for(const cell of cells){
+          const pt=center(cell);ring(pt,.16+p*.38,beat,color);motes(pt,color,4,.46);
+        }
       }else if(style==='dash-cleave'){
         const dx=to.x-from.x,dy=to.y-from.y;
         for(const cell of cells)ring(center(cell),.18+beat*.28,beat);
@@ -306,8 +312,9 @@ export class TacticalRenderer{
       const aimedPath=['dash-cleave','flying-sword'].includes(sk.kind);
       for(const p of this.range)fill(p,aimedPath?'#dec17b45':'#e445454d',aimedPath?'#e5cc87':'#ed6a6a99');
       if(this.selection&&(this.range.some(p=>R.key(p)===R.key(this.selection))||sk.kind==='ring'&&R.key(this.selection)===R.key(mine))){
-        for(const p of R.techniquePath(s,mine,sk,this.selection).slice(1))fill(p,'#e9cf8165','#e5cc87');
-        for(const p of R.skillCells(s,mine,sk,this.selection))fill(p,'#ef39398c','#ffb1a3');
+        const preview=R.techniquePreview(s,mine,sk,this.selection);
+        for(const p of [...preview.path.slice(1),...preview.landings])fill(p,'#e9cf8165','#e5cc87');
+        for(const p of preview.cells)fill(p,'#ef39398c','#ffb1a3');
       }
     }
     if(!animating){

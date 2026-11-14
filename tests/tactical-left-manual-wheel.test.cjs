@@ -13,7 +13,7 @@ const css=fs.readFileSync(path.join(folder,'styles/tactical-quarter-controls.css
 const makeActor=(manualSkills=[],score=1)=>({uid:'u1',name:'修士',atk:200,maxHp:1000,stamina:10,
   manualSkills,trainingAccessScore:score});
 
-test('the first skill of all five manuals costs exactly two stamina',()=>{
+test('the first skill of all six manuals costs exactly two stamina',()=>{
   for(const book of Manuals.BOOKS){
     assert.equal(book.skills.length,3);
     assert.equal(book.skills[0].cost,2,book.name);

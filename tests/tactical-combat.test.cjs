@@ -133,19 +133,37 @@ test('monster warning zones still allow dodging; retired golden-core meteors can
   assert.throws(()=>R.apply(s,'u1',{type:'skill',x:3,y:3},fixed),/金丹技能已停用/);
   assert.equal(s.effects.length,0);
 });
-test('manual counter remains available and basic attacks work when no manual is equipped',()=>{
+test('fist focus ends the action and grants two own turns of three attacks and discounted fists',()=>{
   let s=battle('pvp',{players:[
-    hero('u1',{manualSkills:['dragon-guard'],trainingAccessScore:28}),hero('u2')
+    hero('u1',{manualSkills:['dragon-roar','dragon-strike','wind-slash'],trainingAccessScore:68}),hero('u2')
   ]});
-  s.blocks=[];s.actors[1].x=2;s.actors[0].stamina=10;
-  s=R.apply(s,'u1',{type:'manual',skillId:'dragon-guard',x:1,y:3},fixed);
-  assert.equal(s.actors[0].counter,.55);
-  assert.equal(s.actors[0].stamina,7);
-  s=R.apply(s,'u1',{type:'end'},fixed);
-  s=R.apply(s,'u2',{type:'attack',x:1,y:3},fixed);
-  assert.equal(s.actors[0].hp,880,'manual guard reduces incoming basic damage');
-  assert.equal(s.actors[1].hp,890,'manual counter reflects to the opponent');
-  assert.equal(s.actors[0].counter,0);
+  s.blocks=[];s.actors[0].stamina=10;
+  const act=(uid,command)=>{s=R.apply(s,uid,command,fixed);};
+  const cast=(skillId,x=1)=>act('u1',{type:'manual',skillId,x,y:3});
+  cast('dragon-roar');
+  assert.equal(s.turnUid,'u2');
+  assert.equal(s.actors[0].stamina,3);
+  assert.equal(R.attackLimit(s.actors[1]),2);
+  for(const remaining of [2,1]){
+    act('u2',{type:'end'});
+    const a=s.actors[0];
+    assert.equal(R.focusTurns(a),remaining);
+    assert.equal(R.attackLimit(a),3);
+    assert.equal(a.actions,0);
+    assert.equal(R.techniqueCost(a,R.manualSkillFor(a,'dragon-strike')),1);
+    assert.equal(R.techniqueCost(a,R.manualSkillFor(a,'wind-slash')),2);
+    assert.equal(R.techniqueCost(a,{school:'body',kind:'fist-chain',cost:5}),3);
+    assert.equal(R.techniqueCost(a,R.manualSkillFor(a,'dragon-roar')),7);
+    assert.throws(()=>R.apply(s,'u1',{type:'manual',skillId:'dragon-roar',x:1,y:3},fixed),/體力不足/);
+    if(remaining===2)cast('dragon-strike',2);
+    else act('u1',{type:'guard'});
+    act('u1',{type:'guard'});act('u1',{type:'guard'});
+    assert.throws(()=>R.apply(s,'u1',{type:'guard'},fixed),/三次/);
+    act('u1',{type:'end'});
+  }
+  act('u2',{type:'end'});
+  assert.equal(R.focusTurns(s.actors[0]),0);
+  assert.equal(R.attackLimit(s.actors[0]),2);
 });
 test('PvP timeout advances the turn and two consecutive missed own turns forfeit',()=>{
   let s=battle('pvp');s=R.expire(s,fixed+R.LIMITS.turnMs);assert.equal(s.turnUid,'u2');

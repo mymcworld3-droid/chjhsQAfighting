@@ -14,7 +14,7 @@ test('tactical manuals and combat rules bootstrap without Node globals in a brow
   const context=vm.createContext({});
   vm.runInContext(read('manual-rules.js'),context,{filename:'manual-rules.js'});
   assert.ok(context.QAManuals,'catalog is available after import');
-  assert.equal(context.QAManuals.BOOKS.length,5);
+  assert.equal(context.QAManuals.BOOKS.length,6);
   vm.runInContext(read('tactical-rules.js'),context,{filename:'tactical-rules.js'});
   assert.ok(context.QATactical,'browser combat rules are initialized');
   assert.equal(context.QATactical.LIMITS.stamina,10);

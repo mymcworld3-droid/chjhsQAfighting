@@ -11,10 +11,10 @@ const lowBeast=(id,x,y,hp=80,level=1)=>R.actor({
   uid:id,name:id,bot:true,team:'monster',atk:15,maxHp:hp,level
 },{x,y});
 
-test('each of the five manuals has exactly three skills unlocked at Lv.1 / Lv.5 / Lv.10',()=>{
-  assert.equal(Catalog.BOOKS.length,5);
+test('each of the six manuals has exactly three skills unlocked at Lv.1 / Lv.5 / Lv.10',()=>{
+  assert.equal(Catalog.BOOKS.length,6);
   assert.equal(Catalog.BOOKS.filter(book=>book.school==='sword').length,3);
-  assert.equal(Catalog.BOOKS.filter(book=>book.school==='body').length,2);
+  assert.equal(Catalog.BOOKS.filter(book=>book.school==='body').length,3);
   for(const book of Catalog.BOOKS){
     assert.equal(book.skills.length,3);
     assert.deepEqual(book.skills.map(skill=>skill.levelRequired),[1,5,10]);
@@ -347,4 +347,89 @@ test('far break reaches beyond four cells and pushes survivors farthest first up
     assert.deepEqual(after.actors.slice(1).map(a=>[a.x,a.hp]),[[edge-1,350],[edge,350],[9,500]]);
     assert.deepEqual(after.events.filter(e=>e.animation?.style==='push').map(e=>e.actor),['far','near']);
   }
+});
+
+test('throw moves each enemy to its own rear tile and leaves blocked lanes in place',()=>{
+  const id='tiger-throw',battle=swordBattle(id,[
+    lowBeast('left',5,3,500),lowBeast('center',5,4,500),
+    lowBeast('right',5,5,500),lowBeast('occupied',3,5,500)
+  ]);
+  const hero=battle.actors[0];hero.x=4;
+  battle.blocks=[{x:3,y:3}];
+  const preview=R.techniquePreview(battle,hero,Catalog.BY_SKILL[id],{x:5,y:4});
+  assert.deepEqual(preview.landings,[{x:3,y:4}]);
+  const result=castSword(battle,id,5,4);
+  assert.deepEqual(result.actors.map(a=>[a.x,a.y]),[[4,4],[5,3],[3,4],[5,5],[3,5]]);
+  assert.equal(result.actors[2].intent.kind,'stagger');
+  assert.equal(result.actors[0].stamina,6);
+  assert.equal(result.actors[2].hp,500);
+});
+
+test('fist advances stop against a wall or an enemy that cannot be pushed',()=>{
+  const id='dragon-guard';
+  for(const blocker of ['wall','enemy']){
+    const battle=swordBattle(id,[lowBeast('front',2,4,500),lowBeast('spare',11,8,500)]);
+    if(blocker==='wall')battle.blocks=[{x:3,y:4}];
+    else battle.actors.push(lowBeast('blocker',3,4,500));
+    const hero=battle.actors[0],preview=R.techniquePreview(battle,hero,Catalog.BY_SKILL[id],{x:2,y:4});
+    assert.deepEqual(preview.path,[{x:1,y:4}]);
+    assert.equal(battle.actors[1].hp,500,'preview leaves the room intact');
+    const result=castSword(battle,id,2,4);
+    assert.equal(result.actors[0].x,1);
+    assert.equal(result.actors[1].x,2);
+    assert.equal(result.actors[1].hp,455);
+  }
+});
+
+test('five-step fist rechecks enemies and terrain after each step',()=>{
+  const id='dragon-guard',battle=swordBattle(id,[
+    lowBeast('center',2,4,500),lowBeast('side',2,5,500)
+  ]);
+  const hero=battle.actors[0],preview=R.techniquePreview(battle,hero,Catalog.BY_SKILL[id],{x:2,y:4});
+  const result=castSword(battle,id,2,4);
+  assert.deepEqual(result.actors.map(a=>a.x),[6,7,7]);
+  assert.equal(preview.path.length,6);
+  assert.equal(result.actors[0].attacks,1);
+  assert.equal(result.actors[0].stamina,5);
+  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[275,275]);
+  assert.equal(result.events.filter(e=>e.type==='cast'&&e.skill===id).length,5);
+});
+
+test('T-shaped fists and the double strike match their preview and directional push',()=>{
+  const dash='rock-quake',battle=swordBattle(dash,[lowBeast('m',6,5,500)]);
+  assert.deepEqual(R.skillCells(battle,battle.actors[0],Catalog.BY_SKILL[dash],{x:4,y:4}),
+    [{x:5,y:4},{x:6,y:3},{x:6,y:4},{x:6,y:5}]);
+  assert.equal(castSword(battle,dash,4,4).actors[1].hp,385);
+  const sweep='rock-break',pushing=swordBattle(sweep,[lowBeast('center',2,4,500),lowBeast('side',3,5,500)]);
+  const pushed=castSword(pushing,sweep,2,4);
+  assert.deepEqual(pushed.actors.slice(1).map(a=>[a.x,a.y]),[[5,4],[6,5]]);
+  const step='tiger-step',two=swordBattle(step,[lowBeast('side',4,3,500)]);
+  const result=castSword(two,step,3,4);
+  assert.equal(result.actors[1].hp,350);
+  assert.equal(result.events.filter(e=>e.type==='damage'&&e.target==='side').length,2);
+});
+
+test('the server treats focus as ending the turn, clears pending questions and settles a retry once',async()=>{
+  const db=database(),id='dragon-roar';
+  db.records.get('users/u1').stats.totalScore=68;
+  db.records.set(API.MANUALS+'/u1',{
+    version:2,school:'body',books:{'body-dragon':{exp:1080}},equipped:[id]
+  });
+  const state=await API.start(db,'u1',{mode:'pve'},now);
+  const room=db.records.get(API.ROOMS+'/'+state.id),hero=room.actors[0];
+  hero.stamina=10;
+  room.pending={u1:{id:'old-question'}};
+  room.pendingFollowup={u1:{id:'old-followup'}};
+  const input={roomId:state.id,revision:state.revision,requestId:'fist-focus-retry-01',
+    type:'manual',skillId:id,x:hero.x,y:hero.y};
+  const result=await API.command(db,'u1',input,now);
+  const retry=await API.command(db,'u1',input,now);
+  assert.equal(result.turn,state.turn+1);
+  assert.equal(result.actors[0].stamina,3);
+  assert.equal(result.actors[0].actions,0);
+  assert.equal(R.focusTurns(result.actors[0]),2);
+  assert.equal(result.question,null);
+  assert.equal(result.questionFollowup,null);
+  assert.equal(retry.revision,result.revision);
+  assert.equal(retry.actors[0].fistFocusUntil,result.actors[0].fistFocusUntil);
 });

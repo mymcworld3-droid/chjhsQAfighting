@@ -6,7 +6,7 @@
   const copy=actors=>actors.map(a=>({...a}));
   const clamp=n=>Math.max(0,Math.min(1,n));
   const smooth=n=>n*n*(3-2*n);
-  const jumps=new Set(['leap','hop','fly']);
+  const jumps=new Set(['leap','hop','fly','throw']);
   function duration(scene){
     if(scene.kind==='move'){
       if(scene.style==='teleport')return 360;

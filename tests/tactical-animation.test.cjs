@@ -103,8 +103,8 @@ test('answers, guarding, end-turn, waiting and leaving all have bounded presenta
 
 test('long battles keep event IDs unique and replay the latest multi-monster turn only once',()=>{
   let s=battle();s.actors[0].hp=2000;s.actors[1].intent={kind:'wait',cells:[]};
-  for(let i=0;i<18;i++)s=apply(s,'end');
-  const next=apply(s,'end');assert.equal(next.events.length,28);assert.equal(new Set(next.events.map(e=>e.id)).size,28);
+  for(let i=0;i<30;i++)s=apply(s,'end');
+  const next=apply(s,'end');assert.equal(next.events.length,R.LIMITS.events);assert.equal(new Set(next.events.map(e=>e.id)).size,R.LIMITS.events);
   const scenes=timeline(s,next);assert.ok(scenes.length>=3);assert.ok(scenes.length<=5);assert.deepEqual(timeline(next,structuredClone(next)),[]);
   const legacy=structuredClone(s);legacy.events=[{id:'old:0',type:'move',actor:'u1',path:[{x:1,y:3},{x:2,y:3}],text:'舊版移動'}];legacy.revision=s.revision+1;
   assert.equal(timeline(s,legacy)[0].kind,'move','pre-animation move logs remain usable');

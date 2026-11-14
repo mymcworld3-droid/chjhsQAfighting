@@ -353,7 +353,7 @@ async function command(db,uid,input,now=Date.now()){
     if(expired!==raw){const updates=await settle(tx,db,expired);tx.set(db.collection(ROOMS).doc(expired.id),expired);return withProgress(expired,uid,updates[uid]);}
     if(input.type!=='leave'&&Number(input.revision)!==raw.revision&&!(raw.quizRound&&Number.isInteger(input.actionRevision)&&input.actionRevision===raw.actionRevision))throw error('戰場已更新，請重新選擇行動');
     let s=input.type==='leave'?Rules.forfeit(raw,uid,now):Rules.apply(raw,uid,input,now);
-    if(input.type==='end'||input.type==='leave'){delete s.pending?.[uid];delete s.pendingFollowup?.[uid];}
+    if(s.turn!==raw.turn||input.type==='leave'){delete s.pending?.[uid];delete s.pendingFollowup?.[uid];}
     s.receipts=[...(s.receipts||[]),{uid,id}].slice(-48);
     const updates=s.status==='finished'?await settle(tx,db,s):(await saveManualKills(tx,db,s,uid),{});
     tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,updates[uid]);
@@ -653,7 +653,7 @@ async function refundQuestionStamina(db,uid,id,questionId,shared){
     if(amount){
       s.eventSequence=(s.eventSequence||0)+1;
       s.events=[...s.events,{id:s.revision+':'+s.eventSequence,type:'answer',actor:uid,gain:amount,text:a.name+'錯題確認，返還 '+amount+' 體力',
-        animation:{kind:'answer',changes:[{uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow}],numbers:[{uid,gain:amount}]}}].slice(-28);
+        animation:{kind:'answer',changes:[{uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow}],numbers:[{uid,gain:amount}]}}].slice(-Rules.LIMITS.events);
     }
     if(skipRef)tx.set(skipRef,{uid,questionId,roomId:s.id});
     tx.set(db.collection(ROOMS).doc(s.id),s);

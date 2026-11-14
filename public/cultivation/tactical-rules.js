@@ -8,7 +8,7 @@
   // browser catalog at use time so the first import cannot hide equipped skills.
   const manuals=()=>typeof module==='object'&&module.exports
     ?require('./manual-rules.js'):globalThis.QAManuals;
-  const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,turns:60,turnMs:30000,answerMs:50000});
+  const LIMITS=Object.freeze({stamina:10,correct:4,wrong:1,questions:2,attacks:2,actions:16,events:64,turns:60,turnMs:30000,answerMs:50000});
   const MAPS=Object.freeze([
     {id:'courtyard',name:'演武庭',width:7,height:7,terrain:2,description:'開闊石庭，練習近身與迂迴。'},
     {id:'bamboo',name:'青竹幽徑',width:9,height:7,terrain:0,description:'石障分隔通道，利用掩護接近。'},
@@ -59,6 +59,12 @@
   });
   const BASIC=skill('attack','普通攻擊',2,2,'line',1,'選擇上下左右一個方向，攻擊該方向兩格；遇障礙停止。',{cooldown:0});
   const basicFor=()=>BASIC;
+  const focusTurns=a=>a.fistFocusUntil?Math.max(0,Math.min(2,a.fistFocusUntil-a.turns+1)):0;
+  const attackLimit=a=>focusTurns(a)?3:LIMITS.attacks;
+  const techniqueCost=(a,sk)=>focusTurns(a)&&sk.school==='body'&&sk.kind!=='fist-focus'?Math.ceil(sk.cost/2):sk.cost;
+  function validateAttackLimit(a){
+    if(a.attacks>=attackLimit(a))fail(focusTurns(a)?'本回合已使用三次攻擊／技能':'本回合已使用兩次攻擊／技能');
+  }
   function manualSkillFor(actor,id){
     if(!actor||!Array.isArray(actor.manualSkills)||!actor.manualSkills.includes(id))return null;
     const Manuals=manuals(),skill=Manuals?.BY_SKILL?.[id];
@@ -251,7 +257,7 @@
   function log(s,text,type='info',extra={}){
     // A bounded log still needs unique IDs when one turn produces many effects.
     s.eventSequence=(s.eventSequence||0)+1;
-    const event={id:s.revision+':'+s.eventSequence,type,text,...extra};s.events.push(event);s.events=s.events.slice(-28);return event;
+    const event={id:s.revision+':'+s.eventSequence,type,text,...extra};s.events.push(event);s.events=s.events.slice(-LIMITS.events);return event;
   }
   const point=a=>({x:a.x,y:a.y});
   const appearance=a=>({uid:a.uid,hp:a.hp,shield:a.shield,stamina:a.stamina,guard:a.guard,slow:a.slow,...(a.flyingSword?{flyingSword:a.flyingSword}:{})});
@@ -308,12 +314,17 @@
     }
     return dealt;
   }
-  function push(s,a,target,steps){
-    const before=key(target),route=[point(target)];
-    const dx=Math.abs(target.x-a.x)>=Math.abs(target.y-a.y)?Math.sign(target.x-a.x):0,dy=dx?0:Math.sign(target.y-a.y);
+  function pushDirection(a,target){
+    const dx=target.x-a.x,dy=target.y-a.y;
+    if(dx&&Math.abs(dx)>=Math.abs(dy))return {x:Math.sign(dx),y:0};
+    return dy?{x:0,y:Math.sign(dy)}:null;
+  }
+  function push(s,a,target,steps,direction=pushDirection(a,target)){
+    if(!direction)return;
+    const route=[point(target)],{x:dx,y:dy}=direction;
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(blocked(s,p)||at(s,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
     motion(s,target,route,'push',target.name+'被擊退');
-    if(target.bot&&key(target)!==before)interruptMonster(target);
+    if(target.bot&&route.length>1)interruptMonster(target);
   }
   // Geometric aiming range stays visible even while stamina/cooldown prevents a
   // cast. The server still validates the selected enemy, resources and turn.
@@ -370,8 +381,63 @@
     return route.length>1&&key(route.at(-1))===key(p)&&
       (sk.kind!=='flying-sword'||a.flyingSword||!at(s,p));
   }
+  const fistDirectional=sk=>['fist-sweep','fist-throw','fist-chain'].includes(sk.kind);
+  const offset=(a,d,forward,side=0)=>({x:a.x+d.x*forward-d.y*side,y:a.y+d.y*forward+d.x*side});
+  function frontStrike(s,a,d,tShape){
+    const row=tShape?2:1;
+    const cells=[-1,0,1].map(side=>offset(a,d,row,side));
+    if(tShape)cells.unshift(offset(a,d,1));
+    return cells.filter(cell=>!blocked(s,cell)&&sight(s,a,cell));
+  }
+  function fistDirection(s,a,p,sk){
+    if(!inside(s,p)||dist(a,p)!==1)return null;
+    const d=attackDirection(a,p);
+    return frontStrike(s,a,d,sk.tShape).length?d:null;
+  }
+  function throwLanding(s,target,d){
+    const p=offset(target,d,-2);
+    return !blocked(s,p)&&!at(s,p)?p:null;
+  }
+  function strikeTargets(s,a,cells){
+    return cells.map(cell=>at(s,cell)).filter(target=>target&&target.team!==a.team);
+  }
+  function chainFists(s,a,sk,d,animate=true){
+    const cells=new Map(),path=[point(a)];
+    for(let step=0;step<sk.steps&&alive(a);step++){
+      const row=frontStrike(s,a,d,false),targets=strikeTargets(s,a,row);
+      if(!row.length)break;
+      for(const cell of row)cells.set(key(cell),cell);
+      if(animate&&step>0)log(s,a.name+'踏步連推 · 第 '+(step+1)+' 段','cast',{
+        actor:a.uid,skill:sk.id,animation:{kind:'cast',style:sk.kind,origin:point(a),
+          target:offset(a,d,1),cells:row,color:sk.color}});
+      for(const target of targets){
+        if(!alive(a))break;
+        damage(s,a,target,a.atk*sk.power,{skill:sk.id,manualId:sk.manualId});
+        if(alive(target))push(s,a,target,1,d);
+      }
+      const next=offset(a,d,1);
+      if(!alive(a)||blocked(s,next)||at(s,next))break;
+      const from=point(a);
+      Object.assign(a,next);path.push(next);
+      if(animate)motion(s,a,[from,next],'dash',a.name+'向前一步');
+      if(!s.actors.some(target=>alive(target)&&target.team!==a.team))break;
+    }
+    return {cells:[...cells.values()],path,landings:[]};
+  }
+  function techniquePreview(s,a,sk,p){
+    const d=fistDirectional(sk)?fistDirection(s,a,p,sk):null;
+    if(sk.kind==='fist-chain'&&d){
+      const simulated=clone(s),fighter=simulated.actors.find(actor=>actor.uid===a.uid);
+      return chainFists(simulated,fighter,sk,d,false);
+    }
+    const cells=skillCells(s,a,sk,p);
+    const landings=sk.kind==='fist-throw'&&d?strikeTargets(s,a,cells)
+      .map(target=>throwLanding(s,target,d)).filter(Boolean):[];
+    return {cells,path:techniquePath(s,a,sk,p),landings};
+  }
   function aimCells(s,a,sk){
     if(!a||!alive(a))return [];
+    if(fistDirectional(sk))return CARDINALS.map(([x,y])=>offset(a,{x,y},1)).filter(p=>fistDirection(s,a,p,sk));
     if(sk.kind==='ring')return ring(s,a);
     if(sk.kind==='cleave'){const cells=new Map();for(const d of [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}])for(const p of rectangle(s,a,sk,{x:a.x+d.x,y:a.y+d.y}))cells.set(key(p),p);return [...cells.values()];}
     if(sk.kind==='line')return CARDINALS.flatMap(([dx,dy])=>
@@ -392,6 +458,10 @@
     return cells;
   }
   function skillCells(s,a,sk,p){
+    if(fistDirectional(sk)){
+      const d=fistDirection(s,a,p,sk);
+      return d?frontStrike(s,a,d,sk.tShape):[];
+    }
     if(sk.kind==='cleave')return rectangle(s,a,sk,p);
     if(sk.kind==='ring')return ring(s,a);
     if(sk.kind==='line')return line(s,a,p,lineRange(s,sk));
@@ -400,16 +470,18 @@
     if(sk.kind==='dash-cleave'){
       const direction=attackDirection(a,p);
       if(!direction||!validPathTarget(s,a,sk,p))return [];
-      const {x:dx,y:dy}=direction;
-      return [-1,0,1].map(side=>({x:p.x+dx-side*dy,y:p.y+dy+side*dx}))
-        .filter(cell=>!blocked(s,cell)&&sight(s,p,cell));
+      return frontStrike(s,p,direction,sk.tShape);
     }
     return ['area','meteor'].includes(sk.kind)||sk.kind==='blink'&&sk.burst?area(s,p,sk.radius||1):[p];
   }
   function validateSkill(s,a,sk,p){
-    if(a.stamina<sk.cost)fail('體力不足，先答題補充');
-    if(a.attacks>=LIMITS.attacks)fail('本回合已使用兩次攻擊／技能');
+    if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
+    validateAttackLimit(a);
     if(cooldownUntil(a,sk)>a.turns)fail('技能仍在冷卻');
+    if(fistDirectional(sk)){
+      if(!fistDirection(s,a,p,sk))fail('請選擇上下左右的出拳方向');
+      return;
+    }
     if(['dash-cleave','flying-sword'].includes(sk.kind)){
       if(!validPathTarget(s,a,sk,p))fail(sk.kind==='dash-cleave'?'請選擇直線上可突進的空地':'請選擇飛劍可到達的直線地格');
       return;
@@ -432,7 +504,7 @@
     return Math.max(a.cooldowns[sk.id]||0,a.cooldowns[sk.moveId]||0);
   }
   function cast(s,a,sk,p){
-    validateSkill(s,a,sk,p);a.stamina-=sk.cost;a.attacks++;
+    validateSkill(s,a,sk,p);a.stamina-=techniqueCost(a,sk);a.attacks++;
     if(sk.cooldown)a.cooldowns[sk.moveId||sk.id]=a.turns+sk.cooldown;
     const cells=skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
@@ -448,6 +520,27 @@
       animation:{kind:'cast',style:sk.kind,origin,target:targetPoint,cells,
         ...(rays?{rays}:{}),...(sk.hits?{hits:sk.hits}:{}),
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
+    if(sk.kind==='fist-focus'){
+      a.fistFocusUntil=a.turns+2;
+      return;
+    }
+    if(sk.kind==='fist-chain'){
+      chainFists(s,a,sk,attackDirection(a,p));
+      return;
+    }
+    if(sk.kind==='fist-throw'){
+      const moves=[],d=attackDirection(a,p);
+      for(const target of strikeTargets(s,a,cells)){
+        const landing=throwLanding(s,target,d);
+        if(!landing)continue;
+        moves.push({uid:target.uid,path:[point(target),landing]});
+        Object.assign(target,landing);
+        if(target.bot)interruptMonster(target);
+      }
+      if(moves.length)log(s,a.name+'將敵人翻摔至身後','displace',{
+        actor:a.uid,animation:{kind:'move',style:'throw',moves}});
+      return;
+    }
     if(sk.kind==='restore'){
       const hp=a.hp,shield=a.shield;
       a.hp=Math.min(a.maxHp,a.hp+Math.round(a.maxHp*sk.power));
@@ -474,7 +567,8 @@
       log(s,a.name+'與'+target.name+'交換位置','displace',{actor:a.uid,animation:{kind:'move',style:'teleport',moves:[{uid:a.uid,path:[pos,other]},{uid:target.uid,path:[other,pos]}]}});
     }
     const targets=sk.kind==='swap'?[target]:s.actors.filter(t=>alive(t)&&t.team!==a.team&&cells.some(c=>key(c)===key(t)));
-    if(sk.pushToEdge)targets.sort((first,second)=>dist(a,second)-dist(a,first));
+    if(sk.pushToEdge||sk.tShape&&sk.push)targets.sort((first,second)=>dist(a,second)-dist(a,first));
+    const pushForward=sk.tShape&&sk.push?attackDirection(a,p):undefined;
     const hit=[];
     for(const t of targets){
       if(!alive(a))break;
@@ -489,7 +583,7 @@
       for(let i=0;i<hits&&alive(a)&&alive(t);i++)
         damage(s,a,t,a.atk*power/hits,{...sk,skill:sk.id,manualId:sk.manualId});
       hit.push(t);
-      if(sk.slow&&alive(t)){t.slow=1;t.slowUntil=t.turns+1;}if(sk.push&&alive(t))push(s,a,t,sk.push);
+      if(sk.slow&&alive(t)){t.slow=1;t.slowUntil=t.turns+1;}if(sk.push&&alive(t))push(s,a,t,sk.push,pushForward);
     }
     if(sk.pushToEdge)for(const t of hit)if(alive(t))push(s,a,t,boardSpan(s));
   }
@@ -615,6 +709,7 @@
   function begin(s,a,now){
     s.turnUid=a.uid;a.turns++;if(!s.quizRound)a.questions=0;a.attacks=0;a.actions=0;a.guard=0;a.counter=0;
     if(s.quizRound){s.phase='action';s.actionRevision=s.revision+1;}
+    if(a.fistFocusUntil<a.turns)delete a.fistFocusUntil;
     if((a.slowUntil||0)<a.turns)a.slow=0;
     if(a.counterManualId&&!a.counter)delete a.counterManualId;
     s.turnStartedAtMs=now;s.deadlineMs=s.mode==='pvp'?now+LIMITS.turnMs:0;
@@ -660,6 +755,7 @@
     if(s.mode==='pvp'&&now>=s.deadlineMs)fail('行動時間已結束，請同步戰場');
     if(a.actions>=LIMITS.actions&&command.type!=='end')fail('本回合行動已達上限，請結束回合');
     const p={x:command.x,y:command.y};
+    let endsTurn=command.type==='end';
     if(command.type==='move'){
       const route=path(s,a,p,a.uid),cost=route?route.length-1:0;
       if(!route||route.length<2)fail('此地格無法到達');
@@ -679,13 +775,16 @@
       const selected=command.type==='attack'?basicFor(a):manualSkillFor(a,command.skillId);
       if(!selected)fail('尚未裝備或解鎖此功法技能');
       cast(s,a,selected,p);
+      endsTurn=selected.kind==='fist-focus';
     }else if(command.type==='guard'){
-      if(a.attacks>=LIMITS.attacks)fail('本回合已使用兩次攻擊／技能');a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
-    }else if(command.type==='end'){
-      log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});end(s,now);
+      validateAttackLimit(a);a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
+    }else if(!endsTurn)fail('未知的戰場行動');
+    a.actions++;s.turnTimeouts[uid]=0;
+    if(endsTurn){
+      log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});
+      end(s,now);
     }
-    else fail('未知的戰場行動');
-    a.actions++;s.turnTimeouts[uid]=0;s.revision++;if(s.quizRound)s.actionRevision=s.revision;s.updatedAtMs=now;checkFinished(s);return s;
+    s.revision++;if(s.quizRound)s.actionRevision=s.revision;s.updatedAtMs=now;checkFinished(s);return s;
   }
   function answer(state,uid,correct,now=Date.now()){
     // A late response may arrive after the opponent's action clock. Resolve it
@@ -742,5 +841,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,techniquePath,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

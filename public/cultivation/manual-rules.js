@@ -57,7 +57,7 @@
     Object.freeze({id,name,cost,range,kind,power,description,cooldown:2,...extra});
   const book=(id,name,school,description,skills,realms=[1,6,28])=>Object.freeze({
     id,name,school,description,skills:Object.freeze(skills.map((skill,index)=>
-      Object.freeze({...skill,moveId:skill.moveId||skill.id,manualId:id,
+      Object.freeze({...skill,moveId:skill.moveId||skill.id,manualId:id,school,
         levelRequired:[1,5,10][index],realmRequired:realms[index]})))
   });
   // Each book keeps its own unlock and EXP source even for a shared move.
@@ -65,6 +65,7 @@
   const straight=technique('wind-slash','流風斬',2,3,'line',1.15,'選擇一個方向，斬擊前方直線三格。');
   const breakLine=technique('wind-thousand','遠線破擊',4,null,'line',1.5,
     '劍氣沿直線延伸至石障或邊界。命中後將存活敵人推至最遠的可落腳格。',{unlimited:true,pushToEdge:true});
+  const straightFist=technique('rock-fist','直拳',2,2,'line',1.2,'攻擊前方直線兩格。');
   const BOOKS=Object.freeze([
     book('sword-wind','流風劍訣','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
@@ -89,15 +90,26 @@
         '選擇四格內的中心。正向各延伸三格、斜向各延伸兩格，八路劍氣向中心匯聚。',
         {orthogonal:3,diagonal:2,centerPower:2.4})
     ],[6,28,68]),
-    book('body-rock','玄嶽鍛體訣','body','鍛筋煉骨，撼地破敵。',[
-      technique('rock-fist','碎岩拳',2,1,'hit',1.2,'擊打相鄰敵人。'),
-      technique('rock-quake','震嶽罡勁',3,1,'ring',1.1,'震擊身旁一圈敵人。'),
-      technique('rock-break','崩山重拳',4,2,'hit',1.8,'重拳猛擊並將敵人擊退一格。',{push:1})
+    book('body-rock','玄嶽鍛體訣','body','突進破陣，將敵人擊退。',[
+      straightFist,
+      technique('rock-quake','突進震拳',3,3,'dash-cleave',1.15,
+        '直線突進最多三格，再攻擊落點前方的 T 形四格。',{tShape:true}),
+      technique('rock-break','崩山拳',3,2,'fist-sweep',1.25,
+        '攻擊前方 T 形四格，將命中的敵人沿出拳方向擊退最多三格。',{tShape:true,push:3})
     ]),
-    book('body-dragon','龍象真身訣','body','以血肉之軀凝聚龍象之力。',[
-      technique('dragon-strike','龍象衝拳',2,2,'hit',1.3,'猛擊兩格內敵人。'),
-      technique('dragon-guard','金剛護體',3,0,'counter',.55,'本回合減傷並於首次受擊反擊。'),
-      technique('dragon-roar','龍象震天',4,1,'ring',1.65,'震盪周身一圈，擊退目標。',{push:1})
+    book('body-dragon','龍象真身訣','body','連步逼退對手，蓄勢後連續出拳。',[
+      shared(straightFist,'dragon-strike'),
+      technique('dragon-guard','五步連推',5,1,'fist-chain',.45,
+        '最多五段。每段打前方一排並將敵人推退一格，再前進一格。擊退後正前方仍被阻擋就停止。',{steps:5}),
+      technique('dragon-roar','蓄勢',7,0,'fist-focus',0,
+        '立即結束回合。接下來自己的兩個回合各可出手三次，其他拳法體力消耗減半並向上取整。',{cooldown:3})
+    ],[6,28,68]),
+    book('body-tiger','伏虎擒拿訣','body','以步法貼近敵人，借力改變敵人的站位。',[
+      shared(straightFist,'tiger-fist'),
+      technique('tiger-step','踏步連拳',4,2,'dash-cleave',1.5,
+        '直線踏步最多兩格，再攻擊落點前方橫排三格兩次。',{hits:2}),
+      technique('tiger-throw','翻摔',4,1,'fist-throw',0,
+        '將身前橫排三格內的敵人拉到身後的對應格。若對應落點有障礙或被占用，該目標留在原地。')
     ],[6,28,68])
   ]);
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));
