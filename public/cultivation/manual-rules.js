@@ -99,8 +99,8 @@
     ]),
     book('body-dragon','龍象真身訣','body','連步逼退對手，蓄勢後連續出拳。',[
       shared(straightFist,'dragon-strike'),
-      technique('dragon-guard','五步連推',5,1,'fist-chain',.45,
-        '最多五段。每段打前方一排並將敵人推退一格，再前進一格。擊退後正前方仍被阻擋就停止。',{steps:5}),
+      technique('dragon-guard','四步連推',5,1,'fist-chain',.45,
+        '最多四段。每段打前方一排並將敵人推退一格，再前進一格。擊退後正前方仍被阻擋就停止。',{steps:4}),
       technique('dragon-roar','蓄勢',7,0,'fist-focus',0,
         '立即結束回合。接下來自己的兩個回合各可出手三次，其他拳法體力消耗減半並向上取整。',{cooldown:3})
     ],[6,28,68]),

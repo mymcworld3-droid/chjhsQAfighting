@@ -9,11 +9,14 @@
   const jumps=new Set(['leap','hop','fly','throw']);
   function duration(scene){
     if(scene.kind==='move'){
+      if(scene.style==='dash'&&scene.visualSkill==='dragon-guard')return 200;
       if(scene.style==='teleport')return 360;
       if(jumps.has(scene.style))return 420;
       if(['dash','rush','push'].includes(scene.style))return 300;
       return Math.min(800,180+Math.max(...scene.moves.map(m=>m.path.length-1))*105);
     }
+    if(scene.kind==='cast'&&scene.style==='fist-chain')return 380;
+    if(scene.kind==='damage'&&scene.skill==='dragon-guard')return 280;
     return {cast:420,impact:520,damage:420,restore:420,guard:420,answer:620,turn:300,dodge:300,withdraw:360,finish:650}[scene.kind]||300;
   }
   // Play a knockback at the impact of its originating attack. The server has
@@ -49,7 +52,7 @@
       }
       if(!hasDamage||!moves.length)continue;
       Object.assign(cast,{parallelImpact:true,impactStart:.45,numbers,moves,reflections,
-        after:scenes[j-1].after,duration:620});
+        after:scenes[j-1].after,duration:cast.style==='fist-chain'?460:620});
       scenes.splice(i+1,j-i-1);
     }
   }

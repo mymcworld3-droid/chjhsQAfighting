@@ -381,18 +381,18 @@ test('fist advances stop against a wall or an enemy that cannot be pushed',()=>{
   }
 });
 
-test('five-step fist rechecks enemies and terrain after each step',()=>{
+test('four-step fist rechecks enemies and terrain after each step',()=>{
   const id='dragon-guard',battle=swordBattle(id,[
     lowBeast('center',2,4,500),lowBeast('side',2,5,500)
   ]);
   const hero=battle.actors[0],preview=R.techniquePreview(battle,hero,Catalog.BY_SKILL[id],{x:2,y:4});
   const result=castSword(battle,id,2,4);
-  assert.deepEqual(result.actors.map(a=>a.x),[6,7,7]);
-  assert.equal(preview.path.length,6);
+  assert.deepEqual(result.actors.map(a=>a.x),[5,6,6]);
+  assert.equal(preview.path.length,5);
   assert.equal(result.actors[0].attacks,1);
   assert.equal(result.actors[0].stamina,5);
-  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[275,275]);
-  assert.equal(result.events.filter(e=>e.type==='cast'&&e.skill===id).length,5);
+  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[320,320]);
+  assert.equal(result.events.filter(e=>e.type==='cast'&&e.skill===id).length,4);
 });
 
 test('T-shaped fists and the double strike match their preview and directional push',()=>{

@@ -75,8 +75,8 @@ test('flying sword animation follows the previous sword position and each chain 
   Object.assign(chain.actors[1],{x:5,y:4});
   const after=R.apply(chain,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
   const casts=A.plan(chain,after,'hero').filter(item=>item.kind==='cast'&&item.skill==='dragon-guard');
-  assert.deepEqual(casts.map(item=>item.step),[1,2,3,4,5]);
-  assert.deepEqual(casts.map(item=>item.origin.x),[4,5,6,7,8]);
+  assert.deepEqual(casts.map(item=>item.step),[1,2,3,4]);
+  assert.deepEqual(casts.map(item=>item.origin.x),[4,5,6,7]);
 });
 
 test('dash and throw effects follow committed movement without changing endpoints',()=>{
@@ -128,7 +128,7 @@ test('knockback and damage begin at the attack impact, including every step of t
     const after=R.apply(before,'hero',{type:'manual',skillId:skill,x:5,y:4},now);
     const snapshot=JSON.stringify([before,after]);
     const scenes=A.plan(before,after,'hero'),casts=scenes.filter(s=>s.skill===skill&&s.kind==='cast');
-    assert.equal(casts.length,skill==='dragon-guard'?5:1,skill);
+    assert.equal(casts.length,skill==='dragon-guard'?4:1,skill);
     for(const cast of casts){
       assert.equal(cast.parallelImpact,true,skill);
       const start=cast.before.find(a=>a.uid==='monster-0');
@@ -144,6 +144,18 @@ test('knockback and damage begin at the attack impact, including every step of t
     assert(!scenes.some(s=>s.kind==='move'&&s.style==='push'),skill);
     assert.equal(JSON.stringify([before,after]),snapshot,skill);
   }
+});
+
+test('four chain strikes and advances play at a brisk, readable pace',()=>{
+  const before=fixture('dragon-guard');before.actors[1].x=5;
+  const after=R.apply(before,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const scenes=A.plan(before,after,'hero');
+  const strikes=scenes.filter(s=>s.kind==='cast'&&s.skill==='dragon-guard');
+  const advances=scenes.filter(s=>s.kind==='move'&&s.visualSkill==='dragon-guard');
+  assert.equal(strikes.length,4);assert.equal(advances.length,4);
+  assert(strikes.every(s=>s.parallelImpact&&s.duration<=500));
+  assert(advances.every(s=>s.duration<=240));
+  assert(scenes.reduce((sum,s)=>sum+s.duration,0)<3000);
 });
 
 test('area knockback preserves collision order and never invents movement through a wall',()=>{
