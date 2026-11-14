@@ -40,7 +40,7 @@ test('login status queues a separate daily job before any meditation session, wi
   const context={currentUserData:structuredClone(user),getRankName:()=> '煉氣',getSmartDifficulty:()=> 'medium',
     recentSoloQuestionContext:()=>({}),adaptiveQuestionContext:()=>({}),shuffleArray:x=>x,quizMetaFromRaw:()=>({}),
     window:{QAAdaptiveLearning:{fetchQuiz}},console:{log(){},warn(){},error(){}}};
-  require('node:vm').runInNewContext(source.slice(source.indexOf('async function fetchOneQuestion()'),
+  require('node:vm').runInNewContext(source.slice(source.indexOf('async function fetchOneQuestion(preferredUnit)'),
     source.indexOf('// 閉關三題沿用玩家目前選擇的出題範圍'))+'\nthis.fetchOne=fetchOneQuestion;',context);
   assert.ok((await context.fetchOne()).data.q);assert.equal(ordinaryCalls,1);
   assert.equal((await f.service.status('u2')).session,null);

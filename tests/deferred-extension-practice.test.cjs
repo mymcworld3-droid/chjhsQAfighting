@@ -74,6 +74,7 @@ function setup() {
         + section('const extendedPracticeState =', 'const quizHelperState =')
         + section('let soloNextBusy = false;', 'async function handleAnswer(')
         + section('async function fetchExtendedPracticeQuestion(', 'const quizWhiteboardState =')
+        + section('function pendingSoloChallenge(', 'async function fillBuffer(')
         + section('async function takeSoloQuestion(', 'window.startQuizFlow =')
         + section('function displaySoloQuiz(', 'const openSoloQuestionPage')
         + section('window.startQuizFlow =', '// 🆕 單人模式選擇與啟動邏輯')
