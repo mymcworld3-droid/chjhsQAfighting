@@ -30,10 +30,17 @@
       if(at>=0){events.splice(i,1);events.splice(at,0,e);}
     }
     let actors=copy(previous.actors);const scenes=[];
-    for(const event of events){
+    for(const [index,event] of events.entries()){
       const raw=event.animation||(['move','monster-move','displace'].includes(event.type)?{kind:'move',style:'walk'}:null);
       if(!raw)continue;
       const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,numbers:(raw.numbers||[]).map(number=>({...number})),before:copy(actors)};
+      if(scene.kind==='move'&&['dash','throw'].includes(scene.style)){
+        const revision=String(event.id).split(':')[0];
+        const related=events.filter(other=>other.actor===event.actor&&other.type==='cast'&&
+          String(other.id).split(':')[0]===revision&&other.skill);
+        const cast=related.find(other=>events.indexOf(other)>index)||related.at(-1);
+        if(cast)scene.visualSkill=cast.skill;
+      }
       if(scene.kind==='cast'&&['lunge','pounce','dive'].includes(scene.style)){
         const a=actors.find(a=>a.uid===scene.actor);if(a)scene.origin={x:a.x,y:a.y};
       }

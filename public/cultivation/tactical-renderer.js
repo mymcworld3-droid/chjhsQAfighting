@@ -1,10 +1,12 @@
 import './manual-rules.js';
 import './tactical-rules.js';
 import './tactical-animation.js';
+import './tactical-skill-effects.js';
 import './tactical-camera.js';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
+const SkillEffects=globalThis.QATacticalSkillEffects;
 const Camera=globalThis.QATacticalCamera;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
@@ -126,10 +128,10 @@ export class TacticalRenderer{
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
   }
-  drawFlyingSword(p,color){
+  drawFlyingSword(p,color,opacity=1,angle=Math.PI/5){
     const c=this.ctx,cell=this.cell,x=this.ox+(p.x+.5)*cell,y=this.oy+(p.y+.28)*cell;
     c.save();
-    c.translate(x,y);c.rotate(Math.PI/5);
+    c.translate(x,y);c.rotate(angle);c.globalAlpha=opacity;
     c.strokeStyle=color;c.fillStyle=color;c.shadowBlur=cell*.12;c.shadowColor=color;
     c.lineWidth=Math.max(1.5,cell*.032);c.beginPath();
     c.moveTo(0,-cell*.23);c.lineTo(cell*.047,cell*.09);c.lineTo(-cell*.047,cell*.09);c.closePath();c.fill();
@@ -158,13 +160,16 @@ export class TacticalRenderer{
       }c.stroke();
     };
     c.save();c.beginPath();c.rect(ox,Math.max(0,oy-size*.35),size*this.state.width,size*(this.state.height+.35));c.clip();
+    const view={cell:size,ox,oy,width:this.state.width,height:this.state.height};
+    if(SkillEffects.draw(c,scene,p,view,above)){c.restore();return;}
     if(!above){
       if(['cast','impact'].includes(scene.kind))for(const [i,cell]of cells.entries()){
         const at=center(cell),delay=scene.style==='line'?Math.min(.3,i*.06):0,q=Math.max(0,(p-delay)/(1-delay));
         c.globalAlpha=Math.sin(Math.PI*q)*.26;c.fillStyle=color;c.fillRect(ox+cell.x*size+1,oy+cell.y*size+1,size-2,size-2);
         if(q>0)ring(at,.15+q*.46,(1-q)*.65);
       }
-      if(scene.kind==='move')for(const move of scene.moves){
+      const manualMotion=scene.kind==='move'&&SkillEffects.drawMotion(c,scene,p,view);
+      if(scene.kind==='move'&&!manualMotion)for(const move of scene.moves){
         const route=move.path;
         if(scene.style==='teleport'){ring(center(route[0]),.15+p*.6,1-p);ring(center(route.at(-1)),.65-p*.4,p);}
         else{
@@ -359,8 +364,10 @@ export class TacticalRenderer{
       const own=a.uid===this.uid;
       if(scene?.style==='flying-sword'&&scene.actor===a.uid){
         const {origin,target}=scene;
-        this.drawFlyingSword(sword?{x:origin.x+(target.x-origin.x)*progress,y:origin.y+(target.y-origin.y)*progress}:target,
-          own?'#d1efe1':'#f6c8a9');
+        const moving=!!sword,position=moving?
+          {x:origin.x+(target.x-origin.x)*progress,y:origin.y+(target.y-origin.y)*progress}:target;
+        const angle=moving?Math.atan2(target.y-origin.y,target.x-origin.x)+Math.PI/2:Math.PI/5;
+        this.drawFlyingSword(position,own?'#d1efe1':'#f6c8a9',moving?1:Math.min(1,progress*3),angle);
       }else if(sword)this.drawFlyingSword(sword,own?'#d1efe1':'#f6c8a9');
     }
     if(scene)this.drawEffect(scene,progress,true);

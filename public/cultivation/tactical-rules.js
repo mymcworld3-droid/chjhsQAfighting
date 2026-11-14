@@ -409,7 +409,7 @@
       for(const cell of row)cells.set(key(cell),cell);
       if(animate&&step>0)log(s,a.name+'踏步連推 · 第 '+(step+1)+' 段','cast',{
         actor:a.uid,skill:sk.id,animation:{kind:'cast',style:sk.kind,origin:point(a),
-          target:offset(a,d,1),cells:row,color:sk.color}});
+          target:offset(a,d,1),cells:row,step:step+1,color:sk.color}});
       for(const target of targets){
         if(!alive(a))break;
         damage(s,a,target,a.atk*sk.power,{skill:sk.id,manualId:sk.manualId});
@@ -518,7 +518,7 @@
     const targetPoint=aim?{x:p.x+aim.x,y:p.y+aim.y}:point(p);
     const castEvent=log(s,a.name+'施展「'+sk.name+'」','cast',{actor:a.uid,skill:sk.id,x:p.x,y:p.y,
       animation:{kind:'cast',style:sk.kind,origin,target:targetPoint,cells,
-        ...(rays?{rays}:{}),...(sk.hits?{hits:sk.hits}:{}),
+        ...(rays?{rays}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
     if(sk.kind==='fist-focus'){
       a.fistFocusUntil=a.turns+2;
