@@ -331,7 +331,7 @@ test('sword arrays draw nine and twenty-one cells and resolve the center in mult
     assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='center').length,hits);
     assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='diagonal').length,1);
     const scenes=require('../public/cultivation/tactical-animation.js').plan(battle,after,'u1');
-    const centerNumbers=scenes.find(scene=>scene.kind==='damage').numbers.find(number=>number.uid==='center');
+    const centerNumbers=scenes.find(scene=>scene.numbers.some(number=>number.uid==='center')).numbers.find(number=>number.uid==='center');
     assert.deepEqual([centerNumbers.damage,centerNumbers.hits],[500-centerHP,hits]);
     battle.blocks=[{x:5,y:5}];
     assert(!R.skillCells(battle,battle.actors[0],technique,center).some(p=>p.x===6&&p.y===6));

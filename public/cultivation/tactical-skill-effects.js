@@ -11,6 +11,7 @@
     'wind-slash','wind-step','wind-thousand','flight-summon','sky-cloud','sky-sever',
     'rock-fist','rock-quake','rock-break','dragon-guard','dragon-roar','tiger-step','tiger-throw'
   ]);
+  const heavyMoves=new Set(['rock-fist','rock-quake','rock-break','dragon-guard','tiger-step','tiger-throw','wind-thousand','sky-sever']);
   const clamp=n=>Math.max(0,Math.min(1,n));
   const phase=(p,start,end)=>clamp((p-start)/(end-start));
   const pulse=p=>Math.sin(Math.PI*clamp(p));
@@ -86,6 +87,40 @@
       stroke(start,tip,color,width,.65*beat);
       stroke(start,tip,bright,width*.26,.9*beat);
       return tip;
+    };
+    const heavyImpact=()=>{
+      if(!heavyMoves.has(move)||(!scene.parallelImpact&&!scene.throwImpact)||
+        !(p>scene.impactStart&&p<scene.impactStart+.26))return;
+      const burst=phase(p,scene.impactStart,scene.impactStart+.26),force=pulse(burst);
+      const victims=scene.throwImpact?(scene.moves||[]).filter(m=>m.timing==='manual-throw').map(m=>({uid:m.uid})):
+        (scene.numbers||[]).filter(n=>n.uid!==scene.actor&&n.damage!==undefined);
+      for(const number of victims){
+        const victim=scene.before?.find(a=>a.uid===number.uid);if(!victim)continue;
+        const motion=(scene.moves||[]).find(m=>m.uid===number.uid),path=motion?.path;
+        let contact=center(victim);
+        if(path?.length>1){
+          const q=motion.timing==='manual-throw'?phase(p,.28,.81):phase(p,scene.impactStart,1);
+          const travel=motion.timing==='manual-throw'?q*q*(3-2*q):move==='dragon-guard'?q:1-(1-q)**3;
+          const t=travel*(path.length-1),i=Math.min(path.length-2,Math.floor(t));
+          contact=center(point(path[i],path[i+1],t-i));
+        }
+        const strength=(scene.step===4?1.15:1)*force,primary=sword?jade:gold,secondary=sword?white:ember;
+        glow(secondary,.22);c.globalAlpha=Math.min(1,strength*.38);c.fillStyle=bright;
+        c.beginPath();c.arc(contact.x,contact.y,size*(.20+burst*.18),0,Math.PI*2);c.fill();
+        circle(contact,.20+burst*.65,strength*.9,primary,.065);
+        circle(contact,.13+burst*.38,strength*.9,bright,.035);
+        for(let i=0;i<10;i++){
+          const angle=i*Math.PI/5,inner=(.18+burst*.25)*size,outer=(.42+burst*.5)*size;
+          stroke({x:contact.x+Math.cos(angle)*inner,y:contact.y+Math.sin(angle)*inner},
+            {x:contact.x+Math.cos(angle)*outer,y:contact.y+Math.sin(angle)*outer},i%2?primary:bright,.035,strength*.9);
+        }
+        for(let i=0;i<6;i++){
+          const angle=i*Math.PI/3+.25,travel=(.2+burst*.5)*size;
+          const x=contact.x+Math.cos(angle)*travel,y=contact.y+Math.sin(angle)*travel*.7;
+          c.globalAlpha=strength*.8;c.fillStyle=i%2?secondary:primary;c.beginPath();
+          c.moveTo(x,y-size*.06);c.lineTo(x+size*.055,y+size*.035);c.lineTo(x-size*.035,y+size*.04);c.closePath();c.fill();
+        }
+      }
     };
     c.save();c.beginPath();c.rect(ox,Math.max(0,oy-size*.35),size*width,size*(height+.35));c.clip();
     if(!above){
@@ -195,33 +230,6 @@
         }
         impact(impactPoint,phase(p,.15,1),ember);
       }
-      // Concentrate the strongest shock on real hits, not every highlighted tile.
-      if(force)for(const number of scene.numbers||[]){
-        if(number.uid===scene.actor||number.damage===undefined)continue;
-        const victim=scene.before?.find(a=>a.uid===number.uid);if(!victim)continue;
-        const motion=(scene.moves||[]).find(m=>m.uid===number.uid),path=motion?.path;
-        let contact=center(victim);
-        if(path?.length>1){
-          const t=phase(p,scene.impactStart,1)*(path.length-1),i=Math.min(path.length-2,Math.floor(t));
-          contact=center(point(path[i],path[i+1],t-i));
-        }
-        const strength=(scene.step===4?1.15:1)*force;
-        glow(ember,.22);c.globalAlpha=Math.min(1,strength*.38);c.fillStyle=bright;
-        c.beginPath();c.arc(contact.x,contact.y,size*(.20+burst*.18),0,Math.PI*2);c.fill();
-        circle(contact,.20+burst*.65,strength*.9,gold,.065);
-        circle(contact,.13+burst*.38,strength*.9,bright,.035);
-        for(let i=0;i<10;i++){
-          const angle=i*Math.PI/5,inner=(.18+burst*.25)*size,outer=(.42+burst*.5)*size;
-          stroke({x:contact.x+Math.cos(angle)*inner,y:contact.y+Math.sin(angle)*inner},
-            {x:contact.x+Math.cos(angle)*outer,y:contact.y+Math.sin(angle)*outer},i%2?gold:bright,.035,strength*.9);
-        }
-        for(let i=0;i<6;i++){
-          const angle=i*Math.PI/3+.25,travel=(.2+burst*.5)*size;
-          const x=contact.x+Math.cos(angle)*travel,y=contact.y+Math.sin(angle)*travel*.7;
-          c.globalAlpha=strength*.8;c.fillStyle=i%2?ember:gold;c.beginPath();
-          c.moveTo(x,y-size*.06);c.lineTo(x+size*.055,y+size*.035);c.lineTo(x-size*.035,y+size*.04);c.closePath();c.fill();
-        }
-      }
       sparks(at,10,gold,.48);
     }else if(move==='dragon-roar'){
       for(let i=0;i<3;i++)circle(from,.2+i*.17+p*.18,beat*(.9-i*.18),i===1?bright:gold,.035-i*.006);
@@ -248,7 +256,7 @@
       }
       crescent(from,Math.atan2(dy,dx)+Math.PI,phase(p,.1,.95),gold,1.1);
     }
-    c.restore();return true;
+    heavyImpact();c.restore();return true;
   }
   function drawMotion(ctx,scene,progress,view){
     const move=moveFor(scene.visualSkill);
@@ -261,7 +269,7 @@
     for(const motion of scene.moves||[]){
       const route=motion.path||[];
       if(route.length<2)continue;
-      const distance=(motion.timing==='chain-advance'?p:scene.style==='dash'?1-(1-p)**3:p)*(route.length-1);
+      const distance=(motion.timing==='chain-advance'?p:motion.timing==='manual-throw'?p*p*(3-2*p):scene.style==='dash'?1-(1-p)**3:p)*(route.length-1);
       const index=Math.min(route.length-2,Math.floor(distance)),fraction=distance-index;
       const start=center(route[0]),end=center(route.at(-1));
       const current=point(center(route[index]),center(route[index+1]),fraction);

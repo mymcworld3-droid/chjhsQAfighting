@@ -2,14 +2,17 @@ import './manual-rules.js';
 import './tactical-rules.js';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
+import './tactical-actor-rig.js';
 import './tactical-camera.js';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
 const SkillEffects=globalThis.QATacticalSkillEffects;
+const ActorRig=globalThis.QATacticalActorRig;
 const Camera=globalThis.QATacticalCamera;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
-  monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
+  monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp',
+  limbs:'/assets/world-map/players/combat-rig-v3.png'};
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{}){
@@ -180,6 +183,8 @@ export class TacticalRenderer{
       const manualMotion=scene.kind==='move'&&SkillEffects.drawMotion(c,scene,p,view);
       const advances=scene.moves.filter(move=>move.timing==='chain-advance');
       if(advances.length)SkillEffects.drawMotion(c,{...scene,kind:'move',style:'dash',visualSkill:scene.skill,moves:advances},p,view);
+      const throws=scene.moves.filter(move=>move.timing==='manual-throw');
+      if(throws.length)SkillEffects.drawMotion(c,{...scene,kind:'move',style:'throw',visualSkill:scene.skill,moves:throws},Math.max(0,Math.min(1,(p-.28)/.53)),view);
       if(scene.kind==='move'&&!manualMotion)for(const move of scene.moves){
         const route=move.path;
         if(scene.style==='teleport'){ring(center(route[0]),.15+p*.6,1-p);ring(center(route.at(-1)),.65-p*.4,p);}
@@ -380,6 +385,7 @@ export class TacticalRenderer{
       c.strokeStyle=own?'#f8d58a':enemy?'#f29c83':'#a2d8c4';c.lineWidth=own?2.5:1.5;
       c.beginPath();c.ellipse(px,py+cell*.15,cell*.34,cell*.2,0,0,Math.PI*2);c.stroke();
       const size=cell*1.18,sw=size*(a.scaleX||1),sh=size*(a.scaleY||1),drawn=a.bot?this.sprite('monsters',a.species%5*128,Math.floor(a.species/5)*128,128,128,px-sw/2,py-sh*.7,sw,sh):
+        ActorRig?.draw(c,this.images[a.gender],a,scene,progress,{x:px-sw/2,y:py-sh*.76,width:sw,height:sh},this.images.limbs)||
         this.sprite(a.gender,frame*112,row*112,112,112,px-sw/2,py-sh*.76,sw,sh);
       if(!drawn){c.fillStyle=enemy?'#c57a67':'#e5cc8a';c.beginPath();c.arc(px,py-cell*.12,cell*.24,0,Math.PI*2);c.fill();}
       if(a.shield){c.strokeStyle='#9adcf1';c.lineWidth=2;c.beginPath();c.arc(px,py-cell*.12,cell*.39,0,Math.PI*2);c.stroke();}

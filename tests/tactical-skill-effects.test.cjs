@@ -79,10 +79,10 @@ test('flying sword animation follows the previous sword position and each chain 
   assert.deepEqual(casts.map(item=>item.origin.x),[4,5,6,7]);
 });
 
-test('dash and throw effects follow committed movement without changing endpoints',()=>{
+test('dash effects follow committed movement without changing endpoints',()=>{
   for(const [skill,monsterX,target] of [
     ['wind-step',7,{x:6,y:4}],['rock-quake',7,{x:6,y:4}],
-    ['tiger-step',7,{x:6,y:4}],['tiger-throw',5,{x:5,y:4}]
+    ['tiger-step',7,{x:6,y:4}]
   ]){
     const before=fixture(skill);
     before.actors[1].x=monsterX;
@@ -101,6 +101,19 @@ test('dash and throw effects follow committed movement without changing endpoint
       assert.equal(JSON.stringify(scene),original);
     }
   }
+});
+
+test('throw posing and enemy movement share one animation and retain the committed landing',()=>{
+  const before=fixture('tiger-throw');before.actors[1].x=5;
+  const after=R.apply(before,'hero',{type:'manual',skillId:'tiger-throw',x:5,y:4},now);
+  const scenes=A.plan(before,after,'hero'),cast=scenes.find(s=>s.kind==='cast');
+  assert(cast.throwImpact);assert(!scenes.some(s=>s.kind==='move'&&s.style==='throw'));
+  for(const motion of cast.moves){
+    assert.equal(motion.timing,'manual-throw');
+    const target=A.sample(cast,1).find(a=>a.uid===motion.uid);
+    assert.equal(target.x,motion.path.at(-1).x);assert.equal(target.y,motion.path.at(-1).y);
+  }
+  assert(A.impactPulse(cast,.82)>0);
 });
 
 test('the battlefield renderer uses manual effects for new and saved cast events',()=>{
@@ -237,6 +250,28 @@ test('chain impacts add a short heavy reaction without slowing movement or shaki
   const stopped=A.plan(blocked,blockedAfter,'hero')[0];
   assert(stopped.parallelImpact&&stopped.numbers.some(n=>n.uid==='monster-0'));
   assert(A.impactPulse(stopped,.25)>0);assert.equal(A.sample(stopped,1).find(a=>a.uid==='monster-0').x,5);
+});
+
+test('body techniques and selected sword techniques land with weight while lighter sword moves stay light',()=>{
+  const cases=[
+    ['rock-fist',5,{x:5,y:4}],['rock-quake',7,{x:6,y:4}],['rock-break',5,{x:5,y:4}],
+    ['dragon-guard',5,{x:5,y:4}],['tiger-step',7,{x:6,y:4}],
+    ['wind-thousand',7,{x:5,y:4}],['sky-sever',7,{x:7,y:4}]
+  ];
+  for(const [skill,enemyX,point] of cases){
+    const before=fixture(skill);before.actors[1].x=enemyX;
+    const after=R.apply(before,'hero',{type:'manual',skillId:skill,...point},now);
+    const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+    assert(cast.parallelImpact,skill);assert(A.impactPulse(cast,cast.impactStart+.1)>.5,skill);
+    const enemy=A.sample(cast,cast.impactStart+.1).find(a=>a.uid==='monster-0');
+    assert(enemy.scaleX>1&&enemy.scaleY<1,skill);
+  }
+  for(const skill of ['wind-slash','sky-cloud']){
+    const before=fixture(skill),point=skill==='sky-cloud'?{x:7,y:4}:{x:5,y:4};
+    const after=R.apply(before,'hero',{type:'manual',skillId:skill,...point},now);
+    const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+    assert(cast.parallelImpact,skill);assert.equal(A.impactPulse(cast,cast.impactStart+.1),0,skill);
+  }
 });
 
 test('renderer carries elapsed time across chain strikes without waiting a frame',()=>{

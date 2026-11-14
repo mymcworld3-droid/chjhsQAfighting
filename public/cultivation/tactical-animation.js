@@ -7,6 +7,11 @@
   const clamp=n=>Math.max(0,Math.min(1,n));
   const smooth=n=>n*n*(3-2*n);
   const jumps=new Set(['leap','hop','fly','throw']);
+  const manuals=()=>typeof module==='object'&&module.exports?require('./manual-rules.js'):globalThis.QAManuals;
+  const moveFor=id=>manuals()?.BY_SKILL?.[id]?.moveId||id;
+  const heavyMoves=new Set(['rock-fist','rock-quake','rock-break','dragon-guard','tiger-step','tiger-throw','wind-thousand','sky-sever']);
+  const hitTime={'wind-slash':.40,'wind-step':.32,'wind-thousand':.45,'flight-summon':.45,
+    'sky-cloud':.46,'sky-sever':.46,'rock-fist':.46,'rock-quake':.32,'rock-break':.40,'tiger-step':.32};
   function duration(scene){
     if(scene.kind==='move'){
       if(scene.style==='dash'&&scene.visualSkill==='dragon-guard')return 200;
@@ -99,6 +104,43 @@
       scenes.splice(i+1,j-i);
     }
   }
+  // Manual poses land their committed damage during the swing, not after it.
+  function combineManualImpact(scenes){
+    for(let i=0;i<scenes.length;i++){
+      const cast=scenes[i];
+      if(cast.kind!=='cast'||cast.parallelImpact||cast.style==='fist-chain'||!manuals()?.BY_SKILL?.[cast.skill])continue;
+      let j=i+1;const hits=new Set(),numbers=[],reflections=[];
+      for(;j<scenes.length;j++){
+        const scene=scenes[j];if(scene.eventRevision!==cast.eventRevision||scene.kind!=='damage')break;
+        const direct=scene.actor===cast.actor&&scene.skill===cast.skill;
+        const counter=hits.has(scene.actor)&&scene.numbers.some(n=>n.uid===cast.actor)&&['counter','manual-counter'].includes(scene.skill);
+        if(!direct&&!counter)break;
+        for(const number of scene.numbers){
+          if(direct)hits.add(number.uid);
+          const earlier=numbers.find(n=>n.uid===number.uid);
+          if(earlier&&number.damage!==undefined&&earlier.damage!==undefined){
+            earlier.damage+=number.damage;earlier.absorbed=(earlier.absorbed||0)+(number.absorbed||0);
+            earlier.hits=(earlier.hits||1)+(number.hits||1);
+          }else numbers.push({...number});
+        }
+        if(counter)reflections.push({actor:scene.actor,target:cast.actor});
+      }
+      if(!hits.size)continue;
+      Object.assign(cast,{parallelImpact:true,impactStart:hitTime[moveFor(cast.skill)]??.4,
+        numbers,reflections,after:scenes[j-1].after,duration:600});
+      scenes.splice(i+1,j-i-1);
+    }
+  }
+  function combineManualThrow(scenes){
+    for(let i=0;i<scenes.length-1;i++){
+      const cast=scenes[i],thrown=scenes[i+1];
+      if(cast.kind!=='cast'||moveFor(cast.skill)!=='tiger-throw'||thrown.kind!=='move'||
+        thrown.style!=='throw'||thrown.actor!==cast.actor||thrown.eventRevision!==cast.eventRevision)continue;
+      Object.assign(cast,{throwImpact:true,impactStart:.72,duration:650,after:thrown.after,
+        moves:thrown.moves.map(m=>({...m,timing:'manual-throw'}))});
+      scenes.splice(i+1,1);
+    }
+  }
   function plan(previous,next,uid){
     if(!previous||previous.id!==next.id||next.revision<=previous.revision||previous.width!==next.width||previous.height!==next.height)return [];
     const seen=new Set(previous.events.map(e=>e.id)),events=next.events.filter(e=>{
@@ -151,6 +193,8 @@
     }
     combineKnockback(scenes);
     combineChainAdvance(scenes);
+    combineManualImpact(scenes);
+    combineManualThrow(scenes);
     if(previous.status!=='finished'&&next.status==='finished'){
       const me=next.actors.find(a=>a.uid===uid),won=me?.team===next.winner,draw=next.winner==='draw';
       const scene={kind:'finish',style:won?'victory':draw?'draw':'defeat',actor:uid,label:draw?'平分秋色':won?next.mode==='pve'?'此關已破':'克敵制勝':'整裝再戰',before:copy(next.actors),after:copy(next.actors),moves:[],numbers:[]};
@@ -163,8 +207,9 @@
   }
   // A short contact pulse strengthens the hit without stopping the movement.
   function impactPulse(scene,progress){
-    if(scene?.kind!=='cast'||scene.style!=='fist-chain'||!scene.parallelImpact||
-      !scene.numbers?.some(n=>n.uid!==scene.actor&&n.damage!==undefined))return 0;
+    if(scene?.kind!=='cast'||!heavyMoves.has(moveFor(scene.skill)))return 0;
+    const landed=scene.throwImpact&&scene.moves?.some(m=>m.timing==='manual-throw');
+    if(!landed&&(!scene.parallelImpact||!scene.numbers?.some(n=>n.uid!==scene.actor&&n.damage!==undefined)))return 0;
     const q=(progress-scene.impactStart)/.22;
     return q>0&&q<1?Math.sin(Math.PI*q)*(1-q*.2):0;
   }
@@ -176,9 +221,9 @@
       a.opacity=1;a.lift=0;a.scaleX=1;a.scaleY=1;a.flash=0;
       const move=scene.moves.find(m=>m.uid===a.uid);
       if(move){
-        const advance=move.timing==='chain-advance';
-        const route=move.path,style=advance?'dash':scene.parallelImpact?'push':scene.style;
-        const moveProgress=advance?p:scene.parallelImpact?impact:p;
+        const advance=move.timing==='chain-advance',throwing=move.timing==='manual-throw';
+        const route=move.path,style=advance?'dash':throwing?'throw':scene.parallelImpact?'push':scene.style;
+        const moveProgress=advance?p:throwing?clamp((p-.28)/.53):scene.parallelImpact?impact:p;
         const teleport=style==='teleport',fast=['dash','rush','push'].includes(style);
         const flowingPush=!advance&&scene.style==='fist-chain'&&scene.parallelImpact;
         const t=(advance||flowingPush?moveProgress:fast?1-(1-moveProgress)**3:smooth(moveProgress))*(route.length-1),i=Math.min(route.length-2,Math.floor(t)),f=t-i;
@@ -187,7 +232,7 @@
         else{a.x=from.x+(to.x-from.x)*f;a.y=from.y+(to.y-from.y)*f;}
         a.row=to.x>from.x?1:to.x<from.x?2:to.y<from.y?3:0;
         a.frame=[1,2,3,0][Math.floor(moveProgress*route.length*2)%4];
-        if(jumps.has(style))a.lift=beat*(style==='fly'?.55:.8);
+        if(jumps.has(style))a.lift=(throwing?Math.sin(Math.PI*moveProgress):beat)*(style==='fly'?.55:.8);
         else if(['heavy','sentinel'].includes(style)){a.lift=Math.abs(Math.sin(p*Math.PI*(route.length-1)))*.045;a.scaleY=1-beat*.045;}
         else if(style==='weave'){a.sway=Math.sin(p*Math.PI*6)*.055;}
         else if(style!=='sideways'&&style!=='push')a.lift=Math.abs(Math.sin(p*Math.PI*(route.length-1)*2))*.055;
@@ -198,6 +243,7 @@
         if(weight){a.scaleX*=1+weight*.10;a.scaleY*=1-weight*.08;}
       }
       const number=scene.numbers.find(n=>n.uid===a.uid);
+      if(weight&&move?.timing==='manual-throw'){a.scaleX*=1+weight*.18;a.scaleY*=1-weight*.16;a.flash=weight*.6;}
       if((scene.kind==='damage'||scene.parallelImpact)&&number&&impact>0){
         const impactBeat=Math.sin(Math.PI*impact);
         a.flash=impactBeat*.6;
