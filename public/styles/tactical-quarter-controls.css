@@ -703,3 +703,39 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
   #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector-end{font-size:clamp(14px,3.5vw,20px)!important}
   #tactical-combat.tc-quarter-layout .tc-energy-number{font-size:clamp(22px,5vw,32px)}
 }
+
+
+// Always-visible reason for unavailable attacks in the PvE no-confirm layout.
+#tactical-combat .tc-action-feedback[hidden]{display:none!important}
+#tactical-combat:not(.tc-quarter-layout) .tc-action-feedback{display:none!important}
+#tactical-combat.tc-quarter-layout .tc-action-feedback{
+  position:absolute;
+  left:50%;
+  bottom:calc(var(--tc-dial) + 10px);
+  z-index:4;
+  box-sizing:border-box;
+  max-width:min(84vw,430px);
+  padding:8px 13px;
+  transform:translateX(-50%);
+  border:1px solid #bb956d99;
+  border-radius:12px;
+  background:rgba(24,31,26,.92);
+  color:#f1d5ac;
+  font-size:clamp(12px,2.6vw,14px);
+  font-weight:500;
+  line-height:1.45;
+  text-align:center;
+  text-wrap:balance;
+  box-shadow:0 4px 14px #080e0b88;
+  pointer-events:none;
+}
+#tactical-combat.tc-quarter-layout .tc-left-technique.is-unavailable{
+  opacity:.58;
+}
+@media (max-height:400px) and (orientation:landscape){
+  #tactical-combat.tc-quarter-layout .tc-action-feedback{
+    bottom:calc(var(--tc-dial) + 4px);
+    padding:4px 9px;
+    font-size:12px;
+  }
+}

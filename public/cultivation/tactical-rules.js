@@ -14,7 +14,7 @@
     {id:'bamboo',name:'青竹幽徑',width:9,height:7,terrain:0,description:'石障分隔通道，利用掩護接近。'},
     {id:'ruins',name:'古陣遺墟',width:11,height:9,terrain:16,description:'寬廣遺跡，適合遠程與範圍技能。'}
   ].map(Object.freeze));
-  const skill=(id,name,cost,range,kind,power,description,extra={})=>Object.freeze({id,name,cost,range,kind,power,description,cooldown:2,...extra});
+  const skill=(id,name,cost,range,kind,power,description,extra={})=>Object.freeze({id,name,cost,range,kind,power,description,...extra,cooldown:0});
   const core=(name,color,branches)=>Object.freeze({name,color,branches:Object.freeze(branches.map(b=>Object.freeze(b)))});
   const CORES=Object.freeze({
     none:core('未結金丹','#d8d0b6',[
@@ -477,7 +477,6 @@
   function validateSkill(s,a,sk,p){
     if(a.stamina<techniqueCost(a,sk))fail('體力不足，先答題補充');
     validateAttackLimit(a);
-    if(cooldownUntil(a,sk)>a.turns)fail('技能仍在冷卻');
     if(fistDirectional(sk)){
       if(!fistDirection(s,a,p,sk))fail('請選擇上下左右的出拳方向');
       return;
@@ -500,12 +499,10 @@
       if(!routes.length)fail('無法突進至敵人身旁');
     }
   }
-  function cooldownUntil(a,sk){
-    return Math.max(a.cooldowns[sk.id]||0,a.cooldowns[sk.moveId]||0);
-  }
+  // Compatibility for old saves: old cooldown timestamps cannot prevent casting.
+  function cooldownUntil(){return 0;}
   function cast(s,a,sk,p){
     validateSkill(s,a,sk,p);a.stamina-=techniqueCost(a,sk);a.attacks++;
-    if(sk.cooldown)a.cooldowns[sk.moveId||sk.id]=a.turns+sk.cooldown;
     const cells=skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
     const route=techniquePath(s,a,sk,p);

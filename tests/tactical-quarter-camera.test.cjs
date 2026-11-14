@@ -103,6 +103,18 @@ test('PvE uses tap-to-act, retaining server-authoritative quiz and turn actions'
 });
 
 
+test('quarter-wheel battlefield shows why an action is unavailable without another confirm button',()=>{
+  assert.match(ui,/data-action-feedback role="status" aria-live="polite"/);
+  assert.match(ui,/本回合出手次數已滿/);
+  assert.match(ui,/體力不足：需要 /);
+  assert.match(ui,/尚未裝備此技能，或境界尚未解鎖/);
+  assert.match(ui,/招式動畫播放中/);
+  assert.match(ui,/feedback\.hidden=!reason/);
+  assert.match(css,/\.tc-action-feedback\{/);
+  assert.match(css,/\.tc-action-feedback\[hidden\]/);
+  assert.match(css,/bottom:calc\(var\(--tc-dial\) \+ 10px\)/);
+});
+
 test('green arc has ten live curved segments and the charging button uses a crisp lightning SVG',()=>{
   assert.match(ui,/const energySegment=i=>/);
   assert.match(ui,/A 90 90 0 0 1/);

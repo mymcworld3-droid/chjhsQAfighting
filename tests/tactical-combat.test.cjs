@@ -30,6 +30,25 @@ test('attacks require range, sight, stamina and own turn; guard spends an action
   assert.equal(s.actors[1].hp,800);assert.throws(()=>R.apply(s,'u1',{type:'attack',x:2,y:3},fixed),/兩次/);
   assert.equal(s.actors[0].stamina,8);
 });
+test('manuals have zero cooldown and legacy cooldown timestamps never block repeated casts',()=>{
+  const catalog=require('../public/cultivation/manual-rules.js');
+  for(const book of catalog.BOOKS)for(const skill of book.skills)
+    assert.equal(skill.cooldown,0,skill.id+' should never have cooldown');
+  let s=battle('pve',{players:[hero('u1',{manualSkills:['wind-slash'],trainingAccessScore:68})]});
+  s.blocks=[];s.actors[0].stamina=10;
+  s.actors[0].cooldowns={'wind-slash':999,'rock-fist':999};
+  const used=()=>R.apply(s,'u1',{type:'manual',skillId:'wind-slash',x:2,y:3},fixed);
+  s=used();
+  assert.equal(s.actors[0].attacks,1);
+  assert.equal(R.cooldownUntil(s.actors[0],catalog.BY_SKILL['wind-slash']),0);
+  s=used();
+  assert.equal(s.actors[0].attacks,2);
+  assert.equal(s.actors[0].stamina,6);
+  assert.throws(used,/本回合已使用兩次攻擊/);
+  assert.deepEqual(s.actors[0].cooldowns,{'wind-slash':999,'rock-fist':999},
+    'existing legacy saves need no cooldown migration');
+});
+
 test('normal attacks choose exactly one cardinal direction and hit both cells for one cost',()=>{
   for(const [dx,dy]of [[1,0],[-1,0],[0,1],[0,-1]]){
     const s=battle();s.blocks=[];Object.assign(s.actors[0],{x:3,y:3,stamina:8});

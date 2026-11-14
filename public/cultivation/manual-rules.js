@@ -54,7 +54,7 @@
     return Math.min(MAX_EXP,toTen+(kills-8)*EXP_PER_KILL);
   }
   const technique=(id,name,cost,range,kind,power,description,extra={})=>
-    Object.freeze({id,name,cost,range,kind,power,description,cooldown:2,...extra});
+    Object.freeze({id,name,cost,range,kind,power,description,...extra,cooldown:0});
   const book=(id,name,school,description,skills,realms=[1,6,28])=>Object.freeze({
     id,name,school,description,skills:Object.freeze(skills.map((skill,index)=>
       Object.freeze({...skill,moveId:skill.moveId||skill.id,manualId:id,school,

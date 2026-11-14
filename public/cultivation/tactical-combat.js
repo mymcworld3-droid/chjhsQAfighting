@@ -230,7 +230,7 @@ function selectWheel(value){
 function buildGame(){
   destroyRenderer();$('[data-main]').className='tc-main tc-game';
   root.classList.toggle('tc-quarter-layout',state?.mode==='pve');
-  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div></section>
+  $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div><div class="tc-action-feedback" data-action-feedback role="status" aria-live="polite" aria-atomic="true" hidden></div></section>
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">普通攻擊 · 2</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
   if(state?.mode==='pvp'){
@@ -565,14 +565,32 @@ function updateControls(){
       try{R.validateSkill(state,me,shown,selection);}catch(e){error=e.message;}
     }
   }
-  const cooling=action==='manual'?Math.max(0,R.cooldownUntil(me,shown)-me.turns):0;
   $('[data-skill-title]').textContent=action==='move'?'移動說明':
-    `${shown.name} · ${cost} 體力${cooling?' · 冷卻 '+cooling+' 回合':''}`;
+    `${shown.name} · ${cost} 體力`;
   $('[data-skill]').innerHTML=action==='move'?
     '<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':
     `<p>${esc(shown.description)}</p>`;
   $('[data-execute]').textContent=error||label;
   $('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
+  // The confirm button is intentionally hidden in the quarter-wheel PvE layout.
+  // Show why the selected attack cannot be executed, even before a tile is tapped.
+  const feedback=$('[data-action-feedback]');
+  if(feedback){
+    let reason='';
+    const attackMode=action==='attack'||action==='manual';
+    if(!mine)reason=state.status!=='active'?'本場戰鬥尚未進入行動階段':
+      state.quizRound&&state.phase!=='action'?'請先完成本輪答題，或等待行動階段':'尚未輪到你的行動回合';
+    else if(animating)reason='招式動畫播放中，演出結束後可繼續操作';
+    else if(busy)reason='上一個行動處理中，請稍候';
+    else if(me.actions>=R.LIMITS.actions)reason='本回合行動次數已滿，請結束回合';
+    else if(attackMode&&me.attacks>=R.attackLimit(me))reason='本回合出手次數已滿（'+R.attackLimit(me)+' 次），請結束回合';
+    else if(attackMode&&action==='manual'&&!chosenSkill)reason='尚未裝備此技能，或境界尚未解鎖';
+    else if(attackMode&&me.stamina<cost)reason='體力不足：需要 '+cost+' 點，目前 '+me.stamina+' 點，請答題充能';
+    else if(selection&&error)reason=error;
+    else if(attackMode&&shown&&!R.aimCells(state,me,shown).length)reason='目前沒有可指定的攻擊地格，請移動或改用其他招式';
+    feedback.textContent=reason?(attackMode?'無法攻擊：':'無法移動：')+reason:'';
+    feedback.hidden=!reason;
+  }
   root.querySelectorAll('[data-action]').forEach(b=>{
     b.setAttribute('aria-pressed',String(b.dataset.action===action||
       (action==='manual'&&b.dataset.action==='manual:'+selectedManualSkill)||
@@ -615,6 +633,12 @@ function updateControls(){
       if(technique){
         const cost=R.techniqueCost(me,technique);
         button.setAttribute('aria-label',technique.name+'，消耗 '+cost+' 體力');
+        const unavailable=!mine?'尚未輪到你行動':locked?'正在播放動畫或處理行動':
+          me.attacks>=R.attackLimit(me)?'本回合出手次數已滿':
+          me.actions>=R.LIMITS.actions?'本回合行動次數已滿':
+          me.stamina<cost?'體力不足，還需要 '+(cost-me.stamina)+' 點':'';
+        button.classList.toggle('is-unavailable',!!unavailable);
+        button.title=unavailable||technique.name+' · '+cost+' 體力';
         button.nextElementSibling.querySelector('small').textContent=cost+' 體力';
       }
     });
