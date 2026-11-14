@@ -121,13 +121,14 @@
       crescent(at,angle+.55,phase(p,.43,.98),white,1.2);
       if(p>.32)impact(at,phase(p,.32,.95),jade);
     }else if(move==='wind-thousand'){
-      const end=hit.at(-1)||to,q=phase(p,.12,.78),tip=beam(from,end,q,jade,.12);
+      // The full ray reaches the targets at the same beat as knockback starts.
+      const end=hit.at(-1)||to,q=phase(p,.08,.45),tip=beam(from,end,q,jade,.12);
       for(const offset of [-.16,.16]){
         const shift={x:side.x*size*offset,y:side.y*size*offset};
         stroke({x:from.x+shift.x,y:from.y+shift.y},{x:tip.x+shift.x,y:tip.y+shift.y},jade,.025,beat*.8);
       }
       crescent(tip,Math.atan2(dy,dx),phase(p,.05,.98),white,1.15);
-      if(p>.48)impact(tip,phase(p,.48,1),jade);
+      if(p>.45)impact(tip,phase(p,.45,1),jade);
     }else if(move==='flight-summon'){
       const hadSword=!!scene.before?.find(a=>a.uid===scene.actor)?.flyingSword;
       if(hadSword){

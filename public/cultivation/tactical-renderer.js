@@ -161,9 +161,10 @@ export class TacticalRenderer{
     };
     c.save();c.beginPath();c.rect(ox,Math.max(0,oy-size*.35),size*this.state.width,size*(this.state.height+.35));c.clip();
     const view={cell:size,ox,oy,width:this.state.width,height:this.state.height};
-    if(SkillEffects.draw(c,scene,p,view,above)){c.restore();return;}
+    const manualCast=SkillEffects.draw(c,scene,p,view,above);
+    const impact=scene.parallelImpact?Math.max(0,Math.min(1,(p-scene.impactStart)/(1-scene.impactStart))):p;
     if(!above){
-      if(['cast','impact'].includes(scene.kind))for(const [i,cell]of cells.entries()){
+      if(!manualCast&&['cast','impact'].includes(scene.kind))for(const [i,cell]of cells.entries()){
         const at=center(cell),delay=scene.style==='line'?Math.min(.3,i*.06):0,q=Math.max(0,(p-delay)/(1-delay));
         c.globalAlpha=Math.sin(Math.PI*q)*.26;c.fillStyle=color;c.fillRect(ox+cell.x*size+1,oy+cell.y*size+1,size-2,size-2);
         if(q>0)ring(at,.15+q*.46,(1-q)*.65);
@@ -177,10 +178,19 @@ export class TacticalRenderer{
           route.forEach((pt,i)=>{const at=center(pt);c[i?'lineTo':'moveTo'](at.x,at.y);});c.stroke();c.setLineDash([]);
         }
       }
+      if(scene.parallelImpact&&impact>0){
+        const sampled=A.sample(scene,p);
+        for(const move of scene.moves){
+          const current=sampled.find(a=>a.uid===move.uid);if(!current)continue;
+          const start=center(move.path[0]),end=center(current);
+          c.globalAlpha=(1-impact)*.55;c.strokeStyle=color;c.lineWidth=Math.max(2,size*.07);
+          c.lineCap='round';c.beginPath();c.moveTo(start.x,start.y);c.lineTo(end.x,end.y);c.stroke();
+        }
+      }
       if(['restore','guard','answer','turn','dodge'].includes(scene.kind))ring(from,.25+p*.55,beat*.7,scene.kind==='restore'?'#b6d69c':scene.kind==='answer'?'#e9d28c':color);
       c.restore();return;
     }
-    if(['cast','impact'].includes(scene.kind)){
+    if(!manualCast&&['cast','impact'].includes(scene.kind)){
       const style=scene.style,lightning=scene.skill==='lightning'||scene.skill==='counter';
       if(scene.kind==='impact'){
         for(const cell of cells){const pt=center(cell),fall=Math.min(1,p/.65),head={x:pt.x-size*(1-fall)*.6,y:pt.y-(1-fall)*size*2.5};
@@ -250,23 +260,28 @@ export class TacticalRenderer{
         c.globalAlpha=beat;c.strokeStyle=ink;c.lineWidth=size*.05;c.beginPath();c.moveTo(from.x,from.y-size*.48);c.lineTo(from.x+size*.3,from.y-size*.3);c.lineTo(from.x+size*.24,from.y+size*.1);c.lineTo(from.x,from.y+size*.32);c.lineTo(from.x-size*.24,from.y+size*.1);c.lineTo(from.x-size*.3,from.y-size*.3);c.closePath();c.stroke();
       }
     }
-    if(scene.kind==='damage'){
+    if(scene.kind==='damage'||scene.parallelImpact&&impact>0){
       if(scene.style==='counter')beam(from,to,'#e0baf1',true);
       for(const number of scene.numbers){const a=scene.before.find(a=>a.uid===number.uid);if(a)motes(center(a),number.absorbed?'#b9e5ef':'#efb18e',8,.7);}
+      for(const reflection of scene.reflections||[]){
+        const source=scene.before.find(a=>a.uid===reflection.actor),victim=scene.before.find(a=>a.uid===reflection.target);
+        if(source&&victim)beam(center(source),center(victim),'#e0baf1',true);
+      }
     }
-    const numbers=[...scene.numbers];
+    const numbers=scene.parallelImpact&&impact===0?[]:[...scene.numbers];
+    const numberActors=scene.parallelImpact?A.sample(scene,p):scene.before;
     if(scene.kind==='dodge'&&actor)numbers.push({uid:actor.uid,text:'閃避'});
     for(const number of numbers){
-      const a=scene.before.find(a=>a.uid===number.uid);if(!a)continue;
+      const a=numberActors.find(a=>a.uid===number.uid);if(!a)continue;
       const at=center(a),lines=number.text?[{text:number.text,ink:'#ede1b9'}]:[
         ...(number.damage!==undefined?[{text:'−'+number.damage+(number.hits?' · '+number.hits+' 段':''),ink:'#ffe0c5'}]:[]),
         ...(number.absorbed?[{text:'護盾 −'+number.absorbed,ink:'#bde5ed'}]:[]),
         ...(number.heal?[{text:'+'+number.heal+' 生命',ink:'#d1edb5'}]:[]),
         ...(number.shield?[{text:'護盾 +'+number.shield,ink:'#bde5ed'}]:[]),
         ...(number.gain!==undefined?[{text:'體力 +'+number.gain,ink:'#f5df9f'}]:[])];
-      c.globalAlpha=Math.min(1,(1-p)*3);c.font=`600 ${Math.max(10,Math.min(17,size*.32))}px "Noto Sans TC",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.lineWidth=3;
+      c.globalAlpha=Math.min(1,(1-impact)*3);c.font=`600 ${Math.max(10,Math.min(17,size*.32))}px "Noto Sans TC",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.lineWidth=3;
       for(const [i,line]of lines.entries()){
-        const half=c.measureText(line.text).width/2+3,x=Math.max(ox+half,Math.min(ox+size*this.state.width-half,at.x)),y=Math.max(oy+10,at.y-size*(.55+p*.6)+i*15);
+        const half=c.measureText(line.text).width/2+3,x=Math.max(ox+half,Math.min(ox+size*this.state.width-half,at.x)),y=Math.max(oy+10,at.y-size*(.55+impact*.6)+i*15);
         c.strokeStyle='#231a13';c.strokeText(line.text,x,y);c.fillStyle=line.ink;c.fillText(line.text,x,y);
       }
     }

@@ -63,7 +63,7 @@ test('twenty monster types have visible attacks, dodges and movement styles in c
     }
     const next=apply(s,'end'),scenes=timeline(s,next),attack=scenes.find(v=>v.kind==='cast'&&v.actor===m.uid);
     assert.ok(attack,profile.name);assert.deepEqual(attack.cells,m.intent.cells);
-    assert.ok(scenes.some(v=>v.kind==='damage'),profile.name);
+    assert.ok(scenes.some(v=>v.kind==='damage'||v.parallelImpact&&v.numbers.some(n=>n.uid==='u1')),profile.name);
     for(const scene of scenes)for(const a of A.sample(scene,.5))assert.ok(Number.isFinite(a.x)&&Number.isFinite(a.y),profile.name);
     Object.assign(m,{x:0,y:0,intent:{kind:'advance',cells:[]}});Object.assign(s.actors[0],{x:9,y:9});
     const advance=timeline(s,apply(s,'end')).find(v=>v.kind==='move'&&v.actor===m.uid);

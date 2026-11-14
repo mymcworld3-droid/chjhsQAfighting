@@ -23,6 +23,7 @@ function context(){
   return new Proxy(target,{
     get(o,key){
       if(key in o)return o[key];
+      if(key==='measureText')return text=>({width:String(text).length*8});
       return (...args)=>{
         assert(args.every(value=>typeof value!=='number'||Number.isFinite(value)),String(key));
         if(key==='save')stack.push(1);
@@ -119,4 +120,83 @@ test('the battlefield renderer uses manual effects for new and saved cast events
   const unknown={...cast,skill:'old-custom',style:'line'};
   renderer.drawEffect(unknown,.5,true);
   assert(c.calls.some(call=>call[0]==='stroke'));
+});
+
+test('knockback and damage begin at the attack impact, including every step of the chain',()=>{
+  for(const skill of ['wind-thousand','rock-break','dragon-guard']){
+    const before=fixture(skill);before.actors[1].x=skill==='wind-thousand'?7:5;
+    const after=R.apply(before,'hero',{type:'manual',skillId:skill,x:5,y:4},now);
+    const snapshot=JSON.stringify([before,after]);
+    const scenes=A.plan(before,after,'hero'),casts=scenes.filter(s=>s.skill===skill&&s.kind==='cast');
+    assert.equal(casts.length,skill==='dragon-guard'?5:1,skill);
+    for(const cast of casts){
+      assert.equal(cast.parallelImpact,true,skill);
+      const start=cast.before.find(a=>a.uid==='monster-0');
+      const early=A.sample(cast,.3).find(a=>a.uid==='monster-0');
+      const impact=A.sample(cast,.7).find(a=>a.uid==='monster-0');
+      const end=A.sample(cast,1).find(a=>a.uid==='monster-0');
+      assert.equal(early.x,start.x,skill);assert.equal(early.hp,start.hp,skill);
+      assert(impact.x>start.x&&impact.hp<start.hp,skill);
+      assert.equal(end.x,cast.after.find(a=>a.uid==='monster-0').x,skill);
+      assert.equal(end.hp,cast.after.find(a=>a.uid==='monster-0').hp,skill);
+      assert(cast.numbers.some(n=>n.uid==='monster-0'),skill);
+    }
+    assert(!scenes.some(s=>s.kind==='move'&&s.style==='push'),skill);
+    assert.equal(JSON.stringify([before,after]),snapshot,skill);
+  }
+});
+
+test('area knockback preserves collision order and never invents movement through a wall',()=>{
+  const before=fixture('wind-thousand');before.actors[1].x=6;
+  before.actors.push(R.actor({uid:'far',bot:true,team:'monster',maxHp:3000},{x:8,y:4}));
+  const after=R.apply(before,'hero',{type:'manual',skillId:'wind-thousand',x:5,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  assert.deepEqual(cast.moves.map(m=>m.uid),['far','monster-0']);
+  for(const progress of [.5,.7,.95,1]){
+    const actors=A.sample(cast,progress),near=actors.find(a=>a.uid==='monster-0'),far=actors.find(a=>a.uid==='far');
+    assert(near.x<far.x,'targets must not pass through one another');
+  }
+  for(const move of cast.moves){
+    const ending=after.actors.find(a=>a.uid===move.uid);
+    assert.deepEqual(move.path.at(-1),{x:ending.x,y:ending.y});
+  }
+  const blocked=fixture('rock-break');blocked.actors[1].x=5;blocked.blocks=[{x:6,y:4}];
+  const blockedAfter=R.apply(blocked,'hero',{type:'manual',skillId:'rock-break',x:5,y:4},now);
+  assert.equal(blockedAfter.actors[1].x,5);
+  assert(!A.plan(blocked,blockedAfter,'hero').some(s=>s.moves.some(m=>m.uid==='monster-0')));
+});
+
+test('reflected damage and a monster push retain their committed outcomes',()=>{
+  const before=fixture('rock-break');before.actors[1].x=5;before.actors[1].counter=.5;
+  const after=R.apply(before,'hero',{type:'manual',skillId:'rock-break',x:5,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  assert(cast.parallelImpact);assert(cast.numbers.some(n=>n.uid==='hero'));
+  assert.deepEqual(cast.reflections,[{actor:'monster-0',target:'hero'}]);
+  assert.equal(A.sample(cast,1).find(a=>a.uid==='hero').hp,after.actors[0].hp);
+
+  const fight=fixture('rock-fist');Object.assign(fight.actors[0],{x:5,y:4});
+  Object.assign(fight.actors[1],{x:3,y:4,species:16,atk:100});
+  fight.actors[2].intent={kind:'wait',cells:[]};R.prepareIntents(fight);
+  const ended=R.apply(fight,'hero',{type:'end'},now);
+  const monsterCast=A.plan(fight,ended,'hero').find(s=>s.kind==='cast'&&s.actor==='monster-0');
+  assert(monsterCast.parallelImpact);assert(monsterCast.moves.some(m=>m.uid==='hero'));
+  const endHero=A.sample(monsterCast,1).find(a=>a.uid==='hero');
+  assert.equal(endHero.x,ended.actors[0].x);assert.equal(endHero.hp,ended.actors[0].hp);
+});
+
+test('damage numbers appear at impact on top of the manual animation',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8')
+    .replace(/^import .*;$/gm,'').replace('export class TacticalRenderer','class TacticalRenderer');
+  const Renderer=new Function('globalThis',source+'\nreturn TacticalRenderer;')({
+    QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
+  });
+  const before=fixture('rock-break');before.actors[1].x=5;
+  const after=R.apply(before,'hero',{type:'manual',skillId:'rock-break',x:5,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  const early=context(),later=context(),renderer=Object.create(Renderer.prototype);
+  Object.assign(renderer,{ctx:early,cell:48,ox:0,oy:0,state:after});renderer.drawEffect(cast,.3,true);
+  renderer.ctx=later;renderer.drawEffect(cast,.7,false);renderer.drawEffect(cast,.7,true);
+  assert(!early.calls.some(call=>call[0]==='fillText'));
+  assert(later.calls.some(call=>call[0]==='fillText'&&String(call[1]).startsWith('−')));
 });

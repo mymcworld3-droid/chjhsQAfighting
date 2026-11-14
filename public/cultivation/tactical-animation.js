@@ -16,6 +16,43 @@
     }
     return {cast:420,impact:520,damage:420,restore:420,guard:420,answer:620,turn:300,dodge:300,withdraw:360,finish:650}[scene.kind]||300;
   }
+  // Play a knockback at the impact of its originating attack. The server has
+  // already resolved collisions and ordering; use only those committed paths.
+  function combineKnockback(scenes){
+    for(let i=0;i<scenes.length;i++){
+      const cast=scenes[i];if(cast.kind!=='cast')continue;
+      const hit=new Set(),numbers=[],moves=[],reflections=[];let j=i+1,hasDamage=false;
+      const addNumber=number=>{
+        const earlier=numbers.find(item=>item.uid===number.uid);
+        if(earlier&&number.damage!==undefined&&earlier.damage!==undefined){
+          earlier.damage+=number.damage;earlier.absorbed=(earlier.absorbed||0)+(number.absorbed||0);
+          earlier.hits=(earlier.hits||1)+(number.hits||1);
+        }else numbers.push({...number});
+      };
+      for(;j<scenes.length;j++){
+        const scene=scenes[j];if(scene.eventRevision!==cast.eventRevision)break;
+        if(scene.kind==='damage'){
+          const direct=scene.actor===cast.actor&&(!cast.skill||scene.skill===cast.skill);
+          const counter=hit.has(scene.actor)&&scene.numbers.some(n=>n.uid===cast.actor)&&
+            ['counter','manual-counter'].includes(scene.skill);
+          if(!direct&&!counter)break;
+          hasDamage ||= direct;
+          for(const number of scene.numbers){if(direct)hit.add(number.uid);addNumber(number);}
+          if(counter)reflections.push({actor:scene.actor,target:cast.actor});
+        }else if(scene.kind==='move'&&scene.style==='push'&&scene.moves.every(m=>hit.has(m.uid))){
+          for(const move of scene.moves){
+            const earlier=moves.find(m=>m.uid===move.uid);
+            if(earlier)earlier.path.push(...move.path.slice(1));
+            else moves.push({uid:move.uid,path:move.path.slice()});
+          }
+        }else break;
+      }
+      if(!hasDamage||!moves.length)continue;
+      Object.assign(cast,{parallelImpact:true,impactStart:.45,numbers,moves,reflections,
+        after:scenes[j-1].after,duration:620});
+      scenes.splice(i+1,j-i-1);
+    }
+  }
   function plan(previous,next,uid){
     if(!previous||previous.id!==next.id||next.revision<=previous.revision||previous.width!==next.width||previous.height!==next.height)return [];
     const seen=new Set(previous.events.map(e=>e.id)),events=next.events.filter(e=>{
@@ -33,7 +70,7 @@
     for(const [index,event] of events.entries()){
       const raw=event.animation||(['move','monster-move','displace'].includes(event.type)?{kind:'move',style:'walk'}:null);
       if(!raw)continue;
-      const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,numbers:(raw.numbers||[]).map(number=>({...number})),before:copy(actors)};
+      const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,eventRevision:String(event.id).split(':')[0],numbers:(raw.numbers||[]).map(number=>({...number})),before:copy(actors)};
       if(scene.kind==='move'&&['dash','throw'].includes(scene.style)){
         const revision=String(event.id).split(':')[0];
         const related=events.filter(other=>other.actor===event.actor&&other.type==='cast'&&
@@ -55,7 +92,7 @@
       // One area attack hits several enemies at the same instant. Reflections
       // retain their own beat because their source/skill differ.
       const last=scenes.at(-1);
-      if(scene.kind==='damage'&&last?.kind==='damage'&&scene.actor===last.actor&&scene.skill===last.skill){
+      if(scene.kind==='damage'&&last?.kind==='damage'&&scene.eventRevision===last.eventRevision&&scene.actor===last.actor&&scene.skill===last.skill){
         for(const number of scene.numbers){
           const earlier=last.numbers.find(item=>item.uid===number.uid);
           if(earlier&&number.damage!==undefined&&earlier.damage!==undefined){
@@ -66,6 +103,7 @@
         last.after=scene.after;last.label=scene.label;
       }else scenes.push(scene);
     }
+    combineKnockback(scenes);
     if(previous.status!=='finished'&&next.status==='finished'){
       const me=next.actors.find(a=>a.uid===uid),won=me?.team===next.winner,draw=next.winner==='draw';
       const scene={kind:'finish',style:won?'victory':draw?'draw':'defeat',actor:uid,label:draw?'平分秋色':won?next.mode==='pve'?'此關已破':'克敵制勝':'整裝再戰',before:copy(next.actors),after:copy(next.actors),moves:[],numbers:[]};
@@ -78,31 +116,34 @@
   }
   function sample(scene,progress){
     const p=clamp(progress),beat=Math.sin(Math.PI*p),actors=copy(scene.before);
+    const impact=scene.parallelImpact?clamp((p-scene.impactStart)/(1-scene.impactStart)):p;
     for(const a of actors){
       a.opacity=1;a.lift=0;a.scaleX=1;a.scaleY=1;a.flash=0;
       const move=scene.moves.find(m=>m.uid===a.uid);
       if(move){
-        const route=move.path,teleport=scene.style==='teleport',fast=['dash','rush','push'].includes(scene.style);
-        const t=(fast?1-(1-p)**3:smooth(p))*(route.length-1),i=Math.min(route.length-2,Math.floor(t)),f=t-i;
+        const route=move.path,style=scene.parallelImpact?'push':scene.style,moveProgress=scene.parallelImpact?impact:p;
+        const teleport=style==='teleport',fast=['dash','rush','push'].includes(style);
+        const t=(fast?1-(1-moveProgress)**3:smooth(moveProgress))*(route.length-1),i=Math.min(route.length-2,Math.floor(t)),f=t-i;
         const from=route[i],to=route[i+1];
         if(teleport){Object.assign(a,p<.5?route[0]:route.at(-1));a.opacity=Math.abs(2*p-1);a.scaleX=.55+.45*a.opacity;}
         else{a.x=from.x+(to.x-from.x)*f;a.y=from.y+(to.y-from.y)*f;}
         a.row=to.x>from.x?1:to.x<from.x?2:to.y<from.y?3:0;
-        a.frame=[1,2,3,0][Math.floor(p*route.length*2)%4];
-        if(jumps.has(scene.style))a.lift=beat*(scene.style==='fly'?.55:.8);
-        else if(['heavy','sentinel'].includes(scene.style)){a.lift=Math.abs(Math.sin(p*Math.PI*(route.length-1)))*.045;a.scaleY=1-beat*.045;}
-        else if(scene.style==='weave'){a.sway=Math.sin(p*Math.PI*6)*.055;}
-        else if(scene.style!=='sideways'&&scene.style!=='push')a.lift=Math.abs(Math.sin(p*Math.PI*(route.length-1)*2))*.055;
+        a.frame=[1,2,3,0][Math.floor(moveProgress*route.length*2)%4];
+        if(jumps.has(style))a.lift=beat*(style==='fly'?.55:.8);
+        else if(['heavy','sentinel'].includes(style)){a.lift=Math.abs(Math.sin(p*Math.PI*(route.length-1)))*.045;a.scaleY=1-beat*.045;}
+        else if(style==='weave'){a.sway=Math.sin(p*Math.PI*6)*.055;}
+        else if(style!=='sideways'&&style!=='push')a.lift=Math.abs(Math.sin(p*Math.PI*(route.length-1)*2))*.055;
       }
       if(scene.actor===a.uid&&scene.kind==='cast'){
         const target=scene.target||a,dx=target.x-a.x,dy=target.y-a.y,length=Math.hypot(dx,dy)||1;
         a.x+=dx/length*beat*.12;a.y+=dy/length*beat*.12;a.scaleX=1+beat*.06;a.scaleY=1+beat*.06;
       }
       const number=scene.numbers.find(n=>n.uid===a.uid);
-      if(scene.kind==='damage'&&number){
-        a.flash=beat*.6;a.x+=Math.sin(p*Math.PI*5)*(1-p)*.07;
-        const after=scene.after.find(b=>b.uid===a.uid);a.hp=a.hp+(after.hp-a.hp)*p;a.shield=after.shield;
-        if(after.hp<=0){a.opacity=1-smooth(clamp((p-.35)/.65));a.scaleY=1-p*.25;}
+      if((scene.kind==='damage'||scene.parallelImpact)&&number&&impact>0){
+        const impactBeat=Math.sin(Math.PI*impact);
+        a.flash=impactBeat*.6;a.x+=Math.sin(impact*Math.PI*5)*(1-impact)*.07;
+        const after=scene.after.find(b=>b.uid===a.uid);a.hp=a.hp+(after.hp-a.hp)*impact;a.shield=after.shield;
+        if(after.hp<=0){a.opacity=1-smooth(clamp((impact-.35)/.65));a.scaleY=1-impact*.25;}
       }
       if(scene.kind==='restore'&&number){const after=scene.after.find(b=>b.uid===a.uid);a.hp=a.hp+(after.hp-a.hp)*p;a.shield=after.shield;}
       if(scene.kind==='dodge'&&scene.actor===a.uid)a.x+=beat*.18;
