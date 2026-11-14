@@ -82,8 +82,7 @@ test('flying sword animation follows the previous sword position and each chain 
 test('dash and throw effects follow committed movement without changing endpoints',()=>{
   for(const [skill,monsterX,target] of [
     ['wind-step',7,{x:6,y:4}],['rock-quake',7,{x:6,y:4}],
-    ['tiger-step',7,{x:6,y:4}],['tiger-throw',5,{x:5,y:4}],
-    ['dragon-guard',5,{x:5,y:4}]
+    ['tiger-step',7,{x:6,y:4}],['tiger-throw',5,{x:5,y:4}]
   ]){
     const before=fixture(skill);
     before.actors[1].x=monsterX;
@@ -132,7 +131,7 @@ test('knockback and damage begin at the attack impact, including every step of t
     for(const cast of casts){
       assert.equal(cast.parallelImpact,true,skill);
       const start=cast.before.find(a=>a.uid==='monster-0');
-      const early=A.sample(cast,.3).find(a=>a.uid==='monster-0');
+      const early=A.sample(cast,cast.impactStart/2).find(a=>a.uid==='monster-0');
       const impact=A.sample(cast,.7).find(a=>a.uid==='monster-0');
       const end=A.sample(cast,1).find(a=>a.uid==='monster-0');
       assert.equal(early.x,start.x,skill);assert.equal(early.hp,start.hp,skill);
@@ -146,16 +145,93 @@ test('knockback and damage begin at the attack impact, including every step of t
   }
 });
 
-test('four chain strikes and advances play at a brisk, readable pace',()=>{
+test('chain strikes, knockback and forward steps flow continuously in all four directions',()=>{
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+    const before=fixture('dragon-guard');before.width=before.height=15;
+    Object.assign(before.actors[0],{x:7,y:7});Object.assign(before.actors[1],{x:7+dx,y:7+dy});
+    Object.assign(before.actors[2],{x:13,y:13});
+    const after=R.apply(before,'hero',{type:'manual',skillId:'dragon-guard',x:7+dx,y:7+dy},now);
+    const scenes=A.plan(before,after,'hero');
+    const strikes=scenes.filter(s=>s.kind==='cast'&&s.skill==='dragon-guard');
+    assert.equal(strikes.length,4);assert.equal(scenes.length,4);
+    assert(strikes.every(s=>s.parallelImpact&&s.moves.some(m=>m.uid==='hero'&&m.timing==='chain-advance')));
+    assert(strikes.every(s=>s.impactStart<=.2));
+    assert(scenes.reduce((sum,s)=>sum+s.duration,0)<2000);
+    for(let i=0;i<strikes.length;i++){
+      const scene=strikes[i],start=scene.before.find(a=>a.uid==='hero');let previous=-1;
+      for(const p of [0,.1,.25,.45,.6,.8,.95,1]){
+        const actors=A.sample(scene,p),hero=actors.find(a=>a.uid==='hero'),enemy=actors.find(a=>a.uid==='monster-0');
+        const distance=(hero.x-start.x)*dx+(hero.y-start.y)*dy;
+        assert(distance>previous,'the attacker keeps moving throughout each strike');previous=distance;
+        assert((enemy.x-hero.x)*dx+(enemy.y-hero.y)*dy>0,'the attacker does not pass through the target');
+      }
+      const enemyStart=scene.before.find(a=>a.uid==='monster-0');let lastDisplacement=0;
+      for(const p of [.2,.3,.5,.8,1]){
+        const enemy=A.sample(scene,p).find(a=>a.uid==='monster-0');
+        const distance=(enemy.x-enemyStart.x)*dx+(enemy.y-enemyStart.y)*dy;
+        assert(distance>lastDisplacement,'the pushed target keeps flowing after impact');lastDisplacement=distance;
+      }
+      if(i<strikes.length-1){
+        const end=A.sample(scene,1).find(a=>a.uid==='hero'),next=A.sample(strikes[i+1],0).find(a=>a.uid==='hero');
+        assert(Math.abs(end.x-next.x)<1e-9&&Math.abs(end.y-next.y)<1e-9,'no pause or jump between steps');
+      }
+    }
+  }
+});
+
+test('chain advance stays continuous on empty or defeating strikes but stops at obstacles',()=>{
+  const empty=fixture('dragon-guard');Object.assign(empty.actors[1],{x:10,y:7});
+  const emptyAfter=R.apply(empty,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const emptyScenes=A.plan(empty,emptyAfter,'hero');
+  assert.equal(emptyScenes.length,4);
+  assert(emptyScenes.every(s=>s.moves.some(m=>m.uid==='hero'&&m.timing==='chain-advance')));
+
+  const lethal=fixture('dragon-guard');Object.assign(lethal.actors[1],{x:5,hp:30});
+  const defeated=R.apply(lethal,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const first=A.plan(lethal,defeated,'hero')[0];
+  assert(first.parallelImpact&&first.moves.some(m=>m.uid==='hero'&&m.timing==='chain-advance'));
+  assert(A.sample(first,.2).find(a=>a.uid==='hero').x>4);
+  assert.equal(A.sample(first,1).find(a=>a.uid==='monster-0').hp,0);
+
+  const blocked=fixture('dragon-guard');blocked.actors[1].x=5;blocked.blocks=[{x:6,y:4}];
+  const stopped=R.apply(blocked,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const stoppedScenes=A.plan(blocked,stopped,'hero');
+  assert.equal(stopped.actors[0].x,4);
+  assert(!stoppedScenes.some(s=>s.moves.some(m=>m.uid==='hero')));
+
+  const later=fixture('dragon-guard');later.actors[1].x=5;later.blocks=[{x:8,y:4}];
+  const interrupted=R.apply(later,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const laterCasts=A.plan(later,interrupted,'hero').filter(s=>s.kind==='cast');
+  assert.equal(interrupted.actors[0].x,6);assert.equal(laterCasts.length,3);
+  assert(laterCasts.slice(0,2).every(s=>s.moves.some(m=>m.timing==='chain-advance')));
+  assert(!laterCasts[2].moves.some(m=>m.uid==='hero'));
+});
+
+test('the chain movement trail follows the advancing character',()=>{
   const before=fixture('dragon-guard');before.actors[1].x=5;
   const after=R.apply(before,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
-  const scenes=A.plan(before,after,'hero');
-  const strikes=scenes.filter(s=>s.kind==='cast'&&s.skill==='dragon-guard');
-  const advances=scenes.filter(s=>s.kind==='move'&&s.visualSkill==='dragon-guard');
-  assert.equal(strikes.length,4);assert.equal(advances.length,4);
-  assert(strikes.every(s=>s.parallelImpact&&s.duration<=500));
-  assert(advances.every(s=>s.duration<=240));
-  assert(scenes.reduce((sum,s)=>sum+s.duration,0)<3000);
+  const cast=A.plan(before,after,'hero')[0],advance=cast.moves.find(m=>m.timing==='chain-advance');
+  const c=context(),p=.25,view={cell:48,ox:0,oy:0,width:12,height:9};
+  assert(Effects.drawMotion(c,{...cast,kind:'move',style:'dash',visualSkill:cast.skill,moves:[advance]},p,view));
+  const arc=c.calls.filter(call=>call[0]==='arc').at(-1);
+  assert(Math.abs(arc[1]-(advance.path[0].x+.5+p)*view.cell)<1e-9);
+});
+
+test('renderer carries elapsed time across chain strikes without waiting a frame',()=>{
+  const fs=require('node:fs'),path=require('node:path');
+  const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8')
+    .replace(/^import .*;$/gm,'').replace('export class TacticalRenderer','class TacticalRenderer');
+  const Renderer=new Function('globalThis',source+'\nreturn TacticalRenderer;')({
+    QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
+  });
+  const before=fixture('dragon-guard');before.actors[1].x=5;
+  const after=R.apply(before,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const renderer=Object.create(Renderer.prototype);
+  Object.assign(renderer,{queue:A.plan(before,after,'hero'),scene:null,activity(){}});
+  assert.equal(renderer.advance(1000),0);
+  assert(Math.abs(renderer.advance(1500)-40/460)<1e-9);assert.equal(renderer.scene.step,2);
+  assert(Math.abs(renderer.advance(2500)-120/460)<1e-9);assert.equal(renderer.scene.step,4);
+  assert.equal(renderer.advance(2840),0);assert.equal(renderer.isAnimating,false);
 });
 
 test('area knockback preserves collision order and never invents movement through a wall',()=>{

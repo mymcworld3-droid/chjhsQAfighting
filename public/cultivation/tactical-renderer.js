@@ -116,7 +116,15 @@ export class TacticalRenderer{
   }
   advance(now){
     let changed=false;
-    while(this.scene&&now-this.scene.started>=this.scene.duration){this.scene=null;changed=true;}
+    while(this.scene&&now-this.scene.started>=this.scene.duration){
+      const ended=this.scene,next=this.queue[0];
+      // Carry leftover frame time into the next strike instead of inserting a
+      // fresh frame of waiting between otherwise continuous chain movements.
+      const linked=ended.style==='fist-chain'&&next?.kind==='cast'&&next.style==='fist-chain'&&
+        ended.actor===next.actor&&ended.eventRevision===next.eventRevision;
+      this.scene=linked?{...this.queue.shift(),started:ended.started+ended.duration}:null;
+      changed=true;
+    }
     if(!this.scene&&this.queue.length){this.scene={...this.queue.shift(),started:now};changed=true;}
     if(changed)this.activity();
     return this.scene?Math.min(1,(now-this.scene.started)/this.scene.duration):0;
@@ -170,6 +178,8 @@ export class TacticalRenderer{
         if(q>0)ring(at,.15+q*.46,(1-q)*.65);
       }
       const manualMotion=scene.kind==='move'&&SkillEffects.drawMotion(c,scene,p,view);
+      const advances=scene.moves.filter(move=>move.timing==='chain-advance');
+      if(advances.length)SkillEffects.drawMotion(c,{...scene,kind:'move',style:'dash',visualSkill:scene.skill,moves:advances},p,view);
       if(scene.kind==='move'&&!manualMotion)for(const move of scene.moves){
         const route=move.path;
         if(scene.style==='teleport'){ring(center(route[0]),.15+p*.6,1-p);ring(center(route.at(-1)),.65-p*.4,p);}
@@ -180,7 +190,7 @@ export class TacticalRenderer{
       }
       if(scene.parallelImpact&&impact>0){
         const sampled=A.sample(scene,p);
-        for(const move of scene.moves){
+        for(const move of scene.moves.filter(m=>m.timing!=='chain-advance')){
           const current=sampled.find(a=>a.uid===move.uid);if(!current)continue;
           const start=center(move.path[0]),end=center(current);
           c.globalAlpha=(1-impact)*.55;c.strokeStyle=color;c.lineWidth=Math.max(2,size*.07);

@@ -179,10 +179,21 @@
         }
       }
     }else if(move==='dragon-guard'){
-      const q=phase(p,.04,.9),at=point(from,to,q);
+      const q=phase(p,.04,.9),advance=(scene.moves||[]).find(m=>m.timing==='chain-advance');
+      const foot=advance?center(point(advance.path[0],advance.path.at(-1),p)):from;
+      const aim=advance?{x:foot.x+axis.x*size*.8,y:foot.y+axis.y*size*.8}:to;
+      const at=point(foot,aim,advance?phase(p,.02,.15):q);
       fist(at,Math.atan2(dy,dx)+(Math.floor((scene.step||1)%2)?-.12:.12),q,1.05);
-      for(const at of hit)impact(at,phase(p,.2,1),ember);
-      sparks(to,10,gold,.48);
+      for(const tile of cells){
+        const pushed=(scene.moves||[]).find(m=>m.timing!=='chain-advance'&&m.path?.[0]?.x===tile.x&&m.path[0].y===tile.y);
+        let impactPoint=center(tile);
+        if(pushed?.path.length>1&&scene.parallelImpact){
+          const path=pushed.path,t=phase(p,scene.impactStart,1)*(path.length-1),i=Math.min(path.length-2,Math.floor(t));
+          impactPoint=center(point(path[i],path[i+1],t-i));
+        }
+        impact(impactPoint,phase(p,.15,1),ember);
+      }
+      sparks(at,10,gold,.48);
     }else if(move==='dragon-roar'){
       for(let i=0;i<3;i++)circle(from,.2+i*.17+p*.18,beat*(.9-i*.18),i===1?bright:gold,.035-i*.006);
       for(let i=0;i<10;i++){
@@ -221,7 +232,7 @@
     for(const motion of scene.moves||[]){
       const route=motion.path||[];
       if(route.length<2)continue;
-      const distance=(scene.style==='dash'?1-(1-p)**3:p)*(route.length-1);
+      const distance=(motion.timing==='chain-advance'?p:scene.style==='dash'?1-(1-p)**3:p)*(route.length-1);
       const index=Math.min(route.length-2,Math.floor(distance)),fraction=distance-index;
       const start=center(route[0]),end=center(route.at(-1));
       const current=point(center(route[index]),center(route[index+1]),fraction);
