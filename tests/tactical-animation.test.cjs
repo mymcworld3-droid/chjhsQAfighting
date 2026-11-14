@@ -102,7 +102,7 @@ test('answers, guarding, end-turn, waiting and leaving all have bounded presenta
 });
 
 test('long battles keep event IDs unique and replay the latest multi-monster turn only once',()=>{
-  let s=battle();s.actors[0].hp=2000;s.actors[1].intent={kind:'wait',cells:[]};
+  let s=battle();s.actors[0].maxHp=s.actors[0].hp=10000;s.actors[1].intent={kind:'wait',cells:[]};
   for(let i=0;i<30;i++)s=apply(s,'end');
   const next=apply(s,'end');assert.equal(next.events.length,R.LIMITS.events);assert.equal(new Set(next.events.map(e=>e.id)).size,R.LIMITS.events);
   const scenes=timeline(s,next);assert.ok(scenes.length>=3);assert.ok(scenes.length<=5);assert.deepEqual(timeline(next,structuredClone(next)),[]);
