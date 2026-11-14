@@ -84,7 +84,13 @@
       }
       const step=scenes[j],actor=cast.before.find(a=>a.uid===cast.actor);
       if(!actor||step?.kind!=='move'||step.style!=='dash'||step.actor!==cast.actor||
-        step.eventRevision!==cast.eventRevision||step.moves.length!==1||step.moves[0].uid!==cast.actor)continue;
+        step.eventRevision!==cast.eventRevision||step.moves.length!==1||step.moves[0].uid!==cast.actor){
+        if(numbers.length){
+          Object.assign(cast,{parallelImpact:true,impactStart:.15,numbers,reflections,duration:460,after:scenes[j-1].after});
+          scenes.splice(i+1,j-i-1);
+        }
+        continue;
+      }
       const path=step.moves[0].path;
       if(path[0].x!==actor.x||path[0].y!==actor.y)continue;
       if(numbers.length)Object.assign(cast,{parallelImpact:true,impactStart:.15,numbers,reflections,duration:460});
@@ -155,9 +161,17 @@
     const total=scenes.reduce((n,s)=>n+s.duration,0),scale=Math.min(1,4200/total);
     return scenes.map(s=>({...s,duration:s.duration*scale}));
   }
+  // A short contact pulse strengthens the hit without stopping the movement.
+  function impactPulse(scene,progress){
+    if(scene?.kind!=='cast'||scene.style!=='fist-chain'||!scene.parallelImpact||
+      !scene.numbers?.some(n=>n.uid!==scene.actor&&n.damage!==undefined))return 0;
+    const q=(progress-scene.impactStart)/.22;
+    return q>0&&q<1?Math.sin(Math.PI*q)*(1-q*.2):0;
+  }
   function sample(scene,progress){
     const p=clamp(progress),beat=Math.sin(Math.PI*p),actors=copy(scene.before);
     const impact=scene.parallelImpact?clamp((p-scene.impactStart)/(1-scene.impactStart)):p;
+    const weight=impactPulse(scene,p);
     for(const a of actors){
       a.opacity=1;a.lift=0;a.scaleX=1;a.scaleY=1;a.flash=0;
       const move=scene.moves.find(m=>m.uid===a.uid);
@@ -181,14 +195,18 @@
       if(scene.actor===a.uid&&scene.kind==='cast'){
         const target=scene.target||a,dx=target.x-a.x,dy=target.y-a.y,length=Math.hypot(dx,dy)||1;
         a.x+=dx/length*beat*.12;a.y+=dy/length*beat*.12;a.scaleX=1+beat*.06;a.scaleY=1+beat*.06;
+        if(weight){a.scaleX*=1+weight*.10;a.scaleY*=1-weight*.08;}
       }
       const number=scene.numbers.find(n=>n.uid===a.uid);
       if((scene.kind==='damage'||scene.parallelImpact)&&number&&impact>0){
         const impactBeat=Math.sin(Math.PI*impact);
         a.flash=impactBeat*.6;
         if(scene.style!=='fist-chain')a.x+=Math.sin(impact*Math.PI*5)*(1-impact)*.07;
+        if(weight&&a.uid!==scene.actor){
+          a.flash=Math.max(a.flash,weight*.9);a.scaleX*=1+weight*.18;a.scaleY*=1-weight*.16;
+        }
         const after=scene.after.find(b=>b.uid===a.uid);a.hp=a.hp+(after.hp-a.hp)*impact;a.shield=after.shield;
-        if(after.hp<=0){a.opacity=1-smooth(clamp((impact-.35)/.65));a.scaleY=1-impact*.25;}
+        if(after.hp<=0){a.opacity=1-smooth(clamp((impact-.35)/.65));a.scaleY*=1-impact*.25;}
       }
       if(scene.kind==='restore'&&number){const after=scene.after.find(b=>b.uid===a.uid);a.hp=a.hp+(after.hp-a.hp)*p;a.shield=after.shield;}
       if(scene.kind==='dodge'&&scene.actor===a.uid)a.x+=beat*.18;
@@ -196,5 +214,5 @@
     }
     return actors;
   }
-  return Object.freeze({plan,sample});
+  return Object.freeze({plan,sample,impactPulse});
 });

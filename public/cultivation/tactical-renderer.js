@@ -322,6 +322,11 @@ export class TacticalRenderer{
     const g=Camera.geometry(this.camera,w,h,view);this.camera=Camera.normalize(this.camera,w,h,view);
     const cell=this.cell=g.cell,ox=this.ox=g.ox,oy=this.oy=g.oy;
     const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid&&(!s.quizRound||s.phase==='action'),reduced=this.reducedMotion.matches;
+    const weight=!reduced&&scene?A.impactPulse(scene,progress):0;
+    if(weight){
+      const q=(progress-scene.impactStart)/.22,amount=Math.min(2.5,cell*.05)*weight;
+      c.save();c.translate(Math.sin(q*Math.PI*4)*amount,Math.cos(q*Math.PI*4)*amount*.45);
+    }
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
     c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
     // Finite map: show only tiles within the actual battlefield dimensions.
@@ -398,6 +403,7 @@ export class TacticalRenderer{
     if(scene)this.drawEffect(scene,progress,true);
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
     if(!frameless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
+    if(weight)c.restore();
     if(!this.preview&&(animating||myTurn&&this.mode==='move'&&this.range.length&&!reduced))this.frame=requestAnimationFrame(()=>this.draw());
   }
 }

@@ -217,6 +217,28 @@ test('the chain movement trail follows the advancing character',()=>{
   assert(Math.abs(arc[1]-(advance.path[0].x+.5+p)*view.cell)<1e-9);
 });
 
+test('chain impacts add a short heavy reaction without slowing movement or shaking on a miss',()=>{
+  const before=fixture('dragon-guard');before.actors[1].x=5;
+  const after=R.apply(before,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const cast=A.plan(before,after,'hero')[0],target=A.sample(cast,.25).find(a=>a.uid==='monster-0');
+  assert.equal(A.impactPulse(cast,.1),0);assert(A.impactPulse(cast,.25)>.7);assert.equal(A.impactPulse(cast,.5),0);
+  assert(target.scaleX>1.1&&target.scaleY<.9&&target.flash>.6);
+  assert(target.x>5,'the target is still moving during the impact');
+
+  const empty=fixture('dragon-guard');Object.assign(empty.actors[1],{x:10,y:7});
+  const emptyAfter=R.apply(empty,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const miss=A.plan(empty,emptyAfter,'hero')[0];assert.equal(A.impactPulse(miss,.25),0);
+  const hitCanvas=context(),missCanvas=context(),view={cell:48,ox:0,oy:0,width:12,height:9};
+  Effects.draw(hitCanvas,cast,.25,view,true);Effects.draw(missCanvas,miss,.25,view,true);
+  assert(hitCanvas.calls.filter(c=>c[0]==='closePath').length>missCanvas.calls.filter(c=>c[0]==='closePath').length);
+
+  const blocked=fixture('dragon-guard');blocked.actors[1].x=5;blocked.blocks=[{x:6,y:4}];
+  const blockedAfter=R.apply(blocked,'hero',{type:'manual',skillId:'dragon-guard',x:5,y:4},now);
+  const stopped=A.plan(blocked,blockedAfter,'hero')[0];
+  assert(stopped.parallelImpact&&stopped.numbers.some(n=>n.uid==='monster-0'));
+  assert(A.impactPulse(stopped,.25)>0);assert.equal(A.sample(stopped,1).find(a=>a.uid==='monster-0').x,5);
+});
+
 test('renderer carries elapsed time across chain strikes without waiting a frame',()=>{
   const fs=require('node:fs'),path=require('node:path');
   const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8')

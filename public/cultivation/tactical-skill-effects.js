@@ -183,7 +183,9 @@
       const foot=advance?center(point(advance.path[0],advance.path.at(-1),p)):from;
       const aim=advance?{x:foot.x+axis.x*size*.8,y:foot.y+axis.y*size*.8}:to;
       const at=point(foot,aim,advance?phase(p,.02,.15):q);
-      fist(at,Math.atan2(dy,dx)+(Math.floor((scene.step||1)%2)?-.12:.12),q,1.05);
+      const burst=scene.parallelImpact?phase(p,scene.impactStart,scene.impactStart+.26):0;
+      const force=scene.parallelImpact&&p>scene.impactStart&&p<scene.impactStart+.26?pulse(burst):0;
+      fist(at,Math.atan2(dy,dx)+(Math.floor((scene.step||1)%2)?-.12:.12),q,1.18+force*.22);
       for(const tile of cells){
         const pushed=(scene.moves||[]).find(m=>m.timing!=='chain-advance'&&m.path?.[0]?.x===tile.x&&m.path[0].y===tile.y);
         let impactPoint=center(tile);
@@ -192,6 +194,33 @@
           impactPoint=center(point(path[i],path[i+1],t-i));
         }
         impact(impactPoint,phase(p,.15,1),ember);
+      }
+      // Concentrate the strongest shock on real hits, not every highlighted tile.
+      if(force)for(const number of scene.numbers||[]){
+        if(number.uid===scene.actor||number.damage===undefined)continue;
+        const victim=scene.before?.find(a=>a.uid===number.uid);if(!victim)continue;
+        const motion=(scene.moves||[]).find(m=>m.uid===number.uid),path=motion?.path;
+        let contact=center(victim);
+        if(path?.length>1){
+          const t=phase(p,scene.impactStart,1)*(path.length-1),i=Math.min(path.length-2,Math.floor(t));
+          contact=center(point(path[i],path[i+1],t-i));
+        }
+        const strength=(scene.step===4?1.15:1)*force;
+        glow(ember,.22);c.globalAlpha=Math.min(1,strength*.38);c.fillStyle=bright;
+        c.beginPath();c.arc(contact.x,contact.y,size*(.20+burst*.18),0,Math.PI*2);c.fill();
+        circle(contact,.20+burst*.65,strength*.9,gold,.065);
+        circle(contact,.13+burst*.38,strength*.9,bright,.035);
+        for(let i=0;i<10;i++){
+          const angle=i*Math.PI/5,inner=(.18+burst*.25)*size,outer=(.42+burst*.5)*size;
+          stroke({x:contact.x+Math.cos(angle)*inner,y:contact.y+Math.sin(angle)*inner},
+            {x:contact.x+Math.cos(angle)*outer,y:contact.y+Math.sin(angle)*outer},i%2?gold:bright,.035,strength*.9);
+        }
+        for(let i=0;i<6;i++){
+          const angle=i*Math.PI/3+.25,travel=(.2+burst*.5)*size;
+          const x=contact.x+Math.cos(angle)*travel,y=contact.y+Math.sin(angle)*travel*.7;
+          c.globalAlpha=strength*.8;c.fillStyle=i%2?ember:gold;c.beginPath();
+          c.moveTo(x,y-size*.06);c.lineTo(x+size*.055,y+size*.035);c.lineTo(x-size*.035,y+size*.04);c.closePath();c.fill();
+        }
       }
       sparks(at,10,gold,.48);
     }else if(move==='dragon-roar'){
