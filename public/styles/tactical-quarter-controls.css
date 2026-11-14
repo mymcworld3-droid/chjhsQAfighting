@@ -705,37 +705,36 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
 }
 
 
-/* Visible reason for unavailable attacks in the PvE no-confirm layout. */
+/* Quiet status hint tucked under the header; never cover the arena center. */
 #tactical-combat .tc-action-feedback[hidden]{display:none!important}
 #tactical-combat:not(.tc-quarter-layout) .tc-action-feedback{display:none!important}
 #tactical-combat.tc-quarter-layout .tc-action-feedback{
   position:absolute;
-  left:50%;
-  bottom:calc(var(--tc-dial) + 10px);
+  top:10px;
+  left:12px;
   z-index:4;
   box-sizing:border-box;
-  max-width:min(84vw,430px);
-  padding:8px 13px;
-  transform:translateX(-50%);
-  border:1px solid #bb956d99;
-  border-radius:12px;
-  background:rgba(24,31,26,.92);
-  color:#f1d5ac;
-  font-size:clamp(12px,2.6vw,14px);
-  font-weight:500;
-  line-height:1.45;
-  text-align:center;
-  text-wrap:balance;
-  box-shadow:0 4px 14px #080e0b88;
+  max-width:min(44vw,300px);
+  padding:5px 8px;
+  border:0;
+  border-radius:7px;
+  background:rgba(20,29,23,.66);
+  color:#c5cdbb;
+  font-size:12px;
+  font-weight:400;
+  line-height:1.35;
+  text-align:left;
+  box-shadow:none;
   pointer-events:none;
 }
 #tactical-combat.tc-quarter-layout .tc-left-technique.is-unavailable{
   opacity:.58;
 }
-@media (max-height:400px) and (orientation:landscape){
+@media (orientation:portrait){
   #tactical-combat.tc-quarter-layout .tc-action-feedback{
-    bottom:calc(var(--tc-dial) + 4px);
-    padding:4px 9px;
-    font-size:12px;
+    top:8px;
+    left:8px;
+    max-width:min(65vw,280px);
+    font-size:11px;
   }
 }

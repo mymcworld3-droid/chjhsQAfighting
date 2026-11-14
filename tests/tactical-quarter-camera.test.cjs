@@ -112,7 +112,9 @@ test('quarter-wheel battlefield shows why an action is unavailable without anoth
   assert.match(ui,/feedback\.hidden=!reason/);
   assert.match(css,/\.tc-action-feedback\{/);
   assert.match(css,/\.tc-action-feedback\[hidden\]/);
-  assert.match(css,/bottom:calc\(var\(--tc-dial\) \+ 10px\)/);
+  assert.match(css,/\.tc-action-feedback\{[\s\S]*?top:10px;[\s\S]*?left:12px;/);
+  assert.doesNotMatch(css,/bottom:calc\(var\(--tc-dial\) \+ 10px\)/);
+  assert.match(css,/background:rgba\(20,29,23,\.66\)/);
 });
 
 test('green arc has ten live curved segments and the charging button uses a crisp lightning SVG',()=>{
