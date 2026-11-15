@@ -295,7 +295,8 @@
     const shieldScale=opts.shieldMultiplier||1,absorbed=opts.pierce?0:Math.min(target.shield,Math.round(amount*shieldScale));target.shield-=absorbed;amount=Math.max(0,amount-Math.ceil(absorbed/shieldScale));
     const dealt=Math.min(target.hp,amount);target.hp-=dealt;
     log(s,source.name+' → '+target.name+' −'+dealt+(absorbed?'（護盾 '+absorbed+'）':''),'damage',{actor:source.uid,target:target.uid,damage:dealt,skill:opts.skill||'attack',x:target.x,y:target.y,
-      animation:{kind:'damage',style:opts.skill||'attack',origin:point(source),target:point(target),changes:[appearance(target)],numbers:[{uid:target.uid,damage:dealt,absorbed}]}});
+      animation:{kind:'damage',style:opts.skill||'attack',origin:point(source),target:point(target),changes:[appearance(target)],numbers:[{uid:target.uid,damage:dealt,absorbed}],
+        ...(Number.isInteger(opts.strike)?{strike:opts.strike}:{})}});
     if(opts.leech&&dealt){const heal=Math.min(source.maxHp-source.hp,Math.round(dealt*opts.leech));source.hp+=heal;recovery(s,source,heal);}
     const Manuals=manuals();
     if(target.hp<=0&&target.bot&&source&&!source.bot&&opts.manualId&&Manuals?.BY_BOOK?.[opts.manualId]){
@@ -310,7 +311,7 @@
     if(target.counter&&alive(target)&&!opts.reflected){
       const reflect=target.counter,manualId=target.counterManualId;
       target.counter=0;delete target.counterManualId;
-      damage(s,target,source,target.atk*reflect,{reflected:true,skill:manualId?'manual-counter':'counter',manualId});
+      damage(s,target,source,target.atk*reflect,{reflected:true,skill:manualId?'manual-counter':'counter',manualId,strike:opts.strike});
     }
     return dealt;
   }
@@ -343,6 +344,15 @@
   }return cells;}
   const CARDINALS=[[1,0],[-1,0],[0,1],[0,-1]];
   const DIAGONALS=[[1,1],[1,-1],[-1,1],[-1,-1]];
+  const diagonalIndex=(p,center)=>(p.x-center.x)*(p.y-center.y)>0?0:1;
+  function crossedSwordLines(rays,center){
+    return [0,1].map(axis=>{
+      const sides=rays.filter(ray=>ray[0]&&diagonalIndex(ray[0],center)===axis);
+      const left=sides.find(ray=>ray[0].x<center.x)||[];
+      const right=sides.find(ray=>ray[0].x>center.x)||[];
+      return [...left.slice().reverse(),center,...right];
+    });
+  }
   function swordArray(s,sk,center){
     const rays=[];
     for(const [directions,length] of [[CARDINALS,sk.orthogonal],[DIAGONALS,sk.diagonal]]){
@@ -505,6 +515,7 @@
     validateSkill(s,a,sk,p);a.stamina-=techniqueCost(a,sk);a.attacks++;
     const cells=skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
+    const cuts=rays&&!sk.orthogonal?crossedSwordLines(rays,p):null;
     const route=techniquePath(s,a,sk,p);
     if(sk.kind==='dash-cleave'){
       Object.assign(a,point(p));motion(s,a,route,'dash',a.name+'向前突進');
@@ -515,7 +526,7 @@
     const targetPoint=aim?{x:p.x+aim.x,y:p.y+aim.y}:point(p);
     const castEvent=log(s,a.name+'施展「'+sk.name+'」','cast',{actor:a.uid,skill:sk.id,x:p.x,y:p.y,
       animation:{kind:'cast',style:sk.kind,origin,target:targetPoint,cells,
-        ...(rays?{rays}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
+        ...(rays?{rays}:{}),...(cuts?{cuts}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
     if(sk.kind==='fist-focus'){
       a.fistFocusUntil=a.turns+2;
@@ -564,6 +575,25 @@
       log(s,a.name+'與'+target.name+'交換位置','displace',{actor:a.uid,animation:{kind:'move',style:'teleport',moves:[{uid:a.uid,path:[pos,other]},{uid:target.uid,path:[other,pos]}]}});
     }
     const targets=sk.kind==='swap'?[target]:s.actors.filter(t=>alive(t)&&t.team!==a.team&&cells.some(c=>key(c)===key(t)));
+    if(sk.hits===2||cuts){
+      // Finish the whole first sweep before beginning the second one.
+      const activeCuts=cuts?.flatMap((cut,index)=>cut.length>1?[index]:[]);
+      for(let strike=0;strike<2&&alive(a);strike++){
+        for(const t of targets){
+          if(!alive(a))break;
+          if(!alive(t))continue;
+          let power=sk.power/2;
+          if(cuts){
+            const centerHit=key(t)===key(p);
+            const covered=centerHit?(activeCuts.length?activeCuts.includes(strike):strike===0):diagonalIndex(t,p)===strike;
+            if(!covered)continue;
+            power=centerHit?sk.centerPower/2:sk.power;
+          }
+          damage(s,a,t,a.atk*power,{...sk,skill:sk.id,strike});
+        }
+      }
+      return;
+    }
     if(sk.pushToEdge||sk.tShape&&sk.push)targets.sort((first,second)=>dist(a,second)-dist(a,first));
     const pushForward=sk.tShape&&sk.push?attackDirection(a,p):undefined;
     const hit=[];
@@ -572,10 +602,8 @@
       let power=sk.power;if(sk.execute&&t.hp/t.maxHp<=.4)power=2.2;if(sk.missing)power+=1.15*(1-a.hp/a.maxHp);
       let hits=sk.hits||1;
       if(rays&&key(t)===key(p)){
-        const fullHits=sk.orthogonal?8:2;
-        hits=Math.max(1,sk.orthogonal?rays.length:
-          new Set(rays.map(([cell])=>Math.sign((cell.x-p.x)*(cell.y-p.y)))).size);
-        power=sk.centerPower*hits/fullHits;
+        hits=Math.max(1,rays.length);
+        power=sk.centerPower*hits/8;
       }
       for(let i=0;i<hits&&alive(a)&&alive(t);i++)
         damage(s,a,t,a.atk*power/hits,{...sk,skill:sk.id,manualId:sk.manualId});
@@ -838,5 +866,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

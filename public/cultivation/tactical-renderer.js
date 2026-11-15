@@ -274,26 +274,31 @@ export class TacticalRenderer{
     }
     if(scene.kind==='damage'||scene.parallelImpact&&impact>0){
       if(scene.style==='counter')beam(from,to,'#e0baf1',true);
-      for(const number of scene.numbers){const a=scene.before.find(a=>a.uid===number.uid);if(a)motes(center(a),number.absorbed?'#b9e5ef':'#efb18e',8,.7);}
+      for(const number of scene.strikeImpacts?[]:scene.numbers){const a=scene.before.find(a=>a.uid===number.uid);if(a)motes(center(a),number.absorbed?'#b9e5ef':'#efb18e',8,.7);}
       for(const reflection of scene.reflections||[]){
         const source=scene.before.find(a=>a.uid===reflection.actor),victim=scene.before.find(a=>a.uid===reflection.target);
         if(source&&victim)beam(center(source),center(victim),'#e0baf1',true);
       }
     }
-    const numbers=scene.parallelImpact&&impact===0?[]:[...scene.numbers];
+    const numbers=scene.strikeImpacts?scene.strikeImpacts.flatMap((hits,index)=>{
+      const elapsed=p-A.strikeTime(scene,index);
+      if(elapsed<0||elapsed>=.28)return [];
+      return hits.map(hit=>({...hit,numberProgress:elapsed/.28}));
+    }):scene.parallelImpact&&impact===0?[]:[...scene.numbers];
     const numberActors=scene.parallelImpact?A.sample(scene,p):scene.before;
     if(scene.kind==='dodge'&&actor)numbers.push({uid:actor.uid,text:'閃避'});
     for(const number of numbers){
       const a=numberActors.find(a=>a.uid===number.uid);if(!a)continue;
       const at=center(a),lines=number.text?[{text:number.text,ink:'#ede1b9'}]:[
-        ...(number.damage!==undefined?[{text:'−'+number.damage+(number.hits?' · '+number.hits+' 段':''),ink:'#ffe0c5'}]:[]),
+        ...(number.damage!==undefined?[{text:'−'+number.damage+(number.hits?' · 命中 '+number.hits+' 次':''),ink:'#ffe0c5'}]:[]),
         ...(number.absorbed?[{text:'護盾 −'+number.absorbed,ink:'#bde5ed'}]:[]),
         ...(number.heal?[{text:'+'+number.heal+' 生命',ink:'#d1edb5'}]:[]),
         ...(number.shield?[{text:'護盾 +'+number.shield,ink:'#bde5ed'}]:[]),
         ...(number.gain!==undefined?[{text:'體力 +'+number.gain,ink:'#f5df9f'}]:[])];
-      c.globalAlpha=Math.min(1,(1-impact)*3);c.font=`600 ${Math.max(10,Math.min(17,size*.32))}px "Noto Sans TC",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.lineWidth=3;
+      const numberProgress=number.numberProgress??impact;
+      c.globalAlpha=Math.min(1,(1-numberProgress)*3);c.font=`600 ${Math.max(10,Math.min(17,size*.32))}px "Noto Sans TC",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.lineWidth=3;
       for(const [i,line]of lines.entries()){
-        const half=c.measureText(line.text).width/2+3,x=Math.max(ox+half,Math.min(ox+size*this.state.width-half,at.x)),y=Math.max(oy+10,at.y-size*(.55+impact*.6)+i*15);
+        const half=c.measureText(line.text).width/2+3,x=Math.max(ox+half,Math.min(ox+size*this.state.width-half,at.x)),y=Math.max(oy+10,at.y-size*(.55+numberProgress*.6)+i*15);
         c.strokeStyle='#231a13';c.strokeText(line.text,x,y);c.fillStyle=line.ink;c.fillText(line.text,x,y);
       }
     }

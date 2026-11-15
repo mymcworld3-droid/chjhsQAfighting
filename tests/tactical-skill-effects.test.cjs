@@ -345,6 +345,40 @@ test('the player stays in a fixed pose and moves only along committed paths',()=
   assert.deepEqual([player.x,player.scaleX,player.scaleY,player.lift],[4,1,1,0]);
 });
 
+test('a three-cell cleave shows two full-width sweeps and resolves damage separately',()=>{
+  const before=fixture('wind-step');
+  Object.assign(before.actors[2],{x:7,y:3});
+  const after=R.apply(before,'hero',{type:'manual',skillId:'wind-step',x:6,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  assert.deepEqual(after.events.filter(e=>e.type==='damage').map(e=>e.animation.strike),[0,0,1,1]);
+  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[90,90],[90,90]]);
+  const hp=p=>A.sample(cast,p).find(a=>a.uid==='monster-0').hp;
+  assert.equal(hp(.2),3000);
+  assert.equal(hp(.51),2910);
+  assert.equal(hp(.93),2820);
+  for(let strike=0;strike<2;strike++){
+    const c=context();
+    Effects.draw(c,cast,A.strikeTime(cast,strike),{cell:48,ox:0,oy:0,width:12,height:9},true);
+    assert.equal(c.calls.filter(([name])=>name==='fill').length,1);
+    assert(c.calls.some(([name,x,y])=>name==='moveTo'&&x===0&&y===-72));
+    assert(c.calls.some(([name,,,x,y])=>name==='quadraticCurveTo'&&x===0&&y===72));
+  }
+});
+
+test('crossed sword cuts pass through the center on exactly two diagonals',()=>{
+  const before=fixture('sky-cloud');
+  const after=R.apply(before,'hero',{type:'manual',skillId:'sky-cloud',x:7,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  assert.deepEqual(cast.cuts.map(line=>[line[0],line[2],line.at(-1)]),[
+    [{x:5,y:2},{x:7,y:4},{x:9,y:6}],
+    [{x:5,y:6},{x:7,y:4},{x:9,y:2}]
+  ]);
+  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[80],[80]]);
+  const c=context();
+  Effects.draw(c,cast,.85,{cell:48,ox:0,oy:0,width:12,height:9},true);
+  assert.equal(new Set(c.calls.filter(([name])=>name==='moveTo').map(String)).size,2);
+});
+
 test('damage numbers appear at impact on top of the manual animation',()=>{
   const fs=require('node:fs'),path=require('node:path');
   const source=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-renderer.js'),'utf8')

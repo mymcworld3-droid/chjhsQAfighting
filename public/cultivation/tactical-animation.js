@@ -12,6 +12,10 @@
   const heavyMoves=new Set(['rock-fist','rock-quake','rock-break','dragon-guard','tiger-step','tiger-throw','wind-thousand','sky-sever']);
   const hitTime={'wind-slash':.40,'wind-step':.32,'wind-thousand':.45,'flight-summon':.45,
     'sky-cloud':.46,'sky-sever':.46,'rock-fist':.46,'rock-quake':.32,'rock-break':.40,'tiger-step':.32};
+  function strikeTime(scene,index){
+    const first=scene.impactStart??hitTime[moveFor(scene.skill)]??.4;
+    return index===0?first:first+(1-first)*.54;
+  }
   function duration(scene){
     if(scene.kind==='move'){
       if(scene.style==='dash'&&scene.visualSkill==='dragon-guard')return 200;
@@ -104,12 +108,12 @@
       scenes.splice(i+1,j-i);
     }
   }
-  // Manual poses land their committed damage during the swing, not after it.
+  // Damage appears when its technique effect connects.
   function combineManualImpact(scenes){
     for(let i=0;i<scenes.length;i++){
       const cast=scenes[i];
       if(cast.kind!=='cast'||cast.parallelImpact||cast.style==='fist-chain'||!manuals()?.BY_SKILL?.[cast.skill])continue;
-      let j=i+1;const hits=new Set(),numbers=[],reflections=[];
+      let j=i+1;const hits=new Set(),numbers=[],reflections=[],strikeImpacts=[[],[]];
       for(;j<scenes.length;j++){
         const scene=scenes[j];if(scene.eventRevision!==cast.eventRevision||scene.kind!=='damage')break;
         const direct=scene.actor===cast.actor&&scene.skill===cast.skill;
@@ -117,6 +121,12 @@
         if(!direct&&!counter)break;
         for(const number of scene.numbers){
           if(direct)hits.add(number.uid);
+          const strike=strikeImpacts[scene.strike];
+          if(strike){
+            const previous=strike.find(n=>n.uid===number.uid);
+            if(previous){previous.damage+=number.damage;previous.absorbed=(previous.absorbed||0)+(number.absorbed||0);}
+            else strike.push({...number});
+          }
           const earlier=numbers.find(n=>n.uid===number.uid);
           if(earlier&&number.damage!==undefined&&earlier.damage!==undefined){
             earlier.damage+=number.damage;earlier.absorbed=(earlier.absorbed||0)+(number.absorbed||0);
@@ -126,8 +136,10 @@
         if(counter)reflections.push({actor:scene.actor,target:cast.actor});
       }
       if(!hits.size)continue;
+      const separateHits=strikeImpacts.some(beat=>beat.length);
       Object.assign(cast,{parallelImpact:true,impactStart:hitTime[moveFor(cast.skill)]??.4,
-        numbers,reflections,after:scenes[j-1].after,duration:600});
+        numbers,reflections,after:scenes[j-1].after,duration:separateHits?740:600,
+        ...(separateHits?{strikeImpacts}:{})});
       scenes.splice(i+1,j-i-1);
     }
   }
@@ -180,7 +192,7 @@
       // One area attack hits several enemies at the same instant. Reflections
       // retain their own beat because their source/skill differ.
       const last=scenes.at(-1);
-      if(scene.kind==='damage'&&last?.kind==='damage'&&scene.eventRevision===last.eventRevision&&scene.actor===last.actor&&scene.skill===last.skill){
+      if(scene.kind==='damage'&&last?.kind==='damage'&&scene.eventRevision===last.eventRevision&&scene.actor===last.actor&&scene.skill===last.skill&&scene.strike===last.strike){
         for(const number of scene.numbers){
           const earlier=last.numbers.find(item=>item.uid===number.uid);
           if(earlier&&number.damage!==undefined&&earlier.damage!==undefined){
@@ -256,8 +268,20 @@
           a.flash=Math.max(a.flash,weight*.9);
           if(a.bot){a.scaleX*=1+weight*.18;a.scaleY*=1-weight*.16;}
         }
-        const after=scene.after.find(b=>b.uid===a.uid);a.hp=a.hp+(after.hp-a.hp)*impact;a.shield=after.shield;
-        if(after.hp<=0){a.opacity=1-smooth(clamp((impact-.35)/.65));if(a.bot)a.scaleY*=1-impact*.25;}
+        const after=scene.after.find(b=>b.uid===a.uid);
+        let lifeProgress=impact;
+        if(scene.strikeImpacts){
+          a.flash=0;
+          for(const [index,beatNumbers] of scene.strikeImpacts.entries()){
+            const hit=beatNumbers.find(n=>n.uid===a.uid);if(!hit)continue;
+            const time=p-strikeTime(scene,index),progress=clamp(time/.12);
+            a.hp-=hit.damage*progress;a.shield=Math.max(0,a.shield-(hit.absorbed||0)*progress);
+            a.flash=Math.max(a.flash,Math.sin(Math.PI*progress)*.6);
+            lifeProgress=progress;
+          }
+          if(p===1){a.hp=after.hp;a.shield=after.shield;}
+        }else{a.hp+=(after.hp-a.hp)*impact;a.shield=after.shield;}
+        if(after.hp<=0){a.opacity=1-smooth(clamp((lifeProgress-.35)/.65));if(a.bot)a.scaleY*=1-lifeProgress*.25;}
       }
       if(scene.kind==='restore'&&number){const after=scene.after.find(b=>b.uid===a.uid);a.hp=a.hp+(after.hp-a.hp)*p;a.shield=after.shield;}
       if(a.bot&&scene.kind==='dodge'&&scene.actor===a.uid)a.x+=beat*.18;
@@ -265,5 +289,5 @@
     }
     return actors;
   }
-  return Object.freeze({plan,sample,impactPulse});
+  return Object.freeze({plan,sample,impactPulse,strikeTime});
 });

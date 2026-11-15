@@ -70,7 +70,7 @@
     book('sword-wind','流風劍訣','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
       technique('wind-step','突進橫斬',5,4,'dash-cleave',1.8,
-        '沿直線突進最多四格，再對落點前方一排三格連斬兩次。',{hits:2}),
+        '沿直線突進最多四格，再揮出三格寬的劍氣兩次。',{hits:2}),
       breakLine
     ]),
     book('sword-flight','御劍真訣','sword','御使飛劍，控制敵人的站位。',[
@@ -84,7 +84,7 @@
     book('sword-sky','八方劍典','sword','以多路劍氣交擊一點，兼及周圍敵人。',[
       shared(straight,'sky-pierce'),
       technique('sky-cloud','交叉劍斬',4,3,'sword-array',1.1,
-        '選擇三格內的中心，沿四條對角線各斬兩格。中心承受兩段交叉劍氣。',
+        '選擇三格內的中心，揮出兩道交叉劍氣，各從中心向兩端延伸兩格。中心最多命中兩次。',
         {diagonal:2,centerPower:1.6}),
       technique('sky-sever','八方合劍',6,4,'sword-array',1.25,
         '選擇四格內的中心。正向各延伸三格、斜向各延伸兩格，八路劍氣向中心匯聚。',

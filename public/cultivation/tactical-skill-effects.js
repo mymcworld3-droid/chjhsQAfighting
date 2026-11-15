@@ -7,6 +7,10 @@
   'use strict';
   const manuals=()=>typeof module==='object'&&module.exports
     ?require('./manual-rules.js'):globalThis.QAManuals;
+  const animation=()=>typeof module==='object'&&module.exports
+    ?require('./tactical-animation.js'):globalThis.QATacticalAnimation;
+  const rules=()=>typeof module==='object'&&module.exports
+    ?require('./tactical-rules.js'):globalThis.QATactical;
   const moves=new Set([
     'wind-slash','wind-step','wind-thousand','flight-summon','sky-cloud','sky-sever',
     'rock-fist','rock-quake','rock-break','dragon-guard','dragon-roar','tiger-step','tiger-throw'
@@ -33,6 +37,7 @@
     const ink=sword?jade:gold,bright=sword?white:'#fff2c9';
     const dx=to.x-from.x,dy=to.y-from.y,length=Math.hypot(dx,dy)||1;
     const axis={x:dx/length,y:dy/length},side={x:-axis.y,y:axis.x};
+    const strikeTime=index=>animation().strikeTime(scene,index);
     const glow=(color,blur)=>{c.shadowColor=color;c.shadowBlur=size*blur;};
     const circle=(at,r,alpha,color=ink,width=.025)=>{
       c.globalAlpha=clamp(alpha);c.strokeStyle=color;c.lineWidth=Math.max(1,size*width);
@@ -128,7 +133,7 @@
       for(const tile of cells){
         const at=center(tile);c.globalAlpha=beat*.1;c.fillStyle=ink;
         c.fillRect(ox+tile.x*size+2,oy+tile.y*size+2,size-4,size-4);
-        circle(at,.29+beat*.05,beat*.25,ink,.014);
+        if(move!=='wind-step'&&move!=='sky-cloud')circle(at,.29+beat*.05,beat*.25,ink,.014);
       }
       if(move==='dragon-roar'||move==='flight-summon'){
         c.save();c.translate((move==='dragon-roar'?from:to).x,(move==='dragon-roar'?from:to).y);
@@ -150,11 +155,22 @@
       for(let i=2;i>=0;i--)crescent(point(from,end,Math.max(0,q-i*.1)),Math.atan2(dy,dx),q, jade,1-i*.13);
       if(q>.15)sparks(sweep,9,jade,.45);
     }else if(move==='wind-step'){
-      const at=hit.length?hit[Math.floor(hit.length/2)]:to;
-      const angle=Math.atan2(dy,dx);
-      crescent(at,angle-.55,phase(p,.03,.55),jade,1.35);
-      crescent(at,angle+.55,phase(p,.43,.98),white,1.2);
-      if(p>.32)impact(at,phase(p,.32,.95),jade);
+      c.save();c.beginPath();
+      for(const tile of cells)c.rect(ox+tile.x*size,oy+tile.y*size,size,size);
+      c.clip();c.translate(to.x,to.y);c.rotate(Math.atan2(dy,dx));
+      for(let i=0;i<2;i++){
+        const time=p-strikeTime(i);
+        if(time<-.13||time>.18)continue;
+        const strength=time<=0?1+time/.13:1-time/.18;
+        const x=size*time*1.6,reach=size*1.5;
+        glow(jade,.19);c.globalAlpha=strength*.5;c.fillStyle=jade;
+        c.beginPath();c.moveTo(x,-reach);
+        c.quadraticCurveTo(x+size*.42,0,x,reach);
+        c.quadraticCurveTo(x+size*.14,0,x,-reach);c.closePath();c.fill();
+        c.globalAlpha=strength;c.strokeStyle=white;c.lineWidth=Math.max(1,size*.045);
+        c.beginPath();c.moveTo(x,-reach);c.quadraticCurveTo(x+size*.42,0,x,reach);c.stroke();
+      }
+      c.restore();
     }else if(move==='wind-thousand'){
       // The full ray reaches the targets at the same beat as knockback starts.
       const end=hit.at(-1)||to,q=phase(p,.08,.45),tip=beam(from,end,q,jade,.12);
@@ -191,17 +207,31 @@
         }
         sparks(to,12,white,.55);
       }
-    }else if(move==='sky-cloud'||move==='sky-sever'){
+    }else if(move==='sky-cloud'){
+      const cuts=scene.cuts||rules().crossedSwordLines(scene.rays||[],target);
+      for(const [index,cut] of cuts.entries()){
+        if(cut.length<2)continue;
+        const time=p-strikeTime(index);
+        if(time<-.14)continue;
+        const middle=cut.findIndex(tile=>tile.x===target.x&&tile.y===target.y)/(cut.length-1);
+        const progress=time<0?middle*phase(time,-.14,0):middle+(1-middle)*phase(time,0,.08);
+        const strength=phase(time,-.14,-.03)*(1-phase(time,.08,.50));
+        const start=center(cut[0]),end=center(cut.at(-1)),tip=point(start,end,progress);
+        glow(jade,.16);
+        stroke(start,tip,jade,.21,strength*.42);
+        stroke(start,tip,white,.068,strength);
+      }
+    }else if(move==='sky-sever'){
       const rays=scene.rays||[];
       for(const [i,ray] of rays.entries()){
         if(!ray.length)continue;
         const start=center(ray.at(-1)),q=phase(p,.04+(i%2)*.08,.68+(i%2)*.08);
-        const tip=beam(start,to,q,i%2?white:jade,move==='sky-sever'?.065:.085);
+        const tip=beam(start,to,q,i%2?white:jade,.065);
         crescent(tip,Math.atan2(to.y-start.y,to.x-start.x),phase(p,.04,.88),jade,.58);
       }
       if(p>.45){
         const q=phase(p,.45,1);impact(to,q,white);circle(to,.25+q*.5,pulse(q),jade,.04);
-        sparks(to,move==='sky-sever'?18:12,white,.85);
+        sparks(to,18,white,.85);
       }
     }else if(move==='rock-fist'){
       const end=hit.at(-1)||to,q=phase(p,.04,.85),at=point(from,end,q);
@@ -254,7 +284,7 @@
     }else if(move==='tiger-step'){
       const at=hit.length?hit[Math.floor(hit.length/2)]:to,angle=Math.atan2(dy,dx);
       for(const [i,offset] of [-.32,.32].entries()){
-        const q=phase(p,.02+i*.4,.58+i*.4);
+        const when=strikeTime(i),q=phase(p,when-.15,when+.15);
         fist({x:at.x+side.x*size*offset,y:at.y+side.y*size*offset},angle,q,.9);
         for(const cell of hit)impact(cell,q,gold);
       }
