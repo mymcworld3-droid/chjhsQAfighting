@@ -38,6 +38,7 @@ const registerFriendRequestsApi = require('./friend-requests-api.cjs');
 const registerSoulboundDrawApi = require('./soulbound-draw-api.cjs');
 const registerMeditationApi = require('./daily-meditation-api.cjs');
 const registerVocabularyRewardsApi = require('./daily-vocabulary-reward-api.cjs');
+const registerVocabularyAudio = require('./vocabulary-audio-api.cjs');
 const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
@@ -85,6 +86,7 @@ app.use('/api', (req,res,next) => {
 const adminD1Migration = require('./d1-admin-migration-api.cjs')(app);
 require('./d1-browser-api.cjs').registerD1BrowserApi(app);
 registerGameStage(app);
+registerVocabularyAudio(app);
 app.use(express.static(path.join(__dirname, 'public')));
 registerDongtianApi(app);
 registerTeacherDongtianApi(app);

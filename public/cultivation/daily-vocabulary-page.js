@@ -1,3 +1,5 @@
+import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';
+
 const page = document.getElementById('page-daily-vocabulary');
 const slot = page.querySelector('[data-dv-view]');
 const dayLabel = page.querySelector('[data-dv-date]');
@@ -5,6 +7,7 @@ const saveNote = page.querySelector('[data-dv-save-note]');
 const storagePrefix = 'qingyun:daily-vocabulary:v1:';
 const parts = { 'v.': '動詞', 'n.': '名詞', 'adj.': '形容詞', 'adv.': '副詞' };
 const questionLabels = { meaning: '看英選中', cloze: '語境填空', spelling: '看提示拼寫' };
+const pronunciation = createVocabularyPronunciation(window, updatePronunciation);
 
 let rules;
 let loadTask;
@@ -18,6 +21,7 @@ let quiz;
 let quizLesson;
 let rewardTask;
 let rewardErrors = {};
+let newRewardDate = '';
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, char =>
@@ -148,6 +152,9 @@ async function flushRewards() {
           progress.rewardQueue = (progress.rewardQueue || []).filter(item => item.date !== lesson.date);
           progress.rewardHistory ||= {};
           progress.rewardHistory[lesson.date] = { status: 'claimed', reward: result.reward };
+          if (!result.alreadyClaimed && isOpen() && progress.lesson.date === lesson.date) {
+            newRewardDate = lesson.date;
+          }
           delete rewardErrors[lesson.date];
           saveProgress();
           updatePlayerStats(result, uid);
@@ -176,7 +183,7 @@ function rewardMarkup(lesson) {
   if (status === 'claimed') {
     const reward = progress.rewardHistory[lesson.date].reward;
     return `<div class="dv-reward is-granted" role="status"><strong>今日獎勵已領取</strong>
-      <span>${reward.gold} 靈石 · ${reward.cultivation} 修為</span></div>`;
+      <div class="dv-reward-amounts"><span><b>+${reward.gold}</b> 靈石</span><span><b>+${reward.cultivation}</b> 修為</span></div></div>`;
   }
   const message = rewardErrors[lesson.date] || '正在領取今日獎勵…';
   return `<div class="dv-reward ${rewardErrors[lesson.date] ? 'is-waiting' : 'is-syncing'}" role="status"><strong>今日獎勵</strong>
@@ -217,7 +224,14 @@ function lead(title, supporting, { back = true } = {}) {
   </div>`;
 }
 
-function homeMarkup() {
+function studyNotice(notice) {
+  if (!notice) return '';
+  return `<p class="dv-study-notice ${notice.familiar ? 'is-familiar' : 'is-review'}" role="status">
+    <span aria-hidden="true">${notice.familiar ? '✓' : '↻'}</span> ${escapeHtml(notice.text)}
+  </p>`;
+}
+
+function homeMarkup(notice) {
   const { lesson, level, scores } = progress;
   const studied = lesson.words.filter(id => lesson.studied[id]).length;
   const due = rules.dueWords(progress).length;
@@ -243,6 +257,7 @@ function homeMarkup() {
       <ul class="dv-bands">
         ${rules.BANDS.map(({ id, label, exam }) => `<li data-band="${id}"><b>${label} <span>${id}</span></b><small>${exam}程度 · ${rules.WORDS_PER_BAND} 字</small></li>`).join('')}
       </ul>
+      ${studyNotice(notice)}
       <div class="dv-actions">
         ${button('cards', cardAction, { style: 'dv-primary' })}
         ${button(lesson.result ? 'result' : 'quiz', quizAction)}
@@ -275,18 +290,38 @@ function homeMarkup() {
   </div>`;
 }
 
-function cardsMarkup() {
+function pronunciationButton(word) {
+  return button('listen', '<i class="fa-solid fa-volume-high" aria-hidden="true"></i> <span>聽發音</span>', {
+    style: 'dv-listen',
+    extra: `data-word="${word}" aria-label="播放 ${word} 的發音"`,
+  });
+}
+
+function updatePronunciation({ word, status, source }) {
+  const control = slot.querySelector('[data-dv-action="listen"]');
+  const message = slot.querySelector('[data-dv-audio]');
+  if (!control || !message) return;
+  const current = control.dataset.word === word ? status : 'idle';
+  const active = current === 'loading' || current === 'playing';
+  const label = control.querySelector('span');
+  if (label) label.textContent = active ? '停止發音' : current === 'error' ? '重試發音' : '聽發音';
+  control.dataset.state = current;
+  control.setAttribute('aria-label', `${label?.textContent || '聽發音'} · ${control.dataset.word}`);
+  message.textContent = {
+    loading: '正在準備發音…',
+    playing: source === 'device' ? '正在播放裝置發音' : '正在播放美式發音',
+    error: '發音未能播放，請點一下重試。',
+  }[current] || '';
+}
+
+function cardsMarkup(notice) {
   const { ids, index, revealed, source } = cards;
   const word = rules.wordFor(ids[index]);
   const title = source === 'daily' ? '今日字卡' : source === 'mistakes' ? '今日錯題' : '到期複習';
-  const speakButton = window.speechSynthesis && typeof window.SpeechSynthesisUtterance === 'function'
-    ? button('listen', '<i class="fa-solid fa-volume-high" aria-hidden="true"></i> 發音',
-        { style: 'dv-quiet', extra: 'aria-pressed="false"' })
-    : '';
-
   return `${lead(title, `第 ${index + 1} / ${ids.length} 張`)}
+    ${studyNotice(notice)}
     <article class="dv-panel dv-card ${revealed ? 'is-revealed' : 'is-front'}">
-      <div class="dv-card-meta">${badge(word.band)}${speakButton}</div>
+      <div class="dv-card-meta">${badge(word.band)}${pronunciationButton(word.id)}</div>
       <h4 lang="en" class="dv-english">${escapeHtml(word.id)}</h4>
       <p class="dv-part">${parts[word.part]} <span lang="en">${word.part}</span></p>
       ${revealed ? `<div class="dv-card-answer" tabindex="-1" data-dv-answer>
@@ -336,12 +371,22 @@ function quizMarkup() {
   const answer = lesson.answers[index];
   const atEnd = index + 1 === rules.LESSON_SIZE;
   const title = `第 ${index + 1} / ${rules.LESSON_SIZE} 題`;
+  let streak = 0;
+  for (let i = index; lesson.answers[i]?.correct; i--) streak++;
   const prompt = format === 'meaning'
     ? `<h4 class="dv-english" lang="en">${escapeHtml(word.id)}</h4><p>選出這個單字在字卡中的意思。</p>`
     : `<p lang="en" class="dv-sentence">${quizSentence(word, '____')}</p>
         <p>字義提示　<strong>${escapeHtml(word.meaning)}</strong>${format === 'spelling' ? ` · ${word.id.length} 個字母` : ''}</p>`;
 
   return `${lead(title, `難度 · ${stepLabel(lesson.level)} · ${questionLabels[format]}`)}
+    <div class="dv-quiz-progress" role="progressbar" aria-label="作答進度" aria-valuemin="0"
+      aria-valuemax="${rules.LESSON_SIZE}" aria-valuenow="${lesson.answers.length}">
+      ${Array.from({ length: rules.LESSON_SIZE }, (_, step) => {
+        const completed = lesson.answers[step];
+        const mark = completed ? (completed.correct ? 'is-correct' : 'is-incorrect') : step === index ? 'is-current' : '';
+        return `<span class="${mark}${step === index ? ' is-current-step' : ''}" aria-hidden="true"></span>`;
+      }).join('')}
+    </div>
     <section class="dv-panel dv-question ${answer ? 'is-answered' : ''}">
       <div class="dv-question-meta">${badge(word.band)}<span class="dv-part">${parts[word.part]} <span lang="en">${word.part}</span></span></div>
       ${prompt}
@@ -355,10 +400,15 @@ function quizMarkup() {
           </div>
         </form>`}
       ${answer ? `<div class="dv-feedback ${answer.correct ? 'is-correct' : 'is-incorrect'}" tabindex="-1" data-dv-feedback>
-        <strong>${answer.correct ? '答對了' : answer.value ? '答錯了' : '未作答'} <span lang="en">${escapeHtml(word.id)}</span></strong>
+        <div class="dv-feedback-top">
+          <span class="dv-verdict-icon" aria-hidden="true">${answer.correct ? '✓' : '×'}</span>
+          <div><strong>${answer.correct ? '答對了' : answer.value ? '答錯了' : '未作答'}</strong>
+            ${streak >= 2 ? `<small class="dv-streak">連對 ${streak} 題</small>` : ''}</div>
+        </div>
         ${format === 'spelling' && !answer.correct && answer.value ? `<p>你的答案：<span lang="en">${escapeHtml(answer.value)}</span></p>` : ''}
-        <p>${escapeHtml(word.meaning)}</p>
+        <p class="dv-feedback-word"><b lang="en">${escapeHtml(word.id)}</b> ${escapeHtml(word.meaning)}</p>
         <p lang="en" class="dv-example">${format === 'meaning' ? escapeHtml(word.example) : quizSentence(word, escapeHtml(word.id))}</p>
+        <div class="dv-feedback-audio">${pronunciationButton(word.id)}<p class="dv-audio-message" role="status" data-dv-audio></p></div>
       </div>
       <div class="dv-actions dv-next">${button('next-question', atEnd ? '查看成績' : '下一題',
         { style: 'dv-primary', extra: `data-index="${index}"` })}</div>` : ''}
@@ -382,11 +432,19 @@ function resultMarkup() {
     </section>`;
 }
 
-function render({ focus = '', resetScroll = false } = {}) {
+function render({ focus = '', resetScroll = false, motion = resetScroll ? 'enter' : '', notice } = {}) {
   const markup = { home: homeMarkup, cards: cardsMarkup, quiz: quizMarkup, result: resultMarkup }[screen];
+  const rewardGranted = screen === 'result' && newRewardDate === progress.lesson.date;
   dayLabel.dateTime = progress.lesson.date;
   dayLabel.textContent = progress.lesson.date;
-  slot.innerHTML = markup();
+  slot.dataset.dvMotion = motion;
+  slot.dataset.dvReward = rewardGranted ? 'granted' : '';
+  slot.innerHTML = markup(notice);
+  updatePronunciation(pronunciation.state());
+  if (rewardGranted) {
+    newRewardDate = '';
+    window.QAGameAudio?.play('reward-chime', { key: `vocabulary-reward:${key}:${progress.lesson.date}` });
+  }
   showSaveNote();
   if (resetScroll) page.closest('main').scrollTop = 0;
   if (focus) {
@@ -396,14 +454,14 @@ function render({ focus = '', resetScroll = false } = {}) {
   }
 }
 
-function showScreen(name) {
-  if (screen === 'cards' && name !== 'cards') window.speechSynthesis?.cancel();
+function showScreen(name, motion = 'enter', notice) {
+  pronunciation.stop();
   screen = name;
-  render({ focus: 'focus', resetScroll: true });
+  render({ focus: 'focus', resetScroll: true, motion, notice });
 }
 
-function refreshDashboard(focus = false) {
-  if (screen === 'cards') window.speechSynthesis?.cancel();
+function refreshDashboard(focus = false, notice) {
+  pronunciation.stop();
   const stored = readProgress();
   const previous = stored || progress || rules.newProgress();
   progress = previous;
@@ -411,7 +469,7 @@ function refreshDashboard(focus = false) {
   progress = rules.openLesson(previous, rules.todayInTaipei());
   if (queued || progress !== previous) saveProgress();
   screen = 'home';
-  render({ focus: focus ? 'focus' : '', resetScroll: focus });
+  render({ focus: focus ? 'focus' : '', resetScroll: focus, notice });
   void flushRewards();
 }
 
@@ -438,6 +496,7 @@ async function openPage() {
     progress = null;
     pendingSave = false;
     rewardErrors = {};
+    newRewardDate = '';
   }
   refreshDashboard(true);
 }
@@ -448,11 +507,10 @@ function startCards(ids, source, index = 0) {
   showScreen('cards');
 }
 
-function moveCard(offset) {
-  window.speechSynthesis?.cancel();
+function moveCard(offset, notice) {
   cards.index += offset;
   cards.revealed = false;
-  showScreen('cards');
+  showScreen('cards', offset < 0 ? 'previous' : 'next', notice);
 }
 
 function readLatestLesson() {
@@ -473,37 +531,28 @@ function readLatestLesson() {
 function answer(index, value) {
   if (screen !== 'quiz' || !readLatestLesson()) return;
   if (rules.submitAnswer(progress, currentQuiz(), index, value)) {
+    const { correct } = progress.lesson.answers[index];
+    window.QAGameAudio?.answer(correct, `vocabulary:${key}:${progress.lesson.date}:${index}`);
+    tactile(correct ? 32 : [22, 28, 35]);
     const finished = !!progress.lesson.result;
     if (finished) queueCompletedReward();
     saveProgress();
-    render({ focus: 'feedback' });
+    render({ focus: 'feedback', motion: 'answer' });
     if (finished) void flushRewards();
   } else if (index !== progress.lesson.index || progress.lesson.answers[index]) {
     render();
   }
 }
 
-function listen() {
-  const speech = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(cards.ids[cards.index]);
-  utterance.lang = 'en-US';
-  utterance.rate = 0.88;
-  const message = slot.querySelector('[data-dv-audio]');
-  const control = slot.querySelector('[data-dv-action="listen"]');
-  message.textContent = '';
-  const markSpeaking = speaking => {
-    if (!control?.isConnected) return;
-    control.classList.toggle('is-speaking', speaking);
-    control.setAttribute('aria-pressed', String(speaking));
-  };
-  utterance.onstart = () => markSpeaking(true);
-  utterance.onend = () => markSpeaking(false);
-  utterance.onerror = event => {
-    markSpeaking(false);
-    if (event.error !== 'interrupted' && event.error !== 'canceled') message.textContent = '此裝置目前無法播放發音。';
-  };
-  speech.cancel();
-  speech.speak(utterance);
+function tactile(pattern) {
+  if (!window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) {
+    window.navigator?.vibrate?.(pattern);
+  }
+}
+
+function listen(target) {
+  window.QAGameAudio?.stop();
+  pronunciation.play(target.dataset.word);
 }
 
 const actions = {
@@ -534,7 +583,9 @@ const actions = {
       saveProgress();
     }
     cards.revealed = true;
-    render({ focus: 'answer' });
+    window.QAGameAudio?.play('cloud-whoosh', { volume: .45 });
+    tactile(16);
+    render({ focus: 'answer', motion: 'reveal' });
   },
   'previous-card': () => moveCard(-1),
   'next-card': () => moveCard(1),
@@ -551,7 +602,7 @@ const actions = {
       rules.nextQuestion(lesson);
       saveProgress();
     }
-    showScreen('quiz');
+    showScreen('quiz', 'next');
   },
 };
 
@@ -559,8 +610,11 @@ function rate(familiar) {
   if (!readLatestLesson()) return;
   rules.rateCard(progress, cards.ids[cards.index], familiar);
   saveProgress();
-  if (cards.index + 1 < cards.ids.length) moveCard(1);
-  else refreshDashboard(true);
+  if (familiar) window.QAGameAudio?.play('spirit-pulse', { volume: .5 });
+  tactile(familiar ? 25 : 16);
+  const notice = { familiar, text: familiar ? '已記錄熟悉度' : '已排入明天複習' };
+  if (cards.index + 1 < cards.ids.length) moveCard(1, notice);
+  else refreshDashboard(true, notice);
 }
 
 slot.addEventListener('click', event => {
@@ -588,7 +642,7 @@ function syncPage() {
   }
   if (!active && wasOpen) {
     clearInterval(dayTimer);
-    window.speechSynthesis?.cancel();
+    pronunciation.stop();
   }
   wasOpen = active;
 }
@@ -598,8 +652,10 @@ window.addEventListener('xiuxian:user-data-ready', () => {
   if (isOpen() && storagePrefix + window.getRealmUserUid?.() !== key) void openPage();
 });
 document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pronunciation.stop();
   if (!document.hidden && isOpen() && screen === 'home' && progress) void openPage();
 });
+window.addEventListener('pagehide', () => pronunciation.stop());
 window.addEventListener('storage', event => {
   if (event.key === key && isOpen() && screen === 'home') refreshDashboard();
 });

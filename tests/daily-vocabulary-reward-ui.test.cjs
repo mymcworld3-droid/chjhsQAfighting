@@ -9,6 +9,7 @@ const { database } = require('./helpers/tactical-db.cjs');
 const rewardApi = require('../daily-vocabulary-reward-api.cjs').__test;
 
 const source = readFileSync(join(__dirname, '../public/cultivation/daily-vocabulary-page.js'), 'utf8')
+  .replace("import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.mjs';", '')
   .replace("import('./daily-vocabulary-rules.js')", 'Promise.resolve(testRules)')
   .replace("import('./data/project-repository.js')", 'Promise.resolve(testRepository)');
 
@@ -22,7 +23,7 @@ function harness(rules, db, storage) {
   const local = { uid, stats: { gold: 0, totalScore: 30 } };
   const root = { classList: { contains: () => true }, closest: () => ({ scrollTop: 0 }) };
   const slot = {
-    innerHTML: '',
+    innerHTML: '', dataset: {},
     querySelector: () => null,
     addEventListener: (event, fn) => { handlers[event] = fn; },
   };
@@ -60,6 +61,7 @@ function harness(rules, db, storage) {
     },
     testRules: { ...rules, todayInTaipei: () => rules.todayInTaipei(new Date(now)) },
     testRepository: repository,
+    createVocabularyPronunciation: () => ({ state: () => ({ status: 'idle' }), stop() {} }),
   };
   vm.runInNewContext(source, context, { filename: 'daily-vocabulary-page.js' });
   return {
