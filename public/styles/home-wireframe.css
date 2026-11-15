@@ -62,7 +62,7 @@ body.ui-cleanup #page-home #xiuxian-panel .xiuxian-row:has(#xiuxian-meditation-s
 .home-wireframe-shortcut:focus-visible{
   outline:2px solid #f4dba4;outline-offset:2px
 }
-.home-wireframe-alert{position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:50%;background:#edd083}
+.home-wireframe-alert{position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:50%;background:#f13a34;box-shadow:0 0 0 2px #24170b,0 0 12px rgba(255,66,50,.72)}
 .home-wireframe-alert[hidden]{display:none!important}
 
 /* Large circle: a cultivation emblem, not an ecological render. */

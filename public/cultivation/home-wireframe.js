@@ -82,7 +82,7 @@ function mirrorAlert(sourceId,action){
   const target=document.querySelector('[data-home-alert="'+action+'"]');
   const source=$(sourceId);
   if(!target||!source)return;
-  const sync=()=>{target.hidden=source.hidden||source.getAttribute('aria-hidden')==='true';};
+  const sync=()=>{target.hidden=source.hidden;};
   sync();
   new MutationObserver(sync).observe(source,{attributes:true,attributeFilter:['hidden','aria-hidden']});
 }
