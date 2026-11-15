@@ -39,9 +39,11 @@ html body.xianxia-theme #page-quiz .quiz-main-column > .glass-panel:first-child 
   color: #25392e !important;
   box-shadow: 0 14px 35px #04151140,inset 0 0 35px #947b4620 !important;
 }
+html body.xianxia-theme #page-quiz #question-text {
+  color: #25392e !important;
+}
 html body.xianxia-theme #page-quiz #question-text,
 html body.xianxia-theme #page-quiz #question-text * {
-  color: #25392e !important;
   text-shadow: none !important;
 }
 html body.xianxia-theme #page-quiz #question-text {
@@ -49,14 +51,6 @@ html body.xianxia-theme #page-quiz #question-text {
   line-height: 1.95 !important;
   font-weight: 500 !important;
   letter-spacing: .02em;
-}
-/* Formulas follow their surrounding text: ink on the paper question and light
-   text on jade options, explanations and tools. Include generated glyphs so
-   the shared white-math theme cannot recolor part of an expression. */
-html body.xianxia-theme #page-quiz :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
-html body.xianxia-theme #page-quiz :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) * {
-  color: inherit !important;
-  -webkit-text-fill-color: currentColor !important;
 }
 html body.xianxia-theme #page-quiz .quiz-main-column > .glass-panel:first-child > .text-6xl {
   display: block;
@@ -190,7 +184,5 @@ html body.xianxia-theme #page-quiz .quiz-helper-launcher {
 #page-quiz .adaptive-concept-lesson h4 { font-weight: 700; margin-top: .65rem; }
 #page-quiz .adaptive-concept-lesson :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
 #page-quiz .adaptive-concept-lesson :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) * {
-  color: inherit !important;
-  -webkit-text-fill-color: currentColor !important;
   background: transparent !important;
 }

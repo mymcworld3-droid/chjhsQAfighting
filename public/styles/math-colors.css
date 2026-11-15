@@ -1,0 +1,19 @@
+/* Load first: important layer rules take precedence over theme and modal rules
+   that style all descendants of a question or explanation. */
+@layer math-colors {
+  :where(mjx-container, .MathJax, .MathJax_Display, .katex, .katex-display, math, .quiz-math-fallback),
+  :where(mjx-container, .MathJax, .MathJax_Display, .katex, .katex-display, math, .quiz-math-fallback) * {
+    color: inherit !important;
+    -webkit-text-fill-color: inherit !important;
+  }
+
+  /* Rendered SVG uses paint attributes for glyphs. Preserve empty fills and
+     strokes, which can be part of the geometry of a fraction or symbol. */
+  :where(mjx-container, .MathJax, .MathJax_Display, .katex, .katex-display) svg:not([fill="none"]),
+  :where(mjx-container, .MathJax, .MathJax_Display, .katex, .katex-display) svg [fill]:not([fill="none"]) {
+    fill: currentColor !important;
+  }
+  :where(mjx-container, .MathJax, .MathJax_Display, .katex, .katex-display) :is(svg, svg *)[stroke]:not([stroke="none"]) {
+    stroke: currentColor !important;
+  }
+}

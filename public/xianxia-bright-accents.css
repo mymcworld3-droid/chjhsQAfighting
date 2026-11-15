@@ -334,16 +334,14 @@ body.xianxia-theme .quiz-main-column>.glass-panel:first-child{
     inset 0 0 32px rgba(82,60,30,.10)!important;
 }
 body.xianxia-theme #tactical-combat .tc-question,
+body.xianxia-theme #question-text{
+  color:#211a10!important;
+}
+body.xianxia-theme #tactical-combat .tc-question,
 body.xianxia-theme #tactical-combat .tc-question *,
 body.xianxia-theme #question-text,
 body.xianxia-theme #question-text *{
-  color:#211a10!important;
   text-shadow:none!important;
-}
-body.xianxia-theme #tactical-combat .tc-question :is(mjx-container,mjx-container *),
-body.xianxia-theme #question-text :is(mjx-container,mjx-container *){
-  color:inherit!important;
-  -webkit-text-fill-color:currentColor!important;
 }
 body.xianxia-theme #tactical-combat .tc-question-badge,
 body.xianxia-theme #quiz-badge{

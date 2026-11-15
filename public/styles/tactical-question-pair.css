@@ -79,40 +79,19 @@
 #tactical-combat .tc-quiz .tc-question-sheet > .text-6xl{
   display:block;color:rgba(100,145,117,.18)!important;pointer-events:none;
 }
-/* Regardless of rich-text markup, inline styles, MathJax or KaTeX, all stem
-   glyphs must be pure black on the parchment, not theme green or white. */
+/* The parchment stem sets its ink for ordinary text and rendered math. */
+#tactical-combat .tc-quiz .tc-question-sheet .tc-question{
+  color:#000!important;
+}
 #tactical-combat .tc-quiz .tc-question-sheet .tc-question,
 #tactical-combat .tc-quiz .tc-question-sheet .tc-question *{
-  color:#000!important;
-  -webkit-text-fill-color:#000!important;
   text-shadow:none!important;
-}
-#tactical-combat .tc-quiz .tc-question-sheet .tc-question :is(mjx-container,.MathJax,.katex,.katex-display,math,.quiz-math-fallback),
-#tactical-combat .tc-quiz .tc-question-sheet .tc-question :is(mjx-container,.MathJax,.katex,.katex-display,math,.quiz-math-fallback) *{
-  color:#000!important;
-  -webkit-text-fill-color:#000!important;
-}
-#tactical-combat .tc-quiz .tc-question-sheet .tc-question mjx-container[jax="SVG"] svg,
-#tactical-combat .tc-quiz .tc-question-sheet .tc-question mjx-container[jax="SVG"] svg *,
-#tactical-combat .tc-quiz .tc-question-sheet .tc-question .katex svg,
-#tactical-combat .tc-quiz .tc-question-sheet .tc-question .katex svg *{
-  fill:#000!important;
-}
-#tactical-combat .tc-quiz .tc-question-sheet .tc-question svg :is(text,tspan){
-  fill:#000!important;
-  stroke:none!important;
 }
 
 #tactical-combat .tc-quiz .tc-question-sheet .tc-question{
   margin:0!important;font-size:19px!important;line-height:1.95!important;
   font-weight:500!important;letter-spacing:.02em;
   overflow-wrap:anywhere;position:relative;z-index:1;
-}
-/* Match free-quiz formula contrast inside all four visual regions. */
-#tactical-combat .tc-quiz .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback),
-#tactical-combat .tc-quiz .tc-pair-entry :is(mjx-container,.MathJax,.katex,math,.quiz-math-fallback) *{
-  color:inherit!important;
-  -webkit-text-fill-color:currentColor!important;
 }
 /* Identical single-column four-option layout, spacing and pill lettering. */
 #tactical-combat .tc-quiz .tc-pair-entry .tc-options{
@@ -306,20 +285,9 @@ body.tactical-open #solo-cultivation-feedback{
   outline:2px solid #d1bd7d!important;outline-offset:2px;
 }
 
-/* The whiteboard copies the current stem, so its rendered words and equations
-   must follow the same pure-black ink rule as the parchment question card. */
-#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question,
-#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question *{
+/* Set the ink on the whiteboard's question field. */
+#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question{
   color:#000!important;
-  -webkit-text-fill-color:#000!important;
-}
-#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question mjx-container[jax="SVG"] svg *,
-#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question .katex svg *{
-  fill:#000!important;
-}
-#tactical-combat .tc-quiz .tc-pair-whiteboard .quiz-whiteboard-question svg :is(text,tspan){
-  fill:#000!important;
-  stroke:none!important;
 }
 
 /* Mobile keyboard: keep the logical game canvas fixed while placing only the

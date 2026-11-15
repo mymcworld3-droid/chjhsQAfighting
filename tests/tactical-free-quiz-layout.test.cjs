@@ -88,12 +88,10 @@ test('PvE uses the shared answer page and its ordinary cultivation feedback',()=
 });
 
 
-test('every form of question-stem text and rendered math uses pure black without recoloring answer options',()=>{
-  assert.match(styles,/\.tc-question-sheet \.tc-question,\s*#tactical-combat \.tc-quiz \.tc-question-sheet \.tc-question \*\{\s*color:#000!important;/);
-  assert.match(styles,/-webkit-text-fill-color:#000!important/);
-  assert.match(styles,/mjx-container\[jax="SVG"\] svg/);
-  assert.match(styles,/\.katex svg/);
-  assert.match(styles,/svg :is\(text,tspan\)/);
+test('the tactical stem and whiteboard set their own ink and share formula color rules with options',()=>{
+  assert.match(styles,/\.tc-question-sheet \.tc-question\{\s*color:#000!important;/);
+  assert.match(styles,/\.tc-pair-whiteboard \.quiz-whiteboard-question\{\s*color:#000!important;/);
+  assert.doesNotMatch(styles,/-webkit-text-fill-color:|mjx-container|\.katex/);
   assert.match(styles,/\.tc-options > button\{/);
   assert.match(styles,/color:#eee8d5!important/);
 });

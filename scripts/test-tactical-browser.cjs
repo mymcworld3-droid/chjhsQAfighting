@@ -116,12 +116,18 @@ async function main(){
     });
     for(const pair of pairs)assert.deepEqual(pair.current,pair.original,pair.name+' must keep the original question-page appearance');
   }
-  async function mathIsWhite(view,review=false){
+  async function mathMatchesField(view,review=false){
     if(!mathDir)return;
     await view.locator((review?'.tc-feedback-text':'.tc-question')+' mjx-container').first().waitFor();
-    const colors=await view.evaluate(()=>[...document.querySelectorAll('.tc-quiz mjx-container,.tc-quiz mjx-container *')].map(el=>({color:getComputedStyle(el).color,fill:getComputedStyle(el).webkitTextFillColor})));
-    assert.ok(colors.length>10,'use real MathJax output in the question and explanation');
-    assert.ok(colors.every(c=>c.color==='rgb(255, 255, 255)'&&c.fill==='rgb(255, 255, 255)'),'all rendered formula descendants remain white');
+    const formulas=await view.evaluate(()=>[...document.querySelectorAll('.tc-quiz mjx-container')].map(root=>{
+      const field=getComputedStyle(root.parentElement);
+      return {color:field.color,ink:field.webkitTextFillColor,glyphs:[root,...root.querySelectorAll('*')].map(el=>{
+        const glyph=getComputedStyle(el);
+        return {color:glyph.color,ink:glyph.webkitTextFillColor};
+      })};
+    }));
+    assert.ok(formulas.reduce((count,formula)=>count+formula.glyphs.length,0)>10,'use real MathJax output');
+    for(const {color,ink,glyphs} of formulas)for(const glyph of glyphs)assert.deepEqual(glyph,{color,ink});
   }
   async function acknowledgeIntros(view){
     for(let i=0;i<20&&await view.locator('[data-intro-ack]').count();i++){
@@ -191,7 +197,7 @@ async function main(){
     }finally{view.page.off('request',track);}
   }
   async function correct(page){
-    await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);await mathIsWhite(page);
+    await page.locator('[data-quiz]').click();await page.locator('[data-choice]').first().waitFor();await ratio(page,{dialog:true});await originalQuizStyle(page);await mathMatchesField(page);
     if(!checkedQuestionTools){
       await page.locator('[data-helper-toggle]').click();assert.equal(await page.locator('[data-helper-panel] [role=dialog]').isVisible(),true);await page.screenshot({path:path.join(output,'question-helper-popup.png')});await page.locator('[data-helper-input]').fill('可以解釋第一步嗎？');await page.locator('[data-helper-send]').click();
       await page.waitForFunction(()=>document.querySelectorAll('[data-helper-messages] p').length===2);
@@ -201,7 +207,7 @@ async function main(){
     }
     const orientation=await page.evaluate(()=>innerWidth<innerHeight?'portrait':'landscape');
     await page.screenshot({path:path.join(output,'question-'+orientation+'.png')});
-    await page.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await page.locator('[data-continue]').waitFor();await originalQuizStyle(page);await mathIsWhite(page,true);
+    await page.locator('[data-choice]').filter({hasText:/^\w?3$/}).click();await page.locator('[data-continue]').waitFor();await originalQuizStyle(page);await mathMatchesField(page,true);
     await page.locator('[data-continue]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,'question-review-'+orientation+'.png')});
     await page.locator('[data-continue]').click();await page.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
   }
