@@ -333,7 +333,8 @@ function buildGame(){
       +'<path class="tc-bolt-outline" d="M 43 6 L 16 50 Q 14 54 20 54 H 37 L 26 94 L 63 37 H 43 L 50 6 Z"></path>'
       +'<path class="tc-bolt-fill" d="M 43 6 L 16 50 Q 14 54 20 54 H 37 L 26 94 L 63 37 H 43 L 50 6 Z"></path>'
       +'<path class="tc-bolt-glint" d="M 42 17 L 27 46 H 40"></path>'
-      +'</svg><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>';
+      +'</svg><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>'
+      +'<span class="tc-charge-label" data-charge-label aria-hidden="true">答題充能（0/2）</span>';
     quiz.setAttribute('aria-label','答題充能');
     energy.append(quiz);
     const actions=document.createElement('section');
@@ -500,6 +501,7 @@ function paint({preserveModal=false}={}){
     root.querySelectorAll('[data-energy-segment]').forEach(segment=>
       segment.classList.toggle('is-filled',Number(segment.dataset.energySegment)<amount));
     const quizButton=$('[data-quiz]');
+    $('[data-charge-label]').textContent=`答題充能（${me.questions}/${R.LIMITS.questions}）`;
     quizButton.title=`本回合充能 ${me.questions} / ${R.LIMITS.questions} 次`;
     quizButton.setAttribute('aria-label',`答題充能，${quizButton.title}，目前能量 ${amount} / ${R.LIMITS.stamina}，答對增加 4，答錯增加 1`);
   }else $('[data-quiz]').textContent=canQuestion()?`答題 ${me.questions}/2`:state.quizRound&&me.questions>=2?'答題完成':myTurn?'無法再答題':'等待對手';

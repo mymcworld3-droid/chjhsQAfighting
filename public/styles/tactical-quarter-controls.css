@@ -129,7 +129,7 @@
    Green pulsing appears only while the existing quiz action is enabled. */
 #tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]{
   position:absolute;left:0;bottom:0;z-index:3;
-  width:69%;height:69%;
+  width:80%;height:80%;
   min-width:0;min-height:0!important;
   margin:0;padding:0!important;
   border:2px solid #328a59!important;
@@ -193,6 +193,12 @@
   color:#eaffdf;
   text-shadow:0 0 8px rgba(91,243,138,.66);
   pointer-events:none;
+}
+#tactical-combat.tc-quarter-layout .tc-charge-label{
+  position:absolute;left:4%;bottom:6%;width:83%;
+  color:#eff8e6;font:600 clamp(8px,2vw,12px)/1.2 system-ui,sans-serif;
+  text-align:center;white-space:nowrap;
+  text-shadow:0 1px 4px #0c2516;pointer-events:none;
 }
 #tactical-combat.tc-quarter-layout .tc-quarter-energy>[data-quiz]:focus-visible,
 #tactical-combat.tc-quarter-layout .tc-quarter-action button:focus-visible{
@@ -550,11 +556,11 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
   background:radial-gradient(circle at 12% 88%,#477a51 0%,#285539 57%,#193a29 100%)!important;
 }
 #tactical-combat.tc-quarter-layout .tc-energy-bolt{
-  left:22%;top:26%;width:29%;height:47%;
+  left:22%;top:15%;width:29%;height:43%;
   filter:drop-shadow(0 2px 3px #102619a6) drop-shadow(0 0 5px #84d49a70);
 }
 #tactical-combat.tc-quarter-layout .tc-energy-number{
-  right:15%;bottom:12%;font-size:clamp(23px,3.2vw,44px);
+  right:15%;bottom:30%;font-size:clamp(23px,3.2vw,44px);
   font-weight:500;color:#edf0d8;text-shadow:0 2px 6px #0c2516;
 }
 #tactical-combat.tc-quarter-layout .tc-quarter-action{
