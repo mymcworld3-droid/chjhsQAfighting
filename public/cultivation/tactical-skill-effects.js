@@ -104,7 +104,7 @@
         const motion=(scene.moves||[]).find(m=>m.uid===number.uid),path=motion?.path;
         let contact=center(victim);
         if(path?.length>1){
-          const q=motion.timing==='manual-throw'?phase(p,.28,.81):phase(p,scene.impactStart,1);
+          const q=motion.timing==='manual-throw'?animation().throwProgress(scene,p):phase(p,scene.impactStart,1);
           const travel=motion.timing==='manual-throw'?q*q*(3-2*q):move==='dragon-guard'?q:1-(1-q)**3;
           const t=travel*(path.length-1),i=Math.min(path.length-2,Math.floor(t));
           contact=center(point(path[i],path[i+1],t-i));

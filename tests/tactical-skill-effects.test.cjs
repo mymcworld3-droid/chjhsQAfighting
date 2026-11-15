@@ -103,15 +103,21 @@ test('dash effects follow committed movement without changing endpoints',()=>{
   }
 });
 
-test('throw effects and enemy movement share one animation and retain the committed landing',()=>{
+test('throw damage resolves with the committed landing in one animation',()=>{
   const before=fixture('tiger-throw');before.actors[1].x=5;
   const after=R.apply(before,'hero',{type:'manual',skillId:'tiger-throw',x:5,y:4},now);
   const scenes=A.plan(before,after,'hero'),cast=scenes.find(s=>s.kind==='cast');
-  assert(cast.throwImpact);assert(!scenes.some(s=>s.kind==='move'&&s.style==='throw'));
+  assert(cast.throwImpact);assert(cast.parallelImpact);
+  assert(!scenes.some(s=>(s.kind==='move'&&s.style==='throw')||s.kind==='damage'));
+  assert.deepEqual(cast.numbers,[{uid:before.actors[1].uid,damage:150,absorbed:0}]);
   for(const motion of cast.moves){
     assert.equal(motion.timing,'manual-throw');
-    const target=A.sample(cast,1).find(a=>a.uid===motion.uid);
-    assert.equal(target.x,motion.path.at(-1).x);assert.equal(target.y,motion.path.at(-1).y);
+    const targetAt=p=>A.sample(cast,p).find(a=>a.uid===motion.uid);
+    assert(targetAt(.5).lift>0);assert.equal(targetAt(.5).hp,3000);
+    const landed=targetAt(cast.impactStart);
+    assert.equal(landed.x,motion.path.at(-1).x);assert.equal(landed.y,motion.path.at(-1).y);
+    assert(landed.lift<1e-9);assert.equal(targetAt(1).hp,2850);
+    assert(targetAt(.82).hp<3000);
   }
   assert(A.impactPulse(cast,.82)>0);
 });
@@ -446,12 +452,17 @@ test('damage numbers appear at impact on top of the manual animation',()=>{
   const Renderer=new Function('globalThis',source+'\nreturn TacticalRenderer;')({
     QATactical:R,QATacticalAnimation:A,QATacticalCamera:{},QATacticalSkillEffects:Effects
   });
-  const before=fixture('rock-break');before.actors[1].x=5;
-  const after=R.apply(before,'hero',{type:'manual',skillId:'rock-break',x:5,y:4},now);
-  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
-  const early=context(),later=context(),renderer=Object.create(Renderer.prototype);
-  Object.assign(renderer,{ctx:early,cell:48,ox:0,oy:0,state:after});renderer.drawEffect(cast,.3,true);
-  renderer.ctx=later;renderer.drawEffect(cast,.7,false);renderer.drawEffect(cast,.7,true);
-  assert(!early.calls.some(call=>call[0]==='fillText'));
-  assert(later.calls.some(call=>call[0]==='fillText'&&String(call[1]).startsWith('−')));
+  for(const skill of ['rock-break','tiger-throw']){
+    const before=fixture(skill);before.actors[1].x=5;
+    const after=R.apply(before,'hero',{type:'manual',skillId:skill,x:5,y:4},now);
+    const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+    const early=context(),later=context(),renderer=Object.create(Renderer.prototype);
+    Object.assign(renderer,{ctx:early,cell:48,ox:0,oy:0,state:after});renderer.drawEffect(cast,cast.impactStart-.05,true);
+    const contact=cast.impactStart+.1;
+    renderer.ctx=later;renderer.drawEffect(cast,contact,false);renderer.drawEffect(cast,contact,true);
+    assert(!early.calls.some(call=>call[0]==='fillText'));
+    const number=later.calls.find(call=>call[0]==='fillText'&&call[1].startsWith('−'));
+    assert(number,skill);
+    if(skill==='tiger-throw')assert.deepEqual(number.slice(0,3),['fillText','−150',168]);
+  }
 });

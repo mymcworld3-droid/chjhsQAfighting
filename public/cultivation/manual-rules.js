@@ -108,8 +108,8 @@
       shared(straightFist,'tiger-fist'),
       technique('tiger-step','踏步連拳',4,2,'dash-cleave',1.5,
         '直線踏步最多兩格，再攻擊落點前方橫排三格兩次。',{hits:2}),
-      technique('tiger-throw','翻摔',4,1,'fist-throw',0,
-        '將身前橫排三格內的敵人拉到身後的對應格。若對應落點有障礙或被占用，該目標留在原地。')
+      technique('tiger-throw','翻摔',4,1,'fist-throw',1.5,
+        '將身前橫排三格內的敵人摔到身後的對應格，落地時造成傷害。若對應落點有障礙或被占用，該目標留在原地。')
     ],[6,28,68])
   ]);
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));

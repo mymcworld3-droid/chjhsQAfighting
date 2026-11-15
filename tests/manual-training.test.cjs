@@ -349,7 +349,7 @@ test('far break reaches beyond four cells and pushes survivors farthest first up
   }
 });
 
-test('throw moves each enemy to its own rear tile and leaves blocked lanes in place',()=>{
+test('throw damages enemies at their rear landing tiles and leaves blocked lanes unharmed',()=>{
   const id='tiger-throw',battle=swordBattle(id,[
     lowBeast('left',5,3,500),lowBeast('center',5,4,500),
     lowBeast('right',5,5,500),lowBeast('occupied',3,5,500)
@@ -362,7 +362,9 @@ test('throw moves each enemy to its own rear tile and leaves blocked lanes in pl
   assert.deepEqual(result.actors.map(a=>[a.x,a.y]),[[4,4],[5,3],[3,4],[5,5],[3,5]]);
   assert.equal(result.actors[2].intent.kind,'stagger');
   assert.equal(result.actors[0].stamina,6);
-  assert.equal(result.actors[2].hp,500);
+  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[500,350,500,500]);
+  assert.deepEqual(result.events.filter(e=>e.skill===id&&e.type==='damage').map(e=>[e.target,e.damage,e.x,e.y]),
+    [['center',150,3,4]]);
 });
 
 test('fist advances stop against a wall or an enemy that cannot be pushed',()=>{

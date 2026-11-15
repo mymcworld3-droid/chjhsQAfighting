@@ -537,16 +537,18 @@
       return;
     }
     if(sk.kind==='fist-throw'){
-      const moves=[],d=attackDirection(a,p);
+      const moves=[],thrown=[],d=attackDirection(a,p);
       for(const target of strikeTargets(s,a,cells)){
         const landing=throwLanding(s,target,d);
         if(!landing)continue;
         moves.push({uid:target.uid,path:[point(target),landing]});
+        thrown.push(target);
         Object.assign(target,landing);
         if(target.bot)interruptMonster(target);
       }
       if(moves.length)log(s,a.name+'將敵人翻摔至身後','displace',{
         actor:a.uid,animation:{kind:'move',style:'throw',moves}});
+      for(const target of thrown)damage(s,a,target,a.atk*sk.power,{skill:sk.id,manualId:sk.manualId});
       return;
     }
     if(sk.kind==='restore'){

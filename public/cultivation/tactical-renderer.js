@@ -181,7 +181,7 @@ export class TacticalRenderer{
       const advances=scene.moves.filter(move=>move.timing==='chain-advance');
       if(advances.length)SkillEffects.drawMotion(c,{...scene,kind:'move',style:'dash',visualSkill:scene.skill,moves:advances},p,view);
       const throws=scene.moves.filter(move=>move.timing==='manual-throw');
-      if(throws.length)SkillEffects.drawMotion(c,{...scene,kind:'move',style:'throw',visualSkill:scene.skill,moves:throws},Math.max(0,Math.min(1,(p-.28)/.53)),view);
+      if(throws.length)SkillEffects.drawMotion(c,{...scene,kind:'move',style:'throw',visualSkill:scene.skill,moves:throws},A.throwProgress(scene,p),view);
       if(scene.kind==='move'&&!manualMotion)for(const move of scene.moves){
         const route=move.path;
         if(scene.style==='teleport'){ring(center(route[0]),.15+p*.6,1-p);ring(center(route.at(-1)),.65-p*.4,p);}
@@ -190,7 +190,7 @@ export class TacticalRenderer{
           route.forEach((pt,i)=>{const at=center(pt);c[i?'lineTo':'moveTo'](at.x,at.y);});c.stroke();c.setLineDash([]);
         }
       }
-      if(scene.parallelImpact&&impact>0){
+      if(scene.parallelImpact&&!scene.throwImpact&&impact>0){
         const sampled=A.sample(scene,p);
         for(const move of scene.moves.filter(m=>m.timing!=='chain-advance')){
           const current=sampled.find(a=>a.uid===move.uid);if(!current)continue;
@@ -272,9 +272,11 @@ export class TacticalRenderer{
         c.globalAlpha=beat;c.strokeStyle=ink;c.lineWidth=size*.05;c.beginPath();c.moveTo(from.x,from.y-size*.48);c.lineTo(from.x+size*.3,from.y-size*.3);c.lineTo(from.x+size*.24,from.y+size*.1);c.lineTo(from.x,from.y+size*.32);c.lineTo(from.x-size*.24,from.y+size*.1);c.lineTo(from.x-size*.3,from.y-size*.3);c.closePath();c.stroke();
       }
     }
+    const numberActors=scene.parallelImpact?A.sample(scene,p):scene.before;
     if(scene.kind==='damage'||scene.parallelImpact&&impact>0){
       if(scene.style==='counter')beam(from,to,'#e0baf1',true);
-      for(const number of scene.strikeImpacts?[]:scene.numbers){const a=scene.before.find(a=>a.uid===number.uid);if(a)motes(center(a),number.absorbed?'#b9e5ef':'#efb18e',8,.7);}
+      const impactActors=scene.throwImpact?numberActors:scene.before;
+      for(const number of scene.strikeImpacts?[]:scene.numbers){const a=impactActors.find(a=>a.uid===number.uid);if(a)motes(center(a),number.absorbed?'#b9e5ef':'#efb18e',8,.7);}
       for(const reflection of scene.reflections||[]){
         const source=scene.before.find(a=>a.uid===reflection.actor),victim=scene.before.find(a=>a.uid===reflection.target);
         if(source&&victim)beam(center(source),center(victim),'#e0baf1',true);
@@ -285,7 +287,6 @@ export class TacticalRenderer{
       if(elapsed<0||elapsed>=.28)return [];
       return hits.map(hit=>({...hit,numberProgress:elapsed/.28}));
     }):scene.parallelImpact&&impact===0?[]:[...scene.numbers];
-    const numberActors=scene.parallelImpact?A.sample(scene,p):scene.before;
     if(scene.kind==='dodge'&&actor)numbers.push({uid:actor.uid,text:'閃避'});
     for(const number of numbers){
       const a=numberActors.find(a=>a.uid===number.uid);if(!a)continue;

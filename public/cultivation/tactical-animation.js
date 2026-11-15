@@ -13,6 +13,7 @@
   const hitTime={'wind-slash':.40,'wind-step':.32,'wind-thousand':.45,'flight-summon':.45,
     'sky-cloud':.25,'sky-sever':.46,'rock-fist':.46,'rock-quake':.32,'rock-break':.40,'tiger-step':.32};
   const quickSwordCast=move=>move==='sky-cloud'||move==='sky-sever';
+  const throwProgress=(scene,p)=>clamp((p-.25)/(scene.impactStart-.25));
   function strikeTime(scene,index){
     const move=moveFor(scene.skill),first=scene.impactStart??hitTime[move]??.4;
     if(move==='sky-cloud')return index===0?first:first+.32;
@@ -140,8 +141,8 @@
       }
       if(!hits.size)continue;
       const separateHits=strikeImpacts.some(beat=>beat.length),move=moveFor(cast.skill);
-      Object.assign(cast,{parallelImpact:true,impactStart:hitTime[move]??.4,
-        numbers,reflections,after:scenes[j-1].after,duration:quickSwordCast(move)?500:separateHits?740:600,
+      Object.assign(cast,{parallelImpact:true,impactStart:cast.impactStart??hitTime[move]??.4,
+        numbers,reflections,after:scenes[j-1].after,duration:cast.throwImpact?cast.duration:quickSwordCast(move)?500:separateHits?740:600,
         ...(separateHits?{strikeImpacts}:{})});
       scenes.splice(i+1,j-i-1);
     }
@@ -151,7 +152,7 @@
       const cast=scenes[i],thrown=scenes[i+1];
       if(cast.kind!=='cast'||moveFor(cast.skill)!=='tiger-throw'||thrown.kind!=='move'||
         thrown.style!=='throw'||thrown.actor!==cast.actor||thrown.eventRevision!==cast.eventRevision)continue;
-      Object.assign(cast,{throwImpact:true,impactStart:.72,duration:650,after:thrown.after,
+      Object.assign(cast,{throwImpact:true,impactStart:.72,duration:720,after:thrown.after,
         moves:thrown.moves.map(m=>({...m,timing:'manual-throw'}))});
       scenes.splice(i+1,1);
     }
@@ -208,8 +209,8 @@
     }
     combineKnockback(scenes);
     combineChainAdvance(scenes);
-    combineManualImpact(scenes);
     combineManualThrow(scenes);
+    combineManualImpact(scenes);
     if(previous.status!=='finished'&&next.status==='finished'){
       const me=next.actors.find(a=>a.uid===uid),won=me?.team===next.winner,draw=next.winner==='draw';
       const scene={kind:'finish',style:won?'victory':draw?'draw':'defeat',actor:uid,label:draw?'平分秋色':won?next.mode==='pve'?'此關已破':'克敵制勝':'整裝再戰',before:copy(next.actors),after:copy(next.actors),moves:[],numbers:[]};
@@ -238,7 +239,7 @@
       if(move){
         const advance=move.timing==='chain-advance',throwing=move.timing==='manual-throw';
         const route=move.path,style=advance?'dash':throwing?'throw':scene.parallelImpact?'push':scene.style;
-        const moveProgress=advance?p:throwing?clamp((p-.28)/.53):scene.parallelImpact?impact:p;
+        const moveProgress=advance?p:throwing?throwProgress(scene,p):scene.parallelImpact?impact:p;
         const teleport=style==='teleport',fast=['dash','rush','push'].includes(style);
         const flowingPush=!advance&&scene.style==='fist-chain'&&scene.parallelImpact;
         const t=(advance||flowingPush?moveProgress:fast?1-(1-moveProgress)**3:smooth(moveProgress))*(route.length-1),i=Math.min(route.length-2,Math.floor(t)),f=t-i;
@@ -259,14 +260,14 @@
         if(weight){a.scaleX*=1+weight*.10;a.scaleY*=1-weight*.08;}
       }
       const number=scene.numbers.find(n=>n.uid===a.uid);
-      if(weight&&move?.timing==='manual-throw'){
+      if(weight&&move?.timing==='manual-throw'&&!number){
         if(a.bot){a.scaleX*=1+weight*.18;a.scaleY*=1-weight*.16;}
         a.flash=weight*.6;
       }
       if((scene.kind==='damage'||scene.parallelImpact)&&number&&impact>0){
         const impactBeat=Math.sin(Math.PI*impact);
         a.flash=impactBeat*.6;
-        if(a.bot&&scene.style!=='fist-chain')a.x+=Math.sin(impact*Math.PI*5)*(1-impact)*.07;
+        if(a.bot&&scene.style!=='fist-chain'&&move?.timing!=='manual-throw')a.x+=Math.sin(impact*Math.PI*5)*(1-impact)*.07;
         if(weight&&a.uid!==scene.actor){
           a.flash=Math.max(a.flash,weight*.9);
           if(a.bot){a.scaleX*=1+weight*.18;a.scaleY*=1-weight*.16;}
@@ -292,5 +293,5 @@
     }
     return actors;
   }
-  return Object.freeze({plan,sample,impactPulse,strikeTime});
+  return Object.freeze({plan,sample,impactPulse,strikeTime,throwProgress});
 });
