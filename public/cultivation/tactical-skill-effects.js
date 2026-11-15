@@ -162,6 +162,18 @@
         const shift={x:side.x*size*offset,y:side.y*size*offset};
         stroke({x:from.x+shift.x,y:from.y+shift.y},{x:tip.x+shift.x,y:tip.y+shift.y},jade,.025,beat*.8);
       }
+      // The two-finger command sends a blue greatsword silhouette down the ray.
+      const bladeAlpha=pulse(phase(p,.28,.93));
+      if(bladeAlpha>0){
+        c.save();c.translate(tip.x,tip.y);c.rotate(Math.atan2(dy,dx));glow('#71caff',.3);
+        c.fillStyle='#8bddff';c.strokeStyle='#c8f4ff';c.lineWidth=Math.max(1,size*.028);
+        c.beginPath();c.moveTo(-size*.95,-size*.125);c.lineTo(-size*.18,-size*.118);
+        c.lineTo(size*.16,0);c.lineTo(-size*.18,size*.118);c.lineTo(-size*.95,size*.125);c.closePath();
+        c.globalAlpha=bladeAlpha*.4;c.fill();c.globalAlpha=bladeAlpha*.82;c.stroke();
+        stroke({x:-size*.95,y:-size*.23},{x:-size*.95,y:size*.23},'#8bddff',.055,bladeAlpha*.85);
+        stroke({x:-size*1.20,y:0},{x:size*.12,y:0},'#c8f4ff',.035,bladeAlpha*.9);
+        c.restore();
+      }
       crescent(tip,Math.atan2(dy,dx),phase(p,.05,.98),white,1.15);
       if(p>.45)impact(tip,phase(p,.45,1),jade);
     }else if(move==='flight-summon'){
