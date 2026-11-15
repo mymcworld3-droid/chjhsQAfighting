@@ -75,13 +75,13 @@
   const BOOKS=Object.freeze([
     book('sword-wind','流風劍訣','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
-      technique('wind-step','突進橫斬',4,4,'dash-cleave',1.8,
+      technique('wind-step','突進橫斬',4,4,'dash-cleave',2.8,
         '沿直線突進最多四格，再揮出三格寬的劍氣兩次。',{hits:2}),
       breakLine
     ]),
     book('sword-flight','御劍真訣','sword','御使飛劍，控制敵人的站位。',[
       shared(straight,'flight-slash'),
-      technique('flight-summon','召劍',3,3,'flying-sword',1.1,
+      technique('flight-summon','召劍',2,3,'flying-sword',1.1,
         '在自身直線三格內的空地召劍。再用此招可讓飛劍直線移動最多四格，穿過敵人時造成傷害。每回合最多用兩次。',
         {travel:4,cooldown:0}),
       shared(breakLine,'flight-break')

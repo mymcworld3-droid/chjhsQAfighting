@@ -370,12 +370,12 @@ test('flying sword persists, crosses enemies on its own path and can be used twi
   battle.blocks=[{x:8,y:4}];
   const summoned=castSword(battle,skill,4,4);
   assert.deepEqual(summoned.actors[0].flyingSword,{x:4,y:4});
-  assert.equal(summoned.actors[0].stamina,7);
+  assert.equal(summoned.actors[0].stamina,8);
   assert.equal(summoned.actors[1].hp,500);
   assert.throws(()=>castSword(summoned,skill,8,4),/直線地格/);
   const moved=castSword(summoned,skill,7,4);
   assert.deepEqual(moved.actors[0].flyingSword,{x:7,y:4});
-  assert.equal(moved.actors[0].stamina,4);
+  assert.equal(moved.actors[0].stamina,6);
   assert.deepEqual(moved.actors.slice(1).map(a=>a.hp),[390,390]);
   assert.throws(()=>castSword(moved,skill,6,4),/兩次/);
   const scenes=require('../public/cultivation/tactical-animation.js').plan(summoned,moved,'u1');
@@ -396,10 +396,10 @@ test('dash cleave previews a clear landing and strikes the next row in two hits'
   hero.manualSkillLevels={[skill]:5};
   const upgraded=castSword(battle,skill,5,4);
   assert.equal(upgraded.actors[0].stamina,0);
-  assert.equal(upgraded.actors[1].hp,248);
+  assert.equal(upgraded.actors[1].hp,108);
   assert.deepEqual([after.actors[0].x,after.actors[0].y,after.actors[0].stamina],[5,4,0]);
-  assert.deepEqual(after.actors.slice(1).map(a=>a.hp),[320,320,500]);
-  assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='center').length,2);
+  assert.deepEqual(after.actors.slice(1).map(a=>a.hp),[220,220,500]);
+  assert.deepEqual(after.events.filter(e=>e.type==='damage'&&e.target==='center').map(e=>e.damage),[140,140]);
   assert.equal(after.events.find(e=>e.animation?.style==='dash').path.length,5);
 });
 
