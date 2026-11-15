@@ -2,7 +2,7 @@ import './manual-rules.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
-let root=null,current=null,busy=false,loadedFor='',lastFetch=0,sequence=0;
+let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -23,7 +23,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261115-skill-upgrade';
+    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261115-collapsible-books';
     document.head.append(link);
   }
   return root;
@@ -48,7 +48,7 @@ function skillDetails(id){
   const base=Catalog.BY_SKILL[id];
   return base&&current?.library.find(book=>book.id===base.manualId)?.skills.find(skill=>skill.id===id);
 }
-function markup(){
+function markup(expandedBooks){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const owned=current.library.filter(item=>item.owned).length;
   const equipped=current.equipped||[];
@@ -86,7 +86,7 @@ function markup(){
       </div>`;
     }).join('');
     const progress=`<div class="manual-mastery">
-      <div class="manual-mastery-head"><strong>功法 Lv. ${book.level}</strong>
+      <div class="manual-mastery-head"><strong>熟練度</strong>
         <span>${book.expInLevel.toLocaleString('zh-TW')} / ${book.expToNext.toLocaleString('zh-TW')} EXP</span></div>
       <div class="manual-exp-track" role="progressbar" aria-label="${esc(book.name)}熟練經驗" aria-valuemin="0"
         aria-valuemax="${book.expToNext}" aria-valuenow="${book.expInLevel}">
@@ -95,12 +95,18 @@ function markup(){
       ${book.upgrade?`<button type="button" class="manual-upgrade" data-manual-upgrade="${esc(book.id)}" ${gold<book.upgrade.gold?'disabled':''}>
         ${gold<book.upgrade.gold?'靈石不足 · ':''}升級功法至 Lv. ${book.upgrade.targetLevel} · ${book.upgrade.gold} 靈石</button>`:''}
     </div>`;
-    return `<article class="manual-book owned" data-manual-book="${esc(book.id)}">
-      <div class="manual-book-top"><div class="manual-book-glyph"><i class="fa-solid ${icon(book.school)}"></i></div>
-        <div><small>${label(book.school)}功法</small><h3>${esc(book.name)}</h3></div></div>
-      <p class="manual-book-description">${esc(book.description)}</p>
-      ${progress}<div class="manual-techniques">${skills}</div>
-    </article>`;
+    return `<details class="manual-book" data-manual-book="${esc(book.id)}"${expandedBooks.has(book.id)?' open':''}>
+      <summary class="manual-book-top">
+        <span class="manual-book-glyph" aria-hidden="true"><i class="fa-solid ${icon(book.school)}"></i></span>
+        <span class="manual-book-title"><small>${label(book.school)}功法</small><strong>${esc(book.name)}</strong></span>
+        <span class="manual-book-level">Lv. ${book.level}</span>
+        <span class="manual-book-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="manual-book-content">
+        <p class="manual-book-description">${esc(book.description)}</p>
+        ${progress}<div class="manual-techniques">${skills}</div>
+      </div>
+    </details>`;
   }).join('');
   return `<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
       <div><b>${equipped.length} / 3</b><span>已裝備技能</span></div>
@@ -122,7 +128,12 @@ function markup(){
 }
 function paint(message=''){
   ensure();if(!root)return;
-  root.innerHTML=markup();
+  const expandedBooks=new Set();
+  if(renderedFor===loadedFor){
+    for(const book of root.querySelectorAll('details[data-manual-book][open]'))expandedBooks.add(book.dataset.manualBook);
+  }
+  root.innerHTML=markup(expandedBooks);
+  renderedFor=loadedFor;
   const status=root.querySelector('[data-manual-status]');
   if(status)status.textContent=message;
   root.querySelectorAll('button').forEach(button=>{
