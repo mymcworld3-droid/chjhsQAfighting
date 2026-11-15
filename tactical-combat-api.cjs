@@ -736,7 +736,7 @@ async function reportQuestion(db,uid,input,{review,award,readReceipt=readSoloRec
   const claim=exists(await db.collection('questionErrorCompensations').doc(reports.reportKey(uid,trusted.question)).get());
   const approved=claim?.uid===uid&&claim.question===trusted.question&&claim.correctIndex===trusted.correctIndex&&
     claim.explanation===trusted.explanation&&JSON.stringify(claim.options)===JSON.stringify(trusted.options);
-  const result=approved?{status:'confirmed',reason:claim.reviewReason,issueType:claim.issueType}:await (review||reports.reviewQuestion)(trusted);
+  const result=approved?{status:'confirmed',reason:claim.reviewReason,issueType:claim.issueType}:await (review||reports.reviewQuestion)(trusted,{trusted:true});
   if(result.status==='unavailable')throw error(result.reason,503);
   if(result.status==='confirmed'){
     // The trial pays currency at stage settlement. Correcting a question

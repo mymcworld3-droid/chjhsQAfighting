@@ -4568,7 +4568,8 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
                 options: quiz.data.opts,
                 correctIndex: quiz.data.ans,
                 explanation: quiz.data.exp,
-                userReason: reason
+                userReason: reason,
+                soloProof: quiz.soloProof
             })
         });
         reportStage = 'response';
@@ -4640,6 +4641,15 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
         } else if (trial && result.questionSkipped && !result.compensated) {
             renderReportOutcome({kind:'approved', title:'審查通過 ✅', message:result.reason,
                 actionText:'跳過錯題', onAction:skipVerifiedQuestion});
+        } else if (result.status === 'limit' && result.valid === true) {
+            if (window.currentActiveQuiz === quiz) await quiz.onVerifiedError?.();
+            renderReportOutcome({
+                kind: 'approved',
+                title: '審查通過 ✅',
+                message: result.reason,
+                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
+                onAction: skipVerifiedQuestion
+            });
         } else if (result.status === 'duplicate') {
             if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
             renderReportOutcome({

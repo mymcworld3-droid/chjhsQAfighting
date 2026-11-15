@@ -4,8 +4,12 @@
 // figure and explanations that explicitly contradict or correct the answer.
 const { questionIntegrityIssue } = require('./question-answer-integrity.cjs');
 const MathGuard = require('./public/cultivation/math-guard.js');
+const { inspectQuestionFormat } = require('./question-format.cjs');
 
 function questionQualityIssue({ q, correct, wrong, exp } = {}) {
+  if (inspectQuestionFormat({ q, correct, wrong, exp }).damaged) {
+    return '數學公式的單位指令受損，請重新產生完整題目';
+  }
   // Partial legacy checks still report their specific problems; full generated
   // questions receive the stronger answer/explanation consistency verification.
   if (typeof correct === 'string' && Array.isArray(wrong) && wrong.length === 3 &&
