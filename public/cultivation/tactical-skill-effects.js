@@ -128,9 +128,35 @@
       }
     };
     c.save();c.beginPath();c.rect(ox,Math.max(0,oy-size*.35),size*width,size*(height+.35));c.clip();
+    if(move==='sky-cloud'){
+      const cuts=scene.cuts||rules().crossedSwordLines(scene.rays||[],target);
+      const trailAlpha=1-phase(p,strikeTime(1)+.18,1);
+      for(const [index,cut] of cuts.entries()){
+        if(cut.length<2)continue;
+        const time=p-strikeTime(index);
+        if(time<=-.12)continue;
+        const middle=cut.findIndex(tile=>tile.x===target.x&&tile.y===target.y)/(cut.length-1);
+        const progress=time<0?middle*phase(time,-.12,0):middle+(1-middle)*phase(time,0,.065);
+        const start=center(cut[0]),end=center(cut.at(-1)),tip=point(start,end,progress);
+        if(!above){
+          const strength=trailAlpha*phase(time,-.085,.065);
+          if(strength<=0)continue;
+          glow(jade,.12);
+          stroke(start,tip,jade,.11,strength*.48);
+          stroke(start,tip,white,.032,strength*.74);
+        }else if(time<.13){
+          const strength=phase(time,-.12,-.03)*(1-phase(time,.04,.13));
+          const tail=point(start,end,Math.min(progress,phase(time,.015,.14)));
+          glow(jade,.16);
+          stroke(tail,tip,jade,.21,strength*.42);
+          stroke(tail,tip,white,.068,strength);
+        }
+      }
+      c.restore();return true;
+    }
     if(!above){
       // Ground marks follow the committed cells, including walls and truncated rays.
-      const markedCells=move==='sky-cloud'||move==='sky-sever'?[]:cells;
+      const markedCells=move==='sky-sever'?[]:cells;
       for(const tile of markedCells){
         const at=center(tile);c.globalAlpha=beat*.1;c.fillStyle=ink;
         c.fillRect(ox+tile.x*size+2,oy+tile.y*size+2,size-4,size-4);
@@ -209,21 +235,6 @@
             {x:to.x+Math.cos(angle)*size*.18,y:to.y+Math.sin(angle)*size*.18},jade,.025,beat);
         }
         sparks(to,12,white,.55);
-      }
-    }else if(move==='sky-cloud'){
-      const cuts=scene.cuts||rules().crossedSwordLines(scene.rays||[],target);
-      for(const [index,cut] of cuts.entries()){
-        if(cut.length<2)continue;
-        const time=p-strikeTime(index);
-        if(time<=-.12||time>=.13)continue;
-        const middle=cut.findIndex(tile=>tile.x===target.x&&tile.y===target.y)/(cut.length-1);
-        const progress=time<0?middle*phase(time,-.12,0):middle+(1-middle)*phase(time,0,.065);
-        const strength=phase(time,-.12,-.03)*(1-phase(time,.04,.13));
-        const start=center(cut[0]),end=center(cut.at(-1)),tip=point(start,end,progress);
-        const tail=point(start,end,Math.min(progress,phase(time,.015,.14)));
-        glow(jade,.16);
-        stroke(tail,tip,jade,.21,strength*.42);
-        stroke(tail,tip,white,.068,strength);
       }
     }else if(move==='sky-sever'){
       const hitAt=strikeTime(0),launchAt=hitAt-.14;

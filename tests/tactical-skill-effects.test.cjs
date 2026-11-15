@@ -365,7 +365,7 @@ test('a three-cell cleave shows two full-width sweeps and resolves damage separa
   }
 });
 
-test('crossed sword cuts use two diagonals without overlapping on screen',()=>{
+test('crossed sword cuts sweep in sequence and leave trails that fade together',()=>{
   const before=fixture('sky-cloud');
   const after=R.apply(before,'hero',{type:'manual',skillId:'sky-cloud',x:7,y:4},now);
   const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
@@ -383,6 +383,23 @@ test('crossed sword cuts use two diagonals without overlapping on screen',()=>{
   assert.deepEqual(starts(.41),[]);
   assert.deepEqual(starts(A.strikeTime(cast,1)),['moveTo,264,312']);
   for(let frame=0;frame<=100;frame++)assert(starts(frame/100).length<=1);
+  const trails=p=>{
+    const c=context(),lines=[];
+    c.stroke=()=>{
+      if(c.strokeStyle==='#effff4')lines.push({start:c.calls.at(-2),end:c.calls.at(-1),alpha:c.globalAlpha});
+    };
+    Effects.draw(c,cast,p,{cell:48,ox:0,oy:0,width:12,height:9},false);
+    return lines;
+  };
+  assert.deepEqual(trails(.1),[]);
+  const first=trails(.41),both=trails(.74);
+  assert.deepEqual(first,[{start:['moveTo',264,120],end:['lineTo',456,312],alpha:.74}]);
+  assert.deepEqual(both,[first[0],{start:['moveTo',264,312],end:['lineTo',456,120],alpha:.74}]);
+  const fading=trails(.88);
+  assert.equal(fading.length,2);
+  assert(fading[0].alpha>0&&fading[0].alpha<both[0].alpha);
+  assert.deepEqual(fading,both.map(line=>({...line,alpha:fading[0].alpha})));
+  assert.deepEqual(trails(1),[]);
   assert(cast.duration<=500);
 });
 
