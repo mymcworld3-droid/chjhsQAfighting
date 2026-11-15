@@ -87,14 +87,14 @@ test('PvE follows the sketch: central map, left energy and right three actions o
 });
 
 test('PvE uses tap-to-act, retaining server-authoritative quiz and turn actions',()=>{
-  for(const marker of ['data-action="move"','data-action="attack"','data-action="skill"',
+  for(const marker of ['data-action="move"','data-action="attack"','data-wheel-choice',
     'data-guard','data-end','data-execute','data-quiz']){
     assert.ok(ui.includes(marker),marker);
   }
   for(const marker of [
     "send({type:'guard'})","send({type:'end'})",
     "renderer?.resetView()",'void question()','void execute()',
-    "['move','attack'].includes(action)",
+    "['move','attack','skill','manual'].includes(action)",
     "root.classList.toggle('tc-quarter-layout',state?.mode==='pve')",
     "root.classList.remove('tc-quarter-layout')"
   ])assert.ok(ui.includes(marker),marker);

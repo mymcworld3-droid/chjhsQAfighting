@@ -20,21 +20,26 @@ test('the first skill of all six manuals costs exactly two stamina',()=>{
   }
 });
 
-test('left-circle second ring is the only skill picker; right circle only selects targets and actions',()=>{
-  assert.match(ui,/energy\.append\(techniqueRing\)/);
-  assert.match(ui,/techniqueRing\.append\(button,label\)/,'skill labels are not clipped by the button');
-  assert.match(ui,/const leftSkills=available;/);
-  assert.match(ui,/button\.dataset\.leftAttack='manual:'/);
-  assert.match(ui,/const start=-90\+90\*index\/leftSkills\.length/);
-  assert.match(ui,/makeChoice\('attack-ring','攻擊目標',-90,-180/);
-  assert.match(ui,/selectWheel\(b\.dataset\.leftAttack\)/);
-  assert.match(css,/\.tc-left-technique-ring\{display:contents\}/);
-  assert.match(css,/\.tc-left-technique\[aria-pressed=true\]/);
-  assert.match(css,/\.tc-energy-track\{/,'original outer energy bar stays visible');
-  assert.match(css,/\.tc-quarter-energy>\[data-quiz\]/,'original quiz button stays clickable');
-  assert.doesNotMatch(ui,/manualPickerOpen|manual-menu|data-manual-pick/);
-  assert.doesNotMatch(ui,/data-action="skill"|金丹技能/);
-  assert.doesNotMatch(ui,/makeChoice\('skill'/);
+test('the right outer ring offers only the attacks available in attack mode',()=>{
+  const equip=ui.slice(ui.indexOf('const equippedTechniques='),ui.indexOf('function syncEquippedAttack'));
+  const options=ui.slice(ui.indexOf('function wheelDetailOptions'),ui.indexOf('function updateWheelChoices'));
+  const {wheelDetailOptions,detailAngle,detailIndex}=new Function('R',equip+options+
+    'return {wheelDetailOptions,detailAngle,detailIndex};')(R);
+  const hero=makeActor(['wind-slash','wind-step','wind-thousand'],28);
+  const values=opts=>opts.map(option=>option.value);
+  assert.deepEqual(values(wheelDetailOptions(hero,true)),['player']);
+  assert.deepEqual(values(wheelDetailOptions(hero,false)),['manual:wind-slash','manual:wind-step','manual:wind-thousand']);
+  assert.deepEqual(values(wheelDetailOptions(makeActor(),false)),['attack']);
+  assert.deepEqual(values(wheelDetailOptions(makeActor(['wind-step'],1),false)),['attack']);
+  for(const count of [1,2,3])for(let index=0;index<count;index++){
+    assert.equal(detailIndex(detailAngle(index,count),count),index);
+  }
+  assert.equal(detailIndex(-180,3),2);
+  assert.match(ui,/actions\.append\(tabs,choices,end/);
+  assert.doesNotMatch(ui,/leftAttack|tc-left-technique|攻擊目標；使用左側/);
+  assert.doesNotMatch(css,/tc-left-technique/);
+  assert.match(css,/\.tc-energy-ring\{/);
+  assert.match(css,/\.tc-quarter-energy>\[data-quiz\]/);
 });
 
 test('attack choice is automatically replaced by equipped techniques and keeps the chosen slot on move',()=>{

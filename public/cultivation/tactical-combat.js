@@ -28,7 +28,10 @@ const equippedTechniques=hero=>(hero?.manualSkills||[]).map(id=>R.manualSkillFor
 function syncEquippedAttack(hero=myActor()){
   const skills=equippedTechniques(hero);
   if(skills.length){
-    if(!skills.some(skill=>skill.id===selectedManualSkill))selectedManualSkill=skills[0].id;
+    if(!skills.some(skill=>skill.id===selectedManualSkill)){
+      selectedManualSkill=skills[0].id;
+      if(action==='manual')selection=null;
+    }
     attackChoice='manual:'+selectedManualSkill;
     if(action==='attack'||action==='skill'){action='manual';selection=null;}
   }else{
@@ -55,7 +58,7 @@ function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
-  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261113-jade-dial-v2';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261115-right-skill-ring';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
@@ -77,7 +80,6 @@ function ensure(){
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
-    else if(b.dataset.leftAttack){selectWheel(b.dataset.leftAttack);}
     else if(b.dataset.wheelChoice){selectWheel(b.dataset.wheelChoice);}
     else if(b.dataset.wheelAction){selectWheel(b.dataset.wheelAction);}
     else if(b.dataset.action){selectWheel(b.dataset.action);}
@@ -173,6 +175,58 @@ function wheelSliderShape(slider,count){
   slider.querySelector('.tc-wheel-slider-shape')?.setAttribute('d',wheelSlicePath(count,lane.outer,lane.inner));
   slider.dataset.optionCount=String(count);
 }
+function wheelWedge(start,end,outer,inner){
+  const points=[];
+  for(let i=0;i<=12;i++){
+    const angle=(start+(end-start)*i/12)*Math.PI/180;
+    points.push([100+outer*Math.cos(angle),100+outer*Math.sin(angle)]);
+  }
+  for(let i=12;i>=0;i--){
+    const angle=(start+(end-start)*i/12)*Math.PI/180;
+    points.push([100+inner*Math.cos(angle),100+inner*Math.sin(angle)]);
+  }
+  return 'polygon('+points.map(([x,y])=>x.toFixed(3)+'% '+y.toFixed(3)+'%').join(',')+')';
+}
+function wheelDetailOptions(hero,moving){
+  if(moving)return [{value:'player',name:'玩家'}];
+  const skills=equippedTechniques(hero);
+  const attacks=skills.length?skills:[R.basicFor(hero)];
+  return attacks.map(skill=>({
+    value:skills.length?'manual:'+skill.id:'attack',name:skill.name,skill
+  }));
+}
+function detailAngle(index,count){return -90-90*(index+.5)/count;}
+function detailIndex(angle,count){return Math.min(count-1,Math.floor((-90-angle)*count/90));}
+function updateWheelChoices(container,options,selected,moveCost,hero,locked){
+  const key=options.map(option=>option.value).join('|');
+  if(container.dataset.choices!==key){
+    container.dataset.choices=key;
+    const sweep=90/options.length,gap=options.length>1?1:0;
+    const buttons=options.map(({value},index)=>{
+      const button=document.createElement('button');
+      button.type='button';button.className='tc-sector';
+      button.dataset.wheelChoice=value;
+      button.style.clipPath=wheelWedge(-90-sweep*index-gap,-90-sweep*(index+1)+gap,100,74);
+      const label=document.createElement('span');
+      wheelMarker(label,detailAngle(index,options.length),WHEEL_RADII.detail);
+      button.append(label);return button;
+    });
+    container.replaceChildren(...buttons);
+  }
+  for(const [index,option] of options.entries()){
+    const button=container.children[index],cost=option.skill?R.techniqueCost(hero,option.skill):null;
+    const price=cost===null?moveCost:cost+' 體力';
+    const unavailable=cost===null?'':hero.attacks>=R.attackLimit(hero)?'本回合出手次數已滿':
+      hero.actions>=R.LIMITS.actions?'本回合行動次數已滿':
+      cost>hero.stamina?'體力不足，還需要 '+(cost-hero.stamina)+' 點':'';
+    button.disabled=locked;
+    button.setAttribute('aria-pressed',String(option.value===selected));
+    button.setAttribute('aria-label',option.name+'，'+price+(unavailable?'，'+unavailable:''));
+    button.title=unavailable||option.name+' · '+price;
+    button.classList.toggle('is-unavailable',!!unavailable);
+    wheelText(button.firstElementChild,option.name,price);
+  }
+}
 function wheelMarker(marker,angle,radius){
   if(!marker)return;
   const rad=angle*Math.PI/180;
@@ -250,9 +304,7 @@ function buildGame(){
     }
   }
   if(state?.mode==='pve'){
-    // Strict sketch: only the map, a bottom-left charging dial and a
-    // bottom-right attack/move/end-turn dial are visible. Keep unused
-    // gameplay data nodes for existing rendering and server code, hidden.
+    // PvE puts charging on the left and actions with their choices on the right.
     const command=$('.tc-command');
     // Ten luminous curved segments follow the quarter-circle's perimeter.
     const energySegment=i=>{
@@ -264,18 +316,6 @@ function buildGame(){
       };
       const start=polar(-90+i*9+1.35),end=polar(-90+(i+1)*9-1.35);
       return `<path data-energy-segment="${i}" d="M ${start[0]} ${start[1]} A 90 90 0 0 1 ${end[0]} ${end[1]}"></path>`;
-    };
-    const wedge=(start,end,outer=100,inner=69)=>{
-      const points=[];
-      for(let i=0;i<=12;i++){
-        const angle=(start+(end-start)*i/12)*Math.PI/180;
-        points.push([100+outer*Math.cos(angle),100+outer*Math.sin(angle)]);
-      }
-      for(let i=12;i>=0;i--){
-        const angle=(start+(end-start)*i/12)*Math.PI/180;
-        points.push([100+inner*Math.cos(angle),100+inner*Math.sin(angle)]);
-      }
-      return 'polygon('+points.map(([x,y])=>x.toFixed(3)+'% '+y.toFixed(3)+'%').join(',')+')';
     };
     const energy=document.createElement('section');
     energy.className='tc-quarter tc-quarter-energy';
@@ -296,50 +336,9 @@ function buildGame(){
       +'</svg><span class="tc-energy-number" data-energy-number aria-hidden="true">0</span>';
     quiz.setAttribute('aria-label','答題充能');
     energy.append(quiz);
-    // The second ring of the LEFT charging quarter is now the skill bar.
-    // Equipped techniques are shown here; basic attack remains on the right wheel.
-    // The outermost luminous green stamina track remains unobstructed.
-    const available=equippedTechniques(myActor());
-    const leftSkills=available;
-    const leftWedge=(begin,finish,outer=86,inner=70)=>{
-      const pts=[];
-      for(let i=0;i<=16;i++){
-        const radians=(begin+(finish-begin)*i/16)*Math.PI/180;
-        pts.push([outer*Math.cos(radians),100+outer*Math.sin(radians)]);
-      }
-      for(let i=16;i>=0;i--){
-        const radians=(begin+(finish-begin)*i/16)*Math.PI/180;
-        pts.push([inner*Math.cos(radians),100+inner*Math.sin(radians)]);
-      }
-      return 'polygon('+pts.map(([x,y])=>x.toFixed(3)+'% '+y.toFixed(3)+'%').join(',')+')';
-    };
-    const techniqueRing=document.createElement('div');
-    techniqueRing.className='tc-left-technique-ring';
-    techniqueRing.setAttribute('role','group');
-    techniqueRing.setAttribute('aria-label','攻擊技能，點選後直接在地圖指定攻擊目標');
-    for(const [index,technique] of leftSkills.entries()){
-      const start=-90+90*index/leftSkills.length,finish=-90+90*(index+1)/leftSkills.length;
-      const radians=(start+finish)/2*Math.PI/180,radius=78;
-      const button=document.createElement('button');
-      button.type='button';button.className='tc-left-technique';
-      button.dataset.leftAttack='manual:'+technique.id;
-      button.setAttribute('aria-label',technique.name+'，消耗 '+technique.cost+' 體力');
-      button.style.clipPath=leftWedge(start,finish);
-      // Keep labels outside the clipped hit areas, so the narrow curved
-      // sectors do not cut off equipped skill names or their costs.
-      const label=document.createElement('span');
-      label.className='tc-left-technique-label';
-      label.setAttribute('aria-hidden','true');
-      label.style.left=(radius*Math.cos(radians)).toFixed(2)+'%';
-      label.style.top=(100+radius*Math.sin(radians)).toFixed(2)+'%';
-      label.innerHTML='<strong>'+esc(technique.name)+'</strong><small>'+technique.cost+' 體力</small>';
-      techniqueRing.append(button,label);
-    }
-    energy.append(techniqueRing);
-
     const actions=document.createElement('section');
     actions.className='tc-quarter tc-quarter-action';
-    actions.setAttribute('aria-label','滑動選擇行動、目標與技能');
+    actions.setAttribute('aria-label','選擇行動與技能');
     actions.innerHTML='<svg class="tc-action-lines" viewBox="0 0 100 100" aria-hidden="true">'
       +'<path d="M 100 0 A 100 100 0 0 0 0 100"/>'
       +'<path d="M 100 26 A 74 74 0 0 0 26 100"/>'
@@ -355,27 +354,19 @@ function buildGame(){
     const end=command.querySelector('[data-end]');
     attack.className='tc-sector tc-sector-attack';
     attack.dataset.wheelAction='attack-ring';
-    attack.style.clipPath=wedge(-90,-135,74,49);
+    attack.style.clipPath=wheelWedge(-90,-135,74,49);
     attack.innerHTML='<span>攻擊</span>';
     move.className='tc-sector tc-sector-move';
     move.dataset.wheelAction='move';
-    move.style.clipPath=wedge(-135,-180,74,49);
+    move.style.clipPath=wheelWedge(-135,-180,74,49);
     move.innerHTML='<span>移動</span>';
     end.className='tc-sector tc-sector-end';
-    end.style.clipPath=wedge(-90,-180,49,0);
+    end.style.clipPath=wheelWedge(-90,-180,49,0);
     end.innerHTML='<span>結束\n回合</span>';
-    const choices=document.createElement('div');choices.className='tc-wheel-options';
-    const makeChoice=(value,label,begin,finish,klass,cost)=>{
-      const b=document.createElement('button');b.type='button';
-      b.dataset.wheelChoice=value;b.className='tc-sector '+klass;
-      b.style.clipPath=wedge(begin,finish,100,74);
-      const text=document.createElement('span');
-      wheelText(text,label,cost);
-      b.append(text);choices.append(b);return b;
-    };
-    const hero=myActor();
-    makeChoice('player','玩家',-90,-180,'tc-detail-player','1 體力/格');
-    makeChoice('attack-ring','攻擊目標',-90,-180,'tc-detail-basic',R.basicFor(hero).cost+' 體力');
+    const choices=document.createElement('div');
+    choices.className='tc-wheel-options';
+    choices.setAttribute('role','group');
+    choices.setAttribute('aria-label','選擇攻擊技能');
     // Narrow curved selection pieces glide *inside* each ring. The visible
     // arc angle is driven by the number of choices, not hard-coded to 45°.
     const makeSlider=(kind,choicesCount)=>{
@@ -446,8 +437,8 @@ function buildGame(){
       wheelIgnoreClickUntil=Date.now()+350;
       const next=gesture.ring==='action'?
         (pointerAngle(e)>WHEEL_ANGLES.center?'attack-ring':'move'):
-        (action==='move'?'player':'attack-ring');
-      selectWheel(next);
+        choices.children[detailIndex(pointerAngle(e),choices.childElementCount)]?.dataset.wheelChoice;
+      if(next)selectWheel(next);
       updateControls(); // also snaps back if the turn became locked
     };
     actions.addEventListener('pointerup',endPointer);
@@ -471,13 +462,11 @@ function buildGame(){
         const next=upper?'attack-ring':'move';
         selectWheel(next);
         (upper?attack:move).focus();
-      }else if(action==='move'){
-        selectWheel('player');
-        choices.querySelector('[data-wheel-choice="player"]').focus();
       }else{
-        const next='attack-ring';
-        selectWheel(next);
-        choices.querySelector('[data-wheel-choice="'+next+'"]').focus();
+        const buttons=[...choices.children];
+        const index=Math.max(0,Math.min(buttons.length-1,buttons.indexOf(b)+(upper?-1:1)));
+        const next=buttons[index];
+        if(next){selectWheel(next.dataset.wheelChoice);next.focus();}
       }
     });
     command.prepend(energy,actions);
@@ -607,46 +596,16 @@ function updateControls(){
   });
   if(quarter){
     const attacking=action!=='move';
-    const player=$('[data-wheel-choice="player"]');
-    const target=$('[data-wheel-choice="attack-ring"]');
     const chosenCost=cost+' 體力',moveCostLabel=moveStamina===null?'1 體力/格':moveStamina+' 體力';
-    if(player){
-      player.hidden=attacking;
-      wheelText(player.querySelector('span'),'玩家',moveCostLabel);
-      player.setAttribute('aria-label','移動目標：玩家，'+moveCostLabel);
-    }
-    if(target){
-      target.hidden=!attacking;
-      wheelText(target.querySelector('span'),'攻擊目標',chosenCost);
-      target.setAttribute('aria-label','攻擊目標；使用左側選中的'+shown.name+'，消耗 '+chosenCost);
-    }
-    for(const option of [player,target]){
-      if(!option)continue;
-      option.disabled=!mine||locked;
-      option.setAttribute('aria-pressed',String(option.dataset.wheelChoice===(attacking?'attack-ring':'player')));
-    }
-    // The left ring displays equipped manual skills; basic attack is on the right.
-    root.querySelectorAll('[data-left-attack]').forEach(button=>{
-      button.disabled=!mine||locked;
-      button.setAttribute('aria-pressed',String(button.dataset.leftAttack===attackChoice));
-      const technique=R.manualSkillFor(me,button.dataset.leftAttack.slice(7));
-      if(technique){
-        const cost=R.techniqueCost(me,technique);
-        button.setAttribute('aria-label',technique.name+'，消耗 '+cost+' 體力');
-        const unavailable=!mine?'尚未輪到你行動':locked?'正在播放動畫或處理行動':
-          me.attacks>=R.attackLimit(me)?'本回合出手次數已滿':
-          me.actions>=R.LIMITS.actions?'本回合行動次數已滿':
-          me.stamina<cost?'體力不足，還需要 '+(cost-me.stamina)+' 點':'';
-        button.classList.toggle('is-unavailable',!!unavailable);
-        button.title=unavailable||technique.name+' · '+cost+' 體力';
-        button.nextElementSibling.querySelector('small').textContent=cost+' 體力';
-      }
-    });
-    const ring=$('.tc-quarter-action');
-    const targetName=attacking?(action==='manual'?shown.name:'攻擊目標'):'玩家';
-    const targetCost=attacking?chosenCost:moveCostLabel;
-    ring?.setAttribute('aria-label',attacking?
-      '行動：攻擊；左圈所選'+shown.name+'，消耗 '+chosenCost:
+    const ring=$('.tc-quarter-action'),choices=ring.querySelector('.tc-wheel-options');
+    const options=wheelDetailOptions(me,!attacking),selected=attacking?attackChoice:'player';
+    updateWheelChoices(choices,options,selected,moveCostLabel,me,!mine||locked);
+    choices.setAttribute('aria-label',attacking?'選擇攻擊技能':'移動目標');
+    const targetName=attacking?shown.name:'玩家',targetCost=attacking?chosenCost:moveCostLabel;
+    const detailSelection=Math.max(0,options.findIndex(option=>option.value===selected));
+    const selectedAngle=detailAngle(detailSelection,options.length);
+    ring.setAttribute('aria-label',attacking?
+      '行動：攻擊；'+targetName+'，'+targetCost:
       '行動：移動；目標：玩家，'+moveCostLabel);
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
@@ -654,11 +613,11 @@ function updateControls(){
     detailThumb.title=targetName+' · '+targetCost;
     const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
-    wheelMarker(detailThumb,WHEEL_ANGLES.center,WHEEL_RADII.detail);
+    wheelMarker(detailThumb,selectedAngle,WHEEL_RADII.detail);
     wheelSliderShape($('.tc-wheel-slider-action'),ring.querySelectorAll('[data-wheel-action]').length);
-    wheelSliderShape($('.tc-wheel-slider-detail'),1);
+    wheelSliderShape($('.tc-wheel-slider-detail'),options.length);
     wheelSliderAngle($('.tc-wheel-slider-action'),actionAngle);
-    wheelSliderAngle($('.tc-wheel-slider-detail'),WHEEL_ANGLES.center);
+    wheelSliderAngle($('.tc-wheel-slider-detail'),selectedAngle);
   }
   $('[data-range-legend]').textContent=(action==='move'?'灰格可走':
     ['dash-cleave','flying-sword'].includes(shown.kind)?'金格為落點':'紅格射程')+' · 紅框預告';
