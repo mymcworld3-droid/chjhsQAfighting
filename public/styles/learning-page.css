@@ -42,14 +42,16 @@ body.ui-cleanup #page-learning {
   gap: 8px;
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 clamp(16px, 4vw, 36px);
   list-style: none;
 }
 .learning-feature {
   box-sizing: border-box;
   width: 100%;
-  min-height: 66px;
-  padding-block: 10px;
+  min-height: 88px;
+  padding: 16px 18px;
+  border: 1px solid #c9b38266;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: space-between;
