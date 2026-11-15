@@ -86,6 +86,27 @@ test('server rejects unowned, locked, duplicate and four-slot loadouts',async()=
   assert.equal((await API.manualsState(db,'u2')).library.length,0);
 });
 
+test('gold fills the remaining XP to the next manual level and repeated purchases charge only once',async()=>{
+  const db=database(),userRef='users/u1';
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  const input={bookId:'sword-wind',targetLevel:2};
+  await assert.rejects(API.upgradeManual(db,'u1',input),/靈石不足/);
+  await assert.rejects(API.upgradeManual(db,'u1',{...input,bookId:'body-rock'}),/尚未取得/);
+  await assert.rejects(API.upgradeManual(db,'u1',{...input,targetLevel:3}),/下一級/);
+  bookRecord(db).books['sword-wind'].exp=21;
+  db.records.get(userRef).stats.gold=35;
+  const quote=(await API.manualsState(db,'u1')).library[0].upgrade;
+  assert.deepEqual(quote,{targetLevel:2,targetExp:40,gold:10});
+  const outcomes=await Promise.all([API.upgradeManual(db,'u1',input),API.upgradeManual(db,'u1',input)]);
+  for(const result of outcomes){
+    assert.equal(result.gold,25);
+    assert.equal(result.library[0].level,2);
+  }
+  assert.equal(db.records.get(userRef).stats.gold,25);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,40);
+  assert.equal(Catalog.upgradeQuote(Catalog.totalExpForLevel(10)),null);
+});
+
 test('only equipped manual killing blows grant EXP, once per idempotent request',async()=>{
   const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
   const state=await API.start(db,'u1',{mode:'pve'},now),raw=db.records.get(API.ROOMS+'/'+state.id);
@@ -94,16 +115,16 @@ test('only equipped manual killing blows grant EXP, once per idempotent request'
   const request={roomId:state.id,revision:state.revision,requestId:'manual-kill-once-01',
     type:'manual',skillId:'wind-slash',x:2,y:3};
   const first=await API.command(db,'u1',request,now);
-  assert.equal(first.manualExp.u1['sword-wind'],150);
-  assert.equal(bookRecord(db).books['sword-wind'].exp,150);
-  assert.equal(Catalog.mastery(150).level,3);
+  assert.equal(first.manualExp.u1['sword-wind'],60);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,60);
+  assert.equal(Catalog.mastery(60).level,2);
   assert.equal(first.actors[0].stamina,8,'first manual technique costs two stamina');
   const again=await API.command(db,'u1',request,now);
-  assert.equal(again.manualExp.u1['sword-wind'],150);
-  assert.equal(bookRecord(db).books['sword-wind'].exp,150);
+  assert.equal(again.manualExp.u1['sword-wind'],60);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,60);
   await assert.rejects(API.command(db,'u1',{...request,requestId:'manual-forged-02',
     skillId:'wind-thousand',revision:first.revision},now),/尚未裝備/);
-  assert.equal(bookRecord(db).books['sword-wind'].exp,150);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,60);
 });
 
 test('per-skill realm requirements are independent of manual level, using current cultivation realm cutoffs',()=>{
@@ -133,7 +154,7 @@ test('per-skill realm requirements are independent of manual level, using curren
   assert.equal(R.manualSkillFor({manualSkills:['sky-pierce'],trainingAccessScore:6},'sky-pierce')?.id,'sky-pierce');
 });
 test('spirit-beast realm rewards grow by trial stage, while the Lv. 5 and 10 EXP formula stays intact',()=>{
-  assert.deepEqual(Catalog.REALMS.map(r=>r.exp),[50,70,100,140,190,250,330,430,550]);
+  assert.deepEqual(Catalog.REALMS.map(r=>r.exp),[20,35,55,85,120,170,235,320,430]);
   assert.deepEqual(Catalog.REALMS.map(r=>r.stage),[1,5,10,20,35,55,80,110,150]);
   for(let i=0;i<Catalog.REALMS.length;i++){
     const realm=Catalog.REALMS[i],upper=Catalog.REALMS[i+1];
@@ -170,9 +191,9 @@ test('real battle killing blows award the sum of each defeated beast realm XP',(
     lowBeast('mid',3,3,80,5),lowBeast('high',4,3,80,20),
     lowBeast('spare',6,6,1200,20)];
   const after=R.apply(s,'u1',{type:'manual',skillId:'wind-slash',x:2,y:3},now);
-  assert.equal(after.manualExp.u1['sword-wind'],260);
+  assert.equal(after.manualExp.u1['sword-wind'],140);
   assert.equal(after.manualKills,undefined,'new battles use EXP receipts, not kill counts');
-  assert.deepEqual(after.events.filter(e=>e.type==='manual-mastery').map(e=>e.exp),[50,70,140]);
+  assert.deepEqual(after.events.filter(e=>e.type==='manual-mastery').map(e=>e.exp),[20,35,85]);
 });
 test('battle authority refuses equipped skills when actor realm is too low',()=>{
   const s=R.create({id:'arena-0123456789abcdef',mode:'pve',
@@ -229,7 +250,7 @@ test('equipped manuals replace basic attack and golden-core commands are retired
   assert.throws(()=>R.apply(s,'u1',{type:'skill',x:2,y:3},now),/金丹技能已停用/);
   assert.equal(s.manualExp,undefined);
   const killed=R.apply(s,'u1',{type:'manual',skillId:'rock-fist',x:2,y:3},now);
-  assert.equal(killed.manualExp.u1['body-rock'],50);
+  assert.equal(killed.manualExp.u1['body-rock'],20);
   assert.equal(killed.actors[0].stamina,8,'first manual skill costs 2');
 });
 
@@ -276,7 +297,7 @@ test('the original sword manuals retain their save slots while shared techniques
   raw.actors=[hero,lowBeast('beast',2,3,1)];
   const result=await API.command(db,'u1',{type:'manual',skillId:'flight-slash',x:2,y:3,
     roomId:battle.id,revision:battle.revision,requestId:'shared-sword-source-01'},now);
-  assert.deepEqual(result.manualExp.u1,{'sword-flight':50});
+  assert.deepEqual(result.manualExp.u1,{'sword-flight':20});
 });
 
 function swordBattle(skillId,beasts){

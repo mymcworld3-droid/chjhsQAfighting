@@ -1026,7 +1026,6 @@ function questionSheet(q,review=null,index=0){
         <h3 class="text-lg font-bold font-sci ${review.correct?'tc-correct':'tc-wrong'}">${review.correct?'答對':'答錯'} · 體力 +${review.gain}</h3>
         ${state.mode==='pve'&&review.reward?`<div class="tc-solo-learning-reward">
           <span>${review.reward.cultivation>=0?'+':''}${review.reward.cultivation} 修為</span>
-          ${review.correct?`<span>+${review.reward.gold} 靈石</span>`:''}
           ${review.reward.learning?`<small>${esc(review.reward.learning)}</small>`:''}
         </div>`:''}
       </div>
@@ -1186,7 +1185,7 @@ async function reportQuestion(helperReason=''){
     if(!valid(ctx.epoch,ctx.owner))return;
     if(result.battle&&state?.id===ctx.roomId)accept(result.battle,++op);
     if(!sameQuiz(ctx))return;
-    const message=result.reason+(result.compensated?` 已補償 ${result.goldAdded} 靈石、${result.cultivationAdded} 修為。`:'')+
+    const message=result.reason+(result.compensated?` 已補償 ${result.cultivationAdded} 修為。`:'')+
       (result.staminaRefunded>0?` 已返還 ${result.staminaRefunded} 體力。`:'');
     status.textContent=message;
     if(result.questionSkipped){
@@ -1196,7 +1195,7 @@ async function reportQuestion(helperReason=''){
       if(canQuestion())void question();
       return;
     }
-    if(result.compensated&&!result.battle){const user=localUser();user.stats||={};user.stats.gold=result.newGold;user.stats.totalScore=result.newTotalScore;window.updateUIStats?.();window.refreshXiuxianLiveSync?.(result.newTotalScore);}
+    if(result.compensated&&!result.battle){const user=localUser();user.stats||={};if(result.goldAdded)user.stats.gold=result.newGold;user.stats.totalScore=result.newTotalScore;window.updateUIStats?.();window.refreshXiuxianLiveSync?.(result.newTotalScore);}
   }catch(err){if(sameQuiz(ctx))status.textContent=err.message+'，可再次送出重試。';}
   finally{ctx.reportBusy=false;if(sameQuiz(ctx)&&$('[data-report-send]'))$('[data-report-send]').disabled=false;}
 }

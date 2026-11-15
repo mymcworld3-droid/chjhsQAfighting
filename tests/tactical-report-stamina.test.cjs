@@ -27,7 +27,7 @@ function fixtureDb(){
   });
   return db;
 }
-const deps={review:async()=>confirmed,award:(db,uid,input,result)=>reports.awardOnce(db,uid,input,result,{fieldValue})};
+const deps={review:async()=>confirmed,award:(db,uid,input,result,options)=>reports.awardOnce(db,uid,input,result,{...options,fieldValue})};
 async function question(db,id,ordinal=0){
   const expected=await api.prepareQuestion(db,'u1',id,now+ordinal);
   return api.commitQuestion(db,'u1',expected,{...parsed,q:parsed.q+'（'+ordinal+'）'},now+ordinal);
@@ -46,7 +46,7 @@ test('confirmed wrong answers receive only missing stamina, with authoritative p
   const f=await setup();await answer(f);assert.equal(raw(f).actors[0].stamina,3);
   const out=await report(f);assert.equal(out.staminaAdded,3);assert.equal(out.staminaRefunded,3);
   assert.equal(out.questionSkipped,false);assert.equal(out.battle.actors[0].stamina,6);
-  assert.equal(out.battle.progress.stats.gold,100);assert.equal(out.battle.progress.stats.totalScore,31);
+  assert.equal(out.battle.progress.stats.gold,0);assert.equal(out.battle.progress.stats.totalScore,31);
   assert.equal(raw(f).actors[0].questions,1);assert.equal(raw(f).actors[0].answered,1);
   assert.equal(raw(f).actors[0].correct,0,'invalid questions do not mint correct-answer credit');
   assert.equal(raw(f).events.at(-1).animation.kind,'answer');
@@ -72,10 +72,11 @@ test('the answer-time cap is preserved after spending stamina; already-correct a
   const full=await setup(9),out=await report(full);assert.equal(out.staminaAdded,1);assert.equal(raw(full).actors[0].stamina,10);
 });
 
-test('concurrent reports and response-loss replays cannot duplicate stamina, currency, question slots or events',async()=>{
+test('concurrent reports and response-loss replays cannot duplicate stamina, compensation, question slots or events',async()=>{
   const f=await setup(),[a,b]=await Promise.all([report(f),report(f)]);
   assert.equal(a.staminaAdded+b.staminaAdded,4);assert.equal(raw(f).actors[0].stamina,6);
-  assert.equal(raw(f).actors[0].questions,1);assert.equal(f.db.records.get('users/u1').stats.gold,100);
+  assert.equal(raw(f).actors[0].questions,1);assert.equal(f.db.records.get('users/u1').stats.gold,0);
+  assert.equal(f.db.records.get('users/u1').stats.totalScore,31);
   const revision=raw(f).revision,events=raw(f).events.length;
   const replay=await api.reportQuestion(f.db,'u1',input(f),{review:()=>{throw Error('must not review again');}});
   assert.equal(replay.staminaAdded,0);assert.equal(replay.staminaRefunded,4);assert.equal(replay.battle.actors[0].stamina,6);
@@ -91,19 +92,19 @@ test('rejected or unavailable reports cannot grant stamina or change the pending
   }
 });
 
-test('currency daily limits do not block a confirmed gameplay stamina correction',async()=>{
+test('compensation daily limits do not block a confirmed gameplay stamina correction',async()=>{
   const f=await setup();await answer(f);f.db.records.get('users/u1').questionReportDaily={date:reports.dateInTaiwan(),count:reports.DAILY_LIMIT};
   const out=await report(f);assert.equal(out.compensated,false);assert.equal(out.staminaAdded,3);
   assert.equal(raw(f).actors[0].stamina,6);assert.equal(f.db.records.get('users/u1').stats.gold,0);assert.match(out.reason,/上限/);
 });
 
-test('an award committed before a failed refund can retry without another AI review or another currency grant',async()=>{
+test('an award committed before a failed refund can retry without another AI review or another compensation grant',async()=>{
   const f=await setup();await answer(f);f.db.failRefund=true;
   await assert.rejects(report(f),/refund transaction failed/);
-  assert.equal(f.db.records.get('users/u1').stats.gold,100);assert.equal(raw(f).actors[0].stamina,3);
+  assert.equal(f.db.records.get('users/u1').stats.gold,0);assert.equal(raw(f).actors[0].stamina,3);
   const out=await api.reportQuestion(f.db,'u1',input(f),{...deps,review:()=>{throw Error('persisted approval must be reused');}});
   assert.equal(out.staminaAdded,3);assert.equal(out.compensated,false);assert.equal(raw(f).actors[0].stamina,6);
-  assert.equal(f.db.records.get('users/u1').stats.gold,100);
+  assert.equal(f.db.records.get('users/u1').stats.gold,0);
 });
 
 test('a confirmation arriving after another answer still compensates its original question only',async()=>{

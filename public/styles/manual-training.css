@@ -97,3 +97,5 @@
 .manual-xp-reference b{color:#bce5ac;font-variant-numeric:tabular-nums}
 .manual-xp-reference p{color:#9bb09b;line-height:1.6;font-size:12px;margin-top:9px}
 .manual-technique .manual-lock{line-height:1.6;display:inline-block}
+.manual-upgrade{display:block;margin-top:9px;min-height:34px;padding:6px 10px;
+  border:1px solid #c4b17294;border-radius:7px;background:#3c3723;color:#f1dca8;font-size:12px;font-weight:700}

@@ -23,7 +23,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261112-realm-experience-v3';
+    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261115-upgrade';
     document.head.append(link);
   }
   return root;
@@ -48,6 +48,7 @@ function markup(){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const owned=current.library.filter(item=>item.owned).length;
   const equipped=current.equipped||[];
+  const gold=Number(current.gold)||0;
   const slots=Array.from({length:3},(_,i)=>{
     const id=equipped[i],skill=Catalog.BY_SKILL[id];
     return `<div class="manual-slot ${id?'is-active':''}">
@@ -81,6 +82,8 @@ function markup(){
         aria-valuemax="${book.expToNext}" aria-valuenow="${book.expInLevel}">
         <div class="manual-exp-fill" style="width:${book.progress}%"></div></div>
       <small>${next?`${!next.mastered?'功法 Lv. '+next.levelRequired+' · ':''}${!next.realmReady?'修士 '+next.realmName+'境 · ':''}解鎖「${esc(next.name)}」`:'三招已全部解鎖'}</small>
+      ${book.upgrade?`<button type="button" class="manual-upgrade" data-manual-upgrade="${esc(book.id)}" ${gold<book.upgrade.gold?'disabled':''}>
+        ${gold<book.upgrade.gold?'靈石不足 · ':''}升至 Lv. ${book.upgrade.targetLevel} · ${book.upgrade.gold} 靈石</button>`:''}
     </div>`;
     return `<article class="manual-book owned" data-manual-book="${esc(book.id)}">
       <div class="manual-book-top"><div class="manual-book-glyph"><i class="fa-solid ${icon(book.school)}"></i></div>
@@ -91,7 +94,7 @@ function markup(){
   }).join('');
   return `<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
       <div><b>${equipped.length} / 3</b><span>已裝備技能</span></div>
-      <div><b>${current.school?label(current.school):'未選擇'}</b><span>目前修行方向</span></div></div>
+      <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div></div>
     <section class="manual-school"><div><h3>修行流派</h3><p>第一次選擇流派免費習得一本入門功法。流派可以切換，已取得的功法及熟練度不會消失。</p></div>
       <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
         <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
@@ -113,10 +116,11 @@ function paint(message=''){
   const status=root.querySelector('[data-manual-status]');
   if(status)status.textContent=message;
   root.querySelectorAll('button').forEach(button=>{
-    if(busy&&button.dataset.manualRefresh===undefined)button.disabled=true;
+    if(busy)button.disabled=true;
   });
 }
 async function load({force=false}={}){
+  if(busy)return;
   ensure();const uid=getMainUser()?.uid;
   if(!uid){current=null;loadedFor='';paint('請先登入後查看功法。');return;}
   if(!force&&loadedFor===uid&&Date.now()-lastFetch<15000){paint();return;}
@@ -133,15 +137,27 @@ async function load({force=false}={}){
 async function mutate(url,body){
   if(busy)return;
   const uid=getMainUser()?.uid;if(!uid)return;
-  busy=true;paint('正在保存功法配置…');
+  const upgrading=url.endsWith('/upgrade');
+  ++sequence;busy=true;paint(upgrading?'正在升級功法…':'正在保存功法配置…');
+  let message='';
   try{
     const next=await request(url,body);
     if(getMainUser()?.uid!==uid)return;
-    current=next;loadedFor=uid;lastFetch=Date.now();paint('功法配置已儲存。');
-    window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
-  }catch(error){paint(error.message);}
-  finally{busy=false;root?.querySelectorAll('button').forEach(button=>button.disabled=
-    button.hasAttribute('data-manual-equip')&&equipDisabled(button.dataset.manualEquip));}
+    current=next;loadedFor=uid;lastFetch=Date.now();
+    if(upgrading){
+      const local=window.getCurrentUserData?.();
+      if(local){local.stats||={};local.stats.gold=next.gold;window.updateUIStats?.();}
+      message=`已升級《${next.library.find(book=>book.id===body.bookId).name}》。`;
+    }else{
+      message='功法配置已儲存。';
+      window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
+    }
+  }catch(error){message=error.message;}
+  finally{
+    busy=false;
+    if(getMainUser()?.uid===uid)paint(message);
+    else if(visible())void load({force:true});
+  }
 }
 function ensureNav(){
   const parent=document.getElementById('nav-grid');
@@ -169,6 +185,11 @@ function boot(){
     const button=event.target.closest('button');if(!button||busy)return;
     if(button.hasAttribute('data-manual-refresh')){void load({force:true});return;}
     if(button.dataset.manualSchool){void mutate('/api/tactical/manuals/school',{school:button.dataset.manualSchool});return;}
+    if(button.dataset.manualUpgrade){
+      const book=current?.library.find(item=>item.id===button.dataset.manualUpgrade);
+      if(book?.upgrade)void mutate('/api/tactical/manuals/upgrade',{bookId:book.id,targetLevel:book.upgrade.targetLevel});
+      return;
+    }
     if(button.dataset.manualEquip){
       const id=button.dataset.manualEquip,equipped=current?.equipped||[],other=equippedVersion(id,equipped);
       const skillIds=other?equipped.map(slot=>slot===other?id:slot):[...equipped,id];

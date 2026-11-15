@@ -118,7 +118,7 @@ async function reviewQuestion(input, { generate = aiRouter.generateJSON, deadlin
   return { status: 'confirmed', reason: second.reason || first.reason || '兩次審核均確認題目有誤。', issueType: second.issueType };
 }
 
-async function awardOnce(db, uid, input, result, { today = dateInTaiwan, fieldValue = require('./storage-values.cjs').FieldValue } = {}) {
+async function awardOnce(db, uid, input, result, { today = dateInTaiwan, fieldValue = require('./storage-values.cjs').FieldValue, goldReward = REWARD_GOLD } = {}) {
   const userRef = db.collection('users').doc(uid);
   const key = reportKey(uid, input.question);
   const claimRef = db.collection('questionErrorCompensations').doc(key);
@@ -140,16 +140,16 @@ async function awardOnce(db, uid, input, result, { today = dateInTaiwan, fieldVa
     tx.create(claimRef, {
       uid, question: input.question, options: input.options, correctIndex: input.correctIndex, explanation: input.explanation,
       userReason: input.reason, reviewReason: result.reason, issueType: result.issueType || '',
-      gold: REWARD_GOLD, cultivationRefund, cultivationBonus: BONUS_CULTIVATION,
+      gold: goldReward, cultivationRefund, cultivationBonus: BONUS_CULTIVATION,
       cultivationAdded, date: day, createdAt: fieldValue.serverTimestamp()
     });
     tx.update(userRef, {
-      'stats.gold': fieldValue.increment(REWARD_GOLD),
+      ...(goldReward?{'stats.gold': fieldValue.increment(goldReward)}:{}),
       'stats.totalScore': fieldValue.increment(cultivationAdded),
       questionReportDaily: { date: day, count: used + 1 }
     });
     return {
-      status: 'confirmed', compensated: true, goldAdded: REWARD_GOLD, newGold: gold + REWARD_GOLD,
+      status: 'confirmed', compensated: true, goldAdded: goldReward, newGold: gold + goldReward,
       cultivationRefund, cultivationBonus: BONUS_CULTIVATION, cultivationAdded,
       newTotalScore: score + cultivationAdded, reason: result.reason
     };

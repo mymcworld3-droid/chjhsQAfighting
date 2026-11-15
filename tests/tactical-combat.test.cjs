@@ -211,12 +211,12 @@ test('server hides pending answers, rejects out-of-turn generation and credits r
   const [a,b]=await Promise.all([api.answer(db,'u1',request,fixed+1),api.answer(db,'u1',request,fixed+1)]);
   assert.equal(a.actors[0].stamina,6);assert.equal(b.actors[0].stamina,6);
   assert.equal(db.records.get('users/u1').stats.totalAnswered,1);assert.equal(db.records.get('users/u1').stats.totalScore,32);
-  assert.equal(a.progress.stats.gold,30);assert.equal(b.progress.stats.gold,30);
+  assert.equal(a.progress.stats.gold,0);assert.equal(b.progress.stats.gold,0);
   assert.equal([...db.records.keys()].filter(k=>k.startsWith('exam_logs/')).length,1);
   await assert.rejects(api.prepareQuestion(db,'u2',s.id,fixed),/參戰/);
   assert.equal((await api.state(db,'u1',fixed)).question,null);
 });
-test('tactical battle answers persist the very same solo adaptive footprint, reasoning metadata and reward rules',async()=>{
+test('tactical answers retain solo learning progress while reserving gold for the stage clear',async()=>{
   const db=database(),user=db.records.get('users/u1');
   user.gameSettings={sourceMode:'focused',focusedUnits:[
     {path:'數學/高中二年級/第一學期/數學A',detail:'二項分布'}
@@ -250,7 +250,7 @@ test('tactical battle answers persist the very same solo adaptive footprint, rea
   assert.equal(stats.totalAnswered,1);
   assert.equal(stats.totalCorrect,1);
   assert.equal(stats.totalScore,34,'main base +2, hard +1, weak subject +1');
-  assert.equal(stats.gold,50,'realm 30, hard 10, weak subject 10');
+  assert.equal(stats.gold,0);assert.equal(result.review.reward.gold,0);
   assert.equal(stats.soloLearningV1.version,1);
   assert.equal(stats.knowledgePointMapV1.數學['math-7'].total,1);
   assert.equal(stats.knowledgeMap.數學['二項分布'].correct,1);
@@ -418,6 +418,14 @@ test('simultaneous matchmaking converges and a room never accepts a third player
   const [second,third]=await Promise.all([api.start(db,'u2',{mode:'pvp',code:first.id},fixed),api.start(db,'u3',{mode:'pvp',code:first.id},fixed)] .map(p=>p.then(value=>({value}),error=>({error}))));
   assert.equal(second.value.status,'active');assert.ok(third.error);assert.equal(db.records.get(api.ROOMS+'/'+first.id).actors.length,2);
   assert.equal((await api.prepareQuestion(db,'u2',first.id,fixed)).quizRound,1);
+});
+test('early trial monsters have stage-based health even for a high attack player',()=>{
+  const seed='0123456789abcdef0123456789abcdef';
+  const spawn=(stage,atk)=>R.create({id:'health-curve',players:[hero('u1',{atk})],trial:{seed,stage},now:fixed}).actors.slice(1);
+  assert.deepEqual(spawn(1,200).map(a=>[a.hp,a.maxHp]),[[400,400]]);
+  assert.deepEqual(spawn(1,900).map(a=>a.maxHp),[400]);
+  assert(spawn(5,900).every(a=>a.hp===a.maxHp&&a.hp>=500&&a.hp<=575));
+  assert(spawn(30,900).every(a=>a.maxHp>600));
 });
 test('finished battle rewards and quest counters are atomic and idempotent',async()=>{
   const db=database();let s=await api.start(db,'u1',{mode:'pve'},fixed);let raw=db.records.get(api.ROOMS+'/'+s.id);

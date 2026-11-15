@@ -7,7 +7,6 @@ const Knowledge=require('./public/cultivation/knowledge-points.js');
 const SoloLearning=require('./public/cultivation/solo-learning-rules.js');
 const AdaptiveRules=require('./public/cultivation/adaptive-learning-rules.js');
 const Growth=require('./public/cultivation/nascent-growth.js');
-const Gold=require('./public/cultivation/answer-gold-rules.js');
 const {recordEvent}=require('./public/cultivation/quest-rules.js');
 const {trustedRaidPlayerSnapshot}=require('./raid-authority.cjs');
 const StudyScope=require('./trial-tower-scope.cjs');
@@ -103,7 +102,7 @@ function attachScopes(s,actors){
 function rewardFor(s,a,user){
   if(s.status!=='finished'||s.finishReason==='forfeit'&&s.actors.reduce((n,p)=>n+(p.answered||0),0)<2)return null;
   const win=s.winner===a.team,draw=s.winner==='draw';
-  if(s.mode==='pve')return win&&a.correct>0?{gold:s.trial?35+Math.min(100,Rules.num(s.trial.stage-1)*5):35+Rules.MAPS.findIndex(m=>m.id===s.map)*25,cultivation:2+Growth.cultivation(user,'solo'),win}:null;
+  if(s.mode==='pve')return win&&s.finishReason==='hp'&&a.correct>0?{gold:s.trial?35+Math.min(100,Rules.num(s.trial.stage-1)*5):35+Rules.MAPS.findIndex(m=>m.id===s.map)*25,cultivation:2+Growth.cultivation(user,'solo'),win}:null;
   if(s.actors.filter(p=>!p.bot).reduce((n,p)=>n+p.answered,0)<2)return null;
   return {gold:win?500:draw?250:200,cultivation:win?5+Growth.cultivation(user,'battle'):draw?2:0,win,draw};
 }
@@ -151,10 +150,13 @@ function rollManualDrop(s,uid,raw){
   s.manualDrops||={};s.manualDrops[uid]={id:picked.id,name:picked.name};
   return {state,changed:true,drop:picked.id};
 }
+function manualResponse(record,user,gold=Rules.num(user.stats?.gold)){
+  return {...Manuals.publicState(record,TrainingAccess.score(user)),gold};
+}
 async function manualsState(db,uid){
   const [player,record]=await Promise.all([db.collection('users').doc(uid).get(),db.collection(MANUALS).doc(uid).get()]);
   const user=exists(player);if(!user)throw error('玩家資料不存在',404);
-  return Manuals.publicState(exists(record),TrainingAccess.score(user));
+  return manualResponse(exists(record),user);
 }
 async function chooseSchool(db,uid,input){
   const school=String(input?.school||'');
@@ -171,7 +173,7 @@ async function chooseSchool(db,uid,input){
       if(!next.equipped.length&&Manuals.meetsRealm(introductory,TrainingAccess.score(exists(user))))
         next.equipped.push(introductory.id);
     }
-    tx.set(ref,next);return Manuals.publicState(next,TrainingAccess.score(exists(user)));
+    tx.set(ref,next);return manualResponse(next,exists(user));
   });
 }
 async function equipManualSkills(db,uid,input){
@@ -190,7 +192,27 @@ async function equipManualSkills(db,uid,input){
     if(new Set(ids.map(id=>Manuals.BY_SKILL[id].moveId)).size!==ids.length)
       throw error('相同招式只能裝備一次，請選擇其所屬功法',400);
     next.equipped=[...ids];tx.set(ref,next);
-    return Manuals.publicState(next,score);
+    return manualResponse(next,exists(user));
+  });
+}
+
+async function upgradeManual(db,uid,input){
+  const {bookId,targetLevel}=input||{};
+  if(typeof bookId!=='string'||!Object.hasOwn(Manuals.BY_BOOK,bookId)||
+    !Number.isInteger(targetLevel)||targetLevel<2||targetLevel>10)throw error('功法升級資料無效',400);
+  const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
+  return db.runTransaction(async tx=>{
+    const [userSnap,record]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
+    const user=exists(userSnap);if(!user)throw error('玩家資料不存在',404);
+    const state=Manuals.normalize(exists(record)),book=state.books[bookId];
+    if(!book)throw error('尚未取得此功法',403);
+    if(Manuals.levelForExp(book.exp)>=targetLevel)return manualResponse(state,user);
+    const quote=Manuals.upgradeQuote(book.exp),gold=Rules.num(user.stats?.gold);
+    if(quote.targetLevel!==targetLevel)throw error('請先提升至下一級');
+    if(gold<quote.gold)throw error('靈石不足');
+    book.exp=quote.targetExp;
+    tx.set(manualRef,state);tx.update(userRef,{'stats.gold':gold-quote.gold});
+    return manualResponse(state,user,gold-quote.gold);
   });
 }
 
@@ -554,7 +576,7 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
         });
     }
     const previousScore=Rules.num(stats.totalScore);
-    let cultivation=0,goldAdded=0;
+    let cultivation=0;
     if(s.mode==='pve'){
       patch['stats.soloLearningV1']=learningReward.progress;
       // Main progression awards +1 before 金丹, +2 from 金丹 onward;
@@ -571,8 +593,6 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
       patch['stats.currentStreak']=correct?Rules.num(stats.currentStreak)+1:0;
       patch['stats.bestStreak']=Math.max(Rules.num(stats.bestStreak),patch['stats.currentStreak']);
       if(correct){
-        goldAdded=Gold.perCorrect(previousScore)+learningReward.gold;
-        patch['stats.gold']=Rules.num(stats.gold)+goldAdded;
         patch.questProgress=recordEvent(user.questProgress,'solo');
         if(learningReward.recovery)patch.questProgress=recordEvent(patch.questProgress,'correction');
       }
@@ -580,7 +600,7 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
     // Return actual wallet/progression gains so the same answer review can
     // show them without trusting a client-supplied reward calculation.
     s.reviews[uid].reward={
-      cultivation, gold:goldAdded, learning:learningReward.message||''
+      cultivation, gold:0, learning:learningReward.message||''
     };
     s.reviewHistory[q.id].reward=s.reviews[uid].reward;
     tx.update(userRef,patch);
@@ -685,9 +705,9 @@ async function reportQuestion(db,uid,input,{review,award,readReceipt=readSoloRec
   const result=approved?{status:'confirmed',reason:claim.reviewReason,issueType:claim.issueType}:await (review||reports.reviewQuestion)(trusted);
   if(result.status==='unavailable')throw error(result.reason,503);
   if(result.status==='confirmed'){
-    // Currency and combat stamina have separate idempotent receipts. A lost
-    // response or a failed stamina transaction can safely retry a currency award.
-    const outcome=await (award||reports.awardOnce)(db,uid,trusted,result);
+    // The trial pays currency at stage settlement. Correcting a question
+    // still applies the cultivation compensation and stamina refund once.
+    const outcome=await (award||reports.awardOnce)(db,uid,trusted,result,{goldReward:0});
     return {...outcome,status:'confirmed',reason:'獨立審核已確認本題有誤。'+(outcome.status==='limit'?outcome.reason:''),...await refundQuestionStamina(db,uid,s.id,input.questionId,shared)};
   }
   // Before answering, never reveal the answer through an AI review reason.
@@ -703,6 +723,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.get('/api/tactical/manuals',route((db,uid)=>manualsState(db,uid)));
   app.post('/api/tactical/manuals/school',route((db,uid,req)=>chooseSchool(db,uid,req.body)));
   app.post('/api/tactical/manuals/equip',route((db,uid,req)=>equipManualSkills(db,uid,req.body)));
+  app.post('/api/tactical/manuals/upgrade',route((db,uid,req)=>upgradeManual(db,uid,req.body)));
   app.post('/api/tactical/start',route((db,uid,req)=>start(db,uid,req.body)));
   app.post('/api/tactical/action',route((db,uid,req)=>command(db,uid,req.body)));
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
@@ -710,4 +731,4 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/report-question',route((db,uid,req)=>reportQuestion(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,MANUALS,manualsState,chooseSchool,equipManualSkills,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
+module.exports.__test={ROOMS,PLAYERS,MANUALS,manualsState,chooseSchool,equipManualSkills,upgradeManual,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};

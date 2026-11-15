@@ -10,15 +10,15 @@
   const EXP_PER_KILL=50,MAX_EXP=100000000;
   // Exactly the existing cultivation score cutoffs, with human-readable realm labels.
   const REALMS=Object.freeze([
-    {name:'煉氣',score:1,stage:1,exp:50},
-    {name:'築基',score:6,stage:5,exp:70},
-    {name:'金丹',score:28,stage:10,exp:100},
-    {name:'元嬰',score:68,stage:20,exp:140},
-    {name:'化神',score:188,stage:35,exp:190},
-    {name:'煉虛',score:428,stage:55,exp:250},
-    {name:'合體',score:788,stage:80,exp:330},
-    {name:'渡劫',score:1268,stage:110,exp:430},
-    {name:'真仙',score:1868,stage:150,exp:550}
+    {name:'煉氣',score:1,stage:1,exp:20},
+    {name:'築基',score:6,stage:5,exp:35},
+    {name:'金丹',score:28,stage:10,exp:55},
+    {name:'元嬰',score:68,stage:20,exp:85},
+    {name:'化神',score:188,stage:35,exp:120},
+    {name:'煉虛',score:428,stage:55,exp:170},
+    {name:'合體',score:788,stage:80,exp:235},
+    {name:'渡劫',score:1268,stage:110,exp:320},
+    {name:'真仙',score:1868,stage:150,exp:430}
   ].map(Object.freeze));
   const normalizedScore=value=>Number.isFinite(Number(value))?
     Math.max(0,Math.floor(Number(value))):0;
@@ -43,6 +43,12 @@
     const exp=Math.max(0,Math.min(MAX_EXP,Math.floor(Number(raw)||0)));
     const level=levelForExp(exp),current=exp-totalExpForLevel(level),needed=xpForNextLevel(level);
     return {level,exp,totalExp:exp,expInLevel:current,expToNext:needed,progress:Math.min(100,Math.floor(current/needed*100))};
+  }
+  function upgradeQuote(raw){
+    const {level,exp}=mastery(raw);
+    if(level>=10)return null;
+    const targetLevel=level+1,targetExp=totalExpForLevel(targetLevel);
+    return {targetLevel,targetExp,gold:Math.ceil((targetExp-exp)/2)};
   }
   // Old saves only tracked kills. Map their existing unlock thresholds to
   // Lv. 5 / Lv. 10 so nobody loses an already-unlocked skill during migration.
@@ -151,10 +157,10 @@
     const library=BOOKS.filter(book=>!!s.books[book.id]).map(book=>{
       const levelInfo=mastery(s.books[book.id].exp);
       return {id:book.id,name:book.name,school:book.school,description:book.description,
-        owned:true,...levelInfo,skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score))};
+        owned:true,...levelInfo,upgrade:upgradeQuote(levelInfo.exp),skills:book.skills.map(skill=>publicSkill(skill,levelInfo.level,score))};
     });
     return {...s,realmScore:score,realmName:realmForScore(score).name,library};
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
 });

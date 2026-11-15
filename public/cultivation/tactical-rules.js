@@ -218,6 +218,12 @@
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
+  function trialMonsterHp(stage,species,scaledHp){
+    const early=400+25*Math.min(8,stage-1);
+    const base=early*(species===8||species===18?1.15:1);
+    const scale=Math.max(0,Math.min(1,(stage-9)/21));
+    return Math.round(base+Math.max(0,scaledHp-base)*scale);
+  }
   function create({id,mode='pve',map='courtyard',players,trial=null,simultaneous=mode==='pvp',now=Date.now()}){
     const layout=mode==='pve'&&trial&&trial.layoutVersion!==0?stageLayout(trial.seed,trial.stage,trial.layoutVersion??2):null;
     const m=layout||mapFor(map),mid=Math.floor(m.height/2);
@@ -235,13 +241,16 @@
     const enemyScaleAttack=s.actors[0].enemyScaleAttack||s.actors[0].atk;
     if(layout){
       for(const [i,m]of layout.enemies.entries())s.actors.push(actor({...m,uid:'monster-'+i,bot:true,team:'monster',
-        atk:Math.round(enemyScaleAttack*m.attackFactor),maxHp:Math.round(enemyScaleAttack*m.hpFactor)},{x:m.x,y:m.y}));
+        atk:Math.round(enemyScaleAttack*m.attackFactor),maxHp:trialMonsterHp(m.level,m.species,enemyScaleAttack*m.hpFactor)},{x:m.x,y:m.y}));
     }else if(mode==='pve'){
       const count=m.id==='courtyard'?1:m.id==='bamboo'?2:3;
-      for(let i=0;i<count;i++)s.actors.push(actor({uid:'monster-'+i,bot:true,team:'monster',
-        name:['靈狼','巖甲獸','古陣守衛'][i],species:[0,8,18][i],
-        atk:Math.round(enemyScaleAttack*(.55+i*.1)),maxHp:Math.round(enemyScaleAttack*(3+i*1.3))},
-      {x:m.width-2,y:mid+(i===1?-2:i===2?2:0)}));
+      for(let i=0;i<count;i++){
+        const species=[0,8,18][i],level=trial?Math.max(1,num(trial.stage)):1,scaledHp=enemyScaleAttack*(3+i*1.3);
+        s.actors.push(actor({uid:'monster-'+i,bot:true,team:'monster',
+          name:['靈狼','巖甲獸','古陣守衛'][i],species,level,
+          atk:Math.round(enemyScaleAttack*(.55+i*.1)),maxHp:trial?trialMonsterHp(level,species,scaledHp):Math.round(scaledHp)},
+        {x:m.width-2,y:mid+(i===1?-2:i===2?2:0)}));
+      }
     }
     current(s).turns=1;
     if(mode==='pvp'&&simultaneous){s.quizRound=0;questionRound(s,now);s.actors.forEach(a=>a.turns=0);}
