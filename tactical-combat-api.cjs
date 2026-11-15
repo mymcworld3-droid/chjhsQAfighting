@@ -105,7 +105,13 @@ function attachScopes(s,actors){
 function rewardFor(s,a,user){
   if(s.status!=='finished'||s.finishReason==='forfeit'&&s.actors.reduce((n,p)=>n+(p.answered||0),0)<2)return null;
   const win=s.winner===a.team,draw=s.winner==='draw';
-  if(s.mode==='pve')return win&&s.finishReason==='hp'&&a.correct>0?{gold:s.trial?35+Math.min(100,Rules.num(s.trial.stage-1)*5):35+Rules.MAPS.findIndex(m=>m.id===s.map)*25,cultivation:2+Growth.cultivation(user,'solo'),win}:null;
+  if(s.mode==='pve'){
+    if(!win||s.finishReason!=='hp'||a.correct<=0)return null;
+    const gold=s.trial
+      ?150+Math.min(500,Rules.num(s.trial.stage-1)*25)
+      :150+Rules.MAPS.findIndex(m=>m.id===s.map)*100;
+    return {gold,cultivation:2+Growth.cultivation(user,'solo'),win};
+  }
   if(s.actors.filter(p=>!p.bot).reduce((n,p)=>n+p.answered,0)<2)return null;
   return {gold:win?500:draw?250:200,cultivation:win?5+Growth.cultivation(user,'battle'):draw?2:0,win,draw};
 }
@@ -221,7 +227,7 @@ async function upgradeManual(db,uid,input){
 }
 
 async function upgradeSkill(db,uid,input){
-  const {skillId,targetLevel}=input||{};
+  const {skillId,targetLevel,expectedGold}=input||{};
   if(typeof skillId!=='string'||!Object.hasOwn(Manuals.BY_SKILL,skillId)||
     !Number.isInteger(targetLevel)||targetLevel<2||targetLevel>Manuals.MAX_SKILL_LEVEL)
     throw error('技能升級資料無效',400);
@@ -236,6 +242,8 @@ async function upgradeSkill(db,uid,input){
     if(level>=targetLevel)return manualResponse(state,user);
     const quote=Manuals.skillUpgradeQuote(level),gold=Rules.num(user.stats?.gold);
     if(quote.targetLevel!==targetLevel)throw error('請先提升至下一級');
+    if(expectedGold===undefined)throw error('升級介面已更新，請重新整理頁面',409);
+    if(expectedGold!==quote.gold)throw error('升級費用已更新，請先同步功法',409);
     if(gold<quote.gold)throw error('靈石不足');
     state.skillLevels[skillId]=targetLevel;
     tx.set(manualRef,state);tx.update(userRef,{'stats.gold':gold-quote.gold});

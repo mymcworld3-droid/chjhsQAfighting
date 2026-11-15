@@ -217,7 +217,9 @@ function boot(){
     }
     if(button.dataset.skillUpgrade){
       const skill=skillDetails(button.dataset.skillUpgrade);
-      if(skill?.upgrade)void mutate('/api/tactical/manuals/skills/upgrade',{skillId:skill.id,targetLevel:skill.upgrade.targetLevel});
+      if(skill?.upgrade)void mutate('/api/tactical/manuals/skills/upgrade',{
+        skillId:skill.id,targetLevel:skill.upgrade.targetLevel,expectedGold:skill.upgrade.gold
+      });
       return;
     }
     if(button.dataset.manualEquip){

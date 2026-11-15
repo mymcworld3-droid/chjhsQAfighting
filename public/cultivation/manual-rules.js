@@ -121,7 +121,7 @@
   const BY_BOOK=Object.freeze(Object.fromEntries(BOOKS.map(book=>[book.id,book])));
   const BY_SKILL=Object.freeze(Object.fromEntries(BOOKS.flatMap(book=>book.skills.map(skill=>[skill.id,skill]))));
   const skillLevel=raw=>Number.isInteger(raw)&&raw>=1&&raw<=MAX_SKILL_LEVEL?raw:1;
-  const skillUpgradeQuote=level=>level<MAX_SKILL_LEVEL?{targetLevel:level+1,gold:20*level}:null;
+  const skillUpgradeQuote=level=>level<MAX_SKILL_LEVEL?{targetLevel:level+1,gold:200*level}:null;
   function skillAtLevel(skill,raw){
     const level=skillLevel(raw),upgrades=level-1;
     if(skill.kind==='fist-focus')return {...skill,level,cost:skill.cost-upgrades};

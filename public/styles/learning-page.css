@@ -303,9 +303,189 @@ body.ui-cleanup #page-learning {
 .dv-feedback strong span { margin-inline-start: 6px; }
 .dv-result > .dv-button { margin-top: 12px; }
 .dv-result-score { color: var(--dv-soft); }
+.dv-reward {
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
+  padding: 11px 12px;
+  border: 1px solid #cbb58166;
+  border-radius: 7px;
+  background: #d9b76c12;
+}
+.dv-reward strong { color: var(--dv-gold); }
+.dv-reward p { color: var(--dv-soft); font-size: 13px; }
+.dv-reward .dv-button { justify-self: start; }
 
 @media (max-width: 410px) {
   .dv-bands li { padding-inline: 5px; }
   .dv-bands small { line-height: 1.4; }
   .dv-choices { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Learning interactions stay quick so players can move through words smoothly. */
+.learning-feature {
+  transition: background-color .18s ease, border-color .18s ease;
+}
+.learning-feature > i { transition: transform .18s ease, color .18s ease; }
+.learning-feature:hover > i { transform: translateX(4px); color: #f1dfb7; }
+.learning-feature:active { background: #344636; }
+
+#page-daily-vocabulary .dv-view-heading,
+#page-daily-vocabulary .dv-stack > .dv-panel,
+#page-daily-vocabulary .dv-card-nav {
+  animation: dv-arrive .22s ease-out both;
+}
+#page-daily-vocabulary .dv-stack > .dv-panel:nth-child(2) { animation-delay: .025s; }
+#page-daily-vocabulary .dv-stack > .dv-panel:nth-child(3) { animation-delay: .05s; }
+#page-daily-vocabulary .dv-stack > .dv-panel:nth-child(4) { animation-delay: .075s; }
+.dv-button {
+  transition: transform .14s ease, background-color .16s ease,
+    border-color .16s ease, box-shadow .16s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.dv-button:not(:disabled):active { transform: scale(.97); }
+.dv-button:not(:disabled):hover { border-color: #e5c993; }
+.dv-button.is-speaking {
+  color: #f7e5b9;
+  border-color: #e0c484;
+  animation: dv-speaking 1s ease-in-out infinite;
+}
+.dv-progress .is-studied {
+  transform-origin: left center;
+  animation: dv-progress-fill .25s ease-out both;
+}
+.dv-progress .is-studied:nth-child(5n + 2) { animation-delay: .025s; }
+.dv-progress .is-studied:nth-child(5n + 3) { animation-delay: .05s; }
+.dv-progress .is-studied:nth-child(5n + 4) { animation-delay: .075s; }
+.dv-progress .is-studied:nth-child(5n) { animation-delay: .1s; }
+.dv-word-list[open] .dv-word-group,
+.dv-level details[open] > p {
+  animation: dv-arrive .2s ease-out both;
+}
+
+#page-daily-vocabulary .dv-card {
+  position: relative;
+  isolation: isolate;
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+#page-daily-vocabulary .dv-card.is-front {
+  animation: dv-card-enter .24s ease-out both;
+}
+#page-daily-vocabulary .dv-card.is-revealed {
+  animation: dv-card-flip .3s cubic-bezier(.2,.7,.25,1) both;
+}
+#page-daily-vocabulary .dv-card.is-revealed::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 15%, #f4ddab2b 48%, transparent 80%);
+  content: "";
+  pointer-events: none;
+  animation: dv-card-light .36s ease-out both;
+}
+.dv-card-answer,
+.dv-card.is-revealed .dv-actions { animation: dv-answer-appear .23s ease-out both; }
+
+#page-daily-vocabulary .dv-question:not(.is-answered) {
+  animation: dv-question-enter .2s ease-out both;
+}
+.dv-choice.is-correct { animation: dv-choice-correct .3s ease-out both; }
+.dv-choice.is-incorrect { animation: dv-choice-incorrect .28s ease-out both; }
+.dv-feedback { animation: dv-answer-appear .2s ease-out both; }
+.dv-feedback.is-correct { animation: dv-feedback-correct .3s ease-out both; }
+.dv-feedback.is-incorrect { animation: dv-feedback-incorrect .3s ease-out both; }
+.dv-next { animation: dv-answer-appear .2s ease-out both; }
+
+#page-daily-vocabulary .dv-result { animation: dv-result-enter .3s ease-out both; }
+.dv-result-score strong {
+  display: inline-block;
+  animation: dv-score-pop .36s cubic-bezier(.2,.75,.25,1) both;
+}
+.dv-reward.is-syncing {
+  background: linear-gradient(100deg, #d9b76c12 25%, #d9b76c2b 50%, #d9b76c12 75%);
+  background-size: 220% 100%;
+  animation: dv-reward-sync 1.6s linear infinite;
+}
+.dv-reward.is-granted { animation: dv-reward-granted .45s ease-out both; }
+
+@keyframes dv-arrive {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dv-card-enter {
+  from { opacity: 0; transform: translateY(8px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes dv-card-flip {
+  from { opacity: .65; transform: perspective(900px) rotateY(-72deg) scale(.98); }
+  75% { opacity: 1; transform: perspective(900px) rotateY(3deg) scale(1); }
+  to { opacity: 1; transform: perspective(900px) rotateY(0) scale(1); }
+}
+@keyframes dv-card-light {
+  from { opacity: .85; }
+  to { opacity: 0; }
+}
+@keyframes dv-answer-appear {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dv-question-enter {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes dv-progress-fill {
+  from { opacity: .5; transform: scaleX(.2); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+@keyframes dv-choice-correct {
+  45% { transform: scale(1.015); box-shadow: 0 0 0 3px #8fc7a133; }
+  to { transform: scale(1); box-shadow: none; }
+}
+@keyframes dv-choice-incorrect {
+  25% { transform: translateX(-4px); }
+  55% { transform: translateX(3px); }
+  to { transform: translateX(0); }
+}
+@keyframes dv-feedback-correct {
+  from { opacity: 0; transform: translateY(5px); box-shadow: 0 0 0 3px #8fc7a133; }
+  to { opacity: 1; transform: translateY(0); box-shadow: none; }
+}
+@keyframes dv-feedback-incorrect {
+  from { opacity: 0; transform: translateY(5px); }
+  45% { transform: translateY(0) translateX(-3px); }
+  75% { transform: translateX(2px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes dv-result-enter {
+  from { opacity: 0; transform: translateY(9px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes dv-score-pop {
+  from { opacity: 0; transform: scale(.83); }
+  70% { opacity: 1; transform: scale(1.06); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes dv-reward-sync {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+@keyframes dv-reward-granted {
+  from { opacity: .65; transform: translateY(5px); box-shadow: 0 0 0 3px #e1c08444; }
+  to { opacity: 1; transform: translateY(0); box-shadow: none; }
+}
+@keyframes dv-speaking {
+  50% { box-shadow: 0 0 0 3px #d8bd8638; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #page-learning .learning-feature,
+  #page-learning .learning-feature > i,
+  #page-daily-vocabulary *,
+  #page-daily-vocabulary *::before,
+  #page-daily-vocabulary *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

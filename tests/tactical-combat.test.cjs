@@ -432,11 +432,18 @@ test('finished battle rewards and quest counters are atomic and idempotent',asyn
   raw.blocks=[];raw.actors[0].x=1;raw.actors[0].y=3;raw.actors[0].stamina=4;raw.actors[0].correct=1;raw.actors[0].answered=1;raw.actors[1].x=2;raw.actors[1].y=3;raw.actors[1].hp=1;
   const request={roomId:s.id,revision:0,requestId:'kill-0123456789',type:'attack',x:2,y:3};
   const first=await api.command(db,'u1',request,fixed),retry=await api.command(db,'u1',request,fixed);
-  assert.equal(first.status,'finished');assert.equal(first.rewards.u1.gold,35);assert.equal(retry.rewards.u1.gold,35);
-  assert.equal(db.records.get('users/u1').stats.gold,35);assert.equal(db.records.get('users/u1').stats.totalScore,32);
-  assert.equal(first.progress.stats.gold,35);assert.equal(retry.progress.stats.gold,35);
+  assert.equal(first.status,'finished');assert.equal(first.rewards.u1.gold,150);assert.equal(retry.rewards.u1.gold,150);
+  assert.equal(db.records.get('users/u1').stats.gold,150);assert.equal(db.records.get('users/u1').stats.totalScore,32);
+  assert.equal(first.progress.stats.gold,150);assert.equal(retry.progress.stats.gold,150);
   assert.equal(first.nextStage,2);assert.equal(db.records.get(api.PLAYERS+'/u1').trial.stage,2);
   assert.equal(db.records.get('users/u1').tacticalTrialV1.best,1);
+});
+test('trial stage rewards increase with stage and stay capped',()=>{
+  const actor={team:'player',correct:1,answered:1},user={stats:{}};
+  const state={status:'finished',mode:'pve',finishReason:'hp',winner:'player',trial:{stage:1}};
+  const gold=stage=>api.rewardFor({...state,trial:{stage}},actor,user).gold;
+  assert.deepEqual([1,2,3,21,100].map(gold),[150,175,200,650,650]);
+  assert.equal(api.rewardFor(state,{...actor,correct:0},user),null);
 });
 test('a generation finishing after turn change is discarded; the new turn cannot reuse the question',async()=>{
   const db=database(),s=await api.start(db,'u1',{mode:'pve'},fixed),expected=await api.prepareQuestion(db,'u1',s.id,fixed);

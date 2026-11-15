@@ -37,6 +37,7 @@ const registerInvitationApi = require('./invitation-api.cjs');
 const registerFriendRequestsApi = require('./friend-requests-api.cjs');
 const registerSoulboundDrawApi = require('./soulbound-draw-api.cjs');
 const registerMeditationApi = require('./daily-meditation-api.cjs');
+const registerVocabularyRewardsApi = require('./daily-vocabulary-reward-api.cjs');
 const registerInventoryDismantleApi = require('./inventory-dismantle-api.cjs');
 const registerQuestApi = require('./quest-api.cjs');
 const registerEnlightenmentTrialApi = require('./enlightenment-trial-api.cjs');
@@ -113,6 +114,7 @@ app.use('/api/weapons',(_req,res)=>res.status(410).json({ok:false,error:'武器�
 app.use('/api/soulbound',(req,res)=>res.status(410).json({ok:false,error:'契器已改為尋器，請至煉器頁裝配兵器，或至尋器頁開啟自選兵器匣。'}));
 registerSoulboundDrawApi(app);
 registerMeditationApi(app);
+registerVocabularyRewardsApi(app);
 registerInventoryDismantleApi(app);
 registerOpportunityApi(app);
 registerGameIssueApi(app);

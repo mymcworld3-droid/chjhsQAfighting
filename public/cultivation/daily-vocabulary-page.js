@@ -16,6 +16,8 @@ let screen = 'home';
 let cards;
 let quiz;
 let quizLesson;
+let rewardTask;
+let rewardErrors = {};
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, char =>
@@ -80,6 +82,120 @@ function currentQuiz() {
   return quiz;
 }
 
+function queueCompletedReward() {
+  const lesson = progress.lesson;
+  if (!lesson?.result || lesson.answers.length !== rules.LESSON_SIZE) return false;
+  progress.rewardQueue ||= [];
+  progress.rewardHistory ||= {};
+  if (progress.rewardHistory[lesson.date] || progress.rewardQueue.some(item => item.date === lesson.date)) return false;
+  progress.rewardQueue.push({
+    date: lesson.date,
+    sequence: lesson.sequence,
+    level: lesson.level,
+    words: [...lesson.words],
+    answers: lesson.answers.map(answer => answer.value),
+  });
+  progress.rewardHistory[lesson.date] = { status: 'pending' };
+  return true;
+}
+
+function updatePlayerStats(result, uid) {
+  if (window.getRealmUserUid?.() !== uid) return;
+  const player = window.getCurrentUserData?.();
+  if (!player) return;
+  player.stats ||= {};
+  player.stats.gold = result.gold;
+  player.stats.totalScore = result.totalScore;
+  window.updateUIStats?.();
+  window.refreshCultivationRealmUI?.();
+  window.refreshXiuxianLiveSync?.(result.totalScore);
+  window.dispatchEvent(new CustomEvent('xiuxian:stats-updated', {
+    detail: { source: 'daily-vocabulary', gold: result.gold, totalScore: result.totalScore },
+  }));
+}
+
+async function flushRewards() {
+  if (rewardTask || !progress?.rewardQueue?.length || !key) return;
+  const rewardKey = key;
+  const uid = window.getRealmUserUid?.();
+  const queue = [...progress.rewardQueue];
+  rewardTask = (async () => {
+    try {
+      const { authenticatedMainFetch } = await import('./data/project-repository.js');
+      for (const lesson of queue) {
+        if (key !== rewardKey || window.getRealmUserUid?.() !== uid) break;
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 20_000);
+          let response;
+          let result;
+          try {
+            response = await authenticatedMainFetch('/api/daily-vocabulary/reward', {
+              method: 'POST',
+              body: JSON.stringify(lesson),
+              signal: controller.signal,
+            });
+            result = await response.json();
+          } finally {
+            clearTimeout(timeout);
+          }
+          if (key !== rewardKey || window.getRealmUserUid?.() !== uid) break;
+          if (!response.ok || !result.ok) {
+            const error = new Error(result.error || '獎勵暫時無法同步，請稍後重試。');
+            throw error;
+          }
+          progress = readProgress() || progress;
+          progress.rewardQueue = (progress.rewardQueue || []).filter(item => item.date !== lesson.date);
+          progress.rewardHistory ||= {};
+          progress.rewardHistory[lesson.date] = { status: 'claimed', reward: result.reward };
+          delete rewardErrors[lesson.date];
+          saveProgress();
+          updatePlayerStats(result, uid);
+        } catch (error) {
+          if (key !== rewardKey || window.getRealmUserUid?.() !== uid) break;
+          rewardErrors[lesson.date] = error.name === 'AbortError'
+            ? '獎勵同步逾時，請重新領取。'
+            : error.message || '獎勵暫時無法同步，請稍後重試。';
+        }
+      }
+    } catch (error) {
+      for (const lesson of queue) rewardErrors[lesson.date] = '獎勵暫時無法同步，請稍後重試。';
+    }
+  })();
+  try {
+    await rewardTask;
+  } finally {
+    rewardTask = null;
+    if (key === rewardKey && isOpen() && (screen === 'home' || screen === 'result')) render();
+    if (key !== rewardKey && isOpen() && progress?.rewardQueue?.length) void flushRewards();
+  }
+}
+
+function rewardMarkup(lesson) {
+  const status = progress.rewardHistory?.[lesson.date]?.status;
+  if (status === 'claimed') {
+    const reward = progress.rewardHistory[lesson.date].reward;
+    return `<div class="dv-reward is-granted" role="status"><strong>今日獎勵已領取</strong>
+      <span>${reward.gold} 靈石 · ${reward.cultivation} 修為</span></div>`;
+  }
+  const message = rewardErrors[lesson.date] || '正在領取今日獎勵…';
+  return `<div class="dv-reward ${rewardErrors[lesson.date] ? 'is-waiting' : 'is-syncing'}" role="status"><strong>今日獎勵</strong>
+    <span>${rules.DAILY_REWARD.gold} 靈石 · ${rules.DAILY_REWARD.cultivation} 修為</span>
+    <p>${escapeHtml(message)}</p>
+    ${rewardErrors[lesson.date] ? button('retry-reward', '重新領取', { style: 'dv-quiet' }) : ''}</div>`;
+}
+
+function pendingRewardsMarkup() {
+  const queue = progress.rewardQueue || [];
+  if (!queue.length) return '';
+  const failed = queue.find(item => rewardErrors[item.date]);
+  return `<section class="dv-panel dv-reward" role="status">
+    <strong>有 ${queue.length} 份單字獎勵待領取</strong>
+    <p>${failed ? escapeHtml(rewardErrors[failed.date]) : '正在同步獎勵…'}</p>
+    ${failed ? button('retry-reward', '重新領取', { style: 'dv-quiet' }) : ''}
+  </section>`;
+}
+
 function button(action, label, options = {}) {
   const { style = '', extra = '' } = options;
   return `<button type="button" class="dv-button ${style}" data-dv-action="${action}" ${extra}>${label}</button>`;
@@ -117,7 +233,8 @@ function homeMarkup() {
   return `<div class="dv-stack">
     <section class="dv-panel dv-today">
       <div class="dv-today-heading">
-        <div><h3 tabindex="-1" data-dv-focus>今日單字</h3><p>讀字卡回想意思，再用測驗檢查記住了多少。</p></div>
+        <div><h3 tabindex="-1" data-dv-focus>今日單字</h3><p>讀字卡回想意思，再用測驗檢查記住了多少。</p>
+          <p>完成測驗可獲得 ${rules.DAILY_REWARD.gold} 靈石 · ${rules.DAILY_REWARD.cultivation} 修為</p></div>
         <div class="dv-today-score"><strong>${studied}</strong> / ${rules.LESSON_SIZE}<span>已看字卡</span></div>
       </div>
       <div class="dv-progress" aria-hidden="true">
@@ -131,6 +248,7 @@ function homeMarkup() {
         ${button(lesson.result ? 'result' : 'quiz', quizAction)}
       </div>
     </section>
+    ${pendingRewardsMarkup()}
     <section class="dv-panel dv-review-panel">
       <div><h3>到期複習</h3><p>${due ? `有 ${due} 個字該再回想一次` : '今天沒有到期的單字。'} </p></div>
       ${due ? button('due', '開始複習') : ''}
@@ -162,11 +280,12 @@ function cardsMarkup() {
   const word = rules.wordFor(ids[index]);
   const title = source === 'daily' ? '今日字卡' : source === 'mistakes' ? '今日錯題' : '到期複習';
   const speakButton = window.speechSynthesis && typeof window.SpeechSynthesisUtterance === 'function'
-    ? button('listen', '<i class="fa-solid fa-volume-high" aria-hidden="true"></i> 發音', { style: 'dv-quiet' })
+    ? button('listen', '<i class="fa-solid fa-volume-high" aria-hidden="true"></i> 發音',
+        { style: 'dv-quiet', extra: 'aria-pressed="false"' })
     : '';
 
   return `${lead(title, `第 ${index + 1} / ${ids.length} 張`)}
-    <article class="dv-panel dv-card">
+    <article class="dv-panel dv-card ${revealed ? 'is-revealed' : 'is-front'}">
       <div class="dv-card-meta">${badge(word.band)}${speakButton}</div>
       <h4 lang="en" class="dv-english">${escapeHtml(word.id)}</h4>
       <p class="dv-part">${parts[word.part]} <span lang="en">${word.part}</span></p>
@@ -223,7 +342,7 @@ function quizMarkup() {
         <p>字義提示　<strong>${escapeHtml(word.meaning)}</strong>${format === 'spelling' ? ` · ${word.id.length} 個字母` : ''}</p>`;
 
   return `${lead(title, `難度 · ${stepLabel(lesson.level)} · ${questionLabels[format]}`)}
-    <section class="dv-panel dv-question">
+    <section class="dv-panel dv-question ${answer ? 'is-answered' : ''}">
       <div class="dv-question-meta">${badge(word.band)}<span class="dv-part">${parts[word.part]} <span lang="en">${word.part}</span></span></div>
       ${prompt}
       ${format !== 'spelling' ? choicesMarkup(question, index, answer) : answer ? '' :
@@ -258,6 +377,7 @@ function resultMarkup() {
       <ul class="dv-bands">${rules.BANDS.map(band =>
         `<li data-band="${band.id}"><b>${band.label}</b><small>${result.byBand[band.id]} / ${rules.WORDS_PER_BAND} 題</small></li>`).join('')}</ul>
       <p>${result.mistakes.length ? `${result.mistakes.length} 個錯題單字，已排入明天的複習。` : '全部答對。已安排後續複習。'}</p>
+      ${rewardMarkup(lesson)}
       ${result.mistakes.length ? button('mistakes', '複習錯題', { style: 'dv-primary' }) : ''}
     </section>`;
 }
@@ -277,17 +397,22 @@ function render({ focus = '', resetScroll = false } = {}) {
 }
 
 function showScreen(name) {
+  if (screen === 'cards' && name !== 'cards') window.speechSynthesis?.cancel();
   screen = name;
   render({ focus: 'focus', resetScroll: true });
 }
 
 function refreshDashboard(focus = false) {
+  if (screen === 'cards') window.speechSynthesis?.cancel();
   const stored = readProgress();
   const previous = stored || progress || rules.newProgress();
+  progress = previous;
+  const queued = queueCompletedReward();
   progress = rules.openLesson(previous, rules.todayInTaipei());
-  if (progress !== previous) saveProgress();
+  if (queued || progress !== previous) saveProgress();
   screen = 'home';
   render({ focus: focus ? 'focus' : '', resetScroll: focus });
+  void flushRewards();
 }
 
 async function openPage() {
@@ -312,6 +437,7 @@ async function openPage() {
     key = nextKey;
     progress = null;
     pendingSave = false;
+    rewardErrors = {};
   }
   refreshDashboard(true);
 }
@@ -323,6 +449,7 @@ function startCards(ids, source, index = 0) {
 }
 
 function moveCard(offset) {
+  window.speechSynthesis?.cancel();
   cards.index += offset;
   cards.revealed = false;
   showScreen('cards');
@@ -346,8 +473,11 @@ function readLatestLesson() {
 function answer(index, value) {
   if (screen !== 'quiz' || !readLatestLesson()) return;
   if (rules.submitAnswer(progress, currentQuiz(), index, value)) {
+    const finished = !!progress.lesson.result;
+    if (finished) queueCompletedReward();
     saveProgress();
     render({ focus: 'feedback' });
+    if (finished) void flushRewards();
   } else if (index !== progress.lesson.index || progress.lesson.answers[index]) {
     render();
   }
@@ -359,8 +489,17 @@ function listen() {
   utterance.lang = 'en-US';
   utterance.rate = 0.88;
   const message = slot.querySelector('[data-dv-audio]');
+  const control = slot.querySelector('[data-dv-action="listen"]');
   message.textContent = '';
+  const markSpeaking = speaking => {
+    if (!control?.isConnected) return;
+    control.classList.toggle('is-speaking', speaking);
+    control.setAttribute('aria-pressed', String(speaking));
+  };
+  utterance.onstart = () => markSpeaking(true);
+  utterance.onend = () => markSpeaking(false);
   utterance.onerror = event => {
+    markSpeaking(false);
     if (event.error !== 'interrupted' && event.error !== 'canceled') message.textContent = '此裝置目前無法播放發音。';
   };
   speech.cancel();
@@ -382,6 +521,11 @@ const actions = {
   mistakes: () => startCards(progress.lesson.result.mistakes, 'mistakes'),
   quiz: () => showScreen(progress.lesson.result ? 'result' : 'quiz'),
   result: () => showScreen('result'),
+  'retry-reward': () => {
+    rewardErrors = {};
+    render();
+    void flushRewards();
+  },
   reveal: () => {
     if (!readLatestLesson()) return;
     const id = cards.ids[cards.index];

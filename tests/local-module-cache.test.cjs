@@ -13,7 +13,7 @@ const index = read('index.html');
 const main = read('main.js');
 
 test('every local static resource has an up-to-date independent version', () => {
-  const extensions = new Set(['.html', '.js', '.css', '.json', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.mp3']);
+  const extensions = new Set(['.html', '.js', '.mjs', '.css', '.json', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.mp3']);
   const found = {};
   const walk = dir => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -40,7 +40,7 @@ test('service worker is installed early but preloads only code after all feature
   const featureBuild = main.match(/XIUXIAN_FEATURE_BUILD = '([^']+)'/)?.[1];
   assert.ok(featureBuild);
   assert.ok(index.includes(`src="main.js?v=${featureBuild}"`));
-  assert.match(worker, /filter\(path => \/\\\.\(\?:js\|css\)\$\/\.test\(path\)\)/);
+  assert.match(worker, /filter\(path => \/\\\.\(\?:js\|mjs\|css\)\$\/\.test\(path\)\)/);
   assert.doesNotMatch(worker, /firestore\.googleapis\.com|runTransaction|users\/\$\{/);
 });
 

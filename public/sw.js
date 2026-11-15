@@ -142,7 +142,7 @@ async function serveGeneratedItemImage(request) {
 async function precacheModules() {
   const manifest = await loadManifest(false);
   if (!manifest) return;
-  const modules = Object.keys(manifest.files).filter(path => /\.(?:js|css)$/.test(path));
+  const modules = Object.keys(manifest.files).filter(path => /\.(?:js|mjs|css)$/.test(path));
   let cursor = 0;
   const runners = Array.from({ length: 3 }, async () => {
     while (cursor < modules.length) {

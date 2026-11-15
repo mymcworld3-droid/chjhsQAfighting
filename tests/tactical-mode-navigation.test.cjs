@@ -63,7 +63,7 @@ test('trial introductions and exactly-once stage rewards use the trial pointer w
   const command={roomId:s.id,revision:s.revision,type:'attack',x:2,y:3,requestId:'mode-trial-victory'};
   const win=await api.command(db,'u1',command,now),retry=await api.command(db,'u1',command,now);
   assert.equal(win.nextStage,2);assert.equal(retry.nextStage,2);assert.equal(pointer(db).trial.stage,2);
-  assert.equal(db.records.get('users/u1').stats.gold,35);
+  assert.equal(db.records.get('users/u1').stats.gold,150);
   assert.equal((await api.state(db,'u1',now,'pvp')).id,duel.id);
   const next=await api.start(db,'u1',{mode:'pve'},now);assert.equal(next.trial.stage,2);assert.notEqual(next.id,trial.id);
   assert.equal((await api.state(db,'u1',now,'pvp')).id,duel.id);

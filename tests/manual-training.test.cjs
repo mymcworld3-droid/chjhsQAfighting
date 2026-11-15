@@ -113,7 +113,7 @@ test('manual mastery charges two gold per missing EXP and honors the quoted pric
 test('skill upgrades preserve manual XP and other skills and charge concurrent retries once',async()=>{
   const db=database(),user=db.records.get('users/u1');
   await API.chooseSchool(db,'u1',{school:'sword'});
-  const input={skillId:'wind-slash',targetLevel:2};
+  const input={skillId:'wind-slash',targetLevel:2,expectedGold:200};
   await assert.rejects(API.upgradeSkill(db,'u1',input),/靈石不足/);
   await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'rock-fist'}),/尚未解鎖/);
   await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'wind-step'}),/尚未解鎖/);
@@ -121,11 +121,13 @@ test('skill upgrades preserve manual XP and other skills and charge concurrent r
   bookRecord(db).books['sword-flight']={exp:0};
   user.stats.totalScore=5;
   await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'flight-slash'}),/境界未達/);
-  user.stats.totalScore=30;user.stats.gold=200;
+  user.stats.totalScore=30;user.stats.gold=2000;
+  await assert.rejects(API.upgradeSkill(db,'u1',{skillId:'wind-slash',targetLevel:2}),/重新整理頁面/);
+  await assert.rejects(API.upgradeSkill(db,'u1',{...input,expectedGold:20}),/費用已更新/);
   const buy=()=>API.upgradeSkill(db,'u1',input);
   const outcomes=await Promise.all([buy(),buy()]);
   for(const result of outcomes){
-    assert.equal(result.gold,180);
+    assert.equal(result.gold,1800);
     assert.equal(result.library[0].exp,0);
     assert.equal(result.library[0].level,1);
     assert.equal(result.library[0].skills[0].level,2);
@@ -133,7 +135,7 @@ test('skill upgrades preserve manual XP and other skills and charge concurrent r
     assert.equal(result.library[0].skills[1].upgrade,null);
   }
   for(const targetLevel of [3,4,5])
-    await API.upgradeSkill(db,'u1',{...input,targetLevel});
+    await API.upgradeSkill(db,'u1',{...input,targetLevel,expectedGold:(targetLevel-1)*200});
   const maxed=await API.manualsState(db,'u1');
   assert.equal(maxed.gold,0);
   assert.equal(maxed.library[0].skills[0].upgrade,null);
@@ -144,10 +146,10 @@ test('skill upgrades preserve manual XP and other skills and charge concurrent r
 test('resumed trials use trusted upgraded damage and ignore a forged skill level on the action',async()=>{
   const db=database(),id='wind-slash';
   await API.chooseSchool(db,'u1',{school:'sword'});
-  db.records.get('users/u1').stats.gold=35;
+  db.records.get('users/u1').stats.gold=200;
   const original=await API.start(db,'u1',{mode:'pve'},now);
   assert.equal(R.manualSkillFor(original.actors[0],id).level,1);
-  await API.upgradeSkill(db,'u1',{skillId:id,targetLevel:2});
+  await API.upgradeSkill(db,'u1',{skillId:id,targetLevel:2,expectedGold:200});
   const resumed=await API.start(db,'u1',{mode:'pve'},now);
   assert.equal(original.id,resumed.id);
   assert(resumed.revision>original.revision);
@@ -327,7 +329,7 @@ test('trial clear awards a fresh manual with zero EXP, once, in the same transac
   assert.equal(replay.manualDrops?.u1?.id,drop.id);
   assert.equal(Object.keys(bookRecord(db).books).length,count);
   assert.equal(db.records.get(API.PLAYERS+'/u1').trial.stage,2);
-  assert.equal(db.records.get('users/u1').stats.gold,35);
+  assert.equal(db.records.get('users/u1').stats.gold,150);
 });
 
 test('the original sword manuals retain their save slots while shared techniques use one slot',async()=>{
