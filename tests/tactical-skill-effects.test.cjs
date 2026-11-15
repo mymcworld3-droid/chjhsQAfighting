@@ -365,7 +365,7 @@ test('a three-cell cleave shows two full-width sweeps and resolves damage separa
   }
 });
 
-test('crossed sword cuts pass through the center on exactly two diagonals',()=>{
+test('crossed sword cuts use two diagonals without overlapping on screen',()=>{
   const before=fixture('sky-cloud');
   const after=R.apply(before,'hero',{type:'manual',skillId:'sky-cloud',x:7,y:4},now);
   const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
@@ -374,9 +374,52 @@ test('crossed sword cuts pass through the center on exactly two diagonals',()=>{
     [{x:5,y:6},{x:7,y:4},{x:9,y:2}]
   ]);
   assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[80],[80]]);
-  const c=context();
-  Effects.draw(c,cast,.85,{cell:48,ox:0,oy:0,width:12,height:9},true);
-  assert.equal(new Set(c.calls.filter(([name])=>name==='moveTo').map(String)).size,2);
+  const starts=p=>{
+    const c=context();
+    Effects.draw(c,cast,p,{cell:48,ox:0,oy:0,width:12,height:9},true);
+    return [...new Set(c.calls.filter(([name])=>name==='moveTo').map(String))];
+  };
+  assert.deepEqual(starts(A.strikeTime(cast,0)),['moveTo,264,120']);
+  assert.deepEqual(starts(.41),[]);
+  assert.deepEqual(starts(A.strikeTime(cast,1)),['moveTo,264,312']);
+  for(let frame=0;frame<=100;frame++)assert(starts(frame/100).length<=1);
+  assert(cast.duration<=500);
+});
+
+test('far break holds the enlarged sword silhouette after its beam has cleared',()=>{
+  const before=fixture('wind-thousand');
+  const after=R.apply(before,'hero',{type:'manual',skillId:'wind-thousand',x:5,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  const drawAt=p=>{
+    const c=context(),fills=[];
+    c.fill=()=>{if(c.fillStyle==='#8bddff')fills.push(c.globalAlpha);};
+    Effects.draw(c,cast,p,{cell:48,ox:0,oy:0,width:12,height:9},true);
+    return {fills,calls:c.calls};
+  };
+  const peak=drawAt(.46),hold=drawAt(.715),fading=drawAt(.86);
+  const hasBeam=frame=>frame.calls.some(([name,x,y])=>name==='moveTo'&&x===216&&y===216);
+  assert(hasBeam(peak));assert(!hasBeam(hold));
+  assert(hold.calls.some(([name,x])=>name==='moveTo'&&x<-2*48));
+  assert.deepEqual(hold.fills,peak.fills);
+  assert(fading.fills[0]>0&&fading.fills[0]<hold.fills[0]);
+  assert.deepEqual(drawAt(1).fills,[]);
+});
+
+test('eight sword points light up before converging together',()=>{
+  const before=fixture('sky-sever');
+  const after=R.apply(before,'hero',{type:'manual',skillId:'sky-sever',x:7,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  const drawAt=p=>{
+    const c=context();
+    Effects.draw(c,cast,p,{cell:48,ox:0,oy:0,width:12,height:9},true);
+    return c.calls;
+  };
+  const ready=drawAt(.22),inbound=drawAt(.4);
+  assert.equal(new Set(ready.filter(([name])=>name==='arc').map(([,x,y])=>x+','+y)).size,8);
+  assert(!ready.some(([name])=>name==='lineTo'));
+  assert.equal(new Set(inbound.filter(([name])=>name==='lineTo').map(String)).size,8);
+  assert(drawAt(.47).some(([name,x,y])=>name==='arc'&&x===360&&y===216));
+  assert(!drawAt(.8).some(([name])=>name==='lineTo'||name==='arc'));
 });
 
 test('damage numbers appear at impact on top of the manual animation',()=>{

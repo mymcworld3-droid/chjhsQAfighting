@@ -85,12 +85,12 @@
       for(let i=-1;i<=1;i++)stroke({x:-size*.05*scale,y:i*size*.095*scale},{x:size*.17*scale,y:i*size*.095*scale},bright,.018,a);
       c.restore();
     };
-    const beam=(start,end,t,color=ink,width=.1)=>{
+    const beam=(start,end,t,color=ink,width=.1,strength=beat)=>{
       const q=clamp(t),tip=point(start,end,q);
       glow(color,.22);
-      stroke(start,tip,color,width*2,.17*beat);
-      stroke(start,tip,color,width,.65*beat);
-      stroke(start,tip,bright,width*.26,.9*beat);
+      stroke(start,tip,color,width*2,.17*strength);
+      stroke(start,tip,color,width,.65*strength);
+      stroke(start,tip,bright,width*.26,.9*strength);
       return tip;
     };
     const heavyImpact=()=>{
@@ -130,10 +130,11 @@
     c.save();c.beginPath();c.rect(ox,Math.max(0,oy-size*.35),size*width,size*(height+.35));c.clip();
     if(!above){
       // Ground marks follow the committed cells, including walls and truncated rays.
-      for(const tile of cells){
+      const markedCells=move==='sky-cloud'||move==='sky-sever'?[]:cells;
+      for(const tile of markedCells){
         const at=center(tile);c.globalAlpha=beat*.1;c.fillStyle=ink;
         c.fillRect(ox+tile.x*size+2,oy+tile.y*size+2,size-4,size-4);
-        if(move!=='wind-step'&&move!=='sky-cloud')circle(at,.29+beat*.05,beat*.25,ink,.014);
+        if(move!=='wind-step')circle(at,.29+beat*.05,beat*.25,ink,.014);
       }
       if(move==='dragon-roar'||move==='flight-summon'){
         c.save();c.translate((move==='dragon-roar'?from:to).x,(move==='dragon-roar'?from:to).y);
@@ -173,25 +174,27 @@
       c.restore();
     }else if(move==='wind-thousand'){
       // The full ray reaches the targets at the same beat as knockback starts.
-      const end=hit.at(-1)||to,q=phase(p,.08,.45),tip=beam(from,end,q,jade,.12);
-      for(const offset of [-.16,.16]){
-        const shift={x:side.x*size*offset,y:side.y*size*offset};
-        stroke({x:from.x+shift.x,y:from.y+shift.y},{x:tip.x+shift.x,y:tip.y+shift.y},jade,.025,beat*.8);
-      }
-      // The two-finger command sends a blue greatsword silhouette down the ray.
-      const bladeAlpha=pulse(phase(p,.28,.93));
+      const hitAt=strikeTime(0),lightEnd=.67;
+      const end=hit.at(-1)||to,q=phase(p,.08,hitAt),tip=point(from,end,q);
+      const light=phase(p,.08,.25)*(1-phase(p,hitAt,lightEnd));
+      // Hold the larger greatsword after the flash clears, then fade the shadow.
+      const bladeAlpha=phase(p,.18,.33)*(1-phase(p,lightEnd+.05,1));
       if(bladeAlpha>0){
         c.save();c.translate(tip.x,tip.y);c.rotate(Math.atan2(dy,dx));glow('#71caff',.3);
-        c.fillStyle='#8bddff';c.strokeStyle='#c8f4ff';c.lineWidth=Math.max(1,size*.028);
-        c.beginPath();c.moveTo(-size*.95,-size*.125);c.lineTo(-size*.18,-size*.118);
-        c.lineTo(size*.16,0);c.lineTo(-size*.18,size*.118);c.lineTo(-size*.95,size*.125);c.closePath();
-        c.globalAlpha=bladeAlpha*.4;c.fill();c.globalAlpha=bladeAlpha*.82;c.stroke();
-        stroke({x:-size*.95,y:-size*.23},{x:-size*.95,y:size*.23},'#8bddff',.055,bladeAlpha*.85);
-        stroke({x:-size*1.20,y:0},{x:size*.12,y:0},'#c8f4ff',.035,bladeAlpha*.9);
+        const unit=size*2.25;
+        c.fillStyle='#8bddff';c.strokeStyle='#c8f4ff';c.lineWidth=Math.max(1,size*.04);
+        c.beginPath();c.moveTo(-unit*.95,-unit*.125);c.lineTo(-unit*.18,-unit*.118);
+        c.lineTo(unit*.16,0);c.lineTo(-unit*.18,unit*.118);c.lineTo(-unit*.95,unit*.125);c.closePath();
+        c.globalAlpha=bladeAlpha*.52;c.fill();c.globalAlpha=bladeAlpha*.9;c.stroke();
+        stroke({x:-unit*.95,y:-unit*.23},{x:-unit*.95,y:unit*.23},'#8bddff',.085,bladeAlpha*.9);
+        stroke({x:-unit*1.20,y:0},{x:unit*.12,y:0},'#c8f4ff',.05,bladeAlpha*.8);
         c.restore();
       }
-      crescent(tip,Math.atan2(dy,dx),phase(p,.05,.98),white,1.15);
-      if(p>.45)impact(tip,phase(p,.45,1),jade);
+      if(light>0){
+        beam(from,end,q,jade,.12,light);
+        crescent(tip,Math.atan2(dy,dx),phase(p,.08,lightEnd),white,1.15);
+        if(p>hitAt)impact(tip,phase(p,hitAt,lightEnd),jade);
+      }
     }else if(move==='flight-summon'){
       const hadSword=!!scene.before?.find(a=>a.uid===scene.actor)?.flyingSword;
       if(hadSword){
@@ -212,26 +215,38 @@
       for(const [index,cut] of cuts.entries()){
         if(cut.length<2)continue;
         const time=p-strikeTime(index);
-        if(time<-.14)continue;
+        if(time<=-.12||time>=.13)continue;
         const middle=cut.findIndex(tile=>tile.x===target.x&&tile.y===target.y)/(cut.length-1);
-        const progress=time<0?middle*phase(time,-.14,0):middle+(1-middle)*phase(time,0,.08);
-        const strength=phase(time,-.14,-.03)*(1-phase(time,.08,.50));
+        const progress=time<0?middle*phase(time,-.12,0):middle+(1-middle)*phase(time,0,.065);
+        const strength=phase(time,-.12,-.03)*(1-phase(time,.04,.13));
         const start=center(cut[0]),end=center(cut.at(-1)),tip=point(start,end,progress);
+        const tail=point(start,end,Math.min(progress,phase(time,.015,.14)));
         glow(jade,.16);
-        stroke(start,tip,jade,.21,strength*.42);
-        stroke(start,tip,white,.068,strength);
+        stroke(tail,tip,jade,.21,strength*.42);
+        stroke(tail,tip,white,.068,strength);
       }
     }else if(move==='sky-sever'){
-      const rays=scene.rays||[];
-      for(const [i,ray] of rays.entries()){
-        if(!ray.length)continue;
-        const start=center(ray.at(-1)),q=phase(p,.04+(i%2)*.08,.68+(i%2)*.08);
-        const tip=beam(start,to,q,i%2?white:jade,.065);
-        crescent(tip,Math.atan2(to.y-start.y,to.x-start.x),phase(p,.04,.88),jade,.58);
+      const hitAt=strikeTime(0),launchAt=hitAt-.14;
+      const gather=phase(p,launchAt,hitAt),charge=phase(p,0,.17);
+      for(const ray of scene.rays||[]){
+        if(!ray.length||p>=hitAt)continue;
+        const start=center(ray.at(-1));
+        glow(jade,.23);
+        if(p<launchAt){
+          circle(start,.17+charge*.12,charge*.85,jade,.038);
+          c.globalAlpha=charge;c.fillStyle=white;c.beginPath();
+          c.arc(start.x,start.y,size*(.035+charge*.05),0,Math.PI*2);c.fill();
+        }else{
+          const tip=point(start,to,gather),tail=point(start,to,Math.max(0,gather-.28));
+          stroke(tail,tip,jade,.17,.54);
+          stroke(tail,tip,white,.065,1);
+        }
       }
-      if(p>.45){
-        const q=phase(p,.45,1);impact(to,q,white);circle(to,.25+q*.5,pulse(q),jade,.04);
-        sparks(to,18,white,.85);
+      if(p>=hitAt&&p<hitAt+.22){
+        const q=phase(p,hitAt,hitAt+.22);
+        glow(jade,.28);c.globalAlpha=1-q;c.fillStyle=white;c.beginPath();
+        c.arc(to.x,to.y,size*(.14+q*.27),0,Math.PI*2);c.fill();
+        circle(to,.15+q*.58,1-q,jade,.058);
       }
     }else if(move==='rock-fist'){
       const end=hit.at(-1)||to,q=phase(p,.04,.85),at=point(from,end,q);

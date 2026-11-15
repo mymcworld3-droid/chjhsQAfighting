@@ -11,9 +11,11 @@
   const moveFor=id=>manuals()?.BY_SKILL?.[id]?.moveId||id;
   const heavyMoves=new Set(['rock-fist','rock-quake','rock-break','dragon-guard','tiger-step','tiger-throw','wind-thousand','sky-sever']);
   const hitTime={'wind-slash':.40,'wind-step':.32,'wind-thousand':.45,'flight-summon':.45,
-    'sky-cloud':.46,'sky-sever':.46,'rock-fist':.46,'rock-quake':.32,'rock-break':.40,'tiger-step':.32};
+    'sky-cloud':.25,'sky-sever':.46,'rock-fist':.46,'rock-quake':.32,'rock-break':.40,'tiger-step':.32};
+  const quickSwordCast=move=>move==='sky-cloud'||move==='sky-sever';
   function strikeTime(scene,index){
-    const first=scene.impactStart??hitTime[moveFor(scene.skill)]??.4;
+    const move=moveFor(scene.skill),first=scene.impactStart??hitTime[move]??.4;
+    if(move==='sky-cloud')return index===0?first:first+.32;
     return index===0?first:first+(1-first)*.54;
   }
   function duration(scene){
@@ -25,6 +27,7 @@
       return Math.min(800,180+Math.max(...scene.moves.map(m=>m.path.length-1))*105);
     }
     if(scene.kind==='cast'&&scene.style==='fist-chain')return 380;
+    if(scene.kind==='cast'&&quickSwordCast(moveFor(scene.skill)))return 500;
     if(scene.kind==='damage'&&scene.skill==='dragon-guard')return 280;
     return {cast:420,impact:520,damage:420,restore:420,guard:420,answer:620,turn:300,dodge:300,withdraw:360,finish:650}[scene.kind]||300;
   }
@@ -136,9 +139,9 @@
         if(counter)reflections.push({actor:scene.actor,target:cast.actor});
       }
       if(!hits.size)continue;
-      const separateHits=strikeImpacts.some(beat=>beat.length);
-      Object.assign(cast,{parallelImpact:true,impactStart:hitTime[moveFor(cast.skill)]??.4,
-        numbers,reflections,after:scenes[j-1].after,duration:separateHits?740:600,
+      const separateHits=strikeImpacts.some(beat=>beat.length),move=moveFor(cast.skill);
+      Object.assign(cast,{parallelImpact:true,impactStart:hitTime[move]??.4,
+        numbers,reflections,after:scenes[j-1].after,duration:quickSwordCast(move)?500:separateHits?740:600,
         ...(separateHits?{strikeImpacts}:{})});
       scenes.splice(i+1,j-i-1);
     }
