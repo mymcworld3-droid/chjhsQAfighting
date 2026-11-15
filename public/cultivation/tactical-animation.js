@@ -221,8 +221,17 @@
     const total=scenes.reduce((n,s)=>n+s.duration,0),scale=Math.min(1,4200/total);
     return scenes.map(s=>({...s,duration:s.duration*scale}));
   }
+  function crossCutImpact(scene,progress){
+    if(scene?.kind!=='cast'||moveFor(scene.skill)!=='sky-cloud')return null;
+    const index=progress>=strikeTime(scene,1)?1:0;
+    const phase=(progress-strikeTime(scene,index))/.16;
+    const hits=scene.strikeImpacts?.[index]?.filter(hit=>hit.uid!==scene.actor&&hit.damage!==undefined);
+    if(phase<0||phase>=1||!hits?.length)return null;
+    return {index,phase,hits,strength:(1-phase)**2*(index===0?.85:1.3)};
+  }
   // A short contact pulse strengthens the hit without stopping the movement.
   function impactPulse(scene,progress){
+    if(moveFor(scene?.skill)==='sky-cloud')return crossCutImpact(scene,progress)?.strength||0;
     if(scene?.kind!=='cast'||!heavyMoves.has(moveFor(scene.skill)))return 0;
     const landed=scene.throwImpact&&scene.moves?.some(m=>m.timing==='manual-throw');
     if(!landed&&(!scene.parallelImpact||!scene.numbers?.some(n=>n.uid!==scene.actor&&n.damage!==undefined)))return 0;
@@ -232,7 +241,8 @@
   function sample(scene,progress){
     const p=clamp(progress),beat=Math.sin(Math.PI*p),actors=copy(scene.before);
     const impact=scene.parallelImpact?clamp((p-scene.impactStart)/(1-scene.impactStart)):p;
-    const weight=impactPulse(scene,p);
+    const crossed=moveFor(scene.skill)==='sky-cloud',cutImpact=crossed?crossCutImpact(scene,p):null;
+    const weight=crossed?(cutImpact?.strength||0):impactPulse(scene,p);
     for(const a of actors){
       a.opacity=1;a.lift=0;a.scaleX=1;a.scaleY=1;a.flash=0;
       const move=scene.moves.find(m=>m.uid===a.uid);
@@ -267,8 +277,8 @@
       if((scene.kind==='damage'||scene.parallelImpact)&&number&&impact>0){
         const impactBeat=Math.sin(Math.PI*impact);
         a.flash=impactBeat*.6;
-        if(a.bot&&scene.style!=='fist-chain'&&move?.timing!=='manual-throw')a.x+=Math.sin(impact*Math.PI*5)*(1-impact)*.07;
-        if(weight&&a.uid!==scene.actor){
+        if(a.bot&&!crossed&&scene.style!=='fist-chain'&&move?.timing!=='manual-throw')a.x+=Math.sin(impact*Math.PI*5)*(1-impact)*.07;
+        if(weight&&!crossed&&a.uid!==scene.actor){
           a.flash=Math.max(a.flash,weight*.9);
           if(a.bot){a.scaleX*=1+weight*.18;a.scaleY*=1-weight*.16;}
         }
@@ -283,6 +293,13 @@
             a.flash=Math.max(a.flash,Math.sin(Math.PI*progress)*.6);
             lifeProgress=progress;
           }
+          if(cutImpact?.hits.some(hit=>hit.uid===a.uid)){
+            a.flash=Math.max(a.flash,clamp(weight*.95));
+            if(a.bot){
+              a.sway=(cutImpact.index===0?1:-1)*weight*.14;
+              a.scaleX*=1+weight*.16;a.scaleY*=1-weight*.12;
+            }
+          }
           if(p===1){a.hp=after.hp;a.shield=after.shield;}
         }else{a.hp+=(after.hp-a.hp)*impact;a.shield=after.shield;}
         if(after.hp<=0){a.opacity=1-smooth(clamp((lifeProgress-.35)/.65));if(a.bot)a.scaleY*=1-lifeProgress*.25;}
@@ -293,5 +310,5 @@
     }
     return actors;
   }
-  return Object.freeze({plan,sample,impactPulse,strikeTime,throwProgress});
+  return Object.freeze({plan,sample,impactPulse,crossCutImpact,strikeTime,throwProgress});
 });

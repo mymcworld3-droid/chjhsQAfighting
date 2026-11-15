@@ -147,9 +147,22 @@
         }else if(time<.13){
           const strength=phase(time,-.12,-.03)*(1-phase(time,.04,.13));
           const tail=point(start,end,Math.min(progress,phase(time,.015,.14)));
-          glow(jade,.16);
-          stroke(tail,tip,jade,.21,strength*.42);
+          glow(jade,.20);
+          stroke(tail,tip,jade,index===0?.24:.32,strength*.65);
           stroke(tail,tip,white,.068,strength);
+        }
+      }
+      const contact=above?animation().crossCutImpact(scene,p):null;
+      if(contact){
+        const {phase:q,strength,index}=contact,finish=index===1;
+        for(const hit of contact.hits){
+          const victim=scene.before.find(actor=>actor.uid===hit.uid);if(!victim)continue;
+          const at=center(victim);
+          glow(finish?white:jade,.21);
+          c.globalAlpha=clamp(strength);c.fillStyle=white;
+          c.beginPath();c.arc(at.x,at.y,size*((finish?.24:.16)+q*.22),0,Math.PI*2);c.fill();
+          circle(at,(finish?.31:.22)+q*.52,strength*.8,finish?white:jade,.047);
+          impact(at,q,finish?white:jade);
         }
       }
       c.restore();return true;

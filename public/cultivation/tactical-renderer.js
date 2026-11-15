@@ -330,10 +330,18 @@ export class TacticalRenderer{
     const g=Camera.geometry(this.camera,w,h,view);this.camera=Camera.normalize(this.camera,w,h,view);
     const cell=this.cell=g.cell,ox=this.ox=g.ox,oy=this.oy=g.oy;
     const mine=s.actors.find(a=>a.uid===this.uid),myTurn=!animating&&s.status==='active'&&s.turnUid===this.uid&&(!s.quizRound||s.phase==='action'),reduced=this.reducedMotion.matches;
-    const weight=!reduced&&scene?A.impactPulse(scene,progress):0;
+    const cutImpact=reduced?null:A.crossCutImpact(scene,progress);
+    const weight=!reduced&&scene?(cutImpact?.strength??A.impactPulse(scene,progress)):0;
     if(weight){
-      const q=(progress-scene.impactStart)/.22,amount=Math.min(2.5,cell*.05)*weight;
-      c.save();c.translate(Math.sin(q*Math.PI*4)*amount,Math.cos(q*Math.PI*4)*amount*.45);
+      c.save();
+      if(cutImpact){
+        const direction=cutImpact.index===0?1:-1;
+        const kick=Math.cos(cutImpact.phase*Math.PI*2)*Math.min(4.5,cell*.085)*weight;
+        c.translate(direction*kick,kick*.55);
+      }else{
+        const q=(progress-scene.impactStart)/.22,amount=Math.min(2.5,cell*.05)*weight;
+        c.translate(Math.sin(q*Math.PI*4)*amount,Math.cos(q*Math.PI*4)*amount*.45);
+      }
     }
     const fill=(p,color,stroke)=>{const x=ox+p.x*cell,y=oy+p.y*cell;c.fillStyle=color;c.fillRect(x+1,y+1,cell-2,cell-2);if(stroke){c.strokeStyle=stroke;c.lineWidth=1.5;c.strokeRect(x+2,y+2,cell-4,cell-4);}};
     c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';

@@ -272,12 +272,10 @@ test('body techniques and selected sword techniques land with weight while light
     const enemy=A.sample(cast,cast.impactStart+.1).find(a=>a.uid==='monster-0');
     assert(enemy.scaleX>1&&enemy.scaleY<1,skill);
   }
-  for(const skill of ['wind-slash','sky-cloud']){
-    const before=fixture(skill),point=skill==='sky-cloud'?{x:7,y:4}:{x:5,y:4};
-    const after=R.apply(before,'hero',{type:'manual',skillId:skill,...point},now);
-    const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
-    assert(cast.parallelImpact,skill);assert.equal(A.impactPulse(cast,cast.impactStart+.1),0,skill);
-  }
+  const before=fixture('wind-slash');
+  const after=R.apply(before,'hero',{type:'manual',skillId:'wind-slash',x:5,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  assert(cast.parallelImpact);assert.equal(A.impactPulse(cast,cast.impactStart+.1),0);
 });
 
 test('renderer carries elapsed time across chain strikes without waiting a frame',()=>{
@@ -381,9 +379,12 @@ test('crossed sword cuts sweep in sequence and leave trails that fade together',
   ]);
   assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[80],[80]]);
   const starts=p=>{
-    const c=context();
+    const c=context(),lines=[];
+    c.stroke=()=>{
+      if(c.strokeStyle==='#effff4'&&c.lineWidth===48*.068)lines.push(c.calls.at(-2).join(','));
+    };
     Effects.draw(c,cast,p,{cell:48,ox:0,oy:0,width:12,height:9},true);
-    return [...new Set(c.calls.filter(([name])=>name==='moveTo').map(String))];
+    return lines;
   };
   assert.deepEqual(starts(A.strikeTime(cast,0)),['moveTo,264,120']);
   assert.deepEqual(starts(.41),[]);
@@ -407,6 +408,32 @@ test('crossed sword cuts sweep in sequence and leave trails that fade together',
   assert.deepEqual(fading,both.map(line=>({...line,alpha:fading[0].alpha})));
   assert.deepEqual(trails(1),[]);
   assert(cast.duration<=500);
+});
+
+test('crossed sword cuts kick at each actual hit, with a stronger second strike',()=>{
+  const before=fixture('sky-cloud');
+  Object.assign(before.actors[1],{x:6,y:3});
+  Object.assign(before.actors[2],{x:6,y:5});
+  const aim={type:'manual',skillId:'sky-cloud',x:7,y:4};
+  const after=R.apply(before,'hero',aim,now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  const first=A.strikeTime(cast,0)+.025,second=A.strikeTime(cast,1)+.025;
+  assert(A.impactPulse(cast,first)>.5);
+  assert(A.impactPulse(cast,second)>A.impactPulse(cast,first));
+  assert.equal(A.impactPulse(cast,.49),0);
+  const [firstTarget,unhit]=A.sample(cast,first).slice(1);
+  const [settled,secondTarget]=A.sample(cast,second).slice(1);
+  assert(firstTarget.sway>0&&firstTarget.flash>0);
+  assert(unhit.flash<1e-9);assert(settled.flash<1e-9);
+  assert(secondTarget.sway<0&&secondTarget.scaleX>firstTarget.scaleX);
+  assert.deepEqual([secondTarget.x,secondTarget.y],[6,5]);
+  const c=context();
+  Effects.draw(c,cast,second,{cell:48,ox:0,oy:0,width:12,height:9},true);
+  assert(c.calls.some(([name,x,y])=>name==='arc'&&x===312&&y===264),'flash appears on the struck tile');
+  Object.assign(before.actors[1],{x:10,y:7});
+  Object.assign(before.actors[2],{x:10,y:8});
+  const miss=A.plan(before,R.apply(before,'hero',aim,now),'hero').find(s=>s.kind==='cast');
+  assert.equal(A.impactPulse(miss,first),0);assert.equal(A.impactPulse(miss,second),0);
 });
 
 test('far break holds the enlarged sword silhouette after its beam has cleared',()=>{
