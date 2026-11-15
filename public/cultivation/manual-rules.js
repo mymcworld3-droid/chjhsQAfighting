@@ -75,7 +75,7 @@
   const BOOKS=Object.freeze([
     book('sword-wind','流風劍訣','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
-      technique('wind-step','突進橫斬',5,4,'dash-cleave',1.8,
+      technique('wind-step','突進橫斬',4,4,'dash-cleave',1.8,
         '沿直線突進最多四格，再揮出三格寬的劍氣兩次。',{hits:2}),
       breakLine
     ]),

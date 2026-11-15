@@ -335,8 +335,11 @@ test('dash cleave previews a clear landing and strikes the next row in two hits'
   const hero=battle.actors[0],technique=Catalog.BY_SKILL[skill],landing={x:5,y:4};
   assert.deepEqual(R.skillCells(battle,hero,technique,landing),[{x:6,y:3},{x:6,y:4},{x:6,y:5}]);
   assert.throws(()=>castSword(battle,skill,6,4),/可突進/);
+  hero.stamina=3;
+  assert.throws(()=>castSword(battle,skill,5,4),/體力不足/);
+  hero.stamina=4;
   const after=castSword(battle,skill,5,4);
-  assert.deepEqual([after.actors[0].x,after.actors[0].y,after.actors[0].stamina],[5,4,5]);
+  assert.deepEqual([after.actors[0].x,after.actors[0].y,after.actors[0].stamina],[5,4,0]);
   assert.deepEqual(after.actors.slice(1).map(a=>a.hp),[320,320,500]);
   assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='center').length,2);
   assert.equal(after.events.find(e=>e.animation?.style==='dash').path.length,5);
