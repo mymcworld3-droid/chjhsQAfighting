@@ -74,8 +74,8 @@ function activate(action){
     case 'learning':return window.switchToPage?.('page-learning');
     case 'rank':
       window.switchToPage?.('page-rank');window.loadLeaderboard?.();return;
-    case 'share':
-      if(window.switchToPage?.('page-social')!==false)window.switchSocialTab?.('shares');return;
+    case 'store':
+      window.loadStoreItems?.();window.switchToPage?.('page-store');return;
   }
 }
 function mirrorAlert(sourceId,action){
