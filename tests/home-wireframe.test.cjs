@@ -14,7 +14,7 @@ test('homepage retains original player realm card, six shortcuts and main PvE ac
   assert.match(html,/id="xiuxian-panel"/);
   assert.match(html,/class="home-wireframe-rail is-left"/);
   assert.match(html,/class="home-wireframe-rail is-right"/);
-  for(const action of ['path','rank','share','quest','meditation','learning']){
+  for(const action of ['path','rank','store','quest','meditation','learning']){
     assert.equal(html.split('data-home-action="'+action+'"').length-1,1,action);
     assert.match(js,new RegExp("case '"+action+"'"));
   }
@@ -22,7 +22,8 @@ test('homepage retains original player realm card, six shortcuts and main PvE ac
     assert.equal(html.split('id="'+id+'"').length-1,1,id);
   }
   assert.match(html,/id="btn-home-start"[^>]+onclick="startQuizFlow\(\)"/);
-  assert.match(js,/window\.switchToPage\?\.\('page-social'\)/);
+  assert.match(js,/window\.switchToPage\?\.\('page-store'\)/);
+  assert.doesNotMatch(html,/data-target="page-store"/);
   assert.doesNotMatch(html,/id="btn-home-pvp"|>鬥法論道<|我的訂正進度|home-correction-panel|home-correction-meter|home-correction-open/);
   assert.doesNotMatch(css,/btn-home-pvp|home-correction-card/);
   assert.doesNotMatch(js,/home-correction-progress|home-correction-panel/);
@@ -42,7 +43,10 @@ test('the four-point Learning shortcut opens the full-width list of learning fea
   const page=html.match(/<section id="page-learning"[\s\S]+?<\/section>/)?.[0];
   assert.match(page,/class="page-section hidden"/);
   assert.match(page,/switchToPage\('page-home'\)/);
-  assert.match(page,/<li class="learning-feature" id="daily-english-vocabulary">\s*<h3>每日英文單字<\/h3>\s*<p>準備中<\/p>/);
+  assert.match(page,/<button class="learning-feature" id="daily-english-vocabulary"[^>]+onclick="switchToPage\('page-daily-vocabulary'\)"/);
+  assert.match(page,/<strong>每日英文單字<\/strong>/);
+  assert.match(html,/<section id="page-daily-vocabulary" class="page-section hidden"/);
+  assert.match(html,/<script type="module" src="cultivation\/daily-vocabulary-page\.js\?/);
   assert.match(read('public/styles/learning-page.css'),/\.learning-feature\s*\{[^}]*width: 100%;/);
 });
 
