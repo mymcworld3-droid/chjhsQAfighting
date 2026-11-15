@@ -81,15 +81,18 @@ function patchedUser(user,patch){
   for(const [key,value]of Object.entries(patch))if(key.startsWith('stats.'))next.stats[key.slice(6)]=value;else next[key]=value;
   return next;
 }
+function manualLoadout(manualRecord,trainingAccessScore){
+  const {equipped,skillLevels}=Manuals.normalize(manualRecord);
+  const manualSkills=equipped.filter(id=>Manuals.meetsRealm(Manuals.BY_SKILL[id],trainingAccessScore));
+  const manualSkillLevels=Object.fromEntries(manualSkills.filter(id=>skillLevels[id])
+    .map(id=>[id,skillLevels[id]]));
+  return {trainingAccessScore,manualSkills,manualSkillLevels};
+}
 function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
   const branch=Rules.savedBranch(user,type).id;
-  const trainingAccessScore=TrainingAccess.score(user);
-  const equipped=Manuals.normalize(manualRecord).equipped.filter(id=>
-    Manuals.meetsRealm(Manuals.BY_SKILL[id],trainingAccessScore));
-  return {...trusted,enemyScaleAttack:trusted.atk,trainingAccessScore,
-    core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0,
-    manualSkills:equipped};
+  return {...trusted,...manualLoadout(manualRecord,TrainingAccess.score(user)),
+    enemyScaleAttack:trusted.atk,core:type,branch,gender:user.storyProgressV1?.gender==='female'?'female':'male',shield:0};
 }
 function trialProgress(raw,seed){
   return {version:1,seed:/^[a-f0-9]{32}$/.test(raw?.seed)?raw.seed:seed,
@@ -197,7 +200,7 @@ async function equipManualSkills(db,uid,input){
 }
 
 async function upgradeManual(db,uid,input){
-  const {bookId,targetLevel}=input||{};
+  const {bookId,targetLevel,expectedGold}=input||{};
   if(typeof bookId!=='string'||!Object.hasOwn(Manuals.BY_BOOK,bookId)||
     !Number.isInteger(targetLevel)||targetLevel<2||targetLevel>10)throw error('功法升級資料無效',400);
   const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
@@ -209,8 +212,32 @@ async function upgradeManual(db,uid,input){
     if(Manuals.levelForExp(book.exp)>=targetLevel)return manualResponse(state,user);
     const quote=Manuals.upgradeQuote(book.exp),gold=Rules.num(user.stats?.gold);
     if(quote.targetLevel!==targetLevel)throw error('請先提升至下一級');
+    if(expectedGold!==quote.gold)throw error('升級費用已更新，請先同步功法',409);
     if(gold<quote.gold)throw error('靈石不足');
     book.exp=quote.targetExp;
+    tx.set(manualRef,state);tx.update(userRef,{'stats.gold':gold-quote.gold});
+    return manualResponse(state,user,gold-quote.gold);
+  });
+}
+
+async function upgradeSkill(db,uid,input){
+  const {skillId,targetLevel}=input||{};
+  if(typeof skillId!=='string'||!Object.hasOwn(Manuals.BY_SKILL,skillId)||
+    !Number.isInteger(targetLevel)||targetLevel<2||targetLevel>Manuals.MAX_SKILL_LEVEL)
+    throw error('技能升級資料無效',400);
+  const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
+  return db.runTransaction(async tx=>{
+    const [userSnap,record]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
+    const user=exists(userSnap);if(!user)throw error('玩家資料不存在',404);
+    const state=Manuals.normalize(exists(record)),skill=Manuals.BY_SKILL[skillId];
+    if(!Manuals.unlocked(state,skillId))throw error('尚未解鎖此功法技能',403);
+    if(!Manuals.meetsRealm(skill,TrainingAccess.score(user)))throw error('修士境界未達到此功法技能的門檻',403);
+    const level=Manuals.skillLevel(state.skillLevels[skillId]);
+    if(level>=targetLevel)return manualResponse(state,user);
+    const quote=Manuals.skillUpgradeQuote(level),gold=Rules.num(user.stats?.gold);
+    if(quote.targetLevel!==targetLevel)throw error('請先提升至下一級');
+    if(gold<quote.gold)throw error('靈石不足');
+    state.skillLevels[skillId]=targetLevel;
     tx.set(manualRef,state);tx.update(userRef,{'stats.gold':gold-quote.gold});
     return manualResponse(state,user,gold-quote.gold);
   });
@@ -292,13 +319,12 @@ async function start(db,uid,selection={},now=Date.now()){
         // Resume the same board with the currently equipped, server-validated
         // techniques. Older rooms contain a loadout snapshot from their creation.
         const actor=prior.actors.find(p=>p.uid===uid);
-        const score=TrainingAccess.score(user);
-        const equipped=Manuals.normalize(exists(manualSnap)).equipped.filter(id=>
-          Manuals.meetsRealm(Manuals.BY_SKILL[id],score));
-        if(actor&&(actor.trainingAccessScore!==score||
-          JSON.stringify(actor.manualSkills||[])!==JSON.stringify(equipped))){
-          actor.trainingAccessScore=score;
-          actor.manualSkills=equipped;
+        const loadout=manualLoadout(exists(manualSnap),TrainingAccess.score(user));
+        if(actor&&(actor.trainingAccessScore!==loadout.trainingAccessScore||
+          JSON.stringify(actor.manualSkills||[])!==JSON.stringify(loadout.manualSkills)||
+          Object.keys(actor.manualSkillLevels||{}).length!==Object.keys(loadout.manualSkillLevels).length||
+          loadout.manualSkills.some(id=>actor.manualSkillLevels?.[id]!==loadout.manualSkillLevels[id]))){
+          Object.assign(actor,loadout);
           prior.revision=(prior.revision||0)+1;
           changed=true;
         }
@@ -724,6 +750,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/manuals/school',route((db,uid,req)=>chooseSchool(db,uid,req.body)));
   app.post('/api/tactical/manuals/equip',route((db,uid,req)=>equipManualSkills(db,uid,req.body)));
   app.post('/api/tactical/manuals/upgrade',route((db,uid,req)=>upgradeManual(db,uid,req.body)));
+  app.post('/api/tactical/manuals/skills/upgrade',route((db,uid,req)=>upgradeSkill(db,uid,req.body)));
   app.post('/api/tactical/start',route((db,uid,req)=>start(db,uid,req.body)));
   app.post('/api/tactical/action',route((db,uid,req)=>command(db,uid,req.body)));
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
@@ -731,4 +758,4 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/report-question',route((db,uid,req)=>reportQuestion(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,MANUALS,manualsState,chooseSchool,equipManualSkills,upgradeManual,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
+module.exports.__test={ROOMS,PLAYERS,MANUALS,manualsState,chooseSchool,equipManualSkills,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};

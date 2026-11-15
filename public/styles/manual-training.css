@@ -99,3 +99,8 @@
 .manual-technique .manual-lock{line-height:1.6;display:inline-block}
 .manual-upgrade{display:block;margin-top:9px;min-height:34px;padding:6px 10px;
   border:1px solid #c4b17294;border-radius:7px;background:#3c3723;color:#f1dca8;font-size:12px;font-weight:700}
+
+.manual-technique-heading b span{margin-left:5px;color:#bce5ac;font-size:11px;white-space:nowrap}
+.manual-technique-actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.manual-technique-actions .manual-upgrade{margin-top:0;border-color:#c4b17294;background:#3c3723;color:#f1dca8}
+.manual-technique-actions small{color:#b3bfae;font-size:11px}

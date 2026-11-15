@@ -68,7 +68,7 @@
   function manualSkillFor(actor,id){
     if(!actor||!Array.isArray(actor.manualSkills)||!actor.manualSkills.includes(id))return null;
     const Manuals=manuals(),skill=Manuals?.BY_SKILL?.[id];
-    return skill&&Manuals.meetsRealm(skill,actor.trainingAccessScore)?skill:null;
+    return skill&&Manuals.meetsRealm(skill,actor.trainingAccessScore)?Manuals.skillAtLevel(skill,actor.manualSkillLevels?.[id]):null;
   }
   // The existing spirit page remains the single branch-selection surface.
   const SPIRIT_BRANCHES=Object.freeze({ocean:{tide:'tide',surge:'surge'},taichu:{renew:'renew',devour:'drain'},
@@ -208,13 +208,18 @@
   function actor(raw,pos){
     const type=CORES[raw.core]?raw.core:'none',branch=CORES[type].branches.find(b=>b.id===raw.branch)||CORES[type].branches[0];
     const maxHp=Math.max(1,num(raw.maxHp)||1000);
+    const catalog=manuals();
+    const manualSkills=Array.isArray(raw.manualSkills)&&!raw.bot
+      ?[...new Set(raw.manualSkills.filter(id=>Object.hasOwn(catalog?.BY_SKILL||{},id)))].slice(0,3):[];
+    const manualSkillLevels=Object.fromEntries(manualSkills.map(id=>[id,catalog.skillLevel(raw.manualSkillLevels?.[id])])
+      .filter(([,level])=>level>1));
     return {uid:String(raw.uid),name:String(raw.name||'修士').slice(0,40),team:raw.team||'player',bot:!!raw.bot,
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
-      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills:[...new Set(raw.manualSkills.filter(id=>!!manuals()?.BY_SKILL?.[id]))].slice(0,3)}:{}),
+      ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }

@@ -23,7 +23,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261115-upgrade';
+    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261115-skill-upgrade';
     document.head.append(link);
   }
   return root;
@@ -44,16 +44,20 @@ function equipDisabled(id,equipped=current?.equipped||[]){
   const other=equippedVersion(id,equipped);
   return other===id||(!other&&equipped.length>=3);
 }
+function skillDetails(id){
+  const base=Catalog.BY_SKILL[id];
+  return base&&current?.library.find(book=>book.id===base.manualId)?.skills.find(skill=>skill.id===id);
+}
 function markup(){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const owned=current.library.filter(item=>item.owned).length;
   const equipped=current.equipped||[];
   const gold=Number(current.gold)||0;
   const slots=Array.from({length:3},(_,i)=>{
-    const id=equipped[i],skill=Catalog.BY_SKILL[id];
+    const id=equipped[i],skill=skillDetails(id);
     return `<div class="manual-slot ${id?'is-active':''}">
       <small>第 ${i+1} 技能欄</small>
-      ${skill?`<strong>${esc(skill.name)}</strong><span>${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span>
+      ${skill?`<strong>${esc(skill.name)}</strong><span>招式 Lv. ${skill.level} · ${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span>
         <button type="button" data-manual-remove="${esc(id)}">卸下</button>`:
         '<span class="manual-slot-empty">尚未裝備</span>'}
       </div>`;
@@ -62,28 +66,34 @@ function markup(){
     const next=book.skills.find(s=>!s.unlocked);
     const skills=book.skills.map((skill,i)=>{
       const other=equippedVersion(skill.id,equipped);
-      const unlocked=skill.unlocked;
+      const {unlocked,upgrade}=skill;
+      const bonus=skill.kind==='fist-focus'?'每級少 1 體力':'每級 +10% 基礎傷害';
       const requirements=[
         !skill.mastered?'功法 Lv. '+skill.levelRequired:null,
         !skill.realmReady?'修士 '+skill.realmName+'境':null
       ].filter(Boolean);
       return `<div class="manual-technique ${unlocked?'':'is-locked'}">
-        <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}</b>
+        <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}${unlocked?` <span>Lv. ${skill.level}</span>`:''}</b>
           <small>${skill.cost} 體力 · ${skill.unlimited?'無固定射程':skill.range+' 格'} · ${skill.realmName}境</small></div>
         <p>${esc(skill.description)}</p>
-        ${unlocked?`<button type="button" data-manual-equip="${esc(skill.id)}" ${equipDisabled(skill.id,equipped)?'disabled':''}>${other===skill.id?'已裝備':other?'改用本功法':'裝備技能'}</button>`:
+        ${unlocked?`<div class="manual-technique-actions">
+          <button type="button" data-manual-equip="${esc(skill.id)}" ${equipDisabled(skill.id,equipped)?'disabled':''}>${other===skill.id?'已裝備':other?'改用本功法':'裝備技能'}</button>
+          ${upgrade?`<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" ${gold<upgrade.gold?'disabled':''}>
+            ${gold<upgrade.gold?'靈石不足 · ':''}升級招式至 Lv. ${upgrade.targetLevel} · ${upgrade.gold} 靈石</button>`:'<small>招式已滿級</small>'}
+          ${upgrade?`<small class="manual-skill-bonus">${bonus}</small>`:''}
+        </div>`:
           `<span class="manual-lock"><i class="fa-solid fa-lock"></i> 需達 ${requirements.join('、')}</span>`}
       </div>`;
     }).join('');
     const progress=`<div class="manual-mastery">
-      <div class="manual-mastery-head"><strong>Lv. ${book.level}</strong>
+      <div class="manual-mastery-head"><strong>功法 Lv. ${book.level}</strong>
         <span>${book.expInLevel.toLocaleString('zh-TW')} / ${book.expToNext.toLocaleString('zh-TW')} EXP</span></div>
       <div class="manual-exp-track" role="progressbar" aria-label="${esc(book.name)}熟練經驗" aria-valuemin="0"
         aria-valuemax="${book.expToNext}" aria-valuenow="${book.expInLevel}">
         <div class="manual-exp-fill" style="width:${book.progress}%"></div></div>
       <small>${next?`${!next.mastered?'功法 Lv. '+next.levelRequired+' · ':''}${!next.realmReady?'修士 '+next.realmName+'境 · ':''}解鎖「${esc(next.name)}」`:'三招已全部解鎖'}</small>
       ${book.upgrade?`<button type="button" class="manual-upgrade" data-manual-upgrade="${esc(book.id)}" ${gold<book.upgrade.gold?'disabled':''}>
-        ${gold<book.upgrade.gold?'靈石不足 · ':''}升至 Lv. ${book.upgrade.targetLevel} · ${book.upgrade.gold} 靈石</button>`:''}
+        ${gold<book.upgrade.gold?'靈石不足 · ':''}升級功法至 Lv. ${book.upgrade.targetLevel} · ${book.upgrade.gold} 靈石</button>`:''}
     </div>`;
     return `<article class="manual-book owned" data-manual-book="${esc(book.id)}">
       <div class="manual-book-top"><div class="manual-book-glyph"><i class="fa-solid ${icon(book.school)}"></i></div>
@@ -138,7 +148,7 @@ async function mutate(url,body){
   if(busy)return;
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
-  ++sequence;busy=true;paint(upgrading?'正在升級功法…':'正在保存功法配置…');
+  ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級功法…':'正在保存功法配置…');
   let message='';
   try{
     const next=await request(url,body);
@@ -147,7 +157,9 @@ async function mutate(url,body){
     if(upgrading){
       const local=window.getCurrentUserData?.();
       if(local){local.stats||={};local.stats.gold=next.gold;window.updateUIStats?.();}
-      message=`已升級《${next.library.find(book=>book.id===body.bookId).name}》。`;
+      const skill=body.skillId&&skillDetails(body.skillId);
+      message=skill?`「${skill.name}」已升至 Lv. ${skill.level}。`:
+        `已升級《${next.library.find(book=>book.id===body.bookId).name}》。`;
     }else{
       message='功法配置已儲存。';
       window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
@@ -187,7 +199,14 @@ function boot(){
     if(button.dataset.manualSchool){void mutate('/api/tactical/manuals/school',{school:button.dataset.manualSchool});return;}
     if(button.dataset.manualUpgrade){
       const book=current?.library.find(item=>item.id===button.dataset.manualUpgrade);
-      if(book?.upgrade)void mutate('/api/tactical/manuals/upgrade',{bookId:book.id,targetLevel:book.upgrade.targetLevel});
+      if(book?.upgrade)void mutate('/api/tactical/manuals/upgrade',{
+        bookId:book.id,targetLevel:book.upgrade.targetLevel,expectedGold:book.upgrade.gold
+      });
+      return;
+    }
+    if(button.dataset.skillUpgrade){
+      const skill=skillDetails(button.dataset.skillUpgrade);
+      if(skill?.upgrade)void mutate('/api/tactical/manuals/skills/upgrade',{skillId:skill.id,targetLevel:skill.upgrade.targetLevel});
       return;
     }
     if(button.dataset.manualEquip){

@@ -86,25 +86,79 @@ test('server rejects unowned, locked, duplicate and four-slot loadouts',async()=
   assert.equal((await API.manualsState(db,'u2')).library.length,0);
 });
 
-test('gold fills the remaining XP to the next manual level and repeated purchases charge only once',async()=>{
+test('manual mastery charges two gold per missing EXP and honors the quoted price',async()=>{
   const db=database(),userRef='users/u1';
   await API.chooseSchool(db,'u1',{school:'sword'});
-  const input={bookId:'sword-wind',targetLevel:2};
+  const input={bookId:'sword-wind',targetLevel:2,expectedGold:80};
   await assert.rejects(API.upgradeManual(db,'u1',input),/靈石不足/);
   await assert.rejects(API.upgradeManual(db,'u1',{...input,bookId:'body-rock'}),/尚未取得/);
   await assert.rejects(API.upgradeManual(db,'u1',{...input,targetLevel:3}),/下一級/);
   bookRecord(db).books['sword-wind'].exp=21;
-  db.records.get(userRef).stats.gold=35;
+  db.records.get(userRef).stats.gold=45;
   const quote=(await API.manualsState(db,'u1')).library[0].upgrade;
-  assert.deepEqual(quote,{targetLevel:2,targetExp:40,gold:10});
-  const outcomes=await Promise.all([API.upgradeManual(db,'u1',input),API.upgradeManual(db,'u1',input)]);
+  assert.deepEqual(quote,{targetLevel:2,targetExp:40,gold:38});
+  await assert.rejects(API.upgradeManual(db,'u1',{...input,expectedGold:10}),/費用已更新/);
+  const buy=()=>API.upgradeManual(db,'u1',{...input,expectedGold:quote.gold});
+  const outcomes=await Promise.all([buy(),buy()]);
   for(const result of outcomes){
-    assert.equal(result.gold,25);
+    assert.equal(result.gold,7);
     assert.equal(result.library[0].level,2);
+    assert.equal(result.library[0].skills[0].level,1);
   }
-  assert.equal(db.records.get(userRef).stats.gold,25);
+  assert.equal(db.records.get(userRef).stats.gold,7);
   assert.equal(bookRecord(db).books['sword-wind'].exp,40);
   assert.equal(Catalog.upgradeQuote(Catalog.totalExpForLevel(10)),null);
+});
+
+test('skill upgrades preserve manual XP and other skills and charge concurrent retries once',async()=>{
+  const db=database(),user=db.records.get('users/u1');
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  const input={skillId:'wind-slash',targetLevel:2};
+  await assert.rejects(API.upgradeSkill(db,'u1',input),/靈石不足/);
+  await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'rock-fist'}),/尚未解鎖/);
+  await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'wind-step'}),/尚未解鎖/);
+  await assert.rejects(API.upgradeSkill(db,'u1',{...input,targetLevel:3}),/下一級/);
+  bookRecord(db).books['sword-flight']={exp:0};
+  user.stats.totalScore=5;
+  await assert.rejects(API.upgradeSkill(db,'u1',{...input,skillId:'flight-slash'}),/境界未達/);
+  user.stats.totalScore=30;user.stats.gold=200;
+  const buy=()=>API.upgradeSkill(db,'u1',input);
+  const outcomes=await Promise.all([buy(),buy()]);
+  for(const result of outcomes){
+    assert.equal(result.gold,180);
+    assert.equal(result.library[0].exp,0);
+    assert.equal(result.library[0].level,1);
+    assert.equal(result.library[0].skills[0].level,2);
+    assert.equal(result.library[1].skills[0].level,1,'the shared move from another book keeps its own rank');
+    assert.equal(result.library[0].skills[1].upgrade,null);
+  }
+  for(const targetLevel of [3,4,5])
+    await API.upgradeSkill(db,'u1',{...input,targetLevel});
+  const maxed=await API.manualsState(db,'u1');
+  assert.equal(maxed.gold,0);
+  assert.equal(maxed.library[0].skills[0].upgrade,null);
+  assert.equal(maxed.library[0].skills[0].level,5);
+  await assert.rejects(API.upgradeSkill(db,'u1',{...input,targetLevel:6}),/升級資料無效/);
+});
+
+test('resumed trials use trusted upgraded damage and ignore a forged skill level on the action',async()=>{
+  const db=database(),id='wind-slash';
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  db.records.get('users/u1').stats.gold=35;
+  const original=await API.start(db,'u1',{mode:'pve'},now);
+  assert.equal(R.manualSkillFor(original.actors[0],id).level,1);
+  await API.upgradeSkill(db,'u1',{skillId:id,targetLevel:2});
+  const resumed=await API.start(db,'u1',{mode:'pve'},now);
+  assert.equal(original.id,resumed.id);
+  assert(resumed.revision>original.revision);
+  assert.equal(R.manualSkillFor(resumed.actors[0],id).level,2);
+  const room=db.records.get(API.ROOMS+'/'+resumed.id);
+  room.blocks=[];Object.assign(room.actors[0],{x:1,y:3,atk:200,stamina:10});
+  room.actors=[room.actors[0],lowBeast('target',2,3,500)];
+  const attack=await API.command(db,'u1',{roomId:resumed.id,revision:resumed.revision,
+    requestId:'upgraded-skill-test-01',type:'manual',skillId:id,skillLevel:5,x:2,y:3},now);
+  assert.equal(attack.actors[1].hp,247);
+  assert.equal(attack.actors[0].stamina,8);
 });
 
 test('only equipped manual killing blows grant EXP, once per idempotent request',async()=>{
@@ -339,6 +393,10 @@ test('dash cleave previews a clear landing and strikes the next row in two hits'
   assert.throws(()=>castSword(battle,skill,5,4),/體力不足/);
   hero.stamina=4;
   const after=castSword(battle,skill,5,4);
+  hero.manualSkillLevels={[skill]:5};
+  const upgraded=castSword(battle,skill,5,4);
+  assert.equal(upgraded.actors[0].stamina,0);
+  assert.equal(upgraded.actors[1].hp,248);
   assert.deepEqual([after.actors[0].x,after.actors[0].y,after.actors[0].stamina],[5,4,0]);
   assert.deepEqual(after.actors.slice(1).map(a=>a.hp),[320,320,500]);
   assert.equal(after.events.filter(e=>e.type==='damage'&&e.target==='center').length,2);
@@ -439,7 +497,7 @@ test('the server treats focus as ending the turn, clears pending questions and s
   const db=database(),id='dragon-roar';
   db.records.get('users/u1').stats.totalScore=68;
   db.records.set(API.MANUALS+'/u1',{
-    version:2,school:'body',books:{'body-dragon':{exp:1080}},equipped:[id]
+    version:2,school:'body',books:{'body-dragon':{exp:1080}},equipped:[id],skillLevels:{[id]:2}
   });
   const state=await API.start(db,'u1',{mode:'pve'},now);
   const room=db.records.get(API.ROOMS+'/'+state.id),hero=room.actors[0];
@@ -451,7 +509,7 @@ test('the server treats focus as ending the turn, clears pending questions and s
   const result=await API.command(db,'u1',input,now);
   const retry=await API.command(db,'u1',input,now);
   assert.equal(result.turn,state.turn+1);
-  assert.equal(result.actors[0].stamina,3);
+  assert.equal(result.actors[0].stamina,4);
   assert.equal(result.actors[0].actions,0);
   assert.equal(R.focusTurns(result.actors[0]),2);
   assert.equal(result.question,null);
