@@ -103,7 +103,7 @@ test('dash effects follow committed movement without changing endpoints',()=>{
   }
 });
 
-test('throw posing and enemy movement share one animation and retain the committed landing',()=>{
+test('throw effects and enemy movement share one animation and retain the committed landing',()=>{
   const before=fixture('tiger-throw');before.actors[1].x=5;
   const after=R.apply(before,'hero',{type:'manual',skillId:'tiger-throw',x:5,y:4},now);
   const scenes=A.plan(before,after,'hero'),cast=scenes.find(s=>s.kind==='cast');
@@ -327,6 +327,22 @@ test('reflected damage and a monster push retain their committed outcomes',()=>{
   assert(monsterCast.parallelImpact);assert(monsterCast.moves.some(m=>m.uid==='hero'));
   const endHero=A.sample(monsterCast,1).find(a=>a.uid==='hero');
   assert.equal(endHero.x,ended.actors[0].x);assert.equal(endHero.hp,ended.actors[0].hp);
+});
+
+test('the player stays in a fixed pose and moves only along committed paths',()=>{
+  const before=fixture('rock-break');before.actors[1].x=5;before.actors[1].counter=.5;
+  const after=R.apply(before,'hero',{type:'manual',skillId:'rock-break',x:5,y:4},now);
+  const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
+  for(const progress of [.25,.5,.75]){
+    const player=A.sample(cast,progress).find(a=>a.uid==='hero');
+    assert.deepEqual([player.x,player.y,player.scaleX,player.scaleY,player.lift],[4,4,1,1,0]);
+  }
+
+  const moved=R.apply(before,'hero',{type:'move',x:4,y:5},now);
+  const walk=A.plan(before,moved,'hero').find(s=>s.kind==='move');
+  const player=A.sample(walk,.5).find(a=>a.uid==='hero');
+  assert(player.y>4&&player.y<5);
+  assert.deepEqual([player.x,player.scaleX,player.scaleY,player.lift],[4,1,1,0]);
 });
 
 test('damage numbers appear at impact on top of the manual animation',()=>{
