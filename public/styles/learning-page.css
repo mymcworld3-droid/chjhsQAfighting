@@ -74,6 +74,23 @@ body.ui-cleanup #page-learning {
 }
 .learning-feature > i { color: #d8bd86; font-size: 12px; }
 
+body.xianxia-theme:has(:is(#page-learning.active-page, #page-daily-vocabulary.active-page)) {
+  --xq-scene-art: url('/assets/images/daily-vocabulary-starry-background.webp?v=20261115-starry-learning');
+}
+body.ui-cleanup.xianxia-theme:has(:is(#page-learning.active-page, #page-daily-vocabulary.active-page))::before {
+  background: linear-gradient(115deg, rgba(9, 18, 15, .34), rgba(10, 20, 17, .43)),
+    var(--xq-scene-art) center / cover !important;
+  filter: saturate(.78) brightness(.8) !important;
+}
+.learning-feature#daily-english-vocabulary,
+.learning-feature#daily-english-vocabulary:is(:hover, :active) {
+  background-image: linear-gradient(90deg, rgba(15, 30, 24, .8), rgba(15, 30, 24, .56)),
+    url('../assets/images/daily-vocabulary-starry-background.webp?v=20261115-starry-learning');
+  background-position: center 24%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 #page-daily-vocabulary {
   --dv-ink: #f1e7d0;
   --dv-soft: #c4c6b4;
