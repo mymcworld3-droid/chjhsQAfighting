@@ -4,6 +4,8 @@
 // in the configured Google Drive folder. Not used by custom/static banks.
 // This is a server integration, not the ChatGPT Google Drive connector.
 const crypto = require('node:crypto');
+const { inspectQuestionFormat } = require('./question-format.cjs');
+const { questionQualityIssue } = require('./question-quality.cjs');
 const DEFAULT_FOLDER = '1Z8TgddizbBKYA2h1Ij6nPqXjhGUAVTqF';
 const DRIVE = 'https://www.googleapis.com/drive/v3/files';
 const UPLOAD = 'https://www.googleapis.com/upload/drive/v3/files';
@@ -191,6 +193,7 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     else logger.warn('[AI bank] disabled: no usable Google OAuth or service-account credentials');
   }
   const buckets = new Map();
+  const formatUpdates = new Set();
   const folders = new Map();
   const folderFlights = new Map();
   const inflight = new Map();
@@ -317,6 +320,18 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     return files;
   }
 
+  function persistFormatUpdate(fileId, doc) {
+    // Limit concurrent writes. The next uncached read retries skipped or failed updates.
+    if (formatUpdates.has(fileId) || formatUpdates.size >= 6) return;
+    formatUpdates.add(fileId);
+    void driveRequest(UPLOAD + '/' + encodeURIComponent(fileId) + '?uploadType=media', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify(doc)
+    }).catch(error => {
+      logger.warn('[AI bank] could not persist question format update:', error.message);
+    }).finally(() => formatUpdates.delete(fileId));
+  }
+
   async function readBucket(target) {
     const id = scopeCode(target);
     const cached = buckets.get(id);
@@ -338,7 +353,15 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
         try {
           const response = await driveRequest(DRIVE + '/' + encodeURIComponent(file.id) + '?alt=media');
           const data = await response.json();
-          return data?.status === 'approved' && data?.reviewCount === 1 ? data : null;
+          if (data?.status !== 'approved' || data?.reviewCount !== 1 || !data.question) return null;
+          const format = inspectQuestionFormat(data.question);
+          if (!format.damaged) return data;
+          const safeRepair = format.question && !questionQualityIssue(format.question);
+          const updated = safeRepair
+            ? { ...data, question: format.question }
+            : { ...data, status: 'quarantined', quarantineReason: 'damaged-unit-format' };
+          persistFormatUpdate(file.id, updated);
+          return safeRepair ? updated : null;
         } catch (_) { return null; }
       }));
       items.push(...rows.filter(Boolean));
@@ -376,6 +399,9 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
     if (!enabled || review?.approved !== true) return false;
     if (!question?.q || !question?.correct || !Array.isArray(question?.wrong) ||
         question.wrong.length !== 3 || !question.exp) return false;
+    const format = inspectQuestionFormat(question);
+    if (!format.question || (format.damaged && questionQualityIssue(format.question))) return false;
+    question = format.question;
     const id = scopeCode(target);
     const key = fingerprint(question);
     const items = await readBucket(target);

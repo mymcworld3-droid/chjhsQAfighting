@@ -4,6 +4,7 @@
 // Review and reward are separate: a transient AI failure never consumes a claim.
 const crypto = require('node:crypto');
 const aiRouter = require('./ai-router');
+const { confirmedFormatReport } = require('./question-format.cjs');
 const questionQualityAnalytics = require('./question-quality-analytics.cjs');
 const { adminProject } = require('./firebase-admin-projects.cjs');
 
@@ -84,6 +85,7 @@ function promptFor(input, phase) {
     '[審核決策]',
     '除單選唯一性外，也核對題庫標示答案是否屬於 validIndices 的唯一成員，以及解析的科學事實、計算與結論是否正確。hasError 只表示有可核對的實質錯誤；不得因玩家答錯或提出異議就認定題目有錯，也不得因題庫寫了正解就否定有根據的申訴。',
     '若有多個符合所問的選項，issueType=ambiguity；若唯一符合者和題庫標示不同，issueType=answer；若解析錯誤也可用 fact/calculation；不可用文字強辯多解為單解。',
+    '題幹或選項的 LaTeX 單位、符號或公式在畫面上顯示錯誤，也屬於實質錯誤。若原始內容可見單位指令受損，例如數值後出現 ext{J}、extm/s 或 extJ，即使能從文字猜到單位或答案仍唯一，也應判定 hasError=true、issueType=wording，並指出可核對的錯誤。',
     '確實無法判定時 determinate=false 且 confidence 不得虛高；不要編造事實、題目所缺的條件或玩家原意。沒有實質錯誤則 issueType=none 且 hasError=false。',
     'reason 請用繁體中文簡潔交代具體判定標準、關鍵依據及為何正解唯一或不唯一，不可只說「系統答案正確」。',
     '僅輸出合法 JSON：{"determinate":true,"hasError":false,"validIndices":[0],"confidence":0.0,"issueType":"answer|ambiguity|fact|calculation|conditions|duplicate|wording|none","reason":"繁體中文具體理由"}'
@@ -125,7 +127,9 @@ async function withinDeadline(promise, ms = AI_DEADLINE_MS) {
   }
 }
 
-async function reviewQuestion(input, { generate = aiRouter.generateJSON, deadlineMs = AI_DEADLINE_MS } = {}) {
+async function reviewQuestion(input, { generate = aiRouter.generateJSON, deadlineMs = AI_DEADLINE_MS, trusted = false } = {}) {
+  const format = confirmedFormatReport(input);
+  if (trusted && format) return format;
   // First call performs an independent answer audit; a second independent
   // call is required before any claim is confirmed. Inconsistent verdicts are
   // inconclusive, never an automatic award.
@@ -140,6 +144,9 @@ async function reviewQuestion(input, { generate = aiRouter.generateJSON, deadlin
   const secondResult = await withinDeadline(generate(promptFor(input, 2), { task:'appeal-confirm', timeoutMs: 90000 }), deadlineMs);
   const second = normalizeReview(secondResult?.data, input.options.length);
   if (!second || !second.determinate) return { status: 'unavailable', reason: '第二次獨立複核尚未完成，請稍後再試。' };
+  if (format && [first, second].every(verdict =>
+    verdict.hasError && verdict.issueType === 'wording' && verdict.confidence >= 0.75
+  )) return format;
   if (JSON.stringify(first.validIndices) !== JSON.stringify(second.validIndices)) {
     return { status: 'unavailable', reason: '兩次獨立審核對符合題意的選項有分歧，尚不能作出拒絕或補償判定，請稍後重審。' };
   }
@@ -253,12 +260,15 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
         return res.json({ status: 'duplicate', valid: true, compensated: false, goldAdded: 0, cultivationAdded: 0, reason: '這道題目已領取過錯題補償。' });
       }
       phase = 'ai-review';
-      const result = await review(input);
+      const result = await review(input, { trusted: towerReport });
       if (result.status === 'unavailable') return res.status(503).json({ ...result, phase, valid: null, compensated: false });
       if (result.status !== 'confirmed') return res.json({ ...result, valid: false, compensated: false });
       await trackConfirmed();
       phase = 'compensation';
       const outcome = await award(project.db, uid, input, result);
+      if (outcome.status === 'limit' && result.issueType === 'wording' && confirmedFormatReport(input)) {
+        return res.json({ ...outcome, valid: true, reason: result.reason + ' ' + outcome.reason });
+      }
       return res.json({ ...outcome, valid: outcome.status === 'confirmed' || outcome.status === 'duplicate' });
     } catch (error) {
       logger.error(`[Question report] ${phase} unavailable:`, error?.code || error?.message);
