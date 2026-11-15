@@ -75,7 +75,7 @@ import { getMainUser, authenticatedMainFetch } from './data/project-repository.j
   function syncPanel() {
     const el=node('xiuxian-meditate');if(!el)return;
     const current=panelState(),player=userData(),id=uid();
-    const ready=!!id&&!!player?.stats&&(!player.uid||player.uid===id);
+    const ready=!!id&&!!player&&(!player.uid||player.uid===id);
     const pending=ready&&(!current.done||current.claimable),dot=node('meditation-pending-dot');
     if(dot)dot.hidden=!pending;
     el.setAttribute('aria-label',current.claimable?'閉關，有共修獎勵可領':current.done?'查看今日閉關':'閉關，今日尚未完成');
