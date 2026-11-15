@@ -71,7 +71,7 @@ function activate(action){
     case 'path':return forward('xiuxian-path');
     case 'quest':return forward('quest-open');
     case 'meditation':return forward('xiuxian-meditate');
-    case 'raid':return forward('sect-raid-entry');
+    case 'learning':return window.switchToPage?.('page-learning');
     case 'rank':
       window.switchToPage?.('page-rank');window.loadLeaderboard?.();return;
     case 'share':
@@ -104,7 +104,6 @@ function init(){
   });
   mirrorAlert('quest-ready-dot','quest');
   mirrorAlert('meditation-pending-dot','meditation');
-  mirrorAlert('sect-raid-ticket-dot','raid');
   const observer=new MutationObserver(()=>{if(visible())update();});
   observer.observe(root,{attributes:true,attributeFilter:['class']});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});

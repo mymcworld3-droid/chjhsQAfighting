@@ -81,7 +81,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/battle-v3-stability-ui.js',
   './cultivation/battle-mode-v2.js',
   './cultivation/tactical-combat.js',
-  './cultivation/raid-mode.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/training-scene-map.js',
   './cultivation/manual-training-page.js',
@@ -116,8 +115,7 @@ let xiuxianFeatureLoadStarted = false;
 let xiuxianReadyTimer = null;
 let resolveXiuxianFeatureGate;
 const xiuxianFeatureGate = new Promise((resolve) => { resolveXiuxianFeatureGate = resolve; });
-const XIUXIAN_FEATURE_BUILD = '20261113-stamina-shared-question-page-v1';
-const RAID_FEATURE_BUILD = '20261006-raid-invite-block1';
+const XIUXIAN_FEATURE_BUILD = '20261115-learning-shortcut';
 const BATTLE_FEATURE_BUILD = '20261022-ocean-balance1';
 
 // 交易市集僅為可選功能，載入失敗不可阻止玩家登入或進入遊戲。
@@ -177,9 +175,7 @@ async function loadXiuxianFeaturesSafely() {
     }));
     try {
       let loadedModule;
-      if (modulePath === './cultivation/raid-mode.js') {
-        loadedModule = await import(`${modulePath}?v=${RAID_FEATURE_BUILD}`);
-      } else if (
+      if (
         modulePath === './cultivation/battle-v3-stability-ui.js' ||
         modulePath === './cultivation/battle-mode-v2.js'
       ) {

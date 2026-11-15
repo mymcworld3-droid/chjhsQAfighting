@@ -63,6 +63,24 @@ test('assignment is stored once, cannot claim unassigned mission or claim assign
  assert.equal(next.quests.date,'2026-10-17');
  await assert.rejects(questTransaction(db,'u1',{kind:'commission',id:solo.id,date},tomorrow),/跨日/);
 });
+test('an unfinished raid commission is replaced in place and an earned one can still be claimed',async()=>{
+ const first='commission-solo-four',raid='commission-raid';
+ const saved={commissionDate:date,commissionIds:[first,raid],commissionClaimed:[first]};
+ const db=fake(user(),saved);
+ const view=await questTransaction(db,'u1',null,today);
+ assert.equal(view.quests.commissions.length,2);
+ assert.equal(view.quests.commissions[0].id,first);
+ assert.equal(view.quests.commissions[0].claimed,true);
+ assert.notEqual(view.quests.commissions[1].id,raid);
+ assert.deepEqual((await questTransaction(db,'u1',null,today)).quests.commissions,view.quests.commissions);
+
+ const completed=user();
+ completed.questProgress=rules.recordEvent(completed.questProgress,'raid',date);
+ const earned=fake(completed,saved);
+ const claim=await questTransaction(earned,'u1',{kind:'commission',id:raid,date},today);
+ assert.equal(claim.awarded,true);
+ assert.equal(claim.reward.gold,120);
+});
 test('specialist commission credits server-authenticated enlightenment completion only',async()=>{
  const snapshot={commissionDate:date,commissionIds:['commission-solo-four','commission-enlightenment'],commissionClaimed:[],dailyDate:date};
  const db=fake(user(),snapshot);

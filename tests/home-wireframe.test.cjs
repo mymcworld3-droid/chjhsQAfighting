@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
-const fs=require('node:fs'),path=require('node:path');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const base=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(base,p),'utf8');
 const html=read('public/index.html');
@@ -14,11 +14,11 @@ test('homepage retains original player realm card, six shortcuts and main PvE ac
   assert.match(html,/id="xiuxian-panel"/);
   assert.match(html,/class="home-wireframe-rail is-left"/);
   assert.match(html,/class="home-wireframe-rail is-right"/);
-  for(const action of ['path','rank','share','quest','meditation','raid']){
+  for(const action of ['path','rank','share','quest','meditation','learning']){
     assert.equal(html.split('data-home-action="'+action+'"').length-1,1,action);
     assert.match(js,new RegExp("case '"+action+"'"));
   }
-  for(const id of ['quest-open','xiuxian-meditate','sect-raid-entry','xiuxian-path','btn-home-start','quest-spotlight']){
+  for(const id of ['quest-open','xiuxian-meditate','sect-learning-entry','xiuxian-path','btn-home-start','quest-spotlight']){
     assert.equal(html.split('id="'+id+'"').length-1,1,id);
   }
   assert.match(html,/id="btn-home-start"[^>]+onclick="startQuizFlow\(\)"/);
@@ -26,6 +26,24 @@ test('homepage retains original player realm card, six shortcuts and main PvE ac
   assert.doesNotMatch(html,/id="btn-home-pvp"|>鬥法論道<|我的訂正進度|home-correction-panel|home-correction-meter|home-correction-open/);
   assert.doesNotMatch(css,/btn-home-pvp|home-correction-card/);
   assert.doesNotMatch(js,/home-correction-progress|home-correction-panel/);
+});
+
+test('the four-point Learning shortcut opens the full-width list of learning features',()=>{
+  assert.match(html,/data-home-action="learning"[^>]*><span class="home-learning-star"[^>]*>✦<\/span><span>學習/);
+  assert.doesNotMatch(html,/data-home-action="raid"|id="sect-raid-entry"/);
+  assert.doesNotMatch(read('public/main.js'),/cultivation\/raid-mode\.js/);
+
+  let destination;
+  const window={switchToPage:page=>{destination=page;}};
+  const document={readyState:'loading',addEventListener(){}};
+  vm.runInNewContext(js.replace(/^import .*$/gm,'')+"\nactivate('learning');",{document,window});
+  assert.equal(destination,'page-learning');
+
+  const page=html.match(/<section id="page-learning"[\s\S]+?<\/section>/)?.[0];
+  assert.match(page,/class="page-section hidden"/);
+  assert.match(page,/switchToPage\('page-home'\)/);
+  assert.match(page,/<li class="learning-feature" id="daily-english-vocabulary">\s*<h3>每日英文單字<\/h3>\s*<p>準備中<\/p>/);
+  assert.match(read('public/styles/learning-page.css'),/\.learning-feature\s*\{[^}]*width: 100%;/);
 });
 
 test('three rectangular shortcuts are grouped into a single fixed floating rail per side',()=>{
@@ -136,5 +154,5 @@ test('portrait side panels are anchored in the circle row instead of covering th
   assert.match(css,/position:fixed!important;top:50%;transform:translateY\(-50%\)/);
   // Buttons stay inside home-layout; no DOM hoisting into document.body.
   assert.doesNotMatch(js,/document\.body\.appendChild\(homeLeftRail\)|home-rails-portal|syncPortraitRails/);
-  assert.match(html,/home-wireframe\.css\?v=20261111-portrait-circle-rails/);
+  assert.match(html,/home-wireframe\.css\?v=20261115-learning-shortcut/);
 });

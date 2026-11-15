@@ -53,7 +53,8 @@ body.ui-cleanup #page-home #xiuxian-panel .xiuxian-row:has(#xiuxian-meditation-s
   background:rgba(49,47,38,.69);font:500 11px/1.2 "Noto Serif TC",serif;
   cursor:pointer;transition:background .16s,border-color .16s,transform .16s;
 }
-.home-wireframe-shortcut i{font-size:21px;color:#d5b77e}
+.home-wireframe-shortcut :is(i,.home-learning-star){font-size:21px;color:#d5b77e}
+.home-learning-star{line-height:1}
 .home-wireframe-shortcut:hover,.home-wireframe-shortcut:focus-visible{
   background:rgba(105,90,59,.35);border-color:#e1bf7e;transform:translateY(-1px)
 }
@@ -164,7 +165,7 @@ body.ui-cleanup #page-home .home-records{grid-area:records!important;align-self:
   body.ui-cleanup #page-home #xiuxian-panel .xiuxian-realm{font-size:24px!important}
   .home-wireframe-rail{min-height:0;gap:12px;align-self:center}
   .home-wireframe-shortcut{min-height:65px;padding:8px 3px;font-size:10px;border-radius:9px;gap:5px}
-  .home-wireframe-shortcut i{font-size:18px}
+  .home-wireframe-shortcut :is(i,.home-learning-star){font-size:18px}
   .home-realm-emblem{min-height:0;gap:8px;padding:7px 0}
   .home-realm-disc{width:min(100%,245px)}
   .home-realm-disc .home-disc-symbol{font-size:64px}
@@ -182,7 +183,7 @@ body.ui-cleanup #page-home .home-records{grid-area:records!important;align-self:
     grid-template-columns:51px minmax(0,1fr) 51px!important;column-gap:5px!important;
   }
   .home-wireframe-shortcut{font-size:9px;min-height:57px}
-  .home-wireframe-shortcut i{font-size:16px}
+  .home-wireframe-shortcut :is(i,.home-learning-star){font-size:16px}
   .home-realm-disc{width:min(100%,205px)}
   .home-realm-disc .home-disc-symbol{font-size:50px}
 }
@@ -267,7 +268,7 @@ body.ui-cleanup #page-home:not(.active-page) .home-wireframe-rail{
     min-height:clamp(49px,11dvh,70px);
     padding:5px 1px!important;font-size:9px;
   }
-  body.ui-cleanup #page-home .home-wireframe-shortcut i{font-size:17px}
+  body.ui-cleanup #page-home .home-wireframe-shortcut :is(i,.home-learning-star){font-size:17px}
   body.ui-cleanup #page-home #xiuxian-panel .xiuxian-kicker,
   body.ui-cleanup #page-home #xiuxian-panel .xiuxian-invocation{display:none!important}
   .home-realm-disc .home-ecology-name{font-size:clamp(10px,3vw,14px)}

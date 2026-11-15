@@ -204,9 +204,24 @@ test('quest dates use Taiwan midnight, while totals survive daily resets', () =>
 test('only the current path quest is exposed; existing achievements do not auto-claim', () => {
   const v = rules.view(sample(), {}, date);
   assert.equal(v.path.id, 'path-story-prologue-enter-sect'); assert.equal(v.path.claimable, false);
-  assert.equal(v.pathIndex, 0); assert.equal(v.daily.length, 6);
+  assert.equal(v.pathIndex, 0); assert.equal(v.daily.length, 5);
   assert.equal(v.daily.find(q => q.metric === 'solo').current, 0, 'lifetime answers are not today answers');
   assert.equal(rules.view(sample(), { version: 2, pathClaimed: rules.PATH.map(q => q.id) }, date).path, null);
+});
+
+test('an unavailable raid objective no longer blocks the next path quest', async () => {
+  const user = sample();
+  user.stats.totalScore = 68;
+  const before = beforeQuest('path-raid-one');
+  const db = fakeDb(user, before);
+  const next = await questTransaction(db, 'u1', null, now);
+  assert.equal(next.quests.path.id, 'path-nascent');
+  assert.equal(next.quests.pathTotal, rules.PATH.length - 3);
+  assert(next.quests.daily.every(q => q.metric !== 'raid'));
+  assert(next.quests.weekly.every(q => q.metric !== 'raid'));
+  const paid = await questTransaction(db, 'u1', { kind:'path', id:'path-nascent' }, now);
+  assert.equal(paid.quests.path.id, 'path-duel-five');
+  assert(!db.docs.get('questStates/u1').pathClaimed.includes('path-raid-one'));
 });
 
 test('concurrent repeated path claims award exactly once and advance exactly one step', async () => {

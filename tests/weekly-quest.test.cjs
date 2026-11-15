@@ -53,9 +53,9 @@ test('weekly counters accumulate through daily resets and keep corrections separ
 test('week starts with no retroactive credit from old lifetime statistics',()=>{
  const u=user();u.stats.totalCorrect=500;
  const view=rules.view(u,{},day);
- assert.equal(view.weekly.length,5);
+ assert.equal(view.weekly.length,4);
  assert.ok(view.weekly.every(q=>q.current===0&&q.claimable===false));
- assert.equal(view.daily.length,6);
+ assert.equal(view.daily.length,5);
  assert.equal(view.commissions.length,0);
 });
 test('seven-day progress enables low-pressure 20 questions, corrections and cross-mode activity',()=>{

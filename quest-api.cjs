@@ -25,6 +25,12 @@ async function questTransaction(db, uid, request = null, now = new Date()) {
       state.commissionIds = rules.dailyCommissions(user, uid, date).map(q=>q.id);
       state.commissionClaimed = [];
       stateChanged = true;
+    } else if (state.commissionIds.includes('commission-raid') &&
+        !state.commissionClaimed.includes('commission-raid') &&
+        rules.normalizeProgress(user.questProgress, date).daily.counts.raid === 0) {
+      const replacement = rules.dailyCommissions(user, uid, date)[1].id;
+      state.commissionIds = state.commissionIds.map(id => id === 'commission-raid' ? replacement : id);
+      stateChanged = true;
     }
     let awarded = false, reward = null;
     if (request) {

@@ -94,7 +94,7 @@
     const hasWeakTopic = Object.values(learningMap).some(subject => subject && typeof subject === 'object' &&
       Object.values(subject).some(x => x && typeof x === 'object' && number(x.total) >= 5 &&
         ((number(x.correct) + 2) / (number(x.total) + 4)) < .78));
-    const other = COMMISSION_POOL.filter(q => q.metric !== 'solo' && score >= q.minScore &&
+    const other = COMMISSION_POOL.filter(q => q.metric !== 'solo' && q.metric !== 'raid' && score >= q.minScore &&
       (q.metric !== 'enlightenment' || hasWeakTopic));
     const first = solo[seedNumber(uid + '|' + date + '|solo') % solo.length];
     const second = other[seedNumber(uid + '|' + date + '|activity') % other.length];
@@ -105,7 +105,7 @@
     quest('week-solo-20','七日問道・勤習','本週累積問道答對 20 題，任意時間完成。','solo',20,140,1,'solo'),
     quest('week-solo-50','七日問道・精進','本週累積問道答對 50 題。','solo',50,230,2,'solo'),
     quest('week-correction-2','溫故研習','本週累積訂正並答對 2 題。','correction',2,100,0,'solo'),
-    quest('week-activity-2','百藝兼修','本週累積完成 2 次閉關、洞天、鬥法或團本活動，不須每日連續。','activity',2,125,0,'meditation'),
+    quest('week-activity-2','百藝兼修','本週累積完成 2 次閉關、洞天或鬥法活動，不須每日連續。','activity',2,125,0,'meditation'),
     quest('week-raid-1','同門共進','本週通關團本 1 次，任意難度。','raid',1,130,0,'raid',6)
   ]);
   const METRICS = ['solo', 'meditation', 'battle', 'dongtian', 'raid', 'correction'];
@@ -180,18 +180,23 @@
       const locked = number(user?.stats?.totalScore) < q.minScore;
       return { ...q, current, claimed, locked, complete: current >= q.target, claimable: !claimed && !locked && current >= q.target };
     }
-    return { date, pathIndex: state.pathIndex, pathCompleted: state.pathClaimed.length, pathTotal: PATH.length,
-      path: state.pathIndex < PATH.length ? row(PATH[state.pathIndex], 'path') : null,
+    // Skip unavailable raid objectives while retaining completed rewards and legacy receipts.
+    const available = q => q.metric !== 'raid' || q.complete || q.claimed;
+    const path = PATH.map(q => row(q, 'path', state.pathClaimed.includes(q.id))).filter(available);
+    const next = path.findIndex(q => !q.claimed);
+    return { date, pathIndex: next < 0 ? path.length : next,
+      pathCompleted: state.pathClaimed.length, pathTotal: path.length,
+      path: path[next] ?? null,
       pathTicketRewards: PATH.filter(q => q.reward.drawTickets && state.pathClaimed.includes(q.id) &&
         (state.pathTicketAmounts[q.id] || 0) < q.reward.drawTickets).map(q => ({ ...q, supplemental: true,
           description: '已完成此仙道任務，可補領尚未領取的本命法器抽獎券。',
           current: 1, target: 1, complete: true, claimable: true, claimed: false, locked: false,
           reward: { gold: 0, cultivation: 0, materials: {}, drawTickets: q.reward.drawTickets - (state.pathTicketAmounts[q.id] || 0) } })),
       weeklyKey:weekKey(date),weekStart:weekKey(date),
-      weekly: WEEKLY.map(q => row(q,'weekly',state.weeklyClaimed.includes(q.id))),
-      daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))),
+      weekly: WEEKLY.map(q => row(q,'weekly',state.weeklyClaimed.includes(q.id))).filter(available),
+      daily: DAILY.map(q => row(q, 'daily', state.dailyClaimed.includes(q.id))).filter(available),
       commissions:(state.commissionIds||[]).map(id=>COMMISSION_POOL.find(q=>q.id===id))
-        .filter(Boolean).map(q=>row(q,'commission',state.commissionClaimed.includes(q.id))) };
+        .filter(Boolean).map(q=>row(q,'commission',state.commissionClaimed.includes(q.id))).filter(available) };
   }
   return { PATH, LEGACY_PATH, DAILY, WEEKLY, COMMISSION_POOL, dailyCommissions, seedNumber, dateKey, weekKey, normalizeProgress, recordEvent, normalizeState, view };
 });
