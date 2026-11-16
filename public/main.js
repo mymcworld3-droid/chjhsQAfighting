@@ -15,6 +15,7 @@ void import('./cultivation/player-analytics-client.js?v=20261016-events1').catch
   console.warn('[Player Analytics] optional tracking module unavailable', error);
 });
 void import('./cultivation/game-issue-report.js').catch(error => console.warn('[Game issue report]', error));
+void import('./cultivation/quiz-scope-exclusion.js?v=20261116-scope-exclusion-1').catch(error => console.warn('[Quiz scope exclusion]', error));
 void import('./cultivation/classroom.js').catch(error => {
   console.warn('[Classrooms]', error);
   const panel = document.getElementById('section-classes');
