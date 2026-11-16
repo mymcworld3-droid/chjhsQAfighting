@@ -131,7 +131,10 @@ window.openQuizScopeExclusion = async () => {
       const result=await request({action:'add',unit,text:exclusion});
       if(!alive())return;
       renderRules(result.rules);input.value='';
-      status.textContent='已儲存。下次生成或取用本章節題目時會套用這項限制；目前這一題不會算作錯題。';
+      const alreadyAnswered = !$('feedback-section')?.classList.contains('hidden');
+      status.textContent = window.isTrialQuestionSessionActive?.() || alreadyAnswered
+        ? '已儲存；從下一題起套用，本題既有作答或戰場狀態不變。'
+        : '已儲存；本題不計錯，將依新限制重新取題。';
       window.dispatchEvent(new CustomEvent('qa:scope-exclusions-updated',{detail:{state:result.state,quiz:origin,changed:true}}));
     }catch(error){if(alive())status.textContent=error.message;}
     finally{if(save.isConnected)save.disabled=false;}
@@ -143,3 +146,5 @@ window.openQuizScopeExclusion = async () => {
     if(alive())renderRules(result.rules);
   }catch(error){if(alive())status.textContent='現有規則讀取失敗：'+error.message;}
 };
+
+window.syncQuizScopeExclusionButton?.(window.currentActiveQuiz);
