@@ -52,7 +52,7 @@ function options(s,a,budget=a.stamina){
   const selected=manualId?R.manualSkillFor(a,manualId):R.BASIC;
   if(!selected||a.attacks>=R.LIMITS.attacks||a.actions>=R.LIMITS.actions)return results;
   const cost=selected.cost;
-  const maxTargets=16;
+  const maxTargets=8;
   // Aim with the same geometry supplied to real players. Prioritize cells
   // near enemies while retaining all four cardinal directions for line attacks.
   const positions=selected.range===0?[point(a)]:R.aimCells(s,a,selected);
@@ -109,7 +109,14 @@ function approach(s,a){
 function moveChoice(s,a,accuracy,{escape=false,visited=new Set()}={}){
   const dangers=new Set(warnings(s,a).map(R.key)),base=potential(s,a,accuracy)-hazardDamage(s,a)*hpWeight(a)-approach(s,a)*a.atk*.06;
   let best=null,bestScore=base;
-  for(const p of R.moveCells(s,a)){
+  // Sample nearby legal destinations rather than scoring every square by
+  // replaying every attack. This bounds offline simulations on large maps.
+  const destinations=R.moveCells(s,a).sort((x,y)=>
+    (dangers.has(R.key(x))?1:0)-(dangers.has(R.key(y))?1:0)||
+    approach({...s,actors:s.actors.map(b=>b.uid===a.uid?{...a,...x}:b)},{...a,...x})-
+    approach({...s,actors:s.actors.map(b=>b.uid===a.uid?{...a,...y}:b)},{...a,...y})||
+    x.cost-y.cost||x.y-y.y||x.x-y.x).slice(0,8);
+  for(const p of destinations){
     if(visited.has(R.key(p))||escape&&dangers.has(R.key(p)))continue;
     const actor={...a,x:p.x,y:p.y,stamina:a.stamina-p.cost,slow:0},preview={...s,actors:s.actors.map(b=>b.uid===a.uid?actor:b)};
     const score=(escape?0:potential(preview,actor,accuracy))-hazardDamage(preview,actor)*hpWeight(actor)-approach(preview,actor)*a.atk*.06-p.cost*a.atk*.11;
