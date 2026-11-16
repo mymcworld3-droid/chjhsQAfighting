@@ -18,6 +18,31 @@
     <p id="cs-range-message" role="status" aria-live="polite"></p>
   </section>`;
   let root, active = 0, ready = false;
+  // Keep the studio inside the visible area while the mobile keyboard is open.
+  let keyboardTimer;
+  function syncKeyboardViewport() {
+    const studio=$('scope-studio'), viewport=window.visualViewport;
+    if (!studio || !viewport) return;
+    const input=document.activeElement;
+    const editing=studio.contains(input) && input.matches('textarea,input:not([type]),input[type="text"],input[type="search"]');
+    studio.classList.toggle('ss-keyboard-open',editing);
+    if (!editing) { studio.style.removeProperty('--ss-visible-height'); studio.style.removeProperty('--ss-visible-top'); return; }
+    studio.style.setProperty('--ss-visible-height',Math.round(viewport.height)+'px');
+    studio.style.setProperty('--ss-visible-top',Math.round(viewport.offsetTop)+'px');
+    clearTimeout(keyboardTimer);
+    keyboardTimer=setTimeout(()=>{
+      if(document.activeElement!==input)return;
+      const scroller=input.closest('.ss-picker-body,.ss-cart-body,.ss-transfer-body');
+      if(!scroller)return;
+      const field=input.getBoundingClientRect(), bounds=scroller.getBoundingClientRect();
+      if(field.bottom>bounds.bottom-12)scroller.scrollTop+=field.bottom-bounds.bottom+12;
+      else if(field.top<bounds.top+12)scroller.scrollTop+=field.top-bounds.top-12;
+    },120);
+  }
+  document.addEventListener('focusin',syncKeyboardViewport);
+  document.addEventListener('focusout',()=>setTimeout(syncKeyboardViewport,0));
+  window.visualViewport?.addEventListener('resize',syncKeyboardViewport,{passive:true});
+  window.visualViewport?.addEventListener('scroll',syncKeyboardViewport,{passive:true});
   function options(id) {
     return [...($(id)?.options || [])].filter(o => o.value).map(o => ({value:o.value,label:o.textContent}));
   }

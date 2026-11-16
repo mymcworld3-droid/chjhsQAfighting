@@ -2,6 +2,9 @@
 html.scope-studio-open,body.scope-studio-open{overflow:hidden!important;overscroll-behavior:none}
 #scope-studio{--ss-gold:#ebca83;--ss-cream:#f3e7d1;--ss-muted:#a6a39c;--ss-teal:#86cfc4;position:fixed!important;inset:0!important;z-index:29000!important;display:flex!important;flex-direction:column!important;min-width:320px;height:100dvh;max-height:100dvh;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse 75% 48% at 6% -14%,rgba(126,97,45,.19),transparent 75%),radial-gradient(ellipse 50% 45% at 110% 60%,rgba(26,98,88,.13),transparent 75%),#0b0f12;color:var(--ss-cream);font-family:"Noto Sans TC",sans-serif;font-size:14px;line-height:1.5}
 #scope-studio[hidden]{display:none!important}
+#scope-studio.ss-keyboard-open{top:var(--ss-visible-top,0px)!important;bottom:auto!important;height:var(--ss-visible-height,100dvh)!important;max-height:var(--ss-visible-height,100dvh)!important}
+#scope-studio.ss-keyboard-open .ss-foot{display:none}
+#scope-studio :is(input:not([type]),input[type=text],input[type=search],textarea){font-size:16px!important}
 #scope-studio *{box-sizing:border-box}
 #scope-studio :focus-visible{outline:2px solid var(--ss-teal)!important;outline-offset:3px}
 #scope-studio:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background-image:linear-gradient(rgba(228,194,121,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(228,194,121,.14) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,#000,transparent 62%)}
