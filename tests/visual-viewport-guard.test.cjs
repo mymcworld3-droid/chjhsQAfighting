@@ -12,8 +12,9 @@ const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 test('global page layout guard loads before the main app', () => {
   assert.match(index, /styles\/visual-viewport-guard\.css\?v=[\w-]+/);
   assert.match(index, /visual-viewport-guard\.js\?v=20261013-page-layout1/);
-  assert.ok(index.indexOf('visual-viewport-guard.js?v=20261013-page-layout1') <
-    index.indexOf('main.js?v=20261013-arrival1'));
+  const mainUrl=index.match(/main\.js\?v=20\d{6}-[\w-]+/)?.[0];
+  assert.ok(mainUrl,'main module must be cache-busted');
+  assert.ok(index.indexOf('visual-viewport-guard.js?v=20261013-page-layout1') < index.indexOf(mainUrl),'viewport guard loads before main');
 });
 
 test('page bounds ignore keyboard height and visual panning, while real document resize updates them', () => {
