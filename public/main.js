@@ -80,7 +80,6 @@ const XIUXIAN_FEATURE_MODULES = [
   './cultivation/material-drop-system.js',
   './cultivation/battle-v3-stability-ui.js',
   './cultivation/battle-mode-v2.js',
-  './cultivation/raid-mode.js',
   './cultivation/tactical-combat.js',
   './cultivation/cultivation-status-panel.js',
   './cultivation/training-scene-map.js',
