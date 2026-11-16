@@ -36,5 +36,5 @@ test('tactical browser imports manuals before invoking combat rules',()=>{
   const renderer=read('tactical-renderer.js');
   const first=src=>src.match(/^import\s+['"]([^'"]+)['"]/m)?.[1];
   assert.match(first(combat),/^\.\/manual-rules\.js(?:\?v=[a-zA-Z0-9-]+)?$/);
-  assert.equal(first(renderer),'./manual-rules.js');
+  assert.match(first(renderer),/^\.\/manual-rules\.js(?:\?v=[a-zA-Z0-9-]+)?$/);
 });
