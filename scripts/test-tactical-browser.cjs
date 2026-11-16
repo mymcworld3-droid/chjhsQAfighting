@@ -442,7 +442,9 @@ async function main(){
     }
   }
   try{
-    await modeEntryChecks();
+    // The focused battle-layout job does not run the separate legacy
+    // navigation/quiz harness, which has its own entry mode and fixtures.
+    if(!process.env.TACTICAL_SKETCH_ONLY)await modeEntryChecks();
     if(process.env.TACTICAL_NAV_ONLY){assert.deepEqual(errors,[]);return;}
     if(process.env.TACTICAL_SKETCH_ONLY){
       const quick=await make('u1',{width:1280,height:720});
