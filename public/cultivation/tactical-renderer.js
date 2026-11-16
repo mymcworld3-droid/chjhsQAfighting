@@ -1,7 +1,7 @@
 import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
 import './tactical-rules.js?v=20261116-fourstep-sync-fix-v1';
 import './tactical-animation.js';
-import './tactical-skill-effects.js';
+import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
