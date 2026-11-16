@@ -15,8 +15,9 @@ test('direct attacks insert numeric damage into existing description',()=>{
   assert.doesNotMatch(desc('tiger-throw'),/落地時造成傷害。/);
 });
 test('repeated hits use explicit number of strikes and individual damage, not a combined total',()=>{
-  assert.match(desc('wind-step'),/造成 2 次 280 的傷害/);
-  assert.match(desc('wind-step',200,5),/造成 2 次 392 的傷害/);
+  assert.match(desc('wind-step'),/造成 2 次 140 的傷害/);
+  assert.match(desc('wind-step',200,5),/造成 2 次 196 的傷害/);
+  assert.match(desc('wind-step',426,5),/造成 2 次 417 的傷害/);
   assert.match(desc('tiger-step'),/造成 2 次 150 的傷害/);
   assert.match(desc('dragon-guard'),/最多造成 4 次 90 的傷害/);
   assert.match(desc('sky-cloud'),/一般劍氣每擊造成 220 傷害；中心交點最多造成 2 次 160 的傷害/);
