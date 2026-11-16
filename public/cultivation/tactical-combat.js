@@ -222,10 +222,15 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
       cost>hero.stamina?'體力不足，還需要 '+(cost-hero.stamina)+' 點':'';
     button.disabled=locked;
     button.setAttribute('aria-pressed',String(option.value===selected));
-    button.setAttribute('aria-label',option.name+'，'+price+(unavailable?'，'+unavailable:''));
-    button.title=unavailable||option.name+' · '+price;
+    const damage=option.skill?Manuals.singleHitDamage(hero.atk,option.skill,
+      {flyingSwordReady:!!hero.flyingSword}):null;
+    const damageLabel=damage?(damage.direct?'單次攻擊力 '+damage.damage:'無直接傷害'):'';
+    button.setAttribute('aria-label',option.name+'，'+price+
+      (damageLabel?'，'+damageLabel:'')+(unavailable?'，'+unavailable:''));
+    button.title=unavailable||option.name+' · '+price+
+      (damageLabel?' · '+damageLabel:'')+(damage?.note?' · '+damage.note:'');
     button.classList.toggle('is-unavailable',!!unavailable);
-    wheelText(button.firstElementChild,option.name,price,skillArt(option.skill));
+    wheelText(button.firstElementChild,option.name,price,skillArt(option.skill),damage);
   }
 }
 function wheelMarker(marker,angle,radius){
@@ -236,7 +241,7 @@ function wheelMarker(marker,angle,radius){
 }
 // Keep outer-sector labels and sliding indicator consistent with actual cost.
 // Reuse the nodes so frequent battle updates do not restart the slide animation.
-function wheelText(container,name,cost,art=''){
+function wheelText(container,name,cost,art='',damage=null){
   if(!container)return;
   // One compact horizontal unit, not an image stacked above the cost text.
   // The selected marker and all fixed outer-ring options share this markup.
@@ -263,9 +268,11 @@ function wheelText(container,name,cost,art=''){
   }else image?.remove();
   container.classList.toggle('has-skill-art',!!art);
   if(title.textContent!==name)title.textContent=name;
-  if(fee.textContent!==cost)fee.textContent=cost;
+  const compact=damage?cost.replace(/\s*體力$/,'體')+
+    (damage.direct?' · 傷'+damage.damage:' · 無傷'):cost;
+  if(fee.textContent!==compact)fee.textContent=compact;
 }
-function showPvpSkill(button,skill,cost){
+function showPvpSkill(button,skill,cost,attack=200,flyingSwordReady=false){
   const art=skillArt(skill),key=skill.id+'|'+art;
   if(button.dataset.artSkill!==key){
     button.replaceChildren();
@@ -277,8 +284,16 @@ function showPvpSkill(button,skill,cost){
     const name=document.createElement('span');name.className='tc-pvp-skill-name';
     button.append(name);button.dataset.artSkill=key;
   }
-  button.querySelector('.tc-pvp-skill-name').textContent=skill.name+' · '+cost;
-  button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+cost+' 體力');
+  const hit=Manuals.singleHitDamage(attack,skill,{flyingSwordReady});
+  button.querySelector('.tc-pvp-skill-name').textContent=skill.name+' · '+cost+' 體力';
+  let extra=button.querySelector('.tc-pvp-skill-damage');
+  if(!extra){
+    extra=document.createElement('small');
+    extra.className='tc-pvp-skill-damage';button.append(extra);
+  }
+  extra.textContent=hit.direct?'單次攻擊力 '+hit.damage:'無直接傷害';
+  button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+cost+
+    ' 體力，'+extra.textContent+(hit.note?'，'+hit.note:''));
 }
 // The slider is an actual curved annular pizza-sector, not a floating pill.
 // Its SVG rotor pivots at the bottom-right corner of the quarter-circle.
@@ -324,12 +339,12 @@ function buildGame(){
     if(skills.length){
       const attack=tabs.querySelector('[data-action="attack"]');
       attack.dataset.action='manual:'+skills[0].id;
-      showPvpSkill(attack,skills[0],skills[0].cost);
+      showPvpSkill(attack,skills[0],skills[0].cost,myActor()?.atk||200,!!myActor()?.flyingSword);
       
       for(const skill of skills.slice(1)){
         const button=document.createElement('button');
         button.type='button';button.dataset.action='manual:'+skill.id;
-        showPvpSkill(button,skill,skill.cost);
+        showPvpSkill(button,skill,skill.cost,myActor()?.atk||200,!!myActor()?.flyingSword);
         
         tabs.append(button);
       }
@@ -588,11 +603,13 @@ function updateControls(){
       try{R.validateSkill(state,me,shown,selection);}catch(e){error=e.message;}
     }
   }
+  const singleHit=Manuals.singleHitDamage(me.atk,shown,{flyingSwordReady:!!me.flyingSword});
+  const singleLabel=singleHit.direct?'單次攻擊力 '+singleHit.damage:'無直接傷害';
   $('[data-skill-title]').textContent=action==='move'?'移動說明':
-    `${shown.name} · ${cost} 體力`;
+    `${shown.name} · ${cost} 體力 · ${singleLabel}`;
   $('[data-skill]').innerHTML=action==='move'?
     '<p>每移動一格固定消耗 1 體力，路線繞路也計入；緩速時一次最多移動 2 格。選好位置後移動。</p>':
-    `<p>${esc(shown.description)}</p>`;
+    `<p>${esc(shown.description)}</p><p class="tc-single-damage"><b>${esc(singleLabel)}</b>${singleHit.center!==undefined?' · 中心每擊 '+singleHit.center:''}${singleHit.note?' · '+esc(singleHit.note):''}</p>`;
   $('[data-execute]').textContent=error||label;
   $('[data-execute]').disabled=!mine||locked||!selection||!!error||me.actions>=R.LIMITS.actions;
   // The confirm button is intentionally hidden in the quarter-wheel PvE layout.
@@ -623,7 +640,7 @@ function updateControls(){
       const technique=R.manualSkillFor(me,b.dataset.action.slice(7));
       if(technique){
         const cost=R.techniqueCost(me,technique);
-        showPvpSkill(b,technique,cost);
+        showPvpSkill(b,technique,cost,me.atk,!!me.flyingSword);
         
       }
     }
@@ -643,8 +660,9 @@ function updateControls(){
       '行動：移動；目標：玩家，'+moveCostLabel);
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
-    wheelText(detailThumb,targetName,targetCost,attacking?skillArt(shown):'');
-    detailThumb.title=targetName+' · '+targetCost;
+    wheelText(detailThumb,targetName,targetCost,attacking?skillArt(shown):'',attacking?singleHit:null);
+    detailThumb.title=targetName+' · '+targetCost+
+      (attacking?' · '+singleLabel+(singleHit.note?' · '+singleHit.note:''):'');
     const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);
     wheelMarker(detailThumb,selectedAngle,WHEEL_RADII.detail);
