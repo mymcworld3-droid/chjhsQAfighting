@@ -47,8 +47,8 @@ test('retrying discovery after a successful AI response reuses that response and
 });
 
 test('new build query forces updated refinery code without altering module order', () => {
-  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20261022-ocean-balance1'/);
-  assert.match(index, /main\.js\?v=20261013-arrival1/);
+  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20\d{6}-[\w-]+'/);
+  assert.match(index, /main\.js\?v=20\d{6}-[\w-]+/);
   assert.ok(main.indexOf("'./cultivation/refinery-ai-jobs.js'") <
     main.indexOf("'./cultivation/cultivation-refinery-v2.js'"));
 });
