@@ -21,6 +21,7 @@ let autoQuizKey='',quizContext=null;
 let pairQuestions=[],pairChoices=[],pairReviews=[],pairDisplayIndex=0;
 let pairGeneration=0,pairFollowupPromise=null,pairFollowupError='';
 let preloadedTacticalQuestions=null;
+const mathReviewSent=new Set();
 let pairWhiteboardIndex=-1,pairWhiteboardPointer=null;
 const pairWhiteboardInk=new Map();
 const $=selector=>root?.querySelector(selector);
@@ -66,6 +67,22 @@ function ensure(){
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
   document.body.append(root);
   keyboardGuard=installTacticalKeyboardGuard(root);
+  window.addEventListener('qa:invalid-tex',event=>{
+    const node=event.detail?.node,q=pairQuestions[pairDisplayIndex];
+    if(!node?.isConnected||!root?.contains(node)||!opened||
+       state?.mode!=='pvp'||!modalOpen||!q||pairReviews[pairDisplayIndex])return;
+    const account=uid,roomId=state.id,key=account+':'+roomId+':'+q.id;
+    if(!account||mathReviewSent.has(key))return;
+    mathReviewSent.add(key);
+    // Do not reveal the PvP answer or interrupt the player's answer timer.
+    void api('/api/tactical/review-math-issue',{roomId,questionId:q.id}).then(result=>{
+      if(result.state?.submitted&&valid(epoch,account)&&state?.id===roomId)
+        window.showToast?.('公式顯示異常，已自動送審。');
+    }).catch(error=>{
+      mathReviewSent.delete(key);
+      console.warn('[Quiz Math Auto Review] tactical review unavailable',error);
+    });
+  });
   $('[data-close]').onclick=close;
   root.addEventListener('click',event=>{
     const b=event.target.closest('button');if(!b||b.disabled)return;
