@@ -27,7 +27,9 @@ const startupScenes = ['loading-landscape-ai.webp', 'loading-portrait-ai.webp'].
 
 test('login core is isolated from optional cultivation module failures', () => {
   const staticImports = main.match(/^import\s+['"][^'"]+['"];$/gm) || [];
-  assert.deepEqual(staticImports, ["import './main-legacy.js?v=20261013-arrival1';", "import './cultivation/dongtian-entry.js';"]);
+  assert.equal(staticImports.length,2,'authentication must have only two static imports');
+  assert.match(staticImports[0], /^import '\.\/main-legacy\.js\?v=20\d{6}-[\w-]+';$/);
+  assert.equal(staticImports[1], "import './cultivation/dongtian-entry.js';");
   const dongtianEntry = read('dongtian-entry.js');
   assert.doesNotMatch(dongtianEntry, /firebasejs|firebase-firestore|getFirestore|getAuth/);
   assert.match(main, /const XIUXIAN_FEATURE_MODULES = \[/);
