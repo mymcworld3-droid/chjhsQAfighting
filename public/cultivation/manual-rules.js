@@ -245,7 +245,22 @@
       const level=skillLevel(value),skill=BY_SKILL[id],owned=books[skill.manualId];
       if(level>1&&owned&&levelForExp(owned.exp)>=skill.levelRequired)skillLevels[id]=level;
     }
-    return {version:2,school,books,equipped,skillLevels,
+    const cleanIds=ids=>{
+      const result=[],used=new Set();
+      for(const id of Array.isArray(ids)?ids:[]){
+        const skill=BY_SKILL[id],book=books[skill?.manualId];
+        if(skill&&book&&levelForExp(book.exp)>=skill.levelRequired&&!used.has(skill.moveId)&&result.length<3){result.push(id);used.add(skill.moveId);}
+      }
+      return result;
+    };
+    const activeLoadout=Number.isInteger(raw?.activeLoadout)&&raw.activeLoadout>=0&&raw.activeLoadout<3?raw.activeLoadout:0;
+    const loadouts=Array.from({length:3},(_,i)=>({
+      name:typeof raw?.loadouts?.[i]?.name==='string'&&raw.loadouts[i].name.trim()?Array.from(raw.loadouts[i].name.trim()).slice(0,20).join(''):`配置 ${i+1}`,
+      skillIds:cleanIds(raw?.loadouts?.[i]?.skillIds??(i===0?equipped:[]))
+    }));
+    // The established equipped field is authoritative for backwards-compatible writes.
+    loadouts[activeLoadout].skillIds=[...equipped];
+    return {version:2,school,books,equipped,skillLevels,loadouts,activeLoadout,
       dropMisses:Math.max(0,Math.min(3,Math.trunc(Number(raw?.dropMisses)||0))),
       starterClaimed:raw?.starterClaimed===true};
   }

@@ -1,8 +1,8 @@
-import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
+import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {skillArt} from './manual-art.js';
-import './tactical-rules.js?v=20261116-fourstep-sync-fix-v1';
+import './tactical-rules.js?v=20261116-loadout-presets-v1';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261116-long-line-afterglow-v1';
-import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-fourstep-sync-fix-v1';
+import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-loadout-presets-v1';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 

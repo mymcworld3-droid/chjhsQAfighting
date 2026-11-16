@@ -1,5 +1,5 @@
-import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
-import './tactical-rules.js?v=20261116-fourstep-sync-fix-v1';
+import './manual-rules.js?v=20261116-loadout-presets-v1';
+import './tactical-rules.js?v=20261116-loadout-presets-v1';
 import './tactical-animation.js';
 import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';

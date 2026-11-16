@@ -152,3 +152,8 @@
  #manual-training-root .manual-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
  #manual-training-root .manual-power-summary small{font-size:9px}
 }
+
+.manual-presets{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0}
+.manual-presets button,.manual-preset-controls button{border:1px solid #81734d;border-radius:.6rem;background:#1b2826;color:#e9dfc4;padding:.55rem .8rem}
+.manual-presets button.selected{border-color:#d9bf76;background:#354539;color:#fff4cd}
+.manual-preset-controls{display:flex;align-items:end;gap:.5rem;flex-wrap:wrap}.manual-preset-controls label{display:grid;gap:.25rem;color:#d7cfb9}.manual-preset-controls input{min-width:0;max-width:12rem;border:1px solid #81734d;border-radius:.4rem;background:#111f1c;color:#fff;padding:.5rem}.manual-preset-controls button:disabled{opacity:.5}

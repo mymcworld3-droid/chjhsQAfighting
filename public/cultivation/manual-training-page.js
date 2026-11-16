@@ -1,9 +1,9 @@
-import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
+import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
-let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0;
+let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -24,7 +24,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261116-damage-in-description';
+    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261116-loadout-presets';
     document.head.append(link);
   }
   return root;
@@ -52,7 +52,8 @@ function skillDetails(id){
 function markup(expandedBooks){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const owned=current.library.filter(item=>item.owned).length;
-  const equipped=current.equipped||[];
+  const preset=current.loadouts?.[selectedLoadout];
+  const equipped=preset?.skillIds||[];
   const gold=Number(current.gold)||0;
   const tactical=window.getCombatPower?.();
   const rating=tactical?.mode==='tactical'?tactical:null;
@@ -121,7 +122,7 @@ function markup(expandedBooks){
     </details>`;
   }).join('');
   return `<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
-      <div><b>${equipped.length} / 3</b><span>已裝備技能</span></div>
+      <div><b>${(current.equipped||[]).length} / 3</b><span>已裝備技能</span></div>
       <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
       <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
         <small>${rating?'基礎 '+fmt(rating.base)+' + 招式 '+fmt(rating.skills):'正在計算'}</small></div></div>
@@ -134,7 +135,13 @@ function markup(expandedBooks){
       <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
         <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
         <i class="fa-solid fa-hand-fist"></i> 體修</button></div></section>
-    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。重新進入試煉時會套用目前配置。</p></div>
+    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。戰鬥開始時固定目前使用的配置。</p></div>
+      <div class="manual-presets" role="group" aria-label="功法配置">
+        ${(current.loadouts||[]).map((item,i)=>`<button type="button" data-loadout-select="${i}" class="${selectedLoadout===i?'selected':''}">${esc(item.name)}${i===current.activeLoadout?' · 使用中':''}</button>`).join('')}
+      </div>
+      <div class="manual-preset-controls"><label>配置名稱 <input data-loadout-name maxlength="40" value="${esc(preset?.name||'')}" placeholder="輸入名稱"></label><button type="button" data-loadout-rename>儲存名稱</button>
+      <button type="button" data-loadout-apply ${selectedLoadout===current.activeLoadout?'disabled':''}>${selectedLoadout===current.activeLoadout?'目前使用中':'套用此配置'}</button></div>
+      <p>選擇配置後，在下方裝備或卸下已解鎖的技能；戰鬥進行中無法更換使用中的配置。</p>
       <div class="manual-slot-grid">${slots}</div></section>
     <section class="manual-library"><div class="manual-section-title"><h3>已獲得的功法</h3>
       <button type="button" class="manual-refresh" data-manual-refresh title="同步功法"><i class="fa-solid fa-rotate"></i> 更新</button>
@@ -168,7 +175,7 @@ async function load({force=false}={}){
   try{
     const result=await request('/api/tactical/manuals');
     if(token!==sequence||getMainUser()?.uid!==uid)return;
-    current=result;loadedFor=uid;
+    current=result;if(loadedFor!==uid)selectedLoadout=result.activeLoadout||0;loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
   }catch(error){
@@ -228,6 +235,9 @@ function boot(){
   ensure();
   root?.addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||busy)return;
+    if(button.dataset.loadoutSelect!==undefined){selectedLoadout=Number(button.dataset.loadoutSelect);paint();return;}
+    if(button.hasAttribute('data-loadout-rename')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,name:root.querySelector('[data-loadout-name]')?.value||''});return;}
+    if(button.hasAttribute('data-loadout-apply')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,apply:true});return;}
     if(button.hasAttribute('data-manual-refresh')){void load({force:true});return;}
     if(button.dataset.manualSchool){void mutate('/api/tactical/manuals/school',{school:button.dataset.manualSchool});return;}
     if(button.dataset.manualUpgrade){
@@ -245,12 +255,12 @@ function boot(){
       return;
     }
     if(button.dataset.manualEquip){
-      const id=button.dataset.manualEquip,equipped=current?.equipped||[],other=equippedVersion(id,equipped);
+      const id=button.dataset.manualEquip,equipped=current?.loadouts?.[selectedLoadout]?.skillIds||[],other=equippedVersion(id,equipped);
       const skillIds=other?equipped.map(slot=>slot===other?id:slot):[...equipped,id];
-      void mutate('/api/tactical/manuals/equip',{skillIds});return;
+      void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,skillIds});return;
     }
-    if(button.dataset.manualRemove){void mutate('/api/tactical/manuals/equip',
-      {skillIds:(current?.equipped||[]).filter(id=>id!==button.dataset.manualRemove)});}
+    if(button.dataset.manualRemove){void mutate('/api/tactical/manuals/loadout',
+      {index:selectedLoadout,skillIds:(current?.loadouts?.[selectedLoadout]?.skillIds||[]).filter(id=>id!==button.dataset.manualRemove)});}
   });
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);

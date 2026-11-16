@@ -143,7 +143,7 @@ test('skill upgrades preserve manual XP and other skills and charge concurrent r
   await assert.rejects(API.upgradeSkill(db,'u1',{...input,targetLevel:6}),/升級資料無效/);
 });
 
-test('resumed trials use trusted upgraded damage and ignore a forged skill level on the action',async()=>{
+test('resumed trials retain their skill snapshot and ignore a forged skill level on the action',async()=>{
   const db=database(),id='wind-slash';
   await API.chooseSchool(db,'u1',{school:'sword'});
   db.records.get('users/u1').stats.gold=200;
@@ -152,14 +152,13 @@ test('resumed trials use trusted upgraded damage and ignore a forged skill level
   await API.upgradeSkill(db,'u1',{skillId:id,targetLevel:2,expectedGold:200});
   const resumed=await API.start(db,'u1',{mode:'pve'},now);
   assert.equal(original.id,resumed.id);
-  assert(resumed.revision>original.revision);
-  assert.equal(R.manualSkillFor(resumed.actors[0],id).level,2);
+  assert.equal(R.manualSkillFor(resumed.actors[0],id).level,1);
   const room=db.records.get(API.ROOMS+'/'+resumed.id);
   room.blocks=[];Object.assign(room.actors[0],{x:1,y:3,atk:200,stamina:10});
   room.actors=[room.actors[0],lowBeast('target',2,3,500)];
   const attack=await API.command(db,'u1',{roomId:resumed.id,revision:resumed.revision,
     requestId:'upgraded-skill-test-01',type:'manual',skillId:id,skillLevel:5,x:2,y:3},now);
-  assert.equal(attack.actors[1].hp,247);
+  assert.equal(attack.actors[1].hp,270);
   assert.equal(attack.actors[0].stamina,8);
 });
 
@@ -566,4 +565,38 @@ test('four-step chain writes only serializable combat events and survives server
   const duplicate=await API.command(db,'u1',request,now);
   assert.equal(duplicate.revision,result.revision);
   assert.equal(duplicate.actors[0].x,result.actors[0].x);
+});
+
+
+test('three account presets migrate, persist, validate and lock during battles',async()=>{
+  const db=database();await API.chooseSchool(db,'u1',{school:'sword'});
+  let state=await API.manualsState(db,'u1');
+  assert.deepEqual(state.loadouts.map(p=>p.skillIds),[['wind-slash'],[],[]]);
+  state=await API.updateLoadout(db,'u1',{index:1,name:'練功配置',skillIds:['wind-slash']});
+  assert.equal(state.loadouts[1].name,'練功配置');
+  assert.deepEqual(state.equipped,['wind-slash']);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:2,skillIds:['rock-fist']}),/尚未解鎖/);
+  state=await API.updateLoadout(db,'u1',{index:1,apply:true});
+  assert.equal(state.activeLoadout,1);
+  assert.equal((await API.manualsState(db,'u1')).loadouts[1].name,'練功配置');
+  const battle=await API.start(db,'u1',{mode:'pve'},now);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:0,apply:true}),/戰鬥進行中/);
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:[]}),/戰鬥進行中/);
+  await API.updateLoadout(db,'u1',{index:2,name:'備用'});
+  await API.command(db,'u1',{roomId:battle.id,revision:battle.revision,requestId:'leave-preset-test-001',type:'leave'},now);
+  state=await API.updateLoadout(db,'u1',{index:2,apply:true});
+  assert.deepEqual(state.equipped,[]);
+  assert.deepEqual((await API.manualsState(db,'u1')).loadouts[0].skillIds,['wind-slash']);
+});
+
+test('PvP pairing and active matches block switching for both participants',async()=>{
+  const db=database();
+  await API.chooseSchool(db,'u1',{school:'sword'});
+  await API.chooseSchool(db,'u2',{school:'body'});
+  const time=Date.now(),waiting=await API.start(db,'u1',{mode:'pvp'},time);
+  await assert.rejects(API.updateLoadout(db,'u1',{index:1,apply:true}),/戰鬥進行中/);
+  const joined=await API.start(db,'u2',{mode:'pvp',code:waiting.id.replace('arena-','')},time+1);
+  assert.equal(joined.status,'active');
+  await assert.rejects(API.updateLoadout(db,'u1',{index:1,apply:true}),/戰鬥進行中/);
+  await assert.rejects(API.updateLoadout(db,'u2',{index:1,apply:true}),/戰鬥進行中/);
 });
