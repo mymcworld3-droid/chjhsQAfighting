@@ -601,3 +601,12 @@ test('PvP pairing and active matches block switching for both participants',asyn
   await assert.rejects(API.updateLoadout(db,'u1',{index:1,apply:true}),/戰鬥進行中/);
   await assert.rejects(API.updateLoadout(db,'u2',{index:1,apply:true}),/戰鬥進行中/);
 });
+
+test('manual training UI omits redundant preset instructions and power calculation disclosure',()=>{
+  const source=require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-training-page.js'),'utf8');
+  assert.doesNotMatch(source,/選擇配置後，在下方裝備或卸下已解鎖的技能/);
+  assert.doesNotMatch(source,/manual-power-details|查看戰棋戰力計算/);
+  assert.match(source,/data-loadout-select/);
+  assert.match(source,/manual-slot-grid/);
+  assert.match(source,/manual-power-summary/);
+});
