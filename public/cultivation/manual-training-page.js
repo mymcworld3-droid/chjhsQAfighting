@@ -24,7 +24,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261116-art-v1';
+    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261116-tactical-power-v1';
     document.head.append(link);
   }
   return root;
