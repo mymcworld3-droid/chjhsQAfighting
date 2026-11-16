@@ -1029,13 +1029,14 @@ body.xianxia-theme main:has(#page-training.active-page),
                         </div>
                         </div>
                         
-                        <div class="mt-8 flex gap-3 w-full quiz-footer-actions">
+                        <div class="mt-8 flex flex-wrap gap-3 w-full quiz-footer-actions">
                         <button id="btn-giveup" type="button" onclick="openQuizScopeSettings()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group">
                         <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> <span data-i18n="btn_giveup">設定範圍</span>
                         </button>
                         <button id="btn-report" onclick="openReportModal()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-yellow-400 transition border border-transparent hover:border-yellow-500/20 rounded-lg group">
                         <i class="fa-solid fa-bug group-hover:rotate-12 transition-transform"></i> <span>題目有錯</span>
                         </button>
+                        <button id="btn-quiz-scope-exclusion" type="button" onclick="openQuizScopeExclusion()" hidden class="flex-1 min-w-[42%] sm:min-w-0 py-3 text-amber-300 text-xs text-center hover:text-amber-200 transition border border-transparent hover:border-amber-500/20 rounded-lg group"><i class="fa-solid fa-ban"></i> <span>此題超過學習範圍</span></button>
                         <button id="btn-quiz-home" type="button" onclick="leaveQuizPage()" class="flex-1 py-3 text-gray-600 text-xs text-center hover:text-cyan-400 transition border border-transparent hover:border-cyan-500/20 rounded-lg group">
                         <i class="fa-solid fa-house group-hover:-translate-y-0.5 transition-transform"></i> <span>返回宗門</span>
                         </button>
