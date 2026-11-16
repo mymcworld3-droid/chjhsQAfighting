@@ -355,11 +355,11 @@ test('a three-cell cleave shows two full-width sweeps and resolves damage separa
   const after=R.apply(before,'hero',{type:'manual',skillId:'wind-step',x:6,y:4},now);
   const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
   assert.deepEqual(after.events.filter(e=>e.type==='damage').map(e=>e.animation.strike),[0,0,1,1]);
-  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[70,70],[70,70]]);
+  assert.deepEqual(cast.strikeImpacts.map(beat=>beat.map(n=>n.damage)),[[140,140],[140,140]]);
   const hp=p=>A.sample(cast,p).find(a=>a.uid==='monster-0').hp;
   assert.equal(hp(.2),3000);
-  assert.equal(hp(.51),2930);
-  assert.equal(hp(.93),2860);
+  assert.equal(hp(.51),2860);
+  assert.equal(hp(.93),2720);
   for(let strike=0;strike<2;strike++){
     const c=context();
     Effects.draw(c,cast,A.strikeTime(cast,strike),{cell:48,ox:0,oy:0,width:12,height:9},true);
