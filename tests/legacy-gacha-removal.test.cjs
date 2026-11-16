@@ -14,5 +14,7 @@ test('retired card drawing is absent from markup, boot logic, and visual audit',
   }
   assert.doesNotMatch(boot, /removeLegacyGachaUI|LEGACY_SELECTORS/);
   const nav = index.slice(index.indexOf('<nav id="bottom-nav"'), index.indexOf('<div id="toast-container"'));
-  assert.equal((nav.match(/data-target="page-/g) || []).length, 3);
+  const targets=[...nav.matchAll(/data-target="(page-[^"]+)"/g)].map(match=>match[1]);
+  assert.equal(targets.length,2,'navigation keeps two primary destinations after retired gacha removal');
+  assert.equal(new Set(targets).size,targets.length,'navigation destinations must be unique');
 });
