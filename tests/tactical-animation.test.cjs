@@ -22,25 +22,16 @@ test('animation plans do not mutate snapshots and never replay initial, duplicat
   assert.deepEqual(timeline(next,{...next,newEnemies:[8]}),[],'revision-neutral introduction acknowledgements produce no combat replay');
 });
 
-test('all nineteen equipped skills produce a cast with their real footprint and correct recovery or displacement',()=>{
+test('all retired golden-core skills reject legacy commands without changing combat snapshots',()=>{
   let count=0;
-  for(const [core,c]of Object.entries(R.CORES))for(const branch of c.branches){
-    const s=battle(core,branch.id),a=s.actors[0],sk=branch.skill;
-    const p=sk.range===0?{x:a.x,y:a.y}:sk.kind==='blink'?{x:2,y:3}:{x:3,y:3};
-    const next=apply(s,'skill',p),scenes=timeline(s,next),cast=scenes.find(s=>s.kind==='cast');
-    assert.ok(cast,sk.id);assert.equal(cast.style,sk.kind);assert.equal(cast.skill,sk.id);
-    assert.deepEqual(cast.cells,R.skillCells(s,a,sk,p));
-    if(sk.kind==='restore')assert.ok(scenes.some(s=>s.kind==='restore'),sk.id);
-    if(['blink','swap','lunge'].includes(sk.kind)){
-      const move=scenes.find(s=>s.kind==='move');assert.ok(move,sk.id);endpoint(move,'u1',next.actors[0]);
-      if(sk.kind==='swap'){assert.equal(move.moves.length,2);endpoint(move,'monster-0',next.actors[1]);}
-      if(sk.kind==='lunge')assert.ok(scenes.indexOf(move)<scenes.indexOf(cast),'dash arrives before its sword strike');
-    }
+  for(const [core,c] of Object.entries(R.CORES))for(const branch of c.branches){
+    const s=battle(core,branch.id),before=JSON.stringify(s);
+    assert.throws(()=>apply(s,'skill',{x:3,y:3}),/金丹技能已停用/,core+'.'+branch.id);
+    assert.equal(JSON.stringify(s),before,'rejected legacy commands cannot mutate a battlefield');
     count++;
   }
   assert.equal(count,19);
 });
-
 test('two-cell attacks animate their whole ray even when empty and group simultaneous area damage',()=>{
   const s=battle();Object.assign(s.actors[1],{x:2,y:3});
   s.actors.push(R.actor({uid:'m2',name:'妖獸二',bot:true,team:'monster',maxHp:2000},{x:3,y:3}));
@@ -72,26 +63,44 @@ test('twenty monster types have visible attacks, dodges and movement styles in c
   }
 });
 
-test('pushes, swaps, recovery and reflected hits retain exact independent animation outcomes',()=>{
-  const s=battle('ocean','surge');Object.assign(s.actors[1],{x:2,y:3});
-  const pushed=apply(s,'skill',{x:2,y:3}),push=timeline(s,pushed).find(s=>s.kind==='move');assert.equal(push.style,'push');endpoint(push,'monster-0',pushed.actors[1]);
-  const drain=battle('taichu','drain'),healed=apply(drain,'skill',{x:3,y:3}),heal=timeline(drain,healed).find(s=>s.kind==='restore');
-  assert.equal(heal.numbers[0].heal,176);assert.equal(heal.after[0].hp,1176);
-  const counter=battle('thunder','counter');Object.assign(counter.actors[1],{x:2,y:3});R.prepareIntents(counter);
-  const guarded=apply(counter,'skill',{x:1,y:3}),end=apply(guarded,'end'),hits=timeline(guarded,end).filter(s=>s.kind==='damage');
-  assert.equal(hits.length,2);assert.equal(hits[1].style,'counter');assert.notEqual(hits[0].actor,hits[1].actor);
+test('equipped manual pushes, throws and focus remain replayable without retired core skills',()=>{
+  const manual=(id)=>{
+    const s=R.create({id:'manual-animations',players:[{uid:'u1',name:'修士',atk:200,maxHp:2000,
+      trainingAccessScore:68,manualSkills:[id]}],now});
+    s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10,hp:1000});
+    Object.assign(s.actors[1],{x:2,y:3,maxHp:2000,hp:2000});
+    return s;
+  };
+  const fist=manual('rock-break'),pushed=apply(fist,'manual',{skillId:'rock-break',x:2,y:3});
+  const cast=timeline(fist,pushed).find(x=>x.kind==='cast'&&x.skill==='rock-break');
+  assert(cast&&cast.parallelImpact,'push impact is synchronized to the punch');
+  assert(cast.moves.some(move=>move.uid==='monster-0'),'the pushed target follows its committed path');
+  endpoint(cast,'monster-0',pushed.actors[1]);
+  const throwBefore=manual('tiger-throw'),thrown=apply(throwBefore,'manual',{skillId:'tiger-throw',x:2,y:3});
+  const throwCast=timeline(throwBefore,thrown).find(x=>x.kind==='cast'&&x.skill==='tiger-throw');
+  assert(throwCast?.throwImpact,'the throw resolves at its committed impact beat');
+  endpoint(throwCast,'monster-0',thrown.actors[1]);
+  const before=manual('dragon-roar'),focused=apply(before,'manual',{skillId:'dragon-roar',x:1,y:3});
+  const scenes=timeline(before,focused);
+  assert(scenes.some(x=>x.kind==='cast'&&x.skill==='dragon-roar'));
+  assert(scenes.some(x=>x.kind==='turn'),"focus ends the player's current turn");
 });
-
-test('meteor marking and delayed impact are separate, and defeat is visible before the result scene',()=>{
-  const s=battle('xingchen','meteor'),mark=apply(s,'skill',{x:3,y:3});
-  assert.deepEqual(timeline(s,mark).map(s=>s.kind),['cast']);assert.equal(mark.actors[1].hp,s.actors[1].hp);
-  mark.actors[1].intent={kind:'wait',cells:[]};mark.actors[1].hp=1;
-  const next=apply(mark,'end'),scenes=timeline(mark,next),impact=scenes.findIndex(s=>s.kind==='impact'),damage=scenes.findIndex(s=>s.kind==='damage');
-  assert.ok(impact>=0&&impact<damage);assert.equal(scenes.at(-1).kind,'finish');assert.equal(scenes.at(-1).style,'victory');
-  const dying=A.sample(scenes[damage],.8).find(a=>a.uid==='monster-0');assert.ok(dying.opacity<.5&&dying.opacity>0);
-  assert.equal(A.sample(scenes[damage],1).find(a=>a.uid==='monster-0').opacity,0);
+test('manual lethal damage resolves before the victory scene and renders a completed attack',()=>{
+  const s=R.create({id:'manual-victory',players:[{uid:'u1',name:'修士',atk:200,maxHp:2000,
+    trainingAccessScore:68,manualSkills:['rock-fist']}],now});
+  s.blocks=[];Object.assign(s.actors[0],{x:1,y:3,stamina:10});
+  Object.assign(s.actors[1],{x:2,y:3,maxHp:2000,hp:1,intent:{kind:'wait',cells:[]}});
+  const next=apply(s,'manual',{skillId:'rock-fist',x:2,y:3}),scenes=timeline(s,next);
+  const cast=scenes.find(scene=>scene.kind==='cast'&&scene.skill==='rock-fist');
+  assert(cast);
+  assert.equal(cast.after.find(actor=>actor.uid==='monster-0').hp,0);
+  assert.equal(scenes.at(-1).kind,'finish');
+  assert.equal(scenes.at(-1).style,'victory');
+  for(const progress of [0,.25,.75,1]){
+    const sampled=A.sample(cast,progress);
+    assert(sampled.every(actor=>Number.isFinite(actor.x)&&Number.isFinite(actor.y)));
+  }
 });
-
 test('answers, guarding, end-turn, waiting and leaving all have bounded presentation beats',()=>{
   const s=battle();s.actors[0].stamina=2;
   const answered=R.answer(s,'u1',true,now),answer=timeline(s,answered)[0];assert.equal(answer.kind,'answer');assert.equal(answer.numbers[0].gain,4);
