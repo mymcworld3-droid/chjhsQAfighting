@@ -462,7 +462,8 @@ test('fist advances stop against a wall or an enemy that cannot be pushed',()=>{
     const result=castSword(battle,id,2,4);
     assert.equal(result.actors[0].x,1);
     assert.equal(result.actors[1].x,2);
-    assert.equal(result.actors[1].hp,455);
+    assert.equal(result.actors[1].hp,390,'blocked push deals both a 65-point strike and a 45-point collision');
+    assert.equal(result.events.filter(e=>e.type==='damage'&&e.target==='front').length,2);
   }
 });
 
@@ -475,8 +476,8 @@ test('four-step fist rechecks enemies and terrain after each step',()=>{
   assert.deepEqual(result.actors.map(a=>a.x),[5,6,6]);
   assert.equal(preview.path.length,5);
   assert.equal(result.actors[0].attacks,1);
-  assert.equal(result.actors[0].stamina,5);
-  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[320,320]);
+  assert.equal(result.actors[0].stamina,6);
+  assert.deepEqual(result.actors.slice(1).map(a=>a.hp),[240,240]);
   assert.equal(result.events.filter(e=>e.type==='cast'&&e.skill===id).length,4);
 });
 

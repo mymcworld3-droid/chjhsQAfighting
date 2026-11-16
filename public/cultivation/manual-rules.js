@@ -105,8 +105,8 @@
     ]),
     book('body-dragon','龍象真身訣','body','連步逼退對手，蓄勢後連續出拳。',[
       shared(straightFist,'dragon-strike'),
-      technique('dragon-guard','四步連推',5,1,'fist-chain',.45,
-        '最多四段。每段打前方一排並將敵人推退一格，再前進一格。擊退後正前方仍被阻擋就停止。',{steps:4}),
+      technique('dragon-guard','四步連推',4,1,'fist-chain',.65,
+        '最多四段。每段攻擊前方一排並將敵人推退一格，再前進一格。敵人無法被推退時追加撞擊傷害；前路受阻則停止。',{steps:4,collisionPower:.45}),
       technique('dragon-roar','蓄勢',7,0,'fist-focus',0,
         '立即結束回合。接下來自己的兩個回合各可出手三次，其他拳法體力消耗減半並向上取整。',{cooldown:3})
     ],[6,28,68]),
@@ -153,7 +153,7 @@
       result.note=flyingSwordReady===true?'飛劍每穿過一名敵人時各結算一次':
         '首次召劍不造成傷害；之後移動飛劍穿過敵人時結算';
     if(skill.kind==='fist-chain')
-      result.note='每一步命中分別計算，最多四段；不保證每段都命中';
+      result.note='每一步命中分別計算，最多四段；無法推退目標時額外造成撞擊傷害';
     if(skill.kind==='fist-throw')
       result.note='只有成功摔到身後空格時才造成傷害';
     if(skill.kind==='sword-array'&&skill.centerPower!==undefined){
@@ -193,7 +193,7 @@
       suffix='造成 '+skill.hits+' 次 '+fmt(value.damage)+' 的傷害（戰場攻擊力 '+fmt(attack)+' × 每擊倍率 '+
         Number((skill.power/skill.hits).toFixed(3))+'；每次命中獨立結算）。';
     }else if(skill.kind==='fist-chain'){
-      suffix='最多造成 '+skill.steps+' 次 '+fmt(value.damage)+' 的傷害（依實際踏步命中情況）。';
+      suffix='最多造成 '+skill.steps+' 次 '+fmt(value.damage)+' 的傷害（依實際踏步命中情況）；若無法推退，額外造成 '+fmt(Math.round(attack*(skill.collisionPower||0)))+' 撞擊傷害。';
     }else if(skill.kind==='fist-throw'){
       suffix='成功翻摔時造成 '+fmt(value.damage)+' 傷害。';
     }else{

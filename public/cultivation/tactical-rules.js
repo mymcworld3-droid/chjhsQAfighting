@@ -567,7 +567,13 @@
       for(const target of targets){
         if(!alive(a))break;
         damage(s,a,target,a.atk*sk.power,{skill:sk.id,manualId:sk.manualId});
-        if(alive(target))push(s,a,target,1,d);
+        if(alive(target)){
+          const before=point(target);
+          push(s,a,target,1,d);
+          // A blocked shove is a wall-slam rather than a wasted chain hit.
+          if(alive(target)&&target.x===before.x&&target.y===before.y&&sk.collisionPower>0)
+            damage(s,a,target,a.atk*sk.collisionPower,{skill:sk.id,manualId:sk.manualId});
+        }
       }
       const next=offset(a,d,1);
       if(!alive(a)||blocked(s,next)||at(s,next))break;

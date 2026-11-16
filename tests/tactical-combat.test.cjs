@@ -560,9 +560,9 @@ test('sword-array effects can be persisted and replayed, then an old room can co
   const request={roomId:s.id,revision:newer.revision,type:'manual',skillId:'dragon-guard',x:5,y:4,requestId:'chain-once'};
   const next=await api.command(db,'u1',request,fixed);
   const replay=await api.command(db,'u1',request,fixed);
-  assert.equal(next.actors[0].stamina,1);
+  assert.equal(next.actors[0].stamina,2);
   assert.equal(next.actors[0].x,8);
-  assert.equal(next.actors[1].hp,540);
+  assert.equal(next.actors[1].hp,380);
   assert.equal(replay.revision,next.revision);
   assert.deepEqual(replay.actors,next.actors);
   const oldCast=next.events.find(event=>event.skill==='sky-cloud').animation;
