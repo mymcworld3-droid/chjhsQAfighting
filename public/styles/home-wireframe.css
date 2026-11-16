@@ -105,6 +105,13 @@ body.ui-cleanup #page-home .home-practice #btn-home-start .font-sci{
 }
 body.ui-cleanup #page-home .home-practice #btn-home-start .font-mono{color:#4c4a3e!important;font-size:11px!important;display:block!important}
 body.ui-cleanup #page-home .home-practice #btn-home-start i{color:#393b2e!important;font-size:23px}
+body.ui-cleanup #page-home .home-practice #btn-home-free-quiz{
+  align-self:center;padding:3px 10px;border:0;background:transparent;color:#c4b99f;
+  font:400 12px/1.5 "Noto Serif TC",serif;letter-spacing:.12em;opacity:.58;cursor:pointer;
+  transition:opacity .18s ease,color .18s ease;
+}
+body.ui-cleanup #page-home .home-practice #btn-home-free-quiz:hover,
+body.ui-cleanup #page-home .home-practice #btn-home-free-quiz:focus-visible{opacity:.95;color:#e5d4ad}
 /* Vertical left-lower card: existing live daily quest spotlight (user's screenshot). */
 body.ui-cleanup #page-home .home-daily-progress{
   grid-area:daily;min-width:0;width:100%;align-self:stretch;margin:0;
