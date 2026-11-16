@@ -311,9 +311,9 @@ test('adaptive solo handler assigns different fine methods to simultaneous APIs,
         {status(n){out.status=n;return this;},json(value){out.body=value;return this;}});return out;
     };
     const first=invoke();await new Promise(resolve=>setImmediate(resolve));assert.equal(calls,3);assert.equal(new Set(assignments.map(x=>x.adaptive_facet_id)).size,3);
-    assert(assignments.every(x=>x.adaptive_difficulty==='easy'&&x.scope.subject==='物理'&&x.scope.level==='高中二年級'));
+    assert(assignments.every(x=>x.adaptive_difficulty==='medium'&&x.scope.subject==='物理'&&x.scope.level==='高中二年級'));
     pending[1]();const delivered=await first;assert.equal(delivered.status,undefined);const question=JSON.parse(delivered.body.text);
-    assert.equal(tracked[0].q,question.q);assert.equal(tracked[0].difficulty,question.adaptive.difficulty);assert.equal(tracked[0].difficulty,'easy');
+    assert.equal(tracked[0].q,question.q);assert.equal(tracked[0].difficulty,question.adaptive.difficulty);assert.equal(tracked[0].difficulty,'medium');
     assert.equal(question.adaptive.facetId,assignments[1].adaptive_facet_id);assert.equal(question.adaptive.outline.length,6);assert.equal(question.subject,'物理');
     for(const key of ['generation_task_id','adaptive_scope_id','adaptive_facet_id','adaptive_difficulty'])assert(!Object.hasOwn(question,key));
     pending[0]();pending[2]();await new Promise(resolve=>setImmediate(resolve));
