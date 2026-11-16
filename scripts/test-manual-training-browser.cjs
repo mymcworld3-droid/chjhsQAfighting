@@ -33,7 +33,7 @@ async function main(){
       assert.equal(await page.locator('.manual-power-details').evaluate(e=>e.open),true);
     };
     await page.locator('[data-manual-remove="wind-slash"]').click();await verifyArt();
-    await page.locator('[data-manual-status]').getByText('功法配置已儲存。').waitFor();await verifyArt();
+    await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent==='功法配置已儲存。');await verifyArt();
     assert.equal(await page.locator('[data-manual-remove="wind-slash"]').count(),0);
     await page.locator('[data-manual-equip="wind-slash"]').click();await verifyArt();
     await page.locator('[data-manual-remove="wind-slash"]').waitFor();await verifyArt();
