@@ -493,8 +493,8 @@ async function main(){
         assert.deepEqual(layout.visible.sort(),['attack','close','end','move','quiz','wheelChoice'].sort());
         assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
         assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);
-        assert.ok(Math.abs(layout.map.x-.18)<.025||Math.abs(layout.map.x-.07)<.025);
-        assert.ok(layout.map.w>.60&&layout.map.h>.48);
+        assert.ok(Math.abs(layout.map.x)<.015&&Math.abs(layout.map.y)<.015);
+        assert.ok(layout.map.w>.98&&layout.map.h>.98);
         return layout;
       };
       for(const [width,height,label]of [[1280,720,'sketch-landscape'],[393,852,'sketch-portrait'],[844,390,'sketch-phone-landscape']]){
