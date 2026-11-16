@@ -1,6 +1,6 @@
-import './manual-rules.js?v=20261116-wind-step-rebalance-v1';
+import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
 import {skillArt} from './manual-art.js';
-import './tactical-rules.js';
+import './tactical-rules.js?v=20261116-fourstep-sync-fix-v1';
 import {TacticalRenderer} from './tactical-renderer.js';
 
 const R=globalThis.QATactical,Manuals=globalThis.QAManuals;
