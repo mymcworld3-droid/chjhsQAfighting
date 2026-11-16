@@ -92,7 +92,20 @@
             const escaped = window.QAMathGuard?.fallback(entry.literal) ||
               '<span class="tex2jax_ignore">' + escape(entry.literal) + '</span>';
             try { mj.typesetClear?.([entry.node]); } catch (_) {}
-            entry.node.innerHTML = escaped;
+            // Replacing an entire options panel would destroy the answer
+            // buttons and their click handlers. Keep the surrounding quiz
+            // intact and replace only the malformed MathJax formula.
+            const badMath = broken?.matches?.('mjx-container') ? broken :
+              broken?.closest?.('mjx-container');
+            if (badMath?.replaceWith && typeof document?.createElement === 'function') {
+              const literal = document.createElement('span');
+              literal.className = 'quiz-math-fallback tex2jax_ignore';
+              literal.textContent = badMath.getAttribute?.('data-latex') ||
+                badMath.textContent || entry.literal;
+              badMath.replaceWith(literal);
+            } else {
+              entry.node.innerHTML = escaped;
+            }
             console.warn('[Quiz Math] invalid TeX displayed as literal text');
             // Report an actual MathJax parse failure, not a transient CDN outage.
             // The question controller checks the current active question and
