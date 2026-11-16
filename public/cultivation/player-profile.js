@@ -88,12 +88,14 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
     const stats = data?.stats || {};
     const score = number(stats.totalScore);
     const core = equippedCore(data, self);
-    const power = window.calculateCombatPower?.({
+    const tactical = window.QA_MANUAL_TRAINING_ONLY===true;
+    const power = (tactical && self ? window.getCombatPower?.() : window.calculateCombatPower?.({
       stats: { attack: stats.attack ?? 200,
         maxHp: Math.max(1, Number(stats.maxHp) || 1000) + (window.QATrainingAccessRules?.hpBonus(data) || 0) } ,
       core, equipped: data?.artifactSystem?.equipped || {},
-      inventory: data?.artifactSystem?.inventory || {}
-    }) || { total: 0, base: 0, core: 0, equipment: 0, items: [] };
+      inventory: data?.artifactSystem?.inventory || {},realmScore:window.QATrainingAccessRules?.score(data)||score,
+      manualState:null
+    })) || { total: 0, base: 0, core: 0, equipment: 0, items: [] };
     const answered = number(stats.totalAnswered);
     const correct = Math.min(answered, number(stats.totalCorrect));
     const realm = realmForScore(score)?.name || '凡人';
@@ -108,6 +110,24 @@ import { resolvePlayerAvatar } from './profile-avatar.js';
 
   function profileMarkup(profile) {
     const core = profile.core;
+    if(profile.power?.mode==='tactical'){
+      const power=profile.power,complete=!!power.complete;
+      const items=power.items||[];
+      return '<div class="xpp-hero">' +
+        '<div class="xpp-avatar"><img data-xpp-avatar alt="玩家頭像" hidden><i class="fa-solid fa-user"></i></div>' +
+        '<div class="xpp-identity"><span>修士資料 · PLAYER PROFILE</span><h2>'+esc(profile.name)+
+        '</h2><p>'+esc(profile.realm)+' · 修為 '+fmt(profile.score)+'</p></div></div>' +
+        '<div class="xpp-power"><span>'+(complete?'戰棋戰力':'基礎戰力（功法未同步）')+'</span><strong>'+fmt(power.total)+
+        '</strong><small>攻擊與生命 '+fmt(power.base)+' ／ 已裝備招式 '+fmt(power.skills||0)+'</small></div>' +
+        '<div class="xpp-stats"><div><span>答對率</span><b>'+esc(profile.accuracy)+
+        '</b></div><div><span>累計答對</span><b>'+fmt(profile.correct)+
+        '</b></div><div><span>累計答題</span><b>'+fmt(profile.answered)+'</b></div></div>' +
+        '<section class="xpp-section"><h3>戰棋功法配置</h3>'+
+        (items.length?'<div class="xpp-equipment">'+items.map(item=>'<article class="xpp-equip"><strong>'+
+        esc(item.name)+'</strong><small>Lv.'+fmt(item.level)+' · 戰力 +'+fmt(item.power)+'</small></article>').join('')+
+        '</div>':'<p class="xpp-note">'+(complete?'未裝備可用招式。':'尚未取得可公開的功法裝備資料，僅展示基礎戰力。')+'</p>')+'</section>' +
+        '<p class="xpp-footnote">戰棋戰力以可用攻擊、最大生命及實際裝備招式估算；不額外計入已停用的金丹與舊法寶，亦不直接增加傷害。</p>';
+    }
     const slots = profile.slots.map(({slot,item}) => {
       const power = item ? Math.max(0, Number(window.calculateArtifactPower?.(item)) || 0) : 0;
       const effects = item?.effects?.map(effectLabel).filter(Boolean).slice(0, 5) || [];
