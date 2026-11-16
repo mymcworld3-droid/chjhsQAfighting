@@ -135,12 +135,3 @@
  margin:0 auto 4px;object-fit:cover;border-radius:5px;border:1px solid #bda57488
 }
 #tactical-combat .tc-action-tabs .tc-pvp-skill-name{display:block;overflow-wrap:anywhere}
-
-#tactical-combat .tc-pvp-skill-damage{
-  display:block;margin-top:3px;
-  color:#bde5bc;font-size:10px;line-height:1.25;
-  white-space:normal;font-variant-numeric:tabular-nums;
-}
-#tactical-combat .tc-single-damage{
-  margin-top:5px;color:#c3dcb7;font-variant-numeric:tabular-nums;
-}

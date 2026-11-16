@@ -738,15 +738,3 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
     font-size:clamp(7px,1.85vw,9px);
   }
 }
-
-/* Keep compact attack number beside cost without displacing artwork from its ring. */
-#tactical-combat.tc-quarter-layout .tc-wheel-copy .tc-wheel-cost{
-  font-variant-numeric:tabular-nums;
-  font-size:clamp(8px,.78vw,10px);
-  letter-spacing:-.065em;
-}
-@media(orientation:portrait){
-  #tactical-combat.tc-quarter-layout .tc-wheel-copy .tc-wheel-cost{
-    font-size:clamp(7px,1.8vw,9px);
-  }
-}
