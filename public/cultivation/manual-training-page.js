@@ -57,9 +57,13 @@ function markup(expandedBooks){
   const tactical=window.getCombatPower?.();
   const rating=tactical?.mode==='tactical'?tactical:null;
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
+  const serverAttack=Number(current.battleAttack);
   const projectedAttack=Number(window.getCombatStats?.()?.attack);
-  const attack=Number.isFinite(projectedAttack)&&projectedAttack>0?projectedAttack:
-    Math.max(1,Number(window.getCurrentUserData?.()?.stats?.attack)||200);
+  // An authenticated manual response contains the attack used by the PvE
+  // combat server. Do not silently show an inaccurate client-only estimate.
+  const attack=Number.isFinite(serverAttack)&&serverAttack>0?serverAttack:
+    Number.isFinite(projectedAttack)&&projectedAttack>0?projectedAttack:
+      Math.max(1,Number(window.getCurrentUserData?.()?.stats?.attack)||200);
   const slots=Array.from({length:3},(_,i)=>{
     const id=equipped[i],skill=skillDetails(id);
     return `<div class="manual-slot ${id?'is-active':''}">
