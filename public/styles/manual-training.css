@@ -112,3 +112,22 @@
 .manual-technique-actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .manual-technique-actions .manual-upgrade{margin-top:0;border-color:#c4b17294;background:#3c3723;color:#f1dca8}
 .manual-technique-actions small{color:#b3bfae;font-size:11px}
+
+// Six book covers and twelve move paintings share one compact display system.
+.manual-book-glyph{width:52px;height:60px;padding:2px;overflow:hidden;background:#101d17}
+.manual-book-art{display:block;width:100%;height:100%;object-fit:contain}
+.manual-slot-equipped{display:flex;align-items:center;gap:8px;min-width:0;width:100%}
+.manual-slot-art{width:42px;height:42px;flex:0 0 42px;object-fit:cover;border:1px solid #b5c39275;border-radius:7px;background:#111b18}
+.manual-slot-meta{display:flex;flex-direction:column;gap:4px;min-width:0;overflow-wrap:anywhere}
+.manual-slot-meta strong,.manual-slot-meta span{display:block}
+.manual-technique-overview{display:flex;align-items:flex-start;gap:10px}
+.manual-technique-copy{flex:1;min-width:0}
+.manual-skill-art{width:58px;height:58px;flex:0 0 58px;object-fit:cover;border:1px solid #8aaf9370;border-radius:8px;background:#111b18}
+.manual-technique.is-locked .manual-skill-art{filter:saturate(.45)}
+@media(max-width:690px){
+ .manual-book-glyph{width:43px;height:51px}
+ .manual-slot-equipped{flex-direction:column;align-items:flex-start}
+ .manual-slot-art{width:34px;height:34px;flex-basis:34px}
+ .manual-technique-overview{gap:8px}
+ .manual-skill-art{width:48px;height:48px;flex-basis:48px}
+}

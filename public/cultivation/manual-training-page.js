@@ -1,4 +1,5 @@
 import './manual-rules.js';
+import {bookArt,skillArt} from './manual-art.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
@@ -7,7 +8,7 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
 const label=school=>school==='sword'?'劍修':'體修';
-const icon=school=>school==='sword'?'fa-khanda':'fa-hand-fist';
+const artImg=(src,klass)=>src?`<img class="${klass}" src="${esc(src)}" alt="" loading="lazy" decoding="async">`:``;
 const visible=()=>!!root?.closest('#page-training.active-page:not(.hidden)');
 function ensure(){
   const page=document.getElementById('page-training');
@@ -23,7 +24,7 @@ function ensure(){
   }
   if(!document.getElementById('manual-training-style')){
     const link=document.createElement('link');link.rel='stylesheet';
-    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261115-collapsible-books';
+    link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261116-art-v1';
     document.head.append(link);
   }
   return root;
@@ -57,7 +58,7 @@ function markup(expandedBooks){
     const id=equipped[i],skill=skillDetails(id);
     return `<div class="manual-slot ${id?'is-active':''}">
       <small>第 ${i+1} 技能欄</small>
-      ${skill?`<strong>${esc(skill.name)}</strong><span>招式 Lv. ${skill.level} · ${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span>
+      ${skill?`<div class="manual-slot-equipped">${artImg(skillArt(skill),"manual-slot-art")}<div class="manual-slot-meta"><strong>${esc(skill.name)}</strong><span>招式 Lv. ${skill.level} · ${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span></div></div>
         <button type="button" data-manual-remove="${esc(id)}">卸下</button>`:
         '<span class="manual-slot-empty">尚未裝備</span>'}
       </div>`;
@@ -73,9 +74,10 @@ function markup(expandedBooks){
         !skill.realmReady?'修士 '+skill.realmName+'境':null
       ].filter(Boolean);
       return `<div class="manual-technique ${unlocked?'':'is-locked'}">
+        <div class="manual-technique-overview">${artImg(skillArt(skill),"manual-skill-art")}<div class="manual-technique-copy">
         <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}${unlocked?` <span>Lv. ${skill.level}</span>`:''}</b>
           <small>${skill.cost} 體力 · ${skill.unlimited?'無固定射程':skill.range+' 格'} · ${skill.realmName}境</small></div>
-        <p>${esc(skill.description)}</p>
+        <p>${esc(skill.description)}</p></div></div>
         ${unlocked?`<div class="manual-technique-actions">
           <button type="button" data-manual-equip="${esc(skill.id)}" ${equipDisabled(skill.id,equipped)?'disabled':''}>${other===skill.id?'已裝備':other?'改用本功法':'裝備技能'}</button>
           ${upgrade?`<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" ${gold<upgrade.gold?'disabled':''}>
@@ -97,7 +99,7 @@ function markup(expandedBooks){
     </div>`;
     return `<details class="manual-book" data-manual-book="${esc(book.id)}"${expandedBooks.has(book.id)?' open':''}>
       <summary class="manual-book-top">
-        <span class="manual-book-glyph" aria-hidden="true"><i class="fa-solid ${icon(book.school)}"></i></span>
+        <span class="manual-book-glyph" aria-hidden="true">${artImg(bookArt(book.id),"manual-book-art")}</span>
         <span class="manual-book-title"><small>${label(book.school)}功法</small><strong>${esc(book.name)}</strong></span>
         <span class="manual-book-level">Lv. ${book.level}</span>
         <span class="manual-book-chevron" aria-hidden="true"></span>
