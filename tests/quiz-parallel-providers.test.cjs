@@ -125,8 +125,9 @@ test('real quiz handler rewrites the entire question when every API repeats the 
         SUBJECT_SCHEMA:{數學:['向量']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},
         quizSparePool:createSparePool({similar:(a,b)=>a===b})};
       const helperStart=server.indexOf('function cleanQuestionText('),helperEnd=server.indexOf('const { MODES: FAST_QUIZ_MODES',helperStart);
-      const start=server.indexOf("app.post('/api/generate-quiz',"),end=server.indexOf('// API 5:',start);
-      vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end),context);
+      const start=server.indexOf('async function generateQuiz('),end=server.indexOf("app.post('/api/generate-quiz',",start);
+      assert(start>=0&&end>start,'find the actual quiz generator declaration');
+      vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end)+"\napp.post('/api/generate-quiz',generateQuiz);",context);
       global.fetch=async(_url,init)=>{
         const prompt=JSON.parse(init.body).messages[1].content,task=taskFrom(prompt),bad=calls++<3;
         prompts.push(prompt);
@@ -154,7 +155,7 @@ test('one configured API retains the ordinary sequential path and quiz endpoint 
   assert.match(server,/parallel: true/);
   assert.match(server,/onSpare: spare => quizSparePool\.offer\(spareKey, spare\)/);
   assert.match(server,/const saved = attempts === 0 \? .*quizSparePool\.take\(spareKey, validateCandidate\)/);
-  assert.match(server,/const combatFastMode = FAST_QUIZ_MODES\.has/);
+  assert.match(server,/const combatFastMode = !tacticalMode && FAST_QUIZ_MODES\.has/);
   assert.match(server,/app\.post\('\/api\/generate-quiz'/);
   assert.match(fs.readFileSync('fast-quiz-prompt.cjs','utf8'),/raid-quick-simple.*battle-fast.*immortal-fast/);
 });
@@ -247,8 +248,9 @@ test('real quiz handler delivers the fastest assigned form, strips internal IDs 
         SUBJECT_SCHEMA:{數學:['一次方程式']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},
         quizSparePool:createSparePool({similar:(a,b)=>a===b})};
       const helperStart=server.indexOf('function cleanQuestionText('),helperEnd=server.indexOf('const { MODES: FAST_QUIZ_MODES',helperStart);
-      const start=server.indexOf("app.post('/api/generate-quiz',"),end=server.indexOf('// API 5:',start);
-      vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end),context);
+      const start=server.indexOf('async function generateQuiz('),end=server.indexOf("app.post('/api/generate-quiz',",start);
+      assert(start>=0&&end>start,'find the actual quiz generator declaration');
+      vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end)+"\napp.post('/api/generate-quiz',generateQuiz);",context);
       const questions=[
         {q:'方程式 x+2=6 中，x 的值為何？',correct:'4',wrong:['2','3','5'],exp:'移項得 x=6-2=4，所以答案為 4。'},
         {q:'某數乘以 3 等於 15，這個數是多少？',correct:'5',wrong:['2','3','4'],exp:'設此數為 x，3x=15，兩邊除以 3 得 x=5。'},
@@ -295,8 +297,9 @@ test('adaptive solo handler assigns different fine methods to simultaneous APIs,
       ANSWER_AND_EXPLANATION_RULES:'完整單選題',subjectReliabilityPrompt:()=>'',questionQualityIssue:()=>'',removeUnstableOptionLabels:text=>text,
       SUBJECT_SCHEMA:{物理:['圓周運動']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},quizSparePool:createSparePool({similar:(a,b)=>a===b})};
     const helperStart=server.indexOf('function cleanQuestionText('),helperEnd=server.indexOf('const { MODES: FAST_QUIZ_MODES',helperStart);
-    const start=server.indexOf("app.post('/api/generate-quiz',"),end=server.indexOf('// API 5:',start);
-    vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end),context);
+    const start=server.indexOf('async function generateQuiz('),end=server.indexOf("app.post('/api/generate-quiz',",start);
+    assert(start>=0&&end>start,'find the actual quiz generator declaration');
+      vm.runInNewContext(server.slice(helperStart,helperEnd)+server.slice(start,end)+"\napp.post('/api/generate-quiz',generateQuiz);",context);
     global.fetch=(_url,init)=>new Promise(resolve=>{
       const prompt=JSON.parse(init.body).messages[1].content,task=taskFrom(prompt),binding=JSON.parse(prompt.split('[範圍細觀念與考法]\n')[1].split('\n')[0]),index=calls++;
       assignments.push(binding);pending.push(()=>resolve(response({q:'獨立練習情境：'+binding.method+'，請選出正確關係。',correct:'關係甲',wrong:['關係乙','關係丙','關係丁'],exp:'依照題目條件，完整推導可得關係甲。',
