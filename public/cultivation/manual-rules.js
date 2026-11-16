@@ -75,7 +75,7 @@
   const BOOKS=Object.freeze([
     book('sword-wind','流風劍訣','sword','以身法切入，再以劍氣逼退敵人。',[
       straight,
-      technique('wind-step','突進橫斬',4,4,'dash-cleave',1.4,
+      technique('wind-step','突進橫斬',4,4,'dash-cleave',2.8,
         '沿直線突進最多四格，再揮出三格寬的劍氣兩次。',{hits:2}),
       breakLine
     ]),
@@ -190,7 +190,8 @@
       suffix='一般劍氣每擊造成 '+fmt(value.damage)+' 傷害；中心交點最多造成 '+
         value.centerHits+' 次 '+fmt(value.center)+' 的傷害（依實際劍氣路線）。';
     }else if(skill.hits===2){
-      suffix='造成 '+skill.hits+' 次 '+fmt(value.damage)+' 的傷害（每次命中獨立結算）。';
+      suffix='造成 '+skill.hits+' 次 '+fmt(value.damage)+' 的傷害（戰場攻擊力 '+fmt(attack)+' × 每擊倍率 '+
+        Number((skill.power/skill.hits).toFixed(3))+'；每次命中獨立結算）。';
     }else if(skill.kind==='fist-chain'){
       suffix='最多造成 '+skill.steps+' 次 '+fmt(value.damage)+' 的傷害（依實際踏步命中情況）。';
     }else if(skill.kind==='fist-throw'){
