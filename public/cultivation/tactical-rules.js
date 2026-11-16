@@ -433,7 +433,8 @@
       for(const cell of row)cells.set(key(cell),cell);
       if(animate&&step>0)log(s,a.name+'踏步連推 · 第 '+(step+1)+' 段','cast',{
         actor:a.uid,skill:sk.id,animation:{kind:'cast',style:sk.kind,origin:point(a),
-          target:offset(a,d,1),cells:row,step:step+1,color:sk.color}});
+          target:offset(a,d,1),cells:row,step:step+1,
+          color:sk.color||(CORES[a.core]||CORES.none).color}});
       for(const target of targets){
         if(!alive(a))break;
         damage(s,a,target,a.atk*sk.power,{skill:sk.id,manualId:sk.manualId});
