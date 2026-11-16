@@ -131,3 +131,24 @@
  .manual-technique-overview{gap:8px}
  .manual-skill-art{width:48px;height:48px;flex-basis:48px}
 }
+
+/* Tactical combat rating: distinct from inactive core and artifact bonuses. */
+#manual-training-root .manual-summary{grid-template-columns:repeat(4,minmax(0,1fr))}
+#manual-training-root .manual-power-summary{border-color:#89af956e;background:#1c3b2b}
+#manual-training-root .manual-power-summary small{
+  color:#bcd4bc;font-size:10px;text-align:center;line-height:1.35
+}
+#manual-training-root .manual-power-details{
+  margin:-4px 0 16px;padding:10px 13px;
+  border:1px solid #a6b88c47;border-radius:9px;background:#14261ba8;
+  color:#c5d4bf;font-size:12px;line-height:1.65
+}
+#manual-training-root .manual-power-details summary{
+  color:#e6d2a0;cursor:pointer;font-weight:600;list-style:disclosure-closed
+}
+#manual-training-root .manual-power-details p{margin:8px 0}
+#manual-training-root .manual-power-details ul{margin:7px 0 0;padding-left:19px}
+@media(max-width:690px){
+ #manual-training-root .manual-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #manual-training-root .manual-power-summary small{font-size:9px}
+}
