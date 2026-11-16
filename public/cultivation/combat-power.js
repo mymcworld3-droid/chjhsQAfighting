@@ -1,9 +1,65 @@
 import './training-access-rules.js';
+import './manual-rules.js';
+import './tactical-power-rules.js';
+import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import { ARTIFACT_EQUIP_SLOTS, getArtifactById, realmOrderByName } from './artifact-catalog.js';
 
 // 戰力是獨立展示用的綜合評分，不參與傷害、配對或勝負判定。
 // 金丹只按目前調御的品級給分；法寶按境界品質與裝備特性給分。
 // 不使用背包內未裝備法寶，也不把裝備提供的攻擊／生命重複計入角色基礎值。
+// In this branch only, tactical power is an estimate of the real enabled
+// loadout. The old core/artifact rating remains intact in non-tactical modes.
+const tacticalMode=()=>window.QA_MANUAL_TRAINING_ONLY===true;
+const manualCache={uid:'',state:null,loaded:false,request:null,revision:0};
+const authenticatedUid=()=>String(getMainUser?.()?.uid||'');
+function syncManualAccount(){
+  const uid=authenticatedUid();
+  if(manualCache.uid!==uid){
+    manualCache.uid=uid;manualCache.state=null;manualCache.loaded=false;
+    manualCache.request=null;manualCache.revision++;
+  }
+  return uid;
+}
+function manualPowerChanged(){
+  window.dispatchEvent?.(new CustomEvent('xiuxian:tactical-power-updated'));
+}
+// Only the signed GET or successful server mutation may populate this cache.
+export function setCurrentTacticalManualState(state,uid=authenticatedUid()){
+  if(!tacticalMode()||!uid||uid!==syncManualAccount()||!state||typeof state!=='object')return false;
+  manualCache.revision++;
+  manualCache.request=null;manualCache.state=state;manualCache.loaded=true;
+  manualPowerChanged();
+  return true;
+}
+export function getCurrentTacticalManualState(){
+  return syncManualAccount()&&manualCache.loaded?manualCache.state:null;
+}
+export function refreshCurrentTacticalManualState({force=false}={}){
+  if(!tacticalMode())return Promise.resolve(null);
+  const uid=syncManualAccount();
+  if(!uid)return Promise.resolve(null);
+  if(!force&&manualCache.loaded)return Promise.resolve(manualCache.state);
+  if(!force&&manualCache.request)return manualCache.request;
+  const revision=++manualCache.revision;
+  const task=(async()=>{
+    try{
+      const response=await authenticatedMainFetch('/api/tactical/manuals',{method:'GET'});
+      const payload=await response.json();
+      if(!response.ok||!payload?.ok||!payload.state)throw Error(payload?.error||'功法同步失敗');
+      if(revision!==manualCache.revision||uid!==authenticatedUid())return null;
+      setCurrentTacticalManualState(payload.state,uid);
+      return payload.state;
+    }catch(error){
+      if(revision===manualCache.revision&&uid===authenticatedUid())
+        console.warn('[Tactical power] Unable to synchronize manual loadout',error);
+      return null;
+    }finally{
+      if(manualCache.request===task)manualCache.request=null;
+    }
+  })();
+  manualCache.request=task;
+  return task;
+}
 const CORE_LOWEST_POWER = 4000;
 const CORE_GRADE_STEP = 2000;
 
@@ -87,7 +143,8 @@ export function calculateArtifactPower(item) {
   return Math.max(0, Math.round(realmPower + effectsPower));
 }
 
-export function calculateCombatPower({ stats = {}, core = null, equipped = {}, inventory = {}, getArtifact = getArtifactById } = {}) {
+export function calculateCombatPower({ stats = {}, core = null, equipped = {}, inventory = {}, getArtifact = getArtifactById, manualState = null, realmScore = 0 } = {}) {
+  if(tacticalMode())return globalThis.QATacticalPower.calculate({stats,manualState,realmScore});
   const attack = positive(stats.attack ?? 200);
   const maxHp = Math.max(1, finite(stats.maxHp, 1000));
   const base = Math.round(attack * 2 + maxHp * 0.2);
@@ -108,6 +165,20 @@ export function calculateCombatPower({ stats = {}, core = null, equipped = {}, i
 
 export function getCurrentCombatPower() {
   const data = window.getCurrentUserData?.() || {};
+  if(tacticalMode()){
+    // The tactical server creates a player with core skills disabled and no
+    // equipped artifacts; use the same unmodified base stats plus realm/soul
+    // projection as the tactical room. Never add equipment twice.
+    const live=window.getCombatStats?.();
+    const score=globalThis.QATrainingAccessRules?.score(data)??positive(data.stats?.totalScore);
+    const stats=live?{attack:live.attack,maxHp:live.maxHp}:
+      {attack:positive(data.stats?.attack??200),
+        maxHp:Math.max(1,finite(data.stats?.maxHp,1000))
+          +positive(globalThis.QATrainingAccessRules?.hpBonus(data))};
+    return globalThis.QATacticalPower.calculate({
+      stats,realmScore:score,manualState:getCurrentTacticalManualState()
+    });
+  }
   const core = window.getEquippedGoldenCoreBattleSnapshot?.() || null;
   const soul = window.getNascentSoulBattleSnapshot?.() || null;
   const system = data.artifactSystem || {};
@@ -128,3 +199,19 @@ window.calculateGoldenCorePower = calculateGoldenCorePower;
 window.calculateArtifactPower = calculateArtifactPower;
 window.calculateCombatPower = calculateCombatPower;
 window.getCombatPower = getCurrentCombatPower;
+
+// The separate manual collection is authoritative. Synchronize on login,
+// manual drops and explicit purchases/equip changes, never every render.
+window.setCurrentTacticalManualState=setCurrentTacticalManualState;
+window.getCurrentTacticalManualState=getCurrentTacticalManualState;
+window.refreshCurrentTacticalManualState=refreshCurrentTacticalManualState;
+if(tacticalMode()){
+  window.addEventListener?.('xiuxian:user-data-ready',()=>{
+    syncManualAccount();
+    if(!manualCache.loaded)void refreshCurrentTacticalManualState();
+  });
+  window.addEventListener?.('xiuxian:manual-loot',()=>{
+    void refreshCurrentTacticalManualState({force:true});
+  });
+  queueMicrotask(()=>{if(syncManualAccount())void refreshCurrentTacticalManualState();});
+}
