@@ -129,6 +129,45 @@
     return {...skill,level,power:scaled(skill.power),
       ...(skill.centerPower!==undefined?{centerPower:scaled(skill.centerPower)}:{})};
   }
+  // The tactical engine rounds EACH strike before applying shields, guard
+  // or remaining HP. This preview intentionally describes raw per-hit damage,
+  // never the sum of all hits or all enemies in an area.
+  function singleHitDamage(attack,skill,{flyingSwordReady=null}={}){
+    const atk=Number(attack);
+    const safeAttack=Number.isFinite(atk)?Math.max(1,atk):200;
+    const raw=Number(skill?.power);
+    const power=Number.isFinite(raw)?Math.max(0,raw):0;
+    const hit=value=>Math.max(0,Math.round(safeAttack*value));
+    if(!skill||skill.kind==='fist-focus'){
+      return {damage:0,direct:false,label:'無直接傷害',note:'蓄勢只提供後續回合的出手與體力強化'};
+    }
+    if(skill.kind==='flying-sword'&&flyingSwordReady===false){
+      return {damage:0,direct:false,label:'召劍（0 傷害）',potential:hit(power),
+        note:'本次先召喚飛劍，不造成傷害；下次移動飛劍才會命中'};
+    }
+    const split=skill.hits===2;
+    const damage=hit(power/(split?2:1));
+    const result={damage,direct:true,label:'單次攻擊力 '+damage,
+      note:split?'每次命中獨立結算，最多攻擊兩次':null};
+    if(skill.kind==='flying-sword')
+      result.note=flyingSwordReady===true?'飛劍每穿過一名敵人時各結算一次':
+        '首次召劍不造成傷害；之後移動飛劍穿過敵人時結算';
+    if(skill.kind==='fist-chain')
+      result.note='每一步命中分別計算，最多四段；不保證每段都命中';
+    if(skill.kind==='fist-throw')
+      result.note='只有成功摔到身後空格時才造成傷害';
+    if(skill.kind==='sword-array'&&skill.centerPower!==undefined){
+      const centerPower=Number(skill.centerPower);
+      // Crossed sword beams deal centerPower/2 each for up to two sweeps.
+      // Eight-direction beams deal centerPower/8 on EACH ray that reaches center.
+      const centerValue=skill.orthogonal?centerPower/8:centerPower/2;
+      result.center=hit(Number.isFinite(centerValue)?Math.max(0,centerValue):0);
+      result.centerHits=skill.orthogonal?8:2;
+      result.note='一般劍氣每擊 '+damage+'；中心交會每擊 '+result.center+
+        '（最多 '+result.centerHits+' 次；實際依劍氣路線）';
+    }
+    return result;
+  }
   const publicSkill=(skill,masteryLevel,score,rank)=>{
     const mastered=masteryLevel>=skill.levelRequired,realmReady=meetsRealm(skill,score);
     const unlocked=mastered&&realmReady,stats=skillAtLevel(skill,rank);
@@ -178,5 +217,5 @@
     return {...s,realmScore:score,realmName:realmForScore(score).name,library};
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
 });
