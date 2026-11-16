@@ -20,3 +20,5 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Portrait and landscape battle acceptance
         run: TACTICAL_SKETCH_ONLY=1 node scripts/test-tactical-browser.cjs
+      - name: Manual training artwork stability
+        run: node scripts/test-manual-training-browser.cjs

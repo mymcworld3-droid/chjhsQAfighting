@@ -152,13 +152,53 @@ function markup(expandedBooks){
     </details>
     <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>`;
 }
+// Reconcile the existing page instead of recreating every image on each
+// save/upgrade. In particular, leave an unchanged <img src> untouched.
+function reconcile(parent,template){
+  const key=node=>node?.nodeType===1?node.getAttribute('data-manual-book'):null;
+  const compatible=(a,b)=>a&&a.nodeType===b.nodeType&&a.nodeName===b.nodeName&&key(a)===key(b);
+  function update(oldNode,newNode){
+    if(oldNode.nodeType===3||oldNode.nodeType===8){
+      if(oldNode.nodeValue!==newNode.nodeValue)oldNode.nodeValue=newNode.nodeValue;
+      return;
+    }
+    if(oldNode.nodeType!==1)return;
+    for(const attr of [...oldNode.attributes]){
+      if(oldNode.nodeName==='DETAILS'&&attr.name==='open')continue;
+      if(!newNode.hasAttribute(attr.name))oldNode.removeAttribute(attr.name);
+    }
+    for(const attr of [...newNode.attributes]){
+      if(oldNode.nodeName==='DETAILS'&&attr.name==='open')continue;
+      if(oldNode.getAttribute(attr.name)!==attr.value)oldNode.setAttribute(attr.name,attr.value);
+    }
+    if(oldNode.nodeName==='INPUT'&&document.activeElement!==oldNode&&oldNode.value!==newNode.value)oldNode.value=newNode.value;
+    reconcile(oldNode,newNode);
+  }
+  let index=0;
+  for(const next of [...template.childNodes]){
+    let existing=parent.childNodes[index],wanted=key(next);
+    if(wanted&&key(existing)!==wanted){
+      const match=[...parent.childNodes].slice(index+1).find(node=>key(node)===wanted);
+      if(match){parent.insertBefore(match,existing||null);existing=match;}
+      else{parent.insertBefore(next.cloneNode(true),existing||null);index++;continue;}
+    }
+    if(!existing){parent.appendChild(next.cloneNode(true));}
+    else if(key(existing)&&!wanted){parent.insertBefore(next.cloneNode(true),existing);}
+    else if(!compatible(existing,next)){existing.replaceWith(next.cloneNode(true));}
+    else update(existing,next);
+    index++;
+  }
+  while(parent.childNodes.length>index)parent.lastChild.remove();
+}
 function paint(message=''){
   ensure();if(!root)return;
   const expandedBooks=new Set();
   if(renderedFor===loadedFor){
     for(const book of root.querySelectorAll('details[data-manual-book][open]'))expandedBooks.add(book.dataset.manualBook);
   }
-  root.innerHTML=markup(expandedBooks);
+  const template=document.createElement('template');template.innerHTML=markup(expandedBooks);
+  if(renderedFor&&renderedFor!==loadedFor)root.replaceChildren(template.content.cloneNode(true));
+  else reconcile(root,template.content);
   renderedFor=loadedFor;
   const status=root.querySelector('[data-manual-status]');
   if(status)status.textContent=message;
