@@ -751,6 +751,30 @@ async function reportQuestion(db,uid,input,{review,award,readReceipt=readSoloRec
   // Before answering, never reveal the answer through an AI review reason.
   return (shared||s.pending?.[uid]?.id===input.questionId||s.pendingFollowup?.[uid]?.id===input.questionId)?{...result,reason:result.status==='rejected'?'獨立審核未確認本題有實質錯誤。':result.reason}:result;
 }
+// PvP questions do not expose the answer index to the browser before grading.
+// Resolve the real question from the authenticated battlefield instead of
+// trusting a client-submitted answer or permitting automatic reward claims.
+async function reviewMathIssue(db,uid,input,{review}={}){
+  if(!roomId(input?.roomId))throw error('戰場代碼無效',400);
+  const s=exists(await db.collection(ROOMS).doc(input.roomId).get());
+  member(s,uid);
+  if(s.mode!=='pvp')throw error('只有雙人鬥法使用此公式送審入口',400);
+  const questionId=String(input.questionId||'');
+  const q=s.pending?.[uid]?.id===questionId?s.pending[uid]:
+    s.pendingFollowup?.[uid]?.id===questionId?s.pendingFollowup[uid]:
+    s.reviewHistory?.[questionId]?.uid===uid?s.reviewHistory[questionId]:
+    s.reviews?.[uid]?.questionId===questionId?s.reviews[uid]:null;
+  if(!q)throw error('目前沒有這道可送審的題目',409);
+  const reports=require('./question-report-api.cjs').__test;
+  const evidence=reports.validateReport({question:q.q,options:q.opts,
+    correctIndex:q.answerIndex,explanation:q.explanation,
+    userReason:'玩家作答時 MathJax 無法解析公式，TeX 顯示成原始文字。請審查題幹與選項的公式和排版。'});
+  if(evidence.error)throw error(evidence.error,400);
+  const result=await (review||reports.reviewQuestion)(evidence,{trusted:true});
+  if(result.status==='unavailable')throw error(result.reason,503);
+  // PvP reviews never reveal the answer or grant in-match resources.
+  return {status:result.status,submitted:true};
+}
 function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,logger=console}={}){
   const route=fn=>async(req,res)=>{
     res.set?.('Cache-Control','no-store');
@@ -768,6 +792,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
   app.post('/api/tactical/acknowledge-enemy',route((db,uid,req)=>acknowledgeEnemy(db,uid,req.body)));
   app.post('/api/tactical/report-question',route((db,uid,req)=>reportQuestion(db,uid,req.body)));
+  app.post('/api/tactical/review-math-issue',route((db,uid,req)=>reviewMathIssue(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,MANUALS,manualsState,chooseSchool,equipManualSkills,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
+module.exports.__test={ROOMS,PLAYERS,MANUALS,reviewMathIssue,manualsState,chooseSchool,equipManualSkills,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
