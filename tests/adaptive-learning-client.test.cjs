@@ -7,14 +7,14 @@ const q=(i=0)=>({data:{q:'待答題目'+i},adaptive:{questionId:'test_question_'
 function fixture(storage=new Map(),docs=new Map([['u1',{stats:{gold:42},gameSettings:{sourceMode:'focused',focusedUnits:[unit]}}]])) {
   const nodes=new Map(),events={},calls=[],patches=[],timers=[];let uid='u1',fail=false,afterGet=null;
   class Node {
-    constructor(){this.children=[];this.textContent='';this.innerHTML='';}
+    constructor(tag){this.tagName=tag;this.children=[];this.textContent='';this.innerHTML='';this.styleProps={};this.style={setProperty:(key,val)=>{this.styleProps[key]=val;}};}
     set id(value){this._id=value;nodes.set(value,this);} get id(){return this._id;}
     appendChild(node){this.children.push(node);return node;}
     remove(){nodes.delete(this.id);}
     insertAdjacentElement(_position,node){this.children.push(node);}
   }
   for(const id of ['question-text','feedback-text']){const node=new Node();node.id=id;}
-  const state=()=>docs.get(uid), document={getElementById:id=>nodes.get(id),createElement:()=>new Node()};
+  const state=()=>docs.get(uid), document={getElementById:id=>nodes.get(id),createElement:tag=>new Node(tag)};
   const window={getCurrentUserData:state,addEventListener:(name,fn)=>{events[name]=fn;},quizMathRichText:text=>'SAFE:'+text,quizMathTypeset:async()=>{},persistAdaptiveActiveQuiz:quiz=>{window.persisted=structuredClone(quiz);}};
   const getMainUser=()=>uid?{uid}:null;
   const runTransaction=async(_db,fn)=>{
@@ -67,7 +67,13 @@ test('a late lesson cannot cross accounts or ranges, and valid lesson content us
   f.uid='u2';respond({scopeId:scope.scopeId,conceptId:quiz.adaptive.conceptId,concept:'最高點速率',explanation:'說明文字',example:'示例文字',through:2});await job;
   assert(!f.nodes.has('adaptive-concept-lesson'));
   f.uid='u1';f.response={ok:true,json:async()=>({scopeId:scope.scopeId,conceptId:quiz.adaptive.conceptId,concept:'最高點速率',explanation:'<script>bad</script>',example:'$v^2$ 示例',through:2})};await f.api.afterSaved(quiz);await tick();
-  const panel=f.nodes.get('adaptive-concept-lesson');assert(panel);assert.equal(panel.children[2].innerHTML,'SAFE:<script>bad</script>');assert.equal(f.window.currentActiveQuiz,quiz);
+  const panel=f.nodes.get('adaptive-concept-lesson');assert(panel);assert.equal(panel.tagName,'details');assert.equal(Boolean(panel.open),false);
+  assert.equal(panel.children[2].innerHTML,'SAFE:<script>bad</script>');
+  assert.equal(panel.children[0].children[0].textContent,'觀念補給 · 最高點速率');
+  const zoom=panel.children.find(node=>node.className==='adaptive-lesson-zoom');assert(zoom);
+  zoom.children[1].onclick();assert.equal(panel.styleProps['--adaptive-lesson-font-size'],'1.05rem');
+  zoom.children[0].onclick();assert.equal(panel.styleProps['--adaptive-lesson-font-size'],'0.95rem');
+  assert.equal(f.window.currentActiveQuiz,quiz);
 });
 test('unavailable storage retains observations in memory and normal question fetching still uses authenticated requests',async()=>{
   const f=fixture();f.storage.set=()=>{throw Error('quota');};f.api.answer(q(),true,false);await f.api.flush();assert.equal(f.patches.length,1);
