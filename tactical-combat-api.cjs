@@ -97,11 +97,11 @@ function patchedUser(user,patch){
   return next;
 }
 function manualLoadout(manualRecord,trainingAccessScore){
-  const {equipped,skillLevels}=Manuals.normalize(manualRecord);
+  const {equipped,skillLevels,loadouts,activeLoadout}=Manuals.normalize(manualRecord);
   const manualSkills=equipped.filter(id=>Manuals.meetsRealm(Manuals.BY_SKILL[id],trainingAccessScore));
   const manualSkillLevels=Object.fromEntries(manualSkills.filter(id=>skillLevels[id])
     .map(id=>[id,skillLevels[id]]));
-  return {trainingAccessScore,manualSkills,manualSkillLevels};
+  return {trainingAccessScore,manualSkills,manualSkillLevels,manualLoadoutName:loadouts[activeLoadout].name};
 }
 function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
@@ -322,7 +322,7 @@ async function settle(tx,db,s,userOverrides={}){
     const patch={};
     const pointer=exists(pointers[i]),campaign=pointer?.trial;
     const manualRef=db.collection(MANUALS).doc(a.uid);
-    if(s.mode==='pve'&&s.trial?.layoutVersion===3&&s.winner===a.team&&s.finishReason==='objective'&&['transport','sealing'].includes(s.objective?.type)){
+    if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&s.winner===a.team&&s.finishReason==='objective'&&['transport','sealing','defense'].includes(s.objective?.type)){
       const used=Object.keys(s.manualUsed?.[a.uid]||{}).filter(id=>Manuals.BY_BOOK[id]).slice(0,3);
       if(used.length){s.manualExp||={};s.manualExp[a.uid]||={};for(const id of used)s.manualExp[a.uid][id]=(s.manualExp[a.uid][id]||0)+Math.max(1,Math.floor(Manuals.expForBeast(s.trial.stage)/5));}
     }
@@ -403,7 +403,7 @@ async function start(db,uid,selection={},now=Date.now()){
     }else if(prior?.status==='waiting')return snapshot(prior,uid);
     else{
       const retry=mode==='pve'&&prior?.trial?.seed===campaign.seed&&prior.trial.stage===campaign.stage&&prior.winner!=='player';
-      const trial={...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):3};
+      const trial={...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):4};
       s=attachScopes(Rules.create({id:newId,mode,map:retry&&trial.layoutVersion===0?prior.map:map,players:[a],trial:mode==='pve'?trial:null,now}),[a]);
       // Actor construction deliberately limits public combat fields.
       s.actors[0].baseAtk=a.baseAtk;s.actors[0].baseMaxHp=a.baseMaxHp;s.actors[0].trainingAccessScore=a.trainingAccessScore;

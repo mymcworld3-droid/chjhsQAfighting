@@ -1,7 +1,7 @@
-import './tactical-rules.js?v=20261116-fourstep-sync-fix-v1';
+import './tactical-rules.js?v=20261116-pve-v4';
 import './tactical-animation.js';
 import './tactical-demo-rules.js';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261116-long-line-afterglow-v1';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261116-pve-v4';
 
 // An isolated, read-only arena. This controller never calls the battle API.
 export class EnemyDemo{

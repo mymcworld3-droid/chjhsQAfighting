@@ -226,8 +226,107 @@
     layout.layoutHash=(hash>>>0).toString(16).padStart(8,'0');
     return layout;
   }
+  function stageLayoutV4(seed,stage=1){
+    stage=Math.max(1,Math.min(1000000,num(stage)));
+    const stream=name=>seeded(String(seed)+':stage:'+stage+':v4:'+name);
+    const pick=(r,items)=>items[Math.floor(r()*items.length)];
+    const shuffle=(r,items)=>{items=items.slice();for(let i=items.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[items[i],items[j]]=[items[j],items[i]];}return items;};
+    const schedule=['elimination','elimination','elimination','elimination','elimination','defense','elimination','sealing','elimination','boss','defense','sealing','elimination','defense','boss','elimination','sealing','elimination','defense','boss'];
+    let mode;
+    if(stage<=20)mode=schedule[stage-1];
+    else {
+      const slot=(stage-21)%5,group=Math.floor((stage-21)/5);
+      mode=slot===4?'boss':shuffle(seeded(String(seed)+':v4:group:'+group),['elimination','elimination','defense','sealing'])[slot];
+    }
+    const gr=stream('geometry'),br=stream('biome'),or=stream('objectives'),rr=stream('obstacles'),er=stream('monsters');
+    const sizes={elimination:[[7,7],[9,7]],defense:[[9,7],[11,9]],sealing:[[9,7],[11,9],[13,9]],boss:[[11,9],[13,9]]};
+    const [width,height]=pick(gr,sizes[mode]);
+    const structures={elimination:['open','scatter','choke','ring'],defense:['open','scatter','dual'],sealing:['branch','corridor','dual','ring'],boss:['open','scatter']};
+    const structure=pick(gr,structures[mode]);
+    const introduced=MONSTERS.find(p=>p.unlockStage===stage);
+    const possible=introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
+    const theme=pick(br,possible),spawn={x:1,y:1+Math.floor(gr()*(height-2))};
+    const objective=mode==='defense'?{type:mode,shrine:{x:Math.floor(width/2),y:Math.floor(height/2)},rounds:4,completedRounds:0,hp:0,maxHp:0,spawnIndex:0,completed:false}:
+      mode==='sealing'?{type:mode,points:[{x:Math.floor(width*.55),y:1},{x:width-3,y:height-2},...(stage>=17&&or()<.5?[{x:Math.floor(width/2),y:Math.floor(height/2)}]:[])].map((p,i)=>({...p,kind:['shield','hazard','rage','maze'][(i+Math.floor((stage-8)/4))%4],hp:2,maxHp:2,activated:false})),completed:false}:
+      mode==='boss'?{type:mode,bossUid:'monster-0',completed:false}:{type:mode,completed:false};
+    const bossPos={x:width-4,y:Math.floor(height/2)-1};
+    const bossCells=mode==='boss'?[bossPos,{x:bossPos.x+1,y:bossPos.y},{x:bossPos.x,y:bossPos.y+1},{x:bossPos.x+1,y:bossPos.y+1}]:[];
+    const required=[spawn,...(objective.item?[objective.item]:[]),...(objective.destination?[objective.destination]:[]),...(objective.points||[]),...(objective.shrine?[objective.shrine]:[]),...bossCells];
+    const blocks=[],ground=Array(width*height).fill(theme.terrain);
+    const all=[];for(let y=0;y<height;y++)for(let x=0;x<width;x++)all.push({x,y});
+    function connected(extra=[]){
+      const occupied=new Set([...blocks,...extra].map(key));
+      if(required.some(p=>occupied.has(key(p))))return false;
+      const seen=new Set([key(spawn)]),queue=[spawn];
+      for(let i=0;i<queue.length;i++)for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const p={x:queue[i].x+dx,y:queue[i].y+dy},k=key(p);
+        if(p.x<0||p.y<0||p.x>=width||p.y>=height||occupied.has(k)||seen.has(k))continue;
+        seen.add(k);queue.push(p);
+      }
+      return required.every(p=>seen.has(key(p)))&&seen.size===width*height-occupied.size;
+    }
+    const candidates=shuffle(rr,all.filter(p=>required.every(q=>dist(p,q)>1)));
+    const midX=Math.floor(width/2),midY=Math.floor(height/2);
+    function structurePriority(p){
+      if(structure==='open')return Math.abs(p.x-midX)+Math.abs(p.y-midY);
+      if(structure==='ring')return Math.max(Math.abs(p.x-midX),Math.abs(p.y-midY))===2&&p.x!==midX&&p.y!==midY?100:0;
+      if(structure==='dual')return p.y===midY&&p.x>1&&p.x<width-2?100:0;
+      if(structure==='choke')return p.x===midX&&p.y!==midY?100:0;
+      if(structure==='branch')return (p.x===midX&&p.y!==midY||p.y===midY&&p.x>midX+1&&p.x<width-2)?100:0;
+      if(structure==='corridor')return p.x>1&&p.x<width-2&&p.x%3===0&&p.y!==(Math.floor(p.x/3)%2?1:height-2)?100:0;
+      return 0;
+    }
+    candidates.sort((a,b)=>structurePriority(b)-structurePriority(a));
+    const bounds=mode==='sealing'?[.20,.30]:mode==='boss'?[.06,.14]:mode==='defense'?[.10,.18]:[.08,.16];
+    const ratio=bounds[0]+rr()*(bounds[1]-bounds[0]);
+    const desired=Math.min(Math.floor(width*height*bounds[1]),Math.max(Math.ceil(width*height*bounds[0]),Math.round(width*height*ratio)));
+    for(const p of candidates){
+      if(blocks.length>=desired)break;
+      blocks.push({...p,kind:theme.terrain===13?'rock':rr()<.2?'water':theme.props});
+      const escape=mode!=='boss'||[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>bossCells.every(c=>{const q={x:c.x+dx,y:c.y+dy};return q.x>=0&&q.y>=0&&q.x<width&&q.y<height&&!blocks.some(b=>key(b)===key(q));}));
+      if(!connected()||!escape)blocks.pop();
+    }
+    for(const b of blocks)if(b.kind==='water')ground[b.y*width+b.x]=4;
+    const pool=theme.enemies.filter(id=>MONSTERS[id].unlockStage<=stage),enemyCells=[];
+    const count=mode==='elimination'?Math.min(4,1+Math.floor((stage-1)/3)):mode==='defense'?3:mode==='sealing'?2+Math.floor(er()*4):1+Math.floor(er()*4);
+    const spots=shuffle(er,all.filter(p=>dist(p,spawn)>=3&&required.every(q=>key(p)!==key(q))&&!blocks.some(b=>key(b)===key(p))));
+    const enemies=[];
+    for(let i=0;i<count;i++){
+      let p;
+      if(mode==='boss'&&i===0)p=bossPos;
+      else {
+        if(mode==='defense'){
+          const entries=[{x:0,y:midY},{x:width-1,y:midY},{x:midX,y:0},{x:midX,y:height-1}];
+          const entry=entries[(i+stage)%entries.length];
+          spots.sort((a,b)=>dist(a,entry)-dist(b,entry));
+        }
+        const index=spots.findIndex(candidate=>!enemyCells.some(c=>key(c)===key(candidate))&&connected([...enemyCells,candidate].filter(c=>!bossCells.some(b=>key(b)===key(c)))));
+        if(index<0)break;p=spots.splice(index,1)[0];
+      }
+      const bossSpecies=[8,5,10][(Math.floor(stage/5)-2)%3];
+      const species=mode==='boss'&&i===0?bossSpecies:i===0&&introduced?introduced.species:pick(er,pool);
+      const boss=mode==='boss'&&i===0;
+      enemyCells.push(...(boss?bossCells:[p]));
+      const role=mode==='defense'?'assault':mode==='sealing'&&i%2?'guard':mode==='boss'&&!boss?'guard':'chase';
+      enemies.push({...p,species,name:boss?['巖甲巨獸','巨型妖藤','赤焰巨獸'][(Math.floor(stage/5)-2)%3]:TRIAL_ENEMIES[species],role,home:{...p},...(boss?{boss:true,bossKind:['rock','vine','flame'][(Math.floor(stage/5)-2)%3],footprint:{width:2,height:2}}:{}),
+        hpFactor:(species===8||species===18?3.8:2.8+er()*.6)*(1+Math.min(stage-1,30)*.035),
+        attackFactor:(species===18?.7:.48+er()*.15)*(1+Math.min(stage-1,30)*.025),
+        intentRange:[3,6,12,18].includes(species)?3:2,intentRadius:species===18?1:0,moveSteps:species===8||species===18?1:2,level:stage});
+    }
+    const variant='';
+    const maze=objective.points?.find(p=>p.kind==='maze');
+    if(maze&&blocks.length){
+      const gate=blocks.slice().sort((a,b)=>dist(a,{x:midX,y:midY})-dist(b,{x:midX,y:midY}))[0];
+      maze.gate=point(gate);
+    }
+    const layout={seed,stage,layoutVersion:4,attempt:0,map:'ruins',width,height,title:theme.name,biome:theme.name,structure,terrain:theme.terrain,ground,blocks,spawn,enemies,mode,variant,objective};
+    let hash=2166136261;for(const c of JSON.stringify(layout)){hash^=c.charCodeAt(0);hash=Math.imul(hash,16777619);}
+    layout.layoutHash=(hash>>>0).toString(16).padStart(8,'0');
+    return layout;
+  }
   function stageLayout(seed,stage=1,layoutVersion=2){
     if(layoutVersion===3)return stageLayoutV3(seed,stage);
+    if(layoutVersion===4)return stageLayoutV4(seed,stage);
     stage=Math.max(1,Math.min(1000000,num(stage)));const random=seeded(seed+':stage:'+stage);
     const m=MAPS[Math.floor(random()*MAPS.length)],introduced=layoutVersion>=2?MONSTERS.find(p=>p.unlockStage===stage):null;
     const themes=layoutVersion<2?LEGACY_TRIAL_TERRAINS:introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
@@ -329,6 +428,7 @@
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
       ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
+      ...(!raw.bot&&raw.manualLoadoutName?{manualLoadoutName:String(raw.manualLoadoutName).slice(0,40)}:{}),
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }
@@ -346,15 +446,22 @@
       turn:1,turnUid:players[0].uid,turnStartedAtMs:now,deadlineMs:mode==='pvp'?now+LIMITS.turnMs:0,
       createdAtMs:now,updatedAtMs:now,winner:null,finishReason:'',effects:[],events:[],receipts:[],rewarded:[],turnTimeouts:{}};
     if(layout){s.map=layout.map;s.trial={version:1,seed:layout.seed,stage:layout.stage,layoutVersion:layout.layoutVersion,title:layout.title,
-      ...(layout.layoutVersion===3?{mode:layout.mode,variant:layout.variant,biome:layout.biome,structure:layout.structure,attempt:layout.attempt,layoutHash:layout.layoutHash}:{} )};s.ground=layout.ground;s.blocks=layout.blocks;
-      if(layout.layoutVersion===3)s.objective=clone(layout.objective);}
+      ...(layout.layoutVersion>=3?{mode:layout.mode,variant:layout.variant,biome:layout.biome,structure:layout.structure,attempt:layout.attempt,layoutHash:layout.layoutHash}:{} )};s.ground=layout.ground;s.blocks=layout.blocks;
+      if(layout.layoutVersion>=3)s.objective=clone(layout.objective);}
     else if(mode==='pve'&&trial)s.trial={version:1,seed:trial.seed,stage:trial.stage,layoutVersion:0,title:m.name};
     else if(m.id!=='courtyard'){
       for(let y=1;y<m.height-1;y++)if(y!==mid)s.blocks.push({x:Math.floor(m.width/2),y});
       s.blocks.push({x:2,y:1},{x:m.width-3,y:m.height-2});
     }else s.blocks.push({x:3,y:1},{x:3,y:5});
     s.actors=players.map((p,i)=>actor({...p,team:mode==='pvp'?p.uid:'player'},layout?layout.spawn:{x:i?m.width-2:1,y:mid}));
+    if(layout?.layoutVersion===4)s.pveMetrics={mode:layout.mode,answers:0,staminaSpent:0,manualCasts:{},loadout:[...(s.actors[0].manualSkills||[])]};
     const enemyScaleAttack=s.actors[0].enemyScaleAttack||s.actors[0].atk;
+    if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
+      // Scale with the same trusted attack snapshot used for monster damage,
+      // so defensive pressure does not disappear for high-health builds.
+      s.objective.maxHp=Math.max(1,Math.round(enemyScaleAttack*2.5));
+      s.objective.hp=s.objective.maxHp;
+    }
     if(layout){
       for(const [i,m]of layout.enemies.entries())s.actors.push(actor({...m,uid:'monster-'+i,bot:true,team:'monster',
         atk:Math.round(enemyScaleAttack*m.attackFactor),maxHp:Math.round(trialMonsterHp(m.level,m.species,enemyScaleAttack*m.hpFactor)*(m.boss?1.7:1))},{x:m.x,y:m.y}));
@@ -406,9 +513,10 @@
   function checkFinished(s){
     const human=s.actors.filter(a=>!a.bot),teams=[...new Set(s.actors.filter(alive).map(a=>a.team))];
     if(s.status!=='active')return;
-    if(s.mode==='pve'&&s.trial?.layoutVersion===3&&s.objective){
+    if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&s.objective){
       const hero=human[0],o=s.objective;
       if(!alive(hero)){s.status='finished';s.winner='monster';s.finishReason='hp';}
+      else if(o.type==='defense'&&o.hp<=0){s.status='finished';s.winner='monster';s.finishReason='shrine';}
       else {
         if(o.type==='transport'){
           if(!o.carrying&&o.item&&key(hero)===key(o.item)){
@@ -416,9 +524,10 @@
           }
           if(o.carrying&&o.destination&&key(hero)===key(o.destination))o.completed=true;
         }else if(o.type==='sealing'){
-          for(const p of o.points||[])if(!p.activated&&key(hero)===key(p)){p.activated=true;log(s,'陣眼已啟動','objective');}
+          if(s.trial.layoutVersion===3)for(const p of o.points||[])if(!p.activated&&key(hero)===key(p)){p.activated=true;log(s,'陣眼已啟動','objective');}
           o.completed=!!o.points?.length&&o.points.every(p=>p.activated);
-        }else if(o.type==='boss')o.completed=!!s.actors.find(a=>a.uid===o.bossUid&&!alive(a));
+        }else if(o.type==='defense')o.completed=o.completedRounds>=o.rounds;
+        else if(o.type==='boss')o.completed=!!s.actors.find(a=>a.uid===o.bossUid&&!alive(a));
         else if(o.type==='elimination')o.completed=!s.actors.some(a=>a.bot&&alive(a));
         if(o.completed&&hero.answered>0){s.status='finished';s.winner=hero.team;s.finishReason='objective';}
         else if(o.completed&&!o.awaitingAnswer){o.awaitingAnswer=true;log(s,'目標已完成，請先完成一題作答','objective');}
@@ -430,10 +539,19 @@
         const [a,b]=human,delta=a.hp/a.maxHp-b.hp/b.maxHp;s.winner=Math.abs(delta)<1e-9?'draw':delta>0?a.team:b.team;
       }
     }
-    if(s.status==='finished')s.deadlineMs=0;
+    if(s.status==='finished'){
+      s.deadlineMs=0;
+      if(s.pveMetrics&&!s.pveMetrics.outcome){
+        s.pveMetrics.outcome=s.winner===human[0]?.team?'win':'loss';s.pveMetrics.reason=s.finishReason;
+        s.pveMetrics.turns=human[0]?.turns||0;
+      }
+    }
   }
   function damage(s,source,target,raw,opts={}){
     if(!alive(source)||!alive(target))return 0;
+    const active=s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?s.objective.points.filter(p=>!p.activated):[];
+    if(source.bot&&active.some(p=>p.kind==='rage'&&dist(p,source)<=3))raw*=1.25;
+    if(target.bot&&active.some(p=>p.kind==='shield'&&dist(p,target)<=3)&&!opts.pierce)raw*=.65;
     let amount=Math.max(0,Math.round(raw));if(!opts.pierce)amount=Math.round(amount*(1-(target.guard||0)));
     const shieldScale=opts.shieldMultiplier||1,absorbed=opts.pierce?0:Math.min(target.shield,Math.round(amount*shieldScale));target.shield-=absorbed;amount=Math.max(0,amount-Math.ceil(absorbed/shieldScale));
     const dealt=Math.min(target.hp,amount);target.hp-=dealt;
@@ -457,6 +575,20 @@
       damage(s,target,source,target.atk*reflect,{reflected:true,skill:manualId?'manual-counter':'counter',manualId,strike:opts.strike});
     }
     return dealt;
+  }
+  const sealAt=(s,p)=>s.trial?.layoutVersion===4&&s.objective?.type==='sealing'?(s.objective.points||[]).find(q=>!q.activated&&key(q)===key(p)):null;
+  function strikeSeals(s,cells,seen=new Set()){
+    if(s.trial?.layoutVersion!==4||s.objective?.type!=='sealing')return;
+    for(const p of s.objective.points||[]){
+      if(p.activated||seen.has(key(p))||!cells.some(c=>key(c)===key(p)))continue;
+      seen.add(key(p));p.hp=Math.max(0,p.hp-1);
+      if(!p.hp){
+        p.activated=true;if(p.gate)s.blocks=s.blocks.filter(b=>key(b)!==key(p.gate));
+        if(p.kind==='hazard'&&!s.objective.points.some(q=>!q.activated&&q.kind==='hazard'))s.objective.hazards=[];
+      }
+      log(s,p.activated?'陣眼已破除':'陣眼受擊 · 剩餘 '+p.hp+' 次','objective',
+        {animation:{kind:'impact',style:'blast',cells:[point(p)],color:p.activated?'#9ef4dc':'#e9c677'}});
+    }
   }
   function pushDirection(a,target){
     const dx=target.x-a.x,dy=target.y-a.y;
@@ -556,9 +688,11 @@
   }
   function chainFists(s,a,sk,d,animate=true){
     const cells=new Map(),path=[point(a)];
+    const sealsHit=new Set();
     for(let step=0;step<sk.steps&&alive(a);step++){
       const row=frontStrike(s,a,d,false),targets=strikeTargets(s,a,row);
       if(!row.length)break;
+      if(animate)strikeSeals(s,row,sealsHit);
       for(const cell of row)cells.set(key(cell),cell);
       if(animate&&step>0)log(s,a.name+'踏步連推 · 第 '+(step+1)+' 段','cast',{
         actor:a.uid,skill:sk.id,animation:{kind:'cast',style:sk.kind,origin:point(a),
@@ -652,9 +786,9 @@
     if((sk.unlimited||sk.range>0)&&!sight(s,a,p))fail('石障擋住了視線');
     if(sk.kind==='line'&&!line(s,a,p,lineRange(s,sk)).length)fail('請選擇同一行或同一列');
     const t=at(s,p);
-    if(['hit','lunge','swap'].includes(sk.kind)&&(!t||t.team===a.team))fail('請選擇敵人');
+    if(['hit','lunge','swap'].includes(sk.kind)&&(!t||t.team===a.team)&&!sealAt(s,p))fail('請選擇敵人');
     if(sk.kind==='blink'&&t)fail('落點必須是空地');
-    if(sk.kind==='lunge'){
+    if(sk.kind==='lunge'&&t){
       const routes=neighbours(s,t).map(n=>path(s,a,n,a.uid)).filter(r=>r&&r.length-1<=sk.range);
       if(!routes.length)fail('無法突進至敵人身旁');
     }
@@ -662,8 +796,10 @@
   // Compatibility for old saves: old cooldown timestamps cannot prevent casting.
   function cooldownUntil(){return 0;}
   function cast(s,a,sk,p){
-    validateSkill(s,a,sk,p);a.stamina-=techniqueCost(a,sk);a.attacks++;
-    if(s.mode==='pve'&&s.trial?.layoutVersion===3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
+    validateSkill(s,a,sk,p);const cost=techniqueCost(a,sk);a.stamina-=cost;a.attacks++;
+    if(s.pveMetrics){s.pveMetrics.staminaSpent+=cost;if(sk.manualId)s.pveMetrics.manualCasts[sk.id]=(s.pveMetrics.manualCasts[sk.id]||0)+1;}
+    const fixedTarget=sealAt(s,p);
+    if(s.mode==='pve'&&s.trial?.layoutVersion>=3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
     const cells=skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
     const cuts=rays&&!sk.orthogonal?crossedSwordLines(rays,p):null;
@@ -680,6 +816,9 @@
         // A stored Firestore array cannot directly contain another array.
         ...(rays?{rays:rays.map(cells=>({cells}))}:{}),...(cuts?{cuts:cuts.map(cells=>({cells}))}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
+    if(!['fist-chain','meteor','restore','counter','fist-focus'].includes(sk.kind)&&(sk.kind!=='blink'||sk.burst))strikeSeals(s,cells);
+    // Fixed objectives can be hit by targeted techniques, but cannot be moved.
+    if(fixedTarget&&!at(s,p)&&['hit','lunge','swap'].includes(sk.kind))return;
     if(sk.kind==='fist-focus'){
       a.fistFocusUntil=a.turns+2;
       return;
@@ -884,13 +1023,26 @@
   }
   function prepareIntents(s){
     if(s.mode!=='pve')return;const hero=s.actors[0];
+    if(s.trial?.layoutVersion===4&&s.objective?.type==='sealing'){
+      const active=s.objective.points.some(p=>!p.activated&&p.kind==='hazard');
+      s.objective.hazards=active&&s.turn%2===0?[point(hero)]:[];
+    }
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
+      if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
+        const shrine=s.objective.shrine;
+        const target=dist(m,hero)<=1?hero:dist(m,shrine)<=1?shrine:null;
+        m.intent={version:2,kind:target?'defense-attack':'advance',cells:target?[point(target)]:[],origin:point(m),
+          target:target?point(target):point(shrine),text:target?'下次：攻擊'+(target===hero?'修士':'靈陣'):'下次：逼近靈陣'};
+        continue;
+      }
       if(m.boss){
         if(s.trial?.layoutVersion===4&&m.bossKind){
           const pattern=bossPatternV4(s,m,hero),ready=pattern.cells.some(p=>key(p)===key(hero));
+          if(m.phase===1&&pattern.phase===2)log(s,m.name+'進入第二階段','objective',
+            {actor:m.uid,animation:{kind:'cast',style:'blast',origin:point(m),target:point(m),cells:footprint(m),color:'#f0a36a'}});
           m.phase=pattern.phase;
           m.intent={version:2,kind:ready?'boss-attack':'advance',cells:ready?pattern.cells:[],origin:point(m),target:point(hero),
-            slow:pattern.slow,power:1,text:ready?'下次：'+pattern.name+(pattern.phase===2?'（第二階段）':''):'下次：大型靈獸逼近'};
+            charge:pattern.name==='直線衝擊',slow:pattern.slow,power:1,text:ready?'下次：'+pattern.name+(pattern.phase===2?'（第二階段）':''):'下次：大型靈獸逼近'};
           continue;
         }
         const phase=m.hp/m.maxHp<.5?2:1,radius=phase===2&&s.turn%2===0?2:1;
@@ -913,11 +1065,40 @@
   }
   function monsterTurn(s,m,hero){
     const intent=m.intent;
+    if(intent?.kind==='defense-attack'){
+      if(intent.origin&&key(intent.origin)!==key(m))return;
+      const p=intent.target,o=s.objective;
+      log(s,m.name+'發動攻擊','monster-attack',{actor:m.uid,animation:{kind:'cast',style:'point',origin:point(m),target:p,cells:intent.cells,color:'#e4a06d'}});
+      if(key(p)===key(hero))damage(s,m,hero,m.atk,{skill:'monster-defense'});
+      if(key(p)===key(o.shrine)){
+        const dealt=Math.min(o.hp,m.atk);o.hp-=dealt;
+        log(s,'靈陣受擊 −'+dealt+' · 耐久 '+o.hp+'/'+o.maxHp,'objective',
+          {animation:{kind:'impact',style:'blast',cells:[point(o.shrine)],color:'#f39b78'}});
+      }
+      return;
+    }
+    if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'&&intent?.kind==='advance'){
+      const origin=point(m),goal=s.objective.shrine,queue=[origin],parents=new Map([[key(origin),null]]);
+      for(let i=0;i<queue.length;i++)for(const p of neighbours(s,queue[i])){
+        const k=key(p);if(parents.has(k)||blocked(s,p)||at(s,p)||k===key(goal))continue;
+        parents.set(k,queue[i]);queue.push(p);
+      }
+      queue.sort((a,b)=>dist(a,goal)-dist(b,goal)||dist(a,origin)-dist(b,origin));
+      let p=queue[0],route=[];while(p){route.unshift(p);p=parents.get(key(p));}
+      route=route.slice(0,1+Math.max(1,Math.floor(2/(1+(m.slow||0)))));m.slow=0;
+      if(route.length>1){Object.assign(m,route.at(-1));motion(s,m,route,'walk',m.name+'逼近靈陣');}
+      return;
+    }
     if(m.boss&&intent?.kind==='boss-attack'){
       if(intent.origin&&key(intent.origin)!==key(m))return;
       log(s,m.name+'發動蓄勢攻擊','monster-attack',{actor:m.uid,animation:{kind:'cast',style:'blast',origin:point(m),target:intent.target,cells:intent.cells,color:'#e4a06d'}});
       if(intent.cells.some(p=>key(p)===key(hero))){damage(s,m,hero,m.atk,{skill:'monster-boss'});if(alive(hero)&&intent.slow){hero.slow=1;hero.slowUntil=hero.turns+1;}}
       else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
+      if(intent.charge){
+        const d=attackDirection({x:m.x+.5,y:m.y+.5},intent.target),route=[point(m)];
+        for(let i=0;d&&i<2;i++){const p={x:m.x+d.x,y:m.y+d.y};if(!canOccupy(s,m,p))break;Object.assign(m,p);route.push(point(m));}
+        motion(s,m,route,'dash',m.name+'向前衝撞');
+      }
       return;
     }
     if(m.boss){
@@ -972,6 +1153,7 @@
     s.effects=s.effects.filter(e=>!due.includes(e));
     for(const e of due){
       log(s,'隕星落下','impact',{actor:a.uid,skill:e.skill,animation:{kind:'impact',style:'meteor',cells:e.cells,color:'#b5a1e7'}});
+      strikeSeals(s,e.cells);
       for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&intersects(t,e.cells)))damage(s,a,t,e.power,{skill:e.skill});
     }
     checkFinished(s);
@@ -994,9 +1176,30 @@
   function end(s,now){
     if(s.mode==='pve'){
       const hero=s.actors[0];
+      if(s.trial?.layoutVersion===4&&s.objective?.type==='sealing'&&s.objective.hazards?.some(p=>key(p)===key(hero))){
+        const hit=Math.min(hero.hp,Math.max(1,Math.round(hero.maxHp*.12)));hero.hp-=hit;
+        log(s,'妖煞陣爆發 −'+hit,'damage',{target:hero.uid,damage:hit,animation:{kind:'damage',changes:[appearance(hero)],numbers:[{uid:hero.uid,damage:hit}]}});
+      }
       for(const m of s.actors.filter(a=>a.bot&&alive(a))){
+        if(!alive(hero)||s.objective?.type==='defense'&&s.objective.hp<=0)break;
         monsterTurn(s,m,hero);
         if(!alive(hero))break;
+      }
+      if(s.trial?.layoutVersion===4&&s.objective?.type==='defense'){
+        const o=s.objective;o.completedRounds++;
+        if(alive(hero)&&o.hp>0&&o.completedRounds<o.rounds&&s.actors.filter(a=>a.bot&&alive(a)).length<5){
+          const entries=[{x:0,y:Math.floor(s.height/2)},{x:s.width-1,y:Math.floor(s.height/2)},{x:Math.floor(s.width/2),y:0},{x:Math.floor(s.width/2),y:s.height-1}];
+          const entry=entries[o.spawnIndex%entries.length],options=[];
+          for(let y=0;y<s.height;y++)for(let x=0;x<s.width;x++){
+            const p={x,y};if(!blocked(s,p)&&!at(s,p)&&dist(p,o.shrine)>=3)options.push(p);
+          }
+          options.sort((a,b)=>dist(a,entry)-dist(b,entry)||a.y-b.y||a.x-b.x);
+          const originals=s.actors.filter(a=>a.bot&&/^monster-[0-9]+$/.test(a.uid)),template=originals[o.spawnIndex%originals.length];
+          if(options[0]&&template){
+            const uid='wave-'+o.spawnIndex++;const newcomer=actor({...template,uid,role:'assault'},options[0]);
+            s.actors.push(newcomer);log(s,newcomer.name+'加入戰場','objective');
+          }
+        }
       }
       s.turn++;checkFinished(s);if(s.status==='active'){begin(s,hero,now);prepareIntents(s);}
     }else if(s.quizRound){
@@ -1017,6 +1220,7 @@
       if(a.slow&&cost>2)fail('緩速中，本次最多移動 2 格');
       if(cost>a.stamina)fail('體力不足以走到這裡');
       a.stamina-=cost;a.x=p.x;a.y=p.y;a.slow=0;
+      if(s.pveMetrics)s.pveMetrics.staminaSpent+=cost;
       log(s,a.name+'移動 '+(route.length-1)+' 格，消耗 '+cost+' 體力','move',{actor:a.uid,path:route,animation:{kind:'move',style:'walk',changes:[appearance(a)]}});
     }else if(command.type==='skill'){
       // Golden-core techniques are retired from tactical combat, including
@@ -1036,7 +1240,7 @@
     }else if(!endsTurn)fail('未知的戰場行動');
     a.actions++;(s.turnTimeouts||={})[uid]=0;
     // A displacement or the last hit can finish an objective before enemies act.
-    if(s.mode==='pve'&&s.trial?.layoutVersion===3)checkFinished(s);
+    if(s.mode==='pve'&&s.trial?.layoutVersion>=3)checkFinished(s);
     if(endsTurn&&s.status==='active'){
       log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});
       end(s,now);
@@ -1051,6 +1255,7 @@
     const s=clone(timed),a=canAnswer(s,uid,now);
     const before=a.stamina;a.stamina=Math.min(LIMITS.stamina,a.stamina+(correct?LIMITS.correct:LIMITS.wrong));
     a.questions++;a.answered++;if(correct)a.correct++;
+    if(s.pveMetrics)s.pveMetrics.answers++;
     log(s,a.name+(correct?'答對':'訂正')+'，體力 +'+(a.stamina-before),'answer',{actor:uid,correct,gain:a.stamina-before,
       animation:{kind:'answer',changes:[appearance(a)],numbers:[{uid,gain:a.stamina-before}]}});
     if(!s.quizRound)(s.turnTimeouts||={})[uid]=0;
@@ -1059,7 +1264,7 @@
       else if(s.phase==='waiting-answer')begin(s,a,now);
     }
     s.revision++;s.updatedAtMs=now;
-    if(s.mode==='pve'&&s.trial?.layoutVersion===3)checkFinished(s);
+    if(s.mode==='pve'&&s.trial?.layoutVersion>=3)checkFinished(s);
     return s;
   }
   function expire(state,now=Date.now()){
@@ -1098,6 +1303,7 @@
     const s=clone(state);if(!s.actors.some(a=>a.uid===uid))fail('你不在此戰場');
     if(s.status==='finished')return s;
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
+    if(s.pveMetrics)Object.assign(s.pveMetrics,{outcome:'loss',reason:'forfeit',turns:s.actors.find(a=>a.uid===uid)?.turns||0});
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
   return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});

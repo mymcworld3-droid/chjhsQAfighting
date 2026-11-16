@@ -1,8 +1,8 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {skillArt} from './manual-art.js';
-import './tactical-rules.js?v=20261116-stability-v1';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261116-stability-v1';
-import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-loadout-presets-v1';
+import './tactical-rules.js?v=20261116-pve-v4';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261116-pve-v4';
+import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
 
@@ -108,6 +108,7 @@ function ensure(){
     else if(b.hasAttribute('data-resume'))paint();
     else if(b.hasAttribute('data-hub')){hideModal();mode==='pve'?close():renderHub();}
     else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open('pve');
+    else if(b.hasAttribute('data-manual-training')){close();window.switchToPage?.('page-training');}
     else if(b.hasAttribute('data-exit'))close();
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
@@ -566,8 +567,11 @@ function paint({preserveModal=false}={}){
   if(objective){
     const living=state.actors.filter(a=>a.bot&&a.hp>0).length;
     const label=state.trial?.variant?.includes('breakthrough')?'突圍運送':objective.item?'尋物運送':'運送';
+    const sealLabels={shield:'護：減傷',hazard:'煞：危險格',rage:'獸：增攻',maze:'迷：開路'};
+    const sealEffects=[...new Set((objective.points||[]).filter(p=>!p.activated).map(p=>sealLabels[p.kind]).filter(Boolean))].join('／');
     const text=objective.type==='transport'?(objective.carrying?`${label} · 將靈物送至交付點`:`${label} · 先取得靈物`):
-      objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼`:
+      objective.type==='defense'?`鎮守 · ${objective.completedRounds} / ${objective.rounds} 回合 · 靈陣 ${objective.hp} / ${objective.maxHp}`:
+      objective.type==='sealing'?`封印 · ${objective.points.filter(p=>p.activated).length} / ${objective.points.length} 陣眼${state.trial?.layoutVersion===4?' · 攻擊陣眼'+(sealEffects?' · '+sealEffects:''):''}`:
       objective.type==='boss'?'首領 · 擊敗大型靈獸':`討伐 · 剩餘 ${living} 隻靈獸`;
     objectiveNode.textContent=objective.completed&&!me.answered?'目標完成 · 請先作答一題':text;
   }
@@ -764,7 +768,7 @@ function resultDialog(){
   const drop=state.manualDrops?.[uid];
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p>${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}<button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-exit>返回宗門</button>`);return;
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p>${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}<button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);return;
   }
   showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
 }

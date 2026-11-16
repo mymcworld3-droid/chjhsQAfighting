@@ -538,6 +538,29 @@ async function main(){
       assert.ok(result.actors[1].hp<500,'the map click executes a valid directional attack without confirmation');
       assert.equal(result.actors[0].stamina,6);
       assert.equal(await quick.locator('[data-energy-segment].is-filled').count(),6);
+      // Restore two v4 missions in the real UI in both orientations. The
+      // backing store is local and the normal server remains authoritative.
+      for(const [stage,size] of [[6,{width:393,height:852}],[8,{width:844,height:390}]]){
+        const key=service.ROOMS+'/'+result.id,saved=db.records.get(key);
+        const mission=Rules.create({id:result.id,players:[saved.actors[0]],trial:{seed:'browser-v4',stage,layoutVersion:4}});
+        mission.pendingIntroductions={u1:[]};mission.revision=saved.revision+1;
+        mission.blocks=[];Object.assign(mission.actors[0],{x:1,y:1,stamina:10,answered:1,correct:1});
+        if(stage===8){
+          mission.actors=mission.actors.slice(0,2);Object.assign(mission.actors[1],{x:6,y:6});
+          mission.objective={type:'sealing',points:[{x:2,y:1,kind:'shield',hp:2,maxHp:2,activated:false}],completed:false};
+        }
+        db.records.set(key,mission);await quick.setViewportSize(size);await quick.reload();await quick.locator('#entry').click();
+        await quick.locator('.tc-arena canvas').waitFor();await quick.locator('#startup-cloud-curtain').waitFor({state:'detached'});
+        assert.match(await quick.locator('[data-objective]').textContent(),stage===6?/鎮守.*靈陣/:/封印.*攻擊陣眼/);
+        if(stage===6){
+          await quick.locator('[data-end]').click();await quick.waitForFunction(()=>document.querySelector('[data-objective]')?.textContent.includes('1 / 4 回合'));
+          assert.equal((await read(quick)).objective.completedRounds,1);
+        }else{
+          await quick.locator('[data-action="attack"]').click();await cell(quick,2,1);
+          await quick.waitForFunction(()=>document.querySelector('[data-energy-number]')?.textContent==='8');
+          assert.equal((await read(quick)).objective.points[0].hp,1);
+        }
+      }
       assert.deepEqual(errors,[]);
       console.log('Exact sketch browser check passed: only the required controls in three viewport orientations, real server attack triggered by one tile tap.');
       return;

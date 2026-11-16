@@ -1,0 +1,22 @@
+name: Tactical browser acceptance
+
+on:
+  push:
+    branches: [stamina-battle]
+  pull_request:
+    branches: [stamina-battle, main]
+
+jobs:
+  mobile-battle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --no-audit --no-fund
+      - run: npm install --no-save --no-audit --no-fund playwright@1.62.1
+      - run: npx playwright install --with-deps chromium
+      - name: Portrait and landscape battle acceptance
+        run: TACTICAL_SKETCH_ONLY=1 node scripts/test-tactical-browser.cjs

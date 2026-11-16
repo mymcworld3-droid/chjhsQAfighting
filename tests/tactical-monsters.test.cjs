@@ -110,8 +110,8 @@ test('multiple new species are queued once each and interrupted introductions su
   assert.deepEqual((await api.state(db,'u1',now)).newEnemies,[1]);
   const before=JSON.stringify([...db.records]);await api.state(db,'u1',now);assert.equal(JSON.stringify([...db.records]),before,'ordinary state reads do not write');
 });
-test('retrying v1 and pre-seed battles preserves their map before upgrading on a later stage',async()=>{
-  for(const version of [0,1]){
+test('retrying old and v4 battles preserves their map before upgrading on a later stage',async()=>{
+  for(const version of [0,1,3,4]){
     const db=database(),first=await api.start(db,'u1',{mode:'pve'},now),pointer=db.records.get(api.PLAYERS+'/u1');
     const old=R.create({id:first.id,mode:'pve',map:'bamboo',players:[{uid:'u1',atk:200,maxHp:1100}],trial:{...pointer.trial,layoutVersion:version},now});
     db.records.set(api.ROOMS+'/'+first.id,old);await api.command(db,'u1',{type:'leave',roomId:first.id,requestId:'old-layout-leave-'+version},now);
@@ -119,9 +119,9 @@ test('retrying v1 and pre-seed battles preserves their map before upgrading on a
     assert.equal(retry.trial.layoutVersion,version);assert.equal(retry.map,old.map);assert.deepEqual(retry.blocks,old.blocks);assert.deepEqual(retry.ground,old.ground);
     assert.deepEqual(retry.actors.map(a=>[a.species,a.x,a.y,a.maxHp]),old.actors.map(a=>[a.species,a.x,a.y,a.maxHp]));
     const finishing=db.records.get(api.ROOMS+'/'+retry.id);finishing.blocks=[];finishing.actors=finishing.actors.slice(0,2);
-    Object.assign(finishing.actors[0],{x:1,y:3,stamina:4});Object.assign(finishing.actors[1],{x:2,y:3,hp:1});
+    Object.assign(finishing.actors[0],{x:1,y:3,stamina:4,answered:1,correct:1});Object.assign(finishing.actors[1],{x:2,y:3,hp:1});
     await api.command(db,'u1',{type:'attack',x:2,y:3,roomId:retry.id,revision:retry.revision,requestId:'old-layout-win-'+version},now);
-    const next=await api.start(db,'u1',{mode:'pve'},now);assert.equal(next.trial.stage,2);assert.equal(next.trial.layoutVersion,3);
+    const next=await api.start(db,'u1',{mode:'pve'},now);assert.equal(next.trial.stage,2);assert.equal(next.trial.layoutVersion,4);
   }
 });
 test('v1 seeded geometry and enemy snapshots remain compatible with the previous generator',()=>{

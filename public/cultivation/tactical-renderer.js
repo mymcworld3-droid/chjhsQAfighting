@@ -1,5 +1,5 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
-import './tactical-rules.js?v=20261116-stability-v1';
+import './tactical-rules.js?v=20261116-pve-v4';
 import './tactical-animation.js?v=20261116-stability-v1';
 import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';
@@ -366,12 +366,18 @@ export class TacticalRenderer{
     if(objective?.type==='transport'){
       if(objective.item&&!objective.item.collected)markers.push({...objective.item,label:'物',color:'#f7d975'});
       if(objective.destination)markers.push({...objective.destination,label:'交',color:'#8ee6d0'});
-    }else if(objective?.type==='sealing')for(const p of objective.points||[])markers.push({...p,label:p.activated?'✓':'陣',color:p.activated?'#b5c4b7':'#a7e8ff'});
+    }else if(objective?.type==='defense')markers.push({...objective.shrine,label:'守',color:'#75e9b2'});
+    else if(objective?.type==='sealing')for(const p of objective.points||[])markers.push({...p,label:p.activated?'✓':({shield:'護',hazard:'煞',rage:'獸',maze:'迷'}[p.kind]||'陣'),color:p.activated?'#b5c4b7':'#a7e8ff'});
+    for(const p of objective?.hazards||[])fill(p,'#f24c4866','#ffb1a3');
     for(const p of markers){
       const x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;c.save();c.strokeStyle=p.color;c.fillStyle='#102b2bcc';c.lineWidth=Math.max(2,cell*.06);
       c.beginPath();c.arc(x,y,cell*.34,0,Math.PI*2);c.fill();c.stroke();c.fillStyle=p.color;c.font=`bold ${Math.max(10,cell*.3)}px system-ui`;c.textAlign='center';c.textBaseline='middle';c.fillText(p.label,x,y);c.restore();
+      if(objective?.type==='defense'){
+        const w=cell*.7,h=Math.max(3,cell*.07),left=x-w/2,top=y-cell*.47;
+        c.fillStyle='#16271ddd';c.fillRect(left,top,w,h);c.fillStyle='#7ce8ad';c.fillRect(left,top,w*Math.max(0,Math.min(1,objective.hp/objective.maxHp)),h);
+      }
     }
-    const nextMarker=objective?.type==='transport'?(objective.carrying?markers.find(p=>p.label==='交'):markers.find(p=>p.label==='物')):markers.find(p=>p.label==='陣');
+    const nextMarker=objective?.type==='transport'?(objective.carrying?markers.find(p=>p.label==='交'):markers.find(p=>p.label==='物')):objective?.type==='sealing'?markers.find(p=>p.label!=='✓'):null;
     if(nextMarker){
       const x=ox+(nextMarker.x+.5)*cell,y=oy+(nextMarker.y+.5)*cell,margin=20;
       if(x<margin||x>w-margin||y<margin||y>h-margin){
