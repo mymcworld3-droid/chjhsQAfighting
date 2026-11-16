@@ -4,6 +4,11 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const {Worker,isMainThread,parentPort}=require('node:worker_threads');
 const S=require('./lib/tactical-balance.cjs');
 const root=path.resolve(__dirname,'..'),coreVariants=S.variants.filter(v=>v.core!=='none');
+// Archived tactical-v1 reports predate retirement of golden-core combat skills.
+const archivedCoreVariants=Object.entries(S.R.CORES).filter(([core])=>core!=='none')
+  .flatMap(([core,c])=>c.branches.map(b=>({
+    id:core+'.'+b.id,core,branch:b.id,coreName:c.name,branchName:b.name,skill:b.skill.name
+  })));
 function duelJob(job){
   const a=S.variants.find(v=>v.id===job.a),b=S.variants.find(v=>v.id===job.b),clusters=[],byMap=S.R.MAPS.map(m=>({map:m.id,games:0,winsA:0,winsB:0,draws:0}));
   const result={...job,games:0,winsA:0,winsB:0,draws:0,seat0Wins:0,turnLimit:0,totalTurns:0,castsA:0,castsB:0,byMap,clusters};delete result.kind;
@@ -39,7 +44,9 @@ function interval(clusters,key){
   }values.sort((a,b)=>a-b);return [values[49],values[1949]];
 }
 function summarize(pairs,accuracy){
-  const rows=coreVariants.map(v=>{
+  const archived=pairs.some(p=>archivedCoreVariants.some(v=>v.id===p.a||v.id===p.b));
+  const summaryVariants=archived?archivedCoreVariants:coreVariants;
+  const rows=summaryVariants.map(v=>{
     const clusters=Array.from({length:pairs[0].seeds},(_,seed)=>({seed,games:0,wins:0,draws:0}));let games=0,wins=0,draws=0,casts=0;
     for(const p of pairs.filter(p=>p.a===v.id||p.b===v.id)){
       const key=p.a===v.id?'winsA':'winsB';games+=p.games;wins+=p[key];draws+=p.draws;
@@ -48,9 +55,9 @@ function summarize(pairs,accuracy){
     }
     return {...v,games,wins,draws,losses:games-wins-draws,winPercent:100*wins/games,drawPercent:100*draws/games,scorePercent:100*(wins+draws*.5)/games,castsPerGame:casts/games,ci95:interval(clusters,'wins')};
   });
-  const byCore=Object.keys(S.R.CORES).filter(c=>c!=='none').map(core=>{
+  const byCore=[...new Set(summaryVariants.map(v=>v.core))].map(core=>{
     const branches=rows.filter(r=>r.core===core),games=branches.reduce((n,r)=>n+r.games,0),wins=branches.reduce((n,r)=>n+r.wins,0),draws=branches.reduce((n,r)=>n+r.draws,0);
-    return {core,name:S.R.CORES[core].name,games,wins,draws,winPercent:100*wins/games,drawPercent:100*draws/games,scorePercent:100*(wins+.5*draws)/games};
+    return {core,name:summaryVariants.find(v=>v.core===core).coreName,games,wins,draws,winPercent:100*wins/games,drawPercent:100*draws/games,scorePercent:100*(wins+.5*draws)/games};
   });
   const games=pairs.reduce((n,p)=>n+p.games,0);
   return {accuracy,games,seat0WinPercent:100*pairs.reduce((n,p)=>n+p.seat0Wins,0)/games,drawPercent:100*pairs.reduce((n,p)=>n+p.draws,0)/games,
@@ -58,7 +65,7 @@ function summarize(pairs,accuracy){
 }
 function csv(rows,keys){return keys.join(',')+'\n'+rows.map(r=>keys.map(k=>JSON.stringify(r[k]??'')).join(',')).join('\n')+'\n';}
 function parse(argv){
-  const config={mainAccuracy:.7,seeds:64,sensitivitySeeds:8,pveSeeds:32,workers:4,stages:[1,5,10,15,20,30],accuracies:[.5,.7,.9],out:'docs/balance/tactical-v1'};
+  const config={mainAccuracy:.7,seeds:64,sensitivitySeeds:8,pveSeeds:32,workers:4,stages:[1,5,10,15,20,30],accuracies:[.5,.7,.9],out:'docs/balance/manual-v2'};
   for(let i=0;i<argv.length;i+=2){const name=argv[i],value=argv[i+1];if(value===undefined)throw Error('Missing value for '+name);
     const key={'--seeds':'seeds','--sensitivity-seeds':'sensitivitySeeds','--pve-seeds':'pveSeeds','--workers':'workers','--out':'out'}[name];
     if(!key)throw Error('Unknown option '+name);config[key]=key==='out'?value:Number(value);
@@ -69,7 +76,7 @@ function parse(argv){
 async function run(config){
   const jobs=[];
   for(const accuracy of config.accuracies)for(let a=0;a<coreVariants.length;a++)for(let b=a+1;b<coreVariants.length;b++)jobs.push({kind:'pvp',a:coreVariants[a].id,b:coreVariants[b].id,accuracy,seeds:accuracy===config.mainAccuracy?config.seeds:config.sensitivitySeeds,baseline:false});
-  for(const v of coreVariants)jobs.push({kind:'pvp',a:'none.breath',b:v.id,accuracy:config.mainAccuracy,seeds:config.seeds,baseline:true});
+  for(const v of coreVariants)jobs.push({kind:'pvp',a:'none.basic',b:v.id,accuracy:config.mainAccuracy,seeds:config.seeds,baseline:true});
   for(const v of S.variants)for(const stage of config.stages)jobs.push({kind:'pve',variant:v.id,stage,accuracy:config.mainAccuracy,seeds:config.pveSeeds});
   const results=[],workers=[];let dispatched=0,completed=0;
   await new Promise((resolve,reject)=>{
