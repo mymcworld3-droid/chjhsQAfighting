@@ -2,9 +2,11 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const R=require('../public/cultivation/tactical-rules.js'),Manuals=require('../public/cultivation/manual-rules.js');
 const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/skill-simulator.js'),'utf8');
+const artSource=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-art.js'),'utf8');
+const {skillArt}=new Function(artSource.replace(/^export const /gm,'const ')+'\\nreturn {skillArt};')();
 function boot(){
   class Element{
-    constructor(){this.listeners={};this.dataset={};this.value='';this.children=[];this.hidden=false;this.disabled=false;this.checked=false;this.textContent='';}
+    constructor(){this.listeners={};this.dataset={};this.value='';this.children=[];this.hidden=false;this.disabled=false;this.checked=false;this.textContent='';this.style={};this.classList={toggle(){}};}
     addEventListener(name,fn){this.listeners[name]=fn;}
     setAttribute(name,value){this[name]=value;}
     replaceChildren(...children){this.children=children;this.value=children[0]?.value||'';}
@@ -26,7 +28,7 @@ function boot(){
     querySelectorAll:selector=>selector==='[data-tool]'?tools:[],
     getElementById:id=>els[id],createElement:()=>new Element()
   };
-  const context={document,TacticalRenderer,structuredClone,console};
+  const context={document,TacticalRenderer,structuredClone,console,skillArt};
   context.globalThis=context;context.QATactical=R;context.QAManuals=Manuals;
   vm.runInNewContext(source.replace(/^import .*;$/gm,''),context);
   return {els,tools,get renderer(){return render;}};
