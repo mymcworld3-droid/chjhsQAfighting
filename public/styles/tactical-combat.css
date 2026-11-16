@@ -129,7 +129,7 @@
 #tactical-combat .tc-report-actions button{flex:1;font-size:12px;border-radius:8px}
 #tactical-combat .tc-report-actions [data-report-send]{background:#ca8a04;color:#000;border:0;font-weight:700}
 
-// PvP action buttons use the same illustrations as the PvE attack dial.
+/* PvP action buttons use the same illustrations as the PvE attack dial. */
 #tactical-combat .tc-action-tabs .tc-pvp-skill-art{
  display:block;width:32px;height:32px;max-width:100%;
  margin:0 auto 4px;object-fit:cover;border-radius:5px;border:1px solid #bda57488

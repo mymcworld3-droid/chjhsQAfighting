@@ -652,18 +652,89 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
   }
 }
 
-// Move paintings inside the existing outer attack ring, without additional controls.
-#tactical-combat.tc-quarter-layout .tc-wheel-skill-art{
- display:block;width:clamp(18px,2.5vw,29px);height:clamp(18px,2.5vw,29px);
- margin:0 auto 2px;object-fit:cover;border-radius:5px;
- border:1px solid #d8cba88c;box-shadow:0 1px 5px #0009
+/* Skill icons are part of the sector, never a standalone floating card.
+   Keep the paint, technique name and stamina cost aligned inside the dial.
+   In particular, use CSS comments: a // line invalidated the first image rule. */
+#tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  width:31%;
+  max-height:42px;
+  padding:0;
+  text-align:center;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  gap:3px;
+  width:31%;
+  max-width:31%;
+  max-height:44px;
+  padding:3px 4px;
+  text-align:center;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-copy{
+  display:flex;flex:1 1 0;min-width:0;
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;line-height:1.1;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-copy .tc-wheel-name{
+  display:block;
+  width:100%;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;overflow-wrap:normal;
+  font-size:clamp(9px,1vw,13px);
+  line-height:1.1;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-copy .tc-wheel-cost{
+  display:block;
+  width:100%;min-width:0;
+  margin:0;
+  font-size:clamp(8px,.85vw,11px);
+  font-weight:500;line-height:1.1;white-space:nowrap;
+  letter-spacing:-.04em;
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-skill-art,
+#tactical-combat.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
+  display:block;
+  flex:0 0 auto;
+  width:clamp(17px,2vw,23px);
+  height:clamp(17px,2vw,23px);
+  max-width:23px;max-height:23px;
+  margin:0!important;
+  padding:0!important;
+  object-fit:cover;
+  border-radius:4px;
+  border:1px solid #c5c9a47d;
+  box-shadow:0 1px 3px #0007;
 }
 #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
- width:clamp(18px,2.3vw,27px);height:clamp(18px,2.3vw,27px);border-color:#28553e
+  border-color:#a8c8ac90;
 }
 @media(orientation:portrait){
- #tactical-combat.tc-quarter-layout .tc-wheel-skill-art,
- #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
-  width:clamp(15px,4vw,22px);height:clamp(15px,4vw,22px);margin-bottom:1px
- }
+  #tactical-combat.tc-quarter-layout .tc-quarter-action .tc-sector[data-wheel-choice]>span,
+  #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
+    gap:2px;
+    width:31%;max-width:31%;
+  }
+  #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker{
+    padding:2px;
+    max-height:36px;
+  }
+  #tactical-combat.tc-quarter-layout .tc-wheel-skill-art,
+  #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
+    width:14px;height:14px;max-width:14px;max-height:14px;
+  }
+  #tactical-combat.tc-quarter-layout .tc-wheel-copy .tc-wheel-name{
+    font-size:clamp(8px,2.15vw,10px);
+  }
+  #tactical-combat.tc-quarter-layout .tc-wheel-copy .tc-wheel-cost{
+    font-size:clamp(7px,1.85vw,9px);
+  }
 }

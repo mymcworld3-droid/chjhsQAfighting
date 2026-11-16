@@ -238,23 +238,30 @@ function wheelMarker(marker,angle,radius){
 // Reuse the nodes so frequent battle updates do not restart the slide animation.
 function wheelText(container,name,cost,art=''){
   if(!container)return;
+  // One compact horizontal unit, not an image stacked above the cost text.
+  // The selected marker and all fixed outer-ring options share this markup.
+  let copy=container.querySelector('.tc-wheel-copy');
   let title=container.querySelector('.tc-wheel-name');
   let fee=container.querySelector('.tc-wheel-cost');
-  if(!title||!fee){
+  if(!copy||!title||!fee){
     container.replaceChildren();
+    copy=document.createElement('span');copy.className='tc-wheel-copy';
     title=document.createElement('span');title.className='tc-wheel-name';
     fee=document.createElement('small');fee.className='tc-wheel-cost';
-    container.append(title,fee);
+    copy.append(title,fee);
+    container.append(copy);
   }
   let image=container.querySelector('.tc-wheel-skill-art');
   if(art){
     if(!image){
       image=document.createElement('img');
-      image.className='tc-wheel-skill-art';image.alt='';image.decoding='async';
+      image.className='tc-wheel-skill-art';image.alt='';
+      image.decoding='async';image.draggable=false;
       container.prepend(image);
     }
     if(image.getAttribute('src')!==art)image.src=art;
   }else image?.remove();
+  container.classList.toggle('has-skill-art',!!art);
   if(title.textContent!==name)title.textContent=name;
   if(fee.textContent!==cost)fee.textContent=cost;
 }
