@@ -8,14 +8,14 @@ const { setup } = require('./helpers/d1-db.cjs');
 const rulesModule = import('../public/cultivation/daily-vocabulary-rules.mjs');
 const now = Date.parse('2026-11-15T10:00:00Z');
 
-async function completedLesson({ date = '2026-11-15', sequence = 0, level = 0, wrongFirst = false } = {}) {
+async function completedLesson({ date = '2026-11-15', sequence = null, level = 0, wrongFirst = false } = {}) {
   const rules = await rulesModule;
-  const progress = rules.openLesson({
-    ...rules.newProgress(),
-    level,
-    lesson: { date: '0000-01-01', sequence: sequence - 1 },
-  }, date);
+  const progress = rules.openLesson({ ...rules.newProgress(), level }, date);
   const lesson = progress.lesson;
+  if (sequence !== null) {
+    lesson.sequence = sequence;
+    lesson.words = rules.legacyWordsForSequence(sequence);
+  }
   const questions = rules.questionsFor(lesson);
   const answers = questions.map((question, index) => {
     if (wrongFirst && index === 0) {
@@ -23,7 +23,7 @@ async function completedLesson({ date = '2026-11-15', sequence = 0, level = 0, w
     }
     return question.word.id;
   });
-  return { date, sequence, level, words: lesson.words, answers };
+  return { date, sequence: lesson.sequence, level, words: lesson.words, answers };
 }
 
 test('completion grants a fixed reward once, even across concurrent requests and later retries', async () => {
@@ -77,6 +77,19 @@ test('a completed earlier lesson remains claimable, but a future lesson is rejec
   assert.equal((await api.claim(db, 'u1', older, now)).gold, 100);
   assert.equal((await api.claim(db, 'u1', yesterday, now)).gold, 200);
   assert.equal((await api.claim(db, 'u1', await completedLesson(), now)).gold, 300);
+});
+
+test('personal legacy lessons only receive a temporary migration allowance', async () => {
+  const db = database();
+  const prior = await completedLesson({ date: '2026-11-15', sequence: 9 });
+  assert.equal((await api.claim(db, 'u1', prior, now)).alreadyClaimed, false);
+
+  const nextDate = '2026-11-17';
+  const later = Date.parse('2026-11-17T10:00:00Z');
+  const canonical = await completedLesson({ date: nextDate });
+  const tampered = await completedLesson({ date: nextDate, sequence: 9 });
+  await assert.rejects(api.claim(db, 'u2', tampered, later), /今日單字資料不符/);
+  assert.equal((await api.claim(db, 'u2', canonical, later)).alreadyClaimed, false);
 });
 
 test('different accounts keep separate daily receipts', async () => {

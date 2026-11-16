@@ -19,6 +19,9 @@ export const DAILY_REWARD = Object.freeze({ gold: 100, cultivation: 2 });
 
 const REVIEW_INTERVALS = [1, 3, 7, 14, 30];
 const DAY_MS = 86_400_000;
+// Fixed date anchor keeps the original first group on 2026-11-15.
+// The daily rotation follows the Taiwan calendar, never a player's login history.
+const SHARED_START_DAY = Date.parse('2026-11-15T00:00:00Z') / DAY_MS;
 const dateFormat = new Intl.DateTimeFormat('sv-SE', {
   timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit',
 });
@@ -44,16 +47,55 @@ export function newProgress() {
   return { level: 0, scores: [], lastEvaluation: null, review: {}, lesson: null };
 }
 
+function dayNumber(date) {
+  if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new RangeError('Invalid daily vocabulary date');
+  const ms = Date.parse(date + 'T00:00:00Z');
+  if (!Number.isFinite(ms) || new Date(ms).toISOString().slice(0, 10) !== date) {
+    throw new RangeError('Invalid daily vocabulary date');
+  }
+  return Math.floor(ms / DAY_MS);
+}
+
+export function dailySequenceFor(date) {
+  // Absolute day identity, independent of when a particular player first joins.
+  return dayNumber(date);
+}
+
+function groupForRotation(rotation) {
+  return BANDS.flatMap(({id}) => {
+    const bank = wordsByBand.get(id);
+    const groups = bank.length / WORDS_PER_BAND;
+    const first = ((rotation % groups) + groups) % groups * WORDS_PER_BAND;
+    return Array.from({ length: WORDS_PER_BAND }, (_, index) => bank[first + index].id);
+  });
+}
+
+export function dailyWordsFor(date) {
+  return groupForRotation(dayNumber(date) - SHARED_START_DAY);
+}
+
+// Used only to validate rewards completed before the server-wide migration.
+export function legacyWordsForSequence(sequence) {
+  if (!Number.isSafeInteger(sequence) || sequence < 0) throw new RangeError('Invalid legacy vocabulary sequence');
+  return groupForRotation(sequence);
+}
+
 export function openLesson(progress, date) {
   const previous = progress.lesson;
-  if (previous && previous.date >= date && previous.words.every(id => wordFor(id))) return progress;
+  if (previous?.date > date && Array.isArray(previous.words) && previous.words.every(id => wordFor(id))) return progress;
+  const sequence = dailySequenceFor(date);
+  const words = dailyWordsFor(date);
 
-  const sequence = (previous?.sequence ?? -1) + 1;
-  const words = BANDS.flatMap(({id}) => {
-    const bank = wordsByBand.get(id);
-    const first = (sequence * WORDS_PER_BAND) % bank.length;
-    return Array.from({ length: WORDS_PER_BAND }, (_, index) => bank[(first + index) % bank.length].id);
-  });
+  if (previous?.date === date && Array.isArray(previous.words) &&
+      previous.words.length === LESSON_SIZE && previous.words.every((id, index) => id === words[index])) {
+    // An existing same-day lesson keeps its card/quiz progress when only its old
+    // personal sequence needs migration to the shared day identifier.
+    return previous.sequence === sequence ? progress : {
+      ...progress, lesson: { ...previous, sequence },
+    };
+  }
+  // A personal-sequence lesson from an older client may contain different words.
+  // Replace it; retaining its answers would associate them with the wrong quiz.
   return {
     ...progress,
     lesson: { date, sequence, words, level: progress.level, studied: {}, index: 0, answers: [], result: null },

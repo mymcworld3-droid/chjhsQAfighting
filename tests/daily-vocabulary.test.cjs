@@ -62,7 +62,40 @@ test('the next local day begins at Taiwan midnight', async () => {
   old.lesson.studied[old.lesson.words[0]] = true;
   const next = rules.openLesson(old, '2026-11-16');
   assert.deepEqual(next.lesson.studied, {});
-  assert.equal(next.lesson.sequence, 1);
+  assert.equal(next.lesson.sequence, old.lesson.sequence + 1);
+});
+
+test('all players receive the same Taipei-date words regardless of join date or lessons skipped', async () => {
+  const rules = await rulesModule;
+  const date = '2026-11-16';
+  const newPlayer = rules.openLesson(rules.newProgress(), date);
+  let veteran = rules.newProgress();
+  for (let offset = -10; offset < 0; offset++) {
+    veteran = rules.openLesson(veteran, dateFor(offset + 1));
+  }
+  veteran = rules.openLesson(veteran, date);
+  assert.deepEqual(veteran.lesson.words, newPlayer.lesson.words);
+  assert.equal(veteran.lesson.sequence, newPlayer.lesson.sequence);
+  assert.deepEqual(rules.dailyWordsFor(date), newPlayer.lesson.words);
+
+  const latePlayer = rules.openLesson(rules.newProgress(), dateFor(10));
+  const regularPlayer = rules.openLesson(newPlayer, dateFor(10));
+  assert.deepEqual(latePlayer.lesson.words, regularPlayer.lesson.words);
+
+  const stale = { ...newPlayer, lesson: { ...newPlayer.lesson,
+    sequence: 9, words: rules.legacyWordsForSequence(9), studied: { transit: true }, index: 1,
+    answers: [{ value: 'transit', correct: true }] } };
+  const migrated = rules.openLesson(stale, date);
+  assert.deepEqual(migrated.lesson.words, newPlayer.lesson.words);
+  assert.equal(migrated.lesson.sequence, newPlayer.lesson.sequence);
+  assert.deepEqual(migrated.lesson.studied, {});
+  assert.deepEqual(migrated.lesson.answers, []);
+  assert.equal(migrated.lesson.index, 0);
+
+  const preserved = { ...newPlayer, lesson: { ...newPlayer.lesson, sequence: 0,
+    studied: { [newPlayer.lesson.words[0]]: true } } };
+  assert.deepEqual(rules.openLesson(preserved, date).lesson.studied, preserved.lesson.studied);
+  assert.equal(rules.openLesson(preserved, date).lesson.sequence, newPlayer.lesson.sequence);
 });
 
 test('a resumed quiz preserves question order, options and completed answers', async () => {

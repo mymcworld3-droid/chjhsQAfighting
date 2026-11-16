@@ -26,13 +26,16 @@ function validateLesson(input, rules) {
     throw fail('單字測驗日期無效。');
   }
 
-  const progress = rules.openLesson({
-    ...rules.newProgress(),
-    level,
-    lesson: { date: '0000-01-01', sequence: sequence - 1 },
-  }, date);
-  if (JSON.stringify(progress.lesson.words) !== JSON.stringify(words)) {
-    throw fail('今日單字資料不符，請重新整理。');
+  const progress = rules.openLesson({ ...rules.newProgress(), level }, date);
+  const sameWords = expected => expected.length === words.length &&
+    expected.every((word, index) => word === words[index]);
+  if (sequence !== progress.lesson.sequence || !sameWords(progress.lesson.words)) {
+    // Already-completed lessons from before the migration must remain claimable.
+    // New dates never accept player-selected sequences or word sets.
+    if (date > '2026-11-16' || !sameWords(rules.legacyWordsForSequence(sequence))) {
+      throw fail('今日單字資料不符，請重新整理。');
+    }
+    progress.lesson = { ...progress.lesson, sequence, words };
   }
   const questions = rules.questionsFor(progress.lesson);
   for (let index = 0; index < answers.length; index++) {
