@@ -168,6 +168,40 @@
     }
     return result;
   }
+  // Present the actual raw per-hit amount in the technique description,
+  // rather than adding another visible badge to narrow combat controls.
+  // Target guard/shields and remaining HP can reduce damage actually dealt.
+  function descriptionWithDamage(attack,skill,options={}){
+    if(!skill)return '';
+    const description=String(skill.description||'').trim();
+    const value=singleHitDamage(attack,skill,options);
+    const fmt=n=>Math.max(0,Math.round(n)).toLocaleString('zh-TW');
+    let suffix='';
+    if(skill.kind==='fist-focus'){
+      suffix='不造成直接傷害。';
+    }else if(skill.kind==='flying-sword'){
+      const amount=fmt(value.potential??value.damage);
+      if(options.flyingSwordReady===true)
+        suffix='本次移動飛劍，穿過敵人時每次造成 '+amount+' 傷害。';
+      else if(options.flyingSwordReady===false)
+        suffix='本次召劍不造成傷害；之後飛劍移動命中時每次造成 '+amount+' 傷害。';
+      else suffix='首次召劍不造成傷害；之後飛劍移動命中時每次造成 '+amount+' 傷害。';
+    }else if(value.center!==undefined){
+      suffix='一般劍氣每擊造成 '+fmt(value.damage)+' 傷害；中心交點每擊造成 '+
+        fmt(value.center)+' 傷害（最多 '+value.centerHits+' 次，依實際劍氣路線）。';
+    }else if(skill.hits===2){
+      suffix='每次命中造成 '+fmt(value.damage)+' 傷害（最多兩次）。';
+    }else if(skill.kind==='fist-chain'){
+      suffix='每段命中造成 '+fmt(value.damage)+' 傷害（最多 '+skill.steps+' 段）。';
+    }else if(skill.kind==='fist-throw'){
+      suffix='成功翻摔時造成 '+fmt(value.damage)+' 傷害。';
+    }else{
+      suffix='造成 '+fmt(value.damage)+' 傷害。';
+    }
+    // Keep the existing skill description, only append the computed clause.
+    const join=description.endsWith('。')?' ':' ';
+    return description+join+suffix;
+  }
   const publicSkill=(skill,masteryLevel,score,rank)=>{
     const mastered=masteryLevel>=skill.levelRequired,realmReady=meetsRealm(skill,score);
     const unlocked=mastered&&realmReady,stats=skillAtLevel(skill,rank);
@@ -217,5 +251,5 @@
     return {...s,realmScore:score,realmName:realmForScore(score).name,library};
   }
   const starterFor=school=>school==='sword'?'sword-wind':school==='body'?'body-rock':null;
-  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
+  return Object.freeze({BOOKS,BY_BOOK,BY_SKILL,EXP_PER_KILL,MAX_EXP,REALMS,realmForScore,realmForStage,expForBeast,meetsRealm,xpForNextLevel,totalExpForLevel,levelForExp,mastery,upgradeQuote,MAX_SKILL_LEVEL,skillLevel,skillAtLevel,singleHitDamage,descriptionWithDamage,skillUpgradeQuote,legacyKillsToExp,normalize,unlocked,publicState,starterFor});
 });
