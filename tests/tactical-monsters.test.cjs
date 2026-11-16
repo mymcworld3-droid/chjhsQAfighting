@@ -70,8 +70,9 @@ test('charges stop at an intervening actor and displacement interrupts an alread
   const charge=scene(1,{x:6,y:4},{x:3,y:4});assert.equal(charge.actors[1].intent.kind,'attack');
   const blocker=R.actor({uid:'blocker',name:'石障獸',bot:true,species:8,team:'monster',atk:1,maxHp:1000},{x:4,y:4,intent:{kind:'wait',cells:[]}});charge.actors.push(blocker);
   const stopped=R.apply(charge,'u1',{type:'end'},now);assert.equal(stopped.actors[0].hp,10000);assert.equal(stopped.actors[1].x,3);
-  const pushed=scene(0,{x:3,y:4},{x:4,y:4});Object.assign(pushed.actors[0],{core:'ocean',branch:'surge'});
-  const after=R.apply(pushed,'u1',{type:'skill',x:4,y:4},now);
+  const pushed=scene(0,{x:3,y:4},{x:4,y:4});
+  Object.assign(pushed.actors[0],{trainingAccessScore:68,manualSkills:['rock-break']});
+  const after=R.apply(pushed,'u1',{type:'manual',skillId:'rock-break',x:4,y:4},now);
   assert.equal(after.actors[1].intent.kind,'stagger');assert.deepEqual(after.actors[1].intent.cells,[]);
   assert.equal(R.apply(after,'u1',{type:'end'},now).actors[0].hp,10000);
 });
