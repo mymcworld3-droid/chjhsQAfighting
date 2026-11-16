@@ -33,6 +33,7 @@ import {
   let equipmentPickSlot = '';
   let queued = false;
   let lastItems = new Map();
+  const boundControls = new WeakSet();
 
   // 唯一背包與裝備視圖；舊長條物品卡已從資料模組移除。
 
@@ -95,12 +96,12 @@ import {
       const hint = soulbound
         ? (canEquipOwned ? '點擊選擇本命法器' : '尚未持有本命法器')
         : '點擊裝配';
-      return `<button type="button" class="uib-equip-slot is-empty${soulboundClass}${equipmentPickSlot === slot ? ' is-picking' : ''}" data-uib-empty-slot="${escapeHtml(slot)}" aria-label="${escapeHtml(slot)}：${escapeHtml(hint)}">${crest}${label}
+      return `<button type="button" class="uib-equip-slot is-empty${soulboundClass}${equipmentPickSlot === slot ? ' is-picking' : ''}" data-uib-slot="${escapeHtml(slot)}" data-uib-empty-slot="${escapeHtml(slot)}" aria-label="${escapeHtml(slot)}：${escapeHtml(hint)}">${crest}${label}
         <span class="uib-equip-slot-frame${soulbound ? ' is-soulbound-frame' : ''}">${soulbound ? soulboundItemFrameMarkup() + '<i class="fa-solid fa-khanda"></i>' : '<i class="fa-solid fa-plus"></i>'}</span>
         <b class="uib-equip-slot-name">空裝備欄</b><small class="uib-equip-slot-hint">${hint}</small></button>`;
     }
     const color = qualityColor(item.realm);
-    return `<button type="button" class="uib-equip-slot is-filled${soulboundClass}" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}">${crest}${label}
+    return `<button type="button" class="uib-equip-slot is-filled${soulboundClass}" data-uib-slot="${escapeHtml(slot)}" data-uib-equipped-item="artifact:${escapeHtml(id)}" style="--uib-quality:${escapeHtml(color)}">${crest}${label}
       <span class="uib-equip-slot-frame is-artifact${soulbound ? ' is-soulbound-frame' : ''}">${soulbound ? soulboundItemFrameMarkup() : ''}${imageMarkup(item.imageUrl, item.icon || '◆', item.name)}</span><b class="uib-equip-slot-name">${escapeHtml(item.name)}</b>
       <small class="uib-equip-slot-hint">${escapeHtml(item.realm)} · 戰力 ${Math.max(0, Number(window.calculateArtifactPower?.(item)) || 0).toLocaleString("zh-TW")}</small></button>`;
   }
@@ -420,18 +421,95 @@ import {
     document.body.appendChild(modal);
   }
 
+  // Keep already decoded artwork attached to the DOM during equipment updates.
+  // Only the card whose contents actually changed needs a new image element.
+  function stableDomKey(node) {
+    if (node.nodeType !== 1) return '';
+    for (const attribute of ['data-uib-slot', 'data-uib-item']) {
+      if (node.hasAttribute(attribute)) return attribute + ':' + node.getAttribute(attribute);
+    }
+    return '';
+  }
+
+  function compatibleNode(a, b) {
+    return a.nodeType === b.nodeType && a.nodeName === b.nodeName;
+  }
+
+  function reconcileNode(current, desired) {
+    if (current.nodeType === 3 || current.nodeType === 8) {
+      if (current.nodeValue !== desired.nodeValue) current.nodeValue = desired.nodeValue;
+      return;
+    }
+    if (current.nodeType !== 1) return;
+    const sameImage = current.tagName === 'IMG' &&
+      current.getAttribute('src') === desired.getAttribute('src');
+    const attributes = new Map([...desired.attributes].map(attribute => [attribute.name, attribute.value]));
+    for (const attribute of [...current.attributes]) {
+      // A failed image hides itself; don't reveal that broken asset on a stats update.
+      if (!attributes.has(attribute.name) && !(sameImage && attribute.name === 'hidden')) {
+        current.removeAttribute(attribute.name);
+      }
+    }
+    for (const [name, value] of attributes) {
+      if (current.getAttribute(name) !== value) current.setAttribute(name, value);
+    }
+    if (current.tagName === 'IMG') return;
+    reconcileChildren(current, desired);
+    if (current.tagName === 'SELECT' && current.value !== desired.value) {
+      current.value = desired.value;
+    }
+  }
+
+  function reconcileChildren(current, desired) {
+    const oldNodes = [...current.childNodes];
+    const keyed = new Map(oldNodes.filter(node => stableDomKey(node))
+      .map(node => [stableDomKey(node), node]));
+    const used = new Set();
+    let cursor = current.firstChild;
+    for (const incoming of [...desired.childNodes]) {
+      const key = stableDomKey(incoming);
+      let match = key ? keyed.get(key) : null;
+      if (!key && cursor && !stableDomKey(cursor) && compatibleNode(cursor, incoming) && !used.has(cursor)) {
+        match = cursor;
+      }
+      if (!key && !match) {
+        match = oldNodes.find(node => !used.has(node) && !stableDomKey(node) && compatibleNode(node, incoming));
+      }
+      if (match && !compatibleNode(match, incoming)) match = null;
+      if (match && used.has(match)) match = null;
+      if (!match) {
+        current.insertBefore(incoming, cursor);
+        cursor = incoming.nextSibling;
+        continue;
+      }
+      used.add(match);
+      if (match !== cursor) current.insertBefore(match, cursor);
+      reconcileNode(match, incoming);
+      cursor = match.nextSibling;
+    }
+    for (const node of oldNodes) {
+      if (!used.has(node) && node.parentNode === current) node.remove();
+    }
+  }
+
+  function listenOnce(node, event, handler) {
+    if (!node || boundControls.has(node)) return;
+    boundControls.add(node);
+    node.addEventListener(event, handler);
+  }
+
   function bindRoot(root) {
-    root.querySelector('#uib-filter-type')?.addEventListener('change', (event) => {
+    listenOnce(root.querySelector('#uib-filter-type'), 'change', (event) => {
       filterType = event.target.value || 'all';
       equipmentPickSlot = '';
       scheduleRender(true);
     });
-    root.querySelector('#uib-sort-mode')?.addEventListener('change', (event) => {
+    listenOnce(root.querySelector('#uib-sort-mode'), 'change', (event) => {
       sortMode = event.target.value || 'type-quality';
       scheduleRender(true);
     });
     root.querySelectorAll('[data-uib-item]').forEach((button) => {
-      button.addEventListener('click', async () => {
+      listenOnce(button, 'click', async () => {
         const key = button.dataset.uibItem;
         const item = lastItems.get(key);
         if (!equipmentPickSlot || !item || item.type !== 'artifact' || artifactSlot(item.raw) !== equipmentPickSlot) {
@@ -458,17 +536,18 @@ import {
         }
       });
     });
-    root.querySelectorAll('[data-uib-equipped-item]').forEach((button) => {
-      button.addEventListener('click', () => openDetails(button.dataset.uibEquippedItem));
-    });
-    root.querySelectorAll('[data-uib-empty-slot]').forEach((button) => {
-      button.addEventListener('click', () => {
+    root.querySelectorAll('[data-uib-slot]').forEach((button) => {
+      listenOnce(button, 'click', () => {
+        if (button.dataset.uibEquippedItem) {
+          openDetails(button.dataset.uibEquippedItem);
+          return;
+        }
         equipmentPickSlot = button.dataset.uibEmptySlot || '';
         filterType = 'artifact';
         scheduleRender(true);
       });
     });
-    root.querySelector('[data-uib-cancel-equip]')?.addEventListener('click', () => { equipmentPickSlot = ''; scheduleRender(true); });
+    listenOnce(root.querySelector('[data-uib-cancel-equip]'), 'click', () => { equipmentPickSlot = ''; scheduleRender(true); });
   }
 
   function render(force = false) {
@@ -486,18 +565,34 @@ import {
       sortMode,
       equipmentPickSlot,
       fragments: fragmentBalance(),
-      items: allItems.map((item) => [item.key, item.quantity, item.realm, item.name, item.equipped ? 1 : 0]),
-      equipment: ARTIFACT_EQUIP_SLOTS.map((slot) => [slot, equippedIdForSlot(slot)])
+      items: allItems.map((item) => [item.key, item.quantity, item.realm, item.name, item.equipped ? 1 : 0,
+        item.imageUrl || '', item.icon || '', item.category || '', item.qualityRank || 0]),
+      equipment: ARTIFACT_EQUIP_SLOTS.map((slot) => {
+        const id = equippedIdForSlot(slot), artifact = getArtifactById(id);
+        return [slot, id, artifact?.imageUrl || '', artifact?.name || '',
+          artifact ? Number(window.calculateArtifactPower?.(artifact)) || 0 : 0];
+      })
     });
     const root = document.getElementById(ROOT_ID);
-    if (!force && root?.dataset.signature === signature && root.closest('#training-tab-content') === content) return;
+    const mounted = root?.closest('#training-tab-content') === content;
+    // "force" means check the latest data, not discard every decoded image.
+    if (mounted && root.dataset.signature === signature) return;
 
-    // 修煉模組每次切分頁都可能重建 content；統一背包在其後接手背包內容。
-    content.innerHTML = rootMarkup(allItems, view);
-    const nextRoot = document.getElementById(ROOT_ID);
-    if (nextRoot) {
-      nextRoot.dataset.signature = signature;
-      bindRoot(nextRoot);
+    const markup = rootMarkup(allItems, view);
+    if (mounted && root.classList.contains('uib-' + view + '-view')) {
+      const template = document.createElement('template');
+      template.innerHTML = markup;
+      reconcileNode(root, template.content.firstElementChild);
+      root.dataset.signature = signature;
+      bindRoot(root);
+    } else {
+      // Initial entry or an actual tab change requires a different layout.
+      content.innerHTML = markup;
+      const nextRoot = document.getElementById(ROOT_ID);
+      if (nextRoot) {
+        nextRoot.dataset.signature = signature;
+        bindRoot(nextRoot);
+      }
     }
   }
 

@@ -156,8 +156,10 @@ import { equipmentShellMarkup, refineryShellMarkup } from './training-shared-she
         tab.setAttribute('aria-selected', selected ? 'true' : 'false');
       });
       const content = page.querySelector('#training-tab-content');
-      if (content) content.innerHTML = equipmentShellMarkup();
-      window.openCultivationEquipment?.();
+      if (content && !content.querySelector('#unified-cultivation-bag.uib-equipment-view')) {
+        content.innerHTML = equipmentShellMarkup();
+        window.openCultivationEquipment?.();
+      }
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       finishTransition?.();
     });

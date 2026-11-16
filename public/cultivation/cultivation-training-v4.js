@@ -739,8 +739,13 @@ import { getFirestore, doc, updateDoc, runTransaction } from '../data-store.js';
     }
     if (activeTab === 'equipment') {
       // 四個裝配格先立即出現，再由共用裝備模組填入實際法寶。
-      content.innerHTML = equipmentShellMarkup();
-      window.openCultivationEquipment?.();
+      const equipmentReady = !!content.querySelector('#unified-cultivation-bag.uib-equipment-view');
+      if (!equipmentReady && !content.querySelector('.uib-equipment-shell')) {
+        content.innerHTML = equipmentShellMarkup();
+      }
+      // Opening a new tab may reset the picker; ordinary stats updates must not
+      // throw away the current grid, its decoded images, or the active selection.
+      if (!equipmentReady) window.openCultivationEquipment?.();
       window.dispatchEvent(new CustomEvent('xiuxian:equipment-open-request'));
       return;
     }
