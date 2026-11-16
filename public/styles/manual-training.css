@@ -152,3 +152,22 @@
  #manual-training-root .manual-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
  #manual-training-root .manual-power-summary small{font-size:9px}
 }
+
+/* Raw per-hit damage: visible in equipped slots and each mastered skill card. */
+.manual-skill-damage{
+  display:flex;flex-direction:column;align-items:flex-start;
+  gap:2px;margin:6px 0 4px;padding:6px 8px;
+  border-left:2px solid #81bd8a;border-radius:0 5px 5px 0;
+  background:#1d3327aa;max-width:100%;overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.manual-skill-damage strong{font-size:12px!important;line-height:1.35;color:#baf1b6!important}
+.manual-skill-damage span{font-size:11px;color:#d4d6ae!important}
+.manual-skill-damage small{font-size:10px;color:#acbcae!important;line-height:1.5}
+.manual-slot-meta .manual-skill-damage{padding:4px 6px;margin:3px 0 0}
+.manual-slot-meta .manual-skill-damage strong{font-size:11px!important}
+@media(max-width:690px){
+  .manual-skill-damage{padding:5px 6px}
+  .manual-skill-damage strong{font-size:11px!important}
+  .manual-slot-meta .manual-skill-damage{background:transparent;border:0;padding:0}
+}
