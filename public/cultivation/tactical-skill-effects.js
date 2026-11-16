@@ -212,12 +212,14 @@
       }
       c.restore();
     }else if(move==='wind-thousand'){
-      // The full ray reaches the targets at the same beat as knockback starts.
-      const hitAt=strikeTime(0),lightEnd=.67;
+      // Keep the impact beat unchanged, but let the piercing ray remain visible
+      // after the hit. Both the beam and sword shadow now fade near the end
+      // instead of making the beam vanish at 67% of the animation.
+      const hitAt=strikeTime(0),lightHold=.72,lightEnd=.97;
       const end=hit.at(-1)||to,q=phase(p,.08,hitAt),tip=point(from,end,q);
-      const light=phase(p,.08,.25)*(1-phase(p,hitAt,lightEnd));
-      // Hold the larger greatsword after the flash clears, then fade the shadow.
-      const bladeAlpha=phase(p,.18,.33)*(1-phase(p,lightEnd+.05,1));
+      const light=phase(p,.08,.25)*(1-phase(p,lightHold,lightEnd));
+      // Hold the large greatsword through the beam's afterglow, then fade it.
+      const bladeAlpha=phase(p,.18,.33)*(1-phase(p,.86,1));
       if(bladeAlpha>0){
         c.save();c.translate(tip.x,tip.y);c.rotate(Math.atan2(dy,dx));glow('#71caff',.3);
         const unit=size*2.25;
