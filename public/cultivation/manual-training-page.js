@@ -126,11 +126,6 @@ function markup(expandedBooks){
       <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
       <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
         <small>${rating?'基礎 '+fmt(rating.base)+' + 招式 '+fmt(rating.skills):'正在計算'}</small></div></div>
-    <details class="manual-power-details"><summary>查看戰棋戰力計算</summary>
-      <p>戰力 = 攻擊力 × 2 + 最大生命 × 0.2 + 裝備招式的加權評分。第二、三強招式分別只計 40%／20%，避免重複當作同回合全部輸出。舊金丹及法寶不再額外加分；戰力僅供比較，不改變戰鬥傷害。</p>
-      <div>基礎 ${rating?fmt(rating.base):'—'} ／ 已裝備招式 ${rating?fmt(rating.skills):'—'}</div>
-      ${rating?.items?.length?'<ul>'+rating.items.map(item=>'<li>'+esc(item.name)+' Lv.'+item.level+'：+'+fmt(item.power)+'（權重 '+Math.round(item.weight*100)+'%）</li>').join('')+'</ul>':'<p>目前尚未裝備符合境界與功法等級的招式。</p>'}
-    </details>
     <section class="manual-school"><div><h3>修行流派</h3><p>第一次選擇流派免費習得一本入門功法。流派可以切換，已取得的功法及熟練度不會消失。</p></div>
       <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
         <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
@@ -141,7 +136,6 @@ function markup(expandedBooks){
       </div>
       <div class="manual-preset-controls"><label>配置名稱 <input data-loadout-name maxlength="40" value="${esc(preset?.name||'')}" placeholder="輸入名稱"></label><button type="button" data-loadout-rename>儲存名稱</button>
       <button type="button" data-loadout-apply ${selectedLoadout===current.activeLoadout?'disabled':''}>${selectedLoadout===current.activeLoadout?'目前使用中':'套用此配置'}</button></div>
-      <p>選擇配置後，在下方裝備或卸下已解鎖的技能；進入戰場後可直接切換已儲存配置，無需返回功法閣。</p>
       <div class="manual-slot-grid">${slots}</div></section>
     <section class="manual-library"><div class="manual-section-title"><h3>已獲得的功法</h3>
       <button type="button" class="manual-refresh" data-manual-refresh title="同步功法"><i class="fa-solid fa-rotate"></i> 更新</button>
