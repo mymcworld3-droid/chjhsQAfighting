@@ -504,7 +504,13 @@ async function generateQuiz(req, res) {
                     recoveryOrigin: correction?.sourceQuestion,
                     practiceTopic: correction?.knowledgePoint || (req.body?.soloExtension ? String(specificTopic || '').slice(0, 60) : '')
                 });
-            } catch (_) { /* Public/legacy quiz callers can still receive their questions. */ }
+            } catch (error) {
+                if (correction) {
+                    console.warn('[Correction practice] unable to sign reviewed question:', error.code || error.message);
+                    return res.status(503).json({code:'CORRECTION_UNAVAILABLE',error:'訂正題驗證服務暫時無法使用，請稍後重試。'});
+                }
+                // Public/legacy quiz callers can still receive their questions.
+            }
         }
         return res.json({ ...payload, text: JSON.stringify(parsed), ...(soloProof ? { soloProof } : {}) });
     };
@@ -1133,7 +1139,7 @@ async function generateQuiz(req, res) {
             // Fail closed: a freshly generated Gemini question must be reviewed
             // before it is sent to any game mode or signed as a raid question.
             // Legacy OpenAI-only deployments retain their existing semantics.
-            const independentReview = (typeof process !== 'undefined' && (process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY))
+            const independentReview = (correction || (typeof process !== 'undefined' && (process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY)))
                 ? await reviewCandidate(parsed, bankTarget, routed.model)
                 : null;
 
@@ -1268,7 +1274,15 @@ async function generateQuiz(req, res) {
         }
     }
 }
-app.post('/api/generate-quiz', generateQuiz);
+app.post('/api/generate-quiz', (req, res) => {
+    return generateQuiz(req, res).catch(error => {
+        console.error('[Quiz generation] unexpected failure:', error.code || error.message);
+        if (!res.headersSent) return res.status(503).json({
+            error: '出題服務暫時無法使用，請稍後重試。',
+            code: req.body?.correctionPractice ? 'CORRECTION_UNAVAILABLE' : 'QUIZ_UNAVAILABLE'
+        });
+    });
+});
 
 // Pre-compute and save approved questions while players are elsewhere in the
 // game, not after they open the stamina quiz screen.

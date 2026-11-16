@@ -37,6 +37,15 @@ function disarm(s){
     delete a.weapon;
   }
   delete s.weaponRewards;
+  // D1 could store old array-of-array effects. A resumed room can now be
+  // written to either backend without losing those existing animations.
+  for(const event of s.events||[]){
+    const animation=event.animation;
+    for(const key of ['rays','cuts']){
+      if(animation?.[key]?.some(Array.isArray))
+        animation[key]=animation[key].map(line=>Array.isArray(line)?{cells:line}:line);
+    }
+  }
   return s;
 }
 function member(s,uid){const a=s?.actors?.find(a=>a.uid===uid&&!a.bot);if(!a)throw error('你不是此戰場的參戰玩家',403);return a;}
@@ -68,6 +77,12 @@ function snapshot(s,uid){
   out.questionFollowup=s.status==='active'&&(s.quizRound||s.turnUid===uid)&&!!s.pending?.[uid]
     ?publicQuestion(s.pendingFollowup?.[uid]):null;
   delete out.pendingFollowup;delete out.reviewHistory;
+  for(const event of out.events||[]){
+    for(const key of ['rays','cuts']){
+      if(Array.isArray(event.animation?.[key]))
+        event.animation[key]=event.animation[key].map(line=>line.cells);
+    }
+  }
   out.serverNowMs=Date.now();
   out.review=s.reviews?.[uid]||null;
   out.actors=out.actors.map(a=>{delete a.knowledgeScope;return a;});
@@ -775,19 +790,22 @@ async function reportQuestion(db,uid,input,{review,award,readReceipt=readSoloRec
   // Before answering, never reveal the answer through an AI review reason.
   return (shared||s.pending?.[uid]?.id===input.questionId||s.pendingFollowup?.[uid]?.id===input.questionId)?{...result,reason:result.status==='rejected'?'獨立審核未確認本題有實質錯誤。':result.reason}:result;
 }
-// PvP questions do not expose the answer index to the browser before grading.
-// Resolve the real question from the authenticated battlefield instead of
-// trusting a client-submitted answer or permitting automatic reward claims.
-async function reviewMathIssue(db,uid,input,{review}={}){
+// Review the authenticated room question or the same verified solo question
+// accepted by PvE grading. Automatic review only returns a submission status.
+async function reviewMathIssue(db,uid,input,{review,readReceipt=readSoloReceipt}={}){
   if(!roomId(input?.roomId))throw error('戰場代碼無效',400);
   const s=exists(await db.collection(ROOMS).doc(input.roomId).get());
   member(s,uid);
-  if(s.mode!=='pvp')throw error('只有雙人鬥法使用此公式送審入口',400);
   const questionId=String(input.questionId||'');
-  const q=s.pending?.[uid]?.id===questionId?s.pending[uid]:
+  let q=s.pending?.[uid]?.id===questionId?s.pending[uid]:
     s.pendingFollowup?.[uid]?.id===questionId?s.pendingFollowup[uid]:
     s.reviewHistory?.[questionId]?.uid===uid?s.reviewHistory[questionId]:
     s.reviews?.[uid]?.questionId===questionId?s.reviews[uid]:null;
+  if(!q&&s.mode==='pve'&&input.soloQuestion){
+    const user=exists(await db.collection('users').doc(uid).get());
+    if(!user)throw error('玩家資料不存在',404);
+    q=sharedSoloQuestion(uid,user,s,input,readReceipt);
+  }
   if(!q)throw error('目前沒有這道可送審的題目',409);
   const reports=require('./question-report-api.cjs').__test;
   const evidence=reports.validateReport({question:q.q,options:q.opts,
@@ -796,14 +814,19 @@ async function reviewMathIssue(db,uid,input,{review}={}){
   if(evidence.error)throw error(evidence.error,400);
   const result=await (review||reports.reviewQuestion)(evidence,{trusted:true});
   if(result.status==='unavailable')throw error(result.reason,503);
-  // PvP reviews never reveal the answer or grant in-match resources.
+  // Background reviews cannot reveal answers or race grading for compensation.
   return {status:result.status,submitted:true};
 }
 function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainIdentity,logger=console}={}){
   const route=fn=>async(req,res)=>{
     res.set?.('Cache-Control','no-store');
     try{const uid=await verify(req),result=await fn(resolve().db,uid,req);return res.json({ok:true,state:result});}
-    catch(e){if(!e.status)logger.error('[Tactical combat]',e?.message||e);return res.status(e.status||503).json({ok:false,error:e.status?e.message:'戰場同步失敗，請稍後重試'});}
+    catch(e){
+      if(!e.status)logger.error('[Tactical combat]',{
+        path:req.path,action:req.body?.type,skill:req.body?.skillId,code:e.code,message:e.message
+      });
+      return res.status(e.status||503).json({ok:false,error:e.status?e.message:'戰場同步失敗，請稍後重試'});
+    }
   };
   app.get('/api/tactical/state',route((db,uid,req)=>state(db,uid,Date.now(),req.query?.mode||'')));
   app.get('/api/tactical/manuals',route((db,uid)=>manualsState(db,uid)));

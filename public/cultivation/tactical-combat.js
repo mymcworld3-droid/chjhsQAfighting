@@ -1,7 +1,7 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {skillArt} from './manual-art.js';
-import './tactical-rules.js?v=20261116-loadout-presets-v1';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261116-long-line-afterglow-v1';
+import './tactical-rules.js?v=20261116-stability-v1';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261116-stability-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-loadout-presets-v1';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 import {installTacticalKeyboardGuard} from './tactical-keyboard-guard.js';
@@ -50,10 +50,23 @@ async function api(path,body,signal){
   // short combat prompt. Fetch starts before charge, so keep its own deadline
   // without unnecessarily interrupting the player at 65 seconds.
   const maxMs=path==='/api/generate-quiz'?120000:65000;
-  const response=await authenticatedMainFetch(path,{...(body?{method:'POST',body:JSON.stringify(body)}:{method:'GET'}),signal:signal?AbortSignal.any([signal,AbortSignal.timeout(maxMs)]):AbortSignal.timeout(maxMs)});
-  const data=await response.json().catch(()=>({}));
-  if(!response.ok||data.error)throw Object.assign(Error(data.error||'戰場連線暫時中斷'),{status:response.status});
-  return data;
+  const controller=new AbortController();
+  const cancel=()=>controller.abort();
+  if(signal?.aborted)cancel();
+  else signal?.addEventListener('abort',cancel,{once:true});
+  const timer=setTimeout(cancel,maxMs);
+  try{
+    const response=await authenticatedMainFetch(path,{
+      ...(body?{method:'POST',body:JSON.stringify(body)}:{method:'GET'}),
+      signal:controller.signal
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||data.error)throw Object.assign(Error(data.error||'戰場連線暫時中斷'),{status:response.status});
+    return data;
+  }finally{
+    clearTimeout(timer);
+    signal?.removeEventListener('abort',cancel);
+  }
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
@@ -69,7 +82,8 @@ function ensure(){
   keyboardGuard=installTacticalKeyboardGuard(root);
   window.addEventListener('qa:invalid-tex',event=>{
     const node=event.detail?.node,q=pairQuestions[pairDisplayIndex];
-    if(!node?.isConnected||!root?.contains(node)||!opened||
+    const isQuestion=node?.closest?.('[data-question-text], [data-options-container], [data-pair-whiteboard-question]');
+    if(!node?.isConnected||!isQuestion||!root?.contains(node)||!opened||
        state?.mode!=='pvp'||!modalOpen||!q||pairReviews[pairDisplayIndex])return;
     const account=uid,roomId=state.id,key=account+':'+roomId+':'+q.id;
     if(!account||mathReviewSent.has(key))return;
@@ -716,7 +730,10 @@ function showModal(html,{quiz=false,encounter=false}={}){
   introDemo?.destroy();introDemo=null;
   modalOpen=true;$('[data-modal]').hidden=false;$('[data-modal]').innerHTML=`<section class="tc-dialog${quiz?' tc-quiz':''}${encounter?' tc-encounter':''}" role="dialog" aria-modal="true" tabindex="-1">${html}</section>`;
   $('[data-main]').inert=true;$('[data-close]').disabled=true;renderer?.setPaused(true);
-  $('[data-modal] .tc-dialog').focus({preventScroll:true});window.quizMathTypeset?.($('[data-modal]'));
+  $('[data-modal] .tc-dialog').focus({preventScroll:true});
+  const modal=$('[data-modal]');
+  const mathFields=[...modal.querySelectorAll('[data-question-text], .quiz-rich-option, .tc-feedback-text')];
+  window.quizMathTypeset?.(mathFields.length?mathFields:modal);
 }
 function hideModal(){if(!root)return;window.currentTacticalQuiz=null;closePairWhiteboard();introDemo?.destroy();introDemo=null;modalOpen=false;$('[data-modal]').hidden=true;$('[data-modal]').innerHTML='';$('[data-main]').inert=false;$('[data-close]').disabled=false;renderer?.setPaused(false);}
 function showEnemyIntro(error=''){
@@ -959,6 +976,9 @@ async function soloBattleQuestion(){
       // Let the common feedback renderer capture the pre-answer score first.
       if(current()){state=next;appliedOp=++op;}
       return {review:next.review,applyProgress:()=>{if(getMainUser()?.uid===account)applyProgress(next);}};
+    },
+    async reviewMath(quiz){
+      return (await api('/api/tactical/review-math-issue',inputFor(quiz))).state;
     },
     async report(quiz,reason){
       const {state:result}=await api('/api/tactical/report-question',{...inputFor(quiz),reason});

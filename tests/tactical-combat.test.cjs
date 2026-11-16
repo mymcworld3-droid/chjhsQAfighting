@@ -527,3 +527,45 @@ test('each existing spirit branch selects the matching tactical skill and reques
   const state=await api.start(db,'u1',{mode:'pve',branch:'lightning'},fixed);
   assert.equal(state.actors[0].branch,'counter');
 });
+
+test('sword-array effects can be persisted and replayed, then an old room can commit four-step push once',async()=>{
+  const {database}=require('./helpers/tactical-db.cjs');
+  const db=database(),key=api.ROOMS+'/arena-0123456789abcdef';
+  const s=battle('pve',{players:[hero('u1',{manualSkills:['sky-cloud','sky-sever','dragon-guard'],trainingAccessScore:68})]});
+  s.width=15;s.height=9;s.blocks=[];
+  Object.assign(s.actors[0],{x:4,y:4,stamina:10});
+  Object.assign(s.actors[1],{x:5,y:4,hp:900,maxHp:900});
+  // Firestore permits arrays inside maps, but rejects direct nested arrays.
+  function verifyStorage(value,parentIsArray=false){
+    if(Array.isArray(value)){
+      assert.equal(parentIsArray,false,'nested array would reject the transaction on Firestore');
+      for(const item of value)verifyStorage(item,true);
+    }else if(value&&typeof value==='object'){
+      for(const item of Object.values(value))verifyStorage(item);
+    }
+  }
+  for(const id of ['sky-cloud','sky-sever'])
+    verifyStorage(R.apply(s,'u1',{type:'manual',skillId:id,x:7,y:4},fixed));
+
+  const newer=R.apply(s,'u1',{type:'manual',skillId:'sky-cloud',x:7,y:4},fixed);
+  const geometry=newer.events.find(event=>event.skill==='sky-cloud').animation;
+  for(const key of ['rays','cuts'])geometry[key]=geometry[key].map(line=>line.cells);
+  delete newer.turnTimeouts;
+  db.records.set(key,newer);
+  const transact=db.runTransaction;
+  db.runTransaction=work=>transact(tx=>work({...tx,set:(ref,value)=>{
+    if(ref.key===key)verifyStorage(value);
+    return tx.set(ref,value);
+  }}));
+  const request={roomId:s.id,revision:newer.revision,type:'manual',skillId:'dragon-guard',x:5,y:4,requestId:'chain-once'};
+  const next=await api.command(db,'u1',request,fixed);
+  const replay=await api.command(db,'u1',request,fixed);
+  assert.equal(next.actors[0].stamina,1);
+  assert.equal(next.actors[0].x,8);
+  assert.equal(next.actors[1].hp,540);
+  assert.equal(replay.revision,next.revision);
+  assert.deepEqual(replay.actors,next.actors);
+  const oldCast=next.events.find(event=>event.skill==='sky-cloud').animation;
+  assert.ok(oldCast.rays.every(Array.isArray),'older clients can still replay the saved rays');
+  assert.deepEqual(next.events.filter(event=>event.type==='cast'&&event.skill==='dragon-guard').map(event=>event.animation.step),[1,2,3,4]);
+});

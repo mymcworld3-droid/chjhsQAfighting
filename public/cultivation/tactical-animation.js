@@ -175,6 +175,9 @@
       const raw=event.animation||(['move','monster-move','displace'].includes(event.type)?{kind:'move',style:'walk'}:null);
       if(!raw)continue;
       const scene={...raw,actor:event.actor,skill:event.skill,label:event.text,eventRevision:String(event.id).split(':')[0],numbers:(raw.numbers||[]).map(number=>({...number})),before:copy(actors)};
+      for(const key of ['rays','cuts']){
+        if(Array.isArray(raw[key]))scene[key]=raw[key].map(line=>Array.isArray(line)?line:line.cells);
+      }
       if(scene.kind==='move'&&['dash','throw'].includes(scene.style)){
         const revision=String(event.id).split(':')[0];
         const related=events.filter(other=>other.actor===event.actor&&other.type==='cast'&&

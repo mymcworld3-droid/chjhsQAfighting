@@ -40,7 +40,7 @@ test('active solo question sends one authenticated background review, never open
   const page={contains:node=>node===question,classList:{contains:flag=>flag==='active-page'}};
   const context={
     window:{currentActiveQuiz:quiz,addEventListener:(type,fn)=>listener[type]=fn,showToast:t=>notices.push(t)},
-    auth:{currentUser:user},quizHelperState:{answered:false},isAnswering:false,
+    trialQuestionSession:null,auth:{currentUser:user},quizHelperState:{answered:false},isAnswering:false,
     currentUserData:{stats:{gold:0,totalScore:100}},updateUIStats(){},
     document:{getElementById:id=>id==='page-quiz'?page:id==='question-text'?question:null},
     fetch:async(url,options)=>{calls.push({url,options});return {ok:true,json:async()=>({status:'rejected'})};},
@@ -91,4 +91,39 @@ test('tactical question auto-report does not expose correct answer or block grad
   assert.match(tactical,/api\('\/api\/tactical\/review-math-issue',\{roomId,questionId:q\.id\}/);
   assert.match(tactical,/pairReviews\[pairDisplayIndex\]/);
   assert(!tactical.includes('correctIndex:q.answerIndex'));
+});
+
+test('PvE formula review accepts the verified solo question and leaves stamina and grading untouched',async()=>{
+  const API=require('../tactical-combat-api.cjs').__test;
+  const {database}=require('./helpers/tactical-db.cjs');
+  const db=database(),room=await API.start(db,'u1',{mode:'pve'},2000000000000);
+  const key=API.ROOMS+'/'+room.id,original=structuredClone(db.records.get(key));
+  const question={id:'solo-example',q:'下列哪一個公式符合題意？',opts:['甲','乙','丙','丁'],answerIndex:2,explanation:'以原題條件推導可得丙。'};
+  const input={roomId:room.id,questionId:question.id,soloQuestion:{proof:'signed-question',question:question.q,options:question.opts},correctIndex:0};
+  const readReceipt=(uid,data)=>uid==='u1'&&data.proof==='signed-question'&&data.question===question.q?question:null;
+  const review=async(data,{trusted})=>{
+    assert.equal(trusted,true);
+    assert.equal(data.correctIndex,2);
+    return {status:'confirmed',reason:'不回傳的審查說明'};
+  };
+  assert.deepEqual(await API.reviewMathIssue(db,'u1',input,{review,readReceipt}),{status:'confirmed',submitted:true});
+  assert.deepEqual(db.records.get(key),original);
+  await assert.rejects(API.reviewMathIssue(db,'u1',{...input,soloQuestion:{...input.soloQuestion,proof:'invalid'}},{review,readReceipt}),/驗證失敗/);
+});
+
+test('a malformed formula detected before MathJax loads is reported once without replacing any controls',async()=>{
+  const events=[];
+  const marker={textContent:'不完整公式',removeAttribute:()=>{node.hasMarker=false;}};
+  const node={isConnected:true,hasMarker:true,querySelectorAll:()=>node.hasMarker?[marker]:[]};
+  const context={
+    window:{dispatchEvent:event=>events.push(event)},
+    console:{warn(){}},
+    CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}}
+  };
+  vm.runInNewContext(math,context);
+  await context.window.quizMathTypeset(node);
+  await context.window.quizMathTypeset(node);
+  assert.equal(events.length,1);
+  assert.equal(events[0].type,'qa:invalid-tex');
+  assert.equal(events[0].detail.node,marker);
 });

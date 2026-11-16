@@ -1429,7 +1429,8 @@ onAuthStateChanged(auth, async (user) => {
             }
             if (!featureGateResult?.ok) {
                 const count = featureGateResult?.failures?.length || 0;
-                showGameStartupFailure(`有 ${count} 個功能腳本載入失敗。為避免半套功能開始遊戲，請重新整理後再試。`);
+                const modules = (featureGateResult?.failures || []).map(path => path.split('/').pop()).join('、');
+                showGameStartupFailure(`有 ${count} 個功能腳本載入失敗（${modules}）。請重新整理後再試。`);
                 return;
             }
 
@@ -4505,6 +4506,7 @@ window.addEventListener('qa:invalid-tex', event => {
         !page.classList.contains('active-page') || !inQuestion ||
         quizHelperState.answered || isAnswering) return;
     const quiz = window.currentActiveQuiz, user = auth.currentUser, data = quiz?.data;
+    const trial = trialQuestionSession;
     if (!user?.uid || !data?.q || !Array.isArray(data.opts) ||
         !Number.isInteger(Number(data.ans)) || data.ans < 0 ||
         data.ans >= data.opts.length) return;
@@ -4516,6 +4518,14 @@ window.addEventListener('qa:invalid-tex', event => {
         '畫面片段：' + String(event.detail.source || '').replace(/\\s+/g,' ').slice(0,220);
     void (async () => {
         try {
+            if (trial?.question === quiz && trial.reviewMath) {
+                const result = await trial.reviewMath(quiz);
+                if (!result?.submitted) throw new Error('公式錯誤自動送審暫時失敗');
+                if (trialQuestionSession === trial && window.currentActiveQuiz === quiz &&
+                    auth.currentUser?.uid === user.uid)
+                    window.showToast?.('偵測到公式顯示錯誤，已自動送審。');
+                return;
+            }
             const token = await user.getIdToken();
             if (auth.currentUser?.uid !== user.uid) return;
             const autoReviewEndpoint = '/api/verify-report';

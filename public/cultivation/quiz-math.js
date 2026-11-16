@@ -24,7 +24,8 @@
     // If the AI supplied malformed delimiters/TeX, preserve its original
     // readable expression as literal text rather than expose Math input error.
     const guard = window.QAMathGuard;
-    if (guard && !guard.inspect(text).valid) return guard.fallback(text);
+    if (guard && !guard.inspect(text).valid)
+      return '<span data-invalid-tex>' + guard.fallback(text) + '</span>';
     // main-legacy defines this formatter and already protects math delimiters from
     // HTML escaping while rendering optional Markdown images.
     if (typeof window.formatQuizRichText === 'function') return window.formatQuizRichText(text);
@@ -39,100 +40,76 @@
     }
   }
 
-  // Wait for async MathJax boot: the quiz may be ready before the CDN script.
-  // MathJax startup.promise becomes available after the script is initialized.
-  function readyMath() {
-    const mj = math();
-    return mj?.startup?.promise || Promise.resolve();
+  function reportInvalid(node, source) {
+    console.warn('[Quiz Math] invalid TeX displayed as literal text');
+    if (typeof CustomEvent === 'function') {
+      window.dispatchEvent?.(new CustomEvent('qa:invalid-tex', { detail: { node, source } }));
+    }
+  }
+
+  function readableFallback(roots) {
+    if (typeof document === 'undefined' || !document.createTreeWalker || !window.QAMathGuard) return;
+    for (const node of roots.filter(root => root.isConnected)) {
+      const walker = document.createTreeWalker(node, 4); // SHOW_TEXT
+      while (walker.nextNode()) {
+        const text = walker.currentNode;
+        if (text.parentElement?.closest('mjx-container,script,style,.tex2jax_ignore')) continue;
+        if (/\\[a-zA-Z]+|\\[()[\]]|\$[^$]+\$/.test(text.nodeValue || '')) {
+          text.nodeValue = window.QAMathGuard.readableMath(text.nodeValue);
+        }
+      }
+    }
   }
 
   function typeset(nodes) {
     const roots = (Array.isArray(nodes) ? nodes : [nodes]).filter(Boolean);
     if (!roots.length) return Promise.resolve();
-    // MathJax cannot safely process concurrent DOM updates. Keep independent
-    // question, option and explanation requests in document order.
+    // MathJax cannot safely process concurrent DOM updates.
     const job = async () => {
       const mj = math();
-      if (!mj?.typesetPromise) {
-        // The CDN may be unavailable on mobile. Use readable symbols instead
-        // of leaving raw TeX commands visible until another question arrives.
-        if (typeof document !== 'undefined' && document.createTreeWalker && window.QAMathGuard) {
-          for (const node of roots.filter(root => root.isConnected)) {
-            const walker = document.createTreeWalker(node,4); // SHOW_TEXT
-            const texts = [];
-            while (walker.nextNode()) texts.push(walker.currentNode);
-            for (const text of texts) {
-              if (text.parentElement?.closest('mjx-container,script,style,.tex2jax_ignore')) continue;
-              if (/\\[a-zA-Z]+|\\[()[\]]|\$[^$]+\$/.test(text.nodeValue || '')) {
-                text.nodeValue = window.QAMathGuard.readableMath(text.nodeValue);
-              }
-            }
+      try {
+        await mj?.startup?.promise;
+        const live = roots.filter(node => node.isConnected);
+        for (const node of live) {
+          for (const literal of node.querySelectorAll?.('[data-invalid-tex]') || []) {
+            literal.removeAttribute('data-invalid-tex');
+            reportInvalid(literal, literal.textContent);
           }
         }
-        return;
-      }
-      try {
-        await readyMath();
-        const live = roots.filter(node => node.isConnected);
         if (!live.length) return;
-        const backups = live.map(node => ({
-          node,
-          html: node.innerHTML,
-          literal: node.textContent || ''
-        }));
-        try {
-          await mj.typesetPromise(live);
-          for (const entry of backups) {
-            const broken = entry.node.querySelector?.('mjx-merror, .mjx-merror, [data-mjx-error]') ||
-              (/(?:Math input error|TeX parse error|MathJax internal error)/i.test(entry.node.textContent || '') &&
-                entry.node.querySelector?.('mjx-container'));
-            if (!entry.node.isConnected || !broken) continue;
-            // Mark as ignored so a future MathJax pass cannot re-trigger
-            // the same parse failure. Never insert unescaped source text.
-            const escaped = window.QAMathGuard?.fallback(entry.literal) ||
-              '<span class="tex2jax_ignore">' + escape(entry.literal) + '</span>';
-            try { mj.typesetClear?.([entry.node]); } catch (_) {}
-            // Replacing an entire options panel would destroy the answer
-            // buttons and their click handlers. Keep the surrounding quiz
-            // intact and replace only the malformed MathJax formula.
-            const badMath = broken?.matches?.('mjx-container') ? broken :
-              broken?.closest?.('mjx-container');
-            if (badMath?.replaceWith && typeof document?.createElement === 'function') {
-              const literal = document.createElement('span');
-              literal.className = 'quiz-math-fallback tex2jax_ignore';
-              literal.textContent = badMath.getAttribute?.('data-latex') ||
-                badMath.textContent || entry.literal;
-              badMath.replaceWith(literal);
-            } else {
-              entry.node.innerHTML = escaped;
-            }
-            console.warn('[Quiz Math] invalid TeX displayed as literal text');
-            // Report an actual MathJax parse failure, not a transient CDN outage.
-            // The question controller checks the current active question and
-            // sends it for independent review without opening a report modal.
-            if (typeof CustomEvent === 'function') {
-              window.dispatchEvent?.(new CustomEvent('qa:invalid-tex', {
-                detail: { node: entry.node, source: entry.literal }
-              }));
-            }
+        if (!mj?.typesetPromise) {
+          readableFallback(live);
+          return;
+        }
+        const originals = live.map(node => node.textContent || '');
+        await mj.typesetPromise(live);
+        for (const [index, node] of live.entries()) {
+          if (!node.isConnected) continue;
+          const errorSelector = 'mjx-merror, .mjx-merror, [data-mjx-error]';
+          const errors = Array.from(node.querySelectorAll?.(errorSelector) || [node.querySelector?.(errorSelector)]);
+          if (!errors.some(Boolean) && /(?:Math input error|TeX parse error|MathJax internal error)/i.test(node.textContent || '')) {
+            errors.push(node.querySelector?.('mjx-container'));
           }
-        } catch (renderError) {
-          for (const { node, html, literal } of backups) {
-            if (node.isConnected) {
-              try { mj.typesetClear?.([node]); } catch (_) {}
-              // Never retry the same failed MathJax input unchanged.
-              const original = literal || html.replace(/<[^>]*>/g, ' ');
-              node.innerHTML = window.QAMathGuard?.fallback(original) ||
-                '<span class="tex2jax_ignore">' + escape(original) + '</span>';
-            }
+          const formulas = new Set(errors.filter(Boolean).map(error =>
+            error.matches?.('mjx-container') ? error : error.closest?.('mjx-container') || error));
+          const items = formulas.size ? mj.startup?.document?.getMathItemsWithin?.(node) || [] : [];
+          for (const formula of formulas) {
+            const item = items.find(math => math.typesetRoot === formula);
+            const source = item?.math || formula.getAttribute?.('data-latex') || originals[index];
+            const literal = document.createElement('span');
+            literal.className = 'quiz-math-fallback tex2jax_ignore';
+            literal.textContent = window.QAMathGuard?.readableMath(source) || source;
+            try { mj.typesetClear?.([formula]); } catch (_) {}
+            formula.replaceWith(literal);
+            reportInvalid(node, source);
           }
-          throw renderError;
         }
       } catch (error) {
+        readableFallback(roots);
         console.warn('[Quiz Math] typesetting failed; original text remains readable', error);
       }
     };
-    queue = queue.then(job,job);
+    queue = queue.then(job, job);
     return queue;
   }
 

@@ -1,6 +1,6 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
-import './tactical-rules.js?v=20261116-loadout-presets-v1';
-import './tactical-animation.js';
+import './tactical-rules.js?v=20261116-stability-v1';
+import './tactical-animation.js?v=20261116-stability-v1';
 import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';
 const R=globalThis.QATactical;

@@ -541,7 +541,8 @@
     const targetPoint=aim?{x:p.x+aim.x,y:p.y+aim.y}:point(p);
     const castEvent=log(s,a.name+'施展「'+sk.name+'」','cast',{actor:a.uid,skill:sk.id,x:p.x,y:p.y,
       animation:{kind:'cast',style:sk.kind,origin,target:targetPoint,cells,
-        ...(rays?{rays}:{}),...(cuts?{cuts}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
+        // A stored Firestore array cannot directly contain another array.
+        ...(rays?{rays:rays.map(cells=>({cells}))}:{}),...(cuts?{cuts:cuts.map(cells=>({cells}))}:{}),...(sk.hits?{hits:sk.hits}:{}),...(sk.kind==='fist-chain'?{step:1}:{}),
         color:sk.color||(CORES[a.core]||CORES.none).color,changes:[appearance(a)]}});
     if(sk.kind==='fist-focus'){
       a.fistFocusUntil=a.turns+2;
@@ -821,7 +822,7 @@
     }else if(command.type==='guard'){
       validateAttackLimit(a);a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
     }else if(!endsTurn)fail('未知的戰場行動');
-    a.actions++;s.turnTimeouts[uid]=0;
+    a.actions++;(s.turnTimeouts||={})[uid]=0;
     if(endsTurn){
       log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});
       end(s,now);
@@ -838,7 +839,7 @@
     a.questions++;a.answered++;if(correct)a.correct++;
     log(s,a.name+(correct?'答對':'訂正')+'，體力 +'+(a.stamina-before),'answer',{actor:uid,correct,gain:a.stamina-before,
       animation:{kind:'answer',changes:[appearance(a)],numbers:[{uid,gain:a.stamina-before}]}});
-    if(!s.quizRound)s.turnTimeouts[uid]=0;
+    if(!s.quizRound)(s.turnTimeouts||={})[uid]=0;
     if(s.quizRound&&a.questions===LIMITS.questions){
       if(!s.initiativeUid){s.initiativeUid=uid;s.answerDeadlineMs=now+LIMITS.answerMs;begin(s,a,now);}
       else if(s.phase==='waiting-answer')begin(s,a,now);
@@ -861,7 +862,7 @@
           }
           if(s.phase==='waiting-answer')nextAction(s,due);
         }else{
-          const uid=s.turnUid;s.turnTimeouts[uid]=(s.turnTimeouts[uid]||0)+1;
+          const uid=s.turnUid;const timeouts=s.turnTimeouts||={};timeouts[uid]=(timeouts[uid]||0)+1;
           log(s,current(s).name+'行動逾時','timeout',{actor:uid,animation:{kind:'turn'}});
           if(s.turnTimeouts[uid]>=2){s.status='finished';s.winner=s.actors.find(a=>a.uid!==uid).team;s.finishReason='timeout';s.deadlineMs=0;}
           else end(s,due);
@@ -871,7 +872,7 @@
       return s;
     }
     if(state.status!=='active'||state.mode!=='pvp'||now<state.deadlineMs)return state;
-    const s=clone(state),uid=s.turnUid;s.turnTimeouts[uid]=(s.turnTimeouts[uid]||0)+1;
+    const s=clone(state),uid=s.turnUid;const timeouts=s.turnTimeouts||={};timeouts[uid]=(timeouts[uid]||0)+1;
     log(s,current(s).name+'行動逾時','timeout',{actor:uid,animation:{kind:'turn'}});
     if(s.turnTimeouts[uid]>=2){s.status='finished';s.winner=s.actors.find(a=>a.uid!==uid).team;s.finishReason='timeout';s.deadlineMs=0;}
     else end(s,now);
