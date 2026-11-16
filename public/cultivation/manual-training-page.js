@@ -1,4 +1,4 @@
-import './manual-rules.js';
+import './manual-rules.js?v=20261116-skill-damage-inline-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 

@@ -1,4 +1,4 @@
-import './manual-rules.js';
+import './manual-rules.js?v=20261116-skill-damage-inline-v1';
 import {skillArt} from './manual-art.js';
 import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261112-manual-cultivation-v1';
@@ -58,8 +58,8 @@ function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
-  if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261116-wheel-art-v2';document.head.append(link);}
-  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-wheel-art-v2';document.head.append(link);}
+  if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
