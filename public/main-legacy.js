@@ -122,6 +122,8 @@ let soloCacheIdentity = '';
 let soloCacheRevision = 0;
 let soloQuizOpenSerial = 0;
 let trialQuestionSession = null;
+window.isTrialQuestionSessionActive = () => !!trialQuestionSession;
+let pendingQuizScopeExclusions = null;
 const soloDraws = new WeakMap();
 const adaptiveSoloUnits = new Map();
 window.persistAdaptiveActiveQuiz = quiz => {
@@ -150,6 +152,7 @@ function soloQuestionScope() {
         units,
         level: String(profile.educationLevel || ''),
         weakSubjects: mode === 'focused' ? String(profile.weakSubjects || '') : '',
+        exclusionRevision: mode === 'focused' ? String(currentUserData?.questionScopeExclusions?.revision || '') : '',
         language: 'zh-TW'
     });
 }
@@ -179,6 +182,26 @@ function syncSoloQuestionCache() {
 }
 
 
+window.addEventListener('qa:scope-exclusions-updated', event => {
+    const {state,quiz,changed} = event.detail || {};
+    if (!changed || !state || !currentUserData || !auth.currentUser?.uid) return;
+    const active = quiz === window.currentActiveQuiz;
+    const alreadyAnswered = active && answeredSoloQuizzes.has(quiz);
+    if (alreadyAnswered) {
+        // Keep the result and explanation readable until the player presses 下一題.
+        pendingQuizScopeExclusions = state;
+        return;
+    }
+    currentUserData.questionScopeExclusions = state;
+    if (!active) { syncSoloQuestionCache(); return; }
+    // The current unanswered question is neutral: no incorrect count or loss.
+    // Refresh both the in-memory pool and persisted prefetch cache.
+    if (!trialQuestionSession) {
+        syncSoloQuestionCache();
+        void window.startQuizFlow();
+        window.showToast?.('已排除此類考法，本題不計錯，正在換題。');
+    }
+});
 function recentSoloQuestionContext() {
     syncSoloQuestionCache();
     const history = soloQuestionCache.getHistory();
@@ -2423,13 +2446,21 @@ window.saveProfile = async (triggerButton = null) => {
     document.getElementById('set-strong').value = cleanStrong;
     document.getElementById('set-weak').value = cleanWeak;
     
+    const scopeSignature = (settings, grade) => JSON.stringify([
+        settings?.sourceMode || 'random', String(grade || ''),
+        (Array.isArray(settings?.focusedUnits) ? settings.focusedUnits : [])
+          .map(unit => JSON.stringify([unit.path || '',unit.detail || '',[...(unit.sub_topics || [])].sort()])).sort()
+    ]);
+    const oldScopeSignature = scopeSignature(currentUserData.gameSettings, currentUserData.profile.educationLevel);
     const newSettings = { 
         sourceMode: sourceMode, 
         source: source, 
         focusedUnits: [...(window.soloSelectedUnits || [])]
     };
 
-    await updateDoc(doc(db, "users", auth.currentUser.uid), { 
+    const selectionChanged = oldScopeSignature !== scopeSignature(newSettings,level);
+    await updateDoc(doc(db, "users", auth.currentUser.uid), {
+        ...(selectionChanged ? {"questionScopeExclusions": null} : {}),
         "displayName": displayName,
         "profile.educationLevel": level, 
         "profile.strongSubjects": cleanStrong, 
@@ -2442,6 +2473,10 @@ window.saveProfile = async (triggerButton = null) => {
     currentUserData.profile.strongSubjects = cleanStrong; 
     currentUserData.profile.weakSubjects = cleanWeak; 
     currentUserData.gameSettings = newSettings;
+    if (selectionChanged) {
+        currentUserData.questionScopeExclusions = null;
+        pendingQuizScopeExclusions = null;
+    }
     window.dispatchEvent(new CustomEvent('xiuxian:quest-progress-updated'));
     
     // 更新畫面上方顯示的名稱
@@ -3123,6 +3158,11 @@ window.nextQuestion = async () => {
         extendedPracticeState.recoveryOrigin = pending.recoveryOrigin;
     }
     window.currentActiveQuiz = null;
+    if (pendingQuizScopeExclusions) {
+        currentUserData.questionScopeExclusions = pendingQuizScopeExclusions;
+        pendingQuizScopeExclusions = null;
+        syncSoloQuestionCache();
+    }
     try {
         if (trialQuestionSession) {
             await trialQuestionSession.next();
@@ -4301,6 +4341,7 @@ function renderQuiz(data, rank, topic, {study = false, onAnswer = null} = {}) {
     resetQuizWhiteboard({ close: true });
     resetQuizHelper(data, { topic });
     window.QAAdaptiveLearning?.render(window.currentActiveQuiz);
+    window.syncQuizScopeExclusionButton?.(window.currentActiveQuiz);
     syncQuizExtendedPracticeControls();
     document.getElementById('quiz-loading').classList.add('hidden');
     document.getElementById('quiz-container').classList.remove('hidden');
