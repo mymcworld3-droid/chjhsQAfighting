@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const R=require('../public/cultivation/tactical-rules.js'),Manuals=require('../public/cultivation/manual-rules.js');
 const source=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/skill-simulator.js'),'utf8');
 const artSource=fs.readFileSync(require('node:path').join(__dirname,'../public/cultivation/manual-art.js'),'utf8');
-const {skillArt}=new Function(artSource.replace(/^export const /gm,'const ')+'\\nreturn {skillArt};')();
+const {skillArt}=new Function(artSource.replace(/^export const /gm,'const ')+String.fromCharCode(10)+'return {skillArt};')();
 function boot(){
   class Element{
     constructor(){this.listeners={};this.dataset={};this.value='';this.children=[];this.hidden=false;this.disabled=false;this.checked=false;this.textContent='';this.style={};this.classList={toggle(){}};}
