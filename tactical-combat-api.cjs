@@ -471,6 +471,7 @@ async function switchBattleLoadout(db,uid,input,now=Date.now()){
   if(!request)throw error('配置切換識別碼無效',400);
   return db.runTransaction(async tx=>{
     const s=await readRoom(tx,db,input.roomId,uid);
+    if(s.mode!=='pve')throw error('只有問道試煉期間可以切換配置',403);
     if(s.receipts?.some(receipt=>receipt.uid===uid&&receipt.id===request))return snapshot(s,uid);
     if(s.status!=='active')throw error('目前不是進行中的戰鬥');
     const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);

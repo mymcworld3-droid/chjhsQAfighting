@@ -62,23 +62,15 @@ test('switching saved skills inside PvE is free, preserves resources and persist
   assert.equal(bare.actors[0].stamina,initial.stamina);
 });
 
-test('PvP can switch a preset when it is not the player turn',async()=>{
+test('PvP rejects switching without changing room or saved configuration',async()=>{
   const db=fixture();
   const waiting=await API.start(db,'u1',{mode:'pvp'},NOW);
   const joined=await API.start(db,'u2',{mode:'pvp',code:waiting.id.slice(6)},NOW+1);
-  assert.equal(joined.status,'active');
-  const toSwitch=joined.turnUid==='u1'?'u2':'u1';
-  if(toSwitch==='u2'){
-    db.records.get('users/u2').stats.totalScore=188;
-    db.records.set(API.MANUALS+'/u2',structuredClone(db.records.get(API.MANUALS+'/u1')));
-  }
-  const before=joined.actors.find(a=>a.uid===toSwitch);
-  const changed=await switchTo(API,db,joined.id,1,'switch-pvp-001',toSwitch);
-  const after=changed.actors.find(a=>a.uid===toSwitch);
-  assert.equal(changed.turnUid,joined.turnUid);
-  assert.deepEqual(after.manualSkills,['wind-step']);
-  assert.equal(after.actions,before.actions);
-  assert.equal(after.stamina,before.stamina);
+  const before=structuredClone(db.records.get(API.ROOMS+'/'+joined.id));
+  const manuals=structuredClone(db.records.get(API.MANUALS+'/u1'));
+  await assert.rejects(switchTo(API,db,joined.id,1,'switch-pvp-001'),/只有問道試煉/);
+  assert.deepEqual(db.records.get(API.ROOMS+'/'+joined.id),before);
+  assert.deepEqual(db.records.get(API.MANUALS+'/u1'),manuals);
 });
 
 test('nonparticipants, invalid presets and finished rooms cannot switch',async()=>{
@@ -93,7 +85,7 @@ test('nonparticipants, invalid presets and finished rooms cannot switch',async()
   await assert.rejects(switchTo(API,db,room.id,1,'switch-finished-01'),/不是進行中的戰鬥/);
 });
 
-test('client exposes a compact loadout chooser and updates the live PvP skill buttons',()=>{
+test('client exposes the loadout chooser only during PvE',()=>{
   const src=fs.readFileSync(path.join(__dirname,'../public/cultivation/tactical-combat.js'),'utf8');
   const style=fs.readFileSync(path.join(__dirname,'../public/styles/tactical-combat.css'),'utf8');
   const page=fs.readFileSync(path.join(__dirname,'../public/cultivation/manual-training-page.js'),'utf8');
@@ -105,5 +97,6 @@ test('client exposes a compact loadout chooser and updates the live PvP skill bu
   assert.match(src,/renderBattleLoadouts\(\)/);
   assert.match(src,/syncEquippedAttack\(\);renderer\?\.update/);
   assert.match(style,/\.tc-loadout-popover/);
-  assert.match(page,/戰鬥中也能使用戰場上方的「配置」按鈕自由切換/);
+  assert.match(src,/state\.mode==='pve'/);
+  assert.match(page,/問道試煉中可使用戰場上方的「配置」按鈕切換；鬥法期間無法切換/);
 });

@@ -75,7 +75,7 @@ function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;
 function renderBattleLoadouts(){
   const toggle=$('[data-loadout-toggle]'),menu=$('[data-loadout-menu]');
   if(!toggle||!menu)return;
-  const active=state?.status==='active',actor=myActor();
+  const active=state?.status==='active'&&state.mode==='pve',actor=myActor();
   const index=Number.isInteger(actor?.manualLoadoutIndex)?actor.manualLoadoutIndex:
     (battleLoadouts?.activeLoadout??0);
   toggle.hidden=!active;toggle.disabled=busy;
@@ -96,7 +96,7 @@ function renderBattleLoadouts(){
 }
 async function refreshBattleLoadouts(){
   const account=uid,room=state?.id,e=epoch;
-  if(!room||!valid(e,account)||state.status!=='active'||loadoutFetchedFor===account||
+  if(!room||!valid(e,account)||state.status!=='active'||state.mode!=='pve'||loadoutFetchedFor===account||
     loadoutFetchingFor===account+':'+room)return;
   const key=account+':'+room;loadoutFetchingFor=key;
   try{
@@ -111,7 +111,7 @@ async function refreshBattleLoadouts(){
   }finally{if(loadoutFetchingFor===key)loadoutFetchingFor='';}
 }
 async function switchBattleLoadout(index){
-  if(!state||state.status!=='active'||busy||!Number.isInteger(index)||index<0||index>2)return;
+  if(!state||state.status!=='active'||state.mode!=='pve'||busy||!Number.isInteger(index)||index<0||index>2)return;
   const current=Number.isInteger(myActor()?.manualLoadoutIndex)?myActor().manualLoadoutIndex:
     (battleLoadouts?.activeLoadout??0);
   if(index===current)return;

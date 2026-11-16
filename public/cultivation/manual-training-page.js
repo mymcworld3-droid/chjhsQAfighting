@@ -135,7 +135,7 @@ function markup(expandedBooks){
       <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
         <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
         <i class="fa-solid fa-hand-fist"></i> 體修</button></div></section>
-    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。戰鬥中也能使用戰場上方的「配置」按鈕自由切換。</p></div>
+    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。問道試煉中可使用戰場上方的「配置」按鈕切換；鬥法期間無法切換。</p></div>
       <div class="manual-presets" role="group" aria-label="功法配置">
         ${(current.loadouts||[]).map((item,i)=>`<button type="button" data-loadout-select="${i}" class="${selectedLoadout===i?'selected':''}">${esc(item.name)}${i===current.activeLoadout?' · 使用中':''}</button>`).join('')}
       </div>
