@@ -436,7 +436,7 @@ test('crossed sword cuts kick at each actual hit, with a stronger second strike'
   assert.equal(A.impactPulse(miss,first),0);assert.equal(A.impactPulse(miss,second),0);
 });
 
-test('far break holds the enlarged sword silhouette after its beam has cleared',()=>{
+test('far break keeps its beam with the enlarged sword silhouette, then fades both together',()=>{
   const before=fixture('wind-thousand');
   const after=R.apply(before,'hero',{type:'manual',skillId:'wind-thousand',x:5,y:4},now);
   const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast');
@@ -446,13 +446,14 @@ test('far break holds the enlarged sword silhouette after its beam has cleared',
     Effects.draw(c,cast,p,{cell:48,ox:0,oy:0,width:12,height:9},true);
     return {fills,calls:c.calls};
   };
-  const peak=drawAt(.46),hold=drawAt(.715),fading=drawAt(.86);
+  const peak=drawAt(.46),hold=drawAt(.715),fading=drawAt(.9),late=drawAt(.98);
   const hasBeam=frame=>frame.calls.some(([name,x,y])=>name==='moveTo'&&x===216&&y===216);
-  assert(hasBeam(peak));assert(!hasBeam(hold));
+  assert(hasBeam(peak));assert(hasBeam(hold));assert(hasBeam(fading));
   assert(hold.calls.some(([name,x])=>name==='moveTo'&&x<-2*48));
   assert.deepEqual(hold.fills,peak.fills);
   assert(fading.fills[0]>0&&fading.fills[0]<hold.fills[0]);
-  assert.deepEqual(drawAt(1).fills,[]);
+  assert(late.fills[0]>0&&late.fills[0]<fading.fills[0]);
+  assert.deepEqual(drawAt(1).fills,[]);assert(!hasBeam(drawAt(1)));
 });
 
 test('eight sword points light up before converging together',()=>{
