@@ -1,5 +1,5 @@
 // Canonical filenames for stamina-battle manual and skill artwork.
-// Shared techniques use the same art. 蓄勢 currently has no uploaded painting.
+// Shared techniques reuse the base move's art; all 13 unique moves have paintings.
 const BOOK_ART=Object.freeze({
   'sword-wind':'/assets/books/sword-wind.png',
   'sword-flight':'/assets/books/sword-flight.png',
@@ -19,6 +19,7 @@ const MOVE_ART=Object.freeze({
   'rock-quake':'/assets/skills/rock-quake.png',
   'rock-break':'/assets/skills/rock-break.png',
   'dragon-guard':'/assets/skills/dragon-guard.png',
+  'dragon-roar':'/assets/skills/dragon-roar.png',
   'tiger-step':'/assets/skills/tiger-step.png',
   'tiger-throw':'/assets/skills/tiger-throw.png'
 });
