@@ -54,7 +54,8 @@ function refreshControls(){
   glyph.classList.toggle('has-art',!!art);
   $('#skill-name').textContent=chosen.name;
   $('#skill-stats').textContent=`${chosen.cost} 體力 · ${chosen.unlimited?'無固定射程':chosen.range===0?'自身':chosen.range+' 格'}`;
-  $('#skill-description').textContent=chosen.description;
+  $('#skill-description').textContent=Manuals.descriptionWithDamage(player.atk,chosen,
+    {flyingSwordReady:!!player.flyingSword});
 }
 function render(selection=null){
   if(!state||!renderer)return;
