@@ -18,31 +18,49 @@
     <p id="cs-range-message" role="status" aria-live="polite"></p>
   </section>`;
   let root, active = 0, ready = false;
-  // Keep the studio inside the visible area while the mobile keyboard is open.
-  let keyboardTimer;
+  const viewport = window.visualViewport;
+  const textFields = 'textarea,input:not([type]),input[type="text"],input[type="search"]';
+  let keyboardTimer, lastField, lastHeight;
+
   function syncKeyboardViewport() {
-    const studio=$('scope-studio'), viewport=window.visualViewport;
+    const studio = $('scope-studio');
     if (!studio || !viewport) return;
-    const input=document.activeElement;
-    const editing=studio.contains(input) && input.matches('textarea,input:not([type]),input[type="text"],input[type="search"]');
-    studio.classList.toggle('ss-keyboard-open',editing);
-    if (!editing) { studio.style.removeProperty('--ss-visible-height'); studio.style.removeProperty('--ss-visible-top'); return; }
-    studio.style.setProperty('--ss-visible-height',Math.round(viewport.height)+'px');
-    studio.style.setProperty('--ss-visible-top',Math.round(viewport.offsetTop)+'px');
-    clearTimeout(keyboardTimer);
-    keyboardTimer=setTimeout(()=>{
-      if(document.activeElement!==input)return;
-      const scroller=input.closest('.ss-picker-body,.ss-cart-body,.ss-transfer-body');
-      if(!scroller)return;
-      const field=input.getBoundingClientRect(), bounds=scroller.getBoundingClientRect();
-      if(field.bottom>bounds.bottom-12)scroller.scrollTop+=field.bottom-bounds.bottom+12;
-      else if(field.top<bounds.top+12)scroller.scrollTop+=field.top-bounds.top-12;
-    },120);
+    const input = document.activeElement;
+    const height = Math.round(viewport.height);
+    const keyboardOpen = !studio.hidden && studio.contains(input) && input?.matches(textFields) &&
+      document.documentElement.clientHeight - height > 100 && Math.abs(viewport.scale - 1) < .02;
+
+    if (!keyboardOpen) {
+      studio.classList.remove('ss-keyboard-open');
+      lastField = lastHeight = undefined;
+      return;
+    }
+    if (input === lastField && height === lastHeight) return;
+    lastField = input;
+    lastHeight = height;
+    studio.style.setProperty('--ss-visible-height', height + 'px');
+    studio.style.setProperty('--ss-visible-top', Math.round(viewport.offsetTop) + 'px');
+    studio.classList.add('ss-keyboard-open');
+
+    // Adjust only the inner panel after Safari finishes opening the keyboard.
+    const scroller = input.closest('.ss-picker-body,.ss-cart-body,.ss-transfer-body');
+    if (!scroller) return;
+    const field = input.getBoundingClientRect();
+    const bounds = scroller.getBoundingClientRect();
+    const top = bounds.top + 12;
+    const bottom = bounds.bottom - 12;
+    if (field.height > bottom - top || field.top < top) scroller.scrollTop += field.top - top;
+    else if (field.bottom > bottom) scroller.scrollTop += field.bottom - bottom;
   }
-  document.addEventListener('focusin',syncKeyboardViewport);
-  document.addEventListener('focusout',()=>setTimeout(syncKeyboardViewport,0));
-  window.visualViewport?.addEventListener('resize',syncKeyboardViewport,{passive:true});
-  window.visualViewport?.addEventListener('scroll',syncKeyboardViewport,{passive:true});
+
+  function scheduleKeyboardSync() {
+    clearTimeout(keyboardTimer);
+    keyboardTimer = setTimeout(syncKeyboardViewport, 160);
+  }
+
+  document.addEventListener('focusin', scheduleKeyboardSync);
+  document.addEventListener('focusout', scheduleKeyboardSync);
+  viewport?.addEventListener('resize', scheduleKeyboardSync, { passive: true });
   function options(id) {
     return [...($(id)?.options || [])].filter(o => o.value).map(o => ({value:o.value,label:o.textContent}));
   }
