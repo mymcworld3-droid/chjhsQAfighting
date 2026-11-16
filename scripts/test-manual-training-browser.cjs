@@ -12,7 +12,7 @@ async function main(){
   const db=database();db.records.get('users/u1').stats.gold=10000;
   await service.chooseSchool(db,'u1',{school:'sword'});
   const app=express();app.use(express.json());
-  app.get('/cultivation/data/project-repository.js',(_,res)=>res.type('text/javascript').send(`export const getMainUser=()=>({uid:'u1'});export const authenticatedMainFetch=(url,init)=>fetch(url,init);`));
+  app.get('/cultivation/data/project-repository.js',(_,res)=>res.type('text/javascript').send(`export const getMainUser=()=>({uid:'u1'});export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'Content-Type':'application/json'}});`));
   app.use('/api/tactical/manuals',(req,res,next)=>{if(req.method==='POST')setTimeout(next,250);else next();});
   register(app,{resolve:()=>({db}),verify:async()=> 'u1'});
   app.get('/test',(_,res)=>res.type('html').send(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="nav-grid"></div><main id="page-training" class="active-page"></main><script type="module" src="/cultivation/manual-training-page.js"></script></body></html>`));
