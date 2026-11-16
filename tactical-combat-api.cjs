@@ -160,7 +160,11 @@ function rollManualDrop(s,uid,raw){
   return {state,changed:true,drop:picked.id};
 }
 function manualResponse(record,user,gold=Rules.num(user.stats?.gold)){
-  return {...Manuals.publicState(record,TrainingAccess.score(user)),gold};
+  // Use the same authoritative, artifact-free attack snapshot as a new
+  // tactical trial. Browser projections may omit timed attack modifiers.
+  const combatUser={...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}};
+  const battleAttack=trustedRaidPlayerSnapshot(combatUser,String(user.uid||''),{}).atk;
+  return {...Manuals.publicState(record,TrainingAccess.score(user)),gold,battleAttack};
 }
 async function manualsState(db,uid){
   const [player,record]=await Promise.all([db.collection('users').doc(uid).get(),db.collection(MANUALS).doc(uid).get()]);
