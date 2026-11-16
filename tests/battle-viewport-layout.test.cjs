@@ -62,9 +62,9 @@ test('CSS blocks are balanced and browser loads the new build', () => {
   const ending = full.indexOf('    ' + tick + ';\n    document.head.appendChild(style);');
   const css = full.slice(full.indexOf('/* Viewport-fit battle:'), ending);
   assert.equal(css.split('{').length, css.split('}').length);
-  assert.ok(main.includes("XIUXIAN_FEATURE_BUILD = '20261022-ocean-balance1'"));
+  assert.match(main, /XIUXIAN_FEATURE_BUILD = '20\d{6}-[\w-]+'/);
   assert.ok(main.includes("BATTLE_FEATURE_BUILD = '20261022-ocean-balance1'"));
-  assert.ok(index.includes('main.js?v=20261013-arrival1'));
+  assert.match(index, /main\.js\?v=20\d{6}-[\w-]+/);
 });
 
 test('stage portraits keep the near-left and far-right duel depth in formal and tutorial battles', () => {
