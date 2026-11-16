@@ -10,6 +10,15 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
 const label=school=>school==='sword'?'劍修':'體修';
 const artImg=(src,klass)=>src?`<img class="${klass}" src="${esc(src)}" alt="" loading="lazy" decoding="async">`:``;
 const visible=()=>!!root?.closest('#page-training.active-page:not(.hidden)');
+const damageDetails=(skill,attack)=>{
+  const hit=Catalog.singleHitDamage(attack,skill);
+  const fmt=value=>value.toLocaleString('zh-TW');
+  return `<div class="manual-skill-damage">
+    <strong>${hit.direct?'單次攻擊力 '+fmt(hit.damage):'無直接傷害'}</strong>
+    ${hit.center!==undefined?`<span>中心交點每擊 ${fmt(hit.center)}（最多 ${hit.centerHits} 次）</span>`:''}
+    ${hit.note?`<small>${esc(hit.note)}</small>`:''}
+  </div>`;
+};
 function ensure(){
   const page=document.getElementById('page-training');
   if(!page)return null;
@@ -57,11 +66,14 @@ function markup(expandedBooks){
   const tactical=window.getCombatPower?.();
   const rating=tactical?.mode==='tactical'?tactical:null;
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
+  const projectedAttack=Number(window.getCombatStats?.()?.attack);
+  const attack=Number.isFinite(projectedAttack)&&projectedAttack>0?projectedAttack:
+    Math.max(1,Number(window.getCurrentUserData?.()?.stats?.attack)||200);
   const slots=Array.from({length:3},(_,i)=>{
     const id=equipped[i],skill=skillDetails(id);
     return `<div class="manual-slot ${id?'is-active':''}">
       <small>第 ${i+1} 技能欄</small>
-      ${skill?`<div class="manual-slot-equipped">${artImg(skillArt(skill),"manual-slot-art")}<div class="manual-slot-meta"><strong>${esc(skill.name)}</strong><span>招式 Lv. ${skill.level} · ${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span></div></div>
+      ${skill?`<div class="manual-slot-equipped">${artImg(skillArt(skill),"manual-slot-art")}<div class="manual-slot-meta"><strong>${esc(skill.name)}</strong><span>招式 Lv. ${skill.level} · ${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span>${damageDetails(skill,attack)}</div></div>
         <button type="button" data-manual-remove="${esc(id)}">卸下</button>`:
         '<span class="manual-slot-empty">尚未裝備</span>'}
       </div>`;
@@ -80,7 +92,8 @@ function markup(expandedBooks){
         <div class="manual-technique-overview">${artImg(skillArt(skill),"manual-skill-art")}<div class="manual-technique-copy">
         <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}${unlocked?` <span>Lv. ${skill.level}</span>`:''}</b>
           <small>${skill.cost} 體力 · ${skill.unlimited?'無固定射程':skill.range+' 格'} · ${skill.realmName}境</small></div>
-        <p>${esc(skill.description)}</p></div></div>
+        <p>${esc(skill.description)}</p>
+        ${damageDetails(skill,attack)}</div></div>
         ${unlocked?`<div class="manual-technique-actions">
           <button type="button" data-manual-equip="${esc(skill.id)}" ${equipDisabled(skill.id,equipped)?'disabled':''}>${other===skill.id?'已裝備':other?'改用本功法':'裝備技能'}</button>
           ${upgrade?`<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" ${gold<upgrade.gold?'disabled':''}>
