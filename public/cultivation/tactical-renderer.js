@@ -1,5 +1,5 @@
-import './manual-rules.js';
-import './tactical-rules.js';
+import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
+import './tactical-rules.js?v=20261116-fourstep-sync-fix-v1';
 import './tactical-animation.js';
 import './tactical-skill-effects.js';
 import './tactical-camera.js';
