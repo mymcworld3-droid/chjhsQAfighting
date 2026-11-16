@@ -93,23 +93,45 @@ function showLesson(quiz, lesson, { beforeAnswer = false } = {}) {
   if (!uid || window.currentActiveQuiz !== quiz || !meta || !scopeSelected(meta) || lesson.scopeId !== meta.scopeId || lesson.conceptId !== meta.conceptId) return;
   document.getElementById('adaptive-concept-lesson')?.remove();
   const host = document.getElementById(beforeAnswer ? 'question-text' : 'feedback-text'); if (!host) return;
-  const panel = document.createElement('section'); panel.id = 'adaptive-concept-lesson'; panel.className = 'adaptive-concept-lesson';
-  const heading = document.createElement('h3'); heading.textContent = '觀念補給 · ' + lesson.concept;
-  panel.appendChild(heading);
+  // The lesson is a compact native disclosure until the player opens it.
+  const panel = document.createElement('details'); panel.id = 'adaptive-concept-lesson'; panel.className = 'adaptive-concept-lesson';
+  const heading = document.createElement('summary');
+  const headingText = document.createElement('span'); headingText.textContent = '觀念補給 · ' + lesson.concept;
+  heading.appendChild(headingText); panel.appendChild(heading);
   for (const [label, text] of [['概念講解', lesson.explanation], ['簡單示例', lesson.example]]) {
     const title = document.createElement('h4'); title.textContent = label; panel.appendChild(title);
-    const body = document.createElement('div');
+    const body = document.createElement('div'); body.className = 'adaptive-lesson-copy';
     if (window.quizMathRichText) body.innerHTML = window.quizMathRichText(text);
     else body.textContent = text;
     panel.appendChild(body);
   }
+  // Adjustable text size without changing the game's viewport scaling.
+  const zoom = document.createElement('div'); zoom.className = 'adaptive-lesson-zoom';
+  let fontSize = .95;
+  for (const [label, delta, description] of [['A−', -.1, '縮小觀念補給文字'], ['A+', .1, '放大觀念補給文字']]) {
+    const button = document.createElement('button'); button.type = 'button'; button.textContent = label;
+    button.setAttribute?.('aria-label', description);
+    button.onclick = () => {
+      fontSize = Math.min(1.45, Math.max(.75, Math.round((fontSize + delta) * 100) / 100));
+      panel.style?.setProperty?.('--adaptive-lesson-font-size', fontSize + 'rem');
+    };
+    zoom.appendChild(button);
+  }
+  panel.appendChild(zoom);
+  panel.ontoggle = () => {
+    if (!panel.open || getMainUser()?.uid !== uid) return;
+    // The collapsed title is not assistance; reading the opened lesson is.
+    if (beforeAnswer && !quiz.adaptiveAnswered && !quiz.adaptiveLessonHelp) {
+      quiz.adaptiveLessonHelp = true; hint(quiz);
+    }
+    const through = Math.max(Number(lesson.through) || 0, Rules.row(currentState(meta).concepts[meta.conceptId]).n);
+    enqueue(uid, meta, { id: 'lesson_' + meta.scopeId + '_' + meta.conceptId + '_' + through,
+      kind: 'lesson', through, at: Date.now() });
+    void flush(uid);
+    // MathJax measures displayed content correctly once details is expanded.
+    void window.quizMathTypeset?.([panel]);
+  };
   host.insertAdjacentElement('afterend', panel);
-  if (beforeAnswer && !quiz.adaptiveLessonHelp) { quiz.adaptiveLessonHelp = true; hint(quiz); }
-  const through = Math.max(Number(lesson.through) || 0, Rules.row(currentState(meta).concepts[meta.conceptId]).n);
-  enqueue(uid, meta, { id: 'lesson_' + meta.scopeId + '_' + meta.conceptId + '_' + through,
-    kind: 'lesson', through, at: Date.now() });
-  void flush(uid);
-  void window.quizMathTypeset?.([panel]);
 }
 function render(quiz) {
   clearView();
