@@ -519,3 +519,51 @@ test('the server treats focus as ending the turn, clears pending questions and s
   assert.equal(retry.revision,result.revision);
   assert.equal(retry.actors[0].fistFocusUntil,result.actors[0].fistFocusUntil);
 });
+
+
+test('scripture skill damage previews use the same trusted PvE attack as the server',async()=>{
+  const db=database();
+  const user=db.records.get('users/u1');
+  user.stats.totalScore=68;
+  user.stats.attack=426;
+  const expected=API.playerActor(user,'u1',{}, {},null).atk;
+  const manual=await API.manualsState(db,'u1');
+  assert.equal(manual.battleAttack,expected);
+  assert.match(Catalog.descriptionWithDamage(manual.battleAttack,
+    Catalog.skillAtLevel(Catalog.BY_SKILL['wind-step'],5)),
+    /造成 2 次 835 的傷害（戰場攻擊力 426 × 每擊倍率 1\.96/);
+});
+
+test('four-step chain writes only serializable combat events and survives server retries',async()=>{
+  const db=database(),user=db.records.get('users/u1');
+  user.stats.totalScore=68;
+  db.records.set(API.MANUALS+'/u1',{version:2,school:'body',
+    books:{'body-dragon':{exp:1080}},equipped:['dragon-guard'],skillLevels:{}});
+  const started=await API.start(db,'u1',{mode:'pve'},now);
+  const room=db.records.get(API.ROOMS+'/'+started.id);
+  room.width=12;room.height=9;room.blocks=[];
+  Object.assign(room.actors[0],{x:4,y:4,stamina:10,atk:200});
+  room.actors=[room.actors[0],lowBeast('front',5,4,3000),
+    lowBeast('spare',10,8,3000)];
+  const request={roomId:started.id,revision:started.revision,
+    requestId:'fourstep-server-persist-01',type:'manual',skillId:'dragon-guard',x:5,y:4};
+  const result=await API.command(db,'u1',request,now);
+  const saved=db.records.get(API.ROOMS+'/'+started.id);
+  assert.equal(saved.revision,result.revision);
+  const casts=saved.events.filter(e=>e.type==='cast'&&e.skill==='dragon-guard');
+  assert.equal(casts.length,4);
+  assert.deepEqual(casts.map(e=>e.animation.step),[1,2,3,4]);
+  assert(casts.every(e=>typeof e.animation.color==='string'&&e.animation.color.startsWith('#')));
+  const scan=(object,path='state')=>{
+    if(!object||typeof object!=='object')return;
+    for(const [key,value]of Object.entries(object)){
+      assert.notEqual(value,undefined,'unsavable undefined at '+path+'.'+key);
+      if(typeof value==='number')assert(Number.isFinite(value),'bad number at '+path+'.'+key);
+      scan(value,path+'.'+key);
+    }
+  };
+  scan(saved);
+  const duplicate=await API.command(db,'u1',request,now);
+  assert.equal(duplicate.revision,result.revision);
+  assert.equal(duplicate.actors[0].x,result.actors[0].x);
+});
