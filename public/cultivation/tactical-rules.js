@@ -125,7 +125,83 @@
   ]);
   const TRIAL_TERRAINS=Object.freeze(LEGACY_TRIAL_TERRAINS.map((t,i)=>Object.freeze({...t,enemies:Object.freeze([[0,2,3,4,5],[0,1,6,7,10,11],[0,8,9,12,13],[0,1,14,15,16,17],[0,8,9,10,18,19]][i])})));
   const TRIAL_ENEMIES=Object.freeze(MONSTERS.map(p=>p.name));
+  // V3 is generated explicitly but is not selected for live rooms until its
+  // objective handling, multi-cell actors and client rendering are complete.
+  function stageLayoutV3(seed,stage=1){
+    stage=Math.max(1,Math.min(1000000,num(stage)));
+    const stream=name=>seeded(String(seed)+':stage:'+stage+':v3:'+name);
+    const pick=(r,items)=>items[Math.floor(r()*items.length)];
+    const shuffle=(r,items)=>{items=items.slice();for(let i=items.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[items[i],items[j]]=[items[j],items[i]];}return items;};
+    const schedule=['elimination','elimination','elimination','elimination','elimination','transport','elimination','sealing','elimination','boss','transport','sealing','elimination','transport','boss','transport','sealing','elimination','transport','boss'];
+    let mode;
+    if(stage<=20)mode=schedule[stage-1];
+    else {
+      const slot=(stage-21)%5,group=Math.floor((stage-21)/5);
+      mode=slot===4?'boss':shuffle(seeded(String(seed)+':v3:group:'+group),['elimination','elimination','transport','sealing'])[slot];
+    }
+    const mr=stream('mode'),gr=stream('geometry'),br=stream('biome'),or=stream('objectives'),rr=stream('obstacles'),er=stream('monsters');
+    const pickup=mode==='transport'&&(stage===11||stage===19||stage!==6&&stage!==14&&mr()<.5);
+    const sizes={elimination:[[7,7],[9,7]],transport:[[11,9],[13,9],[15,11]],sealing:[[9,7],[11,9],[13,9]],boss:[[11,9],[13,9]]};
+    const [width,height]=pick(gr,sizes[mode]);
+    const introduced=MONSTERS.find(p=>p.unlockStage===stage);
+    const possible=introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
+    const theme=pick(br,possible),spawn={x:1,y:1+Math.floor(gr()*(height-2))};
+    const objective=mode==='transport'?{type:mode,phase:pickup?'pickup':'delivery',carrying:!pickup,
+      ...(pickup?{item:{x:Math.floor(width/2),y:1+Math.floor(or()*(height-2)),collected:false}}:{}),
+      destination:{x:width-2,y:1+Math.floor(or()*(height-2))},completed:false}:
+      mode==='sealing'?{type:mode,points:[{x:width-2,y:1},{x:width-2,y:height-2},...(stage>=17&&or()<.5?[{x:Math.floor(width/2),y:Math.floor(height/2)}]:[])].map(p=>({...p,activated:false})),completed:false}:
+      mode==='boss'?{type:mode,bossUid:'monster-0',completed:false}:{type:mode,completed:false};
+    const bossPos={x:width-4,y:Math.floor(height/2)-1};
+    const bossCells=mode==='boss'?[bossPos,{x:bossPos.x+1,y:bossPos.y},{x:bossPos.x,y:bossPos.y+1},{x:bossPos.x+1,y:bossPos.y+1}]:[];
+    const required=[spawn,...(objective.item?[objective.item]:[]),...(objective.destination?[objective.destination]:[]),...(objective.points||[]),...bossCells];
+    const blocks=[],ground=Array(width*height).fill(theme.terrain);
+    const all=[];for(let y=0;y<height;y++)for(let x=0;x<width;x++)all.push({x,y});
+    function connected(extra=[]){
+      const occupied=new Set([...blocks,...extra].map(key));
+      if(required.some(p=>occupied.has(key(p))))return false;
+      const seen=new Set([key(spawn)]),queue=[spawn];
+      for(let i=0;i<queue.length;i++)for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const p={x:queue[i].x+dx,y:queue[i].y+dy},k=key(p);
+        if(p.x<0||p.y<0||p.x>=width||p.y>=height||occupied.has(k)||seen.has(k))continue;
+        seen.add(k);queue.push(p);
+      }
+      return required.every(p=>seen.has(key(p)))&&seen.size===width*height-occupied.size;
+    }
+    const candidates=shuffle(rr,all.filter(p=>required.every(q=>dist(p,q)>1)));
+    const ratio=mode==='sealing'?.20+rr()*.10:mode==='boss'?.06+rr()*.08:mode==='transport'?.10+rr()*.08:.08+rr()*.08;
+    const desired=Math.floor(width*height*ratio);
+    for(const p of candidates){
+      if(blocks.length>=desired)break;
+      blocks.push({...p,kind:theme.terrain===13?'rock':rr()<.2?'water':theme.props});
+      if(!connected())blocks.pop();
+    }
+    for(const b of blocks)if(b.kind==='water')ground[b.y*width+b.x]=4;
+    const pool=theme.enemies.filter(id=>MONSTERS[id].unlockStage<=stage),enemyCells=[];
+    const count=mode==='elimination'?Math.min(4,1+Math.floor((stage-1)/3)):mode==='transport'?3+Math.floor(er()*4):mode==='sealing'?2+Math.floor(er()*4):1+Math.floor(er()*4);
+    const spots=shuffle(er,all.filter(p=>dist(p,spawn)>=3&&required.every(q=>key(p)!==key(q))&&!blocks.some(b=>key(b)===key(p))));
+    const enemies=[];
+    for(let i=0;i<count;i++){
+      let p;
+      if(mode==='boss'&&i===0)p=bossPos;
+      else {
+        const index=spots.findIndex(candidate=>!enemyCells.some(c=>key(c)===key(candidate))&&connected([...enemyCells,candidate].filter(c=>!bossCells.some(b=>key(b)===key(c)))));
+        if(index<0)break;p=spots.splice(index,1)[0];
+      }
+      const species=i===0&&introduced?introduced.species:pick(er,pool);
+      const boss=mode==='boss'&&i===0;
+      enemyCells.push(...(boss?bossCells:[p]));
+      enemies.push({...p,species,name:(boss?'鎮關・':'')+TRIAL_ENEMIES[species],...(boss?{boss:true,footprint:{width:2,height:2}}:{}),
+        hpFactor:(species===8||species===18?3.8:2.8+er()*.6)*(1+Math.min(stage-1,30)*.035),
+        attackFactor:(species===18?.7:.48+er()*.15)*(1+Math.min(stage-1,30)*.025),
+        intentRange:[3,6,12,18].includes(species)?3:2,intentRadius:species===18?1:0,moveSteps:species===8||species===18?1:2,level:stage});
+    }
+    const layout={seed,stage,layoutVersion:3,map:'ruins',width,height,title:theme.name,terrain:theme.terrain,ground,blocks,spawn,enemies,mode,variant:pickup?'pickup':mode==='transport'?'carry':'',objective};
+    let hash=2166136261;for(const c of JSON.stringify(layout)){hash^=c.charCodeAt(0);hash=Math.imul(hash,16777619);}
+    layout.layoutHash=(hash>>>0).toString(16).padStart(8,'0');
+    return layout;
+  }
   function stageLayout(seed,stage=1,layoutVersion=2){
+    if(layoutVersion===3)return stageLayoutV3(seed,stage);
     stage=Math.max(1,Math.min(1000000,num(stage)));const random=seeded(seed+':stage:'+stage);
     const m=MAPS[Math.floor(random()*MAPS.length)],introduced=layoutVersion>=2?MONSTERS.find(p=>p.unlockStage===stage):null;
     const themes=layoutVersion<2?LEGACY_TRIAL_TERRAINS:introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
@@ -230,6 +306,7 @@
     return Math.round(base+Math.max(0,scaledHp-base)*scale);
   }
   function create({id,mode='pve',map='courtyard',players,trial=null,simultaneous=mode==='pvp',now=Date.now()}){
+    if(mode==='pve'&&trial?.layoutVersion===3)fail('新版試煉尚未開放');
     const layout=mode==='pve'&&trial&&trial.layoutVersion!==0?stageLayout(trial.seed,trial.stage,trial.layoutVersion??2):null;
     const m=layout||mapFor(map),mid=Math.floor(m.height/2);
     const s={version:1,id,mode,map:m.id,width:m.width,height:m.height,terrain:m.terrain,
@@ -294,8 +371,26 @@
   }
   function checkFinished(s){
     const human=s.actors.filter(a=>!a.bot),teams=[...new Set(s.actors.filter(alive).map(a=>a.team))];
-    if(teams.length<2){s.status='finished';s.winner=teams[0]||'draw';s.finishReason='hp';}
-    else if(s.turn>LIMITS.turns){
+    if(s.status!=='active')return;
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3&&s.objective){
+      const hero=human[0],o=s.objective;
+      if(!alive(hero)){s.status='finished';s.winner='monster';s.finishReason='hp';}
+      else {
+        if(o.type==='transport'){
+          if(!o.carrying&&o.item&&key(hero)===key(o.item)){
+            o.item.collected=true;o.carrying=true;o.phase='delivery';log(s,'已取得靈物，前往交付點','objective');
+          }
+          if(o.carrying&&o.destination&&key(hero)===key(o.destination))o.completed=true;
+        }else if(o.type==='sealing'){
+          for(const p of o.points||[])if(!p.activated&&key(hero)===key(p)){p.activated=true;log(s,'陣眼已啟動','objective');}
+          o.completed=!!o.points?.length&&o.points.every(p=>p.activated);
+        }else if(o.type==='boss')o.completed=!!s.actors.find(a=>a.uid===o.bossUid&&!alive(a));
+        else if(o.type==='elimination')o.completed=!s.actors.some(a=>a.bot&&alive(a));
+        if(o.completed&&hero.answered>0){s.status='finished';s.winner=hero.team;s.finishReason='objective';}
+        else if(o.completed&&!o.awaitingAnswer){o.awaitingAnswer=true;log(s,'目標已完成，請先完成一題作答','objective');}
+      }
+    }else if(teams.length<2){s.status='finished';s.winner=teams[0]||'draw';s.finishReason='hp';}
+    if(s.status==='active'&&s.turn>LIMITS.turns){
       s.status='finished';s.finishReason='turn-limit';
       if(s.mode==='pve')s.winner='monster';else{
         const [a,b]=human,delta=a.hp/a.maxHp-b.hp/b.maxHp;s.winner=Math.abs(delta)<1e-9?'draw':delta>0?a.team:b.team;
@@ -823,7 +918,9 @@
       validateAttackLimit(a);a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
     }else if(!endsTurn)fail('未知的戰場行動');
     a.actions++;(s.turnTimeouts||={})[uid]=0;
-    if(endsTurn){
+    // A displacement or the last hit can finish an objective before enemies act.
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3)checkFinished(s);
+    if(endsTurn&&s.status==='active'){
       log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});
       end(s,now);
     }
@@ -844,7 +941,9 @@
       if(!s.initiativeUid){s.initiativeUid=uid;s.answerDeadlineMs=now+LIMITS.answerMs;begin(s,a,now);}
       else if(s.phase==='waiting-answer')begin(s,a,now);
     }
-    s.revision++;s.updatedAtMs=now;return s;
+    s.revision++;s.updatedAtMs=now;
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3)checkFinished(s);
+    return s;
   }
   function expire(state,now=Date.now()){
     if(state.status==='active'&&state.quizRound){
