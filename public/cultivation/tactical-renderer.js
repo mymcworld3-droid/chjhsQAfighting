@@ -96,7 +96,17 @@ export class TacticalRenderer{
   }
   update(state,uid,mode,selection){
     this.preview=null;
-    if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;}
+    if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){
+      this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;
+      if(state.mode==='pve'&&state.width>=11){
+        const rect=this.canvas.getBoundingClientRect(),view={x:0,y:0,width:state.width,height:state.height},hero=state.actors.find(a=>a.uid===uid);
+        if(rect.width&&rect.height&&hero){
+          const initial=Camera.geometry(this.camera,rect.width,rect.height,view),zoom=Math.min(2.2,Math.max(1,42/initial.cell));
+          const g=Camera.geometry({zoom},rect.width,rect.height,view);
+          this.camera=Camera.normalize({zoom,panX:rect.width/2-(g.ox+(hero.x+.5)*g.cell),panY:rect.height/2-(g.oy+(hero.y+.5)*g.cell)},rect.width,rect.height,view);
+        }
+      }
+    }
     if(!this.reducedMotion.matches)this.queue.push(...A.plan(this.state,state,uid));
     if(this.state!==state||this.uid!==uid||this.mode!==mode){
       const me=state.actors.find(a=>a.uid===uid),mine=state.status==='active'&&state.turnUid===uid&&(!state.quizRound||state.phase==='action');
@@ -352,6 +362,23 @@ export class TacticalRenderer{
       if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=(x+y)%2?'#5b6650':'#5f6b53';c.fillRect(px,py,edgeX-px,edgeY-py);}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
     }
+    const objective=s.objective,markers=[];
+    if(objective?.type==='transport'){
+      if(objective.item&&!objective.item.collected)markers.push({...objective.item,label:'物',color:'#f7d975'});
+      if(objective.destination)markers.push({...objective.destination,label:'交',color:'#8ee6d0'});
+    }else if(objective?.type==='sealing')for(const p of objective.points||[])markers.push({...p,label:p.activated?'✓':'陣',color:p.activated?'#b5c4b7':'#a7e8ff'});
+    for(const p of markers){
+      const x=ox+(p.x+.5)*cell,y=oy+(p.y+.5)*cell;c.save();c.strokeStyle=p.color;c.fillStyle='#102b2bcc';c.lineWidth=Math.max(2,cell*.06);
+      c.beginPath();c.arc(x,y,cell*.34,0,Math.PI*2);c.fill();c.stroke();c.fillStyle=p.color;c.font=`bold ${Math.max(10,cell*.3)}px system-ui`;c.textAlign='center';c.textBaseline='middle';c.fillText(p.label,x,y);c.restore();
+    }
+    const nextMarker=objective?.type==='transport'?(objective.carrying?markers.find(p=>p.label==='交'):markers.find(p=>p.label==='物')):markers.find(p=>p.label==='陣');
+    if(nextMarker){
+      const x=ox+(nextMarker.x+.5)*cell,y=oy+(nextMarker.y+.5)*cell,margin=20;
+      if(x<margin||x>w-margin||y<margin||y>h-margin){
+        const dx=x-w/2,dy=y-h/2,scale=Math.min((w/2-margin)/Math.max(Math.abs(dx),1),(h/2-margin)/Math.max(Math.abs(dy),1));
+        c.save();c.translate(w/2+dx*scale,h/2+dy*scale);c.rotate(Math.atan2(dy,dx));c.fillStyle=nextMarker.color;c.beginPath();c.moveTo(8,0);c.lineTo(-6,-6);c.lineTo(-6,6);c.closePath();c.fill();c.restore();
+      }
+    }
     if(myTurn&&this.mode==='move'){
       // Absolute time keeps the same soft pulse at any refresh rate. The BFS is
       // cached by update(), rather than repeated on every animation frame.
@@ -390,19 +417,20 @@ export class TacticalRenderer{
     const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);
     for(const a of positions){
       const {x,y}=a;
-      const px=ox+(x+.5+(a.sway||0))*cell,groundY=oy+(y+.5)*cell,py=Math.max(cell*.82,groundY-(a.lift||0)*cell),own=a.uid===this.uid,enemy=a.team!==mine?.team;
+      const sizeFactor=a.boss?2:1;
+      const px=ox+(x+sizeFactor/2+(a.sway||0))*cell,groundY=oy+(y+sizeFactor/2)*cell,py=Math.max(cell*.82,groundY-(a.lift||0)*cell),own=a.uid===this.uid,enemy=a.team!==mine?.team;
       c.save();c.globalAlpha=a.opacity??1;
       c.beginPath();c.ellipse(px,groundY+cell*.18,cell*.28,cell*.12,0,0,Math.PI*2);c.fillStyle='#0005';c.fill();
       c.strokeStyle=own?'#f8d58a':enemy?'#f29c83':'#a2d8c4';c.lineWidth=own?2.5:1.5;
       c.beginPath();c.ellipse(px,py+cell*.15,cell*.34,cell*.2,0,0,Math.PI*2);c.stroke();
-      const size=cell*1.18,sw=size*(a.scaleX||1),sh=size*(a.scaleY||1);
+      const size=cell*1.18*sizeFactor,sw=size*(a.scaleX||1),sh=size*(a.scaleY||1);
       const drawn=a.bot?this.sprite('monsters',a.species%5*128,Math.floor(a.species/5)*128,128,128,px-sw/2,py-sh*.7,sw,sh):
         this.sprite(a.gender,0,0,112,112,px-sw/2,py-sh*.76,sw,sh);
       if(!drawn){c.fillStyle=enemy?'#c57a67':'#e5cc8a';c.beginPath();c.arc(px,py-cell*.12,cell*.24,0,Math.PI*2);c.fill();}
       if(a.shield){c.strokeStyle='#9adcf1';c.lineWidth=2;c.beginPath();c.arc(px,py-cell*.12,cell*.39,0,Math.PI*2);c.stroke();}
       if(a.guard){c.strokeStyle='#e3ca89a0';c.lineWidth=1.5;c.beginPath();c.arc(px,py-cell*.12,cell*.44,-Math.PI*.85,-Math.PI*.15);c.stroke();}
       if(a.flash){c.globalAlpha=(a.opacity??1)*a.flash;c.fillStyle='#ffe7c2';c.beginPath();c.ellipse(px,py-cell*.12,cell*.26,cell*.4,0,0,Math.PI*2);c.fill();c.globalAlpha=a.opacity??1;}
-      const bar=cell*.76,barY=py+cell*.34;
+      const bar=cell*.76*sizeFactor,barY=py+cell*.34*sizeFactor;
       c.fillStyle='#14251c';c.fillRect(px-bar/2,barY,bar,4);
       c.fillStyle=enemy?'#df8a73':'#c8d895';c.fillRect(px-bar/2,barY,bar*a.hp/a.maxHp,4);
       const hpText=Math.ceil(a.hp)+'/'+a.maxHp,available=cell*.97;

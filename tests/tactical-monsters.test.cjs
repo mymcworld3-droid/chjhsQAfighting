@@ -121,7 +121,7 @@ test('retrying v1 and pre-seed battles preserves their map before upgrading on a
     const finishing=db.records.get(api.ROOMS+'/'+retry.id);finishing.blocks=[];finishing.actors=finishing.actors.slice(0,2);
     Object.assign(finishing.actors[0],{x:1,y:3,stamina:4});Object.assign(finishing.actors[1],{x:2,y:3,hp:1});
     await api.command(db,'u1',{type:'attack',x:2,y:3,roomId:retry.id,revision:retry.revision,requestId:'old-layout-win-'+version},now);
-    const next=await api.start(db,'u1',{mode:'pve'},now);assert.equal(next.trial.stage,2);assert.equal(next.trial.layoutVersion,2);
+    const next=await api.start(db,'u1',{mode:'pve'},now);assert.equal(next.trial.stage,2);assert.equal(next.trial.layoutVersion,3);
   }
 });
 test('v1 seeded geometry and enemy snapshots remain compatible with the previous generator',()=>{

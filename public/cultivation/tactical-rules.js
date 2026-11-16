@@ -125,7 +125,109 @@
   ]);
   const TRIAL_TERRAINS=Object.freeze(LEGACY_TRIAL_TERRAINS.map((t,i)=>Object.freeze({...t,enemies:Object.freeze([[0,2,3,4,5],[0,1,6,7,10,11],[0,8,9,12,13],[0,1,14,15,16,17],[0,8,9,10,18,19]][i])})));
   const TRIAL_ENEMIES=Object.freeze(MONSTERS.map(p=>p.name));
+  // The v3 generator is kept separate so older rooms and retries retain their layout.
+  function stageLayoutV3(seed,stage=1){
+    stage=Math.max(1,Math.min(1000000,num(stage)));
+    const stream=name=>seeded(String(seed)+':stage:'+stage+':v3:'+name);
+    const pick=(r,items)=>items[Math.floor(r()*items.length)];
+    const shuffle=(r,items)=>{items=items.slice();for(let i=items.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[items[i],items[j]]=[items[j],items[i]];}return items;};
+    const schedule=['elimination','elimination','elimination','elimination','elimination','transport','elimination','sealing','elimination','boss','transport','sealing','elimination','transport','boss','transport','sealing','elimination','transport','boss'];
+    let mode;
+    if(stage<=20)mode=schedule[stage-1];
+    else {
+      const slot=(stage-21)%5,group=Math.floor((stage-21)/5);
+      mode=slot===4?'boss':shuffle(seeded(String(seed)+':v3:group:'+group),['elimination','elimination','transport','sealing'])[slot];
+    }
+    const mr=stream('mode'),gr=stream('geometry'),br=stream('biome'),or=stream('objectives'),rr=stream('obstacles'),er=stream('monsters');
+    const pickup=mode==='transport'&&(stage===11||stage===19||stage!==6&&stage!==14&&mr()<.5);
+    const wantsBreakthrough=mode==='transport'&&(stage===14||stage===19||stage>=21&&mr()<.35);
+    const sizes={elimination:[[7,7],[9,7]],transport:[[11,9],[13,9],[15,11]],sealing:[[9,7],[11,9],[13,9]],boss:[[11,9],[13,9]]};
+    const [width,height]=pick(gr,wantsBreakthrough?sizes.transport.slice(1):sizes[mode]);
+    const structures={elimination:['open','scatter','choke'],transport:['scatter','dual','choke','branch'],sealing:['branch','corridor','dual'],boss:['open','scatter']};
+    const structure=pick(gr,structures[mode]);
+    const introduced=MONSTERS.find(p=>p.unlockStage===stage);
+    const possible=introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
+    const theme=pick(br,possible),spawn={x:1,y:1+Math.floor(gr()*(height-2))};
+    const objective=mode==='transport'?{type:mode,phase:pickup?'pickup':'delivery',carrying:!pickup,
+      ...(pickup?{item:{x:Math.floor(width/2),y:1+Math.floor(or()*(height-2)),collected:false}}:{}),
+      destination:{x:width-2,y:1+Math.floor(or()*(height-2))},completed:false}:
+      mode==='sealing'?{type:mode,points:[{x:width-2,y:1},{x:width-2,y:height-2},...(stage>=17&&or()<.5?[{x:Math.floor(width/2),y:Math.floor(height/2)}]:[])].map(p=>({...p,activated:false})),completed:false}:
+      mode==='boss'?{type:mode,bossUid:'monster-0',completed:false}:{type:mode,completed:false};
+    const bossPos={x:width-4,y:Math.floor(height/2)-1};
+    const bossCells=mode==='boss'?[bossPos,{x:bossPos.x+1,y:bossPos.y},{x:bossPos.x,y:bossPos.y+1},{x:bossPos.x+1,y:bossPos.y+1}]:[];
+    const required=[spawn,...(objective.item?[objective.item]:[]),...(objective.destination?[objective.destination]:[]),...(objective.points||[]),...bossCells];
+    const blocks=[],ground=Array(width*height).fill(theme.terrain);
+    const all=[];for(let y=0;y<height;y++)for(let x=0;x<width;x++)all.push({x,y});
+    function connected(extra=[]){
+      const occupied=new Set([...blocks,...extra].map(key));
+      if(required.some(p=>occupied.has(key(p))))return false;
+      const seen=new Set([key(spawn)]),queue=[spawn];
+      for(let i=0;i<queue.length;i++)for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const p={x:queue[i].x+dx,y:queue[i].y+dy},k=key(p);
+        if(p.x<0||p.y<0||p.x>=width||p.y>=height||occupied.has(k)||seen.has(k))continue;
+        seen.add(k);queue.push(p);
+      }
+      return required.every(p=>seen.has(key(p)))&&seen.size===width*height-occupied.size;
+    }
+    const candidates=shuffle(rr,all.filter(p=>required.every(q=>dist(p,q)>1)));
+    const midX=Math.floor(width/2),midY=Math.floor(height/2);
+    function structurePriority(p){
+      if(structure==='open')return Math.abs(p.x-midX)+Math.abs(p.y-midY);
+      if(structure==='dual')return p.y===midY&&p.x>1&&p.x<width-2?100:0;
+      if(structure==='choke')return p.x===midX&&p.y!==midY?100:0;
+      if(structure==='branch')return (p.x===midX&&p.y!==midY||p.y===midY&&p.x>midX+1&&p.x<width-2)?100:0;
+      if(structure==='corridor')return p.x>1&&p.x<width-2&&p.x%3===0&&p.y!==(Math.floor(p.x/3)%2?1:height-2)?100:0;
+      return 0;
+    }
+    candidates.sort((a,b)=>structurePriority(b)-structurePriority(a));
+    const bounds=mode==='sealing'?[.20,.30]:mode==='boss'?[.06,.14]:mode==='transport'?[.10,.18]:[.08,.16];
+    const ratio=bounds[0]+rr()*(bounds[1]-bounds[0]);
+    const desired=Math.min(Math.floor(width*height*bounds[1]),Math.max(Math.ceil(width*height*bounds[0]),Math.round(width*height*ratio)));
+    for(const p of candidates){
+      if(blocks.length>=desired)break;
+      blocks.push({...p,kind:theme.terrain===13?'rock':rr()<.2?'water':theme.props});
+      if(!connected())blocks.pop();
+    }
+    for(const b of blocks)if(b.kind==='water')ground[b.y*width+b.x]=4;
+    const pool=theme.enemies.filter(id=>MONSTERS[id].unlockStage<=stage),enemyCells=[];
+    const count=mode==='elimination'?Math.min(4,1+Math.floor((stage-1)/3)):mode==='transport'?(wantsBreakthrough?6+Math.floor(er()*4):3+Math.floor(er()*4)):mode==='sealing'?2+Math.floor(er()*4):1+Math.floor(er()*4);
+    function routeBetween(start,end){
+      const wall=new Set(blocks.map(key)),q=[start],parent=new Map([[key(start),null]]);
+      for(let i=0;i<q.length&&!parent.has(key(end));i++)for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const p={x:q[i].x+dx,y:q[i].y+dy},k=key(p);if(p.x<0||p.y<0||p.x>=width||p.y>=height||wall.has(k)||parent.has(k))continue;parent.set(k,q[i]);q.push(p);
+      }
+      const route=[];let p=end;while(p&&parent.has(key(p))){route.unshift(p);p=parent.get(key(p));}return route;
+    }
+    const mainRoute=mode==='transport'?routeBetween(pickup?objective.item:spawn,objective.destination):[];
+    const spots=shuffle(er,all.filter(p=>dist(p,spawn)>=3&&required.every(q=>key(p)!==key(q))&&!blocks.some(b=>key(b)===key(p))));
+    if(wantsBreakthrough)spots.sort((a,b)=>Math.min(...mainRoute.map(p=>dist(a,p)))-Math.min(...mainRoute.map(p=>dist(b,p))));
+    const enemies=[];
+    for(let i=0;i<count;i++){
+      let p;
+      if(mode==='boss'&&i===0)p=bossPos;
+      else {
+        const index=spots.findIndex(candidate=>!enemyCells.some(c=>key(c)===key(candidate))&&connected([...enemyCells,candidate].filter(c=>!bossCells.some(b=>key(b)===key(c)))));
+        if(index<0)break;p=spots.splice(index,1)[0];
+      }
+      const species=i===0&&introduced?introduced.species:pick(er,pool);
+      const boss=mode==='boss'&&i===0;
+      enemyCells.push(...(boss?bossCells:[p]));
+      const role=mode==='transport'?(wantsBreakthrough&&i<Math.ceil(count/2)?'guard':i%2?'patrol':'chase'):mode==='sealing'&&i%2?'guard':mode==='boss'&&!boss?'guard':'chase';
+      enemies.push({...p,species,name:(boss?'鎮關・':'')+TRIAL_ENEMIES[species],role,home:{...p},...(boss?{boss:true,footprint:{width:2,height:2}}:{}),
+        hpFactor:(species===8||species===18?3.8:2.8+er()*.6)*(1+Math.min(stage-1,30)*.035),
+        attackFactor:(species===18?.7:.48+er()*.15)*(1+Math.min(stage-1,30)*.025),
+        intentRange:[3,6,12,18].includes(species)?3:2,intentRadius:species===18?1:0,moveSteps:species===8||species===18?1:2,level:stage});
+    }
+    const pressure=mainRoute.length?mainRoute.filter(p=>enemies.some(e=>dist(e,p)<=2)).length/mainRoute.length:0;
+    const breakthrough=wantsBreakthrough&&enemies.length>=6&&pressure>=.4&&enemies.some(e=>e.role==='guard'&&mainRoute.some(p=>dist(e,p)<=1));
+    const variant=mode==='transport'?(pickup?'pickup':'carry')+(breakthrough?'-breakthrough':''):'';
+    const layout={seed,stage,layoutVersion:3,attempt:0,map:'ruins',width,height,title:theme.name,biome:theme.name,structure,terrain:theme.terrain,ground,blocks,spawn,enemies,mode,variant,objective};
+    let hash=2166136261;for(const c of JSON.stringify(layout)){hash^=c.charCodeAt(0);hash=Math.imul(hash,16777619);}
+    layout.layoutHash=(hash>>>0).toString(16).padStart(8,'0');
+    return layout;
+  }
   function stageLayout(seed,stage=1,layoutVersion=2){
+    if(layoutVersion===3)return stageLayoutV3(seed,stage);
     stage=Math.max(1,Math.min(1000000,num(stage)));const random=seeded(seed+':stage:'+stage);
     const m=MAPS[Math.floor(random()*MAPS.length)],introduced=layoutVersion>=2?MONSTERS.find(p=>p.unlockStage===stage):null;
     const themes=layoutVersion<2?LEGACY_TRIAL_TERRAINS:introduced?TRIAL_TERRAINS.filter(t=>t.enemies.includes(introduced.species)):TRIAL_TERRAINS;
@@ -160,7 +262,12 @@
   function branchFor(a){const c=CORES[a.core]||CORES.none;return c.branches.find(b=>b.id===a.branch)||c.branches[0];}
   function inside(s,p){return Number.isInteger(p?.x)&&Number.isInteger(p?.y)&&p.x>=0&&p.y>=0&&p.x<s.width&&p.y<s.height;}
   function blocked(s,p){return !inside(s,p)||s.blocks.some(b=>b.x===p.x&&b.y===p.y);}
-  function at(s,p){return s.actors.find(a=>alive(a)&&a.x===p.x&&a.y===p.y);}
+  function footprint(a){const w=a.footprint?.width||1,h=a.footprint?.height||1,cells=[];
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++)cells.push({x:a.x+x,y:a.y+y});return cells;}
+  function covers(a,p){return p.x>=a.x&&p.y>=a.y&&p.x<a.x+(a.footprint?.width||1)&&p.y<a.y+(a.footprint?.height||1);}
+  function intersects(a,cells){return cells.some(p=>covers(a,p));}
+  function at(s,p){return s.actors.find(a=>alive(a)&&covers(a,p));}
+  function canOccupy(s,a,p){return footprint({...a,...p}).every(c=>!blocked(s,c)&&(!at(s,c)||at(s,c).uid===a.uid));}
   function neighbours(s,p){return [{x:p.x+1,y:p.y},{x:p.x-1,y:p.y},{x:p.x,y:p.y+1},{x:p.x,y:p.y-1}].filter(n=>!blocked(s,n));}
   function path(s,from,to,ignoreUid=''){
     if(blocked(s,to)||(at(s,to)&&at(s,to).uid!==ignoreUid))return null;
@@ -217,6 +324,8 @@
       gender:raw.gender==='female'?'female':'male',species:num(raw.species),core:type,branch:branch.id,
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
+      ...(raw.bot&&raw.role?{role:raw.role,home:raw.home}:{}),
+      ...(raw.boss?{boss:true,footprint:{width:2,height:2}}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
       ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
@@ -236,7 +345,9 @@
       blocks:[],actors:[],status:mode==='pvp'&&players.length<2?'waiting':'active',revision:0,
       turn:1,turnUid:players[0].uid,turnStartedAtMs:now,deadlineMs:mode==='pvp'?now+LIMITS.turnMs:0,
       createdAtMs:now,updatedAtMs:now,winner:null,finishReason:'',effects:[],events:[],receipts:[],rewarded:[],turnTimeouts:{}};
-    if(layout){s.map=layout.map;s.trial={version:1,seed:layout.seed,stage:layout.stage,layoutVersion:layout.layoutVersion,title:layout.title};s.ground=layout.ground;s.blocks=layout.blocks;}
+    if(layout){s.map=layout.map;s.trial={version:1,seed:layout.seed,stage:layout.stage,layoutVersion:layout.layoutVersion,title:layout.title,
+      ...(layout.layoutVersion===3?{mode:layout.mode,variant:layout.variant,biome:layout.biome,structure:layout.structure,attempt:layout.attempt,layoutHash:layout.layoutHash}:{} )};s.ground=layout.ground;s.blocks=layout.blocks;
+      if(layout.layoutVersion===3)s.objective=clone(layout.objective);}
     else if(mode==='pve'&&trial)s.trial={version:1,seed:trial.seed,stage:trial.stage,layoutVersion:0,title:m.name};
     else if(m.id!=='courtyard'){
       for(let y=1;y<m.height-1;y++)if(y!==mid)s.blocks.push({x:Math.floor(m.width/2),y});
@@ -246,7 +357,7 @@
     const enemyScaleAttack=s.actors[0].enemyScaleAttack||s.actors[0].atk;
     if(layout){
       for(const [i,m]of layout.enemies.entries())s.actors.push(actor({...m,uid:'monster-'+i,bot:true,team:'monster',
-        atk:Math.round(enemyScaleAttack*m.attackFactor),maxHp:trialMonsterHp(m.level,m.species,enemyScaleAttack*m.hpFactor)},{x:m.x,y:m.y}));
+        atk:Math.round(enemyScaleAttack*m.attackFactor),maxHp:Math.round(trialMonsterHp(m.level,m.species,enemyScaleAttack*m.hpFactor)*(m.boss?1.7:1))},{x:m.x,y:m.y}));
     }else if(mode==='pve'){
       const count=m.id==='courtyard'?1:m.id==='bamboo'?2:3;
       for(let i=0;i<count;i++){
@@ -294,8 +405,26 @@
   }
   function checkFinished(s){
     const human=s.actors.filter(a=>!a.bot),teams=[...new Set(s.actors.filter(alive).map(a=>a.team))];
-    if(teams.length<2){s.status='finished';s.winner=teams[0]||'draw';s.finishReason='hp';}
-    else if(s.turn>LIMITS.turns){
+    if(s.status!=='active')return;
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3&&s.objective){
+      const hero=human[0],o=s.objective;
+      if(!alive(hero)){s.status='finished';s.winner='monster';s.finishReason='hp';}
+      else {
+        if(o.type==='transport'){
+          if(!o.carrying&&o.item&&key(hero)===key(o.item)){
+            o.item.collected=true;o.carrying=true;o.phase='delivery';log(s,'已取得靈物，前往交付點','objective');
+          }
+          if(o.carrying&&o.destination&&key(hero)===key(o.destination))o.completed=true;
+        }else if(o.type==='sealing'){
+          for(const p of o.points||[])if(!p.activated&&key(hero)===key(p)){p.activated=true;log(s,'陣眼已啟動','objective');}
+          o.completed=!!o.points?.length&&o.points.every(p=>p.activated);
+        }else if(o.type==='boss')o.completed=!!s.actors.find(a=>a.uid===o.bossUid&&!alive(a));
+        else if(o.type==='elimination')o.completed=!s.actors.some(a=>a.bot&&alive(a));
+        if(o.completed&&hero.answered>0){s.status='finished';s.winner=hero.team;s.finishReason='objective';}
+        else if(o.completed&&!o.awaitingAnswer){o.awaitingAnswer=true;log(s,'目標已完成，請先完成一題作答','objective');}
+      }
+    }else if(teams.length<2){s.status='finished';s.winner=teams[0]||'draw';s.finishReason='hp';}
+    if(s.status==='active'&&s.turn>LIMITS.turns){
       s.status='finished';s.finishReason='turn-limit';
       if(s.mode==='pve')s.winner='monster';else{
         const [a,b]=human,delta=a.hp/a.maxHp-b.hp/b.maxHp;s.winner=Math.abs(delta)<1e-9?'draw':delta>0?a.team:b.team;
@@ -335,7 +464,7 @@
     return dy?{x:0,y:Math.sign(dy)}:null;
   }
   function push(s,a,target,steps,direction=pushDirection(a,target)){
-    if(!direction)return;
+    if(!direction||target.boss)return;
     const route=[point(target)],{x:dx,y:dy}=direction;
     for(let i=0;i<steps;i++){const p={x:target.x+dx,y:target.y+dy};if(blocked(s,p)||at(s,p))break;target.x=p.x;target.y=p.y;route.push(point(target));}
     motion(s,target,route,'push',target.name+'被擊退');
@@ -423,7 +552,7 @@
     return !blocked(s,p)&&!at(s,p)?p:null;
   }
   function strikeTargets(s,a,cells){
-    return cells.map(cell=>at(s,cell)).filter(target=>target&&target.team!==a.team);
+    return [...new Map(cells.map(cell=>at(s,cell)).filter(target=>target&&target.team!==a.team).map(target=>[target.uid,target])).values()];
   }
   function chainFists(s,a,sk,d,animate=true){
     const cells=new Map(),path=[point(a)];
@@ -528,6 +657,7 @@
   function cooldownUntil(){return 0;}
   function cast(s,a,sk,p){
     validateSkill(s,a,sk,p);a.stamina-=techniqueCost(a,sk);a.attacks++;
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3&&sk.manualId){s.manualUsed||={};s.manualUsed[a.uid]||={};s.manualUsed[a.uid][sk.manualId]=true;}
     const cells=skillCells(s,a,sk,p);
     const rays=sk.kind==='sword-array'?swordArray(s,sk,p):null;
     const cuts=rays&&!sk.orthogonal?crossedSwordLines(rays,p):null;
@@ -555,6 +685,7 @@
     if(sk.kind==='fist-throw'){
       const moves=[],thrown=[],d=attackDirection(a,p);
       for(const target of strikeTargets(s,a,cells)){
+        if(target.boss){thrown.push(target);continue;}
         const landing=throwLanding(s,target,d);
         if(!landing)continue;
         moves.push({uid:target.uid,path:[point(target),landing]});
@@ -592,7 +723,7 @@
       const pos=point(a),other=point(target);a.x=target.x;a.y=target.y;target.x=pos.x;target.y=pos.y;if(target.bot)interruptMonster(target);
       log(s,a.name+'與'+target.name+'交換位置','displace',{actor:a.uid,animation:{kind:'move',style:'teleport',moves:[{uid:a.uid,path:[pos,other]},{uid:target.uid,path:[other,pos]}]}});
     }
-    const targets=sk.kind==='swap'?[target]:s.actors.filter(t=>alive(t)&&t.team!==a.team&&cells.some(c=>key(c)===key(t)));
+    const targets=sk.kind==='swap'?[target]:s.actors.filter(t=>alive(t)&&t.team!==a.team&&intersects(t,cells));
     if(sk.hits===2||cuts){
       // Finish the whole first sweep before beginning the second one.
       const activeCuts=cuts?.flatMap((cut,index)=>cut.length>1?[index]:[]);
@@ -602,8 +733,8 @@
           if(!alive(t))continue;
           let power=sk.power/2;
           if(cuts){
-            const centerHit=key(t)===key(p);
-            const covered=centerHit?(activeCuts.length?activeCuts.includes(strike):strike===0):diagonalIndex(t,p)===strike;
+            const centerHit=covers(t,p);
+            const covered=centerHit?(activeCuts.length?activeCuts.includes(strike):strike===0):intersects(t,cuts[strike]);
             if(!covered)continue;
             power=centerHit?sk.centerPower/2:sk.power;
           }
@@ -619,7 +750,7 @@
       if(!alive(a))break;
       let power=sk.power;if(sk.execute&&t.hp/t.maxHp<=.4)power=2.2;if(sk.missing)power+=1.15*(1-a.hp/a.maxHp);
       let hits=sk.hits||1;
-      if(rays&&key(t)===key(p)){
+      if(rays&&covers(t,p)){
         hits=Math.max(1,rays.length);
         power=sk.centerPower*hits/8;
       }
@@ -668,6 +799,18 @@
     return [...new Map(cells.map(p=>[key(p),p])).values()];
   }
   function monsterRoute(s,m,hero){
+    if(m.boss){
+      const origin=point(m),queue=[origin],parents=new Map([[key(origin),null]]);
+      for(let i=0;i<queue.length;i++)for(const [dx,dy] of CARDINALS){
+        const p={x:queue[i].x+dx,y:queue[i].y+dy};
+        if(!parents.has(key(p))&&canOccupy(s,m,p)){parents.set(key(p),queue[i]);queue.push(p);}
+      }
+      const distance=p=>Math.min(...footprint({...m,...p}).map(c=>dist(c,hero)));
+      queue.sort((a,b)=>distance(a)-distance(b)||dist(origin,a)-dist(origin,b));
+      let p=queue[0],route=[];while(p){route.unshift(p);p=parents.get(key(p));}
+      return route.slice(0,2);
+    }
+    if((m.role==='guard'||m.role==='patrol')&&m.home&&dist(m.home,hero)>(m.role==='guard'?4:5))hero=m.home;
     const profile=monsterProfile(m.species),move=profile.move,budget=Math.floor(move.steps/(1+(m.slow||0))),origin={x:m.x,y:m.y};
     if(!budget||move.kind==='rooted')return [origin];
     const jumping=['leap','hop','fly','teleport'].includes(move.kind),parents=new Map([[key(origin),null]]),queue=[origin];
@@ -704,6 +847,17 @@
   function prepareIntents(s){
     if(s.mode!=='pve')return;const hero=s.actors[0];
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
+      if(m.boss){
+        const phase=m.hp/m.maxHp<.5?2:1,radius=phase===2&&s.turn%2===0?2:1;
+        m.phase=phase;
+        const cells=[];for(let y=m.y-radius;y<m.y+2+radius;y++)for(let x=m.x-radius;x<m.x+2+radius;x++){
+          const p={x,y};if(!covers(m,p)&&!blocked(s,p))cells.push(p);
+        }
+        const ready=cells.some(p=>key(p)===key(hero));
+        m.intent={version:2,kind:ready?'boss-attack':'advance',cells:ready?cells:[],origin:point(m),target:point(hero),
+          power:1,text:ready?(radius===2?'下次：靈獸震地（第二階段）':'下次：靈獸爪擊'):'下次：大型靈獸逼近'};
+        continue;
+      }
       const profile=monsterProfile(m.species),cells=monsterCells(s,m,hero,profile),ready=dist(m,hero)>=(profile.move.minDistance||0)&&cells.some(p=>key(p)===key(hero));
       const name=profile.attack.shape==='guardian'?(s.turn%2===0?'天樞十字':'落石鎮壓'):profile.attackName;
       m.intent={version:2,kind:ready?'attack':profile.move.steps?'advance':'wait',cells:ready?cells:[],
@@ -714,6 +868,19 @@
   }
   function monsterTurn(s,m,hero){
     const intent=m.intent;
+    if(m.boss&&intent?.kind==='boss-attack'){
+      if(intent.origin&&key(intent.origin)!==key(m))return;
+      log(s,m.name+'發動蓄勢攻擊','monster-attack',{actor:m.uid,animation:{kind:'cast',style:'blast',origin:point(m),target:intent.target,cells:intent.cells,color:'#e4a06d'}});
+      if(intent.cells.some(p=>key(p)===key(hero)))damage(s,m,hero,m.atk,{skill:'monster-boss'});
+      else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
+      return;
+    }
+    if(m.boss){
+      const route=monsterRoute(s,m,hero),end=route.at(-1);
+      if(route.length>1){m.x=end.x;m.y=end.y;motion(s,m,route,'walk',m.name+'逼近');}
+      else log(s,m.name+'觀察戰局','wait',{actor:m.uid,animation:{kind:'guard'}});
+      return;
+    }
     if(intent?.kind==='strike'){
       log(s,m.name+'發起攻擊','monster-attack',{actor:m.uid,animation:{kind:'cast',style:'point',origin:point(m),target:point(hero),cells:intent.cells,color:'#dda080'}});
       // Honor an already visible warning from a pre-v2 battle for this turn.
@@ -760,7 +927,7 @@
     s.effects=s.effects.filter(e=>!due.includes(e));
     for(const e of due){
       log(s,'隕星落下','impact',{actor:a.uid,skill:e.skill,animation:{kind:'impact',style:'meteor',cells:e.cells,color:'#b5a1e7'}});
-      for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&e.cells.some(c=>key(c)===key(t))))damage(s,a,t,e.power,{skill:e.skill});
+      for(const t of s.actors.filter(t=>alive(t)&&t.team!==a.team&&intersects(t,e.cells)))damage(s,a,t,e.power,{skill:e.skill});
     }
     checkFinished(s);
     if(s.status==='active')log(s,a.name+'的行動回合','turn',{actor:a.uid,animation:{kind:'turn',changes:[appearance(a)]}});
@@ -823,7 +990,9 @@
       validateAttackLimit(a);a.guard=Math.max(.4,a.guard);a.attacks++;log(s,a.name+'凝神護身，下次自身回合前減傷 40%','guard',{actor:a.uid,animation:{kind:'guard',changes:[appearance(a)]}});
     }else if(!endsTurn)fail('未知的戰場行動');
     a.actions++;(s.turnTimeouts||={})[uid]=0;
-    if(endsTurn){
+    // A displacement or the last hit can finish an objective before enemies act.
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3)checkFinished(s);
+    if(endsTurn&&s.status==='active'){
       log(s,s.mode==='pve'?'妖獸開始行動':a.name+'結束回合','turn',{actor:a.uid,animation:{kind:'turn'}});
       end(s,now);
     }
@@ -844,7 +1013,9 @@
       if(!s.initiativeUid){s.initiativeUid=uid;s.answerDeadlineMs=now+LIMITS.answerMs;begin(s,a,now);}
       else if(s.phase==='waiting-answer')begin(s,a,now);
     }
-    s.revision++;s.updatedAtMs=now;return s;
+    s.revision++;s.updatedAtMs=now;
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3)checkFinished(s);
+    return s;
   }
   function expire(state,now=Date.now()){
     if(state.status==='active'&&state.quizRound){
@@ -884,5 +1055,5 @@
     s.status='finished';s.winner=s.mode==='pve'?'monster':s.actors.find(a=>a.uid!==uid)?.team||'draw';s.finishReason='forfeit';s.deadlineMs=0;s.revision++;s.updatedAtMs=now;
     log(s,s.actors.find(a=>a.uid===uid).name+'收法離場','forfeit',{actor:uid,animation:{kind:'withdraw'}});return s;
   }
-  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
+  return Object.freeze({LIMITS,MAPS,CORES,BASIC,basicFor,manualSkillFor,attackDirection,SPIRIT_BRANCHES,spiritBranch,savedBranch,seeded,stageLayout,MONSTERS,monsterProfile,monsterCells,monsterRoute,prepareIntents,TRIAL_TERRAINS,TRIAL_ENEMIES,num,dist,key,alive,current,mapFor,branchFor,inside,blocked,at,footprint,covers,canOccupy,neighbours,path,moveCells,sight,area,line,actor,create,join,aimCells,skillCells,crossedSwordLines,techniquePath,techniquePreview,focusTurns,attackLimit,techniqueCost,cooldownUntil,validateSkill,canAnswer,apply,answer,expire,forfeit});
 });

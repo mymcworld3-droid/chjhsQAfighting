@@ -57,6 +57,12 @@
   -webkit-user-select:none;user-select:none;
 }
 #tactical-combat.tc-quarter-layout .tc-arena>canvas:active{cursor:grabbing}
+#tactical-combat.tc-quarter-layout .tc-objective:not([hidden]){
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:2;
+  max-width:75%;padding:5px 12px;border:1px solid #84c7b877;border-radius:12px;
+  background:#12291ddd;color:#d9f7e9;font-size:12px;text-align:center;
+  pointer-events:none;text-shadow:0 1px 2px #000;
+}
 #tactical-combat.tc-quarter-layout.tc-animating .tc-arena>canvas{cursor:progress}
 
 /* Existing battle data is still updated, but is deliberately absent from

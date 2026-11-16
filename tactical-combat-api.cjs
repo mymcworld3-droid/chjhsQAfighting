@@ -121,7 +121,7 @@ function rewardFor(s,a,user){
   if(s.status!=='finished'||s.finishReason==='forfeit'&&s.actors.reduce((n,p)=>n+(p.answered||0),0)<2)return null;
   const win=s.winner===a.team,draw=s.winner==='draw';
   if(s.mode==='pve'){
-    if(!win||s.finishReason!=='hp'||a.correct<=0)return null;
+    if(!win||!['hp','objective'].includes(s.finishReason)||a.correct<=0)return null;
     const gold=s.trial
       ?150+Math.min(500,Rules.num(s.trial.stage-1)*25)
       :150+Rules.MAPS.findIndex(m=>m.id===s.map)*100;
@@ -308,7 +308,7 @@ async function upgradeSkill(db,uid,input){
   });
 }
 
-async function settle(tx,db,s){
+async function settle(tx,db,s,userOverrides={}){
   const updates={};if(s.status!=='finished')return updates;
   const people=s.actors.filter(a=>!a.bot&&!s.rewarded.includes(a.uid));
   const [users,pointers,manualRecords]=await Promise.all([
@@ -317,15 +317,19 @@ async function settle(tx,db,s){
     Promise.all(people.map(a=>tx.get(db.collection(MANUALS).doc(a.uid))))
   ]);
   people.forEach((a,i)=>{
-    const u=exists(users[i]);if(!u)return;const reward=rewardFor(s,a,u);
+    const u=userOverrides[a.uid]||exists(users[i]);if(!u)return;const reward=rewardFor(s,a,u);
     s.rewarded.push(a.uid);s.rewards||={};s.rewards[a.uid]=reward||{gold:0,cultivation:0,win:s.winner===a.team};
     const patch={};
     const pointer=exists(pointers[i]),campaign=pointer?.trial;
     const manualRef=db.collection(MANUALS).doc(a.uid);
+    if(s.mode==='pve'&&s.trial?.layoutVersion===3&&s.winner===a.team&&s.finishReason==='objective'&&['transport','sealing'].includes(s.objective?.type)){
+      const used=Object.keys(s.manualUsed?.[a.uid]||{}).filter(id=>Manuals.BY_BOOK[id]).slice(0,3);
+      if(used.length){s.manualExp||={};s.manualExp[a.uid]||={};for(const id of used)s.manualExp[a.uid][id]=(s.manualExp[a.uid][id]||0)+Math.max(1,Math.floor(Manuals.expForBeast(s.trial.stage)/5));}
+    }
     const mastered=applyManualKills(s,a.uid,exists(manualRecords[i]));
     let manualChanged=mastered.changed;
     const manuals=mastered.state;
-    const cleared=s.mode==='pve'&&s.trial&&s.winner===a.team&&s.finishReason==='hp'&&currentRoomId(pointer,'pve')===s.id&&
+    const cleared=s.mode==='pve'&&s.trial&&s.winner===a.team&&['hp','objective'].includes(s.finishReason)&&currentRoomId(pointer,'pve')===s.id&&
        campaign?.seed===s.trial.seed&&campaign.stage===s.trial.stage;
     if(cleared){
       const next={...campaign,stage:Math.min(1000000,campaign.stage+1),best:Math.max(campaign.best||0,campaign.stage)};
@@ -399,7 +403,7 @@ async function start(db,uid,selection={},now=Date.now()){
     }else if(prior?.status==='waiting')return snapshot(prior,uid);
     else{
       const retry=mode==='pve'&&prior?.trial?.seed===campaign.seed&&prior.trial.stage===campaign.stage&&prior.winner!=='player';
-      const trial={...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):2};
+      const trial={...campaign,layoutVersion:retry?(prior.trial.layoutVersion??1):3};
       s=attachScopes(Rules.create({id:newId,mode,map:retry&&trial.layoutVersion===0?prior.map:map,players:[a],trial:mode==='pve'?trial:null,now}),[a]);
       // Actor construction deliberately limits public combat fields.
       s.actors[0].baseAtk=a.baseAtk;s.actors[0].baseMaxHp=a.baseMaxHp;s.actors[0].trainingAccessScore=a.trainingAccessScore;
@@ -680,6 +684,8 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
       cultivation, gold:0, learning:learningReward.message||''
     };
     s.reviewHistory[q.id].reward=s.reviews[uid].reward;
+    const updates=s.status==='finished'?await settle(tx,db,s,{[uid]:patchedUser(user,patch)}):{};
+    if(updates[uid]?.stats?.totalScore!==undefined)patch['stats.totalScore']=updates[uid].stats.totalScore;
     tx.update(userRef,patch);
     const point=Knowledge.label(q,q.subject);
     tx.set(logRef,{
@@ -698,7 +704,7 @@ async function answer(db,uid,input,now=Date.now(),readReceipt=readSoloReceipt){
       timestamp:FieldValue.serverTimestamp(),
       timeTaken:Math.max(0,Math.min(86400,Number(input.timeTaken)||0))
     });
-    tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,patchedUser(user,patch));
+    tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,patchedUser(updates[uid]||user,patch));
   });
 }
 async function refundQuestionStamina(db,uid,id,questionId,shared){

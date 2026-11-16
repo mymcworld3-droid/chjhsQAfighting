@@ -314,7 +314,7 @@ test('trial clear awards a fresh manual with zero EXP, once, in the same transac
   await API.chooseSchool(db,'u1',{school:'body'});
   const ref=API.MANUALS+'/u1';db.records.get(ref).dropMisses=3;
   const state=await API.start(db,'u1',{mode:'pve'},now),raw=db.records.get(API.ROOMS+'/'+state.id);
-  raw.blocks=[];Object.assign(raw.actors[0],{x:1,y:3,stamina:10,correct:1});
+  raw.blocks=[];Object.assign(raw.actors[0],{x:1,y:3,stamina:10,correct:1,answered:1});
   raw.actors=[raw.actors[0],lowBeast('last',2,3)];
   const request={roomId:state.id,revision:state.revision,requestId:'manual-clear-0001',
     type:'manual',skillId:'rock-fist',x:2,y:3};
