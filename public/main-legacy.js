@@ -4491,6 +4491,66 @@ window.closeReportModal = () => {
     }, 300);
 };
 
+// A real MathJax parser failure on an unanswered question is an automatic
+// question-error review, not merely a debug warning. The review is deliberately
+// detached from the modal/answer handler so the player can keep answering.
+const automaticMathReviewAttempts = new Set();
+window.addEventListener('qa:invalid-tex', event => {
+    const node = event.detail?.node, page = document.getElementById('page-quiz');
+    const inQuestion = ['question-text','options-container','quiz-whiteboard-question'].some(id => {
+        const section = document.getElementById(id);
+        return !!section && (node === section || section.contains?.(node));
+    });
+    if (!node?.isConnected || !page?.contains(node) ||
+        !page.classList.contains('active-page') || !inQuestion ||
+        quizHelperState.answered || isAnswering) return;
+    const quiz = window.currentActiveQuiz, user = auth.currentUser, data = quiz?.data;
+    if (!user?.uid || !data?.q || !Array.isArray(data.opts) ||
+        !Number.isInteger(Number(data.ans)) || data.ans < 0 ||
+        data.ans >= data.opts.length) return;
+    const key = user.uid + '\\n' + String(quiz.id || '') + '\\n' + data.q;
+    if (automaticMathReviewAttempts.has(key)) return;
+    automaticMathReviewAttempts.add(key);
+    const reason = '玩家作答時 MathJax 無法解析 TeX，公式已降級為原始文字。' +
+        '請檢查題幹與選項的公式、符號及排版是否影響正常作答。' +
+        '畫面片段：' + String(event.detail.source || '').replace(/\\s+/g,' ').slice(0,220);
+    void (async () => {
+        try {
+            const token = await user.getIdToken();
+            if (auth.currentUser?.uid !== user.uid) return;
+            const response = await fetch('/api/verify-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+                body: JSON.stringify({
+                    question: data.q, options: data.opts, correctIndex: data.ans,
+                    explanation: data.exp || '', userReason: reason,
+                    soloProof: quiz.soloProof,
+                    ...(quiz.mode === 'trial-tower' ? {
+                        towerRunId: quiz.towerRunId, towerQuestionId: quiz.towerQuestionId
+                    } : {})
+                })
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || ['invalid','unauthorized','unavailable'].includes(result.status))
+                throw new Error(result.reason || '公式錯誤自動送審暫時失敗');
+            if (result.compensated && Number.isFinite(Number(result.newGold)) &&
+                Number.isFinite(Number(result.newTotalScore)) &&
+                auth.currentUser?.uid === user.uid && currentUserData?.stats) {
+                currentUserData.stats.gold = Number(result.newGold);
+                currentUserData.stats.totalScore = Number(result.newTotalScore);
+                updateUIStats();
+            }
+            if (window.currentActiveQuiz === quiz && auth.currentUser?.uid === user.uid)
+                window.showToast?.('偵測到公式顯示錯誤，已自動送審。');
+        } catch (error) {
+            // A temporary failure can be retried by rerendering the same
+            // question or using the ordinary 題目有錯 button.
+            automaticMathReviewAttempts.delete(key);
+            console.warn('[Quiz Math Auto Review] automatic review unavailable', error);
+        }
+    })();
+});
+
 // Helpers submit the exact question snapshot; changing question/account invalidates a late reply.
 window.reportQuizHelperIssue = async ({ quiz, uid, reason, hideAnswer = false } = {}) => {
     const text = String(reason || '').trim().slice(0, 1200);
