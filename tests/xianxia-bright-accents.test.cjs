@@ -56,7 +56,7 @@ test('quiz paper uses darker parchment with high-contrast ink and preserves answ
   assert.match(css, /linear-gradient\(110deg,#d2c4a4,#b9a681\)/);
   assert.match(css, /#question-text\{\s*color:#211a10!important/);
   assert.match(css, /#question-text \*\{\s*text-shadow:none!important/);
-  assert.match(css, /#question-text :is\(mjx-container,mjx-container \*\)/);
+  assert.match(read('public/styles/math-colors.css'), /mjx-container/, 'formula ink inherits from shared MathJax layer');
   assert.match(css, /#quiz-badge\{[\s\S]*background:rgba\(38,31,21,.82\)!important/);
   assert.match(css, /#options-container>button:not\(\.bg-green-600\):not\(\.bg-red-600\)/);
   assert.match(css, /#options-container>\.bg-green-600/);
