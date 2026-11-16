@@ -3,6 +3,7 @@ import { createVocabularyPronunciation } from './daily-vocabulary-pronunciation.
 const page = document.getElementById('page-daily-vocabulary');
 const slot = page.querySelector('[data-dv-view]');
 const dayLabel = page.querySelector('[data-dv-date]');
+const backButton = page.querySelector('[data-dv-back]');
 const saveNote = page.querySelector('[data-dv-save-note]');
 const storagePrefix = 'qingyun:daily-vocabulary:v1:';
 const parts = { 'v.': '動詞', 'n.': '名詞', 'adj.': '形容詞', 'adv.': '副詞' };
@@ -432,7 +433,16 @@ function resultMarkup() {
     </section>`;
 }
 
+function updateBackButton(){
+  const label=screen==='home'?'回到學習':'回到英文單字';
+  const text=backButton?.querySelector?.('[data-dv-back-label]');
+  if(text)text.textContent=label;
+  backButton?.setAttribute?.('aria-label',label);
+  backButton?.setAttribute?.('title',label);
+}
+
 function render({ focus = '', resetScroll = false, motion = resetScroll ? 'enter' : '', notice } = {}) {
+  updateBackButton();
   const markup = { home: homeMarkup, cards: cardsMarkup, quiz: quizMarkup, result: resultMarkup }[screen];
   const rewardGranted = screen === 'result' && newRewardDate === progress.lesson.date;
   dayLabel.dateTime = progress.lesson.date;
@@ -616,6 +626,15 @@ function rate(familiar) {
   if (cards.index + 1 < cards.ids.length) moveCard(1, notice);
   else refreshDashboard(true, notice);
 }
+
+backButton?.addEventListener?.('click', () => {
+  if(screen==='home'||!progress){
+    window.switchToPage?.('page-learning');
+  }else{
+    // Stay inside Daily Vocabulary and keep the current lesson progress.
+    actions.home();
+  }
+});
 
 slot.addEventListener('click', event => {
   const target = event.target.closest('button[data-dv-action]');

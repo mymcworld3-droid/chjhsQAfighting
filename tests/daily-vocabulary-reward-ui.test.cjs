@@ -22,6 +22,14 @@ function harness(rules, db, storage) {
   let failAfterCommit = true;
   const local = { uid, stats: { gold: 0, totalScore: 30 } };
   const root = { classList: { contains: () => true }, closest: () => ({ scrollTop: 0 }) };
+  const backLabel = { textContent: '' };
+  const backButton = {
+    attributes: {},
+    querySelector: selector => selector==='[data-dv-back-label]'?backLabel:null,
+    setAttribute(name,value){this.attributes[name]=value;},
+    addEventListener(type,fn){handlers['back-'+type]=fn;}
+  };
+  let destination = '';
   const slot = {
     innerHTML: '', dataset: {},
     querySelector: () => null,
@@ -30,7 +38,9 @@ function harness(rules, db, storage) {
   const day = {};
   const note = {};
   root.querySelector = selector =>
-    selector === '[data-dv-view]' ? slot : selector === '[data-dv-date]' ? day : note;
+    selector === '[data-dv-view]' ? slot
+      : selector === '[data-dv-date]' ? day
+      : selector === '[data-dv-back]' ? backButton : note;
 
   const repository = {
     async authenticatedMainFetch(_url, options) {
@@ -48,6 +58,7 @@ function harness(rules, db, storage) {
     getCurrentUserData: () => local,
     addEventListener: (event, fn) => { handlers[event] = fn; },
     dispatchEvent() {},
+    switchToPage: name => { destination=name; },
   };
   const context = {
     console, window, AbortController, setTimeout, clearTimeout,
@@ -65,7 +76,9 @@ function harness(rules, db, storage) {
   };
   vm.runInNewContext(source, context, { filename: 'daily-vocabulary-page.js' });
   return {
-    slot, local,
+    slot, local, backLabel, backButton,
+    getDestination:()=>destination,
+    clickBack:()=>handlers['back-click']?.(),
     saved: () => JSON.parse(storage.get('qingyun:daily-vocabulary:v1:' + uid)),
     setDay: date => { now = Date.parse(date); },
     click(action, data = {}) {
@@ -151,4 +164,20 @@ test('a completed previous-day quiz stays queued when opening the next day', asy
   assert.equal(view.saved().rewardQueue.length, 0);
   assert.equal(db.records.get('users/u1').stats.gold, 100);
   assert.equal(view.saved().rewardHistory['2026-11-15'].status, 'claimed');
+});
+
+test('back from a flashcard returns to English vocabulary overview instead of leaving learning', async()=>{
+  const rules=await import('../public/cultivation/daily-vocabulary-rules.mjs');
+  const view=harness(rules,database(),new Map());
+  await tick();
+  assert.equal(view.backLabel.textContent,'回到學習');
+  view.click('cards');
+  assert.equal(view.backLabel.textContent,'回到英文單字');
+  assert.equal(view.backButton.attributes['aria-label'],'回到英文單字');
+  view.clickBack();
+  assert.match(view.slot.innerHTML,/今日單字/);
+  assert.equal(view.backLabel.textContent,'回到學習');
+  assert.equal(view.getDestination(),'');
+  view.clickBack();
+  assert.equal(view.getDestination(),'page-learning');
 });
