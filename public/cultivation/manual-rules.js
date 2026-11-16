@@ -199,8 +199,21 @@
       suffix='造成 '+fmt(value.damage)+' 傷害。';
     }
     // Keep the existing skill description, only append the computed clause.
-    const join=description.endsWith('。')?' ':' ';
-    return description+join+suffix;
+    if(skill.kind==='fist-throw'&&description.includes('落地時造成傷害')){
+      return description.replace('落地時造成傷害',
+        '落地時造成 '+fmt(value.damage)+' 傷害');
+    }
+    if(skill.kind==='flying-sword'){
+      const amount=fmt(value.potential??value.damage);
+      const described=description.replace('穿過敵人時造成傷害',
+        '穿過敵人時每次造成 '+amount+' 傷害');
+      return described+(options.flyingSwordReady===true?'':options.flyingSwordReady===false
+        ?'本次召劍不造成傷害。':'首次召劍不造成傷害。');
+    }
+    if(suffix.startsWith('造成 ')){
+      return (description.endsWith('。')?description.slice(0,-1):description)+'，'+suffix;
+    }
+    return description+suffix;
   }
   const publicSkill=(skill,masteryLevel,score,rank)=>{
     const mastered=masteryLevel>=skill.levelRequired,realmReady=meetsRealm(skill,score);
