@@ -101,7 +101,8 @@ function manualLoadout(manualRecord,trainingAccessScore){
   const manualSkills=equipped.filter(id=>Manuals.meetsRealm(Manuals.BY_SKILL[id],trainingAccessScore));
   const manualSkillLevels=Object.fromEntries(manualSkills.filter(id=>skillLevels[id])
     .map(id=>[id,skillLevels[id]]));
-  return {trainingAccessScore,manualSkills,manualSkillLevels,manualLoadoutName:loadouts[activeLoadout].name};
+  return {trainingAccessScore,manualSkills,manualSkillLevels,manualLoadoutName:loadouts[activeLoadout].name,
+    manualLoadoutIndex:activeLoadout};
 }
 function playerActor(user,uid,selection,catalog,manualRecord){
   const trusted=trustedRaidPlayerSnapshot({...user,artifactSystem:{...(user.artifactSystem||{}),equipped:{}}},uid,catalog),type=trusted.goldenCore?.type||'none';
@@ -460,6 +461,40 @@ async function command(db,uid,input,now=Date.now()){
     s.receipts=[...(s.receipts||[]),{uid,id}].slice(-48);
     const updates=s.status==='finished'?await settle(tx,db,s):(await saveManualKills(tx,db,s,uid),{});
     tx.set(db.collection(ROOMS).doc(s.id),s);return withProgress(s,uid,updates[uid]);
+  });
+}
+// Switching a saved preset is free; it is not an attack or a turn.
+// Persist both the trusted manual selection and the live actor atomically.
+async function switchBattleLoadout(db,uid,input,now=Date.now()){
+  const index=input?.index,request=requestId(input?.requestId);
+  if(!Number.isInteger(index)||index<0||index>2)throw error('配置不存在',400);
+  if(!request)throw error('配置切換識別碼無效',400);
+  return db.runTransaction(async tx=>{
+    const s=await readRoom(tx,db,input.roomId,uid);
+    if(s.receipts?.some(receipt=>receipt.uid===uid&&receipt.id===request))return snapshot(s,uid);
+    if(s.status!=='active')throw error('目前不是進行中的戰鬥');
+    const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
+    const [userSnap,manualSnap]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
+    const user=exists(userSnap);if(!user||user.uid&&user.uid!==uid)throw error('玩家資料不存在',404);
+    const manuals=Manuals.normalize(exists(manualSnap)),preset=manuals.loadouts[index];
+    const ids=preset.skillIds,score=TrainingAccess.score(user);
+    if(ids.some(skillId=>!Manuals.unlocked(manuals,skillId)))throw error('此配置包含尚未解鎖的功法技能',403);
+    if(ids.some(skillId=>!Manuals.meetsRealm(Manuals.BY_SKILL[skillId],score)))throw error('此配置包含境界未達門檻的技能',403);
+    if(new Set(ids.map(skillId=>Manuals.BY_SKILL[skillId].moveId)).size!==ids.length)
+      throw error('同一招式不可重複裝備',400);
+    const actor=member(s,uid);
+    const levels=Object.fromEntries(ids.filter(skillId=>manuals.skillLevels[skillId])
+      .map(skillId=>[skillId,manuals.skillLevels[skillId]]));
+    actor.manualSkills=[...ids];actor.manualSkillLevels=levels;
+    actor.manualLoadoutName=preset.name;actor.manualLoadoutIndex=index;
+    // HP, stamina, position, focus, cooldown legacy data and action counts survive.
+    if(s.pveMetrics&&s.mode==='pve')s.pveMetrics.loadout=[...ids];
+    s.revision++;s.updatedAtMs=now;
+    s.receipts=[...(s.receipts||[]),{uid,id:request}].slice(-48);
+    manuals.activeLoadout=index;manuals.equipped=[...ids];
+    tx.set(manualRef,manuals);
+    tx.set(db.collection(ROOMS).doc(s.id),s);
+    return snapshot(s,uid);
   });
 }
 async function prepareQuestion(db,uid,id,now=Date.now(),requestedSlot=0){
@@ -843,10 +878,11 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/manuals/skills/upgrade',route((db,uid,req)=>upgradeSkill(db,uid,req.body)));
   app.post('/api/tactical/start',route((db,uid,req)=>start(db,uid,req.body)));
   app.post('/api/tactical/action',route((db,uid,req)=>command(db,uid,req.body)));
+  app.post('/api/tactical/loadout',route((db,uid,req)=>switchBattleLoadout(db,uid,req.body)));
   app.post('/api/tactical/answer',route((db,uid,req)=>answer(db,uid,req.body)));
   app.post('/api/tactical/acknowledge-enemy',route((db,uid,req)=>acknowledgeEnemy(db,uid,req.body)));
   app.post('/api/tactical/report-question',route((db,uid,req)=>reportQuestion(db,uid,req.body)));
   app.post('/api/tactical/review-math-issue',route((db,uid,req)=>reviewMathIssue(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,MANUALS,reviewMathIssue,manualsState,chooseSchool,equipManualSkills,updateLoadout,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
+module.exports.__test={ROOMS,PLAYERS,MANUALS,reviewMathIssue,manualsState,chooseSchool,equipManualSkills,updateLoadout,switchBattleLoadout,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};

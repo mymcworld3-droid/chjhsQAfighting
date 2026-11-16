@@ -135,13 +135,13 @@ function markup(expandedBooks){
       <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
         <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
         <i class="fa-solid fa-hand-fist"></i> 體修</button></div></section>
-    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。戰鬥開始時固定目前使用的配置。</p></div>
+    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。戰鬥中也能使用戰場上方的「配置」按鈕自由切換。</p></div>
       <div class="manual-presets" role="group" aria-label="功法配置">
         ${(current.loadouts||[]).map((item,i)=>`<button type="button" data-loadout-select="${i}" class="${selectedLoadout===i?'selected':''}">${esc(item.name)}${i===current.activeLoadout?' · 使用中':''}</button>`).join('')}
       </div>
       <div class="manual-preset-controls"><label>配置名稱 <input data-loadout-name maxlength="40" value="${esc(preset?.name||'')}" placeholder="輸入名稱"></label><button type="button" data-loadout-rename>儲存名稱</button>
       <button type="button" data-loadout-apply ${selectedLoadout===current.activeLoadout?'disabled':''}>${selectedLoadout===current.activeLoadout?'目前使用中':'套用此配置'}</button></div>
-      <p>選擇配置後，在下方裝備或卸下已解鎖的技能；戰鬥進行中無法更換使用中的配置。</p>
+      <p>選擇配置後，在下方裝備或卸下已解鎖的技能；進入戰場後可直接切換已儲存配置，無需返回功法閣。</p>
       <div class="manual-slot-grid">${slots}</div></section>
     <section class="manual-library"><div class="manual-section-title"><h3>已獲得的功法</h3>
       <button type="button" class="manual-refresh" data-manual-refresh title="同步功法"><i class="fa-solid fa-rotate"></i> 更新</button>

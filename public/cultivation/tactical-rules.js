@@ -429,6 +429,7 @@
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
       ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
       ...(!raw.bot&&raw.manualLoadoutName?{manualLoadoutName:String(raw.manualLoadoutName).slice(0,40)}:{}),
+      ...(!raw.bot&&Number.isInteger(raw.manualLoadoutIndex)?{manualLoadoutIndex:Math.max(0,Math.min(2,raw.manualLoadoutIndex))}:{}),
       intentRange:num(raw.intentRange)||2,intentRadius:num(raw.intentRadius??(raw.species===18?1:0)),moveSteps:num(raw.moveSteps)||2,
       turns:0,questions:0,answered:0,correct:0,attacks:0,actions:0,guard:0,counter:0,slow:0,cooldowns:{},...pos};
   }

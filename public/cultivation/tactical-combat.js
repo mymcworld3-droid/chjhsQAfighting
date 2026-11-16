@@ -14,6 +14,7 @@ const id=()=>globalThis.crypto.randomUUID();
 const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,keyboardGuard=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
+let battleLoadouts=null,loadoutFetchedFor='',loadoutFetchingFor='',loadoutMenuOpen=false;
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
@@ -70,13 +71,94 @@ async function api(path,body,signal){
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
+// The menu stays outside the battle canvas so the quarter-circle controls are unchanged.
+function renderBattleLoadouts(){
+  const toggle=$('[data-loadout-toggle]'),menu=$('[data-loadout-menu]');
+  if(!toggle||!menu)return;
+  const active=state?.status==='active',actor=myActor();
+  const index=Number.isInteger(actor?.manualLoadoutIndex)?actor.manualLoadoutIndex:
+    (battleLoadouts?.activeLoadout??0);
+  toggle.hidden=!active;toggle.disabled=busy;
+  toggle.textContent='配置 '+(index+1);
+  toggle.setAttribute('aria-expanded',String(active&&loadoutMenuOpen));
+  menu.hidden=!active||!loadoutMenuOpen;
+  if(menu.hidden)return;
+  const presets=battleLoadouts?.loadouts||[];
+  menu.innerHTML='<strong>戰場技能配置</strong><small>切換不耗體力，也不占行動次數</small>'+
+    Array.from({length:3},(_,i)=>{
+      const preset=presets[i],ids=preset?.skillIds||[];
+      const names=ids.map(id=>Manuals.BY_SKILL[id]?.name).filter(Boolean);
+      const label=preset?.name||'配置 '+(i+1);
+      return '<button type="button" data-loadout-index="'+i+'" aria-pressed="'+(index===i)+
+        '" '+(busy||index===i?'disabled':'')+'><span>'+esc(label)+'</span><small>'+
+        esc(names.length?names.join(' · '):'普通攻擊')+(index===i?' · 使用中':'')+'</small></button>';
+    }).join('');
+}
+async function refreshBattleLoadouts(){
+  const account=uid,room=state?.id,e=epoch;
+  if(!room||!valid(e,account)||state.status!=='active'||loadoutFetchedFor===account||
+    loadoutFetchingFor===account+':'+room)return;
+  const key=account+':'+room;loadoutFetchingFor=key;
+  try{
+    const result=(await api('/api/tactical/manuals')).state;
+    if(!valid(e,account)||state?.id!==room)return;
+    battleLoadouts=result;loadoutFetchedFor=account;renderBattleLoadouts();
+  }catch(error){
+    if(valid(e,account)&&state?.id===room){
+      loadoutFetchedFor=account;
+      console.warn('[Tactical loadouts] preset names unavailable',error.message);
+    }
+  }finally{if(loadoutFetchingFor===key)loadoutFetchingFor='';}
+}
+async function switchBattleLoadout(index){
+  if(!state||state.status!=='active'||busy||!Number.isInteger(index)||index<0||index>2)return;
+  const current=Number.isInteger(myActor()?.manualLoadoutIndex)?myActor().manualLoadoutIndex:
+    (battleLoadouts?.activeLoadout??0);
+  if(index===current)return;
+  loadoutMenuOpen=false;selection=null;
+  const request={roomId:state.id,index,requestId:id()};
+  const next=await task(async()=>{
+    try{return (await api('/api/tactical/loadout',request)).state;}
+    catch(error){
+      if(!error.status||error.status>=500){
+        try{return (await api('/api/tactical/loadout',request)).state;}catch(_){}
+      }
+      throw error;
+    }
+  });
+  if(next){
+    if(battleLoadouts)battleLoadouts.activeLoadout=index;
+    const name=battleLoadouts?.loadouts?.[index]?.name||'配置 '+(index+1);
+    notice('已切換至「'+name+'」');
+    syncEquippedAttack();renderer?.update(state,uid,battlefieldMode(),selection);
+    updateControls();renderBattleLoadouts();
+  }
+}
+function syncPvpSkillTabs(){
+  if(state?.mode!=='pvp')return;
+  const tabs=$('.tc-action-tabs'),actor=myActor();
+  if(!tabs||!actor)return;
+  const skills=equippedTechniques(actor);
+  const key=skills.map(skill=>skill.id).join('|')||'basic';
+  if(tabs.dataset.loadoutKey===key)return;
+  const move=tabs.querySelector('[data-action="move"]')||document.createElement('button');
+  move.type='button';move.dataset.action='move';move.textContent='移動';
+  const buttons=skills.length?skills.map(skill=>{
+    const button=document.createElement('button');button.type='button';button.dataset.action='manual:'+skill.id;
+    showPvpSkill(button,skill,R.techniqueCost(actor,skill),actor.atk,!!actor.flyingSword);
+    return button;
+  }):[Object.assign(document.createElement('button'),{type:'button',textContent:'普通攻擊 · 2'})];
+  if(!skills.length)buttons[0].dataset.action='attack';
+  tabs.replaceChildren(move,...buttons);tabs.dataset.loadoutKey=key;
+}
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
-  root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
+  root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" class="tc-loadout-toggle" data-loadout-toggle aria-expanded="false" hidden>配置</button><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
+    <div class="tc-loadout-popover" data-loadout-menu role="group" aria-label="戰場功法配置" hidden></div>
     <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
   document.body.append(root);
   keyboardGuard=installTacticalKeyboardGuard(root);
@@ -112,6 +194,8 @@ function ensure(){
     else if(b.hasAttribute('data-exit'))close();
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
+    else if(b.hasAttribute('data-loadout-toggle')){loadoutMenuOpen=!loadoutMenuOpen;renderBattleLoadouts();}
+    else if(b.hasAttribute('data-loadout-index'))void switchBattleLoadout(Number(b.dataset.loadoutIndex));
     else if(b.hasAttribute('data-intro-ack'))void acknowledgeIntro();
     else if(b.dataset.wheelChoice){selectWheel(b.dataset.wheelChoice);}
     else if(b.dataset.wheelAction){selectWheel(b.dataset.wheelAction);}
@@ -357,22 +441,7 @@ function buildGame(){
   $('[data-main]').innerHTML=`<section class="tc-arena"><div class="tc-arena-heading"><span data-map-name></span><span data-range-legend></span></div><canvas tabindex="0" aria-label="方格戰場；點選灰格移動或紅格攻擊，也可使用方向鍵選擇目標"></canvas><div class="tc-objective" data-objective role="status" aria-live="polite" hidden></div><div class="tc-selection" data-selection role="status" aria-live="polite" aria-atomic="true">點選地格，預覽路線與體力消耗</div><div class="tc-action-feedback" data-action-feedback role="status" aria-live="polite" aria-atomic="true" hidden></div></section>
     <aside class="tc-sidebar"><div class="tc-actors" data-actors></div><section class="tc-command"><div class="tc-stamina" data-stamina></div><button type="button" data-quiz>答題</button><div class="tc-action-tabs"><button type="button" data-action="move">移動</button><button type="button" data-action="attack">普通攻擊 · 2</button></div><button type="button" class="tc-confirm" data-execute>選擇目標</button><details class="tc-skill-info"><summary data-skill-title>操作說明</summary><div data-skill></div></details><div class="tc-turn-buttons"><button type="button" data-guard>護身</button><button type="button" data-end>結束回合</button></div></section>
     <div class="tc-game-footer"><details class="tc-history"><summary>戰況與詳情</summary><div class="tc-combat-info" data-combat-info></div><div class="tc-log" data-log role="log" aria-label="戰況紀錄"></div></details><button type="button" data-sync>同步</button><button type="button" data-leave>離開</button></div></aside>`;
-  if(state?.mode==='pvp'){
-    const tabs=$('.tc-action-tabs'),skills=equippedTechniques(myActor());
-    if(skills.length){
-      const attack=tabs.querySelector('[data-action="attack"]');
-      attack.dataset.action='manual:'+skills[0].id;
-      showPvpSkill(attack,skills[0],skills[0].cost,myActor()?.atk||200,!!myActor()?.flyingSword);
-      
-      for(const skill of skills.slice(1)){
-        const button=document.createElement('button');
-        button.type='button';button.dataset.action='manual:'+skill.id;
-        showPvpSkill(button,skill,skill.cost,myActor()?.atk||200,!!myActor()?.flyingSword);
-        
-        tabs.append(button);
-      }
-    }
-  }
+  if(state?.mode==='pvp')syncPvpSkillTabs();
   if(state?.mode==='pve'){
     // PvE puts charging on the left and actions with their choices on the right.
     const command=$('.tc-command');
@@ -554,12 +623,15 @@ function buildGame(){
 }
 function paint({preserveModal=false}={}){
   if(!state)return renderHub();syncEquippedAttack();if(!preserveModal)hideModal();
+  renderBattleLoadouts();
+  if(state.status==='active')void refreshBattleLoadouts();
   $('[data-title]').textContent=state.mode==='pve'?'問道試煉':'鬥法論道';
   if(state.status==='waiting'){
     destroyRenderer();root.classList.remove('tc-quarter-layout');$('[data-main]').className='tc-main tc-waiting';
     $('[data-main]').innerHTML=`<div><h2>配對中…</h2><p>也可將代碼傳給道友加入。</p><code>${esc(state.id.replace('arena-',''))}</code><button type="button" data-copy>複製代碼</button><button type="button" data-leave>取消配對</button></div>`;return;
   }
   if(!renderer||!$('canvas'))buildGame();
+  if(state.mode==='pvp')syncPvpSkillTabs();
   const me=myActor(),myTurn=myAction();
   $('[data-map-name]').textContent=state.trial?'第 '+state.trial.stage+' 關 · '+state.trial.title:R.mapFor(state.map).name;
   const objective=state.objective,objectiveNode=$('[data-objective]');
@@ -792,6 +864,7 @@ function accept(next,serial){
     sum+Math.max(0,Number(count||0)-Number(previousKills[bookId]||0)),0);
   const gainedExpTotal=gainedExp+legacyGained*Manuals.EXP_PER_KILL;
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
+  if(state?.id!==next?.id){battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;}
   state=next;if(!keepSelection)selection=null;
   if(gainedExpTotal)notice('功法熟練經驗 +'+gainedExpTotal+' EXP');
   if(next?.manualDrops?.[uid])window.dispatchEvent(new CustomEvent('xiuxian:manual-loot'));
@@ -821,7 +894,7 @@ async function task(work,{render=true}={}){
   try{const next=await work();if(!valid(e,account))return;
     retryMs=4000;if(render)accept(next,serial);return next;
   }catch(err){if(valid(e,account)){notice(err.message);retryMs=Math.min(30000,retryMs*2);}}
-  finally{if(valid(e,account)){busy=false;if(state&&$('canvas')){updateControls();const acknowledge=$('[data-intro-ack]');if(acknowledge)acknowledge.disabled=false;}else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);schedule();}}
+  finally{if(valid(e,account)){busy=false;if(state&&$('canvas')){updateControls();const acknowledge=$('[data-intro-ack]');if(acknowledge)acknowledge.disabled=false;}else root?.querySelectorAll('[data-start]').forEach(b=>b.disabled=false);renderBattleLoadouts();schedule();}}
 }
 async function start(code=''){
   await task(async()=>{const result=await api('/api/tactical/start',{mode,map,...(code?{code}:{})});return result.state;});
