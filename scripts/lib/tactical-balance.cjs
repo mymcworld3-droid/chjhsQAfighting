@@ -3,7 +3,17 @@
 // the production rules. Forecast utility is a bounded, public-information heuristic.
 const R=require('../../public/cultivation/tactical-rules.js');
 const NOW=2000000000000;
-const variants=Object.entries(R.CORES).flatMap(([core,c])=>c.branches.map(b=>({id:core+'.'+b.id,core,branch:b.id,coreName:c.name,branchName:b.name,skill:b.skill.name})));
+const Manuals=require('../../public/cultivation/manual-rules.js');
+// Compare the eighteen currently equipped manual techniques, not retired
+// golden-core actions. The plain attack remains an explicit baseline.
+const variants=Object.freeze([
+  {id:'none.basic',core:'none',branch:'basic',coreName:'未裝備功法',branchName:'普通攻擊',
+    skill:'普通攻擊',manualSkillId:null},
+  ...Manuals.BOOKS.flatMap(book=>book.skills.map(skill=>({
+    id:book.id+'.'+skill.id,core:book.id,branch:skill.id,coreName:book.name,
+    branchName:skill.name,skill:skill.name,manualSkillId:skill.id
+  })))
+]);
 const emptyHistory=s=>({...s,events:[],receipts:[],rewarded:[]});
 const opponents=(s,a)=>s.actors.filter(b=>R.alive(b)&&b.team!==a.team);
 const me=(s,uid)=>s.actors.find(a=>a.uid===uid);
@@ -38,55 +48,45 @@ function harm(source,target,sk){
   return damage+.7*absorbed+(damage>=target.hp?source.atk*.75:0)+Math.min(source.maxHp-source.hp,Math.round(damage*(sk.leech||0)))*hpWeight(source);
 }
 function options(s,a,budget=a.stamina){
-  const result=[],enemies=opponents(s,a),sk=R.branchFor(a).skill,slots=R.LIMITS.attacks-a.attacks;
-  if(!slots)return result;
-  const danger=incoming(s,a),weight=hpWeight(a);
-  const add=(type,skill,p)=>{
-    if(skill.cost>budget||(a.cooldowns[skill.id]||0)>a.turns||!R.inside(s,p)||R.blocked(s,p)||R.dist(a,p)>skill.range)return;
-    if(skill.range>0&&!R.sight(s,a,p))return;
+  const results=[],enemies=opponents(s,a),manualId=a.manualSkills?.[0]||null;
+  const selected=manualId?R.manualSkillFor(a,manualId):R.BASIC;
+  if(!selected||a.attacks>=R.LIMITS.attacks||a.actions>=R.LIMITS.actions)return results;
+  const cost=selected.cost;
+  const maxTargets=16;
+  // Aim with the same geometry supplied to real players. Prioritize cells
+  // near enemies while retaining all four cardinal directions for line attacks.
+  const positions=selected.range===0?[point(a)]:R.aimCells(s,a,selected);
+  const best=positions.map(p=>({p,proximity:Math.min(...enemies.map(b=>R.dist(b,p)))}))
+    .sort((x,y)=>x.proximity-y.proximity||x.p.y-y.p.y||x.p.x-y.p.x)
+    .slice(0,maxTargets);
+  for(const {p} of best){
+    if(cost>budget)break;
+    const command=manualId?{type:'manual',skillId:manualId,x:p.x,y:p.y}:
+      {type:'attack',x:p.x,y:p.y};
+    let next;
+    try{next=R.apply(emptyHistory(s),a.uid,command,NOW);}
+    catch(_){continue;} // No policy action may violate actual combat rules.
+    const after=me(next,a.uid);
     let value=0;
-    if(skill.kind==='restore'){
-      value=Math.min(a.maxHp-a.hp,Math.round(a.maxHp*skill.power))*weight+
-        Math.max(0,Math.round(a.maxHp*(skill.shield||0))-a.shield)*.68+(skill.cleanse&&a.slow?a.atk*.2:0);
-    }else if(skill.kind==='counter')value=danger*Math.max(0,.4-(a.guard||0))*weight+(a.counter?0:.8*a.atk*Math.min(1,danger/(a.atk*2)));
-    else if(skill.kind==='blink'){
-      if(R.at(s,p))return;
-      const affected=skill.burst?enemies.filter(b=>R.dist(b,p)<=1):[];
-      value=affected.reduce((sum,b)=>sum+harm(a,b,{...skill,power:skill.burst}),0)+Math.max(0,Math.round(a.maxHp*(skill.shield||0))-a.shield)*.68;
-      if(warnings(s,a).some(c=>R.key(c)===R.key(a))&&!warnings(s,a).some(c=>R.key(c)===R.key(p)))value+=danger*.7;
-    }else{
-      if(['hit','lunge','swap'].includes(skill.kind)&&!enemies.some(b=>R.key(b)===R.key(p)))return;
-      if(skill.kind==='lunge'&&!R.neighbours(s,p).some(n=>{const route=R.path(s,a,n,a.uid);return route&&route.length-1<=skill.range;}))return;
-      const cells=R.skillCells(s,a,skill,p);
-      if(skill.kind==='meteor'){
-        for(const b of enemies){
-          const destination=b.bot&&b.intent?.kind==='advance'?R.monsterRoute(s,b,a).at(-1):b;
-          if(cells.some(c=>R.key(c)===R.key(destination)))value+=harm(a,b,skill)*(b.bot?1:.3);
-        }
-        // A visible mark can force an opponent to spend a movement point, even
-        // when a rational opponent leaves the footprint before impact.
-        if(s.mode==='pvp'&&enemies.some(b=>cells.some(c=>R.key(c)===R.key(b))))value+=a.atk*.2;
-      }else{
-        const targets=skill.kind==='swap'?enemies.filter(b=>R.key(b)===R.key(p)):enemies.filter(b=>cells.some(c=>R.key(c)===R.key(b)));
-        value=targets.reduce((sum,b)=>sum+harm(a,b,skill)+(skill.slow&&!b.slow?a.atk*.1:0),0);
-        if(skill.push||skill.kind==='swap')for(const b of targets){
-          if(b.bot&&b.intent?.cells?.some(c=>R.key(c)===R.key(a)))value+=b.atk*.5;
-        }
-      }
+    for(const b of enemies){
+      const current=me(next,b.uid);if(!current)continue;
+      const hpLoss=Math.max(0,b.hp-current.hp);
+      const shieldLoss=Math.max(0,(b.shield||0)-(current.shield||0));
+      const pushed=R.dist(b,current)>0;
+      value+=hpLoss+shieldLoss*.6+(pushed?b.atk*.3:0);
+      if(hpLoss&&current.hp===0)value+=a.atk*.8;
     }
-    // No intentional empty hits or redundant heal/shield refreshes.
-    if(value>1)result.push({command:{type,x:p.x,y:p.y},value,cost:skill.cost,id:skill.id});
-  };
-  for(const [x,y]of [[1,0],[-1,0],[0,1],[0,-1]])add('attack',R.BASIC,{x:a.x+x,y:a.y+y});
-  if(sk.range===0)add('skill',sk,point(a));
-  else if(['hit','lunge','swap'].includes(sk.kind))for(const b of enemies)add('skill',sk,point(b));
-  else if(sk.kind==='line')for(const [x,y]of [[1,0],[-1,0],[0,1],[0,-1]])add('skill',sk,{x:a.x+x,y:a.y+y});
-  else{
-    const positions=R.aimCells(s,a,sk);
-    for(const p of positions)add('skill',sk,p);
+    value+=Math.max(0,after.hp-a.hp)*hpWeight(a);
+    value+=Math.max(0,(after.shield||0)-(a.shield||0))*.65;
+    if(selected.kind==='flying-sword'&&!a.flyingSword&&after.flyingSword)value+=a.atk*.9;
+    if(selected.kind==='fist-focus'&&after.fistFocusUntil>a.fistFocusUntil)value+=a.atk;
+    if(value>1)results.push({command,value,cost,id:manualId||'attack'});
   }
-  if((a.guard||0)<.4&&danger>0)result.push({command:{type:'guard'},value:danger*(.4-(a.guard||0))*weight,cost:0,id:'guard'});
-  return result.sort((x,y)=>y.value-x.value||x.cost-y.cost||x.id.localeCompare(y.id)||((x.command.y||0)-(y.command.y||0))||((x.command.x||0)-(y.command.x||0)));
+  const danger=incoming(s,a);
+  if(a.attacks<R.LIMITS.attacks&&(a.guard||0)<.4&&danger>0)
+    results.push({command:{type:'guard'},value:danger*(.4-(a.guard||0))*hpWeight(a),cost:0,id:'guard'});
+  return results.sort((x,y)=>y.value-x.value||x.cost-y.cost||x.id.localeCompare(y.id)||
+    ((x.command.y||0)-(y.command.y||0))||((x.command.x||0)-(y.command.x||0)));
 }
 function potential(s,a,accuracy){
   const budget=a.stamina+(R.LIMITS.questions-a.questions)*(1+3*accuracy),choices=options(s,a,Math.min(10,budget));
@@ -122,8 +122,7 @@ function moveChoice(s,a,accuracy,{escape=false,visited=new Set()}={}){
 }
 function choose(s,uid,accuracy,visited,moves){
   const a=me(s,uid),dangerous=warnings(s,a).some(p=>R.key(p)===R.key(a));
-  const choices=options(s,a),hasHit=choices.some(c=>['attack','skill'].includes(c.command.type)&&!['restore','counter'].includes(c.id)&&
-    (c.command.type==='attack'||!['restore','counter','blink'].includes(R.branchFor(a).skill.kind)));
+  const choices=options(s,a),hasHit=choices.some(c=>['attack','manual'].includes(c.command.type)&&c.value>a.atk*.2&&c.id!=='dragon-roar');
   // Move once to obtain an offensive angle; a later move is reserved for a
   // telegraphed escape. This prevents per-turn path oscillation.
   if(moves===0&&(!hasHit||dangerous)){
@@ -148,7 +147,7 @@ function playTurn(state,uid,{accuracy=.7,seed='0',audit=null,metrics=null}={}){
   const answers=random(seed+':'+uid+':'+me(s,uid).turns),outcomes=[answers()<accuracy,answers()<accuracy];
   const execute=command=>{
     const before=s;s=R.apply(emptyHistory(s),uid,command,NOW);
-    if(metrics)metrics[uid][command.type]++;
+    if(metrics)metrics[uid][command.type==='manual'?'skill':command.type]++;
     if(audit)audit({type:'action',uid,command,before,after:s});
     if(command.type==='move'){moves++;visited.add(R.key(me(s,uid)));}
   };
@@ -165,7 +164,10 @@ function playTurn(state,uid,{accuracy=.7,seed='0',audit=null,metrics=null}={}){
   }
   if(s.status==='active'&&s.turnUid===uid)execute({type:'end'});return s;
 }
-function fighter(v,uid,{atk=200,maxHp=1000}={}){return {uid,name:v.id,core:v.core,branch:v.branch,atk,maxHp};}
+function fighter(v,uid,{atk=200,maxHp=1000}={}){return {
+  uid,name:v.id,atk,maxHp,trainingAccessScore:68,
+  manualSkills:v.manualSkillId?[v.manualSkillId]:[]
+};}
 function duel(a,b,{map='courtyard',accuracy=.7,seed='0',stats={},audit=null}={}){
   let s=R.create({id:'offline-duel',mode:'pvp',simultaneous:false,map,players:[fighter(a,'seat0',stats),fighter(b,'seat1',stats)],now:NOW});
   const metrics=Object.fromEntries(['seat0','seat1'].map(uid=>[uid,{skill:0,attack:0,guard:0,move:0,end:0}]));
