@@ -14,6 +14,10 @@ function reachable(layout,withEnemies=false){
   }
   return seen;
 }
+test('v3 published seed layouts remain unchanged across future generators',()=>{
+  const hashes={1:'e39df0f4',6:'2b63ab44',8:'9e2de393',10:'2d76f620',11:'0ed7f71b',14:'d9ddd876',15:'d57fd84c',17:'4e3ca579',19:'47b33b3a',20:'ba4d3a11',21:'f4ea7910',25:'7ac2f9c7'};
+  for(const [stage,hash] of Object.entries(hashes))assert.equal(R.stageLayout('compat-v3',Number(stage),3).layoutHash,hash,`stage ${stage}`);
+});
 test('v3 stage schedule is deterministic and every later group has the required modes',()=>{
   const expected=['elimination','elimination','elimination','elimination','elimination','transport','elimination','sealing','elimination','boss','transport','sealing','elimination','transport','boss','transport','sealing','elimination','transport','boss'];
   for(let stage=1;stage<=45;stage++){

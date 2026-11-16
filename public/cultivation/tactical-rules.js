@@ -325,7 +325,7 @@
       ...(num(raw.enemyScaleAttack)?{enemyScaleAttack:num(raw.enemyScaleAttack)}:{}),
       ...(raw.bot?{level:Math.max(1,num(raw.level)||1)}:{}),
       ...(raw.bot&&raw.role?{role:raw.role,home:raw.home}:{}),
-      ...(raw.boss?{boss:true,footprint:{width:2,height:2}}:{}),
+      ...(raw.boss?{boss:true,footprint:{width:2,height:2},...(raw.bossKind?{bossKind:raw.bossKind}:{})}:{}),
       atk:Math.max(1,num(raw.atk)||200),baseAtk:num(raw.baseAtk),baseMaxHp:num(raw.baseMaxHp),trainingAccessScore:num(raw.trainingAccessScore),
       maxHp,hp:maxHp,stamina:2,shield:num(raw.shield),
       ...(Array.isArray(raw.manualSkills)&&!raw.bot?{manualSkills,manualSkillLevels}:{}),
@@ -850,10 +850,49 @@
     }
     return route;
   }
+  // v4 boss patterns are computed once when the warning is shown. The saved
+  // cells, not the player's later position, determine the next enemy attack.
+  function bossPatternV4(s,m,hero){
+    const phase=m.hp/m.maxHp<.5?2:1,alternate=s.turn%2===0;
+    const center={x:m.x+.5,y:m.y+.5};
+    const dx=Math.abs(hero.x-center.x)>=Math.abs(hero.y-center.y)?(hero.x<center.x?-1:1):0;
+    const dy=dx?0:(hero.y<center.y?-1:1),side={x:-dy,y:dx};
+    const cells=[];let name='',slow=false;
+    const add=p=>{if(!covers(m,p)&&!blocked(s,p))cells.push(p);};
+    if(m.bossKind==='vine'){
+      name=alternate?'藤蔓封鎖':'纏根突襲';slow=true;
+      if(dist(m,hero)>6)return {phase,cells:[],name,slow};
+      const radius=alternate&&phase===2?2:1;
+      for(let y=-radius;y<=radius;y++)for(let x=-radius;x<=radius;x++)
+        if(Math.abs(x)+Math.abs(y)<=radius)add({x:hero.x+x,y:hero.y+y});
+    }else if(m.bossKind==='flame'){
+      name='烈焰吐息';const range=phase===2?4:3;
+      const edge=dx?{x:dx>0?m.x+1:m.x,y:m.y}:{x:m.x,y:dy>0?m.y+1:m.y};
+      for(let depth=1;depth<=range;depth++)for(let offset=-depth+1;offset<=depth;offset++)
+        add({x:edge.x+dx*depth+side.x*offset,y:edge.y+dy*depth+side.y*offset});
+    }else if(alternate){
+      name='直線衝擊';const edge=dx?{x:dx>0?m.x+1:m.x,y:m.y}:{x:m.x,y:dy>0?m.y+1:m.y};
+      for(let lane=0;lane<2;lane++)for(let depth=1;depth<=(phase===2?5:4);depth++){
+        const p={x:edge.x+dx*depth+(dy?lane:0),y:edge.y+dy*depth+(dx?lane:0)};
+        if(blocked(s,p))break;add(p);
+      }
+    }else{
+      name='震地';const radius=phase===2?2:1;
+      for(let y=m.y-radius;y<m.y+2+radius;y++)for(let x=m.x-radius;x<m.x+2+radius;x++)add({x,y});
+    }
+    return {phase,cells:[...new Map(cells.map(p=>[key(p),p])).values()],name,slow};
+  }
   function prepareIntents(s){
     if(s.mode!=='pve')return;const hero=s.actors[0];
     for(const m of s.actors.filter(a=>a.bot&&alive(a))){
       if(m.boss){
+        if(s.trial?.layoutVersion===4&&m.bossKind){
+          const pattern=bossPatternV4(s,m,hero),ready=pattern.cells.some(p=>key(p)===key(hero));
+          m.phase=pattern.phase;
+          m.intent={version:2,kind:ready?'boss-attack':'advance',cells:ready?pattern.cells:[],origin:point(m),target:point(hero),
+            slow:pattern.slow,power:1,text:ready?'下次：'+pattern.name+(pattern.phase===2?'（第二階段）':''):'下次：大型靈獸逼近'};
+          continue;
+        }
         const phase=m.hp/m.maxHp<.5?2:1,radius=phase===2&&s.turn%2===0?2:1;
         m.phase=phase;
         const cells=[];for(let y=m.y-radius;y<m.y+2+radius;y++)for(let x=m.x-radius;x<m.x+2+radius;x++){
@@ -877,7 +916,7 @@
     if(m.boss&&intent?.kind==='boss-attack'){
       if(intent.origin&&key(intent.origin)!==key(m))return;
       log(s,m.name+'發動蓄勢攻擊','monster-attack',{actor:m.uid,animation:{kind:'cast',style:'blast',origin:point(m),target:intent.target,cells:intent.cells,color:'#e4a06d'}});
-      if(intent.cells.some(p=>key(p)===key(hero)))damage(s,m,hero,m.atk,{skill:'monster-boss'});
+      if(intent.cells.some(p=>key(p)===key(hero))){damage(s,m,hero,m.atk,{skill:'monster-boss'});if(alive(hero)&&intent.slow){hero.slow=1;hero.slowUntil=hero.turns+1;}}
       else log(s,hero.name+'避開了'+m.name+'的攻擊','dodge',{actor:hero.uid,animation:{kind:'dodge'}});
       return;
     }

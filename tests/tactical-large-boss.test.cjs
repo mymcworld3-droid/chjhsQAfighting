@@ -37,3 +37,33 @@ test('throw deals damage to a boss without moving its four-cell footprint',()=>{
   assert.deepEqual({x:s.actors[1].x,y:s.actors[1].y},position);
   assert.equal(s.actors[1].hp,3700);
 });
+test('v4 bosses warn with distinct shapes and the warning survives player movement',()=>{
+  const cases=[
+    {kind:'rock',turn:2,hero:{x:6,y:2},text:'直線衝擊'},
+    {kind:'vine',turn:1,hero:{x:5,y:2},text:'纏根突襲'},
+    {kind:'flame',turn:1,hero:{x:5,y:2},text:'烈焰吐息'}
+  ];
+  for(const c of cases){
+    let s=scene();s.trial.layoutVersion=4;s.turn=c.turn;
+    Object.assign(s.actors[0],c.hero);Object.assign(s.actors[1],{bossKind:c.kind});
+    R.prepareIntents(s);const intent=s.actors[1].intent;
+    assert.equal(intent.kind,'boss-attack');assert.match(intent.text,new RegExp(c.text));
+    assert.ok(intent.cells.some(p=>R.key(p)===R.key(c.hero)));
+    const safe=R.moveCells(s,s.actors[0]).find(p=>!intent.cells.some(q=>R.key(p)===R.key(q)));
+    assert.ok(safe,c.kind);const hp=s.actors[0].hp;
+    s=R.apply(s,'u',{type:'move',x:safe.x,y:safe.y},now);
+    s=R.apply(s,'u',{type:'end'},now);assert.equal(s.actors[0].hp,hp,c.kind);
+  }
+});
+test('v4 phase expansion is isolated from legacy boss warnings',()=>{
+  for(const kind of ['rock','vine','flame']){
+    const s=scene();s.trial.layoutVersion=4;s.turn=2;
+    Object.assign(s.actors[0],{x:5,y:2});Object.assign(s.actors[1],{bossKind:kind});
+    R.prepareIntents(s);const first=s.actors[1].intent.cells.length;
+    s.actors[1].hp=1900;R.prepareIntents(s);
+    assert.equal(s.actors[1].phase,2);assert.ok(s.actors[1].intent.cells.length>=first,kind);
+  }
+  const old=scene();old.actors[1].bossKind='flame';R.prepareIntents(old);
+  assert.match(old.actors[1].intent.text,/靈獸爪擊/);
+  assert.equal(R.actor({uid:'boss',bot:true,boss:true,bossKind:'vine'},{x:1,y:1}).bossKind,'vine');
+});
