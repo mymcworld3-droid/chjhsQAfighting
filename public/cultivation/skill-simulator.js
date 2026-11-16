@@ -1,4 +1,5 @@
 import './manual-rules.js';
+import {skillArt} from './manual-art.js';
 import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js';
 
@@ -47,7 +48,10 @@ function refreshControls(){
   $('#cast-self').hidden=chosen.range!==0||tool!=='cast';
   $('#cast-self').disabled=busy||state.status!=='active';
   $('#next-turn').disabled=busy||state.status!=='active';
-  $('#glyph').textContent=chosen.school==='sword'?'劍':'拳';
+  const glyph=$('#glyph'),art=skillArt(chosen);
+  glyph.textContent=art?'':chosen.school==='sword'?'劍':'拳';
+  glyph.style.backgroundImage=art?'url("'+art+'")':'';
+  glyph.classList.toggle('has-art',!!art);
   $('#skill-name').textContent=chosen.name;
   $('#skill-stats').textContent=`${chosen.cost} 體力 · ${chosen.unlimited?'無固定射程':chosen.range===0?'自身':chosen.range+' 格'}`;
   $('#skill-description').textContent=chosen.description;

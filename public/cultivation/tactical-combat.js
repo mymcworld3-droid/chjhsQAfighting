@@ -1,4 +1,5 @@
 import './manual-rules.js';
+import {skillArt} from './manual-art.js';
 import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261112-manual-cultivation-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js';
@@ -57,8 +58,8 @@ function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
-  if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css';document.head.append(link);}
-  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261115-right-skill-ring';document.head.append(link);}
+  if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261116-manual-art-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-manual-art-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
@@ -224,7 +225,7 @@ function updateWheelChoices(container,options,selected,moveCost,hero,locked){
     button.setAttribute('aria-label',option.name+'，'+price+(unavailable?'，'+unavailable:''));
     button.title=unavailable||option.name+' · '+price;
     button.classList.toggle('is-unavailable',!!unavailable);
-    wheelText(button.firstElementChild,option.name,price);
+    wheelText(button.firstElementChild,option.name,price,skillArt(option.skill));
   }
 }
 function wheelMarker(marker,angle,radius){
@@ -235,7 +236,7 @@ function wheelMarker(marker,angle,radius){
 }
 // Keep outer-sector labels and sliding indicator consistent with actual cost.
 // Reuse the nodes so frequent battle updates do not restart the slide animation.
-function wheelText(container,name,cost){
+function wheelText(container,name,cost,art=''){
   if(!container)return;
   let title=container.querySelector('.tc-wheel-name');
   let fee=container.querySelector('.tc-wheel-cost');
@@ -245,8 +246,32 @@ function wheelText(container,name,cost){
     fee=document.createElement('small');fee.className='tc-wheel-cost';
     container.append(title,fee);
   }
+  let image=container.querySelector('.tc-wheel-skill-art');
+  if(art){
+    if(!image){
+      image=document.createElement('img');
+      image.className='tc-wheel-skill-art';image.alt='';image.decoding='async';
+      container.prepend(image);
+    }
+    if(image.getAttribute('src')!==art)image.src=art;
+  }else image?.remove();
   if(title.textContent!==name)title.textContent=name;
   if(fee.textContent!==cost)fee.textContent=cost;
+}
+function showPvpSkill(button,skill,cost){
+  const art=skillArt(skill),key=skill.id+'|'+art;
+  if(button.dataset.artSkill!==key){
+    button.replaceChildren();
+    if(art){
+      const image=document.createElement('img');
+      image.className='tc-pvp-skill-art';image.alt='';image.decoding='async';image.src=art;
+      button.append(image);
+    }
+    const name=document.createElement('span');name.className='tc-pvp-skill-name';
+    button.append(name);button.dataset.artSkill=key;
+  }
+  button.querySelector('.tc-pvp-skill-name').textContent=skill.name+' · '+cost;
+  button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+cost+' 體力');
 }
 // The slider is an actual curved annular pizza-sector, not a floating pill.
 // Its SVG rotor pivots at the bottom-right corner of the quarter-circle.
@@ -292,13 +317,13 @@ function buildGame(){
     if(skills.length){
       const attack=tabs.querySelector('[data-action="attack"]');
       attack.dataset.action='manual:'+skills[0].id;
-      attack.textContent=skills[0].name+' · '+skills[0].cost;
-      attack.setAttribute('aria-label','功法技能：'+skills[0].name+'，消耗 '+skills[0].cost+' 體力');
+      showPvpSkill(attack,skills[0],skills[0].cost);
+      
       for(const skill of skills.slice(1)){
         const button=document.createElement('button');
         button.type='button';button.dataset.action='manual:'+skill.id;
-        button.textContent=skill.name+' · '+skill.cost;
-        button.setAttribute('aria-label','功法技能：'+skill.name+'，消耗 '+skill.cost+' 體力');
+        showPvpSkill(button,skill,skill.cost);
+        
         tabs.append(button);
       }
     }
@@ -534,7 +559,7 @@ function updateControls(){
   const directional=['line','cleave','fist-sweep','fist-throw','fist-chain'].includes(shown.kind);
   const quarter=root.classList.contains('tc-quarter-layout'),cost=R.techniqueCost(me,shown);
   const basicTab=$('[data-action="attack"]');
-  if(basicTab&&!quarter)basicTab.textContent='普通攻擊 · '+basic.cost;
+  if(basicTab&&!quarter&&basicTab.dataset.action==='attack')basicTab.textContent='普通攻擊 · '+basic.cost;
   let label=action==='move'?'選擇移動位置':directional?'選擇攻擊方向':
     shown.kind==='ring'?'震擊周圍':shown.kind==='dash-cleave'?'選擇突進落點':
       shown.kind==='flying-sword'?(me.flyingSword?'選擇飛劍移動位置':'選擇召劍位置'):'選擇施放位置';
@@ -591,8 +616,8 @@ function updateControls(){
       const technique=R.manualSkillFor(me,b.dataset.action.slice(7));
       if(technique){
         const cost=R.techniqueCost(me,technique);
-        b.textContent=technique.name+' · '+cost;
-        b.setAttribute('aria-label','功法技能：'+technique.name+'，消耗 '+cost+' 體力');
+        showPvpSkill(b,technique,cost);
+        
       }
     }
   });
@@ -611,7 +636,7 @@ function updateControls(){
       '行動：移動；目標：玩家，'+moveCostLabel);
     const actionThumb=$('.tc-wheel-action-marker'),detailThumb=$('.tc-wheel-detail-marker');
     actionThumb.textContent=attacking?'攻擊':'移動';
-    wheelText(detailThumb,targetName,targetCost);
+    wheelText(detailThumb,targetName,targetCost,attacking?skillArt(shown):'');
     detailThumb.title=targetName+' · '+targetCost;
     const actionAngle=attacking?WHEEL_ANGLES.upper:WHEEL_ANGLES.lower;
     wheelMarker(actionThumb,actionAngle,WHEEL_RADII.action);

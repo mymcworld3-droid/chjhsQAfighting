@@ -651,3 +651,19 @@ html body.ui-cleanup #tactical-combat.tc-quarter-layout .tc-quiz .tc-options>.bg
     font-size:11px;
   }
 }
+
+// Move paintings inside the existing outer attack ring, without additional controls.
+#tactical-combat.tc-quarter-layout .tc-wheel-skill-art{
+ display:block;width:clamp(18px,2.5vw,29px);height:clamp(18px,2.5vw,29px);
+ margin:0 auto 2px;object-fit:cover;border-radius:5px;
+ border:1px solid #d8cba88c;box-shadow:0 1px 5px #0009
+}
+#tactical-combat.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
+ width:clamp(18px,2.3vw,27px);height:clamp(18px,2.3vw,27px);border-color:#28553e
+}
+@media(orientation:portrait){
+ #tactical-combat.tc-quarter-layout .tc-wheel-skill-art,
+ #tactical-combat.tc-quarter-layout .tc-wheel-detail-marker .tc-wheel-skill-art{
+  width:clamp(15px,4vw,22px);height:clamp(15px,4vw,22px);margin-bottom:1px
+ }
+}

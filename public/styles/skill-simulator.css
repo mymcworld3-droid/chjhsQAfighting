@@ -58,3 +58,5 @@ select{display:block;width:100%;margin-top:7px;padding:10px 9px;border:1px solid
 }
 @media(max-width:390px){.canvas-wrap{height:40vh;min-height:255px}.battle-foot{flex-wrap:wrap}.field-row{grid-template-columns:90px minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){button{transition:none}}
+
+.skill-glyph.has-art{background-size:cover;background-position:center;background-repeat:no-repeat;border-color:#bcdaaa}
