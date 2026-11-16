@@ -54,6 +54,9 @@ function markup(expandedBooks){
   const owned=current.library.filter(item=>item.owned).length;
   const equipped=current.equipped||[];
   const gold=Number(current.gold)||0;
+  const tactical=window.getCombatPower?.();
+  const rating=tactical?.mode==='tactical'?tactical:null;
+  const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
   const slots=Array.from({length:3},(_,i)=>{
     const id=equipped[i],skill=skillDetails(id);
     return `<div class="manual-slot ${id?'is-active':''}">
@@ -112,7 +115,14 @@ function markup(expandedBooks){
   }).join('');
   return `<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
       <div><b>${equipped.length} / 3</b><span>已裝備技能</span></div>
-      <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div></div>
+      <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
+      <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
+        <small>${rating?'基礎 '+fmt(rating.base)+' + 招式 '+fmt(rating.skills):'正在計算'}</small></div></div>
+    <details class="manual-power-details"><summary>查看戰棋戰力計算</summary>
+      <p>戰力 = 攻擊力 × 2 + 最大生命 × 0.2 + 裝備招式的加權評分。第二、三強招式分別只計 40%／20%，避免重複當作同回合全部輸出。舊金丹及法寶不再額外加分；戰力僅供比較，不改變戰鬥傷害。</p>
+      <div>基礎 ${rating?fmt(rating.base):'—'} ／ 已裝備招式 ${rating?fmt(rating.skills):'—'}</div>
+      ${rating?.items?.length?'<ul>'+rating.items.map(item=>'<li>'+esc(item.name)+' Lv.'+item.level+'：+'+fmt(item.power)+'（權重 '+Math.round(item.weight*100)+'%）</li>').join('')+'</ul>':'<p>目前尚未裝備符合境界與功法等級的招式。</p>'}
+    </details>
     <section class="manual-school"><div><h3>修行流派</h3><p>第一次選擇流派免費習得一本入門功法。流派可以切換，已取得的功法及熟練度不會消失。</p></div>
       <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
         <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
@@ -151,7 +161,9 @@ async function load({force=false}={}){
   try{
     const result=await request('/api/tactical/manuals');
     if(token!==sequence||getMainUser()?.uid!==uid)return;
-    current=result;loadedFor=uid;paint();
+    current=result;loadedFor=uid;
+    window.setCurrentTacticalManualState?.(result,uid);
+    paint();
   }catch(error){
     if(token!==sequence)return;
     paint(error.message);
@@ -167,6 +179,7 @@ async function mutate(url,body){
     const next=await request(url,body);
     if(getMainUser()?.uid!==uid)return;
     current=next;loadedFor=uid;lastFetch=Date.now();
+    window.setCurrentTacticalManualState?.(next,uid);
     if(upgrading){
       const local=window.getCurrentUserData?.();
       if(local){local.stats||={};local.stats.gold=next.gold;window.updateUIStats?.();}
