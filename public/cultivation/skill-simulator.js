@@ -1,7 +1,7 @@
 import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
 import {skillArt} from './manual-art.js';
 import './tactical-rules.js?v=20261116-fourstep-sync-fix-v1';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261116-fourstep-sync-fix-v1';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261116-long-line-afterglow-v1';
 
 const R=globalThis.QATactical,Manuals=globalThis.QAManuals;
 const uid='practice-player',canvas=document.getElementById('battle');
