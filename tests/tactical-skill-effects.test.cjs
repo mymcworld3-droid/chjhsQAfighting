@@ -493,3 +493,25 @@ test('damage numbers appear at impact on top of the manual animation',()=>{
     if(skill==='tiger-throw')assert.deepEqual(number.slice(0,3),['fillText','−150',168]);
   }
 });
+
+
+test('far-line break retains its beam through 90 percent and fades cleanly',()=>{
+  const view={cell:48,ox:0,oy:0,width:12,height:9};
+  for(const id of ['wind-thousand','flight-break']){
+    const before=fixture(id);
+    const after=R.apply(before,'hero',{type:'manual',skillId:id,x:5,y:4},now);
+    const cast=A.plan(before,after,'hero').find(s=>s.kind==='cast'&&s.skill===id);
+    assert(cast,id);
+    assert.equal(A.strikeTime(cast,0),.45,id+' keeps its hit timing');
+    const strokesAt=p=>{
+      const c=context(),result=[];
+      c.stroke=()=>{if(['#9df8dc','#effff4','#8bddff','#c8f4ff'].includes(c.strokeStyle)&&c.globalAlpha>.01)result.push(c.strokeStyle);};
+      assert.equal(Effects.draw(c,cast,p,view,true),true);
+      return result;
+    };
+    assert(strokesAt(.9).length>0,id+' beam should remain at 90 percent');
+    assert(strokesAt(.98).length>0,id+' should fade smoothly near the end');
+    assert.equal(strokesAt(1).length,0,id+' must disappear completely');
+    assert(after.events.some(e=>e.type==='damage'),id+' should still deal damage');
+  }
+});
