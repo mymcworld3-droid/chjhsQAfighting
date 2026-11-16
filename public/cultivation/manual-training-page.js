@@ -1,4 +1,4 @@
-import './manual-rules.js?v=20261116-wind-step-rebalance-v1';
+import './manual-rules.js?v=20261116-fourstep-sync-fix-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
