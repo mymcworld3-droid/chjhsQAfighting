@@ -79,7 +79,7 @@ function options(s,a,budget=a.stamina){
     value+=Math.max(0,after.hp-a.hp)*hpWeight(a);
     value+=Math.max(0,(after.shield||0)-(a.shield||0))*.65;
     if(selected.kind==='flying-sword'&&!a.flyingSword&&after.flyingSword)value+=a.atk*.9;
-    if(selected.kind==='fist-focus'&&after.fistFocusUntil>a.fistFocusUntil)value+=a.atk;
+    if(selected.kind==='fist-focus'&&(Number(after.fistFocusUntil)||0)>(Number(a.fistFocusUntil)||0))value+=a.atk;
     if(value>1)results.push({command,value,cost,id:manualId||'attack'});
   }
   const danger=incoming(s,a);
