@@ -94,6 +94,14 @@
             try { mj.typesetClear?.([entry.node]); } catch (_) {}
             entry.node.innerHTML = escaped;
             console.warn('[Quiz Math] invalid TeX displayed as literal text');
+            // Report an actual MathJax parse failure, not a transient CDN outage.
+            // The question controller checks the current active question and
+            // sends it for independent review without opening a report modal.
+            if (typeof CustomEvent === 'function') {
+              window.dispatchEvent?.(new CustomEvent('qa:invalid-tex', {
+                detail: { node: entry.node, source: entry.literal }
+              }));
+            }
           }
         } catch (renderError) {
           for (const { node, html, literal } of backups) {
