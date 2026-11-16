@@ -14,12 +14,14 @@ test('direct attacks insert numeric damage into existing description',()=>{
   assert.match(desc('tiger-throw'),/落地時造成 300 傷害/);
   assert.doesNotMatch(desc('tiger-throw'),/落地時造成傷害。/);
 });
-test('multi-hit and sword arrays state each strike, not multiplied total',()=>{
-  assert.match(desc('wind-step'),/每次命中造成 280 傷害/);
-  assert.match(desc('tiger-step'),/每次命中造成 150 傷害/);
-  assert.match(desc('dragon-guard'),/每段命中造成 90 傷害/);
-  assert.match(desc('sky-cloud'),/每擊造成 220 傷害；中心交點每擊造成 160 傷害/);
-  assert.match(desc('sky-sever'),/每擊造成 250 傷害；中心交點每擊造成 60 傷害/);
+test('repeated hits use explicit number of strikes and individual damage, not a combined total',()=>{
+  assert.match(desc('wind-step'),/造成 2 次 280 的傷害/);
+  assert.match(desc('wind-step',200,5),/造成 2 次 392 的傷害/);
+  assert.match(desc('tiger-step'),/造成 2 次 150 的傷害/);
+  assert.match(desc('dragon-guard'),/最多造成 4 次 90 的傷害/);
+  assert.match(desc('sky-cloud'),/一般劍氣每擊造成 220 傷害；中心交點最多造成 2 次 160 的傷害/);
+  assert.match(desc('sky-sever'),/一般劍氣每擊造成 250 傷害；中心交點最多造成 8 次 60 的傷害/);
+  assert.doesNotMatch(desc('wind-step'),/造成 560 傷害/);
 });
 test('buffs, flying swords and every manual use valid conditional descriptions',()=>{
   assert.match(desc('dragon-roar'),/不造成直接傷害。$/);

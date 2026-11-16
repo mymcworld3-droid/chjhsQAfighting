@@ -1,4 +1,4 @@
-import './manual-rules.js?v=20261116-skill-damage-inline-v1';
+import './manual-rules.js?v=20261116-multi-hit-description-v2';
 import {skillArt} from './manual-art.js';
 import './tactical-rules.js';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261112-manual-cultivation-v1';

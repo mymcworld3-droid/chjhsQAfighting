@@ -187,12 +187,12 @@
         suffix='本次召劍不造成傷害；之後飛劍移動命中時每次造成 '+amount+' 傷害。';
       else suffix='首次召劍不造成傷害；之後飛劍移動命中時每次造成 '+amount+' 傷害。';
     }else if(value.center!==undefined){
-      suffix='一般劍氣每擊造成 '+fmt(value.damage)+' 傷害；中心交點每擊造成 '+
-        fmt(value.center)+' 傷害（最多 '+value.centerHits+' 次，依實際劍氣路線）。';
+      suffix='一般劍氣每擊造成 '+fmt(value.damage)+' 傷害；中心交點最多造成 '+
+        value.centerHits+' 次 '+fmt(value.center)+' 的傷害（依實際劍氣路線）。';
     }else if(skill.hits===2){
-      suffix='每次命中造成 '+fmt(value.damage)+' 傷害（最多兩次）。';
+      suffix='造成 '+skill.hits+' 次 '+fmt(value.damage)+' 的傷害（每次命中獨立結算）。';
     }else if(skill.kind==='fist-chain'){
-      suffix='每段命中造成 '+fmt(value.damage)+' 傷害（最多 '+skill.steps+' 段）。';
+      suffix='最多造成 '+skill.steps+' 次 '+fmt(value.damage)+' 的傷害（依實際踏步命中情況）。';
     }else if(skill.kind==='fist-throw'){
       suffix='成功翻摔時造成 '+fmt(value.damage)+' 傷害。';
     }else{
