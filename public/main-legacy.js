@@ -4518,7 +4518,8 @@ window.addEventListener('qa:invalid-tex', event => {
         try {
             const token = await user.getIdToken();
             if (auth.currentUser?.uid !== user.uid) return;
-            const response = await fetch('/api/verify-report', {
+            const autoReviewEndpoint = '/api/verify-report';
+            const response = await fetch(autoReviewEndpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
                 body: JSON.stringify({
