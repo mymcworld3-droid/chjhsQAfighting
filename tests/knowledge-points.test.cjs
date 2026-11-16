@@ -85,7 +85,7 @@ test('every array item is validated, invalid points cannot hide behind a valid f
 function generationHarness(candidates) {
   let handler,calls=0;const prompts=[];
   const source=fs.readFileSync(require.resolve('../server.js'),'utf8');
-  const a=source.indexOf("app.post('/api/generate-quiz',"),b=source.indexOf('// API 5:',a);
+  const a=source.indexOf('async function generateQuiz('),b=source.indexOf("app.post('/api/generate-quiz',",a);
   const context={questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},Knowledge,createQuizTaskPlan:require('../quiz-generation-tasks.cjs').createQuizTaskPlan,app:{post:(_,fn)=>handler=fn},FAST_QUIZ_MODES:MODES,
     SUBJECT_SCHEMA:{數學:['原範圍']},SUBJECT_DETAILS:{},QUESTION_FORMS:['multi-step'],
     cleanQuestionText:x=>String(x),normalizeQuestionMeta:x=>x,getRandomItem:x=>x[0],
@@ -102,7 +102,8 @@ function generationHarness(candidates) {
       options.validate(data,{index:0});return {data,provider:'test',model:'test'};
     }},
     console:{log(){},error(){}},crypto:require('node:crypto')};
-  vm.runInNewContext(source.slice(a,b),context);
+  assert(a>=0&&b>a,'find the actual quiz generator declaration');
+  vm.runInNewContext(source.slice(a,b)+"\napp.post('/api/generate-quiz',generateQuiz);",context);
   return {prompts,calls:()=>calls,async invoke(body){const result={};await handler({body},{status(n){result.status=n;return this;},json(x){result.body=JSON.parse(JSON.stringify(x));return this;}});return result;}};
 }
 test('quiz API rejects invented or cross-subject labels, retries, and returns scope and knowledge separately',async()=>{
