@@ -93,7 +93,7 @@ import { playerRepository } from './data/player-repository.js';
     if (resume && canResume) {
       window.currentActiveQuiz = null;
       // Resume the unanswered solo queue without drawing another encounter on the return trip.
-      void window.startQuizFlow?.(false, { skipEncounter: true });
+      void window.startFreeQuizFlow?.();
     }
   }
   function header(subtitle, title = '機緣洞天') {

@@ -3130,11 +3130,11 @@ window.nextQuestion = async () => {
         }
         const intercepted = extendedPracticeState.active || window.hasReadySoloCorrection?.() ? false : await window.maybeEncounterOpportunity?.({ quiz });
         if (auth.currentUser?.uid !== account) return;
-        if (!intercepted) await window.startQuizFlow();
+        if (!intercepted) await openSoloQuestionPage();
     } catch (error) {
         console.warn('[Opportunity next]', error);
         if (auth.currentUser?.uid === account) {
-            await window.startQuizFlow();
+            await openSoloQuestionPage();
         }
     } finally {
         soloNextBusy = false;
@@ -4253,9 +4253,18 @@ function displaySoloQuiz(quiz) {
 const openSoloQuestionPage = window.startQuizFlow;
 // Keep direct, unstructured question practice available alongside tactical trials.
 window.startFreeQuizFlow = () => openSoloQuestionPage();
+window.leaveQuizPage = () => {
+    if (trialQuestionSession) return trialQuestionSession.back();
+    return window.switchToPage('page-home');
+};
+function updateQuizBackLabel() {
+    const label = document.querySelector('#btn-quiz-home span');
+    if (label) label.textContent = trialQuestionSession ? '返回戰場' : '返回宗門';
+}
 window.QATrialQuestion = Object.freeze({
     async open(callbacks) {
         trialQuestionSession = { ...callbacks };
+        updateQuizBackLabel();
         document.body.classList.add('trial-question-active');
         await openSoloQuestionPage();
     },
@@ -4266,6 +4275,7 @@ window.QATrialQuestion = Object.freeze({
         if (!trialQuestionSession) return false;
         const { question } = trialQuestionSession;
         trialQuestionSession = null;
+        updateQuizBackLabel();
         soloQuizOpenSerial += 1;
         if (window.currentActiveQuiz === question && answeredSoloQuizzes.has(question)) window.currentActiveQuiz = null;
         document.getElementById('trial-question-status')?.remove();
