@@ -102,30 +102,18 @@ test('forged legacy golden-core commands are refused by battle API',async()=>{
   },fixed),/金丹技能已停用/);
 });
 
-test('resuming an unfinished trial loads the current equipped skills without resetting the board',async()=>{
+test('resuming an unfinished trial preserves its original skills and board',async()=>{
   const db=database(),now=2000000000000;
+  await API.chooseSchool(db,'u1',{school:'sword'});
   const first=await API.start(db,'u1',{mode:'pve'},now);
   const raw=db.records.get(API.ROOMS+'/'+first.id);
   Object.assign(raw.actors[0],{x:2,y:2,stamina:6});
-  await API.chooseSchool(db,'u1',{school:'sword'});
-  const loadout=await API.manualsState(db,'u1');
-  assert.equal(loadout.equipped.length,1);
+  await assert.rejects(API.equipManualSkills(db,'u1',{skillIds:[]}),/戰鬥進行中/);
   const resumed=await API.start(db,'u1',{mode:'pve'},now+1);
-  assert.equal(resumed.id,first.id);
   const actor=resumed.actors.find(a=>a.uid==='u1');
-  assert.deepEqual(actor.manualSkills,loadout.equipped);
+  assert.equal(resumed.id,first.id);
+  assert.deepEqual(actor.manualSkills,['wind-slash']);
   assert.deepEqual([actor.x,actor.y,actor.stamina],[2,2,6]);
-  assert.ok(R.manualSkillFor(actor,loadout.equipped[0]));
-  assert.equal(resumed.revision,raw.revision+1);
-  const user=db.records.get('users/u1'),record=db.records.get(API.MANUALS+'/u1');
-  record.books['sword-sky']={exp:1080};user.stats.totalScore=68;
-  await API.equipManualSkills(db,'u1',{skillIds:['sky-sever']});
-  const promoted=await API.start(db,'u1',{mode:'pve'},now+2);
-  assert.equal(R.manualSkillFor(promoted.actors.find(a=>a.uid==='u1'),'sky-sever')?.id,'sky-sever');
-  await API.equipManualSkills(db,'u1',{skillIds:[]});
-  const cleared=await API.start(db,'u1',{mode:'pve'},now+3);
-  assert.deepEqual(cleared.actors.find(a=>a.uid==='u1').manualSkills,[]);
-  assert.equal(cleared.id,first.id);
 });
 
 test('browser rules imported before the manual catalog still resolve the equipped attack',()=>{

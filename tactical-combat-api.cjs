@@ -183,9 +183,12 @@ async function chooseSchool(db,uid,input){
       const starter=Manuals.starterFor(school);
       next.books[starter]||={exp:0};next.starterClaimed=true;
       const introductory=Manuals.BY_BOOK[starter].skills[0];
-      if(!next.equipped.length&&Manuals.meetsRealm(introductory,TrainingAccess.score(exists(user))))
+      if(!next.equipped.length&&Manuals.meetsRealm(introductory,TrainingAccess.score(exists(user)))){
+        await assertLoadoutUnlocked(tx,db,uid);
         next.equipped.push(introductory.id);
+      }
     }
+    next.loadouts[next.activeLoadout].skillIds=[...next.equipped];
     tx.set(ref,next);return manualResponse(next,exists(user));
   });
 }
@@ -204,8 +207,43 @@ async function equipManualSkills(db,uid,input){
       throw error('修士境界未達到此功法技能的門檻',403);
     if(new Set(ids.map(id=>Manuals.BY_SKILL[id].moveId)).size!==ids.length)
       throw error('相同招式只能裝備一次，請選擇其所屬功法',400);
-    next.equipped=[...ids];tx.set(ref,next);
+    await assertLoadoutUnlocked(tx,db,uid);
+    next.equipped=[...ids];next.loadouts[next.activeLoadout].skillIds=[...ids];tx.set(ref,next);
     return manualResponse(next,exists(user));
+  });
+}
+
+// Room pointers and room state are read in the same transaction as the write,
+// so opening a battle and changing its loadout cannot race each other.
+async function assertLoadoutUnlocked(tx,db,uid){
+  const pointer=exists(await tx.get(db.collection(PLAYERS).doc(uid)))||{};
+  const ids=[...new Set([pointer.roomId,...Object.values(pointer.roomIds||{})].filter(Boolean))];
+  const rooms=await Promise.all(ids.map(id=>tx.get(db.collection(ROOMS).doc(id))));
+  if(rooms.some(s=>{const room=exists(s);return room&&(room.status==='active'||room.status==='waiting'&&room.createdAtMs>Date.now()-15*60000)&&room.actors?.some(a=>a.uid===uid);}))
+    throw error('戰鬥進行中，請先結束戰鬥或離場再更換配置',409);
+}
+async function updateLoadout(db,uid,input){
+  const index=input?.index;
+  if(!Number.isInteger(index)||index<0||index>2)throw error('配置不存在',400);
+  const name=input?.name;
+  if(name!==undefined&&(typeof name!=='string'||!name.trim()||Array.from(name.trim()).length>20))throw error('配置名稱須為 1 至 20 個字',400);
+  const ids=input?.skillIds;
+  if(ids!==undefined&&(!Array.isArray(ids)||ids.length>3||ids.some(id=>typeof id!=='string')||new Set(ids).size!==ids.length))throw error('最多裝備三個不重複的功法技能',400);
+  return db.runTransaction(async tx=>{
+    const ref=db.collection(MANUALS).doc(uid);
+    const [userSnap,record]=await Promise.all([tx.get(db.collection('users').doc(uid)),tx.get(ref)]);
+    const user=exists(userSnap);if(!user)throw error('玩家資料不存在',404);
+    const next=Manuals.normalize(exists(record));
+    const chosen=ids===undefined?next.loadouts[index].skillIds:ids;
+    if(chosen.some(id=>!Manuals.unlocked(next,id)))throw error('不能裝備功法等級尚未解鎖的技能',403);
+    if(chosen.some(id=>!Manuals.meetsRealm(Manuals.BY_SKILL[id],TrainingAccess.score(user))))throw error('修士境界未達到此功法技能的門檻',403);
+    if(new Set(chosen.map(id=>Manuals.BY_SKILL[id].moveId)).size!==chosen.length)throw error('相同招式只能裝備一次，請選擇其所屬功法',400);
+    if(input?.apply===true||(ids!==undefined&&index===next.activeLoadout))await assertLoadoutUnlocked(tx,db,uid);
+    if(name!==undefined)next.loadouts[index].name=name.trim();
+    next.loadouts[index].skillIds=[...chosen];
+    if(input?.apply===true){next.activeLoadout=index;next.equipped=[...chosen];}
+    else if(index===next.activeLoadout)next.equipped=[...chosen];
+    tx.set(ref,next);return manualResponse(next,user);
   });
 }
 
@@ -326,20 +364,6 @@ async function start(db,uid,selection={},now=Date.now()){
       if(prior.mode==='pve'&&!prior.trial){
         prior.trial={version:1,seed:campaign.seed,stage:campaign.stage,layoutVersion:0,title:Rules.mapFor(prior.map).name};
         changed=true;tx.set(pointerRef,{...pointer,trial:campaign});
-      }
-      if(prior.mode==='pve'){
-        // Resume the same board with the currently equipped, server-validated
-        // techniques. Older rooms contain a loadout snapshot from their creation.
-        const actor=prior.actors.find(p=>p.uid===uid);
-        const loadout=manualLoadout(exists(manualSnap),TrainingAccess.score(user));
-        if(actor&&(actor.trainingAccessScore!==loadout.trainingAccessScore||
-          JSON.stringify(actor.manualSkills||[])!==JSON.stringify(loadout.manualSkills)||
-          Object.keys(actor.manualSkillLevels||{}).length!==Object.keys(loadout.manualSkillLevels).length||
-          loadout.manualSkills.some(id=>actor.manualSkillLevels?.[id]!==loadout.manualSkillLevels[id]))){
-          Object.assign(actor,loadout);
-          prior.revision=(prior.revision||0)+1;
-          changed=true;
-        }
       }
       changed=ensureIntroductions(prior,uid,pointer)||changed;
       if(changed)tx.set(db.collection(ROOMS).doc(prior.id),prior);
@@ -784,6 +808,7 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.get('/api/tactical/state',route((db,uid,req)=>state(db,uid,Date.now(),req.query?.mode||'')));
   app.get('/api/tactical/manuals',route((db,uid)=>manualsState(db,uid)));
   app.post('/api/tactical/manuals/school',route((db,uid,req)=>chooseSchool(db,uid,req.body)));
+  app.post('/api/tactical/manuals/loadout',route((db,uid,req)=>updateLoadout(db,uid,req.body)));
   app.post('/api/tactical/manuals/equip',route((db,uid,req)=>equipManualSkills(db,uid,req.body)));
   app.post('/api/tactical/manuals/upgrade',route((db,uid,req)=>upgradeManual(db,uid,req.body)));
   app.post('/api/tactical/manuals/skills/upgrade',route((db,uid,req)=>upgradeSkill(db,uid,req.body)));
@@ -795,4 +820,4 @@ function register(app,{resolve=()=>playerRepository.resolve(),verify=verifyMainI
   app.post('/api/tactical/review-math-issue',route((db,uid,req)=>reviewMathIssue(db,uid,req.body)));
 }
 module.exports=register;
-module.exports.__test={ROOMS,PLAYERS,MANUALS,reviewMathIssue,manualsState,chooseSchool,equipManualSkills,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
+module.exports.__test={ROOMS,PLAYERS,MANUALS,reviewMathIssue,manualsState,chooseSchool,equipManualSkills,updateLoadout,upgradeManual,upgradeSkill,applyManualKills,rollManualDrop,roomId,member,snapshot,playerActor,trialProgress,rewardFor,start,state,command,acknowledgeEnemy,prepareQuestion,commitQuestion,answer,reportQuestion};
