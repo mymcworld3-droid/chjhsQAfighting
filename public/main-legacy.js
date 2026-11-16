@@ -187,7 +187,7 @@ window.addEventListener('qa:scope-exclusions-updated', event => {
     if (!changed || !state || !currentUserData || !auth.currentUser?.uid) return;
     const active = quiz === window.currentActiveQuiz;
     const alreadyAnswered = active && answeredSoloQuizzes.has(quiz);
-    if (alreadyAnswered) {
+    if (alreadyAnswered || trialQuestionSession) {
         // Keep the result and explanation readable until the player presses 下一題.
         pendingQuizScopeExclusions = state;
         return;
@@ -4309,6 +4309,11 @@ window.QATrialQuestion = Object.freeze({
         await openSoloQuestionPage();
     },
     async next() {
+        if (pendingQuizScopeExclusions) {
+            currentUserData.questionScopeExclusions = pendingQuizScopeExclusions;
+            pendingQuizScopeExclusions = null;
+            syncSoloQuestionCache();
+        }
         if (trialQuestionSession) await openSoloQuestionPage();
     },
     close() {
@@ -4326,6 +4331,11 @@ window.QATrialQuestion = Object.freeze({
         resetQuizWhiteboard({ close: true });
         quizHelperState.requestSerial++;
         document.body.classList.remove('quiz-helper-fullscreen-open', 'trial-question-active');
+        if (pendingQuizScopeExclusions) {
+            currentUserData.questionScopeExclusions = pendingQuizScopeExclusions;
+            pendingQuizScopeExclusions = null;
+            syncSoloQuestionCache();
+        }
         return true;
     }
 });
