@@ -226,20 +226,28 @@
     const effects = Array.isArray(snapshot.battle?.effects) ? snapshot.battle.effects : [];
     const passive = [];
     const power = snapshot.power || { total:0, base:0, core:0, equipment:0, items:[] };
+    const tactical = power.mode === 'tactical';
+    const powerReady = !tactical || power.complete;
     if (effects.some(effect => effect?.type === 'equip_cheat_death')) passive.push('每場一次免死');
     if (effects.some(effect => effect?.type === 'equip_copy_enemy_artifact')) passive.push('鬥法時複製敵方法寶效果');
     return `
       <section class="training-status-panel">
         <div class="status-section status-power-section" aria-label="綜合戰力">
-          <div class="status-section-title"><span>綜合戰力</span><small>戰力總覽</small></div>
+          <div class="status-section-title"><span>${tactical?'戰棋戰力':'綜合戰力'}</span><small>${powerReady?'戰力總覽':'功法資料同步中'}</small></div>
           <div class="status-power-main"><i class="fa-solid fa-bolt"></i><strong>${formatStatNumber(power.total)}</strong></div>
           <div class="status-power-sources">
-            <div><span>基礎</span><b>${formatStatNumber(power.base)}</b></div>
-            <div><span>金丹 · 品質</span><b>${formatStatNumber(power.core)}</b></div>
-            <div><span>裝備 · 境界與屬性</span><b>${formatStatNumber(power.equipment)}</b></div>
+            <div><span>基礎攻擊與生命</span><b>${formatStatNumber(power.base)}</b></div>
+            ${tactical
+              ? `<div><span>已裝備功法招式</span><b>${formatStatNumber(power.skills)}</b></div>`
+              : `<div><span>金丹 · 品質</span><b>${formatStatNumber(power.core)}</b></div>
+                 <div><span>裝備 · 境界與屬性</span><b>${formatStatNumber(power.equipment)}</b></div>`}
           </div>
-          ${power.items?.length ? `<div class="status-power-items">${power.items.map(item => `<span>${escapeHtml(item.name)}（${escapeHtml(item.realm)}） +${formatStatNumber(item.power)}</span>`).join("")}</div>` : ""}
-          <p class="status-power-note">僅計入目前啟用金丹及已裝備法寶；停用金丹不計戰力。戰力不直接增加鬥法傷害。</p>
+          ${power.items?.length ? `<div class="status-power-items">${power.items.map(item => tactical
+            ? `<span>${escapeHtml(item.name)} Lv.${formatStatNumber(item.level)} +${formatStatNumber(item.power)}</span>`
+            : `<span>${escapeHtml(item.name)}（${escapeHtml(item.realm)}） +${formatStatNumber(item.power)}</span>`).join("")}</div>` : ""}
+          <p class="status-power-note">${tactical
+            ? powerReady?'按實際裝備招式、體力消耗、射程及攻擊／生命評估；金丹與舊法寶不另外加分。戰力不直接增加傷害。':'功法尚在同步，現僅顯示基礎戰力。'
+            : '僅計入目前啟用金丹及已裝備法寶；停用金丹不計戰力。戰力不直接增加鬥法傷害。'}</p>
         </div>
         <div class="status-section status-core-section">
           <div class="status-section-title"><span>目前調御金丹</span><small>調御狀態</small></div>
@@ -398,6 +406,7 @@
     sync();
     window.addEventListener('combat-stats-ready', renderStatus);
     window.addEventListener('golden-core-equipped-changed', renderStatus);
+    window.addEventListener('xiuxian:tactical-power-updated', renderStatus);
     ['xiuxian:user-ready', 'xiuxian:stats-updated', 'training-access-changed', 'foundation-training-stage-changed', 'golden-core-access-changed']
       .forEach(name => window.addEventListener(name, sync));
 
