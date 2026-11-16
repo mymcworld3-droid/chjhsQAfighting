@@ -116,7 +116,7 @@ test('real quiz handler rewrites the entire question when every API repeats the 
   await withMockProviders(async()=>{
     for(const mode of ['solo','battle-fast']) {
       let handler,calls=0;const prompts=[];
-      const context={questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS,createQuizTaskPlan,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,
+      const context={aiQuestionBank:{enabled:false},questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS,createQuizTaskPlan,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,
         FAST_QUIZ_MODES:require('../fast-quiz-prompt.cjs').MODES,quickQuizPrompt:require('../fast-quiz-prompt.cjs').quickQuizPrompt,
         Knowledge:require('../public/cultivation/knowledge-points.js'),
         ANSWER_AND_EXPLANATION_RULES:require('../quiz-answer-prompt.cjs').ANSWER_AND_EXPLANATION_RULES,
@@ -238,7 +238,7 @@ test('real quiz handler delivers the fastest assigned form, strips internal IDs 
   await withMockProviders(async()=>{
     for(const mode of ['solo','battle-fast']) {
       let handler;const pending=[],assigned=[];let calls=0;
-      const context={questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS:require('../quiz-generation-tasks.cjs').QUESTION_FORMS,createQuizTaskPlan,
+      const context={aiQuestionBank:{enabled:false},questionQualityAnalytics:{recordGenerated:async()=>{}},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS:require('../quiz-generation-tasks.cjs').QUESTION_FORMS,createQuizTaskPlan,
         app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,crypto:require('node:crypto'),
         FAST_QUIZ_MODES:require('../fast-quiz-prompt.cjs').MODES,quickQuizPrompt:require('../fast-quiz-prompt.cjs').quickQuizPrompt,
         Knowledge:require('../public/cultivation/knowledge-points.js'),
@@ -292,7 +292,7 @@ test('adaptive solo handler assigns different fine methods to simultaneous APIs,
       const data={concepts:Adaptive.seedConcepts(Adaptive.scopeFor(unit))};options.validate(data);return {data};
     }});
     let handler,calls=0;const pending=[],assignments=[],tracked=[];
-    const context={questionQualityAnalytics:{recordGenerated:async(_db,q,difficulty)=>tracked.push({q,difficulty})},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS,createQuizTaskPlan,adaptiveLearning,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,crypto:require('node:crypto'),
+    const context={aiQuestionBank:{enabled:false},questionQualityAnalytics:{recordGenerated:async(_db,q,difficulty)=>tracked.push({q,difficulty})},playerRepository:{resolve:()=>({db:{}})},QUESTION_FORMS,createQuizTaskPlan,adaptiveLearning,app:{post:(_path,fn)=>{handler=fn;}},aiRouter:router,crypto:require('node:crypto'),
       FAST_QUIZ_MODES:new Set(),quickQuizPrompt:require('../fast-quiz-prompt.cjs').quickQuizPrompt,Knowledge:require('../public/cultivation/knowledge-points.js'),
       ANSWER_AND_EXPLANATION_RULES:'完整單選題',subjectReliabilityPrompt:()=>'',questionQualityIssue:()=>'',removeUnstableOptionLabels:text=>text,
       SUBJECT_SCHEMA:{物理:['圓周運動']},SUBJECT_DETAILS:{},getRandomItem:items=>items[0],console:{log(){},error(){}},quizSparePool:createSparePool({similar:(a,b)=>a===b})};
