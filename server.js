@@ -1157,7 +1157,7 @@ async function generateQuiz(req, res) {
             // Fail closed: a freshly generated Gemini question must be reviewed
             // before it is sent to any game mode or signed as a raid question.
             // Legacy OpenAI-only deployments retain their existing semantics.
-            const independentReview = (correction || (typeof process !== 'undefined' && (process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY)))
+            const independentReview = (scopeExclusions.length || correction || (typeof process !== 'undefined' && (process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY)))
                 ? await reviewCandidate(parsed, bankTarget, routed.model)
                 : null;
 
