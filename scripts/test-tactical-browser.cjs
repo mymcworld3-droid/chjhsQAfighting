@@ -544,7 +544,7 @@ async function main(){
       // backing store is local and the normal server remains authoritative.
       for(const [stage,size] of [[6,{width:393,height:852}],[8,{width:844,height:390}]]){
         const key=service.ROOMS+'/'+result.id,saved=db.records.get(key);
-        const mission=Rules.create({id:result.id,players:[saved.actors[0]],trial:{seed:'browser-v4',stage,layoutVersion:4}});
+        const mission=Rules.create({id:result.id,players:[saved.actors[0]],trial:{seed:'browser-v4-0',stage,layoutVersion:4}});
         mission.pendingIntroductions={u1:[]};mission.revision=saved.revision+1;
         mission.blocks=[];Object.assign(mission.actors[0],{x:1,y:1,stamina:10,answered:1,correct:1});
         if(stage===8){
@@ -555,7 +555,7 @@ async function main(){
         await quick.locator('.tc-arena canvas').waitFor();await quick.locator('#startup-cloud-curtain').waitFor({state:'detached'});
         assert.match(await quick.locator('[data-objective]').textContent(),stage===6?/鎮守.*靈陣/:/封印.*攻擊陣眼/);
         if(stage===6){
-          await quick.locator('[data-end]').click();await quick.waitForFunction(()=>document.querySelector('[data-objective]')?.textContent.includes('1 / 4 回合'));
+          await quick.locator('[data-end]>span').click();await quick.waitForFunction(()=>document.querySelector('[data-objective]')?.textContent.includes('1 / 4 回合'));
           assert.equal((await read(quick)).objective.completedRounds,1);
         }else{
           await quick.locator('[data-action="attack"]').click();await cell(quick,2,1);
