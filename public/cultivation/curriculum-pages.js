@@ -61,6 +61,41 @@
   document.addEventListener('focusin', scheduleKeyboardSync);
   document.addEventListener('focusout', scheduleKeyboardSync);
   viewport?.addEventListener('resize', scheduleKeyboardSync, { passive: true });
+  // Open the editor directly from the touch gesture so iOS can show its keyboard.
+  document.addEventListener('pointerdown', event => {
+    const source = event.target.closest?.('#cs-search, #cs-range-input');
+    if (!source || !event.isPrimary || event.pointerType === 'mouse' || source.disabled || source.readOnly) return;
+    event.preventDefault();
+    const studio = $('scope-studio');
+    let dock = $('cs-mobile-editor');
+    if (!dock) {
+      dock = document.createElement('div');
+      dock.id = 'cs-mobile-editor';
+      dock.innerHTML = '<label for="cs-mobile-editor-input">輸入內容</label><textarea id="cs-mobile-editor-input" rows="2"></textarea><button type="button">完成</button>';
+      studio.append(dock);
+    }
+    const editor = dock.querySelector('textarea');
+    const label = dock.querySelector('label');
+    label.textContent = source.id === 'cs-search' ? '搜尋章名或考點' : '想練習的範圍';
+    editor.value = source.value;
+    editor.placeholder = source.placeholder;
+    editor.maxLength = source.maxLength;
+    editor.inputMode = source.inputMode || 'text';
+    dock.hidden = false;
+    const sync = () => {
+      if (!source.isConnected) return;
+      source.value = editor.value;
+      source.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+    editor.oninput = sync;
+    editor.oncompositionend = sync;
+    const close = () => { sync(); dock.hidden = true; editor.blur(); };
+    dock.querySelector('button').onclick = close;
+    editor.onkeydown = e => { if (e.key === 'Enter' && !e.isComposing && source.tagName === 'INPUT') { e.preventDefault(); close(); } };
+    editor.onblur = () => setTimeout(() => { if (!dock.contains(document.activeElement)) { sync(); dock.hidden = true; } }, 150);
+    editor.focus({ preventScroll: true });
+    editor.setSelectionRange(editor.value.length, editor.value.length);
+  }, true);
   function options(id) {
     return [...($(id)?.options || [])].filter(o => o.value).map(o => ({value:o.value,label:o.textContent}));
   }

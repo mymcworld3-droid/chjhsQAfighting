@@ -208,3 +208,9 @@ body:not(:has(#newbie-tutorial-layer)) #scope-studio:not(.fv-scope) .cs-stage-ti
 
 #scope-studio #comprehensive-source-container.hidden{display:none!important}
 #scope-studio #comprehensive-source-container{display:grid;gap:12px}
+
+#scope-studio #cs-mobile-editor{position:fixed;z-index:30010;left:10px;right:10px;bottom:8px;display:flex;align-items:end;gap:8px;padding:10px;border:1px solid #86cfc4;border-radius:12px;background:#142321;box-shadow:0 4px 24px #0009}
+#scope-studio #cs-mobile-editor[hidden]{display:none}
+#scope-studio #cs-mobile-editor label{position:absolute;left:-9999px}
+html body.xianxia-theme #scope-studio #cs-mobile-editor textarea{flex:1;min-width:0;min-height:46px;max-height:100px;resize:none;padding:8px;background:#091315;color:#fff;border:1px solid #86cfc4;border-radius:8px;font-size:16px!important}
+#scope-studio #cs-mobile-editor button{min-height:44px;padding:0 14px;color:#10221c;background:#a6d9c5;border:0;border-radius:8px}
