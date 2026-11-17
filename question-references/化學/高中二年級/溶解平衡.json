@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅳ：化學反應與平衡二"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-溶解平衡-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「溶解平衡」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "飽和AgCl水溶液加入NaCl後，其他條件不變，AgCl溶解度通常如何？",
+        "correct": "因共同離子Cl⁻而下降",
+        "wrong": [
+          "必定上升且無限大",
+          "完全不受離子濃度影響",
+          "直接產生氯氣而無AgCl沉澱"
+        ],
+        "exp": "Cl⁻濃度增加促進AgCl沉澱方向的平衡。",
+        "subject": "化學",
+        "sub_topic": "溶解平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中二年級-溶解平衡",
+        "template_id": "chem-ref-g2-溶解平衡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-溶解平衡-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「溶解平衡」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "難溶鹽MX(s) ⇌ M⁺+X⁻ 在純水中莫耳溶解度為s，忽略副反應，Ksp為何？",
+        "correct": "s²",
+        "wrong": [
+          "2s",
+          "1/s",
+          "s/2"
+        ],
+        "exp": "兩種離子各為s，因此Ksp＝s×s。",
+        "subject": "化學",
+        "sub_topic": "溶解平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中二年級-溶解平衡",
+        "template_id": "chem-ref-g2-溶解平衡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

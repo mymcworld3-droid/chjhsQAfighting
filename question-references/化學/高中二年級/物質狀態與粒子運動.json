@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅰ：物質與能量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-物質狀態與粒子運動-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「物質狀態與粒子運動」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "定溫定量的理想氣體，體積由4 L壓至2 L，壓力如何改變？",
+        "correct": "變成2倍",
+        "wrong": [
+          "變成1/2",
+          "維持不變",
+          "變成4倍"
+        ],
+        "exp": "依波以耳定律PV為定值，體積減半、壓力加倍。",
+        "subject": "化學",
+        "sub_topic": "物質狀態與粒子運動",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中二年級-物質狀態與粒子運動",
+        "template_id": "chem-ref-g2-物質狀態與粒子運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-物質狀態與粒子運動-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「物質狀態與粒子運動」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "純水在標準大氣壓下沸騰，持續吸熱時溫度維持約100°C。熱量主要用於？",
+        "correct": "克服分子間作用，使液體氣化",
+        "wrong": [
+          "增加每個水分子的質子數",
+          "產生新的氧元素",
+          "使水分子的化學式改成H₂O₂"
+        ],
+        "exp": "沸騰時吸收氣化潛熱，並非必然提高溫度或改變物質組成。",
+        "subject": "化學",
+        "sub_topic": "物質狀態與粒子運動",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中二年級-物質狀態與粒子運動",
+        "template_id": "chem-ref-g2-物質狀態與粒子運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

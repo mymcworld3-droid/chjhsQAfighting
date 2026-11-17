@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅰ：物質與能量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-能量轉換-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「能量轉換」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "某反應ΔH＝−80 kJ（以方程式計），對定壓反應最合理的解讀是？",
+        "correct": "放熱80 kJ",
+        "wrong": [
+          "吸熱80 kJ",
+          "反應速度是80 kJ/s",
+          "產物質量減少80 g"
+        ],
+        "exp": "定壓反應焓變為負表示系統向外放熱。",
+        "subject": "化學",
+        "sub_topic": "能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-能量轉換",
+        "template_id": "chem-ref-g2-能量轉換-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-能量轉換-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「能量轉換」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "加入催化劑後，反應活化能由70降為40 kJ/mol，但反應物與產物狀態未改變。哪項正確？",
+        "correct": "活化能降低，反應焓變不因此改變",
+        "wrong": [
+          "活化能降低代表生成物的原子數減少",
+          "催化劑使反應焓變必然改成正值",
+          "催化劑直接增加反應物總質量"
+        ],
+        "exp": "催化劑改變反應途徑與速率，不改變反應物、產物焓差。",
+        "subject": "化學",
+        "sub_topic": "能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-能量轉換",
+        "template_id": "chem-ref-g2-能量轉換-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

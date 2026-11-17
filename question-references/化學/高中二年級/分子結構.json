@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅱ：物質構造與反應速率"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-分子結構-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「分子結構」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "H₂O分子中心氧有兩對成鍵電子與兩對孤電子，依VSEPR，其分子形狀為？",
+        "correct": "折線形",
+        "wrong": [
+          "直線形",
+          "平面正三角形",
+          "正四面體且四頂點都是氫"
+        ],
+        "exp": "中心氧四個電子域，但兩對孤電子使水分子成折線形。",
+        "subject": "化學",
+        "sub_topic": "分子結構",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中二年級-分子結構",
+        "template_id": "chem-ref-g2-分子結構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-分子結構-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「分子結構」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "CO₂分子的中心碳沒有孤對電子，兩端各為雙鍵，依VSEPR其幾何形狀為？",
+        "correct": "直線形",
+        "wrong": [
+          "三角錐形",
+          "折線形",
+          "正四面體形"
+        ],
+        "exp": "中心碳有兩電子域，彼此約180°排列。",
+        "subject": "化學",
+        "sub_topic": "分子結構",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中二年級-分子結構",
+        "template_id": "chem-ref-g2-分子結構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

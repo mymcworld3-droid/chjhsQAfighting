@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅲ：化學反應與平衡一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-勒沙特列原理-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「勒沙特列原理」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "放熱平衡N₂+3H₂ ⇌ 2NH₃ 升溫，其他條件不變時通常偏向哪個方向？",
+        "correct": "向反應物方向移動",
+        "wrong": [
+          "向生成物方向必然無限移動",
+          "正逆反應完全停止",
+          "平衡完全不受溫度影響"
+        ],
+        "exp": "升溫偏向吸熱方向，即逆反應方向。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "chem-ref-g2-勒沙特列原理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-勒沙特列原理-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「勒沙特列原理」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "平衡2SO₂(g)+O₂(g) ⇌ 2SO₃(g)，定溫壓縮容器使壓力升高，平衡通常偏向？",
+        "correct": "右側，氣體總莫耳數較少",
+        "wrong": [
+          "左側，氣體總莫耳數較多",
+          "兩側氣體莫耳數完全相等",
+          "只會讓反應速率歸零"
+        ],
+        "exp": "左側三莫耳氣體、右側兩莫耳，壓縮偏向右側。",
+        "subject": "化學",
+        "sub_topic": "勒沙特列原理",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-勒沙特列原理",
+        "template_id": "chem-ref-g2-勒沙特列原理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

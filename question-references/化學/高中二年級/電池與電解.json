@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅳ：化學反應與平衡二"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-電池與電解-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「電池與電解」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "原電池鋅電極發生Zn→Zn²⁺+2e⁻，此電極是哪種電極？",
+        "correct": "陽極，發生氧化",
+        "wrong": [
+          "陰極，發生還原",
+          "鹽橋，負責形成水",
+          "陰極，電子在此必定產生"
+        ],
+        "exp": "失電子為氧化，氧化發生於陽極。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "chem-ref-g2-電池與電解-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-電池與電解-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「電池與電解」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "電解熔融NaCl時，Na⁺在陰極獲得電子生成Na。陰極發生哪種反應？",
+        "correct": "還原反應",
+        "wrong": [
+          "氧化反應",
+          "中和反應，不涉及電子",
+          "光合作用"
+        ],
+        "exp": "Na⁺+e⁻→Na為得電子還原，電解池陰極仍為還原處。",
+        "subject": "化學",
+        "sub_topic": "電池與電解",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-電池與電解",
+        "template_id": "chem-ref-g2-電池與電解-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

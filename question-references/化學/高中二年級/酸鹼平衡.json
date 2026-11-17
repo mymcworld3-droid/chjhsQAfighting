@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅲ：化學反應與平衡一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-酸鹼平衡-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「酸鹼平衡」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "25°C、[H⁺]＝1×10⁻³ M且忽略活度效應的溶液，其pH約為？",
+        "correct": "3",
+        "wrong": [
+          "11",
+          "7",
+          "−3"
+        ],
+        "exp": "pH＝−log(10⁻³)＝3。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "chem-ref-g2-酸鹼平衡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-酸鹼平衡-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「酸鹼平衡」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "兩種一元弱酸HA與HB，若Ka(HA)>Ka(HB)，在相同條件下通常何者較易解離？",
+        "correct": "HA",
+        "wrong": [
+          "HB",
+          "完全相同且都不解離",
+          "無法比較，因Ka與解離無關"
+        ],
+        "exp": "Ka越大表示弱酸解離平衡較偏向產物，酸性通常較強。",
+        "subject": "化學",
+        "sub_topic": "酸鹼平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中二年級-酸鹼平衡",
+        "template_id": "chem-ref-g2-酸鹼平衡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

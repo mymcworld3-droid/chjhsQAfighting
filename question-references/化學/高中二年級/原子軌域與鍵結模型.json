@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅱ：物質構造與反應速率"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-原子軌域與鍵結模型-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「原子軌域與鍵結模型」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "基態碳的組態為1s²2s²2p²，最外層電子的主量子數n為何？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "3",
+          "6"
+        ],
+        "exp": "碳原子最外層電子占據2s與2p軌域，n＝2。",
+        "subject": "化學",
+        "sub_topic": "原子軌域與鍵結模型",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中二年級-原子軌域與鍵結模型",
+        "template_id": "chem-ref-g2-原子軌域與鍵結模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-原子軌域與鍵結模型-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「原子軌域與鍵結模型」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "依包立不相容原理，占據同一原子軌域的兩個電子，自旋方向必須如何？",
+        "correct": "互相相反",
+        "wrong": [
+          "完全相同",
+          "都沒有自旋",
+          "四個量子數完全相同"
+        ],
+        "exp": "同軌域的兩電子自旋量子數不同，滿足不相容原理。",
+        "subject": "化學",
+        "sub_topic": "原子軌域與鍵結模型",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中二年級-原子軌域與鍵結模型",
+        "template_id": "chem-ref-g2-原子軌域與鍵結模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

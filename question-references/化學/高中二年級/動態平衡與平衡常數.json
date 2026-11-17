@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅲ：化學反應與平衡一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g2-動態平衡與平衡常數-1",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「動態平衡與平衡常數」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "N₂+3H₂ ⇌ 2NH₃ 達動態平衡後，哪項敘述正確？",
+        "correct": "正、逆反應仍進行且速率相等",
+        "wrong": [
+          "正、逆反應都停止",
+          "各物質濃度必須完全相等",
+          "所有反應物必定耗盡"
+        ],
+        "exp": "動態平衡的巨觀濃度不變，但微觀正逆反應持續且速率相等。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "chem-ref-g2-動態平衡與平衡常數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g2-動態平衡與平衡常數-2",
+      "source": "高中化學108課綱平衡、鍵結與電化學素養題型；依觀念重新編寫",
+      "design": "「動態平衡與平衡常數」以明確條件與可檢算公式判斷唯一正解",
+      "question": {
+        "q": "氣相反應A(g) ⇌ 2B(g)，以濃度表示的Kc應為何？",
+        "correct": "[B]²/[A]",
+        "wrong": [
+          "[A]/[B]²",
+          "2[B]/[A]",
+          "[A][B]²"
+        ],
+        "exp": "平衡常數為生成物濃度係數次方除以反應物濃度係數次方。",
+        "subject": "化學",
+        "sub_topic": "動態平衡與平衡常數",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-動態平衡與平衡常數",
+        "template_id": "chem-ref-g2-動態平衡與平衡常數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
