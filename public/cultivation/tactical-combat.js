@@ -1,5 +1,6 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
-import {skillArt} from './manual-art.js';
+import {skillArt,bookArt} from './manual-art.js';
+import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
 import './tactical-rules.js?v=20261116-pve-v4';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261116-pve-v4';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
@@ -15,6 +16,7 @@ const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,keyboardGuard=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
 let battleLoadouts=null,loadoutFetchedFor='',loadoutFetchingFor='',loadoutMenuOpen=false;
+let manualRecapCache=null,manualRecapLoadingKey='';
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
@@ -154,6 +156,10 @@ function syncPvpSkillTabs(){
 function ensure(){
   if(root){keyboardGuard||=installTacticalKeyboardGuard(root);return;}
   if(!document.getElementById('tactical-style')){const link=document.createElement('link');link.id='tactical-style';link.rel='stylesheet';link.href='/styles/tactical-combat.css?v=20261116-live-loadouts-v1';document.head.append(link);}
+  if(!document.getElementById('tactical-manual-recap-style')){
+    const link=document.createElement('link');link.id='tactical-manual-recap-style';link.rel='stylesheet';
+    link.href='/styles/tactical-manual-recap.css?v=20261118-battle-exp-v1';document.head.append(link);
+  }
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
@@ -191,6 +197,7 @@ function ensure(){
     else if(b.hasAttribute('data-hub')){hideModal();mode==='pve'?close():renderHub();}
     else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open('pve');
     else if(b.hasAttribute('data-manual-training')){close();window.switchToPage?.('page-training');}
+    else if(b.hasAttribute('data-manual-recap-retry')){manualRecapCache=null;void refreshManualRecap({force:true});}
     else if(b.hasAttribute('data-exit'))close();
     else if(b.hasAttribute('data-sync'))void sync();
     else if(b.hasAttribute('data-reset-view'))renderer?.resetView();
@@ -836,12 +843,53 @@ async function acknowledgeIntro(){
   catch(err){error=err.message;}
   finally{if(valid(e,account)){busy=false;if(error&&state.newEnemies?.length)showEnemyIntro(error);else paint();schedule();}}
 }
+function manualRecapKey(room,account){
+  return String(account||'')+':'+String(room?.id||'');
+}
+function manualRecapMarkup(room,account) {
+  const earnings=manualBattleEarnings(room,account,Manuals);
+  if(!earnings)return '';
+  const key=manualRecapKey(room,account);
+  const bookState=manualRecapCache?.key===key?manualRecapCache.state:null;
+  const content=renderManualBattleRecap(room,account,Manuals,bookState,{esc,bookArt});
+  const retry=manualRecapCache?.key===key&&manualRecapCache.error
+    ?'<p class="tc-manual-recap-sync-error" role="status">最新功法等級暫時無法同步，可前往功法閣確認，或在此重試。</p><button type="button" class="tc-manual-recap-retry" data-manual-recap-retry>重試同步</button>':'';
+  return '<div data-manual-battle-result data-room-id="'+esc(room.id)+'">'+content+retry+'</div>';
+}
+async function refreshManualRecap({force=false}={}){
+  const room=state,account=uid;
+  const earnings=manualBattleEarnings(room,account,Manuals);
+  if(!earnings||!earnings.books.length)return;
+  const key=manualRecapKey(room,account);
+  if(!force&&(manualRecapCache?.key===key||manualRecapLoadingKey===key))return;
+  if(manualRecapLoadingKey===key)return;
+  const e=epoch,roomId=room.id;
+  manualRecapLoadingKey=key;
+  try{
+    const result=await api('/api/tactical/manuals');
+    if(!valid(e,account)||state?.id!==roomId||state.status!=='finished')return;
+    if(!Array.isArray(result.state?.library))throw Error('功法資料尚未就緒');
+    manualRecapCache={key,state:result.state};
+  }catch(error){
+    if(!valid(e,account)||state?.id!==roomId)return;
+    manualRecapCache={key,error:error.message};
+  }finally{
+    if(manualRecapLoadingKey===key)manualRecapLoadingKey='';
+    if(valid(e,account)&&state?.id===roomId){
+      const host=$('[data-manual-battle-result]');
+      if(host?.dataset.roomId===roomId)host.outerHTML=manualRecapMarkup(room,account);
+    }
+  }
+}
 function resultDialog(){
   const me=state.actors.find(a=>a.uid===uid),win=state.winner===me.team,draw=state.winner==='draw',reward=state.rewards?.[uid];
   const drop=state.manualDrops?.[uid];
+  const manualRecap=state.mode==='pve'?manualRecapMarkup(state,uid):'';
   if(state.mode==='pve'){
     const stage=state.trial?.stage||1,next=state.nextStage||stage+1;
-    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p>${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}<button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);return;
+    showModal(`<small>問道試煉 · 第 ${stage} 關</small><h2>${win?'此關已破':'整裝再戰'}</h2><p>${win?'已完成本關目標，前方還有新的地勢與挑戰。':'調整走位與體力分配，再次挑戰本關。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'答題紀錄已保存。'}</p>${manualRecap}${drop?'<p class="tc-manual-loot">獲得功法：《'+esc(drop.name)+'》！前往修煉查看。</p>':''}${me.manualLoadoutName?'<p>本場配置：'+esc(me.manualLoadoutName)+'</p>':''}<button type="button" class="tc-primary" data-next-stage>${win?'前往第 '+next+' 關 →':'重試第 '+stage+' 關'}</button><button type="button" data-manual-training>前往功法閣</button><button type="button" data-exit>返回宗門</button>`);
+    if(manualRecap)void refreshManualRecap();
+    return;
   }
   showModal(`<small>此戰已結算</small><h2>${draw?'平分秋色':win?'克敵制勝':'整裝再戰'}</h2><p>${state.finishReason==='timeout'?'連續兩次行動逾時，戰鬥結束。':state.finishReason==='forfeit'?'一方收法離場。':state.finishReason==='turn-limit'?'達到回合上限，以剩餘生命比例判定。':win?'你以走位與招式取得勝利。':'複習這次的攻擊範圍與體力分配，再次挑戰。'}</p><div class="tc-result-stats"><b>答對 ${me.correct} / ${me.answered}</b><b>生命 ${me.hp} / ${me.maxHp}</b></div><p>${reward?.gold?'獲得 '+reward.gold+' 靈石 · '+reward.cultivation+' 修為':'本場沒有額外通關獎勵；答題紀錄已保存。'}</p><button type="button" class="tc-primary" data-hub>返回演武司</button>`);
 }
@@ -1564,7 +1612,7 @@ async function open(nextMode='pve'){
   action='move';attackChoice='attack';selectedManualSkill='';selection=null;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;
   if(!uid){window.showToast?.('請先登入後進入戰場');return;}
-  epoch++;opened=true;busy=true;op=0;appliedOp=0;document.body.classList.add('tactical-open');
+  epoch++;opened=true;busy=true;op=0;appliedOp=0;manualRecapCache=null;manualRecapLoadingKey='';document.body.classList.add('tactical-open');
   clearInterval(clock);clock=setInterval(updateClock,1000);
   const e=epoch,account=uid;
   if(nextMode==='pve'){
@@ -1580,7 +1628,7 @@ async function open(nextMode='pve'){
 }
 function close(){
   if(!root)return;
-  window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
