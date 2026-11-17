@@ -34,7 +34,7 @@ function ensure(){
   if(!document.getElementById('manual-training-hero-style')){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-hero-style';
-    link.href='/styles/manual-training-hero.css?v=20261117-hero-phase1';
+    link.href='/styles/manual-training-hero.css?v=20261117-hero-phase5';
     document.head.append(link);
   }
   if(!document.getElementById('manual-training-loadout-style')){
