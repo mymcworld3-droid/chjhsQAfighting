@@ -165,13 +165,13 @@ test('shared generation must pass an independent review and rejects uncertain or
     if(options.task==='quiz-generate'){
       const data=generated(expected);options.validate(data);return {data,model:'source-model'};
     }
-    const data={approved:true,validIndices:[0,1],reason:'multiple answers'};options.validate(data);return {data};
+    const data={approved:true,applicationValid:true,validIndices:[0,1],reason:'multiple answers'};options.validate(data);return {data};
   }};
   await assert.rejects(createGenerator(router)(expected),/獨立審核未通過/);
   assert.equal(calls.filter(x=>x.task==='quiz-generate').length,3);
   assert.ok(calls.filter(x=>x.task==='quiz-review').every(x=>x.excludeModels.includes('source-model')));
   router.generateJSON=async(prompt,options)=>{
-    const data=options.task==='quiz-generate'?generated(expected):{approved:true,validIndices:[0],reason:'verified from text'};
+    const data=options.task==='quiz-generate'?generated(expected):{approved:true,applicationValid:true,validIndices:[0],reason:'applied class concepts'};
     options.validate(data);return {data,model:'checked-model'};
   };
   assert.equal((await createGenerator(router)(expected)).q,generated(expected).q);
@@ -179,7 +179,7 @@ test('shared generation must pass an independent review and rejects uncertain or
 
 test('unknown, malformed and recall-only candidates never pass the daily generator validation',()=>{
   const {validate}=require('../daily-meditation-generator.cjs'),expected={...require('../daily-meditation-set.cjs').dailyPlan()[0],index:0};
-  for(const patch of [{wrong:['一本想分享的書','球拍','泳衣']},{reasoning_steps:1},{reasoning_steps:undefined},{literacy_context:''},{q:'如圖所示，'+generated(expected).q}])
+  for(const patch of [{wrong:['一本想分享的書','球拍','泳衣']},{reasoning_steps:1},{reasoning_steps:undefined},{literacy_context:''},{literacy_concept:''},{literacy_concept:'閱讀理解'},{q:'如圖所示，'+generated(expected).q}])
     assert.throws(()=>validate(generated(expected,patch),expected));
   assert.throws(()=>validate(generated(expected),expected,[generated(expected).q]),/重複/);
 });

@@ -29,6 +29,7 @@ function quickQuizPrompt({ mode, subject, level, topic, rank, difficulty, previo
     '科目='+safe(subject,40)+'；程度='+safe(level,32)+'；指定範圍='+safe(topic,topicLimit)+'；難度='+
       (quick?'easy':safe(difficulty,16))+'；段位='+Number(rank||0)+'；隨機種子='+safe(randomSeed,24),
     '保持指定學制與難度，禁止超綱或跨科；題目要清楚且有推理深度，勿冗長。',
+    mode==='meditation-literacy' ? '素養情境可來自新聞時事、文章或數據，但必須實際運用本科已學知識；單純找文章主旨、作者態度或摘抄資訊，不可視為素養題。' : '',
     mode === 'tactical' ? '此題用於問道試煉，必須嚴格考查已儲存的指定章節、分流及核心考點；不得用同科其他章節、同年級其他單元、不同數學版本或個人預設年級代替。' : '',
     '題型='+safe(targetForm,40)+'；認知層級='+(quick?1:quality.cognitive||2)+
       '；推理步數='+(quick?1:quality.steps||2),

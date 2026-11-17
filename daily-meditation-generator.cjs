@@ -23,18 +23,19 @@ function createGenerator(router){
       validate(parsed,expected,previous);
       const reviewPrompt=[
         '你是獨立題目審核員。不要相信參考標示答案，先依題幹所問的極性獨立解題並逐項判定。',
-        '確認生活材料完整、至少兩步判讀、四個選項恰一個符合所問、事實和運算與單位正確、解析結論一致。',
+        '確認生活材料完整、至少兩步運用課內觀念、四個選項恰一個符合所問、事實和運算與單位正確、解析結論一致。',
+        'applicationValid 必須逐題獨立判定：是否真正使用 literacy_concept 的課內知識？如果只靠文章字面、作者主旨、資訊摘錄便能選出答案，即使答案唯一也須設為 false，並拒絕。',
         'validIndices 列出所有符合題目所問的 0-based 選項索引。歧義、多解、無解或證據不足一律 approved=false。',
         '只有獨立核對後 validIndices 恰為 [0]、解析無誤才可 approved=true。不可用自評信心代替證據。',
-        '題目資料：'+JSON.stringify({q:parsed.q,options:[parsed.correct,...parsed.wrong],exp:parsed.exp,subject:expected.subject}),
-        '只回傳 JSON：{"approved":false,"validIndices":[],"reason":"具體理由"}'
+        '題目資料：'+JSON.stringify({q:parsed.q,options:[parsed.correct,...parsed.wrong],exp:parsed.exp,subject:expected.subject,literacy_concept:parsed.literacy_concept,literacy_task:parsed.literacy_task}),
+        '只回傳 JSON：{"approved":false,"applicationValid":false,"validIndices":[],"reason":"具體理由"}'
       ].join('\n');
       const reviewed=await router.generateJSON(reviewPrompt,{task:'quiz-review',parallel:false,timeoutMs:90000,
         excludeModels:routed.model?[routed.model]:[],validate:data=>{
-          if(typeof data?.approved!=='boolean'||typeof data.reason!=='string'||!Array.isArray(data.validIndices)||
+          if(typeof data?.approved!=='boolean'||typeof data?.applicationValid!=='boolean'||typeof data.reason!=='string'||!Array.isArray(data.validIndices)||
             data.validIndices.some(x=>!Number.isInteger(x)||x<0||x>3)||new Set(data.validIndices).size!==data.validIndices.length)throw Error('閉關審核格式錯誤');
         }});
-      if(reviewed.data.approved!==true||reviewed.data.validIndices.length!==1||reviewed.data.validIndices[0]!==0)
+      if(reviewed.data.approved!==true||reviewed.data.applicationValid!==true||reviewed.data.validIndices.length!==1||reviewed.data.validIndices[0]!==0)
         throw Error('閉關獨立審核未通過');
       return parsed;
     }catch(error){failure=error;}

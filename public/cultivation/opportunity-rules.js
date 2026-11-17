@@ -6,7 +6,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const SKILLS = Object.freeze(['retrieve', 'integrate', 'infer', 'apply', 'evaluate']);
-  const LABELS = Object.freeze({ retrieve: '資訊擷取', integrate: '整合比較', infer: '推論理解', apply: '情境應用', evaluate: '評估判斷' });
+  const LABELS = Object.freeze({ retrieve: '情境條件辨識', integrate: '整合比較', infer: '推論理解', apply: '情境應用', evaluate: '評估判斷' });
   const SUBJECTS = ['國文', '英文', '數學', '公民', '歷史', '地理', '物理', '化學', '生物', '自然', '社會', '國語', '生活',
     '自然科學', '藝術', '健康與體育', '本土語文', '綜合活動', '綜合'];
   const text = (v, max = 240) => String(v || '').trim().slice(0, max);

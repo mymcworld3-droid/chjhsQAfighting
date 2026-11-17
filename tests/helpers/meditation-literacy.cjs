@@ -6,8 +6,9 @@ function generated(expected,overrides={}){
     correct:'一本想分享的書',wrong:['球拍','游泳衣','露營帳篷'],
     exp:'公告要求事先報名及自備書本。小明已完成報名，因此還需要帶一本想分享的書。',
     subject:expected.subject,question_form:expected.form,reasoning_steps:2,cognitive_level:2,
-    literacy_context:'社區閱讀活動同時規定事先報名與自備書本，小明只完成其中一項。',
-    literacy_task:'結合公告條件與小明已完成的事項，推論仍缺少的準備。',
+    literacy_context:'社區公告同時提供活動規則、參加者的選擇與日期限制，需要運用課內觀念評估何種行動才合理。',
+    literacy_concept:'條件判斷與規範應用',
+    literacy_task:'運用條件判斷與規範應用，結合情境中的兩項限制決定行動。',
     knowledge_points:[{subject,id:point.id,name:point.name}],...overrides};
 }
 async function ready(f,session,uid='u1'){

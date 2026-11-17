@@ -70,7 +70,10 @@ function normalizePack(raw, target) {
     const stem = clean(q.q,600), correct = clean(q.correct,350), wrong = (Array.isArray(q.wrong) ? q.wrong : []).map(v => clean(v,350));
     const exp = removeUnstableOptionLabels(clean(q.exp,1800));
     const evidence = (Array.isArray(q.evidence) ? q.evidence : []).map(e => ({paragraph:clean(e?.paragraph,4),quote:clean(e?.quote,500)}));
+    const application = clean(q.application,240);
     if (stem.length < 12 || !correct || wrong.length !== 3 || wrong.some(v => !v) || exp.length < 60 || !clean(q.concept,100)) throw packFail('題目、選項或解析不完整','question-format',id);
+    if(application.length < 12 || /^(?:閱讀理解|文章主旨|作者態度|資訊擷取|摘錄原文)$/.test(application))
+      throw packFail('素養題需說明如何運用課內知識解決情境問題，不得只有閱讀理解','knowledge-application',id);
     const key = rules.signature(stem).replace(/\d+/g,'#');
     if (stems.has(key) || new Set([correct,...wrong].map(answerKey)).size !== 4) throw packFail('題目或選項重複','duplicate-choice',id);
     stems.add(key);
@@ -80,7 +83,7 @@ function normalizePack(raw, target) {
     if (issue) throw packFail(issue,'question-quality',id);
     try { Knowledge.assertLabel(q,target.subject); }
     catch (_) { throw packFail('題目缺少指定科目的有效知識點標記','knowledge-label',id); }
-    return {id,q:stem,correct,wrong,exp,skill:q.skill,concept:clean(q.concept,100),evidence,...Knowledge.metadata(q,target.subject)};
+    return {id,q:stem,correct,wrong,exp,skill:q.skill,concept:clean(q.concept,100),application,evidence,...Knowledge.metadata(q,target.subject)};
   });
   const fingerprint = hash(rules.signature(article.map(p => p.text).join('')));
   return {title,paragraphs:article,questions,fingerprint,target};
@@ -89,7 +92,7 @@ function generationPrompt(target, history, repair = '') {
   const limits = articleLimits(target);
   const points = Knowledge.points(target.subject), name = Knowledge.subject(target.subject);
   const label = points.length ? [{subject:name,id:'從本科固定清單選取',name:'對應知識點名稱'}] : [];
-  const questions = rules.SKILLS.map((skill,i) => ({id:`Q${i+1}`,skill,concept:'實際考點',q:'完整題目，不含選項標記',
+  const questions = rules.SKILLS.map((skill,i) => ({id:`Q${i+1}`,skill,concept:'實際考點',application:'至少12字，具體說明本題運用哪個課內觀念及如何分析情境',q:'完整題目，不含選項標記',
     correct:'唯一正解內容',wrong:['錯誤內容一','錯誤內容二','錯誤內容三'],exp:'至少80中文字的解析，說明原文依據與判斷理由',
     knowledge_points:label,evidence:[{paragraph:'P1',quote:'逐字引用P1中的連續原文'},
       ...(['integrate','evaluate'].includes(skill) ? [{paragraph:'P3',quote:'逐字引用P3中的連續原文'}] : [])]}));
@@ -98,9 +101,9 @@ function generationPrompt(target, history, repair = '') {
     `嚴格範圍=${JSON.stringify(target)}。學科、選定單元與細項是真正考點；不得只把章節名貼進一般閱讀題，不得超綱。全文只計正文，需要${limits.min}至${limits.max}${limits.unit}，寫完先自行計數。` +
     Knowledge.promptFor(target.subject) + '\n' + QUESTION_PRESENTATION_RULES + '\n' +
     QUESTION_RELIABILITY_RULES + '\n' + subjectReliabilityPrompt(target.subject,{examples:false}) + '\n' +
-    `文章4至10段，用P1、P2依序編號，包含情境、觀察、資料或因果；不依賴附圖、不重複段落。修仙情境不能妨礙單元理解。` +
-    `五題固定依序Q1 retrieve、Q2 integrate、Q3 infer、Q4 apply、Q5 evaluate。每題須依本文作答，彼此獨立、不洩漏其他題答案。` +
-    `每題四個不同選項、唯一正解、至少80中文字解析及有效knowledge_points。Q2整合比較與Q5評估判斷的evidence各至少兩筆，必須來自兩個不同段落；其他題至少一筆。` +
+    `文章4至10段，用P1、P2依序編號，可用新聞式公共事件、文章、資料、觀察或模擬時事作為背景；不要為了拉長文章而堆字。不依賴附圖、不重複段落；未核實的最新新聞、政治人物、法律條文或統計不可杜撰為真，虛構案例需標示「假設」。修仙情境不能妨礙單元理解。` +
+    `素養題的文本只是提供事件背景及證據，真正考核的是運用所選學科課內概念。五題固定依序Q1 retrieve（辨識可供應用的情境條件）、Q2 integrate（結合資料與課內概念比較）、Q3 infer（用學科原理分析因果）、Q4 apply（運用概念解決新情境）、Q5 evaluate（依課內標準評估方案）；彼此獨立、不洩漏答案。即使Q1也不得只問誰、何時、何地、文中提到什麼；五題均不得僅問主旨、作者態度或摘錄原文。若學生不懂課內觀念仍可直接在文章找到正解，整題重寫。` +
+    `每題四個不同選項、唯一正解、至少80中文字解析及有效knowledge_points與application；解析需明確說明哪項課內知識用於哪些情境資料，不可只重述文章。Q2整合比較與Q5評估判斷的evidence各至少兩筆，必須來自兩個不同段落；其他題至少一筆。` +
     `每筆evidence須含實際存在的段落ID及連續逐字quote，不加省略號、不改寫；quote至少8字元，且完整存在於該段原文。` +
     `近期文章與考點=${JSON.stringify(history.slice(-8))}。避免相同情境、資料與推理骨架，不能只換數字或人名。${repair ? '\n上次未通過原因：'+repair : ''}\n` +
     `只輸出以下JSON結構，保留全部五題、各自技能、knowledge_points與引文數量；替換示意文字，不得省略欄位：\n${JSON.stringify(schema)}`;
@@ -125,11 +128,11 @@ async function generatePack(target, history, generate = aiRouter.generateJSON, {
       const pack = normalizePack(result.data,target);
       if (history.some(h => h.fingerprint === pack.fingerprint || rules.signature(h.title) === rules.signature(pack.title))) throw packFail('新文章與近期機緣重複','duplicate-article');
       stage = 'review';
-      const example = {scopeValid:true,passageValid:true,reason:'審核理由',questions:pack.questions.map(q => ({id:q.id,valid:true,correct:'自行求出的正解內容'}))};
-      const review = await call(`獨立審核以下素養題組，從原文自行解題，不要盲信標示正解。驗證範圍、唯一正解、逐字原文依據、解析、跨題洩題與年級適當性。Q2與Q5必須各引用兩段不同原文。正負號、小數點、分數線不可省略；判斷每個wrong是否確實錯誤。範圍=${JSON.stringify(target)}\n題組=${JSON.stringify(pack)}\n只輸出JSON：${JSON.stringify(example)}。questions必須涵蓋Q1至Q5各一次；每題重新求解並將完整正解內容填入correct。不合格應valid:false。`,stage);
+      const example = {scopeValid:true,passageValid:true,reason:'審核理由',questions:pack.questions.map(q => ({id:q.id,valid:true,applicationValid:true,correct:'自行求出的正解內容'}))};
+      const review = await call(`獨立審核以下素養題組，從原文自行解題，不要盲信標示正解。驗證範圍、唯一正解、逐字原文依據、解析、跨題洩題與年級適當性。更要獨立確認每題需運用所選課內知識而非單純從文章擷取答案；未實際應用時即使答案唯一，applicationValid=false且valid=false。Q2與Q5必須各引用兩段不同原文。正負號、小數點、分數線不可省略；判斷每個wrong是否確實錯誤。範圍=${JSON.stringify(target)}\n題組=${JSON.stringify(pack)}\n只輸出JSON：${JSON.stringify(example)}。questions必須涵蓋Q1至Q5各一次；每題重新求解並將完整正解內容填入correct。不合格應valid:false。`,stage);
       const r = review.data;
       if (r?.scopeValid !== true || r?.passageValid !== true || !Array.isArray(r.questions) || r.questions.length !== 5 ||
-          pack.questions.some(q => r.questions.filter(v => v.id === q.id && v.valid === true && answerKey(v.correct) === answerKey(q.correct)).length !== 1)) {
+          pack.questions.some(q => r.questions.filter(v => v.id === q.id && v.valid === true && v.applicationValid===true && answerKey(v.correct) === answerKey(q.correct)).length !== 1)) {
         throw fail('獨立複核未通過：範圍、題目或答案未獲確認',502,{code:'opportunity-review-rejected',stage});
       }
       return pack;

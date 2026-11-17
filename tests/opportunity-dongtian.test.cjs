@@ -17,6 +17,7 @@ function rawPack(title = '青雲水庫手札') {
     '兩組交換紀錄後重新檢查條件，指出單一觀察不足以確定原因，決策必須同時比較用水需求與供水能力。'
   ].map((s, i) => s + `第${i + 1}段補充紀錄：` + '管理人要求所有計算皆保存單位，逐步說明每個等式的意義，最後以原始條件檢驗所得結果。'.repeat(4));
   return { title, paragraphs, questions: rules.SKILLS.map((skill, i) => ({ skill, concept: target.detail,
+    application:'依一元一次方程式的課內觀念，從水量及用戶條件建構或驗算未知數',
     knowledge_subject:'數學',knowledge_point_id:'math-3',knowledge_point:'方程與不等式',
     q: ['管理人首先要求弟子辨認哪一項資訊？', '根據兩組紀錄，整理等式應注意哪些條件？', '從水量逐時減少可以合理推論什麼結論？', '若再增加用水戶數，應如何建立新的方程式？', '比較兩組觀察，哪一種決策理由最充分？'][i],
     correct: '依據原文核對未知數與單位', wrong: ['只比較數字，不需要單位', '忽略資料的測量時間', '不用原始條件檢查結果'],
@@ -24,7 +25,7 @@ function rawPack(title = '青雲水庫手札') {
     evidence: [{ paragraph: 'P1', quote: '先辨認未知數，再將同一天的進水與出水列成等式' }, ...(['integrate', 'evaluate'].includes(skill) ? [{ paragraph: 'P3', quote: '資料不能混用不同時間與單位的數值' }] : [])]
   })) };
 }
-function review(pack, valid = true) { return { data: { scopeValid: valid, passageValid: true, reason: valid ? '通過' : '未考查選定單元', questions: pack.questions.map((q, i) => ({ id: `Q${i + 1}`, valid, correct: q.correct })) } }; }
+function review(pack, valid = true) { return { data: { scopeValid: valid, passageValid: true, reason: valid ? '通過' : '未考查選定單元', questions: pack.questions.map((q, i) => ({ id: `Q${i + 1}`, valid, applicationValid:valid, correct: q.correct })) } }; }
 function fakeDb(initial = player()) {
   const docs = new Map([['users/u1', structuredClone(initial)]]); let queue = Promise.resolve();
   const snap = key => ({ exists: docs.has(key), data: () => structuredClone(docs.get(key)) });
@@ -175,7 +176,7 @@ test('exactly five independent skills and verbatim passage evidence are required
   const p = api.normalizePack(rawPack(), target); assert.equal(p.questions.length, 5);
   for (const mutate of [
     r => r.questions.pop(), r => r.questions.push(r.questions[0]), r => r.questions[2].skill = 'retrieve',
-    r => r.questions[0].wrong[0] = r.questions[0].correct,
+    r => r.questions[0].wrong[0] = r.questions[0].correct, r=>r.questions[0].application='閱讀理解',
     r => r.questions[0].evidence[0].quote = '並不存在於原文的證據',
     r => r.questions[1].evidence.pop(), r => r.paragraphs[1] = r.paragraphs[0],
     r => r.questions[4].q = r.questions[0].q
@@ -202,6 +203,9 @@ test('generation schema actually supplies five skills, knowledge labels and cros
     if(['integrate','evaluate'].includes(q.skill)) assert.equal(new Set(q.evidence.map(e=>e.paragraph)).size,2);
   }
   assert.match(prompt,/Q2整合比較與Q5評估判斷/);
+  assert.match(prompt,/不得只問誰、何時、何地/);
+  assert.match(prompt,/課內概念/);
+  assert.ok(schema.questions.every(q=>q.application.length>=12));
   assert.match(prompt,/650至1200非空白字元/);
 });
 
