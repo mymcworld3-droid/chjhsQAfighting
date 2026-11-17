@@ -307,13 +307,32 @@ async function main(){
     await view.locator('[data-guard]').click();await idle();assert.deepEqual(await view.evaluate(()=>window.__animationHistory),[],'reduced motion applies the final state immediately');
     await view.page.emulateMedia({reducedMotion:'no-preference'});
     // A lethal strike must finish its impact/fade before opening the result.
-    const lethal=db.records.get(key);lethal.actors[0].attacks=0;lethal.actors[0].stamina=10;
+    // Seed an owned book and a server-side EXP ledger; clients must never
+    // create or award the EXP as a result of the victory animation.
+    const manuals=require('../public/cultivation/manual-rules.js');
+    db.records.set(service.MANUALS+'/u1',manuals.normalize({
+      school:'sword',books:{'sword-wind':{exp:0}},starterClaimed:true,
+      loadouts:[],equipped:[]
+    }));
+    const lethal=db.records.get(key);
+    lethal.manualExp={u1:{'sword-wind':70}};lethal.actors[0].attacks=0;lethal.actors[0].stamina=10;
     lethal.actors=lethal.actors.slice(0,2);Object.assign(lethal.actors[1],{x:lethal.actors[0].x+1,y:lethal.actors[0].y,hp:1});lethal.revision++;
     await view.locator('[data-sync]').click();await idle();await reset();
     await view.locator('[data-action="attack"]').click();await cell(view,lethal.actors[1].x,lethal.actors[1].y);await view.locator('[data-execute]').click();
     await view.locator('canvas[data-animation="damage"]').waitFor();assert.equal(await view.locator('[data-next-stage]').count(),0);
     await view.locator('canvas[data-animation="finish"]').waitFor();await beat();await view.screenshot({path:path.join(output,'animation-victory-mobile.png')});
     await view.locator('[data-next-stage]').waitFor();assert.equal(await view.locator('.tc-arena canvas').getAttribute('aria-busy'),'false');
+    // Server commits the exact amount before the client displays a recap.
+    const awarded=await service.manualsState(db,'u1');
+    assert.equal(awarded.library.find(book=>book.id==='sword-wind').totalExp,70);
+    await view.locator('[data-manual-recap-book="sword-wind"]').waitFor();
+    await view.locator('[data-manual-recap-book="sword-wind"] .tc-manual-recap-progress-meta').waitFor();
+    assert.match(await view.locator('.tc-manual-recap-total').textContent(),/\+70/);
+    assert.match(await view.locator('[data-manual-recap-book="sword-wind"] .tc-manual-recap-level').textContent(),/Lv\. 2/);
+    assert.match(await view.locator('[data-manual-recap-book="sword-wind"] .tc-manual-recap-goal').textContent(),/下一招.*突進橫斬/);
+    const mobileExpRecap=await view.locator('[data-manual-recap]').evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
+    assert(mobileExpRecap.scroll<=mobileExpRecap.client+2,
+      'battle EXP recap must fit portrait: '+JSON.stringify(mobileExpRecap));
     await view.evaluate(()=>window.__animationObserver.disconnect());
     saved.revision=(await read(view)).revision+1;db.records.clear();for(const [k,v]of checkpoint)db.records.set(k,v);db.records.set(key,saved);
     await view.locator('[data-exit]').click();await view.locator('#entry').click();await view.locator('#startup-cloud-curtain').waitFor({state:'detached'});await idle();
