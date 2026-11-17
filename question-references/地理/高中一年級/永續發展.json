@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自然資源與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-永續發展-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「永續發展」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某觀光島嶼大量接待遊客，但淡水供應與垃圾處理能力有限。規畫永續觀光時，最重要的評估是？",
+        "correct": "比較遊客量帶來的收入與資源消耗、垃圾處理負荷",
+        "wrong": [
+          "只要觀光收入增加就不必考慮用水",
+          "遊客人數越多代表生態壓力必然越小",
+          "把垃圾處理問題完全交由遊客自行決定"
+        ],
+        "exp": "永續發展須同時兼顧經濟效益與環境承載、居民生活品質。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-永續發展",
+        "template_id": "geo-ref-g1-永續發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-永續發展-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「永續發展」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某市鼓勵以大眾運輸取代部分汽車通勤，但郊區班次不足。哪項政策配套最有助於兼顧減碳與公平？",
+        "correct": "改善郊區接駁與班次，同時評估不同區域的通勤需求",
+        "wrong": [
+          "只在市中心增班，不需考慮郊區",
+          "所有居民無論住哪都必須步行到市中心",
+          "只計算新車外觀顏色而不看運量"
+        ],
+        "exp": "運輸轉型若忽略交通可近性，可能加劇區域落差；需配合服務供給。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-永續發展",
+        "template_id": "geo-ref-g1-永續發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

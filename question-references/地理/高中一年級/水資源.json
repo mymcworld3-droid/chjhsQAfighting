@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自然資源與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-水資源-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「水資源」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "山區水庫集水區發生大面積濫墾，暴雨後水庫淤積加快。最合理的因果關係為何？",
+        "correct": "植被減少可能加強地表侵蝕，使土砂隨逕流進入水庫",
+        "wrong": [
+          "集水區裸露越多就必然使淤積量變成零",
+          "水庫淤積只可能由地下火山引起",
+          "水庫容量與土砂沉積完全無關"
+        ],
+        "exp": "植被可保護地表，裸露坡地遇大雨更易沖刷並造成淤積。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "geo-ref-g1-水資源-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-水資源-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「水資源」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某城降雨量全年總和足夠，但雨季集中三個月，乾季常限水。最適合優先評估哪項策略？",
+        "correct": "增加雨季儲水與乾季需求管理，改善時間分配落差",
+        "wrong": [
+          "只比較全年雨量而完全不分析季節差異",
+          "把旱季用水量當成降雨量紀錄",
+          "認為年雨量夠多就不可能發生缺水"
+        ],
+        "exp": "年雨量無法代表全年水源可用性，季節集中與蓄水能力會影響供需。",
+        "subject": "地理",
+        "sub_topic": "水資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-水資源",
+        "template_id": "geo-ref-g1-水資源-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

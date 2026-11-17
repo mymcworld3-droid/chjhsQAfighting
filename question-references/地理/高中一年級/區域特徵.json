@@ -1,0 +1,66 @@
+{
+  "units": [
+    "區域地理方法"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-區域特徵-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「區域特徵」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "甲地夏季乾燥、冬季較多雨，乙地全年高溫且雨量豐沛。若要區分氣候區域，哪項指標組合最有幫助？",
+        "correct": "月平均氣溫與各月降水量分布",
+        "wrong": [
+          "單一年份的全國人口總數",
+          "各地主要道路的路名",
+          "學校教室的樓層數"
+        ],
+        "exp": "氣候區域須從長期溫度與降水的季節變化辨識，不能只看地區名稱。",
+        "subject": "地理",
+        "sub_topic": "區域特徵",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中一年級-區域特徵",
+        "template_id": "geo-ref-g1-區域特徵-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-區域特徵-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「區域特徵」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某地河口有港口、漁業與密集加工廠，另一地高山谷地以茶園與觀光為主。此差異最適合從哪項角度討論？",
+        "correct": "地形、資源條件與產業活動共同形成區域特色",
+        "wrong": [
+          "不同地形必然具有相同的產業組合",
+          "只要有觀光客就不能從事農業",
+          "產業選址與交通條件完全無關"
+        ],
+        "exp": "港口及山地區位會影響運輸、土地利用和生產方式，形成不同景觀。",
+        "subject": "地理",
+        "sub_topic": "區域特徵",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中一年級-區域特徵",
+        "template_id": "geo-ref-g1-區域特徵-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

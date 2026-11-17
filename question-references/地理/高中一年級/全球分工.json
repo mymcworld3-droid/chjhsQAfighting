@@ -1,0 +1,66 @@
+{
+  "units": [
+    "產業與經濟"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-全球分工-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「全球分工」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "一支手機由甲國設計晶片、乙國製造零件、丙國組裝再販售全球。這種生產模式最能反映什麼？",
+        "correct": "不同地區依技術、成本與專長形成跨國供應鏈",
+        "wrong": [
+          "所有生產步驟都發生於同一地點",
+          "跨國分工代表每國技術水準完全相同",
+          "產品販售全球便不必考慮運輸成本"
+        ],
+        "exp": "設計、零件與組裝分散各地，表示企業利用區位條件形成全球分工。",
+        "subject": "地理",
+        "sub_topic": "全球分工",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-全球分工",
+        "template_id": "geo-ref-g1-全球分工-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-全球分工-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「全球分工」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某加工廠因主要原料需從海外進口，且產品大多外銷，決定設於深水港附近。最直接的區位考量是什麼？",
+        "correct": "降低原料輸入與產品出口的物流成本",
+        "wrong": [
+          "港口旁必然擁有所有原料產地",
+          "加工廠完全不需要勞動力",
+          "港口區位與國際貿易沒有關係"
+        ],
+        "exp": "進出口貨物量大時，靠近港口可降低轉運距離及運輸成本。",
+        "subject": "地理",
+        "sub_topic": "全球分工",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-全球分工",
+        "template_id": "geo-ref-g1-全球分工-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

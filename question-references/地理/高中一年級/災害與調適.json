@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自然資源與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-災害與調適-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「災害與調適」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某坡地聚落附近曾因連日豪雨發生土石流。若政府規畫防災，哪一作法最符合風險降低原則？",
+        "correct": "依地形與雨量警戒資料規畫避難路線及警報機制",
+        "wrong": [
+          "只因上次未受災，就不必檢查坡地地質",
+          "把避難地點設於既有溪谷沖積扇中央",
+          "只看房屋外觀顏色決定土石流風險"
+        ],
+        "exp": "土石流風險與坡地、集水及降雨有關，避難計畫需考慮路線位置和警戒資訊。",
+        "subject": "地理",
+        "sub_topic": "災害與調適",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-災害與調適",
+        "template_id": "geo-ref-g1-災害與調適-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-災害與調適-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「災害與調適」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "沿海居民面對暴潮風險，甲方案只加高海堤，乙方案同時保存潮間帶植被並規畫撤離。若比較韌性，何者較合理？",
+        "correct": "乙採用多種互補措施，分散單一防護失效的風險",
+        "wrong": [
+          "海堤越高便能排除所有可能的洪水",
+          "植被與撤離措施不可能對災害管理有任何作用",
+          "防災設施只要建好就永遠不必維護"
+        ],
+        "exp": "硬體防護、自然緩衝及疏散相互搭配，有助降低殘餘風險，但仍須評估地區條件。",
+        "subject": "地理",
+        "sub_topic": "災害與調適",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-災害與調適",
+        "template_id": "geo-ref-g1-災害與調適-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

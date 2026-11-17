@@ -1,0 +1,66 @@
+{
+  "units": [
+    "區域地理方法"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-人地關係-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「人地關係」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "山坡茶園為減少土壤流失，沿等高線種植並保留草生覆蓋。這主要反映哪項人地互動？",
+        "correct": "人類依坡地環境限制調整農業耕作方式",
+        "wrong": [
+          "茶園與地形坡度從不互相影響",
+          "任何坡地都適合直接順坡深耕",
+          "農作方式只與作物名稱相關"
+        ],
+        "exp": "等高線耕作與草生覆蓋可降低逕流沖蝕，反映環境調適。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人地關係",
+        "template_id": "geo-ref-g1-人地關係-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-人地關係-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「人地關係」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "沿海聚落原靠捕魚維生，近年因海水升溫與漁場變遷，開始發展養殖和漁產加工。從人地關係看，哪項概括適當？",
+        "correct": "自然環境變化可能促使地方產業調整與適應",
+        "wrong": [
+          "氣候變化只會影響海水顏色",
+          "漁場改變必定使所有居民立刻遷離",
+          "任何產業改變都完全與資源條件無關"
+        ],
+        "exp": "漁場與水溫是生產條件，地方可能透過改變產業形式因應環境變遷。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中一年級-人地關係",
+        "template_id": "geo-ref-g1-人地關係-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

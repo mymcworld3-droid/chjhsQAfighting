@@ -1,0 +1,66 @@
+{
+  "units": [
+    "區域地理方法"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-比較分析-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「比較分析」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "比較甲、乙兩城市的交通擁擠程度，甲人口100萬、乙人口30萬。若僅比較全市汽車總數，可能有哪些問題？",
+        "correct": "人口規模不同，應加入每人持車率或道路容量等標準化指標",
+        "wrong": [
+          "只要人口較多，交通一定較不擁擠",
+          "汽車數最多的城市必然具有最短通勤時間",
+          "交通比較完全不需要考慮城市規模"
+        ],
+        "exp": "總量受城市人口規模影響，應以相對指標及交通條件補充。",
+        "subject": "地理",
+        "sub_topic": "比較分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中一年級-比較分析",
+        "template_id": "geo-ref-g1-比較分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-比較分析-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「比較分析」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "要比較兩區域農業生產效率：甲區每年產量600公噸、耕地300公頃；乙區產量500公噸、耕地200公頃。何者每公頃產量較高？",
+        "correct": "乙區，每公頃2.5公噸",
+        "wrong": [
+          "甲區，每公頃3公噸",
+          "兩區相同，均為每公頃2公噸",
+          "甲區，每公頃0.5公噸"
+        ],
+        "exp": "甲600/300＝2公噸／公頃，乙500/200＝2.5，因此乙的單位面積產量較高。",
+        "subject": "地理",
+        "sub_topic": "比較分析",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中一年級-比較分析",
+        "template_id": "geo-ref-g1-比較分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

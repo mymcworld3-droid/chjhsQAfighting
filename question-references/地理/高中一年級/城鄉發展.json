@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人口與聚落"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g1-城鄉發展-1",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「城鄉發展」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某鄉鎮年輕人口外移，高齡人口比例增加，診所也減少。若分析城鄉關係，哪項最可能是相互影響的過程？",
+        "correct": "人口變化影響服務需求與供給，公共服務減少又可能加深外移",
+        "wrong": [
+          "人口外移必然讓醫療服務需求變成零",
+          "診所減少與交通、人口結構不可能有關",
+          "城鄉服務差距只由經緯度決定"
+        ],
+        "exp": "人口結構與服務供給可能形成循環影響，應考察就醫距離及居民需求。",
+        "subject": "地理",
+        "sub_topic": "城鄉發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-城鄉發展",
+        "template_id": "geo-ref-g1-城鄉發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g1-城鄉發展-2",
+      "source": "大考中心《114學年度學測社會試題特色》之地理圖表與人地分析命題方向；自編非原題",
+      "design": "依「城鄉發展」建立具體時空或數據情境，要求可驗證推論",
+      "question": {
+        "q": "某都市中心房價上漲，部分家庭搬往外圍，但仍每天搭車至市中心工作。哪項現象最能描述？",
+        "correct": "都市外圍居住發展與跨區通勤增加",
+        "wrong": [
+          "都市中心因此完全失去就業機會",
+          "所有家庭搬遷後都不再需要交通",
+          "外圍人口增加必定意味市中心無人居住"
+        ],
+        "exp": "居住與工作地點分離，是都市擴張與通勤網絡的一種表現。",
+        "subject": "地理",
+        "sub_topic": "城鄉發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中一年級-城鄉發展",
+        "template_id": "geo-ref-g1-城鄉發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
