@@ -1,0 +1,227 @@
+/* Phase 4: reward overlays for confirmed stamina-manual progress.
+ * No images are replaced when this runs. No global filters or page flashes.
+ * Values/ownership come from the server; only the separate overlay animates.
+ */
+#manual-training-root .manual-celebration-host{
+  position:relative;z-index:100;pointer-events:none;
+}
+#manual-training-root .manual-celebration-host:empty{display:none}
+#manual-training-root .manual-celebration-backdrop{
+  --mc-rune:rgba(126,222,213,.52);
+  --mc-core:#a5f1de;
+  --mc-glow:rgba(47,216,201,.3);
+  position:fixed;z-index:200;inset:0;display:flex;align-items:center;
+  justify-content:center;padding:clamp(12px,4vw,38px);
+  pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(5,24,21,.18),transparent 73%);
+  animation:manual-celebration-arrive .22s ease-out both;
+}
+#manual-training-root .manual-celebration--body{
+  --mc-rune:rgba(235,171,83,.59);
+  --mc-core:#f5d18d;--mc-glow:rgba(237,156,49,.31);
+}
+#manual-training-root .manual-celebration-panel{
+  position:relative;isolation:isolate;overflow:hidden;pointer-events:none;
+  width:min(100%,390px);min-width:0;
+  padding:27px 20px 22px;border:1px solid var(--mc-rune);border-radius:19px;
+  background:radial-gradient(ellipse at 50% 32%,var(--mc-glow),transparent 68%),
+    linear-gradient(157deg,rgba(23,48,41,.97),rgba(10,23,19,.985) 72%);
+  box-shadow:0 22px 65px rgba(0,0,0,.48),0 0 40px var(--mc-glow),
+    inset 0 1px 0 rgba(255,255,255,.12);
+  animation:manual-celebration-pop .52s cubic-bezier(.16,.9,.22,1.2) both;
+}
+#manual-training-root .manual-celebration--body .manual-celebration-panel{
+  background:radial-gradient(ellipse at 50% 32%,var(--mc-glow),transparent 68%),
+    linear-gradient(160deg,rgba(53,43,29,.97),rgba(22,24,19,.985) 73%);
+}
+#manual-training-root .manual-celebration-panel::before,
+#manual-training-root .manual-celebration-panel::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+}
+#manual-training-root .manual-celebration-panel::before{
+  z-index:0;opacity:.14;
+  background:repeating-linear-gradient(135deg,transparent 0 49px,rgba(255,255,255,.07) 50px,transparent 51px 99px);
+}
+#manual-training-root .manual-celebration-panel::after{
+  inset:4px;border-radius:16px;border:1px solid rgba(255,255,255,.06)
+}
+#manual-training-root .manual-celebration-crest{
+  display:block;position:absolute;z-index:0;top:28px;left:50%;
+  width:220px;height:220px;transform:translateX(-50%);
+  pointer-events:none;
+}
+#manual-training-root .manual-celebration-crest-outer,
+#manual-training-root .manual-celebration-crest-inner,
+#manual-training-root .manual-celebration-crest-spark{
+  position:absolute;inset:0;display:grid;place-items:center;border-radius:50%;
+}
+#manual-training-root .manual-celebration-crest-outer{
+  border:1px solid var(--mc-rune);
+  box-shadow:0 0 28px var(--mc-glow),inset 0 0 26px var(--mc-glow);
+  animation:manual-celebration-orbit 8s linear infinite;
+}
+#manual-training-root .manual-celebration-crest-outer::before,
+#manual-training-root .manual-celebration-crest-outer::after{
+  content:"";position:absolute;inset:8px;border:1px dashed var(--mc-rune);border-radius:50%;
+}
+#manual-training-root .manual-celebration-crest-outer::after{inset:18px;border-style:dotted}
+#manual-training-root .manual-celebration-crest-inner{
+  inset:31px;border:2px solid var(--mc-rune);
+  box-shadow:inset 0 0 24px var(--mc-glow);
+  animation:manual-celebration-orbit 7s linear reverse infinite;
+}
+#manual-training-root .manual-celebration-crest-spark{
+  inset:72px;font-size:35px;color:var(--mc-core);
+  text-shadow:0 0 25px var(--mc-glow);
+  animation:manual-celebration-flash .8s ease-out both;
+}
+#manual-training-root .manual-celebration-content{
+  position:relative;z-index:2;display:flex;align-items:center;
+  flex-direction:column;text-align:center;gap:7px;min-width:0
+}
+#manual-training-root .manual-celebration-kicker{
+  color:var(--mc-core);font-size:10px;font-weight:800;
+  letter-spacing:.17em;line-height:1.5;
+}
+#manual-training-root .manual-celebration-heading{
+  font-size:clamp(23px,4vw,31px);font-weight:900;
+  color:#fff0c2;line-height:1.2;text-shadow:0 0 14px var(--mc-glow);
+  animation:manual-celebration-reveal .53s ease-out both;
+}
+#manual-training-root .manual-celebration-art-frame{
+  display:grid;place-items:center;overflow:visible;
+  position:relative;width:115px;height:123px;margin:16px 0 5px;
+}
+#manual-training-root .manual-celebration-art-frame::before{
+  content:"";position:absolute;inset:-12px;border-radius:50%;
+  background:radial-gradient(circle,var(--mc-glow),transparent 73%);
+  animation:manual-celebration-flash .8s ease-out both;
+}
+#manual-training-root .manual-celebration-art{
+  position:relative;width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 8px 11px #000a);
+  animation:manual-celebration-art-in .8s cubic-bezier(.18,.95,.2,1.04) both;
+}
+#manual-training-root .manual-celebration-art-fallback{
+  position:relative;font-size:56px;font-weight:900;color:var(--mc-core);
+}
+#manual-training-root .manual-celebration-name{
+  font-size:clamp(17px,3.3vw,21px);line-height:1.35;
+  color:#fff3d7;font-weight:800;overflow-wrap:anywhere;
+}
+#manual-training-root .manual-celebration-level{
+  display:flex;align-items:baseline;justify-content:center;gap:7px;
+  padding:6px 13px;margin:0 0 3px;border-radius:30px;
+  border:1px solid var(--mc-rune);background:#101f19aa;
+  color:var(--mc-core);font-size:14px;font-weight:850;
+  font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-celebration-level-label{font-size:12px;color:#d0dbcb}
+#manual-training-root .manual-celebration-old-level{font-size:17px;color:#9baea1}
+#manual-training-root .manual-celebration-level b{
+  color:#ffe9ae;font-size:23px;
+  animation:manual-celebration-number .7s ease-out both;
+}
+#manual-training-root .manual-celebration-detail{
+  color:#d9e3d5;font-size:12px;line-height:1.6;
+  overflow-wrap:anywhere;
+}
+#manual-training-root .manual-celebration-extra{
+  color:#edc88c;font-size:11px;line-height:1.65;
+}
+#manual-training-root .manual-celebration-dismiss{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  pointer-events:auto;cursor:pointer;
+  min-width:142px;min-height:42px;margin:10px auto 0;
+  padding:10px 16px;border-radius:10px;
+  border:1px solid #fff0b3;
+  background:linear-gradient(130deg,#ffe9a7,#d4af6e);
+  color:#232d21;font-size:13px;font-weight:850;
+}
+#manual-training-root .manual-celebration-sparks{
+  position:absolute;z-index:1;inset:0;pointer-events:none;overflow:hidden;
+}
+#manual-training-root .manual-celebration-sparks i{
+  display:block;position:absolute;top:47%;left:50%;
+  width:3px;height:26px;border-radius:10px;opacity:0;
+  background:linear-gradient(var(--mc-core),transparent);
+  transform:translate(-50%,-50%) rotate(calc(var(--spark) * 30deg));
+  animation:manual-celebration-burst 1s ease-out both;
+  animation-delay:calc(var(--spark) * 20ms);
+}
+#manual-training-root .manual-celebration--discovery .manual-celebration-panel,
+#manual-training-root .manual-celebration--unlock .manual-celebration-panel{
+  box-shadow:0 23px 68px rgba(0,0,0,.52),0 0 55px var(--mc-glow),
+    inset 0 0 0 1px var(--mc-rune);
+}
+#manual-training-root .manual-celebration--manual-upgrade .manual-celebration-panel,
+#manual-training-root .manual-celebration--skill-upgrade .manual-celebration-panel{
+  padding-top:21px;padding-bottom:17px;
+}
+@keyframes manual-celebration-arrive{
+  from{opacity:0}to{opacity:1}
+}
+@keyframes manual-celebration-pop{
+  from{transform:scale(.87) translateY(10px);opacity:.1}
+  63%{transform:scale(1.025) translateY(-3px);opacity:1}
+  to{transform:scale(1);opacity:1}
+}
+@keyframes manual-celebration-orbit{
+  from{transform:rotate(0)}to{transform:rotate(360deg)}
+}
+@keyframes manual-celebration-flash{
+  from{opacity:0;filter:brightness(1)}
+  40%{opacity:1;filter:brightness(1.45)}
+  to{opacity:.75;filter:brightness(1)}
+}
+@keyframes manual-celebration-reveal{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes manual-celebration-art-in{
+  from{opacity:0;transform:scale(.62) rotate(-8deg)}
+  65%{opacity:1;transform:scale(1.06) rotate(2deg)}
+  to{opacity:1;transform:scale(1) rotate(0)}
+}
+@keyframes manual-celebration-number{
+  from{transform:scale(.72);opacity:.2}
+  65%{transform:scale(1.19);opacity:1}
+  to{transform:scale(1);opacity:1}
+}
+@keyframes manual-celebration-burst{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--spark) * 30deg)) translateY(0) scale(.4)}
+  20%{opacity:.9}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(calc(var(--spark) * 30deg)) translateY(-155px) scale(.45)}
+}
+@media(max-width:460px){
+  #manual-training-root .manual-celebration-backdrop{padding:12px 20px}
+  #manual-training-root .manual-celebration-panel{padding:21px 15px 17px;max-width:330px}
+  #manual-training-root .manual-celebration-art-frame{height:106px;width:102px;margin:13px 0 5px}
+  #manual-training-root .manual-celebration-crest{top:22px;width:184px;height:184px}
+  #manual-training-root .manual-celebration-crest-inner{inset:24px}
+  #manual-training-root .manual-celebration-crest-spark{inset:59px}
+}
+@media(max-height:610px){
+  #manual-training-root .manual-celebration-panel{padding:10px 15px 9px}
+  #manual-training-root .manual-celebration-art-frame{width:75px;height:72px;margin:3px 0}
+  #manual-training-root .manual-celebration-heading{font-size:22px}
+  #manual-training-root .manual-celebration-content{gap:3px}
+  #manual-training-root .manual-celebration-crest{top:9px;width:130px;height:130px}
+  #manual-training-root .manual-celebration-crest-inner{inset:17px}
+  #manual-training-root .manual-celebration-crest-spark{inset:45px}
+  #manual-training-root .manual-celebration-level b{font-size:17px}
+  #manual-training-root .manual-celebration-dismiss{margin-top:4px;min-height:36px}
+}
+@media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-celebration-backdrop,
+  #manual-training-root .manual-celebration-panel,
+  #manual-training-root .manual-celebration-crest-outer,
+  #manual-training-root .manual-celebration-crest-inner,
+  #manual-training-root .manual-celebration-crest-spark,
+  #manual-training-root .manual-celebration-heading,
+  #manual-training-root .manual-celebration-art,
+  #manual-training-root .manual-celebration-art-frame::before,
+  #manual-training-root .manual-celebration-level b,
+  #manual-training-root .manual-celebration-sparks i{animation:none!important;transition:none!important;}
+  #manual-training-root .manual-celebration-sparks{display:none}
+}
