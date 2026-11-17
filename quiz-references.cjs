@@ -15,7 +15,11 @@ function quizReferences({ subject, level, topic, scope, facet, exclusions = [] }
   if (!Object.hasOwn(index, subject) || !Object.hasOwn(index[subject], level)) return [];
   const concepts = index[subject][level];
   const selected = [...labels(topic), ...labels(scope?.path), ...(scope?.sub_topics || []).map(normalize)];
-  const findConcept = label => Object.hasOwn(concepts, label) ? concepts[label] : null;
+  // Labels are whitespace-normalized for matching. Curriculum keys may contain
+  // spaces in terms such as "DNA 與基因" or "GIS 與空間資料".
+  // Retain original filenames; never derive paths from normalized input.
+  const normalizedConcepts = new Map(Object.entries(concepts).map(([label, filename]) => [normalize(label), filename]));
+  const findConcept = label => Object.hasOwn(concepts, label) ? concepts[label] : normalizedConcepts.get(normalize(label)) || null;
   const selectedKeys = new Set(selected.map(findConcept).filter(Boolean));
   const facetKey = facet && findConcept(normalize(facet.concept));
   if (facet && !facetKey) return [];

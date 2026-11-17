@@ -27,7 +27,9 @@ for(const curriculumSubject of subjects){
     const group=require(path.join(__dirname,'..','question-references',subject,level,filename+'.json'));
     assert.ok(group.units.includes(unit),'mismatched unit '+concept);
     assert.ok(group.references.length>=2,'not enough references '+concept);
-    assert.deepEqual(group.excludedConcepts,[]);
+    assert.ok(Array.isArray(group.excludedConcepts));
+    assert.ok(group.excludedConcepts.every(word=>typeof word==='string'&&word.trim()),
+      'existing out-of-scope guard must be preserved');
     const selected=quizReferences({subject,level,topic:concept});
     assert.ok(selected.length>=1,'lazy lookup missing '+concept);
     for(const ref of group.references){

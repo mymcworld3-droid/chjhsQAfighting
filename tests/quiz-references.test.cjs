@@ -38,6 +38,21 @@ test('respects the current facet, grade, space-vectors scope and custom exclusio
   }
 });
 
+test('whitespace in curriculum acronyms never prevents exact index lookup', () => {
+  const cases=[
+    ['生物','高中一年級','DNA 與基因'],
+    ['生物','高中二年級','DNA 複製與基因表現'],
+    ['地理','高中三年級','GIS 與空間資料']
+  ];
+  for (const [subject,level,topic] of cases) {
+    const expected=quizReferences({subject,level,topic});
+    assert.equal(expected.length,2,topic);
+    assert.ok(expected.every(r=>r.question.sub_topic===topic));
+    const noSpaces=quizReferences({subject,level,topic:topic.replace(/\\s+/g,'')});
+    assert.deepEqual(noSpaces.map(r=>r.id),expected.map(r=>r.id));
+  }
+});
+
 test('loads exact Chinese curriculum concepts containing punctuation', () => {
   const target = { subject: '國文', level: '高中一年級' };
   const punctuated = '韻腳、對仗與詩意理解';
