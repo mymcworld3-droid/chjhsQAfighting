@@ -1,0 +1,66 @@
+{
+  "units": [
+    "素養閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-資料與圖表分析-1",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「資料與圖表分析」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "活動報名表：甲班30人有18人報名，乙班40人有20人報名。若比較報名比例，何者正確？",
+        "correct": "甲班60%，高於乙班50%",
+        "wrong": [
+          "乙班因報名人數較多，所以比例也較高",
+          "兩班報名比例相同",
+          "甲班比例是18%，乙班是20%"
+        ],
+        "exp": "甲18/30＝60%，乙20/40＝50%。人數較多不必然表示比例較高。",
+        "subject": "國文",
+        "sub_topic": "資料與圖表分析",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-資料與圖表分析",
+        "template_id": "chinese-reference-高中三年級-資料與圖表分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-資料與圖表分析-2",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「資料與圖表分析」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "報告指出：甲月份平均降雨120毫米、乙月份80毫米，卻沒有逐日紀錄。若有人宣稱「甲月份每一天都比乙月份每一天雨大」，應如何判斷？",
+        "correct": "平均數不同不足以支持逐日都較大的結論",
+        "wrong": [
+          "平均數高就代表每一天都較高",
+          "沒有逐日資料仍能確定每日降雨量完全一致",
+          "降雨毫米數不能用來計算平均"
+        ],
+        "exp": "月平均只能比較兩個月份整體的平均，不能還原每一天的分布與交叉情形。",
+        "subject": "國文",
+        "sub_topic": "資料與圖表分析",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-資料與圖表分析",
+        "template_id": "chinese-reference-高中三年級-資料與圖表分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

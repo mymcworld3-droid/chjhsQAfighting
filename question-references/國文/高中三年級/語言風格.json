@@ -1,0 +1,66 @@
+{
+  "units": [
+    "感性與創意寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-語言風格-1",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「語言風格」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "某段文字原寫：「細雨如絲，將傍晚的河面輕輕織成銀灰色。」若要求改成中性、客觀的觀察紀錄，哪個版本最好？",
+        "correct": "傍晚下著細雨，河面呈現銀灰色。",
+        "wrong": [
+          "細雨再一次溫柔地編織天地的夢。",
+          "河水一定在細雨中流淚，因為它很悲傷。",
+          "每個人都認為那條河擁有世界上最美的顏色。"
+        ],
+        "exp": "客觀紀錄減少擬人、隱喻與主觀評價，保留可觀察的時間、天氣與色澤。",
+        "subject": "國文",
+        "sub_topic": "語言風格",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-語言風格",
+        "template_id": "chinese-reference-高中三年級-語言風格-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-語言風格-2",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「語言風格」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "閱讀：「他走得慢，像是在等一段忘記回來的日子。」此句最明顯的語言風格為何？",
+        "correct": "以詩性比喻表達時間與回憶的感受",
+        "wrong": [
+          "以操作手冊的方式精確標示步行速率",
+          "以法條語言規定行人必須慢走",
+          "以統計報告呈現逐秒移動距離"
+        ],
+        "exp": "「日子忘記回來」將抽象時間寫成可等待之物，以富感情的譬喻而非客觀數據營造抒情氛圍。",
+        "subject": "國文",
+        "sub_topic": "語言風格",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-語言風格",
+        "template_id": "chinese-reference-高中三年級-語言風格-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

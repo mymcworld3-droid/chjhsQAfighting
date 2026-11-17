@@ -1,0 +1,66 @@
+{
+  "units": [
+    "感性與創意寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-敘事與抒情-1",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「敘事與抒情」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "作文以「第一次獨自搭車遠行」為題。下列哪一段最能把事件與心情結合，而不只是抽象說出感受？",
+        "correct": "車門關上的瞬間，我握緊口袋裡的車票；直到窗外熟悉的路口退去，才慢慢鬆開手。",
+        "wrong": [
+          "獨自遠行是一件非常需要勇氣的事情，這是普遍的道理。",
+          "交通工具分為很多種類，票價也依路線而異。",
+          "我很緊張很緊張，因為我真的很緊張。"
+        ],
+        "exp": "握票、鬆手與景物退去呈現情緒從緊張漸漸平復，讓讀者透過具體動作感受人物變化。",
+        "subject": "國文",
+        "sub_topic": "敘事與抒情",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-敘事與抒情",
+        "template_id": "chinese-reference-高中三年級-敘事與抒情-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-敘事與抒情-2",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「敘事與抒情」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "某篇回憶文章前段寫父親每天早上留下熱豆漿，結尾寫：「搬走以後，我才知道，那一杯熱豆漿替他說了多少沒說出口的話。」這種結尾最主要的效果是什麼？",
+        "correct": "把日常事件提升為對父親關懷的理解，讓敘事轉為抒情",
+        "wrong": [
+          "證明父親確曾以豆漿杯寫下長篇信件",
+          "把全文變成市場價格調查報告",
+          "否定前段任何日常行為的存在"
+        ],
+        "exp": "前段是具體行動，末段由此體悟未說出口的關心，以物件承載情感，使敘事與抒情互相呼應。",
+        "subject": "國文",
+        "sub_topic": "敘事與抒情",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-敘事與抒情",
+        "template_id": "chinese-reference-高中三年級-敘事與抒情-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

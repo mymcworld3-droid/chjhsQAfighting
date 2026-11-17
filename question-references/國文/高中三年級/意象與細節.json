@@ -1,0 +1,66 @@
+{
+  "units": [
+    "感性與創意寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-意象與細節-1",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「意象與細節」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "作文題目「雨後的操場」，哪段描寫最有具體感官細節？",
+        "correct": "雨滴沿球框滑落，跑道積水映著灰白的雲，鞋底踩過水窪發出輕響。",
+        "wrong": [
+          "操場的天氣變化十分多樣，值得大家關注。",
+          "我認為操場是一個非常重要的公共空間。",
+          "雨後的操場就是很有雨後操場的感覺。"
+        ],
+        "exp": "視覺有水滴與倒影，聽覺有踩水聲，形成可感知的畫面；其他選項只是抽象評語。",
+        "subject": "國文",
+        "sub_topic": "意象與細節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-意象與細節",
+        "template_id": "chinese-reference-高中三年級-意象與細節-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-意象與細節-2",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「意象與細節」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "作文描寫祖母的舊縫紉機，原句只有「那臺機器很有意義」。若想讓物件自然承載記憶，哪一補寫最恰當？",
+        "correct": "踏板一響，我彷彿又看見祖母低頭替我縫補制服的背影。",
+        "wrong": [
+          "縫紉機在世界各地都可依不同價格購買。",
+          "那臺機器的意義，就是它真的很有意義。",
+          "所有祖母都必定使用完全相同型號的縫紉機。"
+        ],
+        "exp": "聲音與縫補制服的動作讓物件連結具體回憶，展現意象而非空泛宣稱。",
+        "subject": "國文",
+        "sub_topic": "意象與細節",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-意象與細節",
+        "template_id": "chinese-reference-高中三年級-意象與細節-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

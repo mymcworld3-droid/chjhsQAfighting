@@ -1,0 +1,66 @@
+{
+  "units": [
+    "國語文綜合複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-語文知識-1",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「語文知識」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "下列四句中，哪一句的成語運用正確？",
+        "correct": "雖然報告仍有缺點，但整體表現差強人意。",
+        "wrong": [
+          "這場展覽精彩絕倫，真是乏善可陳。",
+          "他因為被同學稱讚而首當其衝地獲獎。",
+          "兩人取得共識後仍然莫衷一是地同意。"
+        ],
+        "exp": "「差強人意」意為大致令人滿意；「乏善可陳」指沒什麼可稱道，「首當其衝」是首先遭受衝擊，「莫衷一是」是無法形成一致意見。",
+        "subject": "國文",
+        "sub_topic": "語文知識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-語文知識",
+        "template_id": "chinese-reference-高中三年級-語文知識-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-語文知識-2",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「語文知識」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "句子：「若僅憑一張照片，便認定整起事件的原委，恐怕失之武斷。」下列哪個詞與「武斷」最接近？",
+        "correct": "未充分查證便作出主觀判定",
+        "wrong": [
+          "詳細蒐集多方證據後審慎推論",
+          "以中立方式陳列所有不同看法",
+          "不針對事件提出任何主張"
+        ],
+        "exp": "「武斷」指不經周詳考慮便憑己意下判斷，句中也由「僅憑一張照片」凸顯證據不足。",
+        "subject": "國文",
+        "sub_topic": "語文知識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-語文知識",
+        "template_id": "chinese-reference-高中三年級-語文知識-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "國語文綜合複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-應用文-1",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「應用文」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "學校安排校外講座，學生要詢問是否能帶家長旁聽。下列郵件敘述何者最適合寄給主辦單位？",
+        "correct": "您好：想請問本次講座是否開放家長旁聽？若需要事先報名，敬請告知，謝謝。",
+        "wrong": [
+          "你們講座到底可不可以帶人？快回我。",
+          "講座我有很多想法，反正大家都是這麼想。",
+          "這封信不是要問問題，所以不用回覆。"
+        ],
+        "exp": "正式詢問宜說明具體問題、可能的報名需求並保持適當禮貌，無須情緒催促。",
+        "subject": "國文",
+        "sub_topic": "應用文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-應用文",
+        "template_id": "chinese-reference-高中三年級-應用文-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-應用文-2",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「應用文」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "社團公告：「11月20日截止繳交海報，逾期不受理；請將電子檔寄到幹部信箱。」某生11月20日晚間完成海報，卻不知道截止的具體時刻。哪項做法最適當？",
+        "correct": "主動向社團確認當日截止的時刻及收件規則",
+        "wrong": [
+          "自行假定一定可以延至隔年11月20日",
+          "因未標明時間，就認定永遠不會截止",
+          "無視寄送方式，只把檔案放在自己電腦中"
+        ],
+        "exp": "公告提供日期和寄件方式，卻未明示時間，遇到影響權益的模糊處應查詢，不應自行增加條件。",
+        "subject": "國文",
+        "sub_topic": "應用文",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-應用文",
+        "template_id": "chinese-reference-高中三年級-應用文-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "素養閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-跨文本比較-1",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「跨文本比較」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "甲：「博物館新增語音導覽，讓參觀者可依自己的速度選擇解說。」乙：「若語音導覽只提供單一語言，仍可能讓部分訪客難以理解。」兩文關係最適合如何概括？",
+        "correct": "甲指出優點，乙補充要真正普及服務仍需改善的限制",
+        "wrong": [
+          "甲乙都否認語音導覽有任何用處",
+          "甲乙都主張博物館必須廢除展品",
+          "兩文只討論導覽設備的電池容量"
+        ],
+        "exp": "乙並不推翻甲所說自主調整速度的優點，而是補充語言近用的限制，屬互補式比較。",
+        "subject": "國文",
+        "sub_topic": "跨文本比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-跨文本比較",
+        "template_id": "chinese-reference-高中三年級-跨文本比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-跨文本比較-2",
+      "source": "依照大考中心114學年度學測國綜之閱讀理解、語文分析命題方向重新設計",
+      "design": "以「跨文本比較」設計有明確證據與可排除迷思的全新情境",
+      "question": {
+        "q": "甲：「公園設夜間燈光，方便居民運動。」乙：「燈光若直射住宅，恐影響住戶睡眠。」若合併兩文，最有根據的政策建議為何？",
+        "correct": "規劃照明時兼顧運動安全與住戶安寧，採合適的方向與時段",
+        "wrong": [
+          "全面禁止所有居民在公園運動",
+          "完全不需考量燈光照射範圍",
+          "增加亮度即可自動解決一切問題"
+        ],
+        "exp": "甲強調公共使用者的需求，乙提醒周邊居民的負擔，合適整合是調整設計而非否定任一群體。",
+        "subject": "國文",
+        "sub_topic": "跨文本比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-跨文本比較",
+        "template_id": "chinese-reference-高中三年級-跨文本比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
