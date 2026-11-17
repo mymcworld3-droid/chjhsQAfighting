@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學與永續"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-能源、資源與環境-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「能源、資源與環境」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "燃燒煤與天然氣都可能排放CO₂，但單位能量的碳排放量不同。若比較能源環境影響，最適合統一哪項基準？",
+        "correct": "每產生相同能量時的二氧化碳排放量",
+        "wrong": [
+          "只看每塊燃料的顏色",
+          "只比較燃料名稱的長度",
+          "只用燃料儲存桶的高度"
+        ],
+        "exp": "比較能源排放應採用相同能量單位，例如每MJ排放CO₂，避免質量或體積誤導。",
+        "subject": "化學",
+        "sub_topic": "能源、資源與環境",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-能源、資源與環境",
+        "template_id": "chem-ref-g1-能源、資源與環境-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-能源、資源與環境-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「能源、資源與環境」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "若電池回收能再利用部分金屬材料，從資源循環角度最直接的好處是？",
+        "correct": "減少部分原生礦產開採需求與廢棄物壓力",
+        "wrong": [
+          "讓金屬元素在回收時無限增殖",
+          "回收後所有材料永遠不需能源處理",
+          "可將任何有毒物質直接排入河川"
+        ],
+        "exp": "回收可恢復有用金屬，降低部分資源與污染負擔，但回收仍有能耗與成本。",
+        "subject": "化學",
+        "sub_topic": "能源、資源與環境",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中一年級-能源、資源與環境",
+        "template_id": "chem-ref-g1-能源、資源與環境-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

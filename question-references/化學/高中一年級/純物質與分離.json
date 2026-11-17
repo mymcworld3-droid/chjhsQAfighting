@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物質組成與分類"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-純物質與分離-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「純物質與分離」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "某混合物含有食鹽、細砂與水。若想先去除細砂，再取得溶解的食鹽，最合理的操作順序是？",
+        "correct": "先過濾，再蒸發濾液中的水",
+        "wrong": [
+          "先將混合物直接用磁鐵吸取食鹽",
+          "只需過濾就能分離已溶於水的食鹽",
+          "先把混合液加冰就能讓所有砂變成鹽"
+        ],
+        "exp": "砂不溶於水，可先過濾；食鹽已溶解，須蒸發水或結晶才可取得。",
+        "subject": "化學",
+        "sub_topic": "純物質與分離",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-純物質與分離",
+        "template_id": "chem-ref-g1-純物質與分離-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-純物質與分離-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「純物質與分離」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "某液體由兩種互溶、沸點相差較大的物質組成。欲利用沸點差異分離，最適合哪種方法？",
+        "correct": "蒸餾",
+        "wrong": [
+          "濾紙過濾",
+          "使用磁鐵吸引",
+          "僅以目視挑出分子"
+        ],
+        "exp": "蒸餾依各成分揮發性差異分離互溶液體；過濾無法去除均勻溶解物。",
+        "subject": "化學",
+        "sub_topic": "純物質與分離",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-純物質與分離",
+        "template_id": "chem-ref-g1-純物質與分離-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

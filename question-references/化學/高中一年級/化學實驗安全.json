@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學與永續"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-化學實驗安全-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「化學實驗安全」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "實驗要將濃硫酸稀釋成較稀溶液。為避免放熱造成噴濺，應遵守哪項原則？",
+        "correct": "緩慢將酸加入較大量的水中並攪拌，配戴防護具",
+        "wrong": [
+          "把水一次倒入大量濃硫酸中",
+          "加熱濃硫酸直到沸騰再加入水",
+          "直接用手觸摸混合液估計溫度"
+        ],
+        "exp": "稀釋濃酸強烈放熱，應酸入水並緩慢混合，減少局部過熱噴濺。",
+        "subject": "化學",
+        "sub_topic": "化學實驗安全",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學實驗安全",
+        "template_id": "chem-ref-g1-化學實驗安全-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-化學實驗安全-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「化學實驗安全」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "酒精燈附近發現易燃溶劑瓶未蓋好。最適當的立即處置是？",
+        "correct": "停止使用附近火源，依實驗室規範關閉並妥善存放溶劑",
+        "wrong": [
+          "把溶劑倒進燃燒中的火焰測試",
+          "以鼻子直接近距離嗅聞蒸氣",
+          "將未蓋溶劑放在熱源上促進蒸發"
+        ],
+        "exp": "易燃溶劑蒸氣可著火，應遠離火源並依安全程序處理。",
+        "subject": "化學",
+        "sub_topic": "化學實驗安全",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學實驗安全",
+        "template_id": "chem-ref-g1-化學實驗安全-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

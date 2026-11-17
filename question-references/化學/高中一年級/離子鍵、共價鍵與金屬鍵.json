@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學鍵與物質性質"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-離子鍵、共價鍵與金屬鍵-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「離子鍵、共價鍵與金屬鍵」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "氯化鈉固體通常由Na⁺與Cl⁻形成晶格，其主要化學鍵類型為？",
+        "correct": "離子鍵",
+        "wrong": [
+          "非極性共價鍵",
+          "分子間氫鍵",
+          "金屬鍵"
+        ],
+        "exp": "NaCl由陽離子與陰離子之間的靜電吸引形成離子晶體。",
+        "subject": "化學",
+        "sub_topic": "離子鍵、共價鍵與金屬鍵",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-離子鍵、共價鍵與金屬鍵",
+        "template_id": "chem-ref-g1-離子鍵、共價鍵與金屬鍵-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-離子鍵、共價鍵與金屬鍵-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「離子鍵、共價鍵與金屬鍵」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "金屬銅能導電，且可敲打成薄片。最能解釋其常見特性的鍵結模型是？",
+        "correct": "金屬離子晶格與離域電子的金屬鍵模型",
+        "wrong": [
+          "每個銅原子只能和氧形成獨立水分子",
+          "電子完全固定不動且不能移動",
+          "銅由大量彼此不相互作用的中性氣體分子組成"
+        ],
+        "exp": "金屬鍵中的離域電子有助導電，而非定向鍵結使金屬具延展性。",
+        "subject": "化學",
+        "sub_topic": "離子鍵、共價鍵與金屬鍵",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-離子鍵、共價鍵與金屬鍵",
+        "template_id": "chem-ref-g1-離子鍵、共價鍵與金屬鍵-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

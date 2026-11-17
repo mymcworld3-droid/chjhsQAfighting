@@ -1,0 +1,66 @@
+{
+  "units": [
+    "溶液與酸鹼"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-濃度、溶解與沉澱-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「濃度、溶解與沉澱」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "將0.20 mol食鹽溶於水，配製成1.0 L溶液。其莫耳濃度為何？",
+        "correct": "0.20 M",
+        "wrong": [
+          "2.0 M",
+          "0.020 M",
+          "1.2 M"
+        ],
+        "exp": "M＝溶質莫耳數／溶液體積(L)＝0.20/1.0＝0.20 M。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "chem-ref-g1-濃度、溶解與沉澱-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-濃度、溶解與沉澱-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「濃度、溶解與沉澱」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "將等體積的0.10 M AgNO₃(aq)與0.10 M NaCl(aq)混合，形成白色沉澱。若忽略其他反應，沉澱主要是？",
+        "correct": "AgCl(s)",
+        "wrong": [
+          "NaNO₃(s)",
+          "AgNO₃(s)",
+          "NaCl(g)"
+        ],
+        "exp": "Ag⁺與Cl⁻反應生成難溶AgCl沉澱，Na⁺與NO₃⁻大多留於溶液。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "chem-ref-g1-濃度、溶解與沉澱-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

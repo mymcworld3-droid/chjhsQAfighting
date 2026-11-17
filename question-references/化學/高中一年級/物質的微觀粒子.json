@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物質組成與分類"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-物質的微觀粒子-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「物質的微觀粒子」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "將糖溶於水後，看不到固體糖晶，但溶液仍有甜味。最符合微觀粒子觀點的敘述是？",
+        "correct": "糖分子分散於水中，並非全部消失或變成水分子",
+        "wrong": [
+          "糖原子在溶解時全部被消滅",
+          "糖必定變成新的元素氧",
+          "溶解只會使水分子停止運動"
+        ],
+        "exp": "溶解是粒子分散和溶劑化，糖分子仍在溶液中。",
+        "subject": "化學",
+        "sub_topic": "物質的微觀粒子",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質的微觀粒子",
+        "template_id": "chem-ref-g1-物質的微觀粒子-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-物質的微觀粒子-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「物質的微觀粒子」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "在固定溫度下，氣體受壓縮使體積減半。若沒有發生化學反應，哪項微觀描述最合理？",
+        "correct": "氣體粒子數不變，但粒子間平均距離通常減小",
+        "wrong": [
+          "每個氣體分子質量都減半",
+          "所有粒子必然結合成新原子",
+          "氣體分子本身的直徑必然縮為一半"
+        ],
+        "exp": "壓縮主要改變氣體粒子可佔有空間與間距，分子大小與數目不需改變。",
+        "subject": "化學",
+        "sub_topic": "物質的微觀粒子",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質的微觀粒子",
+        "template_id": "chem-ref-g1-物質的微觀粒子-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

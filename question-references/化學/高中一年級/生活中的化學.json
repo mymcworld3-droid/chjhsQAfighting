@@ -1,0 +1,66 @@
+{
+  "units": [
+    "溶液與酸鹼"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-生活中的化學-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「生活中的化學」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "使用漂白水時，不宜與酸性清潔劑混合。最主要的安全理由是什麼？",
+        "correct": "可能釋出有毒氯氣等刺激性氣體",
+        "wrong": [
+          "酸性物質會使水完全變成純氧",
+          "漂白水與酸混合必定只產生食鹽",
+          "兩者混合會使所有溶液變成無害的蒸餾水"
+        ],
+        "exp": "含次氯酸鹽清潔劑遇酸可能產生氯氣等危害，應避免混用。",
+        "subject": "化學",
+        "sub_topic": "生活中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-生活中的化學",
+        "template_id": "chem-ref-g1-生活中的化學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-生活中的化學-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「生活中的化學」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "烘焙時加入小蘇打（NaHCO₃）與適當酸性成分，可使麵糊膨脹。直接造成膨脹的氣體主要為？",
+        "correct": "二氧化碳",
+        "wrong": [
+          "氦氣",
+          "氯氣",
+          "氮氣必為唯一產物"
+        ],
+        "exp": "碳酸氫鹽與酸反應可產生CO₂氣泡，協助膨鬆。",
+        "subject": "化學",
+        "sub_topic": "生活中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-生活中的化學",
+        "template_id": "chem-ref-g1-生活中的化學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

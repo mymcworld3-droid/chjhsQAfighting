@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學鍵與物質性質"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-物質性質-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「物質性質」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "將相同質量的鋁塊與鐵塊加熱，若已知比熱容不同，升高相同溫度所需熱量可能不同。何種物理量直接描述此差異？",
+        "correct": "比熱容",
+        "wrong": [
+          "原子序必然相同",
+          "質子數總和",
+          "物質的顏色深淺"
+        ],
+        "exp": "Q＝mcΔT，m和ΔT相同時吸熱量隨c不同。",
+        "subject": "化學",
+        "sub_topic": "物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質性質",
+        "template_id": "chem-ref-g1-物質性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-物質性質-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「物質性質」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "同一純物質在定壓下熔化時，溫度可能暫時保持不變但持續吸熱。熱主要用於什麼？",
+        "correct": "改變粒子間排列與作用，完成固液相變",
+        "wrong": [
+          "讓每個原子核質子數增加",
+          "立即把所有物質轉成另一元素",
+          "使物質在沒有熱量輸入下自發不斷升溫"
+        ],
+        "exp": "相變潛熱用於改變粒子間相互作用與結構，純物質熔點附近溫度可保持不變。",
+        "subject": "化學",
+        "sub_topic": "物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質性質",
+        "template_id": "chem-ref-g1-物質性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

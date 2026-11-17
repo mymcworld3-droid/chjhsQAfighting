@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學反應"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-質量守恆-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「質量守恆」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "密閉容器內有12克碳與32克氧氣，充分反應生成二氧化碳且兩者恰好耗盡。產物總質量是多少？",
+        "correct": "44克",
+        "wrong": [
+          "20克",
+          "32克",
+          "56克"
+        ],
+        "exp": "密閉系統質量守恆，反應物總質量12+32＝44克。",
+        "subject": "化學",
+        "sub_topic": "質量守恆",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-質量守恆",
+        "template_id": "chem-ref-g1-質量守恆-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-質量守恆-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「質量守恆」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "敞開燒杯中讓碳酸鈣與鹽酸反應，產生CO₂逸出，反應後燒杯與內容物總質量下降。哪項解釋最合理？",
+        "correct": "氣體逸出開放系統，使秤量範圍內質量減少，但整體仍符合質量守恆",
+        "wrong": [
+          "化學反應必然摧毀部分原子",
+          "生成氣體代表所有質量都消失",
+          "只要質量下降就能否定化學反應的守恆"
+        ],
+        "exp": "敞開系統未把逸出CO₂秤入，若計入所有反應物與生成物仍質量守恆。",
+        "subject": "化學",
+        "sub_topic": "質量守恆",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-質量守恆",
+        "template_id": "chem-ref-g1-質量守恆-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

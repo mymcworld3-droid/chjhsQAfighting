@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學與永續"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-綠色化學概念-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「綠色化學概念」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "甲反應流程使用大量有毒溶劑，乙流程在相同產品品質下使用較安全溶劑且可回收。較符合綠色化學哪種方向？",
+        "correct": "優先降低危害物質的使用與廢棄產生",
+        "wrong": [
+          "只看產品顏色鮮豔與否",
+          "反應越需要有毒試劑就越綠色",
+          "只要化學反應能完成就不需關心污染"
+        ],
+        "exp": "綠色化學重視從反應設計源頭減少危害與廢棄物。",
+        "subject": "化學",
+        "sub_topic": "綠色化學概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-綠色化學概念",
+        "template_id": "chem-ref-g1-綠色化學概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-綠色化學概念-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「綠色化學概念」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "某合成流程甲原子利用率低、副產物多；流程乙在相同目標下讓更多反應物原子進入目標產物。這反映哪項綠色化學指標改善？",
+        "correct": "原子經濟性提高",
+        "wrong": [
+          "原子核全部停止運動",
+          "產品元素全部變成新元素",
+          "每莫耳反應物的質量守恆被取消"
+        ],
+        "exp": "原子經濟性衡量反應物原子有多少進入目標產物；提高可減少理論副產物。",
+        "subject": "化學",
+        "sub_topic": "綠色化學概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-綠色化學概念",
+        "template_id": "chem-ref-g1-綠色化學概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

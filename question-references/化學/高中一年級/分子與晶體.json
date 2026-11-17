@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學鍵與物質性質"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-分子與晶體-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「分子與晶體」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "石英主要成分SiO₂形成延伸的共價網狀結構，而乾冰CO₂為分子晶體。若比較熔點，哪項較合理？",
+        "correct": "石英熔點通常遠高於乾冰的昇華溫度",
+        "wrong": [
+          "乾冰必然具有比石英更強的整體共價網狀結構",
+          "兩者因化學式都含氧，物理性質必然相同",
+          "石英只能由彼此獨立的CO₂分子堆積而成"
+        ],
+        "exp": "SiO₂共價網狀晶體鍵結強，而固態CO₂主要靠分子間作用力維持晶體。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "chem-ref-g1-分子與晶體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-分子與晶體-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「分子與晶體」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "固態碘I₂由分子排列形成晶體，受熱後可直接昇華。這較能說明什麼？",
+        "correct": "分子晶體內分子間作用力可在昇華時被克服，而I₂分子內共價鍵不必斷裂",
+        "wrong": [
+          "昇華一定將碘原子核分解",
+          "昇華時所有I₂共價鍵必定先完全破壞",
+          "碘晶體由陽離子和電子海組成"
+        ],
+        "exp": "物理狀態改變主要涉及分子間作用力，通常不會將I₂分子直接拆成原子。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "chem-ref-g1-分子與晶體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

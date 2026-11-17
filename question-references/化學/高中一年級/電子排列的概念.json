@@ -1,0 +1,66 @@
+{
+  "units": [
+    "原子結構與週期表"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g1-電子排列的概念-1",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「電子排列的概念」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "中性鎂原子原子序為12，電子在基態可依2、8、2的殼層概念分布。其最外層有幾個電子？",
+        "correct": "2個",
+        "wrong": [
+          "8個",
+          "12個",
+          "10個"
+        ],
+        "exp": "第一、二、三層簡化分布為2、8、2，最外層兩個。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "chem-ref-g1-電子排列的概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g1-電子排列的概念-2",
+      "source": "依高中化學108課綱及學測自然科概念與計量命題方式重新編寫參考題",
+      "design": "以「電子排列的概念」的化學式、實驗條件或安全判斷形成可檢驗推理",
+      "question": {
+        "q": "中性鈉原子失去一個電子形成Na⁺。若鈉原子序為11，Na⁺的電子數是多少？",
+        "correct": "10個",
+        "wrong": [
+          "11個",
+          "12個",
+          "22個"
+        ],
+        "exp": "鈉原子有11個電子，失去一個形成+1價陽離子，剩10個。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "chem-ref-g1-電子排列的概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
