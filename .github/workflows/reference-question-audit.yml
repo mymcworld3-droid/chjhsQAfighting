@@ -1,0 +1,31 @@
+name: Reference question curriculum audit
+
+on:
+  push:
+    branches: [main, stamina-battle]
+    paths:
+      - 'question-references/**'
+      - 'public/high_school_unit_name/**'
+      - 'tests/quiz-reference-*.test.cjs'
+      - 'tests/retired-it-scope.test.cjs'
+      - '.github/workflows/reference-question-audit.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'question-references/**'
+      - 'public/high_school_unit_name/**'
+      - 'tests/quiz-reference-*.test.cjs'
+      - 'tests/retired-it-scope.test.cjs'
+  workflow_dispatch:
+
+jobs:
+  reference-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check reference index, question options and curriculum coverage
+        run: node --test tests/quiz-reference-curriculum.test.cjs tests/quiz-reference-core-coverage.test.cjs tests/retired-it-scope.test.cjs
