@@ -1,0 +1,66 @@
+{
+  "units": [
+    "政治與民主"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中一年級-政府組織與權力分立-1",
+      "source": "大考中心 114學年度學測社會科第2題，參考原題考查觀念重新命題",
+      "design": "藉行政責任的情境辨別立法院監督行政院的憲政機制",
+      "question": {
+        "q": "行政院政策受到重大質疑時，立法院若要依憲法增修條文對行政院院長提出政治責任追究，可採取哪項方式？",
+        "correct": "對行政院院長提出不信任案",
+        "wrong": [
+          "由立法院直接判決行政院院長有罪",
+          "由立法院逕行任命所有法院法官",
+          "由立法院自行簽署國際條約並代替行政院執行"
+        ],
+        "exp": "我國憲法增修條文規定立法院得對行政院院長提出不信任案；這是國會監督行政權的制度之一。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "civics-2026-reference-高中一年級-政府組織與權力分立-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中一年級-政府組織與權力分立-2",
+      "source": "大考中心 114學年度學測社會科第2題，參考原題考查觀念重新命題",
+      "design": "藉行政責任的情境辨別立法院監督行政院的憲政機制",
+      "question": {
+        "q": "甲機關負責訂定並執行政策，乙機關審議法律與預算，並能質詢甲機關首長。最合理的權力分立說明是什麼？",
+        "correct": "行政與立法分工，並透過監督形成制衡",
+        "wrong": [
+          "兩機關必須由同一人兼任所有職位",
+          "乙機關在任何情況下都負責審判刑案",
+          "甲機關不必遵守任何法律"
+        ],
+        "exp": "政策執行屬行政功能，立法與預算審議屬立法功能；質詢等機制可構成監督與制衡。",
+        "subject": "公民",
+        "sub_topic": "政府組織與權力分立",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政府組織與權力分立",
+        "template_id": "civics-2026-reference-高中一年級-政府組織與權力分立-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

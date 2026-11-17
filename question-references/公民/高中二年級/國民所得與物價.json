@@ -1,0 +1,66 @@
+{
+  "units": [
+    "總體經濟與政策"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中二年級-國民所得與物價-1",
+      "source": "大考中心 114學年度學測社會科第6題，參考原題考查觀念重新命題",
+      "design": "辨別當地新增生產與二手轉售、避免把任何交易都計作 GDP",
+      "question": {
+        "q": "某國居民今年花30萬元購買一台去年已在國內生產並出售的新車，現在轉為二手交易。若不計本次交易產生的新仲介服務，今年GDP通常如何處理這30萬元？",
+        "correct": "不把二手車本身的價款再次列入今年GDP",
+        "wrong": [
+          "全額列入今年新車生產價值",
+          "把二手車價格算入今年出口",
+          "只要用現金交易就一律計入新生產"
+        ],
+        "exp": "GDP 衡量一定期間的最終產品與服務新生產；二手車本體已在原生產年度計算，不能重複列入。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "civics-2026-reference-高中二年級-國民所得與物價-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中二年級-國民所得與物價-2",
+      "source": "大考中心 114學年度學測社會科第6題，參考原題考查觀念重新命題",
+      "design": "辨別當地新增生產與二手轉售、避免把任何交易都計作 GDP",
+      "question": {
+        "q": "某國名目GDP由1000億元變為1100億元，同期整體物價水準約上漲10%，而產出組成大致不變。最合理的推論為何？",
+        "correct": "名目GDP增加不代表實質產出一定增加",
+        "wrong": [
+          "實質產出必增加10%",
+          "GDP平減指數必下降10%",
+          "名目GDP與物價水準彼此完全無關"
+        ],
+        "exp": "名目GDP同時反映價格和數量；若名目增加主要來自價格上升，實質產出可能未增加。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "civics-2026-reference-高中二年級-國民所得與物價-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

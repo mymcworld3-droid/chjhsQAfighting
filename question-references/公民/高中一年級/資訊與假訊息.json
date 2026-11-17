@@ -1,0 +1,66 @@
+{
+  "units": [
+    "媒體識讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中一年級-資訊與假訊息-1",
+      "source": "大考中心 114學年度學測社會科第43至44題，參考原題考查觀念重新命題",
+      "design": "以AI生成內容與新聞查核案例區分資訊可靠性與再製偏見",
+      "question": {
+        "q": "社群平台出現『本市所有學校明天停課』的圖片公告，但沒有標明發布機關。轉傳前最合理的做法為何？",
+        "correct": "查詢地方政府或主管機關的正式公告並比對日期",
+        "wrong": [
+          "只要圖片設計專業就直接相信",
+          "因為朋友分享就視為官方資訊",
+          "把未查證訊息改成更聳動的標題"
+        ],
+        "exp": "停課等公共資訊應回查具發布責任的官方管道，確認發布日期、地區與適用對象。",
+        "subject": "公民",
+        "sub_topic": "資訊與假訊息",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-資訊與假訊息",
+        "template_id": "civics-2026-reference-高中一年級-資訊與假訊息-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中一年級-資訊與假訊息-2",
+      "source": "大考中心 114學年度學測社會科第43至44題，參考原題考查觀念重新命題",
+      "design": "以AI生成內容與新聞查核案例區分資訊可靠性與再製偏見",
+      "question": {
+        "q": "一套AI工具頻繁把『科學家』畫成單一性別與族群。若訓練資料長期缺乏其他群體，最合理的解釋是什麼？",
+        "correct": "訓練資料分布偏差可能使輸出重複既有刻板印象",
+        "wrong": [
+          "AI已證明只有該群體能成為科學家",
+          "只要改變圖片大小即可消除所有偏誤",
+          "使用AI生成的畫面必然代表真實人口比例"
+        ],
+        "exp": "資料偏差可影響模型輸出，呈現訓練素材中過度代表的類型；生成圖片不能當成人口事實證據。",
+        "subject": "公民",
+        "sub_topic": "資訊與假訊息",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-資訊與假訊息",
+        "template_id": "civics-2026-reference-高中一年級-資訊與假訊息-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

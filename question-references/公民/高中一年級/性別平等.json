@@ -1,0 +1,66 @@
+{
+  "units": [
+    "社會中的多元與平等"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中一年級-性別平等-1",
+      "source": "大考中心 113學年度學測社會科第21至22題，參考原題考查觀念重新命題",
+      "design": "區分制度性障礙與個人能力，要求推論以證據為基礎",
+      "question": {
+        "q": "某研究所男、女學生的錄取率相近，但女性畢業後升任主管的比例明顯較低。若要檢驗是否存在升遷障礙，最適合進一步蒐集哪項資料？",
+        "correct": "不同性別在相近年資、績效與職務下的升遷紀錄",
+        "wrong": [
+          "只統計研究所校門的高度",
+          "只詢問一位主管是否認識女學生",
+          "只比較不同城市的年降雨量"
+        ],
+        "exp": "升遷差異未必單憑比例就能解釋，需要比較控制其他相關因素後的升遷資料。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "civics-2026-reference-高中一年級-性別平等-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中一年級-性別平等-2",
+      "source": "大考中心 113學年度學測社會科第21至22題，參考原題考查觀念重新命題",
+      "design": "區分制度性障礙與個人能力，要求推論以證據為基礎",
+      "question": {
+        "q": "雇主表示『女性通常不適合帶領技術團隊』，因此即使兩名求職者的專業能力相當，仍優先錄用男性。此決策主要涉及哪項問題？",
+        "correct": "以性別刻板印象取代個別能力評估",
+        "wrong": [
+          "依工作能力進行公平競爭",
+          "全面消除職場偏見",
+          "依可驗證的技能測試結果錄用"
+        ],
+        "exp": "在能力條件相近時，以性別作為排除理由，涉及刻板印象與不公平差別待遇。",
+        "subject": "公民",
+        "sub_topic": "性別平等",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-性別平等",
+        "template_id": "civics-2026-reference-高中一年級-性別平等-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

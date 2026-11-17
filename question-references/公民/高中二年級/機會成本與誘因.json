@@ -1,0 +1,66 @@
+{
+  "units": [
+    "經濟基本概念"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中二年級-機會成本與誘因-1",
+      "source": "大考中心 114學年度學測社會科第23題，參考原題考查觀念重新命題",
+      "design": "用真實可替代方案計算放棄的最高淨利益",
+      "question": {
+        "q": "小安週末可選擇打工賺800元、替家人整理資料獲得500元，或參加免費球賽（本人願意為此支付300元）。若只考慮上述金錢價值，小安選擇參加球賽的機會成本為何？",
+        "correct": "800元",
+        "wrong": [
+          "300元",
+          "500元",
+          "1600元"
+        ],
+        "exp": "機會成本是放棄的最佳替代選擇之價值；若參加球賽，最佳未選方案為打工賺800元。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "civics-2026-reference-高中二年級-機會成本與誘因-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中二年級-機會成本與誘因-2",
+      "source": "大考中心 114學年度學測社會科第23題，參考原題考查觀念重新命題",
+      "design": "用真實可替代方案計算放棄的最高淨利益",
+      "question": {
+        "q": "某商場停車費由每小時40元調高至80元，其他條件不變。對部分消費者而言，最可能直接增加哪個誘因？",
+        "correct": "改搭大眾運輸前往商場",
+        "wrong": [
+          "增加停車時間以降低成本",
+          "因停車費上漲而使免費停車位自動增加",
+          "所有消費者都必停止購物"
+        ],
+        "exp": "停車成本上升，部分消費者會轉向較低成本的交通方式；無法由此推論所有人都作出相同選擇。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "civics-2026-reference-高中二年級-機會成本與誘因-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

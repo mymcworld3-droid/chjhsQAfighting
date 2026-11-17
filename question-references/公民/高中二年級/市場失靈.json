@@ -1,0 +1,66 @@
+{
+  "units": [
+    "經濟基本概念"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中二年級-市場失靈-1",
+      "source": "大考中心 114學年度學測社會科第26題，參考原題考查觀念重新命題",
+      "design": "以環境外部成本為例，說明私人決策與社會成本不一致",
+      "question": {
+        "q": "某工廠生產成本低，但排放污染使附近居民負擔醫療費用，而工廠沒有支付這筆成本。此現象最符合哪個概念？",
+        "correct": "負外部性",
+        "wrong": [
+          "完全競爭必然消除所有污染",
+          "正外部性且社會成本低於私人成本",
+          "沒有任何市場影響"
+        ],
+        "exp": "污染成本由第三方承擔，未納入工廠的私人決策，是負外部性的典型例子。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "civics-2026-reference-高中二年級-市場失靈-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中二年級-市場失靈-2",
+      "source": "大考中心 114學年度學測社會科第26題，參考原題考查觀念重新命題",
+      "design": "以環境外部成本為例，說明私人決策與社會成本不一致",
+      "question": {
+        "q": "政府對每單位排放污染物收取適當費用，目的在於讓企業考量其造成的環境損害。此政策主要想處理什麼？",
+        "correct": "把外部成本納入私人決策",
+        "wrong": [
+          "保證企業永遠不需改善設備",
+          "讓污染變成不需要處理的公共財",
+          "讓社會總成本必定增加且沒有任何改善"
+        ],
+        "exp": "污染費用有助於讓生產者面對外部成本，促使其調整產量或改善排放技術。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "civics-2026-reference-高中二年級-市場失靈-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "社會中的多元與平等"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中一年級-文化差異與多元尊重-1",
+      "source": "大考中心 114學年度學測社會科第1題，參考原題考查觀念重新命題",
+      "design": "以文化權利與少數語言保存為核心，辨別形式平等與實質尊重",
+      "question": {
+        "q": "某校學生多來自不同語言家庭，學校在選修課開設新住民母語課，並開放所有學生報名。此政策最直接希望達成什麼目標？",
+        "correct": "保障多元文化學習機會並提升對不同語言的尊重",
+        "wrong": [
+          "要求所有學生放棄家中原有語言",
+          "把所有課程一律改成單一外語授課",
+          "只允許特定家庭的學生參與校內活動"
+        ],
+        "exp": "提供不同語言的學習資源，讓學生接觸多元文化，屬於肯認文化差異與擴大教育機會。",
+        "subject": "公民",
+        "sub_topic": "文化差異與多元尊重",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-文化差異與多元尊重",
+        "template_id": "civics-2026-reference-高中一年級-文化差異與多元尊重-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中一年級-文化差異與多元尊重-2",
+      "source": "大考中心 114學年度學測社會科第1題，參考原題考查觀念重新命題",
+      "design": "以文化權利與少數語言保存為核心，辨別形式平等與實質尊重",
+      "question": {
+        "q": "地方政府發現少數族群傳統慶典與一般工作日重疊，便允許所屬族人在指定祭儀日依規定請假。此作法較符合哪項原則？",
+        "correct": "考量文化差異，提供實質參與傳統文化的機會",
+        "wrong": [
+          "所有居民必須改信同一宗教",
+          "少數族群應被禁止參與公共事務",
+          "唯有取消所有公共假日才是平等"
+        ],
+        "exp": "平等不必然要求忽略不同文化的需求；合理安排祭儀假別，有助於保存文化與實質平等。",
+        "subject": "公民",
+        "sub_topic": "文化差異與多元尊重",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civics-高中一年級-文化差異與多元尊重",
+        "template_id": "civics-2026-reference-高中一年級-文化差異與多元尊重-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

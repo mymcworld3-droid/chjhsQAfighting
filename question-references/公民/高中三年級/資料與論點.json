@@ -1,0 +1,66 @@
+{
+  "units": [
+    "公民探究與實作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中三年級-資料與論點-1",
+      "source": "大考中心 114學年度學測社會科第43至44題，參考原題考查觀念重新命題",
+      "design": "由資料能支持的範圍推論，區分相關與因果、抽樣偏差",
+      "question": {
+        "q": "某學生調查50名同班同學，發現其中40人喜歡線上課程，便主張『全國高中生有80%偏好線上課程』。此論證最明顯的問題是什麼？",
+        "correct": "樣本不具充分代表性，不能直接推及全國",
+        "wrong": [
+          "樣本中40除以50的比例算錯",
+          "問卷必須全部使用開放式題目才有效",
+          "任何調查都不可能計算比例"
+        ],
+        "exp": "同班同學是便利樣本，即使比例為80%，也不足以支持對全國高中生的母體推論。",
+        "subject": "公民",
+        "sub_topic": "資料與論點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-資料與論點",
+        "template_id": "civics-2026-reference-高中三年級-資料與論點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中三年級-資料與論點-2",
+      "source": "大考中心 114學年度學測社會科第43至44題，參考原題考查觀念重新命題",
+      "design": "由資料能支持的範圍推論，區分相關與因果、抽樣偏差",
+      "question": {
+        "q": "某報告發現社區公園數量和居民運動比例呈正相關，便直接宣稱『多蓋公園必然使所有人開始運動』。哪種批評最切中論證問題？",
+        "correct": "相關資料尚不足以確定因果及適用於每個人的結果",
+        "wrong": [
+          "正相關代表兩個變項必無任何關係",
+          "只要有統計數字就絕不需要其他資料",
+          "社區運動行為無法進行任何研究"
+        ],
+        "exp": "相關可能受人口組成、空間條件等因素影響；單一相關性無法保證因果，也不能推論每個人行為。",
+        "subject": "公民",
+        "sub_topic": "資料與論點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-資料與論點",
+        "template_id": "civics-2026-reference-高中三年級-資料與論點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

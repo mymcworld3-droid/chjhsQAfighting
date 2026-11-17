@@ -1,0 +1,66 @@
+{
+  "units": [
+    "經濟基本概念"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中二年級-需求、供給與市場價格-1",
+      "source": "大考中心 113學年度學測社會科第3題，參考原題考查觀念重新命題",
+      "design": "從供需曲線移動與均衡變化推理市場價格，清楚固定其他條件",
+      "question": {
+        "q": "咖啡需求不變，但產地豐收使可供銷售的咖啡豆數量增加。若市場競爭且其他條件不變，均衡價格通常如何變動？",
+        "correct": "下降",
+        "wrong": [
+          "上升",
+          "一定完全不變",
+          "必定變成零元"
+        ],
+        "exp": "供給增加使供給曲線右移；需求不變時，新的均衡價格通常下降、成交量增加。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "civics-2026-reference-高中二年級-需求、供給與市場價格-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中二年級-需求、供給與市場價格-2",
+      "source": "大考中心 113學年度學測社會科第3題，參考原題考查觀念重新命題",
+      "design": "從供需曲線移動與均衡變化推理市場價格，清楚固定其他條件",
+      "question": {
+        "q": "某款雨衣因連日豪雨而需求增加，短期內供給曲線不變。均衡價格與成交量通常如何變動？",
+        "correct": "價格上升、成交量增加",
+        "wrong": [
+          "價格下降、成交量增加",
+          "價格上升、成交量減少",
+          "價格與成交量均必然下降"
+        ],
+        "exp": "需求右移而供給不變，均衡點沿供給曲線向右上移，價格與成交量通常都增加。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "civics-2026-reference-高中二年級-需求、供給與市場價格-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

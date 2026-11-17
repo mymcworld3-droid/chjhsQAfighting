@@ -1,0 +1,66 @@
+{
+  "units": [
+    "法律與權利"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中二年級-民法、刑法與行政法基本概念-1",
+      "source": "大考中心 114學年度學測社會科第4至5題，參考原題考查觀念重新命題",
+      "design": "給出具體行為，按不同法律關係的目的歸類",
+      "question": {
+        "q": "甲向乙買了一台二手電腦，雙方對交付與價款產生爭議。此爭議主要屬於哪一法律領域？",
+        "correct": "民法上的買賣契約關係",
+        "wrong": [
+          "刑事訴訟中的犯罪偵查",
+          "立法院議事規則的制定",
+          "政府機關的行政裁罰"
+        ],
+        "exp": "私人間買賣產生的交付與付款爭議，原則上屬民事契約關係。",
+        "subject": "公民",
+        "sub_topic": "民法、刑法與行政法基本概念",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民法、刑法與行政法基本概念",
+        "template_id": "civics-2026-reference-高中二年級-民法、刑法與行政法基本概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中二年級-民法、刑法與行政法基本概念-2",
+      "source": "大考中心 114學年度學測社會科第4至5題，參考原題考查觀念重新命題",
+      "design": "給出具體行為，按不同法律關係的目的歸類",
+      "question": {
+        "q": "某餐飲店違反食品衛生法規，衛生主管機關依法裁處罰鍰。此罰鍰主要屬於哪一類法律上的制裁？",
+        "correct": "行政法上的行政罰",
+        "wrong": [
+          "民法上的遺產分配",
+          "由法院判處的有期徒刑",
+          "民事契約解除的唯一方式"
+        ],
+        "exp": "行政機關依法對違反行政法義務者裁處罰鍰，屬行政罰，不等同刑事判刑或民事債務。",
+        "subject": "公民",
+        "sub_topic": "民法、刑法與行政法基本概念",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民法、刑法與行政法基本概念",
+        "template_id": "civics-2026-reference-高中二年級-民法、刑法與行政法基本概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

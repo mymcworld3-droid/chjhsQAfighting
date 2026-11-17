@@ -1,0 +1,66 @@
+{
+  "units": [
+    "政治與民主"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中一年級-政黨與選舉制度-1",
+      "source": "大考中心 114學年度學測社會科第3題，參考原題考查觀念重新命題",
+      "design": "閱讀投票參與資料，避免把相關性誤說成唯一因果",
+      "question": {
+        "q": "某地推出便利投票措施後，投票率由60%增至70%；同時候選人數也增加。僅依上述資料，哪個推論最審慎？",
+        "correct": "投票參與提高，但仍需其他證據才能確認原因",
+        "wrong": [
+          "可確定投票率提高完全由候選人數造成",
+          "可推定所有未投票者都不支持民主",
+          "投票率實際上下降了10個百分點"
+        ],
+        "exp": "60% 到 70% 是增加10個百分點。兩項數據同時變動並不直接證明單一因果機制。",
+        "subject": "公民",
+        "sub_topic": "政黨與選舉制度",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政黨與選舉制度",
+        "template_id": "civics-2026-reference-高中一年級-政黨與選舉制度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中一年級-政黨與選舉制度-2",
+      "source": "大考中心 114學年度學測社會科第3題，參考原題考查觀念重新命題",
+      "design": "閱讀投票參與資料，避免把相關性誤說成唯一因果",
+      "question": {
+        "q": "某選區有1000名有效投票者，甲候選人取得460票、乙350票、丙190票。若採相對多數決且僅選出一席，何者當選？",
+        "correct": "甲，因為得票數最多",
+        "wrong": [
+          "乙，因為其票數超過三分之一",
+          "丙，因為其得票最少",
+          "沒有人當選，因為無人過半"
+        ],
+        "exp": "相對多數決以得票最多者當選，不必取得過半票數；甲的460票最多。",
+        "subject": "公民",
+        "sub_topic": "政黨與選舉制度",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-政黨與選舉制度",
+        "template_id": "civics-2026-reference-高中一年級-政黨與選舉制度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

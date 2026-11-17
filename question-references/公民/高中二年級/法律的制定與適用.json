@@ -1,0 +1,66 @@
+{
+  "units": [
+    "法律與權利"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中二年級-法律的制定與適用-1",
+      "source": "大考中心 114學年度學測社會科第4至5題，參考原題考查觀念重新命題",
+      "design": "分辨法律規範與行政政策，掌握法律優位及法律保留的基本精神",
+      "question": {
+        "q": "某主管機關希望以行政命令新增一項對人民的金錢處罰，但現行法律完全沒有授權此類裁罰。哪個疑慮最直接？",
+        "correct": "處罰欠缺適當的法律依據",
+        "wrong": [
+          "只要行政命令字數夠多就必合法",
+          "民眾有意見便表示任何行政命令都無效",
+          "所有行政機關皆可自由創設刑罰"
+        ],
+        "exp": "涉及人民權利義務的行政裁罰應有法律依據，不能僅憑未經授權的行政命令任意創設。",
+        "subject": "公民",
+        "sub_topic": "法律的制定與適用",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-法律的制定與適用",
+        "template_id": "civics-2026-reference-高中二年級-法律的制定與適用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中二年級-法律的制定與適用-2",
+      "source": "大考中心 114學年度學測社會科第4至5題，參考原題考查觀念重新命題",
+      "design": "分辨法律規範與行政政策，掌握法律優位及法律保留的基本精神",
+      "question": {
+        "q": "某人於行為當時並未觸犯任何刑罰規定，之後法律才新增該罪名。對該人先前的行為，最符合罪刑法定精神的判斷為何？",
+        "correct": "原則上不得以後來才制定的罪名追究刑事責任",
+        "wrong": [
+          "只要網路輿論強烈就一定能定罪",
+          "刑事處罰完全不受法律公布時間影響",
+          "由受害者自己決定有期徒刑的長度"
+        ],
+        "exp": "罪刑法定包含禁止不利於行為人的溯及既往處罰，行為時不罰者原則上不得以新法定罪。",
+        "subject": "公民",
+        "sub_topic": "法律的制定與適用",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-法律的制定與適用",
+        "template_id": "civics-2026-reference-高中二年級-法律的制定與適用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

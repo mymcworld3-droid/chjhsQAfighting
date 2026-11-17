@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修公民：民主政治與治理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civics-2026-reference-高中三年級-公共政策評估-1",
+      "source": "大考中心 114學年度學測社會科第3題，參考原題考查觀念重新命題",
+      "design": "評估政策成效時同時考慮結果與成本，避免僅以單一觀察宣告成功",
+      "question": {
+        "q": "某市開通免費接駁車後，交通壅塞指數下降，但同期也實施彈性上班時間。若想評估接駁車本身的效果，哪個方法較適當？",
+        "correct": "比較相近條件地區或時段，並控制其他政策變化",
+        "wrong": [
+          "直接認定全部下降都由接駁車造成",
+          "只詢問一位搭車乘客是否滿意",
+          "完全忽略接駁車的營運成本"
+        ],
+        "exp": "兩項政策同時推出，不能單靠前後變化辨識因果；可用對照與控制變因評估政策影響。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "civics-2026-reference-高中三年級-公共政策評估-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civics-2026-reference-高中三年級-公共政策評估-2",
+      "source": "大考中心 114學年度學測社會科第3題，參考原題考查觀念重新命題",
+      "design": "評估政策成效時同時考慮結果與成本，避免僅以單一觀察宣告成功",
+      "question": {
+        "q": "某公共政策成功使事故率降低，但執行費用高昂且受益人口有限。政府若進行完整成效評估，最應補充什麼？",
+        "correct": "成本、受益分配及可替代方案的比較",
+        "wrong": [
+          "只計算政策宣傳海報數量",
+          "只採用執行單位的口號",
+          "認為只要事故率下降就無需衡量其他面向"
+        ],
+        "exp": "政策評估要考量效果、成本、公平性與替代方案，才能判斷資源運用是否合理。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "civics-2026-reference-高中三年級-公共政策評估-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
