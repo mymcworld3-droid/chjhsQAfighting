@@ -1,6 +1,8 @@
 // Phase 1 of the stamina cultivation redesign: a read-only visual
 // projection of the existing, server-authoritative manual and skill data.
 // Selecting a book here changes only the current view, not the learned school.
+import {manualVisualState,manualSkillVisualState,renderManualVisualMilestones} from './manual-visual-progression.js';
+
 export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt, label }) {
   const owned=(state?.library||[]).filter(book=>book.owned);
   const chosen=owned.find(book=>book.id===selectedBookId)
@@ -27,6 +29,8 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   };
 
   const book=chosen;
+  const visual=manualVisualState(book);
+  const growth=renderManualVisualMilestones(book,esc);
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
   const progress=Math.max(0,Math.min(100,Number(book.progress)||0));
   const maxed=Number(book.level)>=10;
@@ -51,6 +55,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     :'<span class="manual-hero-cover-fallback" aria-hidden="true">卷</span>';
   const steps=book.skills.map((skill,index)=>{
     const unlocked=!!skill.unlocked;
+    const skillState=manualSkillVisualState(skill);
     const missing=[
       !skill.mastered?`功法 Lv. ${skill.levelRequired}`:null,
       !skill.realmReady?`${skill.realmName}境`:null
@@ -62,13 +67,14 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     const artMarkup=art
       ?`<img src="${esc(art)}" alt="" loading="lazy" decoding="async">`
       :'<span aria-hidden="true">✦</span>';
-    return `<button type="button" class="manual-hero-step ${unlocked?'is-unlocked':'is-locked'} ${next?.id===skill.id?'is-next':''}"
+    return `<button type="button" class="manual-hero-step ${unlocked?'is-unlocked':'is-locked'} is-${skillState} ${next?.id===skill.id?'is-next':''}"
+        data-manual-skill-visual="${skillState}"
         data-manual-jump-skill="${esc(skill.id)}" aria-label="查看${esc(skill.name)}，${esc(detail)}">
       <span class="manual-hero-node">${artMarkup}</span>
       <span class="manual-hero-node-tier">第 ${index+1} 招 · Lv. ${fmt(skill.levelRequired)}</span>
       <strong>${esc(skill.name)}</strong>
       <small>${esc(detail)}</small>
-      <span class="manual-hero-node-status">${unlocked?'已領悟':'未解鎖'}</span>
+      <span class="manual-hero-node-status">${unlocked?'已領悟':skillState==='realm-locked'?'修士境界未達':'功法等級未達'}</span>
     </button>`;
   }).join('');
   const upgrade=book.upgrade;
@@ -83,14 +89,22 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
 
   return {
     bookId:book.id,
-    html:`<section class="manual-hero manual-hero--${book.school}" aria-label="功法修煉焦點">
+    html:`<section class="manual-hero manual-hero--${book.school} manual-hero--tier-${visual.stage}"
+      data-manual-visual-stage="${visual.stage}" data-manual-visual-level="${visual.level}"
+      aria-label="功法修煉焦點">
       ${heading}
       <div class="manual-hero-roster" role="group" aria-label="切換展示的已獲得功法">${roster}</div>
       <div class="manual-hero-main">
         <div class="manual-hero-art-stage">
           <div class="manual-hero-art-halo" aria-hidden="true"></div>
+          <div class="manual-hero-qi-ring" aria-hidden="true">
+            <span class="manual-hero-qi-orbit"></span>
+            <span class="manual-hero-qi-seal"></span>
+          </div>
+          <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
+          <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
           ${coverMarkup}
-          <span class="manual-hero-art-caption">${label(book.school)} · 已獲得</span>
+          <span class="manual-hero-art-caption">${label(book.school)} · ${visual.label}</span>
         </div>
         <div class="manual-hero-details">
           <div class="manual-hero-title-row">
@@ -104,6 +118,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
               aria-valuemin="0" aria-valuemax="100" aria-valuenow="${maxed?100:progress}">
               <span class="manual-hero-progress" style="width:${maxed?100:progress}%"></span></div>
           </div>
+          ${growth}
           <div class="manual-hero-goal">
             <span class="manual-hero-goal-symbol" aria-hidden="true">✧</span>
             <div><strong>${esc(goalTitle)}</strong><small>${esc(goalSubtitle)}</small></div>
