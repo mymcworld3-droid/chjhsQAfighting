@@ -96,8 +96,9 @@ test('empty slot is an action; picker is hidden until requested',()=>{
   const view=ui(2);
   assert.match(view,/空白技能槽/);
   assert.match(view,/點此選擇已領悟的招式/);
-  assert.equal((view.match(/data-manual-pick-slot="0"/g)||[]).length,3,
-    'empty presets always add to the first free position');
+  assert.equal((view.match(/data-manual-pick-slot="[012]"/g)||[]).length,3,
+    'empty presets keep three unique visible controls');
+  assert.match(view,/將先填入第 1 格/);
   assert.doesNotMatch(view,/data-manual-pick-skill/);
   assert.doesNotMatch(view,/data-manual-picker/);
 });
