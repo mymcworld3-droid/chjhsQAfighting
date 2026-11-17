@@ -47,3 +47,31 @@ test('loads exact Chinese curriculum concepts containing punctuation', () => {
   assert.ok(other.every(item => item.question.sub_topic === '主旨、段落結構、語氣'));
   assert.deepEqual(quizReferences({ ...target, topic: '化學反應' }), []);
 });
+
+
+test('grade 11 Chinese first semester references follow exact fine concepts', () => {
+  const target = { subject: '國文', level: '高中二年級' };
+  const concepts = [
+    '文章論點與論據', '篇章結構', '修辭與文史背景',
+    '意象、典故與詩風', '詞牌與語言特色', '跨文本比較',
+    '非連續文本', '媒體識讀', '比較閱讀',
+    '應用文與書信', '語意與語用', '重點摘要'
+  ];
+  for (const concept of concepts) {
+    const refs = quizReferences({ ...target, topic: concept });
+    assert.equal(refs.length, 2, concept);
+    for (const ref of refs) {
+      assert.equal(ref.question.sub_topic, concept);
+      assert.equal(ref.question.wrong.length, 3);
+      assert.equal(new Set([ref.question.correct, ...ref.question.wrong]).size, 4);
+      assert.doesNotMatch(JSON.stringify(ref), /https?:\/\//);
+    }
+  }
+  const formatted = quizReferences({
+    ...target, topic: '高中二年級／第一學期／唐宋詩詞（核心考點細項：意象、典故與詩風）'
+  });
+  assert.equal(formatted.length, 2);
+  assert.ok(formatted.every(ref => ref.question.sub_topic === '意象、典故與詩風'));
+  assert.deepEqual(quizReferences({ ...target, topic: '意象、典故與詩風', exclusions:['排除典故相關題型'] }), []);
+  assert.deepEqual(quizReferences({ ...target, topic: '高中三年級寫作技巧' }), []);
+});
