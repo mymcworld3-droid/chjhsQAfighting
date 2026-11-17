@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣東亞世界比較"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-現代化的不同路徑-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「現代化的不同路徑」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "十九世紀後半，日本政府推動學校、徵兵與工業建設；另有東亞政府側重軍工設備與外交改革。要比較現代化路徑，哪種研究方式最好？",
+        "correct": "分別考察改革的制度範圍、社會背景與推行效果",
+        "wrong": [
+          "只要改革都買了新機器，就當作制度完全相同",
+          "只比較國旗顏色，不考慮制度差異",
+          "先認定各國改革都必然在同一年成功"
+        ],
+        "exp": "現代化涵蓋教育、軍事、產業及政治制度等面向，不同地區優先順序及阻力也不同。",
+        "subject": "歷史",
+        "sub_topic": "現代化的不同路徑",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中二年級-現代化的不同路徑",
+        "template_id": "history-reference-高中二年級-現代化的不同路徑-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-現代化的不同路徑-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「現代化的不同路徑」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某城市引進電車時，商人歡迎交通效率提高，傳統車夫則擔心收入減少。從現代化的社會影響看，哪個判斷最適當？",
+        "correct": "新交通技術可能提高效率，也使部分職業面臨調整壓力",
+        "wrong": [
+          "新技術對所有職業永遠只有正面影響",
+          "電車一旦出現，全城立即不再需要任何其他交通方式",
+          "傳統車夫的經驗與現代化研究毫無關係"
+        ],
+        "exp": "技術變遷帶來新機會及利益分配問題，需同時理解不同群體的感受。",
+        "subject": "歷史",
+        "sub_topic": "現代化的不同路徑",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中二年級-現代化的不同路徑",
+        "template_id": "history-reference-高中二年級-現代化的不同路徑-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

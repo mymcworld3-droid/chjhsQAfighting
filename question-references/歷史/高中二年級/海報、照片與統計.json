@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨主題史料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-海報、照片與統計-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「海報、照片與統計」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "一張宣傳海報畫有快樂勞動者，旁邊寫「新政策讓人人生活富裕」。若研究當時民眾實際生活，最恰當的處理為何？",
+        "correct": "把海報視為官方宣傳立場，再用薪資、物價等資料檢驗其說法",
+        "wrong": [
+          "只看笑容就斷定所有人都變富有",
+          "海報沒有文字就一定不是史料",
+          "所有統計資料都必然比海報晚一百年形成"
+        ],
+        "exp": "海報有助理解政策宣傳，但不等同客觀民生調查，須與其他獨立資料核對。",
+        "subject": "歷史",
+        "sub_topic": "海報、照片與統計",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-海報、照片與統計",
+        "template_id": "history-reference-高中二年級-海報、照片與統計-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-海報、照片與統計-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「海報、照片與統計」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某統計表記載三年失業人數分別為2萬、4萬、3萬，卻未提供人口總數。若要比較各年失業比例，最缺哪項資料？",
+        "correct": "各年勞動力人數或可用的計算分母",
+        "wrong": [
+          "各年廣告海報的顏色",
+          "統計表使用的字型",
+          "製表人的辦公桌尺寸"
+        ],
+        "exp": "失業率需以失業人口占勞動力的比例計算，只有失業人數無法求得各年比率。",
+        "subject": "歷史",
+        "sub_topic": "海報、照片與統計",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-海報、照片與統計",
+        "template_id": "history-reference-高中二年級-海報、照片與統計-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨主題史料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-史料可信度-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「史料可信度」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "網路文章引用「1920年某地人口有500萬」，卻無任何來源。另一份同期官方報表可查到統計口徑與範圍。比較兩者可信度，哪項做法更合理？",
+        "correct": "先追查原始統計的年份、區域與定義，再評估兩筆數字是否可比較",
+        "wrong": [
+          "因網頁字體較大就直接相信網頁",
+          "因官方報表有印章便免除所有偏誤檢查",
+          "只要數字是整數就必定沒有錯誤"
+        ],
+        "exp": "數字需要可追溯的來源及一致口徑，官方資料也可能有統計範圍限制，仍須批判。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-史料可信度",
+        "template_id": "history-reference-高中二年級-史料可信度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-史料可信度-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「史料可信度」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "兩篇文章都引用同一則未核實的匿名網路貼文來證明某史實。若只看「有兩篇文章引用」，能否視為兩份獨立證據？",
+        "correct": "不能，因為兩篇文章可能同源，並未提供獨立的交叉驗證",
+        "wrong": [
+          "可以，只要文章數量超過一就等於獨立證據",
+          "可以，因匿名來源反而比檔案更可靠",
+          "不能，因史學研究只能使用一份資料"
+        ],
+        "exp": "證據是否獨立取決於來源關係，不是引用文章的篇數；同源轉述會造成虛假的多方印證。",
+        "subject": "歷史",
+        "sub_topic": "史料可信度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-史料可信度",
+        "template_id": "history-reference-高中二年級-史料可信度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

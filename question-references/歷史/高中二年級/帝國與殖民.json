@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣東亞世界比較"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-帝國與殖民-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「帝國與殖民」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某殖民政府興建鐵路，主要連接種植園與出口港口，卻很少串連殖民地內陸聚落。若從空間與經濟史角度分析，哪項判斷最合理？",
+        "correct": "交通建設可能優先配合殖民地原料外運與宗主國經濟需求",
+        "wrong": [
+          "只要興建鐵路，當地所有居民就必然受益完全相同",
+          "鐵路分布證明殖民地完全沒有農業",
+          "所有殖民政策都只為了發展在地文化活動"
+        ],
+        "exp": "運輸路線集中原料產區與港口，顯示貿易與資源運送的政策目標；不能僅憑建設存在就推得利益均分。",
+        "subject": "歷史",
+        "sub_topic": "帝國與殖民",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中二年級-帝國與殖民",
+        "template_id": "history-reference-高中二年級-帝國與殖民-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-帝國與殖民-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「帝國與殖民」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "兩份殖民時期史料：政府報告讚揚新式道路促進貨運；地方居民請願書則指出徵地影響住家生計。何種歷史解釋最周延？",
+        "correct": "道路工程可能帶來運輸利益，同時造成不同群體的負擔",
+        "wrong": [
+          "官方報告出現後就可忽略所有居民經驗",
+          "居民請願書證明道路從未被任何人使用",
+          "兩份資料一旦觀點不同，就都不能成為史料"
+        ],
+        "exp": "不同來源呈現官方經濟目標與居民代價，應對照政策受益與受損群體。",
+        "subject": "歷史",
+        "sub_topic": "帝國與殖民",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-帝國與殖民",
+        "template_id": "history-reference-高中二年級-帝國與殖民-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

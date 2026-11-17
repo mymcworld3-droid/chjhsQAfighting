@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：近現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-民族國家與民主思潮-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「民族國家與民主思潮」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "十九世紀某地的政治活動者主張，原先分散在數個政權下、共享部分語言文化的居民應組成統一國家。這類主張最接近哪股政治思潮？",
+        "correct": "民族主義與民族國家形成的理念",
+        "wrong": [
+          "把所有地方永久分割成更小的莊園",
+          "取消各地人民的共同政治認同",
+          "只以中古行會規定決定君主繼承"
+        ],
+        "exp": "共同身分與統一國家的訴求，是十九世紀民族主義重要表現之一，但不代表每個地區背景都完全一樣。",
+        "subject": "歷史",
+        "sub_topic": "民族國家與民主思潮",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-民族國家與民主思潮",
+        "template_id": "history-reference-高中二年級-民族國家與民主思潮-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-民族國家與民主思潮-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「民族國家與民主思潮」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某地革命宣言聲稱政府權力應來自被治理者的同意，並要求代表機關限制統治者權力。這種論述最能反映哪種政治理念？",
+        "correct": "人民主權及以制度限制政府權力",
+        "wrong": [
+          "君主權力永遠不需任何制衡",
+          "政治代表只能由世襲血緣決定",
+          "所有公共決策都應免除討論程序"
+        ],
+        "exp": "宣言強調同意、代表與權力約束，與民主及憲政思潮相近，不等於沒有政府。",
+        "subject": "歷史",
+        "sub_topic": "民族國家與民主思潮",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-民族國家與民主思潮",
+        "template_id": "history-reference-高中二年級-民族國家與民主思潮-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣東亞世界比較"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-政經社會互動-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「政經社會互動」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某國因戰時物資短缺實施配給制度，商人與民眾開始改變購物及日常飲食習慣。這顯示何種歷史關係？",
+        "correct": "政治與戰爭決策可影響市場供應並改變日常生活",
+        "wrong": [
+          "戰時政策永遠只會影響外交官",
+          "民眾消費完全不受物資供應影響",
+          "一旦配給，所有商品就必然無限充足"
+        ],
+        "exp": "物資管制改變取得商品的方式，呈現國家政策、經濟條件與社會生活的連動。",
+        "subject": "歷史",
+        "sub_topic": "政經社會互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中二年級-政經社會互動",
+        "template_id": "history-reference-高中二年級-政經社會互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-政經社會互動-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「政經社會互動」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某地因出口作物價格下跌，農民收入減少，地方團體開始要求政府調整稅負與貸款措施。此過程最能說明什麼？",
+        "correct": "經濟變動可能促使社會團體提出政治政策訴求",
+        "wrong": [
+          "作物價格只與宗教儀式相關，完全沒有經濟效果",
+          "農民收入不可能影響任何公共議題",
+          "所有社會運動都必然與經濟因素無關"
+        ],
+        "exp": "出口價格影響收入，收入壓力促使團體對政府提出訴求，是經濟、社會與政治的互動例子。",
+        "subject": "歷史",
+        "sub_topic": "政經社會互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中二年級-政經社會互動",
+        "template_id": "history-reference-高中二年級-政經社會互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

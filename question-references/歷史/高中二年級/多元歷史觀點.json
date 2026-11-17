@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨主題史料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-多元歷史觀點-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「多元歷史觀點」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某港口新政策開放外商進入後，商人記錄生意增加，工匠卻擔心外來商品競爭。哪項研究結論最合宜？",
+        "correct": "同一貿易政策會因個人職業與位置不同而有不同影響",
+        "wrong": [
+          "只有商人的資料能反映真實，工匠一定說謊",
+          "只要意見不同，就表示政策從未存在",
+          "貿易政策對所有行業的影響必然完全一致"
+        ],
+        "exp": "兩份記錄呈現不同經濟位置的利益與壓力，能共同補充歷史解釋。",
+        "subject": "歷史",
+        "sub_topic": "多元歷史觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-多元歷史觀點",
+        "template_id": "history-reference-高中二年級-多元歷史觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-多元歷史觀點-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「多元歷史觀點」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "研究某次移民潮時，官方記錄重視戶籍與稅收，移民家書則詳述搬遷的不安與家庭分離。要呈現多元觀點，最適合怎麼使用？",
+        "correct": "同時分析制度管理與移民個人經驗，辨認各類資料的侷限",
+        "wrong": [
+          "只留下官方紀錄，因個人情緒完全不能研究",
+          "只留下家書，因戶籍資料必然全是捏造",
+          "認為兩種資料關注不同就無法互相參照"
+        ],
+        "exp": "官方與個人資料各有形成目的，結合有助理解宏觀制度和微觀感受。",
+        "subject": "歷史",
+        "sub_topic": "多元歷史觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-多元歷史觀點",
+        "template_id": "history-reference-高中二年級-多元歷史觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

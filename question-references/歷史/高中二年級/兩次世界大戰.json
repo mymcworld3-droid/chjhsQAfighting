@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：近現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-兩次世界大戰-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「兩次世界大戰」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "第一次世界大戰期間，歐洲多國不僅動員士兵，也實施糧食配給、工廠轉產與募債。這最能顯示何種戰爭特徵？",
+        "correct": "現代戰爭可能動員經濟與民間生活資源，而不只限於前線作戰",
+        "wrong": [
+          "只有軍人受到戰爭的任何影響",
+          "戰時工廠不需要生產任何物資",
+          "各國都完全沒有物資分配的問題"
+        ],
+        "exp": "配給、轉產和募債涉及民間供應與國家財政，呈現總體戰的動員面向。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-兩次世界大戰",
+        "template_id": "history-reference-高中二年級-兩次世界大戰-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-兩次世界大戰-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題之多元史料及跨域比較命題方式，自編參考題",
+      "design": "由「兩次世界大戰」的具體材料進行時空、因果與史料可信度推論",
+      "question": {
+        "q": "某展覽安排：甲「第一次世界大戰後國際聯盟成立」；乙「第二次世界大戰結束後聯合國成立」。根據這組時間關係，哪項解讀最合理？",
+        "correct": "兩次大戰後均曾嘗試建立國際合作機制以維持和平",
+        "wrong": [
+          "聯合國早於第一次世界大戰成立",
+          "國際聯盟與聯合國在同一天成立",
+          "兩次大戰後從未出現國際和平合作嘗試"
+        ],
+        "exp": "國際聯盟設於第一次世界大戰後，聯合國設於第二次世界大戰後，反映國際政治對集體安全制度的持續探索。",
+        "subject": "歷史",
+        "sub_topic": "兩次世界大戰",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-兩次世界大戰",
+        "template_id": "history-reference-高中二年級-兩次世界大戰-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
