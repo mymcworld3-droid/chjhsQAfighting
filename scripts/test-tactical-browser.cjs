@@ -279,6 +279,7 @@ async function main(){
     room.manualExp={u1:{'sword-wind':35}};room.revision++;
     await view.locator('[data-sync]').click();
     await view.locator('[data-manual-xp-toast]').waitFor();
+    await view.screenshot({path:path.join(output,'live-manual-exp-mobile.png')});
     assert.match(await view.locator('[data-manual-xp-toast]').textContent(),/\+35 EXP/);
     assert.equal(await view.locator('.tc-manual-xp-entry--sword').count(),1);
     assert.equal(await view.locator('[data-manual-xp-host]').evaluate(node=>getComputedStyle(node).pointerEvents),'none');
