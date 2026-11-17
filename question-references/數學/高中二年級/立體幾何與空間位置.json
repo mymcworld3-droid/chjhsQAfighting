@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間概念與幾何應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-立體幾何與空間位置-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「立體幾何與空間位置」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "長方體三條互相垂直的邊長分別2、3、4公分，體積為何？",
+        "correct": "24立方公分",
+        "wrong": [
+          "9立方公分",
+          "20立方公分",
+          "26立方公分"
+        ],
+        "exp": "長方體體積為長×寬×高＝2×3×4＝24。",
+        "subject": "數學",
+        "sub_topic": "立體幾何與空間位置",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-立體幾何與空間位置",
+        "template_id": "math-ref-g2B-立體幾何與空間位置-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-立體幾何與空間位置-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「立體幾何與空間位置」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "空間中哪個坐標軸與xy平面垂直？",
+        "correct": "z軸",
+        "wrong": [
+          "x軸",
+          "y軸",
+          "x軸與y軸都垂直"
+        ],
+        "exp": "xy平面內包含x軸、y軸方向，其法向方向為z軸。",
+        "subject": "數學",
+        "sub_topic": "立體幾何與空間位置",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-立體幾何與空間位置",
+        "template_id": "math-ref-g2B-立體幾何與空間位置-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

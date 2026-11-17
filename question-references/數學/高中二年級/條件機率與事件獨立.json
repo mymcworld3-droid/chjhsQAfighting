@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-條件機率與事件獨立-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「條件機率與事件獨立」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "已知P(A∩B)＝0.2、P(B)＝0.5，且P(B)＞0，則P(A|B)為何？",
+        "correct": "0.4",
+        "wrong": [
+          "0.1",
+          "0.2",
+          "0.7"
+        ],
+        "exp": "條件機率P(A|B)＝P(A∩B)/P(B)＝0.2/0.5＝0.4。",
+        "subject": "數學",
+        "sub_topic": "條件機率與事件獨立",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-條件機率與事件獨立",
+        "template_id": "math-ref-g2B-條件機率與事件獨立-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-條件機率與事件獨立-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「條件機率與事件獨立」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "連續擲兩次相互獨立的公平硬幣，兩次都出現正面的機率為何？",
+        "correct": "1/4",
+        "wrong": [
+          "1/2",
+          "1/3",
+          "3/4"
+        ],
+        "exp": "兩次獨立事件的機率相乘：(1/2)×(1/2)＝1/4。",
+        "subject": "數學",
+        "sub_topic": "條件機率與事件獨立",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-條件機率與事件獨立",
+        "template_id": "math-ref-g2B-條件機率與事件獨立-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "平面向量與比例"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-平面上比例與坐標-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「平面上比例與坐標」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "線段A(0,0)、B(10,0)上有一點C，內分比AC:CB＝2:3，則C的x坐標為何？",
+        "correct": "4",
+        "wrong": [
+          "6",
+          "2",
+          "5"
+        ],
+        "exp": "全長分5份，AC占2/5，故x＝10×2/5＝4。",
+        "subject": "數學",
+        "sub_topic": "平面上比例與坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面上比例與坐標",
+        "template_id": "math-ref-g2B-平面上比例與坐標-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-平面上比例與坐標-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「平面上比例與坐標」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "一張地圖比例尺為1:20,000，地圖上兩點直線距離3公分。實際直線距離為多少？",
+        "correct": "600公尺",
+        "wrong": [
+          "60公尺",
+          "6公里",
+          "200公尺"
+        ],
+        "exp": "3×20,000＝60,000公分＝600公尺。",
+        "subject": "數學",
+        "sub_topic": "平面上比例與坐標",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面上比例與坐標",
+        "template_id": "math-ref-g2B-平面上比例與坐標-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

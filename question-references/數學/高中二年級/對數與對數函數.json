@@ -1,0 +1,66 @@
+{
+  "units": [
+    "按比例成長模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-對數與對數函數-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「對數與對數函數」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "以10為底的常用對數log(0.01)等於多少？",
+        "correct": "－2",
+        "wrong": [
+          "2",
+          "－1",
+          "0.01"
+        ],
+        "exp": "0.01＝10⁻²，所以log10(0.01)＝−2。",
+        "subject": "數學",
+        "sub_topic": "對數與對數函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數與對數函數",
+        "template_id": "math-ref-g2B-對數與對數函數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-對數與對數函數-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「對數與對數函數」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "log₂8＋log₂4 的值是多少？",
+        "correct": "5",
+        "wrong": [
+          "6",
+          "4",
+          "12"
+        ],
+        "exp": "log₂8＝3，log₂4＝2，相加得5。",
+        "subject": "數學",
+        "sub_topic": "對數與對數函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-對數與對數函數",
+        "template_id": "math-ref-g2B-對數與對數函數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

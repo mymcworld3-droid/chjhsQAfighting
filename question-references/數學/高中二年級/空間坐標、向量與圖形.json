@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間概念與幾何應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-空間坐標、向量與圖形-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「空間坐標、向量與圖形」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "空間中O(0,0,0)、P(2,3,6)兩點距離為何？",
+        "correct": "7",
+        "wrong": [
+          "11",
+          "√41",
+          "6"
+        ],
+        "exp": "三維距離公式：√(2²＋3²＋6²)＝√49＝7。",
+        "subject": "數學",
+        "sub_topic": "空間坐標、向量與圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標、向量與圖形",
+        "template_id": "math-ref-g2B-空間坐標、向量與圖形-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-空間坐標、向量與圖形-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「空間坐標、向量與圖形」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "單位正立方體的兩個對角頂點(0,0,0)、(1,1,1)距離為何？",
+        "correct": "√3",
+        "wrong": [
+          "3",
+          "√2",
+          "1"
+        ],
+        "exp": "空間對角線長為√(1²＋1²＋1²)＝√3。",
+        "subject": "數學",
+        "sub_topic": "空間坐標、向量與圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標、向量與圖形",
+        "template_id": "math-ref-g2B-空間坐標、向量與圖形-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

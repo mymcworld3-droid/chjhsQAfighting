@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-資料解讀、推論與情境問題-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「資料解讀、推論與情境問題」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "某研究比較讀書時數與成績，得到相關係數r＝0.9。單憑這個結果，可以得到哪種結論？",
+        "correct": "存在強烈正線性相關，但不能單憑相關證明因果",
+        "wrong": [
+          "讀書時間一定是所有成績差異的唯一原因",
+          "兩變數一定完全無關",
+          "增加一小時就必定提升9分"
+        ],
+        "exp": "r接近1表示正線性相關強，但仍可能存在其他變項及因果方向問題。",
+        "subject": "數學",
+        "sub_topic": "資料解讀、推論與情境問題",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-資料解讀、推論與情境問題",
+        "template_id": "math-ref-g2B-資料解讀、推論與情境問題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-資料解讀、推論與情境問題-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「資料解讀、推論與情境問題」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "某商店每月銷售額由80萬元增至100萬元，若計算成長率，正確值為何？",
+        "correct": "25%",
+        "wrong": [
+          "20%",
+          "80%",
+          "125%"
+        ],
+        "exp": "相對原銷售額的增幅為(100−80)/80＝0.25，即25%。",
+        "subject": "數學",
+        "sub_topic": "資料解讀、推論與情境問題",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-資料解讀、推論與情境問題",
+        "template_id": "math-ref-g2B-資料解讀、推論與情境問題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

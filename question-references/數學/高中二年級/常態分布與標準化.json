@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-常態分布與標準化-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「常態分布與標準化」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "考試成績X的平均數70、標準差5，若某生成績80，標準分數z為何？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "1.5",
+          "10"
+        ],
+        "exp": "z＝(X−μ)/σ＝(80−70)/5＝2。",
+        "subject": "數學",
+        "sub_topic": "常態分布與標準化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-常態分布與標準化",
+        "template_id": "math-ref-g2B-常態分布與標準化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-常態分布與標準化-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「常態分布與標準化」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "標準常態分布以0為對稱中心，因此P(Z＞0)為何？",
+        "correct": "0.5",
+        "wrong": [
+          "0.25",
+          "0.84",
+          "1"
+        ],
+        "exp": "由連續、對稱的標準常態分布可知左右兩側面積相等，各為0.5。",
+        "subject": "數學",
+        "sub_topic": "常態分布與標準化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-常態分布與標準化",
+        "template_id": "math-ref-g2B-常態分布與標準化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

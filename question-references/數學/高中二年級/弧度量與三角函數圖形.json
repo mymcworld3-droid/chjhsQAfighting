@@ -1,0 +1,66 @@
+{
+  "units": [
+    "週期性數學模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-弧度量與三角函數圖形-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「弧度量與三角函數圖形」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "角度180°換成弧度，其值為何？",
+        "correct": "π",
+        "wrong": [
+          "2π",
+          "π/2",
+          "π/3"
+        ],
+        "exp": "180°×π/180°＝π弧度。",
+        "subject": "數學",
+        "sub_topic": "弧度量與三角函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量與三角函數圖形",
+        "template_id": "math-ref-g2B-弧度量與三角函數圖形-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-弧度量與三角函數圖形-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「弧度量與三角函數圖形」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "函數y＝3cos x 的振幅與最小正週期分別為何？",
+        "correct": "3、2π",
+        "wrong": [
+          "3、π",
+          "6、2π",
+          "1、3π"
+        ],
+        "exp": "標準cosx週期2π，乘係數3改變振幅，不改變週期。",
+        "subject": "數學",
+        "sub_topic": "弧度量與三角函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量與三角函數圖形",
+        "template_id": "math-ref-g2B-弧度量與三角函數圖形-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

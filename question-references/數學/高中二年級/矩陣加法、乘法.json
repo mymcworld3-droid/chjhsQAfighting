@@ -1,0 +1,66 @@
+{
+  "units": [
+    "矩陣與資料表示"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-矩陣加法、乘法-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「矩陣加法、乘法」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "矩陣A＝[[1,2],[3,4]]、B＝[[2,0],[－1,1]]，A＋B為何？",
+        "correct": "[[3,2],[2,5]]",
+        "wrong": [
+          "[[2,0],[－3,4]]",
+          "[[3,2],[4,5]]",
+          "[[1,2],[2,4]]"
+        ],
+        "exp": "相同位置元素相加：(1＋2,2＋0;3−1,4＋1)＝(3,2;2,5)。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法、乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣加法、乘法",
+        "template_id": "math-ref-g2B-矩陣加法、乘法-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-矩陣加法、乘法-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「矩陣加法、乘法」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "矩陣A＝[[1,2],[0,1]]乘上列向量v＝[[3],[4]]，Av為何？",
+        "correct": "[[11],[4]]",
+        "wrong": [
+          "[[7],[4]]",
+          "[[3],[11]]",
+          "[[11],[7]]"
+        ],
+        "exp": "首列內積1×3＋2×4＝11；次列0×3＋1×4＝4。",
+        "subject": "數學",
+        "sub_topic": "矩陣加法、乘法",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-矩陣加法、乘法",
+        "template_id": "math-ref-g2B-矩陣加法、乘法-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "週期性數學模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-週期模型的實際應用-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「週期模型的實際應用」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "潮位模型h(t)＝2＋sin(πt/6)（公尺），其最高潮位為何？",
+        "correct": "3公尺",
+        "wrong": [
+          "2公尺",
+          "1公尺",
+          "4公尺"
+        ],
+        "exp": "sin函數最大值為1，所以h最大2＋1＝3公尺。",
+        "subject": "數學",
+        "sub_topic": "週期模型的實際應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-週期模型的實際應用",
+        "template_id": "math-ref-g2B-週期模型的實際應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-週期模型的實際應用-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「週期模型的實際應用」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "摩天輪座艙高度模型h(t)＝15－10cos(πt/20)（公尺），其完整一圈所需時間為何？",
+        "correct": "40分鐘",
+        "wrong": [
+          "20分鐘",
+          "10分鐘",
+          "60分鐘"
+        ],
+        "exp": "角頻率π/20，因此最小正週期2π÷(π/20)＝40分鐘。",
+        "subject": "數學",
+        "sub_topic": "週期模型的實際應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-週期模型的實際應用",
+        "template_id": "math-ref-g2B-週期模型的實際應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

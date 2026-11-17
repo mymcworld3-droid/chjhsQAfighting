@@ -1,0 +1,66 @@
+{
+  "units": [
+    "按比例成長模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-指數函數-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「指數函數」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "若2^x＝16，則x為何？",
+        "correct": "4",
+        "wrong": [
+          "2",
+          "8",
+          "3"
+        ],
+        "exp": "16＝2⁴，同底數指數相等，x＝4。",
+        "subject": "數學",
+        "sub_topic": "指數函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-指數函數",
+        "template_id": "math-ref-g2B-指數函數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-指數函數-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「指數函數」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "某細菌數初始100隻，每3小時數量恰好加倍。9小時後預測多少隻？",
+        "correct": "800隻",
+        "wrong": [
+          "300隻",
+          "400隻",
+          "900隻"
+        ],
+        "exp": "經過9/3＝3次加倍，100×2³＝800。",
+        "subject": "數學",
+        "sub_topic": "指數函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-指數函數",
+        "template_id": "math-ref-g2B-指數函數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "按比例成長模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-等比變化與實際模型-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「等比變化與實際模型」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "商品售價原為200元，連續兩年每年成長10%，兩年後價錢為何？",
+        "correct": "242元",
+        "wrong": [
+          "240元",
+          "220元",
+          "244元"
+        ],
+        "exp": "複利式成長為200×(1.1)²＝242，不能把兩次10%直接相加。",
+        "subject": "數學",
+        "sub_topic": "等比變化與實際模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中二年級-等比變化與實際模型",
+        "template_id": "math-ref-g2B-等比變化與實際模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-等比變化與實際模型-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「等比變化與實際模型」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "某設備原值100萬元，每年末折舊20%，兩年後依等比模型的價值是多少？",
+        "correct": "64萬元",
+        "wrong": [
+          "60萬元",
+          "80萬元",
+          "40萬元"
+        ],
+        "exp": "每年剩80%，兩年為100×0.8²＝64萬元。",
+        "subject": "數學",
+        "sub_topic": "等比變化與實際模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中二年級-等比變化與實際模型",
+        "template_id": "math-ref-g2B-等比變化與實際模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "週期性數學模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2B-正弦、餘弦週期現象-1",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「正弦、餘弦週期現象」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "週期函數y＝5sin(2πt/12)，其最小正週期為何？（t以小時計）",
+        "correct": "12小時",
+        "wrong": [
+          "6小時",
+          "24小時",
+          "5小時"
+        ],
+        "exp": "自變數係數為2π/12，週期T＝2π÷(2π/12)＝12。",
+        "subject": "數學",
+        "sub_topic": "正弦、餘弦週期現象",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦、餘弦週期現象",
+        "template_id": "math-ref-g2B-正弦、餘弦週期現象-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2B-正弦、餘弦週期現象-2",
+      "source": "依108課綱數學B之週期、模型、資料與機率評量方向自編，非歷屆原題",
+      "design": "「正弦、餘弦週期現象」：以可驗算條件組合實際情境，區分比例、週期及標準化觀念",
+      "question": {
+        "q": "某規律的溫度模型T(t)＝20＋4cos(πt/6)，其最高預測溫度為何？",
+        "correct": "24",
+        "wrong": [
+          "20",
+          "16",
+          "28"
+        ],
+        "exp": "cos值介於−1與1，最大時T＝20＋4＝24。",
+        "subject": "數學",
+        "sub_topic": "正弦、餘弦週期現象",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦、餘弦週期現象",
+        "template_id": "math-ref-g2B-正弦、餘弦週期現象-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
