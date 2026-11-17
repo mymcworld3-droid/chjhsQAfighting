@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史思考"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-因果與多元觀點-1",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「因果與多元觀點」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "研究某港口城市人口成長，資料顯示開港後商業活動增多、交通改善與外來人口增加。下列推論最恰當的是？",
+        "correct": "人口增加可能同時受貿易機會、交通與移民等多重因素影響",
+        "wrong": [
+          "所有人口成長都只可能由單一事件造成",
+          "交通條件與人口移動從不互相影響",
+          "只要開港，就能推定人人生活完全相同"
+        ],
+        "exp": "歷史結果往往由多因素共同作用，材料顯示不同因素並存，宜分析互動而非單因論。",
+        "subject": "歷史",
+        "sub_topic": "因果與多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中一年級-因果與多元觀點",
+        "template_id": "history-reference-高中一年級-因果與多元觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-因果與多元觀點-2",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「因果與多元觀點」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "對同一個築路計畫，商人日記讚揚貨運便利，農民陳情書則抱怨土地被徵用。何種歷史解釋最合宜？",
+        "correct": "同一政策可能對不同群體產生不同利益與負擔",
+        "wrong": [
+          "商人與農民一定有一方完全沒有真實經驗",
+          "只要有道路建成，就必然無人受到損失",
+          "不同立場出現即證明史料完全不能使用"
+        ],
+        "exp": "兩類史料分別反映受益與受損群體的經驗，應承認多元影響並檢查各自脈絡。",
+        "subject": "歷史",
+        "sub_topic": "因果與多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中一年級-因果與多元觀點",
+        "template_id": "history-reference-高中一年級-因果與多元觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

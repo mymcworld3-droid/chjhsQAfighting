@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣史：近現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-戰後政治與經濟-1",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「戰後政治與經濟」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "一份臺灣產業統計顯示：1950年代農產品與初級加工品占出口較多；1970年代工業產品比重逐步提高。依此資料，下列何者最符合戰後產業變遷？",
+        "correct": "出口結構逐步由農業相關產品向工業製成品轉變",
+        "wrong": [
+          "臺灣在1970年代已完全停止農業生產",
+          "1950年代的出口完全沒有任何工業產品",
+          "產業結構從來不受政策及國際市場影響"
+        ],
+        "exp": "資料只指出不同時期出口組成變化，能支持工業化趨勢，但不足以宣稱農業完全消失。",
+        "subject": "歷史",
+        "sub_topic": "戰後政治與經濟",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "history-高中一年級-戰後政治與經濟",
+        "template_id": "history-reference-高中一年級-戰後政治與經濟-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-戰後政治與經濟-2",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「戰後政治與經濟」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "研究戰後臺灣政治與社會時，一位學生同時蒐集政府公告、當事人口述訪談與報紙社論。這樣安排最主要有何優點？",
+        "correct": "可比較官方立場、個人經驗與媒體觀點，避免只依賴單一視角",
+        "wrong": [
+          "三類資料必定完全相同，因此不必對照",
+          "只要有政府公告，就能推得每位人民的感受",
+          "報紙社論必然比所有其他史料更客觀"
+        ],
+        "exp": "不同資料可能各自呈現制度、經驗及論述面向，交叉閱讀有助重建複雜歷史背景。",
+        "subject": "歷史",
+        "sub_topic": "戰後政治與經濟",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-戰後政治與經濟",
+        "template_id": "history-reference-高中一年級-戰後政治與經濟-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

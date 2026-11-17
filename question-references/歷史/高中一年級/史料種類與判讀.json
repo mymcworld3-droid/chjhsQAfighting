@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史思考"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-史料種類與判讀-1",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「史料種類與判讀」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "某位研究者找到1940年的私人日記，記載當日街頭所見；另有2020年出版的專書，引用多份資料分析同事件。下列分類何者較正確？",
+        "correct": "日記可作為當時的第一手史料，後出版專書通常屬後人的研究詮釋",
+        "wrong": [
+          "日記必然是2020年才寫成的二手史料",
+          "後出版的專書一定比當時日記更早形成",
+          "任何第一手史料都保證不存在記憶與觀察偏差"
+        ],
+        "exp": "日記與後來專書形成的時點及目的不同；第一手並不等於絕對客觀，仍須查核。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-史料種類與判讀",
+        "template_id": "history-reference-高中一年級-史料種類與判讀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-史料種類與判讀-2",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「史料種類與判讀」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "研究戰爭期間民眾生活時，學生發現政府宣傳海報與民眾私人信件對物資情況的描述不同。最適當的處理方法是什麼？",
+        "correct": "分析兩者作者、用途與受眾，並參照更多資料交叉查證",
+        "wrong": [
+          "直接認定宣傳海報絕對完全真實",
+          "把私人信件一律視為虛構故事",
+          "遇到差異就停止研究，不必探討原因"
+        ],
+        "exp": "宣傳與私人書信的寫作目的可能不同，差異本身就是理解戰時社會的重要線索。",
+        "subject": "歷史",
+        "sub_topic": "史料種類與判讀",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-史料種類與判讀",
+        "template_id": "history-reference-高中一年級-史料種類與判讀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

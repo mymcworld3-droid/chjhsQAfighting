@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣史：史前至近代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-大航海時代與鄭氏-1",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「大航海時代與鄭氏」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "十七世紀臺灣有不同海外勢力在港口從事貿易，往來貨物與航線亦受東亞海域局勢影響。若從此背景理解臺灣，哪個判斷最恰當？",
+        "correct": "臺灣因海上貿易網絡而與周邊區域產生密切連結",
+        "wrong": [
+          "臺灣在十七世紀完全沒有對外交流",
+          "所有海外往來都只能從內陸沙漠進行",
+          "任何海上貿易都不會影響聚落發展"
+        ],
+        "exp": "港口活動與國際航線表示臺灣是東亞海域交流的一環，不能以孤立島嶼的想法理解當時歷史。",
+        "subject": "歷史",
+        "sub_topic": "大航海時代與鄭氏",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "history-高中一年級-大航海時代與鄭氏",
+        "template_id": "history-reference-高中一年級-大航海時代與鄭氏-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-大航海時代與鄭氏-2",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「大航海時代與鄭氏」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "史料記載十七世紀某政權來臺後整頓軍事屯墾、增加糧食生產，以供應軍民。若要將此政策放回鄭氏政權的處境，哪個解釋最合理？",
+        "correct": "在持續軍事與行政需求下，透過屯墾取得穩定糧食",
+        "wrong": [
+          "只為了取消臺灣所有農業活動",
+          "因為臺灣完全不存在土地可開墾",
+          "其目的主要是建立二十一世紀的觀光園區"
+        ],
+        "exp": "鄭氏政權具有軍事及民生供應需求，屯墾可增進糧食自給；題目不能推論其所有政策只有單一目的。",
+        "subject": "歷史",
+        "sub_topic": "大航海時代與鄭氏",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "history-高中一年級-大航海時代與鄭氏",
+        "template_id": "history-reference-高中一年級-大航海時代與鄭氏-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

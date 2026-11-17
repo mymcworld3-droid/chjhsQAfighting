@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史思考"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-時間脈絡-1",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「時間脈絡」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "有四件歷史事件：甲鄭成功入臺；乙臺灣進入日治時期；丙清朝在臺設省；丁二二八事件。依時間先後，何者正確？",
+        "correct": "甲→丙→乙→丁",
+        "wrong": [
+          "乙→甲→丙→丁",
+          "丙→甲→丁→乙",
+          "丁→乙→甲→丙"
+        ],
+        "exp": "鄭成功入臺為1661年、臺灣建省1885年、日治開始1895年、二二八事件1947年。",
+        "subject": "歷史",
+        "sub_topic": "時間脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-1",
+            "name": "臺灣史"
+          }
+        ],
+        "concept_id": "history-高中一年級-時間脈絡",
+        "template_id": "history-reference-高中一年級-時間脈絡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-時間脈絡-2",
+      "source": "大考中心114學年度學測社會考科歷史題之時序、史料與比較命題取向；自編參考題",
+      "design": "以「時間脈絡」建立時間、證據與情境的可核對推論，避免超出選定細觀念",
+      "question": {
+        "q": "某人以1910年寫的文章評論1895年的政策。若要判斷他是否親歷政策頒布時刻，最需要確認什麼？",
+        "correct": "作者在1895年時的年齡、所在地與接觸事件的可能性",
+        "wrong": [
+          "1910年文章使用的紙張顏色",
+          "文章共有多少個標點符號",
+          "作者是否喜歡當代流行歌曲"
+        ],
+        "exp": "成文時間晚於事件15年，能否親歷須考量作者當時身分與位置，不能由發表年份推定必然在場。",
+        "subject": "歷史",
+        "sub_topic": "時間脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-時間脈絡",
+        "template_id": "history-reference-高中一年級-時間脈絡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
