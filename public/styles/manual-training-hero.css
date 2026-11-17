@@ -17,7 +17,7 @@
   --mh-glow:rgba(219,141,44,.17);--mh-warm:#ffda9a;
 }
 #manual-training-root .manual-hero::before{
-  content:"";position:absolute;inset:-15%;z-index:0;pointer-events:none;
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse 31% 46% at 27% 47%,var(--mh-glow),transparent 100%);
   opacity:.65;animation:manual-hero-breath 7s ease-in-out infinite alternate;
 }
