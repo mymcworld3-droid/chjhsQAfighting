@@ -1,0 +1,66 @@
+{
+  "units": [
+    "直線與圓"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-直線方程式斜率與距離-1",
+      "source": "大考中心114學年度學測數學A第2題，依命題思路改寫",
+      "design": "比較兩條負斜率直線與兩軸圍成的面積，反求截距參數。",
+      "question": {
+        "q": "兩直線都通過 $P(a,0)$，其中 $a>0$，斜率分別為 $-1$ 與 $-2$。它們各自和坐標軸圍成的三角形面積相差 $8$。求 $a$。",
+        "correct": "$4$",
+        "wrong": [
+          "$2$",
+          "$8$",
+          "$4\\sqrt2$"
+        ],
+        "exp": "斜率為 $-1$ 時，三角形面積為 $a^2/2$；斜率為 $-2$ 時，面積為 $a^2$。差為 $a^2/2=8$，得 $a=4$。",
+        "subject": "數學",
+        "sub_topic": "直線方程式、斜率與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h1-直線方程式、斜率與距離",
+        "template_id": "ref-h1-直線方程式斜率與距離-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-直線方程式斜率與距離-2",
+      "source": "大考中心112學年度學測數學B第3題，依命題思路改寫",
+      "design": "把水平距離及俯角轉成直角三角形的斜邊；避免誤把正弦當餘弦。",
+      "question": {
+        "q": "兩棟樓頂高度不同，水平距離為 $120$ 公尺。從較高樓頂看較低樓頂的俯角為 $30^\\circ$，若繩索拉直連接兩樓頂，其長度為何？",
+        "correct": "$80\\sqrt3$",
+        "wrong": [
+          "$60\\sqrt3$",
+          "$120\\sqrt3$",
+          "$240$"
+        ],
+        "exp": "繩長 $L$ 是直角三角形斜邊，$\\cos30^\\circ=120/L$，故 $L=120/(\\sqrt3/2)=80\\sqrt3$。",
+        "subject": "數學",
+        "sub_topic": "直線方程式、斜率與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h1-直線方程式、斜率與距離",
+        "template_id": "ref-h1-直線方程式斜率與距離-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

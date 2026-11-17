@@ -1,0 +1,66 @@
+{
+  "units": [
+    "多項式函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-多項式四則與因式定理-1",
+      "source": "大考中心114學年度學測數學B第6題，依命題思路改寫",
+      "design": "利用特殊輸入讓三項中只有一項不為零；檢驗因式結構而非展開蠻算。",
+      "question": {
+        "q": "設 $f(x)=a(x-1)(x-2)+b(x-1)(x-3)+c(x-2)(x-3)$，且 $f(x)=x^2$。下列何者正確？",
+        "correct": "$a>c>b$",
+        "wrong": [
+          "$a>b>c$",
+          "$b>a>c$",
+          "$c>a>b$"
+        ],
+        "exp": "代入 $x=1$ 得 $2c=1$，故 $c=1/2$；代入 $x=2$ 得 $-b=4$，故 $b=-4$；代入 $x=3$ 得 $2a=9$，故 $a=9/2$。所以 $a>c>b$。",
+        "subject": "數學",
+        "sub_topic": "多項式四則與因式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h1-多項式四則與因式定理",
+        "template_id": "ref-h1-多項式四則與因式定理-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-多項式四則與因式定理-2",
+      "source": "大考中心113學年度學測數學A第3題，依命題思路改寫",
+      "design": "由零點與首項係數建立多項式，再判斷代入值；干擾選項反映符號錯誤。",
+      "question": {
+        "q": "某三次多項式的首項係數為 $2$，且三個相異零點為 $-2,1,4$。則 $f(0)$ 為何？",
+        "correct": "$16$",
+        "wrong": [
+          "$-16$",
+          "$8$",
+          "$-8$"
+        ],
+        "exp": "由因式定理 $f(x)=2(x+2)(x-1)(x-4)$。因此 $f(0)=2\\cdot2\\cdot(-1)\\cdot(-4)=16$。",
+        "subject": "數學",
+        "sub_topic": "多項式四則與因式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h1-多項式四則與因式定理",
+        "template_id": "ref-h1-多項式四則與因式定理-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

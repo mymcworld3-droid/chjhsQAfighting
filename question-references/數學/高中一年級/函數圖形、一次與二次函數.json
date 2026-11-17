@@ -1,0 +1,66 @@
+{
+  "units": [
+    "多項式函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-函數圖形一次與二次函數-1",
+      "source": "大考中心113學年度學測數學B第5題，依命題思路改寫",
+      "design": "由二次函數的對稱軸和最小值重建函數式，不能只代入兩個條件。",
+      "question": {
+        "q": "二次函數 $f(x)=x^2+bx+c$ 的對稱軸是 $x=2$，且最小值為 $1$。求 $f(0)$。",
+        "correct": "$5$",
+        "wrong": [
+          "$1$",
+          "$3$",
+          "$9$"
+        ],
+        "exp": "可寫成頂點式 $f(x)=(x-2)^2+1$，所以 $f(0)=4+1=5$。",
+        "subject": "數學",
+        "sub_topic": "函數圖形、一次與二次函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h1-函數圖形、一次與二次函數",
+        "template_id": "ref-h1-函數圖形一次與二次函數-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-函數圖形一次與二次函數-2",
+      "source": "大考中心111學年度學測數學B第9題，依命題思路改寫",
+      "design": "利用函數圖形與定義域判斷極值，而非把根誤當成極值點。",
+      "question": {
+        "q": "若 $f(x)=x^2-4x+3$，則在 $0\\leq x\\leq3$ 上的最大值是多少？",
+        "correct": "$3$",
+        "wrong": [
+          "$-1$",
+          "$0$",
+          "$4$"
+        ],
+        "exp": "配方 $f(x)=(x-2)^2-1$。區間內頂點給最小值 $-1$，兩端 $f(0)=3$、$f(3)=0$，故最大值為 $3$。",
+        "subject": "數學",
+        "sub_topic": "函數圖形、一次與二次函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h1-函數圖形、一次與二次函數",
+        "template_id": "ref-h1-函數圖形一次與二次函數-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

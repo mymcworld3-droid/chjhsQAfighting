@@ -1,0 +1,66 @@
+{
+  "units": [
+    "指數與對數函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h2-對數與對數律-1",
+      "source": "大考中心111學年度學測數學A第2題，依命題思路改寫",
+      "design": "以換底與倒數性質辨別對數底數、真數互換的影響。",
+      "question": {
+        "q": "若 $a>1,b>1$ 且 $\\log_a b=\\frac23$，則 $\\log_b a$ 等於多少？",
+        "correct": "$\\frac32$",
+        "wrong": [
+          "$\\frac23$",
+          "$\\frac49$",
+          "$\\frac94$"
+        ],
+        "exp": "$\\log_b a=1/\\log_a b=1/(2/3)=3/2$。",
+        "subject": "數學",
+        "sub_topic": "對數與對數律",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-對數與對數律",
+        "template_id": "ref-h2-對數與對數律-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h2-對數與對數律-2",
+      "source": "大考中心113學年度學測數學B第2題，依命題思路改寫",
+      "design": "對數函數在正數上的單調性與輸出區間，重點是能辨別二次取對數後符號。",
+      "question": {
+        "q": "設 $1<a<10$，$b=\\log_{10}a$，$c=\\log_{10}b$。下列大小關係何者正確？",
+        "correct": "$c<0<b<1<a$",
+        "wrong": [
+          "$0<c<b<1<a$",
+          "$b<c<0<a$",
+          "$0<b<a<c$"
+        ],
+        "exp": "因 $1<a<10$，所以 $0<b=\\log_{10}a<1$；對 $0<b<1$ 再取常用對數得到 $c<0$。",
+        "subject": "數學",
+        "sub_topic": "對數與對數律",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "h2-對數與對數律",
+        "template_id": "ref-h2-對數與對數律-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

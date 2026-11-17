@@ -1,0 +1,66 @@
+{
+  "units": [
+    "指數與對數函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h2-指數函數的圖形與性質-1",
+      "source": "大考中心113學年度學測數學A第1題，依命題思路改寫",
+      "design": "運用半衰期的指數衰退模型，檢驗是否依時間段作等比衰減。",
+      "question": {
+        "q": "某藥物每經 $3$ 小時，體內殘留量變成原本的一半。若起初有 $80$ 毫克，經 $9$ 小時後殘留多少毫克？",
+        "correct": "$10$ 毫克",
+        "wrong": [
+          "$20$ 毫克",
+          "$40$ 毫克",
+          "$5$ 毫克"
+        ],
+        "exp": "$9$ 小時為 $3$ 個半衰期，殘留 $80(1/2)^3=10$ 毫克。",
+        "subject": "數學",
+        "sub_topic": "指數函數的圖形與性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h2-指數函數的圖形與性質",
+        "template_id": "ref-h2-指數函數的圖形與性質-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h2-指數函數的圖形與性質-2",
+      "source": "大考中心114學年度學測數學B第18題，依命題思路改寫",
+      "design": "固定高度增加一段就按相同比例成長，屬於指數模型而非線性加法。",
+      "question": {
+        "q": "某測量值每上升 $100$ 公尺增為原來的 $1.05$ 倍。上升 $600$ 公尺後，是原先的幾倍？",
+        "correct": "$1.05^6$",
+        "wrong": [
+          "$1+0.05\\times6$",
+          "$1.05\\times6$",
+          "$1.05^5$"
+        ],
+        "exp": "共有 $600/100=6$ 次等比成長，故倍率為 $(1.05)^6$，不是把成長率直接乘以六。",
+        "subject": "數學",
+        "sub_topic": "指數函數的圖形與性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "h2-指數函數的圖形與性質",
+        "template_id": "ref-h2-指數函數的圖形與性質-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

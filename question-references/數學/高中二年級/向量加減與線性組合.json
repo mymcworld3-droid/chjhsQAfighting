@@ -1,0 +1,66 @@
+{
+  "units": [
+    "平面向量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h2-向量加減與線性組合-1",
+      "source": "大考中心113學年度學測數學B第4題，依命題思路改寫",
+      "design": "以平面坐標中的向量加法與差向量判斷可達位置，勿混入三維量。",
+      "question": {
+        "q": "平面上 $A=(1,2)$、$B=(4,-1)$，且向量 $\\vec v=(-2,3)$。求 $\\vec v+\\overrightarrow{AB}$。",
+        "correct": "$(1,0)$",
+        "wrong": [
+          "$(3,0)$",
+          "$(-5,6)$",
+          "$(1,6)$"
+        ],
+        "exp": "$\\overrightarrow{AB}=(4-1,-1-2)=(3,-3)$，加上 $\\vec v=(-2,3)$ 得 $(1,0)$。",
+        "subject": "數學",
+        "sub_topic": "向量加減與線性組合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h2-向量加減與線性組合",
+        "template_id": "ref-h2-向量加減與線性組合-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h2-向量加減與線性組合-2",
+      "source": "大考中心113學年度學測數學B第4題，依命題思路改寫",
+      "design": "用向量的加減式還原未知點坐標；辨別點與自由向量。",
+      "question": {
+        "q": "平面上 $A=(-1,4)$，若 $\\overrightarrow{AB}+ (2,-3)=(5,1)$，則點 $B$ 的坐標為何？",
+        "correct": "$(2,8)$",
+        "wrong": [
+          "$(4,0)$",
+          "$(8,2)$",
+          "$(-4,8)$"
+        ],
+        "exp": "$\\overrightarrow{AB}=(5,1)-(2,-3)=(3,4)$，故 $B=A+(3,4)=(-1,4)+(3,4)=(2,8)$。",
+        "subject": "數學",
+        "sub_topic": "向量加減與線性組合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h2-向量加減與線性組合",
+        "template_id": "ref-h2-向量加減與線性組合-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

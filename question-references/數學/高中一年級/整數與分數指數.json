@@ -1,0 +1,66 @@
+{
+  "units": [
+    "指數與常用對數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-整數與分數指數-1",
+      "source": "大考中心112學年度學測數學A第1題，依命題思路改寫",
+      "design": "從重複平方根回推原數，檢查分數指數的逆運算。",
+      "question": {
+        "q": "正整數 $N$ 連續取正平方根三次後恰為 $3$，則 $N$ 為何？",
+        "correct": "$6561$",
+        "wrong": [
+          "$81$",
+          "$729$",
+          "$19683$"
+        ],
+        "exp": "連續三次開平方即得到 $N^{1/8}=3$，因此 $N=3^8=6561$。",
+        "subject": "數學",
+        "sub_topic": "整數與分數指數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "h1-整數與分數指數",
+        "template_id": "ref-h1-整數與分數指數-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-整數與分數指數-2",
+      "source": "大考中心114學年度學測數學B第18題，依命題思路改寫",
+      "design": "以比例增長情境反向解出分數指數，確認非整數次方的意義。",
+      "question": {
+        "q": "已知 $a>0$ 且 $a^{3/2}=27$，則 $a$ 是多少？",
+        "correct": "$9$",
+        "wrong": [
+          "$3$",
+          "$18$",
+          "$81$"
+        ],
+        "exp": "兩邊取 $2/3$ 次方，$a=27^{2/3}=(\\sqrt[3]{27})^2=9$。",
+        "subject": "數學",
+        "sub_topic": "整數與分數指數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "h1-整數與分數指數",
+        "template_id": "ref-h1-整數與分數指數-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

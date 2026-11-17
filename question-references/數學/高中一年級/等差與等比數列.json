@@ -1,0 +1,66 @@
+{
+  "units": [
+    "數列與級數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-等差與等比數列-1",
+      "source": "大考中心111學年度學測數學A第4題，依命題思路改寫",
+      "design": "同時利用等差結構和對數等差條件，由兩種規律建立方程。",
+      "question": {
+        "q": "正項等差數列首項 $a>0$、公差 $d>0$，且 $\\log a_1,\\log a_2,\\log a_4$ 依序成等差數列。求 $a/d$。",
+        "correct": "$1$",
+        "wrong": [
+          "$2$",
+          "$3$",
+          "$4$"
+        ],
+        "exp": "因對數等差，$(a+d)^2=a(a+3d)$，展開得 $d^2=ad$。由 $d>0$，所以 $a=d$，即 $a/d=1$。",
+        "subject": "數學",
+        "sub_topic": "等差與等比數列",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "h1-等差與等比數列",
+        "template_id": "ref-h1-等差與等比數列-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-等差與等比數列-2",
+      "source": "大考中心113學年度學測數學A第3題，依命題思路改寫",
+      "design": "由三個等差排列的零點判斷乘積符號，強調多項式係數的正負。",
+      "question": {
+        "q": "三個數 $-5,-5+d,-5+2d$ 是某三次多項式的零點，且首項係數為正。若 $d$ 只可能為 $2,4,6$，則有幾個 $d$ 使 $f(0)>0$？",
+        "correct": "$2$",
+        "wrong": [
+          "$0$",
+          "$1$",
+          "$3$"
+        ],
+        "exp": "$f(0)$ 的符號等於 $5(5-d)(5-2d)$ 的符號。$d=2$ 時為正；$d=4$ 時為負；$d=6$ 時為正。故符合者共 $2$ 個。",
+        "subject": "數學",
+        "sub_topic": "等差與等比數列",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "h1-等差與等比數列",
+        "template_id": "ref-h1-等差與等比數列-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

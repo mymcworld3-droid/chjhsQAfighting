@@ -1,0 +1,66 @@
+{
+  "units": [
+    "條件機率與統計"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h2-條件機率獨立事件-1",
+      "source": "大考中心114學年度學測數學A第1題，依命題思路改寫",
+      "design": "用二維列聯表表示兩分類事件，並以獨立性條件求未知格數。",
+      "question": {
+        "q": "袋中有兩色球，各標 $1$ 或 $2$。藍色 $1$ 號 $3$ 顆、藍色 $2$ 號 $2$ 顆；綠色 $1$ 號 $6$ 顆、綠色 $2$ 號 $k$ 顆。若「藍球」與「$1$ 號」獨立，則 $k$ 為何？",
+        "correct": "$4$",
+        "wrong": [
+          "$2$",
+          "$6$",
+          "$9$"
+        ],
+        "exp": "獨立時 $P(1\\mid藍)=P(1)$，即 $3/5=9/(11+k)$；得 $3(11+k)=45$，故 $k=4$。",
+        "subject": "數學",
+        "sub_topic": "條件機率、獨立事件",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-條件機率、獨立事件",
+        "template_id": "ref-h2-條件機率獨立事件-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h2-條件機率獨立事件-2",
+      "source": "大考中心112學年度學測數學B第5題，依命題思路改寫",
+      "design": "先依已知事件縮小樣本空間，再判斷交集事件；區別條件機率與無條件機率。",
+      "question": {
+        "q": "從 $1$ 至 $100$ 這 $100$ 個整數中等機率抽一個。已知抽到的是 $10$ 的倍數，則它也是 $4$ 的倍數的機率為何？",
+        "correct": "$\\frac12$",
+        "wrong": [
+          "$\\frac14$",
+          "$\\frac15$",
+          "$\\frac25$"
+        ],
+        "exp": "$10$ 的倍數有 $10$ 個，其中又是 $4$ 的倍數者必為 $20$ 的倍數，有 $5$ 個。因此條件機率為 $5/10=1/2$。",
+        "subject": "數學",
+        "sub_topic": "條件機率、獨立事件",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-條件機率、獨立事件",
+        "template_id": "ref-h2-條件機率獨立事件-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

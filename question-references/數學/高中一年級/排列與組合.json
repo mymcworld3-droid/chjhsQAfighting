@@ -1,0 +1,66 @@
+{
+  "units": [
+    "排列組合"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-排列與組合-1",
+      "source": "大考中心111學年度學測數學A第1題，依命題思路改寫",
+      "design": "兩種不同口味與允許重複的兩球選擇是兩個不同計數問題。",
+      "question": {
+        "q": "一家店宣稱「任選兩種不同口味」的組合超過 $45$ 種。若店內提供的口味數是達成宣稱所需的最少數量，那麼允許兩球同口味時，共有多少種雙球組合？",
+        "correct": "$66$",
+        "wrong": [
+          "$55$",
+          "$60$",
+          "$77$"
+        ],
+        "exp": "$n=10$ 時只有 $\\binom{10}{2}=45$ 種，必須至少 $n=11$；可重複取兩球的組合為 $\\binom{11+1}{2}=66$。",
+        "subject": "數學",
+        "sub_topic": "排列與組合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-排列與組合",
+        "template_id": "ref-h1-排列與組合-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-排列與組合-2",
+      "source": "大考中心114學年度學測數學A第3題，依命題思路改寫",
+      "design": "同類相鄰先視為一個區塊，再處理區塊次序限制與內部排列。",
+      "question": {
+        "q": "音樂會有三類互不相同的節目：鋼琴 $3$ 場、小提琴 $2$ 場、獨唱 $1$ 場。要求同類節目排在一起，且獨唱不能排在最前面，共有多少種節目順序？",
+        "correct": "$48$",
+        "wrong": [
+          "$12$",
+          "$24$",
+          "$36$"
+        ],
+        "exp": "先把三類視為三個區塊，獨唱不在首位的區塊排列有 $3!-2!=4$ 種；各區塊內部可排 $3!\\cdot2!\\cdot1!=12$ 種，因此共 $4\\cdot12=48$ 種。",
+        "subject": "數學",
+        "sub_topic": "排列與組合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-排列與組合",
+        "template_id": "ref-h1-排列與組合-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

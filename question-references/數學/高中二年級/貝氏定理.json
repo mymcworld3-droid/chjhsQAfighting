@@ -1,0 +1,66 @@
+{
+  "units": [
+    "條件機率與統計"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h2-貝氏定理-1",
+      "source": "大考中心111學年度學測數學A第5題，依命題思路改寫",
+      "design": "以盛行率、靈敏度、特異度分辨條件方向，避免把檢驗陽性率視為患病率。",
+      "question": {
+        "q": "某疾病盛行率為 $10\\%$。快篩對患者的陽性率為 $80\\%$，對未患者的陰性率為 $90\\%$。若某人檢驗陽性，他實際患病的機率為何？",
+        "correct": "$\\frac8{17}$",
+        "wrong": [
+          "$\\frac45$",
+          "$\\frac8{9}$",
+          "$\\frac1{10}$"
+        ],
+        "exp": "陽性且患病的機率為 $0.1\\times0.8=0.08$，陽性且未患病為 $0.9\\times0.1=0.09$，故所求為 $0.08/(0.08+0.09)=8/17$。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "ref-h2-貝氏定理-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h2-貝氏定理-2",
+      "source": "大考中心111學年度學測數學A第5題，依命題思路改寫",
+      "design": "同一真人試題的反向事件改寫：檢驗陰性後反推仍患病機率。",
+      "question": {
+        "q": "某病患者比例為 $20\\%$，檢驗對患者的陽性率 $90\\%$，對未患者的陰性率 $80\\%$。已知檢驗陰性，仍患病機率為何？",
+        "correct": "$\\frac1{33}$",
+        "wrong": [
+          "$\\frac1{10}$",
+          "$\\frac2{11}$",
+          "$\\frac1{5}$"
+        ],
+        "exp": "患病且陰性為 $0.2\\times0.1=0.02$；未患病且陰性為 $0.8\\times0.8=0.64$，所以 $P(患病\\mid陰性)=0.02/0.66=1/33$。",
+        "subject": "數學",
+        "sub_topic": "貝氏定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h2-貝氏定理",
+        "template_id": "ref-h2-貝氏定理-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

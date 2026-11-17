@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與資料分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-古典機率-1",
+      "source": "大考中心114學年度學測數學B第4題，依命題思路改寫",
+      "design": "先指定選出哪些種類，再扣除未涵蓋所有指定種類的序列。",
+      "question": {
+        "q": "有 $4$ 種等機率公仔，每次獨立抽得一個。連抽 $3$ 次，恰出現 $2$ 種不同公仔的機率為何？",
+        "correct": "$\\frac{9}{16}$",
+        "wrong": [
+          "$\\frac38$",
+          "$\\frac12$",
+          "$\\frac34$"
+        ],
+        "exp": "總序列為 $4^3=64$。選出兩款有 $\\binom42=6$ 種，每組出現兩款的序列數為 $2^3-2=6$，故機率 $36/64=9/16$。",
+        "subject": "數學",
+        "sub_topic": "古典機率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-古典機率",
+        "template_id": "ref-h1-古典機率-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-古典機率-2",
+      "source": "大考中心112學年度學測數學B第5題，依命題思路改寫",
+      "design": "條件改變樣本空間，計算時只在條件事件內數有利結果。",
+      "question": {
+        "q": "從編號 $1$ 至 $60$ 的球中等機率抽一球。已知球號為 $5$ 的倍數，則球號也為 $3$ 的倍數之機率為何？",
+        "correct": "$\\frac13$",
+        "wrong": [
+          "$\\frac15$",
+          "$\\frac14$",
+          "$\\frac12$"
+        ],
+        "exp": "$5$ 的倍數共 $60/5=12$ 個；同時為 $3$ 與 $5$ 的倍數，就是 $15$ 的倍數，共 $60/15=4$ 個。條件機率為 $4/12=1/3$。",
+        "subject": "數學",
+        "sub_topic": "古典機率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "h1-古典機率",
+        "template_id": "ref-h1-古典機率-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

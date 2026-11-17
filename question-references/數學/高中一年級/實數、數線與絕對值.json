@@ -1,0 +1,66 @@
+{
+  "units": [
+    "數與式"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h1-實數數線與絕對值-1",
+      "source": "大考中心111學年度學測數學B第1題，依命題思路改寫",
+      "design": "將絕對值不等式依正負分段，最後回到整數解的個數；易錯點是漏算負整數。",
+      "question": {
+        "q": "滿足 $3|x|+x<12$ 的整數 $x$ 共有幾個？",
+        "correct": "$8$",
+        "wrong": [
+          "$6$",
+          "$7$",
+          "$9$"
+        ],
+        "exp": "當 $x\\geq0$，得 $4x<12$，故 $x=0,1,2$ 共 $3$ 個；當 $x<0$，得 $-2x<12$，故 $-6<x<0$，共有 $5$ 個整數。總數為 $8$。",
+        "subject": "數學",
+        "sub_topic": "實數、數線與絕對值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "h1-實數、數線與絕對值",
+        "template_id": "ref-h1-實數數線與絕對值-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h1-實數數線與絕對值-2",
+      "source": "大考中心114學年度學測數學B第1題，依命題思路改寫",
+      "design": "把兩個距離翻譯成絕對值；先比較兩點間距與指定距離和。",
+      "question": {
+        "q": "數線上有一點 $P$，它到 $-1$ 與 $5$ 的距離和恰為 $8$。符合條件的 $P$ 有幾個？",
+        "correct": "$2$",
+        "wrong": [
+          "$0$",
+          "$1$",
+          "無限多個"
+        ],
+        "exp": "設坐標為 $x$，則 $|x+1|+|x-5|=8$。兩定點相距 $6$，距離和 $8>6$，兩側各有一解；直接求得 $x=-2$ 或 $x=6$。",
+        "subject": "數學",
+        "sub_topic": "實數、數線與絕對值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "h1-實數、數線與絕對值",
+        "template_id": "ref-h1-實數數線與絕對值-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

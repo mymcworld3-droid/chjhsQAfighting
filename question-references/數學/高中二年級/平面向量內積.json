@@ -37,6 +37,64 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ref-h2-向量內積-1",
+      "source": "大考中心110學年度學測數學第11題，依命題思路改寫",
+      "design": "把投影轉為向量內積；只計算平行方向的有號分量，嚴禁三維向量。",
+      "question": {
+        "q": "在平面上，$\\overrightarrow{AB}$ 長為 $5$，在 $\\overrightarrow{AC}$ 方向的有號投影長為 $-3$。若 $|\\overrightarrow{AC}|=4$，求 $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}$。",
+        "correct": "$-12$",
+        "wrong": [
+          "$12$",
+          "$-20$",
+          "$20$"
+        ],
+        "exp": "內積等於「有號投影長」乘以另一向量長度，因此為 $(-3)\\times4=-12$。",
+        "subject": "數學",
+        "sub_topic": "向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h2-向量內積",
+        "template_id": "ref-h2-向量內積-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h2-向量內積-2",
+      "source": "大考中心113學年度學測數學B第4題，依命題思路改寫",
+      "design": "使用二維座標向量長度平方與內積的關係推理，避免引入空間座標。",
+      "question": {
+        "q": "平面向量 $\\vec u=(-2,3)$、$\\vec v=(1,-1)$。求 $|\\vec u+\\vec v|^2$。",
+        "correct": "$5$",
+        "wrong": [
+          "$1$",
+          "$13$",
+          "$25$"
+        ],
+        "exp": "$\\vec u+\\vec v=(-1,2)$，故長度平方為 $(-1)^2+2^2=5$；亦可用 $|\\vec u|^2+2\\vec u\\cdot\\vec v+|\\vec v|^2=13-10+2=5$。",
+        "subject": "數學",
+        "sub_topic": "向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "h2-向量內積",
+        "template_id": "ref-h2-向量內積-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
