@@ -2,10 +2,11 @@ import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js';
 import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
+import {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary} from './manual-library-view.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
-let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',pickerSlot=null;
+let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',pickerSlot=null,libraryFilter='all';
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -41,6 +42,12 @@ function ensure(){
     link.href='/styles/manual-training-loadout.css?v=20261117-deck-phase2';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-library-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-library-style';
+    link.href='/styles/manual-training-library.css?v=20261117-gallery-phase3';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
@@ -70,6 +77,7 @@ function featuredHeroMarkup(){
 }
 function markup(expandedBooks){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
+  const hero=featuredHeroMarkup();
   const owned=current.library.filter(item=>item.owned).length;
   const equipped=current.loadouts?.[selectedLoadout]?.skillIds||[];
   const gold=Number(current.gold)||0;
@@ -83,7 +91,7 @@ function markup(expandedBooks){
   const attack=Number.isFinite(serverAttack)&&serverAttack>0?serverAttack:
     Number.isFinite(projectedAttack)&&projectedAttack>0?projectedAttack:
       Math.max(1,Number(window.getCurrentUserData?.()?.stats?.attack)||200);
-  const cards=current.library.filter(book=>book.owned).map(book=>{
+  const cards=filterOwnedManuals(current,libraryFilter).map(book=>{
     const next=book.skills.find(s=>!s.unlocked);
     const skills=book.skills.map((skill,i)=>{
       const other=equippedVersion(skill.id,equipped);
@@ -117,20 +125,28 @@ function markup(expandedBooks){
       ${book.upgrade?`<button type="button" class="manual-upgrade" data-manual-upgrade="${esc(book.id)}" ${gold<book.upgrade.gold?'disabled':''}>
         ${gold<book.upgrade.gold?'靈石不足 · ':''}升級功法至 Lv. ${book.upgrade.targetLevel} · ${book.upgrade.gold} 靈石</button>`:''}
     </div>`;
-    return `<details class="manual-book" data-manual-book="${esc(book.id)}"${expandedBooks.has(book.id)?' open':''}>
-      <summary class="manual-book-top">
-        <span class="manual-book-glyph" aria-hidden="true">${artImg(bookArt(book.id),"manual-book-art")}</span>
-        <span class="manual-book-title"><small>${label(book.school)}功法</small><strong>${esc(book.name)}</strong></span>
-        <span class="manual-book-level">Lv. ${book.level}</span>
-        <span class="manual-book-chevron" aria-hidden="true"></span>
-      </summary>
+    const focus=book.id===featuredBookId;
+    const collectionCover=renderManualCollectionSummary(book,featuredBookId,equipped,{
+      esc,bookArt,skillArt,label
+    });
+    return `<details class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${focus?'is-featured':''}"
+      data-manual-book="${esc(book.id)}"${expandedBooks.has(book.id)?' open':''}>
+      ${collectionCover}
       <div class="manual-book-content">
+        <div class="manual-library-detail-header">
+          <div><strong>《${esc(book.name)}》功法詳情</strong>
+            <small>熟練度、技能說明及解鎖條件</small></div>
+          <button type="button" class="manual-library-feature-button" data-feature-book="${esc(book.id)}"
+            data-manual-focus-hero="true">
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+            ${focus?'返回上方展示':'設為展示焦點'}</button>
+        </div>
         <p class="manual-book-description">${esc(book.description)}</p>
         ${progress}<div class="manual-techniques">${skills}</div>
       </div>
     </details>`;
   }).join('');
-  return `${featuredHeroMarkup()}<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
+  return `${hero}<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
       <div><b>${(current.equipped||[]).length} / 3</b><span>已裝備技能</span></div>
       <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
       <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
@@ -138,9 +154,10 @@ function markup(expandedBooks){
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
-    <section class="manual-library"><div class="manual-section-title"><h3>已獲得的功法</h3>
-      <button type="button" class="manual-refresh" data-manual-refresh title="同步功法"><i class="fa-solid fa-rotate"></i> 更新</button>
-      </div><div class="manual-book-grid">${cards||'<p class="manual-empty">尚無功法，選擇劍修或體修即可獲得一本入門功法。</p>'}</div></section>
+    <section class="manual-library" aria-label="功法收藏藏經閣">
+      ${renderManualCollectionHeader(current,libraryFilter,{esc})}
+      <div class="manual-book-grid">${cards||'<p class="manual-empty">此篩選沒有已獲得的功法。可切換流派或選擇「全部功法」。</p>'}</div>
+    </section>
     <details class="manual-xp-reference"><summary>查看靈獸境界 EXP 獎勵</summary>
       <div>${Catalog.REALMS.map(realm=>`<span>${realm.name}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
       <p>使用功法技能擊殺靈獸才能累積經驗。每招同時需要達到功法等級與修士境界。</p>
@@ -212,7 +229,7 @@ async function load({force=false}={}){
   try{
     const result=await request('/api/tactical/manuals');
     if(token!==sequence||getMainUser()?.uid!==uid)return;
-    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';pickerSlot=null;}loadedFor=uid;
+    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';pickerSlot=null;libraryFilter='all';}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
   }catch(error){
@@ -284,10 +301,41 @@ function boot(){
   ensureNav();
   ensure();
   root?.addEventListener('click',event=>{
-    const button=event.target.closest('button');if(!button||busy)return;
+    if(busy)return;
+    // Native details toggling and hero selection are reconciled in one paint.
+    // Keep this before the button handler: summaries are not nested buttons.
+    const summary=event.target.closest('summary.manual-book-top');
+    if(summary&&root.contains(summary)){
+      const details=summary.closest('details[data-manual-book]');
+      const id=details?.dataset.manualBook;
+      if(id&&current?.library.some(book=>book.owned&&book.id===id)){
+        event.preventDefault();
+        details.open=!details.open;
+        featuredBookId=id;
+        paint();
+      }
+      return;
+    }
+    const button=event.target.closest('button');if(!button)return;
     if(button.dataset.featureBook){
       if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
         featuredBookId=button.dataset.featureBook;
+        paint();
+        if(button.hasAttribute('data-manual-focus-hero')){
+          requestAnimationFrame(()=>{
+            root?.querySelector('.manual-hero')?.scrollIntoView({
+              behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+              block:'start'
+            });
+          });
+        }
+      }
+      return;
+    }
+    if(button.dataset.manualCollectionFilter){
+      const filter=button.dataset.manualCollectionFilter;
+      if(['all','sword','body'].includes(filter)){
+        libraryFilter=filter;
         paint();
       }
       return;
@@ -376,7 +424,7 @@ function boot(){
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';featuredBookId='';pickerSlot=null;}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';featuredBookId='';pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
   window.addEventListener('xiuxian:manual-loot',()=>{if(visible())void load({force:true});});
   if(visible())void load({force:true});
 }
