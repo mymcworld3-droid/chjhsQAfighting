@@ -119,7 +119,7 @@ async function main(){
     // Level 5 requires both mastery and realm: only a real server unlock
     // should play the stronger technique-awakening effect.
     db.records.get('users/u1').stats.totalScore=100;
-    ownedManuals.books['sword-wind'].exp=280;
+    db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=280;
     const unlockedSnapshot=await service.manualsState(db,'u1');
     assert.equal(unlockedSnapshot.library.find(b=>b.id==='sword-wind').skills[1].unlocked,true);
     await page.locator('[data-manual-refresh]').click();
@@ -128,7 +128,7 @@ async function main(){
     await page.locator('[data-manual-celebration-dismiss]').click();
     // Direct fixture update simulates a settled PvE drop delivered through the
     // server state endpoint, without letting the client award its own scripture.
-    ownedManuals.books['body-dragon']={exp:0};
+    db.records.get(service.MANUALS+'/u1').books['body-dragon']={exp:0};
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--discovery').waitFor();
     assert.equal(await page.locator('.manual-celebration-name').textContent(),'龍象真身訣');
