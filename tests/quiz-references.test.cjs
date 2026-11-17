@@ -6,6 +6,7 @@ const { scopeCode } = require('../ai-question-bank.cjs');
 const { questionQualityIssue } = require('../question-quality.cjs');
 
 const target = { subject: '數學', level: '高中二年級', topic: '向量內積', difficulty: 'medium' };
+test('retired information technology references no longer load', () => { assert.deepEqual(quizReferences({subject:'資訊科技',level:'高中一年級',topic:'程式設計'}),[]); });
 
 test('finds the same concept for live battle and formatted background warmup', () => {
   const group = require.resolve('../question-references/數學/高中二年級/平面向量內積.json');

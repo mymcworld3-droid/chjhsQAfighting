@@ -14,7 +14,7 @@ test('ten fixed subjects have eight stable knowledge points each, independent of
   assert.equal(new Set(Knowledge.SUBJECTS.flatMap(x=>x.points.map(p=>p.id))).size,80);
   assert.ok(Knowledge.points('國文').some(x=>x.name==='閱讀理解'));
   assert.ok(Knowledge.points('國文').some(x=>x.name==='文言文'));
-  const empty = Core.build(), polluted = Core.build({數學:{'七上第一章':{total:100,correct:100}},資訊科技:{程式:{total:5,correct:5}}});
+  const empty = Core.build(), polluted = Core.build({數學:{'七上第一章':{total:100,correct:100}},未開設科目:{程式:{total:5,correct:5}}});
   assert.equal(empty.topics.length,80);assert.deepEqual(empty.topics,polluted.topics);
   assert.equal(polluted.total,0,'scope-only legacy answers are never reclassified as knowledge evidence');
   const measured = Core.build(Knowledge.record({},math,true));
@@ -35,7 +35,7 @@ test('classification validates matching subject, ID and label, supports aliases,
   }
   assert.equal(Knowledge.assertLabel(math,'數學A').id,'math-3');
   assert.throws(()=>Knowledge.assertLabel(math,'數學','math-4'),/知識點標記無效/);
-  assert.equal(Knowledge.assertLabel({knowledge_subject:'',knowledge_point_id:'',knowledge_point:''},'資訊科技'),null);
+  assert.equal(Knowledge.assertLabel({knowledge_subject:'',knowledge_point_id:'',knowledge_point:''},'未開設科目'),null);
   assert.deepEqual(Knowledge.metadata({meta:math,learningSubject:'數學B'}),{
     knowledge_subject:'數學',knowledge_point_id:'math-3',knowledge_point:'方程與不等式',knowledge_points:[{subject:'數學',id:'math-3',name:'方程與不等式'}]});
   let map=Knowledge.record({},math,true);map=Knowledge.record(map,{meta:math,learningSubject:'數學'},false);
@@ -74,7 +74,7 @@ test('every array item is validated, invalid points cannot hide behind a valid f
     const old={};assert.equal(Knowledge.record(old,question,true),old);
   }
   assert.throws(()=>Knowledge.assertLabel({knowledge_points:[]},'數學'),/知識點標記無效/);
-  assert.equal(Knowledge.assertLabel({knowledge_points:[]},'資訊科技'),null);
+  assert.equal(Knowledge.assertLabel({knowledge_points:[]},'未開設科目'),null);
   const mixed={subject:'綜合',knowledge_points:[point,{subject:'物理',id:'physics-1',name:'力與運動'}]};
   const map=Knowledge.record({},mixed,true);assert.equal(Core.build(map).total,1);
   assert.equal(map._totals.subjects.數學.total,1);assert.equal(map._totals.subjects.物理.total,1);

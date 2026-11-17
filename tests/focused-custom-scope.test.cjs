@@ -10,7 +10,7 @@ function customPicker() {
     soloSelectedUnits: [], soloComprehensiveUnits: [{ path: '英文', detail: '保留綜合範圍' }] };
   const mode={value:'focused',dispatchEvent(){this.changes=(this.changes||0)+1;}};
   const context = vm.createContext({ window, grade: '國中二年級', subject: '數學',
-    grades: ['國中二年級', '高中二年級', '國小三年級'], subjectOptions: () => ['數學', '數學A', '資訊科技', '藝術'],
+    grades: ['國中二年級', '高中二年級', '國小三年級'], subjectOptions: () => ['數學', '數學A', '藝術'],
     canonicalSubject: () => /^數學/.test(context.subject) ? '數學' : context.subject,
     selectedUnits: () => window.soloSelectedUnits, itemKey: u => JSON.stringify([u.path, u.detail, u.sub_topics]),
     el: id=>id==='set-source-mode'?mode:null, Event:class {},
@@ -102,7 +102,7 @@ test('saving focused custom ranges persists them and both solo quizzes and oppor
 });
 
 test('opportunity passages retain every additional subject offered by the curriculum custom range controls', () => {
-  for (const subject of ['自然科學', '藝術', '健康與體育', '本土語文', '綜合活動', '資訊科技', '綜合']) {
+  for (const subject of ['自然科學', '藝術', '健康與體育', '本土語文', '綜合活動', '綜合']) {
     const player = { profile: { educationLevel: '高中職' }, gameSettings: { sourceMode: 'focused',
       focusedUnits: [{ path: subject + '/國小三年級/自訂/' + subject, detail: '本課程的生活應用', sub_topics: [] }] } };
     const target = opportunity.chooseTarget(opportunity.normalizeScope(player), [], () => 0);

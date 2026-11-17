@@ -2,7 +2,7 @@
 // Tower study choices follow free-study scope semantics, not PvP's mutual-grade filter.
 const crypto=require('node:crypto'),fs=require('node:fs/promises'),path=require('node:path');
 const Learning=require('./public/cultivation/adaptive-learning-rules.js');
-const SUBJECTS=new Set(['國文','國語','英文','數學','數學A','數學B','數學甲','數學乙','生物','物理','化學','地球科學','歷史','地理','公民','自然','自然科學','社會','生活','藝術','健康與體育','本土語文','綜合活動','資訊科技','綜合']);
+const SUBJECTS=new Set(['國文','國語','英文','數學','數學A','數學B','數學甲','數學乙','生物','物理','化學','地球科學','歷史','地理','公民','自然','自然科學','社會','生活','藝術','健康與體育','本土語文','綜合活動','綜合']);
 const RANDOM_SUBJECTS=['國文','英文','數學','公民','歷史','地理','物理','化學','生物'];
 const fail=(message,status=409)=>Object.assign(new Error(message),{status});
 const clean=(v,n=240)=>String(v||'').trim().slice(0,n);

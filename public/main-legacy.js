@@ -2399,7 +2399,7 @@ async function updateSettingsInputs() {
         }
 
         // 初始化專注練習清單
-        window.soloSelectedUnits = settings.focusedUnits || [];
+        window.soloSelectedUnits = (Array.isArray(settings.focusedUnits) ? settings.focusedUnits : []).filter(u => String(u?.path || '').split('/')[0] !== '資訊科技');
         window.renderSelectedUnitsList();
         try {
             const res = await fetch('/api/units');
@@ -2455,7 +2455,7 @@ window.saveProfile = async (triggerButton = null) => {
     const newSettings = { 
         sourceMode: sourceMode, 
         source: source, 
-        focusedUnits: [...(window.soloSelectedUnits || [])]
+        focusedUnits: [...(window.soloSelectedUnits || [])].filter(u => String(u?.path || '').split('/')[0] !== '資訊科技')
     };
 
     const selectionChanged = oldScopeSignature !== scopeSignature(newSettings,level);

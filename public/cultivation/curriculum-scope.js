@@ -2,12 +2,12 @@
 import './curriculum-range-rules.js';
 (function(){
 'use strict';
-const files={國文:'國文/chinese.json',英文:'英文/english.json',數學:'數學/math.json',生物:'生物理化/science.json',物理:'生物理化/science.json',化學:'生物理化/science.json',地球科學:'生物理化/science.json',歷史:'歷史/history.json',地理:'地理/geogrophy.json',公民:'公民/civics.json',資訊科技:'高中專屬'};
+const files={國文:'國文/chinese.json',英文:'英文/english.json',數學:'數學/math.json',生物:'生物理化/science.json',物理:'生物理化/science.json',化學:'生物理化/science.json',地球科學:'生物理化/science.json',歷史:'歷史/history.json',地理:'地理/geogrophy.json',公民:'公民/civics.json'};
 const grades=['國小一年級','國小二年級','國小三年級','國小四年級','國小五年級','國小六年級','國中一年級','國中二年級','國中三年級','高中一年級','高中二年級','高中三年級'];
 const highCore=new Set(['數學','數學A','數學B','數學甲','數學乙','物理','化學','生物','地球科學']);
 const highSubjectList=g=>{
  const math=g==='高中一年級'?['數學']:g==='高中二年級'?['數學A','數學B']:['數學甲','數學乙'];
- return ['國文','英文',...math,'物理','化學','生物','地球科學','歷史','地理','公民','資訊科技'];
+ return ['國文','英文',...math,'物理','化學','生物','地球科學','歷史','地理','公民'];
 };
 const elementarySubjectList=g=>{
  const lower=/^國小[一二]年級$/.test(g);
@@ -15,7 +15,7 @@ const elementarySubjectList=g=>{
  ['國語','英文','數學','自然科學','社會','藝術','綜合活動','健康與體育','本土語文'];
 };
 const elementaryFile=s=>s==='數學'?'math.json':['國語','生活','社會','自然科學'].includes(s)?'core.json':'other.json';
-const subjectOptions=g=>g.startsWith('國小')?elementarySubjectList(g):g.startsWith('高中')?highSubjectList(g):Object.keys(files).filter(k=>k!=='資訊科技');
+const subjectOptions=g=>g.startsWith('國小')?elementarySubjectList(g):g.startsWith('高中')?highSubjectList(g):Object.keys(files);
 const sourcePath=(sub,g)=>g.startsWith('國小')?'elementary_school_unit_name/'+elementaryFile(sub)
  :g.startsWith('高中')?'high_school_unit_name/'+(highCore.has(sub)?'core.json':'humanities.json')
  :'middle_school_unit_name/'+files[sub];
@@ -46,7 +46,7 @@ function detailFor(u){return (u?.term?u.term+' · ':'')+(u?.unit||'');}
 function chapterItem(i){const u=units[i];return u?{path:currentPath(),detail:detailFor(u),sub_topics:u.details.slice(0,8)}:null;}
 function topicItem(i,j){const u=units[i],topic=u?.details?.[j];return u&&topic?{path:currentPath(),detail:(detailFor(u)+'－'+topic).slice(0,100),sub_topics:[topic]}:null;}
 function itemKey(item){return JSON.stringify([item?.path||'',item?.detail||'',Array.isArray(item?.sub_topics)?item.sub_topics:[]]);}
-function selectedUnits(){if(!Array.isArray(window.soloSelectedUnits))window.soloSelectedUnits=[];return window.soloSelectedUnits;}
+function selectedUnits(){if(!Array.isArray(window.soloSelectedUnits))window.soloSelectedUnits=[];window.soloSelectedUnits=window.soloSelectedUnits.filter(u=>String(u?.path||'').split('/')[0]!=='資訊科技');return window.soloSelectedUnits;}
 function syncDraftFromSelection(){draft.clear();const keys=new Set(selectedUnits().map(itemKey));units.forEach((u,i)=>{const chapter=chapterItem(i);if(chapter&&keys.has(itemKey(chapter))){draft.add('c:'+i);return;}u.details.forEach((_,j)=>{const topic=topicItem(i,j);if(topic&&keys.has(itemKey(topic)))draft.add('t:'+i+':'+j);});});updateDraft();}
 function applyVisibleSelectionState(){syncDraftFromSelection();el('cs-units')?.querySelectorAll('.cs-chapter').forEach(box=>{const i=box.dataset.i;box.checked=draft.has('c:'+i);box.indeterminate=!box.checked&&units[i]?.details.some((_,j)=>draft.has('t:'+i+':'+j));});el('cs-units')?.querySelectorAll('.cs-topic').forEach(box=>{const i=box.dataset.i,j=box.dataset.j,chapterSelected=draft.has('c:'+i);box.checked=chapterSelected||draft.has('t:'+i+':'+j);box.disabled=chapterSelected;});}
 function notifySelectionList(){if(typeof window.renderSelectedUnitsList==='function')window.renderSelectedUnitsList();else showList();}

@@ -7,7 +7,7 @@
   'use strict';
   const MAX_UNITS = 24, MAX_DETAIL = 90, MAX_INPUT = 2400, MAX_SHARE = 64000;
   const SCHEMA = 'qingyun-study-scopes';
-  const subjects = new Set(['國文','國語','英文','數學','數學A','數學B','數學甲','數學乙','生物','物理','化學','地球科學','歷史','地理','公民','自然','自然科學','社會','生活','藝術','健康與體育','本土語文','綜合活動','資訊科技','綜合']);
+  const subjects = new Set(['國文','國語','英文','數學','數學A','數學B','數學甲','數學乙','生物','物理','化學','地球科學','歷史','地理','公民','自然','自然科學','社會','生活','藝術','健康與體育','本土語文','綜合活動','綜合']);
   const brackets = new Map([['(',')'],['（','）'],['[',']'],['【','】'],['{','}'],['〔','〕'],['「','」'],['『','』'],['“','”'],['"','"']]);
   const key = u => JSON.stringify([u.path, u.detail || '', Array.isArray(u.sub_topics) ? u.sub_topics : []]);
 
@@ -53,6 +53,7 @@
     let added = 0;
     for (const [list, isNew] of [[existing, false], [incoming, true]]) {
       for (const unit of list) {
+        if (String(unit?.path || '').split('/')[0] === '資訊科技') continue; // retired range
         const id = key(unit);
         if (seen.has(id)) continue;
         seen.add(id); units.push(unit); if (isNew) added++;

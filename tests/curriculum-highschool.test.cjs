@@ -10,10 +10,10 @@ const legacy = fs.readFileSync(path.join(base, 'main-legacy.js'), 'utf8');
 const G = ['高中一年級', '高中二年級', '高中三年級'];
 const T = ['第一學期', '第二學期'];
 
-test('high-school 108 study maps cover 11 subjects and two semesters across all three grades', () => {
+test('high-school 108 study maps cover all supported subjects and two semesters across all three grades', () => {
   const all = { ...core.subjects, ...humanities.subjects };
   const required = ['國文', '英文', '數學', '數學A', '數學B', '數學甲', '數學乙',
-    '物理', '化學', '生物', '地球科學', '歷史', '地理', '公民', '資訊科技'];
+    '物理', '化學', '生物', '地球科學', '歷史', '地理', '公民'];
   for (const subject of required) assert.ok(all[subject], 'missing subject ' + subject);
   for (const subject of required) {
     const availableGrades = /^數學(?:A|B)$/.test(subject) ? [G[1]]

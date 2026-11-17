@@ -10,7 +10,6 @@ const { quizReferences, referencePrompt } = require('../quiz-references.cjs');
 // All checks execute in Node tests only. The game client never scans reference files.
 const coverage = {
   '國文': ['高中一年級', '高中二年級', '高中三年級'],
-  '資訊科技': ['高中一年級', '高中二年級', '高中三年級'],
   '歷史': ['高中一年級', '高中二年級', '高中三年級'],
   '地理': ['高中一年級', '高中二年級', '高中三年級'],
   '公民': ['高中一年級', '高中二年級', '高中三年級']
@@ -53,7 +52,6 @@ for (const [subject, grades] of Object.entries(coverage)) {
           assert.equal(new Set([q.correct, ...q.wrong]).size, 4);
           assert.deepEqual(knowledge.labels(q, subject), q.knowledge_points,
             `${concept}: knowledge-point ID/name mismatch`);
-          if (subject === '資訊科技') assert.deepEqual(q.knowledge_points, []);
         }
         assert.match(referencePrompt(selected), /同觀念的人類命題範例/);
       }
