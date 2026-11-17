@@ -1,0 +1,66 @@
+{
+  "units": [
+    "字彙與語用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-學術字彙初階-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「學術字彙初階」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Complete: 'The results provide strong ___ for the hypothesis, although more tests are needed.'",
+        "correct": "evidence",
+        "wrong": [
+          "evident",
+          "evidently",
+          "evidencingly"
+        ],
+        "exp": "provide ... for 後需可作名詞的 evidence，表證據，不能用形容詞或副詞。",
+        "subject": "英文",
+        "sub_topic": "學術字彙初階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-學術字彙初階",
+        "template_id": "eng-ref-g2-學術字彙初階-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-學術字彙初階-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「學術字彙初階」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Choose the most appropriate word: 'The experiment aims to ___ whether light affects seed growth.'",
+        "correct": "determine",
+        "wrong": [
+          "decorate",
+          "deliver",
+          "divide"
+        ],
+        "exp": "determine whether 表查明是否如此，符合實驗目的。",
+        "subject": "英文",
+        "sub_topic": "學術字彙初階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-學術字彙初階",
+        "template_id": "eng-ref-g2-學術字彙初階-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

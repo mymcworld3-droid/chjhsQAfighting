@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英語表達"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-意見表達-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「意見表達」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Choose the best sentence for a formal letter proposing longer library hours.",
+        "correct": "I believe extending weekend hours would help students who commute.",
+        "wrong": [
+          "You must do this now because I said so!",
+          "The library's chairs are secretly made of music.",
+          "Nobody should ever be asked for feedback."
+        ],
+        "exp": "正式表達意見宜有明確立場與理由，語氣禮貌且切題。",
+        "subject": "英文",
+        "sub_topic": "意見表達",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-意見表達",
+        "template_id": "eng-ref-g2-意見表達-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-意見表達-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「意見表達」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Which response politely disagrees while giving a reason? A: 'We should cancel the recycling program because it takes time.'",
+        "correct": "I see your concern, but the program reduces waste and may be worth improving.",
+        "wrong": [
+          "You are always wrong, so stop talking.",
+          "I agree that recycling must disappear forever.",
+          "My favorite restaurant opens on Tuesdays."
+        ],
+        "exp": "合理異議先理解對方顧慮，再以相關理由提出不同看法。",
+        "subject": "英文",
+        "sub_topic": "意見表達",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中二年級-意見表達",
+        "template_id": "eng-ref-g2-意見表達-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

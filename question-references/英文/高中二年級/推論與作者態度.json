@@ -1,0 +1,66 @@
+{
+  "units": [
+    "長篇閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-推論與作者態度-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「推論與作者態度」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'The online course is convenient, but learners should not assume every video is accurate. Checking the instructor's sources remains essential.' What is the author's attitude?",
+        "correct": "Generally supportive but cautious about reliability.",
+        "wrong": [
+          "Completely opposed to all online learning.",
+          "Certain that every video is correct.",
+          "Uninterested in source checking."
+        ],
+        "exp": "convenient 肯定便利，but 轉向須查核，態度審慎而非全面否定。",
+        "subject": "英文",
+        "sub_topic": "推論與作者態度",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-推論與作者態度",
+        "template_id": "eng-ref-g2-推論與作者態度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-推論與作者態度-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「推論與作者態度」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'The plan sounds promising. Still, I would like to see how it works during the rainy season before recommending it to other towns.' What does the writer imply?",
+        "correct": "Further testing is needed before wider adoption.",
+        "wrong": [
+          "The plan has already succeeded in every town.",
+          "The rainy season has no effect on the plan.",
+          "The writer demands immediate nationwide adoption."
+        ],
+        "exp": "sounds promising 表保留肯定，Still 表尚需檢驗雨季表現。",
+        "subject": "英文",
+        "sub_topic": "推論與作者態度",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-推論與作者態度",
+        "template_id": "eng-ref-g2-推論與作者態度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "篇章與綜合測驗"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-文意選填-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「文意選填」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'The museum is popular. ___, admission is free for students, making it easier for young people to visit.' Which phrase best connects the supporting detail?",
+        "correct": "In addition",
+        "wrong": [
+          "On the contrary",
+          "As a punishment",
+          "In the distant past"
+        ],
+        "exp": "免門票是補充博物館受歡迎或易於參觀的資訊，用 In addition。",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文意選填",
+        "template_id": "eng-ref-g2-文意選填-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-文意選填-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「文意選填」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'Many plants cannot survive without sunlight. ___, some species grow well in shaded forests.' Which connector best fits?",
+        "correct": "However",
+        "wrong": [
+          "Therefore",
+          "For this reason",
+          "Similarly"
+        ],
+        "exp": "前後由多數植物需要陽光轉向部分耐陰植物，為轉折關係。",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文意選填",
+        "template_id": "eng-ref-g2-文意選填-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

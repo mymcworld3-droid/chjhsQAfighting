@@ -1,0 +1,66 @@
+{
+  "units": [
+    "閱讀策略"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-語境推理-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「語境推理」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'Although Nora had practiced the speech for weeks, her hands trembled when she saw the audience. She took a deep breath before speaking.' How did Nora probably feel?",
+        "correct": "Nervous but determined to continue.",
+        "wrong": [
+          "Completely unaware of the audience.",
+          "Angry because the speech had been canceled.",
+          "Certain that nobody had arrived."
+        ],
+        "exp": "hands trembled 與 deep breath 暗示緊張，仍準備繼續上台。",
+        "subject": "英文",
+        "sub_topic": "語境推理",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-語境推理",
+        "template_id": "eng-ref-g2-語境推理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-語境推理-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「語境推理」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'The shop owner kept a box of umbrellas by the door. On rainy days, visitors were welcome to borrow one and return it later.' What can be inferred about the owner's intention?",
+        "correct": "To help customers when the weather changes.",
+        "wrong": [
+          "To sell every umbrella immediately.",
+          "To prevent anyone from leaving the shop.",
+          "To collect umbrellas only on sunny days."
+        ],
+        "exp": "提供雨天借傘是便利顧客的行為，並無出售或強制留下的訊息。",
+        "subject": "英文",
+        "sub_topic": "語境推理",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-語境推理",
+        "template_id": "eng-ref-g2-語境推理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

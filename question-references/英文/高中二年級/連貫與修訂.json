@@ -1,0 +1,66 @@
+{
+  "units": [
+    "寫作與翻譯"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-連貫與修訂-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「連貫與修訂」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "A paragraph says: 'Our class planted trees. We watered them regularly. They grew new leaves.' Which revision best avoids repeating 'we' while keeping the meaning?",
+        "correct": "After planting the trees, our class watered them regularly, and new leaves soon appeared.",
+        "wrong": [
+          "Our class planted trees, because new leaves are all teachers.",
+          "Trees were regularly our planted in new leaves.",
+          "We planted trees and never gave them any water."
+        ],
+        "exp": "改寫保留植樹、澆水、長葉順序，句子更連貫且語意不變。",
+        "subject": "英文",
+        "sub_topic": "連貫與修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-連貫與修訂",
+        "template_id": "eng-ref-g2-連貫與修訂-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-連貫與修訂-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「連貫與修訂」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Draft: 'The park was crowded. However, many people visited it because the weather was pleasant.' Which connector would better fit the positive explanation?",
+        "correct": "In fact",
+        "wrong": [
+          "Nevertheless",
+          "In contrast",
+          "Although"
+        ],
+        "exp": "前句說人潮多，後句解釋好天氣與人潮相符，不是轉折；In fact 可加強補述。",
+        "subject": "英文",
+        "sub_topic": "連貫與修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-連貫與修訂",
+        "template_id": "eng-ref-g2-連貫與修訂-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

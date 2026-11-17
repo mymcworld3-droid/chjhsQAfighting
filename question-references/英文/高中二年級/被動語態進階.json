@@ -1,0 +1,66 @@
+{
+  "units": [
+    "文法：語氣與進階結構"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-被動語態進階-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「被動語態進階」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Choose the correct sentence: 'The new sports center ___ by the end of next year.'",
+        "correct": "will have been completed",
+        "wrong": [
+          "will have completed by workers",
+          "has been completing",
+          "was completing by itself"
+        ],
+        "exp": "至明年底前完成，且中心是被建造者，使用未來完成被動 will have been completed。",
+        "subject": "英文",
+        "sub_topic": "被動語態進階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中二年級-被動語態進階",
+        "template_id": "eng-ref-g2-被動語態進階-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-被動語態進階-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「被動語態進階」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Rewrite in passive voice without changing meaning: 'Someone is repairing the bridge now.'",
+        "correct": "The bridge is being repaired now.",
+        "wrong": [
+          "The bridge is repairing someone now.",
+          "The bridge has repaired now.",
+          "The bridge was repair at tomorrow."
+        ],
+        "exp": "現在進行式被動為 is being + 過去分詞 repaired。",
+        "subject": "英文",
+        "sub_topic": "被動語態進階",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "eng-高中二年級-被動語態進階",
+        "template_id": "eng-ref-g2-被動語態進階-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

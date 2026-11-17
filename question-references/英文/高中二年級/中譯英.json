@@ -1,0 +1,66 @@
+{
+  "units": [
+    "寫作與翻譯"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-中譯英-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「中譯英」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Which is the best translation of '如果明天下雨，我們就改在室內舉行活動' ?",
+        "correct": "If it rains tomorrow, we will hold the event indoors.",
+        "wrong": [
+          "If it will rain tomorrow, we held the event indoors yesterday.",
+          "Although it rains tomorrow, we did not hold the event.",
+          "Because tomorrow is sunny, we will cancel the event."
+        ],
+        "exp": "未來真實條件句 if 子句用現在式，主要子句用 will；並保留改在室內之意。",
+        "subject": "英文",
+        "sub_topic": "中譯英",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-中譯英",
+        "template_id": "eng-ref-g2-中譯英-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-中譯英-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「中譯英」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Choose the best translation: '這本書不但容易理解，而且提供許多實用例子。'",
+        "correct": "This book is not only easy to understand but also full of practical examples.",
+        "wrong": [
+          "This book is not easy to understand and gives no examples.",
+          "This book is neither useful nor understandable.",
+          "The book was lost because it had many pages."
+        ],
+        "exp": "not only ... but also ... 表不但且，正確選項保留易懂與實例多兩個訊息。",
+        "subject": "英文",
+        "sub_topic": "中譯英",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-中譯英",
+        "template_id": "eng-ref-g2-中譯英-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

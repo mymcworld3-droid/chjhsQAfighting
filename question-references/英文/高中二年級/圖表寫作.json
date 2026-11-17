@@ -1,0 +1,66 @@
+{
+  "units": [
+    "寫作與翻譯"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-圖表寫作-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「圖表寫作」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "A chart shows school cafeteria waste fell from 50 kg per day to 35 kg after a new program. Which sentence accurately describes the change?",
+        "correct": "Daily food waste decreased by 15 kilograms after the program began.",
+        "wrong": [
+          "Food waste increased by 15 kilograms.",
+          "Food waste was exactly 50 kilograms both before and after.",
+          "The program proves that no food will ever be wasted again."
+        ],
+        "exp": "50 減至35，減量15公斤；不宜擅自推論未來完全無廚餘。",
+        "subject": "英文",
+        "sub_topic": "圖表寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-圖表寫作",
+        "template_id": "eng-ref-g2-圖表寫作-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-圖表寫作-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「圖表寫作」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "A table shows bike commuters rose from 40 in April to 60 in May, while bus commuters remained at 100. Which report sentence is supported?",
+        "correct": "Bicycle commuting increased, whereas bus commuting stayed unchanged.",
+        "wrong": [
+          "Both types of commuting doubled.",
+          "Bus commuting decreased by forty students.",
+          "Cycling remained exactly the same across the two months."
+        ],
+        "exp": "自行車40至60增加，公車維持100不變，whereas 適合比較趨勢。",
+        "subject": "英文",
+        "sub_topic": "圖表寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中二年級-圖表寫作",
+        "template_id": "eng-ref-g2-圖表寫作-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

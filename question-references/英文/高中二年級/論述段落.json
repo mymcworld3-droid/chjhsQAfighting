@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英語表達"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-論述段落-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「論述段落」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Claim: 'Schools should provide more bicycle parking.' Which evidence is most directly relevant?",
+        "correct": "A survey shows many students would cycle if secure parking were available.",
+        "wrong": [
+          "Students prefer three different kinds of music.",
+          "The city's oldest museum is near the station.",
+          "The cafeteria sold more soup last week."
+        ],
+        "exp": "論據需和自行車停車需求有直接連結，調查可支持提案。",
+        "subject": "英文",
+        "sub_topic": "論述段落",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-論述段落",
+        "template_id": "eng-ref-g2-論述段落-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-論述段落-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「論述段落」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "A paragraph argues that community gardens are useful. It includes evidence about fresh vegetables, neighbors meeting, and unused spaces being improved. Which topic sentence fits best?",
+        "correct": "Community gardens can benefit both residents and their neighborhoods.",
+        "wrong": [
+          "Gardens always require no labor or water.",
+          "All city residents have the same gardening skills.",
+          "Community gardens are only useful for professional farmers."
+        ],
+        "exp": "三組證據涵蓋個人與社區利益，主題句需兼顧這些面向且避免絕對化。",
+        "subject": "英文",
+        "sub_topic": "論述段落",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-論述段落",
+        "template_id": "eng-ref-g2-論述段落-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

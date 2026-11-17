@@ -1,0 +1,66 @@
+{
+  "units": [
+    "篇章與綜合測驗"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-克漏字-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「克漏字」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Complete the passage: 'When a bee visits a flower, pollen may stick to its body. As the bee moves to another flower, it can ___ pollen and help plants reproduce.'",
+        "correct": "transfer",
+        "wrong": [
+          "destroyed",
+          "refusing",
+          "invisible"
+        ],
+        "exp": "can 後接原形動詞，且上下文描述花粉移動，transfer 為正解。",
+        "subject": "英文",
+        "sub_topic": "克漏字",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-克漏字",
+        "template_id": "eng-ref-g2-克漏字-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-克漏字-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「克漏字」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Complete: 'The old bridge was unsafe. The city decided to ___ it with a stronger structure rather than continue repairs.'",
+        "correct": "replace",
+        "wrong": [
+          "require to",
+          "repeat of",
+          "remain at"
+        ],
+        "exp": "replace A with B 表以新結構取代舊橋，與決定不再修理的脈絡吻合。",
+        "subject": "英文",
+        "sub_topic": "克漏字",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-克漏字",
+        "template_id": "eng-ref-g2-克漏字-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

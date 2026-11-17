@@ -1,0 +1,66 @@
+{
+  "units": [
+    "字彙與語用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-多義字與搭配詞-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「多義字與搭配詞」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "In 'The library will issue new cards to students,' what does 'issue' mean?",
+        "correct": "Provide or officially give out.",
+        "wrong": [
+          "A problem that people debate.",
+          "A printed edition of a magazine.",
+          "A type of medical injury."
+        ],
+        "exp": "issue 作動詞搭配 cards 表核發，與名詞「議題」「期刊期數」不同。",
+        "subject": "英文",
+        "sub_topic": "多義字與搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-多義字與搭配詞",
+        "template_id": "eng-ref-g2-多義字與搭配詞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-多義字與搭配詞-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「多義字與搭配詞」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "In 'The students raised funds for the shelter,' what is the meaning of 'raised'?",
+        "correct": "Collected money for a purpose.",
+        "wrong": [
+          "Lifted the shelter into the air.",
+          "Increased the shelter's height.",
+          "Grew crops behind the shelter."
+        ],
+        "exp": "raise funds 是募款固定搭配，須依後方 funds 判讀多義字。",
+        "subject": "英文",
+        "sub_topic": "多義字與搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中二年級-多義字與搭配詞",
+        "template_id": "eng-ref-g2-多義字與搭配詞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

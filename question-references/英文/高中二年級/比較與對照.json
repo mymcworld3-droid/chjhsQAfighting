@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英語表達"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-比較與對照-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「比較與對照」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'Unlike the old library, the new one has longer opening hours. Both buildings, however, offer free internet access.' What is true?",
+        "correct": "The new library stays open longer, but both offer free internet.",
+        "wrong": [
+          "The old library never had internet access.",
+          "Only the new building is free to enter.",
+          "Both libraries have exactly the same opening hours."
+        ],
+        "exp": "Unlike 指差異、Both 指共同點；兩館均提供免費網路。",
+        "subject": "英文",
+        "sub_topic": "比較與對照",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中二年級-比較與對照",
+        "template_id": "eng-ref-g2-比較與對照-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-比較與對照-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「比較與對照」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'Solar panels need sunlight to produce electricity, whereas wind turbines depend on moving air. Both can supply renewable energy.' Which structure does the author use?",
+        "correct": "Contrasting the conditions of two technologies and noting a shared feature.",
+        "wrong": [
+          "Listing four unrelated historical events.",
+          "Explaining why both technologies require coal.",
+          "Describing only the cost of a single technology."
+        ],
+        "exp": "whereas 引出不同能源條件，Both 表共同再生能源特性。",
+        "subject": "英文",
+        "sub_topic": "比較與對照",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-比較與對照",
+        "template_id": "eng-ref-g2-比較與對照-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "字彙與語用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-句意辨析-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「句意辨析」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Which sentence means 'Hardly any students missed the meeting'?",
+        "correct": "Almost all students attended the meeting.",
+        "wrong": [
+          "Almost all students missed the meeting.",
+          "No one knew a meeting had been scheduled.",
+          "The meeting was canceled before anyone arrived."
+        ],
+        "exp": "Hardly any ... missed 等於幾乎沒有人缺席，因此幾乎全部到場。",
+        "subject": "英文",
+        "sub_topic": "句意辨析",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-句意辨析",
+        "template_id": "eng-ref-g2-句意辨析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-句意辨析-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「句意辨析」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Which sentence best matches 'The bridge will not open until the safety inspection is complete'?",
+        "correct": "The bridge will remain closed before the inspection is finished.",
+        "wrong": [
+          "The bridge will open before the inspection begins.",
+          "The inspection can only happen after the bridge opens.",
+          "The bridge has already been open for months."
+        ],
+        "exp": "not ... until 表在檢驗完成前不開放，不能誤解為立即開放。",
+        "subject": "英文",
+        "sub_topic": "句意辨析",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-句意辨析",
+        "template_id": "eng-ref-g2-句意辨析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

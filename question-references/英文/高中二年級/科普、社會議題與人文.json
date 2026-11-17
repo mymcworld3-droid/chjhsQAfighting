@@ -1,0 +1,66 @@
+{
+  "units": [
+    "長篇閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-科普、社會議題與人文-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「科普、社會議題與人文」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'Coral reefs support many ocean species. Higher water temperatures can stress corals and cause bleaching, which reduces the shelter available to fish.' What is the main concern?",
+        "correct": "Warming seas may harm corals and the animals that depend on them.",
+        "wrong": [
+          "Coral bleaching always creates more shelter.",
+          "Fish live only in freshwater lakes.",
+          "Coral reefs are entirely unaffected by temperature."
+        ],
+        "exp": "文字指出高溫致白化並影響魚類棲地，重點是生態連鎖影響。",
+        "subject": "英文",
+        "sub_topic": "科普、社會議題與人文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中二年級-科普、社會議題與人文",
+        "template_id": "eng-ref-g2-科普、社會議題與人文-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-科普、社會議題與人文-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「科普、社會議題與人文」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'Some museums now invite local communities to help decide how cultural objects should be displayed. This can add perspectives missing from older descriptions.' What is an intended benefit?",
+        "correct": "Including voices that were previously less represented.",
+        "wrong": [
+          "Replacing every artifact with an advertisement.",
+          "Removing historical context from all exhibitions.",
+          "Proving that curators can never contribute knowledge."
+        ],
+        "exp": "邀請在地社群可補充原有展示敘述缺少的聲音，並非否定專業人員。",
+        "subject": "英文",
+        "sub_topic": "科普、社會議題與人文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中二年級-科普、社會議題與人文",
+        "template_id": "eng-ref-g2-科普、社會議題與人文-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "長篇閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-跨段落比較-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「跨段落比較」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Paragraph 1: 'Electric buses reduce emissions on city streets.' Paragraph 2: 'Cities must also consider the electricity source and battery manufacturing when measuring total environmental impact.' Which statement connects them best?",
+        "correct": "The second paragraph qualifies the first by considering a broader life cycle.",
+        "wrong": [
+          "The second denies that buses can ever run on electricity.",
+          "Both paragraphs only discuss ticket prices.",
+          "The first paragraph proves manufacturing has no emissions."
+        ],
+        "exp": "第一段看街道排放，第二段擴大到全生命週期，屬補充限制。",
+        "subject": "英文",
+        "sub_topic": "跨段落比較",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-跨段落比較",
+        "template_id": "eng-ref-g2-跨段落比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-跨段落比較-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「跨段落比較」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Paragraph 1 describes how a river was polluted by factories. Paragraph 2 explains how residents organized a cleanup and persuaded officials to set monitoring rules. How are the paragraphs related?",
+        "correct": "Problem followed by collective response and proposed solutions.",
+        "wrong": [
+          "Two completely unrelated travel diaries.",
+          "A biography followed by a recipe.",
+          "An experiment followed by its mathematical proof."
+        ],
+        "exp": "前段提出污染問題，後段提供社區行動與治理回應。",
+        "subject": "英文",
+        "sub_topic": "跨段落比較",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-跨段落比較",
+        "template_id": "eng-ref-g2-跨段落比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

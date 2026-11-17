@@ -1,0 +1,66 @@
+{
+  "units": [
+    "閱讀策略"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-文章組織-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「文章組織」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read: 'More students now use refillable bottles. ___, the school has installed three water stations.' Which connector best indicates that the second sentence provides a related development?",
+        "correct": "To support this change",
+        "wrong": [
+          "In spite of the nineteenth century",
+          "By the same birthday",
+          "Contrary to all weather reports"
+        ],
+        "exp": "第二句提供支持自帶水壺的設施，適合用 To support this change 連結。",
+        "subject": "英文",
+        "sub_topic": "文章組織",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文章組織",
+        "template_id": "eng-ref-g2-文章組織-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-文章組織-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「文章組織」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Paragraph order: A. The volunteers then planted seedlings. B. They first removed plastic waste from the beach. C. After six months, the restored area attracted birds. Choose the best order.",
+        "correct": "B → A → C",
+        "wrong": [
+          "A → C → B",
+          "C → A → B",
+          "B → C → A"
+        ],
+        "exp": "先移除垃圾、接著種植、六個月後觀察成果，依時間及因果安排。",
+        "subject": "英文",
+        "sub_topic": "文章組織",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-文章組織",
+        "template_id": "eng-ref-g2-文章組織-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

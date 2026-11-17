@@ -1,0 +1,66 @@
+{
+  "units": [
+    "篇章與綜合測驗"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g2-篇章結構-1",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「篇章結構」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "A paragraph begins with a claim that city trees cool streets, then presents two temperature measurements, and ends with a proposal to plant more trees. What is the organization?",
+        "correct": "Claim → supporting evidence → recommendation.",
+        "wrong": [
+          "Recommendation → unrelated history → definition.",
+          "Question → personal apology → recipe.",
+          "Chronological biography of a tree scientist."
+        ],
+        "exp": "主張之後用數據支持，最後給建議，是典型論證段落結構。",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-篇章結構",
+        "template_id": "eng-ref-g2-篇章結構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g2-篇章結構-2",
+      "source": "依大考中心114學測英文考科語法、閱讀理解及作文命題方向自編的參考題",
+      "design": "根據「篇章結構」的上下文邏輯、語意及文法結構判斷正確選項",
+      "question": {
+        "q": "Read the transition: 'The new app saves time. However, it requires an internet connection, which is not always available.' What is the purpose of 'However'?",
+        "correct": "To introduce a limitation to an earlier advantage.",
+        "wrong": [
+          "To provide an identical advantage.",
+          "To mark the beginning of a list of dates.",
+          "To show that both sentences mean exactly the same thing."
+        ],
+        "exp": "However 將先前優點轉向限制，形成對比。",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中二年級-篇章結構",
+        "template_id": "eng-ref-g2-篇章結構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
