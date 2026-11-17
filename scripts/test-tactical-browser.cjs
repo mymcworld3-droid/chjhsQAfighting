@@ -274,6 +274,23 @@ async function main(){
     room.actors=[room.actors[0],...[[0,3,2],[8,4,2],[12,6,6],[3,6,0]].map(([species,x,y],i)=>Rules.actor({uid:'monster-'+i,name:Rules.monsterProfile(species).name,bot:true,team:'monster',species,atk:100,maxHp:2000},{x,y}))];
     Rules.prepareIntents(room);room.revision=saved.revision+1;db.records.set(key,room);
     await view.setViewportSize({width:393,height:852});await view.locator('[data-sync]').click();await view.waitForFunction(()=>!document.querySelector('[data-end]').disabled);
+    // Simulate an authoritative per-room EXP ledger update. UI must show only
+    // the same-room increment, remain click-through, and never replay on sync.
+    room.manualExp={u1:{'sword-wind':35}};room.revision++;
+    await view.locator('[data-sync]').click();
+    await view.locator('[data-manual-xp-toast]').waitFor();
+    assert.match(await view.locator('[data-manual-xp-toast]').textContent(),/\+35 EXP/);
+    assert.equal(await view.locator('.tc-manual-xp-entry--sword').count(),1);
+    assert.equal(await view.locator('[data-manual-xp-host]').evaluate(node=>getComputedStyle(node).pointerEvents),'none');
+    await view.evaluate(()=>{window.__firstManualXpToast=document.querySelector('[data-manual-xp-toast]');});
+    await view.locator('[data-sync]').click();
+    assert.equal(await view.locator('[data-manual-xp-toast]').evaluate(node=>node===window.__firstManualXpToast),true,
+      'repeating an identical server snapshot must not replay the XP cue');
+    await view.locator('[data-manual-xp-toast]').waitFor({state:'detached',timeout:5000});
+    // Restore the ledger to its old baseline before the actual combat checks.
+    room.manualExp={u1:{}};room.revision++;
+    await view.locator('[data-sync]').click();
+    assert.equal(await view.locator('[data-manual-xp-toast]').count(),0);
     await view.evaluate(()=>{
       window.__animationHistory=[];const canvas=document.querySelector('#tactical-combat canvas');
       window.__animationObserver=new MutationObserver(()=>{const kind=canvas.dataset.animation;if(kind)window.__animationHistory.push({kind,locked:document.querySelector('[data-end]').disabled,result:!!document.querySelector('[data-next-stage]')});});
