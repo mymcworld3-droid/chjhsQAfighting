@@ -3,10 +3,11 @@ import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js';
 import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
 import {filterOwnedManuals,renderManualCollectionHeader,renderManualCollectionSummary} from './manual-library-view.js';
+import {detectManualCelebration,renderManualCelebration} from './manual-celebration.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
-let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',pickerSlot=null,libraryFilter='all';
+let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',pickerSlot=null,libraryFilter='all',celebrationTimer=null;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -46,6 +47,12 @@ function ensure(){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-library-style';
     link.href='/styles/manual-training-library.css?v=20261117-gallery-phase3';
+    document.head.append(link);
+  }
+  if(!document.getElementById('manual-training-celebration-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-celebration-style';
+    link.href='/styles/manual-training-celebration.css?v=20261117-rewards-phase4';
     document.head.append(link);
   }
   return root;
@@ -162,7 +169,8 @@ function markup(expandedBooks){
       <div>${Catalog.REALMS.map(realm=>`<span>${realm.name}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
       <p>使用功法技能擊殺靈獸才能累積經驗。每招同時需要達到功法等級與修士境界。</p>
     </details>
-    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>`;
+    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
+    <div class="manual-celebration-host" data-manual-celebration-host></div>`;
 }
 // Reconcile the existing page instead of recreating every image on each
 // save/upgrade. In particular, leave an unchanged <img src> untouched.
@@ -202,6 +210,24 @@ function reconcile(parent,template){
   }
   while(parent.childNodes.length>index)parent.lastChild.remove();
 }
+function clearManualCelebration(){
+  if(celebrationTimer!==null)clearTimeout(celebrationTimer);
+  celebrationTimer=null;
+  root?.querySelector('[data-manual-celebration-host]')?.replaceChildren();
+}
+function showManualCelebration(reward){
+  if(!reward||!visible())return;
+  const host=root?.querySelector('[data-manual-celebration-host]');
+  if(!host)return;
+  clearManualCelebration();
+  host.innerHTML=renderManualCelebration(reward,{
+    esc,bookArt,skillArt,findSkill:skillDetails
+  });
+  const sound=reward.kind==='unlock'||reward.kind==='discovery'?'grand-reveal':'spirit-pulse';
+  try{globalThis.QAGameAudio?.play(sound,{volume:.70});}catch(_){}
+  const duration=reward.kind==='discovery'?3700:reward.kind==='unlock'?2700:1700;
+  celebrationTimer=setTimeout(()=>{host.replaceChildren();celebrationTimer=null;},duration);
+}
 function paint(message='',{loadoutFeedback=false}={}){
   ensure();if(!root)return;
   const expandedBooks=new Set();
@@ -223,15 +249,18 @@ function paint(message='',{loadoutFeedback=false}={}){
 async function load({force=false}={}){
   if(busy)return;
   ensure();const uid=getMainUser()?.uid;
-  if(!uid){current=null;loadedFor='';paint('請先登入後查看功法。');return;}
+  if(!uid){clearManualCelebration();current=null;loadedFor='';paint('請先登入後查看功法。');return;}
   if(!force&&loadedFor===uid&&Date.now()-lastFetch<15000){paint();return;}
   const token=++sequence;lastFetch=Date.now();
   try{
     const result=await request('/api/tactical/manuals');
     if(token!==sequence||getMainUser()?.uid!==uid)return;
+    const before=loadedFor===uid?current:null;
+    const reward=detectManualCelebration(before,result,{kind:'sync'});
     current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';pickerSlot=null;libraryFilter='all';}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
+    showManualCelebration(reward);
   }catch(error){
     if(token!==sequence)return;
     paint(error.message);
@@ -242,11 +271,16 @@ async function mutate(url,body){
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
   ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級功法…':'正在保存功法配置…');
-  let message='',successful=false;
+  let message='',successful=false,reward=null;
   const equippedSlot=pickerSlot;
   try{
+    const before=current;
     const next=await request(url,body);
     if(getMainUser()?.uid!==uid)return;
+    reward=detectManualCelebration(before,next,{
+      kind:url.endsWith('/school')?'school':upgrading?'upgrade':'loadout',
+      bookId:body?.bookId,skillId:body?.skillId
+    });
     current=next;loadedFor=uid;lastFetch=Date.now();successful=true;
     if(url.endsWith('/school')){featuredBookId='';pickerSlot=null;}
     if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds))pickerSlot=null;
@@ -255,8 +289,10 @@ async function mutate(url,body){
       const local=window.getCurrentUserData?.();
       if(local){local.stats||={};local.stats.gold=next.gold;window.updateUIStats?.();}
       const skill=body.skillId&&skillDetails(body.skillId);
-      message=skill?`「${skill.name}」已升至 Lv. ${skill.level}。`:
-        `已升級《${next.library.find(book=>book.id===body.bookId).name}》。`;
+      const target=body.bookId&&next.library.find(book=>book.id===body.bookId);
+      message=!reward?'功法資料已同步，等級沒有變更。':
+        skill?`「${skill.name}」已升至 Lv. ${skill.level}。`:
+        `已升級《${target?.name||'功法'}》。`;
     }else{
       message=url.endsWith('/school')?'修行流派已切換。':'功法配置已儲存。';
       window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
@@ -266,6 +302,7 @@ async function mutate(url,body){
     busy=false;
     if(getMainUser()?.uid===uid){
       paint(message,{loadoutFeedback:url.endsWith('/loadout')});
+      if(successful)showManualCelebration(reward);
       if(successful&&url.endsWith('/loadout')&&Array.isArray(body?.skillIds)
         &&Number.isInteger(equippedSlot)&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
         const card=root?.querySelector('[data-manual-slot="'+equippedSlot+'"]');
@@ -301,6 +338,9 @@ function boot(){
   ensureNav();
   ensure();
   root?.addEventListener('click',event=>{
+    if(event.target.closest('[data-manual-celebration-dismiss]')){
+      clearManualCelebration();return;
+    }
     if(busy)return;
     // Native details toggling and hero selection are reconciled in one paint.
     // Keep this before the button handler: summaries are not nested buttons.
@@ -424,7 +464,12 @@ function boot(){
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';featuredBookId='';pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){clearManualCelebration();current=null;loadedFor='';featuredBookId='';pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&root?.querySelector('[data-manual-celebration-host]')?.firstChild){
+      clearManualCelebration();
+    }
+  });
   window.addEventListener('xiuxian:manual-loot',()=>{if(visible())void load({force:true});});
   if(visible())void load({force:true});
 }
