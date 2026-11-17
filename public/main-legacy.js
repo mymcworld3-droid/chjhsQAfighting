@@ -4718,8 +4718,12 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
         }
         if (quiz.helperReviewRedacted === true) {
             // 審核仍使用完整證據；作答前的結果視窗與重試表單不顯示可能含正解的理由。
-            result.reason = result.status === 'confirmed' || result.status === 'duplicate'
+            result.reason = result.status === 'confirmed'
                 ? '獨立審核已確認這道題目有誤。'
+                : result.status === 'limit' && result.valid === true
+                    ? '獨立審核已確認這道題目有誤；今日補償獎勵已達上限。'
+                : result.status === 'duplicate'
+                    ? '這道題目先前已完成錯題處理，不會重複發放獎勵。'
                 : result.status === 'rejected' ? '獨立審核未確認這道題目有實質錯誤。'
                     : '本次題目審核尚未完成，請稍後重試。';
         }
@@ -4752,46 +4756,60 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
             reportView('input');
         };
 
-        if (result.status === 'confirmed' && result.compensated === true && result.goldAdded === 100 &&
-            Number.isFinite(Number(result.newGold)) && Number.isFinite(Number(result.newTotalScore))) {
+        // PvE intentionally pays no report gold: it settles battle rewards
+        // separately, but still grants eligible cultivation and stamina refunds.
+        // Use the mode-specific award contract, not 100 gold for every mode.
+        const committed = result.status === 'confirmed' && result.compensated === true &&
+            Number.isFinite(Number(result.newGold)) && Number.isFinite(Number(result.newTotalScore));
+        const paidSolo = !trial && committed && result.goldAdded === 100;
+        const paidBattle = !!trial && committed && result.goldAdded === 0 && !!result.battle;
+        const verifiedAction = trial && !result.questionSkipped ? window.closeReportModal : skipVerifiedQuestion;
+        const verifiedActionText = trial
+            ? (result.questionSkipped ? '下一題／返回戰場' : '關閉')
+            : (quiz.mode === 'trial-tower' ? '返回戰場出招' : '跳過錯題');
+        const staminaMessage = trial && Number.isFinite(Number(result.staminaRefunded))
+            ? '\n本回合已補正 ' + Math.max(0, Number(result.staminaRefunded)) + ' 體力。' : '';
+
+        if (paidSolo || paidBattle) {
             const refunded = Math.max(0, Number(result.cultivationRefund) || 0);
             const extra = Math.max(0, Number(result.cultivationBonus) || 0);
-            if (currentUserData?.stats && auth.currentUser?.uid === user.uid) {
-                // Only a confirmed server transaction may update the client reward display.
+            if (!trial && currentUserData?.stats && auth.currentUser?.uid === user.uid) {
+                // The battle callback already applies authoritative progress.
+                // Do not overwrite it with a potentially older award snapshot.
                 currentUserData.stats.gold = Number(result.newGold);
                 currentUserData.stats.totalScore = Number(result.newTotalScore);
                 updateUIStats();
             }
-            if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
+            if (window.currentActiveQuiz === quiz) await quiz.onVerifiedError?.();
             renderReportOutcome({
                 kind: 'approved',
                 title: '審查通過 ✅',
                 message: (result.reason || '題目確認有誤。') +
                     '\n返還修為 ' + refunded + '，額外獎勵 +' + extra +
-                    ' 修為；共 +' + (refunded + extra) + ' 修為、100 靈石已入帳。',
-                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
-                onAction: skipVerifiedQuestion
+                    ' 修為；共 +' + (refunded + extra) + ' 修為已入帳。' +
+                    (trial ? staminaMessage + '\nPvE 不另發 100 靈石，戰鬥獎勵依關卡結算。' : '另有 100 靈石已入帳。'),
+                actionText: verifiedActionText,
+                onAction: verifiedAction
             });
-        } else if (trial && result.questionSkipped && !result.compensated) {
-            renderReportOutcome({kind:'approved', title:'審查通過 ✅', message:result.reason,
-                actionText:'跳過錯題', onAction:skipVerifiedQuestion});
         } else if (result.status === 'limit' && result.valid === true) {
             if (window.currentActiveQuiz === quiz) await quiz.onVerifiedError?.();
             renderReportOutcome({
                 kind: 'approved',
-                title: '審查通過 ✅',
-                message: result.reason,
-                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
-                onAction: skipVerifiedQuestion
+                title: '題目已確認有誤 · 今日補償達上限',
+                message: (result.reason || '此題已確認有誤，但今日補償獎勵已達上限。') +
+                    staminaMessage + '\n本次不會額外發放修為或靈石。',
+                actionText: verifiedActionText,
+                onAction: verifiedAction
             });
         } else if (result.status === 'duplicate') {
-            if(window.currentActiveQuiz===quiz)await quiz.onVerifiedError?.();
+            if (window.currentActiveQuiz === quiz) await quiz.onVerifiedError?.();
             renderReportOutcome({
                 kind: 'approved',
                 title: '此題已通過審查 ✅',
-                message: '先前已領取這道題目的補償，不會重複發放；'+(quiz.mode==='trial-tower'?'本回合可返回戰場出招。':'可以直接跳過錯題。'),
-                actionText: quiz.mode==='trial-tower'?'返回戰場出招':'跳過錯題',
-                onAction: skipVerifiedQuestion
+                message: (result.reason || '此題先前已完成錯題處理，不會重複發放獎勵。') +
+                    staminaMessage,
+                actionText: verifiedActionText,
+                onAction: verifiedAction
             });
         } else if (result.status === 'rejected') {
             renderReportOutcome({
@@ -4801,17 +4819,19 @@ window.submitReport = async ({ helperReason = '' } = {}) => {
                     '\n本次不發放補償，可關閉視窗繼續作答。'
             });
         } else {
-            // Limit, network errors, uncertain AI output and unsettled payments
-            // are NOT an AI rejection; never present them as a paid success.
-            const isLimit = result.status === 'limit';
+            // A malformed or uncertain settlement is not a rejected review.
+            // Never claim payment success without authoritative award fields.
+            const limitReached = result.status === 'limit';
+            const verifiedUnsettled = result.status === 'confirmed';
             renderReportOutcome({
                 kind: 'incomplete',
-                title: isLimit ? '今日補償已達上限' : '本次審查未完成',
+                title: verifiedUnsettled ? '錯題已確認 · 補償狀態待核實'
+                    : limitReached ? '今日補償已達上限' : '本次審查未完成',
                 message: (result.reason || '審核服務暫時無法處理，請重新送審。') +
-                    '\n本次沒有確認補償入帳。',
-                actionText: isLimit ? '關閉' : '重新送審',
-                onAction: isLimit ? window.closeReportModal : retryReport,
-                showClose: !isLimit
+                    '\n伺服器尚未回傳符合此模式的完整補償紀錄，無法據此判定是否已入帳。',
+                actionText: limitReached ? '關閉' : '重新查詢／送審',
+                onAction: limitReached ? window.closeReportModal : retryReport,
+                showClose: !limitReached
             });
         }
         return result;
