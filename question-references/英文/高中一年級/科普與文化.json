@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨領域閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-科普與文化-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「科普與文化」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Read: 'Mangrove roots slow the movement of water and help hold soil near the coast. Many small fish also use these areas as shelter.' What is a function of mangroves?",
+        "correct": "They protect coastlines and provide habitats for young fish.",
+        "wrong": [
+          "They stop all tides permanently.",
+          "They remove every kind of salt from seawater.",
+          "They prevent any fish from entering shallow water."
+        ],
+        "exp": "根系固定土壤、減緩水流，紅樹林亦提供幼魚棲地。",
+        "subject": "英文",
+        "sub_topic": "科普與文化",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-科普與文化",
+        "template_id": "eng-ref-g1-科普與文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-科普與文化-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「科普與文化」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Read: 'At the festival, families prepare the same traditional dish, but each home adds ingredients from its own region.' What does this suggest about culture?",
+        "correct": "Shared traditions can include local differences.",
+        "wrong": [
+          "All families must follow one identical recipe.",
+          "Traditional food never changes in any way.",
+          "Regional differences make cultural exchange impossible."
+        ],
+        "exp": "相同節慶料理搭配不同在地配料，說明文化傳承與在地變化可並存。",
+        "subject": "英文",
+        "sub_topic": "科普與文化",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中一年級-科普與文化",
+        "template_id": "eng-ref-g1-科普與文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

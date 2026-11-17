@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨領域閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-圖表判讀-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「圖表判讀」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "A chart shows club members: Art 18, Science 24, Music 15. Which statement is true?",
+        "correct": "The Science Club has six more members than the Art Club.",
+        "wrong": [
+          "The Music Club has the most members.",
+          "The Art Club has nine more members than Science.",
+          "The Science and Music Clubs have equal membership."
+        ],
+        "exp": "Science 24 減 Art 18 為 6，人數最多是 Science。",
+        "subject": "英文",
+        "sub_topic": "圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-圖表判讀",
+        "template_id": "eng-ref-g1-圖表判讀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-圖表判讀-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「圖表判讀」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "A table shows bus departures: Route A at 8:10 and 8:40; Route B at 8:25 and 8:55. A student arrives at 8:20 and wants the earliest available bus. Which one should she take?",
+        "correct": "Route B at 8:25.",
+        "wrong": [
+          "Route A at 8:10.",
+          "Route A at 8:40.",
+          "Route B at 8:55."
+        ],
+        "exp": "8:20 之後最早發車的是 B 線 8:25，A 線 8:10 已開走。",
+        "subject": "英文",
+        "sub_topic": "圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中一年級-圖表判讀",
+        "template_id": "eng-ref-g1-圖表判讀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

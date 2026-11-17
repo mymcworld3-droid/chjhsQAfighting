@@ -1,0 +1,66 @@
+{
+  "units": [
+    "克漏字與文意選填"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-詞彙搭配-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「詞彙搭配」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Choose the natural collocation: 'The researchers ___ an experiment to test their idea.'",
+        "correct": "conducted",
+        "wrong": [
+          "made up to",
+          "borrowed of",
+          "took across"
+        ],
+        "exp": "conduct an experiment 為常用詞彙搭配，意為進行實驗。",
+        "subject": "英文",
+        "sub_topic": "詞彙搭配",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-詞彙搭配",
+        "template_id": "eng-ref-g1-詞彙搭配-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-詞彙搭配-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「詞彙搭配」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Choose the best phrase: 'Students should ___ attention to the safety instructions.'",
+        "correct": "pay",
+        "wrong": [
+          "take",
+          "make",
+          "give on"
+        ],
+        "exp": "pay attention to 是固定搭配；不能用 take attention to。",
+        "subject": "英文",
+        "sub_topic": "詞彙搭配",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中一年級-詞彙搭配",
+        "template_id": "eng-ref-g1-詞彙搭配-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

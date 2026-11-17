@@ -1,0 +1,66 @@
+{
+  "units": [
+    "聽力與溝通"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-情境對話-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「情境對話」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "A: 'Would you mind opening the window?' B: '___.' Choose the most appropriate polite acceptance.",
+        "correct": "Not at all. I'll open it.",
+        "wrong": [
+          "Yes, I have never seen a window.",
+          "I disagree with the weather report.",
+          "That is an interesting history lesson."
+        ],
+        "exp": "Would you mind ...? 若願意幫忙，Not at all 表示不介意，後句明確承諾行動。",
+        "subject": "英文",
+        "sub_topic": "情境對話",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-情境對話",
+        "template_id": "eng-ref-g1-情境對話-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-情境對話-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「情境對話」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "A: 'I'm sorry I stepped on your foot.' B: '___.' What is the most natural response?",
+        "correct": "That's okay. It was an accident.",
+        "wrong": [
+          "Could you tell me the train schedule?",
+          "My foot is a new kind of textbook.",
+          "The supermarket sells fresh oranges."
+        ],
+        "exp": "對方道歉，合宜回覆是接受道歉並表示理解，其他答句不符對話目的。",
+        "subject": "英文",
+        "sub_topic": "情境對話",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-情境對話",
+        "template_id": "eng-ref-g1-情境對話-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

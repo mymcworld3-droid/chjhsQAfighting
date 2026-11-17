@@ -1,0 +1,66 @@
+{
+  "units": [
+    "寫作基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-段落寫作-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「段落寫作」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "A student's paragraph says: 'I enjoy volunteering. Last weekend I helped organize donated books. I also cleaned the community center.' Which closing sentence is most suitable?",
+        "correct": "These experiences make volunteering meaningful to me.",
+        "wrong": [
+          "Our geography test will be next Thursday.",
+          "I bought a new laptop charger yesterday.",
+          "The bus company changed its logo last year."
+        ],
+        "exp": "段落圍繞志工活動，結尾應回扣服務經驗與意義。",
+        "subject": "英文",
+        "sub_topic": "段落寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落寫作",
+        "template_id": "eng-ref-g1-段落寫作-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-段落寫作-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「段落寫作」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "In a paragraph about reducing food waste, where is the sentence 'For example, students can take smaller portions first' most useful?",
+        "correct": "After a claim that practical habits can reduce uneaten food.",
+        "wrong": [
+          "Before an unrelated introduction to a famous painter.",
+          "As evidence that all restaurants have closed.",
+          "After a statement that nobody ever eats at school."
+        ],
+        "exp": "For example 引出實例，應置於能由取餐習慣支撐的主張後。",
+        "subject": "英文",
+        "sub_topic": "段落寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落寫作",
+        "template_id": "eng-ref-g1-段落寫作-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

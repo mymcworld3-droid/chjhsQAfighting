@@ -1,0 +1,66 @@
+{
+  "units": [
+    "寫作基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-句子合併-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「句子合併」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Combine without changing meaning: 'The woman is a doctor. She lives next door.'",
+        "correct": "The woman who lives next door is a doctor.",
+        "wrong": [
+          "The woman which live next door is a doctor.",
+          "Living next door, a doctor is the woman who.",
+          "The woman is a doctor because she lives next door."
+        ],
+        "exp": "who 引導關係子句修飾 woman，不誤加入因果關係。",
+        "subject": "英文",
+        "sub_topic": "句子合併",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子合併",
+        "template_id": "eng-ref-g1-句子合併-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-句子合併-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「句子合併」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Combine using 'although': 'The test was difficult. Ken finished it on time.'",
+        "correct": "Although the test was difficult, Ken finished it on time.",
+        "wrong": [
+          "Although the test was difficult, but Ken finished it on time.",
+          "Although difficult the test, and Ken finished on time.",
+          "Ken finished on time because the test was easy."
+        ],
+        "exp": "although 子句表讓步；標準句中不應再加 but 連接同一對子句。",
+        "subject": "英文",
+        "sub_topic": "句子合併",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中一年級-句子合併",
+        "template_id": "eng-ref-g1-句子合併-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

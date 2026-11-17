@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨領域閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-摘要-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「摘要」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Read: 'The town replaced old streetlights with LED lights. Electricity use fell by 30 percent, but some residents asked the town to reduce excessive brightness near homes.' Which summary is most accurate?",
+        "correct": "The LED project saved energy while raising concerns about nighttime brightness.",
+        "wrong": [
+          "The town stopped using all streetlights permanently.",
+          "Residents demanded higher electricity bills.",
+          "LEDs increased energy use by 30 percent."
+        ],
+        "exp": "摘要需同時保留省電與光害疑慮，不能只選一邊或顛倒數字。",
+        "subject": "英文",
+        "sub_topic": "摘要",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-摘要",
+        "template_id": "eng-ref-g1-摘要-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-摘要-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「摘要」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Read: 'The school garden failed during its first dry summer. Students later collected rainwater, added mulch, and grew plants better suited to local conditions. The garden survived the following year.' What is the best summary?",
+        "correct": "Students improved the garden by changing how they managed water and selected plants.",
+        "wrong": [
+          "The students stopped gardening after the first summer.",
+          "All plants grow well without water.",
+          "The garden was destroyed by a storm the next year."
+        ],
+        "exp": "主軸為失敗後改善水資源管理與選植，最終成功延續。",
+        "subject": "英文",
+        "sub_topic": "摘要",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-摘要",
+        "template_id": "eng-ref-g1-摘要-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

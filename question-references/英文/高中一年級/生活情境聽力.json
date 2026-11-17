@@ -1,0 +1,66 @@
+{
+  "units": [
+    "聽力與溝通"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-生活情境聽力-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「生活情境聽力」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Listening transcript: 'Attention, passengers. The 4:20 train to Hsinchu will leave from Platform 3 instead of Platform 1.' What has changed?",
+        "correct": "The departure platform.",
+        "wrong": [
+          "The destination.",
+          "The ticket price.",
+          "The departure date."
+        ],
+        "exp": "廣播只說月台由 1 改為 3，目的地與發車時間沒有改。",
+        "subject": "英文",
+        "sub_topic": "生活情境聽力",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-生活情境聽力",
+        "template_id": "eng-ref-g1-生活情境聽力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-生活情境聽力-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「生活情境聽力」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Listening transcript: 'Your appointment is still at ten, but please arrive fifteen minutes early to complete a form.' When should the listener arrive?",
+        "correct": "9:45",
+        "wrong": [
+          "10:15",
+          "10:00",
+          "9:15"
+        ],
+        "exp": "預約為十點，提前十五分鐘到場，因此 9:45。",
+        "subject": "英文",
+        "sub_topic": "生活情境聽力",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中一年級-生活情境聽力",
+        "template_id": "eng-ref-g1-生活情境聽力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

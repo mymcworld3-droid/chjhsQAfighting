@@ -1,0 +1,66 @@
+{
+  "units": [
+    "閱讀理解"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g1-段落結構-1",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「段落結構」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "Read the sentences: (A) Finally, they planted trees near the river. (B) First, students collected plastic bottles. (C) Next, they separated the recyclable materials. What is the most logical order?",
+        "correct": "B → C → A",
+        "wrong": [
+          "A → B → C",
+          "C → A → B",
+          "B → A → C"
+        ],
+        "exp": "First、Next、Finally 清楚指示先後順序：蒐集、分類、植樹。",
+        "subject": "英文",
+        "sub_topic": "段落結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落結構",
+        "template_id": "eng-ref-g1-段落結構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g1-段落結構-2",
+      "source": "參照大考中心114學年度學測英文考科之文法、篇章與生活情境題型，自編參考題",
+      "design": "以「段落結構」考查語法或語境推理，選項須語意相近且唯一正確",
+      "question": {
+        "q": "A paragraph begins, 'Bicycling offers several benefits.' The next two sentences discuss saving money and staying healthy. Which concluding sentence best fits?",
+        "correct": "For these reasons, cycling is a practical and healthy way to travel.",
+        "wrong": [
+          "The bicycle shop closes at nine on Fridays.",
+          "Some cars are painted blue and others red.",
+          "I have never visited a museum in winter."
+        ],
+        "exp": "最後一句應統整省錢與健康兩項支持理由，不插入無關資訊。",
+        "subject": "英文",
+        "sub_topic": "段落結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中一年級-段落結構",
+        "template_id": "eng-ref-g1-段落結構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
