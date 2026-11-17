@@ -78,7 +78,8 @@ test('review outcome has a passed, not-passed, or retryable incomplete screen', 
 });
 
 test('only an approved and paid review can show rewards; a technical failure is not a rejection', () => {
-  assert.ok(legacy.includes("result.status === 'confirmed' && result.compensated === true && result.goldAdded === 100 &&"));
+  assert.ok(legacy.includes("const paidSolo = !trial && committed && result.goldAdded === 100"));
+  assert.ok(legacy.includes("const paidBattle = !!trial && committed && result.goldAdded === 0"));
   assert.ok(legacy.includes('Number.isFinite(Number(result.newGold))'));
   assert.ok(legacy.includes("result.status === 'rejected'"));
   assert.ok(legacy.includes("result.status === 'duplicate'"));
@@ -86,6 +87,73 @@ test('only an approved and paid review can show rewards; a technical failure is 
   assert.ok(legacy.includes('showClose: !isLimit'));
   assert.match(html, /id="report-result-action"/);
   assert.match(html, /id="report-result-close"/);
+});
+
+test('PvE zero-gold compensation is approved, and daily limits are distinct from unsettled payouts', async () => {
+  const begin=legacy.indexOf("        // PvE intentionally pays no report gold:");
+  const end=legacy.indexOf("        return result;",begin);
+  assert.ok(begin>0&&end>begin,'report payout decision block exists');
+  const code=legacy.slice(begin,end);
+  const vm=require('node:vm');
+  async function evaluate(result, trial=null) {
+    const quiz={mode:'solo',data:{q:'題目'},async onVerifiedError(){}};
+    const account={uid:'player'};
+    let outcome=null,closed=false,skipped=false;
+    const ctx={
+      result,trial,quiz,user:account,auth:{currentUser:account},
+      currentUserData:{stats:{gold:60,totalScore:40}},
+      window:{currentActiveQuiz:quiz,closeReportModal(){closed=true}},
+      skipVerifiedQuestion(){skipped=true},
+      renderReportOutcome(value){outcome=value},
+      updateUIStats(){}
+    };
+    await vm.runInNewContext("(async function(){\n"+code+"\n})()",ctx);
+    return {outcome,ctx,closed:()=>closed,skipped:()=>skipped};
+  }
+  const battle={id:'room',progress:{stats:{gold:60,totalScore:41}}};
+  const confirmed=await evaluate({
+    status:'confirmed',valid:true,compensated:true,goldAdded:0,
+    cultivationRefund:0,cultivationBonus:1,newGold:60,newTotalScore:41,
+    staminaRefunded:3,questionSkipped:false,battle,reason:'獨立審核已確認本題有誤。'
+  },{});
+  assert.equal(confirmed.outcome.kind,'approved');
+  assert.match(confirmed.outcome.message,/修為已入帳/);
+  assert.match(confirmed.outcome.message,/補正 3 體力/);
+  assert.match(confirmed.outcome.message,/不另發 100 靈石/);
+  assert.doesNotMatch(confirmed.outcome.message,/100 靈石已入帳/);
+  confirmed.outcome.onAction();
+  assert.equal(confirmed.closed(),true);
+  assert.equal(confirmed.ctx.currentUserData.stats.totalScore,40,'PvE must not replace battle progress with stale balances');
+
+  const skipped=await evaluate({
+    status:'confirmed',valid:true,compensated:true,goldAdded:0,
+    cultivationRefund:0,cultivationBonus:1,newGold:60,newTotalScore:41,
+    staminaRefunded:4,questionSkipped:true,battle,reason:'已確認'
+  },{});
+  skipped.outcome.onAction();assert.equal(skipped.skipped(),true);
+
+  const limited=await evaluate({
+    status:'limit',valid:true,compensated:false,reason:'已確認有誤，今日已達上限',
+    staminaRefunded:2,questionSkipped:true,battle
+  },{});
+  assert.equal(limited.outcome.kind,'approved');
+  assert.match(limited.outcome.title,/補償達上限/);
+  assert.match(limited.outcome.message,/不會額外發放/);
+  limited.outcome.onAction();assert.equal(limited.skipped(),true);
+
+  const uncertain=await evaluate({
+    status:'confirmed',compensated:true,goldAdded:100,reason:'伺服器資料不完整'
+  },{});
+  assert.equal(uncertain.outcome.kind,'incomplete');
+  assert.match(uncertain.outcome.title,/補償狀態待核實/);
+
+  const normal=await evaluate({
+    status:'confirmed',compensated:true,goldAdded:100,
+    newGold:160,newTotalScore:42,cultivationRefund:1,cultivationBonus:1
+  });
+  assert.equal(normal.outcome.kind,'approved');
+  assert.match(normal.outcome.message,/100 靈石已入帳/);
+  assert.equal(normal.ctx.currentUserData.stats.gold,160);
 });
 
 test('neutral answers avoid unnecessary stats writes while report persists their audit record', () => {
