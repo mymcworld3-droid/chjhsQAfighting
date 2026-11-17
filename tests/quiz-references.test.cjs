@@ -48,7 +48,7 @@ test('whitespace in curriculum acronyms never prevents exact index lookup', () =
     const expected=quizReferences({subject,level,topic});
     assert.equal(expected.length,2,topic);
     assert.ok(expected.every(r=>r.question.sub_topic===topic));
-    const noSpaces=quizReferences({subject,level,topic:topic.replace(/\\s+/g,'')});
+    const noSpaces=quizReferences({subject,level,topic:topic.split(' ').join('')});
     assert.deepEqual(noSpaces.map(r=>r.id),expected.map(r=>r.id));
   }
 });
