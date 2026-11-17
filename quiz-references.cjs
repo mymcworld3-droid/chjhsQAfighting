@@ -1,26 +1,31 @@
 'use strict';
 const path = require('node:path');
-const catalog = require('./question-references/catalog.json').map(entry => ({
-  ...entry, question: require(path.join(__dirname, 'question-references', entry.file))
-}));
+const index = require('./question-references/index.json');
 const normalize = value => String(value || '').normalize('NFKC').replace(/\s+/g, '');
 const labels = value => String(value || '').replace('.json', '').split(/[/／:：()（）,，、]/).map(label => normalize(label).replace(/^核心考點細項/, ''));
 
 function quizReferences({ subject, level, topic, scope, facet, exclusions = [] }) {
+  if (exclusions.length) return [];
+  if (!Object.hasOwn(index, subject) || !Object.hasOwn(index[subject], level)) return [];
+  const concepts = index[subject][level];
   const selected = [...labels(topic), ...labels(scope?.path), ...(scope?.sub_topics || []).map(normalize)];
-  const facetConcept = normalize(facet?.concept);
-  return catalog.filter(entry => {
-    const { question, units, concepts, excludedConcepts = [] } = entry;
-    if (question.subject !== subject || entry.level !== level) return false;
-    if (excludedConcepts.some(word => [topic, scope?.path, facet?.concept, facet?.name]
-      .some(value => normalize(value).includes(word)))) return false;
-    // Free-text restrictions can be narrower than the catalog tags.
-    if (exclusions.length) return false;
-    const matches = concepts.some(label => selected.includes(normalize(label)));
-    if (!facet) return matches;
-    return concepts.map(normalize).includes(facetConcept) &&
-      (matches || (units.some(unit => selected.includes(normalize(unit))) && !scope?.sub_topics?.length));
-  }).slice(0, 3);
+  const findConcept = label => Object.hasOwn(concepts, label) ? concepts[label] : null;
+  const selectedKeys = new Set(selected.map(findConcept).filter(Boolean));
+  const facetKey = facet && findConcept(normalize(facet.concept));
+  if (facet && !facetKey) return [];
+
+  const scopeText = [topic, scope?.path, facet?.concept, facet?.name].map(normalize);
+  const references = [];
+  for (const key of facet ? [facetKey] : selectedKeys) {
+    if (!selectedKeys.has(key) && scope?.sub_topics?.length) continue;
+    // Node caches parsed JSON. Only the matched concept is loaded.
+    const group = require(path.join(__dirname, 'question-references', subject, level, key + '.json'));
+    if (!selectedKeys.has(key) && !group.units.some(unit => selected.includes(normalize(unit)))) continue;
+    if (group.excludedConcepts.some(word => scopeText.some(value => value.includes(word)))) continue;
+    references.push(...group.references.slice(0, 3 - references.length));
+    if (references.length === 3) break;
+  }
+  return references;
 }
 
 function referencePrompt(references) {
