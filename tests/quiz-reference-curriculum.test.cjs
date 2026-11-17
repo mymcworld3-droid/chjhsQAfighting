@@ -11,7 +11,9 @@ const { quizReferences, referencePrompt } = require('../quiz-references.cjs');
 const coverage = {
   '國文': ['高中一年級', '高中二年級', '高中三年級'],
   '資訊科技': ['高中一年級', '高中二年級', '高中三年級'],
-  '歷史': ['高中一年級', '高中二年級']
+  '歷史': ['高中一年級', '高中二年級', '高中三年級'],
+  '地理': ['高中一年級', '高中二年級', '高中三年級'],
+  '公民': ['高中一年級', '高中二年級', '高中三年級']
 };
 for (const [subject, grades] of Object.entries(coverage)) {
   for (const level of grades) {
