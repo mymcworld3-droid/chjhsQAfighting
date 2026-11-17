@@ -1,0 +1,66 @@
+{
+  "units": [
+    "先秦與兩漢文本"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-文言語法與論證-1",
+      "source": "大考中心114學年度學測國綜114國綜第5題，參照其命題能力重新設計；非原題改寫",
+      "design": "分辨必要條件與充分條件，避免過度推論",
+      "question": {
+        "q": "《孟子》有言：「不以規矩，不能成方圓。」以下哪項解讀最符合這句話的論證關係？",
+        "correct": "缺乏必要的規範與工具，就難以達成準確的成果",
+        "wrong": [
+          "只要備有規矩，就能保證每個人技藝精湛",
+          "所有方形和圓形都必須出現在同一張圖上",
+          "規矩的作用在於完全取代人的判斷與練習"
+        ],
+        "exp": "『不以……不能……』表達成事所需的必要條件，不等於『只要有規矩就必然成功』。以製作方圓類比做事應有準則。",
+        "subject": "國文",
+        "sub_topic": "文言語法與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文言語法與論證",
+        "template_id": "chinese-2026-reference-高中一年級-文言語法與論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-文言語法與論證-2",
+      "source": "大考中心114學年度學測國綜114國綜第5題，參照其命題能力重新設計；非原題改寫",
+      "design": "從反差例證回推抽象主張",
+      "question": {
+        "q": "《論語》說：「譬如為山，未成一簣，止，吾止也；譬如平地，雖覆一簣，進，吾往也。」（簣：盛土的筐）下列何者最能說明此段的論證方式？",
+        "correct": "以堆山與平地填土作比，強調是否繼續取決於自身選擇",
+        "wrong": [
+          "以兩種地形比較高低，指出平地永遠優於高山",
+          "藉兩次不同的施工事故，證明工具品質最重要",
+          "以土地所有權爭議，討論公共資源如何分配"
+        ],
+        "exp": "原文將『尚差一筐卻停止』與『僅填一筐卻前進』並列，關鍵在『吾止』『吾往』，以對比與譬喻論證持續努力的重要。",
+        "subject": "國文",
+        "sub_topic": "文言語法與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文言語法與論證",
+        "template_id": "chinese-2026-reference-高中一年級-文言語法與論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

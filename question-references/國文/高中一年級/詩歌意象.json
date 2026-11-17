@@ -1,0 +1,66 @@
+{
+  "units": [
+    "古典詩詞"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-詩歌意象-1",
+      "source": "大考中心114學年度學測國綜114國綜第15－19題，參照其命題能力重新設計；非原題改寫",
+      "design": "整合空間與形狀意象描繪詩境",
+      "question": {
+        "q": "王維〈使至塞上〉寫道：「大漠孤煙直，長河落日圓。」詩中『大漠』『孤煙』『長河』『落日』的組合，最能呈現何種景象？",
+        "correct": "遼闊空曠中兼具靜謐與鮮明線條的塞外風光",
+        "wrong": [
+          "擁擠都市裡喧鬧熱烈的市集活動",
+          "庭院深處被高牆遮擋的細緻花影",
+          "幽暗室內只有燭火微微晃動的夜景"
+        ],
+        "exp": "『大漠』『長河』營造廣闊空間，『孤煙直』『落日圓』形成突出的形狀對比，呈現塞外雄渾開闊的景致。",
+        "subject": "國文",
+        "sub_topic": "詩歌意象",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詩歌意象",
+        "template_id": "chinese-2026-reference-高中一年級-詩歌意象-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-詩歌意象-2",
+      "source": "大考中心114學年度學測國綜114國綜第15－19題，參照其命題能力重新設計；非原題改寫",
+      "design": "辨認詩中景物的感知視角與非字面意義",
+      "question": {
+        "q": "孟浩然〈宿建德江〉寫道：「野曠天低樹，江清月近人。」詩中讓『天』顯得低、『月』顯得近，最主要反映什麼？",
+        "correct": "詩人立於江邊或舟中觀看時的主觀視覺感受",
+        "wrong": [
+          "天空實際已下降到樹木高度",
+          "月球已移動到距離地面數公尺的位置",
+          "詩人正在提供精確的天文測量數據"
+        ],
+        "exp": "在廣闊原野與清澈江面的視角下，天際似與樹相接、月影似貼近人，屬景物感知而非客觀天文事實。",
+        "subject": "國文",
+        "sub_topic": "詩歌意象",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詩歌意象",
+        "template_id": "chinese-2026-reference-高中一年級-詩歌意象-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

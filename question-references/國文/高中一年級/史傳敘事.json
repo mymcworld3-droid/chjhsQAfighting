@@ -1,0 +1,66 @@
+{
+  "units": [
+    "先秦與兩漢文本"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-史傳敘事-1",
+      "source": "大考中心114學年度學測國綜114國綜第32－33題，參照其命題能力重新設計；非原題改寫",
+      "design": "結合主要人物與旁人反應辨識側面描寫",
+      "question": {
+        "q": "閱讀《史記·項羽本紀》：「項王泣數行下，左右皆泣，莫能仰視。」就敘事手法而言，作者除了描寫項王落淚，也寫左右之人的反應，主要作用是什麼？",
+        "correct": "以旁人的反應側面烘托現場的悲愴氣氛",
+        "wrong": [
+          "證明眾人已一致投票推舉新領袖",
+          "交代項王從此不再參與任何戰事",
+          "說明左右之人完全不理解項王感受"
+        ],
+        "exp": "『左右皆泣，莫能仰視』不是項王本人說的話，而是周圍人物受到感染的反應，有助於加強悲劇氛圍。",
+        "subject": "國文",
+        "sub_topic": "史傳敘事",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-史傳敘事",
+        "template_id": "chinese-2026-reference-高中一年級-史傳敘事-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-史傳敘事-2",
+      "source": "大考中心114學年度學測國綜114國綜第32－33題，參照其命題能力重新設計；非原題改寫",
+      "design": "依人物行動先後掌握史傳敘事的因果與轉折",
+      "question": {
+        "q": "閱讀《史記·廉頗藺相如列傳》相關情節：藺相如因顧及國家利益，多次避讓廉頗；廉頗得知原委後，親自到藺相如門前請罪。依此情節，哪個概括最能說明人物關係的轉變？",
+        "correct": "由個人嫌隙走向理解與和解",
+        "wrong": [
+          "由合作親密轉為對彼此完全失去信任",
+          "由雙方爭權轉為兩人同時退出官場",
+          "因藺相如公開辱罵，廉頗才決定報復"
+        ],
+        "exp": "藺相如避讓在先，廉頗理解其為國家著想後負荊請罪，情節核心是化解矛盾而非加深衝突。",
+        "subject": "國文",
+        "sub_topic": "史傳敘事",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-史傳敘事",
+        "template_id": "chinese-2026-reference-高中一年級-史傳敘事-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

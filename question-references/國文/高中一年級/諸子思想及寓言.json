@@ -1,0 +1,66 @@
+{
+  "units": [
+    "先秦與兩漢文本"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-諸子思想及寓言-1",
+      "source": "大考中心114學年度學測國綜114國綜第11－12題，參照其命題能力重新設計；非原題改寫",
+      "design": "用寓言事實與行動後果辨析推論錯誤",
+      "question": {
+        "q": "閱讀寓言：\n「宋人有耕者，田中有株，兔走觸株，折頸而死。因釋其耒而守株，冀復得兔。」（《韓非子》）\n農夫後來守著樹樁不耕田，故事主要批評他的哪種思考方式？",
+        "correct": "把偶然成功當成能反覆奏效的固定方法",
+        "wrong": [
+          "因為太重視耕作，所以拒絕任何意外收穫",
+          "善於記錄不同季節野兔出沒的規律",
+          "在行動前主動比較多種耕作方法"
+        ],
+        "exp": "兔撞樹樁是一次偶發事件；農夫不考察情境差異，就放下原有工作等待再次發生，正是將偶然誤作常態。",
+        "subject": "國文",
+        "sub_topic": "諸子思想及寓言",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-諸子思想及寓言",
+        "template_id": "chinese-2026-reference-高中一年級-諸子思想及寓言-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-諸子思想及寓言-2",
+      "source": "大考中心114學年度學測國綜114國綜第13－14題，參照其命題能力重新設計；非原題改寫",
+      "design": "先找比喻的比較條件，再還原論點",
+      "question": {
+        "q": "《孟子》說：「魚，我所欲也；熊掌，亦我所欲也。二者不可得兼，舍魚而取熊掌者也。」後文以生與義作類比。依這段比喻，最合理的理解為何？",
+        "correct": "當兩項價值無法兼得，必須依重要程度作選擇",
+        "wrong": [
+          "凡是有價值的事物都可以同時取得",
+          "只要是食物，就必然沒有高低優先順序",
+          "選擇某物只能出於偶然，無須判斷"
+        ],
+        "exp": "『不可得兼』指出取捨條件；『舍魚而取熊掌』先示範價值排序，再類比生與義的抉擇。",
+        "subject": "國文",
+        "sub_topic": "諸子思想及寓言",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-諸子思想及寓言",
+        "template_id": "chinese-2026-reference-高中一年級-諸子思想及寓言-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

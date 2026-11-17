@@ -1,0 +1,66 @@
+{
+  "units": [
+    "古典詩詞"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-詞的形式與情感-1",
+      "source": "大考中心114學年度學測國綜114國綜第3題，參照其命題能力重新設計；非原題改寫",
+      "design": "將重複形式與情感強度連結而非只辨認修辭名稱",
+      "question": {
+        "q": "李清照〈聲聲慢〉開篇：「尋尋覓覓，冷冷清清，淒淒慘慘戚戚。」這段連續使用疊字，最突出的表達效果為何？",
+        "correct": "藉節奏重複逐層累積孤寂悲苦的感受",
+        "wrong": [
+          "表明詞人正在列出七種不同的天氣",
+          "證明整闋詞的內容都以歡樂為主",
+          "藉完全相同的字詞否定所有情感變化"
+        ],
+        "exp": "『尋尋覓覓』寫尋索無著，『冷冷清清』寫環境與心境，『淒淒慘慘戚戚』加深哀愁，疊字使聲情層層推進。",
+        "subject": "國文",
+        "sub_topic": "詞的形式與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詞的形式與情感",
+        "template_id": "chinese-2026-reference-高中一年級-詞的形式與情感-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-詞的形式與情感-2",
+      "source": "大考中心114學年度學測國綜114國綜第15－19題，參照其命題能力重新設計；非原題改寫",
+      "design": "由詞句中的祝願語氣與月意象推知情感",
+      "question": {
+        "q": "蘇軾〈水調歌頭〉寫道：「但願人長久，千里共嬋娟。」就上文詞境而言，下列哪個解讀最適當？",
+        "correct": "即使相隔遙遠，也祝願彼此平安，並共賞明月",
+        "wrong": [
+          "要求對方立即放棄所有生活返回故鄉",
+          "因彼此不能見面，斷言親情已完全消失",
+          "認為明月僅能照見自己，無法照及遠人"
+        ],
+        "exp": "『但願人長久』是祝願親友長久安好；『千里共嬋娟』借明月可共賞，寄託遠隔兩地的思念與慰藉。",
+        "subject": "國文",
+        "sub_topic": "詞的形式與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-詞的形式與情感",
+        "template_id": "chinese-2026-reference-高中一年級-詞的形式與情感-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

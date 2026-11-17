@@ -1,0 +1,66 @@
+{
+  "units": [
+    "古典詩詞"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-作者、時代與文化背景-1",
+      "source": "大考中心114學年度學測國綜114國綜第13－14題，參照其命題能力重新設計；非原題改寫",
+      "design": "把作者、作品與時代交叉對照避免朝代錯置",
+      "question": {
+        "q": "某生整理古典文學時間表，將『屈原及《楚辭》』與『蘇軾及宋詞』排列先後。下列敘述何者正確？",
+        "correct": "屈原主要活動於戰國時代，蘇軾則是北宋文人",
+        "wrong": [
+          "屈原與蘇軾同為清代小說家",
+          "《楚辭》形成於明代，早於周代《詩經》",
+          "蘇軾生於戰國時代，比屈原更早"
+        ],
+        "exp": "屈原是戰國楚國詩人，《楚辭》與楚地文化相關；蘇軾生活於北宋，為詞的重要作家。",
+        "subject": "國文",
+        "sub_topic": "作者、時代與文化背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-作者、時代與文化背景",
+        "template_id": "chinese-2026-reference-高中一年級-作者、時代與文化背景-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-作者、時代與文化背景-2",
+      "source": "大考中心114學年度學測國綜114國綜第9－10題，參照其命題能力重新設計；非原題改寫",
+      "design": "用作品中的具體情境理解唐代新樂府的社會關懷",
+      "question": {
+        "q": "唐代白居易〈賣炭翁〉描寫賣炭老人受宮市之害、勞動所得被迫換走的處境。若結合新樂府運動的創作取向，哪項判斷最恰當？",
+        "correct": "藉具體人物遭遇反映社會問題與民生疾苦",
+        "wrong": [
+          "刻意避開任何社會議題，只描摹宮廷娛樂",
+          "以神怪幻境替代所有現實人物的經歷",
+          "主張詩歌只能描寫山水，不應涉及百姓生活"
+        ],
+        "exp": "白居易的新樂府作品常關懷社會現實，《賣炭翁》透過老人受壓迫的遭遇，批評制度造成的民生困苦。",
+        "subject": "國文",
+        "sub_topic": "作者、時代與文化背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-作者、時代與文化背景",
+        "template_id": "chinese-2026-reference-高中一年級-作者、時代與文化背景-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
