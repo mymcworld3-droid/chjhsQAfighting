@@ -4,6 +4,8 @@ export function selectSkillForSlot(ids, slotIndex, skillId, moveIdOf) {
   if(!Array.isArray(ids)||!Number.isInteger(slotIndex)||slotIndex<0||slotIndex>2
     ||typeof skillId!=='string'||!skillId)return null;
   const result=ids.filter(id=>typeof id==='string').slice(0,3);
+  // The server stores a compact array: the next empty position is always length.
+  if(slotIndex>result.length)return null;
   const move=moveIdOf(skillId);
   if(!move)return null;
   const existingIndex=result.findIndex(id=>moveIdOf(id)===move);
@@ -54,6 +56,7 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
   }).join('');
   const slotCards=Array.from({length:3},(_,i)=>{
     const id=equipped[i];
+    const actualSlot=Math.min(i,equipped.length);
     const skill=byId.get(id);
     const art=skill?skillArt(skill):'';
     const filled=!!skill;
@@ -62,14 +65,14 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
       :'<i class="fa-solid fa-plus" aria-hidden="true"></i>';
     const name=filled?skill.name:'空白技能槽';
     const description=filled?`${skill.bookName} · 招式 Lv. ${format(skill.level)}`:
-      '點此選擇已領悟的招式';
+      (actualSlot===i?'點此選擇已領悟的招式':`將先填入第 ${actualSlot+1} 格`);
     const cost=filled?`${format(skill.cost)} 體力`:'尚未裝備';
     return `<div class="manual-slot ${filled?'is-active':'is-empty'} ${filled?'is-'+skill.bookSchool:''} ${pickerSlot===i?'is-editing':''}"
       data-manual-slot="${i}">
-      <button type="button" class="manual-slot-pick" data-manual-pick-slot="${i}"
-        aria-expanded="${pickerSlot===i}" aria-label="${filled?'替換':'設定'}第${i+1}格技能，${esc(name)}">
+      <button type="button" class="manual-slot-pick" data-manual-pick-slot="${actualSlot}"
+        aria-expanded="${pickerSlot===actualSlot}" aria-label="${filled?'替換第'+(i+1)+'格技能':'新增技能，將填入第'+(actualSlot+1)+'格'}，${esc(name)}">
         <span class="manual-slot-topline"><span>招式 ${String(i+1).padStart(2,'0')}</span>
-          <span class="manual-slot-change"><i class="fa-solid ${filled?'fa-rotate':'fa-plus'}" aria-hidden="true"></i> ${filled?'替換':'選擇'}</span>
+          <span class="manual-slot-change"><i class="fa-solid ${filled?'fa-rotate':'fa-plus'}" aria-hidden="true"></i> ${filled?'替換':actualSlot===i?'選擇':'先補空欄'}</span>
         </span>
         <span class="manual-slot-art-frame ${filled?'is-filled':''}">${artMarkup}</span>
         <span class="manual-slot-meta"><strong>${esc(name)}</strong>
@@ -145,7 +148,7 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
         </div>
       </div>
       <div class="manual-deck-slots-header"><strong>招式裝備欄</strong>
-        <small>點擊技能卡可直接替換 · 不需拖曳</small></div>
+        <small>點擊卡片替換技能 · 空欄由前向後依序裝備</small></div>
       <div class="manual-slot-grid">${slotCards}</div>
       <div class="manual-deck-feedback" data-manual-loadout-status role="status" aria-live="polite"></div>
       ${picker}
