@@ -6,7 +6,8 @@ const labels = value => {
   const text = String(value || '').replace('.json', '');
   // Keep the full label first: curriculum concepts may contain commas or '、'.
   // Split only as a fallback for composite scope paths and formatted headings.
-  return [...new Set([normalize(text), ...text.split(/[/／:：()（）,，、]/).map(label => normalize(label).replace(/^核心考點細項/, ''))])];
+  const split = pattern => text.split(pattern).map(label => normalize(label).replace(/^核心考點細項/, ''));
+  return [...new Set([normalize(text), ...split(/[/／:：()（）]/), ...split(/[/／:：()（）,，、]/)])];
 };
 
 function quizReferences({ subject, level, topic, scope, facet, exclusions = [] }) {
