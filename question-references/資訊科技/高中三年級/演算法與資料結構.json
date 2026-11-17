@@ -1,0 +1,54 @@
+{
+  "units": [
+    "程式設計綜合"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中三年級-演算法與資料結構-1",
+      "source": "依據108課綱高中資訊科技教學綱要及程式設計觀念題之評量方向設計；非直接轉載考古題",
+      "design": "由實務情境辨認「演算法與資料結構」的必要條件與限制，並設計有根據的干擾選項",
+      "question": {
+        "q": "某程式須依「先到先處理」的順序處理上傳的作業。哪個資料結構最符合此要求？",
+        "correct": "佇列（queue）",
+        "wrong": [
+          "堆疊（stack）",
+          "只允許反向排序的陣列",
+          "無法記錄輸入先後順序的集合"
+        ],
+        "exp": "佇列具有先進先出特性，適用於按到達順序處理任務；堆疊則是後進先出。",
+        "subject": "資訊科技",
+        "sub_topic": "演算法與資料結構",
+        "knowledge_points": [],
+        "concept_id": "it-高中三年級-演算法與資料結構",
+        "template_id": "it-reference-高中三年級-演算法與資料結構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中三年級-演算法與資料結構-2",
+      "source": "依據108課綱高中資訊科技教學綱要及程式設計觀念題之評量方向設計；非直接轉載考古題",
+      "design": "由實務情境辨認「演算法與資料結構」的必要條件與限制，並設計有根據的干擾選項",
+      "question": {
+        "q": "有已排序陣列[1,4,7,10,13,16,19,22,25]。使用二分搜尋找22，第一次比較中間元素13後，應保留哪部分繼續搜尋？",
+        "correct": "右側的[16,19,22,25]",
+        "wrong": [
+          "左側的[1,4,7,10]",
+          "中間13一個元素",
+          "整個陣列必須重新隨機排序"
+        ],
+        "exp": "22大於13，因資料已排序，可排除左側與中間值，只在較大的一半繼續查找。",
+        "subject": "資訊科技",
+        "sub_topic": "演算法與資料結構",
+        "knowledge_points": [],
+        "concept_id": "it-高中三年級-演算法與資料結構",
+        "template_id": "it-reference-高中三年級-演算法與資料結構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "units": [
+    "專題製作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中三年級-成果展示-1",
+      "source": "依據108課綱高中資訊科技教學綱要及程式設計觀念題之評量方向設計；非直接轉載考古題",
+      "design": "由實務情境辨認「成果展示」的必要條件與限制，並設計有根據的干擾選項",
+      "question": {
+        "q": "專題展示聲稱「改善演算法後處理更快」。若要說服觀眾，哪種展示證據最恰當？",
+        "correct": "在相同測資與設備下比較改善前後的執行時間",
+        "wrong": [
+          "只播放更華麗的開場動畫",
+          "將計算時間的數值單位全部刪除",
+          "僅展示新版本圖示的顏色"
+        ],
+        "exp": "相同條件下的前後比較可直接評估效率改善，避免把設備與測資差異混入結論。",
+        "subject": "資訊科技",
+        "sub_topic": "成果展示",
+        "knowledge_points": [],
+        "concept_id": "it-高中三年級-成果展示",
+        "template_id": "it-reference-高中三年級-成果展示-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中三年級-成果展示-2",
+      "source": "依據108課綱高中資訊科技教學綱要及程式設計觀念題之評量方向設計；非直接轉載考古題",
+      "design": "由實務情境辨認「成果展示」的必要條件與限制，並設計有根據的干擾選項",
+      "question": {
+        "q": "某組開發圖書館預約系統，成果展只介紹程式碼行數，卻沒說要解決什麼問題。最應補充何者？",
+        "correct": "使用者需求、操作示範、測試結果與限制",
+        "wrong": [
+          "所有組員的手機桌布樣式",
+          "與專題無關的流行歌曲排行",
+          "程式碼編輯器的字體顏色"
+        ],
+        "exp": "專題展示應交代目標、方法、效果與不足，才能讓觀眾了解成果的價值和可靠度。",
+        "subject": "資訊科技",
+        "sub_topic": "成果展示",
+        "knowledge_points": [],
+        "concept_id": "it-高中三年級-成果展示",
+        "template_id": "it-reference-高中三年級-成果展示-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "units": [
+    "程式設計綜合"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中三年級-程式測試-1",
+      "source": "依據108課綱高中資訊科技教學綱要及程式設計觀念題之評量方向設計；非直接轉載考古題",
+      "design": "由實務情境辨認「程式測試」的必要條件與限制，並設計有根據的干擾選項",
+      "question": {
+        "q": "函式判定年齡是否符合「滿18歲」資格。若測試邊界條件，哪組輸入最有針對性？",
+        "correct": "17、18、19歲",
+        "wrong": [
+          "1、2、3歲",
+          "5、6、7歲",
+          "55、60、65歲"
+        ],
+        "exp": "門檻在18歲，測試門檻前、門檻本身與門檻後最能檢查比較運算是否正確。",
+        "subject": "資訊科技",
+        "sub_topic": "程式測試",
+        "knowledge_points": [],
+        "concept_id": "it-高中三年級-程式測試",
+        "template_id": "it-reference-高中三年級-程式測試-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中三年級-程式測試-2",
+      "source": "依據108課綱高中資訊科技教學綱要及程式設計觀念題之評量方向設計；非直接轉載考古題",
+      "design": "由實務情境辨認「程式測試」的必要條件與限制，並設計有根據的干擾選項",
+      "question": {
+        "q": "一個計算平均值的函式在輸入空清單時會除以0而失敗。下列哪項修正與測試流程最合適？",
+        "correct": "先明確規定空清單的處理方式，加入對應測試再修正程式",
+        "wrong": [
+          "不管測資為何，永遠回傳100分",
+          "將例外訊息隱藏，視為功能正常",
+          "只測試100個元素的清單，永不測試空清單"
+        ],
+        "exp": "空清單是邊界情況，需定義回傳或錯誤處理規則並檢查測試結果，而非掩蓋失敗。",
+        "subject": "資訊科技",
+        "sub_topic": "程式測試",
+        "knowledge_points": [],
+        "concept_id": "it-高中三年級-程式測試",
+        "template_id": "it-reference-高中三年級-程式測試-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
