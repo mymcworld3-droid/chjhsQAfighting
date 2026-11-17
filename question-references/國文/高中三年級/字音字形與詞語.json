@@ -1,0 +1,66 @@
+{
+  "units": [
+    "國語文學測複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-字音字形與詞語-1",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「字音字形與詞語」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "校刊有四句稿件，哪一句的詞語與字形都正確？",
+        "correct": "他雖然屢次受挫，仍鍥而不捨地完成研究。",
+        "wrong": [
+          "他因為過於急躁，結果欲速則不逹。",
+          "學生們相互鼓勵，準備再接再勵。",
+          "這項計畫歷經波折，終於功虧一匱。"
+        ],
+        "exp": "「不逹」應作「不達」，「再接再勵」應作「再接再厲」，「一匱」應作「一簣」；「鍥而不捨」使用正確。",
+        "subject": "國文",
+        "sub_topic": "字音字形與詞語",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-3",
+            "name": "字音字形"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-字音字形與詞語",
+        "template_id": "chinese-reference-高中三年級-字音字形與詞語-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-字音字形與詞語-2",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「字音字形與詞語」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "下列何句使用「不刊之論」最恰當？",
+        "correct": "這篇研究論述嚴謹、證據充分，被許多人視為不刊之論。",
+        "wrong": [
+          "這則公告尚在修訂，所以是典型的不刊之論。",
+          "文章錯字連篇、必須全部刪除，可見是不刊之論。",
+          "作者拒絕把文章印成書，因此每篇都是不刊之論。"
+        ],
+        "exp": "「不刊」指不可更改，「不刊之論」形容精當不移的言論，並非「沒有刊登」或「需要刪除」。",
+        "subject": "國文",
+        "sub_topic": "字音字形與詞語",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-字音字形與詞語",
+        "template_id": "chinese-reference-高中三年級-字音字形與詞語-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

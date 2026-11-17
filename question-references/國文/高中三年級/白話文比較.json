@@ -1,0 +1,66 @@
+{
+  "units": [
+    "高中國文整合閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-白話文比較-1",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「白話文比較」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "甲：「老街改建後，夜裡多了燈，孩子能安心走回家。」乙：「老街改建後，曾經熟悉的木門與騎樓消失，我再找不到童年玩捉迷藏的角落。」比較兩段，何者正確？",
+        "correct": "同一改建事件同時涉及公共安全的改善與個人記憶的流失",
+        "wrong": [
+          "甲乙都認為改建帶來完全相同的感受",
+          "甲反對照明，乙則反對保存舊物",
+          "兩段都在比較不同的國家歷史"
+        ],
+        "exp": "甲從安全角度肯定照明，乙從記憶角度感受失落，兩者不必互相否定。",
+        "subject": "國文",
+        "sub_topic": "白話文比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-白話文比較",
+        "template_id": "chinese-reference-高中三年級-白話文比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-白話文比較-2",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「白話文比較」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "甲：「學習新工具可以節省處理重複工作所花的時間。」乙：「若不檢查工具輸出的錯誤，省下的時間可能又花在善後。」兩文共同主題與差異為何？",
+        "correct": "都討論工具效率，甲著重優點，乙指出使用時的限制",
+        "wrong": [
+          "甲乙都主張工具的結果永遠正確",
+          "甲否定工具的用途，乙否定人工檢查",
+          "兩者都只在討論筆記本的價格"
+        ],
+        "exp": "甲強調工具帶來的便利，乙則提醒審核品質；應綜合而非擇一宣稱唯一真理。",
+        "subject": "國文",
+        "sub_topic": "白話文比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-白話文比較",
+        "template_id": "chinese-reference-高中三年級-白話文比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "知性寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-文章架構與修訂-1",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「文章架構與修訂」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "某篇議論文章三段分別為甲：「提出讀書會缺乏固定場地的問題」；乙：「比較借用教室和圖書館空間的成本與時間」；丙：「建議先試辦每週一場並收集回饋」。最佳順序為何？",
+        "correct": "甲→乙→丙",
+        "wrong": [
+          "丙→甲→乙",
+          "乙→丙→甲",
+          "甲→丙→乙"
+        ],
+        "exp": "先提出問題，再分析可行方案，最後給出政策建議，是清楚的論述安排。",
+        "subject": "國文",
+        "sub_topic": "文章架構與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-文章架構與修訂",
+        "template_id": "chinese-reference-高中三年級-文章架構與修訂-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-文章架構與修訂-2",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「文章架構與修訂」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "文章結尾寫：「綜上所述，雖然社區夜間照明能提高便利性，但也可能影響附近住戶休息，因此建議分區分時調整亮度。」哪一個前文主旨與此結尾最能相呼應？",
+        "correct": "夜間照明政策應兼顧通行需求與住戶安寧",
+        "wrong": [
+          "只要裝燈就必然完全沒有任何成本",
+          "所有公共設施都只應考量最早提出意見的人",
+          "夜間照明的主要問題是各種燈具外殼的顏色"
+        ],
+        "exp": "結尾同時回應便利與安寧的權衡，故前文主旨應與兩種需求及調整策略一致。",
+        "subject": "國文",
+        "sub_topic": "文章架構與修訂",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-文章架構與修訂",
+        "template_id": "chinese-reference-高中三年級-文章架構與修訂-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

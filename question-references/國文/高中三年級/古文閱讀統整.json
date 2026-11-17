@@ -1,0 +1,66 @@
+{
+  "units": [
+    "高中國文整合閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-古文閱讀統整-1",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「古文閱讀統整」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "閱讀《出師表》：「親賢臣，遠小人，此先漢所以興隆也；親小人，遠賢臣，此後漢所以傾頹也。」下列哪個結論最符合其論證？",
+        "correct": "用兩組相反的用人方式與政局結果，強調親賢遠佞的重要",
+        "wrong": [
+          "主張任何朝代興亡只與天氣變化有關",
+          "認為賢臣與小人都是完全相同的角色",
+          "告訴君主應完全放棄任用官員"
+        ],
+        "exp": "作者以先後漢政局作對比，將用人方式與興衰連結，意在勸後主重賢遠佞。",
+        "subject": "國文",
+        "sub_topic": "古文閱讀統整",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-古文閱讀統整",
+        "template_id": "chinese-reference-高中三年級-古文閱讀統整-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-古文閱讀統整-2",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「古文閱讀統整」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "閱讀《岳陽樓記》：「居廟堂之高則憂其民；處江湖之遠則憂其君。」下列哪項語譯與段落意涵最適切？",
+        "correct": "在朝廷任職要關心百姓，離開朝廷仍應關懷國事",
+        "wrong": [
+          "只要離開朝廷，就完全不必過問任何公共事務",
+          "位居高官時只要追求個人利益便足夠",
+          "江湖之遠是指只能在海上生活的人"
+        ],
+        "exp": "「廟堂」指朝廷，「江湖」指遠離朝廷；兩句對照說明身處不同位置仍保有公共責任。",
+        "subject": "國文",
+        "sub_topic": "古文閱讀統整",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-古文閱讀統整",
+        "template_id": "chinese-reference-高中三年級-古文閱讀統整-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

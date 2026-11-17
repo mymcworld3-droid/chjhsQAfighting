@@ -1,0 +1,66 @@
+{
+  "units": [
+    "高中國文整合閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-詩詞選讀與賞析-1",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「詩詞選讀與賞析」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "杜牧〈赤壁〉：「東風不與周郎便，銅雀春深鎖二喬。」詩人以假設東風未助周瑜來想像歷史，其寫法最能說明什麼？",
+        "correct": "藉反事實假設凸顯歷史成敗也受機緣影響",
+        "wrong": [
+          "準確記錄東風從來沒有出現的真實史實",
+          "說明周瑜最後一定被囚於銅雀臺",
+          "完全排除個人決策對歷史的任何作用"
+        ],
+        "exp": "「東風不與」是與已知史實相反的設想，借此寄託對形勢與機遇的思考，不是正式史料記錄。",
+        "subject": "國文",
+        "sub_topic": "詩詞選讀與賞析",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-詩詞選讀與賞析",
+        "template_id": "chinese-reference-高中三年級-詩詞選讀與賞析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-詩詞選讀與賞析-2",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「詩詞選讀與賞析」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "比較兩句：「明月幾時有？把酒問青天。」與「舉頭望明月，低頭思故鄉。」下列判斷最恰當的是？",
+        "correct": "兩者都以明月引出情感，但前者設問宇宙人生，後者直寫思鄉",
+        "wrong": [
+          "兩者都在抱怨月亮永遠不會升起",
+          "前者只在記錄天文觀測時間，後者是政治奏章",
+          "兩者的詩句與人物情感毫無關係"
+        ],
+        "exp": "蘇軾以問月起興，李白由望月連到故鄉；意象相同而表達層次、情感走向不同。",
+        "subject": "國文",
+        "sub_topic": "詩詞選讀與賞析",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-詩詞選讀與賞析",
+        "template_id": "chinese-reference-高中三年級-詩詞選讀與賞析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

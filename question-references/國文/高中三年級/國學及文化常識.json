@@ -1,0 +1,66 @@
+{
+  "units": [
+    "國語文學測複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-國學及文化常識-1",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「國學及文化常識」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "有四組作者與作品的對應，下列何者正確？",
+        "correct": "陶淵明——〈桃花源記〉",
+        "wrong": [
+          "韓愈——〈赤壁賦〉",
+          "蘇軾——〈出師表〉",
+          "諸葛亮——〈醉翁亭記〉"
+        ],
+        "exp": "〈桃花源記〉為陶淵明作品；〈赤壁賦〉出自蘇軾，〈出師表〉出自諸葛亮，〈醉翁亭記〉出自歐陽修。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "chinese-reference-高中三年級-國學及文化常識-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-國學及文化常識-2",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「國學及文化常識」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "某展覽將「唐詩」「宋詞」「元曲」依各文體在相應朝代的發展鼎盛期展示，哪種標示方式最符合文學史的一般概括？",
+        "correct": "唐代近體詩興盛，宋代詞發展成熟，元代散曲與雜劇繁榮",
+        "wrong": [
+          "唐代最主要文體為明清章回小說",
+          "宋詞通常只能使用七言八句的固定律詩格式",
+          "元代完全沒有曲的創作與表演"
+        ],
+        "exp": "唐詩、宋詞、元曲是概括各朝代代表性文學現象的說法，不代表其他文體不存在；正確選項符合文學史常見演進。",
+        "subject": "國文",
+        "sub_topic": "國學及文化常識",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-國學及文化常識",
+        "template_id": "chinese-reference-高中三年級-國學及文化常識-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

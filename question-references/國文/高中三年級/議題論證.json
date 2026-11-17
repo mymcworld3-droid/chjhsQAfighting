@@ -1,0 +1,66 @@
+{
+  "units": [
+    "知性寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中三年級-議題論證-1",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「議題論證」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "論說題目為「是否應在校園販賣機限制含糖飲料？」某生只說「我不喜歡甜的，所以大家應禁止喝甜飲」。若要提升論證品質，最應補充什麼？",
+        "correct": "與學生健康、選擇自由及措施效果相關的可查證資料",
+        "wrong": [
+          "列出作者十種最喜愛的飲料",
+          "只將「不喜歡」重複十次以增強語氣",
+          "宣稱不需要考慮不同使用者的需求"
+        ],
+        "exp": "個人口味無法直接支持普遍政策，應引入政策目的、影響證據和不同立場的權衡。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "chinese-reference-高中三年級-議題論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中三年級-議題論證-2",
+      "source": "參照大考中心114學年度學測國語文綜合能力測驗之命題方式，重新撰寫的獨立參考題",
+      "design": "以「議題論證」為評量核心，用明確文本資料和易混淆推論建立干擾選項。",
+      "question": {
+        "q": "討論「課堂是否容許使用生成式AI」時，哪種立場最符合有條件的論證？",
+        "correct": "可用於構思與檢查，但須標示使用情況，並由學生自行查核事實與完成核心作業",
+        "wrong": [
+          "只要AI生成就必然百分之百正確，完全不用查證",
+          "任何學科使用數位工具都必定構成作弊",
+          "讓AI取代所有學生，故不需要任何評量制度"
+        ],
+        "exp": "正確選項提出允許的範圍、責任與查核配套，使主張可討論也可執行，不採極端全有全無立場。",
+        "subject": "國文",
+        "sub_topic": "議題論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中三年級-議題論證",
+        "template_id": "chinese-reference-高中三年級-議題論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
