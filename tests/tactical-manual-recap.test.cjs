@@ -96,6 +96,13 @@ test('level 10 accurately labels an already completed book, no extra level promi
   assert.match(html,/三招皆已領悟/);
   assert.match(html,/aria-valuenow="100"/);
 });
+test('failed post-battle mastery sync never pretends to be loading forever',()=>{
+  const html=renderManualBattleRecap(room(),'u1',manuals,null,
+    {...options,syncFailed:true});
+  assert.match(html,/最新功法等級暫時無法取得/);
+  assert.doesNotMatch(html,/正在同步功法等級與下一招目標/);
+  assert.match(html,/\+170/);
+});
 test('zero EXP gives an accurate empty recap rather than a fabricated gain',()=>{
   const html=renderManualBattleRecap(room({
     manualExp:{u1:{}},manualKills:{u1:{}}
