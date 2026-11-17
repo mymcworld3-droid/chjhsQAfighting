@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣史與東亞史統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-文化交流-1",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「文化交流」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "一座東亞港口出土外來陶瓷，也發現當地工匠仿製且調整器形的製品。此發現最能支持哪項解釋？",
+        "correct": "跨地區貿易可能伴隨技術與審美的在地轉化",
+        "wrong": [
+          "外來陶瓷出現便表示當地原有技術已完全消失",
+          "仿製品證明港口與外地從未往來",
+          "同一種陶瓷必然只會由單一工匠製作"
+        ],
+        "exp": "外來器物與地方改造共存，反映交流與在地選擇，而非全盤取代。",
+        "subject": "歷史",
+        "sub_topic": "文化交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中三年級-文化交流",
+        "template_id": "ref-h3-文化交流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-文化交流-2",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「文化交流」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "某城市的節慶保留海外移民帶來的宗教儀式，並融合當地表演形式。若理解文化交流，哪項解釋較恰當？",
+        "correct": "移民文化與在地社會互動，可能形成混合的新傳統",
+        "wrong": [
+          "文化交流必然讓原本所有習俗立即消失",
+          "儀式含多種元素就不能研究其歷史來源",
+          "只要是節慶活動便與移民史無關"
+        ],
+        "exp": "文化交流常包含調適、混合與重新詮釋，需比較來源及形成脈絡。",
+        "subject": "歷史",
+        "sub_topic": "文化交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中三年級-文化交流",
+        "template_id": "ref-h3-文化交流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

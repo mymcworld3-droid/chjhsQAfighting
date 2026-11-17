@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-全球互動-1",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「全球互動」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "一份十九世紀航運紀錄顯示，原料從亞洲港口送往歐洲工廠加工，成品再售往美洲市場。從世界史角度最能說明什麼？",
+        "correct": "不同地區因貿易與工業分工形成跨洲經濟連結",
+        "wrong": [
+          "三洲所有國家都必然使用相同政治制度",
+          "原料產地與製成品市場必定永遠不變",
+          "航運紀錄證明當時不存在任何地方市場"
+        ],
+        "exp": "跨洲供應鏈連結原料、加工與市場，反映國際分工，不等於各地條件相同。",
+        "subject": "歷史",
+        "sub_topic": "全球互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中三年級-全球互動",
+        "template_id": "ref-h3-全球互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-全球互動-2",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「全球互動」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "某次傳染病疫情沿港口與交通線路逐步擴散，各地政府採用不同的隔離政策。哪種研究方式最有助理解全球互動？",
+        "correct": "比較交通網絡與各地政策差異對疫情傳播的影響",
+        "wrong": [
+          "只看疾病名稱便可得出所有地區的完整歷史",
+          "假定各地因相連而有相同公共政策",
+          "將港口人口總數當作唯一的傳播因素"
+        ],
+        "exp": "疾病可能透過交流網絡傳播，政策與交通又影響不同地區的結果。",
+        "subject": "歷史",
+        "sub_topic": "全球互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-全球互動",
+        "template_id": "ref-h3-全球互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史探究實作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-歷史敘事與推論-1",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「歷史敘事與推論」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "研究者寫：「政策公布後商業快速成長，因此商業成長完全由政策造成。」若要避免過度推論，應如何修改？",
+        "correct": "加入其他經濟因素的討論，並檢查政策與成長之間的因果證據",
+        "wrong": [
+          "將「完全」改成「絕對」以加強結論",
+          "取消所有數據，只保留個人評語",
+          "忽略政策實施前後的時間關係"
+        ],
+        "exp": "政策與變化時間相近不足以證明唯一原因，需更完整資料。",
+        "subject": "歷史",
+        "sub_topic": "歷史敘事與推論",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-歷史敘事與推論",
+        "template_id": "ref-h3-歷史敘事與推論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-歷史敘事與推論-2",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「歷史敘事與推論」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "同一事件的甲敘事只呈現政府決策，乙敘事加入地方居民遭遇。這樣比較有什麼史學價值？",
+        "correct": "讓制度層面與個人生活經驗互相補充，更完整理解事件",
+        "wrong": [
+          "政府資料必定比個人資料晚出現",
+          "居民故事不能成為任何歷史研究材料",
+          "同一事件只允許存在一種敘事角度"
+        ],
+        "exp": "宏觀與微觀材料可互相補強，同時也要檢查彼此侷限。",
+        "subject": "歷史",
+        "sub_topic": "歷史敘事與推論",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-歷史敘事與推論",
+        "template_id": "ref-h3-歷史敘事與推論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

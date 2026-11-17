@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史探究實作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-史料交互查核-1",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「史料交互查核」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "三篇文章都聲稱引用某場演講，但第二、三篇是轉載第一篇的內容。若用它們確認演講原文，應如何處理？",
+        "correct": "追查演講錄音或當時逐字稿，避免把同源轉載當成獨立證據",
+        "wrong": [
+          "三篇文章的數量足以保證逐字正確",
+          "把轉載來源數量算作三個互不相關證據",
+          "不需知道演講時間與地點"
+        ],
+        "exp": "來源獨立性比引述次數更重要；應找到原始材料核對。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-史料交互查核",
+        "template_id": "ref-h3-史料交互查核-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-史料交互查核-2",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「史料交互查核」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "學生比較兩份人口統計，甲以行政區A為範圍，乙以合併後的A+B為範圍。若想分析人口是否成長，第一步應做什麼？",
+        "correct": "統一統計範圍與定義後再比較",
+        "wrong": [
+          "直接把兩筆數字相減，無需查看行政區變化",
+          "假設每個行政區人口密度永遠相同",
+          "只比較報表字型大小"
+        ],
+        "exp": "不同區域統計不能直接比較，應控制口徑與行政區邊界變更。",
+        "subject": "歷史",
+        "sub_topic": "史料交互查核",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-史料交互查核",
+        "template_id": "ref-h3-史料交互查核-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

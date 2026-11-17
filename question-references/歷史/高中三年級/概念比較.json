@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史探究實作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-概念比較-1",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「概念比較」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "甲事件是因農業技術提高產量，乙事件是因外國市場需求增加而擴大種植。若要比較兩種農業變遷，哪項對照較清楚？",
+        "correct": "甲側重供給面的生產技術，乙側重需求面的市場誘因",
+        "wrong": [
+          "兩者都只能由同一種氣候因素造成",
+          "甲乙的發生原因必然沒有差異",
+          "只要產量增加就不需分析市場需求"
+        ],
+        "exp": "一者為生產技術改變，一者為市場需求拉動，需分辨不同動力。",
+        "subject": "歷史",
+        "sub_topic": "概念比較",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-概念比較",
+        "template_id": "ref-h3-概念比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-概念比較-2",
+      "source": "參照大考中心114學測社會考科歷史探究與資料比較之評量方向，自編參考題",
+      "design": "「概念比較」之史料解讀、推論限制及同層次干擾選項",
+      "question": {
+        "q": "「帝國」與「民族國家」是研究政治發展時常見概念。下列哪種比較方法最適當？",
+        "correct": "依統治範圍、政治正當性與成員認同來分析具體案例",
+        "wrong": [
+          "直接假定所有帝國都只由單一民族組成",
+          "認為只要有國旗就必然是民族國家",
+          "完全忽略不同時代政治制度的差異"
+        ],
+        "exp": "概念是分析工具，應從具體維度及歷史情境比較，避免以外表標誌判定。",
+        "subject": "歷史",
+        "sub_topic": "概念比較",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-概念比較",
+        "template_id": "ref-h3-概念比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
