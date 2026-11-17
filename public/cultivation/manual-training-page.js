@@ -55,6 +55,12 @@ function ensure(){
     link.href='/styles/manual-training-celebration.css?v=20261117-rewards-phase4';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-growth-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-growth-style';
+    link.href='/styles/manual-training-growth.css?v=20261117-growth-phase5';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
