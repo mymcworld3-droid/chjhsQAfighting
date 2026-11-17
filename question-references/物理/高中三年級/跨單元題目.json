@@ -1,0 +1,66 @@
+{
+  "units": [
+    "電磁與光學統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-跨單元題目-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「跨單元題目」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "一個導線線圈在磁場中轉動產生交流電，再以電熱器加熱水。主要能量轉換順序為何？",
+        "correct": "機械能→電能→內能",
+        "wrong": [
+          "電能→核能→機械能",
+          "內能→化學鍵能→重力位能",
+          "磁場本身無需能量就產生無限熱"
+        ],
+        "exp": "發電機將機械能轉電能，電熱器藉焦耳熱提高水的內能。",
+        "subject": "物理",
+        "sub_topic": "跨單元題目",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-跨單元題目",
+        "template_id": "physics-ref-g3-跨單元題目-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-跨單元題目-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「跨單元題目」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "質量2 kg的物體由高度5 m靜止落下，取g＝10 m/s²，忽略阻力。落地前速率約？",
+        "correct": "10 m/s",
+        "wrong": [
+          "5 m/s",
+          "20 m/s",
+          "50 m/s"
+        ],
+        "exp": "mgh＝(1/2)mv²，v＝√(2gh)＝√100＝10 m/s。",
+        "subject": "物理",
+        "sub_topic": "跨單元題目",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-跨單元題目",
+        "template_id": "physics-ref-g3-跨單元題目-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

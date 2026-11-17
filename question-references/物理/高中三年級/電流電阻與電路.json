@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅳ：電磁現象一複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-電流電阻與電路-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電流電阻與電路」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "一個12 V理想電源串聯2 Ω與4 Ω電阻，電路電流為何？",
+        "correct": "2 A",
+        "wrong": [
+          "3 A",
+          "6 A",
+          "12 A"
+        ],
+        "exp": "串聯總電阻6 Ω，I＝V/R＝12/6＝2 A。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "physics-ref-g3-電流電阻與電路-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-電流電阻與電路-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電流電阻與電路」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "兩個6 Ω電阻並聯接6 V理想電源，電源提供的總電流為多少？",
+        "correct": "2 A",
+        "wrong": [
+          "1 A",
+          "0.5 A",
+          "6 A"
+        ],
+        "exp": "每支路電流1 A，並聯總電流2 A，等效電阻3 Ω。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "physics-ref-g3-電流電阻與電路-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

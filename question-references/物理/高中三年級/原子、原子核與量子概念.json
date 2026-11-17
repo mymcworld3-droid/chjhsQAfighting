@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理：近代物理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-原子、原子核與量子概念-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「原子、原子核與量子概念」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "氫原子電子由較高能階躍遷至較低能階，原子最可能發生什麼？",
+        "correct": "放出能量等於能階差的光子",
+        "wrong": [
+          "吸收相同能量且沒有任何放射",
+          "將質子數變成2",
+          "原子必定直接變成中子"
+        ],
+        "exp": "能階下降時釋放能量，若以光子放射則E＝hν等於差值。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "physics-ref-g3-原子、原子核與量子概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-原子、原子核與量子概念-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「原子、原子核與量子概念」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "某放射性同位素半衰期10天，初始有80 g。經20天後剩餘未衰變的質量約？",
+        "correct": "20 g",
+        "wrong": [
+          "40 g",
+          "10 g",
+          "60 g"
+        ],
+        "exp": "20天為兩個半衰期，剩80×(1/2)²＝20 g。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "physics-ref-g3-原子、原子核與量子概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅴ：電磁現象二"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-電磁應用-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電磁應用」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "理想變壓器初級匝數200圈、次級1000圈，初級交流電壓10 V，次級電壓約多少？",
+        "correct": "50 V",
+        "wrong": [
+          "2 V",
+          "10 V",
+          "200 V"
+        ],
+        "exp": "V₂/V₁＝N₂/N₁＝1000/200＝5，次級50 V。",
+        "subject": "物理",
+        "sub_topic": "電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁應用",
+        "template_id": "physics-ref-g3-電磁應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-電磁應用-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電磁應用」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "電磁煞車利用磁鐵靠近運動金屬板時產生渦電流，渦電流的磁作用通常如何？",
+        "correct": "阻礙金屬板相對運動，將部分動能轉為熱",
+        "wrong": [
+          "持續提供外力讓金屬板自行加速",
+          "完全沒有能量轉換",
+          "使磁鐵立即消失且無需維護"
+        ],
+        "exp": "渦電流產生的磁力依楞次定律反抗相對運動，能量可轉為焦耳熱。",
+        "subject": "物理",
+        "sub_topic": "電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁應用",
+        "template_id": "physics-ref-g3-電磁應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

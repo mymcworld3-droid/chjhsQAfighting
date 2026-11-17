@@ -1,0 +1,66 @@
+{
+  "units": [
+    "電磁與光學統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-電路與電磁感應-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電路與電磁感應」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "磁通量通過一線圈的大小在1秒內由0.5 Wb線性降至0.1 Wb，若線圈有5匝，平均感應電動勢大小為？",
+        "correct": "2.0 V",
+        "wrong": [
+          "0.4 V",
+          "0.08 V",
+          "5.0 V"
+        ],
+        "exp": "|ε|＝N|ΔΦ/Δt|＝5×0.4/1＝2 V。",
+        "subject": "物理",
+        "sub_topic": "電路與電磁感應",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電路與電磁感應",
+        "template_id": "physics-ref-g3-電路與電磁感應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-電路與電磁感應-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電路與電磁感應」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "電路中一個2 Ω電阻接在電壓4 V的理想電源，消耗電功率多少？",
+        "correct": "8 W",
+        "wrong": [
+          "2 W",
+          "4 W",
+          "16 W"
+        ],
+        "exp": "P＝V²/R＝16/2＝8 W。",
+        "subject": "物理",
+        "sub_topic": "電路與電磁感應",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電路與電磁感應",
+        "template_id": "physics-ref-g3-電路與電磁感應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

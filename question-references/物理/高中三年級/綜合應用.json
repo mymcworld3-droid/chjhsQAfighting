@@ -1,0 +1,66 @@
+{
+  "units": [
+    "實驗與數據"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-綜合應用-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「綜合應用」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "太陽能板產生電能供水泵抽水至高處儲水槽。若不計損失，主要能量轉換為？",
+        "correct": "太陽輻射能→電能→水的重力位能",
+        "wrong": [
+          "水的重力位能→太陽能→電能",
+          "聲能→核能→磁能",
+          "熱量自行增加而不需能量來源"
+        ],
+        "exp": "光伏發電轉換太陽能為電能，水泵提高水位而儲存重力位能。",
+        "subject": "物理",
+        "sub_topic": "綜合應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-綜合應用",
+        "template_id": "physics-ref-g3-綜合應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-綜合應用-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「綜合應用」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "質量1 kg的小車沿斜面由高處下降2 m，取g＝10 m/s²。若摩擦耗散5 J，末動能較初動能增加多少？",
+        "correct": "15 J",
+        "wrong": [
+          "20 J",
+          "25 J",
+          "5 J"
+        ],
+        "exp": "重力位能降低mgh＝20 J，扣除摩擦耗散5 J，動能增加15 J。",
+        "subject": "物理",
+        "sub_topic": "綜合應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-綜合應用",
+        "template_id": "physics-ref-g3-綜合應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

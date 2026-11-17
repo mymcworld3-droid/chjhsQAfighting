@@ -1,0 +1,66 @@
+{
+  "units": [
+    "電磁與光學統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-波動、干涉與光學-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「波動、干涉與光學」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "兩相干光源在屏幕上某點的路徑差為一個波長，且初始同相。此處應形成哪種干涉？",
+        "correct": "相長干涉",
+        "wrong": [
+          "完全相消干涉",
+          "必定沒有任何光線抵達",
+          "只因路徑差非零便不能干涉"
+        ],
+        "exp": "路徑差整數倍波長、同相干涉，波峰相疊而亮。",
+        "subject": "物理",
+        "sub_topic": "波動、干涉與光學",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-波動、干涉與光學",
+        "template_id": "physics-ref-g3-波動、干涉與光學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-波動、干涉與光學-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「波動、干涉與光學」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "凸透鏡焦距20 cm，物體距鏡40 cm，依薄透鏡公式，像距多少？",
+        "correct": "40 cm",
+        "wrong": [
+          "20 cm",
+          "10 cm",
+          "80 cm"
+        ],
+        "exp": "1/20＝1/40+1/v，得1/v＝1/40，v＝40 cm。",
+        "subject": "物理",
+        "sub_topic": "波動、干涉與光學",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-波動、干涉與光學",
+        "template_id": "physics-ref-g3-波動、干涉與光學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

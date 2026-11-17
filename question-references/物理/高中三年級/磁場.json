@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅳ：電磁現象一複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-磁場-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「磁場」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "長直導線電流由下向上，從導線上方往下俯視電流方向是朝向觀察者。依右手定則，磁場環繞方向為？",
+        "correct": "逆時針",
+        "wrong": [
+          "順時針",
+          "沿導線向下",
+          "垂直各方向且沒有環繞"
+        ],
+        "exp": "右手拇指沿電流朝向觀察者，四指彎曲指向逆時針磁場。",
+        "subject": "物理",
+        "sub_topic": "磁場",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-磁場",
+        "template_id": "physics-ref-g3-磁場-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-磁場-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「磁場」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "帶正電粒子以v垂直B進入均勻磁場，若粒子速度加倍而q、m、B不變，圓周運動半徑如何？",
+        "correct": "加倍",
+        "wrong": [
+          "減半",
+          "不變",
+          "變為四倍"
+        ],
+        "exp": "磁力供向心力，r＝mv/(qB)，與速度成正比。",
+        "subject": "物理",
+        "sub_topic": "磁場",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-磁場",
+        "template_id": "physics-ref-g3-磁場-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

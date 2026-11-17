@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅴ：電磁現象二"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-交流電與電磁波-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「交流電與電磁波」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "臺灣一般交流電頻率為60 Hz，代表電壓每秒約完成多少個完整週期？",
+        "correct": "60個",
+        "wrong": [
+          "30個",
+          "120個",
+          "1個"
+        ],
+        "exp": "頻率60 Hz指每秒60週期，而非每秒60次單方向零交越。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "physics-ref-g3-交流電與電磁波-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-交流電與電磁波-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「交流電與電磁波」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "電磁波在真空中傳播，頻率f＝1.0×10⁸ Hz，取光速c＝3.0×10⁸ m/s，其波長約多少？",
+        "correct": "3.0 m",
+        "wrong": [
+          "0.33 m",
+          "30 m",
+          "300 m"
+        ],
+        "exp": "λ＝c/f＝3×10⁸/1×10⁸＝3 m。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "physics-ref-g3-交流電與電磁波-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理：近代物理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-光電效應與物質波-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「光電效應與物質波」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "光電效應實驗中，入射光頻率高於金屬截止頻率。若只提高光強而頻率不變，最大光電子動能一般如何？",
+        "correct": "不變，但光電子數可增加",
+        "wrong": [
+          "最大動能必隨光強加倍",
+          "最大動能必變成負值",
+          "光電子數與光強完全無關"
+        ],
+        "exp": "Kmax＝hf−W，頻率固定則最大動能固定；強度主要影響光子數及電流。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "physics-ref-g3-光電效應與物質波-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-光電效應與物質波-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「光電效應與物質波」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "電子具有德布羅意波長λ＝h/p。若電子動量大小加倍，波長如何？",
+        "correct": "減半",
+        "wrong": [
+          "加倍",
+          "維持不變",
+          "變為四倍"
+        ],
+        "exp": "λ與動量成反比，p×2時λ/2。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "physics-ref-g3-光電效應與物質波-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

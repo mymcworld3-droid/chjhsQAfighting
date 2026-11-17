@@ -1,0 +1,66 @@
+{
+  "units": [
+    "力學統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-動量、能量與受力綜合-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「動量、能量與受力綜合」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "水平無外力下，2 kg滑車以3 m/s撞上靜止1 kg滑車，兩車黏住。碰後共同速率？",
+        "correct": "2 m/s",
+        "wrong": [
+          "1 m/s",
+          "3 m/s",
+          "6 m/s"
+        ],
+        "exp": "總動量初始6 kg·m/s，總質量3 kg，共同速度2 m/s。",
+        "subject": "物理",
+        "sub_topic": "動量、能量與受力綜合",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-動量、能量與受力綜合",
+        "template_id": "physics-ref-g3-動量、能量與受力綜合-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-動量、能量與受力綜合-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「動量、能量與受力綜合」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "質量1 kg物體由靜止在光滑水平面受4 N恆力作用2 m。其末動能增加多少？",
+        "correct": "8 J",
+        "wrong": [
+          "2 J",
+          "4 J",
+          "16 J"
+        ],
+        "exp": "功W＝Fs＝4×2＝8 J，等於動能變化。",
+        "subject": "物理",
+        "sub_topic": "動量、能量與受力綜合",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-動量、能量與受力綜合",
+        "template_id": "physics-ref-g3-動量、能量與受力綜合-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

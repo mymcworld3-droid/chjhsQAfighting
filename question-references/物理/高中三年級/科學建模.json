@@ -1,0 +1,66 @@
+{
+  "units": [
+    "力學統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-科學建模-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「科學建模」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "用「忽略空氣阻力」模型預測紙張與金屬球同時落地，實際紙張落得較慢。這最能說明什麼？",
+        "correct": "模型的忽略條件不適用於阻力影響明顯的紙張",
+        "wrong": [
+          "自由落體定律對金屬球必定無效",
+          "紙張沒有任何質量",
+          "任何物理模型都必須包含世界所有細節"
+        ],
+        "exp": "簡化模型有適用情境，對大面積輕物體需納入空氣阻力。",
+        "subject": "物理",
+        "sub_topic": "科學建模",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-科學建模",
+        "template_id": "physics-ref-g3-科學建模-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-科學建模-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「科學建模」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "以F＝kx模型描述彈簧，實驗在小伸長量呈直線關係、大伸長量則明顯偏離。較合適的研究結論？",
+        "correct": "虎克定律的線性近似在該彈簧有限伸長範圍內有效",
+        "wrong": [
+          "實驗偏離表示F與x在所有伸長量必成正比",
+          "只要一組資料符合便可推論任何變形",
+          "線性模型不需要檢查材料的彈性極限"
+        ],
+        "exp": "彈簧可能超出線性彈性範圍，需界定模型有效區間。",
+        "subject": "物理",
+        "sub_topic": "科學建模",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-科學建模",
+        "template_id": "physics-ref-g3-科學建模-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

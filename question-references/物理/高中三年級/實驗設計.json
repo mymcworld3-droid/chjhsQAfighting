@@ -1,0 +1,66 @@
+{
+  "units": [
+    "實驗與數據"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-實驗設計-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「實驗設計」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "要檢驗彈簧週期與質量關係，研究者改變質量並量測週期。哪項控制最合理？",
+        "correct": "使用同一彈簧、保持小振幅並控制外界條件",
+        "wrong": [
+          "每次更換不同彈簧且不記錄k值",
+          "同時改變質量與彈簧常數",
+          "只量測第一組就做出完整趨勢"
+        ],
+        "exp": "T＝2π√(m/k)，要研究m需盡量保持k固定。",
+        "subject": "物理",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中三年級-實驗設計",
+        "template_id": "physics-ref-g3-實驗設計-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-實驗設計-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「實驗設計」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "研究電阻R隨導線長度的變化，若欲驗證R∝L，應如何設計？",
+        "correct": "固定材料、溫度與截面積，改變長度並量測電阻",
+        "wrong": [
+          "同時變更材料及截面積而不記錄",
+          "只選導線顏色相同即可確保所有條件一致",
+          "把電阻值直接由導線名稱推算"
+        ],
+        "exp": "R＝ρL/A，需固定電阻率與截面積以辨認L效應。",
+        "subject": "物理",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-實驗設計",
+        "template_id": "physics-ref-g3-實驗設計-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

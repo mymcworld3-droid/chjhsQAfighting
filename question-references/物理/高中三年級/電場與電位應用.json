@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅳ：電磁現象一複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-電場與電位應用-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電場與電位應用」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "帶正電粒子q＝2.0 μC，從電位10 V處移到電位4 V處，電位能變化ΔU為何？",
+        "correct": "−12 μJ",
+        "wrong": [
+          "+12 μJ",
+          "−3 μJ",
+          "+28 μJ"
+        ],
+        "exp": "ΔU＝qΔV＝2 μC×(4−10) V＝−12 μJ。",
+        "subject": "物理",
+        "sub_topic": "電場與電位應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電場與電位應用",
+        "template_id": "physics-ref-g3-電場與電位應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-電場與電位應用-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「電場與電位應用」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "均勻電場強度200 N/C，正電荷沿電場方向移動0.10 m。電場對每1 C正電荷所作的功為何？",
+        "correct": "20 J/C",
+        "wrong": [
+          "2 J/C",
+          "2000 J/C",
+          "0 J/C"
+        ],
+        "exp": "每單位電荷作功＝Ed＝200×0.10＝20 J/C，即電位差20 V。",
+        "subject": "物理",
+        "sub_topic": "電場與電位應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電場與電位應用",
+        "template_id": "physics-ref-g3-電場與電位應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

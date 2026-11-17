@@ -1,0 +1,66 @@
+{
+  "units": [
+    "實驗與數據"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-誤差與圖形斜率-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「誤差與圖形斜率」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "實驗測得電阻兩端V-I圖呈直線，橫軸電流I(A)、縱軸電壓V(V)，斜率為5 V/A。電阻值？",
+        "correct": "5 Ω",
+        "wrong": [
+          "0.2 Ω",
+          "25 Ω",
+          "5 W"
+        ],
+        "exp": "歐姆定律V＝IR，V對I圖斜率等於R，為5 Ω。",
+        "subject": "物理",
+        "sub_topic": "誤差與圖形斜率",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-誤差與圖形斜率",
+        "template_id": "physics-ref-g3-誤差與圖形斜率-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-誤差與圖形斜率-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「誤差與圖形斜率」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "測彈簧F-x圖的斜率，甲同學只用兩個相距很近的資料點，乙同學對多個點進行線性擬合。若量測有隨機誤差，哪種作法通常更穩健？",
+        "correct": "乙，用多個點估計斜率可減少單一量測誤差影響",
+        "wrong": [
+          "甲，兩點越近必定越準確",
+          "兩者完全一樣，不受資料散布影響",
+          "斜率只能用單一資料點求得"
+        ],
+        "exp": "用多點擬合通常可降低隨機噪音造成的斜率不穩定。",
+        "subject": "物理",
+        "sub_topic": "誤差與圖形斜率",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-誤差與圖形斜率",
+        "template_id": "physics-ref-g3-誤差與圖形斜率-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

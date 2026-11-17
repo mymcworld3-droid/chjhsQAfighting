@@ -1,0 +1,66 @@
+{
+  "units": [
+    "力學統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-運動圖表-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「運動圖表」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "速度—時間圖中，物體速度由2 m/s以直線增加至10 m/s，歷時4 s。若加速度固定，其大小為？",
+        "correct": "2 m/s²",
+        "wrong": [
+          "3 m/s²",
+          "8 m/s²",
+          "40 m/s²"
+        ],
+        "exp": "速度—時間圖斜率＝(10−2)/4＝2 m/s²。",
+        "subject": "物理",
+        "sub_topic": "運動圖表",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-運動圖表",
+        "template_id": "physics-ref-g3-運動圖表-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-運動圖表-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「運動圖表」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "一物體沿直線運動，速度—時間圖在前2秒速度恆為3 m/s，後2秒恆為−1 m/s。4秒內位移多少？",
+        "correct": "4 m",
+        "wrong": [
+          "8 m",
+          "6 m",
+          "2 m"
+        ],
+        "exp": "位移為有號面積：3×2+(−1)×2＝4 m。",
+        "subject": "物理",
+        "sub_topic": "運動圖表",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-運動圖表",
+        "template_id": "physics-ref-g3-運動圖表-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

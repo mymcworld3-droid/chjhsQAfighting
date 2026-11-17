@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理：近代物理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g3-物理學發展-1",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「物理學發展」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "某實驗發現光電效應中，低於截止頻率的光即使強度很大仍無光電子放出。這對物理理論的主要啟示是？",
+        "correct": "光能量具有與頻率相關的量子特性",
+        "wrong": [
+          "光電子能量只由光的振幅決定",
+          "光子能量與頻率完全無關",
+          "所有金屬的截止頻率必定相同"
+        ],
+        "exp": "光電效應支持光量子E＝hf；低頻光子能量不足以克服功函數。",
+        "subject": "物理",
+        "sub_topic": "物理學發展",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-物理學發展",
+        "template_id": "physics-ref-g3-物理學發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g3-物理學發展-2",
+      "source": "依高中物理108課綱與自然科計算及實驗判讀評量方式重寫的參考題",
+      "design": "以「物理學發展」的單位、數據及物理定律形成正解與合理誤算選項",
+      "question": {
+        "q": "若運動物體速度遠小於光速，通常可用牛頓力學近似；當速度接近光速時須用相對論。這表示哪項科學觀點？",
+        "correct": "理論具有適用範圍，較新理論能包含舊理論的有效近似",
+        "wrong": [
+          "牛頓力學對任何低速現象都必然錯誤",
+          "相對論只能用於完全靜止的物體",
+          "物理理論一旦發展就不需以實驗檢驗"
+        ],
+        "exp": "牛頓力學是低速近似，相對論對高速情境更適用，反映理論適用條件。",
+        "subject": "物理",
+        "sub_topic": "物理學發展",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-物理學發展",
+        "template_id": "physics-ref-g3-物理學發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
