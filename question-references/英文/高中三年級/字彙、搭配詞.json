@@ -1,0 +1,66 @@
+{
+  "units": [
+    "學測英文語意"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-字彙、搭配詞-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「字彙、搭配詞」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Choose the best word: 'The city plans to ___ the old railway station while making it accessible to modern visitors.'",
+        "correct": "preserve",
+        "wrong": [
+          "consume",
+          "predict",
+          "exchange"
+        ],
+        "exp": "preserve 表保存原有歷史建物，搭配 make accessible 描述活化而非拆除。",
+        "subject": "英文",
+        "sub_topic": "字彙、搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中三年級-字彙、搭配詞",
+        "template_id": "eng-ref-g3-字彙、搭配詞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-字彙、搭配詞-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「字彙、搭配詞」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Which phrase completes the sentence naturally? 'The campaign aims to raise public ___ of water conservation.'",
+        "correct": "awareness",
+        "wrong": [
+          "aware",
+          "awaken",
+          "awakely"
+        ],
+        "exp": "raise public awareness of... 表提升公眾對議題的認知，awareness 為正確名詞。",
+        "subject": "英文",
+        "sub_topic": "字彙、搭配詞",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "eng-高中三年級-字彙、搭配詞",
+        "template_id": "eng-ref-g3-字彙、搭配詞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

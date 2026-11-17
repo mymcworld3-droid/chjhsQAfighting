@@ -1,0 +1,66 @@
+{
+  "units": [
+    "進階寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-摘要與改寫-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「摘要與改寫」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Original: 'The town offered free water bottles to reduce plastic waste. Initial participation was high, but maintenance of refill stations remained a concern.' Which summary is best?",
+        "correct": "The program attracted users, although keeping refill stations operating may be difficult.",
+        "wrong": [
+          "The town stopped providing drinking water forever.",
+          "Every refill station has already broken down.",
+          "Residents refused all free bottles."
+        ],
+        "exp": "摘要應同時保留參與率高及維護疑慮，不能擅自宣稱全都故障。",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "eng-ref-g3-摘要與改寫-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-摘要與改寫-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「摘要與改寫」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Which paraphrase preserves the meaning? 'Only after the lights went out did the students notice the emergency signs.'",
+        "correct": "The students noticed the emergency signs after the lights had gone out, not before.",
+        "wrong": [
+          "The students saw the signs before the lights went out.",
+          "The signs caused the lights to go out.",
+          "The lights never went out during the event."
+        ],
+        "exp": "Only after... did... 倒裝表示直到熄燈後學生才注意到標誌。",
+        "subject": "英文",
+        "sub_topic": "摘要與改寫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-摘要與改寫",
+        "template_id": "eng-ref-g3-摘要與改寫-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

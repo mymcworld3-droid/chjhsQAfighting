@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英文作文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-圖片與情境寫作-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「圖片與情境寫作」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Picture description: A student holds an umbrella over a classmate who is using crutches while they cross the schoolyard in the rain. Which opening sentence most clearly describes the scene?",
+        "correct": "During a rainy afternoon, one student helps a classmate cross the schoolyard.",
+        "wrong": [
+          "Every student must bring a blue umbrella to school.",
+          "The photograph shows a mountain expedition in summer.",
+          "Two teachers are discussing the price of bicycles."
+        ],
+        "exp": "題幹明確描述人物、動作、天氣和場景；正解忠實概括而不額外推定。",
+        "subject": "英文",
+        "sub_topic": "圖片與情境寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-圖片與情境寫作",
+        "template_id": "eng-ref-g3-圖片與情境寫作-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-圖片與情境寫作-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「圖片與情境寫作」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Writing prompt: 'Describe a time when you changed your opinion after hearing another person's experience.' Which outline best addresses the task?",
+        "correct": "Initial belief → conversation and new evidence → changed viewpoint and reflection",
+        "wrong": [
+          "Favorite foods → bus schedule → textbook cover colors",
+          "Family birthdays → unrelated travel dates → shopping list",
+          "General claims about everyone → no personal event → no reflection"
+        ],
+        "exp": "寫作需要事件前後觀點改變及原因，正解呈現具體經歷與反思。",
+        "subject": "英文",
+        "sub_topic": "圖片與情境寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-圖片與情境寫作",
+        "template_id": "eng-ref-g3-圖片與情境寫作-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

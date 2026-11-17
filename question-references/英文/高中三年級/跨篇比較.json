@@ -1,0 +1,66 @@
+{
+  "units": [
+    "進階閱讀與語用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-跨篇比較-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「跨篇比較」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Text A supports online lectures because students can replay lessons. Text B warns that some students lack reliable internet access. Which combined conclusion is most reasonable?",
+        "correct": "Replayable lessons are useful, but schools should address unequal access.",
+        "wrong": [
+          "Both texts agree that online learning is always harmful.",
+          "Text B proves nobody can use online lectures.",
+          "Text A denies that internet access is required."
+        ],
+        "exp": "兩文分別說明優點與限制，整合需兼顧重播功能與可近性。",
+        "subject": "英文",
+        "sub_topic": "跨篇比較",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-跨篇比較",
+        "template_id": "eng-ref-g3-跨篇比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-跨篇比較-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「跨篇比較」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Text A: 'Cities should expand bike lanes to reduce traffic emissions.' Text B: 'Bike lanes work best when they connect homes to schools, shops, and transit stations.' How do the views relate?",
+        "correct": "Text B adds a design condition to the goal described in Text A.",
+        "wrong": [
+          "Text B rejects all low-carbon transportation.",
+          "Both texts discuss only bicycle manufacturing.",
+          "Text A argues that bike lanes should never connect important places."
+        ],
+        "exp": "A 提倡政策目的，B 補充實現效果的路網連接條件。",
+        "subject": "英文",
+        "sub_topic": "跨篇比較",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-跨篇比較",
+        "template_id": "eng-ref-g3-跨篇比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

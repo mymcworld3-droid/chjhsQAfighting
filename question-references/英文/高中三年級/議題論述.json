@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英文作文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-議題論述-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「議題論述」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Writing task: 'Should schools reduce single-use plastics?' Which thesis is most suitable for a balanced argumentative essay?",
+        "correct": "Schools should reduce unnecessary plastic use while providing affordable reusable alternatives.",
+        "wrong": [
+          "Plastic exists, and I have bought many bottles.",
+          "Every student who uses plastic must be punished immediately.",
+          "School buildings have different numbers of windows."
+        ],
+        "exp": "立論應回應議題，提出政策立場及可討論的配套，避免情緒與離題。",
+        "subject": "英文",
+        "sub_topic": "議題論述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-議題論述",
+        "template_id": "eng-ref-g3-議題論述-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-議題論述-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「議題論述」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Which evidence most directly strengthens the claim 'Free breakfast programs may improve attendance among students who skip breakfast for financial reasons'?",
+        "correct": "A school comparison tracks attendance before and after the program while considering other factors.",
+        "wrong": [
+          "A list of the cafeteria walls' paint colors.",
+          "A survey asking only which music students prefer.",
+          "One teacher's favorite childhood breakfast recipe."
+        ],
+        "exp": "應測量與出席率有關的資料，並控制其他影響因素，不能以無關主觀資料替代。",
+        "subject": "英文",
+        "sub_topic": "議題論述",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-議題論述",
+        "template_id": "eng-ref-g3-議題論述-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

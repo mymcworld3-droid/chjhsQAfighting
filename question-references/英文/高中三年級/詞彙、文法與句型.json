@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英文綜合複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-詞彙、文法與句型-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「詞彙、文法與句型」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Choose the grammatically correct sentence.",
+        "correct": "Had I known about the delay, I would have left later.",
+        "wrong": [
+          "Had I knew about the delay, I would left later.",
+          "If I had knew the delay, I will leave later.",
+          "Had I know the delay, I would leaving."
+        ],
+        "exp": "省略 if 的過去相反條件句 Had I known ...，主要子句 would have + p.p.。",
+        "subject": "英文",
+        "sub_topic": "詞彙、文法與句型",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-詞彙、文法與句型",
+        "template_id": "eng-ref-g3-詞彙、文法與句型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-詞彙、文法與句型-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「詞彙、文法與句型」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Complete: 'Neither the students nor their teacher ___ aware of the schedule change yesterday.'",
+        "correct": "was",
+        "wrong": [
+          "were",
+          "are",
+          "have"
+        ],
+        "exp": "neither ... nor ... 主詞一致性常依就近的 their teacher 單數，且 yesterday 用過去式 was。",
+        "subject": "英文",
+        "sub_topic": "詞彙、文法與句型",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "eng-高中三年級-詞彙、文法與句型",
+        "template_id": "eng-ref-g3-詞彙、文法與句型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

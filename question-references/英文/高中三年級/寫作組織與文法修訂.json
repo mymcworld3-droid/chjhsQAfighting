@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英文作文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-寫作組織與文法修訂-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「寫作組織與文法修訂」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Draft: 'There are many reasons why the museum should be opened on weekends. First, it is help students. Second, tourists can visits.' Which revision corrects both errors?",
+        "correct": "First, it helps students. Second, tourists can visit.",
+        "wrong": [
+          "First, it help students. Second, tourists visits.",
+          "First, it helped students. Second, tourists can visiting.",
+          "First, it are help students. Second, tourists can visited."
+        ],
+        "exp": "it helps 為第三人稱單數，情態動詞 can 後須原形 visit。",
+        "subject": "英文",
+        "sub_topic": "寫作組織與文法修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-寫作組織與文法修訂",
+        "template_id": "eng-ref-g3-寫作組織與文法修訂-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-寫作組織與文法修訂-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「寫作組織與文法修訂」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Which closing sentence best concludes an essay that first discusses the benefits of cycling and then the need for safer roads?",
+        "correct": "Cycling can benefit cities, but its success also depends on well-designed, safe routes.",
+        "wrong": [
+          "In conclusion, buses have always been made of metal.",
+          "Every cyclist must travel the same distance.",
+          "The essay has no connection to transportation."
+        ],
+        "exp": "結論應回扣騎車效益及安全道路兩個核心重點，不新增無關議題。",
+        "subject": "英文",
+        "sub_topic": "寫作組織與文法修訂",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-寫作組織與文法修訂",
+        "template_id": "eng-ref-g3-寫作組織與文法修訂-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

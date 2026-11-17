@@ -1,0 +1,66 @@
+{
+  "units": [
+    "學測英文閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-篇章結構-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「篇章結構」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "A text introduces a city's traffic problem, compares three possible policies, and closes by recommending better bus service. What is the structure?",
+        "correct": "Problem → evaluation of options → recommendation",
+        "wrong": [
+          "Chronological biography → childhood memories → family tree",
+          "Definition → unrelated joke → weather forecast",
+          "A series of claims without any connection"
+        ],
+        "exp": "先界定交通問題，再評估方案，最後提出建議，是問題—比較—結論的組織。",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-篇章結構",
+        "template_id": "eng-ref-g3-篇章結構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-篇章結構-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「篇章結構」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Which sentence best bridges a paragraph about the benefits of remote learning and another about students without reliable internet?",
+        "correct": "Despite these benefits, online classes can also create access problems.",
+        "wrong": [
+          "All students should learn to cook before class.",
+          "The oldest university in the city has a stone gate.",
+          "Remote learning never requires any technology."
+        ],
+        "exp": "第二段談數位落差，轉承句需承認優點後引入可近性問題。",
+        "subject": "英文",
+        "sub_topic": "篇章結構",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-篇章結構",
+        "template_id": "eng-ref-g3-篇章結構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "進階寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-論證與反論證-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「論證與反論證」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Argument: 'The public library should open on Sundays because many students study then.' Counterargument: 'Staffing costs would rise.' Which response best addresses the counterargument?",
+        "correct": "The library could test shorter Sunday hours and compare demand with staffing costs.",
+        "wrong": [
+          "Staffing never costs anything.",
+          "Anyone who worries about costs must dislike reading.",
+          "Libraries should remove all their books."
+        ],
+        "exp": "回應應正視成本疑慮並提出可評估配套，而非否定或攻擊對方。",
+        "subject": "英文",
+        "sub_topic": "論證與反論證",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論證與反論證",
+        "template_id": "eng-ref-g3-論證與反論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-論證與反論證-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「論證與反論證」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Claim: 'Every student learns better with recorded lectures.' Which evidence most directly challenges the absolute claim?",
+        "correct": "A controlled study identifies a group that performs better with in-person instruction.",
+        "wrong": [
+          "A survey asks students which snacks they like.",
+          "A graph shows every school has a building.",
+          "A teacher chooses a new classroom clock."
+        ],
+        "exp": "Every 是全稱主張，有可靠反例就可削弱其普遍性。",
+        "subject": "英文",
+        "sub_topic": "論證與反論證",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論證與反論證",
+        "template_id": "eng-ref-g3-論證與反論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

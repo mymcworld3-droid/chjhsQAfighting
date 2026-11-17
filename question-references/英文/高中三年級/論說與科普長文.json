@@ -1,0 +1,66 @@
+{
+  "units": [
+    "進階閱讀與語用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-論說與科普長文-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「論說與科普長文」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Read: 'Wetlands absorb stormwater, filter some pollutants, and provide wildlife habitat. However, restored wetlands cannot prevent every flood. Their effectiveness depends on location, size, and maintenance.' What is the most accurate conclusion?",
+        "correct": "Wetland restoration can reduce some risks but must be assessed under local conditions.",
+        "wrong": [
+          "Restored wetlands guarantee an end to all floods.",
+          "Wetlands have no effect on stormwater.",
+          "Wetlands only serve as places for buildings."
+        ],
+        "exp": "文章同時說明濕地功能與限制，結論不能忽略條件、過度保證。",
+        "subject": "英文",
+        "sub_topic": "論說與科普長文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論說與科普長文",
+        "template_id": "eng-ref-g3-論說與科普長文-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-論說與科普長文-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「論說與科普長文」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Read: 'Researchers found that people who exercised more reported better sleep. Yet the study relied on self-reports and did not control for work schedules.' Which claim is NOT justified?",
+        "correct": "Exercise was proven to be the sole cause of better sleep.",
+        "wrong": [
+          "The reported sleep quality was related to exercise frequency.",
+          "The study used participants' own reports.",
+          "Work schedules were not controlled in the analysis."
+        ],
+        "exp": "相關研究未控制工時且為自陳，不能證明唯一因果。",
+        "subject": "英文",
+        "sub_topic": "論說與科普長文",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-論說與科普長文",
+        "template_id": "eng-ref-g3-論說與科普長文-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

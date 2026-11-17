@@ -1,0 +1,66 @@
+{
+  "units": [
+    "學測英文閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-混合題與長文閱讀-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「混合題與長文閱讀」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Passage: 'A town introduced shared bicycles in May. At first, only a few residents used them because the stations were far from bus stops. In August, the town moved several stations near transit hubs. Usage rose, but surveys still showed that some users wanted safer cycling lanes.' Which change most likely addressed the initial accessibility problem?",
+        "correct": "Relocating stations closer to public transportation.",
+        "wrong": [
+          "Painting bicycles a different color.",
+          "Removing all nearby bus stops.",
+          "Reducing the number of cycling lanes."
+        ],
+        "exp": "首段說車站離公車太遠，後來移至轉運站附近，對應可近性問題；安全車道仍是另一項需求。",
+        "subject": "英文",
+        "sub_topic": "混合題與長文閱讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-混合題與長文閱讀",
+        "template_id": "eng-ref-g3-混合題與長文閱讀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-混合題與長文閱讀-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「混合題與長文閱讀」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Passage: 'A researcher compared two farms using the same crop. Farm A received more fertilizer and had higher yields, but it also had richer soil and more sunlight. The researcher warned against attributing the whole difference to fertilizer alone.' Why did the researcher express caution?",
+        "correct": "Several conditions differed between the farms, so the cause was uncertain.",
+        "wrong": [
+          "Both farms received identical amounts of sunlight.",
+          "The researcher had proved fertilizer never affects crops.",
+          "The yields of the two farms were exactly equal."
+        ],
+        "exp": "除肥料外土壤與日照也不同，未控制變因，不能將差異全歸因於肥料。",
+        "subject": "英文",
+        "sub_topic": "混合題與長文閱讀",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-混合題與長文閱讀",
+        "template_id": "eng-ref-g3-混合題與長文閱讀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "進階寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-實用文書-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「實用文書」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "You need to request a change in a hotel reservation from Friday to Saturday. Which email subject is clearest?",
+        "correct": "Request to change reservation date from Friday to Saturday",
+        "wrong": [
+          "Hello!!! Important!!!",
+          "A long story about my favorite food",
+          "I have something to tell you"
+        ],
+        "exp": "主旨應清楚說明日期修改，方便對方處理。",
+        "subject": "英文",
+        "sub_topic": "實用文書",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中三年級-實用文書",
+        "template_id": "eng-ref-g3-實用文書-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-實用文書-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「實用文書」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Choose the most appropriate closing for a polite email asking about internship application requirements.",
+        "correct": "Thank you for your time. I look forward to your reply.",
+        "wrong": [
+          "Answer now or I will never forgive you.",
+          "I have decided that the rules do not apply to me.",
+          "No reply is needed, though my questions are important."
+        ],
+        "exp": "正式詢問應維持禮貌與回覆期待，避免威脅或矛盾語氣。",
+        "subject": "英文",
+        "sub_topic": "實用文書",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中三年級-實用文書",
+        "template_id": "eng-ref-g3-實用文書-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "進階閱讀與語用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-語境與詞義推斷-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「語境與詞義推斷」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Read: 'The new policy met with resistance; many shop owners feared losing customers and requested more discussion.' What does 'resistance' mean here?",
+        "correct": "Opposition to a proposed change.",
+        "wrong": [
+          "Electrical resistance measured in ohms.",
+          "A physical exercise routine.",
+          "Unquestioning support for the policy."
+        ],
+        "exp": "商家擔憂損失並要求討論，resistance 在此為反對或抗拒。",
+        "subject": "英文",
+        "sub_topic": "語境與詞義推斷",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-語境與詞義推斷",
+        "template_id": "eng-ref-g3-語境與詞義推斷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-語境與詞義推斷-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「語境與詞義推斷」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Read: 'The proposal is feasible: it can be completed using the existing budget and staff.' The word 'feasible' is closest to:",
+        "correct": "practical and possible to carry out",
+        "wrong": [
+          "impossible under current conditions",
+          "required by international law",
+          "designed only for entertainment"
+        ],
+        "exp": "後文給現有預算和人員可完成，feasible 表可行。",
+        "subject": "英文",
+        "sub_topic": "語境與詞義推斷",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "eng-高中三年級-語境與詞義推斷",
+        "template_id": "eng-ref-g3-語境與詞義推斷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

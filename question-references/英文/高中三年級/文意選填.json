@@ -1,0 +1,66 @@
+{
+  "units": [
+    "學測英文語意"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-文意選填-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「文意選填」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Passage: 'Reading digital maps is convenient. ___, depending on them entirely may make travelers less aware of their surroundings.'",
+        "correct": "Nevertheless",
+        "wrong": [
+          "Furthermore",
+          "For example",
+          "As a result of convenience"
+        ],
+        "exp": "便利與過度依賴的警示形成讓步轉折，Nevertheless 最合適。",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-文意選填",
+        "template_id": "eng-ref-g3-文意選填-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-文意選填-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「文意選填」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Passage: 'The new treatment was tested on a small group. ___, researchers cautioned that larger trials were needed before it could be widely used.'",
+        "correct": "Therefore",
+        "wrong": [
+          "Similarly to its color",
+          "For instance of a book",
+          "Meanwhile yesterday"
+        ],
+        "exp": "因樣本小而需更大型研究，Therefore 表因果結論。",
+        "subject": "英文",
+        "sub_topic": "文意選填",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "eng-高中三年級-文意選填",
+        "template_id": "eng-ref-g3-文意選填-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

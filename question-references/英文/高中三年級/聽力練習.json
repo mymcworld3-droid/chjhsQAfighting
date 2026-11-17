@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英文綜合複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-聽力練習-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「聽力練習」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Listening transcript: 'The lecture has been moved from Room 204 to Room 310. The starting time remains two o'clock.' Which detail changed?",
+        "correct": "The lecture room.",
+        "wrong": [
+          "The lecturer's name.",
+          "The starting time.",
+          "The date of the lecture."
+        ],
+        "exp": "廣播明示教室從204換至310，時間維持下午兩點。",
+        "subject": "英文",
+        "sub_topic": "聽力練習",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中三年級-聽力練習",
+        "template_id": "eng-ref-g3-聽力練習-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-聽力練習-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「聽力練習」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Listening transcript: 'The ferry to the island is delayed by half an hour because of strong winds. It was scheduled for 11:20.' What is the new expected departure time?",
+        "correct": "11:50",
+        "wrong": [
+          "10:50",
+          "11:20",
+          "12:20"
+        ],
+        "exp": "11:20 延後半小時即11:50，不能把延後解讀成提前。",
+        "subject": "英文",
+        "sub_topic": "聽力練習",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-8",
+            "name": "情境溝通"
+          }
+        ],
+        "concept_id": "eng-高中三年級-聽力練習",
+        "template_id": "eng-ref-g3-聽力練習-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

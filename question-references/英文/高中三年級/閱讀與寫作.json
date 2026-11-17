@@ -1,0 +1,66 @@
+{
+  "units": [
+    "英文綜合複習"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "eng-ref-g3-閱讀與寫作-1",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「閱讀與寫作」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Read: 'A school created a quiet room where students could rest during lunch. Surveys showed that some students used it to read while others used it to relax. The school plans to keep both uses.' Which title fits best?",
+        "correct": "One Space, Different Needs",
+        "wrong": [
+          "Why Lunch Breaks Have Been Abolished",
+          "The History of Space Travel",
+          "Every Student Must Read in Silence"
+        ],
+        "exp": "主旨是安靜空間提供不同學生不同用途，並保留多元使用方式。",
+        "subject": "英文",
+        "sub_topic": "閱讀與寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "eng-高中三年級-閱讀與寫作",
+        "template_id": "eng-ref-g3-閱讀與寫作-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "eng-ref-g3-閱讀與寫作-2",
+      "source": "參考大考中心114學測英文考科閱讀與寫作命題方式重新編寫之獨立題目",
+      "design": "以「閱讀與寫作」的篇章、語境或詞法判斷形成唯一正解",
+      "question": {
+        "q": "Writing prompt: 'Discuss one advantage and one limitation of using AI tools for homework.' Which outline best responds?",
+        "correct": "Introduce the tools → explain one benefit with an example → discuss a risk and a safeguard",
+        "wrong": [
+          "List every AI company without evaluating homework use.",
+          "Write only that technology is interesting.",
+          "Explain a childhood trip without discussing homework."
+        ],
+        "exp": "題目要求優勢與限制，正確架構兩面都有理由與具體措施。",
+        "subject": "英文",
+        "sub_topic": "閱讀與寫作",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-7",
+            "name": "翻譯寫作"
+          }
+        ],
+        "concept_id": "eng-高中三年級-閱讀與寫作",
+        "template_id": "eng-ref-g3-閱讀與寫作-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
