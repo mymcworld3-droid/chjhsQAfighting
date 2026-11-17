@@ -1,0 +1,66 @@
+{
+  "units": [
+    "明清文學與小說"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-人物與象徵-1",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "從反覆物件與人物行動之間的關係推導象徵，限制推論範圍",
+      "question": {
+        "q": "某仿古小說寫主角少年時將木尺刻上父親的名字，長大經商仍帶在身邊。生意失敗時，主角想起父親曾說「量物須準，做人須正」，終於決定據實告知債主。木尺在此最主要象徵什麼？",
+        "correct": "父親留下的誠信準則，並影響主角面對困難的抉擇",
+        "wrong": [
+          "主角打算以木尺代替所有債務契約",
+          "父親正在暗中操控市場交易",
+          "主角已放棄經商並準備改當木匠"
+        ],
+        "exp": "木尺由量具轉成提醒做人要正直的物件，兩次出現又與主角是否誠實的選擇相連，故其象徵是價值傳承。",
+        "subject": "國文",
+        "sub_topic": "人物與象徵",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-人物與象徵",
+        "template_id": "chinese-reference-高中二年級-人物與象徵-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-人物與象徵-2",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "從反覆物件與人物行動之間的關係推導象徵，限制推論範圍",
+      "question": {
+        "q": "小說寫：「老掌櫃把顧客多付的銅錢數了三遍，皺著眉不說話。待人走遠，他追出門，把多收的錢放回顧客手裡，只說『下次仔細些』。」從先後行動推斷，哪項人物分析最合理？",
+        "correct": "表面嚴肅寡言，但不願佔顧客便宜",
+        "wrong": [
+          "掌櫃只重視金錢，從來不會退還多收款",
+          "顧客已明確承認故意偷竊掌櫃財物",
+          "掌櫃追出去的目的是要求顧客付更多錢"
+        ],
+        "exp": "數錢、皺眉構成可能嚴苛的第一印象；追還銅錢揭示誠實，不能只截取前半段而忽略後半行動。",
+        "subject": "國文",
+        "sub_topic": "人物與象徵",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-人物與象徵",
+        "template_id": "chinese-reference-高中二年級-人物與象徵-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

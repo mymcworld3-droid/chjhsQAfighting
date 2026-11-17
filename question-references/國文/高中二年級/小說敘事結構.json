@@ -1,0 +1,66 @@
+{
+  "units": [
+    "明清文學與小說"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-小說敘事結構-1",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "運用起因、誤判、證據揭露與結局安排，考查轉折及章回懸念",
+      "question": {
+        "q": "小說先寫商人被疑私藏賑災米糧，縣令查封其倉庫；之後帳冊證明糧食是受託保管的官糧，最後縣令公開澄清。若分析讀者對商人的判斷，轉折關鍵在哪個事件？",
+        "correct": "帳冊顯示糧食的合法來源，推翻查封時形成的嫌疑",
+        "wrong": [
+          "流言出現時，商人的罪責便已確定",
+          "縣令查封倉庫後，便不可能再有新證據",
+          "縣令最後澄清時，才第一次出現糧食"
+        ],
+        "exp": "帳冊不是單純增加情節，而是推翻讀者先前對商人有罪的推測；澄清是轉折後的處理結果。",
+        "subject": "國文",
+        "sub_topic": "小說敘事結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-小說敘事結構",
+        "template_id": "chinese-reference-高中二年級-小說敘事結構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-小說敘事結構-2",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "運用起因、誤判、證據揭露與結局安排，考查轉折及章回懸念",
+      "question": {
+        "q": "某章回故事結尾寫：「二人正欲推門，忽聽房內有人喚其名。究竟是誰？且聽下回分解。」作者把敘事停在此處的主要作用為何？",
+        "correct": "在關鍵人物尚未揭曉時留下懸念，吸引讀者續讀",
+        "wrong": [
+          "交代所有疑點都已獲得解答",
+          "告訴讀者故事的時間順序已完全顛倒",
+          "宣布本書後續不再出現這兩名人物"
+        ],
+        "exp": "推門前的呼喚引出「來者是誰」的未解問題，回末暫停敘事是章回體小說維持期待感的常見安排。",
+        "subject": "國文",
+        "sub_topic": "小說敘事結構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-6",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-小說敘事結構",
+        "template_id": "chinese-reference-高中二年級-小說敘事結構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

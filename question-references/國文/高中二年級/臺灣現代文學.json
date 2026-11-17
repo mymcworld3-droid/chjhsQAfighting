@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣文學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-臺灣現代文學-1",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "運用自編現代臺灣生活文本分析主旨及語言特色",
+      "question": {
+        "q": "閱讀自作短文：「河堤變成自行車道以後，祖父不再能在原地停船。他卻每週帶我沿堤散步，指著橋墩說：『那一帶以前看得到滿河的竹筏。』我聽見的是故事，他看見的卻像另一張地圖。」這段最主要關注什麼？",
+        "correct": "同一地景因世代經驗不同而承載不同的地方記憶",
+        "wrong": [
+          "自行車道開放後所有河流都禁止行船",
+          "祖父從未親眼見過河上的竹筏",
+          "作者主張年輕人不得使用自行車道"
+        ],
+        "exp": "敘事以「故事」對照祖父心中的「另一張地圖」，重點是環境變遷與世代記憶的差異，而不是否定當代設施。",
+        "subject": "國文",
+        "sub_topic": "臺灣現代文學",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-臺灣現代文學",
+        "template_id": "chinese-reference-高中二年級-臺灣現代文學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-臺灣現代文學-2",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "運用自編現代臺灣生活文本分析主旨及語言特色",
+      "question": {
+        "q": "某篇現代散文寫：「母親把市場裡最後一把九層塔放進袋子，說這是巷口阿婆種的。搬離舊社區多年後，菜香仍把我帶回那條巷子。」文中「菜香」最合理的功能是什麼？",
+        "correct": "以氣味作為連結當下與舊社區人情的記憶線索",
+        "wrong": [
+          "證明作者正在記錄九層塔的精確化學組成",
+          "意指母親已無法辨認任何植物",
+          "說明市場只販售一種香草"
+        ],
+        "exp": "氣味在兩個時間點間反覆連結母親、阿婆與巷子，使日常感官經驗承載地方與人際記憶。",
+        "subject": "國文",
+        "sub_topic": "臺灣現代文學",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-臺灣現代文學",
+        "template_id": "chinese-reference-高中二年級-臺灣現代文學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

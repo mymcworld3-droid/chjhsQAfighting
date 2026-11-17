@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣文學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-多元書寫視角-1",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "比較不同敘事位置如何改變同一事件的詮釋",
+      "question": {
+        "q": "同一座老市場拆遷，甲文以攤商口吻寫「我擔心熟客再也找不到我」，乙文以居民口吻寫「新廣場讓孩子終於有安全空間活動」。兩文最值得注意的差異為何？",
+        "correct": "說話者立場不同，因而強調拆遷造成的不同影響",
+        "wrong": [
+          "兩文都肯定拆遷對所有人沒有任何影響",
+          "甲文完全沒有表達情感，乙文只提供數學公式",
+          "兩文證明攤商與居民不可能對話"
+        ],
+        "exp": "甲從經營與客戶連結感受流失，乙從公共空間與兒童安全感受改變；對同一事件的不同選擇性重點符合多元書寫視角。",
+        "subject": "國文",
+        "sub_topic": "多元書寫視角",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-多元書寫視角",
+        "template_id": "chinese-reference-高中二年級-多元書寫視角-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-多元書寫視角-2",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "比較不同敘事位置如何改變同一事件的詮釋",
+      "question": {
+        "q": "閱讀兩句自述：\n甲：「我第一次離開海邊部落，到都市念書，最不習慣的是早晨聽不見海浪。」\n乙：「我在都市長大，第一次到海邊住下，反而因浪聲一夜未眠。」\n兩段敘述共同表明什麼？",
+        "correct": "熟悉的生活環境不同，會影響人對同一聲音的感受",
+        "wrong": [
+          "海浪聲對所有人都有完全一致的影響",
+          "都市學生都不可能適應海邊生活",
+          "只有第一人稱敘事才能記錄真實事件"
+        ],
+        "exp": "對甲而言浪聲是熟悉的生活背景，對乙則是陌生刺激；環境經驗改變感知，沒有必要擴張到所有人的固定反應。",
+        "subject": "國文",
+        "sub_topic": "多元書寫視角",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-多元書寫視角",
+        "template_id": "chinese-reference-高中二年級-多元書寫視角-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

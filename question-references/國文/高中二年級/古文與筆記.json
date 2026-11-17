@@ -1,0 +1,66 @@
+{
+  "units": [
+    "明清文學與小說"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-古文與筆記-1",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "辨識筆記文體的記聞特色及文言句意",
+      "question": {
+        "q": "閱讀自作仿古筆記：「余寓山寺，夜聞竹響，疑有人至。起視之，乃風過竹林，枝葉相擊耳。」下列哪項語譯最能保留事件原意？",
+        "correct": "作者夜聞竹聲以為有人來，起身查看後才知道是風吹竹葉",
+        "wrong": [
+          "作者確實見到訪客進入寺院，並與他交談",
+          "作者因聽不見竹聲，便獨自走出山寺",
+          "作者在竹林中種樹，故夜間不敢就寢"
+        ],
+        "exp": "「疑」表示猜測，「乃」在此揭露實情，「耳」表限定語氣；結尾推翻前面的「有人至」之疑。",
+        "subject": "國文",
+        "sub_topic": "古文與筆記",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古文與筆記",
+        "template_id": "chinese-reference-高中二年級-古文與筆記-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-古文與筆記-2",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "辨識筆記文體的記聞特色及文言句意",
+      "question": {
+        "q": "比較兩則仿古短文。甲：「山中有石，形若臥牛。村人傳其夜能行，余候之三夕，未見動也。」乙：「余見牧童拾石以擊瓦，瓦破而童喜，乃勸其勿以此為戲。」若從文體材料看，兩則共同特色為何？",
+        "correct": "以簡短的見聞或事件為主，帶出敘述者觀察與態度",
+        "wrong": [
+          "必須各自包含完整的長篇家族世系",
+          "都是以整齊對仗為唯一目的的律詩",
+          "都以固定韻腳與詞牌規定寫成"
+        ],
+        "exp": "甲記錄傳說並親自查驗，乙記生活事件兼含勸誡，均呈現筆記體常見的短小記事與作者評論。",
+        "subject": "國文",
+        "sub_topic": "古文與筆記",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古文與筆記",
+        "template_id": "chinese-reference-高中二年級-古文與筆記-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

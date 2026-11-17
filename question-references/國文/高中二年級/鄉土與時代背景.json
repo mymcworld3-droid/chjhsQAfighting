@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣文學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-鄉土與時代背景-1",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "分清時代背景提供的約束與人物自行選擇",
+      "question": {
+        "q": "小說背景設定在鐵路尚未通達的年代。村民要把收成送往外地，多靠牛車沿山路運送；某日暴雨沖毀山徑，貨物因此延遲一週。下列哪項對背景與情節的關係判斷最合適？",
+        "correct": "交通條件與氣候共同限制貨物運輸，構成事件的原因",
+        "wrong": [
+          "村民遲交貨物完全是因為不願意工作",
+          "暴雨發生後，鐵路已立即取代所有山路",
+          "作者藉此證明當時每個村落都不種植農作物"
+        ],
+        "exp": "題幹明示無鐵路、牛車山路與暴雨沖毀，這些時代和環境因素足以解釋遲運，不能憑空歸因於村民懶惰。",
+        "subject": "國文",
+        "sub_topic": "鄉土與時代背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-鄉土與時代背景",
+        "template_id": "chinese-reference-高中二年級-鄉土與時代背景-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-鄉土與時代背景-2",
+      "source": "大考中心114學年度學測國綜文本理解與篇章分析命題方向；依此形式獨立編寫的參考題",
+      "design": "分清時代背景提供的約束與人物自行選擇",
+      "question": {
+        "q": "某篇鄉土散文寫：「收割季節，大家不約而同到隔壁田裡幫忙。等輪到自己家收成，先前受助的人也都會來。父親說，日子緊時，單靠一戶人家是趕不上雨季的。」文字最能反映哪種社會生活特色？",
+        "correct": "農村在季節性勞動壓力下形成互助合作的關係",
+        "wrong": [
+          "農村每戶都禁止與鄰居往來",
+          "每個家庭都必須完全依賴自動化機器",
+          "鄰里之間不曾發生任何形式的勞動交換"
+        ],
+        "exp": "先到鄰田、後來回幫，配合雨季時間壓力，呈現互助的必要性與在地生活脈絡。",
+        "subject": "國文",
+        "sub_topic": "鄉土與時代背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-鄉土與時代背景",
+        "template_id": "chinese-reference-高中二年級-鄉土與時代背景-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
