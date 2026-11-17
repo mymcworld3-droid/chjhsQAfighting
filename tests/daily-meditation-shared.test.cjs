@@ -175,11 +175,18 @@ test('shared generation must pass an independent review and rejects uncertain or
     options.validate(data);return {data,model:'checked-model'};
   };
   assert.equal((await createGenerator(router)(expected)).q,generated(expected).q);
+  // Even a unique, correctly solved answer is rejected if it only tests recall.
+  router.generateJSON=async(_prompt,options)=>{
+    const data=options.task==='quiz-generate'?generated(expected):
+      {approved:true,applicationValid:false,validIndices:[0],reason:'only asks what the text says'};
+    options.validate(data);return {data,model:'checked-model'};
+  };
+  await assert.rejects(createGenerator(router)(expected),/獨立審核未通過/);
 });
 
 test('unknown, malformed and recall-only candidates never pass the daily generator validation',()=>{
   const {validate}=require('../daily-meditation-generator.cjs'),expected={...require('../daily-meditation-set.cjs').dailyPlan()[0],index:0};
-  for(const patch of [{wrong:['一本想分享的書','球拍','泳衣']},{reasoning_steps:1},{reasoning_steps:undefined},{literacy_context:''},{literacy_concept:''},{literacy_concept:'閱讀理解'},{q:'如圖所示，'+generated(expected).q}])
+  for(const patch of [{wrong:[generated(expected).correct,'球拍','泳衣']},{reasoning_steps:1},{reasoning_steps:undefined},{literacy_context:''},{literacy_concept:''},{literacy_concept:'閱讀理解'},{q:'如圖所示，'+generated(expected).q}])
     assert.throws(()=>validate(generated(expected,patch),expected));
   assert.throws(()=>validate(generated(expected),expected,[generated(expected).q]),/重複/);
 });

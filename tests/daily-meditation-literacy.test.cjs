@@ -47,7 +47,7 @@ test('three and four answers cannot settle the new five-question set',async()=>{
 test('incomplete literacy materials, recall-only format and invalid options cannot be committed',async()=>{
   const f=fixture();await f.service.start('u1');const expected=await f.service.prepareQuestion('u1');
   for(const patch of [{literacy_context:''},{literacy_task:''},{reasoning_steps:1},{question_form:'direct-application'},
-    {q:'計算二加二是多少？'},{literacy_concept:'閱讀理解'},{literacy_concept:''},{wrong:['一本想分享的書','其他','選項']},{subject:'數學'}])
+    {q:'計算二加二是多少？'},{literacy_concept:'閱讀理解'},{literacy_concept:''},{wrong:[generated(expected).correct,'其他','選項']},{subject:'數學'}])
     await assert.rejects(f.service.commitQuestion('u1',expected,generated(expected,patch)));
   assert.equal((await f.service.status('u1')).session.question,null);
   assert.ok((await f.service.commitQuestion('u1',expected,generated(expected))).question.id);
