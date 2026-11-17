@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人口與聚落"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中一年級-人口成長與遷移-1",
+      "source": "大考中心 114學年度學測社會科第18題，參考真人命題觀念重新設計",
+      "design": "由出生死亡與社會增加辨識自然增加率及移民人口變化",
+      "question": {
+        "q": "某區一年出生 1,200 人、死亡 900 人，且遷入 400 人、遷出 600 人。人口總數淨增加多少人？",
+        "correct": "100 人",
+        "wrong": [
+          "300 人",
+          "500 人",
+          "700 人"
+        ],
+        "exp": "自然增加 1,200−900＝300 人，社會增加 400−600＝−200 人，總淨增加 100 人。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geog-高中一年級-人口成長與遷移",
+        "template_id": "geog-human-高中一年級-人口成長與遷移-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中一年級-人口成長與遷移-2",
+      "source": "大考中心 114學年度學測社會科第18題，參考真人命題觀念重新設計",
+      "design": "由出生死亡與社會增加辨識自然增加率及移民人口變化",
+      "question": {
+        "q": "某國出生率與死亡率均低，但大量年輕人口移入，總人口持續成長。此現象最直接反映什麼？",
+        "correct": "人口遷移對總人口變化具有重要影響",
+        "wrong": [
+          "該國自然增加率必為全球最高",
+          "該國沒有任何人口移動",
+          "所有移入者都會立即成為出生人口"
+        ],
+        "exp": "總人口變化除了出生與死亡，還受移入與移出影響；大量淨遷入能推高人口總量。",
+        "subject": "地理",
+        "sub_topic": "人口成長與遷移",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geog-高中一年級-人口成長與遷移",
+        "template_id": "geog-human-高中一年級-人口成長與遷移-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

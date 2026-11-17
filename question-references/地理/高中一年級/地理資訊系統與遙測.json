@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地理學方法"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中一年級-地理資訊系統與遙測-1",
+      "source": "大考中心 114學年度學測社會科第21題，參考真人命題觀念重新設計",
+      "design": "辨別 GIS 緩衝區查詢與遙測的功能，依資料需求選方法",
+      "question": {
+        "q": "飲料店業者想找出距離捷運站 300 公尺內的待租店面。最適合使用哪一項地理資訊系統功能？",
+        "correct": "距離緩衝區分析",
+        "wrong": [
+          "等高線繪製",
+          "全球平均溫度預報",
+          "河流侵蝕實驗"
+        ],
+        "exp": "以捷運站為中心建立 300 公尺緩衝區，再與待租店面點位套疊，即可找出符合距離條件的地點。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geog-高中一年級-地理資訊系統與遙測",
+        "template_id": "geog-human-高中一年級-地理資訊系統與遙測-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中一年級-地理資訊系統與遙測-2",
+      "source": "大考中心 114學年度學測社會科第21題，參考真人命題觀念重新設計",
+      "design": "辨別 GIS 緩衝區查詢與遙測的功能，依資料需求選方法",
+      "question": {
+        "q": "研究者想比較同一森林區域過去十年的植被覆蓋變化，最適合先蒐集哪種資料？",
+        "correct": "不同年份相同區域的衛星影像",
+        "wrong": [
+          "十年前某一個人的訪談筆記",
+          "單一城市即時交通號誌",
+          "只含地名的無坐標清單"
+        ],
+        "exp": "不同時間取得的衛星影像可以在相近尺度上比較植被覆蓋分布，是遙測的典型用途。",
+        "subject": "地理",
+        "sub_topic": "地理資訊系統與遙測",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geog-高中一年級-地理資訊系統與遙測",
+        "template_id": "geog-human-高中一年級-地理資訊系統與遙測-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

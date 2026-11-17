@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣地理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中二年級-臺灣自然環境-1",
+      "source": "大考中心 114學年度學測社會科第24題，參考真人命題觀念重新設計",
+      "design": "辨識臺灣石灰岩溶蝕與強烈地形作用的分布特徵",
+      "question": {
+        "q": "臺灣墾丁附近部分石灰岩地區，可見溶蝕形成的特殊地形。其形成與哪一因素最直接相關？",
+        "correct": "含二氧化碳的水長期溶解石灰岩",
+        "wrong": [
+          "高山冰川堆積",
+          "石英砂隨風堆積",
+          "板塊每年完全停止移動"
+        ],
+        "exp": "石灰岩中的碳酸鈣會被弱酸性水溶解，長期可形成岩溶地貌。",
+        "subject": "地理",
+        "sub_topic": "臺灣自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-6",
+            "name": "臺灣地理"
+          }
+        ],
+        "concept_id": "geog-高中二年級-臺灣自然環境",
+        "template_id": "geog-human-高中二年級-臺灣自然環境-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中二年級-臺灣自然環境-2",
+      "source": "大考中心 114學年度學測社會科第24題，參考真人命題觀念重新設計",
+      "design": "辨識臺灣石灰岩溶蝕與強烈地形作用的分布特徵",
+      "question": {
+        "q": "臺灣島的中央山脈與東側山地高度較高、地形起伏大。從地質背景解釋，最主要是什麼？",
+        "correct": "活動板塊邊界造成的造山運動",
+        "wrong": [
+          "全球海平面每年固定上升百米",
+          "臺灣完全位於穩定古老地盾中央",
+          "所有山脈都由單一沙丘堆積成"
+        ],
+        "exp": "臺灣位於板塊聚合地區，長期擠壓、變形與抬升形成高山地形。",
+        "subject": "地理",
+        "sub_topic": "臺灣自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-6",
+            "name": "臺灣地理"
+          }
+        ],
+        "concept_id": "geog-高中二年級-臺灣自然環境",
+        "template_id": "geog-human-高中二年級-臺灣自然環境-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

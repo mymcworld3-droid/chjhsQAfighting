@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞區域"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中二年級-人口、產業與區域整合-1",
+      "source": "大考中心 114學年度學測社會科第23題，參考真人命題觀念重新設計",
+      "design": "從東南亞產業聚落與區域分工判斷跨國產業鏈",
+      "question": {
+        "q": "某國汽車廠在東南亞設總裝配廠，零組件由鄰近國家供應，成品再銷往區域市場。此現象最能反映什麼？",
+        "correct": "跨國產業分工與區域經濟連結",
+        "wrong": [
+          "各國產業已完全與國際市場隔離",
+          "每個國家只生產唯一一種農作物",
+          "所有交通運輸都已停止"
+        ],
+        "exp": "零件、組裝與銷售跨越國界，顯示產業分工及區域市場聯繫。",
+        "subject": "地理",
+        "sub_topic": "人口、產業與區域整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geog-高中二年級-人口、產業與區域整合",
+        "template_id": "geog-human-高中二年級-人口、產業與區域整合-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中二年級-人口、產業與區域整合-2",
+      "source": "大考中心 114學年度學測社會科第23題，參考真人命題觀念重新設計",
+      "design": "從東南亞產業聚落與區域分工判斷跨國產業鏈",
+      "question": {
+        "q": "日本汽車產業將部分生產線設於東南亞，但保留研發與高階設計中心。這最能說明什麼？",
+        "correct": "不同生產環節可依區位優勢分散配置",
+        "wrong": [
+          "製造業完全無須技術人力",
+          "東南亞與日本沒有貿易",
+          "所有生產一定要集中同一國"
+        ],
+        "exp": "不同地區的技術、工資、市場及供應鏈條件不同，使跨國企業將生產階段分散布局。",
+        "subject": "地理",
+        "sub_topic": "人口、產業與區域整合",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geog-高中二年級-人口、產業與區域整合",
+        "template_id": "geog-human-高中二年級-人口、產業與區域整合-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

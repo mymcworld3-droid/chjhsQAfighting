@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地理：空間資訊科技"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中三年級-GIS 與空間資料-1",
+      "source": "大考中心 112學年度學測社會科第40題，參考真人命題觀念重新設計",
+      "design": "辨別空間資料中點、線、面及人口統計屬性，避免將欄位誤認為位置",
+      "question": {
+        "q": "GIS 中一座學校的校門位置，最適合用何種幾何資料表示？",
+        "correct": "點資料",
+        "wrong": [
+          "線資料",
+          "面資料必不可用點代替",
+          "純顏色而不含位置資訊"
+        ],
+        "exp": "校門在此分析尺度上可抽象為具坐標的點，是 GIS 常見的點圖徵。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geog-高中三年級-GIS 與空間資料",
+        "template_id": "geog-human-高中三年級-GIS 與空間資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中三年級-GIS 與空間資料-2",
+      "source": "大考中心 112學年度學測社會科第40題，參考真人命題觀念重新設計",
+      "design": "辨別空間資料中點、線、面及人口統計屬性，避免將欄位誤認為位置",
+      "question": {
+        "q": "分析城市公車路線的走向時，最適合使用哪種向量空間資料？",
+        "correct": "線資料",
+        "wrong": [
+          "單一無坐標的文字",
+          "純數值直方圖",
+          "不具位置的顏色代碼"
+        ],
+        "exp": "公車路線有連續路徑及方向，GIS 通常以線圖徵描述。",
+        "subject": "地理",
+        "sub_topic": "GIS 與空間資料",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geog-高中三年級-GIS 與空間資料",
+        "template_id": "geog-human-高中三年級-GIS 與空間資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自然地理：地形與氣候"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中一年級-板塊、地形與外營力-1",
+      "source": "大考中心 114學年度學測社會科第24題，參考真人命題觀念重新設計",
+      "design": "由岩性及水的溶蝕作用判斷岩溶地形，不把侵蝕種類混淆",
+      "question": {
+        "q": "某石灰岩地區地下水長期溶解岩石，形成洞穴與地下河。這種地形主要由哪一作用造成？",
+        "correct": "化學溶蝕作用",
+        "wrong": [
+          "風力堆積",
+          "火山熔岩冷卻",
+          "冰川直接堆積"
+        ],
+        "exp": "含二氧化碳的水能溶解碳酸鈣，形成石灰岩洞穴與其他岩溶地形。",
+        "subject": "地理",
+        "sub_topic": "板塊、地形與外營力",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-2",
+            "name": "地形與地貌"
+          }
+        ],
+        "concept_id": "geog-高中一年級-板塊、地形與外營力",
+        "template_id": "geog-human-高中一年級-板塊、地形與外營力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中一年級-板塊、地形與外營力-2",
+      "source": "大考中心 114學年度學測社會科第24題，參考真人命題觀念重新設計",
+      "design": "由岩性及水的溶蝕作用判斷岩溶地形，不把侵蝕種類混淆",
+      "question": {
+        "q": "一條山谷呈明顯 V 字形，谷底有快速流動的河水。該谷地形成時，最主要的外營力通常為何？",
+        "correct": "河流向下侵蝕",
+        "wrong": [
+          "冰川磨蝕",
+          "海浪堆積",
+          "風力沉積"
+        ],
+        "exp": "河流在坡度較大的上游常以下切侵蝕為主，容易形成 V 形谷。",
+        "subject": "地理",
+        "sub_topic": "板塊、地形與外營力",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-2",
+            "name": "地形與地貌"
+          }
+        ],
+        "concept_id": "geog-高中一年級-板塊、地形與外營力",
+        "template_id": "geog-human-高中一年級-板塊、地形與外營力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

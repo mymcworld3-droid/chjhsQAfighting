@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人口與聚落"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中一年級-都市化-1",
+      "source": "大考中心 114學年度學測社會科第25題，參考真人命題觀念重新設計",
+      "design": "區分都市人口比率提高和都市總人口增加的概念",
+      "question": {
+        "q": "某國都市人口由 400 萬增為 600 萬，總人口由 1,000 萬增為 1,200 萬。都市人口比例由多少升為多少？",
+        "correct": "40% 升為 50%",
+        "wrong": [
+          "40% 降為 30%",
+          "50% 升為 60%",
+          "40% 維持不變"
+        ],
+        "exp": "都市人口比重原為 400/1,000＝40%，後為 600/1,200＝50%。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geog-高中一年級-都市化",
+        "template_id": "geog-human-高中一年級-都市化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中一年級-都市化-2",
+      "source": "大考中心 114學年度學測社會科第25題，參考真人命題觀念重新設計",
+      "design": "區分都市人口比率提高和都市總人口增加的概念",
+      "question": {
+        "q": "都市化過程中，城市土地面積向外擴張，原本的農地轉變為住宅與商業區。這通常是哪一現象？",
+        "correct": "都市蔓延",
+        "wrong": [
+          "冰川退縮",
+          "岩石風化",
+          "海底擴張"
+        ],
+        "exp": "都市蔓延指都市建成區以較鬆散的方式向外擴展，常改變郊區土地使用。",
+        "subject": "地理",
+        "sub_topic": "都市化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geog-高中一年級-都市化",
+        "template_id": "geog-human-高中一年級-都市化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

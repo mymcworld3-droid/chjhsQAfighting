@@ -1,0 +1,66 @@
+{
+  "units": [
+    "產業與經濟"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geog-human-高中一年級-農工商產業活動-1",
+      "source": "大考中心 114學年度學測社會科第23題，參考真人命題觀念重新設計",
+      "design": "從同類產業集聚推論運輸、供應鏈與勞動市場外部經濟",
+      "question": {
+        "q": "一座城市聚集汽車零件、組裝與物流廠商，因供應鏈鄰近而降低成本。這最符合哪一概念？",
+        "correct": "聚集經濟",
+        "wrong": [
+          "完全自給農業",
+          "人口自然減少",
+          "反都市化"
+        ],
+        "exp": "供應商與工廠鄰近，有利資訊、人力及物流共享，形成聚集經濟。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geog-高中一年級-農工商產業活動",
+        "template_id": "geog-human-高中一年級-農工商產業活動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geog-human-高中一年級-農工商產業活動-2",
+      "source": "大考中心 114學年度學測社會科第23題，參考真人命題觀念重新設計",
+      "design": "從同類產業集聚推論運輸、供應鏈與勞動市場外部經濟",
+      "question": {
+        "q": "某地提供冷涼氣候、充足水源與適當坡度，大量種植高山茶。此產業分布主要受到哪類因素影響？",
+        "correct": "農業的自然區位條件",
+        "wrong": [
+          "僅受國際時區劃分影響",
+          "完全不受氣候與地形影響",
+          "完全由行政機關建築高度決定"
+        ],
+        "exp": "茶葉種植受氣溫、水分、土壤及地形等自然因素制約，屬農業區位條件。",
+        "subject": "地理",
+        "sub_topic": "農工商產業活動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geog-高中一年級-農工商產業活動",
+        "template_id": "geog-human-高中一年級-農工商產業活動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
