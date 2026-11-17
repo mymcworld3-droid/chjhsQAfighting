@@ -41,7 +41,9 @@
 - **戰鬥結算功法 EXP（第六階段）：** PvE 戰鬥結束並且伺服器已將玩家加入 `rewarded` 後，結算視窗依當前玩家的 `manualExp`、舊戰場 `manualKills × EXP_PER_KILL` 顯示本場各本功法累積 EXP；只認得既有功法目錄，不讀取其他玩家的資料。沒有功法 EXP 時顯示明確的空紀錄，不編造獎勵；PvP 不顯示此區。
 - **成長進度確認：** 結算視窗再用原有 `GET /api/tactical/manuals` 唯讀同步已結算的功法等級、當級 EXP 進度、距下級／下一招門檻剩餘 EXP，並區分修士境界尚未達成的招式。此讀取失敗不影響已結算戰場，會提供重試或前往功法閣的入口。同一場結算不會因重複渲染發送多次同步請求；新帳號或新戰場不能沿用舊快取。
 - **視覺表現與限制：** 劍修青藍、體修金橙的結算卡，短暫顯示本場 EXP 與熟練度進度條動效；系統設定減少動態效果時自動停用。此功能只回顧戰場伺服器已記錄的經驗，**不會重新發獎、額外升級、覆寫功法或更改試煉獎勵**。接續下一關／前往功法閣的原按鈕全部保留。
-- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`、`tests/tactical-manual-recap.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`、`scripts/test-tactical-browser.cjs`。
+- **戰鬥中即時 EXP 回饋（第七階段）：** 在同一場 PvE 戰鬥的兩份伺服器狀態之間，依 `manualExp` 的每本功法增量及舊戰場 `manualKills × EXP_PER_KILL` 顯示青藍／金橙小型浮動提示（`public/cultivation/tactical-manual-xp-feedback.js`）。提示只佔戰場頂端中央，不攔截滑鼠與觸控操作，短暫顯示後自動收起，最多列出前三本有 EXP 變化的功法與其餘本數。動畫尊重減少動態效果設定，音效使用玩家既有的開關與音量系統。
+- **避免虛假回饋：** 初次載入、不同房間、PvP、舊版快照、同資料重送、其他玩家的紀錄及不認識的功法 ID 均不觸發。只閱讀伺服器已確認的房間經驗帳本，不額外發放經驗，也不改變通關、戰鬥、裝備、功法解鎖或實際的結算流程。戰鬥中新增 EXP 與伺服器永久保存的功法等級需明確區分，後者仍以戰後的 `GET /api/tactical/manuals` 與修煉頁同步結果為準。
+- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`、`tests/tactical-manual-recap.test.cjs`、`tests/tactical-manual-xp-feedback.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`、`scripts/test-tactical-browser.cjs`。
 
 
 
