@@ -47,7 +47,7 @@ function masteryHint(book,manuals) {
   };
 }
 
-export function renderManualBattleRecap(battle,uid,manuals,manualState=null,{esc,bookArt}={}) {
+export function renderManualBattleRecap(battle,uid,manuals,manualState=null,{esc,bookArt,syncFailed=false}={}) {
   const result=manualBattleEarnings(battle,uid,manuals);
   if(!result)return '';
   const escape=typeof esc==='function'?esc:(x=>String(x));
@@ -81,7 +81,7 @@ export function renderManualBattleRecap(battle,uid,manuals,manualState=null,{esc
         `<strong>下一招 · ${escape(mastery.skillName)}</strong>`:''}
         <small>${escape(mastery.headline)}${mastery.realmName?' · 需'+escape(mastery.realmName)+'境':''}</small>
       </div>`:null;
-    const progress=bar!==null?bar:`<p class="tc-manual-recap-sync">正在同步功法等級與下一招目標…</p>`;
+    const progress=bar!==null?bar:`<p class="tc-manual-recap-sync">${syncFailed?'最新功法等級暫時無法取得':'正在同步功法等級與下一招目標…'}</p>`;
     return `<article class="tc-manual-recap-card tc-manual-recap--${row.school==='body'?'body':'sword'}"
       data-manual-recap-book="${escape(row.id)}">
       <div class="tc-manual-recap-card-top">
