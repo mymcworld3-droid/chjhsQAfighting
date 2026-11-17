@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞史：近世至現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-宋元明清變遷-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「宋元明清變遷」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "宋代一些城市出現商鋪密集、夜間交易較活躍的現象。從經濟史角度，這最直接反映什麼？",
+        "correct": "城市商業與居民消費活動呈現擴展",
+        "wrong": [
+          "宋代所有人口都已退出農業",
+          "所有商品交易都被永久禁止",
+          "城市從此不再需要任何交通運輸"
+        ],
+        "exp": "市集與夜間交易增加，反映商業活動發展；不能據此推得農業消失或國家完全無管制。",
+        "subject": "歷史",
+        "sub_topic": "宋元明清變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "history-高中一年級-宋元明清變遷",
+        "template_id": "history-reference-高中一年級-宋元明清變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-宋元明清變遷-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「宋元明清變遷」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "某史料記載蒙古帝國統治時期，不同地區的商旅沿陸路交換商品與技術。這類歷史材料較能說明什麼？",
+        "correct": "跨區域政治網絡可能促進歐亞交流",
+        "wrong": [
+          "歐亞之間從未存在任何文化往來",
+          "所有商人都只在同一座城市內活動",
+          "商旅往來證明各地制度與文化必然完全一致"
+        ],
+        "exp": "廣域政治網絡可能降低部分往來障礙，促成貿易與技術傳播，但各地仍保有差異。",
+        "subject": "歷史",
+        "sub_topic": "宋元明清變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中一年級-宋元明清變遷",
+        "template_id": "history-reference-高中一年級-宋元明清變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "史料與圖表"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-史料脈絡-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「史料脈絡」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "同一句「城市已大為繁榮」，一篇出自當年政府招商公告，另一篇出自居民私人日記。解讀時最應優先比較什麼？",
+        "correct": "寫作者身分、目的、受眾與當時的社會環境",
+        "wrong": [
+          "兩篇字數是否完全相同",
+          "紙張顏色哪一張更鮮豔",
+          "只要都寫繁榮，便不必檢查內容"
+        ],
+        "exp": "招商公告可能有宣傳目的，私人日記又有個人觀察範圍，各有侷限，需結合脈絡判讀。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-史料脈絡",
+        "template_id": "history-reference-高中一年級-史料脈絡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-史料脈絡-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「史料脈絡」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "學生找到一張標註「某年某月」的示威照片，來源是網路分享；研究者發現照片最早在另一年代的報刊刊出。哪項處理最適當？",
+        "correct": "先核對照片原始刊載、拍攝時間及文字說明，避免錯置事件",
+        "wrong": [
+          "照片看起來古老就直接相信網路標題",
+          "把照片任意修改為符合自己論點的樣子",
+          "只看分享者的追蹤人數判斷拍攝年代"
+        ],
+        "exp": "圖片可能被重新配上錯誤年份，需比對原始來源與影像細節。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-史料脈絡",
+        "template_id": "history-reference-高中一年級-史料脈絡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

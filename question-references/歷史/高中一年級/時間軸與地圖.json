@@ -1,0 +1,66 @@
+{
+  "units": [
+    "史料與圖表"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-時間軸與地圖-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「時間軸與地圖」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "地圖甲標示十九世紀中葉通商口岸，地圖乙標示二十世紀初鐵路網絡。若要比較交通與貿易變化，哪個處理最適當？",
+        "correct": "先確認兩圖的時間、比例尺與符號，再分析港口與鐵路分布",
+        "wrong": [
+          "忽略年份，把兩張圖當作同一天的情形",
+          "只看地圖的底色，不看圖例",
+          "把各地經緯度隨機交換後比較"
+        ],
+        "exp": "歷史地圖有時間及製圖尺度差異，必須先了解圖例與範圍才能比較空間演變。",
+        "subject": "歷史",
+        "sub_topic": "時間軸與地圖",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-時間軸與地圖",
+        "template_id": "history-reference-高中一年級-時間軸與地圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-時間軸與地圖-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「時間軸與地圖」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "四項事件：甲秦統一六國；乙隋朝建立；丙明朝建立；丁中華民國成立。依年代由早至晚排列，哪個順序正確？",
+        "correct": "甲→乙→丙→丁",
+        "wrong": [
+          "乙→甲→丁→丙",
+          "丁→丙→乙→甲",
+          "丙→乙→甲→丁"
+        ],
+        "exp": "秦統一前221年、隋581年、明1368年、中華民國1912年，按年代先後排列即可。",
+        "subject": "歷史",
+        "sub_topic": "時間軸與地圖",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中一年級-時間軸與地圖",
+        "template_id": "history-reference-高中一年級-時間軸與地圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

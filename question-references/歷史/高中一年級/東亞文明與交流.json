@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞史：古代至中古"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-東亞文明與交流-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「東亞文明與交流」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "某日本古代文獻記錄派遣使節前往唐朝，學習律令制度、佛教文化與文字。這則記載最能支持哪種歷史解釋？",
+        "correct": "東亞各地曾透過使節與僧侶吸收、轉化唐代文化",
+        "wrong": [
+          "所有東亞國家從此都完全沒有地方特色",
+          "文字交流只可能透過近代電報",
+          "唐朝從未與周邊社會往來"
+        ],
+        "exp": "遣唐使與文化學習反映交流網絡；吸收外來制度不代表各地放棄自身傳統。",
+        "subject": "歷史",
+        "sub_topic": "東亞文明與交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中一年級-東亞文明與交流",
+        "template_id": "history-reference-高中一年級-東亞文明與交流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-東亞文明與交流-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「東亞文明與交流」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "一件考古文物出土於朝鮮半島，器形與中國中原器物相似，但裝飾方式具有當地特色。根據材料，何種推論較審慎？",
+        "correct": "可能存在文化交流與在地改造，但須更多證據確認傳播途徑",
+        "wrong": [
+          "只要器形相近就表示兩地的政權完全相同",
+          "裝飾不同證明兩地從未有任何接觸",
+          "僅憑單件文物便能確定所有居民的身分"
+        ],
+        "exp": "器物相似可能是交流線索，地方裝飾又顯示改造；不能僅從單件文物做絕對判斷。",
+        "subject": "歷史",
+        "sub_topic": "東亞文明與交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中一年級-東亞文明與交流",
+        "template_id": "history-reference-高中一年級-東亞文明與交流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞史：近世至現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-近代改革與衝突-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「近代改革與衝突」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "十九世紀清朝部分官員主張引進西方船艦製造與軍事技術，以應對外來軍事壓力。此政策取向最接近哪項歷史現象？",
+        "correct": "自強運動強調借重新式技術增強國力",
+        "wrong": [
+          "隋唐科舉制度剛開始創設",
+          "清朝宣布全面拒絕任何新式軍備",
+          "明代鄭和船隊首次遠航"
+        ],
+        "exp": "清代自強運動的部分措施包括設廠、練兵與學習技術，與十九世紀對外衝突和改革壓力相連。",
+        "subject": "歷史",
+        "sub_topic": "近代改革與衝突",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中一年級-近代改革與衝突",
+        "template_id": "history-reference-高中一年級-近代改革與衝突-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-近代改革與衝突-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「近代改革與衝突」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "日本明治政府推動新式學校與徵兵制度，清朝也出現自強與變法論述。若比較兩地改革，何者最適合的研究方法？",
+        "correct": "分別考察改革目標、制度措施與社會阻力，再比較結果",
+        "wrong": [
+          "只看改革名稱是否都含「新」字就下結論",
+          "把兩地改革年份視為完全相同而免查證",
+          "先認定任何改革都不可能產生影響"
+        ],
+        "exp": "不同社會脈絡中的改革不能只憑口號或單一結果比較，須分析背景、過程及影響。",
+        "subject": "歷史",
+        "sub_topic": "近代改革與衝突",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中一年級-近代改革與衝突",
+        "template_id": "history-reference-高中一年級-近代改革與衝突-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

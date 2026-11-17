@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞史：古代至中古"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-秦漢制度-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「秦漢制度」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "秦統一六國後在地方設置由中央任命官員治理的郡縣。此制度相較於以世襲封地為重的分封安排，主要有何特色？",
+        "correct": "中央可透過任命地方官員加強對地方行政的控制",
+        "wrong": [
+          "地方官職全部由諸侯家族永久世襲",
+          "中央政府完全不再管理地方行政",
+          "地方官員只由民間商隊選出"
+        ],
+        "exp": "郡縣制重視中央對地方官員的任命與考核，有助形成較直接的中央行政體系。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "history-高中一年級-秦漢制度",
+        "template_id": "history-reference-高中一年級-秦漢制度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-秦漢制度-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「秦漢制度」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "漢武帝時期朝廷派張騫通西域，後世史料常將此與絲路交通發展連結。若探討當時外交與交通的關係，何者較合宜？",
+        "correct": "使節往來可能提供路線與區域資訊，促進後續交流條件",
+        "wrong": [
+          "張騫出使後東亞與中亞的所有貿易立即停止",
+          "只要派遣一次使節就能確保各國永久和平",
+          "絲路必定只是一條完全固定不變的單一路線"
+        ],
+        "exp": "出使有助認識西域各地與交通路線，絲路則由多條路網逐步發展，不能過度簡化。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中一年級-秦漢制度",
+        "template_id": "history-reference-高中一年級-秦漢制度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

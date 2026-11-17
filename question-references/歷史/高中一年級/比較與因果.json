@@ -1,0 +1,66 @@
+{
+  "units": [
+    "史料與圖表"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-比較與因果-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「比較與因果」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "甲城在新鐵路通車後人口增加；乙城同期也人口增加，但未新建鐵路而有工廠投產。研究者要解釋兩地成長，何者合理？",
+        "correct": "分別檢驗交通、工業與其他因素，不能把兩城人口成長都歸因鐵路",
+        "wrong": [
+          "只要人口增加就必然是鐵路造成",
+          "乙城沒有鐵路，所以人口必然下降",
+          "工廠與交通都不可能影響人口分布"
+        ],
+        "exp": "乙城提供不同成長條件，顯示單因論不足；應比較兩地其他變項。",
+        "subject": "歷史",
+        "sub_topic": "比較與因果",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中一年級-比較與因果",
+        "template_id": "history-reference-高中一年級-比較與因果-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-比較與因果-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「比較與因果」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "某地區旱災期間糧價上漲，史料又記載地方運輸受阻。若要判斷價格上漲的原因，下列何者最合宜？",
+        "correct": "將收成減少與運輸受阻都列為可能因素，再檢查資料",
+        "wrong": [
+          "只憑糧價上漲就能證明沒有旱災",
+          "把所有價格變動都歸因單一官員喜好",
+          "既然資料有兩項因素，便認定二者都毫不相關"
+        ],
+        "exp": "供給減少與物流困難均可能推高價格，需比較時間與程度，避免將複雜變化化約成單一因素。",
+        "subject": "歷史",
+        "sub_topic": "比較與因果",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中一年級-比較與因果",
+        "template_id": "history-reference-高中一年級-比較與因果-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

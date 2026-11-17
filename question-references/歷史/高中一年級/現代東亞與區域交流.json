@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞史：近世至現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-現代東亞與區域交流-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「現代東亞與區域交流」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "二十世紀後半東亞多地製造業與國際貿易成長，企業在不同地區分工生產零件與組裝成品。最能說明何種趨勢？",
+        "correct": "東亞產業逐漸納入跨國生產與貿易網絡",
+        "wrong": [
+          "各地產業從此完全只為本地市場生產",
+          "所有國家同時廢止關稅並成立單一政府",
+          "貿易往來不可能影響社會經濟生活"
+        ],
+        "exp": "零件跨境移動與分工是區域經濟連結的表現，不表示政治制度完全一致。",
+        "subject": "歷史",
+        "sub_topic": "現代東亞與區域交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中一年級-現代東亞與區域交流",
+        "template_id": "history-reference-高中一年級-現代東亞與區域交流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-現代東亞與區域交流-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「現代東亞與區域交流」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "閱讀兩段說法：甲：「區域合作讓商品與技術更容易交流。」乙：「若合作收益集中於少數產業，部分勞動者可能面臨轉型壓力。」下列綜合何者最合理？",
+        "correct": "區域交流可能帶來機會，也可能造成分配與職業調整問題",
+        "wrong": [
+          "甲乙都認為任何交流都毫無成本",
+          "乙已證明所有交流都應一律停止",
+          "兩者都只在討論古代宗教儀式"
+        ],
+        "exp": "兩文關注相同過程的不同影響，應同時評估經濟機會與社會成本。",
+        "subject": "歷史",
+        "sub_topic": "現代東亞與區域交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中一年級-現代東亞與區域交流",
+        "template_id": "history-reference-高中一年級-現代東亞與區域交流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

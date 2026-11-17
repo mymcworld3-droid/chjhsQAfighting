@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞史：古代至中古"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中一年級-隋唐社會與文化-1",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「隋唐社會與文化」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "隋朝興修連接南北的運河，唐代仍有大量物資沿水路運送。若由交通史角度分析，其重要作用為何？",
+        "correct": "強化南北地區糧食與商品運輸的連結",
+        "wrong": [
+          "使中國各地從此完全不需要陸上道路",
+          "只供觀賞，不曾與經濟活動有關",
+          "導致南北所有城市在同一天消失"
+        ],
+        "exp": "運河網絡有利於運送物資與維繫政治經濟連結，但不取代所有陸路交通。",
+        "subject": "歷史",
+        "sub_topic": "隋唐社會與文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "history-高中一年級-隋唐社會與文化",
+        "template_id": "history-reference-高中一年級-隋唐社會與文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中一年級-隋唐社會與文化-2",
+      "source": "依大考中心114學年度學測社會考科的史料判讀、時序及多元歷史觀點評量方向自編",
+      "design": "從「隋唐社會與文化」的時空脈絡與可查證材料推論，不以關鍵詞配對取代分析",
+      "question": {
+        "q": "唐朝都城長安有來自不同區域的商人與宗教活動，文獻亦見外來服飾、樂舞。此現象最能呈現唐代何種特色？",
+        "correct": "都城在對外交流中展現多元文化活動",
+        "wrong": [
+          "長安與外國完全沒有任何接觸",
+          "外來商人被禁止進入所有市集",
+          "唐代社會只有一種不會變動的生活方式"
+        ],
+        "exp": "外來商旅、宗教及藝術活動並存，反映跨區域交流與文化互動。",
+        "subject": "歷史",
+        "sub_topic": "隋唐社會與文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "history-高中一年級-隋唐社會與文化",
+        "template_id": "history-reference-高中一年級-隋唐社會與文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
