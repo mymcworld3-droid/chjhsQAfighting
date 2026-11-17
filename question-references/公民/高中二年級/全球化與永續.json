@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球經濟"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-全球化與永續-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「全球化與永續」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "某產品設計地與組裝地分處不同國家，跨國運輸帶來就業及成本優勢，也增加運輸排放。從永續觀點應如何評估？",
+        "correct": "同時衡量經濟效益、勞動條件與整體環境成本",
+        "wrong": [
+          "只看最低售價便足以代表永續程度",
+          "國際分工必然完全沒有任何排放",
+          "跨國生產與勞工權益問題完全無關"
+        ],
+        "exp": "全球分工具有多種影響，永續評估要看供應鏈全程的社會與環境表現。",
+        "subject": "公民",
+        "sub_topic": "全球化與永續",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中二年級-全球化與永續",
+        "template_id": "civic-ref-g2-全球化與永續-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-全球化與永續-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「全球化與永續」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "國際企業承諾採購無毀林原料，但沒有公開供應商資訊與查核方法。最適合的公民監督方式是？",
+        "correct": "要求可追溯供應鏈及第三方查核證據，檢驗宣稱是否落實",
+        "wrong": [
+          "只因企業發布口號就認定承諾全部完成",
+          "以宣傳影片觀看數量代替原料溯源",
+          "完全不需蒐集資料便直接斷言所有供應商違規"
+        ],
+        "exp": "永續聲明需有可追溯資料與獨立驗證，避免只看文字承諾。",
+        "subject": "公民",
+        "sub_topic": "全球化與永續",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中二年級-全球化與永續",
+        "template_id": "civic-ref-g2-全球化與永續-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

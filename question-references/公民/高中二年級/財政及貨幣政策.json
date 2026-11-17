@@ -1,0 +1,66 @@
+{
+  "units": [
+    "總體經濟與政策"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-財政及貨幣政策-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「財政及貨幣政策」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "景氣衰退時，政府增加公共建設支出，希望帶動總需求。這最直接屬於哪種政策？",
+        "correct": "擴張性財政政策",
+        "wrong": [
+          "緊縮性貨幣政策",
+          "提高銀行存款準備率的貨幣操作",
+          "限制貨幣供給成長的措施"
+        ],
+        "exp": "政府支出是財政政策工具，增加支出有擴張需求的目的；貨幣政策通常由中央銀行操作。",
+        "subject": "公民",
+        "sub_topic": "財政及貨幣政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中二年級-財政及貨幣政策",
+        "template_id": "civic-ref-g2-財政及貨幣政策-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-財政及貨幣政策-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「財政及貨幣政策」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "物價壓力偏高時，中央銀行提高政策利率，希望降低借貸需求。這屬於何種政策方向？",
+        "correct": "偏緊縮的貨幣政策",
+        "wrong": [
+          "增加政府採購的擴張性財政政策",
+          "透過減稅刺激民間消費的措施",
+          "直接由地方議會決定所有商品售價"
+        ],
+        "exp": "央行提高利率可能增加借款成本並抑制總需求，是典型緊縮貨幣政策工具。",
+        "subject": "公民",
+        "sub_topic": "財政及貨幣政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civic-高中二年級-財政及貨幣政策",
+        "template_id": "civic-ref-g2-財政及貨幣政策-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

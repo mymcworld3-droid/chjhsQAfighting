@@ -1,0 +1,66 @@
+{
+  "units": [
+    "政治參與與治理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-政策形成與監督-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「政策形成與監督」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "市府提出垃圾減量方案，先公開問題數據、召開說明會、試辦後公布成效。若分析政策流程，最能看出什麼？",
+        "correct": "政策可透過問題界定、方案形成、實施及評估持續調整",
+        "wrong": [
+          "政策提出後必然不需要任何評估",
+          "只要召開說明會就不用再衡量成效",
+          "有試辦就代表政策永遠不會失敗"
+        ],
+        "exp": "問題、參與、試辦與檢核是政策循環的重要環節，便於調整方案。",
+        "subject": "公民",
+        "sub_topic": "政策形成與監督",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中二年級-政策形成與監督",
+        "template_id": "civic-ref-g2-政策形成與監督-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-政策形成與監督-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「政策形成與監督」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "某市公共工程預算增加，民意代表要求行政機關提供支出明細與成效報告。這最直接體現什麼？",
+        "correct": "透過公開資訊與民意機關監督行政資源使用",
+        "wrong": [
+          "監督者可自行跳過所有法定預算程序",
+          "只要預算增加就必定代表支出無效",
+          "行政機關提出報告後就不可能再受質疑"
+        ],
+        "exp": "預算監督與問責需查核金額、用途及結果，而非僅看預算多寡。",
+        "subject": "公民",
+        "sub_topic": "政策形成與監督",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中二年級-政策形成與監督",
+        "template_id": "civic-ref-g2-政策形成與監督-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

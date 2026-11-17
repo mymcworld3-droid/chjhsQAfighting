@@ -1,0 +1,66 @@
+{
+  "units": [
+    "政治參與與治理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-民主參與形式-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「民主參與形式」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "市府規畫新公園，居民在公聽會提出設計意見；另一群居民則以投票選出市議員。兩者參與方式的主要差別是？",
+        "correct": "前者對具體政策表達意見，後者透過代議制度選出代表",
+        "wrong": [
+          "兩者都直接由居民任命全部行政首長",
+          "公聽會的參與者必然具有立法表決權",
+          "投票選代表並不屬於民主參與"
+        ],
+        "exp": "參與可有直接表達議題與選舉代表等形式，權限與程序並不相同。",
+        "subject": "公民",
+        "sub_topic": "民主參與形式",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中二年級-民主參與形式",
+        "template_id": "civic-ref-g2-民主參與形式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-民主參與形式-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「民主參與形式」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "一個學生會先蒐集會員需求，再由會員選舉代表進行例行決策，重要規章仍交會員大會討論。這最能說明什麼？",
+        "correct": "民主參與可結合代表決策與會員直接討論",
+        "wrong": [
+          "凡有代表存在，會員都不得再參與討論",
+          "所有社團都必須採用完全相同的選舉規則",
+          "直接討論與代議制度不可能並存"
+        ],
+        "exp": "組織可依議題與規章安排不同層次的民主參與。",
+        "subject": "公民",
+        "sub_topic": "民主參與形式",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中二年級-民主參與形式",
+        "template_id": "civic-ref-g2-民主參與形式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

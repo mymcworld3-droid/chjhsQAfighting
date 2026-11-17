@@ -1,0 +1,66 @@
+{
+  "units": [
+    "政治參與與治理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-地方自治-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「地方自治」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "某市規畫公車站位調整，需蒐集居民意見並由地方機關依權責執行。從地方自治角度，最能說明哪項價值？",
+        "correct": "地方公共事務可由較接近居民需求的機關在法定權限內處理",
+        "wrong": [
+          "地方機關可完全無視上位法規",
+          "居民有意見便能直接免除預算程序",
+          "只要是交通事務，就不需要任何跨區協調"
+        ],
+        "exp": "地方自治強調處理在地事務，但仍受憲法、法律與權限分工拘束。",
+        "subject": "公民",
+        "sub_topic": "地方自治",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中二年級-地方自治",
+        "template_id": "civic-ref-g2-地方自治-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-地方自治-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「地方自治」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "甲縣與乙縣共享一條河川，甲縣排水整治可能影響乙縣下游水位。哪個治理策略較適當？",
+        "correct": "依權責推動跨地方政府協調並評估流域整體影響",
+        "wrong": [
+          "只由上游縣市決定而不通知下游",
+          "因河流穿越縣界就不得進行任何治理",
+          "各縣只看行政區內短期效益即可"
+        ],
+        "exp": "流域具有跨界水文關係，地方自治需配合跨區協作。",
+        "subject": "公民",
+        "sub_topic": "地方自治",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中二年級-地方自治",
+        "template_id": "civic-ref-g2-地方自治-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

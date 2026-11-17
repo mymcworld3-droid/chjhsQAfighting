@@ -1,0 +1,66 @@
+{
+  "units": [
+    "總體經濟與政策"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-失業與經濟成長-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「失業與經濟成長」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "某地勞動力為100萬人，其中有工作者94萬人，未就業且正在尋找工作者6萬人。依此定義，失業率是多少？",
+        "correct": "6%",
+        "wrong": [
+          "約6.4%",
+          "94%",
+          "0.6%"
+        ],
+        "exp": "失業率＝失業者／勞動力＝6萬／100萬＝6%；不能把就業人口當作分母。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中二年級-失業與經濟成長",
+        "template_id": "civic-ref-g2-失業與經濟成長-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-失業與經濟成長-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「失業與經濟成長」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "一國實質GDP連續兩年成長，但所得成長集中於少數高收入群體。哪項判斷最合適？",
+        "correct": "經濟總量成長不代表各群體所得必然均等改善",
+        "wrong": [
+          "GDP成長直接保證每個人的購買力增加相同比例",
+          "只要GDP上升，貧富差距一定縮小",
+          "實質GDP無法用來觀察任何經濟活動"
+        ],
+        "exp": "實質GDP衡量總體產出，所得分配需使用其他資料衡量。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中二年級-失業與經濟成長",
+        "template_id": "civic-ref-g2-失業與經濟成長-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

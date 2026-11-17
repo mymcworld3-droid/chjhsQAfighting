@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球經濟"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-匯率-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「匯率」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "匯率從1美元兌換30元新臺幣變成1美元兌換32元新臺幣。對新臺幣而言，何項判斷正確？",
+        "correct": "新臺幣相對美元貶值，購買1美元需要更多新臺幣",
+        "wrong": [
+          "新臺幣升值，因每美元新臺幣數變多",
+          "兩種貨幣相對價值完全不變",
+          "美元必然失去所有國際購買力"
+        ],
+        "exp": "每美元從30元變32元表示美元相對新臺幣升值、新臺幣貶值。",
+        "subject": "公民",
+        "sub_topic": "匯率",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civic-高中二年級-匯率",
+        "template_id": "civic-ref-g2-匯率-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-匯率-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「匯率」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "旅行者原有3000元新臺幣，當時1美元兌30元新臺幣，不計手續費可換100美元。若升為1美元兌25元，能換多少美元？",
+        "correct": "120美元",
+        "wrong": [
+          "75美元",
+          "100美元",
+          "150美元"
+        ],
+        "exp": "3000／25＝120美元，新臺幣升值後同額可換更多美元。",
+        "subject": "公民",
+        "sub_topic": "匯率",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civic-高中二年級-匯率",
+        "template_id": "civic-ref-g2-匯率-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

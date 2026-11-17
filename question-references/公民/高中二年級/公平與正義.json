@@ -1,0 +1,66 @@
+{
+  "units": [
+    "公共議題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-公平與正義-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「公平與正義」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "兩間學校設備相同，但偏遠學校的學生每天需花更長時間通勤。若要討論教育機會的實質平等，哪項較恰當？",
+        "correct": "除了相同設備，也需考量交通與取得教育資源的實際障礙",
+        "wrong": [
+          "設備件數相同便表示所有就學條件完全相同",
+          "只要住得遠就不應享有教育資源",
+          "公平只能以每間學校擁有相同建築面積衡量"
+        ],
+        "exp": "形式上資源相同不一定消除實際障礙，實質機會需考慮交通等條件。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中二年級-公平與正義",
+        "template_id": "civic-ref-g2-公平與正義-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-公平與正義-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「公平與正義」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "某政府補助所有家庭相同金額托育費，但低所得家庭仍負擔較重。若從分配正義探討，最重要的是？",
+        "correct": "比較補助占各家庭收入的比例與實際托育負擔",
+        "wrong": [
+          "總額相同就證明各家庭負擔完全相同",
+          "低所得家庭的需求不應進入政策討論",
+          "只看托育機構外觀判斷公平"
+        ],
+        "exp": "相同補助未必帶來相同負擔，可用所得比例和可近性衡量分配效果。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中二年級-公平與正義",
+        "template_id": "civic-ref-g2-公平與正義-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

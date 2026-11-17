@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球經濟"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g2-國際貿易-1",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「國際貿易」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "甲國生產每噸稻米需10小時，生產一匹布需20小時；乙國分別需12小時與12小時。若比較機會成本，哪個國家生產稻米具有比較利益？",
+        "correct": "甲國，因1噸稻米的機會成本為0.5匹布，低於乙國1匹布",
+        "wrong": [
+          "乙國，因乙國的稻米生產時間較長",
+          "甲乙相同，因兩國皆能生產兩種產品",
+          "無法比較，因題目未給兩國工資"
+        ],
+        "exp": "甲稻米機會成本為10/20＝0.5匹布；乙為12/12＝1匹布。甲在稻米具比較利益。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中二年級-國際貿易",
+        "template_id": "civic-ref-g2-國際貿易-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g2-國際貿易-2",
+      "source": "大考中心114學測社會公民學科之法律、政策、經濟情境評量取向；獨立自編參考題",
+      "design": "以「國際貿易」建立有條件的法律或經濟分析，避免混淆法定範圍及計算分母",
+      "question": {
+        "q": "一國對進口鞋類加徵關稅，短期內其他條件不變。最可能出現哪種市場影響？",
+        "correct": "進口鞋的國內售價可能上升，部分消費轉向本地替代品",
+        "wrong": [
+          "關稅必然使所有進口鞋價格下降",
+          "進口關稅與消費者選擇完全無關",
+          "加徵關稅後本地生產成本必定立即歸零"
+        ],
+        "exp": "關稅提高進口成本，可能影響價格與消費替代，實際程度取決於需求與供給彈性。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中二年級-國際貿易",
+        "template_id": "civic-ref-g2-國際貿易-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
