@@ -1,0 +1,54 @@
+{
+  "units": [
+    "運算思維"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中二年級-搜尋與排序-1",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「搜尋與排序」，兩題不同解題路徑",
+      "question": {
+        "q": "有已由小到大排序的資料[2,5,8,11,14,18,21]，用二分搜尋找14，第一次檢查中間值11後下一步該往哪邊查找？",
+        "correct": "右半部[14,18,21]",
+        "wrong": [
+          "左半部[2,5,8]",
+          "已找到14，立刻結束",
+          "重新檢查整個串列，完全忽略排序"
+        ],
+        "exp": "14大於中間值11，且串列已排序，故可排除左半與11，只查右半。",
+        "subject": "資訊科技",
+        "sub_topic": "搜尋與排序",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-搜尋與排序",
+        "template_id": "it-reference-高中二年級-搜尋與排序-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中二年級-搜尋與排序-2",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「搜尋與排序」，兩題不同解題路徑",
+      "question": {
+        "q": "要把[7,3,5]由小到大排列。若採每次找出未排序部分最小值並放到前端的選擇排序，第一次交換後的序列為何？",
+        "correct": "[3,7,5]",
+        "wrong": [
+          "[7,5,3]",
+          "[5,3,7]",
+          "[7,3,5]"
+        ],
+        "exp": "三個數最小的是3，與第一個7交換，得[3,7,5]；後續步驟尚未執行。",
+        "subject": "資訊科技",
+        "sub_topic": "搜尋與排序",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-搜尋與排序",
+        "template_id": "it-reference-高中二年級-搜尋與排序-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

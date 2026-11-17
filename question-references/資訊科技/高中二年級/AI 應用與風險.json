@@ -1,0 +1,54 @@
+{
+  "units": [
+    "人工智慧與資料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中二年級-AI 應用與風險-1",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「AI 應用與風險」，兩題不同解題路徑",
+      "question": {
+        "q": "同學用生成式AI整理新聞，生成的摘要提到一項未附來源的研究數字。繳交報告前最應採取什麼措施？",
+        "correct": "查找原始可信來源，確認研究存在及數據是否正確",
+        "wrong": [
+          "直接引用並宣稱所有生成內容都已查證",
+          "只把數字字體放大，就能提高可信度",
+          "刪除所有參考資料以免互相矛盾"
+        ],
+        "exp": "生成模型可能產生不實或錯置的數字，正式使用前須核對原始證據。",
+        "subject": "資訊科技",
+        "sub_topic": "AI 應用與風險",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-AI 應用與風險",
+        "template_id": "it-reference-高中二年級-AI 應用與風險-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中二年級-AI 應用與風險-2",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「AI 應用與風險」，兩題不同解題路徑",
+      "question": {
+        "q": "醫院考慮以AI協助初步整理病患症狀。何種使用方式最符合負責任的風險管理？",
+        "correct": "由合格專業人員審核輸出，保護個資並記錄模型限制",
+        "wrong": [
+          "讓AI不經任何審查直接作出全部醫療決定",
+          "把所有病患的身分資料公開供任何人瀏覽",
+          "因為有AI，就停止監控系統錯誤"
+        ],
+        "exp": "高風險情境需人工監督、個資保護與品質控管，AI可協助但不能取代必要的專業決策程序。",
+        "subject": "資訊科技",
+        "sub_topic": "AI 應用與風險",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-AI 應用與風險",
+        "template_id": "it-reference-高中二年級-AI 應用與風險-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

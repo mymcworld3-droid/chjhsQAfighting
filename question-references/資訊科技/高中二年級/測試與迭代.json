@@ -1,0 +1,54 @@
+{
+  "units": [
+    "資訊專題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中二年級-測試與迭代-1",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「測試與迭代」，兩題不同解題路徑",
+      "question": {
+        "q": "校園地圖程式測試時發現：當搜尋空字串，頁面會當機。修正後，哪項測試最能驗證問題確實改善？",
+        "correct": "再次用空字串搜尋，並確認正常顯示提示而非當機",
+        "wrong": [
+          "只打開首頁，不執行任何搜尋",
+          "重新安裝鍵盤驅動程式就當作測試完成",
+          "把錯誤訊息刪掉，卻不修正程式"
+        ],
+        "exp": "回歸測試要重現原本造成錯誤的輸入，並驗證修正後的預期行為。",
+        "subject": "資訊科技",
+        "sub_topic": "測試與迭代",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-測試與迭代",
+        "template_id": "it-reference-高中二年級-測試與迭代-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中二年級-測試與迭代-2",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「測試與迭代」，兩題不同解題路徑",
+      "question": {
+        "q": "專題A版本上線後，使用者反映確認按鈕太小，手機上容易按錯。團隊在B版放大按鈕並重新觀察操作錯誤率。這屬於什麼流程？",
+        "correct": "依使用者回饋修改並再次驗證的迭代開發",
+        "wrong": [
+          "不需任何資料的單次直線式開發",
+          "在產品完成前刻意排除所有使用者",
+          "只改專案名稱而未改功能"
+        ],
+        "exp": "版本B針對版本A的問題做設計改善並以錯誤率檢查成效，符合迭代設計。",
+        "subject": "資訊科技",
+        "sub_topic": "測試與迭代",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-測試與迭代",
+        "template_id": "it-reference-高中二年級-測試與迭代-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

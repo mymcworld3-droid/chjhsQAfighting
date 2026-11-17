@@ -1,0 +1,54 @@
+{
+  "units": [
+    "資訊專題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中二年級-程式實作-1",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「程式實作」，兩題不同解題路徑",
+      "question": {
+        "q": "設計記帳程式，已有函式recordExpense(金額,類別)。要在畫面顯示當月各類別小計，實作上還需要哪項處理？",
+        "correct": "彙整每筆支出並依類別累加",
+        "wrong": [
+          "只更改應用程式的圖示",
+          "將使用者的名稱改成小計",
+          "刪除所有金額欄位"
+        ],
+        "exp": "記帳函式負責新增紀錄，統計小計仍須遍歷並按類別累加金額。",
+        "subject": "資訊科技",
+        "sub_topic": "程式實作",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-程式實作",
+        "template_id": "it-reference-高中二年級-程式實作-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中二年級-程式實作-2",
+      "source": "高中資訊科技108課綱教學綱要與APCS程式識讀能力評量方向；獨立重新命題",
+      "design": "透過具體情境與可追蹤演算法評量「程式實作」，兩題不同解題路徑",
+      "question": {
+        "q": "某專題同時有畫面輸入模組與資料儲存模組。若希望兩位同學能分工開發並順利整合，最重要先約定什麼？",
+        "correct": "模組之間傳遞的資料格式與介面規格",
+        "wrong": [
+          "兩人一定要使用不同的鍵盤品牌",
+          "將檔案名稱全部改為亂數",
+          "不必溝通，最後直接把程式貼在一起"
+        ],
+        "exp": "輸入輸出格式是模組間的契約，事先定義可避免資料型態或欄位不一致。",
+        "subject": "資訊科技",
+        "sub_topic": "程式實作",
+        "knowledge_points": [],
+        "concept_id": "it-高中二年級-程式實作",
+        "template_id": "it-reference-高中二年級-程式實作-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
