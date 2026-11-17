@@ -1,6 +1,7 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {skillArt,bookArt} from './manual-art.js';
 import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-recap.js';
+import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import './tactical-rules.js?v=20261116-pve-v4';
 import {TacticalRenderer} from './tactical-renderer.js?v=20261116-pve-v4';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
@@ -16,7 +17,7 @@ const localUser=()=>window.getCurrentUserData?.()||{};
 let root=null,keyboardGuard=null,renderer=null,state=null,mode='pve',map='courtyard',action='move',selection=null,trialEntry=null;
 let attackChoice='attack',selectedManualSkill='',wheelIgnoreClickUntil=0;
 let battleLoadouts=null,loadoutFetchedFor='',loadoutFetchingFor='',loadoutMenuOpen=false;
-let manualRecapCache=null,manualRecapLoadingKey='';
+let manualRecapCache=null,manualRecapLoadingKey='',manualXpTimer=null;
 const battlefieldMode=()=>action==='manual'?'manual:'+selectedManualSkill:action;
 let opened=false,busy=false,epoch=0,uid='',poll=null,clock=null,retryMs=4000,op=0,appliedOp=0;
 let modalOpen=false,lastTrigger=null,clockOffset=0,deadlineSyncAt=0,introDemo=null;
@@ -73,6 +74,24 @@ async function api(path,body,signal){
 }
 function valid(e,account){return opened&&e===epoch&&account===getMainUser()?.uid;}
 function notice(text){const box=$('[data-notice]');if(box){box.textContent=text;box.hidden=!text;}}
+function clearLiveManualXp(){
+  if(manualXpTimer!==null)clearTimeout(manualXpTimer);
+  manualXpTimer=null;
+  $('[data-manual-xp-host]')?.replaceChildren();
+}
+function showLiveManualXp(delta){
+  if(!delta||!opened||state?.mode!=='pve'||root?.hidden||document.hidden)return;
+  const host=$('[data-manual-xp-host]');
+  if(!host)return;
+  clearLiveManualXp();
+  host.innerHTML=renderManualXpToast(delta,{esc,bookArt});
+  // Only one quiet sound per actual server-ledger change; player mute still wins.
+  try{window.QAGameAudio?.play('spirit-pulse',{volume:.25});}catch(_){}
+  manualXpTimer=setTimeout(()=>{
+    host.replaceChildren();
+    manualXpTimer=null;
+  },2150);
+}
 // The menu stays outside the battle canvas so the quarter-circle controls are unchanged.
 function renderBattleLoadouts(){
   const toggle=$('[data-loadout-toggle]'),menu=$('[data-loadout-menu]');
@@ -160,12 +179,17 @@ function ensure(){
     const link=document.createElement('link');link.id='tactical-manual-recap-style';link.rel='stylesheet';
     link.href='/styles/tactical-manual-recap.css?v=20261118-battle-exp-v1';document.head.append(link);
   }
+  if(!document.getElementById('tactical-manual-xp-feedback-style')){
+    const link=document.createElement('link');link.id='tactical-manual-xp-feedback-style';link.rel='stylesheet';
+    link.href='/styles/tactical-manual-xp-feedback.css?v=20261118-live-exp-v1';
+    document.head.append(link);
+  }
   if(!document.getElementById('tactical-quarter-style')){const link=document.createElement('link');link.id='tactical-quarter-style';link.rel='stylesheet';link.href='/styles/tactical-quarter-controls.css?v=20261116-skill-damage-inline-v1';document.head.append(link);}
   if(!document.getElementById('tactical-pair-style')){const link=document.createElement('link');link.id='tactical-pair-style';link.rel='stylesheet';link.href='/styles/tactical-question-pair.css?v=20261115-field-ink';document.head.append(link);}
   root=document.createElement('section');root.id='tactical-combat';root.hidden=true;root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label','戰棋修行');
   root.innerHTML=`<header class="tc-top"><h1 data-title>問道試煉</h1><div class="tc-top-right"><span data-turn></span><button type="button" class="tc-loadout-toggle" data-loadout-toggle aria-expanded="false" hidden>配置</button><button type="button" data-close aria-label="收起戰場">收起</button></div></header>
     <div class="tc-loadout-popover" data-loadout-menu role="group" aria-label="戰場功法配置" hidden></div>
-    <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
+    <div class="tc-notice" data-notice role="status" hidden></div><div class="tc-manual-xp-host" data-manual-xp-host role="status" aria-live="polite" aria-atomic="true"></div><div class="tc-main" data-main role="region" aria-label="戰場內容"></div><div class="tc-modal" data-modal hidden></div>`;
   document.body.append(root);
   keyboardGuard=installTacticalKeyboardGuard(root);
   window.addEventListener('qa:invalid-tex',event=>{
@@ -907,19 +931,16 @@ function accept(next,serial){
   if(next?.serverNowMs)clockOffset=next.serverNowMs-Date.now();
   applyProgress(next);
   const oldQuestion=state?.question?.id;
-  const sameRoom=state?.id===next?.id;
-  const previousExp=sameRoom?(state.manualExp?.[uid]||{}):{};
-  const previousKills=sameRoom?(state.manualKills?.[uid]||{}):{};
-  const gainedExp=Object.entries(next?.manualExp?.[uid]||{}).reduce((sum,[bookId,total])=>
-    sum+Math.max(0,Number(total||0)-Number(previousExp[bookId]||0)),0);
-  // Compatibility with unfinished battles saved before beast-specific XP existed.
-  const legacyGained=Object.entries(next?.manualKills?.[uid]||{}).reduce((sum,[bookId,count])=>
-    sum+Math.max(0,Number(count||0)-Number(previousKills[bookId]||0)),0);
-  const gainedExpTotal=gainedExp+legacyGained*Manuals.EXP_PER_KILL;
+  // UI-only: compare two server revisions from the SAME PvE room.
+  // New rooms, repeated snapshots and older revisions must not replay XP.
+  const expDelta=manualXpDelta(state,next,uid,Manuals);
   const keepSelection=next?.quizRound&&next.id===state?.id&&next.actionRevision===state.actionRevision&&next.phase===state.phase&&next.turnUid===state.turnUid;
-  if(state?.id!==next?.id){battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;}
+  if(state?.id!==next?.id){
+    battleLoadouts=null;loadoutFetchedFor='';loadoutMenuOpen=false;
+    clearLiveManualXp();
+  }
   state=next;if(!keepSelection)selection=null;
-  if(gainedExpTotal)notice('功法熟練經驗 +'+gainedExpTotal+' EXP');
+  // EXP sound and animated cue are emitted after paint, never from a guessed kill.
   if(next?.manualDrops?.[uid])window.dispatchEvent(new CustomEvent('xiuxian:manual-loot'));
   // Kick off real match-scoped question requests immediately on an eligible
   // battle state, even while the player is reading an encounter introduction.
@@ -933,6 +954,7 @@ function accept(next,serial){
   }
   if(next?.mode==='pvp'&&modalOpen&&$('[data-choice]')&&oldQuestion&&!next?.question){hideModal();pairQuestions=[];pairChoices=[];notice('本輪答題已結束，請查看戰場。');}
   paint({preserveModal:modalOpen});
+  if(expDelta)showLiveManualXp(expDelta);
 }
 function applyProgress(next){
   if(!next?.progress||getMainUser()?.uid!==uid)return;const local=localUser();local.stats||={};
@@ -1616,6 +1638,7 @@ async function open(nextMode='pve'){
   action='move';attackChoice='attack';selectedManualSkill='';selection=null;
   const accountUid=getMainUser()?.uid||'';if(uid!==accountUid||state?.mode!==nextMode)state=null;uid=accountUid;
   if(!uid){window.showToast?.('請先登入後進入戰場');return;}
+  clearLiveManualXp();
   epoch++;opened=true;busy=true;op=0;appliedOp=0;manualRecapCache=null;manualRecapLoadingKey='';document.body.classList.add('tactical-open');
   clearInterval(clock);clock=setInterval(updateClock,1000);
   const e=epoch,account=uid;
@@ -1632,7 +1655,7 @@ async function open(nextMode='pve'){
 }
 function close(){
   if(!root)return;
-  window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
+  window.QATrialQuestion?.close();keyboardGuard?.blur();quizContext?.abort.abort();quizContext=null;window.currentTacticalQuiz=null;pairGeneration++;preloadedTacticalQuestions=null;pairQuestions=[];pairChoices=[];pairReviews=[];pairDisplayIndex=0;pairFollowupPromise=null;pairFollowupError='';pairWhiteboardInk.clear();closePairWhiteboard();autoQuizKey='';epoch++;opened=false;busy=false;manualRecapCache=null;manualRecapLoadingKey='';clearLiveManualXp();clearTimeout(poll);clearInterval(clock);hideModal();destroyRenderer();
   root.hidden=true;root.classList.remove('tc-quarter-layout');document.body.classList.remove('tactical-open');lastTrigger?.focus?.();
 }
 window.openTacticalCombat=open;
