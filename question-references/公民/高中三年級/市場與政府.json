@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修公民：經濟與全球議題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-市場與政府-1",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「市場與政府」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "某工廠的生產活動讓附近居民承受噪音，但工廠未支付居民因此增加的成本。經濟學最適合如何描述此現象？",
+        "correct": "生產造成負向外部性，私人決策未反映全部社會成本",
+        "wrong": [
+          "只要工廠有營收，就不可能造成外部成本",
+          "噪音完全不會影響附近居民",
+          "居民所承受的成本必然已在商品價格中完整反映"
+        ],
+        "exp": "工廠未內部化噪音成本，市場價格可能未包含所有社會負擔，提供政策討論的理由。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中三年級-市場與政府",
+        "template_id": "civic-ref-g3-市場與政府-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-市場與政府-2",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「市場與政府」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "某商品的市場需求與供給正常，但政府為低收入家庭提供限定額度的消費補助。若分析政策目的，何者較合理？",
+        "correct": "提高特定家庭的購買能力，並可能影響市場需求",
+        "wrong": [
+          "補助必然讓所有商品價格永久固定",
+          "政府補助會立即使商品供給曲線完全消失",
+          "只要有補助就不需要考慮財政成本"
+        ],
+        "exp": "補助直接提高受益者可支配資源，需求反應與價格影響仍取決於市場條件。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中三年級-市場與政府",
+        "template_id": "civic-ref-g3-市場與政府-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

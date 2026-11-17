@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修公民：法律與社會"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-社會公平-1",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「社會公平」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "某地政府要補助公共交通，甲提議每位居民都領相同金額，乙提議偏遠地區再增加交通補助。兩者主要反映哪種公平概念的差別？",
+        "correct": "甲偏向形式上相同待遇，乙考慮不同交通條件的實質需求",
+        "wrong": [
+          "甲乙都只考慮每人使用相同車款",
+          "乙主張所有偏遠居民不應獲得補助",
+          "甲只要金額相同就必然消除所有交通差距"
+        ],
+        "exp": "相同補助重視一致分配，加碼補助則依不同地區障礙調整資源，屬不同公平判準。",
+        "subject": "公民",
+        "sub_topic": "社會公平",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中三年級-社會公平",
+        "template_id": "civic-ref-g3-社會公平-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-社會公平-2",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「社會公平」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "某學校所有學生都可在同一時間使用圖書館，但有學生需長時間通勤無法趕上開放時段。若從機會公平討論，最應補充何項資料？",
+        "correct": "不同學生的通勤時間與圖書館實際可使用時間",
+        "wrong": [
+          "只比較圖書館的牆面顏色",
+          "以每位學生的姓氏筆畫決定開館時間",
+          "只看座位總數就認定資源近用完全相同"
+        ],
+        "exp": "形式上開放時間一致，卻可能因通勤障礙造成實際利用差距，需要蒐集可近性資料。",
+        "subject": "公民",
+        "sub_topic": "社會公平",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中三年級-社會公平",
+        "template_id": "civic-ref-g3-社會公平-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

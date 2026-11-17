@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修公民：民主政治與治理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-民主理論-1",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「民主理論」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "市府規畫開發案，甲主張選舉出的議員已有決定權，乙主張應增加公聽與居民協商。這組意見最能反映什麼民主理論的討論？",
+        "correct": "代議決策之外，是否應增加公共審議與直接參與",
+        "wrong": [
+          "民主制度必須完全禁止所有選舉",
+          "只要居民發言，就一定可以取代全部法定機關",
+          "民主與公民是否能表達意見毫無關係"
+        ],
+        "exp": "甲著重民選代表的授權，乙著重決策過程中的公民討論，兩者反映民主運作不同重心。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中三年級-民主理論",
+        "template_id": "civic-ref-g3-民主理論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-民主理論-2",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「民主理論」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "某公共議題的決策程序先提供不同方案的資料，再安排支持和反對者相互提問、修正理由。這種作法較接近哪種民主理念？",
+        "correct": "重視資訊、對話與理由交換的審議民主",
+        "wrong": [
+          "只靠人氣投票，不必公開任何理由",
+          "把最後決定交給發言最大聲的人",
+          "規定所有人必須在討論前放棄自身觀點"
+        ],
+        "exp": "審議民主重視知情討論與提出可讓他人檢驗的理由，不等於每人必須意見一致。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中三年級-民主理論",
+        "template_id": "civic-ref-g3-民主理論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

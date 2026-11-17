@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修公民：法律與社會"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-人權保障-1",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「人權保障」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "政府為防範災害需對特定危險區域暫時限制進入。若從人權保障分析，最重要的檢驗為何？",
+        "correct": "措施是否有法律依據、目的正當，且範圍與期間符合必要程度",
+        "wrong": [
+          "只要宣稱防災，便可永久禁止所有地方進出",
+          "居民未受影響就不需要任何法律依據",
+          "任何有期限的限制都必然合憲"
+        ],
+        "exp": "限制自由須受法律與比例原則拘束，範圍及持續時間應與風險相稱。",
+        "subject": "公民",
+        "sub_topic": "人權保障",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中三年級-人權保障",
+        "template_id": "civic-ref-g3-人權保障-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-人權保障-2",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「人權保障」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "一間公共機關只提供階梯入口，讓輪椅使用者難以辦理業務。何者最符合實質平等的改善方向？",
+        "correct": "依使用者需求提供可進入的無障礙動線及合理調整",
+        "wrong": [
+          "只要每人都看到相同階梯就已實質平等",
+          "要求行動不便者一律由家人代辦，無須檢查其他方式",
+          "增加台階高度即可提高公共服務可近性"
+        ],
+        "exp": "形式上同一入口不代表每人都能使用，合理的無障礙安排可減少實際障礙。",
+        "subject": "公民",
+        "sub_topic": "人權保障",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中三年級-人權保障",
+        "template_id": "civic-ref-g3-人權保障-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

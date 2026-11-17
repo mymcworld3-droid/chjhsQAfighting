@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修公民：法律與社會"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-法律推理-1",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「法律推理」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "某條校園規範寫「上課時未經許可不得錄影」，學生甲經教師明確同意後為實驗做錄影。判斷是否違規，最重要的是？",
+        "correct": "確認「未經許可」要件是否成立，以及許可的範圍",
+        "wrong": [
+          "只要錄影便不必閱讀規範的任何例外條件",
+          "因錄影設備是手機便自動不受規範",
+          "只看學生是否喜歡實驗，不需查核教師是否許可"
+        ],
+        "exp": "法律及規則的適用要核對構成要件和具體事實；已獲許可可能不符合禁止條件。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civic-高中三年級-法律推理",
+        "template_id": "civic-ref-g3-法律推理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-法律推理-2",
+      "source": "大考中心114學測社會公民考科之法律推理、民主制度與公平命題取向；獨立自編題",
+      "design": "以「法律推理」的制度條件、證據與利益權衡形成可驗證推論",
+      "question": {
+        "q": "某規章規定：借用場地須於活動前三天提出申請。A於活動前五天提出，B於活動前一天提出。若其他條件相同，哪種判斷符合規章？",
+        "correct": "A符合提前申請期限，B未符合",
+        "wrong": [
+          "A與B都違反，因提前五天過早",
+          "只有B符合，因越接近活動時間越好",
+          "規章沒有任何期限條件"
+        ],
+        "exp": "依明確的三天前門檻比較，五天前滿足而一天前未滿足，不能擅自加入不存在的限制。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civic-高中三年級-法律推理",
+        "template_id": "civic-ref-g3-法律推理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
