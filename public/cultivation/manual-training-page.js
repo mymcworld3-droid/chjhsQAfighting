@@ -1,10 +1,11 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js';
+import {renderManualLoadout,selectSkillForSlot} from './manual-loadout-view.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
-let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='';
+let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',pickerSlot=null;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -34,6 +35,12 @@ function ensure(){
     link.href='/styles/manual-training-hero.css?v=20261117-hero-phase1';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-loadout-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-loadout-style';
+    link.href='/styles/manual-training-loadout.css?v=20261117-deck-phase2';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
@@ -44,7 +51,7 @@ async function request(url,body){
   if(!response.ok||!result.ok)throw Error(result.error||'功法資料同步失敗');
   return result.state;
 }
-function equippedVersion(id,equipped=current?.equipped||[]){
+function equippedVersion(id,equipped=current?.loadouts?.[selectedLoadout]?.skillIds||[]){
   const move=Catalog.BY_SKILL[id]?.moveId;
   return equipped.find(other=>Catalog.BY_SKILL[other]?.moveId===move);
 }
@@ -64,8 +71,7 @@ function featuredHeroMarkup(){
 function markup(expandedBooks){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const owned=current.library.filter(item=>item.owned).length;
-  const preset=current.loadouts?.[selectedLoadout];
-  const equipped=preset?.skillIds||[];
+  const equipped=current.loadouts?.[selectedLoadout]?.skillIds||[];
   const gold=Number(current.gold)||0;
   const tactical=window.getCombatPower?.();
   const rating=tactical?.mode==='tactical'?tactical:null;
@@ -77,15 +83,6 @@ function markup(expandedBooks){
   const attack=Number.isFinite(serverAttack)&&serverAttack>0?serverAttack:
     Number.isFinite(projectedAttack)&&projectedAttack>0?projectedAttack:
       Math.max(1,Number(window.getCurrentUserData?.()?.stats?.attack)||200);
-  const slots=Array.from({length:3},(_,i)=>{
-    const id=equipped[i],skill=skillDetails(id);
-    return `<div class="manual-slot ${id?'is-active':''}">
-      <small>第 ${i+1} 技能欄</small>
-      ${skill?`<div class="manual-slot-equipped">${artImg(skillArt(skill),"manual-slot-art")}<div class="manual-slot-meta"><strong>${esc(skill.name)}</strong><span>招式 Lv. ${skill.level} · ${esc(Catalog.BY_BOOK[skill.manualId].name)} · ${skill.cost} 體力</span></div></div>
-        <button type="button" data-manual-remove="${esc(id)}">卸下</button>`:
-        '<span class="manual-slot-empty">尚未裝備</span>'}
-      </div>`;
-  }).join('');
   const cards=current.library.filter(book=>book.owned).map(book=>{
     const next=book.skills.find(s=>!s.unlocked);
     const skills=book.skills.map((skill,i)=>{
@@ -138,13 +135,9 @@ function markup(expandedBooks){
       <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
       <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
         <small>${rating?'基礎 '+fmt(rating.base)+' + 招式 '+fmt(rating.skills):'正在計算'}</small></div></div>
-    <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。問道試煉中可使用戰場上方的「配置」按鈕切換；鬥法期間無法切換。</p></div>
-      <div class="manual-presets" role="group" aria-label="功法配置">
-        ${(current.loadouts||[]).map((item,i)=>`<button type="button" data-loadout-select="${i}" class="${selectedLoadout===i?'selected':''}">${esc(item.name)}${i===current.activeLoadout?' · 使用中':''}</button>`).join('')}
-      </div>
-      <div class="manual-preset-controls"><label>配置名稱 <input data-loadout-name maxlength="40" value="${esc(preset?.name||'')}" placeholder="輸入名稱"></label><button type="button" data-loadout-rename>儲存名稱</button>
-      <button type="button" data-loadout-apply ${selectedLoadout===current.activeLoadout?'disabled':''}>${selectedLoadout===current.activeLoadout?'目前使用中':'套用此配置'}</button></div>
-      <div class="manual-slot-grid">${slots}</div></section>
+    ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
+      esc,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
+    })}
     <section class="manual-library"><div class="manual-section-title"><h3>已獲得的功法</h3>
       <button type="button" class="manual-refresh" data-manual-refresh title="同步功法"><i class="fa-solid fa-rotate"></i> 更新</button>
       </div><div class="manual-book-grid">${cards||'<p class="manual-empty">尚無功法，選擇劍修或體修即可獲得一本入門功法。</p>'}</div></section>
@@ -204,6 +197,8 @@ function paint(message=''){
   renderedFor=loadedFor;
   const status=root.querySelector('[data-manual-status]');
   if(status)status.textContent=message;
+  const deckStatus=root.querySelector('[data-manual-loadout-status]');
+  if(deckStatus&&message)deckStatus.textContent=message;
   root.querySelectorAll('button').forEach(button=>{
     if(busy)button.disabled=true;
   });
@@ -217,7 +212,7 @@ async function load({force=false}={}){
   try{
     const result=await request('/api/tactical/manuals');
     if(token!==sequence||getMainUser()?.uid!==uid)return;
-    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';}loadedFor=uid;
+    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';pickerSlot=null;}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
   }catch(error){
@@ -235,7 +230,8 @@ async function mutate(url,body){
     const next=await request(url,body);
     if(getMainUser()?.uid!==uid)return;
     current=next;loadedFor=uid;lastFetch=Date.now();
-    if(url.endsWith('/school'))featuredBookId='';
+    if(url.endsWith('/school')){featuredBookId='';pickerSlot=null;}
+    if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds))pickerSlot=null;
     window.setCurrentTacticalManualState?.(next,uid);
     if(upgrading){
       const local=window.getCurrentUserData?.();
@@ -301,7 +297,43 @@ function boot(){
       }
       return;
     }
-    if(button.dataset.loadoutSelect!==undefined){selectedLoadout=Number(button.dataset.loadoutSelect);paint();return;}
+    if(button.hasAttribute('data-manual-close-picker')){pickerSlot=null;paint();return;}
+    if(button.dataset.manualPickSlot!==undefined){
+      const slot=Number(button.dataset.manualPickSlot);
+      if(Number.isInteger(slot)&&slot>=0&&slot<=2&&current){
+        pickerSlot=pickerSlot===slot?null:slot;
+        paint();
+        if(pickerSlot!==null){
+          requestAnimationFrame(()=>{
+            root?.querySelector('[data-manual-picker]')?.scrollIntoView({
+              behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+              block:'nearest'
+            });
+          });
+        }
+      }
+      return;
+    }
+    if(button.dataset.manualPickSkill!==undefined){
+      const id=button.dataset.manualPickSkill;
+      if(!Number.isInteger(pickerSlot)||!current)return;
+      const allowed=current.library.some(book=>book.owned&&book.skills.some(skill=>skill.id===id&&skill.unlocked));
+      if(!allowed){paint('招式尚未解鎖，請重新整理功法資料。');return;}
+      const equipped=current.loadouts?.[selectedLoadout]?.skillIds||[];
+      const skillIds=selectSkillForSlot(equipped,pickerSlot,id,
+        skillId=>Catalog.BY_SKILL[skillId]?.moveId);
+      if(!skillIds){paint('無法裝備此招式，請確認技能配置。');return;}
+      if(skillIds.join('\u001f')===equipped.join('\u001f')){pickerSlot=null;paint();return;}
+      void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,skillIds});
+      return;
+    }
+    if(button.dataset.loadoutSelect!==undefined){
+      const index=Number(button.dataset.loadoutSelect);
+      if(Number.isInteger(index)&&index>=0&&index<(current?.loadouts?.length||0)){
+        selectedLoadout=index;pickerSlot=null;paint();
+      }
+      return;
+    }
     if(button.hasAttribute('data-loadout-rename')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,name:root.querySelector('[data-loadout-name]')?.value||''});return;}
     if(button.hasAttribute('data-loadout-apply')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,apply:true});return;}
     if(button.hasAttribute('data-manual-refresh')){void load({force:true});return;}
@@ -331,7 +363,7 @@ function boot(){
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';featuredBookId='';}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';featuredBookId='';pickerSlot=null;}if(visible())void load({force:true});});
   window.addEventListener('xiuxian:manual-loot',()=>{if(visible())void load({force:true});});
   if(visible())void load({force:true});
 }
