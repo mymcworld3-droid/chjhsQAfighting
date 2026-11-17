@@ -132,6 +132,20 @@
   border:1px solid #b7a26a8f;
   background:linear-gradient(145deg,#2b3e2d,#182c20)
 }
+#manual-training-root .manual-slot.is-sword.is-active{
+  border-color:rgba(117,213,210,.67);
+  background:linear-gradient(155deg,#204038,#142a28);
+}
+#manual-training-root .manual-slot.is-body.is-active{
+  border-color:rgba(234,181,107,.74);
+  background:linear-gradient(155deg,#433724,#27291e);
+}
+#manual-training-root .manual-slot.is-sword .manual-slot-art-frame.is-filled{
+  border-color:#8ad5d3;box-shadow:0 0 13px rgba(105,209,211,.13)
+}
+#manual-training-root .manual-slot.is-body .manual-slot-art-frame.is-filled{
+  border-color:#efbe7f;box-shadow:0 0 13px rgba(231,174,92,.15)
+}
 #manual-training-root .manual-slot.is-editing{
   border-color:#ffdf8d;box-shadow:inset 0 0 0 1px #ffdf8d70,0 0 16px rgba(214,177,96,.13)
 }
