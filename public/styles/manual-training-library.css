@@ -1,0 +1,312 @@
+/* Phase 3: owned-manual gallery (stamina branch).
+ * Everything is scoped to #manual-training-root to protect other game pages.
+ * Book artwork and detail nodes remain stable across server refreshes.
+ */
+#manual-training-root .manual-library{
+  padding:clamp(13px,2vw,22px);margin:18px 0 22px;
+  border:1px solid rgba(194,169,108,.37);border-radius:18px;
+  background:linear-gradient(155deg,rgba(32,48,35,.82),rgba(13,28,21,.92));
+  box-shadow:0 12px 30px #0002;isolation:isolate;
+}
+#manual-training-root .manual-library-heading{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;
+  gap:13px 14px;margin-bottom:17px;
+}
+#manual-training-root .manual-library-kicker{
+  display:block;margin-bottom:4px;color:#cdb77f;font-size:11px;
+  letter-spacing:.13em;font-weight:800;
+}
+#manual-training-root .manual-library-heading h3{
+  display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;
+  font-size:clamp(20px,2.6vw,27px);line-height:1.2;color:#f9e7bf;
+  font-weight:850;margin:0 0 6px;
+}
+#manual-training-root .manual-library-heading p{
+  margin:0;color:#aebdaf;font-size:12px;line-height:1.7;
+}
+#manual-training-root .manual-library-owned-count{
+  display:inline-flex;align-items:center;padding:3px 9px;
+  border-radius:30px;font-size:12px;color:#e6d5a4;font-weight:700;
+  background:#3c46327d;border:1px solid #b19c6461;white-space:nowrap;
+}
+#manual-training-root .manual-library-heading .manual-refresh{
+  min-height:42px;align-self:start;justify-self:end;padding:9px 14px;
+  border-radius:10px;font-weight:750;
+}
+#manual-training-root .manual-library-filters{
+  grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap;
+  align-items:center;
+}
+#manual-training-root .manual-library-filter{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:41px;padding:9px 13px;flex:0 0 auto;
+  background:#14251baa;color:#bfcdbd;border:1px solid #7b8d776c;
+  border-radius:9px;font-size:13px;font-weight:750;
+}
+#manual-training-root .manual-library-filter.is-selected{
+  border-color:#e2c482;background:linear-gradient(120deg,#3b442c,#2c3b2e);
+  color:#fff0c5;box-shadow:inset 0 -2px #d6b778;
+}
+#manual-training-root .manual-library-filter-count{
+  display:inline-grid;place-items:center;min-width:20px;height:20px;
+  padding:0 4px;background:#172a1ee0;border:1px solid #bdc3a24d;
+  border-radius:30px;font-size:11px;color:#cde1c5;
+}
+#manual-training-root .manual-book-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,315px),1fr));
+  align-items:start;gap:13px;min-width:0;
+}
+#manual-training-root .manual-book{
+  --library-accent:#89d8cf;--library-glow:rgba(78,174,165,.18);
+  --library-border:rgba(112,190,178,.46);
+  --library-plaque:rgba(24,70,65,.74);
+  min-width:0;overflow:hidden;position:relative;isolation:isolate;
+  margin:0;padding:0;border:1px solid rgba(160,173,136,.35);
+  border-radius:14px;
+  background:linear-gradient(160deg,#1e392f,#172a23 52%,#101f1a);
+  box-shadow:0 8px 18px rgba(0,0,0,.16);
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+#manual-training-root .manual-book.is-body{
+  --library-accent:#ebbe81;--library-glow:rgba(219,161,82,.22);
+  --library-border:rgba(216,169,103,.56);
+  --library-plaque:rgba(77,56,27,.72);
+  background:linear-gradient(158deg,#3a3329,#242a20 57%,#171e18);
+}
+#manual-training-root .manual-book.is-featured{
+  border-color:var(--library-accent);
+  box-shadow:0 0 0 1px var(--library-border),0 11px 26px rgba(0,0,0,.27);
+}
+#manual-training-root .manual-book[open]{
+  border-color:var(--library-accent);
+}
+#manual-training-root .manual-book-top{
+  display:block;min-height:0;padding:0;cursor:pointer;
+  list-style:none;border-radius:13px;color:#f5e5c3;
+}
+#manual-training-root .manual-book-top::-webkit-details-marker{display:none}
+#manual-training-root .manual-book-top::marker{content:""}
+#manual-training-root .manual-book-top:focus-visible{
+  outline:2px solid #ffe3a1;outline-offset:-3px;
+}
+#manual-training-root .manual-library-art-zone{
+  position:relative;display:grid;place-items:center;isolation:isolate;
+  height:188px;overflow:hidden;
+  background:radial-gradient(ellipse 62% 70% at 50% 52%,
+    var(--library-glow),rgba(16,26,22,.35) 72%,rgba(8,18,15,.35));
+  border-bottom:1px solid var(--library-border);
+}
+#manual-training-root .manual-library-art-zone::before,
+#manual-training-root .manual-library-art-zone::after{
+  content:"";position:absolute;pointer-events:none;
+}
+#manual-training-root .manual-library-art-zone::before{
+  width:175px;height:175px;border-radius:50%;
+  border:1px solid var(--library-border);top:16px;left:calc(50% - 88px);
+  transform:rotate(19deg);
+  box-shadow:0 0 30px var(--library-glow),inset 0 0 24px var(--library-glow);
+}
+#manual-training-root .manual-library-art-zone::after{
+  width:260px;height:64px;top:118px;left:calc(50% - 130px);
+  background:radial-gradient(ellipse,var(--library-glow),transparent 70%);
+  opacity:.65;
+}
+#manual-training-root .manual-library-cover-glow{
+  position:absolute;width:65%;height:65%;background:var(--library-glow);
+  filter:blur(22px);border-radius:50%;pointer-events:none;opacity:.52;
+}
+#manual-training-root .manual-library-cover-wrap{
+  position:relative;z-index:1;display:grid;place-items:center;
+  width:80%;height:158px;max-width:240px;
+}
+#manual-training-root .manual-library-cover{
+  display:block;width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 7px 10px rgba(0,0,0,.55));
+  padding:0;margin:0;border:0;border-radius:0;
+}
+#manual-training-root .manual-library-cover-fallback{
+  display:grid;place-items:center;width:100px;height:130px;
+  background:#2c3a27;border:1px solid var(--library-accent);
+  border-radius:8px;color:#f5d79c;font-size:21px;
+}
+#manual-training-root .manual-library-school-tag,
+#manual-training-root .manual-library-featured-tag{
+  position:absolute;z-index:2;top:10px;display:inline-flex;
+  align-items:center;gap:5px;border-radius:6px;
+  padding:5px 8px;font-size:11px;font-weight:800;
+}
+#manual-training-root .manual-library-school-tag{
+  left:10px;background:#0b1b15d9;
+  border:1px solid var(--library-border);color:#e6f4d6;
+}
+#manual-training-root .manual-library-featured-tag{
+  right:10px;background:#d0b67c;color:#213025;border:1px solid #f0dba5;
+  box-shadow:0 1px 12px rgba(217,189,112,.25);
+}
+#manual-training-root .manual-library-card-info{
+  display:flex;flex-direction:column;gap:10px;padding:14px 15px 13px;
+  min-width:0;min-height:225px;
+}
+#manual-training-root .manual-library-name-row{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:7px;min-width:0;
+}
+#manual-training-root .manual-library-name-row strong{
+  flex:1;font-size:clamp(16px,1.8vw,19px);line-height:1.3;
+  color:#f8e7c0;overflow-wrap:anywhere;font-weight:850;
+}
+#manual-training-root .manual-library-level{
+  display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 auto;color:#ffdc9c;border-radius:6px;
+  font-size:13px;font-weight:850;white-space:nowrap;
+  padding:5px 7px;background:var(--library-plaque);
+  border:1px solid var(--library-border);font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-library-submeta{
+  display:flex;gap:5px 11px;flex-wrap:wrap;
+  color:#b5d6c2;font-size:11px;
+}
+#manual-training-root .manual-library-submeta>span{
+  display:inline-flex;align-items:center;gap:4px;
+}
+#manual-training-root .manual-library-equipped{color:#e6c98a}
+#manual-training-root .manual-library-mastery{
+  display:flex;flex-direction:column;gap:6px;
+}
+#manual-training-root .manual-library-mastery-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:7px;flex-wrap:wrap;
+  color:#c1d3bc;font-size:11px;line-height:1.2;
+}
+#manual-training-root .manual-library-mastery-head>span:last-child{
+  color:var(--library-accent);font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-library-exp-track{
+  display:block;width:100%;height:10px;padding:2px;overflow:hidden;
+  background:#091711;border-radius:20px;border:1px solid #5b755b77;
+  box-shadow:inset 0 2px 4px #0008;
+}
+#manual-training-root .manual-library-exp-track>span{
+  display:block;height:100%;border-radius:20px;
+  background:linear-gradient(90deg,#527c67,var(--library-accent),#fff0c9);
+  box-shadow:0 0 9px var(--library-glow);
+  transition:width .55s ease-out;
+}
+#manual-training-root .manual-library-three-skills{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;padding:8px 0 3px;
+}
+#manual-training-root .manual-library-skill{
+  display:flex;flex-direction:column;align-items:center;
+  gap:4px;min-width:0;color:#c2d2ba;
+}
+#manual-training-root .manual-library-skill-picture{
+  display:grid;place-items:center;position:relative;overflow:hidden;
+  width:48px;height:48px;max-width:100%;flex:0 0 auto;
+  border:1px solid var(--library-border);border-radius:10px;
+  background:#13221b;color:#e4d5aa;
+  box-shadow:inset 0 0 9px #0005;
+}
+#manual-training-root .manual-library-skill.is-learned .manual-library-skill-picture{
+  box-shadow:0 0 10px var(--library-glow),inset 0 0 9px #0005;
+}
+#manual-training-root .manual-library-skill-art{
+  width:100%;height:100%;display:block;object-fit:cover;
+}
+#manual-training-root .manual-library-skill.is-locked .manual-library-skill-art{
+  filter:grayscale(1) brightness(.42);
+}
+#manual-training-root .manual-library-skill-lock{
+  position:absolute;z-index:1;color:#f4dfb5;font-size:14px;
+  text-shadow:0 1px 5px #000;
+}
+#manual-training-root .manual-library-skill small{
+  color:#aabda9;font-size:10px;white-space:nowrap;
+}
+#manual-training-root .manual-library-next-goal{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:9px;margin-top:auto;
+  padding:10px 0 0;border-top:1px solid var(--library-border);
+  color:#e7d6ac;font-size:11px;font-weight:750;
+}
+#manual-training-root .manual-library-next-goal>span{
+  display:block;min-width:0;overflow-wrap:anywhere;
+}
+#manual-training-root .manual-library-next-goal small{
+  display:block;margin:4px 0 0;color:#b0c3af;
+  font-size:10px;font-weight:450;
+}
+#manual-training-root .manual-library-next-goal i:first-child{
+  color:var(--library-accent);margin-right:4px;
+}
+#manual-training-root .manual-library-disclosure{
+  flex:0 0 auto;color:var(--library-accent);
+  transition:transform .16s ease;
+}
+#manual-training-root .manual-book[open] .manual-library-disclosure{
+  transform:rotate(180deg);
+}
+#manual-training-root .manual-book-content{
+  padding:14px 13px 15px;border-top:1px solid var(--library-border);
+  background:rgba(8,24,17,.55);
+}
+#manual-training-root .manual-library-detail-header{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:9px;margin-bottom:12px;
+}
+#manual-training-root .manual-library-detail-header>div{
+  display:grid;gap:3px;min-width:0;
+}
+#manual-training-root .manual-library-detail-header strong{
+  color:#f5dfae;font-size:13px;line-height:1.35;
+}
+#manual-training-root .manual-library-detail-header small{
+  color:#9fb8a5;font-size:10px;line-height:1.5;
+}
+#manual-training-root .manual-library-feature-button{
+  min-height:39px;padding:9px 11px;white-space:nowrap;
+  border:1px solid #b9a5728c;border-radius:9px;
+  background:#263b2f;color:#f6dfb0;font-size:11px;font-weight:700;
+}
+#manual-training-root .manual-library-feature-button i{margin-right:5px}
+#manual-training-root .manual-book-description{
+  color:#bdcdbb;font-size:12px;line-height:1.7;margin:4px 0 12px;
+}
+#manual-training-root .manual-library button:focus-visible{
+  outline:2px solid #f6dca0;outline-offset:2px;
+}
+@media(hover:hover){
+  #manual-training-root .manual-library-filter:hover:not(.is-selected),
+  #manual-training-root .manual-library-feature-button:hover{
+    border-color:#e5ca8d;color:#ffedc2;
+  }
+  #manual-training-root .manual-book:hover:not(.is-featured){
+    border-color:var(--library-border);
+    box-shadow:0 10px 21px rgba(0,0,0,.22);
+  }
+}
+@media(max-width:690px){
+  #manual-training-root .manual-library{padding:12px 10px}
+  #manual-training-root .manual-library-heading{
+    grid-template-columns:minmax(0,1fr) auto;gap:10px
+  }
+  #manual-training-root .manual-library-card-info{
+    min-height:0;gap:8px;padding:14px 13px 13px
+  }
+  #manual-training-root .manual-library-art-zone{height:167px}
+  #manual-training-root .manual-library-cover-wrap{height:139px}
+  #manual-training-root .manual-library-three-skills{padding:6px 0 0}
+  #manual-training-root .manual-library-heading .manual-refresh{padding:8px 10px}
+}
+@media(max-width:395px){
+  #manual-training-root .manual-library-heading h3{font-size:20px}
+  #manual-training-root .manual-library-filter{padding:8px 9px}
+  #manual-training-root .manual-library-detail-header{
+    align-items:stretch
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-book,
+  #manual-training-root .manual-library-exp-track>span,
+  #manual-training-root .manual-library-disclosure{transition:none}
+}
