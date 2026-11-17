@@ -1,0 +1,66 @@
+{
+  "units": [
+    "文言文閱讀基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-文言語譯與文化背景-1",
+      "source": "大考中心 114學年度學測國綜第20題，參考其命題方式重新命題",
+      "design": "綜合實詞和句意翻譯，避免逐字硬湊",
+      "question": {
+        "q": "《出師表》有言：『苟全性命於亂世，不求聞達於諸侯。』下列語譯何者最符合原意？",
+        "correct": "只求在動亂時代保全性命，不奢望在諸侯之間揚名顯達",
+        "wrong": [
+          "因為諸侯都不聞名，所以無法在亂世生存",
+          "只要得到諸侯任命，便能平定所有戰亂",
+          "刻意隱瞞姓名，是為了讓諸侯四處尋找自己"
+        ],
+        "exp": "『苟全』為姑且保全，『聞達』為聞名顯達；前後兩句對照，強調不汲汲追求名位。",
+        "subject": "國文",
+        "sub_topic": "文言語譯與文化背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文言語譯與文化背景",
+        "template_id": "chinese-2026-reference-高中一年級-文言語譯與文化背景-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-文言語譯與文化背景-2",
+      "source": "大考中心 114學年度學測國綜第11題，參考其命題方式重新命題",
+      "design": "由經典語句連結人際情境，不把君子概念等同迎合",
+      "question": {
+        "q": "《論語》說：『君子和而不同，小人同而不和。』依儒家處世態度，哪一種做法最符合『和而不同』？",
+        "correct": "討論時尊重同伴，也能提出有理由的不同意見",
+        "wrong": [
+          "為維持表面一致，無論何事都不表達反對",
+          "只和觀點完全相同的人合作，拒絕溝通",
+          "故意反對所有人意見，以證明自己獨立"
+        ],
+        "exp": "『和』強調和睦合作，『不同』不等於敵對；孔子區分的是有原則的協調與無原則的附和。",
+        "subject": "國文",
+        "sub_topic": "文言語譯與文化背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-文言語譯與文化背景",
+        "template_id": "chinese-2026-reference-高中一年級-文言語譯與文化背景-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

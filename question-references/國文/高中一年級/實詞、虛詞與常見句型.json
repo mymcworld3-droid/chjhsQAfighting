@@ -1,0 +1,66 @@
+{
+  "units": [
+    "文言文閱讀基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-實詞、虛詞與常見句型-1",
+      "source": "大考中心 115學年度學測國綜第14題，參考其命題方式重新命題",
+      "design": "從全句語意辨認文言虛詞的轉折功能",
+      "question": {
+        "q": "《論語》有言：『人不知而不慍，不亦君子乎？』依句意判斷，『而』主要表達何種語意關係？",
+        "correct": "轉折：即使別人不了解自己，仍不怨恨",
+        "wrong": [
+          "因果：因為別人不了解，所以必定怨恨",
+          "並列：不了解與怨恨是兩項同等的美德",
+          "條件：只有先怨恨別人，才可能被理解"
+        ],
+        "exp": "『人不知』與『不慍』在語意上有逆勢關係，『而』相當於『卻、仍然』；整句稱許不因不被理解而生氣的人。",
+        "subject": "國文",
+        "sub_topic": "實詞、虛詞與常見句型",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-實詞、虛詞與常見句型",
+        "template_id": "chinese-2026-reference-高中一年級-實詞、虛詞與常見句型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-實詞、虛詞與常見句型-2",
+      "source": "大考中心 115學年度學測國綜第15題，參考其命題方式重新命題",
+      "design": "以古文短句檢驗賓語前置和助詞『之』",
+      "question": {
+        "q": "《陋室銘》末句『何陋之有？』若還原為一般語序，最接近下列何者？",
+        "correct": "有何陋？",
+        "wrong": [
+          "有陋何？",
+          "何有陋之？",
+          "陋有何之？"
+        ],
+        "exp": "『何陋』是『有』的賓語，疑問代詞賓語前置；『之』為前置標誌，並非所有格『的』。還原後為『有何陋』，意即『有什麼簡陋的呢？』",
+        "subject": "國文",
+        "sub_topic": "實詞、虛詞與常見句型",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-實詞、虛詞與常見句型",
+        "template_id": "chinese-2026-reference-高中一年級-實詞、虛詞與常見句型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

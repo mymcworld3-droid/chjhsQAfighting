@@ -1,0 +1,66 @@
+{
+  "units": [
+    "文言文閱讀基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-古今詞義比較-1",
+      "source": "大考中心 114學年度學測國綜第32題，參考其命題方式重新命題",
+      "design": "在古文敘事情境判斷古今同形異義詞",
+      "question": {
+        "q": "《桃花源記》寫道：『率妻子邑人來此絕境。』依原文的古代語義，『妻子』指什麼？",
+        "correct": "妻子及兒女",
+        "wrong": [
+          "僅指已婚的女性配偶",
+          "只指村中的所有男性居民",
+          "僅指尚未成年的女兒"
+        ],
+        "exp": "古文中的『妻子』常為兩個詞素，指『妻與子』，即配偶和子女；不能直接套用現代漢語『妻子＝太太』的狹義。",
+        "subject": "國文",
+        "sub_topic": "古今詞義比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古今詞義比較",
+        "template_id": "chinese-2026-reference-高中一年級-古今詞義比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-古今詞義比較-2",
+      "source": "大考中心 114學年度學測國綜第12題，參考其命題方式重新命題",
+      "design": "從說話者身分與上下文還原古義",
+      "question": {
+        "q": "《出師表》寫道：『先帝不以臣卑鄙，猥自枉屈。』依此語境，『卑鄙』的意思是什麼？",
+        "correct": "身分低微、見識淺陋",
+        "wrong": [
+          "品格卑劣、不擇手段",
+          "行為狡詐、蓄意欺騙",
+          "地位尊貴、聲名遠播"
+        ],
+        "exp": "諸葛亮回顧劉備不嫌自己出身低微、見識淺陋而屈尊三顧，『卑鄙』不是現代對人格的貶罵。",
+        "subject": "國文",
+        "sub_topic": "古今詞義比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古今詞義比較",
+        "template_id": "chinese-2026-reference-高中一年級-古今詞義比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
