@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：古代與中世紀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "hist-human-高中二年級-宗教與社會-1",
+      "source": "大考中心114學年度學測社會科第14題，依史料題型改寫",
+      "design": "由羅馬晚期國家宗教政策與書寫知識傳承的關係進行推論。",
+      "question": {
+        "q": "四世紀末羅馬帝國停止支持傳統埃及神廟，祭司團體逐漸消失。若當時少有人能閱讀古埃及文字，最可能出現哪一後果？",
+        "correct": "相關文字系統的知識傳承逐漸中斷",
+        "wrong": [
+          "古埃及文字因此立刻變成現代英文",
+          "全世界立即禁止任何文字書寫",
+          "所有古埃及文物自動消失"
+        ],
+        "exp": "古埃及文的重要識讀傳統保存在祭司與神廟體系，若制度衰退而缺乏傳承，理解文字就更困難。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中二年級-宗教與社會-1",
+        "template_id": "hist-human-高中二年級-宗教與社會-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "hist-human-高中二年級-宗教與社會-2",
+      "source": "大考中心114學年度學測社會科第13題，依史料題型改寫",
+      "design": "由爪哇佛寺建築辨認跨區域宗教文化傳播的痕跡。",
+      "question": {
+        "q": "東南亞爪哇島有八至九世紀的大型佛寺，雕刻顯示印度佛教故事與造像風格。此現象最能說明什麼？",
+        "correct": "印度宗教文化經交流影響東南亞",
+        "wrong": [
+          "當時爪哇完全沒有外來文化交流",
+          "佛教最初起源於近代歐洲",
+          "所有佛寺都是 20 世紀新建"
+        ],
+        "exp": "印度的佛教思想與藝術風格透過海上貿易與文化接觸傳到東南亞，影響當地建築和雕塑。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中二年級-宗教與社會-2",
+        "template_id": "hist-human-高中二年級-宗教與社會-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

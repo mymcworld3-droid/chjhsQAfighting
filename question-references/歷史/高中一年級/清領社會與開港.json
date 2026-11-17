@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣史：史前至近代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "hist-human-高中一年級-清領社會與開港-1",
+      "source": "大考中心112學年度學測社會科第10題，依史料題型改寫",
+      "design": "利用開港後通商與傳教活動的關係推論傳教士移動的經濟基礎。",
+      "question": {
+        "q": "19 世紀臺灣開港通商後，部分西方傳教士在洋行商人協助下進入山區聚落。這最能反映哪一歷史現象？",
+        "correct": "商業網絡與傳教活動在開港後相互連結",
+        "wrong": [
+          "開港後臺灣完全停止對外貿易",
+          "當時所有傳教士都由清廷任命",
+          "山區聚落早已不存在任何交易活動"
+        ],
+        "exp": "開港通商擴大洋行活動的空間與人際網絡，部分傳教士能透過此網絡進入地方社會。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中一年級-清領社會與開港-1",
+        "template_id": "hist-human-高中一年級-清領社會與開港-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "hist-human-高中一年級-清領社會與開港-2",
+      "source": "大考中心114學年度學測社會科第29題，依史料題型改寫",
+      "design": "比較官方文告原始措辭與後來改寫的內容，避免以後出的分類倒讀早期族群。",
+      "question": {
+        "q": "研究清領臺灣族群衝突時，史家發現一份 1722 年文告到了 1764 年地方志重刊時，族群稱呼被改得更具體。哪種處理最符合歷史方法？",
+        "correct": "比較兩版本的用詞與成書背景",
+        "wrong": [
+          "只採用 1764 年版本並假定原文相同",
+          "先刪除兩版本不同的全部字句",
+          "直接把後出的稱呼當成 1722 年所有人的自稱"
+        ],
+        "exp": "史料在轉錄時可能因時代背景改寫，須比對原件與後出版本，才能判斷哪些族群分類是後來添加的。",
+        "subject": "歷史",
+        "sub_topic": "清領社會與開港",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中一年級-清領社會與開港-2",
+        "template_id": "hist-human-高中一年級-清領社會與開港-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

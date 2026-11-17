@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：近現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "hist-human-高中二年級-冷戰、全球化與當代世界-1",
+      "source": "大考中心113學年度學測社會科第10題，依史料題型改寫",
+      "design": "從美蘇對抗中的歐洲與亞洲危機比較冷戰地緣政治。",
+      "question": {
+        "q": "1960 年代初，美國政治人物把西柏林與臺灣海峽危機並列。兩地的共同背景最適合如何概括？",
+        "correct": "兩大陣營對抗下的戰略敏感地區",
+        "wrong": [
+          "都處於第一次世界大戰前的殖民戰爭",
+          "都完全不涉及美國的外交政策",
+          "都在南半球的赤道附近"
+        ],
+        "exp": "西柏林與臺海都是冷戰期間陣營競爭的重要區域，美國對兩地安全態勢高度關注。",
+        "subject": "歷史",
+        "sub_topic": "冷戰、全球化與當代世界",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中二年級-冷戰、全球化與當代世界-1",
+        "template_id": "hist-human-高中二年級-冷戰、全球化與當代世界-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "hist-human-高中二年級-冷戰、全球化與當代世界-2",
+      "source": "大考中心114學年度學測社會科第39題，依史料題型改寫",
+      "design": "連結冷戰對峙與西歐整合的政治經濟動機。",
+      "question": {
+        "q": "1952 年西歐六國成立歐洲煤鋼共同體，將煤鋼生產納入共同管理。從戰後脈絡推論，其重要目的為何？",
+        "correct": "增進成員間經濟互賴並降低再度戰爭的風險",
+        "wrong": [
+          "恢復歐洲各國間的全面封鎖",
+          "規定各國不能進行貿易",
+          "將所有工業轉為農業"
+        ],
+        "exp": "煤鋼是當時重要戰略工業，合作有助於相互監督、促進經濟整合，降低成員間衝突。",
+        "subject": "歷史",
+        "sub_topic": "冷戰、全球化與當代世界",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中二年級-冷戰、全球化與當代世界-2",
+        "template_id": "hist-human-高中二年級-冷戰、全球化與當代世界-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

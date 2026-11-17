@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：近代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "hist-human-高中二年級-科學革命與啟蒙-1",
+      "source": "大考中心114學年度學測社會科第10題，依史料題型改寫",
+      "design": "探討啟蒙時代的出版品如何削弱舊制度權威，而非將變革簡化成思想家單一力量。",
+      "question": {
+        "q": "18 世紀法國，批評王室與教會私生活的小冊子大量流傳。從政治文化角度，這些出版品最可能產生何種影響？",
+        "correct": "削弱民眾對王室與教會權威的信任",
+        "wrong": [
+          "使法國貴族不再需要繳稅",
+          "讓法國立即建立民主共和國",
+          "直接結束歐洲的印刷業"
+        ],
+        "exp": "諷刺和揭露醜聞的出版品可能影響政治觀感，造成對舊權威的質疑，但不會單靠出版物立即改變制度。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中二年級-科學革命與啟蒙-1",
+        "template_id": "hist-human-高中二年級-科學革命與啟蒙-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "hist-human-高中二年級-科學革命與啟蒙-2",
+      "source": "大考中心114學年度學測社會科第10題，依史料題型改寫",
+      "design": "比較啟蒙思想家主張與一般大眾接受資訊的方式，辨別不同社會層次。",
+      "question": {
+        "q": "研究法國大革命前社會氛圍時，除了研究啟蒙哲學家的著作，史家也蒐集街頭傳閱的諷刺小冊。主要目的是什麼？",
+        "correct": "觀察思想和政治不滿如何在不同社會群體流傳",
+        "wrong": [
+          "證明當時每位法國人都讀過同一本哲學書",
+          "證明諷刺小冊全部記載真實事件",
+          "排除大眾文化對政治態度的任何影響"
+        ],
+        "exp": "思想史與大眾文化資料可互補，理解反對舊制度的情緒如何擴散；小冊內容不應直接當作事實。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中二年級-科學革命與啟蒙-2",
+        "template_id": "hist-human-高中二年級-科學革命與啟蒙-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

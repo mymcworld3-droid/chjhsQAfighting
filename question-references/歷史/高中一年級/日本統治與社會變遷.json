@@ -1,0 +1,66 @@
+{
+  "units": [
+    "臺灣史：近現代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "hist-human-高中一年級-日本統治與社會變遷-1",
+      "source": "大考中心114學年度學測社會科第34題，依史料題型改寫",
+      "design": "將臺灣議會設置請願運動置於日治時期政治參與的制度背景中。",
+      "question": {
+        "q": "1920 年代臺灣人士多次向日本帝國議會請願，希望設置臺灣議會。該運動最主要的訴求是什麼？",
+        "correct": "讓臺灣民意代表能參與臺灣相關立法與預算審議",
+        "wrong": [
+          "立即成立中華民國國民大會",
+          "完全取消臺灣的各級學校",
+          "要求臺灣總督直接統治日本全國"
+        ],
+        "exp": "議會設置請願運動主張由臺灣民意代表參與公共事務決策，爭取殖民地的政治參與權，並非要求停止教育。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中一年級-日本統治與社會變遷-1",
+        "template_id": "hist-human-高中一年級-日本統治與社會變遷-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "hist-human-高中一年級-日本統治與社會變遷-2",
+      "source": "大考中心114學年度學測社會科第22題，依史料題型改寫",
+      "design": "從甘蔗種植、糖廠和糖業鐵路的連結判斷殖民經濟政策。",
+      "question": {
+        "q": "日治時期臺灣興建大量糖業鐵路，連接蔗田、製糖工廠與港口。此交通建設最直接的經濟功能為何？",
+        "correct": "降低甘蔗原料與糖製品的運輸成本",
+        "wrong": [
+          "禁止糖業出口",
+          "使甘蔗不再需要加工",
+          "讓所有蔗田改種稻米"
+        ],
+        "exp": "糖業鐵路提高甘蔗運往糖廠和砂糖銷往外地的效率，符合殖民時期產業出口的物流需求。",
+        "subject": "歷史",
+        "sub_topic": "日本統治與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "世界史與跨文化"
+          }
+        ],
+        "concept_id": "hist-human-高中一年級-日本統治與社會變遷-2",
+        "template_id": "hist-human-高中一年級-日本統治與社會變遷-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
