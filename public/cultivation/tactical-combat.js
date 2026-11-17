@@ -196,7 +196,11 @@ function ensure(){
     else if(b.hasAttribute('data-resume'))paint();
     else if(b.hasAttribute('data-hub')){hideModal();mode==='pve'?close():renderHub();}
     else if(b.hasAttribute('data-next-stage')||b.hasAttribute('data-retry-entry'))void open('pve');
-    else if(b.hasAttribute('data-manual-training')){close();window.switchToPage?.('page-training');}
+    else if(b.hasAttribute('data-manual-training')){
+      const account=uid;
+      close();window.switchToPage?.('page-training');
+      window.dispatchEvent(new CustomEvent('xiuxian:manual-battle-settled',{detail:{uid:account}}));
+    }
     else if(b.hasAttribute('data-manual-recap-retry')){manualRecapCache=null;void refreshManualRecap({force:true});}
     else if(b.hasAttribute('data-exit'))close();
     else if(b.hasAttribute('data-sync'))void sync();
