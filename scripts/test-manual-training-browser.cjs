@@ -25,12 +25,16 @@ async function main(){
     page.on('pageerror',e=>errors.push(e.message));
     await page.goto(`http://127.0.0.1:${server.address().port}/test`);
     await page.locator('[data-manual-book="sword-wind"] summary').click();
-    await page.locator('.manual-power-details summary').click();
+    await page.locator('[data-manual-jump-skill="wind-slash"]').click();
+    await page.locator('[data-manual-book="sword-wind"][open]').waitFor();
+    assert.equal(await page.locator('.manual-hero-book-tab.is-current').count(),1);
+    assert.equal(await page.locator('.manual-hero-cover').count(),1);
     await page.evaluate(()=>{window.savedArt=[...document.querySelectorAll('.manual-book-art,.manual-skill-art')];});
     const verifyArt=async()=>{
       assert.equal(await page.evaluate(()=>window.savedArt.length>0&&window.savedArt.every((img,i)=>img===document.querySelectorAll('.manual-book-art,.manual-skill-art')[i]&&img.isConnected)),true,'unchanged artwork must keep its original DOM node');
       assert.equal(await page.locator('[data-manual-book="sword-wind"]').evaluate(e=>e.open),true);
-      assert.equal(await page.locator('.manual-power-details').evaluate(e=>e.open),true);
+      assert.equal(await page.locator('.manual-hero-book-tab.is-current').count(),1);
+      assert.equal(await page.locator('.manual-hero-cover').count(),1);
     };
     await page.locator('[data-manual-remove="wind-slash"]').click();await verifyArt();
     await page.waitForFunction(()=>document.querySelector('[data-manual-status]')?.textContent==='功法配置已儲存。');await verifyArt();
@@ -38,7 +42,7 @@ async function main(){
     await page.locator('[data-manual-equip="wind-slash"]').click();await verifyArt();
     await page.locator('[data-manual-remove="wind-slash"]').waitFor();await verifyArt();
     await page.evaluate(()=>{window.savedSlot=document.querySelector('.manual-slot-art');});
-    await page.locator('[data-manual-upgrade="sword-wind"]').click();await verifyArt();
+    await page.locator('.manual-hero [data-manual-upgrade="sword-wind"]').click();await verifyArt();
     await page.getByText('已升級《流風劍訣》。').waitFor();await verifyArt();
     assert.equal(await page.evaluate(()=>window.savedSlot===document.querySelector('.manual-slot-art')),true);
     await page.locator('[data-skill-upgrade="wind-slash"]').click();await verifyArt();
