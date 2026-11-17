@@ -40,7 +40,6 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
   })));
   const byId=new Map(available.map(skill=>[skill.id,skill]));
   const format=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
-  const icon=school=>school==='sword'?'fa-khanda':'fa-hand-fist';
   const displayName=value=>String(value||'未命名配置');
   const presetTabs=presets.map((item,i)=>{
     const chosen=i===selected,onField=i===activeIndex,count=Array.isArray(item.skillIds)?item.skillIds.length:0;
@@ -65,7 +64,7 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
     const description=filled?`${skill.bookName} · 招式 Lv. ${format(skill.level)}`:
       '點此選擇已領悟的招式';
     const cost=filled?`${format(skill.cost)} 體力`:'尚未裝備';
-    return `<div class="manual-slot ${filled?'is-active':'is-empty'} ${pickerSlot===i?'is-editing':''}"
+    return `<div class="manual-slot ${filled?'is-active':'is-empty'} ${filled?'is-'+skill.bookSchool:''} ${pickerSlot===i?'is-editing':''}"
       data-manual-slot="${i}">
       <button type="button" class="manual-slot-pick" data-manual-pick-slot="${i}"
         aria-expanded="${pickerSlot===i}" aria-label="${filled?'替換':'設定'}第${i+1}格技能，${esc(name)}">
@@ -88,19 +87,20 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
   const picker=pickerVisible?(()=>{
     const candidateCards=available.map(skill=>{
       const index=equipped.findIndex(id=>moveIdOf(id)===moveIdOf(skill.id));
-      const isHere=index===pickerSlot,isElsewhere=index>=0&&!isHere;
+      const isHere=equipped[pickerSlot]===skill.id;
+      const isAlternative=index===pickerSlot&&!isHere,isElsewhere=index>=0&&index!==pickerSlot;
       const art=skillArt(skill);
       return `<button type="button" class="manual-pick-skill
         ${isHere?'is-current':''} ${isElsewhere?'is-elsewhere':''}"
         data-manual-pick-skill="${esc(skill.id)}"
-        aria-label="${esc(skill.name)}，${esc(skill.bookName)}，${isHere?'目前位於本欄':isElsewhere?'將與第'+(index+1)+'格交換':'裝備到第'+(pickerSlot+1)+'格'}">
+        aria-label="${esc(skill.name)}，${esc(skill.bookName)}，${isHere?'目前位於本欄':isAlternative?'改用此功法版本':isElsewhere?'將與第'+(index+1)+'格交換':'裝備到第'+(pickerSlot+1)+'格'}">
         <span class="manual-pick-art"><img src="${esc(art)}" alt="" loading="lazy" decoding="async"></span>
         <span class="manual-pick-info">
           <strong>${esc(skill.name)}</strong>
           <small>${esc(skill.bookName)} · Lv. ${format(skill.level)}</small>
           <small>${format(skill.cost)} 體力</small>
         </span>
-        <span class="manual-pick-status">${isHere?'目前裝備':isElsewhere?'交換位置':'選用'}</span>
+        <span class="manual-pick-status">${isHere?'目前裝備':isAlternative?'切換來源':isElsewhere?'交換位置':'選用'}</span>
       </button>`;
     }).join('');
     return `<div class="manual-picker" data-manual-picker role="region"
@@ -121,7 +121,7 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
     <div class="manual-deck-heading">
       <div><span class="manual-deck-kicker">戰前準備 · SKILL LOADOUT</span>
         <h3><i class="fa-solid fa-layer-group" aria-hidden="true"></i> 戰場技能配置</h3>
-        <p>三組戰術方案，最多裝備三招。選擇配置後，需要按「套用」才會切換戰場技能。</p>
+        <p>最多三招，選取其他配置後按「套用」才會切換。編輯使用中的配置會直接更新出戰招式；問道試煉可在戰場切換。</p>
       </div>
       <span class="manual-deck-count"><strong>${equipped.length}<small> / 3</small></strong><span>已裝備招式</span></span>
     </div>
