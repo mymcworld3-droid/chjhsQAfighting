@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歐洲、美洲與大洋洲"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-人口及產業-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「人口及產業」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "一座北美大城市因資訊服務業興起吸引外地人口，周邊房價也上漲。最合理的地理分析為何？",
+        "correct": "就業集中可能增加人口流入及住宅需求",
+        "wrong": [
+          "資訊服務業增長必然使城市人口下降",
+          "房價只受行政區名稱影響",
+          "人口遷入不可能改變土地使用需求"
+        ],
+        "exp": "工作機會和人口遷移可能相互影響住宅市場，仍需考量供給及政策。",
+        "subject": "地理",
+        "sub_topic": "人口及產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口及產業",
+        "template_id": "geo-ref-g2-人口及產業-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-人口及產業-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「人口及產業」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "澳洲某地礦產豐富、人口相對稀少，礦業產品多出口海外。下列哪項區位因素最可能影響運輸成本？",
+        "correct": "礦區到港口的距離與鐵路等運輸設施",
+        "wrong": [
+          "礦產名稱的音節長短",
+          "當地是否有特定節慶服飾",
+          "礦石照片的解析度"
+        ],
+        "exp": "大宗礦產運輸需要考量內陸至港口的距離、成本與基礎設施。",
+        "subject": "地理",
+        "sub_topic": "人口及產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口及產業",
+        "template_id": "geo-ref-g2-人口及產業-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

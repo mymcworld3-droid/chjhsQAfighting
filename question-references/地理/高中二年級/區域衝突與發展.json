@@ -1,0 +1,66 @@
+{
+  "units": [
+    "南亞與西亞、北非"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-區域衝突與發展-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「區域衝突與發展」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某國內不同地區因水源與農地分配爭議而產生衝突，長期乾旱又使爭議加劇。哪種分析最符合區域地理方法？",
+        "correct": "同時討論資源壓力、政治制度與社會群體間的分配關係",
+        "wrong": [
+          "只要發生乾旱就能解釋所有政治衝突",
+          "只要地形相同，各群體利益就必然一致",
+          "水資源不可能與經濟及社會發展相關"
+        ],
+        "exp": "乾旱可能形成資源壓力，但衝突還與分配制度、歷史和治理有關。",
+        "subject": "地理",
+        "sub_topic": "區域衝突與發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域衝突與發展",
+        "template_id": "geo-ref-g2-區域衝突與發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-區域衝突與發展-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「區域衝突與發展」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某地區原依賴單一能源出口，國際價格下降後財政收入大幅波動。從發展角度，哪個政策方向較能降低風險？",
+        "correct": "在條件許可下培養多元產業與收入來源",
+        "wrong": [
+          "更加集中於唯一出口商品而不評估需求",
+          "把所有國際價格波動視為不可研究",
+          "停止投資任何教育或人力技能"
+        ],
+        "exp": "產業多元化可分散對單一商品價格的依賴，仍須考慮市場與投資成本。",
+        "subject": "地理",
+        "sub_topic": "區域衝突與發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域衝突與發展",
+        "template_id": "geo-ref-g2-區域衝突與發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

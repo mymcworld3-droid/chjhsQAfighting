@@ -1,0 +1,66 @@
+{
+  "units": [
+    "東亞區域"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-人地關係-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「人地關係」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某東南亞河口三角洲人口密集，水稻種植普遍，但雨季洪水也威脅聚落。最能說明人地關係的判斷為何？",
+        "correct": "肥沃沖積地與水源支持農業，同時伴隨洪水風險",
+        "wrong": [
+          "沖積平原的農業優勢使洪水不可能發生",
+          "只要人口密集就能完全改變季風方向",
+          "三角洲的土地利用與河川作用毫無關聯"
+        ],
+        "exp": "河流沉積帶來土壤與水源，低地及雨季洪水也可能造成災害，呈現環境利弊並存。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人地關係",
+        "template_id": "geo-ref-g2-人地關係-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-人地關係-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「人地關係」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "日本某山區聚落坡地陡峭、平地少，居民多沿狹窄河谷集中居住。哪項地理因素最能解釋其聚落分布？",
+        "correct": "可建築的平緩地形與交通通道主要集中河谷",
+        "wrong": [
+          "居民選擇河谷只是因為海拔數字較好記",
+          "所有山區都完全沒有水源供應",
+          "河谷道路與地形限制完全無關"
+        ],
+        "exp": "山地坡度、河谷平地與交通條件影響聚落位置，並非隨機分布。",
+        "subject": "地理",
+        "sub_topic": "人地關係",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人地關係",
+        "template_id": "geo-ref-g2-人地關係-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

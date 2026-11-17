@@ -1,0 +1,66 @@
+{
+  "units": [
+    "撒哈拉以南非洲"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-國際連結-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「國際連結」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某國出口的可可豆送往海外加工成巧克力，再以成品價格回銷國際市場。這主要反映哪種經濟現象？",
+        "correct": "原料生產與高附加價值加工分布在全球不同地區",
+        "wrong": [
+          "原料出口國必然獲得全部製成品利潤",
+          "巧克力生產完全不需要任何農產品",
+          "國際貿易不涉及商品加工階段"
+        ],
+        "exp": "農產品產地與加工銷售地分離，顯示全球價值鏈分工與收益差異。",
+        "subject": "地理",
+        "sub_topic": "國際連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-國際連結",
+        "template_id": "geo-ref-g2-國際連結-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-國際連結-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「國際連結」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某區域國家共同改善跨境道路與海關流程，希望增加貿易。最直接的預期效果為何？",
+        "correct": "減少邊境運輸時間與交易成本，提高區域市場連結",
+        "wrong": [
+          "使兩國之間的地理距離實際變短",
+          "保證所有出口商品價格永久固定",
+          "使區域內每個城市立即擁有同樣產業結構"
+        ],
+        "exp": "通關效率及道路改善可降低物流障礙，但不保證各地利益相等。",
+        "subject": "地理",
+        "sub_topic": "國際連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-國際連結",
+        "template_id": "geo-ref-g2-國際連結-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

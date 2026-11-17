@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歐洲、美洲與大洋洲"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-自然環境-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「自然環境」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "歐洲西側部分沿海地區在相同緯度下較內陸冬季溫和。哪組因素較適合解釋？",
+        "correct": "海洋調節與盛行西風帶來的海洋性影響",
+        "wrong": [
+          "海水在冬季完全不儲存熱量",
+          "歐洲所有內陸地區均位於熱帶",
+          "冬季所有地方的風向必定由陸吹向海"
+        ],
+        "exp": "西風與鄰近海洋提供較緩和的氣溫條件，內陸則受較強大陸性影響。",
+        "subject": "地理",
+        "sub_topic": "自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境",
+        "template_id": "geo-ref-g2-自然環境-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-自然環境-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「自然環境」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某大陸西側高山阻擋來自海洋的濕潤氣流，使迎風坡多雨、背風坡較乾。這主要反映哪種作用？",
+        "correct": "地形抬升降雨與背風側雨影效應",
+        "wrong": [
+          "所有山脈都會使背風坡雨量更多",
+          "坡向與水氣移動不可能有關",
+          "地形起伏只影響河流，不影響大氣"
+        ],
+        "exp": "濕潤空氣沿迎風坡抬升凝結，背風側下沉增溫而較乾燥。",
+        "subject": "地理",
+        "sub_topic": "自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境",
+        "template_id": "geo-ref-g2-自然環境-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

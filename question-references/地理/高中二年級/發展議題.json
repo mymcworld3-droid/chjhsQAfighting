@@ -1,0 +1,66 @@
+{
+  "units": [
+    "撒哈拉以南非洲"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-發展議題-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「發展議題」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某國農產品多以未加工原料出口，進口加工食品價格較高。若想提高地方生產附加價值，哪種策略較具方向性？",
+        "correct": "評估發展加工、冷鏈及品質認證等在地產業能力",
+        "wrong": [
+          "永久停止所有農業技術教育",
+          "只增加原料出口量且不考慮加工收益",
+          "認為運輸與保存不可能影響食品產業"
+        ],
+        "exp": "加工與供應鏈投資可能增加在地就業與價值，但仍須考察市場和成本。",
+        "subject": "地理",
+        "sub_topic": "發展議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-發展議題",
+        "template_id": "geo-ref-g2-發展議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-發展議題-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「發展議題」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某區推動小型太陽能供電站，使偏遠村落晚上可使用照明及冷藏設備。若評估發展成效，哪種指標組合較好？",
+        "correct": "用電可靠性、受益戶數及設備維護成本",
+        "wrong": [
+          "只看太陽能板外觀的顏色",
+          "只看第一天是否有陽光，不記錄後續運轉",
+          "把發電量當成唯一生活品質指標"
+        ],
+        "exp": "能源近用改善需考慮實際服務範圍與長期維運，而非僅設備裝設。",
+        "subject": "地理",
+        "sub_topic": "發展議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-發展議題",
+        "template_id": "geo-ref-g2-發展議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

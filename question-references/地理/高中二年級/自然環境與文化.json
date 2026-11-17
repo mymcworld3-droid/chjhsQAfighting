@@ -1,0 +1,66 @@
+{
+  "units": [
+    "南亞與西亞、北非"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-自然環境與文化-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「自然環境與文化」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "一個地區全年降水少、蒸發量大，聚落多沿河谷及地下水可得處分布。這與西亞、北非哪種環境特徵相符？",
+        "correct": "乾燥氣候使水源集中處成為重要聚落位置",
+        "wrong": [
+          "沙漠地區的所有地方都全年降水豐沛",
+          "地下水與聚落選址不可能有關",
+          "乾燥氣候代表當地沒有任何農業活動"
+        ],
+        "exp": "乾旱區水源空間差異大，河谷和綠洲常是農業與聚落核心。",
+        "subject": "地理",
+        "sub_topic": "自然環境與文化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境與文化",
+        "template_id": "geo-ref-g2-自然環境與文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-自然環境與文化-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「自然環境與文化」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某南亞地區夏季受到帶有水氣的季風影響，出現明顯雨季；冬季風向改變而較乾燥。當地農業安排最需要考量什麼？",
+        "correct": "作物生長季與季風降雨的時間分配",
+        "wrong": [
+          "只使用全年總雨量，不必看雨季開始時刻",
+          "認為所有月份都同樣適合需大量水分的作物",
+          "季風風向改變完全不影響農業用水"
+        ],
+        "exp": "雨季到來時間與雨量差異影響播種及灌溉，不能只比較年降水總量。",
+        "subject": "地理",
+        "sub_topic": "自然環境與文化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境與文化",
+        "template_id": "geo-ref-g2-自然環境與文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

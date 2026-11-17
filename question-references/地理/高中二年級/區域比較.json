@@ -1,0 +1,66 @@
+{
+  "units": [
+    "區域資料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-區域比較-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「區域比較」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "甲區人口20萬、醫院5所；乙區人口50萬、醫院10所。只看醫院數，乙較多；若看每10萬人醫院數，何者正確？",
+        "correct": "甲區每10萬人2.5所，高於乙區2所",
+        "wrong": [
+          "乙區每10萬人5所，高於甲區",
+          "兩區每10萬人均5所",
+          "甲區每10萬人只有0.5所"
+        ],
+        "exp": "甲5/20萬×10萬＝2.5，乙10/50萬×10萬＝2，標準化比較後甲較高。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "geo-ref-g2-區域比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-區域比較-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「區域比較」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "比較兩城市的夏季高溫天數，甲市在海邊、乙市位於盆地，且觀測點高度不同。要提高結論可比較性，應先怎麼做？",
+        "correct": "確認相同的高溫定義、期間及觀測條件，再比較數據",
+        "wrong": [
+          "只將最高的單日數據當成整季平均",
+          "忽略不同地形與測站條件直接下結論",
+          "因城市名稱不同，判定資料無法做任何整理"
+        ],
+        "exp": "比較數據須統一指標與觀測範圍，才能區分氣候與測量條件的影響。",
+        "subject": "地理",
+        "sub_topic": "區域比較",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域比較",
+        "template_id": "geo-ref-g2-區域比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

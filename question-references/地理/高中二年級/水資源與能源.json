@@ -1,0 +1,66 @@
+{
+  "units": [
+    "南亞與西亞、北非"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-水資源與能源-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「水資源與能源」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "甲國有大量石油出口收入，但可用淡水有限。若政府以海水淡化供應城市飲水，政策最需要評估什麼？",
+        "correct": "淡化設備的能源成本、排放與長期供水需求",
+        "wrong": [
+          "有石油就表示不必使用任何電力",
+          "海水淡化能立即增加當地自然降雨量",
+          "只需估計居民數，不必考慮設備運轉"
+        ],
+        "exp": "淡化提高可用水，但有能源與環境成本，須綜合資源管理。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "geo-ref-g2-水資源與能源-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-水資源與能源-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「水資源與能源」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某上游國在跨境河流興建水壩，可能增加發電與蓄水能力；下游國則擔心水量改變。下列何者最合理？",
+        "correct": "河川資源跨國共享時，需協調上游開發與下游用水權益",
+        "wrong": [
+          "上游水壩不可能影響任何下游流量",
+          "下游居民需求與跨境水資源沒有關係",
+          "建水壩必然同時增加每個地區的可用水量"
+        ],
+        "exp": "跨境河流上下游具有水文連結，蓄水及調度可能影響下游用途。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "geo-ref-g2-水資源與能源-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

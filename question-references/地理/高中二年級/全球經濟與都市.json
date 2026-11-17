@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歐洲、美洲與大洋洲"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-全球經濟與都市-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「全球經濟與都市」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某國首都集中跨國企業總部及高階金融服務，許多生產工廠則設於國外。這個城市較符合哪種角色？",
+        "correct": "全球生產網絡中的管理與專業服務節點",
+        "wrong": [
+          "所有商品都必須在首都工廠完成製造",
+          "沒有工廠便表示城市不參與全球經濟",
+          "金融服務和企業總部不可能影響跨國生產"
+        ],
+        "exp": "全球城市可集中指揮、金融與專業服務，生產地點則可能分散世界各地。",
+        "subject": "地理",
+        "sub_topic": "全球經濟與都市",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-全球經濟與都市",
+        "template_id": "geo-ref-g2-全球經濟與都市-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-全球經濟與都市-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「全球經濟與都市」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "比較兩都市的「全球連結程度」，甲有國際金融與多國航線，乙以服務附近農業區為主。何者最有助於建立比較指標？",
+        "correct": "國際航班、跨國企業網絡與高階服務業活動",
+        "wrong": [
+          "兩市建築物常用的油漆顏色",
+          "都市名稱的字數",
+          "只有市政廳的建築高度"
+        ],
+        "exp": "全球連結涉及跨國資金、服務與交通，不只由都市人口決定。",
+        "subject": "地理",
+        "sub_topic": "全球經濟與都市",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-全球經濟與都市",
+        "template_id": "geo-ref-g2-全球經濟與都市-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

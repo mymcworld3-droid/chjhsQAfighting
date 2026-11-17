@@ -1,0 +1,66 @@
+{
+  "units": [
+    "撒哈拉以南非洲"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g2-自然與人口-1",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「自然與人口」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某熱帶草原地區雨季及乾季分明，牧民依季節移動牲畜尋找水草。哪項人地關係最符合？",
+        "correct": "季節性降水分布影響放牧路線與水源利用",
+        "wrong": [
+          "牧民移動與氣候從來沒有關聯",
+          "乾季與雨季的水草分布必然完全一致",
+          "所有牧民全年都必須停留同一水源"
+        ],
+        "exp": "草原水草供應具季節變化，移動可作為因應環境的策略。",
+        "subject": "地理",
+        "sub_topic": "自然與人口",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然與人口",
+        "template_id": "geo-ref-g2-自然與人口-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g2-自然與人口-2",
+      "source": "大考中心114學測社會考科地理區域比較與圖表分析之命題方向；自編非原考題",
+      "design": "依據「自然與人口」建立區位、數據與限制條件推論",
+      "question": {
+        "q": "某地醫療資源集中城市，偏遠農村平均就醫距離較長。若研究居民健康服務可近性，最需比較哪項資料？",
+        "correct": "人口分布、交通時間及醫療設施位置",
+        "wrong": [
+          "只看各城市郵遞區號長度",
+          "僅以醫院外牆顏色判斷服務範圍",
+          "認為醫院總數越多，每位居民距離必定越短"
+        ],
+        "exp": "服務可近性取決於設施與人口的空間分布以及交通條件，不能只比較全國總量。",
+        "subject": "地理",
+        "sub_topic": "自然與人口",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然與人口",
+        "template_id": "geo-ref-g2-自然與人口-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
