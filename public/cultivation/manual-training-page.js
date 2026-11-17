@@ -1,9 +1,10 @@
 import './manual-rules.js?v=20261116-loadout-presets-v1';
 import {bookArt,skillArt} from './manual-art.js';
+import {renderManualHero} from './manual-hero-view.js';
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
-let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0;
+let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='';
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
@@ -27,6 +28,12 @@ function ensure(){
     link.id='manual-training-style';link.href='/styles/manual-training.css?v=20261116-loadout-presets';
     document.head.append(link);
   }
+  if(!document.getElementById('manual-training-hero-style')){
+    const link=document.createElement('link');link.rel='stylesheet';
+    link.id='manual-training-hero-style';
+    link.href='/styles/manual-training-hero.css?v=20261117-hero-phase1';
+    document.head.append(link);
+  }
   return root;
 }
 async function request(url,body){
@@ -48,6 +55,11 @@ function equipDisabled(id,equipped=current?.equipped||[]){
 function skillDetails(id){
   const base=Catalog.BY_SKILL[id];
   return base&&current?.library.find(book=>book.id===base.manualId)?.skills.find(skill=>skill.id===id);
+}
+function featuredHeroMarkup(){
+  const view=renderManualHero(current,featuredBookId,{esc,bookArt,skillArt,label});
+  featuredBookId=view.bookId;
+  return view.html;
 }
 function markup(expandedBooks){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
@@ -84,7 +96,7 @@ function markup(expandedBooks){
         !skill.mastered?'功法 Lv. '+skill.levelRequired:null,
         !skill.realmReady?'修士 '+skill.realmName+'境':null
       ].filter(Boolean);
-      return `<div class="manual-technique ${unlocked?'':'is-locked'}">
+      return `<div class="manual-technique ${unlocked?'':'is-locked'}" data-manual-skill="${esc(skill.id)}">
         <div class="manual-technique-overview">${artImg(skillArt(skill),"manual-skill-art")}<div class="manual-technique-copy">
         <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}${unlocked?` <span>Lv. ${skill.level}</span>`:''}</b>
           <small>${skill.cost} 體力 · ${skill.unlimited?'無固定射程':skill.range+' 格'} · ${skill.realmName}境</small></div>
@@ -121,15 +133,11 @@ function markup(expandedBooks){
       </div>
     </details>`;
   }).join('');
-  return `<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
+  return `${featuredHeroMarkup()}<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
       <div><b>${(current.equipped||[]).length} / 3</b><span>已裝備技能</span></div>
       <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
       <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
         <small>${rating?'基礎 '+fmt(rating.base)+' + 招式 '+fmt(rating.skills):'正在計算'}</small></div></div>
-    <section class="manual-school"><div><h3>修行流派</h3><p>第一次選擇流派免費習得一本入門功法。流派可以切換，已取得的功法及熟練度不會消失。</p></div>
-      <div class="manual-school-choices"><button type="button" data-manual-school="sword" class="${current.school==='sword'?'selected':''}">
-        <i class="fa-solid fa-khanda"></i> 劍修</button><button type="button" data-manual-school="body" class="${current.school==='body'?'selected':''}">
-        <i class="fa-solid fa-hand-fist"></i> 體修</button></div></section>
     <section class="manual-loadout"><div class="manual-section-title"><h3>戰場技能配置</h3><p>自由搭配所有已解鎖的功法技能，最多三招。問道試煉中可使用戰場上方的「配置」按鈕切換；鬥法期間無法切換。</p></div>
       <div class="manual-presets" role="group" aria-label="功法配置">
         ${(current.loadouts||[]).map((item,i)=>`<button type="button" data-loadout-select="${i}" class="${selectedLoadout===i?'selected':''}">${esc(item.name)}${i===current.activeLoadout?' · 使用中':''}</button>`).join('')}
@@ -209,7 +217,7 @@ async function load({force=false}={}){
   try{
     const result=await request('/api/tactical/manuals');
     if(token!==sequence||getMainUser()?.uid!==uid)return;
-    current=result;if(loadedFor!==uid)selectedLoadout=result.activeLoadout||0;loadedFor=uid;
+    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
   }catch(error){
@@ -227,6 +235,7 @@ async function mutate(url,body){
     const next=await request(url,body);
     if(getMainUser()?.uid!==uid)return;
     current=next;loadedFor=uid;lastFetch=Date.now();
+    if(url.endsWith('/school'))featuredBookId='';
     window.setCurrentTacticalManualState?.(next,uid);
     if(upgrading){
       const local=window.getCurrentUserData?.();
@@ -235,7 +244,7 @@ async function mutate(url,body){
       message=skill?`「${skill.name}」已升至 Lv. ${skill.level}。`:
         `已升級《${next.library.find(book=>book.id===body.bookId).name}》。`;
     }else{
-      message='功法配置已儲存。';
+      message=url.endsWith('/school')?'修行流派已切換。':'功法配置已儲存。';
       window.dispatchEvent(new CustomEvent('xiuxian:manual-loadout-updated',{detail:{equipped:next.equipped}}));
     }
   }catch(error){message=error.message;}
@@ -269,6 +278,29 @@ function boot(){
   ensure();
   root?.addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||busy)return;
+    if(button.dataset.featureBook){
+      if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
+        featuredBookId=button.dataset.featureBook;
+        paint();
+      }
+      return;
+    }
+    if(button.dataset.manualJumpSkill){
+      const manualId=Catalog.BY_SKILL[button.dataset.manualJumpSkill]?.manualId;
+      const details=[...root.querySelectorAll('details[data-manual-book]')]
+        .find(item=>item.dataset.manualBook===manualId);
+      if(details){
+        details.open=true;
+        const target=[...details.querySelectorAll('[data-manual-skill]')]
+          .find(item=>item.dataset.manualSkill===button.dataset.manualJumpSkill);
+        if(target){
+          requestAnimationFrame(()=>{
+            target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+          });
+        }
+      }
+      return;
+    }
     if(button.dataset.loadoutSelect!==undefined){selectedLoadout=Number(button.dataset.loadoutSelect);paint();return;}
     if(button.hasAttribute('data-loadout-rename')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,name:root.querySelector('[data-loadout-name]')?.value||''});return;}
     if(button.hasAttribute('data-loadout-apply')){void mutate('/api/tactical/manuals/loadout',{index:selectedLoadout,apply:true});return;}
@@ -299,7 +331,7 @@ function boot(){
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){current=null;loadedFor='';featuredBookId='';}if(visible())void load({force:true});});
   window.addEventListener('xiuxian:manual-loot',()=>{if(visible())void load({force:true});});
   if(visible())void load({force:true});
 }
