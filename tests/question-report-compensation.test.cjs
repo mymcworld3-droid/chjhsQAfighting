@@ -190,6 +190,30 @@ test('endpoint distinguishes review-unavailable and completed repeat claim from 
   assert.equal(repeated.body.goldAdded, 0);
 });
 
+test('confirmed error at the daily cap stays a valid verdict without granting a new reward', async () => {
+  const verifyIdToken = async () => ({
+    uid:'tester',aud:'question-learning',iss:'https://securetoken.google.com/question-learning'
+  });
+  const { db, user, claims } = fakeDatabase();
+  user.questionReportDaily = {date:'2026-09-23',count:api.DAILY_LIMIT};
+  const response1 = response();
+  const approved = api.createHandler({
+    resolve:()=>({auth:{verifyIdToken},db}), logger:{warn(){},error(){}},
+    review:async()=>({status:'confirmed',reason:'本題有兩個正確選項',issueType:'ambiguity'}),
+    award:(database,uid,report,result)=>api.awardOnce(database,uid,report,result,{
+      today:()=> '2026-09-23',fieldValue
+    })
+  });
+  await approved({body:input,get:()=> 'Bearer valid.token'},response1);
+  assert.equal(response1.code,200);
+  assert.equal(response1.body.status,'limit');
+  assert.equal(response1.body.valid,true);
+  assert.equal(response1.body.compensated,false);
+  assert.match(response1.body.reason,/上限/);
+  assert.equal(claims.size,0);
+  assert.equal(user.stats.gold,100);
+});
+
 test('report API distinguishes AI timeout from compensation write failure', async () => {
   const verifyIdToken = async () => ({ uid: 'tester', aud: 'question-learning', iss: 'https://securetoken.google.com/question-learning' });
   const { db, claims } = fakeDatabase();
@@ -225,7 +249,8 @@ test('solo UI does not award gold locally or skip on unavailable result', () => 
   assert.doesNotMatch(server, /app\.post\('\/api\/verify-report'/);
   assert.match(legacy, /Authorization: 'Bearer ' \+ token/);
   assert.match(legacy, /reportSubmitting = true/);
-  assert.match(legacy, /if \(result\.status === 'confirmed' && result\.compensated === true && result\.goldAdded === 100 &&/);
+  assert.match(legacy, /const paidSolo = !trial && committed && result\.goldAdded === 100/);
+  assert.match(legacy, /const paidBattle = !!trial && committed && result\.goldAdded === 0/);
   assert.match(legacy, /stats\.lastQuizAnswer = \{/);
   assert.match(legacy, /if \(quiz\.answerPersistence\) await waitForReportAnswerSaved\(quiz\.answerPersistence\)/);
   assert.match(legacy, /quiz\.answerPersistence = p1;/);
