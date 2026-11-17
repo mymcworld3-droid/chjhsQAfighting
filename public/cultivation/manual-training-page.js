@@ -185,7 +185,7 @@ function reconcile(parent,template){
   }
   while(parent.childNodes.length>index)parent.lastChild.remove();
 }
-function paint(message=''){
+function paint(message='',{loadoutFeedback=false}={}){
   ensure();if(!root)return;
   const expandedBooks=new Set();
   if(renderedFor===loadedFor){
@@ -198,7 +198,7 @@ function paint(message=''){
   const status=root.querySelector('[data-manual-status]');
   if(status)status.textContent=message;
   const deckStatus=root.querySelector('[data-manual-loadout-status]');
-  if(deckStatus&&message)deckStatus.textContent=message;
+  if(deckStatus)deckStatus.textContent=loadoutFeedback?message:'';
   root.querySelectorAll('button').forEach(button=>{
     if(busy)button.disabled=true;
   });
@@ -225,11 +225,12 @@ async function mutate(url,body){
   const uid=getMainUser()?.uid;if(!uid)return;
   const upgrading=url.endsWith('/upgrade');
   ++sequence;busy=true;paint(body.skillId?'正在升級招式…':upgrading?'正在升級功法…':'正在保存功法配置…');
-  let message='';
+  let message='',successful=false;
+  const equippedSlot=pickerSlot;
   try{
     const next=await request(url,body);
     if(getMainUser()?.uid!==uid)return;
-    current=next;loadedFor=uid;lastFetch=Date.now();
+    current=next;loadedFor=uid;lastFetch=Date.now();successful=true;
     if(url.endsWith('/school')){featuredBookId='';pickerSlot=null;}
     if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds))pickerSlot=null;
     window.setCurrentTacticalManualState?.(next,uid);
@@ -246,8 +247,18 @@ async function mutate(url,body){
   }catch(error){message=error.message;}
   finally{
     busy=false;
-    if(getMainUser()?.uid===uid)paint(message);
-    else if(visible())void load({force:true});
+    if(getMainUser()?.uid===uid){
+      paint(message,{loadoutFeedback:url.endsWith('/loadout')});
+      if(successful&&url.endsWith('/loadout')&&Array.isArray(body?.skillIds)
+        &&Number.isInteger(equippedSlot)&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        const card=root?.querySelector('[data-manual-slot="'+equippedSlot+'"]');
+        card?.animate?.([
+          {boxShadow:'0 0 0 0 rgba(236,203,130,0)'},
+          {boxShadow:'0 0 0 2px rgba(236,203,130,.72),0 0 20px rgba(236,203,130,.32)',offset:.45},
+          {boxShadow:'0 0 0 0 rgba(236,203,130,0)'}
+        ],{duration:620,easing:'ease-out'});
+      }
+    } else if(visible())void load({force:true});
   }
 }
 function ensureNav(){
