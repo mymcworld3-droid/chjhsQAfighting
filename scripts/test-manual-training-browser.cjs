@@ -47,9 +47,16 @@ async function main(){
     await page.evaluate(()=>{window.savedSlot=document.querySelector('.manual-slot-art');});
     await page.locator('.manual-hero [data-manual-upgrade="sword-wind"]').click();await verifyArt();
     await page.getByText('已升級《流風劍訣》。').waitFor();await verifyArt();
+    assert.equal(await page.locator('.manual-celebration--manual-upgrade').count(),1,
+      'confirmed manual upgrade should show a distinct visual breakthrough');
+    await page.locator('[data-manual-celebration-dismiss]').click();
+    assert.equal(await page.locator('.manual-celebration-backdrop').count(),0);
     assert.equal(await page.evaluate(()=>window.savedSlot===document.querySelector('.manual-slot-art')),true);
     await page.locator('[data-skill-upgrade="wind-slash"]').click();await verifyArt();
     await page.getByText('「流風斬」已升至 Lv. 2。').waitFor();await verifyArt();
+    assert.equal(await page.locator('.manual-celebration--skill-upgrade').count(),1,
+      'confirmed technique improvement should show a smaller upgrade cue');
+    await page.locator('[data-manual-celebration-dismiss]').click();
     assert.equal(await page.evaluate(()=>window.savedSlot===document.querySelector('.manual-slot-art')),true);
     // Phase 2: select an inactive deck, equip through its new slot picker,
     // rename it, then explicitly apply. Viewing/editing must not silently apply it.
@@ -109,6 +116,27 @@ async function main(){
     const desktopColumns=await page.locator('.manual-book-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
     assert(desktopColumns>=2,'desktop view should use a multi-column gallery');
+    // Level 5 requires both mastery and realm: only a real server unlock
+    // should play the stronger technique-awakening effect.
+    db.records.get('users/u1').stats.totalScore=100;
+    ownedManuals.books['sword-wind'].exp=280;
+    const unlockedSnapshot=await service.manualsState(db,'u1');
+    assert.equal(unlockedSnapshot.library.find(b=>b.id==='sword-wind').skills[1].unlocked,true);
+    await page.locator('[data-manual-refresh]').click();
+    await page.locator('.manual-celebration--unlock').waitFor();
+    assert.equal(await page.locator('.manual-celebration-heading').textContent(),'招式領悟');
+    await page.locator('[data-manual-celebration-dismiss]').click();
+    // Direct fixture update simulates a settled PvE drop delivered through the
+    // server state endpoint, without letting the client award its own scripture.
+    ownedManuals.books['body-dragon']={exp:0};
+    await page.locator('[data-manual-refresh]').click();
+    await page.locator('.manual-celebration--discovery').waitFor();
+    assert.equal(await page.locator('.manual-celebration-name').textContent(),'龍象真身訣');
+    assert.equal(await library.locator('details[data-manual-book]').count(),3);
+    await page.locator('[data-manual-celebration-dismiss]').click();
+    await page.locator('[data-manual-refresh]').click();
+    assert.equal(await page.locator('.manual-celebration-backdrop').count(),0,
+      'refreshing identical data cannot replay a reward');
     assert.deepEqual(errors,[]);
     console.log('Manual artwork and deck stable; owned-only filter, card hero focus, mobile and desktop gallery verified.');
   }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
