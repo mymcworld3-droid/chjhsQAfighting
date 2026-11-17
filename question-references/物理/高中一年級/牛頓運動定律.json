@@ -1,0 +1,66 @@
+{
+  "units": [
+    "運動與力"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-物理-高中一年級-牛頓運動定律-1",
+      "source": "大考中心110學年度學測自然科第58題，依命題思路改寫",
+      "design": "從阻力和重力的方向求合力。",
+      "question": {
+        "q": "質量 $10\\ \\mathrm{kg}$ 的物體鉛直向下運動，重力 $100\\ \\mathrm N$，空氣阻力向上 $30\\ \\mathrm N$。此刻加速度量值為何？",
+        "correct": "$7\\ \\mathrm{m/s^2}$",
+        "wrong": [
+          "$3\\ \\mathrm{m/s^2}$",
+          "$10\\ \\mathrm{m/s^2}$",
+          "$13\\ \\mathrm{m/s^2}$"
+        ],
+        "exp": "合力向下 $100-30=70$ N，$a=F/m=70/10=7\\ \\mathrm{m/s^2}$。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-牛頓運動定律-1",
+        "template_id": "ref-物理-高中一年級-牛頓運動定律-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-物理-高中一年級-牛頓運動定律-2",
+      "source": "大考中心108學年度學測自然科第50題，依命題思路改寫",
+      "design": "以浮力和重力判斷潛艇的加速度方向。",
+      "question": {
+        "q": "潛艇質量 $2000\\ \\mathrm{kg}$，重力 $20000\\ \\mathrm N$、浮力 $24000\\ \\mathrm N$，忽略水阻，潛艇加速度為何？",
+        "correct": "向上 $2\\ \\mathrm{m/s^2}$",
+        "wrong": [
+          "向下 $2\\ \\mathrm{m/s^2}$",
+          "向上 $12\\ \\mathrm{m/s^2}$",
+          "$0$"
+        ],
+        "exp": "浮力較重力大 $4000$ N，合力向上，故 $a=4000/2000=2\\ \\mathrm{m/s^2}$。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-牛頓運動定律-2",
+        "template_id": "ref-物理-高中一年級-牛頓運動定律-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

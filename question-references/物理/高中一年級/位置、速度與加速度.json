@@ -1,0 +1,66 @@
+{
+  "units": [
+    "運動與力"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-物理-高中一年級-位置、速度與加速度-1",
+      "source": "大考中心109學年度學測自然科第2題，依命題思路改寫",
+      "design": "物體從上升氣球掉落時，初速度不是零。",
+      "question": {
+        "q": "一熱氣球以 $10\\ \\mathrm{m/s}$ 等速鉛直上升，距地 $40\\ \\mathrm m$ 時掉落小物體。忽略空氣阻力，取 $g=10\\ \\mathrm{m/s^2}$，物體落地速率為何？",
+        "correct": "$30\\ \\mathrm{m/s}$",
+        "wrong": [
+          "$20\\ \\mathrm{m/s}$",
+          "$10\\ \\mathrm{m/s}$",
+          "$40\\ \\mathrm{m/s}$"
+        ],
+        "exp": "以向上為正，$v^2=v_0^2+2a\\Delta y=100+2(-10)(-40)=900$，故落地速率為 $30\\ \\mathrm{m/s}$。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-位置、速度與加速度-1",
+        "template_id": "ref-物理-高中一年級-位置、速度與加速度-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-物理-高中一年級-位置、速度與加速度-2",
+      "source": "大考中心110學年度學測自然科第58題，依命題思路改寫",
+      "design": "由定加速度推算末速，區分速度與加速度。",
+      "question": {
+        "q": "物體沿直線運動，初速為 $2\\ \\mathrm{m/s}$，以同方向定加速度 $3\\ \\mathrm{m/s^2}$ 運動 $4$ 秒。末速度為何？",
+        "correct": "$14\\ \\mathrm{m/s}$",
+        "wrong": [
+          "$5\\ \\mathrm{m/s}$",
+          "$12\\ \\mathrm{m/s}$",
+          "$24\\ \\mathrm{m/s}$"
+        ],
+        "exp": "$v=v_0+at=2+3(4)=14\\ \\mathrm{m/s}$。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-位置、速度與加速度-2",
+        "template_id": "ref-物理-高中一年級-位置、速度與加速度-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

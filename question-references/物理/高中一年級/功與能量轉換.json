@@ -1,0 +1,66 @@
+{
+  "units": [
+    "能量與熱"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-物理-高中一年級-功與能量轉換-1",
+      "source": "大考中心111學年度學測自然科第5題，依命題思路改寫",
+      "design": "使用動能公式，需注意速度要平方。",
+      "question": {
+        "q": "質量 $8\\ \\mathrm{kg}$ 的球以 $5\\ \\mathrm{m/s}$ 運動，其動能為何？",
+        "correct": "$100$ 焦耳",
+        "wrong": [
+          "$20$ 焦耳",
+          "$40$ 焦耳",
+          "$200$ 焦耳"
+        ],
+        "exp": "$K=\\frac12mv^2=\\frac12(8)(5^2)=100\\ \\mathrm J$。",
+        "subject": "物理",
+        "sub_topic": "功與能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-功與能量轉換-1",
+        "template_id": "ref-物理-高中一年級-功與能量轉換-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-物理-高中一年級-功與能量轉換-2",
+      "source": "大考中心110學年度學測自然科第37題，依命題思路改寫",
+      "design": "重力位能轉換動能，物體質量可約去。",
+      "question": {
+        "q": "物體由距地 $5$ 公尺處靜止落下，忽略空氣阻力，$g=10\\ \\mathrm{m/s^2}$，落地速率為何？",
+        "correct": "$10\\ \\mathrm{m/s}$",
+        "wrong": [
+          "$5\\ \\mathrm{m/s}$",
+          "$25\\ \\mathrm{m/s}$",
+          "$50\\ \\mathrm{m/s}$"
+        ],
+        "exp": "$mgh=\\frac12mv^2$，故 $v=\\sqrt{2gh}=\\sqrt{100}=10\\ \\mathrm{m/s}$。",
+        "subject": "物理",
+        "sub_topic": "功與能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-功與能量轉換-2",
+        "template_id": "ref-物理-高中一年級-功與能量轉換-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

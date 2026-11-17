@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物理量與測量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-物理-高中一年級-國際單位制與量綱-1",
+      "source": "大考中心110學年度學測自然科第14題，依命題思路改寫",
+      "design": "由物理公式轉換基本單位，勿混用牛頓與焦耳。",
+      "question": {
+        "q": "下列何者是功的 SI 基本單位？",
+        "correct": "$\\mathrm{kg\\,m^2\\,s^{-2}}$",
+        "wrong": [
+          "$\\mathrm{kg\\,m\\,s^{-1}}$",
+          "$\\mathrm{kg\\,m\\,s^{-2}}$",
+          "$\\mathrm{kg\\,m^{-1}\\,s^{-2}}$"
+        ],
+        "exp": "功為力乘位移；力的基本單位為 $\\mathrm{kg\\,m\\,s^{-2}}$，再乘 $\\mathrm m$，得 $\\mathrm{kg\\,m^2\\,s^{-2}}$。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-國際單位制與量綱-1",
+        "template_id": "ref-物理-高中一年級-國際單位制與量綱-1-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-物理-高中一年級-國際單位制與量綱-2",
+      "source": "大考中心110學年度學測自然科第14題，依命題思路改寫",
+      "design": "由壓力定義算量綱，需正確處理面積。",
+      "question": {
+        "q": "由壓力等於作用力除以面積，可知壓力的 SI 基本單位是什麼？",
+        "correct": "$\\mathrm{kg\\,m^{-1}\\,s^{-2}}$",
+        "wrong": [
+          "$\\mathrm{kg\\,m\\,s^{-2}}$",
+          "$\\mathrm{kg\\,m^2\\,s^{-2}}$",
+          "$\\mathrm{kg\\,m^{-2}\\,s^{-1}}$"
+        ],
+        "exp": "壓力單位為 $\\mathrm{N/m^2}$，等於 $\\mathrm{kg\\,m\\,s^{-2}/m^2}=\\mathrm{kg\\,m^{-1}\\,s^{-2}}$。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "ref-物理-高中一年級-國際單位制與量綱-2",
+        "template_id": "ref-物理-高中一年級-國際單位制與量綱-2-adapted",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
