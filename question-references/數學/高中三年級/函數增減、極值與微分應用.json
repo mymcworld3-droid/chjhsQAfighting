@@ -1,0 +1,66 @@
+{
+  "units": [
+    "微分"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-函數增減、極值與微分應用-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「函數增減、極值與微分應用」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "f(x)＝－x²＋6x＋1在所有實數中的最大值為何？",
+        "correct": "10",
+        "wrong": [
+          "9",
+          "6",
+          "1"
+        ],
+        "exp": "配方f(x)＝−(x−3)²＋10，故最大值為10。",
+        "subject": "數學",
+        "sub_topic": "函數增減、極值與微分應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數增減、極值與微分應用",
+        "template_id": "math-ref-g3J-函數增減、極值與微分應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-函數增減、極值與微分應用-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「函數增減、極值與微分應用」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "對f(x)＝x³－3x，下列何處為局部極小點的x座標？",
+        "correct": "1",
+        "wrong": [
+          "－1",
+          "0",
+          "3"
+        ],
+        "exp": "f′(x)＝3(x²−1)，在x＝1左負右正，故為局部極小。",
+        "subject": "數學",
+        "sub_topic": "函數增減、極值與微分應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數增減、極值與微分應用",
+        "template_id": "math-ref-g3J-函數增減、極值與微分應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

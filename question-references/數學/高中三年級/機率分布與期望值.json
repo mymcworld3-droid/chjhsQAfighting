@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計進階"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-機率分布與期望值-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「機率分布與期望值」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "公平硬幣正面得3分、反面扣1分。單次分數期望值為何？",
+        "correct": "1分",
+        "wrong": [
+          "2分",
+          "0分",
+          "3分"
+        ],
+        "exp": "E＝3×1/2＋(−1)×1/2＝1分。",
+        "subject": "數學",
+        "sub_topic": "機率分布與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-機率分布與期望值",
+        "template_id": "math-ref-g3J-機率分布與期望值-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-機率分布與期望值-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「機率分布與期望值」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "隨機變數X以機率1/4取值2，以3/4取值4，期望值E(X)為何？",
+        "correct": "3.5",
+        "wrong": [
+          "3",
+          "4",
+          "2.5"
+        ],
+        "exp": "期望為2×1/4＋4×3/4＝0.5＋3＝3.5。",
+        "subject": "數學",
+        "sub_topic": "機率分布與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-機率分布與期望值",
+        "template_id": "math-ref-g3J-機率分布與期望值-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

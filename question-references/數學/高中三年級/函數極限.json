@@ -1,0 +1,66 @@
+{
+  "units": [
+    "極限與連續"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-函數極限-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「函數極限」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "求lim(x→2) (x²－4)/(x－2) 的值。",
+        "correct": "4",
+        "wrong": [
+          "0",
+          "2",
+          "不存在"
+        ],
+        "exp": "先因式分解，x≠2時原式＝x＋2；極限為4。",
+        "subject": "數學",
+        "sub_topic": "函數極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數極限",
+        "template_id": "math-ref-g3J-函數極限-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-函數極限-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「函數極限」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "求lim(x→0) sin x / x（x用弧度）的值。",
+        "correct": "1",
+        "wrong": [
+          "0",
+          "不存在",
+          "π"
+        ],
+        "exp": "基本三角極限：當x以弧度計且趨近0，sin x / x趨近1。",
+        "subject": "數學",
+        "sub_topic": "函數極限",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數極限",
+        "template_id": "math-ref-g3J-函數極限-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

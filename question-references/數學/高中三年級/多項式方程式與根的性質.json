@@ -1,0 +1,66 @@
+{
+  "units": [
+    "多項式與複數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-多項式方程式與根的性質-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「多項式方程式與根的性質」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "方程式x²－5x＋6＝0的兩根之和為何？",
+        "correct": "5",
+        "wrong": [
+          "－5",
+          "6",
+          "－6"
+        ],
+        "exp": "依韋達定理，二次式根和＝−b/a＝5。",
+        "subject": "數學",
+        "sub_topic": "多項式方程式與根的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式方程式與根的性質",
+        "template_id": "math-ref-g3J-多項式方程式與根的性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-多項式方程式與根的性質-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「多項式方程式與根的性質」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "在複數範圍內，方程式x²＋1＝0的所有解為何？",
+        "correct": "x＝i或x＝－i",
+        "wrong": [
+          "x＝1或x＝－1",
+          "只有x＝0",
+          "x＝2i或x＝－2i"
+        ],
+        "exp": "x²＝−1，在複數範圍解為±i。",
+        "subject": "數學",
+        "sub_topic": "多項式方程式與根的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式方程式與根的性質",
+        "template_id": "math-ref-g3J-多項式方程式與根的性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

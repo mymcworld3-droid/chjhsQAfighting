@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計進階"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-離散型隨機變數-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「離散型隨機變數」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "X的機率分布為P(X＝0)＝0.2、P(X＝1)＝0.5、P(X＝2)＝0.3。P(X≥1)為何？",
+        "correct": "0.8",
+        "wrong": [
+          "0.5",
+          "0.7",
+          "0.3"
+        ],
+        "exp": "X≥1包含1與2，機率相加0.5＋0.3＝0.8。",
+        "subject": "數學",
+        "sub_topic": "離散型隨機變數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-離散型隨機變數",
+        "template_id": "math-ref-g3J-離散型隨機變數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-離散型隨機變數-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「離散型隨機變數」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "伯努利隨機變數X滿足P(X＝1)＝0.4、P(X＝0)＝0.6，變異數Var(X)為何？",
+        "correct": "0.24",
+        "wrong": [
+          "0.4",
+          "0.6",
+          "0.16"
+        ],
+        "exp": "伯努利分布變異數p(1−p)＝0.4×0.6＝0.24。",
+        "subject": "數學",
+        "sub_topic": "離散型隨機變數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-離散型隨機變數",
+        "template_id": "math-ref-g3J-離散型隨機變數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

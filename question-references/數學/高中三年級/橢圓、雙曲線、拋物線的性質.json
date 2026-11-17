@@ -1,0 +1,66 @@
+{
+  "units": [
+    "解析幾何"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-橢圓、雙曲線、拋物線的性質-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「橢圓、雙曲線、拋物線的性質」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "橢圓x²/25＋y²/9＝1的焦點到中心距離c為何？",
+        "correct": "4",
+        "wrong": [
+          "5",
+          "3",
+          "√34"
+        ],
+        "exp": "橢圓焦距參數c²＝a²−b²＝25−9＝16，故c＝4。",
+        "subject": "數學",
+        "sub_topic": "橢圓、雙曲線、拋物線的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-橢圓、雙曲線、拋物線的性質",
+        "template_id": "math-ref-g3J-橢圓、雙曲線、拋物線的性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-橢圓、雙曲線、拋物線的性質-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「橢圓、雙曲線、拋物線的性質」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "雙曲線x²/9－y²/16＝1的兩個頂點為何？",
+        "correct": "(3,0)與(－3,0)",
+        "wrong": [
+          "(0,4)與(0,－4)",
+          "(5,0)與(－5,0)",
+          "(0,3)與(0,－3)"
+        ],
+        "exp": "水平雙曲線頂點為(±a,0)，a²＝9，故a＝3。",
+        "subject": "數學",
+        "sub_topic": "橢圓、雙曲線、拋物線的性質",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-橢圓、雙曲線、拋物線的性質",
+        "template_id": "math-ref-g3J-橢圓、雙曲線、拋物線的性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "積分"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-反導函數-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「反導函數」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "f(x)＝6x²－4x 的所有反導函數為何？",
+        "correct": "2x³－2x²＋C",
+        "wrong": [
+          "3x³－4x²＋C",
+          "6x³－4x²＋C",
+          "12x－4＋C"
+        ],
+        "exp": "將各項冪次增加1並除以新指數，積分為2x³−2x²＋C。",
+        "subject": "數學",
+        "sub_topic": "反導函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-反導函數",
+        "template_id": "math-ref-g3J-反導函數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-反導函數-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「反導函數」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "函數f(x)＝3x²＋2x的一個反導函數為何？",
+        "correct": "x³＋x²",
+        "wrong": [
+          "6x＋2",
+          "3x³＋2x²",
+          "x⁴＋x³"
+        ],
+        "exp": "對x³＋x²微分得3x²＋2x，因此為一個反導函數。",
+        "subject": "數學",
+        "sub_topic": "反導函數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-反導函數",
+        "template_id": "math-ref-g3J-反導函數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

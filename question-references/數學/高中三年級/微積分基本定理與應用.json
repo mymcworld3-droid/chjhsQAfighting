@@ -1,0 +1,66 @@
+{
+  "units": [
+    "積分"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-微積分基本定理與應用-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「微積分基本定理與應用」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "設F(x)＝∫₁ˣ t² dt，F′(x)為何？",
+        "correct": "x²",
+        "wrong": [
+          "x³/3",
+          "2x",
+          "x²－1"
+        ],
+        "exp": "微積分基本定理指出連續函數t²的變動上限積分，對x微分得上限處的x²。",
+        "subject": "數學",
+        "sub_topic": "微積分基本定理與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-微積分基本定理與應用",
+        "template_id": "math-ref-g3J-微積分基本定理與應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-微積分基本定理與應用-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「微積分基本定理與應用」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "若G(x)＝∫₀ˣ (2t＋1)dt，則G(2)為何？",
+        "correct": "6",
+        "wrong": [
+          "5",
+          "4",
+          "8"
+        ],
+        "exp": "積分原函數t²＋t，於2得4＋2＝6。",
+        "subject": "數學",
+        "sub_topic": "微積分基本定理與應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-微積分基本定理與應用",
+        "template_id": "math-ref-g3J-微積分基本定理與應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

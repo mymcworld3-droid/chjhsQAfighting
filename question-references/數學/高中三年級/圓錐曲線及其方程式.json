@@ -1,0 +1,66 @@
+{
+  "units": [
+    "解析幾何"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-圓錐曲線及其方程式-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「圓錐曲線及其方程式」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "橢圓x²/9＋y²/4＝1的長軸長度為何？",
+        "correct": "6",
+        "wrong": [
+          "3",
+          "4",
+          "9"
+        ],
+        "exp": "較大的分母a²＝9，所以半長軸a＝3，長軸為6。",
+        "subject": "數學",
+        "sub_topic": "圓錐曲線及其方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-圓錐曲線及其方程式",
+        "template_id": "math-ref-g3J-圓錐曲線及其方程式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-圓錐曲線及其方程式-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「圓錐曲線及其方程式」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "拋物線y²＝8x的焦點坐標為何？",
+        "correct": "(2,0)",
+        "wrong": [
+          "(8,0)",
+          "(4,0)",
+          "(0,2)"
+        ],
+        "exp": "標準式y²＝4px，4p＝8得p＝2，焦點(p,0)。",
+        "subject": "數學",
+        "sub_topic": "圓錐曲線及其方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-圓錐曲線及其方程式",
+        "template_id": "math-ref-g3J-圓錐曲線及其方程式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

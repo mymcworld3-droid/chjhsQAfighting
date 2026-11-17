@@ -1,0 +1,66 @@
+{
+  "units": [
+    "微分"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-導數定義與微分法則-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「導數定義與微分法則」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "若f(x)＝x³－2x，則f′(x)為何？",
+        "correct": "3x²－2",
+        "wrong": [
+          "3x²－2x",
+          "x²－2",
+          "3x³－2"
+        ],
+        "exp": "由冪次微分法則，d(x³)/dx＝3x²、d(−2x)/dx＝−2。",
+        "subject": "數學",
+        "sub_topic": "導數定義與微分法則",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-導數定義與微分法則",
+        "template_id": "math-ref-g3J-導數定義與微分法則-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-導數定義與微分法則-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「導數定義與微分法則」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "依導數定義，f(x)＝x²在x＝3的導數f′(3)為何？",
+        "correct": "6",
+        "wrong": [
+          "3",
+          "9",
+          "12"
+        ],
+        "exp": "lim(h→0)[(3＋h)²−9]/h＝lim(h→0)(6＋h)＝6。",
+        "subject": "數學",
+        "sub_topic": "導數定義與微分法則",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-導數定義與微分法則",
+        "template_id": "math-ref-g3J-導數定義與微分法則-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

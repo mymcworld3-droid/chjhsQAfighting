@@ -1,0 +1,66 @@
+{
+  "units": [
+    "積分"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-定積分與面積-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「定積分與面積」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "求定積分∫₀² x dx 的值。",
+        "correct": "2",
+        "wrong": [
+          "4",
+          "1",
+          "8"
+        ],
+        "exp": "原函數x²/2，由0到2計算為2。",
+        "subject": "數學",
+        "sub_topic": "定積分與面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-定積分與面積",
+        "template_id": "math-ref-g3J-定積分與面積-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-定積分與面積-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「定積分與面積」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "直線y＝x與x軸在0≤x≤3所圍面積為何？",
+        "correct": "9/2",
+        "wrong": [
+          "3",
+          "9",
+          "3/2"
+        ],
+        "exp": "面積為底3、高3三角形的一半，即9/2。",
+        "subject": "數學",
+        "sub_topic": "定積分與面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-定積分與面積",
+        "template_id": "math-ref-g3J-定積分與面積-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

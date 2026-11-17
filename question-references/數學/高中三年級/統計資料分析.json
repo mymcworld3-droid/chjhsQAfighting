@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計進階"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-統計資料分析-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「統計資料分析」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "若五筆資料全部為數值2，這組資料的標準差為何？",
+        "correct": "0",
+        "wrong": [
+          "2",
+          "4",
+          "5"
+        ],
+        "exp": "所有數值都等於平均數，與平均的離差全為0，故標準差為0。",
+        "subject": "數學",
+        "sub_topic": "統計資料分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-統計資料分析",
+        "template_id": "math-ref-g3J-統計資料分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-統計資料分析-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「統計資料分析」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "將資料3、5、8、9由小到大排序後，其中位數是多少？",
+        "correct": "6.5",
+        "wrong": [
+          "5",
+          "8",
+          "6"
+        ],
+        "exp": "四筆資料的中位數為中間兩筆5與8之平均，等於6.5。",
+        "subject": "數學",
+        "sub_topic": "統計資料分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-統計資料分析",
+        "template_id": "math-ref-g3J-統計資料分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

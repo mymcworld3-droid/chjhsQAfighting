@@ -1,0 +1,66 @@
+{
+  "units": [
+    "極限與連續"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-連續函數與極限運算-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「連續函數與極限運算」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "分段函數f(x)於x＜2時為x＋1，x≥2時為常數k。若f在x＝2連續，k應為何？",
+        "correct": "3",
+        "wrong": [
+          "1",
+          "2",
+          "4"
+        ],
+        "exp": "左側極限為2＋1＝3，連續必須與f(2)＝k相等。",
+        "subject": "數學",
+        "sub_topic": "連續函數與極限運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-連續函數與極限運算",
+        "template_id": "math-ref-g3J-連續函數與極限運算-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-連續函數與極限運算-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「連續函數與極限運算」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "函數f(x)＝√x在x＝4處連續，所以lim(x→4)√x等於多少？",
+        "correct": "2",
+        "wrong": [
+          "4",
+          "16",
+          "不存在"
+        ],
+        "exp": "平方根函數在正定義域連續，直接代入x＝4得2。",
+        "subject": "數學",
+        "sub_topic": "連續函數與極限運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-連續函數與極限運算",
+        "template_id": "math-ref-g3J-連續函數與極限運算-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

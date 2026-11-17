@@ -1,0 +1,66 @@
+{
+  "units": [
+    "微分"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-切線與變化率-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「切線與變化率」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "曲線y＝x²在點(2,4)的切線方程式為何？",
+        "correct": "y＝4x－4",
+        "wrong": [
+          "y＝2x",
+          "y＝4x＋4",
+          "y＝x＋2"
+        ],
+        "exp": "斜率y′＝2x，x＝2時為4，代入點斜式y−4＝4(x−2)。",
+        "subject": "數學",
+        "sub_topic": "切線與變化率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-切線與變化率",
+        "template_id": "math-ref-g3J-切線與變化率-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-切線與變化率-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「切線與變化率」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "位置函數s(t)＝t²＋2t（公尺），t以秒計，t＝3秒的瞬時速度為何？",
+        "correct": "8公尺／秒",
+        "wrong": [
+          "6公尺／秒",
+          "5公尺／秒",
+          "11公尺／秒"
+        ],
+        "exp": "速度為ds/dt＝2t＋2，代入t＝3得到8。",
+        "subject": "數學",
+        "sub_topic": "切線與變化率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-切線與變化率",
+        "template_id": "math-ref-g3J-切線與變化率-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

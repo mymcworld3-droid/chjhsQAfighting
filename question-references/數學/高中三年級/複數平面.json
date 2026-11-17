@@ -1,0 +1,66 @@
+{
+  "units": [
+    "多項式與複數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-複數平面-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「複數平面」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "複數z＝－2＋3i在複數平面對應哪個點？",
+        "correct": "(－2,3)",
+        "wrong": [
+          "(3,－2)",
+          "(2,3)",
+          "(－2,－3)"
+        ],
+        "exp": "複數a＋bi對應(x,y)＝(a,b)，實部−2、虛部3。",
+        "subject": "數學",
+        "sub_topic": "複數平面",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數平面",
+        "template_id": "math-ref-g3J-複數平面-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-複數平面-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「複數平面」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "複數z＝3－4i在複數平面上到原點的距離為何？",
+        "correct": "5",
+        "wrong": [
+          "7",
+          "1",
+          "25"
+        ],
+        "exp": "模長|z|＝√(3²＋(−4)²)＝5。",
+        "subject": "數學",
+        "sub_topic": "複數平面",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數平面",
+        "template_id": "math-ref-g3J-複數平面-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "多項式與複數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3J-複數四則運算-1",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「複數四則運算」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "計算(1＋2i)(3－i)，其中i²＝－1。",
+        "correct": "5＋5i",
+        "wrong": [
+          "1＋5i",
+          "5－5i",
+          "3＋5i"
+        ],
+        "exp": "展開得3−i＋6i−2i²＝5＋5i。",
+        "subject": "數學",
+        "sub_topic": "複數四則運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數四則運算",
+        "template_id": "math-ref-g3J-複數四則運算-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3J-複數四則運算-2",
+      "source": "依108課綱數學甲微積分、複數及解析幾何學習目標重新編寫，非歷屆原題",
+      "design": "「複數四則運算」：以可計算的數值、清楚定義域和標準公式建立唯一解",
+      "question": {
+        "q": "將1/(1＋i)化為a＋bi的形式，結果為何？",
+        "correct": "(1－i)/2",
+        "wrong": [
+          "(1＋i)/2",
+          "1－i",
+          "－i/2"
+        ],
+        "exp": "乘共軛(1−i)得分母1−i²＝2，故結果(1−i)/2。",
+        "subject": "數學",
+        "sub_topic": "複數四則運算",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中三年級-複數四則運算",
+        "template_id": "math-ref-g3J-複數四則運算-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
