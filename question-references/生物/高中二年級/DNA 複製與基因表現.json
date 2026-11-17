@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅰ：細胞與遺傳"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-DNA 複製與基因表現-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「DNA 複製與基因表現」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "一段DNA雙股中，一股鹼基序列為5'-ATGC-3'，其互補股若以3'到5'方向寫出，應為何者？",
+        "correct": "3'-TACG-5'",
+        "wrong": [
+          "3'-ATGC-5'",
+          "3'-UACG-5'",
+          "3'-TTTT-5'"
+        ],
+        "exp": "DNA配對規則A-T、G-C，且雙股反向平行，互補為3'-TACG-5'。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "bio-ref-g2-DNA 複製與基因表現-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-DNA 複製與基因表現-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「DNA 複製與基因表現」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "一個細胞中的相同DNA基因，可在肝細胞表現而在神經細胞不表現。最合理的原因為何？",
+        "correct": "不同細胞具有不同基因表現調控",
+        "wrong": [
+          "肝細胞與神經細胞必然擁有完全無關的基因組",
+          "只要含同一基因便必須在所有細胞同步表現",
+          "細胞分化後DNA序列必定全部被刪除"
+        ],
+        "exp": "分化細胞多保有相同基因組，但透過調控使特定基因有差異表現。",
+        "subject": "生物",
+        "sub_topic": "DNA 複製與基因表現",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-DNA 複製與基因表現",
+        "template_id": "bio-ref-g2-DNA 複製與基因表現-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

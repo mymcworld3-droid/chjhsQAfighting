@@ -1,0 +1,66 @@
+{
+  "units": [
+    "分子生物學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-基因調控-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「基因調控」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "某細菌分解乳糖的相關基因在有乳糖時表現較高，在無乳糖時表現較低。這最可能反映什麼？",
+        "correct": "環境訊號可透過調控機制影響基因轉錄",
+        "wrong": [
+          "細菌每次接觸乳糖都必定更換整套DNA",
+          "基因表現與可利用的營養物質完全無關",
+          "只有多細胞動物具有基因調控"
+        ],
+        "exp": "乳糖操縱組等機制顯示環境可調節轉錄，不需改寫原DNA序列。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "bio-ref-g2-基因調控-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-基因調控-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「基因調控」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "同一基因在兩種細胞中mRNA量不同，研究者想判斷原因。哪種檢測最直接反映轉錄產物的差異？",
+        "correct": "測定該基因mRNA的相對量",
+        "wrong": [
+          "只比較兩個細胞的外型",
+          "只測定培養皿的體積",
+          "以細胞膜顏色直接判定所有基因轉錄"
+        ],
+        "exp": "mRNA是轉錄產物，定量其濃度能檢查轉錄／RNA穩定性造成的表現差異。",
+        "subject": "生物",
+        "sub_topic": "基因調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-基因調控",
+        "template_id": "bio-ref-g2-基因調控-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

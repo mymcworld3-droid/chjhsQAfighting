@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅰ：細胞與遺傳"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-細胞週期及分裂-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「細胞週期及分裂」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "一個體細胞在間期完成DNA複製，隨後進行正常有絲分裂。若不計突變，兩個子細胞染色體數通常如何？",
+        "correct": "各與母細胞原有的染色體數相同",
+        "wrong": [
+          "各為母細胞的兩倍",
+          "各只有母細胞的四分之一",
+          "兩個子細胞都不含DNA"
+        ],
+        "exp": "有絲分裂將複製的姐妹染色分體平均分配，維持子細胞染色體數。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "bio-ref-g2-細胞週期及分裂-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-細胞週期及分裂-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「細胞週期及分裂」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "減數分裂第一次分裂與有絲分裂的主要差異之一是？",
+        "correct": "減數分裂第一次分裂分離同源染色體",
+        "wrong": [
+          "有絲分裂必定先完成兩次DNA複製",
+          "減數分裂第一次分裂會把所有DNA完全分解",
+          "有絲分裂通常形成四個染色體數減半的子細胞"
+        ],
+        "exp": "減I主要分離同源染色體，造成染色體數減半，與有絲分裂不同。",
+        "subject": "生物",
+        "sub_topic": "細胞週期及分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞週期及分裂",
+        "template_id": "bio-ref-g2-細胞週期及分裂-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

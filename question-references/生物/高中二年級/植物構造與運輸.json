@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅱ：生命的起源與植物體"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-植物構造與運輸-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「植物構造與運輸」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "植物根部吸水後，水經木質部上升至葉片。對高大植物而言，哪種作用通常是水上升的重要驅動？",
+        "correct": "葉片蒸散造成的水勢梯度與水柱張力",
+        "wrong": [
+          "糖分在篩管中直接把所有水向下壓",
+          "根部每天以肌肉收縮將水送到葉片",
+          "葉片完全不蒸散仍保證所有植物水流一致"
+        ],
+        "exp": "蒸散拉力與水分子內聚、附著等協助木質部輸水。",
+        "subject": "生物",
+        "sub_topic": "植物構造與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物構造與運輸",
+        "template_id": "bio-ref-g2-植物構造與運輸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-植物構造與運輸-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「植物構造與運輸」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "植物光合作用產生的糖分可從成熟葉運往正在生長的果實。主要透過哪類維管組織？",
+        "correct": "韌皮部篩管",
+        "wrong": [
+          "木質部導管",
+          "植物表皮角質層",
+          "葉片氣孔的空氣通道"
+        ],
+        "exp": "韌皮部運輸蔗糖等有機養分，由源運往庫組織。",
+        "subject": "生物",
+        "sub_topic": "植物構造與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物構造與運輸",
+        "template_id": "bio-ref-g2-植物構造與運輸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

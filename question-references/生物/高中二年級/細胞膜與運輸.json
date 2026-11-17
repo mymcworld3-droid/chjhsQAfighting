@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅰ：細胞與遺傳"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-細胞膜與運輸-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「細胞膜與運輸」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "某細胞利用ATP驅動運輸蛋白，將離子由低濃度側送往高濃度側。這個運輸方式主要屬於？",
+        "correct": "主動運輸",
+        "wrong": [
+          "簡單擴散",
+          "滲透作用",
+          "不需要能量的促進性擴散"
+        ],
+        "exp": "逆濃度梯度且需ATP供能，是主動運輸的特徵。",
+        "subject": "生物",
+        "sub_topic": "細胞膜與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞膜與運輸",
+        "template_id": "bio-ref-g2-細胞膜與運輸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-細胞膜與運輸-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「細胞膜與運輸」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "將相同細胞分別置於等張與高張溶液，高張組細胞體積變小。最直接原因為何？",
+        "correct": "水因外液相對濃度較高而淨流出細胞",
+        "wrong": [
+          "細胞立即將所有蛋白質轉成水",
+          "高張溶液使所有水必然淨流入細胞",
+          "細胞膜完全阻止水分通過"
+        ],
+        "exp": "高張溶液水勢較低，水由細胞內向外淨流動，細胞失水縮小。",
+        "subject": "生物",
+        "sub_topic": "細胞膜與運輸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-細胞膜與運輸",
+        "template_id": "bio-ref-g2-細胞膜與運輸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

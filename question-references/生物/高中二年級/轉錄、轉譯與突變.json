@@ -1,0 +1,66 @@
+{
+  "units": [
+    "分子生物學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-轉錄、轉譯與突變-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「轉錄、轉譯與突變」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "DNA模板股為3'-TAC-5'，若轉錄成RNA互補序列，產生的RNA片段為何？",
+        "correct": "5'-AUG-3'",
+        "wrong": [
+          "5'-ATG-3'",
+          "5'-UAC-3'",
+          "5'-TAC-3'"
+        ],
+        "exp": "RNA以A-U、T-A、C-G配對，模板3'-TAC-5'對應5'-AUG-3'。",
+        "subject": "生物",
+        "sub_topic": "轉錄、轉譯與突變",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-轉錄、轉譯與突變",
+        "template_id": "bio-ref-g2-轉錄、轉譯與突變-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-轉錄、轉譯與突變-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「轉錄、轉譯與突變」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "某基因發生單一鹼基替換，但胺基酸序列沒有改變。這最適合稱為什麼結果？",
+        "correct": "可能是沉默突變，因不同密碼子可指定同一胺基酸",
+        "wrong": [
+          "必定造成蛋白質完全失去所有功能",
+          "必定把整條染色體刪除",
+          "DNA突變不可能發生在編碼區"
+        ],
+        "exp": "遺傳密碼具退化性，部分同義密碼子改變不影響胺基酸。",
+        "subject": "生物",
+        "sub_topic": "轉錄、轉譯與突變",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中二年級-轉錄、轉譯與突變",
+        "template_id": "bio-ref-g2-轉錄、轉譯與突變-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

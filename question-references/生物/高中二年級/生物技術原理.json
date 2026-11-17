@@ -1,0 +1,66 @@
+{
+  "units": [
+    "分子生物學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-生物技術原理-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「生物技術原理」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "PCR反應中，DNA先加熱分離雙股，再降溫讓引子結合，接著由耐熱DNA聚合酶延伸。若省去引子，最可能影響哪一步？",
+        "correct": "聚合酶無法在指定位置有效開始合成新DNA",
+        "wrong": [
+          "DNA雙股永遠無法因加熱分離",
+          "DNA的鹼基互補規則立刻失效",
+          "PCR一定會直接產生蛋白質而非DNA"
+        ],
+        "exp": "DNA聚合酶通常需引子提供可延伸的3'-OH端，沒有引子難以進行指定序列擴增。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "bio-ref-g2-生物技術原理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-生物技術原理-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「生物技術原理」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "某實驗用電泳分離不同長度的DNA片段，若膠體條件相同，較短片段通常會如何？",
+        "correct": "更容易穿過凝膠孔隙而移動較遠",
+        "wrong": [
+          "一定因質量較小而完全不帶電",
+          "必定永遠停留在加樣孔",
+          "電泳不受DNA長度影響"
+        ],
+        "exp": "DNA帶負電，在適當條件下短片段通常移動較快、距離更遠。",
+        "subject": "生物",
+        "sub_topic": "生物技術原理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生物技術原理",
+        "template_id": "bio-ref-g2-生物技術原理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "植物生理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-逆境反應-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「逆境反應」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "乾旱時植物葉片氣孔多會關閉，這對植物有何直接作用？",
+        "correct": "減少蒸散失水，但也可能降低CO₂進入量",
+        "wrong": [
+          "增加葉片失水以提高乾旱耐受",
+          "使所有根立即停止吸水",
+          "讓光合作用永久不受二氧化碳限制"
+        ],
+        "exp": "氣孔關閉是保水策略，但限制氣體交換，可影響光合作用。",
+        "subject": "生物",
+        "sub_topic": "逆境反應",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-逆境反應",
+        "template_id": "bio-ref-g2-逆境反應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-逆境反應-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「逆境反應」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "某植物在鹽分較高的土壤生長受抑制。若外界溶液水勢下降，最直接的生理挑戰是？",
+        "correct": "根部吸水較困難，可能造成水分逆境",
+        "wrong": [
+          "高鹽土壤必定提供無限量純水",
+          "植物對水勢完全沒有反應",
+          "細胞膜會因鹽分立即變成完全不透水的石頭"
+        ],
+        "exp": "外液滲透勢降低使吸水不易，鹽離子也可能造成毒害，需多種生理調適。",
+        "subject": "生物",
+        "sub_topic": "逆境反應",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-逆境反應",
+        "template_id": "bio-ref-g2-逆境反應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

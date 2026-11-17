@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅱ：生命的起源與植物體"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-生命起源與演化-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「生命起源與演化」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "若兩物種某一基因的序列高度相似，且共有其他獨立證據支持，最合理的演化推論為何？",
+        "correct": "兩物種可能具有較近的共同祖先關係",
+        "wrong": [
+          "兩者一定是完全同一個個體",
+          "只要有相似序列就能確定外表必定相同",
+          "物種間不可能有任何共同祖先"
+        ],
+        "exp": "遺傳序列相似常提供親緣關係線索，需結合多基因和其他證據。",
+        "subject": "生物",
+        "sub_topic": "生命起源與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生命起源與演化",
+        "template_id": "bio-ref-g2-生命起源與演化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-生命起源與演化-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「生命起源與演化」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "化石序列顯示某群生物在較老地層具有較簡單特徵，在較新地層出現不同衍生特徵。如何研究其演化？",
+        "correct": "結合地層相對年代與形態差異，建立可檢驗的演化假說",
+        "wrong": [
+          "只根據形狀喜好排出祖先後代",
+          "直接認定每個化石都必然是另一個化石的親本",
+          "因化石不含活細胞便毫無演化研究價值"
+        ],
+        "exp": "地層與形態提供演化時間與特徵線索，但不能只依一兩件化石斷定直系祖先。",
+        "subject": "生物",
+        "sub_topic": "生命起源與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中二年級-生命起源與演化",
+        "template_id": "bio-ref-g2-生命起源與演化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

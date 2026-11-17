@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅱ：生命的起源與植物體"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-植物的生殖與調節-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「植物的生殖與調節」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "開花植物花粉落在同種植物適合的柱頭上，花粉管生長到胚珠。這主要是為完成哪一步驟？",
+        "correct": "把精細胞送到胚珠內以進行受精",
+        "wrong": [
+          "將整株植物的葉綠體移入花朵",
+          "使所有花瓣直接變成根",
+          "讓種子在受精前就完成萌發"
+        ],
+        "exp": "花粉管運送雄配子至胚珠，完成受精後才可形成胚與種子等構造。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "bio-ref-g2-植物的生殖與調節-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-植物的生殖與調節-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「植物的生殖與調節」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "某植物種子在乾燥休眠期間不萌發，吸水後在適當溫度下開始生長。最合適的解釋是？",
+        "correct": "吸水與環境條件適合可促使代謝恢復及萌發",
+        "wrong": [
+          "乾種子必定完全不含活細胞",
+          "萌發只取決於種子的外部顏色",
+          "只要有水就必定不受溫度與氧氣影響"
+        ],
+        "exp": "種子萌發需要水分，也通常需要合適溫度、氧氣等條件。",
+        "subject": "生物",
+        "sub_topic": "植物的生殖與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物的生殖與調節",
+        "template_id": "bio-ref-g2-植物的生殖與調節-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

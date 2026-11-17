@@ -1,0 +1,66 @@
+{
+  "units": [
+    "植物生理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-光合作用與呼吸-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「光合作用與呼吸」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "實驗以同種植物測量光合作用速率，保持溫度與光照固定，逐漸提高CO₂濃度後速率不再上升。最合理原因？",
+        "correct": "其他條件可能成為限制因素，使光合作用速率達到飽和",
+        "wrong": [
+          "二氧化碳在任何濃度下都會無限增加速率",
+          "光合作用只需要二氧化碳，不需要光",
+          "速率不再上升就證明植物已死亡"
+        ],
+        "exp": "光合作用受光、溫度與酵素反應等因素共同限制，CO₂不會無限提高速率。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-光合作用與呼吸",
+        "template_id": "bio-ref-g2-光合作用與呼吸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-光合作用與呼吸-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「光合作用與呼吸」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "細胞在線粒體進行有氧呼吸時，若電子傳遞鏈無法將電子交給氧，通常會直接影響什麼？",
+        "correct": "氧化磷酸化的ATP生成及電子傳遞",
+        "wrong": [
+          "細胞所有DNA瞬間從原子層級消失",
+          "葉綠體立即失去所有色素",
+          "所有生命都改成只做光合作用"
+        ],
+        "exp": "氧是有氧呼吸電子傳遞鏈末端電子受體，缺乏氧會影響氧化磷酸化。",
+        "subject": "生物",
+        "sub_topic": "光合作用與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中二年級-光合作用與呼吸",
+        "template_id": "bio-ref-g2-光合作用與呼吸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

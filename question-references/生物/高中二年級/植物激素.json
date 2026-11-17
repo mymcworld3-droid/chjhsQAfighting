@@ -1,0 +1,66 @@
+{
+  "units": [
+    "植物生理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g2-植物激素-1",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「植物激素」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "幼苗單側接受光照後，莖朝光源彎曲。這與生長素分布的哪種影響最有關？",
+        "correct": "莖兩側細胞伸長程度不同，導致向光彎曲",
+        "wrong": [
+          "植物立即把所有根變成花瓣",
+          "莖細胞全部同時等量縮短，必定造成彎曲",
+          "向光性與植物激素作用完全無關"
+        ],
+        "exp": "生長素分布差異可使莖細胞伸長不均，產生向光彎曲。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "bio-ref-g2-植物激素-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g2-植物激素-2",
+      "source": "依高中生物108課綱、學測自然科生物實驗與概念推論題型，自編參考題",
+      "design": "考查「植物激素」之機制、變因控制或證據鏈",
+      "question": {
+        "q": "香蕉與蘋果放在一起保存時，有時可加速香蕉成熟。哪種植物激素與此現象最相關？",
+        "correct": "乙烯",
+        "wrong": [
+          "胰島素",
+          "腎上腺素",
+          "甲狀腺素"
+        ],
+        "exp": "乙烯是植物氣體激素，參與果實成熟調節，成熟果實可釋放乙烯影響鄰近果實。",
+        "subject": "生物",
+        "sub_topic": "植物激素",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-2",
+            "name": "植物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中二年級-植物激素",
+        "template_id": "bio-ref-g2-植物激素-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
