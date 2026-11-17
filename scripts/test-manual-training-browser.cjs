@@ -11,6 +11,9 @@ const service=register.__test;
 async function main(){
   const db=database();db.records.get('users/u1').stats.gold=10000;
   await service.chooseSchool(db,'u1',{school:'sword'});
+  // Add a second owned manual to test filters, independent book art and hero selection.
+  const ownedManuals=db.records.get(service.MANUALS+'/u1');
+  ownedManuals.books['body-rock']={exp:40};
   const app=express();app.use(express.json());
   app.get('/cultivation/data/project-repository.js',(_,res)=>res.type('text/javascript').send(`export const getMainUser=()=>({uid:'u1'});export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'Content-Type':'application/json'}});`));
   app.use('/api/tactical/manuals',(req,res,next)=>{if(req.method==='POST')setTimeout(next,250);else next();});
@@ -74,8 +77,40 @@ async function main(){
     }));
     assert(deckWidth.scroll<=deckWidth.client+2,
       'mobile deck should fit horizontally: '+JSON.stringify(deckWidth));
+    // Phase 3: gallery only shows owned manuals. Filtering must never mutate
+    // the selected battle deck. Card selection updates the hero, not equipment.
+    const activePresetBefore=await page.locator('[data-loadout-select="1"]').getAttribute('class');
+    const library=page.locator('.manual-library');
+    assert.equal(await library.locator('details[data-manual-book]').count(),2);
+    await page.locator('[data-manual-collection-filter="sword"]').click();
+    assert.equal(await library.locator('details[data-manual-book]').count(),1);
+    assert.equal(await library.locator('[data-manual-book="body-rock"]').count(),0);
+    await page.locator('[data-manual-collection-filter="body"]').click();
+    assert.equal(await library.locator('[data-manual-book="body-rock"]').count(),1);
+    assert.equal(await library.locator('[data-manual-book="sword-wind"]').count(),0);
+    await library.locator('[data-manual-book="body-rock"] summary').click();
+    assert.equal(await library.locator('[data-manual-book="body-rock"]').evaluate(e=>e.open),true);
+    assert.equal(await page.locator('.manual-hero-title-row h3').textContent(),'玄嶽鍛體訣');
+    assert.equal(await library.locator('.manual-book.is-featured').count(),1);
+    assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-library-skill-picture').count(),3);
+    assert.equal(await page.locator('[data-loadout-select="1"]').getAttribute('class'),activePresetBefore);
+    await page.locator('[data-manual-collection-filter="all"]').click();
+    assert.equal(await library.locator('details[data-manual-book]').count(),2);
+    await library.locator('[data-manual-book="sword-wind"] summary').click();
+    assert.equal(await page.locator('.manual-hero-title-row h3').textContent(),'流風劍訣');
+    const featured=library.locator('[data-manual-book="sword-wind"]');
+    assert.equal(await featured.evaluate(e=>e.open),true);
+    await featured.locator('[data-manual-focus-hero]').click();
+    assert.equal(await page.locator('.manual-hero-title-row h3').textContent(),'流風劍訣');
+    const mobileGallery=await library.evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
+    assert(mobileGallery.scroll<=mobileGallery.client+2,
+      'gallery should not overflow portrait width: '+JSON.stringify(mobileGallery));
+    await page.setViewportSize({width:1180,height:820});
+    const desktopColumns=await page.locator('.manual-book-grid').evaluate(node=>
+      getComputedStyle(node).gridTemplateColumns.split(' ').length);
+    assert(desktopColumns>=2,'desktop view should use a multi-column gallery');
     assert.deepEqual(errors,[]);
-    console.log('Manual artwork stable; mobile deck picker, inactive preset, rename and explicit apply verified.');
+    console.log('Manual artwork and deck stable; owned-only filter, card hero focus, mobile and desktop gallery verified.');
   }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
