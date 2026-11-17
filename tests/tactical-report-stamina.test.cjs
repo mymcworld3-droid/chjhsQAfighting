@@ -45,6 +45,9 @@ const report=f=>api.reportQuestion(f.db,'u1',input(f),deps);
 test('confirmed wrong answers receive only missing stamina, with authoritative progress and a recovery event',async()=>{
   const f=await setup();await answer(f);assert.equal(raw(f).actors[0].stamina,3);
   const out=await report(f);assert.equal(out.staminaAdded,3);assert.equal(out.staminaRefunded,3);
+  assert.equal(out.status,'confirmed');assert.equal(out.valid,true);
+  assert.equal(out.compensated,true);assert.equal(out.goldAdded,0);
+  assert.equal(out.cultivationAdded,1);
   assert.equal(out.questionSkipped,false);assert.equal(out.battle.actors[0].stamina,6);
   assert.equal(out.battle.progress.stats.gold,0);assert.equal(out.battle.progress.stats.totalScore,31);
   assert.equal(raw(f).actors[0].questions,1);assert.equal(raw(f).actors[0].answered,1);
@@ -94,7 +97,8 @@ test('rejected or unavailable reports cannot grant stamina or change the pending
 
 test('compensation daily limits do not block a confirmed gameplay stamina correction',async()=>{
   const f=await setup();await answer(f);f.db.records.get('users/u1').questionReportDaily={date:reports.dateInTaiwan(),count:reports.DAILY_LIMIT};
-  const out=await report(f);assert.equal(out.compensated,false);assert.equal(out.staminaAdded,3);
+  const out=await report(f);assert.equal(out.status,'limit');assert.equal(out.valid,true);
+  assert.equal(out.compensated,false);assert.equal(out.staminaAdded,3);
   assert.equal(raw(f).actors[0].stamina,6);assert.equal(f.db.records.get('users/u1').stats.gold,0);assert.match(out.reason,/上限/);
 });
 
@@ -103,7 +107,8 @@ test('an award committed before a failed refund can retry without another AI rev
   await assert.rejects(report(f),/refund transaction failed/);
   assert.equal(f.db.records.get('users/u1').stats.gold,0);assert.equal(raw(f).actors[0].stamina,3);
   const out=await api.reportQuestion(f.db,'u1',input(f),{...deps,review:()=>{throw Error('persisted approval must be reused');}});
-  assert.equal(out.staminaAdded,3);assert.equal(out.compensated,false);assert.equal(raw(f).actors[0].stamina,6);
+  assert.equal(out.staminaAdded,3);assert.equal(out.status,'duplicate');assert.equal(out.valid,true);
+  assert.equal(out.compensated,false);assert.equal(raw(f).actors[0].stamina,6);
   assert.equal(f.db.records.get('users/u1').stats.gold,0);
 });
 
