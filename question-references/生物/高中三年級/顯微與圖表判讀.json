@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物實驗與資料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "human-bio-高中三年級-顯微與圖表判讀-1",
+      "source": "大考中心114學年度學測自然科第3題，依原題考點改寫",
+      "design": "依觀察目的選擇正確的顯微鏡標本，保留氣孔排列。",
+      "question": {
+        "q": "若要直接觀察植物葉片的保衛細胞，哪一材料最合適？",
+        "correct": "葉片表皮薄片",
+        "wrong": [
+          "葉柄木質部厚塊",
+          "根尖的根冠組織",
+          "乾燥種皮粉末"
+        ],
+        "exp": "保衛細胞位於葉片表皮並圍成氣孔，取葉表皮製成薄片較容易觀察其形態。",
+        "subject": "生物",
+        "sub_topic": "顯微與圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "human-bio-高中三年級-顯微與圖表判讀-1",
+        "template_id": "human-bio-高中三年級-顯微與圖表判讀-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "human-bio-高中三年級-顯微與圖表判讀-2",
+      "source": "大考中心112學年度學測自然科第13題，依原題考點改寫",
+      "design": "判斷製作標本時哪些步驟保留細胞完整性與位置關係。",
+      "question": {
+        "q": "欲以光學顯微鏡觀察石蓮葉片表面的氣孔，哪種製片方法通常較合適？",
+        "correct": "剝取薄表皮製成濕式玻片標本",
+        "wrong": [
+          "將整片葉磨碎後只看汁液",
+          "先把葉子燒成灰燼",
+          "只觀察葉片內的木質部厚切片"
+        ],
+        "exp": "薄表皮可保留氣孔與保衛細胞的排列；磨碎與燒灰都會破壞細胞構造。",
+        "subject": "生物",
+        "sub_topic": "顯微與圖表判讀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "human-bio-高中三年級-顯微與圖表判讀-2",
+        "template_id": "human-bio-高中三年級-顯微與圖表判讀-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

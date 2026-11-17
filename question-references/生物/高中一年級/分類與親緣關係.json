@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物多樣性與演化"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "human-bio-高中一年級-分類與親緣關係-1",
+      "source": "大考中心109學年度學測自然科第53題，依原題考點改寫",
+      "design": "利用核糖體 RNA 序列作為親緣判斷證據，不只看生物外觀。",
+      "question": {
+        "q": "科學家比較不同生物的核糖體 RNA 序列，這些資料最適合用來研究下列何者？",
+        "correct": "生物間的演化親緣關係",
+        "wrong": [
+          "每隻生物的確切壽命",
+          "單次心跳的速度",
+          "每天的呼吸頻率"
+        ],
+        "exp": "同源基因或 RNA 序列的相似程度與差異可用來推測共同祖先和演化關係。",
+        "subject": "生物",
+        "sub_topic": "分類與親緣關係",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-分類與親緣關係-1",
+        "template_id": "human-bio-高中一年級-分類與親緣關係-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "human-bio-高中一年級-分類與親緣關係-2",
+      "source": "大考中心113學年度學測自然科第9題，依原題考點改寫",
+      "design": "判斷界、門、綱、目、科、屬、種中親緣關係的相對遠近。",
+      "question": {
+        "q": "甲、乙兩物種屬於同一個「屬」；丙、丁兩物種屬於同一「科」但不同屬。在其他證據相當下，通常哪組親緣較近？",
+        "correct": "甲與乙",
+        "wrong": [
+          "丙與丁",
+          "必定一樣近",
+          "從分類階層完全不能推論"
+        ],
+        "exp": "同屬是比同科更細的分類階層，通常表示有更近的共同祖先。",
+        "subject": "生物",
+        "sub_topic": "分類與親緣關係",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-分類與親緣關係-2",
+        "template_id": "human-bio-高中一年級-分類與親緣關係-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "遺傳基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "human-bio-高中一年級-細胞分裂-1",
+      "source": "大考中心114學年度學測自然科第1題，依原題考點改寫",
+      "design": "區分有絲分裂維持染色體套數及減數分裂形成配子。",
+      "question": {
+        "q": "對一般二倍體有性生殖生物而言，下列何者正確？",
+        "correct": "減數分裂形成的配子通常只含單套染色體",
+        "wrong": [
+          "有絲分裂必將染色體數減半",
+          "減數分裂完全不會出現紡錘絲",
+          "只有原核生物能進行減數分裂"
+        ],
+        "exp": "正常減數分裂使染色體套數由二倍體減為單倍體；有絲分裂產生的子細胞一般維持原來套數。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-細胞分裂-1",
+        "template_id": "human-bio-高中一年級-細胞分裂-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "human-bio-高中一年級-細胞分裂-2",
+      "source": "大考中心112學年度學測自然科第15題，依原題考點改寫",
+      "design": "由體細胞二倍體數量推算減數分裂後配子染色體數。",
+      "question": {
+        "q": "某動物體細胞的染色體數為 $2n=12$。正常減數分裂產生的配子有幾條染色體？",
+        "correct": "$6$ 條",
+        "wrong": [
+          "$3$ 條",
+          "$12$ 條",
+          "$24$ 條"
+        ],
+        "exp": "配子的染色體數為單倍體 $n$，因此是 $12/2=6$ 條。",
+        "subject": "生物",
+        "sub_topic": "細胞分裂",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-細胞分裂-2",
+        "template_id": "human-bio-高中一年級-細胞分裂-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

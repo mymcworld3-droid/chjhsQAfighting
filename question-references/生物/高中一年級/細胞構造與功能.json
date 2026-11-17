@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生命的特性與細胞"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "human-bio-高中一年級-細胞構造與功能-1",
+      "source": "大考中心108學年度學測自然科第9題，依原題考點改寫",
+      "design": "用細胞內構造判斷原核與真核細胞的共同特徵。",
+      "question": {
+        "q": "細菌與人體細胞具有下列哪種共同構造？",
+        "correct": "核糖體",
+        "wrong": [
+          "具核膜的細胞核",
+          "粒線體",
+          "葉綠體"
+        ],
+        "exp": "細菌是原核生物，沒有核膜及膜狀胞器，但有製造蛋白質的核糖體；人體細胞也有核糖體。",
+        "subject": "生物",
+        "sub_topic": "細胞構造與功能",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-細胞構造與功能-1",
+        "template_id": "human-bio-高中一年級-細胞構造與功能-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "human-bio-高中一年級-細胞構造與功能-2",
+      "source": "大考中心112學年度學測自然科第14題，依原題考點改寫",
+      "design": "比較大腸桿菌與真核酵母菌，掌握基本細胞構造。",
+      "question": {
+        "q": "大腸桿菌與酵母菌必定都有下列哪一構造？",
+        "correct": "細胞膜",
+        "wrong": [
+          "粒線體",
+          "高基氏體",
+          "核膜"
+        ],
+        "exp": "細胞膜為所有細胞的基本構造；大腸桿菌沒有核膜和粒線體等膜狀胞器。",
+        "subject": "生物",
+        "sub_topic": "細胞構造與功能",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-細胞構造與功能-2",
+        "template_id": "human-bio-高中一年級-細胞構造與功能-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "遺傳基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "human-bio-高中一年級-DNA 與基因-1",
+      "source": "大考中心108學年度學測自然科第58題，依原題考點改寫",
+      "design": "雙股 DNA 上互補鹼基的比例相等，但單一股的 A 和 T 不一定相等。",
+      "question": {
+        "q": "雙股 DNA 的其中一股有 28% 的腺嘌呤（A），互補股的胸腺嘧啶（T）占多少？",
+        "correct": "$28\\%$",
+        "wrong": [
+          "$22\\%$",
+          "$44\\%$",
+          "$56\\%$"
+        ],
+        "exp": "腺嘌呤 A 與胸腺嘧啶 T 互補配對，所以一股 A 的比例，等於相對應互補股 T 的比例，即 28%。",
+        "subject": "生物",
+        "sub_topic": "DNA 與基因",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-DNA 與基因-1",
+        "template_id": "human-bio-高中一年級-DNA 與基因-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "human-bio-高中一年級-DNA 與基因-2",
+      "source": "大考中心113學年度學測自然科第6題，依原題考點改寫",
+      "design": "由 DNA 的雙股互補及反向平行特性決定鹼基序列。",
+      "question": {
+        "q": "某 DNA 單股寫成 $5'$-ATGC-$3'$，按相對應位置從左到右寫出互補股，應為何者？",
+        "correct": "$3'$-TACG-$5'$",
+        "wrong": [
+          "$5'$-TACG-$3'$",
+          "$3'$-ATGC-$5'$",
+          "$3'$-UACG-$5'$"
+        ],
+        "exp": "DNA 中 A 配 T、G 配 C，兩股方向反向平行，所以互補股依相對位置寫作 $3'$-TACG-$5'$。",
+        "subject": "生物",
+        "sub_topic": "DNA 與基因",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "human-bio-高中一年級-DNA 與基因-2",
+        "template_id": "human-bio-高中一年級-DNA 與基因-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
