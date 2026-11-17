@@ -1,0 +1,66 @@
+{
+  "units": [
+    "學測英文閱讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中三年級-主旨、細節與推論-1",
+      "source": "大考中心 114學年度學測英文第39至42題，參照題型與考查觀念重新命題",
+      "design": "區分原文直接給出的資料與需要推論的結論",
+      "question": {
+        "q": "A wildlife center found that sea turtles often mistook floating plastic for food. It launched a program to remove plastic from nearby beaches. Which problem is the program mainly intended to address?",
+        "correct": "Plastic pollution that threatens sea turtles",
+        "wrong": [
+          "A shortage of fishing boats",
+          "The lack of tourists at local beaches",
+          "The disappearance of all marine plants"
+        ],
+        "exp": "中心觀察海龜誤食塑膠並清理海灘，主要目標是降低塑膠污染對海龜的威脅。",
+        "subject": "英文",
+        "sub_topic": "主旨、細節與推論",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨、細節與推論",
+        "template_id": "ceec-adapt-english-高中三年級-主旨、細節與推論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中三年級-主旨、細節與推論-2",
+      "source": "大考中心 114學年度學測英文第39至42題，參照題型與考查觀念重新命題",
+      "design": "區分原文直接給出的資料與需要推論的結論",
+      "question": {
+        "q": "A town's public library extended its evening hours. In the next month, visits by people who worked during the day increased. What is the most reasonable inference?",
+        "correct": "Longer opening hours made the library more accessible to some workers.",
+        "wrong": [
+          "All visitors had stopped reading books.",
+          "Every worker in the town visited the library.",
+          "The library stopped lending books during the day."
+        ],
+        "exp": "延長晚間開放後上班族訪客增加，合理推論是時段安排改善可近性，不能推論所有人都來訪。",
+        "subject": "英文",
+        "sub_topic": "主旨、細節與推論",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨、細節與推論",
+        "template_id": "ceec-adapt-english-高中三年級-主旨、細節與推論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

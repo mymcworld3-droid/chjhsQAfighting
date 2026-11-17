@@ -1,0 +1,66 @@
+{
+  "units": [
+    "詞彙與搭配"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中一年級-字首、字根與字尾-1",
+      "source": "大考中心 114學年度學測英文第1至10題，參照題型與考查觀念重新命題",
+      "design": "辨識否定字首及名詞字尾如何改變語意與詞性",
+      "question": {
+        "q": "The instructions were so ______ that several students asked the teacher to explain them again.",
+        "correct": "unclear",
+        "wrong": [
+          "careful",
+          "clearly",
+          "clearness"
+        ],
+        "exp": "再度請求解釋表示指示不清楚；un- 表否定，unclear 是形容詞。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-字首、字根與字尾",
+        "template_id": "ceec-adapt-english-高中一年級-字首、字根與字尾-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中一年級-字首、字根與字尾-2",
+      "source": "大考中心 114學年度學測英文第1至10題，參照題型與考查觀念重新命題",
+      "design": "辨識否定字首及名詞字尾如何改變語意與詞性",
+      "question": {
+        "q": "The scientist's ______ led her to repeat the experiment rather than accept one unusual result.",
+        "correct": "curiosity",
+        "wrong": [
+          "curious",
+          "curiously",
+          "curiosities"
+        ],
+        "exp": "所有格 scientist's 後面需要名詞作主語；curiosity 指好奇心。",
+        "subject": "英文",
+        "sub_topic": "字首、字根與字尾",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-字首、字根與字尾",
+        "template_id": "ceec-adapt-english-高中一年級-字首、字根與字尾-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

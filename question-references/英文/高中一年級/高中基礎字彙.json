@@ -1,0 +1,66 @@
+{
+  "units": [
+    "詞彙與搭配"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中一年級-高中基礎字彙-1",
+      "source": "大考中心 114學年度學測英文第1至10題，參照題型與考查觀念重新命題",
+      "design": "利用完整語境判定字義，而非僅比對詞性",
+      "question": {
+        "q": "The museum had to ______ its opening because the electrical system was not ready.",
+        "correct": "postpone",
+        "wrong": [
+          "preserve",
+          "predict",
+          "protect"
+        ],
+        "exp": "因電力系統未準備好，開館必須延後，故選 postpone（延後）。",
+        "subject": "英文",
+        "sub_topic": "高中基礎字彙",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中基礎字彙",
+        "template_id": "ceec-adapt-english-高中一年級-高中基礎字彙-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中一年級-高中基礎字彙-2",
+      "source": "大考中心 114學年度學測英文第1至10題，參照題型與考查觀念重新命題",
+      "design": "利用完整語境判定字義，而非僅比對詞性",
+      "question": {
+        "q": "The village relies on a nearby river as its main ______ of drinking water.",
+        "correct": "source",
+        "wrong": [
+          "surface",
+          "result",
+          "response"
+        ],
+        "exp": "河川是飲用水的來源，source 表示來源；其他字無法合理搭配 main ... of。",
+        "subject": "英文",
+        "sub_topic": "高中基礎字彙",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-1",
+            "name": "詞彙片語"
+          }
+        ],
+        "concept_id": "english-高中基礎字彙",
+        "template_id": "ceec-adapt-english-高中一年級-高中基礎字彙-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

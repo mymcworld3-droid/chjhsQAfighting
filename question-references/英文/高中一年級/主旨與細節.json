@@ -1,0 +1,66 @@
+{
+  "units": [
+    "閱讀理解"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中一年級-主旨與細節-1",
+      "source": "大考中心 114學年度學測英文第39至42題，參照題型與考查觀念重新命題",
+      "design": "由短段落統整中心訊息，而非只擷取一個細節",
+      "question": {
+        "q": "At a local school, students collect rainwater to water the garden. They also use leftover leaves to make compost. Both activities help the school reduce waste and conserve resources. What is the main idea?",
+        "correct": "Students are making their school more environmentally friendly.",
+        "wrong": [
+          "Rainwater is unsafe for gardens.",
+          "Every student dislikes gardening.",
+          "The school has stopped all outdoor activities."
+        ],
+        "exp": "集水與堆肥共同指向環境友善措施，而非只描述單一做法。",
+        "subject": "英文",
+        "sub_topic": "主旨與細節",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨與細節",
+        "template_id": "ceec-adapt-english-高中一年級-主旨與細節-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中一年級-主旨與細節-2",
+      "source": "大考中心 114學年度學測英文第39至42題，參照題型與考查觀念重新命題",
+      "design": "由短段落統整中心訊息，而非只擷取一個細節",
+      "question": {
+        "q": "A small bookstore opens at 9 a.m. on weekdays and at 11 a.m. on weekends. It closes at 6 p.m. every day. When can customers enter the bookstore on Sunday?",
+        "correct": "At 11:30 a.m.",
+        "wrong": [
+          "At 8:30 a.m.",
+          "At 9:30 a.m.",
+          "At 7:00 p.m."
+        ],
+        "exp": "週日屬於週末，營業時間為 11:00 至 18:00，因此 11:30 可進入。",
+        "subject": "英文",
+        "sub_topic": "主旨與細節",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-4",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "english-主旨與細節",
+        "template_id": "ceec-adapt-english-高中一年級-主旨與細節-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

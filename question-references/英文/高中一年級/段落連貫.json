@@ -1,0 +1,66 @@
+{
+  "units": [
+    "克漏字與文意選填"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中一年級-段落連貫-1",
+      "source": "大考中心 114學年度學測英文第31至34題，參照題型與考查觀念重新命題",
+      "design": "閱讀前後因果與指代詞，補入語義連貫的句子",
+      "question": {
+        "q": "The city built a new bicycle lane last year. ______ As a result, more students now ride to school instead of taking cars.",
+        "correct": "The lane made cycling safer along busy roads.",
+        "wrong": [
+          "The city closed all its schools forever.",
+          "Bicycles are always more expensive than cars.",
+          "Last year did not have any roads."
+        ],
+        "exp": "新增車道改善騎行安全，能合理導向學生改騎自行車的結果。",
+        "subject": "英文",
+        "sub_topic": "段落連貫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "english-段落連貫",
+        "template_id": "ceec-adapt-english-高中一年級-段落連貫-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中一年級-段落連貫-2",
+      "source": "大考中心 114學年度學測英文第31至34題，參照題型與考查觀念重新命題",
+      "design": "閱讀前後因果與指代詞，補入語義連貫的句子",
+      "question": {
+        "q": "Many students believed that plants grow best with more fertilizer. However, the class experiment showed that too much fertilizer damaged the roots. ______",
+        "correct": "The experiment challenged the students' original assumption.",
+        "wrong": [
+          "The results proved that unlimited fertilizer is always safe.",
+          "The plants never received any fertilizer.",
+          "The students did not perform an experiment."
+        ],
+        "exp": "However 帶出反證，結語應指出原先『越多越好』的假設受到挑戰。",
+        "subject": "英文",
+        "sub_topic": "段落連貫",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-5",
+            "name": "篇章結構"
+          }
+        ],
+        "concept_id": "english-段落連貫",
+        "template_id": "ceec-adapt-english-高中一年級-段落連貫-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

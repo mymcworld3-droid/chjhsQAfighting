@@ -1,0 +1,66 @@
+{
+  "units": [
+    "核心文法：句型與時態"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中一年級-現在式與過去式-1",
+      "source": "大考中心 114學年度學測英文第11至15題，參照題型與考查觀念重新命題",
+      "design": "用時間副詞與事件發生時間選擇時態",
+      "question": {
+        "q": "Every Friday, the students ______ the library after school.",
+        "correct": "visit",
+        "wrong": [
+          "visited",
+          "are visiting yesterday",
+          "had visited tomorrow"
+        ],
+        "exp": "Every Friday 是規律性的現在習慣，用現在簡單式 visit。",
+        "subject": "英文",
+        "sub_topic": "現在式與過去式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-現在式與過去式",
+        "template_id": "ceec-adapt-english-高中一年級-現在式與過去式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中一年級-現在式與過去式-2",
+      "source": "大考中心 114學年度學測英文第11至15題，參照題型與考查觀念重新命題",
+      "design": "用時間副詞與事件發生時間選擇時態",
+      "question": {
+        "q": "When the storm began last night, we ______ all the windows.",
+        "correct": "closed",
+        "wrong": [
+          "close",
+          "will close",
+          "are closing"
+        ],
+        "exp": "last night 和 began 指明過去事件，用 closed。",
+        "subject": "英文",
+        "sub_topic": "現在式與過去式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-現在式與過去式",
+        "template_id": "ceec-adapt-english-高中一年級-現在式與過去式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

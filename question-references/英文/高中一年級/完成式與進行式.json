@@ -1,0 +1,66 @@
+{
+  "units": [
+    "核心文法：句型與時態"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中一年級-完成式與進行式-1",
+      "source": "大考中心 114學年度學測英文第11至15題，參照題型與考查觀念重新命題",
+      "design": "以時間起點與現在延續，區分現在完成和單純過去",
+      "question": {
+        "q": "My brother ______ in Taipei since 2022, and he still lives there.",
+        "correct": "has lived",
+        "wrong": [
+          "lived",
+          "will live",
+          "is living yesterday"
+        ],
+        "exp": "since 2022 且目前仍住在當地，表示狀態由過去延續到現在，用現在完成式 has lived。",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-完成式與進行式",
+        "template_id": "ceec-adapt-english-高中一年級-完成式與進行式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中一年級-完成式與進行式-2",
+      "source": "大考中心 114學年度學測英文第11至15題，參照題型與考查觀念重新命題",
+      "design": "以時間起點與現在延續，區分現在完成和單純過去",
+      "question": {
+        "q": "Look! The children ______ a kite in the park right now.",
+        "correct": "are flying",
+        "wrong": [
+          "flew",
+          "have flown yesterday",
+          "will flying"
+        ],
+        "exp": "Look 與 right now 表示正在進行的動作，用現在進行式 are flying。",
+        "subject": "英文",
+        "sub_topic": "完成式與進行式",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-3",
+            "name": "時態語態"
+          }
+        ],
+        "concept_id": "english-完成式與進行式",
+        "template_id": "ceec-adapt-english-高中一年級-完成式與進行式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

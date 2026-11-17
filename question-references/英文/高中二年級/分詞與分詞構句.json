@@ -1,0 +1,66 @@
+{
+  "units": [
+    "文法：非限定動詞"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中二年級-分詞與分詞構句-1",
+      "source": "大考中心 114學年度學測英文第11至15題，參照題型與考查觀念重新命題",
+      "design": "判斷分詞與修飾對象之主被動關係",
+      "question": {
+        "q": "______ by the sudden noise, the cat hid under the sofa.",
+        "correct": "Frightened",
+        "wrong": [
+          "Frightening",
+          "Frighten",
+          "To frighten"
+        ],
+        "exp": "貓是被突然聲響嚇到，使用過去分詞 Frightened。",
+        "subject": "英文",
+        "sub_topic": "分詞與分詞構句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-分詞與分詞構句",
+        "template_id": "ceec-adapt-english-高中二年級-分詞與分詞構句-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中二年級-分詞與分詞構句-2",
+      "source": "大考中心 114學年度學測英文第11至15題，參照題型與考查觀念重新命題",
+      "design": "判斷分詞與修飾對象之主被動關係",
+      "question": {
+        "q": "______ across the bridge, Nora noticed a small boat below.",
+        "correct": "Walking",
+        "wrong": [
+          "Walked",
+          "To walking",
+          "Having walk"
+        ],
+        "exp": "Nora 主動走過橋時看到小船，Walking across ... 修飾主句主語。",
+        "subject": "英文",
+        "sub_topic": "分詞與分詞構句",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-2",
+            "name": "文法句型"
+          }
+        ],
+        "concept_id": "english-分詞與分詞構句",
+        "template_id": "ceec-adapt-english-高中二年級-分詞與分詞構句-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

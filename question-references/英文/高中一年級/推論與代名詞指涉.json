@@ -1,0 +1,66 @@
+{
+  "units": [
+    "閱讀理解"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ceec-adapt-english-高中一年級-推論與代名詞指涉-1",
+      "source": "大考中心 114學年度學測英文第39至42題，參照題型與考查觀念重新命題",
+      "design": "先確定代名詞指涉，再依明示事實做有限推論",
+      "question": {
+        "q": "After Mia repaired the old bicycle, she lent it to Tom. He returned it the next day. What does the second 'it' refer to?",
+        "correct": "The bicycle",
+        "wrong": [
+          "Mia",
+          "Tom",
+          "The next day"
+        ],
+        "exp": "returned it 的 it 指先前借出的 old bicycle。",
+        "subject": "英文",
+        "sub_topic": "推論與代名詞指涉",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "english-推論與代名詞指涉",
+        "template_id": "ceec-adapt-english-高中一年級-推論與代名詞指涉-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ceec-adapt-english-高中一年級-推論與代名詞指涉-2",
+      "source": "大考中心 114學年度學測英文第39至42題，參照題型與考查觀念重新命題",
+      "design": "先確定代名詞指涉，再依明示事實做有限推論",
+      "question": {
+        "q": "Jason brought an umbrella despite the clear sky. An hour later, dark clouds appeared, and his classmates asked to share it. What can be inferred?",
+        "correct": "Jason had prepared for possible rain.",
+        "wrong": [
+          "Jason knew the exact weather forecast.",
+          "The umbrella was broken.",
+          "It had already been raining all morning."
+        ],
+        "exp": "帶雨傘且之後有烏雲，能支持他預先防雨，不能推論他知道精確預報。",
+        "subject": "英文",
+        "sub_topic": "推論與代名詞指涉",
+        "knowledge_points": [
+          {
+            "subject": "英文",
+            "id": "english-6",
+            "name": "語意推論"
+          }
+        ],
+        "concept_id": "english-推論與代名詞指涉",
+        "template_id": "ceec-adapt-english-高中一年級-推論與代名詞指涉-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
