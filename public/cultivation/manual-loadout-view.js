@@ -69,8 +69,8 @@ export function renderManualLoadout(state, selectedIndex, pickerSlot, {esc,skill
     const cost=filled?`${format(skill.cost)} 體力`:'尚未裝備';
     return `<div class="manual-slot ${filled?'is-active':'is-empty'} ${filled?'is-'+skill.bookSchool:''} ${pickerSlot===i?'is-editing':''}"
       data-manual-slot="${i}">
-      <button type="button" class="manual-slot-pick" data-manual-pick-slot="${actualSlot}"
-        aria-expanded="${pickerSlot===actualSlot}" aria-label="${filled?'替換第'+(i+1)+'格技能':'新增技能，將填入第'+(actualSlot+1)+'格'}，${esc(name)}">
+      <button type="button" class="manual-slot-pick" data-manual-pick-slot="${i}"
+        aria-expanded="${pickerSlot===i}" aria-label="${filled?'替換第'+(i+1)+'格技能':'新增技能，將填入第'+(actualSlot+1)+'格'}，${esc(name)}">
         <span class="manual-slot-topline"><span>招式 ${String(i+1).padStart(2,'0')}</span>
           <span class="manual-slot-change"><i class="fa-solid ${filled?'fa-rotate':'fa-plus'}" aria-hidden="true"></i> ${filled?'替換':actualSlot===i?'選擇':'先補空欄'}</span>
         </span>
