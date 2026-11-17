@@ -4,7 +4,7 @@
 // Work is queued only on an authenticated player's server-derived scope.
 // Candidate generation is concurrent; approval still gates publishing/serving.
 const keyOf = target => JSON.stringify([
-  target.subject, target.level, target.topic, target.difficulty
+  target.subject, target.level, target.topic, target.difficulty, target.referenceVersion || ''
 ]);
 
 function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
@@ -107,7 +107,8 @@ function createTacticalBankPrewarmer({bank,generate,logger=console,now=Date.now,
       }
       if(working.has(key)||now()<(cooldown.get(key)||0))continue;
       queue.set(key,{target:{subject:String(target.subject),level:String(target.level),
-        topic:String(target.topic||''),difficulty:String(target.difficulty)},
+        topic:String(target.topic||''),difficulty:String(target.difficulty),
+        ...(target.referenceVersion ? {referenceVersion:target.referenceVersion} : {})},
         excluded:avoided.slice()});
       added++;
     }

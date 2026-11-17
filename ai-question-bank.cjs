@@ -122,7 +122,8 @@ const trim = (s, size = 200) => String(s || '').normalize('NFC').trim().slice(0,
 const normalize = s => trim(s, 240).toLocaleLowerCase('zh-TW').replace(/\s+/g, '');
 const digest = s => crypto.createHash('sha256').update(s).digest('hex');
 const scopeCode = input => digest(JSON.stringify([
-  normalize(input.subject), normalize(input.level), normalize(input.topic)
+  normalize(input.subject), normalize(input.level), normalize(input.topic),
+  ...(input.referenceVersion ? [input.referenceVersion] : [])
 ])).slice(0, 18);
 const fingerprint = input => digest(JSON.stringify([
   normalize(input?.q), normalize(input?.correct),
@@ -154,7 +155,7 @@ const compatible = (entry, target) => {
   if (normalize(c.subject) !== normalize(target.subject) ||
       normalize(c.level) !== normalize(target.level) ||
       normalize(c.topic) !== normalize(target.topic) ||
-      c.difficulty !== target.difficulty) return false;
+      c.difficulty !== target.difficulty || (c.referenceVersion || '') !== (target.referenceVersion || '')) return false;
   if (target.facetId) {
     if (c.facetId !== target.facetId || c.role !== target.role ||
         c.planVersion !== target.planVersion) return false;
@@ -416,6 +417,7 @@ function createAIQuestionBank({env = process.env, fetcher = fetch, now = Date.no
       catalog:{
         subject:trim(target.subject),level:trim(target.level),topic:trim(target.topic),
         difficulty:target.difficulty,
+        ...(target.referenceVersion ? {referenceVersion:target.referenceVersion} : {}),
         facetId:trim(target.facetId,80),role:trim(target.role,40),
         planVersion:trim(target.planVersion,80)
       },
