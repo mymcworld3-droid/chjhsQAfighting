@@ -1,0 +1,66 @@
+{
+  "units": [
+    "多項式函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-多項式不等式-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「多項式不等式」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "不等式 (x－2)(x＋1)＞0 的解集為何？",
+        "correct": "x＜－1 或 x＞2",
+        "wrong": [
+          "－1＜x＜2",
+          "x≤－1 或 x≥2",
+          "x＞－1"
+        ],
+        "exp": "零點−1與2把數線分區，兩因式同號時乘積正，嚴格不等式不含端點。",
+        "subject": "數學",
+        "sub_topic": "多項式不等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-多項式不等式",
+        "template_id": "math-ref-g1-多項式不等式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-多項式不等式-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「多項式不等式」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "不等式 x²－5x＋6≤0 的解集為何？",
+        "correct": "2≤x≤3",
+        "wrong": [
+          "x≤2 或 x≥3",
+          "2＜x＜3",
+          "x≥2"
+        ],
+        "exp": "因式分解為(x−2)(x−3)≤0，開口向上二次式在兩根間不大於0。",
+        "subject": "數學",
+        "sub_topic": "多項式不等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-多項式不等式",
+        "template_id": "math-ref-g1-多項式不等式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

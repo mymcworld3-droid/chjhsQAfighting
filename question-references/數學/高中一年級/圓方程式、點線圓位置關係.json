@@ -1,0 +1,66 @@
+{
+  "units": [
+    "直線與圓"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-圓方程式、點線圓位置關係-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「圓方程式、點線圓位置關係」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "圓心為(2,－1)、半徑為3的圓，方程式為何？",
+        "correct": "(x－2)²＋(y＋1)²＝9",
+        "wrong": [
+          "(x＋2)²＋(y－1)²＝9",
+          "(x－2)²＋(y＋1)²＝3",
+          "(x－2)²－(y＋1)²＝9"
+        ],
+        "exp": "圓的一般標準式為(x−h)²＋(y−k)²＝r²，代入h＝2、k＝−1、r＝3。",
+        "subject": "數學",
+        "sub_topic": "圓方程式、點線圓位置關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-圓方程式、點線圓位置關係",
+        "template_id": "math-ref-g1-圓方程式、點線圓位置關係-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-圓方程式、點線圓位置關係-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「圓方程式、點線圓位置關係」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "圓心(1,1)、半徑2的圓與直線x＝4有幾個交點？",
+        "correct": "0個",
+        "wrong": [
+          "1個",
+          "2個",
+          "無限多個"
+        ],
+        "exp": "圓心到直線的距離為|4−1|＝3，大於半徑2，所以沒有交點。",
+        "subject": "數學",
+        "sub_topic": "圓方程式、點線圓位置關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-圓方程式、點線圓位置關係",
+        "template_id": "math-ref-g1-圓方程式、點線圓位置關係-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

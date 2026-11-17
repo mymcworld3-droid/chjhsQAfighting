@@ -1,0 +1,66 @@
+{
+  "units": [
+    "排列組合"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-重複排列、分組與計數-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「重複排列、分組與計數」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "把 BANANA 的六個字母重新排列，完全不同的排列數為何？",
+        "correct": "60",
+        "wrong": [
+          "720",
+          "120",
+          "30"
+        ],
+        "exp": "A出現3次、N出現2次，故排列數為6!／(3!2!)＝60。",
+        "subject": "數學",
+        "sub_topic": "重複排列、分組與計數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-重複排列、分組與計數",
+        "template_id": "math-ref-g1-重複排列、分組與計數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-重複排列、分組與計數-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「重複排列、分組與計數」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "6名不同學生分成標記為甲組與乙組的兩組，每組各3人，分組方式有多少種？",
+        "correct": "20種",
+        "wrong": [
+          "10種",
+          "36種",
+          "120種"
+        ],
+        "exp": "選3人進甲組後，其餘自動進乙組，共C(6,3)＝20；兩組有名稱，不再除以2。",
+        "subject": "數學",
+        "sub_topic": "重複排列、分組與計數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-重複排列、分組與計數",
+        "template_id": "math-ref-g1-重複排列、分組與計數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

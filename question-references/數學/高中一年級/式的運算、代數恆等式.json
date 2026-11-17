@@ -1,0 +1,66 @@
+{
+  "units": [
+    "數與式"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-式的運算、代數恆等式-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「式的運算、代數恆等式」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "對所有實數a、b，(a＋b)²－(a－b)² 等於下列何者？",
+        "correct": "4ab",
+        "wrong": [
+          "2a²＋2b²",
+          "2ab",
+          "a²－b²"
+        ],
+        "exp": "展開前者a²＋2ab＋b²，後者a²－2ab＋b²，相減為4ab。",
+        "subject": "數學",
+        "sub_topic": "式的運算、代數恆等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-式的運算、代數恆等式",
+        "template_id": "math-ref-g1-式的運算、代數恆等式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-式的運算、代數恆等式-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「式的運算、代數恆等式」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "將 (x＋2)(x－3) 展開後整理，哪個式子正確？",
+        "correct": "x²－x－6",
+        "wrong": [
+          "x²＋x－6",
+          "x²－x＋6",
+          "x²－5x－6"
+        ],
+        "exp": "依分配律x²－3x＋2x－6＝x²－x－6。",
+        "subject": "數學",
+        "sub_topic": "式的運算、代數恆等式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-式的運算、代數恆等式",
+        "template_id": "math-ref-g1-式的運算、代數恆等式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與資料分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-樣本空間與事件-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「樣本空間與事件」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "同時擲一枚硬幣與一顆六面骰，並記錄兩者結果。樣本空間共有多少個基本結果？",
+        "correct": "12個",
+        "wrong": [
+          "6個",
+          "8個",
+          "36個"
+        ],
+        "exp": "硬幣2種、骰子6種，兩者結合有2×6＝12個可能結果。",
+        "subject": "數學",
+        "sub_topic": "樣本空間與事件",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-樣本空間與事件",
+        "template_id": "math-ref-g1-樣本空間與事件-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-樣本空間與事件-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「樣本空間與事件」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "擲兩顆可區分的公平骰子，點數和等於7的基本結果有幾個？",
+        "correct": "6個",
+        "wrong": [
+          "7個",
+          "5個",
+          "12個"
+        ],
+        "exp": "有(1,6)、(2,5)、(3,4)、(4,3)、(5,2)、(6,1)，共6個有序結果。",
+        "subject": "數學",
+        "sub_topic": "樣本空間與事件",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-樣本空間與事件",
+        "template_id": "math-ref-g1-樣本空間與事件-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "排列組合"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-基本計數原理-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「基本計數原理」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "小安有4件不同上衣與3件不同長褲，每天選1件上衣和1件長褲，搭配共有多少種？",
+        "correct": "12種",
+        "wrong": [
+          "7種",
+          "24種",
+          "4種"
+        ],
+        "exp": "兩階段選擇互相獨立，乘法原理得4×3＝12。",
+        "subject": "數學",
+        "sub_topic": "基本計數原理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-基本計數原理",
+        "template_id": "math-ref-g1-基本計數原理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-基本計數原理-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「基本計數原理」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "甲地到乙地有2條不同道路，乙地到丙地有3條道路，規定必須經乙且各選一條，從甲到丙有幾種走法？",
+        "correct": "6種",
+        "wrong": [
+          "5種",
+          "9種",
+          "3種"
+        ],
+        "exp": "第一段兩種、第二段三種，依乘法原理共有2×3＝6種。",
+        "subject": "數學",
+        "sub_topic": "基本計數原理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-基本計數原理",
+        "template_id": "math-ref-g1-基本計數原理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

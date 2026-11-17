@@ -1,0 +1,66 @@
+{
+  "units": [
+    "指數與常用對數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-指數律-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「指數律」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "計算 2³×2⁻¹，結果為何？",
+        "correct": "4",
+        "wrong": [
+          "16",
+          "8",
+          "2"
+        ],
+        "exp": "同底數相乘指數相加，2^(3−1)＝2²＝4。",
+        "subject": "數學",
+        "sub_topic": "指數律",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-指數律",
+        "template_id": "math-ref-g1-指數律-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-指數律-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「指數律」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "計算 (3²)³／3⁴，結果為何？",
+        "correct": "9",
+        "wrong": [
+          "3",
+          "27",
+          "81"
+        ],
+        "exp": "冪的冪指數相乘得3⁶，再除以3⁴得3²＝9。",
+        "subject": "數學",
+        "sub_topic": "指數律",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-指數律",
+        "template_id": "math-ref-g1-指數律-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

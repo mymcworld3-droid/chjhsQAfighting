@@ -1,0 +1,66 @@
+{
+  "units": [
+    "三角比"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-正弦定理與餘弦定理、面積-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「正弦定理與餘弦定理、面積」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "三角形ABC中，A＝30°、B＝90°，且A的對邊長5。B的對邊長是多少？",
+        "correct": "10",
+        "wrong": [
+          "5√2",
+          "5",
+          "10√3"
+        ],
+        "exp": "正弦定理b/sin90°＝5/sin30°，故b＝10。",
+        "subject": "數學",
+        "sub_topic": "正弦定理與餘弦定理、面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-正弦定理與餘弦定理、面積",
+        "template_id": "math-ref-g1-正弦定理與餘弦定理、面積-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-正弦定理與餘弦定理、面積-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「正弦定理與餘弦定理、面積」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "三角形兩邊長分別為6與8，夾角30°，其面積是多少？",
+        "correct": "12",
+        "wrong": [
+          "24",
+          "14",
+          "48"
+        ],
+        "exp": "三角形面積＝(1/2)×6×8×sin30°＝12。",
+        "subject": "數學",
+        "sub_topic": "正弦定理與餘弦定理、面積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-正弦定理與餘弦定理、面積",
+        "template_id": "math-ref-g1-正弦定理與餘弦定理、面積-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

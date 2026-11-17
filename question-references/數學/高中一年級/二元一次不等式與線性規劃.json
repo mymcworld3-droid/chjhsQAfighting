@@ -1,0 +1,66 @@
+{
+  "units": [
+    "直線與圓"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-二元一次不等式與線性規劃-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「二元一次不等式與線性規劃」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "實數x、y滿足 x≥0、y≥0、x＋y≤8。目標函數3x＋2y的最大值為何？",
+        "correct": "24",
+        "wrong": [
+          "16",
+          "20",
+          "40"
+        ],
+        "exp": "可行三角形頂點(0,0)、(8,0)、(0,8)，代入目標函數分別得0、24、16。",
+        "subject": "數學",
+        "sub_topic": "二元一次不等式與線性規劃",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-二元一次不等式與線性規劃",
+        "template_id": "math-ref-g1-二元一次不等式與線性規劃-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-二元一次不等式與線性規劃-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「二元一次不等式與線性規劃」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "實數x、y滿足 x≥0、y≥0、2x＋y≤6。x＋2y 的最大值為何？",
+        "correct": "12",
+        "wrong": [
+          "6",
+          "9",
+          "3"
+        ],
+        "exp": "頂點(0,0)、(3,0)、(0,6)，目標值為0、3、12，故最大為12。",
+        "subject": "數學",
+        "sub_topic": "二元一次不等式與線性規劃",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-3",
+            "name": "方程與不等式"
+          }
+        ],
+        "concept_id": "math-高中一年級-二元一次不等式與線性規劃",
+        "template_id": "math-ref-g1-二元一次不等式與線性規劃-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

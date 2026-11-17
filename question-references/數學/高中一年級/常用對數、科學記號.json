@@ -1,0 +1,66 @@
+{
+  "units": [
+    "指數與常用對數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-常用對數、科學記號-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「常用對數、科學記號」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "將 0.00056 正確表示為科學記號，應為何者？",
+        "correct": "5.6×10⁻⁴",
+        "wrong": [
+          "5.6×10⁻³",
+          "0.56×10⁻⁴",
+          "56×10⁻⁵"
+        ],
+        "exp": "小數點右移四位得到5.6，故為5.6×10的負四次方；首位數須介於1與10。",
+        "subject": "數學",
+        "sub_topic": "常用對數、科學記號",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-常用對數、科學記號",
+        "template_id": "math-ref-g1-常用對數、科學記號-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-常用對數、科學記號-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「常用對數、科學記號」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "已知 log 表常用對數，求 log(1000√10) 的值。",
+        "correct": "3.5",
+        "wrong": [
+          "3",
+          "4",
+          "1.5"
+        ],
+        "exp": "1000√10＝10³×10^(1/2)，故log值為3＋1/2＝3.5。",
+        "subject": "數學",
+        "sub_topic": "常用對數、科學記號",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-1",
+            "name": "數與運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-常用對數、科學記號",
+        "template_id": "math-ref-g1-常用對數、科學記號-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "多項式函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-餘式定理-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「餘式定理」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "多項式 P(x)＝x³－2x²＋3 除以 x－2，其餘式為何？",
+        "correct": "3",
+        "wrong": [
+          "0",
+          "2",
+          "7"
+        ],
+        "exp": "餘式定理給餘式P(2)＝8－8＋3＝3。",
+        "subject": "數學",
+        "sub_topic": "餘式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-餘式定理",
+        "template_id": "math-ref-g1-餘式定理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-餘式定理-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「餘式定理」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "已知 P(x)＝x²＋2x＋5，除以 x＋1 時餘式為何？",
+        "correct": "4",
+        "wrong": [
+          "6",
+          "5",
+          "2"
+        ],
+        "exp": "x＋1＝0得x＝−1，P(−1)＝1−2＋5＝4。",
+        "subject": "數學",
+        "sub_topic": "餘式定理",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中一年級-餘式定理",
+        "template_id": "math-ref-g1-餘式定理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

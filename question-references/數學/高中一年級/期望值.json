@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與資料分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-期望值-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「期望值」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "隨機變數X以機率1/4取值0、以機率3/4取值4，則E(X)為何？",
+        "correct": "3",
+        "wrong": [
+          "1",
+          "4",
+          "2"
+        ],
+        "exp": "E(X)＝0×1/4＋4×3/4＝3。",
+        "subject": "數學",
+        "sub_topic": "期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-期望值",
+        "template_id": "math-ref-g1-期望值-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-期望值-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「期望值」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "公平六面骰擲出6可得獎金60元，其餘點數沒有獎金；不計參加費，單次獎金的期望值為何？",
+        "correct": "10元",
+        "wrong": [
+          "6元",
+          "50元",
+          "60元"
+        ],
+        "exp": "獎金期望為60×(1/6)＋0×(5/6)＝10元。",
+        "subject": "數學",
+        "sub_topic": "期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-期望值",
+        "template_id": "math-ref-g1-期望值-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

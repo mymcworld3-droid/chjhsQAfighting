@@ -1,0 +1,66 @@
+{
+  "units": [
+    "三角比"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-直角三角形三角比-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「直角三角形三角比」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "某直角三角形對銳角θ的對邊長3、鄰邊長4，tanθ是多少？",
+        "correct": "3/4",
+        "wrong": [
+          "4/3",
+          "3/5",
+          "4/5"
+        ],
+        "exp": "正切定義為對邊／鄰邊，故為3/4。",
+        "subject": "數學",
+        "sub_topic": "直角三角形三角比",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-直角三角形三角比",
+        "template_id": "math-ref-g1-直角三角形三角比-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-直角三角形三角比-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「直角三角形三角比」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "一個直角三角形的斜邊長13，銳角A的對邊長5，sin A是多少？",
+        "correct": "5/13",
+        "wrong": [
+          "12/13",
+          "5/12",
+          "13/5"
+        ],
+        "exp": "正弦定義為對邊／斜邊，故sin A＝5/13。",
+        "subject": "數學",
+        "sub_topic": "直角三角形三角比",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中一年級-直角三角形三角比",
+        "template_id": "math-ref-g1-直角三角形三角比-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

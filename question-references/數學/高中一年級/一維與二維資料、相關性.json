@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與資料分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-一維與二維資料、相關性-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「一維與二維資料、相關性」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "資料點依次為(1,2)、(2,4)、(3,6)，若依線性相關程度判讀，何者正確？",
+        "correct": "完全正線性相關",
+        "wrong": [
+          "完全負線性相關",
+          "沒有任何線性相關",
+          "必然具有曲線但非直線關係"
+        ],
+        "exp": "三點都在y＝2x的正斜率直線上，因此相關係數為＋1。",
+        "subject": "數學",
+        "sub_topic": "一維與二維資料、相關性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-一維與二維資料、相關性",
+        "template_id": "math-ref-g1-一維與二維資料、相關性-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-一維與二維資料、相關性-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「一維與二維資料、相關性」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "資料3、4、4、5、100的中位數為何？",
+        "correct": "4",
+        "wrong": [
+          "5",
+          "23.2",
+          "100"
+        ],
+        "exp": "五個數已排序，中間第三個是4；23.2是平均數，受極端值100影響。",
+        "subject": "數學",
+        "sub_topic": "一維與二維資料、相關性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中一年級-一維與二維資料、相關性",
+        "template_id": "math-ref-g1-一維與二維資料、相關性-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

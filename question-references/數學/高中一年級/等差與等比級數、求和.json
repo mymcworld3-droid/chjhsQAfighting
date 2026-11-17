@@ -1,0 +1,66 @@
+{
+  "units": [
+    "數列與級數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g1-等差與等比級數、求和-1",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「等差與等比級數、求和」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "等差數列3、7、11、…的前10項和是多少？",
+        "correct": "210",
+        "wrong": [
+          "190",
+          "200",
+          "220"
+        ],
+        "exp": "公差4，第10項為3＋9×4＝39，和為10(3＋39)/2＝210。",
+        "subject": "數學",
+        "sub_topic": "等差與等比級數、求和",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中一年級-等差與等比級數、求和",
+        "template_id": "math-ref-g1-等差與等比級數、求和-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g1-等差與等比級數、求和-2",
+      "source": "依108課綱與學測數學A／B常見推理題型自編，非原考題",
+      "design": "「等差與等比級數、求和」：給定明確條件，利用代數或幾何推演唯一答案，干擾選項對應常見計算失誤",
+      "question": {
+        "q": "等比數列2、6、18、54、…的前4項和為何？",
+        "correct": "80",
+        "wrong": [
+          "78",
+          "108",
+          "62"
+        ],
+        "exp": "四項相加2＋6＋18＋54＝80，公比為3。",
+        "subject": "數學",
+        "sub_topic": "等差與等比級數、求和",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中一年級-等差與等比級數、求和",
+        "template_id": "math-ref-g1-等差與等比級數、求和-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
