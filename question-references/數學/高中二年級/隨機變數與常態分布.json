@@ -1,0 +1,66 @@
+{
+  "units": [
+    "條件機率與統計"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-隨機變數與常態分布-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「隨機變數與常態分布」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "標準常態隨機變數Z的分布以0為對稱中心，P(Z≤0)是多少？",
+        "correct": "0.5",
+        "wrong": [
+          "0.25",
+          "0.68",
+          "1"
+        ],
+        "exp": "標準常態分布左右對稱、連續分布在0處機率為0，累積機率為1/2。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-隨機變數與常態分布",
+        "template_id": "math-ref-g2A-隨機變數與常態分布-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-隨機變數與常態分布-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「隨機變數與常態分布」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "離散隨機變數X取0的機率為0.2，取2的機率為0.8，E(X)是多少？",
+        "correct": "1.6",
+        "wrong": [
+          "2",
+          "0.8",
+          "1"
+        ],
+        "exp": "期望值＝0×0.2＋2×0.8＝1.6。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與常態分布",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中二年級-隨機變數與常態分布",
+        "template_id": "math-ref-g2A-隨機變數與常態分布-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

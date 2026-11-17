@@ -1,0 +1,66 @@
+{
+  "units": [
+    "三角函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-正弦與餘弦函數圖形-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「正弦與餘弦函數圖形」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "函數 y＝2sin x 的振幅為何？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "π",
+          "4"
+        ],
+        "exp": "y＝A sin x 的振幅為|A|＝2。",
+        "subject": "數學",
+        "sub_topic": "正弦與餘弦函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦與餘弦函數圖形",
+        "template_id": "math-ref-g2A-正弦與餘弦函數圖形-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-正弦與餘弦函數圖形-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「正弦與餘弦函數圖形」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "函數 y＝cos(x－π／2) 可改寫為何者？",
+        "correct": "sin x",
+        "wrong": [
+          "－sin x",
+          "－cos x",
+          "cos x"
+        ],
+        "exp": "利用餘弦差角公式cos(x−π/2)＝sin x。",
+        "subject": "數學",
+        "sub_topic": "正弦與餘弦函數圖形",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-正弦與餘弦函數圖形",
+        "template_id": "math-ref-g2A-正弦與餘弦函數圖形-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

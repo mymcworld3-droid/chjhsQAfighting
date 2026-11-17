@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間中的平面與直線"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-垂直、平行、夾角與距離-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「垂直、平行、夾角與距離」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間中點P(1,2,3)到xy平面的距離為何？",
+        "correct": "3",
+        "wrong": [
+          "1",
+          "2",
+          "√14"
+        ],
+        "exp": "xy平面方程式z＝0，點至該平面的垂直距離為|z|＝3。",
+        "subject": "數學",
+        "sub_topic": "垂直、平行、夾角與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-垂直、平行、夾角與距離",
+        "template_id": "math-ref-g2A-垂直、平行、夾角與距離-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-垂直、平行、夾角與距離-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「垂直、平行、夾角與距離」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "兩相異平面z＝2與z＝5之間的最短距離為何？",
+        "correct": "3",
+        "wrong": [
+          "7",
+          "√29",
+          "2"
+        ],
+        "exp": "兩平面平行，沿z軸的垂直距離為|5−2|＝3。",
+        "subject": "數學",
+        "sub_topic": "垂直、平行、夾角與距離",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-垂直、平行、夾角與距離",
+        "template_id": "math-ref-g2A-垂直、平行、夾角與距離-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

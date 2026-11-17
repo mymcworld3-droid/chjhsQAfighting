@@ -1,0 +1,66 @@
+{
+  "units": [
+    "矩陣與應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-線性變換-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「線性變換」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "平面線性變換T(x,y)＝(2x＋y,x－y)，則T(1,2)為何？",
+        "correct": "(4,－1)",
+        "wrong": [
+          "(3,1)",
+          "(2,－2)",
+          "(1,4)"
+        ],
+        "exp": "代入x＝1、y＝2得(2＋2,1−2)＝(4,−1)。",
+        "subject": "數學",
+        "sub_topic": "線性變換",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-線性變換",
+        "template_id": "math-ref-g2A-線性變換-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-線性變換-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「線性變換」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "若線性變換T滿足T(1,0)＝(2,1)、T(0,1)＝(1,－1)，其標準矩陣為何？",
+        "correct": "[[2,1],[1,－1]]",
+        "wrong": [
+          "[[2,1],[－1,1]]",
+          "[[1,2],[1,－1]]",
+          "[[2,0],[0,－1]]"
+        ],
+        "exp": "標準矩陣兩個欄向量依序為T(e₁)和T(e₂)，故A的第1欄(2,1)、第2欄(1,−1)。",
+        "subject": "數學",
+        "sub_topic": "線性變換",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-線性變換",
+        "template_id": "math-ref-g2A-線性變換-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間向量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-空間向量內積-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「空間向量內積」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間向量a＝(1,2,3)、b＝(2,－1,4)的內積為何？",
+        "correct": "12",
+        "wrong": [
+          "10",
+          "14",
+          "8"
+        ],
+        "exp": "a·b＝1×2＋2×(−1)＋3×4＝2−2＋12＝12。",
+        "subject": "數學",
+        "sub_topic": "空間向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間向量內積",
+        "template_id": "math-ref-g2A-空間向量內積-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-空間向量內積-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「空間向量內積」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間向量u＝(1,2,－1)與v＝(k,1,3)互相垂直，則k為何？",
+        "correct": "1",
+        "wrong": [
+          "－1",
+          "3",
+          "0"
+        ],
+        "exp": "垂直時內積為0：k＋2−3＝0，故k＝1。",
+        "subject": "數學",
+        "sub_topic": "空間向量內積",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間向量內積",
+        "template_id": "math-ref-g2A-空間向量內積-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

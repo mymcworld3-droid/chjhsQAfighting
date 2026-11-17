@@ -1,0 +1,66 @@
+{
+  "units": [
+    "三角函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-和差角公式、正餘弦疊合-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「和差角公式、正餘弦疊合」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "sin75° 的正確值為何？",
+        "correct": "(√6＋√2)／4",
+        "wrong": [
+          "(√6－√2)／4",
+          "√3／2",
+          "(√3＋1)／2"
+        ],
+        "exp": "sin(45°＋30°)＝sin45°cos30°＋cos45°sin30°＝(√6＋√2)/4。",
+        "subject": "數學",
+        "sub_topic": "和差角公式、正餘弦疊合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-和差角公式、正餘弦疊合",
+        "template_id": "math-ref-g2A-和差角公式、正餘弦疊合-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-和差角公式、正餘弦疊合-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「和差角公式、正餘弦疊合」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "將 sin x＋cos x 寫成單一正弦函數，應為何者？",
+        "correct": "√2 sin(x＋45°)",
+        "wrong": [
+          "2sin(x＋45°)",
+          "√2 sin(x－45°)",
+          "sin(x＋90°)"
+        ],
+        "exp": "√2sin(x＋45°)＝√2(sinx/√2＋cosx/√2)＝sinx＋cosx。",
+        "subject": "數學",
+        "sub_topic": "和差角公式、正餘弦疊合",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中二年級-和差角公式、正餘弦疊合",
+        "template_id": "math-ref-g2A-和差角公式、正餘弦疊合-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

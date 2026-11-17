@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間向量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-空間坐標與向量-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「空間坐標與向量」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間中A(1,2,3)、B(4,6,3)，向量AB的長度為何？",
+        "correct": "5",
+        "wrong": [
+          "7",
+          "√29",
+          "4"
+        ],
+        "exp": "AB＝(3,4,0)，長度√(9＋16＋0)＝5。",
+        "subject": "數學",
+        "sub_topic": "空間坐標與向量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標與向量",
+        "template_id": "math-ref-g2A-空間坐標與向量-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-空間坐標與向量-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「空間坐標與向量」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間中兩點P(1,－2,3)、Q(5,2,7)的中點為何？",
+        "correct": "(3,0,5)",
+        "wrong": [
+          "(6,0,10)",
+          "(2,2,2)",
+          "(4,4,4)"
+        ],
+        "exp": "中點各座標取平均：(1＋5)/2＝3、(−2＋2)/2＝0、(3＋7)/2＝5。",
+        "subject": "數學",
+        "sub_topic": "空間坐標與向量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-空間坐標與向量",
+        "template_id": "math-ref-g2A-空間坐標與向量-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

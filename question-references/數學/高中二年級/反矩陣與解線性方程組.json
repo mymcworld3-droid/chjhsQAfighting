@@ -1,0 +1,66 @@
+{
+  "units": [
+    "矩陣與應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-反矩陣與解線性方程組-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「反矩陣與解線性方程組」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "矩陣A＝[[2,0],[0,3]]的反矩陣為何？",
+        "correct": "[[1/2,0],[0,1/3]]",
+        "wrong": [
+          "[[2,0],[0,3]]",
+          "[[3,0],[0,2]]",
+          "[[－1/2,0],[0,－1/3]]"
+        ],
+        "exp": "對角元素均不為0的對角矩陣，其逆矩陣將各非零對角元素取倒數。",
+        "subject": "數學",
+        "sub_topic": "反矩陣與解線性方程組",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-反矩陣與解線性方程組",
+        "template_id": "math-ref-g2A-反矩陣與解線性方程組-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-反矩陣與解線性方程組-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「反矩陣與解線性方程組」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "矩陣A＝[[1,1],[0,1]]的反矩陣為何？",
+        "correct": "[[1,－1],[0,1]]",
+        "wrong": [
+          "[[1,1],[0,1]]",
+          "[[1,0],[－1,1]]",
+          "[[0,1],[1,0]]"
+        ],
+        "exp": "以矩陣相乘驗算：[[1,1],[0,1]]×[[1,−1],[0,1]]＝單位矩陣。",
+        "subject": "數學",
+        "sub_topic": "反矩陣與解線性方程組",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-2",
+            "name": "代數運算"
+          }
+        ],
+        "concept_id": "math-高中二年級-反矩陣與解線性方程組",
+        "template_id": "math-ref-g2A-反矩陣與解線性方程組-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

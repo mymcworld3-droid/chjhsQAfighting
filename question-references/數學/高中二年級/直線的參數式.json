@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間中的平面與直線"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-直線的參數式-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「直線的參數式」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間直線x＝1＋2t、y＝2－t、z＝－1＋3t。當t＝2時，直線上的點為何？",
+        "correct": "(5,0,5)",
+        "wrong": [
+          "(3,1,2)",
+          "(5,4,5)",
+          "(4,0,3)"
+        ],
+        "exp": "代入t＝2，得到x＝5、y＝0、z＝5。",
+        "subject": "數學",
+        "sub_topic": "直線的參數式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線的參數式",
+        "template_id": "math-ref-g2A-直線的參數式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-直線的參數式-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「直線的參數式」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間直線x＝1＋2t、y＝－t、z＝3＋t，何者是直線上的點？",
+        "correct": "(3,－1,4)",
+        "wrong": [
+          "(3,1,4)",
+          "(1,－1,3)",
+          "(2,－1,4)"
+        ],
+        "exp": "令t＝1得(3,−1,4)，其餘點不滿足三式的同一t。",
+        "subject": "數學",
+        "sub_topic": "直線的參數式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線的參數式",
+        "template_id": "math-ref-g2A-直線的參數式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

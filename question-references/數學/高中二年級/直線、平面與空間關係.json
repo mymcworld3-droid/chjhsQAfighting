@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間向量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-直線、平面與空間關係-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「直線、平面與空間關係」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間中兩個相異平面都垂直於同一條直線，兩平面間的關係為何？",
+        "correct": "互相平行",
+        "wrong": [
+          "一定相交成直角",
+          "一定重合",
+          "一定相交成45°"
+        ],
+        "exp": "垂直於同一直線的平面，其法向量均平行該直線；兩平面相異，故平行。",
+        "subject": "數學",
+        "sub_topic": "直線、平面與空間關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線、平面與空間關係",
+        "template_id": "math-ref-g2A-直線、平面與空間關係-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-直線、平面與空間關係-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「直線、平面與空間關係」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "空間直線L滿足x＝1、y＝2、z＝t（t為實數），它與xy平面的交點為何？",
+        "correct": "(1,2,0)",
+        "wrong": [
+          "(1,0,2)",
+          "(0,2,1)",
+          "沒有交點"
+        ],
+        "exp": "xy平面為z＝0，令t＝0即得到交點(1,2,0)。",
+        "subject": "數學",
+        "sub_topic": "直線、平面與空間關係",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-直線、平面與空間關係",
+        "template_id": "math-ref-g2A-直線、平面與空間關係-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

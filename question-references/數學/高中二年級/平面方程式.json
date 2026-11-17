@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間中的平面與直線"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-平面方程式-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「平面方程式」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "通過(1,－2,3)、法向量(2,1,－1)的平面方程式為何？",
+        "correct": "2x＋y－z＋3＝0",
+        "wrong": [
+          "2x＋y－z－3＝0",
+          "x－2y＋3z＝0",
+          "2x－y＋z＋3＝0"
+        ],
+        "exp": "以法向量列式2(x−1)＋(y＋2)−(z−3)＝0，整理得2x＋y−z＋3＝0。",
+        "subject": "數學",
+        "sub_topic": "平面方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面方程式",
+        "template_id": "math-ref-g2A-平面方程式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-平面方程式-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「平面方程式」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "通過原點且法向量為(1,2,3)的平面方程式為何？",
+        "correct": "x＋2y＋3z＝0",
+        "wrong": [
+          "x＋2y＋3z＝1",
+          "3x＋2y＋z＝0",
+          "x＋y＋z＝0"
+        ],
+        "exp": "法向量(a,b,c)與通過原點的平面對應ax＋by＋cz＝0。",
+        "subject": "數學",
+        "sub_topic": "平面方程式",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-平面方程式",
+        "template_id": "math-ref-g2A-平面方程式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

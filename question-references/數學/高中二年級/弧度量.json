@@ -1,0 +1,66 @@
+{
+  "units": [
+    "三角函數"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g2A-弧度量-1",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「弧度量」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "150° 等於多少弧度？",
+        "correct": "5π／6",
+        "wrong": [
+          "3π／4",
+          "π／3",
+          "5π／3"
+        ],
+        "exp": "150°×π／180°＝5π／6。",
+        "subject": "數學",
+        "sub_topic": "弧度量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量",
+        "template_id": "math-ref-g2A-弧度量-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g2A-弧度量-2",
+      "source": "依108課綱數學A及學測數學A常見推理題型獨立編寫，非歷屆原題",
+      "design": "「弧度量」：依題幹完整前提計算或推理；干擾選項來自常見公式及符號誤用",
+      "question": {
+        "q": "半徑為6的圓，圓心角π／3弧度所對弧長為何？",
+        "correct": "2π",
+        "wrong": [
+          "π",
+          "3π",
+          "6π"
+        ],
+        "exp": "弧長s＝rθ＝6×π／3＝2π。",
+        "subject": "數學",
+        "sub_topic": "弧度量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-5",
+            "name": "幾何與向量"
+          }
+        ],
+        "concept_id": "math-高中二年級-弧度量",
+        "template_id": "math-ref-g2A-弧度量-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
