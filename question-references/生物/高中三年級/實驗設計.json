@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物實驗與資料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-實驗設計-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「實驗設計」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "研究者比較兩種肥料對植物長高的效果，但甲組光照12小時、乙組8小時。若要避免混淆，應如何修改？",
+        "correct": "讓兩組光照相同，僅改變肥料種類",
+        "wrong": [
+          "直接把光照差異當成肥料效果",
+          "改變所有組別的土壤與溫度",
+          "只選最高的一株作為全部樣本"
+        ],
+        "exp": "光照是可能影響生長的干擾變因，需控制。",
+        "subject": "生物",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-實驗設計",
+        "template_id": "bio-ref-g3-實驗設計-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-實驗設計-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「實驗設計」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "測試某酵素抑制劑時，甲組加入抑制劑、乙組加入同體積溶劑但無抑制劑。乙組主要用途是？",
+        "correct": "作為對照，分辨抑制劑本身的影響",
+        "wrong": [
+          "讓乙組自動成為完全不同的酵素",
+          "確保兩組結果無論如何都一樣",
+          "只為增加容器數量而沒有實驗目的"
+        ],
+        "exp": "溶劑對照可分離添加抑制劑與溶劑造成的效果。",
+        "subject": "生物",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中三年級-實驗設計",
+        "template_id": "bio-ref-g3-實驗設計-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

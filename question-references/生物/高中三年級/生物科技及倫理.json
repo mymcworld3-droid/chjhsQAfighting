@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物實驗與資料"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-生物科技及倫理-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「生物科技及倫理」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "醫療研究蒐集受試者的基因資訊，若資料可能被用於未原先說明的用途，最需要關注什麼？",
+        "correct": "知情同意、隱私保護與資料使用範圍",
+        "wrong": [
+          "只要資料可以電子儲存就能永久公開個人姓名",
+          "基因資料因是科學研究就無須倫理審查",
+          "所有研究受試者都必須放棄退出的權利"
+        ],
+        "exp": "個人基因資料敏感，研究需明確說明目的、同意及保護措施。",
+        "subject": "生物",
+        "sub_topic": "生物科技及倫理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中三年級-生物科技及倫理",
+        "template_id": "bio-ref-g3-生物科技及倫理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-生物科技及倫理-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「生物科技及倫理」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "某研究以基因編輯技術改善作物抗病能力，田間試驗前應優先評估何種風險？",
+        "correct": "對非目標生物與環境的潛在影響，並依規範評估",
+        "wrong": [
+          "只看作物外觀就宣稱環境影響必然為零",
+          "因使用基因編輯技術就不需進行任何試驗",
+          "只看研究者個人喜好而不蒐集資料"
+        ],
+        "exp": "農業生物技術效益需搭配生物安全與非目標效應評估。",
+        "subject": "生物",
+        "sub_topic": "生物科技及倫理",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-7",
+            "name": "生物技術"
+          }
+        ],
+        "concept_id": "bio-高中三年級-生物科技及倫理",
+        "template_id": "bio-ref-g3-生物科技及倫理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

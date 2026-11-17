@@ -1,0 +1,66 @@
+{
+  "units": [
+    "遺傳與演化統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-分類與演化證據-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「分類與演化證據」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "兩種生物的前肢骨骼基本排列相似，但功能一為飛行、一為游泳。若以同源構造分析，最合理的解釋是？",
+        "correct": "可能源自共同祖先的基本構造，再經不同適應演化",
+        "wrong": [
+          "構造用途不同就不能具有任何共同祖先",
+          "骨骼相似必定只由巧合且無需其他證據",
+          "只要具有前肢就必定是同一物種"
+        ],
+        "exp": "同源構造顯示共同祖先線索，即使功能可能不同。",
+        "subject": "生物",
+        "sub_topic": "分類與演化證據",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-分類與演化證據",
+        "template_id": "bio-ref-g3-分類與演化證據-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-分類與演化證據-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「分類與演化證據」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "研究者以DNA序列建立親緣樹，發現甲和乙共享較近共同分支，丙較早分出。哪項解讀較恰當？",
+        "correct": "根據所用資料，甲乙可能比各自與丙的親緣關係更近",
+        "wrong": [
+          "甲必定是乙現存的直接祖先",
+          "丙必定完全沒有DNA",
+          "親緣樹分支順序可忽略資料不確定性"
+        ],
+        "exp": "親緣樹描述共同祖先與分支關係，不等於現生物種彼此直接祖先。",
+        "subject": "生物",
+        "sub_topic": "分類與演化證據",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-分類與演化證據",
+        "template_id": "bio-ref-g3-分類與演化證據-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

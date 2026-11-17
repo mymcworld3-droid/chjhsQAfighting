@@ -1,0 +1,66 @@
+{
+  "units": [
+    "遺傳與演化統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-族群遺傳-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「族群遺傳」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "某二倍體族群中，一個基因座A的基因型人數為AA 36人、Aa 48人、aa 16人。A等位基因頻率為何？",
+        "correct": "0.60",
+        "wrong": [
+          "0.36",
+          "0.48",
+          "0.84"
+        ],
+        "exp": "總200個等位基因，其中A為2×36+48＝120，頻率120/200＝0.60。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "bio-ref-g3-族群遺傳-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-族群遺傳-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「族群遺傳」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "若符合哈溫平衡且A等位基因頻率p＝0.7，a頻率q＝0.3，Aa基因型的理論頻率為何？",
+        "correct": "0.42",
+        "wrong": [
+          "0.49",
+          "0.09",
+          "0.70"
+        ],
+        "exp": "Aa頻率為2pq＝2×0.7×0.3＝0.42。",
+        "subject": "生物",
+        "sub_topic": "族群遺傳",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群遺傳",
+        "template_id": "bio-ref-g3-族群遺傳-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

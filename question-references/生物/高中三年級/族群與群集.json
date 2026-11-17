@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅳ：生態、演化及生物多樣性"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-族群與群集-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「族群與群集」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "某森林中同一物種鹿的數量逐年變化，另一份資料則記錄鹿、狼與樹木的交互作用。前後資料分別較接近研究哪種層級？",
+        "correct": "前者是族群動態，後者是群集中的物種交互作用",
+        "wrong": [
+          "前者是單一細胞，後者是單一個體",
+          "前者是大氣環流，後者是岩石循環",
+          "兩者都只能研究單一基因的序列"
+        ],
+        "exp": "同種鹿的數量屬族群，鹿與狼、植物等多物種關係涉及群集。",
+        "subject": "生物",
+        "sub_topic": "族群與群集",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群與群集",
+        "template_id": "bio-ref-g3-族群與群集-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-族群與群集-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「族群與群集」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "湖泊中大型掠食魚減少後，小型魚增加，浮游動物數量隨之減少。這種跨營養階層的間接影響常稱為？",
+        "correct": "營養階層連鎖效應",
+        "wrong": [
+          "DNA複製中的半保留機制",
+          "人體紅血球的氧合作用",
+          "完全不涉及生態交互作用的現象"
+        ],
+        "exp": "捕食者改變可透過中間物種影響下層生物，是食物網中的連鎖效應。",
+        "subject": "生物",
+        "sub_topic": "族群與群集",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-族群與群集",
+        "template_id": "bio-ref-g3-族群與群集-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

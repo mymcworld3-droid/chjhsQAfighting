@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅲ：動物體的構造與功能"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-消化與呼吸-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「消化與呼吸」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "小腸內壁具有絨毛與微絨毛，主要有助於哪項功能？",
+        "correct": "增加吸收表面積，提高消化後養分的吸收效率",
+        "wrong": [
+          "將所有蛋白質直接變成氧氣",
+          "阻止所有水分通過消化道",
+          "讓胃液完全不必參與消化"
+        ],
+        "exp": "絨毛與微絨毛擴大腸道表面積，有利營養物質吸收。",
+        "subject": "生物",
+        "sub_topic": "消化與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-消化與呼吸",
+        "template_id": "bio-ref-g3-消化與呼吸-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-消化與呼吸-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「消化與呼吸」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "肺泡壁薄且外側密布微血管，這樣的構造最直接支持什麼？",
+        "correct": "縮短氧氣與二氧化碳的擴散距離",
+        "wrong": [
+          "使肺泡直接合成所有血紅素",
+          "阻止氧氣由肺泡進入血液",
+          "讓血液流速在肺內完全為零"
+        ],
+        "exp": "薄交換面與血管網有利氣體擴散與運輸，維持交換效率。",
+        "subject": "生物",
+        "sub_topic": "消化與呼吸",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-消化與呼吸",
+        "template_id": "bio-ref-g3-消化與呼吸-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

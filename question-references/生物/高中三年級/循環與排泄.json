@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅲ：動物體的構造與功能"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-循環與排泄-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「循環與排泄」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "某人運動後血液循環加速，肌肉獲得更多氧氣。氧主要由血液中的哪種成分攜帶？",
+        "correct": "紅血球中的血紅素",
+        "wrong": [
+          "血小板中的DNA複製酶",
+          "白血球中的抗體",
+          "血漿中的葉綠素"
+        ],
+        "exp": "血紅素結合並運送大部分氧氣至組織，血漿僅溶解少量。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "bio-ref-g3-循環與排泄-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-循環與排泄-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「循環與排泄」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "腎臟過濾血液後，若水分經腎小管再吸收量增加，其他條件相同，尿液體積通常如何？",
+        "correct": "減少",
+        "wrong": [
+          "必定增加兩倍",
+          "完全不受任何調節",
+          "立即變成純葡萄糖"
+        ],
+        "exp": "較多水分返回血液會減少最終尿量，與體液調節有關。",
+        "subject": "生物",
+        "sub_topic": "循環與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-循環與排泄",
+        "template_id": "bio-ref-g3-循環與排泄-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

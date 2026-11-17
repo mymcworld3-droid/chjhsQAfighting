@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人體生理統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-恆定與調節-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「恆定與調節」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "體溫上升時，人體增加汗液分泌與皮膚血流，使熱散失提高。此機制屬哪種回饋？",
+        "correct": "負回饋",
+        "wrong": [
+          "使偏差持續擴大的正回饋",
+          "細胞分裂形成染色體",
+          "完全不受體溫變化影響的調節"
+        ],
+        "exp": "反應方向與體溫偏高相反，有助維持穩定。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "bio-ref-g3-恆定與調節-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-恆定與調節-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「恆定與調節」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "血液滲透壓上升時，抗利尿激素（ADH）增加，腎臟再吸收較多水分。其主要結果可能是？",
+        "correct": "尿量降低，有助保留體水並降低過高滲透壓",
+        "wrong": [
+          "尿量必定無限增加",
+          "腎臟立即停止所有血液流動",
+          "ADH只會控制骨骼肌收縮，與水分無關"
+        ],
+        "exp": "ADH促進集合管水再吸收，幫助體液調節。",
+        "subject": "生物",
+        "sub_topic": "恆定與調節",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-恆定與調節",
+        "template_id": "bio-ref-g3-恆定與調節-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅲ：動物體的構造與功能"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-動物組織-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「動物組織」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "皮膚表面由緊密排列的細胞形成保護層。這類組織主要屬於哪種類型？",
+        "correct": "上皮組織",
+        "wrong": [
+          "神經組織",
+          "心肌組織",
+          "骨骼肌組織"
+        ],
+        "exp": "上皮細胞排列緊密，覆蓋體表或內腔，具有保護與物質交換等功能。",
+        "subject": "生物",
+        "sub_topic": "動物組織",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-動物組織",
+        "template_id": "bio-ref-g3-動物組織-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-動物組織-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「動物組織」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "肌肉組織受到刺激時可產生收縮力；若心臟壁需要持續有節律地收縮，其主要肌肉組織為何？",
+        "correct": "心肌組織",
+        "wrong": [
+          "骨組織",
+          "血液結締組織",
+          "表皮角質細胞"
+        ],
+        "exp": "心臟壁主要由具節律收縮能力的心肌細胞構成。",
+        "subject": "生物",
+        "sub_topic": "動物組織",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-動物組織",
+        "template_id": "bio-ref-g3-動物組織-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

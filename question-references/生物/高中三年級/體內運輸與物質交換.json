@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人體生理統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-體內運輸與物質交換-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「體內運輸與物質交換」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "微血管壁薄，總橫截面積大，血流較慢。這種構造最有利哪項功能？",
+        "correct": "血液與組織之間的氧氣、養分及代謝廢物交換",
+        "wrong": [
+          "讓大部分血液永遠停留在心臟",
+          "使所有氣體交換只能在大動脈進行",
+          "阻止水分與溶質進出組織液"
+        ],
+        "exp": "微血管的薄壁及流速特徵有利擴散與交換。",
+        "subject": "生物",
+        "sub_topic": "體內運輸與物質交換",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-體內運輸與物質交換",
+        "template_id": "bio-ref-g3-體內運輸與物質交換-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-體內運輸與物質交換-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「體內運輸與物質交換」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "小腸吸收的葡萄糖經血液送至肌肉，但部分脂質經淋巴途徑運送。這反映何種原則？",
+        "correct": "不同類型養分可透過不同吸收與運輸途徑分布全身",
+        "wrong": [
+          "所有養分都只靠氣管輸送",
+          "葡萄糖不可能進入血液",
+          "淋巴液只能運送氧氣而不能運送脂質"
+        ],
+        "exp": "多數單醣進入血液，長鏈脂質經乳糜微粒等方式進入淋巴，途徑不盡相同。",
+        "subject": "生物",
+        "sub_topic": "體內運輸與物質交換",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-體內運輸與物質交換",
+        "template_id": "bio-ref-g3-體內運輸與物質交換-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

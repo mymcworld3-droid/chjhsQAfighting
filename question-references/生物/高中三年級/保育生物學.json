@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅳ：生態、演化及生物多樣性"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-保育生物學-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「保育生物學」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "某瀕危動物的棲地被道路分割成多個小區塊，族群間難以移動。保育措施中何者最直接改善基因交流？",
+        "correct": "建立安全的棲地廊道與跨路通道",
+        "wrong": [
+          "把所有族群永久隔離且不評估繁殖",
+          "在廊道處增加更多不設通道的圍籬",
+          "只更換保育區標誌顏色"
+        ],
+        "exp": "連通棲地可提高個體移動與族群基因流機會，減輕碎片化影響。",
+        "subject": "生物",
+        "sub_topic": "保育生物學",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中三年級-保育生物學",
+        "template_id": "bio-ref-g3-保育生物學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-保育生物學-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「保育生物學」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "同一瀕危物種兩個小族群長期近親繁殖，後代部分健康問題增加。從遺傳保育角度，最需關注什麼？",
+        "correct": "遺傳多樣性降低及近交衰退風險",
+        "wrong": [
+          "所有近親繁殖必定使遺傳變異無限增加",
+          "只要族群數量少就完全不必分析基因",
+          "物種外觀相同可保證完全不存在隱性有害等位基因"
+        ],
+        "exp": "小族群容易遺傳漂變並提高同型合子比例，可能顯現有害隱性基因。",
+        "subject": "生物",
+        "sub_topic": "保育生物學",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-保育生物學",
+        "template_id": "bio-ref-g3-保育生物學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

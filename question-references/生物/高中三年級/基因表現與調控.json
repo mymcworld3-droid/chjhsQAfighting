@@ -1,0 +1,66 @@
+{
+  "units": [
+    "遺傳與演化統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-基因表現與調控-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「基因表現與調控」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "一段DNA序列在兩種細胞中相同，卻只在一種細胞中大量轉錄。這最能反映什麼？",
+        "correct": "基因表現受細胞類型及調控因子影響",
+        "wrong": [
+          "不同轉錄量必然表示兩個細胞DNA序列完全不同",
+          "只要基因存在就必須在所有細胞等量轉錄",
+          "轉錄量不可能受環境或調控蛋白影響"
+        ],
+        "exp": "同一基因的轉錄活性可因轉錄因子與染色質狀態不同而改變。",
+        "subject": "生物",
+        "sub_topic": "基因表現與調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-基因表現與調控",
+        "template_id": "bio-ref-g3-基因表現與調控-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-基因表現與調控-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「基因表現與調控」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "一種小RNA與特定mRNA互補結合後促進其降解。此調控最直接影響哪個過程？",
+        "correct": "mRNA穩定性及可供轉譯的訊息量",
+        "wrong": [
+          "基因組所有染色體立即消失",
+          "DNA複製時所有鹼基都變成相同",
+          "細胞膜的脂質永遠不再移動"
+        ],
+        "exp": "小RNA可透過RNA干擾等機制降低mRNA量，影響蛋白質表現。",
+        "subject": "生物",
+        "sub_topic": "基因表現與調控",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中三年級-基因表現與調控",
+        "template_id": "bio-ref-g3-基因表現與調控-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

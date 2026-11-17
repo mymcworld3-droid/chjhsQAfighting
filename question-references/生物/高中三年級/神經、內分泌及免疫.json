@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人體生理統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-神經、內分泌及免疫-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「神經、內分泌及免疫」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "個體初次接觸某抗原後形成記憶性免疫細胞，再次接觸相同抗原時可能較快產生反應。這反映哪種免疫特性？",
+        "correct": "適應性免疫的免疫記憶",
+        "wrong": [
+          "所有抗原都能在一秒內直接變成抗體",
+          "神經細胞複製所有入侵病原體",
+          "再次接觸必然完全不需任何免疫反應"
+        ],
+        "exp": "記憶性B與T細胞可使再次接觸相同抗原的反應較快速。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "bio-ref-g3-神經、內分泌及免疫-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-神經、內分泌及免疫-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「神經、內分泌及免疫」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "過度壓力可能同時改變交感神經活動、激素分泌與部分免疫反應。這最能顯示什麼？",
+        "correct": "神經、內分泌及免疫系統之間存在調節與交互作用",
+        "wrong": [
+          "三系統完全獨立，任何訊號不能互相影響",
+          "只有骨骼肌才能分泌所有激素",
+          "免疫細胞永遠無法辨識任何外來抗原"
+        ],
+        "exp": "身體各調節系統互相傳訊，壓力反應可影響荷爾蒙與免疫功能。",
+        "subject": "生物",
+        "sub_topic": "神經、內分泌及免疫",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經、內分泌及免疫",
+        "template_id": "bio-ref-g3-神經、內分泌及免疫-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

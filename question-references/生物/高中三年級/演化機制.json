@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅳ：生態、演化及生物多樣性"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-演化機制-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「演化機制」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "某島上鳥類族群因洪水後數量驟減，倖存少數個體的等位基因頻率與原族群差異明顯。即使無選擇，最可能涉及什麼？",
+        "correct": "遺傳漂變的瓶頸效應",
+        "wrong": [
+          "所有個體因需要而定向突變",
+          "等位基因頻率永遠不能改變",
+          "所有性狀必定只由環境塑造而不可遺傳"
+        ],
+        "exp": "族群突然縮小時隨機保留的等位基因可能偏離原頻率，是瓶頸效應。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "bio-ref-g3-演化機制-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-演化機制-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「演化機制」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "兩個原本相通的同種族群因河流阻隔，數千代後出現明顯繁殖隔離。哪項過程最可能參與？",
+        "correct": "地理隔離下的基因流減少與演化分化",
+        "wrong": [
+          "隔離必然讓兩族群的基因頻率永遠一致",
+          "物種分化不可能與繁殖隔離相關",
+          "只要有河流就必定立即形成兩個新物種"
+        ],
+        "exp": "基因流降低後，選擇、漂變與突變可使族群分化，逐漸累積繁殖隔離。",
+        "subject": "生物",
+        "sub_topic": "演化機制",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中三年級-演化機制",
+        "template_id": "bio-ref-g3-演化機制-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

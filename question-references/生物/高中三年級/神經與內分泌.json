@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修生物Ⅲ：動物體的構造與功能"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g3-神經與內分泌-1",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「神經與內分泌」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "神經細胞透過動作電位快速傳遞訊號；內分泌腺釋放激素經血液影響目標細胞。兩者最主要的差異之一是？",
+        "correct": "神經傳導通常快速而具特定路徑，激素透過循環可產生較廣泛且持續的作用",
+        "wrong": [
+          "所有激素都只在神經突觸內傳遞",
+          "神經訊號永遠不需任何細胞膜電位變化",
+          "內分泌激素不需和目標細胞受體作用"
+        ],
+        "exp": "神經與內分泌訊號在傳播方式、速度與作用時間尺度上有所差異。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "bio-ref-g3-神經與內分泌-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g3-神經與內分泌-2",
+      "source": "高中生物108課綱及學測自然考科生物素養評量方向；自編獨立參考題",
+      "design": "以「神經與內分泌」的數據、基因或機制建立可驗證解題路徑",
+      "question": {
+        "q": "血糖上升時胰臟分泌胰島素增加，細胞吸收葡萄糖，使血糖趨於正常。這最接近何種調節？",
+        "correct": "負回饋調節",
+        "wrong": [
+          "永久放大血糖偏差的正回饋",
+          "光合作用中的光能固定",
+          "不受血糖影響的隨機控制"
+        ],
+        "exp": "血糖偏高引發降低血糖的反應，是維持恆定的負回饋。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中三年級-神經與內分泌",
+        "template_id": "bio-ref-g3-神經與內分泌-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
