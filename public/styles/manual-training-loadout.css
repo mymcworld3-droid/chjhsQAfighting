@@ -1,0 +1,298 @@
+/* Phase 2: stamina cultivation deck / equipped techniques.
+ * The view remains state-driven and uses server-provided unlocks and costs.
+ * This stylesheet deliberately scopes all styling under the training root.
+ */
+#manual-training-root .manual-loadout{
+  position:relative;isolation:isolate;margin:18px 0 26px;padding:clamp(14px,2.2vw,23px);
+  border:1px solid rgba(211,183,110,.49);border-radius:18px;
+  background:radial-gradient(circle at 92% -8%,rgba(207,167,85,.13),transparent 46%),
+    linear-gradient(150deg,#20352a,#131f19 56%,#0d1a15);
+  box-shadow:0 12px 36px rgba(0,0,0,.15),inset 0 1px rgba(255,255,255,.06);
+  color:#eee7d4;min-width:0;overflow:hidden;
+}
+#manual-training-root .manual-deck-heading{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  margin-bottom:17px
+}
+#manual-training-root .manual-deck-kicker,
+#manual-training-root .manual-picker-eyebrow{
+  display:block;color:#bba97b;font-size:10px;font-weight:750;letter-spacing:.13em
+}
+#manual-training-root .manual-deck-heading h3{
+  display:flex;align-items:center;gap:9px;font-size:clamp(20px,2.5vw,25px);
+  color:#f9e9c5;line-height:1.3;margin:4px 0 5px
+}
+#manual-training-root .manual-deck-heading h3 i{font-size:19px;color:#e0bf76}
+#manual-training-root .manual-deck-heading p{
+  margin:0;color:#b3c6b9;font-size:12px;line-height:1.65;max-width:620px
+}
+#manual-training-root .manual-deck-count{
+  min-width:94px;min-height:72px;display:flex;align-items:center;flex-direction:column;
+  justify-content:center;border-radius:12px;background:#14271fae;
+  border:1px solid rgba(181,151,84,.46);flex:0 0 auto
+}
+#manual-training-root .manual-deck-count strong{
+  font-size:29px;line-height:1.1;color:#f6daa0;font-variant-numeric:tabular-nums
+}
+#manual-training-root .manual-deck-count strong small{font-size:15px;color:#c9c7ae}
+#manual-training-root .manual-deck-count>span{font-size:10px;color:#a8bea9;margin-top:4px}
+#manual-training-root .manual-presets{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
+  margin:0 0 12px
+}
+#manual-training-root .manual-deck-tab{
+  position:relative;display:flex;flex-direction:column;text-align:left;
+  min-width:0;min-height:87px;justify-content:center;gap:4px;
+  padding:11px 12px;border-radius:12px;border:1px solid #87927c55;
+  color:#d2d4bd;background:linear-gradient(145deg,#203026,#151f1b);
+  box-shadow:inset 0 1px rgba(255,255,255,.03);
+  transition:border-color .15s ease,background .15s ease
+}
+#manual-training-root .manual-deck-tab.is-selected{
+  border-color:#dfc27f;color:#fff0c9;background:linear-gradient(140deg,#3e462b,#263d2c);
+  box-shadow:inset 0 -3px #d8b77a,0 0 0 1px rgba(222,187,108,.13)
+}
+#manual-training-root .manual-deck-tab.is-active::after{
+  content:"";position:absolute;right:10px;top:10px;width:6px;height:6px;
+  border-radius:50%;background:#83e2aa;box-shadow:0 0 9px rgba(131,226,170,.6)
+}
+#manual-training-root .manual-deck-tab-index{
+  font-size:10px;letter-spacing:.1em;color:#a9c2ab
+}
+#manual-training-root .manual-deck-tab strong{
+  font-size:14px;font-weight:780;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;max-width:95%
+}
+#manual-training-root .manual-deck-tab-bottom{
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
+  font-size:11px;color:#b8c9b5;min-width:0
+}
+#manual-training-root .manual-deck-tab-bottom small{
+  font-size:10px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis
+}
+#manual-training-root .manual-deck-tab.is-active .manual-deck-tab-bottom small:last-child{
+  color:#95e8b5
+}
+#manual-training-root .manual-deck-workspace{
+  padding:clamp(12px,1.7vw,17px);border:1px solid #8478525c;border-radius:14px;
+  background:linear-gradient(155deg,rgba(8,22,16,.8),rgba(26,40,28,.89));
+}
+#manual-training-root .manual-deck-toolbar{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;
+  align-items:end;padding-bottom:16px;border-bottom:1px solid rgba(190,177,125,.19)
+}
+#manual-training-root .manual-deck-edit-name{min-width:0}
+#manual-training-root .manual-deck-edit-name label{
+  display:block;color:#c7c3a5;font-size:11px;font-weight:650;margin-bottom:6px
+}
+#manual-training-root .manual-deck-name-row{display:flex;gap:6px;min-width:0}
+#manual-training-root .manual-deck-name-row input{
+  min-width:0;flex:1;width:100%;max-width:320px;padding:9px 10px;
+  border-radius:9px;background:#0b1913;border:1px solid #8e9d816f;
+  color:#f3ebd6;font-size:14px;min-height:42px
+}
+#manual-training-root .manual-deck-name-row input:focus-visible{
+  outline:2px solid #d2bb7b;outline-offset:1px
+}
+#manual-training-root .manual-deck-name-row button{
+  padding:9px 12px;border:1px solid #b9a16d8c;border-radius:9px;
+  background:#334333;color:#f6deb1;font-size:12px;font-weight:750;
+  min-height:42px;white-space:nowrap
+}
+#manual-training-root .manual-deck-apply{
+  display:flex;align-items:end;flex-direction:column;gap:7px
+}
+#manual-training-root .manual-deck-state{font-size:11px;color:#cfb990}
+#manual-training-root .manual-deck-state.is-live{color:#a6e4ba}
+#manual-training-root .manual-deck-apply button{
+  min-width:150px;min-height:42px;padding:9px 14px;border-radius:10px;
+  border:1px solid #efdb9a;color:#243020;font-size:13px;font-weight:800;
+  background:linear-gradient(120deg,#f1d897,#bba463);
+  box-shadow:0 4px 12px #0003
+}
+#manual-training-root .manual-deck-apply button:disabled{
+  background:#2e4032;border-color:#719178;color:#a6d3b3;
+  box-shadow:none;opacity:1;cursor:default
+}
+#manual-training-root .manual-deck-slots-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:6px;flex-wrap:wrap;margin:16px 0 10px
+}
+#manual-training-root .manual-deck-slots-header strong{font-size:14px;color:#f0ddb5}
+#manual-training-root .manual-deck-slots-header small{font-size:11px;color:#a8b7a6}
+#manual-training-root .manual-slot-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px
+}
+#manual-training-root .manual-slot{
+  min-width:0;min-height:0;padding:0;display:flex;flex-direction:column;gap:0;
+  background:linear-gradient(160deg,#1d3429,#132219);
+  border:1px solid #697d6866;border-radius:13px;overflow:hidden;position:relative
+}
+#manual-training-root .manual-slot.is-active{
+  border:1px solid #b7a26a8f;
+  background:linear-gradient(145deg,#2b3e2d,#182c20)
+}
+#manual-training-root .manual-slot.is-editing{
+  border-color:#ffdf8d;box-shadow:inset 0 0 0 1px #ffdf8d70,0 0 16px rgba(214,177,96,.13)
+}
+#manual-training-root .manual-slot.is-empty{border-style:dashed}
+#manual-training-root .manual-slot .manual-slot-pick{
+  display:flex;flex:1;flex-direction:column;align-items:stretch;text-align:left;
+  gap:9px;width:100%;min-width:0;min-height:188px;padding:13px 12px 10px;
+  background:transparent;border:0;border-radius:0;color:#f4ead2;
+  box-shadow:none;margin:0;align-self:stretch;
+}
+#manual-training-root .manual-slot-topline,
+#manual-training-root .manual-slot-bottom{
+  display:flex;justify-content:space-between;align-items:center;gap:6px;
+  font-size:11px;color:#cfcaad
+}
+#manual-training-root .manual-slot-topline>span:first-child{
+  color:#e8d092;font-size:11px;font-weight:800;letter-spacing:.06em
+}
+#manual-training-root .manual-slot-change{font-size:11px;color:#b8ddbf}
+#manual-training-root .manual-slot-art-frame{
+  display:grid;place-items:center;align-self:center;
+  width:76px;height:76px;flex:none;border-radius:14px;
+  border:1px dashed #a6af887e;background:linear-gradient(150deg,#13251d,#263629);
+  color:#aecca9;font-size:24px;box-shadow:inset 0 2px 10px rgba(0,0,0,.35)
+}
+#manual-training-root .manual-slot-art-frame.is-filled{
+  border:1px solid #c2a66c;
+  box-shadow:0 2px 15px rgba(179,145,79,.17),inset 0 0 10px rgba(0,0,0,.15)
+}
+#manual-training-root .manual-slot .manual-slot-art{
+  display:block;width:100%;height:100%;object-fit:cover;
+  flex:none;border:0;border-radius:13px;background:#13241b
+}
+#manual-training-root .manual-slot .manual-slot-meta{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  min-width:0;flex:1;text-align:center;
+}
+#manual-training-root .manual-slot .manual-slot-meta strong{
+  font-size:15px;color:#f3e4bf;line-height:1.3;font-weight:800;
+  overflow-wrap:anywhere
+}
+#manual-training-root .manual-slot .manual-slot-meta small{
+  font-size:11px;color:#aabfaa;line-height:1.45;overflow-wrap:anywhere
+}
+#manual-training-root .manual-slot-bottom{
+  width:100%;border-top:1px solid #a89c6640;padding-top:7px;
+  margin-top:auto;font-size:10px
+}
+#manual-training-root .manual-slot-school{
+  font-size:10px;color:#ddca9b;white-space:nowrap
+}
+#manual-training-root .manual-slot .manual-slot-remove{
+  align-self:stretch;margin:0;min-height:35px;padding:7px 10px;
+  background:#291d1bbc;border:0;border-top:1px solid #a9766e4a;border-radius:0;
+  color:#d9b3a4;font-size:11px;font-weight:650
+}
+#manual-training-root .manual-slot.is-empty .manual-slot-meta strong{color:#a9bba9}
+#manual-training-root .manual-deck-feedback{
+  font-size:12px;line-height:1.5;color:#d9c596;padding:0;
+  overflow-wrap:anywhere
+}
+#manual-training-root .manual-deck-feedback:empty{display:none}
+#manual-training-root .manual-deck-feedback:not(:empty){
+  margin-top:12px;padding:9px 12px;background:#28402c;border:1px solid #8dab715c;border-radius:9px
+}
+#manual-training-root .manual-picker{
+  margin-top:15px;padding:14px;border:1px solid #bdad7773;border-radius:12px;
+  background:linear-gradient(140deg,#2a3c2e,#14241c)
+}
+#manual-training-root .manual-picker-heading{
+  display:flex;justify-content:space-between;align-items:center;gap:10px
+}
+#manual-training-root .manual-picker-heading h4{
+  margin:3px 0 0;color:#f6e4be;font-size:16px
+}
+#manual-training-root .manual-picker-close{
+  flex:0 0 auto;padding:9px 12px;min-height:40px;border:1px solid #b9ab826a;
+  border-radius:9px;color:#f5d8b9;background:#243329;font-size:12px
+}
+#manual-training-root .manual-picker-hint{
+  margin:8px 0 13px;font-size:12px;color:#b8c9b7;line-height:1.6
+}
+#manual-training-root .manual-picker-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+  max-height:360px;overflow-y:auto;overscroll-behavior:contain;padding:3px
+}
+#manual-training-root .manual-pick-skill{
+  display:flex;align-items:center;gap:9px;text-align:left;min-width:0;min-height:76px;
+  padding:9px;border:1px solid #7d937b6e;border-radius:10px;
+  background:#15291f;color:#eee9d3
+}
+#manual-training-root .manual-pick-skill.is-current{border-color:#e4c884;background:#353d2b}
+#manual-training-root .manual-pick-skill.is-elsewhere{border-color:#839caa}
+#manual-training-root .manual-pick-art{
+  flex:0 0 52px;width:52px;height:52px;border:1px solid #abc68a6a;
+  border-radius:8px;overflow:hidden;background:#17271d
+}
+#manual-training-root .manual-pick-art img{display:block;width:100%;height:100%;object-fit:cover}
+#manual-training-root .manual-pick-info{
+  display:flex;flex-direction:column;min-width:0;gap:3px;flex:1
+}
+#manual-training-root .manual-pick-info strong{
+  font-size:13px;color:#f5e6c4;line-height:1.25;overflow-wrap:anywhere
+}
+#manual-training-root .manual-pick-info small{
+  font-size:10px;color:#b1c2b3;line-height:1.3;overflow-wrap:anywhere
+}
+#manual-training-root .manual-pick-status{
+  font-size:10px;color:#b9daa9;white-space:nowrap
+}
+#manual-training-root .manual-picker-empty{
+  grid-column:1/-1;font-size:12px;line-height:1.6;
+  padding:17px;border:1px dashed #9c9a78;color:#c1c7b6;text-align:center;
+}
+#manual-training-root .manual-loadout button:focus-visible{
+  outline:2px solid #fbe5ad;outline-offset:1px
+}
+@media(hover:hover){
+  #manual-training-root .manual-deck-tab:hover,
+  #manual-training-root .manual-slot:hover,
+  #manual-training-root .manual-pick-skill:hover{border-color:#f0ce8a}
+  #manual-training-root .manual-slot .manual-slot-remove:hover{background:#4a2c28}
+}
+@media(max-width:800px){
+  #manual-training-root .manual-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #manual-training-root .manual-pick-status{display:none}
+}
+@media(max-width:630px){
+  #manual-training-root .manual-loadout{padding:14px 10px}
+  #manual-training-root .manual-deck-heading{gap:8px}
+  #manual-training-root .manual-deck-heading p{font-size:11px}
+  #manual-training-root .manual-deck-count{min-width:77px;min-height:67px}
+  #manual-training-root .manual-deck-count strong{font-size:24px}
+  #manual-training-root .manual-deck-toolbar{grid-template-columns:1fr}
+  #manual-training-root .manual-deck-apply{
+    flex-direction:row;align-items:center;justify-content:space-between;gap:9px
+  }
+  #manual-training-root .manual-deck-tab{padding:9px 8px;min-height:76px}
+  #manual-training-root .manual-deck-tab strong{font-size:12px}
+  #manual-training-root .manual-deck-tab-bottom{flex-wrap:wrap}
+  #manual-training-root .manual-deck-slots-header small{font-size:10px}
+  #manual-training-root .manual-slot-grid{gap:6px}
+  #manual-training-root .manual-slot .manual-slot-pick{padding:9px 6px 7px;gap:8px;min-height:180px}
+  #manual-training-root .manual-slot-art-frame{width:57px;height:57px}
+  #manual-training-root .manual-slot .manual-slot-meta strong{font-size:12px}
+  #manual-training-root .manual-slot .manual-slot-meta small{font-size:10px}
+  #manual-training-root .manual-slot .manual-slot-remove{min-height:35px}
+  #manual-training-root .manual-slot-change{font-size:10px}
+  #manual-training-root .manual-picker{padding:11px}
+  #manual-training-root .manual-picker-grid{grid-template-columns:1fr}
+}
+@media(max-width:370px){
+  #manual-training-root .manual-deck-heading h3{font-size:18px}
+  #manual-training-root .manual-deck-state{font-size:10px}
+  #manual-training-root .manual-deck-apply button{min-width:138px}
+  #manual-training-root .manual-deck-tab{padding:9px 6px}
+  #manual-training-root .manual-deck-tab-bottom{font-size:9px}
+  #manual-training-root .manual-slot-art-frame{width:49px;height:49px}
+  #manual-training-root .manual-slot .manual-slot-pick{padding:8px 4px}
+  #manual-training-root .manual-slot-topline{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-deck-tab{transition:none}
+}
