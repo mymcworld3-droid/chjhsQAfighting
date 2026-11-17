@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-史學論證-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「史學論證」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "某生主張「鐵路開通是某城市人口成長的唯一原因」，只提出鐵路通車日期與人口增加曲線。要強化論證，最需要補充什麼？",
+        "correct": "同時期就業、移民、住房及其他交通因素資料，以檢查替代原因",
+        "wrong": [
+          "把「唯一」一詞反覆強調多次",
+          "只增加鐵路火車模型照片的數量",
+          "刪除人口數據以免對照"
+        ],
+        "exp": "時間先後與相關變化不等於證明唯一因果，需要排除其他可能影響人口的因素。",
+        "subject": "歷史",
+        "sub_topic": "史學論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中二年級-史學論證",
+        "template_id": "history-reference-高中二年級-史學論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-史學論證-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「史學論證」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "研究者主張「某政策提升農民收入」，舉例一位農民在政策後收入提高；另一份統計卻顯示部分地區收入下降。最合理的處理是什麼？",
+        "correct": "檢查政策對不同地區及群體的效果，修正過度概括的結論",
+        "wrong": [
+          "因為有一位農民受益，就忽略其他所有資料",
+          "任何統計只要與個案不同便必然造假",
+          "堅持政策對每個人都有完全相同的影響"
+        ],
+        "exp": "單一成功個案不代表全體效果，反向資料有助釐清政策影響的差異與限制。",
+        "subject": "歷史",
+        "sub_topic": "史學論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中二年級-史學論證",
+        "template_id": "history-reference-高中二年級-史學論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

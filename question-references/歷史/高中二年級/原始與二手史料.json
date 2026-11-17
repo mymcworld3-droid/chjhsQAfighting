@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-原始與二手史料-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「原始與二手史料」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "一位士兵在戰爭期間寫日記，記錄自己部隊的撤退；一位學者在八十年後利用該日記及其他檔案寫成專書。下列分類何者最合宜？",
+        "correct": "士兵日記屬同時期的第一手材料，學者專書屬後來的研究論述",
+        "wrong": [
+          "士兵日記因使用第一人稱而必然是小說",
+          "學者專書因出版較晚就一定完全沒有參考價值",
+          "第一手資料不可能含有錯誤或偏見"
+        ],
+        "exp": "第一手與後來研究的區分，主要依材料與研究對象的時代及形成過程；兩者都需要來源批判。",
+        "subject": "歷史",
+        "sub_topic": "原始與二手史料",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-原始與二手史料",
+        "template_id": "history-reference-高中二年級-原始與二手史料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-原始與二手史料-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「原始與二手史料」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "研究者發現一張二十世紀的戰時宣傳海報，上面寫著「全民一致贊成」。應如何使用此材料？",
+        "correct": "可研究官方希望傳達的訊息，但不能只憑標語推定全民真實態度",
+        "wrong": [
+          "可直接證明沒有任何人反對政策",
+          "應立即丟棄，因宣傳品不屬於任何史料",
+          "只根據字體大小決定政治支持比例"
+        ],
+        "exp": "宣傳海報是政治動員的第一手證據，但其口號不等於民意調查結果，需與其他資料對照。",
+        "subject": "歷史",
+        "sub_topic": "原始與二手史料",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-原始與二手史料",
+        "template_id": "history-reference-高中二年級-原始與二手史料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

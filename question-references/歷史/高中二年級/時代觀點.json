@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-時代觀點-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「時代觀點」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "研究十九世紀女性教育時，某篇報刊文章主張「女性不宜接受高等教育」。史家最適當的分析方式為何？",
+        "correct": "放回當時法律、社會與性別觀念脈絡，分析作者立場與受影響者",
+        "wrong": [
+          "因文章發表於十九世紀，就認定所有人都同意",
+          "只用今日科技產品的發展解釋當時教育政策",
+          "將作者意見當作當時所有女性的共同想法"
+        ],
+        "exp": "歷史觀點受時代與作者位置影響，應區分特定論述、社會制度與不同群體的實際經驗。",
+        "subject": "歷史",
+        "sub_topic": "時代觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-時代觀點",
+        "template_id": "history-reference-高中二年級-時代觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-時代觀點-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「時代觀點」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "古人記錄一場疾病流行，將原因歸於當時流行的自然觀念；現代醫學用不同理論理解同種現象。歷史研究最適合如何比較？",
+        "correct": "理解古人當時可用的知識框架，再說明解釋方式的變遷",
+        "wrong": [
+          "只因古人解釋不符合現代醫學，就否定史料記錄的所有事件",
+          "直接宣稱各時代的科學知識完全一樣",
+          "不檢查資料，就認定所有古代記載都來自同一個人"
+        ],
+        "exp": "應區分「當時人如何理解事件」和「現今知識如何解釋」，避免把現代知識直接套回古人。",
+        "subject": "歷史",
+        "sub_topic": "時代觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-時代觀點",
+        "template_id": "history-reference-高中二年級-時代觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

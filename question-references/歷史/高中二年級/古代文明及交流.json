@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：古代與中世紀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-古代文明及交流-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「古代文明及交流」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "某文明聚落多集中於大河流域，留下灌溉水道、穀倉與農業徵稅紀錄。哪個推論最符合這些材料？",
+        "correct": "河流水源與農業剩餘可能支持聚落、行政及社會分工發展",
+        "wrong": [
+          "只要有河流，所有居民就必然不需要農業",
+          "灌溉設施證明當地完全沒有管理組織",
+          "穀倉的存在必定表示此地已使用蒸汽機"
+        ],
+        "exp": "灌溉、穀倉與徵稅共同反映農業生產及治理活動，但不能推得居民生活只有一種模式。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "history-reference-高中二年級-古代文明及交流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-古代文明及交流-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「古代文明及交流」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "考古發現某地有遠方產出的寶石與當地製作的陶器，同一時期其他地區亦出土相似寶石。研究者最適合提出哪項初步假設？",
+        "correct": "不同地區之間可能存在商品流通或交換網絡",
+        "wrong": [
+          "寶石必定由同一位工匠親手送到每一地",
+          "當地居民從未與任何外地人互動",
+          "只要看到外來寶石，就可判定政權完全相同"
+        ],
+        "exp": "非本地原料出現在不同區域是交流的線索，但運輸方式及參與者仍需更多資料確認。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "history-reference-高中二年級-古代文明及交流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

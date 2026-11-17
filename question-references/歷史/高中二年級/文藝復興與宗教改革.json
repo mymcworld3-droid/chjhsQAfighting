@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：近代"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-文藝復興與宗教改革-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「文藝復興與宗教改革」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "某義大利城市的學者重新閱讀古希臘與羅馬文獻，強調透過語言、歷史和修辭理解人的能力與經驗。此現象與哪種思想取向最接近？",
+        "correct": "文藝復興的人文主義",
+        "wrong": [
+          "工業革命後的工廠流水線管理",
+          "二十世紀的核武軍備競賽",
+          "冷戰時期的太空競賽"
+        ],
+        "exp": "重新研究古典文獻並重視人文學養，是文藝復興人文主義的重要特點。",
+        "subject": "歷史",
+        "sub_topic": "文藝復興與宗教改革",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-文藝復興與宗教改革",
+        "template_id": "history-reference-高中二年級-文藝復興與宗教改革-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-文藝復興與宗教改革-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「文藝復興與宗教改革」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "十六世紀歐洲宗教改革的主張透過大量印刷的小冊子流傳。若從傳播史角度分析，印刷技術產生什麼作用？",
+        "correct": "降低文本複製與傳播的成本，讓宗教論辯能觸及更廣讀者",
+        "wrong": [
+          "使所有居民當時立即具備相同閱讀能力",
+          "讓宗教改革完全不受政治勢力影響",
+          "保證每份印刷文本都不可能出錯"
+        ],
+        "exp": "印刷可擴散論述並促成辯論，但普及程度仍受識字、政治與社會條件限制。",
+        "subject": "歷史",
+        "sub_topic": "文藝復興與宗教改革",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-文藝復興與宗教改革",
+        "template_id": "history-reference-高中二年級-文藝復興與宗教改革-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

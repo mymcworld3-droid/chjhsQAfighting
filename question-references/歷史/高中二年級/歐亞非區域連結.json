@@ -1,0 +1,66 @@
+{
+  "units": [
+    "世界史：古代與中世紀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "history-reference-高中二年級-歐亞非區域連結-1",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「歐亞非區域連結」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "中世紀商人運用季風航行印度洋，交易香料、紡織品等貨物。這最能說明什麼？",
+        "correct": "自然風向與航海技術會影響跨區域海上貿易",
+        "wrong": [
+          "季風讓船隻永遠不需要安排航行季節",
+          "印度洋商業往來只與歐洲內陸有關",
+          "海上貿易從未牽涉不同社會的交流"
+        ],
+        "exp": "季風的季節性提供航行條件，與港口、商品及跨文化商業往來相連。",
+        "subject": "歷史",
+        "sub_topic": "歐亞非區域連結",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-歐亞非區域連結",
+        "template_id": "history-reference-高中二年級-歐亞非區域連結-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "history-reference-高中二年級-歐亞非區域連結-2",
+      "source": "參照大考中心114學年度學測社會考科歷史題資料分析與因果論證命題方向，重新編寫",
+      "design": "利用「歐亞非區域連結」的文獻、事件或變遷建立可驗證的推論，避免絕對化的干擾選項",
+      "question": {
+        "q": "一位研究者比較撒哈拉南北兩地的古代史料：北部商人攜帶鹽與布料南行，南方商人則出售黃金等商品。這些紀錄最能反映什麼？",
+        "correct": "跨沙漠商路促成不同環境地區的商品交換",
+        "wrong": [
+          "沙漠必然阻斷所有人類交通",
+          "兩地物產與經濟活動完全相同",
+          "商路存在便能證明每座城市使用同一語言"
+        ],
+        "exp": "商隊穿越撒哈拉進行物產交易，說明沙漠並非不可跨越，貿易往來也不表示文化完全一致。",
+        "subject": "歷史",
+        "sub_topic": "歐亞非區域連結",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-歐亞非區域連結",
+        "template_id": "history-reference-高中二年級-歐亞非區域連結-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
