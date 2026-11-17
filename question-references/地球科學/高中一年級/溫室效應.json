@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球環境變遷"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-溫室效應-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「溫室效應」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "地表放出紅外線，部分紅外線被溫室氣體吸收並再放射。此過程主要影響什麼？",
+        "correct": "大氣與地表的長波輻射能量交換",
+        "wrong": [
+          "完全阻止太陽光抵達地表",
+          "讓地球所有熱量只以傳導傳到太陽",
+          "使地表不再需要從太陽接收能量"
+        ],
+        "exp": "溫室氣體吸收地球長波輻射並再放射，改變地表—大氣能量收支。",
+        "subject": "地球科學",
+        "sub_topic": "溫室效應",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-溫室效應",
+        "template_id": "earth-ref-g1-溫室效應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-溫室效應-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「溫室效應」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "若大氣中的二氧化碳濃度增加，其餘條件相近時，地球對外長波輻射的有效放射高度可能提高。長期如何恢復能量平衡？",
+        "correct": "地表及對流層可能升溫，直到向外放射能量再與吸收相近",
+        "wrong": [
+          "大氣二氧化碳越多，地表必然立刻降至零度",
+          "二氧化碳會完全切斷所有太陽可見光",
+          "溫室效應只發生於火星，地球不受影響"
+        ],
+        "exp": "溫室氣體增強使輻射平衡受擾，系統升溫可增加出射長波輻射。",
+        "subject": "地球科學",
+        "sub_topic": "溫室效應",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-溫室效應",
+        "template_id": "earth-ref-g1-溫室效應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

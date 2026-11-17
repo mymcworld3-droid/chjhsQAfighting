@@ -1,0 +1,66 @@
+{
+  "units": [
+    "大氣與天氣"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-氣壓、風與水循環-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「氣壓、風與水循環」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "在其他條件相近時，地表附近空氣由高壓區向低壓區加速，其主要驅動力為何？",
+        "correct": "水平氣壓梯度力",
+        "wrong": [
+          "岩石的化學鍵能",
+          "地球磁極的強弱",
+          "海水表面的鹽度"
+        ],
+        "exp": "水平氣壓差產生氣壓梯度力，風實際方向另受科氏力與摩擦影響。",
+        "subject": "地球科學",
+        "sub_topic": "氣壓、風與水循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣壓、風與水循環",
+        "template_id": "earth-ref-g1-氣壓、風與水循環-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-氣壓、風與水循環-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「氣壓、風與水循環」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "森林被大量砍伐後，若土壤表面變得較不透水，暴雨時哪種水文反應最可能加強？",
+        "correct": "地表逕流增加，洪峰可能較快出現",
+        "wrong": [
+          "每次暴雨都必然沒有河川流量",
+          "土壤入滲量一定增加到無限大",
+          "水循環只在海洋進行，不涉及陸地"
+        ],
+        "exp": "入滲能力下降時更多雨水成為地表逕流，影響洪峰與坡地侵蝕。",
+        "subject": "地球科學",
+        "sub_topic": "氣壓、風與水循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣壓、風與水循環",
+        "template_id": "earth-ref-g1-氣壓、風與水循環-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

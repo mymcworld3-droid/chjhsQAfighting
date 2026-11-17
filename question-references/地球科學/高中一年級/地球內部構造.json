@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球系統"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-地球內部構造-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「地球內部構造」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "地震波穿過地球時，S波不能穿越外核，但P波能通過。哪項推論最符合這組證據？",
+        "correct": "外核主要呈液態，不能傳遞剪力波",
+        "wrong": [
+          "整個地球內部都是氣體",
+          "P波只能在液體中傳播，不能在固體中傳播",
+          "S波一定比P波快，因此晚到代表儀器失靈"
+        ],
+        "exp": "S波不能在液體傳播，外核的S波陰影區支持液態外核推論。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "earth-ref-g1-地球內部構造-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-地球內部構造-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「地球內部構造」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "某地震站記錄P波先到、S波後到。若已知兩種波從相同震源出發，這表示什麼？",
+        "correct": "P波在所經介質中的傳播速度通常比S波快",
+        "wrong": [
+          "S波傳播速度一定比光速快",
+          "震源必定位於地表正上方",
+          "兩波必定沿完全相同路徑且速度相等"
+        ],
+        "exp": "地震P波通常速度較快而先到，時間差可用於估計震央距離。",
+        "subject": "地球科學",
+        "sub_topic": "地球內部構造",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球內部構造",
+        "template_id": "earth-ref-g1-地球內部構造-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

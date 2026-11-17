@@ -1,0 +1,66 @@
+{
+  "units": [
+    "大氣與天氣"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-大氣結構與熱收支-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「大氣結構與熱收支」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "地球接收太陽短波輻射，並向外放出長波紅外線。若長期吸收的能量高於放出的能量，全球平均溫度趨勢可能如何？",
+        "correct": "能量累積，系統有升溫趨勢",
+        "wrong": [
+          "能量收支不平衡卻必然持續降溫",
+          "太陽短波輻射立即完全停止",
+          "全球所有地點每天溫度都必然相同"
+        ],
+        "exp": "長期正能量不平衡表示系統累積熱量，影響全球平均溫度。",
+        "subject": "地球科學",
+        "sub_topic": "大氣結構與熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-大氣結構與熱收支",
+        "template_id": "earth-ref-g1-大氣結構與熱收支-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-大氣結構與熱收支-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「大氣結構與熱收支」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "對流層中通常高度越高氣溫越低，平流層中部分高度則隨高度上升而增溫。平流層增溫最主要與哪種作用相關？",
+        "correct": "臭氧吸收太陽紫外線造成加熱",
+        "wrong": [
+          "所有空氣分子都停止運動",
+          "平流層沒有任何氣體可吸收輻射",
+          "大氣壓力隨高度增加而無限增大"
+        ],
+        "exp": "平流層臭氧吸收紫外線，造成溫度垂直結構與對流層不同。",
+        "subject": "地球科學",
+        "sub_topic": "大氣結構與熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-大氣結構與熱收支",
+        "template_id": "earth-ref-g1-大氣結構與熱收支-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

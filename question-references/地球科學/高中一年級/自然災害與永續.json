@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球環境變遷"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-自然災害與永續-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「自然災害與永續」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "某海岸聚落有海嘯潛勢，平時規畫步行避難路線與高地集合點。若海嘯警報發布，哪項原則最合理？",
+        "correct": "依警報及避難指示盡速前往安全高地，不等海水退去才行動",
+        "wrong": [
+          "只因平時沒有海嘯，就忽略所有警報",
+          "所有海嘯都只會淹到海灘沙地",
+          "前往低窪地下室以便觀看海浪"
+        ],
+        "exp": "海嘯可快速淹沒低地，警報發出應依規畫避難至高處或指定避難地點。",
+        "subject": "地球科學",
+        "sub_topic": "自然災害與永續",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中一年級-自然災害與永續",
+        "template_id": "earth-ref-g1-自然災害與永續-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-自然災害與永續-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「自然災害與永續」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "某山區道路近年落石增加，當局要決定是否增建防護網。若從風險管理角度，最重要的資料為何？",
+        "correct": "坡地地質、落石頻率、交通暴露量及防護工程成效",
+        "wrong": [
+          "只看道路旁商店名稱",
+          "只看去年哪天有人拍攝雲朵",
+          "以防護網顏色作為唯一安全標準"
+        ],
+        "exp": "災害風險由危害、暴露及脆弱度等組成，需以多項資料評估防護措施。",
+        "subject": "地球科學",
+        "sub_topic": "自然災害與永續",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中一年級-自然災害與永續",
+        "template_id": "earth-ref-g1-自然災害與永續-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

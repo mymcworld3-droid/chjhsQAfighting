@@ -1,0 +1,66 @@
+{
+  "units": [
+    "海洋"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-海水性質-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「海水性質」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "海水蒸發時水分離開海面，鹽分多留在海中；若不考慮其他水流或降水，表層鹽度最可能如何變化？",
+        "correct": "鹽度上升",
+        "wrong": [
+          "鹽度必然降為零",
+          "鹽度與蒸發完全無關",
+          "海水立刻變成純水"
+        ],
+        "exp": "蒸發主要移走水，溶質留存，故在其餘條件不變下鹽度提高。",
+        "subject": "地球科學",
+        "sub_topic": "海水性質",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海水性質",
+        "template_id": "earth-ref-g1-海水性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-海水性質-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「海水性質」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "甲海域大量河水流入，乙海域蒸發旺盛且少雨。若其他條件接近，哪個比較較合理？",
+        "correct": "甲表層鹽度可能較低，乙可能較高",
+        "wrong": [
+          "河水流入會直接增加海水鹽分濃度",
+          "乙蒸發旺盛必定使鹽度下降",
+          "兩海域鹽度只能由海底深度決定"
+        ],
+        "exp": "淡水輸入降低表層鹽度，旺盛蒸發則可能提高，實際還受海流影響。",
+        "subject": "地球科學",
+        "sub_topic": "海水性質",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海水性質",
+        "template_id": "earth-ref-g1-海水性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

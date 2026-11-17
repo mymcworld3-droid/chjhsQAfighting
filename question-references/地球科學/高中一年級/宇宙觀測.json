@@ -1,0 +1,66 @@
+{
+  "units": [
+    "太空與天文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-宇宙觀測-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「宇宙觀測」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "天文學家觀測遠方星系的光譜，發現相同原子譜線相對實驗室波長整體偏向紅端。常見的解釋是什麼？",
+        "correct": "星系相對退行或宇宙膨脹造成紅移",
+        "wrong": [
+          "光的真空速度變成零",
+          "該星系必然位於太陽系內",
+          "星系已停止發出所有光線"
+        ],
+        "exp": "譜線整體紅移是觀測到波長變長，對遠方星系常與宇宙膨脹有關。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙觀測",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-宇宙觀測",
+        "template_id": "earth-ref-g1-宇宙觀測-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-宇宙觀測-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「宇宙觀測」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "若望遠鏡口徑增大而其他條件適當，觀測暗弱天體通常有哪些優勢？",
+        "correct": "可收集更多光子，較容易偵測微弱光源",
+        "wrong": [
+          "所有星體到地球的距離會自動縮短",
+          "可讓星體自行發出更多能量",
+          "觀測時不再需要考慮大氣或儀器"
+        ],
+        "exp": "較大集光面積提高光子蒐集能力，但不改變天體距離或發光量。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙觀測",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中一年級-宇宙觀測",
+        "template_id": "earth-ref-g1-宇宙觀測-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地質與地形"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-岩石循環-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「岩石循環」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "某岩漿冷卻後形成火成岩，之後經風化侵蝕形成沉積物，埋藏壓密後成為沉積岩。這顯示什麼？",
+        "correct": "岩石可透過不同地質作用在類型間轉換",
+        "wrong": [
+          "火成岩形成後絕不再改變",
+          "沉積岩只能直接由岩漿一次冷卻形成",
+          "沉積物與地表侵蝕毫無關係"
+        ],
+        "exp": "冷卻形成火成岩，風化侵蝕、沉積及成岩作用形成沉積岩，是岩石循環。",
+        "subject": "地球科學",
+        "sub_topic": "岩石循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-岩石循環",
+        "template_id": "earth-ref-g1-岩石循環-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-岩石循環-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「岩石循環」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "一塊石灰岩在地底受到高溫高壓作用，礦物重新結晶成大理岩。這個過程稱為什麼？",
+        "correct": "變質作用",
+        "wrong": [
+          "熔融後快速冷凝",
+          "海水直接蒸發結晶出石鹽",
+          "火山灰直接沉降形成鬆散土壤"
+        ],
+        "exp": "大理岩由石灰岩經變質作用重結晶形成，過程不須完全熔融。",
+        "subject": "地球科學",
+        "sub_topic": "岩石循環",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中一年級-岩石循環",
+        "template_id": "earth-ref-g1-岩石循環-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

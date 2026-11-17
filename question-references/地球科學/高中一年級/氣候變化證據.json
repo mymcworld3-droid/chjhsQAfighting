@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球環境變遷"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-氣候變化證據-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「氣候變化證據」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "研究者分析冰芯中封存的氣泡，測得不同年代的大氣二氧化碳濃度。這項資料屬於哪種氣候研究證據？",
+        "correct": "重建過去大氣組成的間接紀錄",
+        "wrong": [
+          "直接測量古代每位居民的體溫",
+          "測得地球中心即時氣壓",
+          "證明所有氣候變化都只有一種成因"
+        ],
+        "exp": "冰芯氣泡保存過去空氣，可作為古大氣成分的代用資料。",
+        "subject": "地球科學",
+        "sub_topic": "氣候變化證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣候變化證據",
+        "template_id": "earth-ref-g1-氣候變化證據-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-氣候變化證據-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「氣候變化證據」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "不同年代樹木年輪寬度有差異，但也受養分、病蟲害與樹種影響。若用年輪推估古氣候，哪種做法最適當？",
+        "correct": "以多棵樹的資料並參照其他氣候紀錄交叉驗證",
+        "wrong": [
+          "只取單棵樹最寬的一圈推論全球氣溫",
+          "假定年輪寬度完全不受生長環境影響",
+          "因年輪不是溫度計，就不能研究過去氣候"
+        ],
+        "exp": "年輪可作為代用指標，但需控制非氣候因素並互證。",
+        "subject": "地球科學",
+        "sub_topic": "氣候變化證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中一年級-氣候變化證據",
+        "template_id": "earth-ref-g1-氣候變化證據-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

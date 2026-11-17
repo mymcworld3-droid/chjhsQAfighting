@@ -1,0 +1,66 @@
+{
+  "units": [
+    "大氣與天氣"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-鋒面、颱風與天氣圖-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「鋒面、颱風與天氣圖」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "一張天氣圖顯示冷鋒逼近，接著觀測到風向轉變、降雨與降溫。最合理的解釋為何？",
+        "correct": "冷暖氣團交界通過，暖空氣受抬升形成雲雨",
+        "wrong": [
+          "冷鋒只能發生在海底",
+          "颱風不可能帶來任何降水",
+          "氣溫下降表示地球自轉已停止"
+        ],
+        "exp": "冷鋒附近空氣抬升可形成降水，鋒後常有冷空氣移入。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "earth-ref-g1-鋒面、颱風與天氣圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-鋒面、颱風與天氣圖-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「鋒面、颱風與天氣圖」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "颱風中心附近氣壓較低，外圍強風環繞。若北半球無其他重大擾動，颱風環流在地面附近通常呈什麼方向？",
+        "correct": "大致逆時針向低壓中心輻合",
+        "wrong": [
+          "大致順時針向高壓中心輻散",
+          "所有風都沿直線向外吹且無旋轉",
+          "颱風中心周圍風向完全不受地球自轉影響"
+        ],
+        "exp": "北半球低壓附近受科氏力影響，地面風常呈逆時針輻合環流。",
+        "subject": "地球科學",
+        "sub_topic": "鋒面、颱風與天氣圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中一年級-鋒面、颱風與天氣圖",
+        "template_id": "earth-ref-g1-鋒面、颱風與天氣圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

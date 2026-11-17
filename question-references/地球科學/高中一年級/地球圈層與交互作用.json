@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球系統"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-地球圈層與交互作用-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「地球圈層與交互作用」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "連日豪雨使山坡崩塌，土砂進入河川後流向海岸。這主要涉及哪些地球圈層的交互作用？",
+        "correct": "大氣圈的降雨、岩石圈的侵蝕與水圈的搬運",
+        "wrong": [
+          "只有生物圈內的細胞呼吸",
+          "只有地核與外太空之間的能量交換",
+          "只有海水鹽度與地球自轉相互作用"
+        ],
+        "exp": "雨水屬大氣與水圈，沖刷岩石土壤並搬運土砂，顯示多圈層交互作用。",
+        "subject": "地球科學",
+        "sub_topic": "地球圈層與交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球圈層與交互作用",
+        "template_id": "earth-ref-g1-地球圈層與交互作用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-地球圈層與交互作用-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「地球圈層與交互作用」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "火山噴發的灰塵進入大氣，部分落入海面並影響海水中的浮游生物。最符合哪個系統觀點？",
+        "correct": "地質事件可能透過大氣與海洋影響生物活動",
+        "wrong": [
+          "岩石圈變化無法影響海洋生物",
+          "只有天文現象才會影響浮游生物",
+          "只要火山噴發就必然使所有海洋生命消失"
+        ],
+        "exp": "火山物質可跨越岩石、大氣、水與生物圈，影響程度依物質與環境而異。",
+        "subject": "地球科學",
+        "sub_topic": "地球圈層與交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-1",
+            "name": "地球構造"
+          }
+        ],
+        "concept_id": "earth-高中一年級-地球圈層與交互作用",
+        "template_id": "earth-ref-g1-地球圈層與交互作用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "海洋"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g1-海流與海洋環流-1",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「海流與海洋環流」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "北半球某海區受持續盛行風推動，表層海水運動又受科氏力影響。若要預測流向，哪種資訊最不可缺少？",
+        "correct": "風向、緯度與海陸分布",
+        "wrong": [
+          "海底岩石的礦物顏色",
+          "漁船船名的字母順序",
+          "附近城市建築物的高度"
+        ],
+        "exp": "表層環流由風、科氏力及大陸邊界共同塑造，不能只用單一因素判定。",
+        "subject": "地球科學",
+        "sub_topic": "海流與海洋環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海流與海洋環流",
+        "template_id": "earth-ref-g1-海流與海洋環流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g1-海流與海洋環流-2",
+      "source": "依大考中心學測自然科地球科學實證與資料判讀命題方向編寫之參考題",
+      "design": "以「海流與海洋環流」觀測情境和自然機制推導唯一結論",
+      "question": {
+        "q": "某海岸出現上升流，較深處的冷水與營養鹽進入表層。哪個影響最可能發生？",
+        "correct": "表層營養鹽增加，有利浮游植物生產",
+        "wrong": [
+          "上升流必然使所有海水溫度立即相同",
+          "冷水上升會直接移除所有海洋營養鹽",
+          "海洋生產力只由月亮盈虧決定"
+        ],
+        "exp": "上升流把深層營養帶到受光照的表層，可支持初級生產力。",
+        "subject": "地球科學",
+        "sub_topic": "海流與海洋環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中一年級-海流與海洋環流",
+        "template_id": "earth-ref-g1-海流與海洋環流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
