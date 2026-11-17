@@ -1,0 +1,66 @@
+{
+  "units": [
+    "能量與熱"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-能量守恆-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「能量守恆」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "忽略空氣阻力，球由高處自由落下，重力位能降低20 J。其動能如何改變？",
+        "correct": "增加20 J",
+        "wrong": [
+          "減少20 J",
+          "不變",
+          "增加40 J"
+        ],
+        "exp": "僅受重力時機械能守恆，重力位能降低多少，動能增加多少。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "physics-ref-g1-能量守恆-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-能量守恆-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「能量守恆」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "理想無摩擦滑道上，小車從高度h滑至高度h/2，從靜止出發。其動能為何？",
+        "correct": "mg(h/2)",
+        "wrong": [
+          "mgh",
+          "0",
+          "2mgh"
+        ],
+        "exp": "初始位能mgh，至一半高度剩mgh/2，差額成為動能mgh/2。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "physics-ref-g1-能量守恆-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

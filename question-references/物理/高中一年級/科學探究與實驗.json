@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物理量與測量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-科學探究與實驗-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「科學探究與實驗」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "研究擺長對週期的影響，甲擺長20 cm、乙40 cm，但同時改變擺球質量。要單獨檢驗擺長因素，最佳改進是？",
+        "correct": "固定擺球質量與小擺角，只改變擺長",
+        "wrong": [
+          "同時增加擺長與質量以讓差異更明顯",
+          "只測一次便宣稱擺長為唯一原因",
+          "直接使用不同場地的重力加速度"
+        ],
+        "exp": "操縱變因應為擺長，其餘影響可能的條件需控制。",
+        "subject": "物理",
+        "sub_topic": "科學探究與實驗",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-科學探究與實驗",
+        "template_id": "physics-ref-g1-科學探究與實驗-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-科學探究與實驗-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「科學探究與實驗」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "兩種材料的導熱實驗採用相同尺寸與熱源，但初始溫度不同。若欲比較導熱表現，最應先做什麼？",
+        "correct": "控制兩組初始與邊界溫度條件使其可比較",
+        "wrong": [
+          "只選擇最後溫度較高的組別",
+          "把材料顏色當作唯一控制條件",
+          "改變兩組熱源功率增加差異"
+        ],
+        "exp": "熱傳導與溫度差有關，初始溫度不同可能干擾材料效應。",
+        "subject": "物理",
+        "sub_topic": "科學探究與實驗",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-科學探究與實驗",
+        "template_id": "physics-ref-g1-科學探究與實驗-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "電與磁"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-磁場與電磁現象-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「磁場與電磁現象」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "一條長直導線通有穩定電流，在其周圍放置小指南針時，指南針可能偏轉。這顯示什麼？",
+        "correct": "電流會在周圍產生磁場",
+        "wrong": [
+          "磁場只能由永久磁鐵產生",
+          "導線中有電流就表示電荷全部靜止",
+          "電流產生磁場必定使地磁場消失"
+        ],
+        "exp": "電流可產生環繞導線的磁場，指南針指向受合成磁場影響。",
+        "subject": "物理",
+        "sub_topic": "磁場與電磁現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-磁場與電磁現象",
+        "template_id": "physics-ref-g1-磁場與電磁現象-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-磁場與電磁現象-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「磁場與電磁現象」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "磁鐵的N極向線圈靠近時，線圈產生感應電流。依楞次定律，感應磁場的作用傾向於？",
+        "correct": "阻抗原本磁通量變化",
+        "wrong": [
+          "永遠加強磁鐵靠近造成的變化",
+          "完全與磁通量改變無關",
+          "令線圈自發產生無限能量"
+        ],
+        "exp": "楞次定律指出感應電流方向會反抗造成它的磁通量變化。",
+        "subject": "物理",
+        "sub_topic": "磁場與電磁現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-磁場與電磁現象",
+        "template_id": "physics-ref-g1-磁場與電磁現象-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

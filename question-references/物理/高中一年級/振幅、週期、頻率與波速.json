@@ -1,0 +1,66 @@
+{
+  "units": [
+    "波動與光"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-振幅、週期、頻率與波速-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「振幅、週期、頻率與波速」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "水波週期為0.50 s，波長1.2 m，依v＝λf，波速為多少？",
+        "correct": "2.4 m/s",
+        "wrong": [
+          "0.6 m/s",
+          "1.7 m/s",
+          "4.8 m/s"
+        ],
+        "exp": "頻率f＝1/T＝2 Hz，波速1.2×2＝2.4 m/s。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "physics-ref-g1-振幅、週期、頻率與波速-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-振幅、週期、頻率與波速-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「振幅、週期、頻率與波速」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "同一條弦上兩列波在相同張力條件下傳播，甲頻率為5 Hz、乙為10 Hz。若波速相同，乙的波長相較甲如何？",
+        "correct": "為甲的一半",
+        "wrong": [
+          "甲的兩倍",
+          "與甲完全相同",
+          "必定為零"
+        ],
+        "exp": "λ＝v/f，波速相同而頻率加倍，波長減半。",
+        "subject": "物理",
+        "sub_topic": "振幅、週期、頻率與波速",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-振幅、週期、頻率與波速",
+        "template_id": "physics-ref-g1-振幅、週期、頻率與波速-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

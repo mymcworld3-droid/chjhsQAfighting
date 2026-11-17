@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物理探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-圖表分析、科學模型-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「圖表分析、科學模型」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "物體作等速直線運動，位置—時間圖為斜率2 m/s的直線。由此最直接可得什麼？",
+        "correct": "物體的速度為2 m/s",
+        "wrong": [
+          "物體加速度為2 m/s²",
+          "位置每秒減少2 m",
+          "物體總質量為2 kg"
+        ],
+        "exp": "位置對時間的斜率為速度；直線斜率固定代表等速。",
+        "subject": "物理",
+        "sub_topic": "圖表分析、科學模型",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-圖表分析、科學模型",
+        "template_id": "physics-ref-g1-圖表分析、科學模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-圖表分析、科學模型-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「圖表分析、科學模型」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "某實驗得到力F與伸長量x的資料，F-x圖為過原點斜率50 N/m的直線。若符合虎克定律，彈簧常數為何？",
+        "correct": "50 N/m",
+        "wrong": [
+          "1/50 N/m",
+          "50 m/N",
+          "2500 N/m"
+        ],
+        "exp": "F＝kx，F對x圖線的斜率就是k。",
+        "subject": "物理",
+        "sub_topic": "圖表分析、科學模型",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-圖表分析、科學模型",
+        "template_id": "physics-ref-g1-圖表分析、科學模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

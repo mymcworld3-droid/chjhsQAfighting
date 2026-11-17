@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物理量與測量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-測量誤差與有效數字-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「測量誤差與有效數字」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "利用刻度至0.1 cm的直尺量得長度12.3 cm，另一段長度為4.56 cm。依加法測量精度原則，兩段總長應報告為多少？",
+        "correct": "16.9 cm",
+        "wrong": [
+          "16.86 cm",
+          "16.860 cm",
+          "17 cm"
+        ],
+        "exp": "12.3+4.56＝16.86，量測加法保留至最少小數位（一位），得16.9 cm。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "physics-ref-g1-測量誤差與有效數字-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-測量誤差與有效數字-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「測量誤差與有效數字」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "同學測同一物體質量三次得到20.1、20.2、20.1 g，但已知儀器校正偏高1.0 g。這組資料主要顯示什麼？",
+        "correct": "重複性良好，但可能有系統誤差影響準確度",
+        "wrong": [
+          "數據接近就代表完全沒有系統偏差",
+          "三次測量平均必定是物體真實質量",
+          "有系統偏差就表示每次測量的隨機散布一定很大"
+        ],
+        "exp": "讀數集中代表精密度較好，儀器固定偏高使準確度受損。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "physics-ref-g1-測量誤差與有效數字-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

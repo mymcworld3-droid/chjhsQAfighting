@@ -1,0 +1,66 @@
+{
+  "units": [
+    "電與磁"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-電荷、電場與電路-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「電荷、電場與電路」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "兩個相同電阻R串聯接至電壓V的理想電源，總電阻為何？",
+        "correct": "2R",
+        "wrong": [
+          "R/2",
+          "R",
+          "R²"
+        ],
+        "exp": "串聯電阻相加，R+R＝2R。",
+        "subject": "物理",
+        "sub_topic": "電荷、電場與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-電荷、電場與電路",
+        "template_id": "physics-ref-g1-電荷、電場與電路-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-電荷、電場與電路-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「電荷、電場與電路」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "一個帶正電小球置於帶正電大球附近且均可近似點電荷，若其他力可忽略，兩者間靜電力方向為？",
+        "correct": "互相排斥",
+        "wrong": [
+          "互相吸引",
+          "一定沒有力",
+          "兩物體只能沿垂直於連心線方向受力"
+        ],
+        "exp": "同性電荷間靜電力為斥力，沿兩電荷連心線方向。",
+        "subject": "物理",
+        "sub_topic": "電荷、電場與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-電荷、電場與電路",
+        "template_id": "physics-ref-g1-電荷、電場與電路-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

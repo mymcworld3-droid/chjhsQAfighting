@@ -1,0 +1,66 @@
+{
+  "units": [
+    "能量與熱"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-溫度、熱與熱傳遞-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「溫度、熱與熱傳遞」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "同質量的水與鐵吸收相同熱量，若水比熱容較大，哪項溫度變化較合理？",
+        "correct": "水的升溫幅度較小",
+        "wrong": [
+          "水升溫必定較大",
+          "兩者升溫必定相同",
+          "吸熱無法使任何物體溫度改變"
+        ],
+        "exp": "Q＝mcΔT，m與Q相同時，c較大代表ΔT較小。",
+        "subject": "物理",
+        "sub_topic": "溫度、熱與熱傳遞",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-溫度、熱與熱傳遞",
+        "template_id": "physics-ref-g1-溫度、熱與熱傳遞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-溫度、熱與熱傳遞-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「溫度、熱與熱傳遞」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "太陽能量穿過太空抵達地球，主要依靠哪種熱傳遞方式？",
+        "correct": "輻射",
+        "wrong": [
+          "熱傳導",
+          "熱對流",
+          "蒸發後的海水輸送"
+        ],
+        "exp": "真空無法透過物質傳導或對流傳熱，電磁輻射可在真空傳播。",
+        "subject": "物理",
+        "sub_topic": "溫度、熱與熱傳遞",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-溫度、熱與熱傳遞",
+        "template_id": "physics-ref-g1-溫度、熱與熱傳遞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

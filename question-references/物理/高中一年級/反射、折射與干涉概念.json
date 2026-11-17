@@ -1,0 +1,66 @@
+{
+  "units": [
+    "波動與光"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-反射、折射與干涉概念-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「反射、折射與干涉概念」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "光由空氣斜射入水中，水的折射率較大。相對於法線，折射光方向通常如何？",
+        "correct": "向法線偏折",
+        "wrong": [
+          "遠離法線偏折",
+          "與入射光保持完全相同角度且無折射",
+          "折射角必定大於90°"
+        ],
+        "exp": "由低折射率進高折射率介質，依司乃耳定律折射角較小。",
+        "subject": "物理",
+        "sub_topic": "反射、折射與干涉概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-反射、折射與干涉概念",
+        "template_id": "physics-ref-g1-反射、折射與干涉概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-反射、折射與干涉概念-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「反射、折射與干涉概念」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "兩列頻率相同、振幅相等的水波在某點相遇，若波峰與波谷剛好重合，理想情況可能產生？",
+        "correct": "相消干涉，使合成位移為零",
+        "wrong": [
+          "相長干涉，振幅必定加倍",
+          "水波速必定變成兩倍",
+          "兩波相遇後從此不再能繼續傳播"
+        ],
+        "exp": "相位差180°且振幅相等時位移互相抵銷，屬相消干涉。",
+        "subject": "物理",
+        "sub_topic": "反射、折射與干涉概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中一年級-反射、折射與干涉概念",
+        "template_id": "physics-ref-g1-反射、折射與干涉概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "波動與光"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-光學現象-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「光學現象」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "凸透鏡的焦距10 cm，將物體置於鏡前30 cm，理想薄透鏡形成的實像大致位於鏡後何處？",
+        "correct": "15 cm",
+        "wrong": [
+          "10 cm",
+          "30 cm",
+          "60 cm"
+        ],
+        "exp": "1/f＝1/u+1/v，1/10−1/30＝1/15，故像距15 cm。",
+        "subject": "物理",
+        "sub_topic": "光學現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-光學現象",
+        "template_id": "physics-ref-g1-光學現象-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-光學現象-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「光學現象」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "晴天白光經三稜鏡產生色散，主要原因是什麼？",
+        "correct": "玻璃對不同波長光的折射率不同",
+        "wrong": [
+          "不同色光在真空中的速度差很多",
+          "所有色光在玻璃中的折射率必定相同",
+          "三稜鏡會把光子直接變成原子"
+        ],
+        "exp": "材料折射率隨波長變化，使各色光折射角不同。",
+        "subject": "物理",
+        "sub_topic": "光學現象",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-光學現象",
+        "template_id": "physics-ref-g1-光學現象-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

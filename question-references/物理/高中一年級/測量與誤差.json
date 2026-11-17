@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物理探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-測量與誤差-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「測量與誤差」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "某同學用秒錶測單擺往返1次約1秒，手動按錶反應延遲影響很大。哪種方法較能降低相對計時誤差？",
+        "correct": "量測20次完整週期的總時間，再除以20",
+        "wrong": [
+          "只測0.1次週期",
+          "每次都更換不同擺長",
+          "只看秒錶外殼顏色"
+        ],
+        "exp": "量多次週期可降低每次人工啟停時間誤差占總時間的比例。",
+        "subject": "物理",
+        "sub_topic": "測量與誤差",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量與誤差",
+        "template_id": "physics-ref-g1-測量與誤差-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-測量與誤差-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「測量與誤差」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "長度量測結果甲為10.2、10.1、10.2 cm，乙為9.8、10.6、10.0 cm。只比較重複測量散布，何者精密度較佳？",
+        "correct": "甲組",
+        "wrong": [
+          "乙組",
+          "兩組散布必然完全相同",
+          "無法比較，因兩組皆有三次量測"
+        ],
+        "exp": "甲組讀值較集中，代表重複性較好；準確度則另需標準值判斷。",
+        "subject": "物理",
+        "sub_topic": "測量與誤差",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量與誤差",
+        "template_id": "physics-ref-g1-測量與誤差-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

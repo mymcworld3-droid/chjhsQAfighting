@@ -1,0 +1,66 @@
+{
+  "units": [
+    "電與磁"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-生活中的電磁應用-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「生活中的電磁應用」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "變壓器初級線圈接交流電，理想次級匝數為初級的一半，次級電壓約為何？",
+        "correct": "初級電壓的一半",
+        "wrong": [
+          "初級電壓的兩倍",
+          "與匝數完全無關",
+          "永遠為零"
+        ],
+        "exp": "理想變壓器V₂/V₁＝N₂/N₁＝1/2。",
+        "subject": "物理",
+        "sub_topic": "生活中的電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-生活中的電磁應用",
+        "template_id": "physics-ref-g1-生活中的電磁應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-生活中的電磁應用-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「生活中的電磁應用」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "手機無線充電板與手機線圈之間沒有金屬接點仍可傳遞能量，主要利用什麼原理？",
+        "correct": "變動磁場造成電磁感應",
+        "wrong": [
+          "只利用靜止電荷的重力",
+          "靠超音波直接充入電子",
+          "由永久不變的磁場產生無限直流電壓"
+        ],
+        "exp": "無線充電利用交流線圈產生變動磁場，受電線圈感應電壓。",
+        "subject": "物理",
+        "sub_topic": "生活中的電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-生活中的電磁應用",
+        "template_id": "physics-ref-g1-生活中的電磁應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物理探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g1-建立假設與變因控制-1",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「建立假設與變因控制」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "研究同一斜面上滑車加速度與傾角的關係。要控制的條件中哪項最合理？",
+        "correct": "固定滑車、軌道材質與釋放方式，只改變傾角",
+        "wrong": [
+          "同時改變傾角與輪軸摩擦",
+          "每次改變滑車質量且不記錄",
+          "只測不同斜面顏色"
+        ],
+        "exp": "若要辨識傾角效果，需控制其他可能影響加速度的條件。",
+        "subject": "物理",
+        "sub_topic": "建立假設與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-建立假設與變因控制",
+        "template_id": "physics-ref-g1-建立假設與變因控制-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g1-建立假設與變因控制-2",
+      "source": "依高中物理108課綱與學測自然物理命題思路重設之參考題",
+      "design": "「建立假設與變因控制」以實驗數據或生活現象、單位及條件進行推論",
+      "question": {
+        "q": "研究水的加熱速率與電熱器功率關係，甲組用100 mL水、乙組200 mL水。若只研究功率影響，應如何改善？",
+        "correct": "固定兩組水量及初始溫度，僅改變加熱功率",
+        "wrong": [
+          "讓兩組水量不同且不計入分析",
+          "只記錄容器顏色",
+          "每次讓環境溫度變化而不記錄"
+        ],
+        "exp": "水量與初始溫度影響升溫，應固定以控制變因。",
+        "subject": "物理",
+        "sub_topic": "建立假設與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-建立假設與變因控制",
+        "template_id": "physics-ref-g1-建立假設與變因控制-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
