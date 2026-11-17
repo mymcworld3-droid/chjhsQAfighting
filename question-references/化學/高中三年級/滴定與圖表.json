@@ -1,0 +1,66 @@
+{
+  "units": [
+    "實驗設計與分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-滴定與圖表-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「滴定與圖表」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "以強鹼滴定強酸，滴定曲線接近當量點時pH變化通常如何？",
+        "correct": "在相對狹窄的滴定體積範圍內快速上升",
+        "wrong": [
+          "在整個過程固定為pH 7",
+          "隨加入強鹼而必然持續下降",
+          "在任何時候都不受酸鹼莫耳數影響"
+        ],
+        "exp": "強酸強鹼滴定在當量點附近pH急遽變化，當量點25°C附近接近7。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "chem-ref-g3-滴定與圖表-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-滴定與圖表-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「滴定與圖表」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "已知某一元酸滴定曲線當量點在25.0 mL，若使用濃度0.100 M強鹼滴定，初始酸莫耳數為何？",
+        "correct": "2.50×10⁻³ mol",
+        "wrong": [
+          "2.50×10⁻² mol",
+          "4.00×10⁻⁴ mol",
+          "0.250 mol"
+        ],
+        "exp": "當量點酸鹼莫耳數相等，0.100×0.0250＝0.00250 mol。",
+        "subject": "化學",
+        "sub_topic": "滴定與圖表",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-滴定與圖表",
+        "template_id": "chem-ref-g3-滴定與圖表-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

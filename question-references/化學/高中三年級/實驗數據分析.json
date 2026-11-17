@@ -1,0 +1,66 @@
+{
+  "units": [
+    "反應計量與實驗"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-實驗數據分析-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「實驗數據分析」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某實驗重複測得反應時間10.2、10.4、10.3秒。若無系統偏差，三值平均為多少？",
+        "correct": "10.3秒",
+        "wrong": [
+          "10.2秒",
+          "10.4秒",
+          "30.9秒"
+        ],
+        "exp": "算術平均(10.2+10.4+10.3)/3＝10.3秒。",
+        "subject": "化學",
+        "sub_topic": "實驗數據分析",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-實驗數據分析",
+        "template_id": "chem-ref-g3-實驗數據分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-實驗數據分析-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「實驗數據分析」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "測量某溶液濃度時，三次數據均比已知標準值高約10%，但彼此很接近。這表示哪個問題較可能？",
+        "correct": "有系統性偏差，精密度高不代表準確度高",
+        "wrong": [
+          "數據彼此接近就證明必定準確",
+          "濃度標準值無法與測量值比較",
+          "所有誤差都只能由隨機因素引起"
+        ],
+        "exp": "重複值接近代表精密度較高，整體偏高則可能存在校正等系統誤差。",
+        "subject": "化學",
+        "sub_topic": "實驗數據分析",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-實驗數據分析",
+        "template_id": "chem-ref-g3-實驗數據分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

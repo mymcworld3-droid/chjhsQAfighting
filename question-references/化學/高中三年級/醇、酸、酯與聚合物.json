@@ -1,0 +1,66 @@
+{
+  "units": [
+    "有機化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-醇、酸、酯與聚合物-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「醇、酸、酯與聚合物」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "乙酸與乙醇在適當酸性催化條件下反應，主要可產生哪一類含香味的有機產物？",
+        "correct": "酯類，如乙酸乙酯",
+        "wrong": [
+          "純元素鈉",
+          "金屬銅晶體",
+          "二氧化矽網狀晶體"
+        ],
+        "exp": "羧酸與醇經酯化可形成酯與水。",
+        "subject": "化學",
+        "sub_topic": "醇、酸、酯與聚合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-醇、酸、酯與聚合物",
+        "template_id": "chem-ref-g3-醇、酸、酯與聚合物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-醇、酸、酯與聚合物-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「醇、酸、酯與聚合物」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "大量乙烯分子經加成聚合形成聚乙烯，哪個結構變化最符合？",
+        "correct": "許多單體以新共價鍵連接成長鏈",
+        "wrong": [
+          "每個乙烯分子都變成單獨金屬離子",
+          "聚合一定完全沒有任何化學鍵改變",
+          "只有單體的顏色發生變化"
+        ],
+        "exp": "加成聚合使C=C參與成鍵，形成長鏈聚合物。",
+        "subject": "化學",
+        "sub_topic": "醇、酸、酯與聚合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-醇、酸、酯與聚合物",
+        "template_id": "chem-ref-g3-醇、酸、酯與聚合物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "反應計量與實驗"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-莫耳與濃度換算-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「莫耳與濃度換算」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "配製250 mL、0.20 M NaCl溶液，需要NaCl多少莫耳？",
+        "correct": "0.050 mol",
+        "wrong": [
+          "0.80 mol",
+          "0.20 mol",
+          "0.0050 mol"
+        ],
+        "exp": "n＝MV＝0.20×0.250＝0.050 mol。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "chem-ref-g3-莫耳與濃度換算-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-莫耳與濃度換算-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「莫耳與濃度換算」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "用50.0 mL的2.0 M溶液加水定容至200.0 mL，假設溶質不變，稀釋後濃度？",
+        "correct": "0.50 M",
+        "wrong": [
+          "8.0 M",
+          "2.0 M",
+          "0.25 M"
+        ],
+        "exp": "C₁V₁＝C₂V₂，C₂＝2.0×50/200＝0.50 M。",
+        "subject": "化學",
+        "sub_topic": "莫耳與濃度換算",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-莫耳與濃度換算",
+        "template_id": "chem-ref-g3-莫耳與濃度換算-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

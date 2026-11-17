@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學平衡與電化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-酸鹼滴定與緩衝液-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「酸鹼滴定與緩衝液」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "以0.10 M NaOH滴定20.0 mL未知濃度HCl，當量點共消耗NaOH 30.0 mL，若HCl為一元強酸，濃度為何？",
+        "correct": "0.15 M",
+        "wrong": [
+          "0.067 M",
+          "0.10 M",
+          "0.30 M"
+        ],
+        "exp": "當量點酸鹼莫耳數相等，C酸×20.0＝0.10×30.0，C酸＝0.15 M。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "chem-ref-g3-酸鹼滴定與緩衝液-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-酸鹼滴定與緩衝液-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「酸鹼滴定與緩衝液」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "醋酸與醋酸鈉配成緩衝液，加入少量強酸後，主要由哪個成分消耗外加的H⁺？",
+        "correct": "醋酸根CH₃COO⁻",
+        "wrong": [
+          "醋酸分子完全不參與任何平衡",
+          "水中氧原子立即失去全部電子",
+          "Na⁺與H⁺形成中性金屬"
+        ],
+        "exp": "共軛鹼醋酸根與H⁺結合形成醋酸，使pH變化較小。",
+        "subject": "化學",
+        "sub_topic": "酸鹼滴定與緩衝液",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-酸鹼滴定與緩衝液",
+        "template_id": "chem-ref-g3-酸鹼滴定與緩衝液-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

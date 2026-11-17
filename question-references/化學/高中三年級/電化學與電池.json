@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學平衡與電化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-電化學與電池-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「電化學與電池」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "原電池Zn | Zn²⁺ || Cu²⁺ | Cu運作時，Zn發生氧化、Cu²⁺發生還原。電子在外電路主要如何流動？",
+        "correct": "由鋅電極流向銅電極",
+        "wrong": [
+          "由銅電極流向鋅電極",
+          "只在鹽橋內由水分子攜帶",
+          "由電池正極直接流向真空而不進入另一電極"
+        ],
+        "exp": "鋅釋放電子，電子經外電路到銅陰極供Cu²⁺還原。",
+        "subject": "化學",
+        "sub_topic": "電化學與電池",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-電化學與電池",
+        "template_id": "chem-ref-g3-電化學與電池-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-電化學與電池-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「電化學與電池」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "電解水時，外部電源驅動反應。若陰極產生氫氣、陽極產生氧氣，哪項電極性質正確？",
+        "correct": "陰極進行還原，陽極進行氧化",
+        "wrong": [
+          "陰極進行氧化，陽極進行還原",
+          "兩極都只進行酸鹼中和",
+          "產生氧氣的地方一定是還原電極"
+        ],
+        "exp": "無論電解池或原電池，陰極為還原、陽極為氧化。",
+        "subject": "化學",
+        "sub_topic": "電化學與電池",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-電化學與電池",
+        "template_id": "chem-ref-g3-電化學與電池-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "有機與生活化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-材料與藥物-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「材料與藥物」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某高分子塑膠可熔融再塑形，另一種固化後不易再熔融。這主要可能與哪項結構差異有關？",
+        "correct": "高分子鏈間是否形成大量交聯網絡",
+        "wrong": [
+          "塑膠的外觀顏色是否透明",
+          "材料名稱是否含有兩個音節",
+          "所有塑膠都具有完全相同分子結構"
+        ],
+        "exp": "熱塑性與熱固性材料的差異常與交聯程度及鏈段活動性有關。",
+        "subject": "化學",
+        "sub_topic": "材料與藥物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-材料與藥物",
+        "template_id": "chem-ref-g3-材料與藥物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-材料與藥物-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「材料與藥物」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某藥物有兩種鏡像異構物，人體受體具有立體選擇性。為何兩者生理作用可能不同？",
+        "correct": "空間構型不同，與受體的相互作用可能不同",
+        "wrong": [
+          "兩者分子式不同所以原子數必然不同",
+          "鏡像異構物不可能具有任何相同物理性質",
+          "人體所有受體都不具有立體結構"
+        ],
+        "exp": "生物分子具立體結構，對映異構物與手性受體結合程度可能不同。",
+        "subject": "化學",
+        "sub_topic": "材料與藥物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-材料與藥物",
+        "template_id": "chem-ref-g3-材料與藥物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "實驗設計與分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-安全與變因控制-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「安全與變因控制」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "甲乙兩組比較酸與金屬反應速率，甲用1 M酸、細顆粒金屬，乙用2 M酸、大塊金屬。若要單獨研究濃度影響，應如何改良？",
+        "correct": "金屬種類與表面積固定，只改變酸濃度",
+        "wrong": [
+          "繼續同時改變濃度與顆粒大小",
+          "只依哪組泡泡較多就推定所有原因",
+          "增加兩組溫度差異使效果更明顯"
+        ],
+        "exp": "表面積與酸濃度都可能影響反應速率，需控制其中一者。",
+        "subject": "化學",
+        "sub_topic": "安全與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-安全與變因控制",
+        "template_id": "chem-ref-g3-安全與變因控制-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-安全與變因控制-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「安全與變因控制」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "未知溶液可能含揮發性有毒物質，欲進行加熱實驗。最適當的安全作法為何？",
+        "correct": "先查閱安全資料並於適當通風設備及防護下操作",
+        "wrong": [
+          "直接近距離嗅聞判斷毒性",
+          "在密閉無通風教室大量加熱",
+          "不標示試劑名稱以免影響觀察"
+        ],
+        "exp": "未知揮發性危害需依SDS和實驗室規範做好通風、防護與辨識。",
+        "subject": "化學",
+        "sub_topic": "安全與變因控制",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中三年級-安全與變因控制",
+        "template_id": "chem-ref-g3-安全與變因控制-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

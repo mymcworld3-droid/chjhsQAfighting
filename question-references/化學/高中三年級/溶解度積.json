@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學平衡與電化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-溶解度積-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「溶解度積」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "AgCl(s) ⇌ Ag⁺+Cl⁻，若在純水中莫耳溶解度為s，忽略其他平衡，其Ksp如何表示？",
+        "correct": "s²",
+        "wrong": [
+          "s/2",
+          "2s",
+          "1/s"
+        ],
+        "exp": "兩種離子濃度皆為s，所以Ksp＝s²。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "chem-ref-g3-溶解度積-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-溶解度積-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「溶解度積」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某溶液中[Ag⁺]＝10⁻³ M、[Cl⁻]＝10⁻³ M，AgCl的Ksp＝1.8×10⁻¹⁰。是否有析出AgCl的趨勢？",
+        "correct": "有，因離子積Q＝10⁻⁶大於Ksp",
+        "wrong": [
+          "沒有，因Q小於Ksp",
+          "沒有，因Q必等於0",
+          "無法比較，因Q和Ksp的單位形式完全不同"
+        ],
+        "exp": "Q＝[Ag⁺][Cl⁻]＝10⁻⁶>Ksp，溶液過飽和，可能產生沉澱。",
+        "subject": "化學",
+        "sub_topic": "溶解度積",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-溶解度積",
+        "template_id": "chem-ref-g3-溶解度積-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

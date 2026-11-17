@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學跨單元統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-反應速率與平衡-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「反應速率與平衡」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "對某可逆反應加入適當催化劑，達平衡的時間縮短。若溫度與組成起點相同，催化劑對平衡常數有何影響？",
+        "correct": "不改變平衡常數，因正逆反應皆受催化",
+        "wrong": [
+          "使平衡常數必然增大十倍",
+          "使反應物全部轉為生成物而無逆反應",
+          "使反應焓變由負值變正值"
+        ],
+        "exp": "催化劑影響正逆反應途徑及到達平衡速率，不改變定溫下平衡常數。",
+        "subject": "化學",
+        "sub_topic": "反應速率與平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應速率與平衡",
+        "template_id": "chem-ref-g3-反應速率與平衡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-反應速率與平衡-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「反應速率與平衡」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某反應初期速率快，之後反應物濃度降低，若其他條件不變且速率受濃度影響，通常會如何？",
+        "correct": "反應速率可能減慢",
+        "wrong": [
+          "反應速率必定無限增加",
+          "反應物濃度下降等於完全無化學反應",
+          "所有反應速率都與濃度無關"
+        ],
+        "exp": "部分反應速率依賴反應物濃度，濃度下降會降低有效碰撞頻率。",
+        "subject": "化學",
+        "sub_topic": "反應速率與平衡",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應速率與平衡",
+        "template_id": "chem-ref-g3-反應速率與平衡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

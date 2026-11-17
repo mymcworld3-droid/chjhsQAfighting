@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學跨單元統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-原子結構與物質性質-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「原子結構與物質性質」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "元素鈉與鉀同屬第1族。若比較最外層電子數，兩者最可能相同的是？",
+        "correct": "各有一個價電子",
+        "wrong": [
+          "各有七個價電子",
+          "兩者的原子序完全相同",
+          "兩者的中子數必然一樣"
+        ],
+        "exp": "同族主族元素價電子數相同，第1族多為一個最外層電子。",
+        "subject": "化學",
+        "sub_topic": "原子結構與物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中三年級-原子結構與物質性質",
+        "template_id": "chem-ref-g3-原子結構與物質性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-原子結構與物質性質-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「原子結構與物質性質」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "氯化鈉晶體在固態通常不易導電，熔融後可導電。最主要原因為何？",
+        "correct": "熔融後離子可移動、固態晶格中離子位置受限",
+        "wrong": [
+          "熔融後每個離子都消失",
+          "固態氯化鈉完全沒有電荷",
+          "導電性只由晶體顏色決定"
+        ],
+        "exp": "離子化合物固態離子不易遷移，熔融時可移動承載電流。",
+        "subject": "化學",
+        "sub_topic": "原子結構與物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中三年級-原子結構與物質性質",
+        "template_id": "chem-ref-g3-原子結構與物質性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

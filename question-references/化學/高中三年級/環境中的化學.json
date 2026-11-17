@@ -1,0 +1,66 @@
+{
+  "units": [
+    "有機與生活化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-環境中的化學-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「環境中的化學」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某湖泊流入過量含氮、磷肥料，藻類大量繁殖後造成水中溶氧下降。最可能是何種環境現象？",
+        "correct": "優養化及藻類死亡分解消耗氧氣",
+        "wrong": [
+          "所有氮磷直接變成惰性氣體且無生態作用",
+          "肥料會使溶氧無限提高而不受其他條件影響",
+          "水中藻類不可能行光合作用"
+        ],
+        "exp": "富營養鹽造成藻華，藻類呼吸及分解可增加耗氧。",
+        "subject": "化學",
+        "sub_topic": "環境中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-環境中的化學",
+        "template_id": "chem-ref-g3-環境中的化學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-環境中的化學-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「環境中的化學」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "酸雨形成可能涉及大氣中的SO₂與氮氧化物經氧化及溶解形成酸性物質。減少酸雨風險最直接的策略為何？",
+        "correct": "降低相關污染物排放並控制燃燒來源",
+        "wrong": [
+          "只增加雨水桶高度",
+          "讓所有氣體不經處理直接排放到高空",
+          "只改變道路顏色而不影響排放"
+        ],
+        "exp": "SO₂、NOx是重要酸雨前驅物，減排可降低形成酸性沉降的負荷。",
+        "subject": "化學",
+        "sub_topic": "環境中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中三年級-環境中的化學",
+        "template_id": "chem-ref-g3-環境中的化學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

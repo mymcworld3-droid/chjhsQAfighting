@@ -1,0 +1,66 @@
+{
+  "units": [
+    "實驗設計與分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-誤差、結果推論-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「誤差、結果推論」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "滴定終點讀數總是比理論當量點多約0.3 mL，且每次偏差方向相同。這較接近哪種誤差？",
+        "correct": "系統性誤差",
+        "wrong": [
+          "只由隨機雜訊造成且平均必為零",
+          "化學反應的質量不守恆",
+          "完全沒有任何測量誤差"
+        ],
+        "exp": "固定偏向同一方向的讀值差異，可能來自操作或指示劑終點偏差。",
+        "subject": "化學",
+        "sub_topic": "誤差、結果推論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-誤差、結果推論",
+        "template_id": "chem-ref-g3-誤差、結果推論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-誤差、結果推論-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「誤差、結果推論」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某化學實驗只有一次測量，就宣稱測得濃度的誤差小於0.1%。要提高證據品質，最合理的是？",
+        "correct": "重複測量並校正儀器，評估精密度與可能偏差",
+        "wrong": [
+          "把讀數小數位加多就保證準確",
+          "只挑最符合預期的一個結果",
+          "不記錄使用的量測設備"
+        ],
+        "exp": "單次測量不足以估計變異，增加有效位數也不等於真實精度，需重複與校正。",
+        "subject": "化學",
+        "sub_topic": "誤差、結果推論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中三年級-誤差、結果推論",
+        "template_id": "chem-ref-g3-誤差、結果推論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

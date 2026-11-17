@@ -1,0 +1,66 @@
+{
+  "units": [
+    "有機化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-碳氫化合物-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「碳氫化合物」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "乙烯C₂H₄含碳碳雙鍵，與乙烷C₂H₆相比，哪種反應較具乙烯的典型特色？",
+        "correct": "雙鍵發生加成反應",
+        "wrong": [
+          "只發生金屬離子晶格解離",
+          "以氧化數固定為0進行氨合成",
+          "完全不與任何試劑反應"
+        ],
+        "exp": "烯烴C=C可進行加成反應，飽和烷烴通常不以雙鍵加成為主要反應。",
+        "subject": "化學",
+        "sub_topic": "碳氫化合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-碳氫化合物",
+        "template_id": "chem-ref-g3-碳氫化合物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-碳氫化合物-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「碳氫化合物」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "分子式C₄H₁₀可能有正丁烷與異丁烷兩種不同結構。兩者屬於何種關係？",
+        "correct": "構造異構物",
+        "wrong": [
+          "同位素",
+          "完全相同的單一結構",
+          "一個是原子、另一個是分子"
+        ],
+        "exp": "分子式相同但碳骨架連接不同，屬構造異構。",
+        "subject": "化學",
+        "sub_topic": "碳氫化合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-碳氫化合物",
+        "template_id": "chem-ref-g3-碳氫化合物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

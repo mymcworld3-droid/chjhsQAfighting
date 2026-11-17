@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學跨單元統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-反應能量與電化學-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「反應能量與電化學」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "某原電池在放電時自發產生電流。若忽略其他能量損失，主要的能量轉換方向為何？",
+        "correct": "化學能轉為電能",
+        "wrong": [
+          "電能轉為地球引力能",
+          "核能轉為可見光，沒有化學作用",
+          "所有化學能憑空消失"
+        ],
+        "exp": "原電池自發氧化還原反應提供電子流，將化學自由能轉成電能。",
+        "subject": "化學",
+        "sub_topic": "反應能量與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應能量與電化學",
+        "template_id": "chem-ref-g3-反應能量與電化學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-反應能量與電化學-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「反應能量與電化學」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "反應A→B的ΔH＝+40 kJ/mol，反應B→C的ΔH＝−10 kJ/mol。依赫斯定律，A→C的ΔH為多少？",
+        "correct": "+30 kJ/mol",
+        "wrong": [
+          "−50 kJ/mol",
+          "+50 kJ/mol",
+          "−30 kJ/mol"
+        ],
+        "exp": "焓為狀態函數，兩步相加40＋(−10)＝+30 kJ/mol。",
+        "subject": "化學",
+        "sub_topic": "反應能量與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中三年級-反應能量與電化學",
+        "template_id": "chem-ref-g3-反應能量與電化學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

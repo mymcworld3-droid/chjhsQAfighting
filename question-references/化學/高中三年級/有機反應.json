@@ -1,0 +1,66 @@
+{
+  "units": [
+    "有機與生活化學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-有機反應-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「有機反應」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "乙烯與溴水反應後褪色，若主要是碳碳雙鍵加成，反應機制類型最接近？",
+        "correct": "加成反應",
+        "wrong": [
+          "金屬電鍍",
+          "酸鹼滴定",
+          "核分裂"
+        ],
+        "exp": "乙烯雙鍵能與溴加成，溴水顏色變淡可作不飽和鍵的檢測線索之一。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "chem-ref-g3-有機反應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-有機反應-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「有機反應」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "乙酸與乙醇在酸催化下生成乙酸乙酯與水，若增加水的量，依可逆酯化平衡可能產生何種影響？",
+        "correct": "促進酯的水解方向，使酯的平衡產量下降",
+        "wrong": [
+          "水越多酯必然無限增加",
+          "加水使所有原子序改變",
+          "水完全不可能影響任何可逆反應"
+        ],
+        "exp": "生成物水增加可依勒沙特列原理使平衡偏向反應物，其他條件相近時酯量減少。",
+        "subject": "化學",
+        "sub_topic": "有機反應",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-8",
+            "name": "有機化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-有機反應",
+        "template_id": "chem-ref-g3-有機反應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

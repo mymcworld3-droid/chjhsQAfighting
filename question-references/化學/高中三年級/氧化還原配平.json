@@ -1,0 +1,66 @@
+{
+  "units": [
+    "反應計量與實驗"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chem-ref-g3-氧化還原配平-1",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「氧化還原配平」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "在酸性溶液中，MnO₄⁻還原為Mn²⁺，每個Mn氧化數由+7降為+2。每個Mn需得到多少電子？",
+        "correct": "5個電子",
+        "wrong": [
+          "2個電子",
+          "7個電子",
+          "9個電子"
+        ],
+        "exp": "氧化數減少5，代表每個Mn接受5個電子。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "chem-ref-g3-氧化還原配平-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-ref-g3-氧化還原配平-2",
+      "source": "高中化學108課綱與大考中心自然科命題方向；獨立自編計算或觀念參考題",
+      "design": "以「氧化還原配平」的實驗、計算或反應機制設計不同推論路徑",
+      "question": {
+        "q": "反應Fe²⁺→Fe³⁺+e⁻與Ce⁴⁺+e⁻→Ce³⁺若相加配平，Fe²⁺和Ce⁴⁺的莫耳比為何？",
+        "correct": "1：1",
+        "wrong": [
+          "1：2",
+          "2：1",
+          "3：2"
+        ],
+        "exp": "兩半反應各交換一電子，電子數直接抵銷，莫耳係數均為1。",
+        "subject": "化學",
+        "sub_topic": "氧化還原配平",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中三年級-氧化還原配平",
+        "template_id": "chem-ref-g3-氧化還原配平-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
