@@ -84,7 +84,7 @@ test('only an approved and paid review can show rewards; a technical failure is 
   assert.ok(legacy.includes("result.status === 'rejected'"));
   assert.ok(legacy.includes("result.status === 'duplicate'"));
   assert.ok(legacy.includes("title: verifiedUnsettled ? '錯題已確認 · 補償狀態待核實'"));
-  assert.ok(legacy.includes('showClose: !isLimit'));
+  assert.ok(legacy.includes('showClose: !limitReached'));
   assert.match(html, /id="report-result-action"/);
   assert.match(html, /id="report-result-close"/);
 });
