@@ -1,0 +1,66 @@
+{
+  "units": [
+    "天文與宇宙"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-觀測證據-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「觀測證據」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "某天文學家用同一光譜儀測量多顆恆星，卻未先使用已知譜線校正波長。最可能影響什麼？",
+        "correct": "譜線位置與紅移測量的準確性",
+        "wrong": [
+          "恆星必然因測量而失去質量",
+          "觀測位置會自動從地球變到火星",
+          "所有譜線會因此改成純白光"
+        ],
+        "exp": "光譜儀的波長校正是判定譜線位置與紅移的重要步驟。",
+        "subject": "地球科學",
+        "sub_topic": "觀測證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-觀測證據",
+        "template_id": "earth-ref-g3-觀測證據-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-觀測證據-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「觀測證據」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "同一顆變星每隔固定時間亮度增加，觀測者連續數週測量亮度曲線。要判定其週期，最適合用什麼資料？",
+        "correct": "亮度隨時間變化的連續紀錄",
+        "wrong": [
+          "只看一次照片的像素數",
+          "只統計望遠鏡外殼重量",
+          "以觀測者的鞋子尺寸推定週期"
+        ],
+        "exp": "週期需要時間序列而非單一瞬間觀測，亮度曲線可反映重複變化。",
+        "subject": "地球科學",
+        "sub_topic": "觀測證據",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-觀測證據",
+        "template_id": "earth-ref-g3-觀測證據-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

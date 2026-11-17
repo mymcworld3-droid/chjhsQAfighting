@@ -1,0 +1,66 @@
+{
+  "units": [
+    "天文與宇宙"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-星系與宇宙-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「星系與宇宙」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "天文學家在銀河系外觀測到許多星系，其光譜紅移與距離大致正相關。通常如何解釋？",
+        "correct": "宇宙膨脹使較遠星系平均退行更快",
+        "wrong": [
+          "所有星系都圍繞地球做相同半徑圓周運動",
+          "光速與空間膨脹完全沒有關係且星系靜止",
+          "紅移代表星系距離必然越近"
+        ],
+        "exp": "哈伯—勒梅特定律描述退行速度與距離之間大致正相關，是膨脹宇宙證據。",
+        "subject": "地球科學",
+        "sub_topic": "星系與宇宙",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-星系與宇宙",
+        "template_id": "earth-ref-g3-星系與宇宙-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-星系與宇宙-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「星系與宇宙」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "夜空中的銀河帶主要由什麼構成？",
+        "correct": "從太陽系內部視角看到銀河系盤面方向大量恆星的集合光",
+        "wrong": [
+          "另一個獨立環繞地球的大氣光環",
+          "所有太陽系行星排列出的固定直線",
+          "宇宙背景輻射直接呈現肉眼可見的藍色"
+        ],
+        "exp": "銀河是觀測者身處銀河系盤面時沿盤面方向看到的密集恆星。",
+        "subject": "地球科學",
+        "sub_topic": "星系與宇宙",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-星系與宇宙",
+        "template_id": "earth-ref-g3-星系與宇宙-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

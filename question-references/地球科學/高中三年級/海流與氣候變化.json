@@ -1,0 +1,66 @@
+{
+  "units": [
+    "海洋與氣候"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-海流與氣候變化-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「海流與氣候變化」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "聖嬰現象期間，熱帶太平洋中東部表層海水異常偏暖。哪個變化較符合常見的海氣耦合機制？",
+        "correct": "信風減弱與赤道上升流及暖水分布改變",
+        "wrong": [
+          "全球所有海域水溫同時完全相同",
+          "信風必定無限增強而海水完全靜止",
+          "海氣耦合不可能影響熱帶降雨"
+        ],
+        "exp": "聖嬰與信風、溫躍層及赤道海溫異常相互作用，影響對流與降雨。",
+        "subject": "地球科學",
+        "sub_topic": "海流與氣候變化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中三年級-海流與氣候變化",
+        "template_id": "earth-ref-g3-海流與氣候變化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-海流與氣候變化-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「海流與氣候變化」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "海流把低緯度較溫暖的水帶往高緯度，可能對沿岸氣候造成哪項影響？",
+        "correct": "改變海洋與大氣間熱量交換，影響沿岸溫度條件",
+        "wrong": [
+          "讓高緯度永遠不可能出現冬季",
+          "讓沿岸所有地區的降水必定相同",
+          "海水熱量輸送不會影響任何大氣現象"
+        ],
+        "exp": "海洋環流能搬運熱量，與海氣熱通量及沿岸氣候相互作用。",
+        "subject": "地球科學",
+        "sub_topic": "海流與氣候變化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中三年級-海流與氣候變化",
+        "template_id": "earth-ref-g3-海流與氣候變化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

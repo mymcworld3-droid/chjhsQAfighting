@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地質與大氣統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-板塊與地震-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「板塊與地震」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "兩側GPS站長期顯示相對聚合，但地表多年未發生明顯位移。這可能代表斷層哪種狀態？",
+        "correct": "部分地殼在應變累積，未必已發生地表破裂",
+        "wrong": [
+          "所有板塊運動已永久停止",
+          "任何GPS位移都能精確預告地震日",
+          "只有海洋地殼才會發生應變"
+        ],
+        "exp": "斷層可能鎖定而累積應變，GPS可監測變形但不足以精確預震。",
+        "subject": "地球科學",
+        "sub_topic": "板塊與地震",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中三年級-板塊與地震",
+        "template_id": "earth-ref-g3-板塊與地震-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-板塊與地震-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「板塊與地震」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "某地震發生在海洋板塊向大陸板塊下方隱沒的邊界，地震震源由淺至深沿傾斜帶分布。此現象最符合？",
+        "correct": "隱沒帶中的班尼奧夫帶地震分布",
+        "wrong": [
+          "僅發生於張裂型中洋脊的淺源地震",
+          "完全沒有板塊相對運動的古老穩定地塊",
+          "所有深源地震都位於海平面以上"
+        ],
+        "exp": "隱沒中的板塊可形成傾斜分布的震源帶，深度逐漸加深。",
+        "subject": "地球科學",
+        "sub_topic": "板塊與地震",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中三年級-板塊與地震",
+        "template_id": "earth-ref-g3-板塊與地震-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

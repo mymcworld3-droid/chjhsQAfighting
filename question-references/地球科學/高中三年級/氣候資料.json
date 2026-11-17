@@ -1,0 +1,66 @@
+{
+  "units": [
+    "海洋與氣候"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-氣候資料-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「氣候資料」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "研究者手上有某地20年的月平均氣溫，想分辨季節循環與長期趨勢。應優先採哪種分析？",
+        "correct": "先估計各月季節性平均，再分析扣除季節循環後的異常值",
+        "wrong": [
+          "只取歷史上最高的一天代表20年的氣候",
+          "將一月與七月資料隨意混合不記錄年份",
+          "以測站名稱判斷所有月份溫度"
+        ],
+        "exp": "去除季節變化後可更清楚觀察年際差異與長期變化。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "earth-ref-g3-氣候資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-氣候資料-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「氣候資料」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "甲測站從山腳遷到山頂後，年平均溫度突然下降。若將資料直接接成長期趨勢，可能產生哪種錯誤？",
+        "correct": "將測站位置變更引起的系統性差異誤判為氣候變化",
+        "wrong": [
+          "所有測站遷移都必然使資料更均勻",
+          "溫度序列不需要記錄儀器位置",
+          "高程與近地面平均溫度沒有任何可能關係"
+        ],
+        "exp": "測站遷移及儀器更換會造成非氣候性不連續，需同質化處理。",
+        "subject": "地球科學",
+        "sub_topic": "氣候資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-氣候資料",
+        "template_id": "earth-ref-g3-氣候資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

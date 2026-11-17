@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地質與大氣統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-大氣動力-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「大氣動力」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "北半球中緯度高空一團空氣若主要受氣壓梯度力與科氏力平衡，忽略摩擦，其風向大致如何？",
+        "correct": "平行等壓線流動",
+        "wrong": [
+          "沿氣壓梯度方向垂直吹向低壓",
+          "與壓力及地球自轉完全無關",
+          "只能向正北方吹"
+        ],
+        "exp": "地轉平衡下風大致沿等壓線，科氏力平衡水平氣壓梯度力。",
+        "subject": "地球科學",
+        "sub_topic": "大氣動力",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-大氣動力",
+        "template_id": "earth-ref-g3-大氣動力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-大氣動力-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「大氣動力」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "某地區地表受熱強烈，近地面空氣上升、周圍空氣向內補充。若不考慮複雜地形，這類環流起始最直接的原因？",
+        "correct": "地表加熱造成的密度與氣壓分布差異",
+        "wrong": [
+          "地球磁場讓所有氣體分子向上",
+          "只有海底地震才能使空氣上升",
+          "任何升流都不需要能量來源"
+        ],
+        "exp": "不均勻加熱產生浮力與水平壓差，可驅動局部熱力環流。",
+        "subject": "地球科學",
+        "sub_topic": "大氣動力",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-大氣動力",
+        "template_id": "earth-ref-g3-大氣動力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

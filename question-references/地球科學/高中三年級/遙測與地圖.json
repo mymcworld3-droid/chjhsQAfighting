@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球科學探究實作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-遙測與地圖-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「遙測與地圖」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "研究颱風過後山坡崩塌範圍，甲張衛星影像攝於颱風前、乙張攝於颱風後。比較時最應先確認什麼？",
+        "correct": "兩張影像配準在同一空間坐標，並考慮雲層與解析度差異",
+        "wrong": [
+          "只要有兩張影像就必定能直接逐像素相減",
+          "衛星影像完全不受雲層影響",
+          "地圖坐標系統與面積比較無關"
+        ],
+        "exp": "若影像未配準，地物位置偏移可能造成假變化，需控制雲與解析度。",
+        "subject": "地球科學",
+        "sub_topic": "遙測與地圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-遙測與地圖",
+        "template_id": "earth-ref-g3-遙測與地圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-遙測與地圖-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「遙測與地圖」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "兩份地質圖使用不同的比例尺，甲為1:25,000、乙為1:250,000。哪張圖通常較適合呈現小區域細部地質？",
+        "correct": "甲，因比例尺較大且可表示較細微空間資訊",
+        "wrong": [
+          "乙，因分母越大就一定更詳細",
+          "兩張圖所能辨識的細節必然相同",
+          "地質圖比例尺只與岩石重量相關"
+        ],
+        "exp": "1:25,000 為較大比例尺，通常適合較細部的地質表示。",
+        "subject": "地球科學",
+        "sub_topic": "遙測與地圖",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-遙測與地圖",
+        "template_id": "earth-ref-g3-遙測與地圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

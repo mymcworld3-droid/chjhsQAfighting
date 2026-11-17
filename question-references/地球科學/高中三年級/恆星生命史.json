@@ -1,0 +1,66 @@
+{
+  "units": [
+    "天文與宇宙"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-恆星生命史-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「恆星生命史」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "一顆質量較大的主序星通常消耗核融合燃料更快。與低質量主序星相比，其主序壽命通常如何？",
+        "correct": "較短，因較高核融合速率使燃料更快耗盡",
+        "wrong": [
+          "較長，因大質量星永遠不會耗盡燃料",
+          "完全相同，不受質量影響",
+          "只由恆星距地球的遠近決定"
+        ],
+        "exp": "大質量恆星光度及能量產率較高，通常主序壽命短於低質量星。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "earth-ref-g3-恆星生命史-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-恆星生命史-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「恆星生命史」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "太陽這類恆星耗盡核心氫燃料後，會先經歷哪種主要演化階段？",
+        "correct": "外層膨脹成紅巨星階段",
+        "wrong": [
+          "立即變成超大質量黑洞",
+          "永久保持相同半徑與核心狀態",
+          "變成行星且停止核融合前所有演化"
+        ],
+        "exp": "太陽質量恆星在核心氫耗盡後外層膨脹，進入紅巨星演化。",
+        "subject": "地球科學",
+        "sub_topic": "恆星生命史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中三年級-恆星生命史",
+        "template_id": "earth-ref-g3-恆星生命史-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

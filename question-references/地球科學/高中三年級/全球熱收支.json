@@ -1,0 +1,66 @@
+{
+  "units": [
+    "海洋與氣候"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-全球熱收支-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「全球熱收支」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "地球長期從太陽吸收的能量大於向太空放出的能量。依能量守恆，最合理的系統反應是？",
+        "correct": "地球系統累積能量，可能表現為海洋與大氣升溫",
+        "wrong": [
+          "地球必定瞬間停止自轉",
+          "放出能量較少就表示能量憑空消失",
+          "地球各地溫度會永遠維持相同"
+        ],
+        "exp": "正的輻射能量不平衡意味熱量累積，其中海洋可儲存大量熱能。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "earth-ref-g3-全球熱收支-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-全球熱收支-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「全球熱收支」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "冰雪面積減少會讓原本高反射率的地表被較暗的海洋或陸地取代。若其他條件相近，會形成何種回饋？",
+        "correct": "吸收更多太陽能量，可能進一步促進暖化的正回饋",
+        "wrong": [
+          "反射率必然增加使地表冷卻",
+          "海冰融化代表太陽輻射完全消失",
+          "地表顏色與短波吸收完全沒有關係"
+        ],
+        "exp": "冰雪反照率高，融化使吸收增加，形成冰雪反照率正回饋。",
+        "subject": "地球科學",
+        "sub_topic": "全球熱收支",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-全球熱收支",
+        "template_id": "earth-ref-g3-全球熱收支-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

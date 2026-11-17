@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球科學探究實作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-數據分析、趨勢-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「數據分析、趨勢」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "某測站五年降雨量依序為900、980、1010、940、1020毫米。研究者宣稱「每年雨量都持續增加」。哪項判斷正確？",
+        "correct": "宣稱不成立，因第四年較第三年減少",
+        "wrong": [
+          "宣稱成立，因第五年比第一年大",
+          "宣稱成立，因每年雨量都高於零",
+          "無法比較，因毫米不是降水單位"
+        ],
+        "exp": "1010 降為 940 代表並非逐年單調增加；末年高於初年不等於每年增加。",
+        "subject": "地球科學",
+        "sub_topic": "數據分析、趨勢",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-數據分析、趨勢",
+        "template_id": "earth-ref-g3-數據分析、趨勢-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-數據分析、趨勢-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「數據分析、趨勢」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "某長期溫度資料平均每十年上升0.2°C，但單一年份可能下降。最適合如何解讀？",
+        "correct": "長期趨勢上升與短期自然波動可以同時存在",
+        "wrong": [
+          "趨勢上升要求每一年都比上一年溫暖",
+          "任何單年下降都必然使趨勢失效",
+          "數據有變化就不能估計任何長期趨勢"
+        ],
+        "exp": "統計趨勢描述整體變動方向，不表示逐年單調變化。",
+        "subject": "地球科學",
+        "sub_topic": "數據分析、趨勢",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中三年級-數據分析、趨勢",
+        "template_id": "earth-ref-g3-數據分析、趨勢-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

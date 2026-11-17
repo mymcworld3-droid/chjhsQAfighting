@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地質與大氣統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g3-天氣預報與地質資料-1",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「天氣預報與地質資料」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "天氣預報顯示某地未來24小時降雨機率70%，下列解讀何者較合理？",
+        "correct": "在該預報定義的地點與時段內，降雨事件的機率為70%",
+        "wrong": [
+          "表示24小時中精確有70%的時間下雨",
+          "表示雨量一定是70毫米",
+          "表示每十個居民恰好有七人會淋雨"
+        ],
+        "exp": "降雨機率針對預定事件發生，不等於降雨持續時間或雨量。",
+        "subject": "地球科學",
+        "sub_topic": "天氣預報與地質資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中三年級-天氣預報與地質資料",
+        "template_id": "earth-ref-g3-天氣預報與地質資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g3-天氣預報與地質資料-2",
+      "source": "依高中地球科學108課綱及學測自然科跨主題證據題型設計之獨立參考題",
+      "design": "「天氣預報與地質資料」以可比較資料、物理機制及不確定性作為推論要素",
+      "question": {
+        "q": "某山坡的工程圖引用二十年前地質調查，但近年又發生大型滑動。要評估現況，哪項資料最有幫助？",
+        "correct": "更新地質鑽探、坡面位移與降雨等現地資料",
+        "wrong": [
+          "只看二十年前報告封面是否完整",
+          "只用坡地附近道路名字決定安全",
+          "把舊地質圖直接當成永久不變的精確現況"
+        ],
+        "exp": "滑動改變坡體條件，舊資料應以新觀測及現地調查補強。",
+        "subject": "地球科學",
+        "sub_topic": "天氣預報與地質資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中三年級-天氣預報與地質資料",
+        "template_id": "earth-ref-g3-天氣預報與地質資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
