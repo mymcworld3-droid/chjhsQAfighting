@@ -221,7 +221,10 @@ function createHandler({ resolve = () => adminProject('A'), review = reviewQuest
       if (result.status !== 'confirmed') return res.json({ ...result, valid: false, compensated: false });
       phase = 'compensation';
       const outcome = await award(project.db, uid, input, result);
-      if (outcome.status === 'limit' && result.issueType === 'wording' && confirmedFormatReport(input)) {
+      // Reaching the daily reward cap never invalidates the independent review.
+      // The client must allow the player to skip a verified bad question even
+      // when no currency can be granted today.
+      if (outcome.status === 'limit') {
         return res.json({ ...outcome, valid: true, reason: result.reason + ' ' + outcome.reason });
       }
       return res.json({ ...outcome, valid: outcome.status === 'confirmed' || outcome.status === 'duplicate' });
