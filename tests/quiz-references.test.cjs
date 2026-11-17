@@ -20,6 +20,8 @@ test('finds the same concept for live battle and formatted background warmup', (
   assert.doesNotMatch(JSON.stringify(reference), /https?:\/\//);
   assert.equal(questionQualityIssue(reference.question), '');
   assert.match(referencePrompt([reference]), /同觀念的人類命題範例/);
+  assert.match(referencePrompt([reference]), /同層次/);
+  assert.match(referencePrompt([reference]), /荒謬情節/);
   assert.equal(quizReferences({ ...target, topic:'高中二年級／第一學期／數學：平面向量 (核心考點細項：向量內積)' })[0].id, reference.id);
   assert.notEqual(scopeCode(target), scopeCode({ ...target, referenceVersion:reference.id }));
 });
