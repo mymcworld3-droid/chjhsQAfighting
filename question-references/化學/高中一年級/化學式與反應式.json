@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學反應"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "highref-化學-高中一年級-化學式與反應式-1",
+      "source": "大考中心109學年度學測自然科第14題，依原題思路改寫",
+      "design": "配平含氮化合物氧化反應，先守恆氮氫再守恆氧。",
+      "question": {
+        "q": "將 $\\mathrm{NH_3+O_2\\rightarrow NO+H_2O}$ 以最小正整數係數配平，氧氣前的係數為何？",
+        "correct": "$5$",
+        "wrong": [
+          "$3$",
+          "$4$",
+          "$6$"
+        ],
+        "exp": "正確配平為 $\\mathrm{4NH_3+5O_2\\rightarrow4NO+6H_2O}$，氧氣係數為 $5$。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-化學式與反應式-1",
+        "template_id": "highref-化學-高中一年級-化學式與反應式-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "highref-化學-高中一年級-化學式與反應式-2",
+      "source": "大考中心111學年度學測自然科第14題，依原題思路改寫",
+      "design": "以烴類完全燃燒的碳、氫、氧守恆求係數。",
+      "question": {
+        "q": "一莫耳 $\\mathrm{C_8H_{18}}$ 在氧氣充足時完全燃燒，生成 $\\mathrm{CO_2}$ 和 $\\mathrm{H_2O}$。需要多少莫耳氧氣？",
+        "correct": "$12.5$",
+        "wrong": [
+          "$8$",
+          "$9$",
+          "$17$"
+        ],
+        "exp": "生成 $8$ 莫耳二氧化碳與 $9$ 莫耳水，合計需氧原子 $8\\times2+9=25$ 莫耳，故需 $\\mathrm{O_2}$ 共 $12.5$ 莫耳。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-化學式與反應式-2",
+        "template_id": "highref-化學-高中一年級-化學式與反應式-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

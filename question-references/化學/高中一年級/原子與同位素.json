@@ -1,0 +1,66 @@
+{
+  "units": [
+    "原子結構與週期表"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "highref-化學-高中一年級-原子與同位素-1",
+      "source": "大考中心110學年度學測自然科第8題，依原題思路改寫",
+      "design": "由原子序、質量數區分質子數與中子數。",
+      "question": {
+        "q": "${}^{37}_{17}\\mathrm{Cl}$ 的原子核有多少個中子？",
+        "correct": "$20$",
+        "wrong": [
+          "$17$",
+          "$37$",
+          "$54$"
+        ],
+        "exp": "原子序 $17$ 是質子數，質量數 $37$ 是質子與中子數之和，中子數為 $37-17=20$。",
+        "subject": "化學",
+        "sub_topic": "原子與同位素",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-原子與同位素-1",
+        "template_id": "highref-化學-高中一年級-原子與同位素-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "highref-化學-高中一年級-原子與同位素-2",
+      "source": "大考中心109學年度學測自然科第1題，依原題思路改寫",
+      "design": "以同位素的定義辨別必定相同的量與可能不同的量。",
+      "question": {
+        "q": "一元素具有兩種同位素，兩者在原子核的哪種粒子數量必定相同？",
+        "correct": "質子數",
+        "wrong": [
+          "中子數",
+          "質量數",
+          "核子總數"
+        ],
+        "exp": "元素由原子序即質子數決定，同一元素的同位素質子數相同，但中子數不同。",
+        "subject": "化學",
+        "sub_topic": "原子與同位素",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-原子與同位素-2",
+        "template_id": "highref-化學-高中一年級-原子與同位素-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "原子結構與週期表"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "highref-化學-高中一年級-週期性與元素性質-1",
+      "source": "大考中心109學年度學測自然科第17題，依原題思路改寫",
+      "design": "從等電子離子的核電荷推導離子半徑大小。",
+      "question": {
+        "q": "$\\mathrm{O^{2-}},\\mathrm{F^-},\\mathrm{Na^+},\\mathrm{Mg^{2+}}$ 的電子數均為 $10$。其中何者半徑最小？",
+        "correct": "$\\mathrm{Mg^{2+}}$",
+        "wrong": [
+          "$\\mathrm{O^{2-}}$",
+          "$\\mathrm{F^-}$",
+          "$\\mathrm{Na^+}$"
+        ],
+        "exp": "等電子粒子的質子數愈大，核對電子的吸引愈強，半徑愈小。$\\mathrm{Mg^{2+}}$ 有 $12$ 個質子，最多。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-週期性與元素性質-1",
+        "template_id": "highref-化學-高中一年級-週期性與元素性質-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "highref-化學-高中一年級-週期性與元素性質-2",
+      "source": "大考中心108學年度學測自然科第15題，依原題思路改寫",
+      "design": "利用週期表位置推論原子半徑，排除同週期愈右愈大的迷思。",
+      "question": {
+        "q": "在週期表第三週期中，鈉（Na）與鎂（Mg）的中性原子半徑，一般何者較大？",
+        "correct": "鈉（Na）",
+        "wrong": [
+          "鎂（Mg）",
+          "兩者必完全相同",
+          "不可利用週期性比較"
+        ],
+        "exp": "同週期向右，有效核電荷通常增加，對最外層電子吸引較強，因此原子半徑傾向變小；鈉較大。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-週期性與元素性質-2",
+        "template_id": "highref-化學-高中一年級-週期性與元素性質-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "物質組成與分類"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "highref-化學-高中一年級-元素、化合物與混合物-1",
+      "source": "大考中心109學年度學測自然科第13題，依原題思路改寫",
+      "design": "比較物質組成是否固定，先分純物質與混合物，再分元素與化合物。",
+      "question": {
+        "q": "四個密閉容器中分別裝有純氧氣、純食鹽、蒸餾水、海水。若要找出其中組成比例可因採樣位置而改變的物質，應選何者？",
+        "correct": "海水",
+        "wrong": [
+          "純氧氣",
+          "純食鹽",
+          "蒸餾水"
+        ],
+        "exp": "海水含水與多種溶解鹽類，各成分比例不固定，屬混合物；另三者被指定為純物質。",
+        "subject": "化學",
+        "sub_topic": "元素、化合物與混合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-元素、化合物與混合物-1",
+        "template_id": "highref-化學-高中一年級-元素、化合物與混合物-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "highref-化學-高中一年級-元素、化合物與混合物-2",
+      "source": "大考中心108學年度學測自然科第15題，依原題思路改寫",
+      "design": "根據化學式中的元素種類判別化合物，不把雙原子分子當化合物。",
+      "question": {
+        "q": "下列四種純物質中，何者是化合物？",
+        "correct": "$\\mathrm{CO_2}$",
+        "wrong": [
+          "$\\mathrm{O_2}$",
+          "$\\mathrm{He}$",
+          "$\\mathrm{Fe}$"
+        ],
+        "exp": "$\\mathrm{CO_2}$ 含碳與氧兩種元素；另外三者各只含一種元素，因此不是化合物。",
+        "subject": "化學",
+        "sub_topic": "元素、化合物與混合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "highref-化學-高中一年級-元素、化合物與混合物-2",
+        "template_id": "highref-化學-高中一年級-元素、化合物與混合物-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
