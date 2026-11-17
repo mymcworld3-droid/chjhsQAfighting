@@ -35,7 +35,10 @@
 - **穩定性：** 前端沿用 DOM 局部對帳更新，不應為切換配置或升級而重建未變更的封面與招式圖片。降低動態效果設定需受到尊重；遊戲實際數值仍以後端回傳資料為準。
 - **突破演出（第四階段）：** 只在伺服器回應確認功法等級提高、技能升級、實際解鎖技能或新功法入藏後，顯示獨立、可關閉的成果視窗。劍修青藍、體修金橙；招式／功法使用原本繪圖素材與既有 `spirit-pulse`、`grand-reveal` 音效，遵循使用者音效設定。符合 `prefers-reduced-motion` 的裝置停用動畫；可點「繼續修煉」、按 Esc 或等待短時間自動關閉。
 - **演出觸發邏輯：** 在 `public/cultivation/manual-celebration.js` 比較兩份伺服器功法狀態，不以「按下升級按鈕」推測成功。初次載入不播放；相同資料重複同步不播放；即使達到 Lv. 5 / Lv. 10，**修士境界不足時不能顯示已領悟**；入門功法與 PvE 掉落以不同文案區分。
-- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`。
+- **功法氣象（第五階段）：** 功法 `Lv. 1–4` 顯示「初息」、`Lv. 5–7` 顯示「凝紋」、`Lv. 8–9` 顯示「盛氣」、`Lv. 10` 顯示「圓滿」。這些僅是依照伺服器回傳的功法等級推算的**永久視覺階段**，只改變主展示法陣、氣息亮度、藏經閣氣象徽記，不附帶新的傷害加成、屬性或境界。回到修煉頁或切換展示功法時仍會反映當前等級，並非只有升級動畫。
+- **十格修行刻度：** 主展示區保留既有當級 EXP 進度條，新增 `Lv. 1–10` 完整等級刻度；`Lv. 1/5/10` 為提示節點，非領悟證明。招式節點依伺服器的 `unlocked/mastered/realmReady` 分辨「已領悟／功法等級未達／修士境界未達」。等級提高但境界不足，不得將對應技能點亮。
+- **動效與穩定性：** 只有高等級主展示法陣可緩慢旋轉，收藏卡片不做持續動畫。啟用 `prefers-reduced-motion` 時停止所有新增的旋轉與閃動。保留原功法圖片的 DOM 節點與三組戰場配置，不因視覺階段改變而重新給予功法、增加 EXP 或影響戰場。
+- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`。
 
 
 
