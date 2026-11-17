@@ -1,5 +1,7 @@
 // Phase 3: owned-manual collection art and filters.
 // Presentational only: visibility, levels, skill unlocks and EXP come from the server.
+import {manualVisualState,manualSkillVisualState} from './manual-visual-progression.js';
+
 export function filterOwnedManuals(state, filter='all') {
   const owned=(state?.library||[]).filter(book=>book?.owned===true);
   return filter==='sword'||filter==='body'
@@ -34,6 +36,7 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
 
 export function renderManualCollectionSummary(book, focusId, equipped, {esc,bookArt,skillArt,label}) {
   const fmt=v=>Math.max(0,Math.round(Number(v)||0)).toLocaleString('zh-TW');
+  const visual=manualVisualState(book);
   const level=Math.max(1,Math.min(10,Math.round(Number(book.level)||1)));
   const capped=level>=10;
   const progress=capped?100:Math.min(100,Math.max(0,Number(book.progress)||0));
@@ -53,8 +56,10 @@ export function renderManualCollectionSummary(book, focusId, equipped, {esc,book
     :'<span class="manual-library-cover-fallback" aria-hidden="true">功法</span>';
   const skills=book.skills.map((skill,i)=>{
     const art=skillArt(skill);
-    return `<span class="manual-library-skill ${skill.unlocked?'is-learned':'is-locked'}"
-      title="${esc(skill.name)}：${skill.unlocked?'已領悟':'未解鎖'}">
+    const skillStage=manualSkillVisualState(skill);
+    const stateText=skillStage==='learned'?'已領悟':skillStage==='realm-locked'?'修士境界不足':'功法等級未達';
+    return `<span class="manual-library-skill ${skill.unlocked?'is-learned':'is-locked'} is-${skillStage}"
+      title="${esc(skill.name)}：${esc(stateText)}">
       <span class="manual-library-skill-picture">
         ${art?`<img class="manual-library-skill-art" src="${esc(art)}" alt="" loading="lazy" decoding="async">`:
           '<i class="fa-solid fa-star" aria-hidden="true"></i>'}
@@ -66,13 +71,16 @@ export function renderManualCollectionSummary(book, focusId, equipped, {esc,book
   const bonus=equippedCount
     ?`<span class="manual-library-equipped"><i class="fa-solid fa-khanda" aria-hidden="true"></i>
       此配置已裝 ${equippedCount} 招</span>`:'';
-  return `<summary class="manual-book-top" aria-label="查看${esc(book.name)}功法詳情">
-    <span class="manual-library-art-zone">
+  return `<summary class="manual-book-top" data-manual-visual-stage="${visual.stage}"
+    aria-label="查看${esc(book.name)}功法詳情，功法氣象${esc(visual.label)}">
+    <span class="manual-library-art-zone" data-manual-stage="${visual.stage}">
       <span class="manual-library-cover-glow" aria-hidden="true"></span>
       <span class="manual-library-cover-wrap">${coverElement}</span>
       <span class="manual-library-school-tag">
         <i class="fa-solid ${book.school==='sword'?'fa-khanda':'fa-hand-fist'}" aria-hidden="true"></i>
         ${label(book.school)}</span>
+      <span class="manual-library-stage-badge" title="視覺成長階段，不影響戰鬥數值">
+        <i class="fa-solid fa-sparkles" aria-hidden="true"></i> ${esc(visual.label)}</span>
       ${selected?'<span class="manual-library-featured-tag">展示中</span>':''}
     </span>
     <span class="manual-library-card-info">
