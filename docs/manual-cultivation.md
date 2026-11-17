@@ -38,7 +38,10 @@
 - **功法氣象（第五階段）：** 功法 `Lv. 1–4` 顯示「初息」、`Lv. 5–7` 顯示「凝紋」、`Lv. 8–9` 顯示「盛氣」、`Lv. 10` 顯示「圓滿」。這些僅是依照伺服器回傳的功法等級推算的**永久視覺階段**，只改變主展示法陣、氣息亮度、藏經閣氣象徽記，不附帶新的傷害加成、屬性或境界。回到修煉頁或切換展示功法時仍會反映當前等級，並非只有升級動畫。
 - **十格修行刻度：** 主展示區保留既有當級 EXP 進度條，新增 `Lv. 1–10` 完整等級刻度；`Lv. 1/5/10` 為提示節點，非領悟證明。招式節點依伺服器的 `unlocked/mastered/realmReady` 分辨「已領悟／功法等級未達／修士境界未達」。等級提高但境界不足，不得將對應技能點亮。
 - **動效與穩定性：** 只有高等級主展示法陣可緩慢旋轉，收藏卡片不做持續動畫。啟用 `prefers-reduced-motion` 時停止所有新增的旋轉與閃動。保留原功法圖片的 DOM 節點與三組戰場配置，不因視覺階段改變而重新給予功法、增加 EXP 或影響戰場。
-- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`。
+- **戰鬥結算功法 EXP（第六階段）：** PvE 戰鬥結束並且伺服器已將玩家加入 `rewarded` 後，結算視窗依當前玩家的 `manualExp`、舊戰場 `manualKills × EXP_PER_KILL` 顯示本場各本功法累積 EXP；只認得既有功法目錄，不讀取其他玩家的資料。沒有功法 EXP 時顯示明確的空紀錄，不編造獎勵；PvP 不顯示此區。
+- **成長進度確認：** 結算視窗再用原有 `GET /api/tactical/manuals` 唯讀同步已結算的功法等級、當級 EXP 進度、距下級／下一招門檻剩餘 EXP，並區分修士境界尚未達成的招式。此讀取失敗不影響已結算戰場，會提供重試或前往功法閣的入口。同一場結算不會因重複渲染發送多次同步請求；新帳號或新戰場不能沿用舊快取。
+- **視覺表現與限制：** 劍修青藍、體修金橙的結算卡，短暫顯示本場 EXP 與熟練度進度條動效；系統設定減少動態效果時自動停用。此功能只回顧戰場伺服器已記錄的經驗，**不會重新發獎、額外升級、覆寫功法或更改試煉獎勵**。接續下一關／前往功法閣的原按鈕全部保留。
+- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`、`tests/manual-training-growth.test.cjs`、`tests/tactical-manual-recap.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`、`scripts/test-tactical-browser.cjs`。
 
 
 
