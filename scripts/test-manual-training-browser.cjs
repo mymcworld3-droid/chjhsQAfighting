@@ -173,8 +173,16 @@ async function main(){
     assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),10);
     assert.equal(await page.locator('.manual-hero-step.is-learned').count(),3);
     await page.locator('[data-manual-celebration-dismiss]').click();
+    // Navigating straight from a finished battle must force an actual server
+    // refresh instead of serving the old 15-second cultivation page cache.
+    const response=page.waitForResponse(res=>res.url().endsWith('/api/tactical/manuals')
+      &&res.request().method()==='GET');
+    await page.evaluate(()=>window.dispatchEvent(new CustomEvent('xiuxian:manual-battle-settled',{
+      detail:{uid:'u1'}
+    })));
+    assert.equal((await response).ok(),true);
     assert.deepEqual(errors,[]);
-    console.log('Manual artwork and deck stable; owned-only filter, card hero focus, mobile and desktop gallery verified.');
+    console.log('Manual artwork, owned-only gallery and deck stable; battle-return refresh, mobile and desktop verified.');
   }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
