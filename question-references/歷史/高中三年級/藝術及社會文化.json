@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修歷史：科技環境與藝術"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-藝術及社會文化-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「藝術及社會文化」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "甲年代的政治海報突出機械工廠，乙年代的海報突出農村手工勞動。研究社會理想時，最值得優先查什麼？",
+        "correct": "海報製作者及委託者的目的與各年代的社會背景",
+        "wrong": [
+          "直接把圖上工廠數量當成真實產量",
+          "僅以海報尺寸判斷產業發展程度",
+          "假定海報呈現全民一致的生活理想"
+        ],
+        "exp": "宣傳藝術傳達特定觀念，畫面選擇需放回委託與社會脈絡。",
+        "subject": "歷史",
+        "sub_topic": "藝術及社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-藝術及社會文化",
+        "template_id": "ref-h3-藝術及社會文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-藝術及社會文化-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「藝術及社會文化」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "同一首社會運動歌曲在幾十年後的紀念活動被重新演唱。如何比較兩次演出的意義較合理？",
+        "correct": "分別分析演出場合、參與者及賦予歌曲的意義",
+        "wrong": [
+          "兩次演唱必然出於完全相同的政治目的",
+          "歌曲一旦寫成就不會產生新的詮釋",
+          "只有歌譜的音符可以作歷史研究材料"
+        ],
+        "exp": "作品的歷史意義可能隨使用情境變化，須分析其再詮釋。",
+        "subject": "歷史",
+        "sub_topic": "藝術及社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-藝術及社會文化",
+        "template_id": "ref-h3-藝術及社會文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

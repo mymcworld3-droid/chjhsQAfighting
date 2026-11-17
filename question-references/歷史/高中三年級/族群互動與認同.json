@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修歷史：族群性別與國家"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-族群互動與認同-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「族群互動與認同」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "某港口城市的商人原按語言成立互助團體，後來各團體共同成立商會處理運輸問題。最能解釋這種轉變的觀點是？",
+        "correct": "群體認同可因共同需求產生跨越原有語言界線的合作",
+        "wrong": [
+          "商會成立必然使原有語言認同完全消失",
+          "商會成立表示所有成員具有相同祖先",
+          "經濟合作意味原有團體從未存在"
+        ],
+        "exp": "材料呈現原有語言認同與新興商業合作並存，群體認同具有多層次。",
+        "subject": "歷史",
+        "sub_topic": "族群互動與認同",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-族群互動與認同",
+        "template_id": "ref-h3-族群互動與認同-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-族群互動與認同-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「族群互動與認同」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "官員記錄的族群分類與居民私人信件中的自稱不同。若研究當時認同，最合理的處理是？",
+        "correct": "比較兩種名稱的使用者、目的與年代",
+        "wrong": [
+          "視官方稱呼為所有居民唯一的自稱",
+          "只因用詞不同就判斷兩群人從未互動",
+          "忽略資料形成背景，直接合併人口"
+        ],
+        "exp": "行政分類與自我認同屬不同視角，需比較其脈絡。",
+        "subject": "歷史",
+        "sub_topic": "族群互動與認同",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-族群互動與認同",
+        "template_id": "ref-h3-族群互動與認同-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

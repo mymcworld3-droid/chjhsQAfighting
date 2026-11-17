@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修歷史：族群性別與國家"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-性別與社會變遷-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「性別與社會變遷」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "一座工廠在戰時大量聘用女性，戰後又出現要求她們退出工作的報導。此材料最適合研究哪項問題？",
+        "correct": "戰爭需求與社會性別角色期待如何相互影響",
+        "wrong": [
+          "戰前女性必然完全未從事任何工作",
+          "戰後所有女性都立刻失去工作機會",
+          "工廠用人與社會觀念完全沒有關聯"
+        ],
+        "exp": "戰時與戰後的用人變化反映經濟需求及性別規範的互動。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-性別與社會變遷",
+        "template_id": "ref-h3-性別與社會變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-性別與社會變遷-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「性別與社會變遷」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "兩年代招生規章分別寫「限男性報考」與「不限性別」。這能最直接支持哪項判斷？",
+        "correct": "該校該科的正式入學資格限制曾發生變化",
+        "wrong": [
+          "所有性別的實際入學人數必然相同",
+          "社會上所有職業的性別差距已消失",
+          "全國各校都在同一天修改相同規則"
+        ],
+        "exp": "招生規則可證明制度資格改變，但要了解實際入學情形仍須人數統計。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-性別與社會變遷",
+        "template_id": "ref-h3-性別與社會變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

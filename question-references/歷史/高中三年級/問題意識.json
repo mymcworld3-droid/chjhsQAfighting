@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史專題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-問題意識-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「問題意識」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "研究舊車站停用的原因時，哪個研究問題最容易透過具體史料回答？",
+        "correct": "停用前後的交通需求與路線調整有何變化？",
+        "wrong": [
+          "歷史對所有人是否永遠重要？",
+          "世界各地所有交通系統如何同時變化？",
+          "哪一座車站在任何時代最美？"
+        ],
+        "exp": "問題須限定時空與可查變項，運量、路線與公告可提供證據。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-問題意識",
+        "template_id": "ref-h3-問題意識-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-問題意識-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「問題意識」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "學生只找到當年地方稅收表，卻想據此回答居民是否全都支持政府。主要證據問題是什麼？",
+        "correct": "財政紀錄無法直接代表居民政治態度",
+        "wrong": [
+          "稅收資料不能研究任何歷史問題",
+          "所有納稅人必然完全支持當局",
+          "有一份稅表就不必再找其他史料"
+        ],
+        "exp": "資料用途須與研究問題對應，政治態度需尋找其他佐證。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-問題意識",
+        "template_id": "ref-h3-問題意識-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

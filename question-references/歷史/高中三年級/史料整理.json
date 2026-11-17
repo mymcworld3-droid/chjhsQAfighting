@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史專題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-史料整理-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「史料整理」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "專題蒐集照片與報紙剪報後未記錄日期、出處及版本。對研究最直接的困難為何？",
+        "correct": "難以核對史料來源與正確引用",
+        "wrong": [
+          "會使所有照片的內容變成相同",
+          "能防止任何史料被質疑",
+          "可以免除不同版本的比較"
+        ],
+        "exp": "記錄來源、時間及取得位置，是交叉查核的基礎。",
+        "subject": "歷史",
+        "sub_topic": "史料整理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-史料整理",
+        "template_id": "ref-h3-史料整理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-史料整理-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「史料整理」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "甲資料是1910年當天的日記，乙是1970年訪談者回憶1910年的事件。整理檔案時應區分什麼？",
+        "correct": "事件發生日期與材料形成日期",
+        "wrong": [
+          "只把兩者都編成1910年即時記錄",
+          "把日記改列為1970年訪談材料",
+          "因同一事件便不用標示作者身分"
+        ],
+        "exp": "記憶與即時紀錄的時間差可能影響史料可靠程度。",
+        "subject": "歷史",
+        "sub_topic": "史料整理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-史料整理",
+        "template_id": "ref-h3-史料整理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

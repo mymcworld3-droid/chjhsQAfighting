@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修歷史：族群性別與國家"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-國家與治理-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「國家與治理」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "某國原由地方貴族世襲徵稅，改革後改由中央任命官員並輪調。哪項權力關係的變化最直接？",
+        "correct": "中央對地方人事與財政的控制提高",
+        "wrong": [
+          "地方世襲勢力必然因此得到更多財政自主",
+          "中央從此不再需要地方行政機構",
+          "所有地方政治參與都立刻轉為普選"
+        ],
+        "exp": "官員任命權與稅收管理權轉向中央，顯示治理集中。",
+        "subject": "歷史",
+        "sub_topic": "國家與治理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-國家與治理",
+        "template_id": "ref-h3-國家與治理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-國家與治理-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「國家與治理」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "甲國地方議會能決定部分公共預算，乙國必須由中央部會統一核准。比較治理制度時，最有用的切入點是？",
+        "correct": "中央與地方之間預算決定權如何分配",
+        "wrong": [
+          "只比較兩國政府建築的年代",
+          "僅根據國土面積推定地方自治程度",
+          "將今日政府制度直接套入所有古代時期"
+        ],
+        "exp": "預算決定權可具體反映中央地方權責，需配合制度條文比較。",
+        "subject": "歷史",
+        "sub_topic": "國家與治理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-國家與治理",
+        "template_id": "ref-h3-國家與治理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

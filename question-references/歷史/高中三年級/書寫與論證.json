@@ -1,0 +1,66 @@
+{
+  "units": [
+    "歷史專題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-書寫與論證-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「書寫與論證」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "某生說「鐵路通車後人口上升，所以鐵路是唯一原因」。如何改寫才符合史學論證要求？",
+        "correct": "鐵路可能影響遷移，仍需比較就業與其他因素",
+        "wrong": [
+          "鐵路通車必然使每座城市人口上升",
+          "只需增加「唯一」一詞的重複次數",
+          "人口數據與因果研究完全無關"
+        ],
+        "exp": "時間相關不能證明唯一因果，需檢查替代解釋。",
+        "subject": "歷史",
+        "sub_topic": "書寫與論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-書寫與論證",
+        "template_id": "ref-h3-書寫與論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-書寫與論證-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「書寫與論證」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "甲資料顯示工業產值提高，乙資料顯示工人薪資並未同步上升。何種結論合理？",
+        "correct": "生產增加不等於成果由所有社會群體平均分享",
+        "wrong": [
+          "產值增加必然使每個工人收入同比增加",
+          "薪資沒增加便代表工廠完全停產",
+          "兩份資料內容不同必有一份造假"
+        ],
+        "exp": "總體產出與所得分配是兩種不同指標，需分別檢驗。",
+        "subject": "歷史",
+        "sub_topic": "書寫與論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-書寫與論證",
+        "template_id": "ref-h3-書寫與論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

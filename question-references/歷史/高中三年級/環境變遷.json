@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修歷史：科技環境與藝術"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-環境變遷-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「環境變遷」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "兩張相隔五十年的河口地圖顯示溼地縮減、農田增加；同時期有河道整治紀錄。最合適的研究推論是？",
+        "correct": "土地開發與水利工程可能共同影響河口環境",
+        "wrong": [
+          "溼地縮減只能由單一地震造成",
+          "河道整治代表當地農田從未增加",
+          "地圖年代不同就不能進行任何比較"
+        ],
+        "exp": "地圖和工程文書提供人為因素與環境變化的線索，仍應核對比例尺。",
+        "subject": "歷史",
+        "sub_topic": "環境變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-環境變遷",
+        "template_id": "ref-h3-環境變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-環境變遷-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「環境變遷」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "官方伐木報告強調木材產量，地方社群記錄山坡土壤流失。若要完整說明政策影響，應如何使用？",
+        "correct": "比較經濟收益與環境負擔，並查核各自資料來源",
+        "wrong": [
+          "只因木材產量增加便否定所有環境影響",
+          "把地方觀察一律當成無效史料",
+          "因兩類資料關注不同便無法同時引用"
+        ],
+        "exp": "經濟與生態是政策的不同面向，需要共同納入分析。",
+        "subject": "歷史",
+        "sub_topic": "環境變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-環境變遷",
+        "template_id": "ref-h3-環境變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

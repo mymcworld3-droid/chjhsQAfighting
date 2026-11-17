@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修歷史：科技環境與藝術"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "ref-h3-科技與生活-1",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「科技與生活」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "十九世紀城市興建自來水管網後，居民較少每天到公井取水。哪項歷史解釋最貼近材料？",
+        "correct": "供水技術改變家庭日常勞動與時間安排",
+        "wrong": [
+          "自來水啟用後所有水資源限制立即消失",
+          "家庭用水習慣完全不受公共建設影響",
+          "設施興建即證明每個家庭均能免費用水"
+        ],
+        "exp": "由取水場所及頻率的改變，可看出技術與生活作息的關聯。",
+        "subject": "歷史",
+        "sub_topic": "科技與生活",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "history-高中三年級-科技與生活",
+        "template_id": "ref-h3-科技與生活-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ref-h3-科技與生活-2",
+      "source": "大考中心114學測社會試題特色的史料推論取向；獨立自編，非原題",
+      "design": "從「科技與生活」的來源與脈絡推導，而非背誦人名年代",
+      "question": {
+        "q": "攝影術普及前後，官方圖像記錄由繪圖逐步增加照片。若將照片作為史料，何項方法較審慎？",
+        "correct": "考慮拍攝角度、選景及原始用途，並與其他材料互證",
+        "wrong": [
+          "相機拍攝代表內容不可能有偏差",
+          "照片一定比所有文字材料更完整",
+          "攝影技術出現後畫作便失去史料價值"
+        ],
+        "exp": "拍攝者選擇與影像流傳背景仍會影響史料意義。",
+        "subject": "歷史",
+        "sub_topic": "科技與生活",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中三年級-科技與生活",
+        "template_id": "ref-h3-科技與生活-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
