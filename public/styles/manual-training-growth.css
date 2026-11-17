@@ -1,0 +1,264 @@
+/* Stamina cultivation phase 5: visible mastery, not another combat bonus.
+   This layer decorates existing book art; no source images are replaced.
+   Only the selected book's ring is permitted to rotate, and only at high levels.
+*/
+#manual-training-root .manual-hero--tier-seed{
+  --mv-aura-opacity:.28;
+  --mv-aura-blur:7px;
+  --mv-aura-scale:.86;
+}
+#manual-training-root .manual-hero--tier-inscribed{
+  --mv-aura-opacity:.52;
+  --mv-aura-blur:12px;
+  --mv-aura-scale:.93;
+}
+#manual-training-root .manual-hero--tier-surge{
+  --mv-aura-opacity:.75;
+  --mv-aura-blur:16px;
+  --mv-aura-scale:1;
+}
+#manual-training-root .manual-hero--tier-complete{
+  --mv-aura-opacity:1;
+  --mv-aura-blur:21px;
+  --mv-aura-scale:1.06;
+}
+#manual-training-root .manual-hero--tier-complete .manual-hero-art-stage{
+  border-color:var(--mh-accent);
+  box-shadow:inset 0 0 22px var(--mh-glow),0 0 18px var(--mh-glow);
+}
+#manual-training-root .manual-hero-art-stage{
+  isolation:isolate;
+}
+#manual-training-root .manual-hero-qi-ring{
+  position:absolute;z-index:0;left:50%;top:46%;
+  width:min(95%,194px);aspect-ratio:1;
+  transform:translate(-50%,-50%) scale(var(--mv-aura-scale,.86));
+  pointer-events:none;
+  opacity:var(--mv-aura-opacity,.28);
+  filter:drop-shadow(0 0 var(--mv-aura-blur,7px) var(--mh-accent));
+  transition:opacity .45s ease,filter .45s ease,transform .45s ease;
+}
+#manual-training-root .manual-hero-qi-orbit{
+  display:block;position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(
+    from 0deg,var(--mh-accent) 0deg 13deg,transparent 13deg 42deg,
+    var(--mh-accent) 42deg 53deg,transparent 53deg 89deg,
+    var(--mh-accent) 89deg 103deg,transparent 103deg 133deg,
+    var(--mh-accent) 133deg 144deg,transparent 144deg 178deg,
+    var(--mh-accent) 178deg 191deg,transparent 191deg 224deg,
+    var(--mh-accent) 224deg 235deg,transparent 235deg 270deg,
+    var(--mh-accent) 270deg 283deg,transparent 283deg 315deg,
+    var(--mh-accent) 315deg 326deg,transparent 326deg 360deg);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
+}
+#manual-training-root .manual-hero-qi-seal{
+  display:block;position:absolute;inset:13%;border-radius:50%;
+  border:1px dashed var(--mh-accent);
+  box-shadow:0 0 13px var(--mh-glow),inset 0 0 14px var(--mh-glow);
+}
+#manual-training-root .manual-hero-qi-seal::before,
+#manual-training-root .manual-hero-qi-seal::after{
+  content:"";position:absolute;inset:11%;border:1px solid var(--mh-line);
+  border-radius:50%;opacity:.66;
+}
+#manual-training-root .manual-hero-qi-seal::after{
+  inset:29%;border-style:dotted;opacity:.6;
+}
+#manual-training-root .manual-hero--tier-surge .manual-hero-qi-orbit,
+#manual-training-root .manual-hero--tier-complete .manual-hero-qi-orbit{
+  animation:manual-growth-rotate 28s linear infinite;
+}
+#manual-training-root .manual-hero--tier-complete .manual-hero-qi-seal{
+  animation:manual-growth-rotate 34s linear reverse infinite;
+}
+#manual-training-root .manual-hero-qi-spark{
+  position:absolute;z-index:0;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--mh-accent);box-shadow:0 0 12px var(--mh-accent);
+  opacity:0;pointer-events:none;transition:opacity .35s ease;
+}
+#manual-training-root .manual-hero-qi-spark--one{left:19%;top:22%}
+#manual-training-root .manual-hero-qi-spark--two{right:16%;bottom:23%}
+#manual-training-root .manual-hero--tier-inscribed .manual-hero-qi-spark,
+#manual-training-root .manual-hero--tier-surge .manual-hero-qi-spark{opacity:.56}
+#manual-training-root .manual-hero--tier-complete .manual-hero-qi-spark{opacity:.9}
+#manual-training-root .manual-hero--tier-surge .manual-hero-qi-spark,
+#manual-training-root .manual-hero--tier-complete .manual-hero-qi-spark{
+  animation:manual-growth-spark 3.8s ease-in-out infinite alternate;
+}
+#manual-training-root .manual-hero--tier-complete .manual-hero-qi-spark--two{
+  animation-delay:-1.9s;
+}
+#manual-training-root .manual-growth{
+  display:grid;gap:8px;padding:11px 12px 10px;
+  border:1px solid var(--mh-line);border-radius:11px;
+  background:linear-gradient(140deg,rgba(5,19,14,.7),var(--mh-soft));
+  min-width:0;
+}
+#manual-training-root .manual-growth-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  flex-wrap:wrap;gap:5px 12px;
+}
+#manual-training-root .manual-growth-heading{
+  font-size:12px;color:#c5d5c4;
+}
+#manual-training-root .manual-growth-heading strong{
+  padding:2px 8px;border:1px solid var(--mh-line);border-radius:20px;
+  margin-left:7px;color:var(--mh-accent);white-space:nowrap;
+  font-size:12px;font-weight:800;
+}
+#manual-training-root .manual-growth-level{
+  font-size:12px;color:#f7dfaa;font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-growth-marks{
+  display:grid;grid-template-columns:repeat(10,minmax(0,1fr));align-items:end;
+  gap:4px;width:100%;min-height:19px;
+}
+#manual-training-root .manual-growth-mark{
+  display:flex;align-items:center;justify-content:center;
+  min-width:0;height:8px;border:1px solid #607765;
+  border-radius:4px;background:#0b1a13;
+}
+#manual-training-root .manual-growth-mark.is-reached{
+  background:linear-gradient(110deg,#498c72,var(--mh-accent));
+  border-color:var(--mh-accent);box-shadow:0 0 5px var(--mh-glow);
+}
+#manual-training-root .manual-growth-mark.is-milestone{
+  height:19px;border-color:#b4a46f;
+}
+#manual-training-root .manual-growth-mark.is-milestone.is-reached{
+  background:linear-gradient(145deg,#b5b177,#e9d7a0);
+  border-color:#ffe2a0;
+}
+#manual-training-root .manual-growth-mark small{
+  font-size:10px;line-height:1;color:#c4d4be;font-weight:700;
+}
+#manual-training-root .manual-growth-mark.is-reached small{color:#1f382c}
+#manual-training-root .manual-growth-mark.is-current{
+  outline:1px solid #f9e9b4;outline-offset:2px;
+}
+#manual-training-root .manual-growth-footnote{
+  display:flex;justify-content:space-between;align-items:baseline;
+  flex-wrap:wrap;gap:3px 9px;
+}
+#manual-training-root .manual-growth-footnote span{
+  font-size:11px;color:#d5dfcb;line-height:1.45;
+}
+#manual-training-root .manual-growth-footnote small{
+  font-size:10px;color:#a9bbac;line-height:1.4;
+}
+#manual-training-root .manual-hero-path-grid{position:relative;isolation:isolate}
+#manual-training-root .manual-hero-path-grid::before{
+  content:"";position:absolute;z-index:-1;
+  top:41px;left:12%;right:12%;height:2px;
+  background:repeating-linear-gradient(90deg,
+    rgba(203,215,179,.55) 0 8px,transparent 8px 14px);
+  pointer-events:none;opacity:.76;
+}
+#manual-training-root .manual-hero-step.is-learned .manual-hero-node{
+  position:relative;border-color:var(--mh-accent);
+  box-shadow:0 0 12px var(--mh-glow),inset 0 0 10px #0005;
+}
+#manual-training-root .manual-hero-step.is-learned .manual-hero-node::after{
+  content:"✓";position:absolute;right:0;bottom:0;
+  display:grid;place-items:center;width:16px;height:16px;
+  border-radius:6px 0 0 0;background:#f1dba4;
+  font-size:12px;color:#244133;font-weight:900;
+}
+#manual-training-root .manual-hero-step.is-realm-locked{
+  border-color:rgba(203,167,100,.72);
+  background:linear-gradient(165deg,#373225,#18261e);
+}
+#manual-training-root .manual-hero-step.is-realm-locked .manual-hero-node-status{
+  color:#f2cd89;
+}
+#manual-training-root .manual-hero-step.is-level-locked{
+  border-color:rgba(140,151,140,.45);
+}
+#manual-training-root .manual-hero-step.is-level-locked .manual-hero-node-status{
+  color:#aab8b0;
+}
+#manual-training-root .manual-hero--tier-complete .manual-hero-level b{
+  color:#fff0ad;text-shadow:0 0 16px var(--mh-glow);
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="seed"]{
+  --mv-card-brightness:.55;
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="inscribed"]{
+  --mv-card-brightness:.76;
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="surge"]{
+  --mv-card-brightness:1;
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="complete"]{
+  --mv-card-brightness:1.24;
+}
+#manual-training-root .manual-library-art-zone::before{
+  opacity:var(--mv-card-brightness,.55);
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="surge"]::before{
+  border-style:dashed;box-shadow:0 0 27px var(--library-glow),inset 0 0 20px var(--library-glow);
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="complete"]::before{
+  border-width:2px;border-color:var(--library-accent);
+  box-shadow:0 0 30px var(--library-glow),inset 0 0 30px var(--library-glow);
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="complete"] .manual-library-cover-glow{
+  opacity:.95;filter:blur(14px);
+}
+#manual-training-root .manual-library-stage-badge{
+  position:absolute;z-index:2;bottom:9px;right:9px;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 8px;border:1px solid var(--library-border);
+  border-radius:8px;background:rgba(7,21,16,.84);
+  color:#e9dbc0;font-size:11px;font-weight:800;
+  pointer-events:none;
+}
+#manual-training-root .manual-library-stage-badge i{
+  color:var(--library-accent);font-size:10px;
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="complete"] .manual-library-stage-badge{
+  color:#fff0bc;border-color:#eac883;
+  background:linear-gradient(125deg,rgba(86,66,28,.94),rgba(26,33,22,.95));
+}
+#manual-training-root .manual-library-skill.is-realm-locked .manual-library-skill-picture{
+  border-color:#dbba75;
+}
+#manual-training-root .manual-library-skill.is-realm-locked .manual-library-skill-lock{
+  color:#e8be73;
+}
+#manual-training-root .manual-library-skill.is-level-locked .manual-library-skill-picture{
+  border-color:rgba(128,148,129,.4);
+}
+@keyframes manual-growth-rotate{
+  to{transform:rotate(360deg)}
+}
+@keyframes manual-growth-spark{
+  from{opacity:.3;box-shadow:0 0 5px var(--mh-accent);transform:scale(.8)}
+  to{opacity:1;box-shadow:0 0 16px var(--mh-accent);transform:scale(1.25)}
+}
+@media(max-width:700px){
+  #manual-training-root .manual-hero-qi-ring{width:min(99%,140px);top:46%}
+  #manual-training-root .manual-growth{padding:10px 9px;gap:7px}
+  #manual-training-root .manual-growth-marks{gap:3px}
+  #manual-training-root .manual-growth-footnote small{font-size:9px}
+}
+@media(max-width:440px){
+  #manual-training-root .manual-hero-qi-ring{width:min(98%,105px);top:43%}
+  #manual-training-root .manual-hero-qi-spark--one{left:9%;top:17%}
+  #manual-training-root .manual-hero-qi-spark--two{right:6%;bottom:22%}
+  #manual-training-root .manual-growth-marks{gap:2px}
+  #manual-training-root .manual-growth-heading{font-size:11px}
+  #manual-training-root .manual-growth-level{font-size:11px}
+  #manual-training-root .manual-growth-footnote span{font-size:10px}
+  #manual-training-root .manual-hero-path-grid::before{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-hero-qi-ring,
+  #manual-training-root .manual-hero-qi-spark{transition:none!important;}
+  #manual-training-root .manual-hero-qi-orbit,
+  #manual-training-root .manual-hero-qi-seal,
+  #manual-training-root .manual-hero-qi-spark{animation:none!important;}
+}
