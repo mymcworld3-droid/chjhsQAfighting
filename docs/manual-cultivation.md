@@ -33,7 +33,9 @@
 - **戰場配置：** 三組配置各有三個招式欄位。點選欄位可挑選已解鎖且符合境界的招式；已裝備的招式可交換欄位，相同 `moveId` 不可重複。查看未使用的配置不會自動套用；修改使用中的配置仍需通過伺服器的戰鬥狀態檢查。
 - **藏經閣：** 卡冊以現有功法封面、等級、EXP、已領悟招數、三招圖片與下一招條件呈現。預設「全部功法」，可切換「劍修」或「體修」篩選；**未取得功法不出現**。選取卡片會同步主展示，點開詳情仍可升級功法、強化招式及裝備技能。
 - **穩定性：** 前端沿用 DOM 局部對帳更新，不應為切換配置或升級而重建未變更的封面與招式圖片。降低動態效果設定需受到尊重；遊戲實際數值仍以後端回傳資料為準。
-- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`。
+- **突破演出（第四階段）：** 只在伺服器回應確認功法等級提高、技能升級、實際解鎖技能或新功法入藏後，顯示獨立、可關閉的成果視窗。劍修青藍、體修金橙；招式／功法使用原本繪圖素材與既有 `spirit-pulse`、`grand-reveal` 音效，遵循使用者音效設定。符合 `prefers-reduced-motion` 的裝置停用動畫；可點「繼續修煉」、按 Esc 或等待短時間自動關閉。
+- **演出觸發邏輯：** 在 `public/cultivation/manual-celebration.js` 比較兩份伺服器功法狀態，不以「按下升級按鈕」推測成功。初次載入不播放；相同資料重複同步不播放；即使達到 Lv. 5 / Lv. 10，**修士境界不足時不能顯示已領悟**；入門功法與 PvE 掉落以不同文案區分。
+- **驗證：** `tests/manual-training-hero.test.cjs`、`tests/manual-training-loadout.test.cjs`、`tests/manual-training-library.test.cjs`、`tests/manual-training-celebration.test.cjs`，以及 `scripts/test-manual-training-browser.cjs`。
 
 
 
