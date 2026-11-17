@@ -1,0 +1,66 @@
+{
+  "units": [
+    "微分及其應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-多項式函數導數-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「多項式函數導數」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "f(x)＝3x²＋4x－1的導函數為何？",
+        "correct": "6x＋4",
+        "wrong": [
+          "3x＋4",
+          "6x²＋4",
+          "6x－1"
+        ],
+        "exp": "d(3x²)/dx＝6x，d(4x)/dx＝4，常數微分為0。",
+        "subject": "數學",
+        "sub_topic": "多項式函數導數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數導數",
+        "template_id": "math-ref-g3Y-多項式函數導數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-多項式函數導數-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「多項式函數導數」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "f(x)＝x³，求f′(2)的值。",
+        "correct": "12",
+        "wrong": [
+          "8",
+          "6",
+          "4"
+        ],
+        "exp": "f′(x)＝3x²，故f′(2)＝12。",
+        "subject": "數學",
+        "sub_topic": "多項式函數導數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數導數",
+        "template_id": "math-ref-g3Y-多項式函數導數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

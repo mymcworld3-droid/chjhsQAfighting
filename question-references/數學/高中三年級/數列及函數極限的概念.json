@@ -1,0 +1,66 @@
+{
+  "units": [
+    "極限與變化率"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-數列及函數極限的概念-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「數列及函數極限的概念」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "數列aₙ＝5＋1/n的極限是多少？",
+        "correct": "5",
+        "wrong": [
+          "6",
+          "1",
+          "不存在"
+        ],
+        "exp": "n趨近無窮大時，1/n趨近0，故aₙ趨近5。",
+        "subject": "數學",
+        "sub_topic": "數列及函數極限的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-6",
+            "name": "數列與級數"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列及函數極限的概念",
+        "template_id": "math-ref-g3Y-數列及函數極限的概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-數列及函數極限的概念-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「數列及函數極限的概念」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "求lim(x→1) (x²－1)/(x－1)，其中x≠1。",
+        "correct": "2",
+        "wrong": [
+          "0",
+          "1",
+          "不存在"
+        ],
+        "exp": "x²−1＝(x−1)(x＋1)，約去後取極限得1＋1＝2。",
+        "subject": "數學",
+        "sub_topic": "數列及函數極限的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-數列及函數極限的概念",
+        "template_id": "math-ref-g3Y-數列及函數極限的概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

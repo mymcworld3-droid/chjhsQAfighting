@@ -1,0 +1,66 @@
+{
+  "units": [
+    "極限與變化率"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-平均變化率與瞬時變化率-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「平均變化率與瞬時變化率」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "位置函數s(t)＝t²（公尺），t由1秒到3秒的平均速度為何？",
+        "correct": "4公尺／秒",
+        "wrong": [
+          "2公尺／秒",
+          "6公尺／秒",
+          "8公尺／秒"
+        ],
+        "exp": "平均速度＝[s(3)−s(1)]/(3−1)＝(9−1)/2＝4。",
+        "subject": "數學",
+        "sub_topic": "平均變化率與瞬時變化率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-平均變化率與瞬時變化率",
+        "template_id": "math-ref-g3Y-平均變化率與瞬時變化率-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-平均變化率與瞬時變化率-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「平均變化率與瞬時變化率」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "成本函數C(q)＝q²＋5q（元），在q＝3的邊際成本C′(3)為何？",
+        "correct": "11",
+        "wrong": [
+          "6",
+          "8",
+          "14"
+        ],
+        "exp": "C′(q)＝2q＋5，代入3得11。",
+        "subject": "數學",
+        "sub_topic": "平均變化率與瞬時變化率",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-平均變化率與瞬時變化率",
+        "template_id": "math-ref-g3Y-平均變化率與瞬時變化率-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

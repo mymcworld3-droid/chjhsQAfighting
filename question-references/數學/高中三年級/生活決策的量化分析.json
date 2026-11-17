@@ -1,0 +1,66 @@
+{
+  "units": [
+    "統計推論與資料分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-生活決策的量化分析-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「生活決策的量化分析」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "某線上服務甲方案年費3000元，乙方案每月200元，連續使用12個月哪個較便宜？",
+        "correct": "乙方案便宜600元",
+        "wrong": [
+          "甲方案便宜600元",
+          "兩者同為3000元",
+          "乙方案便宜1200元"
+        ],
+        "exp": "乙一年200×12＝2400元，比甲3000元少600元。",
+        "subject": "數學",
+        "sub_topic": "生活決策的量化分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-生活決策的量化分析",
+        "template_id": "math-ref-g3Y-生活決策的量化分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-生活決策的量化分析-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「生活決策的量化分析」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "單程公車票30元，某月須搭20次；月票400元且可搭同樣20次。選月票能省多少元？",
+        "correct": "200元",
+        "wrong": [
+          "100元",
+          "400元",
+          "600元"
+        ],
+        "exp": "單次票成本30×20＝600元，月票400元，差額200元。",
+        "subject": "數學",
+        "sub_topic": "生活決策的量化分析",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-生活決策的量化分析",
+        "template_id": "math-ref-g3Y-生活決策的量化分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

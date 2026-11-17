@@ -1,0 +1,66 @@
+{
+  "units": [
+    "數學模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-跨單元資料應用-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「跨單元資料應用」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "市場需求模型p＝50－q（元／件），銷量q≥0且q≤50，收益R＝pq的最大值為何？",
+        "correct": "625元",
+        "wrong": [
+          "1250元",
+          "500元",
+          "2500元"
+        ],
+        "exp": "R(q)＝50q−q²＝−(q−25)²＋625，最大625。",
+        "subject": "數學",
+        "sub_topic": "跨單元資料應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-跨單元資料應用",
+        "template_id": "math-ref-g3Y-跨單元資料應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-跨單元資料應用-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「跨單元資料應用」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "某項活動報名200人，實際出席150人。出席率為何？",
+        "correct": "75%",
+        "wrong": [
+          "25%",
+          "80%",
+          "150%"
+        ],
+        "exp": "出席率＝150/200＝0.75，即75%。",
+        "subject": "數學",
+        "sub_topic": "跨單元資料應用",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-跨單元資料應用",
+        "template_id": "math-ref-g3Y-跨單元資料應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

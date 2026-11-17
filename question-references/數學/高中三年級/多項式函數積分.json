@@ -1,0 +1,66 @@
+{
+  "units": [
+    "積分與面積"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-多項式函數積分-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「多項式函數積分」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "不定積分∫(2x＋3)dx為何？",
+        "correct": "x²＋3x＋C",
+        "wrong": [
+          "2x²＋3x＋C",
+          "x²＋3＋C",
+          "2＋3x＋C"
+        ],
+        "exp": "將2x積分得x²、常數3積分得3x，並加任意常數C。",
+        "subject": "數學",
+        "sub_topic": "多項式函數積分",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數積分",
+        "template_id": "math-ref-g3Y-多項式函數積分-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-多項式函數積分-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「多項式函數積分」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "求定積分∫₀³ 2x dx 的值。",
+        "correct": "9",
+        "wrong": [
+          "6",
+          "3",
+          "18"
+        ],
+        "exp": "反導函數為x²，代入3及0得到9−0＝9。",
+        "subject": "數學",
+        "sub_topic": "多項式函數積分",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-多項式函數積分",
+        "template_id": "math-ref-g3Y-多項式函數積分-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

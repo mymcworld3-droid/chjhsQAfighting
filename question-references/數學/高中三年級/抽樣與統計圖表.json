@@ -1,0 +1,66 @@
+{
+  "units": [
+    "統計推論與資料分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-抽樣與統計圖表-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「抽樣與統計圖表」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "學校三個年級學生數依序100、200、100，要按比例抽樣共40人，各年級應抽多少人？",
+        "correct": "10、20、10人",
+        "wrong": [
+          "20、10、10人",
+          "13、14、13人",
+          "10、10、20人"
+        ],
+        "exp": "總人數400，比例1:2:1，40人按比例為10:20:10。",
+        "subject": "數學",
+        "sub_topic": "抽樣與統計圖表",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-抽樣與統計圖表",
+        "template_id": "math-ref-g3Y-抽樣與統計圖表-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-抽樣與統計圖表-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「抽樣與統計圖表」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "若要呈現某城市連續12個月份的平均氣溫變化，哪種圖最合適？",
+        "correct": "月份為橫軸、氣溫為縱軸的折線圖",
+        "wrong": [
+          "只畫人口比例的圓餅圖",
+          "以月份名稱筆畫數為高度的長條圖",
+          "只列出全年最高氣溫一個數字"
+        ],
+        "exp": "折線圖適合表示依時間先後變化的連續數量，可比較上升下降趨勢。",
+        "subject": "數學",
+        "sub_topic": "抽樣與統計圖表",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-抽樣與統計圖表",
+        "template_id": "math-ref-g3Y-抽樣與統計圖表-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

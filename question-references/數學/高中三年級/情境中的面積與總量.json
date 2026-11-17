@@ -1,0 +1,66 @@
+{
+  "units": [
+    "積分與面積"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-情境中的面積與總量-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「情境中的面積與總量」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "水流入水箱的速率為q(t)＝2t公升／小時（0≤t≤3，t單位小時），三小時總流入量為何？",
+        "correct": "9公升",
+        "wrong": [
+          "6公升",
+          "3公升",
+          "18公升"
+        ],
+        "exp": "總流入量＝∫₀³2t dt＝[t²]₀³＝9公升。",
+        "subject": "數學",
+        "sub_topic": "情境中的面積與總量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-情境中的面積與總量",
+        "template_id": "math-ref-g3Y-情境中的面積與總量-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-情境中的面積與總量-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「情境中的面積與總量」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "一電器以固定100瓦功率運轉2小時，總耗電量為何？",
+        "correct": "200瓦時",
+        "wrong": [
+          "100瓦時",
+          "50瓦時",
+          "2瓦時"
+        ],
+        "exp": "能量＝功率×時間＝100瓦×2小時＝200瓦時。",
+        "subject": "數學",
+        "sub_topic": "情境中的面積與總量",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-情境中的面積與總量",
+        "template_id": "math-ref-g3Y-情境中的面積與總量-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

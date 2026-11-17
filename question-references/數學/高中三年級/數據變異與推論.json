@@ -1,0 +1,66 @@
+{
+  "units": [
+    "統計推論與資料分析"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-數據變異與推論-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「數據變異與推論」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "甲組資料5、5、5，乙組0、5、10。兩組平均皆為5，何者較分散？",
+        "correct": "乙組",
+        "wrong": [
+          "甲組",
+          "兩組標準差相等",
+          "無法根據資料判斷"
+        ],
+        "exp": "甲全部為5，變異數0；乙有偏離平均5的兩項，故離散較大。",
+        "subject": "數學",
+        "sub_topic": "數據變異與推論",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-數據變異與推論",
+        "template_id": "math-ref-g3Y-數據變異與推論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-數據變異與推論-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「數據變異與推論」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "某班只向籃球隊員調查全校運動喜好，最主要的統計推論風險是什麼？",
+        "correct": "樣本偏向運動社團，可能不代表全校學生",
+        "wrong": [
+          "受訪者超過十人就能保證完全代表全校",
+          "學生運動喜好完全不可能使用問卷研究",
+          "只要沒有計算平均數就不會出現偏誤"
+        ],
+        "exp": "研究母群為全校，但樣本集中某球隊，可能產生選樣偏誤。",
+        "subject": "數學",
+        "sub_topic": "數據變異與推論",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-數據變異與推論",
+        "template_id": "math-ref-g3Y-數據變異與推論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

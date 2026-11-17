@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計建模"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-資料解讀-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「資料解讀」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "某組資料依序為10、10、20，其平均數為何？",
+        "correct": "40/3",
+        "wrong": [
+          "10",
+          "20",
+          "15"
+        ],
+        "exp": "平均數＝(10＋10＋20)/3＝40/3，約13.33。",
+        "subject": "數學",
+        "sub_topic": "資料解讀",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-資料解讀",
+        "template_id": "math-ref-g3Y-資料解讀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-資料解讀-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「資料解讀」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "調查顯示每天走路時間與健康指標正相關。哪項解讀是統計上最恰當的？",
+        "correct": "兩者在資料中共同變動，但還不能單憑相關證明因果",
+        "wrong": [
+          "每天多走一分鐘必然使健康指標提高固定數量",
+          "只要正相關就能排除所有混雜變項",
+          "相關係數必然表示直接的因果強度"
+        ],
+        "exp": "相關反映線性關聯，未排除健康狀況、年齡等可能共同影響因素。",
+        "subject": "數學",
+        "sub_topic": "資料解讀",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-資料解讀",
+        "template_id": "math-ref-g3Y-資料解讀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

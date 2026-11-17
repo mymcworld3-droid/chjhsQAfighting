@@ -1,0 +1,66 @@
+{
+  "units": [
+    "微分及其應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-函數增減與極值-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「函數增減與極值」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "f(x)＝(x－2)²＋5的最小值及發生處為何？",
+        "correct": "最小值5，發生於x＝2",
+        "wrong": [
+          "最小值2，發生於x＝5",
+          "最小值0，發生於x＝2",
+          "最小值5，發生於x＝－2"
+        ],
+        "exp": "平方項非負，當x＝2時等於0，故最小值5。",
+        "subject": "數學",
+        "sub_topic": "函數增減與極值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數增減與極值",
+        "template_id": "math-ref-g3Y-函數增減與極值-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-函數增減與極值-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「函數增減與極值」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "函數f(x)＝－x²＋4x在何處取得最大值？",
+        "correct": "x＝2",
+        "wrong": [
+          "x＝4",
+          "x＝0",
+          "x＝－2"
+        ],
+        "exp": "配方f(x)＝−(x−2)²＋4，頂點x＝2時最大。",
+        "subject": "數學",
+        "sub_topic": "函數增減與極值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數增減與極值",
+        "template_id": "math-ref-g3Y-函數增減與極值-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

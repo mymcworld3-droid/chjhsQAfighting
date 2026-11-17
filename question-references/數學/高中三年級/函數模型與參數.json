@@ -1,0 +1,66 @@
+{
+  "units": [
+    "數學模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-函數模型與參數-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「函數模型與參數」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "線性函數f(t)＝a＋bt經過(0,5)、(2,11)，參數(a,b)為何？",
+        "correct": "(5,3)",
+        "wrong": [
+          "(3,5)",
+          "(5,6)",
+          "(0,3)"
+        ],
+        "exp": "f(0)＝a＝5；f(2)＝5＋2b＝11，得b＝3。",
+        "subject": "數學",
+        "sub_topic": "函數模型與參數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數模型與參數",
+        "template_id": "math-ref-g3Y-函數模型與參數-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-函數模型與參數-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「函數模型與參數」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "某成長模型N(t)＝100(0.9)^t（t以年計），每年數量變動率最接近何者？",
+        "correct": "每年減少10%",
+        "wrong": [
+          "每年增加10%",
+          "每年減少90%",
+          "每年維持不變"
+        ],
+        "exp": "乘數0.9代表每年剩90%，相對上一年減少10%。",
+        "subject": "數學",
+        "sub_topic": "函數模型與參數",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-函數模型與參數",
+        "template_id": "math-ref-g3Y-函數模型與參數-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "極限與變化率"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-以圖形理解連續性-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「以圖形理解連續性」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "f(x)在x＜1時為x＋2，在x≥1時為常數k。若圖形在x＝1無跳躍，k應為多少？",
+        "correct": "3",
+        "wrong": [
+          "1",
+          "2",
+          "4"
+        ],
+        "exp": "左極限是1＋2＝3，右側函數值為k，須k＝3才能連續。",
+        "subject": "數學",
+        "sub_topic": "以圖形理解連續性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-以圖形理解連續性",
+        "template_id": "math-ref-g3Y-以圖形理解連續性-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-以圖形理解連續性-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「以圖形理解連續性」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "已知f(x)＝x＋2（x≠2），另外定義f(2)＝k。要使圖形在x＝2連續，k應為何？",
+        "correct": "4",
+        "wrong": [
+          "2",
+          "0",
+          "6"
+        ],
+        "exp": "lim(x→2)f(x)＝4，連續要求f(2)＝極限值。",
+        "subject": "數學",
+        "sub_topic": "以圖形理解連續性",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-以圖形理解連續性",
+        "template_id": "math-ref-g3Y-以圖形理解連續性-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "積分與面積"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-面積累積的概念-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「面積累積的概念」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "一物體沿直線以固定3公尺／秒速度前進4秒，速度時間圖下的面積是多少？",
+        "correct": "12公尺",
+        "wrong": [
+          "7公尺",
+          "3公尺",
+          "1.33公尺"
+        ],
+        "exp": "圖下面積為速度×時間＝3×4＝12公尺，代表位移。",
+        "subject": "數學",
+        "sub_topic": "面積累積的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-面積累積的概念",
+        "template_id": "math-ref-g3Y-面積累積的概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-面積累積的概念-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「面積累積的概念」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "函數y＝t在0≤t≤2的圖線下方、t軸上方所圍面積為何？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "4",
+          "3"
+        ],
+        "exp": "圖形為底2、高2的直角三角形，面積為2×2/2＝2。",
+        "subject": "數學",
+        "sub_topic": "面積累積的概念",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-面積累積的概念",
+        "template_id": "math-ref-g3Y-面積累積的概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "微分及其應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-經濟與生活情境最佳化-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「經濟與生活情境最佳化」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "店家的總收益模型R(q)＝20q－q²（元，q≥0），最大收益是多少？",
+        "correct": "100元",
+        "wrong": [
+          "20元",
+          "200元",
+          "80元"
+        ],
+        "exp": "R(q)＝−(q−10)²＋100，於q＝10時最大值100。",
+        "subject": "數學",
+        "sub_topic": "經濟與生活情境最佳化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-經濟與生活情境最佳化",
+        "template_id": "math-ref-g3Y-經濟與生活情境最佳化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-經濟與生活情境最佳化-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「經濟與生活情境最佳化」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "製作成本模型C(q)＝q²－8q＋30（元，q≥0），最低成本是多少？",
+        "correct": "14元",
+        "wrong": [
+          "8元",
+          "16元",
+          "30元"
+        ],
+        "exp": "C(q)＝(q−4)²＋14，於q＝4取得最小值14。",
+        "subject": "數學",
+        "sub_topic": "經濟與生活情境最佳化",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-8",
+            "name": "微積分"
+          }
+        ],
+        "concept_id": "math-高中三年級-經濟與生活情境最佳化",
+        "template_id": "math-ref-g3Y-經濟與生活情境最佳化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

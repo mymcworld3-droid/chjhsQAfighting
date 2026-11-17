@@ -1,0 +1,66 @@
+{
+  "units": [
+    "機率與統計建模"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-隨機變數與期望值-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「隨機變數與期望值」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "隨機變數X以機率0.4取值0、以0.6取值5，E(X)是多少？",
+        "correct": "3",
+        "wrong": [
+          "2",
+          "5",
+          "0.6"
+        ],
+        "exp": "E(X)＝0×0.4＋5×0.6＝3。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-隨機變數與期望值",
+        "template_id": "math-ref-g3Y-隨機變數與期望值-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-隨機變數與期望值-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「隨機變數與期望值」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "某抽獎票得到10元的機率0.4，得到20元的機率0.6，獎金的期望值是多少？",
+        "correct": "16元",
+        "wrong": [
+          "15元",
+          "14元",
+          "12元"
+        ],
+        "exp": "期望＝10×0.4＋20×0.6＝4＋12＝16元。",
+        "subject": "數學",
+        "sub_topic": "隨機變數與期望值",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-7",
+            "name": "機率與統計"
+          }
+        ],
+        "concept_id": "math-高中三年級-隨機變數與期望值",
+        "template_id": "math-ref-g3Y-隨機變數與期望值-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "數學模型"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "math-ref-g3Y-成長模型-1",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「成長模型」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "某人口初始200人，每年成長5%，兩年後依等比模型為多少人？",
+        "correct": "220.5人（模型預測值）",
+        "wrong": [
+          "220人",
+          "210人",
+          "205人"
+        ],
+        "exp": "模型N＝200×1.05²＝220.5，實際人口須取整但此題問模型值。",
+        "subject": "數學",
+        "sub_topic": "成長模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-成長模型",
+        "template_id": "math-ref-g3Y-成長模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "math-ref-g3Y-成長模型-2",
+      "source": "依108課綱數學乙之生活模型、資料分析與微積分基礎自編，非原考題",
+      "design": "「成長模型」：透過具體數據與定義推算唯一合理答案，附可驗證計算步驟",
+      "question": {
+        "q": "細菌初始100個，每小時變成原來3倍，2小時後有多少個？",
+        "correct": "900個",
+        "wrong": [
+          "300個",
+          "600個",
+          "1200個"
+        ],
+        "exp": "2個時段各乘3，100×3²＝900。",
+        "subject": "數學",
+        "sub_topic": "成長模型",
+        "knowledge_points": [
+          {
+            "subject": "數學",
+            "id": "math-4",
+            "name": "函數與圖形"
+          }
+        ],
+        "concept_id": "math-高中三年級-成長模型",
+        "template_id": "math-ref-g3Y-成長模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
