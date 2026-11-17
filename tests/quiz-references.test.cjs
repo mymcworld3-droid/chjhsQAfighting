@@ -34,3 +34,16 @@ test('respects the current facet, grade, space-vectors scope and custom exclusio
     assert.deepEqual(quizReferences({ ...target, ...overrides }), []);
   }
 });
+
+test('loads exact Chinese curriculum concepts containing punctuation', () => {
+  const target = { subject: '國文', level: '高中一年級' };
+  const punctuated = '韻腳、對仗與詩意理解';
+  const reference = quizReferences({ ...target, topic: punctuated });
+  assert.equal(reference.length, 2);
+  assert.ok(reference.every(item => item.question.sub_topic === punctuated));
+  assert.equal(quizReferences({ ...target, topic: '高中一年級／第一學期／古典韻文（核心考點細項：韻腳、對仗與詩意理解）' })[0].id, reference[0].id);
+  const other = quizReferences({ ...target, topic: '主旨、段落結構、語氣' });
+  assert.equal(other.length, 2);
+  assert.ok(other.every(item => item.question.sub_topic === '主旨、段落結構、語氣'));
+  assert.deepEqual(quizReferences({ ...target, topic: '化學反應' }), []);
+});

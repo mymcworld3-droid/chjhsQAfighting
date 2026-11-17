@@ -2,7 +2,12 @@
 const path = require('node:path');
 const index = require('./question-references/index.json');
 const normalize = value => String(value || '').normalize('NFKC').replace(/\s+/g, '');
-const labels = value => String(value || '').replace('.json', '').split(/[/／:：()（）,，、]/).map(label => normalize(label).replace(/^核心考點細項/, ''));
+const labels = value => {
+  const text = String(value || '').replace('.json', '');
+  // Keep the full label first: curriculum concepts may contain commas or '、'.
+  // Split only as a fallback for composite scope paths and formatted headings.
+  return [...new Set([normalize(text), ...text.split(/[/／:：()（）,，、]/).map(label => normalize(label).replace(/^核心考點細項/, ''))])];
+};
 
 function quizReferences({ subject, level, topic, scope, facet, exclusions = [] }) {
   if (exclusions.length) return [];
