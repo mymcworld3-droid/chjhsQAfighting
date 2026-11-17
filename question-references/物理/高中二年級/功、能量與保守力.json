@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅱ：力學二與熱學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-功、能量與保守力-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「功、能量與保守力」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "彈簧常數200 N/m，從自然長度伸長0.10 m時儲存的彈性位能為多少？",
+        "correct": "1.0 J",
+        "wrong": [
+          "2.0 J",
+          "10 J",
+          "20 J"
+        ],
+        "exp": "彈性位能U＝(1/2)kx²＝0.5×200×0.1²＝1 J。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "physics-ref-g2-功、能量與保守力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-功、能量與保守力-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「功、能量與保守力」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "小球沿無摩擦軌道由高度5 m滑至2 m，取g＝10 m/s²。每公斤質量的重力位能減少多少？",
+        "correct": "30 J/kg",
+        "wrong": [
+          "20 J/kg",
+          "50 J/kg",
+          "70 J/kg"
+        ],
+        "exp": "每單位質量位能改變＝gΔh＝10×(5−2)＝30 J/kg。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "physics-ref-g2-功、能量與保守力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

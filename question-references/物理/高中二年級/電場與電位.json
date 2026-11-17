@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅳ：電磁現象一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-電場與電位-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「電場與電位」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "一個正電荷q＝2×10⁻⁶ C處在均勻電場E＝100 N/C，受電力大小是多少？",
+        "correct": "2×10⁻⁴ N",
+        "wrong": [
+          "2×10⁻⁶ N",
+          "5×10⁷ N",
+          "2×10⁻² N"
+        ],
+        "exp": "F＝qE＝2×10⁻⁶×100＝2×10⁻⁴ N。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "physics-ref-g2-電場與電位-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-電場與電位-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「電場與電位」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "正試驗電荷由高電位處移至低電位處，電場力作正功。其電位能變化為何？",
+        "correct": "電位能降低",
+        "wrong": [
+          "電位能提高",
+          "電位能必須完全不變",
+          "電荷量必然變成負值"
+        ],
+        "exp": "電場力作功W＝−ΔU，W正表示電位能減少。",
+        "subject": "物理",
+        "sub_topic": "電場與電位",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電場與電位",
+        "template_id": "physics-ref-g2-電場與電位-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

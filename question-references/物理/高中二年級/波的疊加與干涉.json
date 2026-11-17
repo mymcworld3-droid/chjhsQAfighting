@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅲ：波動、光及聲音"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-波的疊加與干涉-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「波的疊加與干涉」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "兩列同頻且等振幅波在某點的相位差為180°，理想線性疊加的合成振幅為何？",
+        "correct": "0",
+        "wrong": [
+          "原振幅的兩倍",
+          "原振幅的四倍",
+          "必定與原振幅相同"
+        ],
+        "exp": "等振幅反相的位移相互抵銷，形成完全相消干涉。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "physics-ref-g2-波的疊加與干涉-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-波的疊加與干涉-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「波的疊加與干涉」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "相干雙狹縫光源在屏幕中央形成亮紋。中央路徑差通常為何？",
+        "correct": "0（或等效整數波長）",
+        "wrong": [
+          "半個波長",
+          "四分之一波長",
+          "任意且與相位無關"
+        ],
+        "exp": "中央對稱位置兩路徑距離相同，路徑差0，發生相長干涉。",
+        "subject": "物理",
+        "sub_topic": "波的疊加與干涉",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-波的疊加與干涉",
+        "template_id": "physics-ref-g2-波的疊加與干涉-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

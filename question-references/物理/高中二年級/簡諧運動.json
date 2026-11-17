@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅱ：力學二與熱學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-簡諧運動-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「簡諧運動」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "彈簧振子質量m、彈簧常數k，忽略阻力，其振動週期為T＝2π√(m/k)。若質量增為4倍，週期變為？",
+        "correct": "2倍",
+        "wrong": [
+          "4倍",
+          "1/2倍",
+          "不變"
+        ],
+        "exp": "週期與質量平方根成正比，√4＝2。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "physics-ref-g2-簡諧運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-簡諧運動-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「簡諧運動」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "理想簡諧振子經過平衡位置時，若位移x＝0，哪項敘述正確？",
+        "correct": "速度大小最大、加速度為零",
+        "wrong": [
+          "位移最大、速度為零",
+          "加速度大小最大、速度為零",
+          "速度和加速度都必定最大"
+        ],
+        "exp": "a＝−ω²x，平衡點a＝0；能量主要為動能，速度最大。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "physics-ref-g2-簡諧運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅲ：波動、光及聲音"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-繞射與駐波-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「繞射與駐波」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "波長固定的水波通過狹縫，將狹縫寬度調小至接近波長，繞射現象通常如何？",
+        "correct": "更明顯地向狹縫後方各方向擴散",
+        "wrong": [
+          "必然完全消失",
+          "波速立即變成零",
+          "波長必定縮為原來十分之一"
+        ],
+        "exp": "狹縫寬度與波長接近時，繞射較顯著。",
+        "subject": "物理",
+        "sub_topic": "繞射與駐波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-繞射與駐波",
+        "template_id": "physics-ref-g2-繞射與駐波-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-繞射與駐波-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「繞射與駐波」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "兩端固定、長度L的弦在基頻形成駐波，兩端為節點，中間為一個腹點。其波長為何？",
+        "correct": "2L",
+        "wrong": [
+          "L",
+          "L/2",
+          "4L"
+        ],
+        "exp": "基頻駐波弦長等於半波長，L＝λ/2，所以λ＝2L。",
+        "subject": "物理",
+        "sub_topic": "繞射與駐波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-繞射與駐波",
+        "template_id": "physics-ref-g2-繞射與駐波-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

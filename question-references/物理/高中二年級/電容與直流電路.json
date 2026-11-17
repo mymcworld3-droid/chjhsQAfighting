@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅳ：電磁現象一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-電容與直流電路-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「電容與直流電路」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "電容器C＝10 μF，兩端電壓V＝5.0 V，所儲存電荷量Q為何？",
+        "correct": "50 μC",
+        "wrong": [
+          "2 μC",
+          "10 μC",
+          "500 μC"
+        ],
+        "exp": "Q＝CV＝10 μF×5 V＝50 μC。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "physics-ref-g2-電容與直流電路-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-電容與直流電路-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「電容與直流電路」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "兩個相同電阻6 Ω並聯，等效電阻為多少？",
+        "correct": "3 Ω",
+        "wrong": [
+          "12 Ω",
+          "6 Ω",
+          "36 Ω"
+        ],
+        "exp": "1/R合＝1/6＋1/6＝1/3，R合＝3 Ω。",
+        "subject": "物理",
+        "sub_topic": "電容與直流電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-電容與直流電路",
+        "template_id": "physics-ref-g2-電容與直流電路-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

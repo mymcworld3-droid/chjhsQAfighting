@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅲ：波動、光及聲音"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-幾何光學與聲音-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「幾何光學與聲音」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "平面鏡前物體距鏡1.5 m，理想平面鏡中的虛像位於鏡後距離約多少？",
+        "correct": "1.5 m",
+        "wrong": [
+          "0.75 m",
+          "3.0 m",
+          "0 m"
+        ],
+        "exp": "平面鏡物距等於鏡後像距，像為正立等大虛像。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "physics-ref-g2-幾何光學與聲音-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-幾何光學與聲音-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「幾何光學與聲音」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "救護車朝靜止觀察者靠近時發出固定頻率警笛，觀察者聽到的頻率相較車靜止時通常如何？",
+        "correct": "較高",
+        "wrong": [
+          "較低",
+          "恆等於零",
+          "只由警笛顏色決定"
+        ],
+        "exp": "多普勒效應：聲源接近使波前壓縮，聽者接收頻率提高。",
+        "subject": "物理",
+        "sub_topic": "幾何光學與聲音",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-幾何光學與聲音",
+        "template_id": "physics-ref-g2-幾何光學與聲音-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

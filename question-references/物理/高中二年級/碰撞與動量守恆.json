@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅱ：力學二與熱學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-碰撞與動量守恆-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「碰撞與動量守恆」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "水平無外力下，1 kg滑車以4 m/s撞上靜止的3 kg滑車，碰後兩車黏在一起。共同速度？",
+        "correct": "1 m/s",
+        "wrong": [
+          "4 m/s",
+          "2 m/s",
+          "3 m/s"
+        ],
+        "exp": "總動量4 kg·m/s，總質量4 kg，共同v＝1 m/s。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "physics-ref-g2-碰撞與動量守恆-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-碰撞與動量守恆-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「碰撞與動量守恆」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "兩個質量相同的小球在水平面一維完全彈性碰撞，其中甲以3 m/s撞上靜止乙。理想情況下碰後速度為何？",
+        "correct": "甲停止、乙以3 m/s前進",
+        "wrong": [
+          "甲乙都以3 m/s前進",
+          "甲以−3 m/s反彈、乙保持靜止",
+          "甲乙黏在一起以3 m/s前進"
+        ],
+        "exp": "一維同質量完全彈性碰撞會交換速度，且動量與動能皆守恆。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "physics-ref-g2-碰撞與動量守恆-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅰ：力學一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-一維與二維運動-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「一維與二維運動」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "一車由靜止以2 m/s²作等加速度直線運動，4秒後速度為何？",
+        "correct": "8 m/s",
+        "wrong": [
+          "2 m/s",
+          "4 m/s",
+          "16 m/s"
+        ],
+        "exp": "v=v₀+at＝0+2×4＝8 m/s。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "physics-ref-g2-一維與二維運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-一維與二維運動-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「一維與二維運動」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "一球以水平方向10 m/s從20 m高處拋出，不計空氣阻力，取g＝10 m/s²。落地時間約為？",
+        "correct": "2秒",
+        "wrong": [
+          "1秒",
+          "4秒",
+          "5秒"
+        ],
+        "exp": "垂直初速為零，20＝(1/2)×10×t²，t＝2秒。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "physics-ref-g2-一維與二維運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅰ：力學一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-力學探究-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「力學探究」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "用不同質量滑車在固定水平合力作用下測得加速度。若F相同，預期加速度與質量關係？",
+        "correct": "加速度與質量成反比",
+        "wrong": [
+          "加速度與質量成正比",
+          "加速度必定與質量無關",
+          "加速度與質量平方成正比"
+        ],
+        "exp": "F=ma，F固定時a=F/m。",
+        "subject": "物理",
+        "sub_topic": "力學探究",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-力學探究",
+        "template_id": "physics-ref-g2-力學探究-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-力學探究-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「力學探究」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "學生利用光電門測滑車速度，但不同試次斜面角度也不同。若只研究摩擦力與運動，首先應如何改善？",
+        "correct": "固定斜面角度、滑車及釋放條件，再改變接觸面材質",
+        "wrong": [
+          "同時改變斜面角度與材質，視差異均為摩擦力",
+          "只測速度最高的一次",
+          "忽略質量與斜面角度造成的加速度差異"
+        ],
+        "exp": "比較摩擦影響須控制造成沿斜面重力分力變化的角度等條件。",
+        "subject": "物理",
+        "sub_topic": "力學探究",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-力學探究",
+        "template_id": "physics-ref-g2-力學探究-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

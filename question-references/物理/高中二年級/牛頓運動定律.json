@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅰ：力學一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-牛頓運動定律-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「牛頓運動定律」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "質量3 kg的物體受水平合力12 N，忽略其他因素，其加速度大小為？",
+        "correct": "4 m/s²",
+        "wrong": [
+          "9 m/s²",
+          "12 m/s²",
+          "36 m/s²"
+        ],
+        "exp": "由F=ma，a＝12/3＝4 m/s²。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-牛頓運動定律",
+        "template_id": "physics-ref-g2-牛頓運動定律-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-牛頓運動定律-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「牛頓運動定律」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "質量5 kg的箱子在水平地面上受向右20 N拉力、向左5 N摩擦力。加速度大小？",
+        "correct": "3 m/s²",
+        "wrong": [
+          "4 m/s²",
+          "5 m/s²",
+          "1 m/s²"
+        ],
+        "exp": "合力20−5＝15 N，a＝15/5＝3 m/s²。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-牛頓運動定律",
+        "template_id": "physics-ref-g2-牛頓運動定律-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

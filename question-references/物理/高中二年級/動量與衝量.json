@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅰ：力學一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-動量與衝量-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「動量與衝量」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "質量0.2 kg的球以5 m/s向右運動，被拍擊後以3 m/s向左運動。取向右正，動量改變量為？",
+        "correct": "−1.6 kg·m/s",
+        "wrong": [
+          "+1.6 kg·m/s",
+          "−0.4 kg·m/s",
+          "+0.4 kg·m/s"
+        ],
+        "exp": "Δp＝m(v後−v前)＝0.2(−3−5)＝−1.6。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "physics-ref-g2-動量與衝量-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-動量與衝量-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「動量與衝量」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "平均力10 N作用物體0.30秒，且方向固定，衝量大小為何？",
+        "correct": "3.0 N·s",
+        "wrong": [
+          "0.30 N·s",
+          "10.3 N·s",
+          "33 N·s"
+        ],
+        "exp": "衝量J＝FΔt＝10×0.30＝3.0 N·s。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "physics-ref-g2-動量與衝量-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

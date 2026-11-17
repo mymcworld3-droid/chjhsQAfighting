@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅳ：電磁現象一"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-磁場與帶電粒子-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「磁場與帶電粒子」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "正電荷以速度v垂直進入均勻磁場B，磁力大小F＝qvB。若速度增加兩倍，其他量不變，磁力如何？",
+        "correct": "增加兩倍",
+        "wrong": [
+          "減半",
+          "不變",
+          "增加四倍"
+        ],
+        "exp": "垂直時F＝qvB，與速度大小成正比。",
+        "subject": "物理",
+        "sub_topic": "磁場與帶電粒子",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-磁場與帶電粒子",
+        "template_id": "physics-ref-g2-磁場與帶電粒子-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-磁場與帶電粒子-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「磁場與帶電粒子」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "帶電粒子在均勻磁場中受磁力作圓周運動，若磁力始終垂直速度且忽略其他力，粒子動能如何？",
+        "correct": "保持不變",
+        "wrong": [
+          "持續增加",
+          "持續減少至零",
+          "每轉一圈必然倍增"
+        ],
+        "exp": "磁力垂直位移方向，不作功，只改變速度方向。",
+        "subject": "物理",
+        "sub_topic": "磁場與帶電粒子",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-磁場與帶電粒子",
+        "template_id": "physics-ref-g2-磁場與帶電粒子-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

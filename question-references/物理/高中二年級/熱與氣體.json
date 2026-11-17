@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修物理Ⅱ：力學二與熱學"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "physics-ref-g2-熱與氣體-1",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「熱與氣體」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "定量理想氣體在定壓下由300 K加熱至450 K，體積由2.0 L變為多少？",
+        "correct": "3.0 L",
+        "wrong": [
+          "1.0 L",
+          "2.5 L",
+          "4.5 L"
+        ],
+        "exp": "定壓下V/T固定，V₂＝2×450/300＝3.0 L。",
+        "subject": "物理",
+        "sub_topic": "熱與氣體",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-熱與氣體",
+        "template_id": "physics-ref-g2-熱與氣體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "physics-ref-g2-熱與氣體-2",
+      "source": "依高中物理108課綱及大考中心自然科物理素養命題方向設計的新參考題",
+      "design": "以「熱與氣體」的受力、能量、幾何或單位建立可追蹤解題步驟",
+      "question": {
+        "q": "封閉系統吸熱100 J，並對外作功40 J。依熱力學第一定律ΔU＝Q−W，內能增加多少？",
+        "correct": "60 J",
+        "wrong": [
+          "140 J",
+          "−60 J",
+          "40 J"
+        ],
+        "exp": "Q＝+100、W＝+40（系統對外），故ΔU＝60 J。",
+        "subject": "物理",
+        "sub_topic": "熱與氣體",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中二年級-熱與氣體",
+        "template_id": "physics-ref-g2-熱與氣體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
