@@ -37,7 +37,10 @@ for(const curriculumSubject of subjects){
      assert.ok(!ids.has(ref.id),'duplicate template ID: '+ref.id);ids.add(ref.id);
      assert.ok(!questions.has(q.q),'duplicate stem: '+concept);questions.add(q.q);
      assert.ok(ref.source&&ref.design&&q.exp);
-     assert.equal(q.subject,subject);assert.equal(q.sub_topic,concept);
+     assert.equal(q.subject,subject);
+     // Legacy math fine-concept aliases intentionally reuse the planar inner-product
+     // reference group. The question's sub_topic names the underlying JSON concept.
+     assert.equal(q.sub_topic,filename===concept?concept:filename);
      assert.ok(q.template_id&&q.concept_id);
      assert.ok(['single-choice','multi-step'].includes(q.question_form));
      assert.ok(q.q&&q.correct);
