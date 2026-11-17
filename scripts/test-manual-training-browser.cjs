@@ -48,7 +48,34 @@ async function main(){
     await page.locator('[data-skill-upgrade="wind-slash"]').click();await verifyArt();
     await page.getByText('「流風斬」已升至 Lv. 2。').waitFor();await verifyArt();
     assert.equal(await page.evaluate(()=>window.savedSlot===document.querySelector('.manual-slot-art')),true);
-    assert.deepEqual(errors,[]);console.log('Manual training artwork survives equip, unequip, manual and skill upgrades without replacing unchanged images.');
+    // Phase 2: select an inactive deck, equip through its new slot picker,
+    // rename it, then explicitly apply. Viewing/editing must not silently apply it.
+    await page.locator('[data-loadout-select="1"]').click();
+    assert.equal(await page.locator('[data-loadout-select="0"]').getAttribute('class').then(v=>v.includes('is-active')),true);
+    assert.equal(await page.locator('[data-loadout-select="1"]').getAttribute('aria-pressed'),'true');
+    await page.locator('[data-manual-pick-slot="0"]').click();
+    await page.locator('[data-manual-picker]').waitFor();
+    await page.locator('[data-manual-pick-skill="wind-slash"]').click();
+    await page.locator('[data-manual-picker]').waitFor({state:'detached'});
+    await page.locator('[data-manual-slot="0"] .manual-slot-art').waitFor();
+    assert.equal(await page.locator('[data-loadout-select="0"]').getAttribute('class').then(v=>v.includes('is-active')),true);
+    await page.locator('[data-loadout-name]').fill('劍氣出戰');
+    await page.locator('[data-loadout-rename]').click();
+    await page.locator('[data-loadout-select="1"]').getByText('劍氣出戰').waitFor();
+    await page.locator('[data-loadout-apply]').click();
+    await page.waitForFunction(()=>document.querySelector('[data-loadout-select="1"]')?.classList.contains('is-active'));
+    assert.equal(await page.locator('[data-loadout-apply]').isDisabled(),true);
+    await page.locator('[data-manual-pick-slot="0"]').click();
+    assert.equal(await page.locator('[data-manual-pick-skill="wind-slash"]').count(),1);
+    await page.locator('[data-manual-close-picker]').click();
+    assert.equal(await page.locator('[data-manual-picker]').count(),0);
+    const deckWidth=await page.locator('.manual-loadout').evaluate(node=>({
+      scroll:node.scrollWidth,client:node.clientWidth
+    }));
+    assert(deckWidth.scroll<=deckWidth.client+2,
+      'mobile deck should fit horizontally: '+JSON.stringify(deckWidth));
+    assert.deepEqual(errors,[]);
+    console.log('Manual artwork stable; mobile deck picker, inactive preset, rename and explicit apply verified.');
   }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
