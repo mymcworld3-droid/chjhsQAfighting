@@ -55,6 +55,7 @@ test('swapping an equipped skill keeps its identity and avoids duplicates',()=>{
 
 test('invalid slot, unknown move and a full array cannot create invalid equipment',()=>{
   assert.equal(selectSkillForSlot(['a'],3,'b',moveOf),null);
+  assert.equal(selectSkillForSlot(['a'],2,'b',moveOf),null,'cannot leave a gap in server-ordered slots');
   assert.equal(selectSkillForSlot(['a'],0,'unknown',moveOf),null);
   assert.equal(selectSkillForSlot(['a'],NaN,'b',moveOf),null);
   assert.equal(selectSkillForSlot(['a','b','c'],4,'a',moveOf),null);
@@ -95,6 +96,8 @@ test('empty slot is an action; picker is hidden until requested',()=>{
   const view=ui(2);
   assert.match(view,/空白技能槽/);
   assert.match(view,/點此選擇已領悟的招式/);
+  assert.equal((view.match(/data-manual-pick-slot="0"/g)||[]).length,3,
+    'empty presets always add to the first free position');
   assert.doesNotMatch(view,/data-manual-pick-skill/);
   assert.doesNotMatch(view,/data-manual-picker/);
 });
