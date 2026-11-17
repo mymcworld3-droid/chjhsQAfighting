@@ -1,0 +1,66 @@
+{
+  "units": [
+    "社會、政治與法律統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-人權與民主-1",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「人權與民主」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "某地方公投提案得到多數支持，但內容涉及限制特定少數群體平等使用公共設施的權利。從憲政民主觀點，應如何評估？",
+        "correct": "即使獲得多數票，政策仍須接受基本權與憲法平等原則的檢驗",
+        "wrong": [
+          "公投過半代表所有憲法權利立即失效",
+          "只要有選舉就不必保障少數人的自由",
+          "政府只需問投票者是否喜歡該群體"
+        ],
+        "exp": "憲政民主同時重視多數決與基本權保障，多數決不能逾越所有憲法限制。",
+        "subject": "公民",
+        "sub_topic": "人權與民主",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中三年級-人權與民主",
+        "template_id": "civic-ref-g3-人權與民主-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-人權與民主-2",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「人權與民主」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "某校學生會討論是否應開放會議紀錄，少數成員擔心個資外洩。最能兼顧參與與權利的方案是？",
+        "correct": "公開議題與決議資訊，同時遮蔽不必要的個人資料",
+        "wrong": [
+          "為了透明，公布每位成員完整私人聯絡資訊",
+          "為保護個資，完全不讓學生了解任何決議",
+          "只在會議中詢問出席人數便當成公開資訊"
+        ],
+        "exp": "資訊透明與隱私可藉資料最少揭露、遮蔽及適當程序取得平衡。",
+        "subject": "公民",
+        "sub_topic": "人權與民主",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中三年級-人權與民主",
+        "template_id": "civic-ref-g3-人權與民主-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

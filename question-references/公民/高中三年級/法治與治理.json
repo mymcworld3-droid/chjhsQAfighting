@@ -1,0 +1,66 @@
+{
+  "units": [
+    "社會、政治與法律統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-法治與治理-1",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「法治與治理」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "市府打算在暴雨警戒期間限制危險山區道路通行。若檢驗依法行政與比例原則，應評估何者？",
+        "correct": "措施的法源、風險資料、限制範圍及持續時間是否適當",
+        "wrong": [
+          "只要發布新聞稿就可以無期限封閉所有道路",
+          "只需看限制措施是否讓行政工作更省事",
+          "若涉及安全就不必公告任何理由"
+        ],
+        "exp": "防災目的可正當，但限制仍需法律依據並依風險程度調整範圍及期間。",
+        "subject": "公民",
+        "sub_topic": "法治與治理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civic-高中三年級-法治與治理",
+        "template_id": "civic-ref-g3-法治與治理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-法治與治理-2",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「法治與治理」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "某行政機關使用演算法決定補助排序，居民要求說明評分要件及申復方式。這項要求主要涉及何種治理原則？",
+        "correct": "行政透明、可問責及權利救濟",
+        "wrong": [
+          "只要使用電腦，所有行政決定就不需要說明",
+          "演算法可以完全取代法定申復程序",
+          "補助排序一公布就不可能再有錯誤"
+        ],
+        "exp": "公權力採自動化工具仍應遵守法律程序，並提供適當說明及救濟管道。",
+        "subject": "公民",
+        "sub_topic": "法治與治理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civic-高中三年級-法治與治理",
+        "template_id": "civic-ref-g3-法治與治理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "經濟統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-市場供需-1",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「市場供需」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "某作物因颱風受損，供給減少；假設消費需求曲線不變，競爭市場的新均衡價格與交易量最可能如何改變？",
+        "correct": "價格上升、交易量下降",
+        "wrong": [
+          "價格下降、交易量上升",
+          "價格與交易量都必然上升",
+          "價格與交易量都必然完全不變"
+        ],
+        "exp": "供給曲線左移、需求不變時，新的均衡通常價格提高、數量減少。",
+        "subject": "公民",
+        "sub_topic": "市場供需",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中三年級-市場供需",
+        "template_id": "civic-ref-g3-市場供需-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-市場供需-2",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「市場供需」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "某商品因流行而需求增加，其他條件不變且供給曲線向右上方傾斜。短期均衡會如何變化？",
+        "correct": "均衡價格與交易數量皆上升",
+        "wrong": [
+          "均衡價格下降且交易數量減少",
+          "只有供給曲線左移，需求完全不變",
+          "均衡價格必然不變且交易量減少"
+        ],
+        "exp": "需求曲線右移，原供給曲線向上傾斜，新均衡通常價格和數量都上升。",
+        "subject": "公民",
+        "sub_topic": "市場供需",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中三年級-市場供需",
+        "template_id": "civic-ref-g3-市場供需-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

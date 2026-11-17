@@ -1,0 +1,66 @@
+{
+  "units": [
+    "經濟統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-總體經濟-1",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「總體經濟」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "物價指數由上一年的100上升至今年的105，依簡單年增率計算，今年通貨膨脹率為多少？",
+        "correct": "5%",
+        "wrong": [
+          "105%",
+          "0.5%",
+          "10%"
+        ],
+        "exp": "通膨率＝(105−100)/100＝5%；物價指數105不等於通膨105%。",
+        "subject": "公民",
+        "sub_topic": "總體經濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civic-高中三年級-總體經濟",
+        "template_id": "civic-ref-g3-總體經濟-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-總體經濟-2",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「總體經濟」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "某國名目GDP從1000億元增至1080億元，同期整體物價也上漲。若想知道實際產出量是否成長，應比較什麼？",
+        "correct": "經物價調整的實質GDP",
+        "wrong": [
+          "只看名目GDP增額就認定產量必然增加8%",
+          "只看貨幣紙鈔的面額",
+          "以消費者信心指數完全取代產出統計"
+        ],
+        "exp": "名目GDP同時受價格與數量影響，實質GDP排除價格變動後較適合比較產出。",
+        "subject": "公民",
+        "sub_topic": "總體經濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civic-高中三年級-總體經濟",
+        "template_id": "civic-ref-g3-總體經濟-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

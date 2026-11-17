@@ -1,0 +1,66 @@
+{
+  "units": [
+    "社會、政治與法律統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g3-公共議題-1",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「公共議題」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "某城市擬把一段道路改為行人徒步區，商家擔憂貨車卸貨不便，居民則支持降低交通風險。何種政策評估最周延？",
+        "correct": "比較行人事故風險、商業運輸需求與可能的卸貨配套",
+        "wrong": [
+          "只憑支持者最多便推定沒有任何執行成本",
+          "因商家提出疑慮就放棄蒐集行人安全資料",
+          "只計算道路長度便足以決定所有交通政策"
+        ],
+        "exp": "議題牽涉多種利益與公共目標，應用資料尋找兼顧安全與物流的方案。",
+        "subject": "公民",
+        "sub_topic": "公共議題",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中三年級-公共議題",
+        "template_id": "civic-ref-g3-公共議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g3-公共議題-2",
+      "source": "大考中心114學測社會公民考科之情境與資料論證命題方向；獨立編寫之新參考題",
+      "design": "「公共議題」透過明確前提與可檢驗資料，區分合理結論及常見迷思",
+      "question": {
+        "q": "政府希望降低食物浪費，甲主張用宣導提高意識，乙主張改善學校供餐份量選擇。哪個結論最合理？",
+        "correct": "兩種方案可能互補，應以廚餘量及參與行為資料評估效果",
+        "wrong": [
+          "只要有宣導，供餐制度必然不需改變",
+          "份量調整會直接讓所有學生用餐需求一致",
+          "兩種方案只要不同就不能併行"
+        ],
+        "exp": "行為宣導與制度設計分別作用於認知和選擇條件，可透過實際數據比較。",
+        "subject": "公民",
+        "sub_topic": "公共議題",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中三年級-公共議題",
+        "template_id": "civic-ref-g3-公共議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
