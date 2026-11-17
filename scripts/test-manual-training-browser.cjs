@@ -32,6 +32,11 @@ async function main(){
     await page.locator('[data-manual-book="sword-wind"][open]').waitFor();
     assert.equal(await page.locator('.manual-hero-book-tab.is-current').count(),1);
     assert.equal(await page.locator('.manual-hero-cover').count(),1);
+    // The permanent visual stage must come from the actual manual level.
+    assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'seed');
+    assert.equal(await page.locator('.manual-growth-mark').count(),10);
+    assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),1);
+    assert.equal(await page.locator('.manual-hero-qi-ring').count(),1);
     await page.evaluate(()=>{window.savedArt=[...document.querySelectorAll('.manual-book-art,.manual-skill-art')];});
     const verifyArt=async()=>{
       assert.equal(await page.evaluate(()=>window.savedArt.length>0&&window.savedArt.every((img,i)=>img===document.querySelectorAll('.manual-book-art,.manual-skill-art')[i]&&img.isConnected)),true,'unchanged artwork must keep its original DOM node');
@@ -112,6 +117,11 @@ async function main(){
     const mobileGallery=await library.evaluate(node=>({scroll:node.scrollWidth,client:node.clientWidth}));
     assert(mobileGallery.scroll<=mobileGallery.client+2,
       'gallery should not overflow portrait width: '+JSON.stringify(mobileGallery));
+    const mobileHero=await page.locator('.manual-hero').evaluate(node=>({
+      scroll:node.scrollWidth,client:node.clientWidth
+    }));
+    assert(mobileHero.scroll<=mobileHero.client+2,
+      'growth rings and ten markers should fit portrait hero: '+JSON.stringify(mobileHero));
     await page.setViewportSize({width:1180,height:820});
     const desktopColumns=await page.locator('.manual-book-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
@@ -125,6 +135,9 @@ async function main(){
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--unlock').waitFor();
     assert.equal(await page.locator('.manual-celebration-heading').textContent(),'招式領悟');
+    assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'inscribed');
+    assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),5);
+    assert.equal(await page.locator('.manual-hero-step.is-learned').count(),2);
     await page.locator('[data-manual-celebration-dismiss]').click();
     // Direct fixture update simulates a settled PvE drop delivered through the
     // server state endpoint, without letting the client award its own scripture.
@@ -137,6 +150,29 @@ async function main(){
     await page.locator('[data-manual-refresh]').click();
     assert.equal(await page.locator('.manual-celebration-backdrop').count(),0,
       'refreshing identical data cannot replay a reward');
+    // A higher manual level changes its permanent visuals even before another
+    // skill unlock. Cosmetic tiers never change the existing loadout.
+    const activeDeck=await page.locator('[data-loadout-select="1"]').getAttribute('class');
+    db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=700;
+    await page.locator('[data-manual-refresh]').click();
+    await page.locator('.manual-celebration--manual-upgrade').waitFor();
+    assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'surge');
+    assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),8);
+    assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-art-zone').getAttribute('data-manual-stage'),'surge');
+    assert.equal(await page.locator('[data-loadout-select="1"]').getAttribute('class'),activeDeck);
+    await page.locator('[data-manual-celebration-dismiss]').click();
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await page.locator('.manual-hero-qi-orbit').evaluate(node=>
+      getComputedStyle(node).animationName),'none',
+      'reduced motion must disable looping aura animation');
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=1080;
+    await page.locator('[data-manual-refresh]').click();
+    await page.locator('.manual-celebration--unlock').waitFor();
+    assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'complete');
+    assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),10);
+    assert.equal(await page.locator('.manual-hero-step.is-learned').count(),3);
+    await page.locator('[data-manual-celebration-dismiss]').click();
     assert.deepEqual(errors,[]);
     console.log('Manual artwork and deck stable; owned-only filter, card hero focus, mobile and desktop gallery verified.');
   }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
