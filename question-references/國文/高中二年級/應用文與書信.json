@@ -1,0 +1,66 @@
+{
+  "units": [
+    "語文應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-應用文與書信-1",
+      "source": "大考中心114學年度學測國綜第5題，參考其閱讀／語文評量方式重新命題；本題為自編參考題",
+      "design": "根據收件者需求評估主旨的資訊性與正式程度",
+      "question": {
+        "q": "學生發現學校寄發的英文成績單把班級誤植為另一班，準備寄電子郵件給教務處申請更正。下列哪個郵件主旨最清楚、得體？",
+        "correct": "申請更正成績單班級資料──二年甲班學生",
+        "wrong": [
+          "拜託一定要快點！！！",
+          "有事要說，請點進來看",
+          "關於最近生活的幾個想法"
+        ],
+        "exp": "給行政單位的電子郵件應清楚交代申請事項與相關身分，使收件者能迅速辨識處理目的；其他選項過度情緒化或模糊。",
+        "subject": "國文",
+        "sub_topic": "應用文與書信",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-應用文與書信",
+        "template_id": "chinese-reference-高中二年級-應用文與書信-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-應用文與書信-2",
+      "source": "大考中心114學年度學測國綜第5題，參考其閱讀／語文評量方式重新命題；本題為自編參考題",
+      "design": "從邀請函的溝通目的檢查必要訊息",
+      "question": {
+        "q": "讀書會準備正式邀請地方文史工作者到校分享，信中已有活動目的、日期、時間與地點。還應補充哪項資訊，最方便受邀者安排並回覆？",
+        "correct": "回覆是否出席的期限與聯絡方式",
+        "wrong": [
+          "全校學生歷次段考的總成績",
+          "學校所有社團去年的活動經費",
+          "讀書會每位成員最愛的飲料"
+        ],
+        "exp": "受邀者需要知道何時及如何確認是否出席，主辦單位才能安排後續流程；其他資料與回覆邀請無直接關係。",
+        "subject": "國文",
+        "sub_topic": "應用文與書信",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-應用文與書信",
+        "template_id": "chinese-reference-高中二年級-應用文與書信-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
