@@ -477,6 +477,12 @@ function boot(){
     }
   });
   window.addEventListener('xiuxian:manual-loot',()=>{if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:manual-battle-settled',event=>{
+    if(event.detail?.uid!==getMainUser()?.uid)return;
+    // The battle view may switch pages after closing its result overlay.
+    // Refresh after navigation rather than rendering stale pre-battle mastery.
+    setTimeout(()=>{if(visible())void load({force:true});},0);
+  });
   if(visible())void load({force:true});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
