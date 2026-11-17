@@ -127,6 +127,25 @@
 #tactical-combat .tc-manual-recap--empty p{
   color:#b9c7b5;font-size:12px;line-height:1.65;margin:0;
 }
+#tactical-combat .tc-manual-recap-sync-error{
+  margin:0;font-size:11px;color:#efc889;line-height:1.55;
+}
+#tactical-combat .tc-manual-recap-card .tc-manual-recap-exp{
+  animation:tc-manual-exp-reveal .68s cubic-bezier(.18,.9,.22,1.1) both;
+}
+#tactical-combat .tc-manual-recap-card .tc-manual-recap-track>span{
+  transform-origin:left center;
+  animation:tc-manual-bar-reveal .65s ease-out both;
+}
+@keyframes tc-manual-exp-reveal{
+  0%{opacity:.35;transform:scale(.85)}
+  65%{opacity:1;transform:scale(1.07)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes tc-manual-bar-reveal{
+  from{transform:scaleX(.6);opacity:.5}
+  to{transform:scaleX(1);opacity:1}
+}
 #tactical-combat .tc-manual-recap-retry{
   min-height:38px;justify-self:start;font-size:11px;
 }
@@ -141,4 +160,8 @@
 }
 @media(prefers-reduced-motion:reduce){
   #tactical-combat .tc-manual-recap-track>span{transition:none}
+  #tactical-combat .tc-manual-recap-card .tc-manual-recap-exp,
+  #tactical-combat .tc-manual-recap-card .tc-manual-recap-track>span{
+    animation:none!important;transition:none!important;
+  }
 }
