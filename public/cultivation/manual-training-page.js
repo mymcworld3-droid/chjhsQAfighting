@@ -312,7 +312,9 @@ function boot(){
     if(button.dataset.manualPickSlot!==undefined){
       const slot=Number(button.dataset.manualPickSlot);
       if(Number.isInteger(slot)&&slot>=0&&slot<=2&&current){
-        pickerSlot=pickerSlot===slot?null:slot;
+        const filled=current.loadouts?.[selectedLoadout]?.skillIds?.length||0;
+        const targetSlot=Math.min(slot,filled);
+        pickerSlot=pickerSlot===targetSlot?null:targetSlot;
         paint();
         if(pickerSlot!==null){
           requestAnimationFrame(()=>{
