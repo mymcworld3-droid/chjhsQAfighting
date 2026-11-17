@@ -1,0 +1,66 @@
+{
+  "units": [
+    "唐宋古文與議論"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-修辭與文史背景-1",
+      "source": "大考中心114學年度學測國綜第5題，參考原題評量方向重新設計；本題為自編參考題",
+      "design": "結合對偶語句和後文的士人責任判斷，不將克制私情誤作冷漠。",
+      "question": {
+        "q": "范仲淹〈岳陽樓記〉說：「不以物喜，不以己悲。」下列哪項解讀最能契合此句與作者所強調的理想人格？",
+        "correct": "不因外在景況或個人得失而任意動搖志節",
+        "wrong": [
+          "認為面對他人的困境時應完全沒有感受",
+          "要求讀書人不再關心任何公共事務",
+          "主張只要身在優美景色中，就必須表現悲傷"
+        ],
+        "exp": "『不以物喜，不以己悲』以兩種情況對舉，凸顯超越物境與一己得失的胸襟；與後文關懷天下的士人理想相連。",
+        "subject": "國文",
+        "sub_topic": "修辭與文史背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-2",
+            "name": "文言文"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-修辭與文史背景",
+        "template_id": "chinese-reference-高中二年級-修辭與文史背景-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-修辭與文史背景-2",
+      "source": "大考中心114學年度學測國綜第5題，參考原題評量方向重新設計；本題為自編參考題",
+      "design": "把文句的轉折手法放回文章旨趣，而非只憑字面找酒。",
+      "question": {
+        "q": "歐陽修〈醉翁亭記〉寫道：「醉翁之意不在酒，在乎山水之間也。」如果據此評析文章的表達方式，哪個判斷最恰當？",
+        "correct": "先提出看似與飲酒相關的話題，再轉明真正寄意山水之樂",
+        "wrong": [
+          "以『酒』為文章唯一主題，否定其他景物的存在",
+          "運用精確數據列出當時滁州的所有山峰高度",
+          "說明作者認為山水遊賞與心情感受完全無關"
+        ],
+        "exp": "『不在酒』『在乎山水』形成語意轉折，將表面的飲酒話題引至真正寄託；其後篇章再展開山水與眾人同遊之樂。",
+        "subject": "國文",
+        "sub_topic": "修辭與文史背景",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-修辭與文史背景",
+        "template_id": "chinese-reference-高中二年級-修辭與文史背景-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
