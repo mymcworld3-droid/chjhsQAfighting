@@ -1,0 +1,66 @@
+{
+  "units": [
+    "太空與天文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-human-高中一年級-恆星與星系-1",
+      "source": "大考中心109學年度學測自然科第62題，依原題觀念改寫",
+      "design": "利用天體尺度區分恆星、星系與星系團。",
+      "question": {
+        "q": "下列哪一個天體系統通常包含大量恆星、星際氣體及塵埃？",
+        "correct": "星系",
+        "wrong": [
+          "單一行星",
+          "單一衛星",
+          "單顆流星體"
+        ],
+        "exp": "星系由大量恆星和星際物質構成，尺度遠大於單顆恆星、行星或衛星。",
+        "subject": "地球科學",
+        "sub_topic": "恆星與星系",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-恆星與星系-1",
+        "template_id": "earth-human-高中一年級-恆星與星系-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-human-高中一年級-恆星與星系-2",
+      "source": "大考中心109學年度學測自然科第68題，依原題觀念改寫",
+      "design": "把射電訊號重現週期與恆星日的長度連結。",
+      "question": {
+        "q": "天文學家記錄一射電訊號，其強度極大值每隔約 23 小時 56 分鐘出現一次。這表示訊號來源較可能具備哪一特性？",
+        "correct": "方向相對背景恆星大致固定",
+        "wrong": [
+          "必與地面鐘錶完全同步",
+          "必由月球發出",
+          "每日精確晚 12 小時才出現"
+        ],
+        "exp": "23 小時 56 分鐘接近地球相對恆星自轉一圈的時間；天球上固定方向的天體會隨此週期重回相近方位。",
+        "subject": "地球科學",
+        "sub_topic": "恆星與星系",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-恆星與星系-2",
+        "template_id": "earth-human-高中一年級-恆星與星系-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地質與地形"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-human-高中一年級-地震與火山-1",
+      "source": "大考中心109學年度學測自然科第23題，依原題觀念改寫",
+      "design": "比較 P 與 S 震波的傳播速度，避免把振幅視為先到的依據。",
+      "question": {
+        "q": "同一地震的 P 波與 S 波傳到同一座地震測站，一般哪一種先到達？",
+        "correct": "P 波",
+        "wrong": [
+          "S 波",
+          "必定同時到達",
+          "一定由波幅較大的波先到"
+        ],
+        "exp": "P 波通常傳播得比 S 波快，因此 P 波先抵達；兩者到時差可估計震源距離。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-地震與火山-1",
+        "template_id": "earth-human-高中一年級-地震與火山-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-human-高中一年級-地震與火山-2",
+      "source": "大考中心112學年度學測自然科第9題，依原題觀念改寫",
+      "design": "將環太平洋地震帶與板塊交界的地質作用連結。",
+      "question": {
+        "q": "環太平洋地震帶地震頻繁的主要原因為何？",
+        "correct": "附近存在多個活動的板塊邊界",
+        "wrong": [
+          "全球地震都只發生在赤道",
+          "此區所有板塊完全靜止",
+          "地震都由每天潮汐直接造成"
+        ],
+        "exp": "環太平洋地帶有隱沒、聚合及轉形板塊邊界，板塊運動累積應力後釋放，造成地震。",
+        "subject": "地球科學",
+        "sub_topic": "地震與火山",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-地震與火山-2",
+        "template_id": "earth-human-高中一年級-地震與火山-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

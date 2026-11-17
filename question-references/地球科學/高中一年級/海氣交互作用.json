@@ -1,0 +1,66 @@
+{
+  "units": [
+    "海洋"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-human-高中一年級-海氣交互作用-1",
+      "source": "大考中心108學年度學測自然科第2題，依原題觀念改寫",
+      "design": "以聖嬰的海溫異常及大氣環流聯動辨別海氣作用。",
+      "question": {
+        "q": "聖嬰現象發生時，赤道中、東太平洋海表溫度通常有何變化？",
+        "correct": "比氣候平均值偏暖",
+        "wrong": [
+          "必比氣候平均值偏冷",
+          "全球所有海域都等幅降溫",
+          "海表溫度不會改變"
+        ],
+        "exp": "聖嬰事件的重要特徵是赤道中、東太平洋海面異常偏暖，並伴隨貿易風與大氣環流調整。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-海氣交互作用-1",
+        "template_id": "earth-human-高中一年級-海氣交互作用-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-human-高中一年級-海氣交互作用-2",
+      "source": "大考中心113學年度學測自然科第29題，依原題觀念改寫",
+      "design": "把風浪與海洋大尺度循環的時間尺度比較，避免只按波高排序。",
+      "question": {
+        "q": "若比較單次海面風浪、單次湧浪與全球深層溫鹽環流，哪一種典型時間尺度最長？",
+        "correct": "全球深層溫鹽環流",
+        "wrong": [
+          "單次海面風浪",
+          "單次湧浪",
+          "單次碎波"
+        ],
+        "exp": "溫鹽環流包含深層海水的緩慢循環，尺度可達數百年；風浪與湧浪的週期遠短。",
+        "subject": "地球科學",
+        "sub_topic": "海氣交互作用",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-海氣交互作用-2",
+        "template_id": "earth-human-高中一年級-海氣交互作用-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球系統"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-human-高中一年級-板塊運動-1",
+      "source": "大考中心108學年度學測自然科第44題，依原題觀念改寫",
+      "design": "利用 GPS 地表位置長期變化推論斷層兩側相對運動。",
+      "question": {
+        "q": "跨越活動斷層的兩個 GPS 測站，長期顯示彼此距離逐漸改變。這項資料最直接支持哪一推論？",
+        "correct": "地殼正在產生相對變形",
+        "wrong": [
+          "可精確預報下一次地震的日期",
+          "海水鹽度正在增加",
+          "地球自轉已停止"
+        ],
+        "exp": "GPS 長期位移可觀測板塊或斷層兩側相對運動與變形，但不能單憑此精確預報地震時間。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-板塊運動-1",
+        "template_id": "earth-human-高中一年級-板塊運動-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-human-高中一年級-板塊運動-2",
+      "source": "大考中心112學年度學測自然科第9題，依原題觀念改寫",
+      "design": "以隱沒帶形成的震源深度序列判斷板塊運動。",
+      "question": {
+        "q": "海洋板塊在聚合邊界向另一板塊下方隱沒，經常伴隨哪種地震分布？",
+        "correct": "由淺到深、沿傾斜帶排列的震源",
+        "wrong": [
+          "所有震源恰在海平面",
+          "完全不發生地震",
+          "地震只分布在赤道上"
+        ],
+        "exp": "隱沒板塊沿傾斜面深入地函，常形成由淺到深的地震帶。",
+        "subject": "地球科學",
+        "sub_topic": "板塊運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-板塊運動-2",
+        "template_id": "earth-human-高中一年級-板塊運動-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

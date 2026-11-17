@@ -1,0 +1,66 @@
+{
+  "units": [
+    "太空與天文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-human-高中一年級-日地月運動-1",
+      "source": "大考中心114學年度學測自然科第12題，依原題觀念改寫",
+      "design": "由三天體遮蔽順序判斷日食月相，不能見到新月就斷言日食。",
+      "question": {
+        "q": "發生日食時，月球大致位於地球與太陽之間。此時月相應接近哪一種？",
+        "correct": "朔（新月）",
+        "wrong": [
+          "望（滿月）",
+          "上弦月",
+          "下弦月"
+        ],
+        "exp": "月球擋在太陽與地球之間，觀測到的月相是朔；但月球軌道傾斜，所以不是每個朔都發生日食。",
+        "subject": "地球科學",
+        "sub_topic": "日地月運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-日地月運動-1",
+        "template_id": "earth-human-高中一年級-日地月運動-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-human-高中一年級-日地月運動-2",
+      "source": "大考中心110學年度學測自然科第20題，依原題觀念改寫",
+      "design": "以北極星的高度近似等於觀測地北緯，將幾何觀測轉成緯度。",
+      "question": {
+        "q": "一位觀測者在北半球見北極星仰角約為 $35^\\circ$，其所在地緯度大致為何？",
+        "correct": "北緯 $35^\\circ$",
+        "wrong": [
+          "南緯 $35^\\circ$",
+          "北緯 $55^\\circ$",
+          "赤道"
+        ],
+        "exp": "北極星大致位於北天極，北天極的仰角近似觀測地的北緯，故約在北緯 35 度。",
+        "subject": "地球科學",
+        "sub_topic": "日地月運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-日地月運動-2",
+        "template_id": "earth-human-高中一年級-日地月運動-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

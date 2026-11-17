@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地質與地形"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-human-高中一年級-地質時間與地層-1",
+      "source": "大考中心110學年度學測自然科第67題，依原題觀念改寫",
+      "design": "先確認地層未倒轉，再用地層疊置律判斷先後。",
+      "question": {
+        "q": "某沉積岩層未受倒轉或侵蝕，自下而上為礫岩、砂岩、頁岩。哪一層形成時間最早？",
+        "correct": "礫岩",
+        "wrong": [
+          "砂岩",
+          "頁岩",
+          "三層同時形成"
+        ],
+        "exp": "地層疊置律指出未受擾動沉積層下老上新，最下方的礫岩最早形成。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-地質時間與地層-1",
+        "template_id": "earth-human-高中一年級-地質時間與地層-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-human-高中一年級-地質時間與地層-2",
+      "source": "大考中心110學年度學測自然科第18題，依原題觀念改寫",
+      "design": "用交切關係比較岩脈與圍岩的相對年代。",
+      "question": {
+        "q": "火成岩岩脈切穿已存在的三層沉積岩。哪一敘述符合交切關係定律？",
+        "correct": "岩脈形成晚於被它切穿的岩層",
+        "wrong": [
+          "岩脈一定比被切穿的岩層更早",
+          "四者一定同時形成",
+          "無法比較相對年代"
+        ],
+        "exp": "地質構造或岩脈若切穿其他岩層，表示它形成於被切穿的岩層之後。",
+        "subject": "地球科學",
+        "sub_topic": "地質時間與地層",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-human-高中一年級-地質時間與地層-2",
+        "template_id": "earth-human-高中一年級-地質時間與地層-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
