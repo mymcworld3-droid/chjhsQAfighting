@@ -1,0 +1,268 @@
+/* Stamina manual cultivation, phase 1: featured book + three-skill journey.
+ * Scoped to the manual page; the existing library and loadout remain intact.
+ * Only a background layer animates, never the book or skill artwork itself.
+ */
+#manual-training-root .manual-hero{
+  --mh-accent:#90ddd2;--mh-soft:#173a37;--mh-line:rgba(140,224,207,.48);
+  --mh-glow:rgba(55,190,172,.22);--mh-warm:#e5c88a;
+  position:relative;isolation:isolate;overflow:hidden;margin:0 0 16px;
+  padding:clamp(14px,2.4vw,24px);border:1px solid var(--mh-line);
+  border-radius:18px;color:#f4f1e7;
+  background:radial-gradient(ellipse 70% 85% at 14% 44%,var(--mh-glow),transparent 86%),
+    linear-gradient(140deg,#24352c 0%,#15251f 56%,#101b17 100%);
+  box-shadow:0 14px 28px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.07);
+}
+#manual-training-root .manual-hero--body{
+  --mh-accent:#efc178;--mh-soft:#43301c;--mh-line:rgba(231,176,94,.5);
+  --mh-glow:rgba(219,141,44,.17);--mh-warm:#ffda9a;
+}
+#manual-training-root .manual-hero::before{
+  content:"";position:absolute;inset:-15%;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 31% 46% at 27% 47%,var(--mh-glow),transparent 100%);
+  opacity:.65;animation:manual-hero-breath 7s ease-in-out infinite alternate;
+}
+#manual-training-root .manual-hero::after{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  opacity:.18;background:repeating-linear-gradient(135deg,transparent 0 47px,
+    rgba(255,255,255,.055) 48px,transparent 49px 96px);
+}
+#manual-training-root .manual-hero>*{position:relative;z-index:1}
+#manual-training-root .manual-hero-top{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  column-gap:18px;row-gap:10px;margin:0 0 16px
+}
+#manual-training-root .manual-hero-kicker,
+#manual-training-root .manual-hero-eyebrow{
+  display:block;font-size:11px;letter-spacing:.12em;color:var(--mh-accent);
+  font-weight:750
+}
+#manual-training-root .manual-hero-brand h2{
+  margin:3px 0 0;color:#f7e6bf;font-size:clamp(20px,2.4vw,27px);
+  line-height:1.25;font-weight:800
+}
+#manual-training-root .manual-hero-schools{display:flex;gap:7px;align-items:center}
+#manual-training-root .manual-hero-school{
+  min-height:44px;min-width:92px;padding:9px 13px;border:1px solid #9eab9b58;
+  border-radius:10px;background:#121f1aa8;color:#cfdbcf;font-weight:750;
+  display:flex;align-items:center;justify-content:center;gap:8px
+}
+#manual-training-root .manual-hero-school.is-selected{
+  background:linear-gradient(120deg,#30513f,#214130);border-color:#a3dbab;
+  color:#faf7df;box-shadow:inset 0 0 0 1px #a3dbab35
+}
+#manual-training-root .manual-hero-schools [data-manual-school="body"].is-selected{
+  background:linear-gradient(120deg,#55402c,#3c3024);border-color:#deb87d
+}
+#manual-training-root .manual-hero-roster{
+  display:flex;align-items:center;gap:7px;overflow-x:auto;padding:2px 1px 11px;
+  overscroll-behavior-inline:contain;scrollbar-width:thin;
+}
+#manual-training-root .manual-hero-book-tab{
+  display:flex;align-items:center;gap:7px;flex:0 0 auto;min-height:42px;
+  padding:9px 12px;border-radius:10px;border:1px solid #657d6880;
+  background:#14251dc9;color:#c0cfc0;font-weight:650;font-size:13px;
+  white-space:nowrap
+}
+#manual-training-root .manual-hero-book-tab.is-current{
+  border-color:var(--mh-accent);background:var(--mh-soft);color:#fff3d4;
+  box-shadow:inset 0 -2px var(--mh-accent)
+}
+#manual-training-root .manual-hero-book-tab small{font-size:11px;opacity:.75}
+#manual-training-root .manual-hero-tab-mark{
+  width:6px;height:6px;border:1px solid currentColor;transform:rotate(45deg);
+  background:currentColor;opacity:.75
+}
+#manual-training-root .manual-hero-main{
+  display:grid;grid-template-columns:minmax(142px,194px) minmax(0,1fr);
+  gap:clamp(16px,2.6vw,30px);align-items:center;min-width:0
+}
+#manual-training-root .manual-hero-art-stage{
+  min-width:0;min-height:215px;position:relative;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:14px 9px 12px;
+  border-radius:14px;background:radial-gradient(ellipse at 50% 60%,
+    var(--mh-glow) 0%,rgba(12,23,19,.42) 67%,rgba(8,17,15,.58) 100%);
+  border:1px solid var(--mh-line)
+}
+#manual-training-root .manual-hero-art-halo{
+  position:absolute;inset:20% 7% 17%;border:1px solid var(--mh-line);border-radius:50%;
+  box-shadow:0 0 32px var(--mh-glow),inset 0 0 28px var(--mh-glow);
+  transform:rotate(-16deg);pointer-events:none
+}
+#manual-training-root .manual-hero-cover{
+  width:100%;max-width:165px;height:174px;object-fit:contain;
+  position:relative;z-index:1;filter:drop-shadow(0 9px 11px #0008);
+}
+#manual-training-root .manual-hero-cover-fallback{
+  display:grid;place-items:center;width:110px;height:145px;
+  border:2px solid var(--mh-accent);border-radius:8px;
+  background:var(--mh-soft);font-size:64px;color:var(--mh-warm)
+}
+#manual-training-root .manual-hero-art-caption{
+  z-index:1;font-size:11px;color:#f0deba;letter-spacing:.07em;
+  padding:4px 9px;background:#0a1511bd;border:1px solid var(--mh-line);
+  border-radius:20px;margin-top:7px
+}
+#manual-training-root .manual-hero-details{min-width:0;display:grid;gap:15px}
+#manual-training-root .manual-hero-title-row{
+  display:flex;justify-content:space-between;align-items:start;gap:12px;min-width:0
+}
+#manual-training-root .manual-hero-title-row h3{
+  margin:5px 0 0;font-size:clamp(23px,3.2vw,35px);line-height:1.25;
+  color:#ffefc8;font-weight:850;overflow-wrap:anywhere
+}
+#manual-training-root .manual-hero-level{
+  display:flex;flex-direction:column;align-items:end;gap:3px;flex:0 0 auto
+}
+#manual-training-root .manual-hero-level small{color:#bacbb9;font-size:11px}
+#manual-training-root .manual-hero-level b{
+  color:var(--mh-warm);font-size:clamp(22px,3.1vw,32px);
+  line-height:1.1;white-space:nowrap;font-variant-numeric:tabular-nums
+}
+#manual-training-root .manual-hero-progress-head{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 9px;
+  margin:0 0 7px;font-size:12px
+}
+#manual-training-root .manual-hero-progress-head strong{color:#e9e2c6}
+#manual-training-root .manual-hero-progress-head span{
+  color:var(--mh-accent);font-variant-numeric:tabular-nums
+}
+#manual-training-root .manual-hero-track{
+  height:13px;border-radius:99px;border:1px solid #71837170;
+  padding:2px;background:#07120e;overflow:hidden;box-shadow:inset 0 1px 4px #0009
+}
+#manual-training-root .manual-hero-progress{
+  display:block;height:100%;min-width:0;border-radius:99px;
+  background:linear-gradient(90deg,#398668 0%,var(--mh-accent) 72%,#fff0c0 100%);
+  box-shadow:0 0 10px var(--mh-glow);transition:width .55s ease-out
+}
+#manual-training-root .manual-hero-goal{
+  display:flex;align-items:center;gap:10px;padding:11px 12px;
+  border:1px solid #ac985b70;border-radius:10px;background:#2d2a1dcc;
+}
+#manual-training-root .manual-hero-goal-symbol{font-size:30px;color:#edd295;line-height:1}
+#manual-training-root .manual-hero-goal strong,
+#manual-training-root .manual-hero-goal small{display:block}
+#manual-training-root .manual-hero-goal strong{font-size:14px;color:#fae4b3}
+#manual-training-root .manual-hero-goal small{margin-top:3px;font-size:11px;color:#c5cbb8;line-height:1.55}
+#manual-training-root .manual-hero-actions{
+  display:flex;align-items:center;flex-wrap:wrap;gap:10px
+}
+#manual-training-root .manual-hero-upgrade{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  gap:7px;min-height:44px;min-width:160px;padding:10px 14px;
+  font-weight:800;font-size:14px;color:#192219;
+  background:linear-gradient(130deg,#f9e5ac,#d1b270);
+  border:1px solid #ffe8b6;border-radius:10px;
+  box-shadow:0 3px 13px rgba(190,149,72,.18)
+}
+#manual-training-root .manual-hero-upgrade span{font-size:11px;opacity:.82}
+#manual-training-root .manual-hero-upgrade:disabled{
+  background:#41453a;color:#d3c4a8;border-color:#77765f;box-shadow:none
+}
+#manual-training-root .manual-hero-max-level{font-weight:750;color:var(--mh-warm);font-size:13px}
+#manual-training-root .manual-hero-tip{font-size:11px;color:#aebfaf;line-height:1.5}
+#manual-training-root .manual-hero-path{
+  margin-top:18px;padding-top:16px;border-top:1px solid var(--mh-line)
+}
+#manual-training-root .manual-hero-path-heading{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:7px;flex-wrap:wrap;margin-bottom:12px
+}
+#manual-training-root .manual-hero-path-heading strong{
+  font-size:16px;color:#f6e2b3
+}
+#manual-training-root .manual-hero-path-heading small{
+  font-size:11px;color:#b4c6b5
+}
+#manual-training-root .manual-hero-path-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px
+}
+#manual-training-root .manual-hero-step{
+  min-width:0;min-height:172px;position:relative;display:flex;flex-direction:column;
+  align-items:center;gap:5px;padding:12px 8px 10px;text-align:center;
+  border:1px solid #60776883;border-radius:12px;
+  background:linear-gradient(170deg,#284032ac,#111f19cc);
+  color:#e8e5d6;transition:border-color .16s ease,background .16s ease;
+}
+#manual-training-root .manual-hero-step.is-unlocked{border-color:var(--mh-line)}
+#manual-training-root .manual-hero-step.is-next{
+  border-color:#d5b478;background:linear-gradient(170deg,#403a27dc,#17231b)
+}
+#manual-training-root .manual-hero-node{
+  display:grid;place-items:center;width:61px;height:61px;flex:none;
+  border-radius:12px;border:1px solid var(--mh-line);
+  overflow:hidden;background:var(--mh-soft);box-shadow:inset 0 0 14px #0005
+}
+#manual-training-root .manual-hero-node img{width:100%;height:100%;object-fit:cover}
+#manual-training-root .manual-hero-node-tier{font-size:10px;color:var(--mh-accent)}
+#manual-training-root .manual-hero-step strong{
+  font-size:13px;line-height:1.3;color:#f5e8c4;overflow-wrap:anywhere
+}
+#manual-training-root .manual-hero-step small{
+  font-size:11px;line-height:1.35;color:#bfd0c0;overflow-wrap:anywhere
+}
+#manual-training-root .manual-hero-node-status{
+  font-size:10px;margin-top:auto;color:var(--mh-accent);font-weight:800
+}
+#manual-training-root .manual-hero-step.is-locked .manual-hero-node img{
+  filter:grayscale(1);opacity:.57
+}
+#manual-training-root .manual-hero-step.is-locked .manual-hero-node-status{color:#c3b59b}
+#manual-training-root .manual-hero-step.is-next .manual-hero-node-status{color:#f6d392}
+#manual-training-root .manual-hero-empty-state{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:30px 12px 34px;text-align:center
+}
+#manual-training-root .manual-hero-empty-state i{
+  font-size:48px;color:var(--mh-accent)
+}
+#manual-training-root .manual-hero-empty-state strong{font-size:19px;color:#ffe9b9}
+#manual-training-root .manual-hero-empty-state p{
+  margin:0;color:#c3d0c1;font-size:13px;line-height:1.6
+}
+#manual-training-root .manual-hero button:focus-visible{
+  outline:2px solid #ffeca4;outline-offset:2px
+}
+@media(hover:hover){
+  #manual-training-root .manual-hero-book-tab:hover,
+  #manual-training-root .manual-hero-step:hover{border-color:var(--mh-accent)}
+  #manual-training-root .manual-hero-upgrade:not(:disabled):hover{filter:brightness(1.09)}
+}
+@keyframes manual-hero-breath{from{opacity:.28}to{opacity:.78}}
+@media(max-width:700px){
+  #manual-training-root .manual-hero-main{
+    grid-template-columns:124px minmax(0,1fr);gap:12px;align-items:start
+  }
+  #manual-training-root .manual-hero-art-stage{min-height:172px;padding:8px 5px}
+  #manual-training-root .manual-hero-cover{height:130px}
+  #manual-training-root .manual-hero-title-row{flex-wrap:wrap;gap:5px}
+  #manual-training-root .manual-hero-title-row h3{font-size:22px}
+  #manual-training-root .manual-hero-level{align-items:start}
+  #manual-training-root .manual-hero-level b{font-size:24px}
+  #manual-training-root .manual-hero-details{gap:11px}
+  #manual-training-root .manual-hero-tip{display:none}
+  #manual-training-root .manual-hero-path-grid{gap:6px}
+  #manual-training-root .manual-hero-step{padding:10px 5px;min-height:162px}
+  #manual-training-root .manual-hero-node{width:52px;height:52px}
+}
+@media(max-width:440px){
+  #manual-training-root .manual-hero{padding:13px 11px}
+  #manual-training-root .manual-hero-school{flex:1;min-width:0}
+  #manual-training-root .manual-hero-schools{width:100%}
+  #manual-training-root .manual-hero-main{grid-template-columns:96px minmax(0,1fr);gap:10px}
+  #manual-training-root .manual-hero-art-stage{min-height:145px}
+  #manual-training-root .manual-hero-cover{height:110px}
+  #manual-training-root .manual-hero-art-caption{font-size:10px;padding:4px 5px}
+  #manual-training-root .manual-hero-title-row h3{font-size:20px}
+  #manual-training-root .manual-hero-level b{font-size:22px}
+  #manual-training-root .manual-hero-upgrade{width:100%;min-width:0}
+  #manual-training-root .manual-hero-path-grid{
+    grid-template-columns:repeat(3,minmax(102px,1fr));overflow-x:auto;
+    padding-bottom:7px;scrollbar-width:thin;overscroll-behavior-inline:contain
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-hero::before{animation:none}
+  #manual-training-root .manual-hero-progress,
+  #manual-training-root .manual-hero-step{transition:none}
+}
