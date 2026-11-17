@@ -1,0 +1,54 @@
+{
+  "units": [
+    "程式設計應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中一年級-函式與模組-1",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「函式與模組」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "某程式需在十個地方計算「含稅價格＝原價×1.05」，若把公式包裝成可呼叫的函式，主要好處是什麼？",
+        "correct": "同一規則集中維護並能重複使用",
+        "wrong": [
+          "讓程式不再需要任何輸入",
+          "保證所有計算都不用測試",
+          "把每項商品價格強制改成相同數字"
+        ],
+        "exp": "把共通計算抽成函式，可避免散落的重複公式，未來調整稅率較易同步修改。",
+        "subject": "資訊科技",
+        "sub_topic": "函式與模組",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-函式與模組",
+        "template_id": "it-reference-高中一年級-函式與模組-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中一年級-函式與模組-2",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「函式與模組」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "定義函式f(x)回傳x×x+1。呼叫f(3)應得到什麼？",
+        "correct": "10",
+        "wrong": [
+          "9",
+          "7",
+          "4"
+        ],
+        "exp": "將x代入3，計算3×3+1＝10。",
+        "subject": "資訊科技",
+        "sub_topic": "函式與模組",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-函式與模組",
+        "template_id": "it-reference-高中一年級-函式與模組-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

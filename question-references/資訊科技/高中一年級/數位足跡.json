@@ -1,0 +1,54 @@
+{
+  "units": [
+    "網路與資訊安全"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中一年級-數位足跡-1",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「數位足跡」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "學生公開貼文附上學號、每日放學時間及回家路線。最直接的隱私風險是什麼？",
+        "correct": "陌生人可能利用資訊推知身分與活動規律",
+        "wrong": [
+          "公開資訊會自動永久隱藏給陌生人",
+          "一旦貼文，就必定立刻提高學科成績",
+          "學號不可能被其他資訊交叉比對"
+        ],
+        "exp": "多項公開資訊可交叉定位個人及活動模式，應減少不必要的敏感揭露。",
+        "subject": "資訊科技",
+        "sub_topic": "數位足跡",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-數位足跡",
+        "template_id": "it-reference-高中一年級-數位足跡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中一年級-數位足跡-2",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「數位足跡」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "某同學刪除社群動態後，認為任何人都絕不可能再看到先前公開的內容。這個判斷有何問題？",
+        "correct": "內容可能曾被截圖、轉傳或保存，刪除原貼文不一定能清除所有副本",
+        "wrong": [
+          "刪除貼文會使所有截圖立即自動消失",
+          "貼文從未上傳到任何網路設備",
+          "網站上的所有資料都只會存於自己的手機"
+        ],
+        "exp": "公開資料可能已被他人保存或平台備份，數位足跡未必隨單一刪除動作完全消失。",
+        "subject": "資訊科技",
+        "sub_topic": "數位足跡",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-數位足跡",
+        "template_id": "it-reference-高中一年級-數位足跡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

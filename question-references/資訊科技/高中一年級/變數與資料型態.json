@@ -1,0 +1,54 @@
+{
+  "units": [
+    "演算法與程式設計"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中一年級-變數與資料型態-1",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「變數與資料型態」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "程式將字串「12」與字串「3」以字串連接運算子相接，且不做數值轉換，結果為何？",
+        "correct": "「123」",
+        "wrong": [
+          "數值15",
+          "數值36",
+          "字串「9」"
+        ],
+        "exp": "字串連接按順序合併文字，不會自動執行加法或乘法。",
+        "subject": "資訊科技",
+        "sub_topic": "變數與資料型態",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-變數與資料型態",
+        "template_id": "it-reference-高中一年級-變數與資料型態-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中一年級-變數與資料型態-2",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「變數與資料型態」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "某程式要記錄學生「是否已繳交作業」，只需真或假兩種狀態。最合適的資料型態為何？",
+        "correct": "布林值",
+        "wrong": [
+          "長篇文字檔",
+          "二維圖片",
+          "浮點數座標陣列"
+        ],
+        "exp": "布林值用true/false表達二元條件，比其他選項更直接符合需求。",
+        "subject": "資訊科技",
+        "sub_topic": "變數與資料型態",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-變數與資料型態",
+        "template_id": "it-reference-高中一年級-變數與資料型態-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

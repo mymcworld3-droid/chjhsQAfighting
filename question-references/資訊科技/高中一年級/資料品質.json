@@ -1,0 +1,54 @@
+{
+  "units": [
+    "資料處理"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中一年級-資料品質-1",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「資料品質」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "某環境感測器每隔十分鐘記錄室溫，但一整天突然多次出現「-999℃」。分析前最適當的處理是？",
+        "correct": "辨認其是否為錯誤或缺漏代碼，核對設備紀錄",
+        "wrong": [
+          "直接把-999℃視為室溫正常值",
+          "把每筆資料都加上999以求平均",
+          "忽略感測器異常仍宣稱結果絕對可靠"
+        ],
+        "exp": "異常負值可能是缺測碼或故障，需先釐清來源，不能任意當真或盲目修正。",
+        "subject": "資訊科技",
+        "sub_topic": "資料品質",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-資料品質",
+        "template_id": "it-reference-高中一年級-資料品質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中一年級-資料品質-2",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「資料品質」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "學校想推估全校通勤方式，卻只向自行車社的學生發問卷。資料品質主要有何疑慮？",
+        "correct": "樣本偏向自行車使用者，可能不具全校代表性",
+        "wrong": [
+          "只要有問卷就必然沒有任何偏誤",
+          "資料筆數超過十就能保證完全準確",
+          "通勤方式無法用文字選項記錄"
+        ],
+        "exp": "抽樣母群體與研究目標不同，會使通勤比例偏估，應使用更具代表性的抽樣方式。",
+        "subject": "資訊科技",
+        "sub_topic": "資料品質",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-資料品質",
+        "template_id": "it-reference-高中一年級-資料品質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

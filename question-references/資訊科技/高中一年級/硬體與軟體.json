@@ -1,0 +1,54 @@
+{
+  "units": [
+    "計算機系統"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中一年級-硬體與軟體-1",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「硬體與軟體」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "使用者點選鍵盤輸入文字，電腦依文字編輯程式顯示結果。下列何項屬硬體？",
+        "correct": "鍵盤",
+        "wrong": [
+          "文字編輯程式",
+          "作業系統的檔案管理功能",
+          "電腦遊戲的規則程式"
+        ],
+        "exp": "鍵盤是實體輸入設備；編輯器、作業系統功能及遊戲規則均屬軟體或程式邏輯。",
+        "subject": "資訊科技",
+        "sub_topic": "硬體與軟體",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-硬體與軟體",
+        "template_id": "it-reference-高中一年級-硬體與軟體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中一年級-硬體與軟體-2",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「硬體與軟體」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "同學說：「增加電腦主記憶體容量，能讓同時開啟多個程式時較不易因記憶體不足而變慢。」其理由主要為何？",
+        "correct": "RAM可供執行中的程式暫存資料，容量不足會增加儲存體交換需求",
+        "wrong": [
+          "RAM只用於顯示螢幕外殼顏色",
+          "RAM容量可直接決定網路服務商費率",
+          "增加RAM必然讓所有網頁下載速度翻倍"
+        ],
+        "exp": "RAM供作業中程式使用，容量不足可能造成交換至慢速儲存體；但不保證網速提升。",
+        "subject": "資訊科技",
+        "sub_topic": "硬體與軟體",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-硬體與軟體",
+        "template_id": "it-reference-高中一年級-硬體與軟體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

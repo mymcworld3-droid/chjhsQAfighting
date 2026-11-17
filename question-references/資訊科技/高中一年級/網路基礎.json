@@ -1,0 +1,54 @@
+{
+  "units": [
+    "計算機系統"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中一年級-網路基礎-1",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「網路基礎」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "學生能用家中Wi-Fi連接路由器，但無法開啟任何外部網站。這個現象最能說明什麼？",
+        "correct": "成功連上區域無線網路不代表已能通達網際網路",
+        "wrong": [
+          "所有Wi-Fi連線都必然不需要路由器",
+          "只要Wi-Fi圖示出現，外部網站就必然可用",
+          "網站能否連線只由螢幕亮度決定"
+        ],
+        "exp": "Wi-Fi連線是連到區域網路的其中一步，外部網路或DNS等仍可能故障。",
+        "subject": "資訊科技",
+        "sub_topic": "網路基礎",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-網路基礎",
+        "template_id": "it-reference-高中一年級-網路基礎-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中一年級-網路基礎-2",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「網路基礎」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "兩台電腦在同一教室互相分享檔案，不必把資料送到其他國家的主機。這最符合哪種網路概念？",
+        "correct": "區域網路內的資料交換",
+        "wrong": [
+          "必須先透過衛星傳送至太空",
+          "一定需要全球每台電腦都同時在線",
+          "電腦之間不能透過任何網路直接交換資料"
+        ],
+        "exp": "同一場所的設備可以透過區域網路交換資料，並不必然需要遠端雲端主機。",
+        "subject": "資訊科技",
+        "sub_topic": "網路基礎",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-網路基礎",
+        "template_id": "it-reference-高中一年級-網路基礎-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

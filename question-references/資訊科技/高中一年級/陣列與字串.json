@@ -1,0 +1,54 @@
+{
+  "units": [
+    "程式設計應用"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "it-reference-高中一年級-陣列與字串-1",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「陣列與字串」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "給定陣列A＝[4,7,2,9]，索引從0開始。A[2]的值為何？",
+        "correct": "2",
+        "wrong": [
+          "4",
+          "7",
+          "9"
+        ],
+        "exp": "索引0、1、2、3依次對應4、7、2、9，因此A[2]＝2。",
+        "subject": "資訊科技",
+        "sub_topic": "陣列與字串",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-陣列與字串",
+        "template_id": "it-reference-高中一年級-陣列與字串-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "it-reference-高中一年級-陣列與字串-2",
+      "source": "臺北市科技領域高中資訊科技教學綱要及APCS程式識讀的評量取向；依課綱重新命題，非歷屆原題",
+      "design": "針對「陣列與字串」設計兩種不同情境，避免單純換數字或跨出課綱。",
+      "question": {
+        "q": "字串s＝「ABBA」，要統計字元「B」出現次數，應得到多少？",
+        "correct": "2",
+        "wrong": [
+          "1",
+          "3",
+          "4"
+        ],
+        "exp": "由左到右四個字元依序A、B、B、A，B出現兩次。",
+        "subject": "資訊科技",
+        "sub_topic": "陣列與字串",
+        "knowledge_points": [],
+        "concept_id": "it-高中一年級-陣列與字串",
+        "template_id": "it-reference-高中一年級-陣列與字串-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
