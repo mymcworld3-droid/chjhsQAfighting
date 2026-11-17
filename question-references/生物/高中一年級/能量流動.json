@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物體的能量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-能量流動-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「能量流動」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "草地生態系中，草固定了大量太陽能，草食動物僅獲得其中一部分。最主要原因為何？",
+        "correct": "能量在生產者自身呼吸及各營養階層活動中散失為熱",
+        "wrong": [
+          "能量在食物鏈中會逐級憑空增加",
+          "每一階層都能完整獲得前一階層所有能量",
+          "熱量從來不會從生物體散失"
+        ],
+        "exp": "能量沿營養階層傳遞效率有限，部分用於代謝並以熱散失。",
+        "subject": "生物",
+        "sub_topic": "能量流動",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-能量流動",
+        "template_id": "bio-ref-g1-能量流動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-能量流動-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「能量流動」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "某生態系的生產者可利用能量為10000 kJ，若假設每層約10%轉移至下一營養階層，第二級消費者約可獲多少能量？",
+        "correct": "100 kJ",
+        "wrong": [
+          "1000 kJ",
+          "10000 kJ",
+          "1 kJ"
+        ],
+        "exp": "初級消費者約1000 kJ，第二級消費者約100 kJ；題目已明示10%假設。",
+        "subject": "生物",
+        "sub_topic": "能量流動",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-能量流動",
+        "template_id": "bio-ref-g1-能量流動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

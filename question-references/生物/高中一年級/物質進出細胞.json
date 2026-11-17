@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生命的特性與細胞"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-物質進出細胞-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「物質進出細胞」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "紅血球放入低張溶液後可能膨脹。這主要因水分子如何移動？",
+        "correct": "經滲透作用，淨移動進入細胞",
+        "wrong": [
+          "所有水分只會由細胞內向外移動",
+          "紅血球主動把溶質全部排入水中",
+          "細胞膜完全不容許水分子通過"
+        ],
+        "exp": "低張外液溶質濃度低，水向細胞內淨流入，動物細胞可能脹破。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "bio-ref-g1-物質進出細胞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-物質進出細胞-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「物質進出細胞」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "某物質由細胞膜高濃度側向低濃度側移動，需通道蛋白協助且未直接消耗ATP。最適合描述為何種運輸？",
+        "correct": "促進性擴散",
+        "wrong": [
+          "主動運輸，必定逆濃度梯度",
+          "胞吞作用，必須形成囊泡",
+          "DNA複製作用"
+        ],
+        "exp": "通道蛋白協助順梯度移動且不直接消耗ATP，是促進性擴散。",
+        "subject": "生物",
+        "sub_topic": "物質進出細胞",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-物質進出細胞",
+        "template_id": "bio-ref-g1-物質進出細胞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

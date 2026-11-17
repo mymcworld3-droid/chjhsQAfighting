@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物體的能量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-酵素與代謝-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「酵素與代謝」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "某酵素在37°C反應速率較高，升至90°C後活性大幅降低。若酵素蛋白質結構受高溫破壞，主要原因為何？",
+        "correct": "活性部位的立體構形改變，難以正常與受質結合",
+        "wrong": [
+          "高溫必定把所有受質轉成新的酵素",
+          "所有酵素活性都在溫度越高時無限增加",
+          "酵素只由無機鹽組成，與蛋白結構無關"
+        ],
+        "exp": "高溫可能使酵素變性，改變活性部位而降低催化能力。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "bio-ref-g1-酵素與代謝-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-酵素與代謝-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「酵素與代謝」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "比較有無酵素的兩組反應，加入酵素後相同時間產物較多。若酵素沒有被消耗，最合適的解釋？",
+        "correct": "酵素降低反應活化能，增加反應速率",
+        "wrong": [
+          "酵素讓反應必然違反能量守恆",
+          "酵素直接改變反應物與生成物的原子總數",
+          "酵素必須每催化一次就永久消失"
+        ],
+        "exp": "酵素是催化劑，主要降低活化能並加速反應，不改變守恆。",
+        "subject": "生物",
+        "sub_topic": "酵素與代謝",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-1",
+            "name": "細胞與代謝"
+          }
+        ],
+        "concept_id": "bio-高中一年級-酵素與代謝",
+        "template_id": "bio-ref-g1-酵素與代謝-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

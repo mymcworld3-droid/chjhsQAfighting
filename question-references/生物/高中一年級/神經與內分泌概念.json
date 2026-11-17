@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人體與恆定"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-神經與內分泌概念-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「神經與內分泌概念」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "人手碰到高溫物體時快速縮回，反應可能先經脊髓反射路徑處理。這種反射有何功能？",
+        "correct": "在感覺訊號傳至大腦完整意識前，快速產生保護動作",
+        "wrong": [
+          "必須先完成複雜計算才可收手",
+          "神經訊息完全不需要任何細胞傳遞",
+          "反射作用表示大腦永遠不會接收到痛覺"
+        ],
+        "exp": "脊髓反射可迅速啟動肌肉收縮，大腦仍可能稍後接收痛覺訊號。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌概念",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-神經與內分泌概念",
+        "template_id": "bio-ref-g1-神經與內分泌概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-神經與內分泌概念-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「神經與內分泌概念」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "人在壓力情境下心跳加快，並出現與腎上腺素分泌有關的生理變化。這主要反映什麼？",
+        "correct": "神經與內分泌系統可共同協調身體對環境的反應",
+        "wrong": [
+          "內分泌系統只調節骨骼外觀而不能影響心跳",
+          "壓力反應只能由腸道細菌直接控制",
+          "心跳速度與自律神經完全沒有關係"
+        ],
+        "exp": "交感神經與腎上腺素等訊號可共同參與急性壓力反應。",
+        "subject": "生物",
+        "sub_topic": "神經與內分泌概念",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-神經與內分泌概念",
+        "template_id": "bio-ref-g1-神經與內分泌概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

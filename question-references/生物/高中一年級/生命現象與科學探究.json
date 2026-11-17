@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生命的特性與細胞"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-生命現象與科學探究-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「生命現象與科學探究」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "學生想研究光照是否影響綠豆發芽率，把兩組相同種子放在不同光照環境，保持水分、溫度與觀察時間相同。哪項是這個實驗的操縱變因？",
+        "correct": "光照條件",
+        "wrong": [
+          "種子數量",
+          "觀察期間",
+          "水分供應量"
+        ],
+        "exp": "操縱變因是研究者刻意改變的因素，本題只改變光照，其餘為控制變因。",
+        "subject": "生物",
+        "sub_topic": "生命現象與科學探究",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生命現象與科學探究",
+        "template_id": "bio-ref-g1-生命現象與科學探究-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-生命現象與科學探究-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「生命現象與科學探究」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "兩組植物試驗結果葉片數不同，但研究者同時改變光照與肥料量。若要判斷差異究竟來自何者，最合理的改進是？",
+        "correct": "每次只改變一項主要因素，其他條件一致",
+        "wrong": [
+          "直接把差異全部歸因光照",
+          "只保留生長最快的一盆作結論",
+          "將所有植物都置於不同溫度以增加變異"
+        ],
+        "exp": "同時改變兩項因素會混淆因果，需控制條件或安排因子實驗分辨影響。",
+        "subject": "生物",
+        "sub_topic": "生命現象與科學探究",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-8",
+            "name": "科學探究"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生命現象與科學探究",
+        "template_id": "bio-ref-g1-生命現象與科學探究-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

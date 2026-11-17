@@ -1,0 +1,66 @@
+{
+  "units": [
+    "遺傳基礎"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-遺傳與性狀-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「遺傳與性狀」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "一個性狀由單一常染色體基因決定，A對a完全顯性。若親代皆為Aa，後代為aa的理論機率是多少？",
+        "correct": "1/4",
+        "wrong": [
+          "1/2",
+          "3/4",
+          "0"
+        ],
+        "exp": "Aa×Aa 配子各為A與a，子代AA:Aa:aa＝1:2:1，所以aa機率1/4。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "bio-ref-g1-遺傳與性狀-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-遺傳與性狀-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「遺傳與性狀」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "某種植物的紫花對白花完全顯性，兩株紫花交配卻生出白花後代。若不考慮突變，親代基因型最可能是？",
+        "correct": "兩株皆為雜合子",
+        "wrong": [
+          "兩株皆為顯性純合子",
+          "兩株皆為隱性純合子",
+          "一株為顯性純合子且另一株為隱性純合子"
+        ],
+        "exp": "白花需兩個隱性等位基因，兩株紫花都需攜帶隱性等位基因，故為雜合子。",
+        "subject": "生物",
+        "sub_topic": "遺傳與性狀",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-4",
+            "name": "遺傳與分子生物"
+          }
+        ],
+        "concept_id": "bio-高中一年級-遺傳與性狀",
+        "template_id": "bio-ref-g1-遺傳與性狀-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

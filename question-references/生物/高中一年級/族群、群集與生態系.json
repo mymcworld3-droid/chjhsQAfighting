@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生態與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-族群、群集與生態系-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「族群、群集與生態系」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "同一池塘的所有鯉魚構成什麼生態層級？若再加入水草、昆蟲和其他生物，則成為什麼？",
+        "correct": "鯉魚為族群，多種生物集合為群集",
+        "wrong": [
+          "鯉魚為群集，多種生物構成單一個體",
+          "池塘所有鯉魚都屬不同物種",
+          "族群只包含非生物因子"
+        ],
+        "exp": "同一地區同種生物為族群；多個不同物種族群組成群集。",
+        "subject": "生物",
+        "sub_topic": "族群、群集與生態系",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-族群、群集與生態系",
+        "template_id": "bio-ref-g1-族群、群集與生態系-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-族群、群集與生態系-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「族群、群集與生態系」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "一座池塘的魚類、藻類及微生物，連同水、光及溫度等環境條件，合起來較接近何種層級？",
+        "correct": "生態系",
+        "wrong": [
+          "單一族群",
+          "單一個體",
+          "只有一種細胞的組織"
+        ],
+        "exp": "生態系包含生物群集及其非生物環境的相互作用。",
+        "subject": "生物",
+        "sub_topic": "族群、群集與生態系",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-族群、群集與生態系",
+        "template_id": "bio-ref-g1-族群、群集與生態系-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

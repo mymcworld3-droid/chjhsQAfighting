@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人體與恆定"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-循環、呼吸與排泄-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「循環、呼吸與排泄」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "人體運動時呼吸速率和心跳常上升。最主要有助於滿足哪項生理需求？",
+        "correct": "提高氧氣輸送及二氧化碳排除，以支持組織代謝",
+        "wrong": [
+          "使血液完全停止運送養分",
+          "讓肌肉不再消耗任何ATP",
+          "呼吸加快會直接使腎臟停止所有功能"
+        ],
+        "exp": "運動增加代謝需求，呼吸及血液循環可協同供應氧氣與排除二氧化碳。",
+        "subject": "生物",
+        "sub_topic": "循環、呼吸與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-循環、呼吸與排泄",
+        "template_id": "bio-ref-g1-循環、呼吸與排泄-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-循環、呼吸與排泄-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「循環、呼吸與排泄」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "腎臟形成尿液時，若某有用溶質先被濾入腎小管，再進入血液，這一過程稱為什麼？",
+        "correct": "再吸收",
+        "wrong": [
+          "神經傳導",
+          "蛋白質轉譯",
+          "光合作用"
+        ],
+        "exp": "再吸收使濾液中需保留的水和溶質返回血液，與濾過、分泌不同。",
+        "subject": "生物",
+        "sub_topic": "循環、呼吸與排泄",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-循環、呼吸與排泄",
+        "template_id": "bio-ref-g1-循環、呼吸與排泄-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

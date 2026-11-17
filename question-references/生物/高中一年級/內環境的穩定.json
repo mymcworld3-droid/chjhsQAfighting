@@ -1,0 +1,66 @@
+{
+  "units": [
+    "人體與恆定"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-內環境的穩定-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「內環境的穩定」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "人體體溫略高於正常值時，可能出現出汗與皮膚血管舒張。這最符合哪種調節機制？",
+        "correct": "負回饋，透過散熱使體溫回到適當範圍",
+        "wrong": [
+          "正回饋，刻意讓體溫無限升高",
+          "不需感受器的完全隨機反應",
+          "一旦出汗就代表人體不再消耗能量"
+        ],
+        "exp": "體溫升高引發促進散熱的反應，有助減少偏差，是負回饋。",
+        "subject": "生物",
+        "sub_topic": "內環境的穩定",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-內環境的穩定",
+        "template_id": "bio-ref-g1-內環境的穩定-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-內環境的穩定-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「內環境的穩定」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "血糖上升後胰島素分泌通常增加，使細胞攝取及儲存葡萄糖。若調節正常，最主要效果為何？",
+        "correct": "降低過高血糖，維持內環境穩定",
+        "wrong": [
+          "使血糖濃度持續無限制升高",
+          "直接使全部葡萄糖轉為氧氣",
+          "完全阻止細胞利用任何營養"
+        ],
+        "exp": "胰島素可促進葡萄糖利用和儲存，有助血糖恢復。",
+        "subject": "生物",
+        "sub_topic": "內環境的穩定",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-3",
+            "name": "動物構造與生理"
+          }
+        ],
+        "concept_id": "bio-高中一年級-內環境的穩定",
+        "template_id": "bio-ref-g1-內環境的穩定-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

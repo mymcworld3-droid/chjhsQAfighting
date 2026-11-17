@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生態與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-食物網與能量流-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「食物網與能量流」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "食物網中，草被兔和蝗蟲食用，兔和蝗蟲又被不同捕食者利用。若草減少，何項推論最合理？",
+        "correct": "可能同時影響多條能量傳遞途徑，效果須依食物網關係評估",
+        "wrong": [
+          "只會影響其中一隻兔子而不影響任何其他生物",
+          "草減少會讓所有消費者能量立即增加",
+          "食物網中各物種完全互不相關"
+        ],
+        "exp": "生產者供應多種初級消費者，資源變動可沿多條途徑影響系統。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "bio-ref-g1-食物網與能量流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-食物網與能量流-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「食物網與能量流」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "某森林食物鏈為植物→昆蟲→青蛙→蛇。若假設相鄰營養階層平均只有10%能量傳遞，下列何者正確？",
+        "correct": "蛇可得到的能量通常少於青蛙階層",
+        "wrong": [
+          "蛇必定獲得比植物更多的能量",
+          "能量每經一層就會自動翻倍",
+          "只要是肉食者就能直接製造全部食物能量"
+        ],
+        "exp": "能量沿階層遞減，蛇位於較高層級，通常可利用能量較少。",
+        "subject": "生物",
+        "sub_topic": "食物網與能量流",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-食物網與能量流",
+        "template_id": "bio-ref-g1-食物網與能量流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

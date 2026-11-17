@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物多樣性與演化"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-生物多樣性-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「生物多樣性」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "研究者調查兩塊面積相同的森林，甲地有20種樹木、乙地有5種。若只考慮樹種豐富度，哪個結論正確？",
+        "correct": "甲地的樹種豐富度較高",
+        "wrong": [
+          "乙地的樹種豐富度較高",
+          "樹種數量完全不能作為任何多樣性指標",
+          "甲地因樹種多就必定有較大的總生物量"
+        ],
+        "exp": "物種豐富度是種數，甲有20種大於乙5種；生物量需另外量測。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "bio-ref-g1-生物多樣性-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-生物多樣性-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「生物多樣性」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "同一物種分布於不同山谷，各族群具有不同的遺傳變異。若其中一個族群消失，除了個體數變少，還可能損失什麼？",
+        "correct": "該族群特有的遺傳多樣性",
+        "wrong": [
+          "整個物種所有DNA必然完全消失",
+          "其他所有物種的基因序列必然立即相同",
+          "所有生態系的能量守恆都會失效"
+        ],
+        "exp": "生物多樣性包含遺傳、物種與生態系等層次，局部族群滅失可能損失特有基因變異。",
+        "subject": "生物",
+        "sub_topic": "生物多樣性",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-生物多樣性",
+        "template_id": "bio-ref-g1-生物多樣性-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

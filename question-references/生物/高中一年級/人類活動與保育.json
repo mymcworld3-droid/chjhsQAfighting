@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生態與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-人類活動與保育-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「人類活動與保育」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "某濕地因道路將棲地切成兩塊，動物穿越車道死亡率上升。哪種保育措施較直接回應這個問題？",
+        "correct": "規畫生態廊道與安全動物通道",
+        "wrong": [
+          "在濕地中央增加更多車道而不設通道",
+          "把每種動物全部改為人工模型",
+          "只在路邊設廣告看板"
+        ],
+        "exp": "棲地破碎化與路殺可透過連通廊道與安全通行設施改善。",
+        "subject": "生物",
+        "sub_topic": "人類活動與保育",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-人類活動與保育",
+        "template_id": "bio-ref-g1-人類活動與保育-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-人類活動與保育-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「人類活動與保育」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "外來物種被放入湖泊後快速繁殖，原生魚類數量下降。若研究其影響，最需要蒐集哪組資料？",
+        "correct": "外來與原生物種的數量、食性及環境變化的時間資料",
+        "wrong": [
+          "只記錄外來魚的顏色",
+          "只依放生者的個人願望推估生態效果",
+          "因魚種外來就不需要任何實際調查"
+        ],
+        "exp": "外來種可能透過競爭或捕食影響原生種，需用時間序列和生態關係檢驗。",
+        "subject": "生物",
+        "sub_topic": "人類活動與保育",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-6",
+            "name": "生態與環境"
+          }
+        ],
+        "concept_id": "bio-高中一年級-人類活動與保育",
+        "template_id": "bio-ref-g1-人類活動與保育-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

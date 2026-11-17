@@ -1,0 +1,66 @@
+{
+  "units": [
+    "生物多樣性與演化"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "bio-ref-g1-天擇與演化-1",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「天擇與演化」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "某害蟲族群中原有少數具有抗藥性個體，連續使用殺蟲劑後抗藥性個體比例增加。最合適的解釋是？",
+        "correct": "殺蟲劑使已有抗性差異的個體生存繁殖機會不同",
+        "wrong": [
+          "每隻害蟲都因意志而在同一夜產生相同突變",
+          "殺蟲劑必然直接教會所有害蟲如何抗藥",
+          "沒有遺傳變異也必然能在下一代形成所有抗性"
+        ],
+        "exp": "選汰改變族群中可遺傳性狀的頻率，而非個體因需要而自行定向改變。",
+        "subject": "生物",
+        "sub_topic": "天擇與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-天擇與演化",
+        "template_id": "bio-ref-g1-天擇與演化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "bio-ref-g1-天擇與演化-2",
+      "source": "大考中心學測自然考科生物學實驗、遺傳與生態觀念題型之命題方向；重新編寫",
+      "design": "以「天擇與演化」的實驗條件或生物機制形成兩個不同的推理情境",
+      "question": {
+        "q": "島嶼上的鳥類因食物來源不同，經多代演化出不同形狀的喙。若食物差異影響生存與繁殖，何項推論最合理？",
+        "correct": "不同資源環境可能使不同喙形受到差異選擇",
+        "wrong": [
+          "鳥會在一生中憑需要改寫後代所有基因",
+          "不同喙形證明各群鳥絕無共同祖先",
+          "食物來源從不影響鳥類生存與繁殖"
+        ],
+        "exp": "喙形變異與不同食物適應度相關，可導致族群性狀分化。",
+        "subject": "生物",
+        "sub_topic": "天擇與演化",
+        "knowledge_points": [
+          {
+            "subject": "生物",
+            "id": "biology-5",
+            "name": "演化與分類"
+          }
+        ],
+        "concept_id": "bio-高中一年級-天擇與演化",
+        "template_id": "bio-ref-g1-天擇與演化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
