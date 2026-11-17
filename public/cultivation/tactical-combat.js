@@ -855,7 +855,7 @@ function manualRecapMarkup(room,account) {
   if(!earnings)return '';
   const key=manualRecapKey(room,account);
   const bookState=manualRecapCache?.key===key?manualRecapCache.state:null;
-  const content=renderManualBattleRecap(room,account,Manuals,bookState,{esc,bookArt});
+  const content=renderManualBattleRecap(room,account,Manuals,bookState,{esc,bookArt,syncFailed:!!manualRecapCache?.error});
   const retry=manualRecapCache?.key===key&&manualRecapCache.error
     ?'<p class="tc-manual-recap-sync-error" role="status">最新功法等級暫時無法同步，可前往功法閣確認，或在此重試。</p><button type="button" class="tc-manual-recap-retry" data-manual-recap-retry>重試同步</button>':'';
   return '<div data-manual-battle-result data-room-id="'+esc(room.id)+'">'+content+retry+'</div>';
