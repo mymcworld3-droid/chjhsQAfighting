@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球與臺灣議題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-氣候與資源-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「氣候與資源」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某地降雨量年總和未明顯下降，但近年強降雨更集中且乾季延長。對水資源規畫最直接的挑戰是？",
+        "correct": "雨季儲水與乾季供需調節需求可能提高",
+        "wrong": [
+          "年雨量相近代表各月水量必然不變",
+          "強降雨集中必定消除水庫淤積",
+          "乾季變長不可能影響農業灌溉"
+        ],
+        "exp": "降水時間分配改變會影響逕流、儲水及用水需求，即使年總量接近亦然。",
+        "subject": "地理",
+        "sub_topic": "氣候與資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中三年級-氣候與資源",
+        "template_id": "geo-ref-g3-氣候與資源-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-氣候與資源-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「氣候與資源」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某山區因氣候變化導致積雪期縮短，依賴融雪供水的下游農業可能受何影響？",
+        "correct": "季節性來水時間及供水量分配可能改變",
+        "wrong": [
+          "積雪減少必定使全年河流流量固定",
+          "融雪與農業灌溉時間毫無關聯",
+          "下游地區不可能受到上游積雪變化影響"
+        ],
+        "exp": "積雪可暫時儲存水分，融雪期變化會改變下游可用水時序。",
+        "subject": "地理",
+        "sub_topic": "氣候與資源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中三年級-氣候與資源",
+        "template_id": "geo-ref-g3-氣候與資源-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

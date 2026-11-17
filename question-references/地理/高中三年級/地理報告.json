@@ -1,0 +1,66 @@
+{
+  "units": [
+    "區域探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-地理報告-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「地理報告」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "一份地理報告展示某城市連續十年綠地比例，卻沒有說明綠地定義及資料來源。哪項修訂最能提高可信度？",
+        "correct": "補充資料來源、綠地分類標準與計算方式",
+        "wrong": [
+          "把圖表標題字體放大，代替方法說明",
+          "刪除所有年份，避免讀者比較",
+          "只寫結論而不提供任何數據"
+        ],
+        "exp": "時間序列須有一致定義及可追溯來源，才能判斷數字變化的意義。",
+        "subject": "地理",
+        "sub_topic": "地理報告",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-地理報告",
+        "template_id": "geo-ref-g3-地理報告-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-地理報告-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「地理報告」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "學生報告指出甲地風力發電量較乙地高，但甲裝置容量也大很多。為公平比較，最適合補充哪種指標？",
+        "correct": "單位裝置容量發電量或容量因數",
+        "wrong": [
+          "兩地發電機顏色",
+          "各地工廠名稱的字數",
+          "風力發電設備的外觀高度排名"
+        ],
+        "exp": "比較生產效能應控制裝置規模，否則總發電量未必能反映單位效率。",
+        "subject": "地理",
+        "sub_topic": "地理報告",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中三年級-地理報告",
+        "template_id": "geo-ref-g3-地理報告-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

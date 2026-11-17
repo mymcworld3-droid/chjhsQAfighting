@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地理：社會環境議題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-城鄉與永續-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「城鄉與永續」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某鄉鎮缺乏大眾運輸，年長者就醫不便；政府打算提供預約式接駁服務。若評估社會永續，最重要的指標是哪個？",
+        "correct": "居民實際到院時間及服務可近性的改善程度",
+        "wrong": [
+          "接駁車外觀色彩與廣告數量",
+          "只計算每輛車的最大可能時速",
+          "把全縣總人口直接當作每班乘客數"
+        ],
+        "exp": "公共交通改善應衡量居民能否到達必要服務，不能只看購車數。",
+        "subject": "地理",
+        "sub_topic": "城鄉與永續",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中三年級-城鄉與永續",
+        "template_id": "geo-ref-g3-城鄉與永續-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-城鄉與永續-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「城鄉與永續」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "都市更新後新增大量住宅，但部分原住戶因租金上升被迫遷出。哪種政策評估最周延？",
+        "correct": "同時分析住宅供給、原住戶負擔與搬遷情形",
+        "wrong": [
+          "只以新增大樓高度判定所有人都受益",
+          "租金上升表示原住戶不可能受到影響",
+          "都市更新只需考量建築物數量"
+        ],
+        "exp": "更新成果涉及空間改善和分配效果，原住戶的可負擔性是關鍵。",
+        "subject": "地理",
+        "sub_topic": "城鄉與永續",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中三年級-城鄉與永續",
+        "template_id": "geo-ref-g3-城鄉與永續-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

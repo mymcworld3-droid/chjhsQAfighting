@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球與臺灣議題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-區域差異-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「區域差異」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "甲縣人均所得高但住房負擔也重，乙縣所得較低而住房較可負擔。比較居民生活條件時，哪項指標較有補充價值？",
+        "correct": "住房支出占所得比例及地方公共服務可近性",
+        "wrong": [
+          "只看人均所得就斷定所有居民的生活品質",
+          "只比較縣市名稱的長短",
+          "假定同縣居民都有完全相同的收入"
+        ],
+        "exp": "生活條件需考慮收入與必要支出的關係，以及資源取得情形。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中三年級-區域差異",
+        "template_id": "geo-ref-g3-區域差異-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-區域差異-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「區域差異」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "兩地同樣每年有1000毫米降雨，甲地雨量集中夏季，乙地四季較均勻。哪種比較較合理？",
+        "correct": "年雨量相同不代表農業灌溉與防洪需求相同",
+        "wrong": [
+          "年雨量相同便能確定各月都下同樣多雨",
+          "兩地一定種植完全相同作物",
+          "雨量季節差異不可能影響水庫操作"
+        ],
+        "exp": "雨量分布會影響蓄水、防洪與農業安排，不可只用年合計概括。",
+        "subject": "地理",
+        "sub_topic": "區域差異",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中三年級-區域差異",
+        "template_id": "geo-ref-g3-區域差異-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

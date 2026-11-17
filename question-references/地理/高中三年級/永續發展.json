@@ -1,0 +1,66 @@
+{
+  "units": [
+    "全球與臺灣議題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-永續發展-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「永續發展」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某島嶼設新觀光步道後，遊客增加，但垃圾及海岸踩踏也增加。若要評估是否永續，哪項資料最重要？",
+        "correct": "同時追蹤觀光收益、環境壓力與居民生活影響",
+        "wrong": [
+          "只計算遊客人數，完全忽略其他面向",
+          "只憑第一個遊客的主觀感受",
+          "把垃圾量增加當作島嶼必然更繁榮的證據"
+        ],
+        "exp": "永續發展需在環境、經濟及社會面向取得平衡，應採多指標評估。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中三年級-永續發展",
+        "template_id": "geo-ref-g3-永續發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-永續發展-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「永續發展」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某都市計畫增設綠地降溫，卻主要分布在本就綠地多的高所得社區。若改善環境公平，下一步應怎麼做？",
+        "correct": "優先評估缺綠地、高溫且弱勢人口較多區域的需求",
+        "wrong": [
+          "依原有綠地面積比例繼續集中於相同地點",
+          "只統計公園總數而不看人口分布",
+          "因全市增加綠地就保證每個居民受益相同"
+        ],
+        "exp": "新增綠地的空間配置會影響受益分布，應檢查需求與資源的不均衡。",
+        "subject": "地理",
+        "sub_topic": "永續發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中三年級-永續發展",
+        "template_id": "geo-ref-g3-永續發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

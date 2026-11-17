@@ -1,0 +1,66 @@
+{
+  "units": [
+    "區域探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-環境議題-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「環境議題」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某河川下游魚類減少，同時出現上游工廠排放增加與連年乾旱。若設計研究，哪種作法最適合？",
+        "correct": "分別蒐集水質、流量及魚類資料，檢查多種可能因素",
+        "wrong": [
+          "直接將所有魚類減少歸因於第一家工廠",
+          "僅憑河水顏色就確認每種污染物濃度",
+          "因有兩種可能原因便不再蒐集資料"
+        ],
+        "exp": "污染負荷和乾旱水量都可能影響水體環境，必須用觀測資料區辨作用。",
+        "subject": "地理",
+        "sub_topic": "環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中三年級-環境議題",
+        "template_id": "geo-ref-g3-環境議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-環境議題-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「環境議題」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "城市計畫新增滯洪公園，但居民擔心運動空間減少。若要比較方案，應優先評估什麼？",
+        "correct": "不同設計下的洪水調節能力、日常使用及維護成本",
+        "wrong": [
+          "只選擇地圖上面積最大的方案",
+          "以公園名稱決定所有洪水風險",
+          "把每位居民都視為具有完全相同的使用需求"
+        ],
+        "exp": "環境防災與休憩功能可共存或互相限制，需以具體績效和需求評估。",
+        "subject": "地理",
+        "sub_topic": "環境議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中三年級-環境議題",
+        "template_id": "geo-ref-g3-環境議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

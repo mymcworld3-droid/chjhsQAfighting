@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地理：空間資訊科技"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-地圖製作與表達-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「地圖製作與表達」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "要比較臺灣不同縣市的人口密度，某生用顏色深淺表示每平方公里人口數。這種主題圖的優點為何？",
+        "correct": "透過行政區分級設色，比較密度的空間差異",
+        "wrong": [
+          "面積最大的縣市必然顏色最深",
+          "顏色越深就表示該區總人口一定最多",
+          "分級設色圖不需要圖例便能讀懂每個級距"
+        ],
+        "exp": "人口密度是相對數值，行政區分級設色可呈現空間分布，但須搭配明確圖例與級距。",
+        "subject": "地理",
+        "sub_topic": "地圖製作與表達",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-地圖製作與表達",
+        "template_id": "geo-ref-g3-地圖製作與表達-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-地圖製作與表達-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「地圖製作與表達」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某張道路圖比例尺為1:50,000，地圖上兩地距離4公分。若忽略道路彎曲，兩地直線實際距離約多少？",
+        "correct": "2公里",
+        "wrong": [
+          "200公尺",
+          "20公里",
+          "500公尺"
+        ],
+        "exp": "4公分×50,000＝200,000公分＝2,000公尺＝2公里。",
+        "subject": "地理",
+        "sub_topic": "地圖製作與表達",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-地圖製作與表達",
+        "template_id": "geo-ref-g3-地圖製作與表達-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

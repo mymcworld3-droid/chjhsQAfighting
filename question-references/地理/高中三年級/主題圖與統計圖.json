@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間資料判讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-主題圖與統計圖-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「主題圖與統計圖」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "兩縣人口分別為甲100萬、乙20萬，公共自行車站點為甲100站、乙40站。若改用每10萬人站點數，哪縣較高？",
+        "correct": "乙縣，每10萬人20站",
+        "wrong": [
+          "甲縣，每10萬人100站",
+          "兩縣每10萬人同為10站",
+          "乙縣每10萬人只有2站"
+        ],
+        "exp": "甲為100/100萬×10萬＝10站，乙為40/20萬×10萬＝20站。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-主題圖與統計圖",
+        "template_id": "geo-ref-g3-主題圖與統計圖-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-主題圖與統計圖-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「主題圖與統計圖」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "要表現同一城市十年來每年的降雨量變化，哪種圖形最能看出隨時間的高低起伏？",
+        "correct": "以年份為橫軸、降雨量為縱軸的折線圖",
+        "wrong": [
+          "沒有時間排序的土地利用圓餅圖",
+          "僅顯示全市道路名稱的地圖",
+          "各行政區人口密度的分級設色圖"
+        ],
+        "exp": "折線圖適合連續或依時序觀測的數值變化；其他圖形對應不同問題。",
+        "subject": "地理",
+        "sub_topic": "主題圖與統計圖",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-主題圖與統計圖",
+        "template_id": "geo-ref-g3-主題圖與統計圖-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

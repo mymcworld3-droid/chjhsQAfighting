@@ -1,0 +1,66 @@
+{
+  "units": [
+    "區域探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-資料蒐集-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「資料蒐集」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "學生要比較兩條街道的行人熱舒適度。哪個測量設計最具可比性？",
+        "correct": "在相同時段與天氣條件下量測氣溫、遮蔭及行人活動",
+        "wrong": [
+          "一條街選夏季午後，另一條街選冬季清晨",
+          "只詢問單一位受訪者便推論全體",
+          "用兩條街的名稱字數代替氣溫"
+        ],
+        "exp": "相同時段及測量方法可減少混雜因素，讓遮蔭等環境差異更可比較。",
+        "subject": "地理",
+        "sub_topic": "資料蒐集",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-資料蒐集",
+        "template_id": "geo-ref-g3-資料蒐集-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-資料蒐集-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「資料蒐集」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "調查社區垃圾分類時，只在回收站開放時間訪問正在分類的人。最主要的資料限制為何？",
+        "correct": "樣本可能排除未使用回收站的人，造成選擇偏誤",
+        "wrong": [
+          "有問卷就不必考慮抽樣範圍",
+          "開放時間訪問能保證所有住戶都有回覆",
+          "只要填滿百份便自動沒有偏誤"
+        ],
+        "exp": "回收站使用者較可能積極分類，若推論全社區，需改進抽樣。",
+        "subject": "地理",
+        "sub_topic": "資料蒐集",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-資料蒐集",
+        "template_id": "geo-ref-g3-資料蒐集-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

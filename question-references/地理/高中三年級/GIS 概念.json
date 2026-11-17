@@ -1,0 +1,66 @@
+{
+  "units": [
+    "空間資料判讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-GIS 概念-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「GIS 概念」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "市府有學校位置圖層、道路網圖層與人口分布圖層，想找出步行距離學校超過1公里且人口密集的區域。最適合的GIS功能是？",
+        "correct": "路網距離分析後與人口圖層進行空間疊合",
+        "wrong": [
+          "只對所有圖層更換底色",
+          "只統計學校名稱的字數",
+          "將所有座標當作非空間文字直接連接"
+        ],
+        "exp": "需用道路網算可達距離，再結合人口分布辨識服務不足區域。",
+        "subject": "地理",
+        "sub_topic": "GIS 概念",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-GIS 概念",
+        "template_id": "geo-ref-g3-GIS 概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-GIS 概念-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「GIS 概念」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "GIS中同一條河流在兩份資料裡出現位置偏移。若一份使用不同的坐標參考系統，首先應怎麼處理？",
+        "correct": "確認並轉換為相容的坐標參考系統後再疊圖",
+        "wrong": [
+          "只把河流符號改成相同顏色",
+          "不經轉換直接把偏移視為河流改道",
+          "刪除所有座標讓兩份圖層自動一致"
+        ],
+        "exp": "不同CRS可能造成圖層偏移，須先統一投影及坐標定義，才能判斷真實變化。",
+        "subject": "地理",
+        "sub_topic": "GIS 概念",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-1",
+            "name": "地圖與空間"
+          }
+        ],
+        "concept_id": "geo-高中三年級-GIS 概念",
+        "template_id": "geo-ref-g3-GIS 概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

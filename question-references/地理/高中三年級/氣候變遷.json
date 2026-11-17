@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地理：社會環境議題"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-氣候變遷-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「氣候變遷」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某地30年間平均氣溫上升，但其中數年也出現嚴寒冬季。下列哪個判斷最合理？",
+        "correct": "長期升溫趨勢與短期年度或季節性的氣溫波動可同時存在",
+        "wrong": [
+          "曾有寒冬就能否定所有長期升溫資料",
+          "長期升溫表示每天氣溫都一定比前一天高",
+          "年度平均溫度無法用任何測站資料估計"
+        ],
+        "exp": "氣候變遷關注長期統計趨勢，個別寒冷事件不必然與長期趨勢矛盾。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中三年級-氣候變遷",
+        "template_id": "geo-ref-g3-氣候變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-氣候變遷-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「氣候變遷」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某城市希望研究是否出現都市熱島增強。哪種資料最能避免把區域暖化趨勢誤當作都市效應？",
+        "correct": "比較長期都市與附近非都市測站的溫度差變化",
+        "wrong": [
+          "只取都市最熱一天的溫度",
+          "只看城市人口總數而不測量溫度",
+          "將不同季節、不同高度的單次溫度隨意平均"
+        ],
+        "exp": "相近區域的都市與郊區相對差異，較能分離背景氣候變化與都市建成環境的影響。",
+        "subject": "地理",
+        "sub_topic": "氣候變遷",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中三年級-氣候變遷",
+        "template_id": "geo-ref-g3-氣候變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自然與人文地理統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-區域互動-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「區域互動」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某山城居民搭乘新開通的客運到鄰近平原市區就醫，平原市區也增加到山城旅遊的人次。最能概括此變化？",
+        "correct": "交通改善促進兩地雙向的人員與服務交流",
+        "wrong": [
+          "山城不再需要任何公共設施",
+          "平原市區所有居民都必然搬到山城",
+          "兩地因交通方便而失去經濟連結"
+        ],
+        "exp": "客運使就醫與觀光流動增加，代表區域聯繫加強且方向可能不同。",
+        "subject": "地理",
+        "sub_topic": "區域互動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中三年級-區域互動",
+        "template_id": "geo-ref-g3-區域互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-區域互動-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「區域互動」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某地農產經公路送到港口出口，進口肥料又從港口送回農區。這個地理過程最符合什麼？",
+        "correct": "腹地與港口透過物流形成相互依存的區域網絡",
+        "wrong": [
+          "農區不可能受到國際市場影響",
+          "港口只負責遊客往來，不會運送貨物",
+          "肥料進口表示農區沒有任何農業活動"
+        ],
+        "exp": "原料外運與投入品內送形成雙向物流，展現腹地與港口的連結。",
+        "subject": "地理",
+        "sub_topic": "區域互動",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中三年級-區域互動",
+        "template_id": "geo-ref-g3-區域互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

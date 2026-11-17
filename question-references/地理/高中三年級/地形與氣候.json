@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自然與人文地理統整"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "geo-ref-g3-地形與氣候-1",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「地形與氣候」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "某島中央高山阻擋東北季風，迎風坡冬季多雨，背風坡相對乾燥。這反映哪種組合效果？",
+        "correct": "盛行風與地形抬升、背風側雨影作用",
+        "wrong": [
+          "只由海岸線長度決定降雨",
+          "山脈兩側必然具有完全相同水氣條件",
+          "地形只影響道路，不會影響降水"
+        ],
+        "exp": "水氣沿迎風坡抬升造成凝結降雨，背風側較乾，地形與氣流共同塑造區域差異。",
+        "subject": "地理",
+        "sub_topic": "地形與氣候",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中三年級-地形與氣候",
+        "template_id": "geo-ref-g3-地形與氣候-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "geo-ref-g3-地形與氣候-2",
+      "source": "大考中心114學測社會之地理素養、空間資料判讀命題方向；獨立自編非原題",
+      "design": "以「地形與氣候」之量化資料、地圖條件或環境因素推論，並標明限制",
+      "question": {
+        "q": "甲地位於山腳，乙地位於山頂，相距不遠但年平均溫度有差。哪個因素最可能直接影響此差異？",
+        "correct": "海拔高度引起的垂直溫度變化",
+        "wrong": [
+          "兩地都位於同一國家，所以溫度必然相同",
+          "只要路程短就不能有溫差",
+          "山頂一定比山腳更接近地心"
+        ],
+        "exp": "一般對流層氣溫隨高度增加而下降，實際差異亦受季節與地形等影響。",
+        "subject": "地理",
+        "sub_topic": "地形與氣候",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中三年級-地形與氣候",
+        "template_id": "geo-ref-g3-地形與氣候-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
