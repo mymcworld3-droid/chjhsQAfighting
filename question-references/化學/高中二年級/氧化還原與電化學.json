@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅳ：化學反應與平衡二"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "examref-化學-高中二年級-氧化還原與電化學-1",
+      "source": "大考中心109學年度學測自然科第61題，依原題構思改寫",
+      "design": "從金屬置換反應辨別被氧化者與還原劑。",
+      "question": {
+        "q": "已知 $\\mathrm{Mg+Cu^{2+}\\rightarrow Mg^{2+}+Cu}$，下列何者是還原劑？",
+        "correct": "$\\mathrm{Mg}$",
+        "wrong": [
+          "$\\mathrm{Cu^{2+}}$",
+          "$\\mathrm{Mg^{2+}}$",
+          "$\\mathrm{Cu}$"
+        ],
+        "exp": "鎂由氧化數 $0$ 升至 $+2$，失去電子並使銅離子還原，因此鎂是還原劑。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "examref-化學-高中二年級-氧化還原與電化學-1",
+        "template_id": "examref-化學-高中二年級-氧化還原與電化學-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "examref-化學-高中二年級-氧化還原與電化學-2",
+      "source": "大考中心110學年度學測自然科第5題，依原題構思改寫",
+      "design": "辨別電子的轉移與氧化數增加，不依名稱中有無氧字判斷。",
+      "question": {
+        "q": "半反應 $\\mathrm{Zn\\rightarrow Zn^{2+}+2e^-}$ 中，鋅經歷了何種變化？",
+        "correct": "鋅被氧化並失去兩電子",
+        "wrong": [
+          "鋅被還原並獲得兩電子",
+          "鋅被氧化並獲得兩電子",
+          "鋅的氧化數不變"
+        ],
+        "exp": "鋅由 $0$ 價升為 $+2$ 價，失去兩個電子，因此是氧化反應。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "examref-化學-高中二年級-氧化還原與電化學-2",
+        "template_id": "examref-化學-高中二年級-氧化還原與電化學-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

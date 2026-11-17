@@ -1,0 +1,66 @@
+{
+  "units": [
+    "溶液與酸鹼"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "examref-化學-高中一年級-酸、鹼與中和-1",
+      "source": "大考中心110學年度學測自然科第6題，依原題構思改寫",
+      "design": "以 pH 判斷酸鹼性，對照指示劑變色。",
+      "question": {
+        "q": "將紅色石蕊試紙浸入 pH 為 12 的氫氧化鈉水溶液，最可能看到何種變化？",
+        "correct": "紅色變藍色",
+        "wrong": [
+          "紅色保持不變",
+          "紅色變成無色",
+          "紅色變成綠色"
+        ],
+        "exp": "pH 12 為鹼性；石蕊在鹼性溶液呈藍色，因此紅色試紙變為藍色。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "examref-化學-高中一年級-酸、鹼與中和-1",
+        "template_id": "examref-化學-高中一年級-酸、鹼與中和-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "examref-化學-高中一年級-酸、鹼與中和-2",
+      "source": "大考中心109學年度學測自然科第58題，依原題構思改寫",
+      "design": "由一比一的中和計量求未知體積，注意毫升與公升。",
+      "question": {
+        "q": "用 $0.20\\ \\mathrm{M}$ 的 $\\mathrm{NaOH}$ 水溶液中和 $50\\ \\mathrm{mL}$、$0.10\\ \\mathrm M$ 的 $\\mathrm{HCl}$，需要多少毫升氫氧化鈉？",
+        "correct": "$25$ 毫升",
+        "wrong": [
+          "$10$ 毫升",
+          "$50$ 毫升",
+          "$100$ 毫升"
+        ],
+        "exp": "鹽酸莫耳數為 $0.10\\times0.050=0.005$；需等莫耳的 NaOH，體積為 $0.005/0.20=0.025$ 公升，即 $25$ 毫升。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "examref-化學-高中一年級-酸、鹼與中和-2",
+        "template_id": "examref-化學-高中一年級-酸、鹼與中和-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

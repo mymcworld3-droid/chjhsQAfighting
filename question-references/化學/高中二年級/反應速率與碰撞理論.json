@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅱ：物質構造與反應速率"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "examref-化學-高中二年級-反應速率與碰撞理論-1",
+      "source": "大考中心114學年度學測自然科第36題，依原題構思改寫",
+      "design": "區分催化劑改變活化能及不改變平衡常數。",
+      "question": {
+        "q": "適當的催化劑加入反應系統後，下列哪個敘述正確？",
+        "correct": "提供活化能較低的反應途徑",
+        "wrong": [
+          "使反應平衡常數一定增大",
+          "必在總反應中永久耗盡",
+          "使反應物的總質量增加"
+        ],
+        "exp": "催化劑提供其他反應機制，能降低活化能、加快正逆反應，但不改變反應平衡常數。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "examref-化學-高中二年級-反應速率與碰撞理論-1",
+        "template_id": "examref-化學-高中二年級-反應速率與碰撞理論-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "examref-化學-高中二年級-反應速率與碰撞理論-2",
+      "source": "大考中心108學年度學測自然科第39題，依原題構思改寫",
+      "design": "從接觸面積判斷反應速率，不混淆總質量與暴露表面積。",
+      "question": {
+        "q": "相同質量、同溫的塊狀與粉末狀碳酸鈣分別加入同濃度的過量稀鹽酸中。通常哪一組起始反應速率較快？",
+        "correct": "粉末狀碳酸鈣",
+        "wrong": [
+          "塊狀碳酸鈣",
+          "必相同",
+          "無法受表面積影響"
+        ],
+        "exp": "粉末的總暴露表面積較大，和酸接觸機會較多，通常起始反應速率較快。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "examref-化學-高中二年級-反應速率與碰撞理論-2",
+        "template_id": "examref-化學-高中二年級-反應速率與碰撞理論-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

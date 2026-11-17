@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修化學Ⅰ：物質與能量"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "examref-化學-高中二年級-熱化學與反應熱-1",
+      "source": "大考中心109學年度學測自然科第15題，依原題構思改寫",
+      "design": "赫斯定律結合反應式倍數與正反方向求總反應熱。",
+      "question": {
+        "q": "已知 $\\mathrm{A+B\\rightarrow C}$ 反應熱為 $-80\\ \\mathrm{kJ}$，$\\mathrm{2C\\rightarrow D}$ 反應熱為 $+50\\ \\mathrm{kJ}$。求 $\\mathrm{2A+2B\\rightarrow D}$ 之反應熱。",
+        "correct": "$-110$ kJ",
+        "wrong": [
+          "$-30$ kJ",
+          "$+110$ kJ",
+          "$-160$ kJ"
+        ],
+        "exp": "第一式乘 $2$，反應熱變 $-160$ kJ；與第二式相加消去 $2C$，得 $-160+50=-110$ kJ。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "examref-化學-高中二年級-熱化學與反應熱-1",
+        "template_id": "examref-化學-高中二年級-熱化學與反應熱-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "examref-化學-高中二年級-熱化學與反應熱-2",
+      "source": "大考中心110學年度學測自然科第9題，依原題構思改寫",
+      "design": "由燃燒反應與生成熱辨別反應方向變換的正負號。",
+      "question": {
+        "q": "標準反應 $\\mathrm{C(s)+O_2(g)\\rightarrow CO_2(g)}$ 之焓變為 $-394\\ \\mathrm{kJ}$。若反應倒轉，焓變為多少？",
+        "correct": "$+394$ kJ",
+        "wrong": [
+          "$-394$ kJ",
+          "$0$ kJ",
+          "$-788$ kJ"
+        ],
+        "exp": "反應反向時焓變符號相反、量值不變，故為 $+394$ kJ。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "examref-化學-高中二年級-熱化學與反應熱-2",
+        "template_id": "examref-化學-高中二年級-熱化學與反應熱-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

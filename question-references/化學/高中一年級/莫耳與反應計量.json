@@ -1,0 +1,66 @@
+{
+  "units": [
+    "化學反應"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "examref-化學-高中一年級-莫耳與反應計量-1",
+      "source": "大考中心108學年度學測自然科第16題，依原題構思改寫",
+      "design": "由反應係數推回生成物莫耳數；先配平再計算。",
+      "question": {
+        "q": "$\\mathrm{CaC_2+2H_2O\\rightarrow C_2H_2+Ca(OH)_2}$。若 $0.3$ 莫耳碳化鈣完全反應，能產生多少莫耳乙炔？",
+        "correct": "$0.3$",
+        "wrong": [
+          "$0.15$",
+          "$0.6$",
+          "$0.9$"
+        ],
+        "exp": "碳化鈣和乙炔的係數比為 $1:1$，故有 $0.3$ 莫耳碳化鈣就生成 $0.3$ 莫耳乙炔。",
+        "subject": "化學",
+        "sub_topic": "莫耳與反應計量",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "examref-化學-高中一年級-莫耳與反應計量-1",
+        "template_id": "examref-化學-高中一年級-莫耳與反應計量-1-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "examref-化學-高中一年級-莫耳與反應計量-2",
+      "source": "大考中心113學年度學測自然科第14題，依原題構思改寫",
+      "design": "先用莫耳質量換算反應物莫耳，再用反應係數求產量。",
+      "question": {
+        "q": "$\\mathrm{2H_2+O_2\\rightarrow2H_2O}$。若 $6$ 公克氫氣與足量氧氣完全反應，生成多少莫耳水？（氫氣莫耳質量 $2\\ \\mathrm{g/mol}$）",
+        "correct": "$3$",
+        "wrong": [
+          "$1$",
+          "$2$",
+          "$6$"
+        ],
+        "exp": "氫氣為 $6/2=3$ 莫耳，氫氣與水的係數皆為 $2$，所以生成 $3$ 莫耳水。",
+        "subject": "化學",
+        "sub_topic": "莫耳與反應計量",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "examref-化學-高中一年級-莫耳與反應計量-2",
+        "template_id": "examref-化學-高中一年級-莫耳與反應計量-2-adapt",
+        "question_form": "multi-step",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
