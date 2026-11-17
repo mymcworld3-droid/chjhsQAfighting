@@ -1,0 +1,66 @@
+{
+  "units": [
+    "古典韻文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-古詩與近體詩基本格律-1",
+      "source": "大考中心 114學年度學測國綜第15題，參考其命題方式重新命題",
+      "design": "從原詩實際句數字數推導詩體",
+      "question": {
+        "q": "閱讀王之渙〈登鸛雀樓〉：\n「白日依山盡，黃河入海流。欲窮千里目，更上一層樓。」\n單就每句字數與全詩句數判斷，這首唐詩屬於哪種形式？",
+        "correct": "五言絕句",
+        "wrong": [
+          "五言律詩",
+          "七言絕句",
+          "七言律詩"
+        ],
+        "exp": "全詩四句，每句五字，因此是五言絕句；律詩通常八句，七言則是每句七字。",
+        "subject": "國文",
+        "sub_topic": "古詩與近體詩基本格律",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古詩與近體詩基本格律",
+        "template_id": "chinese-2026-reference-高中一年級-古詩與近體詩基本格律-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-古詩與近體詩基本格律-2",
+      "source": "大考中心 114學年度學測國綜第15題，參考其命題方式重新命題",
+      "design": "以句數及字數兩條必要條件排除選項",
+      "question": {
+        "q": "某首符合近體詩格律的作品共有八句，且每句恰好七字。依此形式特徵，應判定為哪種詩體？",
+        "correct": "七言律詩",
+        "wrong": [
+          "七言絕句",
+          "五言律詩",
+          "五言絕句"
+        ],
+        "exp": "律詩通常八句、絕句四句；七言每句七字、五言每句五字。因此為七言律詩。",
+        "subject": "國文",
+        "sub_topic": "古詩與近體詩基本格律",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-古詩與近體詩基本格律",
+        "template_id": "chinese-2026-reference-高中一年級-古詩與近體詩基本格律-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

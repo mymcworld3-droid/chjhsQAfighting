@@ -1,0 +1,66 @@
+{
+  "units": [
+    "古典韻文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-意象與情感-1",
+      "source": "大考中心 114學年度學測國綜第15題，參考其命題方式重新命題",
+      "design": "結合景物意象和末句的動詞推敲詩人情感",
+      "question": {
+        "q": "王安石〈泊船瓜洲〉寫道：『春風又綠江南岸，明月何時照我還？』若結合『還』字理解詩意，最能讀出的情感為何？",
+        "correct": "見春景而思念故鄉，盼望歸返",
+        "wrong": [
+          "因江南春色而決心永遠不返鄉",
+          "對明月的運行規律感到強烈憤怒",
+          "為了爭取功名而急於離開家人"
+        ],
+        "exp": "春風帶出江南春景，『明月何時照我還』則追問何時能回去，關鍵情感是思鄉與盼歸。",
+        "subject": "國文",
+        "sub_topic": "意象與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-意象與情感",
+        "template_id": "chinese-2026-reference-高中一年級-意象與情感-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-意象與情感-2",
+      "source": "大考中心 114學年度學測國綜第16題，參考其命題方式重新命題",
+      "design": "以視線變化理解送別詩情感",
+      "question": {
+        "q": "李白〈黃鶴樓送孟浩然之廣陵〉末兩句為：『孤帆遠影碧空盡，唯見長江天際流。』詩人久久望著船影消失，最能表達何種情感？",
+        "correct": "對友人遠行的依依惜別",
+        "wrong": [
+          "對友人失約的憤怒責怪",
+          "因厭惡江水而急於離去",
+          "確信自己將永不再見任何人"
+        ],
+        "exp": "『孤帆遠影』漸遠，直到眼中只餘長江，透過持續凝望的景象含蓄表達惜別；不能推得憤怒或永不相見。",
+        "subject": "國文",
+        "sub_topic": "意象與情感",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-意象與情感",
+        "template_id": "chinese-2026-reference-高中一年級-意象與情感-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

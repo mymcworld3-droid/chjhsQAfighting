@@ -1,0 +1,66 @@
+{
+  "units": [
+    "語文知識"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-成語與語境-1",
+      "source": "大考中心 114學年度學測國綜第3題，參考其命題方式重新命題",
+      "design": "運用易望文生義的成語與相近情境干擾",
+      "question": {
+        "q": "下列哪一句成語的運用最符合語境？",
+        "correct": "這次展覽雖有幾處細節待改，整體仍算差強人意。",
+        "wrong": [
+          "他在比賽中第一個拿到冠軍，可謂首當其衝。",
+          "全班一致贊成此案，可見大家都不以為然。",
+          "討論已得到全體共識，眾人的意見卻仍莫衷一是。"
+        ],
+        "exp": "『差強人意』是大致尚能令人滿意；『首當其衝』是最先受衝擊；『不以為然』是不贊同；『莫衷一是』表示意見未能一致。",
+        "subject": "國文",
+        "sub_topic": "成語與語境",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-成語與語境",
+        "template_id": "chinese-2026-reference-高中一年級-成語與語境-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-成語與語境-2",
+      "source": "大考中心 114學年度學測國綜第3題，參考其命題方式重新命題",
+      "design": "依行動是否破壞原有效果推論成語",
+      "question": {
+        "q": "演講者原已在五分鐘內說明重點，卻臨時加上一大段無關的笑話，不僅超時，也讓聽眾忘了結論。下列哪個成語最能評述這段額外內容？",
+        "correct": "畫蛇添足",
+        "wrong": [
+          "雪中送炭",
+          "恰如其分",
+          "亡羊補牢"
+        ],
+        "exp": "主體內容已完整，添加不必要的部分反而損害效果，符合『畫蛇添足』；其餘成語分別指及時幫助、適度合宜及事後補救。",
+        "subject": "國文",
+        "sub_topic": "成語與語境",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-4",
+            "name": "詞語成語"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-成語與語境",
+        "template_id": "chinese-2026-reference-高中一年級-成語與語境-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

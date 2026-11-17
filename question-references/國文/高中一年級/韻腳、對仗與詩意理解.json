@@ -1,0 +1,66 @@
+{
+  "units": [
+    "古典韻文"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-韻腳、對仗與詩意理解-1",
+      "source": "大考中心 114學年度學測國綜第15題，參考其命題方式重新命題",
+      "design": "核對詞語位置與類別，不只憑畫面相近",
+      "question": {
+        "q": "杜甫詩句『兩個黃鸝鳴翠柳，一行白鷺上青天。』下列哪組詞語在兩句中位置相對、詞性與意義類別也相應？",
+        "correct": "黃鸝／白鷺",
+        "wrong": [
+          "黃鸝／青天",
+          "翠柳／一行",
+          "兩個／鳴翠柳"
+        ],
+        "exp": "兩句依次呈現數量詞、鳥類名詞、動作及景物。『黃鸝』和『白鷺』同為鳥類、位置相對，是明確的對仗。",
+        "subject": "國文",
+        "sub_topic": "韻腳、對仗與詩意理解",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-韻腳、對仗與詩意理解",
+        "template_id": "chinese-2026-reference-高中一年級-韻腳、對仗與詩意理解-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-韻腳、對仗與詩意理解-2",
+      "source": "大考中心 114學年度學測國綜第15題，參考其命題方式重新命題",
+      "design": "辨認韻腳時區分押韻與其他格律條件",
+      "question": {
+        "q": "閱讀一首自作短詩：\n「月映窗前滿室光，\n花開小徑送微香。\n行人望盡青山外，\n一夜歸心到故鄉。」\n就句末字『光、香、外、鄉』的押韻關係而言，何者正確？",
+        "correct": "第一、二、四句的『光、香、鄉』相押，第三句『外』不押韻",
+        "wrong": [
+          "只有第一、三句相押，其餘兩句不押韻",
+          "四句的句末字皆押同一韻",
+          "第二句『香』與第四句『鄉』的音韻完全無關"
+        ],
+        "exp": "『光、香、鄉』同屬傳統詩韻的陽韻，『外』不在同一韻部；本題僅比較韻腳，不宣稱全詩符合平仄格律。",
+        "subject": "國文",
+        "sub_topic": "韻腳、對仗與詩意理解",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-7",
+            "name": "文學常識"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-韻腳、對仗與詩意理解",
+        "template_id": "chinese-2026-reference-高中一年級-韻腳、對仗與詩意理解-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

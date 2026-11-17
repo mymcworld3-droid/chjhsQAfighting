@@ -1,0 +1,66 @@
+{
+  "units": [
+    "語文知識"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-字音字形字義-1",
+      "source": "大考中心 114學年度學測國綜第2題，參考其命題方式重新命題",
+      "design": "從校稿情境區分易混字",
+      "question": {
+        "q": "校刊編輯檢查四句稿件。下列哪一句完全沒有錯別字？",
+        "correct": "為了趕上截稿期限，編輯們夜以繼日地校稿。",
+        "wrong": [
+          "他一再拖延，最後只能臨時抱彿腳。",
+          "面對兩難的選擇，她始終猶豫不絕。",
+          "新成員彼此鼓勵，希望再接再勵。"
+        ],
+        "exp": "『抱彿腳』應為『抱佛腳』；『猶豫不絕』應為『猶豫不決』；『再接再勵』應為『再接再厲』。只有『夜以繼日』字形正確。",
+        "subject": "國文",
+        "sub_topic": "字音字形字義",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-3",
+            "name": "字音字形"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-字音字形字義",
+        "template_id": "chinese-2026-reference-高中一年級-字音字形字義-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-字音字形字義-2",
+      "source": "大考中心 115學年度學測國綜第25題，參考其命題方式重新命題",
+      "design": "用不同語境比較一字多義",
+      "question": {
+        "q": "『三顧茅廬』的『顧』有拜訪之意。下列哪個詞語中的『顧』與此義最接近？",
+        "correct": "光顧商店",
+        "wrong": [
+          "顧此失彼",
+          "顧名思義",
+          "奮不顧身"
+        ],
+        "exp": "『三顧』是多次拜訪；『光顧』指客人前往商店，也有造訪之義。『顧此失彼』是照顧、『顧名思義』是看、『奮不顧身』是顧及。",
+        "subject": "國文",
+        "sub_topic": "字音字形字義",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-3",
+            "name": "字音字形"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-字音字形字義",
+        "template_id": "chinese-2026-reference-高中一年級-字音字形字義-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "語文知識"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-2026-reference-高中一年級-標點與修辭-1",
+      "source": "大考中心 115學年度學測國綜第5題，參考其命題方式重新命題",
+      "design": "以總分語意關係判斷標點",
+      "question": {
+        "q": "校刊想把『請準備三種文具』與其後的項目寫成一句話。下列何者標點使用最恰當？",
+        "correct": "請準備三種文具：鉛筆、橡皮擦和直尺。",
+        "wrong": [
+          "請準備三種文具？鉛筆、橡皮擦和直尺。",
+          "請準備三種文具、鉛筆、橡皮擦和直尺。",
+          "請準備三種文具！鉛筆、橡皮擦和直尺？"
+        ],
+        "exp": "前半總說三種文具，後半逐項列舉，應以冒號引出說明；頓號則用來分隔並列項目。其他選項標點與句意不合。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "chinese-2026-reference-高中一年級-標點與修辭-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-2026-reference-高中一年級-標點與修辭-2",
+      "source": "大考中心 114學年度學測國綜第4題，參考其命題方式重新命題",
+      "design": "從重複句構判斷排比效果",
+      "question": {
+        "q": "閱讀句子：\n「不是為了獎牌而奔跑，不是為了掌聲而練習，不是為了分數而努力；我們只是想，比昨天再前進一步。」\n連用三個『不是為了……』，主要運用了哪種修辭？",
+        "correct": "排比",
+        "wrong": [
+          "頂真",
+          "雙關",
+          "借代"
+        ],
+        "exp": "連續三個結構相近的分句，層層強化否定外在獎賞的立場，屬排比。頂真須前句末語銜接後句開頭；雙關及借代也不符合。",
+        "subject": "國文",
+        "sub_topic": "標點與修辭",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-5",
+            "name": "語法修辭"
+          }
+        ],
+        "concept_id": "chinese-高中一年級-標點與修辭",
+        "template_id": "chinese-2026-reference-高中一年級-標點與修辭-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
