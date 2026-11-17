@@ -1,0 +1,66 @@
+{
+  "units": [
+    "公共參與"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-公共事務與媒體-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公共事務與媒體」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "一則新聞只訪問支持開發案的企業，未呈現受影響居民與環境研究資料。讀者最應留意哪項問題？",
+        "correct": "報導取材可能缺少重要立場，需補查其他證據與觀點",
+        "wrong": [
+          "只要接受企業訪問就證明全部內容造假",
+          "新聞有標題即代表所有相關人都已受訪",
+          "報導中沒有居民受訪便代表居民一定贊成"
+        ],
+        "exp": "媒體取材影響議題呈現，需區分有無證據與是否完整呈現利益相關者。",
+        "subject": "公民",
+        "sub_topic": "公共事務與媒體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公共事務與媒體",
+        "template_id": "civic-ref-g1-公共事務與媒體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-公共事務與媒體-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公共事務與媒體」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "社區議題的影片被大量分享，卻沒有附拍攝日期。查證時最適合優先做什麼？",
+        "correct": "確認影片原始來源、拍攝時地與是否遭錯置引用",
+        "wrong": [
+          "分享次數多便可視為當天即時畫面",
+          "只根據配樂情緒判定事件年代",
+          "認為影片影像比文字更不需要查核"
+        ],
+        "exp": "影片可被轉載與重新配文，來源、時間與位置是基本查證條件。",
+        "subject": "公民",
+        "sub_topic": "公共事務與媒體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公共事務與媒體",
+        "template_id": "civic-ref-g1-公共事務與媒體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

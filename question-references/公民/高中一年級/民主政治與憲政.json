@@ -1,0 +1,66 @@
+{
+  "units": [
+    "政治與民主"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-民主政治與憲政-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「民主政治與憲政」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "一個政府定期舉行選舉，但執政者不受憲法限制，也禁止法院審查行政措施。若評估憲政民主，最值得質疑的是？",
+        "correct": "選舉存在不代表權力已受到制度與基本權利的充分制衡",
+        "wrong": [
+          "只要有選舉，憲政保障便必然完整",
+          "法院與政府權力界限不屬於憲政問題",
+          "憲政民主只關心投票箱的材質"
+        ],
+        "exp": "憲政民主除選舉外，也重視法治、權力制衡與基本權保障。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中一年級-民主政治與憲政",
+        "template_id": "civic-ref-g1-民主政治與憲政-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-民主政治與憲政-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「民主政治與憲政」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "政府提出限制公共集會的規定，法院可以依憲法審查是否過度限制人民權利。這體現什麼理念？",
+        "correct": "以憲法保障權利並拘束公權力的行使",
+        "wrong": [
+          "行政機關對所有權利享有無限制決定權",
+          "法院只需要討論政府辦公室的空間",
+          "人民權利在立法後就不再受憲法保障"
+        ],
+        "exp": "憲法具有拘束公權力的功能，對權利限制仍須符合法定及憲法要求。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中一年級-民主政治與憲政",
+        "template_id": "civic-ref-g1-民主政治與憲政-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "公共參與"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-公民社會-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公民社會」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "某倡議團體在政府提出交通政策前蒐集居民意見，公開研究結果並舉辦討論會。這最能反映公民社會什麼功能？",
+        "correct": "提供公共討論與組織集體意見的空間",
+        "wrong": [
+          "公民社會團體能直接取代所有民選機關",
+          "只要團體提出意見，政府就必須毫無審議地照辦",
+          "公共政策只允許政府內部秘密討論"
+        ],
+        "exp": "民間組織可以參與意見形成與監督，但政策仍須依民主程序決定。",
+        "subject": "公民",
+        "sub_topic": "公民社會",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公民社會",
+        "template_id": "civic-ref-g1-公民社會-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-公民社會-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公民社會」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "不同環境團體對一項道路工程看法不一，仍共同要求政府公開環境評估資訊。下列何者最符合公民社會精神？",
+        "correct": "即使政策立場不同，也能合作爭取資訊透明與公共討論",
+        "wrong": [
+          "公民團體必須擁有完全一致立場才能存在",
+          "要求資訊公開等同取得工程最終決定權",
+          "公共議題只能交給單一社團決定"
+        ],
+        "exp": "共享的公共程序要求可能跨越具體立場，反映多元社會中的合作。",
+        "subject": "公民",
+        "sub_topic": "公民社會",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公民社會",
+        "template_id": "civic-ref-g1-公民社會-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

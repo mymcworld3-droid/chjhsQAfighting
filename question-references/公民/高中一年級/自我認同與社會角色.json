@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自我與社會"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-自我認同與社會角色-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「自我認同與社會角色」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "小宇在家是姊姊的弟弟，在班上是學藝股長，在球隊是守門員。這最能說明哪種社會學概念？",
+        "correct": "同一個人可依不同社會關係承擔多重角色",
+        "wrong": [
+          "一個人只能有一種固定不變的社會身分",
+          "球隊角色會自動取消所有家庭角色",
+          "社會角色只由個人的出生日期決定"
+        ],
+        "exp": "家庭、班級及球隊是不同社會關係，個人可同時承擔多種角色與責任。",
+        "subject": "公民",
+        "sub_topic": "自我認同與社會角色",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civic-高中一年級-自我認同與社會角色",
+        "template_id": "civic-ref-g1-自我認同與社會角色-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-自我認同與社會角色-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「自我認同與社會角色」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "一位學生因要準備校內表演，又被社團要求在同一時段參加競賽練習，感到難以兼顧。此情況最貼近什麼？",
+        "correct": "不同角色期待在時間安排上產生衝突",
+        "wrong": [
+          "因為參加兩項活動，便完全喪失個人認同",
+          "兩個團體對他從未提出任何期待",
+          "活動時間重疊就能證明學校規定無效"
+        ],
+        "exp": "學生同時承擔表演者與社團成員的角色，兩方時間要求互相衝突。",
+        "subject": "公民",
+        "sub_topic": "自我認同與社會角色",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civic-高中一年級-自我認同與社會角色",
+        "template_id": "civic-ref-g1-自我認同與社會角色-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

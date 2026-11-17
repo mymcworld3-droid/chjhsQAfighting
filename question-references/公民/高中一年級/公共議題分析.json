@@ -1,0 +1,66 @@
+{
+  "units": [
+    "媒體識讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-公共議題分析-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公共議題分析」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "社區考慮加設路邊停車格。商家認為可提高消費便利性，居民擔心行人空間縮小。哪種分析最周延？",
+        "correct": "比較商業需求、行人安全與道路容量，再評估方案",
+        "wrong": [
+          "只採第一位發言者的意見即可代表全體",
+          "只要商家支持就表示居民沒有權利提出疑慮",
+          "停車位數量與行人使用完全無關"
+        ],
+        "exp": "公共議題有多種目標與利益關係人，需要資料與權衡。",
+        "subject": "公民",
+        "sub_topic": "公共議題分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公共議題分析",
+        "template_id": "civic-ref-g1-公共議題分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-公共議題分析-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公共議題分析」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "某校園午餐政策聲稱能降低廚餘。若要檢驗是否達成，最直接的證據為何？",
+        "correct": "實施前後在可比較條件下的廚餘重量及用餐人數",
+        "wrong": [
+          "只比較午餐海報的配色",
+          "只看政策名稱是否包含環保兩字",
+          "直接假設支持者越多廚餘越少"
+        ],
+        "exp": "廚餘總量應配合用餐人數與觀察期間比較，才能評估政策效果。",
+        "subject": "公民",
+        "sub_topic": "公共議題分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公共議題分析",
+        "template_id": "civic-ref-g1-公共議題分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

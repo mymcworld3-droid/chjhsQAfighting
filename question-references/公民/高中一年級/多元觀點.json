@@ -1,0 +1,66 @@
+{
+  "units": [
+    "媒體識讀"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-多元觀點-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「多元觀點」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "公共運輸路線調整，通勤族希望縮短車程，長者希望保留靠近診所的站牌。如何理解兩種意見最合宜？",
+        "correct": "不同使用者的需求差異會影響對同一政策的評價",
+        "wrong": [
+          "其中一方的需求存在，就表示另一方必然虛假",
+          "政策只能服務搭車次數最多的一群人",
+          "只要是公共運輸，各群體需求必然相同"
+        ],
+        "exp": "通勤效率和醫療可近性是不同而合理的需求，需要權衡。",
+        "subject": "公民",
+        "sub_topic": "多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-多元觀點",
+        "template_id": "civic-ref-g1-多元觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-多元觀點-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「多元觀點」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "閱讀兩段意見：甲主張興建自行車道以減少汽車使用；乙擔心道路過窄，可能排擠行人空間。下列何者最能整合？",
+        "correct": "評估自行車道設計是否同時保障騎乘與步行安全",
+        "wrong": [
+          "甲與乙都認為道路不應保留行人",
+          "只要有自行車道便不必評估交通安全",
+          "應直接宣稱乙反對所有減碳政策"
+        ],
+        "exp": "甲重視低碳交通，乙重視空間分配與安全，兩者可透過設計協調。",
+        "subject": "公民",
+        "sub_topic": "多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-多元觀點",
+        "template_id": "civic-ref-g1-多元觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自我與社會"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-家庭、學校與社會互動-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「家庭、學校與社會互動」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "學生在家中習慣直接表達意見，在學校討論時則練習輪流發言與聆聽。此例最能說明什麼？",
+        "correct": "個人在不同社會化場域學習與調整互動方式",
+        "wrong": [
+          "只有家庭會影響個人的社會化",
+          "學校不可能教導任何溝通規範",
+          "不同場域的互動方式必須完全一致"
+        ],
+        "exp": "家庭與學校都是社會化場域，會塑造並調整溝通行為。",
+        "subject": "公民",
+        "sub_topic": "家庭、學校與社會互動",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civic-高中一年級-家庭、學校與社會互動",
+        "template_id": "civic-ref-g1-家庭、學校與社會互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-家庭、學校與社會互動-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「家庭、學校與社會互動」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "學校推動資源回收，學生將分類習慣帶回家，家長也開始主動分類。哪種說法最合適？",
+        "correct": "社會化可能是雙向互動，學校學習亦能影響家庭生活",
+        "wrong": [
+          "只能由父母影響孩子，孩子絕不可能影響家庭",
+          "學校活動只能改變考試分數",
+          "家庭規範完全不可能隨新經驗改變"
+        ],
+        "exp": "學生從學校帶入新知，家庭成員也可能因此調整行為。",
+        "subject": "公民",
+        "sub_topic": "家庭、學校與社會互動",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civic-高中一年級-家庭、學校與社會互動",
+        "template_id": "civic-ref-g1-家庭、學校與社會互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

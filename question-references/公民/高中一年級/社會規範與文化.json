@@ -1,0 +1,66 @@
+{
+  "units": [
+    "自我與社會"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-社會規範與文化-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「社會規範與文化」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "同一地區的部分家庭在聚餐時習慣共食，另一些家庭則採個人分餐。從文化角度看，哪項理解最合理？",
+        "correct": "飲食習慣是社會文化規範的一部分，可能存在多樣性",
+        "wrong": [
+          "只要習慣不同，就有一種必然不符合道德",
+          "共食或分餐都只能由法律強制規定",
+          "每個家庭的飲食方式必須完全相同"
+        ],
+        "exp": "文化習慣可隨群體與時代而異，不能僅由差異推定優劣。",
+        "subject": "公民",
+        "sub_topic": "社會規範與文化",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civic-高中一年級-社會規範與文化",
+        "template_id": "civic-ref-g1-社會規範與文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-社會規範與文化-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「社會規範與文化」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "某社區原本不鼓勵在會議中使用手機，後來因線上即時查資料而修訂會議禮儀。這反映社會規範哪項特性？",
+        "correct": "規範會隨科技與互動需求而調整",
+        "wrong": [
+          "所有規範只要形成就不能修改",
+          "規範與人際互動及科技使用無關",
+          "只有國家刑罰才能決定所有會議禮儀"
+        ],
+        "exp": "會議習慣是非正式規範，會隨實際溝通方式改變。",
+        "subject": "公民",
+        "sub_topic": "社會規範與文化",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-2",
+            "name": "文化與多元"
+          }
+        ],
+        "concept_id": "civic-高中一年級-社會規範與文化",
+        "template_id": "civic-ref-g1-社會規範與文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

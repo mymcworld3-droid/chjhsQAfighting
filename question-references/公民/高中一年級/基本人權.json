@@ -1,0 +1,66 @@
+{
+  "units": [
+    "權利與責任"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-基本人權-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「基本人權」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "學校討論學生是否可對校規提出建議。若從基本人權角度理解，何者最適當？",
+        "correct": "學生可享有表達意見的權利，但行使方式仍須尊重他人權益",
+        "wrong": [
+          "學生不具任何表達意見的基本權利",
+          "言論自由必然允許威脅任何人",
+          "只要是校規就不能接受任何討論"
+        ],
+        "exp": "表達意見是基本權精神的一部分，同時受到尊重他人與合理規範的要求。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中一年級-基本人權",
+        "template_id": "civic-ref-g1-基本人權-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-基本人權-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「基本人權」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "某公共圖書館新設網站，卻沒有為視覺障礙使用者提供可讀取的文字標籤。若從平等近用角度，最應改善什麼？",
+        "correct": "增加輔助科技可讀的資訊與操作功能",
+        "wrong": [
+          "只增加網站動畫，不改變操作方式",
+          "規定只有視力正常的人可以查詢館藏",
+          "將所有公告改為只有圖片、沒有文字"
+        ],
+        "exp": "資訊無障礙可協助不同使用者實際行使公共服務的近用權，形式相同不等於實際平等。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civic-高中一年級-基本人權",
+        "template_id": "civic-ref-g1-基本人權-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

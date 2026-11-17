@@ -1,0 +1,66 @@
+{
+  "units": [
+    "權利與責任"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-公民參與-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公民參與」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "市府提出新公園規畫，居民可參加公開說明會並提出替代設計。此參與方式最主要有什麼價值？",
+        "correct": "讓受政策影響的人提供資訊與需求，改善決策的回應性",
+        "wrong": [
+          "只要居民參加就自動取得所有行政權",
+          "公開討論可保證每個人最後立場完全相同",
+          "政府必須刪除全部工程評估資料"
+        ],
+        "exp": "公民參與能補充在地資訊、表達利益與監督決策，但仍需正式程序整合。",
+        "subject": "公民",
+        "sub_topic": "公民參與",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公民參與",
+        "template_id": "civic-ref-g1-公民參與-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-公民參與-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「公民參與」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "某學生參加社區交通安全會議，先整理事故地點、再提出改善標線建議。相比只發表不滿，這種作法有何優點？",
+        "correct": "使用可核對的資料提出較具體、可討論的公共建議",
+        "wrong": [
+          "整理資料會使居民失去表達權",
+          "參與公共事務只需提出情緒而不需要理由",
+          "有資料就代表任何方案必定有效"
+        ],
+        "exp": "資料可釐清問題並支撐方案，但實際成效仍須評估。",
+        "subject": "公民",
+        "sub_topic": "公民參與",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civic-高中一年級-公民參與",
+        "template_id": "civic-ref-g1-公民參與-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

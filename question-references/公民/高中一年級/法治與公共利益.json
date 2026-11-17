@@ -1,0 +1,66 @@
+{
+  "units": [
+    "權利與責任"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-法治與公共利益-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「法治與公共利益」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "某市為降低夜間噪音，擬對夜間擴音活動設合理時段限制。從法治觀點，政府應優先確認什麼？",
+        "correct": "限制有法律依據、目的正當且手段不過度",
+        "wrong": [
+          "只要政府覺得方便即可不經法律程序",
+          "公共利益可使所有基本權利不受任何保障",
+          "規範一旦公告就不需要考慮比例性"
+        ],
+        "exp": "公共安寧可為正當目的，但權利限制仍應符合法律保留與比例原則。",
+        "subject": "公民",
+        "sub_topic": "法治與公共利益",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civic-高中一年級-法治與公共利益",
+        "template_id": "civic-ref-g1-法治與公共利益-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-法治與公共利益-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「法治與公共利益」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "政府為保障道路通行，規畫禁止特定時段占用消防通道。從權利與公共利益的平衡看，哪項解釋合理？",
+        "correct": "個人使用道路的自由可受必要且適度的公共安全規範限制",
+        "wrong": [
+          "公共安全與任何個人行為都不可能有衝突",
+          "只要有人支持管制，就不必說明法律依據",
+          "所有道路管制都必然違反憲法"
+        ],
+        "exp": "消防救援需要道路暢通，適度而有法源的限制有其公共安全理由。",
+        "subject": "公民",
+        "sub_topic": "法治與公共利益",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civic-高中一年級-法治與公共利益",
+        "template_id": "civic-ref-g1-法治與公共利益-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

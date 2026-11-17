@@ -1,0 +1,66 @@
+{
+  "units": [
+    "公共參與"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "civic-ref-g1-社會團體-1",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「社會團體」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "某居民成立河川巡守協會，定期辦理淨溪與水質觀察，並向政府提出建議。此團體主要具備什麼性質？",
+        "correct": "成員因共同公共目標自願組織並採取集體行動",
+        "wrong": [
+          "依法一定取代所有政府環保機關",
+          "成員必須具有完全相同的家庭背景",
+          "所有居民不論意願都必須加入"
+        ],
+        "exp": "社會團體可基於共同議題形成，透過活動與倡議參與公共事務。",
+        "subject": "公民",
+        "sub_topic": "社會團體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civic-高中一年級-社會團體",
+        "template_id": "civic-ref-g1-社會團體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "civic-ref-g1-社會團體-2",
+      "source": "大考中心114學測社會公民題之社會情境、權利與公共論證命題取向；獨立自編參考題",
+      "design": "以「社會團體」的具體權益與社會互動情境進行可證明推論",
+      "question": {
+        "q": "社區讀書會由居民自發組成，成員輪流選書與規畫活動。若與政府行政機關比較，下列敘述何者適當？",
+        "correct": "讀書會以自願參與及共同興趣為基礎，不因此具有公權力",
+        "wrong": [
+          "讀書會一成立就能對居民開罰",
+          "所有社團都由政府官員直接任命",
+          "只要成員超過十人便成為法院"
+        ],
+        "exp": "民間團體可有自治規則，但不能因為組織存在便享有國家公權力。",
+        "subject": "公民",
+        "sub_topic": "社會團體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civic-高中一年級-社會團體",
+        "template_id": "civic-ref-g1-社會團體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
