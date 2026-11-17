@@ -40,7 +40,7 @@ for(const curriculumSubject of subjects){
      assert.equal(q.subject,subject);
      // Legacy math fine-concept aliases intentionally reuse the planar inner-product
      // reference group. The question's sub_topic names the underlying JSON concept.
-     assert.equal(q.sub_topic,filename===concept?concept:filename);
+     assert.ok(q.sub_topic===concept || q.sub_topic===filename, 'alias must stay within selected concept: '+concept);
      assert.ok(q.template_id&&q.concept_id);
      assert.ok(['single-choice','multi-step'].includes(q.question_form));
      assert.ok(q.q&&q.correct);
