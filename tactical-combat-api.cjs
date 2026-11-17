@@ -805,7 +805,7 @@ async function reportQuestion(db,uid,input,{review,award,readReceipt=readSoloRec
   const s=exists(await db.collection(ROOMS).doc(input.roomId).get());member(s,uid);
   if(s.mode!=='pve')throw error('問道試煉才能使用此回報入口',400);
   if(String(input.reason||'').normalize('NFC').replace(/\s+/g,' ').trim().length<6)throw error('請具體描述題目的錯誤，至少輸入 6 個字元。',400);
-  if(s.questionRefunds?.[input.questionId]?.uid===uid)return {status:'duplicate',compensated:false,reason:'本題已完成錯題補償。',...await refundQuestionStamina(db,uid,s.id,input.questionId)};
+  if(s.questionRefunds?.[input.questionId]?.uid===uid)return {status:'duplicate',valid:true,compensated:false,reason:'本題已完成錯題審核及體力補正，不會重複發放獎勵。',...await refundQuestionStamina(db,uid,s.id,input.questionId)};
   let q=s.pending?.[uid]?.id===input.questionId?s.pending[uid]:s.pendingFollowup?.[uid]?.id===input.questionId?s.pendingFollowup[uid]:s.reviewHistory?.[input.questionId]?.uid===uid?s.reviewHistory[input.questionId]:s.reviews?.[uid]?.questionId===input.questionId?s.reviews[uid]:null;
   let shared;
   if(input.soloQuestion){
@@ -827,7 +827,11 @@ async function reportQuestion(db,uid,input,{review,award,readReceipt=readSoloRec
     // The trial pays currency at stage settlement. Correcting a question
     // still applies the cultivation compensation and stamina refund once.
     const outcome=await (award||reports.awardOnce)(db,uid,trusted,result,{goldReward:0});
-    return {...outcome,status:'confirmed',reason:'獨立審核已確認本題有誤。'+(outcome.status==='limit'?outcome.reason:''),...await refundQuestionStamina(db,uid,s.id,input.questionId,shared)};
+    const stamina=await refundQuestionStamina(db,uid,s.id,input.questionId,shared);
+    // A verified question can still hit the daily reward cap, or replay a
+    // previously committed award. Never overwrite the payment outcome status.
+    return {...outcome,valid:true,reason:'獨立審核已確認本題有誤。'+
+      (outcome.status==='limit'||outcome.status==='duplicate'?' '+outcome.reason:''),...stamina};
   }
   // Before answering, never reveal the answer through an AI review reason.
   return (shared||s.pending?.[uid]?.id===input.questionId||s.pendingFollowup?.[uid]?.id===input.questionId)?{...result,reason:result.status==='rejected'?'獨立審核未確認本題有實質錯誤。':result.reason}:result;
