@@ -1,7 +1,10 @@
 'use strict';
 const Knowledge=require('../../public/cultivation/knowledge-points.js');
 function generated(expected,overrides={}){
-  const subject=Knowledge.subject(expected.subject)||'國文',point=Knowledge.points(subject)[0];
+  const category={自然:'生物',社會:'公民'}[expected.subject] || expected.subject;
+  const subject=Knowledge.subject(category)||'國文';
+  const pointId={國文:'chinese-8',英文:'english-8',數學:'math-3',自然:'biology-8',社會:'civics-8'}[expected.subject];
+  const point=Knowledge.points(subject).find(item=>item.id===pointId)||Knowledge.points(subject)[0];
   // These fixtures intentionally require application of a named school
   // concept. Mere passage recall must not be mistaken for literacy assessment.
   const examples={
