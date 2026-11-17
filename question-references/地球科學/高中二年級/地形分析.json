@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球系統探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-地形分析-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「地形分析」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "等高線地圖中，甲區等高線很密，乙區等高線稀疏。若比例尺相同，哪項判斷合理？",
+        "correct": "甲區地表坡度通常較陡",
+        "wrong": [
+          "乙區坡度一定比甲區更陡",
+          "兩區坡度必然完全相同",
+          "等高線間距只與地名長短有關"
+        ],
+        "exp": "相同高度差的等高線在水平距離較短的區域表示坡度較大。",
+        "subject": "地球科學",
+        "sub_topic": "地形分析",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地形分析",
+        "template_id": "earth-ref-g2-地形分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-地形分析-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「地形分析」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某河川上游河谷狹窄、坡度大，下游河道較寬且河漫灘發達。最合適的解釋是什麼？",
+        "correct": "河流坡度與侵蝕、搬運、沉積作用在不同河段有所差異",
+        "wrong": [
+          "河流下游必定不再有水流",
+          "上游只會沉積而完全不侵蝕",
+          "河谷形態與水流能量毫無關係"
+        ],
+        "exp": "上游坡陡常以向下侵蝕為主，下游坡緩且沉積與側向作用較顯著。",
+        "subject": "地球科學",
+        "sub_topic": "地形分析",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地形分析",
+        "template_id": "earth-ref-g2-地形分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

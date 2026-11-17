@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球系統探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-岩石與礦物-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「岩石與礦物」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某未知礦物能以指甲刮出痕跡，卻無法刮傷玻璃。若判讀礦物硬度，最直接依據何種特性？",
+        "correct": "礦物抵抗刮磨的能力",
+        "wrong": [
+          "礦物是否能溶於熱水",
+          "礦物的放射性半衰期",
+          "礦物結晶的形成日期"
+        ],
+        "exp": "莫氏硬度反映礦物相對耐刮磨程度，是比較刮痕的物理性質。",
+        "subject": "地球科學",
+        "sub_topic": "岩石與礦物",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中二年級-岩石與礦物",
+        "template_id": "earth-ref-g2-岩石與礦物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-岩石與礦物-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「岩石與礦物」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某岩石由不同大小的碎屑顆粒經壓密與膠結組成，且有明顯層理。最可能是哪類岩石？",
+        "correct": "碎屑沉積岩",
+        "wrong": [
+          "由岩漿直接冷卻的火成岩",
+          "完全熔融後再凝固的大理岩",
+          "單一礦物的天然晶體而非岩石"
+        ],
+        "exp": "顆粒堆積、壓密膠結與層理，是典型沉積岩的形成線索。",
+        "subject": "地球科學",
+        "sub_topic": "岩石與礦物",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-3",
+            "name": "岩石與礦物"
+          }
+        ],
+        "concept_id": "earth-高中二年級-岩石與礦物",
+        "template_id": "earth-ref-g2-岩石與礦物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

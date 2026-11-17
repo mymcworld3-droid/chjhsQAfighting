@@ -1,0 +1,66 @@
+{
+  "units": [
+    "地球系統探究"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-板塊構造與地震資料-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「板塊構造與地震資料」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "兩個GPS測站位於同一條活動斷層兩側，多年來顯示相對位置逐漸改變。此資料最直接表示什麼？",
+        "correct": "斷層兩側存在持續的地殼相對變形",
+        "wrong": [
+          "已能精確預告下一次地震的日期",
+          "兩測站間的海拔必然同時下降",
+          "斷層已完全停止所有運動"
+        ],
+        "exp": "長期GPS位移可量化地殼變形，但不能單靠位移精確預測發震時刻。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "earth-ref-g2-板塊構造與地震資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-板塊構造與地震資料-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「板塊構造與地震資料」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "甲站P波與S波到時差為10秒，乙站為35秒。若兩站使用相同地震波速模型，哪一站通常離震源較遠？",
+        "correct": "乙站",
+        "wrong": [
+          "甲站",
+          "兩站一定等距",
+          "無法判斷，因P波總是晚於S波"
+        ],
+        "exp": "P、S波到時差通常隨傳播距離增加而增加，乙站到時差較大。",
+        "subject": "地球科學",
+        "sub_topic": "板塊構造與地震資料",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-板塊構造與地震資料",
+        "template_id": "earth-ref-g2-板塊構造與地震資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

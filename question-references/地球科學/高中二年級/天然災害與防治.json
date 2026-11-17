@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地科：地質與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-天然災害與防治-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「天然災害與防治」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某地強震後，老舊建物集中區域受損特別嚴重。若評估災害風險，哪項資料應與震度一起考量？",
+        "correct": "建築耐震能力、人口分布及土地使用狀況",
+        "wrong": [
+          "只看地震名稱的字數",
+          "只看附近餐廳的菜色",
+          "假定所有建築在相同震度下損壞程度必定相同"
+        ],
+        "exp": "災害風險不只取決於地震危害，也與暴露和脆弱度有關。",
+        "subject": "地球科學",
+        "sub_topic": "天然災害與防治",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天然災害與防治",
+        "template_id": "earth-ref-g2-天然災害與防治-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-天然災害與防治-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「天然災害與防治」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "颱風期間某山區因連日豪雨達到土石流警戒值，村民應依地方防災計畫及官方指示如何應對？",
+        "correct": "及早依指定路線撤往安全避難處所",
+        "wrong": [
+          "待土石流流到家門口再決定",
+          "到河床中央觀察泥砂運動",
+          "因警戒不等於必定發生便不需準備"
+        ],
+        "exp": "警戒是風險升高的訊號，預防性避難可減少暴露於高危險區的時間。",
+        "subject": "地球科學",
+        "sub_topic": "天然災害與防治",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天然災害與防治",
+        "template_id": "earth-ref-g2-天然災害與防治-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

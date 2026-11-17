@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地科：大氣海洋"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-海洋運動-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「海洋運動」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某港口一天內水位規律起伏，且與月球相對位置有關。最主要的自然成因是什麼？",
+        "correct": "月球與太陽引力及地球自轉造成的潮汐",
+        "wrong": [
+          "海底岩石每半天完全熔融",
+          "海水每天只受海岸植物蒸散控制",
+          "海流不受任何外力或地形影響"
+        ],
+        "exp": "潮汐主要由月、日引潮力與地球自轉引起，地形亦影響潮位表現。",
+        "subject": "地球科學",
+        "sub_topic": "海洋運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中二年級-海洋運動",
+        "template_id": "earth-ref-g2-海洋運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-海洋運動-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「海洋運動」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某海岸連續數日受強烈離岸風影響，表層海水向外海移動，較深冷水上湧補充。這最可能造成什麼現象？",
+        "correct": "沿岸上升流與表層溫度下降",
+        "wrong": [
+          "沿岸海水必定瞬間蒸發殆盡",
+          "外海鹽分必定完全消失",
+          "海岸沒有水可供上升流發生"
+        ],
+        "exp": "適當風向驅動表層水離岸，深層水補上，常使表面較冷。",
+        "subject": "地球科學",
+        "sub_topic": "海洋運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-6",
+            "name": "海洋科學"
+          }
+        ],
+        "concept_id": "earth-高中二年級-海洋運動",
+        "template_id": "earth-ref-g2-海洋運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地科：大氣海洋"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-氣候與天氣模型-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「氣候與天氣模型」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "氣象模式以有限格點描述大氣，且初始觀測值有誤差。為何幾天後預報的不確定性可能增加？",
+        "correct": "大氣非線性演化使初始誤差逐漸放大",
+        "wrong": [
+          "數值模式不需要任何初始條件",
+          "大氣演化必然完全線性且可永久精確預報",
+          "模式格點越多就必定不會有誤差"
+        ],
+        "exp": "大氣系統對初始條件敏感，誤差及模型近似會限制中長期預報準確度。",
+        "subject": "地球科學",
+        "sub_topic": "氣候與天氣模型",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-氣候與天氣模型",
+        "template_id": "earth-ref-g2-氣候與天氣模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-氣候與天氣模型-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「氣候與天氣模型」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某氣候模型將大氣中二氧化碳濃度設為兩個不同情境，其他條件相近，模擬未來平均氣溫差異。這種研究主要在做什麼？",
+        "correct": "比較不同外在強迫條件下的可能氣候反應",
+        "wrong": [
+          "精確預告每一天每一地點的降雨時刻",
+          "證明所有自然變異都已消失",
+          "把情境模擬當作已發生的歷史觀測"
+        ],
+        "exp": "情境模型評估特定假設下的系統回應，而非逐日必然事件。",
+        "subject": "地球科學",
+        "sub_topic": "氣候與天氣模型",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-5",
+            "name": "氣候變遷"
+          }
+        ],
+        "concept_id": "earth-高中二年級-氣候與天氣模型",
+        "template_id": "earth-ref-g2-氣候與天氣模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

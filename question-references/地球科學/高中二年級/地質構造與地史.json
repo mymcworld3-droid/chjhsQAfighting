@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地科：地質與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-地質構造與地史-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「地質構造與地史」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某地層序列由下往上為砂岩、頁岩、石灰岩，且未發現倒轉或嚴重擾動。依地層疊置原理，哪個判斷最合理？",
+        "correct": "下方砂岩形成通常早於上方石灰岩",
+        "wrong": [
+          "石灰岩必定比砂岩更古老",
+          "三層岩石必然在同一天形成",
+          "地層順序能直接給出每層的絕對年齡"
+        ],
+        "exp": "未倒轉的沉積地層一般下老上新；相對年代不等於確定絕對年代。",
+        "subject": "地球科學",
+        "sub_topic": "地質構造與地史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地質構造與地史",
+        "template_id": "earth-ref-g2-地質構造與地史-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-地質構造與地史-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「地質構造與地史」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "一條斷層切穿三層沉積岩，但沒有切穿覆蓋其上的第四層沉積岩。依切割關係，斷層活動時間最可能在何時？",
+        "correct": "前三層沉積後、第四層形成前",
+        "wrong": [
+          "第一層沉積之前",
+          "第四層形成之後且一定仍在活動",
+          "所有地層沉積的同一瞬間"
+        ],
+        "exp": "斷層晚於被切穿地層，早於未被切穿的覆蓋地層。",
+        "subject": "地球科學",
+        "sub_topic": "地質構造與地史",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-2",
+            "name": "板塊與地質作用"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地質構造與地史",
+        "template_id": "earth-ref-g2-地質構造與地史-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

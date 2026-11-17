@@ -1,0 +1,66 @@
+{
+  "units": [
+    "天文觀測"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-天球坐標的概念-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「天球坐標的概念」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "觀測者以地平線為基準量測星體位置，記錄其仰角與方位。這是哪種定位方式？",
+        "correct": "地平坐標系統",
+        "wrong": [
+          "用地球板塊位置判定天體",
+          "以海水鹽度作為天球緯度",
+          "以礦物硬度作為天體方位"
+        ],
+        "exp": "地平坐標由高度角與方位角描述天體在觀測者天空的位置。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "earth-ref-g2-天球坐標的概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-天球坐標的概念-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「天球坐標的概念」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "觀測同一顆恆星，甲、乙兩地觀測者緯度不同，恆星相對地平線的高度可能不同。這反映哪項因素？",
+        "correct": "觀測者在地球表面的位置影響地平坐標",
+        "wrong": [
+          "恆星每天都必須改變本身質量",
+          "地球的球形與觀測者所在緯度完全無關",
+          "每個地方看到的星體高度都必然一樣"
+        ],
+        "exp": "地平坐標依觀測位置而定，同一恆星在不同緯度觀察會有不同高度角。",
+        "subject": "地球科學",
+        "sub_topic": "天球坐標的概念",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天球坐標的概念",
+        "template_id": "earth-ref-g2-天球坐標的概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

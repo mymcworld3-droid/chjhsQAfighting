@@ -1,0 +1,66 @@
+{
+  "units": [
+    "天文觀測"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-宇宙演化-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「宇宙演化」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "遠方星系光譜普遍呈紅移，且距離越遠平均紅移越大，這通常支持哪種宇宙學觀點？",
+        "correct": "宇宙空間正在膨脹",
+        "wrong": [
+          "所有星系都以完全相同速度繞地球旋轉",
+          "地球位於每個星系的幾何中心",
+          "遠方星系已停止發出所有可見光"
+        ],
+        "exp": "哈伯—勒梅特關係顯示星系退行趨勢與距離相關，是宇宙膨脹的重要證據。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙演化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-宇宙演化",
+        "template_id": "earth-ref-g2-宇宙演化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-宇宙演化-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「宇宙演化」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "宇宙微波背景輻射從天空各方向均可觀測到接近2.7 K的熱輻射。這最能支持哪一類宇宙歷史推論？",
+        "correct": "早期宇宙曾處於高溫且更稠密的狀態",
+        "wrong": [
+          "宇宙形成後溫度完全沒有變化",
+          "銀河系只有一顆恆星能發出微波",
+          "大氣中的臭氧完全決定宇宙背景輻射"
+        ],
+        "exp": "宇宙背景輻射是早期熱宇宙冷卻後留下的電磁輻射證據。",
+        "subject": "地球科學",
+        "sub_topic": "宇宙演化",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-宇宙演化",
+        "template_id": "earth-ref-g2-宇宙演化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

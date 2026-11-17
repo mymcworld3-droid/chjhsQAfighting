@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地科：大氣海洋"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-大氣環流-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「大氣環流」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "赤道附近受強烈加熱形成上升氣流、易有對流雨；副熱帶常有下沉氣流與較乾燥天氣。這可由哪種大尺度環流解釋？",
+        "correct": "哈德里環流的上升與下沉分支",
+        "wrong": [
+          "每個緯度都存在相同方向的上升氣流",
+          "大氣環流與太陽加熱沒有關係",
+          "只有月球引力能造成全球降雨帶"
+        ],
+        "exp": "Hadley cell 在赤道附近上升、副熱帶附近下沉，與全球雨帶及乾燥帶分布有關。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "earth-ref-g2-大氣環流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-大氣環流-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「大氣環流」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "北半球中緯度的近地面風受氣壓梯度、科氏力及摩擦力共同作用。若忽略摩擦，穩定時風向往往如何？",
+        "correct": "大致沿等壓線吹，而非直接由高壓垂直吹向低壓",
+        "wrong": [
+          "完全不受氣壓差影響",
+          "必定只沿地球南北方向吹",
+          "必定直線吹向低壓中心且無任何偏轉"
+        ],
+        "exp": "地轉風近似由氣壓梯度力與科氏力平衡，方向沿等壓線。",
+        "subject": "地球科學",
+        "sub_topic": "大氣環流",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-4",
+            "name": "大氣與天氣"
+          }
+        ],
+        "concept_id": "earth-高中二年級-大氣環流",
+        "template_id": "earth-ref-g2-大氣環流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

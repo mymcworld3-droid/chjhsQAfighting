@@ -1,0 +1,66 @@
+{
+  "units": [
+    "選修地科：地質與環境"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-地質資源-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「地質資源」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某含水層長期抽水量大於自然補注量，觀測井水位逐年降低。若要維持資源利用，最應考量什麼？",
+        "correct": "降低過度開採並評估補注速率及用水需求",
+        "wrong": [
+          "因含水層在地下就表示水量無限",
+          "只要水位下降就可不必調整開採",
+          "抽水量增加必然使含水層壓力升高"
+        ],
+        "exp": "地下水需時間補注，長期超抽會降低水位並可能造成地層下陷等問題。",
+        "subject": "地球科學",
+        "sub_topic": "地質資源",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地質資源",
+        "template_id": "earth-ref-g2-地質資源-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-地質資源-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「地質資源」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "某礦床分布在特定岩層，但周邊是重要河川集水區。開採前最需要同時評估哪兩項因素？",
+        "correct": "可開採礦量及對水質、地形與生態的影響",
+        "wrong": [
+          "只考慮礦石顏色是否鮮豔",
+          "只考慮機具品牌而忽略地質與環境",
+          "因有礦床就表示周邊完全無居民與生態"
+        ],
+        "exp": "資源開發須考量經濟效益與環境成本，尤其集水區可能受污染與沖蝕影響。",
+        "subject": "地球科學",
+        "sub_topic": "地質資源",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-8",
+            "name": "地球環境與災害"
+          }
+        ],
+        "concept_id": "earth-高中二年級-地質資源",
+        "template_id": "earth-ref-g2-地質資源-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

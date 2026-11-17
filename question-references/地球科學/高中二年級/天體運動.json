@@ -1,0 +1,66 @@
+{
+  "units": [
+    "天文觀測"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "earth-ref-g2-天體運動-1",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「天體運動」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "地球繞太陽公轉時，北半球夏季日照時間較長。其主要原因是什麼？",
+        "correct": "地球自轉軸傾斜，使不同季節太陽直射位置改變",
+        "wrong": [
+          "地球夏季距太陽一定最近",
+          "太陽每天改變自轉軸方向配合地球",
+          "月球表面的陰影決定四季"
+        ],
+        "exp": "地軸傾角與公轉造成晝夜長短及太陽高度的季節變化。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "earth-ref-g2-天體運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "earth-ref-g2-天體運動-2",
+      "source": "高中地球科學108課綱與學測自然考科之實證分析命題方向；自編參考題",
+      "design": "以「天體運動」的地球系統證據推論並明列限制條件",
+      "question": {
+        "q": "月球在地球與太陽之間，且三者方向接近一致時，地球上可能看到哪種月相？",
+        "correct": "新月",
+        "wrong": [
+          "滿月",
+          "上弦月且必在正午升起",
+          "下弦月且必在日出後才落下"
+        ],
+        "exp": "月球在日地之間、受光面多朝背離地球方向，通常為新月；精確對齊可發生日食。",
+        "subject": "地球科學",
+        "sub_topic": "天體運動",
+        "knowledge_points": [
+          {
+            "subject": "地科",
+            "id": "earth-7",
+            "name": "天文與宇宙"
+          }
+        ],
+        "concept_id": "earth-高中二年級-天體運動",
+        "template_id": "earth-ref-g2-天體運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
