@@ -1,0 +1,66 @@
+{
+  "units": [
+    "議論寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-論證架構-1",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「論證架構」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "某生主張圖書館週末應延長開放一小時。他先引用學生需求調查，再回應人力成本疑慮，最後建議先試辦一個月。這種架構的優點是什麼？",
+        "correct": "先提出證據，再處理反方疑慮，最後提供可評估的方案",
+        "wrong": [
+          "完全不用證據，只靠個人偏好",
+          "只要引用一個數字就能證明任何政策",
+          "避開所有成本問題，不讓人提出不同意見"
+        ],
+        "exp": "調查支撐需求，成本是必須處理的限制，試辦則讓效果可評估，形成連貫論證。",
+        "subject": "國文",
+        "sub_topic": "論證架構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-論證架構",
+        "template_id": "chinese-reference-高中二年級-論證架構-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-論證架構-2",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「論證架構」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "若要論證『學校應設共享雨傘站』，下列哪個陳述最符合『主張→理由→疑慮與回應』？",
+        "correct": "應設雨傘站以應付突降雨；雖然有人擔心遺失，但可用借用登記管理",
+        "wrong": [
+          "雨傘有很多顏色；學生喜歡各種品牌；所以該建更多教室",
+          "有人討厭下雨；我以前淋過雨；所以我喜歡晴天",
+          "雨傘站毫無成本；完全不需清點；但應購買許多帳篷"
+        ],
+        "exp": "正確選項有政策主張、使用需求與管理風險的回應，其餘缺乏推論連結。",
+        "subject": "國文",
+        "sub_topic": "論證架構",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-論證架構",
+        "template_id": "chinese-reference-高中二年級-論證架構-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

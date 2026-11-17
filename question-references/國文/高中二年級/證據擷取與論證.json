@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨文本整合"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-證據擷取與論證-1",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「證據擷取與論證」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "文章主張：『增設遮雨走廊後，雨天學生遲到情況有所改善。』資料顯示去年十個雨天合計80人次遲到，今年相同條件下十個雨天合計45人次。下列推論何者適當？",
+        "correct": "兩組遲到人次確有下降，但尚不能斷定全由走廊造成",
+        "wrong": [
+          "所有學生往後雨天都必定準時",
+          "走廊一定是影響遲到的唯一原因",
+          "今年每一天的遲到人數都是去年的一半"
+        ],
+        "exp": "80降為45顯示觀察到減少，但資料無法排除交通、作息等其他變因，不能據此確定單一因果。",
+        "subject": "國文",
+        "sub_topic": "證據擷取與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-證據擷取與論證",
+        "template_id": "chinese-reference-高中二年級-證據擷取與論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-證據擷取與論證-2",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「證據擷取與論證」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "一篇社論主張『社區運動場應保留晚間開放』，援引①晚間平均60人使用；②上班族表示下班後較有時間運動；③去年運動會的冠軍是三年乙班。哪組資料最能支持主張？",
+        "correct": "①與②",
+        "wrong": [
+          "只有③",
+          "①與③",
+          "②與③"
+        ],
+        "exp": "①說明確有使用需求，②指出晚間時段的便利性；③與社區晚間使用無直接關係。",
+        "subject": "國文",
+        "sub_topic": "證據擷取與論證",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-證據擷取與論證",
+        "template_id": "chinese-reference-高中二年級-證據擷取與論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

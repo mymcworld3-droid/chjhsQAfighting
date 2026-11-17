@@ -1,0 +1,66 @@
+{
+  "units": [
+    "跨文本整合"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-古今文本議題比較-1",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「古今文本議題比較」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "甲：《論語》『己所不欲，勿施於人。』乙：校園網路禮儀守則『分享他人照片前，請先徵得同意。』比較兩者的核心倫理原則，哪項正確？",
+        "correct": "尊重他人的感受與意願，不以自己的方便為唯一標準",
+        "wrong": [
+          "兩者都規定所有照片一律不可分享",
+          "甲只討論現代網路使用，乙則解釋春秋禮制",
+          "兩者都認為只要自己喜歡即可要求他人接受"
+        ],
+        "exp": "甲講求推己及人，乙將同意與尊重落實到網路分享，情境不同而基本原則相通。",
+        "subject": "國文",
+        "sub_topic": "古今文本議題比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古今文本議題比較",
+        "template_id": "chinese-reference-高中二年級-古今文本議題比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-古今文本議題比較-2",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「古今文本議題比較」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "甲：《孟子》『老吾老，以及人之老。』乙：社區方案請志工定期陪同獨居長者採買。若比較兩者，哪一項最合理？",
+        "correct": "乙把由親人推及他人的關懷，實踐於社區長者服務",
+        "wrong": [
+          "甲要求只能照顧自己家中的長輩",
+          "乙意在取消所有長者的自主決定",
+          "兩者都是在討論退休金的利率計算"
+        ],
+        "exp": "『以及人之老』強調擴及他人，乙的志願服務是具體呼應，不是將敬老限於自家。",
+        "subject": "國文",
+        "sub_topic": "古今文本議題比較",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-1",
+            "name": "閱讀理解"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-古今文本議題比較",
+        "template_id": "chinese-reference-高中二年級-古今文本議題比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

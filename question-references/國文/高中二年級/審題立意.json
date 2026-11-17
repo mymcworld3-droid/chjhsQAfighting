@@ -1,0 +1,66 @@
+{
+  "units": [
+    "議論寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-審題立意-1",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「審題立意」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "作文題目是『在便利與隱私之間，談你對校園人臉辨識點名的看法，並提出理由』。何種立意最切題？",
+        "correct": "評估點名效率與個資風險，說明自己的選擇及配套",
+        "wrong": [
+          "只介紹最喜歡的手機品牌",
+          "詳列學校午餐菜色，不談點名與隱私",
+          "只描述古代人的出遊經驗"
+        ],
+        "exp": "作文必須回應指定情境與價值權衡，也須提出明確看法，不能僅談無關的科技或校園經驗。",
+        "subject": "國文",
+        "sub_topic": "審題立意",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-審題立意",
+        "template_id": "chinese-reference-高中二年級-審題立意-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-審題立意-2",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「審題立意」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "作文題目為『從一次失敗的合作經驗，思考團隊如何改善溝通』。下列中心主張最符合題意的是？",
+        "correct": "以一次分工失調的經驗，分析資訊落差原因及改進方式",
+        "wrong": [
+          "描寫自己喜愛的獨處地點，不談合作",
+          "列出常用通訊軟體名稱，卻不談溝通問題",
+          "單純歌頌團隊合作，不提任何失敗經驗"
+        ],
+        "exp": "題目同時要求具體失敗經驗及其反省、改進，答題必須兼顧這兩部分。",
+        "subject": "國文",
+        "sub_topic": "審題立意",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-審題立意",
+        "template_id": "chinese-reference-高中二年級-審題立意-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}

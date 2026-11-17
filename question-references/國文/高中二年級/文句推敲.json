@@ -1,0 +1,66 @@
+{
+  "units": [
+    "議論寫作"
+  ],
+  "excludedConcepts": [],
+  "references": [
+    {
+      "id": "chinese-reference-高中二年級-文句推敲-1",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「文句推敲」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "原句：『這項政策可能一定會使所有學生的學習成績全面提高。』已知調查只顯示部分試辦班級滿意度增加，應怎麼改寫？",
+        "correct": "試辦顯示部分班級滿意度增加，尚無法據此斷定學習成績提高",
+        "wrong": [
+          "這已證明所有學生的成績都必然提高",
+          "只要滿意度增加，每人必然考滿分",
+          "不需任何資料就能證實政策永遠有效"
+        ],
+        "exp": "『可能一定』語意牴觸，而且觀察到的只是部分班級滿意度，不能擴大推論成績。",
+        "subject": "國文",
+        "sub_topic": "文句推敲",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文句推敲",
+        "template_id": "chinese-reference-高中二年級-文句推敲-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chinese-reference-高中二年級-文句推敲-2",
+      "source": "參照大考中心114學年度學測國綜跨文本整合與語文運用的命題方向，獨立撰寫的參考題",
+      "design": "檢驗「文句推敲」的語意、限制條件與推論，避免過度概括。",
+      "question": {
+        "q": "原句：『經過三個月的整理，這份報告被我們終於完成，讓老師可以來理解我們所研究的結果。』何種修改語意較自然？",
+        "correct": "經過三個月整理，我們終於完成報告，讓老師了解研究結果。",
+        "wrong": [
+          "報告經過整理被我們終於老師完成。",
+          "我們終於完成老師，把研究結果整理成報告了它。",
+          "經過整理三個月，這個結果被老師我們去完成。"
+        ],
+        "exp": "以『我們』作主詞，依時間、動作與目的安排資訊，可消除不自然的被動和冗語。",
+        "subject": "國文",
+        "sub_topic": "文句推敲",
+        "knowledge_points": [
+          {
+            "subject": "國文",
+            "id": "chinese-8",
+            "name": "寫作表達"
+          }
+        ],
+        "concept_id": "chinese-高中二年級-文句推敲",
+        "template_id": "chinese-reference-高中二年級-文句推敲-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    }
+  ]
+}
