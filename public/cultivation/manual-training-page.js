@@ -128,6 +128,7 @@ function markup(){
     </article>`
   ).join('');
   return `${hero}${expedition}
+    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
@@ -139,7 +140,6 @@ function markup(){
       <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
       <p>只有以功法技能完成擊殺才能獲得熟練經驗；招式仍需要功法等級及修士境界。</p>
     </details>
-    <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
     <div class="manual-celebration-host" data-manual-celebration-host></div>`;
 
 }
@@ -448,8 +448,16 @@ function boot(){
   },true);
   window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){clearManualCelebration();current=null;loadedFor='';featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
   document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&root?.querySelector('[data-manual-celebration-host]')?.firstChild){
-      clearManualCelebration();
+    if(event.key!=='Escape')return;
+    if(root?.querySelector('[data-manual-celebration-host]')?.firstChild){
+      clearManualCelebration();return;
+    }
+    if(selectedSkillId&&visible()&&!busy){
+      const closingSkill=selectedSkillId;
+      selectedSkillId=null;paint();
+      const button=[...root.querySelectorAll('[data-manual-jump-skill]')]
+        .find(node=>node.dataset.manualJumpSkill===closingSkill);
+      button?.focus({preventScroll:true});
     }
   });
   window.addEventListener('xiuxian:manual-loot',()=>{if(visible())void load({force:true});});
