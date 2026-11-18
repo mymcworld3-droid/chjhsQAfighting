@@ -62,44 +62,43 @@ test('header reports ownership counts and offers keyboard-accessible filters',()
   assert.match(head,/data-manual-refresh/);
 });
 
-test('book card displays level, exact server mastery, preview and locked realm conditions',()=>{
+test('shelf card only displays owned book, current level and one stage',()=>{
   const card=draw();
+  assert.match(card,/class="manual-book-top manual-library-choice"/);
   assert.match(card,/manual-library-cover/);
-  assert.match(card,/manual-book-art/);
   assert.match(card,/Lv. 4/);
-  assert.match(card,/62 \/ 100 EXP/);
-  assert.match(card,/aria-valuenow="62"/);
-  assert.match(card,/已領悟 1 \/ 3 招/);
-  assert.equal((card.match(/manual-library-skill-picture/g)||[]).length,3);
-  assert.match(card,/下一招：第二招/);
-  assert.match(card,/功法 Lv. 5/);
-  assert.match(card,/築基境/);
-  assert.match(card,/fa-lock/);
-  assert.doesNotMatch(card,/展示中/);
+  assert.match(card,/data-feature-book="sword-wind"/);
+  assert.match(card,/aria-pressed="false"/);
+  assert.match(card,/初息/);
+  assert.doesNotMatch(card,/62 \/ 100 EXP/);
+  assert.doesNotMatch(card,/manual-library-exp-track/);
+  assert.doesNotMatch(card,/manual-library-skill-picture/);
+  assert.doesNotMatch(card,/data-manual-upgrade=/);
+  assert.doesNotMatch(card,/下一招：/);
 });
 
-test('focused and equipped book is visibly distinguished without claiming a new main mechanic',()=>{
-  const item=library[0];
-  const card=draw(item,item.id,[item.skills[0].id]);
+test('the selected book is visibly marked but not claimed as a combat loadout',()=>{
+  const book=library[0],card=draw(book,book.id,[book.skills[0].id]);
   assert.match(card,/展示中/);
-  assert.match(card,/此配置已裝 1 招/);
+  assert.match(card,/aria-pressed="true"/);
+  assert.doesNotMatch(card,/此配置已裝/);
   assert.doesNotMatch(card,/主修功法/);
 });
 
-test('max level shows completion and respects separately unmet realm requirements',()=>{
-  const item=book('sword-wind','sword',{level:10,progress:5,
-    skills:book().skills.map(x=>({...x,unlocked:true,mastered:true,realmReady:true}))});
-  const card=draw(item,item.id);
-  assert.match(card,/功法已達最高等級/);
-  assert.match(card,/aria-valuenow="100"/);
-  assert.match(card,/三招皆已領悟/);
-  assert.doesNotMatch(card,/下一招：/);
-  const realmBlocked=book('sword-wind','sword',{level:10,skills:book().skills.map((x,i)=>({
-    ...x,mastered:true,unlocked:i===0,realmReady:i===0
-  }))});
-  const blocked=draw(realmBlocked);
-  assert.match(blocked,/下一招：第二招/);
-  assert.match(blocked,/築基境/);
+test('maxed and approaching manuscripts get one brief status only',()=>{
+  const max=book('sword-wind','sword',{level:10,progress:100});
+  const card=draw(max,max.id);
+  assert.match(card,/圓滿/);
+  assert.doesNotMatch(card,/功法已達最高等級/);
+  assert.doesNotMatch(card,/三招皆已領悟/);
+  const next=book('sword-wind','sword',{
+    level:4,totalExp:270,progress:90
+  });
+  const near=renderManualCollectionSummary(next,'',[],{
+    ...tools,totalExpForLevel:l=>l===5?280:0
+  });
+  assert.match(near,/突破在即/);
+  assert.equal((near.match(/manual-library-brief-state/g)||[]).length,1);
 });
 
 test('only safe escaped metadata enters summary markup',()=>{
@@ -109,5 +108,5 @@ test('only safe escaped metadata enters summary markup',()=>{
   assert.doesNotMatch(card,/<img src=x onerror/);
   assert.doesNotMatch(card,/<svg onload/);
   assert.match(card,/&lt;img src=x/);
-  assert.match(card,/&lt;svg onload/);
+  assert.doesNotMatch(card,/&lt;svg onload/); // No duplicate skill metadata on collection cards.
 });
