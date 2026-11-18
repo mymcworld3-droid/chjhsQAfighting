@@ -21,7 +21,7 @@ const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/wo
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -44,17 +44,20 @@ export class TacticalRenderer{
       const p=point(e);
       this.touches.set(e.pointerId,{...p,startX:p.x,startY:p.y});
       this.clearLongPress();this.longPressTriggered=false;
+      this.setHoverPreview(null);
       if(this.touches.size>=2){this.dragging=true;this.pinch=midpoint();}
-      else if(e.pointerType!=='mouse'){
+      else if(e.pointerType!=='mouse'&&this.state.mode==='pve'){
         const beast=this.beastAtClient(e.clientX,e.clientY);
-        if(beast){
-          const actorUid=beast.uid;
+        const tile=this.tileAtClient(e.clientX,e.clientY);
+        if(beast||tile){
+          const actorUid=beast?.uid;
           this.longPressTimer=setTimeout(()=>{
             this.longPressTimer=null;
-            if(this.destroyed||this.dragging||this.touches.size!==1||
-              !this.state?.actors.some(a=>a.uid===actorUid&&a.hp>0))return;
+            if(this.destroyed||this.dragging||this.touches.size!==1||this.isAnimating)return;
+            if(actorUid&&!this.state?.actors.some(a=>a.uid===actorUid&&a.hp>0))return;
             this.longPressTriggered=true;this.suppressClickUntil=Date.now()+800;
-            this.onInspect(actorUid,'pin');
+            if(actorUid)this.onInspect(actorUid,'pin');
+            else this.setHoverPreview(tile);
           },500);
         }
       }
@@ -66,12 +69,13 @@ export class TacticalRenderer{
         if(next!==this.hoverUid){
           this.hoverUid=next;this.onInspect(next,'hover');
         }
+        this.setHoverPreview(this.tileAtClient(e.clientX,e.clientY));
         return;
       }
       if(this.longPressTriggered)return;
       const before=this.touches.get(e.pointerId);if(!before)return;
       const after=point(e),deltaX=after.x-before.x,deltaY=after.y-before.y;
-      if(Math.hypot(after.x-before.startX,after.y-before.startY)>8)this.clearLongPress();
+      if(Math.hypot(after.x-before.startX,after.y-before.startY)>8){this.clearLongPress();this.setHoverPreview(null);}
       before.x=after.x;before.y=after.y;
       const {w,h}=size(),v=view();
       if(this.touches.size>=2){
@@ -100,7 +104,7 @@ export class TacticalRenderer{
       if(e.type==='pointercancel'||e.type==='lostpointercapture')this.dragging=true;
       this.clearLongPress();
       if(this.longPressTriggered){this.suppressClickUntil=Date.now()+800;this.longPressTriggered=false;}
-      if(this.dragging)this.suppressClickUntil=Date.now()+500;
+      if(this.dragging){this.suppressClickUntil=Date.now()+500;this.setHoverPreview(null);}
       this.touches.delete(e.pointerId);
       try{if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);}catch(_){}
       if(this.touches.size===1){
@@ -117,6 +121,7 @@ export class TacticalRenderer{
     };
     this.onPointerLeave=()=>{
       if(this.hoverUid){this.hoverUid=null;this.onInspect(null,'hover');}
+      if(!this.touches.size)this.setHoverPreview(null);
     };
     canvas.addEventListener('pointerleave',this.onPointerLeave);
     canvas.addEventListener('pointerdown',this.onPointerDown);
@@ -150,6 +155,32 @@ export class TacticalRenderer{
     if(this.longPressTimer!==null)clearTimeout(this.longPressTimer);
     this.longPressTimer=null;
   }
+  tileAtClient(clientX,clientY){
+    if(!this.state||this.preview||this.paused||this.isAnimating)return null;
+    const rect=this.canvas.getBoundingClientRect();
+    if(!rect.width||!rect.height)return null;
+    const p=Camera.tileAt(this.camera,clientX-rect.left,clientY-rect.top,rect.width,rect.height,
+      {x:0,y:0,width:this.state.width,height:this.state.height});
+    return R.inside(this.state,p)?p:null;
+  }
+  setHoverPreview(tile){
+    if(this.preview||this.destroyed||this.state?.mode!=='pve')return;
+    const me=this.state.actors?.find(a=>a.uid===this.uid);
+    const active=me&&this.state.status==='active'&&this.state.turnUid===this.uid&&
+      (!this.state.quizRound||this.state.phase==='action')&&!this.isAnimating;
+    const next=active&&tile?{x:tile.x,y:tile.y}:null;
+    if((!next&&!this.hoverSelection)||(next&&this.hoverSelection&&R.key(next)===R.key(this.hoverSelection)))return;
+    this.hoverSelection=next;
+    this.hoverPlan=next?Targets.derive(this.state,this.uid,this.mode,next,R,this.threatPlan):null;
+    if(this.hoverPlan){
+      this.canvas.dataset.hoverPreviewCost=String(this.hoverPlan.cost);
+      this.canvas.dataset.hoverPreviewValid=String(this.hoverPlan.valid);
+    }else{
+      delete this.canvas.dataset.hoverPreviewCost;
+      delete this.canvas.dataset.hoverPreviewValid;
+    }
+    this.requestDraw();
+  }
   beastAtClient(clientX,clientY){
     if(!this.state||this.preview||this.state.mode!=='pve'||this.isAnimating||this.paused)return null;
     const rect=this.canvas.getBoundingClientRect();
@@ -176,7 +207,7 @@ export class TacticalRenderer{
     }else if(state.mode!=='pve'){this.ambience=null;this.ambienceLayer=null;}
     this.canvas.dataset.ambientTheme=this.ambience?.theme||'none';
     if(newStage||this.state?.width!==state.width||this.state?.height!==state.height){
-      this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;this.inspectedUid=null;this.hoverUid=null;this.clearLongPress();
+      this.queue=[];this.scene=null;this.hoverSelection=null;this.hoverPlan=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;this.inspectedUid=null;this.hoverUid=null;this.clearLongPress();
       this.suppressClickUntil=Date.now()+120;
       if(state.mode==='pve'&&state.width>=11){
         const rect=this.canvas.getBoundingClientRect(),view={x:0,y:0,width:state.width,height:state.height},hero=state.actors.find(a=>a.uid===uid);
@@ -195,6 +226,8 @@ export class TacticalRenderer{
     }
     this.threatPlan=Threats.derive(state,uid,mode,this.range);
     this.targetPlan=Targets.derive(state,uid,mode,selection,R,this.threatPlan);
+    this.hoverPlan=this.hoverSelection?
+      Targets.derive(state,uid,mode,this.hoverSelection,R,this.threatPlan):null;
     const alert=this.canvas.parentElement?.querySelector('[data-threat-a11y]');
     if(state.mode==='pve'){
       const message=this.threatPlan.description+
@@ -226,7 +259,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.canvas.removeAttribute('aria-description');this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.canvas.removeAttribute('aria-description');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -555,7 +588,7 @@ export class TacticalRenderer{
       }
     }
     if(myTurn&&this.mode==='move'&&s.mode==='pve'&&!animating)
-      Targets.drawRoute(c,this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
+      Targets.drawRoute(c,this.hoverPlan||this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
     else if(myTurn&&this.mode==='move'&&this.selection){
       const route=R.path(s,mine,this.selection,mine.uid);if(route&&route.length>1){
         c.beginPath();route.forEach((p,i)=>c[i?'lineTo':'moveTo'](ox+(p.x+.5)*cell,oy+(p.y+.5)*cell));
@@ -649,7 +682,7 @@ export class TacticalRenderer{
     }
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
     if(myTurn&&s.mode==='pve'&&!animating)
-      Targets.drawFocus(c,this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
+      Targets.drawFocus(c,this.hoverPlan||this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
     if(!animating&&s.mode==='pve'){
       const viewport={ox,oy,cell,width:s.width,height:s.height};
       Threats.drawContours(c,this.threatPlan,viewport);
