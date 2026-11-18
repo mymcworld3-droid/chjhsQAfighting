@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-綠色化學概念-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用綠色化學概念觀念",
+      "question": {
+        "q": "某製程改用可回收的較低毒性溶劑，產量相近。這最符合哪項綠色化學理念？",
+        "correct": "降低危害並減少溶劑資源消耗",
+        "wrong": [
+          "只要產品名稱不變就表示沒有環境效益",
+          "增加高毒廢液才能改善製程",
+          "所有溶劑都必須被完全禁止"
+        ],
+        "exp": "綠色化學強調降低危險物質使用與產生，並提高資源效率。",
+        "subject": "化學",
+        "sub_topic": "綠色化學概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-綠色化學概念",
+        "template_id": "ext-2026-chem1-綠色化學概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-綠色化學概念-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用綠色化學概念觀念",
+      "question": {
+        "q": "同一反應使用催化劑後，在較低溫度即可達到相近產率。若其他條件相同，可能產生哪種效益？",
+        "correct": "降低部分反應所需加熱能源",
+        "wrong": [
+          "催化劑可使原子質量不守恆",
+          "催化劑必定使產物組成全改變",
+          "催化劑使用後一定不再有任何副產物"
+        ],
+        "exp": "催化劑可降低活化能及反應條件需求，但不代表零污染。",
+        "subject": "化學",
+        "sub_topic": "綠色化學概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-綠色化學概念",
+        "template_id": "ext-2026-chem1-綠色化學概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-綠色化學概念-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用綠色化學概念觀念",
+      "question": {
+        "q": "兩種合成方法產出相同產品，甲方法大部分反應物原子進入目標產物，乙方法產生大量副產物。從原子經濟性來看何者較佳？",
+        "correct": "甲方法",
+        "wrong": [
+          "乙方法",
+          "只要反應速度快就必定較好",
+          "無法因原子去向差異判斷"
+        ],
+        "exp": "原子經濟性關注反應物原子有多少被保留在目標產物中。",
+        "subject": "化學",
+        "sub_topic": "綠色化學概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-綠色化學概念",
+        "template_id": "ext-2026-chem1-綠色化學概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-化學實驗安全-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用化學實驗安全觀念",
+      "question": {
+        "q": "實驗需要將濃硫酸稀釋。下列哪個操作較符合安全規範？",
+        "correct": "緩慢將酸加入水中並持續攪拌",
+        "wrong": [
+          "快速把大量水倒入濃硫酸中",
+          "不用防護直接以手接觸酸",
+          "把濃酸與未知溶劑任意混合"
+        ],
+        "exp": "稀釋濃酸放熱，應酸入水並小心攪拌，避免局部沸騰噴濺。",
+        "subject": "化學",
+        "sub_topic": "化學實驗安全",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學實驗安全",
+        "template_id": "ext-2026-chem1-化學實驗安全-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-化學實驗安全-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用化學實驗安全觀念",
+      "question": {
+        "q": "學生想辨識一瓶未知化學試劑的氣味。哪種方式較安全？",
+        "correct": "先依標籤及安全資料判斷，未經允許不直接聞嗅",
+        "wrong": [
+          "將鼻子直接貼近瓶口深吸",
+          "把未知試劑放入口中測試",
+          "先將試劑和漂白水混合"
+        ],
+        "exp": "未知試劑不得任意嗅聞或品嘗，須遵守教師及實驗室安全流程。",
+        "subject": "化學",
+        "sub_topic": "化學實驗安全",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學實驗安全",
+        "template_id": "ext-2026-chem1-化學實驗安全-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-化學實驗安全-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用化學實驗安全觀念",
+      "question": {
+        "q": "實驗桌發生未知液體洩漏，學生沒有確認其危害。首先應如何處置？",
+        "correct": "保持距離、通知教師並依實驗室規定處理",
+        "wrong": [
+          "用手直接擦乾並繼續實驗",
+          "任意加強酸強鹼嘗試中和",
+          "把液體倒入飲水機"
+        ],
+        "exp": "未知化學品可能具腐蝕性或毒性，應由受訓人員按規範處理。",
+        "subject": "化學",
+        "sub_topic": "化學實驗安全",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學實驗安全",
+        "template_id": "ext-2026-chem1-化學實驗安全-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

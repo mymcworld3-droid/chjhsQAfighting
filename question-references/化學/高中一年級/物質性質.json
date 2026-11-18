@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-物質性質-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用物質性質觀念",
+      "question": {
+        "q": "固態食鹽通常不易導電，但熔融食鹽可導電。最合理的粒子解釋為何？",
+        "correct": "熔融時離子得以移動，固態晶格中的離子不易自由遷移",
+        "wrong": [
+          "固態食鹽不含任何電荷",
+          "熔融後氯離子必全部變成電子",
+          "導電能力只取決於顏色"
+        ],
+        "exp": "離子導電需可遷移的帶電粒子，熔融後離子可移動。",
+        "subject": "化學",
+        "sub_topic": "物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質性質",
+        "template_id": "ext-2026-chem1-物質性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-物質性質-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用物質性質觀念",
+      "question": {
+        "q": "同質量的銅和木材放在室內，觸摸時銅通常感覺更冷，卻不代表銅溫度較低。主要原因是？",
+        "correct": "銅的熱傳導較快，能較快帶走手部熱量",
+        "wrong": [
+          "銅必定在任何室溫下比木材低10℃",
+          "金屬不可能吸收任何熱量",
+          "木材的溫度一定高於室溫"
+        ],
+        "exp": "觸覺受熱流速率影響，不可直接把冷感等同溫度差。",
+        "subject": "化學",
+        "sub_topic": "物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質性質",
+        "template_id": "ext-2026-chem1-物質性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-物質性質-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用物質性質觀念",
+      "question": {
+        "q": "冬天湖面先結冰，液態水仍可在冰下存在。下列哪個物質性質有助解釋？",
+        "correct": "冰的密度通常小於液態水，因而浮在表面",
+        "wrong": [
+          "冰的密度必大於所有液態水",
+          "水凝固時分子全部分解",
+          "冰形成後完全沒有任何分子運動"
+        ],
+        "exp": "冰的結構使固態水在一般條件下密度較低而漂浮，可形成表面冰層。",
+        "subject": "化學",
+        "sub_topic": "物質性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質性質",
+        "template_id": "ext-2026-chem1-物質性質-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

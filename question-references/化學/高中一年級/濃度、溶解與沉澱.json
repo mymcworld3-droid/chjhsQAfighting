@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-濃度、溶解與沉澱-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用濃度、溶解與沉澱觀念",
+      "question": {
+        "q": "某溶液含NaCl 0.20 mol，溶液總體積0.50 L。其莫耳濃度約為何？",
+        "correct": "0.40 M",
+        "wrong": [
+          "0.10 M",
+          "2.5 M",
+          "0.70 M"
+        ],
+        "exp": "莫耳濃度M=n/V=0.20/0.50=0.40 mol/L。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "ext-2026-chem1-濃度、溶解與沉澱-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-濃度、溶解與沉澱-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用濃度、溶解與沉澱觀念",
+      "question": {
+        "q": "取1.0 M食鹽水100 mL，加純水稀釋至250 mL。若溶質沒有流失，末濃度為何？",
+        "correct": "0.40 M",
+        "wrong": [
+          "2.5 M",
+          "1.0 M",
+          "0.25 M"
+        ],
+        "exp": "稀釋時溶質莫耳數不變，C1V1=C2V2，C2=1.0×100/250=0.40 M。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "ext-2026-chem1-濃度、溶解與沉澱-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-濃度、溶解與沉澱-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用濃度、溶解與沉澱觀念",
+      "question": {
+        "q": "將硝酸銀AgNO₃水溶液與氯化鈉NaCl水溶液混合，出現白色固體。若忽略其他離子反應，沉澱最可能為何？",
+        "correct": "AgCl",
+        "wrong": [
+          "NaNO₃",
+          "NaCl",
+          "AgNO₃"
+        ],
+        "exp": "Ag⁺與Cl⁻可形成難溶AgCl沉澱，Na⁺與NO₃⁻主要留在溶液中。",
+        "subject": "化學",
+        "sub_topic": "濃度、溶解與沉澱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-5",
+            "name": "溶液與濃度"
+          }
+        ],
+        "concept_id": "chem-高中一年級-濃度、溶解與沉澱",
+        "template_id": "ext-2026-chem1-濃度、溶解與沉澱-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

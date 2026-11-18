@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-生活中的化學-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用生活中的化學觀念",
+      "question": {
+        "q": "某地水中Ca²⁺和Mg²⁺含量高，使用肥皂容易產生皂垢。這種水通常稱為？",
+        "correct": "硬水",
+        "wrong": [
+          "蒸餾水",
+          "完全無離子的純水",
+          "液態氮"
+        ],
+        "exp": "鈣鎂離子與肥皂中的脂肪酸根形成難溶物，屬硬水現象。",
+        "subject": "化學",
+        "sub_topic": "生活中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-生活中的化學",
+        "template_id": "ext-2026-chem1-生活中的化學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-生活中的化學-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用生活中的化學觀念",
+      "question": {
+        "q": "工廠排放的SO₂及交通產生的部分氮氧化物，經大氣反應可能形成酸性降水。主要涉及哪種環境化學問題？",
+        "correct": "酸雨",
+        "wrong": [
+          "臭氧層由氮氣直接形成",
+          "完全無污染的水循環",
+          "所有排放都只會形成鹼性降水"
+        ],
+        "exp": "含硫及氮的氧化物在大氣中可轉為酸性物質，影響降水酸度。",
+        "subject": "化學",
+        "sub_topic": "生活中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-生活中的化學",
+        "template_id": "ext-2026-chem1-生活中的化學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-生活中的化學-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用生活中的化學觀念",
+      "question": {
+        "q": "清潔人員要使用含次氯酸鹽的漂白水，卻想與酸性清潔劑混合。最正確的安全判斷是？",
+        "correct": "不可混合，因可能產生有毒含氯氣體",
+        "wrong": [
+          "兩者混合可保證只生成純氧",
+          "酸性清潔劑能使漂白水完全無害",
+          "清潔劑只有在加熱時才需要安全措施"
+        ],
+        "exp": "含氯漂白水與酸混合可能釋出有害氣體，應分開依標示使用。",
+        "subject": "化學",
+        "sub_topic": "生活中的化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-生活中的化學",
+        "template_id": "ext-2026-chem1-生活中的化學-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

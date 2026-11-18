@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-分子與晶體-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用分子與晶體觀念",
+      "question": {
+        "q": "食鹽晶體中存在大量Na⁺與Cl⁻，不是由個別NaCl分子堆積形成。它的晶體種類為何？",
+        "correct": "離子晶體",
+        "wrong": [
+          "分子晶體",
+          "單一金屬原子晶體",
+          "只由氫鍵形成的晶體"
+        ],
+        "exp": "食鹽由正負離子週期排列構成離子晶格。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "ext-2026-chem1-分子與晶體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-分子與晶體-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用分子與晶體觀念",
+      "question": {
+        "q": "鑽石硬度高、熔點高，碳原子在三維網絡中彼此共價鍵結。這種固體較適合分類為何？",
+        "correct": "共價網狀晶體",
+        "wrong": [
+          "一般分子晶體",
+          "金屬晶體",
+          "離子晶體"
+        ],
+        "exp": "鑽石具有延伸的共價鍵網絡，不是靠弱分子間作用力維持的分子晶體。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "ext-2026-chem1-分子與晶體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-分子與晶體-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用分子與晶體觀念",
+      "question": {
+        "q": "乾冰是固態CO₂，分子內存在共價鍵，而分子與分子間主要靠較弱作用力凝聚。乾冰屬於何者？",
+        "correct": "分子晶體",
+        "wrong": [
+          "離子晶體",
+          "金屬晶體",
+          "共價網狀晶體"
+        ],
+        "exp": "乾冰由CO₂分子構成固態晶格，昇華涉及分子間作用的克服。",
+        "subject": "化學",
+        "sub_topic": "分子與晶體",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-分子與晶體",
+        "template_id": "ext-2026-chem1-分子與晶體-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

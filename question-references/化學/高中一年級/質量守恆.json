@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-質量守恆-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用質量守恆觀念",
+      "question": {
+        "q": "在密閉容器內，4 g氫氣與32 g氧氣恰好完全反應生成水。若沒有氣體洩漏，產物總質量為何？",
+        "correct": "36 g",
+        "wrong": [
+          "28 g",
+          "32 g",
+          "72 g"
+        ],
+        "exp": "密閉反應前後總質量守恆，4+32=36 g，且此比例也符合2H₂+O₂→2H₂O。",
+        "subject": "化學",
+        "sub_topic": "質量守恆",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-質量守恆",
+        "template_id": "ext-2026-chem1-質量守恆-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-質量守恆-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用質量守恆觀念",
+      "question": {
+        "q": "鎂在空氣中燃燒後產物氧化鎂比原先鎂帶重。哪種解釋最合理？",
+        "correct": "鎂與空氣中的氧結合，產物包含原本不在鎂帶中的氧質量",
+        "wrong": [
+          "鎂原子自行增加質量而完全不需要氧",
+          "化學反應可無條件創造質量",
+          "稱重儀器遇到任何反應都必定失靈"
+        ],
+        "exp": "開放系統的鎂會結合外界氧，若把氧也計入，總質量仍守恆。",
+        "subject": "化學",
+        "sub_topic": "質量守恆",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-質量守恆",
+        "template_id": "ext-2026-chem1-質量守恆-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-質量守恆-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用質量守恆觀念",
+      "question": {
+        "q": "某錐形瓶在未密封狀態進行產生CO₂的反應，量得瓶內剩餘物質質量下降。最可能是什麼？",
+        "correct": "部分CO₂逸散到環境，量測未涵蓋全部反應物與產物",
+        "wrong": [
+          "反應使碳元素憑空消失",
+          "化學反應不受質量守恆限制",
+          "原子在瓶內失去所有質量"
+        ],
+        "exp": "若產生氣體離開量測系統，讀數可下降，並非總質量不守恆。",
+        "subject": "化學",
+        "sub_topic": "質量守恆",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-質量守恆",
+        "template_id": "ext-2026-chem1-質量守恆-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

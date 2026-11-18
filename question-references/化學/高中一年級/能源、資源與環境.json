@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-能源、資源與環境-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用能源、資源與環境觀念",
+      "question": {
+        "q": "充電電池在充電時吸收電能，放電時對外供電。最合適的能量轉換描述為何？",
+        "correct": "充電將電能儲為化學能，放電則部分轉回電能",
+        "wrong": [
+          "電池可以從無到有永久創造能量",
+          "充電時所有電能都必定轉成聲能",
+          "電池一旦放電就不再遵守能量守恆"
+        ],
+        "exp": "電池藉電化學反應儲存與釋放能量，也存在能量損失。",
+        "subject": "化學",
+        "sub_topic": "能源、資源與環境",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-能源、資源與環境",
+        "template_id": "ext-2026-chem1-能源、資源與環境-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-能源、資源與環境-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用能源、資源與環境觀念",
+      "question": {
+        "q": "某燃煤電廠增加燃燒量，若其他條件相同，哪種溫室氣體排放通常會增加？",
+        "correct": "二氧化碳",
+        "wrong": [
+          "氦氣",
+          "氖氣",
+          "純氮氣N₂的產生必為主要溫室效應來源"
+        ],
+        "exp": "含碳燃料燃燒通常排放CO₂，與溫室效應相關。",
+        "subject": "化學",
+        "sub_topic": "能源、資源與環境",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-能源、資源與環境",
+        "template_id": "ext-2026-chem1-能源、資源與環境-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-能源、資源與環境-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用能源、資源與環境觀念",
+      "question": {
+        "q": "同樣需要製造鋁製品，回收廢鋁再製通常較直接採礦與冶煉新鋁節省能源。其主要資源意義是？",
+        "correct": "降低部分原料開採與高耗能冶煉需求",
+        "wrong": [
+          "回收過程必然完全不需能源",
+          "回收鋁會讓元素種類改變",
+          "只要回收就永遠不會有任何污染"
+        ],
+        "exp": "資源回收可減少部分能源及礦物投入，但仍需考慮回收製程成本。",
+        "subject": "化學",
+        "sub_topic": "能源、資源與環境",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-能源、資源與環境",
+        "template_id": "ext-2026-chem1-能源、資源與環境-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

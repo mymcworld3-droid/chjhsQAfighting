@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-chem1-離子鍵、共價鍵與金屬鍵-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用離子鍵、共價鍵與金屬鍵觀念",
+      "question": {
+        "q": "某固體由鈉陽離子與氯陰離子規律排列而成，離子間以靜電吸引結合。這最符合何種鍵結？",
+        "correct": "離子鍵",
+        "wrong": [
+          "非極性共價鍵",
+          "金屬鍵",
+          "分子間氫鍵"
+        ],
+        "exp": "NaCl由陰陽離子形成離子晶格，主要作用為庫侖靜電吸引。",
+        "subject": "化學",
+        "sub_topic": "離子鍵、共價鍵與金屬鍵",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-離子鍵、共價鍵與金屬鍵",
+        "template_id": "ext-2026-chem1-離子鍵、共價鍵與金屬鍵-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-離子鍵、共價鍵與金屬鍵-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用離子鍵、共價鍵與金屬鍵觀念",
+      "question": {
+        "q": "水分子中氫原子與氧原子以共用電子的方式結合，分子內最主要的鍵結屬於？",
+        "correct": "共價鍵",
+        "wrong": [
+          "金屬鍵",
+          "純離子晶格",
+          "只有分子間作用力"
+        ],
+        "exp": "水分子內O—H結合屬共價鍵，須與水分子之間的氫鍵作用區分。",
+        "subject": "化學",
+        "sub_topic": "離子鍵、共價鍵與金屬鍵",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-離子鍵、共價鍵與金屬鍵",
+        "template_id": "ext-2026-chem1-離子鍵、共價鍵與金屬鍵-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-chem1-離子鍵、共價鍵與金屬鍵-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "以實驗或生活情境運用離子鍵、共價鍵與金屬鍵觀念",
+      "question": {
+        "q": "銅線可導電且容易拉成細線，若從金屬鍵模型解釋，哪項較合適？",
+        "correct": "金屬原子核及離子周圍有可移動的離域電子",
+        "wrong": [
+          "電子被固定在單一水分子內",
+          "銅線內只有互不相連的氯離子",
+          "導電完全由原子質量決定"
+        ],
+        "exp": "金屬的離域電子有助導電，金屬鍵亦容許原子層相對滑動而保有結合。",
+        "subject": "化學",
+        "sub_topic": "離子鍵、共價鍵與金屬鍵",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-3",
+            "name": "化學鍵與結構"
+          }
+        ],
+        "concept_id": "chem-高中一年級-離子鍵、共價鍵與金屬鍵",
+        "template_id": "ext-2026-chem1-離子鍵、共價鍵與金屬鍵-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
