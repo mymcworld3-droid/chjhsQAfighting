@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-能量轉換-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用能量轉換，提供必要數據與前提",
+      "question": {
+        "q": "某暖暖包藉鐵粉與氧氣反應發熱。若從能量觀點分析，最合適的敘述是？",
+        "correct": "化學能部分轉為周圍內能",
+        "wrong": [
+          "熱量完全不需任何化學反應即可永久生成",
+          "發熱代表鐵原子被創造成兩倍",
+          "氧化反應必定全是吸熱"
+        ],
+        "exp": "鐵氧化反應釋放能量，暖暖包把化學反應能用於供熱。",
+        "subject": "化學",
+        "sub_topic": "能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-能量轉換",
+        "template_id": "extra-2026-chem2-能量轉換-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-能量轉換-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用能量轉換，提供必要數據與前提",
+      "question": {
+        "q": "對一般化學鍵而言，單純斷鍵與成鍵兩個過程的能量方向為何？",
+        "correct": "斷鍵需吸能，成鍵會釋能",
+        "wrong": [
+          "斷鍵與成鍵都永遠只吸能",
+          "斷鍵與成鍵都永遠只放能",
+          "能量方向只由氣體顏色決定"
+        ],
+        "exp": "化學鍵斷裂需要輸入能量，形成較穩定鍵會釋放能量；總反應熱取決於二者差額。",
+        "subject": "化學",
+        "sub_topic": "能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-能量轉換",
+        "template_id": "extra-2026-chem2-能量轉換-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-能量轉換-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用能量轉換，提供必要數據與前提",
+      "question": {
+        "q": "某電解裝置利用外部電源使原本非自發的化學反應進行。主要的能量轉換為何？",
+        "correct": "電能轉為化學反應所需能量",
+        "wrong": [
+          "化學能永遠無損轉為機械能",
+          "熱量不需來源自行增加",
+          "反應不受電源電壓影響"
+        ],
+        "exp": "電解借助外部電能驅動非自發氧化還原反應。",
+        "subject": "化學",
+        "sub_topic": "能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-能量轉換",
+        "template_id": "extra-2026-chem2-能量轉換-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-熱化學與反應熱-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用熱化學與反應熱，提供必要數據與前提",
+      "question": {
+        "q": "某反應每生成1 mol產物放出100 kJ熱量，且反應熱與反應進行量成正比。若生成2 mol產物，反應的焓變約為何？",
+        "correct": "−200 kJ",
+        "wrong": [
+          "+200 kJ",
+          "−50 kJ",
+          "+100 kJ"
+        ],
+        "exp": "放熱反應ΔH為負，進行量加倍時總焓變也加倍，為−200 kJ。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-熱化學與反應熱",
+        "template_id": "extra-2026-chem2-熱化學與反應熱-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-熱化學與反應熱-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用熱化學與反應熱，提供必要數據與前提",
+      "question": {
+        "q": "某系統反應A→B的ΔH=+40 kJ，B→C的ΔH=−70 kJ。依赫斯定律，A→C的ΔH為何？",
+        "correct": "−30 kJ",
+        "wrong": [
+          "+110 kJ",
+          "+30 kJ",
+          "−110 kJ"
+        ],
+        "exp": "焓是狀態函數，ΔH(A→C)=40+(−70)=−30 kJ。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-熱化學與反應熱",
+        "template_id": "extra-2026-chem2-熱化學與反應熱-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-熱化學與反應熱-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用熱化學與反應熱，提供必要數據與前提",
+      "question": {
+        "q": "某反應在固定壓力下放熱，且無其他外來做功影響。相對於反應物，產物的焓通常如何？",
+        "correct": "較低",
+        "wrong": [
+          "較高",
+          "必定完全相同",
+          "只由反應速率決定"
+        ],
+        "exp": "放熱過程ΔH=H產物−H反應物小於零，因此產物焓較低。",
+        "subject": "化學",
+        "sub_topic": "熱化學與反應熱",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-熱化學與反應熱",
+        "template_id": "extra-2026-chem2-熱化學與反應熱-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

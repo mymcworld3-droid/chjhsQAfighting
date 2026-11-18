@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-氧化還原與電化學-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用氧化還原與電化學，提供必要數據與前提",
+      "question": {
+        "q": "鐵原子由Fe變為Fe²⁺的過程，電子如何變化？",
+        "correct": "失去2個電子，發生氧化",
+        "wrong": [
+          "得到2個電子，發生還原",
+          "失去2個質子，發生還原",
+          "得到2個中子，發生氧化"
+        ],
+        "exp": "Fe→Fe²⁺+2e⁻，失電子是氧化。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-氧化還原與電化學",
+        "template_id": "extra-2026-chem2-氧化還原與電化學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-氧化還原與電化學-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用氧化還原與電化學，提供必要數據與前提",
+      "question": {
+        "q": "銅離子發生半反應Cu²⁺+2e⁻→Cu，這是何種變化？",
+        "correct": "還原反應",
+        "wrong": [
+          "氧化反應",
+          "酸鹼中和且沒有電子轉移",
+          "水分子的熱分解"
+        ],
+        "exp": "Cu²⁺接受電子形成銅原子，氧化數由+2降為0，屬還原。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-氧化還原與電化學",
+        "template_id": "extra-2026-chem2-氧化還原與電化學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-氧化還原與電化學-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用氧化還原與電化學，提供必要數據與前提",
+      "question": {
+        "q": "鋅與銅離子反應Zn+Cu²⁺→Zn²⁺+Cu，自發進行時哪個物質是還原劑？",
+        "correct": "Zn，因它提供電子",
+        "wrong": [
+          "Cu²⁺，因它得到電子",
+          "Zn²⁺，因它是生成物",
+          "Cu，因它是固態金屬"
+        ],
+        "exp": "Zn失去電子而被氧化，能還原Cu²⁺，所以Zn是還原劑。",
+        "subject": "化學",
+        "sub_topic": "氧化還原與電化學",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-7",
+            "name": "氧化還原與電化學"
+          }
+        ],
+        "concept_id": "chem-高中二年級-氧化還原與電化學",
+        "template_id": "extra-2026-chem2-氧化還原與電化學-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

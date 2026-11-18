@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-反應速率與碰撞理論-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用反應速率與碰撞理論，提供必要數據與前提",
+      "question": {
+        "q": "相同質量的碳酸鈣粉末與塊狀碳酸鈣分別加入相同濃度、足量鹽酸。若攪拌等條件一致，哪組初期反應速率通常較快？",
+        "correct": "粉末組，因有效接觸面積較大",
+        "wrong": [
+          "塊狀組，因質量相同表示表面積相同",
+          "兩組必定完全相同",
+          "粉末組因化學式改變而加快"
+        ],
+        "exp": "粉末有較大比表面積，與酸接觸及有效碰撞機會增加。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-反應速率與碰撞理論",
+        "template_id": "extra-2026-chem2-反應速率與碰撞理論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-反應速率與碰撞理論-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用反應速率與碰撞理論，提供必要數據與前提",
+      "question": {
+        "q": "某反應在較高溫度下進行，反應物濃度等其他條件不變。一般反應速率為何較快？",
+        "correct": "較多粒子有足夠能量跨越活化能門檻",
+        "wrong": [
+          "粒子全部不再運動",
+          "反應物分子一定變成不同元素",
+          "提高溫度直接消除反應物的質量"
+        ],
+        "exp": "溫度提高使有效碰撞比例增加，因而常加快反應。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-反應速率與碰撞理論",
+        "template_id": "extra-2026-chem2-反應速率與碰撞理論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-反應速率與碰撞理論-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用反應速率與碰撞理論，提供必要數據與前提",
+      "question": {
+        "q": "某反應加入催化劑後較快達到化學平衡，反應溫度維持不變。對平衡常數K有何影響？",
+        "correct": "K保持不變，催化劑主要降低反應路徑活化能",
+        "wrong": [
+          "K必定變成兩倍",
+          "催化劑只加快正反應因此平衡必完全右移",
+          "催化劑將所有產物轉成元素"
+        ],
+        "exp": "催化劑通常同時影響正反反應速率，不改變固定溫度下的平衡常數。",
+        "subject": "化學",
+        "sub_topic": "反應速率與碰撞理論",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中二年級-反應速率與碰撞理論",
+        "template_id": "extra-2026-chem2-反應速率與碰撞理論-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

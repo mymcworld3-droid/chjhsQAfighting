@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-原子軌域與鍵結模型-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用原子軌域與鍵結模型，提供必要數據與前提",
+      "question": {
+        "q": "中性原子電子組態為1s²2s²2p⁶3s¹。該原子的電子總數與可能元素為何？",
+        "correct": "11個電子，鈉Na",
+        "wrong": [
+          "10個電子，氖Ne",
+          "12個電子，鎂Mg",
+          "17個電子，氯Cl"
+        ],
+        "exp": "電子總數2+2+6+1=11，中性原子原子序11為鈉。",
+        "subject": "化學",
+        "sub_topic": "原子軌域與鍵結模型",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中二年級-原子軌域與鍵結模型",
+        "template_id": "extra-2026-chem2-原子軌域與鍵結模型-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-原子軌域與鍵結模型-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用原子軌域與鍵結模型，提供必要數據與前提",
+      "question": {
+        "q": "在基本原子軌域模型中，三個2p軌域總共最多可容納多少電子？",
+        "correct": "6個",
+        "wrong": [
+          "2個",
+          "3個",
+          "8個"
+        ],
+        "exp": "每個軌域最多容納2個自旋相反電子，3個p軌域共容納6個。",
+        "subject": "化學",
+        "sub_topic": "原子軌域與鍵結模型",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中二年級-原子軌域與鍵結模型",
+        "template_id": "extra-2026-chem2-原子軌域與鍵結模型-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-原子軌域與鍵結模型-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用原子軌域與鍵結模型，提供必要數據與前提",
+      "question": {
+        "q": "依包立不相容原理，一個空間原子軌域最多可容納幾個電子，且兩電子自旋如何？",
+        "correct": "2個，自旋相反",
+        "wrong": [
+          "4個，自旋完全相同",
+          "8個，自旋任意",
+          "1個，永遠不能有第二個"
+        ],
+        "exp": "同一軌域最多兩電子，且需不同自旋量子數。",
+        "subject": "化學",
+        "sub_topic": "原子軌域與鍵結模型",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中二年級-原子軌域與鍵結模型",
+        "template_id": "extra-2026-chem2-原子軌域與鍵結模型-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

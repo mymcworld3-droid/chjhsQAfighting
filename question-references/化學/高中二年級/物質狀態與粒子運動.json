@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-chem2-物質狀態與粒子運動-1",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用物質狀態與粒子運動，提供必要數據與前提",
+      "question": {
+        "q": "定量理想氣體在溫度不變時，體積由4.0 L壓縮至2.0 L。壓力如何變化？",
+        "correct": "變成兩倍",
+        "wrong": [
+          "變成一半",
+          "完全不變",
+          "變成四倍"
+        ],
+        "exp": "波以耳定律P1V1=P2V2，體積減半則壓力加倍。",
+        "subject": "化學",
+        "sub_topic": "物質狀態與粒子運動",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中二年級-物質狀態與粒子運動",
+        "template_id": "extra-2026-chem2-物質狀態與粒子運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-物質狀態與粒子運動-2",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用物質狀態與粒子運動，提供必要數據與前提",
+      "question": {
+        "q": "兩瓶同種氣體，一瓶溫度300 K、另一瓶600 K。依氣體分子運動論，哪項敘述較正確？",
+        "correct": "600 K的氣體分子平均平動動能較大",
+        "wrong": [
+          "兩瓶平均平動動能相同",
+          "300 K的每個分子必定跑得較快",
+          "600 K氣體的每個分子必同速"
+        ],
+        "exp": "理想氣體分子平均平動動能與絕對溫度成正比，不代表所有分子速度相同。",
+        "subject": "化學",
+        "sub_topic": "物質狀態與粒子運動",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中二年級-物質狀態與粒子運動",
+        "template_id": "extra-2026-chem2-物質狀態與粒子運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-chem2-物質狀態與粒子運動-3",
+      "source": "108課綱化學自編題（非歷屆原題）",
+      "design": "情境化運用物質狀態與粒子運動，提供必要數據與前提",
+      "question": {
+        "q": "純物質在固定壓力下熔化時，持續供熱卻溫度近似固定。能量主要用於？",
+        "correct": "改變粒子間排列與作用，完成相變",
+        "wrong": [
+          "把所有粒子轉變為不同元素",
+          "讓物質質量直接增加一倍",
+          "使粒子完全停止運動"
+        ],
+        "exp": "熔化需要潛熱，能量主要改變微觀結構而非提高溫度。",
+        "subject": "化學",
+        "sub_topic": "物質狀態與粒子運動",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中二年級-物質狀態與粒子運動",
+        "template_id": "extra-2026-chem2-物質狀態與粒子運動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
