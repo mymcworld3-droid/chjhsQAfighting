@@ -37,6 +37,7 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
 
 export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt,label,totalExpForLevel}) {
   const visual=manualVisualState(book);
+  const tierClass=book.tierRealm==='元嬰'?'nascent':book.tierRealm==='築基'?'foundation':'qi';
   const anticipation=manualAnticipation(book,totalExpForLevel);
   const near=anticipation&&['near','imminent'].includes(anticipation.status);
   const current=book.id===focusId;
@@ -55,13 +56,14 @@ export function renderManualCollectionSummary(book,focusId,equipped,{esc,bookArt
       data-manual-approach="${near?anticipation.status:'none'}">
       <span class="manual-library-cover-glow" aria-hidden="true"></span>
       <span class="manual-library-cover-wrap">${art}</span>
+      <span class="manual-library-school-tag is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}功法</span>
       ${current?'<span class="manual-library-featured-tag">展示中</span>':''}
     </span>
     <span class="manual-library-card-info">
       <span class="manual-library-name-row"><strong>${esc(book.name)}</strong>
         <span class="manual-library-level">Lv. ${visual.level}</span></span>
       <span class="manual-library-brief">
-        <span>${esc(label(book.school))} · ${esc(book.tierRealm||'煉氣')}功法</span>
+        <span>${esc(label(book.school))}</span>
         <span class="manual-library-brief-state ${near?'is-approaching':''}">${esc(stage)}</span>
       </span>
     </span>
