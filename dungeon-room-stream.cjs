@@ -12,7 +12,7 @@ function streamDungeonRoom({
 }){
   if(req.aborted||res.destroyed||res.writableEnded)return;
   let stopped=false,unsubscribe=null,keepalive=null,renew=null;
-  let lastRevision=-1;
+  let lastRevision=-1,latestRoom=initialRoom;
   const stop=()=>{
     if(stopped)return;
     stopped=true;
@@ -36,7 +36,7 @@ function streamDungeonRoom({
     if(!isActive(room))return fail(410,'合作副本隊伍已關閉或過期');
     const revision=Number(room.revision)||0;
     if(revision<=lastRevision)return;
-    lastRevision=revision;
+    lastRevision=revision;latestRoom=room;
     send({room:project(ref.id,room,clock())});
   };
   res.set?.({
@@ -62,7 +62,7 @@ function streamDungeonRoom({
   }catch(error){failure(error);return;}
   if(stopped){unsubscribe?.();return;}
   keepalive=setInterval(()=>{
-    if(!isActive(initialRoom))return fail(410,'合作副本隊伍已過期');
+    if(!isActive(latestRoom))return fail(410,'合作副本隊伍已過期');
     if((res.writableLength||0)>MAX_PENDING_BYTES)return stop();
     res.write(': keepalive\n\n');
   },KEEPALIVE_MS);
