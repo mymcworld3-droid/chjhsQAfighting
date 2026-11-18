@@ -8,12 +8,11 @@ import {detectManualCelebration,renderManualCelebration} from './manual-celebrat
 import {authenticatedMainFetch,getMainUser} from './data/project-repository.js';
 
 const Catalog=globalThis.QAManuals;
-let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',pickerSlot=null,libraryFilter='all',celebrationTimer=null;
+let root=null,current=null,busy=false,loadedFor='',renderedFor='',lastFetch=0,sequence=0,selectedLoadout=0,featuredBookId='',selectedSkillId=null,pickerSlot=null,libraryFilter='all',celebrationTimer=null;
 const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 })[ch]);
 const label=school=>school==='sword'?'劍修':'體修';
-const artImg=(src,klass)=>src?`<img class="${klass}" src="${esc(src)}" alt="" loading="lazy" decoding="async">`:``;
 const visible=()=>!!root?.closest('#page-training.active-page:not(.hidden)');
 function ensure(){
   const page=document.getElementById('page-training');
@@ -88,109 +87,55 @@ function equippedVersion(id,equipped=current?.loadouts?.[selectedLoadout]?.skill
   const move=Catalog.BY_SKILL[id]?.moveId;
   return equipped.find(other=>Catalog.BY_SKILL[other]?.moveId===move);
 }
-function equipDisabled(id,equipped=current?.equipped||[]){
-  const other=equippedVersion(id,equipped);
-  return other===id||(!other&&equipped.length>=3);
-}
 function skillDetails(id){
   const base=Catalog.BY_SKILL[id];
   return base&&current?.library.find(book=>book.id===base.manualId)?.skills.find(skill=>skill.id===id);
 }
 function featuredHeroMarkup(){
-  const view=renderManualHero(current,featuredBookId,{esc,bookArt,skillArt,label,totalExpForLevel:Catalog.totalExpForLevel});
+  const activeBook=current?.library?.find(book=>book.id===featuredBookId&&book.owned);
+  if(activeBook&&selectedSkillId&&!activeBook.skills.some(skill=>skill.id===selectedSkillId))
+    selectedSkillId=null;
+  const serverAttack=Number(current?.battleAttack),localAttack=Number(window.getCombatStats?.()?.attack);
+  const attack=Number.isFinite(serverAttack)&&serverAttack>0?serverAttack:
+    Number.isFinite(localAttack)&&localAttack>0?localAttack:
+      Math.max(1,Number(window.getCurrentUserData?.()?.stats?.attack)||200);
+  const equipped=current?.loadouts?.[selectedLoadout]?.skillIds||[];
+  const view=renderManualHero(current,featuredBookId,{
+    esc,bookArt,skillArt,label,totalExpForLevel:Catalog.totalExpForLevel,
+    selectedSkillId,descriptionWithDamage:Catalog.descriptionWithDamage,
+    moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId,equipped,attack
+  });
+  if(view.bookId!==featuredBookId)selectedSkillId=null;
   featuredBookId=view.bookId;
   return view.html;
 }
-function markup(expandedBooks){
+function markup(){
   if(!current)return '<div class="manual-loading">正在讀取功法…</div>';
   const hero=featuredHeroMarkup();
   const expedition=renderManualExpedition(nextManualExpedition(current,featuredBookId,Catalog),{esc,bookArt});
-  const owned=current.library.filter(item=>item.owned).length;
-  const equipped=current.loadouts?.[selectedLoadout]?.skillIds||[];
-  const gold=Number(current.gold)||0;
-  const tactical=window.getCombatPower?.();
-  const rating=tactical?.mode==='tactical'?tactical:null;
-  const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
-  const serverAttack=Number(current.battleAttack);
-  const projectedAttack=Number(window.getCombatStats?.()?.attack);
-  // An authenticated manual response contains the attack used by the PvE
-  // combat server. Do not silently show an inaccurate client-only estimate.
-  const attack=Number.isFinite(serverAttack)&&serverAttack>0?serverAttack:
-    Number.isFinite(projectedAttack)&&projectedAttack>0?projectedAttack:
-      Math.max(1,Number(window.getCurrentUserData?.()?.stats?.attack)||200);
-  const cards=filterOwnedManuals(current,libraryFilter).map(book=>{
-    const next=book.skills.find(s=>!s.unlocked);
-    const skills=book.skills.map((skill,i)=>{
-      const other=equippedVersion(skill.id,equipped);
-      const {unlocked,upgrade}=skill;
-      const bonus=skill.kind==='fist-focus'?'每級少 1 體力':'每級 +10% 基礎傷害';
-      const requirements=[
-        !skill.mastered?'功法 Lv. '+skill.levelRequired:null,
-        !skill.realmReady?'修士 '+skill.realmName+'境':null
-      ].filter(Boolean);
-      return `<div class="manual-technique ${unlocked?'':'is-locked'}" data-manual-skill="${esc(skill.id)}">
-        <div class="manual-technique-overview">${artImg(skillArt(skill),"manual-skill-art")}<div class="manual-technique-copy">
-        <div class="manual-technique-heading"><b>${i+1}. ${esc(skill.name)}${unlocked?` <span>Lv. ${skill.level}</span>`:''}</b>
-          <small>${skill.cost} 體力 · ${skill.unlimited?'無固定射程':skill.range+' 格'} · ${skill.realmName}境</small></div>
-        <p>${esc(Catalog.descriptionWithDamage(attack,skill))}</p></div></div>
-        ${unlocked?`<div class="manual-technique-actions">
-          <button type="button" data-manual-equip="${esc(skill.id)}" ${equipDisabled(skill.id,equipped)?'disabled':''}>${other===skill.id?'已裝備':other?'改用本功法':'裝備技能'}</button>
-          ${upgrade?`<button type="button" class="manual-upgrade" data-skill-upgrade="${esc(skill.id)}" ${gold<upgrade.gold?'disabled':''}>
-            ${gold<upgrade.gold?'靈石不足 · ':''}升級招式至 Lv. ${upgrade.targetLevel} · ${upgrade.gold} 靈石</button>`:'<small>招式已滿級</small>'}
-          ${upgrade?`<small class="manual-skill-bonus">${bonus}</small>`:''}
-        </div>`:
-          `<span class="manual-lock"><i class="fa-solid fa-lock"></i> 需達 ${requirements.join('、')}</span>`}
-      </div>`;
-    }).join('');
-    const progress=`<div class="manual-mastery">
-      <div class="manual-mastery-head"><strong>熟練度</strong>
-        <span>${book.expInLevel.toLocaleString('zh-TW')} / ${book.expToNext.toLocaleString('zh-TW')} EXP</span></div>
-      <div class="manual-exp-track" role="progressbar" aria-label="${esc(book.name)}熟練經驗" aria-valuemin="0"
-        aria-valuemax="${book.expToNext}" aria-valuenow="${book.expInLevel}">
-        <div class="manual-exp-fill" style="width:${book.progress}%"></div></div>
-      <small>${next?`${!next.mastered?'功法 Lv. '+next.levelRequired+' · ':''}${!next.realmReady?'修士 '+next.realmName+'境 · ':''}解鎖「${esc(next.name)}」`:'三招已全部解鎖'}</small>
-      ${book.upgrade?`<button type="button" class="manual-upgrade" data-manual-upgrade="${esc(book.id)}" ${gold<book.upgrade.gold?'disabled':''}>
-        ${gold<book.upgrade.gold?'靈石不足 · ':''}升級功法至 Lv. ${book.upgrade.targetLevel} · ${book.upgrade.gold} 靈石</button>`:''}
-    </div>`;
-    const focus=book.id===featuredBookId;
-    const collectionCover=renderManualCollectionSummary(book,featuredBookId,equipped,{
-      esc,bookArt,skillArt,label,totalExpForLevel:Catalog.totalExpForLevel
-    });
-    return `<details class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${focus?'is-featured':''}"
-      data-manual-book="${esc(book.id)}"${expandedBooks.has(book.id)?' open':''}>
-      ${collectionCover}
-      <div class="manual-book-content">
-        <div class="manual-library-detail-header">
-          <div><strong>《${esc(book.name)}》功法詳情</strong>
-            <small>熟練度、技能說明及解鎖條件</small></div>
-          <button type="button" class="manual-library-feature-button" data-feature-book="${esc(book.id)}"
-            data-manual-focus-hero="true">
-            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-            ${focus?'返回上方展示':'設為展示焦點'}</button>
-        </div>
-        <p class="manual-book-description">${esc(book.description)}</p>
-        ${progress}<div class="manual-techniques">${skills}</div>
-      </div>
-    </details>`;
-  }).join('');
-  return `${hero}${expedition}<div class="manual-summary"><div><b>${owned} 本</b><span>已獲得功法</span></div>
-      <div><b>${(current.equipped||[]).length} / 3</b><span>已裝備技能</span></div>
-      <div><b>${gold.toLocaleString('zh-TW')}</b><span>可用靈石</span></div>
-      <div class="manual-power-summary"><b>${rating?fmt(rating.total):'—'}</b><span>戰棋戰力</span>
-        <small>${rating?'基礎 '+fmt(rating.base)+' + 招式 '+fmt(rating.skills):'正在計算'}</small></div></div>
+  const cards=filterOwnedManuals(current,libraryFilter).map(book=>
+    `<article class="manual-book ${book.school==='sword'?'is-sword':'is-body'} ${book.id===featuredBookId?'is-featured':''}"
+       data-manual-book="${esc(book.id)}">
+       ${renderManualCollectionSummary(book,featuredBookId,[],{
+         esc,bookArt,label,totalExpForLevel:Catalog.totalExpForLevel
+       })}
+    </article>`
+  ).join('');
+  return `${hero}${expedition}
     ${renderManualLoadout(current,selectedLoadout,pickerSlot,{
       esc,skillArt,moveIdOf:id=>Catalog.BY_SKILL[id]?.moveId
     })}
     <section class="manual-library" aria-label="功法收藏藏經閣">
       ${renderManualCollectionHeader(current,libraryFilter,{esc})}
-      <div class="manual-book-grid">${cards||'<p class="manual-empty">此篩選沒有已獲得的功法。可切換流派或選擇「全部功法」。</p>'}</div>
+      <div class="manual-book-grid">${cards||'<p class="manual-empty">尚無此流派已取得的功法，請切換篩選查看。</p>'}</div>
     </section>
-    <details class="manual-xp-reference"><summary>查看靈獸境界 EXP 獎勵</summary>
-      <div>${Catalog.REALMS.map(realm=>`<span>${realm.name}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
-      <p>使用功法技能擊殺靈獸才能累積經驗。每招同時需要達到功法等級與修士境界。</p>
+    <details class="manual-xp-reference"><summary>其他靈獸境界 EXP 對照</summary>
+      <div>${Catalog.REALMS.map(realm=>`<span>${esc(realm.name)}境 <b>+${realm.exp}</b> EXP</span>`).join('')}</div>
+      <p>只有以功法技能完成擊殺才能獲得熟練經驗；招式仍需要功法等級及修士境界。</p>
     </details>
     <div class="manual-status" data-manual-status role="status" aria-live="polite"></div>
     <div class="manual-celebration-host" data-manual-celebration-host></div>`;
+
 }
 // Reconcile the existing page instead of recreating every image on each
 // save/upgrade. In particular, leave an unchanged <img src> untouched.
@@ -250,11 +195,7 @@ function showManualCelebration(reward){
 }
 function paint(message='',{loadoutFeedback=false}={}){
   ensure();if(!root)return;
-  const expandedBooks=new Set();
-  if(renderedFor===loadedFor){
-    for(const book of root.querySelectorAll('details[data-manual-book][open]'))expandedBooks.add(book.dataset.manualBook);
-  }
-  const template=document.createElement('template');template.innerHTML=markup(expandedBooks);
+  const template=document.createElement('template');template.innerHTML=markup();
   if(renderedFor&&renderedFor!==loadedFor)root.replaceChildren(template.content.cloneNode(true));
   else reconcile(root,template.content);
   renderedFor=loadedFor;
@@ -277,7 +218,7 @@ async function load({force=false}={}){
     if(token!==sequence||getMainUser()?.uid!==uid)return;
     const before=loadedFor===uid?current:null;
     const reward=detectManualCelebration(before,result,{kind:'sync'});
-    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';pickerSlot=null;libraryFilter='all';}loadedFor=uid;
+    current=result;if(loadedFor!==uid){selectedLoadout=result.activeLoadout||0;featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}loadedFor=uid;
     window.setCurrentTacticalManualState?.(result,uid);
     paint();
     showManualCelebration(reward);
@@ -302,7 +243,7 @@ async function mutate(url,body){
       bookId:body?.bookId,skillId:body?.skillId
     });
     current=next;loadedFor=uid;lastFetch=Date.now();successful=true;
-    if(url.endsWith('/school')){featuredBookId='';pickerSlot=null;}
+    if(url.endsWith('/school')){featuredBookId='';selectedSkillId=null;pickerSlot=null;}
     if(url.endsWith('/loadout')&&Array.isArray(body?.skillIds))pickerSlot=null;
     window.setCurrentTacticalManualState?.(next,uid);
     if(upgrading){
@@ -362,20 +303,6 @@ function boot(){
       clearManualCelebration();return;
     }
     if(busy)return;
-    // Native details toggling and hero selection are reconciled in one paint.
-    // Keep this before the button handler: summaries are not nested buttons.
-    const summary=event.target.closest('summary.manual-book-top');
-    if(summary&&root.contains(summary)){
-      const details=summary.closest('details[data-manual-book]');
-      const id=details?.dataset.manualBook;
-      if(id&&current?.library.some(book=>book.owned&&book.id===id)){
-        event.preventDefault();
-        details.open=!details.open;
-        featuredBookId=id;
-        paint();
-      }
-      return;
-    }
     const button=event.target.closest('button');if(!button)return;
     if(button.dataset.manualExpeditionAction){
       const guide=nextManualExpedition(current,featuredBookId,Catalog);
@@ -409,6 +336,7 @@ function boot(){
     if(button.dataset.featureBook){
       if(current?.library.some(book=>book.owned&&book.id===button.dataset.featureBook)){
         featuredBookId=button.dataset.featureBook;
+        selectedSkillId=null;
         paint();
         if(button.hasAttribute('data-manual-focus-hero')){
           requestAnimationFrame(()=>{
@@ -430,21 +358,20 @@ function boot(){
       return;
     }
     if(button.dataset.manualJumpSkill){
-      const manualId=Catalog.BY_SKILL[button.dataset.manualJumpSkill]?.manualId;
-      const details=[...root.querySelectorAll('details[data-manual-book]')]
-        .find(item=>item.dataset.manualBook===manualId);
-      if(details){
-        details.open=true;
-        const target=[...details.querySelectorAll('[data-manual-skill]')]
-          .find(item=>item.dataset.manualSkill===button.dataset.manualJumpSkill);
-        if(target){
-          requestAnimationFrame(()=>{
-            target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-          });
-        }
-      }
+      const skillId=button.dataset.manualJumpSkill;
+      const book=current?.library?.find(item=>item.owned&&item.id===featuredBookId);
+      if(!book?.skills.some(skill=>skill.id===skillId))return;
+      selectedSkillId=selectedSkillId===skillId?null:skillId;
+      paint();
+      if(selectedSkillId)requestAnimationFrame(()=>{
+        root?.querySelector('.manual-focus-skill')?.scrollIntoView({
+          behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',
+          block:'nearest'
+        });
+      });
       return;
     }
+    if(button.hasAttribute('data-manual-close-skill')){selectedSkillId=null;paint();return;}
     if(button.hasAttribute('data-manual-close-picker')){pickerSlot=null;paint();return;}
     if(button.dataset.manualPickSlot!==undefined){
       const slot=Number(button.dataset.manualPickSlot);
@@ -513,7 +440,7 @@ function boot(){
   document.addEventListener('click',event=>{
     if(event.target.closest('#nav-training,[data-target="page-training"]'))setTimeout(()=>void load({force:true}),0);
   },true);
-  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){clearManualCelebration();current=null;loadedFor='';featuredBookId='';pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
+  window.addEventListener('xiuxian:user-data-ready',()=>{ensureNav();const uid=getMainUser()?.uid||'';if(uid!==loadedFor){clearManualCelebration();current=null;loadedFor='';featuredBookId='';selectedSkillId=null;pickerSlot=null;libraryFilter='all';}if(visible())void load({force:true});});
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&root?.querySelector('[data-manual-celebration-host]')?.firstChild){
       clearManualCelebration();
