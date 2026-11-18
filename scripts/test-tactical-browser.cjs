@@ -696,7 +696,7 @@ async function main(){
         assert.ok(layout.map.w>.98&&layout.map.h>.98);
         return layout;
       };
-      for(const [width,height,label]of [[1280,720,'sketch-landscape'],[393,852,'sketch-portrait'],[844,390,'sketch-phone-landscape']]){
+      for(const [width,height,label]of [[1280,720,'sketch-landscape'],[393,852,'sketch-portrait'],[844,390,'sketch-phone-landscape'],[320,568,'sketch-compact-portrait'],[768,1024,'sketch-tablet-portrait']]){
         await quick.setViewportSize({width,height});
         const layout=await validate();
         await quick.screenshot({path:path.join(output,label+'.png')});
