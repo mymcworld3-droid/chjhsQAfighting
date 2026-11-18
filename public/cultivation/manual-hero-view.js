@@ -31,6 +31,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   };
 
   const book=chosen;
+  const tierClass=book.tierRealm==='元嬰'?'nascent':book.tierRealm==='築基'?'foundation':'qi';
   const visual=manualVisualState(book);
   const growth=renderManualVisualMilestones(book,esc);
   const anticipation=manualAnticipation(book,totalExpForLevel);
@@ -103,7 +104,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
           <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
           ${coverMarkup}
-          <span class="manual-hero-art-caption">${label(book.school)} · ${esc(book.tierRealm||'煉氣')}功法</span>
+          <span class="manual-hero-art-caption manual-hero-tier-badge is-tier-${tierClass}">${esc(book.tierRealm||'煉氣')}功法</span>
         </div>
         <div class="manual-hero-details">
           <div class="manual-hero-title-row">
