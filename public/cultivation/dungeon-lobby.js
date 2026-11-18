@@ -2,7 +2,8 @@ import {
   createDungeonRoom,joinDungeonRoomByCode,getDungeonRoom,reconnectDungeonRoom,
   leaveDungeonRoom,listPublicDungeonRooms,joinPublicDungeonRoom,quickJoinDungeonRoom,
   setDungeonRoomVisibility,inviteDungeonFriends,setDungeonReady,kickDungeonMember,
-  disbandDungeonRoom,assembleDungeonRoom,cancelDungeonAssembly
+  disbandDungeonRoom,assembleDungeonRoom,cancelDungeonAssembly,
+  subscribeDungeonRoom,heartbeatDungeonRoom
 } from './dungeon-room.js';
 import { getMainUser } from './data/project-repository.js';
 
@@ -17,6 +18,9 @@ const nameOf=member=>member?.name||'無名修士';
 const localUser=()=>getMainUser()?.uid||'';
 let entry,root,body,notice,open=false,room=null,account='',pending=false,refreshing=false;
 let list=[],listLoading=false,lastListAt=0,clock=null,requestSerial=0,initialFocus=null,roomRevision=-1;
+let streamStop=null,streamRoomId='',streamConnected=false,heartbeatBusy=false,lastHeartbeatAt=0;
+let fallbackFailures=0,nextFallbackAt=0,roomViewSignature='';
+const HEARTBEAT_MS=20000,PRESENCE_STALE_MS=60000;
 const $=selector=>root?.querySelector(selector);
 function loadStyle(){
   if(document.getElementById('dungeon-lobby-style'))return;
@@ -73,8 +77,39 @@ function announce(message=''){
   notice.textContent=message;
   notice.hidden=!message;
 }
+function stopRoomStream(){
+  const stop=streamStop;
+  streamStop=null;streamRoomId='';streamConnected=false;
+  stop?.();
+}
 function clearRoom(){
-  room=null;roomRevision=-1;
+  room=null;roomRevision=-1;roomViewSignature='';
+  stopRoomStream();
+  fallbackFailures=0;nextFallbackAt=0;lastHeartbeatAt=0;
+}
+function roomSignature(next){
+  const members=Object.entries(next?.members||{}).sort(([a],[b])=>a.localeCompare(b))
+    .map(([uid,m])=>[uid,m.name,m.realm,m.ready,m.joinedAtMs]);
+  return JSON.stringify([next?.id,next?.revision===undefined?null:next?.status,
+    next?.hostUid,next?.visibility,next?.code,next?.assembledAtMs,members]);
+}
+function memberOnline(member){
+  const last=Number(member?.heartbeatAtMs)||0;
+  return last>0&&Date.now()-last<=PRESENCE_STALE_MS;
+}
+function renderPresence(){
+  if(!root||!open||!room)return;
+  root.querySelectorAll('[data-dg-presence]').forEach(node=>{
+    const member=room.members?.[node.dataset.dgPresence];
+    const online=memberOnline(member);
+    node.textContent=online?'在線':'離線';
+    node.classList.toggle('is-online',online);
+  });
+  const label=$('[data-dg-sync]');
+  if(label){
+    label.textContent=streamConnected?'即時同步':'重新連線中';
+    label.dataset.online=String(streamConnected);
+  }
 }
 function validSession(uid,serial){return open&&uid===account&&localUser()===uid&&serial===requestSerial;}
 function markBusy(value){
@@ -124,7 +159,7 @@ function renderRoom(){
       (leader?'<i class="fa-solid fa-crown"></i>':'<i class="fa-solid fa-user"></i>')+'</span>'+
       '<span class="dg-member-body"><strong>'+esc(nameOf(member))+
       (isMe?' <em>（你）</em>':'')+'</strong><small>'+esc(member.realm||'凡人')+'境'+
-      (leader?' · 隊長':'')+'</small></span>'+
+      (leader?' · 隊長':'')+'</small><small class="dg-presence" data-dg-presence="'+esc(member.uid)+'"></small></span>'+
       '<span class="dg-ready '+(member.ready?'is-ready':'')+'">'+
       (member.ready?'已準備':'未準備')+'</span>'+
       (host&&!leader&&!assembled?'<button class="dg-kick" data-dg="kick" data-target-uid="'+esc(member.uid)+
@@ -132,7 +167,8 @@ function renderRoom(){
   }).join('');
   body.innerHTML='<div class="dg-room-status"><div><small>副本隊伍 · '+(assembled?'已集結':'等待集結')+'</small>'+
     '<h3>'+esc(room.visibility==='public'?'公開隊伍':'私人隊伍')+'</h3></div>'+
-    '<span class="dg-team-count">'+memberList.length+' / 4 人</span></div>'+
+    '<span class="dg-team-count">'+memberList.length+' / 4 人</span>'+
+    '<span class="dg-sync" data-dg-sync role="status"></span></div>'+
     '<div class="dg-room-code"><span>邀請代碼 <strong>'+esc(room.code)+'</strong></span>'+
     '<button data-dg="copy">複製</button></div>'+
     '<div class="dg-section-heading"><h3>隊伍成員</h3><span>'+readyCount+' / '+memberList.length+' 已準備</span></div>'+
@@ -149,11 +185,76 @@ function renderRoom(){
     '<button data-dg="leave">離開隊伍</button>'+
     (host?'<button class="dg-danger" data-dg="disband">解散隊伍</button>':'')+'</div>';
   // A room refresh must not erase a recent operation result or error.
+  renderPresence();
 }
 function render(){
   if(!root||!open)return;
+  const top=body.scrollTop;
   if(room)renderRoom();else renderHome();
   markBusy(pending);
+  body.scrollTop=top;
+}
+function acceptRoom(next){
+  if(!next||!safeRoomId(next.id))return false;
+  const revision=Number(next.revision);
+  if(!Number.isFinite(revision))return false;
+  if(room?.id===next.id&&revision<roomRevision)return false;
+  if(room?.id!==next.id){
+    stopRoomStream();
+    fallbackFailures=0;nextFallbackAt=0;lastHeartbeatAt=0;
+  }
+  const signature=roomSignature(next);
+  const needsRender=signature!==roomViewSignature;
+  room=next;roomRevision=revision;roomViewSignature=signature;
+  if(needsRender)render();
+  else renderPresence();
+  startRoomStream();
+  return true;
+}
+function streamInvalidated(error,roomId){
+  if(!room||room.id!==roomId)return;
+  clearRoom();
+  announce(error?.message||'隊伍已關閉或你已離開');
+  render();
+  void refreshList({force:true});
+}
+function startRoomStream(){
+  if(!open||document.hidden||!room?.id||streamRoomId===room.id)return;
+  stopRoomStream();
+  const uid=account,serial=requestSerial,id=room.id;
+  streamRoomId=id;
+  streamStop=subscribeDungeonRoom(id,
+    next=>{
+      if(!validSession(uid,serial)||room?.id!==id)return;
+      acceptRoom(next);
+    },
+    error=>{
+      if(!validSession(uid,serial)||room?.id!==id)return;
+      if([401,403,404,410].includes(error?.status))return streamInvalidated(error,id);
+      // Fall back to verified GETs while the independent SSE connection retries.
+      streamConnected=false;renderPresence();
+    },
+    connected=>{
+      if(!validSession(uid,serial)||room?.id!==id)return;
+      streamConnected=connected;
+      if(connected){fallbackFailures=0;nextFallbackAt=0;}
+      renderPresence();
+      if(!connected)void refreshRoom();
+    });
+}
+async function sendHeartbeat({force=false}={}){
+  if(!open||document.hidden||!room?.id||heartbeatBusy||pending)return;
+  const now=Date.now();
+  if(!force&&now-lastHeartbeatAt<HEARTBEAT_MS)return;
+  lastHeartbeatAt=now;heartbeatBusy=true;
+  const uid=account,serial=requestSerial,id=room.id;
+  try{
+    await heartbeatDungeonRoom(id);
+  }catch(error){
+    if(!validSession(uid,serial)||room?.id!==id)return;
+    if([401,403,404,410].includes(error?.status))streamInvalidated(error,id);
+    else {streamConnected=false;renderPresence();}
+  }finally{heartbeatBusy=false;}
 }
 async function refreshList({force=false}={}){
   if(!open||room||listLoading||(!force&&Date.now()-lastListAt<12000))return;
@@ -168,21 +269,25 @@ async function refreshList({force=false}={}){
     if(validSession(uid,serial)){lastListAt=Date.now();listLoading=false;renderList();}
   }
 }
-async function refreshRoom(){
-  if(!open||refreshing||pending||!room?.id)return;
+async function refreshRoom({force=false}={}){
+  if(!open||refreshing||pending||!room?.id||(!force&&streamConnected))return;
+  if(!force&&Date.now()<nextFallbackAt)return;
   refreshing=true;
   const uid=account,serial=requestSerial,roomId=room.id;
   try{
     const result=await getDungeonRoom(roomId);
     if(!validSession(uid,serial)||room?.id!==roomId)return;
-    if(result.room&&Number(result.room.revision)!==roomRevision){
-      room=result.room;roomRevision=Number(room.revision);render();
-    }
+    fallbackFailures=0;nextFallbackAt=0;
+    if(result.room)acceptRoom(result.room);
   }catch(error){
-    if(!validSession(uid,serial))return;
-    if([403,404,410].includes(error?.status)){
-      clearRoom();announce('隊伍已解散、已過期或你已離開隊伍。');render();void refreshList({force:true});
-    }else announce(error?.message||'隊伍同步失敗，稍後自動重試');
+    if(!validSession(uid,serial)||room?.id!==roomId)return;
+    if([401,403,404,410].includes(error?.status)){
+      streamInvalidated(error,roomId);
+    }else{
+      fallbackFailures++;
+      nextFallbackAt=Date.now()+Math.min(30000,5000*2**Math.min(3,fallbackFailures-1));
+      announce('即時連線中斷，正在透過安全補查恢復隊伍資訊。');
+    }
   }finally{refreshing=false;}
 }
 function poll(){
@@ -190,7 +295,12 @@ function poll(){
   // Do not keep showing another account's private room after account switch.
   if(localUser()!==account){close();clearRoom();list=[];return;}
   if(document.hidden)return;
-  if(room)void refreshRoom();else void refreshList();
+  if(room){
+    if(!streamStop)startRoomStream();
+    void sendHeartbeat();
+    if(!streamConnected)void refreshRoom();
+    renderPresence();
+  }else void refreshList();
 }
 async function openLobby(){
   const uid=localUser();
@@ -201,7 +311,7 @@ async function openLobby(){
     window.showToast?.('請先離開目前的戰鬥，再進入合作副本');return;
   }
   mount();account=uid;open=true;requestSerial++;
-  clearRoom();list=[];listLoading=false;refreshing=false;lastListAt=0;pending=false;
+  clearRoom();list=[];listLoading=false;refreshing=false;heartbeatBusy=false;lastListAt=0;pending=false;
   initialFocus=document.activeElement;
   root.hidden=false;root.querySelector('[data-dg="close"]')?.focus({preventScroll:true});
   announce('正在恢復隊伍資訊…');render();
@@ -210,8 +320,14 @@ async function openLobby(){
   try{
     const result=await reconnectDungeonRoom();
     if(!validSession(uid,serial))return;
-    room=result.room||null;roomRevision=Number(room?.revision)||-1;
-    announce('');render();if(!room)void refreshList({force:true});
+    announce('');
+    if(result.room){
+      acceptRoom(result.room);
+      void sendHeartbeat({force:true});
+    }else{
+      clearRoom();render();
+      void refreshList({force:true});
+    }
   }catch(error){
     if(validSession(uid,serial)){announce(error?.message||'目前無法連線至副本隊伍');render();}
   }
@@ -219,6 +335,7 @@ async function openLobby(){
 function close(){
   if(!open)return;
   open=false;requestSerial++;clearInterval(clock);clock=null;
+  stopRoomStream();
   root.hidden=true;announce('');
   const target=initialFocus;initialFocus=null;
   if(target?.isConnected)target.focus({preventScroll:true});
@@ -235,8 +352,9 @@ async function mutate(operation,{clear=false,message=''}={}){
       announce(message||'已離開隊伍');render();
       void refreshList({force:true});
     }else{
-      room=result.room;roomRevision=Number(room.revision)||-1;
-      announce(message);render();
+      acceptRoom(result.room);
+      announce(message);
+      void sendHeartbeat({force:true});
     }
   }catch(error){
     if(validSession(uid,serial))announce(error?.message||'副本隊伍操作未完成，請重新嘗試');
@@ -305,7 +423,17 @@ function init(){
   window.addEventListener('xiuxian:dungeon-room-joined',()=>{void openLobby();});
   window.addEventListener('xiuxian:user-ready',entryMount);
   window.addEventListener('pageshow',entryMount);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll();});
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden)stopRoomStream();
+    else {
+      // A fresh authenticated snapshot repairs missed push notifications.
+      if(open&&room){
+        startRoomStream();
+        void refreshRoom({force:true});
+        void sendHeartbeat({force:true});
+      }else poll();
+    }
+  });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
 else init();
