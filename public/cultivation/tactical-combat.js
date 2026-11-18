@@ -4,7 +4,7 @@ import {manualBattleEarnings,renderManualBattleRecap} from './tactical-manual-re
 import {manualXpDelta,renderManualXpToast} from './tactical-manual-xp-feedback.js';
 import {manualRoomExp,battleBreakthroughEstimate,renderBattleBreakthroughEstimate} from './manual-anticipation.js';
 import './tactical-rules.js?v=20261116-pve-v4';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261118-below-actors-v1';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261118-phase7-compass-v1';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import {EnemyDemo} from './tactical-enemy-demo.js?v=20261116-pve-v4';
 import {BeastInspector} from './tactical-beast-inspector.js?v=20261118-phase4-focus-v1';
