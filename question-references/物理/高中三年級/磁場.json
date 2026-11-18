@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-磁場-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用磁場",
+      "question": {
+        "q": "一帶正電粒子速度朝x軸正向、磁場朝y軸正向，兩方向互相垂直。磁力方向依右手定則朝何處？",
+        "correct": "z軸正向",
+        "wrong": [
+          "z軸負向",
+          "x軸正向",
+          "y軸負向"
+        ],
+        "exp": "磁力F=q(v×B)，正電的+x與+y叉積為+z方向。",
+        "subject": "物理",
+        "sub_topic": "磁場",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-磁場",
+        "template_id": "ext-2026-phy3-磁場-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-磁場-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用磁場",
+      "question": {
+        "q": "一長直導線電流由紙面穿出，紙面上其周圍磁力線方向為何？",
+        "correct": "逆時針環繞導線",
+        "wrong": [
+          "順時針環繞導線",
+          "只有水平向右",
+          "磁場必為零"
+        ],
+        "exp": "右手拇指指向電流向外，四指環繞為逆時針。",
+        "subject": "物理",
+        "sub_topic": "磁場",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-磁場",
+        "template_id": "ext-2026-phy3-磁場-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-磁場-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用磁場",
+      "question": {
+        "q": "長0.50 m的直導線通電3 A，垂直置於0.20 T均勻磁場。其磁力大小約為何？",
+        "correct": "0.30 N",
+        "wrong": [
+          "3.0 N",
+          "0.030 N",
+          "30 N"
+        ],
+        "exp": "載流導線受力F=BIL sin90°=0.20×3×0.50=0.30 N。",
+        "subject": "物理",
+        "sub_topic": "磁場",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-磁場",
+        "template_id": "ext-2026-phy3-磁場-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-物理學發展-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用物理學發展",
+      "question": {
+        "q": "高速粒子速度接近光速，研究者不用傳統牛頓動力學直接預估其運動。這反映哪項科學觀念？",
+        "correct": "物理理論具有適用範圍，相對論擴展高速現象的描述",
+        "wrong": [
+          "牛頓力學對所有低速物體都完全錯誤",
+          "高速粒子的速度可以無限制超過光速",
+          "任何新理論出現後所有舊公式都毫無用途"
+        ],
+        "exp": "牛頓理論在低速範圍仍是有效近似，高速需考慮相對論。",
+        "subject": "物理",
+        "sub_topic": "物理學發展",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-物理學發展",
+        "template_id": "ext-2026-phy3-物理學發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-物理學發展-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用物理學發展",
+      "question": {
+        "q": "光電實驗發現，光的頻率低於門檻時不論光強如何都無典型光電流。此觀察支持什麼理論轉變？",
+        "correct": "光能量以與頻率相關的量子形式傳遞",
+        "wrong": [
+          "光子能量只由總照射面積決定",
+          "金屬表面沒有任何電子",
+          "所有顏色光的單光子能量完全相等"
+        ],
+        "exp": "E=hf與金屬逸出功可解釋截止頻率，顯示光的量子特徵。",
+        "subject": "物理",
+        "sub_topic": "物理學發展",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-物理學發展",
+        "template_id": "ext-2026-phy3-物理學發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-物理學發展-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用物理學發展",
+      "question": {
+        "q": "某研究者提出新模型，聲稱無論任何測量結果都能解釋，因此不需明確預測。科學方法最主要的問題是？",
+        "correct": "缺乏可被觀察或實驗反駁的可檢驗預測",
+        "wrong": [
+          "理論若包含數學符號就一定有效",
+          "無法做實驗便可認定所有結果正確",
+          "模型應盡量避免與任何資料比較"
+        ],
+        "exp": "科學理論需提出有條件的可檢驗主張，並接受證據修正。",
+        "subject": "物理",
+        "sub_topic": "物理學發展",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-物理學發展",
+        "template_id": "ext-2026-phy3-物理學發展-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-電流電阻與電路-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電流電阻與電路",
+      "question": {
+        "q": "一個4 Ω電阻直接接於12 V理想電源，阻值不隨溫度變化。電流約為何？",
+        "correct": "3 A",
+        "wrong": [
+          "48 A",
+          "0.33 A",
+          "16 A"
+        ],
+        "exp": "I=V/R=12/4=3 A。單位為安培。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "ext-2026-phy3-電流電阻與電路-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電流電阻與電路-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電流電阻與電路",
+      "question": {
+        "q": "6 Ω與3 Ω兩電阻並聯後接上12 V電源，忽略內阻，電源總電流為何？",
+        "correct": "6 A",
+        "wrong": [
+          "2 A",
+          "4 A",
+          "9 A"
+        ],
+        "exp": "並聯等效電阻為2 Ω，故總電流I=12/2=6 A；各支路為2 A與4 A。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "ext-2026-phy3-電流電阻與電路-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電流電阻與電路-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電流電阻與電路",
+      "question": {
+        "q": "某電阻6 Ω，穩定通過2 A電流。電阻消耗功率為何？",
+        "correct": "24 W",
+        "wrong": [
+          "12 W",
+          "3 W",
+          "48 W"
+        ],
+        "exp": "P=I²R=2²×6=24 W；不可把I和R只做一次相乘作功率。",
+        "subject": "物理",
+        "sub_topic": "電流電阻與電路",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電流電阻與電路",
+        "template_id": "ext-2026-phy3-電流電阻與電路-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

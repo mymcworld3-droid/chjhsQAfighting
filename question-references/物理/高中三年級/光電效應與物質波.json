@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-光電效應與物質波-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用光電效應與物質波",
+      "question": {
+        "q": "對某金屬照射頻率低於截止頻率的光，僅將光強增加10倍。理想單光子光電效應模型預期如何？",
+        "correct": "仍無法使電子因單光子吸收而逸出",
+        "wrong": [
+          "最大光電子動能必然增加10倍",
+          "光強越大截止頻率就越低至零",
+          "每個光子的能量會因此增加10倍"
+        ],
+        "exp": "單光子能量hf由頻率決定，低於逸出功時增加光子數量也不足。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "ext-2026-phy3-光電效應與物質波-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-光電效應與物質波-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用光電效應與物質波",
+      "question": {
+        "q": "取普朗克常數h=6.63×10⁻³⁴ J·s，某光子頻率5.0×10¹⁴ Hz。單一光子能量約多少？",
+        "correct": "3.3×10⁻¹⁹ J",
+        "wrong": [
+          "1.3×10⁻⁴⁸ J",
+          "3.3×10⁻²¹ J",
+          "7.5×10⁴⁷ J"
+        ],
+        "exp": "E=hf=6.63×10⁻³⁴×5.0×10¹⁴≈3.3×10⁻¹⁹ J。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "ext-2026-phy3-光電效應與物質波-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-光電效應與物質波-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用光電效應與物質波",
+      "question": {
+        "q": "某粒子的德布羅意波長λ=h/p。若粒子動量大小變成原來三倍，物質波波長變為何？",
+        "correct": "原來的三分之一",
+        "wrong": [
+          "原來三倍",
+          "原來九倍",
+          "完全不變"
+        ],
+        "exp": "德布羅意波長與動量成反比；p增加三倍，λ縮為三分之一。",
+        "subject": "物理",
+        "sub_topic": "光電效應與物質波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-光電效應與物質波",
+        "template_id": "ext-2026-phy3-光電效應與物質波-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

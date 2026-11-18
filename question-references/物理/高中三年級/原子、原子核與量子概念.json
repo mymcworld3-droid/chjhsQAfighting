@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-原子、原子核與量子概念-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用原子、原子核與量子概念",
+      "question": {
+        "q": "一同位素半衰期4天，初始未衰變質量96 g。經過12天後，未衰變的質量預期約多少？",
+        "correct": "12 g",
+        "wrong": [
+          "48 g",
+          "24 g",
+          "6 g"
+        ],
+        "exp": "12天是3個半衰期，剩96×(1/2)³=12 g。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "ext-2026-phy3-原子、原子核與量子概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-原子、原子核與量子概念-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用原子、原子核與量子概念",
+      "question": {
+        "q": "某原子電子從較高能階躍遷至較低能階，若以單一光子釋放能量，光子能量等於？",
+        "correct": "兩能階之間的能量差",
+        "wrong": [
+          "原子核全部靜止質能",
+          "電子質量的平方",
+          "任意大小且與能階無關"
+        ],
+        "exp": "量子躍遷的能量守恆要求光子能量hν等於初末能階差。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "ext-2026-phy3-原子、原子核與量子概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-原子、原子核與量子概念-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用原子、原子核與量子概念",
+      "question": {
+        "q": "碳十四的原子序為6、質量數為14。其原子核內質子和中子數各為何？",
+        "correct": "6個質子、8個中子",
+        "wrong": [
+          "14個質子、6個中子",
+          "8個質子、6個中子",
+          "6個質子、14個中子"
+        ],
+        "exp": "質子數等於原子序6，中子數=質量數−質子數=14−6=8。",
+        "subject": "物理",
+        "sub_topic": "原子、原子核與量子概念",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-8",
+            "name": "近代物理"
+          }
+        ],
+        "concept_id": "physics-高中三年級-原子、原子核與量子概念",
+        "template_id": "ext-2026-phy3-原子、原子核與量子概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

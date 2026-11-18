@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-電磁感應與感應電動勢-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電磁感應與感應電動勢",
+      "question": {
+        "q": "20匝線圈每匝的磁通量在0.10秒內等量改變0.030 Wb。平均感應電動勢大小為何？",
+        "correct": "6 V",
+        "wrong": [
+          "0.3 V",
+          "0.6 V",
+          "60 V"
+        ],
+        "exp": "法拉第定律|ε|=N|ΔΦ|/Δt=20×0.030/0.10=6 V。",
+        "subject": "物理",
+        "sub_topic": "電磁感應與感應電動勢",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁感應與感應電動勢",
+        "template_id": "ext-2026-phy3-電磁感應與感應電動勢-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電磁感應與感應電動勢-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電磁感應與感應電動勢",
+      "question": {
+        "q": "磁鐵N極逐漸靠近封閉導線線圈，使通過線圈的磁通量增加。楞次定律對感應電流方向的要求是？",
+        "correct": "產生阻抗原本磁通量增加的磁作用",
+        "wrong": [
+          "必定加強磁鐵靠近造成的磁通增加",
+          "線圈不受磁通變化影響",
+          "只由線圈電阻大小決定方向而不看磁場變化"
+        ],
+        "exp": "感應磁場反抗磁通量變化，以符合能量守恆。",
+        "subject": "物理",
+        "sub_topic": "電磁感應與感應電動勢",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁感應與感應電動勢",
+        "template_id": "ext-2026-phy3-電磁感應與感應電動勢-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電磁感應與感應電動勢-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電磁感應與感應電動勢",
+      "question": {
+        "q": "一固定線圈在均勻磁場中，原本線圈面法線與磁場平行，後轉成互相垂直。若磁場大小B與面積A不變，磁通量由何變為何？",
+        "correct": "由BA變為0",
+        "wrong": [
+          "由0變為BA",
+          "由BA變為2BA",
+          "始終保持BA"
+        ],
+        "exp": "磁通量Φ=BA cosθ，其中θ是磁場與面法線夾角；由0°轉90°，磁通由BA降至0。",
+        "subject": "物理",
+        "sub_topic": "電磁感應與感應電動勢",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁感應與感應電動勢",
+        "template_id": "ext-2026-phy3-電磁感應與感應電動勢-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

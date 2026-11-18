@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-電磁應用-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電磁應用",
+      "question": {
+        "q": "水力發電廠以水流帶動渦輪再帶動發電機。能量轉換中何項最恰當？",
+        "correct": "水流的機械能藉電磁感應轉為電能",
+        "wrong": [
+          "電能完全無來源地增加",
+          "發電只需固定不動的磁鐵與線圈",
+          "所有機械能會直接轉為化學能而無電能"
+        ],
+        "exp": "線圈與磁場的相對運動使磁通改變，電能來自水流機械能。",
+        "subject": "物理",
+        "sub_topic": "電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁應用",
+        "template_id": "ext-2026-phy3-電磁應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電磁應用-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電磁應用",
+      "question": {
+        "q": "某電磁爐用交變磁場在適當金屬鍋底感生電流，使鍋具升溫。主要加熱機制為何？",
+        "correct": "感應渦電流所產生的焦耳熱",
+        "wrong": [
+          "只由鍋具受到地球重力而發熱",
+          "永久靜磁場自動創造無限熱量",
+          "完全依靠爐面燃燒燃氣"
+        ],
+        "exp": "交變磁場誘發電流，在具有電阻的鍋底造成能量耗散及升溫。",
+        "subject": "物理",
+        "sub_topic": "電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁應用",
+        "template_id": "ext-2026-phy3-電磁應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電磁應用-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電磁應用",
+      "question": {
+        "q": "設計師想用一般理想變壓器直接將穩定直流電壓升高。若不先轉成變動電流，最大問題是？",
+        "correct": "次級缺乏持續變化的磁通，無法得到穩定的感應交流輸出",
+        "wrong": [
+          "變壓器匝數越多就能創造電池化學能",
+          "穩定直流電自然具有60 Hz頻率",
+          "理想變壓器完全不利用電磁感應"
+        ],
+        "exp": "變壓器需磁通量變化才能在次級感生電壓，穩定直流無法提供連續感應。",
+        "subject": "物理",
+        "sub_topic": "電磁應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電磁應用",
+        "template_id": "ext-2026-phy3-電磁應用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

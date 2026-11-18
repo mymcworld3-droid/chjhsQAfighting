@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-電場與電位應用-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電場與電位應用",
+      "question": {
+        "q": "某正電荷量3 μC由電位9 V移到5 V，電量不變。電位能變化為何？",
+        "correct": "−12 μJ",
+        "wrong": [
+          "+12 μJ",
+          "−27 μJ",
+          "+15 μJ"
+        ],
+        "exp": "ΔU=q(V後−V前)=3 μC×(5−9)V=−12 μJ，正電荷移向低電位時電位能降低。",
+        "subject": "物理",
+        "sub_topic": "電場與電位應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電場與電位應用",
+        "template_id": "ext-2026-phy3-電場與電位應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電場與電位應用-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電場與電位應用",
+      "question": {
+        "q": "兩平行板之間形成強度1000 V/m的均勻電場，板間距離0.020 m且沿電場方向。板間電位差大小約為何？",
+        "correct": "20 V",
+        "wrong": [
+          "0.02 V",
+          "50 V",
+          "20000 V"
+        ],
+        "exp": "均勻電場大小與沿場方向的電位差關係為|ΔV|=Ed=1000×0.020=20 V。",
+        "subject": "物理",
+        "sub_topic": "電場與電位應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電場與電位應用",
+        "template_id": "ext-2026-phy3-電場與電位應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電場與電位應用-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用電場與電位應用",
+      "question": {
+        "q": "一帶負電−2 μC的粒子置於朝右方300 N/C的均勻電場。受電力的大小與方向為何？",
+        "correct": "6×10⁻⁴ N，朝左",
+        "wrong": [
+          "6×10⁻⁴ N，朝右",
+          "1.5×10⁸ N，朝左",
+          "2×10⁻⁶ N，朝右"
+        ],
+        "exp": "F=qE，大小|q|E=2×10⁻⁶×300=6×10⁻⁴ N；負電荷受力與電場方向相反。",
+        "subject": "物理",
+        "sub_topic": "電場與電位應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電場與電位應用",
+        "template_id": "ext-2026-phy3-電場與電位應用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

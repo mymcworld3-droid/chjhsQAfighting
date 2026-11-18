@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-交流電與電磁波-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用交流電與電磁波",
+      "question": {
+        "q": "某交流電源頻率50 Hz。電壓完成一次完整週期所需時間是多少？",
+        "correct": "0.020 s",
+        "wrong": [
+          "0.050 s",
+          "50 s",
+          "2.0 s"
+        ],
+        "exp": "週期T=1/f=1/50=0.020秒。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "ext-2026-phy3-交流電與電磁波-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-交流電與電磁波-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用交流電與電磁波",
+      "question": {
+        "q": "真空中的電磁波波長2.0 m，取光速3.0×10⁸ m/s。頻率約為何？",
+        "correct": "1.5×10⁸ Hz",
+        "wrong": [
+          "6.0×10⁸ Hz",
+          "1.5×10⁷ Hz",
+          "3.0×10⁸ Hz"
+        ],
+        "exp": "由c=λf可得f=c/λ=3.0×10⁸/2.0=1.5×10⁸ Hz。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "ext-2026-phy3-交流電與電磁波-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-交流電與電磁波-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以現象、數據或科技案例運用交流電與電磁波",
+      "question": {
+        "q": "理想變壓器次級匝數是初級的4倍，初級接110 V交流電。理想次級電壓約為何？",
+        "correct": "440 V",
+        "wrong": [
+          "27.5 V",
+          "110 V",
+          "1760 V"
+        ],
+        "exp": "V2/V1=N2/N1=4，所以V2=110×4=440 V；假定為理想交流變壓器。",
+        "subject": "物理",
+        "sub_topic": "交流電與電磁波",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-交流電與電磁波",
+        "template_id": "ext-2026-phy3-交流電與電磁波-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
