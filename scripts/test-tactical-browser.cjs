@@ -233,7 +233,7 @@ async function main(){
     const panel=await view.locator('[data-beast-panel]').textContent();
     assert.ok(panel.includes(beast.attackText)&&panel.includes(beast.moveText)&&panel.includes(beast.tip),
       'battle information must come from existing monster rules');
-    assert.equal(await view.locator('[data-beast-scrim]').count(),0);
+    assert.equal(await view.locator('[data-beast-dismiss]').isVisible(),true,'inspection catches accidental map taps');
     await view.screenshot({path:path.join(output,'beast-inspector-mobile.png')});
     await ratio(view);
     await view.locator('[data-beast-demo]').click();
@@ -252,6 +252,7 @@ async function main(){
         pointerId:88,pointerType:'touch',isPrimary:true,clientX,clientY,bubbles:true,cancelable:true
       }));
       dispatch('pointerdown');await new Promise(resolve=>setTimeout(resolve,570));dispatch('pointerup');
+      canvas.dispatchEvent(new MouseEvent('click',{clientX,clientY,bubbles:true,cancelable:true}));
     },{x:monster.x,y:monster.y,width:initial.width,height:initial.height});
     await view.locator('[data-beast-panel]').waitFor({state:'visible'});
     await view.locator('[data-beast-close]').last().click();
@@ -535,6 +536,7 @@ async function main(){
         await quick.locator('[data-intro-ack]').click();
         await quick.locator('[data-intro-ack]').waitFor({state:'detached'});
       }
+      await beastInspectorChecks(quick);
       const validate=async()=>{
         const layout=await quick.evaluate(()=>{
           const root=document.querySelector('#tactical-combat');
@@ -570,7 +572,7 @@ async function main(){
         assert.match(layout.charging.background,/gradient/,'charging surface is a green gradient');
         assert.equal(layout.charging.ready,!layout.charging.disabled,'pulse only appears when quiz is actionable');
         if(layout.charging.ready)assert.equal(layout.charging.animation,'tc-charge-ready-pulse');
-        assert.deepEqual(layout.visible.sort(),['attack','close','end','loadoutToggle','move','quiz','wheelChoice'].sort());
+        assert.deepEqual(layout.visible.sort(),['attack','beastToggle','close','end','loadoutToggle','move','quiz','wheelChoice'].sort());
         assert.ok(Math.abs(layout.energy.x)<.015&&Math.abs(layout.energy.y+layout.energy.h-1)<.015);
         assert.ok(Math.abs(layout.actions.x+layout.actions.w-1)<.015&&Math.abs(layout.actions.y+layout.actions.h-1)<.015);
         assert.ok(Math.abs(layout.map.x)<.015&&Math.abs(layout.map.y)<.015);
