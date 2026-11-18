@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-重力與生活中的力-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用重力與生活中的力，避免只靠閱讀找答案",
+      "question": {
+        "q": "一件質量500 g的包裹放在地面，取g=10 m/s²。其重量約為何？",
+        "correct": "5 N",
+        "wrong": [
+          "0.5 N",
+          "50 N",
+          "500 N"
+        ],
+        "exp": "500 g=0.5 kg，重量mg=0.5×10=5 N，重量與質量不同。",
+        "subject": "物理",
+        "sub_topic": "重力與生活中的力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-重力與生活中的力",
+        "template_id": "extra-20261118-physics1-重力與生活中的力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-重力與生活中的力-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用重力與生活中的力，避免只靠閱讀找答案",
+      "question": {
+        "q": "一人站在體重計上，體重計與人一起在不受其他支撐的自由落體電梯內下落。忽略空氣阻力，此時體重計讀數為何？",
+        "correct": "接近零，因人體與體重計有相同向下加速度",
+        "wrong": [
+          "等於人在地面上的正常重量",
+          "一定是地面讀數的兩倍",
+          "因地球重力消失而變零"
+        ],
+        "exp": "自由落體時仍受重力，但沒有支撐正向力，體重計讀數接近零。",
+        "subject": "物理",
+        "sub_topic": "重力與生活中的力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-重力與生活中的力",
+        "template_id": "extra-20261118-physics1-重力與生活中的力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-重力與生活中的力-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用重力與生活中的力，避免只靠閱讀找答案",
+      "question": {
+        "q": "同一太空人由地球登上月球，月面重力加速度約為地表六分之一。哪項敘述合理？",
+        "correct": "質量近似不變，重量約成地球的六分之一",
+        "wrong": [
+          "質量與重量都變成六倍",
+          "質量變成原來六分之一而重量不變",
+          "月球上物體的重力必定完全消失"
+        ],
+        "exp": "質量是慣性量，場所改變不直接改變質量；重量隨當地g改變。",
+        "subject": "物理",
+        "sub_topic": "重力與生活中的力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-重力與生活中的力",
+        "template_id": "extra-20261118-physics1-重力與生活中的力-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

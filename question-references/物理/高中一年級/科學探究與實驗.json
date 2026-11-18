@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-科學探究與實驗-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用科學探究與實驗，避免只靠閱讀找答案",
+      "question": {
+        "q": "某校比較兩種電熱器加熱效率，甲組加熱100 mL水、乙組200 mL水，且功率不同。若只研究功率的影響，應如何改進？",
+        "correct": "固定水量、容器與初溫，只改變功率",
+        "wrong": [
+          "同時改變水量與功率以放大差異",
+          "只測最後溫度最高的那組",
+          "在不同環境溫度下測試而不記錄"
+        ],
+        "exp": "水量、熱損失及初溫都影響升溫，應控制其他變因以辨識功率效果。",
+        "subject": "物理",
+        "sub_topic": "科學探究與實驗",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-科學探究與實驗",
+        "template_id": "extra-20261118-physics1-科學探究與實驗-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-科學探究與實驗-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用科學探究與實驗，避免只靠閱讀找答案",
+      "question": {
+        "q": "研究單擺擺長是否影響週期，兩組擺長不同但擺球質量、擺角、實驗地點相同。若要減少人工計時誤差，最好如何做？",
+        "correct": "每組量20次完整週期總時間，再除以20",
+        "wrong": [
+          "每組只計時一次不到1秒的擺動",
+          "每次量測都改變擺長與擺角",
+          "只挑符合預期的一次作結果"
+        ],
+        "exp": "量多個週期並重複測試可降低反應時間誤差的相對影響。",
+        "subject": "物理",
+        "sub_topic": "科學探究與實驗",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-科學探究與實驗",
+        "template_id": "extra-20261118-physics1-科學探究與實驗-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-科學探究與實驗-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用科學探究與實驗，避免只靠閱讀找答案",
+      "question": {
+        "q": "學生做兩次實驗就宣稱「某材料在任何溫度都不導電」，但只測20℃與30℃。主要論證缺陷為何？",
+        "correct": "把有限測試範圍過度推論為所有溫度",
+        "wrong": [
+          "只要同一材料便不需要記錄溫度",
+          "測到不導電就代表測量儀器不可能出錯",
+          "做實驗不需要對照環境條件"
+        ],
+        "exp": "科學結論須受測試條件限制，不能推廣到未檢驗的極端範圍。",
+        "subject": "物理",
+        "sub_topic": "科學探究與實驗",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-科學探究與實驗",
+        "template_id": "extra-20261118-physics1-科學探究與實驗-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

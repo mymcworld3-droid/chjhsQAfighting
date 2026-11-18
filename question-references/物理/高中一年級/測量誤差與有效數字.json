@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-測量誤差與有效數字-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用測量誤差與有效數字，避免只靠閱讀找答案",
+      "question": {
+        "q": "以兩把不同精度直尺量得兩段長度12.5 cm及0.34 cm。依加法測量精度規則，總長應記為？",
+        "correct": "12.8 cm",
+        "wrong": [
+          "12.84 cm",
+          "12.840 cm",
+          "13 cm"
+        ],
+        "exp": "12.5+0.34=12.84 cm，加法依小數位最少的量測保留一位小數，得12.8 cm。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "extra-20261118-physics1-測量誤差與有效數字-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-測量誤差與有效數字-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用測量誤差與有效數字，避免只靠閱讀找答案",
+      "question": {
+        "q": "某長方形兩邊分別量得2.5 cm與3.42 cm，依乘法有效數字規則，面積應報告為何？",
+        "correct": "8.6 cm²",
+        "wrong": [
+          "8.55 cm²",
+          "8.550 cm²",
+          "9 cm²"
+        ],
+        "exp": "面積2.5×3.42=8.55 cm²，最少有效數字為2位，故四捨五入成8.6 cm²。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "extra-20261118-physics1-測量誤差與有效數字-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-測量誤差與有效數字-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用測量誤差與有效數字，避免只靠閱讀找答案",
+      "question": {
+        "q": "某電子秤每次測同一標準砝碼都很接近，但都比標準值高1 g。最合理的判斷為何？",
+        "correct": "重複性好但有系統偏差，須校正儀器",
+        "wrong": [
+          "讀值集中保證測量完全準確",
+          "固定偏差代表隨機誤差一定很大",
+          "只要增加小數位數就可消除偏差"
+        ],
+        "exp": "資料集中表示精密度好，不代表準確；固定偏高可能是系統誤差。",
+        "subject": "物理",
+        "sub_topic": "測量誤差與有效數字",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-測量誤差與有效數字",
+        "template_id": "extra-20261118-physics1-測量誤差與有效數字-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

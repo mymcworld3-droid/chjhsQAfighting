@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-國際單位制與量綱-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用國際單位制與量綱，避免只靠閱讀找答案",
+      "question": {
+        "q": "某交通報導以72 km/h表示道路速限。若使用國際單位制表示速率，應換算成多少？",
+        "correct": "20 m/s",
+        "wrong": [
+          "2 m/s",
+          "72 m/s",
+          "259.2 m/s"
+        ],
+        "exp": "1 km/h等於1/3.6 m/s，所以72除以3.6等於20 m/s。速率換算後仍須保留長度除以時間的單位。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-國際單位制與量綱",
+        "template_id": "extra-20261118-physics1-國際單位制與量綱-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-國際單位制與量綱-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用國際單位制與量綱，避免只靠閱讀找答案",
+      "question": {
+        "q": "在實驗中以F=ma計算合力，其中質量用kg、加速度用m/s²。所得合力的國際單位應為何？",
+        "correct": "kg·m/s²",
+        "wrong": [
+          "kg·m/s",
+          "kg/m·s²",
+          "kg·m²/s²"
+        ],
+        "exp": "合力的量綱為質量乘加速度，即kg·m/s²，另稱牛頓N；kg·m²/s²則是焦耳。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-國際單位制與量綱",
+        "template_id": "extra-20261118-physics1-國際單位制與量綱-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-國際單位制與量綱-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用國際單位制與量綱，避免只靠閱讀找答案",
+      "question": {
+        "q": "某同學想檢查「動量p=mv」是否量綱一致，已知m以kg、v以m/s表示。動量的單位為何？",
+        "correct": "kg·m/s",
+        "wrong": [
+          "kg·m/s²",
+          "kg·m²/s²",
+          "m/s²"
+        ],
+        "exp": "動量為質量與速度乘積，單位kg·m/s，不能與力或能量混用。",
+        "subject": "物理",
+        "sub_topic": "國際單位制與量綱",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-國際單位制與量綱",
+        "template_id": "extra-20261118-physics1-國際單位制與量綱-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

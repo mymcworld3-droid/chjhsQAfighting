@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-能量守恆-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用能量守恆，避免只靠閱讀找答案",
+      "question": {
+        "q": "滑車從高度10 m靜止滑下至高度4 m，無摩擦、取g=10 m/s²。此時速度大小約為何？",
+        "correct": "11 m/s",
+        "wrong": [
+          "6 m/s",
+          "14 m/s",
+          "20 m/s"
+        ],
+        "exp": "位能減少mg(10−4)=6mg，轉為動能，v=√(2×10×6)=√120≈11 m/s。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "extra-20261118-physics1-能量守恆-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-能量守恆-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用能量守恆，避免只靠閱讀找答案",
+      "question": {
+        "q": "理想單擺在左側最高點由靜止釋放，擺到最低點時若忽略阻力，哪項正確？",
+        "correct": "重力位能較小、動能達最大",
+        "wrong": [
+          "重力位能和動能都達最大",
+          "速度維持零但位能最低",
+          "繩張力提供全部機械能來源"
+        ],
+        "exp": "位能隨下降轉成動能，在最低點速度最大。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "extra-20261118-physics1-能量守恆-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-能量守恆-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用能量守恆，避免只靠閱讀找答案",
+      "question": {
+        "q": "滑車從高度5 m沿粗糙軌道下滑，到最低點時量得動能少於起始重力位能。最合理的解釋是？",
+        "correct": "部分機械能經摩擦轉成熱，總能量仍守恆",
+        "wrong": [
+          "重力位能無條件全部消失",
+          "滑車質量必然在途中增加",
+          "所有能量都必定轉成聲音"
+        ],
+        "exp": "粗糙軌道使機械能不守恆，但含熱等形式的總能量仍守恆。",
+        "subject": "物理",
+        "sub_topic": "能量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-能量守恆",
+        "template_id": "extra-20261118-physics1-能量守恆-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

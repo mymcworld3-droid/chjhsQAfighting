@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-位置、速度與加速度-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用位置、速度與加速度，避免只靠閱讀找答案",
+      "question": {
+        "q": "一車沿直線運動，位置x(t)=3+4t−t²，x以公尺、t以秒計。0到2秒的平均速度為何？",
+        "correct": "2 m/s",
+        "wrong": [
+          "4 m/s",
+          "3 m/s",
+          "7 m/s"
+        ],
+        "exp": "x(0)=3 m，x(2)=7 m，位移4 m，平均速度4/2=2 m/s；不能直接把末位置當位移。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-位置、速度與加速度",
+        "template_id": "extra-20261118-physics1-位置、速度與加速度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-位置、速度與加速度-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用位置、速度與加速度，避免只靠閱讀找答案",
+      "question": {
+        "q": "某車沿一直線的速度為v(t)=6−2t（m/s），取起始時刻t=0。若維持此規律，何時瞬時速度為零？",
+        "correct": "3 s",
+        "wrong": [
+          "2 s",
+          "6 s",
+          "12 s"
+        ],
+        "exp": "令6−2t=0得到t=3秒，代表該時刻瞬時停止，並不表示此後一定保持靜止。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-位置、速度與加速度",
+        "template_id": "extra-20261118-physics1-位置、速度與加速度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-位置、速度與加速度-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用位置、速度與加速度，避免只靠閱讀找答案",
+      "question": {
+        "q": "以北方為正，一人先向南走20公尺，再向北走5公尺，總共花10秒。平均速度為何？",
+        "correct": "−1.5 m/s",
+        "wrong": [
+          "+1.5 m/s",
+          "+2.5 m/s",
+          "−2.5 m/s"
+        ],
+        "exp": "總位移−20+5=−15公尺，平均速度−15/10=−1.5 m/s；路程25公尺計算的是平均速率。",
+        "subject": "物理",
+        "sub_topic": "位置、速度與加速度",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-位置、速度與加速度",
+        "template_id": "extra-20261118-physics1-位置、速度與加速度-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

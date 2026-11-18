@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-功與能量轉換-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用功與能量轉換，避免只靠閱讀找答案",
+      "question": {
+        "q": "物流人員沿推車前進方向施加15 N水平推力，推動3 m且推力恆定。推力做功多少？",
+        "correct": "45 J",
+        "wrong": [
+          "5 J",
+          "18 J",
+          "135 J"
+        ],
+        "exp": "力與位移同方向，功W=Fs=15×3=45 J；若力有夾角才須乘以餘弦。",
+        "subject": "物理",
+        "sub_topic": "功與能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-功與能量轉換",
+        "template_id": "extra-20261118-physics1-功與能量轉換-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-功與能量轉換-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用功與能量轉換，避免只靠閱讀找答案",
+      "question": {
+        "q": "一個質量1 kg物體由靜止自5 m高處落下，取g=10 m/s²且忽略空氣阻力。落地前動能約為何？",
+        "correct": "50 J",
+        "wrong": [
+          "10 J",
+          "5 J",
+          "100 J"
+        ],
+        "exp": "重力位能mgh=1×10×5=50 J，忽略阻力時全轉成動能。",
+        "subject": "物理",
+        "sub_topic": "功與能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-功與能量轉換",
+        "template_id": "extra-20261118-physics1-功與能量轉換-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-功與能量轉換-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用功與能量轉換，避免只靠閱讀找答案",
+      "question": {
+        "q": "滑車運動過程中，動能由60 J降為40 J，重力位能未改變且沒有外力做功。若主要因摩擦耗散，轉成其他形式的機械能為何？",
+        "correct": "20 J",
+        "wrong": [
+          "100 J",
+          "60 J",
+          "40 J"
+        ],
+        "exp": "機械能減少60−40=20 J，能量轉入熱等其他形式，總能量仍守恆。",
+        "subject": "物理",
+        "sub_topic": "功與能量轉換",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中一年級-功與能量轉換",
+        "template_id": "extra-20261118-physics1-功與能量轉換-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-牛頓運動定律-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用牛頓運動定律，避免只靠閱讀找答案",
+      "question": {
+        "q": "一台質量4 kg的實驗小車受到水平合力12 N，忽略阻力。加速度大小為何？",
+        "correct": "3 m/s²",
+        "wrong": [
+          "48 m/s²",
+          "8 m/s²",
+          "16 m/s²"
+        ],
+        "exp": "牛頓第二運動定律F=ma，故a=12/4=3 m/s²，應採合力而非個別作用力。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-牛頓運動定律",
+        "template_id": "extra-20261118-physics1-牛頓運動定律-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-牛頓運動定律-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用牛頓運動定律，避免只靠閱讀找答案",
+      "question": {
+        "q": "質量2 kg的物體置於向上加速2 m/s²的電梯地板，取g=10 m/s²。地板對物體的正向力為何？",
+        "correct": "24 N",
+        "wrong": [
+          "20 N",
+          "16 N",
+          "4 N"
+        ],
+        "exp": "向上取正，N−mg=ma，因此N=2(10+2)=24 N，向上加速時視重較大。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-牛頓運動定律",
+        "template_id": "extra-20261118-physics1-牛頓運動定律-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-牛頓運動定律-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用牛頓運動定律，避免只靠閱讀找答案",
+      "question": {
+        "q": "兩名站在光滑冰面的滑冰者甲乙互推，甲的質量是乙的兩倍。推擠瞬間，兩人間的作用力大小關係為何？",
+        "correct": "大小相等、方向相反，但加速度可不同",
+        "wrong": [
+          "甲對乙的力必定為乙對甲的兩倍",
+          "因甲較重，乙完全不受力",
+          "兩人互推的力大小與質量成正比"
+        ],
+        "exp": "牛頓第三定律的成對作用力等大反向，質量不同只會使加速度大小不同。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中一年級-牛頓運動定律",
+        "template_id": "extra-20261118-physics1-牛頓運動定律-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

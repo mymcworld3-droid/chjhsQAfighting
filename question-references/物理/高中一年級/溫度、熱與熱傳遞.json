@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-physics1-溫度、熱與熱傳遞-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用溫度、熱與熱傳遞，避免只靠閱讀找答案",
+      "question": {
+        "q": "一杯200 g水升溫10℃，取水的比熱容4.2 J/(g·℃)，忽略熱損失。吸收熱量為何？",
+        "correct": "8400 J",
+        "wrong": [
+          "420 J",
+          "2100 J",
+          "840 J"
+        ],
+        "exp": "Q=mcΔT=200×4.2×10=8400 J，須注意質量與比熱單位一致。",
+        "subject": "物理",
+        "sub_topic": "溫度、熱與熱傳遞",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-溫度、熱與熱傳遞",
+        "template_id": "extra-20261118-physics1-溫度、熱與熱傳遞-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-溫度、熱與熱傳遞-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用溫度、熱與熱傳遞，避免只靠閱讀找答案",
+      "question": {
+        "q": "兩塊材料受同等光照與環境條件，一塊表面黑色、一塊表面反射率較高。若只比較吸收太陽輻射，何者通常吸收較多？",
+        "correct": "黑色且吸收率較高的表面",
+        "wrong": [
+          "反射率較高的表面必定吸收較多",
+          "兩者吸收完全不可能有差異",
+          "只有材料重量決定輻射吸收"
+        ],
+        "exp": "反射率高的表面通常少吸收入射輻射；須控制材質與表面條件。",
+        "subject": "物理",
+        "sub_topic": "溫度、熱與熱傳遞",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-溫度、熱與熱傳遞",
+        "template_id": "extra-20261118-physics1-溫度、熱與熱傳遞-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-physics1-溫度、熱與熱傳遞-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "以情境、數據和單位運用溫度、熱與熱傳遞，避免只靠閱讀找答案",
+      "question": {
+        "q": "加熱一鍋水時，靠近底部的水升溫、密度下降而上升，較冷水下降。這種熱傳遞主要是哪一類？",
+        "correct": "對流",
+        "wrong": [
+          "純粹熱輻射",
+          "只能由固體發生的熱傳導",
+          "核分裂反應"
+        ],
+        "exp": "流體由密度差驅動循環，將熱量輸送到其他位置，屬熱對流。",
+        "subject": "物理",
+        "sub_topic": "溫度、熱與熱傳遞",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-3",
+            "name": "熱學"
+          }
+        ],
+        "concept_id": "physics-高中一年級-溫度、熱與熱傳遞",
+        "template_id": "extra-20261118-physics1-溫度、熱與熱傳遞-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
