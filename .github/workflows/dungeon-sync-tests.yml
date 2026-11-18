@@ -1,0 +1,37 @@
+name: Dungeon co-op synchronization acceptance
+
+on:
+  push:
+    branches: [stamina-battle]
+    paths:
+      - 'dungeon-room-*.cjs'
+      - 'dungeon-room-api.cjs'
+      - 'invitation-api.cjs'
+      - 'public/cultivation/dungeon-*.js'
+      - 'public/styles/dungeon-lobby.css'
+      - 'public/module-versions.json'
+      - 'tests/dungeon-*.test.cjs'
+      - '.github/workflows/dungeon-sync-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  dungeon-sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Verify asset manifest
+        run: npm run check:module-versions
+      - name: Check server syntax
+        run: |
+          node --check dungeon-room-api.cjs
+          node --check dungeon-room-stream.cjs
+          node --check invitation-api.cjs
+      - name: Test multiplayer lobby, SSE, reconnect and permissions
+        run: node --test tests/dungeon-*.test.cjs
