@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-政府制度比較-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用政府制度比較",
+      "question": {
+        "q": "甲國行政首長直接由選民選出，乙國行政首長須持續取得國會多數信任。兩者最直接差異是？",
+        "correct": "行政權與立法權的產生及政治責任關係",
+        "wrong": [
+          "兩國都必須採完全相同的解散國會程序",
+          "直接民選行政首長就不能有國會",
+          "國會信任與行政運作毫無關係"
+        ],
+        "exp": "政府體制可依行政首長產生與對議會負責方式比較。",
+        "subject": "公民",
+        "sub_topic": "政府制度比較",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-政府制度比較",
+        "template_id": "extra-2026-civ3-政府制度比較-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-政府制度比較-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用政府制度比較",
+      "question": {
+        "q": "在某內閣制國家，政府失去議會信任後可能需要辭職或依憲法程序重新選舉。這反映什麼？",
+        "correct": "行政部門的存續與議會支持有密切關係",
+        "wrong": [
+          "國會不可以影響任何行政決策",
+          "行政權一定由法官直接管理",
+          "只要內閣失去支持就可取消所有選舉"
+        ],
+        "exp": "內閣制重視議會信任與行政責任。",
+        "subject": "公民",
+        "sub_topic": "政府制度比較",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-政府制度比較",
+        "template_id": "extra-2026-civ3-政府制度比較-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-政府制度比較-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用政府制度比較",
+      "question": {
+        "q": "某國元首與行政首長由不同制度產生，且皆有部分行政權限。分析其體制時最重要的是？",
+        "correct": "依憲法具體權限與責任分工判斷，而非只憑職稱",
+        "wrong": [
+          "只看國名是否含有共和二字",
+          "所有國家元首都必須兼任政府首長",
+          "只要兩人同時存在就表示沒有權力分立"
+        ],
+        "exp": "政府制度有多種組合，應以實際制度設計分析。",
+        "subject": "公民",
+        "sub_topic": "政府制度比較",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-政府制度比較",
+        "template_id": "extra-2026-civ3-政府制度比較-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-社會公平-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用社會公平",
+      "question": {
+        "q": "同一獎學金對每位學生都發相同金額，但偏遠地區學生交通支出更高。若評估實質公平，最應考量？",
+        "correct": "不同受助者的實際需求與成本差異",
+        "wrong": [
+          "形式金額相同便必定達到所有人的機會平等",
+          "交通成本不會影響就學",
+          "只要有獎學金就不需評估政策"
+        ],
+        "exp": "公平可能要求考量不同起點與參與障礙。",
+        "subject": "公民",
+        "sub_topic": "社會公平",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-社會公平",
+        "template_id": "extra-2026-civ3-社會公平-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-社會公平-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用社會公平",
+      "question": {
+        "q": "某城市總所得增加，但低所得家庭生活費上升更快。哪種指標更能呈現分配影響？",
+        "correct": "各所得群體的實質可支配所得及支出比重",
+        "wrong": [
+          "只看全市最高收入者所得",
+          "只看總產出變化",
+          "只比較市中心建築數量"
+        ],
+        "exp": "分配與實質購買力需分群考察。",
+        "subject": "公民",
+        "sub_topic": "社會公平",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-社會公平",
+        "template_id": "extra-2026-civ3-社會公平-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-社會公平-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用社會公平",
+      "question": {
+        "q": "甲公司以完全相同考核方式對待所有員工，但某項考核要求與工作無關且不利特定群體。這可能涉及什麼？",
+        "correct": "表面一致的規則也可能產生不合理的間接差別待遇",
+        "wrong": [
+          "規則相同就保證不會有任何不公平",
+          "只要考核書面化就不必檢查職務關聯",
+          "所有群體的生活條件必然一致"
+        ],
+        "exp": "評估公平要檢查標準與工作需求及差異效果。",
+        "subject": "公民",
+        "sub_topic": "社會公平",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-社會公平",
+        "template_id": "extra-2026-civ3-社會公平-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-市場與政府-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用市場與政府",
+      "question": {
+        "q": "某工廠生產時排放污染且未負擔附近社區健康成本。政府若要處理，哪種工具最直接對應問題？",
+        "correct": "透過排放規範或污染成本內部化措施",
+        "wrong": [
+          "限制所有居民的空氣品質監測",
+          "只補貼工廠增加排放",
+          "忽略受害者的外部成本"
+        ],
+        "exp": "負外部性可能需要規範或價格工具改善誘因。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場與政府",
+        "template_id": "extra-2026-civ3-市場與政府-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-市場與政府-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用市場與政府",
+      "question": {
+        "q": "某偏鄉公共運輸乘客少，民間業者難以獲利，但居民仍有必要出行需求。公共政策應如何分析？",
+        "correct": "評估基本服務、補助成本及替代運輸方案",
+        "wrong": [
+          "因市場無利潤便認定居民完全不需要交通",
+          "無條件提供所有路線相同班次",
+          "只以都市路線票價決定偏鄉需求"
+        ],
+        "exp": "市場獲利與公共服務需求可能不一致。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場與政府",
+        "template_id": "extra-2026-civ3-市場與政府-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-市場與政府-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用市場與政府",
+      "question": {
+        "q": "某市場只有少數企業能供應商品，價格長期偏高。評估政府介入時，哪項最重要？",
+        "correct": "查明市場進入障礙及是否存在限制競爭行為",
+        "wrong": [
+          "只看最大企業的廣告",
+          "把所有高價格都視為必然違法",
+          "因企業數少就直接取消消費者選擇"
+        ],
+        "exp": "市場權力需從競爭結構與行為實證評估。",
+        "subject": "公民",
+        "sub_topic": "市場與政府",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-市場與政府",
+        "template_id": "extra-2026-civ3-市場與政府-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

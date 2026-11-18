@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-人權保障-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用人權保障",
+      "question": {
+        "q": "某政策以治安為由要求全民持續公開個人定位紀錄。依權利限制原則，最需要檢驗什麼？",
+        "correct": "是否有法律依據、正當目的及必要且相稱的限制",
+        "wrong": [
+          "只要有治安理由就不需評估侵害",
+          "民眾使用手機就表示放棄全部隱私",
+          "只有企業才享有資訊自主權"
+        ],
+        "exp": "個資與自由的限制應符合必要性與比例。",
+        "subject": "公民",
+        "sub_topic": "人權保障",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-人權保障",
+        "template_id": "extra-2026-civ3-人權保障-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-人權保障-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用人權保障",
+      "question": {
+        "q": "某公共場所只有樓梯，行動不便者難以進入。從平等權觀點，最適合的改善方向是？",
+        "correct": "評估無障礙設施以降低實質參與障礙",
+        "wrong": [
+          "所有人都用樓梯就代表機會完全公平",
+          "一律禁止行動不便者參與",
+          "只張貼歡迎標語就能解決物理障礙"
+        ],
+        "exp": "形式規則相同不一定保障實質可及性。",
+        "subject": "公民",
+        "sub_topic": "人權保障",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-人權保障",
+        "template_id": "extra-2026-civ3-人權保障-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-人權保障-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用人權保障",
+      "question": {
+        "q": "某國允許不同宗教信仰，但只核准多數宗教團體的集會場地。最值得討論的權利問題是？",
+        "correct": "宗教自由及不同群體受平等對待的保障",
+        "wrong": [
+          "信仰自由只包含私人思想而不涉公共實踐",
+          "只要有多數支持就可排除全部少數",
+          "集會場地與宗教實踐毫無關聯"
+        ],
+        "exp": "實際權利保障需關注限制是否有正當與一致標準。",
+        "subject": "公民",
+        "sub_topic": "人權保障",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中三年級-人權保障",
+        "template_id": "extra-2026-civ3-人權保障-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

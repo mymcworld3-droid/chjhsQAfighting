@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-公共政策評估-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用公共政策評估",
+      "question": {
+        "q": "某市提高路邊停車費後，平均車位周轉率提高，但附近巷弄違停也增加。哪種評估最完整？",
+        "correct": "同時比較原定目標、替代行為與執法成本",
+        "wrong": [
+          "只看車位周轉率就宣布全部成功",
+          "只看違停增加就認定所有效果為零",
+          "政策實施後不必再蒐集資料"
+        ],
+        "exp": "政策有直接與間接效果，應整體評估成本效益。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "extra-2026-civ3-公共政策評估-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-公共政策評估-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用公共政策評估",
+      "question": {
+        "q": "某方案宣稱可減少失業，受益人數增加，但投入預算也翻倍。應優先補充哪項指標？",
+        "correct": "每單位資源所達成的實際就業成果",
+        "wrong": [
+          "只統計宣傳活動參加人次",
+          "只看政策名稱是否親切",
+          "不需確認參與者是否真的找到工作"
+        ],
+        "exp": "評估效率須將成果與成本相對照。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "extra-2026-civ3-公共政策評估-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-公共政策評估-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用公共政策評估",
+      "question": {
+        "q": "某校新設輔導機制後缺課率下降，卻同時調整點名標準。要確認效果應如何處理？",
+        "correct": "核對指標定義並比較調整前後可比資料",
+        "wrong": [
+          "把缺課率變化全歸功輔導機制",
+          "只看制度發布日期",
+          "因有兩項變動就永遠不能研究"
+        ],
+        "exp": "指標口徑變化可能產生假趨勢，需校正比較。",
+        "subject": "公民",
+        "sub_topic": "公共政策評估",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-公共政策評估",
+        "template_id": "extra-2026-civ3-公共政策評估-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

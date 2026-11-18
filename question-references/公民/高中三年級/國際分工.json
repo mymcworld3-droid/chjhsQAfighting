@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-國際分工-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用國際分工",
+      "question": {
+        "q": "甲國製造零件成本低，乙國組裝效率高，雙方交換後總產出增加。最接近哪種經濟原理？",
+        "correct": "依比較利益分工可能提高整體生產效率",
+        "wrong": [
+          "每一國都必須擅長所有環節才可貿易",
+          "貿易必定讓所有勞工收入相等",
+          "分工代表兩國從此不再依賴彼此"
+        ],
+        "exp": "比較利益可促進專業化，但利益分配仍有差異。",
+        "subject": "公民",
+        "sub_topic": "國際分工",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-國際分工",
+        "template_id": "extra-2026-civ3-國際分工-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-國際分工-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用國際分工",
+      "question": {
+        "q": "某企業將關鍵零件集中於單一國家生產，該地停工使多國工廠受影響。這顯示分工的哪種風險？",
+        "correct": "供應集中造成跨境中斷與連鎖效應",
+        "wrong": [
+          "跨國分工完全不受地區風險影響",
+          "產品價格從此永久不變",
+          "每個國家都能立即自製所有零件"
+        ],
+        "exp": "分工提高效率，也可能增加對特定供應節點的依賴。",
+        "subject": "公民",
+        "sub_topic": "國際分工",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-國際分工",
+        "template_id": "extra-2026-civ3-國際分工-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-國際分工-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用國際分工",
+      "question": {
+        "q": "某政策鼓勵企業把部分生產線移回國內，雖成本較高但希望降低供應中斷風險。其主要取捨是？",
+        "correct": "生產效率成本與供應鏈韌性之間的權衡",
+        "wrong": [
+          "移回國內必定使成本與風險都完全為零",
+          "只要成本高就代表政策毫無考量",
+          "供應鏈安全與地理配置沒有關係"
+        ],
+        "exp": "供應鏈配置需權衡成本、風險與替代性。",
+        "subject": "公民",
+        "sub_topic": "國際分工",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中三年級-國際分工",
+        "template_id": "extra-2026-civ3-國際分工-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

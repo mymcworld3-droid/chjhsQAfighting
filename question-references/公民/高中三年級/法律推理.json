@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-法律推理-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用法律推理",
+      "question": {
+        "q": "某法律規定未滿一定年齡者不得做特定行為。要判斷個案適用，應先確認什麼？",
+        "correct": "法律要件、當事人事實及行為發生時點",
+        "wrong": [
+          "只看當事人是否受到媒體關注",
+          "將法律的目的直接替代全部條文",
+          "只看他人對當事人的好惡"
+        ],
+        "exp": "法律適用需把具體事實對應構成要件。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法律推理",
+        "template_id": "extra-2026-civ3-法律推理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-法律推理-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用法律推理",
+      "question": {
+        "q": "甲方主張契約無效，理由是對方曾違反其他無關規定。法律分析應優先檢查什麼？",
+        "correct": "所稱違規是否真的與契約效力要件相關",
+        "wrong": [
+          "任何違規都必然使所有契約失效",
+          "契約效力只由兩人年齡決定",
+          "只要一方不滿意便無須法律依據"
+        ],
+        "exp": "推論必須建立法律規範與事實之間的關聯。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法律推理",
+        "template_id": "extra-2026-civ3-法律推理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-法律推理-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用法律推理",
+      "question": {
+        "q": "某機關依新規則處理過去已完成的行為，產生爭議。應優先討論哪項法治問題？",
+        "correct": "法律時間效力及是否允許溯及適用",
+        "wrong": [
+          "公告字型是否較大",
+          "新聞報導是否使用相同標題",
+          "當事人是否認識行政機關人員"
+        ],
+        "exp": "法律推理須檢查行為時點與適用規範。",
+        "subject": "公民",
+        "sub_topic": "法律推理",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中三年級-法律推理",
+        "template_id": "extra-2026-civ3-法律推理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-資料與論點-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用資料與論點",
+      "question": {
+        "q": "一項媒體報導用平均房價上漲支持「人人資產增加」。其推論主要缺陷是？",
+        "correct": "平均價格不能代表每人的資產持有與分配",
+        "wrong": [
+          "房價上漲必然使每個租屋者資產增加",
+          "房價統計不可能反映市場變動",
+          "只要使用平均值就不必看樣本"
+        ],
+        "exp": "總體指標不能直接推到所有個體。",
+        "subject": "公民",
+        "sub_topic": "資料與論點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-資料與論點",
+        "template_id": "extra-2026-civ3-資料與論點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-資料與論點-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用資料與論點",
+      "question": {
+        "q": "甲新聞以總犯罪件數比較兩個人口規模不同的城市。要更公平比較風險，應增加何項資料？",
+        "correct": "每一定人口的犯罪率及事件分類",
+        "wrong": [
+          "兩地道路總長即可代表人身風險",
+          "只比較媒體標題的情緒強度",
+          "人口不同不影響任何比例判斷"
+        ],
+        "exp": "需有適當分母與分類以免規模混淆。",
+        "subject": "公民",
+        "sub_topic": "資料與論點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-資料與論點",
+        "template_id": "extra-2026-civ3-資料與論點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-資料與論點-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用資料與論點",
+      "question": {
+        "q": "某民調報告沒有揭露抽樣方式，卻宣稱結果代表全國。最適當的質疑是？",
+        "correct": "樣本代表性與誤差無法充分評估",
+        "wrong": [
+          "只要樣本數超過一百人就完全無偏差",
+          "任何民調都不得討論公共政策",
+          "同意者較多就不需要研究抽樣"
+        ],
+        "exp": "抽樣方式影響外推，需查核樣本來源與權重。",
+        "subject": "公民",
+        "sub_topic": "資料與論點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中三年級-資料與論點",
+        "template_id": "extra-2026-civ3-資料與論點-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

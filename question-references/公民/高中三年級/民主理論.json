@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ3-民主理論-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用民主理論",
+      "question": {
+        "q": "一項法律經由多數表決通過，仍被法院審查是否侵害少數權利。這最能說明哪種民主觀？",
+        "correct": "民主決策須結合多數決與憲法保障",
+        "wrong": [
+          "只要多數贊成就可任意剝奪基本權",
+          "司法審查代表完全取消人民主權",
+          "法律通過後憲法不再適用"
+        ],
+        "exp": "憲政民主強調多數治理仍受基本權限制。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-民主理論",
+        "template_id": "extra-2026-civ3-民主理論-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-民主理論-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用民主理論",
+      "question": {
+        "q": "某公共議題在投票前舉辦多場公民討論，參與者互相交換理由後改變立場。這較接近何種觀念？",
+        "correct": "審議民主重視公開理由與討論品質",
+        "wrong": [
+          "民主只需計算起初的個人偏好",
+          "只要有人改變意見就不算公平",
+          "審議程序不容許任何不同觀點"
+        ],
+        "exp": "審議民主看重理性討論及資訊交換。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-民主理論",
+        "template_id": "extra-2026-civ3-民主理論-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ3-民主理論-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以政策或社會制度案例運用民主理論",
+      "question": {
+        "q": "某國定期投票選領導人，但反對團體不能組織與競選。評估其民主程度時，哪項條件不可忽略？",
+        "correct": "自由競爭與政治結社的實質保障",
+        "wrong": [
+          "只看投票箱數量",
+          "只要有政府選舉就沒有任何限制",
+          "投票率高必定代表制度完全自由"
+        ],
+        "exp": "民主制度還需競爭、自由及法治，不只選舉形式。",
+        "subject": "公民",
+        "sub_topic": "民主理論",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中三年級-民主理論",
+        "template_id": "extra-2026-civ3-民主理論-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
