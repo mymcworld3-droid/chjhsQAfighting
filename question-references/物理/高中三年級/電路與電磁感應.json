@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-電路與電磁感應-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用電路與電磁感應的數據分析、模型或科技情境",
+      "question": {
+        "q": "一電阻8 Ω接在12 V理想直流電源兩端。此電阻消耗的功率為何？",
+        "correct": "18 W",
+        "wrong": [
+          "1.5 W",
+          "96 W",
+          "32 W"
+        ],
+        "exp": "P=V²/R=12²/8=144/8=18 W。",
+        "subject": "物理",
+        "sub_topic": "電路與電磁感應",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電路與電磁感應",
+        "template_id": "ext-2026-phy3-電路與電磁感應-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電路與電磁感應-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用電路與電磁感應的數據分析、模型或科技情境",
+      "question": {
+        "q": "10匝線圈每匝磁通量在0.10秒內改變0.020 Wb。平均感應電動勢大小為何？",
+        "correct": "2 V",
+        "wrong": [
+          "0.2 V",
+          "20 V",
+          "0.02 V"
+        ],
+        "exp": "|ε|=N|ΔΦ|/Δt=10×0.020/0.10=2 V。",
+        "subject": "物理",
+        "sub_topic": "電路與電磁感應",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電路與電磁感應",
+        "template_id": "ext-2026-phy3-電路與電磁感應-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-電路與電磁感應-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用電路與電磁感應的數據分析、模型或科技情境",
+      "question": {
+        "q": "兩電阻4 Ω、8 Ω串聯接24 V理想電源。8 Ω電阻的電壓降為何？",
+        "correct": "16 V",
+        "wrong": [
+          "8 V",
+          "12 V",
+          "24 V"
+        ],
+        "exp": "總電阻12 Ω，電流I=24/12=2 A；8 Ω電阻電壓IR=2×8=16 V。",
+        "subject": "物理",
+        "sub_topic": "電路與電磁感應",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-7",
+            "name": "磁學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-電路與電磁感應",
+        "template_id": "ext-2026-phy3-電路與電磁感應-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

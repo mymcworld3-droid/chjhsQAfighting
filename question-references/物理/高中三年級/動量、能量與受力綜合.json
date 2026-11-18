@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-動量、能量與受力綜合-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用動量、能量與受力綜合的數據分析、模型或科技情境",
+      "question": {
+        "q": "2 kg滑車以3 m/s撞上靜止1 kg滑車，碰後兩車相黏，水平外力可忽略。共同速度為何？",
+        "correct": "2 m/s",
+        "wrong": [
+          "3 m/s",
+          "1 m/s",
+          "6 m/s"
+        ],
+        "exp": "碰撞前總動量2×3=6 kg·m/s，總質量3 kg，共同速度2 m/s。",
+        "subject": "物理",
+        "sub_topic": "動量、能量與受力綜合",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-動量、能量與受力綜合",
+        "template_id": "ext-2026-phy3-動量、能量與受力綜合-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-動量、能量與受力綜合-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用動量、能量與受力綜合的數據分析、模型或科技情境",
+      "question": {
+        "q": "1 kg物體從4 m高處自由落下，取g=10 m/s²且忽略空氣阻力。落地前速率約多少？",
+        "correct": "8.9 m/s",
+        "wrong": [
+          "4.0 m/s",
+          "20 m/s",
+          "40 m/s"
+        ],
+        "exp": "能量守恆mgh=(1/2)mv²，v=√(2×10×4)=√80≈8.9 m/s。",
+        "subject": "物理",
+        "sub_topic": "動量、能量與受力綜合",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-動量、能量與受力綜合",
+        "template_id": "ext-2026-phy3-動量、能量與受力綜合-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-動量、能量與受力綜合-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用動量、能量與受力綜合的數據分析、模型或科技情境",
+      "question": {
+        "q": "質量5 kg的小車在光滑水平面受水平10 N合力，沿合力方向移動3 m。動能增加多少？",
+        "correct": "30 J",
+        "wrong": [
+          "15 J",
+          "50 J",
+          "3 J"
+        ],
+        "exp": "淨功W=Fs=10×3=30 J，依功—能定理等於動能變化。",
+        "subject": "物理",
+        "sub_topic": "動量、能量與受力綜合",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-動量、能量與受力綜合",
+        "template_id": "ext-2026-phy3-動量、能量與受力綜合-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

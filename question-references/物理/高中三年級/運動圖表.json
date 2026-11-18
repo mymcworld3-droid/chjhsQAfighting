@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-運動圖表-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用運動圖表的數據分析、模型或科技情境",
+      "question": {
+        "q": "某車由靜止開始等加速度運動，速度—時間圖從0秒的0 m/s線性上升至4秒的8 m/s。這4秒內的位移為何？",
+        "correct": "16 m",
+        "wrong": [
+          "32 m",
+          "8 m",
+          "4 m"
+        ],
+        "exp": "速度—時間圖下的面積為位移，三角形面積=(1/2)×4×8=16 m。",
+        "subject": "物理",
+        "sub_topic": "運動圖表",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-運動圖表",
+        "template_id": "ext-2026-phy3-運動圖表-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-運動圖表-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用運動圖表的數據分析、模型或科技情境",
+      "question": {
+        "q": "直線運動物體的位置—時間圖由(0 s, 0 m)連到(3 s, 12 m)，圖線為直線。物體速度為何？",
+        "correct": "4 m/s",
+        "wrong": [
+          "12 m/s",
+          "36 m/s",
+          "0.25 m/s"
+        ],
+        "exp": "位置對時間的斜率為速度，v=(12−0)/(3−0)=4 m/s。",
+        "subject": "物理",
+        "sub_topic": "運動圖表",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-運動圖表",
+        "template_id": "ext-2026-phy3-運動圖表-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-運動圖表-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用運動圖表的數據分析、模型或科技情境",
+      "question": {
+        "q": "一車原速10 m/s，沿直線以−2 m/s²恆加速度煞至停止。若無倒退，煞車距離為何？",
+        "correct": "25 m",
+        "wrong": [
+          "50 m",
+          "20 m",
+          "5 m"
+        ],
+        "exp": "停下需5 s，平均速度(10+0)/2=5 m/s，距離5×5=25 m。",
+        "subject": "物理",
+        "sub_topic": "運動圖表",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-運動圖表",
+        "template_id": "ext-2026-phy3-運動圖表-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

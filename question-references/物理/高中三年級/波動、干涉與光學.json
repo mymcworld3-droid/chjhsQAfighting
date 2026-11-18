@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-波動、干涉與光學-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用波動、干涉與光學的數據分析、模型或科技情境",
+      "question": {
+        "q": "一波在同一介質內的頻率為6 Hz、波長為0.50 m。波速為何？",
+        "correct": "3.0 m/s",
+        "wrong": [
+          "12 m/s",
+          "0.083 m/s",
+          "6.5 m/s"
+        ],
+        "exp": "v=fλ=6×0.50=3.0 m/s。",
+        "subject": "物理",
+        "sub_topic": "波動、干涉與光學",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-波動、干涉與光學",
+        "template_id": "ext-2026-phy3-波動、干涉與光學-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-波動、干涉與光學-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用波動、干涉與光學的數據分析、模型或科技情境",
+      "question": {
+        "q": "兩同相相干光束在某點的路徑差為半個波長。理想情況下該點屬於什麼干涉？",
+        "correct": "相消干涉",
+        "wrong": [
+          "相長干涉",
+          "完全沒有光子抵達的必然狀態",
+          "只因光速較慢而沒有干涉"
+        ],
+        "exp": "半波長路徑差使兩束光的相位差為180°，若振幅相等可完全相消。",
+        "subject": "物理",
+        "sub_topic": "波動、干涉與光學",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-波動、干涉與光學",
+        "template_id": "ext-2026-phy3-波動、干涉與光學-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-波動、干涉與光學-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用波動、干涉與光學的數據分析、模型或科技情境",
+      "question": {
+        "q": "理想凸透鏡焦距15 cm，物體距鏡30 cm。所形成實像的像距為何？",
+        "correct": "30 cm",
+        "wrong": [
+          "15 cm",
+          "45 cm",
+          "60 cm"
+        ],
+        "exp": "1/f=1/u+1/v，1/15−1/30=1/30，得v=30 cm。",
+        "subject": "物理",
+        "sub_topic": "波動、干涉與光學",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-5",
+            "name": "光學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-波動、干涉與光學",
+        "template_id": "ext-2026-phy3-波動、干涉與光學-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

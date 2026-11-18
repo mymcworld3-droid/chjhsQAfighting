@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-綜合應用-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用綜合應用的數據分析、模型或科技情境",
+      "question": {
+        "q": "一電動機在理想情況下以1000 W穩定輸出機械功率，持續30秒。完成的機械功多少？",
+        "correct": "30000 J",
+        "wrong": [
+          "30 J",
+          "1000 J",
+          "300 J"
+        ],
+        "exp": "功率P=W/t，所以W=Pt=1000×30=30000 J。",
+        "subject": "物理",
+        "sub_topic": "綜合應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-綜合應用",
+        "template_id": "ext-2026-phy3-綜合應用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-綜合應用-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用綜合應用的數據分析、模型或科技情境",
+      "question": {
+        "q": "某電熱器電阻20 Ω，接100 V直流電源。若電阻保持不變，運作2秒耗電能量為何？",
+        "correct": "1000 J",
+        "wrong": [
+          "200 J",
+          "500 J",
+          "2000 J"
+        ],
+        "exp": "功率P=V²/R=10000/20=500 W，能量E=Pt=500×2=1000 J。",
+        "subject": "物理",
+        "sub_topic": "綜合應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-綜合應用",
+        "template_id": "ext-2026-phy3-綜合應用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-綜合應用-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用綜合應用的數據分析、模型或科技情境",
+      "question": {
+        "q": "質量3 kg的滑車由高度4 m靜止下滑到最低點，取g=10 m/s²。若途中摩擦耗散30 J，末動能為何？",
+        "correct": "90 J",
+        "wrong": [
+          "120 J",
+          "30 J",
+          "150 J"
+        ],
+        "exp": "重力位能降低mgh=3×10×4=120 J，扣除30 J摩擦耗散後，動能增加90 J。",
+        "subject": "物理",
+        "sub_topic": "綜合應用",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-綜合應用",
+        "template_id": "ext-2026-phy3-綜合應用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

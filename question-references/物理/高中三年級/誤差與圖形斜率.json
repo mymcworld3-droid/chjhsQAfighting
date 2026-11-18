@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-誤差與圖形斜率-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用誤差與圖形斜率的數據分析、模型或科技情境",
+      "question": {
+        "q": "某電阻實驗以橫軸電流I(A)、縱軸電壓V(V)繪圖，資料呈過原點直線，斜率為6 V/A。電阻為何？",
+        "correct": "6 Ω",
+        "wrong": [
+          "1/6 Ω",
+          "36 Ω",
+          "6 W"
+        ],
+        "exp": "依V=IR，V對I圖的斜率就是R，單位V/A等於Ω。",
+        "subject": "物理",
+        "sub_topic": "誤差與圖形斜率",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-誤差與圖形斜率",
+        "template_id": "ext-2026-phy3-誤差與圖形斜率-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-誤差與圖形斜率-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用誤差與圖形斜率的數據分析、模型或科技情境",
+      "question": {
+        "q": "某車速度—時間圖線由t=1 s時2 m/s線性增加至t=5 s時14 m/s。平均加速度為何？",
+        "correct": "3 m/s²",
+        "wrong": [
+          "4 m/s²",
+          "12 m/s²",
+          "16 m/s²"
+        ],
+        "exp": "加速度是速度—時間圖斜率，(14−2)/(5−1)=12/4=3 m/s²。",
+        "subject": "物理",
+        "sub_topic": "誤差與圖形斜率",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-誤差與圖形斜率",
+        "template_id": "ext-2026-phy3-誤差與圖形斜率-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-誤差與圖形斜率-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用誤差與圖形斜率的數據分析、模型或科技情境",
+      "question": {
+        "q": "一溫度感測器固定高估2℃，學生連續測量100次取平均。何項說法正確？",
+        "correct": "平均可降低部分隨機誤差，但仍需處理固定系統偏差",
+        "wrong": [
+          "測量100次就必能消除2℃偏差",
+          "平均次數越多，真溫度必定上升",
+          "只要讀值穩定就沒有任何誤差"
+        ],
+        "exp": "固定零點偏差不會因重複平均而自動消除。",
+        "subject": "物理",
+        "sub_topic": "誤差與圖形斜率",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-6",
+            "name": "電學"
+          }
+        ],
+        "concept_id": "physics-高中三年級-誤差與圖形斜率",
+        "template_id": "ext-2026-phy3-誤差與圖形斜率-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

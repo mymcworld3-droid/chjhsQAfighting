@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-實驗設計-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用實驗設計的數據分析、模型或科技情境",
+      "question": {
+        "q": "若研究理想彈簧振子的週期與質量關係，最適當的設計為何？",
+        "correct": "固定同一彈簧及小振幅，只改變質量並重複計時",
+        "wrong": [
+          "每次更換不同彈簧且改變質量",
+          "只量測一次週期便宣稱所有質量適用",
+          "每組更換不同地點與重力環境而不紀錄"
+        ],
+        "exp": "週期與m和k有關，須控制彈簧常數等非操縱變因。",
+        "subject": "物理",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中三年級-實驗設計",
+        "template_id": "ext-2026-phy3-實驗設計-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-實驗設計-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用實驗設計的數據分析、模型或科技情境",
+      "question": {
+        "q": "某校想檢驗導線電阻是否隨長度增加。哪項操作最合理？",
+        "correct": "固定材料、溫度與截面積，改變導線長度測量電阻",
+        "wrong": [
+          "同時更換材料與粗細而不紀錄",
+          "只用線材顏色推算電阻",
+          "將不同長度的導線任意接成不同電路卻不量電流"
+        ],
+        "exp": "R=ρL/A，研究L時須控制電阻率及截面積。",
+        "subject": "物理",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中三年級-實驗設計",
+        "template_id": "ext-2026-phy3-實驗設計-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-實驗設計-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用實驗設計的數據分析、模型或科技情境",
+      "question": {
+        "q": "研究太陽能板傾角與輸出功率的關係，應盡量控制哪些條件？",
+        "correct": "光源照度、面板種類與負載條件，僅改變傾角",
+        "wrong": [
+          "不同傾角同時採用不同照度",
+          "每次改用不同面板與輸出電路",
+          "只看光線顏色不測電壓電流"
+        ],
+        "exp": "功率受照度、面板與負載影響，控制後才可識別傾角的效果。",
+        "subject": "物理",
+        "sub_topic": "實驗設計",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中三年級-實驗設計",
+        "template_id": "ext-2026-phy3-實驗設計-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

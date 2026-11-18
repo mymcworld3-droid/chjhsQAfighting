@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-科學建模-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用科學建模的數據分析、模型或科技情境",
+      "question": {
+        "q": "研究者用「不考慮空氣阻力」預測紙片與鐵球同時落地，實際紙片較慢。最合理的模型修正是？",
+        "correct": "針對阻力影響顯著的物體加入空氣阻力",
+        "wrong": [
+          "判定所有自由落體公式都毫無價值",
+          "認定紙片受到的重力必定為零",
+          "忽略觀察結果以維持模型不變"
+        ],
+        "exp": "簡化模型有適用條件，受阻力影響大的物體需更完整的力學描述。",
+        "subject": "物理",
+        "sub_topic": "科學建模",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-科學建模",
+        "template_id": "ext-2026-phy3-科學建模-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-科學建模-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用科學建模的數據分析、模型或科技情境",
+      "question": {
+        "q": "某彈簧在小形變範圍符合F=kx，大幅拉伸後測得不再線性。這代表什麼？",
+        "correct": "虎克線性模型具有特定適用範圍",
+        "wrong": [
+          "彈簧常數在任何變形下都必定固定",
+          "原先小形變的實驗數據全部必定錯誤",
+          "只要增加數據點就可使材料完全線性"
+        ],
+        "exp": "材料超過線性彈性範圍時模型需修改，不能將近似外推到任意形變。",
+        "subject": "物理",
+        "sub_topic": "科學建模",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-科學建模",
+        "template_id": "ext-2026-phy3-科學建模-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-科學建模-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用科學建模的數據分析、模型或科技情境",
+      "question": {
+        "q": "研究者用只依電壓預測功率的模型，卻忽略負載電阻變動。檢驗模型時最該做什麼？",
+        "correct": "比較不同電阻下的預測與量測，檢查模型假設",
+        "wrong": [
+          "只收集電壓恰好相同的一次結果",
+          "忽略任何不符合預測的資料",
+          "認定模型越簡短就必然越準確"
+        ],
+        "exp": "電功率與電壓及負載條件有關，模型有效性須在不同條件下檢驗。",
+        "subject": "物理",
+        "sub_topic": "科學建模",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中三年級-科學建模",
+        "template_id": "ext-2026-phy3-科學建模-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

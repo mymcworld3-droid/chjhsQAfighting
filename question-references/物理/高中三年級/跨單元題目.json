@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy3-跨單元題目-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用跨單元題目的數據分析、模型或科技情境",
+      "question": {
+        "q": "太陽能板驅動水泵把10 kg水提升2 m，取g=10 m/s²。若無任何能量損失，所需最少機械能為何？",
+        "correct": "200 J",
+        "wrong": [
+          "20 J",
+          "100 J",
+          "2000 J"
+        ],
+        "exp": "水重力位能增加mgh=10×10×2=200 J，實際耗電量通常更高。",
+        "subject": "物理",
+        "sub_topic": "跨單元題目",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-跨單元題目",
+        "template_id": "ext-2026-phy3-跨單元題目-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-跨單元題目-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用跨單元題目的數據分析、模型或科技情境",
+      "question": {
+        "q": "電動運輸車質量4 kg，從靜止加速到5 m/s，忽略能量損失。車的動能增加多少？",
+        "correct": "50 J",
+        "wrong": [
+          "20 J",
+          "100 J",
+          "10 J"
+        ],
+        "exp": "ΔK=(1/2)mv²=0.5×4×25=50 J。",
+        "subject": "物理",
+        "sub_topic": "跨單元題目",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-跨單元題目",
+        "template_id": "ext-2026-phy3-跨單元題目-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy3-跨單元題目-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "運用跨單元題目的數據分析、模型或科技情境",
+      "question": {
+        "q": "高速列車使用渦電流煞車，線圈或磁場系統使金屬部件產生感應電流。主要能量轉換為何？",
+        "correct": "車輛機械能轉為金屬內能等形式",
+        "wrong": [
+          "金屬內能自動生成額外動量",
+          "固定磁場讓列車永久無損加速",
+          "全部機械能一定轉成電池的化學能"
+        ],
+        "exp": "渦電流因電阻而發熱，煞車效果抵抗相對運動，耗散機械能。",
+        "subject": "物理",
+        "sub_topic": "跨單元題目",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中三年級-跨單元題目",
+        "template_id": "ext-2026-phy3-跨單元題目-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
