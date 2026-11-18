@@ -32,6 +32,21 @@
     for(const char of String(value)){h^=char.charCodeAt(0);h=Math.imul(h,16777619);}
     return h>>>0;
   }
+  // The room ID stays the same when progressing to the next stage.
+  // Keep the stage identity independent of live HP, turns and actor motion.
+  function stageIdentity(state){
+    const trial=state?.trial||{};
+    return [String(state?.id||''),String(state?.mode||''),
+      String(trial.layoutHash||''),String(trial.seed||''),
+      String(trial.stage??''),String(trial.layoutVersion??'')].join('|');
+  }
+  function mapIdentity(state){
+    if(!state)return '';
+    const terrain=(state.ground||[]).join(',');
+    const blocks=(state.blocks||[]).map(b=>[b.x,b.y,b.kind||''].join(':')).sort().join(';');
+    return [stageIdentity(state),state.width,state.height,state.terrain,
+      state.trial?.biome||'',state.trial?.title||'',terrain,blocks].join('|');
+  }
   function random(seed){
     let h=seed>>>0;
     return ()=>{h+=0x6D2B79F5;let t=Math.imul(h^(h>>>15),1|h);
@@ -61,7 +76,7 @@
       x:rand()*width,y:rand()*height,phase:rand()*TAU,
       speed:.4+rand()*.95,size:.8+rand()*1.3,depth:rand()
     });
-    return Object.freeze({id:String(state?.id||''),width,height,theme,seed,
+    return Object.freeze({id:String(state?.id||''),key:mapIdentity(state),width,height,theme,seed,
       details:Object.freeze(details),motes:Object.freeze(motes),
       lamps:Object.freeze(lamps)});
   }
@@ -183,5 +198,5 @@
     }
     ctx.restore();
   }
-  return Object.freeze({themes,themeFor,hash,prepare,idlePose,drawDetails,drawAtmosphere,rasterize});
+  return Object.freeze({themes,themeFor,hash,stageIdentity,mapIdentity,prepare,idlePose,drawDetails,drawAtmosphere,rasterize});
 });
