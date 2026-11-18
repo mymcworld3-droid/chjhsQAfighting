@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-化學式與反應式-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用化學式與反應式的化學原理與實驗判斷",
+      "question": {
+        "q": "反應2H₂+O₂→2H₂O已平衡。氫氣與氧氣的消耗莫耳數比為？",
+        "correct": "2：1",
+        "wrong": [
+          "1：2",
+          "1：1",
+          "3：1"
+        ],
+        "exp": "反應係數代表莫耳數比，兩莫耳氫需一莫耳氧。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學式與反應式",
+        "template_id": "chem-2026-g1-extra-化學式與反應式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-化學式與反應式-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用化學式與反應式的化學原理與實驗判斷",
+      "question": {
+        "q": "鐵氧化生成氧化鐵的平衡式為4Fe+3O₂→2Fe₂O₃。若氧氣消耗3 mol，鐵需要多少mol？",
+        "correct": "4 mol",
+        "wrong": [
+          "2 mol",
+          "3 mol",
+          "6 mol"
+        ],
+        "exp": "依平衡方程式，Fe與O₂之莫耳比是4：3。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學式與反應式",
+        "template_id": "chem-2026-g1-extra-化學式與反應式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-化學式與反應式-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用化學式與反應式的化學原理與實驗判斷",
+      "question": {
+        "q": "CaCO₃→CaO+CO₂的反應可說明何種守恆？",
+        "correct": "鈣、碳、氧的原子數在反應前後相等",
+        "wrong": [
+          "氧原子數在反應後少一個",
+          "每個碳原子必須變成兩個新原子",
+          "生成物數量較多表示總質量必加倍"
+        ],
+        "exp": "左側Ca1、C1、O3，右側CaO與CO₂合計亦相同。",
+        "subject": "化學",
+        "sub_topic": "化學式與反應式",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-化學式與反應式",
+        "template_id": "chem-2026-g1-extra-化學式與反應式-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

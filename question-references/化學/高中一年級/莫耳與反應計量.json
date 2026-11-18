@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-莫耳與反應計量-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用莫耳與反應計量的化學原理與實驗判斷",
+      "question": {
+        "q": "純水36 g，水的莫耳質量為18 g/mol。水有多少mol？",
+        "correct": "2 mol",
+        "wrong": [
+          "18 mol",
+          "0.5 mol",
+          "36 mol"
+        ],
+        "exp": "莫耳數n=m/M=36/18=2 mol。",
+        "subject": "化學",
+        "sub_topic": "莫耳與反應計量",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-莫耳與反應計量",
+        "template_id": "chem-2026-g1-extra-莫耳與反應計量-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-莫耳與反應計量-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用莫耳與反應計量的化學原理與實驗判斷",
+      "question": {
+        "q": "0.50 mol二氧化碳大約有多少分子？取NA=6.02×10²³ mol⁻¹。",
+        "correct": "3.01×10²³",
+        "wrong": [
+          "1.20×10²⁴",
+          "6.02×10²³",
+          "3.01×10²²"
+        ],
+        "exp": "分子數為0.5×6.02×10²³=3.01×10²³。",
+        "subject": "化學",
+        "sub_topic": "莫耳與反應計量",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-莫耳與反應計量",
+        "template_id": "chem-2026-g1-extra-莫耳與反應計量-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-莫耳與反應計量-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用莫耳與反應計量的化學原理與實驗判斷",
+      "question": {
+        "q": "反應2H₂+O₂→2H₂O，若有3 mol氫氣完全反應且氧氣足量，生成水多少mol？",
+        "correct": "3 mol",
+        "wrong": [
+          "1.5 mol",
+          "2 mol",
+          "6 mol"
+        ],
+        "exp": "H₂與H₂O係數都是2，莫耳比為1：1。",
+        "subject": "化學",
+        "sub_topic": "莫耳與反應計量",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-4",
+            "name": "化學反應與計量"
+          }
+        ],
+        "concept_id": "chem-高中一年級-莫耳與反應計量",
+        "template_id": "chem-2026-g1-extra-莫耳與反應計量-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

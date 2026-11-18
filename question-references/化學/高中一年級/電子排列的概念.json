@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-電子排列的概念-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用電子排列的概念的化學原理與實驗判斷",
+      "question": {
+        "q": "中性鈉Na原子序11，依簡化殼層模型其電子排列為何？",
+        "correct": "2、8、1",
+        "wrong": [
+          "2、8、2",
+          "2、7、2",
+          "2、9"
+        ],
+        "exp": "中性Na共有11電子，常用殼層排列為2、8、1。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "chem-2026-g1-extra-電子排列的概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-電子排列的概念-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用電子排列的概念的化學原理與實驗判斷",
+      "question": {
+        "q": "原子序12的鎂形成Mg²⁺後，帶正電離子有多少電子？",
+        "correct": "10個",
+        "wrong": [
+          "12個",
+          "14個",
+          "24個"
+        ],
+        "exp": "中性Mg有12電子，形成2+離子失去兩電子，剩10電子。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "chem-2026-g1-extra-電子排列的概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-電子排列的概念-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用電子排列的概念的化學原理與實驗判斷",
+      "question": {
+        "q": "氯原子最外層有7個電子，常形成Cl⁻。這通常表示？",
+        "correct": "得到1電子而形成較穩定的外層排列",
+        "wrong": [
+          "失去7個質子而帶負電",
+          "增加1個中子便帶負電",
+          "失去全部電子而成陰離子"
+        ],
+        "exp": "形成Cl⁻是得到一個電子，原子核質子數不會因電離而改變。",
+        "subject": "化學",
+        "sub_topic": "電子排列的概念",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-電子排列的概念",
+        "template_id": "chem-2026-g1-extra-電子排列的概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

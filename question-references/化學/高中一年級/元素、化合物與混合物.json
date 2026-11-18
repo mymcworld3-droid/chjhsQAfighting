@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-元素、化合物與混合物-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用元素、化合物與混合物的化學原理與實驗判斷",
+      "question": {
+        "q": "某自來水樣品含水、溶解礦物質及少量氣體。若經蒸餾可分離部分成分，這種自來水屬於？",
+        "correct": "混合物",
+        "wrong": [
+          "單一元素",
+          "組成固定的化合物",
+          "純水分子形成的純物質"
+        ],
+        "exp": "自來水含多種物質且組成可變，能藉物理方法分離部分成分，因此是混合物。",
+        "subject": "化學",
+        "sub_topic": "元素、化合物與混合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-元素、化合物與混合物",
+        "template_id": "chem-2026-g1-extra-元素、化合物與混合物-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-元素、化合物與混合物-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用元素、化合物與混合物的化學原理與實驗判斷",
+      "question": {
+        "q": "一瓶純二氧化碳只含CO₂分子。它在化學分類中屬於？",
+        "correct": "化合物",
+        "wrong": [
+          "元素",
+          "合金",
+          "兩種互不反應氣體的混合物"
+        ],
+        "exp": "每個CO₂由一個碳原子與兩個氧原子經化學鍵結而成，屬化合物。",
+        "subject": "化學",
+        "sub_topic": "元素、化合物與混合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-元素、化合物與混合物",
+        "template_id": "chem-2026-g1-extra-元素、化合物與混合物-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-元素、化合物與混合物-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用元素、化合物與混合物的化學原理與實驗判斷",
+      "question": {
+        "q": "密閉容器內只有N₂分子。雖然每個分子有兩個原子，整體仍應列為？",
+        "correct": "元素形成的純物質",
+        "wrong": [
+          "化合物",
+          "兩種元素的混合物",
+          "含氮和氧的溶液"
+        ],
+        "exp": "N₂只含氮這一種元素，雙原子分子不改變其元素分類。",
+        "subject": "化學",
+        "sub_topic": "元素、化合物與混合物",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-元素、化合物與混合物",
+        "template_id": "chem-2026-g1-extra-元素、化合物與混合物-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

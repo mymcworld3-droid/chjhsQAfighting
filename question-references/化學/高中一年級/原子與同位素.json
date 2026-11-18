@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-原子與同位素-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用原子與同位素的化學原理與實驗判斷",
+      "question": {
+        "q": "某原子原子序為17、中子數為18。該原子的質量數為何？",
+        "correct": "35",
+        "wrong": [
+          "17",
+          "18",
+          "36"
+        ],
+        "exp": "質量數為質子數與中子數相加，即17+18=35。",
+        "subject": "化學",
+        "sub_topic": "原子與同位素",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-原子與同位素",
+        "template_id": "chem-2026-g1-extra-原子與同位素-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-原子與同位素-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用原子與同位素的化學原理與實驗判斷",
+      "question": {
+        "q": "氯-35和氯-37均為中性原子。兩者的主要差別為何？",
+        "correct": "中子數不同",
+        "wrong": [
+          "質子數不同",
+          "化學元素種類不同",
+          "電子數分別為35與37"
+        ],
+        "exp": "同位素具有相同質子數，不同質量數主要由中子數造成。",
+        "subject": "化學",
+        "sub_topic": "原子與同位素",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-原子與同位素",
+        "template_id": "chem-2026-g1-extra-原子與同位素-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-原子與同位素-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用原子與同位素的化學原理與實驗判斷",
+      "question": {
+        "q": "原子序12的中性鎂原子，電子數目是多少？",
+        "correct": "12",
+        "wrong": [
+          "24",
+          "6",
+          "14"
+        ],
+        "exp": "原子中性表示電子數等於質子數，鎂原子序為12。",
+        "subject": "化學",
+        "sub_topic": "原子與同位素",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-原子與同位素",
+        "template_id": "chem-2026-g1-extra-原子與同位素-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

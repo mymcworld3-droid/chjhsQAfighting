@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-純物質與分離-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用純物質與分離的化學原理與實驗判斷",
+      "question": {
+        "q": "食鹽和細沙混合，要分別回收兩種物質，哪種流程較合理？",
+        "correct": "加水溶解食鹽、過濾沙、蒸發濾液",
+        "wrong": [
+          "只用普通濾紙直接篩出全部乾鹽",
+          "只加磁鐵就能分離細沙及鹽",
+          "直接加熱直到沙變成鹽"
+        ],
+        "exp": "利用食鹽可溶於水而沙不溶的差異，再回收濾液中的鹽。",
+        "subject": "化學",
+        "sub_topic": "純物質與分離",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-純物質與分離",
+        "template_id": "chem-2026-g1-extra-純物質與分離-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-純物質與分離-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用純物質與分離的化學原理與實驗判斷",
+      "question": {
+        "q": "乙醇與水可互溶，但沸點不同。若要富集乙醇，應主要利用？",
+        "correct": "蒸餾或分餾",
+        "wrong": [
+          "單純以濾紙過濾",
+          "靜置待其自然分成兩層",
+          "磁鐵吸附乙醇"
+        ],
+        "exp": "混合液體可利用揮發度差異蒸餾分離，不能直接過濾已溶解的分子。",
+        "subject": "化學",
+        "sub_topic": "純物質與分離",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-純物質與分離",
+        "template_id": "chem-2026-g1-extra-純物質與分離-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-純物質與分離-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用純物質與分離的化學原理與實驗判斷",
+      "question": {
+        "q": "墨水經紙層析後出現不同顏色色帶。造成分離的主要原因為何？",
+        "correct": "不同色素在固定相與流動相中的分配不同",
+        "wrong": [
+          "所有色素分子都必須進行核反應",
+          "色帶顏色不同代表分子必定分解",
+          "層析只依墨水滴數判定成分"
+        ],
+        "exp": "色素與紙及溶劑的作用不同，因此移動距離有差異。",
+        "subject": "化學",
+        "sub_topic": "純物質與分離",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-純物質與分離",
+        "template_id": "chem-2026-g1-extra-純物質與分離-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

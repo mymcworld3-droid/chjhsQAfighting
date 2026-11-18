@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-物質的微觀粒子-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用物質的微觀粒子的化學原理與實驗判斷",
+      "question": {
+        "q": "一個水分子H₂O含有哪種原子組成？",
+        "correct": "2個氫原子、1個氧原子",
+        "wrong": [
+          "1個氫原子、2個氧原子",
+          "2個氫分子、1個氧分子",
+          "3個氫原子"
+        ],
+        "exp": "H₂O中下標2修飾H，表示每分子兩氫一氧。",
+        "subject": "化學",
+        "sub_topic": "物質的微觀粒子",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質的微觀粒子",
+        "template_id": "chem-2026-g1-extra-物質的微觀粒子-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-物質的微觀粒子-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用物質的微觀粒子的化學原理與實驗判斷",
+      "question": {
+        "q": "在固定大氣壓下，純水持續沸騰時溫度近似不變。輸入熱量主要用於何處？",
+        "correct": "液態到氣態的相變，克服粒子間作用",
+        "wrong": [
+          "讓水中所有氧原子消失",
+          "讓每個水分子變成氫原子",
+          "把水的總質量瞬間變成零"
+        ],
+        "exp": "沸騰涉及潛熱，能量投入改變粒子間狀態，不一定提高溫度。",
+        "subject": "化學",
+        "sub_topic": "物質的微觀粒子",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質的微觀粒子",
+        "template_id": "chem-2026-g1-extra-物質的微觀粒子-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-物質的微觀粒子-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用物質的微觀粒子的化學原理與實驗判斷",
+      "question": {
+        "q": "氣體相較液體較容易壓縮，主要可由哪項微觀結構說明？",
+        "correct": "氣體粒子間平均距離較大",
+        "wrong": [
+          "氣體粒子完全沒有質量",
+          "液體分子絕對靜止",
+          "氣體分子內不存在任何原子"
+        ],
+        "exp": "氣體壓縮主要縮小粒子間空隙，與分子自身質量是否為零無關。",
+        "subject": "化學",
+        "sub_topic": "物質的微觀粒子",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-1",
+            "name": "物質與粒子"
+          }
+        ],
+        "concept_id": "chem-高中一年級-物質的微觀粒子",
+        "template_id": "chem-2026-g1-extra-物質的微觀粒子-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-酸、鹼與中和-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用酸、鹼與中和的化學原理與實驗判斷",
+      "question": {
+        "q": "10.0 mL、1.0 M的HCl恰用0.50 M NaOH中和。所需NaOH體積為何？",
+        "correct": "20.0 mL",
+        "wrong": [
+          "5.0 mL",
+          "10.0 mL",
+          "40.0 mL"
+        ],
+        "exp": "HCl莫耳數0.0100，需相同莫耳NaOH，體積0.0100/0.50=0.0200 L。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-酸、鹼與中和",
+        "template_id": "chem-2026-g1-extra-酸、鹼與中和-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-酸、鹼與中和-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用酸、鹼與中和的化學原理與實驗判斷",
+      "question": {
+        "q": "25℃下，pH=3的強酸稀溶液相較pH=5的強酸稀溶液，氫離子濃度約為幾倍？",
+        "correct": "100倍",
+        "wrong": [
+          "2倍",
+          "10倍",
+          "1000倍"
+        ],
+        "exp": "pH差2意味氫離子濃度差10²=100倍。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-酸、鹼與中和",
+        "template_id": "chem-2026-g1-extra-酸、鹼與中和-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-酸、鹼與中和-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用酸、鹼與中和的化學原理與實驗判斷",
+      "question": {
+        "q": "25℃下等莫耳的HCl和NaOH完全中和，若沒有其他酸鹼來源，溶液pH約為？",
+        "correct": "7",
+        "wrong": [
+          "1",
+          "3",
+          "13"
+        ],
+        "exp": "強酸與強鹼恰完全中和得到NaCl與水，理想稀溶液在25℃近似中性。",
+        "subject": "化學",
+        "sub_topic": "酸、鹼與中和",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-6",
+            "name": "酸鹼與鹽"
+          }
+        ],
+        "concept_id": "chem-高中一年級-酸、鹼與中和",
+        "template_id": "chem-2026-g1-extra-酸、鹼與中和-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

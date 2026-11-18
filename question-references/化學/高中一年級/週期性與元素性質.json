@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "chem-2026-g1-extra-週期性與元素性質-1",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用週期性與元素性質的化學原理與實驗判斷",
+      "question": {
+        "q": "鉀K與鈉Na同屬週期表第1族，鉀位於鈉的下方。一般原子半徑何者較大？",
+        "correct": "鉀",
+        "wrong": [
+          "鈉",
+          "必完全相等",
+          "只要原子序不同就無法比較"
+        ],
+        "exp": "同族向下電子層數增加，因此鉀原子半徑通常較大。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-週期性與元素性質",
+        "template_id": "chem-2026-g1-extra-週期性與元素性質-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-週期性與元素性質-2",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用週期性與元素性質的化學原理與實驗判斷",
+      "question": {
+        "q": "比較同週期的鈉Na與氯Cl，哪個元素的電負度較高？",
+        "correct": "氯",
+        "wrong": [
+          "鈉",
+          "必然完全相同",
+          "只由原子質量決定無法比較"
+        ],
+        "exp": "同週期由左向右電負度一般增加，氯較容易吸引共用電子。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-週期性與元素性質",
+        "template_id": "chem-2026-g1-extra-週期性與元素性質-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "chem-2026-g1-extra-週期性與元素性質-3",
+      "source": "依108課綱自編，非歷屆原題",
+      "design": "運用週期性與元素性質的化學原理與實驗判斷",
+      "question": {
+        "q": "鈉原子形成Na⁺的過程主要發生何事？",
+        "correct": "失去一個電子，質子數不變",
+        "wrong": [
+          "失去一個質子",
+          "得到一個電子",
+          "得到一個中子就形成正離子"
+        ],
+        "exp": "第1族鈉常失去一個價電子形成正1價離子，原子核並未改變。",
+        "subject": "化學",
+        "sub_topic": "週期性與元素性質",
+        "knowledge_points": [
+          {
+            "subject": "化學",
+            "id": "chemistry-2",
+            "name": "原子與週期表"
+          }
+        ],
+        "concept_id": "chem-高中一年級-週期性與元素性質",
+        "template_id": "chem-2026-g1-extra-週期性與元素性質-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
