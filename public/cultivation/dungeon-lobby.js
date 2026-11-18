@@ -349,7 +349,7 @@ function poll(){
   if(!open)return;
   // Do not keep showing another account's private room after account switch.
   if(localUser()!==account){close();clearRoom();list=[];return;}
-  if(document.hidden)return;
+  if(document.hidden||initializing)return;
   if(room){
     if(!streamStop)startRoomStream();
     void sendHeartbeat();
