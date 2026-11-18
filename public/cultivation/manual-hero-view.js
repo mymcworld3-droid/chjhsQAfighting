@@ -2,8 +2,9 @@
 // projection of the existing, server-authoritative manual and skill data.
 // Selecting a book here changes only the current view, not the learned school.
 import {manualVisualState,manualSkillVisualState,renderManualVisualMilestones} from './manual-visual-progression.js';
+import {manualAnticipation,renderManualAnticipation} from './manual-anticipation.js';
 
-export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt, label }) {
+export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt, label, totalExpForLevel }) {
   const owned=(state?.library||[]).filter(book=>book.owned);
   const chosen=owned.find(book=>book.id===selectedBookId)
     || owned.find(book=>book.school===state?.school)
@@ -31,6 +32,9 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   const book=chosen;
   const visual=manualVisualState(book);
   const growth=renderManualVisualMilestones(book,esc);
+  const anticipation=manualAnticipation(book,totalExpForLevel);
+  const milestone=renderManualAnticipation(anticipation,esc);
+  const near=anticipation&&['near','imminent'].includes(anticipation.status);
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
   const progress=Math.max(0,Math.min(100,Number(book.progress)||0));
   const maxed=Number(book.level)>=10;
@@ -67,7 +71,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     const artMarkup=art
       ?`<img src="${esc(art)}" alt="" loading="lazy" decoding="async">`
       :'<span aria-hidden="true">✦</span>';
-    return `<button type="button" class="manual-hero-step ${unlocked?'is-unlocked':'is-locked'} is-${skillState} ${next?.id===skill.id?'is-next':''}"
+    return `<button type="button" class="manual-hero-step ${unlocked?'is-unlocked':'is-locked'} is-${skillState} ${next?.id===skill.id?'is-next':''} ${near&&next?.id===skill.id?'is-approaching':''}"
         data-manual-skill-visual="${skillState}"
         data-manual-jump-skill="${esc(skill.id)}" aria-label="查看${esc(skill.name)}，${esc(detail)}">
       <span class="manual-hero-node">${artMarkup}</span>
@@ -89,7 +93,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
 
   return {
     bookId:book.id,
-    html:`<section class="manual-hero manual-hero--${book.school} manual-hero--tier-${visual.stage}"
+    html:`<section class="manual-hero manual-hero--${book.school} manual-hero--tier-${visual.stage} ${near?'manual-hero--approaching':''} ${anticipation?.status==='imminent'?'manual-hero--imminent':''}"
       data-manual-visual-stage="${visual.stage}" data-manual-visual-level="${visual.level}"
       aria-label="功法修煉焦點">
       ${heading}
@@ -119,6 +123,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
               <span class="manual-hero-progress" style="width:${maxed?100:progress}%"></span></div>
           </div>
           ${growth}
+          ${milestone}
           <div class="manual-hero-goal">
             <span class="manual-hero-goal-symbol" aria-hidden="true">✧</span>
             <div><strong>${esc(goalTitle)}</strong><small>${esc(goalSubtitle)}</small></div>
