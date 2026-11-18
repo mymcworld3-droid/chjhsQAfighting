@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-東亞文明與交流-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用東亞文明與交流的核心觀念",
+      "question": {
+        "q": "某港口遺址同時出土中國銅錢、朝鮮半島陶器與日本列島器物。最合理的推論是？",
+        "correct": "東亞海域可能存在跨地區交易與文化交流",
+        "wrong": [
+          "三地必定受同一政權直接統治",
+          "所有物品一定在同一間工坊製作",
+          "出土外地物品代表當地從不生產器物"
+        ],
+        "exp": "異地器物提示人與物的流通，但需考證產地、年代及是否轉手。",
+        "subject": "歷史",
+        "sub_topic": "東亞文明與交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-東亞文明與交流",
+        "template_id": "extra-2026-h1-東亞文明與交流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-東亞文明與交流-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用東亞文明與交流的核心觀念",
+      "question": {
+        "q": "漢字傳到東亞各地後，地方社會又發展適合自身語言的表達方式。這反映何種文化現象？",
+        "correct": "文化交流可能伴隨在地改造",
+        "wrong": [
+          "使用相同文字必定使各地政府相同",
+          "接受文字代表所有地方語言消失",
+          "文字傳播與教育及宗教完全無關"
+        ],
+        "exp": "外來文化在傳播中可能被轉化，不必然完全取代既有文化。",
+        "subject": "歷史",
+        "sub_topic": "東亞文明與交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-東亞文明與交流",
+        "template_id": "extra-2026-h1-東亞文明與交流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-東亞文明與交流-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用東亞文明與交流的核心觀念",
+      "question": {
+        "q": "研究古代東亞關係時，若只觀察戰爭而忽視僧侶、商人與使節，最主要的缺陷為何？",
+        "correct": "忽略宗教、商貿和外交等非軍事交流",
+        "wrong": [
+          "戰爭不能用來研究東亞史",
+          "商人從不在不同地區間移動",
+          "有外交往來的國家一定不會發生衝突"
+        ],
+        "exp": "東亞互動兼有衝突與合作，也涉及知識和物資流動。",
+        "subject": "歷史",
+        "sub_topic": "東亞文明與交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-東亞文明與交流",
+        "template_id": "extra-2026-h1-東亞文明與交流-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

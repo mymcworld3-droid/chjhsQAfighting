@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-隋唐社會與文化-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用隋唐社會與文化的核心觀念",
+      "question": {
+        "q": "唐代長安出現來自多地的商旅與宗教場所，這最能支持哪種解釋？",
+        "correct": "長途貿易促成都市人口與文化的多樣接觸",
+        "wrong": [
+          "唐朝所有城市都不與外地交流",
+          "每位外來商旅都必須改信相同宗教",
+          "市場上所有商品都是本地製造"
+        ],
+        "exp": "長安與絲路相連，商貿及宗教活動可能交織。",
+        "subject": "歷史",
+        "sub_topic": "隋唐社會與文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-隋唐社會與文化",
+        "template_id": "extra-2026-h1-隋唐社會與文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-隋唐社會與文化-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用隋唐社會與文化的核心觀念",
+      "question": {
+        "q": "隋唐科舉提供士人參加考試取得官職的途徑。如何評估其社會效果最合理？",
+        "correct": "增加部分入仕方式，但教育資源與門第仍可能影響機會",
+        "wrong": [
+          "每位農民都能不經識字直接做官",
+          "科舉立即讓所有世家失去影響力",
+          "考試完全不需要教育或學習"
+        ],
+        "exp": "科舉改變選才制度，卻不代表階層差異立即消失。",
+        "subject": "歷史",
+        "sub_topic": "隋唐社會與文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-隋唐社會與文化",
+        "template_id": "extra-2026-h1-隋唐社會與文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-隋唐社會與文化-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用隋唐社會與文化的核心觀念",
+      "question": {
+        "q": "政府藉大運河把南方糧食運至北方政治中心。這種建設最直接與何種治理需求有關？",
+        "correct": "跨區域糧食與物資調度",
+        "wrong": [
+          "讓南北氣候完全一致",
+          "永久取代所有陸路交通",
+          "使南北居民數量在同一天相等"
+        ],
+        "exp": "運河運輸有利支援政治中心與軍政所需物資。",
+        "subject": "歷史",
+        "sub_topic": "隋唐社會與文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-隋唐社會與文化",
+        "template_id": "extra-2026-h1-隋唐社會與文化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

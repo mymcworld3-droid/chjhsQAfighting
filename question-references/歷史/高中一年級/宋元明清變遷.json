@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-宋元明清變遷-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用宋元明清變遷的核心觀念",
+      "question": {
+        "q": "某宋代商業城市紙幣流通，市場交易頻繁。這可用來研究哪種變化？",
+        "correct": "都市商業與貨幣交易方式的發展",
+        "wrong": [
+          "當時農業已完全消失",
+          "紙幣必定永遠沒有信用與通貨問題",
+          "每座鄉村與城市的產業結構完全相同"
+        ],
+        "exp": "紙幣與商業活動顯示貨幣經濟變化，不能排除農業與地區差異。",
+        "subject": "歷史",
+        "sub_topic": "宋元明清變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-宋元明清變遷",
+        "template_id": "extra-2026-h1-宋元明清變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-宋元明清變遷-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用宋元明清變遷的核心觀念",
+      "question": {
+        "q": "元帝國治理不同民族與宗教人口時，面臨哪種結構性課題？",
+        "correct": "如何整合跨區域行政與多元文化社群",
+        "wrong": [
+          "帝國疆域越大地方制度就越不必要",
+          "所有居民必然使用同一語言",
+          "多元族群不可能處於同一帝國之下"
+        ],
+        "exp": "跨地域帝國需要處理行政、文化與社會差異。",
+        "subject": "歷史",
+        "sub_topic": "宋元明清變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-宋元明清變遷",
+        "template_id": "extra-2026-h1-宋元明清變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-宋元明清變遷-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用宋元明清變遷的核心觀念",
+      "question": {
+        "q": "清代某地人口成長而耕地擴充有限。分析生計變化時最該考量什麼？",
+        "correct": "人均土地、移民流動與農業技術如何改變",
+        "wrong": [
+          "人口增加必然使每人耕地增加",
+          "土地壓力完全不會影響人群移動",
+          "農村人口變化只能由海外貿易決定"
+        ],
+        "exp": "人口與可耕地之間的關係會影響生計、開墾與遷徙。",
+        "subject": "歷史",
+        "sub_topic": "宋元明清變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-宋元明清變遷",
+        "template_id": "extra-2026-h1-宋元明清變遷-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

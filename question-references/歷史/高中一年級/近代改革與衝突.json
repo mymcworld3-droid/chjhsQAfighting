@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-近代改革與衝突-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用近代改革與衝突的核心觀念",
+      "question": {
+        "q": "某改革派引進新式軍備及工廠，但維持舊有財政管理方式。此改革可能遇到什麼限制？",
+        "correct": "技術引進缺乏制度與財政配套時成效受限",
+        "wrong": [
+          "購入武器必定能解決所有政治問題",
+          "維持舊制便代表沒有任何技術變化",
+          "改革不需要人才或資金"
+        ],
+        "exp": "技術、行政與財政之間需要協調，不能只靠設備。",
+        "subject": "歷史",
+        "sub_topic": "近代改革與衝突",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-近代改革與衝突",
+        "template_id": "extra-2026-h1-近代改革與衝突-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-近代改革與衝突-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用近代改革與衝突的核心觀念",
+      "question": {
+        "q": "列強要求通商特權，地方商人與農民產生不同回應。分析這場衝突時應考量什麼？",
+        "correct": "國際權力、經濟利益及地方社會立場",
+        "wrong": [
+          "只看戰艦數量即可確定所有民眾感受",
+          "所有抗議者必定出於相同動機",
+          "列強官方文件必然完全反映地方意見"
+        ],
+        "exp": "對外衝突往往同時涉及主權、交易與社會分配。",
+        "subject": "歷史",
+        "sub_topic": "近代改革與衝突",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-近代改革與衝突",
+        "template_id": "extra-2026-h1-近代改革與衝突-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-近代改革與衝突-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用近代改革與衝突的核心觀念",
+      "question": {
+        "q": "某國設立新式學校，但女性與低收入家庭入學比例偏低。這提醒研究者應區分什麼？",
+        "correct": "改革方案的名義目標與不同群體的實際受益",
+        "wrong": [
+          "設立學校就代表人人已享平等教育",
+          "未入學者必定反對識字",
+          "只要建築增加即可判定教育公平"
+        ],
+        "exp": "制度建立與教育可及性仍可能存在差距。",
+        "subject": "歷史",
+        "sub_topic": "近代改革與衝突",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-近代改革與衝突",
+        "template_id": "extra-2026-h1-近代改革與衝突-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

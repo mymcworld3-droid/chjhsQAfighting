@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-秦漢制度-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用秦漢制度的核心觀念",
+      "question": {
+        "q": "秦帝國推行統一度量衡後，跨地區商人採用共同計量方式。此政策最直接有助於何者？",
+        "correct": "減少交易和行政計量標準的差異",
+        "wrong": [
+          "立即消除所有地方習俗",
+          "讓地方不再需要行政管理",
+          "建立近代代議民主選舉"
+        ],
+        "exp": "共同標準有助商品交易與行政整合，不能由此推論文化差異全消失。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-秦漢制度",
+        "template_id": "extra-2026-h1-秦漢制度-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-秦漢制度-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用秦漢制度的核心觀念",
+      "question": {
+        "q": "漢代朝廷採用察舉等方式推薦人才。與世襲任官相比，此制度主要改變哪一環節？",
+        "correct": "官員來源可透過地方評價與推薦擴大",
+        "wrong": [
+          "所有官位從此一律由選民直接選出",
+          "被推薦者必定立即繼承帝位",
+          "中央政府完全不再干預官員任用"
+        ],
+        "exp": "察舉提供人才選任途徑，但仍受政治與社會條件限制。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-秦漢制度",
+        "template_id": "extra-2026-h1-秦漢制度-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-秦漢制度-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用秦漢制度的核心觀念",
+      "question": {
+        "q": "史家只比較秦漢疆域大小，卻沒有考慮郡縣與行政官僚。這樣會忽略何種重要問題？",
+        "correct": "中央如何管理地方及動員財政與人力",
+        "wrong": [
+          "疆域能否在紙上畫成地圖",
+          "歷代皇帝是否有不同姓名",
+          "古代城市是否存在建築物"
+        ],
+        "exp": "帝國治理依賴行政組織，而非單憑疆域廣大。",
+        "subject": "歷史",
+        "sub_topic": "秦漢制度",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-2",
+            "name": "中國史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-秦漢制度",
+        "template_id": "extra-2026-h1-秦漢制度-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

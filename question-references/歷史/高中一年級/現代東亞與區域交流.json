@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-現代東亞與區域交流-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用現代東亞與區域交流的核心觀念",
+      "question": {
+        "q": "東亞多國企業將零件、生產與組裝分布在不同國家。這反映何種發展？",
+        "correct": "區域製造分工與跨境供應鏈深化",
+        "wrong": [
+          "各國自此完全不進行貿易",
+          "所有國家必須採相同政治制度",
+          "生產鏈不受交通及市場影響"
+        ],
+        "exp": "跨境產業合作可提高分工，也讓地區經濟相互依賴。",
+        "subject": "歷史",
+        "sub_topic": "現代東亞與區域交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-現代東亞與區域交流",
+        "template_id": "extra-2026-h1-現代東亞與區域交流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-現代東亞與區域交流-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用現代東亞與區域交流的核心觀念",
+      "question": {
+        "q": "研究戰後東亞兩國關係時，若只看政府外交聲明，容易忽略哪種因素？",
+        "correct": "民間往來、商貿合作與歷史記憶",
+        "wrong": [
+          "外交文件無法用作史料",
+          "所有民眾必定完全同意政府的表述",
+          "戰後各國外交立場從不改變"
+        ],
+        "exp": "官方政策與民間互動可能呈現不同層面。",
+        "subject": "歷史",
+        "sub_topic": "現代東亞與區域交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-現代東亞與區域交流",
+        "template_id": "extra-2026-h1-現代東亞與區域交流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-現代東亞與區域交流-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用現代東亞與區域交流的核心觀念",
+      "question": {
+        "q": "某地經濟逐漸從農業轉向精密製造。哪組長期資料最能解釋此產業轉型？",
+        "correct": "人力教育、科技政策、投資與國際需求資料",
+        "wrong": [
+          "只看工廠外牆顏色",
+          "只依當年某張節慶照片",
+          "忽略市場條件與勞動人口"
+        ],
+        "exp": "產業轉型涉及技術、資本、人力及市場，不能只憑單一現象。",
+        "subject": "歷史",
+        "sub_topic": "現代東亞與區域交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-3",
+            "name": "東亞史"
+          }
+        ],
+        "concept_id": "hist-高中一年級-現代東亞與區域交流",
+        "template_id": "extra-2026-h1-現代東亞與區域交流-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

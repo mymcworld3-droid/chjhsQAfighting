@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-比較與因果-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用比較與因果的核心觀念",
+      "question": {
+        "q": "兩港口同時開放貿易，甲商業興盛、乙發展較慢。最值得比較哪種條件？",
+        "correct": "腹地、交通、政策與原有貿易網絡",
+        "wrong": [
+          "兩港口名字長短",
+          "港口啟用日期相同就必然結果一致",
+          "海水顏色是否相同"
+        ],
+        "exp": "相同政策未必產生相同結果，須比較關鍵條件。",
+        "subject": "歷史",
+        "sub_topic": "比較與因果",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中一年級-比較與因果",
+        "template_id": "extra-2026-h1-比較與因果-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-比較與因果-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用比較與因果的核心觀念",
+      "question": {
+        "q": "某地推動教育改革後識字率上升，但同期收入也增加。研究改革效果應如何避免單因推論？",
+        "correct": "加入改革前資料與其他地區對照，評估共同變動因素",
+        "wrong": [
+          "只讀改革後一年的宣傳新聞",
+          "把所有改善都直接歸因改革",
+          "拒絕使用任何統計資料"
+        ],
+        "exp": "前後對照與控制其他因素有助檢查因果關係。",
+        "subject": "歷史",
+        "sub_topic": "比較與因果",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中一年級-比較與因果",
+        "template_id": "extra-2026-h1-比較與因果-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-比較與因果-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用比較與因果的核心觀念",
+      "question": {
+        "q": "研究同一年代，甲側重政治制度、乙側重庶民市場經驗，結論關注點不同。這說明什麼？",
+        "correct": "問題意識不同可能呈現歷史的不同面向",
+        "wrong": [
+          "同年代研究只能有一種結論",
+          "日常生活資料完全沒有史學價值",
+          "兩份研究必定互相排斥"
+        ],
+        "exp": "研究問題及史料選擇會影響敘事的焦點。",
+        "subject": "歷史",
+        "sub_topic": "比較與因果",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中一年級-比較與因果",
+        "template_id": "extra-2026-h1-比較與因果-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

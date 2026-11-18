@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h1-史料脈絡-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用史料脈絡的核心觀念",
+      "question": {
+        "q": "某位退任官員在事件十年後寫回憶錄，評論當時的改革。最值得注意什麼？",
+        "correct": "事後立場與記憶可能改變其對往事的評價",
+        "wrong": [
+          "回憶錄必定在事件發生當天完成",
+          "官員身分可以保證完全中立",
+          "過了十年就不可能保存任何真實記憶"
+        ],
+        "exp": "形成時間和作者經驗是判讀史料可信度的重要線索。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料脈絡",
+        "template_id": "extra-2026-h1-史料脈絡-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-史料脈絡-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用史料脈絡的核心觀念",
+      "question": {
+        "q": "某反戰海報在後世教材被引用，但沒有標示原本發行單位。應優先補充什麼？",
+        "correct": "製作者、發布年代和原定閱聽對象",
+        "wrong": [
+          "只有海報長寬尺寸",
+          "後來教材封面顏色",
+          "海報中每一個字的字體大小"
+        ],
+        "exp": "了解製作與傳播脈絡，才可分析宣傳意圖。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料脈絡",
+        "template_id": "extra-2026-h1-史料脈絡-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h1-史料脈絡-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以史料或事件應用史料脈絡的核心觀念",
+      "question": {
+        "q": "研究同一事件的地方報紙與外國外交官報告，兩者描述不同。哪種處理較妥當？",
+        "correct": "比對資訊來源、目的及可以相互印證的事實",
+        "wrong": [
+          "只選有官印的資料",
+          "把差異直接當成兩份資料皆偽造",
+          "完全不必考量記者與外交官所能接觸的人群"
+        ],
+        "exp": "不同立場與資訊條件可能造成敘述差異。",
+        "subject": "歷史",
+        "sub_topic": "史料脈絡",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中一年級-史料脈絡",
+        "template_id": "extra-2026-h1-史料脈絡-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
