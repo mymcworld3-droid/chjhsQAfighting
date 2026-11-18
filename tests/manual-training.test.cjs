@@ -695,17 +695,17 @@ test('gold upgrades stop at Lv10, but PvE mastery XP still reaches Lv20',async()
       bookId:'sword-wind',targetLevel,expectedGold:0
     }),/Lv. 10 之後只能透過 PvE/);
   }
-  assert.equal(user.stats.gold,4600);
-  assert.equal(record.books['sword-wind'].exp,1080);
+  assert.equal(db.records.get('users/u1').stats.gold,4600);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,1080);
   // The existing combat reward route writes authoritative EXP. No currency
   // quote is available from Lv10 onward, including Lv19->20.
   for(const level of [11,14,19,20]){
-    record.books['sword-wind'].exp=Catalog.totalExpForLevel(level);
+    bookRecord(db).books['sword-wind'].exp=Catalog.totalExpForLevel(level);
     initial=await API.manualsState(db,'u1');
     assert.equal(initial.library[0].level,level);
     assert.equal(initial.library[0].upgrade,null);
     assert.equal(initial.attackBonus,level);
     assert.equal(initial.gold,4600);
   }
-  assert.equal(record.books['sword-wind'].exp,4180);
+  assert.equal(bookRecord(db).books['sword-wind'].exp,4180);
 });
