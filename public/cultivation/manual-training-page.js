@@ -34,7 +34,7 @@ function ensure(){
   if(!document.getElementById('manual-training-hero-style')){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-hero-style';
-    link.href='/styles/manual-training-hero.css?v=20261117-hero-phase5';
+    link.href='/styles/manual-training-hero.css?v=20261118-merged-mastery-v1';
     document.head.append(link);
   }
   if(!document.getElementById('manual-training-loadout-style')){
@@ -58,13 +58,13 @@ function ensure(){
   if(!document.getElementById('manual-training-growth-style')){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-growth-style';
-    link.href='/styles/manual-training-growth.css?v=20261117-growth-phase5';
+    link.href='/styles/manual-training-growth.css?v=20261118-merged-mastery-v1';
     document.head.append(link);
   }
   if(!document.getElementById('manual-training-anticipation-style')){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-anticipation-style';
-    link.href='/styles/manual-anticipation.css?v=20261118-breakthrough-phase8';
+    link.href='/styles/manual-anticipation.css?v=20261118-merged-mastery-v1';
     document.head.append(link);
   }
   return root;
