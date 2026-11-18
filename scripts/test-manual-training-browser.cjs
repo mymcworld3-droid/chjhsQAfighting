@@ -186,20 +186,20 @@ async function main(){
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=250;
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--manual-upgrade').waitFor();
-    assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'near');
-    assert.match(await page.locator('.manual-anticipation').textContent(),/還差 30 EXP/);
+    assert.equal(await page.locator('.manual-hero--approaching').count(),1);
+    assert.match(await page.locator('.manual-hero-next-inline').textContent(),/尚差 30 EXP/);
+    assert.equal(await page.locator('.manual-anticipation').count(),0);
     assert.match(await page.locator('[data-manual-expedition]').textContent(),/第 5 關/);
     assert.match(await page.locator('[data-manual-expedition]').textContent(),/築基境/);
     assert.match(await page.locator('[data-manual-expedition]').textContent(),/\+35/);
     assert.match(await page.locator('[data-manual-expedition]').textContent(),/約 1 次/);
     assert.equal(await page.locator('.manual-hero-step.is-next.is-approaching.is-locked').count(),1);
-    assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-breakthrough-tag').count(),1);
+    assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-brief-state.is-approaching').count(),1);
     await page.locator('[data-manual-celebration-dismiss]').click();
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=270;
     await page.locator('[data-manual-refresh]').click();
-    await page.locator('[data-manual-anticipation="imminent"]').waitFor();
-    assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'imminent');
-    assert.match(await page.locator('.manual-anticipation').textContent(),/還差 10 EXP/);
+    await page.locator('.manual-hero--imminent').waitFor();
+    assert.match(await page.locator('.manual-hero-next-inline').textContent(),/尚差 10 EXP/);
     await page.setViewportSize({width:393,height:852});
     const anticipationMobile=await page.locator('.manual-hero').evaluate(node=>({
       width:node.clientWidth,scroll:node.scrollWidth
@@ -210,8 +210,8 @@ async function main(){
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=280;
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--manual-upgrade').waitFor();
-    await page.locator('[data-manual-anticipation="realm"]').waitFor();
-    assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'realm');
+    await page.waitForFunction(()=>document.querySelector('.manual-hero-next-inline')?.textContent.includes('築基境'));
+    assert.match(await page.locator('.manual-hero-next-inline').textContent(),/待修士 築基境/);
     assert.equal(await page.locator('.manual-hero-step.is-realm-locked').count(),1);
     assert.equal(await page.locator('.manual-hero-step.is-learned').count(),1);
     await page.locator('[data-manual-celebration-dismiss]').click();
