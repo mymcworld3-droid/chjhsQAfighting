@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-公民參與-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公民參與概念",
+      "question": {
+        "q": "地方政府規畫自行車道，居民想提出建議。何種方式較能促進有效參與？",
+        "correct": "整理道路安全資料並參與公開說明及意見程序",
+        "wrong": [
+          "只在匿名留言中辱罵其他使用者",
+          "放棄所有資訊蒐集並只憑直覺決定",
+          "未了解計畫就宣稱所有方案必定相同"
+        ],
+        "exp": "有資訊基礎的參與更容易形成可討論的意見。",
+        "subject": "公民",
+        "sub_topic": "公民參與",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公民參與",
+        "template_id": "extra-2026-civ1-公民參與-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公民參與-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公民參與概念",
+      "question": {
+        "q": "某社區公共活動只邀請白天有空的居民，輪班者很難參加。為改善程序公平，可採哪項措施？",
+        "correct": "提供不同時段或線上意見管道，降低參與障礙",
+        "wrong": [
+          "只將出席者視為唯一受影響的人",
+          "禁止未出席者了解會議結果",
+          "只看活動海報大小判斷參與程度"
+        ],
+        "exp": "參與程序需考慮時間和資源差異，避免排除特定群體。",
+        "subject": "公民",
+        "sub_topic": "公民參與",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公民參與",
+        "template_id": "extra-2026-civ1-公民參與-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公民參與-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公民參與概念",
+      "question": {
+        "q": "公民團體提出政策倡議後，也持續追蹤執行成果並公開問題。這主要屬於何種參與功能？",
+        "correct": "政策監督與持續問責",
+        "wrong": [
+          "只在選舉投票當天才算參與",
+          "政策公布後社會即不得再討論",
+          "倡議成功便代表執行無須查證"
+        ],
+        "exp": "公民參與可貫穿政策討論、決定及後續監督。",
+        "subject": "公民",
+        "sub_topic": "公民參與",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公民參與",
+        "template_id": "extra-2026-civ1-公民參與-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-民主政治與憲政-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用民主政治與憲政概念",
+      "question": {
+        "q": "某民選政府提出限制集會的行政命令，但法院可依法審查其合憲性。這體現何種憲政精神？",
+        "correct": "政府權力須受憲法與司法制約",
+        "wrong": [
+          "政府只要民選就能不受法律限制",
+          "行政機關可以永久取消法院權限",
+          "憲法僅約束一般民眾不約束國家"
+        ],
+        "exp": "憲政民主結合選舉正當性與權力限制。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-民主政治與憲政",
+        "template_id": "extra-2026-civ1-民主政治與憲政-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-民主政治與憲政-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用民主政治與憲政概念",
+      "question": {
+        "q": "某政策獲多數支持，卻可能侵害少數群體的基本權利。依憲政民主，何者較適當？",
+        "correct": "多數決仍需尊重憲法保障的基本權利",
+        "wrong": [
+          "只要超過半數便可取消任何人權",
+          "少數群體一律可以否決所有公共決策",
+          "政府不需要檢查政策的法律依據"
+        ],
+        "exp": "憲政保障權利不任由一時多數任意剝奪。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-民主政治與憲政",
+        "template_id": "extra-2026-civ1-民主政治與憲政-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-民主政治與憲政-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用民主政治與憲政概念",
+      "question": {
+        "q": "一個國家定期舉行選舉，卻禁止反對者集會並限制媒體。評估其民主程度時應注意什麼？",
+        "correct": "除了選舉，也需看政治競爭、自由與法治保障",
+        "wrong": [
+          "有投票箱就代表所有民主條件具備",
+          "媒體自由與政府問責完全無關",
+          "反對者受限必定使選舉更公平"
+        ],
+        "exp": "民主不只看選舉形式，還包括公共自由與競爭。",
+        "subject": "公民",
+        "sub_topic": "民主政治與憲政",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中一年級-民主政治與憲政",
+        "template_id": "extra-2026-civ1-民主政治與憲政-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

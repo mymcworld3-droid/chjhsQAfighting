@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-公共議題分析-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公共議題分析概念",
+      "question": {
+        "q": "市府評估夜市延長營業，商家預期營收增加、居民擔心噪音。何種分析最充分？",
+        "correct": "比較經濟效益、噪音數據與可行管理措施",
+        "wrong": [
+          "只聽支持者就能得出唯一答案",
+          "只看夜市宣傳照片",
+          "把各方陳述當作無需查證的客觀數字"
+        ],
+        "exp": "公共議題通常有多重價值與利益，需資料及方案評估。",
+        "subject": "公民",
+        "sub_topic": "公共議題分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公共議題分析",
+        "template_id": "extra-2026-civ1-公共議題分析-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公共議題分析-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公共議題分析概念",
+      "question": {
+        "q": "某學校試行手機管理政策，學習秩序改善但緊急聯絡變得不便。哪種評估方式最好？",
+        "correct": "設定清楚指標，衡量改善效果及意外成本",
+        "wrong": [
+          "只挑第一週支持政策的評論",
+          "只因政策曾有效就不需檢討",
+          "只看教師與學生的總人數"
+        ],
+        "exp": "政策評估需衡量目標達成與副作用。",
+        "subject": "公民",
+        "sub_topic": "公共議題分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公共議題分析",
+        "template_id": "extra-2026-civ1-公共議題分析-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公共議題分析-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公共議題分析概念",
+      "question": {
+        "q": "一項交通政策的民調支持率達六成，但樣本只來自開車族。這項數據的主要限制是？",
+        "correct": "樣本未涵蓋其他受影響使用者，可能產生選樣偏差",
+        "wrong": [
+          "有六成支持就能代表所有市民",
+          "民調不用說明調查對象",
+          "只要有百分比就等於全面普查"
+        ],
+        "exp": "公共議題應關注代表性及不同群體的需求。",
+        "subject": "公民",
+        "sub_topic": "公共議題分析",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公共議題分析",
+        "template_id": "extra-2026-civ1-公共議題分析-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-公民社會-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公民社會概念",
+      "question": {
+        "q": "居民自發組成環境團體，向地方政府提出公開水質監測的要求。這最能說明公民社會哪種功能？",
+        "correct": "在國家與市場之外形成公共監督和集體行動",
+        "wrong": [
+          "只有行政機關才可提出公共意見",
+          "公民團體成立就必定取代所有民選機關",
+          "團體只可關心個人私事"
+        ],
+        "exp": "自主的公民結社可促進公共討論與政府問責。",
+        "subject": "公民",
+        "sub_topic": "公民社會",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公民社會",
+        "template_id": "extra-2026-civ1-公民社會-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公民社會-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公民社會概念",
+      "question": {
+        "q": "某地方議題上，商會、家長會與環境團體提出不同主張。哪種處理最符合健全公民社會？",
+        "correct": "讓不同組織有機會公開討論並檢驗其論據",
+        "wrong": [
+          "將規模最小的團體排除對話",
+          "只因某團體經費較多就認定其主張正確",
+          "禁止不同利益群體同時參與"
+        ],
+        "exp": "公民社會具有多元組織與利益，公共程序應容納討論。",
+        "subject": "公民",
+        "sub_topic": "公民社會",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公民社會",
+        "template_id": "extra-2026-civ1-公民社會-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公民社會-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公民社會概念",
+      "question": {
+        "q": "某公益組織獲企業贊助後，外界質疑其是否仍能獨立監督該企業。最應關注什麼？",
+        "correct": "利益衝突的揭露與組織決策自主性",
+        "wrong": [
+          "只要接受捐款就必然違法",
+          "企業捐款一定可以直接替代法律",
+          "贊助金額越高意見就越值得信任"
+        ],
+        "exp": "資金來源可能影響獨立性，透明及利益迴避很重要。",
+        "subject": "公民",
+        "sub_topic": "公民社會",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公民社會",
+        "template_id": "extra-2026-civ1-公民社會-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

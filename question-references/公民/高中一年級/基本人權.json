@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-基本人權-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用基本人權概念",
+      "question": {
+        "q": "某校在無合理理由下公開學生的私人健康紀錄。這可能涉及哪項權利問題？",
+        "correct": "個人隱私與資訊自主的保障",
+        "wrong": [
+          "所有公開行為均屬學術自由",
+          "學校擁有學生資料即可無限公開",
+          "隱私權只能保障企業不保障個人"
+        ],
+        "exp": "敏感資料應有正當目的與適當保護，不可任意公開。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中一年級-基本人權",
+        "template_id": "extra-2026-civ1-基本人權-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-基本人權-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用基本人權概念",
+      "question": {
+        "q": "政府提出以公共安全為由限制特定自由。憲政法治下最需要檢查什麼？",
+        "correct": "限制是否有法律依據、正當目的及必要比例",
+        "wrong": [
+          "只要宣稱安全就不需任何審查",
+          "只需檢查政策口號是否順耳",
+          "任何權利限制都完全不可能存在"
+        ],
+        "exp": "權利限制應受法定及比例原則拘束。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中一年級-基本人權",
+        "template_id": "extra-2026-civ1-基本人權-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-基本人權-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用基本人權概念",
+      "question": {
+        "q": "某新聞說「人權只屬於納稅多的人」。這與人權概念最大的衝突是？",
+        "correct": "基本權利不應依個人財富多寡決定是否受到保障",
+        "wrong": [
+          "納稅額可用於討論財政負擔",
+          "所得資料可作公共政策分析",
+          "政府需依法徵收稅款"
+        ],
+        "exp": "基本人權以人格尊嚴及平等保障為核心，不是財產獎賞。",
+        "subject": "公民",
+        "sub_topic": "基本人權",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中一年級-基本人權",
+        "template_id": "extra-2026-civ1-基本人權-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

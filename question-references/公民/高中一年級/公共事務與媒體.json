@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-公共事務與媒體-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公共事務與媒體概念",
+      "question": {
+        "q": "某地方新聞只採訪支持開發案的業者，未說明居民及環境資料。這種報導主要缺少什麼？",
+        "correct": "對不同利害關係人與可核實證據的平衡呈現",
+        "wrong": [
+          "報導只要引用業者就必定全部造假",
+          "新聞不需要任何可查證資料",
+          "只需增加標題字數就能改善公共討論"
+        ],
+        "exp": "公共議題報導應交代利益差異與證據。",
+        "subject": "公民",
+        "sub_topic": "公共事務與媒體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公共事務與媒體",
+        "template_id": "extra-2026-civ1-公共事務與媒體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公共事務與媒體-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公共事務與媒體概念",
+      "question": {
+        "q": "某報導將評論文字以新聞事實形式呈現，卻未標示其立場。讀者應如何辨識？",
+        "correct": "區分已查證事件、推論與價值評論",
+        "wrong": [
+          "只要有媒體標誌就一律視為中立事實",
+          "評論不可能使用任何真實資料",
+          "新聞標題可以代替全部來源查核"
+        ],
+        "exp": "公共資訊需分清事實陳述與意見表達。",
+        "subject": "公民",
+        "sub_topic": "公共事務與媒體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公共事務與媒體",
+        "template_id": "extra-2026-civ1-公共事務與媒體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-公共事務與媒體-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用公共事務與媒體概念",
+      "question": {
+        "q": "市府發表交通改革統計，但媒體只展示有利的一個月份數字。哪種補充最能改善判讀？",
+        "correct": "提供較長時段、統計定義與可能的比較基準",
+        "wrong": [
+          "只放大原本數字字體",
+          "只看哪家媒體轉發最多",
+          "省略時間以免產生爭議"
+        ],
+        "exp": "單一切片可能造成偏差，時序及口徑有助理解趨勢。",
+        "subject": "公民",
+        "sub_topic": "公共事務與媒體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-公共事務與媒體",
+        "template_id": "extra-2026-civ1-公共事務與媒體-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

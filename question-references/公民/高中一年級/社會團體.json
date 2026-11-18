@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-社會團體-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用社會團體概念",
+      "question": {
+        "q": "居民為改善社區噪音而成立自治協會，定期收集意見並與政府協商。這種組織最主要體現什麼？",
+        "correct": "居民藉組織集體表達共同需求",
+        "wrong": [
+          "只能由政府機關設立的行政單位",
+          "成立協會就可不受任何法律拘束",
+          "社區問題只能由單一居民決定"
+        ],
+        "exp": "社會團體可集合成員資源與意見，促進公共參與。",
+        "subject": "公民",
+        "sub_topic": "社會團體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會團體",
+        "template_id": "extra-2026-civ1-社會團體-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-社會團體-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用社會團體概念",
+      "question": {
+        "q": "某志工團體提供免費課後陪伴，另一企業以販售課程為主要業務。比較組織時最該看什麼？",
+        "correct": "組織目的、資源來源與服務方式",
+        "wrong": [
+          "辦公室面積大小即可決定公共價值",
+          "收取費用就永遠不能提供教育服務",
+          "沒有費用便一定不需管理資源"
+        ],
+        "exp": "非營利與營利組織可有不同使命與運作方式。",
+        "subject": "公民",
+        "sub_topic": "社會團體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會團體",
+        "template_id": "extra-2026-civ1-社會團體-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-社會團體-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用社會團體概念",
+      "question": {
+        "q": "某協會的理事會未公開經費使用，會員要求檢視帳目。這最涉及哪種組織治理原則？",
+        "correct": "內部透明與對會員負責的機制",
+        "wrong": [
+          "理事可永久不受成員監督",
+          "只要參與公益就不必記帳",
+          "會員不得詢問任何資源用途"
+        ],
+        "exp": "社會團體亦需健全治理與財務問責。",
+        "subject": "公民",
+        "sub_topic": "社會團體",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-1",
+            "name": "個人與社會"
+          }
+        ],
+        "concept_id": "civics-高中一年級-社會團體",
+        "template_id": "extra-2026-civ1-社會團體-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

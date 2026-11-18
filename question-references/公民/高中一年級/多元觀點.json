@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-多元觀點-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用多元觀點概念",
+      "question": {
+        "q": "某市規畫新公園，家長重視遊具，長者重視無障礙動線。哪個方案最符合多元觀點分析？",
+        "correct": "蒐集各群體需求並評估空間與預算取捨",
+        "wrong": [
+          "只讓聲音最大的群體取得全部空間",
+          "把不同需求視為完全不可討論",
+          "只看其中一方需求便宣布各方皆滿意"
+        ],
+        "exp": "不同立場可能有合理需求，需辨識衝突與共同目標。",
+        "subject": "公民",
+        "sub_topic": "多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-多元觀點",
+        "template_id": "extra-2026-civ1-多元觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-多元觀點-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用多元觀點概念",
+      "question": {
+        "q": "兩家媒體對同一能源政策做不同評價，但使用的成本估計基準不同。讀者應先確認什麼？",
+        "correct": "比較各自的假設、資料來源與評估指標",
+        "wrong": [
+          "只看標題是否出現相同字",
+          "將媒體立場直接當成計算正確性",
+          "因結論不同便認定兩者都無資料依據"
+        ],
+        "exp": "不同前提可能產生不同結論，需要區分事實和價值選擇。",
+        "subject": "公民",
+        "sub_topic": "多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-多元觀點",
+        "template_id": "extra-2026-civ1-多元觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-多元觀點-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用多元觀點概念",
+      "question": {
+        "q": "討論公共住宅時，居民、政府和租屋族提出不同意見。哪種結論較能避免以偏概全？",
+        "correct": "各方利益與負擔可能不同，應在共同資料下比較政策方案",
+        "wrong": [
+          "某一群體的經驗必定代表全市",
+          "只要政府提出就不會有分配問題",
+          "不同意見代表公共議題無法研究"
+        ],
+        "exp": "多元觀點要求辨識不同位置及理由，不代表無法用證據決策。",
+        "subject": "公民",
+        "sub_topic": "多元觀點",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中一年級-多元觀點",
+        "template_id": "extra-2026-civ1-多元觀點-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

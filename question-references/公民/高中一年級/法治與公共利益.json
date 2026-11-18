@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ1-法治與公共利益-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用法治與公共利益概念",
+      "question": {
+        "q": "地方機關因民眾抗議而直接對某店家開罰，卻找不到法律依據。最主要的法治問題是？",
+        "correct": "公權力處罰必須有法定依據與適當程序",
+        "wrong": [
+          "有抗議就能取代所有法律",
+          "只要官員主觀認為不公平即可罰款",
+          "任何私人店家都不得受法律規範"
+        ],
+        "exp": "法律保留與正當程序用以防止恣意處分。",
+        "subject": "公民",
+        "sub_topic": "法治與公共利益",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中一年級-法治與公共利益",
+        "template_id": "extra-2026-civ1-法治與公共利益-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-法治與公共利益-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用法治與公共利益概念",
+      "question": {
+        "q": "某公共設施改善交通，但將大量噪音集中在少數住宅區。評估方案最應考量什麼？",
+        "correct": "整體公共利益及對特定群體造成的負擔與補救",
+        "wrong": [
+          "只計算工程完工日期",
+          "只因受影響居民較少就忽略其權益",
+          "只考量政府宣傳的便利性"
+        ],
+        "exp": "公共利益不能只算總效益，還要考量公平與比例。",
+        "subject": "公民",
+        "sub_topic": "法治與公共利益",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中一年級-法治與公共利益",
+        "template_id": "extra-2026-civ1-法治與公共利益-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ1-法治與公共利益-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以生活或政策情境應用法治與公共利益概念",
+      "question": {
+        "q": "某條新規則只要求某社區居民遵守，未提出合理差別原因。從法律平等原則應如何分析？",
+        "correct": "檢查差別待遇是否具正當理由及合理關聯",
+        "wrong": [
+          "任何不同規範都必然完全違法",
+          "政府只要說明行政便利就不需再審查",
+          "社區居民人數少就不享法律保障"
+        ],
+        "exp": "平等原則要求差別待遇有合理且相關的基礎。",
+        "subject": "公民",
+        "sub_topic": "法治與公共利益",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中一年級-法治與公共利益",
+        "template_id": "extra-2026-civ1-法治與公共利益-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
