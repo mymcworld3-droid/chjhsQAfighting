@@ -86,8 +86,20 @@ async function main(){
       await context.addInitScript(name=>sessionStorage.mockUid=name,uid);
       const page=await context.newPage();
       page.on('pageerror',e=>errors.push(uid+': '+e.message));
+      page.on('response',response=>{
+        if(response.status()>=400&&/\\.js(?:[?#]|$)/.test(response.url()))
+          errors.push(uid+': HTTP '+response.status()+' '+response.url());
+      });
       await page.goto('http://127.0.0.1:'+server.address().port+'/dungeon-test.html');
-      await page.locator('#home-dungeon-entry').waitFor();
+      try{
+        await page.locator('#home-dungeon-entry').waitFor({timeout:8000});
+      }catch(error){
+        console.error('[Dungeon preview startup]',uid,errors,await page.evaluate(()=>({
+          state:document.readyState,host:!!document.querySelector('#page-home .xiuxian-quick-actions'),
+          links:[...document.querySelectorAll('script')].map(node=>node.src)
+        })));
+        throw error;
+      }
       await page.locator('#home-dungeon-entry').click();
       return {page,context};
     }
