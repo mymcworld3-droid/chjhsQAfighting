@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-2-政經社會互動-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：政經社會互動",
+      "question": {
+        "q": "某國提高糧食關稅後城市麵包價格上漲，居民隨即發起請願。這說明哪個歷史關係？",
+        "correct": "經濟政策影響生活成本，可能引起政治動員",
+        "wrong": [
+          "關稅完全不影響任何商品售價",
+          "價格變化只能由宗教改革造成",
+          "民眾抗議不可能與生活壓力有關"
+        ],
+        "exp": "稅負與物價可能改變生活條件，促使民眾透過政治途徑表達訴求。",
+        "subject": "歷史",
+        "sub_topic": "政經社會互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-政經社會互動",
+        "template_id": "ext-2026-history-2-政經社會互動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-政經社會互動-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：政經社會互動",
+      "question": {
+        "q": "十九世紀工業區頻繁發生工安事故，工會組織請願，國會因而討論勞動法。這最能反映何種變遷？",
+        "correct": "產業制度改變、社會運動與立法相互影響",
+        "wrong": [
+          "工廠成立後勞資關係必定不再有衝突",
+          "社會團體完全無法影響政策",
+          "國會討論法律就代表事故已全部消失"
+        ],
+        "exp": "工業化問題可形成集體行動並推動政府回應，但討論法案不等於問題立即解決。",
+        "subject": "歷史",
+        "sub_topic": "政經社會互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-政經社會互動",
+        "template_id": "ext-2026-history-2-政經社會互動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-政經社會互動-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：政經社會互動",
+      "question": {
+        "q": "研究經濟衰退後政府擴大失業救濟的背景，下列哪組證據最適合探討政策形成？",
+        "correct": "失業統計、議會辯論、社會團體訴求及政策時序",
+        "wrong": [
+          "僅比較執政黨標誌顏色",
+          "只看經濟衰退前某一天的物價",
+          "只讀一則沒有日期的傳聞就判定所有決策原因"
+        ],
+        "exp": "政策形成需綜合經濟壓力與政治討論的時間序列，避免單因解釋。",
+        "subject": "歷史",
+        "sub_topic": "政經社會互動",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-政經社會互動",
+        "template_id": "ext-2026-history-2-政經社會互動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-2-帝國與殖民-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：帝國與殖民",
+      "question": {
+        "q": "殖民政府以新土地法登記地權，卻未承認原住社群的共有耕作地。這會造成哪種衝擊？",
+        "correct": "部分傳統土地使用權可能喪失",
+        "wrong": [
+          "各社群立即取得完全相同面積的土地",
+          "殖民統治因土地登記而自動終止",
+          "所有村民的耕地完全不受法制變動影響"
+        ],
+        "exp": "殖民地產權制度可能與傳統土地制度衝突，導致資源權利重分配。",
+        "subject": "歷史",
+        "sub_topic": "帝國與殖民",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-帝國與殖民",
+        "template_id": "ext-2026-history-2-帝國與殖民-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-帝國與殖民-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：帝國與殖民",
+      "question": {
+        "q": "某殖民地主要出口單一經濟作物，日常糧食仰賴進口。這種結構最值得擔憂什麼？",
+        "correct": "國際作物價格與糧食供應波動的風險",
+        "wrong": [
+          "外部市場對當地經濟完全沒有影響",
+          "單一作物能自動滿足所有居民的糧食需求",
+          "只要出口增加，任何家庭的生活都必然改善"
+        ],
+        "exp": "出口單一化與糧食依賴會增加市場與運輸中斷的脆弱性。",
+        "subject": "歷史",
+        "sub_topic": "帝國與殖民",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-帝國與殖民",
+        "template_id": "ext-2026-history-2-帝國與殖民-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-帝國與殖民-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：帝國與殖民",
+      "question": {
+        "q": "兩殖民地均興建鐵路，一地連接礦區與港口，另一地連接多座市鎮。比較其殖民政策時最合理的作法是？",
+        "correct": "分析路線及貨流，判斷交通網主要服務何種經濟與治理目標",
+        "wrong": [
+          "僅比較鐵路是否存在就判定政策相同",
+          "一律假設鐵路只為當地居民通勤",
+          "有鐵路就證明殖民地居民享有完全相同的政治權利"
+        ],
+        "exp": "建設可能同時有地方效益與殖民開採目的，須看路線、輸送內容與管理方式。",
+        "subject": "歷史",
+        "sub_topic": "帝國與殖民",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-帝國與殖民",
+        "template_id": "ext-2026-history-2-帝國與殖民-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

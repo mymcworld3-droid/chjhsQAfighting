@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-history-2-現代化的不同路徑-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：現代化的不同路徑",
+      "question": {
+        "q": "甲國靠政府投資國營工廠，乙國以民間資本發展產業。這最能說明近代工業化的什麼特性？",
+        "correct": "可以由不同國家與市場力量組合推動",
+        "wrong": [
+          "只有自由市場投資才符合現代化",
+          "國家出資必定使工業技術停止進步",
+          "兩國工業化必定形成相同政治制度"
+        ],
+        "exp": "國家政策與私人資本可能在不同國家扮演不同角色，現代化不只有單一路徑。",
+        "subject": "歷史",
+        "sub_topic": "現代化的不同路徑",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-現代化的不同路徑",
+        "template_id": "ext-2026-history-2-現代化的不同路徑-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-現代化的不同路徑-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：現代化的不同路徑",
+      "question": {
+        "q": "某國引入西式學校制度後，仍維持地方語言與傳統節慶。哪個解釋最合理？",
+        "correct": "制度變革不必然等於原有文化被完全取代",
+        "wrong": [
+          "成立現代學校必定消滅所有傳統",
+          "保留節慶代表從未引入新教育制度",
+          "語言與教育制度不可能有任何互動"
+        ],
+        "exp": "社會可能有選擇地吸收新制度，也保留並改造傳統文化。",
+        "subject": "歷史",
+        "sub_topic": "現代化的不同路徑",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-現代化的不同路徑",
+        "template_id": "ext-2026-history-2-現代化的不同路徑-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-history-2-現代化的不同路徑-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "歷史情境分析：現代化的不同路徑",
+      "question": {
+        "q": "只以鐵路里程判定一個國家的現代化程度，而不考慮教育、醫療與政治參與。這項比較有何缺陷？",
+        "correct": "單一基礎建設指標無法涵蓋現代化的多面向",
+        "wrong": [
+          "鐵路里程必然等於國民的識字率",
+          "鐵路越長就能直接證明人人有選舉權",
+          "現代化完全不涉及公共衛生或教育"
+        ],
+        "exp": "現代化涉及經濟、社會與制度多層面，應採多指標比較。",
+        "subject": "歷史",
+        "sub_topic": "現代化的不同路徑",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中二年級-現代化的不同路徑",
+        "template_id": "ext-2026-history-2-現代化的不同路徑-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
