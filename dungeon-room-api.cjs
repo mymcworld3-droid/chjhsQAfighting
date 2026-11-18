@@ -31,6 +31,7 @@ const publicRoom=(roomId,room)=>({
   id:roomId,mode:'dungeon',version:room.version,revision:room.revision,
   status:room.status,visibility:room.visibility==='public'?'public':'private',code:room.code,
   hostUid:room.hostUid,createdAtMs:room.createdAtMs,
+  assembledAtMs:room.assembledAtMs||0,
   expiresAtMs:room.expiresAtMs,maxMembers:MAX_MEMBERS,
   members:membersOf(room)
 });
