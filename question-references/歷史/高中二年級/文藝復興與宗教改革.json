@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-文藝復興與宗教改革-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：文藝復興與宗教改革，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某畫家以透視法描繪城市街道，並研究人體比例。這種創作最能反映文藝復興哪種趨向？",
+        "correct": "重視人文觀察與古典藝術技法的再探索",
+        "wrong": [
+          "全面放棄任何宗教題材",
+          "反對一切自然觀察與數學知識",
+          "將藝術創作完全交由工廠機器"
+        ],
+        "exp": "透視與人體研究凸顯人文及自然觀察，但文藝復興藝術仍可能有宗教主題。",
+        "subject": "歷史",
+        "sub_topic": "文藝復興與宗教改革",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-文藝復興與宗教改革",
+        "template_id": "extra-20261118-history-2-文藝復興與宗教改革-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-文藝復興與宗教改革-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：文藝復興與宗教改革，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某信徒主張信仰權威應重視《聖經》而非只能依教會高層解釋，並使用本地語言閱讀譯本。這與何種運動較相關？",
+        "correct": "宗教改革及信仰權威的重新界定",
+        "wrong": [
+          "拿破崙法典的民事制度改革",
+          "十九世紀勞工運動",
+          "冷戰時期軍備競賽"
+        ],
+        "exp": "宗教改革強調經文、信仰與教會權威關係，也推動俗語譯本流通。",
+        "subject": "歷史",
+        "sub_topic": "文藝復興與宗教改革",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-文藝復興與宗教改革",
+        "template_id": "extra-20261118-history-2-文藝復興與宗教改革-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-文藝復興與宗教改革-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：文藝復興與宗教改革，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "印刷術普及後，宗教論戰的小冊可快速跨城傳播。這對宗教改革的影響最合理為何？",
+        "correct": "加速改革論述及反對意見的擴散",
+        "wrong": [
+          "保證所有歐洲人立即改信同一教派",
+          "讓教會從此無法進行任何回應",
+          "使手抄文書在一夜間全面消失"
+        ],
+        "exp": "印刷網絡降低觀點傳播成本，但不會自動消除各地的宗教差異。",
+        "subject": "歷史",
+        "sub_topic": "文藝復興與宗教改革",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-文藝復興與宗教改革",
+        "template_id": "extra-20261118-history-2-文藝復興與宗教改革-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-科學革命與啟蒙-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：科學革命與啟蒙，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某思想家主張政府權力須由法律限制，且立法、行政與司法互相制衡。這最接近哪種啟蒙政治思路？",
+        "correct": "以分權防止權力集中與濫用",
+        "wrong": [
+          "以神授權力取消所有議會",
+          "由單一君主兼任全部權力機關",
+          "以世襲身分決定自然科學定律"
+        ],
+        "exp": "分權制衡強調制度性限制公權力，與專制集中權力相反。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-科學革命與啟蒙",
+        "template_id": "extra-20261118-history-2-科學革命與啟蒙-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-科學革命與啟蒙-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：科學革命與啟蒙，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "一所學院要求學生先提出可重複檢驗的證據，再修正既有自然理論。此做法最能反映科學革命的哪項精神？",
+        "correct": "透過觀察與實驗檢驗假說",
+        "wrong": [
+          "所有傳統權威不需接受檢驗",
+          "理論只由作者的貴族身分決定",
+          "只靠單一傳聞即可證成普遍定律"
+        ],
+        "exp": "可重複觀測與實驗是近代科學方法的重要基礎。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-科學革命與啟蒙",
+        "template_id": "extra-20261118-history-2-科學革命與啟蒙-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-科學革命與啟蒙-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：科學革命與啟蒙，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某報紙主張公共政策應容許人民公開討論，而非完全依賴君主個人意願。若分析其思想背景，何者最適當？",
+        "correct": "啟蒙時期對理性辯論與公共領域的重視",
+        "wrong": [
+          "歐洲封建領主只依血緣取得封地",
+          "中古修道院拒絕任何文字抄寫",
+          "工業革命全面消除社會階級"
+        ],
+        "exp": "公共辯論與理性討論是啟蒙思潮重要面向，並非經濟成長的必然結果。",
+        "subject": "歷史",
+        "sub_topic": "科學革命與啟蒙",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-科學革命與啟蒙",
+        "template_id": "extra-20261118-history-2-科學革命與啟蒙-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

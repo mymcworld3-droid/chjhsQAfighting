@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-冷戰、全球化與當代世界-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：冷戰、全球化與當代世界，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某小國在冷戰時同時向美、蘇尋求援助，避免完全依附單一陣營。其策略最接近何種外交取向？",
+        "correct": "在兩大陣營間維持自主與談判空間",
+        "wrong": [
+          "自動加入華沙公約組織",
+          "宣稱冷戰沒有任何兩極競爭",
+          "建立中世紀十字軍同盟"
+        ],
+        "exp": "部分國家試圖維持不結盟或策略自主，以減少受超級強權控制。",
+        "subject": "歷史",
+        "sub_topic": "冷戰、全球化與當代世界",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-冷戰、全球化與當代世界",
+        "template_id": "extra-20261118-history-2-冷戰、全球化與當代世界-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-冷戰、全球化與當代世界-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：冷戰、全球化與當代世界，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某跨國企業將設計、零件生產與組裝分散於三洲。此安排最直接體現全球化的哪項特徵？",
+        "correct": "跨國供應鏈與生產分工深化",
+        "wrong": [
+          "商品只能在單一國內完成所有流程",
+          "所有區域的工資與法律必定相同",
+          "各國自此完全不受貿易政策影響"
+        ],
+        "exp": "全球分工讓不同地區承擔不同生產環節，但並不消除制度差異。",
+        "subject": "歷史",
+        "sub_topic": "冷戰、全球化與當代世界",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-冷戰、全球化與當代世界",
+        "template_id": "extra-20261118-history-2-冷戰、全球化與當代世界-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-冷戰、全球化與當代世界-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：冷戰、全球化與當代世界，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "冷戰結束後某國仍面臨族群衝突與跨國經濟風險。這提醒研究者不能如何簡化歷史？",
+        "correct": "不能把兩極對抗結束等同全球所有衝突消失",
+        "wrong": [
+          "不能研究冷戰時期的代理戰爭",
+          "不能認為冷戰曾影響外交政策",
+          "不能以不同資料比較國際局勢"
+        ],
+        "exp": "冷戰結束改變國際權力結構，但族群與經濟問題仍可能存在。",
+        "subject": "歷史",
+        "sub_topic": "冷戰、全球化與當代世界",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-6",
+            "name": "世界現代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-冷戰、全球化與當代世界",
+        "template_id": "extra-20261118-history-2-冷戰、全球化與當代世界-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

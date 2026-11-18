@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-宗教與社會-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：宗教與社會，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某中世紀歐洲城市的行會規定重要節慶停止營業，並由教會主持公共活動。這最能說明當時宗教的哪種作用？",
+        "correct": "宗教規範深入地方共同生活與時間安排",
+        "wrong": [
+          "宗教只影響個人私下祈禱",
+          "城市行會完全取代宗教組織",
+          "歐洲各地已全面實施政教分離"
+        ],
+        "exp": "節慶、公共活動與營業規範均受到宗教影響，說明教會不只處理私人信仰。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-宗教與社會",
+        "template_id": "extra-20261118-history-2-宗教與社會-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-宗教與社會-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：宗教與社會，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某王國君主與教宗為主教任命權長期爭執。這項衝突主要涉及哪個歷史問題？",
+        "correct": "世俗王權與教會權威的界線",
+        "wrong": [
+          "新航路開闢後的殖民關稅",
+          "民族國家間的貨幣匯率",
+          "工廠工時與勞資談判"
+        ],
+        "exp": "主教任命權之爭反映政教權力互相競逐，而非近代經貿問題。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-宗教與社會",
+        "template_id": "extra-20261118-history-2-宗教與社會-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-宗教與社會-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：宗教與社會，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "研究者發現中世紀修道院留下大量抄寫書籍與農地契約。依此材料，對修道院角色的推論何者合理？",
+        "correct": "兼具文化保存與地方經濟活動的功能",
+        "wrong": [
+          "只從事神學討論而不參與地方生活",
+          "已取代所有王國的司法與行政",
+          "其抄寫活動證明當時印刷術普及"
+        ],
+        "exp": "書籍與土地契約分別反映知識保存及資產管理，不能無限推論其權限。",
+        "subject": "歷史",
+        "sub_topic": "宗教與社會",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-宗教與社會",
+        "template_id": "extra-20261118-history-2-宗教與社會-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

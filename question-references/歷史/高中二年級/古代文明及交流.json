@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-古代文明及交流-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：古代文明及交流，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "考古學者在古代兩河流域遺址發現記載糧食數量的泥板。最合理的社會推論是？",
+        "correct": "行政與交易已需要較有系統的記錄方式",
+        "wrong": [
+          "所有居民必定都能閱讀文字",
+          "當時已使用現代電子支付",
+          "文字僅用於娛樂而無行政需求"
+        ],
+        "exp": "糧食紀錄反映財物與行政管理需求，不等於人人識字。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "extra-20261118-history-2-古代文明及交流-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-古代文明及交流-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：古代文明及交流，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某古代港口同時出土當地陶器與來自遠方的玻璃製品。若要推論文化交流，最審慎的作法是？",
+        "correct": "結合物件年代、產地與其他貿易證據確認往來",
+        "wrong": [
+          "只憑一件器物就認定兩地曾建立同一帝國",
+          "認定所有外來物都由當地獨立發明",
+          "因物件產地不同就否定交流可能"
+        ],
+        "exp": "異地物件可提示交易或轉手流通，需其他證據界定方式與規模。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "extra-20261118-history-2-古代文明及交流-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-古代文明及交流-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：古代文明及交流，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "古埃及與兩河流域都發展灌溉及行政組織，兩者河川條件又不完全相同。比較時最合理的問題意識是？",
+        "correct": "自然環境與政治組織如何相互影響",
+        "wrong": [
+          "兩地必定由同一位國王統治",
+          "只要有河流就一定形成相同制度",
+          "考古遺址的年代完全不重要"
+        ],
+        "exp": "比較共同因素與環境差異，才能討論文明發展的多樣路徑。",
+        "subject": "歷史",
+        "sub_topic": "古代文明及交流",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-古代文明及交流",
+        "template_id": "extra-20261118-history-2-古代文明及交流-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

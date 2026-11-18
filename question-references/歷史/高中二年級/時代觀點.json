@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-時代觀點-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：時代觀點，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "研究者比較殖民官員與被統治者對同一政策的描述，發現價值判斷相反。如何解釋最合理？",
+        "correct": "各自所處的權力位置與經驗可能影響評價",
+        "wrong": [
+          "只有官員具有任何歷史記憶",
+          "描述不同必定表示其中一份完全不存在",
+          "研究者應只保留自己喜歡的看法"
+        ],
+        "exp": "歷史敘述受到立場與社會處境影響，宜比對證據理解差異。",
+        "subject": "歷史",
+        "sub_topic": "時代觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-時代觀點",
+        "template_id": "extra-20261118-history-2-時代觀點-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-時代觀點-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：時代觀點，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "今日認為不合理的法律，在過去卻受到多數統治者支持。史家如何避免以今論古？",
+        "correct": "先理解當時制度、思想與社會條件，再進行有根據的評價",
+        "wrong": [
+          "認為過去所有行為都因年代不同而無需研究",
+          "只用現代法律名稱代替歷史分析",
+          "假定古人都擁有今日相同的資訊與選擇"
+        ],
+        "exp": "歷史脈絡有助理解行動者的選擇範圍，不代表不能做批判。",
+        "subject": "歷史",
+        "sub_topic": "時代觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-時代觀點",
+        "template_id": "extra-20261118-history-2-時代觀點-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-時代觀點-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：時代觀點，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某史書作者多年後才記錄自己青年時的政治運動。研究者應優先留意什麼？",
+        "correct": "回憶可能受到後來事件與立場的影響",
+        "wrong": [
+          "回憶因時間久遠就必定完全真實",
+          "當事人不可能記錯時間或細節",
+          "個人回憶與歷史研究沒有任何價值"
+        ],
+        "exp": "事後回憶有經驗價值，但應與同期材料比對以降低記憶偏差。",
+        "subject": "歷史",
+        "sub_topic": "時代觀點",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-時代觀點",
+        "template_id": "extra-20261118-history-2-時代觀點-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

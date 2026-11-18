@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-工業革命與帝國主義-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：工業革命與帝國主義，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某工業城市十九世紀人口迅速增加，工廠附近出現擁擠住宅與污水問題。這最能說明工業化伴隨何種挑戰？",
+        "correct": "都市化與公共衛生及住宅問題",
+        "wrong": [
+          "所有工人都立刻擁有相同高收入",
+          "工業化使城市人口必然減少",
+          "工廠出現後不再需要任何交通網絡"
+        ],
+        "exp": "工業就業集中促進都市擴張，也造成居住與衛生壓力。",
+        "subject": "歷史",
+        "sub_topic": "工業革命與帝國主義",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-工業革命與帝國主義",
+        "template_id": "extra-20261118-history-2-工業革命與帝國主義-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-工業革命與帝國主義-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：工業革命與帝國主義，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某列強先要求海外港口開放貿易，再取得駐軍與行政特權。從帝國主義角度看，這反映何種擴張方式？",
+        "correct": "經濟利益與政治、軍事控制相互結合",
+        "wrong": [
+          "完全尊重當地的政治自主且不涉權力",
+          "只有宗教交流而沒有經濟考量",
+          "所有擴張都必須先建立民主議會"
+        ],
+        "exp": "近代帝國主義常把商業利益與不平等條約、軍事優勢結合。",
+        "subject": "歷史",
+        "sub_topic": "工業革命與帝國主義",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-工業革命與帝國主義",
+        "template_id": "extra-20261118-history-2-工業革命與帝國主義-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-工業革命與帝國主義-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：工業革命與帝國主義，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "比較殖民地鐵路與港口建設時，何種判斷最適當？",
+        "correct": "須同時評估交通改善與是否優先服務資源輸出",
+        "wrong": [
+          "只要修了鐵路就代表殖民地完全自主",
+          "殖民統治永遠不會改變當地經濟結構",
+          "所有港口建設只為當地居民通勤"
+        ],
+        "exp": "殖民交通建設可能帶來基礎設施，也可能以資源輸出為主要目標。",
+        "subject": "歷史",
+        "sub_topic": "工業革命與帝國主義",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-5",
+            "name": "世界近代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-工業革命與帝國主義",
+        "template_id": "extra-20261118-history-2-工業革命與帝國主義-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

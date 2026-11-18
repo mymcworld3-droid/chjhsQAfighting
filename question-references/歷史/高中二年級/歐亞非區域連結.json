@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-歐亞非區域連結-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：歐亞非區域連結，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某東非港口遺址出土中國陶瓷、阿拉伯錢幣與當地器物。這最有助研究哪種歷史現象？",
+        "correct": "印度洋貿易網絡連接不同文化地區",
+        "wrong": [
+          "東非居民完全不生產自己的器物",
+          "當時所有貨物只靠歐洲鐵路運輸",
+          "三地長期使用同一語言與法律"
+        ],
+        "exp": "多地物品同見於港口，可作跨海交流及中介貿易線索。",
+        "subject": "歷史",
+        "sub_topic": "歐亞非區域連結",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-歐亞非區域連結",
+        "template_id": "extra-20261118-history-2-歐亞非區域連結-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-歐亞非區域連結-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：歐亞非區域連結，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "絲綢之路沿線城市常見多種宗教與語言。其最合理的原因是？",
+        "correct": "商旅與移民往來促進文化接觸",
+        "wrong": [
+          "所有城市都由單一宗教強制同化",
+          "商隊只運送貨物而絕無人員交流",
+          "東亞與西亞在古代完全沒有往來"
+        ],
+        "exp": "陸路貿易網絡不只流通商品，也帶動宗教、語言及技術傳播。",
+        "subject": "歷史",
+        "sub_topic": "歐亞非區域連結",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-歐亞非區域連結",
+        "template_id": "extra-20261118-history-2-歐亞非區域連結-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-歐亞非區域連結-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：歐亞非區域連結，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "若研究黑死病在歐亞傳播的路徑，哪種史料組合最有說服力？",
+        "correct": "港口貿易路線、地方疫病記錄及年代對照",
+        "wrong": [
+          "單一旅行者的未經核對傳言",
+          "只比較各國現代人口數",
+          "只看不同城市名字是否相近"
+        ],
+        "exp": "傳播路徑需結合接觸網絡與時間證據，不能靠單一材料判定。",
+        "subject": "歷史",
+        "sub_topic": "歐亞非區域連結",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-4",
+            "name": "世界古代史"
+          }
+        ],
+        "concept_id": "history-高中二年級-歐亞非區域連結",
+        "template_id": "extra-20261118-history-2-歐亞非區域連結-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

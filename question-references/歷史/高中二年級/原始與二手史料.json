@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-20261118-history-2-原始與二手史料-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：原始與二手史料，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某史家研究十九世紀工廠童工，取得當年工人日記與今日學者專書。何者為研究當年經驗的第一手材料？",
+        "correct": "當年工人留下的日記",
+        "wrong": [
+          "今日學者根據多份資料寫的專書",
+          "今日教科書的章節摘要",
+          "現代電影的劇情改編"
+        ],
+        "exp": "與事件同時期由經歷者記錄的日記屬原始史料，後人研究屬二手。",
+        "subject": "歷史",
+        "sub_topic": "原始與二手史料",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-原始與二手史料",
+        "template_id": "extra-20261118-history-2-原始與二手史料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-原始與二手史料-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：原始與二手史料，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "某殖民時期官員報告聲稱治理成效卓著，當地居民請願書卻記錄不同看法。史家應如何處理？",
+        "correct": "比較作者身分與目的，交叉檢驗兩種證詞",
+        "wrong": [
+          "將官方報告一律視為無需核實的真相",
+          "因觀點不同便把兩份資料全部丟棄",
+          "直接以資料篇幅長短決定可信度"
+        ],
+        "exp": "原始史料也可能有立場，需要脈絡化和互證。",
+        "subject": "歷史",
+        "sub_topic": "原始與二手史料",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-原始與二手史料",
+        "template_id": "extra-20261118-history-2-原始與二手史料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-20261118-history-2-原始與二手史料-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "情境應用與史學推理：原始與二手史料，避免僅擷取文章字面資訊",
+      "question": {
+        "q": "有人說「只要是原始史料就必然比二手研究可靠」。最適當的回應是？",
+        "correct": "原始史料有直接性，但仍需檢查偏見、保存及真偽",
+        "wrong": [
+          "所有二手研究必然捏造資料",
+          "原始史料不可能有作者立場",
+          "史料可靠度只能看它是否印在紙上"
+        ],
+        "exp": "史料類型不等於品質，二手研究亦可藉多重資料補充背景。",
+        "subject": "歷史",
+        "sub_topic": "原始與二手史料",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "history-高中二年級-原始與二手史料",
+        "template_id": "extra-20261118-history-2-原始與二手史料-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
