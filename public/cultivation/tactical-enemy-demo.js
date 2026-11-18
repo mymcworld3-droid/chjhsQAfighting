@@ -1,7 +1,7 @@
 import './tactical-rules.js?v=20261116-pve-v4';
 import './tactical-animation.js';
 import './tactical-demo-rules.js';
-import {TacticalRenderer} from './tactical-renderer.js?v=20261118-visual-phase3-v1';
+import {TacticalRenderer} from './tactical-renderer.js?v=20261118-phase5-telegraph-v1';
 
 // An isolated, read-only arena. This controller never calls the battle API.
 export class EnemyDemo{
