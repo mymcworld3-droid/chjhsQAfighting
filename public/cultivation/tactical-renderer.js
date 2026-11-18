@@ -67,6 +67,10 @@ export class TacticalRenderer{
     };
     this.onPointerMove=e=>{
       if(e.pointerType==='mouse'&&!this.touches.has(e.pointerId)){
+        const p=point(e),marker=Compass.pick(this.compassMarkers,p.x,p.y);
+        canvas.style.cursor=marker?'pointer':'';
+        if(marker)canvas.title='點選定位：'+marker.name;
+        else canvas.removeAttribute('title');
         const beast=this.beastAtClient(e.clientX,e.clientY),next=beast?.uid||null;
         if(next!==this.hoverUid){
           this.hoverUid=next;this.onInspect(next,'hover');
@@ -122,6 +126,7 @@ export class TacticalRenderer{
       this.requestDraw();
     };
     this.onPointerLeave=()=>{
+      canvas.style.cursor='';canvas.removeAttribute('title');
       if(this.hoverUid){this.hoverUid=null;this.onInspect(null,'hover');}
       if(!this.touches.size)this.setHoverPreview(null);
     };
