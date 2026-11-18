@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-失業與經濟成長-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用失業與經濟成長",
+      "question": {
+        "q": "某地景氣衰退、訂單減少，企業縮減人力。這類失業最接近哪種？",
+        "correct": "景氣循環性失業",
+        "wrong": [
+          "季節性失業必然與景氣無關",
+          "工作轉換間的摩擦性失業",
+          "特定技術被機器取代的結構性失業"
+        ],
+        "exp": "總需求下降導致僱用減少，是景氣循環失業的典型例子。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-失業與經濟成長",
+        "template_id": "extra-2026-civ2-失業與經濟成長-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-失業與經濟成長-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用失業與經濟成長",
+      "question": {
+        "q": "某產業改用自動化設備，部分工人技能不符新的職缺。這最接近哪種失業？",
+        "correct": "結構性失業",
+        "wrong": [
+          "因短暫求職轉換而失業",
+          "純由每年固定採收季節造成",
+          "因統計方式改變而毫無實際職缺問題"
+        ],
+        "exp": "技能與職位需求不相符反映結構調整。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-失業與經濟成長",
+        "template_id": "extra-2026-civ2-失業與經濟成長-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-失業與經濟成長-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用失業與經濟成長",
+      "question": {
+        "q": "某國GDP增加，但失業率並未明顯下降。應如何理解？",
+        "correct": "經濟成長與就業增加不一定同步，可能有生產力及產業結構因素",
+        "wrong": [
+          "GDP增加必定讓失業率當天歸零",
+          "失業率與就業人口定義完全無關",
+          "產業自動化不可能改變勞動需求"
+        ],
+        "exp": "總產出提高不必然同比增加職缺。",
+        "subject": "公民",
+        "sub_topic": "失業與經濟成長",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-失業與經濟成長",
+        "template_id": "extra-2026-civ2-失業與經濟成長-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

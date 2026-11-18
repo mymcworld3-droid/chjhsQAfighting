@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-全球化與永續-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用全球化與永續",
+      "question": {
+        "q": "跨國企業把製造移至低成本地區，當地就業增加但污染排放上升。最完整的政策分析是？",
+        "correct": "同時評估經濟利益、勞動條件與環境成本",
+        "wrong": [
+          "只看就業增加便推定沒有任何污染問題",
+          "只看污染便否定全部經濟活動",
+          "只依企業廣告推論所有居民受益"
+        ],
+        "exp": "全球化效果可能有取捨，需考量不同群體與外部性。",
+        "subject": "公民",
+        "sub_topic": "全球化與永續",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中二年級-全球化與永續",
+        "template_id": "extra-2026-civ2-全球化與永續-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-全球化與永續-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用全球化與永續",
+      "question": {
+        "q": "某城市採購低價進口產品，卻未查核供應鏈勞動條件。從永續治理角度最應補充什麼？",
+        "correct": "供應鏈透明度及社會責任的評估標準",
+        "wrong": [
+          "只要價格低就不需考量人權",
+          "進口商品必定不需要任何物流",
+          "所有企業聲明必然等於可驗證事實"
+        ],
+        "exp": "永續涵蓋環境與社會條件，採購可運用揭露與查證。",
+        "subject": "公民",
+        "sub_topic": "全球化與永續",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中二年級-全球化與永續",
+        "template_id": "extra-2026-civ2-全球化與永續-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-全球化與永續-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用全球化與永續",
+      "question": {
+        "q": "某氣候政策以降低總排放為目標，但低收入家庭能源支出比重上升。如何改善政策設計較合理？",
+        "correct": "兼顧減排與分配效果，提供適當配套並評估成效",
+        "wrong": [
+          "只看總排放而不分析家庭負擔",
+          "直接認定所有能源支出必然相同",
+          "因存在配套成本就完全放棄目標"
+        ],
+        "exp": "永續政策需平衡環境目標與社會公平。",
+        "subject": "公民",
+        "sub_topic": "全球化與永續",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中二年級-全球化與永續",
+        "template_id": "extra-2026-civ2-全球化與永續-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

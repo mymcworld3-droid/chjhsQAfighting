@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-匯率-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用匯率",
+      "question": {
+        "q": "某臺灣企業須支付1000美元，原匯率每美元30元新臺幣，後升至32元。所需新臺幣成本變化為何？",
+        "correct": "增加2000元",
+        "wrong": [
+          "減少2000元",
+          "增加32000元",
+          "完全不變"
+        ],
+        "exp": "原成本30000元，後成本32000元，相差2000元。",
+        "subject": "公民",
+        "sub_topic": "匯率",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civics-高中二年級-匯率",
+        "template_id": "extra-2026-civ2-匯率-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-匯率-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用匯率",
+      "question": {
+        "q": "新臺幣相對美元升值，其他條件相同時，臺灣廠商以美元收到相同金額貨款並換回新臺幣，收入通常如何？",
+        "correct": "換回的新臺幣金額較少",
+        "wrong": [
+          "換回的新臺幣金額增加",
+          "外幣金額自動增加兩倍",
+          "匯率與換匯收入完全無關"
+        ],
+        "exp": "本幣升值代表每美元可換得較少新臺幣。",
+        "subject": "公民",
+        "sub_topic": "匯率",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civics-高中二年級-匯率",
+        "template_id": "extra-2026-civ2-匯率-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-匯率-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用匯率",
+      "question": {
+        "q": "某進口商以美元購買商品，新臺幣貶值後，商品美元價格不變。哪項判斷較合理？",
+        "correct": "新臺幣計價的進口成本提高",
+        "wrong": [
+          "新臺幣成本必然降低",
+          "美元價格自動下降到零",
+          "匯率變動只影響出口不影響進口"
+        ],
+        "exp": "本幣貶值使購買相同外幣需要更多本幣。",
+        "subject": "公民",
+        "sub_topic": "匯率",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-7",
+            "name": "貨幣與金融"
+          }
+        ],
+        "concept_id": "civics-高中二年級-匯率",
+        "template_id": "extra-2026-civ2-匯率-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

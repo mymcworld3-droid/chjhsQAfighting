@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-論證與資料-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用論證與資料",
+      "question": {
+        "q": "一則新聞稱「新車道讓事故率下降」，卻只提供事故總數而未提供交通量。哪項補充最能改善推論？",
+        "correct": "增加每單位車流的事故率及合理對照期間",
+        "wrong": [
+          "只看道路顏色是否較亮",
+          "把總事故數直接視為所有路段的風險",
+          "因有新聞來源就不用檢查指標"
+        ],
+        "exp": "事故總數受車流規模影響，應比較適當分母。",
+        "subject": "公民",
+        "sub_topic": "論證與資料",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中二年級-論證與資料",
+        "template_id": "extra-2026-civ2-論證與資料-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-論證與資料-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用論證與資料",
+      "question": {
+        "q": "某民調顯示七成支持政策，但只有某個年齡群受訪。其主要限制是？",
+        "correct": "樣本可能不能代表所有受影響人口",
+        "wrong": [
+          "七成支持就能推論各年齡群都相同",
+          "只要問卷有百分比就等於普查",
+          "樣本組成與推論範圍完全無關"
+        ],
+        "exp": "抽樣偏差會影響調查結果的外推性。",
+        "subject": "公民",
+        "sub_topic": "論證與資料",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中二年級-論證與資料",
+        "template_id": "extra-2026-civ2-論證與資料-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-論證與資料-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用論證與資料",
+      "question": {
+        "q": "某分析以物價與犯罪率同步上升，直接推論物價導致犯罪。最需注意哪項問題？",
+        "correct": "相關變化不必然代表因果，可能有共同因素",
+        "wrong": [
+          "只要兩數上升就可排除其他原因",
+          "時間序列永遠不能用於政策研究",
+          "犯罪率只由價格決定"
+        ],
+        "exp": "因果判斷需要控制其他解釋並檢驗機制。",
+        "subject": "公民",
+        "sub_topic": "論證與資料",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-8",
+            "name": "公共議題與全球化"
+          }
+        ],
+        "concept_id": "civics-高中二年級-論證與資料",
+        "template_id": "extra-2026-civ2-論證與資料-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

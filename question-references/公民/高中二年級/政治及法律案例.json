@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-政治及法律案例-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用政治及法律案例",
+      "question": {
+        "q": "某公務員因私人情緒對符合法定資格者拒絕申請。從行政法治角度，主要問題是？",
+        "correct": "公權力不能恣意偏離法定要件與正當程序",
+        "wrong": [
+          "機關只要忙碌便可任意改變規則",
+          "行政決定完全不需說明理由",
+          "個人情緒可優先於法律授權"
+        ],
+        "exp": "行政行為須有合法目的及適當程序。",
+        "subject": "公民",
+        "sub_topic": "政治及法律案例",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-政治及法律案例",
+        "template_id": "extra-2026-civ2-政治及法律案例-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-政治及法律案例-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用政治及法律案例",
+      "question": {
+        "q": "某議員宣稱一項政策能降低事故，但沒有說明比較期間及資料來源。公民最該要求？",
+        "correct": "公開完整統計口徑與評估方法",
+        "wrong": [
+          "只要演說有掌聲就能確認成效",
+          "以支持者人數代替事故資料",
+          "不需區分政策前後的變化"
+        ],
+        "exp": "公共政策主張需要可核查的證據。",
+        "subject": "公民",
+        "sub_topic": "政治及法律案例",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-政治及法律案例",
+        "template_id": "extra-2026-civ2-政治及法律案例-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-政治及法律案例-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用政治及法律案例",
+      "question": {
+        "q": "網友因不滿商家服務，在社群公開店員私人醫療資料。評估其行為時應優先考量什麼？",
+        "correct": "言論表達與個資隱私等權利的界線",
+        "wrong": [
+          "只要不滿意就可公開任何私人資料",
+          "資訊來自朋友就自動取得公開權利",
+          "商業糾紛必定排除隱私保障"
+        ],
+        "exp": "公共批評仍應注意資料正當使用與他人權利。",
+        "subject": "公民",
+        "sub_topic": "政治及法律案例",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-政治及法律案例",
+        "template_id": "extra-2026-civ2-政治及法律案例-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

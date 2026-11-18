@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-政策形成與監督-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用政策形成與監督",
+      "question": {
+        "q": "某市府欲增加公車班次，先蒐集乘客數據、辦公聽會，再提出預算。此流程較接近哪個政策階段順序？",
+        "correct": "問題界定與資料蒐集後形成方案，再進入決策程序",
+        "wrong": [
+          "先宣布永久執行才開始確認有無需求",
+          "只依一人抱怨就不用調查",
+          "政策公布後所有成效必定已確定"
+        ],
+        "exp": "政策形成應有問題分析、方案比較及決策程序。",
+        "subject": "公民",
+        "sub_topic": "政策形成與監督",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中二年級-政策形成與監督",
+        "template_id": "extra-2026-civ2-政策形成與監督-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-政策形成與監督-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用政策形成與監督",
+      "question": {
+        "q": "一項道路改革實施半年，平均通勤時間變短但事故略增。監督者應如何評估？",
+        "correct": "同時檢查目標成效、副作用及資料品質",
+        "wrong": [
+          "只看通勤改善就忽略事故",
+          "只因事故增加就認定所有政策目標失效",
+          "政策推出後永遠不需檢討"
+        ],
+        "exp": "政策評估需衡量不同指標與可能外部效果。",
+        "subject": "公民",
+        "sub_topic": "政策形成與監督",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中二年級-政策形成與監督",
+        "template_id": "extra-2026-civ2-政策形成與監督-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-政策形成與監督-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用政策形成與監督",
+      "question": {
+        "q": "某政府採購案預算執行後，民意機關要求公開支出用途。這主要屬於哪種監督？",
+        "correct": "公共資源使用的透明與行政問責",
+        "wrong": [
+          "民意機關可以完全取消政府法律義務",
+          "採購完成後任何人不得追問",
+          "只看採購廠商的廣告就等於審計"
+        ],
+        "exp": "公共預算需可受監督與檢驗。",
+        "subject": "公民",
+        "sub_topic": "政策形成與監督",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中二年級-政策形成與監督",
+        "template_id": "extra-2026-civ2-政策形成與監督-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

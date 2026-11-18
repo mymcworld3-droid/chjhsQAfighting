@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-財政及貨幣政策-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用財政及貨幣政策",
+      "question": {
+        "q": "景氣低迷時政府擴大公共工程支出，主要使用哪種政策工具？",
+        "correct": "擴張性財政政策",
+        "wrong": [
+          "央行直接調整貨幣供給的唯一方式",
+          "所有企業私人投資計畫",
+          "只改變股票名稱"
+        ],
+        "exp": "政府支出屬財政政策工具，可能影響總需求。",
+        "subject": "公民",
+        "sub_topic": "財政及貨幣政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-財政及貨幣政策",
+        "template_id": "extra-2026-civ2-財政及貨幣政策-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-財政及貨幣政策-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用財政及貨幣政策",
+      "question": {
+        "q": "中央銀行為抑制通膨而提高政策利率，通常希望透過什麼機制影響經濟？",
+        "correct": "提高融資成本以降低部分借貸與需求壓力",
+        "wrong": [
+          "使所有商品立即固定降價",
+          "讓貨幣失去交易功能",
+          "直接代替國會編列全部政府預算"
+        ],
+        "exp": "利率改變影響信貸及需求，但效果具有時滯與差異。",
+        "subject": "公民",
+        "sub_topic": "財政及貨幣政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-財政及貨幣政策",
+        "template_id": "extra-2026-civ2-財政及貨幣政策-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-財政及貨幣政策-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用財政及貨幣政策",
+      "question": {
+        "q": "政府因經濟衰退減稅，若其他條件近似，對可支配所得的直接方向性影響是？",
+        "correct": "部分家戶可支配所得增加，可能提升消費能力",
+        "wrong": [
+          "每戶收入必定同時減少",
+          "減稅必然使物價在同一天歸零",
+          "政府稅收增加與否可不經估算確定"
+        ],
+        "exp": "減稅可能增加可支配所得，但財政與消費效果需進一步評估。",
+        "subject": "公民",
+        "sub_topic": "財政及貨幣政策",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-財政及貨幣政策",
+        "template_id": "extra-2026-civ2-財政及貨幣政策-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

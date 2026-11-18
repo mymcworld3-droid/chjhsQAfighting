@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-公平與正義-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用公平與正義",
+      "question": {
+        "q": "甲乙兩區人口相同，但甲區交通資源密集、乙區缺少基礎服務。討論公平分配時，哪項原則較適合？",
+        "correct": "同時考量需求差異、資源現況與改善效果",
+        "wrong": [
+          "一定按既有資源較多者繼續增加",
+          "人口相同代表所有公共需求必定一致",
+          "完全不必估計建設成本"
+        ],
+        "exp": "實質公平重視不同條件下的合理資源配置。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中二年級-公平與正義",
+        "template_id": "extra-2026-civ2-公平與正義-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-公平與正義-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用公平與正義",
+      "question": {
+        "q": "同一考試提供身心障礙考生必要的無障礙作答安排，並維持相同評分標準。這比較接近哪種平等觀念？",
+        "correct": "透過合理調整減少不利條件以達成實質機會公平",
+        "wrong": [
+          "只要安排不同就必然構成特權",
+          "應取消所有人的考試成績",
+          "無障礙措施不可能影響參與機會"
+        ],
+        "exp": "形式完全相同的程序不一定能提供實質公平機會。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中二年級-公平與正義",
+        "template_id": "extra-2026-civ2-公平與正義-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-公平與正義-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用公平與正義",
+      "question": {
+        "q": "某公司訂定獎金規則時，只看工時卻忽略照顧責任可能影響可加班時間。若檢視分配正義，應思考什麼？",
+        "correct": "獎酬標準及其對不同群體的影響是否合理",
+        "wrong": [
+          "工作時間是唯一可能的公平標準",
+          "只要有規則就完全不會造成間接差別",
+          "家庭責任與工作制度一定毫無關聯"
+        ],
+        "exp": "評估公平須考量制度標準及其後果。",
+        "subject": "公民",
+        "sub_topic": "公平與正義",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-4",
+            "name": "憲法與人權"
+          }
+        ],
+        "concept_id": "civics-高中二年級-公平與正義",
+        "template_id": "extra-2026-civ2-公平與正義-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

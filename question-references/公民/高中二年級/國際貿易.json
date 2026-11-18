@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-國際貿易-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用國際貿易",
+      "question": {
+        "q": "甲國生產一單位布需2小時、米需4小時；乙國布需6小時、米需6小時。哪項比較利益判斷正確？",
+        "correct": "甲國在布的機會成本較低，乙國在米的機會成本較低",
+        "wrong": [
+          "甲國兩產品都有絕對優勢所以不可能有比較利益分工",
+          "乙國在布的機會成本較低",
+          "兩國布的機會成本完全相同"
+        ],
+        "exp": "甲布機會成本為0.5米，乙布為1米，故比較利益分工甲布乙米。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國際貿易",
+        "template_id": "extra-2026-civ2-國際貿易-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-國際貿易-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用國際貿易",
+      "question": {
+        "q": "某國對進口鋼材加徵關稅，其他條件相同時，本地鋼價可能提高。誰可能面臨成本增加？",
+        "correct": "使用鋼材的本地製造業與消費者",
+        "wrong": [
+          "只有海外鋼材出口商，國內企業完全不受影響",
+          "所有本國企業成本都必然下降",
+          "關稅不可能改變商品價格"
+        ],
+        "exp": "關稅可影響投入成本與分配利益，需分別分析受益及受損群體。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國際貿易",
+        "template_id": "extra-2026-civ2-國際貿易-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-國際貿易-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以社會經濟政策情境應用國際貿易",
+      "question": {
+        "q": "某經濟體大量依賴單一外國零件供應商，供應鏈中斷後工廠停工。這主要反映什麼？",
+        "correct": "國際分工提高效率也可能帶來供應集中風險",
+        "wrong": [
+          "跨國貿易必定使供應鏈完全穩定",
+          "所有國內工廠都必須停止貿易",
+          "供應商所在國與物流沒有影響"
+        ],
+        "exp": "分工創造依賴關係，需要評估韌性與替代來源。",
+        "subject": "公民",
+        "sub_topic": "國際貿易",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國際貿易",
+        "template_id": "extra-2026-civ2-國際貿易-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
