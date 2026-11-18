@@ -275,7 +275,9 @@ async function updateLoadout(db,uid,input){
 async function upgradeManual(db,uid,input){
   const {bookId,targetLevel,expectedGold}=input||{};
   if(typeof bookId!=='string'||!Object.hasOwn(Manuals.BY_BOOK,bookId)||
-    !Number.isInteger(targetLevel)||targetLevel<2||targetLevel>Manuals.MAX_LEVEL)throw error('功法升級資料無效',400);
+    !Number.isInteger(targetLevel)||targetLevel<2)throw error('功法升級資料無效',400);
+  if(targetLevel>Manuals.MAX_GOLD_LEVEL)
+    throw error('功法 Lv. 10 之後只能透過 PvE 功法擊殺累積 EXP 升級',403);
   const userRef=db.collection('users').doc(uid),manualRef=db.collection(MANUALS).doc(uid);
   return db.runTransaction(async tx=>{
     const [userSnap,record]=await Promise.all([tx.get(userRef),tx.get(manualRef)]);
@@ -284,6 +286,7 @@ async function upgradeManual(db,uid,input){
     if(!book)throw error('尚未取得此功法',403);
     if(Manuals.levelForExp(book.exp)>=targetLevel)return manualResponse(state,user);
     const quote=Manuals.upgradeQuote(book.exp),gold=Rules.num(user.stats?.gold);
+    if(!quote)throw error('功法 Lv. 10 之後只能透過 PvE 功法擊殺累積 EXP 升級',403);
     if(quote.targetLevel!==targetLevel)throw error('請先提升至下一級');
     if(expectedGold!==quote.gold)throw error('升級費用已更新，請先同步功法',409);
     if(gold<quote.gold)throw error('靈石不足');
