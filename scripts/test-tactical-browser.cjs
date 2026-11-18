@@ -369,6 +369,79 @@ async function main(){
     await ratio(view);
   }
 
+  async function targetPreviewChecks(view){
+    const snapshot=await read(view),player=snapshot.actors.find(a=>a.uid==='u1');
+    assert.ok(player&&snapshot.mode==='pve','a real active PvE room is required');
+    const reachable=Rules.moveCells(snapshot,player).find(p=>
+      !(snapshot.objective?.hazards||[]).some(h=>h.x===p.x&&h.y===p.y));
+    assert.ok(reachable,'at least one legal movement target is needed');
+    await view.setViewportSize({width:393,height:852});
+    await view.locator('[data-action="move"]').click();
+    const position=async tile=>view.evaluate(({tile,width,height})=>{
+      const canvas=document.querySelector('#tactical-combat .tc-arena canvas');
+      const r=canvas.getBoundingClientRect();
+      const g=QATacticalCamera.geometry(QATacticalCamera.create(),r.width,r.height,
+        {x:0,y:0,width,height});
+      return {x:r.left+g.ox+(tile.x+.5)*g.cell,
+        y:r.top+g.oy+(tile.y+.5)*g.cell};
+    },{tile,width:snapshot.width,height:snapshot.height});
+    const target=await position(reachable);
+    const moveCost=Rules.path(snapshot,player,reachable,'u1').length-1;
+    await view.evaluate(p=>{
+      const canvas=document.querySelector('#tactical-combat .tc-arena canvas');
+      canvas.dispatchEvent(new PointerEvent('pointermove',{
+        pointerId:161,pointerType:'mouse',isPrimary:true,clientX:p.x,clientY:p.y,bubbles:true
+      }));
+    },target);
+    await view.waitForFunction(cost=>
+      document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewCost===String(cost),moveCost);
+    assert.equal(await view.locator('.tc-arena canvas').getAttribute('data-hover-preview-valid'),'true');
+    assert.equal((await read(view)).revision,snapshot.revision,
+      'mouse route preview does not execute movement');
+    await view.screenshot({path:path.join(output,'phase6-route-preview-portrait.png')});
+    // Holding a tile previews the same actual path. A subsequent synthetic
+    // click on release must not commit a move or spend stamina.
+    await view.evaluate(async p=>{
+      const c=document.querySelector('#tactical-combat .tc-arena canvas');
+      c.dispatchEvent(new PointerEvent('pointerleave',{pointerType:'mouse',bubbles:true}));
+      const pointer=type=>c.dispatchEvent(new PointerEvent(type,{
+        pointerId:162,pointerType:'touch',isPrimary:true,
+        clientX:p.x,clientY:p.y,bubbles:true,cancelable:true
+      }));
+      pointer('pointerdown');
+      await new Promise(resolve=>setTimeout(resolve,570));
+      pointer('pointerup');
+      c.dispatchEvent(new MouseEvent('click',{
+        clientX:p.x,clientY:p.y,bubbles:true,cancelable:true
+      }));
+    },target);
+    assert.equal(await view.locator('.tc-arena canvas').getAttribute('data-hover-preview-cost'),String(moveCost));
+    assert.equal((await read(view)).revision,snapshot.revision,
+      'touch preview does not trigger an automatic battle action');
+    assert.equal((await read(view)).actors[0].stamina,player.stamina);
+
+    await view.locator('[data-action="attack"]').click();
+    const attack=Rules.aimCells(snapshot,player,Rules.basicFor(player))[0];
+    assert.ok(attack,'there should be an available basic attack direction');
+    const pointer=await position(attack);
+    await view.evaluate(p=>{
+      const c=document.querySelector('#tactical-combat .tc-arena canvas');
+      c.dispatchEvent(new PointerEvent('pointermove',{
+        pointerId:163,pointerType:'mouse',isPrimary:true,
+        clientX:p.x,clientY:p.y,bubbles:true
+      }));
+    },pointer);
+    const visual=require('../public/cultivation/tactical-target-visuals.js');
+    const expectation=visual.derive(snapshot,'u1','attack',attack,Rules);
+    await view.waitForFunction(cost=>document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewCost===String(cost),expectation.cost);
+    assert.equal(await view.locator('.tc-arena canvas').getAttribute('data-hover-preview-targets'),String(expectation.affected.length));
+    await view.screenshot({path:path.join(output,'phase6-attack-focus-portrait.png')});
+    await view.setViewportSize({width:844,height:390});await ratio(view);
+    await view.screenshot({path:path.join(output,'phase6-attack-focus-landscape.png')});
+    assert.equal((await read(view)).revision,snapshot.revision,'visual previews cannot commit actions');
+    assert.equal((await read(view)).actors[0].stamina,player.stamina);
+  }
+
   async function threatReadabilityChecks(view){
     const initial=await read(view),key=service.ROOMS+'/'+initial.id;
     const room=db.records.get(key),original=structuredClone(room);
@@ -755,6 +828,7 @@ async function main(){
       await ambientVisualChecks(quick);
       await visualResilienceChecks(quick);
       await threatReadabilityChecks(quick);
+      await targetPreviewChecks(quick);
       const validate=async()=>{
         const layout=await quick.evaluate(()=>{
           const root=document.querySelector('#tactical-combat');
