@@ -12,8 +12,8 @@ const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/wo
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
-  constructor(canvas,onSelect,onActivity=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.images={};this.frame=0;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;
+  constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -35,12 +35,35 @@ export class TacticalRenderer{
       if(!this.state||this.preview||this.paused||e.pointerType==='mouse'&&e.button!==0)return;
       const p=point(e);
       this.touches.set(e.pointerId,{...p,startX:p.x,startY:p.y});
+      this.clearLongPress();this.longPressTriggered=false;
       if(this.touches.size>=2){this.dragging=true;this.pinch=midpoint();}
+      else if(e.pointerType!=='mouse'){
+        const beast=this.beastAtClient(e.clientX,e.clientY);
+        if(beast){
+          const actorUid=beast.uid;
+          this.longPressTimer=setTimeout(()=>{
+            this.longPressTimer=null;
+            if(this.destroyed||this.dragging||this.touches.size!==1||
+              !this.state?.actors.some(a=>a.uid===actorUid&&a.hp>0))return;
+            this.longPressTriggered=true;this.suppressClickUntil=Date.now()+800;
+            this.onInspect(actorUid,'pin');
+          },500);
+        }
+      }
       try{canvas.setPointerCapture(e.pointerId);}catch(_){}
     };
     this.onPointerMove=e=>{
+      if(e.pointerType==='mouse'&&!this.touches.has(e.pointerId)){
+        const beast=this.beastAtClient(e.clientX,e.clientY),next=beast?.uid||null;
+        if(next!==this.hoverUid){
+          this.hoverUid=next;this.onInspect(next,'hover');
+        }
+        return;
+      }
+      if(this.longPressTriggered)return;
       const before=this.touches.get(e.pointerId);if(!before)return;
       const after=point(e),deltaX=after.x-before.x,deltaY=after.y-before.y;
+      if(Math.hypot(after.x-before.startX,after.y-before.startY)>8)this.clearLongPress();
       before.x=after.x;before.y=after.y;
       const {w,h}=size(),v=view();
       if(this.touches.size>=2){
@@ -61,6 +84,8 @@ export class TacticalRenderer{
     };
     this.onPointerEnd=e=>{
       if(!this.touches.has(e.pointerId))return;
+      this.clearLongPress();
+      if(this.longPressTriggered){this.suppressClickUntil=Date.now()+800;this.longPressTriggered=false;}
       if(this.dragging)this.suppressClickUntil=Date.now()+500;
       this.touches.delete(e.pointerId);
       try{if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);}catch(_){}
@@ -76,6 +101,10 @@ export class TacticalRenderer{
       this.camera=Camera.zoomAt(this.camera,this.camera.zoom*Math.exp(-e.deltaY*.0013),p.x,p.y,w,h,view());
       this.draw();
     };
+    this.onPointerLeave=()=>{
+      if(this.hoverUid){this.hoverUid=null;this.onInspect(null,'hover');}
+    };
+    canvas.addEventListener('pointerleave',this.onPointerLeave);
     canvas.addEventListener('pointerdown',this.onPointerDown);
     canvas.addEventListener('pointermove',this.onPointerMove);
     canvas.addEventListener('pointerup',this.onPointerEnd);
@@ -94,10 +123,28 @@ export class TacticalRenderer{
       const next={x:p.x+delta[0],y:p.y+delta[1]};if(R.inside(this.state,next))this.onSelect(next);
     });
   }
+  clearLongPress(){
+    if(this.longPressTimer!==null)clearTimeout(this.longPressTimer);
+    this.longPressTimer=null;
+  }
+  beastAtClient(clientX,clientY){
+    if(!this.state||this.preview||this.state.mode!=='pve'||this.isAnimating||this.paused)return null;
+    const rect=this.canvas.getBoundingClientRect();
+    if(!rect.width||!rect.height)return null;
+    const p=Camera.tileAt(this.camera,clientX-rect.left,clientY-rect.top,rect.width,rect.height,
+      {x:0,y:0,width:this.state.width,height:this.state.height});
+    const actor=R.inside(this.state,p)?R.at(this.state,p):null;
+    return actor?.bot&&R.alive(actor)?actor:null;
+  }
+  setInspectTarget(uid){
+    const next=uid||null;
+    if(this.inspectedUid===next)return;
+    this.inspectedUid=next;this.draw();
+  }
   update(state,uid,mode,selection){
     this.preview=null;
     if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){
-      this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;
+      this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;this.inspectedUid=null;this.hoverUid=null;this.clearLongPress();
       if(state.mode==='pve'&&state.width>=11){
         const rect=this.canvas.getBoundingClientRect(),view={x:0,y:0,width:state.width,height:state.height},hero=state.actors.find(a=>a.uid===uid);
         if(rect.width&&rect.height&&hero){
@@ -141,7 +188,7 @@ export class TacticalRenderer{
   }
   setPaused(value){if(this.paused===value)return;this.paused=value;this.draw();}
   resetView(){this.camera=Camera.create();this.draw();}
-  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
+  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
@@ -429,6 +476,12 @@ export class TacticalRenderer{
       c.beginPath();c.ellipse(px,groundY+cell*.18,cell*.28,cell*.12,0,0,Math.PI*2);c.fillStyle='#0005';c.fill();
       c.strokeStyle=own?'#f8d58a':enemy?'#f29c83':'#a2d8c4';c.lineWidth=own?2.5:1.5;
       c.beginPath();c.ellipse(px,py+cell*.15,cell*.34,cell*.2,0,0,Math.PI*2);c.stroke();
+      if(a.uid===this.inspectedUid&&!animating){
+        c.save();c.strokeStyle='#f9dfa1';c.lineWidth=Math.max(2,cell*.045);
+        c.setLineDash([Math.max(3,cell*.12),Math.max(2,cell*.075)]);
+        c.beginPath();c.ellipse(px,py+cell*.17,cell*.44*sizeFactor,cell*.27*sizeFactor,0,0,Math.PI*2);
+        c.stroke();c.restore();
+      }
       const size=cell*1.18*sizeFactor,sw=size*(a.scaleX||1),sh=size*(a.scaleY||1);
       const drawn=a.bot?this.sprite('monsters',a.species%5*128,Math.floor(a.species/5)*128,128,128,px-sw/2,py-sh*.7,sw,sh):
         this.sprite(a.gender,0,0,112,112,px-sw/2,py-sh*.76,sw,sh);
