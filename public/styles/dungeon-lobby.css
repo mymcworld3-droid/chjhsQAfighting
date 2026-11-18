@@ -112,3 +112,22 @@ body.ui-cleanup #home-dungeon-entry{min-height:68px;margin-top:4px}
 @media(max-width:620px),(orientation:portrait){
   #dungeon-lobby .dg-sync{font-size:10px}
 }
+
+/* Stage 6: discoverable map-preview entry; never confuses preview with combat. */
+#dungeon-lobby .dg-map-teaser{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:13px 14px;border:1px solid #ad9d6f9c;border-radius:12px;
+  background:linear-gradient(115deg,#314a34,#243429);
+}
+#dungeon-lobby .dg-map-teaser>div{display:grid;gap:5px;min-width:0}
+#dungeon-lobby .dg-map-teaser strong{font-size:14px;color:#e6deb4}
+#dungeon-lobby .dg-map-teaser strong i{color:#bcde9e;margin-right:5px}
+#dungeon-lobby .dg-map-teaser small{font-size:11px;line-height:1.5;color:#bfd1b7}
+#dungeon-lobby .dg-map-teaser button{
+  flex:0 0 auto;background:#c8af77;border-color:#dfc995;color:#1b2a1f;
+  font-weight:700;min-height:44px;
+}
+@media(max-width:440px){
+  #dungeon-lobby .dg-map-teaser{align-items:stretch;flex-direction:column;gap:9px}
+  #dungeon-lobby .dg-map-teaser button{width:100%}
+}
