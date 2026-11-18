@@ -1,4 +1,4 @@
-import './manual-rules.js?v=20261118-level20-attack-v1';
+import './manual-rules.js?v=20261118-gold-cap10-v1';
 import {bookArt,skillArt} from './manual-art.js';
 import {renderManualHero} from './manual-hero-view.js';
 import {nextManualExpedition,renderManualExpedition} from './manual-expedition-guide.js';
@@ -58,7 +58,7 @@ function ensure(){
   if(!document.getElementById('manual-training-growth-style')){
     const link=document.createElement('link');link.rel='stylesheet';
     link.id='manual-training-growth-style';
-    link.href='/styles/manual-training-growth.css?v=20261118-level20-mastery-v1';
+    link.href='/styles/manual-training-growth.css?v=20261118-three-nodes-v1';
     document.head.append(link);
   }
   if(!document.getElementById('manual-training-anticipation-style')){
