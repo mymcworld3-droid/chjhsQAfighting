@@ -148,7 +148,7 @@ function renderRoom(){
     (host&&!assembled?'<button data-dg="invite">邀請好友</button>':'')+
     '<button data-dg="leave">離開隊伍</button>'+
     (host?'<button class="dg-danger" data-dg="disband">解散隊伍</button>':'')+'</div>';
-  if(!assembled&&host&&room.visibility==='public')announce('公開隊伍可在招募列表中被其他玩家加入。');
+  // A room refresh must not erase a recent operation result or error.
 }
 function render(){
   if(!root||!open)return;
@@ -186,17 +186,22 @@ async function refreshRoom(){
   }finally{refreshing=false;}
 }
 function poll(){
-  if(!open||document.hidden)return;
+  if(!open)return;
+  // Do not keep showing another account's private room after account switch.
+  if(localUser()!==account){close();clearRoom();list=[];return;}
+  if(document.hidden)return;
   if(room)void refreshRoom();else void refreshList();
 }
 async function openLobby(){
-  if(open){root?.querySelector('[data-dg="close"]')?.focus();return;}
-  const uid=localUser();if(!uid){window.showToast?.('請先登入後再進入合作副本');return;}
+  const uid=localUser();
+  if(open&&uid===account){root?.querySelector('[data-dg="close"]')?.focus();return;}
+  if(open)close();if(!uid){window.showToast?.('請先登入後再進入合作副本');return;}
   if(document.getElementById('tactical-combat')?.hidden===false||
      window.isXiuxianBattleInviteBlocked?.()||window.isXiuxianRaidInviteBlocked?.()){
     window.showToast?.('請先離開目前的戰鬥，再進入合作副本');return;
   }
   mount();account=uid;open=true;requestSerial++;
+  clearRoom();list=[];listLoading=false;refreshing=false;lastListAt=0;pending=false;
   initialFocus=document.activeElement;
   root.hidden=false;root.querySelector('[data-dg="close"]')?.focus({preventScroll:true});
   announce('正在恢復隊伍資訊…');render();
