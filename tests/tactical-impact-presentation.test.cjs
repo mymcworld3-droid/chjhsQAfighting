@@ -13,7 +13,7 @@ const room=(actor=boss(),opts={})=>({id:'arena-a',mode:'pve',status:'active',rev
   ],...opts});
 const strikeScene={
   kind:'cast',actor:'hero',skill:'rock-fist',parallelImpact:true,impactStart:.45,
-  numbers:[{uid:'monster-0',damage:150}],before:room().actors,after:[...room().actors],
+  numbers:[{uid:'monster-0',damage:150}],moves:[],before:room().actors,after:[...room().actors],
   target:{x:5,y:3},duration:620
 };
 function canvas(){
