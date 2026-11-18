@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-國民所得與物價-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用國民所得與物價",
+      "question": {
+        "q": "某經濟體名目GDP增加10%，但同期物價水準上升8%。若忽略其他因素，實質GDP增幅大致為何？",
+        "correct": "約1.9%",
+        "wrong": [
+          "18%",
+          "10%",
+          "8%"
+        ],
+        "exp": "實質成長約1.10除以1.08減一，約1.85%，不能把名目全當實質。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "extra-2026-civ2-國民所得與物價-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-國民所得與物價-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用國民所得與物價",
+      "question": {
+        "q": "物價指數從100升至105，其他口徑不變。該期間通膨率為何？",
+        "correct": "5%",
+        "wrong": [
+          "105%",
+          "0.05%",
+          "負5%"
+        ],
+        "exp": "通膨率等於指數增幅除以前期指數，為5除以100。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "extra-2026-civ2-國民所得與物價-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-國民所得與物價-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用國民所得與物價",
+      "question": {
+        "q": "某年GDP增加，但家庭所得中位數未提高。最合理的解釋是？",
+        "correct": "總產出成長不必然平均分配到每個家庭",
+        "wrong": [
+          "GDP增加代表每人所得必然同幅增加",
+          "家庭所得分配與國民所得完全相同",
+          "只要GDP增加，物價必定下降"
+        ],
+        "exp": "GDP衡量總體產出，無法直接代表所得分配與生活品質。",
+        "subject": "公民",
+        "sub_topic": "國民所得與物價",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-國民所得與物價",
+        "template_id": "extra-2026-civ2-國民所得與物價-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

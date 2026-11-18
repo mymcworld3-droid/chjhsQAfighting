@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-權利救濟-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用權利救濟",
+      "question": {
+        "q": "某人收到政府作成的不利處分，認為程序違法。若想尋求合法救濟，最應先做什麼？",
+        "correct": "確認處分性質、法定期限與可用的申訴或訴願等途徑",
+        "wrong": [
+          "以毀損公物代替法律救濟",
+          "只在網路留言便等同完成所有法定程序",
+          "因不滿意就認為所有程序都可無限延期"
+        ],
+        "exp": "權利救濟有法定類型和期限，需依案件性質選擇。",
+        "subject": "公民",
+        "sub_topic": "權利救濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-權利救濟",
+        "template_id": "extra-2026-civ2-權利救濟-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-權利救濟-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用權利救濟",
+      "question": {
+        "q": "一名消費者收到瑕疵商品，與商家無法協商解決。下列哪項做法最符合權利救濟的精神？",
+        "correct": "保存契約與交易證據，依消費爭議程序主張權利",
+        "wrong": [
+          "自行拿走店內其他商品當賠償",
+          "只根據朋友情緒決定金額",
+          "刪除所有購買證據再求償"
+        ],
+        "exp": "保存事證、使用合法程序有助確認責任與爭議事實。",
+        "subject": "公民",
+        "sub_topic": "權利救濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-權利救濟",
+        "template_id": "extra-2026-civ2-權利救濟-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-權利救濟-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用權利救濟",
+      "question": {
+        "q": "某學生認為校方處分欠缺說明理由。從正當程序原則看，最重要的要求是？",
+        "correct": "當事人應有適當知悉、陳述及接受公平審查的機會",
+        "wrong": [
+          "只要處分已公告就永遠不得申訴",
+          "學校可不說明任何處分事實",
+          "程序只須符合社群網站投票結果"
+        ],
+        "exp": "程序正義有助保障受影響者及決策的可檢驗性。",
+        "subject": "公民",
+        "sub_topic": "權利救濟",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-權利救濟",
+        "template_id": "extra-2026-civ2-權利救濟-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

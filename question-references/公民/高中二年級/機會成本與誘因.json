@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-機會成本與誘因-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用機會成本與誘因",
+      "question": {
+        "q": "小明週末可打工賺1200元或參加免費工作坊，兩者時間衝突且無其他成本。選擇工作坊的主要機會成本是？",
+        "correct": "放棄的1200元打工收入",
+        "wrong": [
+          "工作坊的零元報名費",
+          "已經花掉且無法收回的上月車費",
+          "朋友願意幫忙的口頭承諾"
+        ],
+        "exp": "機會成本是所放棄的最佳替代方案價值。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "extra-2026-civ2-機會成本與誘因-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-機會成本與誘因-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用機會成本與誘因",
+      "question": {
+        "q": "某商家對回收杯提供10元折扣，回收杯使用率提高。這最直接反映哪個經濟觀念？",
+        "correct": "價格誘因會影響消費者選擇",
+        "wrong": [
+          "折扣只會改變杯子顏色",
+          "所有消費者必定完全不受價格影響",
+          "任何折扣都會讓店家永遠虧損"
+        ],
+        "exp": "行為者會對成本與利益的變化作反應，但效果程度因人而異。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "extra-2026-civ2-機會成本與誘因-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-機會成本與誘因-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用機會成本與誘因",
+      "question": {
+        "q": "某學生已付不可退的電影票錢，當天卻發高燒。若作理性決策，票款最適合如何處理？",
+        "correct": "把已無法追回的票款視為沉沒成本，依健康及剩餘選擇判斷",
+        "wrong": [
+          "因已付款就必須冒險出門",
+          "重新把票價當作可以退還的現金",
+          "只比較當天氣溫便可決定"
+        ],
+        "exp": "沉沒成本不該左右是否繼續投入的邊際決策。",
+        "subject": "公民",
+        "sub_topic": "機會成本與誘因",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-機會成本與誘因",
+        "template_id": "extra-2026-civ2-機會成本與誘因-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

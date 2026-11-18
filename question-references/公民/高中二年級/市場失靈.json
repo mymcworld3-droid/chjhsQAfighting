@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-市場失靈-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用市場失靈",
+      "question": {
+        "q": "工廠生產商品時排放污染，但產品售價沒有反映附近居民健康成本。此現象主要屬於？",
+        "correct": "負外部性",
+        "wrong": [
+          "公共財的完全非排他性",
+          "需求量為零",
+          "生產者沒有任何機會成本"
+        ],
+        "exp": "交易之外的第三方承擔成本，是負外部性的一種。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "extra-2026-civ2-市場失靈-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-市場失靈-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用市場失靈",
+      "question": {
+        "q": "某社區需要防洪堤，堤防建成後難以只讓付費者受保護。這凸顯哪個問題？",
+        "correct": "非排他性可能產生搭便車與集體供給困難",
+        "wrong": [
+          "防洪工程一定是只有個人使用的私有商品",
+          "每戶住家可完全隔離洪水",
+          "公共支出永遠不需要監督"
+        ],
+        "exp": "公共財特徵可能導致私人市場供給不足。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "extra-2026-civ2-市場失靈-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-市場失靈-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用市場失靈",
+      "question": {
+        "q": "二手車買家無法確定車況，賣家比買家掌握更多資訊。這容易造成什麼風險？",
+        "correct": "資訊不對稱導致交易品質與信任問題",
+        "wrong": [
+          "市場中資訊必然完全對稱",
+          "只要有價格就能知道車輛所有故障",
+          "買家一定比賣家知道更多維修紀錄"
+        ],
+        "exp": "資訊不對稱可能影響交易與商品選擇。",
+        "subject": "公民",
+        "sub_topic": "市場失靈",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-市場失靈",
+        "template_id": "extra-2026-civ2-市場失靈-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

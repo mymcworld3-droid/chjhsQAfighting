@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-民法、刑法與行政法基本概念-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用民法、刑法與行政法基本概念",
+      "question": {
+        "q": "甲因購物契約與商家發生退款爭議，乙因違規停車收到政府裁罰。兩者主要涉及哪兩種法律關係？",
+        "correct": "前者偏向民事契約，後者偏向行政處分",
+        "wrong": [
+          "前者必定屬刑事殺人罪，後者屬婚姻契約",
+          "兩者都只能由社區口頭約定處理",
+          "只因涉及金錢就必然屬刑法"
+        ],
+        "exp": "契約爭議與公權力裁罰在法律性質上不同。",
+        "subject": "公民",
+        "sub_topic": "民法、刑法與行政法基本概念",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民法、刑法與行政法基本概念",
+        "template_id": "extra-2026-civ2-民法、刑法與行政法基本概念-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-民法、刑法與行政法基本概念-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用民法、刑法與行政法基本概念",
+      "question": {
+        "q": "某人涉嫌侵占他人物品，檢察機關依法調查其刑事責任。這與一般私人損害賠償最大差異是？",
+        "correct": "刑事程序涉及國家追訴與刑罰，民事主要處理私權救濟",
+        "wrong": [
+          "所有刑事案件都必須先簽訂買賣契約",
+          "私人賠償可以直接替代國家刑事程序",
+          "刑罰只由受害人自行決定"
+        ],
+        "exp": "刑法與民法功能不同，同一事件亦可能分別涉及兩者。",
+        "subject": "公民",
+        "sub_topic": "民法、刑法與行政法基本概念",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民法、刑法與行政法基本概念",
+        "template_id": "extra-2026-civ2-民法、刑法與行政法基本概念-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-民法、刑法與行政法基本概念-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用民法、刑法與行政法基本概念",
+      "question": {
+        "q": "居民認為主管機關核發許可的決定違法，欲提出制度內救濟。最應先區分什麼？",
+        "correct": "是否屬公權力行政決定及其相應救濟程序",
+        "wrong": [
+          "此事是否由鄰居在群組轉傳",
+          "只要不滿意就能以私刑處理",
+          "行政決定永遠不能接受外部審查"
+        ],
+        "exp": "政府處分與私人契約的救濟途徑並不相同。",
+        "subject": "公民",
+        "sub_topic": "民法、刑法與行政法基本概念",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民法、刑法與行政法基本概念",
+        "template_id": "extra-2026-civ2-民法、刑法與行政法基本概念-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

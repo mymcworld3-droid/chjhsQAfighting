@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-法律的制定與適用-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用法律的制定與適用",
+      "question": {
+        "q": "某行政機關想對新型交通工具開罰，但現有法規沒有相應處罰依據。哪項處理較符合法治？",
+        "correct": "先確認法律授權及規範適用範圍，再依法處理",
+        "wrong": [
+          "直接依官員個人好惡開罰",
+          "只看網路留言是否支持處罰",
+          "以新聞標題取代法律規定"
+        ],
+        "exp": "人民受處罰應有法定依據，行政不能自創罰則。",
+        "subject": "公民",
+        "sub_topic": "法律的制定與適用",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-法律的制定與適用",
+        "template_id": "extra-2026-civ2-法律的制定與適用-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-法律的制定與適用-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用法律的制定與適用",
+      "question": {
+        "q": "甲法於今年生效，乙事件發生於去年。判斷甲法能否處理乙事件時，首先應考量什麼？",
+        "correct": "法律生效時間及是否有合法的溯及適用規定",
+        "wrong": [
+          "只看新法條文字數",
+          "只因新法比較新就必定適用全部過去行為",
+          "把生效日和公告日視為永遠相同"
+        ],
+        "exp": "法律適用涉及時間效力，不能不分新舊事件直接套用。",
+        "subject": "公民",
+        "sub_topic": "法律的制定與適用",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-法律的制定與適用",
+        "template_id": "extra-2026-civ2-法律的制定與適用-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-法律的制定與適用-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用法律的制定與適用",
+      "question": {
+        "q": "某地方規則與較高位階法律明顯衝突。依法律位階原則，處理時應優先檢查什麼？",
+        "correct": "下位規範是否逾越或牴觸上位法授權",
+        "wrong": [
+          "地方機關辦公室是否較大",
+          "規則發布時媒體關注是否熱烈",
+          "規則文字是否比較容易背誦"
+        ],
+        "exp": "法律體系有位階與授權關係，不能只憑發布機關偏好處理。",
+        "subject": "公民",
+        "sub_topic": "法律的制定與適用",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-5",
+            "name": "法律與生活"
+          }
+        ],
+        "concept_id": "civics-高中二年級-法律的制定與適用",
+        "template_id": "extra-2026-civ2-法律的制定與適用-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

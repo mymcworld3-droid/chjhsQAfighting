@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-民主參與形式-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用民主參與形式",
+      "question": {
+        "q": "居民透過連署提出公共政策建議，與只在選舉投票相比，這最能顯示什麼？",
+        "correct": "公民可以在選舉之外持續參與公共議題",
+        "wrong": [
+          "只有公職候選人才可以表達政策意見",
+          "投票後人民不得再向政府陳情",
+          "連署與法律效力在任何制度下完全相同"
+        ],
+        "exp": "民主參與包含倡議、請願、討論與監督，須區分法定效力。",
+        "subject": "公民",
+        "sub_topic": "民主參與形式",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民主參與形式",
+        "template_id": "extra-2026-civ2-民主參與形式-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-民主參與形式-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用民主參與形式",
+      "question": {
+        "q": "某政策公聽會只邀請支持方，未提供其他群體發言機會。其程序上的主要問題是？",
+        "correct": "參與機會不均，可能影響意見的完整性",
+        "wrong": [
+          "只要有開會就必定完成公平參與",
+          "會議開始時間一定決定政策成效",
+          "參與者意見不同就不應開會"
+        ],
+        "exp": "民主討論需要合理提供不同利害關係人的參與可能。",
+        "subject": "公民",
+        "sub_topic": "民主參與形式",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民主參與形式",
+        "template_id": "extra-2026-civ2-民主參與形式-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-民主參與形式-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用民主參與形式",
+      "question": {
+        "q": "某市發布開放資料後，民眾以數據追蹤人行道工程成果。這是什麼形式的參與？",
+        "correct": "資訊基礎的公共監督與政策評估",
+        "wrong": [
+          "只屬私人娛樂且與公共事務無關",
+          "只要資料公開政府便無須回應",
+          "使用數據等於完全取代法定選舉"
+        ],
+        "exp": "資料可支持公民監督，但仍須依制度提出意見。",
+        "subject": "公民",
+        "sub_topic": "民主參與形式",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-3",
+            "name": "政治與民主"
+          }
+        ],
+        "concept_id": "civics-高中二年級-民主參與形式",
+        "template_id": "extra-2026-civ2-民主參與形式-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

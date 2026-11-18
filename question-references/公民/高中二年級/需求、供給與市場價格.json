@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-civ2-需求、供給與市場價格-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用需求、供給與市場價格",
+      "question": {
+        "q": "某農產品原有需求量高，豐收使供給增加，需求其他條件不變。均衡價格通常如何變化？",
+        "correct": "下降，交易數量傾向增加",
+        "wrong": [
+          "上升，交易數量減少",
+          "價格與數量皆必定不變",
+          "只因供給增加就消除所有需求"
+        ],
+        "exp": "供給曲線右移，在一般模型下均衡價格下降、數量增加。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "extra-2026-civ2-需求、供給與市場價格-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-需求、供給與市場價格-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用需求、供給與市場價格",
+      "question": {
+        "q": "某城市辦大型活動，使旅館住宿需求增加，但短期房間數無法增加。價格通常受到什麼方向的壓力？",
+        "correct": "上升，因需求增加而短期供給受限",
+        "wrong": [
+          "下降，因需求增加代表供給變多",
+          "保持零元，因活動由政府舉辦",
+          "住宿價格與需求完全無關"
+        ],
+        "exp": "需求曲線右移而短期供給僵固，均衡價格傾向上升。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "extra-2026-civ2-需求、供給與市場價格-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-civ2-需求、供給與市場價格-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "以法治經濟或地方公共案例運用需求、供給與市場價格",
+      "question": {
+        "q": "某市場價格被設定在低於均衡價的上限，且管制有效。若供需曲線正常，最可能發生什麼？",
+        "correct": "需求量超過供給量而形成短缺",
+        "wrong": [
+          "供給量一定大於需求量",
+          "所有人都不再願意購買",
+          "需求與供給都立即變為零"
+        ],
+        "exp": "低於均衡價的有效價格上限常導致超額需求。",
+        "subject": "公民",
+        "sub_topic": "需求、供給與市場價格",
+        "knowledge_points": [
+          {
+            "subject": "公民",
+            "id": "civics-6",
+            "name": "經濟與市場"
+          }
+        ],
+        "concept_id": "civics-高中二年級-需求、供給與市場價格",
+        "template_id": "extra-2026-civ2-需求、供給與市場價格-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
