@@ -6,6 +6,7 @@ import './tactical-camera.js';
 import './tactical-ambience.js?v=20261118-pve-visual-v2';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import './tactical-threat-visuals.js?v=20261118-phase5-v1';
+import './tactical-target-visuals.js?v=20261118-phase6-v1';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
@@ -14,12 +15,13 @@ const Camera=globalThis.QATacticalCamera;
 const Ambience=globalThis.QATacticalAmbience;
 const Impact=globalThis.QATacticalImpact;
 const Threats=globalThis.QATacticalThreats;
+const Targets=globalThis.QATacticalTargetVisuals;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -192,11 +194,22 @@ export class TacticalRenderer{
       this.range=mine?(mode==='move'?R.moveCells(state,me):R.aimCells(state,me,attackSkill(me,mode))):[];
     }
     this.threatPlan=Threats.derive(state,uid,mode,this.range);
+    this.targetPlan=Targets.derive(state,uid,mode,selection,R,this.threatPlan);
     const alert=this.canvas.parentElement?.querySelector('[data-threat-a11y]');
     if(state.mode==='pve'){
       const message=this.threatPlan.description+
         '。紅色斜紋框為目前預告範圍，青綠標記只能避開目前已標示的危險格。';
-      this.canvas.setAttribute('aria-description',message);
+      this.canvas.setAttribute('aria-description',message+
+        (this.targetPlan?'。選取目標：'+this.targetPlan.label+'。'+this.targetPlan.hint:''));
+      if(this.targetPlan){
+        this.canvas.dataset.previewValid=String(this.targetPlan.valid);
+        this.canvas.dataset.previewCost=String(this.targetPlan.cost);
+        this.canvas.dataset.previewTargets=String(this.targetPlan.affected.length);
+      }else{
+        delete this.canvas.dataset.previewValid;
+        delete this.canvas.dataset.previewCost;
+        delete this.canvas.dataset.previewTargets;
+      }
       this.canvas.dataset.threatCells=String(this.threatPlan.cells.length);
       this.canvas.dataset.threatened=String(this.threatPlan.playerThreatened);
       if(alert&&alert.textContent!==this.threatPlan.description)
@@ -205,12 +218,15 @@ export class TacticalRenderer{
       this.canvas.removeAttribute('aria-description');
       delete this.canvas.dataset.threatCells;
       delete this.canvas.dataset.threatened;
+      delete this.canvas.dataset.previewValid;
+      delete this.canvas.dataset.previewCost;
+      delete this.canvas.dataset.previewTargets;
       if(alert)alert.textContent='';
     }
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.canvas.removeAttribute('aria-description');this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.canvas.removeAttribute('aria-description');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -538,7 +554,9 @@ export class TacticalRenderer{
         c.setLineDash([]);
       }
     }
-    if(myTurn&&this.mode==='move'&&this.selection){
+    if(myTurn&&this.mode==='move'&&s.mode==='pve'&&!animating)
+      Targets.drawRoute(c,this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
+    else if(myTurn&&this.mode==='move'&&this.selection){
       const route=R.path(s,mine,this.selection,mine.uid);if(route&&route.length>1){
         c.beginPath();route.forEach((p,i)=>c[i?'lineTo':'moveTo'](ox+(p.x+.5)*cell,oy+(p.y+.5)*cell));
         c.strokeStyle='#f8df9b';c.lineWidth=2.5;c.setLineDash([4,4]);c.stroke();c.setLineDash([]);
@@ -630,6 +648,8 @@ export class TacticalRenderer{
       this.drawEffect(scene,progress,true);
     }
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
+    if(myTurn&&s.mode==='pve'&&!animating)
+      Targets.drawFocus(c,this.targetPlan,{ox,oy,cell,width:s.width,height:s.height});
     if(!animating&&s.mode==='pve'){
       const viewport={ox,oy,cell,width:s.width,height:s.height};
       Threats.drawContours(c,this.threatPlan,viewport);
