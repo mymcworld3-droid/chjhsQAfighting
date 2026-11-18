@@ -48,7 +48,8 @@
     // can be submitted; the rendered "affected" count is never a damage claim.
     try{
       rules.validateSkill(s,me,sk,selection);
-      const permitted=rules.aimCells(s,me,sk).some(p=>key(p)===key(selection));
+      const permitted=rules.aimCells(s,me,sk).some(p=>key(p)===key(selection))||
+        (sk.kind==='ring'||sk.range===0)&&key(selection)===key(me);
       result.valid=currentTurn&&permitted&&(Number(me.actions)||0)<rules.LIMITS.actions;
       if(!permitted){result.hint='不在可指定的攻擊範圍';return result;}
       const preview=rules.techniquePreview(s,me,sk,selection);
