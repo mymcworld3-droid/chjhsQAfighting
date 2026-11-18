@@ -12,6 +12,7 @@ const {manualVisualState,manualSkillVisualState,renderManualVisualMilestones,
   renderManualHero,renderManualCollectionSummary,filterOwnedManuals}=
   vm.runInNewContext([
     read('manual-visual-progression.js'),
+    read('manual-anticipation.js'),
     read('manual-hero-view.js'),
     read('manual-library-view.js'),
     '({manualVisualState,manualSkillVisualState,renderManualVisualMilestones,renderManualHero,renderManualCollectionSummary,filterOwnedManuals})'
