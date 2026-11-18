@@ -91,3 +91,44 @@ test('static accents cache to one bitmap and reduced motion removes dynamic draw
   Visual.drawAtmosphere(ctx,plan,{ox:0,oy:0,cell:40},9000,false,'low');
   assert.ok(ctx.count()>another,'low quality retains a small amount of ambience');
 });
+
+test('cached map identity changes with geometry, terrain and stage, not HP or turn changes',()=>{
+  const old=fake(),initial=Visual.stageIdentity(old),key=Visual.mapIdentity(old);
+  const combat=structuredClone(old);
+  combat.actors[0].hp=23;combat.actors[1].x=4;combat.revision=49;combat.turn=11;
+  assert.equal(Visual.stageIdentity(combat),initial,'live combat must not reset the camera');
+  assert.equal(Visual.mapIdentity(combat),key,'live combat must not rerasterize the ground');
+  const stage={...old,trial:{...old.trial,stage:2,layoutHash:'different'}};
+  assert.notEqual(Visual.stageIdentity(stage),initial,'the same room can advance to a new stage');
+  assert.notEqual(Visual.mapIdentity(stage),key);
+  const blocks={...old,blocks:[{x:3,y:2,kind:'tree'}]};
+  assert.equal(Visual.stageIdentity(blocks),initial);
+  assert.notEqual(Visual.mapIdentity(blocks),key,'same-count moving obstacles invalidate scenery');
+  const water={...old,ground:old.ground.slice()};
+  water.ground[0]=4;
+  assert.notEqual(Visual.mapIdentity(water),key,'a water tile must invalidate the raster cache');
+  const biome={...old,trial:{...old.trial,biome:'雪嶺險徑'},terrain:14};
+  assert.notEqual(Visual.mapIdentity(biome),key);
+  assert.equal(Visual.prepare(old).key,key);
+  assert.equal(Visual.prepare(blocks).key,Visual.mapIdentity(blocks));
+});
+
+test('canvas backing pixel ratio stays within mobile/desktop memory budgets',()=>{
+  for(const [w,h,memory,budget] of [
+    [360,640,2,2200000],[360,640,8,3300000],
+    [1280,720,2,2200000],[1280,720,8,3300000],
+    [2048,1536,2,2200000],[2048,1536,8,3300000]
+  ]){
+    const ratio=Visual.pixelRatioFor(w,h,3,memory);
+    assert.ok(ratio>=1&&ratio<=3,'valid display ratio');
+    assert.ok(w*h*ratio*ratio<=Math.max(budget,w*h)+.01,
+      'backing store must not exceed the capped pixel budget');
+  }
+  assert.equal(Visual.pixelRatioFor(360,640,3,8),3,
+    'standard portrait mobile keeps sharp native resolution');
+  assert.equal(Visual.pixelRatioFor(1280,720,1,8),1,
+    'a 1× device is never upscaled unnecessarily');
+  assert.ok(Visual.pixelRatioFor(1280,720,3,2)<
+            Visual.pixelRatioFor(1280,720,3,8),
+    'low-memory hardware uses a smaller backing buffer');
+});
