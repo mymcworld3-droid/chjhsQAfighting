@@ -68,13 +68,13 @@
 #manual-training-root .manual-anticipation small{
   color:#aab8ab;font-size:10px;
 }
-#manual-training-root .manual-hero--approaching .manual-hero-track{
+#manual-training-root .manual-hero--approaching .manual-growth-flow{
   border-color:#e2c984;box-shadow:inset 0 1px 4px #0008,0 0 9px rgba(215,180,101,.18);
 }
-#manual-training-root .manual-hero--imminent .manual-hero-track{
+#manual-training-root .manual-hero--imminent .manual-growth-flow{
   border-color:#ffe4a3;box-shadow:0 0 15px rgba(245,202,117,.34),inset 0 1px 4px #0009;
 }
-#manual-training-root .manual-hero--imminent .manual-hero-progress{
+#manual-training-root .manual-hero--imminent .manual-growth-flow-fill{
   background:linear-gradient(90deg,#4b9977,#dfbf79,#ffedba);
 }
 #manual-training-root .manual-hero-step.is-next.is-approaching:not(.is-unlocked){
