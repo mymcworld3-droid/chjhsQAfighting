@@ -37,7 +37,7 @@ export class BeastInspector {
     this.roster.dataset.beastRoster='';this.roster.hidden=true;
     this.roster.setAttribute('role','dialog');this.roster.setAttribute('aria-label','本關靈獸清單');this.roster.setAttribute('aria-modal','true');
     this.panel=document.createElement('section');this.panel.className='tc-beast-panel';
-    this.panel.dataset.beastPanel='';this.panel.hidden=true;
+    this.panel.dataset.beastPanel='';this.panel.id='tc-beast-panel';this.panel.hidden=true;
     this.panel.setAttribute('role','dialog');this.panel.setAttribute('aria-label','靈獸戰鬥資料');this.panel.setAttribute('aria-modal','true');
     this.peek=document.createElement('aside');this.peek.className='tc-beast-peek';
     this.peek.dataset.beastPeek='';this.peek.hidden=true;
@@ -126,7 +126,7 @@ export class BeastInspector {
     this.rosterOpen=false;this.pinnedUid=null;this.hoverUid=null;
     this.scrim.hidden=true;this.roster.hidden=true;this.panel.hidden=true;this.peek.hidden=true;
     const main=this.root.querySelector('[data-main]');
-    if(main)main.inert=false;
+    if(main)main.inert=this.root.querySelector('[data-modal]')?.hidden===false;
     this.toggle.setAttribute('aria-expanded','false');
     this.getRenderer()?.setInspectTarget(null);
     if(restoreFocus){
@@ -191,7 +191,8 @@ export class BeastInspector {
     this.toggle.querySelector('[data-beast-count]').textContent=String(living);
     this.toggle.setAttribute('aria-label','查看本關靈獸，尚存活 '+living+' 隻');
     if(this.pinnedUid&&!this.find(this.pinnedUid))this.pinnedUid=null;
-    this.toggle.setAttribute('aria-expanded',String(this.rosterOpen));
+    this.toggle.setAttribute('aria-expanded',String(this.isOpen()));
+    this.toggle.setAttribute('aria-controls',this.pinnedUid?'tc-beast-panel':'tc-beast-roster');
     this.scrim.hidden=!this.isOpen();
     this.roster.hidden=!this.rosterOpen;
     this.panel.hidden=!this.pinnedUid;
