@@ -64,9 +64,9 @@ async function main(){
     assert.equal(await page.locator('.manual-hero-cover').count(),1);
     // The permanent visual stage must come from the actual manual level.
     assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'seed');
-    assert.equal(await page.locator('.manual-growth-mark').count(),10);
+    assert.equal(await page.locator('.manual-growth-mark').count(),20);
     assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),1);
-    assert.equal(await page.locator('.manual-growth-mark.is-milestone').count(),3);
+    assert.equal(await page.locator('.manual-growth-mark.is-milestone').count(),4);
     const masteryPoints=await page.locator('.manual-growth-mark.is-milestone').evaluateAll(nodes=>
       nodes.map(node=>{
         const rect=node.getBoundingClientRect();
@@ -75,13 +75,13 @@ async function main(){
           radius:getComputedStyle(node).borderRadius};
       })
     );
-    assert.deepEqual(masteryPoints.map(p=>p.label),['1','5','10']);
+    assert.deepEqual(masteryPoints.map(p=>p.label),['1','5','10','20']);
     assert(masteryPoints.every(p=>p.width===p.height&&p.radius==='50%'&&p.width>=24),
       'milestones must be raised circular bubbles with centered numbers');
-    assert(masteryPoints[0].x<masteryPoints[1].x&&masteryPoints[1].x<masteryPoints[2].x);
+    assert(masteryPoints.every((p,i)=>i===0||masteryPoints[i-1].x<p.x));
     assert(Math.abs((masteryPoints[1].x-masteryPoints[0].x)/
-      (masteryPoints[2].x-masteryPoints[0].x)-4/9)<.015,
-      'Lv.5 node must be exactly at its ten-level milestone');
+      (masteryPoints[3].x-masteryPoints[0].x)-4/19)<.015,
+      'Lv.5 node must remain correctly positioned on the twenty-level rail');
     assert(Math.abs(masteryPoints[0].y-masteryPoints[2].y)<2);
     assert.equal(await page.locator('.manual-hero-mastery').count(),1);
     assert.equal(await page.locator('.manual-growth').count(),0,
@@ -264,13 +264,26 @@ async function main(){
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=1080;
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--unlock').waitFor();
-    assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'complete');
+    assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'refined');
     assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),10);
     assert.equal(await page.locator('.manual-growth-mark.is-milestone.is-reached').count(),3);
+    assert.equal(await page.locator('.manual-hero-stage-badge').textContent(),'大成');
+    assert.equal(await page.locator('.manual-hero-mastery-level').textContent(),'Lv. 10 / 20');
+    assert.match(await page.locator('.manual-hero-upgrade').textContent(),/升至 Lv. 11/);
+    assert.equal(await page.locator('.manual-hero-step.is-learned').count(),3);
+    await page.locator('[data-manual-celebration-dismiss]').click();
+    // After Lv10 and the third-skill milestone, leveling continues through Lv20.
+    db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=4180;
+    await page.locator('[data-manual-refresh]').click();
+    await page.locator('.manual-celebration--manual-upgrade').waitFor();
+    assert.equal(await page.locator('.manual-hero').getAttribute('data-manual-visual-stage'),'complete');
+    assert.equal(await page.locator('.manual-growth-mark.is-reached').count(),20);
+    assert.equal(await page.locator('.manual-growth-mark.is-milestone.is-reached').count(),4);
     assert.equal(await page.locator('.manual-growth-marks').getAttribute('aria-valuenow'),'100');
     assert.equal(await page.locator('.manual-hero-stage-badge').textContent(),'圓滿');
     assert.equal(await page.locator('.manual-hero-mastery-status').textContent(),'功法已達最高等級');
-    assert.equal(await page.locator('.manual-hero-mastery-level').textContent(),'Lv. 10 / 10');
+    assert.equal(await page.locator('.manual-hero-mastery-level').textContent(),'Lv. 20 / 20');
+    assert.match(await page.locator('.manual-hero-attack-bonus').textContent(),/本功法攻擊 \+20/);
     const badgeBeforeStatus=await page.locator('.manual-hero-mastery-summary').evaluate(node=>{
       const [badge,status]=[node.querySelector('.manual-hero-stage-badge'),
         node.querySelector('.manual-hero-mastery-status')];
