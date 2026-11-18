@@ -1,0 +1,145 @@
+/* Read-only creature inspection. All layers stay within the fixed game stage. */
+#tactical-combat .tc-beast-toggle{
+  min-height:32px!important;padding:5px 9px!important;
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  white-space:nowrap;font-size:12px!important;color:#e4d5b7;
+  border-color:#7a8c68a6;background:#243227;
+}
+#tactical-combat .tc-beast-toggle[hidden]{display:none!important}
+#tactical-combat .tc-beast-toggle [data-beast-count]{
+  min-width:17px;padding:1px 4px;line-height:1.25;border-radius:12px;
+  background:#38573d;color:#cbf3d4;font-variant-numeric:tabular-nums;
+}
+#tactical-combat .tc-beast-toggle[aria-expanded=true]{
+  color:#e9f6dd;background:#36523a;border-color:#98cf9d;
+}
+#tactical-combat .tc-beast-scrim{
+  position:absolute;inset:0;z-index:7;width:100%;height:100%;
+  min-height:0!important;padding:0!important;border:0!important;
+  border-radius:0!important;background:rgba(7,14,10,.16)!important;
+  cursor:default;
+}
+#tactical-combat .tc-beast-roster,
+#tactical-combat .tc-beast-panel{
+  position:absolute;z-index:8;top:clamp(46px,8%,66px);right:12px;
+  width:min(348px,calc(100% - 24px));max-height:calc(100% - 66px);
+  padding:14px;overflow:auto;overscroll-behavior:contain;
+  border:1px solid #98825a;border-radius:12px;
+  background:linear-gradient(135deg,#243128 0%,#181f1b 100%);
+  box-shadow:0 18px 40px #080d0bb8,inset 0 0 0 1px #d0bd8450;
+  color:#e9e1cc;
+}
+#tactical-combat .tc-beast-card-title{
+  display:flex;align-items:start;justify-content:space-between;gap:10px;
+  margin-bottom:10px;
+}
+#tactical-combat .tc-beast-card-title small{
+  display:block;font-size:10px;color:#afc5a9;letter-spacing:.08em;
+}
+#tactical-combat .tc-beast-card-title h2{
+  margin:4px 0 0!important;font-size:19px;line-height:1.4;color:#f3e0b6;
+}
+#tactical-combat .tc-beast-card-title h2 span{font-size:12px;color:#bfd4bb}
+#tactical-combat .tc-beast-card-title [data-beast-close]{
+  flex-shrink:0;width:32px;height:32px;min-height:32px!important;
+  padding:0!important;border:1px solid #756b4d;border-radius:8px;
+  font-size:21px!important;line-height:1;
+}
+#tactical-combat .tc-beast-helper{
+  font-size:11px;line-height:1.55;color:#aebfae;margin-bottom:10px;
+}
+#tactical-combat .tc-beast-list{display:grid;gap:7px;max-height:100%}
+#tactical-combat .tc-beast-row{
+  display:flex;align-items:center;gap:10px;min-height:62px!important;
+  padding:7px 9px!important;text-align:left;background:#2c3930;
+  border-color:#66755f;border-radius:9px;
+}
+#tactical-combat .tc-beast-row .tc-beast-portrait{width:46px;height:46px;flex:0 0 46px}
+#tactical-combat .tc-beast-row-body{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+#tactical-combat .tc-beast-row strong{font-size:13px;color:#f1e2c2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#tactical-combat .tc-beast-row small{font-size:10px;color:#b4c7b6;line-height:1.45;overflow-wrap:anywhere}
+#tactical-combat .tc-beast-row>i{font-size:11px;color:#c5b28c}
+#tactical-combat .tc-beast-row.is-down{opacity:.6}
+#tactical-combat .tc-beast-row:focus-visible,
+#tactical-combat .tc-beast-panel button:focus-visible{outline:2px solid #b9e6b2;outline-offset:2px}
+#tactical-combat .tc-beast-empty{font-size:12px;color:#aab6ab}
+#tactical-combat .tc-beast-portrait{
+  display:block;width:76px;height:76px;flex:0 0 76px;
+  border:1px solid #849777;border-radius:9px;
+  background:#314238 url('/assets/world-map/ai/creatures-atlas.webp') no-repeat;
+  background-size:500% 400%;
+  image-rendering:auto;
+}
+#tactical-combat .tc-beast-identity{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+#tactical-combat .tc-beast-identity>div{min-width:0;flex:1}
+#tactical-combat .tc-beast-identity small{font-size:11px;color:#b5c8ae}
+#tactical-combat .tc-beast-hp-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px}
+#tactical-combat .tc-beast-hp-row span,#tactical-combat .tc-beast-hp-row b{font-size:11px}
+#tactical-combat .tc-beast-hp-row b{color:#f1bba5;font-variant-numeric:tabular-nums}
+#tactical-combat .tc-beast-hp-track{
+  height:7px;margin-top:5px;border-radius:6px;overflow:hidden;background:#423932;
+}
+#tactical-combat .tc-beast-hp-track i{
+  display:block;height:100%;background:linear-gradient(90deg,#b45b50,#ec9b79);transition:width .2s;
+}
+#tactical-combat .tc-beast-status{margin-top:5px;font-size:10px;color:#9fd1c8}
+#tactical-combat .tc-beast-traits{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#tactical-combat .tc-beast-traits section{
+  min-width:0;background:#2a342b;border:1px solid #64745a70;border-radius:9px;padding:10px;
+}
+#tactical-combat .tc-beast-traits small{display:block;font-size:10px;color:#aeb9a3}
+#tactical-combat .tc-beast-traits strong{display:block;margin-top:3px;color:#f2d8aa;font-size:13px}
+#tactical-combat .tc-beast-traits p{
+  margin-top:6px;font-size:11px;line-height:1.6;color:#d5ded3;overflow-wrap:anywhere;
+}
+#tactical-combat .tc-beast-intent,#tactical-combat .tc-beast-advice{
+  margin-top:10px;padding:9px 10px;border:1px solid #8d5c4e8c;border-radius:8px;background:#3a2d29;
+}
+#tactical-combat .tc-beast-advice{border-color:#52877591;background:#233a2e}
+#tactical-combat .tc-beast-intent strong,#tactical-combat .tc-beast-advice strong{
+  font-size:12px;color:#f1c7ab;
+}
+#tactical-combat .tc-beast-advice strong{color:#a9e4c2}
+#tactical-combat .tc-beast-intent p,#tactical-combat .tc-beast-advice p{
+  margin-top:4px;font-size:11px;line-height:1.6;color:#ece6d7;
+}
+#tactical-combat .tc-beast-footer{display:flex;justify-content:space-between;gap:9px;margin-top:13px}
+#tactical-combat .tc-beast-footer button{
+  flex:1;min-height:34px!important;padding:6px!important;font-size:11px!important;
+  border-color:#7d775b;
+}
+#tactical-combat .tc-beast-footer [data-beast-demo]{
+  color:#1d281f;background:#c4d4ab;border-color:#b3d8a8;font-weight:700;
+}
+#tactical-combat .tc-beast-peek{
+  position:absolute;z-index:4;right:12px;top:clamp(55px,10%,80px);
+  width:min(250px,calc(100% - 24px));
+  padding:10px;border:1px solid #9b9168;border-radius:10px;
+  background:#1d2c24f5;box-shadow:0 8px 22px #0008;
+  color:#e7e0ca;pointer-events:none;
+}
+#tactical-combat .tc-beast-peek-head{display:flex;align-items:center;gap:8px}
+#tactical-combat .tc-beast-peek .tc-beast-portrait{width:46px;height:46px;flex:0 0 46px}
+#tactical-combat .tc-beast-peek-head>span{display:flex;flex-direction:column;gap:3px;min-width:0}
+#tactical-combat .tc-beast-peek-head strong{font-size:13px;color:#f2dbac}
+#tactical-combat .tc-beast-peek-head small{font-size:10px;color:#b3cdb7}
+#tactical-combat .tc-beast-peek>p{margin:8px 0 2px;font-size:11px;line-height:1.4;color:#d5d9c7}
+#tactical-combat .tc-beast-peek-hint{font-size:9px;color:#94b8a1}
+@media(orientation:portrait){
+  #tactical-combat .tc-beast-roster,#tactical-combat .tc-beast-panel{
+    top:47px;right:7px;width:calc(100% - 14px);
+    max-height:min(62%,400px);padding:11px;
+  }
+  #tactical-combat .tc-beast-peek{display:none!important}
+  #tactical-combat .tc-beast-card-title h2{font-size:17px}
+  #tactical-combat .tc-beast-portrait{width:62px;height:62px;flex-basis:62px}
+  #tactical-combat .tc-beast-traits section{padding:8px}
+  #tactical-combat .tc-beast-toggle{padding:4px 6px!important;min-height:30px!important;font-size:11px!important}
+}
+@media(max-width:490px){
+  #tactical-combat .tc-beast-toggle{font-size:10px!important;gap:3px}
+  #tactical-combat .tc-beast-toggle i{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  #tactical-combat .tc-beast-hp-track i{transition:none}
+}
