@@ -482,6 +482,36 @@ async function main(){
     assert.match(visible.description,/紅色斜紋框/);
     assert.match(visible.alert,/受到攻擊或場地危險預告/);
     assert.match(visible.hidden,/inset/,'accessible danger narration is not a new visual panel');
+    // Inspect an actual rendered Canvas frame, not merely source order.
+    // Dangerous border strokes must precede both actor sprites and HP labels.
+    const paintOrder=await view.evaluate(async()=>{
+      const canvas=document.querySelector('#tactical-combat .tc-arena canvas');
+      const ctx=canvas.getContext('2d'),events=[];
+      const stroke=ctx.stroke,drawImage=ctx.drawImage,strokeText=ctx.strokeText,clear=ctx.clearRect;
+      ctx.clearRect=function(...args){events.length=0;return clear.apply(this,args);};
+      ctx.stroke=function(...args){
+        if(['#f5a28b','#ffc69b','#ffe0a1'].includes(String(this.strokeStyle).toLowerCase()))
+          events.push('telegraph');
+        return stroke.apply(this,args);
+      };
+      ctx.drawImage=function(img,...args){
+        if(/creatures-atlas|player-(male|female)/.test(String(img?.src||'')))
+          events.push('actor');
+        return drawImage.apply(this,[img,...args]);
+      };
+      ctx.strokeText=function(text,...args){
+        if(String(text).includes('/'))events.push('hp');
+        return strokeText.apply(this,[text,...args]);
+      };
+      try{await new Promise(resolve=>setTimeout(resolve,210));return events.slice();}
+      finally{ctx.stroke=stroke;ctx.drawImage=drawImage;ctx.strokeText=strokeText;ctx.clearRect=clear;}
+    });
+    const dangerPaint=paintOrder.indexOf('telegraph');
+    assert.ok(dangerPaint>=0,'an actual attack warning outline is drawn');
+    assert.ok(paintOrder.indexOf('hp')>dangerPaint,
+      'attack range frames must be below player and beast health text');
+    if(paintOrder.includes('actor'))assert.ok(paintOrder.indexOf('actor')>dangerPaint,
+      'attack range frames must be below player and beast sprites');
     await view.screenshot({path:path.join(output,'phase5-danger-mobile.png')});
     await ratio(view);
     // An enemy displaced after locking its intent cannot attack from a stale origin.
