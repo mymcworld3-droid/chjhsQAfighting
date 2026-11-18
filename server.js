@@ -914,7 +914,7 @@ async function generateQuiz(req, res) {
         : /^[a-zA-Z0-9_-]{20,128}$/.test(requestedSession) ? `session:${requestedSession}` : '';
     const useReferences = tacticalMode || tacticalBankFill;
     const referencesFor = facet => useReferences ? quizReferences({
-        subject, level, topic:targetTopic, scope:adaptiveContext?.scope, facet, exclusions:scopeExclusions
+        subject, level, topic:targetTopic, scope:adaptiveContext?.scope, facet, exclusions:scopeExclusions, referenceSeed:randomSeed
     }) : [];
     const spareKey = correction ? '' : quizSparePool.key({
         owner: adaptiveContext ? 'adaptive:'+adaptiveContext.uid : sessionOwner, mode: tacticalMode?'tactical-references-v1':adaptiveContext?'adaptive-solo':String(quizMode || 'solo'), subject, level,
