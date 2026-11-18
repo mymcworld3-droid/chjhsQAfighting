@@ -1,7 +1,6 @@
 /* One responsibility per surface: mastery/skill upgrades in the hero,
  * loadouts in the deck, selection in the library, trial facts in one row. */
 #manual-training-root .manual-hero{margin-bottom:14px}
-#manual-training-root .manual-hero-mastery-description{display:none}
 #manual-training-root .manual-hero-next-inline{
   display:block;padding:7px 9px;background:rgba(11,24,18,.48);
   border-left:2px solid var(--mh-accent);border-radius:5px;
@@ -119,6 +118,14 @@
   color:#b5c9b9;font-size:10px;line-height:1.5
 }
 
+/* One live status message near the relevant controls, not a second card. */
+#manual-training-root .manual-status:empty{display:none}
+#manual-training-root .manual-status:not(:empty){
+  display:block;min-height:0;margin:8px 0 12px;padding:9px 12px;
+  border-radius:8px;border-left:3px solid #e3c081;
+  background:rgba(31,38,26,.89);font-size:12px;line-height:1.6;
+  color:#f5daa3;
+}
 /* Only one equipment count: in each tab, not in a duplicate statistics row. */
 #manual-training-root .manual-loadout{
   padding:clamp(13px,2vw,19px);margin:14px 0 18px
