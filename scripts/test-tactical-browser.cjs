@@ -421,20 +421,34 @@ async function main(){
     assert.equal((await read(view)).actors[0].stamina,player.stamina);
 
     await view.evaluate(()=>document.querySelector('#tactical-combat [data-action="attack"]').click());
-    const attack=Rules.aimCells(snapshot,player,Rules.basicFor(player))[0];
-    assert.ok(attack,'there should be an available basic attack direction');
+    // The wheel replaces normal attacks with an equipped manual; inspect the
+    // actual selected skill instead of assuming the basic attack cost is 2.
+    const manuals=(player.manualSkills||[]).map(id=>Rules.manualSkillFor(player,id)).filter(Boolean);
+    const selectedSkill=manuals[0]||Rules.basicFor(player);
+    const attackMode=manuals.length?'manual:'+selectedSkill.id:'attack';
+    const attack=Rules.aimCells(snapshot,player,selectedSkill)[0]||
+      (selectedSkill.range===0?{x:player.x,y:player.y}:null);
+    assert.ok(attack,'the selected attack must have at least one aimable tile');
     const pointer=await position(attack);
     await view.evaluate(p=>{
       const c=document.querySelector('#tactical-combat .tc-arena canvas');
+      c.dispatchEvent(new PointerEvent('pointerleave',{pointerType:'mouse',bubbles:true}));
       c.dispatchEvent(new PointerEvent('pointermove',{
         pointerId:163,pointerType:'mouse',isPrimary:true,
         clientX:p.x,clientY:p.y,bubbles:true
       }));
     },pointer);
     const visual=require('../public/cultivation/tactical-target-visuals.js');
-    const expectation=visual.derive(snapshot,'u1','attack',attack,Rules);
-    await view.waitForFunction(cost=>document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewCost===String(cost),expectation.cost);
-    assert.equal(await view.locator('.tc-arena canvas').getAttribute('data-hover-preview-targets'),String(expectation.affected.length));
+    const expectation=visual.derive(snapshot,'u1',attackMode,attack,Rules);
+    const diagnostic=await view.evaluate(()=>({
+      cost:document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewCost,
+      valid:document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewValid,
+      targets:document.querySelector('.tc-arena canvas')?.dataset.hoverPreviewTargets,
+      wheel:document.querySelector('[data-wheel-choice][aria-pressed="true"]')?.dataset.wheelChoice
+    }));
+    assert.equal(diagnostic.cost,String(expectation.cost),
+      'active attack preview should use equipped skill: '+JSON.stringify({diagnostic,skill:selectedSkill.id,expected:expectation.cost}));
+    assert.equal(diagnostic.targets,String(expectation.affected.length));
     await view.screenshot({path:path.join(output,'phase6-attack-focus-portrait.png')});
     await view.setViewportSize({width:844,height:390});await ratio(view);
     await view.screenshot({path:path.join(output,'phase6-attack-focus-landscape.png')});
