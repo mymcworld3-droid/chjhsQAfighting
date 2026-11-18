@@ -32,7 +32,7 @@ const makeBook=(level,school='sword',options={})=>({
   id:school==='sword'?'sword-wind':'body-rock',
   name:school==='sword'?'流風劍訣':'玄嶽鍛體訣',
   school,owned:true,level,progress:45,
-  expInLevel:45,expToNext:100,upgrade:level<20?{targetLevel:level+1,gold:110}:null,
+  expInLevel:45,expToNext:100,upgrade:level<10?{targetLevel:level+1,gold:110}:null,
   skills:[
     {id:'first',name:'第一招',level:1,cost:2,levelRequired:1,mastered:true,realmReady:true,unlocked:true},
     {id:'second',name:'第二招',level:1,cost:4,levelRequired:5,
@@ -57,17 +57,17 @@ test('four visual stages use exact level boundaries, clamping unexpected values'
   assert.equal(manualVisualState({level:'not a number'}).stage,'seed');
 });
 
-test('twenty stations distinguish reached, current, and level-1/5/10/20 milestones',()=>{
+test('only ten route stations and exactly three skill-unlock milestones are shown',()=>{
   const html=renderManualVisualMilestones(makeBook(5),escape);
-  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,20);
+  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
   assert.equal((html.match(/is-reached/g)||[]).length,5);
   assert.equal((html.match(/is-current/g)||[]).length,1);
-  assert.equal((html.match(/is-milestone-(1|5|10|20)/g)||[]).length,4);
+  assert.equal((html.match(/is-milestone-(1|5|10)/g)||[]).length,3);
   assert.match(html,/data-manual-growth-stage="inscribed"/);
   assert.match(html,/role="progressbar"/);
-  assert.match(html,/aria-valuenow="23"/);
+  assert.match(html,/aria-valuenow="49"/);
   assert.match(html,/領悟仍需達到修士境界/);
-  assert.equal((html.match(/<small>1<\/small>|<small>5<\/small>|<small>10<\/small>|<small>20<\/small>/g)||[]).length,4);
+  assert.equal((html.match(/<small>1<\/small>|<small>5<\/small>|<small>10<\/small>/g)||[]).length,3);
 });
 
 test('stages and aura rings are visible with original stable cover and clickable skill',()=>{
@@ -141,7 +141,7 @@ test('book names and image alt remain escaped',()=>{
   assert.match(card(book),/&lt;img src=x/);
 });
 
-test('mastery and aura share a 20-level rail with 1/5/10/20 raised milestones',()=>{
+test('Lv20 keeps the same original three skill-unlock milestones',()=>{
   const b=makeBook(20,'body',{progress:100,expInLevel:0,expToNext:0});
   const html=hero(b);
   assert.equal((html.match(/class="manual-hero-mastery"/g)||[]).length,1);
@@ -149,18 +149,19 @@ test('mastery and aura share a 20-level rail with 1/5/10/20 raised milestones',(
   assert.doesNotMatch(html,/class="manual-growth"/);
   assert.doesNotMatch(html,/class="manual-hero-track"/);
   assert.doesNotMatch(html,/class="manual-hero-level"/);
-  assert.match(html,/<span class="manual-hero-stage-badge">圓滿<\/span>\s*<span class="manual-hero-mastery-status">功法已達最高等級<\/span>/);
-  assert.match(html,/Lv. 20 \/ 20/);
+  assert.match(html,/<span class="manual-hero-stage-badge">圓滿<\/span>\s*<span class="manual-hero-mastery-status">靈紋完整<\/span>/);
+  assert.match(html,/Lv. 20/);
+  assert.doesNotMatch(html,/Lv. 20 \/ 20|最高等級/);
   assert.doesNotMatch(html,/功法修至最高等級，靈紋完整/);
   assert.doesNotMatch(html,/class="manual-hero-goal"/);
   assert.doesNotMatch(html,/class="manual-hero-roster"/);
-  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,20);
-  assert.equal((html.match(/is-milestone-(1|5|10|20)/g)||[]).length,4);
+  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
+  assert.equal((html.match(/is-milestone-(1|5|10)/g)||[]).length,3);
   assert.match(html,/style="width:100\.00%"/);
   assert.match(html,/aria-valuenow="100"/);
 });
 
-test('the single twenty-level rail advances between levels with real server progress',()=>{
+test('the 1–10 skill rail fills at Lv10 and never grows after that',()=>{
   const first=makeBook(1,'sword',{progress:0});
   const one=renderManualVisualMilestones(first,escape);
   const four=renderManualVisualMilestones(makeBook(4,'sword',{progress:50}),escape);
@@ -168,13 +169,18 @@ test('the single twenty-level rail advances between levels with real server prog
   const twenty=renderManualVisualMilestones(makeBook(20,'sword',{progress:100}),escape);
   const percent=markup=>Number(markup.match(/style="width:([0-9.]+)%"/)?.[1]);
   assert.equal(percent(one),0);
-  assert(percent(four)>18 && percent(four)<19);
-  assert(percent(ten)>47 && percent(ten)<48);
+  assert(percent(four)>38 && percent(four)<40);
+  assert.equal(percent(ten),100);
   assert.equal(percent(twenty),100);
+  const fourteen=renderManualVisualMilestones(makeBook(14,'sword',{progress:22}),escape);
+  assert.equal(percent(fourteen),100);
+  assert.equal((fourteen.match(/class="manual-growth-mark /g)||[]).length,10);
+  assert.match(fourteen,/目前 Lv. 14/);
+  assert.doesNotMatch(fourteen,/<small>14<\/small>/);
   assert.match(one,/<small>1<\/small>/);
   assert.match(one,/<small>5<\/small>/);
   assert.match(one,/<small>10<\/small>/);
-  assert.match(one,/<small>20<\/small>/);
+  assert.doesNotMatch(one,/<small>20<\/small>/);
   assert.equal((one.match(/is-milestone is-reached/g)||[]).length,0);
 });
 
