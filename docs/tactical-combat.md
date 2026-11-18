@@ -198,3 +198,15 @@ node scripts/test-tactical-browser.cjs
 - 手機直式資料卡置於頂部下方且高度受限，可內部捲動；左右四分之一圓仍是原操作區。雙人鬥法不顯示 PvE 靈獸入口。
 
 相關程式：`public/cultivation/tactical-beast-inspector.js`、`public/styles/tactical-beast-inspector.css`、`public/cultivation/tactical-renderer.js` 與 `public/cultivation/tactical-combat.js`。回歸腳本 `scripts/test-tactical-browser.cjs` 已加入清單、資料、演練、長按無操作與行動輪存在性檢查。
+
+## 第二階段：戰場視覺生命力（2026-11-18）
+
+本階段僅增加 PvE Canvas 視覺呈現，不改動 `tactical-rules.js`、伺服器權威快照、種子地圖、戰鬥事件或體力／獎勵計算。
+
+- 新增 `public/cultivation/tactical-ambience.js`：依 `trial.biome` 與既有 terrain 種類推導竹林、荒漠、雪嶺、碧水、遺墟五種環境。使用既有地圖種子／布局雜湊建立固定位置的地面裝飾，不呼叫 `Math.random()`，同關卡不因移動、重整或不同裝置而重抽。對水面地格繪製輕微波紋，障礙位置不生成可誤判的地面通路紋理。
+- 地面紋理預先光柵化到離屏 Canvas 並隨地圖一起縮放；每幀只繪製有限的背景光色與少量飄動粒子。五種地形的粒子形狀不同（竹葉、沙塵、雪花、水光、浮塵）。場景光影與粒子都繪製在移動格、技能紅格與敵方攻擊預告之下。
+- 樹冠依地格位置做極小幅度搖動，樹幹與實際障礙格保持不動；玩家與不同靈獸依種類做呼吸、左右輕擺或浮空待機動作，幅度不超過 0.045 格。角色血條、點選／長按／攻擊命中範圍完全使用伺服器原始座標，畫面偏移不影響操作。
+- 增加障礙落地陰影及主角附近的淡色靈光，所有圖層仍限制在有限地圖內；不生成地圖外假地形。雙人鬥法與初遇妖獸示範沿用原本的繪製行為。
+- 事件動畫（技能、移動與傷害數字）保持原本影格排程；靜態場景與可移動格的持續更新改以約 66～100 ms 的低頻計時器進行，避免閒置也持續 60fps 重畫。進入彈窗、離開戰場或頁面隱藏後停止。`prefers-reduced-motion: reduce` 時保留靜態地面細節，停用持續性環境更新與待機動態。
+
+新增 `tests/tactical-ambience.test.cjs` 驗證環境辨識、固定種子可重現、畫面與規則資料分離、待機幅度界限、無障礙變動、減少動態效果及靜態快取；既有瀏覽器驗收另確認視覺層載入、閒置影格頻率、減少動態效果與回合／體力資料不變。
