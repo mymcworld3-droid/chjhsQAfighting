@@ -157,6 +157,30 @@
 }
 #manual-training-root .manual-deck-state{font-size:10px}
 
+/* Intrinsic cultivation rank, separate from the player's own realm.
+   The selected book has one rank label, never a duplicate in its text rows. */
+#manual-training-root .manual-hero-tier-badge,
+#manual-training-root .manual-library-school-tag{
+  border:1px solid rgba(187,216,178,.6);
+  color:#e8f5d0;background:rgba(27,59,41,.92);
+  font-size:10px;font-weight:850;letter-spacing:.015em;
+  box-shadow:0 2px 9px #0005;white-space:nowrap;
+}
+#manual-training-root .manual-hero-tier-badge.is-tier-foundation,
+#manual-training-root .manual-library-school-tag.is-tier-foundation{
+  border-color:#91d8e9;color:#e3f6ff;
+  background:linear-gradient(115deg,rgba(33,78,91,.97),rgba(23,53,67,.94));
+}
+#manual-training-root .manual-hero-tier-badge.is-tier-nascent,
+#manual-training-root .manual-library-school-tag.is-tier-nascent{
+  border-color:#dcc5ff;color:#fff1d3;
+  background:linear-gradient(115deg,rgba(96,65,122,.98),rgba(67,49,85,.96));
+  box-shadow:0 0 13px rgba(194,143,231,.22),0 2px 9px #0005;
+}
+#manual-training-root .manual-library-school-tag{
+  position:absolute;left:6px;top:6px;z-index:3;padding:4px 7px;
+  border-radius:6px;pointer-events:none;
+}
 /* Gallery is a shelf: one cover, one name, one level, one meaningful status. */
 #manual-training-root .manual-library{
   margin:14px 0 18px;padding:13px
