@@ -78,7 +78,7 @@ test('upgrade always uses the server price and disables on insufficient gold',()
 test('max-level and fully unlocked books show completion without a fabricated upgrade',()=>{
   const skills=threeSkills().map(skill=>({...skill,unlocked:true,mastered:true,realmReady:true}));
   const view=draw([makeBook('body-rock',{
-    level:10,progress:100,expInLevel:0,expToNext:0,skills,upgrade:null
+    level:20,progress:100,expInLevel:0,expToNext:0,skills,upgrade:null
   })]);
   assert.match(view.html,/功法已達最高等級/);
   assert.doesNotMatch(view.html,/class="manual-hero-goal"/);
@@ -127,4 +127,28 @@ test('a locked technique remains inspectable without an equipment or upgrade but
   assert.match(view.html,/尚需 功法 Lv. 5/);
   assert.doesNotMatch(view.html,/data-manual-equip="second"/);
   assert.doesNotMatch(view.html,/data-skill-upgrade="second"/);
+});
+
+test('Lv10 is a third-technique milestone, not max level; Lv20 is the new cap',()=>{
+  const book=makeBook('body-rock',{
+    level:10,progress:35,expInLevel:84,expToNext:220,
+    upgrade:{targetLevel:11,targetExp:1300,gold:272},tierRealm:'元嬰'
+  });
+  const mid=draw([book]);
+  assert.match(mid.html,/Lv. 10 \/ 20/);
+  assert.match(mid.html,/升至 Lv. 11/);
+  assert.match(mid.html,/元嬰功法/);
+  assert.match(mid.html,/本功法攻擊 \+10/);
+  assert.doesNotMatch(mid.html,/功法已達最高等級/);
+  const end=draw([makeBook('body-rock',{level:20,upgrade:null,progress:100})]);
+  assert.match(end.html,/Lv. 20 \/ 20/);
+  assert.match(end.html,/功法已達最高等級/);
+});
+
+test('attack total from server and owned book tier are displayed without fabricating higher rank',()=>{
+  const book=makeBook('body-rock',{level:8,tierRealm:'築基'});
+  const view=draw([book],book.id,{attackBonus:28});
+  assert.match(view.html,/築基功法/);
+  assert.match(view.html,/本功法攻擊 \+8/);
+  assert.match(view.html,/已獲功法合計 \+28/);
 });
