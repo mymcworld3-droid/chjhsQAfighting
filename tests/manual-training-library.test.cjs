@@ -86,7 +86,7 @@ test('the selected book is visibly marked but not claimed as a combat loadout',(
 });
 
 test('maxed and approaching manuscripts get one brief status only',()=>{
-  const max=book('sword-wind','sword',{level:10,progress:100});
+  const max=book('sword-wind','sword',{level:20,progress:100});
   const card=draw(max,max.id);
   assert.match(card,/圓滿/);
   assert.doesNotMatch(card,/功法已達最高等級/);
@@ -109,4 +109,14 @@ test('only safe escaped metadata enters summary markup',()=>{
   assert.doesNotMatch(card,/<svg onload/);
   assert.match(card,/&lt;img src=x/);
   assert.doesNotMatch(card,/&lt;svg onload/); // No duplicate skill metadata on collection cards.
+});
+
+test('a level-10 manual reads 大成, while a level-20 manual is actually 圓滿',()=>{
+  const refined=draw(book('sword-wind','sword',{level:10,progress:0,tierRealm:'元嬰'}));
+  assert.match(refined,/Lv. 10/);
+  assert.match(refined,/大成/);
+  assert.match(refined,/元嬰功法/);
+  assert.doesNotMatch(refined,/圓滿/);
+  const max=draw(book('sword-wind','sword',{level:20,progress:100,tierRealm:'元嬰'}));
+  assert.match(max,/圓滿/);
 });
