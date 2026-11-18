@@ -22,3 +22,5 @@ jobs:
         run: TACTICAL_SKETCH_ONLY=1 node scripts/test-tactical-browser.cjs
       - name: Manual training artwork stability
         run: node scripts/test-manual-training-browser.cjs
+      - name: Cooperative dungeon map browser acceptance
+        run: node scripts/test-dungeon-map-browser.cjs
