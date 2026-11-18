@@ -297,13 +297,13 @@ async function main(){
     room.ground=Array(room.width*room.height).fill(13);
     room.blocks=original.blocks.map(block=>({...block,kind:'rock'}));
     room.revision=initial.revision+1;
-    await view.locator('[data-sync]').click();
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
     await view.waitForFunction(()=>document.querySelector('.tc-arena canvas')?.dataset.ambientTheme==='desert');
     assert.equal((await read(view)).id,initial.id);
     await view.screenshot({path:path.join(output,'phase4-same-size-desert.png')});
     Object.assign(room,{trial:original.trial,terrain:original.terrain,ground:original.ground,
       blocks:original.blocks,revision:room.revision+1});
-    await view.locator('[data-sync]').click();
+    await view.evaluate(()=>document.querySelector('#tactical-combat [data-sync]').click());
     await view.waitForFunction(expected=>
       document.querySelector('.tc-arena canvas')?.dataset.ambientTheme===expected,
       await view.evaluate(room=>QATacticalAmbience.themeFor(room),initial));
