@@ -139,6 +139,7 @@ async function main(){
     await page.locator('[data-manual-celebration-dismiss]').click();
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=270;
     await page.locator('[data-manual-refresh]').click();
+    await page.locator('[data-manual-anticipation="imminent"]').waitFor();
     assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'imminent');
     assert.match(await page.locator('.manual-anticipation').textContent(),/還差 10 EXP/);
     await page.setViewportSize({width:393,height:852});
@@ -151,6 +152,7 @@ async function main(){
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=280;
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--manual-upgrade').waitFor();
+    await page.locator('[data-manual-anticipation="realm"]').waitFor();
     assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'realm');
     assert.equal(await page.locator('.manual-hero-step.is-realm-locked').count(),1);
     assert.equal(await page.locator('.manual-hero-step.is-learned').count(),1);
