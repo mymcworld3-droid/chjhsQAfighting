@@ -87,14 +87,15 @@ test('reaching level 5 is not an unlock when the realm requirement is unmet',()=
   assert.match(html,/需築基境/);
   assert.doesNotMatch(html,/三招皆已領悟/);
 });
-test('level 10 accurately labels an already completed book, no extra level promises',()=>{
+test('level 10 has more mastery levels ahead, even with all three skills learned',()=>{
   const skills=book().skills.map(x=>({...x,unlocked:true,mastered:true,realmReady:true}));
   const html=renderManualBattleRecap(room(),'u1',manuals,{
-    library:[book(10,{totalExp:1080,progress:100,skills})]
+    library:[book(10,{totalExp:1080,expInLevel:0,expToNext:220,progress:0,skills})]
   },options);
-  assert.match(html,/功法已達最高等級/);
+  assert.doesNotMatch(html,/功法已達最高等級/);
   assert.match(html,/三招皆已領悟/);
-  assert.match(html,/aria-valuenow="100"/);
+  assert.match(html,/尚需 220 EXP 升級/);
+  assert.match(html,/aria-valuenow="0"/);
 });
 test('failed post-battle mastery sync never pretends to be loading forever',()=>{
   const html=renderManualBattleRecap(room(),'u1',manuals,null,
@@ -126,4 +127,14 @@ test('rendering does not mutate finished battle ledgers or the library',()=>{
   const before=JSON.stringify([r,m]);
   renderManualBattleRecap(r,'u1',manuals,m,options);
   assert.equal(JSON.stringify([r,m]),before);
+});
+
+test('only level 20 is shown as full mastery in post-battle recap',()=>{
+  const skills=book().skills.map(x=>({...x,unlocked:true,mastered:true,realmReady:true}));
+  const h=renderManualBattleRecap(room(),'u1',manuals,{
+    library:[book(20,{totalExp:4180,expInLevel:0,expToNext:0,progress:100,skills})]
+  },options);
+  assert.match(h,/Lv. 20/);
+  assert.match(h,/功法已達最高等級/);
+  assert.match(h,/aria-valuenow="100"/);
 });
