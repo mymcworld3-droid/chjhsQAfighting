@@ -219,6 +219,49 @@ async function main(){
     }
     await view.locator('[data-modal]').waitFor({state:'hidden'});
   }
+  async function beastInspectorChecks(view){
+    const initial=await read(view),living=initial.actors.filter(a=>a.bot&&a.hp>0),monster=living[0];
+    assert.ok(monster,'first PvE stage has at least one living creature');
+    await view.locator('[data-beast-toggle]').waitFor();
+    assert.equal(await view.locator('[data-beast-count]').textContent(),String(living.length));
+    await view.locator('[data-beast-toggle]').click();
+    await view.locator('[data-beast-roster]').waitFor({state:'visible'});
+    assert.equal(await view.locator('[data-beast-select]').count(),initial.actors.filter(a=>a.bot).length);
+    await view.locator('[data-beast-select]').first().click();
+    await view.locator('[data-beast-panel]').waitFor({state:'visible'});
+    const beast=Rules.monsterProfile(monster.species);
+    const panel=await view.locator('[data-beast-panel]').textContent();
+    assert.ok(panel.includes(beast.attackText)&&panel.includes(beast.moveText)&&panel.includes(beast.tip),
+      'battle information must come from existing monster rules');
+    assert.equal(await view.locator('[data-beast-scrim]').count(),0);
+    await view.screenshot({path:path.join(output,'beast-inspector-mobile.png')});
+    await ratio(view);
+    await view.locator('[data-beast-demo]').click();
+    await view.locator('[data-enemy-demo] canvas').waitFor();
+    assert.equal(await view.locator('.tc-encounter h2').textContent(),beast.name);
+    await view.locator('[data-dismiss]').click();
+    await view.locator('[data-beast-panel]').waitFor({state:'hidden'});
+    assert.equal(await view.locator('[data-beast-toggle]').isVisible(),true);
+
+    // A touch hold must open a panel without causing a combat command.
+    await view.evaluate(async({x,y,width,height})=>{
+      const canvas=document.querySelector('.tc-arena canvas'),r=canvas.getBoundingClientRect();
+      const g=QATacticalCamera.geometry(QATacticalCamera.create(),r.width,r.height,{x:0,y:0,width,height});
+      const clientX=r.left+g.ox+(x+.5)*g.cell,clientY=r.top+g.oy+(y+.5)*g.cell;
+      const dispatch=type=>canvas.dispatchEvent(new PointerEvent(type,{
+        pointerId:88,pointerType:'touch',isPrimary:true,clientX,clientY,bubbles:true,cancelable:true
+      }));
+      dispatch('pointerdown');await new Promise(resolve=>setTimeout(resolve,570));dispatch('pointerup');
+    },{x:monster.x,y:monster.y,width:initial.width,height:initial.height});
+    await view.locator('[data-beast-panel]').waitFor({state:'visible'});
+    await view.locator('[data-beast-close]').last().click();
+    const after=await read(view);
+    assert.equal(after.revision,initial.revision,'inspection and demonstrations are read-only');
+    assert.equal(after.actors[0].stamina,initial.actors[0].stamina,'inspection does not consume energy');
+    assert.equal(await view.locator('.tc-quarter-action [data-end]').count(),1,
+      'existing quarter-circle controls remain mounted');
+  }
+
   async function rangePreviewChecks(view){
     const current=await read(view),key=service.ROOMS+'/'+current.id,saved=db.records.get(key);
     const room=Rules.create({id:current.id,mode:'pve',players:[{...saved.actors[0],core:'thunder',branch:'lightning'}]});
@@ -616,7 +659,7 @@ async function main(){
     await mobile.reload();await mobile.locator('#entry').click();await mobile.locator('.tc-arena canvas').waitFor();await mobile.locator('#startup-cloud-curtain').waitFor({state:'detached'});
     assert.equal(await mobile.locator('[data-intro-ack]').count(),0,'acknowledged species does not repeat after refresh');
     assert.equal(await mobile.locator('[data-start],[data-map],[data-branch]').count(),0,'trial entry skips both pickers');
-    assert.equal((await read(mobile)).trial.stage,1);await correct(mobile);
+    assert.equal((await read(mobile)).trial.stage,1);await beastInspectorChecks(mobile);await correct(mobile);
     assert.equal((await read(mobile)).actors[0].stamina,6);
     assert.equal(await mobile.evaluate(()=>getCurrentUserData().stats.totalScore),31,'answer progress updates the existing account UI immediately');
     const beforeMove=await read(mobile),pos=Rules.neighbours(beforeMove,beforeMove.actors[0]).find(p=>!Rules.at(beforeMove,p));
