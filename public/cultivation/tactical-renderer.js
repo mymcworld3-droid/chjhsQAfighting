@@ -3,17 +3,19 @@ import './tactical-rules.js?v=20261116-pve-v4';
 import './tactical-animation.js?v=20261116-stability-v1';
 import './tactical-skill-effects.js?v=20261116-long-line-afterglow-v1';
 import './tactical-camera.js';
+import './tactical-ambience.js?v=20261118-pve-visual-v2';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
 const SkillEffects=globalThis.QATacticalSkillEffects;
 const Camera=globalThis.QATacticalCamera;
+const Ambience=globalThis.QATacticalAmbience;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.ambientTimer=null;this.ambience=null;this.ambienceBlocks=-1;this.destroyed=false;this.paused=false;this.range=[];this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -143,6 +145,13 @@ export class TacticalRenderer{
   }
   update(state,uid,mode,selection){
     this.preview=null;
+    // Rebuild only when the finite map changes; no new network calls or state writes.
+    if(state.mode==='pve'&&(this.ambience?.id!==state.id||
+      this.ambienceBlocks!==(state.blocks?.length||0)||this.ambience?.width!==state.width||
+      this.ambience?.height!==state.height)){
+      this.ambience=Ambience.prepare(state);this.ambienceBlocks=state.blocks?.length||0;
+    }else if(state.mode!=='pve'){this.ambience=null;this.ambienceBlocks=-1;}
+    this.canvas.dataset.ambientTheme=this.ambience?.theme||'none';
     if(this.state?.id!==state.id||this.state?.width!==state.width||this.state?.height!==state.height){
       this.queue=[];this.scene=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;this.inspectedUid=null;this.hoverUid=null;this.clearLongPress();
       if(state.mode==='pve'&&state.width>=11){
@@ -162,7 +171,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.draw();
+    this.ambience=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -188,7 +197,7 @@ export class TacticalRenderer{
   }
   setPaused(value){if(this.paused===value)return;this.paused=value;this.draw();}
   resetView(){this.camera=Camera.create();this.draw();}
-  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
+  destroy(){this.destroyed=true;this.queue=[];this.scene=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
@@ -370,6 +379,7 @@ export class TacticalRenderer{
   }
   draw(){
     cancelAnimationFrame(this.frame);this.frame=0;
+    clearTimeout(this.ambientTimer);this.ambientTimer=null;
     if(this.destroyed||!this.state)return;
     const now=performance.now();
     if(this.paused||document.hidden){this.heldAt??=now;return;}
@@ -408,6 +418,14 @@ export class TacticalRenderer{
       const px=Math.round(ox+x*cell),py=Math.round(oy+y*cell),edgeX=Math.round(ox+(x+1)*cell),edgeY=Math.round(oy+(y+1)*cell),t=s.ground?.[y*s.width+x]??s.terrain;
       if(!this.sprite('ground',t%4*128,Math.floor(t/4)*128,128,128,px,py,edgeX-px,edgeY-py)){c.fillStyle=(x+y)%2?'#5b6650':'#5f6b53';c.fillRect(px,py,edgeX-px,edgeY-py);}
       c.strokeStyle='#10291b30';c.lineWidth=.7;c.strokeRect(px,py,edgeX-px,edgeY-py);
+    }
+    // Ambience is painted behind tactical ranges, red warnings and actors.
+    // It cannot conceal danger telegraphs or create deceptive walkable tiles.
+    const ambienceActive=s.mode==='pve'&&!this.preview&&!!this.ambience;
+    if(ambienceActive){
+      const visual={ox,oy,cell},quality=(cell<25||w*h>1350000)?'low':'normal';
+      Ambience.drawDetails(c,this.ambience,visual);
+      Ambience.drawAtmosphere(c,this.ambience,visual,now,reduced,quality);
     }
     const objective=s.objective,markers=[];
     if(objective?.type==='transport'){
@@ -461,6 +479,12 @@ export class TacticalRenderer{
     for(const p of s.blocks){
       if(p.kind==='water')continue;
       const x=ox+p.x*cell,y=oy+p.y*cell;fill(p,'#1c261b60');
+      // Anchor visual depth beneath immovable trees and rocks, never over paths.
+      if(ambienceActive){
+        c.save();c.fillStyle='rgba(9,19,13,.24)';c.beginPath();
+        c.ellipse(x+cell*.59,y+cell*.86,cell*.48,cell*.16,-.08,0,Math.PI*2);
+        c.fill();c.restore();
+      }
       if(!this.sprite('props',(p.kind==='tree'?1:2)*128,0,128,128,x-cell*.06,y-cell*.15,cell*1.12,cell*1.12)){
         c.fillStyle='#56594c';c.fillRect(x+cell*.14,y+cell*.1,cell*.72,cell*.8);
       }
@@ -472,8 +496,16 @@ export class TacticalRenderer{
       const {x,y}=a;
       const sizeFactor=a.boss?2:1;
       const px=ox+(x+sizeFactor/2+(a.sway||0))*cell,groundY=oy+(y+sizeFactor/2)*cell,py=Math.max(cell*.82,groundY-(a.lift||0)*cell),own=a.uid===this.uid,enemy=a.team!==mine?.team;
+      const pose=Ambience.idlePose(a,now,!ambienceActive||reduced||animating);
+      const actorPx=px+pose.dx*cell,actorPy=py+pose.dy*cell;
       c.save();c.globalAlpha=a.opacity??1;
-      c.beginPath();c.ellipse(px,groundY+cell*.18,cell*.28,cell*.12,0,0,Math.PI*2);c.fillStyle='#0005';c.fill();
+      c.beginPath();c.ellipse(px,groundY+cell*.18,cell*.28*sizeFactor,cell*.12*sizeFactor,0,0,Math.PI*2);c.fillStyle='#0005';c.fill();
+      if(ambienceActive&&own){
+        const halo=c.createRadialGradient(px,groundY,cell*.1,px,groundY,cell*.63);
+        halo.addColorStop(0,'rgba(180,222,176,.13)');
+        halo.addColorStop(1,'rgba(180,222,176,0)');
+        c.fillStyle=halo;c.beginPath();c.ellipse(px,groundY,cell*.63,cell*.43,0,0,Math.PI*2);c.fill();
+      }
       c.strokeStyle=own?'#f8d58a':enemy?'#f29c83':'#a2d8c4';c.lineWidth=own?2.5:1.5;
       c.beginPath();c.ellipse(px,py+cell*.15,cell*.34,cell*.2,0,0,Math.PI*2);c.stroke();
       if(a.uid===this.inspectedUid&&!animating){
@@ -482,10 +514,10 @@ export class TacticalRenderer{
         c.beginPath();c.ellipse(px,py+cell*.17,cell*.44*sizeFactor,cell*.27*sizeFactor,0,0,Math.PI*2);
         c.stroke();c.restore();
       }
-      const size=cell*1.18*sizeFactor,sw=size*(a.scaleX||1),sh=size*(a.scaleY||1);
-      const drawn=a.bot?this.sprite('monsters',a.species%5*128,Math.floor(a.species/5)*128,128,128,px-sw/2,py-sh*.7,sw,sh):
-        this.sprite(a.gender,0,0,112,112,px-sw/2,py-sh*.76,sw,sh);
-      if(!drawn){c.fillStyle=enemy?'#c57a67':'#e5cc8a';c.beginPath();c.arc(px,py-cell*.12,cell*.24,0,Math.PI*2);c.fill();}
+      const size=cell*1.18*sizeFactor,sw=size*(a.scaleX||1)*pose.sx,sh=size*(a.scaleY||1)*pose.sy;
+      const drawn=a.bot?this.sprite('monsters',a.species%5*128,Math.floor(a.species/5)*128,128,128,actorPx-sw/2,actorPy-sh*.7,sw,sh):
+        this.sprite(a.gender,0,0,112,112,actorPx-sw/2,actorPy-sh*.76,sw,sh);
+      if(!drawn){c.fillStyle=enemy?'#c57a67':'#e5cc8a';c.beginPath();c.arc(actorPx,actorPy-cell*.12,cell*.24,0,Math.PI*2);c.fill();}
       if(a.shield){c.strokeStyle='#9adcf1';c.lineWidth=2;c.beginPath();c.arc(px,py-cell*.12,cell*.39,0,Math.PI*2);c.stroke();}
       if(a.guard){c.strokeStyle='#e3ca89a0';c.lineWidth=1.5;c.beginPath();c.arc(px,py-cell*.12,cell*.44,-Math.PI*.85,-Math.PI*.15);c.stroke();}
       if(a.flash){c.globalAlpha=(a.opacity??1)*a.flash;c.fillStyle='#ffe7c2';c.beginPath();c.ellipse(px,py-cell*.12,cell*.26,cell*.4,0,0,Math.PI*2);c.fill();c.globalAlpha=a.opacity??1;}
@@ -517,6 +549,13 @@ export class TacticalRenderer{
     if(this.selection&&!animating)fill(this.selection,'#fff0','#fff1ba');
     if(!frameless){c.strokeStyle='#d9c69380';c.lineWidth=1.5;c.strokeRect(ox+view.x*cell,oy+view.y*cell,cell*view.width,cell*view.height);}
     if(weight)c.restore();
-    if(!this.preview&&(animating||myTurn&&this.mode==='move'&&this.range.length&&!reduced))this.frame=requestAnimationFrame(()=>this.draw());
+    if(!this.preview&&animating){
+      // Combat animations keep their original smooth frame timing.
+      this.frame=requestAnimationFrame(()=>this.draw());
+    }else if(!this.preview&&!reduced&&(ambienceActive||
+      myTurn&&this.mode==='move'&&this.range.length)){
+      // Lightweight, capped ambient refresh; no perpetual 60fps idle redraw.
+      this.ambientTimer=setTimeout(()=>this.draw(),w*h>1350000?100:66);
+    }
   }
 }
