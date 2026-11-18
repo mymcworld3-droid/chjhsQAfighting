@@ -1,6 +1,7 @@
 // Phase 3: owned-manual collection art and filters.
 // Presentational only: visibility, levels, skill unlocks and EXP come from the server.
 import {manualVisualState,manualSkillVisualState} from './manual-visual-progression.js';
+import {manualAnticipation} from './manual-anticipation.js';
 
 export function filterOwnedManuals(state, filter='all') {
   const owned=(state?.library||[]).filter(book=>book?.owned===true);
@@ -34,9 +35,11 @@ export function renderManualCollectionHeader(state, filter, {esc}) {
   </div>`;
 }
 
-export function renderManualCollectionSummary(book, focusId, equipped, {esc,bookArt,skillArt,label}) {
+export function renderManualCollectionSummary(book, focusId, equipped, {esc,bookArt,skillArt,label,totalExpForLevel}) {
   const fmt=v=>Math.max(0,Math.round(Number(v)||0)).toLocaleString('zh-TW');
   const visual=manualVisualState(book);
+  const anticipation=manualAnticipation(book,totalExpForLevel);
+  const near=anticipation&&['near','imminent'].includes(anticipation.status);
   const level=Math.max(1,Math.min(10,Math.round(Number(book.level)||1)));
   const capped=level>=10;
   const progress=capped?100:Math.min(100,Math.max(0,Number(book.progress)||0));
@@ -73,7 +76,7 @@ export function renderManualCollectionSummary(book, focusId, equipped, {esc,book
       此配置已裝 ${equippedCount} 招</span>`:'';
   return `<summary class="manual-book-top" data-manual-visual-stage="${visual.stage}"
     aria-label="查看${esc(book.name)}功法詳情，功法氣象${esc(visual.label)}">
-    <span class="manual-library-art-zone" data-manual-stage="${visual.stage}">
+    <span class="manual-library-art-zone" data-manual-stage="${visual.stage}" data-manual-approach="${near?anticipation.status:'none'}">
       <span class="manual-library-cover-glow" aria-hidden="true"></span>
       <span class="manual-library-cover-wrap">${coverElement}</span>
       <span class="manual-library-school-tag">
@@ -82,6 +85,7 @@ export function renderManualCollectionSummary(book, focusId, equipped, {esc,book
       <span class="manual-library-stage-badge" title="視覺成長階段，不影響戰鬥數值">
         <i class="fa-solid fa-sparkles" aria-hidden="true"></i> ${esc(visual.label)}</span>
       ${selected?'<span class="manual-library-featured-tag">展示中</span>':''}
+      ${near?`<span class="manual-library-breakthrough-tag">${anticipation.status==='imminent'?'即將突破':'接近突破'} · Lv. ${anticipation.targetLevel}</span>`:''}
     </span>
     <span class="manual-library-card-info">
       <span class="manual-library-name-row"><strong>${esc(book.name)}</strong>
@@ -100,7 +104,8 @@ export function renderManualCollectionSummary(book, focusId, equipped, {esc,book
       <span class="manual-library-three-skills" aria-label="三招領悟進度">${skills}</span>
       <span class="manual-library-next-goal">
         <span><i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-          ${esc(nextLabel)}<small>${esc(nextHint)}</small></span>
+          ${esc(nextLabel)}<small>${esc(nextHint)}
+          ${near?` · 尚差 ${fmt(anticipation.remaining)} EXP 達等級門檻`:''}</small></span>
         <i class="fa-solid fa-chevron-down manual-library-disclosure" aria-hidden="true"></i>
       </span>
     </span>
