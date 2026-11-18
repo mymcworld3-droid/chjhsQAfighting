@@ -49,7 +49,7 @@
     for(let y=0;y<height;y++)for(let x=0;x<width;x++){
       const v=rand(),u=rand(),a=rand(),r=rand();
       const water=(state?.ground?.[y*width+x]===4);
-      if(blocked.has(x+','+y))continue;
+      if(blocked.has(x+','+y)&&!water)continue;
       if(v<.7||water)details.push({
         x,y,u:.16+u*.65,v:.19+a*.62,angle:r*TAU,
         size:.10+rand()*.14,kind:water?'ripple':theme
@@ -125,6 +125,15 @@
     const width=plan.width*cell,height=plan.height*cell;
     const seconds=Number.isFinite(time)?time/1000:0;
     ctx.save();ctx.beginPath();ctx.rect(ox,oy,width,height);ctx.clip();
+    // A restrained wash gives each habitat a lighting signature without
+    // tinting tactical indicators, since those are drawn later.
+    if(quality!=='low'){
+      const wash=ctx.createLinearGradient(ox,oy,ox+width,oy+height);
+      wash.addColorStop(0,colors.glow);wash.addColorStop(.52,'rgba(0,0,0,0)');
+      wash.addColorStop(1,colors.glow);
+      ctx.globalAlpha=.7+.1*Math.sin(seconds*.32);
+      ctx.fillStyle=wash;ctx.fillRect(ox,oy,width,height);
+    }
     const count=quality==='low'?Math.min(9,plan.motes.length):plan.motes.length;
     for(let i=0;i<count;i++){
       const mote=plan.motes[i],period=5+mote.speed*8;
