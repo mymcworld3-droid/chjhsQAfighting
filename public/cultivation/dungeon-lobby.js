@@ -20,6 +20,7 @@ let entry,root,body,notice,open=false,room=null,account='',pending=false,refresh
 let list=[],listLoading=false,lastListAt=0,clock=null,requestSerial=0,initialFocus=null,roomRevision=-1;
 let streamStop=null,streamRoomId='',streamConnected=false,heartbeatBusy=false,lastHeartbeatAt=0;
 let fallbackFailures=0,nextFallbackAt=0,roomViewSignature='';
+let emptyRoomCheckAt=0,emptyRoomBusy=false;
 const HEARTBEAT_MS=20000,PRESENCE_STALE_MS=60000;
 const $=selector=>root?.querySelector(selector);
 function loadStyle(){
@@ -290,6 +291,25 @@ async function refreshRoom({force=false}={}){
     }
   }finally{refreshing=false;}
 }
+// A teammate may accept a room invite on another device while this tab is
+// showing the recruitment screen. Check the server-side membership pointer
+// occasionally, without continuously polling an already subscribed room.
+async function refreshRemoteMembership({force=false}={}){
+  if(!open||document.hidden||room||emptyRoomBusy||pending)return;
+  if(!force&&Date.now()-emptyRoomCheckAt<20000)return;
+  const uid=account,serial=requestSerial;
+  emptyRoomBusy=true;emptyRoomCheckAt=Date.now();
+  try{
+    const result=await reconnectDungeonRoom();
+    if(!validSession(uid,serial)||room||!result?.room)return;
+    acceptRoom(result.room);
+    announce('已恢復其他裝置或邀請加入的副本隊伍。');
+    void sendHeartbeat({force:true});
+  }catch(error){
+    if(validSession(uid,serial)&&!room&&error?.status===401)
+      announce('登入狀態已過期，請重新登入。');
+  }finally{emptyRoomBusy=false;}
+}
 function poll(){
   if(!open)return;
   // Do not keep showing another account's private room after account switch.
@@ -300,7 +320,10 @@ function poll(){
     void sendHeartbeat();
     if(!streamConnected)void refreshRoom();
     renderPresence();
-  }else void refreshList();
+  }else{
+    void refreshList();
+    void refreshRemoteMembership();
+  }
 }
 async function openLobby(){
   const uid=localUser();
@@ -312,6 +335,7 @@ async function openLobby(){
   }
   mount();account=uid;open=true;requestSerial++;
   clearRoom();list=[];listLoading=false;refreshing=false;heartbeatBusy=false;lastListAt=0;pending=false;
+  emptyRoomCheckAt=Date.now();emptyRoomBusy=false;
   initialFocus=document.activeElement;
   root.hidden=false;root.querySelector('[data-dg="close"]')?.focus({preventScroll:true});
   announce('正在恢復隊伍資訊…');render();
@@ -420,7 +444,11 @@ async function handleClick(event){
 function init(){
   entryMount();
   window.openDungeonLobby=openLobby;
-  window.addEventListener('xiuxian:dungeon-room-joined',()=>{void openLobby();});
+  window.addEventListener('xiuxian:dungeon-room-joined',()=>{
+    if(!open||localUser()!==account){void openLobby();return;}
+    // A room invite can be accepted while the screen was already open.
+    void refreshRemoteMembership({force:true});
+  });
   window.addEventListener('xiuxian:user-ready',entryMount);
   window.addEventListener('pageshow',entryMount);
   document.addEventListener('visibilitychange',()=>{
