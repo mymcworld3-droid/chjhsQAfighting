@@ -7,6 +7,7 @@ import './tactical-ambience.js?v=20261118-pve-visual-v2';
 import './tactical-impact-presentation.js?v=20261118-combat-phase3-v1';
 import './tactical-threat-visuals.js?v=20261118-phase5-v1';
 import './tactical-target-visuals.js?v=20261118-phase6-v1';
+import './tactical-compass.js?v=20261118-phase7-v1';
 const R=globalThis.QATactical;
 const attackSkill=(actor,mode)=>mode.startsWith('manual:')?(R.manualSkillFor(actor,mode.slice(7))||R.basicFor(actor)):R.basicFor(actor);
 const A=globalThis.QATacticalAnimation;
@@ -16,12 +17,13 @@ const Ambience=globalThis.QATacticalAmbience;
 const Impact=globalThis.QATacticalImpact;
 const Threats=globalThis.QATacticalThreats;
 const Targets=globalThis.QATacticalTargetVisuals;
+const Compass=globalThis.QATacticalCompass;
 const SOURCES={ground:'/assets/world-map/ai/ground-atlas.webp',props:'/assets/world-map/ai/props-atlas.webp',
   monsters:'/assets/world-map/ai/creatures-atlas.webp',male:'/assets/world-map/players/player-male.webp',female:'/assets/world-map/players/player-female.webp'};
 
 export class TacticalRenderer{
   constructor(canvas,onSelect,onActivity=()=>{},onInspect=()=>{}){
-    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.onSelect=onSelect;this.onActivity=onActivity;this.onInspect=onInspect;this.images={};this.frame=0;this.gestureFrame=0;this.ambientTimer=null;this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.destroyed=false;this.paused=false;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.focusBeastIndex=0;this.queue=[];this.scene=null;this.heldAt=null;this.camera=Camera.create();this.touches=new Map();this.dragging=false;this.suppressClickUntil=0;this.pinch=null;this.hoverUid=null;this.inspectedUid=null;this.longPressTimer=null;this.longPressTriggered=false;
     this.reducedMotion=window.matchMedia('(prefers-reduced-motion:reduce)');
     this.refresh=()=>this.draw();document.addEventListener('visibilitychange',this.refresh);this.reducedMotion.addEventListener('change',this.refresh);
     for(const [id,url]of Object.entries(SOURCES)){
@@ -130,17 +132,50 @@ export class TacticalRenderer{
     canvas.addEventListener('pointercancel',this.onPointerEnd);
     canvas.addEventListener('lostpointercapture',this.onPointerEnd);
     canvas.addEventListener('wheel',this.onWheel,{passive:false});
-    canvas.addEventListener('click',event=>{
+    this.onCanvasClick=event=>{
       if(!this.state||this.preview||this.isAnimating||this.paused||Date.now()<this.suppressClickUntil)return;
       const rect=canvas.getBoundingClientRect();
-      const p=Camera.tileAt(this.camera,event.clientX-rect.left,event.clientY-rect.top,rect.width,rect.height,{x:0,y:0,width:this.state.width,height:this.state.height});
+      const x=event.clientX-rect.left,y=event.clientY-rect.top;
+      if(this.state.mode==='pve'){
+        const view={x:0,y:0,width:this.state.width,height:this.state.height};
+        const g=Camera.geometry(this.camera,rect.width,rect.height,view);
+        const marks=Compass.derive(this.state,this.uid,{ox:g.ox,oy:g.oy,
+          cell:g.cell,width:rect.width,height:rect.height});
+        const marker=Compass.pick(marks,x,y);
+        if(marker){
+          this.focusCameraOn(marker.target);
+          this.suppressClickUntil=Date.now()+160;
+          return;
+        }
+      }
+      const p=Camera.tileAt(this.camera,x,y,rect.width,rect.height,
+        {x:0,y:0,width:this.state.width,height:this.state.height});
       if(R.inside(this.state,p))this.onSelect(p);
-    });
-    canvas.addEventListener('keydown',event=>{
-      if(!this.state||this.preview||this.isAnimating||this.paused)return;const delta={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[event.key];
-      if(!delta)return;event.preventDefault();const p=this.selection||this.state.actors.find(a=>a.uid===this.uid)||{x:0,y:0};
-      const next={x:p.x+delta[0],y:p.y+delta[1]};if(R.inside(this.state,next))this.onSelect(next);
-    });
+    };
+    this.onCanvasKeyDown=event=>{
+      if(!this.state||this.preview||this.isAnimating||this.paused)return;
+      if(this.state.mode==='pve'){
+        const key=event.key.toLowerCase();
+        if(['home','0','b','n'].includes(key)){
+          event.preventDefault();
+          if(key==='0')this.resetView();
+          else if(key==='home')this.focusCameraOn(this.state.actors.find(a=>a.uid===this.uid));
+          else if(key==='b')this.focusCameraOn(this.state.actors.find(a=>a.boss&&a.hp>0));
+          else {
+            const beasts=this.state.actors.filter(a=>a.bot&&a.hp>0);
+            if(beasts.length)this.focusCameraOn(beasts[this.focusBeastIndex++%beasts.length]);
+          }
+          return;
+        }
+      }
+      const delta={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[event.key];
+      if(!delta)return;event.preventDefault();
+      const p=this.selection||this.state.actors.find(a=>a.uid===this.uid)||{x:0,y:0};
+      const next={x:p.x+delta[0],y:p.y+delta[1]};
+      if(R.inside(this.state,next))this.onSelect(next);
+    };
+    canvas.addEventListener('click',this.onCanvasClick);
+    canvas.addEventListener('keydown',this.onCanvasKeyDown);
   }
   requestDraw(){
     // Pointermove and ResizeObserver may fire far faster than the display.
@@ -209,6 +244,7 @@ export class TacticalRenderer{
     }else if(state.mode!=='pve'){this.ambience=null;this.ambienceLayer=null;}
     this.canvas.dataset.ambientTheme=this.ambience?.theme||'none';
     if(newStage||this.state?.width!==state.width||this.state?.height!==state.height){
+      this.compassMarkers=[];this.focusBeastIndex=0;
       this.queue=[];this.scene=null;this.hoverSelection=null;this.hoverPlan=null;this.camera=Camera.create();this.touches.clear();this.dragging=false;this.pinch=null;this.inspectedUid=null;this.hoverUid=null;this.clearLongPress();
       this.suppressClickUntil=Date.now()+120;
       if(state.mode==='pve'&&state.width>=11){
@@ -235,7 +271,9 @@ export class TacticalRenderer{
       const message=this.threatPlan.description+
         '。紅色斜紋框為目前預告範圍，青綠標記只能避開目前已標示的危險格。';
       this.canvas.setAttribute('aria-description',message+
-        (this.targetPlan?'。選取目標：'+this.targetPlan.label+'。'+this.targetPlan.hint:''));
+        (this.targetPlan?'。選取目標：'+this.targetPlan.label+'。'+this.targetPlan.hint:'')+
+        '。視野外方向標記可點選定位。Home定位自己，B定位首領，N切換靈獸，0重設鏡頭。');
+      this.canvas.setAttribute('aria-keyshortcuts','Home B N 0');
       if(this.targetPlan){
         this.canvas.dataset.previewValid=String(this.targetPlan.valid);
         this.canvas.dataset.previewCost=String(this.targetPlan.cost);
@@ -251,6 +289,7 @@ export class TacticalRenderer{
         alert.textContent=this.threatPlan.description;
     }else{
       this.canvas.removeAttribute('aria-description');
+      this.canvas.removeAttribute('aria-keyshortcuts');
       delete this.canvas.dataset.threatCells;
       delete this.canvas.dataset.threatened;
       delete this.canvas.dataset.previewValid;
@@ -261,7 +300,7 @@ export class TacticalRenderer{
     this.state=state;this.uid=uid;this.mode=mode;this.selection=selection;this.activity();this.draw();
   }
   present(state,uid,scene=null,progress=0,view=null){
-    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.canvas.removeAttribute('aria-description');this.draw();
+    this.ambience=null;this.ambienceLayer=null;this.stageKey=null;this.canvas.dataset.ambientTheme='none';this.queue=[];this.scene=null;this.preview={scene,progress,view};this.state=state;this.uid=uid;this.mode='demo';this.selection=null;this.range=[];this.threatPlan=null;this.targetPlan=null;this.hoverSelection=null;this.hoverPlan=null;this.compassMarkers=[];this.canvas.removeAttribute('aria-description');this.canvas.removeAttribute('aria-keyshortcuts');this.draw();
   }
   get isAnimating(){return !!this.scene||this.queue.length>0;}
   get currentAction(){return (this.scene||this.queue[0])?.label||'';}
@@ -286,8 +325,26 @@ export class TacticalRenderer{
     return this.scene?Math.min(1,(now-this.scene.started)/this.scene.duration):0;
   }
   setPaused(value){if(this.paused===value)return;this.paused=value;this.draw();}
-  resetView(){this.camera=Camera.create();this.draw();}
-  destroy(){this.destroyed=true;this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
+  focusCameraOn(target){
+    if(!target||!this.state||this.preview||this.paused)return false;
+    const r=this.canvas.getBoundingClientRect();
+    if(!r.width||!r.height)return false;
+    const view={x:0,y:0,width:this.state.width,height:this.state.height};
+    const base=Camera.geometry({zoom:this.camera.zoom,panX:0,panY:0},r.width,r.height,view);
+    const x=Number(target.x),y=Number(target.y);
+    if(!Number.isFinite(x)||!Number.isFinite(y))return false;
+    const cx=x+(target.footprint?.width||0)*.5;
+    const cy=y+(target.footprint?.height||0)*.5;
+    this.camera=Camera.normalize({
+      zoom:this.camera.zoom,
+      panX:r.width/2-(base.ox+cx*base.cell),
+      panY:r.height/2-(base.oy+cy*base.cell)
+    },r.width,r.height,view);
+    this.setHoverPreview(null);
+    this.draw();return true;
+  }
+  resetView(){this.camera=Camera.create();this.focusBeastIndex=0;this.setHoverPreview(null);this.draw();}
+  destroy(){this.destroyed=true;this.canvas.removeEventListener('click',this.onCanvasClick);this.canvas.removeEventListener('keydown',this.onCanvasKeyDown);this.queue=[];this.scene=null;this.ambienceLayer=null;this.ambience=null;this.stageKey=null;clearTimeout(this.ambientTimer);this.ambientTimer=null;this.clearLongPress();this.canvas.removeEventListener('pointerleave',this.onPointerLeave);this.resize.disconnect();cancelAnimationFrame(this.frame);cancelAnimationFrame(this.gestureFrame);this.gestureFrame=0;document.removeEventListener('visibilitychange',this.refresh);this.reducedMotion.removeEventListener('change',this.refresh);for(const img of Object.values(this.images)){img.onload=null;img.onerror=null;}for(const [name,fn]of [['pointerdown',this.onPointerDown],['pointermove',this.onPointerMove],['pointerup',this.onPointerEnd],['pointercancel',this.onPointerEnd],['lostpointercapture',this.onPointerEnd],['wheel',this.onWheel]])this.canvas.removeEventListener(name,fn);}
   sprite(id,sx,sy,sw,sh,x,y,w,h){
     const img=this.images[id];if(!img?.complete||!img.naturalWidth)return false;
     this.ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);return true;
@@ -631,6 +688,12 @@ export class TacticalRenderer{
       if(myTurn&&this.mode==='move')
         Threats.drawGuidance(c,this.threatPlan,viewport,reduced);
     }
+    // Edge navigation badges are drawn below all characters and HP text.
+    // They do not affect the threat, skill range or grid hit-testing rules.
+    this.compassMarkers=!animating&&!this.preview?
+      Compass.derive(s,this.uid,{ox,oy,cell,width:w,height:h}):[];
+    canvas.dataset.compassCount=String(this.compassMarkers.length);
+    Compass.draw(c,this.compassMarkers,{width:w,height:h});
     if(scene)this.drawEffect(scene,progress,false);
     const actors=scene?A.sample(scene,progress):s.actors;
     const positions=actors.filter(R.alive).sort((a,b)=>a.y-b.y);
