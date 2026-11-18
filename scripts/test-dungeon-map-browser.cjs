@@ -22,7 +22,7 @@ app.get('/dungeon-test.html',(_req,res)=>res.type('html').send(
   '<div class="xiuxian-quick-actions" style="width:310px;margin:20px auto"></div></div>'+
   '<script type="module" src="/cultivation/dungeon-lobby.js"></script></body></html>'
 ));
-app.get('/cultivation/data/project-repository.js',(_req,res)=>res.type('javascript').send(
+app.get('/cultivation/data/project-repository.js',(_req,res)=>res.type('text/javascript').send(
   "export const getMainUser=()=>({uid:sessionStorage.mockUid||'a'});"+
   "export const authenticatedMainFetch=(url,init={})=>fetch(url,{...init,headers:{...init.headers,'content-type':'application/json','x-test-user':getMainUser().uid}});"
 ));
