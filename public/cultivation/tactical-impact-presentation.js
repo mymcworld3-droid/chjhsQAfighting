@@ -111,7 +111,7 @@
     ctx.restore();
   }
   function drawBossPresence(ctx,boss,view,time,reduced=false){
-    if(!boss?.alive||!ctx||!view)return;
+    if(!boss||positive(boss.hp)<=0||!ctx||!view)return;
     const {ox,oy,cell}=view;
     const x=ox+(boss.x+(boss.footprint?.width||2)/2)*cell;
     const y=oy+(boss.y+(boss.footprint?.height||2)/2)*cell;
