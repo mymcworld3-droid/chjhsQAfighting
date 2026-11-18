@@ -47,7 +47,7 @@ test('progress rises from training to near to imminent without unlocking skills'
   assert.equal(hint(251).targetLevel,5);
   assert.equal(hint(251).percent,90);
   assert.match(renderManualAnticipation(hint(251),esc),/突破在即/);
-  assert.match(renderManualAnticipation(hint(251),esc),/達到功法門檻後/);
+  assert.match(renderManualAnticipation(hint(251),esc),/功法等級達標後/);
 });
 
 test('mastery threshold is not the same as the player-realm unlock',()=>{
@@ -104,7 +104,7 @@ test('battle gauge adds only ledger growth AFTER a same-room mastery snapshot',(
   const baseline={uid:'u1',roomId:'arena-stamina-test',ledger:{'sword-wind':20}};
   const delta={books:[{id:'sword-wind',earned:32}]};
   const result=battleBreakthroughEstimate(snapshot,room(52),'u1',delta,Catalog,baseline);
-  assert.equal(result.status,'near');
+  assert.equal(result.status,'imminent');
   assert.equal(result.projectedGain,32);
   assert.equal(result.confirmedExp,235);
   assert.equal(result.estimatedExp,267);
