@@ -80,7 +80,8 @@ test('max-level and fully unlocked books show completion without a fabricated up
   const view=draw([makeBook('body-rock',{
     level:20,progress:100,expInLevel:0,expToNext:0,skills,upgrade:null
   })]);
-  assert.match(view.html,/功法已達最高等級/);
+  assert.match(view.html,/靈紋完整/);
+  assert.doesNotMatch(view.html,/最高等級/);
   assert.doesNotMatch(view.html,/class="manual-hero-goal"/);
   assert.match(view.html,/aria-valuenow="100"/);
   assert.doesNotMatch(view.html,/data-manual-upgrade=/);
@@ -132,18 +133,20 @@ test('a locked technique remains inspectable without an equipment or upgrade but
 test('Lv10 is a third-technique milestone, not max level; Lv20 is the new cap',()=>{
   const book=makeBook('body-rock',{
     level:10,progress:35,expInLevel:84,expToNext:220,
-    upgrade:{targetLevel:11,targetExp:1300,gold:272},tierRealm:'元嬰'
+    upgrade:null,tierRealm:'元嬰'
   });
   const mid=draw([book]);
-  assert.match(mid.html,/Lv. 10 \/ 20/);
-  assert.match(mid.html,/升至 Lv. 11/);
+  assert.match(mid.html,/Lv. 10/);
+  assert.doesNotMatch(mid.html,/Lv. 10 \/ 20|升至 Lv. 11|data-manual-upgrade/);
+  assert.match(mid.html,/Lv.10 後需以功法技能擊殺靈獸累積 EXP/);
   assert.match(mid.html,/元嬰功法/);
   assert.match(mid.html,/manual-hero-tier-badge is-tier-nascent/);
   assert.match(mid.html,/本功法攻擊 \+10/);
   assert.doesNotMatch(mid.html,/功法已達最高等級/);
   const end=draw([makeBook('body-rock',{level:20,upgrade:null,progress:100})]);
-  assert.match(end.html,/Lv. 20 \/ 20/);
-  assert.match(end.html,/功法已達最高等級/);
+  assert.match(end.html,/Lv. 20/);
+  assert.doesNotMatch(end.html,/Lv. 20 \/ 20|最高等級/);
+  assert.match(end.html,/靈紋完整/);
 });
 
 test('attack total from server and owned book tier are displayed without fabricating higher rank',()=>{
@@ -152,4 +155,16 @@ test('attack total from server and owned book tier are displayed without fabrica
   assert.match(view.html,/築基功法/);
   assert.match(view.html,/本功法攻擊 \+8/);
   assert.match(view.html,/已獲功法合計 \+28/);
+});
+
+test('Lv14 shows one uncluttered level, and never offers paid upgrading or extra nodes',()=>{
+  const html=draw([makeBook('body-rock',{
+    level:14,expInLevel:30,expToNext:320,progress:10,upgrade:null
+  })]).html;
+  assert.match(html,/class="manual-hero-mastery-level">Lv. 14<\/span>/);
+  assert.doesNotMatch(html,/Lv. 14 \/ 20|最高等級|data-manual-upgrade/);
+  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
+  assert.equal((html.match(/is-milestone-(1|5|10)/g)||[]).length,3);
+  assert.match(html,/style="width:100\.00%"/);
+  assert.match(html,/Lv.10 後需以功法技能擊殺靈獸累積 EXP/);
 });
