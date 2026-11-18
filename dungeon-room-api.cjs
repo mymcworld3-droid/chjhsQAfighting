@@ -6,6 +6,7 @@ const crypto = require('node:crypto');
 const { playerRepository, raidRepository } = require('./server-repositories.cjs');
 const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
+const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -84,13 +85,14 @@ function createHandler({
   resolveC=()=>raidRepository.resolve(),
   clock=()=>Date.now(),
   codeFactory=makeCode,
+  seedFactory=()=>crypto.randomBytes(12).toString('hex'),
   logger=console
 }={}){
   return async function dungeonRoomHandler(req,res){
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -155,6 +157,9 @@ function createHandler({
         for(let attempt=0;attempt<10;attempt++){
           const code=safeCode(codeFactory());
           if(!code)throw err('房碼產生失敗',503);
+          const mapSeed=seedFactory();
+          if(typeof mapSeed!=='string'||!(/^[a-f0-9]{24}$/i).test(mapSeed))
+            throw err('副本地圖種子碼產生失敗',503);
           const roomRef=db.collection(ROOMS).doc(),codeRef=db.collection(CODES).doc(code);
           const outcome=await db.runTransaction(async tx=>{
             const active=await existing(tx);
@@ -166,6 +171,7 @@ function createHandler({
               mode:'dungeon',version:VERSION,revision:1,status:'waiting',
               visibility:action==='quick'||req.body?.visibility==='public'?'public':'private',code,hostUid:uid,createdAtMs:at,
               expiresAtMs:at+LOBBY_TTL_MS,maxMembers:MAX_MEMBERS,
+              mapVersion:LAYOUT_VERSION,mapSeed,
               members:{[uid]:makeMember(uid,name,at,playerSnap.data())}
             };
             tx.set(roomRef,room);
@@ -239,6 +245,20 @@ function createHandler({
       const roomId=safeRoomId(req.body?.roomId);
       if(!roomId)throw err('副本房間編號無效',400);
       const roomRef=db.collection(ROOMS).doc(roomId);
+      if(action==='get-map'){
+        const snap=await roomRef.get();
+        if(!snap.exists)throw err('副本房間不存在',404);
+        const current=snap.data();
+        if(!hasMember(current,uid))throw err('你不是此副本的隊員',403);
+        if(!sessionRoom(current,at))throw err('副本房間已關閉或過期',410);
+        // Phase 5: deterministic, read-only blueprint. Reconnects and all
+        // Render instances regenerate the same map from the trusted room seed.
+        // Pre-v5 waiting rooms derive a stable fallback from the room ID.
+        const seed=current.mapSeed||('legacy:'+roomId);
+        if(current.mapVersion!==undefined&&current.mapVersion!==LAYOUT_VERSION)
+          throw err('副本地圖版本尚未支援',409);
+        return res.json({ok:true,roomId,map:generateDungeonLayout(seed)});
+      }
       if(action==='subscribe'){
         const snap=await roomRef.get();
         if(!snap.exists)throw err('副本房間不存在',404);
