@@ -172,7 +172,7 @@ async function main(){
     await a.page.locator('#dungeon-map-view [data-dm="focus"]').click();
     assert.equal(await a.page.locator('[data-dm="focus"]').getAttribute('aria-pressed'),'true');
     await a.page.locator('#dungeon-map-view [data-dm="close"]').click();
-    await a.page.locator('#dungeon-map-view[hidden]').waitFor();
+    await a.page.locator('#dungeon-map-view').waitFor({state:'hidden'});
     await a.page.locator('#dungeon-lobby [data-dg="preview-map"]').click();
     await a.page.locator('#dungeon-map-view [data-dm-biome-box]:not([hidden])').waitFor();
     await a.page.setViewportSize({width:880,height:530});
