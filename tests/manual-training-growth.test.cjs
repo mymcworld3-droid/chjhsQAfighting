@@ -63,8 +63,10 @@ test('ten segment markers distinguish reached, current and level-5/10 skill mile
   assert.equal((html.match(/is-current/g)||[]).length,1);
   assert.equal((html.match(/is-milestone/g)||[]).length,3);
   assert.match(html,/data-manual-growth-stage="inscribed"/);
-  assert.match(html,/不增加額外戰力/);
-  assert.match(html,/技能仍需符合修士境界才解鎖/);
+  assert.match(html,/role="progressbar"/);
+  assert.match(html,/aria-valuenow="49"/);
+  assert.match(html,/領悟仍需達到修士境界/);
+  assert.equal((html.match(/<small>1<\/small>|<small>5<\/small>|<small>10<\/small>/g)||[]).length,3);
 });
 
 test('stages and aura rings are visible with original stable cover and clickable skill',()=>{
@@ -133,4 +135,43 @@ test('book names and image alt remain escaped',()=>{
   assert.doesNotMatch(card(book),/<img src=x onerror=alert/);
   assert.match(hero(book),/&lt;img src=x/);
   assert.match(card(book),/&lt;img src=x/);
+});
+
+test('mastery and aura are merged; rounded 1/5/10 stations share the same rail',()=>{
+  const b=makeBook(10,'body',{progress:0,expInLevel:0,expToNext:0});
+  const html=hero(b);
+  assert.equal((html.match(/class="manual-hero-mastery"/g)||[]).length,1);
+  assert.doesNotMatch(html,/功法氣象/);
+  assert.doesNotMatch(html,/class="manual-growth"/);
+  assert.doesNotMatch(html,/class="manual-hero-track"/);
+  assert.doesNotMatch(html,/class="manual-hero-level"/);
+  assert.match(html,/<span class="manual-hero-stage-badge">圓滿<\/span>\s*<span class="manual-hero-mastery-status">功法已達最高等級<\/span>/);
+  assert.match(html,/Lv. 10 \/ 10/);
+  assert.match(html,/功法修至最高等級，靈紋完整/);
+  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
+  assert.equal((html.match(/is-milestone/g)||[]).length,3);
+  assert.match(html,/style="width:100\.00%"/);
+  assert.match(html,/aria-valuenow="100"/);
+});
+
+test('the single ten-level rail advances between levels with real server progress',()=>{
+  const first=makeBook(1,'sword',{progress:0});
+  const one=renderManualVisualMilestones(first,escape);
+  const four=renderManualVisualMilestones(makeBook(4,'sword',{progress:50}),escape);
+  const ten=renderManualVisualMilestones(makeBook(10,'sword',{progress:0}),escape);
+  const percent=markup=>Number(markup.match(/style="width:([0-9.]+)%"/)?.[1]);
+  assert.equal(percent(one),0);
+  assert(percent(four)>33 && percent(four)<45);
+  assert.equal(percent(ten),100);
+  assert.match(one,/<small>1<\/small>/);
+  assert.match(one,/<small>5<\/small>/);
+  assert.match(one,/<small>10<\/small>/);
+  assert.equal((one.match(/is-milestone is-reached/g)||[]).length,0);
+});
+
+test('unmaxed books show stage badge and exact EXP inside the same card',()=>{
+  const html=hero(makeBook(5,'sword',{expInLevel:38,expToNext:120,progress:31.67}));
+  assert.match(html,/<span class="manual-hero-stage-badge">凝紋<\/span>/);
+  assert.match(html,/38 \/ 120 EXP/);
+  assert.doesNotMatch(html,/功法已達最高等級/);
 });
