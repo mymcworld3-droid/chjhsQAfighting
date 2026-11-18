@@ -86,6 +86,10 @@ async function main(){
       await context.addInitScript(name=>sessionStorage.mockUid=name,uid);
       const page=await context.newPage();
       page.on('pageerror',e=>errors.push(uid+': '+e.message));
+      page.on('console',message=>{
+        if(message.type()==='error')errors.push(uid+': console: '+message.text());
+      });
+      page.on('requestfailed',req=>errors.push(uid+': request: '+req.url()+' '+req.failure()?.errorText));
       page.on('response',response=>{
         if(response.status()>=400&&/\\.js(?:[?#]|$)/.test(response.url()))
           errors.push(uid+': HTTP '+response.status()+' '+response.url());
@@ -94,9 +98,15 @@ async function main(){
       try{
         await page.locator('#home-dungeon-entry').waitFor({timeout:8000});
       }catch(error){
-        console.error('[Dungeon preview startup]',uid,errors,await page.evaluate(()=>({
-          state:document.readyState,host:!!document.querySelector('#page-home .xiuxian-quick-actions'),
-          links:[...document.querySelectorAll('script')].map(node=>node.src)
+        console.error('[Dungeon preview startup]',uid,errors,await page.evaluate(async()=>({
+          state:document.readyState,
+          host:document.querySelector('#page-home .xiuxian-quick-actions')?.outerHTML,
+          entry:document.querySelector('#home-dungeon-entry')?.outerHTML,
+          links:[...document.querySelectorAll('script')].map(node=>node.src),
+          loaded:(await Promise.all(['/cultivation/dungeon-lobby.js',
+            '/cultivation/dungeon-map-view.js','/cultivation/data/project-repository.js']
+            .map(async url=>{const r=await fetch(url);return {url,status:r.status,
+              type:r.headers.get('content-type'),head:(await r.text()).slice(0,140)};})))
         })));
         throw error;
       }
