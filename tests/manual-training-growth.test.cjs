@@ -13,6 +13,7 @@ const {manualVisualState,manualSkillVisualState,renderManualVisualMilestones,
   vm.runInNewContext([
     read('manual-visual-progression.js'),
     read('manual-anticipation.js'),
+    read('manual-skill-detail-view.js'),
     read('manual-hero-view.js'),
     read('manual-library-view.js'),
     '({manualVisualState,manualSkillVisualState,renderManualVisualMilestones,renderManualHero,renderManualCollectionSummary,filterOwnedManuals})'
@@ -103,18 +104,21 @@ test('collection badges reflect exactly the same visual stages as the hero',()=>
     const book=makeBook(level,'body');
     const html=card(book);
     assert.match(html,new RegExp('data-manual-stage="'+stage+'"'));
-    assert.match(html,/manual-library-stage-badge/);
+    assert.match(html,/manual-library-brief-state/);
     assert.match(html,/manual-book-art/);
-    assert.match(html,/manual-library-skill-art/);
+    assert.doesNotMatch(html,/manual-library-skill-art/);
   }
 });
 
-test('realm locks stay distinct from level locks in gallery preview',()=>{
-  const html=card(makeBook(5));
-  assert.match(html,/is-realm-locked/);
-  assert.match(html,/is-level-locked/);
-  assert.match(html,/修士境界不足/);
-  assert.match(html,/功法等級未達/);
+test('gallery never repeats skill prerequisites already shown in the featured hero',()=>{
+  const item=makeBook(5);
+  const html=card(item);
+  assert.doesNotMatch(html,/修士境界不足/);
+  assert.doesNotMatch(html,/功法等級未達/);
+  assert.doesNotMatch(html,/is-realm-locked/);
+  const view=hero(item);
+  assert.match(view,/is-realm-locked/);
+  assert.match(view,/is-level-locked/);
 });
 
 test('visual projection never modifies authoritative input data',()=>{
@@ -147,7 +151,9 @@ test('mastery and aura are merged; rounded 1/5/10 stations share the same rail',
   assert.doesNotMatch(html,/class="manual-hero-level"/);
   assert.match(html,/<span class="manual-hero-stage-badge">圓滿<\/span>\s*<span class="manual-hero-mastery-status">功法已達最高等級<\/span>/);
   assert.match(html,/Lv. 10 \/ 10/);
-  assert.match(html,/功法修至最高等級，靈紋完整/);
+  assert.doesNotMatch(html,/功法修至最高等級，靈紋完整/);
+  assert.doesNotMatch(html,/class="manual-hero-goal"/);
+  assert.doesNotMatch(html,/class="manual-hero-roster"/);
   assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
   assert.equal((html.match(/is-milestone/g)||[]).length,3);
   assert.match(html,/style="width:100\.00%"/);
