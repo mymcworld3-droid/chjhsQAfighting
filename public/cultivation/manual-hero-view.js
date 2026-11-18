@@ -41,10 +41,14 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
     '';
   const near=anticipation&&['near','imminent'].includes(anticipation.status);
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
-  const maxed=Number(book.level)>=10;
+  const maxed=Number(book.level)>=20;
   const next=book.skills.find(skill=>!skill.unlocked);
   const progressLabel=maxed?'功法已達最高等級':
     `${fmt(book.expInLevel)} / ${fmt(book.expToNext)} EXP`;
+  const ownAttack=Math.max(1,Number(book.level)||1);
+  const allAttack=Number.isFinite(Number(state.attackBonus))?
+    Math.max(0,Number(state.attackBonus)):
+    owned.reduce((sum,item)=>sum+Math.max(1,Number(item.level)||1),0);
   const cover=bookArt(book.id);
   const coverMarkup=cover
     ?`<img class="manual-hero-cover" src="${esc(cover)}" alt="${esc(book.name)}封面" decoding="async" fetchpriority="high">`
@@ -99,7 +103,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
           <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
           ${coverMarkup}
-          <span class="manual-hero-art-caption">${label(book.school)} · 已獲得</span>
+          <span class="manual-hero-art-caption">${label(book.school)} · ${esc(book.tierRealm||'煉氣')}功法</span>
         </div>
         <div class="manual-hero-details">
           <div class="manual-hero-title-row">
@@ -109,12 +113,13 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <div class="manual-hero-mastery" data-manual-mastery-stage="${visual.stage}">
             <div class="manual-hero-mastery-heading">
               <strong>修煉熟練度</strong>
-              <span class="manual-hero-mastery-level">Lv. ${visual.level} / 10</span>
+              <span class="manual-hero-mastery-level">Lv. ${visual.level} / 20</span>
             </div>
             <div class="manual-hero-mastery-summary">
               <span class="manual-hero-stage-badge">${esc(visual.label)}</span>
               <span class="manual-hero-mastery-status">${progressLabel}</span>
             </div>
+            <small class="manual-hero-attack-bonus">本功法攻擊 +${fmt(ownAttack)} · 已獲功法合計 +${fmt(allAttack)}</small>
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
             <small class="manual-hero-mastery-footnote">Lv.5、10 為招式等級門檻，真正領悟仍需符合修士境界。</small>
