@@ -164,7 +164,11 @@ async function main(){
       emit('pointerdown',1,.4);emit('pointerdown',2,.6);
       emit('pointermove',2,.8);emit('pointerup',1,.4);emit('pointerup',2,.8);
     });
-    assert.ok(parseInt(await a.page.locator('[data-dm-zoom]').innerText(),10)>100);
+    // Paint is intentionally deferred to requestAnimationFrame: wait for
+    // the next frame rather than asserting a stale HUD value immediately.
+    await a.page.waitForFunction(()=>parseInt(
+      document.querySelector('[data-dm-zoom]')?.textContent||'0',10)>100,
+      null,{timeout:5000});
     await a.page.locator('#dungeon-map-view [data-dm="focus"]').click();
     assert.equal(await a.page.locator('[data-dm="focus"]').getAttribute('aria-pressed'),'true');
     await a.page.locator('#dungeon-map-view [data-dm="close"]').click();
