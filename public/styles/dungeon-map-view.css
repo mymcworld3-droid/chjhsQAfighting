@@ -141,3 +141,55 @@
   #dungeon-map-view .dm-overview canvas{height:66px;width:85px}
   #dungeon-map-view .dm-legend{display:none}
 }
+
+/* Stage 7: movement is visually separated from map camera manipulation.
+   D-pad sits above the footer, so mobile players can steer without
+   accidentally dragging/zooming the canvas. */
+#dungeon-map-view .dm-movement{
+  position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  min-width:170px;max-width:calc(100% - 20px);padding:9px 12px;
+  background:#101e19e8;border:1px solid #9dbe91b0;border-radius:14px;
+  box-shadow:0 8px 24px #0009;backdrop-filter:blur(6px);
+  touch-action:manipulation;
+}
+#dungeon-map-view .dm-energy{
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:8px;font-size:11px;color:#cfdfc6;
+}
+#dungeon-map-view .dm-energy strong{color:#dddfa5;font-size:13px;font-variant-numeric:tabular-nums}
+#dungeon-map-view .dm-energy span:last-child{color:#b8d5ba}
+#dungeon-map-view .dm-dpad{
+  display:grid;grid-template-columns:repeat(3,45px);
+  grid-template-rows:repeat(2,39px);gap:4px;
+}
+#dungeon-map-view .dm-dpad [data-dm="up"]{grid-column:2;grid-row:1}
+#dungeon-map-view .dm-dpad [data-dm="left"]{grid-column:1;grid-row:2}
+#dungeon-map-view .dm-dpad [data-dm="down"]{grid-column:2;grid-row:2}
+#dungeon-map-view .dm-dpad [data-dm="right"]{grid-column:3;grid-row:2}
+#dungeon-map-view .dm-dpad button{
+  min-width:0;min-height:0;padding:3px 7px;font:700 19px/1.2 system-ui;
+  border-radius:8px;background:#36513c;color:#e8f5dc;
+  border-color:#7c9d76;touch-action:manipulation;
+}
+#dungeon-map-view .dm-dpad button:active:not(:disabled){background:#668b65}
+#dungeon-map-view [data-dm-move-alert]{
+  display:block;min-height:14px;max-width:250px;
+  text-align:center;font-size:11px;line-height:1.4;color:#f0bfaf;
+}
+#dungeon-map-view .dm-movement[hidden]{display:none!important}
+@media(max-width:720px){
+  #dungeon-map-view .dm-movement{
+    left:auto;right:8px;transform:none;bottom:130px;
+    padding:7px 9px;min-width:155px;
+  }
+  #dungeon-map-view .dm-dpad{
+    grid-template-columns:repeat(3,44px);
+    grid-template-rows:repeat(2,40px);
+  }
+  #dungeon-map-view .dm-legend{bottom:235px}
+}
+@media(max-height:430px) and (orientation:landscape){
+  #dungeon-map-view .dm-movement{bottom:8px;left:auto;right:8px;min-width:165px}
+  #dungeon-map-view .dm-controls{max-width:calc(100% - 205px)}
+}
