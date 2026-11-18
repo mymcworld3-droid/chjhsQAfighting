@@ -18,7 +18,7 @@ async function request(action,payload={}){
   }
   return data;
 }
-export const createDungeonRoom=()=>request('create');
+export const createDungeonRoom=(visibility='private')=>request('create',{visibility});
 export const joinDungeonRoomByCode=roomCode=>request('join-code',{roomCode});
 export const getDungeonRoom=roomId=>request('get',{roomId});
 export const reconnectDungeonRoom=()=>request('reconnect');
