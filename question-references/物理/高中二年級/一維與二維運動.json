@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-一維與二維運動-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用一維與二維運動的計算或實驗觀念",
+      "question": {
+        "q": "一球從45 m高的平台以水平速度8 m/s拋出，取g=10 m/s²，忽略空氣阻力。球落地前的水平位移為何？",
+        "correct": "24 m",
+        "wrong": [
+          "8 m",
+          "36 m",
+          "45 m"
+        ],
+        "exp": "鉛直運動45=(1/2)×10×t²，得t=3 s；水平方向等速，位移8×3=24 m。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "ext-2026-phy2-一維與二維運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-一維與二維運動-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用一維與二維運動的計算或實驗觀念",
+      "question": {
+        "q": "一球由地面以20 m/s鉛直上拋，取g=10 m/s²且忽略阻力。上升到最高點相對地面高度為何？",
+        "correct": "20 m",
+        "wrong": [
+          "10 m",
+          "40 m",
+          "2 m"
+        ],
+        "exp": "由v²=v0²−2gh，最高點v=0，h=20²/(2×10)=20 m。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "ext-2026-phy2-一維與二維運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-一維與二維運動-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用一維與二維運動的計算或實驗觀念",
+      "question": {
+        "q": "一個物體某瞬間速度的水平分量為3 m/s、鉛直分量為4 m/s。速率是多少？",
+        "correct": "5 m/s",
+        "wrong": [
+          "7 m/s",
+          "1 m/s",
+          "12 m/s"
+        ],
+        "exp": "兩分量互相垂直，合速度大小為√(3²+4²)=5 m/s。",
+        "subject": "物理",
+        "sub_topic": "一維與二維運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-一維與二維運動",
+        "template_id": "ext-2026-phy2-一維與二維運動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

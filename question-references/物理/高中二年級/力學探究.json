@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-力學探究-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用力學探究的計算或實驗觀念",
+      "question": {
+        "q": "某無摩擦滑車實驗測得加速度對水平合力圖線過原點，斜率為0.5 (m/s²)/N。滑車質量約為多少？",
+        "correct": "2 kg",
+        "wrong": [
+          "0.5 kg",
+          "5 kg",
+          "20 kg"
+        ],
+        "exp": "由a=F/m，a對F圖斜率1/m=0.5，故m=2 kg。",
+        "subject": "物理",
+        "sub_topic": "力學探究",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-力學探究",
+        "template_id": "ext-2026-phy2-力學探究-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-力學探究-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用力學探究的計算或實驗觀念",
+      "question": {
+        "q": "實驗測滑車的外加拉力F與加速度a，發現F對a圖為直線，但F軸截距大於零。哪種解釋最值得優先檢查？",
+        "correct": "可能存在近似固定的摩擦阻力，使部分拉力未成為合力",
+        "wrong": [
+          "質量必定為零",
+          "牛頓第二定律必然無效",
+          "所有加速度計都固定顯示兩倍"
+        ],
+        "exp": "若F=ma+f，非零截距可能對應克服摩擦所需的拉力；應以額外實驗確認。",
+        "subject": "物理",
+        "sub_topic": "力學探究",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-力學探究",
+        "template_id": "ext-2026-phy2-力學探究-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-力學探究-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用力學探究的計算或實驗觀念",
+      "question": {
+        "q": "某校測滑車由靜止沿斜面滑行距離s所需時間t，欲估計等加速度a。應使用哪種關係？",
+        "correct": "a=2s/t²",
+        "wrong": [
+          "a=s/t",
+          "a=st²/2",
+          "a=t²/(2s)"
+        ],
+        "exp": "初速為零且加速度恆定時s=(1/2)at²，所以a=2s/t²。",
+        "subject": "物理",
+        "sub_topic": "力學探究",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-力學探究",
+        "template_id": "ext-2026-phy2-力學探究-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

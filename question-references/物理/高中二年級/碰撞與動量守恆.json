@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-碰撞與動量守恆-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用碰撞與動量守恆的計算或實驗觀念",
+      "question": {
+        "q": "一台1 kg滑車以6 m/s向右撞上靜止2 kg滑車，兩車相黏，水平外力忽略。碰後共同速度為何？",
+        "correct": "2 m/s向右",
+        "wrong": [
+          "6 m/s向右",
+          "3 m/s向右",
+          "2 m/s向左"
+        ],
+        "exp": "動量守恆，(1×6+2×0)/(1+2)=2 m/s，方向向右。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "ext-2026-phy2-碰撞與動量守恆-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-碰撞與動量守恆-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用碰撞與動量守恆的計算或實驗觀念",
+      "question": {
+        "q": "在光滑水平軌道上，兩球等質量，一球以5 m/s向右撞上另一靜止球，發生一維完全彈性碰撞。碰後最合理的速度為何？",
+        "correct": "第一球停止、第二球以5 m/s向右",
+        "wrong": [
+          "兩球都以5 m/s向右",
+          "第一球以5 m/s向左、第二球不動",
+          "兩球相黏並一起以5 m/s向右"
+        ],
+        "exp": "等質量一維完全彈性碰撞會交換速度，同時滿足動量和動能守恆。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "ext-2026-phy2-碰撞與動量守恆-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-碰撞與動量守恆-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用碰撞與動量守恆的計算或實驗觀念",
+      "question": {
+        "q": "兩個同質量滑車沿同一直線分別以+3 m/s與−3 m/s相向運動，碰後完全黏在一起。若外力忽略，共同速度為何？",
+        "correct": "0 m/s",
+        "wrong": [
+          "+3 m/s",
+          "−3 m/s",
+          "+6 m/s"
+        ],
+        "exp": "碰前總動量m×3+m×(−3)=0，故黏在一起後總質量2m的共同速度為零。",
+        "subject": "物理",
+        "sub_topic": "碰撞與動量守恆",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-碰撞與動量守恆",
+        "template_id": "ext-2026-phy2-碰撞與動量守恆-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

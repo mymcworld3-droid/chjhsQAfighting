@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-簡諧運動-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用簡諧運動的計算或實驗觀念",
+      "question": {
+        "q": "彈簧振子的週期T=2π√(m/k)。若質量變為原來四倍、彈簧常數不變，週期變為？",
+        "correct": "原來兩倍",
+        "wrong": [
+          "原來四倍",
+          "原來一半",
+          "完全不變"
+        ],
+        "exp": "週期與質量平方根成正比，m變4倍時T變√4=2倍。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "ext-2026-phy2-簡諧運動-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-簡諧運動-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用簡諧運動的計算或實驗觀念",
+      "question": {
+        "q": "理想水平彈簧振子通過平衡位置時，關於速度與加速度何者正確？",
+        "correct": "速率最大、加速度為零",
+        "wrong": [
+          "速率為零、加速度最大",
+          "速率和加速度都為零",
+          "位移最大且速率最大"
+        ],
+        "exp": "a=−ω²x，平衡位置x=0故a=0；機械能以動能為主，速率最大。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "ext-2026-phy2-簡諧運動-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-簡諧運動-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用簡諧運動的計算或實驗觀念",
+      "question": {
+        "q": "質量1 kg的水平彈簧振子，彈簧常數100 N/m。理想振動角頻率ω約為何？",
+        "correct": "10 rad/s",
+        "wrong": [
+          "100 rad/s",
+          "1 rad/s",
+          "0.1 rad/s"
+        ],
+        "exp": "ω=√(k/m)=√(100/1)=10 rad/s。",
+        "subject": "物理",
+        "sub_topic": "簡諧運動",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-4",
+            "name": "波動與聲音"
+          }
+        ],
+        "concept_id": "physics-高中二年級-簡諧運動",
+        "template_id": "ext-2026-phy2-簡諧運動-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

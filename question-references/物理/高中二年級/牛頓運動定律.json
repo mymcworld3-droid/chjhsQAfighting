@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-牛頓運動定律-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用牛頓運動定律的計算或實驗觀念",
+      "question": {
+        "q": "質量5 kg的箱子受水平向右15 N拉力、向左5 N摩擦力，其他水平力忽略。加速度大小是多少？",
+        "correct": "2 m/s²",
+        "wrong": [
+          "3 m/s²",
+          "4 m/s²",
+          "10 m/s²"
+        ],
+        "exp": "水平合力15−5=10 N，依F=ma得a=10/5=2 m/s²。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-牛頓運動定律",
+        "template_id": "ext-2026-phy2-牛頓運動定律-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-牛頓運動定律-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用牛頓運動定律的計算或實驗觀念",
+      "question": {
+        "q": "一個物體在無摩擦30°斜面上由靜止釋放，取g=10 m/s²。沿斜面向下的加速度為何？",
+        "correct": "5 m/s²",
+        "wrong": [
+          "10 m/s²",
+          "8.7 m/s²",
+          "0 m/s²"
+        ],
+        "exp": "沿斜面重力分力mg sin30°，a=g sin30°=5 m/s²。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-牛頓運動定律",
+        "template_id": "ext-2026-phy2-牛頓運動定律-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-牛頓運動定律-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用牛頓運動定律的計算或實驗觀念",
+      "question": {
+        "q": "兩台滑車質量分別2 kg與3 kg，由水平細繩連結置於光滑平面。對2 kg滑車施加10 N水平拉力，使系統一起加速。繩張力為何？",
+        "correct": "6 N",
+        "wrong": [
+          "10 N",
+          "4 N",
+          "2 N"
+        ],
+        "exp": "總質量5 kg，a=10/5=2 m/s²。3 kg滑車只受繩張力水平作用，T=3×2=6 N。",
+        "subject": "物理",
+        "sub_topic": "牛頓運動定律",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-牛頓運動定律",
+        "template_id": "ext-2026-phy2-牛頓運動定律-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

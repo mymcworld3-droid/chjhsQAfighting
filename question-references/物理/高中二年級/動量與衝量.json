@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-動量與衝量-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用動量與衝量的計算或實驗觀念",
+      "question": {
+        "q": "質量0.2 kg的球沿水平方向以+10 m/s飛來，被拍回後速度為−5 m/s。球所受衝量為何？",
+        "correct": "−3 N·s",
+        "wrong": [
+          "+3 N·s",
+          "−1 N·s",
+          "+1 N·s"
+        ],
+        "exp": "衝量J=Δp=0.2(−5−10)=−3 N·s，方向與原運動相反。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "ext-2026-phy2-動量與衝量-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-動量與衝量-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用動量與衝量的計算或實驗觀念",
+      "question": {
+        "q": "質量1000 kg的汽車以20 m/s前進，煞車後5秒內速度均勻降至0。平均煞車合力大小為何？",
+        "correct": "4000 N",
+        "wrong": [
+          "1000 N",
+          "20000 N",
+          "100 N"
+        ],
+        "exp": "平均加速度(0−20)/5=−4 m/s²，F=ma=−4000 N，大小4000 N。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "ext-2026-phy2-動量與衝量-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-動量與衝量-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用動量與衝量的計算或實驗觀念",
+      "question": {
+        "q": "水平無外力，1 kg甲球向右4 m/s，1 kg乙球向左2 m/s。以向右為正，碰撞前系統總動量多少？",
+        "correct": "+2 kg·m/s",
+        "wrong": [
+          "+6 kg·m/s",
+          "−2 kg·m/s",
+          "0 kg·m/s"
+        ],
+        "exp": "總動量p=1×4+1×(−2)=+2 kg·m/s，必須帶方向符號計算。",
+        "subject": "物理",
+        "sub_topic": "動量與衝量",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-1",
+            "name": "力與運動"
+          }
+        ],
+        "concept_id": "physics-高中二年級-動量與衝量",
+        "template_id": "ext-2026-phy2-動量與衝量-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

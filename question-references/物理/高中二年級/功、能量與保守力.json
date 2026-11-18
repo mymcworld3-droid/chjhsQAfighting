@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "ext-2026-phy2-功、能量與保守力-1",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用功、能量與保守力的計算或實驗觀念",
+      "question": {
+        "q": "彈簧常數100 N/m，從原長拉長0.20 m。理想彈簧儲存的彈性位能為多少？",
+        "correct": "2 J",
+        "wrong": [
+          "20 J",
+          "10 J",
+          "4 J"
+        ],
+        "exp": "U=(1/2)kx²=0.5×100×(0.20)²=2 J。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "ext-2026-phy2-功、能量與保守力-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-功、能量與保守力-2",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用功、能量與保守力的計算或實驗觀念",
+      "question": {
+        "q": "2 kg物體沿無摩擦軌道下降垂直高度5 m，取g=10 m/s²。重力做功為何？",
+        "correct": "100 J",
+        "wrong": [
+          "10 J",
+          "50 J",
+          "25 J"
+        ],
+        "exp": "重力做功只與高度差有關，W=mgh=2×10×5=100 J。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "ext-2026-phy2-功、能量與保守力-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "ext-2026-phy2-功、能量與保守力-3",
+      "source": "108課綱物理自編題（非歷屆原題）",
+      "design": "應用功、能量與保守力的計算或實驗觀念",
+      "question": {
+        "q": "同一物體在水平面繞行一圈回到原位置，過程中地面摩擦力持續阻礙運動。以下哪個判斷正確？",
+        "correct": "重力做淨功為零，摩擦力做負功",
+        "wrong": [
+          "重力與摩擦力都必定做正功",
+          "摩擦力做功與路程無關",
+          "回到原點表示任何作用力做功總和必定為零"
+        ],
+        "exp": "同高度起終點的重力位能差為零，重力淨功為零；摩擦力可隨路程耗散機械能。",
+        "subject": "物理",
+        "sub_topic": "功、能量與保守力",
+        "knowledge_points": [
+          {
+            "subject": "物理",
+            "id": "physics-2",
+            "name": "功與能量"
+          }
+        ],
+        "concept_id": "physics-高中二年級-功、能量與保守力",
+        "template_id": "ext-2026-phy2-功、能量與保守力-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
