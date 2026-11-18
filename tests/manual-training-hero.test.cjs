@@ -138,6 +138,7 @@ test('Lv10 is a third-technique milestone, not max level; Lv20 is the new cap',(
   assert.match(mid.html,/Lv. 10 \/ 20/);
   assert.match(mid.html,/升至 Lv. 11/);
   assert.match(mid.html,/元嬰功法/);
+  assert.match(mid.html,/manual-hero-tier-badge is-tier-nascent/);
   assert.match(mid.html,/本功法攻擊 \+10/);
   assert.doesNotMatch(mid.html,/功法已達最高等級/);
   const end=draw([makeBook('body-rock',{level:20,upgrade:null,progress:100})]);
