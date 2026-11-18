@@ -53,7 +53,7 @@ for (const [subject, grades] of Object.entries(coverage)) {
           assert.deepEqual(knowledge.labels(q, subject), q.knowledge_points,
             `${concept}: knowledge-point ID/name mismatch`);
         }
-        assert.match(referencePrompt(selected), /同觀念的人類命題範例/);
+        assert.match(referencePrompt(selected), /同觀念命題參考例/);
       }
     });
   }
