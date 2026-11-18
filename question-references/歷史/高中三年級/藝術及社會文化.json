@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-藝術及社會文化-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：藝術及社會文化",
+      "question": {
+        "q": "某時期的繪畫開始描繪工人生活，不再只描寫宮廷人物。這種風格改變可如何研究？",
+        "correct": "作品主題可能反映社會群體與價值關注的變化",
+        "wrong": [
+          "畫家改畫工人就證明君主制度當天消失",
+          "藝術從不受社會經驗影響",
+          "只靠一件作品即可判定全國思想一致"
+        ],
+        "exp": "藝術可作社會文化線索，但需考慮作者及流通環境。",
+        "subject": "歷史",
+        "sub_topic": "藝術及社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-藝術及社會文化",
+        "template_id": "extra-2026-h3-藝術及社會文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-藝術及社會文化-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：藝術及社會文化",
+      "question": {
+        "q": "某小說在出版後受到不同階層讀者迥異評價。史家研究它時應如何看待？",
+        "correct": "作品內容及讀者接受方式皆可反映文化與階層差異",
+        "wrong": [
+          "只有作者自述才是唯一研究材料",
+          "讀者評價不同就表示作品不是史料",
+          "出版量等於所有讀者完全同意內容"
+        ],
+        "exp": "文化史同時研究生產、傳播與接受。",
+        "subject": "歷史",
+        "sub_topic": "藝術及社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-藝術及社會文化",
+        "template_id": "extra-2026-h3-藝術及社會文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-藝術及社會文化-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：藝術及社會文化",
+      "question": {
+        "q": "研究者用戲劇宣傳海報探討戰時文化。哪種做法最恰當？",
+        "correct": "結合演出政策、觀眾對象與時代背景分析其動員作用",
+        "wrong": [
+          "只因圖案鮮豔便確定全體觀眾支持",
+          "忽略演出地點與審查制度",
+          "把舞臺角色當作真實歷史人物的逐字肖像"
+        ],
+        "exp": "宣傳與娛樂可能和政治動員交織，需辨識表演與現實。",
+        "subject": "歷史",
+        "sub_topic": "藝術及社會文化",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-藝術及社會文化",
+        "template_id": "extra-2026-h3-藝術及社會文化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

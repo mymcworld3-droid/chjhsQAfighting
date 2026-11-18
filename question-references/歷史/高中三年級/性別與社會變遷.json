@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-性別與社會變遷-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：性別與社會變遷",
+      "question": {
+        "q": "某地工業化後女性大量進入工廠，但工資及升遷仍有差異。對此變遷何項判讀較合理？",
+        "correct": "就業參與擴大不代表性別權利立即平等",
+        "wrong": [
+          "女性進入工廠就表示所有性別差異消失",
+          "工作場所的薪資永遠不受制度影響",
+          "工業化必然使女性完全退出勞動"
+        ],
+        "exp": "性別史需區分參與機會與實際待遇。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-性別與社會變遷",
+        "template_id": "extra-2026-h3-性別與社會變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-性別與社會變遷-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：性別與社會變遷",
+      "question": {
+        "q": "比較不同年代的女性識字率與政治參與資料，可研究哪種關係？",
+        "correct": "教育機會、公共角色與權利擴張之間的互動",
+        "wrong": [
+          "識字率增加就必然在同一年取得普選權",
+          "女性政治參與與法律制度完全無關",
+          "只有個人回憶而無須調查制度"
+        ],
+        "exp": "教育與權利變遷相互影響，但應檢驗時間與因果。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-性別與社會變遷",
+        "template_id": "extra-2026-h3-性別與社會變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-性別與社會變遷-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：性別與社會變遷",
+      "question": {
+        "q": "某社會改革宣稱「已給所有人工作機會」，但正式職業統計不包括家務勞動。最重要的史學提醒是？",
+        "correct": "統計分類可能讓部分勞動及性別經驗被忽略",
+        "wrong": [
+          "家務勞動一律沒有任何社會價值",
+          "正式統計永遠能完整代表所有工作",
+          "只要統計表有數字就無須檢查定義"
+        ],
+        "exp": "史料的統計口徑影響誰被看見，需檢視排除對象。",
+        "subject": "歷史",
+        "sub_topic": "性別與社會變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-性別與社會變遷",
+        "template_id": "extra-2026-h3-性別與社會變遷-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-環境變遷-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：環境變遷",
+      "question": {
+        "q": "某地長期開墾山坡，豪雨後土砂進入河道。研究環境史時，應如何提出問題？",
+        "correct": "土地利用變化如何改變流域侵蝕與洪災風險",
+        "wrong": [
+          "所有洪水都只由天文事件造成",
+          "山坡開墾完全不會影響下游",
+          "只看單一年降雨量就能得出全部原因"
+        ],
+        "exp": "環境史研究人類活動與自然條件的交互作用。",
+        "subject": "歷史",
+        "sub_topic": "環境變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-環境變遷",
+        "template_id": "extra-2026-h3-環境變遷-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-環境變遷-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：環境變遷",
+      "question": {
+        "q": "工業城市的舊檔案記錄燃煤增加、居民呼吸道症狀與煙害抗議。最合理的研究方向是？",
+        "correct": "比較能源使用、污染證據與公共衛生政策變化",
+        "wrong": [
+          "只靠一份抗議書就可精確計算所有疾病原因",
+          "有燃煤工業就必定沒有任何就業成長",
+          "認為過去人類活動不曾改變空氣品質"
+        ],
+        "exp": "污染與健康關係需證據互證，也可研究制度回應。",
+        "subject": "歷史",
+        "sub_topic": "環境變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-環境變遷",
+        "template_id": "extra-2026-h3-環境變遷-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-環境變遷-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：環境變遷",
+      "question": {
+        "q": "一座水庫完工後灌溉面積增加，部分村落卻被迫遷移。哪項分析最符合環境史？",
+        "correct": "同一工程可能改善供水並造成社區與生態成本",
+        "wrong": [
+          "水利工程只可能產生單一正面效果",
+          "有移民就代表水庫從未供水",
+          "社會影響與地理條件完全無關"
+        ],
+        "exp": "工程影響在不同地方與群體間可能不均衡。",
+        "subject": "歷史",
+        "sub_topic": "環境變遷",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-環境變遷",
+        "template_id": "extra-2026-h3-環境變遷-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

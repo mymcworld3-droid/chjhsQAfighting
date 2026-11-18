@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-科技與生活-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：科技與生活",
+      "question": {
+        "q": "鐵路通車使兩城貨運時間下降，沿線商店增加。從科技史角度應如何理解？",
+        "correct": "運輸技術改變市場連結及日常活動方式",
+        "wrong": [
+          "鐵路一出現就取代全國全部道路",
+          "交通成本變化完全不影響商業",
+          "有鐵路就保證每個居民收入增加"
+        ],
+        "exp": "技術影響空間與生活，但效果因職業及地點不同。",
+        "subject": "歷史",
+        "sub_topic": "科技與生活",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-科技與生活",
+        "template_id": "extra-2026-h3-科技與生活-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-科技與生活-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：科技與生活",
+      "question": {
+        "q": "某地電力普及後工廠延長運轉時間，居民夜間活動也增加。最適合分析何種變化？",
+        "correct": "能源技術同時影響生產節奏與都市生活",
+        "wrong": [
+          "電力只可用於工廠而不影響家庭",
+          "夜間活動一定會因電力而全部消失",
+          "所有地區都在同一年完成電氣化"
+        ],
+        "exp": "電力應用改變工作和生活節奏，普及速度具有差異。",
+        "subject": "歷史",
+        "sub_topic": "科技與生活",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-科技與生活",
+        "template_id": "extra-2026-h3-科技與生活-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-科技與生活-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：科技與生活",
+      "question": {
+        "q": "早期電報與後來網際網路都縮短訊息傳遞時間。比較時哪個觀點較恰當？",
+        "correct": "重視共同的通訊加速效果，也分析技術規模及使用者差異",
+        "wrong": [
+          "兩種技術在成本及社會使用上必然完全相同",
+          "通訊加速就代表訊息從不失真",
+          "只有現代科技才會影響外交"
+        ],
+        "exp": "比較技術要兼顧連續性與歷史情境的差異。",
+        "subject": "歷史",
+        "sub_topic": "科技與生活",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-科技與生活",
+        "template_id": "extra-2026-h3-科技與生活-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-史料整理-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：史料整理",
+      "question": {
+        "q": "研究一場社會運動，學生蒐集不同日期的新聞，卻沒有標記報刊名稱與作者。最應改善什麼？",
+        "correct": "建立日期、來源、作者與內容的資料紀錄",
+        "wrong": [
+          "只將每篇文章字數加總",
+          "把所有新聞合併後刪除差異",
+          "只保留第一篇而不看後續變化"
+        ],
+        "exp": "資料整理應保留可追溯性，方便比對偏見與時間。",
+        "subject": "歷史",
+        "sub_topic": "史料整理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料整理",
+        "template_id": "extra-2026-h3-史料整理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-史料整理-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：史料整理",
+      "question": {
+        "q": "兩份檔案分別使用西元與民國紀年。若要比對政策時間先後，最先應做什麼？",
+        "correct": "統一紀年並保留原始日期及換算方式",
+        "wrong": [
+          "只按照檔名英文字母排序",
+          "假設兩種紀年數字可直接比較",
+          "全部刪除時間資訊"
+        ],
+        "exp": "統一時間尺度是建立可靠時間序列的前提。",
+        "subject": "歷史",
+        "sub_topic": "史料整理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料整理",
+        "template_id": "extra-2026-h3-史料整理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-史料整理-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：史料整理",
+      "question": {
+        "q": "某史家建立民眾請願資料庫，發現相同請願書被不同報紙重刊。若要統計請願事件數，應注意什麼？",
+        "correct": "去除重複轉載，區分事件與報導篇數",
+        "wrong": [
+          "每次重刊都算一次新請願",
+          "只根據報紙版面大小計數",
+          "把所有同年請願當成同一份文件"
+        ],
+        "exp": "轉載數與原始事件數不同，需要紀錄來源及去重。",
+        "subject": "歷史",
+        "sub_topic": "史料整理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-史料整理",
+        "template_id": "extra-2026-h3-史料整理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

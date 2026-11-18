@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-問題意識-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：問題意識",
+      "question": {
+        "q": "某學生研究「歷史上的教育」，題目過廣。哪個修正較適合實際史料研究？",
+        "correct": "探討某地某年代學校入學制度如何影響不同群體",
+        "wrong": [
+          "直接宣稱所有時代教育完全相同",
+          "只問人類是否喜歡上學",
+          "省略研究時間與地點仍可精確比較"
+        ],
+        "exp": "明確限制時空和可查證的制度問題，有助選材與論證。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-問題意識",
+        "template_id": "extra-2026-h3-問題意識-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-問題意識-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：問題意識",
+      "question": {
+        "q": "要研究某港口開放後商業是否改變，哪個問題較具有可檢驗性？",
+        "correct": "開港前後貨物種類與商業人口有哪些可量化差異",
+        "wrong": [
+          "開港是否讓所有人永遠幸福",
+          "這座港口是不是世界上最重要的地方",
+          "每位居民是否都有完全相同想法"
+        ],
+        "exp": "可檢驗的問題需要可比較的時段、對象及指標。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-問題意識",
+        "template_id": "extra-2026-h3-問題意識-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-問題意識-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：問題意識",
+      "question": {
+        "q": "某歷史報告先決定「某政策一定失敗」，再只蒐集負面案例。主要問題是？",
+        "correct": "結論先行造成選擇性取證，應允許證據修正假說",
+        "wrong": [
+          "先提出假說就不能從事史學",
+          "所有負面材料都必定不真實",
+          "使用正面史料就等於放棄批判"
+        ],
+        "exp": "研究可有初始假說，但不能只挑符合預期的材料。",
+        "subject": "歷史",
+        "sub_topic": "問題意識",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-7",
+            "name": "史料判讀"
+          }
+        ],
+        "concept_id": "hist-高中三年級-問題意識",
+        "template_id": "extra-2026-h3-問題意識-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

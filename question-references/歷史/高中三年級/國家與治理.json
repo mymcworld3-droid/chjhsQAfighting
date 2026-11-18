@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-國家與治理-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：國家與治理",
+      "question": {
+        "q": "某帝國以地方官治理新納入的地區，卻允許當地保留部分習俗。這反映何種治理策略？",
+        "correct": "中央統合與地方制度妥協可能同時存在",
+        "wrong": [
+          "國家治理必定只能完全消滅地方傳統",
+          "有地方習俗即代表完全沒有中央權力",
+          "所有帝國均必須採相同官制"
+        ],
+        "exp": "統治範圍擴張時，地方制度安排可能具有彈性。",
+        "subject": "歷史",
+        "sub_topic": "國家與治理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-國家與治理",
+        "template_id": "extra-2026-h3-國家與治理-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-國家與治理-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：國家與治理",
+      "question": {
+        "q": "研究政府頒布政策後地方執行情形不一致的原因，哪項史料組合較有幫助？",
+        "correct": "中央命令、地方行政紀錄與居民經驗互相比對",
+        "wrong": [
+          "只看中央公布的政策名稱",
+          "只比較兩地建築物高度",
+          "忽略地方財政與執行人員資料"
+        ],
+        "exp": "政策的制定與實施不同，需比較各層級資料。",
+        "subject": "歷史",
+        "sub_topic": "國家與治理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-國家與治理",
+        "template_id": "extra-2026-h3-國家與治理-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-國家與治理-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：國家與治理",
+      "question": {
+        "q": "某國在戰爭期間擴大徵稅、徵兵及戶籍管理。對國家能力可作哪項合理推論？",
+        "correct": "戰爭需求可能促進行政與資源動員制度擴張",
+        "wrong": [
+          "戰爭必定讓所有政府制度立即消失",
+          "徵稅制度與軍事完全沒有任何關係",
+          "戶籍資料能直接證明全體居民支持戰爭"
+        ],
+        "exp": "國家為動員資源常擴充治理工具，但政策支持度仍須另外研究。",
+        "subject": "歷史",
+        "sub_topic": "國家與治理",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-國家與治理",
+        "template_id": "extra-2026-h3-國家與治理-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

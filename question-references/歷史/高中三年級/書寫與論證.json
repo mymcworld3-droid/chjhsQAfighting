@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-書寫與論證-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：書寫與論證",
+      "question": {
+        "q": "某報告認為鐵路造成城鎮發展，只提出通車後人口成長。要強化論證，應補充什麼？",
+        "correct": "通車前後數據與其他同期政策及區域的比較",
+        "wrong": [
+          "只增加形容詞強調鐵路重要",
+          "反覆重寫同一句結論",
+          "把一張火車照片當作全部因果證據"
+        ],
+        "exp": "因果論證需對照與排除可能的共同因素。",
+        "subject": "歷史",
+        "sub_topic": "書寫與論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-書寫與論證",
+        "template_id": "extra-2026-h3-書寫與論證-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-書寫與論證-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：書寫與論證",
+      "question": {
+        "q": "歷史報告引用一段官員談話，未標示來源、日期與上下文。最重要的修訂為何？",
+        "correct": "加註原始出處並說明話語形成脈絡",
+        "wrong": [
+          "保留引文但刪除全部研究問題",
+          "只把字體改成粗體",
+          "將引文翻譯成現代語便當作獨立證據"
+        ],
+        "exp": "引用需可查證，才能評估語境與可信度。",
+        "subject": "歷史",
+        "sub_topic": "書寫與論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-書寫與論證",
+        "template_id": "extra-2026-h3-書寫與論證-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-書寫與論證-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：書寫與論證",
+      "question": {
+        "q": "一篇文章先指出某改革降低部分商人成本，後又指出農民負擔加重。最合適的結論如何寫？",
+        "correct": "指出改革成效具有群體差異，並依證據限定適用範圍",
+        "wrong": [
+          "宣稱所有人都同時全面獲利",
+          "宣稱改革完全沒有任何效果",
+          "省略兩種資料後只保留立場"
+        ],
+        "exp": "論證結論應符合材料的範圍與不一致處。",
+        "subject": "歷史",
+        "sub_topic": "書寫與論證",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-書寫與論證",
+        "template_id": "extra-2026-h3-書寫與論證-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

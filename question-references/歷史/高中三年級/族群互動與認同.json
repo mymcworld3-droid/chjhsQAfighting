@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-h3-族群互動與認同-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：族群互動與認同",
+      "question": {
+        "q": "某港口在不同時期吸引移民，新舊居民的語言、飲食與節慶逐漸相互影響。哪項分析較符合歷史觀點？",
+        "correct": "族群認同會因接觸、政策與世代經驗而變化",
+        "wrong": [
+          "任何族群認同從古至今必定不變",
+          "移民出現就代表既有文化立即消失",
+          "同城居民一定形成完全一致的族群記憶"
+        ],
+        "exp": "族群互動可能形成融合與差異，認同並非固定單一。",
+        "subject": "歷史",
+        "sub_topic": "族群互動與認同",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-族群互動與認同",
+        "template_id": "extra-2026-h3-族群互動與認同-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-族群互動與認同-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：族群互動與認同",
+      "question": {
+        "q": "某族群在官方調查中被歸為單一名稱，但地方口述資料顯示內部存在不同群體。史家應如何處理？",
+        "correct": "檢視官方分類目的並納入在地自我認同的證據",
+        "wrong": [
+          "僅以官方名稱推定所有人文化相同",
+          "忽略口述資料因其不見於官文",
+          "認為名稱不同就證明完全沒有歷史關聯"
+        ],
+        "exp": "分類標籤與族群自我認同可能不同，需辨識建構脈絡。",
+        "subject": "歷史",
+        "sub_topic": "族群互動與認同",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-族群互動與認同",
+        "template_id": "extra-2026-h3-族群互動與認同-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-h3-族群互動與認同-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "課內知識與材料分析：族群互動與認同",
+      "question": {
+        "q": "兩地居民都使用同種語言，卻有不同歷史記憶與政治認同。最能說明何種現象？",
+        "correct": "語言相同不必然代表政治與文化認同完全一致",
+        "wrong": [
+          "語言共同就表示必定受同一政府治理",
+          "政治認同只能由血緣完全決定",
+          "各群體的歷史經驗不會影響認同"
+        ],
+        "exp": "認同形成受歷史記憶、制度與社會互動共同影響。",
+        "subject": "歷史",
+        "sub_topic": "族群互動與認同",
+        "knowledge_points": [
+          {
+            "subject": "歷史",
+            "id": "history-8",
+            "name": "歷史因果與比較"
+          }
+        ],
+        "concept_id": "hist-高中三年級-族群互動與認同",
+        "template_id": "extra-2026-h3-族群互動與認同-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
