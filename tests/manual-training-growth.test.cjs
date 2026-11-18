@@ -32,7 +32,7 @@ const makeBook=(level,school='sword',options={})=>({
   id:school==='sword'?'sword-wind':'body-rock',
   name:school==='sword'?'流風劍訣':'玄嶽鍛體訣',
   school,owned:true,level,progress:45,
-  expInLevel:45,expToNext:100,upgrade:level<10?{targetLevel:level+1,gold:110}:null,
+  expInLevel:45,expToNext:100,upgrade:level<20?{targetLevel:level+1,gold:110}:null,
   skills:[
     {id:'first',name:'第一招',level:1,cost:2,levelRequired:1,mastered:true,realmReady:true,unlocked:true},
     {id:'second',name:'第二招',level:1,cost:4,levelRequired:5,
@@ -49,7 +49,7 @@ test('four visual stages use exact level boundaries, clamping unexpected values'
   const cases=[[1,'seed','初息'],[4,'seed','初息'],
     [5,'inscribed','凝紋'],[7,'inscribed','凝紋'],
     [8,'surge','盛氣'],[9,'surge','盛氣'],
-    [10,'complete','圓滿'],[300,'complete','圓滿'],[-1,'seed','初息']];
+    [10,'refined','大成'],[19,'refined','大成'],[20,'complete','圓滿'],[300,'complete','圓滿'],[-1,'seed','初息']];
   for(const [level,stage,label] of cases){
     assert.equal(manualVisualState({level}).stage,stage);
     assert.equal(manualVisualState({level}).label,label);
@@ -57,17 +57,17 @@ test('four visual stages use exact level boundaries, clamping unexpected values'
   assert.equal(manualVisualState({level:'not a number'}).stage,'seed');
 });
 
-test('ten segment markers distinguish reached, current and level-5/10 skill milestones',()=>{
+test('twenty stations distinguish reached, current, and level-1/5/10/20 milestones',()=>{
   const html=renderManualVisualMilestones(makeBook(5),escape);
-  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
+  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,20);
   assert.equal((html.match(/is-reached/g)||[]).length,5);
   assert.equal((html.match(/is-current/g)||[]).length,1);
-  assert.equal((html.match(/is-milestone/g)||[]).length,3);
+  assert.equal((html.match(/is-milestone-(1|5|10|20)/g)||[]).length,4);
   assert.match(html,/data-manual-growth-stage="inscribed"/);
   assert.match(html,/role="progressbar"/);
-  assert.match(html,/aria-valuenow="49"/);
+  assert.match(html,/aria-valuenow="23"/);
   assert.match(html,/領悟仍需達到修士境界/);
-  assert.equal((html.match(/<small>1<\/small>|<small>5<\/small>|<small>10<\/small>/g)||[]).length,3);
+  assert.equal((html.match(/<small>1<\/small>|<small>5<\/small>|<small>10<\/small>|<small>20<\/small>/g)||[]).length,4);
 });
 
 test('stages and aura rings are visible with original stable cover and clickable skill',()=>{
@@ -82,7 +82,7 @@ test('stages and aura rings are visible with original stable cover and clickable
 
 test('level threshold alone does not light up skills blocked by player realm',()=>{
   const h=hero(makeBook(10,'sword'));
-  assert.match(h,/manual-hero--tier-complete/);
+  assert.match(h,/manual-hero--tier-refined/);
   assert.match(h,/data-manual-skill-visual="realm-locked"/);
   assert.match(h,/修士境界未達/);
   assert.doesNotMatch(h,/三招皆已領悟/);
@@ -100,7 +100,7 @@ test('actual unlocked skill gains a confirmation mark; locked node remains dim',
 });
 
 test('collection badges reflect exactly the same visual stages as the hero',()=>{
-  for(const [level,stage] of [[2,'seed'],[5,'inscribed'],[8,'surge'],[10,'complete']]){
+  for(const [level,stage] of [[2,'seed'],[5,'inscribed'],[8,'surge'],[10,'refined'],[20,'complete']]){
     const book=makeBook(level,'body');
     const html=card(book);
     assert.match(html,new RegExp('data-manual-stage="'+stage+'"'));
@@ -141,8 +141,8 @@ test('book names and image alt remain escaped',()=>{
   assert.match(card(book),/&lt;img src=x/);
 });
 
-test('mastery and aura are merged; rounded 1/5/10 stations share the same rail',()=>{
-  const b=makeBook(10,'body',{progress:0,expInLevel:0,expToNext:0});
+test('mastery and aura share a 20-level rail with 1/5/10/20 raised milestones',()=>{
+  const b=makeBook(20,'body',{progress:100,expInLevel:0,expToNext:0});
   const html=hero(b);
   assert.equal((html.match(/class="manual-hero-mastery"/g)||[]).length,1);
   assert.doesNotMatch(html,/功法氣象/);
@@ -150,28 +150,31 @@ test('mastery and aura are merged; rounded 1/5/10 stations share the same rail',
   assert.doesNotMatch(html,/class="manual-hero-track"/);
   assert.doesNotMatch(html,/class="manual-hero-level"/);
   assert.match(html,/<span class="manual-hero-stage-badge">圓滿<\/span>\s*<span class="manual-hero-mastery-status">功法已達最高等級<\/span>/);
-  assert.match(html,/Lv. 10 \/ 10/);
+  assert.match(html,/Lv. 20 \/ 20/);
   assert.doesNotMatch(html,/功法修至最高等級，靈紋完整/);
   assert.doesNotMatch(html,/class="manual-hero-goal"/);
   assert.doesNotMatch(html,/class="manual-hero-roster"/);
-  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,10);
-  assert.equal((html.match(/is-milestone/g)||[]).length,3);
+  assert.equal((html.match(/class="manual-growth-mark /g)||[]).length,20);
+  assert.equal((html.match(/is-milestone-(1|5|10|20)/g)||[]).length,4);
   assert.match(html,/style="width:100\.00%"/);
   assert.match(html,/aria-valuenow="100"/);
 });
 
-test('the single ten-level rail advances between levels with real server progress',()=>{
+test('the single twenty-level rail advances between levels with real server progress',()=>{
   const first=makeBook(1,'sword',{progress:0});
   const one=renderManualVisualMilestones(first,escape);
   const four=renderManualVisualMilestones(makeBook(4,'sword',{progress:50}),escape);
   const ten=renderManualVisualMilestones(makeBook(10,'sword',{progress:0}),escape);
+  const twenty=renderManualVisualMilestones(makeBook(20,'sword',{progress:100}),escape);
   const percent=markup=>Number(markup.match(/style="width:([0-9.]+)%"/)?.[1]);
   assert.equal(percent(one),0);
-  assert(percent(four)>33 && percent(four)<45);
-  assert.equal(percent(ten),100);
+  assert(percent(four)>18 && percent(four)<19);
+  assert(percent(ten)>47 && percent(ten)<48);
+  assert.equal(percent(twenty),100);
   assert.match(one,/<small>1<\/small>/);
   assert.match(one,/<small>5<\/small>/);
   assert.match(one,/<small>10<\/small>/);
+  assert.match(one,/<small>20<\/small>/);
   assert.equal((one.match(/is-milestone is-reached/g)||[]).length,0);
 });
 
