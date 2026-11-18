@@ -115,7 +115,6 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
               <span class="manual-hero-stage-badge">${esc(visual.label)}</span>
               <span class="manual-hero-mastery-status">${progressLabel}</span>
             </div>
-            ${!maxed?'<p class="manual-hero-mastery-description">'+esc(visual.description)+'</p>':''}
             ${growth}
             ${nextNote?`<small class="manual-hero-next-inline">${esc(nextNote)}</small>`:''}
             <small class="manual-hero-mastery-footnote">Lv.5、10 為招式等級門檻，真正領悟仍需符合修士境界。</small>
