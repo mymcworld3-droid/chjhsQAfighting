@@ -197,7 +197,7 @@ test('heartbeat renews the room and code lease before expiration, without admitt
   assert.equal((await f.call('b','subscribe',{roomId:id})).status,403);
   // No heartbeat may restore membership after disband.
   await f.call('a','disband',{roomId:id});
-  assert.equal((await f.call('a','heartbeat',{roomId:id})).status,403);
+  assert.equal((await f.call('a','heartbeat',{roomId:id})).status,410);
 });
 test('streamed room never leaks data to an expired lobby and abort closes listener',async()=>{
   const f=fixture(),created=(await f.call('a','create')).body;
