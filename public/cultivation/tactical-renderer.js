@@ -487,7 +487,15 @@ export class TacticalRenderer{
         c.ellipse(x+cell*.59,y+cell*.86,cell*.48,cell*.16,-.08,0,Math.PI*2);
         c.fill();c.restore();
       }
-      if(!this.sprite('props',(p.kind==='tree'?1:2)*128,0,128,128,x-cell*.06,y-cell*.15,cell*1.12,cell*1.12)){
+      let propDrawn=false;
+      if(ambienceActive&&p.kind==='tree'&&!reduced){
+        // A small canopy movement pivots around the grounded trunk.
+        c.save();c.translate(x+cell*.5,y+cell*.85);
+        c.rotate(.012*Math.sin(now*.0012+p.x*1.3+p.y*.87));
+        propDrawn=this.sprite('props',128,0,128,128,-cell*.56,-cell,cell*1.12,cell*1.12);
+        c.restore();
+      }else propDrawn=this.sprite('props',(p.kind==='tree'?1:2)*128,0,128,128,x-cell*.06,y-cell*.15,cell*1.12,cell*1.12);
+      if(!propDrawn){
         c.fillStyle='#56594c';c.fillRect(x+cell*.14,y+cell*.1,cell*.72,cell*.8);
       }
     }
