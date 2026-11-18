@@ -175,9 +175,11 @@ export class TacticalRenderer{
     if(this.hoverPlan){
       this.canvas.dataset.hoverPreviewCost=String(this.hoverPlan.cost);
       this.canvas.dataset.hoverPreviewValid=String(this.hoverPlan.valid);
+      this.canvas.dataset.hoverPreviewTargets=String(this.hoverPlan.affected.length);
     }else{
       delete this.canvas.dataset.hoverPreviewCost;
       delete this.canvas.dataset.hoverPreviewValid;
+      delete this.canvas.dataset.hoverPreviewTargets;
     }
     this.requestDraw();
   }
