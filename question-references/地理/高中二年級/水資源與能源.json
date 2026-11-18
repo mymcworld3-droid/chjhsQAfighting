@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-水資源與能源-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答水資源與能源情境",
+      "question": {
+        "q": "某發電計畫使用水庫蓄水，在枯水季也須兼顧民生與農業用水。哪項決策最適當？",
+        "correct": "綜合水文預測、發電需求及不同用水優先序",
+        "wrong": [
+          "只根據當天電價決定所有放水量",
+          "蓄水量越少一定越容易滿足全部需求",
+          "供電與供水完全沒有競合關係"
+        ],
+        "exp": "水庫具有多功能，需評估調度取捨與枯水風險。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "extra-2026-geo2-水資源與能源-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-水資源與能源-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答水資源與能源情境",
+      "question": {
+        "q": "某地太陽能發電峰值在中午，用電高峰卻在傍晚。哪項措施較能處理時間不匹配？",
+        "correct": "增加儲能、需求管理或其他可調度電源",
+        "wrong": [
+          "只因中午發電量大就保證夜間供電充足",
+          "把用電需求時間直接當作太陽升起時間",
+          "忽略電力系統需即時供需平衡"
+        ],
+        "exp": "再生能源的發電時間可能與需求不一致，需要系統調節。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "extra-2026-geo2-水資源與能源-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-水資源與能源-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答水資源與能源情境",
+      "question": {
+        "q": "某區乾旱時地下水抽取增加，但多年後水位持續下降。這提醒能源與水管理何種問題？",
+        "correct": "短期補足需求可能犧牲長期含水層永續性",
+        "wrong": [
+          "地下水可無限制持續抽取",
+          "只要有水井就不需估計補注量",
+          "水位下降必然表示所有居民用水減少"
+        ],
+        "exp": "地下水是可再生但補注速度有限的資源。",
+        "subject": "地理",
+        "sub_topic": "水資源與能源",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-8",
+            "name": "環境與永續"
+          }
+        ],
+        "concept_id": "geo-高中二年級-水資源與能源",
+        "template_id": "extra-2026-geo2-水資源與能源-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

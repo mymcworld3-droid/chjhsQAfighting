@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-自然與人口-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然與人口情境",
+      "question": {
+        "q": "某地頻繁遭洪水淹沒，但人口仍因港口就業而集中。這最能說明？",
+        "correct": "自然風險與經濟機會共同影響聚落選址",
+        "wrong": [
+          "洪水風險存在就不可能形成城市",
+          "任何港口都一定建於高山",
+          "人口分布完全不受工作機會影響"
+        ],
+        "exp": "聚落位置是環境風險與經濟誘因權衡的結果。",
+        "subject": "地理",
+        "sub_topic": "自然與人口",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然與人口",
+        "template_id": "extra-2026-geo2-自然與人口-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-自然與人口-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然與人口情境",
+      "question": {
+        "q": "乾旱地區因地下水灌溉而人口增加，但水位逐年下降。主要反映何種限制？",
+        "correct": "技術可擴大人類利用環境的能力，但受資源補注約束",
+        "wrong": [
+          "有灌溉就代表水資源無限",
+          "地下水位下降必定使所有農地變濕",
+          "人口成長與供水可靠性完全無關"
+        ],
+        "exp": "灌溉可暫時改善生產，長期仍須考慮地下水永續。",
+        "subject": "地理",
+        "sub_topic": "自然與人口",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然與人口",
+        "template_id": "extra-2026-geo2-自然與人口-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-自然與人口-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然與人口情境",
+      "question": {
+        "q": "某高山聚落冬季道路易因積雪中斷，部分居民遷往較低地區。最直接影響人口移動的因素是？",
+        "correct": "自然環境造成的季節交通及生活限制",
+        "wrong": [
+          "高海拔一定沒有任何農業",
+          "所有人口遷移只由國籍決定",
+          "積雪必定使各地人口同時增加"
+        ],
+        "exp": "可達性與氣候會影響生活成本及遷居決策。",
+        "subject": "地理",
+        "sub_topic": "自然與人口",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然與人口",
+        "template_id": "extra-2026-geo2-自然與人口-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

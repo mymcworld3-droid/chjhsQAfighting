@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-自然環境-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然環境情境",
+      "question": {
+        "q": "同一緯度的甲乙兩地，甲近海、乙位於大陸內部。兩地年溫差可能不同，主要與什麼有關？",
+        "correct": "海陸熱容量與氣流環流的調節",
+        "wrong": [
+          "緯度相同就確定氣候一致",
+          "大陸內部全年都受海風直接調節",
+          "氣溫差只由建築物高度決定"
+        ],
+        "exp": "海洋升降溫較緩，內陸受季節加熱冷卻影響通常較顯著。",
+        "subject": "地理",
+        "sub_topic": "自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境",
+        "template_id": "extra-2026-geo2-自然環境-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-自然環境-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然環境情境",
+      "question": {
+        "q": "某山區迎風坡多雨，背風坡較乾燥。此差異最符合哪種機制？",
+        "correct": "濕氣抬升冷卻凝結後，背風空氣下降增溫",
+        "wrong": [
+          "背風坡空氣必定比迎風坡更容易持續上升",
+          "山脈不會改變水氣輸送",
+          "降雨只取決於地名"
+        ],
+        "exp": "地形抬升與背風雨影塑造降雨空間差異。",
+        "subject": "地理",
+        "sub_topic": "自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境",
+        "template_id": "extra-2026-geo2-自然環境-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-自然環境-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然環境情境",
+      "question": {
+        "q": "某海岸外側有沙洲，颱風後沙洲形狀改變。最可能的自然作用是？",
+        "correct": "海浪、沿岸流與沉積物搬運改變砂源分布",
+        "wrong": [
+          "只有板塊隱沒才能移動沙粒",
+          "沙洲位置完全不受波浪影響",
+          "沿岸流不可能搬運沉積物"
+        ],
+        "exp": "波浪及沿岸漂砂會持續塑造海岸地形。",
+        "subject": "地理",
+        "sub_topic": "自然環境",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-3",
+            "name": "氣候與水文"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境",
+        "template_id": "extra-2026-geo2-自然環境-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

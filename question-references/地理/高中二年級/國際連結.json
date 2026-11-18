@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-國際連結-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答國際連結情境",
+      "question": {
+        "q": "甲國出口電子零件到乙國組裝，成品再售往丙國。這最能反映？",
+        "correct": "跨國價值鏈的中間財流動與區域分工",
+        "wrong": [
+          "只有最終銷售國才參與生產",
+          "中間產品從不跨越國界",
+          "組裝地必定擁有全部研發技術"
+        ],
+        "exp": "跨國商品流通常經過多個生產與運銷環節。",
+        "subject": "地理",
+        "sub_topic": "國際連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-國際連結",
+        "template_id": "extra-2026-geo2-國際連結-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-國際連結-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答國際連結情境",
+      "question": {
+        "q": "某地港口因國際航線減班，出口商品運輸時間大增。哪種經濟影響較可能發生？",
+        "correct": "物流成本提高並影響依賴出口的產業競爭力",
+        "wrong": [
+          "航線減班必定使運費無限下降",
+          "國際物流與市場競爭完全無關",
+          "所有出口商都立即改為在地銷售"
+        ],
+        "exp": "海運可達性影響運輸成本與供應可靠性。",
+        "subject": "地理",
+        "sub_topic": "國際連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-國際連結",
+        "template_id": "extra-2026-geo2-國際連結-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-國際連結-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答國際連結情境",
+      "question": {
+        "q": "某城市與海外城市合作交流水資源管理經驗，卻需要調整以符合本地降雨條件。這說明？",
+        "correct": "國際知識交流需要考量地方自然與制度環境",
+        "wrong": [
+          "他國政策只要成功就能完全照搬",
+          "水文條件不可能影響供水制度",
+          "國際交流必定使各地氣候相同"
+        ],
+        "exp": "技術與政策移植要依地方需求適應。",
+        "subject": "地理",
+        "sub_topic": "國際連結",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-國際連結",
+        "template_id": "extra-2026-geo2-國際連結-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

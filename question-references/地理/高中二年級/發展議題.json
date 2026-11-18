@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-發展議題-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答發展議題情境",
+      "question": {
+        "q": "某地平均所得提高，卻同時面臨飲水污染與醫療不足。若只用收入衡量發展，會忽略什麼？",
+        "correct": "健康、環境與公共服務等人類發展面向",
+        "wrong": [
+          "收入提高代表所有疾病已消失",
+          "只需比較出口總額即可推算健康",
+          "發展指標不需要考慮生活品質"
+        ],
+        "exp": "發展具有多維特性，需檢查經濟以外的條件。",
+        "subject": "地理",
+        "sub_topic": "發展議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-發展議題",
+        "template_id": "extra-2026-geo2-發展議題-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-發展議題-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答發展議題情境",
+      "question": {
+        "q": "某城市新設工業園區後就業增加，但周邊房價上升、部分居民無法負擔。最適合檢查什麼？",
+        "correct": "工作機會及居住負擔的分配效果",
+        "wrong": [
+          "只看產業園區面積代表全市福祉",
+          "認為就業增加一定使住房更便宜",
+          "忽略未受雇居民的情況"
+        ],
+        "exp": "開發利益可能在不同群體間不均等。",
+        "subject": "地理",
+        "sub_topic": "發展議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-發展議題",
+        "template_id": "extra-2026-geo2-發展議題-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-發展議題-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答發展議題情境",
+      "question": {
+        "q": "某地教育普及率高，但女性正式就業機會仍偏低。分析發展障礙應如何做？",
+        "correct": "檢視職場制度、照顧責任與社會規範等因素",
+        "wrong": [
+          "只因教育普及就認定性別機會完全相同",
+          "把就業差異全歸因自然環境",
+          "只比較平均氣溫"
+        ],
+        "exp": "教育與就業之間還存在制度與社會條件。",
+        "subject": "地理",
+        "sub_topic": "發展議題",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-發展議題",
+        "template_id": "extra-2026-geo2-發展議題-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

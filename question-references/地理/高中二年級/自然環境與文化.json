@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-自然環境與文化-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然環境與文化情境",
+      "question": {
+        "q": "某山區聚落依坡地地形發展階梯式耕作，平原聚落多使用大型機械。這最能說明什麼？",
+        "correct": "農業技術會與地形、土地規模及勞動條件互相適應",
+        "wrong": [
+          "山區地形與農業技術完全無關",
+          "平原一定不能使用人工耕作",
+          "不同文化的農耕方式只取決於行政制度"
+        ],
+        "exp": "自然環境提供條件和限制，人類可發展不同土地利用方式。",
+        "subject": "地理",
+        "sub_topic": "自然環境與文化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境與文化",
+        "template_id": "extra-2026-geo2-自然環境與文化-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-自然環境與文化-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然環境與文化情境",
+      "question": {
+        "q": "一個乾旱地區傳統建築常有厚牆與小開口，現代住宅則大量採用空調。研究這項變化可從哪方面切入？",
+        "correct": "氣候適應技術與能源使用方式的轉變",
+        "wrong": [
+          "厚牆必然讓任何地區室內溫度固定",
+          "建築形式永遠與文化無關",
+          "空調普及後就不需要考量電力來源"
+        ],
+        "exp": "建築與能源選擇回應當地熱環境與社會技術條件。",
+        "subject": "地理",
+        "sub_topic": "自然環境與文化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境與文化",
+        "template_id": "extra-2026-geo2-自然環境與文化-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-自然環境與文化-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答自然環境與文化情境",
+      "question": {
+        "q": "某海島祭典與捕魚季節相關，近年魚群洄游時間改變。分析文化影響時應考量？",
+        "correct": "自然資源變化可能影響地方生計及節慶安排",
+        "wrong": [
+          "節慶形式必然完全不受產業變化影響",
+          "魚群活動只由祭典日期決定",
+          "所有社區都必須使用完全相同祭典"
+        ],
+        "exp": "環境與社會文化互相作用，但回應方式因地方而異。",
+        "subject": "地理",
+        "sub_topic": "自然環境與文化",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-自然環境與文化",
+        "template_id": "extra-2026-geo2-自然環境與文化-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-區域衝突與發展-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答區域衝突與發展情境",
+      "question": {
+        "q": "跨國河川上游增建水壩，下游國家擔心水資源減少。較合適的區域治理方式為何？",
+        "correct": "共享流量資訊並協商跨境水資源分配與調度",
+        "wrong": [
+          "只讓上游決定所有下游用水",
+          "認為行政邊界能阻止河水流動",
+          "各國只需比較人口而無須水文資料"
+        ],
+        "exp": "跨境流域涉及共同資源和不對稱地理位置，需要合作。",
+        "subject": "地理",
+        "sub_topic": "區域衝突與發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域衝突與發展",
+        "template_id": "extra-2026-geo2-區域衝突與發展-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-區域衝突與發展-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答區域衝突與發展情境",
+      "question": {
+        "q": "兩個鄰國因邊界地區礦產資源產生爭議，地方居民生活受到影響。分析時最需要什麼？",
+        "correct": "同時檢視領土權屬、資源利益與當地社群經驗",
+        "wrong": [
+          "只依礦產品顏色決定邊界",
+          "把所有居民視為完全一致立場",
+          "區域衝突不可能與自然資源有關"
+        ],
+        "exp": "衝突可能兼具政治、經濟與社會因素。",
+        "subject": "地理",
+        "sub_topic": "區域衝突與發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域衝突與發展",
+        "template_id": "extra-2026-geo2-區域衝突與發展-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-區域衝突與發展-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答區域衝突與發展情境",
+      "question": {
+        "q": "某地因觀光快速開發而增加就業，但房租上升迫使部分原住戶遷出。評估發展政策應如何做？",
+        "correct": "分析收入、居住負擔與不同群體受益程度",
+        "wrong": [
+          "只看旅客人次代表全體福利",
+          "只因有新工作就假設居住成本不變",
+          "遷出人口不必計入發展影響"
+        ],
+        "exp": "發展效益可能不均衡，需要考量地方生活成本。",
+        "subject": "地理",
+        "sub_topic": "區域衝突與發展",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-7",
+            "name": "世界區域"
+          }
+        ],
+        "concept_id": "geo-高中二年級-區域衝突與發展",
+        "template_id": "extra-2026-geo2-區域衝突與發展-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

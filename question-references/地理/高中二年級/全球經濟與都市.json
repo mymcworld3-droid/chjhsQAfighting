@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-全球經濟與都市-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答全球經濟與都市情境",
+      "question": {
+        "q": "某全球企業將總部、研發及金融服務集中在特定都會，製造環節分散各地。這最能說明什麼？",
+        "correct": "高階管理服務與跨國生產網絡具有不同區位邏輯",
+        "wrong": [
+          "所有企業總部必須設在原料產地",
+          "研發與製造一定無法跨境協作",
+          "城市間完全不存在全球資本流動"
+        ],
+        "exp": "全球城市常聚集高階服務與管理功能。",
+        "subject": "地理",
+        "sub_topic": "全球經濟與都市",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-全球經濟與都市",
+        "template_id": "extra-2026-geo2-全球經濟與都市-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-全球經濟與都市-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答全球經濟與都市情境",
+      "question": {
+        "q": "某城市因跨國金融與專業服務聚集，辦公室租金大幅上升。哪個因素較可能是推力？",
+        "correct": "高階服務業對核心區位的競爭性需求",
+        "wrong": [
+          "城市地理座標在一年內變動",
+          "所有住宅供給同時變為零",
+          "金融機構不需要實體及數位基礎設施"
+        ],
+        "exp": "集聚效益與土地稀缺可提高核心區租金。",
+        "subject": "地理",
+        "sub_topic": "全球經濟與都市",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-全球經濟與都市",
+        "template_id": "extra-2026-geo2-全球經濟與都市-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-全球經濟與都市-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答全球經濟與都市情境",
+      "question": {
+        "q": "某全球城市經濟產值高，但城市內低薪服務工作者的通勤時間很長。評估城市發展應注意？",
+        "correct": "全球經濟地位與內部居住、交通公平可能不一致",
+        "wrong": [
+          "產值高就代表每位居民都住在工作地附近",
+          "跨國公司數量可直接決定所有薪資",
+          "通勤問題只由氣候造成"
+        ],
+        "exp": "都市內部可能存在階層化空間結構。",
+        "subject": "地理",
+        "sub_topic": "全球經濟與都市",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-5",
+            "name": "產業與經濟地理"
+          }
+        ],
+        "concept_id": "geo-高中二年級-全球經濟與都市",
+        "template_id": "extra-2026-geo2-全球經濟與都市-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }

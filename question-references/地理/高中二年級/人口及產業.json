@@ -61,6 +61,93 @@
         "cognitive_level": 2,
         "reasoning_steps": 2
       }
+    },
+    {
+      "id": "extra-2026-geo2-人口及產業-1",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答人口及產業情境",
+      "question": {
+        "q": "某地製造業職缺減少、照顧服務需求增加，人口也逐漸高齡化。最合理的產業規畫方向為何？",
+        "correct": "結合勞動人口結構與服務需求調整人才培訓",
+        "wrong": [
+          "只延長所有工廠工時就能處理高齡化",
+          "認為人口年齡與服務業完全無關",
+          "只比較地區面積不需看人口"
+        ],
+        "exp": "產業政策需配合人口結構與技能需求。",
+        "subject": "地理",
+        "sub_topic": "人口及產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口及產業",
+        "template_id": "extra-2026-geo2-人口及產業-1",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人口及產業-2",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答人口及產業情境",
+      "question": {
+        "q": "某縣年輕人口外移後，農地閒置增加。若希望發展新產業，最應先評估什麼？",
+        "correct": "土地利用現況、勞動力技能及交通市場條件",
+        "wrong": [
+          "只看某一年節慶人潮",
+          "所有閒置農地都必須改成工廠",
+          "以縣名決定適合產業"
+        ],
+        "exp": "人口變動與產業可能相互影響，區位及資源需具體分析。",
+        "subject": "地理",
+        "sub_topic": "人口及產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口及產業",
+        "template_id": "extra-2026-geo2-人口及產業-2",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
+    },
+    {
+      "id": "extra-2026-geo2-人口及產業-3",
+      "source": "自編課綱參考題（非歷屆試卷原題）",
+      "design": "運用環境或區域經濟原理解答人口及產業情境",
+      "question": {
+        "q": "甲產業就業人數增加20%，產值卻只增5%；乙就業人數增加5%，產值增20%。若其他條件可比，哪項判讀較合理？",
+        "correct": "乙產業每位就業者的平均產值提升幅度較大",
+        "wrong": [
+          "甲就業成長較快代表平均產值必增加更多",
+          "兩者每人產值增幅完全相同",
+          "只比較產值總額就能知道勞動生產率"
+        ],
+        "exp": "每人產值約為產值除以就業人數，乙比率提高較多。",
+        "subject": "地理",
+        "sub_topic": "人口及產業",
+        "knowledge_points": [
+          {
+            "subject": "地理",
+            "id": "geography-4",
+            "name": "人口與聚落"
+          }
+        ],
+        "concept_id": "geo-高中二年級-人口及產業",
+        "template_id": "extra-2026-geo2-人口及產業-3",
+        "question_form": "single-choice",
+        "cognitive_level": 2,
+        "reasoning_steps": 2
+      }
     }
   ]
 }
