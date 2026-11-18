@@ -214,10 +214,35 @@ async function main(){
           map.tiles[y*map.width+x]!==0;
       })[0];
     };
+    // Compare only the world canvas, not any status badges. This checks
+    // that a's remote movement visibly reaches b's map via SSE.
+    const canvasHash=()=>b.page.evaluate(()=>{
+      const c=document.querySelector('#dungeon-map-view .dm-world');
+      const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+      let h=2166136261;
+      for(let i=0;i<d.length;i+=4){
+        h^=d[i];h=Math.imul(h,16777619);
+        h^=d[i+1];h=Math.imul(h,16777619);
+        h^=d[i+2];h=Math.imul(h,16777619);
+      }
+      return h>>>0;
+    });
+    const beforeRemoteMove=await canvasHash();
     const firstMove=moveFor('a');
     await a.page.locator('#dungeon-map-view [data-dm="'+firstMove+'"]').click();
     await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
       ?.textContent==='99 / 100');
+    await b.page.waitForFunction(before=>{
+      const c=document.querySelector('#dungeon-map-view .dm-world');
+      const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+      let h=2166136261;
+      for(let i=0;i<d.length;i+=4){
+        h^=d[i];h=Math.imul(h,16777619);
+        h^=d[i+1];h=Math.imul(h,16777619);
+        h^=d[i+2];h=Math.imul(h,16777619);
+      }
+      return (h>>>0)!==before;
+    },beforeRemoteMove,{timeout:7000});
     await b.page.waitForFunction(()=>document.querySelector('#dungeon-lobby .dg-room-status')
       ?.textContent.includes('已集結'));
     assert.equal(room.members.a.moveSeq,1);
@@ -230,11 +255,20 @@ async function main(){
     assert.equal(room.members.b.moveSeq,1);
     assert.equal(room.members.a.explorationStamina,99);
     assert.equal(room.members.b.explorationStamina,99);
+    // Opening the modal focuses a button. WASD must work regardless of that
+    // default focus and must still obey one-cell server validation.
+    const nextMove=moveFor('a');
+    const key={up:'w',right:'d',down:'s',left:'a'}[nextMove];
+    await a.page.keyboard.press(key);
+    await a.page.waitForFunction(()=>document.querySelector('[data-dm-energy]')
+      ?.textContent==='98 / 100');
+    assert.equal(room.members.a.moveSeq,2);
+    assert.equal(room.members.a.explorationStamina,98);
     assert.deepStrictEqual(errors,[]);
-    assert.equal(requests.filter(action=>action==='move').length,2);
+    assert.equal(requests.filter(action=>action==='move').length,3);
     assert.ok(!requests.some(action=>/attack|reward|damage/.test(action)));
     await a.context.close();await b.context.close();
-    console.log('[Dungeon map browser] PASS: dual independent movement, shared state, stamina, portrait/landscape, pinch, fit and resize');
+    console.log('[Dungeon map browser] PASS: two clients, 3 successful moves, remote canvas SSE repaint, WASD, stamina, pinch and resize');
   }finally{
     await browser?.close();
     await new Promise(resolve=>server.close(resolve));
