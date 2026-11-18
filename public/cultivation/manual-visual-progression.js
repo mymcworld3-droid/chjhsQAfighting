@@ -39,7 +39,7 @@ export function renderManualVisualMilestones(book,esc) {
     </span>`;
   }).join('');
   return `<div class="manual-growth-marks" data-manual-growth-stage="${stage}" role="progressbar"
-      aria-label="${esc(book?.name||'功法')}熟練度：Lv. ${level} / 20。Lv. 5 和 Lv. 10 為技能等級門檻；Lv. 20 為滿級"
+      aria-label="${esc(book?.name||'功法')}熟練度：Lv. ${level} / 20。Lv. 5 和 Lv. 10 為技能等級門檻，領悟仍需達到修士境界；Lv. 20 為滿級"
       aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentage)}">
       <span class="manual-growth-flow" aria-hidden="true">
         <span class="manual-growth-flow-fill" style="width:${percentage.toFixed(2)}%"></span>
