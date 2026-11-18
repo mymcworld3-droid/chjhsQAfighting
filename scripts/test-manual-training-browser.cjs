@@ -30,6 +30,24 @@ async function main(){
     await page.locator('[data-manual-book="sword-wind"] summary').click();
     await page.locator('[data-manual-jump-skill="wind-slash"]').click();
     await page.locator('[data-manual-book="sword-wind"][open]').waitFor();
+    // Next-stage expedition guidance is bound to the same authenticated state.
+    const quest=page.locator('[data-manual-expedition]');
+    await quest.waitFor();
+    assert.equal(await quest.getAttribute('data-manual-expedition-book'),'sword-wind');
+    assert.match(await quest.textContent(),/第 1 關/);
+    assert.match(await quest.textContent(),/煉氣境/);
+    assert.match(await quest.textContent(),/\+20/);
+    assert.equal(await quest.locator('[data-manual-expedition-action="battle"]').count(),1);
+    await page.evaluate(()=>{
+      window.__expeditionLaunches=[];
+      window.openTacticalCombat=mode=>{
+        window.__expeditionLaunches.push(mode);
+        return Promise.resolve();
+      };
+    });
+    await quest.locator('[data-manual-expedition-action="battle"]').click();
+    assert.deepEqual(await page.evaluate(()=>window.__expeditionLaunches),['pve'],
+      'battle shortcut must invoke only the actual PvE entry point');
     assert.equal(await page.locator('.manual-hero-book-tab.is-current').count(),1);
     assert.equal(await page.locator('.manual-hero-cover').count(),1);
     // The permanent visual stage must come from the actual manual level.
@@ -124,6 +142,9 @@ async function main(){
     await library.locator('[data-manual-book="body-rock"] summary').click();
     assert.equal(await library.locator('[data-manual-book="body-rock"]').evaluate(e=>e.open),true);
     assert.equal(await page.locator('.manual-hero-title-row h3').textContent(),'玄嶽鍛體訣');
+    assert.equal(await page.locator('[data-manual-expedition]').getAttribute('data-manual-expedition-book'),'body-rock');
+    assert.equal(await page.locator('[data-manual-expedition-action="loadout"]').count(),1,
+      'a manuscript without an equipped technique should lead to a loadout, not a fake battle-ready promise');
     assert.equal(await library.locator('.manual-book.is-featured').count(),1);
     assert.equal(await library.locator('[data-manual-book="body-rock"] .manual-library-skill-picture').count(),3);
     assert.equal(await page.locator('[data-loadout-select="1"]').getAttribute('class'),activePresetBefore);
@@ -143,6 +164,11 @@ async function main(){
     }));
     assert(mobileHero.scroll<=mobileHero.client+2,
       'growth rings and ten markers should fit portrait hero: '+JSON.stringify(mobileHero));
+    const mobileExpedition=await page.locator('[data-manual-expedition]').evaluate(node=>({
+      width:node.clientWidth,scroll:node.scrollWidth
+    }));
+    assert(mobileExpedition.scroll<=mobileExpedition.width+2,
+      'expedition guidance must not overflow portrait screen: '+JSON.stringify(mobileExpedition));
     await page.setViewportSize({width:1180,height:820});
     const desktopColumns=await page.locator('.manual-book-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
@@ -150,11 +176,16 @@ async function main(){
     // Phase 8: the Lv5 approach illuminates ONLY the surrounding mastery
     // gauge; the locked second technique must stay locked until realm-ready.
     db.records.get('users/u1').stats.totalScore=1;
+    db.records.get('users/u1').tacticalTrialV1={version:1,stage:5,seed:'a'.repeat(32)};
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=250;
     await page.locator('[data-manual-refresh]').click();
     await page.locator('.manual-celebration--manual-upgrade').waitFor();
     assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'near');
     assert.match(await page.locator('.manual-anticipation').textContent(),/還差 30 EXP/);
+    assert.match(await page.locator('[data-manual-expedition]').textContent(),/第 5 關/);
+    assert.match(await page.locator('[data-manual-expedition]').textContent(),/築基境/);
+    assert.match(await page.locator('[data-manual-expedition]').textContent(),/\+35/);
+    assert.match(await page.locator('[data-manual-expedition]').textContent(),/約 1 次/);
     assert.equal(await page.locator('.manual-hero-step.is-next.is-approaching.is-locked').count(),1);
     assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-breakthrough-tag').count(),1);
     await page.locator('[data-manual-celebration-dismiss]').click();
