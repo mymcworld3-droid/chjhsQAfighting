@@ -1,4 +1,4 @@
-/* Stamina cultivation phase 5: visible mastery, not another combat bonus.
+/* Stamina cultivation: visible mastery; +1 attack/level is derived by the server.
    This layer decorates existing book art; no source images are replaced.
    Only the selected book's ring is permitted to rotate, and only at high levels.
 */
@@ -16,6 +16,9 @@
   --mv-aura-opacity:.75;
   --mv-aura-blur:16px;
   --mv-aura-scale:1;
+}
+#manual-training-root .manual-hero--tier-refined{
+  --mv-aura-opacity:.86;--mv-aura-blur:18px;--mv-aura-scale:1.03;
 }
 #manual-training-root .manual-hero--tier-complete{
   --mv-aura-opacity:1;
@@ -66,6 +69,7 @@
   inset:29%;border-style:dotted;opacity:.6;
 }
 #manual-training-root .manual-hero--tier-surge .manual-hero-qi-orbit,
+#manual-training-root .manual-hero--tier-refined .manual-hero-qi-orbit,
 #manual-training-root .manual-hero--tier-complete .manual-hero-qi-orbit{
   animation:manual-growth-rotate 28s linear infinite;
 }
@@ -81,9 +85,11 @@
 #manual-training-root .manual-hero-qi-spark--one{left:19%;top:22%}
 #manual-training-root .manual-hero-qi-spark--two{right:16%;bottom:23%}
 #manual-training-root .manual-hero--tier-inscribed .manual-hero-qi-spark,
-#manual-training-root .manual-hero--tier-surge .manual-hero-qi-spark{opacity:.56}
+#manual-training-root .manual-hero--tier-surge .manual-hero-qi-spark,
+#manual-training-root .manual-hero--tier-refined .manual-hero-qi-spark{opacity:.56}
 #manual-training-root .manual-hero--tier-complete .manual-hero-qi-spark{opacity:.9}
 #manual-training-root .manual-hero--tier-surge .manual-hero-qi-spark,
+#manual-training-root .manual-hero--tier-refined .manual-hero-qi-spark,
 #manual-training-root .manual-hero--tier-complete .manual-hero-qi-spark{
   animation:manual-growth-spark 3.8s ease-in-out infinite alternate;
 }
@@ -140,18 +146,18 @@
 #manual-training-root .manual-hero-mastery-footnote{
   display:block;font-size:10px;line-height:1.5;color:#b4c7ba;
 }
-/* The ten stations are evenly spaced. The flowing line joins the centre of
-   Lv.1 to Lv.10 (5%-95% of the same track), so all milestones line up. */
+/* Twenty evenly-spaced stations, four numbered, raised progress nodes. */
 #manual-training-root .manual-growth-marks{
   position:relative;isolation:isolate;
-  display:grid;grid-template-columns:repeat(10,minmax(0,1fr));
+  display:grid;grid-template-columns:repeat(20,minmax(0,1fr));
+  box-sizing:border-box;padding-inline:20px;
   align-items:center;justify-items:center;
   width:100%;height:63px;min-width:0;
   margin:2px 0 0;overflow:visible;
 }
 #manual-training-root .manual-growth-flow{
   display:block;position:absolute;z-index:0;
-  left:5%;right:5%;top:calc(50% - 6px);
+  left:calc(20px + 2.5%);right:calc(20px + 2.5%);top:calc(50% - 6px);
   height:12px;overflow:hidden;padding:2px;
   border:1px solid #83998173;border-radius:99px;
   background:#06150f;box-shadow:inset 0 2px 5px rgba(0,0,0,.6);
@@ -179,10 +185,13 @@
   color:#a6b9ac;background:radial-gradient(circle at 30% 22%,#41524a,#142a20 70%);
   box-shadow:0 3px 9px #0008,inset 0 1px 2px rgba(255,255,255,.14);
 }
-#manual-training-root .manual-growth-mark.is-milestone:nth-last-child(6){
+#manual-training-root .manual-growth-mark.is-milestone-5{
   width:33px;height:33px;
 }
-#manual-training-root .manual-growth-mark.is-milestone:last-child{
+#manual-training-root .manual-growth-mark.is-milestone-10{
+  width:35px;height:35px;
+}
+#manual-training-root .manual-growth-mark.is-milestone-20{
   width:39px;height:39px;
 }
 #manual-training-root .manual-growth-mark.is-milestone.is-reached{
@@ -195,7 +204,7 @@
 #manual-training-root .manual-growth-mark.is-milestone.is-current{
   outline:2px solid #ffebaa;outline-offset:3px;
 }
-#manual-training-root .manual-growth-mark.is-milestone:last-child.is-current{
+#manual-training-root .manual-growth-mark.is-milestone-20.is-current{
   box-shadow:0 0 0 4px rgba(246,218,156,.2),
     0 0 25px rgba(250,207,124,.48),inset 0 2px 5px rgba(255,255,255,.7);
 }
@@ -204,7 +213,7 @@
   font-size:11px;font-weight:900;font-variant-numeric:tabular-nums;
   color:inherit;
 }
-#manual-training-root .manual-growth-mark:last-child small{font-size:12px}
+#manual-training-root .manual-growth-mark.is-milestone-20 small{font-size:12px}
 #manual-training-root .manual-hero-path-grid{position:relative;isolation:isolate}
 #manual-training-root .manual-hero-path-grid::before{
   content:"";position:absolute;z-index:-1;
@@ -244,6 +253,9 @@
 }
 #manual-training-root .manual-library-art-zone[data-manual-stage="surge"]{
   --mv-card-brightness:1;
+}
+#manual-training-root .manual-library-art-zone[data-manual-stage="refined"]{
+  --mv-card-brightness:1.12;
 }
 #manual-training-root .manual-library-art-zone[data-manual-stage="complete"]{
   --mv-card-brightness:1.24;
@@ -304,9 +316,25 @@
   #manual-training-root .manual-hero-mastery-level{font-size:13px}
   #manual-training-root .manual-growth-marks{height:57px}
   #manual-training-root .manual-growth-mark.is-milestone{width:25px;height:25px}
-  #manual-training-root .manual-growth-mark.is-milestone:nth-last-child(6){width:30px;height:30px}
-  #manual-training-root .manual-growth-mark.is-milestone:last-child{width:35px;height:35px}
+  #manual-training-root .manual-growth-mark.is-milestone-5{width:29px;height:29px}
+  #manual-training-root .manual-growth-mark.is-milestone-10{width:32px;height:32px}
+  #manual-training-root .manual-growth-mark.is-milestone-20{width:35px;height:35px}
   #manual-training-root .manual-hero-path-grid::before{display:none}
+}
+#manual-training-root .manual-hero-attack-bonus{
+  display:block;color:#d9e4cc;font-size:11px;line-height:1.45;
+  font-variant-numeric:tabular-nums;overflow-wrap:anywhere;
+}
+#manual-training-root .manual-hero-attack-bonus::before{
+  content:"✦";color:var(--mh-warm);margin-right:5px;
+}
+@media(max-width:360px){
+  #manual-training-root .manual-growth-marks{padding-inline:18px}
+  #manual-training-root .manual-growth-flow{left:calc(18px + 2.5%);right:calc(18px + 2.5%)}
+  #manual-training-root .manual-growth-mark.is-milestone{width:23px;height:23px}
+  #manual-training-root .manual-growth-mark.is-milestone-5{width:26px;height:26px}
+  #manual-training-root .manual-growth-mark.is-milestone-10{width:29px;height:29px}
+  #manual-training-root .manual-growth-mark.is-milestone-20{width:32px;height:32px}
 }
 @media(prefers-reduced-motion:reduce){
   #manual-training-root .manual-growth-flow-fill{transition:none!important}
