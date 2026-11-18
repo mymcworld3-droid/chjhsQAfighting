@@ -36,7 +36,6 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
   const milestone=renderManualAnticipation(anticipation,esc);
   const near=anticipation&&['near','imminent'].includes(anticipation.status);
   const fmt=value=>Math.max(0,Math.round(Number(value)||0)).toLocaleString('zh-TW');
-  const progress=Math.max(0,Math.min(100,Number(book.progress)||0));
   const maxed=Number(book.level)>=10;
   const next=book.skills.find(skill=>!skill.unlocked);
   const goalTitle=next?`下一招 · ${next.name}`:'三招皆已領悟';
@@ -89,7 +88,7 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
       <i class="fa-solid fa-arrow-up-right-dots" aria-hidden="true"></i>
       ${needGold?'靈石不足 · ':''}升至 Lv. ${fmt(upgrade.targetLevel)}
       <span>${fmt(upgrade.gold)} 靈石</span></button>`
-    :`<span class="manual-hero-max-level">${maxed?'功法已達 Lv. 10':'熟練度持續累積中'}</span>`;
+    :`<span class="manual-hero-max-level">${maxed?'可繼續強化已領悟的招式':'熟練度持續累積中'}</span>`;
 
   return {
     bookId:book.id,
@@ -108,21 +107,26 @@ export function renderManualHero(state, selectedBookId, { esc, bookArt, skillArt
           <span class="manual-hero-qi-spark manual-hero-qi-spark--one" aria-hidden="true"></span>
           <span class="manual-hero-qi-spark manual-hero-qi-spark--two" aria-hidden="true"></span>
           ${coverMarkup}
-          <span class="manual-hero-art-caption">${label(book.school)} · ${visual.label}</span>
+          <span class="manual-hero-art-caption">${label(book.school)} · 已獲得</span>
         </div>
         <div class="manual-hero-details">
           <div class="manual-hero-title-row">
             <div><span class="manual-hero-eyebrow">正在查看的功法</span>
               <h3>${esc(book.name)}</h3></div>
-            <div class="manual-hero-level"><small>功法等級</small><b>Lv. ${fmt(book.level)}</b></div>
           </div>
-          <div class="manual-hero-mastery">
-            <div class="manual-hero-progress-head"><strong>修煉熟練度</strong><span>${progressLabel}</span></div>
-            <div class="manual-hero-track" role="progressbar" aria-label="${esc(book.name)}熟練度"
-              aria-valuemin="0" aria-valuemax="100" aria-valuenow="${maxed?100:progress}">
-              <span class="manual-hero-progress" style="width:${maxed?100:progress}%"></span></div>
+          <div class="manual-hero-mastery" data-manual-mastery-stage="${visual.stage}">
+            <div class="manual-hero-mastery-heading">
+              <strong>修煉熟練度</strong>
+              <span class="manual-hero-mastery-level">Lv. ${visual.level} / 10</span>
+            </div>
+            <div class="manual-hero-mastery-summary">
+              <span class="manual-hero-stage-badge">${esc(visual.label)}</span>
+              <span class="manual-hero-mastery-status">${progressLabel}</span>
+            </div>
+            <p class="manual-hero-mastery-description">${esc(visual.description)}</p>
+            ${growth}
+            <small class="manual-hero-mastery-footnote">Lv.5、10 為招式等級門檻，真正領悟仍需符合修士境界。</small>
           </div>
-          ${growth}
           ${milestone}
           <div class="manual-hero-goal">
             <span class="manual-hero-goal-symbol" aria-hidden="true">✧</span>
