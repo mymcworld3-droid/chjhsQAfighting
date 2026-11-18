@@ -1,0 +1,134 @@
+/* Stamina phase 10: expedition advice beneath the featured manual.
+ * The guide is read-only and does not promise drops, change trials, or award XP. */
+#manual-training-root .manual-expedition{
+  --me-accent:#9bdfd2;--me-line:rgba(123,206,188,.44);--me-glow:rgba(61,174,155,.16);
+  position:relative;isolation:isolate;overflow:hidden;
+  margin:0 0 18px;padding:clamp(13px,2vw,20px);
+  border:1px solid var(--me-line);border-radius:16px;
+  color:#f4ead3;
+  background:radial-gradient(ellipse 48% 85% at 100% 0%,var(--me-glow),transparent 78%),
+    linear-gradient(135deg,#203b31,#132820 65%,#0c1e18);
+  box-shadow:0 9px 27px rgba(0,0,0,.14),inset 0 1px rgba(255,255,255,.07);
+}
+#manual-training-root .manual-expedition--body{
+  --me-accent:#efcb96;--me-line:rgba(211,164,99,.54);--me-glow:rgba(215,153,67,.14);
+  background:radial-gradient(ellipse 48% 85% at 100% 0%,var(--me-glow),transparent 78%),
+    linear-gradient(135deg,#403527,#27281f 65%,#1d201a);
+}
+#manual-training-root .manual-expedition::before{
+  content:"";pointer-events:none;position:absolute;z-index:0;
+  width:90px;height:90px;right:-26px;top:-35px;border-radius:50%;
+  border:2px dashed var(--me-line);box-shadow:0 0 27px var(--me-glow);
+  opacity:.6;
+}
+#manual-training-root .manual-expedition>*{position:relative;z-index:1}
+#manual-training-root .manual-expedition-heading{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:5px 16px;flex-wrap:wrap;margin-bottom:13px;
+}
+#manual-training-root .manual-expedition-eyebrow{
+  color:var(--me-accent);font-size:11px;letter-spacing:.1em;font-weight:780;
+}
+#manual-training-root .manual-expedition-heading h3{
+  margin:0;line-height:1.35;font-size:clamp(15px,2vw,19px);
+  color:#ffe6ad;font-weight:860;display:flex;gap:7px;align-items:center;
+}
+#manual-training-root .manual-expedition-heading h3 i{font-size:16px;color:var(--me-accent)}
+#manual-training-root .manual-expedition-main{
+  display:grid;grid-template-columns:minmax(165px,1fr) minmax(0,1.55fr);
+  align-items:center;gap:15px;min-width:0;
+}
+#manual-training-root .manual-expedition-book{
+  display:flex;align-items:center;gap:10px;min-width:0;
+}
+#manual-training-root .manual-expedition-cover{
+  width:59px;height:75px;flex:0 0 59px;border-radius:8px;
+  display:grid;place-items:center;overflow:hidden;
+  border:1px solid var(--me-line);background:rgba(8,24,19,.65);
+  box-shadow:0 0 14px var(--me-glow);
+  color:var(--me-accent);
+}
+#manual-training-root .manual-expedition-cover img{
+  display:block;width:100%;height:100%;object-fit:contain;
+}
+#manual-training-root .manual-expedition-book-copy{
+  min-width:0;display:flex;flex-direction:column;gap:5px;
+  line-height:1.35;
+}
+#manual-training-root .manual-expedition-book-copy small{
+  color:#b3cbbd;font-size:10px;
+}
+#manual-training-root .manual-expedition-book-copy strong{
+  color:#f5e6c3;font-size:14px;font-weight:850;overflow-wrap:anywhere;
+}
+#manual-training-root .manual-expedition-book-copy span{
+  color:#e1bd7e;font-size:11px;line-height:1.5;overflow-wrap:anywhere;
+}
+#manual-training-root .manual-expedition-forecast{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;min-width:0;
+}
+#manual-training-root .manual-expedition-forecast>div{
+  min-width:0;min-height:68px;display:flex;flex-direction:column;
+  gap:5px;justify-content:center;align-items:center;text-align:center;
+  padding:7px 5px;border:1px solid rgba(165,189,158,.24);
+  border-radius:9px;background:rgba(4,20,14,.36);
+}
+#manual-training-root .manual-expedition-forecast small{
+  color:#b9d0c0;font-size:10px;line-height:1.35;
+}
+#manual-training-root .manual-expedition-forecast strong{
+  font-size:14px;color:var(--me-accent);
+  font-weight:850;line-height:1.45;
+  overflow-wrap:anywhere;font-variant-numeric:tabular-nums;
+}
+#manual-training-root .manual-expedition-forecast em{
+  font-size:10px;font-style:normal;color:#c9d4c5;
+}
+#manual-training-root .manual-expedition-kills strong{color:#ffe0a0}
+#manual-training-root .manual-expedition-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px 16px;padding-top:12px;margin-top:13px;
+  border-top:1px solid var(--me-line);
+}
+#manual-training-root .manual-expedition-readiness{
+  display:flex;align-items:baseline;gap:7px;flex:1 1 195px;
+  min-width:0;color:#d8c3a3;font-size:11px;line-height:1.55;
+}
+#manual-training-root .manual-expedition-readiness.is-ready{color:#b4e4cc}
+#manual-training-root .manual-expedition-readiness i{flex:0 0 auto}
+#manual-training-root .manual-expedition-action{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  min-width:150px;min-height:43px;flex:0 0 auto;
+  padding:10px 14px;border-radius:9px;cursor:pointer;
+  color:#1a2d24;font-size:12px;font-weight:850;
+  border:1px solid #ffdf9d;background:linear-gradient(110deg,#f6e1a5,#d8b675);
+  box-shadow:0 4px 13px rgba(234,189,106,.19);
+}
+#manual-training-root .manual-expedition-action:focus-visible{
+  outline:2px solid #ffffff;outline-offset:3px;
+}
+#manual-training-root .manual-expedition-action:disabled{
+  opacity:.65;cursor:wait;
+}
+#manual-training-root .manual-expedition-disclaimer{
+  margin:10px 0 0;color:#aebfae;font-size:10px;line-height:1.55;
+}
+@media(max-width:900px){
+  #manual-training-root .manual-expedition-main{
+    grid-template-columns:1fr;align-items:start;gap:13px;
+  }
+}
+@media(max-width:580px){
+  #manual-training-root .manual-expedition{padding:12px 11px}
+  #manual-training-root .manual-expedition-heading{gap:5px;margin-bottom:11px}
+  #manual-training-root .manual-expedition-forecast{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #manual-training-root .manual-expedition-forecast>div{min-height:59px}
+  #manual-training-root .manual-expedition-action{flex:1 1 100%}
+  #manual-training-root .manual-expedition-footer{gap:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  #manual-training-root .manual-expedition-action{transition:none!important}
+}
