@@ -7,6 +7,7 @@ const { playerRepository, raidRepository } = require('./server-repositories.cjs'
 const { verifyMainIdentity } = require('./raid-question-ticket.cjs');
 const {streamDungeonRoom} = require('./dungeon-room-stream.cjs');
 const {LAYOUT_VERSION,generateDungeonLayout} = require('./dungeon-map-generator.cjs');
+const {roomMap,startExplorationMembers,moveOnMap} = require('./dungeon-movement.cjs');
 const trainingAccess = require('./public/cultivation/training-access-rules.js');
 
 const ROOMS='dungeonRooms';
@@ -92,7 +93,7 @@ function createHandler({
     res.set?.('Cache-Control','no-store');
     const action=String(req.body?.action||'');
     try{
-      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map'].includes(action))
+      if(!['create','join-code','join-public','list-public','quick','set-visibility','get','reconnect','leave','ready','kick','disband','start','cancel-start','subscribe','heartbeat','get-map','move'].includes(action))
         throw err('未知的副本房間操作',400);
       const uid=await verifyMainIdentity(req,{resolveA});
       const db=resolveC().db,at=clock();
@@ -304,6 +305,27 @@ function createHandler({
         if(!sessionRoom(room,at))throw err('副本房間已關閉或過期',410);
         return respond(roomId,room);
       }
+      if(action==='move'){
+        // Movement is server-authoritative and sequential per authenticated
+        // player. The client never sends a destination, stamina or position.
+        const {dx,dy,step}=req.body||{};
+        const updated=await db.runTransaction(async tx=>{
+          const snap=await tx.get(roomRef),current=snap.exists?snap.data():null;
+          if(!current||!hasMember(current,uid))
+            throw err('你不是此副本的隊員',403);
+          if(!sessionRoom(current,at))
+            throw err('副本房間已關閉或過期',410);
+          if(current.status!=='assembled')
+            throw err('請先完成全隊集結',409);
+          const map=roomMap(current,roomId);
+          const outcome=moveOnMap(current,uid,map,{dx,dy,step});
+          if(outcome.duplicate)return current;
+          const next={...current,members:outcome.members,revision:current.revision+1};
+          tx.update(roomRef,{members:next.members,revision:next.revision});
+          return next;
+        });
+        return respond(roomId,updated);
+      }
       if(action==='ready'){
         if(typeof req.body?.ready!=='boolean')throw err('準備狀態無效',400);
         const updated=await db.runTransaction(async tx=>{
@@ -332,14 +354,20 @@ function createHandler({
             const members=Object.values(membersOf(room));
             if(!members.length||members.some(m=>m.ready!==true))
               throw err('請先等待所有隊員準備完成',409);
-            // This locks the team in the lobby; map/combat launch comes later.
+            // Spawn positions/energy are committed atomically before anyone
+            // can move. Cross-instance clients see one authoritative snapshot.
+            const map=roomMap(room,roomId);
+            const startingMembers=startExplorationMembers(room,map);
             const next={...room,status:'assembled',assembledAtMs:at,
-              revision:room.revision+1};
-            tx.update(roomRef,{status:next.status,assembledAtMs:at,revision:next.revision});
+              members:startingMembers,revision:room.revision+1};
+            tx.update(roomRef,{status:next.status,assembledAtMs:at,
+              members:startingMembers,revision:next.revision});
             return next;
           }
           if(room.status==='waiting')return room;
           if(room.status!=='assembled')throw err('隊伍尚未集結',409);
+          if(Object.values(membersOf(room)).some(m=>(m.moveSeq||0)>0))
+            throw err('隊伍已開始探索，不能取消集結；可離開隊伍結束本次探索',409);
           const members=Object.fromEntries(Object.entries(membersOf(room))
             .map(([key,m])=>[key,{...m,ready:false}]));
           const next={...room,status:'waiting',members,revision:room.revision+1};
