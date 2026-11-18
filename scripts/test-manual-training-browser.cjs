@@ -126,10 +126,37 @@ async function main(){
     const desktopColumns=await page.locator('.manual-book-grid').evaluate(node=>
       getComputedStyle(node).gridTemplateColumns.split(' ').length);
     assert(desktopColumns>=2,'desktop view should use a multi-column gallery');
-    // Level 5 requires both mastery and realm: only a real server unlock
-    // should play the stronger technique-awakening effect.
-    db.records.get('users/u1').stats.totalScore=100;
+    // Phase 8: the Lv5 approach illuminates ONLY the surrounding mastery
+    // gauge; the locked second technique must stay locked until realm-ready.
+    db.records.get('users/u1').stats.totalScore=1;
+    db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=250;
+    await page.locator('[data-manual-refresh]').click();
+    await page.locator('.manual-celebration--manual-upgrade').waitFor();
+    assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'near');
+    assert.match(await page.locator('.manual-anticipation').textContent(),/還差 30 EXP/);
+    assert.equal(await page.locator('.manual-hero-step.is-next.is-approaching.is-locked').count(),1);
+    assert.equal(await page.locator('[data-manual-book="sword-wind"] .manual-library-breakthrough-tag').count(),1);
+    await page.locator('[data-manual-celebration-dismiss]').click();
+    db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=270;
+    await page.locator('[data-manual-refresh]').click();
+    assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'imminent');
+    assert.match(await page.locator('.manual-anticipation').textContent(),/還差 10 EXP/);
+    await page.setViewportSize({width:393,height:852});
+    const anticipationMobile=await page.locator('.manual-hero').evaluate(node=>({
+      width:node.clientWidth,scroll:node.scrollWidth
+    }));
+    assert(anticipationMobile.scroll<=anticipationMobile.width+2,
+      'approaching breakthrough should not overflow mobile hero '+JSON.stringify(anticipationMobile));
+    await page.setViewportSize({width:1180,height:820});
     db.records.get(service.MANUALS+'/u1').books['sword-wind'].exp=280;
+    await page.locator('[data-manual-refresh]').click();
+    await page.locator('.manual-celebration--manual-upgrade').waitFor();
+    assert.equal(await page.locator('[data-manual-anticipation]').getAttribute('data-manual-anticipation'),'realm');
+    assert.equal(await page.locator('.manual-hero-step.is-realm-locked').count(),1);
+    assert.equal(await page.locator('.manual-hero-step.is-learned').count(),1);
+    await page.locator('[data-manual-celebration-dismiss]').click();
+    // Reaching Lv5 alone is not a skill awakening. Raise realm and re-sync.
+    db.records.get('users/u1').stats.totalScore=100;
     const unlockedSnapshot=await service.manualsState(db,'u1');
     assert.equal(unlockedSnapshot.library.find(b=>b.id==='sword-wind').skills[1].unlocked,true);
     await page.locator('[data-manual-refresh]').click();
